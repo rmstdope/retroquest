@@ -127,6 +127,36 @@ class Game:
                 print("Please answer 'yes' or 'no'.")
                 continue
 
+    def drop(self, item: str) -> str:
+        item = item.lower()
+        for obj in self.state.inventory:
+            if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
+                self.state.inventory.remove(obj)
+                self.state.current_room.items.append(obj)
+                return f"You drop the {obj.get_name()}."
+        return f"You don't have a '{item}' to drop."
+
+    def take(self, item: str) -> str:
+        item = item.lower()
+        # Find item in current room by name or short_name
+        room_items = self.state.current_room.get_items()
+        for obj in room_items:
+            if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
+                # Remove from room
+                self.state.current_room.items.remove(obj)
+                # Add to inventory
+                self.state.inventory.append(obj)
+                return f"You take the {obj.get_name()}."
+        return f"There is no '{item}' here to take."
+
+    def inventory(self) -> str:
+        if not self.state.inventory:
+            return "Your inventory is empty."
+        lines = ["You are carrying:"]
+        for item in self.state.inventory:
+            lines.append(f"- {item.get_name()}")
+        return "\n".join(lines)
+
     # --- Not Implemented Methods ---
     def talk(self, target: str) -> str:
         raise NotImplementedError("Game.talk() is not yet implemented.")
@@ -158,28 +188,6 @@ class Game:
     def taste(self, item: str) -> str:
         raise NotImplementedError("Game.taste() is not yet implemented.")
 
-    def take(self, item: str) -> str:
-        item = item.lower()
-        # Find item in current room by name or short_name
-        room_items = self.state.current_room.get_items()
-        for obj in room_items:
-            if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
-                # Remove from room
-                self.state.current_room.items.remove(obj)
-                # Add to inventory
-                self.state.inventory.append(obj)
-                return f"You take the {obj.get_name()}."
-        return f"There is no '{item}' here to take."
-
-    def drop(self, item: str) -> str:
-        item = item.lower()
-        for obj in self.state.inventory:
-            if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
-                self.state.inventory.remove(obj)
-                self.state.current_room.items.append(obj)
-                return f"You drop the {obj.get_name()}."
-        return f"You don't have a '{item}' to drop."
-
     def use(self, item: str) -> str:
         raise NotImplementedError("Game.use() is not yet implemented.")
 
@@ -194,14 +202,6 @@ class Game:
 
     def unequip(self, item: str) -> str:
         raise NotImplementedError("Game.unequip() is not yet implemented.")
-
-    def inventory(self) -> str:
-        if not self.state.inventory:
-            return "Your inventory is empty."
-        lines = ["You are carrying:"]
-        for item in self.state.inventory:
-            lines.append(f"- {item.get_name()}")
-        return "\n".join(lines)
 
     def open(self, target: str) -> str:
         raise NotImplementedError("Game.open() is not yet implemented.")

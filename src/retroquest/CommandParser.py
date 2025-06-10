@@ -34,8 +34,8 @@ class CommandParser:
             arg = cmd.split(' ', 1)[1] if ' ' in cmd else None
             return self.game.move('follow', arg)
         # Interaction
-        elif any(cmd.startswith(prefix) for prefix in ('talk to ', 'speak to ', 'converse with ')):
-            for prefix in ('talk to ', 'speak to ', 'converse with '):
+        elif any(cmd.startswith(prefix) for prefix in ('talk to ', 'speak to ', 'converse with ', 'talk ')):
+            for prefix in ('talk to ', 'speak to ', 'converse with ', 'talk '):
                 if cmd.startswith(prefix):
                     return self.game.talk(cmd[len(prefix):])
         elif any(cmd.startswith(prefix) for prefix in ('ask ', 'question ')):
