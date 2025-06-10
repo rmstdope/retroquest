@@ -34,11 +34,8 @@ class Game:
             "A distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. "
             "With questions swirling in your mind, you take your first step into the unknown.\n"
         )
+        print(self.state.current_room.describe() + "\n")
         while self.is_running:
-            print("-" * 50)
-            print(self.state.current_room.name)
-            print("-" * 50)
-            print(self.state.current_room.describe())
             user_input = self.session.prompt('> ')
             self.state.history.append(user_input)
             response = self.handle_command(user_input)
@@ -53,7 +50,7 @@ class Game:
             if next_room_key in self.rooms:
                 self.state.current_room = self.rooms[next_room_key]
                 self.state.mark_visited(self.state.current_room)
-                return f"[You move {direction} to {self.state.current_room.name}.]"
+                return f"[You move {direction} to {self.state.current_room.name}.]\n\n" + self.state.current_room.describe()
             else:
                 return "That exit leads nowhere (room not found)."
         else:
@@ -77,7 +74,7 @@ class Game:
         )
 
     def look(self) -> str:
-        return "You take a careful look around."
+        return self.state.current_room.describe()
 
     def examine(self, target: str) -> str:
         target = target.lower()

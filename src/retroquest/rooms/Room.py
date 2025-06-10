@@ -33,7 +33,10 @@ class Room:
 
     def describe(self) -> str:
         """Return a full description of the room, including items, characters, and exits."""
-        desc = self.description + '\n'
+        desc = "-" * 50 + "\n"
+        desc += f"{self.name}\n"
+        desc += "-" * 50 + "\n"
+        desc += self.description + '\n'
         if self.items:
             desc += f"\nItems you can see: {', '.join(item.get_name() for item in self.items)}"
         if self.characters:
