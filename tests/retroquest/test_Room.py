@@ -33,6 +33,14 @@ ROOM_CLASSES = {
     "RoadToGreendale": RoadToGreendale,
 }
 
+# Map of direction to its opposite
+OPPOSITE = {
+    "north": "south",
+    "south": "north",
+    "east": "west",
+    "west": "east"
+}
+
 @pytest.mark.parametrize("start_key", ROOM_CLASSES.keys())
 def test_room_reachability(start_key):
     # Instantiate all rooms
@@ -49,3 +57,51 @@ def test_room_reachability(start_key):
                 queue.append(dest)
     # All rooms should be reachable from the start room
     assert set(rooms.keys()) <= visited, f"From {start_key}, could not reach: {set(rooms.keys()) - visited}"
+
+@pytest.mark.parametrize("room_class, room_key", [
+    (EliorsCottage, "EliorsCottage"),
+    (VegetableField, "VegetableField"),
+    (ChickenCoop, "ChickenCoop"),
+    (VillageSquare, "VillageSquare"),
+    (MirasHut, "MirasHut"),
+    (BlacksmithsForge, "BlacksmithsForge"),
+    (GeneralStore, "GeneralStore"),
+    (VillageWell, "VillageWell"),
+    (AbandonedShed, "AbandonedShed"),
+    (OldMill, "OldMill"),
+    (Riverbank, "Riverbank"),
+    (ForestPath, "ForestPath"),
+    (HiddenGlade, "HiddenGlade"),
+    (VillageChapel, "VillageChapel"),
+    (RoadToGreendale, "RoadToGreendale"),
+])
+def test_room_transitions_bidirectional(room_class, room_key):
+    # Instantiate all rooms
+    rooms = {
+        "EliorsCottage": EliorsCottage(),
+        "VegetableField": VegetableField(),
+        "ChickenCoop": ChickenCoop(),
+        "VillageSquare": VillageSquare(),
+        "MirasHut": MirasHut(),
+        "BlacksmithsForge": BlacksmithsForge(),
+        "GeneralStore": GeneralStore(),
+        "VillageWell": VillageWell(),
+        "AbandonedShed": AbandonedShed(),
+        "OldMill": OldMill(),
+        "Riverbank": Riverbank(),
+        "ForestPath": ForestPath(),
+        "HiddenGlade": HiddenGlade(),
+        "VillageChapel": VillageChapel(),
+        "RoadToGreendale": RoadToGreendale(),
+    }
+    room = rooms[room_key]
+    for direction, dest_key in room.get_exits().items():
+        # Only test cardinal directions
+        if direction not in OPPOSITE:
+            continue
+        dest_room = rooms[dest_key]
+        opposite = OPPOSITE[direction]
+        # The destination room must have an exit back to the original room
+        assert (
+            dest_room.get_exits().get(opposite) == room_key
+        ), f"{room_key} -> {direction} -> {dest_key} but {dest_key} does not have {opposite} back to {room_key}"
