@@ -1,4 +1,4 @@
-from retroquest.Game import Game
+import pytest
 from retroquest.rooms.EliorsCottage import EliorsCottage
 from retroquest.rooms.VegetableField import VegetableField
 from retroquest.rooms.ChickenCoop import ChickenCoop
@@ -15,7 +15,32 @@ from retroquest.rooms.HiddenGlade import HiddenGlade
 from retroquest.rooms.VillageChapel import VillageChapel
 from retroquest.rooms.RoadToGreendale import RoadToGreendale
 
-def main():
+# Map of direction to its opposite
+OPPOSITE = {
+    "north": "south",
+    "south": "north",
+    "east": "west",
+    "west": "east"
+}
+
+@pytest.mark.parametrize("room_class, room_key", [
+    (EliorsCottage, "EliorsCottage"),
+    (VegetableField, "VegetableField"),
+    (ChickenCoop, "ChickenCoop"),
+    (VillageSquare, "VillageSquare"),
+    (MirasHut, "MirasHut"),
+    (BlacksmithsForge, "BlacksmithsForge"),
+    (GeneralStore, "GeneralStore"),
+    (VillageWell, "VillageWell"),
+    (AbandonedShed, "AbandonedShed"),
+    (OldMill, "OldMill"),
+    (Riverbank, "Riverbank"),
+    (ForestPath, "ForestPath"),
+    (HiddenGlade, "HiddenGlade"),
+    (VillageChapel, "VillageChapel"),
+    (RoadToGreendale, "RoadToGreendale"),
+])
+def test_room_transitions_bidirectional(room_class, room_key):
     # Instantiate all rooms
     rooms = {
         "EliorsCottage": EliorsCottage(),
@@ -34,9 +59,14 @@ def main():
         "VillageChapel": VillageChapel(),
         "RoadToGreendale": RoadToGreendale(),
     }
-    starting_room = rooms["EliorsCottage"]
-    game = Game(starting_room, rooms)
-    game.run()
-
-if __name__ == '__main__':
-    main()
+    room = rooms[room_key]
+    for direction, dest_key in room.get_exits().items():
+        # Only test cardinal directions
+        if direction not in OPPOSITE:
+            continue
+        dest_room = rooms[dest_key]
+        opposite = OPPOSITE[direction]
+        # The destination room must have an exit back to the original room
+        assert (
+            dest_room.get_exits().get(opposite) == room_key
+        ), f"{room_key} -> {direction} -> {dest_key} but {dest_key} does not have {opposite} back to {room_key}"

@@ -16,7 +16,7 @@
 - **Spells:** `revive` (restores a single plant, hints at Elior’s power).
 - **Usable Items:** Hoe (uncovers a hidden coin).
 - **Characters:** None.
-- **Exits:** Elior’s Cottage (north), Chicken Coop (west), Village Square (east)
+- **Exits:** Elior’s Cottage (north), Village Well (east), Chicken Coop (south)
 
 ## 3. Chicken Coop
 
@@ -25,7 +25,7 @@
 - **Spells:** None.
 - **Usable Items:** Bread (feed chickens, they reveal a hidden key).
 - **Characters:** None.
-- **Exits:** Vegetable Field (east)
+- **Exits:** Vegetable Field (north)
 
 ## 4. Village Square
 
@@ -34,7 +34,7 @@
 - **Spells:** None.
 - **Usable Items:** Bucket (draw water from the well).
 - **Characters:** Villager (shares rumors, can be questioned).
-- **Exits:** Elior’s Cottage (west), Vegetable Field (west), Mira’s Hut (north), Blacksmith’s Forge (south), General Store (east), Village Well (south)
+- **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east), Blacksmith’s Forge (south)
 
 ## 5. Mira’s Hut
 
@@ -52,7 +52,7 @@
 - **Spells:** None.
 - **Usable Items:** Coin (buy a sharpened knife).
 - **Characters:** Blacksmith (can sharpen items, offers advice).
-- **Exits:** Village Square (north), General Store (east), Abandoned Shed (south)
+- **Exits:** Village Square (north), Village Well (west), Abandoned Shed (south), General Store (east)
 
 ## 7. General Store
 
@@ -61,7 +61,7 @@
 - **Spells:** None.
 - **Usable Items:** Coin (purchase items).
 - **Characters:** Shopkeeper (sells goods, shares gossip).
-- **Exits:** Village Square (west), Blacksmith’s Forge (west), Village Well (south)
+- **Exits:** Village Square (west), Blacksmith’s Forge (south), Old Mill (east)
 
 ## 8. Village Well
 
@@ -70,7 +70,7 @@
 - **Spells:** `purify` (cleanses the water, reveals a shiny ring).
 - **Usable Items:** Bucket (draws water).
 - **Characters:** None.
-- **Exits:** Village Square (north), General Store (north), Abandoned Shed (east)
+- **Exits:** Vegetable Field (west), Blacksmith’s Forge (east), Abandoned Shed (south)
 
 ## 9. Abandoned Shed
 
@@ -135,12 +135,29 @@
 - **Characters:** Merchant (sells wares, provides travel advice).
 - **Exits:** Village Chapel (west)
 
----
+## Room Map
 
-**Action that completes the act:**  
+```
+                [Mira's Hut]
+                     |
+[Elior's Cottage]--[Village Square]--[General Store]
+      |                 |                 |
+[Vegetable Field]--[Village Well]--[Blacksmith's Forge]
+      |                 |                 |
+[Chicken Coop]     [Abandoned Shed]--[Old Mill]--[Riverbank]
+                                         |           |
+                                   [Forest Path]     |
+                                         |           |
+                                   [Hidden Glade]    |
+                                         |           |
+                                   [Village Chapel]--+
+                                         |
+                                 [Road to Greendale]
+```
+
+## Action that completes the act:
+
 After receiving the ancient amulet from Mira and gathering enough supplies and knowledge, use the map fragment on the Road to Greendale. This unlocks the path to Greendale and triggers the transition to Act II.
-
----
 
 ## Golden Path (Optimal Solution to Complete Act I)
 
@@ -288,23 +305,6 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - Use map fragment to reveal shortcut and unlock path to Greendale.  
       _Shortcut is revealed, Act I is completed and transition to Act II begins._
 
-**Result:**  
-Elior has visited all rooms, used all key items and spells, interacted with all characters, and gathered the ancient amulet and map fragment. The act ends as Elior leaves Willowbrook for Greendale, fully prepared for Act II.
+### Result
 
-```
-                [Mira's Hut]
-                     |
-[Elior's Cottage]--[Village Square]--[General Store]
-      |                 |                 |
-[Vegetable Field]--[Village Well]--[Blacksmith's Forge]
-      |                 |                 |
-[Chicken Coop]     [Abandoned Shed]--[Old Mill]--[Riverbank]
-                                         |           |
-                                   [Forest Path]     |
-                                         |           |
-                                   [Hidden Glade]    |
-                                         |           |
-                                   [Village Chapel]--+
-                                         |
-                                 [Road to Greendale]
-```
+Elior has visited all rooms, used all key items and spells, interacted with all characters, and gathered the ancient amulet and map fragment. The act ends as Elior leaves Willowbrook for Greendale, fully prepared for Act II.

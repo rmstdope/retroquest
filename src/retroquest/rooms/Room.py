@@ -1,43 +1,44 @@
 class Room:
-    def __init__(self):
-        pass
+    """
+    Base class for all rooms in RetroQuest.
+    Inherit from this class to define specific rooms.
+    """
+    def __init__(self, name: str, description: str, items: list = None, spells: list = None, usable_items: list = None, characters: list = None, exits: dict = None) -> None:
+        self.name = name
+        self.description = description
+        self.items = items if items is not None else []
+        self.spells = spells if spells is not None else []
+        self.usable_items = usable_items if usable_items is not None else []
+        self.characters = characters if characters is not None else []
+        self.exits = exits if exits is not None else {}
 
-    def __str__(self):
-        return self.get_description()
+    def enter(self) -> None:
+        """Called when the player enters the room."""
+        print(self.description)
 
-    def get_description(self):
-        return "Empty Room"
+    def get_items(self) -> list:
+        return self.items
 
-    def synonyms(self) -> dict:
-        return {}
+    def get_spells(self) -> list:
+        return self.spells
 
-    def translate(self, str) -> str:
-        synonyms = {'nw': 'northwest',
-                    'ne': 'northeast',
-                    'go': 'move',
-                    'walk': 'move',
-                    'run': 'move'}
-        synonyms.update(self.synonyms())
-        str.lower()
-        words = str.split()
-        str = ''
-        for w in words:
-            if w in synonyms:
-                w = synonyms[w]
-            str += w + ' '
-        return str
+    def get_usable_items(self) -> list:
+        return self.usable_items
 
-    def process_command(self, command: str) -> None:
-        command = self.translate(command)
-        words = command.split()
-        match (words[0].lower()):
-            case 'look':
-                print('You take a look around.')
-            case 'exit':
-                print('You leave the game.')
-                exit(0)
-            case 'help':
-                print('No, there is no help for you!')
-            case _:
-                print(f'You are uncertain how to "{command}"')
+    def get_characters(self) -> list:
+        return self.characters
 
+    def get_exits(self) -> dict:
+        return self.exits
+
+    def describe(self) -> str:
+        """Return a full description of the room, including items, characters, and exits."""
+        desc = self.description + '\n'
+        if self.items:
+            desc += f"\nItems you can see: {', '.join(item.get_name() for item in self.items)}"
+        if self.characters:
+            # Use get_name for character instances
+            desc += f"\nCharacters present: {', '.join(c.get_name() for c in self.characters)}"
+        if self.exits:
+            desc += f"\nExits: {', '.join(self.exits.keys())}"
+        return desc
