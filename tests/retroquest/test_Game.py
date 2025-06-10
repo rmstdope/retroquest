@@ -185,7 +185,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Simulate all commands in the golden path
     commands = [
         # # Elior’s Cottage
-        # "take lantern", "take bread", "talk grandmother",
+        # "use lantern", "take bread", "talk grandmother",
         # # Vegetable Field
         # "go south", "take rusty hoe", "use hoe", "cast revive",
         # # Chicken Coop

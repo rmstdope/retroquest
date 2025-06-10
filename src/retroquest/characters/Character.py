@@ -12,3 +12,7 @@ class Character:
 
     def get_description(self) -> str:
         return self.description
+    
+    def talk_to(self, game) -> str:
+        """Default talk_to method. Subclasses should override this for specific dialog."""
+        return f"{self.name} has nothing to say right now."

@@ -6,3 +6,6 @@ class Egg(Item):
             name="egg",
             description="A freshly laid egg, still warm. It could be cooked or used in a recipe."
         )
+
+    def can_be_carried(self) -> bool:
+        return True

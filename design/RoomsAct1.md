@@ -163,10 +163,12 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 1. **Elior’s Cottage:**
 
-   - Take lantern and bread.  
-     _Lantern and bread are added to inventory._
+   - Use lantern to light up the room.  
+     _The lantern illuminates the cottage, revealing the bread._
+   - Take bread.  
+     _Bread is added to inventory._
    - Speak to Grandmother for advice.  
-     _Grandmother gives hints about the village and Elior’s destiny._
+     _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell._
 
 2. **Vegetable Field:**
 

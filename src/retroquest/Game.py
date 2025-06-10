@@ -142,6 +142,8 @@ class Game:
         room_items = self.state.current_room.get_items()
         for obj in room_items:
             if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
+                if not obj.can_be_carried():
+                    return f"You can't take the {obj.get_name()}."
                 # Remove from room
                 self.state.current_room.items.remove(obj)
                 # Add to inventory
@@ -159,7 +161,13 @@ class Game:
 
     # --- Not Implemented Methods ---
     def talk(self, target: str) -> str:
-        raise NotImplementedError("Game.talk() is not yet implemented.")
+        target = target.lower()
+        # Find character in the current room by name
+        for character in self.state.current_room.get_characters():
+            if character.get_name().lower() == target:
+                # Call the character's talk_to method
+                return character.talk_to(self)
+        return f"There is no one named '{target}' here to talk to."
 
     def ask(self, target: str) -> str:
         raise NotImplementedError("Game.ask() is not yet implemented.")

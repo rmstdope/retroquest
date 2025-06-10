@@ -16,3 +16,7 @@ class Item:
     
     def get_short_name(self) -> str:
         return self.short_name
+    
+    def can_be_carried(self) -> bool:
+        """Return True if the item can be carried by the player. Override in subclasses for special cases."""
+        return False
