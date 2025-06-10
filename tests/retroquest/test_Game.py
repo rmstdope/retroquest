@@ -112,3 +112,38 @@ def test_map_multiple_moves(game):
     # Only two rooms shown (count of '- ' at line start)
     room_lines = [line for line in result if line.strip().startswith('- ')]
     assert len(room_lines) == 2
+
+def test_take_item_from_room(game, basic_rooms):
+    # Place an item in the starting room
+    from retroquest.items.Egg import Egg
+    egg = Egg()
+    game.state.current_room.items.append(egg)
+    assert egg in game.state.current_room.items
+    # Take the item
+    result = game.take('egg')
+    assert "You take the egg" in result
+    assert egg in game.state.inventory
+    assert egg not in game.state.current_room.items
+
+def test_take_item_not_present(game):
+    # Try to take an item that isn't in the room
+    result = game.take('nonexistent')
+    assert "There is no 'nonexistent' here to take." in result
+    assert len(game.state.inventory) == 0
+
+def test_drop_item_from_inventory(game, basic_rooms):
+    # Add an item to inventory
+    from retroquest.items.Lantern import Lantern
+    lantern = Lantern()
+    game.state.inventory.append(lantern)
+    assert lantern in game.state.inventory
+    # Drop the item
+    result = game.drop('lantern')
+    assert "You drop the lantern" in result
+    assert lantern not in game.state.inventory
+    assert lantern in game.state.current_room.items
+
+def test_drop_item_not_in_inventory(game):
+    # Try to drop an item not in inventory
+    result = game.drop('nonexistent')
+    assert "You don't have a 'nonexistent' to drop." in result

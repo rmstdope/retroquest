@@ -79,7 +79,7 @@ class Game:
     def examine(self, target: str) -> str:
         target = target.lower()
         # Check inventory first
-        for item in getattr(self.state, 'inventory', []):
+        for item in self.state.inventory:
             if item.get_name().lower() == target or item.get_short_name().lower() == target:
                 return item.get_description()
         # Then check items in the current room
@@ -159,10 +159,26 @@ class Game:
         raise NotImplementedError("Game.taste() is not yet implemented.")
 
     def take(self, item: str) -> str:
-        raise NotImplementedError("Game.take() is not yet implemented.")
+        item = item.lower()
+        # Find item in current room by name or short_name
+        room_items = self.state.current_room.get_items()
+        for obj in room_items:
+            if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
+                # Remove from room
+                self.state.current_room.items.remove(obj)
+                # Add to inventory
+                self.state.inventory.append(obj)
+                return f"You take the {obj.get_name()}."
+        return f"There is no '{item}' here to take."
 
     def drop(self, item: str) -> str:
-        raise NotImplementedError("Game.drop() is not yet implemented.")
+        item = item.lower()
+        for obj in self.state.inventory:
+            if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
+                self.state.inventory.remove(obj)
+                self.state.current_room.items.append(obj)
+                return f"You drop the {obj.get_name()}."
+        return f"You don't have a '{item}' to drop."
 
     def use(self, item: str) -> str:
         raise NotImplementedError("Game.use() is not yet implemented.")
@@ -180,7 +196,12 @@ class Game:
         raise NotImplementedError("Game.unequip() is not yet implemented.")
 
     def inventory(self) -> str:
-        raise NotImplementedError("Game.inventory() is not yet implemented.")
+        if not self.state.inventory:
+            return "Your inventory is empty."
+        lines = ["You are carrying:"]
+        for item in self.state.inventory:
+            lines.append(f"- {item.get_name()}")
+        return "\n".join(lines)
 
     def open(self, target: str) -> str:
         raise NotImplementedError("Game.open() is not yet implemented.")

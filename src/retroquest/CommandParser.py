@@ -102,7 +102,7 @@ class CommandParser:
             for prefix in ('unequip ', 'remove '):
                 if cmd.startswith(prefix):
                     return self.game.unequip(cmd[len(prefix):])
-        elif cmd in ('inventory', 'i', 'show inventory'):
+        elif cmd in ('inventory', 'i', 'show inventory', 'inv'):
             return self.game.inventory()
         elif cmd.startswith('open '):
             return self.game.open(cmd[5:])
