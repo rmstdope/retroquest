@@ -18,5 +18,5 @@ class HiddenGlade(Room):
             spells=["light"],
             usable_items=[],
             characters=[Deer()],
-            exits={"west": "ForestPath", "south": "VillageChapel"}
+            exits={"north": "ForestPath", "south": "VillageChapel"}
         )

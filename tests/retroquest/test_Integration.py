@@ -65,8 +65,6 @@ ROOMS = {
 def test_golden_path_act1_completion(monkeypatch):
     # Simulate all commands in the golden path
     commands = [
-        # Village Square
-        "go north", "go east", "take bucket", "talk villager",
         # Village Well
         "go west", "go east", "use bucket",
         # Blacksmith’s Forge
@@ -136,9 +134,63 @@ def test_golden_path_act1_completion(monkeypatch):
     _execute_commands(game, ["take key"])
     _check_item_in_inventory(game.state, "key")
     
+    # Village Square
+    _execute_commands(game, ["go north", "go north", "go east"])
+    assert game.state.current_room.name == "Village Square", "Not in Village Square after commands (CC -> VF -> VS)"
+    _execute_commands(game, ["take bucket", "talk villager"])
+    _check_item_in_inventory(game.state, "bucket")
 
-    # Check for Act I completion: amulet and map fragment in inventory, and in Road to Greendale
-    # inventory_names = [item.get_name().lower() for item in game.state.inventory]
-    # assert "ancient amulet" in inventory_names, "Amulet not in inventory at end of Act I"
-    # assert "map fragment" in inventory_names, "Map fragment not in inventory at end of Act I"
-    # assert game.state.current_room.name == "Road to Greendale", "Not in Road to Greendale at end of Act I"
+    # # Village Well
+    # # Path: Village Square (S) -> Blacksmith's Forge (W) -> Village Well
+    # # Note: The map shows VS -> (E) GS, VS -> (W) EC, VS -> (N) MH. 
+    # # To reach VW from VS as per golden path step 5 (after VS step 4), need to adjust path or golden path.
+    # # Current golden path in RoomsAct1.md for step 5 (Village Well) is after step 4 (Village Square).
+    # # Map: VS -> EC (W), EC -> VF (S), VF -> VW (E)
+    # # So, from Village Square: go west (to EC), go south (to VF), go east (to VW)
+    # _execute_commands(game, ["go west", "go south", "go east"])
+    # assert game.state.current_room.name == "Village Well", "Not in Village Well after commands (VS -> EC -> VF -> VW)"
+    # _execute_commands(game, ["use bucket"])
+    # # TODO: Add assertion for filled bucket or water interaction if applicable
+
+    # # Blacksmith's Forge
+    # # Path: Village Well (E) -> Blacksmith's Forge
+    # _execute_commands(game, ["go east"])
+    # assert game.state.current_room.name == "Blacksmith's Forge", "Not in Blacksmith's Forge after commands (VW -> BSF)"
+    # # Assuming player has a coin from using the hoe earlier.
+    # _check_item_in_inventory(game.state, "coin") 
+    # _execute_commands(game, ["use coin", "talk blacksmith"])
+    # _check_item_in_inventory(game.state, "coin", should_be_present=False)
+    # # Assuming using coin at blacksmith gives a sharpened knife and removes dull knife if present.
+    # # Need to ensure DullKnife is added to inventory if it's a prerequisite for sharpening.
+    # # For now, let's assume `use coin` handles the transaction and gives `sharpened knife`.
+    # # _check_item_in_inventory(game.state, "dull knife", should_be_present=False) 
+    # _check_item_in_inventory(game.state, "sharpened knife")
+
+    # # General Store
+    # # Path: Blacksmith's Forge (N) -> General Store
+    # _execute_commands(game, ["go north"])
+    # assert game.state.current_room.name == "General Store", "Not in General Store after commands (BSF -> GS)"
+    # _execute_commands(game, ["talk shopkeeper"])
+    # # Player needs a coin to buy rope. The first coin was used at the Blacksmith.
+    # # Golden path suggests: "(If coin was already spent, return to Vegetable Field and use hoe again to uncover another coin, or trade items with shopkeeper.)"
+    # # For the test, we will assume the player needs to get another coin.
+    # # Path: GS (W) -> VS (W) -> EC (S) -> VF
+    # _execute_commands(game, ["go west", "go west", "go south"]) # GS -> VS -> EC -> VF
+    # assert game.state.current_room.name == "Vegetable Field", "Not in Vegetable Field for second coin"
+    # # Using hoe again - assuming RustyHoe is not single-use for *finding* coins, or a new one is acquired.
+    # # For simplicity, let's assume the original RustyHoe was consumed, and we need a new one or the WitheredCarrot interaction gives a coin.
+    # # The current RustyHoe implementation makes it break after one use.
+    # # This part of the golden path needs clarification or game logic adjustment for repeated coin acquisition.
+    # # For now, we will skip buying rope and proceed, or assume a coin is magically available for test purposes.
+    # # Option: Add a coin directly to inventory for test if game logic for re-acquiring isn't in place.
+    # # game.state.inventory.append(Coin()) # Test-only hack if needed
+    # # _check_item_in_inventory(game.state, "coin") 
+    # # _execute_commands(game, ["use coin"]) # Buy rope
+    # # _check_item_in_inventory(game.state, "coin", should_be_present=False)
+    # # _check_item_in_inventory(game.state, "rope")
+
+    # # Check for Act I completion: amulet and map fragment in inventory, and in Road to Greendale
+    # # inventory_names = [item.get_name().lower() for item in game.state.inventory]
+    # # assert "ancient amulet" in inventory_names, "Amulet not in inventory at end of Act I"
+    # # assert "map fragment" in inventory_names, "Map fragment not in inventory at end of Act I"
+    # # assert game.state.current_room.name == "Road to Greendale", "Not in Road to Greendale at end of Act I"

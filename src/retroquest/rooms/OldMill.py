@@ -16,5 +16,5 @@ class OldMill(Room):
             spells=[],
             usable_items=["rope"],
             characters=[],
-            exits={"north": "AbandonedShed", "east": "Riverbank", "west": "GeneralStore"}
+            exits={"north": "AbandonedShed", "east": "Riverbank"}
         )

@@ -34,7 +34,7 @@
 - **Spells:** None.
 - **Usable Items:** Bucket (draw water from the well).
 - **Characters:** Villager (shares rumors, can be questioned).
-- **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east), Blacksmith’s Forge (south)
+- **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east)
 
 ## 5. Mira’s Hut
 
@@ -52,7 +52,7 @@
 - **Spells:** None.
 - **Usable Items:** Coin (buy a sharpened knife).
 - **Characters:** Blacksmith (can sharpen items, offers advice).
-- **Exits:** Village Square (north), Village Well (west), Abandoned Shed (south), General Store (east)
+- **Exits:** Village Well (west), General Store (north)
 
 ## 7. General Store
 
@@ -61,7 +61,7 @@
 - **Spells:** None.
 - **Usable Items:** Coin (purchase items).
 - **Characters:** Shopkeeper (sells goods, shares gossip).
-- **Exits:** Village Square (west), Blacksmith’s Forge (south), Old Mill (east)
+- **Exits:** Village Square (west), Blacksmith’s Forge (south)
 
 ## 8. Village Well
 
@@ -79,7 +79,7 @@
 - **Spells:** `unlock` (opens the box, reveals a map fragment).
 - **Usable Items:** Key (opens shed door).
 - **Characters:** None.
-- **Exits:** Blacksmith’s Forge (north), Village Well (west), Old Mill (south)
+- **Exits:** Blacksmith’s Forge (north), Old Mill (south)
 
 ## 10. Old Mill
 
@@ -106,7 +106,7 @@
 - **Spells:** `grow` (makes a bush bloom, reveals hidden berries).
 - **Usable Items:** Knife (cuts through thick vines).
 - **Characters:** None.
-- **Exits:** Riverbank (north), Hidden Glade (east)
+- **Exits:** Riverbank (north), Hidden Glade (south)
 
 ## 13. Hidden Glade
 
@@ -115,7 +115,7 @@
 - **Spells:** `light` (reveals a hidden inscription on a stone).
 - **Usable Items:** None.
 - **Characters:** Deer (can be observed, hints at magic in the area).
-- **Exits:** Forest Path (west), Village Chapel (south)
+- **Exits:** Forest Path (north), Village Chapel (south)
 
 ## 14. Village Chapel
 
@@ -138,21 +138,22 @@
 ## Room Map
 
 ```
-                [Mira's Hut]
-                     |
-[Elior's Cottage]--[Village Square]--[General Store]
-      |                 |                 |
-[Vegetable Field]--[Village Well]--[Blacksmith's Forge]
-      |                 |                 |
-[Chicken Coop]     [Abandoned Shed]--[Old Mill]--[Riverbank]
-                                         |           |
-                                   [Forest Path]     |
-                                         |           |
-                                   [Hidden Glade]    |
-                                         |           |
-                                   [Village Chapel]--+
-                                         |
-                                 [Road to Greendale]
+                                [Mira's Hut]
+                                     |
+            [Elior's Cottage]--[Village Square]--[General Store]
+                    |                                   |
+            [Vegetable Field]--[Village Well]--[Blacksmith's Forge]
+                    |                 |
+            [Chicken Coop]     [Abandoned Shed]
+                                      |
+                                  [Old Mill]----------[Riverbank]
+                                                         |
+                                                         |
+                                                   [Forest Path]
+                                                         |
+                                                   [Hidden Glade]
+                                                         |
+                                                  [Village Chapel]--[Road to Greendale]
 ```
 
 ## Action that completes the act:

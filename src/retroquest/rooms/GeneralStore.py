@@ -18,5 +18,5 @@ class GeneralStore(Room):
             spells=[],
             usable_items=["coin"],
             characters=[Shopkeeper()],
-            exits={"west": "VillageSquare", "east": "OldMill"}
+            exits={"west": "VillageSquare", "south": "BlacksmithsForge"} # Corrected based on RoomsAct1.md and map
         )

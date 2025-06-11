@@ -17,5 +17,5 @@ class ForestPath(Room):
             spells=["grow"],
             usable_items=["knife"],
             characters=[],
-            exits={"north": "Riverbank", "east": "HiddenGlade"}
+            exits={"north": "Riverbank", "south": "HiddenGlade"}  # Corrected: HG is South, not East.
         )

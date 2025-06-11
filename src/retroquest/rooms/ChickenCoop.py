@@ -14,7 +14,7 @@ class ChickenCoop(Room):
                 "casting striped shadows on the dirt floor. Something glints beneath the straw, hinting at "
                 "a hidden secret."
             ),
-            items=[Egg(), Feather(), Key()],
+            items=[Egg(), Feather()],
             spells=[],
             usable_items=["bread"],
             characters=[],

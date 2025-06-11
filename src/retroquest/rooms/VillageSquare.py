@@ -17,5 +17,5 @@ class VillageSquare(Room):
             spells=[],
             usable_items=["bucket"],
             characters=[Villager()],
-            exits={"west": "EliorsCottage", "north": "MirasHut", "east": "GeneralStore", "south": "BlacksmithsForge"}
+            exits={"west": "EliorsCottage", "north": "MirasHut", "east": "GeneralStore"}
         )

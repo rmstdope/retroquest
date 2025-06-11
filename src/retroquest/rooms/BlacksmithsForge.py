@@ -17,5 +17,5 @@ class BlacksmithsForge(Room):
             spells=[],
             usable_items=["coin"],
             characters=[Blacksmith()],
-            exits={"north": "VillageSquare", "west": "VillageWell", "south": "AbandonedShed"}
+            exits={"west": "VillageWell", "north": "GeneralStore"}
         )

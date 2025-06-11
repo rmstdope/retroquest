@@ -14,5 +14,5 @@ class VillageWell(Room):
             spells=["purify"],
             usable_items=["bucket"],
             characters=[],
-            exits={"west": "VegetableField", "east": "BlacksmithsForge"}
+            exits={"west": "VegetableField", "east": "BlacksmithsForge", "south": "AbandonedShed"}
         )

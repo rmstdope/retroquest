@@ -17,5 +17,5 @@ class AbandonedShed(Room):
             spells=["unlock"],
             usable_items=["key"],
             characters=[],
-            exits={"north": "BlacksmithsForge", "south": "OldMill"}
+            exits={"north": "VillageWell", "south": "OldMill"}
         )
