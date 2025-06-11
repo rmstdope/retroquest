@@ -210,3 +210,67 @@ def test_spells_command_with_spells(game):
     assert "Known Spells:" in result
     assert f"  - {light_spell.get_name()}: {light_spell.get_description()}" in result
     assert f"  - {heal_spell.get_name()}: {heal_spell.get_description()}" in result
+
+# --- Tests for \'give\' command ---
+
+def test_give_item_to_character_successful(game, basic_rooms):
+    from retroquest.items.Apple import Apple
+    from retroquest.characters.Villager import Villager # Assuming a generic Villager character
+    
+    apple = Apple()
+    villager = Villager() # Villager needs to be in the room
+    
+    game.state.inventory.append(apple)
+    game.state.current_room.characters.append(villager)
+    
+    # Mock the villager\'s give_item method
+    villager.give_item = MagicMock(return_value=f"{villager.get_name()} takes the {apple.get_name()}.")
+    
+    result = game.give(f"{apple.get_name()} to {villager.get_name()}")
+    
+    assert f"{villager.get_name()} takes the {apple.get_name()}." in result
+    villager.give_item.assert_called_once_with(game.state, apple)
+    # Assuming the character\'s give_item method is responsible for removing the item if accepted.
+    # If Game.give should remove it, add that check here.
+    # For now, we only check the call and response.
+
+def test_give_item_not_in_inventory(game, basic_rooms):
+    from retroquest.characters.Villager import Villager
+    villager = Villager()
+    game.state.current_room.characters.append(villager)
+    
+    result = game.give(f"nonexistent_item to {villager.get_name()}")
+    assert "You don\'t have any \'nonexistent_item\'." in result
+
+def test_give_item_to_character_not_in_room(game, basic_rooms):
+    from retroquest.items.Apple import Apple
+    apple = Apple()
+    game.state.inventory.append(apple)
+    
+    # Character "Ghost" is not added to the room
+    result = game.give(f"{apple.get_name()} to Ghost")
+    assert "\'Ghost\' is not here." in result
+
+def test_give_item_character_does_not_want(game, basic_rooms):
+    from retroquest.items.Stick import Stick # An item the character might not want
+    from retroquest.characters.Character import Character # Base character
+    
+    stick = Stick()
+    generic_char = Character(name="Grumpy Person", description="Someone grumpy.")
+    
+    game.state.inventory.append(stick)
+    game.state.current_room.characters.append(generic_char)
+    
+    # The default Character.give_item should be called
+    result = game.give(f"{stick.get_name()} to {generic_char.get_name()}")
+    assert f"{generic_char.get_name()} doesn\'t seem interested in the {stick.get_name()}." in result
+
+def test_give_item_invalid_format(game):
+    result = game.give("apple villager") # Missing "to"
+    assert "Invalid command format. Please use \'give <item> to <character>\'." in result
+
+    result = game.give("to villager") # Missing item
+    assert "What do you want to give? Use \'give <item> to <character>\'." in result
+
+    result = game.give("apple to") # Missing character
+    assert "Who do you want to give it to? Use \'give <item> to <character>\'." in result
