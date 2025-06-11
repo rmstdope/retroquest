@@ -16,6 +16,8 @@ from retroquest.rooms.HiddenGlade import HiddenGlade
 from retroquest.rooms.VillageChapel import VillageChapel
 from retroquest.rooms.RoadToGreendale import RoadToGreendale
 
+results = []
+
 # Helper functions for assertions
 def _check_item_in_inventory(game_state, item_name: str, should_be_present: bool = True):
     inventory_names = [item.get_name().lower() for item in game_state.inventory]
@@ -38,9 +40,13 @@ def _check_spell_known(game_state, spell_name: str, should_be_present: bool = Tr
     else:
         assert spell_name.lower() not in spell_names, f"Spell '{spell_name}' found in known spells, but was not expected."
 
+def _check_current_room(game_state, expected_room_name: str):
+    assert game_state.current_room.name == expected_room_name, f"Not in '{expected_room_name}'"
+
 def _execute_commands(game, commands_list):
+    global results
     for cmd in commands_list:
-        game.handle_command(cmd)
+        results += game.handle_command(cmd)
 
 # Room setup for integration test
 ROOMS = {
@@ -111,24 +117,25 @@ def test_golden_path_act1_completion(monkeypatch):
     # monkeypatch.setattr(game, "save", lambda: None)
 
     # Elior’s Cottage
-    _execute_commands(game, ["use lantern", "take bread", "talk to grandmother", "use journal", "talk to grandmother"])
-    # Check if bread is in inventory
+    _execute_commands(game, ["use lantern", "take bread", "talk to grandmother"])
     _check_item_in_inventory(game.state, "bread")
+    _execute_commands(game, ["use journal", "talk to grandmother"])
     _check_spell_known(game.state, "revive")
 
     # Vegetable Field
     _execute_commands(game, ["go south", "take rusty hoe"])
-    assert game.state.current_room.name == "Vegetable Field", "Not in Vegetable Field after commands"
+    _check_current_room(game.state, "Vegetable Field")
     _check_item_in_inventory(game.state, "rusty hoe")
     _check_item_in_room(game.state.current_room, "rusty hoe", should_be_present=False)
 
-    _execute_commands(game, ["use hoe", "cast revive"])
+    _execute_commands(game, ["use hoe", "take knife", "cast revive"])
     _check_item_in_inventory(game.state, "coin")
+    _check_item_in_inventory(game.state, "knife (dull)")
     _check_item_in_inventory(game.state, "rusty hoe", should_be_present=False)
 
     # Chicken Coop
     _execute_commands(game, ["go south", "use bread"])
-    assert game.state.current_room.name == "Chicken Coop", "Not in Chicken Coop after commands"
+    _check_current_room(game.state, "Chicken Coop")
     _check_item_in_inventory(game.state, "bread", should_be_present=False)
     _check_item_in_room(game.state.current_room, "key")
     _execute_commands(game, ["take key"])
@@ -136,30 +143,21 @@ def test_golden_path_act1_completion(monkeypatch):
     
     # Village Square
     _execute_commands(game, ["go north", "go north", "go east"])
-    assert game.state.current_room.name == "Village Square", "Not in Village Square after commands (CC -> VF -> VS)"
+    _check_current_room(game.state, "Village Square")
     _execute_commands(game, ["take bucket", "talk villager"])
     _check_item_in_inventory(game.state, "bucket")
 
-    # # Village Well
-    # # Path: Village Square (S) -> Blacksmith's Forge (W) -> Village Well
-    # # Note: The map shows VS -> (E) GS, VS -> (W) EC, VS -> (N) MH. 
-    # # To reach VW from VS as per golden path step 5 (after VS step 4), need to adjust path or golden path.
-    # # Current golden path in RoomsAct1.md for step 5 (Village Well) is after step 4 (Village Square).
-    # # Map: VS -> EC (W), EC -> VF (S), VF -> VW (E)
-    # # So, from Village Square: go west (to EC), go south (to VF), go east (to VW)
-    # _execute_commands(game, ["go west", "go south", "go east"])
-    # assert game.state.current_room.name == "Village Well", "Not in Village Well after commands (VS -> EC -> VF -> VW)"
-    # _execute_commands(game, ["use bucket"])
-    # # TODO: Add assertion for filled bucket or water interaction if applicable
+    # Village Well
+    _execute_commands(game, ["go west", "go south", "go east"])
+    _check_current_room(game.state, "Village Well")
+    _execute_commands(game, ["use bucket"])
+    _check_item_in_inventory(game.state, "bucket (full)")
 
-    # # Blacksmith's Forge
-    # # Path: Village Well (E) -> Blacksmith's Forge
-    # _execute_commands(game, ["go east"])
-    # assert game.state.current_room.name == "Blacksmith's Forge", "Not in Blacksmith's Forge after commands (VW -> BSF)"
-    # # Assuming player has a coin from using the hoe earlier.
-    # _check_item_in_inventory(game.state, "coin") 
-    # _execute_commands(game, ["use coin", "talk blacksmith"])
-    # _check_item_in_inventory(game.state, "coin", should_be_present=False)
+    # Blacksmith's Forge
+    _execute_commands(game, ["go east"])
+    _check_current_room(game.state, "Blacksmith's Forge")
+    _execute_commands(game, ["give coin to blacksmith", "talk blacksmith"])
+    _check_item_in_inventory(game.state, "coin", should_be_present=False)
     # # Assuming using coin at blacksmith gives a sharpened knife and removes dull knife if present.
     # # Need to ensure DullKnife is added to inventory if it's a prerequisite for sharpening.
     # # For now, let's assume `use coin` handles the transaction and gives `sharpened knife`.
@@ -169,14 +167,14 @@ def test_golden_path_act1_completion(monkeypatch):
     # # General Store
     # # Path: Blacksmith's Forge (N) -> General Store
     # _execute_commands(game, ["go north"])
-    # assert game.state.current_room.name == "General Store", "Not in General Store after commands (BSF -> GS)"
+    # _check_current_room(game.state, "General Store", "BSF -> GS")
     # _execute_commands(game, ["talk shopkeeper"])
     # # Player needs a coin to buy rope. The first coin was used at the Blacksmith.
     # # Golden path suggests: "(If coin was already spent, return to Vegetable Field and use hoe again to uncover another coin, or trade items with shopkeeper.)"
     # # For the test, we will assume the player needs to get another coin.
     # # Path: GS (W) -> VS (W) -> EC (S) -> VF
     # _execute_commands(game, ["go west", "go west", "go south"]) # GS -> VS -> EC -> VF
-    # assert game.state.current_room.name == "Vegetable Field", "Not in Vegetable Field for second coin"
+    # _check_current_room(game.state, "Vegetable Field", "for second coin")
     # # Using hoe again - assuming RustyHoe is not single-use for *finding* coins, or a new one is acquired.
     # # For simplicity, let's assume the original RustyHoe was consumed, and we need a new one or the WitheredCarrot interaction gives a coin.
     # # The current RustyHoe implementation makes it break after one use.

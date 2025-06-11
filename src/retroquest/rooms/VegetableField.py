@@ -1,6 +1,7 @@
 from .Room import Room
 from ..items.WitheredCarrot import WitheredCarrot
 from ..items.RustyHoe import RustyHoe
+from ..items.Knife import Knife
 
 class VegetableField(Room):
     def __init__(self) -> None:
@@ -12,7 +13,7 @@ class VegetableField(Room):
                 "rustles the brittle leaves, carrying the scent of soil and distant rain. The field feels "
                 "quiet, as if holding its breath, waiting for a touch of magic to bring it back to life."
             ),
-            items=[WitheredCarrot(), RustyHoe()],
+            items=[WitheredCarrot(), RustyHoe(), Knife()],
             spells=["revive"],
             usable_items=["hoe"],
             characters=[],

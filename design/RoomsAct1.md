@@ -12,7 +12,7 @@
 ## 2. Vegetable Field
 
 - **Description:** Rows of withered crops under a gray sky.
-- **Items:** Withered carrot, rusty hoe.
+- **Items:** Withered carrot, rusty hoe, knife (dull).
 - **Spells:** `revive` (restores a single plant, hints at Elior’s power).
 - **Usable Items:** Hoe (uncovers a hidden coin).
 - **Characters:** None.
@@ -48,7 +48,7 @@
 ## 6. Blacksmith’s Forge
 
 - **Description:** A hot, smoky forge with tools and weapons.
-- **Items:** Dull knife, horseshoe.
+- **Items:** horseshoe.
 - **Spells:** None.
 - **Usable Items:** Coin (buy a sharpened knife).
 - **Characters:** Blacksmith (can sharpen items, offers advice).
@@ -177,6 +177,8 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
      _Hoe is added to inventory._
    - Use hoe to uncover hidden coin.  
      _Coin is added to inventory._
+   - Take dull knife
+     _Dull knife is added to inventory._
    - Attempt to cast `revive` (fails, but hints at magic).  
      _Nothing happens, but Elior feels a strange energy._
 
@@ -201,8 +203,8 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 6. **Blacksmith’s Forge:**
 
-   - Use coin to buy sharpened knife.  
-     _Coin is removed from inventory, sharpened knife is added to inventory._
+   - Use coin to get dull knife sharpened.  
+     _Coin is removed from inventory, dull knife is transformed to sharp knife._
    - Speak to blacksmith for advice.  
      _Blacksmith gives tips on using tools and mentions strange happenings._
 
@@ -212,7 +214,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
      _Coin is removed from inventory, rope is added to inventory._
    - Speak to shopkeeper for gossip.  
      _Shopkeeper mentions Mira’s knowledge of magic._
-   - (If coin was already spent, return to Vegetable Field and use hoe again to uncover another coin, or trade items with shopkeeper.)
+   - (If coin was already spent, return to Vegetable Field and use hoe again to uncover another coin)
 
 8. **Abandoned Shed:**
 

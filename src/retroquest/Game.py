@@ -186,8 +186,50 @@ class Game:
     def ask(self, target: str) -> str:
         raise NotImplementedError("Game.ask() is not yet implemented.")
 
-    def give(self, item: str) -> str:
-        raise NotImplementedError("Game.give() is not yet implemented.")
+    def give(self, command_args: str) -> str:
+        # Expected format: "give <item_name> to <character_name>"
+        parts = command_args.lower().split()
+        
+        item_name = ""
+        character_name = ""
+
+        if "to" not in parts:
+            return "Invalid command format. Please use 'give <item> to <character>'."
+        to_index = parts.index("to")
+
+        if to_index == 0: # No item name provided
+            return "What do you want to give? Use 'give <item> to <character>'."
+        
+        item_name = " ".join(parts[:to_index])
+        
+        if to_index >= len(parts) - 1: # No character name provided
+            return "Who do you want to give it to? Use 'give <item> to <character>'."
+            
+        character_name = " ".join(parts[to_index+1:])
+
+        # Check if item is in inventory
+        item_to_give = None
+        for inv_item in self.state.inventory:
+            if inv_item.get_name().lower() == item_name or \
+               inv_item.get_short_name().lower() == item_name:
+                item_to_give = inv_item
+                break
+        
+        if not item_to_give:
+            return f"You don't have any '{item_name}'."
+
+        # Check if character is in the room
+        character_to_receive = None
+        for char_in_room in self.state.current_room.get_characters():
+            if char_in_room.get_name().lower() == character_name:
+                character_to_receive = char_in_room
+                break
+        
+        if not character_to_receive:
+            return f"'{character_name.capitalize()}' is not here."
+
+        # Call give_item on the character
+        return character_to_receive.give_item(self.state, item_to_give)
 
     def show(self, item: str) -> str:
         raise NotImplementedError("Game.show() is not yet implemented.")

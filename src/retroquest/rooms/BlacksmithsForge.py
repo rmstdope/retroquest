@@ -1,5 +1,5 @@
 from .Room import Room
-from ..items.DullKnife import DullKnife
+from ..items.Knife import Knife
 from ..items.Horseshoe import Horseshoe
 from ..characters.Blacksmith import Blacksmith
 
@@ -13,7 +13,7 @@ class BlacksmithsForge(Room):
                 "half-finished weapons hang from the walls, and the blacksmith wipes his brow, his arms "
                 "corded with muscle. Sparks dance in the gloom, and the heat is almost overwhelming."
             ),
-            items=[DullKnife(), Horseshoe()],
+            items=[Knife(), Horseshoe()],
             spells=[],
             usable_items=["coin"],
             characters=[Blacksmith()],
