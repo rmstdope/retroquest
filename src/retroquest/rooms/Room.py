@@ -19,6 +19,12 @@ class Room:
     def get_items(self) -> list:
         return self.items
 
+    def add_item(self, item) -> None:
+        """Adds an item to the room's list of items."""
+        if self.items is None:
+            self.items = []
+        self.items.append(item)
+
     def get_spells(self) -> list:
         return self.spells
 
@@ -37,7 +43,7 @@ class Room:
         desc += f"{self.name}\n"
         desc += "-" * 50 + "\n"
         desc += self.description + '\n'
-        visible_items = [item for item in self.items if item.get_is_visible()]
+        visible_items = [item for item in self.items]
         if visible_items:
             desc += f"\nItems you can see: {', '.join(item.get_name() for item in visible_items)}"
         if self.characters:

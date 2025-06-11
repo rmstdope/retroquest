@@ -99,9 +99,6 @@ class Game:
         # Then check items in the current room
         for item in self.state.current_room.get_items():
             if item.get_name().lower() == target or item.get_short_name().lower() == target:
-                if not item.get_is_visible():
-                    # If the item is in the room but not visible, act as if it's not there for examination.
-                    continue
                 return item.get_description()
         # Then check characters in the current room
         for character in self.state.current_room.get_characters():
@@ -159,14 +156,13 @@ class Game:
         room_items = self.state.current_room.get_items()
         for obj in room_items:
             if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
-                if obj.get_is_visible():
-                    if not obj.can_be_carried():
-                        return f"You can't take the {obj.get_name()}."
-                    # Remove from room
-                    self.state.current_room.items.remove(obj)
-                    # Add to inventory
-                    self.state.inventory.append(obj)
-                    return f"You take the {obj.get_name()}."
+                if not obj.can_be_carried():
+                    return f"You can't take the {obj.get_name()}."
+                # Remove from room
+                self.state.current_room.items.remove(obj)
+                # Add to inventory
+                self.state.inventory.append(obj)
+                return f"You take the {obj.get_name()}."
         return f"There is no '{item}' here to take."
 
     def inventory(self) -> str:
@@ -184,7 +180,7 @@ class Game:
         for character in self.state.current_room.get_characters():
             if character.get_name().lower() == target:
                 # Call the character's talk_to method
-                return character.talk_to(self)
+                return character.talk_to(self.state)
         return f"There is no one named '{target}' here to talk to."
 
     def ask(self, target: str) -> str:
@@ -249,11 +245,32 @@ class Game:
     def close(self, target: str) -> str:
         raise NotImplementedError("Game.close() is not yet implemented.")
 
-    def cast(self, spell: str) -> str:
-        raise NotImplementedError("Game.cast() is not yet implemented.")
+    def cast(self, spell_name: str) -> str:
+        spell_name = spell_name.lower()
+        for spell_obj in self.state.known_spells:
+            if spell_obj.get_name().lower() == spell_name:
+                return spell_obj.cast(self.state) # Pass game_state to the spell's cast method
+        return f"You don't know the spell '{spell_name}'."
 
     def learn(self, spell: str) -> str:
-        raise NotImplementedError("Game.learn() is not yet implemented.")
+        # For now, let's assume `spell` is an object of a Spell subclass
+        # In a real scenario, you might look up the spell by name and then add its instance
+        if hasattr(spell, 'get_name') and hasattr(spell, 'get_description'):
+            if spell not in self.state.known_spells:
+                self.state.known_spells.append(spell)
+                return f"You have learned the spell: {spell.get_name()}!"
+            else:
+                return f"You already know the spell: {spell.get_name()}."
+        return "You can't learn that."
+
+    def spells(self) -> str: # Method to list known spells
+        if not self.state.known_spells:
+            return "You don't know any spells yet."
+        
+        output = ["Known Spells:"]
+        for spell_obj in self.state.known_spells:
+            output.append(f"  - {spell_obj.get_name()}: {spell_obj.get_description()}")
+        return "\n".join(output)
 
     def save(self) -> str:
         raise NotImplementedError("Game.save() is not yet implemented.")

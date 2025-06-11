@@ -19,10 +19,9 @@ class Lantern(Item):
             action_taken_message = "The lantern is already lit."
 
         # Item revealing logic
-        for item_in_room in game_state.current_room.get_items():
-            if item_in_room.get_name().lower() == "bread" and not item_in_room.get_is_visible():
-                item_in_room.set_is_visible(True)
-            elif item_in_room.get_name().lower() == "elior's journal" and not item_in_room.get_is_visible():
-                item_in_room.set_is_visible(True)
+        from .Bread import Bread
+        from .EliorsJournal import EliorsJournal
+        game_state.current_room.add_item(Bread())  # Add bread to the room
+        game_state.current_room.add_item(EliorsJournal())
         
         return action_taken_message

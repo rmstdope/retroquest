@@ -1,6 +1,7 @@
 from .Room import Room
 from ..items.Egg import Egg
 from ..items.Feather import Feather
+from ..items.Key import Key
 
 class ChickenCoop(Room):
     def __init__(self) -> None:
@@ -13,7 +14,7 @@ class ChickenCoop(Room):
                 "casting striped shadows on the dirt floor. Something glints beneath the straw, hinting at "
                 "a hidden secret."
             ),
-            items=[Egg(), Feather()],
+            items=[Egg(), Feather(), Key()],
             spells=[],
             usable_items=["bread"],
             characters=[],

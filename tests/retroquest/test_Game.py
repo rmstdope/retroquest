@@ -179,3 +179,34 @@ def test_drop_item_not_in_inventory(game):
     # Try to drop an item not in inventory
     result = game.drop('nonexistent')
     assert "You don't have a 'nonexistent' to drop." in result
+
+def test_learn_spell(game):
+    from retroquest.spells.LightSpell import LightSpell
+    light_spell = LightSpell()
+    result = game.learn(light_spell)
+    assert "You have learned the spell: Light!" in result
+    assert light_spell in game.state.known_spells
+
+def test_learn_spell_already_known(game):
+    from retroquest.spells.LightSpell import LightSpell
+    light_spell = LightSpell()
+    game.learn(light_spell) # Learn it once
+    result = game.learn(light_spell) # Try to learn again
+    assert "You already know the spell: Light." in result
+    assert game.state.known_spells.count(light_spell) == 1
+
+def test_spells_command_no_spells(game):
+    result = game.spells()
+    assert "You don't know any spells yet." in result
+
+def test_spells_command_with_spells(game):
+    from retroquest.spells.LightSpell import LightSpell
+    from retroquest.spells.HealSpell import HealSpell
+    light_spell = LightSpell()
+    heal_spell = HealSpell()
+    game.learn(light_spell)
+    game.learn(heal_spell)
+    result = game.spells()
+    assert "Known Spells:" in result
+    assert f"  - {light_spell.get_name()}: {light_spell.get_description()}" in result
+    assert f"  - {heal_spell.get_name()}: {heal_spell.get_description()}" in result

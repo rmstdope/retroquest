@@ -16,6 +16,32 @@ from retroquest.rooms.HiddenGlade import HiddenGlade
 from retroquest.rooms.VillageChapel import VillageChapel
 from retroquest.rooms.RoadToGreendale import RoadToGreendale
 
+# Helper functions for assertions
+def _check_item_in_inventory(game_state, item_name: str, should_be_present: bool = True):
+    inventory_names = [item.get_name().lower() for item in game_state.inventory]
+    if should_be_present:
+        assert item_name.lower() in inventory_names, f"{item_name} not found in inventory, but was expected."
+    else:
+        assert item_name.lower() not in inventory_names, f"{item_name} found in inventory, but was not expected."
+
+def _check_item_in_room(current_room, item_name: str, should_be_present: bool = True):
+    room_item_names = [item.get_name().lower() for item in current_room.get_items()]
+    if should_be_present:
+        assert item_name.lower() in room_item_names, f"{item_name} not found in room {current_room.name}, but was expected."
+    else:
+        assert item_name.lower() not in room_item_names, f"{item_name} found in room {current_room.name}, but was not expected."
+
+def _check_spell_known(game_state, spell_name: str, should_be_present: bool = True):
+    spell_names = [spell.get_name().lower() for spell in game_state.known_spells]
+    if should_be_present:
+        assert spell_name.lower() in spell_names, f"Spell '{spell_name}' not found in known spells, but was expected."
+    else:
+        assert spell_name.lower() not in spell_names, f"Spell '{spell_name}' found in known spells, but was not expected."
+
+def _execute_commands(game, commands_list):
+    for cmd in commands_list:
+        game.handle_command(cmd)
+
 # Room setup for integration test
 ROOMS = {
     "EliorsCottage": EliorsCottage(),
@@ -39,12 +65,6 @@ ROOMS = {
 def test_golden_path_act1_completion(monkeypatch):
     # Simulate all commands in the golden path
     commands = [
-        # Elior’s Cottage
-        "use lantern", "take bread", "talk grandmother", "use journal", "talk grandmother",
-        # Vegetable Field
-        "go south", "take rusty hoe", "use hoe", "cast revive",
-        # Chicken Coop
-        "go south", "use bread", "take key",
         # Village Square
         "go north", "go east", "take bucket", "talk villager",
         # Village Well
@@ -93,11 +113,29 @@ def test_golden_path_act1_completion(monkeypatch):
     # monkeypatch.setattr(game, "save", lambda: None)
 
     # Elior’s Cottage
-    for cmd in ["use lantern", "take bread", "talk grandmother", "use journal", "talk grandmother"]:
-        game.handle_command(cmd)
+    _execute_commands(game, ["use lantern", "take bread", "talk to grandmother", "use journal", "talk to grandmother"])
     # Check if bread is in inventory
-    inventory_names = [item.get_name().lower() for item in game.state.inventory]
-    assert "bread" in inventory_names, "Bread not found in inventory after 'take bread'"
+    _check_item_in_inventory(game.state, "bread")
+    _check_spell_known(game.state, "revive")
+
+    # Vegetable Field
+    _execute_commands(game, ["go south", "take rusty hoe"])
+    assert game.state.current_room.name == "Vegetable Field", "Not in Vegetable Field after commands"
+    _check_item_in_inventory(game.state, "rusty hoe")
+    _check_item_in_room(game.state.current_room, "rusty hoe", should_be_present=False)
+
+    _execute_commands(game, ["use hoe", "cast revive"])
+    _check_item_in_inventory(game.state, "coin")
+    _check_item_in_inventory(game.state, "rusty hoe", should_be_present=False)
+
+    # Chicken Coop
+    _execute_commands(game, ["go south", "use bread"])
+    assert game.state.current_room.name == "Chicken Coop", "Not in Chicken Coop after commands"
+    _check_item_in_inventory(game.state, "bread", should_be_present=False)
+    _check_item_in_room(game.state.current_room, "key")
+    _execute_commands(game, ["take key"])
+    _check_item_in_inventory(game.state, "key")
+    
 
     # Check for Act I completion: amulet and map fragment in inventory, and in Road to Greendale
     # inventory_names = [item.get_name().lower() for item in game.state.inventory]
