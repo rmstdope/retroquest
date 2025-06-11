@@ -37,8 +37,9 @@ class Room:
         desc += f"{self.name}\n"
         desc += "-" * 50 + "\n"
         desc += self.description + '\n'
-        if self.items:
-            desc += f"\nItems you can see: {', '.join(item.get_name() for item in self.items)}"
+        visible_items = [item for item in self.items if item.get_is_visible()]
+        if visible_items:
+            desc += f"\nItems you can see: {', '.join(item.get_name() for item in visible_items)}"
         if self.characters:
             # Use get_name for character instances
             desc += f"\nCharacters present: {', '.join(c.get_name() for c in self.characters)}"

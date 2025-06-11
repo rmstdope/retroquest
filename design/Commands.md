@@ -42,7 +42,7 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - drink [item]
 - equip [item] / wear [item]
 - unequip [item] / remove [item]
-- inventory / i / show inventory
+- inventory / i
 - open [container]
 - close [container]
 
@@ -69,8 +69,8 @@ Below is a comprehensive list of all commands that should be possible to use in 
 
 - wait / pause
 - sleep / rest
-- map / show map
-- stats / show stats
+- map
+- stats
 
 ---
 

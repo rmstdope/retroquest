@@ -4,5 +4,7 @@ class Bread(Item):
     def __init__(self) -> None:
         super().__init__(
             name="bread",
-            description="A small loaf of fresh, crusty bread. It smells delicious and could restore a bit of energy."
+            description="A small loaf of fresh, crusty bread. It smells delicious and could restore a bit of energy.",
+            is_visible=False,
+            can_be_carried=True
         )

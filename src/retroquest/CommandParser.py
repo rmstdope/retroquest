@@ -102,7 +102,7 @@ class CommandParser:
             for prefix in ('unequip ', 'remove '):
                 if cmd.startswith(prefix):
                     return self.game.unequip(cmd[len(prefix):])
-        elif cmd in ('inventory', 'i', 'show inventory', 'inv'):
+        elif cmd in ('inventory', 'i', 'inv'):
             return self.game.inventory()
         elif cmd.startswith('open '):
             return self.game.open(cmd[5:])
@@ -141,9 +141,9 @@ class CommandParser:
             return self.game.wait()
         elif cmd in ('sleep', 'rest'):
             return self.game.sleep()
-        elif cmd in ('map', 'show map'):
+        elif cmd in ('map'):
             return self.game.map()
-        elif cmd in ('stats', 'show stats'):
+        elif cmd in ('stats'):
             return self.game.stats()
         else:
             return self.game.unknown(command)

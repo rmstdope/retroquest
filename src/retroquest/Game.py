@@ -59,18 +59,32 @@ class Game:
     def help(self, arg: str = None) -> str:
         return (
             "Available commands:\n"
-            "  north, south, east, west, n, s, e, w, go <direction>\n"
-            "      Move in a direction.\n"
-            "  look\n"
-            "      Take a careful look around your current location.\n"
-            "  examine <item>\n"
-            "      Examine an item in the room or your inventory. You can use the item's name or short name.\n"
-            "  map\n"
-            "      Show a list of visited rooms and their exits.\n"
-            "  quit\n"
-            "      Quit the game (with save prompt).\n"
-            "  help\n"
-            "      Show this help message.\n"
+            "  Movement:\n"
+            "    go <direction>, <direction>, <short_direction>\n"
+            "        (e.g., go north, north, n)\n"
+            "        Move in a specified direction.\n"
+            "  Actions:\n"
+            "    look, look around, observe, survey\n"
+            "        Take a careful look around your current location.\n"
+            "    examine <target>, look at <target>, inspect <target>, check <target>\n"
+            "        Examine an item or character in the room or your inventory.\n"
+            "    take <item>, pick up <item>, grab <item>, get <item>\n"
+            "        Pick up an item from the room and add it to your inventory.\n"
+            "    drop <item>, discard <item>\n"
+            "        Remove an item from your inventory and leave it in the room.\n"
+            "    inventory, inv, i\n"
+            "        List items currently in your inventory.\n"
+            "    use <item>\n"
+            "        Use an item from your inventory or in the room.\n"
+            "    talk <character>, talk to <character>, speak to <character>, converse with <character>\n"
+            "        Speak to a character in the current room.\n"
+            "  Game & Information:\n"
+            "    map\n"
+            "        Show a list of visited rooms and their exits.\n"
+            "    quit, exit\n"
+            "        Quit the game (with save prompt).\n"
+            "    help, ?\n"
+            "        Show this help message.\n"
         )
 
     def look(self) -> str:
@@ -85,6 +99,9 @@ class Game:
         # Then check items in the current room
         for item in self.state.current_room.get_items():
             if item.get_name().lower() == target or item.get_short_name().lower() == target:
+                if not item.get_is_visible():
+                    # If the item is in the room but not visible, act as if it's not there for examination.
+                    continue
                 return item.get_description()
         # Then check characters in the current room
         for character in self.state.current_room.get_characters():
@@ -142,13 +159,14 @@ class Game:
         room_items = self.state.current_room.get_items()
         for obj in room_items:
             if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
-                if not obj.can_be_carried():
-                    return f"You can't take the {obj.get_name()}."
-                # Remove from room
-                self.state.current_room.items.remove(obj)
-                # Add to inventory
-                self.state.inventory.append(obj)
-                return f"You take the {obj.get_name()}."
+                if obj.get_is_visible():
+                    if not obj.can_be_carried():
+                        return f"You can't take the {obj.get_name()}."
+                    # Remove from room
+                    self.state.current_room.items.remove(obj)
+                    # Add to inventory
+                    self.state.inventory.append(obj)
+                    return f"You take the {obj.get_name()}."
         return f"There is no '{item}' here to take."
 
     def inventory(self) -> str:
@@ -196,8 +214,22 @@ class Game:
     def taste(self, item: str) -> str:
         raise NotImplementedError("Game.taste() is not yet implemented.")
 
-    def use(self, item: str) -> str:
-        raise NotImplementedError("Game.use() is not yet implemented.")
+    def use(self, item_name: str) -> str:
+        item_name = item_name.lower()
+        # Check inventory for the item
+        for item_obj in self.state.inventory:
+            if item_obj.get_name().lower() == item_name or item_obj.get_short_name().lower() == item_name:
+                return item_obj.use(self.state) # Pass game_state to the item's use method
+        
+        # Check items in the current room if not in inventory (e.g. a lever)
+        for item_obj in self.state.current_room.get_items():
+            if item_obj.get_name().lower() == item_name or item_obj.get_short_name().lower() == item_name:
+                # Check if the item needs to be in inventory to be used
+                if hasattr(item_obj, 'requires_pickup') and item_obj.requires_pickup:
+                    return f"You need to pick up the {item_obj.get_name()} first."
+                return item_obj.use(self.state) # Pass game_state to the item's use method
+
+        return f"You don't have a '{item_name}' to use, and there isn't one here."
 
     def eat(self, item: str) -> str:
         raise NotImplementedError("Game.eat() is not yet implemented.")

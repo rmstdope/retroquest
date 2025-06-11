@@ -5,5 +5,6 @@ class EliorsJournal(Item):
         super().__init__(
             name="Elior's journal",
             description="A leather-bound journal filled with Elior's careful handwriting. The pages are full of notes, sketches, and secrets.",
-            short_name="journal"
+            short_name="journal",
+            is_visible=False  # Make the journal non-visible by default
         )
