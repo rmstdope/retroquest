@@ -14,48 +14,71 @@ class CommandParser:
         self.last_raw = command
         cmd = command.strip().lower()
         # Movement
-        if cmd in ('go north', 'north', 'n', 'move north'):
+        if cmd in ('go north', 'move north', 'north', 'n'):
             return self.game.move('north')
-        elif cmd in ('go south', 'south', 's', 'move south'):
+        elif cmd in ('go south', 'move south', 'south', 's'):
             return self.game.move('south')
-        elif cmd in ('go east', 'east', 'e', 'move east'):
+        elif cmd in ('go east', 'move east', 'east', 'e'):
             return self.game.move('east')
-        elif cmd in ('go west', 'west', 'w', 'move west'):
+        elif cmd in ('go west', 'move west', 'west', 'w'):
             return self.game.move('west')
-        elif cmd.startswith(('enter ', 'go in', 'go inside', 'move in', 'move inside')):
+        elif cmd.startswith('enter '):
+            # Argument for "enter [location]" is cmd[len('enter '):].strip()
+            # Current game.move('in') does not take an argument.
+            return self.game.move('in', cmd[len('enter '):].strip()) 
+        elif cmd in ('go in', 'go inside'):
             return self.game.move('in')
-        elif cmd.startswith(('leave ', 'exit ', 'go out', 'move out')):
+        elif cmd.startswith('leave '):
+            # Argument for "leave [location]" is cmd[len('leave '):].strip()
+            return self.game.move('out', cmd[len('leave '):].strip()) # Assuming 'out' handles the context
+        elif cmd.startswith('exit '): # Handles "exit [location]" as per Commands.md
+            # Argument for "exit [location]" is cmd[len('exit '):].strip()
+            return self.game.move('out', cmd[len('exit '):].strip()) # Assuming 'out' handles the context
+        elif cmd == 'go out':
             return self.game.move('out')
-        elif cmd.startswith(('climb ', 'ascend ', 'move up')):
-            return self.game.move('up')
-        elif cmd.startswith(('descend ', 'go down ', 'move down')):
-            return self.game.move('down')
-        elif cmd.startswith(('follow ', 'walk ', 'move ')):
-            arg = cmd.split(' ', 1)[1] if ' ' in cmd else None
+        elif cmd.startswith('climb '):
+            # Argument for "climb [object]" is cmd[len('climb '):].strip()
+            return self.game.move('up', cmd[len('climb '):].strip()) # Assuming 'up' handles the object context
+        elif cmd.startswith('ascend '):
+            # Argument for "ascend [object]" is cmd[len('ascend '):].strip()
+            return self.game.move('up', cmd[len('ascend '):].strip()) # Assuming 'up' handles the object context
+        elif cmd.startswith('descend '):
+            # Argument for "descend [object]" is cmd[len('descend '):].strip()
+            return self.game.move('down', cmd[len('descend '):].strip()) # Assuming 'down' handles the object context
+        elif cmd.startswith('go down '): # Matches "go down [object]"
+            # Argument for "go down [object]" is cmd[len('go down '):].strip()
+            return self.game.move('down', cmd[len('go down '):].strip()) # Assuming 'down' handles the object context
+        elif cmd.startswith('follow '):
+            arg = cmd[len('follow '):].strip()
             return self.game.move('follow', arg)
+        elif cmd.startswith('walk '):
+            arg = cmd[len('walk '):].strip()
+            return self.game.move('follow', arg) # Assuming 'walk' is an alias for 'follow' functionality
+
         # Interaction
-        elif any(cmd.startswith(prefix) for prefix in ('talk to ', 'speak to ', 'converse with ', 'talk ')):
-            for prefix in ('talk to ', 'speak to ', 'converse with ', 'talk '):
+        elif any(cmd.startswith(prefix) for prefix in ('talk to ', 'speak to ', 'converse with ')):
+            for prefix in ('talk to ', 'speak to ', 'converse with '):
                 if cmd.startswith(prefix):
                     return self.game.talk(cmd[len(prefix):])
-        elif any(cmd.startswith(prefix) for prefix in ('ask ', 'question ')):
+        elif any(cmd.startswith(prefix) for prefix in ('ask ', 'question ')): # e.g. ask mira about amulet
+            # This will pass "mira about amulet" as the argument. Game.ask needs to parse it.
             for prefix in ('ask ', 'question '):
                 if cmd.startswith(prefix):
                     return self.game.ask(cmd[len(prefix):])
-        elif any(cmd.startswith(prefix) for prefix in ('give ', 'hand ')):
+        elif any(cmd.startswith(prefix) for prefix in ('give ', 'hand ')): # e.g. give bread to grandmother
+            # This will pass "bread to grandmother". Game.give needs to parse it.
             for prefix in ('give ', 'hand '):
                 if cmd.startswith(prefix):
                     return self.game.give(cmd[len(prefix):])
-        elif cmd.startswith('show '):
-            return self.game.show(cmd[5:])
-        elif any(cmd.startswith(prefix) for prefix in ('trade ', 'exchange ')):
+        elif cmd.startswith('show '): # e.g. show map to mira
+            # This will pass "map to mira". Game.show needs to parse it.
+            return self.game.show(cmd[len('show '):])
+        elif any(cmd.startswith(prefix) for prefix in ('trade ', 'exchange ')): # e.g. trade coin with shopkeeper
+            # This will pass "coin with shopkeeper". Game.trade needs to parse it.
             for prefix in ('trade ', 'exchange '):
                 if cmd.startswith(prefix):
                     return self.game.trade(cmd[len(prefix):])
-        elif any(cmd.startswith(prefix) for prefix in ('help ', 'assist ')):
-            for prefix in ('help ', 'assist '):
-                if cmd.startswith(prefix):
-                    return self.game.help(cmd[len(prefix):])
+        
         # Examination
         elif cmd in ('look around', 'look', 'observe', 'survey'):
             return self.game.look()
@@ -64,19 +87,26 @@ class CommandParser:
                 if cmd.startswith(prefix):
                     return self.game.examine(cmd[len(prefix):])
         elif cmd.startswith('read '):
-            return self.game.read(cmd[5:])
+            return self.game.read(cmd[len('read '):])
         elif any(cmd.startswith(prefix) for prefix in ('search ', 'investigate ')):
             for prefix in ('search ', 'investigate '):
                 if cmd.startswith(prefix):
                     return self.game.search(cmd[len(prefix):])
-        elif cmd.startswith('listen'):
-            return self.game.listen(cmd[6:].strip() if len(cmd) > 6 else None)
-        elif any(cmd.startswith(prefix) for prefix in ('smell', 'sniff')):
-            for prefix in ('smell', 'sniff'):
-                if cmd.startswith(prefix):
-                    return self.game.smell(cmd[len(prefix):].strip() if len(cmd) > len(prefix) else None)
+        elif cmd == 'listen':
+            return self.game.listen(None)
+        elif cmd.startswith('listen to '):
+            return self.game.listen(cmd[len('listen to '):])
+        elif cmd.startswith('smell '):
+            return self.game.smell(cmd[len('smell '):].strip())
+        elif cmd == 'smell':
+            return self.game.smell(None)
+        elif cmd.startswith('sniff '):
+            return self.game.smell(cmd[len('sniff '):].strip()) # Alias to smell
+        elif cmd == 'sniff':
+            return self.game.smell(None) # Alias to smell
         elif cmd.startswith('taste '):
-            return self.game.taste(cmd[6:])
+            return self.game.taste(cmd[len('taste '):])
+
         # Inventory Management
         elif any(cmd.startswith(prefix) for prefix in ('take ', 'pick up ', 'grab ', 'get ')):
             for prefix in ('take ', 'pick up ', 'grab ', 'get '):
@@ -87,13 +117,13 @@ class CommandParser:
                 if cmd.startswith(prefix):
                     return self.game.drop(cmd[len(prefix):])
         elif cmd.startswith('use '):
-            return self.game.use(cmd[4:])
+            return self.game.use(cmd[len('use '):]) # General item usage
         elif any(cmd.startswith(prefix) for prefix in ('eat ', 'consume ')):
             for prefix in ('eat ', 'consume '):
                 if cmd.startswith(prefix):
                     return self.game.eat(cmd[len(prefix):])
         elif cmd.startswith('drink '):
-            return self.game.drink(cmd[6:])
+            return self.game.drink(cmd[len('drink '):])
         elif any(cmd.startswith(prefix) for prefix in ('equip ', 'wear ')):
             for prefix in ('equip ', 'wear '):
                 if cmd.startswith(prefix):
@@ -105,28 +135,25 @@ class CommandParser:
         elif cmd in ('inventory', 'i', 'inv'):
             return self.game.inventory()
         elif cmd.startswith('open '):
-            return self.game.open(cmd[5:])
+            return self.game.open(cmd[len('open '):])
         elif cmd.startswith('close '):
-            return self.game.close(cmd[6:])
+            return self.game.close(cmd[len('close '):])
+
         # Magic
-        elif any(cmd.startswith(prefix) for prefix in ('cast ', 'use ')):
-            for prefix in ('cast ', 'use '):
-                if cmd.startswith(prefix):
-                    return self.game.cast(cmd[len(prefix):])
+        elif cmd.startswith('cast '): # Handles "cast [spell]" and "cast [spell] on [target]"
+            # game.cast will receive the full string after "cast ", e.g., "revive" or "fireball on goblin"
+            return self.game.cast(cmd[len('cast '):])
         elif cmd.startswith('learn '):
-            return self.game.learn(cmd[6:])
-        elif cmd == 'use magic stone':
-            return self.game.use_magic_stone()
-        elif cmd in ('heal self', 'cast heal'):
-            return self.game.heal()
-        elif cmd in ('reveal hidden door', 'cast reveal'):
-            return self.game.reveal()
+            return self.game.learn(cmd[len('learn '):])
+        elif cmd == 'spells':
+            return self.game.spells() # Assumes game.spells() method exists
+
         # Game Management
         elif cmd in ('save game', 'save'):
             return self.game.save()
         elif cmd in ('load game', 'load'):
             return self.game.load()
-        elif cmd in ('help', '?'):
+        elif cmd in ('help', '?'): # Parameterless help
             return self.game.help()
         elif cmd in ('quit', 'exit'):
             return self.game.quit()
@@ -134,16 +161,18 @@ class CommandParser:
             return self.game.restart()
         elif cmd == 'undo':
             return self.game.undo()
-        elif cmd == 'redo':
+        elif cmd == 'redo': 
             return self.game.redo()
+
         # Miscellaneous
         elif cmd in ('wait', 'pause'):
             return self.game.wait()
         elif cmd in ('sleep', 'rest'):
             return self.game.sleep()
-        elif cmd in ('map'):
+        elif cmd == 'map':
             return self.game.map()
-        elif cmd in ('stats'):
+        elif cmd == 'stats':
             return self.game.stats()
+            
         else:
             return self.game.unknown(command)

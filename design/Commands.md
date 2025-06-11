@@ -4,10 +4,10 @@ Below is a comprehensive list of all commands that should be possible to use in 
 
 ## Movement
 
-- go north / north / n
-- go south / south / s
-- go east / east / e
-- go west / west / w
+- go north / move north / north / n
+- go south / move south / south / s
+- go east / move east / east / e
+- go west / move west / west / w
 - enter [location] / go in / go inside
 - leave [location] / exit [location] / go out
 - climb [object] / ascend [object]
@@ -21,7 +21,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - give [item] to [character] / hand [item] to [character]
 - show [item] to [character]
 - trade [item] with [character] / exchange [item] with [character]
-- help [character] / assist [character]
 
 ## Examination
 
@@ -42,18 +41,16 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - drink [item]
 - equip [item] / wear [item]
 - unequip [item] / remove [item]
-- inventory / i
+- inventory / i / inv
 - open [container]
 - close [container]
 
 ## Magic
 
-- cast [spell] / use [spell]
-- cast [spell] on [object/character] / use [spell] on [object/character]
+- cast [spell]
+- cast [spell] on [object/character]
 - learn [spell]
-- use magic stone
-- heal self / cast heal
-- reveal hidden door / cast reveal
+- spells
 
 ## Game Management
 

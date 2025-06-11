@@ -41,48 +41,48 @@ def test_golden_path_act1_completion(monkeypatch):
     commands = [
         # Elior’s Cottage
         "use lantern", "take bread", "talk grandmother", "use journal", "talk grandmother",
-        # # Vegetable Field
-        # "go south", "take rusty hoe", "use hoe", "cast revive",
-        # # Chicken Coop
-        # "go south", "use bread", "take key",
-        # # Village Square
-        # "go north", "go east", "take bucket", "talk villager",
-        # # Village Well
-        # "go west", "go east", "use bucket",
-        # # Blacksmith’s Forge
-        # "go east", "use coin", "talk blacksmith",
-        # # General Store
-        # "go east", "use coin", "talk shopkeeper",
-        # # Abandoned Shed
-        # "go west", "go south", "use key", "take mysterious box",
-        # # Old Mill
-        # "go south", "use rope", "take millstone fragment",
-        # # Riverbank
-        # "go east", "take fishing rod", "talk fisherman",
-        # # Forest Path
-        # "go south", "use knife", "take wild berries", "take stick",
-        # # Hidden Glade
-        # "go east", "look", "take rare flower", "take shiny pebble",
-        # # Village Chapel
-        # "go south", "take candle", "talk priest", "use candle", "take locket",
-        # # Mira’s Hut
-        # "go north", "go west", "go north", "talk mira",
-        # # Vegetable Field (again)
-        # "go south", "go west", "cast revive",
-        # # Village Well (again)
-        # "go east", "cast purify", "take ring",
-        # # Abandoned Shed (again)
-        # "go west", "go south", "cast unlock", "take map fragment",
-        # # Hidden Glade (again)
-        # "go north", "go east", "cast light",
-        # # Riverbank (again)
-        # "go west", "go south", "go east", "cast freeze",
-        # # Forest Path (again)
-        # "go south", "cast grow",
-        # # Village Chapel (again)
-        # "go north", "go south", "cast bless",
-        # # Road to Greendale
-        # "go east", "talk merchant", "use map fragment"
+        # Vegetable Field
+        "go south", "take rusty hoe", "use hoe", "cast revive",
+        # Chicken Coop
+        "go south", "use bread", "take key",
+        # Village Square
+        "go north", "go east", "take bucket", "talk villager",
+        # Village Well
+        "go west", "go east", "use bucket",
+        # Blacksmith’s Forge
+        "go east", "use coin", "talk blacksmith",
+        # General Store
+        "go east", "use coin", "talk shopkeeper",
+        # Abandoned Shed
+        "go west", "go south", "use key", "take mysterious box",
+        # Old Mill
+        "go south", "use rope", "take millstone fragment",
+        # Riverbank
+        "go east", "take fishing rod", "talk fisherman",
+        # Forest Path
+        "go south", "use knife", "take wild berries", "take stick",
+        # Hidden Glade
+        "go east", "look", "take rare flower", "take shiny pebble",
+        # Village Chapel
+        "go south", "take candle", "talk priest", "use candle", "take locket",
+        # Mira’s Hut
+        "go north", "go west", "go north", "talk mira",
+        # Vegetable Field (again)
+        "go south", "go west", "cast revive",
+        # Village Well (again)
+        "go east", "cast purify", "take ring",
+        # Abandoned Shed (again)
+        "go west", "go south", "cast unlock", "take map fragment",
+        # Hidden Glade (again)
+        "go north", "go east", "cast light",
+        # Riverbank (again)
+        "go west", "go south", "go east", "cast freeze",
+        # Forest Path (again)
+        "go south", "cast grow",
+        # Village Chapel (again)
+        "go north", "go south", "cast bless",
+        # Road to Greendale
+        "go east", "talk merchant", "use map fragment"
     ]
 
     # Setup Game

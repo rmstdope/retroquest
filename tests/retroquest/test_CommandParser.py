@@ -16,7 +16,7 @@ class DummyGame:
         self.calls.append(('show', item))
     def trade(self, item):
         self.calls.append(('trade', item))
-    def help(self, arg=None):
+    def help(self, arg=None): # arg is for "help <target>" which isn't parsed to a separate method yet
         self.calls.append(('help', arg))
     def look(self):
         self.calls.append(('look',))
@@ -36,7 +36,7 @@ class DummyGame:
         self.calls.append(('take', item))
     def drop(self, item):
         self.calls.append(('drop', item))
-    def use(self, item):
+    def use(self, item): # For "use <item>"
         self.calls.append(('use', item))
     def eat(self, item):
         self.calls.append(('eat', item))
@@ -52,16 +52,12 @@ class DummyGame:
         self.calls.append(('open', target))
     def close(self, target):
         self.calls.append(('close', target))
-    def cast(self, spell):
-        self.calls.append(('cast', spell))
+    def cast(self, spell_and_target): # e.g. "revive" or "fireball on goblin"
+        self.calls.append(('cast', spell_and_target))
     def learn(self, spell):
         self.calls.append(('learn', spell))
-    def use_magic_stone(self):
-        self.calls.append(('use_magic_stone',))
-    def heal(self):
-        self.calls.append(('heal',))
-    def reveal(self):
-        self.calls.append(('reveal',))
+    def spells(self): # New method based on Commands.md
+        self.calls.append(('spells',))
     def save(self):
         self.calls.append(('save',))
     def load(self):
@@ -85,58 +81,181 @@ class DummyGame:
     def unknown(self, command):
         self.calls.append(('unknown', command))
 
-def test_movement_commands():
+@pytest.fixture
+def game_parser():
     game = DummyGame()
     parser = CommandParser(game)
-    parser.parse('north')
-    parser.parse('go south')
-    parser.parse('east')
-    parser.parse('go west')
-    assert game.calls == [
-        ('move', 'north', None),
-        ('move', 'south', None),
-        ('move', 'east', None),
-        ('move', 'west', None),
-    ]
+    return game, parser
 
-def test_look_and_examine():
-    game = DummyGame()
-    parser = CommandParser(game)
-    parser.parse('look')
-    parser.parse('look at statue')
-    parser.parse('examine sword')
-    assert game.calls == [
-        ('look',),
-        ('examine', 'statue'),
-        ('examine', 'sword'),
-    ]
+def test_movement_commands(game_parser):
+    game, parser = game_parser
+    commands = {
+        "go north": ("move", "north", None),
+        "move north": ("move", "north", None),
+        "north": ("move", "north", None),
+        "n": ("move", "north", None),
+        "go south": ("move", "south", None),
+        "move south": ("move", "south", None),
+        "south": ("move", "south", None),
+        "s": ("move", "south", None),
+        "go east": ("move", "east", None),
+        "move east": ("move", "east", None),
+        "east": ("move", "east", None),
+        "e": ("move", "east", None),
+        "go west": ("move", "west", None),
+        "move west": ("move", "west", None),
+        "west": ("move", "west", None),
+        "w": ("move", "west", None),
+        "enter cottage": ("move", "in", "cottage"), # CommandParser sends "cottage" as arg
+        "go in": ("move", "in", None),
+        "go inside": ("move", "in", None),
+        "leave cottage": ("move", "out", "cottage"), # CommandParser sends "cottage" as arg
+        "exit room": ("move", "out", "room"), # CommandParser sends "room" as arg
+        "go out": ("move", "out", None),
+        "climb tree": ("move", "up", "tree"), # CommandParser sends "tree" as arg
+        "ascend stairs": ("move", "up", "stairs"), # CommandParser sends "stairs" as arg
+        "descend ladder": ("move", "down", "ladder"), # CommandParser sends "ladder" as arg
+        "go down path": ("move", "down", "path"), # CommandParser sends "path" as arg
+        "follow trail": ("move", "follow", "trail"),
+        "walk road": ("move", "follow", "road"), # walk is alias for follow
+    }
+    expected_calls = []
+    for cmd_text, expected_call in commands.items():
+        parser.parse(cmd_text)
+        expected_calls.append(expected_call)
+    assert game.calls == expected_calls
 
-def test_inventory_commands():
-    game = DummyGame()
-    parser = CommandParser(game)
-    parser.parse('take lantern')
-    parser.parse('drop lantern')
-    parser.parse('inventory')
-    assert game.calls == [
-        ('take', 'lantern'),
-        ('drop', 'lantern'),
-        ('inventory',),
-    ]
+def test_interaction_commands(game_parser):
+    game, parser = game_parser
+    commands = {
+        "talk to mira": ("talk", "mira"),
+        "speak to blacksmith": ("talk", "blacksmith"),
+        "converse with villager": ("talk", "villager"),
+        "ask mira about amulet": ("ask", "mira about amulet"),
+        "question guard about key": ("ask", "guard about key"),
+        "give bread to grandmother": ("give", "bread to grandmother"),
+        "hand coin to merchant": ("give", "coin to merchant"),
+        "show map to mira": ("show", "map to mira"),
+        "trade sword with blacksmith": ("trade", "sword with blacksmith"),
+        "exchange herbs with alchemist": ("trade", "herbs with alchemist"),
+    }
+    expected_calls = []
+    for cmd_text, expected_call in commands.items():
+        parser.parse(cmd_text)
+        expected_calls.append(expected_call)
+    assert game.calls == expected_calls
 
-def test_unknown_command():
-    game = DummyGame()
-    parser = CommandParser(game)
-    parser.parse('foobar')
-    assert game.calls == [
-        ('unknown', 'foobar')
-    ]
+def test_examination_commands(game_parser):
+    game, parser = game_parser
+    commands = {
+        "look around": ("look",),
+        "look": ("look",),
+        "observe": ("look",),
+        "survey": ("look",),
+        "look at statue": ("examine", "statue"),
+        "inspect scroll": ("examine", "scroll"),
+        "examine book": ("examine", "book"),
+        "check chest": ("examine", "chest"),
+        "read sign": ("read", "sign"),
+        "search desk": ("search", "desk"),
+        "investigate rubble": ("search", "rubble"),
+        "listen": ("listen", None),
+        "listen to door": ("listen", "door"),
+        "smell flower": ("smell", "flower"),
+        "sniff potion": ("smell", "potion"), # sniff is alias for smell
+        "smell": ("smell", None),
+        "sniff": ("smell", None),
+        "taste berry": ("taste", "berry"),
+    }
+    expected_calls = []
+    for cmd_text, expected_call in commands.items():
+        parser.parse(cmd_text)
+        expected_calls.append(expected_call)
+    assert game.calls == expected_calls
 
-def test_help_and_quit():
-    game = DummyGame()
-    parser = CommandParser(game)
-    parser.parse('help')
-    parser.parse('quit')
-    assert game.calls == [
-        ('help', None),
-        ('quit',),
-    ]
+def test_inventory_management_commands(game_parser):
+    game, parser = game_parser
+    commands = {
+        "take key": ("take", "key"),
+        "pick up sword": ("take", "sword"),
+        "grab apple": ("take", "apple"),
+        "get shield": ("take", "shield"),
+        "drop key": ("drop", "key"),
+        "discard rock": ("drop", "rock"),
+        "use lantern": ("use", "lantern"),
+        "eat bread": ("eat", "bread"),
+        "consume apple": ("eat", "apple"),
+        "drink water": ("drink", "water"),
+        "equip sword": ("equip", "sword"),
+        "wear cloak": ("equip", "cloak"),
+        "unequip sword": ("unequip", "sword"),
+        "remove helmet": ("unequip", "helmet"),
+        "inventory": ("inventory",),
+        "i": ("inventory",),
+        "inv": ("inventory",),
+        "open chest": ("open", "chest"),
+        "close door": ("close", "door"),
+    }
+    expected_calls = []
+    for cmd_text, expected_call in commands.items():
+        parser.parse(cmd_text)
+        expected_calls.append(expected_call)
+    assert game.calls == expected_calls
+
+def test_magic_commands(game_parser):
+    game, parser = game_parser
+    # Corrected expected calls based on CommandParser.py
+    expected_calls = []
+    parser.parse("cast fireball") # Generic cast
+    expected_calls.append(("cast", "fireball"))
+    parser.parse("cast fireball on goblin") # Generic cast with target
+    expected_calls.append(("cast", "fireball on goblin"))
+    parser.parse("learn teleport")
+    expected_calls.append(("learn", "teleport"))
+    parser.parse("spells")
+    expected_calls.append(("spells",))
+
+    assert game.calls == expected_calls
+
+
+def test_game_management_commands(game_parser):
+    game, parser = game_parser
+    commands = {
+        "save game": ("save",),
+        "save": ("save",),
+        "load game": ("load",),
+        "load": ("load",),
+        "help": ("help", None), # Parameterless help
+        "?": ("help", None),   # Parameterless help
+        "quit": ("quit",),
+        "exit": ("quit",),
+        "restart": ("restart",),
+        "undo": ("undo",),
+        "redo": ("redo",),
+    }
+    expected_calls = []
+    for cmd_text, expected_call in commands.items():
+        parser.parse(cmd_text)
+        expected_calls.append(expected_call)
+    assert game.calls == expected_calls
+
+def test_miscellaneous_commands(game_parser):
+    game, parser = game_parser
+    commands = {
+        "wait": ("wait",),
+        "pause": ("wait",),
+        "sleep": ("sleep",),
+        "rest": ("sleep",),
+        "map": ("map",),
+        "stats": ("stats",),
+    }
+    expected_calls = []
+    for cmd_text, expected_call in commands.items():
+        parser.parse(cmd_text)
+        expected_calls.append(expected_call)
+    assert game.calls == expected_calls
+
+def test_unknown_command(game_parser):
+    game, parser = game_parser
+    parser.parse("xyzzy")
+    assert game.calls == [("unknown", "xyzzy")]

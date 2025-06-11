@@ -255,15 +255,6 @@ class Game:
     def learn(self, spell: str) -> str:
         raise NotImplementedError("Game.learn() is not yet implemented.")
 
-    def use_magic_stone(self) -> str:
-        raise NotImplementedError("Game.use_magic_stone() is not yet implemented.")
-
-    def heal(self) -> str:
-        raise NotImplementedError("Game.heal() is not yet implemented.")
-
-    def reveal(self) -> str:
-        raise NotImplementedError("Game.reveal() is not yet implemented.")
-
     def save(self) -> str:
         raise NotImplementedError("Game.save() is not yet implemented.")
 
