@@ -36,3 +36,7 @@ class GameState:
             if item.get_name().lower() == item_name_lower:
                 self.inventory.remove(item)
                 return # Assuming only one instance of an item name can exist or we remove the first one
+
+    def add_item_to_inventory(self, item_object) -> None:
+        """Adds an item object to the player's inventory."""
+        self.inventory.append(item_object)

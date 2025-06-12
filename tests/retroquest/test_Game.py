@@ -443,3 +443,89 @@ def test_examine_case_insensitivity(game):
     assert result_char == char_description
     game.state.current_room.characters.clear() # Clean up
 
+# --- Tests for 'buy' command ---
+
+def test_buy_item_successful(game):
+    from retroquest.items.Rope import Rope
+    from retroquest.items.Coin import Coin
+    from retroquest.characters.Shopkeeper import Shopkeeper # Assuming Shopkeeper has buy_item
+
+    shopkeeper = Shopkeeper()
+    rope_instance = Rope() # The item instance the shopkeeper would sell
+    
+    # Setup shopkeeper's wares and mock buy_item
+    # For this test, we assume Shopkeeper.buy_item handles coin deduction and item addition
+    # and returns a success message.
+    shopkeeper.wares = {"rope": {"item": rope_instance, "price": 1}}
+    shopkeeper.buy_item = MagicMock(return_value=f"You bought a {rope_instance.get_name()} for 1 coin(s).")
+
+    game.state.current_room.characters.append(shopkeeper)
+    game.state.inventory.append(Coin()) # Player has one coin
+
+    result = game.buy("rope from shopkeeper")
+    
+    assert f"You bought a {rope_instance.get_name()} for 1 coin(s)." in result
+    shopkeeper.buy_item.assert_called_once_with("rope", game.state)
+    # Further checks could be:
+    # - assert Coin not in game.state.inventory (if buy_item removes it)
+    # - assert rope_instance in game.state.inventory (if buy_item adds it)
+    # These depend on the Shopkeeper.buy_item implementation.
+
+def test_buy_item_not_sold_by_character(game):
+    from retroquest.characters.Shopkeeper import Shopkeeper
+    from retroquest.items.Coin import Coin
+
+    shopkeeper = Shopkeeper()
+    shopkeeper.buy_item = MagicMock(return_value="Sorry, I don't have any 'magic beans' for sale.")
+    game.state.current_room.characters.append(shopkeeper)
+    game.state.inventory.append(Coin())
+
+    result = game.buy("magic beans from shopkeeper")
+    assert "Sorry, I don't have any 'magic beans' for sale." in result
+    shopkeeper.buy_item.assert_called_once_with("magic beans", game.state)
+
+def test_buy_item_not_enough_coins(game):
+    from retroquest.characters.Shopkeeper import Shopkeeper
+    from retroquest.items.Rope import Rope
+
+    shopkeeper = Shopkeeper()
+    rope_instance = Rope()
+    # Assume rope costs 1 coin, but player has 0
+    shopkeeper.wares = {"rope": {"item": rope_instance, "price": 1}}
+    shopkeeper.buy_item = MagicMock(return_value="You don't have enough coins for the rope. It costs 1 coin(s).")
+    
+    game.state.current_room.characters.append(shopkeeper)
+    # game.state.inventory is empty (no coins)
+
+    result = game.buy("rope from shopkeeper")
+    assert "You don't have enough coins for the rope. It costs 1 coin(s)." in result
+    shopkeeper.buy_item.assert_called_once_with("rope", game.state)
+
+def test_buy_item_character_not_present(game):
+    from retroquest.items.Coin import Coin
+    game.state.inventory.append(Coin())
+    
+    result = game.buy("rope from Ghostly Shopkeeper")
+    assert "'Ghostly shopkeeper' is not here." in result
+
+def test_buy_item_character_cannot_sell(game):
+    from retroquest.characters.Villager import Villager # Villager cannot sell
+    from retroquest.items.Coin import Coin
+
+    villager = Villager()
+    game.state.current_room.characters.append(villager)
+    game.state.inventory.append(Coin())
+
+    result = game.buy("rope from villager")
+    assert f"{villager.get_name()} does not have any rope to sell right now." in result
+
+def test_buy_item_invalid_format(game):
+    result = game.buy("rope shopkeeper") # Missing "from"
+    assert "Invalid command format. Please use 'buy <item> from <character>'." in result
+
+    result = game.buy("from shopkeeper") # Missing item
+    assert "What do you want to buy? Use 'buy <item> from <character>'." in result
+
+    result = game.buy("rope from") # Missing character
+    assert "From whom do you want to buy? Use 'buy <item> from <character>'." in result
+

@@ -12,7 +12,7 @@
 ## 2. Vegetable Field
 
 - **Description:** Rows of withered crops under a gray sky.
-- **Items:** Withered carrot, rusty hoe, knife (dull).
+- **Items:** Withered carrot, rusty hoe, dull knife.
 - **Spells:** `revive` (restores a single plant, hints at Elior’s power).
 - **Usable Items:** Hoe (uncovers a hidden coin).
 - **Characters:** None.
@@ -50,7 +50,7 @@
 - **Description:** A hot, smoky forge with tools and weapons.
 - **Items:** horseshoe.
 - **Spells:** None.
-- **Usable Items:** Coin (buy a sharpened knife).
+- **Usable Items:** Coin (get the dull knife sharpened).
 - **Characters:** Blacksmith (can sharpen items, offers advice).
 - **Exits:** Village Well (west), General Store (north)
 
@@ -104,7 +104,7 @@
 - **Description:** A winding path leading into the woods.
 - **Items:** Stick, wild berries.
 - **Spells:** `grow` (makes a bush bloom, reveals hidden berries).
-- **Usable Items:** Knife (cuts through thick vines).
+- **Usable Items:** Sharp knife (cuts through thick vines).
 - **Characters:** None.
 - **Exits:** Riverbank (north), Hidden Glade (south)
 
@@ -208,15 +208,20 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
    - Speak to blacksmith for advice.  
      _Blacksmith gives tips on using tools and mentions strange happenings._
 
-7. **General Store:**
+7. **Return to Vegetable Field:**
 
-   - Use coin (if available) to buy rope.  
+   - Go to Vegetable Field.
+   - Use hoe again.
+     _A second coin is found and added to inventory._
+
+8. **General Store:**
+
+   - Use coin to buy rope.  
      _Coin is removed from inventory, rope is added to inventory._
    - Speak to shopkeeper for gossip.  
      _Shopkeeper mentions Mira’s knowledge of magic._
-   - (If coin was already spent, return to Vegetable Field and use hoe again to uncover another coin)
 
-8. **Abandoned Shed:**
+9. **Abandoned Shed:**
 
    - Use key to open shed door.  
      _Key is removed from inventory, shed is unlocked._
@@ -224,15 +229,15 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
      _Box is found but remains locked._
    - (If key was missed, return to Chicken Coop and feed chickens with apple if bread is gone.)
 
-9. **Old Mill:**
+10. **Old Mill:**
 
-   - Use rope to fix mechanism, revealing hidden compartment.  
-     _Rope is removed from inventory, hidden compartment opens._
-   - Take millstone fragment.  
-     _Millstone fragment is added to inventory._
-   - (If rope was missed, return to General Store to purchase.)
+    - Use rope to fix mechanism, revealing hidden compartment.  
+      _Rope is removed from inventory, hidden compartment opens._
+    - Take millstone fragment.  
+      _Millstone fragment is added to inventory._
+    - (If rope was missed, return to General Store to purchase.)
 
-10. **Riverbank:**
+11. **Riverbank:**
 
     - Take fishing rod.  
       _Fishing rod is added to inventory._
@@ -240,13 +245,12 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
       _If fish is caught, fisherman gives a clue about a hidden path._
     - (If fishing rod was missed, return to Riverbank to retrieve.)
 
-11. **Forest Path:**
+12. **Forest Path:**
 
-    - Use knife to cut through vines, access wild berries and stick.  
-      _Knife is used, wild berries and stick are added to inventory._
-    - (If knife was missed, return to Blacksmith’s Forge to purchase or sharpen dull knife.)
+    - Use sharp knife to cut through vines, access wild berries and stick.  
+      _Sharp knife is used, wild berries and stick are added to inventory._
 
-12. **Hidden Glade:**
+13. **Hidden Glade:**
 
     - Observe deer for hints.  
       _Deer’s behavior hints at magic in the area._
@@ -254,7 +258,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
       _Rare flower and shiny pebble are added to inventory._
     - (If items missed, return to Hidden Glade to retrieve.)
 
-13. **Village Chapel:**
+14. **Village Chapel:**
 
     - Take candle.  
       _Candle is added to inventory._
@@ -264,47 +268,47 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
       _Candle is used, hidden locket is added to inventory._
     - (If candle was missed, return to Village Chapel to retrieve.)
 
-14. **Return to Mira’s Hut:**
+15. **Return to Mira’s Hut:**
 
     - Speak to Mira, learn `heal` spell and receive ancient amulet.  
       _Heal spell is learned, ancient amulet is added to inventory._
 
-15. **Return to Vegetable Field:**
+16. **Return to Vegetable Field:**
 
     - Now able to cast `revive` to restore a plant, confirming magic.  
       _A plant is revived, confirming Elior’s magical powers._
 
-16. **Return to Village Well:**
+17. **Return to Village Well:**
 
     - Cast `purify` to cleanse water, find shiny ring.  
       _Water is purified, shiny ring is added to inventory._
 
-17. **Return to Abandoned Shed:**
+18. **Return to Abandoned Shed:**
 
     - Cast `unlock` on mysterious box, obtain map fragment.  
       _Box is unlocked, map fragment is added to inventory._
 
-18. **Return to Hidden Glade:**
+19. **Return to Hidden Glade:**
 
     - Cast `light` to reveal hidden inscription.  
       _A magical inscription is revealed, providing a clue for the journey._
 
-19. **Return to Riverbank:**
+20. **Return to Riverbank:**
 
     - Cast `freeze` to reveal path to island (optional for bonus item).  
       _River is frozen, path to island opens (bonus item can be found)._
 
-20. **Return to Forest Path:**
+21. **Return to Forest Path:**
 
     - Cast `grow` to reveal more berries (optional).  
       _Bush blooms, more berries are added to inventory._
 
-21. **Village Chapel:**
+22. **Village Chapel:**
 
     - Cast `bless` for protection before journey.  
       _Elior receives a temporary protection buff._
 
-22. **Road to Greendale:**
+23. **Road to Greendale:**
     - Speak to merchant for travel advice.  
       _Merchant provides tips for the road ahead._
     - Use map fragment to reveal shortcut and unlock path to Greendale.  

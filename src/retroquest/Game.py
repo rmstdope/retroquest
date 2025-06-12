@@ -239,6 +239,37 @@ class Game:
     def trade(self, item: str) -> str:
         raise NotImplementedError("Game.trade() is not yet implemented.")
 
+    def buy(self, command_args: str) -> str:
+        # Expected format: "buy <item_name> from <character_name>"
+        parts = command_args.lower().split()
+        item_name = ""
+        character_name = ""
+
+        if "from" not in parts:
+            return "Invalid command format. Please use 'buy <item> from <character>'."
+
+        from_index = parts.index("from")
+        item_name = " ".join(parts[:from_index])
+        
+        if not item_name: # Check if an item name was actually provided
+            return "What do you want to buy? Use 'buy <item> from <character>'."
+            
+        if from_index >= len(parts) - 1: # No character name provided
+            return "From whom do you want to buy? Use 'buy <item> from <character>'."
+            
+        character_name = " ".join(parts[from_index+1:])
+
+        character_to_buy_from = None
+        for char_in_room in self.state.current_room.get_characters():
+            if char_in_room.get_name().lower() == character_name:
+                character_to_buy_from = char_in_room
+                break
+        
+        if not character_to_buy_from:
+            return f"'{character_name.capitalize()}' is not here."
+
+        return character_to_buy_from.buy_item(item_name, self.state)
+
     def read(self, item: str) -> str:
         raise NotImplementedError("Game.read() is not yet implemented.")
 
@@ -271,24 +302,6 @@ class Game:
 
         return f"You don't have a '{item_name}' to use, and there isn't one here."
 
-    def eat(self, item: str) -> str:
-        raise NotImplementedError("Game.eat() is not yet implemented.")
-
-    def drink(self, item: str) -> str:
-        raise NotImplementedError("Game.drink() is not yet implemented.")
-
-    def equip(self, item: str) -> str:
-        raise NotImplementedError("Game.equip() is not yet implemented.")
-
-    def unequip(self, item: str) -> str:
-        raise NotImplementedError("Game.unequip() is not yet implemented.")
-
-    def open(self, target: str) -> str:
-        raise NotImplementedError("Game.open() is not yet implemented.")
-
-    def close(self, target: str) -> str:
-        raise NotImplementedError("Game.close() is not yet implemented.")
-
     def cast(self, spell_name: str) -> str:
         spell_name = spell_name.lower()
         for spell_obj in self.state.known_spells:
@@ -315,6 +328,24 @@ class Game:
         for spell_obj in self.state.known_spells:
             output.append(f"  - {spell_obj.get_name()}: {spell_obj.get_description()}")
         return "\n".join(output)
+
+    def eat(self, item: str) -> str:
+        raise NotImplementedError("Game.eat() is not yet implemented.")
+
+    def drink(self, item: str) -> str:
+        raise NotImplementedError("Game.drink() is not yet implemented.")
+
+    def equip(self, item: str) -> str:
+        raise NotImplementedError("Game.equip() is not yet implemented.")
+
+    def unequip(self, item: str) -> str:
+        raise NotImplementedError("Game.unequip() is not yet implemented.")
+
+    def open(self, target: str) -> str:
+        raise NotImplementedError("Game.open() is not yet implemented.")
+
+    def close(self, target: str) -> str:
+        raise NotImplementedError("Game.close() is not yet implemented.")
 
     def save(self) -> str:
         raise NotImplementedError("Game.save() is not yet implemented.")

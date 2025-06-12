@@ -46,7 +46,7 @@ def _check_current_room(game_state, expected_room_name: str):
 def _execute_commands(game, commands_list):
     global results
     for cmd in commands_list:
-        results += game.handle_command(cmd)
+        results.append(game.handle_command(cmd))
 
 # Room setup for integration test
 ROOMS = {
@@ -69,46 +69,6 @@ ROOMS = {
 
 @pytest.mark.integration
 def test_golden_path_act1_completion(monkeypatch):
-    # Simulate all commands in the golden path
-    commands = [
-        # Village Well
-        "go west", "go east", "use bucket",
-        # Blacksmith’s Forge
-        "go east", "use coin", "talk blacksmith",
-        # General Store
-        "go east", "use coin", "talk shopkeeper",
-        # Abandoned Shed
-        "go west", "go south", "use key", "take mysterious box",
-        # Old Mill
-        "go south", "use rope", "take millstone fragment",
-        # Riverbank
-        "go east", "take fishing rod", "talk fisherman",
-        # Forest Path
-        "go south", "use knife", "take wild berries", "take stick",
-        # Hidden Glade
-        "go east", "look", "take rare flower", "take shiny pebble",
-        # Village Chapel
-        "go south", "take candle", "talk priest", "use candle", "take locket",
-        # Mira’s Hut
-        "go north", "go west", "go north", "talk mira",
-        # Vegetable Field (again)
-        "go south", "go west", "cast revive",
-        # Village Well (again)
-        "go east", "cast purify", "take ring",
-        # Abandoned Shed (again)
-        "go west", "go south", "cast unlock", "take map fragment",
-        # Hidden Glade (again)
-        "go north", "go east", "cast light",
-        # Riverbank (again)
-        "go west", "go south", "go east", "cast freeze",
-        # Forest Path (again)
-        "go south", "cast grow",
-        # Village Chapel (again)
-        "go north", "go south", "cast bless",
-        # Road to Greendale
-        "go east", "talk merchant", "use map fragment"
-    ]
-
     # Setup Game
     game = Game(starting_room=ROOMS["EliorsCottage"], rooms=ROOMS)
     # # Patch session.prompt to avoid blocking
@@ -130,21 +90,24 @@ def test_golden_path_act1_completion(monkeypatch):
 
     _execute_commands(game, ["use hoe", "take knife", "cast revive"])
     _check_item_in_inventory(game.state, "coin")
-    _check_item_in_inventory(game.state, "knife (dull)")
-    _check_item_in_inventory(game.state, "rusty hoe", should_be_present=False)
+    _check_item_in_inventory(game.state, "dull knife")
+    inventory_count_after_bread_use = len(game.state.inventory)
+    _execute_commands(game, ["use hoe"])
+    assert len(game.state.inventory) == inventory_count_after_bread_use, "Using hoe again should not add items to inventory"
 
     # Chicken Coop
     _execute_commands(game, ["go south", "use bread"])
     _check_current_room(game.state, "Chicken Coop")
     _check_item_in_inventory(game.state, "bread", should_be_present=False)
     _check_item_in_room(game.state.current_room, "key")
+
     _execute_commands(game, ["take key"])
     _check_item_in_inventory(game.state, "key")
-    
+
     # Village Square
     _execute_commands(game, ["go north", "go north", "go east"])
     _check_current_room(game.state, "Village Square")
-    _execute_commands(game, ["take bucket", "talk villager"])
+    _execute_commands(game, ["take bucket", "talk to villager"])
     _check_item_in_inventory(game.state, "bucket")
 
     # Village Well
@@ -156,36 +119,27 @@ def test_golden_path_act1_completion(monkeypatch):
     # Blacksmith's Forge
     _execute_commands(game, ["go east"])
     _check_current_room(game.state, "Blacksmith's Forge")
-    _execute_commands(game, ["give coin to blacksmith", "talk blacksmith"])
+    _execute_commands(game, ["talk to blacksmith", "give coin to blacksmith"])
     _check_item_in_inventory(game.state, "coin", should_be_present=False)
-    # # Assuming using coin at blacksmith gives a sharpened knife and removes dull knife if present.
-    # # Need to ensure DullKnife is added to inventory if it's a prerequisite for sharpening.
-    # # For now, let's assume `use coin` handles the transaction and gives `sharpened knife`.
-    # # _check_item_in_inventory(game.state, "dull knife", should_be_present=False) 
-    # _check_item_in_inventory(game.state, "sharpened knife")
+    _check_item_in_inventory(game.state, "dull knife", should_be_present=False) 
+    _check_item_in_inventory(game.state, "sharp knife")
 
-    # # General Store
-    # # Path: Blacksmith's Forge (N) -> General Store
-    # _execute_commands(game, ["go north"])
-    # _check_current_room(game.state, "General Store", "BSF -> GS")
-    # _execute_commands(game, ["talk shopkeeper"])
-    # # Player needs a coin to buy rope. The first coin was used at the Blacksmith.
-    # # Golden path suggests: "(If coin was already spent, return to Vegetable Field and use hoe again to uncover another coin, or trade items with shopkeeper.)"
-    # # For the test, we will assume the player needs to get another coin.
-    # # Path: GS (W) -> VS (W) -> EC (S) -> VF
-    # _execute_commands(game, ["go west", "go west", "go south"]) # GS -> VS -> EC -> VF
-    # _check_current_room(game.state, "Vegetable Field", "for second coin")
-    # # Using hoe again - assuming RustyHoe is not single-use for *finding* coins, or a new one is acquired.
-    # # For simplicity, let's assume the original RustyHoe was consumed, and we need a new one or the WitheredCarrot interaction gives a coin.
-    # # The current RustyHoe implementation makes it break after one use.
-    # # This part of the golden path needs clarification or game logic adjustment for repeated coin acquisition.
-    # # For now, we will skip buying rope and proceed, or assume a coin is magically available for test purposes.
-    # # Option: Add a coin directly to inventory for test if game logic for re-acquiring isn't in place.
-    # # game.state.inventory.append(Coin()) # Test-only hack if needed
-    # # _check_item_in_inventory(game.state, "coin") 
-    # # _execute_commands(game, ["use coin"]) # Buy rope
-    # # _check_item_in_inventory(game.state, "coin", should_be_present=False)
-    # # _check_item_in_inventory(game.state, "rope")
+    # Vegetable Field
+    _execute_commands(game, ["go west", "go west", "use hoe"])
+    _check_current_room(game.state, "Vegetable Field")
+    _check_item_in_inventory(game.state, "coin")
+
+    # General Store - Buy Rope
+    _execute_commands(game, ["go north", "go east", "go east"]) # Veg Field -> Village Square -> General Store
+    _check_current_room(game.state, "General Store")
+    _execute_commands(game, ["talk to shopkeeper", "buy rope from shopkeeper"])
+    _debug_print_history()
+    _check_item_in_inventory(game.state, "rope")
+    _check_item_in_inventory(game.state, "coin", should_be_present=False) 
+
+def _debug_print_history():
+    for res_str in results:
+        print(res_str)# Assuming buying rope costs 1 coin
 
     # # Check for Act I completion: amulet and map fragment in inventory, and in Road to Greendale
     # # inventory_names = [item.get_name().lower() for item in game.state.inventory]

@@ -21,6 +21,7 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - give [item] to [character] / hand [item] to [character]
 - show [item] to [character]
 - trade [item] with [character] / exchange [item] with [character]
+- buy [item] from [character]
 
 ## Examination
 

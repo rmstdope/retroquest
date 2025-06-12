@@ -78,6 +78,9 @@ class CommandParser:
             for prefix in ('trade ', 'exchange '):
                 if cmd.startswith(prefix):
                     return self.game.trade(cmd[len(prefix):])
+        elif cmd.startswith('buy '): # e.g. buy rope from shopkeeper
+            # This will pass "rope from shopkeeper". Game.buy needs to parse it.
+            return self.game.buy(cmd[len('buy '):])
         
         # Examination
         elif cmd in ('look around', 'look', 'observe', 'survey'):

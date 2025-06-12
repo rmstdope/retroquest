@@ -24,4 +24,6 @@ class Character:
         """
         return f"{self.name} doesn't seem interested in the {item_object.get_name()}."
 
-
+    def buy_item(self, item_name_to_buy: str, game_state) -> str:
+        """Default buy_item method. Subclasses should override this for specific dialog."""
+        return f"{self.name} does not have any {item_name_to_buy} to sell right now."

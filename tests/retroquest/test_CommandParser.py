@@ -16,6 +16,8 @@ class DummyGame:
         self.calls.append(('show', item))
     def trade(self, item):
         self.calls.append(('trade', item))
+    def buy(self, args): # Added for buy command
+        self.calls.append(('buy', args))
     def help(self, arg=None): # arg is for "help <target>" which isn't parsed to a separate method yet
         self.calls.append(('help', arg))
     def look(self):
@@ -138,6 +140,8 @@ def test_interaction_commands(game_parser):
         "show map to mira": ("show", "map to mira"),
         "trade sword with blacksmith": ("trade", "sword with blacksmith"),
         "exchange herbs with alchemist": ("trade", "herbs with alchemist"),
+        "buy rope from shopkeeper": ("buy", "rope from shopkeeper"),
+        "buy apple from merchant": ("buy", "apple from merchant"),
     }
     expected_calls = []
     for cmd_text, expected_call in commands.items():
