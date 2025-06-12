@@ -53,7 +53,6 @@ def test_game_initial_state(game, basic_rooms):
     assert game.is_running is True
     assert game.state.inventory == []
     assert game.state.history == []
-    assert isinstance(game.command_parser, type(game.command_parser))
 
 def test_move_valid(game, basic_rooms):
     # EliorsCottage south -> VegetableField
@@ -274,3 +273,173 @@ def test_give_item_invalid_format(game):
 
     result = game.give("apple to") # Missing character
     assert "Who do you want to give it to? Use \'give <item> to <character>\'." in result
+
+# --- Tests for \'look\' command ---
+
+def test_look_in_room_with_items_and_characters(game, basic_rooms):
+    from retroquest.items.Apple import Apple
+    from retroquest.characters.Villager import Villager
+    
+    apple = Apple()
+    villager = Villager()
+    
+    # Ensure the starting room (Elior\'s Cottage) is used for this test
+    # or set current_room explicitly if needed.
+    current_room = game.state.current_room 
+    current_room.items.append(apple)
+    current_room.characters.append(villager)
+    
+    # Mock the room\'s describe method to verify it\'s called
+    # Or, more practically, check that the output contains expected elements
+    # from the room description, item names, and character names.
+    current_room.describe = MagicMock(return_value=
+        f"{current_room.description}\n"
+        f"Items here: {apple.get_name()}\n"
+        f"You see: {villager.get_name()}"
+    )
+
+    result = game.look()
+    
+    current_room.describe.assert_called_once()
+    assert current_room.description in result
+    assert apple.get_name() in result
+    assert villager.get_name() in result
+
+def test_look_in_empty_room(game, basic_rooms):
+    # Move to a room that we ensure is empty (or make it empty)
+    # For simplicity, let\'s use VegetableField and clear it.
+    game.move('south') # Move to VegetableField
+    current_room = game.state.current_room
+    current_room.items.clear()
+    current_room.characters.clear()
+    
+    # Original description of VegetableField without items/chars
+    original_description = "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky."
+    current_room.description = original_description # Ensure it\'s set for the test
+    
+    # Mock describe or check its output structure
+    # If Room.describe() dynamically builds the string, we check for absence of item/char lines
+    # For this test, let\'s assume describe() returns the base description if no items/chars
+    current_room.describe = MagicMock(return_value=original_description)
+
+    result = game.look()
+    
+    current_room.describe.assert_called_once()
+    assert original_description in result
+    # We might also want to assert that default "Items here:" or "You see:" are NOT in result
+    # if the Room.describe() method omits them when empty.
+    # This depends on the Room.describe() implementation.
+    # For now, we assume the mocked describe handles this.
+
+# --- Tests for \'inventory\' command ---
+
+def test_inventory_empty(game):
+    result = game.inventory()
+    assert "Your inventory is empty." in result
+
+def test_inventory_with_items(game):
+    from retroquest.items.Apple import Apple
+    from retroquest.items.Stick import Stick
+    apple = Apple()
+    stick = Stick()
+    
+    game.state.inventory.append(apple)
+    game.state.inventory.append(stick)
+    
+    result = game.inventory()
+    
+    assert "You are carrying:" in result
+    assert f"- {apple.get_name()}" in result
+    assert f"- {stick.get_name()}" in result
+
+# --- Tests for 'examine' command ---
+
+def test_examine_item_in_inventory(game):
+    from retroquest.items.Apple import Apple
+    from unittest.mock import MagicMock
+
+    apple = Apple()
+    apple_description = "A juicy red apple, looking perfectly ripe."
+    apple.get_description = MagicMock(return_value=apple_description)
+    apple.get_name = MagicMock(return_value="apple")
+    
+    game.state.inventory.append(apple)
+    # Ensure it's not also in the room to avoid ambiguity for this specific test
+    if apple in game.state.current_room.items:
+        game.state.current_room.items.remove(apple)
+        
+    result = game.examine("apple")
+    assert result == apple_description
+    apple.get_description.assert_called_once()
+
+def test_examine_item_in_room(game):
+    from retroquest.items.Apple import Apple
+    from unittest.mock import MagicMock
+
+    apple = Apple()
+    apple_description = "A shiny green apple, lying on the ground."
+    apple.get_description = MagicMock(return_value=apple_description)
+    apple.get_name = MagicMock(return_value="apple")
+    
+    game.state.current_room.items.append(apple)
+    # Ensure it's not in inventory for this specific test
+    if apple in game.state.inventory:
+        game.state.inventory.remove(apple)
+        
+    result = game.examine("apple")
+    assert result == apple_description
+    apple.get_description.assert_called_once()
+
+def test_examine_character_in_room(game):
+    from retroquest.characters.Villager import Villager
+    # Assuming Villager's get_description returns the description passed to constructor
+    char_description = "A weary-looking traveler, resting by the old oak tree."
+    traveler = Villager()
+    traveler.description = char_description
+    
+    game.state.current_room.characters.append(traveler)
+    
+    result = game.examine("Villager")
+    assert result == char_description
+
+def test_examine_target_not_found(game):
+    # Clear inventory and room items/characters to ensure target is not found
+    game.state.inventory.clear()
+    game.state.current_room.items.clear()
+    game.state.current_room.characters.clear()
+    
+    result = game.examine("dragon")
+    assert result == "You don't see a 'dragon' here."
+
+def test_examine_no_argument(game):
+    result = game.examine("") # Assuming CommandParser passes empty string for no arg
+    assert result == "Examine what?"
+
+def test_examine_case_insensitivity(game):
+    from retroquest.items.Apple import Apple
+    from retroquest.characters.Villager import Villager
+    from unittest.mock import MagicMock
+
+    # Test with item
+    apple = Apple()
+    apple_description = "A golden delicious apple."
+    apple.get_description = MagicMock(return_value=apple_description)
+    apple.get_name = MagicMock(return_value="Golden Apple") # Name with space and caps
+    game.state.inventory.append(apple)
+    
+    result_item = game.examine("golden apple")
+    assert result_item == apple_description
+    apple.get_description.assert_called_once()
+    game.state.inventory.clear() # Clean up for next part of test
+
+    # Test with character
+    char_description = "The village blacksmith, strong and sturdy."
+    blacksmith = Villager()
+    blacksmith.name = "Blacksmith John"
+    blacksmith.description = char_description
+    game.state.current_room.characters.append(blacksmith)
+    
+    result_char = game.examine("blacksmith JOHN")
+    assert result_char == char_description
+    game.state.current_room.characters.clear() # Clean up
+

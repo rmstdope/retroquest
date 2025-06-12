@@ -22,9 +22,10 @@ dependencies = [
   "prompt_toolkit"
 ]
 
-[project.optional-dependencies]
+[project.optional-dependencies] 
 dev = [
     "pytest",  # testing
+    "pytest-cov", # test coverage
 ]
 
 [project.urls]

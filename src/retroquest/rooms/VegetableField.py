@@ -14,7 +14,6 @@ class VegetableField(Room):
                 "quiet, as if holding its breath, waiting for a touch of magic to bring it back to life."
             ),
             items=[WitheredCarrot(), RustyHoe(), Knife()],
-            spells=["revive"],
             usable_items=["hoe"],
             characters=[],
             exits={"north": "EliorsCottage", "east": "VillageWell", "south": "ChickenCoop"}

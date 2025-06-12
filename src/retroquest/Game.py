@@ -91,6 +91,8 @@ class Game:
         return self.state.current_room.describe()
 
     def examine(self, target: str) -> str:
+        if not target:  # Check if target is an empty string or None
+            return "Examine what?"
         target = target.lower()
         # Check inventory first
         for item in self.state.inventory:

@@ -15,7 +15,6 @@ class GeneralStore(Room):
                 "old wood. Every corner seems to hold a new surprise, and the promise of a good bargain."
             ),
             items=[Rope(), Apple(), Matches()],
-            spells=[],
             usable_items=["coin"],
             characters=[Shopkeeper()],
             exits={"west": "VillageSquare", "south": "BlacksmithsForge"} # Corrected based on RoomsAct1.md and map

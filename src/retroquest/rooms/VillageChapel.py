@@ -14,7 +14,6 @@ class VillageChapel(Room):
                 "comfort. In the shadows, a hidden locket glimmers, waiting to be discovered."
             ),
             items=[Candle(), PrayerBook()],
-            spells=["bless"],
             usable_items=["candle"],
             characters=[Priest()],
             exits={"north": "HiddenGlade", "east": "RoadToGreendale"}

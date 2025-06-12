@@ -15,7 +15,6 @@ class ChickenCoop(Room):
                 "a hidden secret."
             ),
             items=[Egg(), Feather()],
-            spells=[],
             usable_items=["bread"],
             characters=[],
             exits={"north": "VegetableField"}
