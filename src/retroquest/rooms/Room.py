@@ -33,6 +33,17 @@ class Room:
     def get_exits(self) -> dict:
         return self.exits
 
+    def get_item_by_name(self, item_name: str):
+        """
+        Retrieves an item from the room by its name (case-insensitive).
+        Returns the item object if found, otherwise None.
+        """
+        item_name_lower = item_name.lower()
+        for item in self.items:
+            if item.get_name().lower() == item_name_lower:
+                return item
+        return None
+
     def describe(self) -> str:
         """Return a full description of the room, including items, characters, and exits."""
         desc = "-" * 50 + "\n"

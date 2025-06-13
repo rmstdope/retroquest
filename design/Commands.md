@@ -37,7 +37,7 @@ Below is a comprehensive list of all commands that should be possible to use in 
 
 - take [item] / pick up [item] / grab [item] / get [item]
 - drop [item] / discard [item]
-- use [item]
+- use [item] / use [item] with [item]
 - eat [item] / consume [item]
 - drink [item]
 - equip [item] / wear [item]

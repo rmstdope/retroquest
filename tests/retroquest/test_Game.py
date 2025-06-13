@@ -529,3 +529,108 @@ def test_buy_item_invalid_format(game):
     result = game.buy("rope from") # Missing character
     assert "From whom do you want to buy? Use 'buy <item> from <character>'." in result
 
+# Helper classes for 'use' tests
+# These are defined here to be available for the test functions below.
+# They duck-type the necessary methods of game items for testing purposes.
+class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere by chance
+    def __init__(self, name, short_name=None, description="A mock item."):
+        self._name = name
+        self._short_name = short_name if short_name else name
+        self._description = description
+        self.requires_pickup = False
+        self.use_called_with_state = None
+        self.use_with_called_with_state_and_item = None
+
+    def get_name(self):
+        return self._name
+
+    def get_short_name(self):
+        return self._short_name
+    
+    def get_description(self):
+        return self._description
+
+    def use(self, game_state):
+        self.use_called_with_state = game_state
+        return f"You used the {self.get_name()}."
+
+    def use_with(self, game_state, other_item):
+        self.use_with_called_with_state_and_item = (game_state, other_item)
+        return f"You used the {self.get_name()} with {other_item.get_name()}."
+
+# --- Tests for 'use <item>' command ---
+
+def test_use_item_from_inventory_successful(game):
+    item1 = MockItemToUse(name="widget")
+    game.state.add_item_to_inventory(item1)
+    
+    result = game.use("widget")
+    assert result == "You used the widget."
+    assert item1.use_called_with_state == game.state
+
+def test_use_item_from_room_successful_no_pickup_needed(game):
+    item1 = MockItemToUse(name="lever")
+    game.state.current_room.add_item(item1)
+    
+    result = game.use("lever")
+    assert result == "You used the lever."
+    assert item1.use_called_with_state == game.state
+
+def test_use_item_not_found(game):
+    result = game.use("nonexistent_item")
+    assert result == "You don't have a 'nonexistent_item' to use, and there isn't one here."
+
+# --- Tests for 'use <item1> with <item2>' command ---
+
+def test_use_item1_inv_with_item2_inv_successful(game):
+    item1 = MockItemToUse(name="key")
+    item2 = MockItemToUse(name="chest")
+    game.state.add_item_to_inventory(item1)
+    game.state.add_item_to_inventory(item2)
+    
+    result = game.use("key", "chest")
+    assert result == "You used the key with chest."
+    assert item1.use_with_called_with_state_and_item == (game.state, item2)
+    assert item2.use_called_with_state is None 
+
+def test_use_item1_inv_with_item2_room_successful(game):
+    item1 = MockItemToUse(name="key")
+    item2 = MockItemToUse(name="locked_door")
+    # item2.requires_pickup is False by default
+    game.state.add_item_to_inventory(item1)
+    game.state.current_room.add_item(item2)
+    
+    result = game.use("key", "locked_door")
+    assert result == "You used the key with locked_door."
+    assert item1.use_with_called_with_state_and_item == (game.state, item2)
+
+def test_use_item1_room_with_item2_inv_successful(game):
+    item1 = MockItemToUse(name="lever") 
+    # item1.requires_pickup is False by default
+    item2 = MockItemToUse(name="mechanism_part")
+    game.state.current_room.add_item(item1)
+    game.state.add_item_to_inventory(item2)
+    
+    result = game.use("lever", "mechanism_part")
+    assert result == "You used the lever with mechanism_part."
+    assert item1.use_with_called_with_state_and_item == (game.state, item2)
+
+def test_use_item1_with_item2_item1_not_found(game):
+    item2 = MockItemToUse(name="target")
+    game.state.add_item_to_inventory(item2)
+    result = game.use("nonexistent_item1", "target")
+    assert result == "You don't have a 'nonexistent_item1' to use, and there isn't one here."
+
+def test_use_item1_with_item2_item2_not_found(game):
+    item1 = MockItemToUse(name="tool")
+    game.state.add_item_to_inventory(item1)
+    result = game.use("tool", "nonexistent_item2")
+    assert result == "You don't see a 'nonexistent_item2' to use with tool."
+
+def test_use_item_with_itself(game):
+    item1 = MockItemToUse(name="widget")
+    game.state.add_item_to_inventory(item1)
+    result = game.use("widget", "widget")
+    assert result == "You can't use the widget with itself."
+    assert item1.use_with_called_with_state_and_item is None
+

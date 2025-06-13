@@ -48,6 +48,10 @@ def _execute_commands(game, commands_list):
     for cmd in commands_list:
         results.append(game.handle_command(cmd))
 
+def _debug_print_history():
+    for res_str in results:
+        print(res_str)# Assuming buying rope costs 1 coin
+
 # Room setup for integration test
 ROOMS = {
     "EliorsCottage": EliorsCottage(),
@@ -133,13 +137,19 @@ def test_golden_path_act1_completion(monkeypatch):
     _execute_commands(game, ["go north", "go east", "go east"]) # Veg Field -> Village Square -> General Store
     _check_current_room(game.state, "General Store")
     _execute_commands(game, ["talk to shopkeeper", "buy rope from shopkeeper"])
-    _debug_print_history()
     _check_item_in_inventory(game.state, "rope")
     _check_item_in_inventory(game.state, "coin", should_be_present=False) 
 
-def _debug_print_history():
-    for res_str in results:
-        print(res_str)# Assuming buying rope costs 1 coin
+    # Abandoned Shed - Use Key
+    # Path: General Store (current) -> Village Square -> Village Well -> Abandoned Shed
+    _execute_commands(game, ["go south", "go west", "go south"]) 
+    _check_current_room(game.state, "Abandoned Shed")
+    _execute_commands(game, ["use key with mysterious box"])
+    _debug_print_history()
+    _check_item_in_inventory(game.state, "key", should_be_present=False)
+    assert game.state.current_room.get_item_by_name("mysterious box").locked == False, "Mysterious box should be unlocked after using key"
+    _check_item_in_room(game.state.current_room, "mysterious box")
+
 
     # # Check for Act I completion: amulet and map fragment in inventory, and in Road to Greendale
     # # inventory_names = [item.get_name().lower() for item in game.state.inventory]

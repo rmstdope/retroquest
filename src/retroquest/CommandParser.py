@@ -120,7 +120,19 @@ class CommandParser:
                 if cmd.startswith(prefix):
                     return self.game.drop(cmd[len(prefix):])
         elif cmd.startswith('use '):
-            return self.game.use(cmd[len('use '):]) # General item usage
+            args_str = cmd[len('use '):]
+            if ' with ' in args_str:
+                parts = args_str.split(' with ', 1)
+                item1_name = parts[0].strip()
+                item2_name = parts[1].strip()
+                if not item1_name or not item2_name:
+                    return "You need to specify two items to use with each other. Format: use <item1> with <item2>"
+                return self.game.use(item1_name, item2_name)
+            else:
+                item_name = args_str.strip()
+                if not item_name:
+                    return "What do you want to use?"
+                return self.game.use(item_name) # General item usage
         elif any(cmd.startswith(prefix) for prefix in ('eat ', 'consume ')):
             for prefix in ('eat ', 'consume '):
                 if cmd.startswith(prefix):

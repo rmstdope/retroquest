@@ -38,8 +38,8 @@ class DummyGame:
         self.calls.append(('take', item))
     def drop(self, item):
         self.calls.append(('drop', item))
-    def use(self, item): # For "use <item>"
-        self.calls.append(('use', item))
+    def use(self, item1, item2=None): # For "use <item>" or "use <item1> with <item2>"
+        self.calls.append(('use', item1, item2))
     def eat(self, item):
         self.calls.append(('eat', item))
     def drink(self, item):
@@ -186,7 +186,9 @@ def test_inventory_management_commands(game_parser):
         "get shield": ("take", "shield"),
         "drop key": ("drop", "key"),
         "discard rock": ("drop", "rock"),
-        "use lantern": ("use", "lantern"),
+        "use lantern": ("use", "lantern", None),
+        "use key with chest": ("use", "key", "chest"), # New test case
+        "use bread with chicken": ("use", "bread", "chicken"), # New test case
         "eat bread": ("eat", "bread"),
         "consume apple": ("eat", "apple"),
         "drink water": ("drink", "water"),

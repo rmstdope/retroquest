@@ -11,7 +11,7 @@ class Game:
         self.session = PromptSession()
         self.rooms = rooms
         self.is_running = True
-        self.state = GameState(starting_room)
+        self.state = GameState(starting_room, all_rooms=self.rooms) # Pass all_rooms
         self.command_parser = CommandParser(self)
 
     def handle_command(self, command: str) -> str:
@@ -285,22 +285,58 @@ class Game:
     def taste(self, item: str) -> str:
         raise NotImplementedError("Game.taste() is not yet implemented.")
 
-    def use(self, item_name: str) -> str:
-        item_name = item_name.lower()
-        # Check inventory for the item
-        for item_obj in self.state.inventory:
-            if item_obj.get_name().lower() == item_name or item_obj.get_short_name().lower() == item_name:
-                return item_obj.use(self.state) # Pass game_state to the item's use method
-        
-        # Check items in the current room if not in inventory (e.g. a lever)
-        for item_obj in self.state.current_room.get_items():
-            if item_obj.get_name().lower() == item_name or item_obj.get_short_name().lower() == item_name:
-                # Check if the item needs to be in inventory to be used
-                if hasattr(item_obj, 'requires_pickup') and item_obj.requires_pickup:
-                    return f"You need to pick up the {item_obj.get_name()} first."
-                return item_obj.use(self.state) # Pass game_state to the item's use method
+    def use(self, item_name_1: str, item_name_2: str = None) -> str:
+        item_name_1_lower = item_name_1.lower()
+        item_obj_1 = None
+        is_item1_from_inventory = False
 
-        return f"You don't have a '{item_name}' to use, and there isn't one here."
+        # Find item_obj_1 in inventory
+        for item in self.state.inventory:
+            if item.get_name().lower() == item_name_1_lower or item.get_short_name().lower() == item_name_1_lower:
+                item_obj_1 = item
+                is_item1_from_inventory = True
+                break
+        
+        # If not in inventory, find item_obj_1 in the current room
+        if not item_obj_1:
+            for item in self.state.current_room.get_items():
+                if item.get_name().lower() == item_name_1_lower or item.get_short_name().lower() == item_name_1_lower:
+                    item_obj_1 = item
+                    # is_item1_from_inventory remains False
+                    break
+
+        if not item_obj_1:
+            return f"You don't have a '{item_name_1}' to use, and there isn't one here."
+
+        # --- Handle two-item usage ---
+        if item_name_2:
+            item_name_2_lower = item_name_2.lower()
+            item_obj_2 = None
+
+            # Find item_obj_2 in inventory
+            for item in self.state.inventory:
+                if item.get_name().lower() == item_name_2_lower or item.get_short_name().lower() == item_name_2_lower:
+                    item_obj_2 = item
+                    break
+            
+            # If not in inventory, find item_obj_2 in the current room
+            if not item_obj_2:
+                for item in self.state.current_room.get_items():
+                    if item.get_name().lower() == item_name_2_lower or item.get_short_name().lower() == item_name_2_lower:
+                        item_obj_2 = item
+                        break
+            
+            if not item_obj_2:
+                return f"You don't see a '{item_name_2}' to use with {item_obj_1.get_name()}."
+
+            if item_obj_1 == item_obj_2:
+                return f"You can't use the {item_obj_1.get_name()} with itself."
+
+            return item_obj_1.use_with(self.state, item_obj_2)
+
+        # --- Handle single-item usage ---
+        else:
+            return item_obj_1.use(self.state)
 
     def cast(self, spell_name: str) -> str:
         spell_name = spell_name.lower()

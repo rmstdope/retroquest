@@ -1,8 +1,13 @@
+from typing import TYPE_CHECKING, Dict
+
+if TYPE_CHECKING:
+    from .rooms.Room import Room
+
 class GameState:
     """
     Holds the mutable state of the currently played game: current room, inventory, history, and visited rooms.
     """
-    def __init__(self, starting_room) -> None:
+    def __init__(self, starting_room, all_rooms=None) -> None:
         self.current_room = starting_room
         self.inventory = []
         self.history = []
