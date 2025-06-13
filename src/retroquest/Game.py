@@ -1,5 +1,6 @@
 from prompt_toolkit import PromptSession
 
+from .spells import Spell
 from .characters import Character
 from .items.Item import Item
 from .CommandParser import CommandParser
@@ -216,10 +217,6 @@ class Game:
         return target1, target2, ''
         
     def give(self, command_args: str) -> str:
-        
-        item_name = ""
-        character_name = ""
-
         # Split the command into item and character parts
         item_name,character_name,error = self.split_command(command_args, 'give', 'to')
         if item_name == None or character_name is None:
@@ -238,42 +235,14 @@ class Game:
         # Call give_item on the character
         return character_to_receive.give_item(self.state, item_to_give)
 
-    # --- Not Implemented Methods ---
-    def ask(self, target: str) -> str:
-        raise NotImplementedError("Game.ask() is not yet implemented.")
-
-    def show(self, item: str) -> str:
-        raise NotImplementedError("Game.show() is not yet implemented.")
-
-    def trade(self, item: str) -> str:
-        raise NotImplementedError("Game.trade() is not yet implemented.")
-
     def buy(self, command_args: str) -> str:
-        # Expected format: "buy <item_name> from <character_name>"
-        parts = command_args.lower().split()
-        item_name = ""
-        character_name = ""
+        # Split the command into item and character parts
+        item_name,character_name,error = self.split_command(command_args, 'buy', 'from')
+        if item_name == None or character_name is None:
+            return error
 
-        if "from" not in parts:
-            return "Invalid command format. Please use 'buy <item> from <character>'."
-
-        from_index = parts.index("from")
-        item_name = " ".join(parts[:from_index])
-        
-        if not item_name: # Check if an item name was actually provided
-            return "What do you want to buy? Use 'buy <item> from <character>'."
-            
-        if from_index >= len(parts) - 1: # No character name provided
-            return "From whom do you want to buy? Use 'buy <item> from <character>'."
-            
-        character_name = " ".join(parts[from_index+1:])
-
-        character_to_buy_from = None
-        for char_in_room in self.state.current_room.get_characters():
-            if char_in_room.get_name().lower() == character_name:
-                character_to_buy_from = char_in_room
-                break
-        
+        # Check if character is in the room
+        character_to_buy_from = self.find_character(character_name)
         if not character_to_buy_from:
             return f"'{character_name.capitalize()}' is not here."
 
@@ -282,24 +251,8 @@ class Game:
     def read(self, item: str) -> str:
         if not item:  # Check if item name is empty or None
             return "Read what?"
-# TODO Extract the below as a separate item getter
-        target_name_lower = item.lower()
-        item_to_read = None
 
-        # Check inventory first
-        for inv_item_obj in self.state.inventory:
-            if inv_item_obj.get_name().lower() == target_name_lower or \
-               inv_item_obj.get_short_name().lower() == target_name_lower:
-                item_to_read = inv_item_obj
-                break
-        
-        # If not in inventory, check items in the current room
-        if not item_to_read:
-            for room_item_obj in self.state.current_room.get_items():
-                if room_item_obj.get_name().lower() == target_name_lower or \
-                   room_item_obj.get_short_name().lower() == target_name_lower:
-                    item_to_read = room_item_obj
-                    break
+        item_to_read = self.find_item(item, look_in_inventory=True, look_in_room=True)
         
         if item_to_read:
             # As per the prompt, all Item objects are assumed to have a .read(game_state) method.
@@ -308,58 +261,15 @@ class Game:
         else:
             return f"You don't see a '{item}' to read here or in your inventory."
 
-    def search(self, target: str) -> str:
-        raise NotImplementedError("Game.search() is not yet implemented.")
-
-    def listen(self, target: str = None) -> str:
-        raise NotImplementedError("Game.listen() is not yet implemented.")
-
-    def smell(self, target: str = None) -> str:
-        raise NotImplementedError("Game.smell() is not yet implemented.")
-
-    def taste(self, item: str) -> str:
-        raise NotImplementedError("Game.taste() is not yet implemented.")
-
     def use(self, item_name_1: str, item_name_2: str = None) -> str:
-        item_name_1_lower = item_name_1.lower()
-        item_obj_1 = None
-        is_item1_from_inventory = False
-
-        # Find item_obj_1 in inventory
-        for item in self.state.inventory:
-            if item.get_name().lower() == item_name_1_lower or item.get_short_name().lower() == item_name_1_lower:
-                item_obj_1 = item
-                is_item1_from_inventory = True
-                break
-        
-        # If not in inventory, find item_obj_1 in the current room
-        if not item_obj_1:
-            for item in self.state.current_room.get_items():
-                if item.get_name().lower() == item_name_1_lower or item.get_short_name().lower() == item_name_1_lower:
-                    item_obj_1 = item
-                    # is_item1_from_inventory remains False
-                    break
+        item_obj_1 = self.find_item(item_name_1, look_in_inventory=True, look_in_room=True)
 
         if not item_obj_1:
             return f"You don't have a '{item_name_1}' to use, and there isn't one here."
 
         # --- Handle two-item usage ---
         if item_name_2:
-            item_name_2_lower = item_name_2.lower()
-            item_obj_2 = None
-
-            # Find item_obj_2 in inventory
-            for item in self.state.inventory:
-                if item.get_name().lower() == item_name_2_lower or item.get_short_name().lower() == item_name_2_lower:
-                    item_obj_2 = item
-                    break
-            
-            # If not in inventory, find item_obj_2 in the current room
-            if not item_obj_2:
-                for item in self.state.current_room.get_items():
-                    if item.get_name().lower() == item_name_2_lower or item.get_short_name().lower() == item_name_2_lower:
-                        item_obj_2 = item
-                        break
+            item_obj_2 = self.find_item(item_name_2, look_in_inventory=True, look_in_room=True)
             
             if not item_obj_2:
                 return f"You don't see a '{item_name_2}' to use with {item_obj_1.get_name()}."
@@ -380,16 +290,12 @@ class Game:
                 return spell_obj.cast(self.state) # Pass game_state to the spell's cast method
         return f"You don't know the spell '{spell_name}'."
 
-    def learn(self, spell: str) -> str:
-        # For now, let's assume `spell` is an object of a Spell subclass
-        # In a real scenario, you might look up the spell by name and then add its instance
-        if hasattr(spell, 'get_name') and hasattr(spell, 'get_description'):
-            if spell not in self.state.known_spells:
-                self.state.known_spells.append(spell)
-                return f"You have learned the spell: {spell.get_name()}!"
-            else:
-                return f"You already know the spell: {spell.get_name()}."
-        return "You can't learn that."
+    def learn(self, spell: Spell) -> str:
+        if spell not in self.state.known_spells:
+            self.state.known_spells.append(spell)
+            return f"You have learned the spell: {spell.get_name()}!"
+        else:
+            return f"You already know the spell: {spell.get_name()}."
 
     def spells(self) -> str: # Method to list known spells
         if not self.state.known_spells:
@@ -399,6 +305,28 @@ class Game:
         for spell_obj in self.state.known_spells:
             output.append(f"  - {spell_obj.get_name()}: {spell_obj.get_description()}")
         return "\n".join(output)
+
+    # --- Not Implemented Methods ---
+    def ask(self, target: str) -> str:
+        raise NotImplementedError("Game.ask() is not yet implemented.")
+
+    def show(self, item: str) -> str:
+        raise NotImplementedError("Game.show() is not yet implemented.")
+
+    def trade(self, item: str) -> str:
+        raise NotImplementedError("Game.trade() is not yet implemented.")
+
+    def search(self, target: str) -> str:
+        raise NotImplementedError("Game.search() is not yet implemented.")
+
+    def listen(self, target: str = None) -> str:
+        raise NotImplementedError("Game.listen() is not yet implemented.")
+
+    def smell(self, target: str = None) -> str:
+        raise NotImplementedError("Game.smell() is not yet implemented.")
+
+    def taste(self, item: str) -> str:
+        raise NotImplementedError("Game.taste() is not yet implemented.")
 
     def eat(self, item: str) -> str:
         raise NotImplementedError("Game.eat() is not yet implemented.")

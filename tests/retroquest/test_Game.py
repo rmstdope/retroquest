@@ -521,13 +521,13 @@ def test_buy_item_character_cannot_sell(game):
 
 def test_buy_item_invalid_format(game):
     result = game.buy("rope shopkeeper") # Missing "from"
-    assert "Invalid command format. Please use 'buy <item> from <character>'." in result
+    assert "Invalid command format. Please use 'buy <target1> from <target2>'." in result
 
     result = game.buy("from shopkeeper") # Missing item
-    assert "What do you want to buy? Use 'buy <item> from <character>'." in result
+    assert "What do you want to buy?" in result
 
     result = game.buy("rope from") # Missing character
-    assert "From whom do you want to buy? Use 'buy <item> from <character>'." in result
+    assert "Who/What should I buy rope from?'." in result
 
 # Helper classes for 'use' tests
 # These are defined here to be available for the test functions below.
