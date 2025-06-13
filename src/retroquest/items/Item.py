@@ -25,3 +25,7 @@ class Item:
     def use(self, game_state) -> str:
         """Base 'use' method for items. Subclasses should override this if they have specific use actions."""
         return f"You can't use the {self.get_name()} in any special way."
+
+    def read(self, game_state) -> str:
+        """Base 'read' method for items. Subclasses should override this if they are readable."""
+        return f"There is nothing to read on the {self.get_name()}."

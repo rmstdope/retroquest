@@ -83,7 +83,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Elior’s Cottage
     _execute_commands(game, ["use lantern", "take bread", "talk to grandmother"])
     _check_item_in_inventory(game.state, "bread")
-    _execute_commands(game, ["use journal", "talk to grandmother"])
+    _execute_commands(game, ["read journal", "talk to grandmother"])
     _check_spell_known(game.state, "revive")
 
     # Vegetable Field

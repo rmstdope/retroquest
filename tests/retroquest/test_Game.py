@@ -266,13 +266,13 @@ def test_give_item_character_does_not_want(game, basic_rooms):
 
 def test_give_item_invalid_format(game):
     result = game.give("apple villager") # Missing "to"
-    assert "Invalid command format. Please use \'give <item> to <character>\'." in result
+    assert "Invalid command format. Please use \'give <target1> to <target2>\'." in result
 
     result = game.give("to villager") # Missing item
-    assert "What do you want to give? Use \'give <item> to <character>\'." in result
+    assert "What do you want to give?" in result
 
     result = game.give("apple to") # Missing character
-    assert "Who do you want to give it to? Use \'give <item> to <character>\'." in result
+    assert "Who/What should I give apple to?" in result
 
 # --- Tests for \'look\' command ---
 
@@ -540,6 +540,7 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
         self.requires_pickup = False
         self.use_called_with_state = None
         self.use_with_called_with_state_and_item = None
+        self.read_called_with_state = None # Added for read tests
 
     def get_name(self):
         return self._name
@@ -557,6 +558,10 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
     def use_with(self, game_state, other_item):
         self.use_with_called_with_state_and_item = (game_state, other_item)
         return f"You used the {self.get_name()} with {other_item.get_name()}."
+
+    def read(self, game_state): # Added for read tests
+        self.read_called_with_state = game_state
+        return f"You read the {self.get_name()}. It says: 'Mock content for {self.get_name()}.'"
 
 # --- Tests for 'use <item>' command ---
 
@@ -633,4 +638,77 @@ def test_use_item_with_itself(game):
     result = game.use("widget", "widget")
     assert result == "You can't use the widget with itself."
     assert item1.use_with_called_with_state_and_item is None
+
+# --- Tests for 'read <item>' command ---
+
+def test_read_item_in_inventory(game):
+    readable_book = MockItemToUse(name="old book")
+    game.state.add_item_to_inventory(readable_book)
+    
+    result = game.read("old book")
+    assert result == "You read the old book. It says: 'Mock content for old book.'"
+    assert readable_book.read_called_with_state == game.state
+
+def test_read_item_in_room(game):
+    readable_scroll = MockItemToUse(name="ancient scroll")
+    game.state.current_room.add_item(readable_scroll)
+    
+    result = game.read("ancient scroll")
+    assert result == "You read the ancient scroll. It says: 'Mock content for ancient scroll.'"
+    assert readable_scroll.read_called_with_state == game.state
+
+def test_read_item_not_found(game):
+    result = game.read("missing_tablet")
+    assert result == "You don't see a 'missing_tablet' to read here or in your inventory."
+
+def test_read_no_item_specified(game):
+    result = game.read("")
+    assert result == "Read what?"
+
+def test_read_item_case_insensitivity_inventory(game):
+    journal = MockItemToUse(name="MyJournal")
+    game.state.add_item_to_inventory(journal)
+    
+    result = game.read("myjournal")
+    assert result == "You read the MyJournal. It says: 'Mock content for MyJournal.'"
+    assert journal.read_called_with_state == game.state
+
+def test_read_item_case_insensitivity_room(game):
+    note = MockItemToUse(name="SecretNote")
+    game.state.current_room.add_item(note)
+    
+    result = game.read("secretnote")
+    assert result == "You read the SecretNote. It says: 'Mock content for SecretNote.'"
+    assert note.read_called_with_state == game.state
+
+def test_read_item_short_name_inventory(game):
+    manual = MockItemToUse(name="Instruction Manual", short_name="manual")
+    game.state.add_item_to_inventory(manual)
+    
+    result = game.read("manual")
+    assert result == "You read the Instruction Manual. It says: 'Mock content for Instruction Manual.'"
+    assert manual.read_called_with_state == game.state
+
+def test_read_item_short_name_room(game):
+    plaque = MockItemToUse(name="Bronze Plaque", short_name="plaque")
+    game.state.current_room.add_item(plaque)
+    
+    result = game.read("plaque")
+    assert result == "You read the Bronze Plaque. It says: 'Mock content for Bronze Plaque.'"
+    assert plaque.read_called_with_state == game.state
+
+def test_read_item_prefers_inventory_over_room(game):
+    book_inv = MockItemToUse(name="common book")
+    book_room = MockItemToUse(name="common book") # Same name
+    
+    book_inv.read = MagicMock(return_value="Read from inventory book.")
+    book_room.read = MagicMock(return_value="Read from room book.")
+    
+    game.state.add_item_to_inventory(book_inv)
+    game.state.current_room.add_item(book_room)
+    
+    result = game.read("common book")
+    assert result == "Read from inventory book."
+    book_inv.read.assert_called_once_with(game.state)
+    book_room.read.assert_not_called()
 

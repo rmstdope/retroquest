@@ -1,4 +1,7 @@
 from prompt_toolkit import PromptSession
+
+from .characters import Character
+from .items.Item import Item
 from .CommandParser import CommandParser
 from .GameState import GameState
 
@@ -42,6 +45,33 @@ class Game:
             # Print a separator line before any output after a command
             if response:
                 print('\n' + response + '\n')
+
+    def find_character(self, target) -> Character:
+        character_to_examine = None
+        target = target.lower()
+        for character in self.state.current_room.get_characters():
+            if character_to_examine == None and character.get_name().lower() == target:
+                character_to_examine = character
+        return character_to_examine
+
+    def find_item(self, target, look_in_inventory: bool = True, look_in_room: bool = True) -> Item:
+        """
+        Find an item by its name or short name in the inventory and/or current room.
+        Returns a tuple of (target_name, item_object) where item_object is None if not found.
+        """
+        target = target.lower()
+        item_to_examine = None
+        # Check inventory first
+        if look_in_inventory:
+            for item in self.state.inventory:
+                if item_to_examine == None and (item.get_name().lower() == target or item.get_short_name().lower() == target):
+                    item_to_examine = item
+        # Then check items in the current room
+        if look_in_room:
+            for item in self.state.current_room.get_items():
+                if item_to_examine == None and (item.get_name().lower() == target or item.get_short_name().lower() == target):
+                    item_to_examine = item
+        return item_to_examine
 
     def move(self, direction: str, arg: str = None) -> str:
         exits = self.state.current_room.get_exits()
@@ -93,19 +123,12 @@ class Game:
     def examine(self, target: str) -> str:
         if not target:  # Check if target is an empty string or None
             return "Examine what?"
-        target = target.lower()
-        # Check inventory first
-        for item in self.state.inventory:
-            if item.get_name().lower() == target or item.get_short_name().lower() == target:
-                return item.get_description()
-        # Then check items in the current room
-        for item in self.state.current_room.get_items():
-            if item.get_name().lower() == target or item.get_short_name().lower() == target:
-                return item.get_description()
-        # Then check characters in the current room
-        for character in self.state.current_room.get_characters():
-            if character.get_name().lower() == target:
-                return character.get_description()
+        item_to_examine = self.find_item(target)
+        if item_to_examine:
+            return item_to_examine.get_description()
+        character_to_examine = self.find_character(target)
+        if character_to_examine:
+            return character_to_examine.get_description()
         return f"You don't see a '{target}' here."
 
     def map(self) -> str:
@@ -144,28 +167,22 @@ class Game:
                 continue
 
     def drop(self, item: str) -> str:
-        item = item.lower()
-        for obj in self.state.inventory:
-            if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
-                self.state.inventory.remove(obj)
-                self.state.current_room.items.append(obj)
-                return f"You drop the {obj.get_name()}."
+        item_to_drop = self.find_item(item, look_in_inventory=True, look_in_room=False)
+        if item_to_drop:
+            self.state.inventory.remove(item_to_drop)
+            self.state.current_room.items.append(item_to_drop)
+            return f"You drop the {item_to_drop.get_name()}."
         return f"You don't have a '{item}' to drop."
 
     def take(self, item: str) -> str:
-        item = item.lower()
-        # Find item in current room by name or short_name
-        room_items = self.state.current_room.get_items()
-        for obj in room_items:
-            if obj.get_name().lower() == item or obj.get_short_name().lower() == item:
-                if not obj.can_be_carried():
-                    return f"You can't take the {obj.get_name()}."
-                # Remove from room
-                self.state.current_room.items.remove(obj)
-                # Add to inventory
-                self.state.inventory.append(obj)
-                return f"You take the {obj.get_name()}."
-        return f"There is no '{item}' here to take."
+        item_to_take = self.find_item(item, look_in_inventory=False, look_in_room=True)
+        if not item_to_take:
+            return f"There is no '{item}' here to take."
+        if not item_to_take.can_be_carried():
+            return f"You can't take the {item_to_take.get_name()}."
+        self.state.current_room.items.remove(item_to_take)
+        self.state.inventory.append(item_to_take)
+        return f"You take the {item_to_take.get_name()}."
 
     def inventory(self) -> str:
         if not self.state.inventory:
@@ -175,63 +192,55 @@ class Game:
             lines.append(f"- {item.get_name()}")
         return "\n".join(lines)
 
-    # --- Not Implemented Methods ---
     def talk(self, target: str) -> str:
-        target = target.lower()
-        # Find character in the current room by name
-        for character in self.state.current_room.get_characters():
-            if character.get_name().lower() == target:
-                # Call the character's talk_to method
-                return character.talk_to(self.state)
-        return f"There is no one named '{target}' here to talk to."
+        if not target:
+            return "Talk to whom?"
+        character_to_talk_to = self.find_character(target)
+        if character_to_talk_to:
+            return character_to_talk_to.talk_to(self.state)
+        else:
+            return f"There is no one named '{target}' here to talk to."
 
-    def ask(self, target: str) -> str:
-        raise NotImplementedError("Game.ask() is not yet implemented.")
-
-    def give(self, command_args: str) -> str:
-        # Expected format: "give <item_name> to <character_name>"
+    def split_command(self, command_args: str, command: str, delimiter: str) -> tuple:
+        # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"
         parts = command_args.lower().split()
+        if delimiter not in parts:
+            return None, None, f"Invalid command format. Please use '{command} <target1> {delimiter} <target2>'."
+        del_index = parts.index(delimiter)
+        if del_index == 0: # No target1 provided
+            return None, None, f"What do you want to {command}?'."
+        target1 = " ".join(parts[:del_index])
+        if del_index >= len(parts) - 1: # No target2 provided
+            return None, None, f"Who/What should I {command} {target1} {delimiter}?'."
+        target2 = " ".join(parts[del_index+1:])
+        return target1, target2, ''
+        
+    def give(self, command_args: str) -> str:
         
         item_name = ""
         character_name = ""
 
-        if "to" not in parts:
-            return "Invalid command format. Please use 'give <item> to <character>'."
-        to_index = parts.index("to")
-
-        if to_index == 0: # No item name provided
-            return "What do you want to give? Use 'give <item> to <character>'."
-        
-        item_name = " ".join(parts[:to_index])
-        
-        if to_index >= len(parts) - 1: # No character name provided
-            return "Who do you want to give it to? Use 'give <item> to <character>'."
-            
-        character_name = " ".join(parts[to_index+1:])
+        # Split the command into item and character parts
+        item_name,character_name,error = self.split_command(command_args, 'give', 'to')
+        if item_name == None or character_name is None:
+            return error
 
         # Check if item is in inventory
-        item_to_give = None
-        for inv_item in self.state.inventory:
-            if inv_item.get_name().lower() == item_name or \
-               inv_item.get_short_name().lower() == item_name:
-                item_to_give = inv_item
-                break
-        
+        item_to_give = self.find_item(item_name, look_in_inventory=True, look_in_room=False)
         if not item_to_give:
             return f"You don't have any '{item_name}'."
 
         # Check if character is in the room
-        character_to_receive = None
-        for char_in_room in self.state.current_room.get_characters():
-            if char_in_room.get_name().lower() == character_name:
-                character_to_receive = char_in_room
-                break
-        
+        character_to_receive = self.find_character(character_name)
         if not character_to_receive:
             return f"'{character_name.capitalize()}' is not here."
 
         # Call give_item on the character
         return character_to_receive.give_item(self.state, item_to_give)
+
+    # --- Not Implemented Methods ---
+    def ask(self, target: str) -> str:
+        raise NotImplementedError("Game.ask() is not yet implemented.")
 
     def show(self, item: str) -> str:
         raise NotImplementedError("Game.show() is not yet implemented.")
@@ -271,7 +280,33 @@ class Game:
         return character_to_buy_from.buy_item(item_name, self.state)
 
     def read(self, item: str) -> str:
-        raise NotImplementedError("Game.read() is not yet implemented.")
+        if not item:  # Check if item name is empty or None
+            return "Read what?"
+# TODO Extract the below as a separate item getter
+        target_name_lower = item.lower()
+        item_to_read = None
+
+        # Check inventory first
+        for inv_item_obj in self.state.inventory:
+            if inv_item_obj.get_name().lower() == target_name_lower or \
+               inv_item_obj.get_short_name().lower() == target_name_lower:
+                item_to_read = inv_item_obj
+                break
+        
+        # If not in inventory, check items in the current room
+        if not item_to_read:
+            for room_item_obj in self.state.current_room.get_items():
+                if room_item_obj.get_name().lower() == target_name_lower or \
+                   room_item_obj.get_short_name().lower() == target_name_lower:
+                    item_to_read = room_item_obj
+                    break
+        
+        if item_to_read:
+            # As per the prompt, all Item objects are assumed to have a .read(game_state) method.
+            # If an item is not meant to be read, its read() method should return an appropriate message.
+            return item_to_read.read(self.state)
+        else:
+            return f"You don't see a '{item}' to read here or in your inventory."
 
     def search(self, target: str) -> str:
         raise NotImplementedError("Game.search() is not yet implemented.")
