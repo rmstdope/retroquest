@@ -62,7 +62,7 @@
 ## 7. General Store
 
 - **Description:** A cluttered shop with shelves of goods.
-- **Items:** apple (start), Rope (later).
+- **Items:** apple (start), rope (later).
 - **Unusable:** matches (start).
 - **Spells:** None.
 - **Usable Items:** Coin (2nd, purchase rope).
@@ -176,7 +176,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 1.  **Elior’s Cottage:**
 
-    - Use lantern to light up the room. _The lantern illuminates the cottage, revealing the bread and Elinor's journal._
+    - Use lantern to light up the room. _The lantern illuminates the cottage, revealing the bread and Elior’s journal._
     - Take bread. _Bread is added to inventory._
     - Read journal. Opens up new conversion story with Grandmother.
     - Speak to Grandmother for advice. _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell._
@@ -326,9 +326,9 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 22. **Return to Elior's Cottage:**
 
-    - Give hidden locket to Grandmother. _Tears well in her eyes as she recognizes it. She shares a tender memory of Elior's parents and, for his journey, gives him a warm `travel cloak`._
+    - Give hidden locket to Grandmother. _Tears well in her eyes as she recognizes it. She shares a tender memory of Elior\'s parents and, for his journey, gives him a warm `travel cloak`._
       - Item used: `hidden locket`
-      - Item obtained: `travel_cloak` (Completes: Warm clothing)
+      - Item obtained: `travel cloak` (Completes: Warm clothing)
 
 23. **Village Chapel (Prepare for Journey):**
 
@@ -355,16 +355,20 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     **Items strictly necessary to complete Act I:**
 
     - `Bread` (to get `key`)
-    - `Key` (to access Abandoned Shed\'s interior where Mysterious Box is)
+    - `Key` (to access Abandoned Shed's interior where Mysterious Box is)
     - `Coin` (1st, to get `dull knife` sharpened)
     - `Dull Knife` (to become `sharp knife`)
     - `Sharp Knife` (to cut vines on Forest Path, enabling access to the `stick` and the Hidden Glade for the `rare flower`)
+    - `Fishing Rod` (to catch `fish` for the `purify` spell, and to retrieve the `shiny ring`)
+    - `Magnet` (to retrieve the `shiny ring` from the well)
+    - `Fish` (to give to the Fisherman to learn the `purify` spell)
+    - `Stick` (to use with `fishing rod` and `magnet` to retrieve the `shiny ring`)
     - `Rare Flower` (to give to Mira to learn spells and get quest)
     - `Apple`
     - `Egg`
     - `Travel Cloak` (from Grandmother)
     - `Wild Berries` (from Forest Path)
-    - `Wandering Boots` (from Merchant)
+    - `Wandering Boots` (from Merchant, obtained by trading `shiny ring`)
     - `Map` (essential item, found in Mysterious Box, opened with `unlock` spell)
     - `Ancient Amulet` (essential item given by Mira after completing her tasks)
     - (Implicitly, all spells: `revive`, `purify`, `bless`, `heal`, `unlock`, `light`, `grow` are necessary)
@@ -383,7 +387,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 4.  **`Dull Knife`** (Obtained: Step 2):
     - Used in Step 6 by giving it to the Blacksmith to be sharpened into a `sharp knife`.
 5.  **`Egg`** (Obtained: Step 3):
-    - Fulfills Mira\'s quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
+    - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
 6.  **`Key`** (Obtained: Step 3):
     - Used in Step 9 to open the Abandoned Shed door.
 7.  **`Bucket`** (Obtained: Step 4):
@@ -393,8 +397,8 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 9.  **`Coin` (2nd)** (Obtained: Step 7):
     - Used in Step 8 to buy `rope` from the General Store.
 10. **`Apple`** (Obtained: Step 8):
-    - Fulfills Mira\'s quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
-11. **`Rope`** (Obtained: Step 8):
+    - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
+11. **`rope`** (Obtained: Step 8):
     - Used in Step 10 to fix the mechanism in the Old Mill, revealing the `millstone fragment`.
 12. **`Fishing Rod`** (Obtained: Step 9):
     - Used in Step 12 to catch a `fish`.
@@ -415,15 +419,15 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Used in Step 15 by showing it to the Priest to learn the `bless` spell.
     - Used in Step 22 by giving it to Grandmother to receive the `travel_cloak`.
 20. **`Map`** (Obtained: Step 17):
-    - Fulfills Mira\'s quest requirement for "A `map` to find his way" (implicitly used by Step 25).
+    - Fulfills Mira's quest requirement for "A `map` to find his way" (implicitly used by Step 25).
     - Used in Step 26 to complete Act I.
 21. **`Shiny Ring`** (Obtained: Step 19):
     - Used in Step 24 by trading it with the Merchant for `wandering boots`.
 22. **`Wild Berries`** (Obtained: Step 21, from `grow` spell):
-    - Fulfills Mira\'s quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
+    - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
 23. **`Travel Cloak`** (Obtained: Step 22):
-    - Fulfills Mira\'s quest requirement for "Warm clothing" (implicitly used by Step 25).
+    - Fulfills Mira's quest requirement for "Warm clothing" (implicitly used by Step 25).
 24. **`Wandering Boots`** (Obtained: Step 24):
-    - Fulfills Mira\'s quest requirement for "Sturdy footwear" (implicitly used by Step 25).
+    - Fulfills Mira's quest requirement for "Sturdy footwear" (implicitly used by Step 25).
 25. **`Ancient Amulet`** (Obtained: Step 25):
-    - Its acquisition is the primary goal of Mira\'s quest and is essential for completing Act I. Considered "used" upon receipt for quest completion.
+    - Its acquisition is the primary goal of Mira's quest and is essential for completing Act I. Considered "used" upon receipt for quest completion.
