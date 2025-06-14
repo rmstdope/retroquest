@@ -100,7 +100,7 @@ def test_golden_path_act1_completion(monkeypatch):
     assert len(game.state.inventory) == inventory_count_after_bread_use, "Using hoe again should not add items to inventory"
 
     # Chicken Coop
-    _execute_commands(game, ["go south", "use bread"])
+    _execute_commands(game, ["go south", "use bread with chicken"])
     _check_current_room(game.state, "Chicken Coop")
     _check_item_in_inventory(game.state, "bread", should_be_present=False)
     _check_item_in_room(game.state.current_room, "key")
