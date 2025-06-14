@@ -28,7 +28,7 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - look around / look / observe / survey
 - look at [object] / inspect [object] / examine [object] / check [object]
 - read [object]
-- search [object/location] / investigate [object/location]
+- search / investigate
 - listen to [object/location]
 - smell / sniff [object]
 - taste [item]

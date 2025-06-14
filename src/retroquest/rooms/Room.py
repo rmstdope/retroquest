@@ -59,3 +59,7 @@ class Room:
         if self.exits:
             desc += f"\nExits: {', '.join(self.exits.keys())}"
         return desc
+
+    def search(self, game_state, target: str = None) -> str:
+        """Allows the player to search the room."""
+        return "You search around the {self.name}, but find nothing of interest beyond what you can already see."

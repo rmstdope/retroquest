@@ -306,18 +306,8 @@ class Game:
             output.append(f"  - {spell_obj.get_name()}: {spell_obj.get_description()}")
         return "\n".join(output)
 
-    # --- Not Implemented Methods ---
-    def ask(self, target: str) -> str:
-        raise NotImplementedError("Game.ask() is not yet implemented.")
-
-    def show(self, item: str) -> str:
-        raise NotImplementedError("Game.show() is not yet implemented.")
-
-    def trade(self, item: str) -> str:
-        raise NotImplementedError("Game.trade() is not yet implemented.")
-
-    def search(self, target: str) -> str:
-        raise NotImplementedError("Game.search() is not yet implemented.")
+    def search(self) -> str:
+        return self.state.current_room.search(self.state) # Pass game_state
 
     def listen(self, target: str = None) -> str:
         if not target:
@@ -328,6 +318,16 @@ class Game:
             return item_to_listen_to.listen(self.state)
         else:
             return f"You don\'t see a '{target}' to listen to here or in your inventory."
+
+    # --- Not Implemented Methods ---
+    def ask(self, target: str) -> str:
+        raise NotImplementedError("Game.ask() is not yet implemented.")
+
+    def show(self, item: str) -> str:
+        raise NotImplementedError("Game.show() is not yet implemented.")
+
+    def trade(self, item: str) -> str:
+        raise NotImplementedError("Game.trade() is not yet implemented.")
 
     def smell(self, target: str = None) -> str:
         raise NotImplementedError("Game.smell() is not yet implemented.")

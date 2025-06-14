@@ -145,11 +145,34 @@ def test_golden_path_act1_completion(monkeypatch):
     _execute_commands(game, ["go south", "go west", "go south"]) 
     _check_current_room(game.state, "Abandoned Shed")
     _execute_commands(game, ["use key with mysterious box"])
-    _debug_print_history()
     _check_item_in_inventory(game.state, "key", should_be_present=False)
     assert game.state.current_room.get_item_by_name("mysterious box").locked == False, "Mysterious box should be unlocked after using key"
     _check_item_in_room(game.state.current_room, "mysterious box")
+    _execute_commands(game, ["search"])
+    _check_item_in_room(game.state.current_room, "fishing rod")
+    _execute_commands(game, ["take fishing rod"])
+    _debug_print_history()
+    _check_item_in_inventory(game.state, "fishing rod")
+    _check_item_in_room(game.state.current_room, "fishing rod", should_be_present=False)
 
+    # Old Mill - Use Rope, Take Millstone Fragment
+    # Path: Abandoned Shed (current) -> Old Mill
+    _execute_commands(game, ["go south"])
+    _check_current_room(game.state, "Old Mill")
+    _execute_commands(game, ["use rope with mechanism"]) # Assuming "use rope" is enough, and it interacts with the mechanism
+    _check_item_in_inventory(game.state, "rope", should_be_present=False)
+    _check_item_in_room(game.state.current_room, "millstone fragment")
+    _execute_commands(game, ["take millstone fragment"])
+    _check_item_in_inventory(game.state, "millstone fragment")
+    _check_item_in_room(game.state.current_room, "millstone fragment", should_be_present=False)
+
+    # Riverbank - Take Fishing Rod, Talk to Fisherman
+    # Path: Old Mill (current) -> Riverbank
+    _execute_commands(game, ["go east"])
+    _check_current_room(game.state, "Riverbank")
+    # _execute_commands(game, ["talk to fisherman"])
+    
+    # # TODO: Add assertion for fisherman's response or state change if implemented
 
     # # Check for Act I completion: amulet and map fragment in inventory, and in Road to Greendale
     # # inventory_names = [item.get_name().lower() for item in game.state.inventory]

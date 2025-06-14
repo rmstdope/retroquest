@@ -1,5 +1,8 @@
 from .Character import Character
 from ..spells.ReviveSpell import ReviveSpell # Import ReviveSpell
+from ..items.TravelCloak import TravelCloak
+from ..items.WildBerries import WildBerries
+from ..items.HiddenLocket import HiddenLocket
 
 class Grandmother(Character):
     def __init__(self) -> None:
@@ -7,16 +10,24 @@ class Grandmother(Character):
             name="Grandmother",
             description="Elior's wise and loving grandmother, always ready with advice and a gentle smile. She has raised Elior since his parents vanished."
         )
+        self.dialogue_state = {
+            "initial_talk": True,
+            "given_locket": False,
+            "given_berries": False,
+        }
 
     def talk_to(self, game_state) -> str:
-        dialogue = (
-            "Oh, Elior, my dear. The village... it feels a bit on edge lately, doesn't it? \n\n"
-            "Willowbrook has always been a peaceful place. The Village Square is usually bustling, though folks seem more hushed these days. \n\n"
-            "If you're needing anything, the General Store usually has a bit of everything. Old Man Hemlock, the shopkeeper, sees and hears a lot, too.\n\n"
-            "And if it's wisdom or a remedy you seek, Mira in her hut to the north of the square is the one to talk to. She has a way with herbs and... other things.\n\n"
-            "The Blacksmith down by the south end, he's a sturdy fellow, always hammering away. Keeps the tools sharp, and his spirits, mostly.\n\n"
-            "Just... be observant, child. There's more to this world than meets the eye. And you, Elior, you have a good heart. Remember that."
-        )
+        dialogue = ""
+        if self.dialogue_state["initial_talk"]:
+            dialogue = (
+                "Oh, Elior, my dear. The village... it feels a bit on edge lately, doesn't it? \n\n"
+                "Willowbrook has always been a peaceful place. The Village Square is usually bustling, though folks seem more hushed these days. \n\n"
+                "If you're needing anything, the General Store usually has a bit of everything. Old Man Hemlock, the shopkeeper, sees and hears a lot, too.\n\n"
+                "And if it's wisdom or a remedy you seek, Mira in her hut to the north of the square is the one to talk to. She has a way with herbs and... other things.\n\n"
+                "The Blacksmith down by the south end, he's a sturdy fellow, always hammering away. Keeps the tools sharp, and his spirits, mostly.\n\n"
+                "Just... be observant, child. There's more to this world than meets the eye. And you, Elior, you have a good heart. Remember that."
+            )
+            self.dialogue_state["initial_talk"] = False # Change state after initial talk
 
         if game_state.get_story_flag('journal_read_prologue_entry'):
             added_dialogue = (
@@ -36,5 +47,44 @@ class Grandmother(Character):
                 dialogue += "\n\nAs she speak of it, the words your father wrote seem to settle in your mind. \n\nYou feel a new understanding... You have learned the Revive spell!"
             else:
                 dialogue += "\n\nYou recall your father's writings on the Revive spell. The knowledge feels familiar."
+        
+        if not dialogue: # If no other dialogue was triggered
+            dialogue = "It's good to see you, Elior. Is there something you need?"
 
         return dialogue
+
+    def give_item(self, item, game_state) -> str:
+        if isinstance(item, HiddenLocket) and not self.dialogue_state["given_locket"]:
+            self.dialogue_state["given_locket"] = True
+            
+            # Check if player already has TravelCloak
+            has_cloak = any(isinstance(inv_item, TravelCloak) for inv_item in game_state.player_inventory)
+            if not has_cloak:
+                travel_cloak = TravelCloak()
+                game_state.add_item_to_inventory(travel_cloak)
+                return (
+                    "Grandmother's eyes widen as she sees the locket. 'This... this was your mother's. She said it would keep you safe. "
+                    "And this... she wanted you to have this when you were old enough to understand its importance.' "
+                    "Grandmother hands you a finely made TravelCloak. 'May it protect you on your journeys, Elior.\'\\n\\n"
+                    "You received a TravelCloak!"
+                )
+            else:
+                return (
+                    "Grandmother's eyes widen as she sees the locket. 'This... this was your mother's. She said it would keep you safe. "
+                    "It seems you already have a cloak much like the one she set aside for you. Keep it well.'"
+                )
+
+        elif isinstance(item, WildBerries) and not self.dialogue_state["given_berries"]:
+            self.dialogue_state["given_berries"] = True
+            # Remove WildBerries from inventory
+            game_state.remove_item_from_inventory(item.get_name())
+            return (
+                "'Oh, Wild Berries! Thank you, dear. These look lovely. I'll make a pie later.' "
+                "Grandmother smiles warmly. 'It's the little things that brighten the day, isn't it?'"
+            )
+        elif isinstance(item, WildBerries) and self.dialogue_state["given_berries"]:
+            # Remove WildBerries from inventory
+            game_state.remove_item_from_inventory(item.get_name())
+            return "'More berries? You are too kind, Elior. Thank you.'"
+        
+        return f"Grandmother looks at the {item.get_name()}. 'I'm not sure what to do with this, dear.'"

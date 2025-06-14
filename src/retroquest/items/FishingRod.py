@@ -5,5 +5,6 @@ class FishingRod(Item):
         super().__init__(
             name="fishing rod",
             description="A simple wooden fishing rod with a frayed line. It looks well-used but still functional.",
-            short_name="rod"
+            short_name="rod",
+            can_be_carried=True
         )
