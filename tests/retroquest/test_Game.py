@@ -540,7 +540,8 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
         self.requires_pickup = False
         self.use_called_with_state = None
         self.use_with_called_with_state_and_item = None
-        self.read_called_with_state = None # Added for read tests
+        self.read_called_with_state = None
+        self.listen_called_with_state = None # Added for listen tests
 
     def get_name(self):
         return self._name
@@ -559,9 +560,13 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
         self.use_with_called_with_state_and_item = (game_state, other_item)
         return f"You used the {self.get_name()} with {other_item.get_name()}."
 
-    def read(self, game_state): # Added for read tests
+    def read(self, game_state):
         self.read_called_with_state = game_state
         return f"You read the {self.get_name()}. It says: 'Mock content for {self.get_name()}.'"
+
+    def listen(self, game_state): # Added for listen tests
+        self.listen_called_with_state = game_state
+        return f"You hear a faint click from the {self.get_name()}."
 
 # --- Tests for 'use <item>' command ---
 
@@ -711,4 +716,91 @@ def test_read_item_prefers_inventory_over_room(game):
     assert result == "Read from inventory book."
     book_inv.read.assert_called_once_with(game.state)
     book_room.read.assert_not_called()
+
+# --- Tests for 'listen' command ---
+
+def test_listen_no_target_room_ambient_sound(game):
+    """Tests listening with no target, expecting room's ambient sound."""
+    expected_sound = "You hear the gentle rustling of leaves."
+    game.state.current_room.get_ambient_sound = MagicMock(return_value=expected_sound)
+    
+    result = game.listen()
+    
+    assert result == expected_sound
+    game.state.current_room.get_ambient_sound.assert_called_once()
+
+def test_listen_item_in_inventory(game):
+    """Tests listening to an item that is in the player's inventory."""
+    mock_item = MockItemToUse(name="pocket_watch")
+    # Override default listen message for this test
+    expected_sound = "The pocket_watch ticks softly."
+    mock_item.listen = MagicMock(return_value=expected_sound)
+    
+    game.state.add_item_to_inventory(mock_item)
+    
+    result = game.listen("pocket_watch")
+    
+    assert result == expected_sound
+    mock_item.listen.assert_called_once_with(game.state)
+
+def test_listen_item_in_room(game):
+    """Tests listening to an item that is in the current room."""
+    mock_item = MockItemToUse(name="old_radio")
+    # Override default listen message
+    expected_sound = "Static crackles from the old_radio."
+    mock_item.listen = MagicMock(return_value=expected_sound)
+    
+    game.state.current_room.add_item(mock_item)
+    
+    result = game.listen("old_radio")
+    
+    assert result == expected_sound
+    mock_item.listen.assert_called_once_with(game.state)
+
+def test_listen_item_not_found(game):
+    """Tests listening to an item that is neither in inventory nor in the room."""
+    # Assuming Game.py's listen method returns a specific message for not found items.
+    # This message might vary based on actual implementation.
+    # Based on Game.examine, a similar message is "You don't see a 'dragon' here."
+    # For listen, it might be "You can't find 'nonexistent_relic' to listen to."
+    # or "There is no 'nonexistent_relic' here."
+    
+    # Clear inventory and room items to be sure
+    game.state.inventory.clear()
+    game.state.current_room.items.clear()
+
+    target_item_name = "nonexistent_relic"
+    result = game.listen(target_item_name)
+    
+    # This assertion depends on the actual message from Game.listen() when an item is not found.
+    # Adjust if the actual message is different.
+    # A plausible message:
+    assert result == f"You don't see a '{target_item_name}' to listen to here or in your inventory."
+
+def test_listen_item_uses_mock_default_listen(game):
+    """Tests listening to an item that uses the default listen method from MockItemToUse."""
+    mock_item = MockItemToUse(name="strange_device") # Uses the default listen from MockItemToUse
+    
+    game.state.add_item_to_inventory(mock_item)
+    
+    result = game.listen("strange_device")
+    
+    expected_default_sound = f"You hear a faint click from the {mock_item.get_name()}."
+    assert result == expected_default_sound
+    assert mock_item.listen_called_with_state == game.state
+
+def test_listen_item_name_case_insensitivity(game):
+    """Tests that listening to an item is case-insensitive."""
+    mock_item = MockItemToUse(name="Whispering Shell")
+    expected_sound = "You hear the faint echo of the sea from the Whispering Shell."
+    mock_item.listen = MagicMock(return_value=expected_sound)
+    
+    game.state.current_room.add_item(mock_item)
+    
+    result = game.listen("whispering SHELL") # Case-insensitive target
+    
+    assert result == expected_sound
+    mock_item.listen.assert_called_once_with(game.state)
+
+# Ensure this is at the very end if no other tests follow
 

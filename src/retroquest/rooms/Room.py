@@ -29,6 +29,10 @@ class Room:
     def get_exits(self) -> dict:
         return self.exits
 
+    def get_ambient_sound(self) -> str:
+        """Returns a description of the ambient sound of the room."""
+        return "It is quiet here."
+
     def get_item_by_name(self, item_name: str):
         """
         Retrieves an item from the room by its name (case-insensitive).

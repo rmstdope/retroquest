@@ -320,7 +320,14 @@ class Game:
         raise NotImplementedError("Game.search() is not yet implemented.")
 
     def listen(self, target: str = None) -> str:
-        raise NotImplementedError("Game.listen() is not yet implemented.")
+        if not target:
+            return self.state.current_room.get_ambient_sound() 
+
+        item_to_listen_to = self.find_item(target, look_in_inventory=True, look_in_room=True)        
+        if item_to_listen_to:
+            return item_to_listen_to.listen(self.state)
+        else:
+            return f"You don\'t see a '{target}' to listen to here or in your inventory."
 
     def smell(self, target: str = None) -> str:
         raise NotImplementedError("Game.smell() is not yet implemented.")

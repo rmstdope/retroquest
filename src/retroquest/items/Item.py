@@ -29,3 +29,7 @@ class Item:
     def read(self, game_state) -> str:
         """Base 'read' method for items. Subclasses should override this if they are readable."""
         return f"There is nothing to read on the {self.get_name()}."
+
+    def listen(self, game_state) -> str:
+        """Base 'listen' method for items. Subclasses should override this if they make a sound."""
+        return f"The {self.get_name()} is silent."
