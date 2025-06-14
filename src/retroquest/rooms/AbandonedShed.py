@@ -14,7 +14,6 @@ class AbandonedShed(Room):
                 "mysteriously inviting."
             ),
             items=[BrokenShovel(), MysteriousBox()],
-            usable_items=["key"],
             characters=[],
             exits={"north": "VillageWell", "south": "OldMill"}
         )

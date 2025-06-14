@@ -15,7 +15,6 @@ class MirasHut(Room):
                 "kindness."
             ),
             items=[HealingHerb(), AncientAmulet()],
-            usable_items=["healing herb"],
             characters=[Mira()],
             exits={"south": "VillageSquare"}
         )

@@ -11,7 +11,6 @@ class VillageWell(Room):
                 "seems to whisper secrets to those who listen closely."
             ),
             items=[],
-            usable_items=["bucket"],
             characters=[],
             exits={"west": "VegetableField", "east": "BlacksmithsForge", "south": "AbandonedShed"}
         )

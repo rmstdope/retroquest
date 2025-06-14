@@ -15,7 +15,6 @@ class RoadToGreendale(Room):
                 "stories."
             ),
             items=[WalkingStick(), TravelCloak()],
-            usable_items=["map fragment"],
             characters=[Merchant()],
             exits={"west": "VillageChapel"}
         )

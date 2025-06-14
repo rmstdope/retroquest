@@ -14,7 +14,6 @@ class ForestPath(Room):
                 "as if it remembers every footstep that has ever passed this way."
             ),
             items=[Stick(), WildBerries()],
-            usable_items=["knife"],
             characters=[],
             exits={"north": "Riverbank", "south": "HiddenGlade"}  # Corrected: HG is South, not East.
         )

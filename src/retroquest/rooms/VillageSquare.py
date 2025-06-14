@@ -14,7 +14,6 @@ class VillageSquare(Room):
                 "of fresh bread. The square is a crossroads for villagers, travelers, and secrets alike."
             ),
             items=[Bucket(), OldNotice()],
-            usable_items=["bucket"],
             characters=[Villager()],
             exits={"west": "EliorsCottage", "north": "MirasHut", "east": "GeneralStore"}
         )

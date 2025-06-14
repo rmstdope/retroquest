@@ -13,7 +13,6 @@ class OldMill(Room):
                 "feels ancient, its walls echoing with the memories of harvests long past."
             ),
             items=[SackOfFlour(), MillstoneFragment()],
-            usable_items=["rope"],
             characters=[],
             exits={"north": "AbandonedShed", "east": "Riverbank"}
         )

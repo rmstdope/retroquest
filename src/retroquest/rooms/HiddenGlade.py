@@ -15,7 +15,6 @@ class HiddenGlade(Room):
                 "the world holds its breath."
             ),
             items=[RareFlower(), ShinyPebble()],
-            usable_items=[],
             characters=[Deer()],
             exits={"north": "ForestPath", "south": "VillageChapel"}
         )

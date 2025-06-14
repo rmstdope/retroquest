@@ -14,7 +14,6 @@ class Riverbank(Room):
                 "riverbank is peaceful, a place where time seems to slow and worries drift away."
             ),
             items=[SmoothStone(), FishingRod()],
-            usable_items=["fishing rod"],
             characters=[Fisherman()],
             exits={"west": "OldMill", "south": "ForestPath"}
         )

@@ -14,7 +14,6 @@ class BlacksmithsForge(Room):
                 "corded with muscle. Sparks dance in the gloom, and the heat is almost overwhelming."
             ),
             items=[DullKnife(), Horseshoe()],
-            usable_items=["coin"],
             characters=[Blacksmith()],
             exits={"west": "VillageWell", "north": "GeneralStore"}
         )

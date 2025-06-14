@@ -16,7 +16,6 @@ class EliorsCottage(Room):
                 "with wisdom and warmth."
             ),
             items=[Lantern(), Bread(), EliorsJournal()],
-            usable_items=["lantern"],
             characters=[Grandmother()],
             exits={"south": "VegetableField", "east": "VillageSquare"}
         )

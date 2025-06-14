@@ -3,11 +3,10 @@ class Room:
     Base class for all rooms in RetroQuest.
     Inherit from this class to define specific rooms.
     """
-    def __init__(self, name: str, description: str, items: list = None, usable_items: list = None, characters: list = None, exits: dict = None) -> None:
+    def __init__(self, name: str, description: str, items: list = None, characters: list = None, exits: dict = None) -> None:
         self.name = name
         self.description = description
         self.items = items if items is not None else []
-        self.usable_items = usable_items if usable_items is not None else []
         self.characters = characters if characters is not None else []
         self.exits = exits if exits is not None else {}
 
@@ -23,9 +22,6 @@ class Room:
         if self.items is None:
             self.items = []
         self.items.append(item)
-
-    def get_usable_items(self) -> list:
-        return self.usable_items
 
     def get_characters(self) -> list:
         return self.characters
