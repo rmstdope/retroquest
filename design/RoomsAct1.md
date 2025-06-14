@@ -5,7 +5,7 @@
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
 - **Items:** Lantern (start), bread (start), Elior’s journal (start), travel cloak (later).
 - **Spells:** `revive` (learned from Grandmother).
-- **Usable Items:** Lantern (lights dark areas), Elior's journal (read for story), hidden locket (give to Grandmother), wild berries (give to Grandmother).
+- **Usable Items:** Lantern (lights dark areas), Elior's journal (read for story), hidden locket (give to Grandmother).
 - **Characters:** Grandmother (offers advice, can be spoken to).
 - **Exits:** Vegetable Field (south), Village Square (east)
 
@@ -111,7 +111,7 @@
 ## 12. Forest Path
 
 - **Description:** A winding path leading into the woods.
-- **Items:** Stick (later), wild berries (later - multiple batches obtainable).
+- **Items:** Stick (later), wild berries (later).
 - **Spells:** None.
 - **Usable Items:** Sharp knife (cuts through thick vines).
 - **Characters:** None.
@@ -254,7 +254,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
       - Item obtained: `fish`
     - Give fish to fisherman. _The fisherman is grateful. He speaks of strange changes in the river's water lately and, sensing a kindred spirit in Elior, teaches him the `purify` spell to cleanse water._
       - Item used: `fish`
-      - Spells Learned: `purify`  (can not be used until magic is learned for real)
+      - Spells Learned: `purify` (can not be used until magic is learned for real)
 
 13. **Forest Path:**
 
@@ -358,7 +358,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - `Key` (to access Abandoned Shed\'s interior where Mysterious Box is)
     - `Coin` (1st, to get `dull knife` sharpened)
     - `Dull Knife` (to become `sharp knife`)
-    - `Sharp Knife` (to cut vines to get `rare flower`)
+    - `Sharp Knife` (to cut vines on Forest Path, enabling access to the `stick` and the Hidden Glade for the `rare flower`)
     - `Rare Flower` (to give to Mira to learn spells and get quest)
     - `Apple`
     - `Egg`
@@ -389,7 +389,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 7.  **`Bucket`** (Obtained: Step 4):
     - Used in Step 5 to draw water from the well for observation.
 8.  **`Sharp Knife`** (Obtained: Step 6):
-    - Used in Step 13 to cut through thick vines, allowing access to `wild berries` and a `stick`.
+    - Used in Step 13 to cut through thick vines on the Forest Path, obtaining a `stick` and clearing the way necessary for later obtaining the `rare flower` (from Hidden Glade) and `wild berries` (from Forest Path via `grow` spell).
 9.  **`Coin` (2nd)** (Obtained: Step 7):
     - Used in Step 8 to buy `rope` from the General Store.
 10. **`Apple`** (Obtained: Step 8):
