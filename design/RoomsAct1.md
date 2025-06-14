@@ -4,7 +4,7 @@
 
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
 - **Items:** Lantern (start), bread (start), Elior’s journal (start), travel cloak (later).
-- **Spells:** None at start; later, `light` can illuminate the room.
+- **Spells:** `revive` (learned from Grandmother).
 - **Usable Items:** Lantern (lights dark areas), Elior's journal (read for story), hidden locket (give to Grandmother), wild berries (give to Grandmother).
 - **Characters:** Grandmother (offers advice, can be spoken to).
 - **Exits:** Vegetable Field (south), Village Square (east)
@@ -14,7 +14,7 @@
 - **Description:** Rows of withered crops under a gray sky.
 - **Items:** rusty hoe (start), dull knife (start), coin (1st) (later), coin (2nd) (later).
 - **Unusable:** Withered carrot (start).
-- **Spells:** `revive` (restores a single plant, hints at Elior’s power).
+- **Spells:** None.
 - **Usable Items:** Hoe (uncovers hidden coins).
 - **Characters:** None.
 - **Exits:** Elior’s Cottage (north), Village Well (east), Chicken Coop (south)
@@ -44,7 +44,7 @@
 - **Description:** A fragrant hut filled with herbs and potions.
 - **Items:** ancient amulet (later).
 - **Unusable:** Healing herb (start).
-- **Spells:** `heal` (restores health if injured).
+- **Spells:** `heal`, `unlock`, `light` (learned from Mira).
 - **Usable Items:** Healing herb (restores health), rare flower (give to Mira).
 - **Characters:** Mira (teaches basic magic, gives quests).
 - **Exits:** Village Square (south)
@@ -73,7 +73,7 @@
 
 - **Description:** An old stone well with clear water.
 - **Items:** Shiny ring (later), Well (start).
-- **Spells:** `purify` (cleanses the water, reveals a shiny ring).
+- **Spells:** None.
 - **Usable Items:** Bucket (draws water, observe murkiness), fishing rod (retrieve ring), magnet (retrieve ring), stick (retrieve ring).
 - **Characters:** None.
 - **Exits:** Vegetable Field (west), Blacksmith’s Forge (east), Abandoned Shed (south)
@@ -83,7 +83,7 @@
 - **Description:** A rickety shed on the village edge.
 - **Items:** mysterious box (start), fishing rod (start), magnet (start), map (later).
 - **Unusable:** Broken shovel (start).
-- **Spells:** `unlock` (opens the box, reveals a map).
+- **Spells:** None.
 - **Usable Items:** Key (opens shed door), mysterious box (unlock with spell, open to get map).
 - **Characters:** None.
 - **Exits:** Blacksmith’s Forge (north), Old Mill (south)
@@ -103,7 +103,7 @@
 - **Description:** A gentle river flows past the village.
 - **Items:** fish (later).
 - **Unusable:** Smooth stone (start).
-- **Spells:** `freeze` (freezes water, reveals a path to a small island).
+- **Spells:** `purify` (learned from Fisherman).
 - **Usable Items:** Fishing rod (catch a fish), fish (give to fisherman).
 - **Characters:** Fisherman (offers fishing tips, trades fish for information).
 - **Exits:** Old Mill (west), Forest Path (south)
@@ -112,7 +112,7 @@
 
 - **Description:** A winding path leading into the woods.
 - **Items:** Stick (later), wild berries (later - multiple batches obtainable).
-- **Spells:** `grow` (makes a bush bloom, reveals hidden berries).
+- **Spells:** None.
 - **Usable Items:** Sharp knife (cuts through thick vines).
 - **Characters:** None.
 - **Exits:** Riverbank (north), Hidden Glade (south)
@@ -122,7 +122,7 @@
 - **Description:** A peaceful clearing with sunlight filtering through trees.
 - **Items:** Rare flower (start).
 - **Unusable:** shiny pebble (start).
-- **Spells:** `light` (reveals a hidden inscription on a stone).
+- **Spells:** `grow` (learned from inscriptions on a stone).
 - **Usable Items:** None.
 - **Characters:** Deer (can be observed, hints at magic in the area).
 - **Exits:** Forest Path (north), Village Chapel (south)
@@ -132,7 +132,7 @@
 - **Description:** A small stone chapel with stained glass windows.
 - **Items:** Candle (start), hidden locket (later).
 - **Unusable:** prayer book (start).
-- **Spells:** `bless` (restores health, grants temporary protection).
+- **Spells:** `bless` (learned from Priest).
 - **Usable Items:** Candle (lights dark corners, reveals a hidden locket), hidden locket (show to Priest).
 - **Characters:** Priest (offers blessings, shares lore).
 - **Exits:** Hidden Glade (north), Road to Greendale (east)
@@ -192,7 +192,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 3.  **Chicken Coop:**
 
     - Use bread to feed chickens, obtain hidden key. _Bread is removed from inventory, key is added to inventory._
-
+  
 4.  **Village Square:**
 
     - Take bucket. _Bucket is added to inventory._
