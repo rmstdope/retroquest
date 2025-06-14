@@ -28,7 +28,7 @@ class DummyGame:
         self.calls.append(('read', item))
     def search(self, target):
         self.calls.append(('search', target))
-    def listen(self, target=None):
+    def listen(self, target=None): # Added this method
         self.calls.append(('listen', target))
     def smell(self, target=None):
         self.calls.append(('smell', target))
@@ -163,7 +163,6 @@ def test_examination_commands(game_parser):
         "read sign": ("read", "sign"),
         "search desk": ("search", "desk"),
         "investigate rubble": ("search", "rubble"),
-        "listen": ("listen", None),
         "listen to door": ("listen", "door"),
         "smell flower": ("smell", "flower"),
         "sniff potion": ("smell", "potion"), # sniff is alias for smell

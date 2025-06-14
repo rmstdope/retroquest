@@ -95,8 +95,6 @@ class CommandParser:
             for prefix in ('search ', 'investigate '):
                 if cmd.startswith(prefix):
                     return self.game.search(cmd[len(prefix):])
-        elif cmd == 'listen':
-            return self.game.listen(None)
         elif cmd.startswith('listen to '):
             return self.game.listen(cmd[len('listen to '):])
         elif cmd.startswith('smell '):
