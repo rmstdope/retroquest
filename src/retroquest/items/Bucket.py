@@ -1,4 +1,6 @@
-from ..items.Item import Item
+from ..GameState import GameState
+from .Well import Well
+from .Item import Item
 
 class Bucket(Item):
     def __init__(self) -> None:
@@ -8,8 +10,8 @@ class Bucket(Item):
             can_be_carried=True
         )
 
-    def use(self, game_state) -> str:
-        if game_state.current_room.name == "Village Well":
+    def use_with(self, game_state: GameState, target: Item):
+        if isinstance(target, Well):
             if self.name == "bucket": # Check if it's not already full
                 self.name = "bucket (full)"
                 self.description = "The bucket is now full of clear water from the well."
@@ -19,4 +21,4 @@ class Bucket(Item):
             else:
                 return "The bucket is already full."
         else:
-            return "You can't seem to use the bucket that way here. Perhaps near a well?"
+            return "You can't seem to use the bucket that way here. Perhaps near something with water?"

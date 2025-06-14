@@ -117,7 +117,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Village Well
     _execute_commands(game, ["go west", "go south", "go east"])
     _check_current_room(game.state, "Village Well")
-    _execute_commands(game, ["use bucket"])
+    _execute_commands(game, ["use bucket with well"])
     _check_item_in_inventory(game.state, "bucket (full)")
 
     # Blacksmith's Forge
