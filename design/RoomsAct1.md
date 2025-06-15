@@ -12,10 +12,9 @@
 ## 2. Vegetable Field
 
 - **Description:** Rows of withered crops under a gray sky.
-- **Items:** rusty hoe (start), dull knife (start), coin (1st) (later), coin (2nd) (later).
-- **Unusable:** Withered carrot (start).
+- **Items:** rusty hoe (start), dull knife (start), Withered carrot (start), coin (1st) (later), coin (2nd) (later), carrot (later).
 - **Spells:** None.
-- **Usable Items:** Hoe (uncovers hidden coins).
+- **Usable Items:** Hoe (uncovers hidden coins), `revive` spell (on `Withered carrot` to transform it into `carrot`).
 - **Characters:** None.
 - **Exits:** Elior’s Cottage (north), Village Well (east), Chicken Coop (south)
 
@@ -285,7 +284,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - Speak to Mira. \_Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. She then tasks Elior with preparing for the journey ahead, mentioning that the Ancient Amulet will be his once he is truly ready. She tells him he needs:
       - Warm clothing (`travel cloak`)
       - Magical protection (cast `bless` on himself)
-      - Food for the road (`wild berries`, `apple`, `egg`)
+      - Food for the road (`wild berries`, `apple`, `egg`, `carrot`)
       - Sturdy footwear (`wandering boots`)
       - A `map` to find his way
       - To have learned all the basic magic the village elders can teach him.\_
@@ -301,8 +300,10 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 18. **Return to Vegetable Field:**
 
-    - Cast `revive` on a withered plant. _A faint glow envelops the plant, and new green shoots emerge. Elior feels his magical abilities solidify._
-      - Spell used: `revive`
+    - Cast `revive` on the `Withered carrot`. _A faint glow envelops the carrot, and it plumps up, becoming a vibrant orange `carrot`. Elior feels his magical abilities solidify._
+      - Spell used: `revive` (on `Withered carrot`)
+      - Item obtained: `carrot`
+      - Item transformed: `Withered carrot`
 
 19. **Return to Village Well:**
 
@@ -345,7 +346,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
     - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you."_
       - Item obtained: `ancient amulet` (ESSENTIAL)
-      - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, and `egg` from Chicken Coop complete: Food)
+      - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field complete: Food)
 
 26. **Road to Greendale (Departure):**
 
@@ -366,6 +367,8 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - `Rare Flower` (to give to Mira to learn spells and get quest)
     - `Apple`
     - `Egg`
+    - `Withered carrot` (found in Vegetable Field, transformed by `revive` spell)
+    - `Carrot` (obtained by reviving `Withered carrot`, needed for Mira's quest)
     - `Travel Cloak` (from Grandmother)
     - `Wild Berries` (from Forest Path)
     - `Wandering Boots` (from Merchant, obtained by trading `shiny ring`)
@@ -386,48 +389,52 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Used in Step 6 to pay the Blacksmith to sharpen the `dull knife`.
 4.  **`Dull Knife`** (Obtained: Step 2):
     - Used in Step 6 by giving it to the Blacksmith to be sharpened into a `sharp knife`.
-5.  **`Egg`** (Obtained: Step 3):
+5.  **`Withered carrot`** (Obtained: Step 2, Vegetable Field):
+    - Transformed in Step 18 using `revive` spell to become `carrot`.
+6.  **`Egg`** (Obtained: Step 3):
     - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
-6.  **`Key`** (Obtained: Step 3):
+7.  **`Key`** (Obtained: Step 3):
     - Used in Step 9 to open the Abandoned Shed door.
-7.  **`Bucket`** (Obtained: Step 4):
+8.  **`Bucket`** (Obtained: Step 4):
     - Used in Step 5 to draw water from the well for observation.
-8.  **`Sharp Knife`** (Obtained: Step 6):
+9.  **`Sharp Knife`** (Obtained: Step 6):
     - Used in Step 13 to cut through thick vines on the Forest Path, obtaining a `stick` and clearing the way necessary for later obtaining the `rare flower` (from Hidden Glade) and `wild berries` (from Forest Path via `grow` spell).
-9.  **`Coin` (2nd)** (Obtained: Step 7):
+10. **`Coin` (2nd)** (Obtained: Step 7):
     - Used in Step 8 to buy `rope` from the General Store.
-10. **`Apple`** (Obtained: Step 8):
+11. **`Apple`** (Obtained: Step 8):
     - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
-11. **`rope`** (Obtained: Step 8):
+12. **`rope`** (Obtained: Step 8):
     - Used in Step 10 to fix the mechanism in the Old Mill, revealing the `millstone fragment`.
-12. **`Fishing Rod`** (Obtained: Step 9):
+13. **`Fishing Rod`** (Obtained: Step 9):
     - Used in Step 12 to catch a `fish`.
     - Used in Step 19 (with `magnet` and `stick`) to retrieve the `shiny ring` from the well.
-13. **`Magnet`** (Obtained: Step 9):
+14. **`Magnet`** (Obtained: Step 9):
     - Used in Step 19 (with `fishing rod` and `stick`) to retrieve the `shiny ring`.
-14. **`Millstone Fragment`** (Obtained: Step 10):
+15. **`Millstone Fragment`** (Obtained: Step 10):
     - Used in Step 11 by giving it to the Blacksmith for information.
-15. **`Fish`** (Obtained: Step 12):
+16. **`Fish`** (Obtained: Step 12):
     - Used in Step 12 by giving it to the Fisherman to learn the `purify` spell.
-16. **`Stick`** (Obtained: Step 13):
+17. **`Stick`** (Obtained: Step 13):
     - Used in Step 19 (with `fishing rod` and `magnet`) to retrieve the `shiny ring`.
-17. **`Rare Flower`** (Obtained: Step 14):
+18. **`Rare Flower`** (Obtained: Step 14):
     - Used in Step 16 by giving it to Mira to learn spells and receive her quest.
-18. **`Candle`** (Obtained: Step 15):
+19. **`Candle`** (Obtained: Step 15):
     - Used in Step 15 to light a dark corner in the chapel, revealing the `hidden locket`.
-19. **`Hidden Locket`** (Obtained: Step 15):
+20. **`Hidden Locket`** (Obtained: Step 15):
     - Used in Step 15 by showing it to the Priest to learn the `bless` spell.
-    - Used in Step 22 by giving it to Grandmother to receive the `travel_cloak`.
-20. **`Map`** (Obtained: Step 17):
+    - Used in Step 22 by giving it to Grandmother to receive the `travel cloak`.
+21. **`Map`** (Obtained: Step 17):
     - Fulfills Mira's quest requirement for "A `map` to find his way" (implicitly used by Step 25).
     - Used in Step 26 to complete Act I.
-21. **`Shiny Ring`** (Obtained: Step 19):
-    - Used in Step 24 by trading it with the Merchant for `wandering boots`.
-22. **`Wild Berries`** (Obtained: Step 21, from `grow` spell):
+22. **`Carrot`** (Obtained: Step 18, by reviving `Withered carrot`):
     - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
-23. **`Travel Cloak`** (Obtained: Step 22):
+23. **`Shiny Ring`** (Obtained: Step 19):
+    - Used in Step 24 by trading it with the Merchant for `wandering boots`.
+24. **`Wild Berries`** (Obtained: Step 21, from `grow` spell):
+    - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
+25. **`Travel Cloak`** (Obtained: Step 22):
     - Fulfills Mira's quest requirement for "Warm clothing" (implicitly used by Step 25).
-24. **`Wandering Boots`** (Obtained: Step 24):
+26. **`Wandering Boots`** (Obtained: Step 24):
     - Fulfills Mira's quest requirement for "Sturdy footwear" (implicitly used by Step 25).
-25. **`Ancient Amulet`** (Obtained: Step 25):
+27. **`Ancient Amulet`** (Obtained: Step 25):
     - Its acquisition is the primary goal of Mira's quest and is essential for completing Act I. Considered "used" upon receipt for quest completion.
