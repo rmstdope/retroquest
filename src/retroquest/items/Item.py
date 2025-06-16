@@ -26,6 +26,14 @@ class Item:
         """Base 'use' method for items. Subclasses should override this if they have specific use actions."""
         return f"You can't use the {self.get_name()} in any special way."
 
+    def use_with(self, game_state, other_item) -> str:
+        """Base 'use_with' method for items. Subclasses should override this if they can interact with other items."""
+        return f"You can't use the {self.get_name()} with the {other_item.get_name()}."
+    
+    def examine(self) -> str:
+        """Base 'examine' method for items. Subclasses should override this if they have specific examination details."""
+        return f"You examine the {self.get_name()}. {self.get_description()}"
+
     def read(self, game_state) -> str:
         """Base 'read' method for items. Subclasses should override this if they are readable."""
         return f"There is nothing to read on the {self.get_name()}."

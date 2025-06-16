@@ -1,6 +1,6 @@
 from .Room import Room
 from ..items.SmoothStone import SmoothStone
-from ..items.FishingRod import FishingRod
+from ..items.River import River  # Import River
 from ..characters.Fisherman import Fisherman
 
 class Riverbank(Room):
@@ -8,12 +8,10 @@ class Riverbank(Room):
         super().__init__(
             name="Riverbank",
             description=(
-                "A gentle river winds past the village, its waters sparkling in the sunlight. Reeds sway "
-                "along the banks, and the air is alive with the hum of insects and the splash of fish. "
-                "A weathered fisherman sits nearby, casting his line and humming a quiet tune. The "
-                "riverbank is peaceful, a place where time seems to slow and worries drift away."
+                "A gentle river flows past the village. Reeds sway along the banks, and the air is alive with the hum of insects. "
+                "A weathered fisherman sits nearby, humming a quiet tune. The riverbank is peaceful, a place where time seems to slow and worries drift away."
             ),
-            items=[SmoothStone(), FishingRod()],
+            items=[SmoothStone(), River()],
             characters=[Fisherman()],
             exits={"west": "OldMill", "south": "ForestPath"}
         )

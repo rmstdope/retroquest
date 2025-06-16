@@ -108,9 +108,6 @@ class Mira(Character):
             return self.dialogue_states["flower_received_quest_pending"]
         
         elif isinstance(item, RareFlower) and self.received_rare_flower:
-            return "Mira smiles. \\'You are kind to bring another, but one was sufficient for now.\\'"
+            return "Mira smiles. 'You are kind to bring another, but one was sufficient for now.'"
 
-        return f"Mira looks at the {item.name} with a gentle smile. \\'Thank you, Elior, but this is not what I need right now.\\'"
-
-# Ensure GameState has get_story_flag, set_story_flag, add_event
-# Ensure Player has has_item, add_item_to_inventory, remove_item_from_inventory, learn_spell, has_spell
+        return f"Mira looks at the {item.name} with a gentle smile. 'Thank you, Elior, but this is not what I need right now.'"

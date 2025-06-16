@@ -2,4 +2,10 @@ from .Spell import Spell
 
 class HealSpell(Spell):
     def __init__(self):
-        super().__init__(name="Heal", description="A restorative spell that channels life-giving energy into a target, mending wounds and alleviating physical ailments. While effective for minor to moderate injuries, it may not be sufficient for grave wounds or potent curses. The spell often manifests as a gentle, warm glow around the recipient.")
+        super().__init__("Heal", "A restorative spell that mends wounds and alleviates ailments.")
+
+    def cast(self, game_state) -> str:
+        # Implement the logic for the heal spell
+        # For example, it might restore player's health
+        # game_state.player.heal(20) # Heals 20 HP
+        return "A warm light envelops you, and you feel your wounds mending."

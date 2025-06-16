@@ -2,6 +2,8 @@ from .Room import Room
 from ..items.BrokenShovel import BrokenShovel
 from ..items.MysteriousBox import MysteriousBox
 from ..items.FishingRod import FishingRod # Import FishingRod
+from ..items.Magnet import Magnet # Import Magnet
+from ..items.ShedDoor import ShedDoor
 
 class AbandonedShed(Room):
     def __init__(self) -> None:
@@ -14,18 +16,39 @@ class AbandonedShed(Room):
                 "old earth and forgotten secrets. Something about the place feels both forlorn and "
                 "mysteriously inviting."
             ),
-            items=[BrokenShovel(), MysteriousBox()],
+            items=[ShedDoor()], # Items are added dynamically
             characters=[],
             exits={"north": "VillageWell", "south": "OldMill"}
         )
-        self.fishing_rod_found = False # Add a flag to track if the rod has been found
+        self.locked = True # The shed starts locked
+        self.room_searched = False
+
+    def unlock(self) -> str:
+        if not self.locked:
+            return "The shed is already unlocked."
+        
+        self.locked = False
+        self.add_item(MysteriousBox())
+        self.add_item(BrokenShovel())
+        return (
+            "The old wooden door creaks open with a groan, revealing the dusty interior of the Abandoned Shed. "
+            "A mysterious box sits on a rickety table, and a broken shovel leans against a cobweb-covered wall."
+        )
 
     def search(self, game_state) -> str:
-        # General search of the Abandoned Shed
-        if not self.fishing_rod_found:
+        if self.locked:
+            return "You take a look around the shed. Nothing! The shed door is locked so you can't search inside."
+
+        items_found_messages = []
+        
+        if not self.room_searched:
             self.add_item(FishingRod())
-            self.fishing_rod_found = True # Mark that the rod has been revealed by searching
-            return "You rummage through the clutter of rusty tools and broken crates. Tucked away in a dusty corner, you find a discarded fishing rod!"
+            self.room_searched = True
+            items_found_messages.append("a discarded fishing rod")
+            self.add_item(Magnet())
+            items_found_messages.append("a small magnet")
+
+        if items_found_messages:
+            return f"You rummage through the clutter of rusty tools and broken crates. Tucked away in dusty corners, you find {', and '.join(items_found_messages)}!"
         else:
-            # If the rod has already been found by searching this room
             return "You search around the shed again, but find nothing else of interest among the clutter."

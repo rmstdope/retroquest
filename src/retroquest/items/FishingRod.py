@@ -1,4 +1,4 @@
-from ..items.Item import Item
+from .Item import Item
 
 class FishingRod(Item):
     def __init__(self) -> None:
@@ -8,3 +8,9 @@ class FishingRod(Item):
             short_name="rod",
             can_be_carried=True
         )
+
+    def use_with(self, game_state, other_item):
+        from .River import River
+        if isinstance(other_item, River):
+            return other_item.use_with(game_state, self)
+        return super().use_with(game_state, other_item)

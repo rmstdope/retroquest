@@ -10,15 +10,9 @@ class Key(Item):
         )
 
     def use_with(self, game_state: GameState, target: Item):
-        from .MysteriousBox import MysteriousBox # Local import to avoid circular dependency issues at module load time
-        if isinstance(target, MysteriousBox):
-            if target.locked:
-                target.unlock()
-                # Remove the key from inventory as it's a one-time use key
-                game_state.remove_item_from_inventory(self.get_name())
-                return f"You use the {self.get_name()} on the {target.get_name()}. It clicks open!"
-            else:
-                return f"The {target.get_name()} is already unlocked."
+        from .ShedDoor import ShedDoor  # Local import to avoid circular dependency issues at module load time
+        if isinstance(target, ShedDoor):
+            return target.use_with(game_state, self)
         return f"The {self.get_name()} doesn\\'t seem to work with the {target.get_name()}."
 
     def use(self, game_state: GameState) -> str:

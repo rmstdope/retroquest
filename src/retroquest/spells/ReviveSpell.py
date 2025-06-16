@@ -2,7 +2,7 @@ from .Spell import Spell
 
 class ReviveSpell(Spell):
     def __init__(self):
-        super().__init__(name="Revive", description="A potent life-affirming spell that breathes vitality back into withered or dying plant life. It can cause dead flowers to bloom anew or shriveled crops to become bountiful. While powerful in its domain, it has no effect on creatures or inanimate objects beyond plants.")
+        super().__init__("Revive", "A potent spell that can restore life to withered plants or even recently deceased small creatures.")
 
     def cast(self, game_state) -> str:
         if not game_state.get_story_flag("knows_magic"):

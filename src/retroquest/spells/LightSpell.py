@@ -2,4 +2,13 @@ from .Spell import Spell
 
 class LightSpell(Spell):
     def __init__(self):
-        super().__init__(name="Light", description="A fundamental spell that conjures a sphere of pure light, banishing darkness from a confined area. This illumination can reveal hidden details, inscriptions, or pathways that were previously obscured by shadow. The light is steady and unwavering, but its reach is limited.")
+        super().__init__("Light", "A simple spell that conjures a sphere of light to illuminate dark areas.")
+
+    def cast(self, game_state) -> str:
+        # Implement the logic for the light spell
+        # For example, it might reveal hidden details in a dark room
+        # current_room = game_state.get_current_room()
+        # if current_room.is_dark:
+        #     current_room.is_lit = True
+        #     return "A sphere of light illuminates the area."
+        return "You cast Light, and a gentle glow emanates from your hand."

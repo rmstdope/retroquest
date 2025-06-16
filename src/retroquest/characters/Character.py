@@ -1,3 +1,6 @@
+from ..GameState import GameState
+from ..items.Item import Item
+
 class Character:
     """
     Base class for all characters in RetroQuest.
@@ -13,17 +16,17 @@ class Character:
     def get_description(self) -> str:
         return self.description
     
-    def talk_to(self, game) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         """Default talk_to method. Subclasses should override this for specific dialog."""
         return f"{self.name} has nothing to say right now."
 
-    def give_item(self, game_state, item_object) -> str:
+    def give_item(self, game_state: GameState, item_object: Item) -> str:
         """
         Default behavior when an item is given to this character.
         Subclasses should override this to handle specific item interactions.
         """
         return f"{self.name} doesn't seem interested in the {item_object.get_name()}."
 
-    def buy_item(self, item_name_to_buy: str, game_state) -> str:
+    def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         """Default buy_item method. Subclasses should override this for specific dialog."""
         return f"{self.name} does not have any {item_name_to_buy} to sell right now."

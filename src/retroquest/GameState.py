@@ -34,6 +34,14 @@ class GameState:
                 return value
         return False
 
+    def has_item(self, item_name: str) -> bool:
+        """Checks if an item with the given name or short name is in the player's inventory (case-insensitive)."""
+        item_name_lower = item_name.lower()
+        for item in self.inventory:
+            if item.get_name().lower() == item_name_lower or item.get_short_name().lower() == item_name_lower:
+                return True
+        return False
+
     def remove_item_from_inventory(self, item_name: str) -> None:
         """Removes an item from the player's inventory by its name."""
         item_name_lower = item_name.lower()
@@ -45,3 +53,16 @@ class GameState:
     def add_item_to_inventory(self, item_object) -> None:
         """Adds an item object to the player's inventory."""
         self.inventory.append(item_object)
+
+    def learn_spell(self, spell_object) -> None:
+        """Adds a spell object to the player's known spells if not already learned."""
+        if not self.has_spell(spell_object.name):
+            self.known_spells.append(spell_object)
+
+    def has_spell(self, spell_name: str) -> bool:
+        """Checks if a spell with the given name is in the player's known spells (case-insensitive)."""
+        spell_name_lower = spell_name.lower()
+        for spell in self.known_spells:
+            if spell.name.lower() == spell_name_lower:
+                return True
+        return False

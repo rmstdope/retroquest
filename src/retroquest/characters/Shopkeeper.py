@@ -12,8 +12,7 @@ class Shopkeeper(Character):
         )
         self.wares = {
             "rope": {"item": Rope(), "price": 1},
-            "apple": {"item": Apple(), "price": 2},
-            "matches": {"item": Matches(), "price": 3}
+            "matches": {"item": Matches(), "price": 4}
         }
         self.dialogue_options = [
             "Welcome to my humble store! Finest goods in Willowbrook, I assure you.",
@@ -26,7 +25,8 @@ class Shopkeeper(Character):
         wares_info = "I have a few things for sale:\n"
         for name, details in self.wares.items():
             wares_info += f"- {name.capitalize()}: {details['price']} coin(s)\n"
-        
+        wares_info += "And remember, you always get an extra apple with every purchase!\n"
+
         dialogue = self.dialogue_options[self.dialogue_index]
         self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options)
         
@@ -63,12 +63,16 @@ class Shopkeeper(Character):
         
         # Add item to inventory
         # Need to create a new instance of the item to add to inventory
+        new_item = Apple()  # Assuming the shopkeeper gives an apple with every purchase
+        new_item.can_be_carried = True
+        game_state.add_item_to_inventory(new_item)
         if item_name_to_buy == "rope":
             new_item = Rope()
-        elif item_name_to_buy == "apple":
-            new_item = Apple()
+            new_item.can_be_carried = True
         elif item_name_to_buy == "matches":
             new_item = Matches()
+            game_state.current_room.get_item_by_name("matches").remove()
+            new_item.can_be_carried = True
         else:
             # Should not happen if item_name_to_buy is in self.wares
             return "An unexpected error occurred trying to sell the item."
@@ -80,4 +84,4 @@ class Shopkeeper(Character):
         # If the store's stock should deplete, that logic would go here,
         # potentially removing item_object from game_state.current_room.items
 
-        return f"You bought a {new_item.get_name()} for {price} coin(s)."
+        return f"You bought a {new_item.get_name()} for {price} coin(s) and got an extra apple as a bonus!"

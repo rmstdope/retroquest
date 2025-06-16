@@ -73,17 +73,17 @@
 - **Description:** An old stone well with clear water.
 - **Items:** Shiny ring (later), Well (start).
 - **Spells:** None.
-- **Usable Items:** Bucket (draws water, observe murkiness), fishing rod (retrieve ring), magnet (retrieve ring), stick (retrieve ring).
+- **Usable Items:** Bucket (draws water, observe murkiness), fishing rod (retrieve ring), magnet (retrieve ring), stick (retrieve ring), `purify` spell (on well water).
 - **Characters:** None.
 - **Exits:** Vegetable Field (west), Blacksmith’s Forge (east), Abandoned Shed (south)
 
 ## 9. Abandoned Shed
 
 - **Description:** A rickety shed on the village edge.
-- **Items:** mysterious box (start), fishing rod (start), magnet (start), map (later).
-- **Unusable:** Broken shovel (start).
+- **Items:** shed door (start), mysterious box (later), fishing rod (later), magnet (later), map (later).
+- **Unusable:** Broken shovel (later).
 - **Spells:** None.
-- **Usable Items:** Key (opens shed door), mysterious box (unlock with spell, open to get map).
+- **Usable Items:** Key (on shed door), mysterious box (unlock with spell, open to get map).
 - **Characters:** None.
 - **Exits:** Blacksmith’s Forge (north), Old Mill (south)
 
@@ -100,10 +100,10 @@
 ## 11. Riverbank
 
 - **Description:** A gentle river flows past the village.
-- **Items:** fish (later).
+- **Items:** fish (later), River (start).
 - **Unusable:** Smooth stone (start).
 - **Spells:** `purify` (learned from Fisherman).
-- **Usable Items:** Fishing rod (catch a fish), fish (give to fisherman).
+- **Usable Items:** Fishing rod (on River to catch a fish), fish (give to fisherman).
 - **Characters:** Fisherman (offers fishing tips, trades fish for information).
 - **Exits:** Old Mill (west), Forest Path (south)
 
@@ -112,7 +112,7 @@
 - **Description:** A winding path leading into the woods.
 - **Items:** Stick (later), wild berries (later).
 - **Spells:** None.
-- **Usable Items:** Sharp knife (cuts through thick vines).
+- **Usable Items:** Sharp knife (cuts through thick vines), `grow` spell (on berry bush).
 - **Characters:** None.
 - **Exits:** Riverbank (north), Hidden Glade (south)
 
@@ -122,7 +122,7 @@
 - **Items:** Rare flower (start).
 - **Unusable:** shiny pebble (start).
 - **Spells:** `grow` (learned from inscriptions on a stone).
-- **Usable Items:** None.
+- **Usable Items:** `light` spell (near moss-covered stone).
 - **Characters:** Deer (can be observed, hints at magic in the area).
 - **Exits:** Forest Path (north), Village Chapel (south)
 
@@ -132,7 +132,7 @@
 - **Items:** Candle (start), hidden locket (later).
 - **Unusable:** prayer book (start).
 - **Spells:** `bless` (learned from Priest).
-- **Usable Items:** Candle (lights dark corners, reveals a hidden locket), hidden locket (show to Priest).
+- **Usable Items:** Candle (lights dark corners, reveals a hidden locket), hidden locket (show to Priest), `bless` spell (cast on self for protection).
 - **Characters:** Priest (offers blessings, shares lore).
 - **Exits:** Hidden Glade (north), Road to Greendale (east)
 
@@ -226,8 +226,8 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 9.  **Abandoned Shed (First Visit):**
 
-    - Use key to open shed door. _Key is removed from inventory, shed is unlocked._
-      - Item used: `key` (partially, for door)
+    - Use key with shed door. _Key is removed from inventory, shed door is unlocked, revealing the interior._
+      - Item used: `key` (on `shed door`)
     - Find Mysterious Box. _The box is intricately locked, and the key doesn't fit this lock._
     - Search shed. _Amidst the clutter, a fishing rod and a small magnet are found._
     - Take fishing rod. _Fishing rod is added to inventory._
@@ -241,15 +241,15 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 11. **Return to Blacksmith's Forge:**
 
-    - Give millstone fragment to Blacksmith. _He examines it and nods. 'A fine piece from the Old Mill. They say the mill has secrets older than the village itself. Be wary if you venture too deep into its workings.'_
+    - Give millstone fragment to Blacksmith. _He examines it and nods. 'A fine piece from the Old Mill. They say the mill has secrets older than the village itself. Some folks with a touch of the arcane about them have even whispered tales of a magical deer seen in the Hidden Glade, a place the mill's old energies might be connected to. Be wary if you venture too deep into its workings.'_
       - Item used: `millstone fragment`
-      - Item obtained: Information
+      - Item obtained: Information (about magical deer in Hidden Glade)
 
 12. **Riverbank:**
 
     - Speak to fisherman. _Fisherman explains his broken arm prevents him from fishing and, seeing Elior's rod, teaches him the basics of fishing._
-    - Use fishing rod on River. _Elior catches a plump river fish! Fish is added to inventory._
-      - Item used: `fishing rod`
+    - Use fishing rod with River. _Elior casts the line into the flowing River and catches a plump river fish! Fish is added to inventory._
+      - Item used: `fishing rod` (with `River`)
       - Item obtained: `fish`
     - Give fish to fisherman. _The fisherman is grateful. He speaks of strange changes in the river's water lately and, sensing a kindred spirit in Elior, teaches him the `purify` spell to cleanse water._
       - Item used: `fish`
@@ -360,10 +360,13 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - `Coin` (1st, to get `dull knife` sharpened)
     - `Dull Knife` (to become `sharp knife`)
     - `Sharp Knife` (to cut vines on Forest Path, enabling access to the `stick` and the Hidden Glade for the `rare flower`)
+    - `Candle` (to find `hidden locket` in Village Chapel)
+    - `Hidden Locket` (to learn `bless` spell from Priest and get `travel cloak` from Grandmother)
     - `Fishing Rod` (to catch `fish` for the `purify` spell, and to retrieve the `shiny ring`)
     - `Magnet` (to retrieve the `shiny ring` from the well)
     - `Fish` (to give to the Fisherman to learn the `purify` spell)
     - `Stick` (to use with `fishing rod` and `magnet` to retrieve the `shiny ring`)
+    - `Shiny Ring` (to trade for `wandering boots` with Merchant)
     - `Rare Flower` (to give to Mira to learn spells and get quest)
     - `Apple`
     - `Egg`
@@ -389,7 +392,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Used in Step 6 to pay the Blacksmith to sharpen the `dull knife`.
 4.  **`Dull Knife`** (Obtained: Step 2):
     - Used in Step 6 by giving it to the Blacksmith to be sharpened into a `sharp knife`.
-5.  **`Withered carrot`** (Obtained: Step 2, Vegetable Field):
+5.  **`Withered carrot`** (Available in Vegetable Field from start):
     - Transformed in Step 18 using `revive` spell to become `carrot`.
 6.  **`Egg`** (Obtained: Step 3):
     - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).

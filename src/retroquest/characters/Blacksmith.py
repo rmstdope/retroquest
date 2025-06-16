@@ -2,6 +2,7 @@ from .Character import Character
 from ..items.Coin import Coin
 from ..items.DullKnife import DullKnife
 from ..items.SharpKnife import SharpKnife # Added import
+from ..items.MillstoneFragment import MillstoneFragment # Added import
 
 class Blacksmith(Character):
     def __init__(self) -> None:
@@ -38,5 +39,10 @@ class Blacksmith(Character):
                 return "The blacksmith takes your coin and your dull knife. He expertly sharpens it on his whetstone and hands you back a gleaming sharp knife!"
             else:
                 return "The blacksmith eyes the coin. 'Thanks for the offer, but I can only sharpen a dull knife for ye if you have one.'"
+        elif isinstance(item_object, MillstoneFragment):
+            game_state.remove_item_from_inventory(item_object.get_name())
+            # Optionally, set a story flag if needed
+            game_state.set_story_flag("deer_can_be_observed", True)
+            return "The blacksmith takes the millstone fragment, turning it over in his calloused hands. 'Aye, this is from the old mill, alright. Sturdy stone. You know, old tales say the mill was built on a place of ancient power. Some say a magical deer sometimes appears in the Hidden Glade, drawn to such remnants. Perhaps this fragment holds a deeper secret than it seems.'"
         else:
             return f"The blacksmith looks at the {item_object.get_name()}. 'I don't have a use for this, lad.'"
