@@ -119,11 +119,11 @@
 ## 13. Hidden Glade
 
 - **Description:** A peaceful clearing with sunlight filtering through trees.
-- **Items:** Rare flower (start).
+- **Items:** Rare flower (later).
 - **Unusable:** shiny pebble (start).
 - **Spells:** `grow` (learned from inscriptions on a stone).
 - **Usable Items:** `light` spell (near moss-covered stone).
-- **Characters:** Deer (can be observed, hints at magic in the area).
+- **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer).
 - **Exits:** Forest Path (north), Village Chapel (south)
 
 ## 14. Village Chapel

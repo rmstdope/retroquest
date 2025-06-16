@@ -179,7 +179,7 @@ class CommandParser:
         elif cmd in ('wait', 'pause'):
             return self.game.wait()
         elif cmd in ('sleep', 'rest'):
-            return self.game.sleep()
+            return self.game.rest()
         elif cmd == 'map':
             return self.game.map()
         elif cmd == 'stats':

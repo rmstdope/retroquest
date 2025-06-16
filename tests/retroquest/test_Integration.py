@@ -33,6 +33,13 @@ def _check_item_in_room(current_room, item_name: str, should_be_present: bool = 
     else:
         assert item_name.lower() not in room_item_names, f"{item_name} found in room {current_room.name}, but was not expected."
 
+def _check_character_in_room(current_room, character_name: str, should_be_present: bool = True):
+    room_character_names = [char.get_name().lower() for char in current_room.get_characters()]
+    if should_be_present:
+        assert character_name.lower() in room_character_names, f"Character '{character_name}' not found in room {current_room.name}, but was expected."
+    else:
+        assert character_name.lower() not in room_character_names, f"Character '{character_name}' found in room {current_room.name}, but was not expected."
+
 def _check_spell_known(game_state, spell_name: str, should_be_present: bool = True):
     spell_names = [spell.get_name().lower() for spell in game_state.known_spells]
     if should_be_present:
@@ -208,24 +215,42 @@ def test_golden_path_act1_completion(monkeypatch):
     # Path: Riverbank (current) -> Forest Path
     _execute_commands(game, ["go south"])
     _check_current_room(game.state, "Forest Path")
+    # Vines should be in the room initially
+    _check_item_in_room(game.state.current_room, "vines", should_be_present=True)
     _check_item_in_room(game.state.current_room, "stick", should_be_present=False) # Stick is not present yet
+    _check_item_in_inventory(game.state, "sharp knife") # Elior has the sharp knife
 
     _execute_commands(game, ["use sharp knife with vines"])
-    _check_item_in_room(game.state.current_room, "stick") # Stick should be revealed
+    # Vines should be removed from the room
+    _check_item_in_room(game.state.current_room, "vines", should_be_present=False)
+    # Sharp Knife should be removed from inventory (it breaks)
+    _check_item_in_inventory(game.state, "sharp knife", should_be_present=False)
+    # Stick should be added to the room
+    _check_item_in_room(game.state.current_room, "stick", should_be_present=True) 
 
     _execute_commands(game, ["take stick"])
     _check_item_in_inventory(game.state, "stick")
     _check_item_in_room(game.state.current_room, "stick", should_be_present=False)
 
-    # # Step 14: Hidden Glade
-    # # Path: Forest Path (current) -> Hidden Glade
-    # _execute_commands(game, ["go south"])
-    # _check_current_room(game.state, "Hidden Glade")
-    # # "observe deer" is a flavor action, no direct state change to assert here
-    # _check_item_in_room(game.state.current_room, "rare flower")
-    # _execute_commands(game, ["take rare flower"])
-    # _check_item_in_inventory(game.state, "rare flower")
-    # _check_item_in_room(game.state.current_room, "rare flower", should_be_present=False)
+    # Step 14: Hidden Glade
+    # Path: Forest Path (current) -> Hidden Glade
+    _execute_commands(game, ["go south"])
+    _check_current_room(game.state, "Hidden Glade")
+    # Deer and Rare Flower should not be present initially
+    _check_character_in_room(game.state.current_room, "deer", should_be_present=False) 
+    _check_item_in_room(game.state.current_room, "rare flower", should_be_present=False)
+
+    # Elior rests, and if deer_can_be_observed is true (set by Blacksmith), Deer and Rare Flower appear
+    # The flag deer_can_be_observed was set in step 11.
+    _execute_commands(game, ["rest"]) 
+    _check_character_in_room(game.state.current_room, "deer", should_be_present=True)
+    _check_item_in_room(game.state.current_room, "rare flower", should_be_present=True)
+    
+    _execute_commands(game, ["take rare flower"])
+    _check_item_in_inventory(game.state, "rare flower")
+    _check_item_in_room(game.state.current_room, "rare flower", should_be_present=False)
+    # Deer remains in the room
+    _check_character_in_room(game.state.current_room, "deer", should_be_present=True)
 
     # # Step 15: Village Chapel (First Visit)
     # # Path: Hidden Glade (current) -> Village Chapel

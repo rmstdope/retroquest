@@ -319,6 +319,9 @@ class Game:
         else:
             return f"You don\'t see a '{target}' to listen to here or in your inventory."
 
+    def rest(self) -> str:
+        return self.state.current_room.rest(self.state)
+
     # --- Not Implemented Methods ---
     def ask(self, target: str) -> str:
         raise NotImplementedError("Game.ask() is not yet implemented.")
@@ -370,9 +373,6 @@ class Game:
 
     def wait(self) -> str:
         raise NotImplementedError("Game.wait() is not yet implemented.")
-
-    def sleep(self) -> str:
-        raise NotImplementedError("Game.sleep() is not yet implemented.")
 
     def stats(self) -> str:
         raise NotImplementedError("Game.stats() is not yet implemented.")

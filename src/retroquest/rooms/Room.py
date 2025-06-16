@@ -1,4 +1,5 @@
 from ..items.Item import Item  # Added import
+from ..characters.Character import Character # Added import
 from ..GameState import GameState  # Added for GameState type hint
 
 class Room:
@@ -22,9 +23,11 @@ class Room:
 
     def add_item(self, item: Item) -> None:
         """Adds an item to the room's list of items."""
-        if self.items is None:
-            self.items = []
         self.items.append(item)
+
+    def add_character(self, character: Character) -> None:
+        """Adds a character to the room's list of characters."""
+        self.characters.append(character)
 
     def get_characters(self) -> list:
         return self.characters
@@ -45,6 +48,17 @@ class Room:
         for item in self.items:
             if item.get_name().lower() == item_name_lower:
                 return item
+        return None
+
+    def get_character_by_name(self, character_name: str): # type: ignore
+        """
+        Retrieves a character from the room by its name (case-insensitive).
+        Returns the character object if found, otherwise None.
+        """
+        character_name_lower = character_name.lower()
+        for character in self.characters:
+            if character.get_name().lower() == character_name_lower:
+                return character
         return None
 
     def remove_item(self, item_name: str) -> Item | None:
@@ -77,3 +91,7 @@ class Room:
     def search(self, game_state: GameState, target: str = None) -> str:
         """Allows the player to search the room."""
         return f"You search around the {self.name}, but find nothing of interest beyond what you can already see."
+
+    def rest(self, game_state: GameState) -> str:
+        """Allows the player to rest in the room."""
+        return "You rest for a moment, gathering your strength."

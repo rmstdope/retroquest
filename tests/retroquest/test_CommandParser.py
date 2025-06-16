@@ -74,8 +74,8 @@ class DummyGame:
         self.calls.append(('redo',))
     def wait(self):
         self.calls.append(('wait',))
-    def sleep(self):
-        self.calls.append(('sleep',))
+    def rest(self):
+        self.calls.append(('rest',))
     def map(self):
         self.calls.append(('map',))
     def stats(self):
@@ -249,8 +249,8 @@ def test_miscellaneous_commands(game_parser):
     commands = {
         "wait": ("wait",),
         "pause": ("wait",),
-        "sleep": ("sleep",),
-        "rest": ("sleep",),
+        "sleep": ("rest",),
+        "rest": ("rest",),
         "map": ("map",),
         "stats": ("stats",),
     }
