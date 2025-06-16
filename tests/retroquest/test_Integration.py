@@ -252,29 +252,60 @@ def test_golden_path_act1_completion(monkeypatch):
     # Deer remains in the room
     _check_character_in_room(game.state.current_room, "deer", should_be_present=True)
 
-    # # Step 15: Village Chapel (First Visit)
-    # # Path: Hidden Glade (current) -> Village Chapel
-    # _execute_commands(game, ["go south"])
+    # Step 15: Village Chapel (First Visit - Part 1)
+    # Path: Hidden Glade (current) -> Village Chapel
+    _execute_commands(game, ["go south"])
+    _check_current_room(game.state, "Village Chapel")
+    _check_item_in_room(game.state.current_room, "candle") # Candle should be in the chapel
+
+    _execute_commands(game, ["take candle"]) # Taking the candle first
+    _check_item_in_inventory(game.state, "candle")
+    _check_item_in_room(game.state.current_room, "candle", should_be_present=False)
+
+    _execute_commands(game, ["talk to priest"]) # Priest mentions needing matches
+
+    # Step 16: General Store (Visit for Matches)
+    # Path: Village Chapel (current) -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Blacksmith's Forge -> General Store
+    _execute_commands(game, ["go north", "go north", "go north", "go west", "go north", "go north", "go east", "go north"])
+    _check_current_room(game.state, "General Store")
+    
+    _check_item_in_room(game.state.current_room, "matches") # Matches in room
+    _execute_commands(game, ["talk to shopkeeper"]) # Ask for matches
+    _check_item_in_inventory(game.state, "matches") # Matches obtained
+    _check_item_in_room(game.state.current_room, "matches", should_be_present=False) # Matches not in room
+
+    # # Step 17: Village Chapel (First Visit - Part 2)
+    # # Path: General Store (current) -> Blacksmith's Forge -> Village Well -> Abandoned Shed -> Old Mill -> Riverbank -> Forest Path -> Hidden Glade -> Village Chapel
+    # _execute_commands(game, ["go south", "go west", "go south", "go south", "go east", "go south", "go south", "go south"])
     # _check_current_room(game.state, "Village Chapel")
-    # _check_item_in_room(game.state.current_room, "candle")
-    # _execute_commands(game, ["take candle"])
-    # _check_item_in_inventory(game.state, "candle")
-    # _check_item_in_room(game.state.current_room, "candle", should_be_present=False)
-    # _execute_commands(game, ["talk to priest"])
-    # # Using candle should reveal the locket
-    # _execute_commands(game, ["use candle"]) 
-    # _check_item_in_room(game.state.current_room, "hidden locket")
+
+    # # Pre-check: Hidden locket should not be visible yet
+    # _check_item_in_room(game.state.current_room, "hidden locket", should_be_present=False)
+    # _check_item_in_inventory(game.state, "candle") # Ensure candle is still in inventory
+    # _check_item_in_inventory(game.state, "matches") # Ensure matches are in inventory
+
+    # _execute_commands(game, ["use candle with matches"]) # Using candle with matches should reveal the locket
+    # _check_item_in_room(game.state.current_room, "hidden locket") # Locket is now visible
+
     # _execute_commands(game, ["take hidden locket"])
     # _check_item_in_inventory(game.state, "hidden locket")
     # _check_item_in_room(game.state.current_room, "hidden locket", should_be_present=False)
-    # _execute_commands(game, ["show locket to priest"]) # Or "give locket to priest" depending on interaction
-    # _check_spell_known(game.state, "bless")
-    # # Locket might be consumed or just shown. Design doc says "show to Priest", then "give to Grandmother".
-    # # For now, assume showing it doesn't consume it. If it's consumed, this check needs to be `should_be_present=False`.
-    # _check_item_in_inventory(game.state, "hidden locket") 
 
-    # # Step 16: Return to Mira’s Hut
+    # # Assuming giving the locket to the priest consumes it, as per previous logic.
+    # # The design doc says "Show the locket to the Priest", then "Item used: hidden locket (to show, not consumed yet)"
+    # # However, the previous test version assumed it was consumed upon learning bless.
+    # # Let's stick to the design doc: locket is NOT consumed when shown to learn bless.
+    # # It's consumed later when given to Grandmother.
+    # _execute_commands(game, ["give locket to priest"]) # Or "show locket to priest"
+    # _check_spell_known(game.state, "bless")
+    # _check_item_in_inventory(game.state, "hidden locket") # Locket should still be in inventory
+
+    # # Step 18: Return to Mira’s Hut
     # # Path: Village Chapel (current) -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Village Square -> Mira's Hut
+    # # Note: The path to General Store and back to Chapel for matches was long.
+    # # The path from Chapel to Mira's hut is:
+    # # Village Chapel -> Hidden Glade (N) -> Forest Path (N) -> Riverbank (N) -> Old Mill (W) -> Abandoned Shed (N) -> Village Well (N) -> Village Square (N) -> Mira's Hut (N)
+    # # This is 8 'go north' or 'go west' moves.
     # _execute_commands(game, ["go north", "go north", "go north", "go west", "go north", "go north", "go north", "go north"])
     # _check_current_room(game.state, "Mira's Hut")
     # _execute_commands(game, ["give rare flower to mira"])
@@ -284,7 +315,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # _check_spell_known(game.state, "unlock")
     # _check_spell_known(game.state, "light")
 
-    # # Step 17: Return to Abandoned Shed (Second Visit)
+    # # Step 19: Return to Abandoned Shed (Second Visit)
     # # Path: Mira's Hut (current) -> Village Square -> Village Well -> Abandoned Shed
     # _execute_commands(game, ["go south", "go west", "go south"])
     # _check_current_room(game.state, "Abandoned Shed")
@@ -299,7 +330,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # _check_item_in_inventory(game.state, "map")
     # _check_item_in_room(game.state.current_room, "mysterious box", should_be_present=False) # Box is taken or gone after opening
 
-    # # Step 18: Return to Vegetable Field
+    # # Step 20: Return to Vegetable Field
     # # Path: Abandoned Shed (current) -> Village Well -> Vegetable Field
     # _execute_commands(game, ["go north", "go west"])
     # _check_current_room(game.state, "Vegetable Field")
@@ -333,7 +364,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # _check_item_in_inventory(game.state, "Withered carrot", should_be_present=False) # Withered carrot is transformed
     # _check_item_in_room(game.state.current_room, "Withered carrot", should_be_present=False) # And removed from room
 
-    # # Step 19: Return to Village Well
+    # # Step 21: Return to Village Well
     # # Path: Vegetable Field (current) -> Village Well
     # _execute_commands(game, ["go east"])
     # _check_current_room(game.state, "Village Well")
@@ -353,14 +384,14 @@ def test_golden_path_act1_completion(monkeypatch):
     # _check_item_in_inventory(game.state, "magnet")
     # _check_item_in_inventory(game.state, "stick")
 
-    # # Step 20: Return to Hidden Glade
+    # # Step 22: Return to Hidden Glade
     # # Path: Village Well (current) -> Abandoned Shed -> Old Mill -> Riverbank -> Forest Path -> Hidden Glade
     # _execute_commands(game, ["go south", "go south", "go east", "go south", "go south"])
     # _check_current_room(game.state, "Hidden Glade")
     # _execute_commands(game, ["cast light near moss-covered stone"]) # Or "cast light on stone", "use light spell"
     # _check_spell_known(game.state, "grow")
 
-    # # Step 21: Return to Forest Path
+    # # Step 23: Return to Forest Path
     # # Path: Hidden Glade (current) -> Forest Path
     # _execute_commands(game, ["go north"])
     # _check_current_room(game.state, "Forest Path")
@@ -373,7 +404,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # _check_item_in_inventory(game.state, "wild berries")
     # _check_item_in_room(game.state.current_room, "wild berries", should_be_present=False) # Taken from room
 
-    # # Step 22: Return to Elior's Cottage
+    # # Step 24: Return to Elior's Cottage
     # # Path: Forest Path (current) -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Vegetable Field -> Elior's Cottage
     # _execute_commands(game, ["go north", "go west", "go north", "go north", "go west", "go north"])
     # _check_current_room(game.state, "Elior's Cottage")
@@ -382,7 +413,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # _check_item_in_inventory(game.state, "hidden locket", should_be_present=False)
     # _check_item_in_inventory(game.state, "travel cloak")
 
-    # # Step 23: Village Chapel (Prepare for Journey)
+    # # Step 25: Village Chapel (Prepare for Journey)
     # # Path: Elior's Cottage (current) -> Village Square -> Mira's Hut -> Village Square -> Village Well -> Abandoned Shed -> Old Mill -> Riverbank -> Forest Path -> Hidden Glade -> Village Chapel
     # _execute_commands(game, ["go east", "go north", "go south", "go west", "go south", "go south", "go east", "go south", "go south", "go south"])
     # _check_current_room(game.state, "Village Chapel")
@@ -391,7 +422,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # # Add assertion for bless effect if applicable (e.g., status effect on player)
     # # For now, just checking command execution.
 
-    # # Step 24: Road to Greendale (Interactions)
+    # # Step 26: Road to Greendale (Interactions)
     # # Path: Village Chapel (current) -> Road to Greendale
     # _execute_commands(game, ["go east"])
     # _check_current_room(game.state, "Road to Greendale")
@@ -400,7 +431,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # _check_item_in_inventory(game.state, "shiny ring", should_be_present=False)
     # _check_item_in_inventory(game.state, "wandering boots")
 
-    # # Step 25: Return to Mira’s Hut (Final Visit)
+    # # Step 27: Return to Mira’s Hut (Final Visit)
     # # Path: Road to Greendale (current) -> Village Chapel -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Village Square -> Mira's Hut
     # _execute_commands(game, ["go west", "go north", "go north", "go north", "go west", "go north", "go north", "go north", "go north"])
     # _check_current_room(game.state, "Mira's Hut")
@@ -425,7 +456,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # _execute_commands(game, ["talk to mira"])
     # _check_item_in_inventory(game.state, "ancient amulet")
 
-    # # Step 26: Road to Greendale (Departure)
+    # # Step 28: Road to Greendale (Departure)
     # # Path: Mira's Hut (current) -> Village Square -> Village Well -> Abandoned Shed -> Old Mill -> Riverbank -> Forest Path -> Hidden Glade -> Village Chapel -> Road to Greendale
     # _execute_commands(game, ["go south", "go west", "go south", "go south", "go east", "go south", "go south", "go south", "go east"])
     # _check_current_room(game.state, "Road to Greendale")

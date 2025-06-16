@@ -2,6 +2,7 @@ from .Character import Character
 from ..items.Item import Item # Added
 from ..items.HiddenLocket import HiddenLocket # Added
 from ..spells.BlessSpell import BlessSpell # Added
+from ..GameState import GameState
 
 class Priest(Character):
     def __init__(self) -> None:
@@ -17,19 +18,11 @@ class Priest(Character):
         }
         self.current_dialogue_key = "initial"
 
-    def talk(self, game_state) -> str:
-        # If the player has already been taught the bless spell by showing the locket,
-        # and they talk to the priest again, use the "after_bless" dialogue.
-        if self.current_dialogue_key == "shown_locket_and_taught_bless":
-            # This check ensures that if they talk again *after* the locket event but *before* another state change,
-            # they get a consistent follow-up message.
-            # If other interactions could change the state away from "shown_locket_and_taught_bless" 
-            # this might need to be more nuanced.
-            pass # current_dialogue_key remains "shown_locket_and_taught_bless"
-        
+    def talk_to(self, game_state: GameState) -> str:
+        game_state.set_story_flag("priest_talked_to", True) # Set the story flag
         return self.dialogue_states[self.current_dialogue_key]
 
-    def give_item(self, item: Item, game_state) -> str:
+    def give_item(self, item: Item, game_state: GameState) -> str:
         if isinstance(item, HiddenLocket) and not self.shown_locket:
             self.shown_locket = True
             # The locket is not consumed, just shown

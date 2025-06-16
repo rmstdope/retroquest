@@ -12,7 +12,7 @@
         "configurations": [
             {
                 "name": "python launch retroquest",
-                "type": "python",
+                "type": "debugpy",
                 "request": "launch",
                 "program": "${workspaceFolder}/src/retroquest/__main__.py",
                 "cwd": "${workspaceFolder}/src/retroquest/",

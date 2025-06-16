@@ -22,9 +22,28 @@ class Shopkeeper(Character):
         self.dialogue_index = 0
 
     def talk_to(self, game_state) -> str:
+        # Check if priest needs matches and shopkeeper hasn't given them yet
+        if game_state.get_story_flag("priest_talked_to") and "matches" in self.wares:
+            # Assuming matches_item_in_room is always found if this block is reached
+            # Give matches to player for the priest
+            game_state.current_room.remove_item("Matches")
+
+            new_matches = Matches() # Create a new instance for the inventory
+            game_state.add_item_to_inventory(new_matches)
+            
+            # Remove matches from wares so they can't be bought/given again
+            del self.wares["matches"]
+            
+            return f'The Shopkeeper leans in. "Ah, you spoke to the Priest? He does get through his matches. Here, take these for him, on the house. Tell him I said hello!" You receive a box of matches.'
+
+        # Standard dialogue if matches aren't being given for the priest
         wares_info = "I have a few things for sale:\n"
-        for name, details in self.wares.items():
-            wares_info += f"- {name.capitalize()}: {details['price']} coin(s)\n"
+        if self.wares:
+            for name, details in self.wares.items():
+                wares_info += f"- {name.capitalize()}: {details['price']} coin(s)\n"
+        else:
+            wares_info = "I'm currently out of stock of items for sale.\n"
+        
         wares_info += "And remember, you always get an extra apple with every purchase!\n"
 
         dialogue = self.dialogue_options[self.dialogue_index]
@@ -71,8 +90,6 @@ class Shopkeeper(Character):
             new_item.can_be_carried = True
         elif item_name_to_buy == "matches":
             new_item = Matches()
-            game_state.current_room.get_item_by_name("matches").remove()
-            new_item.can_be_carried = True
         else:
             # Should not happen if item_name_to_buy is in self.wares
             return "An unexpected error occurred trying to sell the item."

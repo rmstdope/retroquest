@@ -132,7 +132,7 @@
 - **Items:** Candle (start), hidden locket (later).
 - **Unusable:** prayer book (start).
 - **Spells:** `bless` (learned from Priest).
-- **Usable Items:** Candle (lights dark corners, reveals a hidden locket), hidden locket (show to Priest), `bless` spell (cast on self for protection).
+- **Usable Items:** Candle (use with matches, lights dark corners, reveals a hidden locket), hidden locket (show to Priest), `bless` spell (cast on self for protection).
 - **Characters:** Priest (offers blessings, shares lore).
 - **Exits:** Hidden Glade (north), Road to Greendale (east)
 
@@ -267,18 +267,26 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - Observe deer. _The deer seem unusually calm, their gaze occasionally drifting towards an old, moss-covered stone._
     - Take rare flower growing near the stone. _Rare flower is added to inventory._
 
-15. **Village Chapel (First Visit):**
+15. **Village Chapel (First Visit - Part 1):**
 
-    - Take candle from a side altar. _Candle is added to inventory._
-    - Speak to priest. _The priest shares concerns about a growing shadow and speaks of ancient safeguards._
-    - Use candle to light a particularly dark corner of the chapel. _The flickering light reveals a small, hidden locket tucked into a crevice._
+    - Speak to priest. _The priest shares concerns about a growing shadow and speaks of ancient safeguards. Tells a story about a relic of the village's founders that have been lost for a long time. He also mentions that he is out of matches. He usually get his matches for free from the general store._
+
+16. **General Store (Visit for Matches):**
+
+    - Speak to Shopkeeper. _Elior mentions the Priest needs matches. The Shopkeeper, happy to help the Priest, gives Elior a box of `matches`._
+      - Item obtained: `matches`
+
+17. **Village Chapel (First Visit - Part 2):**
+
+    - Use candle with matches to light a particularly dark corner of the chapel. _The flickering light reveals a small, hidden locket tucked into a crevice._
       - Item used: `candle`
+      - Item used: `matches`
     - Take hidden locket. _Hidden locket is added to inventory._
     - Show the locket to the Priest. _The Priest recognizes it as a relic of the village's founders and, seeing Elior's earnestness, teaches him the `bless` spell to seek protection._
       - Item used: `hidden locket` (to show, not consumed yet)
       - Spell Learned: `bless` (can not be used until magic is learned for real)
 
-16. **Return to Mira’s Hut:**
+18. **Return to Mira’s Hut:**
 
     - Give rare flower to Mira. _Mira smiles, saying the flower is a sign of Elior's connection to the natural world._
       - Item used: `rare flower`
@@ -292,21 +300,21 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
       * Spells Learned: `heal`, `unlock`, `light`
       * Quest given: Prepare for the Journey
 
-17. **Return to Abandoned Shed (Second Visit):**
+19. **Return to Abandoned Shed (Second Visit):**
 
     - Cast `unlock` on the Mysterious Box. _A soft click is heard, and the intricate lock on the box springs open._
       - Spell used: `unlock`
     - Open mysterious box. _Inside, nestled on faded velvet, lies a fragment of an old `map`. An `Map` with writings on an ancient language is added to inventory._
       - Item obtained: `map` (ESSENTIAL)
 
-18. **Return to Vegetable Field:**
+20. **Return to Vegetable Field:**
 
     - Cast `revive` on the `Withered carrot`. _A faint glow envelops the carrot, and it plumps up, becoming a vibrant orange `carrot`. Elior feels his magical abilities solidify._
       - Spell used: `revive` (on `Withered carrot`)
       - Item obtained: `carrot`
       - Item transformed: `Withered carrot`
 
-19. **Return to Village Well:**
+21. **Return to Village Well:**
 
     - Cast `purify` on the well water. _The water shimmers with a clear light, and a murky film on the surface dissipates. Peering down, Elior spots something metallic gleaming at the bottom._
       - Spell used: `purify`
@@ -314,42 +322,42 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
       - Items used: `fishing rod`, `magnet`, `stick`
       - Item obtained: `shiny ring`
 
-20. **Return to Hidden Glade:**
+22. **Return to Hidden Glade:**
 
     - Cast `light` near the moss-covered stone. _As the magical light washes over the stone, faint inscriptions glow into view. Studying them, Elior learns the `grow` spell, a secret of the glade._
       - Spell used: `light`
       - Spell Learned: `grow`
 
-21. **Return to Forest Path:**
+23. **Return to Forest Path:**
 
     - Cast `grow` on the berry bush. _The bush flourishes, producing lots of wild berries, an item that can be picked up._
       - Spell used: `grow`
       - Item obtained: `wild berries`
 
-22. **Return to Elior's Cottage:**
+24. **Return to Elior's Cottage:**
 
-    - Give hidden locket to Grandmother. _Tears well in her eyes as she recognizes it. She shares a tender memory of Elior\'s parents and, for his journey, gives him a warm `travel cloak`._
+    - Give hidden locket to Grandmother. _Tears well in her eyes as she recognizes it. She shares a tender memory of Elior\\'s parents and, for his journey, gives him a warm `travel cloak`._
       - Item used: `hidden locket`
       - Item obtained: `travel cloak` (Completes: Warm clothing)
 
-23. **Village Chapel (Prepare for Journey):**
+25. **Village Chapel (Prepare for Journey):**
 
     - Cast `bless`. _A comforting warmth envelops Elior, steeling him for the road ahead._
       - Spell used: `bless` (Completes: Magical protection)
 
-24. **Road to Greendale (Interactions):**
+26. **Road to Greendale (Interactions):**
 
-    - (If `shiny ring` was obtained) Give `shiny ring` to Merchant. _The merchant, impressed by the ring's quality, offers a sturdy pair of `wandering boots` in trade, mentioning its usefulness on long journeys._
+    - (If `shiny ring` was obtained) Give `shiny ring` to Merchant. _The merchant, impressed by the ring\'s quality, offers a sturdy pair of `wandering boots` in trade, mentioning its usefulness on long journeys._
       - Item used: `shiny ring`
       - Item obtained: `wandering boots` (Completes: Wandering shoes)
 
-25. **Return to Mira's Hut (Final Visit):**
+27. **Return to Mira's Hut (Final Visit):**
 
     - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you."_
       - Item obtained: `ancient amulet` (ESSENTIAL)
       - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field complete: Food)
 
-26. **Road to Greendale (Departure):**
+28. **Road to Greendale (Departure):**
 
     - Use `map`. _The `map` aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. Act I is completed._
       - Item used: `map` (ESSENTIAL)
@@ -362,6 +370,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - `Dull Knife` (to become `sharp knife`)
     - `Sharp Knife` (to cut vines on Forest Path, enabling access to the `stick` and the Hidden Glade for the `rare flower`)
     - `Candle` (to find `hidden locket` in Village Chapel)
+    - `Matches` (to light `candle` in Village Chapel)
     - `Hidden Locket` (to learn `bless` spell from Priest and get `travel cloak` from Grandmother)
     - `Fishing Rod` (to catch `fish` for the `purify` spell, and to retrieve the `shiny ring`)
     - `Magnet` (to retrieve the `shiny ring` from the well)
@@ -421,24 +430,26 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 17. **`Stick`** (Obtained: Step 13):
     - Used in Step 19 (with `fishing rod` and `magnet`) to retrieve the `shiny ring`.
 18. **`Rare Flower`** (Obtained: Step 14):
-    - Used in Step 16 by giving it to Mira to learn spells and receive her quest.
-19. **`Candle`** (Obtained: Step 15):
-    - Used in Step 15 to light a dark corner in the chapel, revealing the `hidden locket`.
-20. **`Hidden Locket`** (Obtained: Step 15):
-    - Used in Step 15 by showing it to the Priest to learn the `bless` spell.
-    - Used in Step 22 by giving it to Grandmother to receive the `travel cloak`.
-21. **`Map`** (Obtained: Step 17):
-    - Fulfills Mira's quest requirement for "A `map` to find his way" (implicitly used by Step 25).
-    - Used in Step 26 to complete Act I.
-22. **`Carrot`** (Obtained: Step 18, by reviving `Withered carrot`):
-    - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
-23. **`Shiny Ring`** (Obtained: Step 19):
-    - Used in Step 24 by trading it with the Merchant for `wandering boots`.
-24. **`Wild Berries`** (Obtained: Step 21, from `grow` spell):
-    - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
-25. **`Travel Cloak`** (Obtained: Step 22):
-    - Fulfills Mira's quest requirement for "Warm clothing" (implicitly used by Step 25).
-26. **`Wandering Boots`** (Obtained: Step 24):
-    - Fulfills Mira's quest requirement for "Sturdy footwear" (implicitly used by Step 25).
-27. **`Ancient Amulet`** (Obtained: Step 25):
-    - Its acquisition is the primary goal of Mira's quest and is essential for completing Act I. Considered "used" upon receipt for quest completion.
+    - Used in Step 18 by giving it to Mira to learn spells and receive her quest.
+19. **`Matches`** (Obtained: Step 16):
+    - Used in Step 17 with `candle` to light a dark corner in the chapel, revealing the `hidden locket`.
+20. **`Candle`** (Available in Village Chapel from start or obtained elsewhere - TBD if player needs to find it first):
+    - Used in Step 17 with `matches` to light a dark corner in the chapel, revealing the `hidden locket`.
+21. **`Hidden Locket`** (Obtained: Step 17):
+    - Used in Step 17 by showing it to the Priest to learn the `bless` spell.
+    - Used in Step 23 by giving it to Grandmother to receive the `travel cloak`.
+22. **`Map`** (Obtained: Step 19):
+    - Fulfills Mira\'s quest requirement for "A `map` to find his way" (implicitly used by Step 26).
+    - Used in Step 27 to complete Act I.
+23. **`Carrot`** (Obtained: Step 20, by reviving `Withered carrot`):
+    - Fulfills Mira\'s quest requirement for "Food for the road" (implicitly used by Step 26 when Mira acknowledges quest completion).
+24. **`Shiny Ring`** (Obtained: Step 20):
+    - Used in Step 25 by trading it with the Merchant for `wandering boots`.
+25. **`Wild Berries`** (Obtained: Step 22, from `grow` spell):
+    - Fulfills Mira\'s quest requirement for "Food for the road" (implicitly used by Step 26 when Mira acknowledges quest completion).
+26. **`Travel Cloak`** (Obtained: Step 23):
+    - Fulfills Mira\'s quest requirement for "Warm clothing" (implicitly used by Step 26).
+27. **`Wandering Boots`** (Obtained: Step 25):
+    - Fulfills Mira\'s quest requirement for "Sturdy footwear" (implicitly used by Step 26).
+28. **`Ancient Amulet`** (Obtained: Step 26):
+    - Its acquisition is the primary goal of Mira\'s quest and is essential for completing Act I. Considered "used" upon receipt for quest completion.
