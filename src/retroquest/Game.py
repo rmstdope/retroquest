@@ -183,7 +183,14 @@ class Game:
             return f"You can't take the {item_to_take.get_name()}."
         self.state.current_room.items.remove(item_to_take)
         self.state.inventory.append(item_to_take)
-        return f"You take the {item_to_take.get_name()}."
+        
+        # Call picked_up on the item
+        pickup_message = item_to_take.picked_up(self.state)
+        
+        response = f"You take the {item_to_take.get_name()}."
+        if pickup_message:
+            response += " " + pickup_message
+        return response
 
     def inventory(self) -> str:
         if not self.state.inventory:

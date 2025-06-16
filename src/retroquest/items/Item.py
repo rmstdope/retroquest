@@ -41,3 +41,7 @@ class Item:
     def listen(self, game_state) -> str:
         """Base 'listen' method for items. Subclasses should override this if they make a sound."""
         return f"The {self.get_name()} is silent."
+
+    def picked_up(self, game_state) -> str | None:
+        """Called when the item is picked up by the player. Subclasses can override this."""
+        return None # Default behavior: no message or action

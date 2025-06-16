@@ -281,9 +281,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - Use candle with matches to light a particularly dark corner of the chapel. _The flickering light reveals a small, hidden locket tucked into a crevice._
       - Item used: `candle`
       - Item used: `matches`
-    - Take hidden locket. _Hidden locket is added to inventory._
-    - Show the locket to the Priest. _The Priest recognizes it as a relic of the village's founders and, seeing Elior's earnestness, teaches him the `bless` spell to seek protection._
-      - Item used: `hidden locket` (to show, not consumed yet)
+    - Take hidden locket. _Hidden locket is added to inventory. As Elior picks up the locket, the Priest, noticing the relic, approaches. He recognizes it as a relic of the village's founders and, seeing Elior's earnestness, teaches him the `bless` spell to seek protection._
       - Spell Learned: `bless` (can not be used until magic is learned for real)
 
 18. **Return to Mira’s Hut:**
