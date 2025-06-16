@@ -204,16 +204,18 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "fish", should_be_present=False)
     _check_spell_known(game.state, "purify")
 
-    # # Step 13: Forest Path
-    # # Path: Riverbank (current) -> Forest Path
-    # _execute_commands(game, ["go south"])
-    # _check_current_room(game.state, "Forest Path")
-    # _execute_commands(game, ["use sharp knife"]) # Assumes "use sharp knife" is enough to cut vines
-    # # No direct item obtained from cutting vines, but it enables access to stick
-    # _check_item_in_room(game.state.current_room, "stick") # Stick should be revealed
-    # _execute_commands(game, ["take stick"])
-    # _check_item_in_inventory(game.state, "stick")
-    # _check_item_in_room(game.state.current_room, "stick", should_be_present=False)
+    # Step 13: Forest Path
+    # Path: Riverbank (current) -> Forest Path
+    _execute_commands(game, ["go south"])
+    _check_current_room(game.state, "Forest Path")
+    _check_item_in_room(game.state.current_room, "stick", should_be_present=False) # Stick is not present yet
+
+    _execute_commands(game, ["use sharp knife with vines"])
+    _check_item_in_room(game.state.current_room, "stick") # Stick should be revealed
+
+    _execute_commands(game, ["take stick"])
+    _check_item_in_inventory(game.state, "stick")
+    _check_item_in_room(game.state.current_room, "stick", should_be_present=False)
 
     # # Step 14: Hidden Glade
     # # Path: Forest Path (current) -> Hidden Glade

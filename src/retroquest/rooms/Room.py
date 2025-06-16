@@ -1,3 +1,6 @@
+from ..items.Item import Item  # Added import
+from ..GameState import GameState  # Added for GameState type hint
+
 class Room:
     """
     Base class for all rooms in RetroQuest.
@@ -17,7 +20,7 @@ class Room:
     def get_items(self) -> list:
         return self.items
 
-    def add_item(self, item) -> None:
+    def add_item(self, item: Item) -> None:
         """Adds an item to the room's list of items."""
         if self.items is None:
             self.items = []
@@ -33,7 +36,7 @@ class Room:
         """Returns a description of the ambient sound of the room."""
         return "It is quiet here."
 
-    def get_item_by_name(self, item_name: str):
+    def get_item_by_name(self, item_name: str) -> Item | None:
         """
         Retrieves an item from the room by its name (case-insensitive).
         Returns the item object if found, otherwise None.
@@ -42,6 +45,17 @@ class Room:
         for item in self.items:
             if item.get_name().lower() == item_name_lower:
                 return item
+        return None
+
+    def remove_item(self, item_name: str) -> Item | None:
+        """
+        Removes an item from the room by its name (case-insensitive).
+        Returns the item object if removed, otherwise None.
+        """
+        item_to_remove = self.get_item_by_name(item_name)
+        if item_to_remove:
+            self.items.remove(item_to_remove)
+            return item_to_remove
         return None
 
     def describe(self) -> str:
@@ -60,6 +74,6 @@ class Room:
             desc += f"\nExits: {', '.join(self.exits.keys())}"
         return desc
 
-    def search(self, game_state, target: str = None) -> str:
+    def search(self, game_state: GameState, target: str = None) -> str:
         """Allows the player to search the room."""
-        return "You search around the {self.name}, but find nothing of interest beyond what you can already see."
+        return f"You search around the {self.name}, but find nothing of interest beyond what you can already see."

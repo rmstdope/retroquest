@@ -29,6 +29,7 @@ from .WildBerries import WildBerries
 from .WitheredCarrot import WitheredCarrot
 from .ShedDoor import ShedDoor
 from .River import River
+from .Vines import Vines
 
 __all__ = [
     "AncientAmulet",
@@ -61,4 +62,5 @@ __all__ = [
     "WitheredCarrot",
     "ShedDoor",
     "River",
+    "Vines",
 ]

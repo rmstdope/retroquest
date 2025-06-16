@@ -109,10 +109,10 @@
 
 ## 12. Forest Path
 
-- **Description:** A winding path leading into the woods.
-- **Items:** Stick (later), wild berries (later).
+- **Description:** A winding path leading into the woods. A section of the path is blocked by thick, thorny vines.
+- **Items:** Stick (later), wild berries (later), Vines (start).
 - **Spells:** None.
-- **Usable Items:** Sharp knife (cuts through thick vines), `grow` spell (on berry bush).
+- **Usable Items:** Sharp knife (on Vines to clear path), `grow` spell (on berry bush).
 - **Characters:** None.
 - **Exits:** Riverbank (north), Hidden Glade (south)
 
@@ -257,8 +257,9 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 13. **Forest Path:**
 
-    - Use sharp knife to cut through thick vines blocking a small alcove. _Vines are cleared._
-      - Item used: `sharp knife`
+    - Use sharp knife with Vines. _Elior uses the sharp knife to cut through the thick vines, clearing the way to a small alcove._
+      - Item used: `sharp knife` (with `Vines`)
+      - Item removed: `Vines` (from room)
     - Take a sturdy stick from the alcove. _Stick is added to inventory._
 
 14. **Hidden Glade:**

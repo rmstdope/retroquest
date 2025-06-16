@@ -1,4 +1,5 @@
 from .Item import Item
+from ..GameState import GameState
 
 class SharpKnife(Item):
     def __init__(self) -> None:
@@ -8,3 +9,10 @@ class SharpKnife(Item):
             short_name="knife",
             can_be_carried=True
         )
+
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
+        from .Vines import Vines  # Local import for isinstance check
+        if isinstance(other_item, Vines):
+            return other_item.use_with(game_state, self)
+        return super().use_with(game_state, other_item)
+
