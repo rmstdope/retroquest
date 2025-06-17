@@ -354,7 +354,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
       - Item used: `hidden locket`
       - Item obtained: `travel cloak` (Completes: Warm clothing)
 
-25. **Village Chapel (Prepare for Journey):**
+25. **Any room (Prepare for Journey):**
 
     - Cast `bless`. _A comforting warmth envelops Elior, steeling him for the road ahead._
       - Spell used: `bless` (Completes: Magical protection)

@@ -392,6 +392,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Step 22: Return to Hidden Glade (Second Visit)
     _execute_commands(game, ["go south", "go south", "go east", "go south", "go south"])
     _check_current_room(game.state, "Hidden Glade")
+
     _execute_commands(game, ["cast light"])
     _check_spell_known(game.state, "grow")
 
@@ -401,38 +402,39 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_current_room(game.state, "Forest Path")
     # Casting grow on bush should make wild berries appear in the room.
     _check_item_in_room(game.state.current_room, "wild berries", should_be_present=False) # Not there before casting
+
     _execute_commands(game, ["cast grow on bush"]) # Or "cast grow spell"
     _check_item_in_room(game.state.current_room, "wild berries") # Should be present now
+
     _execute_commands(game, ["take wild berries"])
     _check_item_in_inventory(game.state, "wild berries")
     _check_item_in_room(game.state.current_room, "wild berries", should_be_present=False) # Taken from room
 
-    # # Step 24: Return to Elior's Cottage
-    # # Path: Forest Path (current) -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Vegetable Field -> Elior's Cottage
-    # _execute_commands(game, ["go north", "go west", "go north", "go north", "go west", "go north"])
-    # _check_current_room(game.state, "Elior's Cottage")
-    # _check_item_in_inventory(game.state, "hidden locket") # Locket should still be there from Step 15
-    # _execute_commands(game, ["give hidden locket to grandmother"])
-    # _check_item_in_inventory(game.state, "hidden locket", should_be_present=False)
-    # _check_item_in_inventory(game.state, "travel cloak")
+    # Step 24: Return to Elior's Cottage
+    # Path: Forest Path (current) -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Vegetable Field -> Elior's Cottage
+    _execute_commands(game, ["go north", "go west", "go north", "go north", "go west", "go north"])
+    _check_current_room(game.state, "Elior's Cottage")
+    _check_item_in_inventory(game.state, "hidden locket") # Locket should still be there from Step 15
 
-    # # Step 25: Village Chapel (Prepare for Journey)
-    # # Path: Elior's Cottage (current) -> Village Square -> Mira's Hut -> Village Square -> Village Well -> Abandoned Shed -> Old Mill -> Riverbank -> Forest Path -> Hidden Glade -> Village Chapel
-    # _execute_commands(game, ["go east", "go north", "go south", "go west", "go south", "go south", "go east", "go south", "go south", "go south"])
-    # _check_current_room(game.state, "Village Chapel")
-    # _check_spell_known(game.state, "bless") # Ensure bless was learned
-    # _execute_commands(game, ["cast bless"])
-    # # Add assertion for bless effect if applicable (e.g., status effect on player)
-    # # For now, just checking command execution.
+    _execute_commands(game, ["give hidden locket to grandmother"])
+    _check_item_in_inventory(game.state, "hidden locket", should_be_present=False)
+    _check_item_in_inventory(game.state, "travel cloak")
 
-    # # Step 26: Road to Greendale (Interactions)
-    # # Path: Village Chapel (current) -> Road to Greendale
-    # _execute_commands(game, ["go east"])
-    # _check_current_room(game.state, "Road to Greendale")
-    # _check_item_in_inventory(game.state, "shiny ring") # Ensure shiny ring is present
-    # _execute_commands(game, ["give shiny ring to merchant"]) # Assumes merchant is present
-    # _check_item_in_inventory(game.state, "shiny ring", should_be_present=False)
-    # _check_item_in_inventory(game.state, "wandering boots")
+    # Step 25: Village Chapel (Prepare for Journey)
+    _execute_commands(game, ["go south", "go east", "go south", "go south", "go east", "go south", "go south", "go south"])
+    _check_current_room(game.state, "Village Chapel")
+    _execute_commands(game, ["cast bless"])
+    _check_story_flag(game.state, "journey_bless_completed", True)
+
+    # Step 26: Road to Greendale (Interactions)
+    # Path: Village Chapel (current) -> Road to Greendale
+    _execute_commands(game, ["go east"])
+    _check_current_room(game.state, "Road to Greendale")
+    _check_item_in_inventory(game.state, "shiny ring") # Ensure shiny ring is present
+
+    _execute_commands(game, ["give shiny ring to merchant"]) # Assumes merchant is present
+    _check_item_in_inventory(game.state, "shiny ring", should_be_present=False)
+    _check_item_in_inventory(game.state, "wandering boots")
 
     # # Step 27: Return to Mira’s Hut (Final Visit)
     # # Path: Road to Greendale (current) -> Village Chapel -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Village Square -> Mira's Hut

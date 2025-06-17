@@ -1,3 +1,5 @@
+from ..GameState import GameState
+from ..items.Item import Item
 from .Character import Character
 from ..spells.ReviveSpell import ReviveSpell # Import ReviveSpell
 from ..items.TravelCloak import TravelCloak
@@ -53,26 +55,17 @@ class Grandmother(Character):
 
         return dialogue
 
-    def give_item(self, item, game_state) -> str:
-        if isinstance(item, HiddenLocket) and not self.dialogue_state["given_locket"]:
-            self.dialogue_state["given_locket"] = True
-            
-            # Check if player already has TravelCloak
-            has_cloak = any(isinstance(inv_item, TravelCloak) for inv_item in game_state.player_inventory)
-            if not has_cloak:
-                travel_cloak = TravelCloak()
-                game_state.add_item_to_inventory(travel_cloak)
-                return (
-                    "Grandmother's eyes widen as she sees the locket. 'This... this was your mother's. She said it would keep you safe. "
-                    "And this... she wanted you to have this when you were old enough to understand its importance.' "
-                    "Grandmother hands you a finely made TravelCloak. 'May it protect you on your journeys, Elior.\'\\n\\n"
-                    "You received a TravelCloak!"
-                )
-            else:
-                return (
-                    "Grandmother's eyes widen as she sees the locket. 'This... this was your mother's. She said it would keep you safe. "
-                    "It seems you already have a cloak much like the one she set aside for you. Keep it well.'"
-                )
+    def give_item(self, game_state: GameState, item: Item) -> str:
+        if isinstance(item, HiddenLocket):
+            game_state.remove_item_from_inventory(item.get_name())
+            travel_cloak = TravelCloak()
+            game_state.add_item_to_inventory(travel_cloak)
+            return (
+                "Grandmother's eyes widen as she sees the locket. 'This... this was your mother's. She said it would keep you safe. "
+                "And this... she wanted you to have this when you were old enough to understand its importance.' "
+                "Grandmother hands you a finely made TravelCloak. 'May it protect you on your journeys, Elior.\'\\n\\n"
+                "You received a TravelCloak!"
+            )
 
         elif isinstance(item, WildBerries) and not self.dialogue_state["given_berries"]:
             self.dialogue_state["given_berries"] = True

@@ -5,5 +5,5 @@ class WanderingBoots(Item):
         super().__init__(
             name="Wandering Boots",
             description="Sturdy leather boots, well-worn and comfortable. They seem to hum with a faint energy, eager for the road.",
-            category="wearable"
+            can_be_carried=True
         )

@@ -10,14 +10,11 @@ class Bush(Item):
             short_name="bush",
             can_be_carried=False
         )
-        self.has_berries = False # Track if berries have grown
 
     def grow(self, game_state: GameState) -> str:
         current_room = game_state.current_room
-        if not self.has_berries:
+        if not current_room.get_item_by_name("wild berries"):
             current_room.add_item(WildBerries())
-            self.has_berries = True
-            self.description = "A dense, leafy bush, now laden with ripe wild berries."
             return "You cast the Grow spell on the bush. It flourishes, and clusters of wild berries appear among its leaves!"
         else:
             return "The bush is already full of berries."
