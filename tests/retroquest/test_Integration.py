@@ -86,13 +86,13 @@ def test_golden_path_act1_completion(monkeypatch):
     # Setup Game
     game = Game(starting_room=ROOMS["EliorsCottage"], rooms=ROOMS)
 
-    # Elior’s Cottage
+    # Step 1: Elior’s Cottage
     _execute_commands(game, ["use lantern", "take bread", "talk to grandmother"])
     _check_item_in_inventory(game.state, "bread")
     _execute_commands(game, ["read journal", "talk to grandmother"])
     _check_spell_known(game.state, "revive")
 
-    # Vegetable Field
+    # Step 2: Vegetable Field
     _execute_commands(game, ["go south", "take rusty hoe"])
     _check_current_room(game.state, "Vegetable Field")
     _check_item_in_inventory(game.state, "rusty hoe")
@@ -106,7 +106,7 @@ def test_golden_path_act1_completion(monkeypatch):
     assert len(game.state.inventory) == inventory_count_after_first_hoe_use, \
         "Using hoe again should not add items to inventory"
 
-    # Chicken Coop
+    # Step 3: Chicken Coop
     _execute_commands(game, ["go south", "use bread with chicken"])
     _check_current_room(game.state, "Chicken Coop")
     _check_item_in_inventory(game.state, "bread", should_be_present=False)
@@ -115,19 +115,23 @@ def test_golden_path_act1_completion(monkeypatch):
     _execute_commands(game, ["take key"])
     _check_item_in_inventory(game.state, "key")
 
-    # Village Square
+    _execute_commands(game, ["take egg"])
+    _check_item_in_inventory(game.state, "egg")
+    _check_item_in_room(game.state.current_room, "egg", should_be_present=False)
+
+    # Step 4: Village Square
     _execute_commands(game, ["go north", "go north", "go east"])
     _check_current_room(game.state, "Village Square")
     _execute_commands(game, ["take bucket", "talk to villager"])
     _check_item_in_inventory(game.state, "bucket")
 
-    # Village Well
+    # Step 5: Village Well
     _execute_commands(game, ["go west", "go south", "go east"])
     _check_current_room(game.state, "Village Well")
     _execute_commands(game, ["use bucket with well"])
     _check_item_in_inventory(game.state, "bucket (full)")
 
-    # Blacksmith's Forge
+    # Step 6: Blacksmith's Forge
     _execute_commands(game, ["go east"])
     _check_current_room(game.state, "Blacksmith's Forge")
     _execute_commands(game, ["talk to blacksmith", "give coin to blacksmith"])
@@ -135,12 +139,12 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "dull knife", should_be_present=False) 
     _check_item_in_inventory(game.state, "sharp knife")
 
-    # Vegetable Field
+    # Step 7: Vegetable Field
     _execute_commands(game, ["go west", "go west", "use hoe"])
     _check_current_room(game.state, "Vegetable Field")
     _check_item_in_inventory(game.state, "coin")
 
-    # General Store - Buy Rope
+    # Step 8: General Store - Buy Rope
     _execute_commands(game, ["go north", "go east", "go east"]) # Veg Field -> Village Square -> General Store
     _check_current_room(game.state, "General Store")
     _execute_commands(game, ["take apple"]) # Added "take apple"
@@ -150,7 +154,7 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "rope")
     _check_item_in_inventory(game.state, "coin", should_be_present=False) 
 
-    # Abandoned Shed - Use Key
+    # Step 9: Abandoned Shed - Use Key
     # Path: General Store (current) -> Village Square -> Village Well -> Abandoned Shed
     _execute_commands(game, ["go south", "go west", "go south"]) 
     _check_current_room(game.state, "Abandoned Shed")
@@ -176,7 +180,7 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "magnet")
     _check_item_in_room(game.state.current_room, "magnet", should_be_present=False)
 
-    # Old Mill - Use Rope, Take Millstone Fragment
+    # Step 10: Old Mill - Use Rope, Take Millstone Fragment
     # Path: Abandoned Shed (current) -> Old Mill
     _execute_commands(game, ["go south"])
     _check_current_room(game.state, "Old Mill")
@@ -436,42 +440,42 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "shiny ring", should_be_present=False)
     _check_item_in_inventory(game.state, "wandering boots")
 
-    # # Step 27: Return to Mira’s Hut (Final Visit)
-    # # Path: Road to Greendale (current) -> Village Chapel -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Village Square -> Mira's Hut
-    # _execute_commands(game, ["go west", "go north", "go north", "go north", "go west", "go north", "go north", "go north", "go north"])
-    # _check_current_room(game.state, "Mira's Hut")
-    # # Verify all quest items are present before talking to Mira
-    # _check_item_in_inventory(game.state, "travel cloak")
-    # # Bless was cast, assume it fulfills "Magical protection"
-    # _check_item_in_inventory(game.state, "wild berries")
-    # _check_item_in_inventory(game.state, "apple")
-    # _check_item_in_inventory(game.state, "egg")
-    # _check_item_in_inventory(game.state, "carrot")
-    # _check_item_in_inventory(game.state, "wandering boots")
-    # _check_item_in_inventory(game.state, "map")
-    # # Verify all spells are known
-    # _check_spell_known(game.state, "revive")
-    # _check_spell_known(game.state, "purify")
-    # _check_spell_known(game.state, "bless")
-    # _check_spell_known(game.state, "heal")
-    # _check_spell_known(game.state, "unlock")
-    # _check_spell_known(game.state, "light")
-    # _check_spell_known(game.state, "grow")
+    # Step 27: Return to Mira’s Hut (Final Visit)
+    # Path: Road to Greendale (current) -> Village Chapel -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Village Square -> Mira's Hut
+    _execute_commands(game, ["go west", "go north", "go north", "go north", "go west", "go north", "go north", "go west", "go north", "go east", "go north"])
+    _check_current_room(game.state, "Mira's Hut")
+    # Verify all quest items are present before talking to Mira
+    _check_item_in_inventory(game.state, "travel cloak")
+    # Bless was cast, assume it fulfills "Magical protection"
+    _check_item_in_inventory(game.state, "wild berries")
+    _check_item_in_inventory(game.state, "apple")
+    _check_item_in_inventory(game.state, "egg")
+    _check_item_in_inventory(game.state, "fresh carrot")
+    _check_item_in_inventory(game.state, "wandering boots")
+    _check_item_in_inventory(game.state, "map")
+    # Verify all spells are known
+    _check_spell_known(game.state, "revive")
+    _check_spell_known(game.state, "purify")
+    _check_spell_known(game.state, "bless")
+    _check_spell_known(game.state, "heal")
+    _check_spell_known(game.state, "unlock")
+    _check_spell_known(game.state, "light")
+    _check_spell_known(game.state, "grow")
+    # Verify that bless is cast
+    _check_story_flag(game.state, "journey_bless_completed", True)
 
-    # _execute_commands(game, ["talk to mira"])
-    # _check_item_in_inventory(game.state, "ancient amulet")
+    _execute_commands(game, ["talk to mira"])
+    _check_item_in_inventory(game.state, "ancient amulet")
 
-    # # Step 28: Road to Greendale (Departure)
-    # # Path: Mira's Hut (current) -> Village Square -> Village Well -> Abandoned Shed -> Old Mill -> Riverbank -> Forest Path -> Hidden Glade -> Village Chapel -> Road to Greendale
-    # _execute_commands(game, ["go south", "go west", "go south", "go south", "go east", "go south", "go south", "go south", "go east"])
-    # _check_current_room(game.state, "Road to Greendale")
-    # _check_item_in_inventory(game.state, "map")
-    # _check_item_in_inventory(game.state, "ancient amulet") # Ensure amulet is still there
+    # Step 28: Road to Greendale (Departure)
+    _execute_commands(game, ["go south", "go west", "go south", "go east", "go south", "go south", "go east", "go south", "go south", "go south", "go east"])
+    _check_current_room(game.state, "Road to Greendale")
+    _check_item_in_inventory(game.state, "map")
+    _check_item_in_inventory(game.state, "ancient amulet") # Ensure amulet is still there
     
-    # # This command should ideally trigger an Act I completion state.
-    # # We'll check for the command execution. Further checks depend on how game handles act completion.
-    # _execute_commands(game, ["use map"])
-    # # Example: assert game.state.act_completed == True or similar
-    # # For now, we assume the command executes. If it returns a specific message for act completion, that can be asserted.
-    # # _debug_print_history() # Uncomment to see the final output messages
+    # This command should ideally trigger an Act I completion state.
+    # We'll check for the command execution. Further checks depend on how game handles act completion.
+    _execute_commands(game, ["use map"])
+    # Final check: Act I should be completed
+    _check_story_flag(game.state, "act_1_completed", True)
 

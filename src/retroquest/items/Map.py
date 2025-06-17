@@ -1,4 +1,5 @@
 from .Item import Item
+from ..GameState import GameState
 
 class Map(Item):
     def __init__(self):
@@ -8,11 +9,11 @@ class Map(Item):
             can_be_carried=True
         )
 
-    def use(self, game_state, player) -> str:
+    def use(self, game_state: GameState) -> str:
         # In a real scenario, this might change game state or reveal new exits.
         # For now, it just returns a descriptive message.
-        if game_state.current_room_id == "road_to_greendale":
+        if game_state.current_room.name.lower() == "road to greendale":
             # This is the specific check for completing Act I as per RoomsAct1.md
-            game_state.set_flag("act_i_completed", True)
+            game_state.set_story_flag("act_1_completed", True)
             return "The map aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. You feel a sense of accomplishment as you set forth. (Act I Completed)"
         return "You study the map. It depicts the local area with surprising detail."
