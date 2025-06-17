@@ -10,12 +10,11 @@ class Well(Item):
         )
         self.contains_ring = True  # The well initially contains the ring
         self.is_purified = False
-        self.ring_visible_but_needs_tool = False # True if purified AND ring is present and not yet taken
 
     def get_description(self) -> str:
         base_desc = "An old stone well, its surface worn smooth. A frayed rope hangs nearby, disappearing into the depths."
         if self.is_purified:
-            if self.contains_ring and self.ring_visible_but_needs_tool:
+            if self.contains_ring:
                 return f"{base_desc} The water within is crystal clear. You can see a Shiny Ring at the bottom, but it's still too deep to reach by hand."
             else: # Purified, but ring taken or was never there and now visible
                 return f"{base_desc} The water within is crystal clear. The bottom is visible and appears empty."
@@ -27,15 +26,18 @@ class Well(Item):
 
     def use_with(self, game_state, other_item):
         from .Bucket import Bucket  # Local import to avoid circular dependency
-        if isinstance(other_item, Bucket):
+        from .FishingRod import FishingRod  # Local import to avoid circular dependency
+        from .MagneticFishingRod import MagneticFishingRod  # Local import to avoid circular dependency
+        from .ExtendedMagneticFishingRod import ExtendedMagneticFishingRod  # Local import to avoid circular dependency      
+        # Check if other_item is an instance of any of the classes in the tuple
+        if isinstance(other_item, (Bucket, FishingRod, MagneticFishingRod, ExtendedMagneticFishingRod)):
             return other_item.use_with(game_state, self)
         
-        # Interaction with ExtendedMagneticFishingRod is handled by the rod's use_with method.
         return f"The {self.get_name()} cannot be used with the {other_item.get_name()} in this way."
 
     def search(self, game_state) -> str:
         if self.is_purified:
-            if self.contains_ring and self.ring_visible_but_needs_tool:
+            if self.contains_ring:
                 return "You peer into the crystal clear water. A Shiny Ring glints at the bottom, tantalizingly out of reach by hand."
             else:
                 return "You peer into the crystal clear water. The bottom is visible and empty."
@@ -51,7 +53,6 @@ class Well(Item):
         
         self.is_purified = True
         if self.contains_ring:
-            self.ring_visible_but_needs_tool = True
             # The ShinyRing is not added to the room here.
             # It's retrieved by the ExtendedMagneticFishingRod.
             return f"You cast Purify on the {self.get_name()}. The murky water shimmers and clears! You can now see a Shiny Ring at the bottom, but it's still too deep to reach by hand."
