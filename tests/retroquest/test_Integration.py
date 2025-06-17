@@ -47,6 +47,9 @@ def _check_spell_known(game_state, spell_name: str, should_be_present: bool = Tr
     else:
         assert spell_name.lower() not in spell_names, f"Spell '{spell_name}' found in known spells, but was not expected."
 
+def _check_story_flag(game_state, flag_name: str, expected_value: bool = True):
+    assert game_state.get_story_flag(flag_name) == expected_value, f"Story flag '{flag_name}' was not {expected_value}."
+
 def _check_current_room(game_state, expected_room_name: str):
     assert game_state.current_room.name == expected_room_name, f"Not in '{expected_room_name}'"
 
@@ -287,22 +290,19 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_room(game.state.current_room, "hidden locket", should_be_present=False)
     _check_spell_known(game.state, "bless")
 
-    # # Step 18: Return to Mira’s Hut
-    # # Path: Village Chapel (current) -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Village Square -> Mira's Hut
-    # # Note: The path to General Store and back to Chapel for matches was long.
-    # # The path from Chapel to Mira's hut is:
-    # # Village Chapel -> Hidden Glade (N) -> Forest Path (N) -> Riverbank (N) -> Old Mill (W) -> Abandoned Shed (N) -> Village Well (N) -> Village Square (N) -> Mira's Hut (N)
-    # # This is 8 'go north' or 'go west' moves.
-    # _execute_commands(game, ["go north", "go north", "go north", "go west", "go north", "go north", "go north", "go north"])
-    # _check_current_room(game.state, "Mira's Hut")
-    # _execute_commands(game, ["give rare flower to mira"])
-    # _check_item_in_inventory(game.state, "rare flower", should_be_present=False)
-    # _execute_commands(game, ["talk to mira"])
-    # _check_spell_known(game.state, "heal")
-    # _check_spell_known(game.state, "unlock")
-    # _check_spell_known(game.state, "light")
+    # Step 18: Return to Mira’s Hut
+    # Path: Village Chapel (current) -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Village Square -> Mira's Hut
+    _execute_commands(game, ["go north", "go north", "go north", "go west", "go north", "go north", "go east", "go north", "go west", "go north"])
+    _check_current_room(game.state, "Mira's Hut")
 
-    # # Step 19: Return to Abandoned Shed (Second Visit)
+    _execute_commands(game, ["give rare flower to mira"])
+    _check_item_in_inventory(game.state, "rare flower", should_be_present=False)
+    _check_spell_known(game.state, "heal")
+    _check_spell_known(game.state, "unlock")
+    _check_spell_known(game.state, "light")
+    _check_story_flag(game.state, "magic_fully_unlocked", True)
+
+    # Step 19: Return to Abandoned Shed (Second Visit)
     # # Path: Mira's Hut (current) -> Village Square -> Village Well -> Abandoned Shed
     # _execute_commands(game, ["go south", "go west", "go south"])
     # _check_current_room(game.state, "Abandoned Shed")

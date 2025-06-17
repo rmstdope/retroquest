@@ -286,17 +286,16 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 18. **Return to Mira’s Hut:**
 
-    - Give rare flower to Mira. _Mira smiles, saying the flower is a sign of Elior's connection to the natural world._
-      - Item used: `rare flower`
-    - Speak to Mira. \_Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. She then tasks Elior with preparing for the journey ahead, mentioning that the Ancient Amulet will be his once he is truly ready. She tells him he needs:
+    - Give rare flower to Mira. \_Mira smiles, saying the flower is a sign of Elior's connection to the natural world. Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. She then tasks Elior with preparing for the journey ahead, mentioning that the Ancient Amulet will be his once he is truly ready. She tells him he needs:
       - Warm clothing (`travel cloak`)
       - Magical protection (cast `bless` on himself)
       - Food for the road (`wild berries`, `apple`, `egg`, `carrot`)
       - Sturdy footwear (`wandering boots`)
       - A `map` to find his way
       - To have learned all the basic magic the village elders can teach him.\_
-      * Spells Learned: `heal`, `unlock`, `light`
-      * Quest given: Prepare for the Journey
+      - Item used: `rare flower`
+      - Spells Learned: `heal`, `unlock`, `light`
+      - Quest given: Prepare for the Journey
 
 19. **Return to Abandoned Shed (Second Visit):**
 
