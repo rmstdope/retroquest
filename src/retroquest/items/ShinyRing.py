@@ -5,5 +5,5 @@ class ShinyRing(Item):
         super().__init__(
             name="Shiny Ring",
             description="A beautiful silver ring with a small, sparkling gemstone. It looks quite valuable.",
-            category="treasure"
+            can_be_carried=True
         )

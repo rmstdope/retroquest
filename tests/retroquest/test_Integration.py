@@ -328,63 +328,73 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "map")
     _check_item_in_room(game.state.current_room, "map", should_be_present=False) # Map is now in inventory
 
-    # # Step 20: Return to Vegetable Field
-    # # Path: Abandoned Shed (current) -> Village Well -> Vegetable Field
-    # _execute_commands(game, ["go north", "go west"])
-    # _check_current_room(game.state, "Vegetable Field")
-    # # Withered carrot should be present in the room from the start if not taken
-    # # Or, if it was taken earlier and not revivable then, it might be in inventory.
-    # # Design doc: "Withered carrot (Available in Vegetable Field from start)"
-    # # Design doc: Step 2: "Attempt to cast revive (fails, but hints at magic)" - implies it might have been taken.
-    # # Let's assume it was left in the field, or if taken, it's still "Withered carrot".
-    # # For the test, we need to ensure it's targetable. If it was taken, the command would be `cast revive on Withered carrot` (targeting inventory).
-    # # If it's in the room, it might be `cast revive on Withered carrot` (targeting room item).
-    # # The design doc for step 18 says: "Cast revive on the Withered carrot." - not specifying location.
-    # # Let's assume the game logic handles finding the Withered Carrot either in room or inventory.
-    # # For a clean test, let's ensure it's in the room first if it wasn't picked up.
-    # # However, the initial setup of VegetableField likely places it. If player took it in step 2, it's in inventory.
+    # Step 20: Return to Vegetable Field
+    # Path: Abandoned Shed (current) -> Village Well -> Vegetable Field
+    _execute_commands(game, ["go north", "go west"])
+    _check_current_room(game.state, "Vegetable Field")
+    # Withered carrot should be present in the room from the start if not taken
+    # Or, if it was taken earlier and not revivable then, it might be in inventory.
+    # Design doc: "Withered carrot (Available in Vegetable Field from start)"
+    # Design doc: Step 2: "Attempt to cast revive (fails, but hints at magic)" - implies it might have been taken.
+    # Let's assume it was left in the field, or if taken, it's still "Withered carrot".
+    # For the test, we need to ensure it's targetable. If it was taken, the command would be `cast revive on Withered carrot` (targeting inventory).
+    # If it's in the room, it might be `cast revive on Withered carrot` (targeting room item).
+    # The design doc for step 18 says: "Cast revive on the Withered carrot." - not specifying location.
+    # Let's assume the game logic handles finding the Withered Carrot either in room or inventory.
+    # For a clean test, let's ensure it's in the room first if it wasn't picked up.
+    # However, the initial setup of VegetableField likely places it. If player took it in step 2, it's in inventory.
 
-    # # To make this test robust, we should check if it's in inventory first, then room.
-    # # Or, rely on the game's `cast` command to find it.
-    # # The `RoomsAct1.md` states `Withered carrot (start)` for Vegetable Field items.
-    # # It's not explicitly taken in the Golden Path until it's revived.
-    # # _check_item_in_room(game.state.current_room, "Withered carrot")
-    # # _execute_commands(game, ["cast revive on Withered carrot"])
-    # # _check_item_in_inventory(game.state, "carrot")
-    # # _check_item_in_inventory(game.state, "Withered carrot", should_be_present=False) # Withered carrot is transformed
-    # # _check_item_in_room(game.state.current_room, "Withered carrot", should_be_present=False) # And removed from room
+    # To make this test robust, we should check if it's in inventory first, then room.
+    # Or, rely on the game's `cast` command to find it.
+    # The `RoomsAct1.md` states `Withered carrot (start)` for Vegetable Field items.
+    # It's not explicitly taken in the Golden Path until it's revived.
+    _check_item_in_room(game.state.current_room, "Withered carrot")
 
-    # # For robustness, explicitly check and revive if needed
-    # _check_item_in_inventory(game.state, "Withered carrot", should_be_present=False) # Ensure it's not in inventory
-    # _check_item_in_room(game.state.current_room, "Withered carrot") # Check it's in the room
-    # _execute_commands(game, ["cast revive on Withered carrot"])
-    # _check_item_in_inventory(game.state, "carrot")
-    # _check_item_in_inventory(game.state, "Withered carrot", should_be_present=False) # Withered carrot is transformed
-    # _check_item_in_room(game.state.current_room, "Withered carrot", should_be_present=False) # And removed from room
+    _execute_commands(game, ["cast revive on Withered carrot"])
+    _check_item_in_room(game.state.current_room, "Withered carrot", should_be_present=False) # And removed from room
+    _check_item_in_room(game.state.current_room, "Fresh Carrot", should_be_present=True) # Carrot should now be present after revival
 
-    # # Step 21: Return to Village Well
-    # # Path: Vegetable Field (current) -> Village Well
-    # _execute_commands(game, ["go east"])
-    # _check_current_room(game.state, "Village Well")
-    # _execute_commands(game, ["cast purify on well"])
-    # # Casting purify should make the shiny ring visible or retrievable.
-    # # The design doc implies it's seen at the bottom. We'll assume the next command handles retrieval.
-    
-    # # Ensure items for fishing the ring are present
-    # _check_item_in_inventory(game.state, "fishing rod")
-    # _check_item_in_inventory(game.state, "magnet")
-    # _check_item_in_inventory(game.state, "stick")
+    _execute_commands(game, ["take carrot"])
+    _check_item_in_inventory(game.state, "fresh carrot")
+    _check_item_in_room(game.state.current_room, "fresh carrot", should_be_present=False) # And removed from room
 
-    # _execute_commands(game, ["use fishing rod with magnet and stick on well"])
-    # _check_item_in_inventory(game.state, "shiny ring")
-    # # Assuming the tools are not consumed
-    # _check_item_in_inventory(game.state, "fishing rod")
-    # _check_item_in_inventory(game.state, "magnet")
-    # _check_item_in_inventory(game.state, "stick")
+    # Step 21: Return to Village Well & Retrieve Shiny Ring
+    # Path: Vegetable Field (current) -> Village Well
+    _execute_commands(game, ["go east"])
+    _check_current_room(game.state, "Village Well")
 
-    # # Step 22: Return to Hidden Glade
-    # # Path: Village Well (current) -> Abandoned Shed -> Old Mill -> Riverbank -> Forest Path -> Hidden Glade
-    # _execute_commands(game, ["go south", "go south", "go east", "go south", "go south"])
+    # Ensure items for fishing the ring are present before combination
+    _check_item_in_inventory(game.state, "fishing rod")
+    _check_item_in_inventory(game.state, "magnet")
+    _check_item_in_inventory(game.state, "stick")
+
+    # Combine Fishing Rod with Magnet
+    _execute_commands(game, ["use fishing rod with magnet"])
+    _check_item_in_inventory(game.state, "fishing rod", should_be_present=False)
+    _check_item_in_inventory(game.state, "magnet", should_be_present=False)
+    _check_item_in_inventory(game.state, "magnetic fishing rod")
+
+    # Combine Magnetic Fishing Rod with Stick
+    _execute_commands(game, ["use magnetic fishing rod with stick"])
+    _check_item_in_inventory(game.state, "magnetic fishing rod", should_be_present=False)
+    _check_item_in_inventory(game.state, "stick", should_be_present=False)
+    _check_item_in_inventory(game.state, "extended magnetic fishing rod")
+
+    # Test: Attempt to use extended magnetic fishing rod BEFORE purifying the well
+    _execute_commands(game, ["use extended magnetic fishing rod with well"])
+    _check_item_in_inventory(game.state, "shiny ring", should_be_present=False) # Ring should not be obtained
+    _check_item_in_inventory(game.state, "extended magnetic fishing rod") # Rod should still be in inventory
+
+    _execute_commands(game, ["cast purify on well", "use extended magnetic fishing rod with well"])
+    _check_item_in_inventory(game.state, "shiny ring") # Ring is now in inventory
+    _check_item_in_inventory(game.state, "extended magnetic fishing rod", should_be_present=False) # Rod is consumed or disappears
+
+    # # Step 22: Return to Hidden Glade (Second Visit)
+    # # Path: Village Well (current) -> Vegetable Field -> Elior\'s Cottage -> Village Square -> Mira\'s Hut -> ... -> Hidden Glade
+    # # Shortened for brevity, assuming navigation is correct
+    # _execute_commands(game, ["go west", "go north", "go east", "go north"]) # VW -> VF -> EC -> VS -> MH
+    # _check_current_room(game.state, "Mira\'s Hut") # Should be in Mira\'s hut
+    # _execute_commands(game, ["go south", "go east", "go south", "go south", "go east", "go south", "go south"]) # MH -> VS -> GS -> BSF -> VW -> AS -> OM -> RB -> FP -> HG
     # _check_current_room(game.state, "Hidden Glade")
     # _execute_commands(game, ["cast light near moss-covered stone"]) # Or "cast light on stone", "use light spell"
     # _check_spell_known(game.state, "grow")

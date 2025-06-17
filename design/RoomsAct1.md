@@ -167,6 +167,16 @@
                                                   [Village Chapel]--[Road to Greendale]
 ```
 
+## Learnable Spells in Act I
+
+- **`revive`**: Learned from Grandmother in Elior’s Cottage (Step 1).
+- **`purify`**: Learned from the Fisherman at the Riverbank after giving him a fish (Step 12).
+- **`bless`**: Learned from the Priest in the Village Chapel after showing him the Hidden Locket (Step 17).
+- **`heal`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
+- **`unlock`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
+- **`light`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
+- **`grow`**: Learned from inscriptions on a moss-covered stone in the Hidden Glade after casting `light` on it (Step 22).
+
 ## Action that completes the act:
 
 After receiving the ancient amulet from Mira and gathering enough supplies and knowledge, use the `map` on the Road to Greendale. This unlocks the path to Greendale and triggers the transition to Act II.
@@ -308,15 +318,22 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
     - Cast `revive` on the `Withered carrot`. _A faint glow envelops the carrot, and it plumps up, becoming a vibrant orange `carrot`. Elior feels his magical abilities solidify._
       - Spell used: `revive` (on `Withered carrot`)
-      - Item obtained: `carrot`
-      - Item transformed: `Withered carrot`
+      - Item transformed: `Withered carrot` becomes `Fresh carrot` (in place)
+    - Take `Fresh carrot`. _Fresh carrot is added to inventory._
+      - Item obtained: `Fresh carrot`
 
 21. **Return to Village Well:**
 
+    - Use `fishing rod` with `magnet`. _Elior attaches the magnet to the fishing rod, transforming it into a `magnet fishing rod`._
+      - Item used: `magnet` (consumed)
+      - Item transformed: `fishing rod` becomes `magnet fishing rod`
+    - Use `magnet fishing rod` with `stick`. _Elior firmly attaches the stick to the magnet fishing rod, creating a `long magnet fishing rod` with extended reach._
+      - Item used: `stick` (consumed)
+      - Item transformed: `magnet fishing rod` becomes `long magnet fishing rod`
     - Cast `purify` on the well water. _The water shimmers with a clear light, and a murky film on the surface dissipates. Peering down, Elior spots something metallic gleaming at the bottom._
       - Spell used: `purify`
-    - Use fishing rod with magnet and stick on well. _Elior carefully lowers the improvised tool (magnet tied to stick, held by fishing rod line), and the magnet snags a shiny ring from the depths! Shiny ring is added to inventory._
-      - Items used: `fishing rod`, `magnet`, `stick`
+    - Use `long magnet fishing rod` on well. _Elior carefully lowers the extended magnetic tool into the depths, and it snags a shiny ring! Shiny ring is added to inventory._
+      - Item used: `long magnet fishing rod`
       - Item obtained: `shiny ring`
 
 22. **Return to Hidden Glade:**

@@ -1,15 +1,16 @@
 from .Spell import Spell
+from ..items.Well import Well  # Import Well
 
 class PurifySpell(Spell):
     def __init__(self):
         super().__init__("Purify", "A cleansing spell that removes impurities from water or other substances.")
 
-    def cast(self, game_state) -> str:
-        # Implement the logic for the purify spell
-        # For example, it might make contaminated water drinkable or reveal something hidden
-        # current_room = game_state.get_current_room()
-        # if current_room.name == "Village Well" and current_room.features.get("water_murky"):
-        #     current_room.features["water_murky"] = False
-        #     current_room.description = "The well water is now clear."
-        #     return "The water shimmers with a clear light, and a murky film on the surface dissipates."
+    def cast(self, game_state, target_item=None) -> str:  # Added target_item
+        if not game_state.get_story_flag("magic_fully_unlocked"):
+            return "You attempt to cast Purify, but the magic fizzles out, achieving nothing."
+
+        if target_item:
+            if isinstance(target_item, Well):
+                return target_item.purify(game_state) # Delegate to Well's purify method
+            return f"You cast Purify on the {target_item.get_name()}. A cleansing energy flows from your hands, but nothing else seems to happen."
         return "You cast Purify. A cleansing energy flows from your hands."
