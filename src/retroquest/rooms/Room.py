@@ -95,3 +95,7 @@ class Room:
     def rest(self, game_state: GameState) -> str:
         """Allows the player to rest in the room."""
         return "You rest for a moment, gathering your strength."
+
+    def light(self, game_state: GameState) -> str:
+        """Called when a light source is used or a light spell is cast in the room."""
+        return "The room is already well lit."

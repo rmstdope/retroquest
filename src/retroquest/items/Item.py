@@ -49,3 +49,7 @@ class Item:
     def open(self, game_state) -> str:
         """Base 'open' method for items. Subclasses should override this if they can be opened."""
         return f"You can't open the {self.get_name()}."
+
+    def grow(self, game_state) -> str:
+        """Base 'grow' method for items, typically called by the Grow spell. Subclasses should override this."""
+        return f"The {self.get_name()} does not respond to the Grow spell."

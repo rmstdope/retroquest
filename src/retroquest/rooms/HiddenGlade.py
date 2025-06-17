@@ -3,6 +3,7 @@ from ..items.RareFlower import RareFlower
 from ..items.ShinyPebble import ShinyPebble
 from ..characters.Deer import Deer
 from ..GameState import GameState # Added GameState for type hinting
+from ..spells.GrowSpell import GrowSpell # Import GrowSpell
 
 class HiddenGlade(Room):
     def __init__(self) -> None:
@@ -67,3 +68,12 @@ class HiddenGlade(Room):
 
     def describe(self) -> str:
         return self.get_room_text_description()
+
+    def light(self, game_state: GameState) -> str:
+        """Called when a light source is used or a light spell is cast in the room."""
+        message = "The light illuminates the glade. The inscription on the mossy stone glows faintly, revealing ancient runes. They speak of a seed, a song, and the sun's embrace to awaken life."
+        if not game_state.has_spell("Grow"):
+            grow_spell = GrowSpell()
+            game_state.learn_spell(grow_spell)
+            message += " As you read the runes, you feel a connection to the ancient magic of nature. You have learned the `grow` spell!"
+        return message

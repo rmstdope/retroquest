@@ -110,9 +110,9 @@
 ## 12. Forest Path
 
 - **Description:** A winding path leading into the woods. A section of the path is blocked by thick, thorny vines.
-- **Items:** Stick (later), wild berries (later), Vines (start).
+- **Items:** Stick (later), wild berries (later), Vines (start), Bush (start).
 - **Spells:** None.
-- **Usable Items:** Sharp knife (on Vines to clear path), `grow` spell (on berry bush).
+- **Usable Items:** Sharp knife (on Vines to clear path), `grow` spell (on bush).
 - **Characters:** None.
 - **Exits:** Riverbank (north), Hidden Glade (south)
 
@@ -344,7 +344,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 23. **Return to Forest Path:**
 
-    - Cast `grow` on the berry bush. _The bush flourishes, producing lots of wild berries, an item that can be picked up._
+    - Cast `grow` on the bush. _The bush flourishes, producing lots of wild berries, an item that can be picked up._
       - Spell used: `grow`
       - Item obtained: `wild berries`
 

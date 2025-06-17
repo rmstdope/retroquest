@@ -389,28 +389,23 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "shiny ring") # Ring is now in inventory
     _check_item_in_inventory(game.state, "extended magnetic fishing rod", should_be_present=False) # Rod is consumed or disappears
 
-    # # Step 22: Return to Hidden Glade (Second Visit)
-    # # Path: Village Well (current) -> Vegetable Field -> Elior\'s Cottage -> Village Square -> Mira\'s Hut -> ... -> Hidden Glade
-    # # Shortened for brevity, assuming navigation is correct
-    # _execute_commands(game, ["go west", "go north", "go east", "go north"]) # VW -> VF -> EC -> VS -> MH
-    # _check_current_room(game.state, "Mira\'s Hut") # Should be in Mira\'s hut
-    # _execute_commands(game, ["go south", "go east", "go south", "go south", "go east", "go south", "go south"]) # MH -> VS -> GS -> BSF -> VW -> AS -> OM -> RB -> FP -> HG
-    # _check_current_room(game.state, "Hidden Glade")
-    # _execute_commands(game, ["cast light near moss-covered stone"]) # Or "cast light on stone", "use light spell"
-    # _check_spell_known(game.state, "grow")
+    # Step 22: Return to Hidden Glade (Second Visit)
+    _execute_commands(game, ["go south", "go south", "go east", "go south", "go south"])
+    _check_current_room(game.state, "Hidden Glade")
+    _execute_commands(game, ["cast light"])
+    _check_spell_known(game.state, "grow")
 
-    # # Step 23: Return to Forest Path
-    # # Path: Hidden Glade (current) -> Forest Path
-    # _execute_commands(game, ["go north"])
-    # _check_current_room(game.state, "Forest Path")
-    # # Assuming berry bush is a feature of the room, not an item itself initially.
-    # # Casting grow should make wild berries appear in the room.
-    # _check_item_in_room(game.state.current_room, "wild berries", should_be_present=False) # Not there before casting
-    # _execute_commands(game, ["cast grow on berry bush"]) # Or "cast grow spell"
-    # _check_item_in_room(game.state.current_room, "wild berries") # Should be present now
-    # _execute_commands(game, ["take wild berries"])
-    # _check_item_in_inventory(game.state, "wild berries")
-    # _check_item_in_room(game.state.current_room, "wild berries", should_be_present=False) # Taken from room
+    # Step 23: Return to Forest Path
+    # Path: Hidden Glade (current) -> Forest Path
+    _execute_commands(game, ["go north"])
+    _check_current_room(game.state, "Forest Path")
+    # Casting grow on bush should make wild berries appear in the room.
+    _check_item_in_room(game.state.current_room, "wild berries", should_be_present=False) # Not there before casting
+    _execute_commands(game, ["cast grow on bush"]) # Or "cast grow spell"
+    _check_item_in_room(game.state.current_room, "wild berries") # Should be present now
+    _execute_commands(game, ["take wild berries"])
+    _check_item_in_inventory(game.state, "wild berries")
+    _check_item_in_room(game.state.current_room, "wild berries", should_be_present=False) # Taken from room
 
     # # Step 24: Return to Elior's Cottage
     # # Path: Forest Path (current) -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Vegetable Field -> Elior's Cottage

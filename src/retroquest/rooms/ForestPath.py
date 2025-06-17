@@ -2,6 +2,7 @@ from .Room import Room
 from ..items.Stick import Stick
 from ..items.WildBerries import WildBerries
 from ..items.Vines import Vines
+from ..items.Bush import Bush # Import Bush
 
 class ForestPath(Room):
     def __init__(self) -> None:
@@ -14,7 +15,7 @@ class ForestPath(Room):
                 "occasional snap of a twig hints at unseen creatures nearby. The path feels ancient, "
                 "as if it remembers every footstep that has ever passed this way."
             ),
-            items=[WildBerries(), Vines()],
+            items=[Vines(), Bush()], # Add Bush to items
             characters=[],
             exits={"north": "Riverbank", "south": "HiddenGlade"}  # Corrected: HG is South, not East.
         )

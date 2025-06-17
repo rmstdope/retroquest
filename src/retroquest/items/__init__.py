@@ -4,6 +4,7 @@ from .Apple import Apple
 from .Bread import Bread
 from .BrokenShovel import BrokenShovel
 from .Bucket import Bucket
+from .Bush import Bush # Add Bush
 from .Candle import Candle
 from .Chicken import Chicken
 from .Coin import Coin
@@ -58,6 +59,7 @@ AVAILABLE_ITEMS = {
     "Bread": Bread,
     "BrokenShovel": BrokenShovel,
     "Bucket": Bucket,
+    "Bush": Bush, # Add Bush
     "Candle": Candle,
     "Chicken": Chicken,
     "Coin": Coin,
