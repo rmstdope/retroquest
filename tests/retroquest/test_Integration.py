@@ -303,19 +303,30 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_story_flag(game.state, "magic_fully_unlocked", True)
 
     # Step 19: Return to Abandoned Shed (Second Visit)
-    # # Path: Mira's Hut (current) -> Village Square -> Village Well -> Abandoned Shed
-    # _execute_commands(game, ["go south", "go west", "go south"])
-    # _check_current_room(game.state, "Abandoned Shed")
-    # # Box should be in the room from the first visit
-    # _check_item_in_room(game.state.current_room, "mysterious box") 
-    # _execute_commands(game, ["cast unlock on mysterious box"]) # Or "use unlock spell with mysterious box"
-    # # Assuming casting unlock automatically opens it or makes it openable
-    # # The design doc says: "Open mysterious box. Inside... lies a fragment of an old map."
-    # # This implies a separate "open box" command might be needed if "cast unlock" doesn't auto-open.
-    # # For now, let's assume "cast unlock" is sufficient or the game handles "open box" implicitly after unlock.
-    # # If an explicit "open box" is needed, add: _execute_commands(game, ["open mysterious box"])
-    # _check_item_in_inventory(game.state, "map")
-    # _check_item_in_room(game.state.current_room, "mysterious box", should_be_present=False) # Box is taken or gone after opening
+    # Path: Mira's Hut (current) -> Village Square -> Elior's Cottage -> Vegetable Field -> Village Well -> Abandoned Shed
+    _execute_commands(game, ["go south", "go west", "go south", "go east", "go south"])
+    _check_current_room(game.state, "Abandoned Shed")
+    # Box should be in the room from the first visit
+    _check_item_in_room(game.state.current_room, "mysterious box") 
+    
+    # Make sure the box is locked initially
+    mysterious_box = game.find_item("mysterious box", look_in_inventory=False, look_in_room=True)
+    assert mysterious_box is not None, "Mysterious Box not found in Abandoned Shed"
+    assert mysterious_box.locked, "Mysterious Box should be locked initially"
+    
+    _execute_commands(game, ["cast unlock on mysterious box"]) 
+    assert not mysterious_box.locked, "Mysterious Box should be unlocked after casting Unlock spell"
+    _check_item_in_room(game.state.current_room, "map", should_be_present=False) # Map is still in the box
+
+    _execute_commands(game, ["open mysterious box"])
+    # After opening, the map should be in the room, and the box should not contain it anymore.
+    _check_item_in_room(game.state.current_room, "map", should_be_present=True) 
+    assert not mysterious_box.contains_map, "Mysterious Box should not contain the map after opening"
+
+
+    _execute_commands(game, ["take map"])
+    _check_item_in_inventory(game.state, "map")
+    _check_item_in_room(game.state.current_room, "map", should_be_present=False) # Map is now in inventory
 
     # # Step 20: Return to Vegetable Field
     # # Path: Abandoned Shed (current) -> Village Well -> Vegetable Field

@@ -45,3 +45,7 @@ class Item:
     def picked_up(self, game_state) -> str | None:
         """Called when the item is picked up by the player. Subclasses can override this."""
         return None # Default behavior: no message or action
+
+    def open(self, game_state) -> str:
+        """Base 'open' method for items. Subclasses should override this if they can be opened."""
+        return f"You can't open the {self.get_name()}."

@@ -13,6 +13,8 @@ class Spell:
     def get_description(self) -> str:
         return self.description
 
-    def cast(self, game_state) -> str:
+    def cast(self, game_state, target_item=None) -> str:
         """Casts the spell. This method should be overridden by subclasses."""
-        raise NotImplementedError("This spell has not been implemented yet.")
+        if target_item:
+            return f"You can't cast {self.name} on {target_item.get_name()}."
+        return f"You cast {self.name}, but nothing happens."

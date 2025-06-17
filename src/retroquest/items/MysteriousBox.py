@@ -1,38 +1,39 @@
 from ..items.Item import Item
+from ..items.Map import Map as GameMap # Alias to avoid potential naming conflicts
+from ..GameState import GameState
 
 class MysteriousBox(Item):
     def __init__(self) -> None:
         super().__init__(
             name="mysterious box",
             description="A small, ornate wooden box covered in strange runes. The lid is tightly shut, and it feels oddly heavy for its size. You sense something important is hidden inside.",
-            short_name="box"
+            short_name="box",
         )
         self.locked = True
-        self.contains = "a small, intricately carved wooden bird" # Item revealed when unlocked
+        self.contains_map = True # Initialize contains_map
 
-    def unlock(self):
-        self.locked = False
+    def unlock(self, game_state: GameState) -> str: # Added game_state parameter for consistency
+        if self.locked:
+            self.locked = False
+            self.description = "A small, ornate wooden box covered in strange runes. The lock has clicked open."
+            return "A soft click is heard from the mysterious box as the lock springs open!"
+        return "The mysterious box is already unlocked."
 
-    def use_with(self, game_state, other_item):
-        from .Key import Key  # Local import to avoid circular dependency
-        if isinstance(other_item, Key):
-            # Delegate to the Key's use_with method
-            return other_item.use_with(game_state, self)
-        return f"The {self.get_name()} cannot be used with the {other_item.get_name()}."
-
-    def use(self, game_state):
+    def open(self, game_state: GameState) -> str:
         if self.locked:
             return "The mysterious box is locked. You need to find a way to open it."
+        
+        if self.contains_map:
+            map_item = GameMap() # Use the aliased Map
+            game_state.current_room.add_item(map_item) # Add to current room's items using add_item method
+            self.contains_map = False # Set contains_map to False
+            self.description = "An open, ornate wooden box. It is now empty."
+            return "You open the mysterious box. Inside, you find a fragment of an old map! The map has been placed in the room." 
         else:
-            # Item is revealed, and potentially added to inventory or the room
-            # For now, let's assume it's just revealed.
-            # And let's make it so it can only be "used" once to reveal the item.
-            if self.contains:
-                revealed_item = self.contains
-                self.description = f"An open, ornate wooden box. It once held {revealed_item}." # Update description
-                self.contains = None # Box is now empty
-                # TODO: Decide if the item should be automatically added to inventory or placed in the room
-                # game_state.add_item_to_inventory(RevealedItemObject(revealed_item)) # If it's an actual item object
-                return f"You open the mysterious box. Inside, you find {revealed_item}!"
-            else:
-                return "The mysterious box is now empty."
+            return "The mysterious box is now empty."
+
+    # The use_with method might be more complex depending on how spells are targeted.
+    # For now, we assume the UnlockSpell will call the .unlock() method directly if cast on this box.
+    # If a general "cast <spell> on <target>" command exists, that command would handle finding the box
+    # and then calling a method on the spell object, which in turn might call box.unlock().
+

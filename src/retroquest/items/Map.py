@@ -5,7 +5,7 @@ class Map(Item):
         super().__init__(
             name="Map",
             description="A detailed map of Willowbrook and the surrounding areas. It shows various landmarks and paths, some of which are not immediately obvious.",
-            category="tool"
+            can_be_carried=True
         )
 
     def use(self, game_state, player) -> str:

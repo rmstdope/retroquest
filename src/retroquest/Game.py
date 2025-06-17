@@ -109,6 +109,8 @@ class Game:
             "        Use an item from your inventory or in the room.\n"
             "    talk <character>, talk to <character>, speak to <character>, converse with <character>\n"
             "        Speak to a character in the current room.\n"
+            "    cast <spell> [on <target>]\n"
+            "        Cast a known spell, optionally on a target item.\n"
             "  Game & Information:\n"
             "    map\n"
             "        Show a list of visited rooms and their exits.\n"
@@ -290,12 +292,32 @@ class Game:
         else:
             return item_obj_1.use(self.state)
 
-    def cast(self, spell_name: str) -> str:
-        spell_name = spell_name.lower()
+    def cast(self, command_args: str) -> str:
+        # Try to split for "cast <spell> on <target>"
+        parts = command_args.lower().split(' on ', 1)
+        spell_name = parts[0].strip()
+        target_name = None
+        if len(parts) > 1:
+            target_name = parts[1].strip()
+
+        spell_to_cast = None
         for spell_obj in self.state.known_spells:
             if spell_obj.get_name().lower() == spell_name:
-                return spell_obj.cast(self.state) # Pass game_state to the spell's cast method
-        return f"You don't know the spell '{spell_name}'."
+                spell_to_cast = spell_obj
+                break
+        
+        if not spell_to_cast:
+            return f"You don't know the spell '{spell_name}'."
+
+        target_item = None
+        if target_name:
+            target_item = self.find_item(target_name, look_in_inventory=True, look_in_room=True)
+            if not target_item:
+                return f"You don't see a '{target_name}' to cast {spell_name} on."
+            return spell_to_cast.cast(self.state, target_item) # Pass game_state and target_item
+        else:
+            # Spells that don't require a target
+            return spell_to_cast.cast(self.state) # Pass game_state only
 
     def learn(self, spell: Spell) -> str:
         if spell not in self.state.known_spells:
@@ -329,6 +351,15 @@ class Game:
     def rest(self) -> str:
         return self.state.current_room.rest(self.state)
 
+    def open(self, target: str) -> str:
+        if not target:
+            return "Open what?"
+        item_to_open = self.find_item(target, look_in_inventory=True, look_in_room=True)
+        if item_to_open:
+            return item_to_open.open(self.state) # Pass game_state to the item's open method
+        else:
+            return f"You don't see a '{target}' to open here or in your inventory."
+
     # --- Not Implemented Methods ---
     def ask(self, target: str) -> str:
         raise NotImplementedError("Game.ask() is not yet implemented.")
@@ -356,9 +387,6 @@ class Game:
 
     def unequip(self, item: str) -> str:
         raise NotImplementedError("Game.unequip() is not yet implemented.")
-
-    def open(self, target: str) -> str:
-        raise NotImplementedError("Game.open() is not yet implemented.")
 
     def close(self, target: str) -> str:
         raise NotImplementedError("Game.close() is not yet implemented.")
