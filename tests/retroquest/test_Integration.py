@@ -86,9 +86,16 @@ def test_golden_path_act1_completion(monkeypatch):
     # Setup Game
     game = Game(starting_room=ROOMS["EliorsCottage"], rooms=ROOMS)
 
-    # Step 1: Elior’s Cottage
-    _execute_commands(game, ["use lantern", "take bread", "talk to grandmother"])
+    # Step 1: Elior’s Cottage    
+    _check_item_in_room(game.state.current_room, "bread", should_be_present=False)
+    _check_item_in_room(game.state.current_room, "Elior's Journal", should_be_present=False)
+    _execute_commands(game, ["use lantern"])
+    _check_item_in_room(game.state.current_room, "bread")
+    _check_item_in_room(game.state.current_room, "Elior's Journal")
+    _execute_commands(game, ["take bread", "talk to grandmother"])
+    _check_spell_known(game.state, "revive", should_be_present=False)
     _check_item_in_inventory(game.state, "bread")
+    _check_item_in_room(game.state.current_room, "bread", should_be_present=False)
     _execute_commands(game, ["read journal", "talk to grandmother"])
     _check_spell_known(game.state, "revive")
 

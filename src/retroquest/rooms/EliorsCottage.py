@@ -15,7 +15,7 @@ class EliorsCottage(Room):
                 "crackles in the hearth. Grandmother hums softly in her rocking chair, her eyes twinkling "
                 "with wisdom and warmth."
             ),
-            items=[Lantern(), Bread(), EliorsJournal()],
+            items=[Lantern()],
             characters=[Grandmother()],
             exits={"south": "VegetableField", "east": "VillageSquare"}
         )

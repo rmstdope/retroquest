@@ -26,6 +26,7 @@ class River(Item):
 
     def examine(self) -> str:
         if self.fish_available:
-            return "The [item.name]river[/item.name] flows gently. It looks like a good spot to fish."
+            self.description="A gentle river, its waters flowing steadily. It looks like a good spot for fishing.",
         else:
-            return "The [item.name]river[/item.name] flows gently. You've already fished here recently."
+            self.description="A gentle river, its waters flowing steadily. You've already fished here recently.",
+        return super().examine()

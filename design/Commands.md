@@ -26,7 +26,7 @@ Below is a comprehensive list of all commands that should be possible to use in 
 ## Examination
 
 - look around / look / observe / survey
-- look at [object] / inspect [object] / examine [object] / check [object]
+- look at [object] / inspect [object] / examine [object] / check [object] / look [object]
 - read [object]
 - search / investigate
 - listen to [object/location]

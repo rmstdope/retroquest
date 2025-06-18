@@ -85,8 +85,8 @@ class CommandParser:
         # Examination
         elif cmd in ('look around', 'look', 'observe', 'survey', 'l'):
             return self.game.look()
-        elif any(cmd.startswith(prefix) for prefix in ('look at ', 'inspect ', 'examine ', 'check ')):
-            for prefix in ('look at ', 'inspect ', 'examine ', 'check '):
+        elif any(cmd.startswith(prefix) for prefix in ('look at ', 'inspect ', 'examine ', 'check ', 'look ')):
+            for prefix in ('look at ', 'inspect ', 'examine ', 'check ', 'look '):
                 if cmd.startswith(prefix):
                     return self.game.examine(cmd[len(prefix):])
         elif cmd.startswith('read '):

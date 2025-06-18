@@ -46,25 +46,35 @@ class Game:
 ##    ##  ##           ##     ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
 ##     ## #########    ##     ##     ##  #######   #######   #######  #########  #######     ##
 ''', style="bold yellow")
+        self.session.prompt('Press Enter to continue...')
+        self.console.clear()
         # Revised prologue: do NOT mention the amulet being given yet
         self.console.print(
             "You are Elior, a humble farmer boy living in the quiet village of Willowbrook on the outskirts of Eldoria. "
             "Raised by your grandmother after your parents vanished mysteriously, your life is simple—tending crops and caring for animals. "
             "One stormy night, a strange light appears in the sky, and you dream of a shadowy figure calling your name.\n"
-            "\n"
-            "The next morning, you awaken to find the village abuzz with rumors: livestock missing, strange footprints by the well, and the old mill's wheel turning on its own. "
+        )
+        self.session.prompt('Press Enter to continue...')
+        self.console.print(
+            "\nThe next morning, you awaken to find the village abuzz with rumors: livestock missing, strange footprints by the well, and the old mill's wheel turning on its own. "
             "Your grandmother, usually cheerful, seems worried and distracted, her gaze lingering on a faded photograph.\n"
-            "\n"
-            "As you step outside, the air feels charged with something unfamiliar. The villagers gather in the square, debating what to do. "
+        )
+        self.session.prompt('Press Enter to continue...')
+        self.console.print(
+            "\nAs you step outside, the air feels charged with something unfamiliar. The villagers gather in the square, debating what to do. "
             "Mira, the wise woman, catches your eye and beckons you over. 'There are secrets in Willowbrook, child,' she says. 'Secrets that have waited for you.'\n"
-            "\n"
-            "A distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. "
+        )
+        self.session.prompt('Press Enter to continue...')
+        self.console.print(
+            "\nA distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. "
             "With questions swirling in your mind, you take your first step into the unknown.\n"
         )
-        self.console.print("Type 'help' for a list of commands.\n")
+        self.console.print("\nLet's get started! (Type 'help' for a list of commands.)\n")
+        self.session.prompt('Press Enter to continue...')
 
     def run(self) -> None:
         self.print_intro()
+        self.console.clear()
         self.console.print(self.state.current_room.describe() + "\n")
         while self.is_running:
             user_input = self.session.prompt('> ')
@@ -116,35 +126,64 @@ class Game:
 
     def help(self, arg: str = None) -> str:
         return (
-            "Available commands:\n"
-            "  Movement:\n"
-            "    go <direction>, <direction>, <short_direction>\n"
-            "        (e.g., go north, north, n)\n"
-            "        Move in a specified direction.\n"
-            "  Actions:\n"
-            "    look, look around, observe, survey\n"
-            "        Take a careful look around your current location.\n"
-            "    examine <target>, look at <target>, inspect <target>, check <target>\n"
-            "        Examine an item or character in the room or your inventory.\n"
-            "    take <item>, pick up <item>, grab <item>, get <item>\n"
-            "        Pick up an item from the room and add it to your inventory.\n"
-            "    drop <item>, discard <item>\n"
-            "        Remove an item from your inventory and leave it in the room.\n"
-            "    inventory, inv, i\n"
-            "        List items currently in your inventory.\n"
-            "    use <item>\n"
-            "        Use an item from your inventory or in the room.\n"
-            "    talk <character>, talk to <character>, speak to <character>, converse with <character>\n"
-            "        Speak to a character in the current room.\n"
-            "    cast <spell> [on <target>]\n"
-            "        Cast a known spell, optionally on a target item.\n"
-            "  Game & Information:\n"
-            "    map\n"
-            "        Show a list of visited rooms and their exits.\n"
-            "    quit, exit\n"
-            "        Quit the game (with save prompt).\n"
-            "    help, ?\n"
-            "        Show this help message.\n"
+            "[bold]Available Commands:[/bold]\n"
+            "\n"
+            "[bold]Movement:[/bold]\n"
+            "  go <direction>, move <direction>, <direction>, <short_direction> (e.g., go north, n)\n"
+            "  enter <location>, go in, go inside\n"
+            "  leave <location>, exit <location>, go out\n"
+            "  climb <object>, ascend <object>\n"
+            "  descend <object>, go down <object>\n"
+            "  follow <path>, walk <path>\n"
+            "\n"
+            "[bold]Interaction:[/bold]\n"
+            "  talk to <character>, speak to <character>, converse with <character>\n"
+            "  ask <character> about <topic>, question <character> about <topic>\n"
+            "  give <item> to <character>, hand <item> to <character>\n"
+            "  show <item> to <character>\n"
+            "  trade <item> with <character>, exchange <item> with <character>\n"
+            "  buy <item> from <character>\n"
+            "\n"
+            "[bold]Examination:[/bold]\n"
+            "  look around, look, observe, survey, l\n"
+            "  look at <object>, inspect <object>, examine <object>, check <object>\n"
+            "  search, investigate\n"
+            "  listen to <object/location>\n"
+            "  smell, sniff <object>\n"
+            "  taste <item>\n"
+            "\n"
+            "[bold]Inventory Management:[/bold]\n"
+            "  take <item>, pick up <item>, grab <item>, get <item>\n"
+            "  drop <item>, discard <item>\n"
+            "  use <item>, use <item> with <item>\n"
+            "  eat <item>, consume <item>\n"
+            "  drink <item>\n"
+            "  equip <item>, wear <item>\n"
+            "  unequip <item>, remove <item>\n"
+            "  inventory, i, inv\n"
+            "  open <container>\n"
+            "  close <container>\n"
+            "\n"
+            "[bold]Magic:[/bold]\n"
+            "  cast <spell>\n"
+            "  cast <spell> on <object/character>\n"
+            "  learn <spell>\n"
+            "  spells\n"
+            "\n"
+            "[bold]Game Management:[/bold]\n"
+            "  save game, save\n"
+            "  load game, load\n"
+            "  help, ?\n"
+            "  quit, exit\n"
+            "  restart\n"
+            "  undo\n"
+            "  redo\n"
+            "\n"
+            "[bold]Miscellaneous:[/bold]\n"
+            "  wait, pause\n"
+            "  sleep, rest\n"
+            "  map\n"
+            "  stats\n"
         )
 
     def look(self) -> str:
@@ -236,7 +275,7 @@ class Game:
         if character_to_talk_to:
             return character_to_talk_to.talk_to(self.state)
         else:
-            return f"There is no one named '[character.name]{target}[/character.name]' here to talk to."
+            return f"There is no character named '[character.name]{target}[/character.name]' here to talk to."
 
     def split_command(self, command_args: str, command: str, delimiter: str) -> tuple:
         # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"
@@ -389,52 +428,52 @@ class Game:
 
     # --- Not Implemented Methods ---
     def ask(self, target: str) -> str:
-        raise NotImplementedError("Game.ask() is not yet implemented.")
+        return "The 'ask' command is not yet implemented."
 
     def show(self, item: str) -> str:
-        raise NotImplementedError("Game.show() is not yet implemented.")
+        return "The 'show' command is not yet implemented."
 
     def trade(self, item: str) -> str:
-        raise NotImplementedError("Game.trade() is not yet implemented.")
+        return "The 'trade' command is not yet implemented."
 
     def smell(self, target: str = None) -> str:
-        raise NotImplementedError("Game.smell() is not yet implemented.")
+        return "The 'smell' command is not yet implemented."
 
     def taste(self, item: str) -> str:
-        raise NotImplementedError("Game.taste() is not yet implemented.")
+        return "The 'taste' command is not yet implemented."
 
     def eat(self, item: str) -> str:
-        raise NotImplementedError("Game.eat() is not yet implemented.")
+        return "The 'eat' command is not yet implemented."
 
     def drink(self, item: str) -> str:
-        raise NotImplementedError("Game.drink() is not yet implemented.")
+        return "The 'drink' command is not yet implemented."
 
     def equip(self, item: str) -> str:
-        raise NotImplementedError("Game.equip() is not yet implemented.")
+        return "The 'equip' command is not yet implemented."
 
     def unequip(self, item: str) -> str:
-        raise NotImplementedError("Game.unequip() is not yet implemented.")
+        return "The 'unequip' command is not yet implemented."
 
     def close(self, target: str) -> str:
-        raise NotImplementedError("Game.close() is not yet implemented.")
+        return "The 'close' command is not yet implemented."
 
     def save(self) -> str:
-        raise NotImplementedError("Game.save() is not yet implemented.")
+        return "The 'save' command is not yet implemented."
 
     def load(self) -> str:
-        raise NotImplementedError("Game.load() is not yet implemented.")
+        return "The 'load' command is not yet implemented."
 
     def restart(self) -> str:
-        raise NotImplementedError("Game.restart() is not yet implemented.")
+        return "The 'restart' command is not yet implemented."
 
     def undo(self) -> str:
-        raise NotImplementedError("Game.undo() is not yet implemented.")
+        return "The 'undo' command is not yet implemented."
 
     def redo(self) -> str:
-        raise NotImplementedError("Game.redo() is not yet implemented.")
+        return "The 'redo' command is not yet implemented."
 
     def wait(self) -> str:
-        raise NotImplementedError("Game.wait() is not yet implemented.")
+        return "The 'wait' command is not yet implemented."
 
     def stats(self) -> str:
-        raise NotImplementedError("Game.stats() is not yet implemented.")
+        return "The 'stats' command is not yet implemented."

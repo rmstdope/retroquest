@@ -19,7 +19,7 @@ class RustyHoe(Item):
             if not player_has_coin:
                 coin_to_add = Coin()
                 game_state.add_item_to_inventory(coin_to_add) # Assumes GameState has add_item_to_inventory
-                return "You till the soil with the [item.name]rusty hoe[/item.name]. The ground is tough, and you unearth a small, tarnished [item.name]coin[/item.name]!"
+                return "You till the soil with the [item.name]rusty hoe[/item.name]. The ground is tough, and you unearth a small, tarnished [item.name]coin[/item.name]! You quickly pocket it."
             else:
                 return "You till the soil again with the [item.name]hoe[/item.name], but it seems you've already found what was hidden here."
         else:

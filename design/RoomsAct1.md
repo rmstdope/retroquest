@@ -3,7 +3,7 @@
 ## 1. Elior’s Cottage
 
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
-- **Items:** Lantern (start), bread (start), Elior’s journal (start), travel cloak (later).
+- **Items:** Lantern (start), bread (later), Elior’s journal (later), travel cloak (later).
 - **Spells:** `revive` (learned from Grandmother).
 - **Usable Items:** Lantern (lights dark areas), Elior's journal (read for story), hidden locket (give to Grandmother).
 - **Characters:** Grandmother (offers advice, can be spoken to).

@@ -25,8 +25,10 @@ class ShedDoor(Item):
 
     def examine(self) -> str:
         if self.locked:
-            return f"It's a sturdy wooden [item.name]{self.get_name()}[/item.name], locked tight. There's a keyhole visible."
-        return f"The [item.name]{self.get_name()}[/item.name] is unlocked and slightly ajar."
+            self.description = f"It's a sturdy wooden [item.name]{self.get_name()}[/item.name], locked tight. There's a keyhole visible."
+        else:
+            self.description = f"The [item.name]{self.get_name()}[/item.name] is unlocked and slightly ajar."
+        return super().examine()
 
     def use(self, game_state: GameState) -> str:
         """Attempt to use the door by itself, which is not a valid action."""
