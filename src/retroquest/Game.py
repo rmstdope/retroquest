@@ -1,4 +1,5 @@
 from prompt_toolkit import PromptSession
+from prompt_toolkit.completion import WordCompleter
 from rich.console import Console
 from rich.theme import Theme
 
@@ -24,7 +25,8 @@ class Game:
             "exits": "bold yellow"
         })
         self.console = Console(theme=custom_theme)
-        self.session = PromptSession()
+        self.completer = WordCompleter()
+        self.session = PromptSession(completer=self.completer, complete_while_typing=True)
         self.rooms = rooms
         self.is_running = True
         self.state = GameState(starting_room, all_rooms=self.rooms) # Pass all_rooms
@@ -72,11 +74,49 @@ class Game:
         self.console.print("\nLet's get started! (Type 'help' for a list of commands.)\n")
         self.session.prompt('Press Enter to continue...')
 
+    def get_all_possible_words(self):
+        commands = [
+            "go", "move", "north", "south", "east", "west", "n", "s", "e", "w",
+            "enter", "in", "inside", "leave", "exit", "out", "climb", "ascend", "up",
+            "descend", "down", "follow", "walk", "talk", "to", "speak", "converse", "with",
+            "ask", "question", "about", "give", "hand", "show", "trade", "exchange", "buy", "from",
+            "look", "around", "at", "observe", "survey", "l", "inspect", "examine", "check",
+            "read", "search", "investigate", "listen", "smell", "sniff", "taste",
+            "take", "pick", "up", "grab", "get", "drop", "discard", "use",
+            "eat", "consume", "drink", "equip", "wear", "unequip", "remove",
+            "inventory", "i", "inv", "open", "close", "cast", "on", "learn", "spells",
+            "save", "game", "load", "help", "?", "quit", "restart", "undo", "redo",
+            "wait", "pause", "sleep", "rest", "map", "stats"
+        ]
+        
+        words = set(commands)
+        
+        for item in self.state.current_room.get_items():
+            words.update(item.get_name().lower().split())
+            if item.get_short_name():
+                words.update(item.get_short_name().lower().split())
+
+        for item in self.state.inventory:
+            words.update(item.get_name().lower().split())
+            if item.get_short_name():
+                words.update(item.get_short_name().lower().split())
+
+        for char in self.state.current_room.get_characters():
+            words.update(char.get_name().lower().split())
+            
+        for spell in self.state.known_spells:
+            words.update(spell.get_name().lower().split())
+            
+        words.update(self.state.current_room.get_exits().keys())
+        
+        return list(words)
+
     def run(self) -> None:
         self.print_intro()
         self.console.clear()
         self.console.print(self.state.current_room.describe() + "\n")
         while self.is_running:
+            self.completer.words = self.get_all_possible_words()
             user_input = self.session.prompt('> ')
             self.state.history.append(user_input)
             response = self.handle_command(user_input)
