@@ -1,4 +1,6 @@
 from prompt_toolkit import PromptSession
+from rich.console import Console
+from rich.theme import Theme
 
 from .spells import Spell
 from .characters import Character
@@ -12,6 +14,15 @@ class Game:
     Handles the game loop, command parsing, and room transitions.
     """
     def __init__(self, starting_room, rooms):
+        custom_theme = Theme({
+            "character.name": "bold blue",
+            "dialogue": "italic cyan",
+            "item.name": "bold green",
+            "spell.name": "bold magenta",
+            "room.name": "bold cyan",
+            "event": "dim"
+        })
+        self.console = Console(theme=custom_theme)
         self.session = PromptSession()
         self.rooms = rooms
         self.is_running = True
@@ -22,8 +33,10 @@ class Game:
         return self.command_parser.parse(command)
 
     def print_intro(self):
-        print("Welcome to")
-        print(r'''
+        self.console.print("\033[47;30m", end="")
+        self.console.clear()
+        self.console.print("Welcome to")
+        self.console.print(r'''
 ########  ######### ######### ########   #######   #######  ##     ## #########  #######  #########
 ##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##     ##    ##
 ##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##           ##
@@ -31,10 +44,9 @@ class Game:
 ##   ##   ##           ##     ##   ##   ##     ## ##  ## ## ##     ## ##               ##    ##
 ##    ##  ##           ##     ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
 ##     ## #########    ##     ##     ##  #######   #######   #######  #########  #######     ##
-''')
-        print(" - The Awakening!\n")
+''', style="bold yellow")
         # Revised prologue: do NOT mention the amulet being given yet
-        print(
+        self.console.print(
             "You are Elior, a humble farmer boy living in the quiet village of Willowbrook on the outskirts of Eldoria. "
             "Raised by your grandmother after your parents vanished mysteriously, your life is simple—tending crops and caring for animals. "
             "One stormy night, a strange light appears in the sky, and you dream of a shadowy figure calling your name.\n"
@@ -48,18 +60,18 @@ class Game:
             "A distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. "
             "With questions swirling in your mind, you take your first step into the unknown.\n"
         )
-        print("Type 'help' for a list of commands.")
+        self.console.print("Type 'help' for a list of commands.")
 
     def run(self) -> None:
         self.print_intro()
-        print(self.state.current_room.describe() + "\n")
+        self.console.print(self.state.current_room.describe() + "\n")
         while self.is_running:
             user_input = self.session.prompt('> ')
             self.state.history.append(user_input)
             response = self.handle_command(user_input)
             # Print a separator line before any output after a command
             if response:
-                print('\n' + response + '\n')
+                self.console.print('\n' + response + '\n')
 
     def find_character(self, target) -> Character:
         character_to_examine = None
@@ -95,7 +107,7 @@ class Game:
             if next_room_key in self.rooms:
                 self.state.current_room = self.rooms[next_room_key]
                 self.state.mark_visited(self.state.current_room)
-                return f"[You move {direction} to {self.state.current_room.name}.]\n\n" + self.state.current_room.describe()
+                return f"[event][You move {direction} to [room.name]{self.state.current_room.name}[/room.name].][/event]\n\n" + self.state.current_room.describe()
             else:
                 return "That exit leads nowhere (room not found)."
         else:
@@ -146,7 +158,7 @@ class Game:
         character_to_examine = self.find_character(target)
         if character_to_examine:
             return character_to_examine.get_description()
-        return f"You don't see a '{target}' here."
+        return f"You don't see a '[item.name]{target}[/item.name]' here."
 
     def map(self) -> str:
         # Print all visited rooms and their exits, each exit on a new indented line
@@ -154,17 +166,17 @@ class Game:
         room_objs = {name: room for name, room in self.rooms.items() if room.name in visited}
         if not room_objs:
             return "No rooms visited yet."
-        output = ["Visited Rooms and Exits:"]
+        output = ["[bold]Visited Rooms and Exits:[/bold]"]
         for name, room in room_objs.items():
             exits = room.get_exits()
-            output.append(f"- {room.name}:")
+            output.append(f"- [room.name]{room.name}[/room.name]:")
             if exits:
                 for direction, dest in exits.items():
                     dest_name = self.rooms[dest].name if dest in self.rooms else dest
-                    output.append(f"    {direction} -> {dest_name}")
+                    output.append(f"    {direction} -> [room.name]{dest_name}[/room.name]")
             else:
                 output.append("    No exits")
-        return output
+        return "\n".join(output)
 
     def unknown(self, command: str) -> str:
         return f"I don't understand the command: '{command}'. Try 'help' for a list of valid commands."
@@ -180,7 +192,7 @@ class Game:
                 self.is_running = False
                 return "Goodbye!"
             else:
-                print("Please answer 'yes' or 'no'.")
+                self.console.print("Please answer 'yes' or 'no'.")
                 continue
 
     def drop(self, item: str) -> str:
@@ -188,22 +200,22 @@ class Game:
         if item_to_drop:
             self.state.inventory.remove(item_to_drop)
             self.state.current_room.items.append(item_to_drop)
-            return f"You drop the {item_to_drop.get_name()}."
-        return f"You don't have a '{item}' to drop."
+            return f"You drop the [item.name]{item_to_drop.get_name()}[/item.name]."
+        return f"You don't have a '[item.name]{item}[/item.name]' to drop."
 
     def take(self, item: str) -> str:
         item_to_take = self.find_item(item, look_in_inventory=False, look_in_room=True)
         if not item_to_take:
-            return f"There is no '{item}' here to take."
+            return f"There is no '[item.name]{item}[/item.name]' here to take."
         if not item_to_take.can_be_carried():
-            return f"You can't take the {item_to_take.get_name()}."
+            return f"You can't take the [item.name]{item_to_take.get_name()}[/item.name]."
         self.state.current_room.items.remove(item_to_take)
         self.state.inventory.append(item_to_take)
         
         # Call picked_up on the item
         pickup_message = item_to_take.picked_up(self.state)
         
-        response = f"You take the {item_to_take.get_name()}."
+        response = f"You take the [item.name]{item_to_take.get_name()}[/item.name]."
         if pickup_message:
             response += " " + pickup_message
         return response
@@ -211,9 +223,9 @@ class Game:
     def inventory(self) -> str:
         if not self.state.inventory:
             return "Your inventory is empty."
-        lines = ["You are carrying:"]
+        lines = ["[bold]You are carrying:[/bold]"]
         for item in self.state.inventory:
-            lines.append(f"- {item.get_name()}")
+            lines.append(f"- [item.name]{item.get_name()}[/item.name]")
         return "\n".join(lines)
 
     def talk(self, target: str) -> str:
@@ -223,7 +235,7 @@ class Game:
         if character_to_talk_to:
             return character_to_talk_to.talk_to(self.state)
         else:
-            return f"There is no one named '{target}' here to talk to."
+            return f"There is no one named '[character.name]{target}[/character.name]' here to talk to."
 
     def split_command(self, command_args: str, command: str, delimiter: str) -> tuple:
         # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"
@@ -248,12 +260,12 @@ class Game:
         # Check if item is in inventory
         item_to_give = self.find_item(item_name, look_in_inventory=True, look_in_room=False)
         if not item_to_give:
-            return f"You don't have any '{item_name}'."
+            return f"You don't have any '[item.name]{item_name}[/item.name]'."
 
         # Check if character is in the room
         character_to_receive = self.find_character(character_name)
         if not character_to_receive:
-            return f"'{character_name.capitalize()}' is not here."
+            return f"'[character.name]{character_name.capitalize()}[/character.name]' is not here."
 
         # Call give_item on the character
         return character_to_receive.give_item(self.state, item_to_give)
@@ -267,7 +279,7 @@ class Game:
         # Check if character is in the room
         character_to_buy_from = self.find_character(character_name)
         if not character_to_buy_from:
-            return f"'{character_name.capitalize()}' is not here."
+            return f"'[character.name]{character_name.capitalize()}[/character.name]' is not here."
 
         return character_to_buy_from.buy_item(item_name, self.state)
 
@@ -282,23 +294,23 @@ class Game:
             # If an item is not meant to be read, its read() method should return an appropriate message.
             return item_to_read.read(self.state)
         else:
-            return f"You don't see a '{item}' to read here or in your inventory."
+            return f"You don't see a '[item.name]{item}[/item.name]' to read here or in your inventory."
 
     def use(self, item_name_1: str, item_name_2: str = None) -> str:
         item_obj_1 = self.find_item(item_name_1, look_in_inventory=True, look_in_room=True)
 
         if not item_obj_1:
-            return f"You don't have a '{item_name_1}' to use, and there isn't one here."
+            return f"You don't have a '[item.name]{item_name_1}[/item.name]' to use, and there isn't one here."
 
         # --- Handle two-item usage ---
         if item_name_2:
             item_obj_2 = self.find_item(item_name_2, look_in_inventory=True, look_in_room=True)
             
             if not item_obj_2:
-                return f"You don't see a '{item_name_2}' to use with {item_obj_1.get_name()}."
+                return f"You don't see a '[item.name]{item_name_2}[/item.name]' to use with the [item.name]{item_obj_1.get_name()}[/item.name]."
 
             if item_obj_1 == item_obj_2:
-                return f"You can't use the {item_obj_1.get_name()} with itself."
+                return f"You can't use the [item.name]{item_obj_1.get_name()}[/item.name] with itself."
 
             return item_obj_1.use_with(self.state, item_obj_2)
 
@@ -321,13 +333,13 @@ class Game:
                 break
         
         if not spell_to_cast:
-            return f"You don't know the spell '{spell_name}'."
+            return f"You don't know the spell '[spell.name]{spell_name}[/spell.name]'."
 
         target_item = None
         if target_name:
             target_item = self.find_item(target_name, look_in_inventory=True, look_in_room=True)
             if not target_item:
-                return f"You don't see a '{target_name}' to cast {spell_name} on."
+                return f"You don't see a '[item.name]{target_name}[/item.name]' to cast [spell.name]{spell_name}[/spell.name] on."
             return spell_to_cast.cast(self.state, target_item) # Pass game_state and target_item
         else:
             # Spells that don't require a target
@@ -336,17 +348,17 @@ class Game:
     def learn(self, spell: Spell) -> str:
         if spell not in self.state.known_spells:
             self.state.known_spells.append(spell)
-            return f"You have learned the spell: {spell.get_name()}!"
+            return f"You have learned the spell: [spell.name]{spell.get_name()}[/spell.name]!"
         else:
-            return f"You already know the spell: {spell.get_name()}."
+            return f"You already know the spell: [spell.name]{spell.get_name()}[/spell.name]."
 
     def spells(self) -> str: # Method to list known spells
         if not self.state.known_spells:
             return "You don't know any spells yet."
         
-        output = ["Known Spells:"]
+        output = ["[bold]Known Spells:[/bold]"]
         for spell_obj in self.state.known_spells:
-            output.append(f"  - {spell_obj.get_name()}: {spell_obj.get_description()}")
+            output.append(f"  - [spell.name]{spell_obj.get_name()}[/spell.name]: {spell_obj.get_description()}")
         return "\n".join(output)
 
     def search(self) -> str:
@@ -360,7 +372,7 @@ class Game:
         if item_to_listen_to:
             return item_to_listen_to.listen(self.state)
         else:
-            return f"You don\'t see a '{target}' to listen to here or in your inventory."
+            return f"You don't see a '[item.name]{target}[/item.name]' to listen to here or in your inventory."
 
     def rest(self) -> str:
         return self.state.current_room.rest(self.state)
@@ -372,7 +384,7 @@ class Game:
         if item_to_open:
             return item_to_open.open(self.state) # Pass game_state to the item's open method
         else:
-            return f"You don't see a '{target}' to open here or in your inventory."
+            return f"You don't see a '[item.name]{target}[/item.name]' to open here or in your inventory."
 
     # --- Not Implemented Methods ---
     def ask(self, target: str) -> str:
