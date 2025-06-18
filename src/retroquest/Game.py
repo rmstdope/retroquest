@@ -21,8 +21,18 @@ class Game:
     def handle_command(self, command: str) -> str:
         return self.command_parser.parse(command)
 
-    def run(self) -> None:
-        print(f"Welcome to RetroQuest: The Awakening!\n")
+    def print_intro(self):
+        print("Welcome to")
+        print(r'''
+########  ######### ######### ########   #######   #######  ##     ## #########  #######  #########
+##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##     ##    ##
+##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##           ##
+########  #######      ##     ########  ##     ## ##     ## ##     ## #######    #######     ##
+##   ##   ##           ##     ##   ##   ##     ## ##  ## ## ##     ## ##               ##    ##
+##    ##  ##           ##     ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
+##     ## #########    ##     ##     ##  #######   #######   #######  #########  #######     ##
+''')
+        print(" - The Awakening!\n")
         # Revised prologue: do NOT mention the amulet being given yet
         print(
             "You are Elior, a humble farmer boy living in the quiet village of Willowbrook on the outskirts of Eldoria. "
@@ -38,6 +48,10 @@ class Game:
             "A distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. "
             "With questions swirling in your mind, you take your first step into the unknown.\n"
         )
+        print("Type 'help' for a list of commands.")
+
+    def run(self) -> None:
+        self.print_intro()
         print(self.state.current_room.describe() + "\n")
         while self.is_running:
             user_input = self.session.prompt('> ')
