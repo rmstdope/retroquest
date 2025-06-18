@@ -1,5 +1,5 @@
 from prompt_toolkit import PromptSession
-from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.completion import NestedCompleter
 from rich.console import Console
 from rich.theme import Theme
 
@@ -25,7 +25,7 @@ class Game:
             "exits": "bold yellow"
         })
         self.console = Console(theme=custom_theme)
-        self.completer = WordCompleter()
+        self.completer = NestedCompleter.from_nested_dict({}) 
         self.session = PromptSession(completer=self.completer, complete_while_typing=True)
         self.rooms = rooms
         self.is_running = True
@@ -74,49 +74,122 @@ class Game:
         self.console.print("\nLet's get started! (Type 'help' for a list of commands.)\n")
         self.session.prompt('Press Enter to continue...')
 
-    def get_all_possible_words(self):
-        commands = [
-            "go", "move", "north", "south", "east", "west", "n", "s", "e", "w",
-            "enter", "in", "inside", "leave", "exit", "out", "climb", "ascend", "up",
-            "descend", "down", "follow", "walk", "talk", "to", "speak", "converse", "with",
-            "ask", "question", "about", "give", "hand", "show", "trade", "exchange", "buy", "from",
-            "look", "around", "at", "observe", "survey", "l", "inspect", "examine", "check",
-            "read", "search", "investigate", "listen", "smell", "sniff", "taste",
-            "take", "pick", "up", "grab", "get", "drop", "discard", "use",
-            "eat", "consume", "drink", "equip", "wear", "unequip", "remove",
-            "inventory", "i", "inv", "open", "close", "cast", "on", "learn", "spells",
-            "save", "game", "load", "help", "?", "quit", "restart", "undo", "redo",
-            "wait", "pause", "sleep", "rest", "map", "stats"
-        ]
-        
-        words = set(commands)
-        
-        for item in self.state.current_room.get_items():
-            words.update(item.get_name().lower().split())
-            if item.get_short_name():
-                words.update(item.get_short_name().lower().split())
+    def get_command_completions(self):
+        all_items = self.state.current_room.get_items() + self.state.inventory
+        item_names = {item.get_name().lower(): None for item in all_items}
+        item_short_names = {item.get_short_name().lower(): None for item in all_items if item.get_short_name()}
+        all_item_names = {**item_names, **item_short_names}
 
-        for item in self.state.inventory:
-            words.update(item.get_name().lower().split())
-            if item.get_short_name():
-                words.update(item.get_short_name().lower().split())
+        inventory_item_names = {item.get_name().lower(): None for item in self.state.inventory}
+        inventory_item_short_names = {item.get_short_name().lower(): None for item in self.state.inventory if item.get_short_name()}
+        all_inventory_item_names = {**inventory_item_names, **inventory_item_short_names}
 
-        for char in self.state.current_room.get_characters():
-            words.update(char.get_name().lower().split())
-            
-        for spell in self.state.known_spells:
-            words.update(spell.get_name().lower().split())
-            
-        words.update(self.state.current_room.get_exits().keys())
-        
-        return list(words)
+        room_item_names = {item.get_name().lower(): None for item in self.state.current_room.get_items()}
+        room_item_short_names = {item.get_short_name().lower(): None for item in self.state.current_room.get_items() if item.get_short_name()}
+        all_room_item_names = {**room_item_names, **room_item_short_names}
+
+        character_names = {char.get_name().lower(): None for char in self.state.current_room.get_characters()}
+
+        spell_names = {spell.get_name().lower(): None for spell in self.state.known_spells}
+
+        exit_names = {direction: None for direction in self.state.current_room.get_exits()}
+
+        completions = {
+            'go': exit_names,
+            'move': exit_names,
+            'n': None, 's': None, 'e': None, 'w': None,
+            'north': None, 'south': None, 'east': None, 'west': None,
+            'enter': None, 
+            'leave': None,
+            'exit': None,
+            'climb': all_item_names,
+            'ascend': all_item_names,
+            'descend': all_item_names,
+            'follow': None, 
+            'walk': None,
+
+            'talk': {'to': character_names},
+            'speak': {'to': character_names},
+            'converse': {'with': character_names},
+            'ask': {char: {'about': None} for char in character_names},
+            'question': {char: {'about': None} for char in character_names},
+            'give': {item: {'to': character_names} for item in all_inventory_item_names},
+            'hand': {item: {'to': character_names} for item in all_inventory_item_names},
+            'show': {item: {'to': character_names} for item in all_inventory_item_names},
+            'trade': {item: {'with': character_names} for item in all_inventory_item_names},
+            'exchange': {item: {'with': character_names} for item in all_inventory_item_names},
+            'buy': {item: {'from': character_names} for item in all_item_names},
+
+            'look': {
+                'around': None,
+                'at': {**all_item_names, **character_names},
+            },
+            'l': None,
+            'observe': None,
+            'survey': None,
+            'inspect': {**all_item_names, **character_names},
+            'examine': {**all_item_names, **character_names},
+            'check': {**all_item_names, **character_names},
+            'read': all_item_names,
+            'search': None,
+            'investigate': None,
+            'listen': {'to': all_item_names},
+            'smell': all_item_names,
+            'sniff': all_item_names,
+            'taste': all_inventory_item_names,
+
+            'take': all_room_item_names,
+            'pick': {'up': all_room_item_names},
+            'grab': all_room_item_names,
+            'get': all_room_item_names,
+            'drop': all_inventory_item_names,
+            'discard': all_inventory_item_names,
+            'use': {
+                **{k: {'with': all_item_names} for k in all_item_names}, 
+                **all_item_names
+            },
+            'eat': all_inventory_item_names,
+            'consume': all_inventory_item_names,
+            'drink': all_inventory_item_names,
+            'equip': all_inventory_item_names,
+            'wear': all_inventory_item_names,
+            'unequip': all_inventory_item_names,
+            'remove': all_inventory_item_names,
+            'inventory': None, 'i': None, 'inv': None,
+            'open': all_item_names,
+            'close': all_item_names,
+
+            'cast': {
+                **{k: {'on': {**all_item_names, **character_names}} for k in spell_names},
+                **spell_names
+            },
+            'learn': None, 
+            'spells': None,
+
+            'save': {'game': None},
+            'load': {'game': None},
+            'help': None, '?': None,
+            'quit': None, 'exit': None,
+            'restart': None,
+            'undo': None,
+            'redo': None,
+
+            'wait': None,
+            'pause': None,
+            'sleep': None,
+            'rest': None,
+            'map': None,
+            'stats': None,
+        }
+        return completions
 
     def run(self) -> None:
         self.print_intro()
         self.console.clear()
         self.console.print(self.state.current_room.describe() + "\n")
         while self.is_running:
-            self.completer.words = self.get_all_possible_words()
+            completions = self.get_command_completions()
+            self.session.completer = NestedCompleter.from_nested_dict(completions)
             user_input = self.session.prompt('> ')
             self.state.history.append(user_input)
             response = self.handle_command(user_input)
