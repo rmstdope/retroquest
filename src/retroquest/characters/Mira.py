@@ -21,28 +21,27 @@ class Mira(Character):
         self.amulet_given = False
         
         self.dialogue_states = {
-            "initial": "Mira smiles warmly as you enter her fragrant hut. 'Welcome, Elior. I sense a stirring of the old powers within you. What brings you to my door?'",
-            "quest_conditions_not_met": "Mira looks at you thoughtfully. 'You have made progress, Elior, but you are not yet fully prepared for what lies ahead. Ensure you have all necessary items, learned the essential spells, and received a blessing for your journey.'",
-            "quest_complete_amulet_given": "Mira smiles, a deep wisdom in her eyes. 'You have done well, Elior. You have gathered your supplies, honed your magical skills, and prepared your spirit. You are ready.' She presents you with the Ancient Amulet. 'May this guide and protect you.' (Ancient Amulet added to inventory!)",
-            "post_amulet": "Mira looks at you kindly. 'The journey of a thousand miles begins with a single step. You have taken many already. Go now, and may your path be clear.'"
+            "initial": f"[dialogue][character.name]{self.get_name()}[/character.name] smiles warmly as you enter her fragrant hut. 'Welcome, [character.name]Elior[/character.name]. I sense a stirring of the old powers within you. What brings you to my door?'[/dialogue]",
+            "quest_conditions_not_met": f"[dialogue][character.name]{self.get_name()}[/character.name] looks at you thoughtfully. 'You have made progress, [character.name]Elior[/character.name], but you are not yet fully prepared for what lies ahead. Ensure you have all necessary items, learned the essential spells, and received a blessing for your journey.'[/dialogue]",
+            "quest_complete_amulet_given": f"[dialogue][character.name]{self.get_name()}[/character.name] smiles, a deep wisdom in her eyes. 'You have done well, [character.name]Elior[/character.name]. You have gathered your supplies, honed your magical skills, and prepared your spirit. You are ready.'[/dialogue] She presents you with the [item.name]Ancient Amulet[/item.name]. [dialogue]'May this guide and protect you.'[/dialogue] [event]([item.name]Ancient Amulet[/item.name] added to inventory!)[/event]",
+            "post_amulet": f"[dialogue][character.name]{self.get_name()}[/character.name] looks at you kindly. 'The journey of a thousand miles begins with a single step. You have taken many already. Go now, and may your path be clear.'[/dialogue]"
         }
-        # self.current_dialogue_key removed as it's determined dynamically in talk_to
 
     def _check_quest_conditions(self, game_state: GameState) -> bool:
         # Items
-        has_travel_cloak = game_state.has_item("Travel Cloak")
+        has_travel_cloak = game_state.has_item("travel cloak")
         # Food items
-        has_wild_berries = game_state.has_item("Wild Berries")
-        has_apple = game_state.has_item("Apple")
-        has_egg = game_state.has_item("Egg")
-        has_carrot = game_state.has_item("Carrot")
+        has_wild_berries = game_state.has_item("wild berries")
+        has_apple = game_state.has_item("apple")
+        has_egg = game_state.has_item("egg")
+        has_carrot = game_state.has_item("fresh carrot")
         all_food_collected = has_wild_berries and has_apple and has_egg and has_carrot
 
-        has_wandering_boots = game_state.has_item("Wandering Boots")
-        has_map = game_state.has_item("Map")
-        
+        has_wandering_boots = game_state.has_item("wandering boots")
+        has_map = game_state.has_item("map")
+
         # Spells
-        required_spells = ["Revive", "Purify", "Bless", "Heal", "Unlock", "Light", "Grow"]
+        required_spells = ["revive", "purify", "bless", "heal", "unlock", "light", "grow"]
         knows_all_spells = all(game_state.has_spell(spell_name) for spell_name in required_spells)
         
         # Action: Bless cast for journey (assuming this flag is set elsewhere when player casts bless on self)
@@ -63,20 +62,20 @@ class Mira(Character):
 
             # This is the combined dialogue for receiving flower, teaching spells, and giving quest.
             return (
-                "Mira smiles, accepting the flower. 'This bloom,' she says, her voice soft, 'is a testament to your growing bond with the living world, Elior. "
-                "It shows you are ready to truly channel the energies around us.' She then guides you through ancient words and gestures, awakening your innate abilities. "
-                "You feel a new understanding dawn as she imparts the knowledge of `heal` to mend, `unlock` to reveal, and `light` to illuminate the path. "
-                "'The spark was always within you,' Mira explains, 'but now, you can truly command these magics.' "
-                "With your newfound power, she tasks you with preparing for the journey ahead, mentioning that the Ancient Amulet will be yours "
-                "once you are truly ready. She tells you she needs:\\\\n"
-                "- Warm clothing (like a `travel cloak`)\\\\n"
-                "- Magical protection (cast `bless` on yourself)\\\\n"
-                "- Food for the road (like `wild berries`, `apple`, `egg`, `carrot`)\\\\n"
-                "- Sturdy footwear (perhaps `wandering boots`)\\\\n"
-                "- A `map` to find your way\\\\n"
-                "- To have learned all the basic magic the village elders can teach you."
+                "[dialogue][character.name]Mira[/character.name] smiles, accepting the [item.name]flower[/item.name]. 'This bloom,' she says, her voice soft, 'is a testament to your growing bond with the living world, Elior. "
+                "It shows you are ready to truly channel the energies around us.'[/dialogue] She then guides you through ancient words and gestures, awakening your innate abilities. "
+                "[event]You feel a new understanding dawn as she imparts the knowledge of [spell.name]heal[/spell.name] to mend, [spell.name]unlock[/spell.name] to reveal, and [spell.name]light[/spell.name] to illuminate the path.[/event] "
+                "[dialogue]'The spark was always within you,' [character.name]Mira[/character.name] explains, 'but now, you can truly command these magics.' "
+                "With your newfound power, she tasks you with preparing for the journey ahead, mentioning that the [item.name]Ancient Amulet[/item.name] will be yours "
+                "once you are truly ready. She tells you she needs:\n"
+                "- Warm clothing (like a [item.name]travel cloak[/item.name])\n"
+                "- Magical protection (cast [spell.name]bless[/spell.name] on yourself)\n"
+                "- Food for the road (like [item.name]wild berries[/item.name], [item.name]apple[/item.name], [item.name]egg[/item.name])\n"
+                "- Sturdy footwear (perhaps [item.name]wandering boots[/item.name])\n"
+                "- A [item.name]map[/item.name] to find your way\n"
+                "- To have learned all the basic magic the village elders can teach you.[/dialogue]"
             )
-        return f"Mira looks at the {item.name} but shakes her head gently. 'I have no need for this, child.'"
+        return f"[dialogue][character.name]Mira[/character.name] looks at the [item.name]{item.name}[/item.name] but shakes her head gently. 'I have no need for this, child.'[/dialogue]"
 
     def talk_to(self, game_state: GameState) -> str:
         # 1. Give the post_amulet message if amulet is in inventory

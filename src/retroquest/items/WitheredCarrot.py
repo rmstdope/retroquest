@@ -13,4 +13,4 @@ class WitheredCarrot(Item):
         self.name = "Fresh carrot"
         self.short_name = "carrot" # Keep short_name consistent or update if needed
         self.description = "A vibrant, healthy carrot, freshly revived. It looks delicious and full of nutrients."
-        return f"The {self.name.lower()} looks vibrant and healthy!"
+        return f"The [item.name]{self.name.lower()}[/item.name] looks vibrant and healthy!"

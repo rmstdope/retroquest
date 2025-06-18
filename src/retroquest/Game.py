@@ -159,7 +159,7 @@ class Game:
         character_to_examine = self.find_character(target)
         if character_to_examine:
             return character_to_examine.get_description()
-        return f"You don't see a '[item.name]{target}[/item.name]' here."
+        return f"You don't see any '{target}' here."
 
     def map(self) -> str:
         # Print all visited rooms and their exits, each exit on a new indented line
@@ -202,12 +202,12 @@ class Game:
             self.state.inventory.remove(item_to_drop)
             self.state.current_room.items.append(item_to_drop)
             return f"You drop the [item.name]{item_to_drop.get_name()}[/item.name]."
-        return f"You don't have a '[item.name]{item}[/item.name]' to drop."
+        return f"You don't have a '{item}' to drop."
 
     def take(self, item: str) -> str:
         item_to_take = self.find_item(item, look_in_inventory=False, look_in_room=True)
         if not item_to_take:
-            return f"There is no '[item.name]{item}[/item.name]' here to take."
+            return f"There is no '{item}' here to take."
         if not item_to_take.can_be_carried():
             return f"You can't take the [item.name]{item_to_take.get_name()}[/item.name]."
         self.state.current_room.items.remove(item_to_take)
@@ -261,12 +261,12 @@ class Game:
         # Check if item is in inventory
         item_to_give = self.find_item(item_name, look_in_inventory=True, look_in_room=False)
         if not item_to_give:
-            return f"You don't have any '[item.name]{item_name}[/item.name]'."
+            return f"You don't have any '{item_name}' to give."
 
         # Check if character is in the room
         character_to_receive = self.find_character(character_name)
         if not character_to_receive:
-            return f"'[character.name]{character_name.capitalize()}[/character.name]' is not here."
+            return f"There is no character named '{character_name.capitalize()}' here."
 
         # Call give_item on the character
         return character_to_receive.give_item(self.state, item_to_give)
@@ -280,7 +280,7 @@ class Game:
         # Check if character is in the room
         character_to_buy_from = self.find_character(character_name)
         if not character_to_buy_from:
-            return f"'[character.name]{character_name.capitalize()}[/character.name]' is not here."
+            return f"There is no character named '{character_name.capitalize()}' here."
 
         return character_to_buy_from.buy_item(item_name, self.state)
 
@@ -295,20 +295,20 @@ class Game:
             # If an item is not meant to be read, its read() method should return an appropriate message.
             return item_to_read.read(self.state)
         else:
-            return f"You don't see a '[item.name]{item}[/item.name]' to read here or in your inventory."
+            return f"You don't see a '{item}' to read here or in your inventory."
 
     def use(self, item_name_1: str, item_name_2: str = None) -> str:
         item_obj_1 = self.find_item(item_name_1, look_in_inventory=True, look_in_room=True)
 
         if not item_obj_1:
-            return f"You don't have a '[item.name]{item_name_1}[/item.name]' to use, and there isn't one here."
+            return f"You don't have a '{item_name_1}' to use, and there isn't one here."
 
         # --- Handle two-item usage ---
         if item_name_2:
             item_obj_2 = self.find_item(item_name_2, look_in_inventory=True, look_in_room=True)
             
             if not item_obj_2:
-                return f"You don't see a '[item.name]{item_name_2}[/item.name]' to use with the [item.name]{item_obj_1.get_name()}[/item.name]."
+                return f"You don't see a '{item_name_2}' to use with the [item.name]{item_obj_1.get_name()}[/item.name]."
 
             if item_obj_1 == item_obj_2:
                 return f"You can't use the [item.name]{item_obj_1.get_name()}[/item.name] with itself."
@@ -334,13 +334,13 @@ class Game:
                 break
         
         if not spell_to_cast:
-            return f"You don't know the spell '[spell.name]{spell_name}[/spell.name]'."
+            return f"You don't know any spell called '{spell_name}'."
 
         target_item = None
         if target_name:
             target_item = self.find_item(target_name, look_in_inventory=True, look_in_room=True)
             if not target_item:
-                return f"You don't see a '[item.name]{target_name}[/item.name]' to cast [spell.name]{spell_name}[/spell.name] on."
+                return f"You don't see a '{target_name}' to cast [spell.name]{spell_name}[/spell.name] on."
             return spell_to_cast.cast(self.state, target_item) # Pass game_state and target_item
         else:
             # Spells that don't require a target
@@ -349,9 +349,9 @@ class Game:
     def learn(self, spell: Spell) -> str:
         if spell not in self.state.known_spells:
             self.state.known_spells.append(spell)
-            return f"You have learned the spell: [spell.name]{spell.get_name()}[/spell.name]!"
+            return f"You have learned the [spell.name]{spell.get_name()}[/spell.name] spell!"
         else:
-            return f"You already know the spell: [spell.name]{spell.get_name()}[/spell.name]."
+            return f"You already know the [spell.name]{spell.get_name()}[/spell.name] spell."
 
     def spells(self) -> str: # Method to list known spells
         if not self.state.known_spells:
@@ -373,7 +373,7 @@ class Game:
         if item_to_listen_to:
             return item_to_listen_to.listen(self.state)
         else:
-            return f"You don't see a '[item.name]{target}[/item.name]' to listen to here or in your inventory."
+            return f"You don't see a '{target}' to listen to here or in your inventory."
 
     def rest(self) -> str:
         return self.state.current_room.rest(self.state)
@@ -385,7 +385,7 @@ class Game:
         if item_to_open:
             return item_to_open.open(self.state) # Pass game_state to the item's open method
         else:
-            return f"You don't see a '[item.name]{target}[/item.name]' to open here or in your inventory."
+            return f"You don't see a '{target}' to open here or in your inventory."
 
     # --- Not Implemented Methods ---
     def ask(self, target: str) -> str:

@@ -7,16 +7,16 @@ from ..GameState import GameState # Added import
 class Fisherman(Character):
     def __init__(self) -> None:
         super().__init__(
-            name="Fisherman",
+            name="fisherman",
             description="A weathered old man who spends his days by the riverbank, fishing and humming quiet tunes. He knows much about the river and its secrets."
         )
         self.knows_fishing_basics = False
         self.received_fish = False
         self.dialogue_states = {
-            "initial": "The fisherman nods at you. 'The river's been a bit strange lately. Not many fish biting, and my arm... well, it's seen better days.'",
-            "taught_fishing": "The fisherman smiles. 'Good to see you trying your luck with the rod. Any luck yet?'",
-            "received_fish_thanks": "The fisherman's eyes light up. 'Ah, a fine catch! Thank you kindly. It's been a while since I've had a fresh river fish.'",
-            "taught_spells": "The fisherman looks out over the water. 'The river has many moods. Treat it with respect, and it might share its secrets with you.'"
+            "initial": "[dialogue]The [character.name]fisherman[/character.name] nods at you. 'The river\'s been a bit strange lately. Not many fish biting, and my arm... well, it\'s seen better days.'[/dialogue]",
+            "taught_fishing": "[dialogue]The [character.name]fisherman[/character.name] smiles. 'Good to see you trying your luck with the rod. Any luck yet?'[/dialogue]",
+            "received_fish_thanks": "[dialogue]The [character.name]fisherman[/character.name]'s eyes light up. 'Ah, a fine catch! Thank you kindly. It\'s been a while since I\'ve had a fresh river fish.'[/dialogue]",
+            "taught_spells": "[dialogue]The [character.name]fisherman[/character.name] looks out over the water. 'The river has many moods. Treat it with respect, and it might share its secrets with you.'[/dialogue]"
         }
         self.current_dialogue_key = "initial"
 
@@ -29,7 +29,7 @@ class Fisherman(Character):
                 game_state.set_story_flag("learned_fishing_basics", True)
                 self.knows_fishing_basics = True # Keep this for internal state if needed by other dialogue
                 self.current_dialogue_key = "taught_fishing"
-                return "The fisherman notices your fishing rod. 'Ah, a fellow angler! My arm's busted, can't fish myself. But I can tell you a thing or two. Cast your line near the reeds, that's where they like to hide. Patience is key, my friend, patience.' He teaches you the basics of fishing."
+                return "[dialogue]The [character.name]fisherman[/character.name] notices your [item.name]fishing rod[/item.name]. 'Ah, a fellow angler! My arm\'s busted, can\'t fish myself. But I can tell you a thing or two. Cast your line near the reeds, that\'s where they like to hide. Patience is key, my friend, patience.'[/dialogue] He teaches you the basics of fishing."
             elif game_state.get_story_flag("learned_fishing_basics"):
                  # If already taught, but current_dialogue_key is somehow still initial, switch to taught_fishing
                 self.current_dialogue_key = "taught_fishing"
@@ -51,12 +51,12 @@ class Fisherman(Character):
             # Teach spell
             game_state.learn_spell(PurifySpell())            
             self.current_dialogue_key = "taught_spells"
-            return (f"You give the {item.name} to the Fisherman. {self.dialogue_states['received_fish_thanks']} "
-                    f"'The river's water... it's not been right. Murky. But I sense you have a connection to the old ways. "
-                    f"Let me teach you something to help. With this, you can cleanse water,' he says, teaching you the `purify` spell. "
-                    f"You have learned `purify`!")
+            return (f"You give the [item.name]{item.name}[/item.name] to the [character.name]Fisherman[/character.name]. {self.dialogue_states['received_fish_thanks']} "
+                    f"[dialogue]'The river\'s water... it\'s not been right. Murky. But I sense you have a connection to the old ways. "
+                    f"Let me teach you something to help. With this, you can cleanse water,'[/dialogue] he says, teaching you the [spell.name]purify[/spell.name] spell. "
+                    f"You have learned [spell.name]purify[/spell.name]!")
 
         elif isinstance(item, Fish) and self.received_fish:
-            return "The fisherman smiles. 'Thank you, but I've already eaten. Save it for yourself!'"
+            return "[dialogue]The [character.name]fisherman[/character.name] smiles. 'Thank you, but I\'ve already eaten. Save it for yourself!'[/dialogue]"
         
-        return f"The fisherman looks at the {item.name} curiously but doesn't seem to need it."
+        return f"The [character.name]fisherman[/character.name] looks at the [item.name]{item.name}[/item.name] curiously but doesn\'t seem to need it."

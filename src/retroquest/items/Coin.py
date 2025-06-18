@@ -10,4 +10,4 @@ class Coin(Item):
         )
 
     def use(self, game_state) -> str:
-        return "You flip the coin in the air. It lands heads up. Seems like a regular coin, perhaps for trading."
+        return "You flip the [item.name]coin[/item.name] in the air. It lands heads up. Seems like a regular [item.name]coin[/item.name], perhaps for trading."

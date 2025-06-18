@@ -14,9 +14,9 @@ class Lantern(Item):
         if self.name == "lantern":  # If it's not lit yet
             self.name = "lantern (lit)"
             self.short_name = "lantern"  # Update short_name as well
-            action_taken_message = "You light the lantern. The flickering light reveals more of the room."
+            action_taken_message = f"You light the [item.name]{self.get_name()}[/item.name]. The flickering light reveals more of the room. A small loaf of [item.name]bread[/item.name] and a [item.name]journal[/item.name] appear in the light."
         else:  # Already lit
-            action_taken_message = "The lantern is already lit."
+            action_taken_message = f"The [item.name]{self.get_name()}[/item.name] is already lit."
 
         # Item revealing logic
         from .Bread import Bread

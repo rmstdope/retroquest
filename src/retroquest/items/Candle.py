@@ -1,6 +1,6 @@
 from ..items.Item import Item
 from ..items.Matches import Matches
-from ..items.HiddenLocket import HiddenLocket  # Added import
+from ..items.Locket import Locket  # Added import
 from ..GameState import GameState  # Added import for GameState
 
 class Candle(Item):
@@ -17,10 +17,10 @@ class Candle(Item):
                 self.is_lit = True
                 self.description = "The candle is lit, casting a warm, steady light."
 
-                # Add a new HiddenLocket to the room
-                game_state.current_room.add_item(HiddenLocket())
-                
-                return "You light the candle with the matches. It now casts a warm glow. The flickering candlelight reveals a Hidden Locket that was previously unseen!"
+                # Add a new Locket to the room
+                game_state.current_room.add_item(Locket())
+
+                return f"You light the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name]. It now casts a warm glow. The flickering candlelight reveals a [item.name]locket[/item.name] that was previously unseen!"
             else:
-                return "The candle is already lit."
+                return f"The [item.name]{self.get_name()}[/item.name] is already lit."
         return super().use_with(game_state, other_item)

@@ -14,11 +14,11 @@ class Bucket(Item):
         if isinstance(target, Well):
             if self.name == "bucket": # Check if it's not already full
                 self.name = "bucket (full)"
-                self.description = "The bucket is now full of clear water from the well."
+                self.description = "TA sturdy wooden bucket with a rope handle. It is full of water from the well."
                 # Potentially, we could also add a story flag or a specific state to the bucket itself
                 # e.g., self.set_property("is_full", True) if we had such a system in Item.
-                return "You lower the bucket into the well and draw it up, full of clear water."
+                return "You lower the [item.name]bucket[/item.name] into the [item.name]well[/item.name] and draw it up, full of clear water."
             else:
-                return "The bucket is already full."
+                return "The [item.name]bucket[/item.name] is already full."
         else:
-            return "You can't seem to use the bucket that way here. Perhaps near something with water?"
+            return "You can't seem to use the [item.name]bucket[/item.name] together with [item.name]{target.get_name()}[/item.name]. Perhaps near something with water?"

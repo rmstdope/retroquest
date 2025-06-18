@@ -6,7 +6,7 @@ from ..items.Coin import Coin
 class Merchant(Character):
     def __init__(self) -> None:
         super().__init__(
-            name="Merchant",
+            name="merchant",
             description="A traveling merchant with a cart full of wares and stories from distant lands. Always ready to trade or offer travel advice."
         )
         self.boots_given = False  # Track if boots have been given
@@ -14,11 +14,11 @@ class Merchant(Character):
     def talk_to(self, game_state, player=None) -> str:
         # Use boots_given flag instead of checking inventory
         if not self.boots_given:
-            return ("The Merchant offers a friendly nod. 'Looking for something specific, or just browsing? "
-                    "If you have any fine jewelry, especially a shiny ring, I'm ready to exchange it for a pair of sturdy wandering boots.'")
+            return (f"[dialogue]The [character.name]{self.get_name()}[/character.name] offers a friendly nod. 'Looking for something specific, or just browsing? "
+                    f"If you have any fine jewelry, especially a [item.name]shiny ring[/item.name], I'm ready to exchange it for a pair of sturdy [item.name]wandering boots[/item.name].'[/dialogue]")
         else:
-            return ("The Merchant grins. 'Those boots should serve you well on the road ahead! Let me know if you find anything else of value.'")
-    
+            return (f"[dialogue]The [character.name]{self.get_name()}[/character.name] grins. 'Those [item.name]boots[/item.name] should serve you well on the road ahead! Let me know if you find anything else of value.'[/dialogue]")
+
     def give_item(self, game_state, item):
         from ..items.ShinyRing import ShinyRing
         from ..items.WanderingBoots import WanderingBoots
@@ -27,6 +27,6 @@ class Merchant(Character):
             boots = WanderingBoots()
             game_state.add_item_to_inventory(boots)
             self.boots_given = True  # Set flag when boots are given
-            return ("The Merchant's eyes widen as you hand over the shiny ring. 'A fine piece! As promised, here are the wandering boots. They'll serve you well on the road to Greendale.'\n\nYou receive a pair of Wandering Boots!")
-        return f"The Merchant examines the {item.get_name()} but shakes his head. 'Not interested in that, friend.'"
+            return (f"[dialogue]The [character.name]{self.get_name()}[/character.name]'s eyes widen as you hand over the [item.name]{item.get_name()}[/item.name]. 'A fine piece! As promised, here are the [item.name]{boots.get_name()}[/item.name]. They'll serve you well on the road to Greendale.'[/dialogue]\n\n[event]You receive a pair of [item.name]{boots.get_name()}[/item.name]![/event]")
+        return f"[dialogue]The [character.name]{self.get_name()}[/character.name] examines the [item.name]{item.get_name()}[/item.name] but shakes his head. 'Not interested in that, friend.'[/dialogue]"
 

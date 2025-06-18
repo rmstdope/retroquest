@@ -4,7 +4,7 @@ from .Item import Item
 class ShedDoor(Item):
     def __init__(self):
         super().__init__(
-            name="Shed Door",
+            name="shed door",
             description="An old, weathered wooden door, firmly shut.",
             short_name="door"
         )
@@ -17,17 +17,17 @@ class ShedDoor(Item):
                 game_state.remove_item_from_inventory(other_item.get_name())  # Remove the key from inventory
                 self.locked = False
                 game_state.current_room.unlock()
-                return "The key turns in the lock! The shed door creaks open."
+                return f"The [item.name]{other_item.get_name()}[/item.name] turns in the lock! The [item.name]{self.get_name()}[/item.name] creaks open."
             else:
-                return "The shed door is already unlocked."
+                return f"The [item.name]{self.get_name()}[/item.name] is already unlocked."
         elif other_item:
-            return f"You can't use the {other_item.get_name()} on the shed door."
+            return f"You can't use the [item.name]{other_item.get_name()}[/item.name] on the [item.name]shed door[/item.name]."
 
     def examine(self) -> str:
         if self.locked:
-            return "It's a sturdy wooden door, locked tight. There's a keyhole visible."
-        return "The shed door is unlocked and slightly ajar."
+            return f"It's a sturdy wooden [item.name]{self.get_name()}[/item.name], locked tight. There's a keyhole visible."
+        return f"The [item.name]{self.get_name()}[/item.name] is unlocked and slightly ajar."
 
     def use(self, game_state: GameState) -> str:
         """Attempt to use the door by itself, which is not a valid action."""
-        return "You try to use the door by itself, but nothing happens. It probably needs to be used with something."
+        return f"You try to use the [item.name]{self.get_name()}[/item.name] by itself, but nothing happens. It probably needs to be used with something."

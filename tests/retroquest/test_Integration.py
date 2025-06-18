@@ -282,16 +282,16 @@ def test_golden_path_act1_completion(monkeypatch):
     _execute_commands(game, ["go south", "go west", "go south", "go south", "go east", "go south", "go south", "go south"])
     _check_current_room(game.state, "Village Chapel")
 
-    # Pre-check: Hidden locket should not be visible yet
-    _check_item_in_room(game.state.current_room, "hidden locket", should_be_present=False)
+    # Pre-check: locket should not be visible yet
+    _check_item_in_room(game.state.current_room, "locket", should_be_present=False)
     _check_item_in_inventory(game.state, "matches") # Ensure matches are in inventory
 
     _execute_commands(game, ["use candle with matches"]) # Using candle with matches should reveal the locket
-    _check_item_in_room(game.state.current_room, "hidden locket") # Locket is now visible
+    _check_item_in_room(game.state.current_room, "locket") # Locket is now visible
 
-    _execute_commands(game, ["take hidden locket"])
-    _check_item_in_inventory(game.state, "hidden locket")
-    _check_item_in_room(game.state.current_room, "hidden locket", should_be_present=False)
+    _execute_commands(game, ["take locket"])
+    _check_item_in_inventory(game.state, "locket")
+    _check_item_in_room(game.state.current_room, "locket", should_be_present=False)
     _check_spell_known(game.state, "bless")
 
     # Step 18: Return to Mira’s Hut
@@ -418,10 +418,10 @@ def test_golden_path_act1_completion(monkeypatch):
     # Path: Forest Path (current) -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Vegetable Field -> Elior's Cottage
     _execute_commands(game, ["go north", "go west", "go north", "go north", "go west", "go north"])
     _check_current_room(game.state, "Elior's Cottage")
-    _check_item_in_inventory(game.state, "hidden locket") # Locket should still be there from Step 15
+    _check_item_in_inventory(game.state, "locket") # Locket should still be there from Step 15
 
-    _execute_commands(game, ["give hidden locket to grandmother"])
-    _check_item_in_inventory(game.state, "hidden locket", should_be_present=False)
+    _execute_commands(game, ["give locket to grandmother"])
+    _check_item_in_inventory(game.state, "locket", should_be_present=False)
     _check_item_in_inventory(game.state, "travel cloak")
 
     # Step 25: Village Chapel (Prepare for Journey)

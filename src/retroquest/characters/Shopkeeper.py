@@ -7,7 +7,7 @@ from ..items.Coin import Coin
 class Shopkeeper(Character):
     def __init__(self) -> None:
         super().__init__(
-            name="Shopkeeper",
+            name="shopkeeper",
             description="The owner of the General Store, always bustling about and eager to strike a bargain or share a rumor."
         )
         self.wares = {
@@ -34,30 +34,30 @@ class Shopkeeper(Character):
             # Remove matches from wares so they can't be bought/given again
             del self.wares["matches"]
             
-            return f'The Shopkeeper leans in. "Ah, you spoke to the Priest? He does get through his matches. Here, take these for him, on the house. Tell him I said hello!" You receive a box of matches.'
+            return f'The [character.name]Shopkeeper[/character.name] leans in. [dialogue]"Ah, you spoke to the [character.name]priest[/character.name]? He does get through his [item.name]matches[/item.name]. Here, take these for him, on the house. Tell him I said hello!"[/dialogue]\n\n[event]You receive a box of [item.name]matches[/item.name].[/event]'
 
         # Standard dialogue if matches aren't being given for the priest
         wares_info = "I have a few things for sale:\n"
         if self.wares:
             for name, details in self.wares.items():
-                wares_info += f"- {name.capitalize()}: {details['price']} coin(s)\n"
+                wares_info += f"- [item.name]{name.capitalize()}[/item.name]: {details['price']} [item.name]coin(s)[/item.name]\n"
         else:
             wares_info = "I'm currently out of stock of items for sale.\n"
         
-        wares_info += "And remember, you always get an extra apple with every purchase!\n"
+        wares_info += "And remember, you always get an extra [item.name]apple[/item.name] with every purchase!\n"
 
         dialogue = self.dialogue_options[self.dialogue_index]
         self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options)
-        
-        return f'The Shopkeeper says: "{dialogue} {wares_info.strip()}"'
+
+        return f'The [character.name]Shopkeeper[/character.name] says: [dialogue]"{dialogue} {wares_info.strip()}[/dialogue]"'
 
     def give_item(self, item_name: str, game_state) -> str:
-        return f'The Shopkeeper chuckles. "Not looking for donations, friend, but I appreciate the thought!"'
+        return f'The [character.name]Shopkeeper[/character.name] chuckles. [dialogue]"Not looking for donations, friend, but I appreciate the thought!"[/dialogue]'
 
     def buy_item(self, item_name_to_buy: str, game_state) -> str:
         item_name_to_buy = item_name_to_buy.lower()
         if item_name_to_buy not in self.wares:
-            return f"Sorry, I don't have any '{item_name_to_buy}' for sale."
+            return f"[dialogue]Sorry, I don't have any '[item.name]{item_name_to_buy}[/item.name]' for sale.[/dialogue]"
 
         ware_details = self.wares[item_name_to_buy]
         price = ware_details["price"]
@@ -71,7 +71,7 @@ class Shopkeeper(Character):
                 coin_count += 1
         
         if coin_count < price:
-            return f"You don't have enough coins for the {item_name_to_buy}. It costs {price} coin(s)."
+            return f"[dialogue]You don't have enough [item.name]coins[/item.name] for the [item.name]{item_name_to_buy}[/item.name]. It costs {price} [item.name]coin(s)[/item.name].[/dialogue]"
 
         # Remove coins from inventory
         removed_coins = 0
@@ -101,4 +101,4 @@ class Shopkeeper(Character):
         # If the store's stock should deplete, that logic would go here,
         # potentially removing item_object from game_state.current_room.items
 
-        return f"You bought a {new_item.get_name()} for {price} coin(s) and got an extra apple as a bonus!"
+        return f"[event]You bought a [item.name]{new_item.get_name()}[/item.name] for {price} [item.name]coin(s)[/item.name] and got an extra [item.name]apple[/item.name] as a bonus![/event]"

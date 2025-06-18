@@ -21,10 +21,10 @@ class MagneticFishingRod(Item):
             # Add ExtendedMagneticFishingRod to inventory
             extended_rod = ExtendedMagneticFishingRod()
             game_state.inventory.append(extended_rod)
-            return f"You attach the {other_item.get_name()} to the {self.get_name()}, creating an {extended_rod.get_name()}."
+            return f"You attach the [item.name]{other_item.get_name()}[/item.name] to the [item.name]{self.get_name()}[/item.name], creating an [item.name]{extended_rod.get_name()}[/item.name]."
 
         from .Well import Well # Local import for Well
         if isinstance(other_item, Well):
-            return "You try magnetic fishing in the well, but the rod is too short to reach the water."
+            return f"You try fishing in the [item.name]{other_item.get_name()}[/item.name], but the [item.name]{self.get_name()}[/item.name] is too short to reach the water."
 
         return super().use_with(game_state, other_item)

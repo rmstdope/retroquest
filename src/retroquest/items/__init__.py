@@ -17,7 +17,7 @@ from .FishingRod import FishingRod
 from .MagneticFishingRod import MagneticFishingRod
 from .ExtendedMagneticFishingRod import ExtendedMagneticFishingRod
 from .HealingHerb import HealingHerb
-from .HiddenLocket import HiddenLocket
+from .Locket import Locket
 from .Horseshoe import Horseshoe
 from .Key import Key
 from .Lantern import Lantern
@@ -71,7 +71,7 @@ AVAILABLE_ITEMS = {
     "Fish": Fish,
     "FishingRod": FishingRod,
     "HealingHerb": HealingHerb,
-    "HiddenLocket": HiddenLocket,
+    "Locket": Locket,
     "Horseshoe": Horseshoe,
     "Key": Key,
     "Lantern": Lantern,
@@ -118,7 +118,7 @@ __all__ = [
     "Item", 
     "AncientAmulet", "Apple", "Bread", "BrokenShovel", "Bucket", "Candle", 
     "Chicken", "Coin", "DullKnife", "Egg", "EliorsJournal", 
-    "ExtendedMagneticFishingRod", "Feather", "Fish", "FishingRod", "HealingHerb", "HiddenLocket", 
+    "ExtendedMagneticFishingRod", "Feather", "Fish", "FishingRod", "HealingHerb", "Locket", 
     "Horseshoe", "Key", "Lantern", "Magnet", "MagneticFishingRod", "Map", "Matches", "Mechanism", 
     "MillstoneFragment", "MysteriousBox", "OldNotice", "PrayerBook", 
     "RareFlower", "River", "Rope", "RustyHoe", "SackOfFlour", 

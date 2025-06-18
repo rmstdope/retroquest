@@ -15,6 +15,6 @@ class Bush(Item):
         current_room = game_state.current_room
         if not current_room.get_item_by_name("wild berries"):
             current_room.add_item(WildBerries())
-            return "You cast the Grow spell on the bush. It flourishes, and clusters of wild berries appear among its leaves!"
+            return "You cast the [spell.name]grow[/spell.name] spell on the [item.name]bush[/item.name]. It flourishes, and clusters of wild berries appear among its leaves!"
         else:
-            return "The bush is already full of berries."
+            return "The [item.name]bush[/item.name] is already full of [item.name]wild berries[/item.name]."

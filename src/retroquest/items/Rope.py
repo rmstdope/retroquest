@@ -12,4 +12,3 @@ class Rope(Item):
             # Delegate to the Mechanism's use_with method
             return other_item.use_with(game_state, self)
         return super().use_with(game_state, other_item)
-        return super().use_with(game_state, other_item)

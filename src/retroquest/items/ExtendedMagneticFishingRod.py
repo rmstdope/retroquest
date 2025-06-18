@@ -23,11 +23,11 @@ class ExtendedMagneticFishingRod(Item):
                 # Update well state
                 other_item.contains_ring = False
                 
-                return f"You use the {self.get_name()} with the {other_item.get_name()}. After some careful maneuvering, you manage to retrieve a {ring.get_name()}!"
+                return f"You use the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name]. After some careful maneuvering, you manage to retrieve a [item.name]{ring.get_name()}[/item.name]!"
             elif not other_item.is_purified:
-                return f"The water in the {other_item.get_name()} is too murky. You can't see anything to retrieve."
+                return f"The water in the [item.name]{other_item.get_name()}[/item.name] is too murky. You can't see anything to retrieve."
             elif not other_item.contains_ring:
-                return f"You can see the bottom of the {other_item.get_name()} clearly, but there's nothing metallic to retrieve with the {self.get_name()}."
+                return f"You can see the bottom of the [item.name]{other_item.get_name()}[/item.name] clearly, but there's nothing metallic to retrieve with the [item.name]{self.get_name()}[/item.name]."
             else:
-                return f"You try to use the {self.get_name()} with the {other_item.get_name()}, but it doesn't seem to work right now."
+                return f"You try to use the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name], but it doesn't seem to work right now."
         return super().use_with(game_state, other_item)

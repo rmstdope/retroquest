@@ -24,23 +24,23 @@ class Item:
 
     def use(self, game_state) -> str:
         """Base 'use' method for items. Subclasses should override this if they have specific use actions."""
-        return f"You can't use the {self.get_name()} in any special way."
+        return f"You can't use the [item.name]{self.get_name()}[/item.name] in any special way."
 
     def use_with(self, game_state, other_item) -> str:
         """Base 'use_with' method for items. Subclasses should override this if they can interact with other items."""
-        return f"You can't use the {self.get_name()} with the {other_item.get_name()}."
+        return f"You can't use the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name]."
     
     def examine(self) -> str:
         """Base 'examine' method for items. Subclasses should override this if they have specific examination details."""
-        return f"You examine the {self.get_name()}. {self.get_description()}"
+        return f"You examine the [item.name]{self.get_name()}[/item.name]. {self.get_description()}"
 
     def read(self, game_state) -> str:
         """Base 'read' method for items. Subclasses should override this if they are readable."""
-        return f"There is nothing to read on the {self.get_name()}."
+        return f"There is nothing to read on the [item.name]{self.get_name()}[/item.name]."
 
     def listen(self, game_state) -> str:
         """Base 'listen' method for items. Subclasses should override this if they make a sound."""
-        return f"The {self.get_name()} is silent."
+        return f"The [item.name]{self.get_name()}[/item.name] is silent."
 
     def picked_up(self, game_state) -> str | None:
         """Called when the item is picked up by the player. Subclasses can override this."""
@@ -48,8 +48,8 @@ class Item:
 
     def open(self, game_state) -> str:
         """Base 'open' method for items. Subclasses should override this if they can be opened."""
-        return f"You can't open the {self.get_name()}."
+        return f"You can't open the [item.name]{self.get_name()}[/item.name]."
 
     def grow(self, game_state) -> str:
         """Base 'grow' method for items, typically called by the Grow spell. Subclasses should override this."""
-        return f"The {self.get_name()} does not respond to the Grow spell."
+        return f"The [item.name]{self.get_name()}[/item.name] does not respond to the [spell.name]grow[/spell.name] spell."
