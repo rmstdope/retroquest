@@ -20,7 +20,8 @@ class Game:
             "item.name": "bold green",
             "spell.name": "bold magenta",
             "room.name": "bold cyan",
-            "event": "dim"
+            "event": "dim",
+            "exits": "bold yellow"
         })
         self.console = Console(theme=custom_theme)
         self.session = PromptSession()
@@ -60,7 +61,7 @@ class Game:
             "A distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. "
             "With questions swirling in your mind, you take your first step into the unknown.\n"
         )
-        self.console.print("Type 'help' for a list of commands.")
+        self.console.print("Type 'help' for a list of commands.\n")
 
     def run(self) -> None:
         self.print_intro()

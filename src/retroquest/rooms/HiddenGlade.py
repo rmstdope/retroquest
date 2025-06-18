@@ -29,13 +29,13 @@ class HiddenGlade(Room):
         dynamic_parts = []
         if self.get_character_by_name("Deer"):
             dynamic_parts.append(
-                "A graceful deer grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes."
+                "A graceful [character.name]Deer[/character.name] grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes."
             )
             # Check if flower is still in the room's items
             if any(isinstance(item, RareFlower) for item in self.items):
-                dynamic_parts.append("A beautiful rare flower blooms near the mossy stone.")
+                dynamic_parts.append("A beautiful [item.name]Rare Flower[/item.name] blooms near the mossy stone.")
             else:
-                dynamic_parts.append("You recall picking a beautiful rare flower that once bloomed near the mossy stone.")
+                dynamic_parts.append("You recall picking a beautiful [item.name]Rare Flower[/item.name] that once bloomed near the mossy stone.")
 
 
         if not dynamic_parts and not self.get_character_by_name("Deer"):
@@ -55,19 +55,20 @@ class HiddenGlade(Room):
             if not self.get_character_by_name("Deer"):
                 deer = Deer()
                 self.add_character(deer)
-                messages.append("As you relax, a graceful deer emerges into the glade, its gentle eyes watching you.")
+                messages.append("As you relax, a graceful [character.name]Deer[/character.name] emerges into the glade, its gentle eyes watching you.")
                 self.add_item(RareFlower())
-                messages.append("You notice a rare, beautiful flower blooming near the mossy stone.")
+                messages.append("You notice a rare, beautiful [item.name]Rare Flower[/item.name] blooming near the mossy stone.")
                 appeared_something = True
             else:
-                messages.append("The deer continues to graze peacefully.")
+                messages.append("The [character.name]Deer[/character.name] continues to graze peacefully.")
 
             return " ".join(messages)
         else:
             return "You rest for a while, but the glade remains quiet. Perhaps something more needs to happen for its magic to awaken."
 
     def describe(self) -> str:
-        return self.get_room_text_description()
+        self.description = self.get_room_text_description()
+        return super().describe()
 
     def light(self, game_state: GameState) -> str:
         """Called when a light source is used or a light spell is cast in the room."""
@@ -75,5 +76,5 @@ class HiddenGlade(Room):
         if not game_state.has_spell("Grow"):
             grow_spell = GrowSpell()
             game_state.learn_spell(grow_spell)
-            message += " As you read the runes, you feel a connection to the ancient magic of nature. You have learned the `grow` spell!"
+            message += " As you read the runes, you feel a connection to the ancient magic of nature. You have learned the [spell.name]grow[/spell.name] spell!"
         return message
