@@ -9,6 +9,7 @@ class GameState:
     """
     def __init__(self, starting_room, all_rooms=None) -> None:
         self.current_room = starting_room
+        self.all_rooms = all_rooms
         self.inventory = []
         self.history = []
         self.visited_rooms = [starting_room.name]
@@ -66,3 +67,30 @@ class GameState:
             if spell.name.lower() == spell_name_lower:
                 return True
         return False
+
+    def stats(self) -> str:
+        lines = [
+            f"[bold]Current Room:[/bold] [room.name]{self.current_room.name}[/room.name]",
+            "",
+            "[bold]Inventory:[/bold]"
+        ]
+        if self.inventory:
+            for item in self.inventory:
+                lines.append(f"- [item.name]{item.get_name()}[/item.name]")
+        else:
+            lines.append("(empty)")
+        lines.append("")
+        lines.append("[bold]Known Spells:[/bold]")
+        if self.known_spells:
+            for spell in self.known_spells:
+                lines.append(f"- [spell.name]{spell.get_name()}[/spell.name]")
+        else:
+            lines.append("(none)")
+        lines.append("")
+        lines.append("[bold]Visited Rooms:[/bold]")
+        if self.visited_rooms:
+            for room in self.visited_rooms:
+                lines.append(f"- [room.name]{room}[/room.name]")
+        else:
+            lines.append("(none)")
+        return "\n".join(lines)

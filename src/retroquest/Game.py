@@ -2,6 +2,8 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import NestedCompleter
 from rich.console import Console
 from rich.theme import Theme
+import pickle
+import os
 
 from .spells import Spell
 from .characters import Character
@@ -27,9 +29,8 @@ class Game:
         self.console = Console(theme=custom_theme)
         self.completer = NestedCompleter.from_nested_dict({}) 
         self.session = PromptSession(completer=self.completer, complete_while_typing=True)
-        self.rooms = rooms
         self.is_running = True
-        self.state = GameState(starting_room, all_rooms=self.rooms) # Pass all_rooms
+        self.state = GameState(starting_room, all_rooms=rooms) # Pass all_rooms
         self.command_parser = CommandParser(self)
 
     def handle_command(self, command: str) -> str:
@@ -228,8 +229,8 @@ class Game:
         exits = self.state.current_room.get_exits()
         if direction in exits:
             next_room_key = exits[direction]
-            if next_room_key in self.rooms:
-                self.state.current_room = self.rooms[next_room_key]
+            if next_room_key in self.state.all_rooms:
+                self.state.current_room = self.state.all_rooms[next_room_key]
                 self.state.mark_visited(self.state.current_room)
                 return f"[event][You move {direction} to [room.name]{self.state.current_room.name}[/room.name].][/event]\n\n" + self.state.current_room.describe()
             else:
@@ -316,7 +317,7 @@ class Game:
     def map(self) -> str:
         # Print all visited rooms and their exits, each exit on a new indented line
         visited = set(self.state.visited_rooms)
-        room_objs = {name: room for name, room in self.rooms.items() if room.name in visited}
+        room_objs = {name: room for name, room in self.state.all_rooms.items() if room.name in visited}
         if not room_objs:
             return "No rooms visited yet."
         output = ["[bold]Visited Rooms and Exits:[/bold]"]
@@ -325,7 +326,7 @@ class Game:
             output.append(f"- [room.name]{room.name}[/room.name]:")
             if exits:
                 for direction, dest in exits.items():
-                    dest_name = self.rooms[dest].name if dest in self.rooms else dest
+                    dest_name = self.state.all_rooms[dest].name if dest in self.state.all_rooms else dest
                     output.append(f"    {direction} -> [room.name]{dest_name}[/room.name]")
             else:
                 output.append("    No exits")
@@ -539,6 +540,27 @@ class Game:
         else:
             return f"You don't see a '{target}' to open here or in your inventory."
 
+    def save(self) -> str:
+        try:
+            with open('retroquest.save', 'wb') as f:
+                pickle.dump(self.state, f)
+            return "Game saved successfully."
+        except Exception as e:
+            return f"Failed to save game: {e}"
+
+    def load(self) -> str:
+        if not os.path.exists('retroquest.save'):
+            return "No save file found."
+        try:
+            with open('retroquest.save', 'rb') as f:
+                self.state = pickle.load(f)
+            return "Game loaded successfully."
+        except Exception as e:
+            return f"Failed to load game: {e}"
+
+    def stats(self) -> str:
+        return self.state.stats()
+
     # --- Not Implemented Methods ---
     def ask(self, target: str) -> str:
         return "The 'ask' command is not yet implemented."
@@ -570,12 +592,6 @@ class Game:
     def close(self, target: str) -> str:
         return "The 'close' command is not yet implemented."
 
-    def save(self) -> str:
-        return "The 'save' command is not yet implemented."
-
-    def load(self) -> str:
-        return "The 'load' command is not yet implemented."
-
     def restart(self) -> str:
         return "The 'restart' command is not yet implemented."
 
@@ -587,6 +603,3 @@ class Game:
 
     def wait(self) -> str:
         return "The 'wait' command is not yet implemented."
-
-    def stats(self) -> str:
-        return "The 'stats' command is not yet implemented."
