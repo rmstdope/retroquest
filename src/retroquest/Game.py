@@ -4,6 +4,8 @@ from rich.console import Console
 from rich.theme import Theme
 import pickle
 import os
+import threading
+import pygame
 
 from .spells import Spell
 from .characters import Character
@@ -37,6 +39,16 @@ class Game:
         return self.command_parser.parse(command)
 
     def print_intro(self):
+        # Play music in a separate thread so it doesn't block the prompt
+        def play_music():
+            try:
+                pygame.mixer.init()
+                pygame.mixer.music.load('music/Conquest - Market (freetouse.com).mp3')
+                pygame.mixer.music.play(loops=-1)  # Loop indefinitely
+            except Exception as e:
+                self.console.print(f"[dim]Could not play music: {e}[/dim]")
+        threading.Thread(target=play_music, daemon=True).start()
+        
         self.console.print("\033[47;30m", end="")
         self.console.clear()
         self.console.print("Welcome to")
@@ -49,7 +61,9 @@ class Game:
 ##    ##  ##           ##     ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
 ##     ## #########    ##     ##     ##  #######   #######   #######  #########  #######     ##
 ''', style="bold yellow")
+        self.console.print("\n[bold]Music track:[/bold] Market by Conquest\nSource: https://freetouse.com/music\nCopyright Free Background Music\n", style="dim")
         self.session.prompt('Press Enter to continue...')
+        
         self.console.clear()
         # Revised prologue: do NOT mention the amulet being given yet
         self.console.print(
@@ -137,10 +151,7 @@ class Game:
             'get': all_room_item_names,
             'drop': all_inventory_item_names,
             'discard': all_inventory_item_names,
-            'use': {
-                **{k: {'with': all_item_names} for k in all_item_names}, 
-                **all_item_names
-            },
+            'use': {**{k: {'with': all_item_names} for k in all_item_names}},
             'eat': all_inventory_item_names,
             'consume': all_inventory_item_names,
             'drink': all_inventory_item_names,
@@ -152,10 +163,7 @@ class Game:
             'open': all_item_names,
             'close': all_item_names,
 
-            'cast': {
-                **{k: {'on': {**all_item_names, **character_names}} for k in spell_names},
-                **spell_names
-            },
+            'cast': {**{k: {'on': {**all_item_names, **character_names}} for k in spell_names}},
             'learn': None, 
             'spells': None,
 

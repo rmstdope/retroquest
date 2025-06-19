@@ -61,8 +61,7 @@
 ## 7. General Store
 
 - **Description:** A cluttered shop with shelves of goods.
-- **Items:** apple (start), rope (later).
-- **Unusable:** matches (start).
+- **Items:** apple (start), rope (later), matches (start).
 - **Spells:** None.
 - **Usable Items:** Coin (2nd, purchase rope).
 - **Characters:** Shopkeeper (sells goods, shares gossip).

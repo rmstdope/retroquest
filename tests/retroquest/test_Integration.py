@@ -154,8 +154,10 @@ def test_golden_path_act1_completion(monkeypatch):
     # Step 8: General Store - Buy Rope
     _execute_commands(game, ["go north", "go east", "go east"]) # Veg Field -> Village Square -> General Store
     _check_current_room(game.state, "General Store")
-    _execute_commands(game, ["take apple"]) # Added "take apple"
+    _execute_commands(game, ["take apple", "take rope", "take matches"]) # Added "take apple"
     _check_item_in_inventory(game.state, "apple", should_be_present=False) #Cannot be in inventory yet, just in room
+    _check_item_in_inventory(game.state, "rope", should_be_present=False) #Cannot be in inventory yet, just in room
+    _check_item_in_inventory(game.state, "matches", should_be_present=False) #Cannot be in inventory yet, just in room
     _execute_commands(game, ["talk to shopkeeper", "buy rope from shopkeeper"]) # Added "take apple"
     _check_item_in_inventory(game.state, "apple") # Added check for apple
     _check_item_in_inventory(game.state, "rope")

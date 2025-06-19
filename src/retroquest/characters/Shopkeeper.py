@@ -87,12 +87,12 @@ class Shopkeeper(Character):
         game_state.add_item_to_inventory(new_item)
         if item_name_to_buy == "rope":
             new_item = Rope()
-            new_item.can_be_carried = True
         elif item_name_to_buy == "matches":
             new_item = Matches()
         else:
             # Should not happen if item_name_to_buy is in self.wares
             return "An unexpected error occurred trying to sell the item."
+        new_item.can_be_carried = True
 
         game_state.add_item_to_inventory(new_item)
         

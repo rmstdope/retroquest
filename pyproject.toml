@@ -19,7 +19,8 @@ classifiers = [
 ]
 license = {file = "LICENSE"}
 dependencies = [
-  "prompt_toolkit"
+  "prompt_toolkit",
+  "pygame>=2.0.0"
 ]
 
 [project.optional-dependencies] 
