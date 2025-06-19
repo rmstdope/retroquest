@@ -529,6 +529,42 @@ class Game:
         else:
             return f"You don't see a '{target}' to close here or in your inventory."
 
+    def eat(self, item: str) -> str:
+        if not item:
+            return "Eat what?"
+        item_to_eat = self.find_item(item, look_in_inventory=True, look_in_room=True)
+        if item_to_eat:
+            return item_to_eat.eat(self.state)
+        else:
+            return f"You don't see a '{item}' to eat here or in your inventory."
+
+    def drink(self, item: str) -> str:
+        if not item:
+            return "Drink what?"
+        item_to_drink = self.find_item(item, look_in_inventory=True, look_in_room=True)
+        if item_to_drink:
+            return item_to_drink.drink(self.state)
+        else:
+            return f"You don't see a '{item}' to drink here or in your inventory."
+
+    def equip(self, item: str) -> str:
+        if not item:
+            return "Equip what?"
+        item_to_equip = self.find_item(item, look_in_inventory=True, look_in_room=True)
+        if item_to_equip:
+            return item_to_equip.equip(self.state)
+        else:
+            return f"You don't see a '{item}' to equip here or in your inventory."
+
+    def unequip(self, item: str) -> str:
+        if not item:
+            return "Unequip what?"
+        item_to_unequip = self.find_item(item, look_in_inventory=True, look_in_room=True)
+        if item_to_unequip:
+            return item_to_unequip.unequip(self.state)
+        else:
+            return f"You don't see a '{item}' to unequip here or in your inventory."
+
     def save(self) -> str:
         try:
             with open('retroquest.save', 'wb') as f:
@@ -551,17 +587,5 @@ class Game:
         return self.state.stats()
 
     # --- Not Implemented Methods ---
-    def eat(self, item: str) -> str:
-        return "The 'eat' command is not yet implemented."
-
-    def drink(self, item: str) -> str:
-        return "The 'drink' command is not yet implemented."
-
-    def equip(self, item: str) -> str:
-        return "The 'equip' command is not yet implemented."
-
-    def unequip(self, item: str) -> str:
-        return "The 'unequip' command is not yet implemented."
-
     def restart(self) -> str:
         return "The 'restart' command is not yet implemented."

@@ -57,3 +57,19 @@ class Item:
     def grow(self, game_state) -> str:
         """Base 'grow' method for items, typically called by the Grow spell. Subclasses should override this."""
         return f"The [item.name]{self.get_name()}[/item.name] does not respond to the [spell.name]grow[/spell.name] spell."
+
+    def eat(self, game_state) -> str:
+        """Base 'eat' method for items. Subclasses should override this if they are edible."""
+        return f"You can't eat the [item.name]{self.get_name()}[/item.name]."
+
+    def drink(self, game_state) -> str:
+        """Base 'drink' method for items. Subclasses should override this if they are drinkable."""
+        return f"You can't drink the [item.name]{self.get_name()}[/item.name]."
+
+    def equip(self, game_state) -> str:
+        """Base 'equip' method for items. Subclasses should override this if they are equippable."""
+        return f"You can't equip the [item.name]{self.get_name()}[/item.name]."
+
+    def unequip(self, game_state) -> str:
+        """Base 'unequip' method for items. Subclasses should override this if they are equippable and can be unequipped."""
+        return f"You can't unequip the [item.name]{self.get_name()}[/item.name]."
