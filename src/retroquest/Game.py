@@ -171,8 +171,6 @@ class Game:
             'undo': None,
             'redo': None,
 
-            'wait': None,
-            'pause': None,
             'sleep': None,
             'rest': None,
             'map': None,
@@ -287,7 +285,6 @@ class Game:
             "  redo\n"
             "\n"
             "[bold]Miscellaneous:[/bold]\n"
-            "  wait, pause\n"
             "  sleep, rest\n"
             "  map\n"
             "  stats\n"
@@ -590,6 +587,3 @@ class Game:
 
     def redo(self) -> str:
         return "The 'redo' command is not yet implemented."
-
-    def wait(self) -> str:
-        return "The 'wait' command is not yet implemented."

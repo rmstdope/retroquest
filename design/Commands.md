@@ -62,7 +62,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 
 ## Miscellaneous
 
-- wait / pause
 - sleep / rest
 - map
 - stats

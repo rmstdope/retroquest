@@ -161,8 +161,6 @@ class CommandParser:
             return self.game.redo()
 
         # Miscellaneous
-        elif cmd in ('wait', 'pause'):
-            return self.game.wait()
         elif cmd in ('sleep', 'rest'):
             return self.game.rest()
         elif cmd == 'map':

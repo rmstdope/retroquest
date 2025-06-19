@@ -239,8 +239,6 @@ def test_game_management_commands(game_parser):
 def test_miscellaneous_commands(game_parser):
     game, parser = game_parser
     commands = {
-        "wait": ("wait",),
-        "pause": ("wait",),
         "sleep": ("rest",),
         "rest": ("rest",),
         "map": ("map",),
