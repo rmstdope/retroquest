@@ -223,7 +223,6 @@ def test_game_management_commands(game_parser):
         "?": ("help", None),   # Parameterless help
         "quit": ("quit",),
         "exit": ("quit",),
-        "restart": ("restart",),
     }
     expected_calls = []
     for cmd_text, expected_call in commands.items():

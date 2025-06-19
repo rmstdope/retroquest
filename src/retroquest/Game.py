@@ -583,5 +583,3 @@ class Game:
 
     def stats(self) -> str:
         return self.state.stats()
-
-    # --- Not Implemented Methods ---
