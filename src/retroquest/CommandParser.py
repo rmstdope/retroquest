@@ -141,12 +141,10 @@ class CommandParser:
             return self.game.save()
         elif cmd in ('load game', 'load'):
             return self.game.load()
-        elif cmd in ('help', '?'): # Parameterless help
+        elif cmd in ('help', '?'):
             return self.game.help()
         elif cmd in ('quit', 'exit'):
             return self.game.quit()
-        elif cmd == 'restart':
-            return self.game.restart()
 
         # Miscellaneous
         elif cmd in ('sleep', 'rest'):

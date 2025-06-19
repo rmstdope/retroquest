@@ -54,7 +54,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - load game / load
 - help / ?
 - quit / exit
-- restart
 
 ## Miscellaneous
 

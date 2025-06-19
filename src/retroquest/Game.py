@@ -163,7 +163,6 @@ class Game:
             'load': {'game': None},
             'help': None, '?': None,
             'quit': None, 'exit': None,
-            'restart': None,
 
             'sleep': None,
             'rest': None,
@@ -272,7 +271,6 @@ class Game:
             "  load game, load\n"
             "  help, ?\n"
             "  quit, exit\n"
-            "  restart\n"
             "\n"
             "[bold]Miscellaneous:[/bold]\n"
             "  sleep, rest\n"
@@ -587,5 +585,3 @@ class Game:
         return self.state.stats()
 
     # --- Not Implemented Methods ---
-    def restart(self) -> str:
-        return "The 'restart' command is not yet implemented."
