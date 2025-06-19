@@ -117,7 +117,6 @@ class Game:
             'give': {item: {'to': character_names} for item in all_inventory_item_names},
             'hand': {item: {'to': character_names} for item in all_inventory_item_names},
             'show': {item: {'to': character_names} for item in all_inventory_item_names},
-            'trade': {item: {'with': character_names} for item in all_inventory_item_names},
             'exchange': {item: {'with': character_names} for item in all_inventory_item_names},
             'buy': {item: {'from': character_names} for item in all_item_names},
 
@@ -135,9 +134,6 @@ class Game:
             'search': None,
             'investigate': None,
             'listen': {'to': all_item_names},
-            'smell': all_item_names,
-            'sniff': all_item_names,
-            'taste': all_inventory_item_names,
 
             'take': all_room_item_names,
             'pick': {'up': all_room_item_names},
@@ -255,7 +251,6 @@ class Game:
             "  ask <character> about <topic>, question <character> about <topic>\n"
             "  give <item> to <character>, hand <item> to <character>\n"
             "  show <item> to <character>\n"
-            "  trade <item> with <character>, exchange <item> with <character>\n"
             "  buy <item> from <character>\n"
             "\n"
             "[bold]Examination:[/bold]\n"
@@ -263,8 +258,6 @@ class Game:
             "  look at <object>, inspect <object>, examine <object>, check <object>\n"
             "  search, investigate\n"
             "  listen to <object/location>\n"
-            "  smell, sniff <object>\n"
-            "  taste <item>\n"
             "\n"
             "[bold]Inventory Management:[/bold]\n"
             "  take <item>, pick up <item>, grab <item>, get <item>\n"
@@ -540,6 +533,15 @@ class Game:
         else:
             return f"You don't see a '{target}' to open here or in your inventory."
 
+    def close(self, target: str) -> str:
+        if not target:
+            return "Close what?"
+        item_to_close = self.find_item(target, look_in_inventory=True, look_in_room=True)
+        if item_to_close:
+            return item_to_close.close(self.state) # Pass game_state to the item's close method
+        else:
+            return f"You don't see a '{target}' to close here or in your inventory."
+
     def save(self) -> str:
         try:
             with open('retroquest.save', 'wb') as f:
@@ -568,15 +570,6 @@ class Game:
     def show(self, item: str) -> str:
         return "The 'show' command is not yet implemented."
 
-    def trade(self, item: str) -> str:
-        return "The 'trade' command is not yet implemented."
-
-    def smell(self, target: str = None) -> str:
-        return "The 'smell' command is not yet implemented."
-
-    def taste(self, item: str) -> str:
-        return "The 'taste' command is not yet implemented."
-
     def eat(self, item: str) -> str:
         return "The 'eat' command is not yet implemented."
 
@@ -588,9 +581,6 @@ class Game:
 
     def unequip(self, item: str) -> str:
         return "The 'unequip' command is not yet implemented."
-
-    def close(self, target: str) -> str:
-        return "The 'close' command is not yet implemented."
 
     def restart(self) -> str:
         return "The 'restart' command is not yet implemented."

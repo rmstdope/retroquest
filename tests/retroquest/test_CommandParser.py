@@ -138,8 +138,6 @@ def test_interaction_commands(game_parser):
         "give bread to grandmother": ("give", "bread to grandmother"),
         "hand coin to merchant": ("give", "coin to merchant"),
         "show map to mira": ("show", "map to mira"),
-        "trade sword with blacksmith": ("trade", "sword with blacksmith"),
-        "exchange herbs with alchemist": ("trade", "herbs with alchemist"),
         "buy rope from shopkeeper": ("buy", "rope from shopkeeper"),
         "buy apple from merchant": ("buy", "apple from merchant"),
     }
@@ -163,11 +161,6 @@ def test_examination_commands(game_parser):
         "search": ("search"),
         "investigate": ("search"),
         "listen to door": ("listen", "door"),
-        "smell flower": ("smell", "flower"),
-        "sniff potion": ("smell", "potion"), # sniff is alias for smell
-        "smell": ("smell", None),
-        "sniff": ("smell", None),
-        "taste berry": ("taste", "berry"),
     }
     expected_calls = []
     for cmd_text, expected_call in commands.items():

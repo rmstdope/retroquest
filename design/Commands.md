@@ -20,7 +20,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - ask [character] about [topic] / question [character] about [topic]
 - give [item] to [character] / hand [item] to [character]
 - show [item] to [character]
-- trade [item] with [character] / exchange [item] with [character]
 - buy [item] from [character]
 
 ## Examination
@@ -30,8 +29,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - read [object]
 - search / investigate
 - listen to [object/location]
-- smell / sniff [object]
-- taste [item]
 
 ## Inventory Management
 

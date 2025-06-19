@@ -50,6 +50,10 @@ class Item:
         """Base 'open' method for items. Subclasses should override this if they can be opened."""
         return f"You can't open the [item.name]{self.get_name()}[/item.name]."
 
+    def close(self, game_state) -> str:
+        """Base 'close' method for items. Subclasses should override this if they can be closed."""
+        return f"You can't close the [item.name]{self.get_name()}[/item.name]."
+
     def grow(self, game_state) -> str:
         """Base 'grow' method for items, typically called by the Grow spell. Subclasses should override this."""
         return f"The [item.name]{self.get_name()}[/item.name] does not respond to the [spell.name]grow[/spell.name] spell."

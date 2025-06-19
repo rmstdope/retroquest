@@ -73,11 +73,6 @@ class CommandParser:
         elif cmd.startswith('show '): # e.g. show map to mira
             # This will pass "map to mira". Game.show needs to parse it.
             return self.game.show(cmd[len('show '):])
-        elif any(cmd.startswith(prefix) for prefix in ('trade ', 'exchange ')): # e.g. trade coin with shopkeeper
-            # This will pass "coin with shopkeeper". Game.trade needs to parse it.
-            for prefix in ('trade ', 'exchange '):
-                if cmd.startswith(prefix):
-                    return self.game.trade(cmd[len(prefix):])
         elif cmd.startswith('buy '): # e.g. buy rope from shopkeeper
             # This will pass "rope from shopkeeper". Game.buy needs to parse it.
             return self.game.buy(cmd[len('buy '):])
@@ -95,16 +90,6 @@ class CommandParser:
             return self.game.search()
         elif cmd.startswith('listen to '):
             return self.game.listen(cmd[len('listen to '):])
-        elif cmd.startswith('smell '):
-            return self.game.smell(cmd[len('smell '):].strip())
-        elif cmd == 'smell':
-            return self.game.smell(None)
-        elif cmd.startswith('sniff '):
-            return self.game.smell(cmd[len('sniff '):].strip()) # Alias to smell
-        elif cmd == 'sniff':
-            return self.game.smell(None) # Alias to smell
-        elif cmd.startswith('taste '):
-            return self.game.taste(cmd[len('taste '):])
 
         # Inventory Management
         elif any(cmd.startswith(prefix) for prefix in ('take ', 'pick up ', 'grab ', 'get ')):
