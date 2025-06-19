@@ -133,8 +133,6 @@ def test_interaction_commands(game_parser):
         "talk to mira": ("talk", "mira"),
         "speak to blacksmith": ("talk", "blacksmith"),
         "converse with villager": ("talk", "villager"),
-        "ask mira about amulet": ("ask", "mira about amulet"),
-        "question guard about key": ("ask", "guard about key"),
         "give bread to grandmother": ("give", "bread to grandmother"),
         "hand coin to merchant": ("give", "coin to merchant"),
         "show map to mira": ("show", "map to mira"),

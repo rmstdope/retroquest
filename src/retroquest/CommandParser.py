@@ -60,11 +60,6 @@ class CommandParser:
             for prefix in ('talk to ', 'speak to ', 'converse with '):
                 if cmd.startswith(prefix):
                     return self.game.talk(cmd[len(prefix):])
-        elif any(cmd.startswith(prefix) for prefix in ('ask ', 'question ')): # e.g. ask mira about amulet
-            # This will pass "mira about amulet" as the argument. Game.ask needs to parse it.
-            for prefix in ('ask ', 'question '):
-                if cmd.startswith(prefix):
-                    return self.game.ask(cmd[len(prefix):])
         elif any(cmd.startswith(prefix) for prefix in ('give ', 'hand ')): # e.g. give bread to grandmother
             # This will pass "bread to grandmother". Game.give needs to parse it.
             for prefix in ('give ', 'hand '):

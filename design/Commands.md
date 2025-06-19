@@ -17,7 +17,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 ## Interaction
 
 - talk to [character] / speak to [character] / converse with [character]
-- ask [character] about [topic] / question [character] about [topic]
 - give [item] to [character] / hand [item] to [character]
 - show [item] to [character]
 - buy [item] from [character]

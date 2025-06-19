@@ -112,8 +112,6 @@ class Game:
             'talk': {'to': character_names},
             'speak': {'to': character_names},
             'converse': {'with': character_names},
-            'ask': {char: {'about': None} for char in character_names},
-            'question': {char: {'about': None} for char in character_names},
             'give': {item: {'to': character_names} for item in all_inventory_item_names},
             'hand': {item: {'to': character_names} for item in all_inventory_item_names},
             'show': {item: {'to': character_names} for item in all_inventory_item_names},
@@ -246,7 +244,6 @@ class Game:
             "\n"
             "[bold]Interaction:[/bold]\n"
             "  talk to <character>, speak to <character>, converse with <character>\n"
-            "  ask <character> about <topic>, question <character> about <topic>\n"
             "  give <item> to <character>, hand <item> to <character>\n"
             "  show <item> to <character>\n"
             "  buy <item> from <character>\n"
@@ -561,9 +558,6 @@ class Game:
         return self.state.stats()
 
     # --- Not Implemented Methods ---
-    def ask(self, target: str) -> str:
-        return "The 'ask' command is not yet implemented."
-
     def show(self, item: str) -> str:
         return "The 'show' command is not yet implemented."
 
