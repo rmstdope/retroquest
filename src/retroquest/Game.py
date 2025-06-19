@@ -164,8 +164,6 @@ class Game:
             'help': None, '?': None,
             'quit': None, 'exit': None,
             'restart': None,
-            'undo': None,
-            'redo': None,
 
             'sleep': None,
             'rest': None,
@@ -275,8 +273,6 @@ class Game:
             "  help, ?\n"
             "  quit, exit\n"
             "  restart\n"
-            "  undo\n"
-            "  redo\n"
             "\n"
             "[bold]Miscellaneous:[/bold]\n"
             "  sleep, rest\n"
@@ -569,9 +565,3 @@ class Game:
 
     def restart(self) -> str:
         return "The 'restart' command is not yet implemented."
-
-    def undo(self) -> str:
-        return "The 'undo' command is not yet implemented."
-
-    def redo(self) -> str:
-        return "The 'redo' command is not yet implemented."

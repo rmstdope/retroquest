@@ -224,8 +224,6 @@ def test_game_management_commands(game_parser):
         "quit": ("quit",),
         "exit": ("quit",),
         "restart": ("restart",),
-        "undo": ("undo",),
-        "redo": ("redo",),
     }
     expected_calls = []
     for cmd_text, expected_call in commands.items():

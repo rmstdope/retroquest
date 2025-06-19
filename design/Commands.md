@@ -55,8 +55,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - help / ?
 - quit / exit
 - restart
-- undo
-- redo
 
 ## Miscellaneous
 

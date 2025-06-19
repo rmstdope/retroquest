@@ -147,10 +147,6 @@ class CommandParser:
             return self.game.quit()
         elif cmd == 'restart':
             return self.game.restart()
-        elif cmd == 'undo':
-            return self.game.undo()
-        elif cmd == 'redo': 
-            return self.game.redo()
 
         # Miscellaneous
         elif cmd in ('sleep', 'rest'):
