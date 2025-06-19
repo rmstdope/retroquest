@@ -114,8 +114,6 @@ class Game:
             'converse': {'with': character_names},
             'give': {item: {'to': character_names} for item in all_inventory_item_names},
             'hand': {item: {'to': character_names} for item in all_inventory_item_names},
-            'show': {item: {'to': character_names} for item in all_inventory_item_names},
-            'exchange': {item: {'with': character_names} for item in all_inventory_item_names},
             'buy': {item: {'from': character_names} for item in all_item_names},
 
             'look': {
@@ -245,7 +243,6 @@ class Game:
             "[bold]Interaction:[/bold]\n"
             "  talk to <character>, speak to <character>, converse with <character>\n"
             "  give <item> to <character>, hand <item> to <character>\n"
-            "  show <item> to <character>\n"
             "  buy <item> from <character>\n"
             "\n"
             "[bold]Examination:[/bold]\n"
@@ -558,9 +555,6 @@ class Game:
         return self.state.stats()
 
     # --- Not Implemented Methods ---
-    def show(self, item: str) -> str:
-        return "The 'show' command is not yet implemented."
-
     def eat(self, item: str) -> str:
         return "The 'eat' command is not yet implemented."
 

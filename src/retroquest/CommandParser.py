@@ -65,9 +65,6 @@ class CommandParser:
             for prefix in ('give ', 'hand '):
                 if cmd.startswith(prefix):
                     return self.game.give(cmd[len(prefix):])
-        elif cmd.startswith('show '): # e.g. show map to mira
-            # This will pass "map to mira". Game.show needs to parse it.
-            return self.game.show(cmd[len('show '):])
         elif cmd.startswith('buy '): # e.g. buy rope from shopkeeper
             # This will pass "rope from shopkeeper". Game.buy needs to parse it.
             return self.game.buy(cmd[len('buy '):])

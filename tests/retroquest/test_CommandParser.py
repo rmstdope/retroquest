@@ -135,7 +135,6 @@ def test_interaction_commands(game_parser):
         "converse with villager": ("talk", "villager"),
         "give bread to grandmother": ("give", "bread to grandmother"),
         "hand coin to merchant": ("give", "coin to merchant"),
-        "show map to mira": ("show", "map to mira"),
         "buy rope from shopkeeper": ("buy", "rope from shopkeeper"),
         "buy apple from merchant": ("buy", "apple from merchant"),
     }
