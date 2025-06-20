@@ -43,6 +43,11 @@ class Blacksmith(Character):
             game_state.remove_item_from_inventory(item_object.get_name())
             # Optionally, set a story flag if needed
             game_state.set_story_flag("deer_can_be_observed", True)
-            return f"The [character.name]{self.get_name()}[/character.name] takes the [item.name]{item_object.get_name()}[/item.name], turning it over in his calloused hands. [dialogue]'Aye, this is from the old mill, alright. Sturdy stone. You know, old tales say the mill was built on a place of ancient power. Some say a magical deer sometimes appears in the Hidden Glade, drawn to such remnants. Perhaps this fragment holds a deeper secret than it seems.'[/dialogue]"
+            return (
+                f"The [character.name]{self.get_name()}[/character.name] takes the [item.name]{item_object.get_name()}[/item.name], turning it over in his calloused hands. "
+                "[dialogue]'Aye, this is from the old mill, alright. Sturdy stone. You know, old tales say the mill was built on a place of ancient power. "
+                "Some say a magical deer sometimes appears in the Hidden Glade, but only when all is calm and rest-ful—no voices, no footsteps, just the hush of the wind and the song of the stream. "
+                "If you seek the deer, remember: it will not show itself to those who rush or bring trouble.'[/dialogue]"
+            )
         else:
             return f"The [character.name]{self.get_name()}[/character.name] looks at the [item.name]{item_object.get_name()}[/item.name]. [dialogue]'I don't have a use for this, lad.'[/dialogue]"
