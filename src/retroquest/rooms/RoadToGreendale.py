@@ -1,5 +1,5 @@
 from .Room import Room
-from ..items.WalkingStick import WalkingStick
+from ..items.RustySaw import RustySaw
 from ..items.TravelCloak import TravelCloak
 from ..characters.Merchant import Merchant
 
@@ -14,7 +14,7 @@ class RoadToGreendale(Room):
                 "of adventure and the unknown. The road beckons, leading onward to new lands and new "
                 "stories."
             ),
-            items=[WalkingStick(), TravelCloak()],
+            items=[RustySaw()],
             characters=[Merchant()],
             exits={"west": "VillageChapel"}
         )

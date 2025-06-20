@@ -139,7 +139,7 @@
 
 - **Description:** The main road leaving Willowbrook, lined with ancient oaks.
 - **Items:** wandering boots (later - from Merchant).
-- **Unusable:** Walking stick (start).
+- **Unusable:** Rusty saw (start).
 - **Spells:** None.
 - **Usable Items:** Shiny ring (trade with Merchant), map (reveals shortcut to Greendale).
 - **Characters:** Merchant (sells wares, provides travel advice).

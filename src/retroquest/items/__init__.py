@@ -41,13 +41,13 @@ from .SmoothStone import SmoothStone
 from .Stick import Stick
 from .TravelCloak import TravelCloak
 from .Vines import Vines
-from .WalkingStick import WalkingStick
 from .WanderingBoots import WanderingBoots
 from .Well import Well
 from .WildBerries import WildBerries
 from .WitheredCarrot import WitheredCarrot
 from .Item import Item
 from .Map import Map # Ensure Map is imported
+from .RustySaw import RustySaw
 
 # This list is used to dynamically instantiate items when loading the game state
 # or when items are created during gameplay (e.g., by a character or a room).
@@ -97,11 +97,11 @@ AVAILABLE_ITEMS = {
     "Stick": Stick,
     "TravelCloak": TravelCloak,
     "Vines": Vines,
-    "WalkingStick": WalkingStick,
     "WanderingBoots": WanderingBoots,
     "Well": Well,
     "WildBerries": WildBerries,
     "WitheredCarrot": WitheredCarrot,
+    "RustySaw": RustySaw, # Added RustySaw
 }
 
 # Helper function to create an item instance by its class name
@@ -123,7 +123,7 @@ __all__ = [
     "MillstoneFragment", "MysteriousBox", "OldNotice", "PrayerBook", 
     "RareFlower", "River", "Rope", "RustyHoe", "SackOfFlour", 
     "SharpKnife", "ShedDoor", "ShinyPebble", "ShinyRing", 
-    "SmoothStone", "Stick", "TravelCloak", "Vines", "WalkingStick", 
+    "SmoothStone", "Stick", "TravelCloak", "Vines", "RustySaw", 
     "WanderingBoots", "Well", "WildBerries", "WitheredCarrot",
     "create_item", "AVAILABLE_ITEMS"
 ]

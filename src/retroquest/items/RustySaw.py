@@ -1,4 +1,4 @@
-from ..items.Item import Item
+from .Item import Item
 
 class RustySaw(Item):
     def __init__(self) -> None:

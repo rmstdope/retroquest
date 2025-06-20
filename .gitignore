@@ -162,3 +162,5 @@ cython_debug/
 #.idea/
 src/run.py
 *.save
+.DS_Store
+*.txt

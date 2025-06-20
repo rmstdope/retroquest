@@ -1,5 +1,6 @@
 from prompt_toolkit import PromptSession
 from typing import Any
+from . import DEV_MODE
 
 class CommandParser:
     """
@@ -153,6 +154,8 @@ class CommandParser:
             return self.game.map()
         elif cmd == 'stats':
             return self.game.stats()
-            
+        elif cmd.startswith('dev_execute_commands ') and DEV_MODE:
+            filename = cmd[len('dev_execute_commands '):].strip()
+            return self.game.dev_execute_commands(filename)
         else:
-            return self.game.unknown(command)
+            return self.game.unknown(cmd)

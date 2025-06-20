@@ -6,6 +6,7 @@ class FishingRod(Item):
     def __init__(self):
         super().__init__(
             name="fishing rod",
+            short_name="rod",
             description="A simple fishing rod. It looks a bit flimsy.",
             can_be_carried=True
         )

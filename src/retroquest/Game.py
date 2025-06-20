@@ -12,6 +12,7 @@ from .characters import Character
 from .items.Item import Item
 from .CommandParser import CommandParser
 from .GameState import GameState
+from . import DEV_MODE
 
 class Game:
     """
@@ -108,6 +109,9 @@ class Game:
         spell_names = {spell.get_name().lower(): None for spell in self.state.known_spells}
 
         exit_names = {direction: None for direction in self.state.current_room.get_exits()}
+        
+        # List all .txt files in the current directory
+        file_names = {f: None for f in os.listdir('.') if f.endswith('.txt') and os.path.isfile(f)}
 
         completions = {
             'go': exit_names,
@@ -177,6 +181,11 @@ class Game:
             'map': None,
             'stats': None,
         }
+
+        # Add dev_execute_commands to completions if DEV_MODE is True
+        if DEV_MODE:
+            completions['dev_execute_commands'] = file_names
+
         return completions
 
     def run(self) -> None:
@@ -591,3 +600,20 @@ class Game:
 
     def stats(self) -> str:
         return self.state.stats()
+
+    def dev_execute_commands(self, filename: str) -> str:
+        """
+        Execute a list of commands from a file, one per line, for dev/testing purposes.
+        Returns a summary of the results.
+        """
+        if not os.path.exists(filename):
+            return f"File not found: {filename}"
+        results = []
+        with open(filename, 'r') as f:
+            for line in f:
+                command = line.strip()
+                if not command or command.startswith('#'):
+                    continue  # Skip empty lines and comments
+                result = self.handle_command(command)
+                results.append(f"> {command}\n{result}")
+        return "\n".join(results)
