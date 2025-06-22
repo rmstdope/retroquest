@@ -3,7 +3,7 @@ from ..items.MysteriousBox import MysteriousBox # Ensure MysteriousBox is import
 
 class UnlockSpell(Spell):
     def __init__(self):
-        super().__init__("Unlock", "A spell that can open magically sealed or complex mundane locks.")
+        super().__init__("unlock", "A spell that can open magically sealed or complex mundane locks.")
 
     def cast(self, game_state, target_item=None) -> str:
         if not target_item:

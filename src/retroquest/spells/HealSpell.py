@@ -2,7 +2,7 @@ from .Spell import Spell
 
 class HealSpell(Spell):
     def __init__(self):
-        super().__init__("Heal", "A restorative spell that mends wounds and alleviates ailments.")
+        super().__init__("heal", "A restorative spell that mends wounds and alleviates ailments.")
 
     def cast(self, game_state) -> str:
         # Implement the logic for the heal spell

@@ -3,7 +3,7 @@ from ..items.WitheredCarrot import WitheredCarrot
 
 class GrowSpell(Spell):
     def __init__(self):
-        super().__init__("Grow", "A nature spell that encourages plants to flourish.")
+        super().__init__("grow", "A nature spell that encourages plants to flourish.")
 
     def cast(self, game_state, target_item=None) -> str:
         if target_item:

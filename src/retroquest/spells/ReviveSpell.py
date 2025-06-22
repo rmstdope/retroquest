@@ -3,7 +3,7 @@ from ..items.WitheredCarrot import WitheredCarrot # Assuming WitheredCarrot is a
 
 class ReviveSpell(Spell):
     def __init__(self):
-        super().__init__("Revive", "A potent spell that can restore life to withered plants or even recently deceased small creatures.")
+        super().__init__("revive", "A potent spell that can restore life to withered plants or even recently deceased small creatures.")
 
     def cast(self, game_state, target_item=None) -> str:
         if not game_state.get_story_flag("magic_fully_unlocked"):
