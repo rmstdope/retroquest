@@ -15,6 +15,15 @@ from retroquest.rooms.ForestPath import ForestPath
 from retroquest.rooms.HiddenGlade import HiddenGlade
 from retroquest.rooms.VillageChapel import VillageChapel
 from retroquest.rooms.RoadToGreendale import RoadToGreendale
+from retroquest.quests.HintOfMagic import HintOfMagicQuest
+from retroquest.quests.CuriosityKilledTheCat import CuriosityKilledTheCatQuest
+from retroquest.quests.FishingExpedition import FishingExpeditionQuest
+from retroquest.quests.KnowYourVillage import KnowYourVillageQuest
+from retroquest.quests.LetThereBeLight import LetThereBeLightQuest
+from retroquest.quests.MagicForReal import MagicForRealQuest
+from retroquest.quests.MagnetFishingExpedition import MagnetFishingExpeditionQuest
+from retroquest.quests.OhDeerOhDeer import OhDeerOhDeerQuest
+from retroquest.quests.PreparingForTheRoad import PreparingForTheRoadQuest
 
 results = []
 
@@ -82,9 +91,22 @@ ROOMS = {
     "RoadToGreendale": RoadToGreendale(),
 }
 
+# Quest setup for integration test
+QUESTS = [
+    HintOfMagicQuest(),
+    CuriosityKilledTheCatQuest(),
+    FishingExpeditionQuest(),
+    KnowYourVillageQuest(),
+    LetThereBeLightQuest(),
+    MagicForRealQuest(),
+    MagnetFishingExpeditionQuest(),
+    OhDeerOhDeerQuest(),
+    PreparingForTheRoadQuest()
+]
+
 def test_golden_path_act1_completion(monkeypatch):
     # Setup Game
-    game = Game(starting_room=ROOMS["EliorsCottage"], rooms=ROOMS)
+    game = Game(starting_room=ROOMS["EliorsCottage"], all_rooms=ROOMS, all_quests=QUESTS)
 
     # Step 1: Elior’s Cottage    
     _check_item_in_room(game.state.current_room, "bread", should_be_present=False)

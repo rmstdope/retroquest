@@ -45,6 +45,7 @@ OPPOSITE = {
 def test_room_reachability(start_key):
     # Instantiate all rooms
     rooms = {k: v() for k, v in ROOM_CLASSES.items()}
+    rooms['EliorsCottage'].can_leave()
     visited = set()
     queue = [start_key]
     while queue:
@@ -94,6 +95,7 @@ def test_room_transitions_bidirectional(room_class, room_key):
         "VillageChapel": VillageChapel(),
         "RoadToGreendale": RoadToGreendale(),
     }
+    rooms['EliorsCottage'].can_leave()  # Ensure Elior's Cottage can be left
     room = rooms[room_key]
     for direction, dest_key in room.get_exits().items():
         # Only test cardinal directions

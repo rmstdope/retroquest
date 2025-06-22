@@ -1,5 +1,51 @@
 # Act I Rooms: Willowbrook & Surroundings
 
+### Quests in Act I
+
+- **Name:** Hint of Magic
+
+  - **Trigger:** Starting of the game.
+  - **Completion:** Learn the 'revive' spell from Grandmother.
+
+- **Name:** Know your village
+
+  - **Trigger:** Grandmother encourages you to explore and get to know every corner of Willowbrook.
+  - **Completion:** Visit all areas in the village.
+
+- **Name:** Curiosity killed the cat
+
+  - **Trigger:** Enter the Abandoned Shed for the first time.
+  - **Completion:** Unlock the shed door.
+
+- **Name:** Fishing expedition
+
+  - **Trigger:** Talk to the fisherman for the first time.
+  - **Completion:** Give a fish to the fisherman.
+
+- **Name:** Oh, deer, oh deer
+
+  - **Trigger:** Learn about the magical deer from the Blacksmith.
+  - **Completion:** Observe the deer in the Hidden Glade.
+
+- **Name:** Magnet fishing expedition
+
+  - **Trigger:** Assemble the magnetic fishing rod.
+  - **Completion:** Retrieve the shiny ring from the well.
+
+- **Name:** Let there be light
+
+  - **Trigger:** Talk to the Priest for the first time.
+  - **Completion:** Light the candle.
+
+- **Name:** Magic for real
+
+  - **Trigger:** Learn your first spell.
+  - **Completion:** Be taught magic by Mira.
+
+- **Name:** Preparing for the road
+  - **Trigger:** Learn magic from Mira.
+  - **Completion:** Obtain all items needed for the journey.
+
 ## 1. Elior’s Cottage
 
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
@@ -189,6 +235,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - Read journal. Opens up new conversion story with Grandmother.
     - Speak to Grandmother for advice. _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell._
       - Spell Learned: `revive` (can not be used until magic is learned for real)
+    - **Note:** You cannot leave Elior’s Cottage until you have completed the sub-quest _Hint of Magic_ by learning the 'revive' spell from Grandmother.
 
 2.  **Vegetable Field:**
 

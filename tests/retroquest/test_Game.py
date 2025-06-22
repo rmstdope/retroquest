@@ -16,6 +16,7 @@ from retroquest.rooms.ForestPath import ForestPath
 from retroquest.rooms.HiddenGlade import HiddenGlade
 from retroquest.rooms.VillageChapel import VillageChapel
 from retroquest.rooms.RoadToGreendale import RoadToGreendale
+from retroquest.quests.HintOfMagic import HintOfMagicQuest
 
 # Dummy room and item setup for test
 ROOMS = {
@@ -43,10 +44,12 @@ def basic_rooms():
         "EliorsCottage": EliorsCottage(),
         "VegetableField": VegetableField(),
     }
+def basic_quests():
+    return [HintOfMagicQuest()]
 
 @pytest.fixture
 def game(basic_rooms):
-    return Game(basic_rooms["EliorsCottage"], basic_rooms)
+    return Game(basic_rooms["EliorsCottage"], basic_rooms, all_quests=basic_quests)
 
 def test_game_initial_state(game, basic_rooms):
     assert game.state.current_room == basic_rooms["EliorsCottage"]
@@ -56,6 +59,7 @@ def test_game_initial_state(game, basic_rooms):
 
 def test_move_valid(game, basic_rooms):
     # EliorsCottage south -> VegetableField
+    basic_rooms["EliorsCottage"].can_leave()
     result = game.move('south')
     assert game.state.current_room == basic_rooms["VegetableField"]
     assert "You move south to" in result
@@ -94,6 +98,7 @@ def test_visited_rooms_initial(game):
     assert game.state.visited_rooms == [game.state.current_room.name]
 
 def test_visited_rooms_after_move(game, basic_rooms):
+    basic_rooms["EliorsCottage"].can_leave()
     # Move to another room
     game.move('south')
     assert basic_rooms["VegetableField"].name in game.state.visited_rooms
@@ -101,6 +106,7 @@ def test_visited_rooms_after_move(game, basic_rooms):
     assert set(game.state.visited_rooms) == {basic_rooms["EliorsCottage"].name, basic_rooms["VegetableField"].name}
 
 def test_visited_rooms_no_duplicates(game, basic_rooms):
+    basic_rooms["EliorsCottage"].can_leave()
     # Move to another room and back
     game.move('south')
     game.move('north')  # Assuming VegetableField has north exit back
@@ -109,6 +115,7 @@ def test_visited_rooms_no_duplicates(game, basic_rooms):
     assert game.state.visited_rooms.count(basic_rooms["VegetableField"].name) == 1
 
 def test_map_initial_state(game):
+    game.state.get_room("Elior's Cottage").can_leave()
     result = game.map()
     # Only the starting room should be shown, with its exits listed
     assert "Visited Rooms and Exits:" in result
@@ -119,6 +126,7 @@ def test_map_initial_state(game):
     assert "- [room.name]Vegetable Field[/room.name]" not in result
 
 def test_map_after_move(game):
+    game.state.get_room("Elior's Cottage").can_leave()
     game.move('south')
     result = game.map()
     # Both rooms should be shown
@@ -130,6 +138,7 @@ def test_map_after_move(game):
     assert "    north -> [room.name]Elior's Cottage[/room.name]" in result
 
 def test_map_multiple_moves(game):
+    game.state.get_room("Elior's Cottage").can_leave()
     # Move south, then north (should visit both rooms, no duplicates)
     game.move('south')
     game.move('north')

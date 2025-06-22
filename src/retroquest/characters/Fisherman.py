@@ -13,7 +13,7 @@ class Fisherman(Character):
         self.knows_fishing_basics = False
         self.received_fish = False
         self.dialogue_states = {
-            "initial": "[dialogue]The [character.name]fisherman[/character.name] nods at you. 'The river\'s been a bit strange lately. Not many fish biting, and my arm... well, it\'s seen better days.'[/dialogue]",
+            "initial": "[dialogue]The [character.name]fisherman[/character.name] nods at you. 'The river\'s been a bit strange lately. Not many fish biting, and my arm... well, it\'s seen better days. Oh, I wish I could pull up a pike or two!'[/dialogue]",
             "taught_fishing": "[dialogue]The [character.name]fisherman[/character.name] smiles. 'Good to see you trying your luck with the rod. Any luck yet?'[/dialogue]",
             "received_fish_thanks": "[dialogue]The [character.name]fisherman[/character.name]'s eyes light up. 'Ah, a fine catch! Thank you kindly. It\'s been a while since I\'ve had a fresh river fish.'[/dialogue]",
             "taught_spells": "[dialogue]The [character.name]fisherman[/character.name] looks out over the water. 'The river has many moods. Treat it with respect, and it might share its secrets with you.'[/dialogue]"
@@ -21,6 +21,8 @@ class Fisherman(Character):
         self.current_dialogue_key = "initial"
 
     def talk_to(self, game_state: GameState) -> str: # Removed player argument
+        # Set the story flag that the player has talked to the fisherman
+        game_state.set_story_flag("talked_to_fisherman", True)
         # Check if player has a fishing rod in game_state.inventory
         player_has_rod = game_state.has_item("fishing rod") # Use game_state.has_item
 

@@ -19,13 +19,14 @@ class Game:
     Main Game class for RetroQuest: The Awakening.
     Handles the game loop, command parsing, and room transitions.
     """
-    def __init__(self, starting_room, rooms):
+    def __init__(self, starting_room, all_rooms, all_quests):
         custom_theme = Theme({
             "character.name": "bold blue",
             "dialogue": "italic cyan",
             "item.name": "bold green",
             "spell.name": "bold magenta",
             "room.name": "bold cyan",
+            "quest.name": "bold red",
             "event": "dim",
             "exits": "bold yellow"
         })
@@ -33,11 +34,21 @@ class Game:
         self.completer = NestedCompleter.from_nested_dict({}) 
         self.session = PromptSession(completer=self.completer, complete_while_typing=True)
         self.is_running = True
-        self.state = GameState(starting_room, all_rooms=rooms) # Pass all_rooms
+        self.state = GameState(starting_room, all_rooms=all_rooms, all_quests=all_quests) # Pass all_rooms and all_quests
         self.command_parser = CommandParser(self)
 
     def handle_command(self, command: str) -> str:
-        return self.command_parser.parse(command)
+        result = self.command_parser.parse(command)
+        activated = self.state.activate_quests()
+        completed = self.state.complete_quests()
+        responses = [result]
+        if activated:
+            responses.append('\n')
+            responses.append(activated)
+        if completed:
+            responses.append('\n')
+            responses.append(completed)
+        return "\n".join([r for r in responses if r])
 
     def print_intro(self):
         # Play music in a separate thread so it doesn't block the prompt
@@ -191,7 +202,10 @@ class Game:
     def run(self) -> None:
         self.print_intro()
         self.console.clear()
-        self.console.print(self.state.current_room.describe() + "\n")
+        #self.console.print(self.state.current_room.describe() + "\n")
+        response = self.handle_command('look around')  # Initial look around the room")
+        # Print a separator line before any output after a command
+        self.console.print('\n' + response + '\n')
         while self.is_running:
             completions = self.get_command_completions()
             self.session.completer = NestedCompleter.from_nested_dict(completions)
@@ -199,8 +213,7 @@ class Game:
             self.state.history.append(user_input)
             response = self.handle_command(user_input)
             # Print a separator line before any output after a command
-            if response:
-                self.console.print('\n' + response + '\n')
+            self.console.print('\n' + response + '\n')
 
     def find_character(self, target) -> Character:
         character_to_examine = None

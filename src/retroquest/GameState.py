@@ -1,13 +1,8 @@
-from typing import TYPE_CHECKING, Dict
-
-if TYPE_CHECKING:
-    from .rooms.Room import Room
-
 class GameState:
     """
     Holds the mutable state of the currently played game: current room, inventory, history, and visited rooms.
     """
-    def __init__(self, starting_room, all_rooms=None) -> None:
+    def __init__(self, starting_room, all_rooms, all_quests) -> None:
         self.current_room = starting_room
         self.all_rooms = all_rooms
         self.inventory = []
@@ -15,6 +10,9 @@ class GameState:
         self.visited_rooms = [starting_room.name]
         self.known_spells = []
         self.story_flags = [] # Replace journal_read_prologue_entry
+        self.non_activated_quests = all_quests
+        self.activated_quests = []  # This will hold quests that have been activated
+        self.completed_quests = []  # This will hold quests that have been completed
 
     def mark_visited(self, room) -> None:
         if room.name not in self.visited_rooms:
@@ -93,4 +91,104 @@ class GameState:
                 lines.append(f"- [room.name]{room}[/room.name]")
         else:
             lines.append("(none)")
+        lines.append("")
+        lines.append("[bold]Activated Quests:[/bold]")
+        if self.activated_quests:
+            for quest in self.activated_quests:
+                lines.append(f"- [quest.name]{quest.name}[/quest.name]: {quest.description}")
+        else:
+            lines.append("(none)")
+        lines.append("")
+        lines.append("[bold]Completed Quests:[/bold]")
+        if self.completed_quests:
+            for quest in self.completed_quests:
+                lines.append(f"- [quest.name]{quest.name}[/quest.name]: {quest.completion}")
+        else:
+            lines.append("(none)")
         return "\n".join(lines)
+
+    def activate_quests(self):
+        """
+        Checks non_activated_quests for any that should be activated (triggered).
+        Moves newly activated quests to activated_quests and returns a string describing them,
+        or None if no new quest was activated.
+        """
+        newly_activated = []
+        remaining = []
+        for quest in self.non_activated_quests:
+            if quest.check_trigger(self):
+                self.activated_quests.append(quest)
+                newly_activated.append(quest)
+            else:
+                remaining.append(quest)
+        self.non_activated_quests = remaining
+        if newly_activated:
+            quest_lines = []
+            for q in newly_activated:
+                quest_lines.append(f"[quest.name]{q.name}[/quest.name]: {q.description}")
+            return "New quest(s) activated:\n" + "\n".join(quest_lines)
+        return None
+
+    def complete_quests(self):
+        """
+        Checks activated_quests for any that are now completed.
+        Moves newly completed quests to completed_quests and returns a string describing them,
+        or None if no new quest was completed.
+        """
+        newly_completed = []
+        remaining = []
+        for quest in getattr(self, 'activated_quests', []):
+            if quest.check_completion(self):
+                self.completed_quests.append(quest)
+                newly_completed.append(quest)
+            else:
+                remaining.append(quest)
+        self.activated_quests = remaining
+        if newly_completed:
+            completion_lines = []
+            for q in newly_completed:
+                completion_lines.append(f"[quest.name]{q.name}[/quest.name]: {q.completion}")
+            return "Quest(s) completed:\n" + "\n".join(completion_lines)
+        return None
+
+    def get_room(self, room_name: str):
+        """
+        Returns the room object matching the given room_name (case-insensitive, matches against all room names).
+        Returns None if not found.
+        """
+        for room in self.all_rooms.values():
+            if room.name.lower() == room_name.lower():
+                return room
+        return None
+
+    def get_item(self, item_name: str):
+        """
+        Returns the item object matching the given item_name (case-insensitive),
+        searching first in the player's inventory, then in all rooms.
+        Returns None if not found.
+        """
+        # Search inventory
+        item_name_lower = item_name.lower()
+        for item in self.inventory:
+            if (item.get_name().lower() == item_name_lower) or (item.get_short_name().lower() == item_name_lower):
+                return item
+        # Search all rooms
+        for room in self.all_rooms.values():
+            for room_item in getattr(room, 'items', []):
+                if room_item.get_name().lower() == item_name_lower or (room_item.get_short_name().lower() == item_name_lower):
+                    return room_item
+        return None
+
+    def get_quest(self, quest_name: str):
+        """
+        Returns the quest object matching the given quest_name (case-insensitive),
+        searching in non_activated_quests, activated_quests, and completed_quests.
+        Returns None if not found.
+        """
+        quest_name_lower = quest_name.lower()
+        for quest_list in [self.non_activated_quests, self.activated_quests, self.completed_quests]:
+            for quest in quest_list:
+                if quest.name.lower() == quest_name_lower:
+                    return quest
+        return None
+

@@ -1,6 +1,7 @@
 from .Item import Item
 from .Magnet import Magnet
 from .MagneticFishingRod import MagneticFishingRod
+from ..GameState import GameState
 
 class FishingRod(Item):
     def __init__(self):
@@ -11,19 +12,23 @@ class FishingRod(Item):
             can_be_carried=True
         )
 
-    def use_with(self, game_state, other_item):
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
         if isinstance(other_item, Magnet):
-            # Remove self (FishingRod) and Magnet from inventory
-            if self in game_state.inventory:
-                game_state.inventory.remove(self)
-            if other_item in game_state.inventory:
-                game_state.inventory.remove(other_item)
-            
-            # Add MagneticFishingRod to inventory
-            magnetic_rod = MagneticFishingRod()
-            game_state.inventory.append(magnetic_rod)
-            return f"You attach the [item.name]{other_item.get_name()}[/item.name] to the [item.name]{self.get_name()}[/item.name], creating a [item.name]{magnetic_rod.get_name()}[/item.name]."
-        
+            # Only allow combining if the spell 'purify' is learned
+            if game_state.has_spell('purify'):
+                # Remove self (FishingRod) and Magnet from inventory
+                if self in game_state.inventory:
+                    game_state.inventory.remove(self)
+                if other_item in game_state.inventory:
+                    game_state.inventory.remove(other_item)
+                
+                # Add MagneticFishingRod to inventory
+                magnetic_rod = MagneticFishingRod()
+                game_state.inventory.append(magnetic_rod)
+                return f"You attach the [item.name]{other_item.get_name()}[/item.name] to the [item.name]{self.get_name()}[/item.name], creating a [item.name]{magnetic_rod.get_name()}[/item.name]."
+            else:
+                return ("You could force the magnet onto the rod, but it would likely break the fishing rod — and you might need it for something else.")
+
         from .River import River # Add local import here
         if isinstance(other_item, River): # Check if the other_item is a River
             return other_item.use_with(game_state, self) # Call River's use_with method

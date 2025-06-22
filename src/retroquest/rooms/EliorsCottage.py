@@ -17,5 +17,10 @@ class EliorsCottage(Room):
             ),
             items=[Lantern()],
             characters=[Grandmother()],
-            exits={"south": "VegetableField", "east": "VillageSquare"}
+            exits={}  # Start with empty exits
         )
+
+    def can_leave(self):
+        # Fill exits when this method is called
+        if not self.exits:
+            self.exits = {"south": "VegetableField", "east": "VillageSquare"}
