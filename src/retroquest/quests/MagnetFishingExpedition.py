@@ -5,7 +5,7 @@ class MagnetFishingExpeditionQuest(Quest):
     def __init__(self) -> None:
         super().__init__(
             name="Magnet fishing expedition",
-            description="You have assembled a strange fishing rod with a magnet. What secrets might you pull from the depths of the well?",
+            description="You have assembled a strange fishing rod with a magnet. Time to go on another fishing expedition!",
             completion="You have retrieved the shiny ring from the well, proving your ingenuity and determination."
         )
 
