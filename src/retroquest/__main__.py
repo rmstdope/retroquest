@@ -53,9 +53,7 @@ def main():
         MagicForRealQuest(),
         MagnetFishingExpeditionQuest(),
         OhDeerOhDeerQuest(),
-        PreparingForTheRoadQuest([
-            "travel cloak", "wild berries", "apple", "egg", "fresh carrot", "wandering boots", "map"
-        ]),
+        PreparingForTheRoadQuest(),
     ]
     game = Game(starting_room, rooms, all_quests=all_quests)
     game.run()
