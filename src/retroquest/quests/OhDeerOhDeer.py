@@ -4,7 +4,7 @@ from ..GameState import GameState
 class OhDeerOhDeerQuest(Quest):
     def __init__(self) -> None:
         super().__init__(
-            name="Oh, deer, oh deer",
+            name="Oh deer, oh deer",
             description="You have heard tales of a magical deer from the Blacksmith. Perhaps you will witness something extraordinary yourself!",
             completion="You have observed the magical deer, gaining a deeper understanding of the wonders and mysteries of Eldoria."
         )
