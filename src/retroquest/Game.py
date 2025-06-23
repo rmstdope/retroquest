@@ -26,8 +26,9 @@ class Game:
             "item.name": "bold green",
             "spell.name": "bold magenta",
             "room.name": "bold cyan",
-            "quest.name": "bold red",
+            "quest.name": "red",
             "event": "dim",
+            "failure": "bold red",
             "exits": "bold yellow"
         })
         self.console = Console(theme=custom_theme)
@@ -251,9 +252,9 @@ class Game:
                 self.state.mark_visited(self.state.current_room)
                 return f"[event][You move {direction} to [room.name]{self.state.current_room.name}[/room.name].][/event]\n\n" + self.state.current_room.describe()
             else:
-                return "That exit leads nowhere (room not found)."
+                return "[failure]That exit leads nowhere (room not found).[/failure]"
         else:
-            return "You can't go that way."
+            return "[failure]You can't go that way.[/failure]"
 
     def help(self, arg: str = None) -> str:
         return (
@@ -363,21 +364,21 @@ class Game:
             self.state.inventory.remove(item_to_drop)
             self.state.current_room.items.append(item_to_drop)
             return f"You drop the [item.name]{item_to_drop.get_name()}[/item.name]."
-        return f"You don't have a '{item}' to drop."
+        return f"[failure]You don't have a '{item}' to drop.[/failure]"
 
     def take(self, item: str) -> str:
         item_to_take = self.find_item(item, look_in_inventory=False, look_in_room=True)
         if not item_to_take:
-            return f"There is no '{item}' here to take."
+            return f"[failure]There is no '{item}' here to take.[/failure]"
         if not item_to_take.can_be_carried():
-            return f"You can't take the [item.name]{item_to_take.get_name()}[/item.name]."
+            return f"[failure]You can't take the [item.name]{item_to_take.get_name()}[/item.name].[/failure]"
         self.state.current_room.items.remove(item_to_take)
         self.state.inventory.append(item_to_take)
         
         # Call picked_up on the item
         pickup_message = item_to_take.picked_up(self.state)
         
-        response = f"You take the [item.name]{item_to_take.get_name()}[/item.name]."
+        response = f"[event]You take the [item.name]{item_to_take.get_name()}[/item.name].[/event]"
         if pickup_message:
             response += " " + pickup_message
         return response
@@ -392,24 +393,24 @@ class Game:
 
     def talk(self, target: str) -> str:
         if not target:
-            return "Talk to whom?"
+            return "[failure]Talk to whom?[/failure]"
         character_to_talk_to = self.find_character(target)
         if character_to_talk_to:
             return character_to_talk_to.talk_to(self.state)
         else:
-            return f"There is no character named '[character.name]{target}[/character.name]' here to talk to."
+            return f"[failure]There is no character named '[character.name]{target}[/character.name]' here to talk to.[/failure]"
 
     def split_command(self, command_args: str, command: str, delimiter: str) -> tuple:
         # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"
         parts = command_args.lower().split()
         if delimiter not in parts:
-            return None, None, f"Invalid command format. Please use '{command} <target1> {delimiter} <target2>'."
+            return None, None, f"[failure]Invalid command format. Please use '{command} <target1> {delimiter} <target2>'.[/failure]"
         del_index = parts.index(delimiter)
         if del_index == 0: # No target1 provided
-            return None, None, f"What do you want to {command}?'."
+            return None, None, f"[failure]What do you want to {command}?[/failure]"
         target1 = " ".join(parts[:del_index])
         if del_index >= len(parts) - 1: # No target2 provided
-            return None, None, f"Who/What should I {command} {target1} {delimiter}?'."
+            return None, None, f"[failure]Who/What should I {command} {target1} {delimiter}?[/failure]"
         target2 = " ".join(parts[del_index+1:])
         return target1, target2, ''
         
@@ -422,12 +423,12 @@ class Game:
         # Check if item is in inventory
         item_to_give = self.find_item(item_name, look_in_inventory=True, look_in_room=False)
         if not item_to_give:
-            return f"You don't have any '{item_name}' to give."
+            return f"[failure]You don't have any '{item_name}' to give.[/failure]"
 
         # Check if character is in the room
         character_to_receive = self.find_character(character_name)
         if not character_to_receive:
-            return f"There is no character named '{character_name.capitalize()}' here."
+            return f"[failure]There is no character named '{character_name.capitalize()}' here.[/failure]"
 
         # Call give_item on the character
         return character_to_receive.give_item(self.state, item_to_give)
@@ -441,13 +442,13 @@ class Game:
         # Check if character is in the room
         character_to_buy_from = self.find_character(character_name)
         if not character_to_buy_from:
-            return f"There is no character named '{character_name.capitalize()}' here."
+            return f"[failure]There is no character named '{character_name.capitalize()}' here.[/failure]"
 
         return character_to_buy_from.buy_item(item_name, self.state)
 
     def read(self, item: str) -> str:
         if not item:  # Check if item name is empty or None
-            return "Read what?"
+            return "[failure]Read what?[/failure]"
 
         item_to_read = self.find_item(item, look_in_inventory=True, look_in_room=True)
         
@@ -456,23 +457,23 @@ class Game:
             # If an item is not meant to be read, its read() method should return an appropriate message.
             return item_to_read.read(self.state)
         else:
-            return f"You don't see a '{item}' to read here or in your inventory."
+            return f"[failure]You don't see a '{item}' to read here or in your inventory.[/failure]"
 
     def use(self, item_name_1: str, item_name_2: str = None) -> str:
         item_obj_1 = self.find_item(item_name_1, look_in_inventory=True, look_in_room=True)
 
         if not item_obj_1:
-            return f"You don't have a '{item_name_1}' to use, and there isn't one here."
+            return f"[failure]You don't have a '{item_name_1}' to use, and there isn't one here.[/failure]"
 
         # --- Handle two-item usage ---
         if item_name_2:
             item_obj_2 = self.find_item(item_name_2, look_in_inventory=True, look_in_room=True)
             
             if not item_obj_2:
-                return f"You don't see a '{item_name_2}' to use with the [item.name]{item_obj_1.get_name()}[/item.name]."
+                return f"[failure]You don't see a '{item_name_2}' to use with the [item.name]{item_obj_1.get_name()}[/item.name].[/failure]"
 
             if item_obj_1 == item_obj_2:
-                return f"You can't use the [item.name]{item_obj_1.get_name()}[/item.name] with itself."
+                return f"[failure]You can't use the [item.name]{item_obj_1.get_name()}[/item.name] with itself.[/failure]"
 
             return item_obj_1.use_with(self.state, item_obj_2)
 
@@ -495,7 +496,7 @@ class Game:
                 break
         
         if not spell_to_cast:
-            return f"You don't know any spell called '{spell_name}'."
+            return f"[failure]You don't know any spell called '{spell_name}'.[/failure]"
 
         target_item = None
         if target_name:
@@ -510,9 +511,7 @@ class Game:
     def learn(self, spell: Spell) -> str:
         if spell not in self.state.known_spells:
             self.state.known_spells.append(spell)
-            return f"You have learned the [spell.name]{spell.get_name()}[/spell.name] spell!"
-        else:
-            return f"You already know the [spell.name]{spell.get_name()}[/spell.name] spell."
+            return f"[event]You have learned the [spell.name]{spell.get_name()}[/spell.name] spell![/event]"
 
     def spells(self) -> str: # Method to list known spells
         if not self.state.known_spells:
@@ -534,82 +533,82 @@ class Game:
         if item_to_listen_to:
             return item_to_listen_to.listen(self.state)
         else:
-            return f"You don't see a '{target}' to listen to here or in your inventory."
+            return f"[failure]You don't see a '{target}' to listen to here or in your inventory.[/failure]"
 
     def rest(self) -> str:
         return self.state.current_room.rest(self.state)
 
     def open(self, target: str) -> str:
         if not target:
-            return "Open what?"
+            return "[failure]Open what?[/failure]"
         item_to_open = self.find_item(target, look_in_inventory=True, look_in_room=True)
         if item_to_open:
             return item_to_open.open(self.state) # Pass game_state to the item's open method
         else:
-            return f"You don't see a '{target}' to open here or in your inventory."
+            return f"[failure]You don't see a '{target}' to open here or in your inventory.[/failure]"
 
     def close(self, target: str) -> str:
         if not target:
-            return "Close what?"
+            return "[failure]Close what?[/failure]"
         item_to_close = self.find_item(target, look_in_inventory=True, look_in_room=True)
         if item_to_close:
             return item_to_close.close(self.state) # Pass game_state to the item's close method
         else:
-            return f"You don't see a '{target}' to close here or in your inventory."
+            return f"[failure]You don't see a '{target}' to close here or in your inventory.[/failure]"
 
     def eat(self, item: str) -> str:
         if not item:
-            return "Eat what?"
+            return "[failure]Eat what?[/failure]"
         item_to_eat = self.find_item(item, look_in_inventory=True, look_in_room=True)
         if item_to_eat:
             return item_to_eat.eat(self.state)
         else:
-            return f"You don't see a '{item}' to eat here or in your inventory."
+            return f"[failure]You don't see a '{item}' to eat here or in your inventory.[/failure]"
 
     def drink(self, item: str) -> str:
         if not item:
-            return "Drink what?"
+            return "[failure]Drink what?[/failure]"
         item_to_drink = self.find_item(item, look_in_inventory=True, look_in_room=True)
         if item_to_drink:
             return item_to_drink.drink(self.state)
         else:
-            return f"You don't see a '{item}' to drink here or in your inventory."
+            return f"[failure]You don't see a '{item}' to drink here or in your inventory.[/failure]"
 
     def equip(self, item: str) -> str:
         if not item:
-            return "Equip what?"
+            return "[failure]Equip what?[/failure]"
         item_to_equip = self.find_item(item, look_in_inventory=True, look_in_room=True)
         if item_to_equip:
             return item_to_equip.equip(self.state)
         else:
-            return f"You don't see a '{item}' to equip here or in your inventory."
+            return f"[failure]You don't see a '{item}' to equip here or in your inventory.[/failure]"
 
     def unequip(self, item: str) -> str:
         if not item:
-            return "Unequip what?"
+            return "[failure]Unequip what?[/failure]"
         item_to_unequip = self.find_item(item, look_in_inventory=True, look_in_room=True)
         if item_to_unequip:
             return item_to_unequip.unequip(self.state)
         else:
-            return f"You don't see a '{item}' to unequip here or in your inventory."
+            return f"[failure]You don't see a '{item}' to unequip here or in your inventory.[/failure]"
 
     def save(self) -> str:
         try:
             with open('retroquest.save', 'wb') as f:
                 pickle.dump(self.state, f)
-            return "Game saved successfully."
+            return "[event]Game saved successfully.[/event]"
         except Exception as e:
-            return f"Failed to save game: {e}"
+            return f"[failure]Failed to save game: {e}[/failure]"
 
     def load(self) -> str:
         if not os.path.exists('retroquest.save'):
-            return "No save file found."
+            return "[failure]No save file found.[/failure]"
         try:
             with open('retroquest.save', 'rb') as f:
                 self.state = pickle.load(f)
-            return "Game loaded successfully."
+            return "[event]Game loaded successfully.[/event]"
         except Exception as e:
-            return f"Failed to load game: {e}"
+            return f"[failure]Failed to load game: {e}[/failure]"
 
     def stats(self) -> str:
         return self.state.stats()
@@ -620,7 +619,7 @@ class Game:
         Returns a summary of the results.
         """
         if not os.path.exists(filename):
-            return f"File not found: {filename}"
+            return f"[failure]File not found: {filename}[/failure]"
         results = []
         with open(filename, 'r') as f:
             for line in f:

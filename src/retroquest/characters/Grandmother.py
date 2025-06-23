@@ -53,15 +53,18 @@ class Grandmother(Character):
         if not dialogue: # If no other dialogue was triggered
             dialogue = "[dialogue]It's good to see you, [character.name]Elior[/character.name]. Is there something you need?[/dialogue]"
 
-        return dialogue
+        event_msg = f"[event]You speak with the [character.name]{self.get_name()}[/character.name].[/event]"
+        return event_msg + "\n" + dialogue
 
     def give_item(self, game_state: GameState, item: Item) -> str:
         if isinstance(item, Locket):
             game_state.remove_item_from_inventory(item.get_name())
             travel_cloak = TravelCloak()
             game_state.add_item_to_inventory(travel_cloak)
+            event_msg = f"[event]You give the [item.name]{item.get_name()}[/item.name] to the [character.name]{self.get_name()}[/character.name].[/event]"
             return (
-                f"[dialogue][character.name]{self.get_name()}[/character.name]'s eyes widen as she sees the [item.name]{item.get_name()}[/item.name]. 'This... this was your mother's. She said it would keep you safe. "
+                event_msg + "\n" +
+                f"[character.name]{self.get_name()}[/character.name]'s eyes widen as she sees the [item.name]{item.get_name()}[/item.name]. [dialogue]'This... this was your mother's. She said it would keep you safe. "
                 f"And this... she wanted you to have this when you were old enough to understand its importance.' "
                 f"[character.name]{self.get_name()}[/character.name] hands you a finely made [item.name]{travel_cloak.get_name()}[/item.name]. 'May it protect you on your journeys, [character.name]Elior[/character.name].'[/dialogue]"
                 f"\n\n[event]You received a [item.name]{travel_cloak.get_name()}[/item.name]![/event]"
@@ -71,13 +74,17 @@ class Grandmother(Character):
             self.dialogue_state["given_berries"] = True
             # Remove WildBerries from inventory
             game_state.remove_item_from_inventory(item.get_name())
+            event_msg = f"[event]You give the [item.name]{item.get_name()}[/item.name] to the [character.name]{self.get_name()}[/character.name].[/event]"
             return (
+                event_msg + "\n" +
                 f"[dialogue]'Oh, [item.name]{item.get_name()}[/item.name]! Thank you, dear. These look lovely. I'll make a pie later.' "
                 f"[character.name]{self.get_name()}[/character.name] smiles warmly. 'It's the little things that brighten the day, isn't it?'[/dialogue]"
             )
         elif isinstance(item, WildBerries) and self.dialogue_state["given_berries"]:
             # Remove WildBerries from inventory
             game_state.remove_item_from_inventory(item.get_name())
-            return f"[dialogue]'More [item.name]{item.get_name()}[/item.name]? You are too kind, [character.name]Elior[/character.name]. Thank you.'[/dialogue]"
+            event_msg = f"[event]You give the [item.name]{item.get_name()}[/item.name] to the [character.name]{self.get_name()}[/character.name].[/event]"
+            return event_msg + "\n" + f"[dialogue]'More [item.name]{item.get_name()}[/item.name]? You are too kind, [character.name]Elior[/character.name]. Thank you.'[/dialogue]"
 
-        return f"[dialogue][character.name]{self.get_name()}[/character.name] looks at the [item.name]{item.get_name()}[/item.name]. 'I'm not sure what to do with this, dear.'[/dialogue]"
+        event_msg = f"[event]You offer the [item.name]{item.get_name()}[/item.name] to the [character.name]{self.get_name()}[/character.name].[/event]"
+        return event_msg + "\n" + f"[dialogue][character.name]{self.get_name()}[/character.name] looks at the [item.name]{item.get_name()}[/item.name]. 'I'm not sure what to do with this, dear.'[/dialogue]"

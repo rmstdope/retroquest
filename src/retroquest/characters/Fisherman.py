@@ -43,22 +43,26 @@ class Fisherman(Character):
             # This state transition happens in give_item
             pass
 
-        return self.dialogue_states[self.current_dialogue_key]
+        event_msg = f"[event]You speak with the [character.name]{self.get_name()}[/character.name].[/event]"
+        return event_msg + "\n" + self.dialogue_states[self.current_dialogue_key]
 
     def give_item(self, game_state: GameState, item: Item) -> str:
         if isinstance(item, Fish) and not self.received_fish:
             self.received_fish = True
             game_state.remove_item_from_inventory(item.name)
-            
             # Teach spell
             game_state.learn_spell(PurifySpell())            
             self.current_dialogue_key = "taught_spells"
-            return (f"You give the [item.name]{item.name}[/item.name] to the [character.name]Fisherman[/character.name]. {self.dialogue_states['received_fish_thanks']} "
-                    f"[dialogue]'The river\'s water... it\'s not been right. Murky. But I sense you have a connection to the old ways. "
+            event_msg = f"[event]You give the [item.name]{item.name}[/item.name] to the [character.name]Fisherman[/character.name].[/event]"
+            return (event_msg + "\n" +
+                    f"{self.dialogue_states['received_fish_thanks']} "
+                    f"[dialogue]'The river's water... it's not been right. Murky. But I sense you have a connection to the old ways. "
                     f"Let me teach you something to help. With this, you can cleanse water,'[/dialogue] he says, teaching you the [spell.name]purify[/spell.name] spell. "
                     f"You have learned [spell.name]purify[/spell.name]!")
 
         elif isinstance(item, Fish) and self.received_fish:
-            return "[dialogue]The [character.name]fisherman[/character.name] smiles. 'Thank you, but I\'ve already eaten. Save it for yourself!'[/dialogue]"
+            event_msg = f"[event]You offer the [item.name]{item.name}[/item.name] to the [character.name]Fisherman[/character.name].[/event]"
+            return event_msg + "\n" + "[dialogue]The [character.name]fisherman[/character.name] smiles. 'Thank you, but I've already eaten. Save it for yourself!'[/dialogue]"
         
-        return f"The [character.name]fisherman[/character.name] looks at the [item.name]{item.name}[/item.name] curiously but doesn\'t seem to need it."
+        event_msg = f"[event]You offer the [item.name]{item.name}[/item.name] to the [character.name]Fisherman[/character.name].[/event]"
+        return event_msg + "\n" + f"The [character.name]fisherman[/character.name] looks at the [item.name]{item.name}[/item.name] curiously but doesn't seem to need it."

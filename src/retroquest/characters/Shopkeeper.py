@@ -56,8 +56,9 @@ class Shopkeeper(Character):
 
     def buy_item(self, item_name_to_buy: str, game_state) -> str:
         item_name_to_buy = item_name_to_buy.lower()
+        event_msg = f"[event]You try to buy the [item.name]{item_name_to_buy}[/item.name] from the [character.name]{self.get_name()}[/character.name].[/event]"
         if item_name_to_buy not in self.wares:
-            return f"[dialogue]Sorry, I don't have any '[item.name]{item_name_to_buy}[/item.name]' for sale.[/dialogue]"
+            return event_msg + "\n" + f"[dialogue]Sorry, I don't have any '[item.name]{item_name_to_buy}[/item.name]' for sale.[/dialogue]"
 
         ware_details = self.wares[item_name_to_buy]
         price = ware_details["price"]
@@ -71,7 +72,7 @@ class Shopkeeper(Character):
                 coin_count += 1
         
         if coin_count < price:
-            return f"[dialogue]You don't have enough [item.name]coins[/item.name] for the [item.name]{item_name_to_buy}[/item.name]. It costs {price} [item.name]coin(s)[/item.name].[/dialogue]"
+            return event_msg + "\n" + f"[failure]You don't have enough [item.name]coins[/item.name] for the [item.name]{item_name_to_buy}[/item.name]. It costs {price} [item.name]coin(s)[/item.name].[/failure]"
 
         # Remove coins from inventory
         removed_coins = 0
@@ -101,4 +102,4 @@ class Shopkeeper(Character):
         # If the store's stock should deplete, that logic would go here,
         # potentially removing item_object from game_state.current_room.items
 
-        return f"[event]You bought a [item.name]{new_item.get_name()}[/item.name] for {price} [item.name]coin(s)[/item.name] and got an extra [item.name]apple[/item.name] as a bonus![/event]"
+        return event_msg + f"\n[event]You bought a [item.name]{new_item.get_name()}[/item.name] for {price} [item.name]coin(s)[/item.name] and got an extra [item.name]apple[/item.name] as a bonus![/event]"

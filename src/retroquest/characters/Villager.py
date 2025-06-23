@@ -18,4 +18,5 @@ class Villager(Character):
     def talk_to(self, game) -> str:
         dialogue = self.dialogue_options[self.dialogue_index]
         self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options) # Cycle through dialogue
-        return f'The Villager says: "{dialogue}"'
+        event_msg = f"[event]You speak with the [character.name]{self.get_name()}[/character.name].[/event]"
+        return event_msg + "\n" + f"'{dialogue}'"
