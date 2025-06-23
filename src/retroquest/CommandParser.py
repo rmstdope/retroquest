@@ -132,8 +132,6 @@ class CommandParser:
         elif cmd.startswith('cast '): # Handles "cast [spell]" and "cast [spell] on [target]"
             # game.cast will receive the full string after "cast ", e.g., "revive" or "fireball on goblin"
             return self.game.cast(cmd[len('cast '):])
-        elif cmd.startswith('learn '):
-            return self.game.learn(cmd[len('learn '):])
         elif cmd == 'spells':
             return self.game.spells() # Assumes game.spells() method exists
 

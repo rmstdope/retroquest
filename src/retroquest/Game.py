@@ -61,7 +61,7 @@ class Game:
                 pygame.mixer.music.play(loops=-1)  # Loop indefinitely
             except Exception as e:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
-        #threading.Thread(target=play_music, daemon=True).start()
+        threading.Thread(target=play_music, daemon=True).start()
         
         self.console.print("\033[47;30m", end="")
         self.console.clear()
@@ -181,7 +181,6 @@ class Game:
             'close': all_item_names,
 
             'cast': {**{k: {'on': {**all_item_names, **character_names}} for k in spell_names}},
-            'learn': None, 
             'spells': None,
 
             'save': {'game': None},
@@ -295,7 +294,6 @@ class Game:
             "[bold]Magic:[/bold]\n"
             "  cast <spell>\n"
             "  cast <spell> on <object/character>\n"
-            "  learn <spell>\n"
             "  spells\n"
             "\n"
             "[bold]Game Management:[/bold]\n"
