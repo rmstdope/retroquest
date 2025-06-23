@@ -104,27 +104,57 @@ class Game:
         self.session.prompt('Press Enter to continue...')
 
     def get_command_completions(self):
+        # Helper to build nested dict for multi-word item names
+        def build_nested_names(names):
+            nested = {}
+            for name in names:
+                parts = name.split()
+                d = nested
+                for i, part in enumerate(parts):
+                    if i == len(parts) - 1:
+                        d[part] = None
+                    else:
+                        if part not in d or not isinstance(d[part], dict):
+                            d[part] = {}
+                        d = d[part]
+            return nested
+
+        # Helper to build nested dict for 'use' command so that 'with' is suggested only after the full item name
+        def build_use_with_completions(names, with_dict):
+            root = {}
+            for name in names:
+                parts = name.split()
+                d = root
+                for i, part in enumerate(parts):
+                    if i == len(parts) - 1:
+                        d[part] = {'with': with_dict.copy() if isinstance(with_dict, dict) else with_dict}
+                    else:
+                        if part not in d or not isinstance(d[part], dict):
+                            d[part] = {}
+                        d = d[part]
+            return root
+
         all_items = self.state.current_room.get_items() + self.state.inventory
-        item_names = {item.get_name().lower(): None for item in all_items}
-        item_short_names = {item.get_short_name().lower(): None for item in all_items if item.get_short_name()}
-        all_item_names = {**item_names, **item_short_names}
+        item_names = [item.get_name().lower() for item in all_items]
+        item_short_names = [item.get_short_name().lower() for item in all_items if item.get_short_name()]
+        all_item_names = item_names + item_short_names
 
-        inventory_item_names = {item.get_name().lower(): None for item in self.state.inventory}
-        inventory_item_short_names = {item.get_short_name().lower(): None for item in self.state.inventory if item.get_short_name()}
-        all_inventory_item_names = {**inventory_item_names, **inventory_item_short_names}
+        inventory_item_names = [item.get_name().lower() for item in self.state.inventory]
+        inventory_item_short_names = [item.get_short_name().lower() for item in self.state.inventory if item.get_short_name()]
+        all_inventory_item_names = inventory_item_names + inventory_item_short_names
 
-        room_item_names = {item.get_name().lower(): None for item in self.state.current_room.get_items()}
-        room_item_short_names = {item.get_short_name().lower(): None for item in self.state.current_room.get_items() if item.get_short_name()}
-        all_room_item_names = {**room_item_names, **room_item_short_names}
+        room_item_names = [item.get_name().lower() for item in self.state.current_room.get_items()]
+        room_item_short_names = [item.get_short_name().lower() for item in self.state.current_room.get_items() if item.get_short_name()]
+        all_room_item_names = room_item_names + room_item_short_names
 
-        character_names = {char.get_name().lower(): None for char in self.state.current_room.get_characters()}
-
-        spell_names = {spell.get_name().lower(): None for spell in self.state.known_spells}
-
+        character_names = [char.get_name().lower() for char in self.state.current_room.get_characters()]
+        spell_names = [spell.get_name().lower() for spell in self.state.known_spells]
         exit_names = {direction: None for direction in self.state.current_room.get_exits()}
-        
-        # List all .txt files in the current directory
         file_names = {f: None for f in os.listdir('.') if f.endswith('.txt') and os.path.isfile(f)}
+
+        # Build 'use' completions so that 'with' is suggested only after the full item name
+        use_with_dict = build_nested_names(all_item_names)
+        use_completions = build_use_with_completions(all_item_names, use_with_dict)
 
         completions = {
             'go': exit_names,
@@ -134,53 +164,53 @@ class Game:
             'enter': None, 
             'leave': None,
             'exit': None,
-            'climb': all_item_names,
-            'ascend': all_item_names,
-            'descend': all_item_names,
+            'climb': build_nested_names(all_item_names),
+            'ascend': build_nested_names(all_item_names),
+            'descend': build_nested_names(all_item_names),
             'follow': None, 
             'walk': None,
 
-            'talk': {'to': character_names},
-            'speak': {'to': character_names},
-            'converse': {'with': character_names},
-            'give': {item: {'to': character_names} for item in all_inventory_item_names},
-            'hand': {item: {'to': character_names} for item in all_inventory_item_names},
-            'buy': {item: {'from': character_names} for item in all_item_names},
+            'talk': {'to': build_nested_names(character_names)},
+            'speak': {'to': build_nested_names(character_names)},
+            'converse': {'with': build_nested_names(character_names)},
+            'give': build_nested_names(all_inventory_item_names),
+            'hand': build_nested_names(all_inventory_item_names),
+            'buy': build_nested_names(all_item_names),
 
             'look': {
                 'around': None,
-                'at': {**all_item_names, **character_names},
+                'at': {**build_nested_names(all_item_names), **build_nested_names(character_names)},
             },
             'l': None,
             'observe': None,
             'survey': None,
-            'inspect': {**all_item_names, **character_names},
-            'examine': {**all_item_names, **character_names},
-            'check': {**all_item_names, **character_names},
-            'read': all_item_names,
+            'inspect': {**build_nested_names(all_item_names), **build_nested_names(character_names)},
+            'examine': {**build_nested_names(all_item_names), **build_nested_names(character_names)},
+            'check': {**build_nested_names(all_item_names), **build_nested_names(character_names)},
+            'read': build_nested_names(all_item_names),
             'search': None,
             'investigate': None,
-            'listen': {'to': all_item_names},
+            'listen': {'to': build_nested_names(all_item_names)},
 
-            'take': all_room_item_names,
-            'pick': {'up': all_room_item_names},
-            'grab': all_room_item_names,
-            'get': all_room_item_names,
-            'drop': all_inventory_item_names,
-            'discard': all_inventory_item_names,
-            'use': {**{k: {'with': all_item_names} for k in all_item_names}},
-            'eat': all_inventory_item_names,
-            'consume': all_inventory_item_names,
-            'drink': all_inventory_item_names,
-            'equip': all_inventory_item_names,
-            'wear': all_inventory_item_names,
-            'unequip': all_inventory_item_names,
-            'remove': all_inventory_item_names,
+            'take': build_nested_names(all_room_item_names),
+            'pick': {'up': build_nested_names(all_room_item_names)},
+            'grab': build_nested_names(all_room_item_names),
+            'get': build_nested_names(all_room_item_names),
+            'drop': build_nested_names(all_inventory_item_names),
+            'discard': build_nested_names(all_inventory_item_names),
+            'use': use_completions,
+            'eat': build_nested_names(all_inventory_item_names),
+            'consume': build_nested_names(all_inventory_item_names),
+            'drink': build_nested_names(all_inventory_item_names),
+            'equip': build_nested_names(all_inventory_item_names),
+            'wear': build_nested_names(all_inventory_item_names),
+            'unequip': build_nested_names(all_inventory_item_names),
+            'remove': build_nested_names(all_inventory_item_names),
             'inventory': None, 'i': None, 'inv': None,
-            'open': all_item_names,
-            'close': all_item_names,
+            'open': build_nested_names(all_item_names),
+            'close': build_nested_names(all_item_names),
 
-            'cast': {**{k: {'on': {**all_item_names, **character_names}} for k in spell_names}},
+            'cast': {**{k: {'on': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in spell_names}},
             'spells': None,
 
             'save': {'game': None},

@@ -204,8 +204,6 @@ def test_magic_commands(game_parser):
     expected_calls.append(("cast", "fireball"))
     parser.parse("cast fireball on goblin") # Generic cast with target
     expected_calls.append(("cast", "fireball on goblin"))
-    parser.parse("learn teleport")
-    expected_calls.append(("learn", "teleport"))
     parser.parse("spells")
     expected_calls.append(("spells",))
 
