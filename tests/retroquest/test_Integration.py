@@ -384,12 +384,6 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_room(game.state.current_room, "map", should_be_present=False) # Map is still in the box
 
     _execute_commands(game, ["open mysterious box"])
-    # After opening, the map should be in the room, and the box should not contain it anymore.
-    _check_item_in_room(game.state.current_room, "map", should_be_present=True) 
-    assert not mysterious_box.contains_map, "Mysterious Box should not contain the map after opening"
-
-
-    _execute_commands(game, ["take map"])
     _check_item_in_inventory(game.state, "map")
     _check_item_in_room(game.state.current_room, "map", should_be_present=False) # Map is now in inventory
 

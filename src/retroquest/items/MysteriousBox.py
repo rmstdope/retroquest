@@ -16,7 +16,7 @@ class MysteriousBox(Item):
         if self.locked:
             self.locked = False
             self.description = f"A small, ornate wooden [item.name]{self.get_name()}[/item.name] covered in strange runes. The lock has clicked open."
-            event_msg = f"[event]You try to unlock the [item.name]{self.get_name()}[/item.name].\n"
+            event_msg = f"[event]You try to unlock the [item.name]{self.get_name()}[/item.name].[/event]\n"
             return event_msg + f"A soft click is heard from the [item.name]{self.get_name()}[/item.name] as the lock springs open!"
         return f"[failure]The [item.name]{self.get_name()}[/item.name] is already unlocked.[/failure]"
 
@@ -25,11 +25,10 @@ class MysteriousBox(Item):
             return f"[failure]The [item.name]{self.get_name()}[/item.name] is locked. You need to find a way to open it.[/failure]"
 
         if self.contains_map:
-            map_item = GameMap() # Use the aliased Map
-            game_state.current_room.add_item(map_item) # Add to current room's items using add_item method
+            game_state.add_item_to_inventory(GameMap()) # Add to inventory using aliased Map
             self.contains_map = False # Set contains_map to False
             self.description = "An open, ornate wooden box. It is now empty."
-            return f"[event]You open the [item.name]{self.get_name()}[/item.name]. Inside, you find a [item.name]map[/item.name]![/item.name]\nYou take the [item.name]map[/item.name] and place it in your inventory.[/event]"
+            return f"[event]You open the [item.name]{self.get_name()}[/item.name].[/event]\nInside, you find a [item.name]map[/item.name]! You take the [item.name]map[/item.name] and place it in your inventory."
         else:
             return f"[event]The [item.name]{self.get_name()}[/item.name] is now empty.[/event]"
 

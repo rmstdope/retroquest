@@ -60,7 +60,7 @@ class Game:
                 pygame.mixer.music.play(loops=-1)  # Loop indefinitely
             except Exception as e:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
-        threading.Thread(target=play_music, daemon=True).start()
+        #threading.Thread(target=play_music, daemon=True).start()
         
         self.console.print("\033[47;30m", end="")
         self.console.clear()

@@ -16,8 +16,8 @@ class ReviveSpell(Spell):
                 revival_message = target_item.revive() 
                 
                 # The item, now a "Fresh carrot", remains in its original location.
-                return f"You channel the life-giving energy into the Withered Carrot. It transforms! {revival_message}"
+                return f"[event]You channel the life-giving energy into the Withered Carrot.[/event]\n {revival_message}"
             else:
-                return f"You can't revive the {target_item.get_name()}."
+                return f"[failure]You can't revive the {target_item.get_name()}.[/failure]"
         else:
-            return "What do you want to cast Revive on?"
+            return "[failure]What do you want to cast Revive on?[/failure]"

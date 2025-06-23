@@ -31,7 +31,7 @@ class Fisherman(Character):
                 game_state.set_story_flag("learned_fishing_basics", True)
                 self.knows_fishing_basics = True # Keep this for internal state if needed by other dialogue
                 self.current_dialogue_key = "taught_fishing"
-                return "[dialogue]The [character.name]fisherman[/character.name] notices your [item.name]fishing rod[/item.name]. 'Ah, a fellow angler! My arm\'s busted, can\'t fish myself. But I can tell you a thing or two. Cast your line near the reeds, that\'s where they like to hide. Patience is key, my friend, patience.'[/dialogue] He teaches you the basics of fishing."
+                return "[dialogue]The [character.name]fisherman[/character.name] notices your [item.name]fishing rod[/item.name]. 'Ah, a fellow angler! My arm\'s busted, can\'t fish myself. But I can tell you a thing or two. Cast your line near the reeds, that\'s where they like to hide. Patience is key, my friend, patience.'[/dialogue]\nHe teaches you the basics of fishing."
             elif game_state.get_story_flag("learned_fishing_basics"):
                  # If already taught, but current_dialogue_key is somehow still initial, switch to taught_fishing
                 self.current_dialogue_key = "taught_fishing"
@@ -57,7 +57,7 @@ class Fisherman(Character):
             return (event_msg + "\n" +
                     f"{self.dialogue_states['received_fish_thanks']} "
                     f"[dialogue]'The river's water... it's not been right. Murky. But I sense you have a connection to the old ways. "
-                    f"Let me teach you something to help. With this, you can cleanse water,'[/dialogue] he says, teaching you the [spell.name]purify[/spell.name] spell. "
+                    f"Let me teach you something to help. With this, you can cleanse water,'[/dialogue] he says, teaching you ta new spell.\n"
                     f"You have learned [spell.name]purify[/spell.name]!")
 
         elif isinstance(item, Fish) and self.received_fish:

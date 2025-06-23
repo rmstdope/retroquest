@@ -8,4 +8,4 @@ class GrowSpell(Spell):
     def cast(self, game_state, target_item=None) -> str:
         if target_item:
             return target_item.grow(game_state)
-        return "You cast Grow. The nearby plants seem to respond with vibrant energy, but nothing else happens."
+        return "[event]You cast Grow.[/event]\nThe nearby plants seem to respond with vibrant energy, but nothing else happens."

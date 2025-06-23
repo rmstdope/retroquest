@@ -6,4 +6,4 @@ class BlessSpell(Spell):
 
     def cast(self, game_state) -> str:
         game_state.set_story_flag("journey_bless_completed", True)
-        return "You feel a comforting warmth envelop you, steeling you for the road ahead."
+        return "[event]You cast [spell.name]bless[/spell.name] on yourself.[/event]\nYour resolve is strengthened, and you feel more prepared for the challenges that lie ahead on your journey."

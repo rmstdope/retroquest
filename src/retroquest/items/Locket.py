@@ -7,7 +7,7 @@ class Locket(Item):
     def __init__(self):
         super().__init__(
             name="locket",
-            description="A small, intricately carved silver locket, clearly very old. It feels cool to the touch.",
+            description="A small, intricately carved silver locket, clearly very old. It feels cool to the touch. Perhaps some elder in the village might know more about it.",
             short_name="locket",
             can_be_carried=True
         )

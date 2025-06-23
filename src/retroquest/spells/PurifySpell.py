@@ -7,10 +7,10 @@ class PurifySpell(Spell):
 
     def cast(self, game_state, target_item=None) -> str:  # Added target_item
         if not game_state.get_story_flag("magic_fully_unlocked"):
-            return f"You attempt to cast {self.get_name()}, but the magic fizzles out, achieving nothing."
+            return f"[event]You attempt to cast {self.get_name()}, but the magic fizzles out, achieving nothing.[/event]\nIt feels like the magic is just out of reach."
 
         if target_item:
             if isinstance(target_item, Well):
                 return target_item.purify(game_state) # Delegate to Well's purify method
-            return f"You cast {self.get_name()} on the {target_item.get_name()}. A cleansing energy flows from your hands, but nothing else seems to happen."
-        return f"You cast {self.get_name()}. A cleansing energy flows from your hands."
+            return f"[event]You cast {self.get_name()} on the {target_item.get_name()}.[/event]\nA cleansing energy flows from your hands, but nothing else seems to happen."
+        return f"[event]You cast {self.get_name()}.[/event]\nA cleansing energy flows from your hands."

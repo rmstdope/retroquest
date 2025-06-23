@@ -7,7 +7,7 @@ class UnlockSpell(Spell):
 
     def cast(self, game_state, target_item=None) -> str:
         if not target_item:
-            return "You need to specify what you want to unlock."
+            return "[failure]You need to specify what you want to unlock.[/failure]"
 
         # Check if the target_item is the Mysterious Box and if it's in the current room or inventory
         # The find_item method in Game.py already handles finding the item.
@@ -16,4 +16,4 @@ class UnlockSpell(Spell):
         if isinstance(target_item, MysteriousBox):
             return target_item.unlock(game_state) # Call unlock method of MysteriousBox
         else:
-            return f"You can't unlock the {target_item.get_name()} with this spell."
+            return super().cast(game_state, target_item)

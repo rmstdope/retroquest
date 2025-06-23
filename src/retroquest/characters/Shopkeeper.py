@@ -102,4 +102,4 @@ class Shopkeeper(Character):
         # If the store's stock should deplete, that logic would go here,
         # potentially removing item_object from game_state.current_room.items
 
-        return event_msg + f"\n[event]You bought a [item.name]{new_item.get_name()}[/item.name] for {price} [item.name]coin(s)[/item.name] and got an extra [item.name]apple[/item.name] as a bonus![/event]"
+        return f"\n[event]You bought a [item.name]{new_item.get_name()}[/item.name] for {price} [item.name]coin(s)[/item.name] and got an extra [item.name]apple[/item.name] as a bonus![/event]"

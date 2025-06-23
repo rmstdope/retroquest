@@ -22,20 +22,20 @@ class Grandmother(Character):
         dialogue = ""
         if self.dialogue_state["initial_talk"]:
             dialogue = (
-                "[dialogue]Oh, [character.name]Elior[/character.name], my dear. The village... it feels a bit on edge lately, doesn't it? \n\n"
-                "Willowbrook has always been a peaceful place. The [room.name]Village Square[/room.name] is usually bustling, though folks seem more hushed these days. \n\n"
-                "If you're needing anything, the [room.name]General Store[/room.name] usually has a bit of everything. Old Man Hemlock, the [character.name]shopkeeper[/character.name], sees and hears a lot, too.\n\n"
-                "And if it's wisdom or a remedy you seek, [character.name]Mira[/character.name] in her hut to the north of the square is the one to talk to. She has a way with herbs and... other things.\n\n"
-                "The [character.name]Blacksmith[/character.name] down by the south end, he's a sturdy fellow, always hammering away. Keeps the tools sharp, and his spirits, mostly.\n\n"
+                "[dialogue]Oh, [character.name]Elior[/character.name], my dear. The village... it feels a bit on edge lately, doesn't it? \n"
+                "Willowbrook has always been a peaceful place. The [room.name]Village Square[/room.name] is usually bustling, though folks seem more hushed these days. \n"
+                "If you're needing anything, the [room.name]General Store[/room.name] usually has a bit of everything. Old Man Hemlock, the [character.name]shopkeeper[/character.name], sees and hears a lot, too.\n"
+                "And if it's wisdom or a remedy you seek, [character.name]Mira[/character.name] in her hut to the north of the square is the one to talk to. She has a way with herbs and... other things.\n"
+                "The [character.name]Blacksmith[/character.name] down by the south end, he's a sturdy fellow, always hammering away. Keeps the tools sharp, and his spirits, mostly.\n"
                 "Just... be observant, child. There's more to this world than meets the eye. And you, [character.name]Elior[/character.name], you have a good heart. Remember that.[/dialogue]"
             )
             self.dialogue_state["initial_talk"] = False # Change state after initial talk
 
         if game_state.get_story_flag('journal_read_prologue_entry'):
             added_dialogue = (
-                "\n\n[dialogue]That [item.name]journal[/item.name] of yours... your father was a great writer, you know. He wrote of many things, some of which I am only now beginning to understand.\n\n"
-                "He sensed a darkness, a shadow stretching over Eldoria, long before others did. He believed it was tied to the old tales, to the whispers of forgotten magic.\n\n"
-                "He even researched a peculiar enchantment, one that could supposedly breathe life back into things on the very brink... a '[spell.name]revive[/spell.name]' spell, he called it.\n\n"
+                "\n[dialogue]That [item.name]journal[/item.name] of yours... your father was a great writer, you know. He wrote of many things, some of which I am only now beginning to understand.\n"
+                "He sensed a darkness, a shadow stretching over Eldoria, long before others did. He believed it was tied to the old tales, to the whispers of forgotten magic.\n"
+                "He even researched a peculiar enchantment, one that could supposedly breathe life back into things on the very brink... a '[spell.name]revive[/spell.name]' spell, he called it.\n"
                 "He thought it might be a key, a way to mend what the encroaching darkness sought to break. Keep your eyes open, [character.name]Elior[/character.name]. What you've read might be more than just stories.[/dialogue]"
             )
             dialogue += added_dialogue
@@ -46,14 +46,14 @@ class Grandmother(Character):
             if not already_knows_revive:
                 revive_spell_instance = ReviveSpell()
                 game_state.known_spells.append(revive_spell_instance)
-                dialogue += "\n\n[event]As she speak of it, the words your father wrote seem to settle in your mind. \n\nYou feel a new understanding... You have learned the [spell.name]Revive[/spell.name] spell![/event]"
+                dialogue += "\n\n[event]As she speak of it, the words your father wrote seem to settle in your mind. \nYou feel a new understanding... You have learned the [spell.name]Revive[/spell.name] spell![/event]"
             else:
                 dialogue += "\n\n[event]You recall your father's writings on the [spell.name]Revive[/spell.name] spell. The knowledge feels familiar.[/event]"
         
         if not dialogue: # If no other dialogue was triggered
             dialogue = "[dialogue]It's good to see you, [character.name]Elior[/character.name]. Is there something you need?[/dialogue]"
 
-        event_msg = f"[event]You speak with the [character.name]{self.get_name()}[/character.name].[/event]"
+        event_msg = f"[event]You speak with [character.name]{self.get_name()}[/character.name].[/event]"
         return event_msg + "\n" + dialogue
 
     def give_item(self, game_state: GameState, item: Item) -> str:
@@ -65,9 +65,9 @@ class Grandmother(Character):
             return (
                 event_msg + "\n" +
                 f"[character.name]{self.get_name()}[/character.name]'s eyes widen as she sees the [item.name]{item.get_name()}[/item.name]. [dialogue]'This... this was your mother's. She said it would keep you safe. "
-                f"And this... she wanted you to have this when you were old enough to understand its importance.' "
-                f"[character.name]{self.get_name()}[/character.name] hands you a finely made [item.name]{travel_cloak.get_name()}[/item.name]. 'May it protect you on your journeys, [character.name]Elior[/character.name].'[/dialogue]"
-                f"\n\n[event]You received a [item.name]{travel_cloak.get_name()}[/item.name]![/event]"
+                f"And this... she wanted you to have this when you were old enough to understand its importance.'[/dialogue]\n"
+                f"[character.name]{self.get_name()}[/character.name] hands you a finely made [item.name]{travel_cloak.get_name()}[/item.name].\n[dialogue]'May it protect you on your journeys, [character.name]Elior[/character.name].'[/dialogue]"
+                f"\n[event]You received a [item.name]{travel_cloak.get_name()}[/item.name]![/event]"
             )
 
         elif isinstance(item, WildBerries) and not self.dialogue_state["given_berries"]:

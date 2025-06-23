@@ -4,7 +4,7 @@ from ..GameState import GameState
 class Map(Item):
     def __init__(self):
         super().__init__(
-            name="Map",
+            name="map",
             description="A detailed map of Willowbrook and the surrounding areas. It shows various landmarks and paths, some of which are not immediately obvious.",
             can_be_carried=True
         )

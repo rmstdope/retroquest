@@ -7,11 +7,12 @@ class PreparingForTheRoadQuest(Quest):
             name="Preparing for the road",
             description=(
                 "Mira has tasked you with preparing for your journey. She says you will need: \n"
-                " * Warm clothing (like a travel cloak)\n"
+                " * Warm clothing\n"
                 " * Magical protection\n"
                 " * Food for the road (at least four different types)\n"
                 " * Sturdy footwear\n"
                 " * A map to find your way, and to have learned all the basic magic the village elders can teach you."
+                " * To have learned all the basic magic the village elders can teach you."
             ),
             completion="You have gathered all the items needed for your journey. With your preparations complete, you are ready to face whatever lies beyond Willowbrook."
         )

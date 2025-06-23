@@ -8,4 +8,4 @@ class HealSpell(Spell):
         # Implement the logic for the heal spell
         # For example, it might restore player's health
         # game_state.player.heal(20) # Heals 20 HP
-        return "A warm light envelops you, and you feel your wounds mending."
+        return "[event]You cast heal on yourself.[/event]\nA warm light envelops you, and you feel your wounds mending."

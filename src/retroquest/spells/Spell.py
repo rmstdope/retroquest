@@ -16,5 +16,5 @@ class Spell:
     def cast(self, game_state, target_item=None) -> str:
         """Casts the spell. This method should be overridden by subclasses."""
         if target_item:
-            return f"You can't cast {self.name} on {target_item.get_name()}."
-        return f"You cast {self.name}, but nothing happens."
+            return f"[failure]You can't cast [spell.name]{self.name}[/spell.name] on [item.name]{target_item.get_name()}[/item.name].[/failure]"
+        return f"[failure]You cast [spell.name]{self.name}[/spell.name], but nothing happens.[/failure]"
