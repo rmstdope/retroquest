@@ -22,23 +22,39 @@ class PreparingForTheRoadQuest(Quest):
 
     def check_completion(self, game_state: GameState) -> bool:
         # Items
-        has_travel_cloak = game_state.has_item("travel cloak")
+        self.has_travel_cloak = game_state.has_item("travel cloak")
         # Food items
         has_wild_berries = game_state.has_item("wild berries")
         has_apple = game_state.has_item("apple")
         has_egg = game_state.has_item("egg")
         has_carrot = game_state.has_item("fresh carrot")
-        all_food_collected = has_wild_berries and has_apple and has_egg and has_carrot
+        self.all_food_collected = has_wild_berries and has_apple and has_egg and has_carrot
 
-        has_wandering_boots = game_state.has_item("wandering boots")
-        has_map = game_state.has_item("map")
+        self.has_wandering_boots = game_state.has_item("wandering boots")
+        self.has_map = game_state.has_item("map")
 
         # Spells
         required_spells = ["revive", "purify", "bless", "heal", "unlock", "light", "grow"]
-        knows_all_spells = all(game_state.has_spell(spell_name) for spell_name in required_spells)
+        self.knows_all_spells = all(game_state.has_spell(spell_name) for spell_name in required_spells)
         
         # Action: Bless cast for journey (assuming this flag is set elsewhere when player casts bless on self)
-        journey_bless_completed = game_state.get_story_flag("journey_bless_completed")
+        self.journey_bless_completed = game_state.get_story_flag("journey_bless_completed")
 
-        return (has_travel_cloak and all_food_collected and has_wandering_boots and has_map and
-                knows_all_spells and journey_bless_completed)
+        self.description = ["Mira has tasked you with preparing for your journey. She says you will need: \n"]
+        requirements = [
+            (" * Warm clothing", self.has_travel_cloak),
+            (" * Magical protection", self.journey_bless_completed),
+            (" * Food for the road (at least four different types)", self.all_food_collected),
+            (" * Sturdy footwear", self.has_wandering_boots),
+            (" * A map to find your way", self.has_map),
+            (" * All basic magic learned", self.knows_all_spells),
+        ]
+        for req, completed in requirements:
+            if completed:
+                self.description.append(f"[success]{req}[/success]")
+            else:
+                self.description.append(f"[failure]{req}[/failure]")
+        self.description = "\n".join(self.description)
+
+        return (self.has_travel_cloak and self.all_food_collected and self.has_wandering_boots and self.has_map and
+                self.knows_all_spells and self.journey_bless_completed)

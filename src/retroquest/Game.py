@@ -29,6 +29,7 @@ class Game:
             "quest.name": "red",
             "event": "dim",
             "failure": "bold red",
+            "success": "bold green",
             "exits": "bold yellow"
         })
         self.console = Console(theme=custom_theme)
