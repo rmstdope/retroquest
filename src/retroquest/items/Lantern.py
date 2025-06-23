@@ -14,14 +14,13 @@ class Lantern(Item):
         if self.name == "lantern":  # If it's not lit yet
             self.name = "lantern (lit)"
             self.short_name = "lantern"  # Update short_name as well
-            action_taken_message = f"You light the [item.name]{self.get_name()}[/item.name]. The flickering light reveals more of the room. A small loaf of [item.name]bread[/item.name] and a [item.name]journal[/item.name] appear in the light."
+            # Item revealing logic
+            from .Bread import Bread
+            from .EliorsJournal import EliorsJournal
+            game_state.current_room.add_item(Bread())  # Add bread to the room
+            game_state.current_room.add_item(EliorsJournal())
+            action_taken_message = f"[event]You light the [item.name]{self.get_name()}[/item.name]. The flickering light reveals more of the room. A small loaf of [item.name]bread[/item.name] and a [item.name]journal[/item.name] appear in the light.[/event]"
         else:  # Already lit
-            action_taken_message = f"The [item.name]{self.get_name()}[/item.name] is already lit."
+            action_taken_message = f"[failure]The [item.name]{self.get_name()}[/item.name] is already lit.[/failure]"
 
-        # Item revealing logic
-        from .Bread import Bread
-        from .EliorsJournal import EliorsJournal
-        game_state.current_room.add_item(Bread())  # Add bread to the room
-        game_state.current_room.add_item(EliorsJournal())
-        
         return action_taken_message

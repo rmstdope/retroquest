@@ -17,11 +17,10 @@ class RustyHoe(Item):
             player_has_coin = any(isinstance(item, Coin) for item in game_state.inventory)
             
             if not player_has_coin:
-                coin_to_add = Coin()
-                game_state.add_item_to_inventory(coin_to_add) # Assumes GameState has add_item_to_inventory
-                return "You till the soil with the [item.name]rusty hoe[/item.name]. The ground is tough, and you unearth a small, tarnished [item.name]coin[/item.name]! You quickly pocket it."
+                game_state.add_item_to_inventory(Coin()) # Assumes GameState has add_item_to_inventory
+                return "[event]You till the soil with the [item.name]rusty hoe[/item.name].\n[/event]You till the soil with the [item.name]rusty hoe[/item.name]. The ground is tough, and you unearth a small, tarnished [item.name]coin[/item.name]! You quickly pocket it."
             else:
-                return "You till the soil again with the [item.name]hoe[/item.name], but it seems you've already found what was hidden here."
+                return "[failure]You till the soil again with the [item.name]hoe[/item.name].\nYou till the soil again with the [item.name]hoe[/item.name], but it seems you've already found what was hidden here.[/failure]"
         else:
             # If not in Vegetable Field, the hoe is ineffective but not consumed
-            return "You swing the [item.name]rusty hoe[/item.name], but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though."
+            return "[failure]You swing the [item.name]rusty hoe[/item.name].\nYou swing the [item.name]rusty hoe[/item.name], but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though.[/failure]"

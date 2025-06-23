@@ -10,7 +10,8 @@ class OldNotice(Item):
         )
 
     def read(self, game_state: GameState) -> str:
-        return (
+        event_msg = f"[event]You read the [item.name]{self.get_name()}[/item.name].\n"
+        return event_msg + (
             "The notice is weathered and old, but you can make out some of the words:\n\n"
             "\"[bold]MISSING[/bold] - Our dear cat, Patches, has vanished. Last seen near the old well. "
             "She is very friendly but easily spooked. Responds to her name. "

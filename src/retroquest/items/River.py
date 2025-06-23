@@ -14,19 +14,13 @@ class River(Item):
         from .FishingRod import FishingRod  # Importing FishingRod to check for interaction
         if isinstance(other_item, FishingRod):
             if not game_state.get_story_flag("learned_fishing_basics"):
-                return f"You have the [item.name]{other_item.get_name()}[/item.name], but you're not quite sure how to fish effectively yet. Perhaps someone could teach you."
+                return f"[failure]You have the [item.name]{other_item.get_name()}[/item.name], but you're not quite sure how to fish effectively yet. Perhaps someone could teach you.[/failure]"
             if self.fish_available:
                 game_state.add_item_to_inventory(Fish())
                 self.fish_available = False # Only one fish can be caught, or implement a cooldown/chance
-                return f"You cast your line into the [item.name]{self.get_name()}[/item.name] using the [item.name]{other_item.get_name()}[/item.name]. After a moment, you feel a tug and reel in a plump [item.name]fish[/item.name]!"
+                self.description="A gentle river, its waters flowing steadily. You've already fished here recently.",
+                return f"[event]You cast your line into the [item.name]{self.get_name()}[/item.name] using the [item.name]{other_item.get_name()}[/item.name]. After a moment, you feel a tug and reel in a plump [item.name]fish[/item.name]![/event]\nYou add the fish to your inventory."
             else:
-                return "You cast your line again, but the fish aren't biting right now."
+                return "[failure]You cast your line again, but the fish aren't biting right now.[/failure]"
         else:
             return super().use_with(game_state, other_item)
-
-    def examine(self) -> str:
-        if self.fish_available:
-            self.description="A gentle river, its waters flowing steadily. It looks like a good spot for fishing.",
-        else:
-            self.description="A gentle river, its waters flowing steadily. You've already fished here recently.",
-        return super().examine()

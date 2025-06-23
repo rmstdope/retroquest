@@ -21,5 +21,6 @@ class EliorsJournal(Item):
             "I woke with a start, my heart pounding. Even now, the memory sends a shiver down my spine. "
             "What did it mean?\"[/dialogue]\n"
         )
+        event_msg = "[event]You open your journal and begin to read the latest entry.[/event]\n"
         game_state.set_story_flag('journal_read_prologue_entry', True) # Set the flag when this entry is read
-        return entry
+        return event_msg + entry

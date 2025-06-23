@@ -33,30 +33,30 @@ class Well(Item):
         if isinstance(other_item, (Bucket, FishingRod, MagneticFishingRod, ExtendedMagneticFishingRod)):
             return other_item.use_with(game_state, self)
         
-        return f"The [item.name]{self.get_name()}[/item.name] cannot be used with the [item.name]{other_item.get_name()}[/item.name] in this way."
+        return super().use_with(game_state, other_item)
 
     def search(self, game_state) -> str:
         if self.is_purified:
             if self.contains_ring:
-                return "You peer into the crystal clear water. A [item.name]shiny ring[/item.name] glints at the bottom, tantalizingly out of reach by hand."
+                return "[event]You peer into the crystal clear water. A [item.name]shiny ring[/item.name] glints at the bottom, tantalizingly out of reach by hand.[/event]"
             else:
-                return "You peer into the crystal clear water. The bottom is visible and empty."
+                return "[event]You peer into the crystal clear water. The bottom is visible and empty.[/event]"
         else: # Not purified
             if self.contains_ring:
-                return "You peer into the murky depths. It's hard to see clearly, but you think you catch a glimpse of something shiny. It's far too deep to reach."
+                return "[failure]You peer into the murky depths. It's hard to see clearly, but you think you catch a glimpse of something shiny. It's far too deep to reach.[/failure]"
             else: # Not purified and no ring (e.g. if it was somehow removed before purification)
-                return "You peer into the murky depths. It's too dark and unclear to see anything of interest."
+                return "[failure]You peer into the murky depths. It's too dark and unclear to see anything of interest.[/failure]"
 
     def purify(self, game_state) -> str:
         if self.is_purified:
-            return f"The [item.name]{self.get_name()}[/item.name] is already pure. The water is crystal clear."
-        
+            return f"[failure]The [item.name]{self.get_name()}[/item.name] is already pure. The water is crystal clear.[/failure]"
+
         self.is_purified = True
         if self.contains_ring:
             # The ShinyRing is not added to the room here.
             # It's retrieved by the ExtendedMagneticFishingRod.
-            return f"You cast [spell.name]purify[/spell.name] on the [item.name]{self.get_name()}[/item.name]. The murky water shimmers and clears! You can now see a [item.name]shiny ring[/item.name] at the bottom, but it's still too deep to reach by hand."
+            return f"[event]You cast [spell.name]purify[/spell.name] on the [item.name]{self.get_name()}[/item.name]. The murky water shimmers and clears! You can now see a [item.name]shiny ring[/item.name] at the bottom, but it's still too deep to reach by hand.[/event]"
         else:
             # This case implies the ring was already taken or never there,
             # and the well is now being purified.
-            return f"You cast [spell.name]purify[/spell.name] on the [item.name]{self.get_name()}[/item.name]. The murky water shimmers and clears! The bottom is visible, but there's nothing of interest."
+            return f"[event]You cast [spell.name]purify[/spell.name] on the [item.name]{self.get_name()}[/item.name]. The murky water shimmers and clears! The bottom is visible, but there's nothing of interest.[/event]"

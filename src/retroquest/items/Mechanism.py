@@ -20,14 +20,14 @@ class Mechanism(Item):
 
     def use(self, game_state) -> str:
         if self.repaired:
-            return f"The [item.name]{self.get_name()}[/item.name] has already been operated."
-        return f"It looks like you need to use something with the [item.name]{self.get_name()}[/item.name]."
+            return f"[failure]The [item.name]{self.get_name()}[/item.name] has already been operated.[/failure]"
+        return f"[failure]It looks like you need to use something with the [item.name]{self.get_name()}[/item.name].[/failure]"
 
     def use_with(self, game_state, other_item: Item) -> str:
-        if self.repaired:
-            return f"The [item.name]{self.get_name()}[/item.name] has already been operated."
 
         if isinstance(other_item, Rope):
+            if self.repaired:
+                return f"[failure]The [item.name]{self.get_name()}[/item.name] has already been operated.[/failure]"
             self.repaired = True
             # Remove rope from inventory
             if other_item in game_state.inventory:
@@ -40,11 +40,13 @@ class Mechanism(Item):
             # Update this item's description to reflect the change
             self._description = "The mechanism has been repaired using a rope. A compartment is open."
 
-            return f"You manage to thread the [item.name]rope[/item.name] through the [item.name]{self.get_name()}[/item.name]. With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"
+            event_msg = f"[event]You try to use the [item.name]rope[/item.name] with the [item.name]{self.get_name()}[/item.name].[/event]\n"
+            return event_msg + "You manage to thread the [item.name]rope[/item.name] through the [item.name]{self.get_name()}[/item.name]. With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"
         else:
-            return f"You can't use the [item.name]{other_item.get_name()}[/item.name] with the [item.name]{self.get_name()}[/item.name]."
+            return super().use_with(game_state, other_item)
 
     def listen(self, game_state) -> str:
+        event_msg = f"[event]You listen to the [item.name]{self.get_name()}[/item.name].[/event]\n"
         if self.repaired:
-            return f"The [item.name]{self.get_name()}[/item.name] is silent now, its purpose served."
-        return f"You hear a faint whirring and clicking from within the [item.name]{self.get_name()}[/item.name], as if it's waiting for something."
+            return event_msg + f"The [item.name]{self.get_name()}[/item.name] is silent now, its purpose served."
+        return event_msg + f"You hear a faint whirring and clicking from within the [item.name]{self.get_name()}[/item.name], as if it's waiting for something."

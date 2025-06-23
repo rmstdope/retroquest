@@ -25,9 +25,9 @@ class FishingRod(Item):
                 # Add MagneticFishingRod to inventory
                 magnetic_rod = MagneticFishingRod()
                 game_state.inventory.append(magnetic_rod)
-                return f"You attach the [item.name]{other_item.get_name()}[/item.name] to the [item.name]{self.get_name()}[/item.name], creating a [item.name]{magnetic_rod.get_name()}[/item.name]."
+                return f"[event]You attach the [item.name]{other_item.get_name()}[/item.name] to the [item.name]{self.get_name()}[/item.name], creating a [item.name]{magnetic_rod.get_name()}[/item.name].[/event]"
             else:
-                return ("You could force the magnet onto the rod, but it would likely break the fishing rod — and you might need it for something else.")
+                return ("[failure]You could force the magnet onto the rod, but it would likely break the fishing rod — and you might need it for something else.[/failuer]")
 
         from .River import River # Add local import here
         if isinstance(other_item, River): # Check if the other_item is a River
@@ -35,6 +35,6 @@ class FishingRod(Item):
             
         from .Well import Well # Local import for Well
         if isinstance(other_item, Well):
-            return "You try fishing in the [item.name]well[/item.name], but the [item.name]rod[/item.name] is too short to reach the water."
+            return "[failure]You try fishing in the [item.name]well[/item.name], but the [item.name]rod[/item.name] is too short to reach the water.[/failure]"
 
         return super().use_with(game_state, other_item) # Fallback to base class

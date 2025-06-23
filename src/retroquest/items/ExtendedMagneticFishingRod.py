@@ -11,6 +11,7 @@ class ExtendedMagneticFishingRod(Item):
 
     def use_with(self, game_state, other_item):
         if isinstance(other_item, Well):
+            event_msg = f"[event]You try to use the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name].[/event]\n"
             if other_item.is_purified and other_item.contains_ring:
                 # Remove self from inventory
                 if self in game_state.inventory:
@@ -23,11 +24,11 @@ class ExtendedMagneticFishingRod(Item):
                 # Update well state
                 other_item.contains_ring = False
                 
-                return f"You use the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name]. After some careful maneuvering, you manage to retrieve a [item.name]{ring.get_name()}[/item.name]!"
+                return event_msg + f"After some careful maneuvering, you manage to retrieve a [item.name]{ring.get_name()}[/item.name]!"
             elif not other_item.is_purified:
-                return f"The water in the [item.name]{other_item.get_name()}[/item.name] is too murky. You can't see anything to retrieve."
+                return event_msg + f"The water in the [item.name]{other_item.get_name()}[/item.name] is too murky. You can't see anything to retrieve."
             elif not other_item.contains_ring:
-                return f"You can see the bottom of the [item.name]{other_item.get_name()}[/item.name] clearly, but there's nothing metallic to retrieve with the [item.name]{self.get_name()}[/item.name]."
+                return event_msg + f"You can see the bottom of the [item.name]{other_item.get_name()}[/item.name] clearly, but there's nothing metallic to retrieve with the [item.name]{self.get_name()}[/item.name]."
             else:
-                return f"You try to use the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name], but it doesn't seem to work right now."
+                return event_msg + f"You try to use the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name], but it doesn't seem to work right now."
         return super().use_with(game_state, other_item)

@@ -13,8 +13,4 @@ class Key(Item):
         from .ShedDoor import ShedDoor  # Local import to avoid circular dependency issues at module load time
         if isinstance(target, ShedDoor):
             return target.use_with(game_state, self)
-        return f"The [item.name]{self.get_name()}[/item.name] doesn\'t seem to work with the [item.name]{target.get_name()}[/item.name]."
-
-    def use(self, game_state: GameState) -> str:
-        """Attempt to use the key by itself, which is not a valid action."""
-        return f"You try to use the [item.name]{self.get_name()}[/item.name] by itself, but nothing happens. It probably needs to be used with something."
+        return super().use_with(game_state, target)
