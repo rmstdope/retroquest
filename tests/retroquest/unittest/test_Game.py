@@ -1,22 +1,22 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from retroquest.Game import Game
-from retroquest.rooms.EliorsCottage import EliorsCottage
-from retroquest.rooms.VegetableField import VegetableField
-from retroquest.rooms.ChickenCoop import ChickenCoop
-from retroquest.rooms.VillageSquare import VillageSquare
-from retroquest.rooms.MirasHut import MirasHut
-from retroquest.rooms.BlacksmithsForge import BlacksmithsForge
-from retroquest.rooms.GeneralStore import GeneralStore
-from retroquest.rooms.VillageWell import VillageWell
-from retroquest.rooms.AbandonedShed import AbandonedShed
-from retroquest.rooms.OldMill import OldMill
-from retroquest.rooms.Riverbank import Riverbank
-from retroquest.rooms.ForestPath import ForestPath
-from retroquest.rooms.HiddenGlade import HiddenGlade
-from retroquest.rooms.VillageChapel import VillageChapel
-from retroquest.rooms.RoadToGreendale import RoadToGreendale
-from retroquest.quests.HintOfMagic import HintOfMagicQuest
+from retroquest.act1.rooms.EliorsCottage import EliorsCottage
+from retroquest.act1.rooms.VegetableField import VegetableField
+from retroquest.act1.rooms.ChickenCoop import ChickenCoop
+from retroquest.act1.rooms.VillageSquare import VillageSquare
+from retroquest.act1.rooms.MirasHut import MirasHut
+from retroquest.act1.rooms.BlacksmithsForge import BlacksmithsForge
+from retroquest.act1.rooms.GeneralStore import GeneralStore
+from retroquest.act1.rooms.VillageWell import VillageWell
+from retroquest.act1.rooms.AbandonedShed import AbandonedShed
+from retroquest.act1.rooms.OldMill import OldMill
+from retroquest.act1.rooms.Riverbank import Riverbank
+from retroquest.act1.rooms.ForestPath import ForestPath
+from retroquest.act1.rooms.HiddenGlade import HiddenGlade
+from retroquest.act1.rooms.VillageChapel import VillageChapel
+from retroquest.act1.rooms.RoadToGreendale import RoadToGreendale
+from retroquest.act1.quests.HintOfMagic import HintOfMagicQuest
 
 # Dummy room and item setup for test
 ROOMS = {
@@ -153,7 +153,7 @@ def test_map_multiple_moves(game):
 
 def test_take_item_from_room(game, basic_rooms):
     # Place an item in the starting room
-    from retroquest.items.Egg import Egg
+    from retroquest.act1.items.Egg import Egg
     egg = Egg()
     game.state.current_room.items.append(egg)
     assert egg in game.state.current_room.items
@@ -171,7 +171,7 @@ def test_take_item_not_present(game):
 
 def test_drop_item_from_inventory(game, basic_rooms):
     # Add an item to inventory
-    from retroquest.items.Lantern import Lantern
+    from retroquest.act1.items.Lantern import Lantern
     lantern = Lantern()
     game.state.inventory.append(lantern)
     assert lantern in game.state.inventory
@@ -187,14 +187,14 @@ def test_drop_item_not_in_inventory(game):
     assert "You don't have a 'nonexistent' to drop." in result
 
 def test_learn_spell(game):
-    from retroquest.spells.LightSpell import LightSpell
+    from retroquest.act1.spells.LightSpell import LightSpell
     light_spell = LightSpell()
     result = game.learn(light_spell)
     assert "You have learned the [spell.name]light[/spell.name] spell!" in result
     assert light_spell in game.state.known_spells
 
 def test_learn_spell_already_known(game):
-    from retroquest.spells.LightSpell import LightSpell
+    from retroquest.act1.spells.LightSpell import LightSpell
     light_spell = LightSpell()
     game.learn(light_spell) # Learn it once
     result = game.learn(light_spell) # Try to learn again
@@ -205,8 +205,8 @@ def test_spells_command_no_spells(game):
     assert "You don't know any spells yet." in result
 
 def test_spells_command_with_spells(game):
-    from retroquest.spells.LightSpell import LightSpell
-    from retroquest.spells.HealSpell import HealSpell
+    from retroquest.act1.spells.LightSpell import LightSpell
+    from retroquest.act1.spells.HealSpell import HealSpell
     light_spell = LightSpell()
     heal_spell = HealSpell()
     game.learn(light_spell)
@@ -219,8 +219,8 @@ def test_spells_command_with_spells(game):
 # --- Tests for 'give' command ---
 
 def test_give_item_to_character_successful(game, basic_rooms):
-    from retroquest.items.Apple import Apple
-    from retroquest.characters.Villager import Villager # Assuming a generic Villager character
+    from retroquest.act1.items.Apple import Apple
+    from retroquest.act1.characters.Villager import Villager # Assuming a generic Villager character
     
     apple = Apple()
     villager = Villager() # Villager needs to be in the room
@@ -240,7 +240,7 @@ def test_give_item_to_character_successful(game, basic_rooms):
     # For now, we only check the call and response.
 
 def test_give_item_not_in_inventory(game, basic_rooms):
-    from retroquest.characters.Villager import Villager
+    from retroquest.act1.characters.Villager import Villager
     villager = Villager()
     game.state.current_room.characters.append(villager)
     
@@ -248,7 +248,7 @@ def test_give_item_not_in_inventory(game, basic_rooms):
     assert "You don\'t have any \'nonexistent_item\' to give." in result
 
 def test_give_item_to_character_not_in_room(game, basic_rooms):
-    from retroquest.items.Apple import Apple
+    from retroquest.act1.items.Apple import Apple
     apple = Apple()
     game.state.inventory.append(apple)
     
@@ -257,8 +257,8 @@ def test_give_item_to_character_not_in_room(game, basic_rooms):
     assert "There is no character named \'Ghost\' here." in result
 
 def test_give_item_character_does_not_want(game, basic_rooms):
-    from retroquest.items.Stick import Stick # An item the character might not want
-    from retroquest.characters.Character import Character # Base character
+    from retroquest.act1.items.Stick import Stick # An item the character might not want
+    from retroquest.Character import Character # Base character
     
     stick = Stick()
     generic_char = Character(name="Grumpy Person", description="Someone grumpy.")
@@ -283,8 +283,8 @@ def test_give_item_invalid_format(game):
 # --- Tests for \'look\' command ---
 
 def test_look_in_room_with_items_and_characters(game, basic_rooms):
-    from retroquest.items.Apple import Apple
-    from retroquest.characters.Villager import Villager
+    from retroquest.act1.items.Apple import Apple
+    from retroquest.act1.characters.Villager import Villager
     
     apple = Apple()
     villager = Villager()
@@ -344,8 +344,8 @@ def test_inventory_empty(game):
     assert "Your inventory is empty." in result
 
 def test_inventory_with_items(game):
-    from retroquest.items.Apple import Apple
-    from retroquest.items.Stick import Stick
+    from retroquest.act1.items.Apple import Apple
+    from retroquest.act1.items.Stick import Stick
     apple = Apple()
     stick = Stick()
     
@@ -361,7 +361,7 @@ def test_inventory_with_items(game):
 # --- Tests for 'examine' command ---
 
 def test_examine_item_in_inventory(game):
-    from retroquest.items.Apple import Apple
+    from retroquest.act1.items.Apple import Apple
     from unittest.mock import MagicMock
 
     apple = Apple()
@@ -379,7 +379,7 @@ def test_examine_item_in_inventory(game):
     apple.get_description.assert_called_once()
 
 def test_examine_item_in_room(game):
-    from retroquest.items.Apple import Apple
+    from retroquest.act1.items.Apple import Apple
     from unittest.mock import MagicMock
 
     apple = Apple()
@@ -397,7 +397,7 @@ def test_examine_item_in_room(game):
     apple.get_description.assert_called_once()
 
 def test_examine_character_in_room(game):
-    from retroquest.characters.Villager import Villager
+    from retroquest.act1.characters.Villager import Villager
     # Assuming Villager's get_description returns the description passed to constructor
     char_description = "A weary-looking traveler, resting by the old oak tree."
     traveler = Villager()
@@ -422,8 +422,8 @@ def test_examine_no_argument(game):
     assert result == "Examine what?"
 
 def test_examine_case_insensitivity(game):
-    from retroquest.items.Apple import Apple
-    from retroquest.characters.Villager import Villager
+    from retroquest.act1.items.Apple import Apple
+    from retroquest.act1.characters.Villager import Villager
     from unittest.mock import MagicMock
 
     # Test with item
@@ -452,9 +452,9 @@ def test_examine_case_insensitivity(game):
 # --- Tests for 'buy' command ---
 
 def test_buy_item_successful(game):
-    from retroquest.items.Rope import Rope
-    from retroquest.items.Coin import Coin
-    from retroquest.characters.Shopkeeper import Shopkeeper # Assuming Shopkeeper has buy_item
+    from retroquest.act1.items.Rope import Rope
+    from retroquest.act1.items.Coin import Coin
+    from retroquest.act1.characters.Shopkeeper import Shopkeeper # Assuming Shopkeeper has buy_item
 
     shopkeeper = Shopkeeper()
     rope_instance = Rope() # The item instance the shopkeeper would sell
@@ -478,8 +478,8 @@ def test_buy_item_successful(game):
     # These depend on the Shopkeeper.buy_item implementation.
 
 def test_buy_item_not_sold_by_character(game):
-    from retroquest.characters.Shopkeeper import Shopkeeper
-    from retroquest.items.Coin import Coin
+    from retroquest.act1.characters.Shopkeeper import Shopkeeper
+    from retroquest.act1.items.Coin import Coin
 
     shopkeeper = Shopkeeper()
     shopkeeper.buy_item = MagicMock(return_value="Sorry, I don't have any 'magic beans' for sale.")
@@ -491,8 +491,8 @@ def test_buy_item_not_sold_by_character(game):
     shopkeeper.buy_item.assert_called_once_with("magic beans", game.state)
 
 def test_buy_item_not_enough_coins(game):
-    from retroquest.characters.Shopkeeper import Shopkeeper
-    from retroquest.items.Rope import Rope
+    from retroquest.act1.characters.Shopkeeper import Shopkeeper
+    from retroquest.act1.items.Rope import Rope
 
     shopkeeper = Shopkeeper()
     rope_instance = Rope()
@@ -508,15 +508,15 @@ def test_buy_item_not_enough_coins(game):
     shopkeeper.buy_item.assert_called_once_with("rope", game.state)
 
 def test_buy_item_character_not_present(game):
-    from retroquest.items.Coin import Coin
+    from retroquest.act1.items.Coin import Coin
     game.state.inventory.append(Coin())
     
     result = game.buy("rope from Ghostly Shopkeeper")
     assert "There is no character named 'Ghostly shopkeeper' here." in result
 
 def test_buy_item_character_cannot_sell(game):
-    from retroquest.characters.Villager import Villager # Villager cannot sell
-    from retroquest.items.Coin import Coin
+    from retroquest.act1.characters.Villager import Villager # Villager cannot sell
+    from retroquest.act1.items.Coin import Coin
 
     villager = Villager()
     game.state.current_room.characters.append(villager)

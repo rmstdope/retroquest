@@ -7,11 +7,11 @@ import os
 import threading
 import pygame
 
-from .spells import Spell
-from .characters import Character
-from .items.Item import Item
+from .Character import Character
 from .CommandParser import CommandParser
 from .GameState import GameState
+from .Item import Item
+from .Spell import Spell
 from . import DEV_MODE
 
 class Game:

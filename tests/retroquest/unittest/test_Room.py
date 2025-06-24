@@ -1,19 +1,19 @@
 import pytest
-from retroquest.rooms.EliorsCottage import EliorsCottage
-from retroquest.rooms.VegetableField import VegetableField
-from retroquest.rooms.ChickenCoop import ChickenCoop
-from retroquest.rooms.VillageSquare import VillageSquare
-from retroquest.rooms.MirasHut import MirasHut
-from retroquest.rooms.BlacksmithsForge import BlacksmithsForge
-from retroquest.rooms.GeneralStore import GeneralStore
-from retroquest.rooms.VillageWell import VillageWell
-from retroquest.rooms.AbandonedShed import AbandonedShed
-from retroquest.rooms.OldMill import OldMill
-from retroquest.rooms.Riverbank import Riverbank
-from retroquest.rooms.ForestPath import ForestPath
-from retroquest.rooms.HiddenGlade import HiddenGlade
-from retroquest.rooms.VillageChapel import VillageChapel
-from retroquest.rooms.RoadToGreendale import RoadToGreendale
+from retroquest.act1.rooms.EliorsCottage import EliorsCottage
+from retroquest.act1.rooms.VegetableField import VegetableField
+from retroquest.act1.rooms.ChickenCoop import ChickenCoop
+from retroquest.act1.rooms.VillageSquare import VillageSquare
+from retroquest.act1.rooms.MirasHut import MirasHut
+from retroquest.act1.rooms.BlacksmithsForge import BlacksmithsForge
+from retroquest.act1.rooms.GeneralStore import GeneralStore
+from retroquest.act1.rooms.VillageWell import VillageWell
+from retroquest.act1.rooms.AbandonedShed import AbandonedShed
+from retroquest.act1.rooms.OldMill import OldMill
+from retroquest.act1.rooms.Riverbank import Riverbank
+from retroquest.act1.rooms.ForestPath import ForestPath
+from retroquest.act1.rooms.HiddenGlade import HiddenGlade
+from retroquest.act1.rooms.VillageChapel import VillageChapel
+from retroquest.act1.rooms.RoadToGreendale import RoadToGreendale
 
 ROOM_CLASSES = {
     "EliorsCottage": EliorsCottage,
