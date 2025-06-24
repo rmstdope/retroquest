@@ -1,4 +1,4 @@
-from ...Character import Character
+from ...engine.Character import Character
 
 class Villager(Character):
     def __init__(self) -> None:

@@ -1,5 +1,5 @@
-from ...Quest import Quest
-from ...GameState import GameState
+from ...engine.Quest import Quest
+from ...engine.GameState import GameState
 
 class OhDeerOhDeerQuest(Quest):
     def __init__(self) -> None:

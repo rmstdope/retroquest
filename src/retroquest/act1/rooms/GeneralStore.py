@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.Rope import Rope
 from ..items.Apple import Apple
 from ..items.Matches import Matches

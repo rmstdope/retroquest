@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.Bucket import Bucket
 from ..items.OldNotice import OldNotice
 from ..characters.Villager import Villager

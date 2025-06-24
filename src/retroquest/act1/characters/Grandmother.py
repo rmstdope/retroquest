@@ -1,6 +1,6 @@
-from ...GameState import GameState
-from ...Item import Item
-from ...Character import Character
+from ...engine.GameState import GameState
+from ...engine.Item import Item
+from ...engine.Character import Character
 from ..spells.ReviveSpell import ReviveSpell # Import ReviveSpell
 from ..items.TravelCloak import TravelCloak
 from ..items.WildBerries import WildBerries

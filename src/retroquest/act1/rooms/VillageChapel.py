@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.Candle import Candle
 from ..items.PrayerBook import PrayerBook
 from ..characters.Priest import Priest

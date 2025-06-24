@@ -1,7 +1,7 @@
-from ...Item import Item
+from ...engine.Item import Item
 from ..items.Matches import Matches
 from ..items.Locket import Locket  # Added import
-from ...GameState import GameState  # Added import for GameState
+from ...engine.GameState import GameState  # Added import for GameState
 
 class Candle(Item):
     def __init__(self) -> None:

@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.Egg import Egg
 from ..items.Feather import Feather
 from ..items.Chicken import Chicken

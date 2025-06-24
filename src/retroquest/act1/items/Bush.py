@@ -1,6 +1,6 @@
-from ...Item import Item
+from ...engine.Item import Item
 from .WildBerries import WildBerries # Import WildBerries
-from ...GameState import GameState # Import GameState
+from ...engine.GameState import GameState # Import GameState
 
 class Bush(Item):
     def __init__(self):

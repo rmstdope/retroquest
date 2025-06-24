@@ -1,7 +1,7 @@
-from ...Item import Item
+from ...engine.Item import Item
 from .Magnet import Magnet
 from .MagneticFishingRod import MagneticFishingRod
-from ...GameState import GameState
+from ...engine.GameState import GameState
 
 class FishingRod(Item):
     def __init__(self):

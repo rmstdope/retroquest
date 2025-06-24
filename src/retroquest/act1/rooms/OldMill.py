@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.SackOfFlour import SackOfFlour
 from ..items.Mechanism import Mechanism 
 

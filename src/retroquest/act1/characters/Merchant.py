@@ -1,4 +1,4 @@
-from ...Character import Character
+from ...engine.Character import Character
 from ..items.ShinyRing import ShinyRing
 from ..items.WanderingBoots import WanderingBoots
 from ..items.Coin import Coin

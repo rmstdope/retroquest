@@ -1,5 +1,5 @@
-from ...Item import Item
-from ...GameState import GameState
+from ...engine.Item import Item
+from ...engine.GameState import GameState
 from ..characters.Priest import Priest
 from ..spells.BlessSpell import BlessSpell
 

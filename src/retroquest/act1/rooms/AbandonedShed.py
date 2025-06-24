@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.BrokenShovel import BrokenShovel
 from ..items.MysteriousBox import MysteriousBox
 from ..items.FishingRod import FishingRod # Import FishingRod

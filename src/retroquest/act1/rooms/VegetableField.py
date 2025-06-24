@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.WitheredCarrot import WitheredCarrot
 from ..items.RustyHoe import RustyHoe
 from ..items.DullKnife import DullKnife

@@ -1,4 +1,4 @@
-from ...Spell import Spell
+from ...engine.Spell import Spell
 
 class LightSpell(Spell):
     def __init__(self):

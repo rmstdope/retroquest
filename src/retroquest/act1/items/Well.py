@@ -1,5 +1,5 @@
-from ...GameState import GameState
-from ...Item import Item
+from ...engine.GameState import GameState
+from ...engine.Item import Item
 # ShinyRing is not directly added by the well anymore, but its existence is tracked.
 # from .ShinyRing import ShinyRing 
 

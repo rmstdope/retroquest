@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.Stick import Stick
 from ..items.WildBerries import WildBerries
 from ..items.Vines import Vines

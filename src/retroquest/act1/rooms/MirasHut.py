@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.HealingHerb import HealingHerb
 from ..items.AncientAmulet import AncientAmulet
 from ..characters.Mira import Mira

@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.Horseshoe import Horseshoe
 from ..characters.Blacksmith import Blacksmith
 

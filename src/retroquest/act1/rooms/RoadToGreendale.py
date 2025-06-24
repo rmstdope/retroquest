@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.RustySaw import RustySaw
 from ..items.TravelCloak import TravelCloak
 from ..characters.Merchant import Merchant

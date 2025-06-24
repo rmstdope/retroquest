@@ -1,8 +1,8 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.RareFlower import RareFlower
 from ..items.ShinyPebble import ShinyPebble
 from ..characters.Deer import Deer
-from ...GameState import GameState # Added GameState for type hinting
+from ...engine.GameState import GameState # Added GameState for type hinting
 from ..spells.GrowSpell import GrowSpell # Import GrowSpell
 
 class HiddenGlade(Room):

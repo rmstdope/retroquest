@@ -1,6 +1,6 @@
-from ...GameState import GameState
+from ...engine.GameState import GameState
 from .Chicken import Chicken
-from ...Item import Item
+from ...engine.Item import Item
 from .Key import Key
 
 class Bread(Item):

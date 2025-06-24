@@ -1,6 +1,6 @@
-from ...Item import Item
+from ...engine.Item import Item
 from ..items.Map import Map as GameMap # Alias to avoid potential naming conflicts
-from ...GameState import GameState
+from ...engine.GameState import GameState
 
 class MysteriousBox(Item):
     def __init__(self) -> None:

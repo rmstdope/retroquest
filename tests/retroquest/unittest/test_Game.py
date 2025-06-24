@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from retroquest.Game import Game
+from engine.Game import Game
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
 from retroquest.act1.rooms.VegetableField import VegetableField
 from retroquest.act1.rooms.ChickenCoop import ChickenCoop
@@ -258,7 +258,7 @@ def test_give_item_to_character_not_in_room(game, basic_rooms):
 
 def test_give_item_character_does_not_want(game, basic_rooms):
     from retroquest.act1.items.Stick import Stick # An item the character might not want
-    from retroquest.Character import Character # Base character
+    from retroquest.engine.Character import Character # Base character
     
     stick = Stick()
     generic_char = Character(name="Grumpy Person", description="Someone grumpy.")

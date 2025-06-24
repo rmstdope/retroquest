@@ -1,4 +1,5 @@
-from ...Character import Character
+from ...engine.Character import Character
+from ...engine.Item import Item
 from ..items.Rope import Rope
 from ..items.Apple import Apple
 from ..items.Matches import Matches

@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.SmoothStone import SmoothStone
 from ..items.River import River  # Import River
 from ..characters.Fisherman import Fisherman

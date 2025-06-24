@@ -1,4 +1,4 @@
-from ...Room import Room
+from ...engine.Room import Room
 from ..items.Lantern import Lantern
 from ..items.Bread import Bread
 from ..items.EliorsJournal import EliorsJournal

@@ -1,4 +1,4 @@
-from retroquest.Game import Game
+from retroquest.engine.Game import Game
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
 from retroquest.act1.rooms.VegetableField import VegetableField
 from retroquest.act1.rooms.ChickenCoop import ChickenCoop

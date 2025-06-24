@@ -1,5 +1,5 @@
-from ...Item import Item
-from ...GameState import GameState
+from ...engine.Item import Item
+from ...engine.GameState import GameState
 
 class OldNotice(Item):
     def __init__(self) -> None:

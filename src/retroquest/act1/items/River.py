@@ -1,5 +1,5 @@
-from ...GameState import GameState
-from ...Item import Item
+from ...engine.GameState import GameState
+from ...engine.Item import Item
 from .Fish import Fish # Assuming you have a Fish item
 
 class River(Item):

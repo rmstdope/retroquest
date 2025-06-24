@@ -1,5 +1,5 @@
 import unittest
-from src.retroquest.GameState import GameState
+from engine.GameState import GameState
 
 class DummyRoom:
     def __init__(self, name):

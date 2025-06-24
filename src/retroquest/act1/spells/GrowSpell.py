@@ -1,4 +1,4 @@
-from ...Spell import Spell
+from ...engine.Spell import Spell
 from ..items.WitheredCarrot import WitheredCarrot
 
 class GrowSpell(Spell):

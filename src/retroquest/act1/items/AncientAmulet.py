@@ -1,6 +1,6 @@
-from ...GameState import GameState
+from ...engine.GameState import GameState
 
-from ...Item import Item
+from ...engine.Item import Item
 
 class AncientAmulet(Item):
     def __init__(self) -> None:

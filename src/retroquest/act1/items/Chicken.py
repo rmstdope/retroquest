@@ -1,4 +1,4 @@
-from ...Item import Item
+from ...engine.Item import Item
 
 class Chicken(Item):
     def __init__(self):

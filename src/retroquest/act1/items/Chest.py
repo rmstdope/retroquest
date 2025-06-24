@@ -1,3 +1,3 @@
-from ...GameState import GameState
+from ...engine.GameState import GameState
 
 # ...existing code...

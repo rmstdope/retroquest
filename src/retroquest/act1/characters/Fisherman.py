@@ -1,8 +1,8 @@
-from ...Character import Character
-from ...Item import Item # Added import
+from ...engine.Character import Character
+from ...engine.Item import Item # Added import
 from ..items.Fish import Fish # Added import
 from ..spells.PurifySpell import PurifySpell # Added import
-from ...GameState import GameState # Added import
+from ...engine.GameState import GameState # Added import
 
 class Fisherman(Character):
     def __init__(self) -> None:

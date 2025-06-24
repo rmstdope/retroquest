@@ -1,5 +1,5 @@
 import pytest
-from retroquest.CommandParser import CommandParser
+from engine.CommandParser import CommandParser
 
 class DummyGame:
     def __init__(self):

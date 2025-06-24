@@ -1,5 +1,5 @@
-from ...Character import Character
-from ...GameState import GameState
+from ...engine.Character import Character
+from ...engine.GameState import GameState
 
 class Priest(Character):
     def __init__(self) -> None:

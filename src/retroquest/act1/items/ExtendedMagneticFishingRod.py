@@ -1,5 +1,5 @@
-from ...GameState import GameState
-from ...Item import Item
+from ...engine.GameState import GameState
+from ...engine.Item import Item
 from .Well import Well
 from .ShinyRing import ShinyRing
 

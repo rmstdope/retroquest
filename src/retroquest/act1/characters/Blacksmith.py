@@ -1,4 +1,4 @@
-from ...Character import Character
+from ...engine.Character import Character
 from ..items.Coin import Coin
 from ..items.DullKnife import DullKnife
 from ..items.SharpKnife import SharpKnife # Added import

@@ -1,6 +1,5 @@
 from .GameState import GameState
 
-
 class Quest:
     """
     Base class for all quests in RetroQuest.

@@ -1,5 +1,5 @@
-from ...Character import Character
-from ...Item import Item
+from ...engine.Character import Character
+from ...engine.Item import Item
 from ..items.RareFlower import RareFlower
 from ..items.AncientAmulet import AncientAmulet
 from ..items.TravelCloak import TravelCloak # For quest check
@@ -9,7 +9,7 @@ from ..items.Map import Map as GameMap # For quest check, aliased to avoid confl
 from ..spells.HealSpell import HealSpell
 from ..spells.UnlockSpell import UnlockSpell
 from ..spells.LightSpell import LightSpell
-from ...GameState import GameState
+from ...engine.GameState import GameState
 
 class Mira(Character):
     def __init__(self) -> None:
