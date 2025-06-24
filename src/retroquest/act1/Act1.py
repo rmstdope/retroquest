@@ -54,4 +54,31 @@ class Act1(Act):
             OhDeerOhDeerQuest(),
             PreparingForTheRoadQuest(),
         ]
-        super().__init__(name="Retroquest - Act 1", rooms=rooms, quests=quests)
+        music_file = "music/Conquest - Market (freetouse.com).mp3"
+        super().__init__(name="Act1", rooms=rooms, quests=quests, music_file=music_file)
+
+    def print_act_intro(self, console, session):
+        console.clear()
+        # Revised prologue: do NOT mention the amulet being given yet
+        console.print(
+            "You are Elior, a humble farmer boy living in the quiet village of Willowbrook on the outskirts of Eldoria. "
+            "Raised by your grandmother after your parents vanished mysteriously, your life is simple—tending crops and caring for animals. "
+            "One stormy night, a strange light appears in the sky, and you dream of a shadowy figure calling your name.\n"
+        )
+        session.prompt('Press Enter to continue...')
+        console.print(
+            "\nThe next morning, you awaken to find the village abuzz with rumors: livestock missing, strange footprints by the well, and the old mill's wheel turning on its own. "
+            "Your grandmother, usually cheerful, seems worried and distracted, her gaze lingering on a faded photograph.\n"
+        )
+        session.prompt('Press Enter to continue...')
+        console.print(
+            "\nAs you step outside, the air feels charged with something unfamiliar. The villagers gather in the square, debating what to do. "
+            "Mira, the wise woman, catches your eye and beckons you over. 'There are secrets in Willowbrook, child,' she says. 'Secrets that have waited for you.'\n"
+        )
+        session.prompt('Press Enter to continue...')
+        console.print(
+            "\nA distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. "
+            "With questions swirling in your mind, you take your first step into the unknown.\n"
+        )
+        console.print("\nLet's get started! (Type 'help' for a list of commands.)\n")
+        session.prompt('Press Enter to continue...')

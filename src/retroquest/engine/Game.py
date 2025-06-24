@@ -41,6 +41,7 @@ class Game:
         starting_room = next(iter(act.rooms.values())) if act.rooms else None
         self.state = GameState(starting_room, all_rooms=act.rooms, all_quests=act.quests)
         self.command_parser = CommandParser(self)
+        self.act = act
 
     def handle_command(self, command: str) -> str:
         result = self.command_parser.parse(command)
@@ -55,56 +56,34 @@ class Game:
             responses.append(completed)
         return "\n".join([r for r in responses if r])
 
-    def print_intro(self):
-        # Play music in a separate thread so it doesn't block the prompt
+    def start_music(self):
+        """Start act music in a separate thread so it doesn't block the prompt."""
         def play_music():
             try:
                 pygame.mixer.init()
-                pygame.mixer.music.load('music/Conquest - Market (freetouse.com).mp3')
+                pygame.mixer.music.load(self.act.music_file)
                 pygame.mixer.music.play(loops=-1)  # Loop indefinitely
             except Exception as e:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
         threading.Thread(target=play_music, daemon=True).start()
+
+    def print_intro(self):
+        self.start_music()
         
-        self.console.print("\033[47;30m", end="")
         self.console.clear()
         self.console.print("Welcome to")
         self.console.print(r'''
 ########  ######### ######### ########   #######   #######  ##     ## #########  #######  #########
-##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##     ##    ##
 ##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##           ##
-########  #######      ##     ########  ##     ## ##     ## ##     ## #######    #######     ##
+##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##           ##
+########  #########    ##     ########  ##     ## ##     ## ##     ## ######### ########     ## 
 ##   ##   ##           ##     ##   ##   ##     ## ##  ## ## ##     ## ##               ##    ##
 ##    ##  ##           ##     ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
 ##     ## #########    ##     ##     ##  #######   #######   #######  #########  #######     ##
 ''', style="bold yellow")
         self.console.print("\n[bold]Music track:[/bold] Market by Conquest\nSource: https://freetouse.com/music\nCopyright Free Background Music\n", style="dim")
         self.session.prompt('Press Enter to continue...')
-        
-        self.console.clear()
-        # Revised prologue: do NOT mention the amulet being given yet
-        self.console.print(
-            "You are Elior, a humble farmer boy living in the quiet village of Willowbrook on the outskirts of Eldoria. "
-            "Raised by your grandmother after your parents vanished mysteriously, your life is simple—tending crops and caring for animals. "
-            "One stormy night, a strange light appears in the sky, and you dream of a shadowy figure calling your name.\n"
-        )
-        self.session.prompt('Press Enter to continue...')
-        self.console.print(
-            "\nThe next morning, you awaken to find the village abuzz with rumors: livestock missing, strange footprints by the well, and the old mill's wheel turning on its own. "
-            "Your grandmother, usually cheerful, seems worried and distracted, her gaze lingering on a faded photograph.\n"
-        )
-        self.session.prompt('Press Enter to continue...')
-        self.console.print(
-            "\nAs you step outside, the air feels charged with something unfamiliar. The villagers gather in the square, debating what to do. "
-            "Mira, the wise woman, catches your eye and beckons you over. 'There are secrets in Willowbrook, child,' she says. 'Secrets that have waited for you.'\n"
-        )
-        self.session.prompt('Press Enter to continue...')
-        self.console.print(
-            "\nA distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. "
-            "With questions swirling in your mind, you take your first step into the unknown.\n"
-        )
-        self.console.print("\nLet's get started! (Type 'help' for a list of commands.)\n")
-        self.session.prompt('Press Enter to continue...')
+        self.act.print_act_intro(self.console, self.session)
 
     def get_command_completions(self):
         # Helper to build nested dict for multi-word item names
