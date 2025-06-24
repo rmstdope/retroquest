@@ -46,6 +46,31 @@
   - **Trigger:** Learn magic from Mira.
   - **Completion:** Obtain all items needed for the journey.
 
+- **Name:** The Lost Letter
+  - **Trigger:** Search the farmhouse after speaking with Grandmother.
+  - **Completion:** Deliver the letter to Grandmother and discuss its contents.
+  - **Rewards:** Clue about Elior's parents, unlocks next quest.
+
+- **Name:** Shadows Over Willowbrook (Main Quest)
+  - **Trigger:** Speak with Mira after noticing the withered crops.
+  - **Completion:** Discover the source of the darkness in the woods and report back to Mira.
+  - **Rewards:** Unlocks basic magic, advances main story.
+
+- **Name:** Mira's Apprentice
+  - **Trigger:** Speak with Mira after investigating the darkness.
+  - **Completion:** Collect the required herbs and return to Mira for training.
+  - **Rewards:** Learn basic magic spells, gain Mira as a mentor.
+
+- **Name:** The Faded Photograph
+  - **Trigger:** Search the attic or storage room in the farmhouse.
+  - **Completion:** Decipher the message and show it to Grandmother.
+  - **Rewards:** New lead on the family mystery, unlocks a hidden room or item.
+
+- **Name:** Quest Template
+  - **Trigger:** <How the quest starts.>
+  - **Completion:** <How the quest is completed.>
+  - **Rewards:** <What the player receives.>
+
 ## 1. Elior’s Cottage
 
 - **Description:** A modest cottage with a straw roof and a cozy hearth.

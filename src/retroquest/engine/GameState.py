@@ -10,7 +10,7 @@ class GameState:
         self.visited_rooms = [starting_room.name]
         self.known_spells = []
         self.story_flags = [] # Replace journal_read_prologue_entry
-        self.non_activated_quests = all_quests
+        self.non_activated_quests = all_quests  
         self.activated_quests = []  # This will hold quests that have been activated
         self.completed_quests = []  # This will hold quests that have been completed
 

@@ -1,5 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
+from ...engine.story_flags import FLAG_TALKED_TO_FISHERMAN
 
 class FishingExpeditionQuest(Quest):
     def __init__(self) -> None:
@@ -10,7 +11,7 @@ class FishingExpeditionQuest(Quest):
         )
 
     def check_trigger(self, game_state: GameState) -> bool:
-        return game_state.get_story_flag("talked_to_fisherman")
+        return game_state.get_story_flag(FLAG_TALKED_TO_FISHERMAN)
 
     def check_completion(self, game_state: GameState) -> bool:
         return game_state.has_spell('purify')

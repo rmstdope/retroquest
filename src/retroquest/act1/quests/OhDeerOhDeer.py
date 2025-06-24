@@ -1,5 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
+from ...engine.story_flags import FLAG_DEER_CAN_BE_OBSERVED
 
 class OhDeerOhDeerQuest(Quest):
     def __init__(self) -> None:
@@ -10,7 +11,7 @@ class OhDeerOhDeerQuest(Quest):
         )
 
     def check_trigger(self, game_state: GameState) -> bool:
-        return game_state.get_story_flag("deer_can_be_observed")
+        return game_state.get_story_flag(FLAG_DEER_CAN_BE_OBSERVED)
 
     def check_completion(self, game_state: GameState) -> bool:
         return bool(game_state.get_item("rare flower"))

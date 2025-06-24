@@ -1,5 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
+from ...engine.story_flags import FLAG_MAGIC_FULLY_UNLOCKED, FLAG_JOURNEY_BLESS_COMPLETED
 
 class PreparingForTheRoadQuest(Quest):
     def __init__(self) -> None:
@@ -18,7 +19,7 @@ class PreparingForTheRoadQuest(Quest):
         )
 
     def check_trigger(self, game_state: GameState) -> bool:
-        return game_state.get_story_flag("magic_fully_unlocked")
+        return game_state.get_story_flag(FLAG_MAGIC_FULLY_UNLOCKED)
 
     def check_completion(self, game_state: GameState) -> bool:
         # Items
@@ -38,7 +39,7 @@ class PreparingForTheRoadQuest(Quest):
         self.knows_all_spells = all(game_state.has_spell(spell_name) for spell_name in required_spells)
         
         # Action: Bless cast for journey (assuming this flag is set elsewhere when player casts bless on self)
-        self.journey_bless_completed = game_state.get_story_flag("journey_bless_completed")
+        self.journey_bless_completed = game_state.get_story_flag(FLAG_JOURNEY_BLESS_COMPLETED)
 
         self.description = ["Mira has tasked you with preparing for your journey. She says you will need: \n"]
         requirements = [

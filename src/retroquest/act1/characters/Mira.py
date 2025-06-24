@@ -10,6 +10,7 @@ from ..spells.HealSpell import HealSpell
 from ..spells.UnlockSpell import UnlockSpell
 from ..spells.LightSpell import LightSpell
 from ...engine.GameState import GameState
+from ...engine.story_flags import FLAG_MAGIC_FULLY_UNLOCKED
 
 class Mira(Character):
     def __init__(self) -> None:
@@ -35,7 +36,7 @@ class Mira(Character):
             for spell_instance in spells_to_teach:
                 game_state.learn_spell(spell_instance)
 
-            game_state.set_story_flag("magic_fully_unlocked", True) 
+            game_state.set_story_flag(FLAG_MAGIC_FULLY_UNLOCKED, True) 
 
             # This is the combined dialogue for receiving flower, teaching spells, and giving quest.
             return (
@@ -62,7 +63,7 @@ class Mira(Character):
 
         # 2. Give the initial message if the story flag 'magic_fully_unlocked' is not set 
         #    (i.e., flower hasn't been given yet)
-        if not game_state.get_story_flag("magic_fully_unlocked"):
+        if not game_state.get_story_flag(FLAG_MAGIC_FULLY_UNLOCKED):
             return event_msg + "\n" + self.dialogue_states["initial"]
         
         # 3. If 'magic_fully_unlocked' is set (flower given) and player doesn't have amulet:

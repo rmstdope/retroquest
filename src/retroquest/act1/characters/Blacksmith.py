@@ -1,4 +1,5 @@
 from ...engine.Character import Character
+from ...engine.story_flags import FLAG_BLACKSMITH_MET, FLAG_DEER_CAN_BE_OBSERVED
 from ..items.Coin import Coin
 from ..items.DullKnife import DullKnife
 from ..items.SharpKnife import SharpKnife # Added import
@@ -14,10 +15,10 @@ class Blacksmith(Character):
     def talk_to(self, game_state) -> str:
         # Example dialog, can be expanded
         event_msg = f"[event]You speak with the [character.name]{self.get_name()}[/character.name].[/event]"
-        if game_state.get_story_flag("blacksmith_met"):
+        if game_state.get_story_flag(FLAG_BLACKSMITH_MET):
             return event_msg + "\n" + "[dialogue]'Welcome back, young [character.name]Elior[/character.name]. Need something else?'[/dialogue]"
         else:
-            game_state.set_story_flag("blacksmith_met", True)
+            game_state.set_story_flag(FLAG_BLACKSMITH_MET, True)
             return event_msg + "\n" + f"[dialogue]'Well met, young one. I am Borin, the village [character.name]{self.get_name()}[/character.name]. If you need tools made or mended, I'm your man. A sharp blade can be a good friend.'[/dialogue]"
 
     def give_item(self, game_state, item_object) -> str:
@@ -43,7 +44,7 @@ class Blacksmith(Character):
         elif isinstance(item_object, MillstoneFragment):
             game_state.remove_item_from_inventory(item_object.get_name())
             # Optionally, set a story flag if needed
-            game_state.set_story_flag("deer_can_be_observed", True)
+            game_state.set_story_flag(FLAG_DEER_CAN_BE_OBSERVED, True)
             event_msg = f"[event]You give the [item.name]{item_object.get_name()}[/item.name] to the [character.name]{self.get_name()}[/character.name].[/event]"
             return (
                 event_msg + "\n" +
