@@ -1,5 +1,5 @@
 from ...engine.Character import Character
-from ...engine.story_flags import FLAG_BLACKSMITH_MET, FLAG_DEER_CAN_BE_OBSERVED
+from ..Act1StoryFlags import FLAG_BLACKSMITH_MET, FLAG_DEER_CAN_BE_OBSERVED
 from ..items.Coin import Coin
 from ..items.DullKnife import DullKnife
 from ..items.SharpKnife import SharpKnife # Added import

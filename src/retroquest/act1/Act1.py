@@ -23,6 +23,7 @@ from retroquest.act1.quests.MagicForReal import MagicForRealQuest
 from retroquest.act1.quests.MagnetFishingExpedition import MagnetFishingExpeditionQuest
 from retroquest.act1.quests.OhDeerOhDeer import OhDeerOhDeerQuest
 from retroquest.act1.quests.PreparingForTheRoad import PreparingForTheRoadQuest
+from retroquest.act1.quests.FadedPhotograph import FadedPhotographQuest
 
 class Act1(Act):
     def __init__(self):
@@ -53,6 +54,7 @@ class Act1(Act):
             MagnetFishingExpeditionQuest(),
             OhDeerOhDeerQuest(),
             PreparingForTheRoadQuest(),
+            FadedPhotographQuest(),
         ]
         music_file = "music/Conquest - Market (freetouse.com).mp3"
         super().__init__(name="Act1", rooms=rooms, quests=quests, music_file=music_file)

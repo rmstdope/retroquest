@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ...engine.story_flags import FLAG_PRIEST_TALKED_TO
+from ..Act1StoryFlags import FLAG_PRIEST_TALKED_TO
 
 class LetThereBeLightQuest(Quest):
     def __init__(self) -> None:

@@ -13,9 +13,10 @@ class Character:
     def get_name(self) -> str:
         return self.name
 
-    def get_description(self) -> str:
-        return self.description
-    
+    def examine(self, game_state: GameState) -> str:
+        """Base 'examine' method for items. Subclasses should override this if they have specific examination details."""
+        return f"[event]You examine [character.name]{self.get_name()}[/character.name]. {self.description}[/event]"
+
     def talk_to(self, game_state: GameState) -> str:
         """Default talk_to method. Subclasses should override this for specific dialog."""
         event_msg = f"[event]You speak with the [character.name]{self.name}[/character.name].[/event]"

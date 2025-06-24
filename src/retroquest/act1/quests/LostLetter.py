@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ...engine.story_flags import (
+from ..Act1StoryFlags import (
     FLAG_FOUND_LOST_LETTER,
     FLAG_ASKED_GRANDMOTHER_ABOUT_LETTER
 )

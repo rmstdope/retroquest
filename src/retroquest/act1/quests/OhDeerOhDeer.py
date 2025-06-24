@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ...engine.story_flags import FLAG_DEER_CAN_BE_OBSERVED
+from ..Act1StoryFlags import FLAG_DEER_CAN_BE_OBSERVED
 
 class OhDeerOhDeerQuest(Quest):
     def __init__(self) -> None:

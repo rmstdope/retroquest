@@ -12,18 +12,19 @@ class Well(Item):
         self.contains_ring = True  # The well initially contains the ring
         self.is_purified = False
 
-    def get_description(self) -> str:
+    def examine(self, game_state: GameState) -> str:
         base_desc = "An old stone well, its surface worn smooth. A frayed rope hangs nearby, disappearing into the depths."
         if self.is_purified:
             if self.contains_ring:
-                return f"{base_desc} The water within is crystal clear. You can see something shiny at the bottom, but it's still too deep to reach by hand."
+                self.description = f"{base_desc} The water within is crystal clear. You can see something shiny at the bottom, but it's still too deep to reach by hand."
             else: # Purified, but ring taken or was never there and now visible
-                return f"{base_desc} The water within is crystal clear. The bottom is visible and appears empty."
+                self.description = f"{base_desc} The water within is crystal clear. The bottom is visible and appears empty."
         else: # Not purified
             desc = f"{base_desc} The water below is dark and still."
             if self.contains_ring: # Even if not purified, hint if ring is there
                 desc += " You think you see something shiny deep within the murky water, but it's impossible to tell for sure or reach."
-            return desc
+            self.description = desc
+        return super().examine(game_state)
 
     def use_with(self, game_state, other_item):
         from .Bucket import Bucket  # Local import to avoid circular dependency

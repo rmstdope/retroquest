@@ -1,8 +1,11 @@
+from .GameState import GameState
+
 class Item:
     """
     Base class for all items in RetroQuest.
     Inherit from this class to define specific items.
     """
+    
     def __init__(self, name: str, description: str, short_name: str = None, can_be_carried: bool = False) -> None:
         self.name = name
         self.description = description
@@ -12,9 +15,6 @@ class Item:
     def get_name(self) -> str:
         return self.name
 
-    def get_description(self) -> str:
-        return self.description
-    
     def get_short_name(self) -> str:
         return self.short_name
     
@@ -30,9 +30,9 @@ class Item:
         """Base 'use_with' method for items. Subclasses should override this if they can interact with other items."""
         return f"[failure]You can't use the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name].[/failure]"
     
-    def examine(self) -> str:
+    def examine(self, game_state: GameState) -> str:
         """Base 'examine' method for items. Subclasses should override this if they have specific examination details."""
-        return f"[failure]You examine the [item.name]{self.get_name()}[/item.name]. {self.get_description()}[/failure]"
+        return f"[event]You examine the [item.name]{self.get_name()}[/item.name]. {self.description}[/event]"
 
     def read(self, game_state) -> str:
         """Base 'read' method for items. Subclasses should override this if they are readable."""

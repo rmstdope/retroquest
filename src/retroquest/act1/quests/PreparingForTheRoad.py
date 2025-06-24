@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ...engine.story_flags import FLAG_MAGIC_FULLY_UNLOCKED, FLAG_JOURNEY_BLESS_COMPLETED
+from ..Act1StoryFlags import FLAG_MAGIC_FULLY_UNLOCKED, FLAG_JOURNEY_BLESS_COMPLETED
 
 class PreparingForTheRoadQuest(Quest):
     def __init__(self) -> None:

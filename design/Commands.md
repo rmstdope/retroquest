@@ -68,3 +68,5 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - [object], [item], [character], [spell], and [location] are placeholders for context-specific nouns.
 - Synonyms and alternate phrasings are grouped together and separated by slashes.
 - Some commands may only be available after learning spells or acquiring items.
+
+TODO Remove the read command and replace with use

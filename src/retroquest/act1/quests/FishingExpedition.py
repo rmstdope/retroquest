@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ...engine.story_flags import FLAG_TALKED_TO_FISHERMAN
+from ..Act1StoryFlags import FLAG_TALKED_TO_FISHERMAN
 
 class FishingExpeditionQuest(Quest):
     def __init__(self) -> None:

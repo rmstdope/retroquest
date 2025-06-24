@@ -13,11 +13,12 @@ class Mechanism(Item):
         )
         self.repaired = False
 
-    def get_description(self) -> str:
+    def examine(self, game_state: GameState) -> str:
         if self.repaired:
-            return f"The [item.name]{self.get_name()}[/item.name] has been repaired using a [item.name]rope[/item.name]. A compartment is open."
+            self.description =  f"The [item.name]{self.get_name()}[/item.name] has been repaired using a [item.name]rope[/item.name]. A compartment is open."
         else:
-            return self._description # Access the original description
+            self.description = "A strange mechanism with levers and gears that doesn't quite seem to belong to the old mill's original design. It looks like something could be used with it.",
+        return super().examine(game_state)
 
     def use(self, game_state) -> str:
         if self.repaired:

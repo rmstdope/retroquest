@@ -328,10 +328,10 @@ class Game:
             return "Examine what?"
         item_to_examine = self.find_item(target)
         if item_to_examine:
-            return item_to_examine.get_description()
+            return item_to_examine.examine(self.state)
         character_to_examine = self.find_character(target)
         if character_to_examine:
-            return character_to_examine.get_description()
+            return character_to_examine.examine(self.state)
         return f"You don't see any '{target}' here."
 
     def map(self) -> str:

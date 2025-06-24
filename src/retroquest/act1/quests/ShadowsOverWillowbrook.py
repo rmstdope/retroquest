@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ...engine.story_flags import (
+from ..Act1StoryFlags import (
     FLAG_INVESTIGATED_WITHERED_CROPS,
     FLAG_WITNESSED_SHADOW_EVENT
 )

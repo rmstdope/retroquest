@@ -3,6 +3,8 @@ from ..items.Lantern import Lantern
 from ..items.Bread import Bread
 from ..items.EliorsJournal import EliorsJournal
 from ..characters.Grandmother import Grandmother
+from ..items.FadedPhotograph import FadedPhotograph
+from ..Act1StoryFlags import FLAG_FOUND_PHOTO
 
 class EliorsCottage(Room):
     def __init__(self) -> None:
@@ -24,3 +26,12 @@ class EliorsCottage(Room):
         # Fill exits when this method is called
         if not self.exits:
             self.exits = {"south": "VegetableField", "east": "VillageSquare"}
+
+    def search(self, game_state):
+        # If the faded photograph hasn't been found yet, add it and set the flag
+        if not game_state.get_story_flag(FLAG_FOUND_PHOTO):
+            photo = FadedPhotograph()
+            self.items.append(photo)
+            game_state.set_story_flag(FLAG_FOUND_PHOTO, True)
+            return f"You search the cottage thoroughly and discover a [item.name]{photo.get_name()}[/item.name] hidden in a drawer."
+        return "You search the cottage but find nothing new."
