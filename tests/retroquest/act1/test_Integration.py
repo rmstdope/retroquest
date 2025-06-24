@@ -1,5 +1,6 @@
 import pytest
 from engine.Game import Game
+from engine.Act import Act
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
 from retroquest.act1.rooms.VegetableField import VegetableField
 from retroquest.act1.rooms.ChickenCoop import ChickenCoop
@@ -116,7 +117,8 @@ QUESTS = [
 
 def test_golden_path_act1_completion(monkeypatch):
     # Setup Game
-    game = Game(starting_room=ROOMS["EliorsCottage"], all_rooms=ROOMS, all_quests=QUESTS)
+    act = Act(name="Act1", rooms=ROOMS, quests=QUESTS)
+    game = Game(act)
     _execute_commands(game, ['look around'])
 
     # Step 1: Elior’s Cottage
@@ -407,6 +409,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Or, rely on the game's `cast` command to find it.
     # The `RoomsAct1.md` states `Withered carrot (start)` for Vegetable Field items.
     # It's not explicitly taken in the Golden Path until it's revived.
+    # Let's assume it's in the room for this test.
     _check_item_in_room(game.state.current_room, "Withered carrot")
 
     _execute_commands(game, ["cast revive on Withered carrot"])

@@ -13,13 +13,14 @@ from .GameState import GameState
 from .Item import Item
 from .Spell import Spell
 from . import DEV_MODE
+from .Act import Act
 
 class Game:
     """
     Main Game class for RetroQuest: The Awakening.
     Handles the game loop, command parsing, and room transitions.
     """
-    def __init__(self, starting_room, all_rooms, all_quests):
+    def __init__(self, act):
         custom_theme = Theme({
             "character.name": "bold blue",
             "dialogue": "italic cyan",
@@ -36,7 +37,9 @@ class Game:
         self.completer = NestedCompleter.from_nested_dict({}) 
         self.session = PromptSession(completer=self.completer, complete_while_typing=True)
         self.is_running = True
-        self.state = GameState(starting_room, all_rooms=all_rooms, all_quests=all_quests) # Pass all_rooms and all_quests
+        # Use the first room in act.rooms as the starting room
+        starting_room = next(iter(act.rooms.values())) if act.rooms else None
+        self.state = GameState(starting_room, all_rooms=act.rooms, all_quests=act.quests)
         self.command_parser = CommandParser(self)
 
     def handle_command(self, command: str) -> str:

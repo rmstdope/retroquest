@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 from engine.Game import Game
 from engine.Room import Room
+from engine.Act import Act
 
 # --- Mock Room classes for testing ---
 class MockRoom(Room):
@@ -53,7 +54,8 @@ def basic_rooms():
 
 @pytest.fixture
 def game(basic_rooms):
-    return Game(basic_rooms["EliorsCottage"], basic_rooms, all_quests=[])
+    act = Act(name="TestAct", rooms=basic_rooms, quests=[])
+    return Game(act)
 
 def test_game_initial_state(game, basic_rooms):
     assert game.state.current_room == basic_rooms["EliorsCottage"]
