@@ -17,6 +17,7 @@ from retroquest.act1.rooms.HiddenGlade import HiddenGlade
 from retroquest.act1.rooms.VillageChapel import VillageChapel
 from retroquest.act1.rooms.RoadToGreendale import RoadToGreendale
 from retroquest.act1.quests.HintOfMagic import HintOfMagicQuest
+#TODO Replace all act1 rooms/quests with mocks
 
 # Dummy room and item setup for test
 ROOMS = {
