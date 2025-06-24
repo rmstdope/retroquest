@@ -1,56 +1,59 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from engine.Game import Game
-from retroquest.act1.rooms.EliorsCottage import EliorsCottage
-from retroquest.act1.rooms.VegetableField import VegetableField
-from retroquest.act1.rooms.ChickenCoop import ChickenCoop
-from retroquest.act1.rooms.VillageSquare import VillageSquare
-from retroquest.act1.rooms.MirasHut import MirasHut
-from retroquest.act1.rooms.BlacksmithsForge import BlacksmithsForge
-from retroquest.act1.rooms.GeneralStore import GeneralStore
-from retroquest.act1.rooms.VillageWell import VillageWell
-from retroquest.act1.rooms.AbandonedShed import AbandonedShed
-from retroquest.act1.rooms.OldMill import OldMill
-from retroquest.act1.rooms.Riverbank import Riverbank
-from retroquest.act1.rooms.ForestPath import ForestPath
-from retroquest.act1.rooms.HiddenGlade import HiddenGlade
-from retroquest.act1.rooms.VillageChapel import VillageChapel
-from retroquest.act1.rooms.RoadToGreendale import RoadToGreendale
-from retroquest.act1.quests.HintOfMagic import HintOfMagicQuest
-#TODO Replace all act1 rooms/quests with mocks
+from engine.Room import Room
+
+# --- Mock Room classes for testing ---
+class MockRoom(Room):
+    def __init__(self, name, description="A mock room."):
+        super().__init__(name, description)
+        self.exits = {}
+        self.items = []
+        self.characters = []
+    def can_leave(self):
+        return True
+    def add_exit(self, direction, room):
+        self.exits[direction] = room
+    def add_item(self, item):
+        self.items.append(item)
+    def add_character(self, character):
+        self.characters.append(character)
 
 # Dummy room and item setup for test
 ROOMS = {
-    "EliorsCottage": EliorsCottage(),
-    "VegetableField": VegetableField(),
-    "ChickenCoop": ChickenCoop(),
-    "VillageSquare": VillageSquare(),
-    "MirasHut": MirasHut(),
-    "BlacksmithsForge": BlacksmithsForge(),
-    "GeneralStore": GeneralStore(),
-    "VillageWell": VillageWell(),
-    "AbandonedShed": AbandonedShed(),
-    "OldMill": OldMill(),
-    "Riverbank": Riverbank(),
-    "ForestPath": ForestPath(),
-    "HiddenGlade": HiddenGlade(),
-    "VillageChapel": VillageChapel(),
-    "RoadToGreendale": RoadToGreendale(),
+    "EliorsCottage": MockRoom("Elior's Cottage", "A cozy cottage with a warm hearth."),
+    "VegetableField": MockRoom("Vegetable Field", "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky."),
+    "ChickenCoop": MockRoom("Chicken Coop"),
+    "VillageSquare": MockRoom("Village Square"),
+    "MirasHut": MockRoom("Mira's Hut"),
+    "BlacksmithsForge": MockRoom("Blacksmith's Forge"),
+    "GeneralStore": MockRoom("General Store"),
+    "VillageWell": MockRoom("Village Well"),
+    "AbandonedShed": MockRoom("Abandoned Shed"),
+    "OldMill": MockRoom("Old Mill"),
+    "Riverbank": MockRoom("Riverbank"),
+    "ForestPath": MockRoom("Forest Path"),
+    "HiddenGlade": MockRoom("Hidden Glade"),
+    "VillageChapel": MockRoom("Village Chapel"),
+    "RoadToGreendale": MockRoom("Road to Greendale"),
 }
 
 @pytest.fixture
 def basic_rooms():
     # Minimal room network for testing
+    cottage = MockRoom("EliorsCottage", "A cozy cottage with a warm hearth.")
+    field = MockRoom("VegetableField", "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky.")
+    # Add exits for movement tests
+    cottage.add_exit('south', field.name)
+    field.add_exit('north', cottage.name)
     return {
-        "EliorsCottage": EliorsCottage(),
-        "VegetableField": VegetableField(),
+        "EliorsCottage": cottage,
+        "VegetableField": field,
     }
-def basic_quests():
-    return [HintOfMagicQuest()]
 
 @pytest.fixture
 def game(basic_rooms):
-    return Game(basic_rooms["EliorsCottage"], basic_rooms, all_quests=basic_quests)
+    return Game(basic_rooms["EliorsCottage"], basic_rooms, all_quests=[])
 
 def test_game_initial_state(game, basic_rooms):
     assert game.state.current_room == basic_rooms["EliorsCottage"]
@@ -60,7 +63,6 @@ def test_game_initial_state(game, basic_rooms):
 
 def test_move_valid(game, basic_rooms):
     # EliorsCottage south -> VegetableField
-    basic_rooms["EliorsCottage"].can_leave()
     result = game.move('south')
     assert game.state.current_room == basic_rooms["VegetableField"]
     assert "You move south to" in result
@@ -116,40 +118,37 @@ def test_visited_rooms_no_duplicates(game, basic_rooms):
     assert game.state.visited_rooms.count(basic_rooms["VegetableField"].name) == 1
 
 def test_map_initial_state(game):
-    game.state.get_room("Elior's Cottage").can_leave()
     result = game.map()
     # Only the starting room should be shown, with its exits listed
     assert "Visited Rooms and Exits:" in result
-    assert "- [room.name]Elior's Cottage[/room.name]:" in result
+    assert "- [room.name]EliorsCottage[/room.name]:" in result
     # Should show exits for the starting room (EliorsCottage)
-    assert "    south -> [room.name]Vegetable Field[/room.name]" in result
+    assert "    south -> [room.name]VegetableField[/room.name]" in result
     # Should not show VegetableField as a room yet
-    assert "- [room.name]Vegetable Field[/room.name]" not in result
+    assert "- [room.name]VegetableField[/room.name]" not in result
 
 def test_map_after_move(game):
-    game.state.get_room("Elior's Cottage").can_leave()
     game.move('south')
     result = game.map()
     # Both rooms should be shown
-    assert "- [room.name]Elior's Cottage[/room.name]:" in result
-    assert "- [room.name]Vegetable Field[/room.name]:" in result
+    assert "- [room.name]EliorsCottage[/room.name]:" in result
+    assert "- [room.name]VegetableField[/room.name]:" in result
     # Exits for EliorsCottage should be shown
-    assert "    south -> [room.name]Vegetable Field[/room.name]" in result
+    assert "    south -> [room.name]VegetableField[/room.name]" in result
     # Exits for VegetableField should be shown (should have north back to EliorsCottage)
-    assert "    north -> [room.name]Elior's Cottage[/room.name]" in result
+    assert "    north -> [room.name]EliorsCottage[/room.name]" in result
 
 def test_map_multiple_moves(game):
-    game.state.get_room("Elior's Cottage").can_leave()
     # Move south, then north (should visit both rooms, no duplicates)
     game.move('south')
     game.move('north')
     result = game.map()
     # Both rooms should be present
-    assert "- [room.name]Elior's Cottage[/room.name]:" in result
-    assert "- [room.name]Vegetable Field[/room.name]:" in result
+    assert "- [room.name]EliorsCottage[/room.name]:" in result
+    assert "- [room.name]VegetableField[/room.name]:" in result
     # Exits for both rooms should be shown
-    assert "    south -> [room.name]Vegetable Field[/room.name]" in result
-    assert "    north -> [room.name]Elior's Cottage[/room.name]" in result
+    assert "    south -> [room.name]VegetableField[/room.name]" in result
+    assert "    north -> [room.name]EliorsCottage[/room.name]" in result
     assert result.count('- ') == 2
 
 def test_take_item_from_room(game, basic_rooms):
@@ -772,7 +771,7 @@ def test_listen_item_not_found(game):
     # For listen, it might be "You can't find 'nonexistent_relic' to listen to."
     # or "There is no 'nonexistent_relic' here."
     
-    # Clear inventory and room items to be sure
+    # Clear inventory and room to be sure
     game.state.inventory.clear()
     game.state.current_room.items.clear()
 
