@@ -68,7 +68,7 @@ def test_move_valid(game, basic_rooms):
     result = game.move('south')
     assert game.state.current_room == basic_rooms["VegetableField"]
     assert "You move south to" in result
-    assert f"[room.name]{basic_rooms['VegetableField'].name}[/room.name]" in result
+    assert f"[room_name]{basic_rooms['VegetableField'].name}[/room_name]" in result
 
 def test_move_invalid(game):
     result = game.move('west')
@@ -123,22 +123,22 @@ def test_map_initial_state(game):
     result = game.map()
     # Only the starting room should be shown, with its exits listed
     assert "Visited Rooms and Exits:" in result
-    assert "- [room.name]EliorsCottage[/room.name]:" in result
+    assert "- [room_name]EliorsCottage[/room_name]:" in result
     # Should show exits for the starting room (EliorsCottage)
-    assert "    south -> [room.name]VegetableField[/room.name]" in result
+    assert "    south -> [room_name]VegetableField[/room_name]" in result
     # Should not show VegetableField as a room yet
-    assert "- [room.name]VegetableField[/room.name]" not in result
+    assert "- [room_name]VegetableField[/room_name]" not in result
 
 def test_map_after_move(game):
     game.move('south')
     result = game.map()
     # Both rooms should be shown
-    assert "- [room.name]EliorsCottage[/room.name]:" in result
-    assert "- [room.name]VegetableField[/room.name]:" in result
+    assert "- [room_name]EliorsCottage[/room_name]:" in result
+    assert "- [room_name]VegetableField[/room_name]:" in result
     # Exits for EliorsCottage should be shown
-    assert "    south -> [room.name]VegetableField[/room.name]" in result
+    assert "    south -> [room_name]VegetableField[/room_name]" in result
     # Exits for VegetableField should be shown (should have north back to EliorsCottage)
-    assert "    north -> [room.name]EliorsCottage[/room.name]" in result
+    assert "    north -> [room_name]EliorsCottage[/room_name]" in result
 
 def test_map_multiple_moves(game):
     # Move south, then north (should visit both rooms, no duplicates)
@@ -146,11 +146,11 @@ def test_map_multiple_moves(game):
     game.move('north')
     result = game.map()
     # Both rooms should be present
-    assert "- [room.name]EliorsCottage[/room.name]:" in result
-    assert "- [room.name]VegetableField[/room.name]:" in result
+    assert "- [room_name]EliorsCottage[/room_name]:" in result
+    assert "- [room_name]VegetableField[/room_name]:" in result
     # Exits for both rooms should be shown
-    assert "    south -> [room.name]VegetableField[/room.name]" in result
-    assert "    north -> [room.name]EliorsCottage[/room.name]" in result
+    assert "    south -> [room_name]VegetableField[/room_name]" in result
+    assert "    north -> [room_name]EliorsCottage[/room_name]" in result
     assert result.count('- ') == 2
 
 def test_take_item_from_room(game, basic_rooms):
@@ -161,7 +161,7 @@ def test_take_item_from_room(game, basic_rooms):
     assert egg in game.state.current_room.items
     # Take the item
     result = game.take('egg')
-    assert "You take the [item.name]egg[/item.name]" in result
+    assert "You take the [item_name]egg[/item_name]" in result
     assert egg in game.state.inventory
     assert egg not in game.state.current_room.items
 
@@ -179,7 +179,7 @@ def test_drop_item_from_inventory(game, basic_rooms):
     assert lantern in game.state.inventory
     # Drop the item
     result = game.drop('lantern')
-    assert "You drop the [item.name]lantern[/item.name]" in result
+    assert "You drop the [item_name]lantern[/item_name]" in result
     assert lantern not in game.state.inventory
     assert lantern in game.state.current_room.items
 
@@ -231,11 +231,11 @@ def test_give_item_to_character_successful(game, basic_rooms):
     game.state.current_room.characters.append(villager)
     
     # Mock the villager's give_item method
-    villager.give_item = MagicMock(return_value=f"[character.name]{villager.get_name()}[/character.name] takes the [item.name]{apple.get_name()}[/item.name].")
+    villager.give_item = MagicMock(return_value=f"[character_name]{villager.get_name()}[/character_name] takes the [item_name]{apple.get_name()}[/item_name].")
     
     result = game.give(f"{apple.get_name()} to {villager.get_name()}")
     
-    assert f"[character.name]{villager.get_name()}[/character.name] takes the [item.name]{apple.get_name()}[/item.name]." in result
+    assert f"[character_name]{villager.get_name()}[/character_name] takes the [item_name]{apple.get_name()}[/item_name]." in result
     villager.give_item.assert_called_once_with(game.state, apple)
     # Assuming the character's give_item method is responsible for removing the item if accepted.
     # If Game.give should remove it, add that check here.
@@ -270,7 +270,7 @@ def test_give_item_character_does_not_want(game, basic_rooms):
     
     # The default Character.give_item should be called
     result = game.give(f"{stick.get_name()} to {generic_char.get_name()}")
-    assert f"[character.name]{generic_char.get_name()}[/character.name] doesn't seem interested in the [item.name]{stick.get_name()}[/item.name]." in result
+    assert f"[character_name]{generic_char.get_name()}[/character_name] doesn't seem interested in the [item_name]{stick.get_name()}[/item_name]." in result
 
 def test_give_item_invalid_format(game):
     result = game.give("apple villager") # Missing "to"
@@ -357,8 +357,8 @@ def test_inventory_with_items(game):
     result = game.inventory()
     
     assert "You are carrying:" in result
-    assert f"- [item.name]{apple.get_name()}[/item.name]" in result
-    assert f"- [item.name]{stick.get_name()}[/item.name]" in result
+    assert f"- [item_name]{apple.get_name()}[/item_name]" in result
+    assert f"- [item_name]{stick.get_name()}[/item_name]" in result
 
 # --- Tests for 'examine' command ---
 
@@ -408,7 +408,7 @@ def test_examine_character_in_room(game):
     game.state.current_room.characters.append(traveler)
     
     result = game.examine("Villager")
-    assert result == '[event]You examine [character.name]villager[/character.name]. ' + char_description + '[/event]'
+    assert result == '[event]You examine [character_name]villager[/character_name]. ' + char_description + '[/event]'
 
 def test_examine_target_not_found(game):
     # Clear inventory and room items/characters to ensure target is not found
@@ -436,7 +436,7 @@ def test_examine_case_insensitivity(game):
     game.state.inventory.append(apple)
     
     result_item = game.examine("golden apple")
-    assert result_item == '[event]You examine the [item.name]Golden Apple[/item.name]. ' + apple_description + '[/event]'
+    assert result_item == '[event]You examine the [item_name]Golden Apple[/item_name]. ' + apple_description + '[/event]'
     game.state.inventory.clear() # Clean up for next part of test
 
     # Test with character
@@ -447,7 +447,7 @@ def test_examine_case_insensitivity(game):
     game.state.current_room.characters.append(blacksmith)
     
     result_char = game.examine("blacksmith JOHN")
-    assert result_char == '[event]You examine [character.name]Blacksmith John[/character.name]. ' + char_description + '[/event]'
+    assert result_char == '[event]You examine [character_name]Blacksmith John[/character_name]. ' + char_description + '[/event]'
     game.state.current_room.characters.clear() # Clean up
 
 # --- Tests for 'buy' command ---
@@ -464,14 +464,14 @@ def test_buy_item_successful(game):
     # For this test, we assume Shopkeeper.buy_item handles coin deduction and item addition
     # and returns a success message.
     shopkeeper.wares = {"rope": {"item": rope_instance, "price": 1}}
-    shopkeeper.buy_item = MagicMock(return_value=f"You bought a [item.name]{rope_instance.get_name()}[/item.name] for 1 [item.name]coin[/item.name](s).")
+    shopkeeper.buy_item = MagicMock(return_value=f"You bought a [item_name]{rope_instance.get_name()}[/item_name] for 1 [item_name]coin[/item_name](s).")
 
     game.state.current_room.characters.append(shopkeeper)
     game.state.inventory.append(Coin()) # Player has one coin
 
     result = game.buy("rope from shopkeeper")
     
-    assert f"You bought a [item.name]{rope_instance.get_name()}[/item.name] for 1 [item.name]coin[/item.name](s)." in result
+    assert f"You bought a [item_name]{rope_instance.get_name()}[/item_name] for 1 [item_name]coin[/item_name](s)." in result
     shopkeeper.buy_item.assert_called_once_with("rope", game.state)
     # Further checks could be:
     # - assert Coin not in game.state.inventory (if buy_item removes it)
@@ -499,13 +499,13 @@ def test_buy_item_not_enough_coins(game):
     rope_instance = Rope()
     # Assume rope costs 1 coin, but player has 0
     shopkeeper.wares = {"rope": {"item": rope_instance, "price": 1}}
-    shopkeeper.buy_item = MagicMock(return_value="You don't have enough [item.name]coins[/item.name] for the [item.name]rope[/item.name]. It costs 1 [item.name]coin[/item.name](s).")
+    shopkeeper.buy_item = MagicMock(return_value="You don't have enough [item_name]coins[/item_name] for the [item_name]rope[/item_name]. It costs 1 [item_name]coin[/item_name](s).")
     
     game.state.current_room.characters.append(shopkeeper)
     # game.state.inventory is empty (no coins)
 
     result = game.buy("rope from shopkeeper")
-    assert "You don't have enough [item.name]coins[/item.name] for the [item.name]rope[/item.name]. It costs 1 [item.name]coin[/item.name](s)." in result
+    assert "You don't have enough [item_name]coins[/item_name] for the [item_name]rope[/item_name]. It costs 1 [item_name]coin[/item_name](s)." in result
     shopkeeper.buy_item.assert_called_once_with("rope", game.state)
 
 def test_buy_item_character_not_present(game):
@@ -524,7 +524,7 @@ def test_buy_item_character_cannot_sell(game):
     game.state.inventory.append(Coin())
 
     result = game.buy("rope from villager")
-    assert f"[character.name]{villager.get_name()}[/character.name] does not have any [item.name]rope[/item.name] to sell right now." in result
+    assert f"[character_name]{villager.get_name()}[/character_name] does not have any [item_name]rope[/item_name] to sell right now." in result
 
 def test_buy_item_invalid_format(game):
     result = game.buy("rope shopkeeper") # Missing "from"
@@ -642,13 +642,13 @@ def test_use_item1_with_item2_item2_not_found(game):
     item1 = MockItemToUse(name="tool")
     game.state.add_item_to_inventory(item1)
     result = game.use("tool", "nonexistent_item2")
-    assert result == "[failure]You don't see a 'nonexistent_item2' to use with the [item.name]tool[/item.name].[/failure]"
+    assert result == "[failure]You don't see a 'nonexistent_item2' to use with the [item_name]tool[/item_name].[/failure]"
 
 def test_use_item_with_itself(game):
     item1 = MockItemToUse(name="widget")
     game.state.add_item_to_inventory(item1)
     result = game.use("widget", "widget")
-    assert result == "[failure]You can\'t use the [item.name]widget[/item.name] with itself.[/failure]"
+    assert result == "[failure]You can't use the [item_name]widget[/item_name] with itself.[/failure]"
     assert item1.use_with_called_with_state_and_item is None
 
 # --- Tests for 'read <item>' command ---

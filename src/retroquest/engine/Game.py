@@ -22,12 +22,12 @@ class Game:
     """
     def __init__(self, act):
         custom_theme = Theme({
-            "character.name": "bold blue",
+            "character_name": "bold blue",
             "dialogue": "italic cyan",
-            "item.name": "bold green",
+            "item_name": "bold green",
             "spell.name": "bold magenta",
-            "room.name": "bold cyan",
-            "quest.name": "red",
+            "room_name": "bold cyan",
+            "quest_name": "red",
             "event": "dim",
             "failure": "bold red",
             "success": "bold green",
@@ -274,7 +274,7 @@ Copyright Free Background Music'''
                 self.state.current_room = self.state.all_rooms[next_room_key]
                 self.state.current_room.on_enter(self.state)
                 self.state.mark_visited(self.state.current_room)
-                return f"[event][You move {direction} to [room.name]{self.state.current_room.name}[/room.name].][/event]\n\n" + self.state.current_room.describe()
+                return f"[event][You move {direction} to [room_name]{self.state.current_room.name}[/room_name].][/event]\n\n" + self.state.current_room.describe()
             else:
                 return "[failure]That exit leads nowhere (room not found).[/failure]"
         else:
@@ -355,11 +355,11 @@ Copyright Free Background Music'''
         output = ["[bold]Visited Rooms and Exits:[/bold]"]
         for name, room in room_objs.items():
             exits = room.get_exits()
-            output.append(f"- [room.name]{room.name}[/room.name]:")
+            output.append(f"- [room_name]{room.name}[/room_name]:")
             if exits:
                 for direction, dest in exits.items():
                     dest_name = self.state.all_rooms[dest].name if dest in self.state.all_rooms else dest
-                    output.append(f"    {direction} -> [room.name]{dest_name}[/room.name]")
+                    output.append(f"    {direction} -> [room_name]{dest_name}[/room_name]")
             else:
                 output.append("    No exits")
         return "\n".join(output)
@@ -386,7 +386,7 @@ Copyright Free Background Music'''
         if item_to_drop:
             self.state.inventory.remove(item_to_drop)
             self.state.current_room.items.append(item_to_drop)
-            return f"You drop the [item.name]{item_to_drop.get_name()}[/item.name]."
+            return f"You drop the [item_name]{item_to_drop.get_name()}[/item_name]."
         return f"[failure]You don't have a '{item}' to drop.[/failure]"
 
     def take(self, item: str) -> str:
@@ -394,14 +394,14 @@ Copyright Free Background Music'''
         if not item_to_take:
             return f"[failure]There is no '{item}' here to take.[/failure]"
         if not item_to_take.can_be_carried():
-            return f"[failure]You can't take the [item.name]{item_to_take.get_name()}[/item.name].[/failure]"
+            return f"[failure]You can't take the [item_name]{item_to_take.get_name()}[/item_name].[/failure]"
         self.state.current_room.items.remove(item_to_take)
         self.state.inventory.append(item_to_take)
         
         # Call picked_up on the item
         pickup_message = item_to_take.picked_up(self.state)
         
-        response = f"[event]You take the [item.name]{item_to_take.get_name()}[/item.name].[/event]"
+        response = f"[event]You take the [item_name]{item_to_take.get_name()}[/item_name].[/event]"
         if pickup_message:
             response += " " + pickup_message
         return response
@@ -411,7 +411,7 @@ Copyright Free Background Music'''
             return "Your inventory is empty."
         lines = ["[bold]You are carrying:[/bold]"]
         for item in self.state.inventory:
-            lines.append(f"- [item.name]{item.get_name()}[/item.name]")
+            lines.append(f"- [item_name]{item.get_name()}[/item_name]")
         return "\n".join(lines)
 
     def talk(self, target: str) -> str:
@@ -421,7 +421,7 @@ Copyright Free Background Music'''
         if character_to_talk_to:
             return character_to_talk_to.talk_to(self.state)
         else:
-            return f"[failure]There is no character named '[character.name]{target}[/character.name]' here to talk to.[/failure]"
+            return f"[failure]There is no character named '[character_name]{target}[/character_name]' here to talk to.[/failure]"
 
     def split_command(self, command_args: str, command: str, delimiter: str) -> tuple:
         # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"
@@ -493,10 +493,10 @@ Copyright Free Background Music'''
             item_obj_2 = self.find_item(item_name_2, look_in_inventory=True, look_in_room=True)
             
             if not item_obj_2:
-                return f"[failure]You don't see a '{item_name_2}' to use with the [item.name]{item_obj_1.get_name()}[/item.name].[/failure]"
+                return f"[failure]You don't see a '{item_name_2}' to use with the [item_name]{item_obj_1.get_name()}[/item_name].[/failure]"
 
             if item_obj_1 == item_obj_2:
-                return f"[failure]You can't use the [item.name]{item_obj_1.get_name()}[/item.name] with itself.[/failure]"
+                return f"[failure]You can't use the [item_name]{item_obj_1.get_name()}[/item_name] with itself.[/failure]"
 
             return item_obj_1.use_with(self.state, item_obj_2)
 

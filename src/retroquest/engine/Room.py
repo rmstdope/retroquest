@@ -74,15 +74,15 @@ class Room:
 
     def describe(self) -> str:
         """Return a full description of the room, including items, characters, and exits."""
-        desc = f"[room.name]{self.name}[/room.name]\n"
+        desc = f"[room_name]{self.name}[/room_name]\n"
         desc += self.description + '\n'
         visible_items = [item for item in self.items]
         if visible_items:
-            item_names = ', '.join(f"[item.name]{item.get_name()}[/item.name]" for item in visible_items)
+            item_names = ', '.join(f"[item_name]{item.get_name()}[/item_name]" for item in visible_items)
             desc += f"\nItems you can see: {item_names}"
         if self.characters:
             # Use get_name for character instances
-            character_names = ', '.join(f"[character.name]{c.get_name()}[/character.name]" for c in self.characters)
+            character_names = ', '.join(f"[character_name]{c.get_name()}[/character_name]" for c in self.characters)
             desc += f"\nCharacters present: {character_names}"
         if self.exits:
             exit_names = ', '.join(f"[exits]{exit_name}[/exits]" for exit_name in self.exits.keys())
@@ -91,7 +91,7 @@ class Room:
 
     def search(self, game_state: GameState, target: str = None) -> str:
         """Allows the player to search the room."""
-        return f"You search around the [room.name]{self.name}[/room.name], but find nothing of interest beyond what you can already see."
+        return f"You search around the [room_name]{self.name}[/room_name], but find nothing of interest beyond what you can already see."
 
     def rest(self, game_state: GameState) -> str:
         """Allows the player to rest in the room."""

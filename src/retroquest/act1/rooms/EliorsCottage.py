@@ -33,5 +33,5 @@ class EliorsCottage(Room):
             photo = FadedPhotograph()
             self.items.append(photo)
             game_state.set_story_flag(FLAG_FOUND_PHOTO, True)
-            return f"You search the cottage thoroughly and discover a [item.name]{photo.get_name()}[/item.name] hidden in a drawer."
+            return f"You search the cottage thoroughly and discover a [item_name]{photo.get_name()}[/item_name] hidden in a drawer."
         return "You search the cottage but find nothing new."

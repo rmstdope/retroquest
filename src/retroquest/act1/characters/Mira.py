@@ -24,7 +24,7 @@ class Mira(Character):
         self.dialogue_states = {
             "initial": f"[character.name]{self.get_name()}[/character.name] smiles warmly as you enter her fragrant hut. [dialogue]'Welcome, [character.name]Elior[/character.name]. I sense a stirring of the old powers within you. What brings you to my door?'[/dialogue]",
             "quest_conditions_not_met": f"[character.name]{self.get_name()}[/character.name] looks at you thoughtfully. [dialogue]'You have made progress, [character.name]Elior[/character.name], but you are not yet fully prepared for what lies ahead. Ensure you have all necessary items, learned the essential spells, and received a blessing for your journey.'[/dialogue]",
-            "quest_complete_amulet_given": f"[character.name]{self.get_name()}[/character.name] smiles, a deep wisdom in her eyes. [dialogue]'You have done well, [character.name]Elior[/character.name]. You have gathered your supplies, honed your magical skills, and prepared your spirit. You are ready.'[/dialogue] She presents you with the [item.name]Ancient Amulet[/item.name]. [dialogue]'May this guide and protect you.'[/dialogue] [event]([item.name]Ancient Amulet[/item.name] added to inventory!)[/event]",
+            "quest_complete_amulet_given": f"[character_name]{self.get_name()}[/character_name] smiles, a deep wisdom in her eyes. [dialogue]'You have done well, [character_name]Elior[/character_name]. You have gathered your supplies, honed your magical skills, and prepared your spirit. You are ready.'[/dialogue] She presents you with the [item_name]Ancient Amulet[/item_name]. [dialogue]'May this guide and protect you.'[/dialogue] [event]([item_name]Ancient Amulet[/item_name] added to inventory!)[/event]",
             "post_amulet": f"[character.name]{self.get_name()}[/character.name] looks at you kindly. [dialogue]'The journey of a thousand miles begins with a single step. You have taken many already. Go now, and may your path be clear.'[/dialogue]"
         }
 
@@ -40,23 +40,23 @@ class Mira(Character):
 
             # This is the combined dialogue for receiving flower, teaching spells, and giving quest.
             return (
-                "[character.name]Mira[/character.name] smiles, accepting the [item.name]flower[/item.name]. [dialogue]'This bloom,' she says, her voice soft, 'is a testament to your growing bond with the living world, Elior. "
+                "[character_name]Mira[/character_name] smiles, accepting the [item_name]flower[/item_name]. [dialogue]'This bloom,' she says, her voice soft, 'is a testament to your growing bond with the living world, Elior. "
                 "It shows you are ready to truly channel the energies around us.'[/dialogue] She then guides you through ancient words and gestures, awakening your innate abilities. "
                 "[event]You feel a new understanding dawn as she imparts the knowledge of [spell.name]heal[/spell.name] to mend, [spell.name]unlock[/spell.name] to reveal, and [spell.name]light[/spell.name] to illuminate the path.[/event] "
                 "[dialogue]'The spark was always within you,'[/dialogue] [character.name]Mira[/character.name] explains, [dialogue]'but now, you can truly command these magics.'[/dialogue] "
-                "With your newfound power, she tasks you with preparing for the journey ahead, mentioning that the [item.name]Ancient Amulet[/item.name] will be yours "
+                "With your newfound power, she tasks you with preparing for the journey ahead, mentioning that the [item_name]Ancient Amulet[/item_name] will be yours "
                 "once you are truly ready. She tells you that you will need:\n"
                 "- Warm clothing\n"
                 "- Magical protection\n"
                 "- Food for the road\n"
                 "- Sturdy footwear\n"
-                "- A [item.name]map[/item.name] to find your way\n"
+                "- A [item_name]map[/item_name] to find your way\n"
                 "- To have learned all the basic magic the village elders can teach you.\n"
                 "[dialogue]'Your journey will take you to Greendale,' she continues, her tone serious. 'There, you must seek out the old druid who dwells at the forest's edge. "
                 "He alone can teach you the deeper mysteries of nature's magic and help you understand the darkness threatening Willowbrook. "
                 "Trust in yourself, Elior, and remember: the fate of our village, or even more, may rest in your hands.'[/dialogue]"
             )
-        return f"[character.name]Mira[/character.name] looks at the [item.name]{item.name}[/item.name] but shakes her head gently. [dialogue]'I have no need for this, child.'[/dialogue]"
+        return f"[character_name]Mira[/character_name] looks at the [item_name]{item.name}[/item_name] but shakes her head gently. [dialogue]'I have no need for this, child.'[/dialogue]"
 
     def talk_to(self, game_state: GameState) -> str:
         event_msg = f"[event]You speak with [character.name]Mira[/character.name].[/event]"

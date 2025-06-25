@@ -17,7 +17,7 @@ class Bread(Item):
             game_state.remove_item_from_inventory(self.name)
             # Add key to the room
             game_state.current_room.add_item(Key())            
-            return "[event]You offer the [item.name]bread[/item.name] to the [character.name]chickens[/character.name].[/event]\nThey peck at it excitedly, and in the commotion, something shiny falls from a rafter. It's a [item.name]small key[/item.name]!"
+            return "[event]You offer the [item_name]bread[/item_name] to the [character_name]chickens[/character_name].[/event]\nThey peck at it excitedly, and in the commotion, something shiny falls from a rafter. It's a [item_name]small key[/item_name]!"
         else:
-            return f"[failure]You can't use the [item.name]bread[/item.name] with the [item.name]{target.get_name()}[/item.name].[/failure]"
+            return f"[failure]You can't use the [item_name]bread[/item_name] with the [item_name]{target.get_name()}[/item_name].[/failure]"
 

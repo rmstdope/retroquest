@@ -20,8 +20,8 @@ class Lantern(Item):
             from .EliorsJournal import EliorsJournal
             game_state.current_room.add_item(Bread())  # Add bread to the room
             game_state.current_room.add_item(EliorsJournal())
-            action_taken_message = f"[event]You light the [item.name]{self.get_name()}[/item.name]. The flickering light reveals more of the room. A small loaf of [item.name]bread[/item.name] and a [item.name]journal[/item.name] appear in the light.[/event]"
+            action_taken_message = f"[event]You light the [item_name]{self.get_name()}[/item_name]. The flickering light reveals more of the room. A small loaf of [item_name]bread[/item_name] and a [item_name]journal[/item_name] appear in the light.[/event]"
         else:  # Already lit
-            action_taken_message = f"[failure]The [item.name]{self.get_name()}[/item.name] is already lit.[/failure]"
+            action_taken_message = f"[failure]The [item_name]{self.get_name()}[/item_name] is already lit.[/failure]"
 
         return action_taken_message

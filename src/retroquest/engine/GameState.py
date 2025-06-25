@@ -68,7 +68,7 @@ class GameState:
 
     def stats(self) -> str:
         lines = [
-            f"[bold]Current Room:[/bold] [room.name]{self.current_room.name}[/room.name]",
+            f"[bold]Current Room:[/bold] [room_name]{self.current_room.name}[/room_name]",
             "",
             "[bold]Inventory:[/bold]"
         ]
@@ -88,7 +88,7 @@ class GameState:
         lines.append("[bold]Visited Rooms:[/bold]")
         if self.visited_rooms:
             for room in self.visited_rooms:
-                lines.append(f"- [room.name]{room}[/room.name]")
+                lines.append(f"- [room_name]{room}[/room_name]")
         else:
             lines.append("(none)")
         lines.append("")
@@ -96,7 +96,7 @@ class GameState:
         if self.activated_quests:
             for quest in self.activated_quests:
                 quest_type = "main" if quest.is_main() else "side"
-                lines.append(f"- [quest.name]{quest.name} ({quest_type})[/quest.name]: {quest.description}")
+                lines.append(f"- [quest_name]{quest.name} ({quest_type})[/quest_name]: {quest.description}")
         else:
             lines.append("(none)")
         lines.append("")
@@ -104,7 +104,7 @@ class GameState:
         if self.completed_quests:
             for quest in self.completed_quests:
                 quest_type = "main" if quest.is_main() else "side"
-                lines.append(f"- [quest.name]{quest.name} ({quest_type})[/quest.name]: {quest.completion}")
+                lines.append(f"- [quest_name]{quest.name} ({quest_type})[/quest_name]: {quest.completion}")
         else:
             lines.append("(none)")
         return "\n".join(lines)
@@ -128,7 +128,7 @@ class GameState:
             quest_lines = []
             for q in newly_activated:
                 quest_type = "main" if q.is_main() else "side"
-                quest_lines.append(f"[quest.name]{q.name} ({quest_type})[/quest.name]: {q.description}")
+                quest_lines.append(f"[quest_name]{q.name} ({quest_type})[/quest_name]: {q.description}")
             return "New quest(s) activated:\n" + "\n".join(quest_lines)
         return None
 
@@ -151,7 +151,7 @@ class GameState:
             completion_lines = []
             for q in newly_completed:
                 quest_type = "main" if q.is_main() else "side"
-                completion_lines.append(f"[quest.name]{q.name} ({quest_type})[/quest.name]: [dim]{q.completion}[/dim]")
+                completion_lines.append(f"[quest_name]{q.name} ({quest_type})[/quest_name]: [dim]{q.completion}[/dim]")
             return "Quest(s) completed:\n" + "\n".join(completion_lines)
         return None
 
@@ -168,7 +168,7 @@ class GameState:
             update_lines = []
             for q in updated_quests:
                 quest_type = "main" if q.is_main() else "side"
-                update_lines.append(f"[quest.name]{q.name} ({quest_type})[/quest.name]: {q.description}")
+                update_lines.append(f"[quest_name]{q.name} ({quest_type})[/quest_name]: {q.description}")
             return "Quest log updated:\n" + "\n".join(update_lines)
         return None
 

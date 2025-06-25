@@ -413,7 +413,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Or, if it was taken earlier and not revivable then, it might be in inventory.
     # Design doc: "Withered carrot (Available in Vegetable Field from start)"
     # Design doc: Step 2: "Attempt to cast revive (fails, but hints at magic)" - implies it might have been taken.
-    # Let's assume it was left in the field, or if taken, it's still "Withered carrot".
+    # Let's assume it was left in the room, or if taken, it's still "Withered carrot".
     # For the test, we need to ensure it's targetable. If it was taken, the command would be `cast revive on Withered carrot` (targeting inventory).
     # If it's in the room, it might be `cast revive on Withered carrot` (targeting room item).
     # The design doc for step 18 says: "Cast revive on the Withered carrot." - not specifying location.

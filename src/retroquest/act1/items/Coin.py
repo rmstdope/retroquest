@@ -11,4 +11,4 @@ class Coin(Item):
         )
 
     def use(self, game_state) -> str:
-        return "[event]You flip the [item.name]coin[/item.name] in the air.[event]/nIt lands heads up. Seems like a regular [item.name]coin[/item.name], perhaps for trading."
+        return "[event]You flip the [item_name]coin[/item_name] in the air.[event]/nIt lands heads up. Seems like a regular [item_name]coin[/item_name], perhaps for trading."
