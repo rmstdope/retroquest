@@ -251,8 +251,8 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 1.  **Elior’s Cottage:**
 
     - Use lantern to light up the room. _The lantern illuminates the cottage, revealing the bread and Elior’s journal._
-    - Take bread. _Bread is added to inventory._
-    - Read journal. Opens up new conversion story with Grandmother.
+      - Take bread. _Bread is added to inventory._
+      - Read journal. Opens up new conversion story with Grandmother.
     - Speak to Grandmother for advice. _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell._
       - Spell Learned: `revive` (can not be used until magic is learned for real)
     - **Note:** You cannot leave Elior’s Cottage until you have completed the sub-quest _Hint of Magic_ by learning the 'revive' spell from Grandmother.

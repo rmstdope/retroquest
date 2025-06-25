@@ -8,3 +8,6 @@ class Act:
         self.rooms = rooms
         self.quests = quests
         self.music_file = music_file
+
+    def get_act_intro(self) -> str:
+        return ""

@@ -8,8 +8,8 @@ class GameController:
         self.last_output = ""
 
     def start(self):
-        self.game.print_intro()
-        self.last_output = self.game.handle_command('look around')
+        # Show ASCII logo at game start
+        self.last_output = self.game.get_ascii_logo()
         return self.last_output
 
     def handle_command(self, command: str) -> str:
@@ -21,7 +21,7 @@ class GameController:
         return self.last_output
 
     def get_quest_log(self) -> str:
-        return self.game.state.stats().split("[bold]Completed Quests:[/bold]")[0]  # crude split for demo
+        return 'quest log' #self.game.state.stats().split("[bold]Completed Quests:[/bold]")[0]  # crude split for demo
 
     def get_inventory(self) -> str:
         lines = ["[bold]Inventory:[/bold]"]

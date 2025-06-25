@@ -71,23 +71,30 @@ class Game:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
         threading.Thread(target=play_music, daemon=True).start()
 
-    def print_intro(self):
-        self.start_music()
-        
-        self.console.clear()
-        self.console.print("Welcome to")
-        self.console.print(r'''
+    def get_ascii_logo(self):
+        return r'''
+Welcome to
+[bold yellow]
 ########  ######### ######### ########   #######   #######  ##     ## #########  #######  #########
 ##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##           ##
 ##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##           ##
-########  #########    ##     ##   ##   ##     ## ##     ## ##     ## ######### ########     ## 
-##   ##   ##           ##     ##    ##  ##     ## ##  ## ## ##     ## ##               ##    ##
-##    ##  ##           ##     ##     ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
+########  #########    ##     ########  ##     ## ##     ## ##     ## #########  #######     ## 
+##   ##   ##           ##     ##   ##   ##     ## ##  ## ## ##     ## ##               ##    ##
+##    ##  ##           ##     ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
 ##     ## #########    ##     ##     ##  #######   #######   #######  #########  #######     ##
-''', style="bold yellow")
-        self.console.print("\n[bold]Music track:[/bold] Market by Conquest\nSource: https://freetouse.com/music\nCopyright Free Background Music\n", style="dim")
+[/bold yellow]
+[bold]Music track:[/bold] Market by Conquest
+Source: https://freetouse.com/music
+Copyright Free Background Music'''
+
+    def print_intro(self):
+        self.start_music()
+        self.console.clear()
+        self.console.print(self.get_ascii_logo())
         self.session.prompt('Press Enter to continue...')
-        self.act.print_act_intro(self.console, self.session)
+        self.console.clear()
+        self.console.print(self.act.get_act_intro())
+        self.session.prompt('Press Enter to continue...')
 
     def get_command_completions(self):
         # Helper to build nested dict for multi-word item names

@@ -1,8 +1,8 @@
-from retroquest.engine.ui.app import RetroQuestApp
+from retroquest.engine.ui.RetroQuestApp import RetroQuestApp
 from retroquest.engine.Game import Game
 from retroquest.act1.Act1 import Act1
 
-USE_TEXTUAL_UI = False  # Set to False to use the classic console UI
+USE_TEXTUAL_UI = True  # Set to False to use the classic console UI
 
 def main():
     if USE_TEXTUAL_UI:
