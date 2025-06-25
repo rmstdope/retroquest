@@ -1,7 +1,9 @@
+from ...engine.GameState import GameState
 from ...engine.Room import Room
 from ..items.WitheredCarrot import WitheredCarrot
 from ..items.RustyHoe import RustyHoe
 from ..items.DullKnife import DullKnife
+from ..Act1StoryFlags import FLAG_INVESTIGATED_WITHERED_CROPS
 
 class VegetableField(Room):
     def __init__(self) -> None:
@@ -17,3 +19,8 @@ class VegetableField(Room):
             characters=[],
             exits={"north": "EliorsCottage", "east": "VillageWell", "south": "ChickenCoop"}
         )
+
+    def on_enter(self, game_state: GameState) -> None:
+        # Set the story flag when the player enters the field
+        game_state.set_story_flag(FLAG_INVESTIGATED_WITHERED_CROPS, True)
+        super().on_enter(game_state)

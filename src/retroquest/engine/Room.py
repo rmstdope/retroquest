@@ -100,3 +100,7 @@ class Room:
     def light(self, game_state: GameState) -> str:
         """Called when a light source is used or a light spell is cast in the room."""
         return "The room is already well lit."
+
+    def on_enter(self, game_state: GameState) -> None:
+        """Hook called when the player enters the room. Override in subclasses for custom behavior."""
+        pass

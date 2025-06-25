@@ -1,7 +1,6 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-# ShinyRing is not directly added by the well anymore, but its existence is tracked.
-# from .ShinyRing import ShinyRing 
+from ..Act1StoryFlags import FLAG_WELL_EXAMINED
 
 class Well(Item):
     def __init__(self):
@@ -13,6 +12,7 @@ class Well(Item):
         self.is_purified = False
 
     def examine(self, game_state: GameState) -> str:
+        game_state.set_story_flag(FLAG_WELL_EXAMINED, True)
         base_desc = "An old stone well, its surface worn smooth. A frayed rope hangs nearby, disappearing into the depths."
         if self.is_purified:
             if self.contains_ring:
@@ -20,7 +20,7 @@ class Well(Item):
             else: # Purified, but ring taken or was never there and now visible
                 self.description = f"{base_desc} The water within is crystal clear. The bottom is visible and appears empty."
         else: # Not purified
-            desc = f"{base_desc} The water below is dark and still."
+            desc = f"{base_desc} The water below is dark and still. A foul stench rises from the depths, making your stomach churn. Something is very wrong here."
             if self.contains_ring: # Even if not purified, hint if ring is there
                 desc += " You think you see something shiny deep within the murky water, but it's impossible to tell for sure or reach."
             self.description = desc
@@ -50,8 +50,11 @@ class Well(Item):
                 return "[failure]You peer into the murky depths. It's too dark and unclear to see anything of interest.[/failure]"
 
     def purify(self, game_state) -> str:
+        if not game_state.get_story_flag(FLAG_WELL_EXAMINED):
+            return f"[failure]You hesitate. Why would you cast [spell.name]purify[/spell.name] on the [item.name]{self.get_name()}[/item.name]? Perhaps you should examine it first.[/failure]"
         if self.is_purified:
             return f"[failure]The [item.name]{self.get_name()}[/item.name] is already pure. The water is crystal clear.[/failure]"
+        
 
         self.is_purified = True
         if self.contains_ring:

@@ -10,7 +10,7 @@ from ..spells.HealSpell import HealSpell
 from ..spells.UnlockSpell import UnlockSpell
 from ..spells.LightSpell import LightSpell
 from ...engine.GameState import GameState
-from ..Act1StoryFlags import FLAG_MAGIC_FULLY_UNLOCKED
+from ..Act1StoryFlags import FLAG_MAGIC_FULLY_UNLOCKED, FLAG_INVESTIGATED_WITHERED_CROPS, FLAG_VILLAGER_TALKED_TO, FLAG_WELL_EXAMINED, FLAG_CONNECT_WITH_NATURE
 
 class Mira(Character):
     def __init__(self) -> None:
@@ -51,7 +51,10 @@ class Mira(Character):
                 "- Food for the road\n"
                 "- Sturdy footwear\n"
                 "- A [item.name]map[/item.name] to find your way\n"
-                "- To have learned all the basic magic the village elders can teach you."
+                "- To have learned all the basic magic the village elders can teach you.\n"
+                "[dialogue]'Your journey will take you to Greendale,' she continues, her tone serious. 'There, you must seek out the old druid who dwells at the forest's edge. "
+                "He alone can teach you the deeper mysteries of nature's magic and help you understand the darkness threatening Willowbrook. "
+                "Trust in yourself, Elior, and remember: the fate of our village, or even more, may rest in your hands.'[/dialogue]"
             )
         return f"[character.name]Mira[/character.name] looks at the [item.name]{item.name}[/item.name] but shakes her head gently. [dialogue]'I have no need for this, child.'[/dialogue]"
 
@@ -64,7 +67,21 @@ class Mira(Character):
         # 2. Give the initial message if the story flag 'magic_fully_unlocked' is not set 
         #    (i.e., flower hasn't been given yet)
         if not game_state.get_story_flag(FLAG_MAGIC_FULLY_UNLOCKED):
-            return event_msg + "\n" + self.dialogue_states["initial"]
+            # Check if all three story flags are set
+            if (game_state.get_story_flag(FLAG_INVESTIGATED_WITHERED_CROPS)
+                and game_state.get_story_flag(FLAG_VILLAGER_TALKED_TO)
+                and game_state.get_story_flag(FLAG_WELL_EXAMINED)):
+                game_state.set_story_flag(FLAG_CONNECT_WITH_NATURE, True)
+                extra = (
+                    "\n[dialogue]You describe to Mira the withered crops, the villagers' fears, and the foul stench from the well. "
+                    "Her expression grows troubled as she listens.[/dialogue] "
+                    "[dialogue]'These are signs of a darkness that has long slumbered beneath Willowbrook,'[/dialogue] she says sadly. "
+                    "[dialogue]'The land is suffering, and so are its people. But there is hope, Elior. You must connect with the living world—listen to the wind, the water, the roots beneath your feet. "
+                    "Only by understanding the magic of nature can you hope to confront what is coming.'[/dialogue]"
+                )
+                return event_msg + "\n" + self.dialogue_states["initial"] + extra
+            else:
+                return event_msg + "\n" + self.dialogue_states["initial"]
         
         # 3. If 'magic_fully_unlocked' is set (flower given) and player doesn't have amulet:
         #    Quest is active or completable.

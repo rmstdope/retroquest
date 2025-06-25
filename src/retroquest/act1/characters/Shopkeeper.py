@@ -4,6 +4,7 @@ from ..items.Rope import Rope
 from ..items.Apple import Apple
 from ..items.Matches import Matches
 from ..items.Coin import Coin
+from ..Act1StoryFlags import FLAG_CONNECT_WITH_NATURE
 
 class Shopkeeper(Character):
     def __init__(self) -> None:
@@ -21,8 +22,16 @@ class Shopkeeper(Character):
             "Heard some strange tales from travelers lately. This village isn't as sleepy as it seems."
         ]
         self.dialogue_index = 0
+        self.closed_dialogue = (
+            "The [character.name]Shopkeeper[/character.name] shakes his head. "
+            "[dialogue]'Sorry, not open for business just yet. Come back later, lad—there's something you need to discover first.'[/dialogue]"
+        )
 
     def talk_to(self, game_state) -> str:
+        # If Elior hasn't been tasked to connect with nature, shop is not open yet
+        if not game_state.get_story_flag(FLAG_CONNECT_WITH_NATURE):
+            return self.closed_dialogue
+
         # Check if priest needs matches and shopkeeper hasn't given them yet
         if game_state.get_story_flag("priest_talked_to") and "matches" in self.wares:
             # Assuming matches_item_in_room is always found if this block is reached
@@ -56,6 +65,8 @@ class Shopkeeper(Character):
         return f'The [character.name]Shopkeeper[/character.name] chuckles. [dialogue]"Not looking for donations, friend, but I appreciate the thought!"[/dialogue]'
 
     def buy_item(self, item_name_to_buy: str, game_state) -> str:
+        if not game_state.get_story_flag(FLAG_CONNECT_WITH_NATURE):
+            return self.closed_dialogue
         item_name_to_buy = item_name_to_buy.lower()
         event_msg = f"[event]You try to buy the [item.name]{item_name_to_buy}[/item.name] from the [character.name]{self.get_name()}[/character.name].[/event]"
         if item_name_to_buy not in self.wares:

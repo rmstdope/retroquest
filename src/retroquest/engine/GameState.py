@@ -95,14 +95,16 @@ class GameState:
         lines.append("[bold]Activated Quests:[/bold]")
         if self.activated_quests:
             for quest in self.activated_quests:
-                lines.append(f"- [quest.name]{quest.name}[/quest.name]: {quest.description}")
+                quest_type = "main" if quest.is_main() else "side"
+                lines.append(f"- [quest.name]{quest.name} ({quest_type})[/quest.name]: {quest.description}")
         else:
             lines.append("(none)")
         lines.append("")
         lines.append("[bold]Completed Quests:[/bold]")
         if self.completed_quests:
             for quest in self.completed_quests:
-                lines.append(f"- [quest.name]{quest.name}[/quest.name]: {quest.completion}")
+                quest_type = "main" if quest.is_main() else "side"
+                lines.append(f"- [quest.name]{quest.name} ({quest_type})[/quest.name]: {quest.completion}")
         else:
             lines.append("(none)")
         return "\n".join(lines)
@@ -125,7 +127,8 @@ class GameState:
         if newly_activated:
             quest_lines = []
             for q in newly_activated:
-                quest_lines.append(f"[quest.name]{q.name}[/quest.name]: {q.description}")
+                quest_type = "main" if q.is_main() else "side"
+                quest_lines.append(f"[quest.name]{q.name} ({quest_type})[/quest.name]: {q.description}")
             return "New quest(s) activated:\n" + "\n".join(quest_lines)
         return None
 
@@ -147,8 +150,26 @@ class GameState:
         if newly_completed:
             completion_lines = []
             for q in newly_completed:
-                completion_lines.append(f"[quest.name]{q.name}[/quest.name]: {q.completion}")
+                quest_type = "main" if q.is_main() else "side"
+                completion_lines.append(f"[quest.name]{q.name} ({quest_type})[/quest.name]: [dim]{q.completion}[/dim]")
             return "Quest(s) completed:\n" + "\n".join(completion_lines)
+        return None
+
+    def update_quests(self):
+        """
+        Checks activated_quests for any that should update their quest log (dynamic quest log updates).
+        Returns a string describing updated quests, or None if no quest log was updated.
+        """
+        updated_quests = []
+        for quest in getattr(self, 'activated_quests', []):
+            if quest.check_update(self):
+                updated_quests.append(quest)
+        if updated_quests:
+            update_lines = []
+            for q in updated_quests:
+                quest_type = "main" if q.is_main() else "side"
+                update_lines.append(f"[quest.name]{q.name} ({quest_type})[/quest.name]: {q.description}")
+            return "Quest log updated:\n" + "\n".join(update_lines)
         return None
 
     def get_room(self, room_name: str):

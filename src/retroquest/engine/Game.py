@@ -46,11 +46,15 @@ class Game:
     def handle_command(self, command: str) -> str:
         result = self.command_parser.parse(command)
         activated = self.state.activate_quests()
+        updated = self.state.update_quests()
         completed = self.state.complete_quests()
         responses = [result]
         if activated:
             responses.append('\n')
             responses.append(activated)
+        if updated:
+            responses.append('\n')
+            responses.append(updated)
         if completed:
             responses.append('\n')
             responses.append(completed)
@@ -76,9 +80,9 @@ class Game:
 ########  ######### ######### ########   #######   #######  ##     ## #########  #######  #########
 ##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##           ##
 ##     ## ##           ##     ##     ## ##     ## ##     ## ##     ## ##        ##           ##
-########  #########    ##     ########  ##     ## ##     ## ##     ## ######### ########     ## 
-##   ##   ##           ##     ##   ##   ##     ## ##  ## ## ##     ## ##               ##    ##
-##    ##  ##           ##     ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
+########  #########    ##     ##   ##   ##     ## ##     ## ##     ## ######### ########     ## 
+##   ##   ##           ##     ##    ##  ##     ## ##  ## ## ##     ## ##               ##    ##
+##    ##  ##           ##     ##     ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
 ##     ## #########    ##     ##     ##  #######   #######   #######  #########  #######     ##
 ''', style="bold yellow")
         self.console.print("\n[bold]Music track:[/bold] Market by Conquest\nSource: https://freetouse.com/music\nCopyright Free Background Music\n", style="dim")
@@ -261,6 +265,7 @@ class Game:
             next_room_key = exits[direction]
             if next_room_key in self.state.all_rooms:
                 self.state.current_room = self.state.all_rooms[next_room_key]
+                self.state.current_room.on_enter(self.state)
                 self.state.mark_visited(self.state.current_room)
                 return f"[event][You move {direction} to [room.name]{self.state.current_room.name}[/room.name].][/event]\n\n" + self.state.current_room.describe()
             else:

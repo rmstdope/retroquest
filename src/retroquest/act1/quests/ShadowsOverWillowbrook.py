@@ -2,17 +2,20 @@ from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import (
     FLAG_INVESTIGATED_WITHERED_CROPS,
-    FLAG_WITNESSED_SHADOW_EVENT
+    FLAG_VILLAGER_TALKED_TO,
+    FLAG_WELL_EXAMINED,
+    FLAG_CONNECT_WITH_NATURE,
+    FLAG_MAGIC_FOR_REAL
 )
 
 # TODO: Shadows Over Willowbrook Quest - Steps to Completion
-# 1. The player investigates the withered crops or talks to villagers about the darkness.
-# 2. The game sets FLAG_INVESTIGATED_WITHERED_CROPS to indicate the investigation has started.
-# 3. The player experiences events or encounters that reveal the presence of a shadowy force in Willowbrook.
-# 4. The player witnesses a supernatural event or discusses findings with Mira, setting FLAG_WITNESSED_SHADOW_EVENT.
-# 5. Dialogue is provided for Mira and villagers about the darkness.
-# 6. Optionally, minor obstacles or puzzles related to the darkness are presented.
-# 7. The quest is now complete and connects to the main story thread.
+# 1. The game starts with a mysterious dream sequence where Elior sees a shadowy figure in the fields.
+# 2. The player investigates the Vegetable Field, where crops are withering (sets FLAG_INVESTIGATED_WITHERED_CROPS).
+# 3. The player talks to the Villager who mention strange occurrences (e.g., animals acting restless, crops failing).
+# 4. The player find a clue in the village,an infected well,
+# 5. Speak with Mira about all of the above
+# 6. Complete the Magic for real quest
+# 7. Complete the Act
 
 class ShadowsOverWillowbrookQuest(Quest):
     def __init__(self):
@@ -24,11 +27,69 @@ class ShadowsOverWillowbrookQuest(Quest):
             ),
             completion="You have confirmed that a dark force is at work in Willowbrook. Mira warns you that your magical abilities may be the key to protecting the village."
         )
+        self._flag_state = {}
 
     def check_trigger(self, game_state: GameState) -> bool:
-        # Triggered after the player investigates the Vegetable Field or talks to villagers
-        return game_state.get_story_flag(FLAG_INVESTIGATED_WITHERED_CROPS)
+        return True
+
+    def check_update(self, game_state: GameState) -> bool:
+        updated = False
+        self.description = ''
+        new_desc = (
+            "Elior dreams of a shadowy figure lurking in the fields, its presence felt even in the waking world. "
+            "The dream is unsettling, leaving him with a sense of foreboding that something is wrong in Willowbrook."
+        )
+        if game_state.get_story_flag(FLAG_INVESTIGATED_WITHERED_CROPS):
+            if not self._flag_state.get(FLAG_INVESTIGATED_WITHERED_CROPS):
+                self._flag_state[FLAG_INVESTIGATED_WITHERED_CROPS] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\nElior has witnessed the devastation firsthand: once lush rows of crops now stand wilted and brown, their leaves curled and brittle. "
+                "The earth beneath his feet is cracked and dry, and the air is thick with the scent of decay. "
+                "Where there was once the promise of a bountiful harvest, there is now only ruin. "
+            )
+        if game_state.get_story_flag(FLAG_VILLAGER_TALKED_TO):
+            if not self._flag_state.get(FLAG_VILLAGER_TALKED_TO):
+                self._flag_state[FLAG_VILLAGER_TALKED_TO] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\nVillagers speak in hushed tones of strange happenings: animals refusing to leave their shelters, and shadows moving where none should be. "
+                "Elior senses the fear growing among his neighbors, and the mystery deepens. "
+            )
+        if game_state.get_story_flag(FLAG_WELL_EXAMINED):
+            if not self._flag_state.get(FLAG_WELL_EXAMINED):
+                self._flag_state[FLAG_WELL_EXAMINED] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\nRumors spread of the village well: a foul stench rising from its depths, and water that no one dares to drink. "
+                "Elior wonders if the source of the corruption lies beneath the surface. "
+            )
+        if game_state.get_story_flag(FLAG_CONNECT_WITH_NATURE):
+            if not self._flag_state.get(FLAG_CONNECT_WITH_NATURE):
+                self._flag_state[FLAG_CONNECT_WITH_NATURE] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\nMira has urged Elior to connect with the living world and learn from its magic. The path forward is uncertain, but hope stirs in the heart of Willowbrook." 
+            )
+        if game_state.get_story_flag(FLAG_MAGIC_FOR_REAL):
+            if not self._flag_state.get(FLAG_MAGIC_FOR_REAL):
+                self._flag_state[FLAG_MAGIC_FOR_REAL] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\nElior has proven his magical abilities are real. The villagers will look to him with new hope, and Mira believes he may be the key to dispelling the darkness. "
+                "Mira tells Elior that his journey must continue to Greendale, where he is to seek out the old druid at the forest's edge. "
+                "Only there can he learn the deeper mysteries of nature's magic and find the knowledge needed to save Willowbrook."
+            )
+        self.description += new_desc
+        return updated
 
     def check_completion(self, game_state: GameState) -> bool:
-        # Completed after witnessing a supernatural event or talking to Mira about the darkness
-        return game_state.get_story_flag(FLAG_WITNESSED_SHADOW_EVENT)
+        return False
+
+    def is_main(self) -> bool:
+        return True
