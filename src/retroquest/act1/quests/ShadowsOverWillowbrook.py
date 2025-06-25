@@ -5,7 +5,7 @@ from ..Act1StoryFlags import (
     FLAG_VILLAGER_TALKED_TO,
     FLAG_WELL_EXAMINED,
     FLAG_CONNECT_WITH_NATURE,
-    FLAG_MAGIC_FOR_REAL
+    FLAG_MAGIC_FULLY_UNLOCKED
 )
 
 # TODO: Shadows Over Willowbrook Quest - Steps to Completion
@@ -75,9 +75,9 @@ class ShadowsOverWillowbrookQuest(Quest):
             new_desc = (
                 "\nMira has urged Elior to connect with the living world and learn from its magic. The path forward is uncertain, but hope stirs in the heart of Willowbrook." 
             )
-        if game_state.get_story_flag(FLAG_MAGIC_FOR_REAL):
-            if not self._flag_state.get(FLAG_MAGIC_FOR_REAL):
-                self._flag_state[FLAG_MAGIC_FOR_REAL] = True
+        if game_state.get_story_flag(FLAG_MAGIC_FULLY_UNLOCKED):
+            if not self._flag_state.get(FLAG_MAGIC_FULLY_UNLOCKED):
+                self._flag_state[FLAG_MAGIC_FULLY_UNLOCKED] = True
                 updated = True
             self.description += '[dim]' + new_desc + '[/dim]'
             new_desc = (

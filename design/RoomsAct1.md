@@ -43,15 +43,18 @@
   - **Completion:** Be taught magic by Mira.
 
 - **Name:** Preparing for the road
+
   - **Trigger:** Learn magic from Mira.
   - **Completion:** Obtain all items needed for the journey.
 
 - **Name:** The Faded Photograph
+
   - **Trigger:** Search the attic or storage room in the farmhouse.
   - **Completion:** Decipher the message and show it to Grandmother.
   - **Rewards:** New lead on the family mystery, unlocks a hidden room or item.
 
 - **Name:** The Lost Letter
+
   - **Trigger:** Search the farmhouse after speaking with Grandmother.
   - **Completion:** Deliver the letter to Mira and discuss its contents.
 
@@ -273,6 +276,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 5.  **Village Well:**
 
+    - Examine the well. _Elior peers into the depths, noticing the stonework and the faint, unsettling shimmer on the water's surface. This observation hints that the well is not as pure as it seems and might need cleansing._
     - Use bucket to draw water from the well. _The water appears surprisingly murky and still, hinting that the well is not as pure as it seems and might need cleansing._
       - Item used: `bucket` (for observation)
 
@@ -288,6 +292,10 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - Use hoe again. _A second coin (2nd) is found and added to inventory._
       - Item used: `rusty hoe`
       - Item obtained: `coin` (2nd)
+
+7.5. **Visit Mira’s Hut:**
+
+    - Speak to Mira. _Mira greets Elior warmly, offering encouragement and subtle hints about the journey ahead. She reminds Elior to seek out the rare flower and to pay attention to the well and the glade, as they may hold secrets vital to his quest._
 
 8.  **General Store:**
 

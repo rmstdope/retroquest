@@ -14,6 +14,8 @@ class DummyQuest:
         return self.description
     def check_completion(self, game_state):
         return self.completion
+    def is_main(self):
+        return False
 
 class TestGameState(unittest.TestCase):
     def setUp(self):

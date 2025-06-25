@@ -25,6 +25,9 @@ from retroquest.act1.quests.MagicForReal import MagicForRealQuest
 from retroquest.act1.quests.MagnetFishingExpedition import MagnetFishingExpeditionQuest
 from retroquest.act1.quests.OhDeerOhDeer import OhDeerOhDeerQuest
 from retroquest.act1.quests.PreparingForTheRoad import PreparingForTheRoadQuest
+from retroquest.act1.quests.FadedPhotograph import FadedPhotographQuest
+from retroquest.act1.quests.LostLetter import LostLetterQuest
+from retroquest.act1.quests.ShadowsOverWillowbrook import ShadowsOverWillowbrookQuest
 
 results = []
 
@@ -112,7 +115,10 @@ QUESTS = [
     MagicForRealQuest(),
     MagnetFishingExpeditionQuest(),
     OhDeerOhDeerQuest(),
-    PreparingForTheRoadQuest()
+    PreparingForTheRoadQuest(),
+    FadedPhotographQuest(),
+    ShadowsOverWillowbrookQuest(),
+    LostLetterQuest()
 ]
 
 def test_golden_path_act1_completion(monkeypatch):
@@ -122,7 +128,7 @@ def test_golden_path_act1_completion(monkeypatch):
     _execute_commands(game, ['look around'])
 
     # Step 1: Elior’s Cottage
-    _check_quests(game.state, ["Hint of Magic"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Hint of Magic"])
     _check_item_in_room(game.state.current_room, "bread", should_be_present=False)
     _check_item_in_room(game.state.current_room, "Elior's Journal", should_be_present=False)
     _execute_commands(game, ["use lantern"])
@@ -132,14 +138,14 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_spell_known(game.state, "revive", should_be_present=False)
     _check_item_in_inventory(game.state, "bread")
     _check_item_in_room(game.state.current_room, "bread", should_be_present=False)
-    _check_quests(game.state, ["Hint of Magic"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Hint of Magic"])
     _execute_commands(game, ["read journal", "talk to grandmother"])
     _check_spell_known(game.state, "revive")
-    _check_quests(game.state, ["Magic for real"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real"])
 
     # Step 2: Vegetable Field
     _execute_commands(game, ["go south", "take rusty hoe"])
-    _check_quests(game.state, ["Magic for real", "Know your village"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
     _check_current_room(game.state, "Vegetable Field")
     _check_item_in_inventory(game.state, "rusty hoe")
     _check_item_in_room(game.state.current_room, "rusty hoe", should_be_present=False)
@@ -174,7 +180,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Step 5: Village Well
     _execute_commands(game, ["go west", "go south", "go east"])
     _check_current_room(game.state, "Village Well")
-    _execute_commands(game, ["use bucket with well"])
+    _execute_commands(game, ["examine well", "use bucket with well"])
     _check_item_in_inventory(game.state, "bucket (full)")
 
     # Step 6: Blacksmith's Forge
@@ -190,8 +196,18 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_current_room(game.state, "Vegetable Field")
     _check_item_in_inventory(game.state, "coin")
 
+    # Step 7.5: Visit Mira's Hut for encouragement and hints
+    _execute_commands(game, ["go north", "go east", "go north"])
+    _check_current_room(game.state, "Mira's Hut")
+    # Mira should be present in the room
+    _check_character_in_room(game.state.current_room, "mira", should_be_present=True)
+    # Talk to Mira for encouragement and hints
+    _execute_commands(game, ["talk to mira"])
+    # No new items or spells are expected at this point, but ensure the player remains on the correct quest path
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
+
     # Step 8: General Store - Buy Rope
-    _execute_commands(game, ["go north", "go east", "go east"]) # Veg Field -> Village Square -> General Store
+    _execute_commands(game, ["go south", "go east"]) # Veg Field -> Village Square -> General Store
     _check_current_room(game.state, "General Store")
     _execute_commands(game, ["take apple", "take rope", "take matches"]) # Added "take apple"
     _check_item_in_inventory(game.state, "apple", should_be_present=False) #Cannot be in inventory yet, just in room
@@ -205,7 +221,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Step 9: Abandoned Shed - Use Key
     # Path: General Store (current) -> Village Square -> Village Well -> Abandoned Shed
     _execute_commands(game, ["go south", "go west", "go south"]) 
-    _check_quests(game.state, ["Magic for real", "Know your village", "Curiosity killed the cat"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Curiosity killed the cat"])
     _check_current_room(game.state, "Abandoned Shed")
     _check_item_in_room(game.state.current_room, "mysterious box", should_be_present=False) # Box is not present yet
  
@@ -213,9 +229,9 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_room(game.state.current_room, "fishing rod", should_be_present=False)
     _check_item_in_room(game.state.current_room, "magnet", should_be_present=False)
  
-    _check_quests(game.state, ["Magic for real", "Know your village", "Curiosity killed the cat"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Curiosity killed the cat"])
     _execute_commands(game, ["use key with door"]) # Changed: Assumes 'use key' unlocks the shed door
-    _check_quests(game.state, ["Magic for real", "Know your village"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
     _check_item_in_inventory(game.state, "key", should_be_present=False) # Key is used up or its state changes
     _check_item_in_room(game.state.current_room, "mysterious box") # Box is present
 
@@ -249,10 +265,10 @@ def test_golden_path_act1_completion(monkeypatch):
     _execute_commands(game, ["go north", "go north", "go east"])
     _check_current_room(game.state, "Blacksmith's Forge")
 
-    _check_quests(game.state, ["Magic for real", "Know your village"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
     _execute_commands(game, ["give millstone fragment to blacksmith"])
     _check_item_in_inventory(game.state, "millstone fragment", should_be_present=False)
-    _check_quests(game.state, ["Magic for real", "Know your village", "Oh deer, oh deer"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Oh deer, oh deer"])
 
     # Step 12: Riverbank
     # Path: Blacksmith's Forge (current) -> Village Well -> Abandoned Shed -> Old Mill -> Riverbank
@@ -263,16 +279,16 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "fish", should_be_present=False) # Fish is not in inventory as player cannot fish
 
     _execute_commands(game, ["talk to fisherman"])
-    _check_quests(game.state, ["Magic for real", "Know your village", "Oh deer, oh deer", "Fishing expedition"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Oh deer, oh deer", "Fishing expedition"])
     # Fisherman teaches fishing - no direct item/spell yet, but sets up next action
     _execute_commands(game, ["use fishing rod with river"])
     _check_item_in_inventory(game.state, "fish")
 
-    _check_quests(game.state, ["Magic for real", "Know your village", "Oh deer, oh deer", "Fishing expedition"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Oh deer, oh deer", "Fishing expedition"])
     _execute_commands(game, ["give fish to fisherman"])
     _check_item_in_inventory(game.state, "fish", should_be_present=False)
     _check_spell_known(game.state, "purify")
-    _check_quests(game.state, ["Magic for real", "Know your village", "Oh deer, oh deer"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Oh deer, oh deer"])
 
     # Step 13: Forest Path
     # Path: Riverbank (current) -> Forest Path
@@ -305,11 +321,11 @@ def test_golden_path_act1_completion(monkeypatch):
 
     # Elior rests, and if deer_can_be_observed is true (set by Blacksmith), Deer and Rare Flower appear
     # The flag deer_can_be_observed was set in step 11.
-    _check_quests(game.state, ["Magic for real", "Know your village", "Oh deer, oh deer"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Oh deer, oh deer"])
     _execute_commands(game, ["rest"]) 
     _check_character_in_room(game.state.current_room, "deer", should_be_present=True)
     _check_item_in_room(game.state.current_room, "rare flower", should_be_present=True)
-    _check_quests(game.state, ["Magic for real", "Know your village"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
 
     _execute_commands(game, ["take rare flower"])
     _check_item_in_inventory(game.state, "rare flower")
@@ -324,7 +340,7 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_room(game.state.current_room, "candle") # Candle should be in the chapel
 
     _execute_commands(game, ["talk to priest"]) # Priest mentions needing matches
-    _check_quests(game.state, ["Magic for real", "Know your village", "Let there be light"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Let there be light"])
 
     # Step 16: General Store (Visit for Matches)
     # Path: Village Chapel (current) -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Blacksmith's Forge -> General Store
@@ -345,10 +361,10 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_room(game.state.current_room, "locket", should_be_present=False)
     _check_item_in_inventory(game.state, "matches") # Ensure matches are in inventory
 
-    _check_quests(game.state, ["Magic for real", "Know your village", "Let there be light"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Let there be light"])
     _execute_commands(game, ["use candle with matches"]) # Using candle with matches should reveal the locket
     _check_item_in_room(game.state.current_room, "locket") # Locket is now visible
-    _check_quests(game.state, ["Magic for real", "Know your village"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
 
     _execute_commands(game, ["take locket"])
     _check_item_in_inventory(game.state, "locket")
@@ -360,14 +376,14 @@ def test_golden_path_act1_completion(monkeypatch):
     _execute_commands(game, ["go north", "go north", "go north", "go west", "go north", "go north", "go east", "go north", "go west", "go north"])
     _check_current_room(game.state, "Mira's Hut")
 
-    _check_quests(game.state, ["Magic for real", "Know your village"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
     _execute_commands(game, ["give rare flower to mira"])
     _check_item_in_inventory(game.state, "rare flower", should_be_present=False)
     _check_spell_known(game.state, "heal")
     _check_spell_known(game.state, "unlock")
     _check_spell_known(game.state, "light")
     _check_story_flag(game.state, "magic_fully_unlocked", True)
-    _check_quests(game.state, ["Know your village", "Preparing for the road"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Know your village", "Preparing for the road"])
 
     # Step 19: Return to Abandoned Shed (Second Visit)
     # Path: Mira's Hut (current) -> Village Square -> Elior's Cottage -> Vegetable Field -> Village Well -> Abandoned Shed
@@ -435,7 +451,7 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "fishing rod", should_be_present=False)
     _check_item_in_inventory(game.state, "magnet", should_be_present=False)
     _check_item_in_inventory(game.state, "magnetic fishing rod")
-    _check_quests(game.state, ["Know your village", "Preparing for the road", "Magnet fishing expedition"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Know your village", "Preparing for the road", "Magnet fishing expedition"])
 
     # Combine Magnetic Fishing Rod with Stick
     _execute_commands(game, ["use magnetic fishing rod with stick"])
@@ -448,11 +464,11 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "shiny ring", should_be_present=False) # Ring should not be obtained
     _check_item_in_inventory(game.state, "extended magnetic fishing rod") # Rod should still be in inventory
 
-    _check_quests(game.state, ["Know your village", "Magnet fishing expedition", "Preparing for the road"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Know your village", "Magnet fishing expedition", "Preparing for the road"])
     _execute_commands(game, ["cast purify on well", "use extended magnetic fishing rod with well"])
     _check_item_in_inventory(game.state, "shiny ring") # Ring is now in inventory
     _check_item_in_inventory(game.state, "extended magnetic fishing rod", should_be_present=False) # Rod is consumed or disappears
-    _check_quests(game.state, ["Know your village", "Preparing for the road"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Know your village", "Preparing for the road"])
 
     # Step 22: Return to Hidden Glade (Second Visit)
     _execute_commands(game, ["go south", "go south", "go east", "go south", "go south"])
@@ -493,16 +509,16 @@ def test_golden_path_act1_completion(monkeypatch):
 
     # Step 26: Road to Greendale (Interactions)
     # Path: Village Chapel (current) -> Road to Greendale
-    _check_quests(game.state, ["Know your village", "Preparing for the road"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Know your village", "Preparing for the road"])
     _execute_commands(game, ["go east"])
-    _check_quests(game.state, ["Preparing for the road"])
+    _check_quests(game.state, ["Shadows Over Willowbrook", "Preparing for the road"])
     _check_current_room(game.state, "Road to Greendale")
     _check_item_in_inventory(game.state, "shiny ring") # Ensure shiny ring is present
 
     _execute_commands(game, ["give shiny ring to merchant"]) # Assumes merchant is present
     _check_item_in_inventory(game.state, "shiny ring", should_be_present=False)
     _check_item_in_inventory(game.state, "wandering boots")
-    _check_quests(game.state, [])
+    _check_quests(game.state, ["Shadows Over Willowbrook", ])
 
     # Step 27: Return to Mira’s Hut (Final Visit)
     # Path: Road to Greendale (current) -> Village Chapel -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Village Square -> Mira's Hut

@@ -368,7 +368,7 @@ def test_examine_item_in_inventory(game):
 
     apple = Apple()
     apple_description = "A juicy red apple, looking perfectly ripe."
-    apple.get_description = MagicMock(return_value=apple_description)
+    apple.examine = MagicMock(return_value=apple_description)
     apple.get_name = MagicMock(return_value="apple")
     
     game.state.inventory.append(apple)
@@ -378,7 +378,7 @@ def test_examine_item_in_inventory(game):
         
     result = game.examine("apple")
     assert result == apple_description
-    apple.get_description.assert_called_once()
+    apple.examine.assert_called_once()
 
 def test_examine_item_in_room(game):
     from retroquest.act1.items.Apple import Apple
@@ -386,7 +386,7 @@ def test_examine_item_in_room(game):
 
     apple = Apple()
     apple_description = "A shiny green apple, lying on the ground."
-    apple.get_description = MagicMock(return_value=apple_description)
+    apple.examine = MagicMock(return_value=apple_description)
     apple.get_name = MagicMock(return_value="apple")
     
     game.state.current_room.items.append(apple)
@@ -396,7 +396,7 @@ def test_examine_item_in_room(game):
         
     result = game.examine("apple")
     assert result == apple_description
-    apple.get_description.assert_called_once()
+    apple.examine.assert_called_once()
 
 def test_examine_character_in_room(game):
     from retroquest.act1.characters.Villager import Villager
@@ -408,7 +408,7 @@ def test_examine_character_in_room(game):
     game.state.current_room.characters.append(traveler)
     
     result = game.examine("Villager")
-    assert result == char_description
+    assert result == '[event]You examine [character.name]villager[/character.name]. ' + char_description + '[/event]'
 
 def test_examine_target_not_found(game):
     # Clear inventory and room items/characters to ensure target is not found
@@ -431,13 +431,12 @@ def test_examine_case_insensitivity(game):
     # Test with item
     apple = Apple()
     apple_description = "A golden delicious apple."
-    apple.get_description = MagicMock(return_value=apple_description)
+    apple.description = apple_description
     apple.get_name = MagicMock(return_value="Golden Apple") # Name with space and caps
     game.state.inventory.append(apple)
     
     result_item = game.examine("golden apple")
-    assert result_item == apple_description
-    apple.get_description.assert_called_once()
+    assert result_item == '[event]You examine the [item.name]Golden Apple[/item.name]. ' + apple_description + '[/event]'
     game.state.inventory.clear() # Clean up for next part of test
 
     # Test with character
@@ -448,7 +447,7 @@ def test_examine_case_insensitivity(game):
     game.state.current_room.characters.append(blacksmith)
     
     result_char = game.examine("blacksmith JOHN")
-    assert result_char == char_description
+    assert result_char == '[event]You examine [character.name]Blacksmith John[/character.name]. ' + char_description + '[/event]'
     game.state.current_room.characters.clear() # Clean up
 
 # --- Tests for 'buy' command ---
