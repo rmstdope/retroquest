@@ -224,6 +224,6 @@ class GameState:
                 self.activated_quests.append(quest)
                 del self.non_activated_quests[i]
                 quest_type = "main" if quest.is_main() else "side"
-                return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]:\n{quest.description}"
+                return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
         return None
 

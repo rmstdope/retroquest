@@ -7,6 +7,7 @@ from textual.css.query import NoMatches
 from .GameController import GameController
 from ...act1.Act1 import Act1
 from ..theme import apply_theme
+from textual.suggester import Suggester, SuggestFromList
 
 class RoomPanel(RichLog):
     def update_room(self, text: str):
@@ -29,6 +30,10 @@ class InventoryPanel(RichLog):
         self.write(apply_theme(text))
 
 class CommandInput(Input):
+    def __init__(self, controller, *args, **kwargs):
+        kwargs['suggester'] = NestedSuggester(self, controller)
+        super().__init__(*args, **kwargs)
+
     async def on_input_submitted(self, message: Input.Submitted) -> None:
         pass
 
@@ -78,7 +83,7 @@ class RetroQuestApp(App):
         self.questlog_panel.tooltip = "Quest Log"
         self.inventory_panel = InventoryPanel(id="inventory", markup=True, wrap=True, auto_scroll=False)
         self.inventory_panel.tooltip = "Inventory"
-        self.command_input = CommandInput(placeholder="Press Enter to continue", id="command_input")
+        self.command_input = CommandInput(self.controller, placeholder="Press Enter to continue", id="command_input")
         yield Header()
         yield Container(
             Horizontal(
@@ -145,8 +150,6 @@ class RetroQuestApp(App):
             room = self.controller.game.look()
             self.room_panel.update_room(self.controller.get_room())
             self.inventory_panel.update_inventory(self.controller.get_inventory())
-            self.questlog_panel.update_questlog(self.controller.get_quest_log())
-            self.command_input.value = ""
             # Check for quest activation popups
             while True:
                 quest_popup = self.controller.game.state.activate_quest()
@@ -154,6 +157,9 @@ class RetroQuestApp(App):
                     await self.popup("Quest Updated", quest_popup)
                 else:
                     break
+            # Update quest log and clear command input
+            self.questlog_panel.update_questlog(self.controller.get_quest_log())
+            self.command_input.value = ""
 
     # Add default CSS for layout if not present
     BINDINGS = [
@@ -242,3 +248,35 @@ Container{
     text-align: center;
 }
 '''
+
+class NestedSuggester(Suggester):
+    """
+    Suggester that provides word completions based on Game.build_use_with_completions.
+    The completions variable is a nested dictionary of words.
+    """
+    def __init__(self, input_widget: Input, controller: GameController):
+        super().__init__()
+        self.input_widget = input_widget
+        self.controller = controller
+
+    async def get_suggestion(self, value: str) -> str | None:
+        next_word = value.strip().split()[-1]  # Get the last word only
+        words = value.strip().split()[:-1]  # Exclude the last word
+        node = self.controller.game.get_command_completions()
+        for word in words:
+            if isinstance(node, dict) and word in node:
+                node = node[word]
+            else:
+                node = None
+                break
+        # Now node is the dict/list of possible next words
+        # Only suggest if next_word is a prefix of exactly one possible next word
+        candidates = []
+        if isinstance(node, dict):
+            candidates = [w for w in node.keys() if w.startswith(next_word)]
+        elif isinstance(node, list):
+            candidates = [w for w in node if w.startswith(next_word)]
+        if len(candidates) == 1:
+            words.append(candidates[0])
+            return ' '.join(words)
+        return None
