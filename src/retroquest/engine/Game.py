@@ -45,6 +45,10 @@ class Game:
 
     def handle_command(self, command: str) -> str:
         result = self.command_parser.parse(command)
+        if self.describe_room:
+            # If the command resulted in a room change, describe the new room
+            self.describe_room = False
+            result += self.state.current_room.describe()
         activated = self.state.activate_quests()
         updated = self.state.update_quests()
         completed = self.state.complete_quests()
@@ -226,7 +230,6 @@ Copyright Free Background Music'''
     def run(self) -> None:
         self.print_intro()
         self.console.clear()
-        #self.console.print(self.state.current_room.describe() + "\n")
         response = self.handle_command('look around')  # Initial look around the room")
         # Print a separator line before any output after a command
         self.console.print('\n' + response + '\n')
@@ -274,7 +277,8 @@ Copyright Free Background Music'''
                 self.state.current_room = self.state.all_rooms[next_room_key]
                 self.state.current_room.on_enter(self.state)
                 self.state.mark_visited(self.state.current_room)
-                return f"[event][You move {direction} to [room_name]{self.state.current_room.name}[/room_name].][/event]\n\n" + self.state.current_room.describe()
+                self.describe_room = True
+                return f"[event][You move {direction} to [room_name]{self.state.current_room.name}[/room_name].][/event]\n\n"
             else:
                 return "[failure]That exit leads nowhere (room not found).[/failure]"
         else:
@@ -333,7 +337,8 @@ Copyright Free Background Music'''
         )
 
     def look(self) -> str:
-        return self.state.current_room.describe()
+        self.describe_room = True
+        return "[event]You look around the room.[/event]\n\n"
 
     def examine(self, target: str) -> str:
         if not target:  # Check if target is an empty string or None

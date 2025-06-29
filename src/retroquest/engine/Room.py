@@ -74,7 +74,7 @@ class Room:
 
     def describe(self) -> str:
         """Return a full description of the room, including items, characters, and exits."""
-        desc = f"[room_name]{self.name}[/room_name]\n"
+        desc = f"[bold]{self.name}[/bold]\n"
         desc += self.description + '\n'
         visible_items = [item for item in self.items]
         if visible_items:

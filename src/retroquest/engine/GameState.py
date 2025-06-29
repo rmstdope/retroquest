@@ -213,3 +213,17 @@ class GameState:
                     return quest
         return None
 
+    def activate_quest(self):
+        """
+        Checks non_activated_quests for the first quest that should be activated (triggered).
+        Moves the newly activated quest to activated_quests and returns a string describing it,
+        or None if no new quest was activated.
+        """
+        for i, quest in enumerate(self.non_activated_quests):
+            if quest.check_trigger(self):
+                self.activated_quests.append(quest)
+                del self.non_activated_quests[i]
+                quest_type = "main" if quest.is_main() else "side"
+                return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]:\n{quest.description}"
+        return None
+
