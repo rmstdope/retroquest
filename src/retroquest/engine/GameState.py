@@ -227,3 +227,28 @@ class GameState:
                 return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
         return None
 
+    def update_quest(self):
+        """
+        Checks activated_quests for the first quest that should update its quest log (dynamic quest log updates).
+        Returns a string describing the updated quest, or None if no quest log was updated.
+        """
+        for quest in self.activated_quests:
+            if quest.check_update(self):
+                quest_type = "main" if quest.is_main() else "side"
+                return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
+        return None
+
+    def complete_quest(self):
+        """
+        Checks activated_quests for the first quest that is now completed.
+        Moves the newly completed quest to completed_quests and returns a string describing it,
+        or None if no new quest was completed.
+        """
+        for i, quest in enumerate(self.activated_quests):
+            if quest.check_completion(self):
+                self.completed_quests.append(quest)
+                del self.activated_quests[i]
+                quest_type = "main" if quest.is_main() else "side"
+                return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n[dim]{quest.completion}[/dim]"
+        return None
+

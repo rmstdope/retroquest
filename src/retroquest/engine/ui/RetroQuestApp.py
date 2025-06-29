@@ -1,64 +1,21 @@
 import asyncio
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, RichLog, Input, Static, TextArea
+from textual.widgets import Header, Footer, Input
 from textual.containers import Container, Horizontal
 from textual import events
 from textual.css.query import NoMatches
 from .GameController import GameController
 from ...act1.Act1 import Act1
 from ..theme import apply_theme
-from textual.suggester import Suggester, SuggestFromList
+from .RoomPanel import RoomPanel
+from .ResultPanel import ResultPanel
+from .QuestLogPanel import QuestLogPanel
+from .InventoryPanel import InventoryPanel
+from .CommandInput import CommandInput
+from .Popup import Popup
 
-class RoomPanel(RichLog):
-    def update_room(self, text: str):
-        self.clear()
-        self.write(apply_theme(text))
-
-class ResultPanel(RichLog):
-    def update_result(self, text: str):
-        self.clear()
-        self.write(apply_theme(text))
-
-class QuestLogPanel(RichLog):
-    def update_questlog(self, text: str):
-        self.clear()
-        self.write(apply_theme(text))
-
-class InventoryPanel(RichLog):
-    def update_inventory(self, text: str):
-        self.clear()
-        self.write(apply_theme(text))
-
-class CommandInput(Input):
-    def __init__(self, controller, *args, **kwargs):
-        kwargs['suggester'] = NestedSuggester(self, controller)
-        super().__init__(*args, **kwargs)
-
-    async def on_input_submitted(self, message: Input.Submitted) -> None:
-        pass
-
-    def _on_focus(self, event):
-        pass
-
-class PopupWidget(Container):
-    def __init__(self, border_text: str, text: str, **kwargs):
-        super().__init__(**kwargs)
-        self.can_focus = True
-        self.border_title = apply_theme(border_text)
-        self.text_area = Static(apply_theme(text), id="popup_textarea")
-        self.static = Static("Press Enter to close", id="popup_static")
-        self.id = "popup"
-
-    async def on_key(self, event: events.Key) -> None:
-        if event.key == "enter":
-            await self.app.close_popup()
-
-    def compose(self) -> ComposeResult:
-        yield self.text_area
-        yield self.static
-
-    def on_mount(self):
-        self.text_area.focus()
+# TODO Panel for spell list
+# TODO Quests should be expandable and not horizonrtally scrollable
 
 class RetroQuestApp(App):
     TITLE = "RetroQuest"
@@ -110,11 +67,11 @@ class RetroQuestApp(App):
         self.inventory_panel.update_inventory('')
         self.command_input.focus()  # Remove 'await' here, as focus() is not async
 
-    async def popup(self, border_text: str, text: str):
+    async def open_popup(self, border_text: str, text: str):
         try:
             self.get_widget_by_id("popup")
         except NoMatches:
-            popup = PopupWidget(border_text, text)
+            popup = Popup(border_text, text)
             await self.mount(popup)
             popup.focus()
             return
@@ -150,14 +107,28 @@ class RetroQuestApp(App):
             room = self.controller.game.look()
             self.room_panel.update_room(self.controller.get_room())
             self.inventory_panel.update_inventory(self.controller.get_inventory())
+            # Check for quest completion popups
+            while True:
+                quest_complete_popup = self.controller.game.state.complete_quest()
+                if isinstance(quest_complete_popup, str) and quest_complete_popup.strip():
+                    await self.open_popup("Quest Completed", quest_complete_popup)
+                else:
+                    break
+            # Check for quest update popups
+            while True:
+                quest_update_popup = self.controller.game.state.update_quest()
+                if isinstance(quest_update_popup, str) and quest_update_popup.strip():
+                    await self.open_popup("Quest Updated", quest_update_popup)
+                else:
+                    break
             # Check for quest activation popups
             while True:
                 quest_popup = self.controller.game.state.activate_quest()
                 if isinstance(quest_popup, str) and quest_popup.strip():
-                    await self.popup("Quest Updated", quest_popup)
+                    await self.open_popup("Quest Activated", quest_popup)
                 else:
                     break
-            # Update quest log and clear command input
+                # Update quest log and clear command input
             self.questlog_panel.update_questlog(self.controller.get_quest_log())
             self.command_input.value = ""
 
@@ -248,35 +219,3 @@ Container{
     text-align: center;
 }
 '''
-
-class NestedSuggester(Suggester):
-    """
-    Suggester that provides word completions based on Game.build_use_with_completions.
-    The completions variable is a nested dictionary of words.
-    """
-    def __init__(self, input_widget: Input, controller: GameController):
-        super().__init__()
-        self.input_widget = input_widget
-        self.controller = controller
-
-    async def get_suggestion(self, value: str) -> str | None:
-        next_word = value.strip().split()[-1]  # Get the last word only
-        words = value.strip().split()[:-1]  # Exclude the last word
-        node = self.controller.game.get_command_completions()
-        for word in words:
-            if isinstance(node, dict) and word in node:
-                node = node[word]
-            else:
-                node = None
-                break
-        # Now node is the dict/list of possible next words
-        # Only suggest if next_word is a prefix of exactly one possible next word
-        candidates = []
-        if isinstance(node, dict):
-            candidates = [w for w in node.keys() if w.startswith(next_word)]
-        elif isinstance(node, list):
-            candidates = [w for w in node if w.startswith(next_word)]
-        if len(candidates) == 1:
-            words.append(candidates[0])
-            return ' '.join(words)
-        return None
