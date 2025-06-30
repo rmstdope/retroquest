@@ -13,9 +13,11 @@ from .QuestLogPanel import QuestLogPanel
 from .InventoryPanel import InventoryPanel
 from .CommandInput import CommandInput
 from .Popup import Popup
+from .SpellPanel import SpellPanel
 
 # TODO Panel for spell list
 # TODO Quests should be expandable and not horizonrtally scrollable
+#TODO move setting of tool tips into respective panels init methods
 
 class RetroQuestApp(App):
     TITLE = "RetroQuest"
@@ -40,6 +42,8 @@ class RetroQuestApp(App):
         self.questlog_panel.tooltip = "Quest Log"
         self.inventory_panel = InventoryPanel(id="inventory", markup=True, wrap=True, auto_scroll=False)
         self.inventory_panel.tooltip = "Inventory"
+        self.spell_panel = SpellPanel(id="spells", markup=True, wrap=True, auto_scroll=False)
+        self.spell_panel.tooltip = "Spell List"
         self.command_input = CommandInput(self.controller, placeholder="Press Enter to continue", id="command_input")
         yield Header()
         yield Container(
@@ -50,7 +54,11 @@ class RetroQuestApp(App):
                     id="output_column"
                 ),
                 Container(
-                    self.inventory_panel,  # Inventory on top
+                    Horizontal(
+                        self.inventory_panel,
+                        self.spell_panel,
+                        id="inventory_spell_row"
+                    ),
                     self.questlog_panel,  # Questlog below
                     id="side_panels"
                 ),
@@ -65,6 +73,7 @@ class RetroQuestApp(App):
         self.room_panel.update_room(self.controller.start())
         self.questlog_panel.update_questlog('')
         self.inventory_panel.update_inventory('')
+        self.spell_panel.update_spells('')
         self.command_input.focus()  # Remove 'await' here, as focus() is not async
 
     async def open_popup(self, border_text: str, text: str):
@@ -107,6 +116,7 @@ class RetroQuestApp(App):
             room = self.controller.game.look()
             self.room_panel.update_room(self.controller.get_room())
             self.inventory_panel.update_inventory(self.controller.get_inventory())
+            self.spell_panel.update_spells(self.controller.get_spells())
             # Check for quest completion popups
             while True:
                 quest_complete_popup = self.controller.game.state.complete_quest()
@@ -176,16 +186,31 @@ Container{
     border: solid #666;
     height: 100%;
 }
-#questlog, #inventory {
+#inventory_spell_row {
+    layout: horizontal;
+    width: 1fr;
+    min-width: 30;
     height: 1fr;
     min-height: 10;
     border-bottom: solid #444;
 }
-#questlog {
+#inventory, #spells {
+    width: 1fr;
+    min-width: 15;
+    height: 1fr;
+    min-height: 10;
     border-bottom: none;
 }
 #inventory {
-    border-bottom: solid #444;
+    border-right: solid #444;
+}
+#spells {
+    border-left: solid #444;
+}
+#questlog {
+    height: 1fr;
+    min-height: 10;
+    border-bottom: none;
 }
 #popup {
     background: #222;

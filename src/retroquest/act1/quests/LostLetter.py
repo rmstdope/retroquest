@@ -5,7 +5,7 @@ from ..Act1StoryFlags import (
     FLAG_ASKED_GRANDMOTHER_ABOUT_LETTER
 )
 
-# TODO: The Lost Letter Quest - Steps to Completion
+# The Lost Letter Quest - Steps to Completion
 # 1. The player searches the floorboard in Elior's Cottage and finds the faded letter.
 # 2. The game sets FLAG_FOUND_LOST_LETTER to indicate the letter has been found.
 # 3. The letter item is given to the player and can be examined.

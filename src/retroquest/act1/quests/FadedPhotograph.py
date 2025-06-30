@@ -2,7 +2,7 @@ from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import FLAG_FOUND_PHOTO, FLAG_READ_PHOTO_MESSAGE, FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO
 
-# TODO: The Faded Photograph Quest - Steps to Completion
+# The Faded Photograph Quest - Steps to Completion
 # 1. The player finds the photograph in Elior's cottage (e.g., searching the attic or a hidden drawer), which sets FLAG_FOUND_PHOTO.
 # 2. The photograph item is given to the player and can be examined.
 # 3. The player examines/reads the back of the photograph, setting FLAG_READ_PHOTO_MESSAGE.

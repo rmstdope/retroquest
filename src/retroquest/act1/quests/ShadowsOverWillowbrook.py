@@ -8,7 +8,7 @@ from ..Act1StoryFlags import (
     FLAG_MAGIC_FULLY_UNLOCKED
 )
 
-# TODO: Shadows Over Willowbrook Quest - Steps to Completion
+# Shadows Over Willowbrook Quest - Steps to Completion
 # 1. The game starts with a mysterious dream sequence where Elior sees a shadowy figure in the fields.
 # 2. The player investigates the Vegetable Field, where crops are withering (sets FLAG_INVESTIGATED_WITHERED_CROPS).
 # 3. The player talks to the Villager who mention strange occurrences (e.g., animals acting restless, crops failing).

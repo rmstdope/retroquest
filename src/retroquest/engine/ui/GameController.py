@@ -45,3 +45,12 @@ class GameController:
     def get_room(self) -> str:
         """Return the current room description, styled."""
         return apply_theme(self.game.state.current_room.describe())
+
+    def get_spells(self) -> str:
+        lines = ["[bold]Spells:[/bold]"]
+        if self.game.state.known_spells:
+            for spell in self.game.state.known_spells:
+                lines.append(f"- [spell_name]{spell.get_name()}[/spell_name]")
+        else:
+            lines.append("(none)")
+        return apply_theme("\n".join(lines))
