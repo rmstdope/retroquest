@@ -14,7 +14,6 @@ from .CommandInput import CommandInput
 from .Popup import Popup, PopupType
 from .SpellPanel import SpellPanel
 
-# TODO Quests should be expandable and not horizontally scrollable
 # TODO Ensure GameController is the facade to Game and GameState
 
 class RetroQuestApp(App):
@@ -141,7 +140,7 @@ class RetroQuestApp(App):
                 self.open_popup("Quest Activated", quest_popup, PopupType.INFO)
             else:
                 break
-        self.questlog_panel.update_questlog(self.controller.get_quest_log())
+        self.questlog_panel.update_questlog(self.controller.get_active_quests(), self.controller.get_completed_quests())
         self.command_input.value = ""
 
     # Add default CSS for layout if not present
@@ -156,9 +155,6 @@ class RetroQuestApp(App):
 Screen {
     layers: main popup;
     align: center middle;
-}
-Container{
-    layer: main;
 }
 #main_row {
     height: 1fr;
@@ -244,5 +240,18 @@ Container{
     align: center middle;
     border: none;
     text-align: center;
+}
+Collapsible * {
+    padding: 0 2;
+}
+.quest{
+    padding: 0;
+    margin: 0;
+    border: none;
+    content-align: left top;
+}
+.quest-description {
+    padding: 0;
+    margin: 0;
 }
 '''
