@@ -40,3 +40,30 @@ class QuestLogPanel(Vertical):
                 no_completed = Static(apply_theme("[dim](none)[/dim]"))
                 self.mount(no_completed)
         pass
+
+    async def on_key(self, event) -> None:
+        if event.key in ("down", "up"):
+            # Get all Collapsible widgets
+            collapsibles = [child for child in self.children if isinstance(child, Collapsible)]
+            
+            if not collapsibles:
+                return
+            
+            # Find currently focused collapsible
+            current_focused = None
+            for i, collapsible in enumerate(collapsibles):
+                if collapsible.has_focus_within:
+                    current_focused = i
+                    break
+            
+            # Move to next/previous collapsible or first/last one if none focused
+            if current_focused is not None:
+                if event.key == "down":
+                    next_index = (current_focused + 1) % len(collapsibles)
+                else:  # up key
+                    next_index = (current_focused - 1) % len(collapsibles)
+            else:
+                next_index = 0 if event.key == "down" else len(collapsibles) - 1
+            
+            collapsibles[next_index].children[0].focus()
+            event.prevent_default()
