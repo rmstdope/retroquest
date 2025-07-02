@@ -1,11 +1,12 @@
-from textual.widgets import RichLog, Collapsible, Static
-from textual.containers import Container, Vertical
+from textual.widgets import Collapsible, Static
+from textual.containers import VerticalScroll
 from ..theme import apply_theme
 
-class QuestLogPanel(Vertical):
+class QuestLogPanel(VerticalScroll):
     def __init__(self):
         super().__init__(id="questlog")
         self.tooltip = "Quest Log"
+        self.can_focus = False  # Prevent the panel itself from being focused
 
     def update_questlog(self, active_quests: list, completed_quests: list = None):
         # Remove all existing children

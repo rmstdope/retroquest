@@ -1,5 +1,5 @@
 from enum import Enum
-from textual.containers import Container
+from textual.containers import VerticalScroll
 from textual.widgets import Static
 from textual import events
 from ..theme import apply_theme
@@ -8,7 +8,7 @@ class PopupType(Enum):
     INFO = "info"
     QUESTION = "question"
 
-class Popup(Container):
+class Popup(VerticalScroll):
     def __init__(self, border_text: str, text: str, popup_type: PopupType):
         super().__init__(id = "popup")
         self.can_focus = True

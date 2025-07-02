@@ -1,13 +1,14 @@
-from textual.containers import Vertical
+from textual.containers import VerticalScroll
 from textual.widgets import Static
 
 from .Popup import PopupType
 from ..theme import apply_theme
 
-class SpellPanel(Vertical):
+class SpellPanel(VerticalScroll):
     def __init__(self):
         super().__init__(id="spells", classes="selectable-list")
         self.tooltip = "Spell List"
+        self.can_focus = False  # Prevent the panel itself from being focused
 
     def update_spells(self, text: list) -> None:
         # Remove all existing children

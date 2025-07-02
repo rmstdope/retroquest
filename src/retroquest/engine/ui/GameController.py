@@ -24,22 +24,20 @@ class GameController:
     def get_active_quests(self) -> list:
         """Return a list of tuples (quest_name, description) for activated quests."""
         quest_tuples = []
-        if self.game.state.activated_quests:
-            for quest in self.game.state.activated_quests:
-                quest_type = "main" if quest.is_main() else "side"
-                quest_name = f"[quest_name]{quest.name} ({quest_type})[/quest_name]"
-                quest_tuples.append((quest_name, quest.description))
+        for quest in self.game.state.activated_quests:
+            quest_type = "main" if quest.is_main() else "side"
+            quest_name = f"[quest_name]{quest.name} ({quest_type})[/quest_name]"
+            quest_tuples.append((quest_name, quest.description))
         return quest_tuples
 
     def get_completed_quests(self) -> list:
         """Return a list of tuples (quest_name, completion) for completed quests."""
         quest_tuples = []
-        if self.game.state.completed_quests:
-            for quest in self.game.state.completed_quests:
-                quest_type = "main" if quest.is_main() else "side"
-                quest_name = f"[quest_name]{quest.name} ({quest_type})[/quest_name]"
-                completion_text = f"[dim]{quest.completion}[/dim]"
-                quest_tuples.append((quest_name, completion_text))
+        for quest in self.game.state.completed_quests:
+            quest_type = "main" if quest.is_main() else "side"
+            quest_name = f"[quest_name]{quest.name} ({quest_type})[/quest_name]"
+            completion_text = f"[dim]{quest.completion}[/dim]"
+            quest_tuples.append((quest_name, completion_text))
         return quest_tuples
 
     def get_inventory(self) -> list:

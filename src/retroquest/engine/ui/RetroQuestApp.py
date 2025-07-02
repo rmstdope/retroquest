@@ -222,6 +222,7 @@ Screen {
     layer: popup;
     position: relative;
     width: 50%;
+    max-height: 90%;
     height: auto;
     align: center middle;
     layout: vertical;

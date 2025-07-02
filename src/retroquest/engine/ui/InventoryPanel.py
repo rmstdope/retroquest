@@ -1,13 +1,14 @@
-from textual.containers import Vertical
+from textual.containers import VerticalScroll
 from textual.widgets import Static
 
 from .Popup import PopupType
 from ..theme import apply_theme
 
-class InventoryPanel(Vertical):
+class InventoryPanel(VerticalScroll):
     def __init__(self):
         super().__init__(id="inventory", classes="selectable-list")
         self.tooltip = "Inventory"
+        self.can_focus = False  # Prevent the panel itself from being focused
 
     def update_inventory(self, text: list[tuple]) -> None:
         # Remove all existing children
