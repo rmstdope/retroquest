@@ -47,6 +47,7 @@ class Act1(Act):
             "RoadToGreendale": RoadToGreendale(),
         }
         quests = [
+            ShadowsOverWillowbrookQuest(),
             HintOfMagicQuest(),
             CuriosityKilledTheCatQuest(),
             FishingExpeditionQuest(),
@@ -57,7 +58,6 @@ class Act1(Act):
             OhDeerOhDeerQuest(),
             PreparingForTheRoadQuest(),
             FadedPhotographQuest(),
-            ShadowsOverWillowbrookQuest(),
             LostLetterQuest(),
         ]
         music_file = "music/Conquest - Market (freetouse.com).mp3"
