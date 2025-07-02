@@ -227,6 +227,7 @@ Screen {
     height: 1fr;
     min-height: 10;
     border-bottom: none;
+    background: #1c1c1c;
 }
 #popup {
     background: #222;
