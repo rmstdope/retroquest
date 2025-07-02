@@ -1,11 +1,26 @@
-from textual.widgets import RichLog
+from textual.widgets import Static
+from textual.containers import ScrollableContainer
 from ..theme import apply_theme
 
-class RoomPanel(RichLog):
+class RoomPanel(ScrollableContainer):
     def __init__(self):
-        super().__init__(id="room", markup=True, wrap=True, auto_scroll=False)
+        """Initialize the RoomPanel as a scrollable container for room descriptions."""
+        super().__init__(classes="room", can_focus=False)
         self.tooltip = "Current Room Description"
+        self.content_widget = Static("", classes='room-text', markup=True)
+        self.content_widget.can_focus = True
 
-    def update_room(self, text: str):
-        self.clear()
-        self.write(apply_theme(text))
+    def on_mount(self):
+        """Mount the content widget when the panel is added to the DOM."""
+        self.mount(self.content_widget)
+
+    def update_room(self, text: str, wide: bool = False):
+        """Update the panel with new room description text.
+        
+        Args:
+            text: The room description text to display, will be processed through apply_theme
+            wide: If True, applies wide formatting (for ASCII logo), otherwise normal formatting
+        """
+        # pass
+        self.content_widget.classes = 'room-text room-text-wide' if wide else 'room-text'
+        self.content_widget.update(apply_theme(text))

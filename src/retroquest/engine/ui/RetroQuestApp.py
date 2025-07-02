@@ -19,6 +19,7 @@ from .SpellPanel import SpellPanel
 class RetroQuestApp(App):
     TITLE = "RetroQuest"
     SUB_TITLE = "A Text Adventure"
+    CSS_PATH = "styles.tcss"
 
     STATE_LOGO = 0
     STATE_INTRO = 1
@@ -63,7 +64,7 @@ class RetroQuestApp(App):
 
     async def on_mount(self) -> None:
         # Initialize game and display intro
-        self.room_panel.update_room(self.controller.start())
+        self.room_panel.update_room(self.controller.start(), wide=True)
         self.questlog_panel.update_questlog('')
         self.inventory_panel.update_inventory([])
         self.spell_panel.update_spells([])
@@ -105,7 +106,7 @@ class RetroQuestApp(App):
         command = message.value.strip()
         if self.state == self.STATE_LOGO:
             # Transition to intro
-            self.room_panel.update_room(self.controller.game.act.get_act_intro())
+            self.room_panel.update_room(self.controller.game.act.get_act_intro(), wide=False)
             self.command_input.placeholder = 'Press Enter to continue'
             self.command_input.value = ""
             self.state = self.STATE_INTRO
@@ -126,7 +127,7 @@ class RetroQuestApp(App):
         result = self.controller.handle_command(command)
         self.result_panel.update_result(result)
         room = self.controller.game.look()
-        self.room_panel.update_room(self.controller.get_room())
+        self.room_panel.update_room(self.controller.get_room(), wide=False)
         self.inventory_panel.update_inventory(self.controller.get_inventory())
         self.spell_panel.update_spells(self.controller.get_spells())
         # Check for quest completion popups
@@ -158,103 +159,3 @@ class RetroQuestApp(App):
 
     def action_quit(self) -> None:
         self.exit()
-
-    CSS = '''
-Screen {
-    layers: main popup;
-    align: center middle;
-}
-.main_column {
-    width: 2fr;
-}
-.frame {
-    background: #1c1c1c;
-    border: round #666;
-}
-#room {
-    height: 2fr;
-    min-height: 10;
-    border-bottom: solid #666;
-}
-#result {
-    height: 1fr;
-    min-height: 5;
-    border: none;
-}
-#inventory_spell_row {
-    border-bottom: solid #444;
-}
-#inventory, #spells {
-    width: 1fr;
-    min-width: 15;
-    height: 1fr;
-    min-height: 10;
-    border: none;
-}
-#inventory {
-    border-right: solid #444;
-}
-.selectable-list {
-    background: #1c1c1c;
-}
-.selectable-item:blur {
-    background: #1c1c1c;
-}
-.selectable-item:focus {
-    background: #444;
-    color: #fff;
-}
-#spells {
-}
-#questlog {
-    height: 1fr;
-    min-height: 10;
-    border-bottom: none;
-    background: #1c1c1c;
-}
-#popup {
-    background: #222;
-    color: #fff;
-    border: round #dd5;
-    border-title-align: center;
-    border-title-color: #ff0;
-    padding: 0;
-    layer: popup;
-    position: relative;
-    width: 50%;
-    max-height: 90%;
-    height: auto;
-    align: center middle;
-    layout: vertical;
-}
-#popup_textarea {
-    padding: 1 1;
-    width: 100%;
-    height: auto;
-    border: none;
-    content-align: center middle;
-    text-align: center;
-    overflow: auto;
-}
-#popup_static {
-    padding: 0;
-    width: 100%;
-    height: 1;
-    align: center middle;
-    border: none;
-    text-align: center;
-}
-Collapsible * {
-    padding: 0 2;
-}
-.quest{
-    padding: 0;
-    margin: 0;
-    border: none;
-    content-align: left top;
-}
-.quest-description {
-    padding: 0;
-    margin: 0;
-}
-'''
