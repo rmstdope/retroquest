@@ -114,6 +114,8 @@ class RetroQuestApp(App):
             command = 'look around'
             self.state = self.STATE_RUNNING
         if self.state == self.STATE_RUNNING and command:
+            self.command_input.placeholder = 'What do you want to do?'
+            self.command_input.value = ""
             if command.lower() in ("quit", "exit"):
                 self.state = self.STATE_QUITTING
                 self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)
