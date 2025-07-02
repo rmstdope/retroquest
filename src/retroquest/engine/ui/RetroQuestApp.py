@@ -66,7 +66,7 @@ class RetroQuestApp(App):
         # Initialize game and display intro
         self.room_panel.update_room(self.controller.start())
         self.questlog_panel.update_questlog('')
-        self.inventory_panel.update_inventory('')
+        self.inventory_panel.update_inventory([])
         self.spell_panel.update_spells('')
         self.command_input.focus()  # Remove 'await' here, as focus() is not async
 
@@ -201,6 +201,16 @@ Screen {
 }
 #inventory {
     border-right: solid #444;
+}
+.selectable-list {
+    background: #1c1c1c;
+}
+.selectable-item:blur {
+    background: #1c1c1c;
+}
+.selectable-item:focus {
+    background: #444;
+    color: #fff;
 }
 #spells {
     border-left: solid #444;

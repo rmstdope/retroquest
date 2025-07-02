@@ -42,14 +42,14 @@ class GameController:
                 quest_tuples.append((quest_name, completion_text))
         return quest_tuples
 
-    def get_inventory(self) -> str:
-        lines = ["[bold]Inventory:[/bold]"]
-        if self.game.state.inventory:
-            for item in self.game.state.inventory:
-                lines.append(f"- [item_name]{item.get_name()}[/item_name]")
-        else:
-            lines.append("(empty)")
-        return apply_theme("\n".join(lines))
+    def get_inventory(self) -> list:
+        """Return a list of tuples (item_name, item_description) for inventory items."""
+        item_tuples = []
+        for item in self.game.state.inventory:
+            item_name = f"[item_name]{item.get_name()}[/item_name]"
+            item_description = item.description
+            item_tuples.append((item_name, item_description))
+        return item_tuples
 
     def get_room(self) -> str:
         """Return the current room description, styled."""

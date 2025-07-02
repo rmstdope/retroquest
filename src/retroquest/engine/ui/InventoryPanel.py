@@ -1,11 +1,70 @@
-from textual.widgets import RichLog
+from textual.containers import Vertical
+from textual.widgets import Static
+
+from .Popup import PopupType
 from ..theme import apply_theme
 
-class InventoryPanel(RichLog):
+class InventoryPanel(Vertical):
     def __init__(self):
-        super().__init__(id="inventory", markup=True, wrap=True, auto_scroll=False)
+        super().__init__(id="inventory", classes="selectable-list")
         self.tooltip = "Inventory"
 
-    def update_inventory(self, text: str):
-        self.clear()
-        self.write(apply_theme(text))
+    def update_inventory(self, text: list[tuple]) -> None:
+        # Remove all existing children
+        for child in list(self.children):
+            child.remove()
+        
+        # Add Inventory header
+        header = Static(apply_theme("[bold]Inventory[/bold]"))
+        self.mount(header)
+        
+        # Create a new Static widget for each element
+        if text:
+            for item in text:
+                static_widget = Static(apply_theme(item[0]), classes='selectable-item')
+                static_widget.can_focus = True
+                static_widget.description = item[1]  # Store the description
+                
+                self.mount(static_widget)
+        else:
+            no_items = Static(apply_theme("[dim](none)[/dim]"))
+            self.mount(no_items)
+
+    async def on_key(self, event) -> None:
+        if event.key in ("down", "up"):
+            # Get all focusable Static widgets (selectable items)
+            focusable_items = [child for child in self.children if child.can_focus]
+            
+            if not focusable_items:
+                return
+            
+            # Find currently focused item
+            current_focused = None
+            for i, item in enumerate(focusable_items):
+                if item.has_focus:
+                    current_focused = i
+                    break
+            
+            # Move to next/previous item or first/last one if none focused
+            if current_focused is not None:
+                if event.key == "down":
+                    next_index = (current_focused + 1) % len(focusable_items)
+                else:  # up key
+                    next_index = (current_focused - 1) % len(focusable_items)
+            else:
+                next_index = 0 if event.key == "down" else len(focusable_items) - 1
+            
+            focusable_items[next_index].focus()
+            event.prevent_default()
+        elif event.key == "enter":
+            # Get all focusable Static widgets (selectable items)
+            focusable_items = [child for child in self.children if child.can_focus]
+            
+            # Find currently focused item
+            for item in focusable_items:
+                if item.has_focus:
+                    # Extract item name from the rendered text (remove styling tags)
+                    item_text = str(item.renderable)
+                    # Use the item's stored description instead of placeholder
+                    self.app.open_popup(item_text, item.description, PopupType.INFO)
+                    break 
