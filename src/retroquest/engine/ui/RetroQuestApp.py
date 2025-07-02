@@ -68,7 +68,7 @@ class RetroQuestApp(App):
         self.room_panel.update_room(self.controller.start())
         self.questlog_panel.update_questlog('')
         self.inventory_panel.update_inventory([])
-        self.spell_panel.update_spells('')
+        self.spell_panel.update_spells([])
         self.command_input.focus()  # Remove 'await' here, as focus() is not async
 
     def open_popup(self, border_text: str, text: str, popup_type):
