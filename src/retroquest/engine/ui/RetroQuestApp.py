@@ -41,12 +41,11 @@ class RetroQuestApp(App):
         self.spell_panel = SpellPanel()
         self.command_input = CommandInput(self.controller)
         yield Header()
-        yield Container(
-            Horizontal(
+        yield Horizontal(
                 Vertical(
                     self.room_panel,
                     self.result_panel,
-                    id="output_column"
+                    classes="main_column frame"
                 ),
                 Vertical(
                     Horizontal(
@@ -55,12 +54,11 @@ class RetroQuestApp(App):
                         id="inventory_spell_row"
                     ),
                     self.questlog_panel,  # Questlog below
-                    id="side_panels"
+                    classes="frame"
                 ),
                 id="main_row"
-            ),
-            self.command_input,
-        )
+            )
+        yield self.command_input
         yield Footer()
 
     async def on_mount(self) -> None:
@@ -164,40 +162,24 @@ Screen {
     layers: main popup;
     align: center middle;
 }
-#main_row {
-    height: 1fr;
-}
-#output_column {
+.main_column {
     width: 2fr;
-    min-width: 60;
-    border: solid #666;
-    height: 100%;
-    min-height: 20;
-    layout: vertical;
+}
+.frame {
+    background: #1c1c1c;
+    border: round #666;
 }
 #room {
     height: 2fr;
     min-height: 10;
-    border-bottom: solid #444;
+    border-bottom: solid #666;
 }
 #result {
     height: 1fr;
     min-height: 5;
-    border-bottom: none;
-}
-#side_panels {
-    width: 1fr;
-    min-width: 30;
-    layout: vertical;
-    border: solid #666;
-    height: 100%;
+    border: none;
 }
 #inventory_spell_row {
-    layout: horizontal;
-    width: 1fr;
-    min-width: 30;
-    height: 1fr;
-    min-height: 10;
     border-bottom: solid #444;
 }
 #inventory, #spells {
@@ -205,7 +187,7 @@ Screen {
     min-width: 15;
     height: 1fr;
     min-height: 10;
-    border-bottom: none;
+    border: none;
 }
 #inventory {
     border-right: solid #444;
@@ -221,7 +203,6 @@ Screen {
     color: #fff;
 }
 #spells {
-    border-left: solid #444;
 }
 #questlog {
     height: 1fr;
@@ -232,7 +213,7 @@ Screen {
 #popup {
     background: #222;
     color: #fff;
-    border: solid #ff0;
+    border: round #dd5;
     border-title-align: center;
     border-title-color: #ff0;
     padding: 0;
