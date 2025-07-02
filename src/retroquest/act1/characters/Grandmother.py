@@ -43,9 +43,7 @@ class Grandmother(Character):
             dialogue += added_dialogue
 
             # Check if player already knows Revive spell by its name
-            already_knows_revive = any(spell.get_name() == "Revive" for spell in game_state.known_spells)
-            
-            if not already_knows_revive:
+            if not game_state.has_spell('revive'):
                 revive_spell_instance = ReviveSpell()
                 game_state.known_spells.append(revive_spell_instance)
                 dialogue += "\n\n[event]As she speak of it, the words your father wrote seem to settle in your mind. \nYou feel a new understanding... You have learned the [spell_name]Revive[/spell_name] spell![/event]"
