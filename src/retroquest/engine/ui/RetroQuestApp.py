@@ -243,7 +243,7 @@ Screen {
     layout: vertical;
 }
 #popup_textarea {
-    padding: 1 0;
+    padding: 1 1;
     width: 100%;
     height: auto;
     border: none;
