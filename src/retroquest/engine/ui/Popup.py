@@ -26,7 +26,7 @@ class Popup(Container):
         else:
             self.static.update("Press Enter to close")
 
-    async def on_key(self, event: events.Key) -> None:
+    def on_key(self, event: events.Key) -> None:
         if self.popup_type == PopupType.INFO:
             if event.key == "enter":
                 self.app.close_popup()
@@ -42,3 +42,8 @@ class Popup(Container):
 
     def on_mount(self):
         self.text_area.focus()
+
+    def on_blur(self, event: events.Blur) -> None:
+        """Restore focus to popup when it loses focus (maintains modal behavior)"""
+        # Use call_next to avoid infinite recursion
+        self.call_next(self.focus)
