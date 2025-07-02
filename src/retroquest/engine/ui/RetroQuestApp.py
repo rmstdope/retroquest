@@ -31,6 +31,7 @@ class RetroQuestApp(App):
         self.controller = GameController(Act1())
         self.state = self.STATE_LOGO
         self._popup_queue = []
+        self._focus_before_popup = None
 
     def compose(self) -> ComposeResult:
         self.room_panel = RoomPanel()
@@ -74,6 +75,8 @@ class RetroQuestApp(App):
         try:
             self.get_widget_by_id("popup")
         except NoMatches:
+            # Save currently focused widget before opening popup
+            self._focus_before_popup = self.focused
             popup = Popup(border_text, text, popup_type)
             self.mount(popup)
             popup.focus()
@@ -92,7 +95,12 @@ class RetroQuestApp(App):
             next_border, next_text, next_type = self._popup_queue.pop(0)
             popup.set_content(next_border, next_text, next_type)
         else:
-            self.command_input.focus()
+            # Restore focus to the widget that was focused before popup
+            if self._focus_before_popup and self._focus_before_popup.is_attached:
+                self._focus_before_popup.focus()
+            else:
+                self.command_input.focus()
+            self._focus_before_popup = None
             popup.remove()
 
     def on_input_submitted(self, message: Input.Submitted) -> None:
