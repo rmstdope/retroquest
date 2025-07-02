@@ -278,7 +278,7 @@ Copyright Free Background Music'''
                 self.state.current_room.on_enter(self.state)
                 self.state.mark_visited(self.state.current_room)
                 self.describe_room = True
-                return f"[event][You move {direction} to [room_name]{self.state.current_room.name}[/room_name].][/event]\n\n"
+                return f"[event]You move {direction} to [room_name]{self.state.current_room.name}[/room_name].[/event]\n\n"
             else:
                 return "[failure]That exit leads nowhere (room not found).[/failure]"
         else:
@@ -530,7 +530,7 @@ Copyright Free Background Music'''
         if target_name:
             target_item = self.find_item(target_name, look_in_inventory=True, look_in_room=True)
             if not target_item:
-                return f"You don't see a '{target_name}' to cast [spell.name]{spell_name}[/spell.name] on."
+                return f"You don't see a '{target_name}' to cast [spell_name]{spell_name}[/spell_name] on."
             return spell_to_cast.cast(self.state, target_item) # Pass game_state and target_item
         else:
             # Spells that don't require a target
@@ -539,7 +539,7 @@ Copyright Free Background Music'''
     def learn(self, spell: Spell) -> str:
         if spell not in self.state.known_spells:
             self.state.known_spells.append(spell)
-            return f"[event]You have learned the [spell.name]{spell.get_name()}[/spell.name] spell![/event]"
+            return f"[event]You have learned the [spell_name]{spell.get_name()}[/spell_name] spell![/event]"
 
     def spells(self) -> str: # Method to list known spells
         if not self.state.known_spells:
@@ -547,7 +547,7 @@ Copyright Free Background Music'''
         
         output = ["[bold]Known Spells:[/bold]"]
         for spell_obj in self.state.known_spells:
-            output.append(f"  - [spell.name]{spell_obj.get_name()}[/spell.name]: {spell_obj.get_description()}")
+            output.append(f"  - [spell_name]{spell_obj.get_name()}[/spell_name]: {spell_obj.get_description()}")
         return "\n".join(output)
 
     def search(self) -> str:

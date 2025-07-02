@@ -13,10 +13,10 @@ class Fisherman(Character):
         self.knows_fishing_basics = False
         self.received_fish = False
         self.dialogue_states = {
-            "initial": "[dialogue]The [character.name]fisherman[/character.name] nods at you. 'The river\'s been a bit strange lately. Not many fish biting, and my arm... well, it\'s seen better days. Oh, I wish I could pull up a pike or two!'[/dialogue]",
-            "taught_fishing": "[dialogue]The [character.name]fisherman[/character.name] smiles. 'Good to see you trying your luck with the rod. Any luck yet?'[/dialogue]",
-            "received_fish_thanks": "[dialogue]The [character.name]fisherman[/character.name]'s eyes light up. 'Ah, a fine catch! Thank you kindly. It\'s been a while since I\'ve had a fresh river fish.'[/dialogue]",
-            "taught_spells": "[dialogue]The [character.name]fisherman[/character.name] looks out over the water. 'The river has many moods. Treat it with respect, and it might share its secrets with you.'[/dialogue]"
+            "initial": "[dialogue]The [character_name]fisherman[/character_name] nods at you. 'The river\'s been a bit strange lately. Not many fish biting, and my arm... well, it\'s seen better days. Oh, I wish I could pull up a pike or two!'[/dialogue]",
+            "taught_fishing": "[dialogue]The [character_name]fisherman[/character_name] smiles. 'Good to see you trying your luck with the rod. Any luck yet?'[/dialogue]",
+            "received_fish_thanks": "[dialogue]The [character_name]fisherman[/character_name]'s eyes light up. 'Ah, a fine catch! Thank you kindly. It\'s been a while since I\'ve had a fresh river fish.'[/dialogue]",
+            "taught_spells": "[dialogue]The [character_name]fisherman[/character_name] looks out over the water. 'The river has many moods. Treat it with respect, and it might share its secrets with you.'[/dialogue]"
         }
         self.current_dialogue_key = "initial"
 
@@ -43,7 +43,7 @@ class Fisherman(Character):
             # This state transition happens in give_item
             pass
 
-        event_msg = f"[event]You speak with the [character.name]{self.get_name()}[/character.name].[/event]"
+        event_msg = f"[event]You speak with the [character_name]{self.get_name()}[/character_name].[/event]"
         return event_msg + "\n" + self.dialogue_states[self.current_dialogue_key]
 
     def give_item(self, game_state: GameState, item: Item) -> str:
@@ -58,11 +58,11 @@ class Fisherman(Character):
                     f"{self.dialogue_states['received_fish_thanks']} "
                     f"[dialogue]'The river's water... it's not been right. Murky. But I sense you have a connection to the old ways. "
                     f"Let me teach you something to help. With this, you can cleanse water,'[/dialogue] he says, teaching you ta new spell.\n"
-                    f"You have learned [spell.name]purify[/spell.name]!")
+                    f"You have learned [spell_name]purify[/spell_name]!")
 
         elif isinstance(item, Fish) and self.received_fish:
             event_msg = f"[event]You offer the [item_name]{item.name}[/item_name] to the [character_name]Fisherman[/character_name].[/event]"
-            return event_msg + "\n" + "[dialogue]The [character.name]fisherman[/character.name] smiles. 'Thank you, but I've already eaten. Save it for yourself!'[/dialogue]"
+            return event_msg + "\n" + "[dialogue]The [character_name]fisherman[/character_name] smiles. 'Thank you, but I've already eaten. Save it for yourself!'[/dialogue]"
         
         event_msg = f"[event]You offer the [item_name]{item.name}[/item_name] to the [character_name]Fisherman[/character_name].[/event]"
-        return event_msg + "\n" + f"The [character.name]fisherman[/character.name] looks at the [item.name]{item.name}[/item.name] curiously but doesn't seem to need it."
+        return event_msg + "\n" + f"The [character_name]fisherman[/character_name] looks at the [item_name]{item.name}[/item_name] curiously but doesn't seem to need it."

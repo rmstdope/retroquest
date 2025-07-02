@@ -21,5 +21,5 @@ class Villager(Character):
         game_state.set_story_flag(FLAG_VILLAGER_TALKED_TO, True)
         dialogue = self.dialogue_options[self.dialogue_index]
         self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options) # Cycle through dialogue
-        event_msg = f"[event]You speak with the [character.name]{self.get_name()}[/character.name].[/event]"
+        event_msg = f"[event]You speak with the [character_name]{self.get_name()}[/character_name].[/event]"
         return event_msg + "\n" + f"'{dialogue}'"

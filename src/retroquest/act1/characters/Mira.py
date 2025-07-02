@@ -22,10 +22,10 @@ class Mira(Character):
         self.amulet_given = False
         
         self.dialogue_states = {
-            "initial": f"[character.name]{self.get_name()}[/character.name] smiles warmly as you enter her fragrant hut. [dialogue]'Welcome, [character.name]Elior[/character.name]. I sense a stirring of the old powers within you. What brings you to my door?'[/dialogue]",
-            "quest_conditions_not_met": f"[character.name]{self.get_name()}[/character.name] looks at you thoughtfully. [dialogue]'You have made progress, [character.name]Elior[/character.name], but you are not yet fully prepared for what lies ahead. Ensure you have all necessary items, learned the essential spells, and received a blessing for your journey.'[/dialogue]",
+            "initial": f"[character_name]{self.get_name()}[/character_name] smiles warmly as you enter her fragrant hut. [dialogue]'Welcome, [character_name]Elior[/character_name]. I sense a stirring of the old powers within you. What brings you to my door?'[/dialogue]",
+            "quest_conditions_not_met": f"[character_name]{self.get_name()}[/character_name] looks at you thoughtfully. [dialogue]'You have made progress, [character_name]Elior[/character_name], but you are not yet fully prepared for what lies ahead. Ensure you have all necessary items, learned the essential spells, and received a blessing for your journey.'[/dialogue]",
             "quest_complete_amulet_given": f"[character_name]{self.get_name()}[/character_name] smiles, a deep wisdom in her eyes. [dialogue]'You have done well, [character_name]Elior[/character_name]. You have gathered your supplies, honed your magical skills, and prepared your spirit. You are ready.'[/dialogue] She presents you with the [item_name]Ancient Amulet[/item_name]. [dialogue]'May this guide and protect you.'[/dialogue] [event]([item_name]Ancient Amulet[/item_name] added to inventory!)[/event]",
-            "post_amulet": f"[character.name]{self.get_name()}[/character.name] looks at you kindly. [dialogue]'The journey of a thousand miles begins with a single step. You have taken many already. Go now, and may your path be clear.'[/dialogue]"
+            "post_amulet": f"[character_name]{self.get_name()}[/character_name] looks at you kindly. [dialogue]'The journey of a thousand miles begins with a single step. You have taken many already. Go now, and may your path be clear.'[/dialogue]"
         }
 
     def give_item(self, game_state: GameState, item: Item) -> str:
@@ -42,8 +42,8 @@ class Mira(Character):
             return (
                 "[character_name]Mira[/character_name] smiles, accepting the [item_name]flower[/item_name]. [dialogue]'This bloom,' she says, her voice soft, 'is a testament to your growing bond with the living world, Elior. "
                 "It shows you are ready to truly channel the energies around us.'[/dialogue] She then guides you through ancient words and gestures, awakening your innate abilities. "
-                "[event]You feel a new understanding dawn as she imparts the knowledge of [spell.name]heal[/spell.name] to mend, [spell.name]unlock[/spell.name] to reveal, and [spell.name]light[/spell.name] to illuminate the path.[/event] "
-                "[dialogue]'The spark was always within you,'[/dialogue] [character.name]Mira[/character.name] explains, [dialogue]'but now, you can truly command these magics.'[/dialogue] "
+                "[event]You feel a new understanding dawn as she imparts the knowledge of [spell_name]heal[/spell_name] to mend, [spell_name]unlock[/spell_name] to reveal, and [spell_name]light[/spell_name] to illuminate the path.[/event] "
+                "[dialogue]'The spark was always within you,'[/dialogue] [character_name]Mira[/character_name] explains, [dialogue]'but now, you can truly command these magics.'[/dialogue] "
                 "With your newfound power, she tasks you with preparing for the journey ahead, mentioning that the [item_name]Ancient Amulet[/item_name] will be yours "
                 "once you are truly ready. She tells you that you will need:\n"
                 "- Warm clothing\n"
@@ -59,7 +59,7 @@ class Mira(Character):
         return f"[character_name]Mira[/character_name] looks at the [item_name]{item.name}[/item_name] but shakes her head gently. [dialogue]'I have no need for this, child.'[/dialogue]"
 
     def talk_to(self, game_state: GameState) -> str:
-        event_msg = f"[event]You speak with [character.name]Mira[/character.name].[/event]"
+        event_msg = f"[event]You speak with [character_name]Mira[/character_name].[/event]"
         # 1. Give the post_amulet message if amulet is in inventory
         if game_state.has_item("Ancient Amulet"):
             return event_msg + "\n" + self.dialogue_states["post_amulet"]

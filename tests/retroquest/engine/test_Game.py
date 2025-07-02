@@ -192,7 +192,7 @@ def test_learn_spell(game):
     from retroquest.act1.spells.LightSpell import LightSpell
     light_spell = LightSpell()
     result = game.learn(light_spell)
-    assert "You have learned the [spell.name]light[/spell.name] spell!" in result
+    assert "You have learned the [spell_name]light[/spell_name] spell!" in result
     assert light_spell in game.state.known_spells
 
 def test_learn_spell_already_known(game):
@@ -215,8 +215,8 @@ def test_spells_command_with_spells(game):
     game.learn(heal_spell)
     result = game.spells()
     assert "Known Spells:" in result
-    assert f"  - [spell.name]{light_spell.get_name()}[/spell.name]: {light_spell.get_description()}" in result
-    assert f"  - [spell.name]{heal_spell.get_name()}[/spell.name]: {heal_spell.get_description()}" in result
+    assert f"  - [spell_name]{light_spell.get_name()}[/spell_name]: {light_spell.get_description()}" in result
+    assert f"  - [spell_name]{heal_spell.get_name()}[/spell_name]: {heal_spell.get_description()}" in result
 
 # --- Tests for 'give' command ---
 

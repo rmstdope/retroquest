@@ -5,7 +5,7 @@ custom_theme = {
     "item_name": "bold green",
     "spell_name": "bold magenta",
     "room_name": "bold cyan",
-    "quest_name": "red",
+    "quest_name": "#5050d0",
     "event": "dim",
     "failure": "bold red",
     "success": "bold green",

@@ -40,7 +40,7 @@ class Well(Item):
     def search(self, game_state) -> str:
         if self.is_purified:
             if self.contains_ring:
-                return "[event]You peer into the crystal clear water. A [item.name]shiny ring[/item.name] glints at the bottom, tantalizingly out of reach by hand.[/event]"
+                return "[event]You peer into the crystal clear water. A [item_name]shiny ring[/item_name] glints at the bottom, tantalizingly out of reach by hand.[/event]"
             else:
                 return "[event]You peer into the crystal clear water. The bottom is visible and empty.[/event]"
         else: # Not purified
@@ -51,17 +51,17 @@ class Well(Item):
 
     def purify(self, game_state) -> str:
         if not game_state.get_story_flag(FLAG_WELL_EXAMINED):
-            return f"[failure]You hesitate. Why would you cast [spell.name]purify[/spell.name] on the [item.name]{self.get_name()}[/item.name]? Perhaps you should examine it first.[/failure]"
+            return f"[failure]You hesitate. Why would you cast [spell_name]purify[/spell_name] on the [item_name]{self.get_name()}[/item_name]? Perhaps you should examine it first.[/failure]"
         if self.is_purified:
-            return f"[failure]The [item.name]{self.get_name()}[/item.name] is already pure. The water is crystal clear.[/failure]"
+            return f"[failure]The [item_name]{self.get_name()}[/item_name] is already pure. The water is crystal clear.[/failure]"
         
 
         self.is_purified = True
         if self.contains_ring:
             # The ShinyRing is not added to the room here.
             # It's retrieved by the ExtendedMagneticFishingRod.
-            return f"[event]You cast [spell.name]purify[/spell.name] on the [item.name]{self.get_name()}[/item.name]. The murky water shimmers and clears! You can now see a [item.name]shiny ring[/item.name] at the bottom, but it's still too deep to reach by hand.[/event]"
+            return f"[event]You cast [spell_name]purify[/spell_name] on the [item_name]{self.get_name()}[/item_name]. The murky water shimmers and clears! You can now see a [item_name]shiny ring[/item_name] at the bottom, but it's still too deep to reach by hand.[/event]"
         else:
             # This case implies the ring was already taken or never there,
             # and the well is now being purified.
-            return f"[event]You cast [spell.name]purify[/spell.name] on the [item.name]{self.get_name()}[/item.name]. The murky water shimmers and clears! The bottom is visible, but there's nothing of interest.[/event]"
+            return f"[event]You cast [spell_name]purify[/spell_name] on the [item_name]{self.get_name()}[/item_name]. The murky water shimmers and clears! The bottom is visible, but there's nothing of interest.[/event]"

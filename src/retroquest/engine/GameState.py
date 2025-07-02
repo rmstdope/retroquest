@@ -74,14 +74,14 @@ class GameState:
         ]
         if self.inventory:
             for item in self.inventory:
-                lines.append(f"- [item.name]{item.get_name()}[/item.name]")
+                lines.append(f"- [item_name]{item.get_name()}[/item_name]")
         else:
             lines.append("(empty)")
         lines.append("")
         lines.append("[bold]Known Spells:[/bold]")
         if self.known_spells:
             for spell in self.known_spells:
-                lines.append(f"- [spell.name]{spell.get_name()}[/spell.name]")
+                lines.append(f"- [spell_name]{spell.get_name()}[/spell_name]")
         else:
             lines.append("(none)")
         lines.append("")

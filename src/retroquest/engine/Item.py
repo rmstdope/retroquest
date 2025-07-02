@@ -56,7 +56,7 @@ class Item:
 
     def grow(self, game_state) -> str:
         """Base 'grow' method for items, typically called by the Grow spell. Subclasses should override this."""
-        return f"[failure]The [item_name]{self.get_name()}[/item_name] does not respond to the [spell.name]grow[/spell.name] spell.[/failure]"
+        return f"[failure]The [item_name]{self.get_name()}[/item_name] does not respond to the [spell_name]grow[/spell_name] spell.[/failure]"
 
     def eat(self, game_state) -> str:
         """Base 'eat' method for items. Subclasses should override this if they are edible."""

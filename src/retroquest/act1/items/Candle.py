@@ -20,7 +20,7 @@ class Candle(Item):
                 # Add a new Locket to the room
                 game_state.current_room.add_item(Locket())
 
-                return f"[event]You light the [item.name]{self.get_name()}[/item.name] with the [item.name]{other_item.get_name()}[/item.name].[/event]\nIt now casts a warm glow. The flickering candlelight reveals a [item.name]locket[/item.name] that was previously unseen!"
+                return f"[event]You light the [item_name]{self.get_name()}[/item_name] with the [item_name]{other_item.get_name()}[/item_name].[/event]\nIt now casts a warm glow. The flickering candlelight reveals a [item_name]locket[/item_name] that was previously unseen!"
             else:
-                return f"[failure]The [item.name]{self.get_name()}[/item.name] is already lit.[/failure]"
+                return f"[failure]The [item_name]{self.get_name()}[/item_name] is already lit.[/failure]"
         return super().use_with(game_state, other_item)

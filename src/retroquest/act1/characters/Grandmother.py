@@ -24,12 +24,12 @@ class Grandmother(Character):
         dialogue = ""
         if self.dialogue_state["initial_talk"]:
             dialogue = (
-                "[dialogue]Oh, [character.name]Elior[/character.name], my dear. The village... it feels a bit on edge lately, doesn't it? \n"
+                "[dialogue]Oh, [character_name]Elior[/character_name], my dear. The village... it feels a bit on edge lately, doesn't it? \n"
                 "Willowbrook has always been a peaceful place. The [room_name]Village Square[/room_name] is usually bustling, though folks seem more hushed these days. \n"
                 "If you're needing anything, the [room_name]General Store[/room_name] usually has a bit of everything. Old Man Hemlock, the [character_name]shopkeeper[/character_name], sees and hears a lot, too.\n"
-                "And if it's wisdom or a remedy you seek, [character.name]Mira[/character.name] in her hut to the north of the square is the one to talk to. She has a way with herbs and... other things.\n"
-                "The [character.name]Blacksmith[/character.name] down by the south end, he's a sturdy fellow, always hammering away. Keeps the tools sharp, and his spirits, mostly.\n"
-                "Just... be observant, child. There's more to this world than meets the eye. And you, [character.name]Elior[/character.name], you have a good heart. Remember that.[/dialogue]"
+                "And if it's wisdom or a remedy you seek, [character_name]Mira[/character_name] in her hut to the north of the square is the one to talk to. She has a way with herbs and... other things.\n"
+                "The [character_name]Blacksmith[/character_name] down by the south end, he's a sturdy fellow, always hammering away. Keeps the tools sharp, and his spirits, mostly.\n"
+                "Just... be observant, child. There's more to this world than meets the eye. And you, [character_name]Elior[/character_name], you have a good heart. Remember that.[/dialogue]"
             )
             self.dialogue_state["initial_talk"] = False # Change state after initial talk
 
@@ -37,8 +37,8 @@ class Grandmother(Character):
             added_dialogue = (
                 "\n[dialogue]That [item_name]journal[/item_name] of yours... your father was a great writer, you know. He wrote of many things, some of which I am only now beginning to understand.\n"
                 "He sensed a darkness, a shadow stretching over Eldoria, long before others did. He believed it was tied to the old tales, to the whispers of forgotten magic.\n"
-                "He even researched a peculiar enchantment, one that could supposedly breathe life back into things on the very brink... a '[spell.name]revive[/spell.name]' spell, he called it.\n"
-                "He thought it might be a key, a way to mend what the encroaching darkness sought to break. Keep your eyes open, [character.name]Elior[/character.name]. What you've read might be more than just stories.[/dialogue]"
+                "He even researched a peculiar enchantment, one that could supposedly breathe life back into things on the very brink... a '[spell_name]revive[/spell_name]' spell, he called it.\n"
+                "He thought it might be a key, a way to mend what the encroaching darkness sought to break. Keep your eyes open, [character_name]Elior[/character_name]. What you've read might be more than just stories.[/dialogue]"
             )
             dialogue += added_dialogue
 
@@ -48,14 +48,14 @@ class Grandmother(Character):
             if not already_knows_revive:
                 revive_spell_instance = ReviveSpell()
                 game_state.known_spells.append(revive_spell_instance)
-                dialogue += "\n\n[event]As she speak of it, the words your father wrote seem to settle in your mind. \nYou feel a new understanding... You have learned the [spell.name]Revive[/spell.name] spell![/event]"
+                dialogue += "\n\n[event]As she speak of it, the words your father wrote seem to settle in your mind. \nYou feel a new understanding... You have learned the [spell_name]Revive[/spell_name] spell![/event]"
             else:
-                dialogue += "\n\n[event]You recall your father's writings on the [spell.name]Revive[/spell.name] spell. The knowledge feels familiar.[/event]"
+                dialogue += "\n\n[event]You recall your father's writings on the [spell_name]Revive[/spell_name] spell. The knowledge feels familiar.[/event]"
         
         if not dialogue: # If no other dialogue was triggered
-            dialogue = "[dialogue]It's good to see you, [character.name]Elior[/character.name]. Is there something you need?[/dialogue]"
+            dialogue = "[dialogue]It's good to see you, [character_name]Elior[/character_name]. Is there something you need?[/dialogue]"
 
-        event_msg = f"[event]You speak with [character.name]{self.get_name()}[/character.name].[/event]"
+        event_msg = f"[event]You speak with [character_name]{self.get_name()}[/character_name].[/event]"
         return event_msg + "\n" + dialogue
 
     def give_item(self, game_state: GameState, item: Item) -> str:
@@ -79,8 +79,8 @@ class Grandmother(Character):
             event_msg = f"[event]You give the [item_name]{item.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]"
             return (
                 event_msg + "\n" +
-                f"[dialogue]'Oh, [item.name]{item.get_name()}[/item.name]! Thank you, dear. These look lovely. I'll make a pie later.' "
-                f"[character.name]{self.get_name()}[/character.name] smiles warmly. 'It's the little things that brighten the day, isn't it?'[/dialogue]"
+                f"[dialogue]'Oh, [item_name]{item.get_name()}[/item_name]! Thank you, dear. These look lovely. I'll make a pie later.' "
+                f"[character_name]{self.get_name()}[/character_name] smiles warmly. 'It's the little things that brighten the day, isn't it?'[/dialogue]"
             )
         elif isinstance(item, WildBerries) and self.dialogue_state["given_berries"]:
             # Remove WildBerries from inventory
@@ -103,4 +103,4 @@ class Grandmother(Character):
                 )
 
         event_msg = f"[event]You offer the [item_name]{item.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]"
-        return event_msg + "\n" + f"[dialogue][character.name]{self.get_name()}[/character.name] looks at the [item.name]{item.get_name()}[/item.name]. 'I'm not sure what to do with this, dear.'[/dialogue]"
+        return event_msg + "\n" + f"[dialogue][character_name]{self.get_name()}[/character_name] looks at the [item_name]{item.get_name()}[/item_name]. 'I'm not sure what to do with this, dear.'[/dialogue]"

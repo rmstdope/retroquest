@@ -17,8 +17,8 @@ class Bucket(Item):
                 self.description = "TA sturdy wooden bucket with a rope handle. It is full of water from the well."
                 # Potentially, we could also add a story flag or a specific state to the bucket itself
                 # e.g., self.set_property("is_full", True) if we had such a system in Item.
-                return "[event]You lower the [item.name]bucket[/item.name] into the [item.name]well[/item.name] and draw it up, full of clear water.[/event]"
+                return "[event]You lower the [item_name]bucket[/item_name] into the [item_name]well[/item_name] and draw it up, full of clear water.[/event]"
             else:
-                return "[failure]The [item.name]bucket[/item.name] is already full.[/failure]"
+                return "[failure]The [item_name]bucket[/item_name] is already full.[/failure]"
         else:
-            return f"[failure]You can't seem to use the [item.name]bucket[/item.name] together with [item.name]{target.get_name()}[/item.name]. Perhaps near something with water?[/failure]"
+            return f"[failure]You can't seem to use the [item_name]bucket[/item_name] together with [item_name]{target.get_name()}[/item_name]. Perhaps near something with water?[/failure]"
