@@ -18,9 +18,9 @@ class Item:
     def get_short_name(self) -> str:
         return self.short_name
     
-    def can_be_carried(self) -> bool:
-        """Return True if the item can be carried by the player. Override in subclasses for special cases."""
-        return self.can_be_carried_flag
+    def prevent_pickup(self) -> str | None:
+        """Return a message if the item cannot be picked up. Override in subclasses for special cases."""
+        return None if self.can_be_carried_flag else f"[failure]You can't take the [item_name]{self.get_name()}[/item_name].[/failure]"
 
     def use(self, game_state) -> str:
         """Base 'use' method for items. Subclasses should override this if they have specific use actions."""

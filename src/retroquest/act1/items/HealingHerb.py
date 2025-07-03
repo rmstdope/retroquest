@@ -9,4 +9,7 @@ class HealingHerb(Item):
             description="A bundle of fragrant green herbs, known for their restorative properties. Useful for healing wounds or brewing potions.",
             short_name="herb"
         )
-# TODO Mira should say something if Elior tries to take the herb
+    
+    def prevent_pickup(self) -> str | None:
+        """Mira prevents Elior from taking the healing herb."""
+        return "[character_name]Mira[/character_name] gently but firmly stops you. [dialogue]'Those herbs are part of my stores, [character_name]Elior[/character_name]. They are not for taking, but for healing those who truly need them. If you require healing, simply ask.'[/dialogue]"

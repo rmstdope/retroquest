@@ -435,8 +435,10 @@ Copyright Free Background Music'''
         item_to_take = self.find_item(item, look_in_inventory=False, look_in_room=True)
         if not item_to_take:
             return f"[failure]There is no '{item}' here to take.[/failure]"
-        if not item_to_take.can_be_carried():
-            return f"[failure]You can't take the [item_name]{item_to_take.get_name()}[/item_name].[/failure]"
+        no_pickup = item_to_take.prevent_pickup()
+        if no_pickup:
+            # If the item has a prevent_pickup method that returns a message, use that
+            return f"{no_pickup}"
         self.state.current_room.items.remove(item_to_take)
         self.state.inventory.append(item_to_take)
 
