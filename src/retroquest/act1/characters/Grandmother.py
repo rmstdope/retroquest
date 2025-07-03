@@ -89,6 +89,7 @@ class Grandmother(Character):
         elif isinstance(item, FadedPhotograph):
             event_msg = f"[event]You show the [item_name]{item.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]"
             if not game_state.get_story_flag(FLAG_READ_PHOTO_MESSAGE):
+                game_state.remove_item_from_inventory(item.get_name())
                 return (
                     event_msg + "\n" +
                     f"She takes the photograph, her eyes misty with memory. [dialogue]'This was taken long ago, before the troubles began. Your parents were so full of hope... They loved you dearly, Elior. I miss them every day.' She gently returns the photo to you, lost in thought.[/dialogue]"
@@ -97,7 +98,7 @@ class Grandmother(Character):
                 game_state.set_story_flag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, True)
                 return (
                     event_msg + "\n" +
-                    f"She studies the back of the photograph, her expression growing serious. [dialogue]'You found the message, then? Your parents... they were involved in something much bigger than any of us realized. There is a darkness in Eldoria, and your family is tied to it. There is a secret, Elior—a truth you must uncover. Promise me you'll be careful.'[/dialogue]"
+                    f"She studies the back of the photograph, her expression growing serious. [dialogue]'You found the message, then? Your parents... they were involved in something much bigger than any of us realized. There is a darkness in Eldoria, and your family is tied to it. There is a secret, Elior — a truth you must uncover. Promise me you'll be careful.'[/dialogue]"
                 )
 
         event_msg = f"[event]You offer the [item_name]{item.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]"
