@@ -797,5 +797,144 @@ def test_listen_item_name_case_insensitivity(game):
     assert result == expected_sound
     mock_item.listen.assert_called_once_with(game.state)
 
+# ===== CAST METHOD TESTS =====
+
+class MockSpell:
+    def __init__(self, name, description="A test spell"):
+        self.name = name
+        self.description = description
+    
+    def get_name(self):
+        return self.name
+    
+    def get_description(self):
+        return self.description
+    
+    def cast_spell(self, game_state):
+        """Cast spell without a target."""
+        return f"[event]You cast [spell_name]{self.name}[/spell_name] without a target.[/event]"
+    
+    def cast_on_item(self, game_state, target_item):
+        """Cast spell on an item."""
+        return f"[event]You cast [spell_name]{self.name}[/spell_name] on [item_name]{target_item.get_name()}[/item_name].[/event]"
+    
+    def cast_on_character(self, game_state, target_character):
+        """Cast spell on a character."""
+        return f"[event]You cast [spell_name]{self.name}[/spell_name] on [character_name]{target_character.get_name()}[/character_name].[/event]"
+
+class MockItem:
+    def __init__(self, name, short_name=None):
+        self.name = name
+        self.short_name = short_name
+    
+    def get_name(self):
+        return self.name
+    
+    def get_short_name(self):
+        return self.short_name or ""
+    
+    def use(self, game_state):
+        return f"You use the [item_name]{self.name}[/item_name]."
+
+class MockCharacter:
+    def __init__(self, name):
+        self.name = name
+    
+    def get_name(self):
+        return self.name
+    
+    def examine(self, game_state):
+        return f"You examine [character_name]{self.name}[/character_name]."
+
+@pytest.fixture
+def game_with_spells(basic_rooms):
+    act = Act(name="TestAct", rooms=basic_rooms, quests=[])
+    game = Game(act)
+    
+    # Add some test spells
+    heal_spell = MockSpell("heal", "A healing spell")
+    light_spell = MockSpell("light", "A light spell")
+    unlock_spell = MockSpell("unlock", "An unlocking spell")
+    
+    game.state.known_spells = [heal_spell, light_spell, unlock_spell]
+    
+    # Add test items and characters
+    test_item = MockItem("test item", "item")
+    test_character = MockCharacter("test character")
+    
+    game.state.current_room.add_item(test_item)
+    game.state.current_room.add_character(test_character)
+    game.state.inventory.append(MockItem("inventory item"))
+    
+    return game
+
+def test_cast_unknown_spell(game_with_spells):
+    result = game_with_spells.cast("fireball")
+    assert "[failure]You don't know any spell called 'fireball'.[/failure]" in result
+
+def test_cast_spell_without_target(game_with_spells):
+    result = game_with_spells.cast("heal")
+    assert "[event]You cast [spell_name]heal[/spell_name] without a target.[/event]" in result
+
+def test_cast_spell_on_item_in_room(game_with_spells):
+    result = game_with_spells.cast("heal on test item")
+    assert "[event]You cast [spell_name]heal[/spell_name] on [item_name]test item[/item_name].[/event]" in result
+
+def test_cast_spell_on_item_in_inventory(game_with_spells):
+    result = game_with_spells.cast("heal on inventory item")
+    assert "[event]You cast [spell_name]heal[/spell_name] on [item_name]inventory item[/item_name].[/event]" in result
+
+def test_cast_spell_on_character(game_with_spells):
+    result = game_with_spells.cast("heal on test character")
+    assert "[event]You cast [spell_name]heal[/spell_name] on [character_name]test character[/character_name].[/event]" in result
+
+def test_cast_spell_on_nonexistent_target(game_with_spells):
+    result = game_with_spells.cast("heal on dragon")
+    assert "[failure]You don't see a 'dragon' to cast [spell_name]heal[/spell_name] on.[/failure]" in result
+
+def test_cast_spell_case_insensitive(game_with_spells):
+    result = game_with_spells.cast("HEAL on TEST ITEM")
+    assert "[event]You cast [spell_name]heal[/spell_name] on [item_name]test item[/item_name].[/event]" in result
+
+def test_cast_spell_with_short_name(game_with_spells):
+    result = game_with_spells.cast("heal on item")  # Using short name
+    assert "[event]You cast [spell_name]heal[/spell_name] on [item_name]test item[/item_name].[/event]" in result
+
+def test_cast_spell_prefers_item_over_character(game_with_spells):
+    # Add an item and character with same name to test priority
+    same_name_item = MockItem("target")
+    same_name_character = MockCharacter("target")
+    
+    game_with_spells.state.current_room.add_item(same_name_item)
+    game_with_spells.state.current_room.add_character(same_name_character)
+    
+    result = game_with_spells.cast("heal on target")
+    # Should cast on item (has 'use' method), not character
+    assert "[item_name]target[/item_name]" in result
+    assert "[character_name]target[/character_name]" not in result
+
+def test_cast_command_parsing_variations(game_with_spells):
+    # Test different ways of specifying targets
+    
+    # Standard format: "spell on target"
+    result1 = game_with_spells.cast("heal on test item")
+    assert "[event]You cast [spell_name]heal[/spell_name] on [item_name]test item[/item_name].[/event]" in result1
+    
+    # Extra spaces
+    result2 = game_with_spells.cast("heal  on  test item")
+    assert "[event]You cast [spell_name]heal[/spell_name] on [item_name]test item[/item_name].[/event]" in result2
+
+def test_cast_empty_command(game_with_spells):
+    result = game_with_spells.cast("")
+    assert "[failure]You don't know any spell called ''.[/failure]" in result
+
+def test_cast_only_on_keyword(game_with_spells):
+    result = game_with_spells.cast("on")
+    assert "[failure]You don't know any spell called 'on'.[/failure]" in result
+
+def test_cast_spell_name_only_with_on(game_with_spells):
+    result = game_with_spells.cast("heal on")
+    assert "[failure]You don't know any spell called 'heal on'.[/failure]" in result
+
 # Ensure this is at the very end if no other tests follow
 

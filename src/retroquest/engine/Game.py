@@ -545,16 +545,26 @@ Copyright Free Background Music'''
 
         if not spell_to_cast:
             return f"[failure]You don't know any spell called '{spell_name}'.[/failure]"
-# TODO Add possibility to cast spells on characters
+
         target_item = None
+        target_character = None
         if target_name:
+            # First try to find an item
             target_item = self.find_item(target_name, look_in_inventory=True, look_in_room=True)
             if not target_item:
-                return f"You don't see a '{target_name}' to cast [spell_name]{spell_name}[/spell_name] on."
-            return spell_to_cast.cast(self.state, target_item) # Pass game_state and target_item
+                # If no item found, try to find a character
+                target_character = self.find_character(target_name)
+                if not target_character:
+                    return f"[failure]You don't see a '{target_name}' to cast [spell_name]{spell_name}[/spell_name] on.[/failure]"
+            
+            # Cast spell on the found target (item or character)
+            if target_item:
+                return spell_to_cast.cast_on_item(self.state, target_item) # Pass game_state and target_item
+            else:
+                return spell_to_cast.cast_on_character(self.state, target_character) # Pass game_state and target_character
         else:
             # Spells that don't require a target
-            return spell_to_cast.cast(self.state) # Pass game_state only
+            return spell_to_cast.cast_spell(self.state) # Pass game_state only
 
     def learn(self, spell: Spell) -> str:
         if spell not in self.state.known_spells:
