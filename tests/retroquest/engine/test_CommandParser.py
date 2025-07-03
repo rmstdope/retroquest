@@ -147,7 +147,6 @@ def test_interaction_commands(game_parser):
 def test_examination_commands(game_parser):
     game, parser = game_parser
     commands = {
-        "look around": ("look",),
         "look": ("look",),
         "observe": ("look",),
         "survey": ("look",),

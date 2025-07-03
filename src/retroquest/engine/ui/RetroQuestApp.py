@@ -112,7 +112,7 @@ class RetroQuestApp(App):
             self.state = self.STATE_INTRO
             return
         elif self.state == self.STATE_INTRO:
-            command = 'look around'
+            command = 'look'
             self.state = self.STATE_RUNNING
         if self.state == self.STATE_RUNNING and command:
             self.command_input.placeholder = 'What do you want to do?'

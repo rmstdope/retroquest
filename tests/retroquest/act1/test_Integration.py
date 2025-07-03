@@ -125,7 +125,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Setup Game
     act = Act(name="Act1", rooms=ROOMS, quests=QUESTS)
     game = Game(act)
-    _execute_commands(game, ['look around'])
+    _execute_commands(game, ['look'])
 
     # Step 1: Elior’s Cottage
     _check_quests(game.state, ["Shadows Over Willowbrook", "Hint of Magic"])

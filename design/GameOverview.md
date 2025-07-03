@@ -27,7 +27,7 @@ Players interact with the world by typing text commands. The game responds with 
 
 - **Movement:** `go north`, `enter castle`, `climb tree`
 - **Interaction:** `talk to Mira`, `ask Nyx about riddle`, `give potion to Cedric`
-- **Examination:** `look around`, `inspect altar`, `read scroll`
+- **Examination:** `look`, `inspect altar`, `read scroll`
 - **Inventory:** `take sword`, `drop apple`, `use magic stone`
 - **Magic:** `cast fireball`, `heal self`, `reveal hidden door`
 - **Game Management:** `save`, `load`, `help`

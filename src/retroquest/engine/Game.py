@@ -165,7 +165,6 @@ Copyright Free Background Music'''
             'buy': build_nested_names(all_item_names),
 
             'look': {
-                'around': None,
                 'at': {**build_nested_names(all_item_names), **build_nested_names(character_names)},
                 **build_nested_names(all_item_names),
                 **build_nested_names(character_names),
@@ -252,7 +251,7 @@ Copyright Free Background Music'''
     def run(self) -> None:
         self.print_intro()
         self.console.clear()
-        response = self.handle_command('look around')  # Initial look around the room")
+        response = self.handle_command('look')  # Initial look at the room
         # Print a separator line before any output after a command
         self.console.print('\n' + response + '\n')
         while self.is_running:
@@ -324,7 +323,7 @@ Copyright Free Background Music'''
             "  buy <item> from <character>\n"
             "\n"
             "[bold]Examination:[/bold]\n"
-            "  look around, look, observe, survey, l\n"
+            "  look, observe, survey, l\n"
             "  look at <object>, inspect <object>, examine <object>, check <object>\n"
             "  search, investigate\n"
             "  listen to <object/location>\n"
@@ -359,7 +358,7 @@ Copyright Free Background Music'''
 
     def look(self) -> str:
         self.describe_room = True
-        return "[event]You look around the room.[/event]\n\n"
+        return "[event]You take a look at your surroundings.[/event]\n\n"
 
     def examine(self, target: str) -> str:
         if not target:  # Check if target is an empty string or None
