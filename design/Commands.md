@@ -50,8 +50,8 @@ Below is a comprehensive list of all commands that should be possible to use in 
 
 ## Game Management
 
-- save game / save
-- load game / load
+- save
+- load
 - help / ?
 - quit / exit
 

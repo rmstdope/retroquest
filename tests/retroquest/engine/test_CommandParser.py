@@ -213,9 +213,7 @@ def test_magic_commands(game_parser):
 def test_game_management_commands(game_parser):
     game, parser = game_parser
     commands = {
-        "save game": ("save",),
         "save": ("save",),
-        "load game": ("load",),
         "load": ("load",),
         "help": ("help", None), # Parameterless help
         "?": ("help", None),   # Parameterless help

@@ -2,6 +2,7 @@ from textual.suggester import Suggester
 from textual.widgets import Input
 from .GameController import GameController
 
+#TODO If there is only one suggested word after the current, suggest that as well
 class NestedSuggester(Suggester):
     """
     Suggester that provides word completions based on Game.build_use_with_completions.
@@ -31,5 +32,5 @@ class NestedSuggester(Suggester):
             candidates = [w for w in node if w.startswith(next_word)]
         if len(candidates) == 1:
             words.append(candidates[0])
-            return ' '.join(words)
+            return ' '.join(words) + ' '
         return None

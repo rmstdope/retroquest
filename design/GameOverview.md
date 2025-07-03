@@ -30,7 +30,7 @@ Players interact with the world by typing text commands. The game responds with 
 - **Examination:** `look around`, `inspect altar`, `read scroll`
 - **Inventory:** `take sword`, `drop apple`, `use magic stone`
 - **Magic:** `cast fireball`, `heal self`, `reveal hidden door`
-- **Game Management:** `save game`, `load game`, `help`
+- **Game Management:** `save`, `load`, `help`
 
 ## Target Audience
 

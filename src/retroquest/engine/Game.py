@@ -202,8 +202,8 @@ Copyright Free Background Music'''
             'cast': {**{k: {'on': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in spell_names}},
             'spells': None,
 
-            'save': {'game': None},
-            'load': {'game': None},
+            'save': None,
+            'load': None,
             'help': None, '?': None,
             'quit': None, 'exit': None,
 
@@ -216,6 +216,36 @@ Copyright Free Background Music'''
         # Add dev_execute_commands to completions if DEV_MODE is True
         if DEV_MODE:
             completions['dev_execute_commands'] = file_names
+
+        # Process completions to split multi-word keys into nested levels
+        def split_multiword_keys(comp_dict):
+            if not isinstance(comp_dict, dict):
+                return comp_dict
+                
+            new_dict = {}
+            for key, value in comp_dict.items():
+                parts = key.split()
+                if len(parts) > 1:
+                    # Multi-word key, create nested structure
+                    d = new_dict
+                    for i, part in enumerate(parts):
+                        if i == len(parts) - 1:
+                            # Last part, assign the recursively processed value
+                            d[part] = split_multiword_keys(value)
+                        else:
+                            # Intermediate part, create nested dict if needed
+                            if part not in d:
+                                d[part] = {}
+                            elif not isinstance(d[part], dict):
+                                # If it's not a dict, convert it to one
+                                d[part] = {}
+                            d = d[part]
+                else:
+                    # Single word key, recursively process the value
+                    new_dict[key] = split_multiword_keys(value)
+            return new_dict
+
+        completions = split_multiword_keys(completions)
 
         return completions
 
@@ -317,8 +347,7 @@ Copyright Free Background Music'''
             "  spells\n"
             "\n"
             "[bold]Game Management:[/bold]\n"
-            "  save game, save\n"
-            "  load game, load\n"
+            "  save, load\n"
             "  help, ?\n"
             "  quit, exit\n"
             "\n"

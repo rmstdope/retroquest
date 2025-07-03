@@ -136,9 +136,9 @@ class CommandParser:
             return self.game.spells() # Assumes game.spells() method exists
 
         # Game Management
-        elif cmd in ('save game', 'save'):
+        elif cmd in ('save',):
             return self.game.save()
-        elif cmd in ('load game', 'load'):
+        elif cmd in ('load',):
             return self.game.load()
         elif cmd in ('help', '?'):
             return self.game.help()
