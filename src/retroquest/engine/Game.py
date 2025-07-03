@@ -34,7 +34,7 @@ class Game:
             "exits": "bold yellow"
         })
         self.console = Console(theme=custom_theme)
-        self.completer = NestedCompleter.from_nested_dict({}) 
+        self.completer = NestedCompleter.from_nested_dict({})
         self.session = PromptSession(completer=self.completer, complete_while_typing=True)
         self.is_running = True
         # Use the first room in act.rooms as the starting room
@@ -80,12 +80,12 @@ class Game:
 Welcome to
 [bold yellow]
 ########  ######### ######## ########   #######   #######  ##     ## #########  #######  ########
-##     ## ##           ##    ##     ## ##     ## ##     ## ##     ## ##        ##           ##   
-##     ## ##           ##    ##     ## ##     ## ##     ## ##     ## ##        ##           ##.  
-########  #########    ##    ########  ##     ## ##     ## ##     ## #########  #######     ##   
-##   ##   ##           ##    ##   ##   ##     ## ##  ## ## ##     ## ##               ##    ##.  
-##    ##  ##           ##    ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##.  
-##     ## #########    ##    ##     ##  #######   #######   #######  #########  #######     ##.  
+##     ## ##           ##    ##     ## ##     ## ##     ## ##     ## ##        ##           ##
+##     ## ##           ##    ##     ## ##     ## ##     ## ##     ## ##        ##           ##.
+########  #########    ##    ########  ##     ## ##     ## ##     ## #########  #######     ##
+##   ##   ##           ##    ##   ##   ##     ## ##  ## ## ##     ## ##               ##    ##.
+##    ##  ##           ##    ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##.
+##     ## #########    ##    ##     ##  #######   #######   #######  #########  #######     ##.
 [/bold yellow]
 [bold]Music track:[/bold] Market by Conquest
 Source: https://freetouse.com/music
@@ -116,21 +116,6 @@ Copyright Free Background Music'''
                         d = d[part]
             return nested
 
-        # Helper to build nested dict for 'use' command so that 'with' is suggested only after the full item name
-        def build_use_with_completions(names, with_dict):
-            root = {}
-            for name in names:
-                parts = name.split()
-                d = root
-                for i, part in enumerate(parts):
-                    if i == len(parts) - 1:
-                        d[part] = {'with': with_dict.copy() if isinstance(with_dict, dict) else with_dict}
-                    else:
-                        if part not in d or not isinstance(d[part], dict):
-                            d[part] = {}
-                        d = d[part]
-            return root
-
         all_items = self.state.current_room.get_items() + self.state.inventory
         item_names = [item.get_name().lower() for item in all_items]
         item_short_names = [item.get_short_name().lower() for item in all_items if item.get_short_name()]
@@ -149,28 +134,33 @@ Copyright Free Background Music'''
         exit_names = {direction: None for direction in self.state.current_room.get_exits()}
         file_names = {f: None for f in os.listdir('.') if f.endswith('.txt') and os.path.isfile(f)}
 
-        # Build 'use' completions so that 'with' is suggested only after the full item name
-        use_with_dict = build_nested_names(all_item_names)
-        use_completions = build_use_with_completions(all_item_names, use_with_dict)
+        # # Build 'use' completions so that 'with' is suggested only after the full item name
+        # use_with_dict = build_nested_names(all_item_names)
+        # use_completions = build_command_with_preposition(all_item_names, 'with', use_with_dict)
 
+        # # Build 'give' completions so that 'to' is suggested only after the full item name
+        # give_to_dict = build_nested_names(character_names)
+        # give_completions = build_command_with_preposition(all_inventory_item_names, 'to', give_to_dict)
+
+# TODO Only complete s,n,e,w if exits exist
         completions = {
             'go': exit_names,
             'move': exit_names,
             'n': None, 's': None, 'e': None, 'w': None,
             'north': None, 'south': None, 'east': None, 'west': None,
-            'enter': None, 
+            'enter': None,
             'leave': None,
             'exit': None,
             'climb': build_nested_names(all_item_names),
             'ascend': build_nested_names(all_item_names),
             'descend': build_nested_names(all_item_names),
-            'follow': None, 
+            'follow': None,
             'walk': None,
 
             'talk': {'to': build_nested_names(character_names)},
             'speak': {'to': build_nested_names(character_names)},
             'converse': {'with': build_nested_names(character_names)},
-            'give': build_nested_names(all_inventory_item_names),
+            'give': {**{k: {'to': {**build_nested_names(character_names)}} for k in all_inventory_item_names}},
             'hand': build_nested_names(all_inventory_item_names),
             'buy': build_nested_names(all_item_names),
 
@@ -195,7 +185,7 @@ Copyright Free Background Music'''
             'get': build_nested_names(all_room_item_names),
             'drop': build_nested_names(all_inventory_item_names),
             'discard': build_nested_names(all_inventory_item_names),
-            'use': use_completions,
+            'use': {**{k: {'on': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in all_item_names}},
             'eat': build_nested_names(all_inventory_item_names),
             'consume': build_nested_names(all_inventory_item_names),
             'drink': build_nested_names(all_inventory_item_names),
@@ -402,10 +392,10 @@ Copyright Free Background Music'''
             return f"[failure]You can't take the [item_name]{item_to_take.get_name()}[/item_name].[/failure]"
         self.state.current_room.items.remove(item_to_take)
         self.state.inventory.append(item_to_take)
-        
+
         # Call picked_up on the item
         pickup_message = item_to_take.picked_up(self.state)
-        
+
         response = f"[event]You take the [item_name]{item_to_take.get_name()}[/item_name].[/event]"
         if pickup_message:
             response += " " + pickup_message
@@ -441,7 +431,7 @@ Copyright Free Background Music'''
             return None, None, f"[failure]Who/What should I {command} {target1} {delimiter}?[/failure]"
         target2 = " ".join(parts[del_index+1:])
         return target1, target2, ''
-        
+
     def give(self, command_args: str) -> str:
         # Split the command into item and character parts
         item_name,character_name,error = self.split_command(command_args, 'give', 'to')
@@ -479,7 +469,7 @@ Copyright Free Background Music'''
             return "[failure]Read what?[/failure]"
 
         item_to_read = self.find_item(item, look_in_inventory=True, look_in_room=True)
-        
+
         if item_to_read:
             # As per the prompt, all Item objects are assumed to have a .read(game_state) method.
             # If an item is not meant to be read, its read() method should return an appropriate message.
@@ -496,7 +486,7 @@ Copyright Free Background Music'''
         # --- Handle two-item usage ---
         if item_name_2:
             item_obj_2 = self.find_item(item_name_2, look_in_inventory=True, look_in_room=True)
-            
+
             if not item_obj_2:
                 return f"[failure]You don't see a '{item_name_2}' to use with the [item_name]{item_obj_1.get_name()}[/item_name].[/failure]"
 
@@ -522,7 +512,7 @@ Copyright Free Background Music'''
             if spell_obj.get_name().lower() == spell_name:
                 spell_to_cast = spell_obj
                 break
-        
+
         if not spell_to_cast:
             return f"[failure]You don't know any spell called '{spell_name}'.[/failure]"
 
@@ -544,7 +534,7 @@ Copyright Free Background Music'''
     def spells(self) -> str: # Method to list known spells
         if not self.state.known_spells:
             return "You don't know any spells yet."
-        
+
         output = ["[bold]Known Spells:[/bold]"]
         for spell_obj in self.state.known_spells:
             output.append(f"  - [spell_name]{spell_obj.get_name()}[/spell_name]: {spell_obj.get_description()}")
@@ -555,9 +545,9 @@ Copyright Free Background Music'''
 
     def listen(self, target: str = None) -> str:
         if not target:
-            return self.state.current_room.get_ambient_sound() 
+            return self.state.current_room.get_ambient_sound()
 
-        item_to_listen_to = self.find_item(target, look_in_inventory=True, look_in_room=True)        
+        item_to_listen_to = self.find_item(target, look_in_inventory=True, look_in_room=True)
         if item_to_listen_to:
             return item_to_listen_to.listen(self.state)
         else:
