@@ -142,12 +142,29 @@ Copyright Free Background Music'''
         # give_to_dict = build_nested_names(character_names)
         # give_completions = build_command_with_preposition(all_inventory_item_names, 'to', give_to_dict)
 
-# TODO Only complete s,n,e,w if exits exist
+        # Build directional completions based on actual exits
+        directional_completions = {}
+        available_exits = self.state.current_room.get_exits()
+        
+        # Short directions
+        if 'north' in available_exits:
+            directional_completions['n'] = None
+        if 'south' in available_exits:
+            directional_completions['s'] = None
+        if 'east' in available_exits:
+            directional_completions['e'] = None
+        if 'west' in available_exits:
+            directional_completions['w'] = None
+            
+        # Long directions
+        for direction in ['north', 'south', 'east', 'west']:
+            if direction in available_exits:
+                directional_completions[direction] = None
+
         completions = {
             'go': exit_names,
             'move': exit_names,
-            'n': None, 's': None, 'e': None, 'w': None,
-            'north': None, 'south': None, 'east': None, 'west': None,
+            **directional_completions,  # Only include available directions
             'enter': None,
             'leave': None,
             'exit': None,
