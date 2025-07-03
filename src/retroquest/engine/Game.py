@@ -167,6 +167,8 @@ Copyright Free Background Music'''
             'look': {
                 'around': None,
                 'at': {**build_nested_names(all_item_names), **build_nested_names(character_names)},
+                **build_nested_names(all_item_names),
+                **build_nested_names(character_names),
             },
             'l': None,
             'observe': None,
