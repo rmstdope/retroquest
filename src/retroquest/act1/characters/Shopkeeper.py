@@ -4,6 +4,8 @@ from ..items.Rope import Rope
 from ..items.Apple import Apple
 from ..items.Matches import Matches
 from ..items.Coin import Coin
+from ..items.Armor import Armor
+from ..items.Sword import Sword
 from ..Act1StoryFlags import FLAG_CONNECT_WITH_NATURE
 
 class Shopkeeper(Character):
@@ -12,10 +14,11 @@ class Shopkeeper(Character):
             name="shopkeeper",
             description="The owner of the General Store, always bustling about and eager to strike a bargain or share a rumor."
         )
-        #TODO a shop needs more items that can be purchased
         self.wares = {
             "rope": {"item": Rope(), "price": 1},
-            "matches": {"item": Matches(), "price": 4}
+            "matches": {"item": Matches(), "price": 4},
+            "sword": {"item": Sword(), "price": 5},
+            "armor": {"item": Armor(), "price": 10}
         }
         self.dialogue_options = [
             "Welcome to my humble store! Finest goods in Willowbrook, I assure you.",
@@ -103,6 +106,10 @@ class Shopkeeper(Character):
             new_item = Rope()
         elif item_name_to_buy == "matches":
             new_item = Matches()
+        elif item_name_to_buy == "sword":
+            new_item = Sword()
+        elif item_name_to_buy == "armor":
+            new_item = Armor()
         else:
             # Should not happen if item_name_to_buy is in self.wares
             return "An unexpected error occurred trying to sell the item."

@@ -2,6 +2,8 @@ from ...engine.Room import Room
 from ..items.Rope import Rope
 from ..items.Apple import Apple
 from ..items.Matches import Matches
+from ..items.Armor import Armor
+from ..items.Sword import Sword
 from ..characters.Shopkeeper import Shopkeeper
 
 class GeneralStore(Room):
@@ -14,7 +16,7 @@ class GeneralStore(Room):
                 "chatting with customers. The air is thick with the mingled scents of fruit, wax, and "
                 "old wood. Every corner seems to hold a new surprise, and the promise of a good bargain."
             ),
-            items=[Rope(), Apple(), Matches()],
+            items=[Rope(), Apple(), Matches(), Sword(), Armor()],
             characters=[Shopkeeper()],
             exits={"west": "VillageSquare", "south": "BlacksmithsForge"} # Corrected based on RoomsAct1.md and map
         )
