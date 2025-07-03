@@ -7,6 +7,13 @@ class Rope(Item):
             name="rope",
             description="A long, sturdy coil of rope. Useful for climbing, tying, or hauling things."
         )
+    
+    def prevent_pickup(self) -> str | None:
+        """Shopkeeper prevents taking the rope unless it's been purchased."""
+        if not self.can_be_carried_flag:
+            return f"[character_name]Shopkeeper[/character_name] quickly steps over. [dialogue]'Hold on there, friend! That [item_name]{self.get_name()}[/item_name] is merchandise, not a free sample. If you want it, you'll need to buy it proper-like.'[/dialogue]"
+        return None  # Allow pickup if can_be_carried is True
+    
     def use_with(self, game_state, other_item: Item) -> str:
         from .Mechanism import Mechanism
         if isinstance(other_item, Mechanism):

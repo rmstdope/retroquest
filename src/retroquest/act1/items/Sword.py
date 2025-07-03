@@ -9,6 +9,12 @@ class Sword(Item):
             short_name="sword"
         )
 
+    def prevent_pickup(self) -> str | None:
+        """Shopkeeper prevents taking the sword unless it's been purchased."""
+        if not self.can_be_carried_flag:
+            return f"[character_name]Shopkeeper[/character_name] quickly steps over. [dialogue]'Hold on there, friend! That [item_name]{self.get_name()}[/item_name] is merchandise, not a free sample. If you want it, you'll need to buy it proper-like.'[/dialogue]"
+        return None  # Allow pickup if can_be_carried is True
+
     def use(self, game_state: GameState) -> str:
         return "[event]You examine the [item_name]sword[/item_name]. It feels perfectly balanced and ready for combat.[/event]"
 
