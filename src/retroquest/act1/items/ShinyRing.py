@@ -1,7 +1,6 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 
-#TODO No completion on 'shiny'
 class ShinyRing(Item):
     def __init__(self):
         super().__init__(
