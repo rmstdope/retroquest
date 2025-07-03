@@ -15,5 +15,5 @@ class Map(Item):
         if game_state.current_room.name.lower() == "road to greendale":
             # This is the specific check for completing Act I as per RoomsAct1.md
             game_state.set_story_flag("act_1_completed", True)
-            return f"[event]You use the map.[/event]\nThe [item.name]{self.get_name()}[/item.name] aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. You feel a sense of accomplishment as you set forth. (Act I Completed)"
-        return f"[event]You study the [item.name]{self.get_name()}[/item.name]. It depicts the local area with surprising detail.[/event]"
+            return f"[event]You use the map.[/event]\nThe [item_name]{self.get_name()}[/item_name] aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. You feel a sense of accomplishment as you set forth. (Act I Completed)"
+        return f"[event]You study the [item_name]{self.get_name()}[/item_name]. It depicts the local area with surprising detail.[/event]"

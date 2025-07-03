@@ -186,7 +186,7 @@ Copyright Free Background Music'''
             'get': build_nested_names(all_room_item_names),
             'drop': build_nested_names(all_inventory_item_names),
             'discard': build_nested_names(all_inventory_item_names),
-            'use': {**{k: {'on': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in all_item_names}},
+            'use': {**{k: {'with': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in all_item_names}},
             'eat': build_nested_names(all_inventory_item_names),
             'consume': build_nested_names(all_inventory_item_names),
             'drink': build_nested_names(all_inventory_item_names),

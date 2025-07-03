@@ -10,7 +10,7 @@ class PrayerBook(Item):
         )
 
     def read(self, game_state) -> str:
-        event_msg = f"[event]You read the [item.name]{self.get_name()}[/item.name].\n"
+        event_msg = f"[event]You read the [item_name]{self.get_name()}[/item_name].\n"
         return event_msg + (
             "The pages shimmer with shifting runes and cryptic sigils. As you try to focus, the words seem to rearrange themselves: "
             "'By the moon's forgotten echo, let the silent bells resound...'\n"
