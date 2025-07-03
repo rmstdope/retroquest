@@ -1,11 +1,9 @@
 from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, Input
-from textual.containers import Container, Horizontal, Vertical
-from textual import events
+from textual.containers import Horizontal, Vertical
 from textual.css.query import NoMatches
 from .GameController import GameController
 from ...act1.Act1 import Act1
-from ..theme import apply_theme
 from .RoomPanel import RoomPanel
 from .ResultPanel import ResultPanel
 from .QuestLogPanel import QuestLogPanel
@@ -13,8 +11,6 @@ from .InventoryPanel import InventoryPanel
 from .CommandInput import CommandInput
 from .Popup import Popup, PopupType
 from .SpellPanel import SpellPanel
-
-# TODO Ensure GameController is the facade to Game and GameState
 
 class RetroQuestApp(App):
     TITLE = "RetroQuest"
@@ -87,7 +83,7 @@ class RetroQuestApp(App):
         popup = self.get_widget_by_id("popup")
         if self.state == self.STATE_QUITTING:
             if response == "y":
-                self.controller.game.save()
+                self.controller.save_game()
             self.exit()
         # Show next popup in queue if any
         if self._popup_queue:
@@ -106,7 +102,7 @@ class RetroQuestApp(App):
         command = message.value.strip()
         if self.state == self.STATE_LOGO:
             # Transition to intro
-            self.room_panel.update_room(self.controller.game.act.get_act_intro(), wide=False)
+            self.room_panel.update_room(self.controller.get_act_intro(), wide=False)
             self.command_input.placeholder = 'Press Enter to continue'
             self.command_input.value = ""
             self.state = self.STATE_INTRO
@@ -126,25 +122,25 @@ class RetroQuestApp(App):
     def execute(self, command: str):
         result = self.controller.handle_command(command)
         self.result_panel.update_result(result)
-        room = self.controller.game.look()
+        room = self.controller.look()
         self.room_panel.update_room(self.controller.get_room(), wide=False)
         self.inventory_panel.update_inventory(self.controller.get_inventory())
         self.spell_panel.update_spells(self.controller.get_spells())
         # Check for quest completion popups
         while True:
-            quest_complete_popup = self.controller.game.state.complete_quest()
+            quest_complete_popup = self.controller.complete_quest()
             if isinstance(quest_complete_popup, str) and quest_complete_popup.strip():
                 self.open_popup("Quest Completed", quest_complete_popup, PopupType.INFO)
             else:
                 break
         while True:
-            quest_update_popup = self.controller.game.state.update_quest()
+            quest_update_popup = self.controller.update_quest()
             if isinstance(quest_update_popup, str) and quest_update_popup.strip():
                 self.open_popup("Quest Updated", quest_update_popup, PopupType.INFO)
             else:
                 break
         while True:
-            quest_popup = self.controller.game.state.activate_quest()
+            quest_popup = self.controller.activate_quest()
             if isinstance(quest_popup, str) and quest_popup.strip():
                 self.open_popup("Quest Activated", quest_popup, PopupType.INFO)
             else:

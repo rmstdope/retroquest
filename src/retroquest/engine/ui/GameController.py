@@ -61,3 +61,27 @@ class GameController:
             spell_description = spell.description
             spell_tuples.append((spell_name, spell_description))
         return spell_tuples
+
+    def save_game(self) -> None:
+        """Save the game state."""
+        self.game.save()
+
+    def get_act_intro(self) -> str:
+        """Get the act introduction text."""
+        return self.game.act.get_act_intro()
+
+    def look(self) -> str:
+        """Execute the look command and return result."""
+        return self.game.look()
+
+    def complete_quest(self) -> str:
+        """Check for quest completion and return popup text if any."""
+        return self.game.state.complete_quest()
+
+    def update_quest(self) -> str:
+        """Check for quest updates and return popup text if any."""
+        return self.game.state.update_quest()
+
+    def activate_quest(self) -> str:
+        """Check for quest activation and return popup text if any."""
+        return self.game.state.activate_quest()
