@@ -18,7 +18,7 @@ class ShedDoor(Item):
                 self.locked = False
                 self.description = f"The [item_name]{self.get_name()}[/item_name] is unlocked and slightly ajar."
                 game_state.current_room.unlock()
-                return f"[event]The [item_name]{other_item.get_name()}[/item_name] turns in the lock! The [item_name]{self.get_name()}[/item_name] creaks open.[/event]\nYou can now enter the shed."
+                return f"[event]The [item_name]{other_item.get_name()}[/item_name] turns in the lock! The [item_name]{self.get_name()}[/item_name] creaks open.[/event]\n You can see a few interesting things inside."
             else:
                 return f"[failure]The [item_name]{self.get_name()}[/item_name] is already unlocked.[/failure]"
         elif other_item:

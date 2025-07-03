@@ -27,7 +27,7 @@ class FishingRod(Item):
                 game_state.inventory.append(magnetic_rod)
                 return f"[event]You attach the [item_name]{other_item.get_name()}[/item_name] to the [item_name]{self.get_name()}[/item_name], creating a [item_name]{magnetic_rod.get_name()}[/item_name].[/event]"
             else:
-                return ("[failure]You could force the magnet onto the rod, but it would likely break the fishing rod — and you might need it for something else.[/failuer]")
+                return ("[failure]You could force the magnet onto the rod, but it would likely prevent you from fishing — and you are really keen on doing some fishing![/failure]")
 
         from .River import River # Add local import here
         if isinstance(other_item, River): # Check if the other_item is a River

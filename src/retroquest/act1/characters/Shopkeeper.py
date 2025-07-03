@@ -12,6 +12,7 @@ class Shopkeeper(Character):
             name="shopkeeper",
             description="The owner of the General Store, always bustling about and eager to strike a bargain or share a rumor."
         )
+        #TODO a shop needs more items that can be purchased
         self.wares = {
             "rope": {"item": Rope(), "price": 1},
             "matches": {"item": Matches(), "price": 4}

@@ -11,7 +11,7 @@ class WitheredCarrot(Item):
         )
 
     def revive(self) -> str:
-        self.name = "Fresh carrot"
+        self.name = "fresh carrot"
         self.short_name = "carrot" # Keep short_name consistent or update if needed
         self.description = "A vibrant, healthy carrot, freshly revived. It looks delicious and full of nutrients."
         return f"The [item_name]{self.name.lower()}[/item_name] looks vibrant and healthy!"

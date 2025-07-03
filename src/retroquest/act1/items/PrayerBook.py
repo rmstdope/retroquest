@@ -6,7 +6,7 @@ class PrayerBook(Item):
         super().__init__(
             name="prayer book",
             description="A small, leather-bound book filled with prayers and hymns. The pages are worn from years of use.",
-            short_name="prayerbook"
+            short_name="book"
         )
 
     def read(self, game_state) -> str:

@@ -9,3 +9,4 @@ class AncientAmulet(Item):
             description="A mysterious amulet inscribed with runes. It glows faintly and feels powerful to the touch.",
             short_name="amulet"
         )
+# TODO Mira should say something if Elior tries to take the amulet before the quest is complete

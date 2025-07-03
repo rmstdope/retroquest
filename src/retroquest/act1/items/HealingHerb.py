@@ -9,3 +9,4 @@ class HealingHerb(Item):
             description="A bundle of fragrant green herbs, known for their restorative properties. Useful for healing wounds or brewing potions.",
             short_name="herb"
         )
+# TODO Mira should say something if Elior tries to take the herb

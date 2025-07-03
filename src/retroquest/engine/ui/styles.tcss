@@ -23,7 +23,7 @@ Screen {
 
 .room-text {
     text-overflow: fold; # For text that is too long
-    text-wrap: nowrap;
+    text-wrap: wrap;
 }
 
 .room-text:focus {

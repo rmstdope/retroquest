@@ -1,3 +1,6 @@
+from pytest import Item
+
+from ...engine import GameState
 from ...engine.Character import Character
 from ..Act1StoryFlags import FLAG_BLACKSMITH_MET, FLAG_DEER_CAN_BE_OBSERVED
 from ..items.Coin import Coin
@@ -21,15 +24,12 @@ class Blacksmith(Character):
             game_state.set_story_flag(FLAG_BLACKSMITH_MET, True)
             return event_msg + "\n" + f"[dialogue]'Well met, young one. I am Borin, the village [character_name]{self.get_name()}[/character_name]. If you need tools made or mended, I'm your man. A sharp blade can be a good friend.'[/dialogue]"
 
-    def give_item(self, game_state, item_object) -> str:
-        if isinstance(item_object, Coin):
+    def give_item(self, game_state: GameState, item_object: Item) -> str:
+        if isinstance(item_object, Coin) or isinstance(item_object, DullKnife):
             # Check for "knife (dull)" in inventory
-            dull_knife_instance = None
-            for item in game_state.inventory:
-                if isinstance(item, DullKnife):
-                    dull_knife_instance = item
-                    break
-            if dull_knife_instance:
+            dull_knife_instance = game_state.get_item('dull knife')
+            coin_instance = game_state.get_item('coin')
+            if dull_knife_instance and coin_instance:
                 # Remove coin from inventory
                 game_state.remove_item_from_inventory(item_object.get_name())
                 # Remove the dull knife from inventory
@@ -40,7 +40,7 @@ class Blacksmith(Character):
                 return event_msg + "\n" + f"The [character_name]{self.get_name()}[/character_name] takes your [item_name]{item_object.get_name()}[/item_name] and your [item_name]{dull_knife_instance.get_name()}[/item_name]. He expertly sharpens it on his whetstone and hands you back a gleaming [item_name]sharp knife[/item_name]!"
             else:
                 event_msg = f"[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]"
-                return event_msg + "\n" + f"The [character_name]{self.get_name()}[/character_name] eyes the [item_name]{item_object.get_name()}[/item_name]. [dialogue]'Thanks for the offer, but I can only sharpen a [item_name]dull knife[/item_name] for ye if you have one.'[/dialogue]"
+                return event_msg + "\n" + f"The [character_name]{self.get_name()}[/character_name] eyes the [item_name]{item_object.get_name()}[/item_name]. [dialogue]'Thanks for the offer, but I can only sharpen a [item_name]dull knife[/item_name] for ye if you have one—and you'll need to pay me a coin for the service.'[/dialogue]"
         elif isinstance(item_object, MillstoneFragment):
             game_state.remove_item_from_inventory(item_object.get_name())
             # Optionally, set a story flag if needed

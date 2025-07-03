@@ -162,7 +162,7 @@ Copyright Free Background Music'''
             'converse': {'with': build_nested_names(character_names)},
             'give': {**{k: {'to': {**build_nested_names(character_names)}} for k in all_inventory_item_names}},
             'hand': build_nested_names(all_inventory_item_names),
-            'buy': build_nested_names(all_item_names),
+            'buy': {**{k: {'from': {**build_nested_names(character_names)}} for k in all_room_item_names}},
 
             'look': {
                 'at': {**build_nested_names(all_item_names), **build_nested_names(character_names)},
@@ -545,7 +545,7 @@ Copyright Free Background Music'''
 
         if not spell_to_cast:
             return f"[failure]You don't know any spell called '{spell_name}'.[/failure]"
-
+# TODO Add possibility to cast spells on characters
         target_item = None
         if target_name:
             target_item = self.find_item(target_name, look_in_inventory=True, look_in_room=True)

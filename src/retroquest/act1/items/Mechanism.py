@@ -43,7 +43,7 @@ class Mechanism(Item):
             self._description = "The mechanism has been repaired using a rope. A compartment is open."
 
             event_msg = f"[event]You try to use the [item_name]rope[/item_name] with the [item_name]{self.get_name()}[/item_name].[/event]\n"
-            return event_msg + "You manage to thread the [item_name]rope[/item_name] through the [item_name]{self.get_name()}[/item_name]. With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"
+            return event_msg + f"You manage to thread the [item_name]rope[/item_name] through the [item_name]{self.get_name()}[/item_name]. With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"
         else:
             return super().use_with(game_state, other_item)
 
