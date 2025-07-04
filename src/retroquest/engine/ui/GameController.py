@@ -9,6 +9,7 @@ class GameController:
         self.last_output = ""
 
     def start(self):
+        self.game.start_music()
         # Show ASCII logo at game start
         self.last_output = self.game.get_ascii_logo()
         return self.last_output
