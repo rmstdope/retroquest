@@ -92,7 +92,6 @@ Source: https://freetouse.com/music
 Copyright Free Background Music'''
 
     def print_intro(self):
-        self.start_music()
         self.console.clear()
         self.console.print(self.get_ascii_logo())
         self.session.prompt('Press Enter to continue...')
@@ -203,7 +202,7 @@ Copyright Free Background Music'''
             'get': build_nested_names(all_room_item_names),
             'drop': build_nested_names(all_inventory_item_names),
             'discard': build_nested_names(all_inventory_item_names),
-            'use': {**{k: {'with': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in all_item_names}},
+            'use': {**{k: {'@': None, 'with': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in all_item_names}},
             'eat': build_nested_names(all_inventory_item_names),
             'consume': build_nested_names(all_inventory_item_names),
             'drink': build_nested_names(all_inventory_item_names),
@@ -215,7 +214,7 @@ Copyright Free Background Music'''
             'open': build_nested_names(all_item_names),
             'close': build_nested_names(all_item_names),
 
-            'cast': {**{k: {'on': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in spell_names}},
+            'cast': {**{k: {'@': None, 'on': {**build_nested_names(all_item_names), **build_nested_names(character_names)}} for k in spell_names}},
             'spells': None,
 
             'save': None,
@@ -266,6 +265,7 @@ Copyright Free Background Music'''
         return completions
 
     def run(self) -> None:
+        self.start_music()
         self.print_intro()
         self.console.clear()
         response = self.handle_command('look')  # Initial look at the room
