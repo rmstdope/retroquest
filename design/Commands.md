@@ -8,11 +8,11 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - go south / move south / south / s
 - go east / move east / east / e
 - go west / move west / west / w
-- enter [location] / go in / go inside
-- leave [location] / exit [location] / go out
-- climb [object] / ascend [object]
-- descend [object] / go down [object]
-- follow [path] / walk [path]
+<!-- - enter [location] / go in / go inside -->
+<!-- - leave [location] / exit [location] / go out -->
+<!-- - climb [object] / ascend [object] -->
+<!-- - descend [object] / go down [object] -->
+<!-- - follow [path] / walk [path] -->
 
 ## Interaction
 
@@ -26,17 +26,17 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - look at [object] / inspect [object] / examine [object] / check [object] / look [object]
 - read [object]
 - search / investigate
-- listen to [object/location]
+<!-- - listen to [object/location] -->
 
 ## Inventory Management
 
 - take [item] / pick up [item] / grab [item] / get [item]
 - drop [item] / discard [item]
 - use [item] / use [item] with [item]
-- eat [item] / consume [item]
-- drink [item]
-- equip [item] / wear [item]
-- unequip [item] / remove [item]
+<!-- - eat [item] / consume [item] -->
+<!-- - drink [item] -->
+<!-- - equip [item] / wear [item] -->
+<!-- - unequip [item] / remove [item] -->
 - inventory / i / inv
 - open [container]
 - close [container]
@@ -45,7 +45,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 
 - cast [spell]
 - cast [spell] on [object/character]
-- learn [spell]
 - spells
 
 ## Game Management

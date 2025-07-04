@@ -23,38 +23,38 @@ class CommandParser:
             return self.game.move('east')
         elif cmd in ('go west', 'move west', 'west', 'w'):
             return self.game.move('west')
-        elif cmd.startswith('enter '):
-            # Argument for "enter [location]" is cmd[len('enter '):].strip()
-            # Current game.move('in') does not take an argument.
-            return self.game.move('in', cmd[len('enter '):].strip()) 
-        elif cmd in ('go in', 'go inside'):
-            return self.game.move('in')
-        elif cmd.startswith('leave '):
-            # Argument for "leave [location]" is cmd[len('leave '):].strip()
-            return self.game.move('out', cmd[len('leave '):].strip()) # Assuming 'out' handles the context
-        elif cmd.startswith('exit '): # Handles "exit [location]" as per Commands.md
-            # Argument for "exit [location]" is cmd[len('exit '):].strip()
-            return self.game.move('out', cmd[len('exit '):].strip()) # Assuming 'out' handles the context
-        elif cmd == 'go out':
-            return self.game.move('out')
-        elif cmd.startswith('climb '):
-            # Argument for "climb [object]" is cmd[len('climb '):].strip()
-            return self.game.move('up', cmd[len('climb '):].strip()) # Assuming 'up' handles the object context
-        elif cmd.startswith('ascend '):
-            # Argument for "ascend [object]" is cmd[len('ascend '):].strip()
-            return self.game.move('up', cmd[len('ascend '):].strip()) # Assuming 'up' handles the object context
-        elif cmd.startswith('descend '):
-            # Argument for "descend [object]" is cmd[len('descend '):].strip()
-            return self.game.move('down', cmd[len('descend '):].strip()) # Assuming 'down' handles the object context
-        elif cmd.startswith('go down '): # Matches "go down [object]"
-            # Argument for "go down [object]" is cmd[len('go down '):].strip()
-            return self.game.move('down', cmd[len('go down '):].strip()) # Assuming 'down' handles the object context
-        elif cmd.startswith('follow '):
-            arg = cmd[len('follow '):].strip()
-            return self.game.move('follow', arg)
-        elif cmd.startswith('walk '):
-            arg = cmd[len('walk '):].strip()
-            return self.game.move('follow', arg) # Assuming 'walk' is an alias for 'follow' functionality
+        # elif cmd.startswith('enter '):
+        #     # Argument for "enter [location]" is cmd[len('enter '):].strip()
+        #     # Current game.move('in') does not take an argument.
+        #     return self.game.move('in', cmd[len('enter '):].strip()) 
+        # elif cmd in ('go in', 'go inside'):
+        #     return self.game.move('in')
+        # elif cmd.startswith('leave '):
+        #     # Argument for "leave [location]" is cmd[len('leave '):].strip()
+        #     return self.game.move('out', cmd[len('leave '):].strip()) # Assuming 'out' handles the context
+        # elif cmd.startswith('exit '): # Handles "exit [location]" as per Commands.md
+        #     # Argument for "exit [location]" is cmd[len('exit '):].strip()
+        #     return self.game.move('out', cmd[len('exit '):].strip()) # Assuming 'out' handles the context
+        # elif cmd == 'go out':
+        #     return self.game.move('out')
+        # elif cmd.startswith('climb '):
+        #     # Argument for "climb [object]" is cmd[len('climb '):].strip()
+        #     return self.game.move('up', cmd[len('climb '):].strip()) # Assuming 'up' handles the object context
+        # elif cmd.startswith('ascend '):
+        #     # Argument for "ascend [object]" is cmd[len('ascend '):].strip()
+        #     return self.game.move('up', cmd[len('ascend '):].strip()) # Assuming 'up' handles the object context
+        # elif cmd.startswith('descend '):
+        #     # Argument for "descend [object]" is cmd[len('descend '):].strip()
+        #     return self.game.move('down', cmd[len('descend '):].strip()) # Assuming 'down' handles the object context
+        # elif cmd.startswith('go down '): # Matches "go down [object]"
+        #     # Argument for "go down [object]" is cmd[len('go down '):].strip()
+        #     return self.game.move('down', cmd[len('go down '):].strip()) # Assuming 'down' handles the object context
+        # elif cmd.startswith('follow '):
+        #     arg = cmd[len('follow '):].strip()
+        #     return self.game.move('follow', arg)
+        # elif cmd.startswith('walk '):
+        #     arg = cmd[len('walk '):].strip()
+        #     return self.game.move('follow', arg) # Assuming 'walk' is an alias for 'follow' functionality
 
         # Interaction
         elif any(cmd.startswith(prefix) for prefix in ('talk to ', 'speak to ', 'converse with ')):
@@ -81,8 +81,8 @@ class CommandParser:
             return self.game.read(cmd[len('read '):])
         elif cmd == 'search' or cmd == 'investigate':
             return self.game.search()
-        elif cmd.startswith('listen to '):
-            return self.game.listen(cmd[len('listen to '):])
+        # elif cmd.startswith('listen to '):
+        #     return self.game.listen(cmd[len('listen to '):])
 
         # Inventory Management
         elif any(cmd.startswith(prefix) for prefix in ('take ', 'pick up ', 'grab ', 'get ')):
@@ -107,20 +107,20 @@ class CommandParser:
                 if not item_name:
                     return "What do you want to use?"
                 return self.game.use(item_name) # General item usage
-        elif any(cmd.startswith(prefix) for prefix in ('eat ', 'consume ')):
-            for prefix in ('eat ', 'consume '):
-                if cmd.startswith(prefix):
-                    return self.game.eat(cmd[len(prefix):])
-        elif cmd.startswith('drink '):
-            return self.game.drink(cmd[len('drink '):])
-        elif any(cmd.startswith(prefix) for prefix in ('equip ', 'wear ')):
-            for prefix in ('equip ', 'wear '):
-                if cmd.startswith(prefix):
-                    return self.game.equip(cmd[len(prefix):])
-        elif any(cmd.startswith(prefix) for prefix in ('unequip ', 'remove ')):
-            for prefix in ('unequip ', 'remove '):
-                if cmd.startswith(prefix):
-                    return self.game.unequip(cmd[len(prefix):])
+        # elif any(cmd.startswith(prefix) for prefix in ('eat ', 'consume ')):
+        #     for prefix in ('eat ', 'consume '):
+        #         if cmd.startswith(prefix):
+        #             return self.game.eat(cmd[len(prefix):])
+        # elif cmd.startswith('drink '):
+        #     return self.game.drink(cmd[len('drink '):])
+        # elif any(cmd.startswith(prefix) for prefix in ('equip ', 'wear ')):
+        #     for prefix in ('equip ', 'wear '):
+        #         if cmd.startswith(prefix):
+        #             return self.game.equip(cmd[len(prefix):])
+        # elif any(cmd.startswith(prefix) for prefix in ('unequip ', 'remove ')):
+        #     for prefix in ('unequip ', 'remove '):
+        #         if cmd.startswith(prefix):
+        #             return self.game.unequip(cmd[len(prefix):])
         elif cmd in ('inventory', 'i', 'inv'):
             return self.game.inventory()
         elif cmd.startswith('open '):
