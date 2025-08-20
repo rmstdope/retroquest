@@ -1,6 +1,6 @@
 # Act I Rooms: Willowbrook & Surroundings
 
-### Quests in Act I
+## Quests in Act I
 
 - **Name:** Hint of Magic
 
@@ -66,7 +66,8 @@
   - **Update:** Examine the withered crop, the infected well and the darkened glade and report back to Mira
   - **Completion:** When act 1 is completed
 
-## 1. Elior’s Cottage
+## Rooms
+### 1. Elior’s Cottage
 
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
 - **Items:** Lantern (start), bread (later), Elior’s journal (later), travel cloak (later).
@@ -75,7 +76,7 @@
 - **Characters:** Grandmother (offers advice, can be spoken to).
 - **Exits:** Vegetable Field (south), Village Square (east)
 
-## 2. Vegetable Field
+### 2. Vegetable Field
 
 - **Description:** Rows of withered crops under a gray sky.
 - **Items:** rusty hoe (start), dull knife (start), Withered carrot (start), coin (1st) (later), coin (2nd) (later), carrot (later).
@@ -84,7 +85,7 @@
 - **Characters:** None.
 - **Exits:** Elior’s Cottage (north), Village Well (east), Chicken Coop (south)
 
-## 3. Chicken Coop
+### 3. Chicken Coop
 
 - **Description:** A small wooden coop with nervous chickens.
 - **Items:** egg (start), key (later).
@@ -94,7 +95,7 @@
 - **Characters:** None.
 - **Exits:** Vegetable Field (north)
 
-## 4. Village Square
+### 4. Village Square
 
 - **Description:** The heart of Willowbrook, with a well and notice board.
 - **Items:** Bucket (start).
@@ -104,7 +105,7 @@
 - **Characters:** Villager (shares rumors, can be questioned).
 - **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east)
 
-## 5. Mira’s Hut
+### 5. Mira’s Hut
 
 - **Description:** A fragrant hut filled with herbs and potions.
 - **Items:** ancient amulet (later).
@@ -114,7 +115,7 @@
 - **Characters:** Mira (teaches basic magic, gives quests).
 - **Exits:** Village Square (south)
 
-## 6. Blacksmith’s Forge
+### 6. Blacksmith’s Forge
 
 - **Description:** A hot, smoky forge with tools and weapons.
 - **Items:** sharp knife (later).
@@ -124,7 +125,7 @@
 - **Characters:** Blacksmith (can sharpen items, offers advice).
 - **Exits:** Village Well (west), General Store (north)
 
-## 7. General Store
+### 7. General Store
 
 - **Description:** A cluttered shop with shelves of goods.
 - **Items:** apple (start), rope (later), matches (start).
@@ -133,7 +134,7 @@
 - **Characters:** Shopkeeper (sells goods, shares gossip).
 - **Exits:** Village Square (west), Blacksmith’s Forge (south)
 
-## 8. Village Well
+### 8. Village Well
 
 - **Description:** An old stone well with clear water.
 - **Items:** Shiny ring (later), Well (start).
@@ -142,7 +143,7 @@
 - **Characters:** None.
 - **Exits:** Vegetable Field (west), Blacksmith’s Forge (east), Abandoned Shed (south)
 
-## 9. Abandoned Shed
+### 9. Abandoned Shed
 
 - **Description:** A rickety shed on the village edge.
 - **Items:** shed door (start), mysterious box (later), fishing rod (later), magnet (later), map (later).
@@ -152,7 +153,7 @@
 - **Characters:** None.
 - **Exits:** Blacksmith’s Forge (north), Old Mill (south)
 
-## 10. Old Mill
+### 10. Old Mill
 
 - **Description:** A creaky windmill with dusty gears.
 - **Items:** millstone fragment (later), Mechanism (start).
@@ -162,7 +163,7 @@
 - **Characters:** None.
 - **Exits:** Abandoned Shed (north), Riverbank (east)
 
-## 11. Riverbank
+### 11. Riverbank
 
 - **Description:** A gentle river flows past the village.
 - **Items:** fish (later), River (start).
@@ -172,7 +173,7 @@
 - **Characters:** Fisherman (offers fishing tips, trades fish for information).
 - **Exits:** Old Mill (west), Forest Path (south)
 
-## 12. Forest Path
+### 12. Forest Path
 
 - **Description:** A winding path leading into the woods. A section of the path is blocked by thick, thorny vines.
 - **Items:** Stick (later), wild berries (later), Vines (start), Bush (start).
@@ -181,7 +182,7 @@
 - **Characters:** None.
 - **Exits:** Riverbank (north), Hidden Glade (south)
 
-## 13. Hidden Glade
+### 13. Hidden Glade
 
 - **Description:** A peaceful clearing with sunlight filtering through trees.
 - **Items:** Rare flower (later).
@@ -191,7 +192,7 @@
 - **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer).
 - **Exits:** Forest Path (north), Village Chapel (south)
 
-## 14. Village Chapel
+### 14. Village Chapel
 
 - **Description:** A small stone chapel with stained glass windows.
 - **Items:** Candle (start), hidden locket (later).
@@ -201,7 +202,7 @@
 - **Characters:** Priest (offers blessings, shares lore).
 - **Exits:** Hidden Glade (north), Road to Greendale (east)
 
-## 15. Road to Greendale
+### 15. Road to Greendale
 
 - **Description:** The main road leaving Willowbrook, lined with ancient oaks.
 - **Items:** wandering boots (later - from Merchant).
