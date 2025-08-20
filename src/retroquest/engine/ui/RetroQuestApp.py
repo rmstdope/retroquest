@@ -4,6 +4,7 @@ from textual.containers import Horizontal, Vertical
 from textual.css.query import NoMatches
 from .GameController import GameController
 from ...act1.Act1 import Act1
+from ...act2.Act2 import Act2
 from .RoomPanel import RoomPanel
 from .ResultPanel import ResultPanel
 from .QuestLogPanel import QuestLogPanel
@@ -25,7 +26,7 @@ class RetroQuestApp(App):
 
     def __init__(self):
         super().__init__()
-        self.controller = GameController(Act1())
+        self.controller = GameController(Act2())
         self.state = self.STATE_LOGO
         self._popup_queue = []
         self._focus_before_popup = None

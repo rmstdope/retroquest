@@ -509,7 +509,6 @@ None
 - South to Greendale Gates
 - North to Castle Approach
 - East to Market District
-- West to Residential Quarter
 
 ### 3. Market District
 
@@ -764,6 +763,7 @@ None
 
 - South to Castle Approach
 - North to Great Hall
+- West to Residential Quarter
 
 ### 9. Great Hall
 
@@ -849,7 +849,7 @@ Quiet streets lined with comfortable two-story homes, each with small gardens an
 
 #### Exits
 
-- East to Main Square
+- South to Castle Courtyard
 - North to Healer's House
 - Secret passage to Hidden Library (basement)
 
@@ -1076,7 +1076,7 @@ None
 #### Exits
 
 - West to Forest Transition
-- North to Ancient Grove
+- South to Ancient Grove
 - East to Whispering Glade
 
 ### 16. Ancient Grove
@@ -1125,8 +1125,8 @@ A circular clearing dominated by trees so old and massive they seem to touch the
 
 #### Exits
 
-- South to Forest Entrance
-- East to Heart of the Forest
+- North to Forest Entrance
+- South to Heart of the Forest
 
 ### 17. Whispering Glade
 
@@ -1222,33 +1222,32 @@ The deepest part of the Enchanted Forest, where reality seems more fluid and mag
 
 #### Exits
 
-- West to Ancient Grove
+- North to Ancient Grove
 
 ## Room Map
 
 ```
-                Hidden Library
-                     |
-            Healer's House
-                     |
-        Residential Quarter ---- Main Square ---- Market District
-                                     |                    |
-    Great Hall - Castle Courtyard - Castle Approach  Silver Stag Inn
-         |            |                                    |
-    (throne)          |                               Inn Rooms
-                      |                                    |
-                 Greendale Gates                    Merchant's Warehouse
-                      |
-                Mountain Path
-                     |
-              Forest Transition
-                     |
-               Forest Entrance
-                  /     \
-        Ancient Grove  Whispering Glade
-              |
-        Heart of the Forest
-           (Nyx's Domain)
+                     Hidden Library
+                          |
+                   (secret passage)
+                          |
+                   Healer's House
+                          |
+                   Residential Quarter                                      Merchant's Warehouse
+                          |                                                           |
+    Great Hall ---- Castle Courtyard ---- Castle Approach ---- Main Square ---- Market District
+                                                                      |               |
+                                                               Greendale Gates  Silver Stag Inn
+                                                                      |               |
+                                                                Mountain Path     Inn Rooms
+                                                                      |
+                                                            Forest Transition
+                                                                      |
+                                                              Forest Entrance ---- Whispering Glade
+                                                                      |
+                                                                Ancient Grove
+                                                                      |
+                                                              Heart of the Forest
 ```
 
 ## Learnable Spells in Act II
