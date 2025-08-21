@@ -1439,7 +1439,8 @@ The completion of Act II marks Elior's transformation from a promising young her
    - Take Walking Stick. _Walking Stick is added to inventory._
    - Speak to Mountain Hermit. _The hermit shares warnings about the changing times._
    - Receive Training Sword from Mountain Hermit. _Training Sword is added to inventory._
-   - Search the camp site to find an Entry Pass to Greendale (dropped by a previous traveler).
+   - Examine the camp site to find an Entry Pass to Greendale (dropped by a previous traveler).
+   - Take Entry Pass. _Entry Pass is added to inventory._
 
 2. **Greendale Gates:**
 
@@ -1452,6 +1453,8 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 3. **Main Square:**
 
+   - Use City Map to orient yourself in Greendale. _The map reveals important locations and prevents getting lost in the maze of streets._
+     - Item used: `City Map` (navigation)
    - Examine City Notice Board. _Elior reads about local events and a posting seeking brave souls for "The Gathering Storm."_
    - Talk to Town Crier. _Crier mentions Sir Cedric seeks heroes and directs Elior to the castle._
    - Take Merchant's Flyer. _Merchant's Flyer is added to inventory._
@@ -1473,6 +1476,8 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 6. **Market District:**
 
+   - Give Merchant's Flyer to Master Merchant Aldric. _The flyer serves as introduction and grants access to premium equipment._
+     - Item used: `Merchant's Flyer` (merchant introduction)
    - Talk to Master Merchant Aldric. _Aldric offers quality survival gear for forest expeditions._
    - Accept Cedric's supply gathering request. _Cedric mentioned needing proper equipment for the Enchanted Forest._
      - Quest accepted: "Supplies for the Journey"
@@ -1488,6 +1493,8 @@ The completion of Act II marks Elior's transformation from a promising young her
    - Talk to Barmaid Elena. _Elena appears sickly, clearly affected by dark magic._
      - Quest accepted: "The Innkeeper's Daughter"
    - Buy Room Key from Innkeeper Marcus and gather information. _Key obtained, local knowledge gained._
+   - Use Room Key to access Inn Rooms. _The private space allows Elior to study the Traveler's Journal safely._
+     - Item used: `Room Key` (access)
    - Take Traveler's Journal. _Journal is added to inventory - contains historical references._
 
 8. **Return to Market District:**
@@ -1502,6 +1509,8 @@ The completion of Act II marks Elior's transformation from a promising young her
 
    - Give Pass (from Grandmother) to Court Herald. _The herald presents Elior formally to the nobility._
      - Item used: `Pass (from Grandmother)` (formal presentation)
+   - Show Traveler's Journal to historians. _The journal provides crucial context for understanding historical records._
+     - Item used: `Traveler's Journal` (historical research)
    - Read Ancient Chronicle. _Historical records mention Willowbrook and its connection to ancient powers._
    - Search for records mentioning Willowbrook. _Discovery of old artifacts and documents._
      - Quest accepted: "Echoes of the Past"
@@ -1510,6 +1519,8 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 10. **Residential Quarter:**
 
+    - Use Walking Stick to assist elderly residents. _Helping the community earns trust and demonstrates compassion._
+      - Item used: `Walking Stick` (community service)
     - Look at local craftsmen at work. _Watching skilled artisans repair items, Elior learns the `mend` spell._
       - Spell Learned: `mend` (repair magic)
     - Take Healing Herbs. _Healing Herbs are added to inventory._
@@ -1540,16 +1551,22 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Read Ancient Spellbook. _From the tome's arcane knowledge, Elior learns the `dispel` spell._
       - Spell Learned: `dispel` (counter-magic)
     - Read Prophecy Scroll. _The scroll reveals ancient prophecies about the Chosen One and coming darkness._
+    - Use Crystal Focus to enhance magical understanding. _The focus amplifies comprehension of ancient texts._
+      - Item used: `Crystal Focus` (magical enhancement)
     - Take Crystal Focus. _Crystal Focus is added to inventory._
       - Quest completed: "The Ancient Library"
 
 14. **Return to Healer's House:**
 
+    - Use Advanced Healing Potion to help critically injured patients. _The potent remedy saves lives that normal healing couldn't reach._
+      - Item used: `Advanced Healing Potion` (emergency healing)
     - Assist with healing the sick. _Elior helps treat patients, gaining practical experience._
       - Quest completed: "The Healer's Apprentice"
 
 15. **Forest Transition:**
 
+    - Use Forest Survival Kit to safely approach the magical boundary. _The protective gear shields Elior from harmful magical energies._
+      - Item used: `Forest Survival Kit` (magical protection)
     - Examine ancient standing stones. _The moss-covered runes pulse with ancient power._
     - Use standing stones to learn nature magic. _The protective runes resonate, teaching Elior `nature_sense`._
       - Spell Learned: `nature_sense` (forest awareness)
@@ -1561,9 +1578,12 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 16. **Forest Entrance:**
 
+    - Use Protective Charm to ward off hostile forest spirits. _The charm provides safe passage through the dangerous threshold._
+      - Item used: `Protective Charm` (spiritual protection)
     - Use Enhanced Lantern to illuminate hidden paths. _The magical light reveals secret routes through the forest._
       - Item used: `Enhanced Lantern` (navigation)
-    - Take Forest Map Fragment. _Map Fragment is added to inventory._
+    - Use Forest Map Fragment to navigate safely. _The partial map prevents dangerous wrong turns._
+      - Item used: `Forest Map Fragment` (navigation)
     - Take Enchanted Acorn. _Enchanted Acorn is added to inventory._
     - Talk to Forest Sprites. _Minor spirits provide guidance about deeper forest areas._
       - Quest accepted: "The Forest Guardian's Riddles"
@@ -1607,6 +1627,10 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 21. **Search for Lost Caravan (Forest Areas):**
 
+    - Use Quality Rope to traverse difficult forest terrain. _The rope allows safe passage through ravines and fallen trees._
+      - Item used: `Quality Rope` (terrain navigation)
+    - Use Boundary Stone Fragment to locate ancient paths. _The fragment resonates with old druidic waypoints._
+      - Item used: `Boundary Stone Fragment` (pathfinding)
     - Cast `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location._
       - Spell cast: `forest_speech` (investigation)
     - Follow animal guidance to find the lost caravan. _Merchant wagons discovered in a forest clearing._
@@ -1689,10 +1713,21 @@ This Golden Path ensures that the design rule "all side quests must be completed
 **Items strictly necessary to complete Act II:**
 
 - `Pass (from Grandmother)` (access to castle and formal recognition)
+- `City Map` (navigate Greendale streets)
+- `Merchant's Flyer` (introduction to Master Merchant Aldric)
+- `Room Key` (access to Inn Rooms for safe journal study)
+- `Traveler's Journal` (historical research in Great Hall)
+- `Walking Stick` (community service in Residential Quarter)
 - `Coins` (purchase essential supplies in Market District)
 - `Healing Herbs` (required for Lyria's training)
-- `Forest Survival Kit` (safe forest navigation)
+- `Forest Survival Kit` (magical protection at Forest Transition)
 - `Enhanced Lantern` (illuminate hidden forest paths)
+- `Quality Rope` (traverse difficult forest terrain for caravan rescue)
+- `Advanced Healing Potion` (emergency healing at Healer's House)
+- `Crystal Focus` (enhance magical understanding in Hidden Library)
+- `Boundary Stone Fragment` (locate ancient paths for caravan rescue)
+- `Protective Charm` (ward off hostile spirits at Forest Entrance)
+- `Forest Map Fragment` (safe navigation in Forest Entrance)
 - `Enchanted Acorn` (offering to Ancient Tree Spirit)
 - `Crystal-Clear Water` (purify Elena's curse, general purification)
 - `Silver Leaves` (offering to Nyx)

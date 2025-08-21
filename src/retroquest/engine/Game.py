@@ -42,6 +42,7 @@ class Game:
         self.state = GameState(starting_room, all_rooms=act.rooms, all_quests=act.quests)
         self.command_parser = CommandParser(self)
         self.act = act
+        self.describe_room = False  # Flag to indicate if we need to describe the room after a command
 
     def handle_command(self, command: str) -> str:
         result = self.command_parser.parse(command)
