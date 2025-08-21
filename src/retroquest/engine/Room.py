@@ -103,4 +103,4 @@ class Room:
 
     def on_enter(self, game_state: GameState) -> None:
         """Hook called when the player enters the room. Override in subclasses for custom behavior."""
-        pass
+        return ""

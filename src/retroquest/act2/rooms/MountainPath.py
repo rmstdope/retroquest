@@ -32,29 +32,3 @@ class MountainPath(Room):
     def unlock_forest_transition(self) -> None:
         """Unlock the path to the forest (called when appropriate quest conditions are met)"""
         self.forest_exit_locked = False
-
-    def on_enter(self, game_state: GameState) -> str:
-        """Called when player enters the room"""
-        arrival_msg = super().on_enter(game_state)
-        
-        # Check if this is the first time arriving from Willowbrook
-        if not game_state.get_flag("arrived_at_mountain_path"):
-            game_state.set_flag("arrived_at_mountain_path", True)
-            arrival_msg += ("\n\n[event]After your adventures in Willowbrook, you find yourself on the mountain "
-                          "path leading to Greendale. The sight of the larger settlement ahead fills you with "
-                          "both excitement and apprehension about the challenges that await.[/event]")
-        
-        return arrival_msg
-
-    def search(self, game_state: GameState) -> str:
-        """Allow searching the room for the camp site"""
-        camp_site = None
-        for item in self.items:
-            if item.get_name() == "camp site":
-                camp_site = item
-                break
-        
-        if camp_site and not camp_site.searched:
-            return camp_site.search(game_state)
-        
-        return "You search the mountain path carefully, but find nothing else of interest beyond what's already visible."

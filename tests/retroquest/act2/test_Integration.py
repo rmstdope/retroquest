@@ -75,7 +75,7 @@ def _debug_print_history():
         print(res_str)
 
 def test_golden_path_act2_completion():
-    """Test the golden path through Act2 completion - Currently testing step 1"""
+    """Test the golden path through Act2 completion - Currently testing steps 1-2"""
     act = Act2()
     game = Game(act)
     
@@ -85,23 +85,55 @@ def test_golden_path_act2_completion():
     # Forest exit should be locked initially
     exits = game.state.current_room.get_exits()
     assert "east" not in exits  # Forest transition should not be available initially
-
     # Take Walking Stick
     _execute_commands(game, ["take walking stick"])
     _check_item_in_inventory(game.state, "Walking Stick")
-    
     # Speak to Mountain Hermit
-    results = _execute_commands(game, ["talk to mountain hermit"])
+    _execute_commands(game, ["talk to mountain hermit"])
     _check_item_in_inventory(game.state, "Training Sword")
-    
     # Examine the camp site to find Entry Pass
     _check_item_in_room(game.state.current_room, "Entry Pass", should_be_present=False)
-    results = _execute_commands(game, ["examine camp site"])
+    _execute_commands(game, ["examine camp site"])
     _check_item_in_room(game.state.current_room, "Entry Pass", should_be_present=True)
-    
+    _check_item_in_inventory(game.state, "Entry Pass", should_be_present=False)
     # Take Entry Pass
-    results = _execute_commands(game, ["take entry pass"])
+    _execute_commands(game, ["take entry pass"])
     _check_item_in_inventory(game.state, "Entry Pass")
     _check_item_in_room(game.state.current_room, "Entry Pass", should_be_present=False)    
     
-    # TODO: Implement remaining steps 2-27 when all rooms, items, and quests are available
+    # Step 2: Greendale Gates
+    # Move to Greendale Gates
+    _execute_commands(game, ["go north"])
+    _check_current_room(game.state, "Greendale Gates")
+    # Verify that north exit to Main Square is not available before giving Entry Pass
+    exits = game.state.current_room.get_exits()
+    assert "north" not in exits, "North exit to Main Square should not be available before giving Entry Pass"
+    assert "south" in exits, "South exit to Mountain Path should always be available"
+    # Give Entry Pass to Gate Captain
+    _check_character_in_room(game.state.current_room, "Gate Captain")
+    _execute_commands(game, ["give entry pass to gate captain"])
+    _check_item_in_inventory(game.state, "Entry Pass", should_be_present=False)
+    # Verify that north exit to Main Square is now available after giving Entry Pass
+    exits = game.state.current_room.get_exits()
+    assert "north" in exits, "North exit to Main Square should be available after giving Entry Pass"
+    assert exits["north"] == "MainSquare", "North exit should lead to Main Square"
+    # Verify that the room cannot be searched yet (captain still present)
+    _check_character_in_room(game.state.current_room, "Gate Captain")
+    _execute_commands(game, ["search"])
+    # The search should fail because captain is still watching
+    assert "improper to search around while he's observing" in results[-1].lower(), "Search should be blocked while captain is present"
+    _check_item_in_room(game.state.current_room, "City Map", should_be_present=False)
+    # Talk to Gate Captain for city information - this causes him to walk away
+    _execute_commands(game, ["talk to gate captain"])
+    # Verify that the Gate Captain has now walked away and is no longer in the room
+    _check_character_in_room(game.state.current_room, "Gate Captain", should_be_present=False)
+    # Search the room to find City Map (should now be possible after captain walked away)
+    _check_item_in_room(game.state.current_room, "City Map", should_be_present=False)
+    _execute_commands(game, ["search"])
+    _check_item_in_room(game.state.current_room, "City Map", should_be_present=True)
+    # Take City Map
+    _execute_commands(game, ["take city map"])
+    _check_item_in_inventory(game.state, "City Map")
+    _check_item_in_room(game.state.current_room, "City Map", should_be_present=False)
+    
+    # TODO: Implement remaining steps 3-27 when all rooms, items, and quests are available
