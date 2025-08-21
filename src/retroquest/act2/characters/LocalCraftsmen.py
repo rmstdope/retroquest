@@ -9,10 +9,14 @@ class LocalCraftsmen(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
-        if game_state.get_story_flag("learned_mend_from_craftsmen"):
+        if not game_state.get_story_flag("learned_mend_from_craftsmen"):
+            game_state.set_story_flag("learned_mend_from_craftsmen", True)
+            from ..spells.MendSpell import MendSpell
+            game_state.learn_spell(MendSpell())
+            return ("[success]You speak with the [character_name]Local Craftsmen[/character_name] and watch them work, "
+                    "observing their techniques for repairing damaged items. As you study their methods, you begin to "
+                    "understand the magical principles behind restoration and repair. Through careful observation, "
+                    "you learn the [spell_name]mend[/spell_name] spell![/success]")
+        else:
             return ("[character_name]Local Craftsmen[/character_name]: Good to see you again! How has your repair magic "
                     "been working? The mend spell is one of the most useful pieces of magic a person can learn.")
-        else:
-            return ("[character_name]Local Craftsmen[/character_name]: Welcome, young one! We're always happy to share "
-                    "our knowledge with those willing to learn. Watch carefully as we work - there's magic in "
-                    "the art of mending and repair that goes beyond mere craftsmanship.")
