@@ -18,7 +18,7 @@ class MountainPath(Room):
             ),
             items=[MountainFlower(), WalkingStick(), CampSite()],
             characters=[MountainHermit()],
-            exits={"north": "greendale_gates", "east": "forest_transition"}
+            exits={"north": "GreendaleGates", "east": "ForestTransition"}
         )
         self.forest_exit_locked = True
 

@@ -1,21 +1,22 @@
 from retroquest.engine.Act import Act
 from retroquest.act2.rooms.MountainPath import MountainPath
-
-# TODO: Import other room classes when they are created
-# from retroquest.act2.rooms.GreendaleGates import GreendaleGates
-# from retroquest.act2.rooms.MainSquare import MainSquare
-# from retroquest.act2.rooms.MarketDistrict import MarketDistrict
-# from retroquest.act2.rooms.SilverStagInn import SilverStagInn
-# from retroquest.act2.rooms.CastleCourtyard import CastleCourtyard
-# from retroquest.act2.rooms.GreatHall import GreatHall
-# from retroquest.act2.rooms.ResidentialQuarter import ResidentialQuarter
-# from retroquest.act2.rooms.HealersHouse import HealersHouse
-# from retroquest.act2.rooms.HiddenLibrary import HiddenLibrary
-# from retroquest.act2.rooms.ForestTransition import ForestTransition
-# from retroquest.act2.rooms.ForestEntrance import ForestEntrance
-# from retroquest.act2.rooms.AncientGrove import AncientGrove
-# from retroquest.act2.rooms.WhisperingGlade import WhisperingGlade
-# from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
+from retroquest.act2.rooms.GreendaleGates import GreendaleGates
+from retroquest.act2.rooms.MainSquare import MainSquare
+from retroquest.act2.rooms.MarketDistrict import MarketDistrict
+from retroquest.act2.rooms.SilverStagInn import SilverStagInn
+from retroquest.act2.rooms.InnRooms import InnRooms
+from retroquest.act2.rooms.MerchantsWarehouse import MerchantsWarehouse
+from retroquest.act2.rooms.CastleApproach import CastleApproach
+from retroquest.act2.rooms.CastleCourtyard import CastleCourtyard
+from retroquest.act2.rooms.GreatHall import GreatHall
+from retroquest.act2.rooms.ResidentialQuarter import ResidentialQuarter
+from retroquest.act2.rooms.HealersHouse import HealersHouse
+from retroquest.act2.rooms.HiddenLibrary import HiddenLibrary
+from retroquest.act2.rooms.ForestTransition import ForestTransition
+from retroquest.act2.rooms.ForestEntrance import ForestEntrance
+from retroquest.act2.rooms.AncientGrove import AncientGrove
+from retroquest.act2.rooms.WhisperingGlade import WhisperingGlade
+from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
 
 # TODO: Import quest classes when they are created
 # from retroquest.act2.quests.TheGatheringStorm import TheGatheringStormQuest
@@ -35,6 +36,23 @@ class Act2(Act):
     def __init__(self):
         rooms = {
             "MountainPath": MountainPath(),
+            "GreendaleGates": GreendaleGates(),
+            "MainSquare": MainSquare(),
+            "MarketDistrict": MarketDistrict(),
+            "SilverStagInn": SilverStagInn(),
+            "InnRooms": InnRooms(),
+            "MerchantsWarehouse": MerchantsWarehouse(),
+            "CastleApproach": CastleApproach(),
+            "CastleCourtyard": CastleCourtyard(),
+            "GreatHall": GreatHall(),
+            "ResidentialQuarter": ResidentialQuarter(),
+            "HealersHouse": HealersHouse(),
+            "HiddenLibrary": HiddenLibrary(),
+            "ForestTransition": ForestTransition(),
+            "ForestEntrance": ForestEntrance(),
+            "AncientGrove": AncientGrove(),
+            "WhisperingGlade": WhisperingGlade(),
+            "HeartOfTheForest": HeartOfTheForest(),
         }
         quests = [
         ]
