@@ -1443,28 +1443,28 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 2. **Greendale Gates:**
 
-   - Show Entry Pass (found at the Mountain Path camp site) to Gate Captain. _The captain recognizes the seal and waves Elior through with respect._
+   - Give Entry Pass (found at the Mountain Path camp site) to Gate Captain. _The captain recognizes the seal and waves Elior through with respect._
      - Item used: `Entry Pass` (for identification)
    - Not possible to search room while Gate Captain is present.
-   - Speak to Gate Captain for city information. _Captain says that you will need a map to find your way in the city._
+   - Talk to Gate Captain for city information. _Captain says that you will need a map to find your way in the city._
    - Search the room _City Map is revealed._
    - Take City Map. _City Map is added to inventory._
 
 3. **Main Square:**
 
    - Examine City Notice Board. _Elior reads about local events and a posting seeking brave souls for "The Gathering Storm."_
-   - Speak to Town Crier. _Crier mentions Sir Cedric seeks heroes and directs Elior to the castle._
+   - Talk to Town Crier. _Crier mentions Sir Cedric seeks heroes and directs Elior to the castle._
    - Take Merchant's Flyer. _Merchant's Flyer is added to inventory._
 
 4. **Castle Approach:**
 
-   - Show Pass to Herald. _The herald examines the pass and grants formal audience rights._
+   - Give Pass to Herald. _The herald examines the pass and grants formal audience rights._
      - Item used: `Pass` (for castle access)
-   - Speak to Castle Guard Captain. _Captain provides protocol for meeting Sir Cedric._
+   - Talk to Castle Guard Captain. _Captain provides protocol for meeting Sir Cedric._
 
 5. **Castle Courtyard:**
 
-   - Speak to Sir Cedric. _Cedric explains "The Gathering Storm" quest - dark forces are gathering, and allies with magical knowledge are needed. He requests proof of Elior's abilities and commitment._
+   - Talk to Sir Cedric. _Cedric explains "The Gathering Storm" quest - dark forces are gathering, and allies with magical knowledge are needed. He requests proof of Elior's abilities and commitment._
      - Quest accepted: "The Gathering Storm"
      - Quest accepted: "The Knight's Test"
    - Use Training Sword to demonstrate combat skills. _Elior shows competence with the blade, earning Cedric's respect._
@@ -1473,33 +1473,34 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 6. **Market District:**
 
-   - Speak to Master Merchant Aldric. _Aldric offers quality survival gear for forest expeditions._
+   - Talk to Master Merchant Aldric. _Aldric offers quality survival gear for forest expeditions._
    - Accept Cedric's supply gathering request. _Cedric mentioned needing proper equipment for the Enchanted Forest._
      - Quest accepted: "Supplies for the Journey"
-   - Speak to Caravan Master Thorne. _Thorne desperately seeks help finding his lost caravan._
+   - Talk to Caravan Master Thorne. _Thorne desperately seeks help finding his lost caravan._
      - Quest accepted: "The Merchant's Lost Caravan"
-   - Purchase Forest Survival Kit with coins. _Survival Kit is added to inventory._
+   - Buy Forest Survival Kit from Master Merchant Aldric. _Survival Kit is added to inventory._
      - Item used: `coins` (payment)
      - Item obtained: `Forest Survival Kit`
 
 7. **The Silver Stag Inn:**
 
-   - Speak to Innkeeper Marcus. _Marcus shares local rumors and mentions his daughter's curse._
-   - Speak to Barmaid Elena. _Elena appears sickly, clearly affected by dark magic._
+   - Talk to Innkeeper Marcus. _Marcus shares local rumors and mentions his daughter's curse._
+   - Talk to Barmaid Elena. _Elena appears sickly, clearly affected by dark magic._
      - Quest accepted: "The Innkeeper's Daughter"
-   - Purchase Room Key and gather information. _Key obtained, local knowledge gained._
+   - Buy Room Key from Innkeeper Marcus and gather information. _Key obtained, local knowledge gained._
    - Take Traveler's Journal. _Journal is added to inventory - contains historical references._
 
 8. **Return to Market District:**
 
-   - Purchase Enhanced Lantern and Quality Rope. _Additional survival gear is added to inventory._
+   - Buy Enhanced Lantern from Master Merchant Aldric. _Additional survival gear is added to inventory._
+   - Buy Quality Rope from Master Merchant Aldric. _Additional survival gear is added to inventory._
      - Item used: `coins` (payment)
      - Item obtained: `Enhanced Lantern`, `Quality Rope`
      - Quest completed: "Supplies for the Journey"
 
 9. **Great Hall:**
 
-   - Show Pass (from Grandmother) to Court Herald. _The herald presents Elior formally to the nobility._
+   - Give Pass (from Grandmother) to Court Herald. _The herald presents Elior formally to the nobility._
      - Item used: `Pass (from Grandmother)` (formal presentation)
    - Read Ancient Chronicle. _Historical records mention Willowbrook and its connection to ancient powers._
    - Search for records mentioning Willowbrook. _Discovery of old artifacts and documents._
@@ -1509,14 +1510,14 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 10. **Residential Quarter:**
 
-    - Observe local craftsmen at work. _Watching skilled artisans repair items, Elior learns the `mend` spell._
+    - Look at local craftsmen at work. _Watching skilled artisans repair items, Elior learns the `mend` spell._
       - Spell Learned: `mend` (repair magic)
     - Take Healing Herbs. _Healing Herbs are added to inventory._
-    - Speak to families about local history. _Residents share stories about Greendale's past._
+    - Talk to families about local history. _Residents share stories about Greendale's past._
 
 11. **Healer's House:**
 
-    - Speak to Master Healer Lyria. _Lyria recognizes Elior's magical potential and offers advanced training._
+    - Talk to Master Healer Lyria. _Lyria recognizes Elior's magical potential and offers advanced training._
       - Quest accepted: "The Healer's Apprentice"
     - Give Healing Herbs to Lyria. _Lyria uses them to create advanced remedies._
       - Item used: `Healing Herbs`
@@ -1535,8 +1536,8 @@ The completion of Act II marks Elior's transformation from a promising young her
 
     - Cast `mend` on damaged protective enchantments. _The magical barriers flicker and stabilize._
       - Spell used: `mend` (on magical barriers)
-    - Speak to Spectral Librarian. _The ghostly guardian tests Elior's worthiness to access the texts._
-    - Study Ancient Spellbook. _From the tome's arcane knowledge, Elior learns the `dispel` spell._
+    - Talk to Spectral Librarian. _The ghostly guardian tests Elior's worthiness to access the texts._
+    - Read Ancient Spellbook. _From the tome's arcane knowledge, Elior learns the `dispel` spell._
       - Spell Learned: `dispel` (counter-magic)
     - Read Prophecy Scroll. _The scroll reveals ancient prophecies about the Chosen One and coming darkness._
     - Take Crystal Focus. _Crystal Focus is added to inventory._
@@ -1550,10 +1551,10 @@ The completion of Act II marks Elior's transformation from a promising young her
 15. **Forest Transition:**
 
     - Examine ancient standing stones. _The moss-covered runes pulse with ancient power._
-    - Touch boundary stones with respect. _The protective runes resonate, teaching Elior `nature_sense`._
+    - Use standing stones to learn nature magic. _The protective runes resonate, teaching Elior `nature_sense`._
       - Spell Learned: `nature_sense` (forest awareness)
     - Take Boundary Stone Fragment. _Stone Fragment is added to inventory._
-    - Speak to Forest Hermit. _The hermit warns of forest dangers and offers protection._
+    - Talk to Forest Hermit. _The hermit warns of forest dangers and offers protection._
       - Quest accepted: "The Hermit's Warning"
       - Quest completed: "The Hermit's Warning"
     - Receive protective charm from hermit. _Protective Charm is added to inventory._
@@ -1564,15 +1565,15 @@ The completion of Act II marks Elior's transformation from a promising young her
       - Item used: `Enhanced Lantern` (navigation)
     - Take Forest Map Fragment. _Map Fragment is added to inventory._
     - Take Enchanted Acorn. _Enchanted Acorn is added to inventory._
-    - Speak to Forest Sprites. _Minor spirits provide guidance about deeper forest areas._
+    - Talk to Forest Sprites. _Minor spirits provide guidance about deeper forest areas._
       - Quest accepted: "The Forest Guardian's Riddles"
 
 17. **Ancient Grove:**
 
-    - Approach the silver-barked tree with reverence. _The ancient tree spirit awakens to Elior's presence._
-    - Use Enchanted Acorn as offering. _The tree spirit accepts the gift with approval._
+    - Look at the silver-barked tree with reverence. _The ancient tree spirit awakens to Elior's presence._
+    - Give Enchanted Acorn to Ancient Tree Spirit. _The tree spirit accepts the gift with approval._
       - Item used: `Enchanted Acorn` (offering)
-    - Speak to Ancient Tree Spirit. _The spirit shares wisdom of ages and teaches forest communication._
+    - Talk to Ancient Tree Spirit. _The spirit shares wisdom of ages and teaches forest communication._
       - Spell Learned: `forest_speech` (communicate with trees)
     - Take Silver Leaves. _Silver Leaves are added to inventory._
     - Take Druidic Focus. _Druidic Focus is added to inventory._
@@ -1583,10 +1584,10 @@ The completion of Act II marks Elior's transformation from a promising young her
 
     - Cast `nature_sense` to locate water nymphs. _The spell reveals shimmering forms by the stream._
       - Spell used: `nature_sense` (detection)
-    - Speak to Water Nymphs. _The nymphs pose riddles about the forest's secrets._
+    - Talk to Water Nymphs. _The nymphs pose riddles about the forest's secrets._
     - Solve riddles using forest knowledge. _Correct answers earn the nymphs' trust._
       - Quest completed: "The Forest Guardian's Riddles"
-    - Collect Crystal-Clear Water. _Crystal Water is added to inventory._
+    - Take Crystal-Clear Water. _Crystal Water is added to inventory._
     - Take Moonflowers. _Moonflowers are added to inventory._
 
 19. **Return to Ancient Grove:**
@@ -1614,7 +1615,7 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 22. **Return to Market District:**
 
-    - Report to Caravan Master Thorne with good news. _Thorne rewards Elior with valuable supplies._
+    - Talk to Caravan Master Thorne with good news. _Thorne rewards Elior with valuable supplies._
       - Quest completed: "The Merchant's Lost Caravan"
 
 23. **Castle Courtyard (Cedric's Honor Quest):**
@@ -1631,10 +1632,12 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 25. **Heart of the Forest:**
 
-    - Approach Nyx's tree with all forest tokens. _The magnificent tree glows with recognition._
-    - Present offerings to Nyx. _Silver Leaves, Moonflowers, and other forest gifts demonstrate respect._
+26. **Heart of the Forest:**
+
+    - Look at Nyx's tree with all forest tokens. _The magnificent tree glows with recognition._
+    - Give offerings to Nyx. _Silver Leaves, Moonflowers, and other forest gifts demonstrate respect._
       - Items used: `Silver Leaves`, `Moonflowers`, `Druidic Focus` (offerings)
-    - Speak to Nyx. _The forest sprite acknowledges Elior as a true friend of nature._
+    - Talk to Nyx. _The forest sprite acknowledges Elior as a true friend of nature._
     - Complete Nyx's trials of wisdom. _Tests of magical knowledge and moral character._
     - Learn ultimate divination magic from Nyx. _She grants the power to see what is to come._
       - Spell Learned: `prophetic_vision` (see possible futures)
@@ -1644,8 +1647,8 @@ The completion of Act II marks Elior's transformation from a promising young her
       - Spell used: `prophetic_vision` (divination)
       - Quest completed: "The Gathering Storm"
 
-26. **Return to Castle Courtyard:**
-    - Report to Sir Cedric with new knowledge. _Cedric is amazed by Elior's growth and magical mastery._
+27. **Return to Castle Courtyard:**
+    - Talk to Sir Cedric with new knowledge. _Cedric is amazed by Elior's growth and magical mastery._
     - Share prophetic visions of coming darkness. _The knowledge helps Cedric prepare defenses._
     - Receive Cedric's blessing for the next phase. _The knight pledges his support for future challenges._
 
