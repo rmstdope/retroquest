@@ -363,13 +363,14 @@ def test_golden_path_act2_completion():
     assert game.state.get_story_flag("echoes_of_past_completed"), "Should have completed Echoes of the Past quest"
     assert game.state.get_story_flag("ancient_library_completed"), "Should have completed Ancient Library quest"
     assert game.state.is_quest_completed("Echoes of the Past"), "Echoes of the Past quest should be completed"
-    assert game.state.is_quest_completed("The Ancient Library"), "The Ancient Library quest should be completed"
     # Check that we learned dispel spell
     _check_spell_known(game.state, "dispel")
-    # Check that Crystal Focus is available
+    # Check that Crystal Focus is available and take it
     _check_item_in_room(game.state.current_room, "Crystal Focus")
     _execute_commands(game, ["take crystal focus"])
     _check_item_in_inventory(game.state, "Crystal Focus")
+    # Now check that The Ancient Library quest is completed (requires Crystal Focus in inventory)
+    assert game.state.is_quest_completed("The Ancient Library"), "The Ancient Library quest should be completed"
     
     # At this point, we have completed steps 1-13 of the golden path!
 
