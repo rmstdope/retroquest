@@ -14,8 +14,19 @@ class MendSpell(Spell):
                 "looking for something to repair, but finds nothing that needs mending nearby.[/success]")
 
     def cast_on_item(self, game_state: GameState, target_item: Item) -> str:
-        # Check if the item can be repaired (this is a simple implementation)
-        if "broken" in target_item.get_description().lower() or "damaged" in target_item.get_description().lower():
+        # Special handling for protective enchantments in Hidden Library
+        if target_item.get_name().lower() == "protective enchantments":
+            if not game_state.get_story_flag("mended_library_enchantments"):
+                game_state.set_story_flag("mended_library_enchantments", True)
+                return ("[success]You cast [spell_name]mend[/spell_name] on the damaged [item_name]protective enchantments[/item_name]. "
+                        "The magical barriers flicker and stabilize as your repair magic restores their integrity. "
+                        "The shimmering barriers around the most valuable texts now glow steadily. You have proven "
+                        "your worthiness and respect for ancient knowledge.[/success]")
+            else:
+                return "[info]The [item_name]protective enchantments[/item_name] have already been repaired and are functioning properly.[/info]"
+        
+        # Check if the item can be repaired (this is the original implementation)
+        elif "broken" in target_item.get_description().lower() or "damaged" in target_item.get_description().lower():
             return (f"[success]You cast [spell_name]mend[/spell_name] on [item_name]{target_item.get_name()}[/item_name]. "
                     f"The magical energy flows through the item, repairing damage and restoring it to working condition![/success]")
         else:
