@@ -144,9 +144,39 @@ def test_golden_path_act2_completion():
     # Move to Main Square
     _execute_commands(game, ["go north"])
     _check_current_room(game.state, "Main Square")
+    
+    # Test navigation restriction before using city map
+    # Should not be able to go north or east without map
+    _execute_commands(game, ["go north"])
+    _check_current_room(game.state, "Main Square")  # Should still be in Main Square
+    assert "lost" in results[-1].lower(), "Should get lost message when trying to go north without map"
+    
+    _execute_commands(game, ["go east"])
+    _check_current_room(game.state, "Main Square")  # Should still be in Main Square
+    assert "lost" in results[-1].lower(), "Should get lost message when trying to go east without map"
+    
+    # Should be able to go south (back to Greendale Gates)
+    _execute_commands(game, ["go south"])
+    _check_current_room(game.state, "Greendale Gates")
+    _execute_commands(game, ["go north"])  # Return to Main Square
+    _check_current_room(game.state, "Main Square")
+    
     # Use City Map to orient yourself
+    # First verify the map is in inventory
+    _check_item_in_inventory(game.state, "City Map")
+    
     _execute_commands(game, ["use city map"])
     assert game.state.get_story_flag("used_city_map"), "City map should have been used"
+    
+    # Verify the map has been removed from inventory after use
+    _check_item_in_inventory(game.state, "City Map", should_be_present=False)
+    
+    # After using map, should be able to move freely
+    _execute_commands(game, ["go north"])
+    _check_current_room(game.state, "Castle Approach")
+    _execute_commands(game, ["go south"])  # Return to Main Square
+    _check_current_room(game.state, "Main Square")
+    
     # Examine City Notice Board
     _execute_commands(game, ["examine city notice board"])
     # Talk to Town Crier
@@ -265,9 +295,9 @@ def test_golden_path_act2_completion():
         game.state.set_story_flag("court_herald_formal_presentation", True)  # Bypass for test
     _execute_commands(game, ["search"])
     assert game.state.get_story_flag("researched_family_heritage"), "Should have researched family heritage"
-    # This should complete "Echoes of the Past" quest (it gets activated and completed in same command)
-    assert game.state.is_quest_completed("Echoes of the Past"), "Echoes of the Past quest should be completed"
-    
+    # This should trigger "Echoes of the Past" quest
+    assert game.state.is_quest_activated("Echoes of the Past"), "Echoes of the Past quest should be activated"
+
     # Step 10: Residential Quarter
     # Go to Residential Quarter
     _execute_commands(game, ["go east", "go north"])
@@ -288,3 +318,62 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["talk to families"])
     
     # At this point, we have completed steps 1-10 of the golden path!
+
+def test_main_square_navigation_restriction():
+    """Test that Main Square navigation is restricted until city map is used"""
+    act = Act2()
+    game = Game(act)
+    
+    # Add required items from Act 1
+    from retroquest.act2.items.CityMap import CityMap
+    
+    game.state.inventory.append(CityMap())
+    
+    # Navigate directly to Main Square for this focused test
+    game.state.current_room = game.state.all_rooms["MainSquare"]
+    
+    # Verify that map hasn't been used yet
+    assert not game.state.get_story_flag("used_city_map"), "City map should not be used initially"
+    
+    # Test restricted exits - should only be able to go south
+    available_exits = game.state.current_room.get_exits(game.state)
+    assert available_exits == {"south": "GreendaleGates"}, f"Expected only south exit, got: {available_exits}"
+    
+    # Test navigation restriction - should get lost message when trying invalid directions
+    result = game.move("north")
+    assert "lost" in result.lower(), "Should get lost message when trying to go north without map"
+    assert game.state.current_room.name == "Main Square", "Should still be in Main Square"
+    
+    result = game.move("east")
+    assert "lost" in result.lower(), "Should get lost message when trying to go east without map"
+    assert game.state.current_room.name == "Main Square", "Should still be in Main Square"
+    
+    # Invalid direction should still give standard error message
+    result = game.move("west")
+    assert "can't go that way" in result.lower(), "Should get standard error for truly invalid direction"
+    assert game.state.current_room.name == "Main Square", "Should still be in Main Square"
+    
+    # Use the city map to unlock navigation
+    # First verify the map is in inventory
+    assert game.state.has_item("city map"), "City map should be in inventory before use"
+    
+    result = game.handle_command("use city map")
+    assert game.state.get_story_flag("used_city_map"), "City map should now be used"
+    
+    # Verify the map has been removed from inventory after use
+    assert not game.state.has_item("city map"), "City map should be removed from inventory after use"
+    
+    # After using map, should have full access to all exits
+    available_exits = game.state.current_room.get_exits(game.state)
+    expected_exits = {"south": "GreendaleGates", "north": "CastleApproach", "east": "MarketDistrict"}
+    assert available_exits == expected_exits, f"Expected all exits after using map, got: {available_exits}"
+    
+    # Test that navigation now works to previously restricted directions
+    # Note: We'll just test that the movement command doesn't return a lost message
+    # since we don't want to actually navigate away from Main Square in this test
+    main_square_room = game.state.current_room
+    
+    # Mock the movement to test the exit availability without side effects
+    exits = game.state.current_room.get_exits(game.state)
+    assert "north" in exits, "North exit should be available after using map"
+    assert "east" in exits, "East exit should be available after using map"

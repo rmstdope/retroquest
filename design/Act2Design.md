@@ -1455,6 +1455,7 @@ The completion of Act II marks Elior's transformation from a promising young her
 
    - Use City Map to orient yourself in Greendale. _The map reveals important locations and prevents getting lost in the maze of streets._
      - Item used: `City Map` (navigation)
+     - **Navigation Rule:** As long as the map has not been used, moving in any direction other than back to Greendale Gates should return a message that you are lost and automatically return back to Main Square.
    - Examine City Notice Board. _Elior reads about local events and a posting seeking brave souls for "The Gathering Storm."_
    - Talk to Town Crier. _Crier mentions Sir Cedric seeks heroes and directs Elior to the castle._
    - Take Merchant's Flyer. _Merchant's Flyer is added to inventory._
@@ -1514,8 +1515,6 @@ The completion of Act II marks Elior's transformation from a promising young her
    - Read Ancient Chronicle. _Historical records mention Willowbrook and its connection to ancient powers._
    - Search for records mentioning Willowbrook. _Discovery of old artifacts and documents._
      - Quest accepted: "Echoes of the Past"
-   - Gather evidence about Elior's heritage. _Chronicle reveals hints about family lineage._
-     - Quest completed: "Echoes of the Past"
 
 10. **Residential Quarter:**
 
@@ -1548,6 +1547,8 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Cast `mend` on damaged protective enchantments. _The magical barriers flicker and stabilize._
       - Spell cast: `mend` (on magical barriers)
     - Talk to Spectral Librarian. _The ghostly guardian tests Elior's worthiness to access the texts._
+      - The Spectral Librarian tells about Elior's heritage. _Reveals hints about family lineage._
+        - Quest completed: "Echoes of the Past"
     - Read Ancient Spellbook. _From the tome's arcane knowledge, Elior learns the `dispel` spell._
       - Spell Learned: `dispel` (counter-magic)
     - Read Prophecy Scroll. _The scroll reveals ancient prophecies about the Chosen One and coming darkness._

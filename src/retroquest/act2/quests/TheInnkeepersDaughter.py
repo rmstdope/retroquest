@@ -1,5 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE
 
 class TheInnkeepersDaughterQuest(Quest):
     def __init__(self) -> None:
@@ -7,6 +8,9 @@ class TheInnkeepersDaughterQuest(Quest):
             name="The Innkeeper's Daughter",
             description="Elena, the barmaid at The Silver Stag Inn, has been cursed by a dark wizard. Find a way to break the curse and save her life.",
         )
+
+    def check_trigger(self, game_state: GameState) -> bool:
+        return game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE)
 
     def update(self, game_state: GameState) -> str:
         if game_state.get_story_flag("elena_curse_broken"):

@@ -5,6 +5,7 @@ class CityNoticeBoard(Item):
     def __init__(self) -> None:
         super().__init__(
             name="city notice board",
+            short_name="board",
             description="A large wooden board posted with official notices, job postings, and announcements. The most prominent posting seeks brave souls for 'The Gathering Storm' - a call for heroes to help defend against rising dark forces.",
             can_be_carried=False,
         )

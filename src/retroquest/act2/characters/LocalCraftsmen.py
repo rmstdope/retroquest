@@ -1,5 +1,6 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import FLAG_LEARNED_MEND_FROM_CRAFTSMEN
 
 class LocalCraftsmen(Character):
     def __init__(self) -> None:
@@ -9,8 +10,8 @@ class LocalCraftsmen(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
-        if not game_state.get_story_flag("learned_mend_from_craftsmen"):
-            game_state.set_story_flag("learned_mend_from_craftsmen", True)
+        if not game_state.get_story_flag(FLAG_LEARNED_MEND_FROM_CRAFTSMEN):
+            game_state.set_story_flag(FLAG_LEARNED_MEND_FROM_CRAFTSMEN, True)
             from ..spells.MendSpell import MendSpell
             game_state.learn_spell(MendSpell())
             return ("[success]You speak with the [character_name]Local Craftsmen[/character_name] and watch them work, "

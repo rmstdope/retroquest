@@ -131,7 +131,7 @@ Copyright Free Background Music'''
 
         character_names = [char.get_name().lower() for char in self.state.current_room.get_characters()]
         spell_names = [spell.get_name().lower() for spell in self.state.known_spells]
-        exit_names = {direction: None for direction in self.state.current_room.get_exits()}
+        exit_names = {direction: None for direction in self.state.current_room.get_exits(self.state)}
         file_names = {f: None for f in os.listdir('.') if f.endswith('.txt') and os.path.isfile(f)}
 
         # # Build 'use' completions so that 'with' is suggested only after the full item name
@@ -144,7 +144,7 @@ Copyright Free Background Music'''
 
         # Build directional completions based on actual exits
         directional_completions = {}
-        available_exits = self.state.current_room.get_exits()
+        available_exits = self.state.current_room.get_exits(self.state)
         
         # Short directions
         if 'north' in available_exits:
@@ -309,7 +309,19 @@ Copyright Free Background Music'''
         return item_to_examine
 
     def move(self, direction: str, arg: str = None) -> str:
-        exits = self.state.current_room.get_exits()
+        exits = self.state.current_room.get_exits(self.state)
+        
+        # Special handling for MainSquare navigation restriction
+        if (self.state.current_room.name == "Main Square" and 
+            not self.state.get_story_flag("used_city_map") and 
+            direction != "south"):
+            # Check if this would have been a valid direction with the map
+            all_exits = self.state.current_room.exits  # Get unrestricted exits
+            if direction in all_exits:
+                return ("[event]You wander through Greendale's winding streets, but without a proper map to guide you, "
+                       "you quickly become lost in the maze of alleys and buildings. Eventually, you find your way "
+                       "back to the Main Square, feeling disoriented.[/event]")
+        
         if direction in exits:
             next_room_key = exits[direction]
             if next_room_key in self.state.all_rooms:
@@ -397,7 +409,7 @@ Copyright Free Background Music'''
             return "No rooms visited yet."
         output = ["[bold]Visited Rooms and Exits:[/bold]"]
         for name, room in room_objs.items():
-            exits = room.get_exits()
+            exits = room.get_exits(self.state)
             output.append(f"- [room_name]{room.name}[/room_name]:")
             if exits:
                 for direction, dest in exits.items():

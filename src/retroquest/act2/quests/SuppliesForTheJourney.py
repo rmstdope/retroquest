@@ -1,5 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import FLAG_PREMIUM_SELECTION_AVAILABLE
 
 class SuppliesForTheJourneyQuest(Quest):
     def __init__(self) -> None:
@@ -8,6 +9,9 @@ class SuppliesForTheJourneyQuest(Quest):
             description="Sir Cedric mentioned the need for proper equipment for forest expeditions. Gather essential supplies from the Market District.",
             completion="You have gathered all the essential supplies for forest exploration. The journey supplies quest is complete!"
         )
+
+    def check_trigger(self, game_state: GameState) -> bool:
+        return game_state.get_story_flag(FLAG_PREMIUM_SELECTION_AVAILABLE)
 
     def check_completion(self, game_state: GameState) -> bool:
         if not self.is_completed_flag:

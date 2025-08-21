@@ -32,7 +32,7 @@ class Room:
     def get_characters(self) -> list:
         return self.characters
 
-    def get_exits(self) -> dict:
+    def get_exits(self, game_state=None) -> dict:
         return self.exits
 
     def get_ambient_sound(self) -> str:

@@ -8,7 +8,14 @@ class TheGatheringStormQuest(Quest):
             description="Sir Cedric has explained that dark forces are gathering and he needs allies with magical knowledge. This is the main quest that ties together all of Act II's challenges.",
         )
 
-    def update(self, game_state: GameState) -> str:
+    def is_main(self) -> bool:
+        """This is the main quest for Act II."""
+        return True
+
+    def check_trigger(self, game_state: GameState) -> bool:
+        return True  # This quest is always active once Act II begins
+
+    def check_completion(self, game_state: GameState) -> bool:
         # This quest cannot be completed until ALL other quests in Act II are finished
         required_quests = [
             "The Knight's Test",
@@ -27,7 +34,6 @@ class TheGatheringStormQuest(Quest):
         all_completed = all(game_state.is_quest_completed(quest_name) for quest_name in required_quests)
         
         if all_completed and game_state.has_spell("prophetic_vision"):
-            self.complete(game_state)
-            return "With all your trials completed and the prophetic vision spell learned, you have proven yourself worthy of Sir Cedric's trust. The Gathering Storm quest is complete!"
+            return True
         
-        return "Continue gathering allies, learning spells, and completing the various challenges throughout Greendale and the forest."
+        return False

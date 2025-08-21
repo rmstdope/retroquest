@@ -259,12 +259,3 @@ class GameState:
     def is_quest_completed(self, quest_name: str) -> bool:
         """Check if a quest with the given name is completed"""
         return any(quest.name == quest_name for quest in self.completed_quests)
-    
-    def activate_quest_by_object(self, quest_object) -> None:
-        """Manually activate a quest by adding it to activated_quests"""
-        if quest_object not in self.activated_quests and quest_object not in self.completed_quests:
-            self.activated_quests.append(quest_object)
-            # Remove from non_activated_quests if it's there
-            if quest_object in self.non_activated_quests:
-                self.non_activated_quests.remove(quest_object)
-

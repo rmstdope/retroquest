@@ -13,9 +13,11 @@ class CityMap(Item):
     def use(self, game_state: GameState) -> str:
         # Set the story flag when the city map is used
         game_state.set_story_flag("used_city_map", True)
+        # Remove the map from inventory since it's been memorized
+        game_state.remove_item_from_inventory("city map")
         return ("You study the city map carefully. The detailed layout shows the Main Square at the center, "
                 "with the Market District to the east, Castle Approach to the north, and various other important "
-                "locations clearly marked. With this map, you can navigate Greendale's streets without getting lost.")
+                "locations clearly marked. You commit the layout to memory and no longer need to carry the physical map.")
 
     def examine(self, game_state: GameState) -> str:
         return ("You examine the city map closely. It's a professional cartographer's work, showing detailed "

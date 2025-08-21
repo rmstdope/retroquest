@@ -3,6 +3,7 @@ from ...engine.GameState import GameState
 from ..characters.LocalCraftsmen import LocalCraftsmen
 from ..characters.Families import Families
 from ..items.HealingHerbs import HealingHerbs
+from ..Act2StoryFlags import FLAG_HELPED_ELDERLY_RESIDENTS, FLAG_LEARNED_MEND_FROM_CRAFTSMEN
 
 class ResidentialQuarter(Room):
     def __init__(self) -> None:
@@ -22,8 +23,8 @@ class ResidentialQuarter(Room):
         # Handle "use walking stick" command to help elderly residents
         if "use walking stick" in command.lower():
             walking_stick = next((item for item in game_state.inventory if "walking stick" in item.get_name().lower()), None)
-            if walking_stick and not game_state.get_story_flag("helped_elderly_residents"):
-                game_state.set_story_flag("helped_elderly_residents", True)
+            if walking_stick and not game_state.get_story_flag(FLAG_HELPED_ELDERLY_RESIDENTS):
+                game_state.set_story_flag(FLAG_HELPED_ELDERLY_RESIDENTS, True)
                 return ("[success]You use your walking stick to help several elderly residents navigate the uneven "
                         "cobblestones and carry their heavy loads. Your assistance is greatly appreciated, and the "
                         "community takes note of your kind and helpful nature. Word spreads that you are someone "
@@ -35,8 +36,8 @@ class ResidentialQuarter(Room):
         
         # Handle "look at craftsmen" command to learn mend spell
         elif "look at local craftsmen" in command.lower() or "look at craftsmen" in command.lower():
-            if not game_state.get_story_flag("learned_mend_from_craftsmen"):
-                game_state.set_story_flag("learned_mend_from_craftsmen", True)
+            if not game_state.get_story_flag(FLAG_LEARNED_MEND_FROM_CRAFTSMEN):
+                game_state.set_story_flag(FLAG_LEARNED_MEND_FROM_CRAFTSMEN, True)
                 from ..spells.MendSpell import MendSpell
                 game_state.learn_spell(MendSpell())
                 return ("[success]You watch the [character_name]Local Craftsmen[/character_name] work, observing their "

@@ -1,5 +1,6 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import FLAG_COURT_HERALD_FORMAL_PRESENTATION
 
 class CourtHerald(Character):
     def __init__(self) -> None:
@@ -9,7 +10,7 @@ class CourtHerald(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
-        if game_state.get_story_flag("court_herald_formal_presentation"):
+        if game_state.get_story_flag(FLAG_COURT_HERALD_FORMAL_PRESENTATION):
             return ("[character_name]Court Herald[/character_name]: You have been formally presented to the court and "
                     "your credentials are on record. You may access the historical archives and speak with court "
                     "historians about your research.")

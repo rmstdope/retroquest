@@ -2,6 +2,7 @@ from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..quests.SuppliesForTheJourney import SuppliesForTheJourneyQuest
+from ..Act2StoryFlags import FLAG_GAVE_MERCHANTS_FLYER, FLAG_PREMIUM_SELECTION_AVAILABLE
 
 class MasterMerchantAldric(Character):
     def __init__(self) -> None:
@@ -11,10 +12,9 @@ class MasterMerchantAldric(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
-        if game_state.get_story_flag("gave_merchants_flyer"):
-            # Activate the supplies quest when talking after giving flyer
-            if not game_state.is_quest_activated("Supplies for the Journey"):
-                game_state.activate_quest_by_object(SuppliesForTheJourneyQuest())
+        if game_state.get_story_flag(FLAG_GAVE_MERCHANTS_FLYER):
+            # Set flag for premium selection availability when talking after giving flyer
+            game_state.set_story_flag(FLAG_PREMIUM_SELECTION_AVAILABLE, True)
             return ("[character_name]Master Merchant Aldric[/character_name]: Ah, excellent! The flyer grants you access "
                     "to our premium selection. I offer the finest adventure gear in Greendale - survival kits, "
                     "enhanced lanterns, quality rope, and more. What can I help you acquire today?")
@@ -29,7 +29,7 @@ class MasterMerchantAldric(Character):
             # Remove the flyer from inventory
             if item_object in game_state.inventory:
                 game_state.inventory.remove(item_object)
-            game_state.set_story_flag("gave_merchants_flyer", True)
+            game_state.set_story_flag(FLAG_GAVE_MERCHANTS_FLYER, True)
             return ("[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name].[/event]\n"
                     "[success]You present the merchant's flyer to [character_name]Master Merchant Aldric[/character_name]. "
                     "His eyes light up as he examines it. 'Ah, excellent! This flyer grants you access to our premium "
@@ -39,7 +39,7 @@ class MasterMerchantAldric(Character):
 
     def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         """Handle buying items from Master Merchant Aldric"""
-        if not game_state.get_story_flag("gave_merchants_flyer"):
+        if not game_state.get_story_flag(FLAG_GAVE_MERCHANTS_FLYER):
             return f"[failure]Master Merchant Aldric requires proper credentials before selling premium items like the {item_name_to_buy}.[/failure]"
         
         # Find coins in inventory
