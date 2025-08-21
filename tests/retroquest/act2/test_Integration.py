@@ -254,7 +254,7 @@ def test_golden_path_act2_completion():
     _check_character_in_room(game.state.current_room, "Court Herald")
     _check_character_in_room(game.state.current_room, "Historians") 
     # Show the journal to historians directly (we already used our main pass)
-    _execute_commands(game, ["show traveler's journal to historians"])
+    _execute_commands(game, ["give traveler's journal to historians"])
     assert game.state.get_story_flag("showed_journal_to_historians"), "Should have shown journal to historians"
     # Read Ancient Chronicle
     _check_item_in_room(game.state.current_room, "Ancient Chronicle")

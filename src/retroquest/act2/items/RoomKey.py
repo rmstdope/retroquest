@@ -10,4 +10,14 @@ class RoomKey(Item):
         )
 
     def use(self, game_state: GameState) -> str:
-        return "You examine the room key. It grants access to a private room at The Silver Stag Inn where you can study in peace and store valuable items safely."
+        # Check if we're in the Inn Rooms
+        if game_state.current_room.name == "Inn Rooms":
+            if not game_state.get_story_flag("accessed_inn_room"):
+                game_state.set_story_flag("accessed_inn_room", True)
+                return ("[success]You use the room key to access your private room. The quiet space allows you "
+                        "to study and examine items safely away from the busy common room below. You notice "
+                        "a traveler's journal left behind by a previous guest.[/success]")
+            else:
+                return "[info]You've already accessed your room and can move freely here.[/info]"
+        else:
+            return "You examine the room key. It grants access to a private room at The Silver Stag Inn where you can study in peace and store valuable items safely."

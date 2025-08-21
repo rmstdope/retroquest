@@ -50,15 +50,15 @@ class MasterMerchantAldric(Character):
         item_class = None
         
         if "forest survival kit" in item_name_lower:
-            cost = 50
+            cost = 30  # Reduced from 50
             from ..items.ForestSurvivalKit import ForestSurvivalKit
             item_class = ForestSurvivalKit
         elif "enhanced lantern" in item_name_lower:
-            cost = 30
+            cost = 20  # Reduced from 30
             from ..items.EnhancedLantern import EnhancedLantern
             item_class = EnhancedLantern
         elif "quality rope" in item_name_lower:
-            cost = 20
+            cost = 15  # Reduced from 20
             from ..items.QualityRope import QualityRope
             item_class = QualityRope
         else:
