@@ -1,4 +1,5 @@
 from ...engine.Room import Room
+from ..characters.MasterHealerLyria import MasterHealerLyria
 
 class HealersHouse(Room):
     def __init__(self) -> None:
@@ -11,6 +12,6 @@ class HealersHouse(Room):
                 "healing and learning."
             ),
             items=[],
-            characters=[],
+            characters=[MasterHealerLyria()],
             exits={"south": "ResidentialQuarter"}
         )

@@ -28,6 +28,8 @@ from retroquest.act2.quests.SuppliesForTheJourney import SuppliesForTheJourneyQu
 from retroquest.act2.quests.EchoesOfThePast import EchoesOfThePastQuest
 from retroquest.act2.quests.TheInnkeepersDaughter import TheInnkeepersDaughterQuest
 from retroquest.act2.quests.TheMerchantsLostCaravan import TheMerchantsLostCaravanQuest
+from retroquest.act2.quests.TheHealersApprentice import TheHealersApprenticeQuest
+from retroquest.act2.quests.TheAncientLibrary import TheAncientLibraryQuest
 
 class Act2(Act):
     def __init__(self):
@@ -59,15 +61,15 @@ class Act2(Act):
             TheKnightsTestQuest(),
             SuppliesForTheJourneyQuest(),
             EchoesOfThePastQuest(),
+            TheHealersApprenticeQuest(),
+            TheAncientLibraryQuest(),
             TheInnkeepersDaughterQuest(),
             
             # Forest Phase Side Quests
             TheMerchantsLostCaravanQuest(),
             
             # TODO: Add remaining quests when implemented:
-            # TheHealersApprenticeQuest(),
             # CedricksLostHonorQuest(), 
-            # TheAncientLibraryQuest(),
             # TheHermitsWarningQuest(),
             # TheForestGuardiansRiddlesQuest(),
             # WhispersInTheWindQuest(),

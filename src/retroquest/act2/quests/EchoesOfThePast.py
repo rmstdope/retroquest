@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_RESEARCHED_FAMILY_HERITAGE
+from ..Act2StoryFlags import FLAG_RESEARCHED_FAMILY_HERITAGE, FLAG_ECHOES_OF_PAST_COMPLETED
 
 class EchoesOfThePastQuest(Quest):
     def __init__(self) -> None:
@@ -12,3 +12,6 @@ class EchoesOfThePastQuest(Quest):
 
     def check_trigger(self, game_state: GameState) -> bool:
         return game_state.get_story_flag(FLAG_RESEARCHED_FAMILY_HERITAGE)
+
+    def check_completion(self, game_state: GameState) -> bool:
+        return game_state.get_story_flag(FLAG_ECHOES_OF_PAST_COMPLETED)

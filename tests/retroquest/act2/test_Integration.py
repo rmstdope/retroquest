@@ -75,7 +75,7 @@ def _debug_print_history():
         print(res_str)
 
 def test_golden_path_act2_completion():
-    """Test the golden path through Act2 completion - Currently testing steps 1-10"""
+    """Test the golden path through Act2 completion - Currently testing steps 1-13"""
     act = Act2()
     game = Game(act)
     
@@ -318,6 +318,60 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["talk to families"])
     
     # At this point, we have completed steps 1-10 of the golden path!
+    
+    # Step 11: Healer's House
+    # Go to Healer's House from Residential Quarter
+    _execute_commands(game, ["go north"])
+    _check_current_room(game.state, "Healer's House")
+    # Check that Master Healer Lyria is present
+    _check_character_in_room(game.state.current_room, "Master Healer Lyria")
+    # Talk to Lyria with Healing Herbs to trigger quest (first interaction)
+    _execute_commands(game, ["talk to master healer lyria"])
+    assert game.state.is_quest_activated("The Healer's Apprentice"), "The Healer's Apprentice quest should be activated"
+    assert game.state.get_story_flag("healers_apprentice_accepted"), "Should have accepted healer's apprentice quest"
+    # Talk to Lyria again to complete the quest (second interaction)
+    _execute_commands(game, ["talk to master healer lyria"])
+    assert game.state.is_quest_completed("The Healer's Apprentice"), "The Healer's Apprentice quest should be completed"
+    assert game.state.get_story_flag("healers_apprentice_completed"), "Should have completed healer's apprentice quest"
+    # Check that we learned greater_heal spell
+    _check_spell_known(game.state, "greater_heal")
+    # Check that Advanced Healing Potion is available
+    _check_item_in_room(game.state.current_room, "Advanced Healing Potion")
+    _execute_commands(game, ["take advanced healing potion"])
+    _check_item_in_inventory(game.state, "Advanced Healing Potion")
+    
+    # Step 12: Residential Quarter (Hidden Library Discovery)
+    # Return to Residential Quarter
+    _execute_commands(game, ["go south"])
+    _check_current_room(game.state, "Residential Quarter")
+    # Search to discover Hidden Library
+    _execute_commands(game, ["search"])
+    assert game.state.get_story_flag("ancient_library_accepted"), "Should have accepted ancient library quest"
+    assert game.state.is_quest_activated("The Ancient Library"), "The Ancient Library quest should be activated"
+    
+    # Step 13: Hidden Library
+    # Go to Hidden Library via secret passage
+    _execute_commands(game, ["go secret_passage"])
+    _check_current_room(game.state, "Hidden Library")
+    # Check that Spectral Librarian is present
+    _check_character_in_room(game.state.current_room, "Spectral Librarian")
+    # Cast mend on protective enchantments
+    _execute_commands(game, ["cast mend on protective enchantments"])
+    assert game.state.get_story_flag("mended_library_enchantments"), "Should have mended library enchantments"
+    # Talk to Spectral Librarian to learn about heritage and get dispel spell
+    _execute_commands(game, ["talk to spectral librarian"])
+    assert game.state.get_story_flag("echoes_of_past_completed"), "Should have completed Echoes of the Past quest"
+    assert game.state.get_story_flag("ancient_library_completed"), "Should have completed Ancient Library quest"
+    assert game.state.is_quest_completed("Echoes of the Past"), "Echoes of the Past quest should be completed"
+    assert game.state.is_quest_completed("The Ancient Library"), "The Ancient Library quest should be completed"
+    # Check that we learned dispel spell
+    _check_spell_known(game.state, "dispel")
+    # Check that Crystal Focus is available
+    _check_item_in_room(game.state.current_room, "Crystal Focus")
+    _execute_commands(game, ["take crystal focus"])
+    _check_item_in_inventory(game.state, "Crystal Focus")
+    
+    # At this point, we have completed steps 1-13 of the golden path!
 
 def test_main_square_navigation_restriction():
     """Test that Main Square navigation is restricted until city map is used"""
