@@ -1439,7 +1439,8 @@ The completion of Act II marks Elior's transformation from a promising young her
    - Take Walking Stick. _Walking Stick is added to inventory._
    - Speak to Mountain Hermit. _The hermit shares warnings about the changing times._
    - Receive Training Sword from Mountain Hermit. _Training Sword is added to inventory._
-   - Search the camp site to find an Entry Pass to Greendale (dropped by a previous traveler).
+   - Examine the camp site to find an Entry Pass to Greendale (dropped by a previous traveler).
+   - Take Entry Pass. _Entry Pass is added to inventory._
 
 2. **Greendale Gates:**
 

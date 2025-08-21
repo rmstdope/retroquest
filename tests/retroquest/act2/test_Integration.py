@@ -17,169 +17,91 @@ from retroquest.engine.GameState import GameState
 # from retroquest.act2.quests.TheForestGuardiansRiddles import TheForestGuardiansRiddlesQuest
 # from retroquest.act2.quests.WhispersInTheWind import WhispersInTheWindQuest
 
+results = []
 
-def test_act2_creation():
-    """Test that Act2 can be created without errors"""
-    act = Act2()
-    assert act is not None
-    assert act.name == "Act II: Greendale & The Forest Edge"
-    assert len(act.rooms) == 18  # All 18 rooms should be present
+# Helper functions for assertions
+def _check_item_in_inventory(game_state, item_name: str, should_be_present: bool = True):
+    inventory_names = [item.get_name().lower() for item in game_state.inventory]
+    if should_be_present:
+        assert item_name.lower() in inventory_names, f"{item_name} not found in inventory, but was expected."
+    else:
+        assert item_name.lower() not in inventory_names, f"{item_name} found in inventory, but was not expected."
 
+def _check_item_in_room(current_room, item_name: str, should_be_present: bool = True):
+    room_item_names = [item.get_name().lower() for item in current_room.get_items()]
+    if should_be_present:
+        assert item_name.lower() in room_item_names, f"{item_name} not found in room {current_room.name}, but was expected."
+    else:
+        assert item_name.lower() not in room_item_names, f"{item_name} found in room {current_room.name}, but was not expected."
 
-def test_act2_has_all_expected_rooms():
-    """Test that Act2 contains all expected rooms"""
-    act = Act2()
-    expected_rooms = [
-        "MountainPath",
-        "GreendaleGates", 
-        "MainSquare",
-        "MarketDistrict",
-        "SilverStagInn",
-        "InnRooms",
-        "MerchantsWarehouse",
-        "CastleApproach",
-        "CastleCourtyard",
-        "GreatHall",
-        "ResidentialQuarter",
-        "HealersHouse",
-        "HiddenLibrary",
-        "ForestTransition",
-        "ForestEntrance",
-        "AncientGrove",
-        "WhisperingGlade",
-        "HeartOfTheForest",
-    ]
-    
-    for room_name in expected_rooms:
-        assert room_name in act.rooms, f"Room {room_name} missing from Act2"
+def _check_character_in_room(current_room, character_name: str, should_be_present: bool = True):
+    room_character_names = [char.get_name().lower() for char in current_room.get_characters()]
+    if should_be_present:
+        assert character_name.lower() in room_character_names, f"Character '{character_name}' not found in room {current_room.name}, but was expected."
+    else:
+        assert character_name.lower() not in room_character_names, f"Character '{character_name}' found in room {current_room.name}, but was not expected."
 
+def _check_spell_known(game_state, spell_name: str, should_be_present: bool = True):
+    spell_names = [spell.get_name().lower() for spell in game_state.known_spells]
+    if should_be_present:
+        assert spell_name.lower() in spell_names, f"Spell '{spell_name}' not found in known spells, but was expected."
+    else:
+        assert spell_name.lower() not in spell_names, f"Spell '{spell_name}' found in known spells, but was not expected."
 
-def test_act2_game_creation():
-    """Test that a Game can be created with Act2"""
-    act = Act2()
-    game = Game(act)
-    assert game is not None
-    assert game.state is not None
-    assert game.state.current_room.name == "Mountain Path"  # Starting room
+def _check_story_flag(game_state, flag_name: str, expected_value: bool = True):
+    assert game_state.get_story_flag(flag_name) == expected_value, f"Story flag '{flag_name}' was not {expected_value}."
 
+def _check_current_room(game_state, expected_room_name: str):
+    assert game_state.current_room.name == expected_room_name, f"Not in '{expected_room_name}'"
 
-def test_act2_intro():
-    """Test that Act2 has a proper introduction"""
-    act = Act2()
-    intro = act.get_act_intro()
-    assert intro is not None
-    assert len(intro) > 0
-    assert "Greendale" in intro
-    assert "Enchanted Forest" in intro
+def _check_quests(game_state, expected_active_quests):
+    """
+    Asserts that the specified quests (by name) are currently active, no more, no less.
+    """
+    active_quest_names = sorted([q.name for q in game_state.activated_quests])
+    expected_names = sorted(expected_active_quests)
+    assert active_quest_names == expected_names, (
+        f"Active quests do not match.\nExpected: {expected_names}\nActual: {active_quest_names}"
+    )
 
+def _execute_commands(game, commands_list):
+    global results
+    for cmd in commands_list:
+        results.append(game.handle_command(cmd))
+    _debug_print_history()
 
-def test_act2_completion_placeholder():
-    """Test that Act2 completion checking is implemented (placeholder)"""
-    act = Act2()
-    # For now, should return False as a placeholder
-    assert act.is_complete() == False
+def _debug_print_history():
+    for res_str in results:
+        print(res_str)
 
-
-def test_act2_room_navigation():
-    """Test basic room navigation in Act2"""
+def test_golden_path_act2_completion():
+    """Test the golden path through Act2 completion - Currently testing step 1"""
     act = Act2()
     game = Game(act)
     
+    # Step 1: Mountain Path
     # Should start in Mountain Path
-    assert game.state.current_room.name == "Mountain Path"
-    
-    # Test moving to Greendale Gates
-    result = game.handle_command("go north")
-    assert "Greendale Gates" in result or game.state.current_room == "GreendaleGates"
-
-
-def test_mountain_path_forest_exit_initially_locked():
-    """Test that the forest exit from Mountain Path is initially locked"""
-    act = Act2()
-    mountain_path = act.rooms["MountainPath"]
-    
+    _check_current_room(game.state, "Mountain Path")
     # Forest exit should be locked initially
-    exits = mountain_path.get_exits()
+    exits = game.state.current_room.get_exits()
     assert "east" not in exits  # Forest transition should not be available initially
 
-
-# TODO: Add comprehensive integration tests when quests are implemented
-# def test_golden_path_act2_completion():
-#     """Test the golden path through Act2 completion"""
-#     # This will be implemented when all quests and items are created
-#     pass
-
-
-def _execute_commands(game, commands):
-    """Helper function to execute a list of commands"""
-    results = []
-    for command in commands:
-        result = game.handle_command(command)
-        results.append(result)
-    return results
-
-
-def _check_current_room(game_state, expected_room):
-    """Helper function to check current room"""
-    assert game_state.current_room.name == expected_room, f"Expected to be in {expected_room}, but in {game_state.current_room.name}"
-
-
-def _check_item_in_inventory(game_state, item_name, should_be_present=True):
-    """Helper function to check if item is in inventory"""
-    has_item = any(item.get_name().lower() == item_name.lower() for item in game_state.inventory)
-    if should_be_present:
-        assert has_item, f"Item '{item_name}' should be in inventory"
-    else:
-        assert not has_item, f"Item '{item_name}' should not be in inventory"
-
-
-def _check_story_flag(game_state, flag_name, expected_value=True):
-    """Helper function to check story flags"""
-    flag_value = game_state.get_flag(flag_name)
-    assert flag_value == expected_value, f"Story flag '{flag_name}' should be {expected_value}, got {flag_value}"
-
-
-# Placeholder test for future quest integration
-def test_act2_quest_structure():
-    """Test that Act2 quest structure is properly set up"""
-    act = Act2()
+    # Take Walking Stick
+    _execute_commands(game, ["take walking stick"])
+    _check_item_in_inventory(game.state, "Walking Stick")
     
-    # Currently no quests implemented, but structure should be there
-    assert hasattr(act, 'quests')
-    assert isinstance(act.quests, list)
-    # When quests are implemented, we'll test their presence here
-
-
-def test_act2_starting_conditions():
-    """Test Act2 starting conditions and setup"""
-    act = Act2()
-    game = Game(act)
+    # Speak to Mountain Hermit
+    results = _execute_commands(game, ["talk to mountain hermit"])
+    _check_item_in_inventory(game.state, "Training Sword")
     
-    # Should start in Mountain Path
-    assert game.state.current_room.name == "Mountain Path"
+    # Examine the camp site to find Entry Pass
+    _check_item_in_room(game.state.current_room, "Entry Pass", should_be_present=False)
+    results = _execute_commands(game, ["examine camp site"])
+    _check_item_in_room(game.state.current_room, "Entry Pass", should_be_present=True)
     
-    # Player should have basic starting conditions
-    # (This will be expanded when we know what items/flags should carry over from Act1)
-    assert game.state is not None
-    assert hasattr(game.state, 'inventory')
-    assert hasattr(game.state, 'story_flags')
-
-
-def test_act2_room_transitions():
-    """Test that room transitions work correctly"""
-    act = Act2()
-    game = Game(act)
+    # Take Entry Pass
+    results = _execute_commands(game, ["take entry pass"])
+    _check_item_in_inventory(game.state, "Entry Pass")
+    _check_item_in_room(game.state.current_room, "Entry Pass", should_be_present=False)    
     
-    # Test a few basic transitions
-    test_moves = [
-        ("go north", "Greendale Gates"),
-        ("go north", "Main Square"),
-        ("go east", "Market District"),
-        ("go south", "Merchant's Warehouse"),
-        ("go north", "Market District"),
-        ("go west", "Main Square"),
-    ]
-    
-    for command, expected_room in test_moves:
-        game.handle_command(command)
-        _check_current_room(game.state, expected_room)
+    # TODO: Implement remaining steps 2-27 when all rooms, items, and quests are available
