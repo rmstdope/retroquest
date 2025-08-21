@@ -1,4 +1,6 @@
 from ...engine.Room import Room
+from ..characters.InnkeeperMarcus import InnkeeperMarcus
+from ..characters.BarmaidElena import BarmaidElena
 
 class SilverStagInn(Room):
     def __init__(self) -> None:
@@ -11,6 +13,6 @@ class SilverStagInn(Room):
                 "information flows as freely as the drink."
             ),
             items=[],
-            characters=[],
-            exits={"south": "MarketDistrict", "upstairs": "InnRooms"}
+            characters=[InnkeeperMarcus(), BarmaidElena()],
+            exits={"south": "MarketDistrict", "east": "InnRooms"}
         )

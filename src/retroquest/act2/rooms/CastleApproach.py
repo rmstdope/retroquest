@@ -1,4 +1,6 @@
 from ...engine.Room import Room
+from ..characters.Herald import Herald
+from ..characters.CastleGuardCaptain import CastleGuardCaptain
 
 class CastleApproach(Room):
     def __init__(self) -> None:
@@ -11,6 +13,6 @@ class CastleApproach(Room):
                 "in Greendale."
             ),
             items=[],
-            characters=[],
+            characters=[Herald(), CastleGuardCaptain()],
             exits={"south": "MainSquare", "west": "CastleCourtyard"}
         )

@@ -18,19 +18,8 @@ from retroquest.act2.rooms.AncientGrove import AncientGrove
 from retroquest.act2.rooms.WhisperingGlade import WhisperingGlade
 from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
 
-# TODO: Import quest classes when they are created
-# from retroquest.act2.quests.TheGatheringStorm import TheGatheringStormQuest
-# from retroquest.act2.quests.TheKnightsTest import TheKnightsTestQuest
-# from retroquest.act2.quests.SuppliesForTheJourney import SuppliesForTheJourneyQuest
-# from retroquest.act2.quests.TheMerchantsLostCaravan import TheMerchantsLostCaravanQuest
-# from retroquest.act2.quests.EchoesOfThePast import EchoesOfThePastQuest
-# from retroquest.act2.quests.TheHealersApprentice import TheHealersApprenticeQuest
-# from retroquest.act2.quests.CedricsLostHonor import CedricsLostHonorQuest
-# from retroquest.act2.quests.TheInnkeepersDaughter import TheInnkeepersDaughterQuest
-# from retroquest.act2.quests.TheAncientLibrary import TheAncientLibraryQuest
-# from retroquest.act2.quests.TheHermitsWarning import TheHermitsWarningQuest
-# from retroquest.act2.quests.TheForestGuardiansRiddles import TheForestGuardiansRiddlesQuest
-# from retroquest.act2.quests.WhispersInTheWind import WhispersInTheWindQuest
+# Import starting items for Act 2
+from retroquest.act2.items.Pass import Pass
 
 class Act2(Act):
     def __init__(self):
@@ -58,6 +47,10 @@ class Act2(Act):
         ]
         music_file = "music/Conquest - Market (freetouse.com).mp3"
         super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file)
+
+    def get_starting_items(self):
+        """Return items that the player should start Act 2 with"""
+        return [Pass()]
     
     def get_act_intro(self) -> str:
         return (
