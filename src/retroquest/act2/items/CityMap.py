@@ -4,7 +4,8 @@ from ...engine.GameState import GameState
 class CityMap(Item):
     def __init__(self) -> None:
         super().__init__(
-            name="City Map",
+            name="city map",
+            short_name="map",
             description="A detailed map of Greendale showing the main districts, important buildings, and street layouts. The map is well-drawn and clearly marked, making navigation through the city much easier.",
             can_be_carried=True,
         )

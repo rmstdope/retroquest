@@ -5,6 +5,7 @@ class EntryPass(Item):
     def __init__(self) -> None:
         super().__init__(
             name="entry pass",
+            short_name="pass",
             description="An official-looking document with the seal of Greendale. It appears to grant passage through the city gates to those who present it to the guards.",
             can_be_carried=True,
         )

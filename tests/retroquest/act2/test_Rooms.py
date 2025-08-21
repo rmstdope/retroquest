@@ -58,7 +58,8 @@ def test_all_rooms_have_valid_exits():
     
     for room_name, room_class in ROOM_CLASSES.items():
         room = room_class()
-        for direction, target_room in room.exits.items():
+        exits = room.get_exits()
+        for direction, target_room in exits.items():
             # Special handling for secret passages and special exits
             if direction in ["secret_passage", "upstairs", "downstairs"]:
                 continue

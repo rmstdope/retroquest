@@ -8,7 +8,6 @@ from engine.Act import Act
 class MockRoom(Room):
     def __init__(self, name, description="A mock room."):
         super().__init__(name, description)
-        self.exits = {}
         self.items = []
         self.characters = []
     def can_leave(self):

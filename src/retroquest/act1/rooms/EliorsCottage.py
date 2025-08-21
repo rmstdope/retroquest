@@ -24,7 +24,8 @@ class EliorsCottage(Room):
 
     def can_leave(self):
         # Fill exits when this method is called
-        if not self.exits:
+        exits = self.get_exits()
+        if not exits:
             self.exits = {"south": "VegetableField", "east": "VillageSquare"}
 
     def search(self, game_state):
