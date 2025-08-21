@@ -12,15 +12,27 @@ class AdvancedHealingPotion(Item):
             can_be_carried=True,
         )
 
-    def use_item(self, game_state) -> str:
-        # This item is used for emergency healing during "The Healer's Apprentice" quest
+    def use(self, game_state) -> str:
+        # Check if we're in the Healer's House for emergency healing scenario
+        current_room_name = game_state.current_room.name.lower()
+        if "healer" in current_room_name and "house" in current_room_name:
+            # This is the emergency healing scenario for step 14
+            if not game_state.get_story_flag("emergency_healing_completed"):
+                game_state.set_story_flag("emergency_healing_completed", True)
+                game_state.set_story_flag("healers_apprentice_ready", True)
+                
+                return ("[success]You uncork the [item_name]Advanced Healing Potion[/item_name] and drink it in "
+                       "one swift motion. The liquid burns slightly as it goes down, but immediately you feel a "
+                       "powerful surge of healing energy coursing through your body. Wounds close, bruises fade, "
+                       "and your strength is fully restored. This is clearly the work of a master alchemist![/success]\n\n"
+                       
+                       "[info]Master Healer Lyria watches approvingly. 'Excellent! You've demonstrated that you can "
+                       "use advanced healing techniques under pressure. This is exactly the kind of skill that marks "
+                       "a true healer's apprentice. Your training is now complete!'[/info]")
+            else:
+                return ("You've already used the [item_name]Advanced Healing Potion[/item_name] for your emergency healing training.")
+        
+        # General use outside of emergency healing scenario
         return ("[success]You drink the [item_name]Advanced Healing Potion[/item_name]. Powerful healing energy "
                 "courses through your body, restoring your health to peak condition and curing any ailments. "
                 "The potion's magic is so potent it could save lives that normal healing couldn't reach.[/success]")
-
-    def use_item_on_character(self, game_state, target_character):
-        """Use the potion on another character for emergency healing"""
-        return (f"[success]You give the [item_name]Advanced Healing Potion[/item_name] to "
-                f"[character_name]{target_character.get_name()}[/character_name]. They drink it gratefully, "
-                f"and powerful healing energy restores their health to peak condition, curing any serious "
-                f"ailments they may have had.[/success]")

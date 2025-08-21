@@ -393,6 +393,15 @@ Copyright Free Background Music'''
     def examine(self, target: str) -> str:
         if not target:  # Check if target is an empty string or None
             return "Examine what?"
+        
+        # First check if the current room can handle this examine command
+        if hasattr(self.state.current_room, 'handle_command'):
+            examine_command = f"examine {target}"
+            room_result = self.state.current_room.handle_command(examine_command, self.state)
+            if room_result:  # If the room returned a non-empty response
+                return room_result
+        
+        # Check for items and characters as usual
         item_to_examine = self.find_item(target)
         if item_to_examine:
             return item_to_examine.examine(self.state)
@@ -420,6 +429,13 @@ Copyright Free Background Music'''
         return "\n".join(output)
 
     def unknown(self, command: str) -> str:
+        # First check if the current room can handle the command
+        if hasattr(self.state.current_room, 'handle_command'):
+            room_result = self.state.current_room.handle_command(command, self.state)
+            if room_result:  # If the room returned a non-empty response
+                return room_result
+        
+        # If the room didn't handle it, return the default unknown command message
         return f"I don't understand the command: '{command}'. Try 'help' for a list of valid commands."
 
     def quit(self) -> str:

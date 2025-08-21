@@ -432,3 +432,172 @@ def test_main_square_navigation_restriction():
     exits = game.state.current_room.get_exits(game.state)
     assert "north" in exits, "North exit should be available after using map"
     assert "east" in exits, "East exit should be available after using map"
+
+
+def test_golden_path_step_14_emergency_healing():
+    """Test step 14: Return to Healer's House for emergency healing with Advanced Healing Potion."""
+    act = Act2()
+    game = Game(act)
+    
+    # Set up the game state as if we've completed steps 1-13
+    game.state.current_room = game.state.all_rooms["HealersHouse"]
+    
+    # Set up prerequisites: player should have advanced healing potion and quest should be ready
+    from retroquest.act2.items.AdvancedHealingPotion import AdvancedHealingPotion
+    from retroquest.act2.Act2StoryFlags import FLAG_HEALERS_APPRENTICE_ACCEPTED, FLAG_HEALERS_APPRENTICE_COMPLETED
+    
+    game.state.inventory.append(AdvancedHealingPotion())
+    # Need both flags set to be in the completed state
+    game.state.set_story_flag(FLAG_HEALERS_APPRENTICE_ACCEPTED, True)
+    game.state.set_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED, True)
+    
+    # Verify initial state
+    _check_item_in_inventory(game.state, "advanced healing potion")
+    assert not game.state.get_story_flag("emergency_healing_completed"), "Emergency healing should not be completed initially"
+    
+    # Use the Advanced Healing Potion for emergency healing
+    result = game.handle_command("use advanced healing potion")
+    
+    # Verify the emergency healing was successful
+    assert game.state.get_story_flag("emergency_healing_completed"), "Emergency healing should be marked as completed"
+    assert game.state.get_story_flag("healers_apprentice_ready"), "Healer's apprentice quest should be ready for completion"
+    assert "surge of healing energy" in result.lower(), "Should get healing energy description"
+    assert "master healer lyria" in result.lower(), "Should mention Lyria's approval"
+    
+    # Talk to Master Healer Lyria to complete the quest
+    lyria = None
+    for character in game.state.current_room.get_characters():
+        if "lyria" in character.get_name().lower():
+            lyria = character
+            break
+    
+    assert lyria is not None, "Master Healer Lyria should be in the room"
+    
+    result = lyria.talk_to(game.state)
+    
+    # Verify the quest completion
+    assert "no longer just my apprentice" in result.lower(), "Should acknowledge advancement to colleague status"
+    assert "quest complete" in result.lower(), "Should show quest completion message"
+    assert game.state.get_story_flag("lyria_relationship_colleague"), "Should upgrade relationship to colleague"
+
+
+def test_golden_path_step_15_forest_transition():
+    """Test step 15: Forest Transition activities - kit use, stone examination, spell learning, hermit interaction."""
+    act = Act2()
+    game = Game(act)
+    
+    # Navigate to Forest Transition
+    game.state.current_room = game.state.all_rooms["ForestTransition"]
+    
+    # Set up prerequisites: player should have forest survival kit
+    from retroquest.act2.items.ForestSurvivalKit import ForestSurvivalKit
+    game.state.inventory.append(ForestSurvivalKit())
+    
+    # Verify initial state
+    _check_item_in_inventory(game.state, "forest survival kit")
+    _check_character_in_room(game.state.current_room, "forest hermit")
+    assert not game.state.get_story_flag("forest_transition_kit_used"), "Kit should not be used initially"
+    assert not game.state.get_story_flag("standing_stones_examined"), "Stones should not be examined initially"
+    assert not game.state.get_story_flag("nature_sense_learned"), "Nature sense should not be learned initially"
+    
+    # Step 15a: Use Forest Survival Kit
+    result = game.handle_command("use forest survival kit")
+    assert game.state.get_story_flag("forest_transition_kit_used"), "Kit use should be marked"
+    assert "compass points true north" in result.lower(), "Should describe compass"
+    assert "forest map" in result.lower(), "Should mention studying the map"
+    assert "wilderness survival" in result.lower(), "Should mention survival preparation"
+    
+    # Step 15b: Examine standing stones
+    result = game.handle_command("examine stones")
+    assert game.state.get_story_flag("standing_stones_examined"), "Stone examination should be marked"
+    assert "druidic" in result.lower(), "Should mention druidic runes"
+    assert "boundary between worlds" in result.lower(), "Should describe the boundary"
+    _check_item_in_inventory(game.state, "boundary stone fragment"), "Should receive boundary stone fragment"
+    
+    # Step 15c: Learn nature_sense spell from the stones
+    result = game.handle_command("learn spell")
+    assert game.state.get_story_flag("nature_sense_learned"), "Spell learning should be marked"
+    _check_spell_known(game.state, "nature_sense"), "Should learn nature_sense spell"
+    assert "nature's sense" in result.lower(), "Should mention the spell name"
+    assert "connection forming with the natural world" in result.lower(), "Should describe magical connection"
+    
+    # Step 15d: Talk to Forest Hermit to get protective charm and complete quest
+    hermit = None
+    for character in game.state.current_room.get_characters():
+        if "hermit" in character.get_name().lower():
+            hermit = character
+            break
+    
+    assert hermit is not None, "Forest Hermit should be in the room"
+    
+    result = hermit.talk_to(game.state)
+    
+    # Verify hermit interaction results
+    assert "waiting for you" in result.lower(), "Should show hermit was expecting player"
+    assert "protective charm" in result.lower(), "Should mention the charm"
+    assert "ancient guardians" in result.lower(), "Should warn about forest dangers"
+    assert "dark spirits" in result.lower(), "Should warn about dark spirits"
+    _check_item_in_inventory(game.state, "protective charm"), "Should receive protective charm"
+    assert game.state.get_story_flag("hermits_warning_completed"), "Hermit's warning should be completed"
+
+
+def test_golden_path_steps_14_15_integration():
+    """Test the integration of steps 14-15 together to ensure they work in sequence."""
+    act = Act2()
+    game = Game(act)
+    
+    # Start from a state where steps 1-13 are completed
+    # Set up for step 14: Have advanced healing potion and completed basic apprenticeship
+    from retroquest.act2.items.AdvancedHealingPotion import AdvancedHealingPotion
+    from retroquest.act2.items.ForestSurvivalKit import ForestSurvivalKit
+    from retroquest.act2.Act2StoryFlags import FLAG_HEALERS_APPRENTICE_ACCEPTED, FLAG_HEALERS_APPRENTICE_COMPLETED
+    
+    game.state.inventory.append(AdvancedHealingPotion())
+    game.state.inventory.append(ForestSurvivalKit())
+    # Need both flags set to be in the completed state
+    game.state.set_story_flag(FLAG_HEALERS_APPRENTICE_ACCEPTED, True)
+    game.state.set_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED, True)
+    
+    # Step 14: Emergency healing at Healer's House
+    game.state.current_room = game.state.all_rooms["HealersHouse"]
+    result = game.handle_command("use advanced healing potion")
+    assert game.state.get_story_flag("emergency_healing_completed"), "Emergency healing should be completed"
+    
+    # Talk to Lyria to complete the apprentice quest
+    lyria = game.state.current_room.get_characters()[0]  # Should be Master Healer Lyria
+    result = lyria.talk_to(game.state)
+    assert game.state.get_story_flag("lyria_relationship_colleague"), "Should become colleague"
+    
+    # Step 15: Move to Forest Transition and complete all activities
+    game.state.current_room = game.state.all_rooms["ForestTransition"]
+    
+    # Use forest survival kit
+    result = game.handle_command("use forest survival kit")
+    assert game.state.get_story_flag("forest_transition_kit_used"), "Kit should be used"
+    
+    # Examine stones and get fragment
+    result = game.handle_command("examine stones")
+    assert game.state.get_story_flag("standing_stones_examined"), "Stones should be examined"
+    _check_item_in_inventory(game.state, "boundary stone fragment")
+    
+    # Learn nature_sense spell
+    result = game.handle_command("learn spell")
+    assert game.state.get_story_flag("nature_sense_learned"), "Spell should be learned"
+    _check_spell_known(game.state, "nature_sense")
+    
+    # Talk to hermit
+    hermit = game.state.current_room.get_characters()[0]  # Should be Forest Hermit
+    result = hermit.talk_to(game.state)
+    assert game.state.get_story_flag("hermits_warning_completed"), "Hermit warning should be completed"
+    _check_item_in_inventory(game.state, "protective charm")
+    
+    # Verify final state: player should have all items and flags set for continuing to step 16
+    _check_item_in_inventory(game.state, "boundary stone fragment")
+    _check_item_in_inventory(game.state, "protective charm")
+    _check_spell_known(game.state, "nature_sense")
+    assert game.state.get_story_flag("emergency_healing_completed")
+    assert game.state.get_story_flag("forest_transition_kit_used")
+    assert game.state.get_story_flag("standing_stones_examined")
+    assert game.state.get_story_flag("nature_sense_learned")
+    assert game.state.get_story_flag("hermits_warning_completed")
+    assert game.state.get_story_flag("lyria_relationship_colleague")

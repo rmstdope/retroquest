@@ -65,7 +65,20 @@ class MasterHealerLyria(Character):
                         "to the healing arts.")
         
         elif game_state.get_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED):
-            if game_state.get_story_flag(FLAG_LYRIA_RELATIONSHIP_COLLEAGUE):
+            # Check if emergency healing was completed
+            if game_state.get_story_flag("emergency_healing_completed"):
+                if not game_state.get_story_flag(FLAG_LYRIA_RELATIONSHIP_COLLEAGUE):
+                    game_state.set_story_flag(FLAG_LYRIA_RELATIONSHIP_COLLEAGUE, True)
+                    return ("[success][character_name]Master Healer Lyria[/character_name] beams with pride. "
+                           "'I saw how you used the [item_name]advanced healing potion[/item_name] just now. "
+                           "Your technique was flawless—you've truly mastered the art of emergency healing under "
+                           "pressure. You are no longer just my apprentice, but a colleague in the healing arts!'[/success]\n\n"
+                           "[quest_complete]Quest Complete: The Healer's Apprentice[/quest_complete]")
+                else:
+                    return ("[character_name]Master Healer Lyria[/character_name]: It's wonderful to see how far you've "
+                            "come with your healing abilities. You're truly a master of the healing arts now. "
+                            "Continue to use your gifts to help those in need.")
+            elif game_state.get_story_flag(FLAG_LYRIA_RELATIONSHIP_COLLEAGUE):
                 return ("[character_name]Master Healer Lyria[/character_name]: It's wonderful to see how far you've "
                         "come with your healing abilities. You're truly becoming a master of the healing arts. "
                         "Continue to use your gifts to help those in need.")
