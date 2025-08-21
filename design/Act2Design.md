@@ -52,7 +52,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Trigger:** First meeting with Sir Cedric
   - **Prerequisites:** Access to Castle Courtyard
   - **Dependencies:** None
-  - **Completion:** Prove your worthiness by completing a trial set by Cedric (combat skills, moral choices, or magical demonstration)
+  - **Completion:** Prove your worthiness by demonstrating combat skills to Cedric
   - **Rewards:** Cedric's respect, Training Sword, access to "Supplies for the Journey"
   - **Story Impact:** Establishes trust with a key ally
 
@@ -72,7 +72,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Trigger:** Speak with a worried merchant in Greendale's market
   - **Prerequisites:** Access to Market District
   - **Dependencies:** Must learn `forest_speech` spell to locate caravan
-  - **Completion:** Rescue the merchant's caravan from bandits or forest creatures, earning valuable supplies and information about safe forest paths
+  - **Completion:** Rescue the merchant's caravan from bandits through negotiation, earning valuable supplies and information about safe forest paths
   - **Rewards:** Trade goods, safe forest path knowledge
   - **Story Impact:** Establishes reputation as a reliable hero
 
@@ -1535,7 +1535,7 @@ The completion of Act II marks Elior's transformation from a promising young her
 13. **Hidden Library:**
 
     - Cast `mend` on damaged protective enchantments. _The magical barriers flicker and stabilize._
-      - Spell used: `mend` (on magical barriers)
+      - Spell cast: `mend` (on magical barriers)
     - Talk to Spectral Librarian. _The ghostly guardian tests Elior's worthiness to access the texts._
     - Read Ancient Spellbook. _From the tome's arcane knowledge, Elior learns the `dispel` spell._
       - Spell Learned: `dispel` (counter-magic)
@@ -1583,7 +1583,7 @@ The completion of Act II marks Elior's transformation from a promising young her
 18. **Whispering Glade:**
 
     - Cast `nature_sense` to locate water nymphs. _The spell reveals shimmering forms by the stream._
-      - Spell used: `nature_sense` (detection)
+      - Spell cast: `nature_sense` (detection)
     - Talk to Water Nymphs. _The nymphs pose riddles about the forest's secrets._
     - Solve riddles using forest knowledge. _Correct answers earn the nymphs' trust._
       - Quest completed: "The Forest Guardian's Riddles"
@@ -1598,19 +1598,19 @@ The completion of Act II marks Elior's transformation from a promising young her
 20. **Return to The Silver Stag Inn:**
 
     - Cast `greater_heal` on cursed Elena. _The enhanced healing magic battles the dark curse._
-      - Spell used: `greater_heal` (on Elena)
+      - Spell cast: `greater_heal` (on Elena)
     - Use Crystal-Clear Water to purify the curse. _The pure water breaks the remaining dark magic._
       - Item used: `Crystal-Clear Water` (purification)
     - Cast `dispel` to break the final curse bindings. _The counter-magic completely frees Elena._
-      - Spell used: `dispel` (curse breaking)
+      - Spell cast: `dispel` (curse breaking)
       - Quest completed: "The Innkeeper's Daughter"
 
 21. **Search for Lost Caravan (Forest Areas):**
 
-    - Use `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location._
-      - Spell used: `forest_speech` (investigation)
+    - Cast `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location._
+      - Spell cast: `forest_speech` (investigation)
     - Follow animal guidance to find the lost caravan. _Merchant wagons discovered in a forest clearing._
-    - Rescue caravan from bandits or forest creatures. _Combat or negotiation resolves the threat._
+    - Rescue caravan from bandits through negotiation. _Diplomatic discussion resolves the threat peacefully._
     - Secure the caravan and ensure safe passage. _Caravan is safely recovered for Thorne._
 
 22. **Return to Market District:**
@@ -1644,7 +1644,7 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Receive Nyx's Token. _Nyx's Token is added to inventory._
     - Receive Forest Heart Crystal. _Forest Heart Crystal is added to inventory._
     - Cast `prophetic_vision` to see future threats. _Visions reveal the true scope of the gathering storm._
-      - Spell used: `prophetic_vision` (divination)
+      - Spell cast: `prophetic_vision` (divination)
       - Quest completed: "The Gathering Storm"
 
 27. **Return to Castle Courtyard:**
