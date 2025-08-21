@@ -1,5 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import FLAG_RESEARCHED_FAMILY_HERITAGE, FLAG_ECHOES_OF_PAST_COMPLETED
 
 class EchoesOfThePastQuest(Quest):
     def __init__(self) -> None:
@@ -9,8 +10,8 @@ class EchoesOfThePastQuest(Quest):
             completion="You have uncovered important information about your family heritage and Willowbrook's significance in ancient history!"
         )
 
+    def check_trigger(self, game_state: GameState) -> bool:
+        return game_state.get_story_flag(FLAG_RESEARCHED_FAMILY_HERITAGE)
+
     def check_completion(self, game_state: GameState) -> bool:
-        if game_state.get_story_flag("researched_family_heritage") and not self.is_completed_flag:
-            self.is_completed_flag = True
-            return True
-        return False
+        return game_state.get_story_flag(FLAG_ECHOES_OF_PAST_COMPLETED)

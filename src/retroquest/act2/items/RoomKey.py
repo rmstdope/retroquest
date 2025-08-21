@@ -1,5 +1,6 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_ACCESSED_INN_ROOM
 
 class RoomKey(Item):
     def __init__(self) -> None:
@@ -12,8 +13,8 @@ class RoomKey(Item):
     def use(self, game_state: GameState) -> str:
         # Check if we're in the Inn Rooms
         if game_state.current_room.name == "Inn Rooms":
-            if not game_state.get_story_flag("accessed_inn_room"):
-                game_state.set_story_flag("accessed_inn_room", True)
+            if not game_state.get_story_flag(FLAG_ACCESSED_INN_ROOM):
+                game_state.set_story_flag(FLAG_ACCESSED_INN_ROOM, True)
                 return ("[success]You use the room key to access your private room. The quiet space allows you "
                         "to study and examine items safely away from the busy common room below. You notice "
                         "a traveler's journal left behind by a previous guest.[/success]")

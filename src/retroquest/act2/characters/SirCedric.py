@@ -2,6 +2,7 @@ from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..quests.TheGatheringStorm import TheGatheringStormQuest
 from ..quests.TheKnightsTest import TheKnightsTestQuest
+from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_CEDRIC_TRUSTS_ELIOR
 
 class SirCedric(Character):
     def __init__(self) -> None:
@@ -11,21 +12,20 @@ class SirCedric(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
-        if not game_state.is_quest_activated("The Gathering Storm"):
+        if not game_state.get_story_flag(FLAG_SPOKEN_TO_SIR_CEDRIC):
             # First meeting - explain the main quest and give knight's test
-            game_state.activate_quest_by_object(TheGatheringStormQuest())
-            game_state.activate_quest_by_object(TheKnightsTestQuest())
+            game_state.set_story_flag(FLAG_SPOKEN_TO_SIR_CEDRIC, True)
             return ("[character_name]Sir Cedric[/character_name]: Greetings, traveler. I am [character_name]Sir Cedric[/character_name], "
                     "and I have been seeking individuals of courage and skill for a matter of great importance. "
                     "Dark forces are gathering - what I call 'The Gathering Storm' - and I need allies with "
                     "magical knowledge and proven abilities. Before I can trust you with this responsibility, "
                     "I need proof of your combat skills. Can you demonstrate your martial abilities?")
-        elif game_state.is_quest_completed("The Knight's Test") and not game_state.get_story_flag("cedric_trusts_elior"):
-            game_state.set_story_flag("cedric_trusts_elior", True)
+        elif game_state.is_quest_completed("The Knight's Test") and not game_state.get_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR):
+            game_state.set_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR, True)
             return ("[character_name]Sir Cedric[/character_name]: Excellent demonstration! Your combat skills are impressive. "
                     "I can see you have the training and discipline needed for the challenges ahead. Now I need you "
                     "to gather supplies and allies. The realm faces a great threat, and we must be prepared.")
-        elif game_state.get_story_flag("cedric_trusts_elior"):
+        elif game_state.get_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR):
             return ("[character_name]Sir Cedric[/character_name]: How goes your preparation? The gathering storm grows "
                     "stronger each day. I trust you are making good progress in gathering allies and supplies.")
         else:

@@ -1,6 +1,7 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..quests.TheInnkeepersDaughter import TheInnkeepersDaughterQuest
+from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE
 
 class BarmaidElena(Character):
     def __init__(self) -> None:
@@ -10,9 +11,8 @@ class BarmaidElena(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
-        if not game_state.is_quest_activated("The Innkeeper's Daughter"):
-            game_state.activate_quest_by_object(TheInnkeepersDaughterQuest())
-            game_state.set_story_flag("knows_elena_curse", True)
+        if not game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE):
+            game_state.set_story_flag(FLAG_KNOWS_ELENA_CURSE, True)
             return ("[character_name]Barmaid Elena[/character_name]: *coughs weakly* Hello, traveler. I apologize for my "
                     "appearance... I've been cursed by a dark wizard who passed through town weeks ago. The curse "
                     "grows stronger each day, draining my life force. My father searches desperately for a cure, "

@@ -1,5 +1,6 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS
 
 class TrainingSword(Item):
     def __init__(self) -> None:
@@ -13,9 +14,9 @@ class TrainingSword(Item):
         # Check if we're in the Castle Courtyard with Sir Cedric present
         if (game_state.current_room.name == "Castle Courtyard" and 
             any(char.get_name().lower() == "sir cedric" for char in game_state.current_room.get_characters()) and
-            not game_state.get_story_flag("demonstrated_combat_skills")):
+            not game_state.get_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS)):
             
-            game_state.set_story_flag("demonstrated_combat_skills", True)
+            game_state.set_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS, True)
             return ("[success]You draw the training sword and perform a series of combat forms for "
                     "[character_name]Sir Cedric[/character_name]. Your movements are fluid and precise, "
                     "demonstrating skill with both offensive and defensive techniques. Sir Cedric nods "

@@ -21,6 +21,16 @@ from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
 # Import starting items for Act 2
 from retroquest.act2.items.Pass import Pass
 
+# Import all available quests for Act 2
+from retroquest.act2.quests.TheGatheringStorm import TheGatheringStormQuest
+from retroquest.act2.quests.TheKnightsTest import TheKnightsTestQuest
+from retroquest.act2.quests.SuppliesForTheJourney import SuppliesForTheJourneyQuest
+from retroquest.act2.quests.EchoesOfThePast import EchoesOfThePastQuest
+from retroquest.act2.quests.TheInnkeepersDaughter import TheInnkeepersDaughterQuest
+from retroquest.act2.quests.TheMerchantsLostCaravan import TheMerchantsLostCaravanQuest
+from retroquest.act2.quests.TheHealersApprentice import TheHealersApprenticeQuest
+from retroquest.act2.quests.TheAncientLibrary import TheAncientLibraryQuest
+
 class Act2(Act):
     def __init__(self):
         rooms = {
@@ -44,6 +54,25 @@ class Act2(Act):
             "HeartOfTheForest": HeartOfTheForest(),
         }
         quests = [
+            # Main Quest
+            TheGatheringStormQuest(),
+            
+            # Greendale Phase Side Quests
+            TheKnightsTestQuest(),
+            SuppliesForTheJourneyQuest(),
+            EchoesOfThePastQuest(),
+            TheHealersApprenticeQuest(),
+            TheAncientLibraryQuest(),
+            TheInnkeepersDaughterQuest(),
+            
+            # Forest Phase Side Quests
+            TheMerchantsLostCaravanQuest(),
+            
+            # TODO: Add remaining quests when implemented:
+            # CedricksLostHonorQuest(), 
+            # TheHermitsWarningQuest(),
+            # TheForestGuardiansRiddlesQuest(),
+            # WhispersInTheWindQuest(),
         ]
         music_file = "music/Conquest - Market (freetouse.com).mp3"
         super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file)

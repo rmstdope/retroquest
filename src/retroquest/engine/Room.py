@@ -32,7 +32,7 @@ class Room:
     def get_characters(self) -> list:
         return self.characters
 
-    def get_exits(self) -> dict:
+    def get_exits(self, game_state=None) -> dict:
         return self.exits
 
     def get_ambient_sound(self) -> str:
@@ -84,8 +84,9 @@ class Room:
             # Use get_name for character instances
             character_names = ', '.join(f"[character_name]{c.get_name()}[/character_name]" for c in self.characters)
             desc += f"\nCharacters present: {character_names}"
-        if self.exits:
-            exit_names = ', '.join(f"[exits]{exit_name}[/exits]" for exit_name in self.exits.keys())
+        exits = self.get_exits()
+        if exits:
+            exit_names = ', '.join(f"[exits]{exit_name}[/exits]" for exit_name in exits.keys())
             desc += f"\nExits: {exit_names}"
         return desc
 

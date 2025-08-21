@@ -1,6 +1,7 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..quests.TheMerchantsLostCaravan import TheMerchantsLostCaravanQuest
+from ..Act2StoryFlags import FLAG_SPOKEN_TO_CARAVAN_MASTER
 
 class CaravanMasterThorne(Character):
     def __init__(self) -> None:
@@ -10,8 +11,8 @@ class CaravanMasterThorne(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
-        if not game_state.is_quest_activated("The Merchant's Lost Caravan"):
-            game_state.activate_quest_by_object(TheMerchantsLostCaravanQuest())
+        if not game_state.get_story_flag(FLAG_SPOKEN_TO_CARAVAN_MASTER):
+            game_state.set_story_flag(FLAG_SPOKEN_TO_CARAVAN_MASTER, True)
             return ("[character_name]Caravan Master Thorne[/character_name]: Thank the gods, someone who looks capable! "
                     "I desperately need help - one of my most valuable caravans has gone missing in the Enchanted Forest. "
                     "It was carrying rare goods and several merchants. I fear the worst, but I must know their fate. "

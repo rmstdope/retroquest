@@ -22,7 +22,7 @@ class MountainPath(Room):
         )
         self.forest_exit_locked = True
 
-    def get_exits(self) -> dict:
+    def get_exits(self, game_state=None) -> dict:
         """Return available exits, hiding forest_transition if locked"""
         exits = super().get_exits().copy()
         if self.forest_exit_locked:

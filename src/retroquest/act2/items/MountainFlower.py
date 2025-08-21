@@ -5,6 +5,7 @@ class MountainFlower(Item):
     def __init__(self) -> None:
         super().__init__(
             name="mountain flower",
+            short_name="flower",
             description="A small but hardy wildflower that grows along the mountain paths. Its purple petals seem to shimmer slightly in the sunlight, though it appears to have no special properties.",
             can_be_carried=True,
         )

@@ -1,6 +1,7 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE
 
 class InnkeeperMarcus(Character):
     def __init__(self) -> None:
@@ -10,7 +11,7 @@ class InnkeeperMarcus(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
-        if game_state.get_story_flag("knows_elena_curse"):
+        if game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE):
             return ("[character_name]Innkeeper Marcus[/character_name]: You've spoken with [character_name]Elena[/character_name]? "
                     "Then you understand my desperation. The curse grows stronger each day, and I fear we don't have "
                     "much time left. If you truly can help her, I'll give you anything - rooms, information, whatever you need.")

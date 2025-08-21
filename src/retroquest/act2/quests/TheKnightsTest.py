@@ -1,5 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SPOKEN_TO_SIR_CEDRIC
 
 class TheKnightsTestQuest(Quest):
     def __init__(self) -> None:
@@ -9,8 +10,10 @@ class TheKnightsTestQuest(Quest):
             completion="You have successfully demonstrated your combat skills to Sir Cedric. He now trusts your abilities!"
         )
 
+    def check_trigger(self, game_state: GameState) -> bool:
+        return game_state.get_story_flag(FLAG_SPOKEN_TO_SIR_CEDRIC)
+
     def check_completion(self, game_state: GameState) -> bool:
-        if game_state.get_story_flag("demonstrated_combat_skills") and not self.is_completed_flag:
-            self.is_completed_flag = True
+        if game_state.get_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS):
             return True
         return False

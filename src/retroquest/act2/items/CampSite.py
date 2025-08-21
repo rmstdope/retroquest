@@ -5,6 +5,7 @@ class CampSite(Item):
     def __init__(self) -> None:
         super().__init__(
             name="camp site",
+            short_name="camp",
             description="A small clearing off the main path where travelers often rest. There are signs of recent use - a fire pit with cold ashes and scattered belongings that suggest someone left in a hurry.",
             can_be_carried=False,
         )
