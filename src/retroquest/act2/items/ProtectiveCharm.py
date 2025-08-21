@@ -14,10 +14,15 @@ class ProtectiveCharm(Item):
 
     def use(self, game_state) -> str:
         if game_state.current_room.name == "Forest Entrance":
-            return ("[success]You hold the [item_name]protective charm[/item_name] aloft. Its gentle green glow "
-                   "creates a barrier of safety around you, warding off the hostile forest spirits that lurk "
-                   "in the shadows. The charm provides safe passage through the dangerous threshold between "
-                   "the civilized world and the wild forest realm.[/success]")
+            if not game_state.get_story_flag("protective_charm_used_forest_entrance"):
+                game_state.set_story_flag("protective_charm_used_forest_entrance", True)
+                return ("[spell_effect]The Protective Charm radiates a warm, golden light as you invoke its power. "
+                       "A shimmering barrier of spiritual energy surrounds you, and you feel the watchful gaze of "
+                       "the forest spirits become less threatening. The ancient magic recognizes your respect and "
+                       "preparation, granting you safe passage through these sacred woods.[/spell_effect]")
+            else:
+                return ("[info]The Protective Charm's energy still surrounds you, providing continued spiritual "
+                       "protection in this mystical place.[/info]")
         else:
             return ("The [item_name]protective charm[/item_name] glows softly, providing a sense of comfort and "
                    "protection. It seems most powerful near places of natural magic.")

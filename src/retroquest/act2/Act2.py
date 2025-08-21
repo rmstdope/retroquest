@@ -30,6 +30,8 @@ from retroquest.act2.quests.TheInnkeepersDaughter import TheInnkeepersDaughterQu
 from retroquest.act2.quests.TheMerchantsLostCaravan import TheMerchantsLostCaravanQuest
 from retroquest.act2.quests.TheHealersApprentice import TheHealersApprenticeQuest
 from retroquest.act2.quests.TheAncientLibrary import TheAncientLibraryQuest
+from retroquest.act2.quests.TheForestGuardiansRiddles import TheForestGuardiansRiddles
+from retroquest.act2.quests.WhispersInTheWind import WhispersInTheWind
 
 class Act2(Act):
     def __init__(self):
@@ -67,12 +69,12 @@ class Act2(Act):
             
             # Forest Phase Side Quests
             TheMerchantsLostCaravanQuest(),
+            TheForestGuardiansRiddles(),
+            WhispersInTheWind(),
             
             # TODO: Add remaining quests when implemented:
             # CedricksLostHonorQuest(), 
             # TheHermitsWarningQuest(),
-            # TheForestGuardiansRiddlesQuest(),
-            # WhispersInTheWindQuest(),
         ]
         music_file = "music/Conquest - Market (freetouse.com).mp3"
         super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file)
