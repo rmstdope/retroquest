@@ -1,5 +1,6 @@
 from ...engine.Room import Room
 from ..items.EnchantedAcorn import EnchantedAcorn
+from ..items.ForestMapFragment import ForestMapFragment
 from ..characters.ForestSprites import ForestSprites
 
 class ForestEntrance(Room):
@@ -14,7 +15,7 @@ class ForestEntrance(Room):
                 "serves as the sacred gateway to the forest's heart, while the other leads to a peaceful glade. "
                 "Small motes of light dance between the trees - forest sprites watching your every move."
             ),
-            items=[EnchantedAcorn()],
+            items=[EnchantedAcorn(), ForestMapFragment()],
             characters=[ForestSprites()],
             exits={"west": "ForestTransition", "south": "AncientGrove", "east": "WhisperingGlade"}
         )
@@ -52,6 +53,18 @@ class ForestEntrance(Room):
             return self._take_enchanted_acorn(game_state)
         elif command == "get acorn":
             return self._take_enchanted_acorn(game_state)
+            
+        # Handle taking the Forest Map Fragment
+        elif command == "take forest map fragment":
+            return self._take_forest_map_fragment(game_state)
+        elif command == "take map fragment":
+            return self._take_forest_map_fragment(game_state)
+        elif command == "take forest map":
+            return self._take_forest_map_fragment(game_state)
+        elif command == "get forest map fragment":
+            return self._take_forest_map_fragment(game_state)
+        elif command == "get map fragment":
+            return self._take_forest_map_fragment(game_state)
         
         # Handle examining the acorn before taking
         elif command == "examine enchanted acorn":
@@ -159,3 +172,28 @@ class ForestEntrance(Room):
             )
         else:
             return "[error]There is no Enchanted Acorn here to examine.[/error]"
+            
+    def _take_forest_map_fragment(self, game_state) -> str:
+        """Take the Forest Map Fragment from the forest floor."""
+        # Check if the map fragment is still in the room (case-insensitive)
+        fragment_in_room = any(item.name.lower() == "forest map fragment" for item in self.items)
+        
+        if fragment_in_room:
+            # Remove from room and add to inventory
+            self.items = [item for item in self.items if item.name.lower() != "forest map fragment"]
+            from ..items.ForestMapFragment import ForestMapFragment
+            fragment = ForestMapFragment()
+            game_state.inventory.add_item(fragment)
+            game_state.set_story_flag("forest_map_fragment_taken", True)
+            
+            return (
+                "[item_acquired]You carefully pick up the Forest Map Fragment from where it lies "
+                "partially buried beneath some moss. The ancient parchment feels surprisingly durable "
+                "despite its age, and the ink seems to shimmer with a faint magical glow. This fragment "
+                "clearly shows important forest paths and landmarks that could be crucial for safe "
+                "navigation through the Enchanted Forest.[/item_acquired]"
+            )
+        elif game_state.inventory.has_item("forest map fragment"):
+            return "[info]You already have the Forest Map Fragment.[/info]"
+        else:
+            return "[error]There is no Forest Map Fragment here to take.[/error]"

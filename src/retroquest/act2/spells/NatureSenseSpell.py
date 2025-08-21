@@ -16,7 +16,23 @@ class NatureSenseSpell(Spell):
     def cast_spell(self, game_state) -> str:
         current_room = game_state.current_room.name
         
-        if "forest" in current_room.lower() or "enchanted" in current_room.lower():
+        # Special handling for Whispering Glade
+        if current_room == "Whispering Glade":
+            if not game_state.get_story_flag("nature_sense_used_whispering_glade"):
+                game_state.set_story_flag("nature_sense_used_whispering_glade", True)
+                return (
+                    "[spell_effect]You cast [spell_name]Nature's Sense[/spell_name] and extend "
+                    "your awareness throughout the glade. Immediately, you sense magical presences "
+                    "by the stream - graceful forms of living water and moonlight. The water nymphs "
+                    "reveal themselves, shimmering into visibility as they recognize your magical "
+                    "sensitivity and respect for the natural world.[/spell_effect]"
+                )
+            else:
+                return (
+                    "[info]Your [spell_name]Nature's Sense[/spell_name] reveals the familiar presence of the water nymphs "
+                    "by the sacred stream, their forms visible and welcoming.[/info]"
+                )
+        elif "forest" in current_room.lower() or "enchanted" in current_room.lower():
             # In forest areas, provide enhanced sensory information
             return ("[success]You cast [spell_name]Nature's Sense[/spell_name] and feel your awareness "
                    "expand throughout the surrounding forest. The whisper of leaves speaks of safe "

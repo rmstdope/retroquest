@@ -35,6 +35,11 @@ class AncientGrove(Room):
                         "give enchanted acorn to ancient tree spirit", "give acorn to ancient tree spirit"]:
             return self._give_enchanted_acorn(game_state)
             
+        # Handle completing the "Whispers in the Wind" quest (step 19)
+        elif command in ["complete whispers in the wind", "complete quest", "turn in quest",
+                        "report to tree spirit", "return to tree spirit"]:
+            return self._complete_whispers_quest(game_state)
+            
         # Handle taking Silver Leaves
         elif command in ["take silver leaves", "get silver leaves", "take leaves", "get leaves"]:
             return self._take_silver_leaves(game_state)
@@ -92,6 +97,58 @@ class AncientGrove(Room):
             "tree's bark begins to glow more brightly, and the very air around you thrums with ancient "
             "power. A deep, resonant voice emerges from within the tree - the Ancient Tree Spirit has "
             "accepted your offering and wishes to speak with you.[/quest_progress]"
+        )
+        
+    def _complete_whispers_quest(self, game_state) -> str:
+        """Complete the 'Whispers in the Wind' quest by returning with sacred items."""
+        # Check if the quest is already completed
+        if game_state.get_story_flag("whispers_in_the_wind_completed"):
+            return "[info]You have already completed the 'Whispers in the Wind' quest.[/info]"
+            
+        # Check if the prerequisite quests are completed
+        if not game_state.get_story_flag("water_nymph_riddles_completed"):
+            return "[error]You must complete 'The Forest Guardian's Riddles' quest first.[/error]"
+            
+        # Check if the player has the required items
+        has_crystal_water = game_state.has_item("crystal-clear water")
+        has_moonflowers = game_state.has_item("moonflowers")
+        
+        if not has_crystal_water or not has_moonflowers:
+            missing_items = []
+            if not has_crystal_water:
+                missing_items.append("crystal-clear water")
+            if not has_moonflowers:
+                missing_items.append("moonflowers")
+                
+            return (
+                f"[error]You need to bring the sacred items from the water nymphs to complete this quest. "
+                f"You are missing: {', '.join(missing_items)}.[/error]"
+            )
+            
+        # Complete the quest
+        game_state.set_story_flag("whispers_in_the_wind_completed", True)
+        
+        # Add quest completion to the player's progress
+        completed_quests = game_state.get_story_flag("completed_quests") or []
+        completed_quests.append("Whispers in the Wind")
+        game_state.set_story_flag("completed_quests", completed_quests)
+        
+        return (
+            "[quest_complete]You approach the Ancient Tree Spirit with the sacred items from the "
+            "Whispering Glade - the Crystal-Clear Water and the Moonflowers. As you present these "
+            "blessed gifts, the Ancient Tree Spirit's voice fills the grove with warmth and approval.\n\n"
+            
+            "'You have done well, forest wanderer. The water nymphs have tested your wisdom and found "
+            "you worthy. These sacred items - water blessed with purification magic and flowers touched "
+            "by moonlight - are treasures of the forest's heart. You have shown respect for the old ways "
+            "and proven yourself a true friend to the woodland spirits.'\n\n"
+            
+            "The silver leaves on the great tree shimmer more brightly, and you feel a deep sense of "
+            "accomplishment. The forest itself seems to acknowledge your achievement, and the whispers "
+            "in the wind now carry words of welcome and gratitude.\n\n"
+            
+            "[bold]Quest Complete: 'Whispers in the Wind'[/bold]\n"
+            "You have successfully communed with the forest spirits and earned their trust.[/quest_complete]"
         )
         
     def _take_silver_leaves(self, game_state) -> str:
