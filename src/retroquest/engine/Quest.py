@@ -4,10 +4,11 @@ class Quest:
     """
     Base class for all quests in RetroQuest.
     """
-    def __init__(self, name: str, description: str, completion: str) -> None:
+    def __init__(self, name: str, description: str, completion: str = None) -> None:
         self.name = name
         self.description = description
-        self.completion = completion
+        self.completion = completion or f"You have completed the quest '{name}'."
+        self.is_completed_flag = False
 
     def check_trigger(self, game_state: GameState) -> bool:
         """Override in subclasses to check if the quest should be triggered."""
@@ -15,7 +16,12 @@ class Quest:
 
     def check_completion(self, game_state: GameState) -> bool:
         """Override in subclasses to check if the quest is completed."""
-        return False
+        return self.is_completed_flag
+
+    def complete(self, game_state: GameState) -> str:
+        """Mark the quest as completed and return completion message."""
+        self.is_completed_flag = True
+        return self.completion
 
     def check_update(self, game_state: GameState) -> bool:
         """Override in subclasses to update quest state dynamically. Return True if quest log should update."""
