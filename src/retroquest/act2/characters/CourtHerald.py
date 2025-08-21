@@ -8,7 +8,7 @@ class CourtHerald(Character):
             description="An elaborately dressed official who manages formal presentations and ceremonies at court. He scrutinizes documents and credentials with practiced expertise.",
         )
 
-    def talk(self, game_state: GameState) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag("court_herald_formal_presentation"):
             return ("[character_name]Court Herald[/character_name]: You have been formally presented to the court and "
                     "your credentials are on record. You may access the historical archives and speak with court "

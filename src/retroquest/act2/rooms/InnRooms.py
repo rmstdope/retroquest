@@ -13,7 +13,7 @@ class InnRooms(Room):
             ),
             items=[TravelersJournal()],
             characters=[],
-            exits={"downstairs": "SilverStagInn"}
+            exits={"west": "SilverStagInn"}
         )
 
     def handle_command(self, command: str, game_state: GameState) -> str:

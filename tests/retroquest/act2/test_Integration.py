@@ -205,7 +205,7 @@ def test_golden_path_act2_completion():
     # Should now have "The Merchant's Lost Caravan" quest
     assert game.state.is_quest_activated("The Merchant's Lost Caravan"), "The Merchant's Lost Caravan quest should be activated"
     # Buy Forest Survival Kit
-    _execute_commands(game, ["buy forest survival kit"])
+    _execute_commands(game, ["buy forest survival kit from master merchant aldric"])
     _check_item_in_inventory(game.state, "Forest Survival Kit")
     
     # Step 7: The Silver Stag Inn
@@ -222,10 +222,10 @@ def test_golden_path_act2_completion():
     assert game.state.is_quest_activated("The Innkeeper's Daughter"), "The Innkeeper's Daughter quest should be activated"
     assert game.state.get_story_flag("knows_elena_curse"), "Should know about Elena's curse"
     # Buy Room Key
-    _execute_commands(game, ["buy room key"])
+    _execute_commands(game, ["buy room key from innkeeper marcus"])
     _check_item_in_inventory(game.state, "Room Key")
     # Use Room Key to access Inn Rooms
-    _execute_commands(game, ["go upstairs"])
+    _execute_commands(game, ["go east"])
     _check_current_room(game.state, "Inn Rooms")
     _execute_commands(game, ["use room key"])
     assert game.state.get_story_flag("accessed_inn_room"), "Should have accessed inn room"
@@ -236,12 +236,12 @@ def test_golden_path_act2_completion():
     
     # Step 8: Return to Market District
     # Go back to Market District
-    _execute_commands(game, ["go downstairs", "go south"])
+    _execute_commands(game, ["go west", "go south"])
     _check_current_room(game.state, "Market District")
     # Buy Enhanced Lantern and Quality Rope
-    _execute_commands(game, ["buy enhanced lantern"])
+    _execute_commands(game, ["buy enhanced lantern from master merchant aldric"])
     _check_item_in_inventory(game.state, "Enhanced Lantern")
-    _execute_commands(game, ["buy quality rope"])
+    _execute_commands(game, ["buy quality rope from master merchant aldric"])
     _check_item_in_inventory(game.state, "Quality Rope")
     # "Supplies for the Journey" quest should now be completed
     assert game.state.is_quest_completed("Supplies for the Journey"), "Supplies for the Journey quest should be completed"

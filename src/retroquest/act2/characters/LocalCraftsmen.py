@@ -8,7 +8,7 @@ class LocalCraftsmen(Character):
             description="Skilled artisans working at various crafts - blacksmithing, carpentry, tailoring, and magical repair work. They demonstrate traditional techniques passed down through generations.",
         )
 
-    def talk(self, game_state: GameState) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag("learned_mend_from_craftsmen"):
             return ("[character_name]Local Craftsmen[/character_name]: Good to see you again! How has your repair magic "
                     "been working? The mend spell is one of the most useful pieces of magic a person can learn.")

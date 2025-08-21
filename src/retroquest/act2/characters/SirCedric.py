@@ -10,7 +10,7 @@ class SirCedric(Character):
             description="A noble knight in gleaming armor, bearing the scars of many battles. His eyes hold wisdom and determination as he prepares for the challenges ahead.",
         )
 
-    def talk(self, game_state: GameState) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         if not game_state.is_quest_activated("The Gathering Storm"):
             # First meeting - explain the main quest and give knight's test
             game_state.activate_quest_by_object(TheGatheringStormQuest())

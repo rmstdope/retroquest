@@ -9,7 +9,7 @@ class CaravanMasterThorne(Character):
             description="A weather-beaten man with worried eyes who oversees merchant caravans. He paces anxiously, clearly distressed about some urgent matter.",
         )
 
-    def talk(self, game_state: GameState) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         if not game_state.is_quest_activated("The Merchant's Lost Caravan"):
             game_state.activate_quest_by_object(TheMerchantsLostCaravanQuest())
             return ("[character_name]Caravan Master Thorne[/character_name]: Thank the gods, someone who looks capable! "

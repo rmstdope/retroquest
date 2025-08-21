@@ -9,7 +9,7 @@ class BarmaidElena(Character):
             description="A young woman who moves slowly and appears weakened by some affliction. Dark circles under her eyes and a pale complexion suggest she is suffering from a magical curse.",
         )
 
-    def talk(self, game_state: GameState) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         if not game_state.is_quest_activated("The Innkeeper's Daughter"):
             game_state.activate_quest_by_object(TheInnkeepersDaughterQuest())
             game_state.set_story_flag("knows_elena_curse", True)

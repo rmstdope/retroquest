@@ -9,7 +9,7 @@ class Herald(Character):
             description="An official court herald wearing ornate robes bearing the royal arms. He examines documents and credentials for those seeking audience with nobility.",
         )
 
-    def talk(self, game_state: GameState) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag("herald_received_pass"):
             return ("[character_name]Herald[/character_name]: Your credentials have been verified and you have been "
                     "granted formal audience rights. You may proceed to meet with [character_name]Sir Cedric[/character_name] "
