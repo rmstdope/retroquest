@@ -1,4 +1,8 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import (
+    FLAG_STANDING_STONES_EXAMINED,
+    FLAG_NATURE_SENSE_LEARNED
+)
 from .BoundaryStoneFragment import BoundaryStoneFragment
 from ..spells.NatureSenseSpell import NatureSenseSpell
 
@@ -21,7 +25,7 @@ class StandingStones(Item):
         """Examine the standing stones to learn about their magic and obtain a fragment."""
         if not self.examined:
             self.examined = True
-            game_state.set_story_flag("standing_stones_examined", True)
+            game_state.set_story_flag(FLAG_STANDING_STONES_EXAMINED, True)
             
             # Give boundary stone fragment
             if not self.fragment_obtained:
@@ -33,10 +37,10 @@ class StandingStones(Item):
                 fragment_msg = ""
             
             # Learn nature_sense spell automatically
-            if not game_state.get_story_flag("nature_sense_learned"):
+            if not game_state.get_story_flag(FLAG_NATURE_SENSE_LEARNED):
                 nature_sense = NatureSenseSpell()
                 game_state.learn_spell(nature_sense)
-                game_state.set_story_flag("nature_sense_learned", True)
+                game_state.set_story_flag(FLAG_NATURE_SENSE_LEARNED, True)
                 spell_msg = ("\n\n[success]As you trace the druidic runes with your finger, ancient knowledge flows into your mind. "
                             "The symbols begin to make sense—they're not just markers, but a teaching tool! You feel a "
                             "connection forming with the natural world around you, and suddenly you understand how to "

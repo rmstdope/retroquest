@@ -1,6 +1,9 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE
+from ..Act2StoryFlags import (
+    FLAG_KNOWS_ELENA_CURSE,
+    FLAG_ELENA_CURSE_BROKEN
+)
 
 class TheInnkeepersDaughterQuest(Quest):
     def __init__(self) -> None:
@@ -13,7 +16,7 @@ class TheInnkeepersDaughterQuest(Quest):
         return game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE)
 
     def update(self, game_state: GameState) -> str:
-        if game_state.get_story_flag("elena_curse_broken"):
+        if game_state.get_story_flag(FLAG_ELENA_CURSE_BROKEN):
             self.complete(game_state)
             return "You have successfully broken Elena's curse! She and her father are eternally grateful."
         

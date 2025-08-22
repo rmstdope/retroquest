@@ -1,4 +1,5 @@
 from ...engine.Quest import Quest
+from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED
 
 class TheHermitsWarning(Quest):
     def __init__(self) -> None:
@@ -19,7 +20,7 @@ class TheHermitsWarning(Quest):
 
     def update_progress(self, game_state) -> str:
         """Check if the quest can be completed based on story flags."""
-        if game_state.get_story_flag("hermits_warning_completed") and not self.completed:
+        if game_state.get_story_flag(FLAG_HERMITS_WARNING_COMPLETED) and not self.completed:
             self.completed = True
             return self.complete_quest(game_state)
         return ""

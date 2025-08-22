@@ -1,5 +1,9 @@
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_HEALERS_APPRENTICE_COMPLETED
+from ..Act2StoryFlags import (
+    FLAG_HEALERS_APPRENTICE_COMPLETED,
+    FLAG_EMERGENCY_HEALING_COMPLETED,
+    FLAG_HEALERS_APPRENTICE_READY
+)
 
 class AdvancedHealingPotion(Item):
     def __init__(self) -> None:
@@ -18,9 +22,9 @@ class AdvancedHealingPotion(Item):
         current_room_name = game_state.current_room.name.lower()
         if "healer" in current_room_name and "house" in current_room_name:
             # This is the emergency healing scenario for step 14
-            if not game_state.get_story_flag("emergency_healing_completed"):
-                game_state.set_story_flag("emergency_healing_completed", True)
-                game_state.set_story_flag("healers_apprentice_ready", True)
+            if not game_state.get_story_flag(FLAG_EMERGENCY_HEALING_COMPLETED):
+                game_state.set_story_flag(FLAG_EMERGENCY_HEALING_COMPLETED, True)
+                game_state.set_story_flag(FLAG_HEALERS_APPRENTICE_READY, True)
                 
                 return ("[success]You uncork the [item_name]Advanced Healing Potion[/item_name] and drink it in "
                         "one swift motion. The liquid burns slightly as it goes down, but immediately you feel a "

@@ -1,6 +1,7 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..items.ProtectiveCharm import ProtectiveCharm
+from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED
 
 class ForestHermit(Character):
     def __init__(self) -> None:
@@ -25,7 +26,7 @@ class ForestHermit(Character):
             # Quest will be activated by the Forest Transition room when appropriate
             
             # Set quest completion flag
-            game_state.set_story_flag("hermits_warning_completed", True)
+            game_state.set_story_flag(FLAG_HERMITS_WARNING_COMPLETED, True)
             
             return (event_msg + "\n" +
                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] studies you with ancient eyes. "

@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_DRUIDIC_FOCUS_TAKEN
 
 class DruidicFocus(Item):
     def __init__(self) -> None:
@@ -34,7 +35,7 @@ class DruidicFocus(Item):
     def picked_up(self, game_state) -> str:
         """Called when the item is picked up by the player."""
         if game_state.current_room.name == "Ancient Grove":
-            game_state.set_story_flag("druidic_focus_taken", True)
+            game_state.set_story_flag(FLAG_DRUIDIC_FOCUS_TAKEN, True)
             return ("The polished wood feels warm and alive in your hands, and you can sense its power to amplify nature magic.")
         return ""
 

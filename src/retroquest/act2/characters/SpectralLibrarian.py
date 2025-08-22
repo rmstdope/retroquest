@@ -2,7 +2,8 @@ from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
     FLAG_ANCIENT_LIBRARY_COMPLETED,
-    FLAG_ECHOES_OF_PAST_COMPLETED
+    FLAG_ECHOES_OF_PAST_COMPLETED,
+    FLAG_MENDED_LIBRARY_ENCHANTMENTS
 )
 
 class SpectralLibrarian(Character):
@@ -21,7 +22,7 @@ class SpectralLibrarian(Character):
     def talk_to(self, game_state: GameState) -> str:
         # Check if player has mended the protective enchantments first
         has_mend_spell = game_state.has_spell("mend")
-        mended_enchantments = game_state.get_story_flag("mended_library_enchantments")
+        mended_enchantments = game_state.get_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS)
         
         if not game_state.get_story_flag(FLAG_ANCIENT_LIBRARY_COMPLETED):
             if has_mend_spell and mended_enchantments:

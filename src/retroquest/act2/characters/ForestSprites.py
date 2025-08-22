@@ -1,5 +1,6 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED
 
 class ForestSprites(Character):
     def __init__(self) -> None:
@@ -21,7 +22,7 @@ class ForestSprites(Character):
         if not self.riddles_quest_given:
             # Give the Forest Guardian's Riddles quest
             self.riddles_quest_given = True
-            game_state.set_story_flag("forest_guardians_riddles_offered", True)
+            game_state.set_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED, True)
             
             return (event_msg + "\n" +
                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] flutter around you "

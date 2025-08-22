@@ -1,4 +1,5 @@
 from ...engine.Spell import Spell
+from ..Act2StoryFlags import FLAG_MENDED_LIBRARY_ENCHANTMENTS
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 
@@ -16,8 +17,8 @@ class MendSpell(Spell):
     def cast_on_item(self, game_state: GameState, target_item: Item) -> str:
         # Special handling for protective enchantments in Hidden Library
         if target_item.get_name().lower() == "protective enchantments":
-            if not game_state.get_story_flag("mended_library_enchantments"):
-                game_state.set_story_flag("mended_library_enchantments", True)
+            if not game_state.get_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS):
+                game_state.set_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS, True)
                 return ("[success]You cast [spell_name]mend[/spell_name] on the damaged [item_name]protective enchantments[/item_name]. "
                         "The magical barriers flicker and stabilize as your repair magic restores their integrity. "
                         "The shimmering barriers around the most valuable texts now glow steadily. You have proven "

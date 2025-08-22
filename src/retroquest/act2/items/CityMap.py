@@ -1,5 +1,6 @@
 from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import FLAG_USED_CITY_MAP
 
 class CityMap(Item):
     def __init__(self) -> None:
@@ -12,7 +13,7 @@ class CityMap(Item):
 
     def use(self, game_state: GameState) -> str:
         # Set the story flag when the city map is used
-        game_state.set_story_flag("used_city_map", True)
+        game_state.set_story_flag(FLAG_USED_CITY_MAP, True)
         # Remove the map from inventory since it's been memorized
         game_state.remove_item_from_inventory("city map")
         return ("You study the city map carefully. The detailed layout shows the Main Square at the center, "

@@ -3,7 +3,8 @@ from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
     FLAG_HEALERS_APPRENTICE_ACCEPTED, 
     FLAG_HEALERS_APPRENTICE_COMPLETED,
-    FLAG_LYRIA_RELATIONSHIP_COLLEAGUE
+    FLAG_LYRIA_RELATIONSHIP_COLLEAGUE,
+    FLAG_EMERGENCY_HEALING_COMPLETED
 )
 
 class MasterHealerLyria(Character):
@@ -35,7 +36,7 @@ class MasterHealerLyria(Character):
                         "Bring me some [item_name]Healing Herbs[/item_name] and I will teach you advanced techniques.")
         elif game_state.get_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED):
             # Check if emergency healing was completed
-            if game_state.get_story_flag("emergency_healing_completed"):
+            if game_state.get_story_flag(FLAG_EMERGENCY_HEALING_COMPLETED):
                 if not game_state.get_story_flag(FLAG_LYRIA_RELATIONSHIP_COLLEAGUE):
                     game_state.set_story_flag(FLAG_LYRIA_RELATIONSHIP_COLLEAGUE, True)
                     return ("[success][character_name]Master Healer Lyria[/character_name] beams with pride. "
@@ -56,7 +57,7 @@ class MasterHealerLyria(Character):
                         "[spell_name]greater_heal[/spell_name] spell. Remember that healing magic requires both "
                         "knowledge and compassion. Continue to develop both aspects of your abilities.")
         
-        elif game_state.get_story_flag("emergency_healing_completed"):
+        elif game_state.get_story_flag(FLAG_EMERGENCY_HEALING_COMPLETED):
             game_state.set_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED, True)
             return ("[character_name]Master Healer Lyria[/character_name]: You've successfully completed the emergency healing training. "
                     "Your skills are truly impressive, and I have no doubt you'll make a great healer.")

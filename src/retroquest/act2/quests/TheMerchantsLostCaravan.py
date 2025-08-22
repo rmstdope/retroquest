@@ -1,6 +1,9 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_SPOKEN_TO_CARAVAN_MASTER
+from ..Act2StoryFlags import (
+    FLAG_SPOKEN_TO_CARAVAN_MASTER,
+    FLAG_FOUND_LOST_CARAVAN
+)
 
 class TheMerchantsLostCaravanQuest(Quest):
     def __init__(self) -> None:
@@ -13,7 +16,7 @@ class TheMerchantsLostCaravanQuest(Quest):
         return game_state.get_story_flag(FLAG_SPOKEN_TO_CARAVAN_MASTER)
 
     def update(self, game_state: GameState) -> str:
-        if game_state.get_story_flag("found_lost_caravan"):
+        if game_state.get_story_flag(FLAG_FOUND_LOST_CARAVAN):
             self.complete(game_state)
             return "You have successfully located the lost caravan and resolved the situation. Caravan Master Thorne is grateful!"
         

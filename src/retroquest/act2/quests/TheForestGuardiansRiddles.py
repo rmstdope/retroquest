@@ -1,4 +1,8 @@
 from ...engine.Quest import Quest
+from ..Act2StoryFlags import (
+    FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
+    FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED
+)
 
 class TheForestGuardiansRiddles(Quest):
     def __init__(self) -> None:
@@ -22,11 +26,11 @@ class TheForestGuardiansRiddles(Quest):
 
     def check_trigger(self, game_state) -> bool:
         """Check if this quest should be activated."""
-        return game_state.get_story_flag("forest_guardians_riddles_offered")
+        return game_state.get_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED)
 
     def check_completion(self, game_state) -> bool:
         """Check if the quest can be completed based on story flags."""
-        return game_state.get_story_flag("forest_guardians_riddles_completed") and not self.is_completed_flag
+        return game_state.get_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED) and not self.is_completed_flag
 
     def complete(self, game_state) -> str:
         """Complete the quest and give rewards."""

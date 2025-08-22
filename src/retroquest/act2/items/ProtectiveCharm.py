@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE
 
 class ProtectiveCharm(Item):
     def __init__(self) -> None:
@@ -14,8 +15,8 @@ class ProtectiveCharm(Item):
 
     def use(self, game_state) -> str:
         if game_state.current_room.name == "Forest Entrance":
-            if not game_state.get_story_flag("protective_charm_used_forest_entrance"):
-                game_state.set_story_flag("protective_charm_used_forest_entrance", True)
+            if not game_state.get_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE):
+                game_state.set_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, True)
                 return ("[spell_effect]The Protective Charm radiates a warm, golden light as you invoke its power. "
                        "A shimmering barrier of spiritual energy surrounds you, and you feel the watchful gaze of "
                        "the forest spirits become less threatening. The ancient magic recognizes your respect and "

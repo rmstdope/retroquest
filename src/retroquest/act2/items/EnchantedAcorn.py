@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_ENCHANTED_ACORN_TAKEN
 
 class EnchantedAcorn(Item):
     def __init__(self) -> None:
@@ -31,7 +32,7 @@ class EnchantedAcorn(Item):
     def picked_up(self, game_state) -> str:
         """Called when the item is picked up by the player."""
         if game_state.current_room.name == "Forest Entrance":
-            game_state.set_story_flag("enchanted_acorn_taken", True)
+            game_state.set_story_flag(FLAG_ENCHANTED_ACORN_TAKEN, True)
             return ("The moment you touch it, you feel a surge of natural magic - this is no "
                    "ordinary acorn, but a sacred offering imbued with the forest's blessing. "
                    "The forest sprites whisper approvingly as you claim this gift.")
