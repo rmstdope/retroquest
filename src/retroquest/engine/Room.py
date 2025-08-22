@@ -86,7 +86,7 @@ class Room:
             desc += f"\nCharacters present: {character_names}"
         exits = self.get_exits()
         if exits:
-            exit_names = ', '.join(f"[exits]{exit_name}[/exits]" for exit_name in exits.keys())
+            exit_names = ', '.join(f"[exits]{direction}[/exits] ({destination})" for direction, destination in exits.items())
             desc += f"\nExits: {exit_names}"
         return desc
 
