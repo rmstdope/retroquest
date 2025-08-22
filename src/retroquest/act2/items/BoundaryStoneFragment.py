@@ -4,6 +4,7 @@ class BoundaryStoneFragment(Item):
     def __init__(self) -> None:
         super().__init__(
             name="boundary stone fragment",
+            short_name="fragment",
             description=(
                 "A piece of ancient stone carved with druidic runes that pulse with faint magical energy. "
                 "This fragment was broken from one of the standing stones that mark the boundary between "

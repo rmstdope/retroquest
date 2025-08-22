@@ -4,6 +4,7 @@ class CrystalFocus(Item):
     def __init__(self) -> None:
         super().__init__(
             name="Crystal Focus",
+            short_name="crystal",
             description=(
                 "A perfectly cut crystal that resonates with magical energy, crafted by ancient practitioners "
                 "to amplify and focus spellcasting abilities. The crystal glows with inner light and feels "

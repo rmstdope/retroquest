@@ -5,6 +5,7 @@ class SilverLeaves(Item):
     def __init__(self) -> None:
         super().__init__(
             name="silver leaves",
+            short_name="leaves",
             description=(
                 "Leaves from the ancient silver-barked tree, each one shimmering with "
                 "ethereal light. They feel lighter than air yet possess a tangible warmth "

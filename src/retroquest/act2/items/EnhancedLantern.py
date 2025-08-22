@@ -6,6 +6,7 @@ class EnhancedLantern(Item):
     def __init__(self) -> None:
         super().__init__(
             name="enhanced lantern",
+            short_name="lantern",
             description="A magically enhanced lantern that burns with bright, steady light. The enchantment allows it to illuminate hidden paths and reveal magical auras that would otherwise remain invisible.",
             can_be_carried=True,
         )

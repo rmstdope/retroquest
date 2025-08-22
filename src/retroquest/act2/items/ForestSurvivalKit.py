@@ -6,6 +6,7 @@ class ForestSurvivalKit(Item):
     def __init__(self) -> None:
         super().__init__(
             name="forest survival kit",
+            short_name="kit",
             description="A comprehensive kit containing everything needed for safe forest exploration: rope, dried food, water purification tablets, protective gear, and magical wards against forest spirits.",
             can_be_carried=True,
         )

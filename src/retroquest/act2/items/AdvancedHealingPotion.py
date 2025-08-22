@@ -9,6 +9,7 @@ class AdvancedHealingPotion(Item):
     def __init__(self) -> None:
         super().__init__(
             name="Advanced Healing Potion",
+            short_name="potion",
             description=(
                 "A crystal vial containing a luminescent healing elixir created by Master Healer Lyria. "
                 "The potion glows with a soft blue light and has the power to heal even the most serious "

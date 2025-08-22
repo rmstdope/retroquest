@@ -5,6 +5,7 @@ class TravelersJournal(Item):
     def __init__(self) -> None:
         super().__init__(
             name="traveler's journal",
+            short_name="journal",
             description="A well-worn leather journal containing historical notes, family genealogies, and references to ancient bloodlines. Several passages mention Willowbrook and its significance in regional history.",
             can_be_carried=True,
         )

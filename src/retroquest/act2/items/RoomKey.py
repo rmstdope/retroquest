@@ -6,6 +6,7 @@ class RoomKey(Item):
     def __init__(self) -> None:
         super().__init__(
             name="room key",
+            short_name="key",
             description="A brass key to a private room at The Silver Stag Inn. The room provides a quiet space for studying and safe storage of important items.",
             can_be_carried=True,
         )

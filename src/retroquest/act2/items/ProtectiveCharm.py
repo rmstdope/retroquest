@@ -5,6 +5,7 @@ class ProtectiveCharm(Item):
     def __init__(self) -> None:
         super().__init__(
             name="protective charm",
+            short_name="charm",
             description=(
                 "A small talisman woven from forest vines and blessed by ancient magic. It pulses with a gentle "
                 "green light and carries the protective power of the deep woods. This charm will ward off hostile "

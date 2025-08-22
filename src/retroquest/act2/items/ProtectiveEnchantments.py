@@ -5,6 +5,7 @@ class ProtectiveEnchantments(Item):
     def __init__(self) -> None:
         super().__init__(
             name="protective enchantments",
+            short_name="enchantments",
             description=(
                 "Shimmering magical barriers that surround the most valuable texts in the ancient library. "
                 "These enchantments appear to be damaged by time, with flickering energy and weak points "

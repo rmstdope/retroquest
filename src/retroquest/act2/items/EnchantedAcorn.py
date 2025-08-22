@@ -5,6 +5,7 @@ class EnchantedAcorn(Item):
     def __init__(self) -> None:
         super().__init__(
             name="enchanted acorn",
+            short_name="acorn",
             description=(
                 "A perfectly shaped acorn that glows with soft, natural magic. The shell "
                 "appears to be made of polished wood with intricate spiral patterns that "

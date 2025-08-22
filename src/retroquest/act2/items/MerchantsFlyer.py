@@ -5,6 +5,7 @@ class MerchantsFlyer(Item):
     def __init__(self) -> None:
         super().__init__(
             name="merchant's flyer",
+            short_name="flyer",
             description="A colorful handbill advertising the Market District's finest merchants and their premium goods. It features a special introduction coupon for new customers seeking quality adventure gear.",
             can_be_carried=True,
         )
