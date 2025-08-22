@@ -1,6 +1,8 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from ..items.RoomKey import RoomKey
+from ..items.Coins import Coins
 from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE
 
 class InnkeeperMarcus(Character):
@@ -9,36 +11,96 @@ class InnkeeperMarcus(Character):
             name="innkeeper marcus",
             description="A kind-hearted man who runs The Silver Stag Inn. He has worry lines on his face and glances frequently toward his daughter with obvious concern.",
         )
+        self.wares = {
+            "room key": {"item": RoomKey(), "price": 10}
+        }
+        self.dialogue_options = [
+            "Welcome to The Silver Stag Inn! We offer comfortable rooms and warm meals for weary travelers.",
+            "These have been difficult times, but we still maintain the finest accommodations in Greendale.",
+            "A good night's rest in a private room can work wonders for mind and body."
+        ]
+        self.dialogue_index = 0
 
     def talk_to(self, game_state: GameState) -> str:
+        # Build wares information
+        wares_info = "I can offer you:\n"
+        if self.wares:
+            for name, details in self.wares.items():
+                wares_info += f"- [item_name]{name.title()}[/item_name]: {details['price']} [item_name]gold coins[/item_name]\n"
+        else:
+            wares_info = "I'm currently not offering any services.\n"
+        
+        # Cycle through dialogue options
+        dialogue = self.dialogue_options[self.dialogue_index]
+        self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options)
+        
         if game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE):
-            return ("[character_name]Innkeeper Marcus[/character_name]: You've spoken with [character_name]Elena[/character_name]? "
+            return (f'The [character_name]Innkeeper Marcus[/character_name] says: [dialogue]"{dialogue} '
+                    f'{wares_info.strip()}"[/dialogue]\n\n'
+                    "You've spoken with [character_name]Elena[/character_name]? "
                     "Then you understand my desperation. The curse grows stronger each day, and I fear we don't have "
                     "much time left. If you truly can help her, I'll give you anything - rooms, information, whatever you need.")
         else:
-            return ("[character_name]Innkeeper Marcus[/character_name]: Welcome to The Silver Stag Inn, friend. We offer "
-                    "fine rooms and hearty meals. Though I must say, these have been dark times for my family. "
+            return (f'The [character_name]Innkeeper Marcus[/character_name] says: [dialogue]"{dialogue} '
+                    f'{wares_info.strip()}"[/dialogue]\n\n'
+                    "Though I must say, these have been dark times for my family. "
                     "My daughter... well, perhaps you should speak with her yourself if you're looking to help those in need.")
 
     def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         """Handle buying items from Innkeeper Marcus"""
-        item_name_lower = item_name_to_buy.lower()
+        item_name_to_buy = item_name_to_buy.lower()
+        event_msg = f"[event]You try to buy the [item_name]{item_name_to_buy}[/item_name] from the [character_name]{self.get_name()}[/character_name].[/event]"
         
-        if "room key" in item_name_lower:
-            # Find coins in inventory
-            coins = next((item for item in game_state.inventory if item.get_name().lower() == "coins"), None)
-            if not coins or coins.get_amount() < 10:
-                return "[failure]You don't have enough coins to rent a room (costs 10 gold).[/failure]"
-            
-            # Check if already have room key
-            if any(item.get_name().lower() == "room key" for item in game_state.inventory):
-                return "[info]You already have a room key.[/info]"
-            
-            # Purchase room key
-            coins.spend(10)
-            from ..items.RoomKey import RoomKey
-            game_state.inventory.append(RoomKey())
-            return ("[success]You pay 10 gold coins to [character_name]Innkeeper Marcus[/character_name] for a room. "
-                    "He hands you a brass key and explains how to access the private rooms upstairs.[/success]")
+        # Check if item is available
+        if item_name_to_buy not in self.wares:
+            return event_msg + "\n" + f'[dialogue]"Sorry, I don\'t have any \'[item_name]{item_name_to_buy}[/item_name]\' for sale. Check what I can offer you."[/dialogue]'
+
+        ware_details = self.wares[item_name_to_buy]
+        price = ware_details["price"]
+        
+        # Find coins in inventory
+        coins_item = None
+        for item in game_state.inventory:
+            if isinstance(item, Coins):
+                coins_item = item
+                break
+        
+        # Check if player has coins
+        if not coins_item:
+            return event_msg + "\n" + f'[failure]You don\'t have any [item_name]coins[/item_name] to purchase the [item_name]{item_name_to_buy}[/item_name].[/failure]'
+        
+        # Check if player has enough coins
+        if coins_item.get_amount() < price:
+            return event_msg + "\n" + f'[failure]You don\'t have enough [item_name]coins[/item_name] for the [item_name]{item_name_to_buy}[/item_name]. It costs {price} [item_name]gold coins[/item_name] but you only have {coins_item.get_amount()}.[/failure]'
+
+        # Check if already have the item in inventory (not counting display items in room)
+        if any(item.get_name().lower() == item_name_to_buy and item.can_be_carried for item in game_state.inventory):
+            return event_msg + "\n" + f'[dialogue]"You already have a [item_name]{item_name_to_buy}[/item_name]. One room should be sufficient for your stay."[/dialogue]'
+        
+        # Purchase the item - spend coins and add item to inventory
+        if not coins_item.spend(price):
+            return event_msg + "\n" + f'[failure]Transaction failed. Unable to process payment.[/failure]'
+        
+        # Remove the display item from the room (if present)
+        room_item_to_remove = None
+        for item in game_state.current_room.items:
+            if item.get_name().lower() == item_name_to_buy:
+                room_item_to_remove = item
+                break
+        
+        if room_item_to_remove:
+            game_state.current_room.items.remove(room_item_to_remove)
+        
+        # Create new carriable instance of the item to add to inventory
+        new_item = None
+        if item_name_to_buy == "room key":
+            new_item = RoomKey()
+        
+        if new_item:
+            new_item.can_be_carried = True  # Ensure the purchased item is carriable
+            game_state.add_item_to_inventory(new_item)
+            remaining_coins = coins_item.get_amount()
+            return event_msg + "\n" + f'[success]You purchase the [item_name]{item_name_to_buy}[/item_name] from [character_name]Innkeeper Marcus[/character_name] for {price} [item_name]gold coins[/item_name]. He hands you a brass key and explains how to access the private rooms upstairs. You have {remaining_coins} [item_name]coins[/item_name] remaining.[/success]'
         else:
-            return super().buy_item(item_name_to_buy, game_state)
+            # Should not happen if item is in wares, but safety check
+            return event_msg + "\n" + f'[failure]An unexpected error occurred trying to rent the room.[/failure]'

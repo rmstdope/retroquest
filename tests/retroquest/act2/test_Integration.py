@@ -290,7 +290,7 @@ def test_golden_path_act2_completion():
     # Should now have "The Innkeeper's Daughter" quest
     _check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
     # assert game.state.get_story_flag("knows_elena_curse"), "Should know about Elena's curse"
-    # Buy Room Key
+    # Buy Room Key  
     _execute_commands(game, ["buy room key from innkeeper marcus"])
     _check_item_in_inventory(game.state, "Room Key")
     # Use Room Key to access Inn Rooms
