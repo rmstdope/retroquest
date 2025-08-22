@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_SILVER_LEAVES_TAKEN
 
 class SilverLeaves(Item):
     def __init__(self) -> None:
@@ -30,7 +31,7 @@ class SilverLeaves(Item):
     def picked_up(self, game_state) -> str:
         """Called when the item is picked up by the player."""
         if game_state.current_room.name == "Ancient Grove":
-            game_state.set_story_flag("silver_leaves_taken", True)
+            game_state.set_story_flag(FLAG_SILVER_LEAVES_TAKEN, True)
             return ("Each leaf gleams like polished silver and tingles with forest magic when you touch it.")
         return ""
 

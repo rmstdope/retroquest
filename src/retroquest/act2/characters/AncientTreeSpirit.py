@@ -1,5 +1,11 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import (
+    FLAG_WHISPERS_IN_WIND_COMPLETED,
+    FLAG_GAVE_ACORN_TO_TREE_SPIRIT,
+    FLAG_LEARNED_FOREST_SPEECH,
+    FLAG_WHISPERS_IN_WIND_OFFERED
+)
 
 class AncientTreeSpirit(Character):
     def __init__(self) -> None:
@@ -31,7 +37,7 @@ class AncientTreeSpirit(Character):
                     f"of forest customs. Bring me a gift that shows your connection to the natural world, "
                     f"and I will consider sharing my knowledge with you.'[/dialogue]")
         
-        elif not game_state.get_story_flag("whispers_in_wind_completed"):
+        elif not game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED):
             # Player has given the acorn but hasn't completed the Whispers in the Wind quest yet
             return (event_msg + "\n" +
                     f"[dialogue]The [character_name]{self.get_name()}[/character_name] senses your "
@@ -69,12 +75,12 @@ class AncientTreeSpirit(Character):
             # First meaningful interaction - receive the acorn
             self.acorn_received = True
             game_state.remove_item_from_inventory("enchanted acorn")
-            game_state.set_story_flag("gave_acorn_to_tree_spirit", True)
+            game_state.set_story_flag(FLAG_GAVE_ACORN_TO_TREE_SPIRIT, True)
             
             # Teach the forest speech spell
             from ..spells.ForestSpeechSpell import ForestSpeechSpell
             game_state.learn_spell(ForestSpeechSpell())
-            game_state.set_story_flag("learned_forest_speech", True)
+            game_state.set_story_flag(FLAG_LEARNED_FOREST_SPEECH, True)
 
             # Also provide the items (Silver Leaves and Druidic Focus)
             from ..items.SilverLeaves import SilverLeaves
@@ -83,7 +89,7 @@ class AncientTreeSpirit(Character):
             game_state.add_item_to_inventory(DruidicFocus())
 
             # Give the Whispers in the Wind quest
-            game_state.set_story_flag("whispers_in_wind_offered", True)
+            game_state.set_story_flag(FLAG_WHISPERS_IN_WIND_OFFERED, True)
 
             return (event_msg + "\n" +
                     f"[dialogue]The [character_name]{self.get_name()}[/character_name] stirs as you "
@@ -123,7 +129,7 @@ class AncientTreeSpirit(Character):
         
         elif item_object.get_name().lower() in ["crystal-clear water", "moonflowers"]:
             # Check if quest is already completed
-            if game_state.get_story_flag("whispers_in_wind_completed"):
+            if game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED):
                 return f"[dialogue]The [character_name]{self.get_name()}[/character_name] nods approvingly but gently refuses. 'You have already proven yourself, young one. Keep these sacred gifts as tokens of the forest's trust in you.'[/dialogue]"
             
             # Check if player has both required items
@@ -132,7 +138,7 @@ class AncientTreeSpirit(Character):
             
             if has_water and has_moonflowers:
                 # Complete the quest - player has both items
-                game_state.set_story_flag("whispers_in_wind_completed", True)
+                game_state.set_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED, True)
                 self.whispers_quest_completed = True
                 
                 return ("[quest_complete]You approach the Ancient Tree Spirit with the sacred items from the "

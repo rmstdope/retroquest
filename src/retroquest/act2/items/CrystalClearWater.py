@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_CRYSTAL_CLEAR_WATER_TAKEN
 
 class CrystalClearWater(Item):
     def __init__(self) -> None:
@@ -31,7 +32,7 @@ class CrystalClearWater(Item):
     def picked_up(self, game_state) -> str:
         """Called when the item is picked up by the player."""
         if game_state.current_room.name == "Whispering Glade":
-            game_state.set_story_flag("crystal_clear_water_taken", True)
+            game_state.set_story_flag(FLAG_CRYSTAL_CLEAR_WATER_TAKEN, True)
             return ("The water nymphs nod approvingly as you collect their sacred gift. "
                     "This blessed water will serve you well in breaking dark enchantments.")
         return ""

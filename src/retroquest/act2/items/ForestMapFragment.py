@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_FOREST_MAP_USED_FOREST_ENTRANCE
 
 class ForestMapFragment(Item):
     def __init__(self) -> None:
@@ -16,8 +17,8 @@ class ForestMapFragment(Item):
     def use(self, game_state) -> str:
         current_room = game_state.current_room.name
         if current_room == "Forest Entrance":
-            if not game_state.get_story_flag("forest_map_used_forest_entrance"):
-                game_state.set_story_flag("forest_map_used_forest_entrance", True)
+            if not game_state.get_story_flag(FLAG_FOREST_MAP_USED_FOREST_ENTRANCE):
+                game_state.set_story_flag(FLAG_FOREST_MAP_USED_FOREST_ENTRANCE, True)
                 return ("[item_effect]The Forest Map Fragment glows softly as you study it, revealing ancient "
                        "pathways and sacred sites within the Enchanted Forest. The map shows the Ancient Grove "
                        "to the south as a place of great power, where the oldest tree spirit dwells. To the east, "

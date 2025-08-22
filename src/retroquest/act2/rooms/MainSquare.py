@@ -2,6 +2,7 @@ from ...engine.Room import Room
 from ..items.CityNoticeBoard import CityNoticeBoard
 from ..items.MerchantsFlyer import MerchantsFlyer
 from ..characters.TownCrier import TownCrier
+from ..Act2StoryFlags import FLAG_USED_CITY_MAP
 
 class MainSquare(Room):
     def __init__(self) -> None:
@@ -23,7 +24,7 @@ class MainSquare(Room):
         Override exits to enforce navigation restriction until city map is used.
         Without using the map, only the path back to Greendale Gates is available.
         """
-        if game_state and not game_state.get_story_flag("used_city_map"):
+        if game_state and not game_state.get_story_flag(FLAG_USED_CITY_MAP):
             # Only allow movement back to Greendale Gates until map is used
             return {"south": "GreendaleGates"}
         return self.exits

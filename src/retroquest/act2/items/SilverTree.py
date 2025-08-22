@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_SILVER_TREE_EXAMINED
 
 class SilverTree(Item):
     def __init__(self) -> None:
@@ -18,7 +19,7 @@ class SilverTree(Item):
         """Examine the magnificent silver-barked tree."""
         if not self.examined:
             self.examined = True
-            game_state.set_story_flag("silver_tree_examined", True)
+            game_state.set_story_flag(FLAG_SILVER_TREE_EXAMINED, True)
             return (
                 "[environment_description]The ancient tree towers above you, its silver bark shimmering "
                 "with an inner light that seems to pulse in rhythm with your heartbeat. The bark is smooth "

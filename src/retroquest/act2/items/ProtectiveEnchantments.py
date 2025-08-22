@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_MENDED_LIBRARY_ENCHANTMENTS
 
 class ProtectiveEnchantments(Item):
     def __init__(self) -> None:
@@ -14,7 +15,7 @@ class ProtectiveEnchantments(Item):
         )
 
     def examine(self, game_state) -> str:
-        if game_state.get_story_flag("mended_library_enchantments"):
+        if game_state.get_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS):
             return ("The [item_name]protective enchantments[/item_name] now glow steadily with restored power. "
                     "The magical barriers around the most valuable texts have been successfully repaired, "
                     "allowing access to the ancient knowledge within.")

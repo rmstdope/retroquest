@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_MOONFLOWERS_TAKEN
 
 class Moonflowers(Item):
     def __init__(self) -> None:
@@ -31,7 +32,7 @@ class Moonflowers(Item):
     def picked_up(self, game_state) -> str:
         """Called when the item is picked up by the player."""
         if game_state.current_room.name == "Whispering Glade":
-            game_state.set_story_flag("moonflowers_taken", True)
+            game_state.set_story_flag(FLAG_MOONFLOWERS_TAKEN, True)
             return ("The moonflowers seem to approve of your gentle touch, their "
                     "silvery glow pulsing warmly as you gather them. These blessed "
                     "blooms will aid in healing and protection magic.")

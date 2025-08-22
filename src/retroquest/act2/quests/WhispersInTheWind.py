@@ -1,4 +1,8 @@
 from ...engine.Quest import Quest
+from ..Act2StoryFlags import (
+    FLAG_WHISPERS_IN_WIND_OFFERED,
+    FLAG_WHISPERS_IN_WIND_COMPLETED
+)
 
 class WhispersInTheWind(Quest):
     def __init__(self) -> None:
@@ -22,11 +26,11 @@ class WhispersInTheWind(Quest):
 
     def check_trigger(self, game_state) -> bool:
         """Check if this quest should be activated."""
-        return game_state.get_story_flag("whispers_in_wind_offered")
+        return game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_OFFERED)
 
     def check_completion(self, game_state) -> bool:
         """Check if the quest can be completed based on story flags."""
-        return game_state.get_story_flag("whispers_in_wind_completed") and not self.is_completed_flag
+        return game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED) and not self.is_completed_flag
 
     def complete(self, game_state) -> str:
         """Complete the quest and give rewards."""

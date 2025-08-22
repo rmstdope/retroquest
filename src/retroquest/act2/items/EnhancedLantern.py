@@ -1,5 +1,6 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE
 
 class EnhancedLantern(Item):
     def __init__(self) -> None:
@@ -11,8 +12,8 @@ class EnhancedLantern(Item):
 
     def use(self, game_state: GameState) -> str:
         if game_state.current_room.name == "Forest Entrance":
-            if not game_state.get_story_flag("enhanced_lantern_used_forest_entrance"):
-                game_state.set_story_flag("enhanced_lantern_used_forest_entrance", True)
+            if not game_state.get_story_flag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE):
+                game_state.set_story_flag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, True)
                 return ("[item_effect]The Enhanced Lantern's crystal core pulses with magical energy, casting "
                        "ethereal blue light that reveals hidden paths through the dense undergrowth. The light "
                        "seems to resonate with the forest's natural magic, illuminating safe routes and warning "
