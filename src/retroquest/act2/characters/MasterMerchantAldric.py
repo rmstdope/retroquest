@@ -1,6 +1,10 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from ..items.ForestSurvivalKit import ForestSurvivalKit
+from ..items.EnhancedLantern import EnhancedLantern
+from ..items.QualityRope import QualityRope
+from ..items.Coins import Coins
 from ..quests.SuppliesForTheJourney import SuppliesForTheJourneyQuest
 from ..Act2StoryFlags import FLAG_GAVE_MERCHANTS_FLYER, FLAG_PREMIUM_SELECTION_AVAILABLE
 
@@ -10,18 +14,44 @@ class MasterMerchantAldric(Character):
             name="master merchant aldric",
             description="A prosperous merchant with keen eyes for quality goods. He specializes in premium adventure gear and has connections throughout the trading networks.",
         )
+        self.wares = {
+            "forest survival kit": {"item": ForestSurvivalKit(), "price": 30},
+            "enhanced lantern": {"item": EnhancedLantern(), "price": 20},
+            "quality rope": {"item": QualityRope(), "price": 15}
+        }
+        self.dialogue_options = [
+            "Welcome to Aldric's Premium Adventure Gear! Only the finest equipment for discerning adventurers.",
+            "Planning an expedition? You've come to the right place for quality supplies.",
+            "I've heard tales of strange happenings in the forest. Good thing I stock the best protective gear!"
+        ]
+        self.dialogue_index = 0
+        self.closed_dialogue = (
+            "The [character_name]Master Merchant Aldric[/character_name] looks at you appraisingly. "
+            "[dialogue]'I deal only with established customers and those with proper credentials. "
+            "Do you have any introduction or referral that would qualify you for my premium services?'[/dialogue]"
+        )
 
     def talk_to(self, game_state: GameState) -> str:
-        if game_state.get_story_flag(FLAG_GAVE_MERCHANTS_FLYER):
-            # Set flag for premium selection availability when talking after giving flyer
-            game_state.set_story_flag(FLAG_PREMIUM_SELECTION_AVAILABLE, True)
-            return ("[character_name]Master Merchant Aldric[/character_name]: Ah, excellent! The flyer grants you access "
-                    "to our premium selection. I offer the finest adventure gear in Greendale - survival kits, "
-                    "enhanced lanterns, quality rope, and more. What can I help you acquire today?")
+        # If merchant hasn't been given the flyer, shop is not fully open yet
+        if not game_state.get_story_flag(FLAG_GAVE_MERCHANTS_FLYER):
+            return self.closed_dialogue
+
+        # Set flag for premium selection availability when talking after giving flyer
+        game_state.set_story_flag(FLAG_PREMIUM_SELECTION_AVAILABLE, True)
+        
+        # Build wares information similar to Act 1 Shopkeeper
+        wares_info = "My premium selection includes:\n"
+        if self.wares:
+            for name, details in self.wares.items():
+                wares_info += f"- [item_name]{name.title()}[/item_name]: {details['price']} [item_name]gold coins[/item_name]\n"
         else:
-            return ("[character_name]Master Merchant Aldric[/character_name]: Welcome to my establishment. I deal in "
-                    "premium adventure gear, but such quality comes at a premium price. Do you have any credentials "
-                    "or introduction that would qualify you for my special services?")
+            wares_info = "I'm currently restocking my premium inventory.\n"
+        
+        # Cycle through dialogue options like Act 1 Shopkeeper
+        dialogue = self.dialogue_options[self.dialogue_index]
+        self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options)
+
+        return f'The [character_name]Master Merchant Aldric[/character_name] says: [dialogue]"{dialogue} {wares_info.strip()}"[/dialogue]'
 
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to Master Merchant Aldric"""
@@ -30,49 +60,76 @@ class MasterMerchantAldric(Character):
             if item_object in game_state.inventory:
                 game_state.inventory.remove(item_object)
             game_state.set_story_flag(FLAG_GAVE_MERCHANTS_FLYER, True)
-            return ("[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name].[/event]\n"
-                    "[success]You present the merchant's flyer to [character_name]Master Merchant Aldric[/character_name]. "
+            game_state.current_room.add_wares()
+            return (f"[success]You present the [item]{item_object.get_name()}[/item] to [character_name]Master Merchant Aldric[/character_name]. "
                     "His eyes light up as he examines it. 'Ah, excellent! This flyer grants you access to our premium "
                     "selection and preferred customer pricing. What quality goods can I help you acquire today?'[/success]")
         else:
-            return super().give_item(game_state, item_object)
+            return f'The [character_name]Master Merchant Aldric[/character_name] examines the {item_object.get_name()}. [dialogue]"I appreciate the offer, but I deal in adventure gear, not donations. Perhaps you could purchase something instead?"[/dialogue]'
 
     def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         """Handle buying items from Master Merchant Aldric"""
+        # Check if shop is accessible
         if not game_state.get_story_flag(FLAG_GAVE_MERCHANTS_FLYER):
-            return f"[failure]Master Merchant Aldric requires proper credentials before selling premium items like the {item_name_to_buy}.[/failure]"
+            return self.closed_dialogue
+
+        item_name_to_buy = item_name_to_buy.lower()
+        event_msg = f"[event]You try to buy the [item_name]{item_name_to_buy}[/item_name] from the [character_name]{self.get_name()}[/character_name].[/event]"
+        
+        # Check if item is available
+        if item_name_to_buy not in self.wares:
+            return event_msg + "\n" + f'[dialogue]"Sorry, I don\'t have any \'[item_name]{item_name_to_buy}[/item_name]\' for sale. Check my current inventory for available items."[/dialogue]'
+
+        ware_details = self.wares[item_name_to_buy]
+        price = ware_details["price"]
         
         # Find coins in inventory
-        coins = next((item for item in game_state.inventory if item.get_name().lower() == "coins"), None)
+        coins_item = None
+        for item in game_state.inventory:
+            if isinstance(item, Coins):
+                coins_item = item
+                break
         
-        item_name_lower = item_name_to_buy.lower()
-        cost = 0
-        item_class = None
+        # Check if player has coins
+        if not coins_item:
+            return event_msg + "\n" + f'[failure]You don\'t have any [item_name]coins[/item_name] to purchase the [item_name]{item_name_to_buy}[/item_name].[/failure]'
         
-        if "forest survival kit" in item_name_lower:
-            cost = 30  # Reduced from 50
-            from ..items.ForestSurvivalKit import ForestSurvivalKit
-            item_class = ForestSurvivalKit
-        elif "enhanced lantern" in item_name_lower:
-            cost = 20  # Reduced from 30
-            from ..items.EnhancedLantern import EnhancedLantern
-            item_class = EnhancedLantern
-        elif "quality rope" in item_name_lower:
-            cost = 15  # Reduced from 20
-            from ..items.QualityRope import QualityRope
-            item_class = QualityRope
+        # Check if player has enough coins
+        if coins_item.get_amount() < price:
+            return event_msg + "\n" + f'[failure]You don\'t have enough [item_name]coins[/item_name] for the [item_name]{item_name_to_buy}[/item_name]. It costs {price} [item_name]gold coins[/item_name] but you only have {coins_item.get_amount()}.[/failure]'
+
+        # Check if already have the item in inventory (not counting display items in room)
+        if any(item.get_name().lower() == item_name_to_buy and item.can_be_carried for item in game_state.inventory):
+            return event_msg + "\n" + f'[dialogue]"You already have a [item_name]{item_name_to_buy}[/item_name]. One should be sufficient for your needs."[/dialogue]'
+        
+        # Purchase the item - spend coins and add item to inventory
+        if not coins_item.spend(price):
+            return event_msg + "\n" + f'[failure]Transaction failed. Unable to process payment.[/failure]'
+        
+        # Remove the display item from the room (if present)
+        room_item_to_remove = None
+        for item in game_state.current_room.items:
+            if item.get_name().lower() == item_name_to_buy:
+                room_item_to_remove = item
+                break
+        
+        if room_item_to_remove:
+            game_state.current_room.items.remove(room_item_to_remove)
+        
+        # Create new carriable instance of the item to add to inventory
+        new_item = None
+        if item_name_to_buy == "forest survival kit":
+            new_item = ForestSurvivalKit()
+        elif item_name_to_buy == "enhanced lantern":
+            new_item = EnhancedLantern()
+        elif item_name_to_buy == "quality rope":
+            new_item = QualityRope()
+        
+        if new_item:
+            new_item.can_be_carried = True  # Ensure the purchased item is carriable
+            game_state.add_item_to_inventory(new_item)
+            remaining_coins = coins_item.get_amount()
+            return event_msg + "\n" + f'[success]You purchase the [item_name]{item_name_to_buy}[/item_name] from [character_name]Master Merchant Aldric[/character_name] for {price} [item_name]gold coins[/item_name]. You have {remaining_coins} [item_name]coins[/item_name] remaining.[/success]'
         else:
-            return super().buy_item(item_name_to_buy, game_state)
-        
-        if not coins or coins.get_amount() < cost:
-            return f"[failure]You don't have enough coins to buy the {item_name_to_buy} (costs {cost} gold).[/failure]"
-        
-        # Check if already have the item
-        if any(item.get_name().lower() == item_name_lower for item in game_state.inventory):
-            return f"[info]You already have a {item_name_to_buy}.[/info]"
-        
-        # Purchase the item
-        coins.spend(cost)
-        game_state.inventory.append(item_class())
-        
-        return f"[success]You purchase the {item_name_to_buy} from Master Merchant Aldric for {cost} gold coins.[/success]"
+            # Should not happen if item is in wares, but safety check
+            return event_msg + "\n" + f'[failure]An unexpected error occurred trying to sell the [item_name]{item_name_to_buy}[/item_name].[/failure]'
