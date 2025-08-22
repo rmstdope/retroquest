@@ -6,6 +6,7 @@ class AncientChronicle(Item):
     def __init__(self) -> None:
         super().__init__(
             name="ancient chronicle",
+            short_name="chronicle",
             description="A massive tome containing historical records of the region, including detailed accounts of ancient bloodlines, family genealogies, and the significance of various settlements including Willowbrook.",
             can_be_carried=False,
         )

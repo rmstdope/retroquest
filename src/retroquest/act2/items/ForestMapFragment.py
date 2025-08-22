@@ -5,6 +5,7 @@ class ForestMapFragment(Item):
     def __init__(self) -> None:
         super().__init__(
             name="forest map fragment",
+            short_name="forest_map",
             description=(
                 "A torn piece of parchment showing ancient forest paths and landmarks. "
                 "The ink is faded but still legible, marking safe routes through dangerous "

@@ -5,6 +5,7 @@ class SilverTree(Item):
     def __init__(self) -> None:
         super().__init__(
             name="silver-barked tree",
+            short_name="tree",
             description=(
                 "A magnificent ancient tree that towers above all others, its silver bark shimmering "
                 "with an inner light that seems to pulse in rhythm with your heartbeat. The bark is smooth "

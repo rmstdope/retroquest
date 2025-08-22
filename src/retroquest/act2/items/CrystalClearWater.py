@@ -5,6 +5,7 @@ class CrystalClearWater(Item):
     def __init__(self) -> None:
         super().__init__(
             name="crystal-clear water",
+            short_name="water",
             description=(
                 "Water from the sacred spring in the Whispering Glade, this liquid is "
                 "so pure it seems to glow with its own inner light. The water has been "

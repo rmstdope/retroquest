@@ -5,6 +5,7 @@ class HealingHerbs(Item):
     def __init__(self) -> None:
         super().__init__(
             name="healing herbs",
+            short_name="herbs",
             description="A bundle of carefully selected medicinal herbs known for their healing properties. These herbs are essential for advanced healing magic and potion-making.",
             can_be_carried=True,
         )

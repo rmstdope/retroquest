@@ -6,6 +6,7 @@ class TrainingSword(Item):
     def __init__(self) -> None:
         super().__init__(
             name="training sword",
+            short_name="sword",
             description="A well-balanced practice sword with a dulled blade. Though not sharp enough for real combat, it's perfect for demonstrating martial skills and training exercises.",
             can_be_carried=True,
         )

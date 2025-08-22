@@ -5,6 +5,7 @@ class DruidicFocus(Item):
     def __init__(self) -> None:
         super().__init__(
             name="druidic focus",
+            short_name="focus",
             description=(
                 "A crystalline focal tool carved from living wood and embedded with "
                 "natural crystals. The focus pulses with primal magic, designed to "

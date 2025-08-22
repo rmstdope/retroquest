@@ -5,6 +5,7 @@ class QualityRope(Item):
     def __init__(self) -> None:
         super().__init__(
             name="quality rope",
+            short_name="rope",
             description="Fifty feet of strong, reliable rope suitable for climbing, securing loads, and emergency situations. The rope is treated to resist weather and magical corrosion.",
             can_be_carried=True,
         )
