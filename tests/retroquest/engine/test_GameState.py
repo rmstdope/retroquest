@@ -62,6 +62,73 @@ class TestGameState(unittest.TestCase):
         self.gs.remove_item_from_inventory("item1")
         self.assertFalse(self.gs.has_item("item1"))
 
+    def test_multiple_items_inventory(self):
+        """Test inventory batching functionality with multiple items of the same type."""
+        class DummyItem:
+            def __init__(self, name):
+                self.item_name = name
+            def get_name(self): return self.item_name
+            def get_short_name(self): return self.item_name[:3]
+
+        # Add multiple items of the same type
+        for i in range(5):
+            coin = DummyItem("coin")
+            self.gs.add_item_to_inventory(coin)
+        
+        # Add multiple items of different types
+        for i in range(3):
+            key = DummyItem("key")
+            self.gs.add_item_to_inventory(key)
+        
+        # Add a single item
+        sword = DummyItem("sword")
+        self.gs.add_item_to_inventory(sword)
+
+        # Test inventory summary
+        summary = self.gs.get_inventory_summary()
+        self.assertEqual(summary["coin"], 5)
+        self.assertEqual(summary["key"], 3)
+        self.assertEqual(summary["sword"], 1)
+
+        # Test item counts
+        self.assertEqual(self.gs.get_item_count("coin"), 5)
+        self.assertEqual(self.gs.get_item_count("key"), 3)
+        self.assertEqual(self.gs.get_item_count("sword"), 1)
+        self.assertEqual(self.gs.get_item_count("nonexistent"), 0)
+
+        # Test has_item with multiple items
+        self.assertTrue(self.gs.has_item("coin"))
+        self.assertTrue(self.gs.has_item("key"))
+        self.assertTrue(self.gs.has_item("sword"))
+        self.assertFalse(self.gs.has_item("potion"))
+
+        # Test stats display with batching
+        stats_output = self.gs.stats()
+        self.assertIn("5 coin", stats_output)
+        self.assertIn("3 key", stats_output)
+        self.assertIn("sword", stats_output)  # Single item without count
+        self.assertNotIn("1 sword", stats_output)  # Should not show count for single items
+
+        # Test partial removal
+        removed = self.gs.remove_item_from_inventory("coin", 2)
+        self.assertEqual(removed, 2)
+        self.assertEqual(self.gs.get_item_count("coin"), 3)
+        
+        # Test removing more than available
+        removed = self.gs.remove_item_from_inventory("key", 5)
+        self.assertEqual(removed, 3)  # Should only remove what's available
+        self.assertEqual(self.gs.get_item_count("key"), 0)
+        
+        # Test remove all items of a type
+        removed = self.gs.remove_all_items_from_inventory("coin")
+        self.assertEqual(removed, 3)
+        self.assertEqual(self.gs.get_item_count("coin"), 0)
+        self.assertFalse(self.gs.has_item("coin"))
+        
+        # Verify only sword remains
+        self.assertTrue(self.gs.has_item("sword"))
+        self.assertEqual(len(self.gs.inventory), 1)
+
     def test_learn_spell_and_has_spell(self):
         class DummySpell:
             def __init__(self, name): self.name = name
@@ -139,6 +206,34 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(self.gs.get_quest("Quest3"), completed_quest)
         # Not found
         self.assertIsNone(self.gs.get_quest("NotAQuest"))
+
+    def test_add_item_to_inventory_with_count(self):
+        """Test that add_item_to_inventory works with count parameter."""
+        from engine.Item import Item
+        
+        # Create test items
+        coin = Item("coin", "A golden coin")
+        sword = Item("sword", "A sharp sword")
+        
+        # Test default behavior (count=1)
+        self.gs.add_item_to_inventory(sword)
+        self.assertEqual(self.gs.get_item_count("sword"), 1)
+        
+        # Test adding multiple items with count parameter
+        self.gs.add_item_to_inventory(coin, count=5)
+        self.assertEqual(self.gs.get_item_count("coin"), 5)
+        
+        # Test adding more of the same item
+        self.gs.add_item_to_inventory(coin, count=3)
+        self.assertEqual(self.gs.get_item_count("coin"), 8)
+        
+        # Verify inventory summary
+        summary = self.gs.get_inventory_summary()
+        self.assertEqual(summary["coin"], 8)
+        self.assertEqual(summary["sword"], 1)
+        
+        # Verify total inventory size
+        self.assertEqual(len(self.gs.inventory), 9)  # 8 coins + 1 sword
 
 
 
