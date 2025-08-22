@@ -5,6 +5,7 @@ class GameState:
     def __init__(self, starting_room, all_rooms, all_quests) -> None:
         self.current_room = starting_room
         self.all_rooms = all_rooms
+        # TODO Add support for carrying more then one item of the same type
         self.inventory = []
         self.history = []
         self.visited_rooms = [starting_room.name]

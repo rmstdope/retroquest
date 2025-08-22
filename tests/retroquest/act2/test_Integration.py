@@ -294,11 +294,14 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["buy room key from innkeeper marcus"])
     _check_item_in_inventory(game.state, "Room Key")
     # Use Room Key to access Inn Rooms
+    # TODO Before gaining access to the room, the key needs to be used
     _execute_commands(game, ["go east"])
     _check_current_room(game.state, "Inn Rooms")
     _execute_commands(game, ["use room key"])
     # assert game.state.get_story_flag("accessed_inn_room"), "Should have accessed inn room"
     # Take Traveler's Journal
+    # TODO The journal should be found through searching the ro
+    # TODO Some of the gold needed to buy supplies should be found by searching the castle approach
     _check_item_in_room(game.state.current_room, "Traveler's Journal")
     _execute_commands(game, ["take traveler's journal"])
     _check_item_in_inventory(game.state, "Traveler's Journal")
