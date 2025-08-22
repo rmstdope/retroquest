@@ -19,25 +19,26 @@ class Moonflowers(Item):
         current_room = game_state.current_room.name
         if "healer" in current_room.lower():
             return ("The [item_name]moonflowers[/item_name] would be perfect for Master "
-                   "Healer Lyria's advanced remedies and magical preparations.")
+                    "Healer Lyria's advanced remedies and magical preparations.")
         elif "forest" in current_room.lower():
             return ("The [item_name]moonflowers[/item_name] glow more brightly in the "
-                   "magical atmosphere of the forest, their protective properties enhanced.")
+                    "magical atmosphere of the forest, their protective properties enhanced.")
         else:
             return ("The [item_name]moonflowers[/item_name] remain dormant here. "
-                   "They likely have special significance for healing or magical purposes.")
+                    "They likely have special significance for healing or magical purposes.")
 
+# TODO Is this ever used?
     def picked_up(self, game_state) -> str:
         """Called when the item is picked up by the player."""
         if game_state.current_room.name == "Whispering Glade":
             game_state.set_story_flag("moonflowers_taken", True)
             return ("The moonflowers seem to approve of your gentle touch, their "
-                   "silvery glow pulsing warmly as you gather them. These blessed "
-                   "blooms will aid in healing and protection magic.")
+                    "silvery glow pulsing warmly as you gather them. These blessed "
+                    "blooms will aid in healing and protection magic.")
         return ""
 
     def examine(self, game_state) -> str:
         return ("[event]You examine the [item_name]moonflowers[/item_name]. {0} "
-               "As you watch, the petals seem to move gently even though there's "
-               "no breeze, and you notice tiny motes of silvery light drifting "
-               "from the blooms like magical pollen.[/event]".format(self.description))
+                "As you watch, the petals seem to move gently even though there's "
+                "no breeze, and you notice tiny motes of silvery light drifting "
+                "from the blooms like magical pollen.[/event]".format(self.description))

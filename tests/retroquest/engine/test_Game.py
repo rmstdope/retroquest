@@ -844,6 +844,15 @@ class MockCharacter:
     
     def examine(self, game_state):
         return f"You examine [character_name]{self.name}[/character_name]."
+    
+    def say_to(self, word, game_state):
+        """Mock implementation of say_to method."""
+        if word.lower() == "hello":
+            return f"[dialogue][character_name]{self.name}[/character_name] responds: 'Hello there!'[/dialogue]"
+        elif word.lower() == "password":
+            return f"[dialogue][character_name]{self.name}[/character_name] nods and steps aside.[/dialogue]"
+        else:
+            return f"[dialogue][character_name]{self.name}[/character_name] looks confused and doesn't understand '{word}'.[/dialogue]"
 
 @pytest.fixture
 def game_with_spells(basic_rooms):
@@ -936,4 +945,88 @@ def test_cast_spell_name_only_with_on(game_with_spells):
     assert "[failure]You don't know any spell called 'heal on'.[/failure]" in result
 
 # Ensure this is at the very end if no other tests follow
+
+# --- Tests for 'say' command ---
+
+def test_say_word_to_character_successful(game):
+    """Test saying a word to a character that recognizes it."""
+    mock_char = MockCharacter("guard")
+    game.state.current_room.add_character(mock_char)
+    
+    result = game.say("hello", "guard")
+    
+    assert "[dialogue][character_name]guard[/character_name] responds: 'Hello there!'[/dialogue]" in result
+
+def test_say_password_to_character(game):
+    """Test saying a password to a character."""
+    mock_char = MockCharacter("gatekeeper")
+    game.state.current_room.add_character(mock_char)
+    
+    result = game.say("password", "gatekeeper")
+    
+    assert "[dialogue][character_name]gatekeeper[/character_name] nods and steps aside.[/dialogue]" in result
+
+def test_say_unrecognized_word_to_character(game):
+    """Test saying a word that the character doesn't recognize."""
+    mock_char = MockCharacter("villager")
+    game.state.current_room.add_character(mock_char)
+    
+    result = game.say("xyzzy", "villager")
+    
+    assert "[dialogue][character_name]villager[/character_name] looks confused and doesn't understand 'xyzzy'.[/dialogue]" in result
+
+def test_say_word_to_nonexistent_character(game):
+    """Test saying a word to a character that doesn't exist in the room."""
+    result = game.say("hello", "ghost")
+    
+    assert "[failure]There is no character named '[character_name]ghost[/character_name]' here to speak to.[/failure]" in result
+
+def test_say_empty_word(game):
+    """Test saying an empty word."""
+    mock_char = MockCharacter("merchant")
+    game.state.current_room.add_character(mock_char)
+    
+    result = game.say("", "merchant")
+    
+    assert "[failure]What do you want to say?[/failure]" in result
+
+def test_say_to_empty_character(game):
+    """Test saying a word to an empty character name."""
+    result = game.say("hello", "")
+    
+    assert "[failure]Who do you want to say that to?[/failure]" in result
+
+def test_say_both_empty(game):
+    """Test saying with both word and character empty."""
+    result = game.say("", "")
+    
+    assert "[failure]What do you want to say?[/failure]" in result
+
+def test_say_multi_word_phrase(game):
+    """Test saying a multi-word phrase to a character."""
+    mock_char = MockCharacter("oracle")
+    game.state.current_room.add_character(mock_char)
+    
+    result = game.say("the answer is wisdom", "oracle")
+    
+    # The mock character doesn't recognize this phrase, so should get confused response
+    assert "[dialogue][character_name]oracle[/character_name] looks confused and doesn't understand 'the answer is wisdom'.[/dialogue]" in result
+
+def test_say_case_insensitive_character_name(game):
+    """Test that character names are case-insensitive."""
+    mock_char = MockCharacter("Guard Captain")
+    game.state.current_room.add_character(mock_char)
+    
+    result = game.say("hello", "guard captain")
+    
+    assert "[dialogue][character_name]Guard Captain[/character_name] responds: 'Hello there!'[/dialogue]" in result
+
+def test_say_word_with_spaces(game):
+    """Test saying a word/phrase that contains spaces."""
+    mock_char = MockCharacter("wizard")
+    game.state.current_room.add_character(mock_char)
+    
+    result = game.say("magic words", "wizard")
+    
+    assert "[dialogue][character_name]wizard[/character_name] looks confused and doesn't understand 'magic words'.[/dialogue]" in result
 

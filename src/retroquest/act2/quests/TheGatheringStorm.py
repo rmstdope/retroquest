@@ -12,6 +12,8 @@ class TheGatheringStormQuest(Quest):
         """This is the main quest for Act II."""
         return True
 
+# TODO Fix the description of this quest
+# TODO Add a number of updates to the quest
     def check_trigger(self, game_state: GameState) -> bool:
         return True  # This quest is always active once Act II begins
 

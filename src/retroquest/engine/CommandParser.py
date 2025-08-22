@@ -65,6 +65,19 @@ class CommandParser:
             for prefix in ('talk to ', 'speak to ', 'converse with '):
                 if cmd.startswith(prefix):
                     return self.game.talk(cmd[len(prefix):])
+        elif cmd.startswith('say '):
+            # Handle "say [word] to [character]"
+            say_args = cmd[len('say '):].strip()
+            if ' to ' in say_args:
+                parts = say_args.split(' to ', 1)
+                word = parts[0].strip()
+                character = parts[1].strip()
+                if word and character:
+                    return self.game.say(word, character)
+                else:
+                    return "You need to specify both what to say and who to say it to. Use say <word> to <character>"
+            else:
+                return "You need to specify who to say that to. Use say <word> to <character>"
         elif any(cmd.startswith(prefix) for prefix in ('give ', 'hand ')): # e.g. give bread to grandmother
             # This will pass "bread to grandmother". Game.give needs to parse it.
             for prefix in ('give ', 'hand '):

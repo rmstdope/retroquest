@@ -105,8 +105,3 @@ class Room:
     def on_enter(self, game_state: GameState) -> None:
         """Hook called when the player enters the room. Override in subclasses for custom behavior."""
         return ""
-
-    def handle_command(self, command: str, game_state: GameState) -> str:
-        """Handle room-specific commands. Override in subclasses for custom behavior."""
-        # Default implementation: no special commands handled
-        return ""

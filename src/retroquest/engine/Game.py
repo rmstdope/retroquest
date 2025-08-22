@@ -349,6 +349,7 @@ Copyright Free Background Music'''
             "\n"
             "[bold]Interaction:[/bold]\n"
             "  talk to <character>, speak to <character>, converse with <character>\n"
+            "  say <word(s)> to <character>\n"
             "  give <item> to <character>, hand <item> to <character>\n"
             "  buy <item> from <character>\n"
             "\n"
@@ -394,13 +395,6 @@ Copyright Free Background Music'''
         if not target:  # Check if target is an empty string or None
             return "Examine what?"
         
-        # First check if the current room can handle this examine command
-        if hasattr(self.state.current_room, 'handle_command'):
-            examine_command = f"examine {target}"
-            room_result = self.state.current_room.handle_command(examine_command, self.state)
-            if room_result:  # If the room returned a non-empty response
-                return room_result
-        
         # Check for items and characters as usual
         item_to_examine = self.find_item(target)
         if item_to_examine:
@@ -429,13 +423,6 @@ Copyright Free Background Music'''
         return "\n".join(output)
 
     def unknown(self, command: str) -> str:
-        # First check if the current room can handle the command
-        if hasattr(self.state.current_room, 'handle_command'):
-            room_result = self.state.current_room.handle_command(command, self.state)
-            if room_result:  # If the room returned a non-empty response
-                return room_result
-        
-        # If the room didn't handle it, return the default unknown command message
         return f"I don't understand the command: '{command}'. Try 'help' for a list of valid commands."
 
     def quit(self) -> str:
@@ -495,6 +482,19 @@ Copyright Free Background Music'''
             return character_to_talk_to.talk_to(self.state)
         else:
             return f"[failure]There is no character named '[character_name]{target}[/character_name]' here to talk to.[/failure]"
+
+    def say(self, word: str, character_name: str) -> str:
+        """Say a specific word or phrase to a character."""
+        if not word:
+            return "[failure]What do you want to say?[/failure]"
+        if not character_name:
+            return "[failure]Who do you want to say that to?[/failure]"
+            
+        character_to_speak_to = self.find_character(character_name)
+        if character_to_speak_to:
+            return character_to_speak_to.say_to(word, self.state)
+        else:
+            return f"[failure]There is no character named '[character_name]{character_name}[/character_name]' here to speak to.[/failure]"
 
     def split_command(self, command_args: str, command: str, delimiter: str) -> tuple:
         # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"

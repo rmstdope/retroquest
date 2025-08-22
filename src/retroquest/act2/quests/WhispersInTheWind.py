@@ -26,7 +26,7 @@ class WhispersInTheWind(Quest):
 
     def check_completion(self, game_state) -> bool:
         """Check if the quest can be completed based on story flags."""
-        return game_state.get_story_flag("whispers_in_the_wind_completed") and not self.is_completed_flag
+        return game_state.get_story_flag("whispers_in_wind_completed") and not self.is_completed_flag
 
     def complete(self, game_state) -> str:
         """Complete the quest and give rewards."""

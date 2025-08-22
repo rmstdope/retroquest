@@ -28,6 +28,4 @@ class TheHealersApprenticeQuest(Quest):
 
     def check_completion(self, game_state: GameState) -> bool:
         # Quest completes when player has learned greater_heal spell and received training
-        return (game_state.get_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED) and
-                game_state.has_spell("greater_heal") and
-                game_state.get_story_flag(FLAG_LYRIA_RELATIONSHIP_STUDENT))
+        return game_state.get_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED)

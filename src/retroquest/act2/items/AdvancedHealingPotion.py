@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ..Act2StoryFlags import FLAG_HEALERS_APPRENTICE_COMPLETED
 
 class AdvancedHealingPotion(Item):
     def __init__(self) -> None:
@@ -22,13 +23,13 @@ class AdvancedHealingPotion(Item):
                 game_state.set_story_flag("healers_apprentice_ready", True)
                 
                 return ("[success]You uncork the [item_name]Advanced Healing Potion[/item_name] and drink it in "
-                       "one swift motion. The liquid burns slightly as it goes down, but immediately you feel a "
-                       "powerful surge of healing energy coursing through your body. Wounds close, bruises fade, "
-                       "and your strength is fully restored. This is clearly the work of a master alchemist![/success]\n\n"
-                       
-                       "[info]Master Healer Lyria watches approvingly. 'Excellent! You've demonstrated that you can "
-                       "use advanced healing techniques under pressure. This is exactly the kind of skill that marks "
-                       "a true healer's apprentice. Your training is now complete!'[/info]")
+                        "one swift motion. The liquid burns slightly as it goes down, but immediately you feel a "
+                        "powerful surge of healing energy coursing through your body. Wounds close, bruises fade, "
+                        "and your strength is fully restored. This is clearly the work of a master alchemist![/success]\n\n"
+
+                        "[info]Master Healer Lyria watches approvingly. 'Excellent! You've demonstrated that you can "
+                        "use advanced healing techniques under pressure. This is exactly the kind of skill that marks "
+                        "a true healer's apprentice. Your training is now complete!'[/info]")
             else:
                 return ("You've already used the [item_name]Advanced Healing Potion[/item_name] for your emergency healing training.")
         
