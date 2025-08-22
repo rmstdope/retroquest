@@ -5,7 +5,7 @@ class GameState:
     def __init__(self, starting_room, all_rooms, all_quests) -> None:
         self.current_room = starting_room
         self.all_rooms = all_rooms
-        # TODO Add support for carrying more then one item of the same type
+        # Inventory supports carrying multiple items of the same type, displayed as batched counts
         self.inventory = []
         self.history = []
         self.visited_rooms = [starting_room.name]
@@ -34,6 +34,26 @@ class GameState:
                 return value
         return False
 
+    def get_inventory_summary(self) -> dict:
+        """Returns a dictionary with item names as keys and counts as values."""
+        item_counts = {}
+        for item in self.inventory:
+            item_name = item.get_name()
+            if item_name in item_counts:
+                item_counts[item_name] += 1
+            else:
+                item_counts[item_name] = 1
+        return item_counts
+
+    def get_item_count(self, item_name: str) -> int:
+        """Returns the count of items with the given name or short name in inventory (case-insensitive)."""
+        item_name_lower = item_name.lower()
+        count = 0
+        for item in self.inventory:
+            if item.get_name().lower() == item_name_lower or item.get_short_name().lower() == item_name_lower:
+                count += 1
+        return count
+
     def has_item(self, item_name: str) -> bool:
         """Checks if an item with the given name or short name is in the player's inventory (case-insensitive)."""
         item_name_lower = item_name.lower()
@@ -41,18 +61,55 @@ class GameState:
             if item.get_name().lower() == item_name_lower or item.get_short_name().lower() == item_name_lower:
                 return True
         return False
-
-    def remove_item_from_inventory(self, item_name: str) -> None:
-        """Removes an item from the player's inventory by its name."""
+        """Checks if an item with the given name or short name is in the player's inventory (case-insensitive)."""
         item_name_lower = item_name.lower()
         for item in self.inventory:
-            if item.get_name().lower() == item_name_lower:
-                self.inventory.remove(item)
-                return # Assuming only one instance of an item name can exist or we remove the first one
+            if item.get_name().lower() == item_name_lower or item.get_short_name().lower() == item_name_lower:
+                return True
+        return False
 
-    def add_item_to_inventory(self, item_object) -> None:
-        """Adds an item object to the player's inventory."""
-        self.inventory.append(item_object)
+    def remove_item_from_inventory(self, item_name: str, count: int = 1) -> int:
+        """
+        Removes up to 'count' items from the player's inventory by name.
+        Returns the actual number of items removed.
+        """
+        item_name_lower = item_name.lower()
+        removed_count = 0
+        items_to_remove = []
+        
+        for item in self.inventory:
+            if removed_count >= count:
+                break
+            if item.get_name().lower() == item_name_lower:
+                items_to_remove.append(item)
+                removed_count += 1
+        
+        for item in items_to_remove:
+            self.inventory.remove(item)
+        
+        return removed_count
+
+    def remove_all_items_from_inventory(self, item_name: str) -> int:
+        """
+        Removes all items with the given name from the player's inventory.
+        Returns the number of items removed.
+        """
+        item_name_lower = item_name.lower()
+        items_to_remove = []
+        
+        for item in self.inventory:
+            if item.get_name().lower() == item_name_lower:
+                items_to_remove.append(item)
+        
+        for item in items_to_remove:
+            self.inventory.remove(item)
+        
+        return len(items_to_remove)
+
+    def add_item_to_inventory(self, item_object, count: int = 1) -> None:
+        """Adds an item object to the player's inventory, optionally multiple times."""
+        for _ in range(count):
+            self.inventory.append(item_object)
 
     def learn_spell(self, spell_object) -> None:
         """Adds a spell object to the player's known spells if not already learned."""
@@ -74,8 +131,20 @@ class GameState:
             "[bold]Inventory:[/bold]"
         ]
         if self.inventory:
+            # Batch items by name for display
+            item_counts = {}
             for item in self.inventory:
-                lines.append(f"- [item_name]{item.get_name()}[/item_name]")
+                item_name = item.get_name()
+                if item_name in item_counts:
+                    item_counts[item_name] += 1
+                else:
+                    item_counts[item_name] = 1
+            
+            for item_name, count in item_counts.items():
+                if count == 1:
+                    lines.append(f"- [item_name]{item_name}[/item_name]")
+                else:
+                    lines.append(f"- [item_name]{count} {item_name}[/item_name]")
         else:
             lines.append("(empty)")
         lines.append("")
