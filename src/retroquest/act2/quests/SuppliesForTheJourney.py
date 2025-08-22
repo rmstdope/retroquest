@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_PREMIUM_SELECTION_AVAILABLE
+from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS
 
 class SuppliesForTheJourneyQuest(Quest):
     def __init__(self) -> None:
@@ -11,7 +11,7 @@ class SuppliesForTheJourneyQuest(Quest):
         )
 
     def check_trigger(self, game_state: GameState) -> bool:
-        return game_state.get_story_flag(FLAG_PREMIUM_SELECTION_AVAILABLE)
+        return game_state.get_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS)
 
     def check_completion(self, game_state: GameState) -> bool:
         if not self.is_completed_flag:

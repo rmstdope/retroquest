@@ -28,14 +28,11 @@ class GateCaptain(Character):
     def give_item(self, game_state: GameState, item) -> str:
         if item.get_name().lower() == "entry pass":
             if self.entry_pass_given:
-                return "The Gate Captain already has your entry pass. He waves you through with respect."
+                return f"You have already shown the entry pass to the [character]{self.name}[/character]. He waves you through with respect."
             
             self.entry_pass_given = True
-            # Remove the entry pass from inventory since it's been given
-            if item in game_state.inventory:
-                game_state.inventory.remove(item)
             
-            return ("The Gate Captain examines the entry pass carefully, noting the official seal. "
+            return ("The Gate Captain examines the entry pass carefully when you show it to him, noting the official seal. "
                     "His expression changes to one of respect as he recognizes the authority behind it. "
                     "'This is legitimate documentation indeed. You are welcome in Greendale, honored visitor. "
                     "Please, proceed with our blessing.' He steps aside and gestures toward the city.")

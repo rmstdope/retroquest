@@ -14,6 +14,12 @@ class CityMap(Item):
     def use(self, game_state: GameState) -> str:
         # Set the story flag when the city map is used
         game_state.set_story_flag(FLAG_USED_CITY_MAP, True)
+        
+        # Enable city navigation in Main Square
+        main_square = game_state.all_rooms.get("MainSquare")
+        if main_square and hasattr(main_square, 'enable_city_navigation'):
+            main_square.enable_city_navigation()
+        
         # Remove the map from inventory since it's been memorized
         game_state.remove_item_from_inventory("city map")
         return ("You study the city map carefully. The detailed layout shows the Main Square at the center, "

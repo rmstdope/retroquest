@@ -156,8 +156,8 @@ def test_golden_path_act2_completion():
     # Give Entry Pass to Gate Captain
     _check_character_in_room(game.state.current_room, "Gate Captain")
     _execute_commands(game, ["give entry pass to gate captain"])
-    _check_item_in_inventory(game.state, "Entry Pass", should_be_present=False)
-    # Verify that north exit to Main Square is now available after giving Entry Pass
+    _check_item_in_inventory(game.state, "Entry Pass", should_be_present=True)
+    # Verify that north exit to Main Square is now available after showing the Entry Pass
     exits = game.state.current_room.get_exits()
     assert "north" in exits, "North exit to Main Square should be available after giving Entry Pass"
     assert exits["north"] == "MainSquare", "North exit should lead to Main Square"
@@ -233,7 +233,7 @@ def test_golden_path_act2_completion():
     # Give Pass to Herald
     _check_character_in_room(game.state.current_room, "Herald")
     _execute_commands(game, ["give pass to herald"])
-    _check_item_in_inventory(game.state, "Pass", should_be_present=False)
+    _check_item_in_inventory(game.state, "Pass", should_be_present=True)
     # assert game.state.get_story_flag("herald_received_pass"), "Herald should have received the pass"
     # Talk to Castle Guard Captain
     _check_character_in_room(game.state.current_room, "Castle Guard Captain")
@@ -251,17 +251,16 @@ def test_golden_path_act2_completion():
     # Use Training Sword to demonstrate combat skills
     _execute_commands(game, ["use training sword"])
     # assert game.state.get_story_flag("demonstrated_combat_skills"), "Combat skills should have been demonstrated"
-    # Quest "The Knight's Test" should now be completed
-    _check_quests(game.state, ["The Gathering Storm"])
+    # Quest "The Knight's Test" should now be completed and "Supplies for the Journey" activated
+    _check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey"])
+    _check_item_in_inventory(game.state, "Coins", False)
+    _execute_commands(game, ["talk to sir cedric"])
+    _check_item_in_inventory(game.state, "Coins")
     
     # Step 6: Market District
     # Go to Market District via Main Square
     _execute_commands(game, ["go east", "go south", "go east"])
     _check_current_room(game.state, "Market District")
-    # Take coins first (needed for purchases)
-    _check_item_in_room(game.state.current_room, "Coins")
-    _execute_commands(game, ["take coins"])
-    _check_item_in_inventory(game.state, "Coins")
     # Give Merchant's Flyer to Master Merchant Aldric
     _check_character_in_room(game.state.current_room, "Master Merchant Aldric")
     _execute_commands(game, ["give merchant's flyer to master merchant aldric"])
@@ -269,7 +268,6 @@ def test_golden_path_act2_completion():
     # assert game.state.get_story_flag("gave_merchants_flyer"), "Merchant's flyer should have been given"
     # Talk to Master Merchant Aldric
     _execute_commands(game, ["talk to master merchant aldric"])
-    _check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey"])
     # Talk to Caravan Master Thorne (accept quest)
     _check_character_in_room(game.state.current_room, "Caravan Master Thorne") 
     _execute_commands(game, ["talk to caravan master thorne"])
@@ -572,7 +570,7 @@ def test_main_square_navigation_restriction():
     assert not game.state.get_story_flag("used_city_map"), "City map should not be used initially"
     
     # Test restricted exits - should only be able to go south
-    available_exits = game.state.current_room.get_exits(game.state)
+    available_exits = game.state.current_room.get_exits()
     assert available_exits == {"south": "GreendaleGates"}, f"Expected only south exit, got: {available_exits}"
     
     # Test navigation restriction - should get lost message when trying invalid directions
@@ -600,7 +598,7 @@ def test_main_square_navigation_restriction():
     assert not game.state.has_item("city map"), "City map should be removed from inventory after use"
     
     # After using map, should have full access to all exits
-    available_exits = game.state.current_room.get_exits(game.state)
+    available_exits = game.state.current_room.get_exits()
     expected_exits = {"south": "GreendaleGates", "north": "CastleApproach", "east": "MarketDistrict"}
     assert available_exits == expected_exits, f"Expected all exits after using map, got: {available_exits}"
     
@@ -610,7 +608,7 @@ def test_main_square_navigation_restriction():
     main_square_room = game.state.current_room
     
     # Mock the movement to test the exit availability without side effects
-    exits = game.state.current_room.get_exits(game.state)
+    exits = game.state.current_room.get_exits()
     assert "north" in exits, "North exit should be available after using map"
     assert "east" in exits, "East exit should be available after using map"
 

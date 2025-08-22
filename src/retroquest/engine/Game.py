@@ -131,7 +131,7 @@ Copyright Free Background Music'''
 
         character_names = [char.get_name().lower() for char in self.state.current_room.get_characters()]
         spell_names = [spell.get_name().lower() for spell in self.state.known_spells]
-        exit_names = {direction: None for direction in self.state.current_room.get_exits(self.state)}
+        exit_names = {direction: None for direction in self.state.current_room.get_exits()}
         file_names = {f: None for f in os.listdir('.') if f.endswith('.txt') and os.path.isfile(f)}
 
         # # Build 'use' completions so that 'with' is suggested only after the full item name
@@ -144,7 +144,7 @@ Copyright Free Background Music'''
 
         # Build directional completions based on actual exits
         directional_completions = {}
-        available_exits = self.state.current_room.get_exits(self.state)
+        available_exits = self.state.current_room.get_exits()
         
         # Short directions
         if 'north' in available_exits:
@@ -309,7 +309,7 @@ Copyright Free Background Music'''
         return item_to_examine
 
     def move(self, direction: str, arg: str = None) -> str:
-        exits = self.state.current_room.get_exits(self.state)
+        exits = self.state.current_room.get_exits()
         
         # Special handling for MainSquare navigation restriction
         if (self.state.current_room.name == "Main Square" and 
@@ -412,7 +412,7 @@ Copyright Free Background Music'''
             return "No rooms visited yet."
         output = ["[bold]Visited Rooms and Exits:[/bold]"]
         for name, room in room_objs.items():
-            exits = room.get_exits(self.state)
+            exits = room.get_exits()
             output.append(f"- [room_name]{room.name}[/room_name]:")
             if exits:
                 for direction, dest in exits.items():

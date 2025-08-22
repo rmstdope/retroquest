@@ -1,7 +1,6 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_HERALD_RECEIVED_PASS
 
 class Herald(Character):
     def __init__(self) -> None:
@@ -9,9 +8,10 @@ class Herald(Character):
             name="herald",
             description="An official court herald wearing ornate robes bearing the royal arms. He examines documents and credentials for those seeking audience with nobility.",
         )
+        self.received_pass = False
 
     def talk_to(self, game_state: GameState) -> str:
-        if game_state.get_story_flag(FLAG_HERALD_RECEIVED_PASS):
+        if self.received_pass:
             return ("[character_name]Herald[/character_name]: Your credentials have been verified and you have been "
                     "granted formal audience rights. You may proceed to meet with [character_name]Sir Cedric[/character_name] "
                     "and other members of the court.")
@@ -23,12 +23,10 @@ class Herald(Character):
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to the Herald"""
         if "pass" in item_object.get_name().lower():
-            # Remove the pass from inventory
-            if item_object in game_state.inventory:
-                game_state.inventory.remove(item_object)
-            game_state.set_story_flag(FLAG_HERALD_RECEIVED_PASS, True)
+            game_state.current_room.enable_castle_courtyard()
+            self.received_pass = True
             return ("[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name].[/event]\n"
-                    "[success]You present your grandmother's pass to the [character_name]Herald[/character_name]. "
+                    "[success]You present the [item_name]{item_object.get_name()}[/item_name] to the [character_name]Herald[/character_name]. "
                     "He examines the seal carefully and nods with approval. 'This is a formal recommendation "
                     "of excellent standing. You are granted formal audience rights with the nobility.' "
                     "The pass has been officially registered.[/success]")
