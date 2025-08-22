@@ -8,15 +8,16 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - go south / move south / south / s
 - go east / move east / east / e
 - go west / move west / west / w
-<!-- - enter [location] / go in / go inside -->
-<!-- - leave [location] / exit [location] / go out -->
-<!-- - climb [object] / ascend [object] -->
-<!-- - descend [object] / go down [object] -->
-<!-- - follow [path] / walk [path] -->
+  <!-- - enter [location] / go in / go inside -->
+  <!-- - leave [location] / exit [location] / go out -->
+  <!-- - climb [object] / ascend [object] -->
+  <!-- - descend [object] / go down [object] -->
+  <!-- - follow [path] / walk [path] -->
 
 ## Interaction
 
 - talk to [character] / speak to [character] / converse with [character]
+- say [word] to [character]
 - give [item] to [character] / hand [item] to [character]
 - buy [item] from [character]
 
@@ -33,10 +34,10 @@ Below is a comprehensive list of all commands that should be possible to use in 
 - take [item] / pick up [item] / grab [item] / get [item]
 - drop [item] / discard [item]
 - use [item] / use [item] with [item]
-<!-- - eat [item] / consume [item] -->
-<!-- - drink [item] -->
-<!-- - equip [item] / wear [item] -->
-<!-- - unequip [item] / remove [item] -->
+  <!-- - eat [item] / consume [item] -->
+  <!-- - drink [item] -->
+  <!-- - equip [item] / wear [item] -->
+  <!-- - unequip [item] / remove [item] -->
 - inventory / i / inv
 - open [container]
 - close [container]

@@ -1564,6 +1564,7 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Assist with healing the sick. _Elior helps treat patients, gaining practical experience._
       - Quest completed: "The Healer's Apprentice"
 
+# TODO Expand The Hermit's Warning
 15. **Forest Transition:**
 
     - Use Forest Survival Kit to safely approach the magical boundary. _The protective gear shields Elior from harmful magical energies._

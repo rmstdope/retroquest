@@ -22,6 +22,13 @@ class Character:
         event_msg = f"[event]You speak with the [character_name]{self.name}[/character_name].[/event]"
         return event_msg + "\n" + f"[character_name]{self.name}[/character_name] has nothing to say right now."
 
+    def say_to(self, words: str, game_state: GameState) -> str:
+        """
+        Default say_to method for when a player says a specific word to this character.
+        Subclasses should override this to handle specific word recognition and responses.
+        """
+        return f"[dialogue]You say '{words}' to [character_name]{self.name}[/character_name], but they don't seem to understand or respond to that particular phrase.[/dialogue]"
+
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """
         Default behavior when an item is given to this character.

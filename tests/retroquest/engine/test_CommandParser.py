@@ -8,6 +8,8 @@ class DummyGame:
         self.calls.append(('move', direction, arg))
     def talk(self, target):
         self.calls.append(('talk', target))
+    def say(self, word, character):
+        self.calls.append(('say', word, character))
     def ask(self, target):
         self.calls.append(('ask', target))
     def give(self, item):
@@ -133,6 +135,9 @@ def test_interaction_commands(game_parser):
         "talk to mira": ("talk", "mira"),
         "speak to blacksmith": ("talk", "blacksmith"),
         "converse with villager": ("talk", "villager"),
+        "say hello to mira": ("say", "hello", "mira"),
+        "say wisdom to nymph": ("say", "wisdom", "nymph"),
+        "say magic word to guardian spirit": ("say", "magic word", "guardian spirit"),
         "give bread to grandmother": ("give", "bread to grandmother"),
         "hand coin to merchant": ("give", "coin to merchant"),
         "buy rope from shopkeeper": ("buy", "rope from shopkeeper"),
@@ -243,3 +248,23 @@ def test_unknown_command(game_parser):
     game, parser = game_parser
     parser.parse("xyzzy")
     assert game.calls == [("unknown", "xyzzy")]
+
+def test_say_command_validation(game_parser):
+    game, parser = game_parser
+    
+    # Test valid say commands
+    parser.parse("say hello to mira")
+    assert game.calls[-1] == ("say", "hello", "mira")
+    
+    parser.parse("say the answer is wisdom to water nymph")
+    assert game.calls[-1] == ("say", "the answer is wisdom", "water nymph")
+    
+    # Test invalid say commands that should return error messages
+    result = parser.parse("say hello")  # Missing "to character"
+    assert "You need to specify who to say that to" in result
+    
+    result = parser.parse("say to mira")  # Missing word
+    assert "You need to specify who to say that to" in result
+            
+    result = parser.parse("say  to ")  # Empty word and character
+    assert "You need to specify who to say that to" in result
