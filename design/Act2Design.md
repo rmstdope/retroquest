@@ -712,7 +712,7 @@ None
 
 #### Usable Items
 
-- Pass (from Grandmother) - grants audience with Sir Cedric
+- Entry Pass - grants audience with Sir Cedric
 
 #### Characters
 
@@ -796,7 +796,7 @@ None
 
 #### Usable Items
 
-- Pass (from Grandmother) - formal presentation to local lords
+- Entry Pass - formal presentation to local lords
 
 #### Characters
 
@@ -1462,8 +1462,8 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 4. **Castle Approach:**
 
-   - Give Pass to Herald. _The herald examines the pass and grants formal audience rights._
-     - Item used: `Pass` (for castle access)
+   - Give Entry Pass to Herald. _The herald examines the pass and grants formal audience rights._
+     - Item used: `Entry Pass` (for castle access)
    - Talk to Castle Guard Captain. _Captain provides protocol for meeting Sir Cedric._
 
 5. **Castle Courtyard:**
@@ -1508,8 +1508,8 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 9. **Great Hall:**
 
-   - Give Pass (from Grandmother) to Court Herald. _The herald presents Elior formally to the nobility._
-     - Item used: `Pass (from Grandmother)` (formal presentation)
+   - Give Entry Pass to Court Herald. _The herald presents Elior formally to the nobility._
+     - Item used: `Entry Pass` (formal presentation)
    - Show Traveler's Journal to historians. _The journal provides crucial context for understanding historical records._
      - Item used: `Traveler's Journal` (historical research)
    - Read Ancient Chronicle. _Historical records mention Willowbrook and its connection to ancient powers._
@@ -1565,6 +1565,7 @@ The completion of Act II marks Elior's transformation from a promising young her
       - Quest completed: "The Healer's Apprentice"
 
 # TODO Expand The Hermit's Warning
+
 15. **Forest Transition:**
 
     - Use Forest Survival Kit to safely approach the magical boundary. _The protective gear shields Elior from harmful magical energies._
@@ -1714,7 +1715,7 @@ This Golden Path ensures that the design rule "all side quests must be completed
 
 **Items strictly necessary to complete Act II:**
 
-- `Pass (from Grandmother)` (access to castle and formal recognition)
+- `Entry Pass` (access to castle and formal recognition)
 - `City Map` (navigate Greendale streets)
 - `Merchant's Flyer` (introduction to Master Merchant Aldric)
 - `Room Key` (access to Inn Rooms for safe journal study)
@@ -1741,7 +1742,7 @@ This Golden Path ensures that the design rule "all side quests must be completed
 
 **Essential Items:**
 
-- **Pass (from Grandmother)**: Used to gain audience with Sir Cedric and access to castle
+- **Entry Pass**: Used to gain audience with Sir Cedric and access to castle
 - **Healing Herbs**: Gathered for Lyria's quest, used throughout for healing
 - **Forest Guide/Map**: Helps navigate the Enchanted Forest safely
 - **Crystal-Clear Water**: Used to purify cursed items and enhance magical abilities

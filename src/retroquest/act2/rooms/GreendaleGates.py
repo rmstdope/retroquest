@@ -21,7 +21,7 @@ class GreendaleGates(Room):
         self.gate_captain = gate_captain
         self.city_map_found = False
 
-    def get_exits(self, game_state=None) -> dict:
+    def get_exits(self) -> dict:
         """Override to conditionally include north exit after entry pass is given."""
         exits = super().get_exits().copy()
         

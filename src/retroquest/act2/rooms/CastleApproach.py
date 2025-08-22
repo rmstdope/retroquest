@@ -16,3 +16,18 @@ class CastleApproach(Room):
             characters=[Herald(), CastleGuardCaptain()],
             exits={"south": "MainSquare", "west": "CastleCourtyard"}
         )
+        self.castle_courtyard_enabled = False
+
+    def get_exits(self) -> dict:
+        """Override to conditionally include castle courtyard exit only after entry pass is shown to herald."""
+        exits = super().get_exits().copy()
+        
+        # Remove west exit to CastleCourtyard until entry pass has been shown to herald
+        if not self.castle_courtyard_enabled and "west" in exits:
+            del exits["west"]
+            
+        return exits
+
+    def enable_castle_courtyard(self) -> None:
+        """Enable the exit to the Castle Courtyard."""
+        self.castle_courtyard_enabled = True

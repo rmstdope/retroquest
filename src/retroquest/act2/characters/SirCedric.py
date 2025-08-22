@@ -2,6 +2,7 @@ from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..quests.TheGatheringStorm import TheGatheringStormQuest
 from ..quests.TheKnightsTest import TheKnightsTestQuest
+from ..items.Coins import Coins
 from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_CEDRIC_TRUSTS_ELIOR
 
 class SirCedric(Character):
@@ -22,9 +23,18 @@ class SirCedric(Character):
                     "I need proof of your combat skills. Can you demonstrate your martial abilities?")
         elif game_state.is_quest_completed("The Knight's Test") and not game_state.get_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR):
             game_state.set_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR, True)
+            
+            # Give Elior 100 coins for purchasing supplies
+            coins = Coins(100)
+            game_state.add_item_to_inventory(coins)
+            
             return ("[character_name]Sir Cedric[/character_name]: Excellent demonstration! Your combat skills are impressive. "
-                    "I can see you have the training and discipline needed for the challenges ahead. Now I need you "
-                    "to gather supplies and allies. The realm faces a great threat, and we must be prepared.")
+                    "I can see you have the training and discipline needed for the challenges ahead. "
+                    "\n\n*Sir Cedric reaches into his pouch and hands you a bag of coins*\n\n"
+                    "Please accept these 100 gold coins - I should have provided them earlier for your "
+                    "supply purchasing. You'll need proper equipment for the forest expedition: a survival kit, "
+                    "enhanced lantern, and quality rope from the Market District. The realm faces a great threat, "
+                    "and we must be prepared.")
         elif game_state.get_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR):
             return ("[character_name]Sir Cedric[/character_name]: How goes your preparation? The gathering storm grows "
                     "stronger each day. I trust you are making good progress in gathering allies and supplies.")

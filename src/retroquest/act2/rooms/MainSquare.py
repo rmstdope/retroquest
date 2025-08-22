@@ -18,13 +18,18 @@ class MainSquare(Room):
             characters=[TownCrier()],
             exits={"south": "GreendaleGates", "north": "CastleApproach", "east": "MarketDistrict"}
         )
+        self.city_map_used = False
 
-    def get_exits(self, game_state=None) -> dict:
+    def get_exits(self) -> dict:
         """
-        Override exits to enforce navigation restriction until city map is used.
+        Return exits based on whether city map has been used.
         Without using the map, only the path back to Greendale Gates is available.
         """
-        if game_state and not game_state.get_story_flag(FLAG_USED_CITY_MAP):
-            # Only allow movement back to Greendale Gates until map is used
+        if self.city_map_used:
+            return self.exits
+        else:
             return {"south": "GreendaleGates"}
-        return self.exits
+
+    def enable_city_navigation(self) -> None:
+        """Enable all exits after city map is used."""
+        self.city_map_used = True

@@ -49,7 +49,6 @@ FLAG_MARCUS_GRATEFUL = "marcus_grateful"
 # Learning and Interaction Flags
 FLAG_LEARNED_MEND_FROM_CRAFTSMEN = "learned_mend_from_craftsmen"
 FLAG_SHOWED_JOURNAL_TO_HISTORIANS = "showed_journal_to_historians"
-FLAG_HERALD_RECEIVED_PASS = "herald_received_pass"
 FLAG_GAVE_MERCHANTS_FLYER = "gave_merchants_flyer"
 FLAG_PREMIUM_SELECTION_AVAILABLE = "premium_selection_available"
 FLAG_SPOKEN_TO_CARAVAN_MASTER = "spoken_to_caravan_master"

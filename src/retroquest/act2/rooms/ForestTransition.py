@@ -18,19 +18,3 @@ class ForestTransition(Room):
             characters=[ForestHermit()],
             exits={"west": "MountainPath", "east": "ForestEntrance"}
         )
-        self.kit_used = False
-        self.spell_learned = False
-        self.hermit_talked = False
-        self.quest_activated = False
-
-# TODO What is this?
-    # def enter(self, game_state) -> str:
-    #     """Called when the player enters this room."""
-    #     # Activate The Hermit's Warning quest on first entry
-    #     if not self.quest_activated:
-    #         self.quest_activated = True
-    #         hermits_warning = TheHermitsWarning()
-    #         game_state.add_quest(hermits_warning)
-    #         game_state.activate_quest("The Hermit's Warning")
-        
-    #     return super().enter(game_state)
