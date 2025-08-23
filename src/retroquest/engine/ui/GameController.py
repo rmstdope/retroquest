@@ -42,12 +42,27 @@ class GameController:
         return quest_tuples
 
     def get_inventory(self) -> list:
-        """Return a list of tuples (item_name, item_description) for inventory items."""
+        """Return a list of tuples (itemname, item_description) for inventory items."""
         item_tuples = []
+        inventory_summary = self.game.state.get_inventory_summary()
+        
+        # Create a set to track which items we've already processed
+        processed_items = set()
+        
         for item in self.game.state.inventory:
-            item_name = f"[item_name]{item.get_name()}[/item_name]"
+            item_name = item.get_name()
+            if item_name in processed_items:
+                continue  # Skip duplicates, we already processed this item type
+            
+            count = inventory_summary[item_name]
+            if count > 1:
+                styled_item_name = f"[item_name]{count} {item_name}[/item_name]"
+            else:
+                styled_item_name = f"[item_name]{item_name}[/item_name]"
             item_description = item.description
-            item_tuples.append((item_name, item_description))
+            item_tuples.append((styled_item_name, item_description))
+            processed_items.add(item_name)
+            
         return item_tuples
 
     def get_room(self) -> str:

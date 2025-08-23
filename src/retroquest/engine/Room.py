@@ -78,7 +78,21 @@ class Room:
         desc += self.description + '\n'
         visible_items = [item for item in self.items]
         if visible_items:
-            item_names = ', '.join(f"[item_name]{item.get_name()}[/item_name]" for item in visible_items)
+            # Group items by name and count them
+            item_counts = {}
+            for item in visible_items:
+                item_name = item.get_name()
+                item_counts[item_name] = item_counts.get(item_name, 0) + 1
+            
+            # Create formatted item list with counts
+            item_descriptions = []
+            for item_name, count in item_counts.items():
+                if count > 1:
+                    item_descriptions.append(f"[item_name]{count} {item_name}[/item_name]")
+                else:
+                    item_descriptions.append(f"[item_name]{item_name}[/item_name]")
+            
+            item_names = ', '.join(item_descriptions)
             desc += f"\nItems you can see: {item_names}"
         if self.characters:
             # Use get_name for character instances
