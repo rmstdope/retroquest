@@ -24,9 +24,9 @@ class SirCedric(Character):
         elif game_state.is_quest_completed("The Knight's Test") and not game_state.get_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR):
             game_state.set_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR, True)
             
-            # Give Elior 100 coins for purchasing supplies
-            coins = Coins(100)
-            game_state.add_item_to_inventory(coins)
+            # Give Elior 100 individual coins using the new batching system
+            coin = Coins(1)  # Create a single coin worth 1 gold
+            game_state.add_item_to_inventory(coin, count=100)  # Add 100 of them
             
             return ("[character_name]Sir Cedric[/character_name]: Excellent demonstration! Your combat skills are impressive. "
                     "I can see you have the training and discipline needed for the challenges ahead. "

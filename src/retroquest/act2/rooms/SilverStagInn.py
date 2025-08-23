@@ -2,11 +2,10 @@ from ...engine.Room import Room
 from ..characters.InnkeeperMarcus import InnkeeperMarcus
 from ..characters.BarmaidElena import BarmaidElena
 from ..items.RoomKey import RoomKey
+from ..items.Door import Door
 
 class SilverStagInn(Room):
     def __init__(self) -> None:
-        # Create the room key display item immediately
-        wares = self.add_wares()
         
         super().__init__(
             name="The Silver Stag Inn",
@@ -16,14 +15,15 @@ class SilverStagInn(Room):
                 "and adventuring trophies decorate the walls. The atmosphere is welcoming, and you sense this is where "
                 "information flows as freely as the drink."
             ),
-            items=wares,
+            items=[RoomKey(), Door()],
             characters=[InnkeeperMarcus(), BarmaidElena()],
-            exits={"south": "MarketDistrict", "east": "InnRooms"}
+            exits={"south": "MarketDistrict"}
         )
 
-    def add_wares(self) -> list:
-        """Create and return the innkeeper's available room key (non-carriable display item)"""
-        room_key = RoomKey()
-        room_key.can_be_carried = False
-        
-        return [room_key]
+    def use_key(self) -> str:
+        """Called when the room key is used. Unlocks access to the inn rooms."""
+        if "east" not in self.exits:
+            self.exits["east"] = "InnRooms"
+            return "[success]The room key unlocks access to the private inn rooms upstairs. You can now 'go east' to enter the room area.[/success]"
+        else:
+            return "[info]The inn rooms are already accessible.[/info]"

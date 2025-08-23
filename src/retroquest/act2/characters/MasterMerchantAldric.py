@@ -83,27 +83,20 @@ class MasterMerchantAldric(Character):
         ware_details = self.wares[item_name_to_buy]
         price = ware_details["price"]
         
-        # Find coins in inventory
-        coins_item = None
-        for item in game_state.inventory:
-            if isinstance(item, Coins):
-                coins_item = item
-                break
-        
-        # Check if player has coins
-        if not coins_item:
-            return event_msg + "\n" + f'[failure]You don\'t have any [item_name]coins[/item_name] to purchase the [item_name]{item_name_to_buy}[/item_name].[/failure]'
+        # Count total coins in inventory using the batching system
+        total_coins = game_state.get_item_count("coins")
         
         # Check if player has enough coins
-        if coins_item.get_amount() < price:
-            return event_msg + "\n" + f'[failure]You don\'t have enough [item_name]coins[/item_name] for the [item_name]{item_name_to_buy}[/item_name]. It costs {price} [item_name]gold coins[/item_name] but you only have {coins_item.get_amount()}.[/failure]'
+        if total_coins < price:
+            return event_msg + "\n" + f'[failure]You don\'t have enough [item_name]coins[/item_name] for the [item_name]{item_name_to_buy}[/item_name]. It costs {price} [item_name]gold coins[/item_name] but you only have {total_coins}.[/failure]'
 
         # Check if already have the item in inventory (not counting display items in room)
         if any(item.get_name().lower() == item_name_to_buy and item.can_be_carried for item in game_state.inventory):
             return event_msg + "\n" + f'[dialogue]"You already have a [item_name]{item_name_to_buy}[/item_name]. One should be sufficient for your needs."[/dialogue]'
         
-        # Purchase the item - spend coins and add item to inventory
-        if not coins_item.spend(price):
+        # Purchase the item - spend coins using the batching system
+        coins_removed = game_state.remove_item_from_inventory("coins", price)
+        if coins_removed != price:
             return event_msg + "\n" + f'[failure]Transaction failed. Unable to process payment.[/failure]'
         
         # Remove the display item from the room (if present)
@@ -128,7 +121,7 @@ class MasterMerchantAldric(Character):
         if new_item:
             new_item.can_be_carried = True  # Ensure the purchased item is carriable
             game_state.add_item_to_inventory(new_item)
-            remaining_coins = coins_item.get_amount()
+            remaining_coins = game_state.get_item_count("coins")
             return event_msg + "\n" + f'[success]You purchase the [item_name]{item_name_to_buy}[/item_name] from [character_name]Master Merchant Aldric[/character_name] for {price} [item_name]gold coins[/item_name]. You have {remaining_coins} [item_name]coins[/item_name] remaining.[/success]'
         else:
             # Should not happen if item is in wares, but safety check

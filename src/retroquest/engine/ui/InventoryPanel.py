@@ -22,9 +22,11 @@ class InventoryPanel(VerticalScroll):
         # Create a new Static widget for each element
         if text:
             for item in text:
-                static_widget = Static(apply_theme(item[0]), classes='selectable-item')
+                # Expect tuple of (itemname, description)
+                itemname, description = item
+                static_widget = Static(apply_theme(itemname), classes='selectable-item')
                 static_widget.can_focus = True
-                static_widget.description = item[1]  # Store the description
+                static_widget.description = description  # Store the description
                 
                 self.mount(static_widget)
         else:

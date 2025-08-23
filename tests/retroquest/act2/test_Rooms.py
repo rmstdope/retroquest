@@ -86,6 +86,13 @@ def test_room_connectivity():
                 target_room = rooms[target_room_name]
                 opposite_direction = direction_opposites[direction]
                 
+                # Special handling for inn - call use_key to unlock exits
+                if room_name == "SilverStagInn" or target_room_name == "SilverStagInn":
+                    if hasattr(room, 'use_key'):
+                        room.use_key()
+                    if hasattr(target_room, 'use_key'):
+                        target_room.use_key()
+                
                 # Check if the target room has the expected return exit
                 assert opposite_direction in target_room.exits, \
                     f"Room {target_room_name} should have {opposite_direction} exit back to {room_name}"

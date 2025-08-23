@@ -206,7 +206,6 @@ def test_golden_path_act2_completion():
     _check_item_in_inventory(game.state, "City Map")
     
     _execute_commands(game, ["use city map"])
-    # assert game.state.get_story_flag("used_city_map"), "City map should have been used"
     
     # Verify the map has been removed from inventory after use
     _check_item_in_inventory(game.state, "City Map", should_be_present=False)
@@ -234,7 +233,6 @@ def test_golden_path_act2_completion():
     _check_character_in_room(game.state.current_room, "Herald")
     _execute_commands(game, ["give pass to herald"])
     _check_item_in_inventory(game.state, "Pass", should_be_present=True)
-    # assert game.state.get_story_flag("herald_received_pass"), "Herald should have received the pass"
     # Talk to Castle Guard Captain
     _check_character_in_room(game.state.current_room, "Castle Guard Captain")
     _execute_commands(game, ["talk to castle guard captain"])
@@ -250,7 +248,6 @@ def test_golden_path_act2_completion():
     _check_quests(game.state, ["The Gathering Storm", "The Knight's Test"])
     # Use Training Sword to demonstrate combat skills
     _execute_commands(game, ["use training sword"])
-    # assert game.state.get_story_flag("demonstrated_combat_skills"), "Combat skills should have been demonstrated"
     # Quest "The Knight's Test" should now be completed and "Supplies for the Journey" activated
     _check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey"])
     _check_item_in_inventory(game.state, "Coins", False)
@@ -265,7 +262,6 @@ def test_golden_path_act2_completion():
     _check_character_in_room(game.state.current_room, "Master Merchant Aldric")
     _execute_commands(game, ["give merchant's flyer to master merchant aldric"])
     _check_item_in_inventory(game.state, "Merchant's Flyer", should_be_present=False)
-    # assert game.state.get_story_flag("gave_merchants_flyer"), "Merchant's flyer should have been given"
     # Talk to Master Merchant Aldric
     _execute_commands(game, ["talk to master merchant aldric"])
     # Talk to Caravan Master Thorne (accept quest)
@@ -289,20 +285,20 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["talk to barmaid elena"])
     # Should now have "The Innkeeper's Daughter" quest
     _check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
-    # assert game.state.get_story_flag("knows_elena_curse"), "Should know about Elena's curse"
     # Buy Room Key  
     _execute_commands(game, ["buy room key from innkeeper marcus"])
     _check_item_in_inventory(game.state, "Room Key")
     # Use Room Key to access Inn Rooms
-    # TODO Before gaining access to the room, the key needs to be used
     _execute_commands(game, ["go east"])
+    _check_current_room(game.state, "The Silver Stag Inn")
+    _execute_commands(game, ["use room key with door", "go east"])
     _check_current_room(game.state, "Inn Rooms")
-    _execute_commands(game, ["use room key"])
-    # assert game.state.get_story_flag("accessed_inn_room"), "Should have accessed inn room"
+    _check_item_in_inventory(game.state, "Room Key", False)
     # Take Traveler's Journal
-    # TODO The journal should be found through searching the ro
     # TODO Some of the gold needed to buy supplies should be found by searching the castle approach
-    _check_item_in_room(game.state.current_room, "Traveler's Journal")
+    _check_item_in_room(game.state.current_room, "Traveler's Journal", False)
+    _execute_commands(game, ["search"])
+    _check_item_in_room(game.state.current_room, "Traveler's Journal", True)
     _execute_commands(game, ["take traveler's journal"])
     _check_item_in_inventory(game.state, "Traveler's Journal")
     
@@ -327,7 +323,6 @@ def test_golden_path_act2_completion():
     _check_character_in_room(game.state.current_room, "Historians") 
     # Show the journal to historians directly (we already used our main pass)
     _execute_commands(game, ["give traveler's journal to historians"])
-    # assert game.state.get_story_flag("showed_journal_to_historians"), "Should have shown journal to historians"
     # Read Ancient Chronicle
     _check_item_in_room(game.state.current_room, "Ancient Chronicle")
     _execute_commands(game, ["examine ancient chronicle"])
@@ -336,7 +331,6 @@ def test_golden_path_act2_completion():
     if not game.state.get_story_flag("court_herald_formal_presentation"):
         game.state.set_story_flag("court_herald_formal_presentation", True)  # Bypass for test
     _execute_commands(game, ["search"])
-    # assert game.state.get_story_flag("researched_family_heritage"), "Should have researched family heritage"
     # This should trigger "Echoes of the Past" quest
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past"])
 
@@ -346,10 +340,8 @@ def test_golden_path_act2_completion():
     _check_current_room(game.state, "Residential Quarter")
     # Use Walking Stick to assist elderly residents
     _execute_commands(game, ["use walking stick"])
-    # assert game.state.get_story_flag("helped_elderly_residents"), "Should have helped elderly residents"
     # Look at local craftsmen to learn mend spell
     _execute_commands(game, ["talk to local craftsmen"])
-    # assert game.state.get_story_flag("learned_mend_from_craftsmen"), "Should have learned mend from craftsmen"
     _check_spell_known(game.state, "mend")
     # Take Healing Herbs
     _check_item_in_room(game.state.current_room, "Healing Herbs")
@@ -384,7 +376,6 @@ def test_golden_path_act2_completion():
     _check_current_room(game.state, "Residential Quarter")
     # Search to discover Hidden Library
     _execute_commands(game, ["search"])
-    # assert game.state.get_story_flag("ancient_library_accepted"), "Should have accepted ancient library quest"
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past", "The Healer's Apprentice", "The Ancient Library"])
     
     # Step 13: Hidden Library
@@ -395,11 +386,8 @@ def test_golden_path_act2_completion():
     _check_character_in_room(game.state.current_room, "Spectral Librarian")
     # Cast mend on protective enchantments
     _execute_commands(game, ["cast mend on protective enchantments"])
-    # assert game.state.get_story_flag("mended_library_enchantments"), "Should have mended library enchantments"
     # Talk to Spectral Librarian to learn about heritage and get dispel spell
     _execute_commands(game, ["talk to spectral librarian"])
-    # assert game.state.get_story_flag("echoes_of_past_completed"), "Should have completed Echoes of the Past quest"
-    # assert game.state.get_story_flag("ancient_library_completed"), "Should have completed Ancient Library quest"
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Healer's Apprentice", "The Ancient Library"])
     # Check that we learned dispel spell
     _check_spell_known(game.state, "dispel")
@@ -419,13 +407,10 @@ def test_golden_path_act2_completion():
     
     # Use Advanced Healing Potion for emergency healing
     _execute_commands(game, ["use advanced healing potion"])
-    # assert game.state.get_story_flag("emergency_healing_completed"), "Emergency healing should be completed"
-    # assert game.state.get_story_flag("healers_apprentice_ready"), "Healer's apprentice quest should be ready for completion"
     
     # Talk to Master Healer Lyria to become colleague (completing healer progression)
     _execute_commands(game, ["talk to master healer lyria"])
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
-    # assert game.state.get_story_flag("lyria_relationship_colleague"), "Should become colleague with Lyria"
     
     # Step 15: Forest Transition Activities
     # Navigate to Forest Transition (Healer's House -> Residential Quarter -> Castle Courtyard -> Castle Approach -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition)
@@ -441,20 +426,16 @@ def test_golden_path_act2_completion():
     
     # Use Forest Survival Kit
     _execute_commands(game, ["use forest survival kit"])
-    # assert game.state.get_story_flag("forest_transition_kit_used"), "Kit use should be marked"
     
     # Examine standing stones and get boundary stone fragment
     _execute_commands(game, ["examine stones"])
-    # assert game.state.get_story_flag("standing_stones_examined"), "Stone examination should be marked"
     _check_item_in_inventory(game.state, "Boundary Stone Fragment")
     
     # Learn nature_sense spell from the stones
-    # assert game.state.get_story_flag("nature_sense_learned"), "Spell learning should be marked"
     _check_spell_known(game.state, "nature_sense")
     
     # Talk to Forest Hermit to get protective charm and complete "The Hermit's Warning" quest
     _execute_commands(game, ["talk to forest hermit"])
-    # assert game.state.get_story_flag("hermits_warning_completed"), "Hermit's warning should be completed"
     _check_item_in_inventory(game.state, "Protective Charm")
     
     # Step 16: Forest Entrance Activities  
@@ -464,21 +445,17 @@ def test_golden_path_act2_completion():
     
     # Use Protective Charm for spiritual protection
     _execute_commands(game, ["use protective charm"])
-    # assert game.state.get_story_flag("protective_charm_used_forest_entrance"), "Protective charm should be used"
     
     # Use Enhanced Lantern for navigation
     _execute_commands(game, ["use enhanced lantern"])
-    # assert game.state.get_story_flag("enhanced_lantern_used_forest_entrance"), "Enhanced lantern should be used"
     
     # Use Forest Map Fragment for safe navigation (available in Forest Entrance)
     _execute_commands(game, ["take forest map fragment"])
     _check_item_in_inventory(game.state, "Forest Map Fragment")
     _execute_commands(game, ["use forest map fragment"])
-    # assert game.state.get_story_flag("forest_map_used_forest_entrance"), "Forest map should be used"
     
     # Take Enchanted Acorn
     _execute_commands(game, ["take enchanted acorn"])
-    # assert game.state.get_story_flag("enchanted_acorn_taken"), "Acorn should be taken"
     _check_item_in_inventory(game.state, "Enchanted Acorn")
     
     # Talk to Forest Sprites (they offer guidance to the riddle quest)
@@ -493,11 +470,9 @@ def test_golden_path_act2_completion():
     
     # Look at silver-barked tree
     _execute_commands(game, ["look at silver-barked tree"])
-    # assert game.state.get_story_flag("silver_tree_examined"), "Silver tree should be examined"
     
     # Give Enchanted Acorn to Ancient Tree Spirit
     _execute_commands(game, ["give enchanted acorn to ancient tree spirit"])
-    # assert game.state.get_story_flag("enchanted_acorn_given"), "Acorn should be given"
     _check_item_in_inventory(game.state, "Enchanted Acorn", should_be_present=False)
     _check_spell_known(game.state, "forest_speech")
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Forest Guardian's Riddles", "Whispers in the Wind"])
@@ -516,32 +491,25 @@ def test_golden_path_act2_completion():
     
     # Cast nature_sense to detect water nymphs
     _execute_commands(game, ["cast nature_sense"])
-    # assert game.state.get_story_flag("nature_sense_used_whispering_glade"), "Nature sense should be used in glade"
     
     # Talk to water nymphs to start riddles
     _execute_commands(game, ["talk to water nymphs"])
     
     # Answer the three riddles correctly using the 'say' command
     _execute_commands(game, ["say tree to water nymphs"])  # First riddle answer
-    # assert game.state.get_story_flag("water_nymph_riddle_1_completed"), "First riddle should be completed"
     
     _execute_commands(game, ["say water to water nymphs"])  # Second riddle answer
-    # assert game.state.get_story_flag("water_nymph_riddle_2_completed"), "Second riddle should be completed"
     
     _execute_commands(game, ["say insects to water nymphs"])  # Third riddle answer
-    # assert game.state.get_story_flag("water_nymph_riddle_3_completed"), "Third riddle should be completed"
-    # assert game.state.get_story_flag("water_nymph_riddles_completed"), "All riddles should be completed"
     
     # Quest "The Forest Guardian's Riddles" should now be completed
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Whispers in the Wind"])
     
     # Take Crystal-Clear Water and Moonflowers (quest rewards)
     _execute_commands(game, ["take crystal-clear water"])
-    # assert game.state.get_story_flag("crystal_clear_water_taken"), "Crystal water should be taken"
     _check_item_in_inventory(game.state, "Crystal-Clear Water")
     
     _execute_commands(game, ["take moonflowers"])
-    # assert game.state.get_story_flag("moonflowers_taken"), "Moonflowers should be taken"
     _check_item_in_inventory(game.state, "Moonflowers")
     
     # Step 19: Return to Ancient Grove to complete "Whispers in the Wind"
@@ -551,7 +519,6 @@ def test_golden_path_act2_completion():
     
     # Complete the "Whispers in the Wind" quest (requires both Crystal-Clear Water and Moonflowers)
     _execute_commands(game, ["give moonflowers to ancient tree spirit"])
-    # assert game.state.get_story_flag("whispers_in_the_wind_completed"), "Whispers in the Wind should be completed"
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
     
     # At this point, we have completed steps 1-19 of the golden path!
@@ -595,7 +562,6 @@ def test_main_square_navigation_restriction():
     assert game.state.has_item("city map"), "City map should be in inventory before use"
     
     result = game.handle_command("use city map")
-    # assert game.state.get_story_flag("used_city_map"), "City map should now be used"
     
     # Verify the map has been removed from inventory after use
     assert not game.state.has_item("city map"), "City map should be removed from inventory after use"
@@ -641,8 +607,6 @@ def test_golden_path_step_14_emergency_healing():
     result = game.handle_command("use advanced healing potion")
     
     # Verify the emergency healing was successful
-    # assert game.state.get_story_flag("emergency_healing_completed"), "Emergency healing should be marked as completed"
-    # assert game.state.get_story_flag("healers_apprentice_ready"), "Healer's apprentice quest should be ready for completion"
     assert "surge of healing energy" in result.lower(), "Should get healing energy description"
     assert "master healer lyria" in result.lower(), "Should mention Lyria's approval"
     
@@ -660,7 +624,6 @@ def test_golden_path_step_14_emergency_healing():
     # Verify the quest completion
     assert "no longer just my apprentice" in result.lower(), "Should acknowledge advancement to colleague status"
     assert "quest complete" in result.lower(), "Should show quest completion message"
-    # assert game.state.get_story_flag("lyria_relationship_colleague"), "Should upgrade relationship to colleague"
 
 
 def test_golden_path_step_15_forest_transition():
@@ -684,20 +647,17 @@ def test_golden_path_step_15_forest_transition():
     
     # Step 15a: Use Forest Survival Kit
     result = game.handle_command("use forest survival kit")
-    # assert game.state.get_story_flag("forest_transition_kit_used"), "Kit use should be marked"
     assert "compass points true north" in result.lower(), "Should describe compass"
     assert "forest map" in result.lower(), "Should mention studying the map"
     assert "wilderness survival" in result.lower(), "Should mention survival preparation"
     
     # Step 15b: Examine standing stones
     result = game.handle_command("examine stones")
-    # assert game.state.get_story_flag("standing_stones_examined"), "Stone examination should be marked"
     assert "druidic" in result.lower(), "Should mention druidic runes"
     assert "boundary between worlds" in result.lower(), "Should describe the boundary"
     _check_item_in_inventory(game.state, "boundary stone fragment"), "Should receive boundary stone fragment"
     
     # Step 15c: Learn nature_sense spell from the stones
-    # assert game.state.get_story_flag("nature_sense_learned"), "Spell learning should be marked"
     _check_spell_known(game.state, "nature_sense"), "Should learn nature_sense spell"
     assert "nature's sense" in result.lower(), "Should mention the spell name"
     assert "connection forming with the natural world" in result.lower(), "Should describe magical connection"
@@ -719,7 +679,6 @@ def test_golden_path_step_15_forest_transition():
     assert "ancient guardians" in result.lower(), "Should warn about forest dangers"
     assert "dark spirits" in result.lower(), "Should warn about dark spirits"
     _check_item_in_inventory(game.state, "protective charm"), "Should receive protective charm"
-    # assert game.state.get_story_flag("hermits_warning_completed"), "Hermit's warning should be completed"
 
 def test_golden_path_steps_16_17_combined():
     """Test the complete workflow of steps 16-17 as a continuous sequence"""
@@ -792,7 +751,6 @@ def test_golden_path_steps_16_17_combined():
     ]
     
     # for flag in expected_flags:
-        # assert game.state.get_story_flag(flag), f"Flag '{flag}' should be set"
     
     # Verify final inventory and spells
     expected_items = [
@@ -833,7 +791,6 @@ def test_whispering_glade_riddle_system():
     
     # Cast nature_sense to detect nymphs
     result = game.handle_command("cast nature_sense")
-    # assert game.state.get_story_flag("nature_sense_used_whispering_glade")
     
     # Start riddle sequence
     result = game.handle_command("talk to water nymphs")
@@ -851,10 +808,8 @@ def test_whispering_glade_riddle_system():
     for i, (answer, flag) in enumerate(zip(riddle_answers, riddle_flags)):
         result = game.handle_command(f"say {answer} to water nymphs")
         assert "correct" in result.lower()
-        # assert game.state.get_story_flag(flag), f"Riddle {i+1} should be completed"
     
     # Verify all riddles completed
-    # assert game.state.get_story_flag("water_nymph_riddles_completed")
     # Note: Quest completion is handled internally by the riddle completion logic
     
     # Verify quest reward items are available
@@ -920,14 +875,12 @@ def test_emergency_healing_mechanics():
     
     # Test emergency healing
     result = game.handle_command("use advanced healing potion")
-    # assert game.state.get_story_flag("emergency_healing_completed")
     assert "healing energy" in result.lower()
     
     # Test Lyria interaction after emergency healing
     lyria = game.state.current_room.get_characters()[0]  # Should be Master Healer Lyria
     result = lyria.talk_to(game.state)
     assert "colleague" in result.lower()
-    # assert game.state.get_story_flag("lyria_relationship_colleague")
 
 
 def test_forest_transition_spell_learning():
@@ -941,19 +894,15 @@ def test_forest_transition_spell_learning():
     
     # Use survival kit
     result = game.handle_command("use forest survival kit")
-    # assert game.state.get_story_flag("forest_transition_kit_used")
     
     # Examine stones
     result = game.handle_command("examine stones")
-    # assert game.state.get_story_flag("standing_stones_examined")
     _check_item_in_inventory(game.state, "boundary stone fragment")
     
-    # assert game.state.get_story_flag("nature_sense_learned")
     _check_spell_known(game.state, "nature_sense")
     
     # Talk to hermit
     hermit = game.state.current_room.get_characters()[0]  # Should be Forest Hermit
     result = hermit.talk_to(game.state)
-    # assert game.state.get_story_flag("hermits_warning_completed")
     _check_item_in_inventory(game.state, "protective charm")
 
