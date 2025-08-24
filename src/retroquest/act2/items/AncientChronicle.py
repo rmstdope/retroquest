@@ -1,6 +1,6 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_ANCIENT_LIBRARY_COMPLETED
+from ..Act2StoryFlags import FLAG_ANCIENT_LIBRARY_COMPLETED, FLAG_SPECTRAL_LIBRARIAN_FRIENDLY
 
 class AncientChronicle(Item):
     def __init__(self) -> None:
@@ -11,15 +11,16 @@ class AncientChronicle(Item):
             can_be_carried=False,
         )
 
-    def examine(self, game_state: GameState) -> str:
-        if game_state.get_story_flag(FLAG_ANCIENT_LIBRARY_COMPLETED):
+    def use(self, game_state: GameState) -> str:
+        if game_state.get_story_flag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY):
+            # Learn dispel spell from ancient texts
+            from ..spells.DispelSpell import DispelSpell
+            game_state.learn_spell(DispelSpell())
+
             return ("[info]You study the ancient texts, reviewing the knowledge of the [spell_name]dispel[/spell_name] "
                     "spell and the revelations about your heritage. The words of the Chosen One prophecy echo "
                     "in your mind as you contemplate your destiny.[/info]")
         else:
-            return ("[info]The protective enchantments prevent you from accessing the most valuable texts. "
-                    "You need to repair them first to prove your worthiness to the "
-                    "[character_name]Spectral Librarian[/character_name].[/info]")
-
-    def use(self, game_state: GameState) -> str:
-        return "The ancient chronicle contains vast historical knowledge. You search through its pages for information about your heritage and Willowbrook's significance."
+            return ("[info]The [character_name]Spectral Librarian[/character_name] materializes before you, blocking "
+                    "your access to the ancient texts. 'These sacred chronicles are not for the unworthy,' the spirit "
+                    "intones. 'Prove yourself first, then perhaps I will permit you to study these treasures.'[/info]")

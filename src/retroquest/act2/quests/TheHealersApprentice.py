@@ -2,8 +2,7 @@ from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
     FLAG_HEALERS_APPRENTICE_ACCEPTED,
-    FLAG_HEALERS_APPRENTICE_COMPLETED,
-    FLAG_LYRIA_RELATIONSHIP_STUDENT
+    FLAG_HEALERS_APPRENTICE_COMPLETED
 )
 
 class TheHealersApprenticeQuest(Quest):
@@ -12,8 +11,7 @@ class TheHealersApprenticeQuest(Quest):
             name="The Healer's Apprentice",
             description=(
                 "Master Healer Lyria has recognized your magical potential and offered to teach you advanced "
-                "healing techniques. She requires you to bring Healing Herbs as proof of your commitment to "
-                "the healing arts. Learn from her wisdom and master the greater_heal spell."
+                "healing techniques. Learn from her wisdom and master the greater_heal spell."
             ),
             completion=(
                 "You have successfully completed your apprenticeship with Master Healer Lyria! You've learned "

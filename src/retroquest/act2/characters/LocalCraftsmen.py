@@ -1,6 +1,6 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_LEARNED_MEND_FROM_CRAFTSMEN
+from ..Act2StoryFlags import FLAG_LEARNED_MEND_FROM_CRAFTSMEN, FLAG_HELPED_ELDERLY_RESIDENTS
 
 class LocalCraftsmen(Character):
     def __init__(self) -> None:
@@ -10,6 +10,11 @@ class LocalCraftsmen(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
+        if not game_state.get_story_flag(FLAG_HELPED_ELDERLY_RESIDENTS):
+            return ("[failure]The [character_name]local craftsmen[/character_name] eye you with suspicion and "
+                    "refuse to talk to you. They don't seem to trust you yet. Perhaps you need to prove yourself "
+                    "to the community first.[/failure]")
+        
         if not game_state.get_story_flag(FLAG_LEARNED_MEND_FROM_CRAFTSMEN):
             game_state.set_story_flag(FLAG_LEARNED_MEND_FROM_CRAFTSMEN, True)
             from ..spells.MendSpell import MendSpell

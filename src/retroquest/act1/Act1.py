@@ -61,7 +61,7 @@ class Act1(Act):
             LostLetterQuest(),
         ]
         music_file = "music/Conquest - Market (freetouse.com).mp3"
-        super().__init__(name="Act1", rooms=rooms, quests=quests, music_file=music_file)
+        super().__init__(name="Act1", rooms=rooms, quests=quests, music_file=music_file, music_info='Market by Conquest\nSource: https://freetouse.com/music\nCopyright Free Background Music')
 
     def get_act_intro(self) -> str:
         return (

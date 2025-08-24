@@ -1,9 +1,8 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_ANCIENT_LIBRARY_COMPLETED,
-    FLAG_ECHOES_OF_PAST_COMPLETED,
-    FLAG_MENDED_LIBRARY_ENCHANTMENTS
+    FLAG_MENDED_LIBRARY_ENCHANTMENTS,
+    FLAG_SPECTRAL_LIBRARIAN_FRIENDLY
 )
 
 class SpectralLibrarian(Character):
@@ -21,18 +20,11 @@ class SpectralLibrarian(Character):
 
     def talk_to(self, game_state: GameState) -> str:
         # Check if player has mended the protective enchantments first
-        has_mend_spell = game_state.has_spell("mend")
         mended_enchantments = game_state.get_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS)
         
-        if not game_state.get_story_flag(FLAG_ANCIENT_LIBRARY_COMPLETED):
-            if has_mend_spell and mended_enchantments:
-                # Reveal heritage information and complete Echoes of the Past
-                game_state.set_story_flag(FLAG_ECHOES_OF_PAST_COMPLETED, True)
-                game_state.set_story_flag(FLAG_ANCIENT_LIBRARY_COMPLETED, True)
-                
-                # Learn dispel spell from ancient texts
-                from ..spells.DispelSpell import DispelSpell
-                game_state.learn_spell(DispelSpell())
+        if not game_state.get_story_flag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY):
+            if mended_enchantments:
+                game_state.set_story_flag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY, True)
                 
                 # Add Crystal Focus to the room for player to take
                 from ..items.CrystalFocus import CrystalFocus
@@ -48,16 +40,11 @@ class SpectralLibrarian(Character):
                         "'Study these tomes to learn the [spell_name]dispel[/spell_name] spell, and take this "
                         "[item_name]Crystal Focus[/item_name] to enhance your growing abilities. Your destiny "
                         "as one of the Chosen is beginning to unfold.'[/success]")
-            elif not has_mend_spell:
+            else:
                 return ("[character_name]Spectral Librarian[/character_name]: 'Welcome, seeker of knowledge. I am "
                         "the eternal guardian of this repository. The protective enchantments around the most "
-                        "valuable texts have been damaged by time. Prove your worthiness by repairing them with "
-                        "the [spell_name]mend[/spell_name] spell, and I shall share the knowledge you seek about "
-                        "your heritage and destiny.'")
-            else:
-                return ("[character_name]Spectral Librarian[/character_name]: 'I sense you have the [spell_name]mend[/spell_name] "
-                        "spell, but you must first repair the protective enchantments before I can share the "
-                        "ancient knowledge. Cast your mend spell on the damaged barriers.'")
+                        "valuable texts have been damaged by time. Prove your worthiness by repairing them, and "
+                        "I shall share the knowledge you seek about your heritage and destiny.'")
         else:
             return ("[character_name]Spectral Librarian[/character_name]: 'You have proven yourself worthy and "
                     "learned what this library can teach. The knowledge of your bloodline and the [spell_name]dispel[/spell_name] "

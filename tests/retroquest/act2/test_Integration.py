@@ -3,20 +3,6 @@ from retroquest.engine.Game import Game
 from retroquest.act2.Act2 import Act2
 from retroquest.engine.GameState import GameState
 
-# TODO: Import quest classes when they are created
-# from retroquest.act2.quests.TheGatheringStorm import TheGatheringStormQuest
-# from retroquest.act2.quests.TheKnightsTest import TheKnightsTestQuest
-# from retroquest.act2.quests.SuppliesForTheJourney import SuppliesForTheJourneyQuest
-# from retroquest.act2.quests.TheMerchantsLostCaravan import TheMerchantsLostCaravanQuest
-# from retroquest.act2.quests.EchoesOfThePast import EchoesOfThePastQuest
-# from retroquest.act2.quests.TheHealersApprentice import TheHealersApprenticeQuest
-# from retroquest.act2.quests.CedricsLostHonor import CedricsLostHonorQuest
-# from retroquest.act2.quests.TheInnkeepersDaughter import TheInnkeepersDaughterQuest
-# from retroquest.act2.quests.TheAncientLibrary import TheAncientLibraryQuest
-# from retroquest.act2.quests.TheHermitsWarning import TheHermitsWarningQuest
-# from retroquest.act2.quests.TheForestGuardiansRiddles import TheForestGuardiansRiddlesQuest
-# from retroquest.act2.quests.WhispersInTheWind import WhispersInTheWindQuest
-
 results = []
 
 # Helper functions for assertions
@@ -26,6 +12,12 @@ def _check_item_in_inventory(game_state, item_name: str, should_be_present: bool
         assert item_name.lower() in inventory_names, f"{item_name} not found in inventory, but was expected."
     else:
         assert item_name.lower() not in inventory_names, f"{item_name} found in inventory, but was not expected."
+
+def _check_item_count_in_inventory(game_state, item_name: str, expected_count: int):
+    """Check that the inventory contains exactly the expected count of a specific item."""
+    inventory_names = [item.get_name().lower() for item in game_state.inventory]
+    actual_count = inventory_names.count(item_name.lower())
+    assert actual_count == expected_count, f"Expected {expected_count} {item_name} in inventory, but found {actual_count}."
 
 def _check_item_in_room(current_room, item_name: str, should_be_present: bool = True):
     room_item_names = [item.get_name().lower() for item in current_room.get_items()]
@@ -272,6 +264,10 @@ def test_golden_path_act2_completion():
     # Buy Forest Survival Kit
     _execute_commands(game, ["buy forest survival kit from master merchant aldric"])
     _check_item_in_inventory(game.state, "Forest Survival Kit")
+    _execute_commands(game, ["buy enhanced lantern from master merchant aldric"])
+    _check_item_in_inventory(game.state, "Enhanced Lantern")
+    _execute_commands(game, ["buy quality rope from master merchant aldric"])
+    _check_item_in_inventory(game.state, "Quality Rope", False)
     
     # Step 7: The Silver Stag Inn
     # Move to The Silver Stag Inn
@@ -295,24 +291,24 @@ def test_golden_path_act2_completion():
     _check_current_room(game.state, "Inn Rooms")
     _check_item_in_inventory(game.state, "Room Key", False)
     # Take Traveler's Journal
-    # TODO Some of the gold needed to buy supplies should be found by searching the castle approach
     _check_item_in_room(game.state.current_room, "Traveler's Journal", False)
     _execute_commands(game, ["search"])
     _check_item_in_room(game.state.current_room, "Traveler's Journal", True)
-    _execute_commands(game, ["take traveler's journal"])
+    _check_item_count_in_inventory(game.state, "coins", 0)
+    _execute_commands(game, ["take traveler's journal", "take coins"])
     _check_item_in_inventory(game.state, "Traveler's Journal")
+    _check_item_count_in_inventory(game.state, "coins", 20)
+    _execute_commands(game, ["use traveler's journal"])
+    _check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past"])
     
     # Step 8: Return to Market District
     # Go back to Market District
     _execute_commands(game, ["go west", "go south"])
     _check_current_room(game.state, "Market District")
-    # Buy Enhanced Lantern and Quality Rope
-    _execute_commands(game, ["buy enhanced lantern from master merchant aldric"])
-    _check_item_in_inventory(game.state, "Enhanced Lantern")
+    # Buy Enhanced Lantern and Quality Rope (not enough coins)
     _execute_commands(game, ["buy quality rope from master merchant aldric"])
     _check_item_in_inventory(game.state, "Quality Rope")
-    # "Supplies for the Journey" quest should now be completed
-    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
+    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past"])
     
     # Step 9: Great Hall
     # Go to Great Hall via Main Square and Castle Courtyard
@@ -323,35 +319,27 @@ def test_golden_path_act2_completion():
     _check_character_in_room(game.state.current_room, "Historians") 
     # Show the journal to historians directly (we already used our main pass)
     _execute_commands(game, ["give traveler's journal to historians"])
-    # Read Ancient Chronicle
-    _check_item_in_room(game.state.current_room, "Ancient Chronicle")
-    _execute_commands(game, ["examine ancient chronicle"])
     # Search for records about Willowbrook (this will activate and complete "Echoes of the Past")
     # But we need formal credentials first - let's assume the herald recognizes us from our previous interaction
     if not game.state.get_story_flag("court_herald_formal_presentation"):
         game.state.set_story_flag("court_herald_formal_presentation", True)  # Bypass for test
     _execute_commands(game, ["search"])
-    # This should trigger "Echoes of the Past" quest
-    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past"])
+    # This should finish "Echoes of the Past" quest
+    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
 
     # Step 10: Residential Quarter
     # Go to Residential Quarter
     _execute_commands(game, ["go east", "go north"])
     _check_current_room(game.state, "Residential Quarter")
-    # Use Walking Stick to assist elderly residents
-    _execute_commands(game, ["use walking stick"])
-    # Look at local craftsmen to learn mend spell
+    # Give Walking Stick to families to assist elderly residents
+    _execute_commands(game, ["give walking stick to families"])
+    _check_item_in_inventory(game.state, "Walking Stick", should_be_present=False)
+    # Talk to families to get healing herbs
+    _execute_commands(game, ["talk to families"])
+    _check_item_in_inventory(game.state, "Healing Herbs")
+    # Talk to local craftsmen to learn mend spell
     _execute_commands(game, ["talk to local craftsmen"])
     _check_spell_known(game.state, "mend")
-    # Take Healing Herbs
-    _check_item_in_room(game.state.current_room, "Healing Herbs")
-    _execute_commands(game, ["take healing herbs"])
-    _check_item_in_inventory(game.state, "Healing Herbs")
-    # Talk to families about local history
-    _check_character_in_room(game.state.current_room, "Families")
-    _execute_commands(game, ["talk to families"])
-    
-    # At this point, we have completed steps 1-10 of the golden path!
     
     # Step 11: Healer's House
     # Go to Healer's House from Residential Quarter
@@ -363,8 +351,9 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["talk to master healer lyria"])
     # Give Healing Herbs to Lyria with Healing Herbs to trigger quest (first interaction)
     _execute_commands(game, ["give healing herbs to master healer lyria"])
-    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past", "The Healer's Apprentice"])
+    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Healer's Apprentice"])
     _check_spell_known(game.state, "greater_heal")
+    # TODO Should spell be taught after quest is done?
     # Check that Advanced Healing Potion is available
     _check_item_in_room(game.state.current_room, "Advanced Healing Potion")
     _execute_commands(game, ["take advanced healing potion"])
@@ -374,9 +363,11 @@ def test_golden_path_act2_completion():
     # Return to Residential Quarter
     _execute_commands(game, ["go south"])
     _check_current_room(game.state, "Residential Quarter")
+    _execute_commands(game, ["go secret_passage"])
+    _check_current_room(game.state, "Residential Quarter")
     # Search to discover Hidden Library
     _execute_commands(game, ["search"])
-    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past", "The Healer's Apprentice", "The Ancient Library"])
+    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter",  "The Healer's Apprentice", "The Ancient Library"])
     
     # Step 13: Hidden Library
     # Go to Hidden Library via secret passage
@@ -387,8 +378,7 @@ def test_golden_path_act2_completion():
     # Cast mend on protective enchantments
     _execute_commands(game, ["cast mend on protective enchantments"])
     # Talk to Spectral Librarian to learn about heritage and get dispel spell
-    _execute_commands(game, ["talk to spectral librarian"])
-    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Healer's Apprentice", "The Ancient Library"])
+    _execute_commands(game, ["talk to spectral librarian", "use ancient chronicle"])
     # Check that we learned dispel spell
     _check_spell_known(game.state, "dispel")
     # Check that Crystal Focus is available and take it

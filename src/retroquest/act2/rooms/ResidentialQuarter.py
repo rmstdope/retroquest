@@ -4,8 +4,6 @@ from ..characters.LocalCraftsmen import LocalCraftsmen
 from ..characters.Families import Families
 from ..items.HealingHerbs import HealingHerbs
 from ..Act2StoryFlags import (
-    FLAG_HELPED_ELDERLY_RESIDENTS, 
-    FLAG_LEARNED_MEND_FROM_CRAFTSMEN,
     FLAG_ANCIENT_LIBRARY_ACCEPTED
 )
 
@@ -18,15 +16,17 @@ class ResidentialQuarter(Room):
                 "from chimneys, and the sound of craftsmen at work echoes from various buildings. This is where Greendale's "
                 "skilled artisans and middle-class citizens live and work. The atmosphere is peaceful and industrious."
             ),
-            items=[HealingHerbs()],
+            items=[],
             characters=[LocalCraftsmen(), Families()],
-            exits={"south": "CastleCourtyard", "north": "HealersHouse", "secret_passage": "HiddenLibrary"}
+            exits={"south": "CastleCourtyard", "north": "HealersHouse"}
         )
 
     def search(self, game_state: GameState, target: str = None) -> str:
         """Handle searching for the Hidden Library entrance"""
         if not game_state.get_story_flag(FLAG_ANCIENT_LIBRARY_ACCEPTED):
             game_state.set_story_flag(FLAG_ANCIENT_LIBRARY_ACCEPTED, True)
+            # Add the secret passage exit when the library is discovered
+            self.exits["secret_passage"] = "HiddenLibrary"
             return ("[success]You search through the basement areas of the residential buildings. Behind some old "
                     "storage crates and forgotten furniture, you discover a concealed entrance hidden in the stone "
                     "wall. A narrow tunnel leads deeper underground to what appears to be an ancient chamber. "

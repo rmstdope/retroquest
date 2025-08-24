@@ -11,10 +11,8 @@ class TheAncientLibraryQuest(Quest):
         super().__init__(
             name="The Ancient Library",
             description=(
-                "You've discovered a hidden library beneath Greendale containing ancient magical texts and lore. "
-                "The protective enchantments need to be repaired with the mend spell before you can access the "
-                "most valuable knowledge. Prove your worthiness to the Spectral Librarian and unlock the "
-                "mysteries of your heritage."
+                "You've discovered a hidden passage beneath Greendale containing an ancient library of magical texts and lore. "
+                "You should explore its depths and uncover the secrets within."
             ),
             completion=(
                 "You have successfully gained access to the ancient library's knowledge! You've learned the "
@@ -31,9 +29,6 @@ class TheAncientLibraryQuest(Quest):
     def check_completion(self, game_state: GameState) -> bool:
         # Quest completes when player has:
         # 1. Learned the dispel spell
-        # 2. Gained knowledge about their heritage (which completes Echoes of the Past)
-        # 3. Obtained the Crystal Focus
-        return (game_state.get_story_flag(FLAG_ANCIENT_LIBRARY_COMPLETED) and
-                game_state.has_spell("dispel") and
-                game_state.get_story_flag(FLAG_ECHOES_OF_PAST_COMPLETED) and
+        # 2. Gained the Crystal Focus
+        return (game_state.has_spell("dispel") and
                 game_state.has_item("Crystal Focus"))

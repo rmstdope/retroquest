@@ -76,8 +76,8 @@ class Act2(Act):
             # CedricksLostHonorQuest(), 
             # TheHermitsWarningQuest(),
         ]
-        music_file = "music/Conquest - Market (freetouse.com).mp3"
-        super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file)
+        music_file = "music/Walen - Medieval Village (freetouse.com).mp3"
+        super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file, music_info='Music track: Medieval Village by Walen\nSource: https://freetouse.com/music\nFree To Use Music for Video')
 
     def get_starting_items(self):
         """Return items that the player should start Act 2 with"""
