@@ -1,6 +1,6 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_FOREST_TRANSITION_KIT_USED
+from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED
 
 class ForestSurvivalKit(Item):
     def __init__(self) -> None:
@@ -15,7 +15,7 @@ class ForestSurvivalKit(Item):
         # Check if we're in Forest Transition for special handling
         current_room = game_state.current_room
         if current_room.name == "Forest Transition":
-            game_state.set_story_flag(FLAG_FOREST_TRANSITION_KIT_USED, True)
+            game_state.set_story_flag(FLAG_HERMITS_WARNING_COMPLETED, True)
             return ("[success]You open the [item_name]forest survival kit[/item_name] and spread its contents. "
                     "The compass points true north, the protective gear fits snugly, "
                     "and the dried rations remind you to prepare for a long journey. Most importantly, you "

@@ -71,41 +71,6 @@ def _create_test_game():
     act = Act2()
     return Game(act)
 
-def _add_item_to_inventory(game_state, item_name: str):
-    """Add an item to the inventory by name"""
-    # This is a simplified helper - in a real implementation you'd need to import and instantiate the actual items
-    # For now, we'll use the inventory's internal structure
-    from retroquest.engine.Item import Item
-    
-    # Map common item names to their classes
-    item_map = {
-        "forest map fragment": "retroquest.act2.items.ForestMapFragment.ForestMapFragment",
-        "enhanced lantern": "retroquest.act2.items.EnhancedLantern.EnhancedLantern", 
-        "protective charm": "retroquest.act2.items.ProtectiveCharm.ProtectiveCharm",
-        "enchanted acorn": "retroquest.act2.items.EnchantedAcorn.EnchantedAcorn",
-        "silver leaves": "retroquest.act2.items.SilverLeaves.SilverLeaves",
-        "druidic focus": "retroquest.act2.items.DruidicFocus.DruidicFocus"
-    }
-    
-    if item_name.lower() in item_map:
-        module_path = item_map[item_name.lower()]
-        module_name, class_name = module_path.rsplit('.', 1)
-        
-        try:
-            import importlib
-            module = importlib.import_module(module_name)
-            item_class = getattr(module, class_name)
-            item = item_class()
-            game_state.inventory.append(item)
-        except (ImportError, AttributeError):
-            # Fallback: create a basic item
-            item = Item(item_name.title(), f"A {item_name}")
-            game_state.inventory.append(item)
-    else:
-        # Create a basic item for unknown items
-        item = Item(item_name.title(), f"A {item_name}")
-        game_state.inventory.append(item)
-
 def test_golden_path_act2_completion():
     """Test the golden path through Act2 completion - Currently testing steps 1-13"""
     act = Act2()
@@ -418,18 +383,14 @@ def test_golden_path_act2_completion():
     # Navigate to Forest Entrance
     _execute_commands(game, ["go east"])
     _check_current_room(game.state, "Forest Entrance")
-    
+    _execute_commands(game, ["go south"])
+    _check_current_room(game.state, "Forest Entrance")
+    _execute_commands(game, ["go east"])
+    _check_current_room(game.state, "Forest Entrance")    
     # Use Protective Charm for spiritual protection
     _execute_commands(game, ["use protective charm"])
-    
     # Use Enhanced Lantern for navigation
     _execute_commands(game, ["use enhanced lantern"])
-    
-    # Use Forest Map Fragment for safe navigation (available in Forest Entrance)
-    _execute_commands(game, ["take forest map fragment"])
-    _check_item_in_inventory(game.state, "Forest Map Fragment")
-    _execute_commands(game, ["use forest map fragment"])
-    
     # Take Enchanted Acorn
     _execute_commands(game, ["take enchanted acorn"])
     _check_item_in_inventory(game.state, "Enchanted Acorn")
@@ -616,11 +577,9 @@ def test_golden_path_steps_16_17_combined():
     game = _create_test_game()
     
     # Set up prerequisites (simulate completing steps 14-15)
-    from retroquest.act2.items.ForestMapFragment import ForestMapFragment
     from retroquest.act2.items.EnhancedLantern import EnhancedLantern
     from retroquest.act2.items.ProtectiveCharm import ProtectiveCharm
     
-    game.state.inventory.append(ForestMapFragment())
     game.state.inventory.append(EnhancedLantern())
     game.state.inventory.append(ProtectiveCharm())
     
@@ -639,8 +598,7 @@ def test_golden_path_steps_16_17_combined():
     # Execute the complete step 16-17 sequence
     forest_entrance_commands = [
         "use protective charm",
-        "use enhanced lantern", 
-        "use forest map fragment",
+        "use enhanced lantern",
         "examine enchanted acorn",
         "take enchanted acorn",
         "talk to forest sprites"
@@ -685,7 +643,7 @@ def test_golden_path_steps_16_17_combined():
     
     # Verify final inventory and spells
     expected_items = [
-        "forest map fragment", "enhanced lantern", "protective charm",
+        "enhanced lantern", "protective charm",
         "silver leaves", "druidic focus"
     ]
     for item_name in expected_items:

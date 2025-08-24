@@ -1,6 +1,6 @@
 from ...engine.Room import Room
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_FOREST_TRANSITION_KIT_USED
+from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED
 from ..characters.ForestHermit import ForestHermit
 from ..items.BoundaryStoneFragment import BoundaryStoneFragment
 from ..items.StandingStones import StandingStones
@@ -25,7 +25,7 @@ class ForestTransition(Room):
         exits = super().get_exits(game_state).copy()
         
         # Remove east exit if survival kit hasn't been used
-        if not game_state.get_story_flag(FLAG_FOREST_TRANSITION_KIT_USED):
+        if not game_state.get_story_flag(FLAG_HERMITS_WARNING_COMPLETED):
             exits.pop("east", None)
             
         return exits
