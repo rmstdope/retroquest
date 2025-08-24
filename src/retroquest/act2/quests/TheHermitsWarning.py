@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED, FLAG_FOREST_TRANSITION_KIT_USED, FLAG_HERMITS_WARNING_ACCEPTED
+from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED, FLAG_HERMITS_WARNING_ACCEPTED
 
 class TheHermitsWarningQuest(Quest):
     def __init__(self) -> None:
@@ -21,5 +21,5 @@ class TheHermitsWarningQuest(Quest):
 
     def check_completion(self, game_state: GameState) -> bool:
         """Check if the quest should be completed when the survival kit is used."""
-        return game_state.get_story_flag(FLAG_FOREST_TRANSITION_KIT_USED)
+        return game_state.get_story_flag(FLAG_HERMITS_WARNING_COMPLETED)
 

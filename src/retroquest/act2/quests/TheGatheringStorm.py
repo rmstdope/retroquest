@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED, FLAG_ANCIENT_LIBRARY_COMPLETED
+from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED, FLAG_ANCIENT_LIBRARY_COMPLETED, FLAG_HERMITS_WARNING_COMPLETED
 
 class TheGatheringStormQuest(Quest):
     def __init__(self) -> None:
@@ -77,6 +77,20 @@ class TheGatheringStormQuest(Quest):
                 "destiny and the magical arts, you now possess the knowledge and power needed to confront the gathering storm. "
                 "The pieces of the puzzle are falling into place, and with each revelation, the path to finding Nyx and "
                 "ultimately defeating the encroaching shadow becomes clearer."
+            )
+
+        if game_state.get_story_flag(FLAG_HERMITS_WARNING_COMPLETED):
+            if not self._flag_state.get(FLAG_HERMITS_WARNING_COMPLETED):
+                self._flag_state[FLAG_HERMITS_WARNING_COMPLETED] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\n\nBy heeding the Hermit's warning and properly preparing with "
+                "the survival kit, you have successfully navigated the threshold between the civilized world and the wild "
+                "Enchanted Forest. The ancient protective runes have recognized your readiness, and the forest's guardians "
+                "have granted you safe passage. With the hermit's blessing and proper preparation, you can now venture into "
+                "the mystical realm where Nyx awaits. The path forward is clear, and the final phase of your quest to "
+                "understand and combat the gathering darkness can begin."
             )
 
         self.description += new_desc

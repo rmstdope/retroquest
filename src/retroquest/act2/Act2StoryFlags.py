@@ -1,5 +1,6 @@
 # Story flag constants for Act II: Greendale & The Forest Edge
-
+# TODO Remove all unused flags
+# TODO Merge flags that are superfluous
 # Main Quest Progression Flags
 FLAG_ARRIVED_IN_GREENDALE = "arrived_in_greendale"
 FLAG_SPOKEN_TO_SIR_CEDRIC = "spoken_to_sir_cedric"
@@ -62,8 +63,6 @@ FLAG_USED_CITY_MAP = "used_city_map"
 FLAG_FOUND_LOST_CARAVAN = "found_lost_caravan"
 FLAG_HEALERS_APPRENTICE_READY = "healers_apprentice_ready"
 FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE = "protective_charm_used_forest_entrance"
-FLAG_FOREST_TRANSITION_KIT_USED = "forest_transition_kit_used"
-FLAG_FOREST_MAP_USED_FOREST_ENTRANCE = "forest_map_used_forest_entrance"
 FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE = "enhanced_lantern_used_forest_entrance"
 FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED = "forest_guardians_riddles_offered"
 FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED = "forest_guardians_riddles_completed"
