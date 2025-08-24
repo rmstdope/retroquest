@@ -1,5 +1,6 @@
 from ...engine.Spell import Spell
 from ..Act2StoryFlags import FLAG_NATURE_SENSE_USED_WHISPERING_GLADE
+from ..characters.WaterNymphs import WaterNymphs
 
 class NatureSenseSpell(Spell):
     def __init__(self) -> None:
@@ -21,6 +22,8 @@ class NatureSenseSpell(Spell):
         if current_room == "Whispering Glade":
             if not game_state.get_story_flag(FLAG_NATURE_SENSE_USED_WHISPERING_GLADE):
                 game_state.set_story_flag(FLAG_NATURE_SENSE_USED_WHISPERING_GLADE, True)
+                # Add the Water Nymphs to the room when first cast
+                game_state.current_room.characters.append(WaterNymphs())
                 return (
                     "[spell_effect]You cast [spell_name]Nature's Sense[/spell_name] and extend "
                     "your awareness throughout the glade. Immediately, you sense magical presences "

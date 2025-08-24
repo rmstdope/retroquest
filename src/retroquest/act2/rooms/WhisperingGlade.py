@@ -1,5 +1,4 @@
 from ...engine.Room import Room
-from ..characters.WaterNymphs import WaterNymphs
 
 class WhisperingGlade(Room):
     def __init__(self) -> None:
@@ -13,31 +12,31 @@ class WhisperingGlade(Room):
                 "you sense the presence of water nymphs, guardians of this sacred place."
             ),
             items=[],
-            characters=[WaterNymphs()],
+            characters=[],
             exits={"west": "ForestEntrance"}
         )
 
-    def handle_command(self, command: str, game_state) -> str:
-        """Handle room-specific commands for the Whispering Glade."""
-        command = command.lower().strip()
+    # def handle_command(self, command: str, game_state) -> str:
+    #     """Handle room-specific commands for the Whispering Glade."""
+    #     command = command.lower().strip()
         
-        # Handle answering riddles from water nymphs
-        if command.startswith("answer "):
-            answer = command[7:].strip()  # Remove "answer " prefix
-            return self._answer_riddle(game_state, answer)
-        elif command == "answer":
-            return self._answer_riddle(game_state, "")
+    #     # Handle answering riddles from water nymphs
+    #     if command.startswith("answer "):
+    #         answer = command[7:].strip()  # Remove "answer " prefix
+    #         return self._answer_riddle(game_state, answer)
+    #     elif command == "answer":
+    #         return self._answer_riddle(game_state, "")
             
-        return ""  # No command handled
+    #     return ""  # No command handled
         
-    def _answer_riddle(self, game_state, answer: str) -> str:
-        """Handle riddle answers directed to the water nymphs."""
-        if not answer:
-            return "[error]You must provide an answer to the riddle.[/error]"
+    # def _answer_riddle(self, game_state, answer: str) -> str:
+    #     """Handle riddle answers directed to the water nymphs."""
+    #     if not answer:
+    #         return "[error]You must provide an answer to the riddle.[/error]"
             
-        # Find the water nymphs character
-        water_nymphs = next((char for char in self.characters if isinstance(char, WaterNymphs)), None)
-        if water_nymphs:
-            return water_nymphs.answer_riddle(game_state, answer)
-        else:
-            return "[error]There are no water nymphs here to answer.[/error]"
+    #     # Find the water nymphs character
+    #     water_nymphs = next((char for char in self.characters if isinstance(char, WaterNymphs)), None)
+    #     if water_nymphs:
+    #         return water_nymphs.answer_riddle(game_state, answer)
+    #     else:
+    #         return "[error]There are no water nymphs here to answer.[/error]"

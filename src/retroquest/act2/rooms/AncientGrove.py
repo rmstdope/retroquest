@@ -13,10 +13,8 @@ class AncientGrove(Room):
                 "carved symbols that predate human memory, and the air shimmers with concentrated magic. At the center "
                 "grows a tree unlike any other - its silver bark gleams and its leaves whisper secrets in an ancient "
                 "tongue. This is clearly a place of power and the sacred gateway to the forest's deepest mysteries. "
-                "The Ancient Tree Spirit dwells within the great silver-barked tree, its presence filling the grove "
-                "with ancient wisdom."
             ),
             items=[SilverTree()],
-            characters=[AncientTreeSpirit()],
+            characters=[],
             exits={"north": "ForestEntrance", "south": "HeartOfTheForest"}
         )

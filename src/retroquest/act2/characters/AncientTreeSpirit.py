@@ -123,10 +123,8 @@ class AncientTreeSpirit(Character):
                     f"[dialogue]'Use your newfound abilities to help the forest creatures who dwell "
                     f"here. Listen to their troubles, ease their burdens, and restore harmony to "
                     f"this sacred place. When you have shown that you truly understand the ways "
-                    f"of the forest, return to me.'[/dialogue]\n\n"
+                    f"of the forest, return to me with two gifts the forest has bestowed upon you.'[/dialogue]")
 
-                    f"[quest_offered]Quest Offered: Whispers in the Wind[/quest_offered]")
-        
         elif item_object.get_name().lower() in ["crystal-clear water", "moonflowers"]:
             # Check if quest is already completed
             if game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED):

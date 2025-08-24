@@ -1,5 +1,5 @@
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_SILVER_TREE_EXAMINED
+from ..characters.AncientTreeSpirit import AncientTreeSpirit
 
 class SilverTree(Item):
     def __init__(self) -> None:
@@ -20,16 +20,33 @@ class SilverTree(Item):
         """Examine the magnificent silver-barked tree."""
         if not self.examined:
             self.examined = True
-            game_state.set_story_flag(FLAG_SILVER_TREE_EXAMINED, True)
-            return (
-                "[environment_description]The ancient tree towers above you, its silver bark shimmering "
-                "with an inner light that seems to pulse in rhythm with your heartbeat. The bark is smooth "
-                "as polished metal yet warm to the touch, and intricate spiraling patterns flow across its "
-                "surface like living veins of starlight. Its massive canopy spreads wide, with leaves that "
-                "catch and reflect light in impossible ways. You sense an ancient presence within - older "
-                "than memory, wise beyond measure, and deeply connected to the very essence of the forest. "
-                "This is no mere tree, but the dwelling place of the Ancient Tree Spirit.[/environment_description]"
-            )
+            
+            # Add the Ancient Tree Spirit to the room only if we're in the Ancient Grove
+            if game_state.current_room.name == "Ancient Grove":
+                ancient_spirit = AncientTreeSpirit()
+                game_state.current_room.characters.append(ancient_spirit)
+                
+                return (
+                    "[environment_description]The ancient tree towers above you, its silver bark shimmering "
+                    "with an inner light that seems to pulse in rhythm with your heartbeat. The bark is smooth "
+                    "as polished metal yet warm to the touch, and intricate spiraling patterns flow across its "
+                    "surface like living veins of starlight. Its massive canopy spreads wide, with leaves that "
+                    "catch and reflect light in impossible ways. You sense an ancient presence within - older "
+                    "than memory, wise beyond measure, and deeply connected to the very essence of the forest. "
+                    "As you study the tree more closely, the silver bark begins to glow more brightly, and suddenly "
+                    "you feel a powerful presence emerge from within. The Ancient Tree Spirit has awakened to your "
+                    "reverent attention.[/environment_description]"
+                )
+            else:
+                return (
+                    "[environment_description]The ancient tree towers above you, its silver bark shimmering "
+                    "with an inner light that seems to pulse in rhythm with your heartbeat. The bark is smooth "
+                    "as polished metal yet warm to the touch, and intricate spiraling patterns flow across its "
+                    "surface like living veins of starlight. Its massive canopy spreads wide, with leaves that "
+                    "catch and reflect light in impossible ways. You sense an ancient presence within - older "
+                    "than memory, wise beyond measure, and deeply connected to the very essence of the forest. "
+                    "This is no mere tree, but the dwelling place of the Ancient Tree Spirit.[/environment_description]"
+                )
         else:
             return (
                 "[environment_description]The magnificent silver-barked tree continues to radiate ancient "

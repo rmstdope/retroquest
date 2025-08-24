@@ -78,7 +78,6 @@ FLAG_MOONFLOWERS_TAKEN = "moonflowers_taken"
 FLAG_STANDING_STONES_EXAMINED = "standing_stones_examined"
 FLAG_NATURE_SENSE_LEARNED = "nature_sense_learned"
 FLAG_NATURE_SENSE_USED_WHISPERING_GLADE = "nature_sense_used_whispering_glade"
-FLAG_SILVER_TREE_EXAMINED = "silver_tree_examined"
 FLAG_MENDED_LIBRARY_ENCHANTMENTS = "mended_library_enchantments"
 
 # Spell Learning Flags

@@ -394,7 +394,6 @@ def test_golden_path_act2_completion():
     # Take Enchanted Acorn
     _execute_commands(game, ["take enchanted acorn"])
     _check_item_in_inventory(game.state, "Enchanted Acorn")
-    
     # Talk to Forest Sprites (they offer guidance to the riddle quest)
     _execute_commands(game, ["talk to forest sprites"])
     # Quest "The Forest Guardian's Riddles" should now be activated
@@ -404,31 +403,22 @@ def test_golden_path_act2_completion():
     # Move to Ancient Grove
     _execute_commands(game, ["go south"])
     _check_current_room(game.state, "Ancient Grove")
-    
     # Look at silver-barked tree
     _execute_commands(game, ["look at silver-barked tree"])
-    
     # Give Enchanted Acorn to Ancient Tree Spirit
     _execute_commands(game, ["give enchanted acorn to ancient tree spirit"])
     _check_item_in_inventory(game.state, "Enchanted Acorn", should_be_present=False)
+    _check_item_in_inventory(game.state, "Silver Leaves")
+    _check_item_in_inventory(game.state, "Druidic Focus")
     _check_spell_known(game.state, "forest_speech")
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Forest Guardian's Riddles", "Whispers in the Wind"])
-    
-    # Take Silver Leaves and Druidic Focus (reward items from tree spirit)
-    _execute_commands(game, ["take silver leaves"])
-    _check_item_in_inventory(game.state, "Silver Leaves")
-    
-    _execute_commands(game, ["take druidic focus"])
-    _check_item_in_inventory(game.state, "Druidic Focus")
     
     # Step 18: Whispering Glade Activities (The Forest Guardian's Riddles quest)
     # Navigate to Whispering Glade
     _execute_commands(game, ["go north", "go east"])  # Forest Entrance -> Whispering Glade
-    _check_current_room(game.state, "Whispering Glade")
-    
+    _check_current_room(game.state, "Whispering Glade")    
     # Cast nature_sense to detect water nymphs
     _execute_commands(game, ["cast nature_sense"])
-    
     # Talk to water nymphs to start riddles
     _execute_commands(game, ["talk to water nymphs"])
     
