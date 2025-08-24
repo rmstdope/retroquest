@@ -1484,9 +1484,9 @@ The completion of Act II marks Elior's transformation from a promising young her
      - Quest accepted: "Supplies for the Journey"
    - Talk to Caravan Master Thorne. _Thorne desperately seeks help finding his lost caravan._
      - Quest accepted: "The Merchant's Lost Caravan"
-   - Buy Forest Survival Kit from Master Merchant Aldric. _Survival Kit is added to inventory._
+   - Buy Forest Survival Kit and Enhanced Lantern from Master Merchant Aldric. _Items added to inventory._
      - Item used: `coins` (payment)
-     - Item obtained: `Forest Survival Kit`
+     - Item obtained: `Enhanced Lantern`, `Forest Survival Kit`
 
 7. **The Silver Stag Inn:**
 
@@ -1503,7 +1503,7 @@ The completion of Act II marks Elior's transformation from a promising young her
    - Buy Enhanced Lantern from Master Merchant Aldric. _Additional survival gear is added to inventory._
    - Buy Quality Rope from Master Merchant Aldric. _Additional survival gear is added to inventory._
      - Item used: `coins` (payment)
-     - Item obtained: `Enhanced Lantern`, `Quality Rope`
+     - Item obtained: `Quality Rope`
      - Quest completed: "Supplies for the Journey"
 
 9. **Great Hall:**

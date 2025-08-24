@@ -1,7 +1,7 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_SHOWED_JOURNAL_TO_HISTORIANS
+from ..Act2StoryFlags import FLAG_SHOWED_JOURNAL_TO_HISTORIANS, FLAG_READ_TRAVELERS_JOURNAL
 
 class Historians(Character):
     def __init__(self) -> None:
@@ -23,11 +23,15 @@ class Historians(Character):
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to the Historians"""
         if "journal" in item_object.get_name().lower():
+            if not game_state.get_story_flag(FLAG_READ_TRAVELERS_JOURNAL):
+                return (f"[failure]You should not give things away that you know nothing about. Perhaps you should "
+                        f"ensure that you understand its contents "
+                        f"before sharing it with others.[/failure]")
+
             game_state.set_story_flag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS, True)
-            return ("[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name].[/event]\n"
-                    "[success]You show the traveler's journal to the [character_name]Historians[/character_name]. "
-                    "They examine it with great interest, cross-referencing the genealogical information with their "
-                    "own records. 'This is fascinating! The journal confirms several theories about Willowbrook's "
-                    "significance and provides crucial context for the ancient chronicles.'[/success]")
+            return (f"[success]You show the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name]. "
+                    f"They examine it with great interest, cross-referencing the genealogical information with their "
+                    f"own records. 'This is fascinating! The journal confirms several theories about Willowbrook's "
+                    f"significance and provides crucial context for the ancient chronicles.'[/success]")
         else:
             return super().give_item(game_state, item_object)

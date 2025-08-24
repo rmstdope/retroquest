@@ -12,7 +12,7 @@ class InnRooms(Room):
                 "and a window overlooking the Market District. The rooms are clean and well-maintained, providing a peaceful "
                 "retreat for travelers. From here, you can hear the gentle murmur of conversation from the common room below."
             ),
-            items=[Coins() for _ in range(15)],
+            items=[Coins() for _ in range(20)],
             characters=[],
             exits={"west": "SilverStagInn"}
         )

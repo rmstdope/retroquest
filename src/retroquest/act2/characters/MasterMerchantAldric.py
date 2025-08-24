@@ -15,9 +15,9 @@ class MasterMerchantAldric(Character):
             description="A prosperous merchant with keen eyes for quality goods. He specializes in premium adventure gear and has connections throughout the trading networks.",
         )
         self.wares = {
-            "forest survival kit": {"item": ForestSurvivalKit(), "price": 30},
-            "enhanced lantern": {"item": EnhancedLantern(), "price": 20},
-            "quality rope": {"item": QualityRope(), "price": 15}
+            "forest survival kit": {"item": ForestSurvivalKit(), "price": 50},
+            "enhanced lantern": {"item": EnhancedLantern(), "price": 40},
+            "quality rope": {"item": QualityRope(), "price": 20}
         }
         self.dialogue_options = [
             "Welcome to Aldric's Premium Adventure Gear! Only the finest equipment for discerning adventurers.",

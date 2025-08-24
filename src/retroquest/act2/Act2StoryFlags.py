@@ -45,10 +45,12 @@ FLAG_NYX_TRIALS_COMPLETED = "nyx_trials_completed"
 FLAG_ELENA_CURSE_BROKEN = "elena_curse_broken"
 FLAG_KNOWS_ELENA_CURSE = "knows_elena_curse"
 FLAG_MARCUS_GRATEFUL = "marcus_grateful"
+FLAG_SPECTRAL_LIBRARIAN_FRIENDLY = "spectral_librarian_friendly"
 
 # Learning and Interaction Flags
 FLAG_LEARNED_MEND_FROM_CRAFTSMEN = "learned_mend_from_craftsmen"
 FLAG_SHOWED_JOURNAL_TO_HISTORIANS = "showed_journal_to_historians"
+FLAG_READ_TRAVELERS_JOURNAL = "read_travelers_journal"
 FLAG_GAVE_MERCHANTS_FLYER = "gave_merchants_flyer"
 FLAG_PREMIUM_SELECTION_AVAILABLE = "premium_selection_available"
 FLAG_SPOKEN_TO_CARAVAN_MASTER = "spoken_to_caravan_master"

@@ -77,7 +77,7 @@ class Game:
         threading.Thread(target=play_music, daemon=True).start()
 
     def get_ascii_logo(self):
-        return r'''
+        text = r'''
 Welcome to
 [bold yellow]
 ########  ######### ######## ########   #######   #######  ##     ## #########  #######  ########
@@ -88,9 +88,9 @@ Welcome to
 ##    ##  ##           ##    ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##.
 ##     ## #########    ##    ##     ##  #######   #######   #######  #########  #######     ##.
 [/bold yellow]
-[bold]Music track:[/bold] Market by Conquest
-Source: https://freetouse.com/music
-Copyright Free Background Music'''
+[bold]Music track:[/bold] '''
+        text += self.act.music_info
+        return text
 
     def print_intro(self):
         self.console.clear()
@@ -308,6 +308,25 @@ Copyright Free Background Music'''
                     item_to_examine = item
         return item_to_examine
 
+    def find_all_items(self, target, look_in_inventory: bool = True, look_in_room: bool = True) -> list:
+        """
+        Find all items by their name or short name in the inventory and/or current room.
+        Returns a list of all matching items.
+        """
+        target = target.lower()
+        matching_items = []
+        # Check inventory first
+        if look_in_inventory:
+            for item in self.state.inventory:
+                if item.get_name().lower() == target or item.get_short_name().lower() == target:
+                    matching_items.append(item)
+        # Then check items in the current room
+        if look_in_room:
+            for item in self.state.current_room.get_items():
+                if item.get_name().lower() == target or item.get_short_name().lower() == target:
+                    matching_items.append(item)
+        return matching_items
+
     def move(self, direction: str, arg: str = None) -> str:
         exits = self.state.current_room.get_exits()
         
@@ -448,23 +467,57 @@ Copyright Free Background Music'''
         return f"[failure]You don't have a '{item}' to drop.[/failure]"
 
     def take(self, item: str) -> str:
-        item_to_take = self.find_item(item, look_in_inventory=False, look_in_room=True)
-        if not item_to_take:
+        items_to_take = self.find_all_items(item, look_in_inventory=False, look_in_room=True)
+        if not items_to_take:
             return f"[failure]There is no '{item}' here to take.[/failure]"
-        no_pickup = item_to_take.prevent_pickup()
-        if no_pickup:
-            # If the item has a prevent_pickup method that returns a message, use that
-            return f"{no_pickup}"
-        self.state.current_room.items.remove(item_to_take)
-        self.state.inventory.append(item_to_take)
-
-        # Call picked_up on the item
-        pickup_message = item_to_take.picked_up(self.state)
-
-        response = f"[event]You take the [item_name]{item_to_take.get_name()}[/item_name].[/event]"
-        if pickup_message:
-            response += " " + pickup_message
-        return response
+        
+        taken_items = []
+        prevented_items = []
+        
+        for item_to_take in items_to_take:
+            no_pickup = item_to_take.prevent_pickup()
+            if no_pickup:
+                # If the item has a prevent_pickup method that returns a message, track it
+                prevented_items.append((item_to_take, no_pickup))
+            else:
+                self.state.current_room.items.remove(item_to_take)
+                self.state.inventory.append(item_to_take)
+                
+                # Call picked_up on the item
+                pickup_message = item_to_take.picked_up(self.state)
+                taken_items.append((item_to_take, pickup_message))
+        
+        # Build response message
+        responses = []
+        
+        if taken_items:
+            if len(taken_items) == 1:
+                item_obj, pickup_message = taken_items[0]
+                response = f"[event]You take the [item_name]{item_obj.get_name()}[/item_name].[/event]"
+                if pickup_message:
+                    response += " " + pickup_message
+                responses.append(response)
+            else:
+                # Multiple items taken
+                item_name = taken_items[0][0].get_name()  # Use the name from the first item
+                responses.append(f"[event]You take {len(taken_items)} [item_name]{item_name}[/item_name].[/event]")
+                # Add any pickup messages
+                for item_obj, pickup_message in taken_items:
+                    if pickup_message:
+                        responses.append(pickup_message)
+        
+        # Add any prevention messages
+        for item_obj, no_pickup in prevented_items:
+            responses.append(no_pickup)
+        
+        if not taken_items and prevented_items:
+            # All items were prevented from being picked up
+            return "\n".join(responses)
+        elif taken_items:
+            return "\n".join(responses)
+        else:
+            # This shouldn't happen, but just in case
+            return f"[failure]There is no '{item}' here to take.[/failure]"
 
     def inventory(self) -> str:
         if not self.state.inventory:
