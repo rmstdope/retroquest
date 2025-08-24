@@ -67,7 +67,7 @@ class GameController:
 
     def get_room(self) -> str:
         """Return the current room description, styled."""
-        return apply_theme(self.game.state.current_room.describe())
+        return apply_theme(self.game.state.current_room.describe(self.game.state))
 
     def get_spells(self) -> list:
         """Return a list of tuples (spell_name, spell_description) for known spells."""
