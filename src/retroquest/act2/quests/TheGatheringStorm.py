@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_DEMONSTRATED_COMBAT_SKILLS
+from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED, FLAG_ANCIENT_LIBRARY_COMPLETED
 
 class TheGatheringStormQuest(Quest):
     def __init__(self) -> None:
@@ -48,6 +48,35 @@ class TheGatheringStormQuest(Quest):
                 "from the Market District: a forest survival kit, enhanced lantern, and quality rope. Time is of the "
                 "essence, as the darkness grows stronger each day, and only Nyx's ancient wisdom may hold the key to "
                 "understanding and defeating these otherworldly threats."
+            )
+        
+        if game_state.get_story_flag(FLAG_SUPPLIES_QUEST_COMPLETED):
+            if not self._flag_state.get(FLAG_SUPPLIES_QUEST_COMPLETED):
+                self._flag_state[FLAG_SUPPLIES_QUEST_COMPLETED] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\n\nWith all the essential supplies now gathered - the forest survival kit, enhanced lantern, and quality rope - "
+                "you are properly equipped for the dangerous journey into the enchanted forest. The merchant's guidance and "
+                "the quality of the equipment give you confidence that you can navigate the magical perils ahead. Now fully "
+                "prepared, the path to finding Nyx and unlocking the ancient wisdom needed to combat the growing darkness "
+                "lies before you. The forest awaits, and with it, the answers that could save both Greendale and the "
+                "surrounding lands from the encroaching shadow."
+            )
+        
+        if game_state.get_story_flag(FLAG_ANCIENT_LIBRARY_COMPLETED):
+            if not self._flag_state.get(FLAG_ANCIENT_LIBRARY_COMPLETED):
+                self._flag_state[FLAG_ANCIENT_LIBRARY_COMPLETED] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\n\nThe ancient hidden library has revealed its secrets! Through the Spectral Librarian's guidance, you have "
+                "uncovered crucial knowledge about your family heritage and learned the powerful dispel spell. The ancient "
+                "prophecies speak of a Chosen One destined to face the returning darkness, and the revelation of your lineage "
+                "suggests you may be central to this cosmic struggle. Armed with this newfound understanding of both your "
+                "destiny and the magical arts, you now possess the knowledge and power needed to confront the gathering storm. "
+                "The pieces of the puzzle are falling into place, and with each revelation, the path to finding Nyx and "
+                "ultimately defeating the encroaching shadow becomes clearer."
             )
 
         self.description += new_desc

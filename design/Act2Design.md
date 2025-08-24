@@ -91,9 +91,9 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Type:** Side Quest (Required for Main Quest)
   - **Trigger:** Meet Greendale's local healer who recognizes magical potential in Elior
   - **Prerequisites:** Access to Residential Quarter
-  - **Dependencies:** Must have Healing Herbs
-  - **Completion:** Assist with healing the sick and wounded, learning advanced healing techniques and earning a powerful healing item
-  - **Rewards:** `greater_heal` spell, Advanced Healing Potion, alliance with Lyria
+  - **Dependencies:** Must have Crystal Focus from Hidden Library
+  - **Completion:** Obtain a crystal focus so that Lyria can treat her patients that are on the brink of death, learning advanced healing techniques and earning a powerful healing item
+  - **Rewards:** 'greated_heal' spell, alliance with Lyria
   - **Story Impact:** Develops healing abilities essential for later quests
 
 - **Name:** Cedric's Lost Honor
@@ -294,14 +294,6 @@ Spells in Act II follow a logical progression where each spell has specific cond
   - **Used For:** Repair Hidden Library enchantments, general item repair
   - **Story Integration:** Demonstrates growing practical magic skills
 
-- **`greater_heal`**:
-
-  - **Learned From:** Master Healer Lyria in the Healer's House
-  - **Prerequisites:** Complete "The Healer's Apprentice" quest, demonstrate compassion
-  - **Conditions:** Must have basic healing knowledge, must provide Healing Herbs
-  - **Used For:** Cure Elena's curse, advanced medical emergencies
-  - **Story Integration:** Establishes Elior as a healer, essential for saving lives
-
 - **`dispel`**:
 
   - **Learned From:** Ancient texts in the Hidden Library
@@ -309,6 +301,14 @@ Spells in Act II follow a logical progression where each spell has specific cond
   - **Conditions:** Must prove worthiness to Spectral Librarian, demonstrate magical understanding
   - **Used For:** Break magical barriers and curses, counter enemy magic
   - **Story Integration:** Advanced magical knowledge needed for complex problems
+
+- **`greater_heal`**:
+
+  - **Learned From:** Master Healer Lyria in Healer's House
+  - **Prerequisites:** Must give Crystal Focus to Lyria to help treat critically injured patients
+  - **Conditions:** Must complete "The Healer's Apprentice" quest, demonstrate compassion for the suffering
+  - **Used For:** Cure Elena's curse
+  - **Story Integration:** Represents growth in both magical skill and empathy for others
 
 - **`nature_sense`**:
 
@@ -861,10 +861,6 @@ A cozy cottage filled with the scents of medicinal herbs and healing potions. Dr
 
 #### Items
 
-- **Advanced Healing Potion**
-  - Present: Later (given by Lyria after quest)
-  - Can be carried: Yes
-  - Useful: Yes
 - **Herb Gathering Bag**
   - Present: From start
   - Can be carried: Yes
@@ -1527,14 +1523,11 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 11. **Healer's House:**
 
-    - Talk to Master Healer Lyria. _Lyria recognizes Elior's magical potential and offers advanced training._
+    - Talk to Master Healer Lyria. _Lyria recognizes Elior's magical potential and explains her desperate need for a crystal focus._
       - Quest accepted: "The Healer's Apprentice"
-    - Give Healing Herbs to Lyria. _Lyria uses them to create advanced remedies._
-      - Item used: `Healing Herbs`
-    - Learn advanced healing from Lyria. _Through careful instruction, Elior masters the `greater_heal` spell._
-      - Spell Learned: `greater_heal` (enhanced healing magic)
-    - Accept Lyria's herb-gathering quest. _Lyria needs rare forest herbs for her remedies._
-    - Take Advanced Healing Potion. _Advanced Healing Potion is added to inventory._
+    - Learn about patients on the brink of death. _Lyria explains that without a proper crystal focus, she cannot treat the most critically injured patients._
+    - Accept Lyria's crystal focus quest. _Lyria needs a crystal focus to amplify her healing magic for dying patients._
+    - Obtain Crystal Focus from Hidden Library (completed later). _This will be needed to help Lyria save lives._
 
 12. **Residential Quarter (Hidden Library Discovery):**
 
@@ -1559,9 +1552,11 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 14. **Return to Healer's House:**
 
-    - Use Advanced Healing Potion to help critically injured patients. _The potent remedy saves lives that normal healing couldn't reach._
-      - Item used: `Advanced Healing Potion` (emergency healing)
-    - Assist with healing the sick. _Elior helps treat patients, gaining practical experience._
+    - Give Crystal Focus to Master Healer Lyria. _Lyria uses the focus to amplify her healing magic for critically injured patients._
+      - Item given: `Crystal Focus`
+    - Assist with healing critically injured patients. _Elior helps treat patients on the brink of death, gaining practical experience._
+    - Learn advanced healing from Lyria. _Through careful instruction and with the crystal focus amplifying the magic, Elior masters the `greater_heal` spell._
+      - Spell Learned: `greater_heal` (enhanced healing magic)
       - Quest completed: "The Healer's Apprentice"
 
 # TODO Expand The Hermit's Warning
@@ -1723,10 +1718,10 @@ This Golden Path ensures that the design rule "all side quests must be completed
 - `Walking Stick` (community service in Residential Quarter)
 - `Coins` (purchase essential supplies in Market District)
 - `Healing Herbs` (required for Lyria's training)
+- `Crystal Focus` (enhance magical understanding in Hidden Library, give to Lyria for healing quest)
 - `Forest Survival Kit` (magical protection at Forest Transition)
 - `Enhanced Lantern` (illuminate hidden forest paths)
 - `Quality Rope` (traverse difficult forest terrain for caravan rescue)
-- `Advanced Healing Potion` (emergency healing at Healer's House)
 - `Crystal Focus` (enhance magical understanding in Hidden Library)
 - `Boundary Stone Fragment` (locate ancient paths for caravan rescue)
 - `Protective Charm` (ward off hostile spirits at Forest Entrance)

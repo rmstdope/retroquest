@@ -15,7 +15,7 @@ class TheHealersApprenticeQuest(Quest):
             ),
             completion=(
                 "You have successfully completed your apprenticeship with Master Healer Lyria! You've learned "
-                "the greater_heal spell and received an Advanced Healing Potion for emergencies. Your "
+                "the greater_heal spell through her advanced training. Your "
                 "understanding of healing magic has grown significantly."
             )
         )
