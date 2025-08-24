@@ -31,6 +31,7 @@ from retroquest.act2.quests.TheMerchantsLostCaravan import TheMerchantsLostCarav
 from retroquest.act2.quests.TheHealersApprentice import TheHealersApprenticeQuest
 from retroquest.act2.quests.TheAncientLibrary import TheAncientLibraryQuest
 from retroquest.act2.quests.TheForestGuardiansRiddles import TheForestGuardiansRiddles
+from retroquest.act2.quests.TheHermitsWarning import TheHermitsWarningQuest
 from retroquest.act2.quests.WhispersInTheWind import WhispersInTheWind
 
 class Act2(Act):
@@ -71,10 +72,10 @@ class Act2(Act):
             TheMerchantsLostCaravanQuest(),
             TheForestGuardiansRiddles(),
             WhispersInTheWind(),
+            TheHermitsWarningQuest(),
             
             # TODO: Add remaining quests when implemented:
             # CedricksLostHonorQuest(), 
-            # TheHermitsWarningQuest(),
         ]
         music_file = "music/Walen - Medieval Village (freetouse.com).mp3"
         super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file, music_info='Music track: Medieval Village by Walen\nSource: https://freetouse.com/music\nFree To Use Music for Video')

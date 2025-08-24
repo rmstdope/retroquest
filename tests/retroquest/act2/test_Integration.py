@@ -398,20 +398,21 @@ def test_golden_path_act2_completion():
     _check_current_room(game.state, "Mountain Path")
     _execute_commands(game, ["go east"])  # From Mountain Path to Forest Transition
     _check_current_room(game.state, "Forest Transition")
-    
-    # Use Forest Survival Kit
+    # East entrance should be closed
+    _execute_commands(game, ["go east"])
+    _check_current_room(game.state, "Forest Transition")
+    # Talk to Forest Hermit to get protective charm and start "The Hermit's Warning" quest
+    _execute_commands(game, ["talk to forest hermit"])
+    _check_item_in_inventory(game.state, "Protective Charm")
+    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Hermit's Warning"])
+    # Use Forest Survival Kit to complete the quest
     _execute_commands(game, ["use forest survival kit"])
-    
+    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
     # Examine standing stones and get boundary stone fragment
     _execute_commands(game, ["examine stones"])
     _check_item_in_inventory(game.state, "Boundary Stone Fragment")
-    
     # Learn nature_sense spell from the stones
-    _check_spell_known(game.state, "nature_sense")
-    
-    # Talk to Forest Hermit to get protective charm and complete "The Hermit's Warning" quest
-    _execute_commands(game, ["talk to forest hermit"])
-    _check_item_in_inventory(game.state, "Protective Charm")
+    _check_spell_known(game.state, "nature_sense")    
     
     # Step 16: Forest Entrance Activities  
     # Navigate to Forest Entrance
