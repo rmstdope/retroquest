@@ -66,9 +66,9 @@ class HiddenGlade(Room):
         else:
             return "You rest for a while, but the glade remains quiet. Perhaps something more needs to happen for its magic to awaken."
 
-    def describe(self) -> str:
+    def describe(self, game_state: GameState) -> str:
         self.description = self.get_room_text_description()
-        return super().describe()
+        return super().describe(game_state)
 
     def light(self, game_state: GameState) -> str:
         """Called when a light source is used or a light spell is cast in the room."""

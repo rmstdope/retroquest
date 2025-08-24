@@ -1,4 +1,5 @@
 from ...engine.Room import Room
+from ...engine.GameState import GameState
 from ..items.CityNoticeBoard import CityNoticeBoard
 from ..items.MerchantsFlyer import MerchantsFlyer
 from ..characters.TownCrier import TownCrier
@@ -20,7 +21,7 @@ class MainSquare(Room):
         )
         self.city_map_used = False
 
-    def get_exits(self) -> dict:
+    def get_exits(self, game_state: GameState) -> dict:
         """
         Return exits based on whether city map has been used.
         Without using the map, only the path back to Greendale Gates is available.

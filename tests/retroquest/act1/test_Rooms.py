@@ -15,6 +15,14 @@ from retroquest.act1.rooms.HiddenGlade import HiddenGlade
 from retroquest.act1.rooms.VillageChapel import VillageChapel
 from retroquest.act1.rooms.RoadToGreendale import RoadToGreendale
 
+class MockGameState:
+    """Mock GameState for testing room functionality without complex dependencies."""
+    def __init__(self):
+        self.story_flags = []
+    
+    def get_story_flag(self, flag):
+        return flag in self.story_flags
+
 ROOM_CLASSES = {
     "EliorsCottage": EliorsCottage,
     "VegetableField": VegetableField,
@@ -53,7 +61,7 @@ def test_room_reachability(start_key):
         if current in visited:
             continue
         visited.add(current)
-        for dest in rooms[current].get_exits().values():
+        for dest in rooms[current].get_exits(MockGameState()).values():
             if dest not in visited and dest in rooms:
                 queue.append(dest)
     # All rooms should be reachable from the start room
@@ -97,7 +105,7 @@ def test_room_transitions_bidirectional(room_class, room_key):
     }
     rooms['EliorsCottage'].can_leave()  # Ensure Elior's Cottage can be left
     room = rooms[room_key]
-    for direction, dest_key in room.get_exits().items():
+    for direction, dest_key in room.get_exits(MockGameState()).items():
         # Only test cardinal directions
         if direction not in OPPOSITE:
             continue
@@ -105,5 +113,5 @@ def test_room_transitions_bidirectional(room_class, room_key):
         opposite = OPPOSITE[direction]
         # The destination room must have an exit back to the original room
         assert (
-            dest_room.get_exits().get(opposite) == room_key
+            dest_room.get_exits(MockGameState()).get(opposite) == room_key
         ), f"{room_key} -> {direction} -> {dest_key} but {dest_key} does not have {opposite} back to {room_key}"

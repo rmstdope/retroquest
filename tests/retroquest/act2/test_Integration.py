@@ -119,7 +119,7 @@ def test_golden_path_act2_completion():
     # Should start in Mountain Path
     _check_current_room(game.state, "Mountain Path")
     # Forest exit should be locked initially
-    exits = game.state.current_room.get_exits()
+    exits = game.state.current_room.get_exits(game.state)
     assert "east" not in exits  # Forest transition should not be available initially
     # Take Walking Stick
     _execute_commands(game, ["take walking stick"])
@@ -142,7 +142,7 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["go north"])
     _check_current_room(game.state, "Greendale Gates")
     # Verify that north exit to Main Square is not available before giving Entry Pass
-    exits = game.state.current_room.get_exits()
+    exits = game.state.current_room.get_exits(game.state)
     assert "north" not in exits, "North exit to Main Square should not be available before giving Entry Pass"
     assert "south" in exits, "South exit to Mountain Path should always be available"
     # Give Entry Pass to Gate Captain
@@ -150,7 +150,7 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["give entry pass to gate captain"])
     _check_item_in_inventory(game.state, "Entry Pass", should_be_present=True)
     # Verify that north exit to Main Square is now available after showing the Entry Pass
-    exits = game.state.current_room.get_exits()
+    exits = game.state.current_room.get_exits(game.state)
     assert "north" in exits, "North exit to Main Square should be available after giving Entry Pass"
     assert exits["north"] == "MainSquare", "North exit should lead to Main Square"
     # Verify that the room cannot be searched yet (captain still present)
@@ -383,7 +383,7 @@ def test_golden_path_act2_completion():
     # Now check that The Ancient Library quest is completed (requires Crystal Focus in inventory)
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Healer's Apprentice"])
     
-    # Step 14: Emergency Healing at Healer's House
+    # Step 14: Healer's House - again
     # Return to Healer's House (navigate from Hidden Library back through the secret passage)
     _execute_commands(game, ["go secret_passage", "go north"])  # To Healer's House
     _check_current_room(game.state, "Healer's House")
@@ -391,17 +391,11 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["give crystal focus to master healer lyria"])
     _check_spell_known(game.state, 'greater_heal')
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
-    # TODO Update the main quest so that it indicates that the forest have been unlocked
     
     # Step 15: Forest Transition Activities
     # Navigate to Forest Transition (Healer's House -> Residential Quarter -> Castle Courtyard -> Castle Approach -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition)
     _execute_commands(game, ["go south", "go south", "go east", "go south", "go south", "go south"])  
     _check_current_room(game.state, "Mountain Path")
-
-    # Unlock the forest transition (this would normally happen after completing certain quests)
-    # Since we've completed the necessary quests (including Healer's Apprentice), unlock it
-    game.state.current_room.unlock_forest_transition()
-    
     _execute_commands(game, ["go east"])  # From Mountain Path to Forest Transition
     _check_current_room(game.state, "Forest Transition")
     
@@ -521,7 +515,7 @@ def test_main_square_navigation_restriction():
     assert not game.state.get_story_flag("used_city_map"), "City map should not be used initially"
     
     # Test restricted exits - should only be able to go south
-    available_exits = game.state.current_room.get_exits()
+    available_exits = game.state.current_room.get_exits(game.state)
     assert available_exits == {"south": "GreendaleGates"}, f"Expected only south exit, got: {available_exits}"
     
     # Test navigation restriction - should get lost message when trying invalid directions
@@ -548,7 +542,7 @@ def test_main_square_navigation_restriction():
     assert not game.state.has_item("city map"), "City map should be removed from inventory after use"
     
     # After using map, should have full access to all exits
-    available_exits = game.state.current_room.get_exits()
+    available_exits = game.state.current_room.get_exits(game.state)
     expected_exits = {"south": "GreendaleGates", "north": "CastleApproach", "east": "MarketDistrict"}
     assert available_exits == expected_exits, f"Expected all exits after using map, got: {available_exits}"
     
@@ -558,7 +552,7 @@ def test_main_square_navigation_restriction():
     main_square_room = game.state.current_room
     
     # Mock the movement to test the exit availability without side effects
-    exits = game.state.current_room.get_exits()
+    exits = game.state.current_room.get_exits(game.state)
     assert "north" in exits, "North exit should be available after using map"
     assert "east" in exits, "East exit should be available after using map"
 

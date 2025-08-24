@@ -32,7 +32,7 @@ class Room:
     def get_characters(self) -> list:
         return self.characters
 
-    def get_exits(self) -> dict:
+    def get_exits(self, game_state: GameState) -> dict:
         return self.exits
 
     def get_ambient_sound(self) -> str:
@@ -72,7 +72,7 @@ class Room:
             return item_to_remove
         return None
 
-    def describe(self) -> str:
+    def describe(self, game_state: GameState) -> str:
         """Return a full description of the room, including items, characters, and exits."""
         desc = f"[bold]{self.name}[/bold]\n"
         desc += self.description + '\n'
@@ -98,7 +98,7 @@ class Room:
             # Use get_name for character instances
             character_names = ', '.join(f"[character_name]{c.get_name()}[/character_name]" for c in self.characters)
             desc += f"\nCharacters present: {character_names}"
-        exits = self.get_exits()
+        exits = self.get_exits(game_state)
         if exits:
             exit_names = ', '.join(f"[exits]{direction}[/exits] ({destination})" for direction, destination in exits.items())
             desc += f"\nExits: {exit_names}"

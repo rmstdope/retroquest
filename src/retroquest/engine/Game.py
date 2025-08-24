@@ -49,7 +49,7 @@ class Game:
         if self.describe_room:
             # If the command resulted in a room change, describe the new room
             self.describe_room = False
-            result += self.state.current_room.describe()
+            result += self.state.current_room.describe(self.state)
         activated = self.state.activate_quests()
         updated = self.state.update_quests()
         completed = self.state.complete_quests()
@@ -131,7 +131,7 @@ Welcome to
 
         character_names = [char.get_name().lower() for char in self.state.current_room.get_characters()]
         spell_names = [spell.get_name().lower() for spell in self.state.known_spells]
-        exit_names = {direction: None for direction in self.state.current_room.get_exits()}
+        exit_names = {direction: None for direction in self.state.current_room.get_exits(self.state)}
         file_names = {f: None for f in os.listdir('.') if f.endswith('.txt') and os.path.isfile(f)}
 
         # # Build 'use' completions so that 'with' is suggested only after the full item name
@@ -144,7 +144,7 @@ Welcome to
 
         # Build directional completions based on actual exits
         directional_completions = {}
-        available_exits = self.state.current_room.get_exits()
+        available_exits = self.state.current_room.get_exits(self.state)
         
         # Short directions
         if 'north' in available_exits:
@@ -328,7 +328,7 @@ Welcome to
         return matching_items
 
     def move(self, direction: str, arg: str = None) -> str:
-        exits = self.state.current_room.get_exits()
+        exits = self.state.current_room.get_exits(self.state)
         
         # Special handling for MainSquare navigation restriction
         if (self.state.current_room.name == "Main Square" and 
@@ -431,7 +431,7 @@ Welcome to
             return "No rooms visited yet."
         output = ["[bold]Visited Rooms and Exits:[/bold]"]
         for name, room in room_objs.items():
-            exits = room.get_exits()
+            exits = room.get_exits(self.state)
             output.append(f"- [room_name]{room.name}[/room_name]:")
             if exits:
                 for direction, dest in exits.items():
