@@ -4,6 +4,7 @@ from ..items.MountainFlower import MountainFlower
 from ..items.WalkingStick import WalkingStick
 from ..items.CampSite import CampSite
 from ..characters.MountainHermit import MountainHermit
+from ..Act2StoryFlags import FLAG_SUPPLIES_QUEST_COMPLETED
 
 class MountainPath(Room):
     def __init__(self) -> None:
@@ -20,15 +21,10 @@ class MountainPath(Room):
             characters=[MountainHermit()],
             exits={"north": "GreendaleGates", "east": "ForestTransition"}
         )
-        self.forest_exit_locked = True
 
-    def get_exits(self) -> dict:
-        """Return available exits, hiding forest_transition if locked"""
-        exits = super().get_exits().copy()
-        if self.forest_exit_locked:
+    def get_exits(self, game_state: GameState) -> dict:
+        """Return available exits, only showing forest transition if supplies quest is completed"""
+        exits = super().get_exits(game_state).copy()
+        if not game_state.get_story_flag(FLAG_SUPPLIES_QUEST_COMPLETED):
             exits.pop("east", None)
         return exits
-
-    def unlock_forest_transition(self) -> None:
-        """Unlock the path to the forest (called when appropriate quest conditions are met)"""
-        self.forest_exit_locked = False

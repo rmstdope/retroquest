@@ -1,4 +1,5 @@
 import pytest
+from retroquest.engine.GameState import GameState
 from retroquest.act2.rooms.MountainPath import MountainPath
 from retroquest.act2.rooms.GreendaleGates import GreendaleGates
 from retroquest.act2.rooms.MainSquare import MainSquare
@@ -17,6 +18,15 @@ from retroquest.act2.rooms.ForestEntrance import ForestEntrance
 from retroquest.act2.rooms.AncientGrove import AncientGrove
 from retroquest.act2.rooms.WhisperingGlade import WhisperingGlade
 from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
+
+
+class MockGameState:
+    """Mock GameState for testing that only provides get_story_flag method"""
+    def __init__(self):
+        self.story_flags = []
+    
+    def get_story_flag(self, flag):
+        return flag in self.story_flags
 
 ROOM_CLASSES = {
     "MountainPath": MountainPath,
@@ -56,9 +66,12 @@ def test_all_rooms_have_valid_exits():
     """Test that all room exits reference valid room names"""
     valid_room_names = set(ROOM_CLASSES.keys())
     
+    # Create a mock GameState for testing
+    mock_game_state = MockGameState()
+    
     for room_name, room_class in ROOM_CLASSES.items():
         room = room_class()
-        exits = room.get_exits()
+        exits = room.get_exits(mock_game_state)
         for direction, target_room in exits.items():
             # Special handling for secret passages and special exits
             if direction in ["secret_passage", "upstairs", "downstairs"]:

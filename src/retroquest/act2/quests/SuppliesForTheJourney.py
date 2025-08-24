@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS
+from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED
 
 class SuppliesForTheJourneyQuest(Quest):
     def __init__(self) -> None:
@@ -21,5 +21,6 @@ class SuppliesForTheJourneyQuest(Quest):
             
             if has_survival_kit and has_lantern and has_rope:
                 self.is_completed_flag = True
+                game_state.set_story_flag(FLAG_SUPPLIES_QUEST_COMPLETED, True)
                 return True
         return False

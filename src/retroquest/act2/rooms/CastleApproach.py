@@ -1,4 +1,5 @@
 from ...engine.Room import Room
+from ...engine.GameState import GameState
 from ..characters.Herald import Herald
 from ..characters.CastleGuardCaptain import CastleGuardCaptain
 
@@ -18,9 +19,9 @@ class CastleApproach(Room):
         )
         self.castle_courtyard_enabled = False
 
-    def get_exits(self) -> dict:
+    def get_exits(self, game_state: GameState) -> dict:
         """Override to conditionally include castle courtyard exit only after entry pass is shown to herald."""
-        exits = super().get_exits().copy()
+        exits = super().get_exits(game_state).copy()
         
         # Remove west exit to CastleCourtyard until entry pass has been shown to herald
         if not self.castle_courtyard_enabled and "west" in exits:
