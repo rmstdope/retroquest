@@ -352,12 +352,7 @@ def test_golden_path_act2_completion():
     # Give Healing Herbs to Lyria with Healing Herbs to trigger quest (first interaction)
     _execute_commands(game, ["give healing herbs to master healer lyria"])
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Healer's Apprentice"])
-    _check_spell_known(game.state, "greater_heal")
-    # TODO Should spell be taught after quest is done?
-    # Check that Advanced Healing Potion is available
-    _check_item_in_room(game.state.current_room, "Advanced Healing Potion")
-    _execute_commands(game, ["take advanced healing potion"])
-    _check_item_in_inventory(game.state, "Advanced Healing Potion")
+    _check_spell_known(game.state, "greater_heal", should_be_present=False)
     
     # Step 12: Residential Quarter (Hidden Library Discovery)
     # Return to Residential Quarter
@@ -390,23 +385,19 @@ def test_golden_path_act2_completion():
     
     # Step 14: Emergency Healing at Healer's House
     # Return to Healer's House (navigate from Hidden Library back through the secret passage)
-    _execute_commands(game, ["go secret_passage"])  # Back to Residential Quarter
-    _check_current_room(game.state, "Residential Quarter")
-    _execute_commands(game, ["go north"])  # To Healer's House
+    _execute_commands(game, ["go secret_passage", "go north"])  # To Healer's House
     _check_current_room(game.state, "Healer's House")
-    
-    # Use Advanced Healing Potion for emergency healing
-    _execute_commands(game, ["use advanced healing potion"])
-    
-    # Talk to Master Healer Lyria to become colleague (completing healer progression)
-    _execute_commands(game, ["talk to master healer lyria"])
+    # Give Crystal Focus to Healer to complete Healer's apprentice
+    _execute_commands(game, ["give crystal focus to master healer lyria"])
+    _check_spell_known(game.state, 'greater_heal')
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
+    # TODO Update the main quest so that it indicates that the forest have been unlocked
     
     # Step 15: Forest Transition Activities
     # Navigate to Forest Transition (Healer's House -> Residential Quarter -> Castle Courtyard -> Castle Approach -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition)
     _execute_commands(game, ["go south", "go south", "go east", "go south", "go south", "go south"])  
     _check_current_room(game.state, "Mountain Path")
-    
+
     # Unlock the forest transition (this would normally happen after completing certain quests)
     # Since we've completed the necessary quests (including Healer's Apprentice), unlock it
     game.state.current_room.unlock_forest_transition()
@@ -570,51 +561,6 @@ def test_main_square_navigation_restriction():
     exits = game.state.current_room.get_exits()
     assert "north" in exits, "North exit should be available after using map"
     assert "east" in exits, "East exit should be available after using map"
-
-
-def test_golden_path_step_14_emergency_healing():
-    """Test step 14: Return to Healer's House for emergency healing with Advanced Healing Potion."""
-    act = Act2()
-    game = Game(act)
-    
-    # Set up the game state as if we've completed steps 1-13
-    game.state.current_room = game.state.all_rooms["HealersHouse"]
-    
-    # Set up prerequisites: player should have advanced healing potion and quest should be ready
-    from retroquest.act2.items.AdvancedHealingPotion import AdvancedHealingPotion
-    from retroquest.act2.Act2StoryFlags import FLAG_HEALERS_APPRENTICE_ACCEPTED, FLAG_HEALERS_APPRENTICE_COMPLETED
-    
-    game.state.inventory.append(AdvancedHealingPotion())
-    # Need both flags set to be in the completed state
-    game.state.set_story_flag(FLAG_HEALERS_APPRENTICE_ACCEPTED, True)
-    game.state.set_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED, True)
-    
-    # Verify initial state
-    _check_item_in_inventory(game.state, "advanced healing potion")
-    assert not game.state.get_story_flag("emergency_healing_completed"), "Emergency healing should not be completed initially"
-    
-    # Use the Advanced Healing Potion for emergency healing
-    result = game.handle_command("use advanced healing potion")
-    
-    # Verify the emergency healing was successful
-    assert "surge of healing energy" in result.lower(), "Should get healing energy description"
-    assert "master healer lyria" in result.lower(), "Should mention Lyria's approval"
-    
-    # Talk to Master Healer Lyria to complete the quest
-    lyria = None
-    for character in game.state.current_room.get_characters():
-        if "lyria" in character.get_name().lower():
-            lyria = character
-            break
-    
-    assert lyria is not None, "Master Healer Lyria should be in the room"
-    
-    result = lyria.talk_to(game.state)
-    
-    # Verify the quest completion
-    assert "no longer just my apprentice" in result.lower(), "Should acknowledge advancement to colleague status"
-    assert "quest complete" in result.lower(), "Should show quest completion message"
-
 
 def test_golden_path_step_15_forest_transition():
     """Test step 15: Forest Transition activities - kit use, stone examination, spell learning, hermit interaction."""
@@ -848,29 +794,6 @@ def test_item_examination_and_usage():
     # Test Moonflowers usage
     result = game.handle_command("use moonflowers")
     assert "healing" in result.lower() or "magical" in result.lower()
-
-
-def test_emergency_healing_mechanics():
-    """Test the emergency healing mechanics for step 14."""
-    game = _create_test_game()
-    
-    # Set up Healer's House with prerequisites
-    from retroquest.act2.items.AdvancedHealingPotion import AdvancedHealingPotion
-    from retroquest.act2.Act2StoryFlags import FLAG_HEALERS_APPRENTICE_ACCEPTED, FLAG_HEALERS_APPRENTICE_COMPLETED
-    
-    game.state.inventory.append(AdvancedHealingPotion())
-    game.state.set_story_flag(FLAG_HEALERS_APPRENTICE_ACCEPTED, True)
-    game.state.set_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED, True)
-    game.state.current_room = game.state.all_rooms["HealersHouse"]
-    
-    # Test emergency healing
-    result = game.handle_command("use advanced healing potion")
-    assert "healing energy" in result.lower()
-    
-    # Test Lyria interaction after emergency healing
-    lyria = game.state.current_room.get_characters()[0]  # Should be Master Healer Lyria
-    result = lyria.talk_to(game.state)
-    assert "colleague" in result.lower()
 
 
 def test_forest_transition_spell_learning():
