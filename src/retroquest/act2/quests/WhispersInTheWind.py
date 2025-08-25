@@ -9,20 +9,13 @@ class WhispersInTheWind(Quest):
         super().__init__(
             name="Whispers in the Wind",
             description=(
-                "The Ancient Tree Spirit has sensed a disturbance in the heart of the forest. "
-                "Strange whispers carry on the wind, speaking of corruption that threatens the "
-                "very essence of nature. You must journey to the Heart of the Forest and "
-                "investigate these ominous whispers to discover their source."
+                "The Ancient Tree Spirit has sensed mystical beings hidden within the forest's depths. "
+                "Gentle whispers carry on the wind, speaking of ancient wisdom and forgotten lore. "
+                "To prove yourself worthy of the forest's trust, you must seek out these hidden spirits "
+                "in the Whispering Glade and demonstrate your understanding of nature's mysteries."
             ),
-            completion="You have investigated the mysterious whispers and discovered their source, protecting the forest from the growing corruption."
+            completion="You have communed with the Water Nymphs in the Whispering Glade, solved their ancient riddles, and earned their sacred gifts. By returning these blessed items to the Ancient Tree Spirit, you have proven yourself a true friend to the woodland spirits and earned the forest's trust."
         )
-        self.objectives = [
-            "Travel to the Heart of the Forest",
-            "Investigate the source of the mysterious whispers",
-            "Discover what threatens the forest's essence",
-            "Report back to the Ancient Tree Spirit with your findings"
-        ]
-        self.experience_reward = 300
 
     def check_trigger(self, game_state) -> bool:
         """Check if this quest should be activated."""

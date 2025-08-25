@@ -155,7 +155,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Prerequisites:** Access to Ancient Grove
   - **Dependencies:** Must have `forest_speech` spell and forest tokens
   - **Completion:** Help forest creatures with small problems, earning their guidance and learning preparatory spells needed to communicate with Nyx
-  - **Rewards:** Forest spirit alliance, Silver Leaves, Druidic Focus
+  - **Rewards:** Forest spirit alliance, Silver Leaves
   - **Story Impact:** Establishes connection with forest realm
 
 #### Optional Exploration Quests
@@ -1091,10 +1091,6 @@ A circular clearing dominated by trees so old and massive they seem to touch the
   - Present: Later (given by tree spirit after offering)
   - Can be carried: Yes
   - Useful: Yes
-- **Druidic Focus**
-  - Present: Later (given by tree spirit after offering)
-  - Can be carried: Yes
-  - Useful: Yes
 - **Sacred Rune Stone**
   - Present: From start (hidden, found by searching tree roots)
   - Can be carried: Yes
@@ -1175,10 +1171,14 @@ None
 
 #### Description
 
-The deepest part of the Enchanted Forest, where reality seems more fluid and magic flows like water. Impossible colors paint the landscape, and the very air sparkles with enchantment. At the center stands a magnificent tree whose branches seem to hold up the sky itself. This is Nyx's domain, where the forest sprite dwells and where the greatest secrets are revealed. The sacred grove that leads here is the only passage to this mystical realm.
+The deepest part of the Enchanted Forest, where reality seems more fluid and magic flows like water. Impossible colors paint the landscape, and the very air sparkles with enchantment. At the center stands a magnificent tree whose branches seem to hold up the sky itself. Before the great tree sits an ancient offering altar, carved from a single piece of starstone and adorned with mystical runes that pulse with otherworldly light. This is Nyx's domain, where the forest sprite dwells and where the greatest secrets are revealed. The sacred grove that leads here is the only passage to this mystical realm.
 
 #### Items
 
+- **Offering Altar**
+  - Present: From start
+  - Can be carried: No
+  - Useful: Yes
 - **Nyx's Token**
   - Present: Later (given by Nyx after completing trials)
   - Can be carried: Yes
@@ -1563,15 +1563,15 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 15. **Forest Transition:**
 
+    - Talk to Forest Hermit. _The hermit warns of forest dangers and offers protection._
+      - Quest accepted: "The Hermit's Warning"
     - Use Forest Survival Kit to safely approach the magical boundary. _The protective gear shields Elior from harmful magical energies._
       - Item used: `Forest Survival Kit` (magical protection)
+      - Quest completed: "The Hermit's Warning"
     - Examine ancient standing stones. _The moss-covered runes pulse with ancient power._
     - Use standing stones to learn nature magic. _The protective runes resonate, teaching Elior `nature_sense`._
       - Spell Learned: `nature_sense` (forest awareness)
     - Take Boundary Stone Fragment. _Stone Fragment is added to inventory._
-    - Talk to Forest Hermit. _The hermit warns of forest dangers and offers protection._
-      - Quest accepted: "The Hermit's Warning"
-      - Quest completed: "The Hermit's Warning"
     - Receive protective charm from hermit. _Protective Charm is added to inventory._
 
 16. **Forest Entrance:**
@@ -1594,7 +1594,6 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Talk to Ancient Tree Spirit. _The spirit shares wisdom of ages and teaches forest communication._
       - Spell Learned: `forest_speech` (communicate with trees)
     - Take Silver Leaves. _Silver Leaves are added to inventory._
-    - Take Druidic Focus. _Druidic Focus is added to inventory._
     - Help solve the Ancient Grove's puzzle. _Using newly learned magic to assist forest creatures._
       - Quest accepted: "Whispers in the Wind"
 
@@ -1610,8 +1609,9 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 19. **Return to Ancient Grove:**
 
-    - Complete helping forest creatures with newly learned magic. _Full mastery of forest communication aids the spirits._
+    - Complete helping forest creatures with newly learned magic. Ancient forest spirit shows the way to Nyx's home. _Full mastery of forest communication aids the spirits._
       - Quest completed: "Whispers in the Wind"
+      - A pathway to the heart of the forest opens up
 
 20. **Return to The Silver Stag Inn:**
 
@@ -1654,11 +1654,9 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 25. **Heart of the Forest:**
 
-26. **Heart of the Forest:**
-
     - Look at Nyx's tree with all forest tokens. _The magnificent tree glows with recognition._
     - Give offerings to Nyx. _Silver Leaves, Moonflowers, and other forest gifts demonstrate respect._
-      - Items used: `Silver Leaves`, `Moonflowers`, `Druidic Focus` (offerings)
+      - Items used: `Silver Leaves`, `Moonflowers` (offerings)
     - Talk to Nyx. _The forest sprite acknowledges Elior as a true friend of nature._
     - Complete Nyx's trials of wisdom. _Tests of magical knowledge and moral character._
     - Learn ultimate divination magic from Nyx. _She grants the power to see what is to come._
@@ -1669,7 +1667,7 @@ The completion of Act II marks Elior's transformation from a promising young her
       - Spell cast: `prophetic_vision` (divination)
       - Quest completed: "The Gathering Storm"
 
-27. **Return to Castle Courtyard:**
+26. **Return to Castle Courtyard:**
     - Talk to Sir Cedric with new knowledge. _Cedric is amazed by Elior's growth and magical mastery._
     - Share prophetic visions of coming darkness. _The knowledge helps Cedric prepare defenses._
     - Receive Cedric's blessing for the next phase. _The knight pledges his support for future challenges._
@@ -1730,7 +1728,6 @@ This Golden Path ensures that the design rule "all side quests must be completed
 - `Crystal-Clear Water` (purify Elena's curse, general purification)
 - `Silver Leaves` (offering to Nyx)
 - `Moonflowers` (offering to Nyx)
-- `Druidic Focus` (offering to Nyx)
 - (All spells: `mend`, `greater_heal`, `dispel`, `nature_sense`, `forest_speech`, `prophetic_vision` are necessary for progression)
 
 ## Golden Path Item Usage Summary

@@ -15,6 +15,7 @@ class EnhancedLantern(Item):
         if game_state.current_room.name == "Forest Entrance":
             if not game_state.get_story_flag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE):
                 game_state.set_story_flag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, True)
+                self.name = 'enhanced lantern (lit)'
                 result = ("[item_effect]The Enhanced Lantern's crystal core pulses with magical energy, casting "
                     "ethereal blue light that reveals hidden paths through the dense undergrowth. The light "
                     "seems to resonate with the forest's natural magic, illuminating safe routes and warning "

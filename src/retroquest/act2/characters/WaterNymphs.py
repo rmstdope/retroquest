@@ -23,21 +23,29 @@ class WaterNymphs(Character):
         self.current_riddle = 0
         self.riddles = [
             {
-                "question": "I grow without soil, reach without roots, and sing without voice. The older I become, the more rings I show. What am I?",
-                "answer": "tree",
+                "question": "I stand tall and proud, my arms reaching skyward, and sing without voice. The older I become, the more rings I show. What am I?",
+                "answers": ["tree", "trees", "forest"],
                 "explanation": "A tree grows from earth but reaches toward sky, sings in the wind, and shows age through rings."
             },
             {
                 "question": "I am the forest's blood that flows without wound, the sky's gift that falls without being thrown. I give life yet can take it, am soft yet can carve stone. What am I?",
-                "answer": "water",
+                "answers": ["water"],
                 "explanation": "Water is the lifeblood of the forest, falls as rain, nurtures life but can flood, and over time carves through stone."
             },
             {
                 "question": "We are many yet one, small yet mighty, busy yet patient. We build without hands, work without rest, and turn death into life. What are we?",
-                "answer": "insects",
+                "answers": ["insect", "insects", "bug", "bugs", "ant", "ants", "beetle", "beetles"],
                 "explanation": "Insects work as colonies, build complex structures, decompose matter, and are essential to the forest ecosystem."
             }
         ]
+
+    def _get_ordinal_word(self, number):
+        """Convert a number to its ordinal word representation."""
+        ordinals = ["first", "second", "third", "fourth", "fifth"]
+        if 1 <= number <= len(ordinals):
+            return ordinals[number - 1]
+        else:
+            return str(number)  # fallback for numbers beyond our list
 
     def talk_to(self, game_state: GameState) -> str:
         event_msg = f"[event]You approach the [character_name]{self.get_name()}[/character_name] by the sacred stream.[/event]"
@@ -58,12 +66,12 @@ class WaterNymphs(Character):
                     f"[dialogue]The [character_name]{self.get_name()}[/character_name] speak in "
                     f"harmonious, flowing voices like water over stones. 'Welcome, forest walker, "
                     f"to our sacred glade. To prove your wisdom and earn our trust, you must "
-                    f"answer our riddles three. Listen carefully to the {self.current_riddle + 1} riddle:'[/dialogue]\n\n"
+                    f"answer our riddles three. Listen carefully to the {self._get_ordinal_word(self.current_riddle + 1)} riddle:'[/dialogue]\n\n"
                     
                     f"[dialogue]'{riddle['question']}'[/dialogue]\n\n"
                     
                     f"[info]Think carefully and speak your answer when you believe you know it. "
-                    f"Use the command 'say [your answer] to water nymphs' to give your solution.[/info]")
+                    f"Use the command 'say <your_answer> to water nymphs' to give your solution.[/info]")
         else:
             # This shouldn't happen, but just in case
             return (event_msg + "\n" +
@@ -84,7 +92,7 @@ class WaterNymphs(Character):
         riddle = self.riddles[self.current_riddle]
         word_lower = word.lower().strip()
         
-        if word_lower == riddle["answer"]:
+        if word_lower in riddle["answers"]:
             # Correct answer
             self.current_riddle += 1
             
@@ -111,8 +119,6 @@ class WaterNymphs(Character):
                         f"gifts - the crystal-clear water and moonflowers that grow in this "
                         f"sacred place. May they serve you well in your noble quest.'[/dialogue]\n\n"
                         
-                        f"[quest_completed]Quest Completed: The Forest Guardian's Riddles[/quest_completed]\n\n"
-                        
                         f"[info]The water nymphs gesture toward the stream and flowers, making "
                         f"them accessible for you to take.[/info]")
             else:
@@ -120,7 +126,7 @@ class WaterNymphs(Character):
                 next_riddle = self.riddles[self.current_riddle]
                 return (f"[success]Correct! '{word}' is the right answer. {riddle['explanation']}[/success]\n\n"
                         f"[dialogue]The [character_name]{self.get_name()}[/character_name] nod "
-                        f"approvingly. 'Well spoken! Now for the {self.current_riddle + 1} riddle:'[/dialogue]\n\n"
+                        f"approvingly. 'Well spoken! Now for the {self._get_ordinal_word(self.current_riddle + 1)} riddle:'[/dialogue]\n\n"
                         
                         f"[dialogue]'{next_riddle['question']}'[/dialogue]")
         else:

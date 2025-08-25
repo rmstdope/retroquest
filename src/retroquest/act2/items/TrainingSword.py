@@ -20,6 +20,9 @@ class TrainingSword(Item):
                 # First time demonstrating combat skills
                 game_state.set_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS, True)
                 
+                # Remove the training sword from inventory after successful demonstration
+                game_state.remove_item_from_inventory("training sword")
+                
                 return ("[success]You draw the training sword and perform a series of combat forms for "
                         "[character_name]Sir Cedric[/character_name]. Your movements are fluid and precise, "
                         "demonstrating skill with both offensive and defensive techniques.\n\n"

@@ -77,16 +77,10 @@ class AncientTreeSpirit(Character):
             game_state.remove_item_from_inventory("enchanted acorn")
             game_state.set_story_flag(FLAG_GAVE_ACORN_TO_TREE_SPIRIT, True)
             
-            # Teach the forest speech spell
+                        # Teach the forest speech spell
             from ..spells.ForestSpeechSpell import ForestSpeechSpell
             game_state.learn_spell(ForestSpeechSpell())
             game_state.set_story_flag(FLAG_LEARNED_FOREST_SPEECH, True)
-
-            # Also provide the items (Silver Leaves and Druidic Focus)
-            from ..items.SilverLeaves import SilverLeaves
-            from ..items.DruidicFocus import DruidicFocus            
-            game_state.add_item_to_inventory(SilverLeaves())
-            game_state.add_item_to_inventory(DruidicFocus())
 
             # Give the Whispers in the Wind quest
             game_state.set_story_flag(FLAG_WHISPERS_IN_WIND_OFFERED, True)
@@ -106,14 +100,6 @@ class AncientTreeSpirit(Character):
                     f"of communication with the natural world.\n\n"
 
                     f"You have learned the [spell_name]Forest Speech[/spell_name] spell![/success]\n\n"
-
-                    f"[dialogue]'Take these gifts as well, young forest friend.' The spirit extends "
-                    f"branches laden with shimmering silver leaves and offers a crystalline focus "
-                    f"carved from living wood. 'The [item_name]silver leaves[/item_name] will help "
-                    f"you commune with plant life, and the [item_name]druidic focus[/item_name] will "
-                    f"amplify your natural magic.'[/dialogue]\n\n"
-
-                    f"[event]You receive [item_name]silver leaves[/item_name] and [item_name]druidic focus[/item_name]![/event]"
 
                     f"[dialogue]The [character_name]{self.get_name()}[/character_name] regards you "
                     f"with ancient, knowing eyes. 'Now that you can speak with the forest, there "
@@ -139,21 +125,33 @@ class AncientTreeSpirit(Character):
                 game_state.set_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED, True)
                 self.whispers_quest_completed = True
                 
-                return ("[quest_complete]You approach the Ancient Tree Spirit with the sacred items from the "
-                        "Whispering Glade - the Crystal-Clear Water and the Moonflowers. As you present these "
-                        "blessed gifts, the Ancient Tree Spirit's voice fills the grove with warmth and approval.\n\n"
+                # Remove the moonflowers from inventory since they take root at the silver tree
+                game_state.remove_item_from_inventory("moonflowers")
+                
+                return ("You approach the Ancient Tree Spirit with the sacred items from the "
+                        "Whispering Glade - the Crystal-Clear Water and the Moonflowers. At the spirit's gentle "
+                        "guidance, you pour some of the crystal-clear water at the base of the silver tree, "
+                        "where the moonflowers immediately take root in the blessed soil. The Ancient Tree Spirit's "
+                        "voice fills the grove with warmth and approval as the flowers begin to glow with ethereal light.\n\n"
                         
-                        "'You have done well, forest wanderer. The water nymphs have tested your wisdom and found "
+                        "[dialogue]'You have done well, forest wanderer. The water nymphs have tested your wisdom and found "
                         "you worthy. These sacred items - water blessed with purification magic and flowers touched "
                         "by moonlight - are treasures of the forest's heart. You have shown respect for the old ways "
-                        "and proven yourself a true friend to the woodland spirits.'\n\n"
+                        "and proven yourself a true friend to the woodland spirits.'[/dialogue]\n\n"
                         
-                        "The silver leaves on the great tree shimmer more brightly, and you feel a deep sense of "
+                        "The great tree's bark glows more brightly, and you feel a deep sense of "
                         "accomplishment. The forest itself seems to acknowledge your achievement, and the whispers "
                         "in the wind now carry words of welcome and gratitude.\n\n"
                         
-                        "[bold]Quest Complete: 'Whispers in the Wind'[/bold]\n"
-                        "You have successfully communed with the forest spirits and earned their trust.[/quest_complete]")
+                        "[dialogue]'Your dedication has earned you a great privilege, young seeker. I now open the path to "
+                        "the Heart of the Forest - Nyx's sacred home. The way south from here shall be revealed to you.'[/dialogue]\n\n"
+                        
+                        "The spirit's ancient voice takes on a more serious tone.\n\n"
+                        
+                        "[dialogue]'However, know this - Nyx dwells between the realms, and to summon the forest sprite to "
+                        "this plane of existence, you will need three sacred charms. These powerful tokens must be "
+                        "gathered from across the forest realm. Only when you possess all three charms can you "
+                        "call upon Nyx and receive the ultimate wisdom you seek.'[/dialogue]")
             else:
                 # Player only has one of the required items
                 missing_item = "moonflowers" if has_water else "crystal-clear water"

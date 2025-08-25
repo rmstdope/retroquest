@@ -205,6 +205,7 @@ def test_golden_path_act2_completion():
     _check_quests(game.state, ["The Gathering Storm", "The Knight's Test"])
     # Use Training Sword to demonstrate combat skills
     _execute_commands(game, ["use training sword"])
+    _check_item_in_inventory(game.state, "Training Sword", False)
     # Quest "The Knight's Test" should now be completed and "Supplies for the Journey" activated
     _check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey"])
     _check_item_in_inventory(game.state, "Coins", False)
@@ -372,6 +373,7 @@ def test_golden_path_act2_completion():
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Hermit's Warning"])
     # Use Forest Survival Kit to complete the quest
     _execute_commands(game, ["use forest survival kit"])
+    _check_item_in_inventory(game.state, "Forest Survival Kit", should_be_present=False)
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
     # Examine standing stones and get boundary stone fragment
     _execute_commands(game, ["examine stones"])
@@ -408,8 +410,6 @@ def test_golden_path_act2_completion():
     # Give Enchanted Acorn to Ancient Tree Spirit
     _execute_commands(game, ["give enchanted acorn to ancient tree spirit"])
     _check_item_in_inventory(game.state, "Enchanted Acorn", should_be_present=False)
-    _check_item_in_inventory(game.state, "Silver Leaves")
-    _check_item_in_inventory(game.state, "Druidic Focus")
     _check_spell_known(game.state, "forest_speech")
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Forest Guardian's Riddles", "Whispers in the Wind"])
     
@@ -421,12 +421,9 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["cast nature_sense"])
     # Talk to water nymphs to start riddles
     _execute_commands(game, ["talk to water nymphs"])
-    
     # Answer the three riddles correctly using the 'say' command
-    _execute_commands(game, ["say tree to water nymphs"])  # First riddle answer
-    
+    _execute_commands(game, ["say tree to water nymphs"])  # First riddle answer    
     _execute_commands(game, ["say water to water nymphs"])  # Second riddle answer
-    
     _execute_commands(game, ["say insects to water nymphs"])  # Third riddle answer
     
     # Quest "The Forest Guardian's Riddles" should now be completed
@@ -446,6 +443,8 @@ def test_golden_path_act2_completion():
     
     # Complete the "Whispers in the Wind" quest (requires both Crystal-Clear Water and Moonflowers)
     _execute_commands(game, ["give moonflowers to ancient tree spirit"])
+    _check_item_in_inventory(game.state, "Moonflowers", should_be_present=False)
+    _check_item_in_inventory(game.state, "crystal-clear water")
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
     
     # At this point, we have completed steps 1-19 of the golden path!
@@ -561,94 +560,6 @@ def test_golden_path_step_15_forest_transition():
     assert "ancient guardians" in result.lower(), "Should warn about forest dangers"
     assert "dark spirits" in result.lower(), "Should warn about dark spirits"
     _check_item_in_inventory(game.state, "protective charm"), "Should receive protective charm"
-
-def test_golden_path_steps_16_17_combined():
-    """Test the complete workflow of steps 16-17 as a continuous sequence"""
-    game = _create_test_game()
-    
-    # Set up prerequisites (simulate completing steps 14-15)
-    from retroquest.act2.items.EnhancedLantern import EnhancedLantern
-    from retroquest.act2.items.ProtectiveCharm import ProtectiveCharm
-    
-    game.state.inventory.append(EnhancedLantern())
-    game.state.inventory.append(ProtectiveCharm())
-    
-    # Set story flags that would be set from completing previous steps
-    game.state.set_story_flag("hermits_warning_completed", True)
-    game.state.set_story_flag("forest_transition_kit_used", True)
-    game.state.set_story_flag("nature_sense_learned", True)
-    
-    # Add the nature_sense spell that would have been learned in previous steps
-    from retroquest.act2.spells.NatureSenseSpell import NatureSenseSpell
-    game.state.learn_spell(NatureSenseSpell())
-    
-    # Navigate to Forest Entrance
-    game.state.current_room = game.state.all_rooms["ForestEntrance"]
-    
-    # Execute the complete step 16-17 sequence
-    forest_entrance_commands = [
-        "use protective charm",
-        "use enhanced lantern",
-        "examine enchanted acorn",
-        "take enchanted acorn",
-        "talk to forest sprites"
-    ]
-    
-    for command in forest_entrance_commands:
-        result = game.handle_command(command)
-        assert result, f"Command '{command}' should produce output"
-    
-    # Move to Ancient Grove and complete step 17
-    game.state.current_room = game.state.all_rooms["AncientGrove"]
-    
-    ancient_grove_commands = [
-        "look at silver-barked tree",
-        "give enchanted acorn to ancient tree spirit",
-        "talk to ancient tree spirit",
-        "examine silver leaves",
-        "take silver leaves",
-        "examine druidic focus",
-        "take druidic focus"
-    ]
-    
-    for command in ancient_grove_commands:
-        result = game.handle_command(command)
-        assert result, f"Command '{command}' should produce output"
-    
-    # Verify the complete state after both steps
-    expected_flags = [
-        "protective_charm_used_forest_entrance",
-        "enhanced_lantern_used_forest_entrance", 
-        "forest_map_used_forest_entrance",
-        "enchanted_acorn_taken",
-        "silver_tree_examined",
-        "enchanted_acorn_given",
-        "ancient_tree_spirit_met",
-        "forest_speech_learned",
-        "silver_leaves_taken",
-        "druidic_focus_taken"
-    ]
-    
-    # for flag in expected_flags:
-    
-    # Verify final inventory and spells
-    expected_items = [
-        "enhanced lantern", "protective charm",
-        "silver leaves", "druidic focus"
-    ]
-    for item_name in expected_items:
-        _check_item_in_inventory(game.state, item_name)
-    
-    expected_spells = ["nature_sense", "forest_speech"]
-    for spell_name in expected_spells:
-        _check_spell_known(game.state, spell_name)
-    
-    # Verify quests are available
-    riddles_quest = next((quest for quest in game.state.activated_quests if quest.name == "The Forest Guardian's Riddles"), None)
-    whispers_quest = next((quest for quest in game.state.activated_quests if quest.name == "Whispers in the Wind"), None)
-    assert riddles_quest is not None, "The Forest Guardian's Riddles quest should be activated"
-    assert whispers_quest is not None, "Whispers in the Wind quest should be activated"
-
 
 def test_whispering_glade_riddle_system():
     """Test the water nymph riddle system in detail for step 18."""
