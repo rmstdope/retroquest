@@ -608,18 +608,21 @@ Welcome to
         else:
             return f"[failure]You don't see a '{item}' to read here or in your inventory.[/failure]"
 
-    def use(self, item_name_1: str, item_name_2: str = None) -> str:
+    def use(self, item_name_1: str, object_name: str = None) -> str:
         item_obj_1 = self.find_item(item_name_1, look_in_inventory=True, look_in_room=True)
 
         if not item_obj_1:
             return f"[failure]You don't have a '{item_name_1}' to use, and there isn't one here.[/failure]"
 
         # --- Handle two-item usage ---
-        if item_name_2:
-            item_obj_2 = self.find_item(item_name_2, look_in_inventory=True, look_in_room=True)
+        if object_name:
+            item_obj_2 = self.find_item(object_name, look_in_inventory=True, look_in_room=True)
 
             if not item_obj_2:
-                return f"[failure]You don't see a '{item_name_2}' to use with the [item_name]{item_obj_1.get_name()}[/item_name].[/failure]"
+                character_obj_2 = self.find_character(object_name)
+                if character_obj_2:
+                    return item_obj_1.use_on_character(self.state, character_obj_2)
+                return f"[failure]You don't see a '{object_name}' to use with the [item_name]{item_obj_1.get_name()}[/item_name].[/failure]"
 
             if item_obj_1 == item_obj_2:
                 return f"[failure]You can't use the [item_name]{item_obj_1.get_name()}[/item_name] with itself.[/failure]"

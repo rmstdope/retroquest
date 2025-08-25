@@ -447,7 +447,19 @@ def test_golden_path_act2_completion():
     _check_item_in_inventory(game.state, "crystal-clear water")
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
     
-    # At this point, we have completed steps 1-19 of the golden path!
+    # Step 20: Return to The Silver Stag Inn to cure Elena
+    # Navigate back to The Silver Stag Inn: Ancient Grove -> Forest Entrance -> Forest Transition -> Mountain Path -> Greendale Gates -> Main Square -> Market District -> Silver Stag Inn
+    _execute_commands(game, ["go north", "go west", "go west", "go north", "go north", "go east", "go north"])
+    _check_current_room(game.state, "The Silver Stag Inn")
+    # Cure Elena using the magical healing sequence
+    _execute_commands(game, ["cast greater_heal on barmaid elena", "use crystal-clear water with barmaid elena", "cast dispel on barmaid elena"])
+    _check_item_in_inventory(game.state, "crystal-clear water")
+    _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan"])
+    # Talk to Marcus to receive the Druidic Charm
+    _execute_commands(game, ["talk to innkeeper marcus"])
+    _check_item_in_inventory(game.state, "druidic charm")    
+    
+    # At this point, we have completed steps 1-20 of the golden path!
 
 def test_main_square_navigation_restriction():
     """Test that Main Square navigation is restricted until city map is used"""
@@ -611,43 +623,6 @@ def test_whispering_glade_riddle_system():
 def test_quest_prerequisites_validation():
     """Test validation of quest prerequisites for steps 18-19."""
     game = _create_test_game()
-
-def test_item_examination_and_usage():
-    """Test item examination and usage functionality for steps 18-19."""
-    game = _create_test_game()
-    
-    # Set up Whispering Glade with completed riddles and add the items to the room
-    from retroquest.act2.items.CrystalClearWater import CrystalClearWater
-    from retroquest.act2.items.Moonflowers import Moonflowers
-    
-    game.state.current_room = game.state.all_rooms["WhisperingGlade"]
-    game.state.set_story_flag("water_nymph_riddles_completed", True)
-    
-    # Add the items to the room (they would normally be added by quest completion)
-    crystal_water = CrystalClearWater()
-    moonflowers = Moonflowers()
-    game.state.current_room.add_item(crystal_water)
-    game.state.current_room.add_item(moonflowers)
-    
-    # Examine items before taking
-    result = game.handle_command("examine crystal-clear water")
-    assert "item_description" in result.lower() or "sacred" in result.lower()
-    
-    result = game.handle_command("examine moonflowers")
-    assert "item_description" in result.lower() or "ethereal" in result.lower()
-    
-    # Take items and test their usage
-    game.handle_command("take crystal-clear water")
-    game.handle_command("take moonflowers")
-    
-    # Test Crystal-Clear Water usage in different contexts
-    result = game.handle_command("use crystal-clear water")
-    # Updated to match actual response format - it shows contextual message about significance
-    assert "purification" in result.lower() or "healing" in result.lower()
-    
-    # Test Moonflowers usage
-    result = game.handle_command("use moonflowers")
-    assert "healing" in result.lower() or "magical" in result.lower()
 
 
 def test_forest_transition_spell_learning():

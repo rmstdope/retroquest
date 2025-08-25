@@ -15,12 +15,10 @@ class GreaterHealSpell(Spell):
                 "need of healing nearby.[/success]")
 
     def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
-        # This method can be used for healing specific characters like Elena
+        # Special handling for Elena's curse
         if target_character.get_name().lower() == "barmaid elena":
-            return (f"[success]You cast [spell_name]greater_heal[/spell_name] on [character_name]{target_character.get_name()}[/character_name]. "
-                    f"Powerful healing energy flows through her, beginning to battle the dark curse that afflicts her. "
-                    f"The spell makes significant progress, but breaking the curse completely will require additional "
-                    f"purification and dispelling magic.[/success]")
+            # Check if Elena has the receive_greater_heal method and call it
+            return target_character.receive_greater_heal(game_state)
         else:
             return (f"[success]You cast [spell_name]greater_heal[/spell_name] on [character_name]{target_character.get_name()}[/character_name]. "
                     f"Healing energy flows through them, restoring their vitality and curing any minor ailments they may have had.[/success]")

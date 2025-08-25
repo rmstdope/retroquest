@@ -3,7 +3,8 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..items.RoomKey import RoomKey
 from ..items.Coins import Coins
-from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE
+from ..items.DruidicCharm import DruidicCharm
+from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE, FLAG_INNKEEPERS_DAUGHTER_COMPLETED
 
 class InnkeeperMarcus(Character):
     def __init__(self) -> None:
@@ -20,8 +21,29 @@ class InnkeeperMarcus(Character):
             "A good night's rest in a private room can work wonders for mind and body."
         ]
         self.dialogue_index = 0
+        self.has_given_charm = False
 
     def talk_to(self, game_state: GameState) -> str:
+        if game_state.get_story_flag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED):
+            if not self.has_given_charm:
+                # First time speaking after Elena is cured - give the Druidic Charm
+                self.has_given_charm = True
+                druidic_charm = DruidicCharm()
+                game_state.add_item_to_inventory(druidic_charm)
+                
+                return ("[character_name]Innkeeper Marcus[/character_name]: *tears of joy in his eyes* "
+                        "You have given me back my daughter! There are no words to express my gratitude. "
+                        "This [item_name]druidic charm[/item_name] has been in my family for generations - "
+                        "it was blessed by the ancient druids who first settled in these lands. Please, "
+                        "take it as a token of our eternal gratitude. May it bring you protection and "
+                        "guidance on your heroic journey!\n\n"
+                        "[success]Marcus places the sacred charm in your hands with reverence. You can "
+                        "feel the ancient magic thrumming within the carved wood.[/success]")
+            else:
+                return ("[character_name]Innkeeper Marcus[/character_name]: My daughter is healthy and "
+                        "happy again, all thanks to you! The Silver Stag Inn will always be your home. "
+                        "Whatever you need - rooms, meals, information - it's yours freely.")
+        
         # Build wares information
         wares_info = "I can offer you:\n"
         if self.wares:

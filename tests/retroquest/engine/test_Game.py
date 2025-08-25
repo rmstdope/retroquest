@@ -534,6 +534,7 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
         self.requires_pickup = False
         self.use_called_with_state = None
         self.use_with_called_with_state_and_item = None
+        self.use_on_character_called_with = None  # Added for character use tracking
         self.read_called_with_state = None
         self.listen_called_with_state = None # Added for listen tests
 
@@ -553,6 +554,11 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
     def use_with(self, game_state, other_item):
         self.use_with_called_with_state_and_item = (game_state, other_item)
         return f"You used the [item]{self.get_name()}[/item] with [item]{other_item.get_name()}[/item]."
+
+    def use_on_character(self, game_state, target_character):
+        """Default implementation - items can't be used on characters."""
+        self.use_on_character_called_with = (game_state, target_character)
+        return f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] on [character_name]{target_character.get_name()}[/character_name].[/failure]"
 
     def read(self, game_state):
         self.read_called_with_state = game_state
@@ -637,6 +643,148 @@ def test_use_item_with_itself(game):
     result = game.use("widget", "widget")
     assert result == "[failure]You can't use the [item_name]widget[/item_name] with itself.[/failure]"
     assert item1.use_with_called_with_state_and_item is None
+
+# --- Tests for 'use <item> on <character>' command ---
+
+class MockItemWithCharacterUse(MockItemToUse):
+    """Mock item that can be used on characters."""
+    def __init__(self, name, short_name=None, description="A mock item that can be used on characters."):
+        super().__init__(name, short_name, description)
+        self.use_on_character_called_with = None
+
+    def use_on_character(self, game_state, target_character):
+        self.use_on_character_called_with = (game_state, target_character)
+        return f"You used the [item_name]{self.get_name()}[/item_name] on [character_name]{target_character.get_name()}[/character_name]."
+
+def test_use_item_on_character_successful(game):
+    """Test using an item on a character when the item supports it."""
+    healing_potion = MockItemWithCharacterUse(name="healing potion")
+    wounded_soldier = MockCharacter("wounded soldier")
+    
+    game.state.add_item_to_inventory(healing_potion)
+    game.state.current_room.add_character(wounded_soldier)
+    
+    result = game.use("healing potion", "wounded soldier")
+    
+    assert result == "You used the [item_name]healing potion[/item_name] on [character_name]wounded soldier[/character_name]."
+    assert healing_potion.use_on_character_called_with == (game.state, wounded_soldier)
+
+def test_use_item_on_character_item_from_room(game):
+    """Test using an item from the room on a character."""
+    bandages = MockItemWithCharacterUse(name="bandages")
+    injured_traveler = MockCharacter("injured traveler")
+    
+    game.state.current_room.add_item(bandages)
+    game.state.current_room.add_character(injured_traveler)
+    
+    result = game.use("bandages", "injured traveler")
+    
+    assert result == "You used the [item_name]bandages[/item_name] on [character_name]injured traveler[/character_name]."
+    assert bandages.use_on_character_called_with == (game.state, injured_traveler)
+
+def test_use_item_on_character_not_supported(game):
+    """Test using an item that doesn't support use_on_character method."""
+    regular_item = MockItemToUse(name="apple")  # Has default use_on_character method
+    hungry_person = MockCharacter("hungry person")
+    
+    game.state.add_item_to_inventory(regular_item)
+    game.state.current_room.add_character(hungry_person)
+    
+    result = game.use("apple", "hungry person")
+    
+    # Should use the default use_on_character implementation which returns a failure message
+    assert "[failure]You can't use the [item_name]apple[/item_name] on [character_name]hungry person[/character_name].[/failure]" in result
+    assert regular_item.use_on_character_called_with == (game.state, hungry_person)
+
+def test_use_item_on_nonexistent_character(game):
+    """Test using an item on a character that doesn't exist."""
+    magic_wand = MockItemWithCharacterUse(name="magic wand")
+    game.state.add_item_to_inventory(magic_wand)
+    
+    result = game.use("magic wand", "unicorn")
+    
+    assert "You don't see a 'unicorn' to use with the [item_name]magic wand[/item_name]" in result
+    assert magic_wand.use_on_character_called_with is None
+
+def test_use_item_on_character_case_insensitive(game):
+    """Test that using items on characters is case-insensitive."""
+    crystal = MockItemWithCharacterUse(name="Crystal Shard")
+    wizard = MockCharacter("Wise Wizard")
+    
+    game.state.add_item_to_inventory(crystal)
+    game.state.current_room.add_character(wizard)
+    
+    result = game.use("crystal shard", "wise wizard")
+    
+    assert result == "You used the [item_name]Crystal Shard[/item_name] on [character_name]Wise Wizard[/character_name]."
+    assert crystal.use_on_character_called_with == (game.state, wizard)
+
+def test_use_item_on_character_item_not_found(game):
+    """Test using a non-existent item on a character."""
+    friendly_npc = MockCharacter("friendly npc")
+    game.state.current_room.add_character(friendly_npc)
+    
+    result = game.use("nonexistent item", "friendly npc")
+    
+    assert result == "[failure]You don't have a 'nonexistent item' to use, and there isn't one here.[/failure]"
+
+def test_use_item_on_character_prefers_item_over_character_for_second_param(game):
+    """Test that when object_name matches both an item and character, it prefers the item for use_with."""
+    tool = MockItemToUse(name="hammer")
+    target_item = MockItemToUse(name="target")
+    target_character = MockCharacter("target")  # Same name as item
+    
+    game.state.add_item_to_inventory(tool)
+    game.state.add_item_to_inventory(target_item)
+    game.state.current_room.add_character(target_character)
+    
+    result = game.use("hammer", "target")
+    
+    # Should use hammer with target item, not target character
+    assert result == "You used the [item]hammer[/item] with [item]target[/item]."
+    assert tool.use_with_called_with_state_and_item == (game.state, target_item)
+
+def test_use_item_on_character_when_no_item_match(game):
+    """Test that when object_name doesn't match any item, it tries character."""
+    staff = MockItemWithCharacterUse(name="healing staff")
+    patient = MockCharacter("patient")
+    
+    game.state.add_item_to_inventory(staff)
+    game.state.current_room.add_character(patient)
+    
+    # Make sure there's no item named "patient"
+    assert not any(item.get_name().lower() == "patient" for item in game.state.inventory)
+    assert not any(item.get_name().lower() == "patient" for item in game.state.current_room.items)
+    
+    result = game.use("healing staff", "patient")
+    
+    assert result == "You used the [item_name]healing staff[/item_name] on [character_name]patient[/character_name]."
+    assert staff.use_on_character_called_with == (game.state, patient)
+
+class MockItemWithoutCharacterUse(MockItemToUse):
+    """Mock item that explicitly doesn't support use_on_character."""
+    def __init__(self, name, short_name=None):
+        super().__init__(name, short_name)
+        # Deliberately override use_on_character to simulate old behavior
+    
+    def use_on_character(self, game_state, target_character):
+        """Override to return the same failure message as the default Item implementation."""
+        self.use_on_character_called_with = (game_state, target_character)  # Track the call
+        return f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] on [character_name]{target_character.get_name()}[/character_name].[/failure]"
+
+def test_use_item_without_character_support_on_character(game):
+    """Test using an item that doesn't have use_on_character method on a character."""
+    regular_sword = MockItemWithoutCharacterUse(name="sword")
+    enemy = MockCharacter("goblin")
+    
+    game.state.add_item_to_inventory(regular_sword)
+    game.state.current_room.add_character(enemy)
+    
+    result = game.use("sword", "goblin")
+    
+    # Should use the default use_on_character implementation which returns a failure message
+    assert "[failure]You can't use the [item_name]sword[/item_name] on [character_name]goblin[/character_name].[/failure]" in result
+    assert regular_sword.use_on_character_called_with == (game.state, enemy)
 
 # --- Tests for 'read <item>' command ---
 

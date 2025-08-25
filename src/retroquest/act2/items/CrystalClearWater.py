@@ -16,27 +16,15 @@ class CrystalClearWater(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state) -> str:
-        current_room = game_state.current_room.name
-        if "silver stag inn" in current_room.lower():
-            # This should be used to purify Elena's curse
-            return ("The [item_name]crystal-clear water[/item_name] glows with purification magic. "
-                    "It should be used on someone who needs cleansing from dark enchantments.")
-        elif "ancient grove" in current_room.lower():
-            return ("The [item_name]crystal-clear water[/item_name] resonates with the sacred "
-                    "energy of this grove, ready to be used for powerful purification rituals.")
+    def use_on_character(self, game_state, target_character) -> str:
+        """Use crystal-clear water on a character to purify them."""
+        # Special handling for Elena's curse purification
+        if target_character.get_name().lower() == "barmaid elena":
+            return target_character.receive_crystal_water_purification(game_state)
         else:
-            return ("The [item_name]crystal-clear water[/item_name] remains inert here. "
-                    "It likely has special significance in places of healing or purification.")
-
-# TODO Is this ever used?
-    def picked_up(self, game_state) -> str:
-        """Called when the item is picked up by the player."""
-        if game_state.current_room.name == "Whispering Glade":
-            game_state.set_story_flag(FLAG_CRYSTAL_CLEAR_WATER_TAKEN, True)
-            return ("The water nymphs nod approvingly as you collect their sacred gift. "
-                    "This blessed water will serve you well in breaking dark enchantments.")
-        return ""
+            return (f"The [item_name]crystal-clear water[/item_name] glows faintly when near "
+                    f"[character_name]{target_character.get_name()}[/character_name], but it seems "
+                    f"this blessed water is meant for someone specifically afflicted by dark magic.")
 
     def examine(self, game_state) -> str:
         return ("[event]You examine the [item_name]crystal-clear water[/item_name]. {0} "

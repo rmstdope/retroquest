@@ -15,12 +15,10 @@ class DispelSpell(Spell):
                 "barriers and curses, but finds no active magic to dispel nearby.[/success]")
 
     def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
-        # This method is specifically used for breaking curses like Elena's
+        # Special handling for Elena's curse - final step
         if target_character.get_name().lower() == "barmaid elena":
-            return (f"[success]You cast [spell_name]dispel[/spell_name] on [character_name]{target_character.get_name()}[/character_name]. "
-                    f"Powerful counter-magic flows around her, breaking apart the remaining dark enchantments "
-                    f"that bind the curse. Combined with healing magic and purification, this completely "
-                    f"frees her from the curse's influence![/success]")
+            # Check if Elena has the receive_dispel_final_cure method and call it
+            return target_character.receive_dispel_final_cure(game_state)
         else:
             return (f"[success]You cast [spell_name]dispel[/spell_name] on [character_name]{target_character.get_name()}[/character_name]. "
                     f"Counter-magic flows around them, dispelling any minor enchantments or magical effects "

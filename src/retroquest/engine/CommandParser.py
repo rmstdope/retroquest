@@ -115,10 +115,10 @@ class CommandParser:
             if ' with ' in args_str:
                 parts = args_str.split(' with ', 1)
                 item1_name = parts[0].strip()
-                item2_name = parts[1].strip()
-                if not item1_name or not item2_name:
+                object_name = parts[1].strip()
+                if not item1_name or not object_name:
                     return "You need to specify two items to use with each other. Format: use <item1> with <item2>"
-                return self.game.use(item1_name, item2_name)
+                return self.game.use(item1_name, object_name)
             else:
                 item_name = args_str.strip()
                 if not item_name:
