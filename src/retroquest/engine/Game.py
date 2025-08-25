@@ -6,6 +6,7 @@ import pickle
 import os
 import threading
 import pygame
+from typing import Any, Union
 
 from .Character import Character
 from .CommandParser import CommandParser
@@ -20,7 +21,7 @@ class Game:
     Main Game class for RetroQuest: The Awakening.
     Handles the game loop, command parsing, and room transitions.
     """
-    def __init__(self, act):
+    def __init__(self, act: Act) -> None:
         custom_theme = Theme({
             "character_name": "bold blue",
             "dialogue": "italic cyan",
@@ -65,9 +66,9 @@ class Game:
             responses.append(completed)
         return "\n".join([r for r in responses if r])
 
-    def start_music(self):
+    def start_music(self) -> None:
         """Start act music in a separate thread so it doesn't block the prompt."""
-        def play_music():
+        def play_music() -> None:
             try:
                 pygame.mixer.init()
                 pygame.mixer.music.load(self.act.music_file)
@@ -76,7 +77,7 @@ class Game:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
         threading.Thread(target=play_music, daemon=True).start()
 
-    def get_ascii_logo(self):
+    def get_ascii_logo(self) -> str:
         text = r'''
 Welcome to
 [bold yellow]
@@ -92,7 +93,7 @@ Welcome to
         text += self.act.music_info
         return text
 
-    def print_intro(self):
+    def print_intro(self) -> None:
         self.console.clear()
         self.console.print(self.get_ascii_logo())
         self.session.prompt('Press Enter to continue...')
@@ -100,9 +101,9 @@ Welcome to
         self.console.print(self.act.get_act_intro())
         self.session.prompt('Press Enter to continue...')
 
-    def get_command_completions(self):
+    def get_command_completions(self) -> dict[str, Any]:
         # Helper to build nested dict for multi-word item names
-        def build_nested_names(names):
+        def build_nested_names(names: list[str]) -> dict[str, Any]:
             nested = {}
             for name in names:
                 parts = name.split()
@@ -234,7 +235,7 @@ Welcome to
             completions['dev_execute_commands'] = file_names
 
         # Process completions to split multi-word keys into nested levels
-        def split_multiword_keys(comp_dict):
+        def split_multiword_keys(comp_dict: Any) -> Any:
             if not isinstance(comp_dict, dict):
                 return comp_dict
                 
@@ -281,7 +282,7 @@ Welcome to
             # Print a separator line before any output after a command
             self.console.print('\n' + response + '\n')
 
-    def find_character(self, target) -> Character:
+    def find_character(self, target: str) -> Union[Character, None]:
         character_to_examine = None
         target = target.lower()
         for character in self.state.current_room.get_characters():
@@ -289,7 +290,7 @@ Welcome to
                 character_to_examine = character
         return character_to_examine
 
-    def find_item(self, target, look_in_inventory: bool = True, look_in_room: bool = True) -> Item:
+    def find_item(self, target: str, look_in_inventory: bool = True, look_in_room: bool = True) -> Union[Item, None]:
         """
         Find an item by its name or short name in the inventory and/or current room.
         Returns a tuple of (target_name, item_object) where item_object is None if not found.
@@ -308,7 +309,7 @@ Welcome to
                     item_to_examine = item
         return item_to_examine
 
-    def find_all_items(self, target, look_in_inventory: bool = True, look_in_room: bool = True) -> list:
+    def find_all_items(self, target: str, look_in_inventory: bool = True, look_in_room: bool = True) -> list[Item]:
         """
         Find all items by their name or short name in the inventory and/or current room.
         Returns a list of all matching items.
@@ -549,7 +550,7 @@ Welcome to
         else:
             return f"[failure]There is no character named '[character_name]{character_name}[/character_name]' here to speak to.[/failure]"
 
-    def split_command(self, command_args: str, command: str, delimiter: str) -> tuple:
+    def split_command(self, command_args: str, command: str, delimiter: str) -> tuple[Union[str, None], Union[str, None], str]:
         # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"
         parts = command_args.lower().split()
         if delimiter not in parts:

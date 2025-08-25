@@ -1,8 +1,10 @@
+from typing import Any, Union
+
 class GameState:
     """
     Holds the mutable state of the currently played game: current room, inventory, history, and visited rooms.
     """
-    def __init__(self, starting_room, all_rooms, all_quests) -> None:
+    def __init__(self, starting_room: Any, all_rooms: dict, all_quests: list) -> None:
         self.current_room = starting_room
         self.all_rooms = all_rooms
         # Inventory supports carrying multiple items of the same type, displayed as batched counts
@@ -15,7 +17,7 @@ class GameState:
         self.activated_quests = []  # This will hold quests that have been activated
         self.completed_quests = []  # This will hold quests that have been completed
 
-    def mark_visited(self, room) -> None:
+    def mark_visited(self, room: Any) -> None:
         if room.name not in self.visited_rooms:
             self.visited_rooms.append(room.name)
 
@@ -34,7 +36,7 @@ class GameState:
                 return value
         return False
 
-    def get_inventory_summary(self) -> dict:
+    def get_inventory_summary(self) -> dict[str, int]:
         """Returns a dictionary with item names as keys and counts as values."""
         item_counts = {}
         for item in self.inventory:
@@ -106,12 +108,12 @@ class GameState:
         
         return len(items_to_remove)
 
-    def add_item_to_inventory(self, item_object, count: int = 1) -> None:
+    def add_item_to_inventory(self, item_object: Any, count: int = 1) -> None:
         """Adds an item object to the player's inventory, optionally multiple times."""
         for _ in range(count):
             self.inventory.append(item_object)
 
-    def learn_spell(self, spell_object) -> None:
+    def learn_spell(self, spell_object: Any) -> None:
         """Adds a spell object to the player's known spells if not already learned."""
         if not self.has_spell(spell_object.name):
             self.known_spells.append(spell_object)
@@ -179,7 +181,7 @@ class GameState:
             lines.append("(none)")
         return "\n".join(lines)
 
-    def activate_quests(self):
+    def activate_quests(self) -> Union[str, None]:
         """
         Checks non_activated_quests for any that should be activated (triggered).
         Moves newly activated quests to activated_quests and returns a string describing them,
@@ -202,7 +204,7 @@ class GameState:
             return "New quest(s) activated:\n" + "\n".join(quest_lines)
         return None
 
-    def complete_quests(self):
+    def complete_quests(self) -> Union[str, None]:
         """
         Checks activated_quests for any that are now completed.
         Moves newly completed quests to completed_quests and returns a string describing them,
@@ -225,7 +227,7 @@ class GameState:
             return "Quest(s) completed:\n" + "\n".join(completion_lines)
         return None
 
-    def update_quests(self):
+    def update_quests(self) -> Union[str, None]:
         """
         Checks activated_quests for any that should update their quest log (dynamic quest log updates).
         Returns a string describing updated quests, or None if no quest log was updated.
@@ -242,7 +244,7 @@ class GameState:
             return "Quest log updated:\n" + "\n".join(update_lines)
         return None
 
-    def get_room(self, room_name: str):
+    def get_room(self, room_name: str) -> Union[Any, None]:
         """
         Returns the room object matching the given room_name (case-insensitive, matches against all room names).
         Returns None if not found.
@@ -252,7 +254,7 @@ class GameState:
                 return room
         return None
 
-    def get_item(self, item_name: str):
+    def get_item(self, item_name: str) -> Union[Any, None]:
         """
         Returns the item object matching the given item_name (case-insensitive),
         searching first in the player's inventory, then in all rooms.
@@ -270,7 +272,7 @@ class GameState:
                     return room_item
         return None
 
-    def get_quest(self, quest_name: str):
+    def get_quest(self, quest_name: str) -> Union[Any, None]:
         """
         Returns the quest object matching the given quest_name (case-insensitive),
         searching in non_activated_quests, activated_quests, and completed_quests.
@@ -283,7 +285,7 @@ class GameState:
                     return quest
         return None
 
-    def activate_quest(self):
+    def activate_quest(self) -> Union[str, None]:
         """
         Checks non_activated_quests for the first quest that should be activated (triggered).
         Moves the newly activated quest to activated_quests and returns a string describing it,
@@ -297,7 +299,7 @@ class GameState:
                 return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
         return None
 
-    def update_quest(self):
+    def update_quest(self) -> Union[str, None]:
         """
         Checks activated_quests for the first quest that should update its quest log (dynamic quest log updates).
         Returns a string describing the updated quest, or None if no quest log was updated.
@@ -308,7 +310,7 @@ class GameState:
                 return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
         return None
 
-    def complete_quest(self):
+    def complete_quest(self) -> Union[str, None]:
         """
         Checks activated_quests for the first quest that is now completed.
         Moves the newly completed quest to completed_quests and returns a string describing it,
