@@ -1,9 +1,11 @@
+from typing import Union
+
 class Act:
     """
     Represents a collection of rooms, quests, items, and characters for a given act in the game.
     This is a simple container class to help organize content by act.
     """
-    def __init__(self, name, rooms, quests, music_file=None, music_info=''):
+    def __init__(self, name: str, rooms: dict, quests: list, music_file: Union[str, None] = None, music_info: str = '') -> None:
         self.name = name
         self.rooms = rooms
         self.quests = quests

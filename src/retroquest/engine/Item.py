@@ -1,5 +1,5 @@
 from .GameState import GameState
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .Character import Character
@@ -10,7 +10,7 @@ class Item:
     Inherit from this class to define specific items.
     """
     
-    def __init__(self, name: str, description: str, short_name: str = None, can_be_carried: bool = False) -> None:
+    def __init__(self, name: str, description: str, short_name: Union[str, None] = None, can_be_carried: bool = False) -> None:
         self.name = name
         self.description = description
         self.short_name = short_name if short_name is not None else name
@@ -22,7 +22,7 @@ class Item:
     def get_short_name(self) -> str:
         return self.short_name
     
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> Union[str, None]:
         """Return a message if the item cannot be picked up. Override in subclasses for special cases."""
         return None if self.can_be_carried_flag else f"[failure]You can't take the [item_name]{self.get_name()}[/item_name].[/failure]"
 
@@ -50,7 +50,7 @@ class Item:
         """Base 'listen' method for items. Subclasses should override this if they make a sound."""
         return f"[failure]The [item_name]{self.get_name()}[/item_name] is silent.[/failure]"
 
-    def picked_up(self, game_state: GameState) -> str | None:
+    def picked_up(self, game_state: GameState) -> Union[str, None]:
         """Called when the item is picked up by the player. Subclasses can override this."""
         return None # Default behavior: no message or action
 
