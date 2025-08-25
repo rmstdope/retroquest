@@ -72,27 +72,27 @@ In the Main Square, the heart of Greendale pulsed with activity around a grand f
 
 ## Chapter 11: Meeting Sir Cedric
 
-At the Castle Approach, Elior presented his pass from his grandmother to the Herald, gaining formal audience rights. The Herald explained the protocol for meeting the knight, and soon Elior stood in the Castle Courtyard where Sir Cedric explained "The Gathering Storm" quest—dark forces were gathering, and allies with magical knowledge were desperately needed.
+At the Castle Approach, Elior presented his Entry Pass to the Herald, gaining formal audience rights. The Herald explained the protocol for meeting the knight, and soon Elior stood in the Castle Courtyard where Sir Cedric explained "The Gathering Storm" quest—dark forces were gathering, and allies with magical knowledge were desperately needed.
 
 To prove his worth, Elior demonstrated his combat skills with the training sword, earning Cedric's respect and completing "The Knight's Test." The knight's approval opened new possibilities for Elior's mission, establishing him as a recognized ally in the fight against the growing darkness.
 
 ## Chapter 12: Gathering Supplies in the Market
 
-In Greendale's Market District, narrow streets packed with shops and trading posts created a maze of commerce. Elior used the merchant's flyer as an introduction to Master Merchant Aldric and accepted quests to gather essential supplies for forest expeditions and help find Caravan Master Thorne's lost caravan. He purchased a Forest Survival Kit and other equipment with coins earned from his village adventures.
+In Greendale's Market District, narrow streets packed with shops and trading posts created a maze of commerce. Elior used the merchant's flyer as an introduction to Master Merchant Aldric and accepted quests to gather essential supplies for forest expeditions and help find Caravan Master Thorne's lost caravan. He purchased a Forest Survival Kit and Enhanced Lantern together from Aldric, getting both essential pieces of equipment with coins earned from his village adventures.
 
 At The Silver Stag Inn, Elior met Innkeeper Marcus, who shared local rumors and spoke of his daughter Elena's mysterious curse. The barmaid appeared sickly, clearly affected by dark magic, and Elior accepted the quest to help break the curse that plagued her. Renting a room with a key from Marcus, he studied a Traveler's Journal in private, gathering historical references that would prove important later.
 
 ## Chapter 13: Advanced Learning
 
-Returning to purchase more equipment from Master Merchant Aldric—an Enhanced Lantern and Quality Rope—Elior completed his supply gathering quest. In the castle's Great Hall, he presented his grandmother's pass formally to the nobility and shared the Traveler's Journal with historians, leading to discoveries about Willowbrook's connection to ancient powers in historical records.
+Returning to purchase Quality Rope from Master Merchant Aldric—the final piece of equipment needed for forest expeditions—Elior completed his supply gathering quest. In the castle's Great Hall, he presented his Entry Pass formally to the nobility and shared the Traveler's Journal with historians, leading to discoveries about Willowbrook's connection to ancient powers in historical records.
 
 In the Residential Quarter, Elior assisted elderly residents with his walking stick, demonstrating compassion that earned the community's trust. Watching local craftsmen repair items, he learned the mend spell through careful observation—practical magic that would prove essential for accessing ancient knowledge.
 
 ## Chapter 14: The Hidden Library and Healing Arts
 
-Elior discovered a concealed entrance to a Hidden Library beneath the Residential Quarter. Using his newly learned mend spell to repair damaged protective enchantments, he gained access to ancient knowledge. The Spectral Librarian, a ghostly guardian, tested his worthiness and revealed hints about his family heritage while granting access to an Ancient Spellbook that taught him the dispel spell.
+Elior discovered a concealed entrance to a Hidden Library beneath the Residential Quarter. Using his newly learned mend spell to repair damaged protective enchantments, he gained access to ancient knowledge. The Spectral Librarian, a ghostly guardian, tested his worthiness and revealed hints about his family heritage while granting access to an Ancient Spellbook that taught him the dispel spell. From the library's treasures, he also acquired a Crystal Focus—an artifact that would prove essential for the healing arts.
 
-At the Healer's House, Master Healer Lyria recognized his magical potential and offered advanced training. Through careful instruction with healing herbs, Elior mastered the greater_heal spell and gained practical experience helping treat patients with an Advanced Healing Potion, establishing himself as a skilled healer.
+At the Healer's House, Master Healer Lyria recognized his magical potential but explained her desperate situation—she had patients on the brink of death who required more than ordinary healing. When Elior presented her with the Crystal Focus from the Hidden Library, her eyes lit with hope. Using the focus to amplify her healing magic for the critically injured, Lyria was able to save lives that had seemed lost. Through careful instruction and with the crystal focus demonstrating the heights of healing magic, Elior mastered the greater_heal spell and gained invaluable practical experience treating the most severe cases.
 
 ## Chapter 15: Entering the Enchanted Forest
 
