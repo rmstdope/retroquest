@@ -103,7 +103,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Prerequisites:** Building relationship with castle inhabitants
   - **Dependencies:** Must complete "Echoes of the Past" for research materials
   - **Completion:** Help Cedric reclaim his honor by solving the mystery of his past disgrace and clearing his name with evidence
-  - **Rewards:** Cedric's deeper trust, Royal Seal
+  - **Rewards:** Cedric's deeper trust, Royal Seal, Nature's Charm (third of three sacred charms needed to summon Nyx)
   - **Story Impact:** Strengthens alliance with key character
 
 - **Name:** The Innkeeper's Daughter
@@ -113,7 +113,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Prerequisites:** Access to The Silver Stag Inn
   - **Dependencies:** Must learn `greater_heal` and `dispel` spells, need Crystal-Clear Water
   - **Completion:** Break the curse using a combination of Elior's growing magical abilities and items found throughout Greendale
-  - **Rewards:** Innkeeper's gratitude, curse-breaking experience
+  - **Rewards:** Innkeeper's gratitude, curse-breaking experience, Druidic Charm
   - **Story Impact:** Demonstrates growing magical power, saves innocent life
 
 - **Name:** The Ancient Library
@@ -135,7 +135,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Prerequisites:** Access to Forest Transition
   - **Dependencies:** Must complete all Greendale phase quests
   - **Completion:** Earn the hermit's trust and receive crucial warnings about the dangers that lie ahead in the forest, plus a protective charm
-  - **Rewards:** Protective Charm, Forest Guide, safety warnings
+  - **Rewards:** Protective Charm (one of three sacred charms needed to summon Nyx), Forest Guide, safety warnings
   - **Story Impact:** Provides essential forest survival knowledge
 
 - **Name:** The Forest Guardian's Riddles
@@ -155,7 +155,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Prerequisites:** Access to Ancient Grove
   - **Dependencies:** Must have `forest_speech` spell and forest tokens
   - **Completion:** Help forest creatures with small problems, earning their guidance and learning preparatory spells needed to communicate with Nyx
-  - **Rewards:** Forest spirit alliance, Silver Leaves
+  - **Rewards:** Forest spirit alliance
   - **Story Impact:** Establishes connection with forest realm
 
 #### Optional Exploration Quests
@@ -582,6 +582,10 @@ A three-story inn with warm yellow light spilling from its windows. The common r
   - Present: From start (hidden, found by searching trophy displays)
   - Can be carried: Yes
   - Useful: Yes
+- **Druidic Charm**
+  - Present: Later (given by Innkeeper Marcus after breaking Elena's curse)
+  - Can be carried: Yes
+  - Useful: Yes
 
 #### Spells
 
@@ -742,6 +746,10 @@ An expansive courtyard within the castle walls, featuring training grounds where
   - Useful: Yes
 - **Squire's Diary**
   - Present: From start (hidden, found by searching under stone benches)
+  - Can be carried: Yes
+  - Useful: Yes
+- **Nature's Charm**
+  - Present: Later (given by Sir Cedric after completing "Cedric's Lost Honor")
   - Can be carried: Yes
   - Useful: Yes
 
@@ -1001,6 +1009,10 @@ The boundary between the civilized mountain paths and the wild Enchanted Forest.
   - Present: Later (given by hermit)
   - Can be carried: Yes
   - Useful: Yes
+- **Protective Charm**
+  - Present: Later (given by Forest Hermit after earning trust)
+  - Can be carried: Yes
+  - Useful: Yes
 - **Hermit's Cache**
   - Present: From start (hidden, found by searching around standing stones)
   - Can be carried: Yes
@@ -1085,10 +1097,6 @@ A circular clearing dominated by trees so old and massive they seem to touch the
 
 - **Ancient Tree Bark**
   - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Silver Leaves**
-  - Present: Later (given by tree spirit after offering)
   - Can be carried: Yes
   - Useful: Yes
 - **Sacred Rune Stone**
@@ -1209,6 +1217,7 @@ The deepest part of the Enchanted Forest, where reality seems more fluid and mag
 #### Usable Items
 
 - All forest-related items reach their full potential here
+- Offering Altar: Place the three sacred charms (Druidic Charm, Protective Charm, and Nature's Charm) to summon Nyx for the final wisdom trials
 
 #### Characters
 
@@ -1593,7 +1602,6 @@ The completion of Act II marks Elior's transformation from a promising young her
       - Item used: `Enchanted Acorn` (offering)
     - Talk to Ancient Tree Spirit. _The spirit shares wisdom of ages and teaches forest communication._
       - Spell Learned: `forest_speech` (communicate with trees)
-    - Take Silver Leaves. _Silver Leaves are added to inventory._
     - Help solve the Ancient Grove's puzzle. _Using newly learned magic to assist forest creatures._
       - Quest accepted: "Whispers in the Wind"
 
@@ -1622,6 +1630,8 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Cast `dispel` to break the final curse bindings. _The counter-magic completely frees Elena._
       - Spell cast: `dispel` (curse breaking)
       - Quest completed: "The Innkeeper's Daughter"
+    - Receive Druidic Charm from grateful Innkeeper Marcus. _Marcus presents an ancient charm as thanks for saving his daughter._
+      - Item obtained: `Druidic Charm`
 
 21. **Search for Lost Caravan (Forest Areas):**
 
@@ -1651,12 +1661,16 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Gather evidence of Cedric's innocence. _Ancient Chronicle and witness testimony clear his name._
     - Present evidence to Lord Commander. _Official vindication restores Cedric's honor._
       - Quest completed: "Cedric's Lost Honor"
+    - Receive Nature's Charm from Cedric. _In gratitude, Cedric presents a sacred charm blessed by ancient knights._
+      - Item received: `Nature's Charm` (third sacred charm)
 
 25. **Heart of the Forest:**
 
     - Look at Nyx's tree with all forest tokens. _The magnificent tree glows with recognition._
-    - Give offerings to Nyx. _Silver Leaves, Moonflowers, and other forest gifts demonstrate respect._
-      - Items used: `Silver Leaves`, `Moonflowers` (offerings)
+    - Use the three sacred charms to summon Nyx. _Place Druidic Charm, Protective Charm, and Nature's Charm on the offering altar._
+      - Items used: `Druidic Charm`, `Protective Charm`, and `Nature's Charm` (summoning ritual)
+    - Give offerings to Nyx. _Moonflowers and other forest gifts demonstrate respect._
+      - Items used: `Moonflowers` (offerings)
     - Talk to Nyx. _The forest sprite acknowledges Elior as a true friend of nature._
     - Complete Nyx's trials of wisdom. _Tests of magical knowledge and moral character._
     - Learn ultimate divination magic from Nyx. _She grants the power to see what is to come._
@@ -1722,12 +1736,13 @@ This Golden Path ensures that the design rule "all side quests must be completed
 - `Quality Rope` (traverse difficult forest terrain for caravan rescue)
 - `Crystal Focus` (enhance magical understanding in Hidden Library)
 - `Boundary Stone Fragment` (locate ancient paths for caravan rescue)
-- `Protective Charm` (ward off hostile spirits at Forest Entrance)
 - `Forest Map Fragment` (safe navigation in Forest Entrance)
 - `Enchanted Acorn` (offering to Ancient Tree Spirit)
 - `Crystal-Clear Water` (purify Elena's curse, general purification)
-- `Silver Leaves` (offering to Nyx)
 - `Moonflowers` (offering to Nyx)
+- `Druidic Charm` (first of three sacred charms needed to summon Nyx)
+- `Protective Charm` (second of three sacred charms needed to summon Nyx)
+- `Nature's Charm` (third of three sacred charms needed to summon Nyx)
 - (All spells: `mend`, `greater_heal`, `dispel`, `nature_sense`, `forest_speech`, `prophetic_vision` are necessary for progression)
 
 ## Golden Path Item Usage Summary
