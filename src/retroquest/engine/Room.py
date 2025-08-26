@@ -1,3 +1,4 @@
+from typing import Union
 from .Item import Item  # Added import
 from .Character import Character # Added import
 from .GameState import GameState  # Added for GameState type hint
@@ -7,7 +8,7 @@ class Room:
     Base class for all rooms in RetroQuest.
     Inherit from this class to define specific rooms.
     """
-    def __init__(self, name: str, description: str, items: list = None, characters: list = None, exits: dict = None) -> None:
+    def __init__(self, name: str, description: str, items: Union[list[Item], None] = None, characters: Union[list[Character], None] = None, exits: Union[dict[str, str], None] = None) -> None:
         self.name = name
         self.description = description
         self.items = items if items is not None else []
@@ -18,7 +19,7 @@ class Room:
         """Called when the player enters the room."""
         print(self.description)
 
-    def get_items(self) -> list:
+    def get_items(self) -> list[Item]:
         return self.items
 
     def add_item(self, item: Item) -> None:
@@ -29,17 +30,17 @@ class Room:
         """Adds a character to the room's list of characters."""
         self.characters.append(character)
 
-    def get_characters(self) -> list:
+    def get_characters(self) -> list[Character]:
         return self.characters
 
-    def get_exits(self, game_state: GameState) -> dict:
+    def get_exits(self, game_state: GameState) -> dict[str, str]:
         return self.exits
 
     def get_ambient_sound(self) -> str:
         """Returns a description of the ambient sound of the room."""
         return "It is quiet here."
 
-    def get_item_by_name(self, item_name: str) -> Item | None:
+    def get_item_by_name(self, item_name: str) -> Union[Item, None]:
         """
         Retrieves an item from the room by its name (case-insensitive).
         Returns the item object if found, otherwise None.
@@ -50,7 +51,7 @@ class Room:
                 return item
         return None
 
-    def get_character_by_name(self, character_name: str): # type: ignore
+    def get_character_by_name(self, character_name: str) -> Union[Character, None]:
         """
         Retrieves a character from the room by its name (case-insensitive).
         Returns the character object if found, otherwise None.
@@ -61,7 +62,7 @@ class Room:
                 return character
         return None
 
-    def remove_item(self, item_name: str) -> Item | None:
+    def remove_item(self, item_name: str) -> Union[Item, None]:
         """
         Removes an item from the room by its name (case-insensitive).
         Returns the item object if removed, otherwise None.

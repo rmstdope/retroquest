@@ -1,3 +1,4 @@
+from typing import Any, Union
 from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, Input
 from textual.containers import Horizontal, Vertical
@@ -24,7 +25,7 @@ class RetroQuestApp(App):
     STATE_SAVING = 3
     STATE_QUITTING = 4
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.controller = GameController(Act2())
         self.state = self.STATE_LOGO
@@ -67,7 +68,7 @@ class RetroQuestApp(App):
         self.spell_panel.update_spells([])
         self.command_input.focus()  # Remove 'await' here, as focus() is not async
 
-    def open_popup(self, border_text: str, text: str, popup_type):
+    def open_popup(self, border_text: str, text: str, popup_type: PopupType) -> None:
         try:
             self.get_widget_by_id("popup")
         except NoMatches:
@@ -120,7 +121,7 @@ class RetroQuestApp(App):
                 return
             self.execute(command)
 
-    def execute(self, command: str):
+    def execute(self, command: str) -> None:
         result = self.controller.handle_command(command)
         self.result_panel.update_result(result)
         room = self.controller.look()

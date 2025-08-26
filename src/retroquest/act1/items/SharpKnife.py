@@ -10,7 +10,7 @@ class SharpKnife(Item):
             can_be_carried=True
         )
 
-    def use_with(self, game_state: GameState, other_item: Item) -> str:
+    def use_with(self, game_state, other_item: Item) -> str:
         from .Vines import Vines  # Local import for isinstance check
         if isinstance(other_item, Vines):
             return other_item.use_with(game_state, self)

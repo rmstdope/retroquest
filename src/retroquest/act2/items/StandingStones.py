@@ -4,6 +4,7 @@ from ..Act2StoryFlags import (
     FLAG_NATURE_SENSE_LEARNED
 )
 from ..spells.NatureSenseSpell import NatureSenseSpell
+from ...engine.GameState import GameState
 
 class StandingStones(Item):
     def __init__(self) -> None:
@@ -19,7 +20,7 @@ class StandingStones(Item):
         )
         self.examined = False
 
-    def examine(self, game_state) -> str:
+    def examine(self, game_state: GameState) -> str:
         """Examine the standing stones to learn about their magic."""
         if not self.examined:
             self.examined = True

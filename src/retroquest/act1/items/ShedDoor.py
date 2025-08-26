@@ -1,8 +1,9 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from typing import Any
 
 class ShedDoor(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="shed door",
             description = f"It's a sturdy wooden [item_name]door[/item_name], locked tight. There's a keyhole visible.",
@@ -10,7 +11,7 @@ class ShedDoor(Item):
         )
         self.locked = True
 
-    def use_with(self, game_state, other_item) -> str: 
+    def use_with(self, game_state: GameState, other_item: Item) -> str: 
         from .Key import Key
         if other_item and isinstance(other_item, Key): # Changed to use isinstance
             if self.locked:

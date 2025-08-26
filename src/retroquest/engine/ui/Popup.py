@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Any
 from textual.containers import VerticalScroll
 from textual.widgets import Static
 from textual import events
@@ -9,7 +10,7 @@ class PopupType(Enum):
     QUESTION = "question"
 
 class Popup(VerticalScroll):
-    def __init__(self, border_text: str, text: str, popup_type: PopupType):
+    def __init__(self, border_text: str, text: str, popup_type: PopupType) -> None:
         super().__init__(id = "popup")
         self.can_focus = True
         self.animation_duration = 0.3  # Duration for all animations in seconds
@@ -18,7 +19,7 @@ class Popup(VerticalScroll):
         self.tooltip = "Popup Dialog"
         self.set_content(border_text, text, popup_type)
 
-    def set_content(self, border_text: str, text: str, popup_type: PopupType):
+    def set_content(self, border_text: str, text: str, popup_type: PopupType) -> None:
         if self.is_mounted:
             # Animate out, update content, then animate back in
             self.styles.animate("opacity", 0.0, duration=self.animation_duration, on_complete=lambda: self._update_content_and_fade_in(border_text, text, popup_type))
@@ -26,7 +27,7 @@ class Popup(VerticalScroll):
             # Widget not mounted yet, set content directly
             self._update_content(border_text, text, popup_type)
     
-    def _update_content(self, border_text: str, text: str, popup_type: PopupType):
+    def _update_content(self, border_text: str, text: str, popup_type: PopupType) -> None:
         """Internal method to update the popup content."""
         self.border_title = apply_theme(border_text)
         self.text_area.update(apply_theme(text))
@@ -36,7 +37,7 @@ class Popup(VerticalScroll):
         else:
             self.static.update("Press Enter to close")
     
-    def _update_content_and_fade_in(self, border_text: str, text: str, popup_type: PopupType):
+    def _update_content_and_fade_in(self, border_text: str, text: str, popup_type: PopupType) -> None:
         """Update content and fade back in."""
         self._update_content(border_text, text, popup_type)
         self.styles.animate("opacity", 1.0, duration=self.animation_duration)
@@ -51,11 +52,11 @@ class Popup(VerticalScroll):
             elif event.key.lower() == "n":
                 self.app.close_popup(response="n")
 
-    def compose(self):
+    def compose(self) -> Any:
         yield self.text_area
         yield self.static
 
-    def on_mount(self):
+    def on_mount(self) -> None:
         self.text_area.focus()
         # Animate opacity from 0.0 to 1.0 for a fade-in effect
         self.styles.opacity = 0.0

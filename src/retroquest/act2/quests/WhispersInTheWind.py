@@ -1,4 +1,5 @@
 from ...engine.Quest import Quest
+from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
     FLAG_WHISPERS_IN_WIND_OFFERED,
     FLAG_WHISPERS_IN_WIND_COMPLETED
@@ -17,15 +18,15 @@ class WhispersInTheWind(Quest):
             completion="You have communed with the Water Nymphs in the Whispering Glade, solved their ancient riddles, and earned their sacred gifts. By returning these blessed items to the Ancient Tree Spirit, you have proven yourself a true friend to the woodland spirits and earned the forest's trust."
         )
 
-    def check_trigger(self, game_state) -> bool:
+    def check_trigger(self, game_state: GameState) -> bool:
         """Check if this quest should be activated."""
         return game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_OFFERED)
 
-    def check_completion(self, game_state) -> bool:
+    def check_completion(self, game_state: GameState) -> bool:
         """Check if the quest can be completed based on story flags."""
         return game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED) and not self.is_completed_flag
 
-    def complete(self, game_state) -> str:
+    def complete(self, game_state: GameState) -> str:
         """Complete the quest and give rewards."""
         if not self.is_completed_flag:
             self.is_completed_flag = True

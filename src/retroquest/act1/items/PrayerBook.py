@@ -9,7 +9,7 @@ class PrayerBook(Item):
             short_name="book"
         )
 
-    def read(self, game_state) -> str:
+    def read(self, game_state: GameState) -> str:
         event_msg = f"[event]You read the [item_name]{self.get_name()}[/item_name].\n"
         return event_msg + (
             "The pages shimmer with shifting runes and cryptic sigils. As you try to focus, the words seem to rearrange themselves: "

@@ -1,5 +1,6 @@
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_MENDED_LIBRARY_ENCHANTMENTS
+from ...engine.GameState import GameState
 
 class ProtectiveEnchantments(Item):
     def __init__(self) -> None:
@@ -15,7 +16,7 @@ class ProtectiveEnchantments(Item):
             can_be_carried=False,
         )
 
-    def examine(self, game_state) -> str:
+    def examine(self, game_state: GameState) -> str:
         if game_state.get_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS):
             return ("The [item_name]protective enchantments[/item_name] now glow steadily with restored power. "
                     "The magical barriers around the most valuable texts have been successfully repaired, "
@@ -25,5 +26,5 @@ class ProtectiveEnchantments(Item):
                     "of damage from the passage of time. These ancient magical barriers need to be repaired "
                     "with restoration magic before they can properly protect the library's most precious texts.")
 
-    def use_item(self, game_state) -> str:
+    def use_item(self, game_state: GameState) -> str:
         return "[info]The protective enchantments are magical barriers, not something you can use directly.[/info]"

@@ -1,8 +1,9 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
+from typing import Any
 
 class HintOfMagicQuest(Quest):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="Hint of Magic",
             description=(

@@ -1,5 +1,6 @@
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_ENCHANTED_ACORN_TAKEN
+from ...engine.GameState import GameState
 
 class EnchantedAcorn(Item):
     def __init__(self) -> None:
@@ -16,7 +17,7 @@ class EnchantedAcorn(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state) -> str:
+    def use(self, game_state: GameState) -> str:
         current_room = game_state.current_room.name
         if "ancient grove" in current_room.lower():
             # This should be handled by the room or character interaction
@@ -30,7 +31,7 @@ class EnchantedAcorn(Item):
             return ("The [item_name]enchanted acorn[/item_name] feels dormant here. It likely "
                     "has special significance in a more magical location.")
 
-    def picked_up(self, game_state) -> str:
+    def picked_up(self, game_state: GameState) -> str:
         """Called when the item is picked up by the player."""
         from ..rooms.ForestEntrance import ForestEntrance  # Import here to avoid circular imports
         
@@ -41,7 +42,7 @@ class EnchantedAcorn(Item):
                     "The forest sprites whisper approvingly as you claim this gift.")
         return ""
 
-    def examine(self, game_state) -> str:
+    def examine(self, game_state: GameState) -> str:
         return ("[event]You examine the [item_name]enchanted acorn[/item_name]. {0} "
                 "When you hold it up to the light, you can see tiny veins of silver running "
                 "through the shell like tree roots. The acorn seems to whisper in a language "

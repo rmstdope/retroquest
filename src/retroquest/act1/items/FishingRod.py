@@ -2,9 +2,10 @@ from ...engine.Item import Item
 from .Magnet import Magnet
 from .MagneticFishingRod import MagneticFishingRod
 from ...engine.GameState import GameState
+from typing import Any
 
 class FishingRod(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="fishing rod",
             short_name="rod",
@@ -12,7 +13,7 @@ class FishingRod(Item):
             can_be_carried=True
         )
 
-    def use_with(self, game_state: GameState, other_item: Item) -> str:
+    def use_with(self, game_state, other_item: Item) -> str:
         if isinstance(other_item, Magnet):
             # Only allow combining if the spell 'purify' is learned
             if game_state.has_spell('purify'):

@@ -9,7 +9,7 @@ class EliorsJournal(Item):
             short_name="journal"
         )
 
-    def read(self, game_state) -> str:
+    def read(self, game_state: GameState) -> str:
         entry = (
             "The ink is slightly smudged on this page, as if written in haste or with a trembling hand...\n\n"
             "[dialogue]\"What a night. The wind howled like a hungry wolf, and rain lashed against the shutters. "

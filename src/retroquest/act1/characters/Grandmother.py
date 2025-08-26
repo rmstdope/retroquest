@@ -20,7 +20,7 @@ class Grandmother(Character):
             "given_berries": False,
         }
 
-    def talk_to(self, game_state) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         dialogue = ""
         if self.dialogue_state["initial_talk"]:
             dialogue = (

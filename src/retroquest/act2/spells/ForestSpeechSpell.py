@@ -1,6 +1,8 @@
+from typing import Any
 from ...engine.Spell import Spell
 from ..Act2StoryFlags import FLAG_FOUND_RAVINE
 from ..items.Ravine import Ravine
+from ...engine.GameState import GameState
 
 class ForestSpeechSpell(Spell):
     def __init__(self) -> None:
@@ -58,7 +60,7 @@ class ForestSpeechSpell(Spell):
                     "of any plants nearby, but the spell would be much more powerful in a "
                     "forest or natural environment.[/info]")
 
-    def cast_on_character(self, game_state, target_character):
+    def cast_on_character(self, game_state: GameState, target_character: Any) -> str:
         """Allow communication with forest creatures"""
         from ..characters.AncientTreeSpirit import AncientTreeSpirit
         from ..characters.ForestSprites import ForestSprites

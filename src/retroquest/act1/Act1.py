@@ -28,7 +28,7 @@ from retroquest.act1.quests.ShadowsOverWillowbrook import ShadowsOverWillowbrook
 from retroquest.act1.quests.LostLetter import LostLetterQuest
 
 class Act1(Act):
-    def __init__(self):
+    def __init__(self) -> None:
         rooms = {
             "EliorsCottage": EliorsCottage(),
             "VegetableField": VegetableField(),

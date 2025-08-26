@@ -39,7 +39,7 @@ class WaterNymphs(Character):
             }
         ]
 
-    def _get_ordinal_word(self, number):
+    def _get_ordinal_word(self, number: int) -> str:
         """Convert a number to its ordinal word representation."""
         ordinals = ["first", "second", "third", "fourth", "fifth"]
         if 1 <= number <= len(ordinals):

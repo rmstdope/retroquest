@@ -3,6 +3,7 @@ from ..characters.CourtHerald import CourtHerald
 from ..characters.Historians import Historians
 from ..items.AncientChronicle import AncientChronicle
 from ..Act2StoryFlags import FLAG_COURT_HERALD_FORMAL_PRESENTATION, FLAG_RESEARCHED_FAMILY_HERITAGE, FLAG_SHOWED_JOURNAL_TO_HISTORIANS
+from ...engine.GameState import GameState
 
 class GreatHall(Room):
     def __init__(self) -> None:
@@ -19,7 +20,7 @@ class GreatHall(Room):
             exits={"east": "CastleCourtyard"}
         )
 
-    def search(self, game_state) -> str:
+    def search(self, game_state: GameState) -> str:
         """Override search to handle family heritage research"""
         if game_state.get_story_flag(FLAG_COURT_HERALD_FORMAL_PRESENTATION):
             if not game_state.get_story_flag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS):

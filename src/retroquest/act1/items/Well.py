@@ -1,9 +1,10 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..Act1StoryFlags import FLAG_WELL_EXAMINED
+from typing import Any
 
 class Well(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="well",
             description="An old stone well, its surface worn smooth. A frayed rope hangs nearby, disappearing into the depths.",
@@ -26,7 +27,7 @@ class Well(Item):
             self.description = desc
         return super().examine(game_state)
 
-    def use_with(self, game_state, other_item):
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
         from .Bucket import Bucket  # Local import to avoid circular dependency
         from .FishingRod import FishingRod  # Local import to avoid circular dependency
         from .MagneticFishingRod import MagneticFishingRod  # Local import to avoid circular dependency
@@ -37,7 +38,7 @@ class Well(Item):
         
         return super().use_with(game_state, other_item)
 
-    def search(self, game_state) -> str:
+    def search(self, game_state: GameState) -> str:
         if self.is_purified:
             if self.contains_ring:
                 return "[event]You peer into the crystal clear water. A [item_name]shiny ring[/item_name] glints at the bottom, tantalizingly out of reach by hand.[/event]"
@@ -49,7 +50,7 @@ class Well(Item):
             else: # Not purified and no ring (e.g. if it was somehow removed before purification)
                 return "[failure]You peer into the murky depths. It's too dark and unclear to see anything of interest.[/failure]"
 
-    def purify(self, game_state) -> str:
+    def purify(self, game_state: GameState) -> str:
         if not game_state.get_story_flag(FLAG_WELL_EXAMINED):
             return f"[failure]You hesitate. Why would you cast [spell_name]purify[/spell_name] on the [item_name]{self.get_name()}[/item_name]? Perhaps you should examine it first.[/failure]"
         if self.is_purified:

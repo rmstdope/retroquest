@@ -1,5 +1,6 @@
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_MOONFLOWERS_TAKEN
+from ...engine.GameState import GameState
 
 class Moonflowers(Item):
     def __init__(self) -> None:
@@ -16,7 +17,7 @@ class Moonflowers(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state) -> str:
+    def use(self, game_state: GameState) -> str:
         current_room = game_state.current_room.name
         if "healer" in current_room.lower():
             return ("The [item_name]moonflowers[/item_name] would be perfect for Master "
@@ -29,7 +30,7 @@ class Moonflowers(Item):
                     "They likely have special significance for healing or magical purposes.")
 
 # TODO Is this ever used?
-    def picked_up(self, game_state) -> str:
+    def picked_up(self, game_state: GameState) -> str:
         """Called when the item is picked up by the player."""
         from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
         
@@ -40,7 +41,7 @@ class Moonflowers(Item):
                     "blooms will aid in healing and protection magic.")
         return ""
 
-    def examine(self, game_state) -> str:
+    def examine(self, game_state: GameState) -> str:
         return ("[event]You examine the [item_name]moonflowers[/item_name]. {0} "
                 "As you watch, the petals seem to move gently even though there's "
                 "no breeze, and you notice tiny motes of silvery light drifting "

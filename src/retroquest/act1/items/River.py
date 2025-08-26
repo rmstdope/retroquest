@@ -1,9 +1,10 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from .Fish import Fish # Assuming you have a Fish item
+from typing import Any
 
 class River(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="river",
             description="A gentle river, its waters flowing steadily. It looks like a good spot for fishing.",

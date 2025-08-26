@@ -1,4 +1,5 @@
 from ...engine.Room import Room
+from ...engine.GameState import GameState
 
 class WhisperingGlade(Room):
     def __init__(self) -> None:
@@ -23,13 +24,13 @@ class WhisperingGlade(Room):
     #     # Handle answering riddles from water nymphs
     #     if command.startswith("answer "):
     #         answer = command[7:].strip()  # Remove "answer " prefix
-    #         return self._answer_riddle(game_state, answer)
+    #         return self._answer_riddle(game_state: GameState, answer)
     #     elif command == "answer":
-    #         return self._answer_riddle(game_state, "")
+    #         return self._answer_riddle(game_state: GameState, "")
             
     #     return ""  # No command handled
         
-    # def _answer_riddle(self, game_state, answer: str) -> str:
+    # def _answer_riddle(self, game_state: GameState, answer: str) -> str:
     #     """Handle riddle answers directed to the water nymphs."""
     #     if not answer:
     #         return "[error]You must provide an answer to the riddle.[/error]"
@@ -37,6 +38,6 @@ class WhisperingGlade(Room):
     #     # Find the water nymphs character
     #     water_nymphs = next((char for char in self.characters if isinstance(char, WaterNymphs)), None)
     #     if water_nymphs:
-    #         return water_nymphs.answer_riddle(game_state, answer)
+    #         return water_nymphs.answer_riddle(game_state: GameState, answer)
     #     else:
     #         return "[error]There are no water nymphs here to answer.[/error]"

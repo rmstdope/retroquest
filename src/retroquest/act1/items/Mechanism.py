@@ -2,9 +2,10 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 from .MillstoneFragment import MillstoneFragment
 from .Rope import Rope
+from typing import Any
 
 class Mechanism(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="strange mechanism",
             short_name="mechanism",
@@ -20,7 +21,7 @@ class Mechanism(Item):
             self.description = "A strange mechanism with levers and gears that doesn't quite seem to belong to the old mill's original design. It looks like something could be used with it.",
         return super().examine(game_state)
 
-    def use(self, game_state) -> str:
+    def use(self, game_state: GameState) -> str:
         if self.repaired:
             return f"[failure]The [item_name]{self.get_name()}[/item_name] has already been operated.[/failure]"
         return f"[failure]It looks like you need to use something with the [item_name]{self.get_name()}[/item_name].[/failure]"
@@ -47,7 +48,7 @@ class Mechanism(Item):
         else:
             return super().use_with(game_state, other_item)
 
-    def listen(self, game_state) -> str:
+    def listen(self, game_state: GameState) -> str:
         event_msg = f"[event]You listen to the [item_name]{self.get_name()}[/item_name].[/event]\n"
         if self.repaired:
             return event_msg + f"The [item_name]{self.get_name()}[/item_name] is silent now, its purpose served."

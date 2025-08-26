@@ -1,9 +1,10 @@
+from typing import Any
 from textual.widgets import Input
 from textual.events import Key
 from .NestedSuggester import NestedSuggester
 
 class CommandInput(Input):
-    def __init__(self, controller):
+    def __init__(self, controller: Any) -> None:
         super().__init__(placeholder="Press Enter to continue", id="command_input")
         self.controller = controller
         self.tooltip = "Command Input"

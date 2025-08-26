@@ -4,7 +4,7 @@ from retroquest.act1.Act1 import Act1
 
 USE_TEXTUAL_UI = True  # Set to False to use the classic console UI
 
-def main():
+def main() -> None:
     if USE_TEXTUAL_UI:
         app = RetroQuestApp()
         app.run()

@@ -7,6 +7,7 @@ from ..items.Coin import Coin
 from ..items.DullKnife import DullKnife
 from ..items.SharpKnife import SharpKnife # Added import
 from ..items.MillstoneFragment import MillstoneFragment # Added import
+from ...engine.GameState import GameState
 
 class Blacksmith(Character):
     def __init__(self) -> None:
@@ -15,7 +16,7 @@ class Blacksmith(Character):
             description="A burly, skilled craftsman who forges tools and weapons for the village. He is always ready to offer advice or sharpen a blade."
         )
 
-    def talk_to(self, game_state) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         # Example dialog, can be expanded
         event_msg = f"[event]You speak with the [character_name]{self.get_name()}[/character_name].[/event]"
         if game_state.get_story_flag(FLAG_BLACKSMITH_MET):

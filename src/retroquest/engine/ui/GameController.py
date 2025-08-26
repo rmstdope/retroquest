@@ -1,14 +1,15 @@
+from typing import Any
 from ..Game import Game
 from textual.message import Message
 from ..theme import apply_theme
 
 class GameController:
     """Controller to bridge RetroQuest game logic and the Textual UI."""
-    def __init__(self, act):
+    def __init__(self, act: Any) -> None:
         self.game = Game(act)
         self.last_output = ""
 
-    def start(self):
+    def start(self) -> str:
         self.game.start_music()
         # Show ASCII logo at game start
         self.last_output = self.game.get_ascii_logo()

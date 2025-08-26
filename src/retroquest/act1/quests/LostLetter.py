@@ -4,6 +4,7 @@ from ..Act1StoryFlags import (
     FLAG_FOUND_LOST_LETTER,
     FLAG_ASKED_GRANDMOTHER_ABOUT_LETTER
 )
+from typing import Any
 
 # The Lost Letter Quest - Steps to Completion
 # 1. The player searches the floorboard in Elior's Cottage and finds the faded letter.
@@ -15,7 +16,7 @@ from ..Act1StoryFlags import (
 # 7. The quest is now complete and connects to the main story thread.
 
 class LostLetterQuest(Quest):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="The Lost Letter",
             description=(

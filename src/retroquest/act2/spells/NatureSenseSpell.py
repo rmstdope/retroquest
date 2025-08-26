@@ -1,4 +1,5 @@
 from ...engine.Spell import Spell
+from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_NATURE_SENSE_USED_WHISPERING_GLADE
 from ..characters.WaterNymphs import WaterNymphs
 
@@ -16,7 +17,7 @@ class NatureSenseSpell(Spell):
         )
 
 # TODO Fix the checking for name strings below
-    def cast_spell(self, game_state) -> str:
+    def cast_spell(self, game_state: GameState) -> str:
         from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
         
         # Special handling for Whispering Glade

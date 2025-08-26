@@ -7,6 +7,7 @@ from ..Act1StoryFlags import (
     FLAG_CONNECT_WITH_NATURE,
     FLAG_MAGIC_FULLY_UNLOCKED
 )
+from typing import Any
 
 # Shadows Over Willowbrook Quest - Steps to Completion
 # 1. The game starts with a mysterious dream sequence where Elior sees a shadowy figure in the fields.
@@ -18,7 +19,7 @@ from ..Act1StoryFlags import (
 # 7. Complete the Act
 
 class ShadowsOverWillowbrookQuest(Quest):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="Shadows Over Willowbrook",
             description=(

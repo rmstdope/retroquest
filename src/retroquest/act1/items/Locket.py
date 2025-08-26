@@ -2,9 +2,10 @@ from ...engine.Item import Item
 from ...engine.GameState import GameState
 from ..characters.Priest import Priest
 from ..spells.BlessSpell import BlessSpell
+from typing import Any
 
 class Locket(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="locket",
             description="A small, intricately carved silver locket, clearly very old. It feels cool to the touch. Perhaps some elder in the village might know more about it.",

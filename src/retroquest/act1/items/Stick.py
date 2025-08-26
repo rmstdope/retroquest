@@ -9,7 +9,7 @@ class Stick(Item):
             can_be_carried=True,
         )
 
-    def use_with(self, game_state: GameState, other_item: Item) -> str:
+    def use_with(self, game_state, other_item: Item) -> str:
         # If the other item is a MagneticFishingRod, delegate to its use_with
         from .MagneticFishingRod import MagneticFishingRod
         if isinstance(other_item, MagneticFishingRod):

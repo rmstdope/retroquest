@@ -1,9 +1,10 @@
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import FLAG_READ_PHOTO_MESSAGE
+from typing import Any
 
 class FadedPhotograph(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="faded photograph",
             short_name="photograph",

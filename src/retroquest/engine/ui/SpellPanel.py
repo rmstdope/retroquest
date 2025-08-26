@@ -5,7 +5,7 @@ from .Popup import PopupType
 from ..theme import apply_theme
 
 class SpellPanel(VerticalScroll):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(id="spells", classes="selectable-list")
         self.tooltip = "Spell List"
         self.can_focus = False  # Prevent the panel itself from being focused
