@@ -11,7 +11,7 @@ class CourtHerald(Character):
             description="An elaborately dressed official who manages formal presentations and ceremonies at court. He scrutinizes documents and credentials with practiced expertise.",
         )
 
-    def give_item(self, game_state, item_object: Item) -> str:
+    def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to the Court Herald."""
         if isinstance(item_object, EntryPass):
             # Set the formal presentation flag

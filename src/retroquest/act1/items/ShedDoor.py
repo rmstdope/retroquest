@@ -11,7 +11,7 @@ class ShedDoor(Item):
         )
         self.locked = True
 
-    def use_with(self, game_state: GameState, other_item) -> str: 
+    def use_with(self, game_state: GameState, other_item: Item) -> str: 
         from .Key import Key
         if other_item and isinstance(other_item, Key): # Changed to use isinstance
             if self.locked:
