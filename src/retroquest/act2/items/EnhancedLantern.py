@@ -12,7 +12,9 @@ class EnhancedLantern(Item):
         )
 
     def use(self, game_state: GameState) -> str:
-        if game_state.current_room.name == "Forest Entrance":
+        from ..rooms.ForestEntrance import ForestEntrance  # Import here to avoid circular imports
+        
+        if isinstance(game_state.current_room, ForestEntrance):
             if not game_state.get_story_flag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE):
                 game_state.set_story_flag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, True)
                 self.name = 'enhanced lantern (lit)'

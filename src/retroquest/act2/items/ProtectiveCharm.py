@@ -15,7 +15,9 @@ class ProtectiveCharm(Item):
         )
 
     def use(self, game_state) -> str:
-        if game_state.current_room.name == "Forest Entrance":
+        from ..rooms.ForestEntrance import ForestEntrance  # Import here to avoid circular imports
+        
+        if isinstance(game_state.current_room, ForestEntrance):
             if not game_state.get_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE):
                 game_state.set_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, True)
                 result = ("[spell_effect]The Protective Charm radiates a warm, golden light as you invoke its power. "

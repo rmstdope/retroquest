@@ -26,7 +26,9 @@ class GateCaptain(Character):
                 return ("The Gate Captain has already returned to his duties and is no longer present.")
 
     def give_item(self, game_state: GameState, item) -> str:
-        if item.get_name().lower() == "entry pass":
+        from ..items.EntryPass import EntryPass  # Import here to avoid circular imports
+        
+        if isinstance(item, EntryPass):
             if self.entry_pass_given:
                 return f"You have already shown the entry pass to the [character]{self.name}[/character]. He waves you through with respect."
             
