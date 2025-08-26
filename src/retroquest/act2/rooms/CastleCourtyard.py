@@ -1,6 +1,10 @@
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..characters.SirCedric import SirCedric
+from ..characters.TrainingMaster import TrainingMaster
+from ..characters.Squires import Squires
+from ..items.SquiresDiary import SquiresDiary
+from ..Act2StoryFlags import FLAG_SQUIRES_TALKED_TO
 
 class CastleCourtyard(Room):
     def __init__(self) -> None:
@@ -12,6 +16,27 @@ class CastleCourtyard(Room):
                 "The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses."
             ),
             items=[],
-            characters=[SirCedric()],
+            characters=[SirCedric(), TrainingMaster(), Squires()],
             exits={"east": "CastleApproach", "north": "ResidentialQuarter", "west": "GreatHall"}
         )
+        self.diary_found = False
+
+    def search(self, game_state: GameState) -> str:
+        """Search the room for hidden items."""
+        if not self.diary_found:
+            # Check if squires have been talked to first
+            if not game_state.get_story_flag(FLAG_SQUIRES_TALKED_TO):
+                return ("[event]You search around the stone benches and training equipment, but you don't find anything "
+                        "of particular interest. The squires are watching you curiously - perhaps you should talk to them "
+                        "first to learn more about this place.[/event]")
+            
+            # Add the squire's diary when searching under stone benches (after talking to squires)
+            diary = SquiresDiary()
+            self.add_item(diary)
+            self.diary_found = True
+            return ("[event]You search around the stone benches and training equipment. Remembering what the squires told you, "
+                    "you look more carefully under one of the ancient stone benches and discover a worn leather diary that "
+                    "appears to have been left by a former squire.[/event]\n\n"
+                    "[success]You found a [item_name]squire's diary[/item_name]![/success]")
+        else:
+            return "[info]You've already searched this area thoroughly.[/info]"
