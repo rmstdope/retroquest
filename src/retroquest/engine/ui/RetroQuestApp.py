@@ -27,7 +27,7 @@ class RetroQuestApp(App):
 
     def __init__(self) -> None:
         super().__init__()
-        self.controller = GameController(Act2())
+        self.controller = GameController([Act1(), Act2()])
         self.state = self.STATE_LOGO
         self._popup_queue = []
         self._focus_before_popup = None

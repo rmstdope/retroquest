@@ -21,7 +21,7 @@ class Game:
     Main Game class for RetroQuest: The Awakening.
     Handles the game loop, command parsing, and room transitions.
     """
-    def __init__(self, act: Act) -> None:
+    def __init__(self, acts: list[Act]) -> None:
         custom_theme = Theme({
             "character_name": "bold blue",
             "dialogue": "italic cyan",
@@ -38,11 +38,12 @@ class Game:
         self.completer = NestedCompleter.from_nested_dict({})
         self.session = PromptSession(completer=self.completer, complete_while_typing=True)
         self.is_running = True
-        # Use the first room in act.rooms as the starting room
-        starting_room = next(iter(act.rooms.values())) if act.rooms else None
-        self.state = GameState(starting_room, all_rooms=act.rooms, all_quests=act.quests)
+        self.acts = acts
+        self.current_act = 0
+        # Use the first room in current act's rooms as the starting room
+        starting_room = next(iter(self.acts[self.current_act].rooms.values()))
+        self.state = GameState(starting_room, all_rooms=self.acts[self.current_act].rooms, all_quests=self.acts[self.current_act].quests)
         self.command_parser = CommandParser(self)
-        self.act = act
         self.describe_room = False  # Flag to indicate if we need to describe the room after a command
 
     def handle_command(self, command: str) -> str:
@@ -71,7 +72,7 @@ class Game:
         def play_music() -> None:
             try:
                 pygame.mixer.init()
-                pygame.mixer.music.load(self.act.music_file)
+                pygame.mixer.music.load(self.current_act.music_file)
                 # pygame.mixer.music.play(loops=-1)  # Loop indefinitely
             except Exception as e:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
@@ -90,7 +91,7 @@ Welcome to
 ##     ## #########    ##    ##     ##  #######   #######   #######  #########  #######     ##.
 [/bold yellow]
 [bold]Music track:[/bold] '''
-        text += self.act.music_info
+        text += self.acts[self.current_act].music_info
         return text
 
     def print_intro(self) -> None:
@@ -98,7 +99,7 @@ Welcome to
         self.console.print(self.get_ascii_logo())
         self.session.prompt('Press Enter to continue...')
         self.console.clear()
-        self.console.print(self.act.get_act_intro())
+        self.console.print(self.acts[self.current_act].get_act_intro())
         self.session.prompt('Press Enter to continue...')
 
     def get_command_completions(self) -> dict[str, Any]:

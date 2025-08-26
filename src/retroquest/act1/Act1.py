@@ -1,5 +1,5 @@
-from engine.GameState import GameState
-from engine.Act import Act
+from retroquest.engine.GameState import GameState
+from retroquest.engine.Act import Act
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
 from retroquest.act1.rooms.VegetableField import VegetableField
 from retroquest.act1.rooms.ChickenCoop import ChickenCoop

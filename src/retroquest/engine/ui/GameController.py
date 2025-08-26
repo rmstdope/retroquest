@@ -1,12 +1,12 @@
-from typing import Any
+from ..Act import Act
 from ..Game import Game
 from textual.message import Message
 from ..theme import apply_theme
 
 class GameController:
     """Controller to bridge RetroQuest game logic and the Textual UI."""
-    def __init__(self, act: Any) -> None:
-        self.game = Game(act)
+    def __init__(self, acts: list[Act]) -> None:
+        self.game = Game(acts)
         self.last_output = ""
 
     def start(self) -> str:
@@ -85,7 +85,7 @@ class GameController:
 
     def get_act_intro(self) -> str:
         """Get the act introduction text."""
-        return self.game.act.get_act_intro()
+        return self.game.acts[self.game.current_act].get_act_intro()
 
     def look(self) -> str:
         """Execute the look command and return result."""

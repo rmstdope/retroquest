@@ -1,4 +1,4 @@
-from engine import GameState
+from retroquest.engine import GameState
 from retroquest.engine.Act import Act
 from retroquest.act2.rooms.MountainPath import MountainPath
 from retroquest.act2.rooms.GreendaleGates import GreendaleGates
