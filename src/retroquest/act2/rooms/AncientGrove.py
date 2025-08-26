@@ -19,7 +19,7 @@ class AncientGrove(Room):
             exits={"north": "ForestEntrance", "south": "HeartOfTheForest"}
         )
 
-    def get_exits(self, game_state: GameState = None) -> dict[str, str]:
+    def get_exits(self, game_state: GameState) -> dict[str, str]:
         """Override get_exits to conditionally show the south exit."""
         base_exits = {"north": "ForestEntrance"}
         
