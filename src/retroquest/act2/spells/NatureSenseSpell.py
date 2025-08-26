@@ -16,11 +16,12 @@ class NatureSenseSpell(Spell):
             )
         )
 
+# TODO Fix the checking for name strings below
     def cast_spell(self, game_state: GameState) -> str:
-        current_room = game_state.current_room.name
+        from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
         
         # Special handling for Whispering Glade
-        if current_room == "Whispering Glade":
+        if isinstance(game_state.current_room, WhisperingGlade):
             if not game_state.get_story_flag(FLAG_NATURE_SENSE_USED_WHISPERING_GLADE):
                 game_state.set_story_flag(FLAG_NATURE_SENSE_USED_WHISPERING_GLADE, True)
                 # Add the Water Nymphs to the room when first cast
@@ -37,14 +38,14 @@ class NatureSenseSpell(Spell):
                     "[info]Your [spell_name]Nature's Sense[/spell_name] reveals the familiar presence of the water nymphs "
                     "by the sacred stream, their forms visible and welcoming.[/info]"
                 )
-        elif "forest" in current_room.lower() or "enchanted" in current_room.lower():
+        elif "forest" in game_state.current_room.name.lower() or "enchanted" in game_state.current_room.name.lower():
             # In forest areas, provide enhanced sensory information
             return ("[success]You cast [spell_name]Nature's Sense[/spell_name] and feel your awareness "
                    "expand throughout the surrounding forest. The whisper of leaves speaks of safe "
                    "passages, the rustle of small creatures warns of predators, and the very air "
                    "reveals the health of the woodland. You sense several hidden paths that wind "
                    "through the trees, offering safer routes through the wilderness.[/success]")
-        elif "transition" in current_room.lower():
+        elif "transition" in game_state.current_room.name.lower():
             # In transition areas, help detect magical boundaries
             return ("[success]You cast [spell_name]Nature's Sense[/spell_name] and feel the magical "
                    "boundaries that separate different realms. The spell reveals the ebb and flow "

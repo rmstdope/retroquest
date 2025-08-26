@@ -11,3 +11,5 @@ class Pass(Item):
 
     def use(self, game_state: GameState) -> str:
         return "You examine the pass from your grandmother. The formal seal and recommendation should grant you access to restricted areas and formal audiences with nobility."
+    
+    # TODO Should Pass and EntryPass be the same item?

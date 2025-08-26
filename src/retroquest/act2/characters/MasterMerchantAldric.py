@@ -55,7 +55,9 @@ class MasterMerchantAldric(Character):
 
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to Master Merchant Aldric"""
-        if "flyer" in item_object.get_name().lower():
+        from ..items.MerchantsFlyer import MerchantsFlyer
+        
+        if isinstance(item_object, MerchantsFlyer):
             # Remove the flyer from inventory
             if item_object in game_state.inventory:
                 game_state.inventory.remove(item_object)

@@ -22,7 +22,9 @@ class Herald(Character):
 
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to the Herald"""
-        if "pass" in item_object.get_name().lower():
+        from ..items.Pass import Pass
+        
+        if isinstance(item_object, Pass):
             game_state.current_room.enable_castle_courtyard()
             self.received_pass = True
             return ("[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name].[/event]\n"

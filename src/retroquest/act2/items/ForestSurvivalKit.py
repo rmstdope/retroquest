@@ -12,9 +12,11 @@ class ForestSurvivalKit(Item):
         )
 
     def use(self, game_state: GameState) -> str:
+        from ..rooms.ForestTransition import ForestTransition  # Import here to avoid circular imports
+        
         # Check if we're in Forest Transition for special handling
         current_room = game_state.current_room
-        if current_room.name == "Forest Transition":
+        if isinstance(current_room, ForestTransition):
             game_state.set_story_flag(FLAG_HERMITS_WARNING_COMPLETED, True)
             
             # Remove the forest survival kit from inventory after successful use

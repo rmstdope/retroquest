@@ -14,10 +14,14 @@ class SuppliesForTheJourneyQuest(Quest):
         return game_state.get_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS)
 
     def check_completion(self, game_state: GameState) -> bool:
+        from ..items.ForestSurvivalKit import ForestSurvivalKit
+        from ..items.EnhancedLantern import EnhancedLantern
+        from ..items.QualityRope import QualityRope
+        
         if not self.is_completed_flag:
-            has_survival_kit = any(item.get_name().lower() == "forest survival kit" for item in game_state.inventory)
-            has_lantern = any(item.get_name().lower() == "enhanced lantern" for item in game_state.inventory)
-            has_rope = any(item.get_name().lower() == "quality rope" for item in game_state.inventory)
+            has_survival_kit = any(isinstance(item, ForestSurvivalKit) for item in game_state.inventory)
+            has_lantern = any(isinstance(item, EnhancedLantern) for item in game_state.inventory)
+            has_rope = any(isinstance(item, QualityRope) for item in game_state.inventory)
             
             if has_survival_kit and has_lantern and has_rope:
                 self.is_completed_flag = True

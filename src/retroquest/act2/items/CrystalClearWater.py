@@ -19,8 +19,10 @@ class CrystalClearWater(Item):
 
     def use_on_character(self, game_state: GameState, target_character) -> str:
         """Use crystal-clear water on a character to purify them."""
+        from ..characters.BarmaidElena import BarmaidElena  # Import here to avoid circular imports
+        
         # Special handling for Elena's curse purification
-        if target_character.get_name().lower() == "barmaid elena":
+        if isinstance(target_character, BarmaidElena):
             return target_character.receive_crystal_water_purification(game_state)
         else:
             return (f"The [item_name]crystal-clear water[/item_name] glows faintly when near "

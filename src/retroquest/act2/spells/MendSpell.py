@@ -15,8 +15,10 @@ class MendSpell(Spell):
                 "looking for something to repair, but finds nothing that needs mending nearby.[/success]")
 
     def cast_on_item(self, game_state: GameState, target_item: Item) -> str:
+        from ..items.ProtectiveEnchantments import ProtectiveEnchantments  # Import here to avoid circular imports
+        
         # Special handling for protective enchantments in Hidden Library
-        if target_item.get_name().lower() == "protective enchantments":
+        if isinstance(target_item, ProtectiveEnchantments):
             if not game_state.get_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS):
                 game_state.set_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS, True)
                 return ("[success]You cast [spell_name]mend[/spell_name] on the damaged [item_name]protective enchantments[/item_name]. "

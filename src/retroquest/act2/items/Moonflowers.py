@@ -32,7 +32,9 @@ class Moonflowers(Item):
 # TODO Is this ever used?
     def picked_up(self, game_state: GameState) -> str:
         """Called when the item is picked up by the player."""
-        if game_state.current_room.name == "Whispering Glade":
+        from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
+        
+        if isinstance(game_state.current_room, WhisperingGlade):
             game_state.set_story_flag(FLAG_MOONFLOWERS_TAKEN, True)
             return ("The moonflowers seem to approve of your gentle touch, their "
                     "silvery glow pulsing warmly as you gather them. These blessed "

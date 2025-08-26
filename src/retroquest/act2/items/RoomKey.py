@@ -13,14 +13,16 @@ class RoomKey(Item):
         )
 
     def use_with(self, game_state: GameState, other_item) -> str:
+        from ..rooms.SilverStagInn import SilverStagInn  # Import here to avoid circular imports
+        
         # Check if other_item is a Door
         if isinstance(other_item, Door):
             # Check if we're in the Silver Stag Inn
-            if game_state.current_room.name == "The Silver Stag Inn":
+            if isinstance(game_state.current_room, SilverStagInn):
                 # Find the room key in inventory (it should be carriable)
                 key_in_inventory = None
                 for item in game_state.inventory:
-                    if item.get_name().lower() == "room key":
+                    if isinstance(item, RoomKey):
                         key_in_inventory = item
                         break
                 

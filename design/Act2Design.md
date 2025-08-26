@@ -390,7 +390,6 @@ The forest represents increasingly mystical realms:
 
 - Predates human settlements by millennia
 - Home to spirits and magical beings who remember the world's creation
-- Boundary stones placed by ancient druids to mark sacred spaces
 - Nyx serves as keeper of primordial knowledge and prophecies
 
 #### Connection to Wider World Events
@@ -404,7 +403,6 @@ The forest represents increasingly mystical realms:
 
 #### Ancient Artifacts
 
-- **Boundary Stone Fragments:** Pieces of original druidic markers, carry protective magic
 - **Prophecy Scrolls:** Written by ancient seers, predict current events
 - **Crystal Focus:** Crafted by early magical practitioners, amplifies natural abilities
 - **Forest Heart Crystal:** Gift from Nyx, contains essence of forest's power
@@ -789,6 +787,10 @@ A magnificent hall with soaring ceilings supported by massive stone columns. Tap
   - Present: Later (earned after proving worth to Lord Commander)
   - Can be carried: Yes
   - Useful: Yes
+- **Secret Documents**
+  - Present: Later (given by Caravan Master Thorne after completing "The Merchant's Lost Caravan")
+  - Can be carried: Yes
+  - Useful: Yes
 - **Secret Correspondence**
   - Present: From start (hidden, found by searching behind tapestries)
   - Can be carried: Yes
@@ -1001,10 +1003,6 @@ The boundary between the civilized mountain paths and the wild Enchanted Forest.
 
 #### Items
 
-- **Boundary Stone Fragment**
-  - Present: Later (taken after learning nature_sense)
-  - Can be carried: Yes
-  - Useful: Yes
 - **Forest Guide**
   - Present: Later (given by hermit)
   - Can be carried: Yes
@@ -1568,8 +1566,6 @@ The completion of Act II marks Elior's transformation from a promising young her
       - Spell Learned: `greater_heal` (enhanced healing magic)
       - Quest completed: "The Healer's Apprentice"
 
-# TODO Expand The Hermit's Warning
-
 15. **Forest Transition:**
 
     - Talk to Forest Hermit. _The hermit warns of forest dangers and offers protection._
@@ -1580,7 +1576,6 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Examine ancient standing stones. _The moss-covered runes pulse with ancient power._
     - Use standing stones to learn nature magic. _The protective runes resonate, teaching Elior `nature_sense`._
       - Spell Learned: `nature_sense` (forest awareness)
-    - Take Boundary Stone Fragment. _Stone Fragment is added to inventory._
     - Receive protective charm from hermit. _Protective Charm is added to inventory._
 
 16. **Forest Entrance:**
@@ -1635,30 +1630,27 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 21. **Search for Lost Caravan (Forest Areas):**
 
-    - Use Quality Rope to traverse difficult forest terrain. _The rope allows safe passage through ravines and fallen trees._
-      - Item used: `Quality Rope` (terrain navigation)
-    - Use Boundary Stone Fragment to locate ancient paths. _The fragment resonates with old druidic waypoints._
-      - Item used: `Boundary Stone Fragment` (pathfinding)
-    - Cast `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location._
+    - Cast `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location, but it is located in a ravine._
       - Spell cast: `forest_speech` (investigation)
-    - Follow animal guidance to find the lost caravan. _Merchant wagons discovered in a forest clearing._
-    - Rescue caravan from bandits through negotiation. _Diplomatic discussion resolves the threat peacefully._
+    - Use Quality Rope to traverse difficult forest terrain. _The rope allows safe passage through the ravine._
+      - Item used: `Quality Rope` (terrain navigation)
     - Secure the caravan and ensure safe passage. _Caravan is safely recovered for Thorne._
 
 22. **Return to Market District:**
 
-    - Talk to Caravan Master Thorne with good news. _Thorne rewards Elior with valuable supplies._
+    - Talk to Caravan Master Thorne with good news. _Thorne rewards Elior with secret documents._
+      - Item obtained: `Secret Documents`
       - Quest completed: "The Merchant's Lost Caravan"
 
 23. **Castle Courtyard (Cedric's Honor Quest):**
 
     - Learn about Cedric's past disgrace from castle gossip. _Servants and guards whisper about the knight's fall from grace._
       - Quest accepted: "Cedric's Lost Honor"
-    - Investigate the truth using available resources. _Research and witness interviews reveal hidden details about past events._
 
 24. **Return to Great Hall:**
 
-    - Gather evidence of Cedric's innocence. _Ancient Chronicle and witness testimony clear his name._
+    - Read Secret Documents to prove Sir Cedric's innocence. _The documents contain evidence that clears Cedric of past accusations._
+      - Item used: `Secret Documents` (evidence of innocence)
     - Present evidence to Lord Commander. _Official vindication restores Cedric's honor._
       - Quest completed: "Cedric's Lost Honor"
     - Receive Nature's Charm from Cedric. _In gratitude, Cedric presents a sacred charm blessed by ancient knights._
@@ -1710,7 +1702,7 @@ The completion of Act II marks Elior's transformation from a promising young her
 - ✅ **`mend`** (Step 10) - From craftsmen, used for library enchantments
 - ✅ **`greater_heal`** (Step 11) - From Lyria, used for curse breaking
 - ✅ **`dispel`** (Step 13) - From ancient texts, used for curse breaking
-- ✅ **`nature_sense`** (Step 15) - From boundary stones, used for forest navigation
+- ✅ **`nature_sense`** (Step 15) - From standing stones, used for forest navigation
 - ✅ **`forest_speech`** (Step 17) - From tree spirit, used for caravan rescue
 - ✅ **`prophetic_vision`** (Step 25) - From Nyx, completes main quest
 
@@ -1735,11 +1727,11 @@ This Golden Path ensures that the design rule "all side quests must be completed
 - `Enhanced Lantern` (illuminate hidden forest paths)
 - `Quality Rope` (traverse difficult forest terrain for caravan rescue)
 - `Crystal Focus` (enhance magical understanding in Hidden Library)
-- `Boundary Stone Fragment` (locate ancient paths for caravan rescue)
 - `Forest Map Fragment` (safe navigation in Forest Entrance)
 - `Enchanted Acorn` (offering to Ancient Tree Spirit)
 - `Crystal-Clear Water` (purify Elena's curse, general purification)
 - `Moonflowers` (offering to Nyx)
+- `Secret Documents` (evidence to prove Sir Cedric's innocence)
 - `Druidic Charm` (first of three sacred charms needed to summon Nyx)
 - `Protective Charm` (second of three sacred charms needed to summon Nyx)
 - `Nature's Charm` (third of three sacred charms needed to summon Nyx)
@@ -1766,6 +1758,5 @@ This Golden Path ensures that the design rule "all side quests must be completed
 **Quest-Specific Items:**
 
 - **Training Sword**: Proves combat skills to Sir Cedric
-- **Boundary Stone Fragment**: Connects to ancient magic at Forest Transition
 - **Nyx's Token**: Final reward that enables prophetic visions
 - **Forest Heart Crystal**: Magical artifact from completing Nyx's trials

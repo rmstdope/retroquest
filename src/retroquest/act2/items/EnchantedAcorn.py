@@ -22,27 +22,29 @@ class EnchantedAcorn(Item):
         if "ancient grove" in current_room.lower():
             # This should be handled by the room or character interaction
             return ("The [item_name]enchanted acorn[/item_name] pulses with magical energy in "
-                   "response to the sacred grove. You should offer it to the ancient tree spirit "
-                   "that dwells here.")
+                    "response to the sacred grove. You should offer it to the ancient tree spirit "
+                    "that dwells here.")
         elif "forest" in current_room.lower():
             return ("The [item_name]enchanted acorn[/item_name] glows softly in the forest, "
-                   "but it seems to be calling you toward something more ancient and sacred.")
+                    "but it seems to be calling you toward something more ancient and sacred.")
         else:
             return ("The [item_name]enchanted acorn[/item_name] feels dormant here. It likely "
-                   "has special significance in a more magical location.")
+                    "has special significance in a more magical location.")
 
     def picked_up(self, game_state: GameState) -> str:
         """Called when the item is picked up by the player."""
-        if game_state.current_room.name == "Forest Entrance":
+        from ..rooms.ForestEntrance import ForestEntrance  # Import here to avoid circular imports
+        
+        if isinstance(game_state.current_room, ForestEntrance):
             game_state.set_story_flag(FLAG_ENCHANTED_ACORN_TAKEN, True)
             return ("The moment you touch it, you feel a surge of natural magic - this is no "
-                   "ordinary acorn, but a sacred offering imbued with the forest's blessing. "
-                   "The forest sprites whisper approvingly as you claim this gift.")
+                    "ordinary acorn, but a sacred offering imbued with the forest's blessing. "
+                    "The forest sprites whisper approvingly as you claim this gift.")
         return ""
 
     def examine(self, game_state: GameState) -> str:
         return ("[event]You examine the [item_name]enchanted acorn[/item_name]. {0} "
-               "When you hold it up to the light, you can see tiny veins of silver running "
-               "through the shell like tree roots. The acorn seems to whisper in a language "
-               "older than words, speaking of growth, wisdom, and the eternal cycle of the "
-               "forest.[/event]".format(self.description))
+                "When you hold it up to the light, you can see tiny veins of silver running "
+                "through the shell like tree roots. The acorn seems to whisper in a language "
+                "older than words, speaking of growth, wisdom, and the eternal cycle of the "
+                "forest.[/event]".format(self.description))

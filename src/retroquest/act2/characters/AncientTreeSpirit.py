@@ -66,9 +66,11 @@ class AncientTreeSpirit(Character):
 
     def give_item(self, game_state: GameState, item_object) -> str:
         """Handle giving items to the Ancient Tree Spirit."""
+        from ..items.EnchantedAcorn import EnchantedAcorn  # Import here to avoid circular imports
+        
         event_msg = f"[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]"
         
-        if item_object.get_name().lower() == "enchanted acorn":
+        if isinstance(item_object, EnchantedAcorn):
             if self.acorn_received:
                 return f"[dialogue]The [character_name]{self.get_name()}[/character_name] gently refuses. 'You have already offered me the sacred acorn, young one. One gift of such significance is enough.'[/dialogue]"
             
@@ -112,6 +114,13 @@ class AncientTreeSpirit(Character):
                     f"of the forest, return to me with two gifts the forest has bestowed upon you.'[/dialogue]")
 
         elif item_object.get_name().lower() in ["crystal-clear water", "moonflowers"]:
+            from ..items.CrystalClearWater import CrystalClearWater
+            from ..items.Moonflowers import Moonflowers
+            
+            # Allow both specific items
+            if not (isinstance(item_object, CrystalClearWater) or isinstance(item_object, Moonflowers)):
+                return super().give_item(game_state, item_object)
+                
             # Check if quest is already completed
             if game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED):
                 return f"[dialogue]The [character_name]{self.get_name()}[/character_name] nods approvingly but gently refuses. 'You have already proven yourself, young one. Keep these sacred gifts as tokens of the forest's trust in you.'[/dialogue]"

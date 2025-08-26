@@ -1,6 +1,9 @@
 from ...engine.Room import Room
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE
+from ..Act2StoryFlags import (
+    FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, 
+    FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE
+)
 from ..items.EnchantedAcorn import EnchantedAcorn
 from ..characters.ForestSprites import ForestSprites
 
