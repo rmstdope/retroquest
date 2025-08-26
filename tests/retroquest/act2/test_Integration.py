@@ -511,7 +511,7 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["give secret documents to lord commander", "examine secret documents"])
     _check_quests(game.state, ["The Gathering Storm", "Cedric's Lost Honor"])
     # Give secret documents to Lord Commander to complete quest
-    _execute_commands(game, ["  "])
+    _execute_commands(game, ["give secret documents to lord commander"])
     _check_quests(game.state, ["The Gathering Storm"])
     _check_item_in_inventory(game.state, "secret documents", False)  # Should be removed
     
@@ -520,7 +520,34 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["talk to sir cedric"])
     _check_item_in_inventory(game.state, "nature's charm")
     
-    # At this point, we have completed steps 1-24 of the golden path!
+    # Step 25: Heart of the Forest - Complete The Gathering Storm quest
+    # Navigate to Heart of the Forest: Castle Courtyard -> Castle Approach -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition -> Forest Entrance -> Ancient Grove -> Heart of the Forest
+    _execute_commands(game, ["go east", "go south", "go south", "go south", "go east", "go east", "go south", "go south"])
+    _check_current_room(game.state, "Heart of the Forest")
+    # Verify Nyx and offering altar are present
+    _check_character_in_room(game.state.current_room, "Nyx", should_be_present=False)
+    _check_item_in_room(game.state.current_room, "offering altar")
+    _execute_commands(game, ["use druidic charm with offering altar"])
+    _check_character_in_room(game.state.current_room, "Nyx")
+    # Talk to Nyx for the first meeting
+    _execute_commands(game, ["talk to nyx"])
+    
+    # Verify charms were consumed and rewards received
+    _check_item_in_inventory(game.state, "druidic charm", False)
+    _check_item_in_inventory(game.state, "protective charm", False)
+    _check_item_in_inventory(game.state, "nature's charm", False)
+    _check_item_in_inventory(game.state, "nyx's token", True)
+    _check_item_in_inventory(game.state, "forest heart crystal", True)
+    
+    # Verify prophetic_vision spell was learned
+    _check_spell_known(game.state, "prophetic_vision")
+
+    # Step 26: Go back to Sir Cedric and cast prophetic_vision to complete The Gathering Storm quest
+    _execute_commands(game, ["go north", "go north", "go west", "go west", "go north", "go north", "go north", "go west"])
+    _execute_commands(game, ["cast prophetic_vision"])
+    _check_quests(game.state, [])
+    
+    # At this point, we have completed steps 1-25 of the golden path!
 
 def test_main_square_navigation_restriction():
     """Test that Main Square navigation is restricted until city map is used"""

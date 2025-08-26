@@ -95,27 +95,4 @@ class Act2(Act):
         )
     
     def is_complete(self) -> bool:
-        """Check if all required quests for Act II have been completed"""
-        # According to design rules, all side quests must be completed before main quest
-        required_quests = [
-            # Greendale Phase Quests
-            "the_knights_test",
-            "supplies_for_the_journey", 
-            "echoes_of_the_past",
-            "the_healers_apprentice",
-            "cedriks_lost_honor",
-            "the_innkeepers_daughter",
-
-            "the_ancient_library",
-            # Forest Phase Quests
-            "the_hermits_warning",
-            "the_forest_guardians_riddles",
-            "whispers_in_the_wind",
-            "the_merchants_lost_caravan",
-            # Main Quest (can only complete after all side quests)
-            "the_gathering_storm"
-        ]
-        
-        # TODO: Implement proper quest completion checking when quests are created
-        # For now, return False as a placeholder
         return False

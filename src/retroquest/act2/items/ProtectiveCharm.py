@@ -39,3 +39,13 @@ class ProtectiveCharm(Item):
         else:
             return ("The [item_name]protective charm[/item_name] glows softly, providing a sense of comfort and "
                     "protection. It seems most powerful near places of natural magic.")
+
+    def use_with(self, game_state: 'GameState', other_item) -> str:
+        """Use the protective charm with another item."""
+        from ..items.OfferingAltar import OfferingAltar
+        
+        if isinstance(other_item, OfferingAltar):
+            # Delegate to the offering altar's use_with method
+            return other_item.use_with(game_state, self)
+        else:
+            return super().use_with(game_state, other_item)

@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED, FLAG_ANCIENT_LIBRARY_COMPLETED, FLAG_HERMITS_WARNING_COMPLETED
+from ..Act2StoryFlags import FLAG_GATHERING_STORM_COMPLETED, FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED, FLAG_ANCIENT_LIBRARY_COMPLETED, FLAG_HERMITS_WARNING_COMPLETED, FLAG_NYX_TRIALS_COMPLETED
 
 class TheGatheringStormQuest(Quest):
     def __init__(self) -> None:
@@ -14,7 +14,6 @@ class TheGatheringStormQuest(Quest):
         """This is the main quest for Act II."""
         return True
 
-# TODO Add a number of updates to the quest
     def check_trigger(self, game_state: GameState) -> bool:
         return True  # This quest is always active once Act II begins
 
@@ -93,28 +92,24 @@ class TheGatheringStormQuest(Quest):
                 "understand and combat the gathering darkness can begin."
             )
 
+        if game_state.get_story_flag(FLAG_NYX_TRIALS_COMPLETED):
+            if not self._flag_state.get(FLAG_NYX_TRIALS_COMPLETED):
+                self._flag_state[FLAG_NYX_TRIALS_COMPLETED] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\n\nThe trials are complete! You have successfully met with Nyx, the ancient forest sprite, and proven "
+                "yourself worthy of her greatest gifts. Through your demonstration of wisdom, compassion, and courage "
+                "throughout your journey, Nyx has blessed you with the sacred prophetic vision spell - the power to see "
+                "glimpses of possible futures and understand the threads of fate. Along with this ultimate magical ability, "
+                "you have received Nyx's Token as a symbol of your alliance with the forest spirits, and the Forest Heart "
+                "Crystal containing the very essence of nature's power. With these powerful tools and newfound magical "
+                "sight, you are now ready to face the gathering storm and protect both Greendale and the surrounding "
+                "lands from the darkness that threatens to consume them all."
+            )
+
         self.description += new_desc
         return updated
 
     def check_completion(self, game_state: GameState) -> bool:
-        # This quest cannot be completed until ALL other quests in Act II are finished
-        required_quests = [
-            "The Knight's Test",
-            "Supplies for the Journey", 
-            "Echoes of the Past",
-            "The Healer's Apprentice",
-            "Cedric's Lost Honor",
-            "The Innkeeper's Daughter",
-            "The Ancient Library",
-            "The Hermit's Warning",
-            "The Forest Guardian's Riddles",
-            "Whispers in the Wind",
-            "The Merchant's Lost Caravan"
-        ]
-        
-        all_completed = all(game_state.is_quest_completed(quest_name) for quest_name in required_quests)
-        
-        if all_completed and game_state.has_spell("prophetic_vision"):
-            return True
-        
-        return False
+        return game_state.get_story_flag(FLAG_GATHERING_STORM_COMPLETED)
