@@ -76,10 +76,6 @@ def test_golden_path_act2_completion():
     act = Act2()
     game = Game(act)
     
-    # Add starting items that player should have from Act 1
-    from retroquest.act2.items.Pass import Pass
-    game.state.inventory.append(Pass())
-    
     # Step 1: Mountain Path
     # Should start in Mountain Path
     _check_current_room(game.state, "Mountain Path")
@@ -186,10 +182,10 @@ def test_golden_path_act2_completion():
     # Move to Castle Approach
     _execute_commands(game, ["go north"])
     _check_current_room(game.state, "Castle Approach")
-    # Give Pass to Herald
+    # Give Entry Pass to Herald
     _check_character_in_room(game.state.current_room, "Herald")
-    _execute_commands(game, ["give pass to herald"])
-    _check_item_in_inventory(game.state, "Pass", should_be_present=True)
+    _execute_commands(game, ["give entry pass to herald"])
+    _check_item_in_inventory(game.state, "entry pass", should_be_present=True)
     # Talk to Castle Guard Captain
     _check_character_in_room(game.state.current_room, "Castle Guard Captain")
     _execute_commands(game, ["talk to castle guard captain"])

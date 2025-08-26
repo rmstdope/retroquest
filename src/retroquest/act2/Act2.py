@@ -20,7 +20,6 @@ from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
 from typing import Any
 
 # Import starting items for Act 2
-from retroquest.act2.items.Pass import Pass
 
 # Import all available quests for Act 2
 from retroquest.act2.quests.TheGatheringStorm import TheGatheringStormQuest
@@ -81,10 +80,6 @@ class Act2(Act):
         music_file = "music/Walen - Medieval Village (freetouse.com).mp3"
         super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file, music_info='Music track: Medieval Village by Walen\nSource: https://freetouse.com/music\nFree To Use Music for Video')
 
-    def get_starting_items(self) -> list:
-        """Return items that the player should start Act 2 with"""
-        return [Pass()]
-    
     def get_act_intro(self) -> str:
         return (
             "After the mysterious events in Willowbrook and the revelation of your growing magical abilities, you have left your quiet village behind. "
