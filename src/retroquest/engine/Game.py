@@ -6,7 +6,7 @@ import pickle
 import os
 import threading
 import pygame
-from typing import Any, Union
+from typing import Any
 
 from .Character import Character
 from .CommandParser import CommandParser
@@ -282,7 +282,7 @@ Welcome to
             # Print a separator line before any output after a command
             self.console.print('\n' + response + '\n')
 
-    def find_character(self, target: str) -> Union[Character, None]:
+    def find_character(self, target: str) -> Character:
         character_to_examine = None
         target = target.lower()
         for character in self.state.current_room.get_characters():
@@ -290,7 +290,7 @@ Welcome to
                 character_to_examine = character
         return character_to_examine
 
-    def find_item(self, target: str, look_in_inventory: bool = True, look_in_room: bool = True) -> Union[Item, None]:
+    def find_item(self, target: str, look_in_inventory: bool = True, look_in_room: bool = True) -> Item:
         """
         Find an item by its name or short name in the inventory and/or current room.
         Returns a tuple of (target_name, item_object) where item_object is None if not found.
@@ -550,7 +550,7 @@ Welcome to
         else:
             return f"[failure]There is no character named '[character_name]{character_name}[/character_name]' here to speak to.[/failure]"
 
-    def split_command(self, command_args: str, command: str, delimiter: str) -> tuple[Union[str, None], Union[str, None], str]:
+    def split_command(self, command_args: str, command: str, delimiter: str) -> tuple[str, None, str, None, str]:
         # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"
         parts = command_args.lower().split()
         if delimiter not in parts:
