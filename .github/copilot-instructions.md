@@ -66,3 +66,9 @@ This document outlines the design rules and guidelines for both the game story a
 - Implement unit tests for each major component, including quests, spells, and character interactions.
 - Use integration tests to ensure that quest chains and character interactions work as intended.
 - Conduct end-to-end testing to verify that the act can be completed successfully and that all quests are properly integrated.
+
+### Details
+
+- Try to use isinstance when checking types, as it is more robust than comparing types directly.
+- Avoid using magic strings or numbers; instead, use constants or enums to represent important values.
+- When using multi-line strings, align the opening quotes so that Visual Studio Code recognizes the indentation.

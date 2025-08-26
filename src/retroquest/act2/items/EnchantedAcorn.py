@@ -37,13 +37,13 @@ class EnchantedAcorn(Item):
         if isinstance(game_state.current_room, ForestEntrance):
             game_state.set_story_flag(FLAG_ENCHANTED_ACORN_TAKEN, True)
             return ("The moment you touch it, you feel a surge of natural magic - this is no "
-                   "ordinary acorn, but a sacred offering imbued with the forest's blessing. "
-                   "The forest sprites whisper approvingly as you claim this gift.")
+                    "ordinary acorn, but a sacred offering imbued with the forest's blessing. "
+                    "The forest sprites whisper approvingly as you claim this gift.")
         return ""
 
     def examine(self, game_state) -> str:
         return ("[event]You examine the [item_name]enchanted acorn[/item_name]. {0} "
-               "When you hold it up to the light, you can see tiny veins of silver running "
-               "through the shell like tree roots. The acorn seems to whisper in a language "
-               "older than words, speaking of growth, wisdom, and the eternal cycle of the "
-               "forest.[/event]".format(self.description))
+                "When you hold it up to the light, you can see tiny veins of silver running "
+                "through the shell like tree roots. The acorn seems to whisper in a language "
+                "older than words, speaking of growth, wisdom, and the eternal cycle of the "
+                "forest.[/event]".format(self.description))
