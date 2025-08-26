@@ -52,7 +52,11 @@ class BarmaidElena(Character):
                             "has restored some of her strength and vitality. Her eyes show hope for "
                             "the first time in weeks.")
         
-        return ("[success]You cast [spell_name]greater_heal[/spell_name] on Elena, channeling powerful "
+        # Get spell name for display
+        from ..spells.GreaterHealSpell import GreaterHealSpell
+        greater_heal_spell = GreaterHealSpell()
+        
+        return (f"[success]You cast [spell_name]{greater_heal_spell.get_name()}[/spell_name] on Elena, channeling powerful "
                 "healing energy into her weakened form. The golden light battles against the dark "
                 "tendrils of the curse, and while it cannot break the enchantment completely, it "
                 "significantly strengthens Elena's life force. She gasps as color returns to her "
@@ -110,7 +114,11 @@ class BarmaidElena(Character):
                             "She moves with grace and energy, completely free from the dark curse "
                             "that once plagued her. She looks at you with deep gratitude and joy.")
         
-        return ("[success]You cast [spell_name]dispel[/spell_name] on Elena, channeling powerful "
+        # Get spell name for display
+        from ..spells.DispelSpell import DispelSpell
+        dispel_spell = DispelSpell()
+        
+        return (f"[success]You cast [spell_name]{dispel_spell.get_name()}[/spell_name] on Elena, channeling powerful "
                 "counter-magic into the remaining curse fragments. The spell tears through the last "
                 "dark tendrils like lightning, shattering the evil enchantment completely. Elena cries "
                 "out in relief as the final traces of the curse dissolve into nothingness.\n\n"

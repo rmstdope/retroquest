@@ -28,9 +28,11 @@ class MountainHermit(Character):
                 return event_msg + "\n" + warning_msg
         else:
             if self.sword_given:
+                from ..items.TrainingSword import TrainingSword
+                training_sword = TrainingSword()
                 return (event_msg + "\n" +
                        f"[dialogue]The [character_name]{self.get_name()}[/character_name] nods sagely. "
-                       f"'The [item_name]training sword[/item_name] I gave you will serve you well in Greendale. "
+                       f"'The [item_name]{training_sword.get_name()}[/item_name] I gave you will serve you well in Greendale. "
                        f"Show them your skill, and doors will open. May your journey be blessed with wisdom and courage.'[/dialogue]")
             else:
                 return self.give_training_sword_with_dialogue(game_state, event_msg, "")
@@ -44,10 +46,10 @@ class MountainHermit(Character):
         training_sword = TrainingSword()
         game_state.add_item_to_inventory(training_sword)
         
-        sword_dialogue = (f"[dialogue]He reaches into his pack and pulls out a [item_name]training sword[/item_name]. "
+        sword_dialogue = (f"[dialogue]He reaches into his pack and pulls out a [item_name]{training_sword.get_name()}[/item_name]. "
                          f"'Take this. If you truly are destined for greatness, you'll need to prove your skills to "
                          f"those who matter. This blade has served me well in teaching others.'[/dialogue]\n\n"
-                         f"[event]You receive a [item_name]training sword[/item_name]![/event]")
+                         f"[event]You receive a [item_name]{training_sword.get_name()}[/item_name]![/event]")
         
         if warning_msg:
             return event_msg + "\n" + warning_msg + "\n\n" + sword_dialogue
@@ -62,8 +64,8 @@ class MountainHermit(Character):
         training_sword = TrainingSword()
         game_state.add_item_to_inventory(training_sword)
         
-        event_msg = f"[event]The [character_name]{self.get_name()}[/character_name] hands you the [item_name]training sword[/item_name].[/event]"
+        event_msg = f"[event]The [character_name]{self.get_name()}[/character_name] hands you the [item_name]{training_sword.get_name()}[/item_name].[/event]"
         return (event_msg + "\n" +
                f"[dialogue]'This blade has trained many would-be heroes. It may not be sharp enough for battle, "
                f"but it will show your skill to those who need convincing. Use it well in Greendale.'[/dialogue]\n\n"
-               f"[event]You receive a [item_name]training sword[/item_name]![/event]")
+               f"[event]You receive a [item_name]{training_sword.get_name()}[/item_name]![/event]")

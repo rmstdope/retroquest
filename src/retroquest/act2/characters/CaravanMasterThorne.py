@@ -26,7 +26,7 @@ class CaravanMasterThorne(Character):
                         "As promised, here is your reward - but this is more than just payment. "
                         "These documents came into my possession years ago, and I believe they contain "
                         "evidence that could clear a good man's name. Perhaps you'll know what to do with them.\n\n"
-                        "Thorne hands you a stack of [item_name]Secret Documents[/item_name].")
+                        f"Thorne hands you a stack of [item_name]{secret_docs.get_name()}[/item_name].")
             else:
                 return (f"[character_name]{self.get_name()}[/character_name]: I'm still processing the relief "
                         "of having my caravan safely returned. Those documents I gave you - I hope they prove "
