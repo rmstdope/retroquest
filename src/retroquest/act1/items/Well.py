@@ -27,7 +27,7 @@ class Well(Item):
             self.description = desc
         return super().examine(game_state)
 
-    def use_with(self, game_state: GameState, other_item: Any) -> str:
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
         from .Bucket import Bucket  # Local import to avoid circular dependency
         from .FishingRod import FishingRod  # Local import to avoid circular dependency
         from .MagneticFishingRod import MagneticFishingRod  # Local import to avoid circular dependency

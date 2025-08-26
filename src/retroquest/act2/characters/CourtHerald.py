@@ -11,7 +11,7 @@ class CourtHerald(Character):
             description="An elaborately dressed official who manages formal presentations and ceremonies at court. He scrutinizes documents and credentials with practiced expertise.",
         )
 
-    def give_item(self, game_state: GameState, item_object: Item) -> str:
+    def give_item(self, game_state, item_object: Item) -> str:
         """Handle giving items to the Court Herald."""
         if isinstance(item_object, EntryPass):
             # Set the formal presentation flag
@@ -24,7 +24,7 @@ class CourtHerald(Character):
                     "Your credentials are now on record, and you may research freely in our collections.")
         else:
             # Default behavior for other items
-            return super().give_item(game_state: GameState, item_object)
+            return super().give_item(game_state, item_object)
 
     def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag(FLAG_COURT_HERALD_FORMAL_PRESENTATION):

@@ -10,7 +10,7 @@ class MagneticFishingRod(Item):
             description="A fishing rod with a magnet attached to the end. Good for attracting metallic objects."
         )
 
-    def use_with(self, game_state: GameState, other_item: Any) -> str:
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
         # Circular import guard for ExtendedMagneticFishingRod
         from .ExtendedMagneticFishingRod import ExtendedMagneticFishingRod
         if isinstance(other_item, Stick):

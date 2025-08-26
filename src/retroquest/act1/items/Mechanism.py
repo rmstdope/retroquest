@@ -26,7 +26,7 @@ class Mechanism(Item):
             return f"[failure]The [item_name]{self.get_name()}[/item_name] has already been operated.[/failure]"
         return f"[failure]It looks like you need to use something with the [item_name]{self.get_name()}[/item_name].[/failure]"
 
-    def use_with(self, game_state: GameState, other_item: Item) -> str:
+    def use_with(self, game_state, other_item: Item) -> str:
 
         if isinstance(other_item, Rope):
             if self.repaired:
@@ -46,7 +46,7 @@ class Mechanism(Item):
             event_msg = f"[event]You try to use the [item_name]rope[/item_name] with the [item_name]{self.get_name()}[/item_name].[/event]\n"
             return event_msg + f"You manage to thread the [item_name]rope[/item_name] through the [item_name]{self.get_name()}[/item_name]. With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"
         else:
-            return super().use_with(game_state: GameState, other_item)
+            return super().use_with(game_state, other_item)
 
     def listen(self, game_state: GameState) -> str:
         event_msg = f"[event]You listen to the [item_name]{self.get_name()}[/item_name].[/event]\n"

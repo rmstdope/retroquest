@@ -1,11 +1,10 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import (
-from typing import Any
-
     FLAG_FOUND_LOST_LETTER,
     FLAG_ASKED_GRANDMOTHER_ABOUT_LETTER
 )
+from typing import Any
 
 # The Lost Letter Quest - Steps to Completion
 # 1. The player searches the floorboard in Elior's Cottage and finds the faded letter.

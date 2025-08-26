@@ -1,4 +1,5 @@
 from ...engine.Character import Character
+from ...engine.Item import Item
 from ..items.ShinyRing import ShinyRing
 from ..items.WanderingBoots import WanderingBoots
 from ..items.Coin import Coin
@@ -24,7 +25,7 @@ class Merchant(Character):
             return (event_msg + "\n" +
                     f"[dialogue]The [character_name]{self.get_name()}[/character_name] grins. 'Those [item_name]boots[/item_name] should serve you well on the road ahead! Let me know if you find anything else of value.'[/dialogue]")
 
-    def give_item(self, game_state: GameState, item: Any) -> str:
+    def give_item(self, game_state: GameState, item: Item) -> str:
         from ..items.ShinyRing import ShinyRing
         from ..items.WanderingBoots import WanderingBoots
         if isinstance(item, ShinyRing):

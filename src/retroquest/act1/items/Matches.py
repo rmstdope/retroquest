@@ -14,9 +14,9 @@ class Matches(Item):
             return f"[character_name]Shopkeeper[/character_name] quickly steps over. [dialogue]'Hold on there, friend! That [item_name]{self.get_name()}[/item_name] is merchandise, not a free sample. If you want it, you'll need to buy it proper-like.'[/dialogue]"
         return None  # Allow pickup if can_be_carried is True
 
-    def use_with(self, game_state: GameState, other_item) -> str:
+    def use_with(self, game_state, other_item) -> str:
         from .Candle import Candle # Moved import here and updated path
         if isinstance(other_item, Candle):
             # Call the Candle's use_with method, passing these matches
-            return other_item.use_with(game_state: GameState, self)
-        return super().use_with(game_state: GameState, other_item)
+            return other_item.use_with(game_state, self)
+        return super().use_with(game_state, other_item)

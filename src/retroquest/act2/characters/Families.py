@@ -36,7 +36,7 @@ class Families(Character):
         
         return response
 
-    def give_item(self, game_state: GameState, item_object: Item) -> str:
+    def give_item(self, game_state, item_object: Item) -> str:
         """Handle giving items to the Families"""
         if isinstance(item_object, WalkingStick):
             # Remove the walking stick from inventory and help elderly residents
@@ -48,4 +48,4 @@ class Families(Character):
                     "who cares about others.[/success]")
         else:
             # For all other items, use the default behavior
-            return super().give_item(game_state: GameState, item_object)
+            return super().give_item(game_state, item_object)

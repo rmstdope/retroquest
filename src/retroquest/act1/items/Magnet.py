@@ -10,9 +10,9 @@ class Magnet(Item):
             can_be_carried=True
         )
 
-    def use_with(self, game_state: GameState, other_item: Item) -> str:
+    def use_with(self, game_state, other_item: Item) -> str:
         from .FishingRod import FishingRod
         if isinstance(other_item, FishingRod):
             # Delegate to FishingRod's use_with
-            return other_item.use_with(game_state: GameState, self)
-        return super().use_with(game_state: GameState, other_item)
+            return other_item.use_with(game_state, self)
+        return super().use_with(game_state, other_item)

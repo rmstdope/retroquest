@@ -12,7 +12,7 @@ class River(Item):
         )
         self.fish_available = True # Controls if fish can be caught
 
-    def use_with(self, game_state: GameState, other_item) -> str:
+    def use_with(self, game_state, other_item) -> str:
         from .FishingRod import FishingRod  # Importing FishingRod to check for interaction
         if isinstance(other_item, FishingRod):
             if not game_state.get_story_flag("learned_fishing_basics"):
@@ -25,4 +25,4 @@ class River(Item):
             else:
                 return "[failure]You cast your line again, but the fish aren't biting right now.[/failure]"
         else:
-            return super().use_with(game_state: GameState, other_item)
+            return super().use_with(game_state, other_item)

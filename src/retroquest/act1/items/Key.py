@@ -9,8 +9,8 @@ class Key(Item):
             can_be_carried=True
         )
 
-    def use_with(self, game_state: GameState, target: Item) -> str:
+    def use_with(self, game_state, target: Item) -> str:
         from .ShedDoor import ShedDoor  # Local import to avoid circular dependency issues at module load time
         if isinstance(target, ShedDoor):
-            return target.use_with(game_state: GameState, self)
-        return super().use_with(game_state: GameState, target)
+            return target.use_with(game_state, self)
+        return super().use_with(game_state, target)

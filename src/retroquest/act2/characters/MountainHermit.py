@@ -23,7 +23,7 @@ class MountainHermit(Character):
             
             if not self.sword_given:
                 # Automatically give the training sword when first spoken to
-                return self.give_training_sword_with_dialogue(game_state: GameState, event_msg, warning_msg)
+                return self.give_training_sword_with_dialogue(game_state, event_msg, warning_msg)
             else:
                 return event_msg + "\n" + warning_msg
         else:
@@ -33,7 +33,7 @@ class MountainHermit(Character):
                        f"'The [item_name]training sword[/item_name] I gave you will serve you well in Greendale. "
                        f"Show them your skill, and doors will open. May your journey be blessed with wisdom and courage.'[/dialogue]")
             else:
-                return self.give_training_sword_with_dialogue(game_state: GameState, event_msg, "")
+                return self.give_training_sword_with_dialogue(game_state, event_msg, "")
 
     def give_training_sword_with_dialogue(self, game_state: GameState, event_msg: str, warning_msg: str) -> str:
         """Helper method to give training sword with appropriate dialogue"""

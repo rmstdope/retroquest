@@ -1,6 +1,6 @@
 from ...engine.Quest import Quest
-from ..Act2StoryFlags import (
 from ...engine.GameState import GameState
+from ..Act2StoryFlags import (
     FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
     FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED
 )
@@ -39,7 +39,7 @@ class TheForestGuardiansRiddles(Quest):
             self.is_completed_flag = True
             
             # Add experience
-            if hasattr(game_state: GameState, 'add_experience'):
+            if hasattr(game_state, 'add_experience'):
                 game_state.add_experience(self.experience_reward)
                 exp_msg = f" You gain {self.experience_reward} experience!"
             else:

@@ -20,7 +20,7 @@ class Herald(Character):
                     "before you can be granted audience with the nobility. Do you have a formal pass or letter "
                     "of recommendation?")
 
-    def give_item(self, game_state: GameState, item_object: Item) -> str:
+    def give_item(self, game_state, item_object: Item) -> str:
         """Handle giving items to the Herald"""
         if "pass" in item_object.get_name().lower():
             game_state.current_room.enable_castle_courtyard()
@@ -31,4 +31,4 @@ class Herald(Character):
                     "of excellent standing. You are granted formal audience rights with the nobility.' "
                     "The pass has been officially registered.[/success]")
         else:
-            return super().give_item(game_state: GameState, item_object)
+            return super().give_item(game_state, item_object)

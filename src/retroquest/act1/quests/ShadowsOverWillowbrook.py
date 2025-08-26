@@ -1,14 +1,13 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import (
-from typing import Any
-
     FLAG_INVESTIGATED_WITHERED_CROPS,
     FLAG_VILLAGER_TALKED_TO,
     FLAG_WELL_EXAMINED,
     FLAG_CONNECT_WITH_NATURE,
     FLAG_MAGIC_FULLY_UNLOCKED
 )
+from typing import Any
 
 # Shadows Over Willowbrook Quest - Steps to Completion
 # 1. The game starts with a mysterious dream sequence where Elior sees a shadowy figure in the fields.
