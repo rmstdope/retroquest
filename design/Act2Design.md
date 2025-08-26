@@ -390,7 +390,6 @@ The forest represents increasingly mystical realms:
 
 - Predates human settlements by millennia
 - Home to spirits and magical beings who remember the world's creation
-- Boundary stones placed by ancient druids to mark sacred spaces
 - Nyx serves as keeper of primordial knowledge and prophecies
 
 #### Connection to Wider World Events
@@ -404,7 +403,6 @@ The forest represents increasingly mystical realms:
 
 #### Ancient Artifacts
 
-- **Boundary Stone Fragments:** Pieces of original druidic markers, carry protective magic
 - **Prophecy Scrolls:** Written by ancient seers, predict current events
 - **Crystal Focus:** Crafted by early magical practitioners, amplifies natural abilities
 - **Forest Heart Crystal:** Gift from Nyx, contains essence of forest's power
@@ -1005,10 +1003,6 @@ The boundary between the civilized mountain paths and the wild Enchanted Forest.
 
 #### Items
 
-- **Boundary Stone Fragment**
-  - Present: Later (taken after learning nature_sense)
-  - Can be carried: Yes
-  - Useful: Yes
 - **Forest Guide**
   - Present: Later (given by hermit)
   - Can be carried: Yes
@@ -1572,8 +1566,6 @@ The completion of Act II marks Elior's transformation from a promising young her
       - Spell Learned: `greater_heal` (enhanced healing magic)
       - Quest completed: "The Healer's Apprentice"
 
-# TODO Expand The Hermit's Warning
-
 15. **Forest Transition:**
 
     - Talk to Forest Hermit. _The hermit warns of forest dangers and offers protection._
@@ -1584,7 +1576,6 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Examine ancient standing stones. _The moss-covered runes pulse with ancient power._
     - Use standing stones to learn nature magic. _The protective runes resonate, teaching Elior `nature_sense`._
       - Spell Learned: `nature_sense` (forest awareness)
-    - Take Boundary Stone Fragment. _Stone Fragment is added to inventory._
     - Receive protective charm from hermit. _Protective Charm is added to inventory._
 
 16. **Forest Entrance:**
@@ -1637,7 +1628,6 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Receive Druidic Charm from grateful Innkeeper Marcus. _Marcus presents an ancient charm as thanks for saving his daughter._
       - Item obtained: `Druidic Charm`
 
-# TODO Remove the boundary stone fragment
 21. **Search for Lost Caravan (Forest Areas):**
 
     - Cast `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location, but it is located in a ravine._
@@ -1712,7 +1702,7 @@ The completion of Act II marks Elior's transformation from a promising young her
 - ✅ **`mend`** (Step 10) - From craftsmen, used for library enchantments
 - ✅ **`greater_heal`** (Step 11) - From Lyria, used for curse breaking
 - ✅ **`dispel`** (Step 13) - From ancient texts, used for curse breaking
-- ✅ **`nature_sense`** (Step 15) - From boundary stones, used for forest navigation
+- ✅ **`nature_sense`** (Step 15) - From standing stones, used for forest navigation
 - ✅ **`forest_speech`** (Step 17) - From tree spirit, used for caravan rescue
 - ✅ **`prophetic_vision`** (Step 25) - From Nyx, completes main quest
 
@@ -1737,7 +1727,6 @@ This Golden Path ensures that the design rule "all side quests must be completed
 - `Enhanced Lantern` (illuminate hidden forest paths)
 - `Quality Rope` (traverse difficult forest terrain for caravan rescue)
 - `Crystal Focus` (enhance magical understanding in Hidden Library)
-- `Boundary Stone Fragment` (locate ancient paths for caravan rescue)
 - `Forest Map Fragment` (safe navigation in Forest Entrance)
 - `Enchanted Acorn` (offering to Ancient Tree Spirit)
 - `Crystal-Clear Water` (purify Elena's curse, general purification)
@@ -1769,6 +1758,5 @@ This Golden Path ensures that the design rule "all side quests must be completed
 **Quest-Specific Items:**
 
 - **Training Sword**: Proves combat skills to Sir Cedric
-- **Boundary Stone Fragment**: Connects to ancient magic at Forest Transition
 - **Nyx's Token**: Final reward that enables prophetic visions
 - **Forest Heart Crystal**: Magical artifact from completing Nyx's trials

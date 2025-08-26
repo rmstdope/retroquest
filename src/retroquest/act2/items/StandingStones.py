@@ -3,7 +3,6 @@ from ..Act2StoryFlags import (
     FLAG_STANDING_STONES_EXAMINED,
     FLAG_NATURE_SENSE_LEARNED
 )
-from .BoundaryStoneFragment import BoundaryStoneFragment
 from ..spells.NatureSenseSpell import NatureSenseSpell
 
 class StandingStones(Item):
@@ -19,22 +18,12 @@ class StandingStones(Item):
             can_be_carried=False,
         )
         self.examined = False
-        self.fragment_obtained = False
 
     def examine(self, game_state) -> str:
-        """Examine the standing stones to learn about their magic and obtain a fragment."""
+        """Examine the standing stones to learn about their magic."""
         if not self.examined:
             self.examined = True
             game_state.set_story_flag(FLAG_STANDING_STONES_EXAMINED, True)
-            
-            # Give boundary stone fragment
-            if not self.fragment_obtained:
-                self.fragment_obtained = True
-                fragment = BoundaryStoneFragment()
-                game_state.add_item_to_inventory(fragment)
-                fragment_msg = "\n\n[event]As you study the stones, a small fragment breaks away and falls at your feet. You pick up the [item_name]boundary stone fragment[/item_name].[/event]"
-            else:
-                fragment_msg = ""
             
             # Learn nature_sense spell automatically
             if not game_state.get_story_flag(FLAG_NATURE_SENSE_LEARNED):
@@ -53,6 +42,6 @@ class StandingStones(Item):
                     "The runes carved into the stone are clearly druidic—symbols representing protection, passage, and "
                     "the balance between civilization and wilderness. These stones have stood here for centuries, "
                     "marking the boundary between worlds. You can feel the old magic thrumming within them, a gentle "
-                    "but powerful force that has protected travelers for generations.[/info]" + fragment_msg + spell_msg)
+                    "but powerful force that has protected travelers for generations.[/info]" + spell_msg)
         else:
             return "The standing stones continue to pulse with ancient magic, their druidic runes a testament to the old ways."

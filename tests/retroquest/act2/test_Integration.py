@@ -375,10 +375,8 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["use forest survival kit"])
     _check_item_in_inventory(game.state, "Forest Survival Kit", should_be_present=False)
     _check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
-    # Examine standing stones and get boundary stone fragment
+    # Examine standing stones to learn nature_sense spell
     _execute_commands(game, ["examine stones"])
-    _check_item_in_inventory(game.state, "Boundary Stone Fragment")
-    # Learn nature_sense spell from the stones
     _check_spell_known(game.state, "nature_sense")    
     
     # Step 16: Forest Entrance Activities  
@@ -571,7 +569,6 @@ def test_golden_path_step_15_forest_transition():
     result = game.handle_command("examine stones")
     assert "druidic" in result.lower(), "Should mention druidic runes"
     assert "boundary between worlds" in result.lower(), "Should describe the boundary"
-    _check_item_in_inventory(game.state, "boundary stone fragment"), "Should receive boundary stone fragment"
     
     # Step 15c: Learn nature_sense spell from the stones
     _check_spell_known(game.state, "nature_sense"), "Should learn nature_sense spell"
@@ -662,7 +659,6 @@ def test_forest_transition_spell_learning():
     
     # Examine stones
     result = game.handle_command("examine stones")
-    _check_item_in_inventory(game.state, "boundary stone fragment")
     
     _check_spell_known(game.state, "nature_sense")
     

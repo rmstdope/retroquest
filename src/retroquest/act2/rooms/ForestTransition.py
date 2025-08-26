@@ -2,7 +2,6 @@ from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED
 from ..characters.ForestHermit import ForestHermit
-from ..items.BoundaryStoneFragment import BoundaryStoneFragment
 from ..items.StandingStones import StandingStones
 
 class ForestTransition(Room):
