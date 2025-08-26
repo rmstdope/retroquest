@@ -1,3 +1,4 @@
+from engine import GameState
 from retroquest.engine.Act import Act
 from retroquest.act2.rooms.MountainPath import MountainPath
 from retroquest.act2.rooms.GreendaleGates import GreendaleGates
@@ -17,11 +18,6 @@ from retroquest.act2.rooms.ForestEntrance import ForestEntrance
 from retroquest.act2.rooms.AncientGrove import AncientGrove
 from retroquest.act2.rooms.WhisperingGlade import WhisperingGlade
 from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
-from typing import Any
-
-# Import starting items for Act 2
-
-# Import all available quests for Act 2
 from retroquest.act2.quests.TheGatheringStorm import TheGatheringStormQuest
 from retroquest.act2.quests.TheKnightsTest import TheKnightsTestQuest
 from retroquest.act2.quests.SuppliesForTheJourney import SuppliesForTheJourneyQuest
@@ -34,6 +30,7 @@ from retroquest.act2.quests.TheForestGuardiansRiddles import TheForestGuardiansR
 from retroquest.act2.quests.TheHermitsWarning import TheHermitsWarningQuest
 from retroquest.act2.quests.WhispersInTheWind import WhispersInTheWind
 from retroquest.act2.quests.CedricksLostHonorQuest import CedricksLostHonorQuest
+from retroquest.act2.Act2StoryFlags import FLAG_GATHERING_STORM_COMPLETED
 
 class Act2(Act):
     def __init__(self) -> None:
@@ -93,6 +90,6 @@ class Act2(Act):
             "Only then will you be ready to face the forest's deepest secrets and the growing storm that threatens all you hold dear.\n"
             "\nTake a deep breath and step forward into your destiny.\n"
         )
-    
-    def is_complete(self) -> bool:
-        return False
+
+    def is_completed(self, game_state: GameState) -> bool:
+        return game_state.get_story_flag(FLAG_GATHERING_STORM_COMPLETED)

@@ -1,4 +1,5 @@
-from retroquest.engine.Act import Act
+from engine.GameState import GameState
+from engine.Act import Act
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
 from retroquest.act1.rooms.VegetableField import VegetableField
 from retroquest.act1.rooms.ChickenCoop import ChickenCoop
@@ -26,6 +27,7 @@ from retroquest.act1.quests.PreparingForTheRoad import PreparingForTheRoadQuest
 from retroquest.act1.quests.FadedPhotograph import FadedPhotographQuest
 from retroquest.act1.quests.ShadowsOverWillowbrook import ShadowsOverWillowbrookQuest
 from retroquest.act1.quests.LostLetter import LostLetterQuest
+from retroquest.act1.Act1StoryFlags import FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED
 
 class Act1(Act):
     def __init__(self) -> None:
@@ -76,3 +78,6 @@ class Act1(Act):
             "With questions swirling in your mind, you take your first step into the unknown.\n"
             "\nLet's get started! (Type 'help' for a list of commands.)\n"
         )
+
+    def is_completed(self, game_state: GameState) -> bool:
+        return game_state.get_story_flag(FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED)

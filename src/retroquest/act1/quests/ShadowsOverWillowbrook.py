@@ -5,7 +5,8 @@ from ..Act1StoryFlags import (
     FLAG_VILLAGER_TALKED_TO,
     FLAG_WELL_EXAMINED,
     FLAG_CONNECT_WITH_NATURE,
-    FLAG_MAGIC_FULLY_UNLOCKED
+    FLAG_MAGIC_FULLY_UNLOCKED,
+    FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED
 )
 from typing import Any
 
@@ -90,7 +91,7 @@ class ShadowsOverWillowbrookQuest(Quest):
         return updated
 
     def check_completion(self, game_state: GameState) -> bool:
-        return False
+        return game_state.get_story_flag(FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED)
 
     def is_main(self) -> bool:
         return True

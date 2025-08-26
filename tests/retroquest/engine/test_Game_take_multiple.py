@@ -34,7 +34,8 @@ class MockAct(Act):
             name="Test Act",
             rooms={"TestRoom": test_room, "EmptyRoom": empty_room},
             quests=test_quests,
-            music_file=None
+            music_file='',
+            music_info=''
         )
 
 def test_take_multiple_identical_items():

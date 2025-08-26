@@ -546,6 +546,7 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["go north", "go north", "go west", "go west", "go north", "go north", "go north", "go west"])
     _execute_commands(game, ["cast prophetic_vision"])
     _check_quests(game.state, [])
+    assert game.act.is_completed(game.state), "Act 2 should be marked as completed"
     
     # At this point, we have completed steps 1-25 of the golden path!
 

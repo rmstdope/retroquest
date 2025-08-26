@@ -1,6 +1,6 @@
 import pytest
+from act1.Act1 import Act1
 from engine.Game import Game
-from engine.Act import Act
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
 from retroquest.act1.rooms.VegetableField import VegetableField
 from retroquest.act1.rooms.ChickenCoop import ChickenCoop
@@ -123,7 +123,7 @@ QUESTS = [
 
 def test_golden_path_act1_completion(monkeypatch):
     # Setup Game
-    act = Act(name="Act1", rooms=ROOMS, quests=QUESTS)
+    act = Act1()
     game = Game(act)
     _execute_commands(game, ['look'])
 
@@ -557,5 +557,5 @@ def test_golden_path_act1_completion(monkeypatch):
     # We'll check for the command execution. Further checks depend on how game handles act completion.
     _execute_commands(game, ["use map"])
     # Final check: Act I should be completed
-    _check_story_flag(game.state, "act_1_completed", True)
+    assert game.act.is_completed(game.state), "Act I is not marked as completed."
 

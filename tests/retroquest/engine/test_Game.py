@@ -53,7 +53,7 @@ def basic_rooms():
 
 @pytest.fixture
 def game(basic_rooms):
-    act = Act(name="TestAct", rooms=basic_rooms, quests=[])
+    act = Act("TestAct", basic_rooms, [], '', '')
     return Game(act)
 
 def test_game_initial_state(game, basic_rooms):
@@ -1004,7 +1004,7 @@ class MockCharacter:
 
 @pytest.fixture
 def game_with_spells(basic_rooms):
-    act = Act(name="TestAct", rooms=basic_rooms, quests=[])
+    act = Act("TestAct", basic_rooms, [], '', '')
     game = Game(act)
     
     # Add some test spells
