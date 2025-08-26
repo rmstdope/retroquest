@@ -33,10 +33,10 @@ class ResidentialQuarter(Room):
             hidden_library = HiddenLibrary()
             
             return (f"[success]You search through the basement areas of the residential buildings. Behind some old "
-                    "storage crates and forgotten furniture, you discover a concealed entrance hidden in the stone "
-                    "wall. A narrow tunnel leads deeper underground to what appears to be an ancient chamber. "
-                    f"You've found a secret passage to a [location_name]{hidden_library.get_name()}[/location_name]! You can now "
-                    "use 'go secret_passage' to enter this mysterious underground repository.[/success]")
+                    f"storage crates and forgotten furniture, you discover a concealed entrance hidden in the stone "
+                    f"wall. A narrow tunnel leads deeper underground to what appears to be an ancient chamber. "
+                    f"You've found a secret passage to a [location_name]{hidden_library.name}[/location_name]! You can now "
+                    f"use 'go secret_passage' to enter this mysterious underground repository.[/success]")
         else:
             # Get the Hidden Library room name for the message  
             from ..rooms.HiddenLibrary import HiddenLibrary
