@@ -46,6 +46,10 @@ def _check_story_flag(game_state, flag_name: str, expected_value: bool = True):
 def _check_current_room(game_state, expected_room_name: str):
     assert game_state.current_room.name == expected_room_name, f"Not in '{expected_room_name}'"
 
+def _check_quest_completed(game_state, quest_name: str):
+    """Check if a quest with the given name is completed."""
+    assert game_state.is_quest_completed(quest_name), f"Quest '{quest_name}' should be completed but is not"
+
 def _check_quests(game_state, expected_active_quests):
     """
     Asserts that the specified quests (by name) are currently active, no more, no less.
@@ -75,10 +79,6 @@ def test_golden_path_act2_completion():
     """Test the golden path through Act2 completion"""
     act = Act2()
     game = Game(act)
-    
-    # Add starting items that player should have from Act 1
-    from retroquest.act2.items.Pass import Pass
-    game.state.inventory.append(Pass())
     
     # Step 1: Mountain Path
     # Should start in Mountain Path
@@ -186,10 +186,10 @@ def test_golden_path_act2_completion():
     # Move to Castle Approach
     _execute_commands(game, ["go north"])
     _check_current_room(game.state, "Castle Approach")
-    # Give Pass to Herald
+    # Give Entry Pass to Herald
     _check_character_in_room(game.state.current_room, "Herald")
-    _execute_commands(game, ["give pass to herald"])
-    _check_item_in_inventory(game.state, "Pass", should_be_present=True)
+    _execute_commands(game, ["give entry pass to herald"])
+    _check_item_in_inventory(game.state, "entry pass", should_be_present=True)
     # Talk to Castle Guard Captain
     _check_character_in_room(game.state.current_room, "Castle Guard Captain")
     _execute_commands(game, ["talk to castle guard captain"])
@@ -480,7 +480,74 @@ def test_golden_path_act2_completion():
     _check_item_in_inventory(game.state, "secret documents")
     _check_quests(game.state, ["The Gathering Storm"])  # Caravan quest should be completed
     
-    # At this point, we have completed steps 1-22 of the golden path!
+    # Step 23: Castle Courtyard (Cedric's Honor Quest)
+    # Navigate to Castle Courtyard: Market District -> Main Square -> Castle Approach -> Castle Courtyard
+    _execute_commands(game, ["go west", "go north", "go west"])
+    _check_current_room(game.state, "Castle Courtyard")
+    # Verify characters are present
+    _check_character_in_room(game.state.current_room, "Sir Cedric")
+    _check_character_in_room(game.state.current_room, "Training Master")
+    _check_character_in_room(game.state.current_room, "Squires")
+    # Talk to Training Master to learn about Cedric's past and accept the quest
+    _execute_commands(game, ["talk to training master"])
+    _check_quests(game.state, ["The Gathering Storm", "Cedric's Lost Honor"])
+    # Try to search the room without finding anything
+    _execute_commands(game, ["search"])
+    _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=False)
+    # Talking to Squires enables search under stone benches to find Squire's Diary
+    _execute_commands(game, ["talk to squires"])
+    _execute_commands(game, ["search"])
+    _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=True)
+    # Take and read the diary to get more details about the quest
+    _execute_commands(game, ["take squire's diary"])
+    _check_item_in_inventory(game.state, "squire's diary")
+    _execute_commands(game, ["use squire's diary"])
+    _check_item_in_inventory(game.state, "squire's diary", False)
+    
+    # Step 24: Return to Great Hall - Complete Cedric's Lost Honor quest
+    _execute_commands(game, ["go west"])
+    _check_current_room(game.state, "Great Hall")
+    # Quest should still be active unless documents examined
+    _execute_commands(game, ["give secret documents to lord commander", "examine secret documents"])
+    _check_quests(game.state, ["The Gathering Storm", "Cedric's Lost Honor"])
+    # Give secret documents to Lord Commander to complete quest
+    _execute_commands(game, ["give secret documents to lord commander"])
+    _check_quests(game.state, ["The Gathering Storm"])
+    _check_item_in_inventory(game.state, "secret documents", False)  # Should be removed
+    
+    # Return to Sir Cedric to receive Nature's Charm
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    _execute_commands(game, ["talk to sir cedric"])
+    _check_item_in_inventory(game.state, "nature's charm")
+    
+    # Step 25: Heart of the Forest - Complete The Gathering Storm quest
+    # Navigate to Heart of the Forest: Castle Courtyard -> Castle Approach -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition -> Forest Entrance -> Ancient Grove -> Heart of the Forest
+    _execute_commands(game, ["go east", "go south", "go south", "go south", "go east", "go east", "go south", "go south"])
+    _check_current_room(game.state, "Heart of the Forest")
+    # Verify Nyx and offering altar are present
+    _check_character_in_room(game.state.current_room, "Nyx", should_be_present=False)
+    _check_item_in_room(game.state.current_room, "offering altar")
+    _execute_commands(game, ["use druidic charm with offering altar"])
+    _check_character_in_room(game.state.current_room, "Nyx")
+    # Talk to Nyx for the first meeting
+    _execute_commands(game, ["talk to nyx"])
+    
+    # Verify charms were consumed and rewards received
+    _check_item_in_inventory(game.state, "druidic charm", False)
+    _check_item_in_inventory(game.state, "protective charm", False)
+    _check_item_in_inventory(game.state, "nature's charm", False)
+    _check_item_in_inventory(game.state, "nyx's token", True)
+    _check_item_in_inventory(game.state, "forest heart crystal", True)
+    
+    # Verify prophetic_vision spell was learned
+    _check_spell_known(game.state, "prophetic_vision")
+
+    # Step 26: Go back to Sir Cedric and cast prophetic_vision to complete The Gathering Storm quest
+    _execute_commands(game, ["go north", "go north", "go west", "go west", "go north", "go north", "go north", "go west"])
+    _execute_commands(game, ["cast prophetic_vision"])
+    _check_quests(game.state, [])
+    
+    # At this point, we have completed steps 1-25 of the golden path!
 
 def test_main_square_navigation_restriction():
     """Test that Main Square navigation is restricted until city map is used"""
@@ -644,6 +711,146 @@ def test_quest_prerequisites_validation():
     """Test validation of quest prerequisites for steps 18-19."""
     game = _create_test_game()
 
+def test_training_master_quest_trigger():
+    """Test that talking to Training Master triggers Cedric's Lost Honor quest."""
+    game = _create_test_game()
+    
+    # Navigate to Castle Courtyard
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    
+    # Verify quest is not active initially
+    _check_quests(game.state, [])
+    
+    # Talk to Training Master
+    result = game.handle_command("talk to training master")
+    
+    # Verify quest acceptance message
+    assert "New quest(s) activated:" in result
+    assert "Cedric's Lost Honor (side)" in result
+    assert "accusations of cowardice" in result
+    assert "documents - evidence that would clear his name" in result
+    
+    # Verify quest is now active
+    from retroquest.act2.quests.CedricksLostHonorQuest import CedricksLostHonorQuest
+    active_quest_names = [q.name for q in game.state.activated_quests]
+    assert "Cedric's Lost Honor" in active_quest_names
+    
+    # Talk to Training Master again - should get different dialogue
+    result = game.handle_command("talk to training master")
+    assert "Quest Accepted" not in result  # Should not trigger quest again
+    assert "You're looking into Sir Cedric's situation" in result
+
+def test_squires_diary_quest_dependency():
+    """Test that the diary can only be found after talking to squires and provides meaningful information only after quest is accepted."""
+    game = _create_test_game()
+    
+    # Navigate to Castle Courtyard
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    
+    # Try to talk to squires before quest is accepted - should be too busy
+    result = game.handle_command("talk to squires")
+    assert "too busy and focused to engage" in result
+    assert "can't talk" in result
+    
+    # Try to search without talking to squires first - should not find diary
+    result = game.handle_command("search")
+    assert "don't find anything of particular interest" in result
+    assert "talk to them first" in result
+    _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=False)
+    
+    # Accept quest by talking to Training Master first
+    game.handle_command("talk to training master")
+    
+    # Now talk to squires - should provide information about diary
+    result = game.handle_command("talk to squires")
+    assert "Sir Cedric's disgrace" in result
+    assert "old diary under the stone benches" in result
+    
+    # Now search should find the diary
+    result = game.handle_command("search")
+    assert "worn leather diary" in result
+    _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=True)
+    
+    # Take the diary
+    game.handle_command("take squire's diary")
+    
+    # Read diary - should provide detailed information (quest already accepted)
+    result = game.handle_command("use squire's diary")
+    assert "Battle of Thornfield Pass" in result
+    assert "secret military documents" in result
+    assert "Heavensforth" in result
+    assert "caravan" in result
+
+
+def test_castle_courtyard_search_dependency():
+    """Test that the Castle Courtyard search requires talking to squires first, and squires require quest acceptance."""
+    game = _create_test_game()
+    
+    # Navigate to Castle Courtyard
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    
+    # Verify squires are present
+    _check_character_in_room(game.state.current_room, "Squires")
+    
+    # Search without talking to squires should fail to find diary
+    result = game.handle_command("search")
+    assert "don't find anything of particular interest" in result
+    assert "talk to them first" in result
+    _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=False)
+    
+    # Try to talk to squires before quest accepted - should be too busy
+    result = game.handle_command("talk to squires")
+    assert "too busy and focused" in result
+    assert "can't talk" in result
+    
+    # Accept quest by talking to Training Master
+    game.handle_command("talk to training master")
+    
+    # Now talk to squires - should work
+    result = game.handle_command("talk to squires")
+    assert "old diary under the stone benches" in result
+    
+    # Now search should succeed
+    result = game.handle_command("search")
+    assert "worn leather diary" in result
+    assert "squire's diary" in result
+    _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=True)
+    
+    # Subsequent searches should indicate already searched
+    result = game.handle_command("search")
+    assert "already searched this area thoroughly" in result
+
+def test_squires_busy_before_quest_acceptance():
+    """Test that squires are too busy to talk before Cedric's Lost Honor quest is accepted."""
+    game = _create_test_game()
+    
+    # Navigate to Castle Courtyard
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    
+    # Verify quest is not active initially
+    _check_quests(game.state, [])
+    
+    # Try to talk to squires before quest is accepted
+    result = game.handle_command("talk to squires")
+    assert "too busy and focused to engage" in result
+    assert "can't talk" in result
+    assert "Training Master expects us to perfect" in result
+    
+    # Verify squires talked flag is NOT set
+    from retroquest.act2.Act2StoryFlags import FLAG_SQUIRES_TALKED_TO
+    assert not game.state.get_story_flag(FLAG_SQUIRES_TALKED_TO)
+    
+    # Accept quest by talking to Training Master
+    game.handle_command("talk to training master")
+    
+    # Now squires should be willing to talk
+    result = game.handle_command("talk to squires")
+    assert "Sir Cedric's disgrace" in result
+    assert "old diary under the stone benches" in result
+    
+    # Verify squires talked flag IS now set
+    assert game.state.get_story_flag(FLAG_SQUIRES_TALKED_TO)
+
 
 def test_forest_transition_spell_learning():
     """Test the spell learning mechanics in Forest Transition for step 15."""
@@ -667,3 +874,167 @@ def test_forest_transition_spell_learning():
     result = hermit.talk_to(game.state)
     _check_item_in_inventory(game.state, "protective charm")
 
+
+def test_secret_documents_quest_dependency():
+    """Test that examining secret documents provides meaningful information only after reading the squire's diary."""
+    game = _create_test_game()
+    
+    # Add secret documents to inventory
+    from retroquest.act2.items.SecretDocuments import SecretDocuments
+    from retroquest.act2.items.SquiresDiary import SquiresDiary
+    from retroquest.act2.Act2StoryFlags import FLAG_EXAMINED_SECRET_DOCUMENTS
+    
+    secret_docs = SecretDocuments()
+    diary = SquiresDiary()
+    game.state.inventory.append(secret_docs)
+    game.state.inventory.append(diary)
+    
+    # Examine documents before reading diary - should not understand significance
+    examine_result = secret_docs.examine(game.state)
+    assert "legal papers and testimonies" in examine_result
+    assert "can't make sense of their significance" in examine_result
+    assert "don't mean anything to you" in examine_result
+    assert "Sir Cedric" not in examine_result, "Should not mention Cedric before reading diary"
+    
+    # Flag should not be set yet since diary wasn't read
+    assert not game.state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS)
+    
+    # Read the squire's diary to learn about Cedric's case
+    game.handle_command("use squire's diary")
+    
+    # Now examine documents after reading diary - should understand their significance
+    examine_result = secret_docs.examine(game.state)
+    assert "Sir Cedric was falsely accused" in examine_result
+    assert "protecting civilians" in examine_result
+    assert "clear his name and restore his honor" in examine_result
+    assert "can't make sense" not in examine_result, "Should not show confusion after reading diary"
+    
+    # Flag should now be set since documents were examined after reading diary
+    assert game.state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS)
+
+
+def test_squires_diary_sets_flag():
+    """Test that reading the squire's diary sets the appropriate story flag."""
+    game = _create_test_game()
+    
+    # Add squire's diary to inventory
+    from retroquest.act2.items.SquiresDiary import SquiresDiary
+    from retroquest.act2.Act2StoryFlags import FLAG_READ_SQUIRES_DIARY
+    
+    diary = SquiresDiary()
+    game.state.inventory.append(diary)
+    
+    # Verify flag is not set initially
+    assert not game.state.get_story_flag(FLAG_READ_SQUIRES_DIARY)
+    
+    # Read/use the diary
+    result = game.handle_command("use squire's diary")
+    
+    # Verify flag is now set
+    assert game.state.get_story_flag(FLAG_READ_SQUIRES_DIARY)
+    
+    # Verify the diary is removed from inventory after use
+    assert diary not in game.state.inventory, "Diary should be removed from inventory after use"
+    
+    # Verify the diary content is returned
+    assert "troubling story" in result
+    assert "Battle of Thornfield Pass" in result
+    assert "secret documents from Heavensforth" in result
+
+
+def test_cedriks_honor_quest_updates_with_documents():
+    """Test that Cedric's Lost Honor quest updates when secret documents are examined."""
+    game = _create_test_game()
+    
+    # Navigate to Castle Courtyard and accept quest
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    game.handle_command("talk to training master")
+    
+    # Find the activated quest
+    cedrics_quest = None
+    for quest in game.state.activated_quests:
+        if quest.name == "Cedric's Lost Honor":
+            cedrics_quest = quest
+            break
+    
+    assert cedrics_quest is not None, "Cedric's Lost Honor quest should be activated"
+    
+    # Add items to inventory
+    from retroquest.act2.items.SquiresDiary import SquiresDiary
+    from retroquest.act2.items.SecretDocuments import SecretDocuments
+    
+    diary = SquiresDiary()
+    docs = SecretDocuments()
+    game.state.inventory.append(diary)
+    game.state.inventory.append(docs)
+    
+    # Check initial quest description
+    initial_description = cedrics_quest.description
+    assert "Investigate the rumors" in initial_description
+    assert "secret documents from Heavensforth" not in initial_description
+    assert "You have found the secret documents" not in initial_description
+    
+    # Read diary - should trigger first quest update
+    game.handle_command("use squire's diary")
+    first_update_description = cedrics_quest.description
+    assert "secret documents from Heavensforth" in first_update_description
+    assert "went missing when a merchant caravan was lost" in first_update_description
+    assert "You have found the secret documents" not in first_update_description
+    
+    # Examine documents - should trigger second quest update
+    game.handle_command("examine secret documents")
+    final_description = cedrics_quest.description
+    assert "You have found the secret documents" in final_description
+    assert "clearly proves Sir Cedric's innocence" in final_description
+    assert "protecting civilians and following direct orders" in final_description
+    assert "present this evidence" in final_description
+
+
+def test_step_24_lord_commander_interaction():
+    """Test step 24 specifically - completing Cedric's Lost Honor quest via Lord Commander."""
+    game = _create_test_game()
+    
+    # Set up the required state: quest accepted, diary read, documents examined
+    from retroquest.act2.items.SecretDocuments import SecretDocuments
+    from retroquest.act2.Act2StoryFlags import FLAG_CEDRIKS_HONOR_ACCEPTED, FLAG_READ_SQUIRES_DIARY, FLAG_EXAMINED_SECRET_DOCUMENTS
+    
+    game.state.set_story_flag(FLAG_CEDRIKS_HONOR_ACCEPTED, True)
+    game.state.set_story_flag(FLAG_READ_SQUIRES_DIARY, True)
+    game.state.set_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS, True)
+    
+    # Add quest to activated quests
+    from retroquest.act2.quests.CedricksLostHonorQuest import CedricksLostHonorQuest
+    quest = CedricksLostHonorQuest()
+    game.state.activated_quests.append(quest)
+    
+    # Add secret documents to inventory
+    docs = SecretDocuments()
+    game.state.inventory.append(docs)
+    
+    # Navigate to Great Hall
+    game.state.current_room = game.state.all_rooms["GreatHall"]
+    
+    # Verify quest is not completed initially
+    assert not game.state.is_quest_completed("Cedric's Lost Honor")
+    
+    # Give documents to Lord Commander
+    result = game.handle_command("give secret documents to lord commander")
+    
+    # Verify the quest is now completed
+    assert game.state.is_quest_completed("Cedric's Lost Honor")
+    
+    # Verify documents were removed from inventory
+    assert not any(item.name.lower() == "secret documents" for item in game.state.inventory)
+    
+    # Verify success message
+    assert "Justice has been served at last" in result
+    assert "officially restore Sir Cedric's honor" in result
+    
+    # Now test Sir Cedric's reaction
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    result = game.handle_command("talk to sir cedric")
+    
+    # Should receive Nature's Charm
+    assert any(item.name.lower() == "nature's charm" for item in game.state.inventory)
+    assert "Nature's Charm" in result
+    assert "blessed by the ancient knights" in result

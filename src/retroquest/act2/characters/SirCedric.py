@@ -3,7 +3,8 @@ from ...engine.GameState import GameState
 from ..quests.TheGatheringStorm import TheGatheringStormQuest
 from ..quests.TheKnightsTest import TheKnightsTestQuest
 from ..items.Coins import Coins
-from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_CEDRIC_TRUSTS_ELIOR
+from ..items.NaturesCharm import NaturesCharm
+from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_CEDRIC_TRUSTS_ELIOR, FLAG_CEDRIKS_HONOR_COMPLETED, FLAG_RECEIVED_NATURES_CHARM, FLAG_NYX_TRIALS_COMPLETED
 
 class SirCedric(Character):
     def __init__(self) -> None:
@@ -13,6 +14,37 @@ class SirCedric(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
+        # Check if Nyx trials are completed - highest priority response
+        if game_state.get_story_flag(FLAG_NYX_TRIALS_COMPLETED):
+            return ("[character_name]Sir Cedric[/character_name]: My friend, I sense something extraordinary has happened! "
+                    "You carry an aura of ancient magic about you, and your eyes seem to hold depths that were not "
+                    "there before. Have you succeeded in your quest to find Nyx? The prophetic vision spell you've "
+                    "learned - this is precisely the kind of mystical knowledge we need to understand and prepare "
+                    "for the gathering storm. With your newfound ability to glimpse possible futures, we can "
+                    "better anticipate the threats ahead and develop strategies to counter them. You have become "
+                    "a truly formidable ally in our fight against the darkness!")
+        
+        if game_state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED) and not game_state.get_story_flag(FLAG_RECEIVED_NATURES_CHARM):
+            # Honor has been restored, give Nature's Charm
+            game_state.set_story_flag(FLAG_RECEIVED_NATURES_CHARM, True)
+            charm = NaturesCharm()
+            game_state.inventory.append(charm)
+            
+            return ("[character_name]Sir Cedric[/character_name]: My friend, I cannot express how grateful I am! "
+                    "You have restored my honor and cleared my name of those terrible accusations. The weight "
+                    "I have carried for so long has finally been lifted from my shoulders. "
+                    "\n\n*Sir Cedric reaches into his pack and withdraws an ancient wooden charm*\n\n"
+                    "Please accept this Nature's Charm - it has been in my family for generations, "
+                    "blessed by the ancient knights who first made pacts with the forest spirits. "
+                    "According to the old texts, this is one of the three sacred charms needed to summon "
+                    "the forest sprite Nyx. You have proven yourself a true friend, and I believe "
+                    "you will need this for the greater challenges ahead.")
+        
+        if game_state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED):
+            return ("[character_name]Sir Cedric[/character_name]: Thanks to your efforts, my honor has been restored "
+                    "and the false accusations have been cleared from my record. I stand ready to face "
+                    "whatever challenges lie ahead with renewed purpose and dignity.")
+        
         if not game_state.get_story_flag(FLAG_SPOKEN_TO_SIR_CEDRIC):
             # First meeting - explain the main quest and give knight's test
             game_state.set_story_flag(FLAG_SPOKEN_TO_SIR_CEDRIC, True)

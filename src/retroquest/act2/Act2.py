@@ -20,7 +20,6 @@ from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
 from typing import Any
 
 # Import starting items for Act 2
-from retroquest.act2.items.Pass import Pass
 
 # Import all available quests for Act 2
 from retroquest.act2.quests.TheGatheringStorm import TheGatheringStormQuest
@@ -34,6 +33,7 @@ from retroquest.act2.quests.TheAncientLibrary import TheAncientLibraryQuest
 from retroquest.act2.quests.TheForestGuardiansRiddles import TheForestGuardiansRiddles
 from retroquest.act2.quests.TheHermitsWarning import TheHermitsWarningQuest
 from retroquest.act2.quests.WhispersInTheWind import WhispersInTheWind
+from retroquest.act2.quests.CedricksLostHonorQuest import CedricksLostHonorQuest
 
 class Act2(Act):
     def __init__(self) -> None:
@@ -68,23 +68,17 @@ class Act2(Act):
             TheHealersApprenticeQuest(),
             TheAncientLibraryQuest(),
             TheInnkeepersDaughterQuest(),
+            CedricksLostHonorQuest(),
             
             # Forest Phase Side Quests
             TheMerchantsLostCaravanQuest(),
             TheForestGuardiansRiddles(),
             WhispersInTheWind(),
             TheHermitsWarningQuest(),
-            
-            # TODO: Add remaining quests when implemented:
-            # CedricksLostHonorQuest(), 
         ]
         music_file = "music/Walen - Medieval Village (freetouse.com).mp3"
         super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file, music_info='Music track: Medieval Village by Walen\nSource: https://freetouse.com/music\nFree To Use Music for Video')
 
-    def get_starting_items(self) -> list:
-        """Return items that the player should start Act 2 with"""
-        return [Pass()]
-    
     def get_act_intro(self) -> str:
         return (
             "After the mysterious events in Willowbrook and the revelation of your growing magical abilities, you have left your quiet village behind. "
@@ -101,27 +95,4 @@ class Act2(Act):
         )
     
     def is_complete(self) -> bool:
-        """Check if all required quests for Act II have been completed"""
-        # According to design rules, all side quests must be completed before main quest
-        required_quests = [
-            # Greendale Phase Quests
-            "the_knights_test",
-            "supplies_for_the_journey", 
-            "echoes_of_the_past",
-            "the_healers_apprentice",
-            "cedriks_lost_honor",
-            "the_innkeepers_daughter",
-
-            "the_ancient_library",
-            # Forest Phase Quests
-            "the_hermits_warning",
-            "the_forest_guardians_riddles",
-            "whispers_in_the_wind",
-            "the_merchants_lost_caravan",
-            # Main Quest (can only complete after all side quests)
-            "the_gathering_storm"
-        ]
-        
-        # TODO: Implement proper quest completion checking when quests are created
-        # For now, return False as a placeholder
         return False

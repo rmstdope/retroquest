@@ -71,4 +71,4 @@ This document outlines the design rules and guidelines for both the game story a
 
 - Try to use isinstance when checking types, as it is more robust than comparing types directly.
 - Avoid using magic strings or numbers; instead, use constants or enums to represent important values.
-- When using multi-line strings, align the opening quotes so that Visual Studio Code recognizes the indentation.
+- When using multi-line strings, align the lines so that they match the indentation of the surrounding code.
