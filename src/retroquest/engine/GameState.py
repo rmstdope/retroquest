@@ -1,4 +1,7 @@
-from typing import Any, Union
+from typing import Any, Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .Item import Item
 
 class GameState:
     """
@@ -108,7 +111,7 @@ class GameState:
         
         return len(items_to_remove)
 
-    def add_item_to_inventory(self, item_object: Item, count: int = 1) -> None:
+    def add_item_to_inventory(self, item_object: "Item", count: int = 1) -> None:
         """Adds an item object to the player's inventory, optionally multiple times."""
         for _ in range(count):
             self.inventory.append(item_object)
@@ -254,7 +257,7 @@ class GameState:
                 return room
         return None
 
-    def get_item(self, item_name: str) -> Union[Item, None]:
+    def get_item(self, item_name: str) -> Union["Item", None]:
         """
         Returns the item object matching the given item_name (case-insensitive),
         searching first in the player's inventory, then in all rooms.
