@@ -10,7 +10,7 @@ class GreaterHealSpell(Spell):
         )
 
     def cast_spell(self, game_state: GameState) -> str:
-        return ("[success]You cast [spell_name]greater_heal[/spell_name], channeling powerful healing energy. "
+        return (f"[success]You cast [spell_name]{self.get_name()}[/spell_name], channeling powerful healing energy. "
                 "The spell radiates outward, ready to cure serious ailments, but finds no one in immediate "
                 "need of healing nearby.[/success]")
 
@@ -22,5 +22,5 @@ class GreaterHealSpell(Spell):
             # Check if Elena has the receive_greater_heal method and call it
             return target_character.receive_greater_heal(game_state)
         else:
-            return (f"[success]You cast [spell_name]greater_heal[/spell_name] on [character_name]{target_character.get_name()}[/character_name]. "
+            return (f"[success]You cast [spell_name]{self.get_name()}[/spell_name] on [character_name]{target_character.get_name()}[/character_name]. "
                     f"Healing energy flows through them, restoring their vitality and curing any minor ailments they may have had.[/success]")

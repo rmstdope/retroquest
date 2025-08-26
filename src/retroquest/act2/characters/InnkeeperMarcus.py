@@ -31,16 +31,16 @@ class InnkeeperMarcus(Character):
                 druidic_charm = DruidicCharm()
                 game_state.add_item_to_inventory(druidic_charm)
                 
-                return ("[character_name]Innkeeper Marcus[/character_name]: *tears of joy in his eyes* "
+                return (f"[character_name]{self.get_name()}[/character_name]: *tears of joy in his eyes* "
                         "You have given me back my daughter! There are no words to express my gratitude. "
-                        "This [item_name]druidic charm[/item_name] has been in my family for generations - "
+                        f"This [item_name]{druidic_charm.get_name()}[/item_name] has been in my family for generations - "
                         "it was blessed by the ancient druids who first settled in these lands. Please, "
                         "take it as a token of our eternal gratitude. May it bring you protection and "
                         "guidance on your heroic journey!\n\n"
                         "[success]Marcus places the sacred charm in your hands with reverence. You can "
                         "feel the ancient magic thrumming within the carved wood.[/success]")
             else:
-                return ("[character_name]Innkeeper Marcus[/character_name]: My daughter is healthy and "
+                return (f"[character_name]{self.get_name()}[/character_name]: My daughter is healthy and "
                         "happy again, all thanks to you! The Silver Stag Inn will always be your home. "
                         "Whatever you need - rooms, meals, information - it's yours freely.")
         
@@ -57,13 +57,13 @@ class InnkeeperMarcus(Character):
         self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options)
         
         if game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE):
-            return (f'The [character_name]Innkeeper Marcus[/character_name] says: [dialogue]"{dialogue} '
+            return (f'The [character_name]{self.get_name()}[/character_name] says: [dialogue]"{dialogue} '
                     f'{wares_info.strip()}"[/dialogue]\n\n'
                     "You've spoken with [character_name]Elena[/character_name]? "
                     "Then you understand my desperation. The curse grows stronger each day, and I fear we don't have "
                     "much time left. If you truly can help her, I'll give you anything - rooms, information, whatever you need.")
         else:
-            return (f'The [character_name]Innkeeper Marcus[/character_name] says: [dialogue]"{dialogue} '
+            return (f'The [character_name]{self.get_name()}[/character_name] says: [dialogue]"{dialogue} '
                     f'{wares_info.strip()}"[/dialogue]\n\n'
                     "Though I must say, these have been dark times for my family. "
                     "My daughter... well, perhaps you should speak with her yourself if you're looking to help those in need.")
@@ -115,7 +115,7 @@ class InnkeeperMarcus(Character):
             new_item.can_be_carried = True  # Ensure the purchased item is carriable
             game_state.add_item_to_inventory(new_item)
             remaining_coins = game_state.get_item_count("coins")
-            return event_msg + "\n" + f'[success]You purchase the [item_name]{item_name_to_buy}[/item_name] from [character_name]Innkeeper Marcus[/character_name] for {price} [item_name]gold coins[/item_name]. He hands you a brass key and explains how to access the private rooms upstairs. You have {remaining_coins} [item_name]coins[/item_name] remaining.[/success]'
+            return event_msg + "\n" + f'[success]You purchase the [item_name]{item_name_to_buy}[/item_name] from [character_name]{self.get_name()}[/character_name] for {price} [item_name]gold coins[/item_name]. He hands you a brass key and explains how to access the private rooms upstairs. You have {remaining_coins} [item_name]coins[/item_name] remaining.[/success]'
         else:
             # Should not happen if item is in wares, but safety check
             return event_msg + "\n" + f'[failure]An unexpected error occurred trying to rent the room.[/failure]'

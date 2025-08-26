@@ -12,30 +12,30 @@ class BarmaidElena(Character):
 
     def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED):
-            return ("[character_name]Elena[/character_name]: *beaming with health and vitality* Oh, "
+            return (f"[character_name]{self.get_name()}[/character_name]: *beaming with health and vitality* Oh, "
                     "thank you so much! I feel like I'm alive again! The curse is completely gone, "
                     "and I owe you my life. My father is so grateful - he insists you take our family's "
                     "sacred charm as a token of our eternal gratitude. You are truly a hero!")
         elif game_state.get_story_flag(FLAG_ELENA_PURIFIED):
-            return ("[character_name]Elena[/character_name]: *glowing with pure energy* "
+            return (f"[character_name]{self.get_name()}[/character_name]: *glowing with pure energy* "
                     "I feel so much cleaner now! The blessed water has washed away the dark "
                     "corruption that was clinging to my soul. The curse is almost gone - I can "
                     "sense just a few dark tendrils remaining. One powerful dispelling spell "
                     "should shatter the last of this evil enchantment!")
         elif game_state.get_story_flag(FLAG_ELENA_INITIAL_HEALING):
-            return ("[character_name]Elena[/character_name]: *looking much better but still weak* "
+            return (f"[character_name]{self.get_name()}[/character_name]: *looking much better but still weak* "
                     "The healing magic has given me strength! I can feel the curse's grip weakening, "
                     "but it's still there, clinging to me. I think you'll need to purify the dark "
                     "magic with blessed water and then cast a powerful dispelling spell to break "
                     "it completely.")
         elif not game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE):
             game_state.set_story_flag(FLAG_KNOWS_ELENA_CURSE, True)
-            return ("[character_name]Barmaid Elena[/character_name]: *coughs weakly* Hello, traveler. I apologize for my "
+            return (f"[character_name]{self.get_name()}[/character_name]: *coughs weakly* Hello, traveler. I apologize for my "
                     "appearance... I've been cursed by a dark wizard who passed through town weeks ago. The curse "
                     "grows stronger each day, draining my life force. My father searches desperately for a cure, "
                     "but I fear only someone with powerful magical abilities could break such dark magic.")
         else:
-            return ("[character_name]Barmaid Elena[/character_name]: *weakly* Have you found a way to break the curse? "
+            return (f"[character_name]{self.get_name()}[/character_name]: *weakly* Have you found a way to break the curse? "
                     "I can feel my strength fading more each day...")
 
     def receive_greater_heal(self, game_state: GameState) -> str:
@@ -52,7 +52,11 @@ class BarmaidElena(Character):
                             "has restored some of her strength and vitality. Her eyes show hope for "
                             "the first time in weeks.")
         
-        return ("[success]You cast [spell_name]greater_heal[/spell_name] on Elena, channeling powerful "
+        # Get spell name for display
+        from ..spells.GreaterHealSpell import GreaterHealSpell
+        greater_heal_spell = GreaterHealSpell()
+        
+        return (f"[success]You cast [spell_name]{greater_heal_spell.get_name()}[/spell_name] on Elena, channeling powerful "
                 "healing energy into her weakened form. The golden light battles against the dark "
                 "tendrils of the curse, and while it cannot break the enchantment completely, it "
                 "significantly strengthens Elena's life force. She gasps as color returns to her "
@@ -110,7 +114,11 @@ class BarmaidElena(Character):
                             "She moves with grace and energy, completely free from the dark curse "
                             "that once plagued her. She looks at you with deep gratitude and joy.")
         
-        return ("[success]You cast [spell_name]dispel[/spell_name] on Elena, channeling powerful "
+        # Get spell name for display
+        from ..spells.DispelSpell import DispelSpell
+        dispel_spell = DispelSpell()
+        
+        return (f"[success]You cast [spell_name]{dispel_spell.get_name()}[/spell_name] on Elena, channeling powerful "
                 "counter-magic into the remaining curse fragments. The spell tears through the last "
                 "dark tendrils like lightning, shattering the evil enchantment completely. Elena cries "
                 "out in relief as the final traces of the curse dissolve into nothingness.\n\n"

@@ -12,11 +12,11 @@ class Historians(Character):
 
     def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS):
-            return ("[character_name]Historians[/character_name]: The journal you showed us was most illuminating! "
+            return (f"[character_name]{self.get_name()}[/character_name]: The journal you showed us was most illuminating! "
                     "The references to Willowbrook's bloodlines confirm what we suspected from the ancient chronicles. "
                     "Your heritage appears to be quite significant indeed.")
         else:
-            return ("[character_name]Historians[/character_name]: Welcome to the historical archives. We maintain "
+            return (f"[character_name]{self.get_name()}[/character_name]: Welcome to the historical archives. We maintain "
                     "records of regional history, family genealogies, and ancient chronicles. Do you have any "
                     "historical documents or artifacts you'd like us to examine?")
 

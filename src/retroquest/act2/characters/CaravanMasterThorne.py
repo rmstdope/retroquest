@@ -21,22 +21,22 @@ class CaravanMasterThorne(Character):
                 self.has_given_documents = True
                 # Set the flag indicating the lost caravan quest is completed
                 game_state.set_story_flag(FLAG_LOST_CARAVAN_COMPLETED, True)
-                return ("[character_name]Caravan Master Thorne[/character_name]: You've found them! Thank the gods! "
+                return (f"[character_name]{self.get_name()}[/character_name]: You've found them! Thank the gods! "
                         "I cannot express my gratitude enough for bringing my people back safely. "
                         "As promised, here is your reward - but this is more than just payment. "
                         "These documents came into my possession years ago, and I believe they contain "
                         "evidence that could clear a good man's name. Perhaps you'll know what to do with them.\n\n"
-                        "Thorne hands you a stack of [item_name]Secret Documents[/item_name].")
+                        f"Thorne hands you a stack of [item_name]{secret_docs.get_name()}[/item_name].")
             else:
-                return ("[character_name]Caravan Master Thorne[/character_name]: I'm still processing the relief "
+                return (f"[character_name]{self.get_name()}[/character_name]: I'm still processing the relief "
                         "of having my caravan safely returned. Those documents I gave you - I hope they prove "
                         "useful. Sometimes the right evidence can restore honor where it was unjustly lost.")
         elif not game_state.get_story_flag(FLAG_SPOKEN_TO_CARAVAN_MASTER):
             game_state.set_story_flag(FLAG_SPOKEN_TO_CARAVAN_MASTER, True)
-            return ("[character_name]Caravan Master Thorne[/character_name]: Thank the gods, someone who looks capable! "
+            return (f"[character_name]{self.get_name()}[/character_name]: Thank the gods, someone who looks capable! "
                     "I desperately need help - one of my most valuable caravans has gone missing in the Enchanted Forest. "
                     "It was carrying rare goods and several merchants. I fear the worst, but I must know their fate. "
                     "Would you be willing to search for them? I would be forever in your debt.")
         else:
-            return ("[character_name]Caravan Master Thorne[/character_name]: Any word on my missing caravan? Every day "
+            return (f"[character_name]{self.get_name()}[/character_name]: Any word on my missing caravan? Every day "
                     "that passes makes me fear the worst for those poor souls.")

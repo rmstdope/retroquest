@@ -22,7 +22,7 @@ class ForestSurvivalKit(Item):
             # Remove the forest survival kit from inventory after successful use
             game_state.remove_item_from_inventory("forest survival kit")
             
-            return ("[success]You open the [item_name]forest survival kit[/item_name] and spread its contents. "
+            return (f"[success]You open the [item_name]{self.get_name()}[/item_name] and spread its contents. "
                     "The compass points true north, the protective gear fits snugly, "
                     "and the dried rations remind you to prepare for a long journey. Most importantly, you "
                     "study the forest map, learning the locations of safe camping spots and which areas to avoid. "

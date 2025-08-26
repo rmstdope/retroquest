@@ -28,31 +28,42 @@ class SpectralLibrarian(Character):
                 
                 # Add Crystal Focus to the room for player to take
                 from ..items.CrystalFocus import CrystalFocus
-                game_state.current_room.add_item(CrystalFocus())
+                crystal_focus = CrystalFocus()
+                game_state.current_room.add_item(crystal_focus)
                 
-                return ("[success][character_name]Spectral Librarian[/character_name]: 'Ah, you have repaired the "
-                        "protective enchantments with your [spell_name]mend[/spell_name] spell. This shows both "
+                # Get spell names
+                from ..spells.MendSpell import MendSpell
+                from ..spells.DispelSpell import DispelSpell
+                mend_spell = MendSpell()
+                dispel_spell = DispelSpell()
+                
+                return (f"[success][character_name]{self.get_name()}[/character_name]: 'Ah, you have repaired the "
+                        f"protective enchantments with your [spell_name]{mend_spell.get_name()}[/spell_name] spell. This shows both "
                         "magical ability and respect for ancient knowledge. I shall reveal what you seek.' The "
                         "spirit's eyes glow brighter as they speak: 'Your bloodline traces back to the ancient "
                         "mages of Willowbrook, those who were chosen to guard against the rising darkness. "
                         "Malakar's interest in your village was no coincidence - he seeks to corrupt or destroy "
                         "the magical heritage that flows through your veins.' They gesture to the ancient texts: "
-                        "'Study these tomes to learn the [spell_name]dispel[/spell_name] spell, and take this "
-                        "[item_name]Crystal Focus[/item_name] to enhance your growing abilities. Your destiny "
+                        f"'Study these tomes to learn the [spell_name]{dispel_spell.get_name()}[/spell_name] spell, and take this "
+                        f"[item_name]{crystal_focus.get_name()}[/item_name] to enhance your growing abilities. Your destiny "
                         "as one of the Chosen is beginning to unfold.'[/success]")
             else:
-                return ("[character_name]Spectral Librarian[/character_name]: 'Welcome, seeker of knowledge. I am "
+                return (f"[character_name]{self.get_name()}[/character_name]: 'Welcome, seeker of knowledge. I am "
                         "the eternal guardian of this repository. The protective enchantments around the most "
                         "valuable texts have been damaged by time. Prove your worthiness by repairing them, and "
                         "I shall share the knowledge you seek about your heritage and destiny.'")
         else:
-            return ("[character_name]Spectral Librarian[/character_name]: 'You have proven yourself worthy and "
-                    "learned what this library can teach. The knowledge of your bloodline and the [spell_name]dispel[/spell_name] "
+            # Get spell name
+            from ..spells.DispelSpell import DispelSpell
+            dispel_spell = DispelSpell()
+            
+            return (f"[character_name]{self.get_name()}[/character_name]: 'You have proven yourself worthy and "
+                    f"learned what this library can teach. The knowledge of your bloodline and the [spell_name]{dispel_spell.get_name()}[/spell_name] "
                     "spell will serve you well in the challenges ahead. Remember: you are part of an ancient "
                     "lineage chosen to stand against the darkness. Use this knowledge wisely.'")
 
     def examine(self, game_state: GameState) -> str:
-        return ("The [character_name]Spectral Librarian[/character_name] appears to be a scholar from ancient "
+        return (f"The [character_name]{self.get_name()}[/character_name] appears to be a scholar from ancient "
                 "times, their ethereal form bound to this library by duty and purpose. They radiate wisdom "
                 "accumulated over centuries of guarding these precious texts. There's something both "
                 "melancholy and noble about their eternal vigil.")

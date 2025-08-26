@@ -12,11 +12,11 @@ class Herald(Character):
 
     def talk_to(self, game_state: GameState) -> str:
         if self.received_pass:
-            return ("[character_name]Herald[/character_name]: Your credentials have been verified and you have been "
+            return (f"[character_name]{self.get_name()}[/character_name]: Your credentials have been verified and you have been "
                     "granted formal audience rights. You may proceed to meet with [character_name]Sir Cedric[/character_name] "
                     "and other members of the court.")
         else:
-            return ("[character_name]Herald[/character_name]: Greetings, traveler. I must examine your credentials "
+            return (f"[character_name]{self.get_name()}[/character_name]: Greetings, traveler. I must examine your credentials "
                     "before you can be granted audience with the nobility. Do you have a formal pass or letter "
                     "of recommendation?")
 
@@ -27,8 +27,8 @@ class Herald(Character):
         if isinstance(item_object, EntryPass):
             game_state.current_room.enable_castle_courtyard()
             self.received_pass = True
-            return ("[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name].[/event]\n"
-                    "[success]You present the [item_name]{item_object.get_name()}[/item_name] to the [character_name]Herald[/character_name]. "
+            return (f"[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]\n"
+                    f"[success]You present the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name]. "
                     "He examines the seal carefully and nods with approval. 'This is a formal recommendation "
                     "of excellent standing. You are granted formal audience rights with the nobility.' "
                     "The pass has been officially registered.[/success]")
