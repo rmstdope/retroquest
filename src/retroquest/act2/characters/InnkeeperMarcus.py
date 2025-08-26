@@ -33,7 +33,7 @@ class InnkeeperMarcus(Character):
                 
                 return (f"[character_name]{self.get_name()}[/character_name]: *tears of joy in his eyes* "
                         "You have given me back my daughter! There are no words to express my gratitude. "
-                        "This [item_name]druidic charm[/item_name] has been in my family for generations - "
+                        f"This [item_name]{druidic_charm.get_name()}[/item_name] has been in my family for generations - "
                         "it was blessed by the ancient druids who first settled in these lands. Please, "
                         "take it as a token of our eternal gratitude. May it bring you protection and "
                         "guidance on your heroic journey!\n\n"

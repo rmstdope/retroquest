@@ -29,10 +29,10 @@ class Families(Character):
             from ..items.HealingHerbs import HealingHerbs
             herbs = HealingHerbs()
             game_state.add_item_to_inventory(herbs)
-            response += ("\n\n[event]An elderly woman from one of the families approaches you with a warm smile. "
+            response += (f"\n\n[event]An elderly woman from one of the families approaches you with a warm smile. "
                         "'Here, dear,' she says, pressing a bundle into your hands. 'These are rare healing herbs "
                         "that have been in our family for generations. Someone who helps others as you do should "
-                        "have them.' You receive [item_name]healing herbs[/item_name]![/event]")
+                        f"have them.' You receive [item_name]{herbs.get_name()}[/item_name]![/event]")
         
         return response
 

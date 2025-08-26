@@ -48,5 +48,5 @@ class GreendaleGates(Room):
         
         return ("With the Gate Captain having stepped away, you're free to look around. "
                 "You notice a small information post near the gates where visiting merchants and travelers "
-                "leave helpful items. Searching through it, you discover a detailed [item_name]city map[/item_name] "
+                f"leave helpful items. Searching through it, you discover a detailed [item_name]{city_map.get_name()}[/item_name] "
                 "of Greendale - exactly what you need to navigate the city's winding streets!")

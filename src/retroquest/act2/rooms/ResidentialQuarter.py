@@ -27,10 +27,18 @@ class ResidentialQuarter(Room):
             game_state.set_story_flag(FLAG_ANCIENT_LIBRARY_ACCEPTED, True)
             # Add the secret passage exit when the library is discovered
             self.exits["secret_passage"] = "HiddenLibrary"
-            return ("[success]You search through the basement areas of the residential buildings. Behind some old "
+            
+            # Get the Hidden Library room name for the message
+            from ..rooms.HiddenLibrary import HiddenLibrary
+            hidden_library = HiddenLibrary()
+            
+            return (f"[success]You search through the basement areas of the residential buildings. Behind some old "
                     "storage crates and forgotten furniture, you discover a concealed entrance hidden in the stone "
                     "wall. A narrow tunnel leads deeper underground to what appears to be an ancient chamber. "
-                    "You've found a secret passage to a [location_name]Hidden Library[/location_name]! You can now "
+                    f"You've found a secret passage to a [location_name]{hidden_library.get_name()}[/location_name]! You can now "
                     "use 'go secret_passage' to enter this mysterious underground repository.[/success]")
         else:
-            return "[info]You've already discovered the secret passage to the Hidden Library.[/info]"
+            # Get the Hidden Library room name for the message  
+            from ..rooms.HiddenLibrary import HiddenLibrary
+            hidden_library = HiddenLibrary()
+            return f"[info]You've already discovered the secret passage to the {hidden_library.get_name()}.[/info]"
