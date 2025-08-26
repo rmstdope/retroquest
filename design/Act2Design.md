@@ -1644,7 +1644,11 @@ The completion of Act II marks Elior's transformation from a promising young her
 
 23. **Castle Courtyard (Cedric's Honor Quest):**
 
-    - Learn about Cedric's past disgrace from castle gossip. _Servants and guards whisper about the knight's fall from grace._
+    - Talk to Training Master. _The training master shares rumors about Sir Cedric's past military service._
+    - Talk to Squires. _The squires whisper about their mentor's disgrace and lost honor._
+    - Search under stone benches. _Discovers a Squire's Diary containing details about Cedric's past._
+      - Item obtained: `Squire's Diary`
+    - Read Squire's Diary. _The diary reveals that secret documents from the city of Heavensforth would clear Cedric's name, but these documents mysteriously went missing when the caravan transporting them arrived. The diary suggests the documents may have been lost or stolen during the journey._
       - Quest accepted: "Cedric's Lost Honor"
 
 24. **Return to Great Hall:**
