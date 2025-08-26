@@ -1,5 +1,6 @@
 from ...engine.Item import Item
 from ..characters.AncientTreeSpirit import AncientTreeSpirit
+from ...engine.GameState import GameState
 
 class SilverTree(Item):
     def __init__(self) -> None:
@@ -16,7 +17,7 @@ class SilverTree(Item):
         )
         self.examined = False
 
-    def examine(self, game_state) -> str:
+    def examine(self, game_state: GameState) -> str:
         """Examine the magnificent silver-barked tree."""
         if not self.examined:
             self.examined = True

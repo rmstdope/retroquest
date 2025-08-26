@@ -3,6 +3,7 @@ from ..items.ShinyRing import ShinyRing
 from ..items.WanderingBoots import WanderingBoots
 from ..items.Coin import Coin
 from typing import Any
+from ...engine.GameState import GameState
 
 class Merchant(Character):
     def __init__(self) -> None:
@@ -12,7 +13,7 @@ class Merchant(Character):
         )
         self.boots_given = False  # Track if boots have been given
 
-    def talk_to(self, game_state, player=None) -> str:
+    def talk_to(self, game_state: GameState, player=None) -> str:
         # Use boots_given flag instead of checking inventory
         event_msg = f"[event]You speak with the [character_name]{self.get_name()}[/character_name].[/event]"
         if not self.boots_given:

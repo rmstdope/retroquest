@@ -31,4 +31,4 @@ class Herald(Character):
                     "of excellent standing. You are granted formal audience rights with the nobility.' "
                     "The pass has been officially registered.[/success]")
         else:
-            return super().give_item(game_state, item_object)
+            return super().give_item(game_state: GameState, item_object)

@@ -1,5 +1,6 @@
 from ...engine.Quest import Quest
 from ..Act2StoryFlags import (
+from ...engine.GameState import GameState
     FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
     FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED
 )
@@ -24,21 +25,21 @@ class TheForestGuardiansRiddles(Quest):
         ]
         self.experience_reward = 200
 
-    def check_trigger(self, game_state) -> bool:
+    def check_trigger(self, game_state: GameState) -> bool:
         """Check if this quest should be activated."""
         return game_state.get_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED)
 
-    def check_completion(self, game_state) -> bool:
+    def check_completion(self, game_state: GameState) -> bool:
         """Check if the quest can be completed based on story flags."""
         return game_state.get_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED) and not self.is_completed_flag
 
-    def complete(self, game_state) -> str:
+    def complete(self, game_state: GameState) -> str:
         """Complete the quest and give rewards."""
         if not self.is_completed_flag:
             self.is_completed_flag = True
             
             # Add experience
-            if hasattr(game_state, 'add_experience'):
+            if hasattr(game_state: GameState, 'add_experience'):
                 game_state.add_experience(self.experience_reward)
                 exp_msg = f" You gain {self.experience_reward} experience!"
             else:

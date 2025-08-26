@@ -3,6 +3,7 @@ from ..items.Stick import Stick
 from ..items.WildBerries import WildBerries
 from ..items.Vines import Vines
 from ..items.Bush import Bush # Import Bush
+from ...engine.GameState import GameState
 
 class ForestPath(Room):
     def __init__(self) -> None:
@@ -20,7 +21,7 @@ class ForestPath(Room):
             exits={"north": "Riverbank", "south": "HiddenGlade"}  # Corrected: HG is South, not East.
         )
 
-    def get_description(self, game_state) -> str:
+    def get_description(self, game_state: GameState) -> str:
         # Check if vines are still present (i.e., not cut)
         if any(isinstance(item, Vines) for item in self.items):
             return self.description # Original description with vines

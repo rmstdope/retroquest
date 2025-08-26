@@ -10,7 +10,7 @@ class RustyHoe(Item):
             can_be_carried=True # Explicitly set can_be_carried
         )
 
-    def use(self, game_state) -> str:
+    def use(self, game_state: GameState) -> str:
         from .Coin import Coin # Local import to avoid circular dependency if Coin needs Item
 
         if game_state.current_room.name == "Vegetable Field":

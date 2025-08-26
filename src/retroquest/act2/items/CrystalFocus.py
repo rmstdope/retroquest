@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ...engine.GameState import GameState
 
 class CrystalFocus(Item):
     def __init__(self) -> None:
@@ -14,14 +15,14 @@ class CrystalFocus(Item):
             can_be_carried=True,
         )
 
-    def use_item(self, game_state) -> str:
+    def use_item(self, game_state: GameState) -> str:
         # This item enhances magical understanding and comprehension of ancient texts
         return ("[success]You focus your magical energy through the [item_name]Crystal Focus[/item_name]. "
                 "The crystal amplifies your magical awareness, allowing you to better understand arcane "
                 "principles and enhancing your ability to comprehend ancient magical texts. Your connection "
                 "to magical forces feels stronger and more refined.[/success]")
 
-    def examine(self, game_state) -> str:
+    def examine(self, game_state: GameState) -> str:
         return ("The [item_name]Crystal Focus[/item_name] is a masterwork of ancient magical craftsmanship. "
                 "Its faceted surface catches and amplifies magical energy, and you can feel it resonating "
                 "with your own magical abilities. This is clearly a tool created by master enchanters to "

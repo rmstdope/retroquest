@@ -24,7 +24,7 @@ class CourtHerald(Character):
                     "Your credentials are now on record, and you may research freely in our collections.")
         else:
             # Default behavior for other items
-            return super().give_item(game_state, item_object)
+            return super().give_item(game_state: GameState, item_object)
 
     def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag(FLAG_COURT_HERALD_FORMAL_PRESENTATION):

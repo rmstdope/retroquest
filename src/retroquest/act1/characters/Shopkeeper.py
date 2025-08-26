@@ -7,6 +7,7 @@ from ..items.Coin import Coin
 from ..items.Armor import Armor
 from ..items.Sword import Sword
 from ..Act1StoryFlags import FLAG_CONNECT_WITH_NATURE
+from ...engine.GameState import GameState
 
 class Shopkeeper(Character):
     def __init__(self) -> None:
@@ -31,7 +32,7 @@ class Shopkeeper(Character):
             "[dialogue]'Sorry, not open for business just yet. Come back later, lad—there's something you need to discover first.'[/dialogue]"
         )
 
-    def talk_to(self, game_state) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         # If Elior hasn't been tasked to connect with nature, shop is not open yet
         if not game_state.get_story_flag(FLAG_CONNECT_WITH_NATURE):
             return self.closed_dialogue
@@ -65,10 +66,10 @@ class Shopkeeper(Character):
 
         return f'The [character_name]Shopkeeper[/character_name] says: [dialogue]"{dialogue} {wares_info.strip()}[/dialogue]"'
 
-    def give_item(self, item_name: str, game_state) -> str:
+    def give_item(self, item_name: str, game_state: GameState) -> str:
         return f'The [character_name]Shopkeeper[/character_name] chuckles. [dialogue]"Not looking for donations, friend, but I appreciate the thought!"[/dialogue]'
 
-    def buy_item(self, item_name_to_buy: str, game_state) -> str:
+    def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         if not game_state.get_story_flag(FLAG_CONNECT_WITH_NATURE):
             return self.closed_dialogue
         item_name_to_buy = item_name_to_buy.lower()

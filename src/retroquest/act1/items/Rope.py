@@ -14,9 +14,9 @@ class Rope(Item):
             return f"[character_name]Shopkeeper[/character_name] quickly steps over. [dialogue]'Hold on there, friend! That [item_name]{self.get_name()}[/item_name] is merchandise, not a free sample. If you want it, you'll need to buy it proper-like.'[/dialogue]"
         return None  # Allow pickup if can_be_carried is True
     
-    def use_with(self, game_state, other_item: Item) -> str:
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
         from .Mechanism import Mechanism
         if isinstance(other_item, Mechanism):
             # Delegate to the Mechanism's use_with method
-            return other_item.use_with(game_state, self)
-        return super().use_with(game_state, other_item)
+            return other_item.use_with(game_state: GameState, self)
+        return super().use_with(game_state: GameState, other_item)

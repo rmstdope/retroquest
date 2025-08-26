@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ...engine.GameState import GameState
 
 class BoundaryStoneFragment(Item):
     def __init__(self) -> None:
@@ -14,7 +15,7 @@ class BoundaryStoneFragment(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state) -> str:
+    def use(self, game_state: GameState) -> str:
         current_room = game_state.current_room.name
         if "forest" in current_room.lower():
             return ("[success]You hold the [item_name]boundary stone fragment[/item_name] in your hands. "

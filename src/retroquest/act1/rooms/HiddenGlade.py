@@ -1,9 +1,9 @@
 from ...engine.Room import Room
+from ...engine.GameState import GameState
 from ..items.RareFlower import RareFlower
 from ..items.ShinyPebble import ShinyPebble
 from ..characters.Deer import Deer
-from ...engine.GameState import GameState # Added GameState for type hinting
-from ..spells.GrowSpell import GrowSpell # Import GrowSpell
+from ..spells.GrowSpell import GrowSpell
 
 class HiddenGlade(Room):
     def __init__(self) -> None:

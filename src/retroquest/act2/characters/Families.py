@@ -48,4 +48,4 @@ class Families(Character):
                     "who cares about others.[/success]")
         else:
             # For all other items, use the default behavior
-            return super().give_item(game_state, item_object)
+            return super().give_item(game_state: GameState, item_object)

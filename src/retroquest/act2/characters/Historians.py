@@ -34,4 +34,4 @@ class Historians(Character):
                     f"own records. 'This is fascinating! The journal confirms several theories about Willowbrook's "
                     f"significance and provides crucial context for the ancient chronicles.'[/success]")
         else:
-            return super().give_item(game_state, item_object)
+            return super().give_item(game_state: GameState, item_object)

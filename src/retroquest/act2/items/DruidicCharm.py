@@ -1,4 +1,5 @@
 from ...engine.Item import Item
+from ...engine.GameState import GameState
 
 class DruidicCharm(Item):
     def __init__(self) -> None:
@@ -14,7 +15,7 @@ class DruidicCharm(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state) -> str:
+    def use(self, game_state: GameState) -> str:
         current_room = game_state.current_room.name
         if "heart of the forest" in current_room.lower():
             return ("The [item_name]druidic charm[/item_name] resonates with the mystical "
@@ -25,7 +26,7 @@ class DruidicCharm(Item):
                     "It feels especially potent here, but you sense it has a greater purpose "
                     "that requires the right location and companions.")
 
-    def examine(self, game_state) -> str:
+    def examine(self, game_state: GameState) -> str:
         return ("[event]You examine the [item_name]druidic charm[/item_name]. {0} "
                 "The intricate carvings depict intertwined branches and leaves, symbols "
                 "of the eternal cycle of growth and renewal. You can feel the gratitude "

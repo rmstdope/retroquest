@@ -32,10 +32,10 @@ class FishingRod(Item):
 
         from .River import River # Add local import here
         if isinstance(other_item, River): # Check if the other_item is a River
-            return other_item.use_with(game_state, self) # Call River's use_with method
+            return other_item.use_with(game_state: GameState, self) # Call River's use_with method
             
         from .Well import Well # Local import for Well
         if isinstance(other_item, Well):
             return "[failure]You try fishing in the [item_name]well[/item_name], but the [item_name]rod[/item_name] is too short to reach the water.[/failure]"
 
-        return super().use_with(game_state, other_item) # Fallback to base class
+        return super().use_with(game_state: GameState, other_item) # Fallback to base class

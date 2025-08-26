@@ -1,4 +1,5 @@
 from ...engine.Spell import Spell
+from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_NATURE_SENSE_USED_WHISPERING_GLADE
 from ..characters.WaterNymphs import WaterNymphs
 
@@ -15,7 +16,7 @@ class NatureSenseSpell(Spell):
             )
         )
 
-    def cast_spell(self, game_state) -> str:
+    def cast_spell(self, game_state: GameState) -> str:
         current_room = game_state.current_room.name
         
         # Special handling for Whispering Glade

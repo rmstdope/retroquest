@@ -34,11 +34,11 @@ class Well(Item):
         from .ExtendedMagneticFishingRod import ExtendedMagneticFishingRod  # Local import to avoid circular dependency      
         # Check if other_item is an instance of any of the classes in the tuple
         if isinstance(other_item, (Bucket, FishingRod, MagneticFishingRod, ExtendedMagneticFishingRod)):
-            return other_item.use_with(game_state, self)
+            return other_item.use_with(game_state: GameState, self)
         
-        return super().use_with(game_state, other_item)
+        return super().use_with(game_state: GameState, other_item)
 
-    def search(self, game_state) -> str:
+    def search(self, game_state: GameState) -> str:
         if self.is_purified:
             if self.contains_ring:
                 return "[event]You peer into the crystal clear water. A [item_name]shiny ring[/item_name] glints at the bottom, tantalizingly out of reach by hand.[/event]"
@@ -50,7 +50,7 @@ class Well(Item):
             else: # Not purified and no ring (e.g. if it was somehow removed before purification)
                 return "[failure]You peer into the murky depths. It's too dark and unclear to see anything of interest.[/failure]"
 
-    def purify(self, game_state) -> str:
+    def purify(self, game_state: GameState) -> str:
         if not game_state.get_story_flag(FLAG_WELL_EXAMINED):
             return f"[failure]You hesitate. Why would you cast [spell_name]purify[/spell_name] on the [item_name]{self.get_name()}[/item_name]? Perhaps you should examine it first.[/failure]"
         if self.is_purified:

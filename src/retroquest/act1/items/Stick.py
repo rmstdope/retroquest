@@ -13,5 +13,5 @@ class Stick(Item):
         # If the other item is a MagneticFishingRod, delegate to its use_with
         from .MagneticFishingRod import MagneticFishingRod
         if isinstance(other_item, MagneticFishingRod):
-            return other_item.use_with(game_state, self)
-        return super().use_with(game_state, other_item)
+            return other_item.use_with(game_state: GameState, self)
+        return super().use_with(game_state: GameState, other_item)

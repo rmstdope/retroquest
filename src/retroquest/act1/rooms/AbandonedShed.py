@@ -4,6 +4,7 @@ from ..items.MysteriousBox import MysteriousBox
 from ..items.FishingRod import FishingRod # Import FishingRod
 from ..items.Magnet import Magnet # Import Magnet
 from ..items.ShedDoor import ShedDoor
+from ...engine.GameState import GameState
 
 class AbandonedShed(Room):
     def __init__(self) -> None:
@@ -35,7 +36,7 @@ class AbandonedShed(Room):
             "A [item_name]Mysterious Box[/item_name] sits on a rickety table, and a [item_name]Broken Shovel[/item_name] leans against a cobweb-covered wall."
         )
 
-    def search(self, game_state) -> str:
+    def search(self, game_state: GameState) -> str:
         if self.locked:
             return "You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] is locked so you can't search inside."
 

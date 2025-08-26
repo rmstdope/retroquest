@@ -1,5 +1,6 @@
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_CRYSTAL_CLEAR_WATER_TAKEN
+from ...engine.GameState import GameState
 
 class CrystalClearWater(Item):
     def __init__(self) -> None:
@@ -16,7 +17,7 @@ class CrystalClearWater(Item):
             can_be_carried=True,
         )
 
-    def use_on_character(self, game_state, target_character) -> str:
+    def use_on_character(self, game_state: GameState, target_character) -> str:
         """Use crystal-clear water on a character to purify them."""
         # Special handling for Elena's curse purification
         if target_character.get_name().lower() == "barmaid elena":
@@ -26,7 +27,7 @@ class CrystalClearWater(Item):
                     f"[character_name]{target_character.get_name()}[/character_name], but it seems "
                     f"this blessed water is meant for someone specifically afflicted by dark magic.")
 
-    def examine(self, game_state) -> str:
+    def examine(self, game_state: GameState) -> str:
         return ("[event]You examine the [item_name]crystal-clear water[/item_name]. {0} "
                 "The liquid moves with an otherworldly fluidity, and you can sense the "
                 "powerful purification magic contained within. This water could break "

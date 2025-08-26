@@ -33,4 +33,4 @@ class ExtendedMagneticFishingRod(Item):
                 return event_msg + f"You can see the bottom of the [item_name]{other_item.get_name()}[/item_name] clearly, but there's nothing metallic to retrieve with the [item_name]{self.get_name()}[/item_name]."
             else:
                 return event_msg + f"You try to use the [item_name]{self.get_name()}[/item_name] with the [item_name]{other_item.get_name()}[/item_name], but it doesn't seem to work right now."
-        return super().use_with(game_state, other_item)
+        return super().use_with(game_state: GameState, other_item)

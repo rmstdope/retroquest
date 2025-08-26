@@ -1,5 +1,6 @@
 from typing import Any
 from ...engine.Spell import Spell
+from ...engine.GameState import GameState
 
 class ForestSpeechSpell(Spell):
     def __init__(self) -> None:
@@ -14,7 +15,7 @@ class ForestSpeechSpell(Spell):
             )
         )
 
-    def cast_spell(self, game_state) -> str:
+    def cast_spell(self, game_state: GameState) -> str:
         current_room = game_state.current_room.name
         
         if "forest" in current_room.lower() or "grove" in current_room.lower():

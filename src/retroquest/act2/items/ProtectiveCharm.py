@@ -1,5 +1,6 @@
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE
+from ...engine.GameState import GameState
 
 class ProtectiveCharm(Item):
     def __init__(self) -> None:
@@ -14,7 +15,7 @@ class ProtectiveCharm(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state) -> str:
+    def use(self, game_state: GameState) -> str:
         if game_state.current_room.name == "Forest Entrance":
             if not game_state.get_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE):
                 game_state.set_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, True)
