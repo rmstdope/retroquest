@@ -22,7 +22,9 @@ class Historians(Character):
 
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to the Historians"""
-        if "journal" in item_object.get_name().lower():
+        from ..items.TravelersJournal import TravelersJournal
+        
+        if isinstance(item_object, TravelersJournal):
             if not game_state.get_story_flag(FLAG_READ_TRAVELERS_JOURNAL):
                 return (f"[failure]You should not give things away that you know nothing about. Perhaps you should "
                         f"ensure that you understand its contents "

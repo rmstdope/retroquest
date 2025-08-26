@@ -15,15 +15,17 @@ class ForestSpeechSpell(Spell):
             )
         )
 
+# TODO Fix checking for string names below
     def cast_spell(self, game_state) -> str:
-        current_room = game_state.current_room.name
+        current_room = game_state.current_room
         
         # Special caravan search logic for Forest Entrance
-        if current_room == "Forest Entrance" and not game_state.get_story_flag(FLAG_FOUND_RAVINE):
+        from ..rooms.ForestEntrance import ForestEntrance
+        if isinstance(current_room, ForestEntrance) and not game_state.get_story_flag(FLAG_FOUND_RAVINE):
             game_state.set_story_flag(FLAG_FOUND_RAVINE, True)
             # Add the Ravine item to the Forest Entrance room
             ravine = Ravine()
-            game_state.current_room.items.append(ravine)
+            current_room.items.append(ravine)
             return ("[success]You cast [spell_name]Forest Speech[/spell_name] and the woodland creatures "
                     "gather around you excitedly. A family of squirrels chatters frantically about "
                     "strange noises from the deep ravine to the northeast. An old owl hoots solemnly "
@@ -32,40 +34,43 @@ class ForestSpeechSpell(Spell):
                     "where something seems to be moving. You should try to get down there.[/success]")
         
         # Check if caravan has already been found in Forest Entrance
-        if current_room == "Forest Entrance" and game_state.get_story_flag(FLAG_FOUND_RAVINE):
+        if isinstance(current_room, ForestEntrance) and game_state.get_story_flag(FLAG_FOUND_RAVINE):
             return ("[info]You cast [spell_name]Forest Speech[/spell_name], but the woodland creatures "
                     "have no new information about the ravine - you've already located it.[/info]")
         
         # Normal forest speech behavior for other locations
-        if "forest" in current_room.lower() or "grove" in current_room.lower():
+        room_name = current_room.name.lower()
+        if "forest" in room_name or "grove" in room_name:
             return ("[success]You cast [spell_name]Forest Speech[/spell_name] and suddenly "
-                   "the forest comes alive with conversation. The trees whisper their ancient "
-                   "wisdom, sharing memories of seasons past and warnings of dangers ahead. "
-                   "Small woodland creatures emerge to share news of hidden paths and secret "
-                   "places. You feel deeply connected to the living tapestry of the forest.[/success]")
-        elif "enchanted" in current_room.lower():
+                    "the forest comes alive with conversation. The trees whisper their ancient "
+                    "wisdom, sharing memories of seasons past and warnings of dangers ahead. "
+                    "Small woodland creatures emerge to share news of hidden paths and secret "
+                    "places. You feel deeply connected to the living tapestry of the forest.[/success]")
+        elif "enchanted" in room_name:
             return ("[success]You cast [spell_name]Forest Speech[/spell_name] in this magical "
-                   "realm and the response is overwhelming. Every plant, from the mightiest "
-                   "tree to the smallest moss, has something to say. The magical nature of "
-                   "this place amplifies your connection, allowing you to understand even "
-                   "the most subtle communications from the natural world.[/success]")
+                    "realm and the response is overwhelming. Every plant, from the mightiest "
+                    "tree to the smallest moss, has something to say. The magical nature of "
+                    "this place amplifies your connection, allowing you to understand even "
+                    "the most subtle communications from the natural world.[/success]")
         else:
             return ("[info]You cast [spell_name]Forest Speech[/spell_name], but there are "
-                   "few natural beings here to communicate with. You sense the faint whispers "
-                   "of any plants nearby, but the spell would be much more powerful in a "
-                   "forest or natural environment.[/info]")
+                    "few natural beings here to communicate with. You sense the faint whispers "
+                    "of any plants nearby, but the spell would be much more powerful in a "
+                    "forest or natural environment.[/info]")
 
     def cast_on_character(self, game_state, target_character):
         """Allow communication with forest creatures"""
-        character_name = target_character.get_name().lower()
+        from ..characters.AncientTreeSpirit import AncientTreeSpirit
+        from ..characters.ForestSprites import ForestSprites
+        from ..characters.WaterNymphs import WaterNymphs
         
-        if any(keyword in character_name for keyword in ['tree', 'spirit', 'forest', 'sprite', 'nymph']):
+        if isinstance(target_character, (AncientTreeSpirit, ForestSprites, WaterNymphs)):
             return (f"[success]You cast [spell_name]Forest Speech[/spell_name] on "
-                   f"[character_name]{target_character.get_name()}[/character_name], opening "
-                   f"a channel of deep, mystical communication. Through the spell's magic, "
-                   f"you can understand their ancient wisdom and forest secrets.[/success]")
+                    f"[character_name]{target_character.get_name()}[/character_name], opening "
+                    f"a channel of deep, mystical communication. Through the spell's magic, "
+                    f"you can understand their ancient wisdom and forest secrets.[/success]")
         else:
             return (f"[info]You cast [spell_name]Forest Speech[/spell_name] on "
-                   f"[character_name]{target_character.get_name()}[/character_name], but this "
-                   f"spell is designed for communication with forest beings and natural "
-                   f"spirits. It has no effect on this character.[/info]")
+                    f"[character_name]{target_character.get_name()}[/character_name], but this "
+                    f"spell is designed for communication with forest beings and natural "
+                    f"spirits. It has no effect on this character.[/info]")

@@ -114,6 +114,13 @@ class AncientTreeSpirit(Character):
                     f"of the forest, return to me with two gifts the forest has bestowed upon you.'[/dialogue]")
 
         elif item_object.get_name().lower() in ["crystal-clear water", "moonflowers"]:
+            from ..items.CrystalClearWater import CrystalClearWater
+            from ..items.Moonflowers import Moonflowers
+            
+            # Allow both specific items
+            if not (isinstance(item_object, CrystalClearWater) or isinstance(item_object, Moonflowers)):
+                return super().give_item(game_state, item_object)
+                
             # Check if quest is already completed
             if game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED):
                 return f"[dialogue]The [character_name]{self.get_name()}[/character_name] nods approvingly but gently refuses. 'You have already proven yourself, young one. Keep these sacred gifts as tokens of the forest's trust in you.'[/dialogue]"
