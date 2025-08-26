@@ -71,7 +71,7 @@ class Game:
             try:
                 pygame.mixer.init()
                 pygame.mixer.music.load(self.act.music_file)
-                pygame.mixer.music.play(loops=-1)  # Loop indefinitely
+                # pygame.mixer.music.play(loops=-1)  # Loop indefinitely
             except Exception as e:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
         threading.Thread(target=play_music, daemon=True).start()

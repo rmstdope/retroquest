@@ -789,6 +789,10 @@ A magnificent hall with soaring ceilings supported by massive stone columns. Tap
   - Present: Later (earned after proving worth to Lord Commander)
   - Can be carried: Yes
   - Useful: Yes
+- **Secret Documents**
+  - Present: Later (given by Caravan Master Thorne after completing "The Merchant's Lost Caravan")
+  - Can be carried: Yes
+  - Useful: Yes
 - **Secret Correspondence**
   - Present: From start (hidden, found by searching behind tapestries)
   - Can be carried: Yes
@@ -1633,32 +1637,30 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Receive Druidic Charm from grateful Innkeeper Marcus. _Marcus presents an ancient charm as thanks for saving his daughter._
       - Item obtained: `Druidic Charm`
 
+# TODO Remove the boundary stone fragment
 21. **Search for Lost Caravan (Forest Areas):**
 
-    - Use Quality Rope to traverse difficult forest terrain. _The rope allows safe passage through ravines and fallen trees._
-      - Item used: `Quality Rope` (terrain navigation)
-    - Use Boundary Stone Fragment to locate ancient paths. _The fragment resonates with old druidic waypoints._
-      - Item used: `Boundary Stone Fragment` (pathfinding)
-    - Cast `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location._
+    - Cast `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location, but it is located in a ravine._
       - Spell cast: `forest_speech` (investigation)
-    - Follow animal guidance to find the lost caravan. _Merchant wagons discovered in a forest clearing._
-    - Rescue caravan from bandits through negotiation. _Diplomatic discussion resolves the threat peacefully._
+    - Use Quality Rope to traverse difficult forest terrain. _The rope allows safe passage through the ravine._
+      - Item used: `Quality Rope` (terrain navigation)
     - Secure the caravan and ensure safe passage. _Caravan is safely recovered for Thorne._
 
 22. **Return to Market District:**
 
-    - Talk to Caravan Master Thorne with good news. _Thorne rewards Elior with valuable supplies._
+    - Talk to Caravan Master Thorne with good news. _Thorne rewards Elior with secret documents._
+      - Item obtained: `Secret Documents`
       - Quest completed: "The Merchant's Lost Caravan"
 
 23. **Castle Courtyard (Cedric's Honor Quest):**
 
     - Learn about Cedric's past disgrace from castle gossip. _Servants and guards whisper about the knight's fall from grace._
       - Quest accepted: "Cedric's Lost Honor"
-    - Investigate the truth using available resources. _Research and witness interviews reveal hidden details about past events._
 
 24. **Return to Great Hall:**
 
-    - Gather evidence of Cedric's innocence. _Ancient Chronicle and witness testimony clear his name._
+    - Read Secret Documents to prove Sir Cedric's innocence. _The documents contain evidence that clears Cedric of past accusations._
+      - Item used: `Secret Documents` (evidence of innocence)
     - Present evidence to Lord Commander. _Official vindication restores Cedric's honor._
       - Quest completed: "Cedric's Lost Honor"
     - Receive Nature's Charm from Cedric. _In gratitude, Cedric presents a sacred charm blessed by ancient knights._
@@ -1740,6 +1742,7 @@ This Golden Path ensures that the design rule "all side quests must be completed
 - `Enchanted Acorn` (offering to Ancient Tree Spirit)
 - `Crystal-Clear Water` (purify Elena's curse, general purification)
 - `Moonflowers` (offering to Nyx)
+- `Secret Documents` (evidence to prove Sir Cedric's innocence)
 - `Druidic Charm` (first of three sacred charms needed to summon Nyx)
 - `Protective Charm` (second of three sacred charms needed to summon Nyx)
 - `Nature's Charm` (third of three sacred charms needed to summon Nyx)

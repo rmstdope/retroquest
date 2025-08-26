@@ -72,7 +72,7 @@ def _create_test_game():
     return Game(act)
 
 def test_golden_path_act2_completion():
-    """Test the golden path through Act2 completion - Currently testing steps 1-13"""
+    """Test the golden path through Act2 completion"""
     act = Act2()
     game = Game(act)
     
@@ -459,7 +459,30 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["talk to innkeeper marcus"])
     _check_item_in_inventory(game.state, "druidic charm")    
     
-    # At this point, we have completed steps 1-20 of the golden path!
+    # Step 21: Search for Lost Caravan (Forest Areas)
+    # Navigate back to Forest Entrance: Silver Stag Inn -> Market District -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition -> Forest Entrance
+    _execute_commands(game, ["go south", "go west", "go south", "go south", "go east", "go east"])
+    _check_current_room(game.state, "Forest Entrance")
+    # Cast forest_speech to communicate with woodland creatures and find caravan location
+    _check_item_in_room(game.state.current_room, "ravine", should_be_present=False)
+    _execute_commands(game, ["cast forest_speech"])
+    _check_item_in_room(game.state.current_room, "ravine")
+    # Use Quality Rope with Ravine to traverse difficult forest terrain and rescue caravan
+    _check_item_in_room(game.state.current_room, "caravan", should_be_present=False)
+    _execute_commands(game, ["use quality rope with ravine"])
+    _check_item_in_room(game.state.current_room, "caravan")
+    _check_item_in_inventory(game.state, "quality rope", False)  # Rope should be consumed in the rescue
+    
+    # Step 22: Return to Market District
+    # Navigate back to Market District: Forest Entrance -> Forest Transition -> Mountain Path -> Greendale Gates -> Main Square -> Market District
+    _execute_commands(game, ["go west", "go west", "go north", "go north", "go east"])
+    _check_current_room(game.state, "Market District")
+    # Talk to Caravan Master Thorne with good news - he rewards with Secret Documents
+    _execute_commands(game, ["talk to caravan master thorne"])
+    _check_item_in_inventory(game.state, "secret documents")
+    _check_quests(game.state, ["The Gathering Storm"])  # Caravan quest should be completed
+    
+    # At this point, we have completed steps 1-22 of the golden path!
 
 def test_main_square_navigation_restriction():
     """Test that Main Square navigation is restricted until city map is used"""

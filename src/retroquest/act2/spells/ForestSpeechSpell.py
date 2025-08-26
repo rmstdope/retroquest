@@ -1,4 +1,6 @@
 from ...engine.Spell import Spell
+from ..Act2StoryFlags import FLAG_FOUND_RAVINE
+from ..items.Ravine import Ravine
 
 class ForestSpeechSpell(Spell):
     def __init__(self) -> None:
@@ -16,6 +18,25 @@ class ForestSpeechSpell(Spell):
     def cast_spell(self, game_state) -> str:
         current_room = game_state.current_room.name
         
+        # Special caravan search logic for Forest Entrance
+        if current_room == "Forest Entrance" and not game_state.get_story_flag(FLAG_FOUND_RAVINE):
+            game_state.set_story_flag(FLAG_FOUND_RAVINE, True)
+            # Add the Ravine item to the Forest Entrance room
+            ravine = Ravine()
+            game_state.current_room.items.append(ravine)
+            return ("[success]You cast [spell_name]Forest Speech[/spell_name] and the woodland creatures "
+                    "gather around you excitedly. A family of squirrels chatters frantically about "
+                    "strange noises from the deep ravine to the northeast. An old owl hoots solemnly "
+                    "about 'metal beasts trapped in the earth-scar where the stone walls weep.' "
+                    "The animals describe a steep ravine hidden beyond the thickest part of the forest, "
+                    "where something seems to be moving. You should try to get down there.[/success]")
+        
+        # Check if caravan has already been found in Forest Entrance
+        if current_room == "Forest Entrance" and game_state.get_story_flag(FLAG_FOUND_RAVINE):
+            return ("[info]You cast [spell_name]Forest Speech[/spell_name], but the woodland creatures "
+                    "have no new information about the ravine - you've already located it.[/info]")
+        
+        # Normal forest speech behavior for other locations
         if "forest" in current_room.lower() or "grove" in current_room.lower():
             return ("[success]You cast [spell_name]Forest Speech[/spell_name] and suddenly "
                    "the forest comes alive with conversation. The trees whisper their ancient "
