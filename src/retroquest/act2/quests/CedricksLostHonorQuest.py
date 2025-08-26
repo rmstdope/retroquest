@@ -56,6 +56,6 @@ class CedricksLostHonorQuest(Quest):
             if not self.documents_examined:
                 updated = True
             self.documents_examined = True
-        self.description += new_desc\
+        self.description += new_desc
         
         return updated

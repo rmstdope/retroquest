@@ -46,6 +46,10 @@ def _check_story_flag(game_state, flag_name: str, expected_value: bool = True):
 def _check_current_room(game_state, expected_room_name: str):
     assert game_state.current_room.name == expected_room_name, f"Not in '{expected_room_name}'"
 
+def _check_quest_completed(game_state, quest_name: str):
+    """Check if a quest with the given name is completed."""
+    assert game_state.is_quest_completed(quest_name), f"Quest '{quest_name}' should be completed but is not"
+
 def _check_quests(game_state, expected_active_quests):
     """
     Asserts that the specified quests (by name) are currently active, no more, no less.
@@ -499,11 +503,24 @@ def test_golden_path_act2_completion():
     _check_item_in_inventory(game.state, "squire's diary")
     _execute_commands(game, ["use squire's diary"])
     _check_item_in_inventory(game.state, "squire's diary", False)
-    # Quest should still be active (diary provides more details, doesn't change quest state)
-    _execute_commands(game, ["examine secret documents"])
-    _check_quests(game.state, ["The Gathering Storm", "Cedric's Lost Honor"])
     
-    # At this point, we have completed steps 1-23 of the golden path!
+    # Step 24: Return to Great Hall - Complete Cedric's Lost Honor quest
+    _execute_commands(game, ["go west"])
+    _check_current_room(game.state, "Great Hall")
+    # Quest should still be active unless documents examined
+    _execute_commands(game, ["give secret documents to lord commander", "examine secret documents"])
+    _check_quests(game.state, ["The Gathering Storm", "Cedric's Lost Honor"])
+    # Give secret documents to Lord Commander to complete quest
+    _execute_commands(game, ["  "])
+    _check_quests(game.state, ["The Gathering Storm"])
+    _check_item_in_inventory(game.state, "secret documents", False)  # Should be removed
+    
+    # Return to Sir Cedric to receive Nature's Charm
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    _execute_commands(game, ["talk to sir cedric"])
+    _check_item_in_inventory(game.state, "nature's charm")
+    
+    # At this point, we have completed steps 1-24 of the golden path!
 
 def test_main_square_navigation_restriction():
     """Test that Main Square navigation is restricted until city map is used"""
@@ -944,3 +961,53 @@ def test_cedriks_honor_quest_updates_with_documents():
     assert "clearly proves Sir Cedric's innocence" in final_description
     assert "protecting civilians and following direct orders" in final_description
     assert "present this evidence" in final_description
+
+
+def test_step_24_lord_commander_interaction():
+    """Test step 24 specifically - completing Cedric's Lost Honor quest via Lord Commander."""
+    game = _create_test_game()
+    
+    # Set up the required state: quest accepted, diary read, documents examined
+    from retroquest.act2.items.SecretDocuments import SecretDocuments
+    from retroquest.act2.Act2StoryFlags import FLAG_CEDRIKS_HONOR_ACCEPTED, FLAG_READ_SQUIRES_DIARY, FLAG_EXAMINED_SECRET_DOCUMENTS
+    
+    game.state.set_story_flag(FLAG_CEDRIKS_HONOR_ACCEPTED, True)
+    game.state.set_story_flag(FLAG_READ_SQUIRES_DIARY, True)
+    game.state.set_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS, True)
+    
+    # Add quest to activated quests
+    from retroquest.act2.quests.CedricksLostHonorQuest import CedricksLostHonorQuest
+    quest = CedricksLostHonorQuest()
+    game.state.activated_quests.append(quest)
+    
+    # Add secret documents to inventory
+    docs = SecretDocuments()
+    game.state.inventory.append(docs)
+    
+    # Navigate to Great Hall
+    game.state.current_room = game.state.all_rooms["GreatHall"]
+    
+    # Verify quest is not completed initially
+    assert not game.state.is_quest_completed("Cedric's Lost Honor")
+    
+    # Give documents to Lord Commander
+    result = game.handle_command("give secret documents to lord commander")
+    
+    # Verify the quest is now completed
+    assert game.state.is_quest_completed("Cedric's Lost Honor")
+    
+    # Verify documents were removed from inventory
+    assert not any(item.name.lower() == "secret documents" for item in game.state.inventory)
+    
+    # Verify success message
+    assert "Justice has been served at last" in result
+    assert "officially restore Sir Cedric's honor" in result
+    
+    # Now test Sir Cedric's reaction
+    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
+    result = game.handle_command("talk to sir cedric")
+    
+    # Should receive Nature's Charm
+    assert any(item.name.lower() == "nature's charm" for item in game.state.inventory)
+    assert "Nature's Charm" in result
+    assert "blessed by the ancient knights" in result

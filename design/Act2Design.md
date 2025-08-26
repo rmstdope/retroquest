@@ -1657,7 +1657,7 @@ The completion of Act II marks Elior's transformation from a promising young her
       - Item used: `Secret Documents` (evidence of innocence)
     - Present evidence to Lord Commander. _Official vindication restores Cedric's honor._
       - Quest completed: "Cedric's Lost Honor"
-    - Receive Nature's Charm from Cedric. _In gratitude, Cedric presents a sacred charm blessed by ancient knights._
+    - Talk to Sir Cedric again. stepReceive Nature's Charm from Cedric. _In gratitude, Cedric presents a sacred charm blessed by ancient knights._
       - Item received: `Nature's Charm` (third sacred charm)
 
 25. **Heart of the Forest:**
@@ -1665,22 +1665,19 @@ The completion of Act II marks Elior's transformation from a promising young her
     - Look at Nyx's tree with all forest tokens. _The magnificent tree glows with recognition._
     - Use the three sacred charms to summon Nyx. _Place Druidic Charm, Protective Charm, and Nature's Charm on the offering altar._
       - Items used: `Druidic Charm`, `Protective Charm`, and `Nature's Charm` (summoning ritual)
-    - Give offerings to Nyx. _Moonflowers and other forest gifts demonstrate respect._
-      - Items used: `Moonflowers` (offerings)
     - Talk to Nyx. _The forest sprite acknowledges Elior as a true friend of nature._
-    - Complete Nyx's trials of wisdom. _Tests of magical knowledge and moral character._
     - Learn ultimate divination magic from Nyx. _She grants the power to see what is to come._
       - Spell Learned: `prophetic_vision` (see possible futures)
     - Receive Nyx's Token. _Nyx's Token is added to inventory._
     - Receive Forest Heart Crystal. _Forest Heart Crystal is added to inventory._
     - Cast `prophetic_vision` to see future threats. _Visions reveal the true scope of the gathering storm._
       - Spell cast: `prophetic_vision` (divination)
-      - Quest completed: "The Gathering Storm"
 
 26. **Return to Castle Courtyard:**
     - Talk to Sir Cedric with new knowledge. _Cedric is amazed by Elior's growth and magical mastery._
     - Share prophetic visions of coming darkness. _The knowledge helps Cedric prepare defenses._
     - Receive Cedric's blessing for the next phase. _The knight pledges his support for future challenges._
+      - Quest completed: "The Gathering Storm"
 
 ## Quest Completion Verification
 
