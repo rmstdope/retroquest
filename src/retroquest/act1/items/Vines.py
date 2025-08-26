@@ -1,9 +1,10 @@
 from ...engine.Item import Item
 from .Stick import Stick
 from ...engine.GameState import GameState
+from typing import Any
 
 class Vines(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="vines",
             description="Thick, thorny vines block a small alcove.",

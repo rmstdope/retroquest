@@ -1,3 +1,4 @@
+from typing import Union, Any
 from ...engine.Room import Room
 from ..characters.AncientTreeSpirit import AncientTreeSpirit
 from ..items.SilverTree import SilverTree
@@ -18,7 +19,7 @@ class AncientGrove(Room):
             exits={"north": "ForestEntrance", "south": "HeartOfTheForest"}
         )
 
-    def get_exits(self, game_state=None):
+    def get_exits(self, game_state: Union[Any, None] = None) -> dict[str, str]:
         """Override get_exits to conditionally show the south exit."""
         base_exits = {"north": "ForestEntrance"}
         

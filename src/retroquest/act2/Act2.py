@@ -17,6 +17,7 @@ from retroquest.act2.rooms.ForestEntrance import ForestEntrance
 from retroquest.act2.rooms.AncientGrove import AncientGrove
 from retroquest.act2.rooms.WhisperingGlade import WhisperingGlade
 from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
+from typing import Any
 
 # Import starting items for Act 2
 from retroquest.act2.items.Pass import Pass
@@ -35,7 +36,7 @@ from retroquest.act2.quests.TheHermitsWarning import TheHermitsWarningQuest
 from retroquest.act2.quests.WhispersInTheWind import WhispersInTheWind
 
 class Act2(Act):
-    def __init__(self):
+    def __init__(self) -> None:
         rooms = {
             "MountainPath": MountainPath(),
             "GreendaleGates": GreendaleGates(),
@@ -80,7 +81,7 @@ class Act2(Act):
         music_file = "music/Walen - Medieval Village (freetouse.com).mp3"
         super().__init__(name="Act II: Greendale & The Forest Edge", rooms=rooms, quests=quests, music_file=music_file, music_info='Music track: Medieval Village by Walen\nSource: https://freetouse.com/music\nFree To Use Music for Video')
 
-    def get_starting_items(self):
+    def get_starting_items(self) -> list:
         """Return items that the player should start Act 2 with"""
         return [Pass()]
     
@@ -99,7 +100,7 @@ class Act2(Act):
             "\nTake a deep breath and step forward into your destiny.\n"
         )
     
-    def is_complete(self):
+    def is_complete(self) -> bool:
         """Check if all required quests for Act II have been completed"""
         # According to design rules, all side quests must be completed before main quest
         required_quests = [

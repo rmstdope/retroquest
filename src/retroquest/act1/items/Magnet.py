@@ -1,8 +1,9 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from typing import Any
 
 class Magnet(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="magnet",
             description="A small, surprisingly strong magnet. It might be useful for retrieving metallic objects from hard-to-reach places.",

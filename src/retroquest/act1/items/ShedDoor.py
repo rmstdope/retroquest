@@ -1,8 +1,9 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from typing import Any
 
 class ShedDoor(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="shed door",
             description = f"It's a sturdy wooden [item_name]door[/item_name], locked tight. There's a keyhole visible.",

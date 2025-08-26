@@ -1,6 +1,8 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import (
+from typing import Any
+
     FLAG_FOUND_LOST_LETTER,
     FLAG_ASKED_GRANDMOTHER_ABOUT_LETTER
 )
@@ -15,7 +17,7 @@ from ..Act1StoryFlags import (
 # 7. The quest is now complete and connects to the main story thread.
 
 class LostLetterQuest(Quest):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="The Lost Letter",
             description=(

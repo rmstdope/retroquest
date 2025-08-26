@@ -1,6 +1,7 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import FLAG_FOUND_PHOTO, FLAG_READ_PHOTO_MESSAGE, FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO
+from typing import Any
 
 # The Faded Photograph Quest - Steps to Completion
 # 1. The player finds the photograph in Elior's cottage (e.g., searching the attic or a hidden drawer), which sets FLAG_FOUND_PHOTO.
@@ -11,7 +12,7 @@ from ..Act1StoryFlags import FLAG_FOUND_PHOTO, FLAG_READ_PHOTO_MESSAGE, FLAG_TAL
 # 6. After the dialogue, FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO is set.
 
 class FadedPhotographQuest(Quest):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="The Faded Photograph",
             description=(

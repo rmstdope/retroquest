@@ -1,15 +1,16 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from .Stick import Stick
+from typing import Any
 
 class MagneticFishingRod(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="magnetic fishing rod",
             description="A fishing rod with a magnet attached to the end. Good for attracting metallic objects."
         )
 
-    def use_with(self, game_state, other_item):
+    def use_with(self, game_state: Any, other_item: Any) -> str:
         # Circular import guard for ExtendedMagneticFishingRod
         from .ExtendedMagneticFishingRod import ExtendedMagneticFishingRod
         if isinstance(other_item, Stick):

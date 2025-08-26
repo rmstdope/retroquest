@@ -10,7 +10,7 @@ class Bucket(Item):
             can_be_carried=True
         )
 
-    def use_with(self, game_state: GameState, target: Item):
+    def use_with(self, game_state: GameState, target: Item) -> str:
         if isinstance(target, Well):
             if self.name == "bucket": # Check if it's not already full
                 self.name = "bucket (full)"

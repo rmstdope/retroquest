@@ -2,9 +2,10 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 from .MillstoneFragment import MillstoneFragment
 from .Rope import Rope
+from typing import Any
 
 class Mechanism(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="strange mechanism",
             short_name="mechanism",

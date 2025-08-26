@@ -2,9 +2,10 @@ from ...engine.Item import Item
 from .Magnet import Magnet
 from .MagneticFishingRod import MagneticFishingRod
 from ...engine.GameState import GameState
+from typing import Any
 
 class FishingRod(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="fishing rod",
             short_name="rod",

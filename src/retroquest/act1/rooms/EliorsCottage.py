@@ -1,3 +1,4 @@
+from typing import Any
 from ...engine.Room import Room
 from ..items.Lantern import Lantern
 from ..items.Bread import Bread
@@ -22,12 +23,12 @@ class EliorsCottage(Room):
             exits={}  # Start with empty exits
         )
 
-    def can_leave(self):
+    def can_leave(self) -> None:
         # Fill exits when this method is called
         if not self.exits:
             self.exits = {"south": "VegetableField", "east": "VillageSquare"}
 
-    def search(self, game_state):
+    def search(self, game_state: Any) -> str:
         # If the faded photograph hasn't been found yet, add it and set the flag
         if not game_state.get_story_flag(FLAG_FOUND_PHOTO):
             photo = FadedPhotograph()

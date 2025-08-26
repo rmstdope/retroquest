@@ -1,9 +1,10 @@
 from ...engine.Item import Item
 from .WildBerries import WildBerries # Import WildBerries
 from ...engine.GameState import GameState # Import GameState
+from typing import Any
 
 class Bush(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="bush",
             description="A dense, leafy bush. It looks like it might be hiding something, or just be a bush.",

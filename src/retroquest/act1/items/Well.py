@@ -1,9 +1,10 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..Act1StoryFlags import FLAG_WELL_EXAMINED
+from typing import Any
 
 class Well(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="well",
             description="An old stone well, its surface worn smooth. A frayed rope hangs nearby, disappearing into the depths.",
@@ -26,7 +27,7 @@ class Well(Item):
             self.description = desc
         return super().examine(game_state)
 
-    def use_with(self, game_state, other_item):
+    def use_with(self, game_state: Any, other_item: Any) -> str:
         from .Bucket import Bucket  # Local import to avoid circular dependency
         from .FishingRod import FishingRod  # Local import to avoid circular dependency
         from .MagneticFishingRod import MagneticFishingRod  # Local import to avoid circular dependency

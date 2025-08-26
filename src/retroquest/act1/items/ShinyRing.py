@@ -1,8 +1,9 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from typing import Any
 
 class ShinyRing(Item):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="shiny ring",
             short_name="ring",

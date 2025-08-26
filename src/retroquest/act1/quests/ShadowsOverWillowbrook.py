@@ -1,6 +1,8 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import (
+from typing import Any
+
     FLAG_INVESTIGATED_WITHERED_CROPS,
     FLAG_VILLAGER_TALKED_TO,
     FLAG_WELL_EXAMINED,
@@ -18,7 +20,7 @@ from ..Act1StoryFlags import (
 # 7. Complete the Act
 
 class ShadowsOverWillowbrookQuest(Quest):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="Shadows Over Willowbrook",
             description=(
