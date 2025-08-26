@@ -15,7 +15,6 @@ class ForestMapFragment(Item):
             can_be_carried=True,
         )
 
-#TODO Fix checking for string names below
     def use(self, game_state) -> str:
         from ..rooms.ForestEntrance import ForestEntrance  # Import here to avoid circular imports
         
@@ -30,15 +29,19 @@ class ForestMapFragment(Item):
             else:
                 return ("[info]Consulting the Forest Map Fragment again, you confirm your bearings. The Ancient "
                        "Grove lies to the south, and the Whispering Glade to the east.[/info]")
-        elif "forest" in game_state.current_room.name.lower():
-            return ("[success]You consult the [item_name]forest map fragment[/item_name] and study "
-                   "the ancient markings. The partial map reveals several safe paths through the "
-                   "enchanted woods, warning of areas where the trees themselves might lead you "
-                   "astray. Following the marked routes, you can navigate more safely through "
-                   "this magical wilderness.[/success]")
         else:
-            return ("The [item_name]forest map fragment[/item_name] shows forest paths, but "
-                   "would be more useful once you're actually in the enchanted woods.")
+            from ..rooms.ForestTransition import ForestTransition
+            from ..rooms.HeartOfTheForest import HeartOfTheForest
+            
+            if isinstance(game_state.current_room, (ForestTransition, HeartOfTheForest)):
+                return ("[success]You consult the [item_name]forest map fragment[/item_name] and study "
+                       "the ancient markings. The partial map reveals several safe paths through the "
+                       "enchanted woods, warning of areas where the trees themselves might lead you "
+                       "astray. Following the marked routes, you can navigate more safely through "
+                       "this magical wilderness.[/success]")
+            else:
+                return ("The [item_name]forest map fragment[/item_name] shows forest paths, but "
+                       "would be more useful once you're actually in the enchanted woods.")
 
     def examine(self, game_state) -> str:
         return ("[event]You examine the [item_name]forest map fragment[/item_name]. {0} "
