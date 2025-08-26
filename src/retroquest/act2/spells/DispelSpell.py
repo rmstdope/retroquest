@@ -15,8 +15,10 @@ class DispelSpell(Spell):
                 "barriers and curses, but finds no active magic to dispel nearby.[/success]")
 
     def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
+        from ..characters.BarmaidElena import BarmaidElena  # Import here to avoid circular imports
+        
         # Special handling for Elena's curse - final step
-        if target_character.get_name().lower() == "barmaid elena":
+        if isinstance(target_character, BarmaidElena):
             # Check if Elena has the receive_dispel_final_cure method and call it
             return target_character.receive_dispel_final_cure(game_state)
         else:

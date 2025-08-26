@@ -66,9 +66,11 @@ class AncientTreeSpirit(Character):
 
     def give_item(self, game_state: GameState, item_object) -> str:
         """Handle giving items to the Ancient Tree Spirit."""
+        from ..items.EnchantedAcorn import EnchantedAcorn  # Import here to avoid circular imports
+        
         event_msg = f"[event]You offer the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]"
         
-        if item_object.get_name().lower() == "enchanted acorn":
+        if isinstance(item_object, EnchantedAcorn):
             if self.acorn_received:
                 return f"[dialogue]The [character_name]{self.get_name()}[/character_name] gently refuses. 'You have already offered me the sacred acorn, young one. One gift of such significance is enough.'[/dialogue]"
             

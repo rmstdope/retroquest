@@ -20,7 +20,9 @@ class QualityRope(Item):
 
     def use_with(self, game_state: GameState, target_item) -> str:
         """Special method for using rope with other items like the ravine."""
-        if target_item.get_name().lower() == "ravine":
+        from .Ravine import Ravine  # Import here to avoid circular imports
+        
+        if isinstance(target_item, Ravine):
             # Check if caravan has already been secured
             if game_state.get_story_flag(FLAG_FOUND_LOST_CARAVAN):
                 return ("[info]You've already used your rope to secure the caravan and help the merchants "
@@ -35,7 +37,7 @@ class QualityRope(Item):
             
             # Remove the rope from inventory as it's used up in the rescue
             for item in game_state.inventory[:]:  # Use slice to avoid modification during iteration
-                if item.get_name().lower() == "quality rope":
+                if isinstance(item, QualityRope):
                     game_state.inventory.remove(item)
                     break
             

@@ -12,9 +12,12 @@ class TrainingSword(Item):
         )
 
     def use(self, game_state: GameState) -> str:
+        from ..characters.SirCedric import SirCedric  # Import here to avoid circular imports
+        from ..rooms.CastleCourtyard import CastleCourtyard  # Import here to avoid circular imports
+        
         # Check if we're in the Castle Courtyard with Sir Cedric present
-        if (game_state.current_room.name == "Castle Courtyard" and 
-            any(char.get_name().lower() == "sir cedric" for char in game_state.current_room.get_characters())):
+        if (isinstance(game_state.current_room, CastleCourtyard) and 
+            any(isinstance(char, SirCedric) for char in game_state.current_room.get_characters())):
             
             if not game_state.get_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS):
                 # First time demonstrating combat skills

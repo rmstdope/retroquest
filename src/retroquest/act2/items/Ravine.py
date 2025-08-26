@@ -25,7 +25,9 @@ class Ravine(Item):
 
     def use_with(self, game_state: 'GameState', target_item) -> str:
         """Handle using the ravine with other items. Delegates to Quality Rope if applicable."""
-        if target_item.get_name().lower() == "quality rope":
+        from .QualityRope import QualityRope  # Import here to avoid circular imports
+        
+        if isinstance(target_item, QualityRope):
             # Delegate to the Quality Rope's use_with method, passing ravine as the target
             return target_item.use_with(game_state, self)
         else:

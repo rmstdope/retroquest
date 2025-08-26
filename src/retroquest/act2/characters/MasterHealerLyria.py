@@ -55,6 +55,7 @@ class MasterHealerLyria(Character):
     def give_item(self, game_state: GameState, item_object) -> str:
         """Handle giving items to Master Healer Lyria."""
         from ..items.CrystalFocus import CrystalFocus
+        from ..items.HealingHerbs import HealingHerbs  # Import here to avoid circular imports
         
         if isinstance(item_object, CrystalFocus):            
             # Remove Crystal Focus from inventory as it's given to Lyria
@@ -74,7 +75,7 @@ class MasterHealerLyria(Character):
                     "and this magical aid, you've shown yourself ready for advanced training.' She teaches you the "
                     "[spell_name]greater_heal[/spell_name] spell! 'You've truly earned the title of healer.'[/success]\n\n"
                     "[quest_complete]Quest Complete: The Healer's Apprentice[/quest_complete]")
-        elif item_object.get_name().lower() == "healing herbs":
+        elif isinstance(item_object, HealingHerbs):
             # Check if apprentice quest is accepted but not completed
             game_state.set_story_flag(FLAG_HEALERS_APPRENTICE_ACCEPTED, True)
             # Remove healing herbs from inventory as they're given to Lyria
