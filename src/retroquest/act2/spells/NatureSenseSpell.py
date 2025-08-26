@@ -16,7 +16,6 @@ class NatureSenseSpell(Spell):
             )
         )
 
-# TODO Fix the checking for name strings below
     def cast_spell(self, game_state: GameState) -> str:
         from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
         
@@ -27,7 +26,7 @@ class NatureSenseSpell(Spell):
                 # Add the Water Nymphs to the room when first cast
                 game_state.current_room.characters.append(WaterNymphs())
                 return (
-                    "[spell_effect]You cast [spell_name]Nature's Sense[/spell_name] and extend "
+                    f"[spell_effect]You cast [spell_name]{self.get_name()}[/spell_name] and extend "
                     "your awareness throughout the glade. Immediately, you sense magical presences "
                     "by the stream - graceful forms of living water and moonlight. The water nymphs "
                     "reveal themselves, shimmering into visibility as they recognize your magical "
@@ -35,25 +34,25 @@ class NatureSenseSpell(Spell):
                 )
             else:
                 return (
-                    "[info]Your [spell_name]Nature's Sense[/spell_name] reveals the familiar presence of the water nymphs "
+                    f"[info]Your [spell_name]{self.get_name()}[/spell_name] reveals the familiar presence of the water nymphs "
                     "by the sacred stream, their forms visible and welcoming.[/info]"
                 )
         elif "forest" in game_state.current_room.name.lower() or "enchanted" in game_state.current_room.name.lower():
             # In forest areas, provide enhanced sensory information
-            return ("[success]You cast [spell_name]Nature's Sense[/spell_name] and feel your awareness "
+            return (f"[success]You cast [spell_name]{self.get_name()}[/spell_name] and feel your awareness "
                    "expand throughout the surrounding forest. The whisper of leaves speaks of safe "
                    "passages, the rustle of small creatures warns of predators, and the very air "
                    "reveals the health of the woodland. You sense several hidden paths that wind "
                    "through the trees, offering safer routes through the wilderness.[/success]")
         elif "transition" in game_state.current_room.name.lower():
             # In transition areas, help detect magical boundaries
-            return ("[success]You cast [spell_name]Nature's Sense[/spell_name] and feel the magical "
+            return (f"[success]You cast [spell_name]{self.get_name()}[/spell_name] and feel the magical "
                    "boundaries that separate different realms. The spell reveals the ebb and flow "
                    "of natural energy, showing you where the civilized world ends and wilder magics "
                    "begin. You can sense the ancient protections woven into the very landscape.[/success]")
         else:
             # In other areas, provide general nature awareness
-            return ("[info]You cast [spell_name]Nature's Sense[/spell_name] and feel a subtle "
+            return (f"[info]You cast [spell_name]{self.get_name()}[/spell_name] and feel a subtle "
                    "connection to the natural world around you. While there isn't much wilderness "
                    "here, you gain a better understanding of the living things in this area and "
                    "their relationship to the environment.[/info]")

@@ -30,7 +30,7 @@ class SpectralLibrarian(Character):
                 from ..items.CrystalFocus import CrystalFocus
                 game_state.current_room.add_item(CrystalFocus())
                 
-                return ("[success][character_name]Spectral Librarian[/character_name]: 'Ah, you have repaired the "
+                return (f"[success][character_name]{self.get_name()}[/character_name]: 'Ah, you have repaired the "
                         "protective enchantments with your [spell_name]mend[/spell_name] spell. This shows both "
                         "magical ability and respect for ancient knowledge. I shall reveal what you seek.' The "
                         "spirit's eyes glow brighter as they speak: 'Your bloodline traces back to the ancient "
@@ -41,18 +41,18 @@ class SpectralLibrarian(Character):
                         "[item_name]Crystal Focus[/item_name] to enhance your growing abilities. Your destiny "
                         "as one of the Chosen is beginning to unfold.'[/success]")
             else:
-                return ("[character_name]Spectral Librarian[/character_name]: 'Welcome, seeker of knowledge. I am "
+                return (f"[character_name]{self.get_name()}[/character_name]: 'Welcome, seeker of knowledge. I am "
                         "the eternal guardian of this repository. The protective enchantments around the most "
                         "valuable texts have been damaged by time. Prove your worthiness by repairing them, and "
                         "I shall share the knowledge you seek about your heritage and destiny.'")
         else:
-            return ("[character_name]Spectral Librarian[/character_name]: 'You have proven yourself worthy and "
+            return (f"[character_name]{self.get_name()}[/character_name]: 'You have proven yourself worthy and "
                     "learned what this library can teach. The knowledge of your bloodline and the [spell_name]dispel[/spell_name] "
                     "spell will serve you well in the challenges ahead. Remember: you are part of an ancient "
                     "lineage chosen to stand against the darkness. Use this knowledge wisely.'")
 
     def examine(self, game_state: GameState) -> str:
-        return ("The [character_name]Spectral Librarian[/character_name] appears to be a scholar from ancient "
+        return (f"The [character_name]{self.get_name()}[/character_name] appears to be a scholar from ancient "
                 "times, their ethereal form bound to this library by duty and purpose. They radiate wisdom "
                 "accumulated over centuries of guarding these precious texts. There's something both "
                 "melancholy and noble about their eternal vigil.")

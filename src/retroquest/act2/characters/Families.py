@@ -14,11 +14,11 @@ class Families(Character):
 
     def talk_to(self, game_state: GameState) -> str:
         if not game_state.get_story_flag(FLAG_HELPED_ELDERLY_RESIDENTS):
-            return ("[failure]The [character_name]families[/character_name] seem busy with their own affairs and "
+            return (f"[failure]The [character_name]{self.get_name()}[/character_name] seem busy with their own affairs and "
                     "no one seems to want to talk to you. They give you polite but distant nods, clearly not "
                     "interested in conversation with a stranger.[/failure]")
         
-        response = ("[character_name]Local Families[/character_name]: Welcome to our neighborhood! It's lovely to meet someone "
+        response = (f"[character_name]{self.get_name()}[/character_name]: Welcome to our neighborhood! It's lovely to meet someone "
                    "who takes time to help others. Greendale has a rich history - our families have been here for generations. "
                    "The city has always been a place where those with good hearts and magical talents find a home. "
                    "We're grateful for folks like you who lend a hand to those in need.")

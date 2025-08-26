@@ -17,9 +17,9 @@ class CourtHerald(Character):
             # Set the formal presentation flag
             game_state.set_story_flag(FLAG_COURT_HERALD_FORMAL_PRESENTATION, True)
             
-            event_msg = f"[event]You present the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name].[/event]"
+            event_msg = f"[event]You present the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.get_name()}[/character_name].[/event]"
             return (event_msg + "\n" + 
-                    f"[character_name]{self.name}[/character_name]: Excellent! This is a properly certified entry pass. "
+                    f"[character_name]{self.get_name()}[/character_name]: Excellent! This is a properly certified entry pass. "
                     "I hereby formally present you to the court and grant you access to our historical archives. "
                     "Your credentials are now on record, and you may research freely in our collections.")
         else:
@@ -28,10 +28,10 @@ class CourtHerald(Character):
 
     def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag(FLAG_COURT_HERALD_FORMAL_PRESENTATION):
-            return ("[character_name]Court Herald[/character_name]: You have been formally presented to the court and "
+            return (f"[character_name]{self.get_name()}[/character_name]: You have been formally presented to the court and "
                     "your credentials are on record. You may access the historical archives and speak with court "
                     "historians about your research.")
         else:
-            return ("[character_name]Court Herald[/character_name]: I handle formal presentations and credentials for "
+            return (f"[character_name]{self.get_name()}[/character_name]: I handle formal presentations and credentials for "
                     "court access. If you wish to research in the historical archives or speak with court officials, "
                     "you'll need proper documentation of your standing.")
