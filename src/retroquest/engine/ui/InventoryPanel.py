@@ -5,7 +5,7 @@ from .Popup import PopupType
 from ..theme import apply_theme
 
 class InventoryPanel(VerticalScroll):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(id="inventory", classes="selectable-list")
         self.tooltip = "Inventory"
         self.can_focus = False  # Prevent the panel itself from being focused
