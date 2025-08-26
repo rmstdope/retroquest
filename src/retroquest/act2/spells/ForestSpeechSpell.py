@@ -36,7 +36,7 @@ class ForestSpeechSpell(Spell):
                    "of any plants nearby, but the spell would be much more powerful in a "
                    "forest or natural environment.[/info]")
 
-    def cast_on_character(self, game_state: Any, target_character: Any) -> str:
+    def cast_on_character(self, game_state: GameState, target_character: Any) -> str:
         """Allow communication with forest creatures"""
         character_name = target_character.get_name().lower()
         

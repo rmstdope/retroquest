@@ -27,16 +27,16 @@ class Well(Item):
             self.description = desc
         return super().examine(game_state)
 
-    def use_with(self, game_state: Any, other_item: Any) -> str:
+    def use_with(self, game_state: GameState, other_item: Any) -> str:
         from .Bucket import Bucket  # Local import to avoid circular dependency
         from .FishingRod import FishingRod  # Local import to avoid circular dependency
         from .MagneticFishingRod import MagneticFishingRod  # Local import to avoid circular dependency
         from .ExtendedMagneticFishingRod import ExtendedMagneticFishingRod  # Local import to avoid circular dependency      
         # Check if other_item is an instance of any of the classes in the tuple
         if isinstance(other_item, (Bucket, FishingRod, MagneticFishingRod, ExtendedMagneticFishingRod)):
-            return other_item.use_with(game_state: GameState, self)
+            return other_item.use_with(game_state, self)
         
-        return super().use_with(game_state: GameState, other_item)
+        return super().use_with(game_state, other_item)
 
     def search(self, game_state: GameState) -> str:
         if self.is_purified:

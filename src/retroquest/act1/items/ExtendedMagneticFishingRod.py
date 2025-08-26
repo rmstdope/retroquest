@@ -11,7 +11,7 @@ class ExtendedMagneticFishingRod(Item):
             description="A long fishing rod with a magnet on the end, reinforced with a sturdy stick. Perfect for reaching and retrieving metallic items from a distance."
         )
 
-    def use_with(self, game_state: Any, other_item: Any) -> str:
+    def use_with(self, game_state: GameState, other_item: Any) -> str:
         if isinstance(other_item, Well):
             event_msg = f"[event]You try to use the [item_name]{self.get_name()}[/item_name] with the [item_name]{other_item.get_name()}[/item_name].[/event]\n"
             if other_item.is_purified and other_item.contains_ring:
@@ -33,4 +33,4 @@ class ExtendedMagneticFishingRod(Item):
                 return event_msg + f"You can see the bottom of the [item_name]{other_item.get_name()}[/item_name] clearly, but there's nothing metallic to retrieve with the [item_name]{self.get_name()}[/item_name]."
             else:
                 return event_msg + f"You try to use the [item_name]{self.get_name()}[/item_name] with the [item_name]{other_item.get_name()}[/item_name], but it doesn't seem to work right now."
-        return super().use_with(game_state: GameState, other_item)
+        return super().use_with(game_state, other_item)

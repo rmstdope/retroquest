@@ -10,7 +10,7 @@ class MagneticFishingRod(Item):
             description="A fishing rod with a magnet attached to the end. Good for attracting metallic objects."
         )
 
-    def use_with(self, game_state: Any, other_item: Any) -> str:
+    def use_with(self, game_state: GameState, other_item: Any) -> str:
         # Circular import guard for ExtendedMagneticFishingRod
         from .ExtendedMagneticFishingRod import ExtendedMagneticFishingRod
         if isinstance(other_item, Stick):
@@ -29,4 +29,4 @@ class MagneticFishingRod(Item):
         if isinstance(other_item, Well):
             return f"[failure]You try fishing in the [item_name]{other_item.get_name()}[/item_name], but the [item_name]{self.get_name()}[/item_name] is too short to reach the water.[/failure]"
 
-        return super().use_with(game_state: GameState, other_item)
+        return super().use_with(game_state, other_item)
