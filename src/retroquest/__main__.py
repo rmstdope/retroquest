@@ -1,17 +1,23 @@
-from retroquest.engine.ui.RetroQuestApp import RetroQuestApp
+
+import sys
+from retroquest.engine.textualui.TextualApp import TextualApp
+from retroquest.engine.promptui.PromptSessionApp import PromptSessionApp
 from retroquest.engine.Game import Game
 from retroquest.act1.Act1 import Act1
+from retroquest.act2.Act2 import Act2
 
-USE_TEXTUAL_UI = True  # Set to False to use the classic console UI
+USE_TEXTUAL_UI = True
+
+if '-oldschool' in sys.argv:
+    USE_TEXTUAL_UI = False
 
 def main() -> None:
+    game = Game([Act1(), Act2()])
     if USE_TEXTUAL_UI:
-        app = RetroQuestApp()
-        app.run()
+        app = TextualApp(game)
     else:
-        act = Act1()
-        game = Game(act)
-        game.run()
+        app = PromptSessionApp(game)
+    app.run()
 
 if __name__ == '__main__':
     main()

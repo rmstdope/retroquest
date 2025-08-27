@@ -22,21 +22,6 @@ class Game:
     Handles the game loop, command parsing, and room transitions.
     """
     def __init__(self, acts: list[Act]) -> None:
-        custom_theme = Theme({
-            "character_name": "bold blue",
-            "dialogue": "italic cyan",
-            "item_name": "bold green",
-            "spell.name": "bold magenta",
-            "room_name": "bold cyan",
-            "quest_name": "red",
-            "event": "dim",
-            "failure": "bold red",
-            "success": "bold green",
-            "exits": "bold yellow"
-        })
-        self.console = Console(theme=custom_theme)
-        self.completer = NestedCompleter.from_nested_dict({})
-        self.session = PromptSession(completer=self.completer, complete_while_typing=True)
         self.is_running = True
         self.acts = acts
         self.current_act = 0
@@ -46,33 +31,12 @@ class Game:
         self.command_parser = CommandParser(self)
         self.describe_room = False  # Flag to indicate if we need to describe the room after a command
 
-    def handle_command(self, command: str) -> str:
-        result = self.command_parser.parse(command)
-        if self.describe_room:
-            # If the command resulted in a room change, describe the new room
-            self.describe_room = False
-            result += self.state.current_room.describe(self.state)
-        activated = self.state.activate_quests()
-        updated = self.state.update_quests()
-        completed = self.state.complete_quests()
-        responses = [result]
-        if activated:
-            responses.append('\n')
-            responses.append(activated)
-        if updated:
-            responses.append('\n')
-            responses.append(updated)
-        if completed:
-            responses.append('\n')
-            responses.append(completed)
-        return "\n".join([r for r in responses if r])
-
     def start_music(self) -> None:
         """Start act music in a separate thread so it doesn't block the prompt."""
         def play_music() -> None:
             try:
                 pygame.mixer.init()
-                pygame.mixer.music.load(self.current_act.music_file)
+                pygame.mixer.music.load(self.acts[self.current_act].music_file)
                 # pygame.mixer.music.play(loops=-1)  # Loop indefinitely
             except Exception as e:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
@@ -94,13 +58,8 @@ Welcome to
         text += self.acts[self.current_act].music_info
         return text
 
-    def print_intro(self) -> None:
-        self.console.clear()
-        self.console.print(self.get_ascii_logo())
-        self.session.prompt('Press Enter to continue...')
-        self.console.clear()
-        self.console.print(self.acts[self.current_act].get_act_intro())
-        self.session.prompt('Press Enter to continue...')
+    def get_act_intro(self) -> None:
+        return self.acts[self.current_act].get_act_intro()
 
     def get_command_completions(self) -> dict[str, Any]:
         # Helper to build nested dict for multi-word item names
@@ -267,22 +226,6 @@ Welcome to
 
         return completions
 
-    def run(self) -> None:
-        self.start_music()
-        self.print_intro()
-        self.console.clear()
-        response = self.handle_command('look')  # Initial look at the room
-        # Print a separator line before any output after a command
-        self.console.print('\n' + response + '\n')
-        while self.is_running:
-            completions = self.get_command_completions()
-            self.session.completer = NestedCompleter.from_nested_dict(completions)
-            user_input = self.session.prompt('> ')
-            self.state.history.append(user_input)
-            response = self.handle_command(user_input)
-            # Print a separator line before any output after a command
-            self.console.print('\n' + response + '\n')
-
     def find_character(self, target: str) -> Character:
         character_to_examine = None
         target = target.lower()
@@ -447,18 +390,8 @@ Welcome to
         return f"I don't understand the command: '{command}'. Try 'help' for a list of valid commands."
 
     def quit(self) -> str:
-        while True:
-            answer = self.session.prompt("Do you want to save before quitting? (yes/no): ").strip().lower()
-            if answer in ("yes", "y"):
-                self.save()
-                self.is_running = False
-                return "Game saved. Goodbye!"
-            elif answer in ("no", "n"):
-                self.is_running = False
-                return "Goodbye!"
-            else:
-                self.console.print("Please answer 'yes' or 'no'.")
-                continue
+        self.is_running = False
+        return ''
 
     def drop(self, item: str) -> str:
         item_to_drop = self.find_item(item, look_in_inventory=True, look_in_room=False)

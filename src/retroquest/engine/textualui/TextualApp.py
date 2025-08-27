@@ -3,9 +3,9 @@ from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, Input
 from textual.containers import Horizontal, Vertical
 from textual.css.query import NoMatches
+
+from ...engine.Game import Game
 from .GameController import GameController
-from ...act1.Act1 import Act1
-from ...act2.Act2 import Act2
 from .RoomPanel import RoomPanel
 from .ResultPanel import ResultPanel
 from .QuestLogPanel import QuestLogPanel
@@ -14,7 +14,7 @@ from .CommandInput import CommandInput
 from .Popup import Popup, PopupType
 from .SpellPanel import SpellPanel
 
-class RetroQuestApp(App):
+class TextualApp(App):
     TITLE = "RetroQuest"
     SUB_TITLE = "A Text Adventure"
     CSS_PATH = "styles.tcss"
@@ -25,9 +25,9 @@ class RetroQuestApp(App):
     STATE_SAVING = 3
     STATE_QUITTING = 4
 
-    def __init__(self) -> None:
+    def __init__(self, game: Game) -> None:
         super().__init__()
-        self.controller = GameController([Act1(), Act2()])
+        self.controller = GameController(game)
         self.state = self.STATE_LOGO
         self._popup_queue = []
         self._focus_before_popup = None
@@ -115,11 +115,11 @@ class RetroQuestApp(App):
         if self.state == self.STATE_RUNNING and command:
             self.command_input.placeholder = 'What do you want to do?'
             self.command_input.value = ""
-            if command.lower() in ("quit", "exit"):
+            self.execute(command)
+            if not self.controller.game.is_running:
                 self.state = self.STATE_QUITTING
                 self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)
                 return
-            self.execute(command)
 
     def execute(self, command: str) -> None:
         result = self.controller.handle_command(command)
