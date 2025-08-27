@@ -2,6 +2,7 @@ from typing import Any, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .Item import Item
+    from .Quest import Quest
 
 class GameState:
     """
@@ -184,67 +185,39 @@ class GameState:
             lines.append("(none)")
         return "\n".join(lines)
 
-    def activate_quests(self) -> Union[str, None]:
+    def next_activated_quest(self) -> Union['Quest', None]:
         """
-        Checks non_activated_quests for any that should be activated (triggered).
-        Moves newly activated quests to activated_quests and returns a string describing them,
+        Checks non_activated_quests for the first quest that should be activated (triggered).
+        Moves the newly activated quest to activated_quests and returns the quest,
         or None if no new quest was activated.
         """
-        newly_activated = []
-        remaining = []
-        for quest in self.non_activated_quests:
+        for i, quest in enumerate(self.non_activated_quests):
             if quest.check_trigger(self):
                 self.activated_quests.append(quest)
-                newly_activated.append(quest)
-            else:
-                remaining.append(quest)
-        self.non_activated_quests = remaining
-        if newly_activated:
-            quest_lines = []
-            for q in newly_activated:
-                quest_type = "main" if q.is_main() else "side"
-                quest_lines.append(f"[quest_name]{q.name} ({quest_type})[/quest_name]: {q.description}")
-            return "New quest(s) activated:\n" + "\n".join(quest_lines)
+                del self.non_activated_quests[i]
+                return quest
         return None
 
-    def complete_quests(self) -> Union[str, None]:
+    def next_updated_quest(self) -> Union['Quest', None]:
         """
-        Checks activated_quests for any that are now completed.
-        Moves newly completed quests to completed_quests and returns a string describing them,
-        or None if no new quest was completed.
+        Checks activated_quests for the first quest that should be updated.
+        Returns the quest if found, or None if no quest needs updating.
         """
-        newly_completed = []
-        remaining = []
-        for quest in getattr(self, 'activated_quests', []):
+        for quest in self.activated_quests:
+            if quest.check_update(self):
+                return quest
+        return None
+
+    def next_completed_quest(self) -> Union['Quest', None]:
+        """
+        Checks activated_quests for the first quest that should be completed.
+        Returns the quest if found, or None if no quest needs completing.
+        """
+        for i, quest in enumerate(self.activated_quests):
             if quest.check_completion(self):
                 self.completed_quests.append(quest)
-                newly_completed.append(quest)
-            else:
-                remaining.append(quest)
-        self.activated_quests = remaining
-        if newly_completed:
-            completion_lines = []
-            for q in newly_completed:
-                quest_type = "main" if q.is_main() else "side"
-                completion_lines.append(f"[quest_name]{q.name} ({quest_type})[/quest_name]: [dim]{q.completion}[/dim]")
-            return "Quest(s) completed:\n" + "\n".join(completion_lines)
-        return None
-
-    def update_quests(self) -> Union[str, None]:
-        """
-        Checks activated_quests for any that should update their quest log (dynamic quest log updates).
-        Returns a string describing updated quests, or None if no quest log was updated.
-        """
-        updated_quests = []
-        for quest in getattr(self, 'activated_quests', []):
-            if quest.check_update(self):
-                updated_quests.append(quest)
-        if updated_quests:
-            update_lines = []
-            for q in updated_quests:
-                quest_type = "main" if q.is_main() else "side"
-                update_lines.append(f"[quest_name]{q.name} ({quest_type})[/quest_name]: {q.description}")
-            return "Quest log updated:\n" + "\n".join(update_lines)
+                del self.activated_quests[i]
+                return quest
         return None
 
     def get_room(self, room_name: str) -> Union[Any, None]:
@@ -286,20 +259,6 @@ class GameState:
             for quest in quest_list:
                 if quest.name.lower() == quest_name_lower:
                     return quest
-        return None
-
-    def activate_quest(self) -> Union[str, None]:
-        """
-        Checks non_activated_quests for the first quest that should be activated (triggered).
-        Moves the newly activated quest to activated_quests and returns a string describing it,
-        or None if no new quest was activated.
-        """
-        for i, quest in enumerate(self.non_activated_quests):
-            if quest.check_trigger(self):
-                self.activated_quests.append(quest)
-                del self.non_activated_quests[i]
-                quest_type = "main" if quest.is_main() else "side"
-                return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
         return None
 
     def update_quest(self) -> Union[str, None]:

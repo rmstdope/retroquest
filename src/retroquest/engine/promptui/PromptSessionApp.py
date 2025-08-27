@@ -11,7 +11,7 @@ class PromptSessionApp:
     """
     Prompt-based user interface for RetroQuest.
     """
-    
+
     def __init__(self, game: Game) -> None:
         custom_theme = Theme({
             "character_name": "bold blue",
@@ -32,27 +32,32 @@ class PromptSessionApp:
         self.console = Console(theme=custom_theme)
         self.completer = NestedCompleter.from_nested_dict({})
         self.session = PromptSession(completer=self.completer, complete_while_typing=True)
-    
+
     def handle_command(self, command: str) -> str:
         result = self.game.command_parser.parse(command)
         if self.game.describe_room:
             # If the command resulted in a room change, describe the new room
             self.describe_room = False
             result += self.game.state.current_room.describe(self.game.state)
-        activated = self.game.state.activate_quests()
-        updated = self.game.state.update_quests()
-        completed = self.game.state.complete_quests()
-        responses = [result]
-        if activated:
-            responses.append('\n')
-            responses.append(activated)
-        if updated:
-            responses.append('\n')
-            responses.append(updated)
-        if completed:
-            responses.append('\n')
-            responses.append(completed)
-        return "\n".join([r for r in responses if r])
+        txt = []
+        while (quest := self.game.state.next_activated_quest()):
+            quest_type = "main" if quest.is_main() else "side"
+            txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
+        if txt:
+            result += "\nQuest(s) activated:\n" + "\n".join(txt)
+        txt = []
+        while (quest := self.game.state.next_updated_quest()):
+            quest_type = "main" if quest.is_main() else "side"
+            txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
+        if txt:
+            result += "\nQuest(s) updated:\n" + "\n".join(txt)
+        txt = []
+        while (quest := self.game.state.next_completed_quest()):
+            quest_type = "main" if quest.is_main() else "side"
+            txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
+        if txt:
+            result += "\nQuest(s) completed:\n" + "\n".join(txt)
+        return result
 
     def run(self) -> None:
         self.game.start_music()

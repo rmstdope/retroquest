@@ -65,9 +65,12 @@ def _execute_commands(game, commands_list):
     part_result = []
     for cmd in commands_list:
         part_result.append(game.command_parser.parse(cmd))
-        game.state.activate_quests()
-        game.state.update_quests()
-        game.state.complete_quests()
+        while game.state.next_activated_quest():
+            pass
+        while game.state.next_updated_quest():
+            pass
+        while game.state.next_completed_quest():
+            pass
     results.extend(part_result)
     _debug_print_history()
     return "".join(part_result)

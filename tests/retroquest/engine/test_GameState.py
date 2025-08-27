@@ -24,22 +24,6 @@ class TestGameState(unittest.TestCase):
         self.quest2 = DummyQuest("Quest2", description=False, completion=True)
         self.gs = GameState(self.room, all_rooms=None, all_quests=[self.quest1, self.quest2])
 
-    def test_activate_quests(self):
-        msg = self.gs.activate_quests()
-        self.assertIn("Quest1", msg)
-        self.assertIn(self.quest1, getattr(self.gs, 'activated_quests', []))
-        self.assertNotIn(self.quest1, self.gs.non_activated_quests)
-
-    def test_complete_quests(self):
-        # Activate quest1 first
-        self.gs.activate_quests()
-        # Now set quest1 to be completable
-        self.quest1.completion = True
-        msg = self.gs.complete_quests()
-        self.assertIn("Quest1", msg)
-        self.assertIn(self.quest1, getattr(self.gs, 'completed_quests', []))
-        self.assertNotIn(self.quest1, getattr(self.gs, 'activated_quests', []))
-
     def test_mark_visited(self):
         new_room = DummyRoom("AnotherRoom")
         self.gs.mark_visited(new_room)

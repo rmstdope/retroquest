@@ -92,12 +92,21 @@ class GameController:
 
     def complete_quest(self) -> str:
         """Check for quest completion and return popup text if any."""
-        return self.game.state.complete_quest()
+        if (quest := self.game.state.next_completed_quest()) is not None:
+            quest_type = "main" if quest.is_main() else "side"
+            return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
+        return None
 
     def update_quest(self) -> str:
         """Check for quest updates and return popup text if any."""
-        return self.game.state.update_quest()
+        if (quest := self.game.state.next_updated_quest()) is not None:
+            quest_type = "main" if quest.is_main() else "side"
+            return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
+        return None
 
     def activate_quest(self) -> str:
         """Check for quest activation and return popup text if any."""
-        return self.game.state.activate_quest()
+        if (quest := self.game.state.next_activated_quest()) is not None:
+            quest_type = "main" if quest.is_main() else "side"
+            return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
+        return None

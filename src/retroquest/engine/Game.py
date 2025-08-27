@@ -723,6 +723,12 @@ Welcome to
                 command = line.strip()
                 if not command or command.startswith('#'):
                     continue  # Skip empty lines and comments
-                result = self.handle_command(command)
+                result = self.command_parser.parse(command)
+                while self.state.next_activated_quest():
+                    pass
+                while self.state.next_updated_quest():
+                    pass
+                while self.state.next_completed_quest():
+                    pass
                 results.append(f"> {command}\n{result}")
         return "\n".join(results)

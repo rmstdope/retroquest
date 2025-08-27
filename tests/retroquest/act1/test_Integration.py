@@ -80,9 +80,12 @@ def _execute_commands(game, commands_list):
     global results
     for cmd in commands_list:
         results.append(game.command_parser.parse(cmd))
-        game.state.activate_quests()
-        game.state.update_quests()
-        game.state.complete_quests()
+        while game.state.next_activated_quest():
+            pass
+        while game.state.next_updated_quest():
+            pass
+        while game.state.next_completed_quest():
+            pass
     _debug_print_history()
 
 def _debug_print_history():
