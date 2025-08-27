@@ -18,6 +18,49 @@ class DummyQuest:
         return False
 
 class TestGameState(unittest.TestCase):
+    def test_next_activated_quest(self):
+        # Setup: quest1 triggers, quest2 does not
+        self.gs.non_activated_quests = [self.quest1, self.quest2]
+        activated = self.gs.next_activated_quest()
+        self.assertEqual(activated, self.quest1)
+        self.assertIn(self.quest1, self.gs.activated_quests)
+        self.assertNotIn(self.quest1, self.gs.non_activated_quests)
+        # No more triggers
+        activated2 = self.gs.next_activated_quest()
+        self.assertIsNone(activated2)
+
+    def test_next_updated_quest(self):
+        # DummyQuest with check_update method
+        class UpdateQuest(DummyQuest):
+            def __init__(self, name, update=False):
+                super().__init__(name)
+                self._update = update
+            def check_update(self, game_state):
+                return self._update
+        q1 = UpdateQuest("Q1", update=False)
+        q2 = UpdateQuest("Q2", update=True)
+        self.gs.activated_quests = [q1, q2]
+        updated = self.gs.next_updated_quest()
+        self.assertEqual(updated, q2)
+        # No quest needs updating
+        q2._update = False
+        updated2 = self.gs.next_updated_quest()
+        self.assertIsNone(updated2)
+
+    def test_next_completed_quest(self):
+        # quest1 does not complete, quest2 does
+        self.gs.activated_quests = [self.quest1, self.quest2]
+        # Patch quest2 to complete
+        self.quest2.completion = True
+        def check_completion_true(gs): return True
+        self.quest2.check_completion = check_completion_true
+        completed = self.gs.next_completed_quest()
+        self.assertEqual(completed, self.quest2)
+        self.assertIn(self.quest2, self.gs.completed_quests)
+        self.assertNotIn(self.quest2, self.gs.activated_quests)
+        # No more completions
+        completed2 = self.gs.next_completed_quest()
+        self.assertIsNone(completed2)
     def setUp(self):
         self.room = DummyRoom("TestRoom")
         self.quest1 = DummyQuest("Quest1", description=True, completion=False)
