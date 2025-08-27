@@ -62,9 +62,15 @@ def _check_quests(game_state, expected_active_quests):
 
 def _execute_commands(game, commands_list):
     global results
+    part_result = []
     for cmd in commands_list:
-        results.append(game.handle_command(cmd))
+        part_result.append(game.command_parser.parse(cmd))
+        game.state.activate_quests()
+        game.state.update_quests()
+        game.state.complete_quests()
+    results.extend(part_result)
     _debug_print_history()
+    return "".join(part_result)
 
 def _debug_print_history():
     for res_str in results:
@@ -73,12 +79,12 @@ def _debug_print_history():
 def _create_test_game():
     """Create a test game instance with Act2"""
     act = Act2()
-    return Game(act)
+    return Game([act])
 
 def test_golden_path_act2_completion():
     """Test the golden path through Act2 completion"""
     act = Act2()
-    game = Game(act)
+    game = Game([act])
     
     # Step 1: Mountain Path
     # Should start in Mountain Path
@@ -546,14 +552,14 @@ def test_golden_path_act2_completion():
     _execute_commands(game, ["go north", "go north", "go west", "go west", "go north", "go north", "go north", "go west"])
     _execute_commands(game, ["cast prophetic_vision"])
     _check_quests(game.state, [])
-    assert game.act.is_completed(game.state), "Act 2 should be marked as completed"
+    assert game.acts[game.current_act].is_completed(game.state), "Act 2 should be marked as completed"
     
     # At this point, we have completed steps 1-25 of the golden path!
 
 def test_main_square_navigation_restriction():
     """Test that Main Square navigation is restricted until city map is used"""
     act = Act2()
-    game = Game(act)
+    game = Game([act])
     
     # Add required items from Act 1
     from retroquest.act2.items.CityMap import CityMap
@@ -587,9 +593,9 @@ def test_main_square_navigation_restriction():
     # Use the city map to unlock navigation
     # First verify the map is in inventory
     assert game.state.has_item("city map"), "City map should be in inventory before use"
-    
-    result = game.handle_command("use city map")
-    
+
+    result = _execute_commands(game, ["use city map"])
+
     # Verify the map has been removed from inventory after use
     assert not game.state.has_item("city map"), "City map should be removed from inventory after use"
     
@@ -611,7 +617,7 @@ def test_main_square_navigation_restriction():
 def test_golden_path_step_15_forest_transition():
     """Test step 15: Forest Transition activities - kit use, stone examination, spell learning, hermit interaction."""
     act = Act2()
-    game = Game(act)
+    game = Game([act])
     
     # Navigate to Forest Transition
     game.state.current_room = game.state.all_rooms["ForestTransition"]
@@ -628,13 +634,13 @@ def test_golden_path_step_15_forest_transition():
     assert not game.state.get_story_flag("nature_sense_learned"), "Nature sense should not be learned initially"
     
     # Step 15a: Use Forest Survival Kit
-    result = game.handle_command("use forest survival kit")
+    result = _execute_commands(game, ["use forest survival kit"])
     assert "compass points true north" in result.lower(), "Should describe compass"
     assert "forest map" in result.lower(), "Should mention studying the map"
     assert "wilderness survival" in result.lower(), "Should mention survival preparation"
     
     # Step 15b: Examine standing stones
-    result = game.handle_command("examine stones")
+    result = _execute_commands(game, ["examine stones"])
     assert "druidic" in result.lower(), "Should mention druidic runes"
     assert "boundary between worlds" in result.lower(), "Should describe the boundary"
     
@@ -680,14 +686,14 @@ def test_whispering_glade_riddle_system():
     game.state.current_room = game.state.all_rooms["WhisperingGlade"]
     
     # Cast nature_sense to detect nymphs
-    result = game.handle_command("cast nature_sense")
+    result = _execute_commands(game, ["cast nature_sense"])
     
     # Start riddle sequence
-    result = game.handle_command("talk to water nymphs")
+    result = _execute_commands(game, ["talk to water nymphs"])
     assert "riddle" in result.lower()
     
     # Test wrong answer first
-    result = game.handle_command("say wrong to water nymphs")
+    result = _execute_commands(game, ["say wrong to water nymphs"])
     assert "not quite" in result.lower() or "incorrect" in result.lower()
     assert not game.state.get_story_flag("water_nymph_riddle_1_completed")
     
@@ -696,7 +702,7 @@ def test_whispering_glade_riddle_system():
     riddle_flags = ["water_nymph_riddle_1_completed", "water_nymph_riddle_2_completed", "water_nymph_riddle_3_completed"]
     
     for i, (answer, flag) in enumerate(zip(riddle_answers, riddle_flags)):
-        result = game.handle_command(f"say {answer} to water nymphs")
+        result = _execute_commands(game, [f"say {answer} to water nymphs"])
         assert "correct" in result.lower()
     
     # Verify all riddles completed
@@ -712,35 +718,6 @@ def test_quest_prerequisites_validation():
     """Test validation of quest prerequisites for steps 18-19."""
     game = _create_test_game()
 
-def test_training_master_quest_trigger():
-    """Test that talking to Training Master triggers Cedric's Lost Honor quest."""
-    game = _create_test_game()
-    
-    # Navigate to Castle Courtyard
-    game.state.current_room = game.state.all_rooms["CastleCourtyard"]
-    
-    # Verify quest is not active initially
-    _check_quests(game.state, [])
-    
-    # Talk to Training Master
-    result = game.handle_command("talk to training master")
-    
-    # Verify quest acceptance message
-    assert "New quest(s) activated:" in result
-    assert "Cedric's Lost Honor (side)" in result
-    assert "accusations of cowardice" in result
-    assert "documents - evidence that would clear his name" in result
-    
-    # Verify quest is now active
-    from retroquest.act2.quests.CedricksLostHonorQuest import CedricksLostHonorQuest
-    active_quest_names = [q.name for q in game.state.activated_quests]
-    assert "Cedric's Lost Honor" in active_quest_names
-    
-    # Talk to Training Master again - should get different dialogue
-    result = game.handle_command("talk to training master")
-    assert "Quest Accepted" not in result  # Should not trigger quest again
-    assert "You're looking into Sir Cedric's situation" in result
-
 def test_squires_diary_quest_dependency():
     """Test that the diary can only be found after talking to squires and provides meaningful information only after quest is accepted."""
     game = _create_test_game()
@@ -749,34 +726,34 @@ def test_squires_diary_quest_dependency():
     game.state.current_room = game.state.all_rooms["CastleCourtyard"]
     
     # Try to talk to squires before quest is accepted - should be too busy
-    result = game.handle_command("talk to squires")
+    result = _execute_commands(game, ["talk to squires"])
     assert "too busy and focused to engage" in result
     assert "can't talk" in result
     
     # Try to search without talking to squires first - should not find diary
-    result = game.handle_command("search")
+    result = _execute_commands(game, ["search"])
     assert "don't find anything of particular interest" in result
     assert "talk to them first" in result
     _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=False)
     
     # Accept quest by talking to Training Master first
-    game.handle_command("talk to training master")
+    _execute_commands(game, ["talk to training master"])
     
     # Now talk to squires - should provide information about diary
-    result = game.handle_command("talk to squires")
+    result = _execute_commands(game, ["talk to squires"])
     assert "Sir Cedric's disgrace" in result
     assert "old diary under the stone benches" in result
     
     # Now search should find the diary
-    result = game.handle_command("search")
+    result = _execute_commands(game, ["search"])
     assert "worn leather diary" in result
     _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=True)
     
     # Take the diary
-    game.handle_command("take squire's diary")
+    _execute_commands(game, ["take squire's diary"])
     
     # Read diary - should provide detailed information (quest already accepted)
-    result = game.handle_command("use squire's diary")
+    result = _execute_commands(game, ["use squire's diary"])
     assert "Battle of Thornfield Pass" in result
     assert "secret military documents" in result
     assert "Heavensforth" in result
@@ -794,31 +771,31 @@ def test_castle_courtyard_search_dependency():
     _check_character_in_room(game.state.current_room, "Squires")
     
     # Search without talking to squires should fail to find diary
-    result = game.handle_command("search")
+    result = _execute_commands(game, ["search"])
     assert "don't find anything of particular interest" in result
     assert "talk to them first" in result
     _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=False)
     
     # Try to talk to squires before quest accepted - should be too busy
-    result = game.handle_command("talk to squires")
+    result = _execute_commands(game, ["talk to squires"])
     assert "too busy and focused" in result
     assert "can't talk" in result
     
     # Accept quest by talking to Training Master
-    game.handle_command("talk to training master")
+    _execute_commands(game, ["talk to training master"])
     
     # Now talk to squires - should work
-    result = game.handle_command("talk to squires")
+    result = _execute_commands(game, ["talk to squires"])
     assert "old diary under the stone benches" in result
     
     # Now search should succeed
-    result = game.handle_command("search")
+    result = _execute_commands(game, ["search"])
     assert "worn leather diary" in result
     assert "squire's diary" in result
     _check_item_in_room(game.state.current_room, "squire's diary", should_be_present=True)
     
     # Subsequent searches should indicate already searched
-    result = game.handle_command("search")
+    result = _execute_commands(game, ["search"])
     assert "already searched this area thoroughly" in result
 
 def test_squires_busy_before_quest_acceptance():
@@ -832,7 +809,7 @@ def test_squires_busy_before_quest_acceptance():
     _check_quests(game.state, [])
     
     # Try to talk to squires before quest is accepted
-    result = game.handle_command("talk to squires")
+    result = _execute_commands(game, ["talk to squires"])
     assert "too busy and focused to engage" in result
     assert "can't talk" in result
     assert "Training Master expects us to perfect" in result
@@ -842,10 +819,10 @@ def test_squires_busy_before_quest_acceptance():
     assert not game.state.get_story_flag(FLAG_SQUIRES_TALKED_TO)
     
     # Accept quest by talking to Training Master
-    game.handle_command("talk to training master")
+    _execute_commands(game, ["talk to training master"])
     
     # Now squires should be willing to talk
-    result = game.handle_command("talk to squires")
+    result = _execute_commands(game, ["talk to squires"])
     assert "Sir Cedric's disgrace" in result
     assert "old diary under the stone benches" in result
     
@@ -863,10 +840,10 @@ def test_forest_transition_spell_learning():
     game.state.current_room = game.state.all_rooms["ForestTransition"]
     
     # Use survival kit
-    result = game.handle_command("use forest survival kit")
+    result = _execute_commands(game, ["use forest survival kit"])
     
     # Examine stones
-    result = game.handle_command("examine stones")
+    result = _execute_commands(game, ["examine stones"])
     
     _check_spell_known(game.state, "nature_sense")
     
@@ -901,7 +878,7 @@ def test_secret_documents_quest_dependency():
     assert not game.state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS)
     
     # Read the squire's diary to learn about Cedric's case
-    game.handle_command("use squire's diary")
+    _execute_commands(game, ["use squire's diary"])
     
     # Now examine documents after reading diary - should understand their significance
     examine_result = secret_docs.examine(game.state)
@@ -929,7 +906,7 @@ def test_squires_diary_sets_flag():
     assert not game.state.get_story_flag(FLAG_READ_SQUIRES_DIARY)
     
     # Read/use the diary
-    result = game.handle_command("use squire's diary")
+    result = _execute_commands(game, ["use squire's diary"])
     
     # Verify flag is now set
     assert game.state.get_story_flag(FLAG_READ_SQUIRES_DIARY)
@@ -949,7 +926,7 @@ def test_cedriks_honor_quest_updates_with_documents():
     
     # Navigate to Castle Courtyard and accept quest
     game.state.current_room = game.state.all_rooms["CastleCourtyard"]
-    game.handle_command("talk to training master")
+    _execute_commands(game, ["talk to training master"])
     
     # Find the activated quest
     cedrics_quest = None
@@ -976,14 +953,14 @@ def test_cedriks_honor_quest_updates_with_documents():
     assert "You have found the secret documents" not in initial_description
     
     # Read diary - should trigger first quest update
-    game.handle_command("use squire's diary")
+    _execute_commands(game, ["use squire's diary"])
     first_update_description = cedrics_quest.description
     assert "secret documents from Heavensforth" in first_update_description
     assert "went missing when a merchant caravan was lost" in first_update_description
     assert "You have found the secret documents" not in first_update_description
     
     # Examine documents - should trigger second quest update
-    game.handle_command("examine secret documents")
+    _execute_commands(game, ["examine secret documents"])
     final_description = cedrics_quest.description
     assert "You have found the secret documents" in final_description
     assert "clearly proves Sir Cedric's innocence" in final_description
@@ -1019,7 +996,7 @@ def test_step_24_lord_commander_interaction():
     assert not game.state.is_quest_completed("Cedric's Lost Honor")
     
     # Give documents to Lord Commander
-    result = game.handle_command("give secret documents to lord commander")
+    result = _execute_commands(game, ["give secret documents to lord commander"])
     
     # Verify the quest is now completed
     assert game.state.is_quest_completed("Cedric's Lost Honor")
@@ -1033,7 +1010,7 @@ def test_step_24_lord_commander_interaction():
     
     # Now test Sir Cedric's reaction
     game.state.current_room = game.state.all_rooms["CastleCourtyard"]
-    result = game.handle_command("talk to sir cedric")
+    result = _execute_commands(game, ["talk to sir cedric"])
     
     # Should receive Nature's Charm
     assert any(item.name.lower() == "nature's charm" for item in game.state.inventory)

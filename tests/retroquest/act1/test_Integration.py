@@ -79,7 +79,10 @@ def _check_quests(game_state, expected_active_quests):
 def _execute_commands(game, commands_list):
     global results
     for cmd in commands_list:
-        results.append(game.handle_command(cmd))
+        results.append(game.command_parser.parse(cmd))
+        game.state.activate_quests()
+        game.state.update_quests()
+        game.state.complete_quests()
     _debug_print_history()
 
 def _debug_print_history():
@@ -124,7 +127,7 @@ QUESTS = [
 def test_golden_path_act1_completion(monkeypatch):
     # Setup Game
     act = Act1()
-    game = Game(act)
+    game = Game([act])
     _execute_commands(game, ['look'])
 
     # Step 1: Elior’s Cottage
@@ -557,5 +560,5 @@ def test_golden_path_act1_completion(monkeypatch):
     # We'll check for the command execution. Further checks depend on how game handles act completion.
     _execute_commands(game, ["use map"])
     # Final check: Act I should be completed
-    assert game.act.is_completed(game.state), "Act I is not marked as completed."
+    assert game.acts[game.current_act].is_completed(game.state), "Act I is not marked as completed."
 

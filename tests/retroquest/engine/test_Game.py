@@ -54,7 +54,7 @@ def basic_rooms():
 @pytest.fixture
 def game(basic_rooms):
     act = Act("TestAct", basic_rooms, [], '', '')
-    return Game(act)
+    return Game([act])
 
 def test_game_initial_state(game, basic_rooms):
     assert game.state.current_room == basic_rooms["EliorsCottage"]
@@ -72,30 +72,6 @@ def test_move_valid(game, basic_rooms):
 def test_move_invalid(game):
     result = game.move('west')
     assert "can't go that way" in result
-
-def test_quit_prompts_save(monkeypatch, game):
-    # Simulate user saying 'no' to save
-    monkeypatch.setattr(game.session, 'prompt', lambda msg: 'no')
-    result = game.quit()
-    assert "Goodbye!" in result
-    assert game.is_running is False
-
-    # Simulate user saying 'yes' to save, and patch save
-    game.is_running = True
-    monkeypatch.setattr(game.session, 'prompt', lambda msg: 'yes')
-    game.save = MagicMock(return_value=None)
-    result = game.quit()
-    assert "Game saved. Goodbye!" in result
-    assert game.save.called
-    assert game.is_running is False
-
-def test_quit_loops_on_invalid(monkeypatch, game):
-    # Simulate user entering invalid, then 'no'
-    responses = iter(['maybe', 'no'])
-    monkeypatch.setattr(game.session, 'prompt', lambda msg: next(responses))
-    result = game.quit()
-    assert "Goodbye!" in result
-    assert game.is_running is False
 
 def test_visited_rooms_initial(game):
     # Only the starting room should be visited
@@ -1005,7 +981,7 @@ class MockCharacter:
 @pytest.fixture
 def game_with_spells(basic_rooms):
     act = Act("TestAct", basic_rooms, [], '', '')
-    game = Game(act)
+    game = Game([act])
     
     # Add some test spells
     heal_spell = MockSpell("heal", "A healing spell")

@@ -42,7 +42,7 @@ def test_take_multiple_identical_items():
     """Test taking multiple items of the same type."""
     # Create mock act and game
     act = MockAct()
-    game = Game(act)
+    game = Game([act])
     
     # Create multiple identical items
     coins = [MockItem("coins", "A gold coin") for _ in range(5)]
@@ -59,7 +59,7 @@ def test_take_multiple_identical_items():
     assert len(initial_coins) == 5, f"Expected 5 coins in room, found {len(initial_coins)}"
     
     # Test taking all coins
-    result = game.handle_command("take coins")
+    result = game.command_parser.parse("take coins")
     
     # Verify the result message shows correct count
     assert "[event]You take 5 [item_name]coins[/item_name].[/event]" in result, f"Unexpected result: {result}"
@@ -75,7 +75,7 @@ def test_take_single_item():
     """Test taking a single item shows correct message format."""
     # Create mock act and game
     act = MockAct()
-    game = Game(act)
+    game = Game([act])
     
     # Create single item
     sword = MockItem("sword", "A sharp sword")
@@ -86,7 +86,7 @@ def test_take_single_item():
     game.state.current_room = test_room
     
     # Test taking the sword
-    result = game.handle_command("take sword")
+    result = game.command_parser.parse("take sword")
     
     # Should use singular form with "the"
     assert "[event]You take the [item_name]sword[/item_name].[/event]" in result, f"Unexpected result: {result}"
@@ -100,7 +100,7 @@ def test_take_mixed_pickupable_and_non_pickupable_items():
     """Test taking items when some can be picked up and others cannot."""
     # Create mock act and game
     act = MockAct()
-    game = Game(act)
+    game = Game([act])
     
     # Create mixed items - 3 books, 2 can be picked up, 1 cannot
     book1 = MockItem("book", "A readable book", can_pickup=True)
@@ -115,7 +115,7 @@ def test_take_mixed_pickupable_and_non_pickupable_items():
     game.state.current_room = test_room
     
     # Test taking books
-    result = game.handle_command("take book")
+    result = game.command_parser.parse("take book")
     
     # Should mention taking 2 books
     assert "[event]You take 2 [item_name]book[/item_name].[/event]" in result, f"Result should mention taking 2 books: {result}"
@@ -137,13 +137,13 @@ def test_take_nonexistent_item():
     """Test taking an item that doesn't exist."""
     # Create mock act and game
     act = MockAct()
-    game = Game(act)
+    game = Game([act])
     
     # Use empty room
     game.state.current_room = game.state.all_rooms["EmptyRoom"]
     
     # Test taking non-existent item
-    result = game.handle_command("take unicorn")
+    result = game.command_parser.parse("take unicorn")
     
     # Should get failure message
     assert "[failure]There is no 'unicorn' here to take.[/failure]" in result, f"Expected failure message, got: {result}"
@@ -152,7 +152,7 @@ def test_take_with_pickup_messages():
     """Test that pickup messages from individual items are preserved."""
     # Create mock act and game
     act = MockAct()
-    game = Game(act)
+    game = Game([act])
     
     # Create items with pickup messages
     gem1 = MockItem("gem", "A sparkling gem", pickup_message="The gem glows as you touch it!")
@@ -167,7 +167,7 @@ def test_take_with_pickup_messages():
     game.state.current_room = test_room
     
     # Test taking gems
-    result = game.handle_command("take gem")
+    result = game.command_parser.parse("take gem")
     
     # Should include both pickup messages
     assert "The gem glows as you touch it!" in result, f"Should include first pickup message: {result}"
@@ -184,7 +184,7 @@ def test_take_backward_compatibility_with_existing_behavior():
     """Ensure the take command maintains backward compatibility."""
     # Create mock act and game
     act = MockAct()
-    game = Game(act)
+    game = Game([act])
     
     # Test single item scenarios (should work exactly as before)
     test_items = [
@@ -195,13 +195,13 @@ def test_take_backward_compatibility_with_existing_behavior():
     
     for item in test_items:
         # Reset game state for each test
-        game = Game(act)
+        game = Game([act])
         test_room = game.state.all_rooms["TestRoom"]
         test_room.add_item(item)
         game.state.current_room = test_room
         
         # Test taking the item
-        result = game.handle_command(f"take {item.get_name()}")
+        result = game.command_parser.parse(f"take {item.get_name()}")
         
         # Should not be a failure message
         assert "[failure]" not in result, f"Failed to take {item.get_name()}: {result}"
