@@ -6,7 +6,6 @@ from ..items.EnhancedLantern import EnhancedLantern
 from ..items.QualityRope import QualityRope
 from ..items.Coins import Coins
 from ..quests.SuppliesForTheJourney import SuppliesForTheJourneyQuest
-from ..Act2StoryFlags import FLAG_GAVE_MERCHANTS_FLYER, FLAG_PREMIUM_SELECTION_AVAILABLE
 
 class MasterMerchantAldric(Character):
     def __init__(self) -> None:
@@ -30,15 +29,13 @@ class MasterMerchantAldric(Character):
             "[dialogue]'I deal only with established customers and those with proper credentials. "
             "Do you have any introduction or referral that would qualify you for my premium services?'[/dialogue]"
         )
+        self.gave_flyer = False
 
     def talk_to(self, game_state: GameState) -> str:
         # If merchant hasn't been given the flyer, shop is not fully open yet
-        if not game_state.get_story_flag(FLAG_GAVE_MERCHANTS_FLYER):
+        if not self.gave_flyer:
             return self.closed_dialogue
 
-        # Set flag for premium selection availability when talking after giving flyer
-        game_state.set_story_flag(FLAG_PREMIUM_SELECTION_AVAILABLE, True)
-        
         # Build wares information similar to Act 1 Shopkeeper
         wares_info = "My premium selection includes:\n"
         if self.wares:
@@ -61,7 +58,7 @@ class MasterMerchantAldric(Character):
             # Remove the flyer from inventory
             if item_object in game_state.inventory:
                 game_state.inventory.remove(item_object)
-            game_state.set_story_flag(FLAG_GAVE_MERCHANTS_FLYER, True)
+            self.gave_flyer = True
             game_state.current_room.add_wares()
             return (f"[success]You present the [item]{item_object.get_name()}[/item] to [character_name]Master Merchant Aldric[/character_name]. "
                     "His eyes light up as he examines it. 'Ah, excellent! This flyer grants you access to our premium "
@@ -72,7 +69,7 @@ class MasterMerchantAldric(Character):
     def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         """Handle buying items from Master Merchant Aldric"""
         # Check if shop is accessible
-        if not game_state.get_story_flag(FLAG_GAVE_MERCHANTS_FLYER):
+        if not self.gave_flyer:
             return self.closed_dialogue
 
         item_name_to_buy = item_name_to_buy.lower()

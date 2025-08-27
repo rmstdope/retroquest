@@ -1,7 +1,7 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..quests.TheInnkeepersDaughter import TheInnkeepersDaughterQuest
-from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE, FLAG_INNKEEPERS_DAUGHTER_COMPLETED, FLAG_ELENA_INITIAL_HEALING, FLAG_ELENA_PURIFIED
+from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE, FLAG_INNKEEPERS_DAUGHTER_COMPLETED
 
 class BarmaidElena(Character):
     def __init__(self) -> None:
@@ -9,6 +9,8 @@ class BarmaidElena(Character):
             name="barmaid elena",
             description="A young woman who moves slowly and appears weakened by some affliction. Dark circles under her eyes and a pale complexion suggest she is suffering from a magical curse.",
         )
+        self.elena_initial_healing = False
+        self.elena_purified = False
 
     def talk_to(self, game_state: GameState) -> str:
         if game_state.get_story_flag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED):
@@ -16,13 +18,13 @@ class BarmaidElena(Character):
                     "thank you so much! I feel like I'm alive again! The curse is completely gone, "
                     "and I owe you my life. My father is so grateful - he insists you take our family's "
                     "sacred charm as a token of our eternal gratitude. You are truly a hero!")
-        elif game_state.get_story_flag(FLAG_ELENA_PURIFIED):
+        elif self.elena_purified:
             return (f"[character_name]{self.get_name()}[/character_name]: *glowing with pure energy* "
                     "I feel so much cleaner now! The blessed water has washed away the dark "
                     "corruption that was clinging to my soul. The curse is almost gone - I can "
                     "sense just a few dark tendrils remaining. One powerful dispelling spell "
                     "should shatter the last of this evil enchantment!")
-        elif game_state.get_story_flag(FLAG_ELENA_INITIAL_HEALING):
+        elif self.elena_initial_healing:
             return (f"[character_name]{self.get_name()}[/character_name]: *looking much better but still weak* "
                     "The healing magic has given me strength! I can feel the curse's grip weakening, "
                     "but it's still there, clinging to me. I think you'll need to purify the dark "
@@ -40,12 +42,12 @@ class BarmaidElena(Character):
 
     def receive_greater_heal(self, game_state: GameState) -> str:
         """Handle receiving the greater_heal spell as the first step of the cure"""
-        if game_state.get_story_flag(FLAG_ELENA_INITIAL_HEALING):
+        if self.elena_initial_healing:
             return ("Elena is already strengthened by your healing magic.")
         
         # Set the flag and update Elena's condition
-        game_state.set_story_flag(FLAG_ELENA_INITIAL_HEALING, True)
-        
+        self.elena_initial_healing = True
+
         # Update Elena's description to show improvement
         self.description = ("A young woman who appears to be recovering from a serious affliction. "
                             "While still pale and bearing signs of magical corruption, the healing magic "
@@ -66,10 +68,10 @@ class BarmaidElena(Character):
 
     def receive_crystal_water_purification(self, game_state: GameState) -> str:
         """Handle using crystal-clear water on Elena as the second step of the cure"""
-        if game_state.get_story_flag(FLAG_ELENA_PURIFIED):
+        if self.elena_purified:
             return ("Elena has already been purified with the crystal-clear water.")
         
-        if not game_state.get_story_flag(FLAG_ELENA_INITIAL_HEALING):
+        if not self.elena_initial_healing:
             return ("Elena is too weak from the curse. You need to heal her "
                     "before attempting purification.")
         
@@ -78,13 +80,13 @@ class BarmaidElena(Character):
             return "You need [item_name]crystal-clear water[/item_name] to purify Elena."
         
         # Use the crystal-clear water and set the purification flag
-        game_state.set_story_flag(FLAG_ELENA_PURIFIED, True)
-        
+        self.elena_purified = True
+
         # Update Elena's description to show purification
         self.description = ("A young woman who radiates a faint, pure light. The blessed water has "
-                          "cleansed away much of the dark corruption, leaving her looking almost "
-                          "healthy. Her skin has a subtle luminous quality and her eyes are bright "
-                          "with hope, though traces of the curse still linger.")
+                            "cleansed away much of the dark corruption, leaving her looking almost "
+                            "healthy. Her skin has a subtle luminous quality and her eyes are bright "
+                            "with hope, though traces of the curse still linger.")
         
         return ("[success]You carefully pour the [item_name]crystal-clear water[/item_name] over Elena. "
                 "The blessed water sparkles with divine light as it touches her skin, and dark shadows "
@@ -100,8 +102,8 @@ class BarmaidElena(Character):
         """Handle casting dispel spell on Elena as the final step to complete the cure"""
         if game_state.get_story_flag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED):
             return "Elena has already been completely cured of her curse."
-        
-        if not game_state.get_story_flag(FLAG_ELENA_PURIFIED):
+
+        if not self.elena_purified:
             return ("Elena needs to be purified with crystal-clear water before the curse can be dispelled. "
                     "The dark magic is still too strong to break with dispelling alone.")
         

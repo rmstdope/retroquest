@@ -2,8 +2,6 @@ from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
     FLAG_WHISPERS_IN_WIND_COMPLETED,
-    FLAG_GAVE_ACORN_TO_TREE_SPIRIT,
-    FLAG_LEARNED_FOREST_SPEECH,
     FLAG_WHISPERS_IN_WIND_OFFERED
 )
 
@@ -77,12 +75,10 @@ class AncientTreeSpirit(Character):
             # First meaningful interaction - receive the acorn
             self.acorn_received = True
             game_state.remove_item_from_inventory("enchanted acorn")
-            game_state.set_story_flag(FLAG_GAVE_ACORN_TO_TREE_SPIRIT, True)
             
-                        # Teach the forest speech spell
+            # Teach the forest speech spell
             from ..spells.ForestSpeechSpell import ForestSpeechSpell
             game_state.learn_spell(ForestSpeechSpell())
-            game_state.set_story_flag(FLAG_LEARNED_FOREST_SPEECH, True)
 
             # Give the Whispers in the Wind quest
             game_state.set_story_flag(FLAG_WHISPERS_IN_WIND_OFFERED, True)

@@ -1,6 +1,5 @@
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_ACCESSED_INN_ROOM
 from .Door import Door
 
 class RoomKey(Item):

@@ -4,7 +4,7 @@ from ..quests.TheGatheringStorm import TheGatheringStormQuest
 from ..quests.TheKnightsTest import TheKnightsTestQuest
 from ..items.Coins import Coins
 from ..items.NaturesCharm import NaturesCharm
-from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_CEDRIC_TRUSTS_ELIOR, FLAG_CEDRIKS_HONOR_COMPLETED, FLAG_RECEIVED_NATURES_CHARM, FLAG_NYX_TRIALS_COMPLETED
+from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_CEDRIKS_HONOR_COMPLETED, FLAG_NYX_TRIALS_COMPLETED
 
 class SirCedric(Character):
     def __init__(self) -> None:
@@ -12,6 +12,8 @@ class SirCedric(Character):
             name="sir cedric",
             description="A noble knight in gleaming armor, bearing the scars of many battles. His eyes hold wisdom and determination as he prepares for the challenges ahead.",
         )
+        self.received_natures_charm = False
+        self.cedric_trusts_elior = False
 
     def talk_to(self, game_state: GameState) -> str:
         # Check if Nyx trials are completed - highest priority response
@@ -24,9 +26,9 @@ class SirCedric(Character):
                     "better anticipate the threats ahead and develop strategies to counter them. You have become "
                     "a truly formidable ally in our fight against the darkness!")
         
-        if game_state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED) and not game_state.get_story_flag(FLAG_RECEIVED_NATURES_CHARM):
+        if game_state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED) and not self.received_natures_charm:
             # Honor has been restored, give Nature's Charm
-            game_state.set_story_flag(FLAG_RECEIVED_NATURES_CHARM, True)
+            self.received_natures_charm = True
             charm = NaturesCharm()
             game_state.inventory.append(charm)
             
@@ -53,9 +55,9 @@ class SirCedric(Character):
                     "Dark forces are gathering - what I call 'The Gathering Storm' - and I need allies with "
                     "magical knowledge and proven abilities. Before I can trust you with this responsibility, "
                     "I need proof of your combat skills. Can you demonstrate your martial abilities?")
-        elif game_state.is_quest_completed("The Knight's Test") and not game_state.get_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR):
-            game_state.set_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR, True)
-            
+        elif game_state.is_quest_completed("The Knight's Test") and not self.cedric_trusts_elior:
+            self.cedric_trusts_elior = True
+
             # Give Elior 100 individual coins using the new batching system
             coin = Coins(1)  # Create a single coin worth 1 gold
             game_state.add_item_to_inventory(coin, count=100)  # Add 100 of them
@@ -67,7 +69,7 @@ class SirCedric(Character):
                     "supply purchasing. You'll need proper equipment for the forest expedition: a survival kit, "
                     "enhanced lantern, and quality rope from the Market District. The realm faces a great threat, "
                     "and we must be prepared.")
-        elif game_state.get_story_flag(FLAG_CEDRIC_TRUSTS_ELIOR):
+        elif self.cedric_trusts_elior:
             return ("[character_name]Sir Cedric[/character_name]: How goes your preparation? The gathering storm grows "
                     "stronger each day. I trust you are making good progress in gathering allies and supplies.")
         else:

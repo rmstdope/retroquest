@@ -1,7 +1,6 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_WATER_NYMPH_RIDDLES_COMPLETED,
     FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED
 )
 
@@ -102,7 +101,6 @@ class WaterNymphs(Character):
             if self.current_riddle >= len(self.riddles):
                 # All riddles completed
                 self.riddles_completed = True
-                game_state.set_story_flag(FLAG_WATER_NYMPH_RIDDLES_COMPLETED, True)
                 game_state.set_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED, True)
                 
                 # Add the items to the room for the player to take

@@ -2,8 +2,7 @@ from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
     FLAG_HEALERS_APPRENTICE_ACCEPTED, 
-    FLAG_HEALERS_APPRENTICE_COMPLETED,
-    FLAG_LYRIA_RELATIONSHIP_COLLEAGUE
+    FLAG_HEALERS_APPRENTICE_COMPLETED
 )
 
 class MasterHealerLyria(Character):

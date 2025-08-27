@@ -74,19 +74,21 @@ class PromptSessionApp:
 
         # Run
         self.console.clear()
-        response = self.handle_command('look')  # Initial look at the room
-        self.console.print('\n' + response + '\n')
+        response = self.handle_command('look')
+        self.game.describe_room = False
+        self.console.print(response + '\n')
         while self.game.is_running:
             completions = self.game.get_command_completions()
             self.session.completer = NestedCompleter.from_nested_dict(completions)
             user_input = self.session.prompt('> ')
             self.game.state.history.append(user_input)
             response = self.handle_command(user_input)
-            if not self.game.is_running:
-                break
+            # if not self.game.is_running:
+            #     break
             # Print a separator line before any output after a command
             self.console.print('\n' + response + '\n')
         while True:
+            self.console.clear()
             answer = self.session.prompt("Do you want to save before quitting? (yes/no): ").strip().lower()
             if answer in ("yes", "y"):
                 self.game.save()

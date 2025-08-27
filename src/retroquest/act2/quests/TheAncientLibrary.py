@@ -1,9 +1,7 @@
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_ANCIENT_LIBRARY_ACCEPTED,
-    FLAG_ANCIENT_LIBRARY_COMPLETED,
-    FLAG_ECHOES_OF_PAST_COMPLETED
+    FLAG_ANCIENT_LIBRARY_ACCEPTED
 )
 
 class TheAncientLibraryQuest(Quest):

@@ -1,5 +1,4 @@
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_ENCHANTED_ACORN_TAKEN
 from ...engine.GameState import GameState
 
 class EnchantedAcorn(Item):
@@ -36,7 +35,6 @@ class EnchantedAcorn(Item):
         from ..rooms.ForestEntrance import ForestEntrance  # Import here to avoid circular imports
         
         if isinstance(game_state.current_room, ForestEntrance):
-            game_state.set_story_flag(FLAG_ENCHANTED_ACORN_TAKEN, True)
             return ("The moment you touch it, you feel a surge of natural magic - this is no "
                     "ordinary acorn, but a sacred offering imbued with the forest's blessing. "
                     "The forest sprites whisper approvingly as you claim this gift.")

@@ -1,6 +1,5 @@
 from ...engine.Spell import Spell
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_NATURE_SENSE_USED_WHISPERING_GLADE
 from ..characters.WaterNymphs import WaterNymphs
 
 class NatureSenseSpell(Spell):
@@ -15,14 +14,15 @@ class NatureSenseSpell(Spell):
                 "those who lived in harmony with the wilderness."
             )
         )
+        self.nature_sense_used = False
 
     def cast_spell(self, game_state: GameState) -> str:
         from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
         
         # Special handling for Whispering Glade
         if isinstance(game_state.current_room, WhisperingGlade):
-            if not game_state.get_story_flag(FLAG_NATURE_SENSE_USED_WHISPERING_GLADE):
-                game_state.set_story_flag(FLAG_NATURE_SENSE_USED_WHISPERING_GLADE, True)
+            if not self.nature_sense_used:
+                self.nature_sense_used = True
                 # Add the Water Nymphs to the room when first cast
                 game_state.current_room.characters.append(WaterNymphs())
                 return (

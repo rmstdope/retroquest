@@ -2,7 +2,6 @@ from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
     FLAG_KNOWS_ELENA_CURSE,
-    FLAG_ELENA_CURSE_BROKEN,
     FLAG_INNKEEPERS_DAUGHTER_COMPLETED
 )
 

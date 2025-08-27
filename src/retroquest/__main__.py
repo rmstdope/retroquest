@@ -6,7 +6,7 @@ from retroquest.engine.Game import Game
 from retroquest.act1.Act1 import Act1
 from retroquest.act2.Act2 import Act2
 
-USE_TEXTUAL_UI = True
+USE_TEXTUAL_UI = False
 
 if '-oldschool' in sys.argv:
     USE_TEXTUAL_UI = False

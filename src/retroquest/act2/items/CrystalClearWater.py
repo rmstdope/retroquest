@@ -1,5 +1,4 @@
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_CRYSTAL_CLEAR_WATER_TAKEN
 from ...engine.GameState import GameState
 
 class CrystalClearWater(Item):
