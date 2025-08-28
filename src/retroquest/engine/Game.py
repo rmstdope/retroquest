@@ -599,19 +599,6 @@ Welcome to
 
         return character_to_buy_from.buy_item(item_name, self.state)
 
-    def read(self, item: str) -> str:
-        if not item:  # Check if item name is empty or None
-            return "[failure]Read what?[/failure]"
-
-        item_to_read = self.find_item(item, look_in_inventory=True, look_in_room=True)
-
-        if item_to_read:
-            # As per the prompt, all Item objects are assumed to have a .read(game_state) method.
-            # If an item is not meant to be read, its read() method should return an appropriate message.
-            return item_to_read.read(self.state)
-        else:
-            return f"[failure]You don't see a '{item}' to read here or in your inventory.[/failure]"
-
     def use(self, item_name_1: str, object_name: str = None) -> str:
         item_obj_1 = self.find_item(item_name_1, look_in_inventory=True, look_in_room=True)
 

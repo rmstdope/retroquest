@@ -42,10 +42,6 @@ class Item:
         """Base 'examine' method for items. Subclasses should override this if they have specific examination details."""
         return f"[event]You examine the [item_name]{self.get_name()}[/item_name]. {self.description}[/event]"
 
-    def read(self, game_state: GameState) -> str:
-        """Base 'read' method for items. Subclasses should override this if they are readable."""
-        return f"[failure]There is nothing to read on the [item_name]{self.get_name()}[/item_name].[/failure]"
-
     def listen(self, game_state: GameState) -> str:
         """Base 'listen' method for items. Subclasses should override this if they make a sound."""
         return f"[failure]The [item_name]{self.get_name()}[/item_name] is silent.[/failure]"

@@ -26,8 +26,6 @@ class DummyGame:
         self.calls.append(('look',))
     def examine(self, target):
         self.calls.append(('examine', target))
-    def read(self, item):
-        self.calls.append(('read', item))
     def search(self):
         self.calls.append(('search'))
     def listen(self, target=None): # Added this method
@@ -158,7 +156,6 @@ def test_examination_commands(game_parser):
         "look at statue": ("examine", "statue"),
         "inspect scroll": ("examine", "scroll"),
         "examine book": ("examine", "book"),
-        "read sign": ("read", "sign"),
         "search": ("search"),
         "investigate": ("search"),
         # "listen to door": ("listen", "door"),

@@ -536,9 +536,7 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
         self.use_on_character_called_with = (game_state, target_character)
         return f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] on [character_name]{target_character.get_name()}[/character_name].[/failure]"
 
-    def read(self, game_state):
-        self.read_called_with_state = game_state
-        return f"You read the [item]{self.get_name()}[/item]. It says: \'Mock content for {self.get_name()}.\'"
+
 
     def listen(self, game_state): # Added for listen tests
         self.listen_called_with_state = game_state
@@ -762,78 +760,6 @@ def test_use_item_without_character_support_on_character(game):
     assert "[failure]You can't use the [item_name]sword[/item_name] on [character_name]goblin[/character_name].[/failure]" in result
     assert regular_sword.use_on_character_called_with == (game.state, enemy)
 
-# --- Tests for 'read <item>' command ---
-
-def test_read_item_in_inventory(game):
-    readable_book = MockItemToUse(name="old book")
-    game.state.add_item_to_inventory(readable_book)
-    
-    result = game.read("old book")
-    assert result == "You read the [item]old book[/item]. It says: \'Mock content for old book.\'"
-    assert readable_book.read_called_with_state == game.state
-
-def test_read_item_in_room(game):
-    readable_scroll = MockItemToUse(name="ancient scroll")
-    game.state.current_room.add_item(readable_scroll)
-    
-    result = game.read("ancient scroll")
-    assert result == "You read the [item]ancient scroll[/item]. It says: \'Mock content for ancient scroll.\'"
-    assert readable_scroll.read_called_with_state == game.state
-
-def test_read_item_not_found(game):
-    result = game.read("missing_tablet")
-    assert result == "[failure]You don't see a 'missing_tablet' to read here or in your inventory.[/failure]"
-
-def test_read_no_item_specified(game):
-    result = game.read("")
-    assert result == "[failure]Read what?[/failure]"
-
-def test_read_item_case_insensitivity_inventory(game):
-    journal = MockItemToUse(name="MyJournal")
-    game.state.add_item_to_inventory(journal)
-    
-    result = game.read("myjournal")
-    assert result == "You read the [item]MyJournal[/item]. It says: \'Mock content for MyJournal.\'"
-    assert journal.read_called_with_state == game.state
-
-def test_read_item_case_insensitivity_room(game):
-    note = MockItemToUse(name="SecretNote")
-    game.state.current_room.add_item(note)
-    
-    result = game.read("secretnote")
-    assert result == "You read the [item]SecretNote[/item]. It says: \'Mock content for SecretNote.\'"
-    assert note.read_called_with_state == game.state
-
-def test_read_item_short_name_inventory(game):
-    manual = MockItemToUse(name="Instruction Manual", short_name="manual")
-    game.state.add_item_to_inventory(manual)
-    
-    result = game.read("manual")
-    assert result == "You read the [item]Instruction Manual[/item]. It says: \'Mock content for Instruction Manual.\'"
-    assert manual.read_called_with_state == game.state
-
-def test_read_item_short_name_room(game):
-    plaque = MockItemToUse(name="Bronze Plaque", short_name="plaque")
-    game.state.current_room.add_item(plaque)
-    
-    result = game.read("plaque")
-    assert result == "You read the [item]Bronze Plaque[/item]. It says: \'Mock content for Bronze Plaque.\'"
-    assert plaque.read_called_with_state == game.state
-
-def test_read_item_prefers_inventory_over_room(game):
-    book_inv = MockItemToUse(name="common book")
-    book_room = MockItemToUse(name="common book") # Same name
-    
-    book_inv.read = MagicMock(return_value="Read from inventory [item]book[/item].")
-    book_room.read = MagicMock(return_value="Read from room [item]book[/item].")
-    
-    game.state.add_item_to_inventory(book_inv)
-    game.state.current_room.add_item(book_room)
-    
-    result = game.read("common book")
-    assert result == "Read from inventory [item]book[/item]."
-    book_inv.read.assert_called_once_with(game.state)
-    book_room.read.assert_not_called()
 
 # --- Tests for 'listen' command ---
 

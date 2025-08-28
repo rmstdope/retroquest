@@ -145,7 +145,7 @@ def test_golden_path_act1_completion(monkeypatch):
     _check_item_in_inventory(game.state, "bread")
     _check_item_in_room(game.state.current_room, "bread", should_be_present=False)
     _check_quests(game.state, ["Shadows Over Willowbrook", "Hint of Magic"])
-    _execute_commands(game, ["read journal", "talk to grandmother"])
+    _execute_commands(game, ["use journal", "talk to grandmother"])
     _check_spell_known(game.state, "revive")
     _check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real"])
 
