@@ -41,15 +41,32 @@ class Game:
         self.accept_input = False
         self.command_result = ''
 
+    def play_soundeffect(self, filename: str) -> None:
+        """Play a sound effect (wav/ogg) mixed with the currently playing music. Non-blocking."""
+        def play_fx():
+            try:
+                if not pygame.mixer.get_init():
+                    pygame.mixer.init()
+                sound = pygame.mixer.Sound('audio/soundeffects/' + filename)
+                sound.play()
+            except Exception as e:
+                print(f"[dim]Could not play sound effect '{filename}': {e}[/dim]")
+        threading.Thread(target=play_fx, daemon=True).start()
+
     def start_music(self) -> None:
-        """Start act music in a separate thread so it doesn't block the prompt."""
+        """Start act music in a separate thread so it doesn't block the prompt. 
+        If music is already playing, stop it first."""
         def play_music() -> None:
             try:
-                pygame.mixer.init()
-                pygame.mixer.music.load(self.acts[self.current_act].music_file)
-                # pygame.mixer.music.play(loops=-1)  # Loop indefinitely
+                if pygame.mixer.get_init():
+                    pygame.mixer.music.stop()
+                else:
+                    pygame.mixer.init()
+                pygame.mixer.music.load('audio/music/' + self.acts[self.current_act].music_file)
+                pygame.mixer.music.play(loops=-1)  # Loop indefinitely
             except Exception as e:
-                self.console.print(f"[dim]Could not play music: {e}[/dim]")
+                # Use print instead of self.console.print to avoid dependency issues
+                print(f"[dim]Could not play music: {e}[/dim]")
         threading.Thread(target=play_music, daemon=True).start()
 
     def new_turn(self) -> None:
@@ -110,6 +127,10 @@ class Game:
     def is_act_transitioning(self) -> bool:
         """Return True if the current act is transitioning."""
         return self.run_state == GameRunState.ActTransition
+
+    def is_act_intro_showing(self) -> bool:
+        """Return True if the current act is transitioning."""
+        return self.run_state == GameRunState.ActIntro
 
     def get_ascii_logo(self) -> str:
         text = r'''

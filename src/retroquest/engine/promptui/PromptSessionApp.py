@@ -4,6 +4,7 @@ from prompt_toolkit.completion import NestedCompleter
 from rich.console import Console
 from rich.theme import Theme
 
+from audio.soundeffects.SoundEffects import NEW_QUEST_SOUND, QUEST_COMPLETED_SOUND
 from retroquest.engine import Game
 
 class PromptSessionApp:
@@ -40,24 +41,32 @@ class PromptSessionApp:
             self.game.has_changed_room = False
             result += self.game.state.current_room.describe(self.game.state)
         txt = []
+        quest_sound = 0
         while (quest := self.game.state.next_activated_quest()):
             quest_type = "main" if quest.is_main() else "side"
             txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
         if txt:
             result += "\n\nQuest(s) activated:\n" + "\n".join(txt)
+            quest_sound = 1
         txt = []
         while (quest := self.game.state.next_updated_quest()):
             quest_type = "main" if quest.is_main() else "side"
             txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
         if txt:
             result += "\n\nQuest(s) updated:\n" + "\n".join(txt)
+            quest_sound = 1
         txt = []
         while (quest := self.game.state.next_completed_quest()):
             quest_type = "main" if quest.is_main() else "side"
             txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
         if txt:
             result += "\n\nQuest(s) completed:\n" + "\n".join(txt)
+            quest_sound = 2
         result += '\n'
+        if quest_sound == 1:
+            self.game.play_soundeffect(NEW_QUEST_SOUND)
+        elif quest_sound == 2:
+            self.game.play_soundeffect(QUEST_COMPLETED_SOUND)
         return result
 
     def run(self) -> None:
@@ -76,3 +85,5 @@ class PromptSessionApp:
                 self.session.prompt('Press Enter to continue...')
                 self.game.handle_input('')
             self.game.new_turn()
+            if self.game.is_act_intro_showing():
+                self.game.start_music()

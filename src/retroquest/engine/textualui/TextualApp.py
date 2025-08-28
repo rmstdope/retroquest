@@ -4,6 +4,8 @@ from textual.widgets import Header, Footer, Input
 from textual.containers import Horizontal, Vertical
 from textual.css.query import NoMatches
 
+from audio.soundeffects.SoundEffects import NEW_QUEST_SOUND, QUEST_COMPLETED_SOUND
+
 from ...engine.Game import Game
 from .GameController import GameController
 from .RoomPanel import RoomPanel
@@ -132,18 +134,21 @@ class TextualApp(App):
         while True:
             quest_complete_popup = self.controller.complete_quest()
             if isinstance(quest_complete_popup, str) and quest_complete_popup.strip():
+                self.controller.play_soundeffect(QUEST_COMPLETED_SOUND)
                 self.open_popup("Quest Completed", quest_complete_popup, PopupType.INFO)
             else:
                 break
         while True:
             quest_update_popup = self.controller.update_quest()
             if isinstance(quest_update_popup, str) and quest_update_popup.strip():
+                self.controller.play_soundeffect(NEW_QUEST_SOUND)
                 self.open_popup("Quest Updated", quest_update_popup, PopupType.INFO)
             else:
                 break
         while True:
             quest_popup = self.controller.activate_quest()
             if isinstance(quest_popup, str) and quest_popup.strip():
+                self.controller.play_soundeffect(NEW_QUEST_SOUND)
                 self.open_popup("Quest Activated", quest_popup, PopupType.INFO)
             else:
                 break

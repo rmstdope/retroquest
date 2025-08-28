@@ -4,6 +4,7 @@ from ..theme import apply_theme
 
 class GameController:
     """Controller to bridge RetroQuest game logic and the Textual UI."""
+
     def __init__(self, game: Game) -> None:
         self.game = game
         self.last_output = ""
@@ -110,3 +111,7 @@ class GameController:
             quest_type = "main" if quest.is_main() else "side"
             return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"
         return None
+
+    def play_soundeffect(self, filename: str) -> None:
+        """Play a sound effect using the underlying Game's play_soundeffect method."""
+        self.game.play_soundeffect(filename)
