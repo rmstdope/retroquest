@@ -78,6 +78,7 @@ class Act2(Act):
 
     def get_act_intro(self) -> str:
         return (
+            "[bold]ACT 2: THE GATHERING STORM[/bold]\n\n"
             "After the mysterious events in Willowbrook and the revelation of your growing magical abilities, you have left your quiet village behind. "
             "The mountain path stretches before you, winding through rocky terrain toward your destination: Greendale, a bustling city that serves as the gateway between civilization and the mystical Enchanted Forest.\n"
             "\nAs you crest the final ridge, the sight takes your breath away. Below lies Greendale—larger than any settlement you've ever seen, with stone buildings, busy market squares, and an impressive castle rising majestically above the city walls. "

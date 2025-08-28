@@ -7,6 +7,7 @@ import os
 import threading
 import pygame
 from typing import Any
+from enum import Enum, auto
 
 from .Character import Character
 from .CommandParser import CommandParser
@@ -16,6 +17,12 @@ from .Spell import Spell
 from . import DEV_MODE
 from .Act import Act
 
+# The runtime phase of the game: controls startup/logo/act intro/act transitions
+class GameRunState(Enum):
+    ShowLogo = auto()
+    ActIntro = auto()
+    ActRunning = auto()
+    ActTransition = auto()
 class Game:
     """
     Main Game class for RetroQuest: The Awakening.
@@ -29,7 +36,10 @@ class Game:
         starting_room = next(iter(self.acts[self.current_act].rooms.values()))
         self.state = GameState(starting_room, all_rooms=self.acts[self.current_act].rooms, all_quests=self.acts[self.current_act].quests)
         self.command_parser = CommandParser(self)
-        self.describe_room = False  # Flag to indicate if we need to describe the room after a command
+        self.has_changed_room = False  # Flag to indicate if we need to describe the room after a command
+        self.run_state = GameRunState.ShowLogo
+        self.accept_input = False
+        self.command_result = ''
 
     def start_music(self) -> None:
         """Start act music in a separate thread so it doesn't block the prompt."""
@@ -41,6 +51,65 @@ class Game:
             except Exception as e:
                 self.console.print(f"[dim]Could not play music: {e}[/dim]")
         threading.Thread(target=play_music, daemon=True).start()
+
+    def new_turn(self) -> None:
+        """Advance the game state by one turn."""
+        if self.run_state == GameRunState.ShowLogo:
+            self.run_state = GameRunState.ActIntro
+            self.accept_input = False
+        elif self.run_state == GameRunState.ActIntro:
+            self.run_state = GameRunState.ActRunning
+            self.accept_input = True
+            self.has_changed_room = True
+        elif self.run_state == GameRunState.ActRunning:
+            if self.acts[self.current_act].is_completed(self.state):
+                self.current_act += 1
+                if self.current_act < len(self.acts):
+                    self.run_state = GameRunState.ActTransition
+                    self.accept_input = False
+                    # Transition to next act
+                    starting_room = next(iter(self.acts[self.current_act].rooms.values()))
+                    self.state = GameState(starting_room, all_rooms=self.acts[self.current_act].rooms, all_quests=self.acts[self.current_act].quests)
+                    self.has_changed_room = True
+                else:
+                    # No more acts, end the game
+                    self.is_running = False
+                    self.accept_input = False
+        elif self.run_state == GameRunState.ActTransition:
+            self.run_state = GameRunState.ActIntro
+            self.accept_input = False
+
+    def get_result_text(self) -> str:
+        """Get the next text to display."""
+        if self.run_state == GameRunState.ShowLogo:
+            return self.get_ascii_logo()
+        elif self.run_state == GameRunState.ActIntro:
+            return self.acts[self.current_act].get_act_intro()
+        elif self.run_state == GameRunState.ActRunning:
+            return self.command_result
+        elif self.run_state == GameRunState.ActTransition:
+            return (
+                self.command_result
+                + f"\n\nCongratulations — you have completed Act {self.current_act}!\n\n"
+                + "Take a moment to catch your breath and grab a cup of coffee. "
+                + f"Get ready for Act {self.current_act + 1}, where new challenges, characters, and mysteries await.\n"
+            )
+        return ""
+
+    def handle_input(self, input: str) -> None:
+        """Process input provided by the user."""
+        if self.run_state == GameRunState.ActRunning:
+            self.command_result = self.command_parser.parse(input)
+        else:
+            self.command_result = ''
+        
+    def is_act_running(self) -> bool:
+        """Return True if the current act is running."""
+        return self.run_state == GameRunState.ActRunning
+
+    def is_act_transitioning(self) -> bool:
+        """Return True if the current act is transitioning."""
+        return self.run_state == GameRunState.ActTransition
 
     def get_ascii_logo(self) -> str:
         text = r'''
@@ -292,7 +361,7 @@ Welcome to
                 self.state.current_room = self.state.all_rooms[next_room_key]
                 self.state.current_room.on_enter(self.state)
                 self.state.mark_visited(self.state.current_room)
-                self.describe_room = True
+                self.has_changed_room = True
                 return f"[event]You move {direction} to [room_name]{self.state.current_room.name}[/room_name].[/event]\n\n"
             else:
                 return "[failure]That exit leads nowhere (room not found).[/failure]"
@@ -352,7 +421,7 @@ Welcome to
         )
 
     def look(self) -> str:
-        self.describe_room = True
+        self.has_changed_room = True
         return "[event]You take a look at your surroundings.[/event]\n\n"
 
     def examine(self, target: str) -> str:

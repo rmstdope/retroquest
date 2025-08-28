@@ -67,6 +67,7 @@ class Act1(Act):
 
     def get_act_intro(self) -> str:
         return (
+            "[bold]ACT 1: THE CALL TO ADVENTURE[/bold]\n\n"
             "You are Elior, a humble farmer boy living in the quiet village of Willowbrook on the outskirts of Eldoria. "
             "Raised by your grandmother after your parents vanished mysteriously, your life is simple—tending crops and caring for animals. "
             "One stormy night, a strange light appears in the sky, and you dream of a shadowy figure calling your name.\n"

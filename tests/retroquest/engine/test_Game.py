@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from engine.Game import Game
-from engine.Room import Room
-from engine.Act import Act
+from retroquest.engine.Game import Game
+from retroquest.engine.Room import Room
+from retroquest.engine.Act import Act
 
 # --- Mock Room classes for testing ---
 class MockRoom(Room):

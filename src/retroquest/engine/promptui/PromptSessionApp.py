@@ -1,5 +1,4 @@
-import os
-from typing import Any
+from prompt_toolkit.styles import Style
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import NestedCompleter
 from rich.console import Console
@@ -14,6 +13,7 @@ class PromptSessionApp:
 
     def __init__(self, game: Game) -> None:
         custom_theme = Theme({
+            "default": "black on #000000",
             "character_name": "bold blue",
             "dialogue": "italic cyan",
             "item_name": "bold green",
@@ -29,77 +29,50 @@ class PromptSessionApp:
         self.completer = NestedCompleter.from_nested_dict({})
         self.session = PromptSession(completer=self.completer, complete_while_typing=True)
         self.game = game
-        self.console = Console(theme=custom_theme)
-        self.completer = NestedCompleter.from_nested_dict({})
-        self.session = PromptSession(completer=self.completer, complete_while_typing=True)
 
-    def handle_command(self, command: str) -> str:
-        result = self.game.command_parser.parse(command)
-        if self.game.describe_room:
+    def get_output_text(self) -> str:
+        """Get the current output text to display."""
+        result =  self.game.get_result_text()
+        if not self.game.is_act_running():
+            return result
+        if self.game.has_changed_room:
             # If the command resulted in a room change, describe the new room
-            self.describe_room = False
+            self.game.has_changed_room = False
             result += self.game.state.current_room.describe(self.game.state)
         txt = []
         while (quest := self.game.state.next_activated_quest()):
             quest_type = "main" if quest.is_main() else "side"
             txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
         if txt:
-            result += "\nQuest(s) activated:\n" + "\n".join(txt)
+            result += "\n\nQuest(s) activated:\n" + "\n".join(txt)
         txt = []
         while (quest := self.game.state.next_updated_quest()):
             quest_type = "main" if quest.is_main() else "side"
             txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
         if txt:
-            result += "\nQuest(s) updated:\n" + "\n".join(txt)
+            result += "\n\nQuest(s) updated:\n" + "\n".join(txt)
         txt = []
         while (quest := self.game.state.next_completed_quest()):
             quest_type = "main" if quest.is_main() else "side"
             txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
         if txt:
-            result += "\nQuest(s) completed:\n" + "\n".join(txt)
+            result += "\n\nQuest(s) completed:\n" + "\n".join(txt)
+        result += '\n'
         return result
 
     def run(self) -> None:
         self.game.start_music()
-
-        # Print Logo
-        self.console.clear()
-        self.console.print(self.game.get_ascii_logo())
-        self.session.prompt('Press Enter to continue...')
-
-        # Print Intro
-        self.console.clear()
-        self.console.print(self.game.get_act_intro())
-        self.session.prompt('Press Enter to continue...')
-
-        # Run
-        self.console.clear()
-        response = self.handle_command('look')
-        self.game.describe_room = False
-        self.console.print(response + '\n')
         while self.game.is_running:
-            completions = self.game.get_command_completions()
-            self.session.completer = NestedCompleter.from_nested_dict(completions)
-            user_input = self.session.prompt('> ')
-            self.game.state.history.append(user_input)
-            response = self.handle_command(user_input)
-            # if not self.game.is_running:
-            #     break
-            # Print a separator line before any output after a command
-            self.console.print('\n' + response + '\n')
-        while True:
-            self.console.clear()
-            answer = self.session.prompt("Do you want to save before quitting? (yes/no): ").strip().lower()
-            if answer in ("yes", "y"):
-                self.game.save()
-                self.console.print("Game saved. Goodbye!")
-                break
-            elif answer in ("no", "n"):
-                self.console.print("Goodbye!")
-                break
+            if not (self.game.is_act_running() or self.game.is_act_transitioning()) or self.game.has_changed_room:
+                self.console.clear()
+            self.console.print(self.get_output_text())
+            if self.game.accept_input:
+                completions = self.game.get_command_completions()
+                self.session.completer = NestedCompleter.from_nested_dict(completions)
+                user_input = self.session.prompt('> ')
+                self.game.state.history.append(user_input)
+                self.game.handle_input(user_input)
             else:
-                self.console.print("Please answer 'yes' or 'no'.")
-                continue
-
-
-
+                self.session.prompt('Press Enter to continue...')
+                self.game.handle_input('')
+            self.game.new_turn()
