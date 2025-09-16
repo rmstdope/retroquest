@@ -61,6 +61,79 @@ class TestGameState(unittest.TestCase):
         # No more completions
         completed2 = self.gs.next_completed_quest()
         self.assertIsNone(completed2)
+
+    def test_update_quest_string_return(self):
+        # Quest whose check_update returns True should produce formatted string
+        class UpdatableQuest(DummyQuest):
+            def __init__(self, name, description):
+                super().__init__(name, description)
+            def check_update(self, game_state):
+                return True
+            def is_main(self):
+                return True
+        uq = UpdatableQuest("Hero's Call", description="Answer the call")
+        self.gs.activated_quests = [uq]
+        update_str = self.gs.update_quest()
+        self.assertIn("Hero's Call", update_str)
+        self.assertIn("(main quest)", update_str)
+        self.assertIn("Answer the call", update_str)
+
+    def test_complete_quest_string_return(self):
+        class CompletableQuest(DummyQuest):
+            def __init__(self, name, completion):
+                super().__init__(name, description=False, completion=completion)
+            def check_completion(self, game_state):
+                return True
+            def is_main(self):
+                return False
+        cq = CompletableQuest("Find Relic", completion=True)
+        cq.completion = "You have recovered the relic."
+        self.gs.activated_quests = [cq]
+        complete_str = self.gs.complete_quest()
+        self.assertIn("Find Relic", complete_str)
+        self.assertIn("(side quest)", complete_str)
+        self.assertIn("relic", complete_str.lower())
+        # Subsequent call returns None
+        self.assertIsNone(self.gs.complete_quest())
+
+    def test_is_quest_activated_and_completed(self):
+        self.gs.activated_quests = [self.quest1]
+        self.assertTrue(self.gs.is_quest_activated("Quest1"))
+        self.assertFalse(self.gs.is_quest_completed("Quest1"))
+        self.gs.completed_quests = [self.quest2]
+        self.assertTrue(self.gs.is_quest_completed("Quest2"))
+        self.assertFalse(self.gs.is_quest_activated("Quest2"))
+
+    def test_story_flag_overwrite(self):
+        self.gs.set_story_flag("door_open", True)
+        self.assertTrue(self.gs.get_story_flag("door_open"))
+        self.gs.set_story_flag("door_open", False)
+        self.assertFalse(self.gs.get_story_flag("door_open"))
+
+    def test_remove_item_more_than_exists(self):
+        class DummyItem:
+            def get_name(self): return "stone"
+            def get_short_name(self): return "stn"
+        for _ in range(2):
+            self.gs.add_item_to_inventory(DummyItem())
+        removed = self.gs.remove_item_from_inventory("stone", 5)
+        self.assertEqual(removed, 2)
+        self.assertEqual(self.gs.get_item_count("stone"), 0)
+
+    def test_get_item_prefers_inventory_before_rooms(self):
+        # Same name item in inventory and room; inventory should be found first
+        class DummyItem:
+            def __init__(self, name): self._n = name
+            def get_name(self): return self._n
+            def get_short_name(self): return self._n
+        inv_item = DummyItem("amulet")
+        room_item = DummyItem("amulet")
+        room = DummyRoom("Chamber")
+        room.items = [room_item]
+        self.gs.add_item_to_inventory(inv_item)
+        self.gs.all_rooms = {room.name: room}
+        found = self.gs.get_item("amulet")
+        self.assertIs(found, inv_item)
     def setUp(self):
         self.room = DummyRoom("TestRoom")
         self.quest1 = DummyQuest("Quest1", description=True, completion=False)
