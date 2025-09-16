@@ -82,6 +82,8 @@ class DummyGame:
         self.calls.append(('stats',))
     def unknown(self, command):
         self.calls.append(('unknown', command))
+    def dev_execute_commands(self, filename):
+        self.calls.append(('dev_execute_commands', filename))
 
 @pytest.fixture
 def game_parser():
@@ -166,6 +168,20 @@ def test_examination_commands(game_parser):
         expected_calls.append(expected_call)
     assert game.calls == expected_calls
 
+def test_examination_additional_aliases(game_parser):
+    """Covers shorthand and additional aliases not in the original test."""
+    game, parser = game_parser
+    commands = {
+        "l": ("look",),  # shorthand alias
+        "look statue": ("examine", "statue"),  # 'look <target>' form
+        "check altar": ("examine", "altar"),   # 'check <target>' alias
+    }
+    expected_calls = []
+    for cmd_text, expected_call in commands.items():
+        parser.parse(cmd_text)
+        expected_calls.append(expected_call)
+    assert game.calls == expected_calls
+
 def test_inventory_management_commands(game_parser):
     game, parser = game_parser
     commands = {
@@ -197,6 +213,20 @@ def test_inventory_management_commands(game_parser):
         expected_calls.append(expected_call)
     assert game.calls == expected_calls
 
+def test_use_command_error_no_item(game_parser):
+    game, parser = game_parser
+    # An empty item after 'use ' should return an error string
+    result = parser.parse("use   ")
+    assert "What do you want to use?" in result
+    assert game.calls == []  # No game method invoked
+
+def test_use_command_error_missing_second_item(game_parser):
+    game, parser = game_parser
+    # Missing second item after 'with'
+    result = parser.parse("use key with   ")
+    assert "You need to specify two items to use with each other" in result
+    assert game.calls == []
+
 def test_magic_commands(game_parser):
     game, parser = game_parser
     # Corrected expected calls based on CommandParser.py
@@ -209,6 +239,12 @@ def test_magic_commands(game_parser):
     expected_calls.append(("spells",))
 
     assert game.calls == expected_calls
+
+def test_dynamic_go_direction(game_parser):
+    """Ensure 'go <custom>' passes the custom direction to move."""
+    game, parser = game_parser
+    parser.parse("go secret_passage")
+    assert game.calls == [("move", "secret_passage", None)]
 
 
 def test_game_management_commands(game_parser):
@@ -240,6 +276,14 @@ def test_miscellaneous_commands(game_parser):
         parser.parse(cmd_text)
         expected_calls.append(expected_call)
     assert game.calls == expected_calls
+
+def test_dev_execute_commands(monkeypatch, game_parser):
+    """Test dev_execute_commands path when DEV_MODE is enabled."""
+    game, parser = game_parser
+    import engine.CommandParser as cp_mod
+    monkeypatch.setattr(cp_mod, "DEV_MODE", True)
+    parser.parse("dev_execute_commands commands.txt")
+    assert game.calls == [("dev_execute_commands", "commands.txt")]
 
 def test_unknown_command(game_parser):
     game, parser = game_parser

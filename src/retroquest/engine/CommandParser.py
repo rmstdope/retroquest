@@ -108,20 +108,28 @@ class CommandParser:
             for prefix in ('drop ', 'discard '):
                 if cmd.startswith(prefix):
                     return self.game.drop(cmd[len(prefix):])
+        elif cmd == 'use':
+            return "What do you want to use?"
         elif cmd.startswith('use '):
-            args_str = cmd[len('use '):]
-            if ' with ' in args_str:
-                parts = args_str.split(' with ', 1)
-                item1_name = parts[0].strip()
-                object_name = parts[1].strip()
+            # Use the original command (not fully stripped) to preserve trailing spaces to detect incomplete patterns
+            original_tail = command[len('use '):]
+            stripped_tail = original_tail.strip()
+            if not stripped_tail:
+                return "What do you want to use?"
+            # Detect pattern ending with ' with' meaning second item missing
+            if original_tail.lower().rstrip().endswith(' with'):
+                return "You need to specify two items to use with each other. Format: use <item1> with <item2>"
+            lower_tail = stripped_tail.lower()
+            if ' with ' in lower_tail:
+                # Split on the first occurrence of ' with ' using the original (case-sensitive) stripped_tail for item names
+                split_index = lower_tail.find(' with ')
+                item1_name = stripped_tail[:split_index].strip()
+                object_name = stripped_tail[split_index + 6:].strip()
                 if not item1_name or not object_name:
                     return "You need to specify two items to use with each other. Format: use <item1> with <item2>"
                 return self.game.use(item1_name, object_name)
             else:
-                item_name = args_str.strip()
-                if not item_name:
-                    return "What do you want to use?"
-                return self.game.use(item_name) # General item usage
+                return self.game.use(stripped_tail) # General single-item usage
         # elif any(cmd.startswith(prefix) for prefix in ('eat ', 'consume ')):
         #     for prefix in ('eat ', 'consume '):
         #         if cmd.startswith(prefix):
