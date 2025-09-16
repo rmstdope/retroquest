@@ -19,6 +19,37 @@ class MockRoom(Room):
     def add_character(self, character):
         self.characters.append(character)
 
+# ==== Begin migrated take multiple tests support classes ====
+from retroquest.engine.Item import Item
+
+class TakeMockItem(Item):
+    """Mock item for take command tests supporting prevent_pickup and picked_up hooks."""
+    def __init__(self, name, description="A test item", can_pickup=True, pickup_message=None):
+        super().__init__(name, description)
+        self._can_pickup = can_pickup
+        self._pickup_message = pickup_message
+
+    def prevent_pickup(self):  # Mirror logic of real items; return failure string or None
+        if not self._can_pickup:
+            return f"[failure]The {self.name} is too heavy to lift.[/failure]"
+        return None
+
+    def picked_up(self, game_state):
+        return self._pickup_message
+
+class TakeMockAct(Act):
+    def __init__(self):
+        test_room = Room("Test Room", "A room for testing the take command.")
+        empty_room = Room("Empty Room", "A room with no items.")
+        super().__init__(
+            name="Test Act",
+            rooms={"TestRoom": test_room, "EmptyRoom": empty_room},
+            quests={},
+            music_file='',
+            music_info=''
+        )
+# ==== End migrated take multiple tests support classes ====
+
 # Dummy room and item setup for test
 ROOMS = {
     "EliorsCottage": MockRoom("Elior's Cottage", "A cozy cottage with a warm hearth."),
@@ -145,6 +176,95 @@ def test_take_item_not_present(game):
     result = game.take('nonexistent')
     assert "There is no 'nonexistent' here to take." in result
     assert len(game.state.inventory) == 0
+
+# ==== Migrated take multiple tests start ====
+def test_take_multiple_identical_items():
+    act = TakeMockAct()
+    game = Game([act])
+    coins = [TakeMockItem("coins", "A gold coin") for _ in range(5)]
+    test_room = game.state.all_rooms["TestRoom"]
+    for coin in coins:
+        test_room.add_item(coin)
+    game.state.current_room = test_room
+    assert sum(1 for item in test_room.get_items() if item.get_name().lower() == "coins") == 5
+    result = game.command_parser.parse("take coins")
+    assert "[event]You take 5 [item_name]coins[/item_name].[/event]" in result
+    assert sum(1 for item in test_room.get_items() if item.get_name().lower() == "coins") == 0
+    assert sum(1 for item in game.state.inventory if item.get_name().lower() == "coins") == 5
+
+def test_take_single_item():
+    act = TakeMockAct()
+    game = Game([act])
+    sword = TakeMockItem("sword", "A sharp sword")
+    test_room = game.state.all_rooms["TestRoom"]
+    test_room.add_item(sword)
+    game.state.current_room = test_room
+    result = game.command_parser.parse("take sword")
+    assert "[event]You take the [item_name]sword[/item_name].[/event]" in result
+    assert len(test_room.get_items()) == 0
+    assert len(game.state.inventory) == 1 and game.state.inventory[0].get_name() == "sword"
+
+def test_take_mixed_pickupable_and_non_pickupable_items():
+    act = TakeMockAct()
+    game = Game([act])
+    book1 = TakeMockItem("book", "A readable book", can_pickup=True)
+    book2 = TakeMockItem("book", "Another book", can_pickup=True, pickup_message="This book is heavy!")
+    book3 = TakeMockItem("book", "A chained book", can_pickup=False)
+    test_room = game.state.all_rooms["TestRoom"]
+    for book in (book1, book2, book3):
+        test_room.add_item(book)
+    game.state.current_room = test_room
+    result = game.command_parser.parse("take book")
+    assert "[event]You take 2 [item_name]book[/item_name].[/event]" in result
+    assert "This book is heavy!" in result
+    assert "too heavy to lift" in result
+    remaining = [item for item in test_room.get_items() if item.get_name().lower() == "book"]
+    inv_books = [item for item in game.state.inventory if item.get_name().lower() == "book"]
+    assert len(remaining) == 1
+    assert len(inv_books) == 2
+
+def test_take_nonexistent_item():
+    act = TakeMockAct()
+    game = Game([act])
+    game.state.current_room = game.state.all_rooms["EmptyRoom"]
+    result = game.command_parser.parse("take unicorn")
+    assert "[failure]There is no 'unicorn' here to take.[/failure]" in result
+
+def test_take_with_pickup_messages():
+    act = TakeMockAct()
+    game = Game([act])
+    gem1 = TakeMockItem("gem", "A sparkling gem", pickup_message="The gem glows as you touch it!")
+    gem2 = TakeMockItem("gem", "Another gem", pickup_message="This gem feels warm.")
+    gem3 = TakeMockItem("gem", "A third gem", pickup_message=None)
+    test_room = game.state.all_rooms["TestRoom"]
+    for gem in (gem1, gem2, gem3):
+        test_room.add_item(gem)
+    game.state.current_room = test_room
+    result = game.command_parser.parse("take gem")
+    assert "The gem glows as you touch it!" in result
+    assert "This gem feels warm." in result
+    assert "[event]You take 3 [item_name]gem[/item_name].[/event]" in result
+    assert len(test_room.get_items()) == 0
+    assert len(game.state.inventory) == 3
+
+def test_take_backward_compatibility_with_existing_behavior():
+    act = TakeMockAct()
+    base_act = TakeMockAct()  # Each loop new act/game ensures isolation
+    test_items = [
+        TakeMockItem("sword", "A sharp sword"),
+        TakeMockItem("shield", "A sturdy shield"),
+        TakeMockItem("potion", "A healing potion"),
+    ]
+    for item in test_items:
+        game = Game([TakeMockAct()])
+        test_room = game.state.all_rooms["TestRoom"]
+        test_room.add_item(item)
+        game.state.current_room = test_room
+        result = game.command_parser.parse(f"take {item.get_name()}")
+        assert "[failure]" not in result
+        assert "[event]You take the" in result
+        assert len(game.state.inventory) == 1 and game.state.inventory[0].get_name() == item.get_name()
+# ==== Migrated take multiple tests end ====
 
 def test_drop_item_from_inventory(game, basic_rooms):
     # Add an item to inventory
