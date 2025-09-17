@@ -68,7 +68,7 @@ class TextualApp(App):
         self.questlog_panel.update_questlog('')
         self.inventory_panel.update_inventory([])
         self.spell_panel.update_spells([])
-        self.command_input.focus()  # Remove 'await' here, as focus() is not async
+        self.command_input.focus()
 
     def open_popup(self, border_text: str, text: str, popup_type: PopupType) -> None:
         try:
@@ -118,6 +118,8 @@ class TextualApp(App):
             self.command_input.placeholder = 'What do you want to do?'
             self.command_input.value = ""
             self.execute(command)
+            if self.controller.game.is_act_transitioning():
+                pass
             if not self.controller.game.is_running:
                 self.state = self.STATE_QUITTING
                 self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)

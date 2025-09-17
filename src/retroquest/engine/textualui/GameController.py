@@ -11,9 +11,7 @@ class GameController:
 
     def start(self) -> str:
         self.game.start_music()
-        # Show ASCII logo at game start
-        self.last_output = self.game.get_ascii_logo()
-        return self.last_output
+        return self.game.get_result_text()
 
     def handle_command(self, command: str) -> str:
         output = self.game.command_parser.parse(command)
