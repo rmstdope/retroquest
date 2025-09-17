@@ -50,7 +50,10 @@ class Popup(VerticalScroll):
             if event.key.lower() == "y":
                 self.app.close_popup(response="y")
             elif event.key.lower() == "n":
-                self.app.close_popup(response="n")
+                self.app.close_popup(response="n")        
+        # Prevent all key events from bubbling up to maintain modal behavior
+        event.prevent_default()
+        event.stop()
 
     def compose(self) -> Any:
         yield self.text_area

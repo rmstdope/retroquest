@@ -69,6 +69,14 @@ class TextualApp(App):
         self.inventory_panel.update_inventory([])
         self.spell_panel.update_spells([])
         self.command_input.focus()
+        self.update_input()
+
+    def update_input(self) -> None:
+        if self.controller.game.accept_input:
+            self.command_input.placeholder = 'What do you want to do?'
+        else:
+            self.command_input.placeholder = 'Press Enter to continue'
+        self.command_input.value = ""
 
     def open_popup(self, border_text: str, text: str, popup_type: PopupType) -> None:
         try:
@@ -104,35 +112,22 @@ class TextualApp(App):
 
     def on_input_submitted(self, message: Input.Submitted) -> None:
         command = message.value.strip()
-        if self.state == self.STATE_LOGO:
-            # Transition to intro
-            self.room_panel.update_room(self.controller.get_act_intro(), wide=False)
-            self.command_input.placeholder = 'Press Enter to continue'
-            self.command_input.value = ""
-            self.state = self.STATE_INTRO
-            return
-        elif self.state == self.STATE_INTRO:
-            command = 'look'
-            self.state = self.STATE_RUNNING
-        if self.state == self.STATE_RUNNING and command:
-            self.command_input.placeholder = 'What do you want to do?'
-            self.command_input.value = ""
-            self.execute(command)
-            if self.controller.game.is_act_transitioning():
-                pass
-            if not self.controller.game.is_running:
-                self.state = self.STATE_QUITTING
-                self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)
-                return
-
-    def execute(self, command: str) -> None:
-        result = self.controller.handle_command(command)
-        self.result_panel.update_result(result)
-        room = self.controller.look()
-        self.room_panel.update_room(self.controller.get_room(), wide=False)
+        self.controller.game.handle_input(command)
+        self.controller.game.new_turn()
+        self.update_input()
+        if self.controller.game.is_act_running():
+            self.result_panel.update_result(self.controller.game.get_result_text())
+            self.room_panel.update_room(self.controller.get_room(), wide=False)
+        else:
+            self.room_panel.update_room(self.controller.game.get_result_text(), wide=True)
         self.inventory_panel.update_inventory(self.controller.get_inventory())
         self.spell_panel.update_spells(self.controller.get_spells())
-        # Check for quest completion popups
+        self.handle_quests()
+        if not self.controller.game.is_running:
+            self.state = self.STATE_QUITTING
+            self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)
+
+    def handle_quests(self) -> None:
         while True:
             quest_complete_popup = self.controller.complete_quest()
             if isinstance(quest_complete_popup, str) and quest_complete_popup.strip():
@@ -155,7 +150,9 @@ class TextualApp(App):
             else:
                 break
         self.questlog_panel.update_questlog(self.controller.get_active_quests(), self.controller.get_completed_quests())
-        self.command_input.value = ""
+        if not self.controller.game.is_running:
+            self.state = self.STATE_QUITTING
+            self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)
 
     # Add default CSS for layout if not present
     BINDINGS = [

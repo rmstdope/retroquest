@@ -11,7 +11,9 @@ class GameController:
 
     def start(self) -> str:
         self.game.start_music()
-        return self.game.get_result_text()
+        output = self.game.get_result_text()
+        # self.game.new_turn()
+        return output
 
     def handle_command(self, command: str) -> str:
         output = self.game.command_parser.parse(command)
@@ -105,6 +107,8 @@ class GameController:
 
     def activate_quest(self) -> str:
         """Check for quest activation and return popup text if any."""
+        if not self.game.is_act_running():
+            return None
         if (quest := self.game.state.next_activated_quest()) is not None:
             quest_type = "main" if quest.is_main() else "side"
             return f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n\n{quest.description}"

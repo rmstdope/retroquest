@@ -5,7 +5,7 @@ from .NestedSuggester import NestedSuggester
 
 class CommandInput(Input):
     def __init__(self, controller: Any) -> None:
-        super().__init__(placeholder="Press Enter to continue", id="command_input")
+        super().__init__(placeholder="Invalid", id="command_input")
         self.controller = controller
         self.tooltip = "Command Input"
         self.suggester = NestedSuggester(self, controller)
