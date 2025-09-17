@@ -433,6 +433,7 @@ Teleportation only (no cardinal exits)
 ```
 
 Legend:
+
 - SM = Shoreline Markers
 - OW = Outer Wards
 - CP = Collapsed Pier
@@ -441,6 +442,7 @@ Legend:
 - ST = Sanctum of the Tide
 
 The connections reflect exits:
+
 - Tidal Causeway: N→SM, E→SA
 - Shoreline Markers: S→TC, E→OW
 - Outer Wards: S→SA, E→CP, W→SM
@@ -457,6 +459,7 @@ The connections reflect exits:
 ```
 
 Legend:
+
 - OO = Obsidian Outcrops
 - MT = Mirror Terraces
 - FP = Fumarole Passages
@@ -465,6 +468,7 @@ Legend:
 - PC = Phoenix Crater
 
 The connections reflect exits:
+
 - Lower Switchbacks: N→OO, E→EG
 - Obsidian Outcrops: S→LS, E→MT
 - Mirror Terraces: S→EG, E→FP, W→OO
@@ -481,14 +485,16 @@ The connections reflect exits:
 ```
 
 Legend:
+
 - ToC = Tool Cache
-- CG  = Collapsed Galleries
-- EC  = Echo Chambers
-- CM  = Cavern Mouth
-- SV  = Stillness Vestibule
-- DH  = Dragon’s Hall
+- CG = Collapsed Galleries
+- EC = Echo Chambers
+- CM = Cavern Mouth
+- SV = Stillness Vestibule
+- DH = Dragon’s Hall
 
 The connections reflect exits:
+
 - Cavern Mouth: N→ToC, E→SV
 - Tool Cache: S→CM, E→CG
 - Collapsed Galleries: S→SV, E→EC, W→ToC
