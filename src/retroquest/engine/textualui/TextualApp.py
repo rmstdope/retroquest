@@ -21,16 +21,9 @@ class TextualApp(App):
     SUB_TITLE = "A Text Adventure"
     CSS_PATH = "styles.tcss"
 
-    STATE_LOGO = 0
-    STATE_INTRO = 1
-    STATE_RUNNING = 2
-    STATE_SAVING = 3
-    STATE_QUITTING = 4
-
     def __init__(self, game: Game) -> None:
         super().__init__()
         self.controller = GameController(game)
-        self.state = self.STATE_LOGO
         self._popup_queue = []
         self._focus_before_popup = None
 
@@ -93,7 +86,7 @@ class TextualApp(App):
  
     def close_popup(self, response: str = None) -> None:
         popup = self.get_widget_by_id("popup")
-        if self.state == self.STATE_QUITTING:
+        if not self.controller.game.is_running:
             if response == "y":
                 self.controller.save_game()
             self.exit()
@@ -124,7 +117,6 @@ class TextualApp(App):
         self.spell_panel.update_spells(self.controller.get_spells())
         self.handle_quests()
         if not self.controller.game.is_running:
-            self.state = self.STATE_QUITTING
             self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)
 
     def handle_quests(self) -> None:
@@ -150,9 +142,6 @@ class TextualApp(App):
             else:
                 break
         self.questlog_panel.update_questlog(self.controller.get_active_quests(), self.controller.get_completed_quests())
-        if not self.controller.game.is_running:
-            self.state = self.STATE_QUITTING
-            self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)
 
     # Add default CSS for layout if not present
     BINDINGS = [
