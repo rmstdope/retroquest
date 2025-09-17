@@ -178,6 +178,8 @@ Act III requires the use of five previously learned spells. Each is woven into c
 
 ## Rooms
 
+Connectivity note: All cardinal exits connect only within their location. Travel between locations (Mira’s Hut, each relic site, and the Fortress Entrance) occurs only via teleport and is not represented by north/east/south/west exits.
+
 ### Starting Room
 
 #### Mira's Hut (Act III Start)
@@ -191,6 +193,8 @@ Act III requires the use of five previously learned spells. Each is woven into c
   - Mira (mentor; explains the relics and initiates Act III)
   - Sir Cedric (companion; accompanies Elior)
 - Quest Relevance: Entry point to the Main Quest “The Three Virtues”; Mira’s Teleportation Focus enables travel to each relic location and, later, to the fortress threshold.
+- Exits:
+  - None (teleportation only)
 
 ---
 
@@ -202,6 +206,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Rope Lines, Salt‑scraped Map Shards
 - Characters: Water‑Wardens (silent spirits that watch), Cedric
 - Quest Relevance: Entry to the Ruins; orientation point for locating shoreline markers and ward pillars (Tideward Sigils).
+- Exits:
+  - North to Shoreline Markers
+  - East to Submerged Antechamber
 
 2. Shoreline Markers
 
@@ -209,6 +216,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Coquina Runes (collectible quest components), Tidal Chalk
 - Characters: Ward‑Scribe Spirit (observes and instructs), Mira (advises)
 - Quest Relevance: Collect runes for “Tideward Sigils.”
+- Exits:
+  - South to Tidal Causeway
+  - East to Outer Wards
 
 3. Outer Wards
 
@@ -216,6 +226,10 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Warding Pillar Caps, Brine Flask
 - Characters: Drowned Knight Spirit (tests resolve), Warden Echoes
 - Quest Relevance: Align pillars to engrave the complete Tideward Sigil (completes “Tideward Sigils”).
+- Exits:
+  - South to Submerged Antechamber
+  - East to Collapsed Pier
+  - West to Shoreline Markers
 
 4. Collapsed Pier
 
@@ -223,6 +237,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Prism Lanterns (three), Rusted Locker Key
 - Characters: Pier Warden (guardian of the vaults)
 - Quest Relevance: Retrieve lanterns for “Lanterns of the Deeps.”
+- Exits:
+  - South to Sanctum of the Tide
+  - West to Outer Wards
 
 5. Submerged Antechamber
 
@@ -230,6 +247,10 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Lantern Brackets, Tangleweed Bundle
 - Characters: Tide‑Guide Sprite (points to correct placements)
 - Quest Relevance: Mount the prism lanterns to reveal the safe approach (completes “Lanterns of the Deeps”).
+- Exits:
+  - North to Outer Wards
+  - East to Sanctum of the Tide
+  - West to Tidal Causeway
 
 6. Sanctum of the Tide
 
@@ -237,6 +258,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Crystal of Light (relic), Votive Shells
 - Characters: Tide‑Born Guardian (final test of Courage)
 - Quest Relevance: Main Quest phase completion for the Crystal of Light.
+- Exits:
+  - North to Collapsed Pier
+  - West to Submerged Antechamber
 
 ---
 
@@ -248,6 +272,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Climbing Kit, Emberwater Canteen
 - Characters: Ash Scholars (neutral observers), Cedric
 - Quest Relevance: Staging area; points to mirror terraces (Mirrors of Emberlight).
+- Exits:
+  - North to Obsidian Outcrops
+  - East to Ember Gallery
 
 2. Obsidian Outcrops
 
@@ -255,6 +282,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Brass Mirror Segments, Binding Resin
 - Characters: Mirror‑Keeper Adept (catalogs fragments)
 - Quest Relevance: Recover segments for “Mirrors of Emberlight.”
+- Exits:
+  - South to Lower Switchbacks (Base Camp)
+  - East to Mirror Terraces
 
 3. Mirror Terraces
 
@@ -262,6 +292,10 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Mirror Mounts, Alignment Wedges
 - Characters: Terrace Warden (ensures correct assembly)
 - Quest Relevance: Repair and set mirrors to form the light channel (completes “Mirrors of Emberlight”).
+- Exits:
+  - South to Ember Gallery
+  - East to Fumarole Passages
+  - West to Obsidian Outcrops
 
 4. Fumarole Passages
 
@@ -269,6 +303,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Vent Stones, Heat‑Ward Mix (ash‑fern and cooled slag)
 - Characters: Fumarole Keeper (guides timing)
 - Quest Relevance: Calibrate vent stones and prepare heat ward (Breath of the Mountain).
+- Exits:
+  - South to Phoenix Crater
+  - West to Mirror Terraces
 
 5. Ember Gallery
 
@@ -276,6 +313,10 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Ash‑Fern, Cooled Slag, Fireglass Chips
 - Characters: Ember Attendant (helps craft simple wards)
 - Quest Relevance: Gather components for the heat ward (progress for “Breath of the Mountain”).
+- Exits:
+  - North to Mirror Terraces
+  - East to Phoenix Crater
+  - West to Lower Switchbacks (Base Camp)
 
 6. Phoenix Crater
 
@@ -283,6 +324,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Phoenix Feather (relic), Melt‑Mark Tablet
 - Characters: The Phoenix (questions of wisdom)
 - Quest Relevance: Main Quest phase completion for the Phoenix Feather.
+- Exits:
+  - North to Fumarole Passages
+  - West to Ember Gallery
 
 ---
 
@@ -294,6 +338,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Chisel Set, Survey Notes
 - Characters: Mine Overseer (organizes evacuation), Miners
 - Quest Relevance: Identifies the collapsed galleries (start of “Miners’ Rescue”).
+- Exits:
+  - North to Tool Cache
+  - East to Stillness Vestibule
 
 2. Tool Cache
 
@@ -301,6 +348,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Reinforced Braces, Support Straps, Wedge Blocks
 - Characters: Quartermaster (issues materials)
 - Quest Relevance: Supplies needed to clear the cave‑in (for “Miners’ Rescue”).
+- Exits:
+  - South to Cavern Mouth
+  - East to Collapsed Galleries
 
 3. Collapsed Galleries
 
@@ -308,6 +358,10 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Marking Chalk, Pulley Kit
 - Characters: Trapped Miners, Cedric
 - Quest Relevance: Clear debris and escort miners to safety (completes “Miners’ Rescue”).
+- Exits:
+  - South to Stillness Vestibule
+  - East to Echo Chambers
+  - West to Tool Cache
 
 4. Echo Chambers
 
@@ -315,6 +369,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Resonant Chant Rubbings, Echo Stone Shards
 - Characters: Echo Spirits (wandering phantoms)
 - Quest Relevance: Copy chant and perform it at echo stones (for “Oath of Stillness”).
+- Exits:
+  - South to Dragon’s Hall
+  - West to Collapsed Galleries
 
 5. Stillness Vestibule
 
@@ -322,6 +379,10 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Stillwater Phial, Quiet Charm
 - Characters: Silence Keeper (guardian of the threshold)
 - Quest Relevance: Finalize the Oath of Stillness to silence illusions (completes “Oath of Stillness”).
+- Exits:
+  - North to Collapsed Galleries
+  - East to Dragon’s Hall
+  - West to Cavern Mouth
 
 6. Dragon’s Hall
 
@@ -329,6 +390,9 @@ Act III requires the use of five previously learned spells. Each is woven into c
 - Items: Dragon’s Scale (relic), Old Oath‑Scrolls
 - Characters: The Ancient Dragon (voice of burdens)
 - Quest Relevance: Main Quest phase completion for the Dragon’s Scale; also delivers the Dragon’s Memory for the storytelling quest.
+- Exits:
+  - North to Echo Chambers
+  - West to Stillness Vestibule
 
 ---
 
@@ -345,6 +409,100 @@ Act III requires the use of five previously learned spells. Each is woven into c
   - Stone Sentinels (motionless guardians set into the gateframe)
   - Shadow Ward (an impersonal barrier that hums with restrained force)
 - Quest Relevance: Arrival point after securing all three relics; transition into Act IV’s assault on the fortress.
+- Exits:
+  - None (teleportation arrival point only)
+
+## Maps
+
+Connectivity rules: Maps show only intra-location connections via cardinal exits. Inter-location travel (Mira’s Hut ↔ Relic Sites ↔ Fortress Entrance) is teleport-only and not shown as lines.
+
+### Starting Room — Mira’s Hut
+
+```
+[Mira's Hut]
+
+Teleportation only (no cardinal exits)
+```
+
+### Sunken Ruins — Courage (Crystal of Light)
+
+```
+[SM] ---- [OW] ---- [CP]
+  |         |         |
+[TC] ---- [SA] ---- [ST]
+```
+
+Legend:
+- SM = Shoreline Markers
+- OW = Outer Wards
+- CP = Collapsed Pier
+- TC = Tidal Causeway
+- SA = Submerged Antechamber
+- ST = Sanctum of the Tide
+
+The connections reflect exits:
+- Tidal Causeway: N→SM, E→SA
+- Shoreline Markers: S→TC, E→OW
+- Outer Wards: S→SA, E→CP, W→SM
+- Collapsed Pier: S→ST, W→OW
+- Submerged Antechamber: N→OW, E→ST, W→TC
+- Sanctum of the Tide: N→CP, W→SA
+
+### Mount Ember — Wisdom (Phoenix Feather)
+
+```
+[OO] ---- [MT] ---- [FP]
+  |         |         |
+[LS] ---- [EG] ---- [PC]
+```
+
+Legend:
+- OO = Obsidian Outcrops
+- MT = Mirror Terraces
+- FP = Fumarole Passages
+- LS = Lower Switchbacks (Base Camp)
+- EG = Ember Gallery
+- PC = Phoenix Crater
+
+The connections reflect exits:
+- Lower Switchbacks: N→OO, E→EG
+- Obsidian Outcrops: S→LS, E→MT
+- Mirror Terraces: S→EG, E→FP, W→OO
+- Fumarole Passages: S→PC, W→MT
+- Ember Gallery: N→MT, E→PC, W→LS
+- Phoenix Crater: N→FP, W→EG
+
+### Caverns of Shadow — Selflessness (Dragon’s Scale)
+
+```
+[ToC] ---- [CG] ---- [EC]
+   |          |         |
+[CM]  ----  [SV] ---- [DH]
+```
+
+Legend:
+- ToC = Tool Cache
+- CG  = Collapsed Galleries
+- EC  = Echo Chambers
+- CM  = Cavern Mouth
+- SV  = Stillness Vestibule
+- DH  = Dragon’s Hall
+
+The connections reflect exits:
+- Cavern Mouth: N→ToC, E→SV
+- Tool Cache: S→CM, E→CG
+- Collapsed Galleries: S→SV, E→EC, W→ToC
+- Echo Chambers: S→DH, W→CG
+- Stillness Vestibule: N→CG, E→DH, W→CM
+- Dragon’s Hall: N→EC, W→SV
+
+### Ending Room — Entrance to Malakar’s Fortress
+
+```
+[Fortress Entrance]
+
+Teleportation arrival point only (no cardinal exits)
+```
 
 ## Golden Path (Detailed, Step-by-Step)
 
