@@ -1,0 +1,622 @@
+# Act III: Trials and Revelations
+
+## Narrative Overview
+
+Elior leaves the Enchanted Forest carrying the echo of Nyx’s last words: “Power follows purpose; purpose follows truth.” The air feels thinner now, charged with the knowledge that Malakar holds King Alden captive and leeches his life to call forth a kingdom-wide curse. The path ahead is no longer about learning who Elior might become—it is about deciding the kind of person he will be while the kingdom watches.
+
+Act III unfolds as a pilgrimage across Eldoria to recover three ancient relics—each bound to a virtue that shapes Elior’s character: Courage, Wisdom, and Selflessness. As Elior travels with Mira and Sir Cedric, he confronts enemies, moral trials, and the creeping weight of his parents’ mystery. Rumors now speak plainly: Malakar once knew them, and he wants something that only Elior can unlock.
+
+## Journey Between Relic Sites
+
+Mira, drawing on her mastery of arcane teleportation, whisks the party between the distant relic sites. Her spells bend space, allowing Elior, Cedric, and herself to traverse Eldoria’s vast reaches in moments—first to the storm-lashed coast, then to the volcanic slopes, and finally deep beneath the hills. Each transition is marked by shimmering portals and brief glimpses of places left behind. After securing all three relics, Mira prepares one final teleport, anchoring the party at the threshold of Malakar’s fortress, where the fate of the kingdom will be decided.
+
+## The Stakes
+
+- Malakar’s ritual drains King Alden’s essence. If the king falls, the binding magics protecting Eldoria unravel.
+- The relics are needed to counter the ritual and shield Elior from Malakar’s influence.
+
+## The Relics and Their Trials
+
+### 1) Crystal of Light — Courage (Sunken Ruins)
+
+The journey leads to the coast where the sea swallows a shattered temple known as the Sunken Ruins. At dusk, stone causeways rise from the surf, slick with salt and seaweed. Spectral water-wardens—spirits bound to guard the ruins—test intruders with fear itself.
+
+- Trial: In the sanctum, the water spirits coalesce into a tide-born guardian that feeds on hesitation. The Crystal of Light responds only when Elior speaks a vow aloud—naming what, or whom, he will never abandon. The answer shall be 'myself'. His courage becomes a beacon that parts the flood and reveals the relic.
+
+Result: Elior claims the Crystal. The causeways collapse behind them; the sea keeps its secrets.
+
+### 2) Phoenix Feather — Wisdom (Mount Ember)
+
+Mount Ember is an old volcano whose heart pulses with elemental puzzles. Its slopes are etched with obsidian channels and brass mirrors that once guided sunlight to a high altar.
+
+- Guardian: A phoenix wrought of ember and memory rises from a crater. It does not attack; it poses a riddle for Elior to answer: “What is wisdom when time is short?”
+
+Result: The Phoenix offers a single Feather, warm as a heartbeat.
+
+### 3) Dragon’s Scale — Selflessness (Caverns of Shadow)
+
+Beneath Eldoria’s oldest hills, the Caverns of Shadow breathe a chill that dims torches. There, a dragon sleeps—not a beast of greed, but a creature of burdens, keeping darkness pinned beneath its coils.
+
+- The Dragon: Ancient, wise, and tired. It knows Elior’s parents’ names. It reveals they bargained their safety for a chance to hide Elior from Malakar. The dragon guards a scale that can ward a soul—but taking it without due cause weakens the prison it maintains.
+- Offering: Elior offers something of himself—a meaningful sacrifice of power or a binding pledge. The dragon yields the Scale when it believes the promise.
+
+Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns brighten, not with light, but with trust.
+
+## Malakar’s Shadow and Parentage Hints
+
+- Letters and sigils resurface: Malakar’s early research mentions two apprentices who defied him—Elior’s parents.
+- In the Sunken Ruins, a mural shows a figure shielding a child from a storm of sigils.
+- In Mount Ember’s ash, footprints burned into stone are child-sized beside two adults’ strides.
+- The dragon names a place where the parents vanished from sight—not dead, but warded away.
+
+## Quests in Act III
+
+### Main Quest
+
+- Name: The Three Virtues
+  - Type: Main Quest
+  - Trigger: Speak with Mira at the start of Act III to learn of Malakar’s ritual and the need for the relics
+  - Prerequisites: Completion of Act II
+  - Dependencies: ALL Act III side quests must be completed before this quest can be finished
+  - Quest Chain Phases:
+    - Phase 1: Crystal of Light (Courage) — Requires completion of both Sunken Ruins side quests
+    - Phase 2: Phoenix Feather (Wisdom) — Requires completion of both Mount Ember side quests
+    - Phase 3: Dragon’s Scale (Selflessness) — Requires completion of both Caverns of Shadow side quests
+    - Final: Warding Rite — Combine the three relics to stabilize King Alden and prepare for the Act IV assault
+  - Story Impact: Establishes the relics as the counter to Malakar’s ritual and leads directly to the transition into Act IV
+
+### Storytelling Quest (Spans All Three Locations)
+
+- Name: Echoes of the Hidden Bond
+  - Type: Storytelling Quest
+  - Trigger: Receive a keepsake note from Mira referencing Elior’s parents at the start of Act III
+  - Structure: Three linked discoveries, one at each relic site
+  - Objectives:
+    1. Sunken Ruins — Recover the Sea‑Sealed Letter fragment preserved in a coral reliquary
+    2. Mount Ember — Read the Charred Inscription etched into cooled lava near the mirror terraces
+    3. Caverns of Shadow — Hear the Dragon’s Memory, a spoken recollection naming Elior’s parents and the ward they forged
+  - Completion: Assemble the three testimonies into a single account explaining how Elior was hidden from Malakar
+  - Story Impact: Clarifies parentage and motive without altering main progression
+
+### Side Quests (Required, by Location)
+
+#### Sunken Ruins (Courage)
+
+- Name: Tideward Sigils
+
+  - Type: Side Quest
+  - Location: Sunken Ruins causeways and outer wards
+  - Prerequisites: None
+  - Objectives:
+    - Collect Coquina Runes from shoreline markers
+    - Align three warding pillars to engrave a complete Tideward Sigil
+  - Outcome: Grants safe passage through flood wards to the sanctum; required to access the Crystal of Light
+
+- Name: Lanterns of the Deeps
+  - Type: Side Quest
+  - Location: Collapsed pier and submerged antechambers
+  - Prerequisites: Tideward Sigils completed
+  - Objectives:
+    - Retrieve three prism lanterns from the pier vaults
+    - Mount lanterns along the sanctum approach to reveal the submerged path
+  - Outcome: Illuminates the approach; required to reach the tide‑born guardian and the Crystal of Light
+
+#### Mount Ember (Wisdom)
+
+- Name: Mirrors of Emberlight
+
+  - Type: Side Quest
+  - Location: Mirror terraces on the volcano’s mid‑slope
+  - Prerequisites: None
+  - Objectives:
+    - Recover cracked brass mirror segments from obsidian outcrops
+    - Repair and set mirrors to form an unbroken light channel to the high altar
+  - Outcome: Opens the upper terraces; required to access the phoenix’s crater
+
+- Name: Breath of the Mountain
+  - Type: Side Quest
+  - Location: Fumarole passages below the crater
+  - Prerequisites: Mirrors of Emberlight completed
+  - Objectives:
+    - Gather ash‑fern and cooled slag to craft a simple heat ward
+    - Calibrate vent stones to synchronize the safe crossing intervals
+  - Outcome: Enables safe passage through heated vents; required to stand before the phoenix and receive the Feather
+
+#### Caverns of Shadow (Selflessness)
+
+- Name: Miners’ Rescue
+
+  - Type: Side Quest
+  - Location: Collapsed galleries near the cavern mouth
+  - Prerequisites: None
+  - Objectives:
+    - Clear the cave‑in using reinforced braces from the tool cache
+    - Escort the miners to a stable junction and secure the passage
+  - Outcome: Unlocks a stable route to the inner caverns; required to reach the dragon’s hall
+
+- Name: Oath of Stillness
+  - Type: Side Quest
+  - Location: Echo chambers before the dragon’s hall
+  - Prerequisites: Miners’ Rescue completed
+  - Objectives:
+    - Copy the Resonant Chant from runic walls
+    - Perform the chant at three echo stones to quiet the wandering phantoms
+  - Outcome: Silences the illusions; required to enter the dragon’s presence and obtain the Dragon’s Scale
+
+## Spells Required in Act III
+
+Act III requires the use of five previously learned spells. Each is woven into core progression and must be cast to complete the act.
+
+- Spell: `unlock`
+
+  - Learned In: Act I (from Mira)
+  - Used In: Sunken Ruins — Collapsed Pier vault
+  - Purpose: Open the corroded locker to retrieve the three Prism Lanterns after the physical key fails
+
+- Spell: `light`
+
+  - Learned In: Act I (from Mira)
+  - Used In: Sunken Ruins — Submerged Antechamber
+  - Purpose: Ignite/activate the mounted Prism Lanterns to reveal the submerged path to the sanctum
+
+- Spell: `purify`
+
+  - Learned In: Act I (from Fisherman at the Riverbank)
+  - Used In: Sunken Ruins — Outer Wards
+  - Purpose: Cleanse the brine-crusted warding pillars so the Tideward Sigil will take and stabilize the flood wards
+
+- Spell: `mend`
+
+  - Learned In: Act II (via craftsmen study/mentorship)
+  - Used In: Mount Ember — Mirror Terraces
+  - Purpose: Repair cracked brass mirror segments after mounting so the light channel becomes unbroken to the high altar
+
+- Spell: `bless`
+  - Learned In: Act I (from the Priest)
+  - Used In: Caverns of Shadow — Stillness Vestibule
+  - Purpose: Sanctify the echo stones before performing the Resonant Chant so the illusions fully quiet
+
+## Rooms
+
+### Starting Room
+
+#### Mira's Hut (Act III Start)
+
+- Description: A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully among her concoctions, her eyes bright with knowledge and kindness.
+- Items:
+  - Healing Herbs (basic curatives and components)
+  - Ancient Amulet (family heirloom reminder; story flavor)
+  - Teleportation Focus (crystal prism used by Mira to anchor travel between relic sites)
+- Characters:
+  - Mira (mentor; explains the relics and initiates Act III)
+  - Sir Cedric (companion; accompanies Elior)
+- Quest Relevance: Entry point to the Main Quest “The Three Virtues”; Mira’s Teleportation Focus enables travel to each relic location and, later, to the fortress threshold.
+
+---
+
+### Sunken Ruins — Courage (Crystal of Light)
+
+1. Tidal Causeway
+
+- Description: Moon‑washed causeways slick with seaweed rise and fall with the tide, linking broken arches to half‑drowned plazas.
+- Items: Rope Lines, Salt‑scraped Map Shards
+- Characters: Water‑Wardens (silent spirits that watch), Cedric
+- Quest Relevance: Entry to the Ruins; orientation point for locating shoreline markers and ward pillars (Tideward Sigils).
+
+2. Shoreline Markers
+
+- Description: Weathered stone steles stand at the surf’s edge, carved with coquina runes encrusted in coral.
+- Items: Coquina Runes (collectible quest components), Tidal Chalk
+- Characters: Ward‑Scribe Spirit (observes and instructs), Mira (advises)
+- Quest Relevance: Collect runes for “Tideward Sigils.”
+
+3. Outer Wards
+
+- Description: Three leaning pillars surround a drowned courtyard; faint glyphs glow when touched with brine.
+- Items: Warding Pillar Caps, Brine Flask
+- Characters: Drowned Knight Spirit (tests resolve), Warden Echoes
+- Quest Relevance: Align pillars to engrave the complete Tideward Sigil (completes “Tideward Sigils”).
+
+4. Collapsed Pier
+
+- Description: A shattered jetty with sunken vaults beneath; barnacled beams jut like ribs.
+- Items: Prism Lanterns (three), Rusted Locker Key
+- Characters: Pier Warden (guardian of the vaults)
+- Quest Relevance: Retrieve lanterns for “Lanterns of the Deeps.”
+
+5. Submerged Antechamber
+
+- Description: A partially flooded hall; carved niches hold lantern brackets; light lines the underwater path.
+- Items: Lantern Brackets, Tangleweed Bundle
+- Characters: Tide‑Guide Sprite (points to correct placements)
+- Quest Relevance: Mount the prism lanterns to reveal the safe approach (completes “Lanterns of the Deeps”).
+
+6. Sanctum of the Tide
+
+- Description: A domed chamber where water stands glass‑still; sigils ripple across the surface like starlight.
+- Items: Crystal of Light (relic), Votive Shells
+- Characters: Tide‑Born Guardian (final test of Courage)
+- Quest Relevance: Main Quest phase completion for the Crystal of Light.
+
+---
+
+### Mount Ember — Wisdom (Phoenix Feather)
+
+1. Lower Switchbacks (Base Camp)
+
+- Description: Wind‑carved paths zig‑zag across black rock; canvas shelters flap and braziers glow low.
+- Items: Climbing Kit, Emberwater Canteen
+- Characters: Ash Scholars (neutral observers), Cedric
+- Quest Relevance: Staging area; points to mirror terraces (Mirrors of Emberlight).
+
+2. Obsidian Outcrops
+
+- Description: Needle‑sharp obsidian towers; mirror fragments glint from crevices.
+- Items: Brass Mirror Segments, Binding Resin
+- Characters: Mirror‑Keeper Adept (catalogs fragments)
+- Quest Relevance: Recover segments for “Mirrors of Emberlight.”
+
+3. Mirror Terraces
+
+- Description: Stepped platforms with sockets for polished mirrors; channels etched to carry focused light uphill.
+- Items: Mirror Mounts, Alignment Wedges
+- Characters: Terrace Warden (ensures correct assembly)
+- Quest Relevance: Repair and set mirrors to form the light channel (completes “Mirrors of Emberlight”).
+
+4. Fumarole Passages
+
+- Description: Narrow tunnels exhaling rhythmic heat; stone vents chuff like a great sleeping bellows.
+- Items: Vent Stones, Heat‑Ward Mix (ash‑fern and cooled slag)
+- Characters: Fumarole Keeper (guides timing)
+- Quest Relevance: Calibrate vent stones and prepare heat ward (Breath of the Mountain).
+
+5. Ember Gallery
+
+- Description: A vaulted cavern veined with cooling flows; the air smells of charcoal and iron.
+- Items: Ash‑Fern, Cooled Slag, Fireglass Chips
+- Characters: Ember Attendant (helps craft simple wards)
+- Quest Relevance: Gather components for the heat ward (progress for “Breath of the Mountain”).
+
+6. Phoenix Crater
+
+- Description: A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals.
+- Items: Phoenix Feather (relic), Melt‑Mark Tablet
+- Characters: The Phoenix (questions of wisdom)
+- Quest Relevance: Main Quest phase completion for the Phoenix Feather.
+
+---
+
+### Caverns of Shadow — Selflessness (Dragon’s Scale)
+
+1. Cavern Mouth
+
+- Description: A broad entry arch curtained by cold mist; lantern light dims at the threshold.
+- Items: Chisel Set, Survey Notes
+- Characters: Mine Overseer (organizes evacuation), Miners
+- Quest Relevance: Identifies the collapsed galleries (start of “Miners’ Rescue”).
+
+2. Tool Cache
+
+- Description: A reinforced alcove with crates of timbers, iron braces, and hemp rope.
+- Items: Reinforced Braces, Support Straps, Wedge Blocks
+- Characters: Quartermaster (issues materials)
+- Quest Relevance: Supplies needed to clear the cave‑in (for “Miners’ Rescue”).
+
+3. Collapsed Galleries
+
+- Description: Passages pinched by fallen rock; dust motes hang in still air.
+- Items: Marking Chalk, Pulley Kit
+- Characters: Trapped Miners, Cedric
+- Quest Relevance: Clear debris and escort miners to safety (completes “Miners’ Rescue”).
+
+4. Echo Chambers
+
+- Description: Smooth caverns that amplify every footfall; faint whispers mimic speech.
+- Items: Resonant Chant Rubbings, Echo Stone Shards
+- Characters: Echo Spirits (wandering phantoms)
+- Quest Relevance: Copy chant and perform it at echo stones (for “Oath of Stillness”).
+
+5. Stillness Vestibule
+
+- Description: A hush falls over dark water pools; sound seems to fold into the stone.
+- Items: Stillwater Phial, Quiet Charm
+- Characters: Silence Keeper (guardian of the threshold)
+- Quest Relevance: Finalize the Oath of Stillness to silence illusions (completes “Oath of Stillness”).
+
+6. Dragon’s Hall
+
+- Description: A vast chamber lit by slow‑breathing embers beneath scaled coils; age‑old sigils line the floor.
+- Items: Dragon’s Scale (relic), Old Oath‑Scrolls
+- Characters: The Ancient Dragon (voice of burdens)
+- Quest Relevance: Main Quest phase completion for the Dragon’s Scale; also delivers the Dragon’s Memory for the storytelling quest.
+
+---
+
+### Ending Room
+
+#### Entrance to Malakar’s Fortress
+
+- Description: A blackstone bastion rises from a shattered ridge; gate sigils pulse like a heartbeat behind iron lattices. The air tastes of cold metal and distant thunder.
+- Items:
+  - Ward Gate Sigil (inscribed seal indicating a bound threshold)
+  - Siege Banner Remnant (torn standard caught on the outer spikes)
+  - Anchor Glyph (a clean stone set for teleportation arrival)
+- Characters:
+  - Stone Sentinels (motionless guardians set into the gateframe)
+  - Shadow Ward (an impersonal barrier that hums with restrained force)
+- Quest Relevance: Arrival point after securing all three relics; transition into Act IV’s assault on the fortress.
+
+## Golden Path (Detailed, Step-by-Step)
+
+This sequence completes all Act III requirements in a linear path. Each step lists the room, the exact commands to enter, and their direct consequences.
+
+### Act Start — Mira’s Hut and Teleportation
+
+1. Room: Mira’s Hut
+
+- Commands:
+  - `look`
+  - `talk to Mira`
+- Consequences:
+  - Main Quest “The Three Virtues” begins.
+  - Mira describes the three relics and offers teleportation.
+
+2. Room: Mira’s Hut
+
+- Commands:
+  - `talk to Mira`
+- Consequences:
+  - The party is teleported to the Sunken Ruins (arrive at Tidal Causeway).
+
+---
+
+### Sunken Ruins — Courage (Crystal of Light)
+
+3. Room: Tidal Causeway
+
+- Commands:
+  - `look`
+  - `north` (move deeper into the ruins as appropriate)
+- Consequences:
+  - Orientation established; paths to Shoreline Markers and Outer Wards identified.
+
+4. Room: Shoreline Markers
+
+- Commands:
+  - `search`
+  - `examine steles`
+  - `take coquina runes`
+- Consequences:
+  - Coquina Runes added to inventory (for “Tideward Sigils”).
+
+5. Room: Outer Wards
+
+- Commands:
+  - `look`
+  - `cast purify on warding pillars`
+  - `use coquina runes with warding pillars`
+- Consequences:
+  - Brine and coral residue cleansed from pillars.
+  - Tideward Sigil engraved; Outer Wards stabilized.
+  - Side Quest “Tideward Sigils” completed; sanctum flood wards weaken.
+
+6. Room: Collapsed Pier
+
+- Commands:
+  - `search`
+  - `examine vault`
+  - `take rusted locker key` (hidden)
+- Consequences:
+  - Rusted Locker Key added to inventory.
+
+7. Room: Collapsed Pier (Vault)
+
+- Commands:
+  - `use rusted locker key with locker` (fails; lock is fused)
+  - `cast unlock on locker`
+  - `open locker`
+  - `take prism lantern`
+- Consequences:
+  - Prism Lanterns (3) added to inventory (stack or repeated picks).
+
+8. Room: Submerged Antechamber
+
+- Commands:
+  - `look`
+  - `use prism lantern with bracket` (repeat for all brackets)
+  - `cast light`
+- Consequences:
+  - Prism Lanterns flare to life; submerged path revealed by refracted beams.
+  - Side Quest “Lanterns of the Deeps” completed; approach to sanctum unlocked.
+
+9. Room: Tidal Causeway (Story Clue)
+
+- Commands:
+  - `examine mural`
+  - `take sea-sealed letter` (hidden in coral reliquary)
+- Consequences:
+  - Sea‑Sealed Letter fragment acquired (Storytelling Quest “Echoes of the Hidden Bond,” part 1/3).
+
+10. Room: Sanctum of the Tide
+
+- Commands:
+  - `look`
+  - `say myself to tide-born guardian`
+- Consequences:
+  - The vow is accepted; waters part.
+  - `take crystal of light` becomes available; Crystal of Light added to inventory.
+  - Sunken Ruins phase of Main Quest completed.
+
+11. Room: Sanctum of the Tide
+
+- Commands:
+  - `talk to Mira`
+- Consequences:
+  - Teleport to Mount Ember (arrive at Lower Switchbacks).
+
+---
+
+### Mount Ember — Wisdom (Phoenix Feather)
+
+12. Room: Lower Switchbacks (Base Camp)
+
+- Commands:
+  - `look`
+  - `talk to ash scholars`
+- Consequences:
+  - Mirror Terraces and Obsidian Outcrops identified.
+
+13. Room: Obsidian Outcrops
+
+- Commands:
+  - `search`
+  - `take brass mirror segment`
+  - `take binding resin` (hidden)
+- Consequences:
+  - Brass Mirror Segments and Binding Resin added to inventory.
+
+14. Room: Mirror Terraces
+
+- Commands:
+  - `look`
+  - `use brass mirror segment with mirror mount` (repeat to complete channel)
+  - `cast mend on mirror`
+- Consequences:
+  - Cracks knit and surfaces true; light channel restored up to the high altar.
+  - Side Quest “Mirrors of Emberlight” completed; upper terraces open.
+
+15. Room: Ember Gallery
+
+- Commands:
+  - `look`
+  - `take ash-fern`
+  - `take cooled slag`
+- Consequences:
+  - Components acquired for a simple heat ward.
+
+16. Room: Fumarole Passages
+
+- Commands:
+  - `use ash-fern with cooled slag`
+  - `use heat-ward mix`
+  - `use vent stones`
+- Consequences:
+  - Heat ward prepared; crossing intervals synchronized.
+  - Side Quest “Breath of the Mountain” completed; access to crater enabled.
+
+17. Room: Phoenix Crater (Story Clue)
+
+- Commands:
+  - `examine melt-mark tablet`
+- Consequences:
+  - Charred Inscription read (Storytelling Quest, part 2/3).
+
+18. Room: Phoenix Crater (Relic Trial)
+
+- Commands:
+  - `look`
+  - `say patience to phoenix` (example answer to “What is wisdom when time is short?”)
+- Consequences:
+  - The phoenix acknowledges the answer.
+  - `take phoenix feather` becomes available; Phoenix Feather added to inventory.
+  - Mount Ember phase of Main Quest completed.
+
+19. Room: Phoenix Crater
+
+- Commands:
+  - `talk to Mira`
+- Consequences:
+  - Teleport to the Caverns of Shadow (arrive at Cavern Mouth).
+
+---
+
+### Caverns of Shadow — Selflessness (Dragon’s Scale)
+
+20. Room: Cavern Mouth
+
+- Commands:
+  - `look`
+  - `talk to mine overseer`
+- Consequences:
+  - Collapsed Galleries identified; Tool Cache location marked.
+
+21. Room: Tool Cache
+
+- Commands:
+  - `open crate`
+  - `take reinforced braces`
+  - `take support straps`
+  - `take wedge blocks`
+- Consequences:
+  - Structural materials acquired for rescue.
+
+22. Room: Collapsed Galleries
+
+- Commands:
+  - `use reinforced braces with fallen rock`
+  - `use wedge blocks with fallen rock`
+  - `talk to miners`
+- Consequences:
+  - Passage stabilized; miners escorted to safety junction.
+  - Side Quest “Miners’ Rescue” completed; stable route unlocked.
+
+23. Room: Echo Chambers
+
+- Commands:
+  - `examine runic walls`
+  - `take resonant chant rubbings`
+- Consequences:
+  - Chant acquired for quieting phantoms.
+
+24. Room: Stillness Vestibule
+
+- Commands:
+  - `cast bless`
+  - `use resonant chant rubbings`
+- Consequences:
+  - Echo stones are sanctified, then the oath is performed; illusions fully silenced.
+  - Side Quest “Oath of Stillness” completed; dragon’s hall opens.
+
+25. Room: Dragon’s Hall (Story Clue)
+
+- Commands:
+  - `talk to dragon`
+- Consequences:
+  - Dragon’s Memory received (Storytelling Quest, part 3/3; storytelling quest completes when combined with earlier clues).
+
+26. Room: Dragon’s Hall (Relic Trial)
+
+- Commands:
+  - `look`
+  - `say oath to dragon` (binding pledge)
+- Consequences:
+  - The dragon accepts the offering.
+  - `take dragon's scale` becomes available; Dragon’s Scale added to inventory.
+  - Caverns phase of Main Quest completed.
+
+---
+
+### Return and Fortress Threshold
+
+27. Room: Dragon’s Hall
+
+- Commands:
+  - `talk to Mira`
+- Consequences:
+  - Teleport back to Mira’s Hut.
+
+28. Room: Mira’s Hut
+
+- Commands:
+  - `talk to Mira`
+- Consequences:
+  - Warding Rite initiated; relics combined to stabilize King Alden’s life.
+  - Mira opens a final teleport to the fortress.
+
+29. Room: Entrance to Malakar’s Fortress
+
+- Commands:
+  - `look`
+  - `examine ward gate sigil`
+- Consequences:
+  - Arrival at fortress threshold confirmed; Act III concludes and Act IV begins.

@@ -26,5 +26,13 @@
     "python.autoComplete.extraPaths": [
         "${workspaceFolder}/src/retroquest",
         "${workspaceFolder}/src/retroquest/rooms"
+    ],
+    "cSpell.words": [
+        "Elior",
+        "Elior's",
+        "Elior’s",
+        "Greendale",
+        "Malakar",
+        "Willowbrook"
     ]
 }
