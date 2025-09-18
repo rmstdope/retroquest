@@ -1,5 +1,6 @@
 import pytest
 from act3.Act3 import Act3
+from engine.Game import Game
 
 # TODO: Import room classes when they are created
 # from retroquest.act3.rooms.ExampleRoom import ExampleRoom
@@ -10,24 +11,36 @@ class TestAct3Rooms:
     def setup_method(self):
         """Set up test fixtures."""
         self.act3 = Act3()
-        
+        self.act3.music_file = ''
+    
     def test_act3_has_rooms(self):
         """Test that Act 3 has rooms defined."""
         assert isinstance(self.act3.rooms, dict)
         assert len(self.act3.rooms) > 0
+    
+    def test_all_exits_are_bidirectional(self):
+        """Ensure every cardinal exit has a matching reverse exit back to the origin room."""
+        game = Game([self.act3])
+        reverse = {"north": "south", "south": "north", "east": "west", "west": "east"}
+
+        # Iterate through rooms by key so we can validate target links precisely
+        for room_key, room in self.act3.rooms.items():
+            exits = room.get_exits(game.state)
+            for direction, target_key in exits.items():
+                # Only enforce bi-directionality for standard cardinal directions
+                if direction not in reverse:
+                    continue
+                assert target_key in self.act3.rooms, (
+                    f"Exit from {room_key} via '{direction}' points to unknown room '{target_key}'."
+                )
+                target_room = self.act3.rooms[target_key]
+                target_exits = target_room.get_exits(game.state)
+                reverse_dir = reverse[direction]
+                assert reverse_dir in target_exits, (
+                    f"Room '{target_key}' must have a '{reverse_dir}' exit back to '{room_key}'."
+                )
+                assert target_exits[reverse_dir] == room_key, (
+                    f"Reverse exit mismatch: from '{target_key}' via '{reverse_dir}' should go back to '{room_key}', "
+                    f"but goes to '{target_exits[reverse_dir]}'."
+                )
         
-    # TODO: Add room-specific tests when rooms are implemented
-    # def test_example_room_creation(self):
-    #     """Test that ExampleRoom can be created."""
-    #     room = ExampleRoom()
-    #     assert room is not None
-    #     assert room.name is not None
-    #     assert room.description is not None
-    #     
-    # def test_room_connections(self):
-    #     """Test that rooms are properly connected."""
-    #     pass
-    #     
-    # def test_room_interactions(self):
-    #     """Test that room interactions work correctly."""
-    #     pass

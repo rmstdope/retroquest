@@ -82,11 +82,13 @@ def _debug_print_history():
 def _create_test_game():
     """Create a test game instance with Act2"""
     act = Act2()
+    act.music_file = ''
     return Game([act])
 
 def test_golden_path_act2_completion():
     """Test the golden path through Act2 completion"""
     act = Act2()
+    act.music_file = ''
     game = Game([act])
     
     # Step 1: Mountain Path
@@ -562,6 +564,7 @@ def test_golden_path_act2_completion():
 def test_main_square_navigation_restriction():
     """Test that Main Square navigation is restricted until city map is used"""
     act = Act2()
+    act.music_file = ''
     game = Game([act])
     
     # Add required items from Act 1
@@ -620,6 +623,7 @@ def test_main_square_navigation_restriction():
 def test_golden_path_step_15_forest_transition():
     """Test step 15: Forest Transition activities - kit use, stone examination, spell learning, hermit interaction."""
     act = Act2()
+    act.music_file = ''
     game = Game([act])
     
     # Navigate to Forest Transition

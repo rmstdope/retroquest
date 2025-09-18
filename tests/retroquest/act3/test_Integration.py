@@ -14,6 +14,7 @@ class TestAct3Integration:
     def setup_method(self):
         """Set up test fixtures."""
         self.act3 = Act3()
+        self.act3.music_file = ''
         self.game = Game([self.act3])
         
     def test_act3_initialization(self):

@@ -130,6 +130,7 @@ QUESTS = [
 def test_golden_path_act1_completion(monkeypatch):
     # Setup Game
     act = Act1()
+    act.music_file = ''
     game = Game([act])
     _execute_commands(game, ['look'])
 

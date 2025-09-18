@@ -68,7 +68,8 @@ class Game:
             except Exception as e:
                 # Use print instead of self.console.print to avoid dependency issues
                 print(f"[dim]Could not play music: {e}[/dim]")
-        threading.Thread(target=play_music, daemon=True).start()
+        if self.acts[self.current_act].music_file != None and self.acts[self.current_act].music_file != '':
+            threading.Thread(target=play_music, daemon=True).start()
 
     def new_turn(self) -> None:
         """Advance the game state by one turn."""
