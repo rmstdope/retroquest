@@ -10,6 +10,8 @@ FLAG_ACT3_COMPLETED = "act3_completed"
 FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED = "act3_tideward_sigils_attuned"
 FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT = "act3_lanterns_of_the_deeps_lit"
 FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED = "act3_crystal_of_light_acquired"
+FLAG_ACT3_VOW_OF_COURAGE_MADE = "act3_vow_of_courage_made"
+FLAG_ACT3_SEA_SEALED_LETTER_FOUND = "act3_sea_sealed_letter_found"
 
 
 # Main quest lifecycle flags

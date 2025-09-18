@@ -4,6 +4,7 @@ from ..Act3StoryFlags import (
     FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED,
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
     FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+    FLAG_ACT3_VOW_OF_COURAGE_MADE,
 )
 
 
@@ -32,14 +33,15 @@ class CrystalOfLight(Item):
     def picked_up(self, game_state: GameState) -> str | None:
         sigils = game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED)
         lanterns = game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)
-        if not (sigils and lanterns):
+        vow = game_state.get_story_flag(FLAG_ACT3_VOW_OF_COURAGE_MADE)
+        if not (sigils and lanterns and vow):
             # Prevent acquisition by reversing and informing the player
             game_state.remove_item_from_inventory(self.get_name(), 1)
             game_state.current_room.add_item(self)
             return (
-                "[failure]As your fingers close around the Crystal, the chamber's wards flare."
-                " Unbalanced rites resist your claim. The Tideward Sigils must be attuned and the Lanterns of the"
-                " Deeps lit before the relic will yield.[/failure]"
+                "[failure]As your fingers close around the Crystal, the chamber's wards flare, holding it fast."
+                " The rites must be whole and your vow spoken: attune the Tideward Sigils, light the Lanterns of the"
+                " Deeps, and answer the guardian before the relic will yield.[/failure]"
             )
 
         # Mark acquisition and provide a short effect line

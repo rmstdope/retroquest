@@ -6,3 +6,6 @@ from .CoquinaRunes import CoquinaRunes
 from .Steles import Steles
 from .RustedLockerKey import RustedLockerKey
 from .WardingPillars import WardingPillars
+from .Locker import Locker
+from .PrismLantern import PrismLantern
+from .LanternBracket import LanternBracket

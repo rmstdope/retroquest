@@ -38,10 +38,20 @@ class Mira(Character):
                 )
             )
 
-        # Subsequent conversation: teleport to the Sunken Ruins (Tidal Causeway)
-        # Teleport is allowed even if side quests are not yet done; gating is on relic retrieval later.
-        # Perform the teleport by moving the player to the target room directly.
-        destination_key = "TidalCauseway"
+        # Subsequent conversation: teleport onward based on current location.
+        # - From Sanctum of the Tide -> Mount Ember (Lower Switchbacks)
+        # - Otherwise -> Sunken Ruins entry (Tidal Causeway)
+        if game_state.current_room.name == "Sanctum of the Tide":
+            destination_key = "LowerSwitchbacks"
+            flavor = (
+                "[dialogue]'The circle to Mount Ember is set. Brace for ash on the wind.'[/dialogue]"
+            )
+        else:
+            destination_key = "TidalCauseway"
+            flavor = (
+                "[dialogue]'Hold steady, Elior. I will draw a circle to the Tidal Causeway—salt and moonlight will carry us.'[/dialogue]" 
+                "\n[dialogue]'When the air folds and the mist closes, breathe. It will pass in a heartbeat.'[/dialogue]"
+            )
         if destination_key in game_state.all_rooms:
             # Capture origin and destination rooms
             origin_room = game_state.current_room
@@ -59,17 +69,10 @@ class Mira(Character):
             # Call room hook and mark visited for consistency
             game_state.current_room.on_enter(game_state)
             game_state.mark_visited(game_state.current_room)
-            return (
-                event_msg
-                + "\n"
-                + (
-                    "[dialogue]'Hold steady, Elior. I will draw a circle to the Tidal Causeway—salt and moonlight will carry us.'[/dialogue]\n"
-                    "[dialogue]'When the air folds and the mist closes, breathe. It will pass in a heartbeat.'[/dialogue]\n"
-                    "[event]Mira traces a prism with her finger; the air folds, and sea-salt mist closes over you. "
-                    "When it clears, you stand upon the moon-washed stones of the Sunken Ruins." 
-                    "[/event]\n"
-                    f"[event]You arrive at [room_name]{game_state.current_room.name}[/room_name].[/event]"
-                )
+            arrival_fx = (
+                "[event]Mira traces a prism with her finger; the air folds and the world blurs." 
+                " When it clears, you arrive at your next destination.[/event]\n"
             )
+            return event_msg + "\n" + flavor + "\n" + arrival_fx + f"[event]You arrive at [room_name]{game_state.current_room.name}[/room_name].[/event]"
         else:
             return event_msg + "\n" + "[failure]Mira hesitates—she cannot find the proper anchor to send you there yet.[/failure]"

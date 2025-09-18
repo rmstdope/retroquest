@@ -1,6 +1,6 @@
 from ...engine.Room import Room
 from ...engine.GameState import GameState
-from ..items import RustedLockerKey
+from ..items import RustedLockerKey, Locker
 
 
 class CollapsedPier(Room):
@@ -10,7 +10,7 @@ class CollapsedPier(Room):
             description=(
                 "A shattered jetty with sunken vaults beneath; barnacled beams jut like ribs."
             ),
-            items=[],
+            items=[Locker()],
             characters=[],
             exits={"south": "SanctumOfTheTide", "west": "OuterWards"},
         )

@@ -4,12 +4,6 @@ from retroquest.engine.Game import Game
 from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED, FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
 from ..utils.utils import *
 
-# TODO: Import room classes when they are created
-# from retroquest.act3.rooms.ExampleRoom import ExampleRoom
-
-# TODO: Import quest classes when they are created
-# from retroquest.act3.quests.ExampleQuest import ExampleQuest
-
 class TestAct3Integration:
     """Integration tests for Act 3."""
     
@@ -82,3 +76,55 @@ class TestAct3Integration:
         assert 'vault' in pier_search.lower() and 'locker' in pier_search.lower()
         take_key = execute_commands(game, ['take rusted locker key'])
         check_item_in_inventory(game.state, 'Rusted Locker Key', True)
+
+        # Step 7: Collapsed Pier (Vault) — key fails, cast unlock, open locker, take three prism lanterns
+        # Give the hint by examining the locker
+        exam = execute_commands(game, ['examine locker'])
+        assert 'fused' in exam.lower() or 'lock' in exam.lower()
+        # Try the key and fail
+        fail_key = execute_commands(game, ['use rusted locker key with locker'])
+        assert 'fused' in fail_key.lower() or 'need more than metal' in fail_key.lower()
+        # Cast unlock on locker
+        unlocked = execute_commands(game, ['cast unlock on locker'])
+        assert 'locker' in unlocked.lower() and ('click' in unlocked.lower() or 'release' in unlocked.lower())
+        # Open locker and take all lanterns
+        opened = execute_commands(game, ['open locker'])
+        assert 'prism lantern' in opened.lower()
+        # Collect three lanterns
+        take_lanterns = execute_commands(game, ['take prism lantern', 'take prism lantern', 'take prism lantern'])
+        check_item_count_in_inventory(game.state, 'Prism Lantern', 3)
+
+        # Step 8: Submerged Antechamber — mount lanterns and cast light
+        execute_commands(game, ['south'])
+        check_current_room(game.state, 'Sanctum of the Tide')
+        execute_commands(game, ['west'])
+        check_current_room(game.state, 'Submerged Antechamber')
+        # Mount three lanterns to brackets
+        mount1 = execute_commands(game, ['use prism lantern with lantern bracket'])
+        mount2 = execute_commands(game, ['use prism lantern with lantern bracket'])
+        mount3 = execute_commands(game, ['use prism lantern with lantern bracket'])
+        # After mounts, there should be no more prism lanterns in inventory
+        check_item_count_in_inventory(game.state, 'Prism Lantern', 0)
+        # Cast light to reveal the path
+        light_result = execute_commands(game, ['cast light'])
+        assert 'path' in light_result.lower() or 'lanterns' in light_result.lower()
+
+        # Step 9: Tidal Causeway — examine mural, take Sea-Sealed Letter
+        execute_commands(game, ['west'])
+        check_current_room(game.state, 'Tidal Causeway')
+        mural_reveal = execute_commands(game, ['examine mural'])
+        assert 'reliquary' in mural_reveal.lower() or 'sea-sealed letter' in mural_reveal.lower()
+        take_letter = execute_commands(game, ['take sea-sealed letter'])
+        check_item_in_inventory(game.state, 'Sea-Sealed Letter', True)
+
+        # Step 10: Sanctum — speak vow, then take crystal
+        execute_commands(game, ['east', 'east'])
+        check_current_room(game.state, 'Sanctum of the Tide')
+        vow = execute_commands(game, ['say myself to tide-born guardian'])
+        assert 'vow' in vow.lower() or 'waters draw back' in vow.lower() or 'you may now take' in vow.lower()
+        take_crystal = execute_commands(game, ['take crystal of light'])
+        check_item_in_inventory(game.state, 'crystal of light', True)
+
+        # Step 11: Talk to Mira to teleport to Mount Ember
+        to_ember = execute_commands(game, ['talk to mira'])
+        check_current_room(game.state, 'Lower Switchbacks (Base Camp)')

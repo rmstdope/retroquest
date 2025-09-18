@@ -1,8 +1,9 @@
 from retroquest.engine.Act import Act
 from retroquest.engine.GameState import GameState
-from .spells import PurifySpell
+from .spells import PurifySpell, UnlockSpell, LightSpell
 from .Act3StoryFlags import FLAG_ACT3_COMPLETED
 from .quests import TheThreeVirtuesQuest, TidewardSigilsQuest
+from .quests.LanternsOfTheDeeps import LanternsOfTheDeepsQuest
 from .rooms import (
     MirasHut,
     TidalCauseway, ShorelineMarkers, OuterWards, CollapsedPier, SubmergedAntechamber, SanctumOfTheTide,
@@ -53,6 +54,7 @@ class Act3(Act):
             TheThreeVirtuesQuest(),
             # Sunken Ruins Side Quests
             TidewardSigilsQuest(),
+            LanternsOfTheDeepsQuest(),
         ]
 
         music_file = "Orchestronika - Feel The Storm (freetouse.com).mp3"
@@ -75,5 +77,10 @@ class Act3(Act):
 
     def setup_gamestate(self, game_state: GameState) -> None:
         """Ensure essential Act III magic is available at start."""
-        # Learn Purify so the player can cleanse and interact with Sunken Ruins wards
-        game_state.learn_spell(PurifySpell())
+        # Learn core Act III spells so Sunken Ruins progression is possible
+        if not game_state.has_spell(PurifySpell().name):
+            game_state.learn_spell(PurifySpell())
+        if not game_state.has_spell(UnlockSpell().name):
+            game_state.learn_spell(UnlockSpell())
+        if not game_state.has_spell(LightSpell().name):
+            game_state.learn_spell(LightSpell())
