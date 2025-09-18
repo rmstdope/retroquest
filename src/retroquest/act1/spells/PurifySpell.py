@@ -3,6 +3,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ...engine.Character import Character
 from ..items.Well import Well  # Import Well
+from ...act3.items.WardingPillars import WardingPillars
 
 class PurifySpell(Spell):
     def __init__(self) -> None:
@@ -18,6 +19,11 @@ class PurifySpell(Spell):
             return f"[event]You attempt to cast [spell_name]{self.get_name()}[/spell_name], but the magic fizzles out, achieving nothing.[/event]\nIt feels like the magic is just out of reach."
         if isinstance(target_item, Well):
             return target_item.purify(game_state) # Delegate to Well's purify method
+        if isinstance(target_item, WardingPillars):
+            # Delegate to the room hook to handle narrative/state
+            hook = getattr(game_state.current_room, 'cast_purify_on_pillars', None)
+            if hook:
+                return hook(game_state)
         return f"[event]You cast [spell_name]{self.get_name()}[/spell_name] on [item_name]{target_item.get_name()}[/item_name].[/event]\nA cleansing energy flows from your hands, but nothing else seems to happen."
 
     def cast_on_character(self, game_state: GameState, target_character: Character) -> str:

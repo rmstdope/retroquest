@@ -533,7 +533,6 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 3. Room: Tidal Causeway
 
 - Commands and yields:
-  - `search` → Describes moon‑washed causeways; highlights exits to Shoreline Markers (north) and Submerged Antechamber (east).
   - `north` → Moves to Shoreline Markers.
 
 4. Room: Shoreline Markers

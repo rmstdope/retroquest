@@ -1,4 +1,9 @@
 from ...engine.Room import Room
+from ..characters.Mira import Mira
+from ..characters.SirCedric import SirCedric
+from ..items.HealingHerbs import HealingHerbs
+from ..items.AncientAmulet import AncientAmulet
+from ..items.TeleportationFocus import TeleportationFocus
 
 
 class MirasHut(Room):
@@ -11,7 +16,14 @@ class MirasHut(Room):
                 "streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully "
                 "among her concoctions, her eyes bright with knowledge and kindness."
             ),
-            items=[],
-            characters=[],
+            items=[
+                HealingHerbs(),
+                AncientAmulet(),
+                TeleportationFocus(),
+            ],
+            characters=[
+                Mira(),
+                SirCedric(),
+            ],
             exits={},
         )

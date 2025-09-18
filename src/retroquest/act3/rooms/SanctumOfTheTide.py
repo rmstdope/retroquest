@@ -1,4 +1,5 @@
 from ...engine.Room import Room
+from ..items import CrystalOfLight
 
 
 class SanctumOfTheTide(Room):
@@ -8,7 +9,7 @@ class SanctumOfTheTide(Room):
             description=(
                 "A domed chamber where water stands glass‑still; sigils ripple across the surface like starlight."
             ),
-            items=[],
+            items=[CrystalOfLight()],
             characters=[],
             exits={"north": "CollapsedPier", "west": "SubmergedAntechamber"},
         )

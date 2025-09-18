@@ -13,7 +13,8 @@ if '-oldschool' in sys.argv:
     USE_TEXTUAL_UI = False
 
 def main() -> None:
-    game = Game([Act1(), Act2(), Act3()])
+    game = Game([Act3()])
+    # game = Game([Act1(), Act2(), Act3()])
     if USE_TEXTUAL_UI:
         app = TextualApp(game)
     else:

@@ -49,9 +49,8 @@ This document outlines the design rules and guidelines for both the game story a
 
 ### Character Interactions
 
-- Characters should have rich dialogue trees that allow for multiple interaction types, such as quest giving, teaching, and trading.
+- Characters should have rich dialogues.
 - Character states should change based on quest progress, affecting future interactions and story outcomes.
-- Implement a system for tracking character relationships and their impact on the story.
 
 ### Technical Considerations
 

@@ -10,6 +10,7 @@ from typing import Any
 from enum import Enum, auto
 
 from .Character import Character
+from .Room import Room
 from .CommandParser import CommandParser
 from .GameState import GameState
 from .Item import Item
@@ -35,6 +36,7 @@ class Game:
         # Use the first room in current act's rooms as the starting room
         starting_room = next(iter(self.acts[self.current_act].rooms.values()))
         self.state = GameState(starting_room, all_rooms=self.acts[self.current_act].rooms, all_quests=self.acts[self.current_act].quests)
+        self.acts[self.current_act].setup_gamestate(self.state)
         self.command_parser = CommandParser(self)
         self.has_changed_room = False  # Flag to indicate if we need to describe the room after a command
         self.run_state = GameRunState.ShowLogo
@@ -89,6 +91,7 @@ class Game:
                     # Transition to next act
                     starting_room = next(iter(self.acts[self.current_act].rooms.values()))
                     self.state = GameState(starting_room, all_rooms=self.acts[self.current_act].rooms, all_quests=self.acts[self.current_act].quests)
+                    self.acts[self.current_act].setup_gamestate(self.state)
                     self.has_changed_room = True
                 else:
                     # No more acts, end the game

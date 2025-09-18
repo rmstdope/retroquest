@@ -1,6 +1,6 @@
 import pytest
-from act3.Act3 import Act3
-from engine.Game import Game
+from retroquest.act3.Act3 import Act3
+from retroquest.engine.Game import Game
 
 # TODO: Import room classes when they are created
 # from retroquest.act3.rooms.ExampleRoom import ExampleRoom
@@ -12,7 +12,7 @@ class TestAct3Rooms:
         """Set up test fixtures."""
         self.act3 = Act3()
         self.act3.music_file = ''
-    
+
     def test_act3_has_rooms(self):
         """Test that Act 3 has rooms defined."""
         assert isinstance(self.act3.rooms, dict)

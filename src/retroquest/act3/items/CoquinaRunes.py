@@ -1,0 +1,27 @@
+from ...engine.Item import Item
+from ...engine.GameState import GameState
+from typing import Union
+from .WardingPillars import WardingPillars
+
+class CoquinaRunes(Item):
+    def __init__(self) -> None:
+        super().__init__(
+            name="Coquina Runes",
+            description=(
+                "Porous shells fused into chalk-white tiles, etched with ward-lines that drink brine and hold it."
+            ),
+            short_name="coquina runes",
+            can_be_carried=True,
+        )
+
+    def picked_up(self, game_state: GameState) -> Union[str, None]:
+        # Flavor-only for now; side quest logic handled elsewhere
+        return "[dim]The runes leave a fine salt on your fingers.[/dim]"
+
+    def use_with(self, game_state: GameState, other_item: 'Item') -> str:
+        if isinstance(other_item, WardingPillars):
+            # Ask the room to handle sigil completion
+            hook = getattr(game_state.current_room, 'use_runes_with_pillars', None)
+            if hook:
+                return hook(game_state)
+        return super().use_with(game_state, other_item)

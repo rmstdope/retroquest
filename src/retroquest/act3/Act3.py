@@ -1,7 +1,9 @@
 from retroquest.engine.Act import Act
 from retroquest.engine.GameState import GameState
+from .spells import PurifySpell
 from .Act3StoryFlags import FLAG_ACT3_COMPLETED
-from retroquest.act3.rooms import (
+from .quests import TheThreeVirtuesQuest, TidewardSigilsQuest
+from .rooms import (
     MirasHut,
     TidalCauseway, ShorelineMarkers, OuterWards, CollapsedPier, SubmergedAntechamber, SanctumOfTheTide,
     LowerSwitchbacks, ObsidianOutcrops, MirrorTerraces, FumarolePassages, EmberGallery, PhoenixCrater,
@@ -46,7 +48,12 @@ class Act3(Act):
             "FortressEntrance": FortressEntrance(),
         }
         
-        quests = []
+        quests = [
+            # Main Quest
+            TheThreeVirtuesQuest(),
+            # Sunken Ruins Side Quests
+            TidewardSigilsQuest(),
+        ]
 
         music_file = "Orchestronika - Feel The Storm (freetouse.com).mp3"
         music_info = 'Music track: Feel The Storm by Orchestronika\nSource: https://freetouse.com/music\nNo Copyright Vlog Music for Videos'
@@ -65,3 +72,8 @@ class Act3(Act):
     def is_completed(self, game_state: GameState) -> bool:
         # Act III completes when the fortress gate is opened and the endgame is triggered.
         return game_state.get_story_flag(FLAG_ACT3_COMPLETED)
+
+    def setup_gamestate(self, game_state: GameState) -> None:
+        """Ensure essential Act III magic is available at start."""
+        # Learn Purify so the player can cleanse and interact with Sunken Ruins wards
+        game_state.learn_spell(PurifySpell())
