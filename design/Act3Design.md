@@ -519,7 +519,6 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 1. Room: Mira’s Hut
 
 - Commands and yields:
-  - `search` → Shows Mira’s Hut description (herbs, potions, stained glass; characters/items visible).
   - `talk to Mira` → Starts Main Quest “The Three Virtues”; Mira explains relics and offers teleportation.
 
 2. Room: Mira’s Hut
@@ -577,13 +576,13 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 - Commands and yields:
   - `examine mural` → Reveals a guardian mural shielding a child; hints at a hidden reliquary.
-  - `take sea-sealed letter` → Adds the Sea‑Sealed Letter fragment to inventory (Storytelling Quest 1/3).
+  - `take sea-sealed letter` → Adds the Sea‑Sealed Letter fragment to inventory (Storytelling Quest 1/3 progress).
 
 10. Room: Sanctum of the Tide
 
 - Commands and yields:
   - `search` → Shows a glass‑still basin and the tide‑born guardian’s presence.
-  - `say myself to tide-born guardian` → Vow accepted; waters part; enables `take crystal of light` to claim the relic and complete the Sunken Ruins phase.
+  - `say myself to tide-born guardian` → Vow accepted; waters part; enables `take crystal of light` to claim the relic and complete the Sunken Ruins phase. The relic can be taken only after completing “Tideward Sigils” and “Lanterns of the Deeps”.
 
 11. Room: Sanctum of the Tide
 
@@ -631,13 +630,13 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 17. Room: Phoenix Crater (Story Clue)
 
 - Commands and yields:
-  - `examine melt-mark tablet` → Reads the Charred Inscription (Storytelling Quest 2/3).
+  - `examine melt-mark tablet` → Reads the Charred Inscription (Storytelling Quest 2/3 progress).
 
 18. Room: Phoenix Crater (Relic Trial)
 
 - Commands and yields:
   - `search` → Reveals the phoenix within the luminous crater.
-  - `say patience to phoenix` → Answer accepted; enables `take phoenix feather` to claim the relic; completes Mount Ember phase.
+  - `say patience to phoenix` → Answer accepted; enables `take phoenix feather` to claim the relic; completes Mount Ember phase. The relic can be taken only after completing “Mirrors of Emberlight” and “Breath of the Mountain”.
 
 19. Room: Phoenix Crater
 
@@ -684,13 +683,13 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 25. Room: Dragon’s Hall (Story Clue)
 
 - Commands and yields:
-  - `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes when combined with earlier clues).
+  - `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues).
 
 26. Room: Dragon’s Hall (Relic Trial)
 
 - Commands and yields:
   - `search` → Reveals the vast chamber and the dragon’s sigiled dais.
-  - `say oath to dragon` → The pledge is accepted; enables `take dragon's scale` to claim the relic; completes Caverns phase.
+  - `say oath to dragon` → The pledge is accepted; enables `take dragon's scale` to claim the relic; completes Caverns phase. The relic can be taken only after completing “Miners’ Rescue” and “Oath of Stillness”.
 
 ---
 
@@ -704,7 +703,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 28. Room: Mira’s Hut
 
 - Commands and yields:
-  - `talk to Mira` → Initiates the Warding Rite; combines relics to stabilize King Alden; opens final teleport to the fortress.
+  - `talk to Mira` → Initiates the Warding Rite; combines relics to stabilize King Alden; completes the Warding Rite; opens final teleport to the fortress.
 
 29. Room: Entrance to Malakar’s Fortress
 
