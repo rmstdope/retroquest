@@ -518,19 +518,14 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 1. Room: Mira’s Hut
 
-- Commands:
-  - `look`
-  - `talk to Mira`
-- Consequences:
-  - Main Quest “The Three Virtues” begins.
-  - Mira describes the three relics and offers teleportation.
+- Commands and yields:
+  - `search` → Shows Mira’s Hut description (herbs, potions, stained glass; characters/items visible).
+  - `talk to Mira` → Starts Main Quest “The Three Virtues”; Mira explains relics and offers teleportation.
 
 2. Room: Mira’s Hut
 
-- Commands:
-  - `talk to Mira`
-- Consequences:
-  - The party is teleported to the Sunken Ruins (arrive at Tidal Causeway).
+- Commands and yields:
+  - `talk to Mira` → Teleports the party to the Sunken Ruins (arrive at Tidal Causeway).
 
 ---
 
@@ -538,85 +533,62 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 3. Room: Tidal Causeway
 
-- Commands:
-  - `look`
-  - `north` (move deeper into the ruins as appropriate)
-- Consequences:
-  - Orientation established; paths to Shoreline Markers and Outer Wards identified.
+- Commands and yields:
+  - `search` → Describes moon‑washed causeways; highlights exits to Shoreline Markers (north) and Submerged Antechamber (east).
+  - `north` → Moves to Shoreline Markers.
 
 4. Room: Shoreline Markers
 
-- Commands:
-  - `search`
-  - `examine steles`
-  - `take coquina runes`
-- Consequences:
-  - Coquina Runes added to inventory (for “Tideward Sigils”).
+- Commands and yields:
+  - `search` → Reveals Coquina Runes clustered among the markers (and Tidal Chalk flavor).
+  - `examine steles` → Provides lore on coquina carvings and confirms the runes’ purpose.
+  - `take coquina runes` → Adds Coquina Runes to inventory (progress for “Tideward Sigils”).
 
 5. Room: Outer Wards
 
-- Commands:
-  - `look`
-  - `cast purify on warding pillars`
-  - `use coquina runes with warding pillars`
-- Consequences:
-  - Brine and coral residue cleansed from pillars.
-  - Tideward Sigil engraved; Outer Wards stabilized.
-  - Side Quest “Tideward Sigils” completed; sanctum flood wards weaken.
+- Commands and yields:
+  - `search` → Describes three leaning warding pillars and drowned courtyard.
+  - `cast purify on warding pillars` → Cleanses brine/coral, allowing sigils to hold.
+  - `use coquina runes with warding pillars` → Engraves Tideward Sigil; stabilizes ward; completes “Tideward Sigils”; weakens sanctum flood wards.
 
 6. Room: Collapsed Pier
 
-- Commands:
-  - `search`
-  - `examine vault`
-  - `take rusted locker key` (hidden)
-- Consequences:
-  - Rusted Locker Key added to inventory.
+- Commands and yields:
+  - `search` → Uncovers the vault area and a corroded locker beneath the pier.
+  - `examine vault` → Notes the fused locker lock; hints the key alone will fail.
+  - `take rusted locker key` → Adds Rusted Locker Key to inventory.
 
 7. Room: Collapsed Pier (Vault)
 
-- Commands:
-  - `use rusted locker key with locker` (fails; lock is fused)
-  - `cast unlock on locker`
-  - `open locker`
-  - `take prism lantern`
-- Consequences:
-  - Prism Lanterns (3) added to inventory (stack or repeated picks).
+- Commands and yields:
+  - `use rusted locker key with locker` → Fails (lock fused); confirms magical unlocking is needed.
+  - `cast unlock on locker` → Releases the fused mechanism.
+  - `open locker` → Opens the locker, revealing prism lanterns.
+  - `take prism lantern` → Adds a Prism Lantern to inventory (repeat until all three are collected).
 
 8. Room: Submerged Antechamber
 
-- Commands:
-  - `look`
-  - `use prism lantern with bracket` (repeat for all brackets)
-  - `cast light`
-- Consequences:
-  - Prism Lanterns flare to life; submerged path revealed by refracted beams.
-  - Side Quest “Lanterns of the Deeps” completed; approach to sanctum unlocked.
+- Commands and yields:
+  - `search` → Reveals lantern brackets and carved niches along the approach.
+  - `use prism lantern with bracket` → Mounts a lantern (repeat for all brackets until mounted).
+  - `cast light` → Ignites mounted prism lanterns; reveals submerged path; completes “Lanterns of the Deeps”; unlocks sanctum approach.
 
 9. Room: Tidal Causeway (Story Clue)
 
-- Commands:
-  - `examine mural`
-  - `take sea-sealed letter` (hidden in coral reliquary)
-- Consequences:
-  - Sea‑Sealed Letter fragment acquired (Storytelling Quest “Echoes of the Hidden Bond,” part 1/3).
+- Commands and yields:
+  - `examine mural` → Reveals a guardian mural shielding a child; hints at a hidden reliquary.
+  - `take sea-sealed letter` → Adds the Sea‑Sealed Letter fragment to inventory (Storytelling Quest 1/3).
 
 10. Room: Sanctum of the Tide
 
-- Commands:
-  - `look`
-  - `say myself to tide-born guardian`
-- Consequences:
-  - The vow is accepted; waters part.
-  - `take crystal of light` becomes available; Crystal of Light added to inventory.
-  - Sunken Ruins phase of Main Quest completed.
+- Commands and yields:
+  - `search` → Shows a glass‑still basin and the tide‑born guardian’s presence.
+  - `say myself to tide-born guardian` → Vow accepted; waters part; enables `take crystal of light` to claim the relic and complete the Sunken Ruins phase.
 
 11. Room: Sanctum of the Tide
 
-- Commands:
-  - `talk to Mira`
-- Consequences:
-  - Teleport to Mount Ember (arrive at Lower Switchbacks).
+- Commands and yields:
+  - `talk to Mira` → Teleports the party to Mount Ember (arrive at Lower Switchbacks).
 
 ---
 
@@ -624,73 +596,53 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 12. Room: Lower Switchbacks (Base Camp)
 
-- Commands:
-  - `look`
-  - `talk to ash scholars`
-- Consequences:
-  - Mirror Terraces and Obsidian Outcrops identified.
+- Commands and yields:
+  - `search` → Describes base camp; identifies nearby paths.
+  - `talk to ash scholars` → Points you toward Mirror Terraces and Obsidian Outcrops.
 
 13. Room: Obsidian Outcrops
 
-- Commands:
-  - `search`
-  - `take brass mirror segment`
-  - `take binding resin` (hidden)
-- Consequences:
-  - Brass Mirror Segments and Binding Resin added to inventory.
+- Commands and yields:
+  - `search` → Reveals Brass Mirror Segments and Binding Resin.
+  - `take brass mirror segment` → Adds segments to inventory (repeat as needed).
+  - `take binding resin` → Adds Binding Resin to inventory.
 
 14. Room: Mirror Terraces
 
-- Commands:
-  - `look`
-  - `use brass mirror segment with mirror mount` (repeat to complete channel)
-  - `cast mend on mirror`
-- Consequences:
-  - Cracks knit and surfaces true; light channel restored up to the high altar.
-  - Side Quest “Mirrors of Emberlight” completed; upper terraces open.
+- Commands and yields:
+  - `search` → Shows sockets, mounts, and the etched light channels.
+  - `use brass mirror segment with mirror mount` → Installs segments; once all placed, the beam path forms.
+  - `cast mend on mirror` → Repairs cracks; restores a continuous light channel; completes “Mirrors of Emberlight”; opens upper terraces.
 
 15. Room: Ember Gallery
 
-- Commands:
-  - `look`
-  - `take ash-fern`
-  - `take cooled slag`
-- Consequences:
-  - Components acquired for a simple heat ward.
+- Commands and yields:
+  - `search` → Identifies ash‑fern and cooled slag deposits.
+  - `take ash-fern` → Adds Ash‑Fern to inventory.
+  - `take cooled slag` → Adds Cooled Slag to inventory.
 
 16. Room: Fumarole Passages
 
-- Commands:
-  - `use ash-fern with cooled slag`
-  - `use heat-ward mix`
-  - `use vent stones`
-- Consequences:
-  - Heat ward prepared; crossing intervals synchronized.
-  - Side Quest “Breath of the Mountain” completed; access to crater enabled.
+- Commands and yields:
+  - `use ash-fern with cooled slag` → Crafts a Heat‑Ward Mix.
+  - `use heat-ward mix` → Applies the heat ward for safe vent crossing.
+  - `use vent stones` → Calibrates vent timing; completes “Breath of the Mountain”; enables access to the crater.
 
 17. Room: Phoenix Crater (Story Clue)
 
-- Commands:
-  - `examine melt-mark tablet`
-- Consequences:
-  - Charred Inscription read (Storytelling Quest, part 2/3).
+- Commands and yields:
+  - `examine melt-mark tablet` → Reads the Charred Inscription (Storytelling Quest 2/3).
 
 18. Room: Phoenix Crater (Relic Trial)
 
-- Commands:
-  - `look`
-  - `say patience to phoenix` (example answer to “What is wisdom when time is short?”)
-- Consequences:
-  - The phoenix acknowledges the answer.
-  - `take phoenix feather` becomes available; Phoenix Feather added to inventory.
-  - Mount Ember phase of Main Quest completed.
+- Commands and yields:
+  - `search` → Reveals the phoenix within the luminous crater.
+  - `say patience to phoenix` → Answer accepted; enables `take phoenix feather` to claim the relic; completes Mount Ember phase.
 
 19. Room: Phoenix Crater
 
-- Commands:
-  - `talk to Mira`
-- Consequences:
-  - Teleport to the Caverns of Shadow (arrive at Cavern Mouth).
+- Commands and yields:
+  - `talk to Mira` → Teleports the party to the Caverns of Shadow (arrive at Cavern Mouth).
 
 ---
 
@@ -698,65 +650,47 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 20. Room: Cavern Mouth
 
-- Commands:
-  - `look`
-  - `talk to mine overseer`
-- Consequences:
-  - Collapsed Galleries identified; Tool Cache location marked.
+- Commands and yields:
+  - `search` → Describes the misted entry and reveals the situation within.
+  - `talk to mine overseer` → Identifies Collapsed Galleries and marks Tool Cache on your mental map.
 
 21. Room: Tool Cache
 
-- Commands:
-  - `open crate`
-  - `take reinforced braces`
-  - `take support straps`
-  - `take wedge blocks`
-- Consequences:
-  - Structural materials acquired for rescue.
+- Commands and yields:
+  - `open crate` → Opens supply crates holding structural materials.
+  - `take reinforced braces` → Adds Reinforced Braces to inventory.
+  - `take support straps` → Adds Support Straps to inventory.
+  - `take wedge blocks` → Adds Wedge Blocks to inventory.
 
 22. Room: Collapsed Galleries
 
-- Commands:
-  - `use reinforced braces with fallen rock`
-  - `use wedge blocks with fallen rock`
-  - `talk to miners`
-- Consequences:
-  - Passage stabilized; miners escorted to safety junction.
-  - Side Quest “Miners’ Rescue” completed; stable route unlocked.
+- Commands and yields:
+  - `use reinforced braces with fallen rock` → Stabilizes the collapse.
+  - `use wedge blocks with fallen rock` → Frees the blocked passage.
+  - `talk to miners` → Initiates escort; completes “Miners’ Rescue”; opens a stable inner route.
 
 23. Room: Echo Chambers
 
-- Commands:
-  - `examine runic walls`
-  - `take resonant chant rubbings`
-- Consequences:
-  - Chant acquired for quieting phantoms.
+- Commands and yields:
+  - `examine runic walls` → Reveals the Resonant Chant instructions.
+  - `take resonant chant rubbings` → Adds Chant Rubbings to inventory (lyrics/notation secured).
 
 24. Room: Stillness Vestibule
 
-- Commands:
-  - `cast bless`
-  - `use resonant chant rubbings`
-- Consequences:
-  - Echo stones are sanctified, then the oath is performed; illusions fully silenced.
-  - Side Quest “Oath of Stillness” completed; dragon’s hall opens.
+- Commands and yields:
+  - `cast bless` → Sanctifies the echo stones for the rite.
+  - `use resonant chant rubbings` → Performs the Oath; silences illusions; completes “Oath of Stillness”; opens the path to Dragon’s Hall.
 
 25. Room: Dragon’s Hall (Story Clue)
 
-- Commands:
-  - `talk to dragon`
-- Consequences:
-  - Dragon’s Memory received (Storytelling Quest, part 3/3; storytelling quest completes when combined with earlier clues).
+- Commands and yields:
+  - `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes when combined with earlier clues).
 
 26. Room: Dragon’s Hall (Relic Trial)
 
-- Commands:
-  - `look`
-  - `say oath to dragon` (binding pledge)
-- Consequences:
-  - The dragon accepts the offering.
-  - `take dragon's scale` becomes available; Dragon’s Scale added to inventory.
-  - Caverns phase of Main Quest completed.
+- Commands and yields:
+  - `search` → Reveals the vast chamber and the dragon’s sigiled dais.
+  - `say oath to dragon` → The pledge is accepted; enables `take dragon's scale` to claim the relic; completes Caverns phase.
 
 ---
 
@@ -764,23 +698,16 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 27. Room: Dragon’s Hall
 
-- Commands:
-  - `talk to Mira`
-- Consequences:
-  - Teleport back to Mira’s Hut.
+- Commands and yields:
+  - `talk to Mira` → Teleports the party back to Mira’s Hut.
 
 28. Room: Mira’s Hut
 
-- Commands:
-  - `talk to Mira`
-- Consequences:
-  - Warding Rite initiated; relics combined to stabilize King Alden’s life.
-  - Mira opens a final teleport to the fortress.
+- Commands and yields:
+  - `talk to Mira` → Initiates the Warding Rite; combines relics to stabilize King Alden; opens final teleport to the fortress.
 
 29. Room: Entrance to Malakar’s Fortress
 
-- Commands:
-  - `look`
-  - `examine ward gate sigil`
-- Consequences:
-  - Arrival at fortress threshold confirmed; Act III concludes and Act IV begins.
+- Commands and yields:
+  - `search` → Describes the blackstone gate, iron lattices, and sentinel sigils.
+  - `examine ward gate sigil` → Confirms the bound threshold; marks Act III completion and the beginning of Act IV.
