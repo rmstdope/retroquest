@@ -1,6 +1,20 @@
+"""Caravan Master Thorne character definition.
+
+This module defines the `CaravanMasterThorne` NPC used in Act II. He provides the hook
+for the lost caravan side quest: initial conversation sets a story flag; after the
+player locates the missing caravan (signaled via `FLAG_FOUND_LOST_CARAVAN`), a follow-up
+dialogue awards the `SecretDocuments` item and marks the quest completion via
+`FLAG_LOST_CARAVAN_COMPLETED`.
+
+Behavior summary:
+ - First talk: offers help (sets `FLAG_SPOKEN_TO_CARAVAN_MASTER`).
+ - Before caravan found: repeats inquiry about progress.
+ - After caravan found (first talk): grants `SecretDocuments` and sets completion flag.
+ - After caravan found (subsequent talks): provides wrap-up flavor.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
-from ..quests.TheMerchantsLostCaravan import TheMerchantsLostCaravanQuest
 from ..Act2StoryFlags import FLAG_SPOKEN_TO_CARAVAN_MASTER, FLAG_FOUND_LOST_CARAVAN, FLAG_LOST_CARAVAN_COMPLETED
 from ..items.SecretDocuments import SecretDocuments
 
