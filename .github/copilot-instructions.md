@@ -59,6 +59,10 @@ This document outlines the design rules and guidelines for both the game story a
 - Uses object-oriented programming principles to encapsulate game logic and data.
 - Create one class per file and name files according to the class they contain.
 - Use descriptive names for classes, methods, and variables to enhance readability and maintainability.
+- Use type hints for all function signatures to improve code clarity and facilitate static analysis.
+- Include docstrings for all classes and methods to explain their purpose and usage.
+- Follow PEP 8 style guidelines for Python code to ensure consistency across the codebase.
+- Do not share code between acts; each act should be self-contained. All common functionality should be implemented in the engine module.
 
 ### Testing
 
