@@ -1,3 +1,30 @@
+"""Offering Altar (Act II Environmental / Ritual Item)
+
+Narrative Role:
+    Central ritual focus enabling summoning of Nyx, an advanced progression milestone bridging preparation
+    and deeper forest arc revelations.
+
+Key Mechanics / Interactions:
+    - use_with validates that the provided item is one of the three sacred charms (Druidic, Protective, Nature's).
+    - Requires possession of all three charms simultaneously; partial offerings provide informative feedback
+      listing missing components.
+    - Upon success: removes all three charms from player inventory and instantiates Nyx in the current room.
+    - Idempotence presently not enforced (assumes single ritual run by narrative design); could gate with a
+      future FLAG_NYX_SUMMONED if repeat attempts need suppression.
+
+Story Flags:
+    - Sets: (none currently)
+    - Reads: (none)
+
+Progression Effects:
+    Summons Nyx—likely prerequisite for later quests, lore delivery, or unlocking forest trials.
+
+Design Notes:
+    - Centralizes multi-item validation avoiding duplication across individual charm classes (they delegate via use_with).
+    - Clear textual feedback enumerates missing charms to guide player inventory goals.
+    - Extension hook: add story flag set after summoning to prevent re-summon exploits or enable post-summon state shifts.
+"""
+
 from ...engine.Item import Item
 from ..items.DruidicCharm import DruidicCharm
 from ..items.ProtectiveCharm import ProtectiveCharm

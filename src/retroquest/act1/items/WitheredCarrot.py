@@ -1,4 +1,24 @@
-from ...engine.GameState import GameState
+"""WitheredCarrot Item
+
+Narrative Role:
+Demonstrates transformable resource states (withered → fresh) hinting at restorative or nurturing mechanics the player may later unlock.
+
+Key Mechanics / Interactions:
+- Starts as a low-value, withered vegetable (`name='withered carrot'`).
+- `revive()` method upgrades it to a `fresh carrot` with new description (no external trigger implemented yet).
+
+Story Flags (Sets / Reads):
+(none) – Pure item-local state change.
+
+Progression Effects:
+- Establishes pattern for environmental or alchemical improvement of gathered resources.
+
+Design Notes:
+- Currently unused `revive()` relies purely on caller invocation; later could be tied to a spell, fertilizer room effect, or NPC interaction.
+- Keeps `short_name` stable (`carrot`) for command consistency across states.
+
+"""
+
 from ...engine.Item import Item
 
 class WitheredCarrot(Item):

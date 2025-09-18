@@ -1,4 +1,26 @@
-from ...engine.GameState import GameState
+"""Rope Item
+
+Narrative Role:
+Found/purchased early; establishes that some shop items must be paid for before pickup. Serves as a generic enabling tool for later mechanical or traversal interactions.
+
+Key Mechanics / Interactions:
+- Pickup may be blocked by the shopkeeper until purchased (`prevent_pickup`).
+- Delegates combo logic when used with a `Mechanism` object (``Mechanism.use_with(game_state, rope)``) – keeps specific puzzle logic centralized in the target.
+- Otherwise falls back to base `Item.use_with` behavior.
+
+Story Flags (Sets / Reads):
+(none) – Economic gating implied via `can_be_carried_flag` rather than flags.
+
+Progression Effects:
+- Teaches player that not all visible items are freely obtainable.
+- Acts as a future-proof generic component for multi-step contraptions or rescue events (parallel to Act II higher-quality rope patterns).
+
+Design Notes:
+- Uses a defensive late import for `Mechanism` to avoid circular dependencies.
+- Expansion path: could add durability or consumption on certain high-impact uses without refactoring current API.
+
+"""
+
 from ...engine.Item import Item
 
 class Rope(Item):

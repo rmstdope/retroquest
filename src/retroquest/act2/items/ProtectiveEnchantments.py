@@ -1,3 +1,26 @@
+"""Protective Enchantments (Act II Environmental Item)
+
+Narrative Role:
+    Environmental magical barrier inside the ancient library signifying restricted knowledge protection.
+    Serves as visual / interactive indicator that restoration work is required before accessing deeper lore.
+
+Key Mechanics / Interactions:
+    - Non-carriable static item; player cannot pick up or directly use (examine driven interaction).
+    - examine() output branches based on FLAG_MENDED_LIBRARY_ENCHANTMENTS to reflect repair progress.
+    - use_item() overridden to supply clarifying feedback about non-usability.
+
+Story Flags:
+    - Reads: FLAG_MENDED_LIBRARY_ENCHANTMENTS
+    - Sets: (none) — state mutation performed elsewhere by restoration quest logic/spells.
+
+Progression Effects:
+    Feedback surface for completion of library restoration tasks prerequisite to accessing certain texts (e.g., AncientChronicle study gating).
+
+Design Notes:
+    - Pure presentation layer; keeps narrative clarity without embedding quest logic here.
+    - Pattern for other environmental magical constructs (wards, seals, barriers) emphasizing examine() state reflection.
+"""
+
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_MENDED_LIBRARY_ENCHANTMENTS
 from ...engine.GameState import GameState
@@ -26,5 +49,5 @@ class ProtectiveEnchantments(Item):
                     "of damage from the passage of time. These ancient magical barriers need to be repaired "
                     "with restoration magic before they can properly protect the library's most precious texts.")
 
-    def use_item(self, game_state: GameState) -> str:
+    def use_item(self, _game_state: GameState) -> str:
         return "[info]The protective enchantments are magical barriers, not something you can use directly.[/info]"

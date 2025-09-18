@@ -1,8 +1,31 @@
+"""Great Hall (Act II)
+
+Narrative Role:
+    Political and historical nexus of Greendale; facilitates lineage revelation and formal audience progression.
+
+Key Mechanics:
+    - search() mediates heritage research sequence:
+        * Requires FLAG_COURT_HERALD_FORMAL_PRESENTATION first (formal access granted)
+        * Requires FLAG_SHOWED_JOURNAL_TO_HISTORIANS for guided archive search
+        * On success sets FLAG_RESEARCHED_FAMILY_HERITAGE and returns multi-paragraph exposition.
+
+Story Flags:
+    - Reads: FLAG_COURT_HERALD_FORMAL_PRESENTATION, FLAG_SHOWED_JOURNAL_TO_HISTORIANS
+    - Sets: FLAG_RESEARCHED_FAMILY_HERITAGE (ancestral revelation complete)
+
+Contents:
+    - NPCs: CourtHerald (protocol gate), Historians (research enablers), LordCommander (authority / later arc catalyst).
+    - Items: None directly (archives abstracted to search logic).
+
+Design Notes:
+    - Multi-flag gating exemplifies progressive validation pattern; if reused often consider layered decorator approach.
+    - Exposition kept in code; could externalize to data file if localization or branching expansions planned.
+"""
+
 from ...engine.Room import Room
 from ..characters.CourtHerald import CourtHerald
 from ..characters.Historians import Historians
 from ..characters.LordCommander import LordCommander
-from ..items.AncientChronicle import AncientChronicle
 from ..Act2StoryFlags import FLAG_COURT_HERALD_FORMAL_PRESENTATION, FLAG_RESEARCHED_FAMILY_HERITAGE, FLAG_SHOWED_JOURNAL_TO_HISTORIANS
 from ...engine.GameState import GameState
 
@@ -21,7 +44,7 @@ class GreatHall(Room):
             exits={"east": "CastleCourtyard"}
         )
 
-    def search(self, game_state: GameState) -> str:
+    def search(self, game_state: GameState, target: str = None) -> str:
         """Override search to handle family heritage research"""
         if game_state.get_story_flag(FLAG_COURT_HERALD_FORMAL_PRESENTATION):
             if not game_state.get_story_flag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS):

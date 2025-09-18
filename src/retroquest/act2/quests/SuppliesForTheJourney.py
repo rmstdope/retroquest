@@ -1,3 +1,26 @@
+"""Supplies for the Journey Quest Module.
+
+This quest ensures the player properly prepares before deeper forest exploration.
+
+Trigger Conditions:
+- Activated after proving combat skill (``FLAG_DEMONSTRATED_COMBAT_SKILLS``) to Sir Cedric.
+
+Objectives:
+- Acquire three prerequisite items from the Market District vendors:
+    * Forest Survival Kit
+    * Enhanced Lantern
+    * Quality Rope
+
+Completion Logic:
+- When all three items are present in inventory the quest marks complete and sets
+    ``FLAG_SUPPLIES_QUEST_COMPLETED``. This flag is referenced by the Act II main
+    quest progression and subsequent forest‑entry gating.
+
+Design Notes:
+- Uses ``isinstance`` checks against concrete item classes to avoid name collisions.
+- Does not award experience directly; pacing handled through main / composite quests.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED

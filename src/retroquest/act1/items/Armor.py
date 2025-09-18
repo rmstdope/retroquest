@@ -1,3 +1,24 @@
+"""Armor Item
+
+Narrative Role:
+Early defensive gear establishing the concept of protective equipment without yet integrating numerical mitigation mechanics.
+
+Key Mechanics / Interactions:
+- Basic `equip` and `examine` flows; no durability or stat calculations.
+- Mirrors acquisition gating pattern with shopkeeper via `prevent_pickup`.
+
+Story Flags (Sets / Reads):
+(none) – Purely descriptive at this stage.
+
+Progression Effects:
+- Reinforces preparation loop (procure weapon + armor) ahead of deeper mechanical systems.
+
+Design Notes:
+- Parallel structure to `Sword` maintains consistency in UX.
+- Future: introduce armor tiers or conditional dialogue when equipped in specific encounters.
+
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 

@@ -1,4 +1,23 @@
-from ...engine.GameState import GameState
+"""Apple Item
+
+Narrative Role:
+Basic consumable-style food item establishing village economy flavor and shop ownership gating pattern. Serves as a harmless early example of merchant-protected goods.
+
+Key Mechanics / Interactions:
+- Pickup may be blocked by shopkeeper until purchased (``prevent_pickup`` checks `can_be_carried_flag`).
+- Currently no consumption mechanic; persists in inventory as flavor/ potential barter object.
+
+Story Flags (Sets / Reads):
+(none) – Ownership/permission enforced locally via pickup prevention.
+
+Progression Effects:
+- Reinforces that mundane items can still require proper acquisition steps.
+
+Design Notes:
+- Future extension: add a `consume` method to restore minor health or morale when a health system is introduced.
+
+"""
+
 from ...engine.Item import Item
 
 class Apple(Item):

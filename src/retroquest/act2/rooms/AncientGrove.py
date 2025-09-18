@@ -1,6 +1,28 @@
+"""Ancient Grove (Act II)
+
+Narrative Role:
+    Sacred waypoint deep in the Enchanted Forest; transitional sanctum between outer forest and the Heart.
+    Establishes spiritual escalation and ties quest completion (Whispers in the Wind) to deeper progression.
+
+Key Mechanics:
+    - Overrides get_exits() to gate 'south' -> HeartOfTheForest behind FLAG_WHISPERS_IN_WIND_COMPLETED.
+    - Presents SilverTree (lore/focal object) reinforcing ritual ambiance.
+
+Story Flags:
+    - Reads: FLAG_WHISPERS_IN_WIND_COMPLETED to unlock deeper access.
+    - Sets: None (pure gate reader to keep quest logic external).
+
+Contents:
+    - Item: SilverTree (environmental / potential catalyst).
+    - Characters: None currently; AncientTreeSpirit import scaffold present for future encounter (unused now).
+
+Design Notes:
+    - Maintains minimalism to heighten contrast with HeartOfTheForest.
+    - If multiple forest gates accumulate, consider generic QuestFlagExitGate helper.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
-from ..characters.AncientTreeSpirit import AncientTreeSpirit
 from ..items.SilverTree import SilverTree
 from ..Act2StoryFlags import FLAG_WHISPERS_IN_WIND_COMPLETED
 

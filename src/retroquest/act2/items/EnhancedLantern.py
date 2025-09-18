@@ -1,3 +1,30 @@
+"""Enhanced Lantern (Act II Item)
+
+Narrative Role:
+    One of the two complementary gating items required to safely penetrate the Enchanted Forest interior.
+    Provides narrative and mechanical justification for navigation clarity and magical path revelation.
+
+Key Mechanics / Interactions:
+    - Special use logic only at ForestEntrance (contextual illumination & flag set).
+    - Sets FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE upon first successful contextual use and renames itself
+      to indicate its lit/active state (diegetic feedback in inventory listing).
+    - Synergy message appears if the Protective Charm flag is already active (or will appear vice‑versa from charm).
+    - Combined with FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, unlocks additional exits when ForestEntrance.get_exits
+      is queried (room reads both flags; lantern does not directly alter exits).
+
+Story Flags:
+    - Sets: FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE
+    - Reads: FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE (to emit synergy success messaging)
+
+Progression Effects:
+    One half of the dual-item gate for accessing AncientGrove and WhisperingGlade from ForestEntrance.
+
+Design Notes:
+    - Keeps gating passive; room logic centralizes exit mutation, avoiding duplicated unlocking code here.
+    - Name mutation communicates persistent active state without additional UI hooks.
+    - Non-contextual use provides lore / generic effect description for clarity outside intended room.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE

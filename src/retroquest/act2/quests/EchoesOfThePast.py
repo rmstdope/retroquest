@@ -1,3 +1,19 @@
+"""Echoes of the Past Quest Module.
+
+Focused lore discovery quest exploring protagonist heritage and regional history.
+
+Trigger Conditions:
+- Begins after reading the traveler's journal (``FLAG_READ_TRAVELERS_JOURNAL``).
+
+Objective:
+- Conduct archival / hall research culminating in setting
+    ``FLAG_RESEARCHED_FAMILY_HERITAGE``.
+
+Completion Logic:
+- Quest completes once heritage research flag is set, unlocking lineage
+    exposition valuable to the Act II main narrative thread.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_RESEARCHED_FAMILY_HERITAGE, FLAG_READ_TRAVELERS_JOURNAL

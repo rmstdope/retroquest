@@ -1,8 +1,33 @@
+"""Innkeeper Marcus (Act II)
+
+Role:
+    Merchant-caregiver hybrid NPC anchoring the Inn sub-plot and Elena's curse recovery
+    arc. Provides lodging access (room key) and, upon successful cure completion, grants
+    a unique relic reward (DruidicCharm) reinforcing gratitude and future magical utility.
+
+Interaction Flow:
+    1. Pre-cure: Rotating hospitality dialogue; conditional desperation lines if player
+       knows about Elena's curse (FLAG_KNOWS_ELENA_CURSE).
+    2. Post-cure (FLAG_INNKEEPERS_DAUGHTER_COMPLETED): One-time reward of DruidicCharm, then
+       permanent benevolent acknowledgment.
+
+Story Flags:
+    - Reads: FLAG_KNOWS_ELENA_CURSE, FLAG_INNKEEPERS_DAUGHTER_COMPLETED
+    - Sets: None directly (consumes cure resolution produced elsewhere).
+
+Rewards & Economy:
+    - Sells RoomKey (10 coins) enabling narrative rest / private space concept.
+    - Grants DruidicCharm once after completion (tracked via has_given_charm instance attr).
+
+Design Notes:
+    - Avoids additional flags for charm distribution; local boolean suffices.
+    - Dialogue indexing mirrors other shop patterns for consistency.
+    - Future extension: Could allow free lodging post-cure by zeroing wares pricing dynamically.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
-from ...engine.Item import Item
 from ..items.RoomKey import RoomKey
-from ..items.Coins import Coins
 from ..items.DruidicCharm import DruidicCharm
 from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE, FLAG_INNKEEPERS_DAUGHTER_COMPLETED
 
@@ -94,7 +119,7 @@ class InnkeeperMarcus(Character):
         # Purchase the item - spend coins using the batching system
         coins_removed = game_state.remove_item_from_inventory("coins", price)
         if coins_removed != price:
-            return event_msg + "\n" + f'[failure]Transaction failed. Unable to process payment.[/failure]'
+            return event_msg + "\n" + '[failure]Transaction failed. Unable to process payment.[/failure]'
         
         # Remove the display item from the room (if present)
         room_item_to_remove = None
@@ -118,4 +143,4 @@ class InnkeeperMarcus(Character):
             return event_msg + "\n" + f'[success]You purchase the [item_name]{item_name_to_buy}[/item_name] from [character_name]{self.get_name()}[/character_name] for {price} [item_name]gold coins[/item_name]. He hands you a brass key and explains how to access the private rooms upstairs. You have {remaining_coins} [item_name]coins[/item_name] remaining.[/success]'
         else:
             # Should not happen if item is in wares, but safety check
-            return event_msg + "\n" + f'[failure]An unexpected error occurred trying to rent the room.[/failure]'
+            return event_msg + "\n" + '[failure]An unexpected error occurred trying to rent the room.[/failure]'

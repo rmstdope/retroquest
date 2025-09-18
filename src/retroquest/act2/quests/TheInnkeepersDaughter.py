@@ -1,8 +1,29 @@
+"""The Innkeeper's Daughter Quest Module.
+
+Focused curative sequence combining staged restorative magic applications.
+
+Trigger Conditions:
+- Begins when player learns of Elena's curse (``FLAG_KNOWS_ELENA_CURSE``).
+
+Intended Cure Sequence (narrative order):
+1. Apply advanced healing (``greater_heal``) to stabilize.
+2. Use purified / crystal water to cleanse lingering spiritual residue.
+3. Cast ``dispel`` to break the underlying dark enchantment.
+
+Completion Logic:
+- External interaction flow sets ``FLAG_INNKEEPERS_DAUGHTER_COMPLETED`` which this
+    quest monitors via ``check_completion``.
+
+Narrative Impact:
+- Demonstrates compound spell synergy and validates mastery gained from other
+    Act II progression quests (Healer's Apprentice + Ancient Library).
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_KNOWS_ELENA_CURSE,
-    FLAG_INNKEEPERS_DAUGHTER_COMPLETED
+        FLAG_KNOWS_ELENA_CURSE,
+        FLAG_INNKEEPERS_DAUGHTER_COMPLETED
 )
 
 class TheInnkeepersDaughterQuest(Quest):

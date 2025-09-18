@@ -1,6 +1,31 @@
+"""Ancient Chronicle (Act II Environmental Item)
+
+Narrative Role:
+    Monumental historical tome housing genealogies and regional arcana. Acts as a lore reward and mechanical
+    gateway for acquiring the Dispel spell once trust with the Spectral Librarian is secured.
+
+Key Mechanics / Interactions:
+    - Non-carriable (stationary library asset) examined/used in place.
+    - use() conditionally grants DispelSpell if FLAG_SPECTRAL_LIBRARIAN_FRIENDLY is True; otherwise produces
+      obstructive guardian messaging reinforcing prerequisite relationship.
+    - Does not itself set completion flags (e.g., FLAG_ANCIENT_LIBRARY_COMPLETED); assumes external quest logic handles.
+
+Story Flags:
+    - Reads: FLAG_SPECTRAL_LIBRARIAN_FRIENDLY (gates spell learning)
+    - Sets: (none)
+
+Progression Effects:
+    Grants access to restorative/anti-magic capabilities via DispelSpell supporting future barrier/curse encounters.
+
+Design Notes:
+    - Keeps relational gating (friendliness) decoupled; potential future expansion could include multiple study phases
+      tracked by additional flags if tiered lore delivery is desired.
+    - Avoids redundant learning: underlying learn_spell should internally guard against duplicate spell additions.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act2StoryFlags import FLAG_ANCIENT_LIBRARY_COMPLETED, FLAG_SPECTRAL_LIBRARIAN_FRIENDLY
+from ..Act2StoryFlags import FLAG_SPECTRAL_LIBRARIAN_FRIENDLY
 
 class AncientChronicle(Item):
     def __init__(self) -> None:

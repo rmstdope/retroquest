@@ -1,3 +1,27 @@
+"""Families (Act II)
+
+Role:
+    Collective civilian NPC representing Greendale's intergenerational community. Serves
+    as moral validation layer and conditional giver of HealingHerbs reward after the player
+    demonstrates kindness via aiding elderly residents.
+
+Gating Mechanics:
+    - Dialogue friendly state requires FLAG_HELPED_ELDERLY_RESIDENTS == True (earned by giving
+      a WalkingStick to assist mobility) OR triggering via give_item logic with that stick.
+
+Story Flags:
+    - Reads: FLAG_HELPED_ELDERLY_RESIDENTS
+    - Sets: FLAG_HELPED_ELDERLY_RESIDENTS when WalkingStick is donated (acts as both action and attestation).
+
+Rewards:
+    - On first friendly conversation post-flag, grants HealingHerbs (single-use boon, supports parallel cure arc flavor).
+
+Design Notes:
+    - Internal boolean healing_herbs_given prevents duplication without extra story flag.
+    - Uses defer-import for HealingHerbs to avoid unnecessary load costs if player never qualifies.
+    - Encourages exploratory altruism prior to more heroic plot escalations.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item

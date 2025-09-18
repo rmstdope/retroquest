@@ -1,3 +1,26 @@
+"""Squires (Act II)
+
+Role:
+    Informational cluster NPC that supplies rumor-level context for Sir Cedric's alleged disgrace
+    while subtly nudging the player toward investigating contradictory evidence.
+
+Interaction Logic:
+    - Only engages fully after Cedric's honor quest accepted (FLAG_CEDRIKS_HONOR_ACCEPTED).
+    - First qualifying interaction sets FLAG_SQUIRES_TALKED_TO (progress metric for quest chains / integration tests).
+
+Story Flags:
+    - Reads: FLAG_CEDRIKS_HONOR_ACCEPTED
+    - Sets: FLAG_SQUIRES_TALKED_TO
+
+Narrative Impact:
+    - Provides diegetic motivation to locate the diary and pursue exoneration path.
+    - Reinforces honor + mentorship themes central to Act II.
+
+Design Notes:
+    - Kept stateless after first flag set to avoid repetitive flag toggling.
+    - Dialogue intentionally dense with leads; ensures players can't miss Cedric arc foundations.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_SQUIRES_TALKED_TO, FLAG_CEDRIKS_HONOR_ACCEPTED

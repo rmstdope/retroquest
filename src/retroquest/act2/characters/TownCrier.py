@@ -1,3 +1,19 @@
+"""Town Crier (Act II)
+
+Role:
+    Ambient exposition NPC delivering broad hooks (Sir Cedric seeking aid, notice board mention)
+    that funnel early Act II players toward central activity hubs.
+
+Function:
+    - Single static informative dialogue establishing civic vibrancy and quest availability.
+    - No state, flags, or branching; intentionally reliable repeating information source.
+
+Design Notes:
+    - Could later rotate announcements based on major act flags (e.g., honor restored) without
+      altering baseline signature.
+    - Simplicity improves performance—no imports beyond engine basics.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 

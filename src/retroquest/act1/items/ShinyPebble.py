@@ -1,4 +1,22 @@
-from ...engine.GameState import GameState
+"""ShinyPebble Item
+
+Narrative Role:
+Minor collectible / curiosity reinforcing tactile environmental detail. Potential future token for barter, child NPC interaction, or simple luck charm crafting.
+
+Key Mechanics / Interactions:
+- Purely flavor at present; portable and inert.
+
+Story Flags (Sets / Reads):
+(none)
+
+Progression Effects:
+- Encourages players to pick up innocuous objects, building pattern recognition for later meaningful small finds.
+
+Design Notes:
+- Could later influence a luck mechanic or be exchangeable for information.
+
+"""
+
 from ...engine.Item import Item
 
 class ShinyPebble(Item):

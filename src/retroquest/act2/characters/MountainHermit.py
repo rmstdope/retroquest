@@ -1,3 +1,30 @@
+"""Mountain Hermit (Act II)
+
+Role:
+        Transitional mentor stationed between Willowbrook and Greendale who gifts the Training
+        Sword and foreshadows escalating regional threats, thematically bridging Acts I & II.
+
+Interaction Mechanics:
+        - On first talk_to(): sets internal warned flag and (if not already) grants TrainingSword
+            via helper method for narrative pacing.
+        - Subsequent talks reinforce motivational guidance and confirm sword possession.
+
+State Tracking (instance attributes):
+        - sword_given: ensures the Training Sword cannot be duplicated.
+        - warned_about_times: controls delivery of initial prophetic warning block.
+
+Items Granted:
+        - TrainingSword (non-combat symbolic credential used to gain trust / prove skill in
+            Greendale training contexts and potential gating with martial NPCs).
+
+Design Notes:
+        - Uses helper method give_training_sword_with_dialogue to consolidate reward flow.
+        - Maintains narrative gravitas while remaining mechanically simple—does not set
+            story flags to keep early Act II onboarding clean.
+        - If later balancing requires gating Cedric's test, a story flag could be added when
+            sword is granted; keep hermit self-contained otherwise.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..items.TrainingSword import TrainingSword
@@ -11,7 +38,7 @@ class MountainHermit(Character):
         self.sword_given = False
         self.warned_about_times = False
 
-    def talk_to(self, game_state: GameState, player=None) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         event_msg = f"[event]You approach the [character_name]{self.get_name()}[/character_name].[/event]"
         
         if not self.warned_about_times:
@@ -28,7 +55,6 @@ class MountainHermit(Character):
                 return event_msg + "\n" + warning_msg
         else:
             if self.sword_given:
-                from ..items.TrainingSword import TrainingSword
                 training_sword = TrainingSword()
                 return (event_msg + "\n" +
                        f"[dialogue]The [character_name]{self.get_name()}[/character_name] nods sagely. "

@@ -1,3 +1,24 @@
+"""Mira's Hut (Act I)
+
+Narrative Role:
+    Early magical/medical resource point introducing dual-purpose items (healing + mystical artifact) and mentor archetype.
+
+Key Mechanics:
+    - Static configuration; no dynamic exits or conditional search yet.
+    - Provides HealingHerb (consumable) and AncientAmulet (mystic progression / potential protective trigger later).
+
+Story Flags:
+    - None presently; future interactions (teaching spells, blessing) could establish flags here.
+
+Contents:
+    - Items: HealingHerb, AncientAmulet.
+    - NPC: Mira (potential spell tutor / quest giver).
+
+Design Notes:
+    - Serves as foundational node for later Act II healer expansion; maintain naming alignment (Healer's House vs. Hut) for clarity.
+    - Consider adding context-sensitive guidance if player lacks basic recovery knowledge.
+"""
+
 from ...engine.Room import Room
 from ..items.HealingHerb import HealingHerb
 from ..items.AncientAmulet import AncientAmulet

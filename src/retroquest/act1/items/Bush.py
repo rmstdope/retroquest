@@ -1,7 +1,26 @@
+"""Bush Item
+
+Narrative Role:
+Environment vegetation that can be magically stimulated to generate forage (wild berries), demonstrating renewable resource mechanics gated by spell use.
+
+Key Mechanics / Interactions:
+- `grow` (triggered via spell externally) adds `WildBerries` if not already present in room.
+- Idempotent production prevents duplication spam in single cycle.
+
+Story Flags (Sets / Reads):
+(none) – Room inventory presence provides implicit state.
+
+Progression Effects:
+- Introduces transformation of static environment into resource node via magic.
+
+Design Notes:
+- Could track depletion/regrowth timers if resource economy expands.
+
+"""
+
 from ...engine.Item import Item
 from .WildBerries import WildBerries # Import WildBerries
 from ...engine.GameState import GameState # Import GameState
-from typing import Any
 
 class Bush(Item):
     def __init__(self) -> None:

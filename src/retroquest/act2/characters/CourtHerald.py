@@ -1,3 +1,21 @@
+"""Court Herald (Act II)
+
+Role:
+    Bureaucratic credentialing NPC enabling formal access to court archives and historians.
+
+Interaction Flow:
+    - Player presents EntryPass item -> sets FLAG_COURT_HERALD_FORMAL_PRESENTATION and acknowledges access rights.
+    - Subsequent talk_to provides confirmation / archival research permission messaging.
+
+Story Flags:
+    - Sets: FLAG_COURT_HERALD_FORMAL_PRESENTATION (acts as an access key for other scholarly NPCs/location logic).
+    - Reads same flag for branching dialogue.
+
+Design Notes:
+    - Uses item verification rather than abstract command to maintain tangible progression artifact.
+    - Lightweight; relies on other systems to enforce archive gating using the flag.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item

@@ -1,3 +1,22 @@
+"""City Notice Board (Act II Environmental/Economy Item)
+
+Narrative Role:
+    Public information hub conveying civic atmosphere and seeding quest hook for 'The Gathering Storm'.
+
+Key Mechanics / Interactions:
+    - Non-carriable static item; examine() reveals postings with emphasis on key recruitment notice.
+    - Currently read-only—no flag mutation here (quest acceptance handled via separate NPC/flow).
+
+Story Flags:
+    - Sets/Reads: (none) — intentionally passive to avoid redundant gating.
+
+Progression Effects:
+    Atmospherically foreshadows main conflict escalation, orienting player toward knightly authority structures.
+
+Design Notes:
+    - Could later set a discovery flag (e.g., FLAG_READ_GATHERING_STORM_NOTICE) if tracking exploration completeness is desired.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 

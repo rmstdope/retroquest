@@ -63,6 +63,7 @@ This document outlines the design rules and guidelines for both the game story a
 - Include docstrings for all classes and methods to explain their purpose and usage.
 - Follow PEP 8 style guidelines for Python code to ensure consistency across the codebase.
 - Do not share code between acts; each act should be self-contained. All common functionality should be implemented in the engine module.
+- Always update docstrings and comments to reflect any changes made to the code.
 
 ### Testing
 

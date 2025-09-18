@@ -1,3 +1,24 @@
+"""Heal Spell (Act I)
+
+Purpose:
+    Basic restorative magic introducing the player to supportive spellcasting. Provides
+    low-intensity healing flavor and establishes the pattern of self-cast vs. targeted cast.
+
+Acquisition:
+    Early-game foundational spell (available during or shortly after initial magical unlocking sequence).
+
+Core Mechanics:
+    - Self cast (cast_spell): ambient healing narration; currently no mechanical HP system integrated.
+    - Target cast (cast_on_character): mirrors self flavor with recipient substitution.
+
+Story / Flags:
+    - Sets no flags directly (pure baseline utility / tutorial spell).
+
+Design Notes:
+    - Future health system can hook here (e.g., player.heal(amount)).
+    - Maintained minimal logic to keep onboarding clear.
+"""
+
 from ...engine.Spell import Spell
 from ...engine.GameState import GameState
 from ...engine.Character import Character

@@ -1,3 +1,23 @@
+"""Forest Speech Spell (Act II)
+
+Purpose:
+    Druidic communication spell enabling environmental intelligence gathering from forest fauna/flora.
+
+Special Logic:
+    - First cast in ForestEntrance before FLAG_FOUND_RAVINE reveals Ravine (adds Ravine item + sets flag).
+    - Subsequent casts in that location provide non-redundant informational messaging.
+    - Adaptive flavor text based on biome (forest / enchanted / other).
+    - Enables deeper interaction tone with forest-aligned characters (AncientTreeSpirit, ForestSprites, WaterNymphs).
+
+Story Flags:
+    - Sets: FLAG_FOUND_RAVINE (first discovery route to caravan scenario trigger).
+    - Reads: Same flag to control idempotent discovery.
+
+Design Notes:
+    - Minimizes hard-coded room name checks to broad patterns ("forest", "grove", "enchanted").
+    - Could migrate environment classification into Room metadata for scalability if biome count grows.
+"""
+
 from typing import Any
 from ...engine.Spell import Spell
 from ..Act2StoryFlags import FLAG_FOUND_RAVINE

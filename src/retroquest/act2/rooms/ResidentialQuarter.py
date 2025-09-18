@@ -1,8 +1,30 @@
+"""Residential Quarter (Act II)
+
+Narrative Role:
+    Civic hub representing Greendale's productive middle class. Serves as discovery vector
+    for the Hidden Library via active searching, rewarding curiosity outside primary quest hubs.
+
+Key Mechanics:
+    - First successful search() without prior discovery sets FLAG_ANCIENT_LIBRARY_ACCEPTED and
+      injects a new exit 'secret_passage' leading to HiddenLibrary.
+    - Subsequent searches provide idempotent informational messaging.
+
+Story Flags:
+    - Sets: FLAG_ANCIENT_LIBRARY_ACCEPTED (library access unlocked)
+    - Reads: same flag to prevent duplicate unlocking.
+
+NPC Composition:
+    - LocalCraftsmen (gateway to Mend spell) and Families (healing herbs reward after civic aid), reinforcing community theme.
+
+Design Notes:
+    - Discovery uses search rather than passive presence to encourage exploration.
+    - Secret exit added in-place keeping minimal coupling; if more hidden exits appear, consider a HiddenExitManager.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..characters.LocalCraftsmen import LocalCraftsmen
 from ..characters.Families import Families
-from ..items.HealingHerbs import HealingHerbs
 from ..Act2StoryFlags import (
     FLAG_ANCIENT_LIBRARY_ACCEPTED
 )
@@ -41,4 +63,4 @@ class ResidentialQuarter(Room):
             # Get the Hidden Library room name for the message  
             from ..rooms.HiddenLibrary import HiddenLibrary
             hidden_library = HiddenLibrary()
-            return f"[info]You've already discovered the secret passage to the {hidden_library.get_name()}.[/info]"
+            return f"[info]You've already discovered the secret passage to the {hidden_library.name}.[/info]"

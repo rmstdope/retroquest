@@ -1,3 +1,28 @@
+"""The Gathering Storm (Act II Main Quest) Module.
+
+Primary narrative backbone for Act II, aggregating progression across multiple
+side quests and developmental threads.
+
+Always Active:
+- Becomes available immediately upon Act II start (``check_trigger`` returns True).
+
+Progression Sources (monitored flags):
+1. ``FLAG_SPOKEN_TO_SIR_CEDRIC`` – establishes quest framing & need for allies.
+2. ``FLAG_DEMONSTRATED_COMBAT_SKILLS`` – validates martial readiness.
+3. ``FLAG_SUPPLIES_QUEST_COMPLETED`` – confirms expedition preparedness.
+4. ``FLAG_ANCIENT_LIBRARY_COMPLETED`` – injects prophetic / heritage revelations.
+5. ``FLAG_HERMITS_WARNING_COMPLETED`` – transitions to deeper forest access.
+6. ``FLAG_NYX_TRIALS_COMPLETED`` – culmination of forest spiritual trials.
+
+Dynamic Description:
+- ``check_update`` composes layered narrative segments, dimming earlier stages
+    while appending the newest active phase text for player clarity.
+
+Completion Logic:
+- Final resolution monitored through ``FLAG_GATHERING_STORM_COMPLETED`` (set
+    externally once all act narrative beats resolve).
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_GATHERING_STORM_COMPLETED, FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED, FLAG_ANCIENT_LIBRARY_COMPLETED, FLAG_HERMITS_WARNING_COMPLETED, FLAG_NYX_TRIALS_COMPLETED

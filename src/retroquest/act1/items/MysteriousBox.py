@@ -1,3 +1,25 @@
+"""MysteriousBox Item
+
+Narrative Role:
+Small locked container introducing multi-step acquisition (unlock → open → retrieve map). Provides early tangible reward loop and object state transitions.
+
+Key Mechanics / Interactions:
+- `locked` boolean gates access; `unlock(game_state)` flips state and updates description.
+- `open(game_state)` dispenses `Map` exactly once (`contains_map` flag) then becomes inert container.
+- Designed for integration with an unlock spell or key-like future mechanic (currently direct method calls expected).
+
+Story Flags (Sets / Reads):
+(none) – Progress tracked internally via `locked` and `contains_map`.
+
+Progression Effects:
+- Grants `Map` item enabling navigation or future fast-travel/hint systems.
+
+Design Notes:
+- Separate `unlock` and `open` preserves clarity and allows alternative unlocking paths (spell, tool, code) without conflating retrieval.
+- Could emit a story flag when map acquired if later narrative branches depend on it.
+
+"""
+
 from ...engine.Item import Item
 from ..items.Map import Map as GameMap # Alias to avoid potential naming conflicts
 from ...engine.GameState import GameState
@@ -12,7 +34,7 @@ class MysteriousBox(Item):
         self.locked = True
         self.contains_map = True # Initialize contains_map
 
-    def unlock(self, game_state: GameState) -> str: # Added game_state parameter for consistency
+    def unlock(self, _game_state: GameState) -> str: # game_state not currently used
         if self.locked:
             self.locked = False
             self.description = f"A small, ornate wooden [item_name]{self.get_name()}[/item_name] covered in strange runes. The lock has clicked open."

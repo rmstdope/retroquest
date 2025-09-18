@@ -1,3 +1,26 @@
+"""Druidic Charm (Act II Sacred Item)
+
+Narrative Role:
+    One of the three sacred charms required for the Offering Altar ritual to summon Nyx. Gifted in gratitude,
+    it thematically binds acts of protection and healing with ancient natural stewardship.
+
+Key Mechanics / Interactions:
+    - Contextual messaging in Heart of the Forest hints at altar placement purpose.
+    - Delegates multi-item ritual handling to OfferingAltar via use_with pattern (centralized validation).
+    - examine() enriches provenance and emotional weight of the gift event.
+
+Story Flags:
+    - Sets: (none directly)
+    - Reads: (none)
+
+Progression Effects:
+    Required (with ProtectiveCharm and Nature's Charm) to summon Nyx—gateway to deeper forest narrative layers.
+
+Design Notes:
+    - Avoids embedding ritual logic locally to prevent duplication across charm classes.
+    - Could later gain resonance interactions (e.g., boosting nature spell potency) after Nyx encounter.
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 

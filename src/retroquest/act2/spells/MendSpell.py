@@ -1,3 +1,25 @@
+"""Mend Spell (Act II)
+
+Purpose:
+    Foundational utility spell enabling repair of damaged objects and—critically—restoration
+    of the Hidden Library's protective enchantments to prove scholarly worthiness.
+
+Acquisition:
+    Granted by the Local Craftsmen after demonstrating civic helpfulness (helping elderly residents).
+
+Core Mechanics:
+    - Generic repair flavor for any item whose description contains 'broken' or 'damaged'.
+    - Special-case: Casting on ProtectiveEnchantments (Hidden Library) sets FLAG_MENDED_LIBRARY_ENCHANTMENTS.
+
+Story Flags:
+    - Sets: FLAG_MENDED_LIBRARY_ENCHANTMENTS (first successful repair of protective wards).
+    - Reads: Same flag to ensure idempotent subsequent messaging.
+
+Design Notes:
+    - Uses deferred import of ProtectiveEnchantments to avoid cyclic dependency with room/item definitions.
+    - Keeps broad text matching simple; future refinement could introduce an interface (Repairable) rather than string parsing.
+"""
+
 from ...engine.Spell import Spell
 from ..Act2StoryFlags import FLAG_MENDED_LIBRARY_ENCHANTMENTS
 from ...engine.GameState import GameState

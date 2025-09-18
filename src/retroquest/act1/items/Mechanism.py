@@ -1,8 +1,28 @@
+"""Mechanism Item
+
+Narrative Role:
+Central repair puzzle object in mill context. Encourages combining a structural aid (`Rope`) to restore function and reveal hidden component (`MillstoneFragment`).
+
+Key Mechanics / Interactions:
+- `use_with` + `Rope` repairs, consumes rope, spawns `MillstoneFragment`, sets `repaired` state, updates description.
+- Post-repair examine/listen feedback differentiates pre/post states.
+
+Story Flags (Sets / Reads):
+(none) – Local boolean state only.
+
+Progression Effects:
+- Advances mill-related discovery; introduces concealed compartment reveal pattern.
+
+Design Notes:
+- Description assignment pre-repair had trailing comma (tuple); retained original semantics but consider cleanup in future refactor.
+- Could emit a flag for global narrative reactions (e.g., mill operational status) later.
+
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from .MillstoneFragment import MillstoneFragment
 from .Rope import Rope
-from typing import Any
 
 class Mechanism(Item):
     def __init__(self) -> None:
@@ -41,7 +61,7 @@ class Mechanism(Item):
             game_state.current_room.add_item(millstone_fragment)
             
             # Update this item's description to reflect the change
-            self._description = "The mechanism has been repaired using a rope. A compartment is open."
+            self.description = "The mechanism has been repaired using a rope. A compartment is open."
 
             event_msg = f"[event]You try to use the [item_name]rope[/item_name] with the [item_name]{self.get_name()}[/item_name].[/event]\n"
             return event_msg + f"You manage to thread the [item_name]rope[/item_name] through the [item_name]{self.get_name()}[/item_name]. With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"

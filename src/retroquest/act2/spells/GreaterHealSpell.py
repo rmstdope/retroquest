@@ -1,3 +1,21 @@
+"""Greater Heal Spell (Act II)
+
+Purpose:
+    Advanced restorative magic used as an intermediate step in Elena's multi-phase cure
+    progression and a generalized high-impact healing effect for other characters.
+
+Acquisition:
+    Taught by Master Healer Lyria after apprenticeship arc completion (healing quest chain).
+
+Special Handling:
+    - When cast on BarmaidElena invokes her receive_greater_heal(game_state) method to advance curse state.
+    - Otherwise returns generic restoration messaging.
+
+Design Notes:
+    - Delegates narrative branching to target character to keep spell implementation lean.
+    - Potential future enhancement: integrate resource cost (mana) once economy layer is added.
+"""
+
 from ...engine.Spell import Spell
 from ...engine.GameState import GameState
 from ...engine.Character import Character

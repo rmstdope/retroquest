@@ -1,3 +1,27 @@
+"""Forest Entrance (Act II)
+
+Narrative Role:
+    Threshold zone to the Enchanted Forest. Establishes environmental tension and introduces dual-item
+    preparation requirement (enhanced lantern + protective charm) before deeper biomes become accessible.
+
+Key Mechanics:
+    - Overrides get_exits() to dynamically gate 'south' (AncientGrove) and 'east' (WhisperingGlade) until BOTH:
+        FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE AND FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE are True.
+    - Prevents premature progression; players receive clear feedback by item usage events elsewhere.
+
+Story Flags:
+    - Reads: FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE
+    - Sets: Neither (flags set by item usage contexts outside this room).
+
+Contents:
+    - EnchantedAcorn (forest-aligned quest/interaction item)
+    - ForestSprites (ambient magical observers; potential tutorialization channel)
+
+Design Notes:
+    - Uses pure read gating to keep logic decentralized (item interactions register their own flags).
+    - Could be generalized later into a MultiFlagExitGate helper if pattern repeats across acts.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (

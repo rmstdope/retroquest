@@ -1,3 +1,22 @@
+"""Nature Sense Spell (Act II)
+
+Purpose:
+    Sensory amplification magic revealing hidden natural presences, detecting boundaries, and
+    spawning Water Nymphs encounter in Whispering Glade on first use.
+
+Core Mechanics:
+    - First cast in WhisperingGlade: adds WaterNymphs NPC to room and returns discovery narration.
+    - Subsequent casts in Glade: informational reminder.
+    - Contextual flavor for forest / enchanted / transition zones; generic elsewhere.
+
+State Tracking:
+    - nature_sense_used (instance boolean) prevents duplicate spawning and ensures idempotent narrative.
+
+Design Notes:
+    - Maintains self-contained spawn logic instead of pushing into room to keep cause (spell) explicit.
+    - If more spawn-capable spells emerge, consider abstracting a Summoning/Reveal interface.
+"""
+
 from ...engine.Spell import Spell
 from ...engine.GameState import GameState
 from ..characters.WaterNymphs import WaterNymphs

@@ -1,3 +1,25 @@
+"""Castle Approach (Act II)
+
+Narrative Role:
+    ceremonial processional leading from civic center to noble power. Establishes social hierarchy and
+    acts as preliminary gate to castle interior spaces (Courtyard, GreatHall).
+
+Key Mechanics:
+    - West exit to CastleCourtyard suppressed until enable_castle_courtyard() is invoked (triggered by presenting entry pass to Herald).
+    - get_exits() clones parent exits then prunes conditionally (non-destructive base data design).
+
+Story Flags:
+    - None read directly; gating handled via local boolean set by NPC interaction logic elsewhere.
+
+Contents:
+    - NPCs: Herald (formal protocol), CastleGuardCaptain (authority presence / potential future gate escalation).
+    - Items: None (keeps focus on social interaction).
+
+Design Notes:
+    - Boolean approach keeps state internal; could migrate to story flag if cross-room logic later requires awareness.
+    - Method enable_castle_courtyard isolates mutation, preserving single responsibility.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..characters.Herald import Herald

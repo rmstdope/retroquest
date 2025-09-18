@@ -1,3 +1,24 @@
+"""Village Square (Act I)
+
+Narrative Role:
+    Social and geographic hub of Willowbrook; introduces core ambient tone and early utility items (Bucket, OldNotice).
+
+Key Mechanics:
+    - No dynamic gating; serves as stable anchor for early navigation learning.
+    - Provides flavor items that reinforce rural life and hint at future quests (notice board).
+
+Story Flags:
+    - None directly; early game relies on freeform exploration without progression locks here.
+
+Contents:
+    - Items: Bucket (utility / water interactions later), OldNotice (lore / hint surface).
+    - NPC: Villager (generic social presence; potential dialogue hook foundation).
+
+Design Notes:
+    - Kept intentionally ungated to reduce friction during onboarding.
+    - Could later host timed announcements or seasonal events without structural changes.
+"""
+
 from ...engine.Room import Room
 from ..items.Bucket import Bucket
 from ..items.OldNotice import OldNotice

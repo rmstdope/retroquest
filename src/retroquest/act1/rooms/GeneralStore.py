@@ -1,3 +1,24 @@
+"""General Store (Act I)
+
+Narrative Role:
+    Primary supply vendor introducing basic survival and combat gear early in the game.
+
+Key Mechanics:
+    - Static inventory seeded directly (no dynamic purchase state yet).
+    - Provides multi-category items (tool, food, light, weapon, armor) to preview breadth of systems.
+
+Story Flags:
+    - None currently; transactional logic not yet flag-integrated.
+
+Contents:
+    - Items: Rope (climbing/puzzle potential), Apple (consumable), Matches (light source precursor), Sword (weapon), Armor (defense).
+    - NPC: Shopkeeper (commerce interaction placeholder).
+
+Design Notes:
+    - If economy system expands, migrate static list into merchant inventory abstraction.
+    - Consider per-item descriptive pricing or availability flags in later acts.
+"""
+
 from ...engine.Room import Room
 from ..items.Rope import Rope
 from ..items.Apple import Apple

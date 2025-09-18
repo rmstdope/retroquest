@@ -1,3 +1,26 @@
+"""Cedric's Lost Honor Quest Module.
+
+Investigative redemption quest to clear Sir Cedric of historical accusations.
+
+Trigger Conditions:
+- Initiated when player engages Training Master / Cedric chain, setting
+    ``FLAG_CEDRIKS_HONOR_ACCEPTED``.
+
+Dynamic Description Updates:
+- Reading the squires' diary (``FLAG_READ_SQUIRES_DIARY``) appends contextual
+    lead text about missing exonerating documents.
+- Examining secret documents (``FLAG_EXAMINED_SECRET_DOCUMENTS``) further augments
+    description with retrieval success prompt to finalize honor restoration.
+
+Completion Logic:
+- Marks complete externally via ``FLAG_CEDRIKS_HONOR_COMPLETED`` after presenting
+    documents; this quest's ``check_completion`` simply monitors the story flag.
+
+Narrative Impact:
+- Synergizes with Merchant's Lost Caravan quest (source of the documents) and
+    reinforces player's role as truth‑seeker and protector of just reputation.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_CEDRIKS_HONOR_ACCEPTED, FLAG_CEDRIKS_HONOR_COMPLETED, FLAG_READ_SQUIRES_DIARY, FLAG_EXAMINED_SECRET_DOCUMENTS

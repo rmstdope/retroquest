@@ -1,4 +1,22 @@
-from ...engine.GameState import GameState
+"""Stick Item
+
+Narrative Role:
+Common salvage output (e.g., from clearing vines) offering low-tier improvisational utility and combination potential.
+
+Key Mechanics / Interactions:
+- Delegates combination to `MagneticFishingRod` when paired, enabling that item to centralize retrieval logic.
+
+Story Flags (Sets / Reads):
+(none)
+
+Progression Effects:
+- Reinforces that mundane objects may still participate in crafted tool chains.
+
+Design Notes:
+- Could later be upcycled into more advanced tools (staff, spear) if crafting deepens.
+
+"""
+
 from ...engine.Item import Item
 
 class Stick(Item):

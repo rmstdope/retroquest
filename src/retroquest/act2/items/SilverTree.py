@@ -1,3 +1,25 @@
+"""Silver-Barked Tree (Act II Environmental Item)
+
+Narrative Role:
+    Majestic living monument in the Ancient Grove acting as the manifestation point for the Ancient Tree Spirit
+    when respectfully examined. Serves as a lore delivery anchor and spiritual nexus.
+
+Key Mechanics / Interactions:
+    - Non-carriable environmental feature; single-use (per instance) examination toggles internal examined flag.
+    - On first examine within AncientGrove: instantiates AncientTreeSpirit NPC into the current room (dynamic population).
+    - Subsequent examines provide ambient reinforcement text without spawning duplicates.
+
+Story Flags:
+    - Sets/Reads: (none directly) — ephemeral state tracked locally via self.examined.
+
+Progression Effects:
+    Gate for introducing AncientTreeSpirit interactions which may yield quests, lore, or future magical boons.
+
+Design Notes:
+    - Uses local boolean instead of global story flag since scope is confined to room narrative.
+    - Pattern applicable to other awakening-style environmental encounters (could be abstracted later).
+"""
+
 from ...engine.Item import Item
 from ..characters.AncientTreeSpirit import AncientTreeSpirit
 from ...engine.GameState import GameState

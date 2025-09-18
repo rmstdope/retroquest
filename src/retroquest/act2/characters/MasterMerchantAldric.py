@@ -1,11 +1,30 @@
+"""Master Merchant Aldric (Act II)
+
+Role:
+    Premium gear vendor unlocking higher-tier utility items after social proof (flyer) is presented.
+
+Unlock Condition:
+    - Requires giving MerchantsFlyer (sets internal gave_flyer) before wares list becomes accessible.
+
+Economy & Inventory:
+    - Stocks: ForestSurvivalKit (50), EnhancedLantern (40), QualityRope (20).
+    - Uses coin batching via GameState.get_item_count / remove_item_from_inventory for atomic purchases.
+
+Narrative Flavor:
+    - Rotating marketing-style dialogue lines reinforce merchant personality and world commerce tone.
+
+Design Notes:
+    - No story flags; containment ensures reuse pattern for future merchants.
+    - Item restocking hook (add_wares) called upon flyer validation—room controls display items separately from purchased copies.
+    - Safety checks guard against duplicate acquisition and payment race conditions.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..items.ForestSurvivalKit import ForestSurvivalKit
 from ..items.EnhancedLantern import EnhancedLantern
 from ..items.QualityRope import QualityRope
-from ..items.Coins import Coins
-from ..quests.SuppliesForTheJourney import SuppliesForTheJourneyQuest
 
 class MasterMerchantAldric(Character):
     def __init__(self) -> None:
@@ -96,7 +115,7 @@ class MasterMerchantAldric(Character):
         # Purchase the item - spend coins using the batching system
         coins_removed = game_state.remove_item_from_inventory("coins", price)
         if coins_removed != price:
-            return event_msg + "\n" + f'[failure]Transaction failed. Unable to process payment.[/failure]'
+            return event_msg + "\n" + '[failure]Transaction failed. Unable to process payment.[/failure]'
         
         # Remove the display item from the room (if present)
         room_item_to_remove = None

@@ -1,7 +1,31 @@
+"""The Ancient Library Quest Module.
+
+Discovers and explores the hidden subterranean archive beneath Greendale.
+
+Trigger Conditions:
+- Activated when the player uncovers the secret passage and accepts entry, setting
+    ``FLAG_ANCIENT_LIBRARY_ACCEPTED``.
+
+Core Objectives (implicit):
+1. Gain access to the spectral librarian / arcane stacks.
+2. Acquire the Crystal Focus item (enhances later magical interactions/mechanics).
+3. Learn the ``dispel`` spell from recovered tomes / spectral tutoring.
+
+Completion Logic:
+- Quest completes when both the ``dispel`` spell is known AND the player possesses
+    the ``Crystal Focus`` item. These two conditions gate Act II main quest narrative
+    advancement (knowledge & lineage revelation).
+
+Lore / Narrative Impact:
+- Reveals prophetic material concerning the Chosen One lineage and establishes
+    the player's heritage link. Provides early mid‑act power escalation while keeping
+    forest progression balanced.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_ANCIENT_LIBRARY_ACCEPTED
+        FLAG_ANCIENT_LIBRARY_ACCEPTED
 )
 
 class TheAncientLibraryQuest(Quest):

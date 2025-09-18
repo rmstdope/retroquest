@@ -1,7 +1,30 @@
+"""Well Item
+
+Narrative Role:
+Central multi-phase environmental puzzle object: examine → purify (spell gated) → retrieve submerged reward via extended tool chain. Embodies layered interaction design early in the game.
+
+Key Mechanics / Interactions:
+- `examine` sets flag `FLAG_WELL_EXAMINED` and adjusts description based on purification and ring status.
+- `purify` requires prior examination (flag gate), transitions water state, reveals ring presence descriptively without spawning item directly.
+- `use_with` delegates to bucket/fishing rod variants enabling retrieval attempts; specialized extended magnetic rod handles final extraction path (elsewhere).
+- `search` gives contextual feedback aligned to purity + ring presence.
+
+Story Flags (Sets / Reads):
+- Sets: `FLAG_WELL_EXAMINED`
+- Reads: `FLAG_WELL_EXAMINED` (in `purify` precondition)
+
+Progression Effects:
+- Introduces multi-step gating (knowledge + spell + crafted tool) culminating in reward retrieval.
+
+Design Notes:
+- Separation of reveal (description) and extraction (tool interaction) supports flexible alternate retrieval implementations.
+- Could later add contamination reversion if dark magic events occur (flag toggling).
+
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..Act1StoryFlags import FLAG_WELL_EXAMINED
-from typing import Any
 
 class Well(Item):
     def __init__(self) -> None:
@@ -38,7 +61,7 @@ class Well(Item):
         
         return super().use_with(game_state, other_item)
 
-    def search(self, game_state: GameState) -> str:
+    def search(self, _game_state: GameState) -> str:  # game_state not directly used beyond interface
         if self.is_purified:
             if self.contains_ring:
                 return "[event]You peer into the crystal clear water. A [item_name]shiny ring[/item_name] glints at the bottom, tantalizingly out of reach by hand.[/event]"

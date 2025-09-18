@@ -1,3 +1,27 @@
+"""Secret Documents (Act II Quest Evidence Item)
+
+Narrative Role:
+    Exonerating legal evidence central to resolving Sir Cedric's honor arc. Tied to investigative sequencing
+    requiring prior contextual knowledge from the squire's diary before meaningful interpretation.
+
+Key Mechanics / Interactions:
+    - examine() before prerequisite knowledge returns low-context ambiguity.
+    - After FLAG_READ_SQUIRES_DIARY is set, examine() both reveals full exoneration narrative and sets
+      FLAG_EXAMINED_SECRET_DOCUMENTS marking evidence review completion.
+    - Non-consumable; remains examinable for reinforcement (idempotent flag set safe).
+
+Story Flags:
+    - Reads: FLAG_READ_SQUIRES_DIARY
+    - Sets: FLAG_EXAMINED_SECRET_DOCUMENTS
+
+Progression Effects:
+    Validates Cedric's innocence; expected to unlock downstream reputation/dialogue or quest completion turn-in.
+
+Design Notes:
+    - Two-stage informational reveal pattern: gating clarity by prior discovery fosters investigative cadence.
+    - Could be extended with provenance verification step if a counter-accusation branch is later designed.
+"""
+
 from typing import TYPE_CHECKING
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_READ_SQUIRES_DIARY, FLAG_EXAMINED_SECRET_DOCUMENTS

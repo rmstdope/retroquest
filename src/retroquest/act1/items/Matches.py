@@ -1,4 +1,25 @@
-from ...engine.GameState import GameState
+"""Matches Item
+
+Narrative Role:
+Basic ignition source enabling illumination and ritual flavor actions (e.g., lighting candles or a lantern). Reinforces delegated interaction pattern with target items.
+
+Key Mechanics / Interactions:
+- Pickup can be blocked by the shopkeeper until purchased (`prevent_pickup`).
+- When used with a `Candle`, delegates logic to the candle's `use_with`, allowing candle to control its lit state and side effects.
+- Otherwise defers to base combination handling.
+
+Story Flags (Sets / Reads):
+(none) – Lighting actions currently self-contained.
+
+Progression Effects:
+- Establishes that certain enabling tools (like matches) unlock latent states in other items (candles, lanterns) rather than doing something standalone.
+
+Design Notes:
+- Could be extended with limited charges (match count) if resource management is introduced.
+- Maintains simplicity by not tracking a lit state itself; targets own their ignition state.
+
+"""
+
 from ...engine.Item import Item
 
 class Matches(Item):

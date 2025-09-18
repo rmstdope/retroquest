@@ -1,3 +1,23 @@
+"""Walking Stick (Act II Utility / Flavor Item)
+
+Narrative Role:
+    Practical travel aid symbolizing preparedness for rugged terrain. Provides a subtle immersive anchor during
+    mountain traversal segments.
+
+Key Mechanics / Interactions:
+    - use() outputs supportive flavor; no durability or mechanical buffs yet applied.
+
+Story Flags:
+    - Sets/Reads: (none)
+
+Progression Effects:
+    None directly; candidate for future minor movement bonuses or stability checks.
+
+Design Notes:
+    - Could integrate with an encumbrance or terrain challenge system (reduced stumble chance, etc.).
+    - Retained intentionally simple pending broader traversal mechanics.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 

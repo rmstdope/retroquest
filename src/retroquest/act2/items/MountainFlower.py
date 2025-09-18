@@ -1,3 +1,23 @@
+"""Mountain Flower (Act II Flavor / Minor Resource Item)
+
+Narrative Role:
+    Ambient collectible reinforcing biome identity along mountain routes. Currently ornamental with latent potential
+    for future alchemical or offering systems.
+
+Key Mechanics / Interactions:
+    - use() yields descriptive feedback only; no flags or transformation.
+
+Story Flags:
+    - Sets/Reads: (none)
+
+Progression Effects:
+    None at present—may become a secondary ingredient or trade good later.
+
+Design Notes:
+    - Serves as low-stakes inventory occupant illustrating world richness.
+    - Could gain rarity variants (e.g., dusk-bloom) introducing collection incentives.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 

@@ -1,7 +1,28 @@
+"""Sir Cedric NPC definition.
+
+Role:
+    Central martial ally and narrative anchor for Act II. Introduces main quest
+    ("The Gathering Storm"), issues combat proficiency gate ("The Knight's Test"),
+    and participates in redemption arc (Cedric's Lost Honor).
+
+Key Interactions:
+    - First meeting: sets ``FLAG_SPOKEN_TO_SIR_CEDRIC`` and frames overarching threat.
+    - Post Knight's Test success: grants starter economy (100 gold) and directs supply gathering.
+    - Honor restoration: upon ``FLAG_CEDRIKS_HONOR_COMPLETED`` awards ``Nature's Charm`` (Nyx summoning component).
+    - Post Nyx trials: delivers escalated acknowledgement referencing prophetic empowerment.
+
+Story Flags Observed / Set:
+    - ``FLAG_SPOKEN_TO_SIR_CEDRIC``
+    - ``FLAG_CEDRIKS_HONOR_COMPLETED``
+    - ``FLAG_NYX_TRIALS_COMPLETED``
+
+Design Notes:
+    Minimal internal booleans (``received_natures_charm`` / ``cedric_trusts_elior``) control one‑time item grants
+    and dialogue evolution separate from global flags.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
-from ..quests.TheGatheringStorm import TheGatheringStormQuest
-from ..quests.TheKnightsTest import TheKnightsTestQuest
 from ..items.Coins import Coins
 from ..items.NaturesCharm import NaturesCharm
 from ..Act2StoryFlags import FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_CEDRIKS_HONOR_COMPLETED, FLAG_NYX_TRIALS_COMPLETED

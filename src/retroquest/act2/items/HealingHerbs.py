@@ -1,3 +1,23 @@
+"""Healing Herbs (Act II Resource Item)
+
+Narrative Role:
+    Foundational alchemical and medical component supporting healer training, potion crafting, or restorative spellwork.
+
+Key Mechanics / Interactions:
+    - use() provides contextual descriptive guidance (not currently consumed here).
+    - Acts as a potential ingredient placeholder for future crafting or quest turn-ins.
+
+Story Flags:
+    - Sets/Reads: (none)
+
+Progression Effects:
+    Enables (implicitly) participation in healer-centric advancement; may become a requirement for training steps.
+
+Design Notes:
+    - Retained as non-consumptive until a defined crafting/consumption mechanic is introduced.
+    - Could later support quantity stacking or integration with an inventory categorization system.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 

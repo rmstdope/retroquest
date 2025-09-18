@@ -1,3 +1,24 @@
+"""Nyx (Act II)
+
+Role:
+    Apex forest guardian / transcendent mentor who validates the player's moral-spiritual
+    progression and grants late-act boons (Prophetic Vision spell + Nyx's Token + Forest Heart Crystal).
+
+Interaction Simplicity:
+    - Single gating flag FLAG_NYX_TRIALS_COMPLETED toggled on first dialogue; rewards granted immediately.
+    - Subsequent talks deliver gentle encouragement maintaining mystical tone.
+
+Rewards:
+    - Spell: PropheticVision (foreknowledge thematic reinforcement for impending conflict).
+    - Items: NyxToken (potential future ritual / access key) and ForestHeartCrystal (magical enhancement anchor).
+
+Design Notes:
+    - Direct reward injection keeps climax pacing brisk; earlier quests establish worthiness indirectly.
+    - If future balancing requires explicit prerequisite verification, insert checks before granting and
+      defer flag setting until validation passes.
+    - Maintains minimal imports at module top for clarity; additional item/spell dependencies resolved locally.
+"""
+
 from ...engine.Character import Character
 from ..items.NyxToken import NyxToken
 from ..items.ForestHeartCrystal import ForestHeartCrystal

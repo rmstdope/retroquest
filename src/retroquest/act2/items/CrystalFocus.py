@@ -1,3 +1,25 @@
+"""Crystal Focus (Act II Item)
+
+Narrative Role:
+    Arcane amplification artifact symbolizing refined magical discipline. Serves as a reusable flavor / role-play
+    enhancer that may justify improved comprehension of magical texts and spell interactions.
+
+Key Mechanics / Interactions:
+    - use_item() returns success messaging (no state mutation / flags currently set).
+    - examine() reinforces craftsmanship / lore context.
+
+Story Flags:
+    - Sets: (none)
+    - Reads: (none)
+
+Progression Effects:
+    Currently atmospheric; can become a prerequisite catalyst or modifier for advanced spell acquisition later.
+
+Design Notes:
+    - Non-consumable; encourages repeated thematic use without mechanical exploitation.
+    - Potential extension: introduce synergy checks (e.g., improves success chance for certain rituals) gated by new flags.
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 
@@ -15,7 +37,7 @@ class CrystalFocus(Item):
             can_be_carried=True,
         )
 
-    def use_item(self, game_state: GameState) -> str:
+    def use_item(self, _game_state: GameState) -> str:
         # This item enhances magical understanding and comprehension of ancient texts
         return ("[success]You focus your magical energy through the [item_name]Crystal Focus[/item_name]. "
                 "The crystal amplifies your magical awareness, allowing you to better understand arcane "

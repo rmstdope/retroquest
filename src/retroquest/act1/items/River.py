@@ -1,7 +1,28 @@
-from ...engine.GameState import GameState
+"""River Item
+
+Narrative Role:
+Dynamic natural feature enabling fishing interactions and skill/knowledge gating (requires learned basics). Serves as a repeatable but state-limited resource source.
+
+Key Mechanics / Interactions:
+- `use_with` + `FishingRod` checks a story flag (`learned_fishing_basics`) before permitting catch.
+- Single-catch logic via `fish_available` flag; subsequent attempts yield failure until reset (future extension).
+- Updates description after fish caught (currently assigned with trailing comma—future cleanup candidate).
+
+Story Flags (Sets / Reads):
+- Reads: `learned_fishing_basics` (gates success)
+- Sets: (none)
+
+Progression Effects:
+- Reinforces skill acquisition gating and natural resource harvesting loop.
+
+Design Notes:
+- Could introduce respawn timer or multiple fish types influenced by time-of-day or bait.
+- Consider centralizing fishing logic if additional water bodies added.
+
+"""
+
 from ...engine.Item import Item
 from .Fish import Fish # Assuming you have a Fish item
-from typing import Any
 
 class River(Item):
     def __init__(self) -> None:

@@ -1,3 +1,26 @@
+"""Prophetic Vision Spell (Act II)
+
+Purpose:
+    Climactic divination unlocking narrative foresight and completing the main Act II aggregation quest
+    (The Gathering Storm) when cast in Sir Cedric's presence for the first time.
+
+Acquisition:
+    Granted by Nyx upon proving worthiness (Nyx trials completion flag path) along with other boons.
+
+Core Mechanics:
+    - Requires Sir Cedric nearby for meaningful first-cast outcome; otherwise advisory info encourages proper context.
+    - First successful contextual cast sets FLAG_GATHERING_STORM_COMPLETED and delivers extended vision narrative.
+    - Subsequent casts produce concise reflective flavor text.
+
+Story Flags:
+    - Sets: FLAG_GATHERING_STORM_COMPLETED
+    - Reads: Same flag to determine narrative variant.
+
+Design Notes:
+    - Encourages player to align with key ally (Cedric) reinforcing partnership themes.
+    - Vision text intentionally rich; future localization might segment narrative into paragraphs array.
+"""
+
 from ...engine.Spell import Spell
 from ..Act2StoryFlags import FLAG_GATHERING_STORM_COMPLETED
 from ...engine.GameState import GameState

@@ -1,6 +1,25 @@
+"""Barmaid (Elena) NPC definition.
+
+Role:
+    Central afflicted character for "The Innkeeper's Daughter" quest. Provides a
+    staged recovery arc that tutorializes multi-step magical intervention.
+
+Recovery Sequence (state booleans):
+    1. ``receive_greater_heal`` -> sets ``elena_initial_healing`` (stabilization)
+    2. ``receive_crystal_water_purification`` -> sets ``elena_purified`` (cleansing)
+    3. ``receive_dispel_final_cure`` -> sets quest completion flag
+
+Story Flags:
+    - ``FLAG_KNOWS_ELENA_CURSE`` (awareness / quest trigger)
+    - ``FLAG_INNKEEPERS_DAUGHTER_COMPLETED`` (full cure)
+
+Design Notes:
+    Each phase updates description to give visual feedback and contextual next
+    steps, reinforcing player understanding of layered magical problem solving.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
-from ..quests.TheInnkeepersDaughter import TheInnkeepersDaughterQuest
 from ..Act2StoryFlags import FLAG_KNOWS_ELENA_CURSE, FLAG_INNKEEPERS_DAUGHTER_COMPLETED
 
 class BarmaidElena(Character):
@@ -40,7 +59,7 @@ class BarmaidElena(Character):
             return (f"[character_name]{self.get_name()}[/character_name]: *weakly* Have you found a way to break the curse? "
                     "I can feel my strength fading more each day...")
 
-    def receive_greater_heal(self, game_state: GameState) -> str:
+    def receive_greater_heal(self, game_state: GameState) -> str:  # game_state kept for interface consistency
         """Handle receiving the greater_heal spell as the first step of the cure"""
         if self.elena_initial_healing:
             return ("Elena is already strengthened by your healing magic.")
@@ -66,7 +85,7 @@ class BarmaidElena(Character):
                 "The healing has made her strong enough to endure the final steps of the cure, "
                 "but the curse still clings to her. Now you'll need to purify her and dispel the curse.[/success]")
 
-    def receive_crystal_water_purification(self, game_state: GameState) -> str:
+    def receive_crystal_water_purification(self, game_state: GameState) -> str:  # game_state kept for interface consistency
         """Handle using crystal-clear water on Elena as the second step of the cure"""
         if self.elena_purified:
             return ("Elena has already been purified with the crystal-clear water.")
@@ -98,7 +117,7 @@ class BarmaidElena(Character):
                 "purification. Now only a powerful dispelling spell remains to shatter the last "
                 "remnants of the dark enchantment.[/success]")
 
-    def receive_dispel_final_cure(self, game_state: GameState) -> str:
+    def receive_dispel_final_cure(self, game_state: GameState) -> str:  # game_state kept for interface consistency
         """Handle casting dispel spell on Elena as the final step to complete the cure"""
         if game_state.get_story_flag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED):
             return "Elena has already been completely cured of her curse."

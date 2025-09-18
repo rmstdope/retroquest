@@ -1,3 +1,23 @@
+"""Riverbank (Act I)
+
+Narrative Role:
+    Serene natural edge space enabling early meditative pacing and introduction of fishing thematic.
+
+Key Mechanics:
+    - Static layout; potential future fishing system integration point (Fisherman NPC anchor).
+
+Story Flags:
+    - None currently; fishing progression or environmental events could introduce them later.
+
+Contents:
+    - Items: SmoothStone (collectible/flavor), River (environment object possibly enabling verbs like 'fish', 'fill').
+    - NPC: Fisherman (tutorialization or quest hook for gathering/crafting loops).
+
+Design Notes:
+    - Consider dynamic time-of-day description variants to reinforce tranquility.
+    - Could tie into rare catch events unlocked by story milestones.
+"""
+
 from ...engine.Room import Room
 from ..items.SmoothStone import SmoothStone
 from ..items.River import River  # Import River

@@ -1,3 +1,21 @@
+"""The Merchant's Lost Caravan Quest Module.
+
+Rescue / investigation quest that bridges civic intrigue with wilderness
+exploration and supports Sir Cedric's redemption arc.
+
+Trigger Conditions:
+- Offered after speaking to Caravan Master Thorne (``FLAG_SPOKEN_TO_CARAVAN_MASTER``).
+
+Progression Beats (monitored via flags):
+1. Learn location through forest speech interactions (sets ``FLAG_FOUND_LOST_CARAVAN``).
+2. Use Quality Rope to descend ravine and free trapped merchants.
+3. Completion sets ``FLAG_LOST_CARAVAN_COMPLETED`` and yields secret exonerating documents.
+
+Narrative Impact:
+- Provides evidence later consumed by Cedric's Lost Honor quest chain.
+- Demonstrates synergy between item acquisition (rope) and learned utility magic.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (

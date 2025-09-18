@@ -1,3 +1,15 @@
+"""Water Nymphs NPC definition.
+
+Role:
+    Mystical spirits residing in the Whispering Glade; provide sacred items
+    (crystal-clear water, moonflowers) required to complete "Whispers in the Wind".
+
+Story Integration:
+    Their interaction cadence reinforces patient observation and respectful
+    engagement before receiving both ritual components. Completion tracked via
+    ``FLAG_WHISPERS_IN_WIND_COMPLETED`` after hand-in to Ancient Tree Spirit.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
@@ -77,65 +89,46 @@ class WaterNymphs(Character):
                     f"[dialogue]The [character_name]{self.get_name()}[/character_name] smile "
                     f"mysteriously. 'The riddles have been answered, young one.'[/dialogue]")
 
-    def say_to(self, word: str, game_state: GameState) -> str:
-        """
-        Handle words said to the water nymphs, specifically riddle answers.
-        Overrides the default say_to method from Character.
-        """
+    def say_to(self, words: str, game_state: GameState) -> str:
+        """Process player speech for riddle answering (overrides base)."""
         if self.riddles_completed:
-            return f"[info]The [character_name]{self.get_name()}[/character_name] have already accepted your wisdom. They listen to your words '{word}' with gentle understanding but have no more riddles for you.[/info]"
-        
+            return (f"[info]The [character_name]{self.get_name()}[/character_name] have already accepted your wisdom. "
+                    f"They listen to your words '{words}' with gentle understanding but have no more riddles for you.[/info]")
+
         if self.current_riddle >= len(self.riddles):
-            return f"[error]There are no more riddles to answer.[/error]"
-        
+            return "[error]There are no more riddles to answer.[/error]"
+
         riddle = self.riddles[self.current_riddle]
-        word_lower = word.lower().strip()
-        
+        word_lower = words.lower().strip()
+
         if word_lower in riddle["answers"]:
             # Correct answer
             self.current_riddle += 1
-            
-            # Set individual riddle completion flags
             game_state.set_story_flag(f"water_nymph_riddle_{self.current_riddle}_completed", True)
-            
+
             if self.current_riddle >= len(self.riddles):
-                # All riddles completed
                 self.riddles_completed = True
                 game_state.set_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED, True)
-                
-                # Add the items to the room for the player to take
+
                 from ..items.CrystalClearWater import CrystalClearWater
                 from ..items.Moonflowers import Moonflowers
-                
                 game_state.current_room.items.append(CrystalClearWater())
                 game_state.current_room.items.append(Moonflowers())
-                
-                return (f"[success]Correct! '{word}' is indeed the answer. {riddle['explanation']}[/success]\n\n"
-                        f"[dialogue]The [character_name]{self.get_name()}[/character_name] sing "
-                        f"in harmonious delight. 'Wisely spoken, all three riddles answered! You have "
-                        f"proven your deep understanding of the forest's mysteries. Accept our "
-                        f"gifts - the crystal-clear water and moonflowers that grow in this "
-                        f"sacred place. May they serve you well in your noble quest.'[/dialogue]\n\n"
-                        
-                        f"[info]The water nymphs gesture toward the stream and flowers, making "
-                        f"them accessible for you to take.[/info]")
+
+                return (f"[success]Correct! '{words}' is indeed the answer. {riddle['explanation']}[/success]\n\n"
+                        f"[dialogue]The [character_name]{self.get_name()}[/character_name] sing in harmonious delight. "
+                        f"'Wisely spoken, all three riddles answered! You have proven your deep understanding of the forest's mysteries. "
+                        f"Accept our gifts - the crystal-clear water and moonflowers that grow in this sacred place. May they serve you well in your noble quest.'[/dialogue]\n\n"
+                        f"[info]The water nymphs gesture toward the stream and flowers, making them accessible for you to take.[/info]")
             else:
-                # More riddles remain
                 next_riddle = self.riddles[self.current_riddle]
-                return (f"[success]Correct! '{word}' is the right answer. {riddle['explanation']}[/success]\n\n"
-                        f"[dialogue]The [character_name]{self.get_name()}[/character_name] nod "
-                        f"approvingly. 'Well spoken! Now for the {self._get_ordinal_word(self.current_riddle + 1)} riddle:'[/dialogue]\n\n"
-                        
+                return (f"[success]Correct! '{words}' is the right answer. {riddle['explanation']}[/success]\n\n"
+                        f"[dialogue]The [character_name]{self.get_name()}[/character_name] nod approvingly. 'Well spoken! Now for the {self._get_ordinal_word(self.current_riddle + 1)} riddle:'[/dialogue]\n\n"
                         f"[dialogue]'{next_riddle['question']}'[/dialogue]")
         else:
-            # Incorrect answer
-            return (f"[failure]The [character_name]{self.get_name()}[/character_name] shake "
-                    f"their heads gently as you say '{word}'. 'Not quite, young seeker. Think more deeply about "
-                    f"the forest and its ways. The answer lies in understanding the natural "
-                    f"world around you.'[/failure]\n\n"
-                    
+            return (f"[failure]The [character_name]{self.get_name()}[/character_name] shake their heads gently as you say '{words}'. "
+                    f"'Not quite, young seeker. Think more deeply about the forest and its ways. The answer lies in understanding the natural world around you.'[/failure]\n\n"
                     f"[dialogue]'{riddle['question']}'[/dialogue]\n\n"
-                    
                     f"[info]Consider what you've learned about the forest during your journey.[/info]")
 
     def examine(self, game_state: GameState) -> str:

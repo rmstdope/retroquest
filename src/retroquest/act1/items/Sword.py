@@ -1,3 +1,24 @@
+"""Sword Item
+
+Narrative Role:
+Found or purchased early as a foundational combat/heroism symbol. Provides flavor and potential future combat stat hooks without current mechanical modifiers.
+
+Key Mechanics / Interactions:
+- Standard equip/examine/use messaging; no durability or combat math yet.
+- `equip` provides atmospheric confirmation; could later apply stat bonuses via `GameState` or player attributes.
+
+Story Flags (Sets / Reads):
+(none) – No direct progression gating presently.
+
+Progression Effects:
+- Signals preparedness for future threats; psychologically rewards acquisition even before combat is implemented.
+
+Design Notes:
+- Separation of `use` and `equip` retains flexibility for future differentiation (e.g., `use` could perform context-sensitive actions while equipped state persists).
+- Could add `is_equipped` property if engine or character stats expand.
+
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 

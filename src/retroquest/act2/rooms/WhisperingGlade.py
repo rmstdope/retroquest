@@ -1,5 +1,27 @@
+"""Whispering Glade (Act II)
+
+Narrative Role:
+    Tranquil sub-biome offering contrast to denser forest areas. Anticipated future site for water nymph
+    interaction / riddle challenge and potential restorative or lore functions.
+
+Current Mechanics:
+    - Simple pass-through destination unlocked jointly with AncientGrove via ForestEntrance dual-flag gating.
+    - No active items or characters populated yet (empty lists by design).
+
+Planned / Scaffolded Features:
+    - Commented handle_command / riddle-answering pipeline referencing WaterNymphs (character not yet integrated).
+    - Future reward hooks could include purification, temporary buffs, or nature-aligned spell acquisition.
+
+Story Flags:
+    - Reads none directly; accessibility indirectly depends on lantern + protective charm flags at ForestEntrance.
+    - Sets none currently.
+
+Design Notes:
+    - Left minimal to allow incremental narrative layering without refactor overhead.
+    - When activating riddle system, ensure consistent command verbs (e.g., 'answer <text>') across puzzle rooms.
+"""
+
 from ...engine.Room import Room
-from ...engine.GameState import GameState
 
 class WhisperingGlade(Room):
     def __init__(self) -> None:

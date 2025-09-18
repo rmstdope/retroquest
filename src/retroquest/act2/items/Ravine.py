@@ -1,3 +1,25 @@
+"""Ravine (Act II Environmental Hazard Item)
+
+Narrative Role:
+    Environmental obstacle revealing stranded merchant caravan and enabling a rescue sequence using Quality Rope.
+    Provides geographic drama and introduces vertical traversal challenge motif.
+
+Key Mechanics / Interactions:
+    - Non-carriable terrain feature; examine() reveals trapped caravan (lore + hint of required equipment).
+    - use_with delegates rope interaction to QualityRope for rescue logic & flag setting/ item spawning.
+    - Does not itself manage story flags—keeps hazard passive while tool drives state change.
+
+Story Flags:
+    - Sets/Reads: (none directly here)
+
+Progression Effects:
+    Facilitates FLAG_FOUND_LOST_CARAVAN (set inside QualityRope) enabling downstream gratitude rewards / quest resolution.
+
+Design Notes:
+    - Delegation keeps hazard objects simple; pattern can extend to cliffs, chasms, or collapsed bridges.
+    - Future enhancement: add risk/skill checks before allowing rescue, parameterizing difficulty.
+"""
+
 from typing import TYPE_CHECKING
 from ...engine.Item import Item
 
@@ -23,12 +45,12 @@ class Ravine(Item):
                 "what is there.")
 
 
-    def use_with(self, game_state: 'GameState', target_item) -> str:
+    def use_with(self, game_state: 'GameState', other_item) -> str:
         """Handle using the ravine with other items. Delegates to Quality Rope if applicable."""
         from .QualityRope import QualityRope  # Import here to avoid circular imports
         
-        if isinstance(target_item, QualityRope):
+        if isinstance(other_item, QualityRope):
             # Delegate to the Quality Rope's use_with method, passing ravine as the target
-            return target_item.use_with(game_state, self)
+            return other_item.use_with(game_state, self)
         else:
-            return f"You can't use the ravine with {target_item.get_name()}."
+            return f"You can't use the ravine with {other_item.get_name()}."

@@ -1,3 +1,29 @@
+"""Protective Charm (Act II Item)
+
+Narrative Role:
+    Spiritual warding component of the dual gating pair (with Enhanced Lantern) enabling safe traversal into
+    deeper enchanted forest zones. Represents accord with forest spirits and hermit's sanctioned protection.
+
+Key Mechanics / Interactions:
+    - Context-sensitive use only at ForestEntrance sets FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE.
+    - Emits a synergy success message if the enhanced lantern flag is already active (mirrors lantern behavior).
+    - Generic use elsewhere gives atmospheric feedback (reinforces location specificity).
+    - Provides delegation through use_with to OfferingAltar enabling multi-charm summoning ritual for Nyx.
+
+Story Flags:
+    - Sets: FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE
+    - Reads: FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE (to conditionally append synergy messaging)
+
+Progression Effects:
+    One half of the ForestEntrance dual-item requirement that reveals additional forest exits when both flags are set.
+    Also a ritual component for summoning Nyx (alongside DruidicCharm and NaturesCharm) via OfferingAltar.
+
+Design Notes:
+    - Maintains single responsibility: gating vs. ritual handled via contextual vs. use_with pathways.
+    - Delegation pattern avoids circular ritual logic inside each charm, centralizing multi-item validation in OfferingAltar.
+    - Could be extended with durability or charge systems if future design wants repeatable protective effects.
+"""
+
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE
 from ...engine.GameState import GameState

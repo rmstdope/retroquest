@@ -1,4 +1,21 @@
-from ...engine.GameState import GameState
+"""SackOfFlour Item
+
+Narrative Role:
+Everyday provisioning good emphasizing agrarian economy and baking culture. Potential quest delivery or ingredient.
+
+Key Mechanics / Interactions:
+- Heavy thematic item; currently portable without penalty (no encumbrance system yet).
+
+Story Flags (Sets / Reads):
+(none)
+
+Progression Effects:
+- Could support future baking/cooking mini-quest or trade barter.
+
+Design Notes:
+- Might later become non-portable until player acquires a cart or similar aid.
+
+"""
 
 from ...engine.Item import Item
 

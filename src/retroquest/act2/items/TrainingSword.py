@@ -1,3 +1,30 @@
+"""Training Sword (Act II Item)
+
+Narrative Role:
+    Proof-of-competence tool enabling the player to demonstrate martial capability to Sir Cedric, advancing
+    early Greendale progression and unlocking guidance toward forest preparation objectives.
+
+Key Mechanics / Interactions:
+    - Contextual use only meaningful in CastleCourtyard when SirCedric present.
+    - On first successful demonstration: sets FLAG_DEMONSTRATED_COMBAT_SKILLS and removes itself from inventory
+      (symbolic of the demonstration's completion / no repeated need for proof artifact).
+    - Subsequent contextual uses (after flag) provide reinforcing advisory dialogue without re-consuming item (since removed).
+    - Generic practice messaging shown if used elsewhere.
+
+Story Flags:
+    - Sets: FLAG_DEMONSTRATED_COMBAT_SKILLS (first successful courtyard demo)
+    - Reads: FLAG_DEMONSTRATED_COMBAT_SKILLS (to branch first vs. repeat dialogue)
+
+Progression Effects:
+    Unlocks Cedric's deeper exposition pointing player toward acquisition of key forest preparation items (survival kit,
+    enhanced lantern, rope) guiding transition to wilderness arc.
+
+Design Notes:
+    - Removes itself only on first contextual success avoiding inventory clutter.
+    - Lazy imports inside use() prevent circular dependencies with character and room modules.
+    - Could be extended with a combat mini-tutorial system if combat mechanics later expand.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS

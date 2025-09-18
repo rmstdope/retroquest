@@ -1,3 +1,23 @@
+"""Blacksmith's Forge (Act I)
+
+Narrative Role:
+    Craftsmanship focal point emphasizing equipment culture and environmental immersion (heat, sound, sparks).
+
+Key Mechanics:
+    - Currently static; future upgrade, repair, or forging systems could anchor here.
+
+Story Flags:
+    - None presently; progression-neutral location.
+
+Contents:
+    - Item: Horseshoe (flavor / potential crafting input or luck charm hook).
+    - NPC: Blacksmith (candidate for gear enhancement or repair interactions later).
+
+Design Notes:
+    - Serves as sensory contrast to quieter village locations.
+    - If forging introduced, may warrant a ForgingStation item abstraction to manage recipes.
+"""
+
 from ...engine.Room import Room
 from ..items.Horseshoe import Horseshoe
 from ..characters.Blacksmith import Blacksmith

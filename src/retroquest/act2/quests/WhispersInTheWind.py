@@ -1,8 +1,31 @@
+"""Whispers in the Wind Quest Module.
+
+Spiritual communion quest emphasizing harmony with elemental / woodland spirits.
+
+Trigger Conditions:
+- Offered after the Ancient Tree Spirit invites deeper communion (flag
+    ``FLAG_WHISPERS_IN_WIND_OFFERED``).
+
+Objectives (implicit):
+- Locate and engage water nymph spirits in the Whispering Glade.
+- Solve their riddles / perform respectful interaction sequence.
+- Return sanctified gifts to the Ancient Tree Spirit.
+
+Completion Logic:
+- Completes when ``FLAG_WHISPERS_IN_WIND_COMPLETED`` is set externally; quest
+    awards experience via overridden ``complete`` method and sets internal
+    completion flag to prevent duplication.
+
+Narrative Impact:
+- Reinforces player's trust relationship with nature and unlocks / foreshadows
+    broader forest faction alignment.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_WHISPERS_IN_WIND_OFFERED,
-    FLAG_WHISPERS_IN_WIND_COMPLETED
+        FLAG_WHISPERS_IN_WIND_OFFERED,
+        FLAG_WHISPERS_IN_WIND_COMPLETED
 )
 
 class WhispersInTheWind(Quest):
@@ -41,13 +64,3 @@ class WhispersInTheWind(Quest):
             return f"[quest_complete]Quest Complete: {self.name}[/quest_complete]{exp_msg}"
         
         return self.completion
-
-    def get_status(self) -> str:
-        """Return the current status of the quest."""
-        if self.is_completed_flag:
-            return f"[quest_status_complete]{self.name} - COMPLETED[/quest_status_complete]"
-        else:
-            status = f"[quest_status_active]{self.name} - IN PROGRESS[/quest_status_active]\n"
-            for objective in self.objectives:
-                status += f"  • {objective}\n"
-            return status

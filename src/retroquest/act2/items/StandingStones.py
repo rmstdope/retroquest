@@ -1,3 +1,25 @@
+"""Standing Stones (Act II Environmental Item)
+
+Narrative Role:
+    Threshold druidic monument marking liminal space between civilization and wilderness. Provides an early
+    natural magic learning moment (Nature's Sense spell) reinforcing environmental attunement.
+
+Key Mechanics / Interactions:
+    - Non-carriable; first examine triggers spell acquisition (NatureSenseSpell) if player lacks it.
+    - Local self.examined flag prevents repeated descriptive + spell awarding sequence (idempotent design).
+    - Subsequent examines yield concise ambient summary.
+
+Story Flags:
+    - Sets/Reads: (none) — relies on spell possession check for gating.
+
+Progression Effects:
+    Grants sensory capability assisting future forest navigation or hidden element detection (depending on spell implementation).
+
+Design Notes:
+    - Leverages spell existence instead of separate flag, reducing flag namespace noise.
+    - Could adopt a multi-tier progression (progressive rune decoding) if expanded later.
+"""
+
 from ...engine.Item import Item
 from ..spells.NatureSenseSpell import NatureSenseSpell
 from ...engine.GameState import GameState

@@ -1,3 +1,24 @@
+"""Door (Act II Structural Item)
+
+Narrative Role:
+    Architectural element representing the barrier to Silver Stag Inn private rooms. Provides environmental realism
+    while reinforcing key-based progression.
+
+Key Mechanics / Interactions:
+    - use() contextual hint only when in SilverStagInn; otherwise generic inaccessibility message.
+    - use_with delegates unlocking to RoomKey which handles exit mutation via SilverStagInn.use_key().
+
+Story Flags:
+    - Sets/Reads: (none)
+
+Progression Effects:
+    Serves as tangible affordance for the RoomKey unlocking moment; no direct narrative mutation itself.
+
+Design Notes:
+    - Keeping door logic minimal prevents proliferation of lock state duplication—room retains source of truth.
+    - Could later adopt standardized Lockable interface if more interactive door types emerge.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 
@@ -24,11 +45,11 @@ class Door(Item):
                 "latch. The door frame is carved with intricate patterns typical of the inn's welcoming atmosphere. "
                 "This door provides access to the upper floor where guests can rent private rooms for rest and storage.")
 
-    def use_with(self, game_state: GameState, target_item) -> str:
+    def use_with(self, game_state: GameState, other_item) -> str:
         """Handle using the door with other items. Delegates to Room Key if applicable."""
         from .RoomKey import RoomKey  # Import here to avoid circular imports
-        if isinstance(target_item, RoomKey):
+        if isinstance(other_item, RoomKey):
             # Delegate to the Room Key's use_with method, passing door as the target
-            return target_item.use_with(game_state, self)
+            return other_item.use_with(game_state, self)
         else:
-            return f"You can't use the door with {target_item.get_name()}."
+            return f"You can't use the door with {other_item.get_name()}."

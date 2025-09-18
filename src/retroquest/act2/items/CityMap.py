@@ -1,3 +1,27 @@
+"""City Map (Act II Item)
+
+Narrative Role:
+    Transitional knowledge artifact helping the player internalize Greendale's spatial layout. Serves as a
+    one-time navigation unlock that declutters inventory after memorization.
+
+Key Mechanics / Interactions:
+    - use() sets FLAG_USED_CITY_MAP then invokes MainSquare.enable_city_navigation() (dynamic exit expansion or
+      related affordances) if the room implements the hook.
+    - Item is removed from inventory post-use to represent committed memory (non-repeatable effect).
+    - examine() provides persistent descriptive context while still possessed.
+
+Story Flags:
+    - Sets: FLAG_USED_CITY_MAP
+    - Reads: (none)
+
+Progression Effects:
+    Unlocks richer traversal of Greendale from its hub without requiring repeated item usage.
+
+Design Notes:
+    - Delegates structural mutation to room method, preserving SRP and avoiding map logic coupling here.
+    - Removal prevents redundant flag setting and emphasizes permanent acquisition of knowledge.
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_USED_CITY_MAP

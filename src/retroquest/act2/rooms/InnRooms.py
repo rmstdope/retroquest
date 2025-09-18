@@ -1,3 +1,24 @@
+"""Inn Rooms (Act II)
+
+Narrative Role:
+    Private upstairs area of Silver Stag Inn providing loot discovery (hidden journal) and coin resources.
+
+Key Mechanics:
+    - search() injects TravelersJournal on first use (journal_found flag prevents duplication).
+    - Pre-populated with list comprehension generated Coins (aggregate wealth source, plural item counts displayed in Room.describe()).
+
+Story Flags:
+    - None currently; discovery tracked via local boolean only.
+
+Contents:
+    - Items: Multiple Coins (economy support), conditional TravelersJournal (lore/progression catalyst).
+    - Characters: None to maintain solitary atmosphere.
+
+Design Notes:
+    - Hidden item pattern mirrors CastleCourtyard approach; consistent idempotent search design.
+    - If rest mechanics expanded, this location could grant enhanced recovery bonuses.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..items.TravelersJournal import TravelersJournal
@@ -18,7 +39,7 @@ class InnRooms(Room):
         )
         self.journal_found = False
 
-    def search(self, game_state: GameState) -> str:
+    def search(self, game_state: GameState, target: str = None) -> str:
         """Search the inn rooms to find hidden items"""
         if not self.journal_found:
             # Add the journal to the room when first searched

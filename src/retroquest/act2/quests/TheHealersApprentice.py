@@ -1,8 +1,29 @@
+"""The Healer's Apprentice Quest Module.
+
+Advances the player's healing magic progression through mentorship with Master
+Healer Lyria.
+
+Trigger Conditions:
+- Activated when apprenticeship is accepted (``FLAG_HEALERS_APPRENTICE_ACCEPTED``)
+    after presenting prerequisite healing materials (e.g., herbs) in dialogue.
+
+Learning Objective:
+- Guides the acquisition of the advanced ``greater_heal`` spell via narrative
+    training beats (actual flag set externally, this quest just monitors).
+
+Completion Logic:
+- Finishes when training sequence sets ``FLAG_HEALERS_APPRENTICE_COMPLETED``.
+
+Narrative Impact:
+- Expands player's supportive role identity; synergizes with future purification
+    and protective spell mechanics in later acts.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_HEALERS_APPRENTICE_ACCEPTED,
-    FLAG_HEALERS_APPRENTICE_COMPLETED
+        FLAG_HEALERS_APPRENTICE_ACCEPTED,
+        FLAG_HEALERS_APPRENTICE_COMPLETED
 )
 
 class TheHealersApprenticeQuest(Quest):

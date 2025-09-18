@@ -1,3 +1,25 @@
+"""The Hermit's Warning Quest Module.
+
+Provides early atmospheric foreshadowing and a soft tutorialized gating step
+before deep exploration of the Enchanted Forest.
+
+Trigger Conditions:
+- Activated when the player accepts counsel from the forest hermit (sets
+    ``FLAG_HERMITS_WARNING_ACCEPTED``) after initial wilderness approach.
+
+Purpose:
+- Delivers lore about shifting paths / spirits.
+- Grants/acknowledges a protective charm item externally.
+- Encourages acquiring proper survival supplies first.
+
+Completion Logic:
+- Marks complete when preparatory condition is satisfied (external sequence sets
+    ``FLAG_HERMITS_WARNING_COMPLETED``). Quest itself is passive monitor.
+
+Narrative Impact:
+- Signals escalation from civilized outskirts to magical wilderness.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED, FLAG_HERMITS_WARNING_ACCEPTED

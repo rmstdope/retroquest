@@ -1,3 +1,21 @@
+"""Unlock Spell (Act I)
+
+Purpose:
+    Utility spell enabling progression through sealed containers or simple magical locks.
+
+Acquisition:
+    Early to mid Act I reward after exposure to first locked object (teaches problem-solving beyond brute force).
+
+Core Mechanics:
+    - cast_on_item: If target is MysteriousBox delegates to its unlock(game_state); otherwise failure flavor.
+    - cast_spell without target prompts the player to specify an object (reinforces targeting requirement).
+    - cast_on_character always fails (guiding expectations of valid targets).
+
+Design Notes:
+    - Additional lock-bearing items should encapsulate their own unlock logic; this spell remains a dispatcher.
+    - Consider future extension: difficulty tiers + skill checks or resource costs.
+"""
+
 from ...engine.Spell import Spell
 from ...engine.GameState import GameState
 from ...engine.Item import Item

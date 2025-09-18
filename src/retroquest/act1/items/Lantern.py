@@ -1,3 +1,25 @@
+"""Lantern Item
+
+Narrative Role:
+Primary early-game light source revealing hidden items and reinforcing the concept that using an item can alter the environment (spawning new items).
+
+Key Mechanics / Interactions:
+- First use transforms the item (renames to ``lantern (lit)``) and reveals `Bread` and `EliorsJournal` in the current room.
+- Subsequent uses report that it is already lit (idempotent state change).
+- Light emission abstracted; no ongoing fuel tracking.
+
+Story Flags (Sets / Reads):
+(none) – Environmental reveal handled directly; no global progression flags.
+
+Progression Effects:
+- Teaches players that some items modify the room inventory, encouraging revisiting spaces with newly acquired tools.
+
+Design Notes:
+- Uses name mutation plus `short_name` alignment to maintain consistent command targeting.
+- Consider future abstraction for light-producing items if additional variants appear (e.g., magical lantern, torch).
+
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 

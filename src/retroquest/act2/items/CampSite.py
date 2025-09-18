@@ -1,3 +1,24 @@
+"""Camp Site (Act II Environmental Discovery Item)
+
+Narrative Role:
+    Abandoned resting point that rewards attentive exploration with an Entry Pass find, reinforcing early-game
+    preparation and world lived-in texture.
+
+Key Mechanics / Interactions:
+    - Non-carriable; single-use examination spawns an EntryPass into the room (idempotent via self.examined flag).
+    - use() delegates to examine() if not yet searched to streamline player interaction.
+
+Story Flags:
+    - Sets/Reads: (none) — discovery handled locally without global progression dependency.
+
+Progression Effects:
+    Provides alternate acquisition path for city access credential (Entry Pass) if player missed another source.
+
+Design Notes:
+    - Could later track discovery via a FLAG_FOUND_CAMP_SITE for completion metrics; currently intentionally lean.
+    - Pattern reusable for other micro-discovery nodes (e.g., caches, shrines) with minimal boilerplate.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 

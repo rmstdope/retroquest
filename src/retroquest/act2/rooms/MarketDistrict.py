@@ -1,3 +1,24 @@
+"""Market District (Act II)
+
+Narrative Role:
+    Commerce epicenter enabling acquisition of preparation gear for wilderness and forest progression.
+
+Key Mechanics:
+    - add_wares() populates non-carriable display items (ForestSurvivalKit, EnhancedLantern, QualityRope) with can_be_carried=False until purchase flow triggers conversion.
+    - Static exits connect economic triangle (MainSquare, SilverStagInn, MerchantsWarehouse).
+
+Story Flags:
+    - None directly; purchase state managed per-item (could elevate to flags if narrative reacts to acquisition).
+
+Contents:
+    - NPCs: MasterMerchantAldric (merchant logic), CaravanMasterThorne (travel hooks / future expansion).
+    - Items: Initially empty until add_wares invoked to stage merchant inventory.
+
+Design Notes:
+    - Display item pattern suggests future transactional system (toggle can_be_carried after payment).
+    - Consider central MerchantInventory service if multiple markets appear across acts.
+"""
+
 from ...engine.Room import Room
 from ..characters.MasterMerchantAldric import MasterMerchantAldric
 from ..characters.CaravanMasterThorne import CaravanMasterThorne

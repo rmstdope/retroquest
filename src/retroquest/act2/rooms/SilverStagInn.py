@@ -1,3 +1,25 @@
+"""The Silver Stag Inn (Act II)
+
+Narrative Role:
+    Social nexus and information exchange hub within Greendale. Provides access to private inn rooms via
+    a keyed progression step and hosts support NPCs involved in healing and provisioning.
+
+Key Mechanics:
+    - use_key() method adds a new exit 'east' -> InnRooms exactly once (idempotent check on exits dict).
+    - Players must first obtain and use RoomKey to access rest/recovery or narrative threads upstairs.
+
+Story Flags:
+    - None directly; gating handled through possession/interaction with RoomKey item.
+
+Contents:
+    - Items: RoomKey (unlock trigger), Door (flavor/interaction potential).
+    - NPCs: InnkeeperMarcus (resource provisioning), BarmaidElena (civic aid / healing narrative bridge).
+
+Design Notes:
+    - Dynamic exit mutation localized to explicit method (use_key) keeping constructor static.
+    - If further room expansions become common, consider abstracting to a LockableExit mixin.
+"""
+
 from ...engine.Room import Room
 from ..characters.InnkeeperMarcus import InnkeeperMarcus
 from ..characters.BarmaidElena import BarmaidElena

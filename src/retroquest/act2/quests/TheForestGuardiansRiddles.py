@@ -1,8 +1,32 @@
+"""The Forest Guardian's Riddles Quest Module.
+
+Wisdom / knowledge trial emphasizing respect for natural lore and establishes
+rapport with forest guardian entities.
+
+Trigger Conditions:
+- Offered upon acceptance of the guardians' intellectual challenge
+    (``FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED``).
+
+Objectives:
+- Scripted list stored in ``self.objectives`` for UI/status rendering.
+- Early objectives implicitly satisfied by visiting key biomes; later ones by
+    solving riddle interactions (external logic sets completion flag).
+
+Completion Logic:
+- Monitors ``FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED``; on first completion
+    awards experience and prints formatted quest completion string.
+
+Design Notes:
+- Provides mid‑act experience bump and thematically pairs with Whispers quest to
+    represent dual aspects of forest acceptance: empathy (spirits) and intellect
+    (guardians' wisdom).
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
-    FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED
+        FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
+        FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED
 )
 
 class TheForestGuardiansRiddles(Quest):

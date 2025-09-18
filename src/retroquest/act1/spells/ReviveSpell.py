@@ -1,3 +1,23 @@
+"""Revive Spell (Act I)
+
+Purpose:
+    Life-restoration themed spell for small organic targets (plants / minor creatures) used early
+    to demonstrate transformation interactions (e.g., WitheredCarrot -> fresh state) and tease later
+    resurrection-like mechanics without full combat system complexity.
+
+Gating:
+    - Requires story flag magic_fully_unlocked (shared gating with other growth-tier spells) else fizzles.
+
+Core Mechanics:
+    - cast_on_item: If target is WitheredCarrot calls its revive() method (delegated polymorphic transformation).
+    - cast_on_character: Always fails unless future extension introduces valid corpse targets.
+    - cast_spell (no target): prompts for specifying an appropriate target.
+
+Design Notes:
+    - Revival logic intentionally item-driven; keeps spell agnostic to future additional revive-able item classes.
+    - Potential enhancement: Introduce an interface (Reviveable) rather than explicit isinstance checks.
+"""
+
 from ...engine.Spell import Spell
 from ...engine.GameState import GameState
 from ...engine.Item import Item

@@ -1,6 +1,23 @@
-from ...engine.GameState import GameState
+"""Magnet Item
+
+Narrative Role:
+Simple component item suggesting utility in retrieval puzzles and crafting/combination with tools (fishing rod) to extend reach capability.
+
+Key Mechanics / Interactions:
+- When used with `FishingRod`, delegates to the rod to handle upgrade logic (keeps combination rules centralized in primary tool).
+
+Story Flags (Sets / Reads):
+(none)
+
+Progression Effects:
+- Part of upgrade chain enabling metallic object retrieval from depth (well ring via extended variants later).
+
+Design Notes:
+- Minimal own logic; intentionally lean to reduce maintenance duplication across reciprocal `use_with` paths.
+
+"""
+
 from ...engine.Item import Item
-from typing import Any
 
 class Magnet(Item):
     def __init__(self) -> None:

@@ -1,9 +1,29 @@
+"""Main Square (Act II)
+
+Narrative Role:
+    Central urban hub establishing city scale; unlocks full directional navigation after player orients using map.
+
+Key Mechanics:
+    - get_exits() restricts movement to south (GreendaleGates) until enable_city_navigation() invoked (city_map_used=True).
+    - Exits dictionary remains intact; gating chooses between minimal vs. full set.
+
+Story Flags:
+    - Potential tie-in: FLAG_USED_CITY_MAP (import present) though current implementation relies on local boolean only.
+
+Contents:
+    - Items: CityNoticeBoard (information surface), MerchantsFlyer (commerce flavor / potential lead generator).
+    - NPC: TownCrier (broadcast narrative beats / quest hooks).
+
+Design Notes:
+    - Orientation gating reinforces map discovery loop from GreendaleGates.
+    - Consider consolidating navigation unlock into a shared MapUnlockController if multiple settlements added later.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..items.CityNoticeBoard import CityNoticeBoard
 from ..items.MerchantsFlyer import MerchantsFlyer
 from ..characters.TownCrier import TownCrier
-from ..Act2StoryFlags import FLAG_USED_CITY_MAP
 
 class MainSquare(Room):
     def __init__(self) -> None:

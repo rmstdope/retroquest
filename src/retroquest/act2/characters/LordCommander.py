@@ -1,3 +1,30 @@
+"""Lord Commander (Act II)
+
+Role:
+    Senior military authority who possesses the narrative power to formally restore
+    Sir Cedric's honor, concluding that character's reputation arc once evidence is validated.
+
+Interaction Flow:
+    1. Player investigates Cedric's past (collects and examines secret documents).
+    2. After FLAG_EXAMINED_SECRET_DOCUMENTS is True, dialogue cues the player to present them.
+    3. Giving SecretDocuments when properly examined sets FLAG_CEDRIKS_HONOR_COMPLETED and removes the item.
+
+Story Flags:
+    - Reads: FLAG_EXAMINED_SECRET_DOCUMENTS, FLAG_CEDRIKS_HONOR_COMPLETED
+    - Sets: FLAG_CEDRIKS_HONOR_COMPLETED (terminal state of Cedric's honor quest chain)
+
+Items:
+    - Consumes SecretDocuments (only after examination; otherwise rejects with guidance).
+
+Rewards / Narrative Impact:
+    - Symbolic resolution—no material item granted, but unlocks downstream narrative acknowledgement.
+
+Design Notes:
+    - Separation of 'examination' and 'presentation' ensures players engage with lore rather than passively couriering.
+    - Maintains idempotent completion response after honor restored.
+    - Future extension: could broadcast a court-wide state change (e.g., new greetings) via a shared flag observer.
+"""
+
 from typing import TYPE_CHECKING
 from ...engine.Character import Character
 from ..Act2StoryFlags import FLAG_CEDRIKS_HONOR_COMPLETED, FLAG_EXAMINED_SECRET_DOCUMENTS
@@ -32,25 +59,25 @@ class LordCommander(Character):
                 "I oversee the military affairs of our realm and ensure that justice is served "
                 "among our knights and soldiers.\"")
 
-    def give_item(self, game_state: 'GameState', item) -> str:
-        """Handle giving items to the Lord Commander."""
-        if isinstance(item, SecretDocuments):
+    def give_item(self, game_state: 'GameState', item_object) -> str:  # parameter name aligned with base class
+        """Handle giving items to the Lord Commander (override matching base signature)."""
+        if isinstance(item_object, SecretDocuments):
             if not game_state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS):
                 return ("The Lord Commander examines the documents carefully but shakes his head. "
                         "\"These appear to be legal papers, but I need you to understand "
                         "their significance first. Please examine them thoroughly and then return to me.\"")
-            
+
             # Player has examined the documents and understands their importance
             game_state.set_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED, True)
-            
+
             # Remove the documents from inventory
-            game_state.inventory.remove(item)
-            
+            game_state.inventory.remove(item_object)
+
             return ("[success]The Lord Commander carefully reviews the secret documents. His expression "
                     "grows solemn as he reads the testimonies and evidence. \"These documents clearly prove "
                     "Sir Cedric's innocence in the Battle of Thornfield Pass. The accusations of cowardice "
                     "were completely unfounded - he was following direct orders and protecting civilians. "
                     "I hereby officially restore Sir Cedric's honor and expunge all false charges from "
                     "his record. Justice has been served at last.\"[/success]")
-        
-        return f"The Lord Commander has no need for your {item.name}."
+
+        return f"The Lord Commander has no need for your {item_object.name}."

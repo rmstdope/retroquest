@@ -1,3 +1,23 @@
+"""Candle Item
+
+Narrative Role:
+Small light source that reveals hidden object (Locket) when lit, teaching players that illumination can alter room item sets.
+
+Key Mechanics / Interactions:
+- `use_with` + `Matches` lights candle (idempotent) and spawns `Locket` exactly once.
+- Sets internal `is_lit` state; subsequent attempts produce failure feedback.
+
+Story Flags (Sets / Reads):
+(none) – Relies on simple state toggling.
+
+Progression Effects:
+- Reinforces environment reactivity to item-driven state changes (vision gating pattern).
+
+Design Notes:
+- Could generalize into a LightSource base if more reveal-light items appear.
+
+"""
+
 from ...engine.Item import Item
 from ..items.Matches import Matches
 from ..items.Locket import Locket  # Added import

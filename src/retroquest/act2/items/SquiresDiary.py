@@ -1,6 +1,28 @@
+"""Squire's Diary (Act II Investigative Item)
+
+Narrative Role:
+    Found personal journal providing contextual backstory and the first explicit reference to missing exonerating
+    documents. Serves as the prerequisite knowledge step before interpreting Secret Documents.
+
+Key Mechanics / Interactions:
+    - use() sets FLAG_READ_SQUIRES_DIARY and removes the diary from both inventory and room (simulating careful replacement).
+    - examine() offers descriptive preview without consuming or setting the read flag (keeps intentional player action meaningful).
+
+Story Flags:
+    - Sets: FLAG_READ_SQUIRES_DIARY
+    - Reads: (none here)
+
+Progression Effects:
+    Unlocks meaningful examination of Secret Documents; advances Cedric honor restoration quest chain.
+
+Design Notes:
+    - Removal after use prevents redundant flag setting and reduces inventory noise.
+    - Could track partial read state if future multi-entry progressive revelation is desired.
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_CEDRIKS_HONOR_ACCEPTED, FLAG_READ_SQUIRES_DIARY
+from ..Act2StoryFlags import FLAG_READ_SQUIRES_DIARY
 
 class SquiresDiary(Item):
     def __init__(self) -> None:

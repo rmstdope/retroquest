@@ -1,3 +1,26 @@
+"""Historians (Act II)
+
+Role:
+    Scholarly review collective validating genealogical and regional lore artifacts. Bridges
+    raw discovery (player reads TravelersJournal) with authoritative confirmation, lending
+    narrative weight to heritage revelations.
+
+Flow:
+    - Player must read TravelersJournal first (FLAG_READ_TRAVELERS_JOURNAL) before presenting it;
+      otherwise receives cautionary failure advising self-understanding.
+    - Successful presentation sets FLAG_SHOWED_JOURNAL_TO_HISTORIANS delivering affirmation dialogue.
+
+Story Flags:
+    - Reads: FLAG_READ_TRAVELERS_JOURNAL, FLAG_SHOWED_JOURNAL_TO_HISTORIANS
+    - Sets: FLAG_SHOWED_JOURNAL_TO_HISTORIANS
+
+Design Notes:
+    - Ensures lore is not passively forwarded—player must internalize content (read flag) first.
+    - Prevents duplicate state spam by idempotent early return once flag set.
+    - Future extension: Could unlock deeper archive tiers or cross-reference other relics if additional
+      genealogical artifacts introduced.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Item import Item
@@ -26,9 +49,8 @@ class Historians(Character):
         
         if isinstance(item_object, TravelersJournal):
             if not game_state.get_story_flag(FLAG_READ_TRAVELERS_JOURNAL):
-                return (f"[failure]You should not give things away that you know nothing about. Perhaps you should "
-                        f"ensure that you understand its contents "
-                        f"before sharing it with others.[/failure]")
+                return ("[failure]You should not give things away that you know nothing about. Perhaps you should "
+                        "ensure that you understand its contents before sharing it with others.[/failure]")
 
             game_state.set_story_flag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS, True)
             return (f"[success]You show the [item_name]{item_object.get_name()}[/item_name] to the [character_name]{self.name}[/character_name]. "

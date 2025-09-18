@@ -1,3 +1,25 @@
+"""Master Healer Lyria NPC definition.
+
+Role:
+    Acts as the mentor for the "The Healer's Apprentice" quest, granting access
+    to advanced restorative magic (``greater_heal``) in exchange for support
+    items (``Healing Herbs`` or ``Crystal Focus``).
+
+Key Interactions:
+    - Dialogue branches depending on possession of Healing Herbs / Crystal Focus.
+    - Accepting herbs sets apprenticeship acceptance flag.
+    - Giving Crystal Focus both completes the apprenticeship and teaches the
+      ``greater_heal`` spell (flag: ``FLAG_HEALERS_APPRENTICE_COMPLETED``).
+
+Story Flags Consumed / Set:
+    - ``FLAG_HEALERS_APPRENTICE_ACCEPTED``
+    - ``FLAG_HEALERS_APPRENTICE_COMPLETED``
+
+Design Notes:
+    Import of spell and item classes is deferred inside methods to avoid
+    circular dependency issues between quest, spell, and item modules.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (

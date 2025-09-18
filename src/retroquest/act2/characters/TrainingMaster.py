@@ -1,3 +1,14 @@
+"""Training Master NPC definition.
+
+Role:
+    Veteran instructor who seeds the "Cedric's Lost Honor" investigation by
+    setting ``FLAG_CEDRIKS_HONOR_ACCEPTED`` and providing contextual suspicion.
+
+Design Notes:
+    Dialogue intentionally embeds moral framing (truth, injustice) to motivate
+    engagement with investigation mechanics and diary/document retrieval loops.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_CEDRIKS_HONOR_ACCEPTED

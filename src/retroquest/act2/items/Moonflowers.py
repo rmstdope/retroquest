@@ -1,3 +1,25 @@
+"""Moonflowers (Act II Rare Herbal Item)
+
+Narrative Role:
+    Bioluminescent blossoms tied to protective and divinatory practices. Serve as a premium botanical resource
+    foreshadowing advanced healing, warding, or revelation mechanics.
+
+Key Mechanics / Interactions:
+    - Contextual use messaging responds to healer spaces vs generic forest vs mundane locations.
+    - picked_up() provides special acquisition flavor in WhisperingGlade.
+    - No direct flag manipulation; significance emerges through crafting / NPC dialogue opportunities.
+
+Story Flags:
+    - Sets/Reads: (none)
+
+Progression Effects:
+    Potential ingredient for purification, dream warding, or clairvoyance expansions later.
+
+Design Notes:
+    - Could gain potency tiers or freshness decay if alchemy system deepens.
+    - Location name string matching keeps current implementation lightweight.
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 

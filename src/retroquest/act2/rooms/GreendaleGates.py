@@ -1,3 +1,28 @@
+"""Greendale Gates (Act II)
+
+Narrative Role:
+    Entry chokepoint shifting player experience from wilderness travel (MountainPath) to urban exploration.
+    Introduces formal access control and navigation setup via city map discovery.
+
+Key Mechanics:
+    - get_exits() prunes 'north' (to MainSquare) until GateCaptain grants entry (entry_pass_given boolean on NPC).
+    - search() logic staged:
+        * Blocked while GateCaptain present (social protocol)
+        * Once absent, first search spawns CityMap (idempotent via city_map_found flag)
+        * Adds map to room then returns discovery narrative.
+
+Story Flags:
+    - None directly; relies on NPC state (entry_pass_given). Could migrate to story flag if global awareness needed.
+
+Contents:
+    - NPC: GateCaptain (controls progression & removal condition for search permission).
+    - Item (conditional): CityMap (enables full MainSquare navigation once used elsewhere).
+
+Design Notes:
+    - Demonstrates etiquette gating before environmental scavenging; pattern encourages dialogue-first behavior.
+    - Uses local booleans instead of story flags to keep transient discovery state scoped.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..characters.GateCaptain import GateCaptain

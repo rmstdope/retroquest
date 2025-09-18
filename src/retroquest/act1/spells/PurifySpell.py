@@ -1,3 +1,28 @@
+"""Purify Spell (Act I / Cross-Act Utility)
+
+Purpose:
+    Cleansing spell that removes corruption or impurities from environmental targets (e.g., wells, warding artifacts) once full magic capability is unlocked.
+
+Gating:
+    - Requires story flag "magic_fully_unlocked"; otherwise fizzles—establishes progressive magic growth.
+
+Core Mechanics:
+    - cast_on_item:
+        * Well -> delegates to Well.purify(game_state).
+        * WardingPillars (Act III) -> delegates to room hook cast_purify_on_pillars enabling narrative flexibility.
+        * Generic item -> fallback flavor message.
+    - cast_spell / cast_on_character share gating + flavor.
+
+Story Flags:
+    - Reads: magic_fully_unlocked (string literal presently; candidate for central constant extraction).
+    - Does not set flags itself.
+
+Design Notes:
+    - Uses delegation rather than embedding purification details to keep spell slim and reusable across acts.
+    - Room hook pattern (cast_purify_on_pillars) allows environment-specific branching without coupling here.
+    - Consider future mechanic: sanctify accumulation or purity meter.
+"""
+
 from ...engine.Spell import Spell
 from ...engine.GameState import GameState
 from ...engine.Item import Item

@@ -1,3 +1,31 @@
+"""Spectral Librarian (Act II)
+
+Role:
+    Guardian spirit of the ancient library, adjudicating the player's worthiness to access
+    deeper lore (heritage revelation + Dispel spell) contingent on respectful restoration
+    of protective enchantments.
+
+Gating & Flow:
+    - Requires FLAG_MENDED_LIBRARY_ENCHANTMENTS True to transition from neutral gatekeeper
+      to friendly benefactor.
+    - On first successful post-mend interaction: sets FLAG_SPECTRAL_LIBRARIAN_FRIENDLY,
+      places Crystal Focus item, and grants contextual lore plus access to learn Dispel.
+
+Story Flags:
+    - Reads: FLAG_MENDED_LIBRARY_ENCHANTMENTS, FLAG_SPECTRAL_LIBRARIAN_FRIENDLY
+    - Sets: FLAG_SPECTRAL_LIBRARIAN_FRIENDLY
+
+Rewards:
+    - Item: CrystalFocus added to current room (player must still pick it up, reinforcing interaction).
+    - Knowledge: Heritage exposition + unlocking path for Dispel (spell learned via study, not immediate grant here).
+
+Design Notes:
+    - Spell objects are instantiated inline to obtain names for narrative clarity without premature acquisition.
+    - Maintains single state transition ensuring idempotent follow-up dialogue.
+    - If additional library depth is added later, consider branching on new flags while retaining
+      this baseline friendly state as prerequisite.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (

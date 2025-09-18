@@ -1,3 +1,24 @@
+"""Ancient Tree Spirit NPC definition.
+
+Role:
+    Primary guardian entity of the Ancient Grove; mentors the player through
+    nature attunement and initiates the "Whispers in the Wind" quest.
+
+Core Functions:
+    - Accepts the ``Enchanted Acorn`` offering to teach ``Forest Speech`` spell.
+    - Sets ``FLAG_WHISPERS_IN_WIND_OFFERED`` when acorn is gifted (quest start).
+    - Accepts combined sacred gifts (crystal-clear water + moonflowers) to set
+      ``FLAG_WHISPERS_IN_WIND_COMPLETED`` then narratively unlocks path to Nyx.
+
+Story Flags:
+    - ``FLAG_WHISPERS_IN_WIND_OFFERED`` (quest activation)
+    - ``FLAG_WHISPERS_IN_WIND_COMPLETED`` (quest completion)
+
+Design Notes:
+    Item/spell imports are deferred within methods to avoid circular imports.
+    Dialogue branches emphasize ecological reciprocity rather than transaction.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
@@ -20,7 +41,7 @@ class AncientTreeSpirit(Character):
         self.acorn_received = False
         self.whispers_quest_completed = False
 
-    def talk_to(self, game_state: GameState, player=None) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         event_msg = f"[event]You approach the [character_name]{self.get_name()}[/character_name] with reverence.[/event]"
         
         if not self.acorn_received:

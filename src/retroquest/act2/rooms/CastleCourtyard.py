@@ -1,3 +1,25 @@
+"""Castle Courtyard (Act II)
+
+Narrative Role:
+    Martial training hub within castle grounds; blends progression (discovering squire's diary) with character development.
+
+Key Mechanics:
+    - search() yields Squire's Diary only after FLAG_SQUIRES_TALKED_TO is True (enforces social interaction before reward).
+    - Diary item injected lazily (self.add_item) and guarded by diary_found instance flag for idempotence.
+
+Story Flags:
+    - Reads: FLAG_SQUIRES_TALKED_TO (precondition for hidden item discovery).
+    - Sets: None itself (leaves narrative escalation to diary usage / downstream logic).
+
+Contents:
+    - NPCs: SirCedric (noble context), TrainingMaster (skill thematic), Squires (dialogue gating).
+    - Item (conditional): Squire's Diary (added on search post-dialogue).
+
+Design Notes:
+    - Pattern exemplifies conversation-before-loot structure; reusable via a potential ConversationGateSearch mixin later.
+    - Maintains clean state via two-tier gating (story flag + local boolean) to avoid duplicate item instantiation.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..characters.SirCedric import SirCedric
@@ -21,7 +43,7 @@ class CastleCourtyard(Room):
         )
         self.diary_found = False
 
-    def search(self, game_state: GameState) -> str:
+    def search(self, game_state: GameState, target: str = None) -> str:
         """Search the room for hidden items."""
         if not self.diary_found:
             # Check if squires have been talked to first

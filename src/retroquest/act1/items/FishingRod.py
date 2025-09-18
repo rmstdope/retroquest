@@ -1,8 +1,28 @@
+"""FishingRod Item
+
+Narrative Role:
+Baseline tool that can be upgraded through combination, illustrating emergent crafting (rod + magnet) constrained by knowledge gating (spell requirement) and environmental versatility (river vs. well failure feedback).
+
+Key Mechanics / Interactions:
+- `use_with` + `Magnet` (only if player has learned spell 'purify') consumes both to create `MagneticFishingRod` (inventory transform pattern).
+- Delegates interaction to `River` for fishing attempts; explicitly blocks well use with flavor fail.
+
+Story Flags (Sets / Reads):
+(none) – Spell possession check uses existing spell system, not flags.
+
+Progression Effects:
+- Introduces conditional crafting recipe reliant on spell progression.
+- Sets pattern for multi-component upgrades leading to extended retrieval capacity (later extended magnetic variant synergy with well ring).
+
+Design Notes:
+- Could refactor into generic crafting service if recipes scale; current inline approach adequate for low volume.
+- Prevents magnet attachment prematurely to preserve fishing utility until proper upgrade moment.
+
+"""
+
 from ...engine.Item import Item
 from .Magnet import Magnet
 from .MagneticFishingRod import MagneticFishingRod
-from ...engine.GameState import GameState
-from typing import Any
 
 class FishingRod(Item):
     def __init__(self) -> None:

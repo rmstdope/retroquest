@@ -1,3 +1,27 @@
+"""Hidden Glade (Act I)
+
+Narrative Role:
+    Optional enchanted clearing introducing dynamic environmental description, conditional creature appearance, and first nature-aligned spell acquisition (Grow).
+
+Key Mechanics:
+    - rest(): If story flag 'deer_can_be_observed' (string literal) is set and Deer absent, spawns Deer and RareFlower then augments narrative.
+    - light(): Casting light toggles light_spell_cast=True; grants Grow spell if player lacks it (teaches via rune reading event).
+    - describe(): Overrides to rebuild description each call using get_room_text_description() with state-driven segments.
+
+Story Flags:
+    - Reads: 'deer_can_be_observed' (string literal; candidate for central constant definition for consistency).
+    - Sets: None directly; relies on external systems to enable deer observation.
+
+Contents:
+    - Items: ShinyPebble (collectible), conditional RareFlower (spawned during rest event).
+    - NPC: Conditional Deer (appears after correct rest condition), no static inhabitants initially.
+    - Spell Gain: Grow (if not already known) via light() interaction.
+
+Design Notes:
+    - Rich stateful narrative suggests eventual refactor to unify dynamic description pattern across rooms.
+    - Recommend elevating magic flag strings (e.g., 'deer_can_be_observed') into Act1StoryFlags for consistency.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..items.RareFlower import RareFlower
@@ -51,14 +75,12 @@ class HiddenGlade(Room):
     def rest(self, game_state: GameState) -> str:
         if game_state.get_story_flag("deer_can_be_observed"):
             messages = ["You take a moment to rest in the tranquil glade."]
-            appeared_something = False
             if not self.get_character_by_name("Deer"):
                 deer = Deer()
                 self.add_character(deer)
                 messages.append("As you relax, a graceful [character_name]Deer[/character_name] emerges into the glade. It gazes at you with deep, ancient eyes, and for a moment, you feel a surge of gentle magical energy flow through your body, as if the glade itself is welcoming you.")
                 self.add_item(RareFlower())
                 messages.append("You notice a rare, beautiful [item_name]Rare Flower[/item_name] blooming near the mossy stone.")
-                appeared_something = True
             else:
                 messages.append("The [character_name]Deer[/character_name] continues to graze peacefully.")
 

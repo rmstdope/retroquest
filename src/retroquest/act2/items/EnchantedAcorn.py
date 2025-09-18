@@ -1,3 +1,25 @@
+"""Enchanted Acorn (Act II Sacred Offering Item)
+
+Narrative Role:
+    A forest-blessed token intended as an offering or rapport-building gift for ancient spirits (notably the
+    Ancient Tree Spirit). Reinforces themes of respectful approach to primal magic domains.
+
+Key Mechanics / Interactions:
+    - Contextual use text varies by location class/name (generic forest vs. Ancient Grove vs elsewhere).
+    - picked_up() provides special flavor at ForestEntrance acknowledging forest sprites' observation.
+    - Does not directly set story flags—its significance surfaces through NPC / room interactions.
+
+Story Flags:
+    - Sets/Reads: (none directly)
+
+Progression Effects:
+    Potential catalyst for improved outcomes or unlocking dialogue when presented in sacred locations.
+
+Design Notes:
+    - Location name substring checks keep logic lightweight; could migrate to isinstance room checks if polymorphism increases.
+    - Extendable into a broader offering system (e.g., categorized boons) in future acts.
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 

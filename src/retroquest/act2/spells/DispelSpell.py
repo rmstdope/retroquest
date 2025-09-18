@@ -1,3 +1,21 @@
+"""Dispel Spell (Act II)
+
+Purpose:
+    Advanced counter-magic used to neutralize hostile enchantments and complete the final
+    stage of Elena's curse cure sequence when cast on her by invoking specialized character logic.
+
+Acquisition:
+    Learned via study after assisting the Spectral Librarian (post-mending of library wards).
+
+Core Mechanics:
+    - Generic success responses when used on arbitrary characters or items (flavor utility).
+    - Special-case: Casting on BarmaidElena defers to her receive_dispel_final_cure(game_state) method.
+
+Design Notes:
+    - Keeps cure logic centralized in the character class to avoid distributing narrative state here.
+    - Future expansions (e.g., barrier removal) should branch via item or room markers rather than expanding conditionals inline.
+"""
+
 from ...engine.Spell import Spell
 from ...engine.GameState import GameState
 from ...engine.Character import Character

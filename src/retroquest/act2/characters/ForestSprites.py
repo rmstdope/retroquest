@@ -1,3 +1,18 @@
+"""Forest Sprites NPC definition.
+
+Role:
+    Playful threshold guardians for deeper forest zones. They initiate the
+    "Forest Guardian's Riddles" quest that tests player wisdom / respect.
+
+Key Behavior:
+    - First interaction sets ``FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED``.
+    - Subsequent dialogues provide gentle directional hints (Ancient Grove,
+      Whispering Glade) without duplicating quest logic.
+
+Design Notes:
+    Maintains minimal state via ``riddles_quest_given`` to avoid re-triggering.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED
@@ -16,7 +31,7 @@ class ForestSprites(Character):
         )
         self.riddles_quest_given = False
 
-    def talk_to(self, game_state: GameState, player=None) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         event_msg = f"[event]You approach the [character_name]{self.get_name()}[/character_name].[/event]"
         
         if not self.riddles_quest_given:

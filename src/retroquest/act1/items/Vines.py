@@ -1,7 +1,26 @@
+"""Vines Item
+
+Narrative Role:
+Destructible environmental obstacle that converts into a resource (`Stick`) when overcome, illustrating clearance + yield pattern.
+
+Key Mechanics / Interactions:
+- `use_with` + `SharpKnife` removes vines from room, consumes the knife, spawns a `Stick` item.
+- Delegates fallback behavior to base for non-supported tools.
+
+Story Flags (Sets / Reads):
+(none) – Persistence handled by removing item from room.
+
+Progression Effects:
+- Teaches that environmental barriers can produce salvage materials.
+
+Design Notes:
+- Knife destruction adds cost weight to clearing; encourages timing choice.
+- Could later variabilize outputs (multiple sticks, fiber) if crafting deepens.
+
+"""
+
 from ...engine.Item import Item
 from .Stick import Stick
-from ...engine.GameState import GameState
-from typing import Any
 
 class Vines(Item):
     def __init__(self) -> None:

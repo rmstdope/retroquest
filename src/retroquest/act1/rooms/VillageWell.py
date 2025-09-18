@@ -1,3 +1,23 @@
+"""Village Well (Act I)
+
+Narrative Role:
+    Central mystical-feeling utility structure; atmospheric locus for future purification or divination mechanics.
+
+Key Mechanics:
+    - Static exit hub with mild environmental intrigue; Well item enables water/purification interactions later.
+
+Story Flags:
+    - None yet; potential future flags for purified water, revealed secret, or wish events.
+
+Contents:
+    - Item: Well (interactive environmental object with likely custom verbs in expansion).
+    - Characters: None—solitary ambiance preserved.
+
+Design Notes:
+    - Opportunity for early subtle foreshadowing of deeper magical systems.
+    - Could spawn event-driven character (seer, spirit) after meeting certain cross-room conditions.
+"""
+
 from ...engine.Room import Room
 from ..items.Well import Well
 

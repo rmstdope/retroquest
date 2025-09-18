@@ -1,3 +1,19 @@
+"""Forest Hermit NPC definition.
+
+Role:
+    Transitional wilderness mentor who provides protective charm and activates
+    the "Hermit's Warning" quest sequence (``FLAG_HERMITS_WARNING_ACCEPTED``) to
+    gate deeper forest traversal with preparatory lore.
+
+Key Mechanics:
+    - First interaction grants ``ProtectiveCharm`` item and sets acceptance flag.
+    - Subsequent talks reinforce guidance (non-repetitive reward logic).
+
+Design Notes:
+    Uses internal booleans to prevent duplicate charm distribution. Leaves quest
+    completion mechanics to external forest transition logic per modular design.
+"""
+
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..items.ProtectiveCharm import ProtectiveCharm
@@ -12,7 +28,7 @@ class ForestHermit(Character):
         self.has_warned = False
         self.charm_given = False
 
-    def talk_to(self, game_state: GameState, player=None) -> str:
+    def talk_to(self, game_state: GameState) -> str:
         event_msg = f"[event]You approach the [character_name]{self.get_name()}[/character_name].[/event]"
         
         if not self.has_warned:

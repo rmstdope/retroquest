@@ -1,3 +1,26 @@
+"""Traveler's Journal (Act II Item)
+
+Narrative Role:
+    Heritage revelation artifact establishing noble lineage and granting narrative credentials for future
+    scholarly / archival access (potentially influencing restricted research interactions).
+
+Key Mechanics / Interactions:
+    - Simple use() that sets FLAG_READ_TRAVELERS_JOURNAL and delivers multi-paragraph lore payload.
+    - Carriable until used; currently not auto-removed, allowing re-reading if design wants persistent access (flag prevents gating loops elsewhere).
+    - Provides implicit justification for future flags like FLAG_RESEARCHED_FAMILY_HERITAGE when shown to historians.
+
+Story Flags:
+    - Sets: FLAG_READ_TRAVELERS_JOURNAL
+    - Reads: (none)
+
+Progression Effects:
+    Supplies lineage proof enabling potential downstream dialogue branches or unlocking deeper archive records.
+
+Design Notes:
+    - Not consumed to allow repeated consultation (consistent with reference material behavior).
+    - If inventory pressure becomes a concern, future enhancement could allow 'memorize' action mirroring CityMap pattern.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_READ_TRAVELERS_JOURNAL

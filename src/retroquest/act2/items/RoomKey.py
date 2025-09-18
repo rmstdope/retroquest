@@ -1,3 +1,28 @@
+"""Room Key (Act II Item)
+
+Narrative Role:
+    Access credential for The Silver Stag Inn private rooms. Formalizes a discrete progression beat granting
+    player a safe study/rest space and additional narrative surface (InnRooms) once used.
+
+Key Mechanics / Interactions:
+    - use_with(Door) while in SilverStagInn triggers room.use_key() which adds east -> InnRooms exit.
+    - Consumed upon successful unlock (removed from inventory) to reflect one-time provisioning of access.
+    - Provides failure messaging if used in wrong location or without having the key actually in inventory.
+
+Story Flags:
+    - Sets: (none directly)
+    - Reads: (none)
+
+Progression Effects:
+    Opens InnRooms, enabling further interactions / potential rest or lore access points.
+
+Design Notes:
+    - Indirect exit mutation keeps unlocking logic encapsulated in SilverStagInn.use_key, enabling reuse of
+      pattern for other lockable areas (could evolve into a shared LockableRoom mixin).
+    - Key is non-carriable by constructor (can_be_carried=False) suggesting it might normally remain placed
+      until obtained—adjust if future design wants player to explicitly pick it up first.
+"""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from .Door import Door

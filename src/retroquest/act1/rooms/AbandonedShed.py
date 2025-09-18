@@ -1,3 +1,27 @@
+"""Abandoned Shed (Act I)
+
+Narrative Role:
+    Early micro-dungeon style container offering multi-step interaction: unlock -> search -> loot staging.
+
+Key Mechanics:
+    - unlock(): Toggles locked state, injects MysteriousBox + BrokenShovel.
+    - search(): While unlocked, first run adds FishingRod + Magnet (room_searched flag ensures idempotence).
+    - Locked state blocks meaningful search feedback reinforcing tool discovery order.
+
+Story Flags:
+    - None yet; internal booleans (locked, room_searched) handle progression. Could elevate lock state to a flag if other rooms react.
+
+Contents:
+    - Items (initial): ShedDoor (implicit lock object).
+    - Items (on unlock): MysteriousBox, BrokenShovel.
+    - Items (on first search post-unlock): FishingRod, Magnet.
+    - Characters: None.
+
+Design Notes:
+    - Exemplifies staged revelation pattern; reusable via a LockableLootRoom abstraction if pattern repeats.
+    - Consider moving narrative strings to constants for localization scalability.
+"""
+
 from ...engine.Room import Room
 from ..items.BrokenShovel import BrokenShovel
 from ..items.MysteriousBox import MysteriousBox
@@ -36,7 +60,7 @@ class AbandonedShed(Room):
             "A [item_name]Mysterious Box[/item_name] sits on a rickety table, and a [item_name]Broken Shovel[/item_name] leans against a cobweb-covered wall."
         )
 
-    def search(self, game_state: GameState) -> str:
+    def search(self, game_state: GameState, target: str = None) -> str:
         if self.locked:
             return "You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] is locked so you can't search inside."
 

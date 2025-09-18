@@ -1,3 +1,25 @@
+"""Heart of the Forest (Act II)
+
+Narrative Role:
+    Climactic inner sanctum of the Enchanted Forest tied to Nyx encounter and high-magic revelations.
+
+Key Mechanics:
+    - Access path funneled through AncientGrove gating; this room itself hosts ritual focal point (OfferingAltar).
+    - No dynamic exits or local gating—serves as resolution / ritual arena.
+
+Story Flags:
+    - Reads none directly; progression assumed validated upstream.
+    - Potential future: altar interactions may set offering / blessing flags.
+
+Contents:
+    - Item: OfferingAltar (interaction hub for sprite / ritual logic).
+    - Characters: None initially (sprite may manifest contextually elsewhere or be added later).
+
+Design Notes:
+    - Intentionally static to keep attention on invoked event sequences rather than navigation.
+    - If multiple ritual arenas appear across acts, consider abstract RitualChamber base specialization.
+"""
+
 from ...engine.Room import Room
 from ..items.OfferingAltar import OfferingAltar
 

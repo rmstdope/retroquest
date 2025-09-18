@@ -1,3 +1,25 @@
+"""Crystal-Clear Water (Act II Purification Item)
+
+Narrative Role:
+    Blessed spring water holding potent cleansing magic capable of breaking curses (notably Barmaid Elena's affliction).
+    Embodies purity motif and a branching resolution vector for corruption narratives.
+
+Key Mechanics / Interactions:
+    - use_on_character() checks for BarmaidElena instance and delegates purification to character method.
+    - Non-targeted application yields contextual feedback clarifying specificity.
+    - examine() reinforces sanctity and latent power.
+
+Story Flags:
+    - Sets/Reads: (none directly; any curse resolution flags handled within character logic).
+
+Progression Effects:
+    Key consumable enabling advancement/closure of a healing or curse-lifting quest line.
+
+Design Notes:
+    - Consider single-use consumption mechanics (removal) once purification succeeds to reflect scarcity.
+    - Potential future synergy: amplify other healing spells while possessed.
+"""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 

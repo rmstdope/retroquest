@@ -1,3 +1,25 @@
+"""Forest Transition (Act II)
+
+Narrative Role:
+    Liminal boundary between civilized MountainPath and enchanted interior forest. Introduces survival preparation theme.
+
+Key Mechanics:
+    - get_exits() hides 'east' -> ForestEntrance until FLAG_HERMITS_WARNING_COMPLETED is set (survival kit usage / hermit interaction resolution).
+    - StandingStones item provides environmental lore anchor.
+
+Story Flags:
+    - Reads: FLAG_HERMITS_WARNING_COMPLETED to enable forward traversal.
+    - Sets: None here (flag progression handled via item/NPC context externally).
+
+Contents:
+    - NPC: ForestHermit (advisory / gating dialogue).
+    - Item: StandingStones (flavor, potential future ritual site).
+
+Design Notes:
+    - Early gating room mirrors pattern used later (multi-step forest gating) providing conceptual consistency.
+    - Could share a common GateOnFlag mixin if additional simple gate rooms emerge.
+"""
+
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED

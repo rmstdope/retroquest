@@ -1,4 +1,23 @@
-from ...engine.GameState import GameState
+"""HealingHerb Item
+
+Narrative Role:
+Represents controlled medicinal stock belonging to healer NPC (Mira). Reinforces boundary between player scavenging and community stewardship.
+
+Key Mechanics / Interactions:
+- Always blocks pickup (`prevent_pickup` returns dialogue) – cannot be taken even if visible.
+- No direct healing consumption yet; implies future use via healer services rather than raw item use.
+
+Story Flags (Sets / Reads):
+(none) – Access control handled through pickup prevention.
+
+Progression Effects:
+- Foreshadows structured healing systems without granting portable healing early.
+
+Design Notes:
+- Could later expose a `brew()` or `apply()` action gated by profession, location, or learned skill.
+- Dialogue references protagonist by name to anchor role-play context.
+
+"""
 
 from ...engine.Item import Item
 
