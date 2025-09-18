@@ -70,7 +70,6 @@ class PromptSessionApp:
         return result
 
     def run(self) -> None:
-        self.game.start_music()
         while self.game.is_running:
             if not (self.game.is_act_running() or self.game.is_act_transitioning()) or self.game.has_changed_room:
                 self.console.clear()
@@ -85,5 +84,3 @@ class PromptSessionApp:
                 self.session.prompt('Press Enter to continue...')
                 self.game.handle_input('')
             self.game.new_turn()
-            if self.game.is_act_intro_showing():
-                self.game.start_music()

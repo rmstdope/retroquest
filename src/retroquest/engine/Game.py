@@ -40,6 +40,7 @@ class Game:
         self.run_state = GameRunState.ShowLogo
         self.accept_input = False
         self.command_result = ''
+        self.start_music()
 
     def play_soundeffect(self, filename: str) -> None:
         """Play a sound effect (wav/ogg) mixed with the currently playing music. Non-blocking."""
@@ -93,6 +94,7 @@ class Game:
                     self.is_running = False
                     self.accept_input = False
         elif self.run_state == GameRunState.ActTransition:
+            self.start_music()
             self.run_state = GameRunState.ActIntro
             self.accept_input = False
 

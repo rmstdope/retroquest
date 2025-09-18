@@ -14,8 +14,7 @@ class TestAct3Rooms:
     def test_act3_has_rooms(self):
         """Test that Act 3 has rooms defined."""
         assert isinstance(self.act3.rooms, dict)
-        # TODO: Update when rooms are implemented
-        # assert len(self.act3.rooms) > 0
+        assert len(self.act3.rooms) > 0
         
     # TODO: Add room-specific tests when rooms are implemented
     # def test_example_room_creation(self):

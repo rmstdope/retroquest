@@ -5,6 +5,7 @@ from retroquest.engine.promptui.PromptSessionApp import PromptSessionApp
 from retroquest.engine.Game import Game
 from retroquest.act1.Act1 import Act1
 from retroquest.act2.Act2 import Act2
+from retroquest.act3.Act3 import Act3
 
 USE_TEXTUAL_UI = True
 
@@ -12,7 +13,7 @@ if '-oldschool' in sys.argv:
     USE_TEXTUAL_UI = False
 
 def main() -> None:
-    game = Game([Act1(), Act2()])
+    game = Game([Act1(), Act2(), Act3()])
     if USE_TEXTUAL_UI:
         app = TextualApp(game)
     else:

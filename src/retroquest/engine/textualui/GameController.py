@@ -10,9 +10,7 @@ class GameController:
         self.last_output = ""
 
     def start(self) -> str:
-        self.game.start_music()
         output = self.game.get_result_text()
-        # self.game.new_turn()
         return output
 
     def handle_command(self, command: str) -> str:
