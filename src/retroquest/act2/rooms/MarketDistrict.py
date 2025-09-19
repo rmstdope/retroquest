@@ -1,23 +1,4 @@
-"""Market District (Act II)
-
-Narrative Role:
-    Commerce epicenter enabling acquisition of preparation gear for wilderness and forest progression.
-
-Key Mechanics:
-    - add_wares() populates non-carriable display items (ForestSurvivalKit, EnhancedLantern, QualityRope) with can_be_carried=False until purchase flow triggers conversion.
-    - Static exits connect economic triangle (MainSquare, SilverStagInn, MerchantsWarehouse).
-
-Story Flags:
-    - None directly; purchase state managed per-item (could elevate to flags if narrative reacts to acquisition).
-
-Contents:
-    - NPCs: MasterMerchantAldric (merchant logic), CaravanMasterThorne (travel hooks / future expansion).
-    - Items: Initially empty until add_wares invoked to stage merchant inventory.
-
-Design Notes:
-    - Display item pattern suggests future transactional system (toggle can_be_carried after payment).
-    - Consider central MerchantInventory service if multiple markets appear across acts.
-"""
+"""Market District room for Act II."""
 
 from ...engine.Room import Room
 from ..characters.MasterMerchantAldric import MasterMerchantAldric
@@ -27,15 +8,35 @@ from ..items.EnhancedLantern import EnhancedLantern
 from ..items.QualityRope import QualityRope
 
 class MarketDistrict(Room):
+    """Commerce hub supplying preparation gear (Act II).
+
+    Narrative Role:
+        Provides equipment that foreshadows forest and wilderness challenges. Social density and
+        negotiation ambience reinforce the city's economic stature.
+
+    Key Mechanics:
+        `add_wares()` injects display items that start as non-carriable. A future purchase system can
+        flip `can_be_carried` to True upon transaction.
+
+    Story Flags:
+        None yet; individual item acquisition is currently local state. Could elevate to flags if
+        narrative reacts to owning specific gear.
+
+    Contents:
+        NPCs: Master Merchant Aldric (pricing / trade logic scaffold), Caravan Master Thorne (travel
+        hook potential). Items list initially empty until staged.
+
+    Design Notes:
+        A MerchantInventory abstraction could later manage pricing, stock rotation, and multi-act
+        economies. Keeping logic lean avoids premature complexity.
+    """
     def __init__(self) -> None:
-        # Create merchant items that are not carriable initially (display items)
-        
         super().__init__(
             name="Market District",
             description=(
-                "Narrow streets packed with shops, inns, and trading posts create a maze of commerce. The air is thick "
-                "with the scents of spices, leather, and fresh bread. Merchant wagons crowd the streets, and you can "
-                "hear negotiations in multiple languages. This is where serious business gets done in Greendale."
+                "Narrow streets crammed with shops and trading posts weave a maze of commerce. Spices, "
+                "leather, and fresh bread scent the air. Merchant wagons clog passageways while deals "
+                "are argued in several languages. Serious business gets done here."
             ),
             items=[],
             characters=[MasterMerchantAldric(), CaravanMasterThorne()],
@@ -43,7 +44,11 @@ class MarketDistrict(Room):
         )
 
     def add_wares(self) -> None:
-        """Create and add the merchant's display items (non-carriable)"""
+        """Populate the market's display wares as non-carriable placeholders.
+
+        These items represent stock on display. A future purchase transaction would toggle each
+        item's `can_be_carried` to True, allowing the player to take it.
+        """
         survival_kit = ForestSurvivalKit()
         survival_kit.can_be_carried = False
         

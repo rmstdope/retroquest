@@ -1,39 +1,43 @@
-"""Heart of the Forest (Act II)
-
-Narrative Role:
-    Climactic inner sanctum of the Enchanted Forest tied to Nyx encounter and high-magic revelations.
-
-Key Mechanics:
-    - Access path funneled through AncientGrove gating; this room itself hosts ritual focal point (OfferingAltar).
-    - No dynamic exits or local gating—serves as resolution / ritual arena.
-
-Story Flags:
-    - Reads none directly; progression assumed validated upstream.
-    - Potential future: altar interactions may set offering / blessing flags.
-
-Contents:
-    - Item: OfferingAltar (interaction hub for sprite / ritual logic).
-    - Characters: None initially (sprite may manifest contextually elsewhere or be added later).
-
-Design Notes:
-    - Intentionally static to keep attention on invoked event sequences rather than navigation.
-    - If multiple ritual arenas appear across acts, consider abstract RitualChamber base specialization.
-"""
+"""Heart of the Forest room: climactic ritual sanctum with offering altar."""
 
 from ...engine.Room import Room
 from ..items.OfferingAltar import OfferingAltar
 
 class HeartOfTheForest(Room):
+    """Climactic inner sanctum emphasizing ritual and revelation.
+
+    Narrative Role:
+        High‑magic focal space associated with Nyx and late-act lore delivery.
+        Access already validated by upstream gating (AncientGrove path).
+
+    Key Mechanics:
+        - Static exits; contains ``OfferingAltar`` as ritual interaction hub.
+
+    Story Flags:
+        - Reads none directly; future altar interactions may set offering or
+          blessing flags.
+
+    Contents:
+        - Item: ``OfferingAltar``.
+        - Characters: None currently (sprite manifestation externalized).
+
+    Design Notes:
+        Kept static to focus player attention on event sequencing; could evolve
+        into a ``RitualChamber`` specialization if multiple similar arenas are
+        introduced.
+    """
+
     def __init__(self) -> None:
+        """Initialize heart chamber with altar and single northern exit."""
         super().__init__(
             name="Heart of the Forest",
             description=(
-                "The deepest part of the Enchanted Forest, where reality seems more fluid and magic flows like water. "
-                "Impossible colors paint the landscape, and the very air sparkles with enchantment. At the center stands "
-                "a magnificent tree whose branches seem to hold up the sky itself. Before the great tree sits an ancient "
-                "offering altar, carved from a single piece of starstone and adorned with mystical runes that pulse with "
-                "otherworldly light. This is Nyx's domain, where the forest sprite dwells and where the greatest secrets "
-                "are revealed. The sacred grove that leads here is the only passage to this mystical realm."
+                "The deepest part of the Enchanted Forest, where reality feels fluid and magic flows "
+                "like water. Impossible colors paint the landscape and the air sparkles with latent "
+                "energy. A colossal tree dominates the center, its branches seeming to uphold the sky. "
+                "Before it rests an ancient altar carved from starstone, runes pulsing with otherworldly "
+                "light. This is Nyx's domain where profound secrets surface. The sacred grove path is "
+                "the only passage into this mystical heart."
             ),
             items=[OfferingAltar()],
             characters=[],

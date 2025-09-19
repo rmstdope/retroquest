@@ -17,7 +17,6 @@ class Act:
 
     def setup_gamestate(self, game_state: GameState) -> None:
         """Hook for act-specific GameState initialization. Default is no-op."""
-        pass
 
     def is_completed(self, game_state: GameState) -> bool:
         raise NotImplementedError("Subclasses must implement the is_completed method")

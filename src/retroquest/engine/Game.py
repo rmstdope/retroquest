@@ -1,16 +1,12 @@
-from prompt_toolkit import PromptSession
-from prompt_toolkit.completion import NestedCompleter
-from rich.console import Console
-from rich.theme import Theme
+from typing import Any
+from enum import Enum, auto
+
 import pickle
 import os
 import threading
 import pygame
-from typing import Any
-from enum import Enum, auto
 
 from .Character import Character
-from .Room import Room
 from .CommandParser import CommandParser
 from .GameState import GameState
 from .Item import Item
@@ -20,10 +16,10 @@ from .Act import Act
 
 # The runtime phase of the game: controls startup/logo/act intro/act transitions
 class GameRunState(Enum):
-    ShowLogo = auto()
-    ActIntro = auto()
-    ActRunning = auto()
-    ActTransition = auto()
+    SHOW_LOGO = auto()
+    ACT_INTRO = auto()
+    ACT_RUNNINT = auto()
+    ACT_TRANSITION = auto()
 class Game:
     """
     Main Game class for RetroQuest: The Awakening.
@@ -39,7 +35,7 @@ class Game:
         self.acts[self.current_act].setup_gamestate(self.state)
         self.command_parser = CommandParser(self)
         self.has_changed_room = False  # Flag to indicate if we need to describe the room after a command
-        self.run_state = GameRunState.ShowLogo
+        self.run_state = GameRunState.SHOW_LOGO
         self.accept_input = False
         self.command_result = ''
         self.start_music()
@@ -52,7 +48,7 @@ class Game:
                     pygame.mixer.init()
                 sound = pygame.mixer.Sound('audio/soundeffects/' + filename)
                 sound.play()
-            except Exception as e:
+            except RuntimeError as e:
                 print(f"[dim]Could not play sound effect '{filename}': {e}[/dim]")
         threading.Thread(target=play_fx, daemon=True).start()
 
@@ -67,26 +63,26 @@ class Game:
                     pygame.mixer.init()
                 pygame.mixer.music.load('audio/music/' + self.acts[self.current_act].music_file)
                 pygame.mixer.music.play(loops=-1)  # Loop indefinitely
-            except Exception as e:
+            except RuntimeError as e:
                 # Use print instead of self.console.print to avoid dependency issues
                 print(f"[dim]Could not play music: {e}[/dim]")
-        if self.acts[self.current_act].music_file != None and self.acts[self.current_act].music_file != '':
+        if self.acts[self.current_act].music_file is not None and self.acts[self.current_act].music_file != '':
             threading.Thread(target=play_music, daemon=True).start()
 
     def new_turn(self) -> None:
         """Advance the game state by one turn."""
-        if self.run_state == GameRunState.ShowLogo:
-            self.run_state = GameRunState.ActIntro
+        if self.run_state == GameRunState.SHOW_LOGO:
+            self.run_state = GameRunState.ACT_INTRO
             self.accept_input = False
-        elif self.run_state == GameRunState.ActIntro:
-            self.run_state = GameRunState.ActRunning
+        elif self.run_state == GameRunState.ACT_INTRO:
+            self.run_state = GameRunState.ACT_RUNNINT
             self.accept_input = True
             self.has_changed_room = True
-        elif self.run_state == GameRunState.ActRunning:
+        elif self.run_state == GameRunState.ACT_RUNNINT:
             if self.acts[self.current_act].is_completed(self.state):
                 self.current_act += 1
                 if self.current_act < len(self.acts):
-                    self.run_state = GameRunState.ActTransition
+                    self.run_state = GameRunState.ACT_TRANSITION
                     self.accept_input = False
                     # Transition to next act
                     starting_room = next(iter(self.acts[self.current_act].rooms.values()))
@@ -97,20 +93,20 @@ class Game:
                     # No more acts, end the game
                     self.is_running = False
                     self.accept_input = False
-        elif self.run_state == GameRunState.ActTransition:
+        elif self.run_state == GameRunState.ACT_TRANSITION:
             self.start_music()
-            self.run_state = GameRunState.ActIntro
+            self.run_state = GameRunState.ACT_INTRO
             self.accept_input = False
 
     def get_result_text(self) -> str:
         """Get the next text to display."""
-        if self.run_state == GameRunState.ShowLogo:
+        if self.run_state == GameRunState.SHOW_LOGO:
             return self.get_ascii_logo()
-        elif self.run_state == GameRunState.ActIntro:
+        elif self.run_state == GameRunState.ACT_INTRO:
             return self.acts[self.current_act].get_act_intro()
-        elif self.run_state == GameRunState.ActRunning:
+        elif self.run_state == GameRunState.ACT_RUNNINT:
             return self.command_result
-        elif self.run_state == GameRunState.ActTransition:
+        elif self.run_state == GameRunState.ACT_TRANSITION:
             return (
                 self.command_result
                 + f"\n\nCongratulations — you have completed Act {self.current_act}!\n\n"
@@ -119,24 +115,24 @@ class Game:
             )
         return ""
 
-    def handle_input(self, input: str) -> None:
+    def handle_input(self, data: str) -> None:
         """Process input provided by the user."""
-        if self.run_state == GameRunState.ActRunning:
-            self.command_result = self.command_parser.parse(input)
+        if self.run_state == GameRunState.ACT_RUNNINT:
+            self.command_result = self.command_parser.parse(data)
         else:
             self.command_result = ''
         
     def is_act_running(self) -> bool:
         """Return True if the current act is running."""
-        return self.run_state == GameRunState.ActRunning
+        return self.run_state == GameRunState.ACT_RUNNINT
 
     def is_act_transitioning(self) -> bool:
         """Return True if the current act is transitioning."""
-        return self.run_state == GameRunState.ActTransition
+        return self.run_state == GameRunState.ACT_TRANSITION
 
     def is_act_intro_showing(self) -> bool:
         """Return True if the current act is transitioning."""
-        return self.run_state == GameRunState.ActIntro
+        return self.run_state == GameRunState.ACT_INTRO
 
     def get_ascii_logo(self) -> str:
         text = r'''
@@ -368,7 +364,7 @@ Welcome to
                     matching_items.append(item)
         return matching_items
 
-    def move(self, direction: str, arg: str = None) -> str:
+    def move(self, direction: str, _arg: str = None) -> str:
         exits = self.state.current_room.get_exits(self.state)
         
         # Special handling for MainSquare navigation restriction
@@ -395,7 +391,7 @@ Welcome to
         else:
             return "[failure]You can't go that way.[/failure]"
 
-    def help(self, arg: str = None) -> str:
+    def help(self, _arg: str = None) -> str:
         return (
             "[bold]Available Commands:[/bold]\n"
             "\n"
@@ -777,7 +773,7 @@ Welcome to
             with open('retroquest.save', 'wb') as f:
                 pickle.dump(self.state, f)
             return "[event]Game saved successfully.[/event]"
-        except Exception as e:
+        except OSError as e:
             return f"[failure]Failed to save game: {e}[/failure]"
 
     def load(self) -> str:
@@ -787,7 +783,7 @@ Welcome to
             with open('retroquest.save', 'rb') as f:
                 self.state = pickle.load(f)
             return "[event]Game loaded successfully.[/event]"
-        except Exception as e:
+        except OSError as e:
             return f"[failure]Failed to load game: {e}[/failure]"
 
     def stats(self) -> str:
@@ -801,7 +797,7 @@ Welcome to
         if not os.path.exists(filename):
             return f"[failure]File not found: {filename}[/failure]"
         results = []
-        with open(filename, 'r') as f:
+        with open(filename, 'rt', encoding='utf-8') as f:
             for line in f:
                 command = line.strip()
                 if not command or command.startswith('#'):

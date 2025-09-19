@@ -6,9 +6,14 @@ class MirrorTerraces(Room):
         super().__init__(
             name="Mirror Terraces",
             description=(
-                "Stepped platforms with sockets for polished mirrors; channels etched to carry focused light uphill."
+                "Stepped platforms with sockets for polished mirrors; channels etched "
+                "to carry focused light uphill."
             ),
             items=[],
             characters=[],
-            exits={"south": "EmberGallery", "east": "FumarolePassages", "west": "ObsidianOutcrops"},
+            exits={
+                "south": "EmberGallery", 
+                "east": "FumarolePassages", 
+                "west": "ObsidianOutcrops"
+            },
         )

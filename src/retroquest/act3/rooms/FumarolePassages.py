@@ -6,7 +6,8 @@ class FumarolePassages(Room):
         super().__init__(
             name="Fumarole Passages",
             description=(
-                "Narrow tunnels exhaling rhythmic heat; stone vents chuff like a great sleeping bellows."
+                "Narrow tunnels exhaling rhythmic heat; stone vents chuff like a great "
+                "sleeping bellows."
             ),
             items=[],
             characters=[],

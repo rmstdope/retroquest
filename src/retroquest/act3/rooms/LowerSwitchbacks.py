@@ -6,7 +6,8 @@ class LowerSwitchbacks(Room):
         super().__init__(
             name="Lower Switchbacks (Base Camp)",
             description=(
-                "Wind‑carved paths zig‑zag across black rock; canvas shelters flap and braziers glow low."
+                "Wind‑carved paths zig‑zag across black rock; canvas shelters flap and "
+                "braziers glow low."
             ),
             items=[],
             characters=[],

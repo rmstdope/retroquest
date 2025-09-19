@@ -1,13 +1,25 @@
+"""Warding Pillars item for Act III."""
+
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 
 
 class WardingPillars(Item):
+    """Tideward ritual pillars requiring purification (Act III).
+
+    Narrative Role:
+        Environmental anchor for sigil completion; demonstrates interaction between spell effects and
+        quest progression.
+
+    Key Mechanics:
+        `purify()` method transitions state, affecting examine text and enabling downstream interactions.
+    """
     def __init__(self) -> None:
         super().__init__(
             name="Warding Pillars",
             description=(
-                "Three leaning pillars ring a drowned courtyard; glyph-lines are clogged with brine and coral crust."
+                "Three weathered pillars ring a drowned courtyard; glyph-lines are clogged with brine "
+                "and coral crust that must be cleared to restore their ward function."
             ),
             short_name="warding pillars",
             can_be_carried=False,
@@ -16,8 +28,8 @@ class WardingPillars(Item):
 
     def prevent_pickup(self):
         return (
-            "[failure]You can't take the [item_name]Warding Pillars[/item_name]. They are fixed stone, older than the pier."
-            "[/failure]"
+            "[failure]You can't take the [item_name]Warding Pillars[/item_name]. They are "
+            "fixed stone, older than the pier.[/failure]"
         )
 
     def examine(self, game_state: GameState) -> str:
@@ -27,11 +39,11 @@ class WardingPillars(Item):
             " proper cleansing and coquina tiles, the ward could be restored.[/event]"
         )
 
-    def purify(self, game_state: GameState) -> str:
+    def purify(self, _game_state: GameState) -> str:
         if self.purified:
             return "[info]The pillars are already cleansed of brine and coral.[/info]"
         self.purified = True
         return (
-            "[event]You rinse salt and scrape coral from the carved channels. Glyph-lines breathe again, ready to take"
-            " the Tideward Sigil.[/event]"
+            "[event]You rinse salt and scrape coral from the carved channels. Glyph-lines "
+            "breathe again, ready to take the Tideward Sigil.[/event]"
         )

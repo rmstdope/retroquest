@@ -1,17 +1,21 @@
-from prompt_toolkit import PromptSession
+"""Command parser for processing player input in RetroQuest."""
 from typing import Any
 from . import DEV_MODE
+
 
 class CommandParser:
     """
     Parses and handles player commands for RetroQuest.
     Now calls Game methods directly for each command.
     """
-    def __init__(self, game: Any) -> None:
+    from . import Game  # Import here to avoid circular dependency
+
+    def __init__(self, game: Game) -> None:
         self.game = game
         self.last_raw: str | None = None
 
     def parse(self, command: str) -> Any:
+        """Parse and execute a player command, returning the result."""
         self.last_raw = command
         cmd = command.strip().lower()
         # Movement
@@ -35,33 +39,48 @@ class CommandParser:
         #     return self.game.move('in')
         # elif cmd.startswith('leave '):
         #     # Argument for "leave [location]" is cmd[len('leave '):].strip()
-        #     return self.game.move('out', cmd[len('leave '):].strip()) # Assuming 'out' handles the context
-        # elif cmd.startswith('exit '): # Handles "exit [location]" as per Commands.md
+        #     return self.game.move(
+        #         'out', cmd[len('leave '):].strip()
+        #     )  # Assuming 'out' handles the context
+        # elif cmd.startswith('exit '):  # Handles "exit [location]" as per Commands.md
         #     # Argument for "exit [location]" is cmd[len('exit '):].strip()
-        #     return self.game.move('out', cmd[len('exit '):].strip()) # Assuming 'out' handles the context
+        #     return self.game.move(
+        #         'out', cmd[len('exit '):].strip()
+        #     )  # Assuming 'out' handles the context
         # elif cmd == 'go out':
         #     return self.game.move('out')
         # elif cmd.startswith('climb '):
         #     # Argument for "climb [object]" is cmd[len('climb '):].strip()
-        #     return self.game.move('up', cmd[len('climb '):].strip()) # Assuming 'up' handles the object context
+        #     return self.game.move(
+        #         'up', cmd[len('climb '):].strip()
+        #     )  # Assuming 'up' handles the object context
         # elif cmd.startswith('ascend '):
         #     # Argument for "ascend [object]" is cmd[len('ascend '):].strip()
-        #     return self.game.move('up', cmd[len('ascend '):].strip()) # Assuming 'up' handles the object context
+        #     return self.game.move(
+        #         'up', cmd[len('ascend '):].strip()
+        #     )  # Assuming 'up' handles the object context
         # elif cmd.startswith('descend '):
         #     # Argument for "descend [object]" is cmd[len('descend '):].strip()
-        #     return self.game.move('down', cmd[len('descend '):].strip()) # Assuming 'down' handles the object context
-        # elif cmd.startswith('go down '): # Matches "go down [object]"
+        #     return self.game.move(
+        #         'down', cmd[len('descend '):].strip()
+        #     )  # Assuming 'down' handles the object context
+        # elif cmd.startswith('go down '):  # Matches "go down [object]"
         #     # Argument for "go down [object]" is cmd[len('go down '):].strip()
-        #     return self.game.move('down', cmd[len('go down '):].strip()) # Assuming 'down' handles the object context
+        #     return self.game.move(
+        #         'down', cmd[len('go down '):].strip()
+        #     )  # Assuming 'down' handles the object context
         # elif cmd.startswith('follow '):
         #     arg = cmd[len('follow '):].strip()
         #     return self.game.move('follow', arg)
         # elif cmd.startswith('walk '):
         #     arg = cmd[len('walk '):].strip()
-        #     return self.game.move('follow', arg) # Assuming 'walk' is an alias for 'follow' functionality
+        #     return self.game.move(
+        #         'follow', arg
+        #     )  # Assuming 'walk' is an alias for 'follow' functionality
 
         # Interaction
-        elif any(cmd.startswith(prefix) for prefix in ('talk to ', 'speak to ', 'converse with ')):
+        elif any(cmd.startswith(prefix) for prefix in 
+                 ('talk to ', 'speak to ', 'converse with ')):
             for prefix in ('talk to ', 'speak to ', 'converse with '):
                 if cmd.startswith(prefix):
                     return self.game.talk(cmd[len(prefix):])
@@ -75,22 +94,30 @@ class CommandParser:
                 if word and character:
                     return self.game.say(word, character)
                 else:
-                    return "You need to specify both what to say and who to say it to. Use say <word> to <character>"
+                    return (
+                        "You need to specify both what to say and who to say it to. "
+                        "Use say <word> to <character>"
+                    )
             else:
-                return "You need to specify who to say that to. Use say <word> to <character>"
-        elif any(cmd.startswith(prefix) for prefix in ('give ', 'hand ')): # e.g. give bread to grandmother
+                return (
+                    "You need to specify who to say that to. "
+                    "Use say <word> to <character>"
+                )
+        elif any(cmd.startswith(prefix) for prefix in 
+                 ('give ', 'hand ')):  # e.g. give bread to grandmother
             # This will pass "bread to grandmother". Game.give needs to parse it.
             for prefix in ('give ', 'hand '):
                 if cmd.startswith(prefix):
                     return self.game.give(cmd[len(prefix):])
-        elif cmd.startswith('buy '): # e.g. buy rope from shopkeeper
+        elif cmd.startswith('buy '):  # e.g. buy rope from shopkeeper
             # This will pass "rope from shopkeeper". Game.buy needs to parse it.
             return self.game.buy(cmd[len('buy '):])
         
         # Examination
         elif cmd in ('look', 'observe', 'survey', 'l'):
             return self.game.look()
-        elif any(cmd.startswith(prefix) for prefix in ('look at ', 'inspect ', 'examine ', 'check ', 'look ')):
+        elif any(cmd.startswith(prefix) for prefix in 
+                 ('look at ', 'inspect ', 'examine ', 'check ', 'look ')):
             for prefix in ('look at ', 'inspect ', 'examine ', 'check ', 'look '):
                 if cmd.startswith(prefix):
                     return self.game.examine(cmd[len(prefix):])
@@ -100,7 +127,8 @@ class CommandParser:
         #     return self.game.listen(cmd[len('listen to '):])
 
         # Inventory Management
-        elif any(cmd.startswith(prefix) for prefix in ('take ', 'pick up ', 'grab ', 'get ')):
+        elif any(cmd.startswith(prefix) for prefix in 
+                 ('take ', 'pick up ', 'grab ', 'get ')):
             for prefix in ('take ', 'pick up ', 'grab ', 'get '):
                 if cmd.startswith(prefix):
                     return self.game.take(cmd[len(prefix):])
@@ -111,25 +139,33 @@ class CommandParser:
         elif cmd == 'use':
             return "What do you want to use?"
         elif cmd.startswith('use '):
-            # Use the original command (not fully stripped) to preserve trailing spaces to detect incomplete patterns
+            # Use the original command (not fully stripped) to preserve trailing spaces 
+            # to detect incomplete patterns
             original_tail = command[len('use '):]
             stripped_tail = original_tail.strip()
             if not stripped_tail:
                 return "What do you want to use?"
             # Detect pattern ending with ' with' meaning second item missing
             if original_tail.lower().rstrip().endswith(' with'):
-                return "You need to specify two items to use with each other. Format: use <item1> with <item2>"
+                return (
+                    "You need to specify two items to use with each other. "
+                    "Format: use <item1> with <item2>"
+                )
             lower_tail = stripped_tail.lower()
             if ' with ' in lower_tail:
-                # Split on the first occurrence of ' with ' using the original (case-sensitive) stripped_tail for item names
+                # Split on the first occurrence of ' with ' using the original 
+                # (case-sensitive) stripped_tail for item names
                 split_index = lower_tail.find(' with ')
                 item1_name = stripped_tail[:split_index].strip()
                 object_name = stripped_tail[split_index + 6:].strip()
                 if not item1_name or not object_name:
-                    return "You need to specify two items to use with each other. Format: use <item1> with <item2>"
+                    return (
+                        "You need to specify two items to use with each other. "
+                        "Format: use <item1> with <item2>"
+                    )
                 return self.game.use(item1_name, object_name)
             else:
-                return self.game.use(stripped_tail) # General single-item usage
+                return self.game.use(stripped_tail)  # General single-item usage
         # elif any(cmd.startswith(prefix) for prefix in ('eat ', 'consume ')):
         #     for prefix in ('eat ', 'consume '):
         #         if cmd.startswith(prefix):
@@ -152,11 +188,12 @@ class CommandParser:
             return self.game.close(cmd[len('close '):])
 
         # Magic
-        elif cmd.startswith('cast '): # Handles "cast [spell]" and "cast [spell] on [target]"
-            # game.cast will receive the full string after "cast ", e.g., "revive" or "fireball on goblin"
+        elif cmd.startswith('cast '):  # Handles "cast [spell]" and "cast [spell] on [target]"
+            # game.cast will receive the full string after "cast ", e.g., "revive" or 
+            # "fireball on goblin"
             return self.game.cast(cmd[len('cast '):])
         elif cmd == 'spells':
-            return self.game.spells() # Assumes game.spells() method exists
+            return self.game.spells()  # Assumes game.spells() method exists
 
         # Game Management
         elif cmd in ('save',):

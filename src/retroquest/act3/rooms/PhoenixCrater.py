@@ -6,7 +6,8 @@ class PhoenixCrater(Room):
         super().__init__(
             name="Phoenix Crater",
             description=(
-                "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals."
+                "A luminous bowl of vitrified rock where warm drafts swirl and cinders "
+                "dance in spirals."
             ),
             items=[],
             characters=[],
