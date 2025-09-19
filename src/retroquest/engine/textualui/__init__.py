@@ -1,1 +1,1 @@
-# UI package for RetroQuest using Textual
+"""Textual-based UI components for RetroQuest (panels, controller, app shell)."""

@@ -1,3 +1,5 @@
+"""Spell panel listing known spells with keyboard navigation and detail popups."""
+
 from textual.containers import VerticalScroll
 from textual.widgets import Static
 
@@ -5,12 +7,13 @@ from .Popup import PopupType
 from ..theme import apply_theme
 
 class SpellPanel(VerticalScroll):
+    """Scrollable list of spells with popup detail on selection."""
     def __init__(self) -> None:
         super().__init__(id="spells", classes="selectable-list")
         self.tooltip = "Spell List"
-        self.can_focus = False  # Prevent the panel itself from being focused
+        self.can_focus = False
 
-    def update_spells(self, text: list) -> None:
+    def update_spells(self, text: list[tuple[str, str]]) -> None:
         # Remove all existing children
         for child in list(self.children):
             child.remove()
@@ -31,7 +34,7 @@ class SpellPanel(VerticalScroll):
             no_spells = Static(apply_theme("[dim](none)[/dim]"))
             self.mount(no_spells)
 
-    async def on_key(self, event) -> None:
+    async def on_key(self, event) -> None:  # type: ignore[override]
         if event.key in ("down", "up"):
             # Get all focusable Static widgets (selectable items)
             focusable_items = [child for child in self.children if child.can_focus]

@@ -26,7 +26,21 @@ from ..Act2StoryFlags import FLAG_GATHERING_STORM_COMPLETED
 from ...engine.GameState import GameState
 
 class PropheticVision(Spell):
-    """Ultimate divination magic that grants glimpses of possible futures."""
+    """Ultimate divination spell concluding Act II foresight quest progression.
+
+    Purpose:
+        Provides climactic narrative vision when cast with Sir Cedric present, completing
+        the Gathering Storm aggregation quest on first successful contextual use.
+
+    Mechanics:
+        - Requires Sir Cedric present for quest-completing first cast.
+        - Sets gathering storm completion flag and delivers extended prophecy text.
+        - Subsequent casts: concise reflective foresight flavor.
+
+    Design Notes:
+        Keeps heavy narrative payload inline for clarity; could later externalize into
+        a text asset or segmented localization structure if needed.
+    """
     
     def __init__(self) -> None:
         super().__init__(

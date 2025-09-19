@@ -25,6 +25,23 @@ from ..items.Ravine import Ravine
 from ...engine.GameState import GameState
 
 class ForestSpeechSpell(Spell):
+    """Druidic communication spell enabling dialogue with forest life and discovery hooks.
+
+    Purpose:
+        Facilitates environmental intelligence gathering and enables discovery of the
+        Ravine (caravan hook) on first contextual use in the Forest Entrance.
+
+    Mechanics:
+        - First cast in Forest Entrance: reveals Ravine, adds item, sets flag.
+        - Subsequent casts in same room: non-redundant info message.
+        - Context-aware flavor for forest / enchanted biomes; generic fallback elsewhere.
+        - ``cast_on_character``: richer communication only with forest-aligned entities.
+
+    Design Notes:
+        Avoids deep room-name branching beyond lightweight biome keyword checks. Could
+        escalate to a biome enum if environment set expands.
+    """
+
     def __init__(self) -> None:
         super().__init__(
             name="forest_speech",

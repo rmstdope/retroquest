@@ -1,4 +1,5 @@
-from ...engine.GameState import GameState
+"""Broken shovel item: flavor tool hinting at future repair or crafting systems."""
+
 from ...engine.Item import Item
 
 class BrokenShovel(Item):

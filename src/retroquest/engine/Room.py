@@ -33,7 +33,8 @@ class Room:
     def get_characters(self) -> list[Character]:
         return self.characters
 
-    def get_exits(self, game_state: GameState) -> dict[str, str]:
+    def get_exits(self, _game_state: GameState) -> dict[str, str]:
+        """Return static exit mapping; parameter reserved for dynamic overrides."""
         return self.exits
 
     def get_ambient_sound(self) -> str:
@@ -105,18 +106,26 @@ class Room:
             desc += f"\nExits: {exit_names}"
         return desc
 
-    def search(self, game_state: GameState, target: str = None) -> str:
-        """Allows the player to search the room."""
-        return f"You search around the [room_name]{self.name}[/room_name], but find nothing of interest beyond what you can already see."
+    def search(self, _game_state: GameState, _target: str = None) -> str:
+        """Search the room; base implementation reveals nothing new.
 
-    def rest(self, game_state: GameState) -> str:
-        """Allows the player to rest in the room."""
+        Underscore-prefixed parameters keep polymorphic signature while avoiding unused
+        variable lint warnings.
+        """
+        return (
+            "You search around the [room_name]"
+            f"{self.name}[/room_name], but find nothing of interest beyond what you can "
+            "already see."
+        )
+
+    def rest(self, _game_state: GameState) -> str:
+        """Rest briefly; base implementation has no mechanical effect."""
         return "You rest for a moment, gathering your strength."
 
-    def light(self, game_state: GameState) -> str:
-        """Called when a light source is used or a light spell is cast in the room."""
+    def light(self, _game_state: GameState) -> str:
+        """Handle lighting action; base implementation assumes sufficient light."""
         return "The room is already well lit."
 
-    def on_enter(self, game_state: GameState) -> None:
-        """Hook called when the player enters the room. Override in subclasses for custom behavior."""
+    def on_enter(self, _game_state: GameState) -> None:
+        """Hook when player enters; override for custom scripted behaviors."""
         return ""

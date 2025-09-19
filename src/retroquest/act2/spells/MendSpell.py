@@ -26,6 +26,23 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class MendSpell(Spell):
+    """Utility repair spell with special handling for library protective wards.
+
+    Purpose:
+        Provides baseline repair functionality and advances Hidden Library ward
+        restoration when used on protective enchantments.
+
+    Mechanics:
+        - Ambient ``cast_spell``: flavor if nothing repairable nearby.
+        - ``cast_on_item``: sets ward flag when target is ProtectiveEnchantments.
+        - Fallback heuristic repairs any item whose description contains 'broken' or
+          'damaged'.
+
+    Design Notes:
+        Uses string matching instead of an interface; may later evolve to a dedicated
+        Repairable protocol if repair targets diversify.
+    """
+
     def __init__(self) -> None:
         super().__init__(
             name="mend",

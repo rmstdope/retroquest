@@ -66,7 +66,9 @@ This document outlines the design rules and guidelines for both the game story a
 - Always update docstrings and comments to reflect any changes made to the code.
 - For files that contain only one class, make the module docstring a one-liner summarizing the class's purpose. no more than that! Just one line!
 - For files with multiple classes or functions, provide a somewhat more detailed module docstring explaining the overall purpose and functionality of the module.
-- Keep lines to a maximum of 99 characters for better readability.
+- Lines MUST NEVER exceed a maximum of 99 characters (including indentation spaces) for better readability.
+- Indentation spaces should just that, spaces, not tab characters
+- Never use pylint inline directives in the code. All pylint configuration should be global
 
 ### Testing
 

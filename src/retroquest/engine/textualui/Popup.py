@@ -1,3 +1,5 @@
+"""Modal popup widgets for info and confirmation interactions in Textual UI."""
+
 from enum import Enum
 from typing import Any
 from textual.containers import VerticalScroll
@@ -6,16 +8,19 @@ from textual import events
 from ..theme import apply_theme
 
 class PopupType(Enum):
+    """Enumeration of popup dialog semantic types."""
     INFO = "info"
     QUESTION = "question"
 
 class Popup(VerticalScroll):
+    """Animated modal popup supporting fade transitions and queued updates."""
     def __init__(self, border_text: str, text: str, popup_type: PopupType) -> None:
-        super().__init__(id = "popup")
+        super().__init__(id="popup")
         self.can_focus = True
-        self.animation_duration = 0.3  # Duration for all animations in seconds
+        self.animation_duration = 0.3  # seconds
         self.text_area = Static("", id="popup_textarea")
         self.static = Static("", id="popup_static")
+        self.popup_type: PopupType = popup_type
         self.tooltip = "Popup Dialog"
         self.set_content(border_text, text, popup_type)
 
@@ -42,7 +47,7 @@ class Popup(VerticalScroll):
         self._update_content(border_text, text, popup_type)
         self.styles.animate("opacity", 1.0, duration=self.animation_duration)
 
-    def on_key(self, event: events.Key) -> None:
+    def on_key(self, event: events.Key) -> None:  # type: ignore[override]
         if self.popup_type == PopupType.INFO:
             if event.key == "enter":
                 self.app.close_popup()
@@ -55,18 +60,18 @@ class Popup(VerticalScroll):
         event.prevent_default()
         event.stop()
 
-    def compose(self) -> Any:
+    def compose(self) -> Any:  # type: ignore[override]
         yield self.text_area
         yield self.static
 
-    def on_mount(self) -> None:
+    def on_mount(self) -> None:  # type: ignore[override]
         self.text_area.focus()
         # Animate opacity from 0.0 to 1.0 for a fade-in effect
         self.styles.opacity = 0.0
         self.styles.animate("opacity", 1.0, duration=self.animation_duration)
 
 
-    def on_blur(self, event: events.Blur) -> None:
-        """Restore focus to popup when it loses focus (maintains modal behavior)"""
+    def on_blur(self, _event: events.Blur) -> None:  # type: ignore[override]
+        """Restore focus to popup when it loses focus (maintains modal behavior)."""
         # Use call_next to avoid infinite recursion
         self.call_next(self.focus)

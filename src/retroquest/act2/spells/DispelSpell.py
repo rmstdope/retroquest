@@ -21,6 +21,23 @@ from ...engine.GameState import GameState
 from ...engine.Character import Character
 
 class DispelSpell(Spell):
+    """Counter-magic spell for breaking enchantments and Elena's final cure phase.
+
+    Purpose:
+        Breaks hostile magical effects; when used on Elena triggers her final recovery
+        method to complete the multi-step curse sequence.
+
+    Mechanics:
+        - ``cast_spell``: ambient cast, returns generic counter-magic flavor.
+        - ``cast_on_character``: delegates to Elena's ``receive_dispel_final_cure`` if
+          she is the target, else generic dispel narration.
+        - ``cast_on_item``: flavor removal of latent enchantments.
+
+    Design Notes:
+        Narrative completion logic resides in the character to keep the spell lean and
+        extensible for future barrier / ward interactions.
+    """
+
     def __init__(self) -> None:
         super().__init__(
             name="dispel",
@@ -34,7 +51,7 @@ class DispelSpell(Spell):
 
     def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
         from ..characters.BarmaidElena import BarmaidElena  # Import here to avoid circular imports
-        
+
         # Special handling for Elena's curse - final step
         if isinstance(target_character, BarmaidElena):
             # Check if Elena has the receive_dispel_final_cure method and call it

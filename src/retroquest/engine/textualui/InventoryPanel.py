@@ -1,3 +1,5 @@
+"""Inventory panel listing carried items with focusable entries for detail popups."""
+
 from textual.containers import VerticalScroll
 from textual.widgets import Static
 
@@ -5,12 +7,13 @@ from .Popup import PopupType
 from ..theme import apply_theme
 
 class InventoryPanel(VerticalScroll):
+    """Scrollable inventory list with keyboard navigation and detail popups."""
     def __init__(self) -> None:
         super().__init__(id="inventory", classes="selectable-list")
         self.tooltip = "Inventory"
-        self.can_focus = False  # Prevent the panel itself from being focused
+        self.can_focus = False
 
-    def update_inventory(self, text: list[tuple]) -> None:
+    def update_inventory(self, text: list[tuple[str, str]]) -> None:
         # Remove all existing children
         for child in list(self.children):
             child.remove()
@@ -33,7 +36,7 @@ class InventoryPanel(VerticalScroll):
             no_items = Static(apply_theme("[dim](none)[/dim]"))
             self.mount(no_items)
 
-    async def on_key(self, event) -> None:
+    async def on_key(self, event) -> None:  # type: ignore[override]
         if event.key in ("down", "up"):
             # Get all focusable Static widgets (selectable items)
             focusable_items = [child for child in self.children if child.can_focus]
@@ -60,14 +63,9 @@ class InventoryPanel(VerticalScroll):
             focusable_items[next_index].focus()
             event.prevent_default()
         elif event.key == "enter":
-            # Get all focusable Static widgets (selectable items)
             focusable_items = [child for child in self.children if child.can_focus]
-            
-            # Find currently focused item
             for item in focusable_items:
                 if item.has_focus:
-                    # Extract item name from the rendered text (remove styling tags)
                     item_text = str(item.renderable)
-                    # Use the item's stored description instead of placeholder
                     self.app.open_popup(item_text, item.description, PopupType.INFO)
-                    break 
+                    break

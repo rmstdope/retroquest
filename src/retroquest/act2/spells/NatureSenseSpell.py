@@ -22,6 +22,23 @@ from ...engine.GameState import GameState
 from ..characters.WaterNymphs import WaterNymphs
 
 class NatureSenseSpell(Spell):
+    """Reveals hidden natural presences and spawns water nymphs in Whispering Glade.
+
+    Purpose:
+        Enhances environmental perception and triggers first-time summoning of Water
+        Nymphs in the appropriate mystical location.
+
+    Mechanics:
+        - First cast in Whispering Glade: spawns WaterNymphs, sets internal usage flag.
+        - Subsequent casts: contextual sensory feedback only.
+        - Keyword-based room classification (forest / enchanted / transition) shapes
+          flavor output.
+
+    Design Notes:
+        Keeps spawn logic local to maintain clear causal link (spell -> appearance). A
+        future generic Reveal/Summon framework could unify similar mechanics.
+    """
+
     def __init__(self) -> None:
         super().__init__(
             name="nature_sense",

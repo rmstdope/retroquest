@@ -1,19 +1,18 @@
+"""Hierarchical suggester expanding partial commands using game completion tree."""
+
 from typing import Union
 from textual.suggester import Suggester
 from textual.widgets import Input
 from .GameController import GameController
 
 class NestedSuggester(Suggester):
-    """
-    Suggester that provides word completions based on Game.build_use_with_completions.
-    The completions variable is a nested dictionary of words.
-    """
+    """Provide multi-token suggestions from the engine's command completion graph."""
     def __init__(self, input_widget: Input, controller: GameController) -> None:
         super().__init__(use_cache=False)
         self.input_widget = input_widget
         self.controller = controller
 
-    async def get_suggestion(self, value: str) -> Union[str, None]:
+    async def get_suggestion(self, value: str) -> Union[str, None]:  # type: ignore[override]
         next_word = value.split(' ')[-1]  # Get the last word only
         words = value.split(' ')[:-1]  # Exclude the last word
         node = self.controller.game.get_command_completions()

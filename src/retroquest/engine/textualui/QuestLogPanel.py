@@ -1,13 +1,16 @@
+"""Quest log panel showing active and completed quests using collapsible entries."""
+
 from typing import Union
 from textual.widgets import Collapsible, Static
 from textual.containers import VerticalScroll
 from ..theme import apply_theme
 
 class QuestLogPanel(VerticalScroll):
+    """Scrollable quest log with collapsible sections for details."""
     def __init__(self) -> None:
         super().__init__(id="questlog")
         self.tooltip = "Quest Log"
-        self.can_focus = False  # Prevent the panel itself from being focused
+        self.can_focus = False
 
     def update_questlog(self, active_quests: list, completed_quests: Union[list, None] = None) -> None:
         # Remove all existing children
@@ -41,9 +44,8 @@ class QuestLogPanel(VerticalScroll):
             else:
                 no_completed = Static(apply_theme("[dim](none)[/dim]"))
                 self.mount(no_completed)
-        pass
 
-    async def on_key(self, event) -> None:
+    async def on_key(self, event) -> None:  # type: ignore[override]
         if event.key in ("down", "up"):
             # Get all Collapsible widgets
             collapsibles = [child for child in self.children if isinstance(child, Collapsible)]

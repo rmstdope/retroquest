@@ -21,6 +21,22 @@ from ...engine.GameState import GameState
 from ...engine.Character import Character
 
 class GreaterHealSpell(Spell):
+    """Advanced restorative spell used in Elena's staged cure and high-impact healing.
+
+    Purpose:
+        Provides significant restorative magic and triggers Elena's first recovery step
+        when targeted at her, delegating narrative state changes to the character.
+
+    Mechanics:
+        - ``cast_spell``: ambient cast with no target (flavor only).
+        - ``cast_on_character``: if target is ``BarmaidElena`` invokes her
+          ``receive_greater_heal`` method; otherwise generic healing text.
+
+    Design Notes:
+        Keeps cure progression logic centralized in the character class to avoid
+        duplicating quest sequencing inside the spell layer.
+    """
+
     def __init__(self) -> None:
         super().__init__(
             name="greater_heal",
