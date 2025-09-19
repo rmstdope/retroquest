@@ -54,6 +54,8 @@ This document outlines the design rules and guidelines for both the game story a
 
 ### Technical Considerations
 
+These instructions are mandatory for all code contributions to ensure consistency, maintainability, and quality across the codebase. It shall be taken into account when doing any edits in any python file.
+
 - Ensure integration with existing systems, such as Game.py, GameState.py, and Quest.py base classes.
 - Maintain compatibility with the user interface system and save/load functionality.
 - Uses object-oriented programming principles to encapsulate game logic and data.
@@ -67,8 +69,10 @@ This document outlines the design rules and guidelines for both the game story a
 - For files that contain only one class, make the module docstring a one-liner summarizing the class's purpose. no more than that! Just one line!
 - For files with multiple classes or functions, provide a somewhat more detailed module docstring explaining the overall purpose and functionality of the module.
 - Lines MUST NEVER exceed a maximum of 99 characters (including indentation spaces) for better readability.
-- Indentation spaces should just that, spaces, not tab characters
+- Indentation spaces should be just that, spaces, not tab characters
 - Never use pylint inline directives in the code. All pylint configuration should be global
+- Never have trailing whitespace in any line
+- Always have a single newline at the end of each file
 
 ### Testing
 

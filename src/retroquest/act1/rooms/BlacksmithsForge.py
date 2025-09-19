@@ -1,28 +1,31 @@
-"""Blacksmith's Forge (Act I)
-
-Narrative Role:
-    Craftsmanship focal point emphasizing equipment culture and environmental immersion (heat, sound, sparks).
-
-Key Mechanics:
-    - Currently static; future upgrade, repair, or forging systems could anchor here.
-
-Story Flags:
-    - None presently; progression-neutral location.
-
-Contents:
-    - Item: Horseshoe (flavor / potential crafting input or luck charm hook).
-    - NPC: Blacksmith (candidate for gear enhancement or repair interactions later).
-
-Design Notes:
-    - Serves as sensory contrast to quieter village locations.
-    - If forging introduced, may warrant a ForgingStation item abstraction to manage recipes.
-"""
+"""Blacksmith's Forge room: sensory craftsmanship hub placeholder for forging systems."""
 
 from ...engine.Room import Room
 from ..items.Horseshoe import Horseshoe
 from ..characters.Blacksmith import Blacksmith
 
 class BlacksmithsForge(Room):
+    """Static crafting ambience node foreshadowing future equipment systems.
+
+    Narrative Role:
+        Establishes industrial heat/sound contrast versus quieter pastoral spaces and
+        hints at later gear enhancement mechanics.
+
+    Key Mechanics:
+        Currently inert. Potential future: repair hooks, forging mini-game, upgrade
+        services, or recipe discovery.
+
+    Story Flags:
+        None; progression neutral.
+
+    Contents:
+        - Item: ``Horseshoe`` (flavor / possible luck or crafting reagent).
+        - NPC: ``Blacksmith`` (future gear interface candidate).
+
+    Design Notes:
+        If forging expands, introduce a ``ForgingStation`` item (encapsulating recipe
+        validation, heat states, material slotting).  
+    """
     def __init__(self) -> None:
         super().__init__(
             name="Blacksmith's Forge",

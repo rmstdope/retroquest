@@ -1,23 +1,4 @@
-"""General Store (Act I)
-
-Narrative Role:
-    Primary supply vendor introducing basic survival and combat gear early in the game.
-
-Key Mechanics:
-    - Static inventory seeded directly (no dynamic purchase state yet).
-    - Provides multi-category items (tool, food, light, weapon, armor) to preview breadth of systems.
-
-Story Flags:
-    - None currently; transactional logic not yet flag-integrated.
-
-Contents:
-    - Items: Rope (climbing/puzzle potential), Apple (consumable), Matches (light source precursor), Sword (weapon), Armor (defense).
-    - NPC: Shopkeeper (commerce interaction placeholder).
-
-Design Notes:
-    - If economy system expands, migrate static list into merchant inventory abstraction.
-    - Consider per-item descriptive pricing or availability flags in later acts.
-"""
+"""General Store room: static early merchant hub with multi-category items."""
 
 from ...engine.Room import Room
 from ..items.Rope import Rope
@@ -28,6 +9,24 @@ from ..items.Sword import Sword
 from ..characters.Shopkeeper import Shopkeeper
 
 class GeneralStore(Room):
+    """Foundational vendor location showcasing breadth of item categories.
+
+    Narrative Role:
+        Introduces economic hub concept and early provisioning context.
+
+    Key Mechanics:
+        Static seeded inventory; no transaction system or dynamic pricing yet.
+
+    Story Flags:
+        None currently.
+
+    Contents:
+        - Items: ``Rope``, ``Apple``, ``Matches``, ``Sword``, ``Armor``.
+        - NPC: ``Shopkeeper``.
+
+    Design Notes:
+        Future economy: migrate to merchant inventory abstraction with dynamic stock.  
+    """
     def __init__(self) -> None:
         super().__init__(
             name="General Store",
@@ -39,5 +38,5 @@ class GeneralStore(Room):
             ),
             items=[Rope(), Apple(), Matches(), Sword(), Armor()],
             characters=[Shopkeeper()],
-            exits={"west": "VillageSquare", "south": "BlacksmithsForge"} # Corrected based on RoomsAct1.md and map
+            exits={"west": "VillageSquare", "south": "BlacksmithsForge"}  # Map alignment
         )

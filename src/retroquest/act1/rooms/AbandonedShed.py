@@ -1,36 +1,40 @@
-"""Abandoned Shed (Act I)
-
-Narrative Role:
-    Early micro-dungeon style container offering multi-step interaction: unlock -> search -> loot staging.
-
-Key Mechanics:
-    - unlock(): Toggles locked state, injects MysteriousBox + BrokenShovel.
-    - search(): While unlocked, first run adds FishingRod + Magnet (room_searched flag ensures idempotence).
-    - Locked state blocks meaningful search feedback reinforcing tool discovery order.
-
-Story Flags:
-    - None yet; internal booleans (locked, room_searched) handle progression. Could elevate lock state to a flag if other rooms react.
-
-Contents:
-    - Items (initial): ShedDoor (implicit lock object).
-    - Items (on unlock): MysteriousBox, BrokenShovel.
-    - Items (on first search post-unlock): FishingRod, Magnet.
-    - Characters: None.
-
-Design Notes:
-    - Exemplifies staged revelation pattern; reusable via a LockableLootRoom abstraction if pattern repeats.
-    - Consider moving narrative strings to constants for localization scalability.
-"""
+"""Abandoned Shed room: staged unlock and layered search progression."""
 
 from ...engine.Room import Room
 from ..items.BrokenShovel import BrokenShovel
 from ..items.MysteriousBox import MysteriousBox
-from ..items.FishingRod import FishingRod # Import FishingRod
-from ..items.Magnet import Magnet # Import Magnet
+from ..items.FishingRod import FishingRod  # Import FishingRod
+from ..items.Magnet import Magnet  # Import Magnet
 from ..items.ShedDoor import ShedDoor
 from ...engine.GameState import GameState
 
 class AbandonedShed(Room):
+    """Staged micro-dungeon style container with unlock and gated search phases.
+
+    Narrative Role:
+        Early contained progression space teaching player that environment states change
+        across interactions (unlock -> search -> reward tiers).
+
+    Key Mechanics:
+        - ``unlock()``: Toggles locked state; injects ``MysteriousBox`` and ``BrokenShovel``.
+        - ``search()``: First successful (post-unlock) search adds ``FishingRod`` and ``Magnet``.
+        - Internal booleans ``locked`` / ``room_searched`` control state; no story flags yet.
+
+    Story Flags:
+        None presently. Could elevate lock/search completions to flags if cross-room
+        reactions are later required.
+
+    Contents:
+        - Initial: ``ShedDoor`` (implicit barrier object).
+        - On unlock: ``MysteriousBox``, ``BrokenShovel``.
+        - First search: ``FishingRod``, ``Magnet``.
+        - Characters: None.
+
+    Design Notes:
+        Demonstrates reusable staged revelation pattern. Future abstraction could be a
+        ``LockableLootRoom`` base capturing common sequencing logic. Narrative strings
+        intentionally inline (localization not yet scoped).  
+    """
     def __init__(self) -> None:
         super().__init__(
             name="Abandoned Shed",
@@ -45,7 +49,7 @@ class AbandonedShed(Room):
             characters=[],
             exits={"north": "VillageWell", "south": "OldMill"}
         )
-        self.locked = True # The shed starts locked
+        self.locked = True  # The shed starts locked
         self.room_searched = False
 
     def unlock(self) -> str:
@@ -60,9 +64,12 @@ class AbandonedShed(Room):
             "A [item_name]Mysterious Box[/item_name] sits on a rickety table, and a [item_name]Broken Shovel[/item_name] leans against a cobweb-covered wall."
         )
 
-    def search(self, game_state: GameState, target: str = None) -> str:
+    def search(self, _game_state: GameState, _target: str = None) -> str:
         if self.locked:
-            return "You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] is locked so you can't search inside."
+            return (
+                "You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] is "
+                "locked so you can't search inside."
+            )
 
         items_found_messages = []
         
@@ -74,6 +81,11 @@ class AbandonedShed(Room):
             items_found_messages.append("a small [item_name]Magnet[/item_name]")
 
         if items_found_messages:
-            return f"You rummage through the clutter of rusty tools and broken crates. Tucked away in dusty corners, you find {', and '.join(items_found_messages)}!"
-        else:
-            return "You search around the shed again, but find nothing else of interest among the clutter."
+            return (
+                "You rummage through the clutter of rusty tools and broken crates. Tucked away in "
+                f"dusty corners, you find {', and '.join(items_found_messages)}!"
+            )
+        return (
+            "You search around the shed again, but find nothing else of interest among the "
+            "clutter."
+        )

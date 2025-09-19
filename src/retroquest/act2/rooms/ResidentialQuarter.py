@@ -43,8 +43,16 @@ class ResidentialQuarter(Room):
             exits={"south": "CastleCourtyard", "north": "HealersHouse"}
         )
 
-    def search(self, game_state: GameState, target: str = None) -> str:
-        """Handle searching for the Hidden Library entrance"""
+    def search(self, game_state: GameState, _target: str = None) -> str:
+        """Handle searching for the Hidden Library entrance.
+
+        Parameters:
+            game_state: Global state used to read/set library discovery flag.
+            _target: Ignored placeholder for potential future targeted search.
+
+        Returns:
+            Narrative string describing discovery or repeat information.
+        """
         if not game_state.get_story_flag(FLAG_ANCIENT_LIBRARY_ACCEPTED):
             game_state.set_story_flag(FLAG_ANCIENT_LIBRARY_ACCEPTED, True)
             # Add the secret passage exit when the library is discovered
@@ -54,11 +62,13 @@ class ResidentialQuarter(Room):
             from ..rooms.HiddenLibrary import HiddenLibrary
             hidden_library = HiddenLibrary()
             
-            return (f"[success]You search through the basement areas of the residential buildings. Behind some old "
-                    f"storage crates and forgotten furniture, you discover a concealed entrance hidden in the stone "
-                    f"wall. A narrow tunnel leads deeper underground to what appears to be an ancient chamber. "
-                    f"You've found a secret passage to a [location_name]{hidden_library.name}[/location_name]! You can now "
-                    f"use 'go secret_passage' to enter this mysterious underground repository.[/success]")
+            return (
+                f"[success]You search through the basement areas of the residential buildings. Behind "
+                f"some old storage crates and forgotten furniture, you discover a concealed entrance "
+                f"in the stone wall. A narrow tunnel leads underground to what appears to be an ancient "
+                f"chamber. You've found a secret passage to a [location_name]{hidden_library.name}[/location_name]! "
+                f"Use 'go secret_passage' to enter this mysterious repository.[/success]"
+            )
         else:
             # Get the Hidden Library room name for the message  
             from ..rooms.HiddenLibrary import HiddenLibrary

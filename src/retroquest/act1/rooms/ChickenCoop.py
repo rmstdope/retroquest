@@ -1,22 +1,4 @@
-"""Chicken Coop (Act I)
-
-Narrative Role:
-    Light agricultural micro-location providing early harmless creature ambiance and small collectible resources.
-
-Key Mechanics:
-    - Static configuration; description hints at hidden secret (future search or inspect hook candidate).
-
-Story Flags:
-    - None currently; collection or care systems could introduce them later.
-
-Contents:
-    - Items: Chicken (creature object), Egg (food / trade), Feather (crafting/brewing potential).
-    - Characters: None (chickens modeled as items rather than NPCs for simplicity).
-
-Design Notes:
-    - Consider whether Chicken should become a Character if behavior/emotion systems are added.
-    - Hidden hint provides low-cost expansion path for a mini-quest (lost trinket, golden egg, etc.).
-"""
+"""Chicken Coop room: light agricultural ambience with small resource items."""
 
 from ...engine.Room import Room
 from ..items.Egg import Egg
@@ -24,6 +6,26 @@ from ..items.Feather import Feather
 from ..items.Chicken import Chicken
 
 class ChickenCoop(Room):
+    """Light agricultural micro-location with passive collectible signals.
+
+    Narrative Role:
+        Introduces harmless creature presence and gentle resource flavor early.
+
+    Key Mechanics:
+        Static now; description seeds a hidden glint hook for future search or mini
+        quest expansion.
+
+    Story Flags:
+        None currently.
+
+    Contents:
+        - Items: ``Chicken`` (ambient creature styled as item), ``Egg``, ``Feather``.
+        - Characters: None.
+
+    Design Notes:
+        ``Chicken`` could migrate to a Character if behavior/emotion systems appear.
+        Hidden hint supplies expandable narrative path (golden egg, lost trinket).  
+    """
     def __init__(self) -> None:
         super().__init__(
             name="Chicken Coop",

@@ -58,7 +58,7 @@ def test_golden_path_act2_completion():
     check_character_in_room(game.state.current_room, "Gate Captain")
     execute_commands(game, ["search"])
     # The search should fail because captain is still watching
-    assert "improper to search around while he's observing" in results[-1].lower(), "Search should be blocked while captain is present"
+    assert "improper to search" in results[-1].lower(), "Search should be blocked while captain is present"
     check_item_in_room(game.state.current_room, "City Map", should_be_present=False)
     # Talk to Gate Captain for city information - this causes him to walk away
     execute_commands(game, ["talk to gate captain"])

@@ -1,29 +1,28 @@
-"""Road to Greendale (Act I)
-
-Narrative Role:
-    Transitional outbound route signaling shift from sheltered village life to broader regional journey.
-
-Key Mechanics:
-    - Simple linear exit design; staging area for encounter or travel preparation events.
-
-Story Flags:
-    - None currently; future travel milestones or ambush events could attach here.
-
-Contents:
-    - Items: RustySaw (tool), potential TravelCloak (import present but not currently added—candidate for inclusion or removal),
-      enabling light equipment provisioning.
-    - NPC: Merchant (economic teaser / bridge to larger markets in Act II).
-
-Design Notes:
-    - Consider adding conditional exit enabling once certain village quests complete to reinforce narrative readiness.
-    - Review unused TravelCloak import if item intentionally withheld (maybe reward gating) to avoid confusion.
-"""
+"""Road to Greendale room: outbound transition toward broader world scope."""
 
 from ...engine.Room import Room
 from ..items.RustySaw import RustySaw
 from ..characters.Merchant import Merchant
 
 class RoadToGreendale(Room):
+    """Transitional route signaling expansion beyond village confines.
+
+    Narrative Role:
+        Frames departure tone and allows light provisioning via ambient merchant.
+
+    Key Mechanics:
+        Simple exit topology; staging for future encounter gating or travel events.
+
+    Story Flags:
+        None currently.
+
+    Contents:
+        - Item: ``RustySaw``.
+        - NPC: ``Merchant``.
+
+    Design Notes:
+        Could introduce conditional unlocking tied to core village quest completion.  
+    """
     def __init__(self) -> None:
         super().__init__(
             name="Road to Greendale",

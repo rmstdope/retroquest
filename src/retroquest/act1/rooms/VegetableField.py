@@ -1,24 +1,4 @@
-"""Vegetable Field (Act I)
-
-Narrative Role:
-    Environmental tableau signaling early-world imbalance and foreshadowing restorative magic themes.
-
-Key Mechanics:
-    - on_enter() sets FLAG_INVESTIGATED_WITHERED_CROPS automatically (passive discovery pattern triggering quest awareness).
-    - Provides multiple basic tool/ingredient items (WitheredCarrot, RustyHoe, DullKnife) for early experimentation.
-
-Story Flags:
-    - Sets: FLAG_INVESTIGATED_WITHERED_CROPS (player has noticed agricultural blight).
-    - Reads: None.
-
-Contents:
-    - Items: WitheredCarrot (symbolic decay / potential reagent), RustyHoe (tool), DullKnife (basic utility).
-    - Characters: None (emphasis on desolation).
-
-Design Notes:
-    - Automatic flag setting reduces friction; ensure consistency with later passive discovery sites.
-    - Could later react to growth or purification spells showing visual state changes.
-"""
+"""Vegetable Field room: blighted crops establishing early restorative themes."""
 
 from ...engine.GameState import GameState
 from ...engine.Room import Room
@@ -28,6 +8,25 @@ from ..items.DullKnife import DullKnife
 from ..Act1StoryFlags import FLAG_INVESTIGATED_WITHERED_CROPS
 
 class VegetableField(Room):
+    """Blighted agricultural scene auto-triggering passive investigation flag.
+
+    Narrative Role:
+        Conveys ecological imbalance and seeds restorative magic expectations.
+
+    Key Mechanics:
+        - ``on_enter()`` sets ``FLAG_INVESTIGATED_WITHERED_CROPS`` unprompted.
+        - Provides multiple basic experimental items.
+
+    Story Flags:
+        - Sets: ``FLAG_INVESTIGATED_WITHERED_CROPS``.
+
+    Contents:
+        - Items: ``WitheredCarrot``, ``RustyHoe``, ``DullKnife``.
+        - Characters: None.
+
+    Design Notes:
+        Later visual state swap possible after growth spell or quest resolution.  
+    """
     def __init__(self) -> None:
         super().__init__(
             name="Vegetable Field",

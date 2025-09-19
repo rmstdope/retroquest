@@ -1,28 +1,29 @@
-"""Old Mill (Act I)
-
-Narrative Role:
-    Weathered industrial structure offering subtle technological contrast to agrarian village life; houses mysterious Mechanism suggesting hidden systems.
-
-Key Mechanics:
-    - Static room currently; Mechanism item hints at potential puzzle/activation sequence.
-
-Story Flags:
-    - None yet; if mechanism puzzle added, introduce activation flags (e.g., FLAG_MILL_MECHANISM_REPAIRED).
-
-Contents:
-    - Items: SackOfFlour (mundane supply), Mechanism (anomalous interactive object candidate).
-    - Characters: None (emphasis on emptiness and latent function).
-
-Design Notes:
-    - Potential gateway for crafting, food provision bonuses, or mechanical quest chain.
-    - Could provide ambient ticking or gear sounds dynamically once repaired.
-"""
+"""Old Mill room: weathered structure with latent mechanical mystery."""
 
 from ...engine.Room import Room
 from ..items.SackOfFlour import SackOfFlour
-from ..items.Mechanism import Mechanism 
+from ..items.Mechanism import Mechanism
 
 class OldMill(Room):
+    """Aging industrial landmark hinting at future mechanical puzzle systems.
+
+    Narrative Role:
+        Provides tonal contrast (technology vs. rustic agriculture) and seeds the
+        ``Mechanism`` object as a future interaction anchor.
+
+    Key Mechanics:
+        Static currently; ``Mechanism`` signals deferred puzzle or activation chain.
+
+    Story Flags:
+        None yet.
+
+    Contents:
+        - Items: ``SackOfFlour``, ``Mechanism``.
+        - Characters: None.
+
+    Design Notes:
+        Could expand into crafting throughput, speed buffs, or timing-based events.  
+    """
     def __init__(self) -> None:
         super().__init__(
             name="Old Mill",
