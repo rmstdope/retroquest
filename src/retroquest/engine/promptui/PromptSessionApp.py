@@ -1,4 +1,3 @@
-from prompt_toolkit.styles import Style
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import NestedCompleter
 from rich.console import Console
@@ -13,6 +12,7 @@ class PromptSessionApp:
     """
 
     def __init__(self, game: Game) -> None:
+        """Initialize the prompt session app with the given game instance."""
         custom_theme = Theme({
             "default": "black on #000000",
             "character_name": "bold blue",
@@ -44,21 +44,27 @@ class PromptSessionApp:
         quest_sound = 0
         while (quest := self.game.state.next_activated_quest()):
             quest_type = "main" if quest.is_main() else "side"
-            txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
+            txt.append(
+                f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}"
+            )
         if txt:
             result += "\n\nQuest(s) activated:\n" + "\n".join(txt)
             quest_sound = 1
         txt = []
         while (quest := self.game.state.next_updated_quest()):
             quest_type = "main" if quest.is_main() else "side"
-            txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
+            txt.append(
+                f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}"
+            )
         if txt:
             result += "\n\nQuest(s) updated:\n" + "\n".join(txt)
             quest_sound = 1
         txt = []
         while (quest := self.game.state.next_completed_quest()):
             quest_type = "main" if quest.is_main() else "side"
-            txt.append(f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}")
+            txt.append(
+                f"[quest_name]{quest.name} ({quest_type} quest)[/quest_name]\n{quest.description}"
+            )
         if txt:
             result += "\n\nQuest(s) completed:\n" + "\n".join(txt)
             quest_sound = 2
@@ -70,8 +76,10 @@ class PromptSessionApp:
         return result
 
     def run(self) -> None:
+        """Main game loop that handles user input and updates the display."""
         while self.game.is_running:
-            if not (self.game.is_act_running() or self.game.is_act_transitioning()) or self.game.has_changed_room:
+            if (not (self.game.is_act_running() or self.game.is_act_transitioning()) 
+                or self.game.has_changed_room):
                 self.console.clear()
             self.console.print(self.get_output_text())
             if self.game.accept_input:

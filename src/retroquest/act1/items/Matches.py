@@ -23,9 +23,17 @@ Design Notes:
 """
 
 from ...engine.Item import Item
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ...engine.GameState import GameState
 
 class Matches(Item):
+    """
+    Basic ignition source enabling illumination and ritual flavor actions.
+    """
+
     def __init__(self) -> None:
+        """Initialize the Matches item with name and description."""
         super().__init__(
             name="matches",
             description=(
@@ -44,9 +52,9 @@ class Matches(Item):
             )
         return None  # Allow pickup if can_be_carried is True
 
-    def use_with(self, game_state, other_item) -> str:
-        from .Candle import Candle # Moved import here and updated path
+    def use_with(self, game_state: 'GameState', other_item: Item) -> str:
+        """Delegate to Candle's use_with if applicable, otherwise fallback."""
+        from .Candle import Candle
         if isinstance(other_item, Candle):
-            # Call the Candle's use_with method, passing these matches
             return other_item.use_with(game_state, self)
         return super().use_with(game_state, other_item)

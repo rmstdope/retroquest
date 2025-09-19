@@ -21,9 +21,17 @@ Design Notes:
 """
 
 from ...engine.Item import Item
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ...engine.GameState import GameState
 
 class Magnet(Item):
+    """
+    Small, strong magnet used for retrieval puzzles and crafting upgrades.
+    """
+
     def __init__(self) -> None:
+        """Initialize the Magnet item with name, description, and carry status."""
         super().__init__(
             name="magnet",
             description=(
@@ -33,9 +41,9 @@ class Magnet(Item):
             can_be_carried=True,
         )
 
-    def use_with(self, game_state, other_item: Item) -> str:
+    def use_with(self, game_state: 'GameState', other_item: Item) -> str:
+        """Delegate to FishingRod's use_with if applicable, otherwise fallback."""
         from .FishingRod import FishingRod
         if isinstance(other_item, FishingRod):
-            # Delegate to FishingRod's use_with
             return other_item.use_with(game_state, self)
         return super().use_with(game_state, other_item)

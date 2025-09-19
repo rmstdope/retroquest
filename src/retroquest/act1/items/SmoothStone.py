@@ -21,10 +21,18 @@ Design Notes:
 from ...engine.Item import Item
 
 class SmoothStone(Item):
+    """
+    Ambient river find that can act as a tactile focus or low-stakes collectible, grounding the world with natural artifacts.
+    """
+
     def __init__(self) -> None:
+        """Initialize the Smooth Stone item with name, description, and carry status."""
         super().__init__(
             name="smooth stone",
-            description="A small, flat stone polished smooth by the river's current. It fits perfectly in your palm.",
+            description=(
+                "A small, flat stone polished smooth by the river's current. It fits perfectly "
+                "in your palm."
+            ),
             short_name="stone",
             can_be_carried=True
         )

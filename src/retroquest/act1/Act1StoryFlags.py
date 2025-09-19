@@ -1,4 +1,22 @@
 # Story flag constants for use throughout the game
+"""
+Act1StoryFlags.py
+
+This module defines story flag constants used throughout Act 1 of the game.
+Each flag represents a specific event, interaction, or milestone that can be tracked
+to manage game state and narrative progression.
+
+Flags include:
+- Discovery events (e.g., finding the lost letter, photo)
+- Character interactions (e.g., talking to the grandmother, priest, fisherman, blacksmith, villager)
+- Investigation and observation events (e.g., investigating withered crops,
+    observing deer, examining the well)
+- Magical progression (e.g., learning spells, unlocking magic, completing blessings)
+- Major story milestones (e.g., witnessing shadow events, completing Shadows Over Willowbrook)
+
+These constants are intended for use throughout the game's codebase to ensure consistent
+reference to story flags and facilitate maintainable game logic.
+"""
 FLAG_FOUND_LOST_LETTER = "found_lost_letter"
 FLAG_ASKED_GRANDMOTHER_ABOUT_LETTER = "asked_grandmother_about_letter"
 FLAG_INVESTIGATED_WITHERED_CROPS = "investigated_withered_crops"

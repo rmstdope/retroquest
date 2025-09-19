@@ -27,7 +27,12 @@ from .MillstoneFragment import MillstoneFragment
 from .Rope import Rope
 
 class Mechanism(Item):
+    """
+    Central repair puzzle object in the mill context.
+    """
+
     def __init__(self) -> None:
+        """Initialize the Mechanism item with name, description, and repaired state."""
         super().__init__(
             name="strange mechanism",
             short_name="mechanism",
@@ -39,7 +44,8 @@ class Mechanism(Item):
         )
         self.repaired = False
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, game_state: 'GameState') -> str:
+        """Return description based on repaired state."""
         if self.repaired:
             self.description = (
                 f"The [item_name]{self.get_name()}[/item_name] has been repaired using a "
@@ -52,7 +58,8 @@ class Mechanism(Item):
             )
         return super().examine(game_state)
 
-    def use(self, game_state: GameState) -> str:
+    def use(self, _game_state: 'GameState') -> str:
+        """Operate the mechanism if repaired, otherwise prompt for repair."""
         if self.repaired:
             return (
                 f"[failure]The [item_name]{self.get_name()}[/item_name] has already been "
@@ -63,8 +70,8 @@ class Mechanism(Item):
             f"[item_name]{self.get_name()}[/item_name].[/failure]"
         )
 
-    def use_with(self, game_state, other_item: Item) -> str:
-
+    def use_with(self, game_state: 'GameState', other_item: Item) -> str:
+        """Repair with Rope, spawn MillstoneFragment, or fallback."""
         if isinstance(other_item, Rope):
             if self.repaired:
                 return (
@@ -72,19 +79,13 @@ class Mechanism(Item):
                     "operated.[/failure]"
                 )
             self.repaired = True
-            # Remove rope from inventory
             if other_item in game_state.inventory:
                 game_state.inventory.remove(other_item)
-            
-            # Add MillstoneFragment to the current room's items
             millstone_fragment = MillstoneFragment()
             game_state.current_room.add_item(millstone_fragment)
-            
-            # Update this item's description to reflect the change
             self.description = (
                 "The mechanism has been repaired using a rope. A compartment is open."
             )
-
             event_msg = (
                 f"[event]You try to use the [item_name]rope[/item_name] with the "
                 f"[item_name]{self.get_name()}[/item_name].[/event]\n"
@@ -98,7 +99,8 @@ class Mechanism(Item):
         else:
             return super().use_with(game_state, other_item)
 
-    def listen(self, game_state: GameState) -> str:
+    def listen(self, _game_state: 'GameState') -> str:
+        """Return sound feedback based on repaired state."""
         event_msg = (
             f"[event]You listen to the [item_name]{self.get_name()}[/item_name].[/event]\n"
         )

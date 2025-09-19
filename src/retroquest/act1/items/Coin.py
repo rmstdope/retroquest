@@ -29,8 +29,10 @@ class Coin(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state: GameState) -> str:
+    def use(self, _game_state: GameState) -> str:
+        """Flip the coin for a flavor message."""
         return (
-            "[event]You flip the [item_name]coin[/item_name] in the air.[/event]\nIt lands "
-            "heads up. Seems like a regular [item_name]coin[/item_name], perhaps for trading."
+            "[event]You flip the [item_name]coin[/item_name] in the air.[/event]\n"
+            "It lands heads up. Seems like a regular [item_name]coin[/item_name], "
+            "perhaps for trading."
         )

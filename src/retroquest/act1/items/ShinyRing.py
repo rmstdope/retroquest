@@ -1,12 +1,19 @@
-from ...engine.GameState import GameState
+
+"""Valuable silver ring with gemstone, reward for solving the well puzzle."""
 from ...engine.Item import Item
-from typing import Any
 
 class ShinyRing(Item):
+    """
+    Valuable silver ring with gemstone, reward for solving the well puzzle.
+    """
+
     def __init__(self) -> None:
+        """Initialize the Shiny Ring item with name, description, and carry status."""
         super().__init__(
             name="shiny ring",
             short_name="ring",
-            description="A beautiful silver ring with a small, sparkling gemstone. It looks quite valuable.",
+            description=(
+                "A beautiful silver ring with a small, sparkling gemstone. It looks quite valuable."
+            ),
             can_be_carried=True
         )

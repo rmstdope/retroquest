@@ -21,7 +21,12 @@ Design Notes:
 from ...engine.Item import Item
 
 class Egg(Item):
+    """
+    Simple agricultural product reinforcing life in the village and potential cooking/crafting systems.
+    """
+
     def __init__(self) -> None:
+        """Initialize the Egg item with name, description, and carry status."""
         super().__init__(
             name="egg",
             description="A freshly laid egg, still warm. It could be cooked or used in a recipe.",

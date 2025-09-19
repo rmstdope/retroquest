@@ -23,6 +23,9 @@ Design Notes:
 from ...engine.Item import Item
 from .Magnet import Magnet
 from .MagneticFishingRod import MagneticFishingRod
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ...engine.GameState import GameState
 
 class FishingRod(Item):
     """Baseline fishing tool supporting an upgrade into a magnetic retrieval variant.
@@ -51,7 +54,8 @@ class FishingRod(Item):
             can_be_carried=True,
         )
 
-    def use_with(self, game_state, other_item: Item) -> str:
+    def use_with(self, game_state: 'GameState', other_item: Item) -> str:
+        """Combine with Magnet if spell is learned, interact with River, or fail with Well."""
         if isinstance(other_item, Magnet):
             # Only allow combining if the spell 'purify' is learned
             if game_state.has_spell('purify'):

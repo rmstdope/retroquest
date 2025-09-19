@@ -21,7 +21,12 @@ Design Notes:
 from ...engine.Item import Item
 
 class RareFlower(Item):
+    """
+    Collectible flower from a secluded area, hinting at mystical undercurrents and future value.
+    """
+
     def __init__(self) -> None:
+        """Initialize the Rare Flower item with name, description, and carry status."""
         super().__init__(
             name="rare flower",
             description="A delicate, radiant flower found only in this hidden glade. Its petals shimmer with a faint magical glow.",

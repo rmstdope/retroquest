@@ -1,24 +1,18 @@
+
+"""Edible lure item used to coax chickens into dropping a hidden key."""
 from ...engine.GameState import GameState
 from .Chicken import Chicken
 from ...engine.Item import Item
 from .Key import Key
 
+
 class Bread(Item):
-    """Edible lure item used to coax chickens into dropping a hidden key.
-
-    Purpose:
-        Acts as a single-use catalyst for a micro environmental reveal (``Key``) when
-        combined with chickens. Reinforces that mundane items can drive discovery.
-
-    Mechanics:
-        - ``use_with`` + ``Chicken``: consumes bread (removed from inventory) and spawns
-          a ``Key`` in the current room.
-        - Non-chicken combos fail with a contextual message.
-
-    Design Notes:
-        Could later integrate with a hunger or stamina system instead of purely puzzle use.
     """
+    Edible lure item used to coax chickens into dropping a hidden key.
+    """
+
     def __init__(self) -> None:
+        """Initialize the Bread item with name, description, and carry status."""
         super().__init__(
             name="bread",
             description=(
@@ -29,16 +23,17 @@ class Bread(Item):
         )
 
     def use_with(self, game_state: GameState, other_item: Item) -> str:
+        """Use bread with chickens to reveal a key, otherwise fail."""
         if isinstance(other_item, Chicken):
             # Remove bread from inventory
             game_state.remove_item_from_inventory(self.name)
             # Add key to the room
-            game_state.current_room.add_item(Key())            
+            game_state.current_room.add_item(Key())
             return (
                 "[event]You offer the [item_name]bread[/item_name] to the "
-                "[character_name]chickens[/character_name].[/event]\nThey peck at it excitedly, "
-                "and in the commotion, something shiny falls from a rafter. It's a "
-                "[item_name]small key[/item_name]!"
+                "[character_name]chickens[/character_name].[/event]\n"
+                "They peck at it excitedly, and in the commotion, something shiny falls "
+                "from a rafter. It's a [item_name]small key[/item_name]!"
             )
         else:
             return (
