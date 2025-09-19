@@ -25,12 +25,30 @@ from .Magnet import Magnet
 from .MagneticFishingRod import MagneticFishingRod
 
 class FishingRod(Item):
+    """Baseline fishing tool supporting an upgrade into a magnetic retrieval variant.
+
+    Purpose:
+        Introduces conditional crafting (rod + magnet) gated by spell knowledge (``purify``)
+        and demonstrates environmental specialization (works with rivers, fails at wells).
+
+    Mechanics:
+        - ``use_with`` + ``Magnet`` (if player knows ``purify``) -> consume both & create
+          ``MagneticFishingRod`` (inventory transformation pattern).
+        - Delegates fishing attempts to ``River`` instances.
+        - Explicit failure when used with ``Well`` (range limitation flavor).
+
+    Design Notes:
+        Inline upgrade logic keeps early complexity low; could shift to a recipe registry if
+        additional tool evolutions emerge. Prevents premature magnet attachment to retain
+        standard fishing capability until the player advances magically.
+    """
+
     def __init__(self) -> None:
         super().__init__(
             name="fishing rod",
             short_name="rod",
             description="A simple fishing rod. It looks a bit flimsy.",
-            can_be_carried=True
+            can_be_carried=True,
         )
 
     def use_with(self, game_state, other_item: Item) -> str:
@@ -46,16 +64,23 @@ class FishingRod(Item):
                 # Add MagneticFishingRod to inventory
                 magnetic_rod = MagneticFishingRod()
                 game_state.inventory.append(magnetic_rod)
-                return f"[event]You attach the [item_name]{other_item.get_name()}[/item_name] to the [item_name]{self.get_name()}[/item_name], creating a [item_name]{magnetic_rod.get_name()}[/item_name].[/event]"
+                return (
+                    f"[event]You attach the [item_name]{other_item.get_name()}[/item_name] to "
+                    f"the [item_name]{self.get_name()}[/item_name], creating a "
+                    f"[item_name]{magnetic_rod.get_name()}[/item_name].[/event]"
+                )
             else:
-                return ("[failure]You could force the magnet onto the rod, but it would likely prevent you from fishing — and you are really keen on doing some fishing![/failure]")
+                return (
+                    "[failure]You could force the magnet onto the rod, but it would likely "
+                    "prevent you from fishing — and you are really keen on doing some "
+                    "fishing![/failure]"
+                )
 
-        from .River import River # Add local import here
-        if isinstance(other_item, River): # Check if the other_item is a River
-            return other_item.use_with(game_state, self) # Call River's use_with method
+        from .River import River  # Local import
+        if isinstance(other_item, River):  # River-specific interaction
+            return other_item.use_with(game_state, self)
             
-        from .Well import Well # Local import for Well
+        from .Well import Well  # Local import for Well
         if isinstance(other_item, Well):
             return "[failure]You try fishing in the [item_name]well[/item_name], but the [item_name]rod[/item_name] is too short to reach the water.[/failure]"
-
-        return super().use_with(game_state, other_item) # Fallback to base class
+        return super().use_with(game_state, other_item)

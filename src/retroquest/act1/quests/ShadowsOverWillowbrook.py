@@ -1,3 +1,48 @@
+"""Shadows Over Willowbrook main quest (Act I).
+
+Narrative Role:
+    Establishes the central mystery afflicting the village (blight, fear, subtle corruption) and
+    guides the player through key discovery beats that ultimately unlock progression to Act II.
+
+Golden Path / Progressive Beats:
+    1. Initial dream sequence hinting at a shadow in the fields (implied narrative tone setting).
+    2. Investigate withered crops (``FLAG_INVESTIGATED_WITHERED_CROPS``) – confirms physical decay.
+    3. Speak with a villager (``FLAG_VILLAGER_TALKED_TO``) – surfaces communal fear & rumors.
+    4. Examine the well (``FLAG_WELL_EXAMINED``) – introduces environmental corruption source.
+    5. Connect with nature at Mira's urging (``FLAG_CONNECT_WITH_NATURE``) – frames druidic path.
+    6. Fully unlock magic (``FLAG_MAGIC_FULLY_UNLOCKED``) – affirms player capability.
+    7. Quest completes once the act resolution flag is set
+       (``FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED``), enabling transition toward Greendale.
+
+Dynamic Description System:
+    The quest text is rebuilt each time ``check_update`` runs. Previously revealed segments are
+    preserved but visually de-emphasised using a dim style tag (``[dim]...[/dim]``) to provide a
+    layered recap while highlighting the newest narrative beat.
+
+Story Flags (Reads):
+    - ``FLAG_INVESTIGATED_WITHERED_CROPS``
+    - ``FLAG_VILLAGER_TALKED_TO``
+    - ``FLAG_WELL_EXAMINED``
+    - ``FLAG_CONNECT_WITH_NATURE``
+    - ``FLAG_MAGIC_FULLY_UNLOCKED``
+    - ``FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED`` (completion condition)
+
+Story Flags (Sets):
+    This quest does not itself set flags; it reacts to state established by rooms, characters,
+    and related sub‑activities in Act I.
+
+Progression Effects:
+    Completion signals that the player has gathered all essential context and is narratively
+    prepared to leave Willowbrook and pursue deeper druidic knowledge in Act II.
+
+Design Notes:
+    - Uses an internal ``_flag_state`` dict to detect first-time revelation of each beat so the
+      UI (or log) can optionally highlight updates.
+    - ``check_trigger`` currently always returns ``True`` allowing early visibility; could be
+      gated later if desired (e.g., after dream sequence initialization).
+    - Keeps recomposed description both concise for current step and archival for prior beats.
+"""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import (
@@ -6,20 +51,28 @@ from ..Act1StoryFlags import (
     FLAG_WELL_EXAMINED,
     FLAG_CONNECT_WITH_NATURE,
     FLAG_MAGIC_FULLY_UNLOCKED,
-    FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED
+    FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED,
 )
-from typing import Any
-
-# Shadows Over Willowbrook Quest - Steps to Completion
-# 1. The game starts with a mysterious dream sequence where Elior sees a shadowy figure in the fields.
-# 2. The player investigates the Vegetable Field, where crops are withering (sets FLAG_INVESTIGATED_WITHERED_CROPS).
-# 3. The player talks to the Villager who mention strange occurrences (e.g., animals acting restless, crops failing).
-# 4. The player find a clue in the village,an infected well,
-# 5. Speak with Mira about all of the above
-# 6. Complete the Magic for real quest
-# 7. Complete the Act
 
 class ShadowsOverWillowbrookQuest(Quest):
+    """Main Act I quest tracking the unfolding village corruption mystery.
+
+    This quest incrementally reveals narrative segments as key investigative and
+    character-interaction flags are raised elsewhere in the act. Each update:
+        - Rebuilds ``self.description`` from scratch.
+        - Pushes previously current text into a dimmed recap block.
+        - Appends the newly active narrative segment as plain (highlighted) text.
+
+    Attributes:
+        _flag_state (dict[str, bool]): Internal record of which story flags have already
+            contributed a segment so we can signal an update only once per flag.
+
+    Methods:
+        check_trigger(game_state): Always returns True; kept for architectural consistency.
+        check_update(game_state): Recomputes description; returns True if new segment added.
+        check_completion(game_state): Returns True when the act completion flag is set.
+        is_main(): Identifies this as the act's primary quest (affects UI / ordering).
+    """
     def __init__(self) -> None:
         super().__init__(
             name="Shadows Over Willowbrook",

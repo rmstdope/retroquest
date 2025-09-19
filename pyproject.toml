@@ -43,3 +43,15 @@ package-dir = {"" = "src/retroquest"}
 pythonpath = [
   ".", "src/retroquest",
 ]
+
+[tool.pylint."BASIC"]
+class-naming-style = "PascalCase"
+method-naming-style = "snake_case"
+function-naming-style = "snake_case"
+argument-naming-style = "snake_case"
+variable-naming-style = "snake_case"
+# module-naming-style = "PascalCase"
+module-rgx = "([A-Z][a-zA-Z0-9]*)|([a-z_][a-z0-9_]*)$"
+
+[tool.pylint.messages_control]
+disable = ["import-outside-toplevel"]

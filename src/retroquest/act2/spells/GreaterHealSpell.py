@@ -8,7 +8,7 @@ Acquisition:
     Taught by Master Healer Lyria after apprenticeship arc completion (healing quest chain).
 
 Special Handling:
-    - When cast on BarmaidElena invokes her receive_greater_heal(game_state) method to advance curse state.
+    - When cast on BarmaidElena invokes her ``receive_greater_heal()`` method to advance curse state.
     - Otherwise returns generic restoration messaging.
 
 Design Notes:
@@ -37,8 +37,8 @@ class GreaterHealSpell(Spell):
         
         # Special handling for Elena's curse
         if isinstance(target_character, BarmaidElena):
-            # Check if Elena has the receive_greater_heal method and call it
-            return target_character.receive_greater_heal(game_state)
+            # Invoke Elena's staged recovery handler (no game_state argument needed)
+            return target_character.receive_greater_heal()
         else:
             return (f"[success]You cast [spell_name]{self.get_name()}[/spell_name] on [character_name]{target_character.get_name()}[/character_name]. "
                     f"Healing energy flows through them, restoring their vitality and curing any minor ailments they may have had.[/success]")

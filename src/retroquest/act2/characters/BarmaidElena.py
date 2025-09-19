@@ -59,8 +59,9 @@ class BarmaidElena(Character):
             return (f"[character_name]{self.get_name()}[/character_name]: *weakly* Have you found a way to break the curse? "
                     "I can feel my strength fading more each day...")
 
-    def receive_greater_heal(self, game_state: GameState) -> str:  # game_state kept for interface consistency
-        """Handle receiving the greater_heal spell as the first step of the cure"""
+    def receive_greater_heal(self) -> str:
+        """Handle receiving the greater_heal spell as the first step of the cure.
+        """
         if self.elena_initial_healing:
             return ("Elena is already strengthened by your healing magic.")
         

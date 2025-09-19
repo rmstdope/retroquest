@@ -64,6 +64,9 @@ This document outlines the design rules and guidelines for both the game story a
 - Follow PEP 8 style guidelines for Python code to ensure consistency across the codebase.
 - Do not share code between acts; each act should be self-contained. All common functionality should be implemented in the engine module.
 - Always update docstrings and comments to reflect any changes made to the code.
+- For files that contain only one class, make the module docstring a one-liner summarizing the class's purpose. no more than that! Just one line!
+- For files with multiple classes or functions, provide a somewhat more detailed module docstring explaining the overall purpose and functionality of the module.
+- Keep lines to a maximum of 99 characters for better readability.
 
 ### Testing
 
