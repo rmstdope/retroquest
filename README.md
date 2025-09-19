@@ -12,9 +12,9 @@ Fast forward to the vibrant spring of May 2025! A new, audacious experiment was 
 
 So, what's the human role in this AI-driven epic? Imagine a director guiding a prodigious, tireless actor:
 
-- **The Prompter Supreme:** I, your human collaborator, chart the course, whispering prompts and grand designs to the AI.
-- **The Discerning Eye:** I meticulously review every line of code, every test case, offering constructive feedback to refine the AI's creations.
-- **The Last Bastion:** Should the AI encounter an unyielding enigma, a bug too cunning, I step in as the final troubleshooter.
+-   **The Prompter Supreme:** I, your human collaborator, chart the course, whispering prompts and grand designs to the AI.
+-   **The Discerning Eye:** I meticulously review every line of code, every test case, offering constructive feedback to refine the AI's creations.
+-   **The Last Bastion:** Should the AI encounter an unyielding enigma, a bug too cunning, I step in as the final troubleshooter.
 
 This is a dance of wits, a partnership where the human provides the vision and the AI, the tireless execution.
 
@@ -31,4 +31,42 @@ To navigate this ambitious undertaking, we've charted a "Golden Path"—a meticu
 Join us as RetroQuest unfolds, one prompt, one line of code, one AI-generated marvel at a time!
 
 ---
-*PS: Yes, you guessed it - this README was also artfully crafted by GitHub Copilot!*
+
+_PS: Yes, you guessed it - this README was also artfully crafted by GitHub Copilot!_
+
+## Development & Formatting Standards
+
+All contributions must satisfy strict formatting and structural rules:
+
+Hard constraints (CI enforced):
+
+1. Max physical line length: 99 characters (including indentation).
+2. No tabs; 4-space indentation.
+3. No trailing whitespace; exactly one newline at EOF.
+4. One-line module docstring for single-class modules.
+5. All overridden methods (`search`, `get_exits`, gating helpers) have docstrings.
+6. Unused parameters prefixed with underscore.
+
+Before committing, run:
+
+```bash
+python scripts/check_line_length.py
+ruff check
+ruff format --check
+```
+
+(Install tooling first: `pip install pre-commit ruff` then `pre-commit install`).
+
+Pre-commit hooks automatically enforce line length and Ruff diagnostics.
+
+Narrative wrapping pattern:
+
+```python
+description = (
+	"First clause describing the space. "
+	"Second clause continuing the thought. "
+	"Final clause concluding the description."
+)
+```
+
+Pull requests must include the phrase: `Formatting constraints verified` in the description.

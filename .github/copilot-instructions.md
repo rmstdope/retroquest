@@ -2,6 +2,113 @@
 
 This document outlines the design rules and guidelines for both the game story and the implementation the game, focusing on key design patterns, technical considerations, and content guidelines to ensure a cohesive and engaging player experience.
 
+## Hard Formatting & Static Rules (Enforced)
+
+These MUST be satisfied for every Python file. Pull requests must explicitly state:
+"Formatting constraints verified".
+
+1. Maximum physical line length: 99 characters (count all characters including indentation).
+2. Prefer keeping narrative lines ≤95 chars to allow safe future edits.
+3. No tabs; indentation is 4 spaces.
+4. No trailing whitespace anywhere.
+5. Exactly one newline at end of file.
+6. One-line module docstring for single-class modules (strictly one line, no wrapping).
+7. All overridden methods (e.g., search, get_exits, gating helpers) require docstrings.
+8. Unused parameters must be prefixed with an underscore (e.g., \_game_state, \_target).
+9. Long prose must be wrapped by splitting into multiple adjacent string literals inside parentheses.
+10. Avoid lines ending at 99 if possible; leave a small buffer for later wording refinements.
+
+Violation of any item is grounds for rejection in code review / CI.
+
+### Wrapping Guidance
+
+When writing long narrative or return strings:
+
+- Wrap inside a parenthesized block using multiple string literals.
+- Break on sentence or clause boundaries; never split inside a word.
+- Keep each physical line ≤99 chars including indentation.
+- For f-strings nearing the limit, extract dynamic segments to variables first.
+
+Example:
+
+```
+description = (
+		"The hall extends into shadow, banners stirring in a draft that smells of old "
+		"parchment and steel. A faint glow outlines a sealed archway ahead."
+)
+```
+
+### Developer Completion Checklist (Must Pass Before Commit)
+
+- [ ] All lines ≤99 chars (`python scripts/check_line_length.py`).
+- [ ] No tabs / no trailing whitespace.
+- [ ] One-line module docstring where required.
+- [ ] All custom overrides documented.
+- [ ] Unused parameters underscored.
+- [ ] Docstrings updated to reflect changes.
+
+### Automation (Recommended)
+
+Add a custom line-length gate plus Ruff to enforce style:
+
+`scripts/check_line_length.py` (example):
+
+```
+import sys
+from pathlib import Path
+
+MAX = 99
+errors = []
+for path in Path('src').rglob('*.py'):
+		for i, line in enumerate(path.read_text().splitlines(), start=1):
+				if len(line) > MAX:
+						errors.append(f"{path}:{i}: {len(line)} > {MAX}")
+if errors:
+		print('Line length violations:')
+		print('\n'.join(errors))
+		sys.exit(1)
+```
+
+Pre-commit hook snippet:
+
+```
+repos:
+	- repo: local
+		hooks:
+			- id: line-length
+				name: Enforce 99-char line length
+				entry: python scripts/check_line_length.py
+				language: system
+				pass_filenames: false
+	- repo: https://github.com/astral-sh/ruff-pre-commit
+		rev: v0.6.9
+		hooks:
+			- id: ruff
+				args: [--line-length=99]
+			- id: ruff-format
+```
+
+`.editorconfig` excerpt:
+
+```
+[*]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 99
+```
+
+VS Code settings suggestion:
+
+```
+{
+	"editor.rulers": [99],
+	"files.trimTrailingWhitespace": true,
+	"editor.wordWrap": "off"
+}
+```
+
 ## Game Story Design Rules
 
 ### Narrative Structure

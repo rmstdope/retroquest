@@ -55,3 +55,14 @@ module-rgx = "([A-Z][a-zA-Z0-9]*)|([a-z_][a-z0-9_]*)$"
 
 [tool.pylint.messages_control]
 disable = ["import-outside-toplevel"]
+
+[tool.ruff]
+line-length = 99
+target-version = "py311"
+select = ["E", "F", "W", "B", "I"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
