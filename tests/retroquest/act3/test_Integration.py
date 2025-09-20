@@ -1,18 +1,19 @@
-import pytest
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
 from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED, FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
-from ..utils.utils import *
+from ..utils.utils import (check_character_in_room, check_current_room, check_quests, check_story_flag,
+                            execute_commands, check_item_in_inventory, check_quest_completed,
+                            check_item_count_in_inventory)
 
 class TestAct3Integration:
     """Integration tests for Act 3."""
     
-    def setup_method(self):
-        """Set up test fixtures."""
+    def __init__(self):
+        """Initialize test attributes for Act 3 integration tests."""
         self.act3 = Act3()
         self.act3.music_file = ''
         self.game = Game([self.act3])
-        
+
     def test_act3_initialization(self):
         """Test that Act 3 initializes correctly."""
         assert self.act3 is not None

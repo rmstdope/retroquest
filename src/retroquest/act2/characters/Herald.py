@@ -10,7 +10,7 @@ class Herald(Character):
         )
         self.received_pass = False
 
-    def talk_to(self, game_state: GameState) -> str:
+    def talk_to(self, _game_state: GameState) -> str:
         if self.received_pass:
             return (f"[character_name]{self.get_name()}[/character_name]: Your credentials have been verified and you have been "
                     "granted formal audience rights. You may proceed to meet with [character_name]Sir Cedric[/character_name] "
@@ -23,7 +23,6 @@ class Herald(Character):
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to the Herald"""
         from ..items.EntryPass import EntryPass
-        
         if isinstance(item_object, EntryPass):
             game_state.current_room.enable_castle_courtyard()
             self.received_pass = True

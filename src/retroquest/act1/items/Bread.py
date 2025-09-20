@@ -40,4 +40,3 @@ class Bread(Item):
                 f"[failure]You can't use the [item_name]bread[/item_name] with the "
                 f"[item_name]{other_item.get_name()}[/item_name].[/failure]"
             )
-

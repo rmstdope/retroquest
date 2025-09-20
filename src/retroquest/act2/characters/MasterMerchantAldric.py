@@ -50,7 +50,7 @@ class MasterMerchantAldric(Character):
         )
         self.gave_flyer = False
 
-    def talk_to(self, game_state: GameState) -> str:
+    def talk_to(self, _game_state: GameState) -> str:
         # If merchant hasn't been given the flyer, shop is not fully open yet
         if not self.gave_flyer:
             return self.closed_dialogue
@@ -62,7 +62,7 @@ class MasterMerchantAldric(Character):
                 wares_info += f"- [item_name]{name.title()}[/item_name]: {details['price']} [item_name]gold coins[/item_name]\n"
         else:
             wares_info = "I'm currently restocking my premium inventory.\n"
-        
+
         # Cycle through dialogue options like Act 1 Shopkeeper
         dialogue = self.dialogue_options[self.dialogue_index]
         self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options)
@@ -72,7 +72,7 @@ class MasterMerchantAldric(Character):
     def give_item(self, game_state: GameState, item_object: Item) -> str:
         """Handle giving items to Master Merchant Aldric"""
         from ..items.MerchantsFlyer import MerchantsFlyer
-        
+
         if isinstance(item_object, MerchantsFlyer):
             # Remove the flyer from inventory
             if item_object in game_state.inventory:
@@ -93,17 +93,17 @@ class MasterMerchantAldric(Character):
 
         item_name_to_buy = item_name_to_buy.lower()
         event_msg = f"[event]You try to buy the [item_name]{item_name_to_buy}[/item_name] from the [character_name]{self.get_name()}[/character_name].[/event]"
-        
+
         # Check if item is available
         if item_name_to_buy not in self.wares:
             return event_msg + "\n" + f'[dialogue]"Sorry, I don\'t have any \'[item_name]{item_name_to_buy}[/item_name]\' for sale. Check my current inventory for available items."[/dialogue]'
 
         ware_details = self.wares[item_name_to_buy]
         price = ware_details["price"]
-        
+
         # Count total coins in inventory using the batching system
         total_coins = game_state.get_item_count("coins")
-        
+
         # Check if player has enough coins
         if total_coins < price:
             return event_msg + "\n" + f'[failure]You don\'t have enough [item_name]coins[/item_name] for the [item_name]{item_name_to_buy}[/item_name]. It costs {price} [item_name]gold coins[/item_name] but you only have {total_coins}.[/failure]'
@@ -111,22 +111,22 @@ class MasterMerchantAldric(Character):
         # Check if already have the item in inventory (not counting display items in room)
         if any(item.get_name().lower() == item_name_to_buy and item.can_be_carried for item in game_state.inventory):
             return event_msg + "\n" + f'[dialogue]"You already have a [item_name]{item_name_to_buy}[/item_name]. One should be sufficient for your needs."[/dialogue]'
-        
+
         # Purchase the item - spend coins using the batching system
         coins_removed = game_state.remove_item_from_inventory("coins", price)
         if coins_removed != price:
             return event_msg + "\n" + '[failure]Transaction failed. Unable to process payment.[/failure]'
-        
+
         # Remove the display item from the room (if present)
         room_item_to_remove = None
         for item in game_state.current_room.items:
             if item.get_name().lower() == item_name_to_buy:
                 room_item_to_remove = item
                 break
-        
+
         if room_item_to_remove:
             game_state.current_room.items.remove(room_item_to_remove)
-        
+
         # Create new carriable instance of the item to add to inventory
         new_item = None
         if item_name_to_buy == "forest survival kit":
@@ -135,7 +135,7 @@ class MasterMerchantAldric(Character):
             new_item = EnhancedLantern()
         elif item_name_to_buy == "quality rope":
             new_item = QualityRope()
-        
+
         if new_item:
             new_item.can_be_carried = True  # Ensure the purchased item is carriable
             game_state.add_item_to_inventory(new_item)

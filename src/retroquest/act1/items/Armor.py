@@ -1,7 +1,8 @@
 """Armor Item
 
 Narrative Role:
-Early defensive gear establishing the concept of protective equipment without yet integrating numerical mitigation mechanics.
+Early defensive gear establishing the concept of protective equipment without yet
+integrating numerical mitigation mechanics.
 
 Key Mechanics / Interactions:
 - Basic `equip` and `examine` flows; no durability or stat calculations.
@@ -45,8 +46,8 @@ class Armor(Item):
             return (
                 f"[character_name]Shopkeeper[/character_name] quickly steps over. "
                 f"[dialogue]'Hold on there, friend! That [item_name]{self.get_name()}[/item_name] "
-                f"is merchandise, not a free sample. If you want it, you'll need to buy it proper-like.'"
-                f"[/dialogue]"
+                f"is merchandise, not a free sample. If you want it, you'll need to buy "
+                f"it proper-like.'[/dialogue]"
             )
         return None  # Allow pickup if can_be_carried is True
 

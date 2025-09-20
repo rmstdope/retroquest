@@ -58,9 +58,8 @@ class WaterNymphs(Character):
         else:
             return str(number)  # fallback for numbers beyond our list
 
-    def talk_to(self, game_state: GameState) -> str:
+    def talk_to(self, _game_state: GameState) -> str:
         event_msg = f"[event]You approach the [character_name]{self.get_name()}[/character_name] by the sacred stream.[/event]"
-        
         if self.riddles_completed:
             # After completing all riddles
             return (event_msg + "\n" +
@@ -69,7 +68,6 @@ class WaterNymphs(Character):
                     f"forest's ways, young seeker. The sacred gifts are yours to take - "
                     f"the crystal-clear water and moonflowers that grow here. Use them "
                     f"wisely in your quest to protect the natural world.'[/dialogue]")
-        
         elif self.current_riddle < len(self.riddles):
             # Present the current riddle
             riddle = self.riddles[self.current_riddle]
@@ -78,9 +76,7 @@ class WaterNymphs(Character):
                     f"harmonious, flowing voices like water over stones. 'Welcome, forest walker, "
                     f"to our sacred glade. To prove your wisdom and earn our trust, you must "
                     f"answer our riddles three. Listen carefully to the {self._get_ordinal_word(self.current_riddle + 1)} riddle:'[/dialogue]\n\n"
-                    
                     f"[dialogue]'{riddle['question']}'[/dialogue]\n\n"
-                    
                     f"[info]Think carefully and speak your answer when you believe you know it. "
                     f"Use the command 'say <your_answer> to water nymphs' to give your solution.[/info]")
         else:
@@ -131,7 +127,7 @@ class WaterNymphs(Character):
                     f"[dialogue]'{riddle['question']}'[/dialogue]\n\n"
                     f"[info]Consider what you've learned about the forest during your journey.[/info]")
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, _game_state: GameState) -> str:
         return (f"[event]You study the [character_name]{self.get_name()}[/character_name] in wonder. "
                 f"{self.description} They move with fluid grace, and you can see the wisdom "
                 f"of ages in their ever-changing features. These are ancient guardians of "

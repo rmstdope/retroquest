@@ -39,15 +39,14 @@ class GateCaptain(Character):
             if self in game_state.current_room.characters:
                 # Remove self from the current room
                 game_state.current_room.characters.remove(self)
-                
                 return ("The Gate Captain nods respectfully. 'Welcome to Greendale, honored visitor. "
                         "You'll need a map to navigate the city - the streets can be quite maze-like for newcomers. "
                         "Feel free to look around here for anything that might help you find your way.' "
                         "With that, he salutes smartly and walks back to his patrol duties, leaving you free to explore the gate area.")
             else:
-                return ("The Gate Captain has already returned to his duties and is no longer present.")
+                return "The Gate Captain has already returned to his duties and is no longer present."
 
-    def give_item(self, game_state: GameState, item_object) -> str:  # parameter name aligned with base class
+    def give_item(self, _game_state: GameState, item_object) -> str:  # parameter name aligned with base class
         from ..items.EntryPass import EntryPass  # Import here to avoid circular imports
 
         if isinstance(item_object, EntryPass):

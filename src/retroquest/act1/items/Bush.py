@@ -1,7 +1,8 @@
 """Bush Item
 
 Narrative Role:
-Environment vegetation that can be magically stimulated to generate forage (wild berries), demonstrating renewable resource mechanics gated by spell use.
+Environment vegetation that can be magically stimulated to generate forage (wild berries),
+demonstrating renewable resource mechanics gated by spell use.
 
 Key Mechanics / Interactions:
 - `grow` (triggered via spell externally) adds `WildBerries` if not already present in room.
