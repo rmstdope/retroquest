@@ -1,11 +1,9 @@
+"""Mira character for Act I."""
+
 from ...engine.Character import Character
 from ...engine.Item import Item
 from ..items.RareFlower import RareFlower
 from ..items.AncientAmulet import AncientAmulet
-from ..items.TravelCloak import TravelCloak # For quest check
-from ..items.WildBerries import WildBerries # For quest check
-from ..items.WanderingBoots import WanderingBoots # For quest check
-from ..items.Map import Map as GameMap # For quest check, aliased to avoid conflict if Map is a general type
 from ..spells.HealSpell import HealSpell
 from ..spells.UnlockSpell import UnlockSpell
 from ..spells.LightSpell import LightSpell
@@ -22,44 +20,78 @@ class Mira(Character):
         self.amulet_given = False
         
         self.dialogue_states = {
-            "initial": f"[character_name]{self.get_name()}[/character_name] smiles warmly as you enter her fragrant hut. [dialogue]'Welcome, [character_name]Elior[/character_name]. I sense a stirring of the old powers within you. What brings you to my door?'[/dialogue]",
-            "quest_conditions_not_met": f"[character_name]{self.get_name()}[/character_name] looks at you thoughtfully. [dialogue]'You have made progress, [character_name]Elior[/character_name], but you are not yet fully prepared for what lies ahead. Ensure you have all necessary items, learned the essential spells, and received a blessing for your journey.'[/dialogue]",
-            "quest_complete_amulet_given": f"[character_name]{self.get_name()}[/character_name] smiles, a deep wisdom in her eyes. [dialogue]'You have done well, [character_name]Elior[/character_name]. You have gathered your supplies, honed your magical skills, and prepared your spirit. You are ready.'[/dialogue] She presents you with the [item_name]Ancient Amulet[/item_name]. [dialogue]'May this guide and protect you.'[/dialogue] [event]([item_name]Ancient Amulet[/item_name] added to inventory!)[/event]",
-            "post_amulet": f"[character_name]{self.get_name()}[/character_name] looks at you kindly. [dialogue]'The journey of a thousand miles begins with a single step. You have taken many already. Go now, and may your path be clear.'[/dialogue]"
+            "initial": (
+                f"[character_name]{self.get_name()}[/character_name] smiles warmly as you enter her "
+                f"fragrant hut. [dialogue]'Welcome, [character_name]Elior[/character_name]. I sense "
+                f"a stirring of the old powers within you. What brings you to my door?'[/dialogue]"
+            ),
+            "quest_conditions_not_met": (
+                f"[character_name]{self.get_name()}[/character_name] looks at you thoughtfully. "
+                f"[dialogue]'You have made progress, [character_name]Elior[/character_name], but "
+                f"you are not yet fully prepared for what lies ahead. Ensure you have all "
+                f"necessary items, learned the essential spells, and received a blessing for "
+                f"your journey.'[/dialogue]"
+            ),
+            "quest_complete_amulet_given": (
+                f"[character_name]{self.get_name()}[/character_name] smiles, a deep wisdom in her "
+                f"eyes. [dialogue]'You have done well, [character_name]Elior[/character_name]. You "
+                f"have gathered your supplies, honed your magical skills, and prepared your "
+                f"spirit. You are ready.'[/dialogue] She presents you with the "
+                f"[item_name]Ancient Amulet[/item_name]. [dialogue]'May this guide and protect "
+                f"you.'[/dialogue] [event]([item_name]Ancient Amulet[/item_name] added to "
+                f"inventory!)[/event]"
+            ),
+            "post_amulet": (
+                f"[character_name]{self.get_name()}[/character_name] looks at you kindly. "
+                f"[dialogue]'The journey of a thousand miles begins with a single step. You "
+                f"have taken many already. Go now, and may your path be clear.'[/dialogue]"
+            )
         }
 
-    def give_item(self, game_state: GameState, item: Item) -> str:
-        if isinstance(item, RareFlower):
-            game_state.remove_item_from_inventory(item.get_name()) 
+    def give_item(self, game_state: GameState, item_object: Item) -> str:
+        if isinstance(item_object, RareFlower):
+            game_state.remove_item_from_inventory(item_object.get_name())
 
             spells_to_teach = [HealSpell(), UnlockSpell(), LightSpell()]
             for spell_instance in spells_to_teach:
                 game_state.learn_spell(spell_instance)
 
-            game_state.set_story_flag(FLAG_MAGIC_FULLY_UNLOCKED, True) 
+            game_state.set_story_flag(FLAG_MAGIC_FULLY_UNLOCKED, True)
 
             # This is the combined dialogue for receiving flower, teaching spells, and giving quest.
             return (
-                "[character_name]Mira[/character_name] smiles, accepting the [item_name]flower[/item_name]. [dialogue]'This bloom,' she says, her voice soft, 'is a testament to your growing bond with the living world, Elior. "
-                "It shows you are ready to truly channel the energies around us.'[/dialogue] She then guides you through ancient words and gestures, awakening your innate abilities. "
-                "[event]You feel a new understanding dawn as she imparts the knowledge of [spell_name]heal[/spell_name] to mend, [spell_name]unlock[/spell_name] to reveal, and [spell_name]light[/spell_name] to illuminate the path.[/event] "
-                "[dialogue]'The spark was always within you,'[/dialogue] [character_name]Mira[/character_name] explains, [dialogue]'but now, you can truly command these magics.'[/dialogue] "
-                "With your newfound power, she tasks you with preparing for the journey ahead, mentioning that the [item_name]Ancient Amulet[/item_name] will be yours "
-                "once you are truly ready. She tells you that you will need:\n"
+                "[character_name]Mira[/character_name] smiles, accepting the [item_name]flower[/item_name]. "
+                "[dialogue]'This bloom,' she says, her voice soft, 'is a testament to your growing "
+                "bond with the living world, Elior. It shows you are ready to truly channel the "
+                "energies around us.'[/dialogue] She then guides you through ancient words and "
+                "gestures, awakening your innate abilities. [event]You feel a new understanding "
+                "dawn as she imparts the knowledge of [spell_name]heal[/spell_name] to mend, "
+                "[spell_name]unlock[/spell_name] to reveal, and [spell_name]light[/spell_name] to "
+                "illuminate the path.[/event] [dialogue]'The spark was always within you,'[/dialogue] "
+                "[character_name]Mira[/character_name] explains, [dialogue]'but now, you can truly "
+                "command these magics.'[/dialogue] With your newfound power, she tasks you with "
+                "preparing for the journey ahead, mentioning that the [item_name]Ancient Amulet[/item_name] "
+                "will be yours once you are truly ready. She tells you that you will need:\n"
                 "- Warm clothing\n"
                 "- Magical protection\n"
                 "- Food for the road\n"
                 "- Sturdy footwear\n"
                 "- A [item_name]map[/item_name] to find your way\n"
                 "- To have learned all the basic magic the village elders can teach you.\n"
-                "[dialogue]'Your journey will take you to Greendale,' she continues, her tone serious. 'There, you must seek out the old druid who dwells at the forest's edge. "
-                "He alone can teach you the deeper mysteries of nature's magic and help you understand the darkness threatening Willowbrook. "
-                "Trust in yourself, Elior, and remember: the fate of our village, or even more, may rest in your hands.'[/dialogue]"
+                "[dialogue]'Your journey will take you to Greendale,' she continues, her tone serious. "
+                "'There, you must seek out the old druid who dwells at the forest's edge. He alone "
+                "can teach you the deeper mysteries of nature's magic and help you understand the "
+                "darkness threatening Willowbrook. Trust in yourself, Elior, and remember: the fate "
+                "of our village, or even more, may rest in your hands.'[/dialogue]"
             )
-        return f"[character_name]Mira[/character_name] looks at the [item_name]{item.name}[/item_name] but shakes her head gently. [dialogue]'I have no need for this, child.'[/dialogue]"
+        return (
+            "[character_name]Mira[/character_name] looks at the [item_name]"
+            + item_object.get_name()
+            + "[/item_name] but shakes her head gently. [dialogue]'I have no need for this, child.'[/dialogue]"
+        )
 
     def talk_to(self, game_state: GameState) -> str:
-        event_msg = f"[event]You speak with [character_name]Mira[/character_name].[/event]"
+        event_msg = "[event]You speak with [character_name]Mira[/character_name].[/event]"
         # 1. Give the post_amulet message if amulet is in inventory
         if game_state.has_item("Ancient Amulet"):
             return event_msg + "\n" + self.dialogue_states["post_amulet"]

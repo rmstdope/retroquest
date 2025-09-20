@@ -46,4 +46,3 @@ class FadedPhotograph(Item):
         """Set the story flag when the photograph is examined."""
         game_state.set_story_flag(FLAG_READ_PHOTO_MESSAGE, True)
         return super().examine(game_state)
-

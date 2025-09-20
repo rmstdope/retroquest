@@ -1,7 +1,5 @@
-import pytest
 from retroquest.engine.Game import Game
 from retroquest.act2.Act2 import Act2
-from retroquest.engine.GameState import GameState
 from ..utils.utils import *
 
 def _create_test_game():

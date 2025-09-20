@@ -19,7 +19,7 @@ class TideBornGuardian(Character):
             ),
         )
 
-    def talk_to(self, game_state: GameState) -> str:
+    def talk_to(self, _game_state: GameState) -> str:
         return (
             "[dialogue]The guardian's voice is the hush of a turning tide: 'Name what "
             "you will not abandon.'[/dialogue]"

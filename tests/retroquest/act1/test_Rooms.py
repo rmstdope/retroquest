@@ -19,7 +19,7 @@ class MockGameState:
     """Mock GameState for testing room functionality without complex dependencies."""
     def __init__(self):
         self.story_flags = []
-    
+
     def get_story_flag(self, flag):
         return flag in self.story_flags
 

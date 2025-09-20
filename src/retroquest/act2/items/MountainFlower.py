@@ -30,5 +30,5 @@ class MountainFlower(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state: GameState) -> str:
+    def use(self, _game_state: GameState) -> str:
         return "You examine the mountain flower closely. It's quite pretty, but seems to be just an ordinary wildflower that's adapted to the harsh mountain climate."

@@ -34,7 +34,7 @@ class QualityRope(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state: GameState) -> str:
+    def use(self, _game_state: GameState) -> str:
         # Default behavior - rope needs to be used with something specific
         return ("You examine the quality rope. It's well-made and versatile - useful for climbing, "
                 "rappelling, securing equipment, or any situation where strong, reliable rope is needed. "

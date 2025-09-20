@@ -29,5 +29,5 @@ class MerchantsFlyer(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state: GameState) -> str:
+    def use(self, _game_state: GameState) -> str:
         return "You examine the merchant's flyer. It advertises quality goods from Master Merchant Aldric and would serve as a good introduction when visiting the Market District."

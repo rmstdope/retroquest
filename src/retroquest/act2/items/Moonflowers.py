@@ -53,14 +53,14 @@ class Moonflowers(Item):
     def picked_up(self, game_state: GameState) -> str:
         """Called when the item is picked up by the player."""
         from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
-        
+
         if isinstance(game_state.current_room, WhisperingGlade):
             return ("The moonflowers seem to approve of your gentle touch, their "
                     "silvery glow pulsing warmly as you gather them. These blessed "
                     "blooms will aid in healing and protection magic.")
         return ""
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, _game_state: GameState) -> str:
         return ("[event]You examine the [item_name]moonflowers[/item_name]. {0} "
                 "As you watch, the petals seem to move gently even though there's "
                 "no breeze, and you notice tiny motes of silvery light drifting "

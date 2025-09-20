@@ -53,4 +53,3 @@ class ForestPath(Room):
                 "occasional snap of a twig hints at unseen creatures nearby. The path feels ancient, "
                 "as if it remembers every footstep that has ever passed this way."
             )
-

@@ -55,7 +55,6 @@ class AbandonedShed(Room):
     def unlock(self) -> str:
         if not self.locked:
             return "The shed is already unlocked."
-        
         self.locked = False
         self.add_item(MysteriousBox())
         self.add_item(BrokenShovel())
@@ -72,7 +71,6 @@ class AbandonedShed(Room):
             )
 
         items_found_messages = []
-        
         if not self.room_searched:
             self.add_item(FishingRod())
             self.room_searched = True

@@ -31,7 +31,7 @@ class CrystalOfLight(Item):
             can_be_carried=True,
         )
 
-    def examine(self, game_state: GameState) -> str:  # noqa: ARG002
+    def examine(self, _game_state: GameState) -> str:  # noqa: ARG002
         """Return descriptive examination text referencing ambient progress cues."""
         return (
             "[event]The crystal's facets amplify the faintest glow, casting sigil-like refractions. "

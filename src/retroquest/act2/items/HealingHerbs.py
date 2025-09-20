@@ -30,5 +30,5 @@ class HealingHerbs(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state: GameState) -> str:
+    def use(self, _game_state: GameState) -> str:
         return "You examine the healing herbs. They are fresh and potent - perfect for use in advanced healing magic, training with Master Healer Lyria, or crafting powerful remedies."

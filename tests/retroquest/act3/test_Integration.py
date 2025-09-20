@@ -8,12 +8,12 @@ from ..utils.utils import (check_character_in_room, check_current_room, check_qu
 class TestAct3Integration:
     """Integration tests for Act 3."""
     
-    def __init__(self):
-        """Initialize test attributes for Act 3 integration tests."""
+    def setup_method(self):
+        """Set up test fixtures."""
         self.act3 = Act3()
         self.act3.music_file = ''
         self.game = Game([self.act3])
-
+        
     def test_act3_initialization(self):
         """Test that Act 3 initializes correctly."""
         assert self.act3 is not None

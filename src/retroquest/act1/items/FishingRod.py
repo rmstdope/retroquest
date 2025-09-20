@@ -19,11 +19,10 @@ Design Notes:
 - Prevents magnet attachment prematurely to preserve fishing utility until proper upgrade moment.
 
 """
-
+from typing import TYPE_CHECKING
 from ...engine.Item import Item
 from .Magnet import Magnet
 from .MagneticFishingRod import MagneticFishingRod
-from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ...engine.GameState import GameState
 

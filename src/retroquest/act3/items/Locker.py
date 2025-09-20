@@ -27,7 +27,7 @@ class Locker(Item):
         self.locked: bool = True
         self.opened: bool = False
 
-    def examine(self, game_state: GameState) -> str:  # noqa: ARG002
+    def examine(self, _game_state: GameState) -> str:  # noqa: ARG002
         """Return state-dependent description of the locker."""
         if self.opened:
             return (

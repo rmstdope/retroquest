@@ -32,7 +32,7 @@ class WardingPillars(Item):
             "fixed stone, older than the pier.[/failure]"
         )
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, _game_state: GameState) -> str:
         state = "cleansed" if self.purified else "encrusted"
         return (
             f"[event]The pillars stand weathered and {state}. Channels for a tideward sigil thread their faces; with"

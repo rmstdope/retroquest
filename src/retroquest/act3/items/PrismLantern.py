@@ -16,7 +16,7 @@ class PrismLantern(Item):
             can_be_carried=True,
         )
 
-    def picked_up(self, game_state: GameState) -> str:
+    def picked_up(self, _game_state: GameState) -> str:
         """Handle when the lantern is picked up by the player."""
         return (
             "[info]The lantern's facets refract dim ambient glimmers into a soft fan of "

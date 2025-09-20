@@ -26,7 +26,7 @@ class TeleportationFocus(Item):
             can_be_carried=False,
         )
 
-    def examine(self, game_state: GameState) -> str:  # noqa: ARG002 (game_state reserved for future use)
+    def examine(self, _game_state: GameState) -> str:  # noqa: ARG002 (game_state reserved for future use)
         """Return a descriptive examination of the focus."""
         return (
             "[event]You study the prism. Reflections hover a breath out of sync—each a doorway waiting "

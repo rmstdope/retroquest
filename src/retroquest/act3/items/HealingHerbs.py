@@ -32,7 +32,7 @@ class HealingHerbs(Item):
             "place them in your hands.'[/dialogue]"
         )
 
-    def use(self, game_state: GameState) -> str:  # noqa: ARG002
+    def use(self, _game_state: GameState) -> str:  # noqa: ARG002
         """Provide flavor text when examining the herb preparations."""
         return (
             "You sort the sachets by scent and potency. Mira's mix will steady breath and sharpen "
