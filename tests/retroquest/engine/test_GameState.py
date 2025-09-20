@@ -12,7 +12,7 @@ class DummyQuest:
         self.completion = completion
     def check_trigger(self, game_state):
         return self.description
-    def check_completion(self, game_state):
+    def check_completion(self, _game_state):
         return self.completion
     def is_main(self):
         return False

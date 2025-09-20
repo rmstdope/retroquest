@@ -1,9 +1,6 @@
 """Ancient Tree Spirit NPC for quest and spell progression."""
 
 from ...engine.Character import Character
-"""Ancient Tree Spirit NPC for quest and spell progression."""
-
-from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
     FLAG_WHISPERS_IN_WIND_COMPLETED,

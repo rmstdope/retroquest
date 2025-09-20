@@ -1,28 +1,9 @@
-"""Squire's Diary (Act II Investigative Item)
-
-Narrative Role:
-    Found personal journal providing contextual backstory and the first explicit reference to missing exonerating
-    documents. Serves as the prerequisite knowledge step before interpreting Secret Documents.
-
-Key Mechanics / Interactions:
-    - use() sets FLAG_READ_SQUIRES_DIARY and removes the diary from both inventory and room (simulating careful replacement).
-    - examine() offers descriptive preview without consuming or setting the read flag (keeps intentional player action meaningful).
-
-Story Flags:
-    - Sets: FLAG_READ_SQUIRES_DIARY
-    - Reads: (none here)
-
-Progression Effects:
-    Unlocks meaningful examination of Secret Documents; advances Cedric honor restoration quest chain.
-
-Design Notes:
-    - Removal after use prevents redundant flag setting and reduces inventory noise.
-    - Could track partial read state if future multi-entry progressive revelation is desired.
-"""
+"""Squire's Diary item for Act II; an investigative journal advancing Cedric's quest."""
 
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_READ_SQUIRES_DIARY
+
 
 class SquiresDiary(Item):
     def __init__(self) -> None:
@@ -30,14 +11,16 @@ class SquiresDiary(Item):
             name="squire's diary",
             short_name="diary",
             description=(
-                "A worn leather-bound diary belonging to a former squire. The pages are filled with observations about "
-                "castle life, training exercises, and concerning notes about Sir Cedric's supposed disgrace. The entries "
-                "seem to contain important information about events that transpired years ago."
+                "A worn leather-bound diary belonging to a former squire. The pages are "
+                "filled with observations about castle life and training exercises. There are "
+                "also notes about Sir Cedric's supposed disgrace and details about events from "
+                "years ago."
             ),
             can_be_carried=True,
         )
 
     def use(self, game_state: GameState) -> str:
+        """Use the diary: set story flag, remove the item, and return narrative text."""
         # Set the flag that the squire's diary has been read
         game_state.set_story_flag(FLAG_READ_SQUIRES_DIARY, True)
 
@@ -48,30 +31,40 @@ class SquiresDiary(Item):
             game_state.current_room.items.remove(self)
 
         # The quest should already be accepted by talking to Training Master
-        return ("[event]You carefully read through the squire's diary. The entries reveal a troubling story...[/event]\n\n"
+        return (
+            "[event]You carefully read through the squire's diary. The entries reveal a "
+            "troubling story...[/event]\n\n"
 
-                "*Entry from three years ago:* 'Sir Cedric has been accused of abandoning his post during the Battle of "
-                "Thornfield Pass. The official reports claim he fled when the enemy charged, leaving his men to die. "
-                "But this makes no sense - Sir Cedric is the most honorable knight I've ever known.'\n\n"
+            "*Entry from three years ago:* 'Sir Cedric has been accused of abandoning "
+            "his post during the Battle of Thornfield Pass. Official reports claim he fled "
+            "when the enemy charged, leaving his men behind. But this makes no sense - Sir "
+            "Cedric is the most honorable knight I've ever known.'\n\n"
 
-                "*Later entry:* 'I've been asking questions, and something doesn't add up. A merchant caravan was supposed "
-                "to arrive from the city of Heavensforth carrying secret military documents that would prove Sir Cedric's "
-                "innocence. These documents contained witness testimonies and battle reports that showed the real truth "
-                "about what happened at Thornfield Pass.'\n\n"
+            "*Later entry:* 'I've been asking questions, and something doesn't add up. A "
+            "merchant caravan was due from Heavensforth, carrying secret military documents "
+            "that could prove Sir Cedric's innocence. Those documents contained witness "
+            "testimonies and reports that showed the real truth about Thornfield Pass.'\n\n"
 
-                "*Final entry:* 'The caravan from Heavensforth arrived, but the secret documents were nowhere to be found! "
-                "The merchants claimed they never received any such documents, but there were rumors that the caravan had "
-                "been attacked or lost goods along the mountain roads. Without those documents, Sir Cedric's name could "
-                "never be cleared. I pray that someday, someone will find the truth and restore his honor.'\n\n"
+            "*Final entry:* 'The caravan arrived, but the secret documents were nowhere to "
+            "be found. The merchants claimed they never received such documents. There were "
+            "rumors of attacks and lost goods along the mountain roads. Without those "
+            "documents, Sir Cedric's name could not be cleared. I pray someone will find the "
+            "truth and restore his honor.'\n\n"
 
-                "[success]The diary confirms what the Training Master suspected - secret documents from Heavensforth "
-                "would clear Sir Cedric's name, but they mysteriously went missing when the caravan transporting them "
-                "arrived. The lost caravan's missing documents might still be out there somewhere...[/success]\n\n"
+            "[success]The diary confirms what the Training Master suspected - secret "
+            "documents from Heavensforth would clear Sir Cedric's name. They "
+            "mysteriously went missing when the caravan arrived. The lost caravan's "
+            "documents might still be out there...[/success]\n\n"
 
-                "[event]After thoroughly reading the diary, you carefully place it back where you found it, ensuring "
-                "the precious information it contains remains safe while no longer needing to carry it with you.[/event]")
+            "[event]After reading the diary, you place it back where you found it. This keeps "
+            "the information safe while you no longer carry the diary.[/event]"
+        )
 
     def examine(self, _game_state: GameState) -> str:
-        return ("[event]You examine the [item_name]squire's diary[/item_name]. {0} The handwriting is careful and "
-                "deliberate, and several entries seem to focus on Sir Cedric's supposed disgrace and missing evidence "
-                "that could clear his name.[/event]".format(self.description))
+        """Return a short examination string describing the diary and its entries."""
+        msg = (
+            "[event]You examine the [item_name]squire's diary[/item_name]. {0} "
+            "The handwriting is careful and deliberate. Several entries focus on Sir "
+            "Cedric's disgrace and the missing evidence that could clear his name.[/event]"
+        )
+        return msg.format(self.description)

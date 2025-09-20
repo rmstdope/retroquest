@@ -8,8 +8,8 @@ Role:
 Interaction Flow:
     1. Pre-cure: Rotating hospitality dialogue; conditional desperation lines if player
        knows about Elena's curse (FLAG_KNOWS_ELENA_CURSE).
-    2. Post-cure (FLAG_INNKEEPERS_DAUGHTER_COMPLETED): One-time reward of DruidicCharm, then
-       permanent benevolent acknowledgment.
+    2. Post-cure (FLAG_INNKEEPERS_DAUGHTER_COMPLETED): One-time reward of DruidicCharm,
+       then permanent benevolent acknowledgment.
 
 Story Flags:
     - Reads: FLAG_KNOWS_ELENA_CURSE, FLAG_INNKEEPERS_DAUGHTER_COMPLETED
@@ -22,7 +22,8 @@ Rewards & Economy:
 Design Notes:
     - Avoids additional flags for charm distribution; local boolean suffices.
     - Dialogue indexing mirrors other shop patterns for consistency.
-    - Future extension: Could allow free lodging post-cure by zeroing wares pricing dynamically.
+    - Future extension: Could allow free lodging post-cure by zeroing wares pricing
+      dynamically.
 """
 
 from ...engine.Character import Character
@@ -35,15 +36,20 @@ class InnkeeperMarcus(Character):
     def __init__(self) -> None:
         super().__init__(
             name="innkeeper marcus",
-            description="A kind-hearted man who runs The Silver Stag Inn. He has worry lines on his face and glances frequently toward his daughter with obvious concern.",
+            description=(
+                "A kind-hearted man who runs The Silver Stag Inn. He has worry lines on "
+                "his face and glances frequently toward his daughter with obvious concern."
+            ),
         )
         self.wares = {
             "room key": {"item": RoomKey(), "price": 10}
         }
         self.dialogue_options = [
-            "Welcome to The Silver Stag Inn! We offer comfortable rooms and warm meals for weary travelers.",
-            "These have been difficult times, but we still maintain the finest accommodations in Greendale.",
-            "A good night's rest in a private room can work wonders for mind and body."
+            "Welcome to The Silver Stag Inn! We offer comfortable rooms and warm meals "
+            "for weary travelers.",
+            "These have been difficult times, but we still maintain the finest "
+            "accommodations in Greendale.",
+            "A good night's rest in a private room can work wonders for mind and body.",
         ]
         self.dialogue_index = 0
         self.has_given_charm = False
@@ -56,18 +62,24 @@ class InnkeeperMarcus(Character):
                 druidic_charm = DruidicCharm()
                 game_state.add_item_to_inventory(druidic_charm)
                 
-                return (f"[character_name]{self.get_name()}[/character_name]: *tears of joy in his eyes* "
-                        "You have given me back my daughter! There are no words to express my gratitude. "
-                        f"This [item_name]{druidic_charm.get_name()}[/item_name] has been in my family for generations - "
-                        "it was blessed by the ancient druids who first settled in these lands. Please, "
-                        "take it as a token of our eternal gratitude. May it bring you protection and "
-                        "guidance on your heroic journey!\n\n"
-                        "[success]Marcus places the sacred charm in your hands with reverence. You can "
-                        "feel the ancient magic thrumming within the carved wood.[/success]")
+                return (
+                    f"[character_name]{self.get_name()}[/character_name]: *tears of joy in his eyes* "
+                    "You have given me back my daughter! There are no words to express my "
+                    "gratitude. "
+                    f"This [item_name]{druidic_charm.get_name()}[/item_name] has been in my family "
+                    "for generations - it was blessed by the ancient druids who first settled in "
+                    "these lands. Please, take it as a token of our eternal gratitude. May it "
+                    "bring you protection and guidance on your heroic journey!\n\n"
+                    "[success]Marcus places the sacred charm in your hands with reverence. You "
+                    "can feel the ancient magic thrumming within the carved wood.[/success]"
+                )
             else:
-                return (f"[character_name]{self.get_name()}[/character_name]: My daughter is healthy and "
-                        "happy again, all thanks to you! The Silver Stag Inn will always be your home. "
-                        "Whatever you need - rooms, meals, information - it's yours freely.")
+                return (
+                    f"[character_name]{self.get_name()}[/character_name]: My daughter is healthy "
+                    "and happy again, all thanks to you! The Silver Stag Inn will always be "
+                    "your home. Whatever you need - rooms, meals, information - it's yours "
+                    "freely."
+                )
         
         # Build wares information
         wares_info = "I can offer you:\n"
@@ -82,16 +94,22 @@ class InnkeeperMarcus(Character):
         self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options)
         
         if game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE):
-            return (f'The [character_name]{self.get_name()}[/character_name] says: [dialogue]"{dialogue} '
-                    f'{wares_info.strip()}"[/dialogue]\n\n'
-                    "You've spoken with [character_name]Elena[/character_name]? "
-                    "Then you understand my desperation. The curse grows stronger each day, and I fear we don't have "
-                    "much time left. If you truly can help her, I'll give you anything - rooms, information, whatever you need.")
+            return (
+                f'The [character_name]{self.get_name()}[/character_name] says: [dialogue]"{dialogue} '
+                f'{wares_info.strip()}"[/dialogue]\n\n'
+                "You've spoken with [character_name]Elena[/character_name]? Then you understand my "
+                "desperation. The curse grows stronger each day, and I fear we don't have much time "
+                "left. If you truly can help her, I'll give you anything - rooms, information, "
+                "whatever you need."
+            )
         else:
-            return (f'The [character_name]{self.get_name()}[/character_name] says: [dialogue]"{dialogue} '
-                    f'{wares_info.strip()}"[/dialogue]\n\n'
-                    "Though I must say, these have been dark times for my family. "
-                    "My daughter... well, perhaps you should speak with her yourself if you're looking to help those in need.")
+            return (
+                f'The [character_name]{self.get_name()}[/character_name] says: [dialogue]"{dialogue} '
+                f'{wares_info.strip()}"[/dialogue]\n\n'
+                "Though I must say, these have been dark times for my family. My daughter... "
+                "well, perhaps you should speak with her yourself if you're looking to help those "
+                "in need."
+            )
 
     def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         """Handle buying items from Innkeeper Marcus"""
@@ -140,7 +158,13 @@ class InnkeeperMarcus(Character):
             new_item.can_be_carried = True  # Ensure the purchased item is carriable
             game_state.add_item_to_inventory(new_item)
             remaining_coins = game_state.get_item_count("coins")
-            return event_msg + "\n" + f'[success]You purchase the [item_name]{item_name_to_buy}[/item_name] from [character_name]{self.get_name()}[/character_name] for {price} [item_name]gold coins[/item_name]. He hands you a brass key and explains how to access the private rooms upstairs. You have {remaining_coins} [item_name]coins[/item_name] remaining.[/success]'
+            return (
+                event_msg
+                + "\n"
+                + f'[success]You purchase the [item_name]{item_name_to_buy}[/item_name] from [character_name]{self.get_name()}[/character_name] '
+                + f'for {price} [item_name]gold coins[/item_name]. He hands you a brass key and explains how to access the private rooms upstairs. '
+                + f'You have {remaining_coins} [item_name]coins[/item_name] remaining.[/success]'
+            )
         else:
             # Should not happen if item is in wares, but safety check
             return event_msg + "\n" + '[failure]An unexpected error occurred trying to rent the room.[/failure]'

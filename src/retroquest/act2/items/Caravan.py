@@ -34,7 +34,7 @@ class Caravan(Item):
             can_be_carried=False,  # A caravan is too large to carry
         )
 
-    def examine(self, game_state) -> str:  # type: ignore[override]
+    def examine(self, _game_state) -> str:  # type: ignore[override]
         return (
             "The merchant caravan is in rough shape but the people are safe. The wagon's "
             "wheels are cracked and the canvas cover is torn, but the structure is sound. "

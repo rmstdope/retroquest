@@ -29,7 +29,7 @@ class CityNoticeBoard(Item):
             can_be_carried=False,
         )
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, _game_state: GameState) -> str:
         return ("You read through the various postings on the notice board. Most are mundane announcements about "
                 "trade regulations and festival dates, but one catches your eye: a formal call for heroes to aid "
                 "in 'The Gathering Storm.' The notice bears the seal of Sir Cedric and promises great rewards for "

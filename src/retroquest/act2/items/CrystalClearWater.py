@@ -41,17 +41,21 @@ class CrystalClearWater(Item):
     def use_on_character(self, game_state: GameState, target_character) -> str:
         """Use crystal-clear water on a character to purify them."""
         from ..characters.BarmaidElena import BarmaidElena  # Import here to avoid circular imports
-        
         # Special handling for Elena's curse purification
         if isinstance(target_character, BarmaidElena):
             return target_character.receive_crystal_water_purification(game_state)
         else:
-            return (f"The [item_name]crystal-clear water[/item_name] glows faintly when near "
-                    f"[character_name]{target_character.get_name()}[/character_name], but it seems "
-                    f"this blessed water is meant for someone specifically afflicted by dark magic.")
+            return (
+                f"The [item_name]crystal-clear water[/item_name] glows faintly when near "
+                f"[character_name]{target_character.get_name()}[/character_name], but it "
+                f"seems this blessed water is meant for someone specifically afflicted "
+                f"by dark magic."
+            )
 
-    def examine(self, game_state: GameState) -> str:
-        return ("[event]You examine the [item_name]crystal-clear water[/item_name]. {0} "
-                "The liquid moves with an otherworldly fluidity, and you can sense the "
-                "powerful purification magic contained within. This water could break "
-                "even the strongest curses.[/event]".format(self.description))
+    def examine(self, _game_state: GameState) -> str:
+        return (
+            "[event]You examine the [item_name]crystal-clear water[/item_name]. {0} "
+            "The liquid moves with an otherworldly fluidity, and you can sense the "
+            "powerful purification magic contained within. This water could break "
+            "even the strongest curses.[/event]".format(self.description)
+        )

@@ -33,5 +33,5 @@ class EntryPass(Item):
             can_be_carried=True,
         )
 
-    def use(self, game_state: GameState) -> str:
+    def use(self, _game_state: GameState) -> str:
         return "You examine the entry pass. The seal looks authentic, and it should allow you passage into Greendale without question."

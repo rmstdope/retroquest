@@ -1,3 +1,5 @@
+"""Shopkeeper NPC for Act I - general store owner and vendor logic."""
+
 from ...engine.Character import Character
 from ...engine.Item import Item
 from ..items.Rope import Rope
@@ -13,7 +15,10 @@ class Shopkeeper(Character):
     def __init__(self) -> None:
         super().__init__(
             name="shopkeeper",
-            description="The owner of the General Store, always bustling about and eager to strike a bargain or share a rumor."
+            description=(
+                "The owner of the General Store, always bustling about and eager to "
+                "strike a bargain or share a rumor."
+            )
         )
         self.wares = {
             "rope": {"item": Rope(), "price": 1},
@@ -22,14 +27,21 @@ class Shopkeeper(Character):
             "armor": {"item": Armor(), "price": 10}
         }
         self.dialogue_options = [
-            "Welcome to my humble store! Finest goods in Willowbrook, I assure you.",
+            (
+                "Welcome to my humble store! Finest goods in Willowbrook, "
+                "I assure you."
+            ),
             "Looking for something specific, or just browsing?",
-            "Heard some strange tales from travelers lately. This village isn't as sleepy as it seems."
+            (
+                "Heard some strange tales from travelers lately. This village "
+                "isn't as sleepy as it seems."
+            ),
         ]
         self.dialogue_index = 0
         self.closed_dialogue = (
             "The [character_name]Shopkeeper[/character_name] shakes his head. "
-            "[dialogue]'Sorry, not open for business just yet. Come back later, lad—there's something you need to discover first.'[/dialogue]"
+            "[dialogue]'Sorry, not open for business just yet. Come back later, lad—" 
+            "there's something you need to discover first.'[/dialogue]"
         )
 
     def talk_to(self, game_state: GameState) -> str:
@@ -43,57 +55,94 @@ class Shopkeeper(Character):
             # Give matches to player for the priest
             game_state.current_room.remove_item("Matches")
 
-            new_matches = Matches() # Create a new instance for the inventory
+            new_matches = Matches()  # Create a new instance for the inventory
             game_state.add_item_to_inventory(new_matches)
-            
+
             # Remove matches from wares so they can't be bought/given again
             del self.wares["matches"]
-            
-            return f'The [character_name]Shopkeeper[/character_name] leans in. [dialogue]"Ah, you spoke to the [character_name]priest[/character_name]? He does get through his [item_name]matches[/item_name]. Here, take these for him, on the house. Tell him I said hello!"[/dialogue]\n\n[event]You receive a box of [item_name]matches[/item_name].[/event]'
+
+            return (
+                "The [character_name]Shopkeeper[/character_name] leans in. "
+                '[dialogue]"Ah, you spoke to the [character_name]priest[/character_name]? '
+                'He does get through his [item_name]matches[/item_name]. '
+                'Here, take these for him, on the house. Tell him I said hello!"[/dialogue]'
+                "\n\n[event]You receive a box of [item_name]matches[/item_name].[/event]"
+            )
 
         # Standard dialogue if matches aren't being given for the priest
         wares_info = "I have a few things for sale:\n"
         if self.wares:
             for name, details in self.wares.items():
-                wares_info += f"- [item_name]{name.capitalize()}[/item_name]: {details['price']} [item_name]coin(s)[/item_name]\n"
+                wares_info += (
+                    f"- [item_name]{name.capitalize()}[/item_name]: {details['price']} "
+                    "[item_name]coin(s)[/item_name]\n"
+                )
         else:
             wares_info = "I'm currently out of stock of items for sale.\n"
-        
-        wares_info += "And remember, you always get an extra [item_name]apple[/item_name] with every purchase!\n"
+
+        wares_info += (
+            "And remember, you always get an extra [item_name]apple[/item_name] "
+            "with every purchase!\n"
+        )
 
         dialogue = self.dialogue_options[self.dialogue_index]
         self.dialogue_index = (self.dialogue_index + 1) % len(self.dialogue_options)
 
-        return f'The [character_name]Shopkeeper[/character_name] says: [dialogue]"{dialogue} {wares_info.strip()}[/dialogue]"'
+        return (
+            "The [character_name]Shopkeeper[/character_name] says: "
+            f'[dialogue]"{dialogue} {wares_info.strip()}[/dialogue]"'
+        )
 
-    def give_item(self, item_name: str, game_state: GameState) -> str:
-        return f'The [character_name]Shopkeeper[/character_name] chuckles. [dialogue]"Not looking for donations, friend, but I appreciate the thought!"[/dialogue]'
+    def give_item(self, _game_state: GameState, _item_object: Item) -> str:
+        """Handle an item being given to the shopkeeper; unused parameters are
+        underscored per project rules."""
+        return (
+            "The [character_name]Shopkeeper[/character_name] chuckles. "
+            '[dialogue]"Not looking for donations, friend, but I appreciate the '
+            'thought!"[/dialogue]'
+        )
 
     def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         if not game_state.get_story_flag(FLAG_CONNECT_WITH_NATURE):
             return self.closed_dialogue
         item_name_to_buy = item_name_to_buy.lower()
-        event_msg = f"[event]You try to buy the [item_name]{item_name_to_buy}[/item_name] from the [character_name]{self.get_name()}[/character_name].[/event]"
+        event_msg = (
+            f"[event]You try to buy the [item_name]{item_name_to_buy}[/item_name] from the "
+            f"[character_name]{self.get_name()}[/character_name].[/event]"
+        )
         if item_name_to_buy not in self.wares:
-            return event_msg + "\n" + f"[dialogue]Sorry, I don't have any '[item_name]{item_name_to_buy}[/item_name]' for sale.[/dialogue]"
+            return (
+                event_msg
+                + "\n"
+                + (
+                    "[dialogue]Sorry, I don't have any '[item_name]"
+                    + f"{item_name_to_buy}[/item_name]' for sale.[/dialogue]"
+                )
+            )
 
         ware_details = self.wares[item_name_to_buy]
         price = ware_details["price"]
-        item_object = ware_details["item"]
 
         # Check if player has enough coins
         coin_count = 0
-        coins_to_remove = []
         for item in game_state.inventory:
             if isinstance(item, Coin):
                 coin_count += 1
         
         if coin_count < price:
-            return event_msg + "\n" + f"[failure]You don't have enough [item_name]coins[/item_name] for the [item_name]{item_name_to_buy}[/item_name]. It costs {price} [item_name]coin(s)[/item_name].[/failure]"
+            return (
+                event_msg
+                + "\n"
+                + (
+                    f"[failure]You don't have enough [item_name]coins[/item_name] for "
+                    f"the [item_name]{item_name_to_buy}[/item_name]. It costs {price} "
+                )
+                + "[item_name]coin(s)[/item_name].[/failure]"
+            )
 
         # Remove coins from inventory
         removed_coins = 0
-        for item in list(game_state.inventory): # Iterate over a copy for safe removal
+        for item in list(game_state.inventory):  # Iterate over a copy for safe removal
             if isinstance(item, Coin) and removed_coins < price:
                 game_state.inventory.remove(item)
                 removed_coins += 1
@@ -123,4 +172,9 @@ class Shopkeeper(Character):
         # If the store's stock should deplete, that logic would go here,
         # potentially removing item_object from game_state.current_room.items
 
-        return f"\n[event]You bought a [item_name]{new_item.get_name()}[/item_name] for {price} [item_name]coin(s)[/item_name] and got an extra [item_name]apple[/item_name] as a bonus![/event]"
+        return (
+            "\n[event]You bought a [item_name]"
+            f"{new_item.get_name()}[/item_name] for {price} "
+            "[item_name]coin(s)[/item_name] and got an extra "
+            "[item_name]apple[/item_name] as a bonus![/event]"
+        )

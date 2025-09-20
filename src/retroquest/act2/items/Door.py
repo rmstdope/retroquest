@@ -40,7 +40,7 @@ class Door(Item):
         else:
             return "[info]This door is not accessible from your current location.[/info]"
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, _game_state: GameState) -> str:
         return ("You examine the door closely. It's made of sturdy oak wood with decorative iron hinges and a simple "
                 "latch. The door frame is carved with intricate patterns typical of the inn's welcoming atmosphere. "
                 "This door provides access to the upper floor where guests can rent private rooms for rest and storage.")

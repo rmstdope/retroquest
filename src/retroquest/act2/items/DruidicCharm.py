@@ -52,14 +52,13 @@ class DruidicCharm(Item):
     def use_with(self, game_state: 'GameState', other_item) -> str:
         """Use the druidic charm with another item."""
         from ..items.OfferingAltar import OfferingAltar
-        
         if isinstance(other_item, OfferingAltar):
             # Delegate to the offering altar's use_with method
             return other_item.use_with(game_state, self)
         else:
             return super().use_with(game_state, other_item)
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, _game_state: GameState) -> str:
         return ("[event]You examine the [item_name]druidic charm[/item_name]. {0} "
                 "The intricate carvings depict intertwined branches and leaves, symbols "
                 "of the eternal cycle of growth and renewal. You can feel the gratitude "

@@ -55,14 +55,13 @@ class EnchantedAcorn(Item):
     def picked_up(self, game_state: GameState) -> str:
         """Called when the item is picked up by the player."""
         from ..rooms.ForestEntrance import ForestEntrance  # Import here to avoid circular imports
-        
         if isinstance(game_state.current_room, ForestEntrance):
             return ("The moment you touch it, you feel a surge of natural magic - this is no "
                     "ordinary acorn, but a sacred offering imbued with the forest's blessing. "
                     "The forest sprites whisper approvingly as you claim this gift.")
         return ""
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, _game_state: GameState) -> str:
         return (f"[event]You examine the [item_name]{self.get_name()}[/item_name]. {self.description} "
                 "When you hold it up to the light, you can see tiny veins of silver running "
                 "through the shell like tree roots. The acorn seems to whisper in a language "

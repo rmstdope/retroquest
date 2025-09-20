@@ -39,13 +39,17 @@ class CrystalFocus(Item):
 
     def use_item(self, _game_state: GameState) -> str:
         # This item enhances magical understanding and comprehension of ancient texts
-        return ("[success]You focus your magical energy through the [item_name]Crystal Focus[/item_name]. "
-                "The crystal amplifies your magical awareness, allowing you to better understand arcane "
-                "principles and enhancing your ability to comprehend ancient magical texts. Your connection "
-                "to magical forces feels stronger and more refined.[/success]")
+        return (
+            "[success]You focus your magical energy through the [item_name]Crystal Focus[/item_name]. "
+            "The crystal amplifies your magical awareness, allowing you to better understand arcane "
+            "principles and enhancing your ability to comprehend ancient magical texts. Your "
+            "connection to magical forces feels stronger and more refined.[/success]"
+        )
 
-    def examine(self, game_state: GameState) -> str:
-        return ("The [item_name]Crystal Focus[/item_name] is a masterwork of ancient magical craftsmanship. "
-                "Its faceted surface catches and amplifies magical energy, and you can feel it resonating "
-                "with your own magical abilities. This is clearly a tool created by master enchanters to "
-                "enhance the magical arts.")
+    def examine(self, _game_state: GameState) -> str:
+        return (
+            "The [item_name]Crystal Focus[/item_name] is a masterwork of ancient magical craftsmanship. "
+            "Its faceted surface catches and amplifies magical energy, and you can feel it resonating "
+            "with your own magical abilities. This is clearly a tool created by master enchanters to "
+            "enhance the magical arts."
+        )

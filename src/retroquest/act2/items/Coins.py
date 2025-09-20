@@ -27,18 +27,27 @@ class Coins(Item):
         self.amount = amount
         super().__init__(
             name="coins",
-            description=f"A pouch containing {amount} gold coins. These will be useful for purchasing supplies and equipment in Greendale.",
+            description=(
+                f"A pouch containing {amount} gold coins. These will be useful for purchasing "
+                f"supplies and equipment in Greendale."
+            ),
             can_be_carried=True,
         )
 
-    def use(self, game_state: GameState) -> str:
-        return f"You count your coins. You have {self.amount} gold pieces to spend on supplies and equipment."
+    def use(self, _game_state: GameState) -> str:
+        return (
+            f"You count your coins. You have {self.amount} gold pieces to spend on "
+            f"supplies and equipment."
+        )
 
     def spend(self, amount: int) -> bool:
         """Spend coins if enough are available"""
         if self.amount >= amount:
             self.amount -= amount
-            self.description = f"A pouch containing {self.amount} gold coins. These will be useful for purchasing supplies and equipment in Greendale."
+            self.description = (
+                f"A pouch containing {self.amount} gold coins. These will be useful for "
+                f"purchasing supplies and equipment in Greendale."
+            )
             return True
         return False
 
