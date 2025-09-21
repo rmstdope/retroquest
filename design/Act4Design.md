@@ -167,7 +167,9 @@ trials, they learn to:
 
 ### Malakar's Complexity
 
-Malakar is revealed not as pure evil, but as a fallen friend consumed by grief and power. His corruption began when he tried to prevent the loss that took Elior's parents, leading to the very tragedy he sought to avoid.
+Malakar is revealed not as pure evil, but as a fallen friend consumed by grief and power. His 
+corruption began when he tried to prevent the loss that took Elior's parents, leading to the 
+very tragedy he sought to avoid.
 
 ## Spell System Design
 
@@ -188,15 +190,19 @@ Act IV introduces the ability to combine relic powers for enhanced effects:
 
 ### Malakar's Fortress
 
-The fortress reflects Malakar's mental state - starting with organized defenses but becoming increasingly chaotic and desperate as players progress deeper. Each area tells the story of his fall from grace.
+The fortress reflects Malakar's mental state - starting with organized defenses but becoming 
+increasingly chaotic and desperate as players progress deeper. Each area tells the story of 
+his fall from grace.
 
 ### The Corruption's Source
 
-Revealed to be Malakar's attempt to reverse time and save Elior's parents, which instead created a temporal wound that consumes life energy.
+Revealed to be Malakar's attempt to reverse time and save Elior's parents, which instead 
+created a temporal wound that consumes life energy.
 
 ### Kingdom's True History
 
-The relics were originally created by an alliance between Malakar and Elior's parents to protect the kingdom, making the current conflict a tragic perversion of their original bond.
+The relics were originally created by an alliance between Malakar and Elior's parents to protect 
+the kingdom, making the current conflict a tragic perversion of their original bond.
 
 ## Rooms
 
@@ -204,7 +210,9 @@ The relics were originally created by an alliance between Malakar and Elior's pa
 
 #### Description
 
-Massive iron gates wreathed in shadow rise before you, their surfaces carved with writhing forms that seem to move in your peripheral vision. Dark energy pulses from ward stones embedded in the gate frame, while spectral guardians materialize from the shadows.
+Massive iron gates wreathed in shadow rise before you, their surfaces carved with writhing 
+forms that seem to move in your peripheral vision. Dark energy pulses from ward stones embedded 
+in the gate frame, while spectral guardians materialize from the shadows.
 
 #### Items
 
@@ -234,7 +242,9 @@ Massive iron gates wreathed in shadow rise before you, their surfaces carved wit
 
 #### Description
 
-A vast stone courtyard stretches before you, littered with the remnants of ancient battles. Twisted metal sculptures rise like grotesque monuments, while fortress servants move about in an eerie trance, their eyes glowing with unnatural light.
+A vast stone courtyard stretches before you, littered with the remnants of ancient battles. 
+Twisted metal sculptures rise like grotesque monuments, while fortress servants move about in 
+an eerie trance, their eyes glowing with unnatural light.
 
 #### Items
 
@@ -267,7 +277,9 @@ A vast stone courtyard stretches before you, littered with the remnants of ancie
 
 #### Description
 
-Countless mirrors line the corridors of this bewildering maze, each reflecting not your true form but distorted versions of yourself and false paths. The Phoenix Feather grows warm in your presence, resonating with the truth hidden behind the illusions.
+Countless mirrors line the corridors of this bewildering maze, each reflecting not your true 
+form but distorted versions of yourself and false paths. The Phoenix Feather grows warm in your 
+presence, resonating with the truth hidden behind the illusions.
 
 #### Items
 
@@ -299,7 +311,9 @@ Countless mirrors line the corridors of this bewildering maze, each reflecting n
 
 #### Description
 
-This grand hall stretches into shadows, its vaulted ceiling lost in darkness. Ancient banners hang in tatters, and the sound of your footsteps echoes strangely, as if accompanied by the ghosts of past battles. At the hall's center stands the Knight of Despair.
+This grand hall stretches into shadows, its vaulted ceiling lost in darkness. Ancient banners 
+hang in tatters, and the sound of your footsteps echoes strangely, as if accompanied by the 
+ghosts of past battles. At the hall's center stands the Knight of Despair.
 
 #### Items
 
@@ -330,7 +344,9 @@ This grand hall stretches into shadows, its vaulted ceiling lost in darkness. An
 
 #### Description
 
-A spiraling tower that seems to twist reality itself as you climb. Shadows dance independently of their sources, and whispered lies assault your mind from every direction. The very air seems thick with deception and false promises.
+A spiraling tower that seems to twist reality itself as you climb. Shadows dance independently 
+of their sources, and whispered lies assault your mind from every direction. The very air seems 
+thick with deception and false promises.
 
 #### Items
 
@@ -361,7 +377,9 @@ A spiraling tower that seems to twist reality itself as you climb. Shadows dance
 
 #### Description
 
-At the tower's peak, you find a circular chamber where the Sorceress of Lies holds court. Reality bends around her as she weaves false visions and poisonous words, but her power cannot hide the pain and loneliness that drove her to serve Malakar.
+At the tower's peak, you find a circular chamber where the Sorceress of Lies holds court. 
+Reality bends around her as she weaves false visions and poisonous words, but her power cannot 
+hide the pain and loneliness that drove her to serve Malakar.
 
 #### Items
 
@@ -392,7 +410,9 @@ At the tower's peak, you find a circular chamber where the Sorceress of Lies hol
 
 #### Description
 
-A mysterious chamber filled with floating memory orbs that show scenes from the past. Here, the shadow of Malakar's former self dwells among memories of friendship, hope, and the tragic events that led to his corruption.
+A mysterious chamber filled with floating memory orbs that show scenes from the past. Here, the 
+shadow of Malakar's former self dwells among memories of friendship, hope, and the tragic events 
+that led to his corruption.
 
 #### Items
 
@@ -423,7 +443,9 @@ A mysterious chamber filled with floating memory orbs that show scenes from the 
 
 #### Description
 
-A grand corridor leading to Malakar's throne room, lined with statues of fallen heroes who challenged him before. King Alden hangs suspended in a crystal prison, his life force slowly draining into a dark ritual circle that pulses with malevolent energy.
+A grand corridor leading to Malakar's throne room, lined with statues of fallen heroes who 
+challenged him before. King Alden hangs suspended in a crystal prison, his life force slowly 
+draining into a dark ritual circle that pulses with malevolent energy.
 
 #### Items
 
@@ -454,7 +476,9 @@ A grand corridor leading to Malakar's throne room, lined with statues of fallen 
 
 #### Description
 
-The heart of Malakar's power, a vast chamber dominated by a twisted throne of black stone. Ancient murals depict the friendship between Malakar and Elior's parents, now scarred by centuries of bitterness. Here, the final confrontation awaits.
+The heart of Malakar's power, a vast chamber dominated by a twisted throne of black stone. 
+Ancient murals depict the friendship between Malakar and Elior's parents, now scarred by 
+centuries of bitterness. Here, the final confrontation awaits.
 
 #### Items
 
@@ -486,7 +510,9 @@ The heart of Malakar's power, a vast chamber dominated by a twisted throne of bl
 
 #### Description
 
-A tranquil garden where the story concludes, restored to beauty after Malakar's defeat or redemption. Sunlight streams through crystal windows, and the air carries the scent of blooming flowers and hope renewed.
+A tranquil garden where the story concludes, restored to beauty after Malakar's defeat or 
+redemption. Sunlight streams through crystal windows, and the air carries the scent of blooming 
+flowers and hope renewed.
 
 #### Items
 
@@ -557,7 +583,8 @@ Legend:
 
 ### Main Quest Completion Architecture
 
-Following the design rule that all side quests must be completed before the main quest can be finished, Act IV completion requires:
+Following the design rule that all side quests must be completed before the main quest can be 
+finished, Act IV completion requires:
 
 #### Phase 1: Fortress Infiltration (All Required)
 
@@ -578,7 +605,9 @@ Following the design rule that all side quests must be completed before the main
 
 #### Final Confrontation
 
-Only after completing ALL side quests can "The Final Stand" be completed, ensuring players have demonstrated mastery of all three virtues and are prepared for the ultimate choice between forgiveness and vengeance.
+Only after completing ALL side quests can "The Final Stand" be completed, ensuring players have 
+demonstrated mastery of all three virtues and are prepared for the ultimate choice between 
+forgiveness and vengeance.
 
 ### Key Story Revelations at Completion
 
@@ -603,9 +632,11 @@ Based on player choices throughout the act:
 
 #### Quest Dependency Tracking
 
-- **Prerequisite Validation:** System must check that all prerequisite quests are completed before allowing new quest triggers
+- **Prerequisite Validation:** System must check that all prerequisite quests are completed 
+  before allowing new quest triggers
 - **Phase Management:** Clear separation between Infiltration, Lieutenant, and Inner Sanctum phases
-- **Completion Validation:** Main quest "The Final Stand" cannot be completed until ALL side quests are finished
+- **Completion Validation:** Main quest "The Final Stand" cannot be completed until ALL side 
+  quests are finished
 
 #### Choice Consequence System
 
@@ -636,9 +667,11 @@ Based on player choices throughout the act:
 #### Compatibility Considerations
 
 - **Game.py Integration:** All new choice systems must work with existing game engine
-- **GameState.py Compatibility:** Moral choice tracking must integrate with existing state management
+- **GameState.py Compatibility:** Moral choice tracking must integrate with existing state 
+  management
 - **Quest.py Extension:** Choice-based quest types must extend existing Quest base class
-- **UI System Integration:** Choice prompts and consequence displays must work with existing interface
+- **UI System Integration:** Choice prompts and consequence displays must work with existing 
+  interface
 
 ### Testing Requirements
 
@@ -665,7 +698,9 @@ Based on player choices throughout the act:
 
 ## Golden Path (Optimal Solution to Complete Act IV)
 
-This sequence completes all Act IV requirements following the most merciful path while demonstrating all three virtues. Each step lists the room, exact commands, and their consequences.
+This sequence completes all Act IV requirements following the most merciful path while 
+demonstrating all three virtues. Each step lists the room, exact commands, and their 
+consequences.
 
 ### Phase 1: Fortress Infiltration
 
@@ -673,7 +708,8 @@ This sequence completes all Act IV requirements following the most merciful path
 
    - Commands and yields:
      - `examine ward stones` → Reveals the shadow guardians' anchor points
-     - `use crystal of light with ward stones` → Crystal dispels the shadow energy, banishing guardians
+     - `use crystal of light with ward stones` → Crystal dispels the shadow energy, 
+       banishing guardians
        - Quest completed: "Shattered Ward Guardians"
        - Item obtained: `Guardian's Essence`
      - `take ancient iron key` → Adds key to inventory for inner passages
@@ -816,7 +852,9 @@ This sequence completes all Act IV requirements following the most merciful path
 
 - ✅ **The Final Stand** (Step 10) - Only completed after ALL side quests finished
 
-This Golden Path ensures that the design rule "all side quests must be completed before the main quest can be finished" is properly followed while demonstrating the most virtuous path through the story.
+This Golden Path ensures that the design rule "all side quests must be completed before the 
+main quest can be finished" is properly followed while demonstrating the most virtuous path 
+through the story.
 
 **Items strictly necessary to complete Act IV:**
 
