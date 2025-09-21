@@ -53,8 +53,8 @@ class CrystalOfLight(Item):
             game_state.current_room.add_item(self)
             return (
                 "[failure]Wards flare as you touch the crystal, locking it in place. Complete the "
-                "rites: attune Tideward Sigils, light the Lanterns of the Deeps, and swear the vow "
-                "before it will yield.[/failure]"
+                "rites: attune Tideward Sigils, light the Lanterns of the Deeps, and swear the "
+                "vow before it will yield.[/failure]"
             )
         if not game_state.get_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED):
             game_state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)

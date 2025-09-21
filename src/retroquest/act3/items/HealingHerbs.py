@@ -8,10 +8,12 @@ class HealingHerbs(Item):
     """Mira's herbal preparations for ritual stabilization (Act III).
 
     Narrative Role:
-        Establishes Mira's expertise and provides thematic preparation elements for complex rituals.
+        Establishes Mira's expertise and provides thematic preparation elements for complex
+        rituals.
 
     Key Mechanics:
-        Non-carriable; interaction restricted to preserve ritual integrity and reserve for guided use.
+        Non-carriable; interaction restricted to preserve ritual integrity and reserve for guided
+        use.
     """
     def __init__(self) -> None:
         super().__init__(

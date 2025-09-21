@@ -8,18 +8,19 @@ class WardingPillars(Item):
     """Tideward ritual pillars requiring purification (Act III).
 
     Narrative Role:
-        Environmental anchor for sigil completion; demonstrates interaction between spell effects and
-        quest progression.
+        Environmental anchor for sigil completion; demonstrates interaction between spell effects
+        and quest progression.
 
     Key Mechanics:
-        `purify()` method transitions state, affecting examine text and enabling downstream interactions.
+        `purify()` method transitions state, affecting examine text and enabling downstream
+        interactions.
     """
     def __init__(self) -> None:
         super().__init__(
             name="Warding Pillars",
             description=(
-                "Three weathered pillars ring a drowned courtyard; glyph-lines are clogged with brine "
-                "and coral crust that must be cleared to restore their ward function."
+                "Three weathered pillars ring a drowned courtyard; glyph-lines are clogged with "
+                "brine and coral crust that must be cleared to restore their ward function."
             ),
             short_name="warding pillars",
             can_be_carried=False,
@@ -35,8 +36,9 @@ class WardingPillars(Item):
     def examine(self, _game_state: GameState) -> str:
         state = "cleansed" if self.purified else "encrusted"
         return (
-            f"[event]The pillars stand weathered and {state}. Channels for a tideward sigil thread their faces; with"
-            " proper cleansing and coquina tiles, the ward could be restored.[/event]"
+            f"[event]The pillars stand weathered and {state}. Channels for a tideward sigil "
+            "thread their faces; with proper cleansing and coquina tiles, the ward could be "
+            "restored.[/event]"
         )
 
     def purify(self, _game_state: GameState) -> str:
