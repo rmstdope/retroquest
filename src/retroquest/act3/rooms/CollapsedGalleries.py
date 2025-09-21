@@ -10,5 +10,9 @@ class CollapsedGalleries(Room):
             ),
             items=[],
             characters=[],
-            exits={"south": "StillnessVestibule", "east": "EchoChambers", "west": "ToolCache"},
+            exits={
+                "south": "StillnessVestibule", 
+                "east": "EchoChambers", 
+                "west": "ToolCache"
+            },
         )

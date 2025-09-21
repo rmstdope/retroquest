@@ -18,5 +18,6 @@ class UnlockSpell(Spell):
             return target_item.unlock(game_state)
         return (
             f"[failure]You cast [spell_name]{self.get_name()}[/spell_name] on "
-            f"[item_name]{target_item.get_name()}[/item_name], but no lock yields.[/failure]"
+            f"[item_name]{target_item.get_name()}[/item_name], but no lock "
+            "yields.[/failure]"
         )

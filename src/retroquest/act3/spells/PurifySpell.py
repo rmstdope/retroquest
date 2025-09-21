@@ -13,8 +13,8 @@ class PurifySpell(Spell):
         super().__init__(
             name="purify",
             description=(
-                "A cleansing rite tuned to salt and stone; it scours sea-grit and wakes dormant "
-                "ward-glyphs."
+                "A cleansing rite tuned to salt and stone; it scours sea-grit and "
+                "wakes dormant ward-glyphs."
             ),
         )
 

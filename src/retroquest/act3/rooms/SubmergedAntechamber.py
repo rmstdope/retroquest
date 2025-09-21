@@ -17,7 +17,11 @@ class SubmergedAntechamber(Room):
             ),
             items=[LanternBracket(), LanternBracket(), LanternBracket()],
             characters=[],
-            exits={"north": "OuterWards", "east": "SanctumOfTheTide", "west": "TidalCauseway"},
+            exits={
+                "north": "OuterWards", 
+                "east": "SanctumOfTheTide", 
+                "west": "TidalCauseway"
+            },
         )
 
     def search(self, game_state: GameState, _target: str = None) -> str:
@@ -28,15 +32,20 @@ class SubmergedAntechamber(Room):
                 "Deeps are already lit.[/info]"
             )
         return (
-            "[event]You wade through chilled water. Three empty brackets line the approach, "
-            "awaiting lanterns. Set them, then kindle the way forward.[/event]"
+            "[event]You wade through chilled water. Three empty brackets line the "
+            "approach, awaiting lanterns. Set them, then kindle the way "
+            "forward.[/event]"
         )
 
     def mount_lantern(self, game_state: GameState) -> str:
         """Mount a prism lantern on an empty bracket."""
         # Find an empty bracket
         empty = next(
-            (b for b in self.items if isinstance(b, LanternBracket) and not b.has_lantern), None
+            (
+                b for b in self.items 
+                if isinstance(b, LanternBracket) and not b.has_lantern
+            ), 
+            None
         )
         if empty is None:
             return "[info]All brackets here are already filled.[/info]"
@@ -70,6 +79,6 @@ class SubmergedAntechamber(Room):
             return "[info]The prism lanterns already burn with steady, cold flame.[/info]"
         game_state.set_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, True)
         return (
-            "[success]Light pours from the prisms, weaving a clear path through the flooded "
-            "hall. The way to the sanctum stands revealed.[/success]"
+            "[success]Light pours from the prisms, weaving a clear path through "
+            "the flooded hall. The way to the sanctum stands revealed.[/success]"
         )

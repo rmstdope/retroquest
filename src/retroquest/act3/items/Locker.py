@@ -8,18 +8,20 @@ class Locker(Item):
     """Corroded pier locker containing prism lanterns (Act III).
 
     Narrative Role:
-        Environmental container gating access to multiple prism lanterns used in ritual lighting.
+        Environmental container gating access to multiple prism lanterns used in ritual 
+        lighting.
 
     Key Mechanics:
-        Requires external unlocking (spell or effect). Once unlocked, opening spawns lantern items.
+        Requires external unlocking (spell or effect). Once unlocked, opening spawns 
+        lantern items.
     """
 
     def __init__(self) -> None:
         super().__init__(
             name="Locker",
             description=(
-                "A corroded locker wedged under the pier. Salt and time have fused its lock, "
-                "resisting ordinary keys and brute effort."
+                "A corroded locker wedged under the pier. Salt and time have fused "
+                "its lock, resisting ordinary keys and brute effort."
             ),
             short_name="locker",
             can_be_carried=False,
@@ -31,11 +33,14 @@ class Locker(Item):
         """Return state-dependent description of the locker."""
         if self.opened:
             return (
-                "The door hangs open and the interior is still and cold, silt motes drifting "
-                "inside."
+                "The door hangs open and the interior is still and cold, silt motes "
+                "drifting inside."
             )
         if self.locked:
-            return "Barnacles crust the seam; the fused lock will not yield to a mundane key."
+            return (
+                "Barnacles crust the seam; the fused lock will not yield to a "
+                "mundane key."
+            )
         return "The mechanism is freed; the door can be opened."
 
     def open(self, game_state: GameState) -> str:
@@ -45,8 +50,8 @@ class Locker(Item):
             return "[info]The locker is already open.[/info]"
         if self.locked:
             return (
-                "[failure]You pull at the handle, but the fused lock holds tight. It cannot open "
-                "while it remains locked.[/failure]"
+                "[failure]You pull at the handle, but the fused lock holds tight. "
+                "It cannot open while it remains locked.[/failure]"
             )
         self.opened = True
         for _ in range(3):
@@ -62,6 +67,6 @@ class Locker(Item):
             return "[info]The mechanism is already free.[/info]"
         self.locked = False
         return (
-            "[event]A subtle click echoes under the pier as fused pins release. The locker can "
-            "now be opened.[/event]"
+            "[event]A subtle click echoes under the pier as fused pins release. "
+            "The locker can now be opened.[/event]"
         )

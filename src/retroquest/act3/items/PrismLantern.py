@@ -9,8 +9,8 @@ class PrismLantern(Item):
         super().__init__(
             name="Prism Lantern",
             description=(
-                "A faceted lantern of glass ribs and brass, made to scatter light into clear "
-                "paths."
+                "A faceted lantern of glass ribs and brass, made to scatter light "
+                "into clear paths."
             ),
             short_name="lantern",
             can_be_carried=True,
