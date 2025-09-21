@@ -1,5 +1,5 @@
-from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ...engine.Item import Item
 
 
 class PrismLantern(Item):

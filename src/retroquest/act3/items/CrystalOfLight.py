@@ -1,11 +1,11 @@
 """Crystal of Light item for Act III."""
 
-from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ...engine.Item import Item
 from ..Act3StoryFlags import (
-    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED,
-    FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
     FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+    FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
+    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED,
     FLAG_ACT3_VOW_OF_COURAGE_MADE,
 )
 

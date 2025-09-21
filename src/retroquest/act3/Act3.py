@@ -2,6 +2,7 @@
 
 from retroquest.engine.Act import Act
 from retroquest.engine.GameState import GameState
+
 from .Act3StoryFlags import FLAG_ACT3_COMPLETED
 from .quests import TheThreeVirtuesQuest, TidewardSigilsQuest
 from .quests.LanternsOfTheDeeps import LanternsOfTheDeepsQuest
@@ -15,8 +16,8 @@ from .rooms import (
     FortressEntrance,
     FumarolePassages,
     LowerSwitchbacks,
-    MirrorTerraces,
     MirasHut,
+    MirrorTerraces,
     ObsidianOutcrops,
     OuterWards,
     PhoenixCrater,
@@ -28,6 +29,7 @@ from .rooms import (
     ToolCache,
 )
 from .spells import LightSpell, PurifySpell, UnlockSpell
+
 
 class Act3(Act):
     """Act 3 of RetroQuest: The Awakening."""

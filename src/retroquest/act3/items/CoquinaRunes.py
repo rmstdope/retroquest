@@ -1,18 +1,20 @@
 """Coquina shell runes for tidebound ward sigils."""
-from ...engine.Item import Item
-from ...engine.GameState import GameState
 from typing import Union
+
+from ...engine.GameState import GameState
+from ...engine.Item import Item
 from .WardingPillars import WardingPillars
+
 
 class CoquinaRunes(Item):
     """
     Etched coquina shells used for ward-line restoration.
-    
+
     Narrative Role:
     - Material component for completing tidebound ward sigils
     - Harvested fragments that connect shore magic to ritual work
     - Tactile element that reinforces the coastal magical tradition
-    
+
     Key Mechanics:
     - Can be carried as ritual components
     - Interacts with WardingPillars through room-mediated hook system

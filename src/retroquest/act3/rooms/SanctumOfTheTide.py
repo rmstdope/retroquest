@@ -1,12 +1,12 @@
-from ...engine.Room import Room
-from ...engine.GameState import GameState
 from ...engine.Character import Character
-from ..items import CrystalOfLight
+from ...engine.GameState import GameState
+from ...engine.Room import Room
 from ..Act3StoryFlags import (
-    FLAG_ACT3_VOW_OF_COURAGE_MADE,
-    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED,
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
+    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED,
+    FLAG_ACT3_VOW_OF_COURAGE_MADE,
 )
+from ..items import CrystalOfLight
 
 
 class TideBornGuardian(Character):

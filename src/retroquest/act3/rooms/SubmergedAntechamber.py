@@ -1,6 +1,6 @@
 """Flooded antechamber with lantern mounting system for underwater passage."""
-from ...engine.Room import Room
 from ...engine.GameState import GameState
+from ...engine.Room import Room
 from ..Act3StoryFlags import FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT
 from ..items import LanternBracket, PrismLantern
 

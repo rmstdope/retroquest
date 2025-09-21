@@ -1,7 +1,7 @@
 """Healing Herbs item for Act III."""
 
-from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ...engine.Item import Item
 
 
 class HealingHerbs(Item):
@@ -20,8 +20,8 @@ class HealingHerbs(Item):
             name="healing herbs",
             short_name="herbs",
             description=(
-                "Bundles of resin-sweet stems and silverleaf—Mira's blends for steadying wounds and "
-                "sharpening ritual focus during complex workings."
+                "Bundles of resin-sweet stems and silverleaf—Mira's blends for steadying wounds "
+                "and sharpening ritual focus during complex workings."
             ),
             can_be_carried=False,
         )
@@ -30,8 +30,8 @@ class HealingHerbs(Item):
         """Block pickup with narrative explanation through Mira."""
         return (
             "[character_name]Mira[/character_name] lifts a sachet, then shakes her head. "
-            "[dialogue]'Leave these for the circles and crossings. When the rite calls for them, I will "
-            "place them in your hands.'[/dialogue]"
+            "[dialogue]'Leave these for the circles and crossings. When the rite calls for them, "
+            "I will place them in your hands.'[/dialogue]"
         )
 
     def use(self, _game_state: GameState) -> str:  # noqa: ARG002

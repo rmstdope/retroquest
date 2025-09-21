@@ -1,6 +1,6 @@
-from ...engine.Room import Room
 from ...engine.GameState import GameState
-from ..items import RustedLockerKey, Locker
+from ...engine.Room import Room
+from ..items import Locker, RustedLockerKey
 
 
 class CollapsedPier(Room):
@@ -14,7 +14,7 @@ class CollapsedPier(Room):
             characters=[],
             exits={"south": "SanctumOfTheTide", "west": "OuterWards"},
         )
-    
+
     def search(self, game_state: GameState, _target: str = None) -> str:
         # If key already present or in inventory, return idempotent vault description
         if any(isinstance(i, RustedLockerKey) for i in self.items) or any(

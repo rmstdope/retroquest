@@ -1,7 +1,7 @@
 """Warding Pillars item for Act III."""
 
-from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ...engine.Item import Item
 
 
 class WardingPillars(Item):

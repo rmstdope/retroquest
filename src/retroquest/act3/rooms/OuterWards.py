@@ -1,6 +1,6 @@
 """Drowned courtyard with tideward sigil pillars."""
-from ...engine.Room import Room
 from ...engine.GameState import GameState
+from ...engine.Room import Room
 from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
 from ..items import CoquinaRunes, WardingPillars
 
@@ -8,12 +8,12 @@ from ..items import CoquinaRunes, WardingPillars
 class OuterWards(Room):
     """
     A flooded courtyard with three ancient pillars for tideward sigil work.
-    
+
     Narrative Role:
     - Central location for the Tideward Sigils side quest
     - Demonstrates the connection between purification magic and sigil crafting
     - Gateway area that controls access to deeper sanctum areas
-    
+
     Key Mechanics:
     - Search action attunes sigils when first performed
     - Supports purify spell casting on pillars via room hook
@@ -30,8 +30,8 @@ class OuterWards(Room):
             items=[WardingPillars()],
             characters=[],
             exits={
-                "south": "SubmergedAntechamber", 
-                "east": "CollapsedPier", 
+                "south": "SubmergedAntechamber",
+                "east": "CollapsedPier",
                 "west": "ShorelineMarkers"
             },
         )

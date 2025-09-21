@@ -1,7 +1,7 @@
 """Locker item for Act III (corroded storage revealing prism lanterns)."""
 
-from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ...engine.Item import Item
 
 
 class Locker(Item):

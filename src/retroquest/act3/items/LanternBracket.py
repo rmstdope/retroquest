@@ -1,17 +1,17 @@
 """Carved niche for mounting prism lanterns."""
-from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ...engine.Item import Item
 
 
 class LanternBracket(Item):
     """
     A fixed mounting point for prism lanterns in ritual spaces.
-    
+
     Narrative Role:
     - Architectural element that provides structure for lighting rituals
     - Visual cue for prism lantern placement during ceremonies
     - Static anchor point that players can reference for spatial orientation
-    
+
     Key Mechanics:
     - Cannot be carried (fixed architectural element)
     - Tracks whether a lantern is currently mounted

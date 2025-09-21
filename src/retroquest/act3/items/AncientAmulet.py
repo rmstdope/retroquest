@@ -21,7 +21,8 @@ class AncientAmulet(Item):
             short_name="amulet",
             description=(
                 "A family heirloom whose runes glint like dew at dawn. It seems to resonate "
-                "faintly in the presence of the other relics, as though completing an unseen circuit."
+                "faintly in the presence of the other relics, as though completing an unseen "
+                "circuit."
             ),
             can_be_carried=False,
         )

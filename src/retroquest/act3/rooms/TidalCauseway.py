@@ -1,6 +1,6 @@
-from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ...engine.Item import Item
+from ...engine.Room import Room
 from ..Act3StoryFlags import FLAG_ACT3_SEA_SEALED_LETTER_FOUND
 
 
@@ -24,7 +24,7 @@ class Mural(Item):
             )
         # Reveal the letter in the room if not already found
         letter_present = any(
-            i.get_name().lower() == "sea-sealed letter" 
+            i.get_name().lower() == "sea-sealed letter"
             for i in game_state.current_room.get_items()
         )
         if not letter_present:
