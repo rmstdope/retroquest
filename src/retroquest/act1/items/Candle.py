@@ -1,7 +1,8 @@
 """Candle Item
 
 Narrative Role:
-Small light source that reveals hidden object (Locket) when lit, teaching players that illumination can alter room item sets.
+Small light source that reveals hidden object (Locket) when lit, teaching players
+that illumination can alter room item sets.
 
 Key Mechanics / Interactions:
 - `use_with` + `Matches` lights candle (idempotent) and spawns `Locket` exactly once.
@@ -55,6 +56,7 @@ class Candle(Item):
                 )
             else:
                 return (
-                    f"[failure]The [item_name]{self.get_name()}[/item_name] is already lit.[/failure]"
+                    f"[failure]The [item_name]{self.get_name()}[/item_name]"
+                    f" is already lit.[/failure]"
                 )
         return super().use_with(game_state, other_item)

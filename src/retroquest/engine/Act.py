@@ -1,11 +1,13 @@
+"""Engine Act base class and helpers."""
+
 from .GameState import GameState
 
 class Act:
-    """
-    Represents a collection of rooms, quests, items, and characters for a given act in the game.
-    This is a simple container class to help organize content by act.
-    """
-    def __init__(self, name: str, rooms: dict, quests: list, music_file: str, music_info: str) -> None:
+    """Container for rooms, quests, music and act-level helpers."""
+
+    def __init__(self, name: str, rooms: dict, quests: list, music_file: str,
+                 music_info: str) -> None:
+        """Initialize the Act with content and metadata."""
         self.name = name
         self.rooms = rooms
         self.quests = quests
@@ -13,11 +15,12 @@ class Act:
         self.music_info = music_info
 
     def get_act_intro(self) -> str:
+        """Return an introduction string for the act (override in acts)."""
         return ""
 
-    def setup_gamestate(self, game_state: GameState) -> None:
+    def setup_gamestate(self, _game_state: GameState) -> None:
         """Hook for act-specific GameState initialization. Default is no-op."""
 
-    def is_completed(self, game_state: GameState) -> bool:
-        raise NotImplementedError("Subclasses must implement the is_completed method")
-
+    def is_completed(self, _game_state: GameState) -> bool:
+        """Return True when the act's completion conditions are met."""
+        return False

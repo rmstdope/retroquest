@@ -1,13 +1,14 @@
-import pytest
+"""Room unit tests for Act 3 to verify room definitions and exits."""
+
+from typing import Optional
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
 
-# TODO: Import room classes when they are created
-# from retroquest.act3.rooms.ExampleRoom import ExampleRoom
-
 class TestAct3Rooms:
     """Tests for Act 3 room functionality."""
-    
+    act3: Optional[Act3] = None
+    game: Optional[Game] = None
+
     def setup_method(self):
         """Set up test fixtures."""
         self.act3 = Act3()
@@ -17,7 +18,7 @@ class TestAct3Rooms:
         """Test that Act 3 has rooms defined."""
         assert isinstance(self.act3.rooms, dict)
         assert len(self.act3.rooms) > 0
-    
+
     def test_all_exits_are_bidirectional(self):
         """Ensure every cardinal exit has a matching reverse exit back to the origin room."""
         game = Game([self.act3])
@@ -40,7 +41,7 @@ class TestAct3Rooms:
                     f"Room '{target_key}' must have a '{reverse_dir}' exit back to '{room_key}'."
                 )
                 assert target_exits[reverse_dir] == room_key, (
-                    f"Reverse exit mismatch: from '{target_key}' via '{reverse_dir}' should go back to '{room_key}', "
+                    f"Reverse exit mismatch: from '{target_key}' via '{reverse_dir}'"
+                    f" should go back to '{room_key}', "
                     f"but goes to '{target_exits[reverse_dir]}'."
                 )
-        

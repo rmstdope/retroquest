@@ -1,11 +1,13 @@
 """HealingHerb Item
 
 Narrative Role:
-Represents controlled medicinal stock belonging to healer NPC (Mira). Reinforces boundary between player scavenging and community stewardship.
+Represents controlled medicinal stock belonging to healer NPC (Mira). Reinforces boundary
+between player scavenging and community stewardship.
 
 Key Mechanics / Interactions:
 - Always blocks pickup (`prevent_pickup` returns dialogue) – cannot be taken even if visible.
-- No direct healing consumption yet; implies future use via healer services rather than raw item use.
+- No direct healing consumption yet; implies future use via healer services rather than
+    raw item use.
 
 Story Flags (Sets / Reads):
 (none) – Access control handled through pickup prevention.

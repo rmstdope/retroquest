@@ -67,7 +67,7 @@ def test_room_reachability(start_key):
     # All rooms should be reachable from the start room
     assert set(rooms.keys()) <= visited, f"From {start_key}, could not reach: {set(rooms.keys()) - visited}"
 
-@pytest.mark.parametrize("room_class, room_key", [
+@pytest.mark.parametrize("_room_class, room_key", [
     (EliorsCottage, "EliorsCottage"),
     (VegetableField, "VegetableField"),
     (ChickenCoop, "ChickenCoop"),
@@ -84,7 +84,7 @@ def test_room_reachability(start_key):
     (VillageChapel, "VillageChapel"),
     (RoadToGreendale, "RoadToGreendale"),
 ])
-def test_room_transitions_bidirectional(room_class, room_key):
+def test_room_transitions_bidirectional(_room_class, room_key):
     # Instantiate all rooms
     rooms = {
         "EliorsCottage": EliorsCottage(),

@@ -1,24 +1,4 @@
-"""FadedPhotograph Item
-
-Narrative Role:
-Personal relic tying Elior to family backstory and gently pointing exploration toward the river bend area. Serves as an early lore anchor and directs player movement.
-
-Key Mechanics / Interactions:
-- On `examine`, sets story flag `FLAG_READ_PHOTO_MESSAGE` to record that the hint was seen.
-- Inherits base `examine` output after flag setting (no custom description override logic needed here).
-
-Story Flags (Sets / Reads):
-- Sets: `FLAG_READ_PHOTO_MESSAGE` (marks hint consumed)
-- Reads: (none)
-
-Progression Effects:
-- Encourages travel to river-related locations, priming later discovery/puzzle chains.
-
-Design Notes:
-- Could later be re-examinable with expanded description if additional memory fragments are unlocked.
-- Flag separation keeps narrative hint tracking explicit for adaptive dialogue logic elsewhere.
-
-"""
+"""Faded photograph item used to reveal a hint and set a story flag."""
 
 from ...engine.Item import Item
 from ...engine.GameState import GameState

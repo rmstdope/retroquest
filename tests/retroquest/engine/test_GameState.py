@@ -1,24 +1,37 @@
+"""Unit tests for GameState: activation, updates, completion, inventory, and flags."""
+
 import unittest
 from engine.GameState import GameState
 
 class DummyRoom:
+    """Simple dummy room with a name used by GameState tests."""
+
     def __init__(self, name):
         self.name = name
+        self.items = []
 
 class DummyQuest:
+    """Dummy quest with configurable trigger and completion responses."""
+
     def __init__(self, name, description=False, completion=False):
         self.name = name
         self.description = description
         self.completion = completion
-    def check_trigger(self, game_state):
+
+    def check_trigger(self, _game_state):
         return self.description
+
     def check_completion(self, _game_state):
         return self.completion
+
     def is_main(self):
         return False
 
 class TestGameState(unittest.TestCase):
+    """Tests for GameState quest handling, inventory, and story flags."""
+
     def test_next_activated_quest(self):
+        """Quest activation moves a triggered quest from non-activated to activated."""
         # Setup: quest1 triggers, quest2 does not
         self.gs.non_activated_quests = [self.quest1, self.quest2]
         activated = self.gs.next_activated_quest()
@@ -34,16 +47,16 @@ class TestGameState(unittest.TestCase):
         class UpdateQuest(DummyQuest):
             def __init__(self, name, update=False):
                 super().__init__(name)
-                self._update = update
-            def check_update(self, game_state):
-                return self._update
+                self.update = update
+            def check_update(self, _game_state):
+                return self.update
         q1 = UpdateQuest("Q1", update=False)
         q2 = UpdateQuest("Q2", update=True)
         self.gs.activated_quests = [q1, q2]
         updated = self.gs.next_updated_quest()
         self.assertEqual(updated, q2)
         # No quest needs updating
-        q2._update = False
+        q2.update = False
         updated2 = self.gs.next_updated_quest()
         self.assertIsNone(updated2)
 
@@ -52,7 +65,7 @@ class TestGameState(unittest.TestCase):
         self.gs.activated_quests = [self.quest1, self.quest2]
         # Patch quest2 to complete
         self.quest2.completion = True
-        def check_completion_true(gs): return True
+        def check_completion_true(_gs): return True
         self.quest2.check_completion = check_completion_true
         completed = self.gs.next_completed_quest()
         self.assertEqual(completed, self.quest2)
@@ -67,7 +80,7 @@ class TestGameState(unittest.TestCase):
         class UpdatableQuest(DummyQuest):
             def __init__(self, name, description):
                 super().__init__(name, description)
-            def check_update(self, game_state):
+            def check_update(self, _game_state):
                 return True
             def is_main(self):
                 return True
@@ -82,7 +95,7 @@ class TestGameState(unittest.TestCase):
         class CompletableQuest(DummyQuest):
             def __init__(self, name, completion):
                 super().__init__(name, description=False, completion=completion)
-            def check_completion(self, game_state):
+            def check_completion(self, _game_state):
                 return True
             def is_main(self):
                 return False
@@ -135,6 +148,7 @@ class TestGameState(unittest.TestCase):
         found = self.gs.get_item("amulet")
         self.assertIs(found, inv_item)
     def setUp(self):
+        """Create a GameState with a test room and two dummy quests."""
         self.room = DummyRoom("TestRoom")
         self.quest1 = DummyQuest("Quest1", description=True, completion=False)
         self.quest2 = DummyQuest("Quest2", description=False, completion=True)
@@ -171,12 +185,12 @@ class TestGameState(unittest.TestCase):
             def get_short_name(self): return self.item_name[:3]
 
         # Add multiple items of the same type
-        for i in range(5):
+        for _ in range(5):
             coin = DummyItem("coin")
             self.gs.add_item_to_inventory(coin)
         
         # Add multiple items of different types
-        for i in range(3):
+        for _ in range(3):
             key = DummyItem("key")
             self.gs.add_item_to_inventory(key)
         

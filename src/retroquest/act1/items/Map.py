@@ -60,11 +60,12 @@ class Map(Item):
             game_state.set_story_flag(FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED, True)
             return (
                 f"[event]You use the [item_name]{self.get_name()}[/item_name].[/event]\n"
-                f"The [item_name]{self.get_name()}[/item_name] aligns with the landscape, revealing a "
-                "hidden path that shortens the journey to Greendale. You feel a sense of "
-                "accomplishment as you set forth."
+                f"The [item_name]{self.get_name()}[/item_name] aligns with the landscape,"
+                f" revealing a "
+                f"hidden path that shortens the journey to Greendale. You feel a sense of "
+                f"accomplishment as you set forth."
             )
         return (
-            f"[event]You study the [item_name]{self.get_name()}[/item_name]. It depicts the local area "
-            "with surprising detail.[/event]"
+            f"[event]You study the [item_name]{self.get_name()}[/item_name]. It depicts the "
+            f"local area with surprising detail.[/event]"
         )

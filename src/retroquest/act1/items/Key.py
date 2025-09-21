@@ -18,7 +18,7 @@ class Key(Item):
 
     def use_with(self, game_state: 'GameState', other_item: Item) -> str:
         """Use the key with a ShedDoor, otherwise fallback to base behavior."""
-        from .ShedDoor import ShedDoor  # Local import to avoid circular dependency issues at module load time
+        from .ShedDoor import ShedDoor
         if isinstance(other_item, ShedDoor):
             return other_item.use_with(game_state, self)
         return super().use_with(game_state, other_item)

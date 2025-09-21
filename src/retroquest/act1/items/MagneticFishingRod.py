@@ -1,3 +1,5 @@
+"""Magnetic fishing rod item used for attracting metallic objects and upgrades."""
+
 from typing import TYPE_CHECKING
 from ...engine.Item import Item
 from .Stick import Stick
@@ -39,6 +41,7 @@ class MagneticFishingRod(Item):
         if isinstance(other_item, Well):
             return (
                 f"[failure]You try fishing in the [item_name]{other_item.get_name()}[/item_name], "
-                f"but the [item_name]{self.get_name()}[/item_name] is too short to reach the water.[/failure]"
+                f"but the [item_name]{self.get_name()}[/item_name] is too short to"
+                f" reach the water.[/failure]"
             )
         return super().use_with(game_state, other_item)

@@ -1,5 +1,3 @@
-import pytest
-
 results = []
 
 # Helper functions for assertions
@@ -58,7 +56,6 @@ def check_quests(game_state, expected_active_quests):
     )
 
 def execute_commands(game, commands_list):
-    global results
     part_result = []
     for cmd in commands_list:
         part_result.append(game.command_parser.parse(cmd))

@@ -12,6 +12,9 @@ from ..Act1StoryFlags import FLAG_CONNECT_WITH_NATURE
 from ...engine.GameState import GameState
 
 class Shopkeeper(Character):
+    """
+    Represents the shopkeeper NPC in Willowbrook's General Store.
+    """
     def __init__(self) -> None:
         super().__init__(
             name="shopkeeper",
@@ -128,7 +131,7 @@ class Shopkeeper(Character):
         for item in game_state.inventory:
             if isinstance(item, Coin):
                 coin_count += 1
-        
+
         if coin_count < price:
             return (
                 event_msg
@@ -146,7 +149,7 @@ class Shopkeeper(Character):
             if isinstance(item, Coin) and removed_coins < price:
                 game_state.inventory.remove(item)
                 removed_coins += 1
-        
+
         # Add item to inventory
         # Need to create a new instance of the item to add to inventory
         new_item = Apple()  # Assuming the shopkeeper gives an apple with every purchase
@@ -164,9 +167,8 @@ class Shopkeeper(Character):
             # Should not happen if item_name_to_buy is in self.wares
             return "An unexpected error occurred trying to sell the item."
         new_item.can_be_carried = True
-
         game_state.add_item_to_inventory(new_item)
-        
+
         # Remove item from General Store's items list if it's a unique item or limited stock
         # For now, assume infinite stock in the store, but the player buys one instance.
         # If the store's stock should deplete, that logic would go here,

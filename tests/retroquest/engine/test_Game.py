@@ -1,5 +1,6 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
+from engine import GameState
 from retroquest.engine.Game import Game
 from retroquest.engine.Room import Room
 from retroquest.engine.Act import Act
@@ -34,7 +35,7 @@ class TakeMockItem(Item):
             return f"[failure]The {self.name} is too heavy to lift.[/failure]"
         return None
 
-    def picked_up(self, game_state):
+    def picked_up(self, _game_state):
         return self._pickup_message
 
 class TakeMockAct(Act):
@@ -48,6 +49,9 @@ class TakeMockAct(Act):
             music_file='',
             music_info=''
         )
+    def is_completed(self, _game_state: GameState) -> bool:
+        """Return True when the act's completion conditions are met."""
+        return False
 # ==== End migrated take multiple tests support classes ====
 
 # Dummy room and item setup for test
@@ -69,8 +73,8 @@ ROOMS = {
     "RoadToGreendale": MockRoom("Road to Greendale"),
 }
 
-@pytest.fixture
-def basic_rooms():
+@pytest.fixture(name="basic_rooms")
+def basic_rooms_fixture():
     # Minimal room network for testing
     cottage = MockRoom("EliorsCottage", "A cozy cottage with a warm hearth.")
     field = MockRoom("VegetableField", "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky.")
@@ -82,8 +86,8 @@ def basic_rooms():
         "VegetableField": field,
     }
 
-@pytest.fixture
-def game(basic_rooms):
+@pytest.fixture(name="game")
+def game_fixture(basic_rooms):
     act = Act("TestAct", basic_rooms, [], '', '')
     return Game([act])
 
@@ -159,7 +163,7 @@ def test_map_multiple_moves(game):
     assert "    north -> [room_name]EliorsCottage[/room_name]" in result
     assert result.count('- ') == 2
 
-def test_take_item_from_room(game, basic_rooms):
+def test_take_item_from_room(game):
     # Place an item in the starting room
     from retroquest.act1.items.Egg import Egg
     egg = Egg()
@@ -248,8 +252,6 @@ def test_take_with_pickup_messages():
     assert len(game.state.inventory) == 3
 
 def test_take_backward_compatibility_with_existing_behavior():
-    act = TakeMockAct()
-    base_act = TakeMockAct()  # Each loop new act/game ensures isolation
     test_items = [
         TakeMockItem("sword", "A sharp sword"),
         TakeMockItem("shield", "A sturdy shield"),
@@ -266,7 +268,7 @@ def test_take_backward_compatibility_with_existing_behavior():
         assert len(game.state.inventory) == 1 and game.state.inventory[0].get_name() == item.get_name()
 # ==== Migrated take multiple tests end ====
 
-def test_drop_item_from_inventory(game, basic_rooms):
+def test_drop_item_from_inventory(game):
     # Add an item to inventory
     from retroquest.act1.items.Lantern import Lantern
     lantern = Lantern()
@@ -294,7 +296,7 @@ def test_learn_spell_already_known(game):
     from retroquest.act1.spells.LightSpell import LightSpell
     light_spell = LightSpell()
     game.learn(light_spell) # Learn it once
-    result = game.learn(light_spell) # Try to learn again
+    game.learn(light_spell) # Try to learn again
     assert game.state.known_spells.count(light_spell) == 1
 
 def test_spells_command_no_spells(game):
@@ -315,7 +317,7 @@ def test_spells_command_with_spells(game):
 
 # --- Tests for 'give' command ---
 
-def test_give_item_to_character_successful(game, basic_rooms):
+def test_give_item_to_character_successful(game):
     from retroquest.act1.items.Apple import Apple
     from retroquest.act1.characters.Villager import Villager # Assuming a generic Villager character
     
@@ -336,7 +338,7 @@ def test_give_item_to_character_successful(game, basic_rooms):
     # If Game.give should remove it, add that check here.
     # For now, we only check the call and response.
 
-def test_give_item_not_in_inventory(game, basic_rooms):
+def test_give_item_not_in_inventory(game):
     from retroquest.act1.characters.Villager import Villager
     villager = Villager()
     game.state.current_room.characters.append(villager)
@@ -344,7 +346,7 @@ def test_give_item_not_in_inventory(game, basic_rooms):
     result = game.give(f"nonexistent_item to {villager.get_name()}")
     assert "You don\'t have any \'nonexistent_item\' to give." in result
 
-def test_give_item_to_character_not_in_room(game, basic_rooms):
+def test_give_item_to_character_not_in_room(game):
     from retroquest.act1.items.Apple import Apple
     apple = Apple()
     game.state.inventory.append(apple)
@@ -353,7 +355,7 @@ def test_give_item_to_character_not_in_room(game, basic_rooms):
     result = game.give(f"{apple.get_name()} to Ghost")
     assert "There is no character named \'Ghost\' here." in result
 
-def test_give_item_character_does_not_want(game, basic_rooms):
+def test_give_item_character_does_not_want(game):
     from retroquest.act1.items.Stick import Stick # An item the character might not want
     from retroquest.engine.Character import Character # Base character
     
@@ -379,7 +381,7 @@ def test_give_item_invalid_format(game):
 
 # --- Tests for \'look\' command ---
 
-def test_look_in_room_with_items_and_characters(game, basic_rooms):
+def test_look_in_room_with_items_and_characters(game):
     from retroquest.act1.items.Apple import Apple
     from retroquest.act1.characters.Villager import Villager
     
@@ -401,9 +403,9 @@ def test_look_in_room_with_items_and_characters(game, basic_rooms):
         f"You see: {villager.get_name()}"
     )
 
-    result = game.look()
+    game.look()
 
-def test_look_in_empty_room(game, basic_rooms):
+def test_look_in_empty_room(game):
     # Move to a room that we ensure is empty (or make it empty)
     # For simplicity, let\'s use VegetableField and clear it.
     game.move('south') # Move to VegetableField
@@ -420,7 +422,7 @@ def test_look_in_empty_room(game, basic_rooms):
     # For this test, let\'s assume describe() returns the base description if no items/chars
     current_room.describe = MagicMock(return_value=original_description)
 
-    result = game.look()
+    game.look()
 
 # --- Tests for \'inventory\' command ---
 
@@ -447,7 +449,6 @@ def test_inventory_with_items(game):
 
 def test_examine_item_in_inventory(game):
     from retroquest.act1.items.Apple import Apple
-    from unittest.mock import MagicMock
 
     apple = Apple()
     apple_description = "A juicy red apple, looking perfectly ripe."
@@ -465,7 +466,6 @@ def test_examine_item_in_inventory(game):
 
 def test_examine_item_in_room(game):
     from retroquest.act1.items.Apple import Apple
-    from unittest.mock import MagicMock
 
     apple = Apple()
     apple_description = "A shiny green apple, lying on the ground."
@@ -509,7 +509,6 @@ def test_examine_no_argument(game):
 def test_examine_case_insensitivity(game):
     from retroquest.act1.items.Apple import Apple
     from retroquest.act1.characters.Villager import Villager
-    from unittest.mock import MagicMock
 
     # Test with item
     apple = Apple()
@@ -979,15 +978,15 @@ class MockSpell:
     def get_description(self):
         return self.description
     
-    def cast_spell(self, game_state):
+    def cast_spell(self, _game_state):
         """Cast spell without a target."""
         return f"[event]You cast [spell_name]{self.name}[/spell_name] without a target.[/event]"
     
-    def cast_on_item(self, game_state, target_item):
+    def cast_on_item(self, _game_state, target_item):
         """Cast spell on an item."""
         return f"[event]You cast [spell_name]{self.name}[/spell_name] on [item_name]{target_item.get_name()}[/item_name].[/event]"
     
-    def cast_on_character(self, game_state, target_character):
+    def cast_on_character(self, _game_state, target_character):
         """Cast spell on a character."""
         return f"[event]You cast [spell_name]{self.name}[/spell_name] on [character_name]{target_character.get_name()}[/character_name].[/event]"
 
@@ -1002,7 +1001,7 @@ class MockItem:
     def get_short_name(self):
         return self.short_name or ""
     
-    def use(self, game_state):
+    def use(self, _game_state):
         return f"You use the [item_name]{self.name}[/item_name]."
 
 class MockCharacter:
@@ -1012,10 +1011,10 @@ class MockCharacter:
     def get_name(self):
         return self.name
     
-    def examine(self, game_state):
+    def examine(self, _game_state):
         return f"You examine [character_name]{self.name}[/character_name]."
     
-    def say_to(self, word, game_state):
+    def say_to(self, word, _game_state):
         """Mock implementation of say_to method."""
         if word.lower() == "hello":
             return f"[dialogue][character_name]{self.name}[/character_name] responds: 'Hello there!'[/dialogue]"
@@ -1024,8 +1023,8 @@ class MockCharacter:
         else:
             return f"[dialogue][character_name]{self.name}[/character_name] looks confused and doesn't understand '{word}'.[/dialogue]"
 
-@pytest.fixture
-def game_with_spells(basic_rooms):
+@pytest.fixture(name="game_with_spells")
+def game_with_spells_fixture(basic_rooms):
     act = Act("TestAct", basic_rooms, [], '', '')
     game = Game([act])
     

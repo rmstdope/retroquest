@@ -1,5 +1,4 @@
 import pytest
-from retroquest.engine.GameState import GameState
 from retroquest.act2.rooms.MountainPath import MountainPath
 from retroquest.act2.rooms.GreendaleGates import GreendaleGates
 from retroquest.act2.rooms.MainSquare import MainSquare
@@ -50,8 +49,8 @@ ROOM_CLASSES = {
 }
 
 
-@pytest.mark.parametrize("room_name,room_class", ROOM_CLASSES.items())
-def test_room_creation(room_name, room_class):
+@pytest.mark.parametrize("_room_name,room_class", ROOM_CLASSES.items())
+def test_room_creation(_room_name, room_class):
     """Test that all Act2 rooms can be created without errors"""
     room = room_class()
     assert room is not None

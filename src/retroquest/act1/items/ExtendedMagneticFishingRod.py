@@ -6,9 +6,7 @@ from .Well import Well
 from .ShinyRing import ShinyRing
 
 class ExtendedMagneticFishingRod(Item):
-    """
-    Fishing rod with a magnet, used to retrieve metallic items from a distance.
-    """
+    """Fishing rod with a magnet, used to retrieve metallic items from a distance."""
 
     def __init__(self) -> None:
         """Initialize the Extended Magnetic Fishing Rod item with name and description."""
@@ -37,27 +35,33 @@ class ExtendedMagneticFishingRod(Item):
                 # Update well state
                 other_item.contains_ring = False
                 return (
-                    event_msg +
-                    f"After some careful maneuvering, you manage to retrieve a "
-                    f"[item_name]{ring.get_name()}[/item_name]!"
+                    event_msg
+                    + "After some careful maneuvering, you manage to retrieve a "
+                    + f"[item_name]{ring.get_name()}[/item_name]!"
                 )
             elif not other_item.is_purified:
                 return (
-                    event_msg +
-                    f"The water in the [item_name]{other_item.get_name()}[/item_name] is too murky. "
-                    "You can't see anything to retrieve."
+                    event_msg
+                    + f"The water in the [item_name]{other_item.get_name()}[/item_name] "
+                    + "is too murky. You can't see anything to retrieve."
                 )
             elif not other_item.contains_ring:
                 return (
-                    event_msg +
-                    f"You can see the bottom of the [item_name]{other_item.get_name()}[/item_name] "
-                    "clearly, but there's nothing metallic to retrieve with the "
-                    f"[item_name]{self.get_name()}[/item_name]."
+                    event_msg
+                    + (
+                        f"You can see the bottom of the [item_name]{other_item.get_name()}"
+                        f"[/item_name] "
+                    )
+                    + "clearly, but there's nothing metallic to retrieve with the "
+                    + f"[item_name]{self.get_name()}[/item_name]."
                 )
             else:
                 return (
-                    event_msg +
-                    f"You try to use the [item_name]{self.get_name()}[/item_name] with the "
-                    f"[item_name]{other_item.get_name()}[/item_name], but it doesn't seem to work right now."
+                    event_msg
+                    + (
+                        f"You try to use the [item_name]{self.get_name()}[/item_name] "
+                        f"with the [item_name]{other_item.get_name()}[/item_name], but "
+                    )
+                    + "it doesn't seem to work right now."
                 )
         return super().use_with(game_state, other_item)

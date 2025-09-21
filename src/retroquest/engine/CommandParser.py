@@ -1,16 +1,21 @@
 """Command parser for processing player input in RetroQuest."""
-from typing import Any
+from __future__ import annotations
+
+from typing import Any, TYPE_CHECKING
 from . import DEV_MODE
 
 
 class CommandParser:
-    """
-    Parses and handles player commands for RetroQuest.
-    Now calls Game methods directly for each command.
-    """
-    from . import Game  # Import here to avoid circular dependency
+    """Parses and handles player commands for RetroQuest.
 
-    def __init__(self, game: Game) -> None:
+    Uses runtime calls into the Game instance; type hints use forward
+    references to avoid circular imports.
+    """
+
+    if TYPE_CHECKING:
+        from .Game import Game
+
+    def __init__(self, game: "Game") -> None:
         self.game = game
         self.last_raw: str | None = None
 

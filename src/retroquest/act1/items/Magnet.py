@@ -21,9 +21,7 @@ Design Notes:
 """
 
 from ...engine.Item import Item
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from ...engine.GameState import GameState
+from ...engine.GameState import GameState
 
 class Magnet(Item):
     """

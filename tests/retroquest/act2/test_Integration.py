@@ -1,6 +1,11 @@
+"""Integration tests for Act2: golden path, navigation, quests, and interactions."""
+
 from retroquest.engine.Game import Game
 from retroquest.act2.Act2 import Act2
-from ..utils.utils import *
+from ..utils.utils import (check_character_in_room, check_current_room, check_quests,
+                            execute_commands, check_item_in_inventory,
+                            check_item_count_in_inventory, check_item_in_room, results,
+                            check_spell_known)
 
 def _create_test_game():
     """Create a test game instance with Act2"""
@@ -533,11 +538,6 @@ def test_main_square_navigation_restriction():
     expected_exits = {"south": "GreendaleGates", "north": "CastleApproach", "east": "MarketDistrict"}
     assert available_exits == expected_exits, f"Expected all exits after using map, got: {available_exits}"
     
-    # Test that navigation now works to previously restricted directions
-    # Note: We'll just test that the movement command doesn't return a lost message
-    # since we don't want to actually navigate away from Main Square in this test
-    main_square_room = game.state.current_room
-    
     # Mock the movement to test the exit availability without side effects
     exits = game.state.current_room.get_exits(game.state)
     assert "north" in exits, "North exit should be available after using map"
@@ -575,7 +575,7 @@ def test_golden_path_step_15_forest_transition():
     assert "boundary between worlds" in result.lower(), "Should describe the boundary"
     
     # Step 15c: Learn nature_sense spell from the stones
-    check_spell_known(game.state, "nature_sense"), "Should learn nature_sense spell"
+    check_spell_known(game.state, "nature_sense")
     assert "nature's sense" in result.lower(), "Should mention the spell name"
     assert "connection forming with the natural world" in result.lower(), "Should describe magical connection"
     
@@ -595,7 +595,7 @@ def test_golden_path_step_15_forest_transition():
     assert "protective charm" in result.lower(), "Should mention the charm"
     assert "ancient guardians" in result.lower(), "Should warn about forest dangers"
     assert "dark spirits" in result.lower(), "Should warn about dark spirits"
-    check_item_in_inventory(game.state, "protective charm"), "Should receive protective charm"
+    check_item_in_inventory(game.state, "protective charm")
 
 def test_whispering_glade_riddle_system():
     """Test the water nymph riddle system in detail for step 18."""
@@ -629,9 +629,8 @@ def test_whispering_glade_riddle_system():
     
     # Test correct answers in sequence
     riddle_answers = ["tree", "water", "insects"]
-    riddle_flags = ["water_nymph_riddle_1_completed", "water_nymph_riddle_2_completed", "water_nymph_riddle_3_completed"]
     
-    for i, (answer, flag) in enumerate(zip(riddle_answers, riddle_flags)):
+    for answer in riddle_answers:
         result = execute_commands(game, [f"say {answer} to water nymphs"])
         assert "correct" in result.lower()
     
@@ -643,10 +642,6 @@ def test_whispering_glade_riddle_system():
     item_names = [item.name.lower() for item in whispering_glade.items]
     assert "crystal-clear water" in item_names
     assert "moonflowers" in item_names
-
-def test_quest_prerequisites_validation():
-    """Test validation of quest prerequisites for steps 18-19."""
-    game = _create_test_game()
 
 def test_squires_diary_quest_dependency():
     """Test that the diary can only be found after talking to squires and provides meaningful information only after quest is accepted."""
@@ -770,16 +765,16 @@ def test_forest_transition_spell_learning():
     game.state.current_room = game.state.all_rooms["ForestTransition"]
     
     # Use survival kit
-    result = execute_commands(game, ["use forest survival kit"])
+    execute_commands(game, ["use forest survival kit"])
     
     # Examine stones
-    result = execute_commands(game, ["examine stones"])
+    execute_commands(game, ["examine stones"])
     
     check_spell_known(game.state, "nature_sense")
     
     # Talk to hermit
     hermit = game.state.current_room.get_characters()[0]  # Should be Forest Hermit
-    result = hermit.talk_to(game.state)
+    hermit.talk_to(game.state)
     check_item_in_inventory(game.state, "protective charm")
 
 

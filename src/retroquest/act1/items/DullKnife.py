@@ -12,7 +12,8 @@ class DullKnife(Item):
         """Initialize the Dull Knife item with name, description, and carry status."""
         super().__init__(
             name="dull knife",
-            description="A small kitchen knife with a dull blade. It won't cut much, but could be sharpened.",
+            description="A small kitchen knife with a dull blade."
+            + " It won't cut much, but could be sharpened.",
             short_name="knife",
             can_be_carried=True
         )

@@ -33,7 +33,8 @@ class Bush(Item):
         super().__init__(
             name="bush",
             description=(
-                "A dense, leafy bush. It looks like it might be hiding something, or just be a bush."
+                "A dense, leafy bush. It looks like it might be hiding something,"
+                + " or just be a bush."
             ),
             short_name="bush",
             can_be_carried=False

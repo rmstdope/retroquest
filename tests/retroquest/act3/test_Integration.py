@@ -1,5 +1,8 @@
+"""Integration tests for Act 3: golden path and key interactions."""
+
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from typing import Optional
 from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED, FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
 from ..utils.utils import (check_character_in_room, check_current_room, check_quests, check_story_flag,
                             execute_commands, check_item_in_inventory, check_quest_completed,
@@ -7,6 +10,8 @@ from ..utils.utils import (check_character_in_room, check_current_room, check_qu
 
 class TestAct3Integration:
     """Integration tests for Act 3."""
+    act3: Optional[Act3] = None
+    game: Optional[Game] = None
     
     def setup_method(self):
         """Set up test fixtures."""
@@ -28,6 +33,7 @@ class TestAct3Integration:
         assert self.game.acts[0] == self.act3
         
     def test_golden_path_act3_completion(self):
+        """Run the Act 3 golden path and assert expected progressions."""
         game = self.game
 
         # Start in Mira's Hut with Mira present
@@ -75,7 +81,7 @@ class TestAct3Integration:
         check_current_room(game.state, 'Collapsed Pier')
         pier_search = execute_commands(game, ['search'])
         assert 'vault' in pier_search.lower() and 'locker' in pier_search.lower()
-        take_key = execute_commands(game, ['take rusted locker key'])
+        execute_commands(game, ['take rusted locker key'])
         check_item_in_inventory(game.state, 'Rusted Locker Key', True)
 
         # Step 7: Collapsed Pier (Vault) — key fails, cast unlock, open locker, take three prism lanterns
@@ -92,7 +98,7 @@ class TestAct3Integration:
         opened = execute_commands(game, ['open locker'])
         assert 'prism lantern' in opened.lower()
         # Collect three lanterns
-        take_lanterns = execute_commands(game, ['take prism lantern', 'take prism lantern', 'take prism lantern'])
+        execute_commands(game, ['take prism lantern', 'take prism lantern', 'take prism lantern'])
         check_item_count_in_inventory(game.state, 'Prism Lantern', 3)
 
         # Step 8: Submerged Antechamber — mount lanterns and cast light
@@ -101,9 +107,9 @@ class TestAct3Integration:
         execute_commands(game, ['west'])
         check_current_room(game.state, 'Submerged Antechamber')
         # Mount three lanterns to brackets
-        mount1 = execute_commands(game, ['use prism lantern with lantern bracket'])
-        mount2 = execute_commands(game, ['use prism lantern with lantern bracket'])
-        mount3 = execute_commands(game, ['use prism lantern with lantern bracket'])
+        execute_commands(game, ['use prism lantern with lantern bracket'])
+        execute_commands(game, ['use prism lantern with lantern bracket'])
+        execute_commands(game, ['use prism lantern with lantern bracket'])
         # After mounts, there should be no more prism lanterns in inventory
         check_item_count_in_inventory(game.state, 'Prism Lantern', 0)
         # Cast light to reveal the path
@@ -115,7 +121,7 @@ class TestAct3Integration:
         check_current_room(game.state, 'Tidal Causeway')
         mural_reveal = execute_commands(game, ['examine mural'])
         assert 'reliquary' in mural_reveal.lower() or 'sea-sealed letter' in mural_reveal.lower()
-        take_letter = execute_commands(game, ['take sea-sealed letter'])
+        execute_commands(game, ['take sea-sealed letter'])
         check_item_in_inventory(game.state, 'Sea-Sealed Letter', True)
 
         # Step 10: Sanctum — speak vow, then take crystal
@@ -123,9 +129,9 @@ class TestAct3Integration:
         check_current_room(game.state, 'Sanctum of the Tide')
         vow = execute_commands(game, ['say myself to tide-born guardian'])
         assert 'vow' in vow.lower() or 'waters draw back' in vow.lower() or 'you may now take' in vow.lower()
-        take_crystal = execute_commands(game, ['take crystal of light'])
+        execute_commands(game, ['take crystal of light'])
         check_item_in_inventory(game.state, 'crystal of light', True)
 
         # Step 11: Talk to Mira to teleport to Mount Ember
-        to_ember = execute_commands(game, ['talk to mira'])
+        execute_commands(game, ['talk to mira'])
         check_current_room(game.state, 'Lower Switchbacks (Base Camp)')

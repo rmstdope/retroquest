@@ -22,7 +22,8 @@ from ...engine.Item import Item
 
 class Egg(Item):
     """
-    Simple agricultural product reinforcing life in the village and potential cooking/crafting systems.
+    Simple agricultural product reinforcing life in the village and
+    potential cooking/crafting systems.
     """
 
     def __init__(self) -> None:

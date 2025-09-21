@@ -1,12 +1,11 @@
+"""Character base class and helpers for in-game NPCs and actors."""
+
 from .GameState import GameState
 from .Item import Item
 
 
 class Character:
-    """
-    Base class for all characters in RetroQuest.
-    Inherit from this class to define specific characters.
-    """
+    """Base class for all characters in RetroQuest. Inherit to define actors."""
 
     def __init__(self, name: str, description: str) -> None:
         self.name = name
@@ -33,7 +32,7 @@ class Character:
             "[/event]"
         )
         return (
-            event_msg + "\n" + 
+            event_msg + "\n" +
             f"[character_name]{self.name}[/character_name] has nothing to say right now."
         )
 
@@ -58,7 +57,7 @@ class Character:
             f"[character_name]{self.name}[/character_name].[/event]"
         )
         return (
-            event_msg + "\n" + 
+            event_msg + "\n" +
             f"[character_name]{self.name}[/character_name] doesn't seem interested in the "
             f"[item_name]{item_object.get_name()}[/item_name]."
         )
@@ -70,7 +69,7 @@ class Character:
             f"[character_name]{self.name}[/character_name].[/event]"
         )
         return (
-            event_msg + "\n" + 
+            event_msg + "\n" +
             f"[character_name]{self.name}[/character_name] does not have any "
             f"[item_name]{item_name_to_buy}[/item_name] to sell right now."
         )
