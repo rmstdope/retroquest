@@ -22,6 +22,7 @@ class LordCommander(Character):
         )
 
     def talk(self, game_state: 'GameState') -> str:
+        """Handle talking to the Lord Commander (override matching base signature)."""
         if game_state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED):
             return (
                 "The Lord Commander nods with satisfaction. "
@@ -29,7 +30,6 @@ class LordCommander(Character):
                 "him have been officially stricken from the record. It brings me great "
                 "pleasure to see justice served and a good knight vindicated.\""
             )
-
         if game_state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS):
             # Player has the secret documents and should present them
             return (
@@ -38,7 +38,6 @@ class LordCommander(Character):
                 "the secret documents that prove his innocence, please present them to me so "
                 "I can officially restore his honor.\""
             )
-
         return (
             "The Lord Commander greets you formally. "
             "\"Welcome to Greendale's Great Hall. I oversee the military affairs of our "

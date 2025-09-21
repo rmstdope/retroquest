@@ -22,20 +22,22 @@ class MountainPath(Room):
         Sets: None; completion handled externally.
 
     Contents:
-        Items: Mountain Flower, Walking Stick, Camp Site (rest / flavor potential). NPC: Mountain Hermit
-        who can provide guidance or quests.
+        Items: Mountain Flower, Walking Stick, Camp Site (rest / flavor potential). NPC: Mountain
+        Hermit who can provide guidance or quests.
 
     Design Notes:
-        Early gating underscores readiness. Could later layer travel events (weather, encounters) for
+        Early gating underscores readiness. Could later layer travel events (weather, encounters)
+        344for
         pacing variety.
     """
     def __init__(self) -> None:
         super().__init__(
             name="Mountain Path",
             description=(
-                "A winding trail climbs through rocky terrain between Willowbrook and Greendale. Sturdy "
-                "trees cast intermittent shade and the path remains well tended despite its remoteness. "
-                "Glimpses of both settlements appear at overlooks, offering reflective pauses. A small "
+                "A winding trail climbs through rocky terrain between Willowbrook and Greendale. "
+                "Sturdy trees cast intermittent shade and the path remains well tended despite "
+                "its remoteness. Glimpses of both settlements appear at overlooks, offering "
+                "reflective pauses. A small "
                 "camp site used by travelers rests just off the main trail."
             ),
             items=[MountainFlower(), WalkingStick(), CampSite()],

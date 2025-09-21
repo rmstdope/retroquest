@@ -119,6 +119,9 @@ class MountainHermit(Character):
             return event_msg + "\n" + sword_dialogue
 
     def give_training_sword(self, game_state: GameState) -> str:
+        """
+        Gives the player a training sword if it has not already been given.
+        """
         if self.sword_given:
             name = self.get_name()
             return (
@@ -139,9 +142,9 @@ class MountainHermit(Character):
         name = self.get_name()
         sword_name = training_sword.get_name()
         dialogue_block = (
-            f"[dialogue]'This blade has trained many would-be heroes. It may not be "
-            f"sharp enough for battle, but it will show your skill to those who need "
-            f"convincing. Use it well in Greendale.'[/dialogue]\n\n"
+            "[dialogue]'This blade has trained many would-be heroes. It may not be "
+            "sharp enough for battle, but it will show your skill to those who need "
+            "convincing. Use it well in Greendale.'[/dialogue]\n\n"
         )
         receive_event = f"[event]You receive a [item_name]{sword_name}[/item_name]![/event]"
         return event_msg + "\n" + dialogue_block + receive_event

@@ -9,11 +9,14 @@ Acquisition:
 
 Core Mechanics:
     - Generic success responses when used on arbitrary characters or items (flavor utility).
-    - Special-case: Casting on BarmaidElena defers to her receive_dispel_final_cure(game_state) method.
+    - Special-case: Casting on BarmaidElena defers to her receive_dispel_final_cure(game_state
+    method.
 
 Design Notes:
-    - Keeps cure logic centralized in the character class to avoid distributing narrative state here.
-    - Future expansions (e.g., barrier removal) should branch via item or room markers rather than expanding conditionals inline.
+    - Keeps cure logic centralized in the character class to avoid distributing narrative state
+    here.
+    - Future expansions (e.g., barrier removal) should branch via item or room markers rather than
+    expanding conditionals inline.
 """
 
 from ...engine.Spell import Spell

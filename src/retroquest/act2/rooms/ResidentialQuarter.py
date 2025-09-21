@@ -9,6 +9,7 @@ from ..Act2StoryFlags import (
 )
 
 class ResidentialQuarter(Room):
+    """Residential Quarter room for Act II; handles hidden library discovery."""
     def __init__(self) -> None:
         super().__init__(
             name="Residential Quarter",

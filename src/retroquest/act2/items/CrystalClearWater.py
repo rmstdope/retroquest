@@ -1,24 +1,4 @@
-"""Crystal-Clear Water (Act II Purification Item)
-
-Narrative Role:
-    Blessed spring water holding potent cleansing magic capable of breaking curses (notably Barmaid Elena's affliction).
-    Embodies purity motif and a branching resolution vector for corruption narratives.
-
-Key Mechanics / Interactions:
-    - use_on_character() checks for BarmaidElena instance and delegates purification to character method.
-    - Non-targeted application yields contextual feedback clarifying specificity.
-    - examine() reinforces sanctity and latent power.
-
-Story Flags:
-    - Sets/Reads: (none directly; any curse resolution flags handled within character logic).
-
-Progression Effects:
-    Key consumable enabling advancement/closure of a healing or curse-lifting quest line.
-
-Design Notes:
-    - Consider single-use consumption mechanics (removal) once purification succeeds to reflect scarcity.
-    - Potential future synergy: amplify other healing spells while possessed.
-"""
+"""Crystal-clear water purification item (Act II)."""
 
 from ...engine.Item import Item
 from ...engine.GameState import GameState
@@ -29,8 +9,8 @@ class CrystalClearWater(Item):
             name="crystal-clear water",
             short_name="water",
             description=(
-                "Water from the sacred spring in the Whispering Glade, this liquid is "
-                "so pure it seems to glow with its own inner light. The water has been "
+                "Water from the sacred spring in the Whispering Glade, this liquid is so "
+                "pure it seems to glow with its own inner light. The water has been "
                 "blessed by the water nymphs and carries powerful purification magic "
                 "that can break curses and cleanse dark enchantments. Each drop sparkles "
                 "like liquid starlight, and the container feels cool to the touch."
@@ -45,11 +25,11 @@ class CrystalClearWater(Item):
         if isinstance(target_character, BarmaidElena):
             return target_character.receive_crystal_water_purification(game_state)
         else:
+            name = target_character.get_name()
             return (
-                f"The [item_name]crystal-clear water[/item_name] glows faintly when near "
-                f"[character_name]{target_character.get_name()}[/character_name], but it "
-                f"seems this blessed water is meant for someone specifically afflicted "
-                f"by dark magic."
+                "The [item_name]crystal-clear water[/item_name] glows faintly when near "
+                f"[character_name]{name}[/character_name], but it seems this blessed water is "
+                "meant for someone specifically afflicted by dark magic."
             )
 
     def examine(self, _game_state: GameState) -> str:
