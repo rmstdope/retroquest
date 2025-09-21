@@ -10,8 +10,8 @@ class ShorelineMarkers(Room):
         super().__init__(
             name="Shoreline Markers",
             description=(
-                "Weathered stone steles stand at the surf's edge, carved with coquina runes "
-                "encrusted in coral."
+                "Weathered stone steles stand at the surf's edge, carved with "
+                "coquina runes encrusted in coral."
             ),
             items=[Steles()],
             characters=[],
@@ -25,8 +25,9 @@ class ShorelineMarkers(Room):
         already_owned = any(isinstance(i, CoquinaRunes) for i in game_state.inventory)
         if already_here or already_owned:
             return (
-                "[event]You comb the surf-slick stones again. Coquina fragments gleam in the "
-                "cracks, but you've already gathered what you need.[/event]"
+                "[event]You comb the surf-slick stones again. Coquina fragments "
+                "gleam in the cracks, but you've already gathered what you "
+                "need.[/event]"
             )
         # Reveal runes
         self.items.append(CoquinaRunes())

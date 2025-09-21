@@ -10,5 +10,9 @@ class StillnessVestibule(Room):
             ),
             items=[],
             characters=[],
-            exits={"north": "CollapsedGalleries", "east": "DragonsHall", "west": "CavernMouth"},
+            exits={
+                "north": "CollapsedGalleries", 
+                "east": "DragonsHall", 
+                "west": "CavernMouth"
+            },
         )

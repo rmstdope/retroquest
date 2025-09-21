@@ -8,7 +8,8 @@ class CollapsedPier(Room):
         super().__init__(
             name="Collapsed Pier",
             description=(
-                "A shattered jetty with sunken vaults beneath; barnacled beams jut like ribs."
+                "A shattered jetty with sunken vaults beneath; barnacled beams jut "
+                "like ribs."
             ),
             items=[Locker()],
             characters=[],

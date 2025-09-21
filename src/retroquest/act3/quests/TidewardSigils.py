@@ -14,8 +14,9 @@ class TidewardSigilsQuest(Quest):
                 "upon the leaning pillars to stabilize the flood wards."
             ),
             completion=(
-                "You cleansed the pillars and set the coquina runes— the Tideward Sigil resonates "
-                "and the flood wards steady, granting safe passage toward the sanctum."
+                "You cleansed the pillars and set the coquina runes— the Tideward "
+                "Sigil resonates and the flood wards steady, granting safe passage "
+                "toward the sanctum."
             ),
         )
 

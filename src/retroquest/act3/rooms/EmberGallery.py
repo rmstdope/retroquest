@@ -6,9 +6,14 @@ class EmberGallery(Room):
         super().__init__(
             name="Ember Gallery",
             description=(
-                "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron."
+                "A vaulted cavern veined with cooling flows; the air smells of "
+                "charcoal and iron."
             ),
             items=[],
             characters=[],
-            exits={"north": "MirrorTerraces", "east": "PhoenixCrater", "west": "LowerSwitchbacks"},
+            exits={
+                "north": "MirrorTerraces", 
+                "east": "PhoenixCrater", 
+                "west": "LowerSwitchbacks"
+            },
         )

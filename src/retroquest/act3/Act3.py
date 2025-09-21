@@ -82,7 +82,9 @@ class Act3(Act):
             'Source: https://freetouse.com/music\n'
             'No Copyright Vlog Music for Videos'
         )
-        super().__init__('Act III', rooms, quests, music_file=music_file, music_info=music_info)
+        super().__init__(
+            'Act III', rooms, quests, music_file=music_file, music_info=music_info
+        )
 
     def get_act_intro(self) -> str:
         return (
@@ -92,7 +94,8 @@ class Act3(Act):
             "and what must be done next. "
             "Her guidance will chart your path toward the Obsidian Fortress "
             "and the trials ahead.\n\n"
-            "Gather your resolve; the final hunt begins where the first questions were asked.\n\n"
+            "Gather your resolve; the final hunt begins where the first questions "
+            "were asked.\n\n"
             "Let's begin. (Type 'help' for a list of commands.)\n"
         )
 

@@ -14,8 +14,8 @@ class CrystalOfLight(Item):
     """Central luminous relic binding multiple quest prerequisites (Act III).
 
     Narrative Role:
-        Acts as a synthesis reward once sigils are attuned, deep lanterns lit, and a courage vow
-        made.
+        Acts as a synthesis reward once sigils are attuned, deep lanterns lit, and a 
+        courage vow made.
 
     Key Mechanics:
         Pickup reversal enforces completion gating; upon success sets acquisition flag.
@@ -26,8 +26,8 @@ class CrystalOfLight(Item):
             name="crystal of light",
             short_name="crystal",
             description=(
-                "A palm-sized prism humming with soft radiance. Within it swirl echoes of moonlit "
-                "tides and layered ward patterns waiting to converge."
+                "A palm-sized prism humming with soft radiance. Within it swirl echoes "
+                "of moonlit tides and layered ward patterns waiting to converge."
             ),
             can_be_carried=True,
         )
@@ -52,9 +52,9 @@ class CrystalOfLight(Item):
             game_state.remove_item_from_inventory(self.get_name(), 1)
             game_state.current_room.add_item(self)
             return (
-                "[failure]Wards flare as you touch the crystal, locking it in place. Complete the "
-                "rites: attune Tideward Sigils, light the Lanterns of the Deeps, and swear the "
-                "vow before it will yield.[/failure]"
+                "[failure]Wards flare as you touch the crystal, locking it in place. "
+                "Complete the rites: attune Tideward Sigils, light the Lanterns of the "
+                "Deeps, and swear the vow before it will yield.[/failure]"
             )
         if not game_state.get_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED):
             game_state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)

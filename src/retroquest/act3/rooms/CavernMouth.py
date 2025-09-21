@@ -6,7 +6,8 @@ class CavernMouth(Room):
         super().__init__(
             name="Cavern Mouth",
             description=(
-                "A broad entry arch curtained by cold mist; lantern light dims at the threshold."
+                "A broad entry arch curtained by cold mist; lantern light dims at "
+                "the threshold."
             ),
             items=[],
             characters=[],
