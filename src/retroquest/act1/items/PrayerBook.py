@@ -1,11 +1,13 @@
 """PrayerBook Item
 
 Narrative Role:
-Religious/cultural artifact grounding village spirituality while hinting at latent mystical currents (shifting runes). Bridges mundane faith and arcane systems.
+Religious/cultural artifact grounding village spirituality while hinting at latent mystical
+currents (shifting runes). Bridges mundane faith and arcane systems.
 
 Key Mechanics / Interactions:
 - `read` produces atmospheric text with subtle arcane foreshadowing.
-- Non-portable vs. portable distinction: currently carriable (could be restricted later if needed).
+- Non-portable vs. portable distinction: currently carriable (could be restricted later
+if needed).
 
 Story Flags (Sets / Reads):
 (none) – No tracking of whether player has read it yet.
@@ -30,7 +32,8 @@ class PrayerBook(Item):
         """Initialize the Prayer Book item with name, description, and short name."""
         super().__init__(
             name="prayer book",
-            description="A small, leather-bound book filled with prayers and hymns. The pages are worn from years of use.",
+            description="A small, leather-bound book filled with prayers and hymns. "
+            + "The pages are worn from years of use.",
             short_name="book"
         )
 

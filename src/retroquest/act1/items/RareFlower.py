@@ -1,7 +1,8 @@
 """RareFlower Item
 
 Narrative Role:
-Collectible from a secluded area (hidden glade), hinting at gentle mystical undercurrents in Act I and potential later alchemical or ritual value.
+Collectible from a secluded area (hidden glade), hinting at gentle mystical
+undercurrents in Act I and potential later alchemical or ritual value.
 
 Key Mechanics / Interactions:
 - Portable (`can_be_carried=True`).
@@ -29,7 +30,8 @@ class RareFlower(Item):
         """Initialize the Rare Flower item with name, description, and carry status."""
         super().__init__(
             name="rare flower",
-            description="A delicate, radiant flower found only in this hidden glade. Its petals shimmer with a faint magical glow.",
+            description="A delicate, radiant flower found only in this hidden glade. "
+            + "Its petals shimmer with a faint magical glow.",
             short_name="flower",
             can_be_carried=True
         )

@@ -1,41 +1,23 @@
-"""MysteriousBox Item
-
-Narrative Role:
-Small locked container introducing multi-step acquisition (unlock → open → retrieve map). Provides early tangible reward loop and object state transitions.
-
-Key Mechanics / Interactions:
-- `locked` boolean gates access; `unlock(game_state)` flips state and updates description.
-- `open(game_state)` dispenses `Map` exactly once (`contains_map` flag) then becomes inert container.
-- Designed for integration with an unlock spell or key-like future mechanic (currently direct method calls expected).
-
-Story Flags (Sets / Reads):
-(none) – Progress tracked internally via `locked` and `contains_map`.
-
-Progression Effects:
-- Grants `Map` item enabling navigation or future fast-travel/hint systems.
-
-Design Notes:
-- Separate `unlock` and `open` preserves clarity and allows alternative unlocking paths (spell, tool, code) without conflating retrieval.
-- Could emit a story flag when map acquired if later narrative branches depend on it.
-
-"""
+"""Small locked mysterious box that may contain a map for Act I."""
 
 from ...engine.Item import Item
-from ..items.Map import Map as GameMap # Alias to avoid potential naming conflicts
+from ..items.Map import Map as GameMap
 from ...engine.GameState import GameState
 
+
 class MysteriousBox(Item):
-    """
-    Small locked container introducing multi-step acquisition and object state transitions.
+    """Small locked container introducing multi-step acquisition and
+    object state transitions.
     """
 
     def __init__(self) -> None:
-        """Initialize the Mysterious Box item with name, description, and state flags."""
+        """Initialize the Mysterious Box item with name and description."""
         super().__init__(
             name="mysterious box",
             description=(
-                "A small, ornate wooden box covered in strange runes. The lid is tightly shut, "
-                "and it feels oddly heavy for its size. You sense something important is hidden inside."
+                "A small, ornate wooden box covered in strange runes. The lid is "
+                "tightly shut, and it feels oddly heavy for its size. You sense "
+                "something important is hidden inside."
             ),
             short_name="box",
         )
@@ -44,44 +26,43 @@ class MysteriousBox(Item):
 
     def unlock(self, _game_state: 'GameState') -> str:
         """Unlock the box if locked, otherwise report already unlocked."""
+        name_html = f"[item_name]{self.get_name()}[/item_name]"
         if self.locked:
             self.locked = False
             self.description = (
-                f"A small, ornate wooden [item_name]{self.get_name()}[/item_name] covered in "
+                f"A small, ornate wooden {name_html} covered in "
                 "strange runes. The lock has clicked open."
             )
-            event_msg = (
-                f"[event]You try to unlock the [item_name]{self.get_name()}[/item_name].[/event]\n"
-            )
+            event_msg = f"[event]You try to unlock the {name_html}.[/event]\n"
             return (
-                event_msg +
-                f"A soft click is heard from the [item_name]{self.get_name()}[/item_name] as the lock springs open!"
+                event_msg
+                + f"A soft click is heard from the {name_html} as the lock springs open!"
             )
-        return (
-            f"[failure]The [item_name]{self.get_name()}[/item_name] is already unlocked.[/failure]"
-        )
+
+        return f"[failure]The {name_html} is already unlocked.[/failure]"
 
     def open(self, game_state: 'GameState') -> str:
-        """Open the box if unlocked and dispense the map, otherwise report locked or empty."""
+        """Open the box if unlocked and dispense the map, otherwise report locked or
+        empty.
+        """
+        name_html = f"[item_name]{self.get_name()}[/item_name]"
         if self.locked:
             return (
-                f"[failure]The [item_name]{self.get_name()}[/item_name] is locked. You need to find a way to open it.[/failure]"
+                f"[failure]The {name_html} is locked. You need to find a way to open it."
+                "[/failure]"
             )
+
         if self.contains_map:
             game_state.add_item_to_inventory(GameMap())
             self.contains_map = False
             self.description = "An open, ornate wooden box. It is now empty."
             return (
-                f"[event]You open the [item_name]{self.get_name()}[/item_name].[/event]\n"
-                "Inside, you find a [item_name]map[/item_name]! You take the [item_name]map[/item_name] and place it in your inventory."
+                f"[event]You open the {name_html}.[/event]\n"
+                "Inside, you find a [item_name]map[/item_name]! You take the "
+                "[item_name]map[/item_name] and place it in your inventory."
             )
-        else:
-            return (
-                f"[event]The [item_name]{self.get_name()}[/item_name] is now empty.[/event]"
-            )
+
+        return f"[event]The {name_html} is now empty.[/event]"
 
     # The use_with method might be more complex depending on how spells are targeted.
-    # For now, we assume the UnlockSpell will call the .unlock() method directly if cast on this box.
-    # If a general "cast <spell> on <target>" command exists, that command would handle finding the box
-    # and then calling a method on the spell object, which in turn might call box.unlock().
-
+    # For now, the UnlockSpell will call the .unlock() method directly if cast on this box.

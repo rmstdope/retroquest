@@ -1,7 +1,8 @@
 """SmoothStone Item
 
 Narrative Role:
-Ambient river find that can act as a tactile focus or low-stakes collectible, grounding the world with natural artifacts.
+Ambient river find that can act as a tactile focus or low-stakes collectible,
+grounding the world with natural artifacts.
 
 Key Mechanics / Interactions:
 - Portable (`can_be_carried=True`).
@@ -22,7 +23,8 @@ from ...engine.Item import Item
 
 class SmoothStone(Item):
     """
-    Ambient river find that can act as a tactile focus or low-stakes collectible, grounding the world with natural artifacts.
+    Ambient river find that can act as a tactile focus or low-stakes collectible,
+    grounding the world with natural artifacts.
     """
 
     def __init__(self) -> None:

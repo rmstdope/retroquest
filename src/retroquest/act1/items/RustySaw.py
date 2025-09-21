@@ -1,9 +1,10 @@
+"""RustySaw item: an old rusty saw for cutting soft materials."""
+
 from ...engine.Item import Item
 
+
 class RustySaw(Item):
-    """
-    Old, rusty saw with a worn wooden handle, useful for cutting soft materials.
-    """
+    """Old, rusty saw with a worn wooden handle, useful for cutting soft materials."""
 
     def __init__(self) -> None:
         """Initialize the Rusty Saw item with name, description, and carry status."""

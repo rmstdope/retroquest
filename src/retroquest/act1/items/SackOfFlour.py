@@ -1,7 +1,8 @@
 """SackOfFlour Item
 
 Narrative Role:
-Everyday provisioning good emphasizing agrarian economy and baking culture. Potential quest delivery or ingredient.
+Everyday provisioning good emphasizing agrarian economy and baking culture.
+Potential quest delivery or ingredient.
 
 Key Mechanics / Interactions:
 - Heavy thematic item; currently portable without penalty (no encumbrance system yet).
@@ -21,7 +22,8 @@ from ...engine.Item import Item
 
 class SackOfFlour(Item):
     """
-    Everyday provisioning good emphasizing agrarian economy and baking culture. Potential quest delivery or ingredient.
+    Everyday provisioning good emphasizing agrarian economy and baking culture.
+    Potential quest delivery or ingredient.
     """
 
     def __init__(self) -> None:

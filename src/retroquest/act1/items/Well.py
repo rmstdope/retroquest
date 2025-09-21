@@ -1,35 +1,11 @@
-"""Well Item
-
-Narrative Role:
-Central multi-phase environmental puzzle object: examine → purify (spell gated) → retrieve submerged reward via extended tool chain. Embodies layered interaction design early in the game.
-
-Key Mechanics / Interactions:
-- `examine` sets flag `FLAG_WELL_EXAMINED` and adjusts description based on purification and ring status.
-- `purify` requires prior examination (flag gate), transitions water state, reveals ring presence descriptively without spawning item directly.
-- `use_with` delegates to bucket/fishing rod variants enabling retrieval attempts; specialized extended magnetic rod handles final extraction path (elsewhere).
-- `search` gives contextual feedback aligned to purity + ring presence.
-
-Story Flags (Sets / Reads):
-- Sets: `FLAG_WELL_EXAMINED`
-- Reads: `FLAG_WELL_EXAMINED` (in `purify` precondition)
-
-Progression Effects:
-- Introduces multi-step gating (knowledge + spell + crafted tool) culminating in reward retrieval.
-
-Design Notes:
-- Separation of reveal (description) and extraction (tool interaction) supports flexible alternate retrieval implementations.
-- Could later add contamination reversion if dark magic events occur (flag toggling).
-
-"""
+"""Well item: a multi-step environmental puzzle object in Act I."""
 
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..Act1StoryFlags import FLAG_WELL_EXAMINED
 
 class Well(Item):
-    """
-    Central multi-phase environmental puzzle object: examine → purify (spell gated) → retrieve submerged reward via extended tool chain.
-    """
+    """Central multi-phase environmental puzzle object used for layered interactions."""
 
     def __init__(self) -> None:
         """Initialize the Well item with name, description, and state flags."""
@@ -53,23 +29,30 @@ class Well(Item):
         if self.is_purified:
             if self.contains_ring:
                 self.description = (
-                    f"{base_desc} The water within is crystal clear. You can see something shiny "
-                    "at the bottom, but it's still too deep to reach by hand."
+                    base_desc
+                    + (
+                        " The water within is crystal clear. You can see something shiny "
+                        "at the bottom, but it's still too deep to reach by hand."
+                    )
                 )
             else:
                 self.description = (
-                    f"{base_desc} The water within is crystal clear. The bottom is visible and "
-                    "appears empty."
+                    base_desc
+                    + (" The water within is crystal clear. The bottom is visible and "
+                       "appears empty.")
                 )
         else:
             desc = (
-                f"{base_desc} The water below is dark and still. A foul stench rises from the "
-                "depths, making your stomach churn. Something is very wrong here."
+                base_desc
+                + (
+                    " The water below is dark and still. A foul stench rises from the "
+                    "depths, making your stomach churn. Something is very wrong here."
+                )
             )
             if self.contains_ring:
                 desc += (
-                    " You think you see something shiny deep within the murky water, but it's "
-                    "impossible to tell for sure or reach."
+                    " You think you see something shiny deep within the murky water, but "
+                    "it's impossible to tell for sure or reach."
                 )
             self.description = desc
         return super().examine(game_state)
@@ -80,7 +63,10 @@ class Well(Item):
         from .FishingRod import FishingRod
         from .MagneticFishingRod import MagneticFishingRod
         from .ExtendedMagneticFishingRod import ExtendedMagneticFishingRod
-        if isinstance(other_item, (Bucket, FishingRod, MagneticFishingRod, ExtendedMagneticFishingRod)):
+        if isinstance(
+            other_item,
+            (Bucket, FishingRod, MagneticFishingRod, ExtendedMagneticFishingRod),
+        ):
             return other_item.use_with(game_state, self)
         return super().use_with(game_state, other_item)
 
@@ -89,46 +75,58 @@ class Well(Item):
         if self.is_purified:
             if self.contains_ring:
                 return (
-                    "[event]You peer into the crystal clear water. A [item_name]shiny ring[/item_name] "
-                    "glints at the bottom, tantalizingly out of reach by hand.[/event]"
+                    "[event]You peer into the crystal clear water. A [item_name]shiny "
+                    "ring[/item_name] glints at the bottom, tantalizingly out of "
+                    "reach by hand.[/event]"
                 )
-            else:
-                return (
-                    "[event]You peer into the crystal clear water. The bottom is visible and empty.[/event]"
-                )
-        else:
-            if self.contains_ring:
-                return (
-                    "[failure]You peer into the murky depths. It's hard to see clearly, but you "
-                    "think you catch a glimpse of something shiny. It's far too deep to reach.[/failure]"
-                )
-            else:
-                return (
-                    "[failure]You peer into the murky depths. It's too dark and unclear to see "
-                    "anything of interest.[/failure]"
-                )
+            return (
+                "[event]You peer into the crystal clear water. The bottom is visible and "
+                "empty.[/event]"
+            )
+        if self.contains_ring:
+            return (
+                "[failure]You peer into the murky depths. It's hard to see clearly, "
+                "but you think you catch a glimpse of something shiny. It's far too "
+                "deep to reach.[/failure]"
+            )
+        return (
+            "[failure]You peer into the murky depths. It's too dark and unclear to see "
+            "anything of interest.[/failure]"
+        )
 
     def purify(self, game_state: GameState) -> str:
         """Purify the well if examined, update state, and reveal ring if present."""
         if not game_state.get_story_flag(FLAG_WELL_EXAMINED):
+            name = self.get_name()
             return (
-                f"[failure]You hesitate. Why would you cast [spell_name]purify[/spell_name] on the "
-                f"[item_name]{self.get_name()}[/item_name]? Perhaps you should examine it first.[/failure]"
+                "[failure]You hesitate. Why would you cast [spell_name]purify[/spell_name] on the "
+                + name
+                + "[item_name][/item_name]? Perhaps you should examine it first.[/failure]"
             )
         if self.is_purified:
+            name = self.get_name()
             return (
-                f"[failure]The [item_name]{self.get_name()}[/item_name] is already pure. The water "
-                f"is crystal clear.[/failure]"
+                "[failure]The [item_name]" + name + "[/item_name] is already pure. The water is "
+                "crystal clear.[/failure]"
             )
         self.is_purified = True
         if self.contains_ring:
+            name = self.get_name()
             return (
-                f"[event]You cast [spell_name]purify[/spell_name] on the [item_name]{self.get_name()}[/item_name]. "
-                "The murky water shimmers and clears! You can now see a [item_name]shiny ring[/item_name] "
-                "at the bottom, but it's still too deep to reach by hand.[/event]"
+                "[event]You cast [spell_name]purify[/spell_name] on the [item_name]"
+                + name
+                + (
+                    "[/item_name]. The murky water shimmers and clears! You can now "
+                    "see a [item_name]shiny ring[/item_name] at the bottom, but it's "
+                    "still too deep to reach by hand.[/event]"
+                )
             )
-        else:
-            return (
-                f"[event]You cast [spell_name]purify[/spell_name] on the [item_name]{self.get_name()}[/item_name]. "
-                "The murky water shimmers and clears! The bottom is visible, but there's nothing of interest.[/event]"
+        name = self.get_name()
+        return (
+            "[event]You cast [spell_name]purify[/spell_name] on the [item_name]"
+            + name
+            + (
+                "[/item_name]. The murky water shimmers and clears! The bottom is "
+                "visible, but there's nothing of interest.[/event]"
             )
+        )

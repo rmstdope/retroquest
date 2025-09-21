@@ -12,7 +12,8 @@ class RustyHoe(Item):
         """Initialize the Rusty Hoe item with name, description, and carry status."""
         super().__init__(
             name="rusty hoe",
-            description="A gardening hoe with a rusted blade and a splintered handle. It might still be useful for tilling soil.",
+            description="A gardening hoe with a rusted blade and a splintered handle. "
+            + "It might still be useful for tilling soil.",
             short_name="hoe",
             can_be_carried=True
         )
@@ -26,7 +27,8 @@ class RustyHoe(Item):
                 game_state.add_item_to_inventory(Coin())
                 return (
                     "[event]You till the soil with the [item_name]rusty hoe[/item_name].\n[/event]"
-                    "The ground is tough, and you unearth a small, tarnished [item_name]coin[/item_name]! "
+                    "The ground is tough, and you unearth a small, tarnished "
+                    "[item_name]coin[/item_name]! "
                     "You quickly pocket it."
                 )
             else:
