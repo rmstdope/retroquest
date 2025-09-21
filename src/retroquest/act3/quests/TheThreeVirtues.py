@@ -1,6 +1,8 @@
-from ...engine.Quest import Quest
+"""The Three Virtues quest class."""
+
 from ...engine.GameState import GameState
-from ..Act3StoryFlags import FLAG_ACT3_MAIN_STARTED, FLAG_ACT3_MAIN_COMPLETED
+from ...engine.Quest import Quest
+from ..Act3StoryFlags import FLAG_ACT3_MAIN_COMPLETED, FLAG_ACT3_MAIN_STARTED
 
 
 class TheThreeVirtuesQuest(Quest):
@@ -8,8 +10,8 @@ class TheThreeVirtuesQuest(Quest):
         super().__init__(
             name="The Three Virtues",
             description=(
-                "Prove Courage, Wisdom, and Selflessness by recovering the three relics: the Crystal of Light, "
-                "the Phoenix Feather, and the Dragon's Scale."
+                "Prove Courage, Wisdom, and Selflessness by recovering the three relics: "
+                "the Crystal of Light, the Phoenix Feather, and the Dragon's Scale."
             ),
         )
         self._flag_state = {}

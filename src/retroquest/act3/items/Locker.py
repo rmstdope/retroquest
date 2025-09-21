@@ -18,8 +18,8 @@ class Locker(Item):
         super().__init__(
             name="Locker",
             description=(
-                "A corroded locker wedged under the pier. Salt and time have fused its lock, resisting "
-                "ordinary keys and brute effort."
+                "A corroded locker wedged under the pier. Salt and time have fused its lock, "
+                "resisting ordinary keys and brute effort."
             ),
             short_name="locker",
             can_be_carried=False,
@@ -31,7 +31,8 @@ class Locker(Item):
         """Return state-dependent description of the locker."""
         if self.opened:
             return (
-                "The door hangs open and the interior is still and cold, silt motes drifting inside."
+                "The door hangs open and the interior is still and cold, silt motes drifting "
+                "inside."
             )
         if self.locked:
             return "Barnacles crust the seam; the fused lock will not yield to a mundane key."
@@ -44,15 +45,15 @@ class Locker(Item):
             return "[info]The locker is already open.[/info]"
         if self.locked:
             return (
-                "[failure]You pull at the handle, but the fused lock holds tight. It cannot open while it "
-                "remains locked.[/failure]"
+                "[failure]You pull at the handle, but the fused lock holds tight. It cannot open "
+                "while it remains locked.[/failure]"
             )
         self.opened = True
         for _ in range(3):
             game_state.current_room.items.append(PrismLantern())
         return (
-            "[success]With a brittle crack the door gives, revealing three prism lanterns gleaming behind "
-            "veils of silt.[/success]"
+            "[success]With a brittle crack the door gives, revealing three prism lanterns "
+            "gleaming behind veils of silt.[/success]"
         )
 
     def unlock(self, _game_state: GameState) -> str:
@@ -61,6 +62,6 @@ class Locker(Item):
             return "[info]The mechanism is already free.[/info]"
         self.locked = False
         return (
-            "[event]A subtle click echoes under the pier as fused pins release. The locker can now be "
-            "opened.[/event]"
+            "[event]A subtle click echoes under the pier as fused pins release. The locker can "
+            "now be opened.[/event]"
         )
