@@ -1,1 +1,1 @@
-# Package marker for act 1.spells
+"""Act I spells package — register available spells for the act."""

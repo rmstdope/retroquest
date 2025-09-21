@@ -1,9 +1,13 @@
-"""Withered carrot item that can be revived into a fresh carrot."""
+"""WitheredCarrot item that can be revived into a fresh carrot."""
 
 from ...engine.Item import Item
 
+
 class WitheredCarrot(Item):
+    """A shriveled carrot that can be revived into a fresh carrot."""
+
     def __init__(self) -> None:
+        """Initialize the withered carrot with its name and description."""
         super().__init__(
             name="withered carrot",
             description=(

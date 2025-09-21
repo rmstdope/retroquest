@@ -54,11 +54,7 @@ class ForestTransition(Room):
             preparedness has been acknowledged.
         """
         exits = super().get_exits(game_state).copy()
-        
         # Remove east exit if survival kit hasn't been used
         if not game_state.get_story_flag(FLAG_HERMITS_WARNING_COMPLETED):
             exits.pop("east", None)
-            
         return exits
-        
-        

@@ -45,7 +45,6 @@ class TrainingSword(Item):
     def use(self, game_state: GameState) -> str:
         from ..characters.SirCedric import SirCedric  # Import here to avoid circular imports
         from ..rooms.CastleCourtyard import CastleCourtyard  # Import here to avoid circular imports
-        
         # Check if we're in the Castle Courtyard with Sir Cedric present
         if (
             isinstance(game_state.current_room, CastleCourtyard)

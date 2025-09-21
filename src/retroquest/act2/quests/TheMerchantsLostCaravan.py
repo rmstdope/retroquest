@@ -52,5 +52,4 @@ class TheMerchantsLostCaravanQuest(Quest):
     def update(self, game_state: GameState) -> str:
         if game_state.get_story_flag(FLAG_FOUND_LOST_CARAVAN):
             return "You've learned the caravan's location from the woodland creatures. Now use rope to reach the ravine and rescue the trapped merchants."
-        
         return "Search the Enchanted Forest for the missing caravan. Try using forest magic to communicate with woodland creatures for information."

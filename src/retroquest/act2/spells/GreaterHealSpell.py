@@ -50,7 +50,6 @@ class GreaterHealSpell(Spell):
 
     def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
         from ..characters.BarmaidElena import BarmaidElena  # Import here to avoid circular imports
-        
         # Special handling for Elena's curse
         if isinstance(target_character, BarmaidElena):
             # Invoke Elena's staged recovery handler (no game_state argument needed)

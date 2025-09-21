@@ -56,7 +56,6 @@ class ForestSpeechSpell(Spell):
 
     def cast_spell(self, game_state) -> str:
         current_room = game_state.current_room
-        
         # Special caravan search logic for Forest Entrance
         from ..rooms.ForestEntrance import ForestEntrance
         if isinstance(current_room, ForestEntrance) and not game_state.get_story_flag(FLAG_FOUND_RAVINE):
@@ -70,12 +69,10 @@ class ForestSpeechSpell(Spell):
                     "about 'metal beasts trapped in the earth-scar where the stone walls weep.' "
                     "The animals describe a steep ravine hidden beyond the thickest part of the forest, "
                     "where something seems to be moving. You should try to get down there.[/success]")
-        
         # Check if caravan has already been found in Forest Entrance
         if isinstance(current_room, ForestEntrance) and game_state.get_story_flag(FLAG_FOUND_RAVINE):
             return (f"[info]You cast [spell_name]{self.get_name()}[/spell_name], but the woodland creatures "
                     "have no new information about the ravine - you've already located it.[/info]")
-        
         # Normal forest speech behavior for other locations
         room_name = current_room.name.lower()
         if "forest" in room_name or "grove" in room_name:
@@ -101,7 +98,6 @@ class ForestSpeechSpell(Spell):
         from ..characters.AncientTreeSpirit import AncientTreeSpirit
         from ..characters.ForestSprites import ForestSprites
         from ..characters.WaterNymphs import WaterNymphs
-        
         if isinstance(target_character, (AncientTreeSpirit, ForestSprites, WaterNymphs)):
             return (f"[success]You cast [spell_name]{self.get_name()}[/spell_name] on "
                     f"[character_name]{target_character.get_name()}[/character_name], opening "

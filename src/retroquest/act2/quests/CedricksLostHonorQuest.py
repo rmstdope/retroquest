@@ -66,7 +66,7 @@ class CedricksLostHonorQuest(Quest):
             if not self.squires_info_added:
                 updated = True
             self.squires_info_added = True
-        
+
         # Second update: when secret documents are examined
         if game_state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS):
             # Update the description to include information about finding the evidence
@@ -80,5 +80,5 @@ class CedricksLostHonorQuest(Quest):
                 updated = True
             self.documents_examined = True
         self.description += new_desc
-        
+
         return updated

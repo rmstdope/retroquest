@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 class SecretDocuments(Item):
     """Secret documents containing evidence that proves Sir Cedric's innocence."""
-    
+
     def __init__(self) -> None:
         super().__init__(
             name="secret documents",

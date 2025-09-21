@@ -56,11 +56,9 @@ class CastleApproach(Room):
             Mapping of available exits; ``west`` omitted until courtyard enabled.
         """
         exits = super().get_exits(game_state).copy()
-        
         # Remove west exit to CastleCourtyard until entry pass has been shown to herald
         if not self.castle_courtyard_enabled and "west" in exits:
             del exits["west"]
-            
         return exits
 
     def enable_castle_courtyard(self) -> None:

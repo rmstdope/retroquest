@@ -11,6 +11,7 @@ from ..Act2StoryFlags import (
 )
 
 class SirCedric(Character):
+    """Noble knight who recruits allies and awards honor-based quests."""
     def __init__(self) -> None:
         super().__init__(
             name="sir cedric",

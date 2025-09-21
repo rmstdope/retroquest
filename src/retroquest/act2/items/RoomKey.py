@@ -38,7 +38,6 @@ class RoomKey(Item):
 
     def use_with(self, game_state: GameState, other_item) -> str:
         from ..rooms.SilverStagInn import SilverStagInn  # Import here to avoid circular imports
-        
         # Check if other_item is a Door
         if isinstance(other_item, Door):
             # Check if we're in the Silver Stag Inn
@@ -49,20 +48,15 @@ class RoomKey(Item):
                     if isinstance(item, RoomKey):
                         key_in_inventory = item
                         break
-                
                 if key_in_inventory is None:
                     return "[failure]You don't have a [item_name]room key[/item_name] in your inventory.[/failure]"
-                
                 # Call the room's use_key method to unlock the east exit
                 result = game_state.current_room.use_key()
-                
                 # Remove the key from inventory after successful use
                 if "[success]" in result:
                     game_state.inventory.remove(key_in_inventory)
-                
                 return result
             else:
                 return "[info]You need to be in The Silver Stag Inn to use the key with the door.[/info]"
         else:
             return f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] with the [item_name]{other_item.get_name()}[/item_name].[/failure]"
-

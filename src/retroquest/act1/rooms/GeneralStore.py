@@ -28,15 +28,18 @@ class GeneralStore(Room):
         Future economy: migrate to merchant inventory abstraction with dynamic stock.  
     """
     def __init__(self) -> None:
+        """Initialize the General Store with its static inventory and NPC."""
         super().__init__(
             name="General Store",
             description=(
-                "A cluttered shop overflowing with goods of every kind. Shelves groan under the weight of "
-                "rope, apples, matches, and trinkets. The shopkeeper bustles about, dusting jars and "
-                "chatting with customers. The air is thick with the mingled scents of fruit, wax, and "
-                "old wood. Every corner seems to hold a new surprise, and the promise of a good bargain."
+                "A cluttered shop overflowing with goods of every kind. Shelves groan under "
+                "the weight of rope, apples, matches, and trinkets. The shopkeeper bustles "
+                "about, dusting jars and chatting with customers. The air is thick with the "
+                "mingled scents of fruit, wax, and old wood. Every corner seems to hold a "
+                "new surprise, and the promise of a good bargain."
             ),
             items=[Rope(), Apple(), Matches(), Sword(), Armor()],
             characters=[Shopkeeper()],
-            exits={"west": "VillageSquare", "south": "BlacksmithsForge"}  # Map alignment
+            # Map alignment
+            exits={"west": "VillageSquare", "south": "BlacksmithsForge"}
         )

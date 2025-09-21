@@ -43,7 +43,6 @@ class ProtectiveCharm(Item):
 
     def use(self, game_state: GameState) -> str:
         from ..rooms.ForestEntrance import ForestEntrance  # Import here to avoid circular imports
-        
         if isinstance(game_state.current_room, ForestEntrance):
             if not game_state.get_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE):
                 game_state.set_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, True)
@@ -52,7 +51,6 @@ class ProtectiveCharm(Item):
             "gaze of the forest spirits become less threatening. The ancient magic recognizes "
             "your respect and preparation, granting you safe passage through these sacred "
             "woods.[/spell_effect]")
-                
                 # Check if both protective charm and enhanced lantern have been used
                 if game_state.get_story_flag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE):
                     result += (
@@ -60,7 +58,6 @@ class ProtectiveCharm(Item):
                         "lantern's magical illumination active, the forest's deeper paths are now revealed and "
                         "safe to travel. You can now venture deeper into the enchanted woods.[/success]"
                     )
-                
                 return result
             else:
                 return (
@@ -76,7 +73,6 @@ class ProtectiveCharm(Item):
     def use_with(self, game_state: 'GameState', other_item) -> str:
         """Use the protective charm with another item."""
         from ..items.OfferingAltar import OfferingAltar
-        
         if isinstance(other_item, OfferingAltar):
             # Delegate to the offering altar's use_with method
             return other_item.use_with(game_state, self)

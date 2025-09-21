@@ -28,10 +28,10 @@ class Riverbank(Room):
         super().__init__(
             name="Riverbank",
             description=(
-                "A gentle river flows past the village. Reeds sway along the banks, and the air is "
-                "alive with the hum of insects. A weathered fisherman sits nearby, humming a quiet "
-                "tune. The riverbank is peaceful, a place where time seems to slow and worries drift "
-                "away."
+                "A gentle river flows past the village. Reeds sway along the banks, and "
+                "the air is alive with the hum of insects. A weathered fisherman sits "
+                "nearby, humming a quiet tune. The riverbank is peaceful, a place where "
+                "time seems to slow and worries drift away."
             ),
             items=[SmoothStone(), River()],
             characters=[Fisherman()],

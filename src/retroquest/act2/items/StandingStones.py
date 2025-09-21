@@ -43,7 +43,6 @@ class StandingStones(Item):
         """Examine the standing stones to learn about their magic."""
         if not self.examined:
             self.examined = True
-            
             # Learn nature_sense spell automatically
             if not game_state.has_spell(NatureSenseSpell().name):
                 nature_sense = NatureSenseSpell()
@@ -57,7 +56,6 @@ class StandingStones(Item):
                 )
             else:
                 spell_msg = ""
-            
             return (
                 "[info]You approach the ancient standing stones and run your hands over their weathered "
                 "surfaces. The runes carved into the stone are clearly druidic—symbols representing "

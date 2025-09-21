@@ -33,7 +33,7 @@ class Door(Item):
 
     def use(self, game_state: GameState) -> str:
         from ..rooms.SilverStagInn import SilverStagInn  # Import here to avoid circular imports
-        
+
         # Check if we're in the Silver Stag Inn
         if isinstance(game_state.current_room, SilverStagInn):
             return "[info]The door leads to the private inn rooms upstairs. You can 'go east' to enter the room area.[/info]"

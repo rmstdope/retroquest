@@ -233,7 +233,7 @@ class AncientTreeSpirit(Character):
         return (
             f"[dialogue]The [character_name]{self.get_name()}[/character_name] regards the "
             f"[item_name]{item_object.get_name()}[/item_name] with ancient wisdom. 'This is "
-            f"not what I seek, young one. The forest calls for a more sacred offering.'" 
+            f"not what I seek, young one. The forest calls for a more sacred offering.'"
             "[/dialogue]"
         )
 

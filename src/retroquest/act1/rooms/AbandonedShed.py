@@ -36,14 +36,15 @@ class AbandonedShed(Room):
         intentionally inline (localization not yet scoped).  
     """
     def __init__(self) -> None:
+        """Initialize the Abandoned Shed room and its initial locked/search state."""
         super().__init__(
             name="Abandoned Shed",
             description=(
-                "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards "
-                "creaking in the wind. Rusty tools and broken crates are scattered about, and a thick "
-                "layer of dust covers everything. Shadows gather in the corners, and the air smells of "
-                "old earth and forgotten secrets. Something about the place feels both forlorn and "
-                "mysteriously inviting."
+                "A rickety shed leans precariously at the edge of Willowbrook, its weathered "
+                "boards creaking in the wind. Rusty tools and broken crates are scattered "
+                "about, and a thick layer of dust covers everything. Shadows gather in the "
+                "corners, and the air smells of old earth and forgotten secrets. Something "
+                "about the place feels both forlorn and mysteriously inviting."
             ),
             items=[ShedDoor()], # Items are added dynamically
             characters=[],
@@ -53,21 +54,25 @@ class AbandonedShed(Room):
         self.room_searched = False
 
     def unlock(self) -> str:
+        """Unlock the shed, add unlock items, and return a descriptive message."""
         if not self.locked:
             return "The shed is already unlocked."
         self.locked = False
         self.add_item(MysteriousBox())
         self.add_item(BrokenShovel())
         return (
-            "The old wooden door creaks open with a groan, revealing the dusty interior of the Abandoned Shed. "
-            "A [item_name]Mysterious Box[/item_name] sits on a rickety table, and a [item_name]Broken Shovel[/item_name] leans against a cobweb-covered wall."
+            "The old wooden door creaks open with a groan, revealing the dusty interior "
+            "of the Abandoned Shed. A [item_name]Mysterious Box[/item_name] sits on a rickety "
+            "table, and a [item_name]Broken Shovel[/item_name] leans against a cobweb-covered "
+            "wall."
         )
 
     def search(self, _game_state: GameState, _target: str = None) -> str:
+        """Search the shed; if first post-unlock search, add loot and return message."""
         if self.locked:
             return (
-                "You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] is "
-                "locked so you can't search inside."
+                "You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] "
+                "is locked so you can't search inside."
             )
 
         items_found_messages = []

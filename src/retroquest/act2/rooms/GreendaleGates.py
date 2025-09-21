@@ -9,24 +9,25 @@ class GreendaleGates(Room):
     """Urban threshold enforcing protocol and staged discovery.
 
     Narrative Role:
-        Shifts player from wilderness traversal to structured civic space while
-        introducing formal access control.
+        Shifts player from wilderness traversal to a structured civic space. It also
+        introduces formal access control and etiquette required to progress.
 
     Key Mechanics:
         - ``get_exits()`` withholds ``north`` until the gate captain grants entry.
-        - ``search()`` blocked while captain present; afterwards first search
-          spawns a ``CityMap`` (idempotent via local boolean).
+        - ``search()`` is blocked while the captain remains; the first permissive
+          search spawns a ``CityMap`` (idempotent via a local boolean).
 
     Story Flags:
-        - None; relies on NPC state attribute ``entry_pass_given``.
+        - None; this room currently relies on the NPC attribute
+          ``entry_pass_given`` rather than global story flags.
 
     Contents:
         - NPC: ``GateCaptain``.
         - Conditional Item: ``CityMap``.
 
     Design Notes:
-        Local state keeps transient discovery scoped; could elevate to a story
-        flag if later cross-room logic depends on map acquisition.
+        Local state keeps transient discovery scoped. Elevate to a story flag if
+        later cross-room logic requires explicit map ownership checks.
     """
 
     def __init__(self) -> None:
@@ -35,15 +36,16 @@ class GreendaleGates(Room):
         super().__init__(
             name="Greendale Gates",
             description=(
-                "A magnificent stone archway marks the entrance to Greendale, the largest settlement "
-                "you have encountered. Guards in polished mail stand watch, banners fluttering in the "
-                "mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling "
-                "shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet "
-                "charm."
+                "A magnificent stone archway marks the entrance to Greendale, the largest "
+                "settlement you have encountered. Guards in polished mail stand watch, banners "
+                "fluttering in the mountain breeze. Beyond, cobblestone streets wind between "
+                "stone houses and bustling shops. The air carries the sounds of commerce—a "
+                "stark contrast to Willowbrook's quiet charm."
             ),
             items=[],
             characters=[gate_captain],
-            exits={"south": "MountainPath", "north": "MainSquare"}  # Include north exit in static definition
+            exits={"south": "MountainPath", "north": "MainSquare"},
+            # Include north exit in the static definition above
         )
         self.gate_captain = gate_captain
         self.city_map_found = False
@@ -58,11 +60,9 @@ class GreendaleGates(Room):
             Mapping of exits including ``south`` and conditionally ``north``.
         """
         exits = super().get_exits(game_state).copy()
-        
-        # Remove north exit until entry pass is given
+        # Remove north exit until the entry pass has been given
         if not self.gate_captain.entry_pass_given and "north" in exits:
             del exits["north"]
-            
         return exits
 
     def search(self, _game_state: GameState, _target: str = None) -> str:
@@ -77,19 +77,19 @@ class GreendaleGates(Room):
         """
         if self.gate_captain in self.characters:
             return (
-                "The Gate Captain stands vigilant, watching all who approach. It would be improper to "
-                "search while he observes you so closely. Perhaps speak with him first."
+                "The Gate Captain stands vigilant, watching all who approach. It would be "
+                "improper to search while he observes you so closely. Perhaps speak with him "
+                "first."
             )
         if self.city_map_found:
-            return (
-                "You've already searched thoroughly. Nothing more of value stands out here."
-            )
+            return "You've already searched thoroughly. Nothing more of value stands out here."
         self.city_map_found = True
         city_map = CityMap()
         self.add_item(city_map)
+        name = city_map.get_name()
         return (
-            "With the Gate Captain gone, you're free to look around. A small information post nearby "
-            "holds items left by travelers. Among them you discover a detailed "
-            f"[item_name]{city_map.get_name()}[/item_name] of Greendale—exactly what you need to navigate "
-            "the city's winding streets!"
+            "With the Gate Captain gone, you're free to look around. A small information post "
+            "nearby holds items left by travelers. Among them you discover a detailed "
+            f"[item_name]{name}[/item_name] of Greendale—exactly what you need to navigate the "
+            "city's winding streets!"
         )

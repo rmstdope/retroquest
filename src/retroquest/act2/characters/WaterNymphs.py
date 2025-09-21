@@ -8,18 +8,20 @@ from ..Act2StoryFlags import (
 )
 
 class WaterNymphs(Character):
+    """Ethereal guardians of the Whispering Glade who test visitors with riddles."""
+
     def __init__(self) -> None:
         super().__init__(
             name="water nymphs",
             description=(
                 "Graceful ethereal beings who dwell in the sacred waters of the "
                 "Whispering Glade. Their forms seem to be made of living water and "
-                "moonlight, constantly shifting between transparency and solidity."
+                "moonlight, constantly shifting between transparency and solidity. "
                 "Their voices sound like the gentle babbling of streams mixed with "
-                "wind chimes, and their eyes hold the wisdom of countless seasons."
+                "wind chimes, and their eyes hold the wisdom of countless seasons. "
                 "These ancient guardians are known to test visitors with riddles "
                 "that reveal the true depth of one's connection to the natural world."
-            )
+            ),
         )
         self.riddles_completed = False
         self.current_riddle = 0

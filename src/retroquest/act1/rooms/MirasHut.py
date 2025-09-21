@@ -25,14 +25,15 @@ class MirasHut(Room):
         Serves as base for potential later blessing or spell tutoring systems.  
     """
     def __init__(self) -> None:
+        """Initialize Mira's Hut with its items and resident mentor NPC."""
         super().__init__(
             name="Mira's Hut",
             description=(
-                "A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with "
-                "bottles, roots, and colorful flowers. The air is thick with the scent of lavender and "
-                "sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira "
-                "herself moves gracefully among her concoctions, her eyes bright with knowledge and "
-                "kindness."
+                "A fragrant hut filled with drying herbs and mysterious potions. Shelves "
+                "overflow with bottles, roots, and colorful flowers. The air is thick with "
+                "the scent of lavender and sage. Sunlight streams through stained glass, "
+                "painting the walls in shifting hues. Mira herself moves gracefully among "
+                "her concoctions, her eyes bright with knowledge and kindness."
             ),
             items=[HealingHerb(), AncientAmulet()],
             characters=[Mira()],

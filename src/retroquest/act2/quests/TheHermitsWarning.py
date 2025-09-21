@@ -44,4 +44,3 @@ class TheHermitsWarningQuest(Quest):
     def check_completion(self, game_state: GameState) -> bool:
         """Check if the quest should be completed when the survival kit is used."""
         return game_state.get_story_flag(FLAG_HERMITS_WARNING_COMPLETED)
-

@@ -62,7 +62,6 @@ class TheGatheringStormQuest(Quest):
             "respected knight commander, who may hold crucial knowledge about the "
             "darkness that approaches."
         )
-        
         if game_state.get_story_flag(FLAG_SPOKEN_TO_SIR_CEDRIC):
             if not self._flag_state.get(FLAG_SPOKEN_TO_SIR_CEDRIC):
                 self._flag_state[FLAG_SPOKEN_TO_SIR_CEDRIC] = True
@@ -72,7 +71,6 @@ class TheGatheringStormQuest(Quest):
                 "\n\nSir Cedric has explained that dark forces are gathering and he needs "
                 "allies with magical knowledge. "
             )
-        
         if game_state.get_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS):
             if not self._flag_state.get(FLAG_DEMONSTRATED_COMBAT_SKILLS):
                 self._flag_state[FLAG_DEMONSTRATED_COMBAT_SKILLS] = True
@@ -93,7 +91,6 @@ class TheGatheringStormQuest(Quest):
                 "hold the key to understanding and defeating these otherworldly "
                 "threats."
             )
-        
         if game_state.get_story_flag(FLAG_SUPPLIES_QUEST_COMPLETED):
             if not self._flag_state.get(FLAG_SUPPLIES_QUEST_COMPLETED):
                 self._flag_state[FLAG_SUPPLIES_QUEST_COMPLETED] = True
@@ -110,7 +107,6 @@ class TheGatheringStormQuest(Quest):
                 "with it, the answers that could save both Greendale and the surrounding "
                 "lands from the encroaching shadow."
             )
-        
         if game_state.get_story_flag(FLAG_ANCIENT_LIBRARY_COMPLETED):
             if not self._flag_state.get(FLAG_ANCIENT_LIBRARY_COMPLETED):
                 self._flag_state[FLAG_ANCIENT_LIBRARY_COMPLETED] = True

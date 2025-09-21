@@ -1,7 +1,8 @@
 """Vines Item
 
 Narrative Role:
-Destructible environmental obstacle that converts into a resource (`Stick`) when overcome, illustrating clearance + yield pattern.
+Destructible environmental obstacle that converts into a resource (`Stick`)
+when overcome, illustrating clearance + yield pattern.
 
 Key Mechanics / Interactions:
 - `use_with` + `SharpKnife` removes vines from room, consumes the knife, spawns a `Stick` item.
@@ -42,9 +43,12 @@ class Vines(Item):
             game_state.remove_item_from_inventory(other_item.get_name())
             game_state.current_room.add_item(Stick())
             return (
-                f"[event]You use the [item_name]{other_item.get_name()}[/item_name] to cut through the "
-                f"thick [item_name]{self.get_name()}[/item_name], clearing the way to a small alcove. "
-                f"The [item_name]{other_item.get_name()}[/item_name] shatters from the effort! You can see "
+                f"[event]You use the [item_name]{other_item.get_name()}[/item_name] "
+                f"to cut through the "
+                f"thick [item_name]{self.get_name()}[/item_name], clearing the way "
+                f"to a small alcove. "
+                f"The [item_name]{other_item.get_name()}[/item_name] shatters from the "
+                f"effort! You can see "
                 f"a sturdy [item_name]stick[/item_name] in the revealed alcove.[/event]"
             )
         return super().use_with(game_state, other_item)

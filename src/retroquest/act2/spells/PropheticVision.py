@@ -41,7 +41,7 @@ class PropheticVision(Spell):
         Keeps heavy narrative payload inline for clarity; could later externalize into
         a text asset or segmented localization structure if needed.
     """
-    
+
     def __init__(self) -> None:
         super().__init__(
             name="prophetic_vision",
@@ -54,10 +54,8 @@ class PropheticVision(Spell):
     def cast_spell(self, game_state: GameState) -> str:
         # Check if Sir Cedric is present in the current room
         from ..characters.SirCedric import SirCedric
-        
         # Check if Sir Cedric is in the current room
         cedric_present = any(isinstance(char, SirCedric) for char in game_state.current_room.characters)
-        
         if not cedric_present:
             return (
                 "[info]As you begin to cast the prophetic vision spell, you sense that the visions would be "
@@ -65,11 +63,9 @@ class PropheticVision(Spell):
                 "spell together with Sir Cedric, who has the authority and wisdom to prepare for the "
                 "threats that the visions reveal.[/info]"
             )
-        
         if not game_state.get_story_flag(FLAG_GATHERING_STORM_COMPLETED):
             # First casting - complete The Gathering Storm quest
             game_state.set_story_flag(FLAG_GATHERING_STORM_COMPLETED, True)
-            
             return (
                 "[magic]You close your eyes and reach out with your newly granted sight beyond sight. "
                 "With Sir Cedric standing beside you, you share the visions as they flood your mind "
@@ -94,4 +90,3 @@ class PropheticVision(Spell):
                 "through the tapestry of time, and wisdom lies in understanding the consequences of "
                 "your actions.[/magic]"
             )
- 

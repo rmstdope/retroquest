@@ -40,12 +40,10 @@ class SuppliesForTheJourneyQuest(Quest):
         from ..items.ForestSurvivalKit import ForestSurvivalKit
         from ..items.EnhancedLantern import EnhancedLantern
         from ..items.QualityRope import QualityRope
-        
         if not self.is_completed_flag:
             has_survival_kit = any(isinstance(item, ForestSurvivalKit) for item in game_state.inventory)
             has_lantern = any(isinstance(item, EnhancedLantern) for item in game_state.inventory)
             has_rope = any(isinstance(item, QualityRope) for item in game_state.inventory)
-            
             if has_survival_kit and has_lantern and has_rope:
                 self.is_completed_flag = True
                 game_state.set_story_flag(FLAG_SUPPLIES_QUEST_COMPLETED, True)

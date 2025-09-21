@@ -48,15 +48,13 @@ class SilverTree(Item):
     def examine(self, game_state: GameState) -> str:
         """Examine the magnificent silver-barked tree."""
         from ..rooms.AncientGrove import AncientGrove  # Import here to avoid circular imports
-        
+
         if not self.examined:
             self.examined = True
-            
             # Add the Ancient Tree Spirit to the room only if we're in the Ancient Grove
             if isinstance(game_state.current_room, AncientGrove):
                 ancient_spirit = AncientTreeSpirit()
                 game_state.current_room.characters.append(ancient_spirit)
-                
                 return (
                     "[environment_description]The ancient tree towers above you, its silver bark shimmering "
                     "with an inner light that seems to pulse in rhythm with your heartbeat. The bark is "

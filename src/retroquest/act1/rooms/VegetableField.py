@@ -28,13 +28,15 @@ class VegetableField(Room):
         Later visual state swap possible after growth spell or quest resolution.  
     """
     def __init__(self) -> None:
+        """Initialize the Vegetable Field and its passive investigation flag behavior."""
         super().__init__(
             name="Vegetable Field",
             description=(
-                "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, "
-                "with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze "
-                "rustles the brittle leaves, carrying the scent of soil and distant rain. The field feels "
-                "quiet, as if holding its breath, waiting for a touch of magic to bring it back to life."
+                "Rows of withered crops stretch beneath a brooding gray sky. The earth is "
+                "cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at "
+                "better days. A faint breeze rustles the brittle leaves, carrying the scent "
+                "of soil and distant rain. The field feels quiet, as if holding its breath, "
+                "waiting for a touch of magic to bring it back to life."
             ),
             items=[WitheredCarrot(), RustyHoe(), DullKnife()],
             characters=[],

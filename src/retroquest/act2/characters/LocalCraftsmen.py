@@ -31,24 +31,41 @@ from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_HELPED_ELDERLY_RESIDENTS
 
 class LocalCraftsmen(Character):
+    """Collective artisan NPC that awards the Mend spell after civic aid."""
     def __init__(self) -> None:
         super().__init__(
             name="local craftsmen",
-            description="Skilled artisans working at various crafts - blacksmithing, carpentry, tailoring, and magical repair work. They demonstrate traditional techniques passed down through generations.",
+            description=(
+                "Skilled artisans working at various crafts - blacksmithing, carpentry, "
+                "tailoring, and magical repair work. They demonstrate traditional "
+                "techniques passed down through generations."
+            ),
         )
 
     def talk_to(self, game_state: GameState) -> str:
         from ..spells.MendSpell import MendSpell
         if not game_state.get_story_flag(FLAG_HELPED_ELDERLY_RESIDENTS):
-            return (f"[failure]The [character_name]{self.get_name()}[/character_name] eye you with suspicion and "
-                    "refuse to talk to you. They don't seem to trust you yet. Perhaps you need to prove yourself "
-                    "to the community first.[/failure]")
+            name = self.get_name()
+            return (
+                f"[failure]The [character_name]{name}[/character_name] eye you with "
+                "suspicion and refuse to talk to you. They don't seem to trust "
+                "you yet. Perhaps you need to prove yourself to the community "
+                "first.[/failure]"
+            )
         if not game_state.has_spell(MendSpell().name):
             game_state.learn_spell(MendSpell())
-            return (f"[success]You speak with the [character_name]{self.get_name()}[/character_name] and watch them work, "
-                    "observing their techniques for repairing damaged items. As you study their methods, you begin to "
-                    "understand the magical principles behind restoration and repair. Through careful observation, "
-                    "you learn the [spell_name]mend[/spell_name] spell![/success]")
+            name = self.get_name()
+            return (
+                f"[success]You speak with the [character_name]{name}[/character_name] and "
+                "watch them work, observing their techniques for repairing items. "
+                "As you study their methods, you begin to understand the magical "
+                "principles behind restoration and repair. Through careful study, "
+                "you learn the [spell_name]mend[/spell_name] spell![/success]"
+            )
         else:
-            return (f"[character_name]{self.get_name()}[/character_name]: Good to see you again! How has your repair magic "
-                    "been working? The mend spell is one of the most useful pieces of magic a person can learn.")
+            name = self.get_name()
+            return (
+                f"[character_name]{name}[/character_name]: Good to see you again! "
+                "How has your repair magic been working? The mend spell is one of the "
+                "most useful pieces of magic a person can learn."
+            )

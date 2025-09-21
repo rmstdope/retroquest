@@ -3,7 +3,7 @@
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..Act2StoryFlags import (
-    FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, 
+    FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE,
     FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE
 )
 from ..items.EnchantedAcorn import EnchantedAcorn
@@ -63,13 +63,10 @@ class ForestEntrance(Room):
             and ``east`` once both lantern and charm usage flags are set.
         """
         exits = {"west": "ForestTransition"}  # Always allow going back west
-        
         # Only show south and east exits if both items have been used
         lantern_used = game_state.get_story_flag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE)
         charm_used = game_state.get_story_flag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)
-        
         if lantern_used and charm_used:
             exits["south"] = "AncientGrove"
             exits["east"] = "WhisperingGlade"
-            
         return exits

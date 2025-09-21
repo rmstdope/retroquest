@@ -55,7 +55,6 @@ class MendSpell(Spell):
 
     def cast_on_item(self, game_state: GameState, target_item: Item) -> str:
         from ..items.ProtectiveEnchantments import ProtectiveEnchantments  # Import here to avoid circular imports
-        
         # Special handling for protective enchantments in Hidden Library
         if isinstance(target_item, ProtectiveEnchantments):
             if not game_state.get_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS):
@@ -66,7 +65,6 @@ class MendSpell(Spell):
                         "your worthiness and respect for ancient knowledge.[/success]")
             else:
                 return f"[info]The [item_name]{target_item.get_name()}[/item_name] have already been repaired and are functioning properly.[/info]"
-        
         # Check if the item can be repaired (this is the original implementation)
         elif "broken" in target_item.get_description().lower() or "damaged" in target_item.get_description().lower():
             return (f"[success]You cast [spell_name]{self.get_name()}[/spell_name] on [item_name]{target_item.get_name()}[/item_name]. "

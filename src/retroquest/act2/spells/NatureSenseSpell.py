@@ -54,7 +54,6 @@ class NatureSenseSpell(Spell):
 
     def cast_spell(self, game_state: GameState) -> str:
         from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
-        
         # Special handling for Whispering Glade
         if isinstance(game_state.current_room, WhisperingGlade):
             if not self.nature_sense_used:

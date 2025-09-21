@@ -24,14 +24,15 @@ class RoadToGreendale(Room):
         Could introduce conditional unlocking tied to core village quest completion.  
     """
     def __init__(self) -> None:
+        """Initialize the Road to Greendale with its item and traveling merchant NPC."""
         super().__init__(
             name="Road to Greendale",
             description=(
-                "The main road leaving Willowbrook stretches beneath ancient oaks, their branches arching "
-                "overhead like a living tunnel. The path is well-trodden, lined with wildflowers and "
-                "scattered leaves. A merchant's cart creaks nearby, and the air is filled with the promise "
-                "of adventure and the unknown. The road beckons, leading onward to new lands and new "
-                "stories."
+                "The main road leaving Willowbrook stretches beneath ancient oaks, their "
+                "branches arching overhead like a living tunnel. The path is well-trodden, "
+                "lined with wildflowers and scattered leaves. A merchant's cart creaks nearby, "
+                "and the air is filled with the promise of adventure and the unknown. The road "
+                "beckons, leading onward to new lands and new stories."
             ),
             items=[RustySaw()],
             characters=[Merchant()],

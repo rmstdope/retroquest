@@ -22,7 +22,6 @@ class TravelersJournal(Item):
     def use(self, game_state: GameState) -> str:
         # Set flag to indicate the journal has been read
         game_state.set_story_flag(FLAG_READ_TRAVELERS_JOURNAL, True)
-        
         return (
             "[event]You carefully open the weathered traveler's journal and begin reading "
             "the faded entries...[/event]\n\n"

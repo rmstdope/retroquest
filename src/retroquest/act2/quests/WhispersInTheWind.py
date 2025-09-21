@@ -53,14 +53,12 @@ class WhispersInTheWind(Quest):
         """Complete the quest and give rewards."""
         if not self.is_completed_flag:
             self.is_completed_flag = True
-            
+
             # Add experience
             if hasattr(game_state, 'add_experience'):
                 game_state.add_experience(self.experience_reward)
                 exp_msg = f" You gain {self.experience_reward} experience!"
             else:
                 exp_msg = ""
-        
             return f"[quest_complete]Quest Complete: {self.name}[/quest_complete]{exp_msg}"
-        
         return self.completion

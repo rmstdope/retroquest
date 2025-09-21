@@ -37,15 +37,17 @@ from ..Act2StoryFlags import (
 )
 
 class SpectralLibrarian(Character):
+    """Ghostly guardian NPC who controls access to the library's deeper lore."""
     def __init__(self) -> None:
         super().__init__(
             name="Spectral Librarian",
             description=(
-                "A ghostly figure who appears to be the eternal guardian of this ancient library. Their "
-                "ethereal form shimmers with a soft blue light, and ancient wisdom gleams in their "
-                "otherworldly eyes. They wear the robes of a scholar from ages past, and their presence "
-                "emanates both knowledge and protective purpose. This spirit has watched over these texts "
-                "for countless years, ensuring only the worthy gain access to the deepest secrets."
+                "A ghostly figure who appears to be the eternal guardian of this ancient library. "
+                "Their ethereal form shimmers with a soft blue light. Ancient wisdom gleams in "
+                "their otherworldly eyes. They wear the robes of a scholar from ages past. Their "
+                "presence emanates both knowledge and protective purpose. This spirit has "
+                "watched over these texts for countless years, ensuring only the worthy gain "
+                "access to the deepest secrets."
             ),
         )
 
@@ -68,41 +70,47 @@ class SpectralLibrarian(Character):
                 dispel_name = dispel_spell.get_name()
                 crystal_name = crystal_focus.get_name()
                 return (
-                    f"[success][character_name]{self.get_name()}[/character_name]: 'Ah, you have repaired "
-                    f"the protective enchantments with your [spell_name]{mend_name}[/spell_name] spell. "
-                    "This shows both magical ability and respect for ancient knowledge. I shall reveal "
-                    "what you seek.' The spirit's eyes glow brighter as they speak: 'Your bloodline traces "
-                    "back to the ancient mages of Willowbrook, those who were chosen to guard against the "
-                    "rising darkness. Malakar's interest in your village was no coincidence - he seeks to "
-                    "corrupt or destroy the magical heritage that flows through your veins.' They gesture "
-                    "to the ancient texts: '"
-                    f"Study these tomes to learn the [spell_name]{dispel_name}[/spell_name] spell, and take this "
-                    f"[item_name]{crystal_name}[/item_name] to enhance your growing abilities. Your destiny as "
-                    "one of the Chosen is beginning to unfold.'[/success]"
+                    f"[success][character_name]{self.get_name()}[/character_name]: 'Ah, you have "
+                    "repaired the protective enchantments with your "
+                    f"[spell_name]{mend_name}[/spell_name] "
+                    "spell. This shows both magical ability and respect for ancient "
+                    "knowledge. I shall reveal what you seek.' The spirit's eyes glow "
+                    "brighter as they speak: 'Your bloodline traces back to the ancient "
+                    "mages of Willowbrook, those who were chosen to guard against the "
+                    "rising darkness. Malakar's interest in your village was no "
+                    "coincidence - he seeks to corrupt or destroy the magical heritage "
+                    "that flows through your veins.' They gesture to the ancient texts: '"
+                    f"Study these tomes to learn the [spell_name]{dispel_name}[/spell_name] "
+                    f"spell, and take this [item_name]{crystal_name}[/item_name] to "
+                    "enhance your abilities. Your destiny as one of the Chosen is "
+                    "beginning to unfold.'[/success]"
                 )
             else:
                 return (
-                    f"[character_name]{self.get_name()}[/character_name]: 'Welcome, seeker of knowledge. "
-                    "I am the eternal guardian of this repository. The protective enchantments around the "
-                    "most valuable texts have been damaged by time. Prove your worthiness by repairing them, "
-                    "and I shall share the knowledge you seek about your heritage and destiny.'"
+                    f"[character_name]{self.get_name()}[/character_name]: 'Welcome, "
+                    f"seeker of knowledge. "
+                    "I am the eternal guardian of this repository. The protective enchantments "
+                    "around the most valuable texts have been damaged by time. Prove your "
+                    "worthiness by repairing them, and I shall share the knowledge you "
+                    "seek about your heritage and destiny.'"
                 )
         else:
             # Get spell name
             from ..spells.DispelSpell import DispelSpell
             dispel_spell = DispelSpell()
             return (
-                f"[character_name]{self.get_name()}[/character_name]: 'You have proven yourself worthy and "
-                f"learned what this library can teach. The knowledge of your bloodline and the "
-                f"[spell_name]{dispel_spell.get_name()}[/spell_name] spell will serve you well in the "
-                "challenges ahead. Remember: you are part of an ancient lineage chosen to stand against "
-                "the darkness. Use this knowledge wisely.'"
+                f"[character_name]{self.get_name()}[/character_name]: 'You have proven yourself "
+                f"worthy and learned what this library can teach. The knowledge of your "
+                f"bloodline and the [spell_name]{dispel_spell.get_name()}[/spell_name] spell "
+                "will serve you well in the challenges ahead. Remember: you are part of "
+                "an ancient lineage chosen to stand against the darkness. Use this "
+                "knowledge wisely.'"
             )
 
     def examine(self, _game_state: GameState) -> str:
         return (
-            f"The [character_name]{self.get_name()}[/character_name] appears to be a scholar from ancient "
-            "times, their ethereal form bound to this library by duty and purpose. They radiate wisdom "
-            "accumulated over centuries of guarding these precious texts. There's something both "
-            "melancholy and noble about their eternal vigil."
+            f"The [character_name]{self.get_name()}[/character_name] appears to be a scholar from "
+            "ancient times, their ethereal form bound to this library by duty and purpose. "
+            "They radiate wisdom accumulated over centuries of guarding these precious texts. "
+            "There's something both melancholy and noble about their eternal vigil."
         )

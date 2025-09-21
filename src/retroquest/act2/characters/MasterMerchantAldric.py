@@ -1,24 +1,4 @@
-"""Master Merchant Aldric (Act II)
-
-Role:
-    Premium gear vendor unlocking higher-tier utility items after social proof (flyer) is presented.
-
-Unlock Condition:
-    - Requires giving MerchantsFlyer (sets internal gave_flyer) before wares list becomes accessible.
-
-Economy & Inventory:
-        - Stocks: ForestSurvivalKit (50), EnhancedLantern (40), QualityRope (20).
-        - Uses coin batching via GameState.get_item_count / remove_item_from_inventory for
-            atomic purchases.
-
-Narrative Flavor:
-    - Rotating marketing-style dialogue lines reinforce merchant personality and world commerce tone.
-
-Design Notes:
-    - No story flags; containment ensures reuse pattern for future merchants.
-    - Item restocking hook (add_wares) called upon flyer validation—room controls display items separately from purchased copies.
-    - Safety checks guard against duplicate acquisition and payment race conditions.
-"""
+"""Master Merchant Aldric character (Act II)."""
 
 from ...engine.Character import Character
 from ...engine.GameState import GameState
@@ -28,6 +8,7 @@ from ..items.EnhancedLantern import EnhancedLantern
 from ..items.QualityRope import QualityRope
 
 class MasterMerchantAldric(Character):
+    """Merchant dealing premium adventure gear and expedition supplies."""
     def __init__(self) -> None:
         super().__init__(
             name="master merchant aldric",
@@ -50,9 +31,12 @@ class MasterMerchantAldric(Character):
         ]
         self.dialogue_index = 0
         self.closed_dialogue = (
-            "The [character_name]Master Merchant Aldric[/character_name] looks at you appraisingly. "
-            "[dialogue]'I deal only with established customers and those with proper credentials. "
-            "Do you have any introduction or referral that would qualify you for my premium services?'[/dialogue]"
+            "The [character_name]Master Merchant Aldric[/character_name] looks at you "
+            "appraisingly. "
+            "[dialogue]'I deal only with established customers and those with proper "
+            "credentials. "
+            "Do you have any introduction or referral that would qualify you for "
+            "my premium services?'[/dialogue]"
         )
         self.gave_flyer = False
 
@@ -65,7 +49,10 @@ class MasterMerchantAldric(Character):
         wares_info = "My premium selection includes:\n"
         if self.wares:
             for name, details in self.wares.items():
-                wares_info += f"- [item_name]{name.title()}[/item_name]: {details['price']} [item_name]gold coins[/item_name]\n"
+                wares_info += (
+                    f"- [item_name]{name.title()}[/item_name]: {details['price']} "
+                    "[item_name]gold coins[/item_name]\n"
+                )
         else:
             wares_info = "I'm currently restocking my premium inventory.\n"
 
@@ -88,15 +75,23 @@ class MasterMerchantAldric(Character):
                 game_state.inventory.remove(item_object)
             self.gave_flyer = True
             game_state.current_room.add_wares()
+            item_name = item_object.get_name()
             return (
-                f"[success]You present the [item]{item_object.get_name()}[/item] to "
-                f"[character_name]Master Merchant Aldric[/character_name]. His eyes light up as "
-                "he examines it. 'Ah, excellent! This flyer grants you access to our premium "
-                "selection and preferred customer pricing. What quality goods can I help you "
-                "acquire today?'[/success]"
+                f"[success]You present the [item]{item_name}[/item] to "
+                "[character_name]Master Merchant Aldric[/character_name]. His eyes "
+                "light up as he examines it. 'Ah, excellent! This flyer grants you "
+                "access to our premium selection and preferred customer pricing. "
+                "What quality goods can I help you acquire today?'[/success]"
             )
-        else:
-            return f'The [character_name]Master Merchant Aldric[/character_name] examines the {item_object.get_name()}. [dialogue]"I appreciate the offer, but I deal in adventure gear, not donations. Perhaps you could purchase something instead?"[/dialogue]'
+
+        # Non-flyer items are politely declined
+        item_name = item_object.get_name()
+        return (
+            f'The [character_name]Master Merchant Aldric[/character_name] examines the '
+            f"{item_name}. "
+            "[dialogue]'I appreciate the offer, but I deal in adventure gear, not "
+            "donations. Perhaps you could purchase something instead?'[/dialogue]"
+        )
 
     def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
         """Handle buying items from Master Merchant Aldric"""
@@ -105,11 +100,25 @@ class MasterMerchantAldric(Character):
             return self.closed_dialogue
 
         item_name_to_buy = item_name_to_buy.lower()
-        event_msg = f"[event]You try to buy the [item_name]{item_name_to_buy}[/item_name] from the [character_name]{self.get_name()}[/character_name].[/event]"
+        name = self.get_name()
+        event_msg = (
+            "[event]You try to buy the [item_name]" + item_name_to_buy
+            + "[/item_name] from the [character_name]" + name
+            + "[/character_name].[/event]"
+        )
 
         # Check if item is available
         if item_name_to_buy not in self.wares:
-            return event_msg + "\n" + f'[dialogue]"Sorry, I don\'t have any \'[item_name]{item_name_to_buy}[/item_name]\' for sale. Check my current inventory for available items."[/dialogue]'
+            return (
+                event_msg
+                + "\n"
+                + (
+                    f'[dialogue]"Sorry, I don\'t have any \' '
+                    f'[item_name]{item_name_to_buy}[/item_name]\' for sale. '
+                    'Check my current inventory for available items.'
+                    '[/dialogue]'
+                )
+            )
 
         ware_details = self.wares[item_name_to_buy]
         price = ware_details["price"]
@@ -119,16 +128,41 @@ class MasterMerchantAldric(Character):
 
         # Check if player has enough coins
         if total_coins < price:
-            return event_msg + "\n" + f'[failure]You don\'t have enough [item_name]coins[/item_name] for the [item_name]{item_name_to_buy}[/item_name]. It costs {price} [item_name]gold coins[/item_name] but you only have {total_coins}.[/failure]'
+            return (
+                event_msg
+                + "\n"
+                + (
+                    f'[failure]You don\'t have enough [item_name]coins[/item_name] '
+                    f'for the [item_name]{item_name_to_buy}[/item_name]. It costs {price} '
+                    f'[item_name]gold coins[/item_name] but you only have {total_coins}.'
+                    '[/failure]'
+                )
+            )
 
         # Check if already have the item in inventory (not counting display items in room)
-        if any(item.get_name().lower() == item_name_to_buy and item.can_be_carried for item in game_state.inventory):
-            return event_msg + "\n" + f'[dialogue]"You already have a [item_name]{item_name_to_buy}[/item_name]. One should be sufficient for your needs."[/dialogue]'
+        if any(
+            item.get_name().lower() == item_name_to_buy
+            and item.can_be_carried
+            for item in game_state.inventory
+        ):
+            return (
+                event_msg
+                + "\n"
+                + (
+                    f'[dialogue]"You already have a [item_name]{item_name_to_buy}[/item_name]. '
+                    'One should be sufficient for your needs.'
+                    '[/dialogue]'
+                )
+            )
 
         # Purchase the item - spend coins using the batching system
         coins_removed = game_state.remove_item_from_inventory("coins", price)
         if coins_removed != price:
-            return event_msg + "\n" + '[failure]Transaction failed. Unable to process payment.[/failure]'
+            return (
+                event_msg
+                + "\n"
+                + ('[failure]Transaction failed. Unable to process payment.[/failure]')
+            )
 
         # Remove the display item from the room (if present)
         room_item_to_remove = None

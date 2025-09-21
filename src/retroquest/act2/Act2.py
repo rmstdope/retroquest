@@ -57,7 +57,7 @@ class Act2(Act):
         quests = [
             # Main Quest
             TheGatheringStormQuest(),
-            
+
             # Greendale Phase Side Quests
             TheKnightsTestQuest(),
             SuppliesForTheJourneyQuest(),
@@ -66,7 +66,7 @@ class Act2(Act):
             TheAncientLibraryQuest(),
             TheInnkeepersDaughterQuest(),
             CedricksLostHonorQuest(),
-            
+
             # Forest Phase Side Quests
             TheMerchantsLostCaravanQuest(),
             TheForestGuardiansRiddles(),
