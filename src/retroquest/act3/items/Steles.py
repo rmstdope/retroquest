@@ -1,16 +1,17 @@
 """Weathered stone pillars containing coquina runes for tidebound sigils."""
-from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ...engine.Item import Item
+
 
 class Steles(Item):
     """
     Ancient stone pillars at the shore's edge with ward sigils.
-    
+
     Narrative Role:
     - Source of coquina fragments needed for tidebound ritual work
     - Visual markers of the shore's magical foundation
     - Immovable landmarks that ground the scene in ancient power
-    
+
     Key Mechanics:
     - Cannot be picked up (part of the shore itself)
     - Examine reveals coquina fragments useful for sigil completion

@@ -12,8 +12,8 @@ class MirrorTerraces(Room):
             items=[],
             characters=[],
             exits={
-                "south": "EmberGallery", 
-                "east": "FumarolePassages", 
+                "south": "EmberGallery",
+                "east": "FumarolePassages",
                 "west": "ObsidianOutcrops"
             },
         )

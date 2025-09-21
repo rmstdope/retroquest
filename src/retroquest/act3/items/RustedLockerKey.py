@@ -1,16 +1,17 @@
 """Corroded iron key from the pier vaults."""
-from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ...engine.Item import Item
+
 
 class RustedLockerKey(Item):
     """
     A salt-corroded key that cannot open its intended lock through normal means.
-    
+
     Narrative Role:
     - Symbol of decay and the futility of conventional approaches
     - Red herring that hints at magical solutions rather than physical ones
     - Atmospheric detail that reinforces the pier's deteriorated state
-    
+
     Key Mechanics:
     - Can be carried but cannot successfully unlock the locker
     - Provides failure feedback when used with locker

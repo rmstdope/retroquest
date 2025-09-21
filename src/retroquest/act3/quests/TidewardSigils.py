@@ -1,5 +1,7 @@
-from ...engine.Quest import Quest
+"""Tideward Sigils quest class."""
+
 from ...engine.GameState import GameState
+from ...engine.Quest import Quest
 from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
 
 
@@ -8,12 +10,12 @@ class TidewardSigilsQuest(Quest):
         super().__init__(
             name="Tideward Sigils",
             description=(
-                "Collect coquina runes at the shore and engrave a complete Tideward Sigil upon the leaning pillars"
-                " to stabilize the flood wards."
+                "Collect coquina runes at the shore and engrave a complete Tideward Sigil "
+                "upon the leaning pillars to stabilize the flood wards."
             ),
             completion=(
-                "You cleansed the pillars and set the coquina runes— the Tideward Sigil resonates and the flood wards"
-                " steady, granting safe passage toward the sanctum."
+                "You cleansed the pillars and set the coquina runes— the Tideward Sigil resonates "
+                "and the flood wards steady, granting safe passage toward the sanctum."
             ),
         )
 

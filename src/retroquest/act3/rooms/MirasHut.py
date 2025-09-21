@@ -1,8 +1,8 @@
 from ...engine.Room import Room
 from ..characters.Mira import Mira
 from ..characters.SirCedric import SirCedric
-from ..items.HealingHerbs import HealingHerbs
 from ..items.AncientAmulet import AncientAmulet
+from ..items.HealingHerbs import HealingHerbs
 from ..items.TeleportationFocus import TeleportationFocus
 
 

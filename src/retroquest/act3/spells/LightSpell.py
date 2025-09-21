@@ -1,5 +1,7 @@
-from ...engine.Spell import Spell
+"""Light spell for Act 3."""
+
 from ...engine.GameState import GameState
+from ...engine.Spell import Spell
 
 
 class LightSpell(Spell):
@@ -13,4 +15,5 @@ class LightSpell(Spell):
         hook = getattr(game_state.current_room, 'cast_light_here', None)
         if hook:
             return hook(game_state)
-        return "[event]A warm spark flares in your palm and fades—nothing here seems to catch.[/event]"
+        return ("[event]A warm spark flares in your palm and fades—nothing here seems to "
+                "catch.[/event]")

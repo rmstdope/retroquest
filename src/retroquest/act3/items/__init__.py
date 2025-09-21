@@ -1,11 +1,27 @@
-from .TeleportationFocus import TeleportationFocus
-from .CrystalOfLight import CrystalOfLight
-from .HealingHerbs import HealingHerbs
+"""Item classes for Act 3."""
+
 from .AncientAmulet import AncientAmulet
 from .CoquinaRunes import CoquinaRunes
-from .Steles import Steles
-from .RustedLockerKey import RustedLockerKey
-from .WardingPillars import WardingPillars
+from .CrystalOfLight import CrystalOfLight
+from .HealingHerbs import HealingHerbs
+from .LanternBracket import LanternBracket
 from .Locker import Locker
 from .PrismLantern import PrismLantern
-from .LanternBracket import LanternBracket
+from .RustedLockerKey import RustedLockerKey
+from .Steles import Steles
+from .TeleportationFocus import TeleportationFocus
+from .WardingPillars import WardingPillars
+
+__all__ = [
+    "AncientAmulet",
+    "CoquinaRunes",
+    "CrystalOfLight",
+    "HealingHerbs",
+    "LanternBracket",
+    "Locker",
+    "PrismLantern",
+    "RustedLockerKey",
+    "Steles",
+    "TeleportationFocus",
+    "WardingPillars",
+]
