@@ -59,15 +59,15 @@ class GameController:
         """Return themed tuples: (possibly counted_item_name, item_description)."""
         item_tuples: List[Tuple[str, str]] = []
         inventory_summary = self.game.state.get_inventory_summary()
-        
+
         # Create a set to track which items we've already processed
         processed_items = set()
-        
+
         for item in self.game.state.inventory:
             item_name = item.get_name()
             if item_name in processed_items:
                 continue  # Skip duplicates, we already processed this item type
-            
+
             count = inventory_summary[item_name]
             if count > 1:
                 styled_item_name = f"[item_name]{count} {item_name}[/item_name]"
@@ -76,7 +76,7 @@ class GameController:
             item_description = item.description
             item_tuples.append((styled_item_name, item_description))
             processed_items.add(item_name)
-            
+
         return item_tuples
 
     def get_room(self) -> str:

@@ -11,7 +11,7 @@ class ResultPanel(ScrollableContainer):
         self.tooltip = "Command Result"
         self.content_widget = Static("", classes='room-text', markup=True)
         self.content_widget.can_focus = True
-        
+
     def on_mount(self) -> None:  # type: ignore[override]
         """Mount the inner static when the panel is added to the DOM."""
         self.mount(self.content_widget)

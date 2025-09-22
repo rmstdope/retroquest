@@ -108,7 +108,7 @@ class TextualApp(App):  # pylint: disable=too-many-instance-attributes
             return
         # If a popup already exists, queue the new one
         self._popup_queue.append((border_text, text, popup_type))
- 
+
     def close_popup(self, response: str | None = None) -> None:
         """Close current popup; handle queued popups and optional quit flow."""
         popup = self.get_widget_by_id("popup")
@@ -146,7 +146,9 @@ class TextualApp(App):  # pylint: disable=too-many-instance-attributes
         self.spell_panel.update_spells(self.controller.get_spells())
         self.handle_quests()
         if not self.controller.game.is_running:
-            self.open_popup("Quit Game", "Do you want to save before quitting?", PopupType.QUESTION)
+            self.open_popup(
+                "Quit Game", "Do you want to save before quitting?", PopupType.QUESTION
+            )
 
     def handle_quests(self) -> None:
         """Process queued quest state changes and open popups with sounds."""
@@ -171,7 +173,9 @@ class TextualApp(App):  # pylint: disable=too-many-instance-attributes
                 self.open_popup("Quest Activated", quest_popup, PopupType.INFO)
             else:
                 break
-        self.questlog_panel.update_questlog(self.controller.get_active_quests(), self.controller.get_completed_quests())
+        self.questlog_panel.update_questlog(
+            self.controller.get_active_quests(), self.controller.get_completed_quests()
+        )
 
     # Add default CSS for layout if not present
     BINDINGS = [("ctrl+q", "quit", "Quit")]
