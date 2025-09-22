@@ -5,4 +5,3 @@ from .PurifySpell import PurifySpell
 from .UnlockSpell import UnlockSpell
 
 __all__ = ["LightSpell", "PurifySpell", "UnlockSpell"]
-

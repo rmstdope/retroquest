@@ -43,9 +43,9 @@ class SubmergedAntechamber(Room):
         # Find an empty bracket
         empty = next(
             (
-                b for b in self.items 
+                b for b in self.items
                 if isinstance(b, LanternBracket) and not b.has_lantern
-            ), 
+            ),
             None
         )
         if empty is None:
