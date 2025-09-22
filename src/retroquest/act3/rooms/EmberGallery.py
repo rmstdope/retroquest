@@ -1,8 +1,12 @@
+"""Ember Gallery room for Act 3."""
+
 from ...engine.Room import Room
 
 
 class EmberGallery(Room):
+    """A vaulted cavern veined with cooling flows smelling of charcoal and iron."""
     def __init__(self) -> None:
+        """Initialize Ember Gallery with description and exits."""
         super().__init__(
             name="Ember Gallery",
             description=(

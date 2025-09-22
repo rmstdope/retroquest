@@ -9,6 +9,7 @@ class SubmergedAntechamber(Room):
     """Flooded antechamber with lantern mounting system for underwater passage."""
 
     def __init__(self) -> None:
+        """Initialize Submerged Antechamber with lantern brackets and exits."""
         super().__init__(
             name="Submerged Antechamber",
             description=(

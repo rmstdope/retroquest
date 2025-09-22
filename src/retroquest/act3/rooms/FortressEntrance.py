@@ -1,8 +1,12 @@
+"""Fortress Entrance room for Act 3."""
+
 from ...engine.Room import Room
 
 
 class FortressEntrance(Room):
+    """A blackstone bastion rising from a shattered ridge with gate sigils."""
     def __init__(self) -> None:
+        """Initialize Fortress Entrance with description and exits."""
         super().__init__(
             name="Entrance to Malakar's Fortress",
             description=(

@@ -17,6 +17,7 @@ class Locker(Item):
     """
 
     def __init__(self) -> None:
+        """Initialize Locker with description and locked state."""
         super().__init__(
             name="Locker",
             description=(

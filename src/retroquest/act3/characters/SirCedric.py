@@ -8,6 +8,7 @@ from ..Act3StoryFlags import FLAG_ACT3_MAIN_STARTED
 class SirCedric(Character):
     """A steadfast knight who aids the player in their quest against Malakar."""
     def __init__(self) -> None:
+        """Initialize Sir Cedric with description."""
         super().__init__(
             name="sir cedric",
             description=(
@@ -17,6 +18,7 @@ class SirCedric(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
+        """Return appropriate dialogue based on quest progress."""
         if game_state.get_story_flag(FLAG_ACT3_MAIN_STARTED):
             return (
                 "[character_name]Sir Cedric[/character_name]: The path is set. "

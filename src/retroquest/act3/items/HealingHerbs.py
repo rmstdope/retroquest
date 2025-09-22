@@ -16,6 +16,7 @@ class HealingHerbs(Item):
         for guided use.
     """
     def __init__(self) -> None:
+        """Initialize Healing Herbs with description and restrictions."""
         super().__init__(
             name="healing herbs",
             short_name="herbs",

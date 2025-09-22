@@ -10,6 +10,7 @@ from ..items.WardingPillars import WardingPillars
 class PurifySpell(Spell):
     """Act III variant of Purify, customized for Sunken Ruins interactions."""
     def __init__(self) -> None:
+        """Initialize Purify spell with description and behavior."""
         super().__init__(
             name="purify",
             description=(
@@ -19,6 +20,7 @@ class PurifySpell(Spell):
         )
 
     def cast_spell(self, game_state: GameState) -> str:
+        """Cast purify spell providing cleansing aura."""
         # Act III version has no global gating; it always responds with a cleansing aura
         return (
             f"[event]You cast [spell_name]{self.get_name()}[/spell_name].[/event]\n"
@@ -26,6 +28,7 @@ class PurifySpell(Spell):
         )
 
     def cast_on_item(self, game_state: GameState, target_item: Item) -> str:
+        """Cast purify on target item, with special handling for warding pillars."""
         # Special handling for the warding pillars in the Outer Wards
         if isinstance(target_item, WardingPillars):
             hook = getattr(game_state.current_room, 'cast_purify_on_pillars', None)
@@ -38,6 +41,7 @@ class PurifySpell(Spell):
         )
 
     def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
+        """Cast purify on target character to provide cleansing calm."""
         return (
             f"[event]You cast [spell_name]{self.get_name()}[/spell_name] on "
             f"[character_name]{target_character.get_name()}[/character_name].[/event]\n"

@@ -1,3 +1,5 @@
+"""Shoreline Markers room for Act 3."""
+
 from ...engine.GameState import GameState
 from ...engine.Room import Room
 from ..items import CoquinaRunes, Steles
@@ -7,6 +9,7 @@ class ShorelineMarkers(Room):
     """Shore location with weathered steles containing searchable coquina runes."""
 
     def __init__(self) -> None:
+        """Initialize Shoreline Markers with steles and exits."""
         super().__init__(
             name="Shoreline Markers",
             description=(

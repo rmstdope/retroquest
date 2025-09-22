@@ -18,6 +18,7 @@ class LanternBracket(Item):
     - Examine text changes based on lantern presence
     """
     def __init__(self) -> None:
+        """Initialize Lantern Bracket with description and properties."""
         super().__init__(
             name="Lantern Bracket",
             description=(

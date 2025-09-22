@@ -5,6 +5,7 @@ from ...engine.Room import Room
 class CollapsedGalleries(Room):
     """Passages pinched by fallen rock; dust motes hang in still air."""
     def __init__(self) -> None:
+        """Initialize Collapsed Galleries with description and exits."""
         super().__init__(
             name="Collapsed Galleries",
             description=(

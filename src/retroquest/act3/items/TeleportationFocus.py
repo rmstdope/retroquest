@@ -17,6 +17,7 @@ class TeleportationFocus(Item):
     """
 
     def __init__(self) -> None:
+        """Initialize Teleportation Focus with description and properties."""
         super().__init__(
             name="teleportation focus",
             short_name="focus",

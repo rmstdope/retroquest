@@ -21,6 +21,7 @@ class OuterWards(Room):
     - Sets FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED when quest completed
     """
     def __init__(self) -> None:
+        """Initialize Outer Wards with warding pillars and exits."""
         super().__init__(
             name="Outer Wards",
             description=(

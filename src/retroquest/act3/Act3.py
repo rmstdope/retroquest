@@ -87,6 +87,7 @@ class Act3(Act):
         )
 
     def get_act_intro(self) -> str:
+        """Return the introductory text for Act III."""
         return (
             "[bold]ACT III: THE AWAKENING[/bold]\n\n"
             "You and Sir Cedric return to Willowbrook, the village where it all began. "
@@ -100,6 +101,7 @@ class Act3(Act):
         )
 
     def is_completed(self, game_state: GameState) -> bool:
+        """Check if Act III is completed based on the completion flag."""
         # Act III completes when the fortress gate is opened and the endgame is triggered.
         return game_state.get_story_flag(FLAG_ACT3_COMPLETED)
 

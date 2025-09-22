@@ -1,3 +1,5 @@
+"""Tidal Causeway room and related items for Act 3."""
+
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ...engine.Room import Room
@@ -5,7 +7,10 @@ from ..Act3StoryFlags import FLAG_ACT3_SEA_SEALED_LETTER_FOUND
 
 
 class Mural(Item):
+    """A weathered mural along a half-drowned arch showing a guardian."""
+
     def __init__(self) -> None:
+        """Initialize the mural with its description."""
         super().__init__(
             name="mural",
             short_name="mural",
@@ -17,6 +22,7 @@ class Mural(Item):
         )
 
     def examine(self, game_state: GameState) -> str:
+        """Examine the mural to reveal hidden secrets or the letter."""
         if game_state.get_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_FOUND):
             return (
                 "[event]The mural's scene is clear now: a guardian's silhouette "
@@ -37,7 +43,10 @@ class Mural(Item):
 
 
 class SeaSealedLetter(Item):
+    """A scrap of vellum preserved by salt-crystal varnish."""
+
     def __init__(self) -> None:
+        """Initialize the sea-sealed letter with its description."""
         super().__init__(
             name="Sea-Sealed Letter",
             short_name="letter",
@@ -49,6 +58,7 @@ class SeaSealedLetter(Item):
         )
 
     def picked_up(self, game_state: GameState) -> str | None:
+        """Handle letter pickup and set story flag."""
         if not game_state.get_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_FOUND):
             game_state.set_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_FOUND, True)
         return (
@@ -58,7 +68,10 @@ class SeaSealedLetter(Item):
 
 
 class TidalCauseway(Room):
+    """Moon-washed causeways linking broken arches to half-drowned plazas."""
+
     def __init__(self) -> None:
+        """Initialize Tidal Causeway with mural and exits."""
         super().__init__(
             name="Tidal Causeway",
             description=(

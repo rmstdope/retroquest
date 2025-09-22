@@ -18,6 +18,7 @@ class Steles(Item):
     - Contains narrative hints about ward magic and tidebound rituals
     """
     def __init__(self) -> None:
+        """Initialize Steles with description and properties."""
         super().__init__(
             name="Steles",
             description=(
