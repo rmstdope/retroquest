@@ -1,3 +1,5 @@
+"""Tests for the Room class and room mechanics."""
+
 import pytest
 from retroquest.engine.Room import Room
 from retroquest.engine.Item import Item

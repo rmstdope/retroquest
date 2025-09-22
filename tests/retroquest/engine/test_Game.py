@@ -10,25 +10,25 @@ from retroquest.engine.Act import Act
 # --- Mock Room classes for testing ---
 class MockRoom(Room):
     """Mock room class for testing purposes."""
-    
+
     def __init__(self, name, description="A mock room."):
         """Initialize a mock room with the given name and description."""
         super().__init__(name, description)
         self.items = []
         self.characters = []
-        
+
     def can_leave(self):
         """Always allow leaving the room."""
         return True
-        
+
     def add_exit(self, direction, room):
         """Add an exit in the given direction to the specified room."""
         self.exits[direction] = room
-        
+
     def add_item(self, item):
         """Add an item to the room."""
         self.items.append(item)
-        
+
     def add_character(self, character):
         """Add a character to the room."""
         self.characters.append(character)
@@ -56,7 +56,7 @@ class TakeMockItem(Item):
 
 class TakeMockAct(Act):
     """Mock act class for testing take command functionality."""
-    
+
     def __init__(self):
         """Initialize the mock act with test rooms."""
         test_room = Room("Test Room", "A room for testing the take command.")
@@ -68,7 +68,7 @@ class TakeMockAct(Act):
             music_file='',
             music_info=''
         )
-        
+
     def is_completed(self, _game_state: GameState) -> bool:
         """Return True when the act's completion conditions are met."""
         return False

@@ -1,1 +1,1 @@
-# Test package for Act 2
+"""Test package for Act 2 tests."""
