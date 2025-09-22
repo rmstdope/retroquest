@@ -20,7 +20,7 @@ class CrystalFocus(Item):
         )
 
     def use_item(self, _game_state: GameState) -> str:
-        # This item enhances magical understanding and comprehension of ancient texts
+        """This item enhances magical understanding and comprehension of ancient texts."""
         return (
             "[success]You focus your magical energy through the "
             "[item_name]Crystal Focus[/item_name]. "

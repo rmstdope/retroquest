@@ -1,8 +1,8 @@
-from ...engine.GameState import GameState
+"""Wandering boots item that aids in travel."""
 from ...engine.Item import Item
-from typing import Any
 
 class WanderingBoots(Item):
+    """Wandering boots item that aids in travel."""
     def __init__(self) -> None:
         super().__init__(
             name="wandering boots",

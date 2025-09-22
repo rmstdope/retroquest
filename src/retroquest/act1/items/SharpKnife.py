@@ -1,7 +1,8 @@
+"""A sharp knife item that can be used to cut through vines and other obstacles."""
 from ...engine.Item import Item
-from ...engine.GameState import GameState
 
 class SharpKnife(Item):
+    """A sharp knife item that can be used to cut through vines and other obstacles."""
     def __init__(self) -> None:
         super().__init__(
             name="sharp knife",
@@ -16,4 +17,3 @@ class SharpKnife(Item):
         if isinstance(other_item, Vines):
             return other_item.use_with(game_state, self)
         return super().use_with(game_state, other_item)
-

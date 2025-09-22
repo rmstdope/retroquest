@@ -1,7 +1,9 @@
+"""A kindly priest character who offers blessings and lore about Eldoria."""
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 
 class Priest(Character):
+    """A kindly priest character who offers blessings and lore about Eldoria."""
     def __init__(self) -> None:
         super().__init__(
             name="priest",

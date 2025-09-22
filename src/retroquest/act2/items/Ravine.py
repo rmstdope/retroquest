@@ -1,24 +1,4 @@
-"""Ravine (Act II Environmental Hazard Item)
-
-Narrative Role:
-    Environmental obstacle revealing stranded merchant caravan and enabling a rescue sequence using Quality Rope.
-    Provides geographic drama and introduces vertical traversal challenge motif.
-
-Key Mechanics / Interactions:
-    - Non-carriable terrain feature; examine() reveals trapped caravan (lore + hint of required equipment).
-    - use_with delegates rope interaction to QualityRope for rescue logic & flag setting/ item spawning.
-    - Does not itself manage story flags—keeps hazard passive while tool drives state change.
-
-Story Flags:
-    - Sets/Reads: (none directly here)
-
-Progression Effects:
-    Facilitates FLAG_FOUND_LOST_CARAVAN (set inside QualityRope) enabling downstream gratitude rewards / quest resolution.
-
-Design Notes:
-    - Delegation keeps hazard objects simple; pattern can extend to cliffs, chasms, or collapsed bridges.
-    - Future enhancement: add risk/skill checks before allowing rescue, parameterizing difficulty.
-"""
+"""Ravine: Steep ravine environmental hazard used in a rescue sequence."""
 
 from typing import TYPE_CHECKING
 from ...engine.Item import Item
@@ -28,21 +8,28 @@ if TYPE_CHECKING:
     from ...engine.GameState import GameState
 
 class Ravine(Item):
-    """A steep ravine discovered through forest speech. This geographic feature cannot be carried."""
+    """A steep ravine discovered through forest speech.
+    This geographic feature cannot be carried.
+    """
 
     def __init__(self) -> None:
         super().__init__(
             name="ravine",
-            description="A steep, rocky ravine that cuts deep into the forest floor. The walls are too treacherous to climb safely without proper equipment.",
-            can_be_carried=False  # This item cannot be picked up
+            description=(
+                "A steep, rocky ravine that cuts deep into the forest floor. The walls "
+                "are too treacherous to climb safely without proper equipment."
+            ),
+            can_be_carried=False,  # This item cannot be picked up
         )
 
     def examine(self, _game_state: 'GameState') -> str:
-        return ("Looking down into the ravine, you can see the remnants of a merchant caravan "
-                "trapped at the bottom. The wooden wagon wheels are visible among the rocks, "
-                "and you can hear faint voices calling for help. The walls are steep and dangerous - "
-                "you'll need rope or other climbing equipment to safely reach the bottom and see "
-                "what is there.")
+        return (
+            "Looking down into the ravine, you can see the remnants of a merchant caravan "
+            "trapped at the bottom. The wooden wagon wheels are visible among the rocks, "
+            "and you can hear faint voices calling for help. The walls are steep and "
+            "dangerous - you'll need rope or other climbing equipment to safely reach the "
+            "bottom and see what is there."
+        )
 
     def use_with(self, game_state: 'GameState', other_item) -> str:
         """Handle using the ravine with other items. Delegates to Quality Rope if applicable."""
