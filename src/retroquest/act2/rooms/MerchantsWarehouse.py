@@ -25,9 +25,10 @@ class MerchantsWarehouse(Room):
         super().__init__(
             name="Merchant's Warehouse",
             description=(
-                "A large stone building packed with goods from distant lands. Crates and barrels form "
-                "narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the "
-                "cool still air. This is where the most valuable inventory rests under quiet watch."
+                "A large stone building packed with goods from distant lands. Crates and "
+                "barrels form narrow corridors between tall shelving. Exotic spice and "
+                "lacquer aromas mingle in the cool still air. This is where the most valuable "
+                "inventory rests under quiet watch."
             ),
             items=[],
             characters=[],

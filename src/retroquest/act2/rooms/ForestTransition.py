@@ -33,10 +33,11 @@ class ForestTransition(Room):
         super().__init__(
             name="Forest Transition",
             description=(
-                "The boundary between the civilized mountain paths and the wild Enchanted Forest. Ancient "
-                "standing stones mark the threshold, carved with protective runes that pulse with faint "
-                "magic. The air grows thicker and you sense ancient power awakening. Beyond lies a realm "
-                "where normal rules may not apply. A robed figure sits peacefully among the stones."
+                "The boundary between the civilized mountain paths and the wild Enchanted Forest. "
+                "Ancient standing stones mark the threshold, carved with protective runes that "
+                "pulse with faint magic. The air grows thicker and you sense ancient power "
+                "awakening. Beyond lies a realm where normal rules may not apply. "
+                "A robed figure sits peacefully among the stones."
             ),
             items=[StandingStones()],
             characters=[ForestHermit()],

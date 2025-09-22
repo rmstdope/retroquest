@@ -29,10 +29,10 @@ class SilverStagInn(Room):
         super().__init__(
             name="The Silver Stag Inn",
             description=(
-                "A three-story inn glows with warm yellow light. Conversations from travelers and locals "
-                "merge into a comforting din while tales are traded over bread and ale. Stag mounts and "
-                "adventuring trophies line the walls. The place feels welcoming; information flows here "
-                "as freely as the drink."
+                "A three-story inn glows with warm yellow light. Conversations from travelers "
+                "and locals merge into a comforting din while tales are traded over bread and "
+                "ale. Stag mounts and adventuring trophies line the walls. The place feels "
+                "welcoming; information flows here as freely as the drink."
             ),
             items=[RoomKey(), Door()],
             characters=[InnkeeperMarcus(), BarmaidElena()],
@@ -44,8 +44,8 @@ class SilverStagInn(Room):
         if "east" not in self.exits:
             self.exits["east"] = "InnRooms"
             return (
-                "[success]The key turns with a soft click, unlocking access to the private inn rooms "
-                "upstairs. You can now 'go east' to enter them.[/success]"
+                "[success]The key turns with a soft click, unlocking access to the private "
+                "inn rooms upstairs. You can now 'go east' to enter them.[/success]"
             )
         else:
             return "[info]The inn rooms are already unlocked.[/info]"

@@ -4,45 +4,26 @@ from ...engine.Room import Room
 from ..characters.CourtHerald import CourtHerald
 from ..characters.Historians import Historians
 from ..characters.LordCommander import LordCommander
-from ..Act2StoryFlags import FLAG_COURT_HERALD_FORMAL_PRESENTATION, FLAG_RESEARCHED_FAMILY_HERITAGE, FLAG_SHOWED_JOURNAL_TO_HISTORIANS
+from ..Act2StoryFlags import (
+    FLAG_COURT_HERALD_FORMAL_PRESENTATION,
+    FLAG_RESEARCHED_FAMILY_HERITAGE,
+    FLAG_SHOWED_JOURNAL_TO_HISTORIANS
+)
 from ...engine.GameState import GameState
 
 class GreatHall(Room):
-    """Central audience chamber with multi-flag heritage research gating.
-
-    Narrative Role:
-        Political and historical nexus where lineage revelations occur under
-        formal protocol. Bridges social validation (presentation) with guided
-        scholarly assistance (historians) to unlock ancestry exposition.
-
-    Key Mechanics:
-        - ``search()`` requires sequential flags: formal presentation, then
-          historian guidance.
-        - Success sets ``FLAG_RESEARCHED_FAMILY_HERITAGE`` and returns lore.
-
-    Story Flags:
-        - Reads: ``FLAG_COURT_HERALD_FORMAL_PRESENTATION``,
-          ``FLAG_SHOWED_JOURNAL_TO_HISTORIANS``.
-        - Sets: ``FLAG_RESEARCHED_FAMILY_HERITAGE``.
-
-    Contents:
-        - NPCs: ``CourtHerald``, ``Historians``, ``LordCommander``.
-        - Items: None (archives abstracted into search interaction).
-
-    Design Notes:
-        Demonstrates layered validation; a decorator or helper abstraction could
-        reduce duplication if similar patterns proliferate.
-    """
+    """Central audience chamber with multi-flag heritage research gating."""
 
     def __init__(self) -> None:
         """Initialize great hall with protocol and scholarly NPC ensemble."""
         super().__init__(
             name="Great Hall",
             description=(
-                "A magnificent hall with soaring ceilings supported by massive stone columns. Tapestries "
-                "depicting legendary battles cover the walls, and a throne sits on a raised dais at the far "
-                "end. Sunlight streams through tall stained-glass windows, casting colorful patterns on the "
-                "stone floor. This is where the lords of Greendale hold court and make important decisions."
+                "A magnificent hall with soaring ceilings supported by massive stone columns. "
+                "Tapestries depicting legendary battles cover the walls, and a throne sits on "
+                "a raised dais at the far end. Sunlight streams through tall stained-glass "
+                "windows, casting colorful patterns on the stone floor. This is where the "
+                "lords of Greendale hold court and make important decisions."
             ),
             items=[],
             characters=[CourtHerald(), Historians(), LordCommander()],
@@ -67,18 +48,19 @@ class GreatHall(Room):
             )
         if not game_state.get_story_flag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS):
             return (
-                "[failure]The archives are vast, filled with countless books and scrolls. You don't "
-                "know where to start. You need guidance from someone familiar with these records."
-                "[/failure]"
+                "[failure]The archives are vast, filled with countless books and scrolls. "
+                "You don't know where to start. You need guidance from someone familiar "
+                "with these records.[/failure]"
             )
         game_state.set_story_flag(FLAG_RESEARCHED_FAMILY_HERITAGE, True)
         return (
-            "[success]With the historians' expert guidance, you navigate through the vast archives to "
-            "find records mentioning Willowbrook and your family lineage. The ancient chronicles "
-            "reveal that your ancestors, the Ravencrest family, were among the first settlers of "
-            "Willowbrook. For generations, they served as protectors of the realm, wielding "
-            "hereditary magical abilities passed down through bloodlines. Your family has long been "
-            "connected to the ancient tradition of safeguarding the balance between the natural and "
-            "mystical worlds, with each generation producing individuals capable of channeling "
-            "protective magic to defend their community.[/success]"
+            "[success]With the historians' expert guidance, you navigate through the vast "
+            "archives to find records mentioning Willowbrook and your family lineage. The "
+            "ancient chronicles reveal that your ancestors, the Ravencrest family, were "
+            "among the first settlers of Willowbrook. For generations, they served as protectors "
+            "of the realm, wielding hereditary magical abilities passed down through bloodlines. "
+            "Your family has long been connected to the ancient tradition of safeguarding the "
+            "balance between the natural and mystical worlds, with each generation producing "
+            "individuals capable of channeling protective magic to defend their community."
+            "[/success]"
         )

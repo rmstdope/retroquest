@@ -31,9 +31,10 @@ class MainSquare(Room):
         super().__init__(
             name="Main Square",
             description=(
-                "The heart of Greendale pulses with activity. A grand fountain shows ancient heroes "
-                "locked in battle with mythical beasts. Merchants hawk wares from bright stalls while "
-                "stone buildings with red roofs frame the space. Castle towers rise to the north, and "
+                "The heart of Greendale pulses with activity. A grand fountain shows ancient "
+                "heroes locked in battle with mythical beasts. Merchants hawk wares from "
+                "bright stalls while townsfolk bustle about, exchanging news and gossip. Stone "
+                "buildings with red roofs frame the space. Castle towers rise to the north, and "
                 "the energetic flow of people makes it clear important things happen here."
             ),
             items=[CityNoticeBoard(), MerchantsFlyer()],

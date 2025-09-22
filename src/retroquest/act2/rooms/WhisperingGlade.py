@@ -6,8 +6,8 @@ class WhisperingGlade(Room):
     """Tranquil forest clearing with latent lore potential (Act II).
 
     Narrative Role:
-        Provides a quiet tonal contrast to denser forest areas and a future anchor for nature, riddle,
-        or restorative interactions.
+        Provides a quiet tonal contrast to denser forest areas and a future anchor
+        for nature, riddle, or restorative interactions.
 
     Current Mechanics:
         Pass-through location reached after prerequisite flags at Forest Entrance; presently no
@@ -26,8 +26,8 @@ class WhisperingGlade(Room):
             description=(
                 "A peaceful meadow opens around a small stream that babbles over smooth stones. "
                 "Wildflowers blanket the ground and butterflies drift through warm sunlight. The "
-                "water's murmur soothes, yet faint voices ride the breeze — whispers hinting at ancient "
-                "secrets. Near the crystal stream you sense watchful, unseen guardians."
+                "water's murmur soothes, yet faint voices ride the breeze — whispers hinting at "
+                "ancient secrets. Near the crystal stream you sense watchful, unseen guardians."
             ),
             items=[],
             characters=[],

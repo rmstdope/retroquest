@@ -33,10 +33,10 @@ class InnRooms(Room):
         super().__init__(
             name="Inn Rooms",
             description=(
-                "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a "
-                "cozy bed, a writing desk, and a window overlooking the Market District. The rooms "
-                "are clean and well-maintained, offering a peaceful retreat for travelers. Faint "
-                "conversation drifts up from the common room below."
+                "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room "
+                "has a cozy bed, a writing desk, and a window overlooking the Market District. "
+                "The rooms are clean and well-maintained, offering a peaceful retreat for "
+                "travelers. Faint conversation drifts up from the common room below."
             ),
             items=[Coins() for _ in range(20)],
             characters=[],
@@ -61,13 +61,14 @@ class InnRooms(Room):
             self.journal_found = True
             return (
                 "[event]You search the inn rooms thoroughly.[/event]\n\nAs you examine the room "
-                "carefully, you notice a wooden floorboard near the bed is slightly raised. Pressing "
-                "it shifts the board with a soft creak. Lifting it reveals a hidden space containing a "
+                "carefully, you notice a wooden floorboard near the bed is slightly raised. "
+                "Pressing it shifts the board with a soft creak. Lifting it reveals a hidden "
+                "space containing a "
                 "leather-bound journal deliberately concealed by a previous guest. The pages hold "
                 "detailed notes and observations that may aid your journey."
             )
         else:
             return (
-                "[event]You search the inn rooms again.[/event]\n\nYou've already searched this room "
-                "and found everything of interest."
+                "[event]You search the inn rooms again.[/event]\n\nYou've already searched "
+                "this room and found everything of interest."
             )

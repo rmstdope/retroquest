@@ -33,9 +33,10 @@ class HiddenLibrary(Room):
             name="Hidden Library",
             description=(
                 "Discovered beneath Greendale through a secret passage, this ancient library holds "
-                "countless volumes of magical lore. Glowing crystals provide soft illumination and the "
-                "air hums with residual energy. Protective enchantments shimmer around the most "
-                "valuable texts. This repository of knowledge may unlock mysteries of your destiny."
+                "countless volumes of magical lore. Glowing crystals provide soft illumination and "
+                "the air hums with residual energy. Protective enchantments shimmer around the "
+                "most valuable texts. This repository of knowledge may unlock mysteries of your "
+                "destiny."
             ),
             items=[AncientChronicle(), ProtectiveEnchantments()],
             characters=[SpectralLibrarian()],

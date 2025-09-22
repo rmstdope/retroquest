@@ -32,12 +32,13 @@ class HeartOfTheForest(Room):
         super().__init__(
             name="Heart of the Forest",
             description=(
-                "The deepest part of the Enchanted Forest, where reality feels fluid and magic flows "
-                "like water. Impossible colors paint the landscape and the air sparkles with latent "
-                "energy. A colossal tree dominates the center, its branches seeming to uphold the sky. "
-                "Before it rests an ancient altar carved from starstone, runes pulsing with otherworldly "
-                "light. This is Nyx's domain where profound secrets surface. The sacred grove path is "
-                "the only passage into this mystical heart."
+                "The deepest part of the Enchanted Forest, where reality feels fluid and "
+                "magic flows like water. Impossible colors paint the landscape and the air "
+                "sparkles with latent energy. A colossal tree dominates the center, its "
+                "branches seeming to uphold the sky. Before it rests an ancient altar carved "
+                "from starstone, runes pulsing with otherworldly light. This is Nyx's domain "
+                "where profound secrets surface. The sacred grove path is the only passage into "
+                "this mystical heart."
             ),
             items=[OfferingAltar()],
             characters=[],

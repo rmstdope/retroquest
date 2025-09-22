@@ -39,13 +39,13 @@ class ForestEntrance(Room):
         super().__init__(
             name="Forest Entrance",
             description=(
-                "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled "
-                "sunlight filters through the dense canopy, and the path ahead disappears into green "
-                "shadows. The air is alive with birds and rustling leaves, but beneath it lies an "
-                "expectant silence, as if the forest itself is watching. Two paths diverge deeper: "
-                "one toward an ancient grove—the sacred gateway to the forest's heart—and one toward "
-                "a tranquil glade. Small motes of light dance between the trees: forest sprites "
-                "watching your every move."
+                "Massive trees create a natural cathedral as you enter the Enchanted Forest. "
+                "Dappled sunlight filters through the dense canopy, and the path ahead "
+                "disappears into green shadows. The air is alive with birds and rustling leaves, "
+                "but beneath it lies an expectant silence, as if the forest itself is watching. "
+                "Two paths diverge deeper: one toward an ancient grove—the sacred gateway to the "
+                "forest's heart—and one toward a tranquil glade. Small motes of light dance "
+                "between the trees: forest sprites watching your every move."
             ),
             items=[EnchantedAcorn()],
             characters=[ForestSprites()],
