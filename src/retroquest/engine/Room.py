@@ -1,3 +1,4 @@
+"""Base class for all rooms in RetroQuest."""
 from typing import Union
 from .Item import Item  # Added import
 from .Character import Character # Added import
@@ -8,7 +9,9 @@ class Room:
     Base class for all rooms in RetroQuest.
     Inherit from this class to define specific rooms.
     """
-    def __init__(self, name: str, description: str, items: Union[list[Item], None] = None, characters: Union[list[Character], None] = None, exits: Union[dict[str, str], None] = None) -> None:
+    def __init__(self, name: str, description: str, items: Union[list[Item], None] = None,
+                 characters: Union[list[Character], None] = None,
+                 exits: Union[dict[str, str], None] = None) -> None:
         self.name = name
         self.description = description
         self.items = items if items is not None else []
@@ -85,7 +88,7 @@ class Room:
             for item in visible_items:
                 item_name = item.get_name()
                 item_counts[item_name] = item_counts.get(item_name, 0) + 1
-            
+
             # Create formatted item list with counts
             item_descriptions = []
             for item_name, count in item_counts.items():
@@ -93,16 +96,21 @@ class Room:
                     item_descriptions.append(f"[item_name]{count} {item_name}[/item_name]")
                 else:
                     item_descriptions.append(f"[item_name]{item_name}[/item_name]")
-            
+
             item_names = ', '.join(item_descriptions)
             desc += f"\nItems you can see: {item_names}"
         if self.characters:
             # Use get_name for character instances
-            character_names = ', '.join(f"[character_name]{c.get_name()}[/character_name]" for c in self.characters)
+            character_names = ', '.join(
+                f"[character_name]{c.get_name()}[/character_name]" for c in self.characters
+            )
             desc += f"\nCharacters present: {character_names}"
         exits = self.get_exits(game_state)
         if exits:
-            exit_names = ', '.join(f"[exits]{direction}[/exits] ({destination})" for direction, destination in exits.items())
+            exit_names = ', '.join(
+                f"[exits]{direction}[/exits] ({destination})"
+                for direction, destination in exits.items()
+            )
             desc += f"\nExits: {exit_names}"
         return desc
 

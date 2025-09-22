@@ -26,7 +26,7 @@ class Quest:
 
     def check_update(self, game_state: GameState) -> bool:
         """
-        Override in subclasses to update quest state dynamically. Return True if quest log 
+        Override in subclasses to update quest state dynamically. Return True if quest log
         should update.
         """
         return False

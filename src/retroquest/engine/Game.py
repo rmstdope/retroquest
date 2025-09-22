@@ -1,3 +1,4 @@
+"""Main game engine class for RetroQuest."""
 from typing import Any
 from enum import Enum, auto
 
@@ -32,8 +33,8 @@ class Game:
         # Use the first room in current act's rooms as the starting room
         starting_room = next(iter(self.acts[self.current_act].rooms.values()))
         self.state = GameState(
-            starting_room, 
-            all_rooms=self.acts[self.current_act].rooms, 
+            starting_room,
+            all_rooms=self.acts[self.current_act].rooms,
             all_quests=self.acts[self.current_act].quests
         )
         self.acts[self.current_act].setup_gamestate(self.state)
@@ -59,7 +60,7 @@ class Game:
 
     def start_music(self) -> None:
         """
-        Start act music in a separate thread so it doesn't block the prompt. 
+        Start act music in a separate thread so it doesn't block the prompt.
         If music is already playing, stop it first.
         """
         def play_music() -> None:
@@ -96,8 +97,8 @@ class Game:
                     # Transition to next act
                     starting_room = next(iter(self.acts[self.current_act].rooms.values()))
                     self.state = GameState(
-                        starting_room, 
-                        all_rooms=self.acts[self.current_act].rooms, 
+                        starting_room,
+                        all_rooms=self.acts[self.current_act].rooms,
                         all_quests=self.acts[self.current_act].quests
                     )
                     self.acts[self.current_act].setup_gamestate(self.state)
@@ -135,7 +136,7 @@ class Game:
             self.command_result = self.command_parser.parse(data)
         else:
             self.command_result = ''
-        
+
     def is_act_running(self) -> bool:
         """Return True if the current act is running."""
         return self.run_state == GameRunState.ACT_RUNNING
@@ -192,40 +193,40 @@ Welcome to
         all_items = self.state.current_room.get_items() + self.state.inventory
         item_names = [item.get_name().lower() for item in all_items]
         item_short_names = [
-            item.get_short_name().lower() 
-            for item in all_items 
+            item.get_short_name().lower()
+            for item in all_items
             if item.get_short_name()
         ]
         all_item_names = item_names + item_short_names
 
         inventory_item_names = [item.get_name().lower() for item in self.state.inventory]
         inventory_item_short_names = [
-            item.get_short_name().lower() 
-            for item in self.state.inventory 
+            item.get_short_name().lower()
+            for item in self.state.inventory
             if item.get_short_name()
         ]
         all_inventory_item_names = inventory_item_names + inventory_item_short_names
 
         room_item_names = [item.get_name().lower() for item in self.state.current_room.get_items()]
         room_item_short_names = [
-            item.get_short_name().lower() 
-            for item in self.state.current_room.get_items() 
+            item.get_short_name().lower()
+            for item in self.state.current_room.get_items()
             if item.get_short_name()
         ]
         all_room_item_names = room_item_names + room_item_short_names
 
         character_names = [
-            char.get_name().lower() 
+            char.get_name().lower()
             for char in self.state.current_room.get_characters()
         ]
         spell_names = [spell.get_name().lower() for spell in self.state.known_spells]
         exit_names = {
-            direction: None 
+            direction: None
             for direction in self.state.current_room.get_exits(self.state)
         }
         file_names = {
-            f: None 
-            for f in os.listdir('.') 
+            f: None
+            for f in os.listdir('.')
             if f.endswith('.txt') and os.path.isfile(f)
         }
 
@@ -242,7 +243,7 @@ Welcome to
         # Build directional completions based on actual exits
         directional_completions = {}
         available_exits = self.state.current_room.get_exits(self.state)
-        
+
         # Short directions
         if 'north' in available_exits:
             directional_completions['n'] = None
@@ -252,7 +253,7 @@ Welcome to
             directional_completions['e'] = None
         if 'west' in available_exits:
             directional_completions['w'] = None
-            
+
         # Long directions
         for direction in ['north', 'south', 'east', 'west']:
             if direction in available_exits:
@@ -275,18 +276,18 @@ Welcome to
             'speak': {'to': build_nested_names(character_names)},
             'converse': {'with': build_nested_names(character_names)},
             'give': {
-                **{k: {'to': {**build_nested_names(character_names)}} 
+                **{k: {'to': {**build_nested_names(character_names)}}
                    for k in all_inventory_item_names}
             },
             'hand': build_nested_names(all_inventory_item_names),
             'buy': {
-                **{k: {'from': {**build_nested_names(character_names)}} 
+                **{k: {'from': {**build_nested_names(character_names)}}
                    for k in all_room_item_names}
             },
 
             'look': {
                 'at': {
-                    **build_nested_names(all_item_names), 
+                    **build_nested_names(all_item_names),
                     **build_nested_names(character_names)
                 },
                 **build_nested_names(all_item_names),
@@ -296,15 +297,15 @@ Welcome to
             'observe': None,
             'survey': None,
             'inspect': {
-                **build_nested_names(all_item_names), 
+                **build_nested_names(all_item_names),
                 **build_nested_names(character_names)
             },
             'examine': {
-                **build_nested_names(all_item_names), 
+                **build_nested_names(all_item_names),
                 **build_nested_names(character_names)
             },
             'check': {
-                **build_nested_names(all_item_names), 
+                **build_nested_names(all_item_names),
                 **build_nested_names(character_names)
             },
             'read': build_nested_names(all_item_names),
@@ -320,9 +321,9 @@ Welcome to
             'discard': build_nested_names(all_inventory_item_names),
             'use': {
                 **{k: {
-                    '@': None, 
+                    '@': None,
                     'with': {
-                        **build_nested_names(all_item_names), 
+                        **build_nested_names(all_item_names),
                         **build_nested_names(character_names)
                     }
                 } for k in all_item_names}
@@ -340,9 +341,9 @@ Welcome to
 
             'cast': {
                 **{k: {
-                    '@': None, 
+                    '@': None,
                     'on': {
-                        **build_nested_names(all_item_names), 
+                        **build_nested_names(all_item_names),
                         **build_nested_names(character_names)
                     }
                 } for k in spell_names}
@@ -368,7 +369,7 @@ Welcome to
         def split_multiword_keys(comp_dict: Any) -> Any:
             if not isinstance(comp_dict, dict):
                 return comp_dict
-                
+
             new_dict = {}
             for key, value in comp_dict.items():
                 parts = key.split()
@@ -401,12 +402,12 @@ Welcome to
         character_to_examine = None
         target = target.lower()
         for character in self.state.current_room.get_characters():
-            if (character_to_examine is None and 
+            if (character_to_examine is None and
                 character.get_name().lower() == target):
                 character_to_examine = character
         return character_to_examine
 
-    def find_item(self, target: str, look_in_inventory: bool = True, 
+    def find_item(self, target: str, look_in_inventory: bool = True,
                   look_in_room: bool = True) -> Item:
         """
         Find an item by its name or short name in the inventory and/or current room.
@@ -417,20 +418,20 @@ Welcome to
         # Check inventory first
         if look_in_inventory:
             for item in self.state.inventory:
-                if (item_to_examine is None and 
-                    (item.get_name().lower() == target or 
+                if (item_to_examine is None and
+                    (item.get_name().lower() == target or
                      item.get_short_name().lower() == target)):
                     item_to_examine = item
         # Then check items in the current room
         if look_in_room:
             for item in self.state.current_room.get_items():
-                if (item_to_examine is None and 
-                    (item.get_name().lower() == target or 
+                if (item_to_examine is None and
+                    (item.get_name().lower() == target or
                      item.get_short_name().lower() == target)):
                     item_to_examine = item
         return item_to_examine
 
-    def find_all_items(self, target: str, look_in_inventory: bool = True, 
+    def find_all_items(self, target: str, look_in_inventory: bool = True,
                        look_in_room: bool = True) -> list[Item]:
         """
         Find all items by their name or short name in the inventory and/or current room.
@@ -441,13 +442,13 @@ Welcome to
         # Check inventory first
         if look_in_inventory:
             for item in self.state.inventory:
-                if (item.get_name().lower() == target or 
+                if (item.get_name().lower() == target or
                     item.get_short_name().lower() == target):
                     matching_items.append(item)
         # Then check items in the current room
         if look_in_room:
             for item in self.state.current_room.get_items():
-                if (item.get_name().lower() == target or 
+                if (item.get_name().lower() == target or
                     item.get_short_name().lower() == target):
                     matching_items.append(item)
         return matching_items
@@ -455,10 +456,10 @@ Welcome to
     def move(self, direction: str, _arg: str = None) -> str:
         """Move the player in the specified direction."""
         exits = self.state.current_room.get_exits(self.state)
-        
+
         # Special handling for MainSquare navigation restriction
-        if (self.state.current_room.name == "Main Square" and 
-            not self.state.get_story_flag("used_city_map") and 
+        if (self.state.current_room.name == "Main Square" and
+            not self.state.get_story_flag("used_city_map") and
             direction != "south"):
             # Check if this would have been a valid direction with the map
             all_exits = self.state.current_room.exits  # Get unrestricted exits
@@ -469,7 +470,7 @@ Welcome to
                     "buildings. Eventually, you find your way back to the Main Square, "
                     "feeling disoriented.[/event]"
                 )
-        
+
         if direction in exits:
             next_room_key = exits[direction]
             if next_room_key in self.state.all_rooms:
@@ -548,7 +549,7 @@ Welcome to
         """Examine a specific item or character."""
         if not target:  # Check if target is an empty string or None
             return "Examine what?"
-        
+
         # Check for items and characters as usual
         item_to_examine = self.find_item(target)
         if item_to_examine:
@@ -563,8 +564,8 @@ Welcome to
         # Print all visited rooms and their exits, each exit on a new indented line
         visited = set(self.state.visited_rooms)
         room_objs = {
-            name: room 
-            for name, room in self.state.all_rooms.items() 
+            name: room
+            for name, room in self.state.all_rooms.items()
             if room.name in visited
         }
         if not room_objs:
@@ -576,8 +577,8 @@ Welcome to
             if exits:
                 for direction, dest in exits.items():
                     dest_name = (
-                        self.state.all_rooms[dest].name 
-                        if dest in self.state.all_rooms 
+                        self.state.all_rooms[dest].name
+                        if dest in self.state.all_rooms
                         else dest
                     )
                     output.append(f"    {direction} -> [room_name]{dest_name}[/room_name]")
@@ -613,10 +614,10 @@ Welcome to
         )
         if not items_to_take:
             return f"[failure]There is no '{item}' here to take.[/failure]"
-        
+
         taken_items = []
         prevented_items = []
-        
+
         for item_to_take in items_to_take:
             no_pickup = item_to_take.prevent_pickup()
             if no_pickup:
@@ -625,14 +626,14 @@ Welcome to
             else:
                 self.state.current_room.items.remove(item_to_take)
                 self.state.inventory.append(item_to_take)
-                
+
                 # Call picked_up on the item
                 pickup_message = item_to_take.picked_up(self.state)
                 taken_items.append((item_to_take, pickup_message))
-        
+
         # Build response message
         responses = []
-        
+
         if taken_items:
             if len(taken_items) == 1:
                 item_obj, pickup_message = taken_items[0]
@@ -653,11 +654,11 @@ Welcome to
                 for item_obj, pickup_message in taken_items:
                     if pickup_message:
                         responses.append(pickup_message)
-        
+
         # Add any prevention messages
         for item_obj, no_pickup in prevented_items:
             responses.append(no_pickup)
-        
+
         if not taken_items and prevented_items:
             # All items were prevented from being picked up
             return "\n".join(responses)
@@ -695,7 +696,7 @@ Welcome to
             return "[failure]What do you want to say?[/failure]"
         if not character_name:
             return "[failure]Who do you want to say that to?[/failure]"
-            
+
         character_to_speak_to = self.find_character(character_name)
         if character_to_speak_to:
             return character_to_speak_to.say_to(word, self.state)
@@ -705,7 +706,7 @@ Welcome to
                 f"'[character_name]{character_name}[/character_name]' here to speak to.[/failure]"
             )
 
-    def split_command(self, command_args: str, command: str, 
+    def split_command(self, command_args: str, command: str,
                       delimiter: str) -> tuple[str, None, str, None, str]:
         """Split command arguments using a delimiter (e.g., 'give item to character')."""
         # Expected format: "<command> <item/character_name> <delimiter> <item/character_name>"
@@ -772,7 +773,8 @@ Welcome to
 
         if not item_obj_1:
             return (
-                f"[failure]You don't have a '{item_name_1}' to use, and there isn't one here.[/failure]"
+                f"[failure]You don't have a '{item_name_1}' to use, and there isn't one "
+                "here.[/failure]"
             )
 
         # --- Handle two-item usage ---
@@ -831,7 +833,7 @@ Welcome to
                         f"[failure]You don't see a '{target_name}' to cast "
                         f"[spell_name]{spell_name}[/spell_name] on.[/failure]"
                     )
-            
+
             # Cast spell on the found target (item or character)
             if target_item:
                 # Pass game_state and target_item
@@ -848,7 +850,8 @@ Welcome to
         if spell not in self.state.known_spells:
             self.state.known_spells.append(spell)
             return (
-                f"[event]You have learned the [spell_name]{spell.get_name()}[/spell_name] spell![/event]"
+                f"[event]You have learned the [spell_name]{spell.get_name()}[/spell_name] "
+                "spell![/event]"
             )
 
     def spells(self) -> str:  # Method to list known spells
@@ -859,7 +862,8 @@ Welcome to
         output = ["[bold]Known Spells:[/bold]"]
         for spell_obj in self.state.known_spells:
             output.append(
-                f"  - [spell_name]{spell_obj.get_name()}[/spell_name]: {spell_obj.get_description()}"
+                f"  - [spell_name]{spell_obj.get_name()}[/spell_name]: "
+                f"{spell_obj.get_description()}"
             )
         return "\n".join(output)
 
@@ -877,7 +881,8 @@ Welcome to
             return item_to_listen_to.listen(self.state)
         else:
             return (
-                f"[failure]You don't see a '{target}' to listen to here or in your inventory.[/failure]"
+                f"[failure]You don't see a '{target}' to listen to here or in your "
+                "inventory.[/failure]"
             )
 
     def rest(self) -> str:
@@ -905,7 +910,8 @@ Welcome to
             return item_to_close.close(self.state)  # Pass game_state to the item's close method
         else:
             return (
-                f"[failure]You don't see a '{target}' to close here or in your inventory.[/failure]"
+                f"[failure]You don't see a '{target}' to close here or in your "
+                "inventory.[/failure]"
             )
 
     def eat(self, item: str) -> str:
@@ -953,7 +959,8 @@ Welcome to
             return item_to_unequip.unequip(self.state)
         else:
             return (
-                f"[failure]You don't see a '{item}' to unequip here or in your inventory.[/failure]"
+                f"[failure]You don't see a '{item}' to unequip here or in your "
+                "inventory.[/failure]"
             )
 
     def save(self) -> str:

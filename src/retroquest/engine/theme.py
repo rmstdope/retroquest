@@ -1,3 +1,4 @@
+"""Shared theme for RetroQuest UI components."""
 # Shared theme for RetroQuest (used by both Rich and Textual UIs)
 custom_theme = {
     "character_name": "bold blue",
