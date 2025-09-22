@@ -34,9 +34,10 @@ class CrystalClearWater(Item):
             )
 
     def examine(self, _game_state: GameState) -> str:
+        description = self.description
         return (
-            "[event]You examine the [item_name]crystal-clear water[/item_name]. {0} "
-            "The liquid moves with an otherworldly fluidity, and you can sense the "
-            "powerful purification magic contained within. This water could break "
-            "even the strongest curses.[/event]".format(self.description)
+            "[event]You examine the [item_name]crystal-clear water[/item_name]. "
+            f"{description} The liquid moves with an otherworldly fluidity, and you can "
+            "sense the powerful purification magic contained within. This water could break "
+            "even the strongest curses.[/event]"
         )

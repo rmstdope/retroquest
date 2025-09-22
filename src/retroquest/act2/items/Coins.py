@@ -1,23 +1,4 @@
-"""Coins (Act II Economy Item)
-
-Narrative Role:
-    Core currency resource enabling acquisition of supplies, gear, and potentially quest services within Greendale.
-
-Key Mechanics / Interactions:
-    - Maintains internal mutable integer balance (self.amount) with spend() helper performing guarded decrements.
-    - use() provides current balance feedback; description kept synchronized after each spend.
-    - Functions as a single inventory item representing a pouch rather than discrete coin stacking.
-
-Story Flags:
-    - Sets/Reads: (none) — currency state isolated from narrative progression flags.
-
-Progression Effects:
-    Facilitates market interactions and preparation gates (e.g., purchasing survival gear) without directly unlocking narrative beats.
-
-Design Notes:
-    - If future systems require persistence across acts, consider migrating amount into GameState economy subsystem.
-    - Potential extension: log transactions for quest auditing or introduce denominations.
-"""
+"""Coins item for Act 2 (currency pouch)."""
 
 from ...engine.GameState import GameState
 from ...engine.Item import Item

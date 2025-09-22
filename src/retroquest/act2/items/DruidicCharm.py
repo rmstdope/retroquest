@@ -43,10 +43,11 @@ class DruidicCharm(Item):
             return super().use_with(game_state, other_item)
 
     def examine(self, _game_state: GameState) -> str:
+        desc = self.description
         return (
-            "[event]You examine the [item_name]druidic charm[/item_name]. {0} "
-            "The intricate carvings depict intertwined branches and leaves, symbols "
-            "of the eternal cycle of growth and renewal. You can feel the gratitude "
-            "and love that Marcus poured into this gift when he gave it to you for "
-            "saving his daughter Elena from the dark curse.[/event]".format(self.description)
+            "[event]You examine the [item_name]druidic charm[/item_name]. "
+            f"{desc} The intricate carvings depict intertwined branches and leaves, "
+            "symbols of the eternal cycle of growth and renewal. You can feel the "
+            "gratitude and love that Marcus poured into this gift when he gave it to "
+            "you for saving his daughter Elena from the dark curse.[/event]"
         )
