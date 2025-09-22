@@ -25,16 +25,22 @@ from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED, FLAG_HERMITS_WARNING_ACCEPTED
 
 class TheHermitsWarningQuest(Quest):
+    """Quest to heed the hermit's warning and prepare for the Enchanted Forest."""
     def __init__(self) -> None:
         super().__init__(
             name="The Hermit's Warning",
             description=(
-                "A mysterious forest hermit has warned you about the dangers of the Enchanted Forest. "
-                "They spoke of ancient guardians, dark spirits, and ever-shifting paths that trap the unwary. "
-                "The hermit has given you a protective charm to help safeguard your journey through the magical wilderness, "
-                "but you need to prepare yourself before venturing further into the Enchanted Forest."
+                "A mysterious forest hermit has warned you about the dangers of the "
+                "Enchanted Forest. They spoke of ancient guardians, dark spirits, "
+                "and ever-shifting paths that trap the unwary. The hermit has given "
+                "you a protective charm to help safeguard your journey through the "
+                "magical wilderness, but you need to prepare yourself before venturing "
+                "further into the Enchanted Forest."
             ),
-            completion="You have heeded the hermit's warning and are now prepared to face the challenges of the Enchanted Forest."
+            completion=(
+                "You have heeded the hermit's warning and are now prepared to face "
+                "the challenges of the Enchanted Forest."
+            )
         )
 
     def check_trigger(self, game_state: GameState) -> bool:

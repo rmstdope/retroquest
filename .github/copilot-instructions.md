@@ -169,7 +169,7 @@ These instructions are mandatory for all code contributions to ensure consistenc
 -   Create one class per file and name files according to the class they contain.
 -   Use descriptive names for classes, methods, and variables to enhance readability and maintainability.
 -   Use type hints for all function signatures to improve code clarity and facilitate static analysis.
--   Include docstrings for all classes and methods to explain their purpose and usage.
+-   Include docstrings for all modules, classes, functions and methods to explain their purpose and usage.
 -   Follow PEP 8 style guidelines for Python code to ensure consistency across the codebase.
 -   Do not share code between acts; each act should be self-contained. All common functionality should be implemented in the engine module.
 -   Always update docstrings and comments to reflect any changes made to the code.

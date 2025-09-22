@@ -30,16 +30,21 @@ from ..Act2StoryFlags import (
 )
 
 class TheForestGuardiansRiddles(Quest):
+    """Quest to solve the riddles posed by the forest guardians."""
     def __init__(self) -> None:
         super().__init__(
             name="The Forest Guardian's Riddles",
             description=(
                 "The forest sprites have challenged you to prove your wisdom by solving the "
                 "riddles of the forest guardians. You must journey to the Ancient Grove and "
-                "beyond to the Whispering Glade, where ancient spirits will test your understanding "
-                "of forest ways and natural wisdom."
+                "beyond to the Whispering Glade, where ancient spirits will test "
+                "your understanding of forest ways and natural wisdom."
             ),
-            completion="You have successfully solved the riddles of the forest guardians, proving your wisdom and respect for the natural world. The forest spirits acknowledge your understanding."
+            completion=(
+                "You have successfully solved the riddles of the forest guardians, "
+                "proving your wisdom and respect for the natural world. The "
+                "forest spirits acknowledge your understanding."
+            )
         )
         self.objectives = [
             "Speak with the Ancient Tree Spirit in the Ancient Grove",
@@ -55,7 +60,10 @@ class TheForestGuardiansRiddles(Quest):
 
     def check_completion(self, game_state: GameState) -> bool:
         """Check if the quest can be completed based on story flags."""
-        return game_state.get_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED) and not self.is_completed_flag
+        return (
+            game_state.get_story_flag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED)
+            and not self.is_completed_flag
+        )
 
     def complete(self, game_state: GameState) -> str:
         """Complete the quest and give rewards."""

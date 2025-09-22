@@ -29,18 +29,22 @@ from ..Act2StoryFlags import (
 )
 
 class TheAncientLibraryQuest(Quest):
+    """Quest to discover and explore the hidden ancient library beneath Greendale."""
     def __init__(self) -> None:
         super().__init__(
             name="The Ancient Library",
             description=(
-                "You've discovered a hidden passage beneath Greendale containing an ancient library of magical texts and lore. "
-                "You should explore its depths and uncover the secrets within."
+                "You've discovered a hidden passage beneath Greendale containing an "
+                "ancient library of magical texts and lore. You should explore its "
+                "depths and uncover the secrets within."
             ),
             completion=(
-                "You have successfully gained access to the ancient library's knowledge! You've learned the "
-                "dispel spell, discovered important information about your family heritage, and received a "
-                "Crystal Focus to enhance your magical abilities. The library's secrets have revealed "
-                "crucial insights about the Chosen One prophecy and your destiny."
+                "You have successfully gained access to the ancient library's "
+                "knowledge! You've learned the dispel spell, discovered important "
+                "information about your family heritage, and received a Crystal "
+                "Focus to enhance your magical abilities. The library's secrets "
+                "have revealed crucial insights about the Chosen One prophecy "
+                "and your destiny."
             )
         )
 

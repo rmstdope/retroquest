@@ -25,9 +25,18 @@ Completion Logic:
 
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
-from ..Act2StoryFlags import FLAG_GATHERING_STORM_COMPLETED, FLAG_SPOKEN_TO_SIR_CEDRIC, FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SUPPLIES_QUEST_COMPLETED, FLAG_ANCIENT_LIBRARY_COMPLETED, FLAG_HERMITS_WARNING_COMPLETED, FLAG_NYX_TRIALS_COMPLETED
+from ..Act2StoryFlags import (
+    FLAG_GATHERING_STORM_COMPLETED,
+    FLAG_SPOKEN_TO_SIR_CEDRIC,
+    FLAG_DEMONSTRATED_COMBAT_SKILLS,
+    FLAG_SUPPLIES_QUEST_COMPLETED,
+    FLAG_ANCIENT_LIBRARY_COMPLETED,
+    FLAG_HERMITS_WARNING_COMPLETED,
+    FLAG_NYX_TRIALS_COMPLETED,
+)
 
 class TheGatheringStormQuest(Quest):
+    """Quest tracking the main narrative arc of Act II."""
     def __init__(self) -> None:
         super().__init__(
             name="The Gathering Storm",

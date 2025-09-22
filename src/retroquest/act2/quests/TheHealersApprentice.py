@@ -27,17 +27,20 @@ from ..Act2StoryFlags import (
 )
 
 class TheHealersApprenticeQuest(Quest):
+    """Quest to become Master Healer Lyria's apprentice and learn greater_heal."""
     def __init__(self) -> None:
         super().__init__(
             name="The Healer's Apprentice",
             description=(
-                "Master Healer Lyria has recognized your magical potential and offered to teach you advanced "
-                "healing techniques. Learn from her wisdom and master the greater_heal spell."
+                "Master Healer Lyria has recognized your magical potential and offered "
+                "to teach you advanced healing techniques. Learn from her wisdom and "
+                "master the greater_heal spell."
             ),
             completion=(
-                "You have successfully completed your apprenticeship with Master Healer Lyria! You've learned "
-                "the greater_heal spell through her advanced training. Your "
-                "understanding of healing magic has grown significantly."
+                "You have successfully completed your apprenticeship with Master "
+                "Healer Lyria! You've learned the greater_heal spell through her "
+                "advanced training. Your understanding of healing magic has grown "
+                "significantly."
             )
         )
 

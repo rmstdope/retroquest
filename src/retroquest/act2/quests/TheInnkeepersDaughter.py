@@ -27,11 +27,22 @@ from ..Act2StoryFlags import (
 )
 
 class TheInnkeepersDaughterQuest(Quest):
+    """Quest to save Elena, the innkeeper's daughter, from a dark curse."""
     def __init__(self) -> None:
         super().__init__(
             name="The Innkeeper's Daughter",
-            description="Elena, the barmaid at The Silver Stag Inn, has been cursed by a dark wizard. Use your magical abilities to break the curse and save her life.",
-            completion="Through careful magical healing, you successfully broke Elena's curse. You first strengthened her with a greater heal spell, then purified her spirit with crystal-clear water, and finally used a dispel spell to shatter the dark magic completely. Elena is now free from the wizard's curse!"
+            description=(
+                "Elena, the barmaid at The Silver Stag Inn, has been cursed by a "
+                "dark wizard. Use your magical abilities to break the curse and save "
+                "her life."
+            ),
+            completion=(
+                "Through careful magical healing, you successfully broke Elena's "
+                "curse. You first strengthened her with a greater heal spell, then "
+                "purified her spirit with crystal-clear water, and finally used a "
+                "dispel spell to shatter the dark magic completely. Elena is now "
+                "free from the wizard's curse!"
+            ),
         )
 
     def check_trigger(self, game_state: GameState) -> bool:
