@@ -1,3 +1,5 @@
+"""Tests for Act 1 room definitions and connectivity."""
+
 import pytest
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
 from retroquest.act1.rooms.VegetableField import VegetableField
@@ -18,9 +20,11 @@ from retroquest.act1.rooms.RoadToGreendale import RoadToGreendale
 class MockGameState:
     """Mock GameState for testing room functionality without complex dependencies."""
     def __init__(self):
+        """Initialize mock game state with empty story flags."""
         self.story_flags = []
 
     def get_story_flag(self, flag):
+        """Check if a story flag is set."""
         return flag in self.story_flags
 
 ROOM_CLASSES = {
@@ -51,6 +55,7 @@ OPPOSITE = {
 
 @pytest.mark.parametrize("start_key", ROOM_CLASSES.keys())
 def test_room_reachability(start_key):
+    """Test that all rooms are reachable from any starting room."""
     # Instantiate all rooms
     rooms = {k: v() for k, v in ROOM_CLASSES.items()}
     rooms['EliorsCottage'].can_leave()
@@ -65,7 +70,8 @@ def test_room_reachability(start_key):
             if dest not in visited and dest in rooms:
                 queue.append(dest)
     # All rooms should be reachable from the start room
-    assert set(rooms.keys()) <= visited, f"From {start_key}, could not reach: {set(rooms.keys()) - visited}"
+    unreachable = set(rooms.keys()) - visited
+    assert set(rooms.keys()) <= visited, f"From {start_key}, could not reach: {unreachable}"
 
 @pytest.mark.parametrize("_room_class, room_key", [
     (EliorsCottage, "EliorsCottage"),
@@ -85,6 +91,7 @@ def test_room_reachability(start_key):
     (RoadToGreendale, "RoadToGreendale"),
 ])
 def test_room_transitions_bidirectional(_room_class, room_key):
+    """Test that room transitions are bidirectional where expected."""
     # Instantiate all rooms
     rooms = {
         "EliorsCottage": EliorsCottage(),
@@ -114,4 +121,7 @@ def test_room_transitions_bidirectional(_room_class, room_key):
         # The destination room must have an exit back to the original room
         assert (
             dest_room.get_exits(MockGameState()).get(opposite) == room_key
-        ), f"{room_key} -> {direction} -> {dest_key} but {dest_key} does not have {opposite} back to {room_key}"
+        ), (
+            f"{room_key} -> {direction} -> {dest_key} but {dest_key} does not have "
+            f"{opposite} back to {room_key}"
+        )

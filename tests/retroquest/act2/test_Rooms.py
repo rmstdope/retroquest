@@ -1,3 +1,5 @@
+"""Tests for Act 2 room definitions and connectivity."""
+
 import pytest
 from retroquest.act2.rooms.MountainPath import MountainPath
 from retroquest.act2.rooms.GreendaleGates import GreendaleGates
@@ -22,9 +24,11 @@ from retroquest.act2.rooms.HeartOfTheForest import HeartOfTheForest
 class MockGameState:
     """Mock GameState for testing that only provides get_story_flag method"""
     def __init__(self):
+        """Initialize mock game state with empty story flags."""
         self.story_flags = []
 
     def get_story_flag(self, flag):
+        """Check if a story flag is set."""
         return flag in self.story_flags
 
 ROOM_CLASSES = {
@@ -75,7 +79,9 @@ def test_all_rooms_have_valid_exits():
             # Special handling for secret passages and special exits
             if direction in ["secret_passage", "upstairs", "downstairs"]:
                 continue
-            assert target_room in valid_room_names, f"Room {room_name} has invalid exit to {target_room}"
+            assert target_room in valid_room_names, (
+                f"Room {room_name} has invalid exit to {target_room}"
+            )
 
 
 def test_room_connectivity():
@@ -106,10 +112,14 @@ def test_room_connectivity():
                         target_room.use_key()
 
                 # Check if the target room has the expected return exit
-                assert opposite_direction in target_room.exits, \
-                    f"Room {target_room_name} should have {opposite_direction} exit back to {room_name}"
-                assert target_room.exits[opposite_direction] == room_name, \
-                    f"Room {target_room_name}'s {opposite_direction} exit should lead to {room_name}"
+                assert opposite_direction in target_room.exits, (
+                    f"Room {target_room_name} should have {opposite_direction} exit "
+                    f"back to {room_name}"
+                )
+                assert target_room.exits[opposite_direction] == room_name, (
+                    f"Room {target_room_name}'s {opposite_direction} exit should lead "
+                    f"to {room_name}"
+                )
 
 
 def test_room_descriptions_not_empty():
@@ -145,4 +155,6 @@ def test_room_names_match_class_names():
     for class_name, room_class in ROOM_CLASSES.items():
         room = room_class()
         expected_name = expected_names[class_name]
-        assert room.name == expected_name, f"Room {class_name} should have name '{expected_name}', got '{room.name}'"
+        assert room.name == expected_name, (
+            f"Room {class_name} should have name '{expected_name}', got '{room.name}'"
+        )

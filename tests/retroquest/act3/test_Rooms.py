@@ -32,7 +32,8 @@ class TestAct3Rooms:
                 if direction not in reverse:
                     continue
                 assert target_key in self.act3.rooms, (
-                    f"Exit from {room_key} via '{direction}' points to unknown room '{target_key}'."
+                    f"Exit from {room_key} via '{direction}' points to unknown room "
+                    f"'{target_key}'."
                 )
                 target_room = self.act3.rooms[target_key]
                 target_exits = target_room.get_exits(game.state)
