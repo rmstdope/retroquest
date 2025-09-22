@@ -24,6 +24,7 @@ from ...engine.Item import Item
 from ...engine.GameState import GameState
 
 class NaturesCharm(Item):
+    """One of the sacred charms required for the Offering Altar ritual."""
     def __init__(self) -> None:
         super().__init__(
             name="nature's charm",

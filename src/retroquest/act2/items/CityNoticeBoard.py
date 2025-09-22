@@ -4,6 +4,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class CityNoticeBoard(Item):
+    """Public notice board with postings that provide in-game leads and quests."""
     def __init__(self) -> None:
         super().__init__(
             name="city notice board",

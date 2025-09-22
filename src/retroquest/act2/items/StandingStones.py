@@ -5,6 +5,7 @@ from ..spells.NatureSenseSpell import NatureSenseSpell
 from ...engine.GameState import GameState
 
 class StandingStones(Item):
+    """Ancient druidic monoliths that convey nature magic and may teach a spell."""
     def __init__(self) -> None:
         super().__init__(
             name="standing stones",

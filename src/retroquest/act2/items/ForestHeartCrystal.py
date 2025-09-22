@@ -24,6 +24,7 @@ Design Notes:
 from ...engine.Item import Item
 
 class ForestHeartCrystal(Item):
+    """A powerful crystal embodying the living essence of the enchanted forest."""
     def __init__(self) -> None:
         super().__init__(
             name="forest heart crystal",

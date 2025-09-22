@@ -4,6 +4,7 @@ from ...engine.Item import Item
 from ...engine.GameState import GameState
 
 class CrystalFocus(Item):
+    """Faceted magical crystal that amplifies spellcasting and arcane study."""
     def __init__(self) -> None:
         super().__init__(
             name="Crystal Focus",

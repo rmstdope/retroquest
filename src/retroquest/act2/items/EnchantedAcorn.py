@@ -1,29 +1,10 @@
-"""Enchanted Acorn (Act II Sacred Offering Item)
-
-Narrative Role:
-    A forest-blessed token intended as an offering or rapport-building gift for ancient spirits (notably the
-    Ancient Tree Spirit). Reinforces themes of respectful approach to primal magic domains.
-
-Key Mechanics / Interactions:
-    - Contextual use text varies by location class/name (generic forest vs. Ancient Grove vs elsewhere).
-    - picked_up() provides special flavor at ForestEntrance acknowledging forest sprites' observation.
-    - Does not directly set story flags—its significance surfaces through NPC / room interactions.
-
-Story Flags:
-    - Sets/Reads: (none directly)
-
-Progression Effects:
-    Potential catalyst for improved outcomes or unlocking dialogue when presented in sacred locations.
-
-Design Notes:
-    - Location name substring checks keep logic lightweight; could migrate to isinstance room checks if polymorphism increases.
-    - Extendable into a broader offering system (e.g., categorized boons) in future acts.
-"""
+"""EnchantedAcorn: Forest-offering item used in Act II rituals and interactions."""
 
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 
 class EnchantedAcorn(Item):
+    """A forest-blessed acorn intended as an offering to sacred spirits."""
     def __init__(self) -> None:
         super().__init__(
             name="enchanted acorn",
@@ -42,15 +23,21 @@ class EnchantedAcorn(Item):
         current_room = game_state.current_room.name
         if "ancient grove" in current_room.lower():
             # This should be handled by the room or character interaction
-            return (f"The [item_name]{self.get_name()}[/item_name] pulses with magical energy in "
-                    "response to the sacred grove. You should offer it to the ancient tree spirit "
-                    "that dwells here.")
+            return (
+                f"The [item_name]{self.get_name()}[/item_name] pulses with magical energy in "
+                "response to the sacred grove. You should offer it to the ancient tree spirit "
+                "that dwells here."
+            )
         elif "forest" in current_room.lower():
-            return (f"The [item_name]{self.get_name()}[/item_name] glows softly in the forest, "
-                    "but it seems to be calling you toward something more ancient and sacred.")
+            return (
+                f"The [item_name]{self.get_name()}[/item_name] glows softly in the forest, "
+                "but it seems to be calling you toward something more ancient and sacred."
+            )
         else:
-            return (f"The [item_name]{self.get_name()}[/item_name] feels dormant here. It likely "
-                    "has special significance in a more magical location.")
+            return (
+                f"The [item_name]{self.get_name()}[/item_name] feels dormant here. It likely "
+                "has special significance in a more magical location."
+            )
 
     def picked_up(self, game_state: GameState) -> str:
         """Called when the item is picked up by the player."""
@@ -62,8 +49,12 @@ class EnchantedAcorn(Item):
         return ""
 
     def examine(self, _game_state: GameState) -> str:
-        return (f"[event]You examine the [item_name]{self.get_name()}[/item_name]. {self.description} "
-                "When you hold it up to the light, you can see tiny veins of silver running "
-                "through the shell like tree roots. The acorn seems to whisper in a language "
-                "older than words, speaking of growth, wisdom, and the eternal cycle of the "
-                "forest.[/event]")
+        name = self.get_name()
+        desc = self.description
+        return (
+            f"[event]You examine the [item_name]{name}[/item_name]. {desc} "
+            "When you hold it up to the light, you can see tiny veins of silver running "
+            "through the shell like tree roots. The acorn seems to whisper in a language "
+            "older than words, speaking of growth, wisdom, and the eternal cycle of the "
+            "forest.[/event]"
+        )

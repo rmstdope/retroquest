@@ -8,6 +8,7 @@ from ..Act2StoryFlags import (
 )
 
 class EnhancedLantern(Item):
+    """Magical lantern that reveals hidden paths and magical auras when used."""
     def __init__(self) -> None:
         """Initialize the Enhanced Lantern item with its descriptive text."""
         super().__init__(

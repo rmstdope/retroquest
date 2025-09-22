@@ -4,6 +4,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class MountainFlower(Item):
+    """A hardy mountain wildflower used as a collectible or crafting ingredient."""
     def __init__(self) -> None:
         super().__init__(
             name="mountain flower",

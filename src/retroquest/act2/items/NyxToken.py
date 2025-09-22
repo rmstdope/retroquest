@@ -23,6 +23,7 @@ Design Notes:
 from ...engine.Item import Item
 
 class NyxToken(Item):
+    """Token of favor awarded by Nyx after ritual or trial completion."""
     def __init__(self) -> None:
         super().__init__(
             name="nyx's token",

@@ -3,6 +3,7 @@
 from ...engine.Item import Item
 
 class Caravan(Item):
+    """A large rescued merchant caravan object; non-carriable but interactive."""
     def __init__(self) -> None:
         super().__init__(
             name="caravan",

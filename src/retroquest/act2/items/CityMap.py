@@ -5,6 +5,7 @@ from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_USED_CITY_MAP
 
 class CityMap(Item):
+    """A portable map item that reveals city navigation when used."""
     def __init__(self) -> None:
         super().__init__(
             name="city map",

@@ -25,6 +25,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class EntryPass(Item):
+    """Credential document that grants passage through Greendale's gates."""
     def __init__(self) -> None:
         super().__init__(
             name="entry pass",

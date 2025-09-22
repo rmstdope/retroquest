@@ -28,6 +28,7 @@ from ...engine.Item import Item
 from .Door import Door
 
 class RoomKey(Item):
+    """Brass key unlocking a private room at The Silver Stag Inn."""
     def __init__(self) -> None:
         super().__init__(
             name="room key",

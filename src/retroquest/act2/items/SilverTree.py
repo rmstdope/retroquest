@@ -31,6 +31,7 @@ from ..characters.AncientTreeSpirit import AncientTreeSpirit
 from ...engine.GameState import GameState
 
 class SilverTree(Item):
+    """Ancient silver-barked tree that anchors the Ancient Grove and related encounters."""
     def __init__(self) -> None:
         super().__init__(
             name="silver-barked tree",

@@ -4,6 +4,7 @@ from ...engine.Item import Item
 from ...engine.GameState import GameState
 
 class CrystalClearWater(Item):
+    """Purifying water item that can cleanse curses and dark enchantments."""
     def __init__(self) -> None:
         super().__init__(
             name="crystal-clear water",

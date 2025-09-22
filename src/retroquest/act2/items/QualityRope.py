@@ -6,6 +6,7 @@ from ..Act2StoryFlags import FLAG_FOUND_LOST_CARAVAN
 from .Caravan import Caravan
 
 class QualityRope(Item):
+    """Durable rope used for climbing, rescue, and utility tasks in the field."""
     def __init__(self) -> None:
         super().__init__(
             name="quality rope",

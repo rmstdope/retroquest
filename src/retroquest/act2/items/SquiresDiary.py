@@ -6,6 +6,7 @@ from ..Act2StoryFlags import FLAG_READ_SQUIRES_DIARY
 
 
 class SquiresDiary(Item):
+    """A personal diary containing clues about Sir Cedric's past and missing documents."""
     def __init__(self) -> None:
         super().__init__(
             name="squire's diary",

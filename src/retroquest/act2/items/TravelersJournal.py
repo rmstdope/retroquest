@@ -7,6 +7,7 @@ from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_READ_TRAVELERS_JOURNAL
 
 class TravelersJournal(Item):
+    """A family journal containing genealogies and lore about Willowbrook and ley sites."""
     def __init__(self) -> None:
         super().__init__(
             name="traveler's journal",

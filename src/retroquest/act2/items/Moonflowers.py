@@ -1,29 +1,10 @@
-"""Moonflowers (Act II Rare Herbal Item)
-
-Narrative Role:
-    Bioluminescent blossoms tied to protective and divinatory practices. Serve as a premium botanical resource
-    foreshadowing advanced healing, warding, or revelation mechanics.
-
-Key Mechanics / Interactions:
-    - Contextual use messaging responds to healer spaces vs generic forest vs mundane locations.
-    - picked_up() provides special acquisition flavor in WhisperingGlade.
-    - No direct flag manipulation; significance emerges through crafting / NPC dialogue opportunities.
-
-Story Flags:
-    - Sets/Reads: (none)
-
-Progression Effects:
-    Potential ingredient for purification, dream warding, or clairvoyance expansions later.
-
-Design Notes:
-    - Could gain potency tiers or freshness decay if alchemy system deepens.
-    - Location name string matching keeps current implementation lightweight.
-"""
+"""Moonflowers: Rare herbal item used in Act II for healing and divination."""
 
 from ...engine.Item import Item
 from ...engine.GameState import GameState
 
 class Moonflowers(Item):
+    """Rare bioluminescent blossoms used in healing and divinatory practices."""
     def __init__(self) -> None:
         super().__init__(
             name="moonflowers",
@@ -41,23 +22,32 @@ class Moonflowers(Item):
     def use(self, game_state: GameState) -> str:
         current_room = game_state.current_room.name
         if "healer" in current_room.lower():
-            return ("The [item_name]moonflowers[/item_name] would be perfect for Master "
-                    "Healer Lyria's advanced remedies and magical preparations.")
+            return (
+                "The [item_name]moonflowers[/item_name] would be perfect for Master "
+                "Healer Lyria's advanced remedies and magical preparations."
+            )
         elif "forest" in current_room.lower():
-            return ("The [item_name]moonflowers[/item_name] glow more brightly in the "
-                    "magical atmosphere of the forest, their protective properties enhanced.")
+            return (
+                "The [item_name]moonflowers[/item_name] glow more brightly in the "
+                "magical atmosphere of the forest, their protective properties enhanced."
+            )
         else:
-            return ("The [item_name]moonflowers[/item_name] remain dormant here. "
-                    "They likely have special significance for healing or magical purposes.")
+            return (
+                "The [item_name]moonflowers[/item_name] remain dormant here. "
+                "They likely have special significance for healing or magical purposes."
+            )
 
     def picked_up(self, game_state: GameState) -> str:
         """Called when the item is picked up by the player."""
-        from ..rooms.WhisperingGlade import WhisperingGlade  # Import here to avoid circular imports
+        # Import locally to avoid circular imports when module loads
+        from ..rooms.WhisperingGlade import WhisperingGlade
 
         if isinstance(game_state.current_room, WhisperingGlade):
-            return ("The moonflowers seem to approve of your gentle touch, their "
-                    "silvery glow pulsing warmly as you gather them. These blessed "
-                    "blooms will aid in healing and protection magic.")
+            return (
+                "The moonflowers seem to approve of your gentle touch, their "
+                "silvery glow pulsing warmly as you gather them. These blessed "
+                "blooms will aid in healing and protection magic."
+            )
         return ""
 
     def examine(self, _game_state: GameState) -> str:

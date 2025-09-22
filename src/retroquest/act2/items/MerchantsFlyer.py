@@ -4,6 +4,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class MerchantsFlyer(Item):
+    """Promotional flyer advertising Market District merchants and coupons."""
     def __init__(self) -> None:
         super().__init__(
             name="merchant's flyer",

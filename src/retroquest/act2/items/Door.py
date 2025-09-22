@@ -23,6 +23,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class Door(Item):
+    """Non-carriable door item used as an environmental barrier and interaction target."""
     def __init__(self) -> None:
         super().__init__(
             name="door",

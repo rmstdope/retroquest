@@ -22,6 +22,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class HealingHerbs(Item):
+    """A bundle of medicinal herbs used for healing and crafting."""
     def __init__(self) -> None:
         super().__init__(
             name="healing herbs",

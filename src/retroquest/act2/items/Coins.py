@@ -23,6 +23,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class Coins(Item):
+    """Pouch-like currency item that tracks an integer coin balance."""
     def __init__(self, amount: int = 100) -> None:
         self.amount = amount
         super().__init__(
@@ -52,4 +53,5 @@ class Coins(Item):
         return False
 
     def get_amount(self) -> int:
+        """Return the current coin balance."""
         return self.amount

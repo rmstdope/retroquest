@@ -4,6 +4,7 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 
 class WalkingStick(Item):
+    """A sturdy walking stick that aids travel and provides minor protection."""
     def __init__(self) -> None:
         super().__init__(
             name="walking stick",

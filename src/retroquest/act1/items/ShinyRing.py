@@ -13,7 +13,8 @@ class ShinyRing(Item):
             name="shiny ring",
             short_name="ring",
             description=(
-                "A beautiful silver ring with a small, sparkling gemstone. It looks quite valuable."
+                "A beautiful silver ring with a small, sparkling gemstone. "
+                "It looks quite valuable."
             ),
             can_be_carried=True
         )

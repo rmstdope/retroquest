@@ -5,6 +5,7 @@ from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_HERMITS_WARNING_COMPLETED
 
 class ForestSurvivalKit(Item):
+    """Comprehensive kit providing supplies and guidance for safe forest travel."""
     def __init__(self) -> None:
         super().__init__(
             name="forest survival kit",

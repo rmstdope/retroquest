@@ -6,6 +6,7 @@ from ..Act2StoryFlags import FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE
 from ...engine.GameState import GameState
 
 class ProtectiveCharm(Item):
+    """Talisman granting spiritual protection in the enchanted forest when used."""
     def __init__(self) -> None:
         super().__init__(
             name="protective charm",

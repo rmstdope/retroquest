@@ -26,6 +26,7 @@ from ..Act2StoryFlags import FLAG_MENDED_LIBRARY_ENCHANTMENTS
 from ...engine.GameState import GameState
 
 class ProtectiveEnchantments(Item):
+    """Static environmental magical barriers protecting restricted library texts."""
     def __init__(self) -> None:
         super().__init__(
             name="protective enchantments",

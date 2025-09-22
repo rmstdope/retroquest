@@ -30,6 +30,7 @@ from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS
 
 class TrainingSword(Item):
+    """Practice sword used to demonstrate combat skill to NPCs."""
     def __init__(self) -> None:
         super().__init__(
             name="training sword",

@@ -5,6 +5,7 @@ from ...engine.Item import Item
 from ..Act2StoryFlags import FLAG_SPECTRAL_LIBRARIAN_FRIENDLY
 
 class AncientChronicle(Item):
+    """Stationary tome that can teach the Dispel spell when the librarian permits."""
     def __init__(self) -> None:
         super().__init__(
             name="ancient chronicle",
