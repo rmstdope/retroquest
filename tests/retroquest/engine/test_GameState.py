@@ -51,10 +51,13 @@ class TestGameState(unittest.TestCase):
         """Test quest update checking and next_updated_quest method."""
         # DummyQuest with check_update method
         class UpdateQuest(DummyQuest):
+            """Dummy quest that can be updated."""
             def __init__(self, name, update=False):
+                """Initialize an update-capable dummy quest with an update flag."""
                 super().__init__(name)
                 self.update = update
             def check_update(self, _game_state):
+                """Return whether this dummy quest reports an update is available."""
                 return self.update
         q1 = UpdateQuest("Q1", update=False)
         q2 = UpdateQuest("Q2", update=True)
@@ -67,11 +70,14 @@ class TestGameState(unittest.TestCase):
         self.assertIsNone(updated2)
 
     def test_next_completed_quest(self):
+        """Quest completion moves a completed quest from activated to completed."""
         # quest1 does not complete, quest2 does
         self.gs.activated_quests = [self.quest1, self.quest2]
         # Patch quest2 to complete
         self.quest2.completion = True
-        def check_completion_true(_gs): return True
+        def check_completion_true(_gs):
+            """Return True to simulate quest completion for the patched quest."""
+            return True
         self.quest2.check_completion = check_completion_true
         completed = self.gs.next_completed_quest()
         self.assertEqual(completed, self.quest2)
@@ -82,13 +88,18 @@ class TestGameState(unittest.TestCase):
         self.assertIsNone(completed2)
 
     def test_update_quest_string_return(self):
+        """Test that update_quest returns formatted string for updated quests."""
         # Quest whose check_update returns True should produce formatted string
         class UpdatableQuest(DummyQuest):
+            """Dummy quest that can be updated with description."""
             def __init__(self, name, description):
+                """Initialize with name and description."""
                 super().__init__(name, description)
             def check_update(self, _game_state):
+                """Always return True for updates."""
                 return True
             def is_main(self):
+                """Declare this update as the main quest update."""
                 return True
         uq = UpdatableQuest("Hero's Call", description="Answer the call")
         self.gs.activated_quests = [uq]
@@ -98,12 +109,17 @@ class TestGameState(unittest.TestCase):
         self.assertIn("Answer the call", update_str)
 
     def test_complete_quest_string_return(self):
+        """Ensure completed quest string includes expected fragments."""
         class CompletableQuest(DummyQuest):
+            """Dummy quest used to test completion string formatting."""
             def __init__(self, name, completion):
+                """Initialize with a name and configured completion text."""
                 super().__init__(name, description=False, completion=completion)
             def check_completion(self, _game_state):
+                """Always indicate completion for this test quest."""
                 return True
             def is_main(self):
+                """Indicate this dummy is a side quest for the test."""
                 return False
         cq = CompletableQuest("Find Relic", completion=True)
         cq.completion = "You have recovered the relic."
@@ -116,6 +132,7 @@ class TestGameState(unittest.TestCase):
         self.assertIsNone(self.gs.complete_quest())
 
     def test_is_quest_activated_and_completed(self):
+        """Verify that activation and completion checks by name behave correctly."""
         self.gs.activated_quests = [self.quest1]
         self.assertTrue(self.gs.is_quest_activated("Quest1"))
         self.assertFalse(self.gs.is_quest_completed("Quest1"))
@@ -124,15 +141,23 @@ class TestGameState(unittest.TestCase):
         self.assertFalse(self.gs.is_quest_activated("Quest2"))
 
     def test_story_flag_overwrite(self):
+        """Story flags can be set and then overwritten with new values."""
         self.gs.set_story_flag("door_open", True)
         self.assertTrue(self.gs.get_story_flag("door_open"))
         self.gs.set_story_flag("door_open", False)
         self.assertFalse(self.gs.get_story_flag("door_open"))
 
     def test_remove_item_more_than_exists(self):
+        """Removing more items than present should only remove available count."""
         class DummyItem:
-            def get_name(self): return "stone"
-            def get_short_name(self): return "stn"
+            """Minimal item type used for inventory removal tests."""
+            def get_name(self):
+                """Return the item's full name used in tests."""
+                return "stone"
+
+            def get_short_name(self):
+                """Return the item's short name used in tests."""
+                return "stn"
         for _ in range(2):
             self.gs.add_item_to_inventory(DummyItem())
         removed = self.gs.remove_item_from_inventory("stone", 5)
@@ -140,11 +165,21 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(self.gs.get_item_count("stone"), 0)
 
     def test_get_item_prefers_inventory_before_rooms(self):
+        """Lookup should prefer inventory matches over identical room items."""
         # Same name item in inventory and room; inventory should be found first
         class DummyItem:
-            def __init__(self, name): self._n = name
-            def get_name(self): return self._n
-            def get_short_name(self): return self._n
+            """Simple dummy item with name accessors for lookup tests."""
+            def __init__(self, name):
+                """Initialize dummy item with given name."""
+                self._n = name
+
+            def get_name(self):
+                """Return the dummy item's full name."""
+                return self._n
+
+            def get_short_name(self):
+                """Return the dummy item's short name."""
+                return self._n
         inv_item = DummyItem("amulet")
         room_item = DummyItem("amulet")
         room = DummyRoom("Chamber")
@@ -161,20 +196,29 @@ class TestGameState(unittest.TestCase):
         self.gs = GameState(self.room, all_rooms=None, all_quests=[self.quest1, self.quest2])
 
     def test_mark_visited(self):
+        """mark_visited should add the room's name to visited_rooms."""
         new_room = DummyRoom("AnotherRoom")
         self.gs.mark_visited(new_room)
         self.assertIn("AnotherRoom", self.gs.visited_rooms)
 
     def test_story_flag(self):
+        """Setting and clearing a story flag should reflect in get_story_flag."""
         self.gs.set_story_flag("flag1", True)
         self.assertTrue(self.gs.get_story_flag("flag1"))
         self.gs.set_story_flag("flag1", False)
         self.assertFalse(self.gs.get_story_flag("flag1"))
 
     def test_inventory(self):
+        """Basic inventory operations: add, has_item, remove by name."""
         class DummyItem:
-            def get_name(self): return "item1"
-            def get_short_name(self): return "itm1"
+            """Tiny inventory item exposing name accessors for tests."""
+            def get_name(self):
+                """Return inventory test item's full name."""
+                return "item1"
+
+            def get_short_name(self):
+                """Return inventory test item's short name."""
+                return "itm1"
         item = DummyItem()
         self.gs.add_item_to_inventory(item)
         self.assertTrue(self.gs.has_item("item1"))
@@ -185,10 +229,18 @@ class TestGameState(unittest.TestCase):
     def test_multiple_items_inventory(self):
         """Test inventory batching functionality with multiple items of the same type."""
         class DummyItem:
+            """Dummy item used to exercise multiple-items inventory behavior."""
             def __init__(self, name):
+                """Store the provided name on the dummy item."""
                 self.item_name = name
-            def get_name(self): return self.item_name
-            def get_short_name(self): return self.item_name[:3]
+
+            def get_name(self):
+                """Return the stored full name for the dummy item."""
+                return self.item_name
+
+            def get_short_name(self):
+                """Return a short form of the item's name for tests."""
+                return self.item_name[:3]
 
         # Add multiple items of the same type
         for _ in range(5):
@@ -250,20 +302,37 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(len(self.gs.inventory), 1)
 
     def test_learn_spell_and_has_spell(self):
+        """Learning a spell should register it and make it queryable by name."""
         class DummySpell:
-            def __init__(self, name): self.name = name
+            """Minimal spell object with name attribute for testing."""
+            def __init__(self, name):
+                """Initialize dummy spell with a name attribute."""
+                self.name = name
         spell = DummySpell("fireball")
         self.gs.learn_spell(spell)
         self.assertTrue(self.gs.has_spell("fireball"))
 
     def test_stats(self):
+        """Stats should include items, spells, visited rooms and return a string."""
         # Add some items and spells
         class DummyItem:
-            def get_name(self): return "item1"
-            def get_short_name(self): return "itm1"
+            """Tiny dummy item used in stats test."""
+            def get_name(self):
+                """Return the stats test item's full name."""
+                return "item1"
+
+            def get_short_name(self):
+                """Return the stats test item's short name."""
+                return "itm1"
         class DummySpell:
-            def __init__(self, name): self.name = name
-            def get_name(self): return self.name
+            """Tiny dummy spell exposing get_name used in stats."""
+            def __init__(self, name):
+                """Create a tiny dummy spell with the given name."""
+                self.name = name
+
+            def get_name(self):
+                """Return the dummy spell's name."""
+                return self.name
         self.gs.add_item_to_inventory(DummyItem())
         self.gs.learn_spell(DummySpell("fireball"))
         self.gs.set_story_flag("flag1", True)
@@ -279,6 +348,7 @@ class TestGameState(unittest.TestCase):
         self.assertIsInstance(stats_output, str)
 
     def test_get_room_by_name(self):
+        """get_room should lookup a room by name or return None if missing."""
         # Add another room to all_rooms and test lookup by name
         another_room = DummyRoom("AnotherRoom")
         self.gs.all_rooms = {self.room.name: self.room, another_room.name: another_room}
@@ -287,14 +357,27 @@ class TestGameState(unittest.TestCase):
         self.assertIsNone(self.gs.get_room("NonExistentRoom"))
 
     def test_get_item_inventory_and_room(self):
+        """get_item should find items in inventory first, then in rooms, by name."""
         # Dummy item for inventory
         class DummyItem:
-            def get_name(self): return "item1"
-            def get_short_name(self): return "itm1"
+            """Inventory dummy for get_item tests."""
+            def get_name(self):
+                """Return the inventory dummy's full name for get_item tests."""
+                return "item1"
+
+            def get_short_name(self):
+                """Return the inventory dummy's short name for get_item tests."""
+                return "itm1"
         # Dummy item for room
         class DummyRoomItem:
-            def get_name(self): return "item2"
-            def get_short_name(self): return "itm2"
+            """Room dummy for get_item tests."""
+            def get_name(self):
+                """Return the room-dummy item's full name for get_item tests."""
+                return "item2"
+
+            def get_short_name(self):
+                """Return the room-dummy item's short name for get_item tests."""
+                return "itm2"
         item_inventory = DummyItem()
         item_room = DummyRoomItem()
         self.gs.add_item_to_inventory(item_inventory)
@@ -312,6 +395,7 @@ class TestGameState(unittest.TestCase):
         self.assertIsNone(self.gs.get_item("notfound"))
 
     def test_get_quest(self):
+        """Ensure quests can be retrieved by name from game state lists."""
         # Should find quests by name (case-insensitive) in all quest lists
         self.gs.non_activated_quests = [self.quest1]
         self.gs.activated_quests = [self.quest2]

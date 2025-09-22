@@ -17,6 +17,7 @@ from .Act import Act
 
 # The runtime phase of the game: controls startup/logo/act intro/act transitions
 class GameRunState(Enum):
+    """Enumeration of game run states."""
     SHOW_LOGO = auto()
     ACT_INTRO = auto()
     ACT_RUNNING = auto()
@@ -488,6 +489,7 @@ Welcome to
             return "[failure]You can't go that way.[/failure]"
 
     def help(self, _arg: str = None) -> str:
+        """Display help text with available commands."""
         return (
             "[bold]Available Commands:[/bold]\n"
             "\n"

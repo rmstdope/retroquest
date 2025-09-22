@@ -1,8 +1,8 @@
 """Integration tests for Act 3: golden path and key interactions."""
 
+from typing import Optional
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
-from typing import Optional
 from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_MAIN_STARTED,
     FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED

@@ -47,7 +47,9 @@ def test_golden_path_act2_completion():
     check_current_room(game.state, "Greendale Gates")
     # Verify that north exit to Main Square is not available before giving Entry Pass
     exits = game.state.current_room.get_exits(game.state)
-    assert "north" not in exits, "North exit to Main Square should not be available before giving Entry Pass"
+    assert "north" not in exits, (
+        "North exit shouldn't be available before giving Entry Pass"
+    )
     assert "south" in exits, "South exit to Mountain Path should always be available"
     # Give Entry Pass to Gate Captain
     check_character_in_room(game.state.current_room, "Gate Captain")
@@ -55,13 +57,17 @@ def test_golden_path_act2_completion():
     check_item_in_inventory(game.state, "Entry Pass", should_be_present=True)
     # Verify that north exit to Main Square is now available after showing the Entry Pass
     exits = game.state.current_room.get_exits(game.state)
-    assert "north" in exits, "North exit to Main Square should be available after giving Entry Pass"
+    assert "north" in exits, (
+        "North exit should be available after giving Entry Pass"
+    )
     assert exits["north"] == "MainSquare", "North exit should lead to Main Square"
     # Verify that the room cannot be searched yet (captain still present)
     check_character_in_room(game.state.current_room, "Gate Captain")
     execute_commands(game, ["search"])
     # The search should fail because captain is still watching
-    assert "improper to search" in results[-1].lower(), "Search should be blocked while captain is present"
+    assert "improper to search" in results[-1].lower(), (
+        "Search should be blocked while captain is present"
+    )
     check_item_in_room(game.state.current_room, "City Map", should_be_present=False)
     # Talk to Gate Captain for city information - this causes him to walk away
     execute_commands(game, ["talk to gate captain"])
@@ -85,11 +91,15 @@ def test_golden_path_act2_completion():
     # Should not be able to go north or east without map
     execute_commands(game, ["go north"])
     check_current_room(game.state, "Main Square")  # Should still be in Main Square
-    assert "lost" in results[-1].lower(), "Should get lost message when trying to go north without map"
+    assert "lost" in results[-1].lower(), (
+        "Should get lost message when trying to go north without map"
+    )
 
     execute_commands(game, ["go east"])
     check_current_room(game.state, "Main Square")  # Should still be in Main Square
-    assert "lost" in results[-1].lower(), "Should get lost message when trying to go east without map"
+    assert "lost" in results[-1].lower(), (
+        "Should get lost message when trying to go east without map"
+    )
 
     # Should be able to go south (back to Greendale Gates)
     execute_commands(game, ["go south"])
@@ -165,7 +175,14 @@ def test_golden_path_act2_completion():
     check_character_in_room(game.state.current_room, "Caravan Master Thorne")
     execute_commands(game, ["talk to caravan master thorne"])
     # Should now have "The Merchant's Lost Caravan" quest
-    check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey", "The Merchant's Lost Caravan"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "Supplies for the Journey",
+            "The Merchant's Lost Caravan",
+        ],
+    )
     # Buy Forest Survival Kit
     execute_commands(game, ["buy forest survival kit from master merchant aldric"])
     check_item_in_inventory(game.state, "Forest Survival Kit")
@@ -185,7 +202,15 @@ def test_golden_path_act2_completion():
     check_character_in_room(game.state.current_room, "Barmaid Elena")
     execute_commands(game, ["talk to barmaid elena"])
     # Should now have "The Innkeeper's Daughter" quest
-    check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "Supplies for the Journey",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+        ],
+    )
     # Buy Room Key
     execute_commands(game, ["buy room key from innkeeper marcus"])
     check_item_in_inventory(game.state, "Room Key")
@@ -204,7 +229,16 @@ def test_golden_path_act2_completion():
     check_item_in_inventory(game.state, "Traveler's Journal")
     check_item_count_in_inventory(game.state, "coins", 20)
     execute_commands(game, ["use traveler's journal"])
-    check_quests(game.state, ["The Gathering Storm", "Supplies for the Journey", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "Supplies for the Journey",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "Echoes of the Past",
+        ],
+    )
 
     # Step 8: Return to Market District
     # Go back to Market District
@@ -213,7 +247,15 @@ def test_golden_path_act2_completion():
     # Buy Enhanced Lantern and Quality Rope (not enough coins)
     execute_commands(game, ["buy quality rope from master merchant aldric"])
     check_item_in_inventory(game.state, "Quality Rope")
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Echoes of the Past"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "Echoes of the Past",
+        ],
+    )
 
     # Step 9: Great Hall
     # Go to Great Hall via Main Square and Castle Courtyard
@@ -225,12 +267,19 @@ def test_golden_path_act2_completion():
     # Show the journal to historians directly (we already used our main pass)
     execute_commands(game, ["give traveler's journal to historians"])
     # Search for records about Willowbrook (this will activate and complete "Echoes of the Past")
-    # But we need formal credentials first - let's assume the herald recognizes us from our previous interaction
+    # But we need formal credentials first - assume the herald recognizes us from prior interaction
     if not game.state.get_story_flag("court_herald_formal_presentation"):
         game.state.set_story_flag("court_herald_formal_presentation", True)  # Bypass for test
     execute_commands(game, ["search"])
     # This should finish "Echoes of the Past" quest
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+        ],
+    )
 
     # Step 10: Residential Quarter
     # Go to Residential Quarter
@@ -256,7 +305,15 @@ def test_golden_path_act2_completion():
     execute_commands(game, ["talk to master healer lyria"])
     # Give Healing Herbs to Lyria with Healing Herbs to trigger quest (first interaction)
     execute_commands(game, ["give healing herbs to master healer lyria"])
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Healer's Apprentice"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "The Healer's Apprentice",
+        ],
+    )
     check_spell_known(game.state, "greater_heal", should_be_present=False)
 
     # Step 12: Residential Quarter (Hidden Library Discovery)
@@ -267,7 +324,16 @@ def test_golden_path_act2_completion():
     check_current_room(game.state, "Residential Quarter")
     # Search to discover Hidden Library
     execute_commands(game, ["search"])
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter",  "The Healer's Apprentice", "The Ancient Library"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "The Healer's Apprentice",
+            "The Ancient Library",
+        ],
+    )
 
     # Step 13: Hidden Library
     # Go to Hidden Library via secret passage
@@ -286,7 +352,15 @@ def test_golden_path_act2_completion():
     execute_commands(game, ["take crystal focus"])
     check_item_in_inventory(game.state, "Crystal Focus")
     # Now check that The Ancient Library quest is completed (requires Crystal Focus in inventory)
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Healer's Apprentice"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "The Healer's Apprentice",
+        ],
+    )
 
     # Step 14: Healer's House - again
     # Return to Healer's House (navigate from Hidden Library back through the secret passage)
@@ -295,10 +369,18 @@ def test_golden_path_act2_completion():
     # Give Crystal Focus to Healer to complete Healer's apprentice
     execute_commands(game, ["give crystal focus to master healer lyria"])
     check_spell_known(game.state, 'greater_heal')
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+        ],
+    )
 
     # Step 15: Forest Transition Activities
-    # Navigate to Forest Transition (Healer's House -> Residential Quarter -> Castle Courtyard -> Castle Approach -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition)
+    # Navigate to Forest Transition (Healer's House -> Residential Quarter -> Castle Courtyard ->
+    # Castle Approach -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition)
     execute_commands(game, ["go south", "go south", "go east", "go south", "go south", "go south"])
     check_current_room(game.state, "Mountain Path")
     execute_commands(game, ["go east"])  # From Mountain Path to Forest Transition
@@ -309,11 +391,26 @@ def test_golden_path_act2_completion():
     # Talk to Forest Hermit to get protective charm and start "The Hermit's Warning" quest
     execute_commands(game, ["talk to forest hermit"])
     check_item_in_inventory(game.state, "Protective Charm")
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Hermit's Warning"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "The Hermit's Warning",
+        ],
+    )
     # Use Forest Survival Kit to complete the quest
     execute_commands(game, ["use forest survival kit"])
     check_item_in_inventory(game.state, "Forest Survival Kit", should_be_present=False)
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+        ],
+    )
     # Examine standing stones to learn nature_sense spell
     execute_commands(game, ["examine stones"])
     check_spell_known(game.state, "nature_sense")
@@ -336,7 +433,15 @@ def test_golden_path_act2_completion():
     # Talk to Forest Sprites (they offer guidance to the riddle quest)
     execute_commands(game, ["talk to forest sprites"])
     # Quest "The Forest Guardian's Riddles" should now be activated
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Forest Guardian's Riddles"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "The Forest Guardian's Riddles",
+        ],
+    )
 
     # Step 17: Ancient Grove Activities
     # Move to Ancient Grove
@@ -348,7 +453,16 @@ def test_golden_path_act2_completion():
     execute_commands(game, ["give enchanted acorn to ancient tree spirit"])
     check_item_in_inventory(game.state, "Enchanted Acorn", should_be_present=False)
     check_spell_known(game.state, "forest_speech")
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "The Forest Guardian's Riddles", "Whispers in the Wind"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "The Forest Guardian's Riddles",
+            "Whispers in the Wind",
+        ],
+    )
 
     # Step 18: Whispering Glade Activities (The Forest Guardian's Riddles quest)
     # Navigate to Whispering Glade
@@ -364,7 +478,15 @@ def test_golden_path_act2_completion():
     execute_commands(game, ["say insects to water nymphs"])  # Third riddle answer
 
     # Quest "The Forest Guardian's Riddles" should now be completed
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter", "Whispers in the Wind"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+            "Whispers in the Wind",
+        ],
+    )
 
     # Take Crystal-Clear Water and Moonflowers (quest rewards)
     execute_commands(game, ["take crystal-clear water"])
@@ -375,21 +497,51 @@ def test_golden_path_act2_completion():
 
     # Step 19: Return to Ancient Grove to complete "Whispers in the Wind"
     # Navigate back to Ancient Grove
-    execute_commands(game, ["go west", "go south"])  # Whispering Glade -> Forest Entrance -> Ancient Grove
+    execute_commands(
+        game, ["go west", "go south"]
+    )  # Whispering Glade -> Forest Entrance -> Ancient Grove
     check_current_room(game.state, "Ancient Grove")
 
     # Complete the "Whispers in the Wind" quest (requires both Crystal-Clear Water and Moonflowers)
     execute_commands(game, ["give moonflowers to ancient tree spirit"])
     check_item_in_inventory(game.state, "Moonflowers", should_be_present=False)
     check_item_in_inventory(game.state, "crystal-clear water")
-    check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan", "The Innkeeper's Daughter"])
+    check_quests(
+        game.state,
+        [
+            "The Gathering Storm",
+            "The Merchant's Lost Caravan",
+            "The Innkeeper's Daughter",
+        ],
+    )
 
     # Step 20: Return to The Silver Stag Inn to cure Elena
-    # Navigate back to The Silver Stag Inn: Ancient Grove -> Forest Entrance -> Forest Transition -> Mountain Path -> Greendale Gates -> Main Square -> Market District -> Silver Stag Inn
-    execute_commands(game, ["go north", "go west", "go west", "go north", "go north", "go east", "go north"])
+    # Navigate back to The Silver Stag Inn: Ancient Grove -> Forest Entrance ->
+    # Forest Transition -> Mountain Path -> Greendale Gates -> Main Square ->
+    # Market District -> Silver Stag Inn
+    # Mountain Path -> Greendale Gates -> Main Square -> Market District -> Silver Stag Inn
+    execute_commands(
+        game,
+        [
+            "go north",
+            "go west",
+            "go west",
+            "go north",
+            "go north",
+            "go east",
+            "go north",
+        ],
+    )
     check_current_room(game.state, "The Silver Stag Inn")
     # Cure Elena using the magical healing sequence
-    execute_commands(game, ["cast greater_heal on barmaid elena", "use crystal-clear water with barmaid elena", "cast dispel on barmaid elena"])
+    execute_commands(
+        game,
+        [
+            "cast greater_heal on barmaid elena",
+            "use crystal-clear water with barmaid elena",
+            "cast dispel on barmaid elena",
+        ],
+    )
     check_item_in_inventory(game.state, "crystal-clear water")
     check_quests(game.state, ["The Gathering Storm", "The Merchant's Lost Caravan"])
     # Talk to Marcus to receive the Druidic Charm
@@ -397,7 +549,8 @@ def test_golden_path_act2_completion():
     check_item_in_inventory(game.state, "druidic charm")
 
     # Step 21: Search for Lost Caravan (Forest Areas)
-    # Navigate back to Forest Entrance: Silver Stag Inn -> Market District -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition -> Forest Entrance
+    # Navigate back to Forest Entrance: Silver Stag Inn -> Market District -> Main Square ->
+    # Greendale Gates -> Mountain Path -> Forest Transition -> Forest Entrance
     execute_commands(game, ["go south", "go west", "go south", "go south", "go east", "go east"])
     check_current_room(game.state, "Forest Entrance")
     # Cast forest_speech to communicate with woodland creatures and find caravan location
@@ -408,10 +561,13 @@ def test_golden_path_act2_completion():
     check_item_in_room(game.state.current_room, "caravan", should_be_present=False)
     execute_commands(game, ["use quality rope with ravine"])
     check_item_in_room(game.state.current_room, "caravan")
-    check_item_in_inventory(game.state, "quality rope", False)  # Rope should be consumed in the rescue
+    check_item_in_inventory(
+        game.state, "quality rope", False
+    )  # Rope should be consumed in the rescue
 
     # Step 22: Return to Market District
-    # Navigate back to Market District: Forest Entrance -> Forest Transition -> Mountain Path -> Greendale Gates -> Main Square -> Market District
+    # Navigate back to Market District: Forest Entrance -> Forest Transition -> Mountain Path ->
+    # Greendale Gates -> Main Square -> Market District
     execute_commands(game, ["go west", "go west", "go north", "go north", "go east"])
     check_current_room(game.state, "Market District")
     # Talk to Caravan Master Thorne with good news - he rewards with Secret Documents
@@ -420,7 +576,8 @@ def test_golden_path_act2_completion():
     check_quests(game.state, ["The Gathering Storm"])  # Caravan quest should be completed
 
     # Step 23: Castle Courtyard (Cedric's Honor Quest)
-    # Navigate to Castle Courtyard: Market District -> Main Square -> Castle Approach -> Castle Courtyard
+    # Navigate to Castle Courtyard: Market District -> Main Square -> Castle Approach ->
+    # Castle Courtyard
     execute_commands(game, ["go west", "go north", "go west"])
     check_current_room(game.state, "Castle Courtyard")
     # Verify characters are present
@@ -460,8 +617,22 @@ def test_golden_path_act2_completion():
     check_item_in_inventory(game.state, "nature's charm")
 
     # Step 25: Heart of the Forest - Complete The Gathering Storm quest
-    # Navigate to Heart of the Forest: Castle Courtyard -> Castle Approach -> Main Square -> Greendale Gates -> Mountain Path -> Forest Transition -> Forest Entrance -> Ancient Grove -> Heart of the Forest
-    execute_commands(game, ["go east", "go south", "go south", "go south", "go east", "go east", "go south", "go south"])
+    # Navigate to Heart of the Forest: Castle Courtyard -> Castle Approach -> Main Square ->
+    # Greendale Gates -> Mountain Path -> Forest Transition -> Forest Entrance -> Ancient Grove ->
+    # Heart of the Forest
+    execute_commands(
+        game,
+        [
+            "go east",
+            "go south",
+            "go south",
+            "go south",
+            "go east",
+            "go east",
+            "go south",
+            "go south",
+        ],
+    )
     check_current_room(game.state, "Heart of the Forest")
     # Verify Nyx and offering altar are present
     check_character_in_room(game.state.current_room, "Nyx", should_be_present=False)
@@ -481,11 +652,25 @@ def test_golden_path_act2_completion():
     # Verify prophetic_vision spell was learned
     check_spell_known(game.state, "prophetic_vision")
 
-    # Step 26: Go back to Sir Cedric and cast prophetic_vision to complete The Gathering Storm quest
-    execute_commands(game, ["go north", "go north", "go west", "go west", "go north", "go north", "go north", "go west"])
+    # Step 26: Go back to Sir Cedric and cast prophetic_vision to complete the quest
+    execute_commands(
+        game,
+        [
+            "go north",
+            "go north",
+            "go west",
+            "go west",
+            "go north",
+            "go north",
+            "go north",
+            "go west",
+        ],
+    )
     execute_commands(game, ["cast prophetic_vision"])
     check_quests(game.state, [])
-    assert game.acts[game.current_act].is_completed(game.state), "Act 2 should be marked as completed"
+    assert game.acts[game.current_act].is_completed(game.state), (
+        "Act 2 should be marked as completed"
+    )
 
     # At this point, we have completed steps 1-25 of the golden path!
 
@@ -508,7 +693,9 @@ def test_main_square_navigation_restriction():
 
     # Test restricted exits - should only be able to go south
     available_exits = game.state.current_room.get_exits(game.state)
-    assert available_exits == {"south": "GreendaleGates"}, f"Expected only south exit, got: {available_exits}"
+    assert available_exits == {"south": "GreendaleGates"}, (
+        f"Expected only south exit, got: {available_exits}"
+    )
 
     # Test navigation restriction - should get lost message when trying invalid directions
     result = game.move("north")
@@ -521,7 +708,9 @@ def test_main_square_navigation_restriction():
 
     # Invalid direction should still give standard error message
     result = game.move("west")
-    assert "can't go that way" in result.lower(), "Should get standard error for truly invalid direction"
+    assert "can't go that way" in result.lower(), (
+        "Should get standard error for truly invalid direction"
+    )
     assert game.state.current_room.name == "Main Square", "Should still be in Main Square"
 
     # Use the city map to unlock navigation
@@ -531,12 +720,20 @@ def test_main_square_navigation_restriction():
     result = execute_commands(game, ["use city map"])
 
     # Verify the map has been removed from inventory after use
-    assert not game.state.has_item("city map"), "City map should be removed from inventory after use"
+    assert not game.state.has_item("city map"), (
+        "City map should be removed from inventory after use"
+    )
 
     # After using map, should have full access to all exits
     available_exits = game.state.current_room.get_exits(game.state)
-    expected_exits = {"south": "GreendaleGates", "north": "CastleApproach", "east": "MarketDistrict"}
-    assert available_exits == expected_exits, f"Expected all exits after using map, got: {available_exits}"
+    expected_exits = {
+        "south": "GreendaleGates",
+        "north": "CastleApproach",
+        "east": "MarketDistrict",
+    }
+    assert available_exits == expected_exits, (
+        f"Expected all exits after using map, got: {available_exits}"
+    )
 
     # Mock the movement to test the exit availability without side effects
     exits = game.state.current_room.get_exits(game.state)
@@ -544,7 +741,9 @@ def test_main_square_navigation_restriction():
     assert "east" in exits, "East exit should be available after using map"
 
 def test_golden_path_step_15_forest_transition():
-    """Test step 15: Forest Transition activities - kit use, stone examination, spell learning, hermit interaction."""
+    """Test step 15: Forest Transition activities - kit use, stone examination,
+    spell learning, hermit interaction.
+    """
     act = Act2()
     act.music_file = ''
     game = Game([act])
@@ -559,9 +758,15 @@ def test_golden_path_step_15_forest_transition():
     # Verify initial state
     check_item_in_inventory(game.state, "forest survival kit")
     check_character_in_room(game.state.current_room, "forest hermit")
-    assert not game.state.get_story_flag("forest_transition_kit_used"), "Kit should not be used initially"
-    assert not game.state.get_story_flag("standing_stones_examined"), "Stones should not be examined initially"
-    assert not game.state.get_story_flag("nature_sense_learned"), "Nature sense should not be learned initially"
+    assert not game.state.get_story_flag("forest_transition_kit_used"), (
+        "Kit should not be used initially"
+    )
+    assert not game.state.get_story_flag("standing_stones_examined"), (
+        "Stones should not be examined initially"
+    )
+    assert not game.state.get_story_flag("nature_sense_learned"), (
+        "Nature sense should not be learned initially"
+    )
 
     # Step 15a: Use Forest Survival Kit
     result = execute_commands(game, ["use forest survival kit"])
@@ -577,7 +782,9 @@ def test_golden_path_step_15_forest_transition():
     # Step 15c: Learn nature_sense spell from the stones
     check_spell_known(game.state, "nature_sense")
     assert "nature's sense" in result.lower(), "Should mention the spell name"
-    assert "connection forming with the natural world" in result.lower(), "Should describe magical connection"
+    assert "connection forming with the natural world" in result.lower(), (
+        "Should describe magical connection"
+    )
 
     # Step 15d: Talk to Forest Hermit to get protective charm and complete quest
     hermit = None
@@ -644,7 +851,9 @@ def test_whispering_glade_riddle_system():
     assert "moonflowers" in item_names
 
 def test_squires_diary_quest_dependency():
-    """Test that the diary can only be found after talking to squires and provides meaningful information only after quest is accepted."""
+    """Test that the diary can only be found after talking to squires and provides
+    meaningful information only after quest is accepted.
+    """
     game = _create_test_game()
 
     # Navigate to Castle Courtyard
@@ -686,7 +895,9 @@ def test_squires_diary_quest_dependency():
 
 
 def test_castle_courtyard_search_dependency():
-    """Test that the Castle Courtyard search requires talking to squires first, and squires require quest acceptance."""
+    """Test that the Castle Courtyard search requires talking to squires first,
+    and squires require quest acceptance.
+    """
     game = _create_test_game()
 
     # Navigate to Castle Courtyard
@@ -779,7 +990,9 @@ def test_forest_transition_spell_learning():
 
 
 def test_secret_documents_quest_dependency():
-    """Test that examining secret documents provides meaningful information only after reading the squire's diary."""
+    """Test that examining secret documents provides meaningful information only
+    after reading the squire's diary.
+    """
     game = _create_test_game()
 
     # Add secret documents to inventory
@@ -810,7 +1023,9 @@ def test_secret_documents_quest_dependency():
     assert "Sir Cedric was falsely accused" in examine_result
     assert "protecting civilians" in examine_result
     assert "clear his name and restore his honor" in examine_result
-    assert "can't make sense" not in examine_result, "Should not show confusion after reading diary"
+    assert "can't make sense" not in examine_result, (
+        "Should not show confusion after reading diary"
+    )
 
     # Flag should now be set since documents were examined after reading diary
     assert game.state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS)
@@ -899,7 +1114,11 @@ def test_step_24_lord_commander_interaction():
 
     # Set up the required state: quest accepted, diary read, documents examined
     from retroquest.act2.items.SecretDocuments import SecretDocuments
-    from retroquest.act2.Act2StoryFlags import FLAG_CEDRIKS_HONOR_ACCEPTED, FLAG_READ_SQUIRES_DIARY, FLAG_EXAMINED_SECRET_DOCUMENTS
+    from retroquest.act2.Act2StoryFlags import (
+        FLAG_CEDRIKS_HONOR_ACCEPTED,
+        FLAG_READ_SQUIRES_DIARY,
+        FLAG_EXAMINED_SECRET_DOCUMENTS
+    )
 
     game.state.set_story_flag(FLAG_CEDRIKS_HONOR_ACCEPTED, True)
     game.state.set_story_flag(FLAG_READ_SQUIRES_DIARY, True)

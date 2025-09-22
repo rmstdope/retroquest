@@ -23,6 +23,7 @@ class Room:
         print(self.description)
 
     def get_items(self) -> list[Item]:
+        """Returns the list of items currently in the room."""
         return self.items
 
     def add_item(self, item: Item) -> None:
@@ -34,6 +35,7 @@ class Room:
         self.characters.append(character)
 
     def get_characters(self) -> list[Character]:
+        """Returns the list of characters currently in the room."""
         return self.characters
 
     def get_exits(self, _game_state: GameState) -> dict[str, str]:

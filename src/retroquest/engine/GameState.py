@@ -136,6 +136,7 @@ class GameState:
         return False
 
     def stats(self) -> str:
+        """Returns a formatted string summarizing the current game state."""
         lines = [
             f"[bold]Current Room:[/bold] [room_name]{self.current_room.name}[/room_name]",
             "",

@@ -14,6 +14,7 @@ class SpellPanel(VerticalScroll):
         self.can_focus = False
 
     def update_spells(self, text: list[tuple[str, str]]) -> None:
+        """Update the spell list with new spells."""
         # Remove all existing children
         for child in list(self.children):
             child.remove()
@@ -35,6 +36,7 @@ class SpellPanel(VerticalScroll):
             self.mount(no_spells)
 
     async def on_key(self, event) -> None:  # type: ignore[override]
+        """Handle up/down arrow keys for navigation and Enter for popup details."""
         if event.key in ("down", "up"):
             # Get all focusable Static widgets (selectable items)
             focusable_items = [child for child in self.children if child.can_focus]

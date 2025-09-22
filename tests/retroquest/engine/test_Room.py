@@ -17,8 +17,8 @@ class DummyCharacter(Character):
     def __init__(self, name="Test Character", description="A test character"):
         super().__init__(name=name, description=description)
 
-@pytest.fixture
-def game_state():
+@pytest.fixture(name="game_state")
+def game_state_fixture():
     # Create a minimal starting room and pass required mappings to GameState
     start_room = Room("Start", "Starting room")
     gs = GameState(start_room, {"Start": start_room}, [])
@@ -144,7 +144,7 @@ def test_get_ambient_sound_default():
 
 # --- Hooks ---
 
-def test_on_enter_returns_string(game_state, capsys):
+def test_on_enter_returns_string(game_state):
     r = Room("R", "Desc")
     # on_enter currently returns empty string; ensure no exception
     result = r.on_enter(game_state)

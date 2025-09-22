@@ -14,6 +14,10 @@ class InventoryPanel(VerticalScroll):
         self.can_focus = False
 
     def update_inventory(self, text: list[tuple[str, str]]) -> None:
+        """
+        Update the inventory list with new items. Each item is a tuple of
+        (item name, description).
+        """
         # Remove all existing children
         for child in list(self.children):
             child.remove()
@@ -37,6 +41,7 @@ class InventoryPanel(VerticalScroll):
             self.mount(no_items)
 
     async def on_key(self, event) -> None:  # type: ignore[override]
+        """Handle up/down arrow keys for navigation and Enter for popups."""
         if event.key in ("down", "up"):
             # Get all focusable Static widgets (selectable items)
             focusable_items = [child for child in self.children if child.can_focus]

@@ -1,7 +1,6 @@
 """Base class for all items in RetroQuest."""
-from .GameState import GameState
 from typing import TYPE_CHECKING, Union
-
+from .GameState import GameState
 if TYPE_CHECKING:
     from .Character import Character
 
@@ -19,9 +18,11 @@ class Item:
         self.can_be_carried_flag = can_be_carried
 
     def get_name(self) -> str:
+        """Returns the full name of the item."""
         return self.name
 
     def get_short_name(self) -> str:
+        """Returns the short name of the item."""
         return self.short_name
 
     def prevent_pickup(self) -> Union[str, None]:

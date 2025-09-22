@@ -1,6 +1,5 @@
 """Integration tests for Act 1: golden path and story progression."""
 
-import pytest
 from act1.Act1 import Act1
 from engine.Game import Game
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
@@ -30,7 +29,9 @@ from retroquest.act1.quests.PreparingForTheRoad import PreparingForTheRoadQuest
 from retroquest.act1.quests.FadedPhotograph import FadedPhotographQuest
 from retroquest.act1.quests.LostLetter import LostLetterQuest
 from retroquest.act1.quests.ShadowsOverWillowbrook import ShadowsOverWillowbrookQuest
-from ..utils.utils import *
+from ..utils.utils import (check_character_in_room, check_current_room, check_quests,
+                            execute_commands, check_item_in_inventory, check_item_in_room,
+                            check_spell_known, check_story_flag)
 
 # Room setup for integration test
 ROOMS = {
@@ -67,7 +68,7 @@ QUESTS = [
     LostLetterQuest()
 ]
 
-def test_golden_path_act1_completion(monkeypatch):
+def test_golden_path_act1_completion():
     """Test the complete golden path through Act 1 from start to finish."""
     # Setup Game
     act = Act1()

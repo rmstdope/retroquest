@@ -25,6 +25,7 @@ class Popup(VerticalScroll):
         self.set_content(border_text, text, popup_type)
 
     def set_content(self, border_text: str, text: str, popup_type: PopupType) -> None:
+        """Set or update the popup content with optional fade animation."""
         if self.is_mounted:
             # Animate out, update content, then animate back in
             self.styles.animate(
@@ -54,6 +55,7 @@ class Popup(VerticalScroll):
         self.styles.animate("opacity", 1.0, duration=self.animation_duration)
 
     def on_key(self, event: events.Key) -> None:  # type: ignore[override]
+        """Handle key events for popup interaction."""
         if self.popup_type == PopupType.INFO:
             if event.key == "enter":
                 self.app.close_popup()
@@ -71,6 +73,7 @@ class Popup(VerticalScroll):
         yield self.static
 
     def on_mount(self) -> None:  # type: ignore[override]
+        """Set initial focus and animate in on mount."""
         self.text_area.focus()
         # Animate opacity from 0.0 to 1.0 for a fade-in effect
         self.styles.opacity = 0.0

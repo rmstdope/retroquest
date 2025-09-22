@@ -14,6 +14,13 @@ class QuestLogPanel(VerticalScroll):
 
     def update_questlog(self, active_quests: list,
                         completed_quests: Union[list, None] = None) -> None:
+        """Update the quest log with active and completed quests.
+
+        Args:
+            active_quests (list): List of active quests.
+            completed_quests (Union[list, None], optional): List of completed quests.
+                Defaults to None.
+        """
         # Remove all existing children
         for child in list(self.children):
             child.remove()
@@ -54,6 +61,9 @@ class QuestLogPanel(VerticalScroll):
                 self.mount(no_completed)
 
     async def on_key(self, event) -> None:  # type: ignore[override]
+        """
+        Handle key events for quest log navigation.
+        """
         if event.key in ("down", "up"):
             # Get all Collapsible widgets
             collapsibles = [child for child in self.children if isinstance(child, Collapsible)]
