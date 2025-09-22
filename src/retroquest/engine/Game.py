@@ -4,8 +4,6 @@ from enum import Enum, auto
 
 import pickle
 import os
-import threading
-import pygame
 
 from .Character import Character
 from .CommandParser import CommandParser
@@ -14,6 +12,7 @@ from .Item import Item
 from .Spell import Spell
 from . import DEV_MODE
 from .Act import Act
+from .Audio import Audio
 
 # The runtime phase of the game: controls startup/logo/act intro/act transitions
 class GameRunState(Enum):
@@ -45,40 +44,17 @@ class Game:
         self.run_state = GameRunState.SHOW_LOGO
         self.accept_input = False
         self.command_result = ''
-        self.start_music()
-
+        # Audio subsystem owned by Game
+        self.audio = Audio()
+        # Start act music if available
+        self.audio.start_music(self.acts[self.current_act].music_file)
     def play_soundeffect(self, filename: str) -> None:
-        """Play a sound effect (wav/ogg) mixed with the currently playing music. Non-blocking."""
-        def play_fx():
-            try:
-                if not pygame.mixer.get_init():
-                    pygame.mixer.init()
-                sound = pygame.mixer.Sound('audio/soundeffects/' + filename)
-                sound.play()
-            except RuntimeError as e:
-                print(f"[dim]Could not play sound effect '{filename}': {e}[/dim]")
-        threading.Thread(target=play_fx, daemon=True).start()
+        """Delegate sound effect playback to the Audio subsystem."""
+        self.audio.play_soundeffect(filename)
 
     def start_music(self) -> None:
-        """
-        Start act music in a separate thread so it doesn't block the prompt.
-        If music is already playing, stop it first.
-        """
-        def play_music() -> None:
-            try:
-                if pygame.mixer.get_init():
-                    pygame.mixer.music.stop()
-                else:
-                    pygame.mixer.init()
-                music_path = 'audio/music/' + self.acts[self.current_act].music_file
-                pygame.mixer.music.load(music_path)
-                pygame.mixer.music.play(loops=-1)  # Loop indefinitely
-            except RuntimeError as e:
-                # Use print instead of self.console.print to avoid dependency issues
-                print(f"[dim]Could not play music: {e}[/dim]")
-        music_file = self.acts[self.current_act].music_file
-        if music_file is not None and music_file != '':
-            threading.Thread(target=play_music, daemon=True).start()
+        """Delegate starting music to the Audio subsystem for the current act."""
+        self.audio.start_music(self.acts[self.current_act].music_file)
 
     def new_turn(self) -> None:
         """Advance the game state by one turn."""
