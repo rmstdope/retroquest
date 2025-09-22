@@ -17,11 +17,11 @@ class InventoryPanel(VerticalScroll):
         # Remove all existing children
         for child in list(self.children):
             child.remove()
-        
+
         # Add Inventory header
         header = Static(apply_theme("[bold]Inventory[/bold]"))
         self.mount(header)
-        
+
         # Create a new Static widget for each element
         if text:
             for item in text:
@@ -30,7 +30,7 @@ class InventoryPanel(VerticalScroll):
                 static_widget = Static(apply_theme(itemname), classes='selectable-item')
                 static_widget.can_focus = True
                 static_widget.description = description  # Store the description
-                
+
                 self.mount(static_widget)
         else:
             no_items = Static(apply_theme("[dim](none)[/dim]"))
@@ -40,17 +40,17 @@ class InventoryPanel(VerticalScroll):
         if event.key in ("down", "up"):
             # Get all focusable Static widgets (selectable items)
             focusable_items = [child for child in self.children if child.can_focus]
-            
+
             if not focusable_items:
                 return
-            
+
             # Find currently focused item
             current_focused = None
             for i, item in enumerate(focusable_items):
                 if item.has_focus:
                     current_focused = i
                     break
-            
+
             # Move to next/previous item or first/last one if none focused
             if current_focused is not None:
                 if event.key == "down":
@@ -59,7 +59,7 @@ class InventoryPanel(VerticalScroll):
                     next_index = (current_focused - 1) % len(focusable_items)
             else:
                 next_index = 0 if event.key == "down" else len(focusable_items) - 1
-            
+
             focusable_items[next_index].focus()
             event.prevent_default()
         elif event.key == "enter":

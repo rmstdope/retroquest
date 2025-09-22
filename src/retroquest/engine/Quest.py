@@ -1,3 +1,4 @@
+"""Base class for all quests in RetroQuest."""
 from .GameState import GameState
 
 class Quest:
@@ -24,7 +25,10 @@ class Quest:
         return self.completion
 
     def check_update(self, game_state: GameState) -> bool:
-        """Override in subclasses to update quest state dynamically. Return True if quest log should update."""
+        """
+        Override in subclasses to update quest state dynamically. Return True if quest log
+        should update.
+        """
         return False
 
     def is_main(self) -> bool:

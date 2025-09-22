@@ -17,7 +17,7 @@ class Character:
 
     def examine(self, _game_state: GameState) -> str:
         """
-        Base 'examine' method for characters. Subclasses should override this if they have 
+        Base 'examine' method for characters. Subclasses should override this if they have
         specific examination details.
         """
         return (

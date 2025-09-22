@@ -27,11 +27,16 @@ class Popup(VerticalScroll):
     def set_content(self, border_text: str, text: str, popup_type: PopupType) -> None:
         if self.is_mounted:
             # Animate out, update content, then animate back in
-            self.styles.animate("opacity", 0.0, duration=self.animation_duration, on_complete=lambda: self._update_content_and_fade_in(border_text, text, popup_type))
+            self.styles.animate(
+                "opacity", 0.0, duration=self.animation_duration,
+                on_complete=lambda: self._update_content_and_fade_in(
+                    border_text, text, popup_type
+                )
+            )
         else:
             # Widget not mounted yet, set content directly
             self._update_content(border_text, text, popup_type)
-    
+
     def _update_content(self, border_text: str, text: str, popup_type: PopupType) -> None:
         """Internal method to update the popup content."""
         self.border_title = apply_theme(border_text)
@@ -41,8 +46,9 @@ class Popup(VerticalScroll):
             self.static.update("Press Y or N")
         else:
             self.static.update("Press Enter to close")
-    
-    def _update_content_and_fade_in(self, border_text: str, text: str, popup_type: PopupType) -> None:
+
+    def _update_content_and_fade_in(self, border_text: str, text: str,
+                                    popup_type: PopupType) -> None:
         """Update content and fade back in."""
         self._update_content(border_text, text, popup_type)
         self.styles.animate("opacity", 1.0, duration=self.animation_duration)
@@ -55,7 +61,7 @@ class Popup(VerticalScroll):
             if event.key.lower() == "y":
                 self.app.close_popup(response="y")
             elif event.key.lower() == "n":
-                self.app.close_popup(response="n")        
+                self.app.close_popup(response="n")
         # Prevent all key events from bubbling up to maintain modal behavior
         event.prevent_default()
         event.stop()

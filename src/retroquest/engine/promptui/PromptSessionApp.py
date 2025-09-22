@@ -1,3 +1,4 @@
+"""Terminal-based UI using prompt_toolkit for command input and rich for output."""
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import NestedCompleter
 from rich.console import Console
@@ -78,7 +79,7 @@ class PromptSessionApp:
     def run(self) -> None:
         """Main game loop that handles user input and updates the display."""
         while self.game.is_running:
-            if (not (self.game.is_act_running() or self.game.is_act_transitioning()) 
+            if (not (self.game.is_act_running() or self.game.is_act_transitioning())
                 or self.game.has_changed_room):
                 self.console.clear()
             self.console.print(self.get_output_text())

@@ -1,3 +1,4 @@
+"""Game state management for RetroQuest."""
 from typing import Any, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -6,13 +7,13 @@ if TYPE_CHECKING:
 
 class GameState:
     """
-    Holds the mutable state of the currently played game: current room, inventory, 
+    Holds the mutable state of the currently played game: current room, inventory,
     history, and visited rooms.
     """
     def __init__(self, starting_room: Any, all_rooms: dict, all_quests: list) -> None:
         self.current_room = starting_room
         self.all_rooms = all_rooms
-        # Inventory supports carrying multiple items of the same type, 
+        # Inventory supports carrying multiple items of the same type,
         # displayed as batched counts
         self.inventory = []
         self.history = []
@@ -56,25 +57,25 @@ class GameState:
 
     def get_item_count(self, item_name: str) -> int:
         """
-        Returns the count of items with the given name or short name in inventory 
+        Returns the count of items with the given name or short name in inventory
         (case-insensitive).
         """
         item_name_lower = item_name.lower()
         count = 0
         for item in self.inventory:
-            if (item.get_name().lower() == item_name_lower or 
+            if (item.get_name().lower() == item_name_lower or
                 item.get_short_name().lower() == item_name_lower):
                 count += 1
         return count
 
     def has_item(self, item_name: str) -> bool:
         """
-        Checks if an item with the given name or short name is in the player's 
+        Checks if an item with the given name or short name is in the player's
         inventory (case-insensitive).
         """
         item_name_lower = item_name.lower()
         for item in self.inventory:
-            if (item.get_name().lower() == item_name_lower or 
+            if (item.get_name().lower() == item_name_lower or
                 item.get_short_name().lower() == item_name_lower):
                 return True
         return False
@@ -125,7 +126,7 @@ class GameState:
 
     def has_spell(self, spell_name: str) -> bool:
         """
-        Checks if a spell with the given name is in the player's known spells 
+        Checks if a spell with the given name is in the player's known spells
         (case-insensitive).
         """
         spell_name_lower = spell_name.lower()
@@ -229,7 +230,7 @@ class GameState:
 
     def get_room(self, room_name: str) -> Union[Any, None]:
         """
-        Returns the room object matching the given room_name (case-insensitive, 
+        Returns the room object matching the given room_name (case-insensitive,
         matches against all room names). Returns None if not found.
         """
         for room in self.all_rooms.values():
@@ -246,13 +247,13 @@ class GameState:
         # Search inventory
         item_name_lower = item_name.lower()
         for item in self.inventory:
-            if ((item.get_name().lower() == item_name_lower) or 
+            if ((item.get_name().lower() == item_name_lower) or
                 (item.get_short_name().lower() == item_name_lower)):
                 return item
         # Search all rooms
         for room in self.all_rooms.values():
             for room_item in getattr(room, 'items', []):
-                if (room_item.get_name().lower() == item_name_lower or 
+                if (room_item.get_name().lower() == item_name_lower or
                     (room_item.get_short_name().lower() == item_name_lower)):
                     return room_item
         return None
@@ -273,8 +274,8 @@ class GameState:
 
     def update_quest(self) -> Union[str, None]:
         """
-        Checks activated_quests for the first quest that should update its quest log 
-        (dynamic quest log updates). Returns a string describing the updated quest, 
+        Checks activated_quests for the first quest that should update its quest log
+        (dynamic quest log updates). Returns a string describing the updated quest,
         or None if no quest log was updated.
         """
         for quest in self.activated_quests:
@@ -289,7 +290,7 @@ class GameState:
     def complete_quest(self) -> Union[str, None]:
         """
         Checks activated_quests for the first quest that is now completed.
-        Moves the newly completed quest to completed_quests and returns a string 
+        Moves the newly completed quest to completed_quests and returns a string
         describing it, or None if no new quest was completed.
         """
         for i, quest in enumerate(self.activated_quests):

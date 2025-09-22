@@ -1,3 +1,4 @@
+"""Base class for all items in RetroQuest."""
 from .GameState import GameState
 from typing import TYPE_CHECKING, Union
 
@@ -9,8 +10,9 @@ class Item:
     Base class for all items in RetroQuest.
     Inherit from this class to define specific items.
     """
-    
-    def __init__(self, name: str, description: str, short_name: Union[str, None] = None, can_be_carried: bool = False) -> None:
+
+    def __init__(self, name: str, description: str, short_name: Union[str, None] = None,
+                 can_be_carried: bool = False) -> None:
         self.name = name
         self.description = description
         self.short_name = short_name if short_name is not None else name
@@ -21,26 +23,56 @@ class Item:
 
     def get_short_name(self) -> str:
         return self.short_name
-    
+
     def prevent_pickup(self) -> Union[str, None]:
-        """Return a message if the item cannot be picked up. Override in subclasses for special cases."""
-        return None if self.can_be_carried_flag else f"[failure]You can't take the [item_name]{self.get_name()}[/item_name].[/failure]"
+        """
+        Return a message if the item cannot be picked up. Override in subclasses for
+        special cases.
+        """
+        return (
+            None if self.can_be_carried_flag else
+            f"[failure]You can't take the [item_name]{self.get_name()}[/item_name].[/failure]"
+        )
 
     def use(self, _game_state: GameState) -> str:
-        """Base 'use' method for items. Subclasses should override this if they have specific use actions."""
-        return f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] in any special way.[/failure]"
+        """
+        Base 'use' method for items. Subclasses should override this if they have specific
+        use actions.
+        """
+        return (
+            f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] in any "
+            "special way.[/failure]"
+        )
 
     def use_with(self, _game_state: GameState, other_item: 'Item') -> str:
-        """Base 'use_with' method for items. Subclasses should override this if they can interact with other items."""
-        return f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] with the [item_name]{other_item.get_name()}[/item_name].[/failure]"
-    
+        """
+        Base 'use_with' method for items. Subclasses should override this if they can
+        interact with other items.
+        """
+        return (
+            f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] with "
+            f"the [item_name]{other_item.get_name()}[/item_name].[/failure]"
+        )
+
     def use_on_character(self, _game_state: GameState, target_character: 'Character') -> str:
-        """Base 'use_on_character' method for items. Subclasses should override this if they can be used on characters."""
-        return f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] on [character_name]{target_character.get_name()}[/character_name].[/failure]"
-    
+        """
+        Base 'use_on_character' method for items. Subclasses should override this if they
+        can be used on characters.
+        """
+        return (
+            f"[failure]You can't use the [item_name]{self.get_name()}[/item_name] on "
+            f"[character_name]{target_character.get_name()}[/character_name].[/failure]"
+        )
+
     def examine(self, _game_state: GameState) -> str:
-        """Base 'examine' method for items. Subclasses should override this if they have specific examination details."""
-        return f"[event]You examine the [item_name]{self.get_name()}[/item_name]. {self.description}[/event]"
+        """
+        Base 'examine' method for items. Subclasses should override this if they have
+        specific examination details.
+        """
+        return (
+            f"[event]You examine the [item_name]{self.get_name()}[/item_name]. "
+            f"{self.description}[/event]"
+        )
 
     def listen(self, _game_state: GameState) -> str:
         """Base 'listen' method for items. Subclasses should override this if they make a sound."""
@@ -59,8 +91,14 @@ class Item:
         return f"[failure]You can't close the [item_name]{self.get_name()}[/item_name].[/failure]"
 
     def grow(self, _game_state: GameState) -> str:
-        """Base 'grow' method for items, typically called by the Grow spell. Subclasses should override this."""
-        return f"[failure]The [item_name]{self.get_name()}[/item_name] does not respond to the [spell_name]grow[/spell_name] spell.[/failure]"
+        """
+        Base 'grow' method for items, typically called by the Grow spell. Subclasses
+        should override this.
+        """
+        return (
+            f"[failure]The [item_name]{self.get_name()}[/item_name] does not respond to "
+            "the [spell_name]grow[/spell_name] spell.[/failure]"
+        )
 
     def eat(self, _game_state: GameState) -> str:
         """Base 'eat' method for items. Subclasses should override this if they are edible."""
@@ -71,9 +109,21 @@ class Item:
         return f"[failure]You can't drink the [item_name]{self.get_name()}[/item_name].[/failure]"
 
     def equip(self, _game_state: GameState) -> str:
-        """Base 'equip' method for items. Subclasses should override this if they are equippable."""
-        return f"[failure]You can't equip the [item_name]{self.get_name()}[/item_name].[/failure]"
+        """
+        Base 'equip' method for items. Subclasses should override this if they are
+        equippable.
+        """
+        return (
+            f"[failure]You can't equip the [item_name]{self.get_name()}[/item_name]."
+            "[/failure]"
+        )
 
     def unequip(self, _game_state: GameState) -> str:
-        """Base 'unequip' method for items. Subclasses should override this if they are equippable and can be unequipped."""
-        return f"[failure]You can't unequip the [item_name]{self.get_name()}[/item_name].[/failure]"
+        """
+        Base 'unequip' method for items. Subclasses should override this if they are
+        equippable and can be unequipped.
+        """
+        return (
+            f"[failure]You can't unequip the [item_name]{self.get_name()}[/item_name]."
+            "[/failure]"
+        )
