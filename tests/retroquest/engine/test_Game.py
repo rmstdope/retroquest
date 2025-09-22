@@ -320,18 +320,18 @@ def test_spells_command_with_spells(game):
 def test_give_item_to_character_successful(game):
     from retroquest.act1.items.Apple import Apple
     from retroquest.act1.characters.Villager import Villager # Assuming a generic Villager character
-    
+
     apple = Apple()
     villager = Villager() # Villager needs to be in the room
-    
+
     game.state.inventory.append(apple)
     game.state.current_room.characters.append(villager)
-    
+
     # Mock the villager's give_item method
     villager.give_item = MagicMock(return_value=f"[character_name]{villager.get_name()}[/character_name] takes the [item_name]{apple.get_name()}[/item_name].")
-    
+
     result = game.give(f"{apple.get_name()} to {villager.get_name()}")
-    
+
     assert f"[character_name]{villager.get_name()}[/character_name] takes the [item_name]{apple.get_name()}[/item_name]." in result
     villager.give_item.assert_called_once_with(game.state, apple)
     # Assuming the character's give_item method is responsible for removing the item if accepted.
@@ -342,7 +342,7 @@ def test_give_item_not_in_inventory(game):
     from retroquest.act1.characters.Villager import Villager
     villager = Villager()
     game.state.current_room.characters.append(villager)
-    
+
     result = game.give(f"nonexistent_item to {villager.get_name()}")
     assert "You don\'t have any \'nonexistent_item\' to give." in result
 
@@ -350,7 +350,7 @@ def test_give_item_to_character_not_in_room(game):
     from retroquest.act1.items.Apple import Apple
     apple = Apple()
     game.state.inventory.append(apple)
-    
+
     # Character "Ghost" is not added to the room
     result = game.give(f"{apple.get_name()} to Ghost")
     assert "There is no character named \'Ghost\' here." in result
@@ -358,13 +358,13 @@ def test_give_item_to_character_not_in_room(game):
 def test_give_item_character_does_not_want(game):
     from retroquest.act1.items.Stick import Stick # An item the character might not want
     from retroquest.engine.Character import Character # Base character
-    
+
     stick = Stick()
     generic_char = Character(name="Grumpy Person", description="Someone grumpy.")
-    
+
     game.state.inventory.append(stick)
     game.state.current_room.characters.append(generic_char)
-    
+
     # The default Character.give_item should be called
     result = game.give(f"{stick.get_name()} to {generic_char.get_name()}")
     assert f"[character_name]{generic_char.get_name()}[/character_name] doesn't seem interested in the [item_name]{stick.get_name()}[/item_name]." in result
@@ -384,16 +384,16 @@ def test_give_item_invalid_format(game):
 def test_look_in_room_with_items_and_characters(game):
     from retroquest.act1.items.Apple import Apple
     from retroquest.act1.characters.Villager import Villager
-    
+
     apple = Apple()
     villager = Villager()
-    
+
     # Ensure the starting room (Elior\'s Cottage) is used for this test
     # or set current_room explicitly if needed.
-    current_room = game.state.current_room 
+    current_room = game.state.current_room
     current_room.items.append(apple)
     current_room.characters.append(villager)
-    
+
     # Mock the room\'s describe method to verify it\'s called
     # Or, more practically, check that the output contains expected elements
     # from the room description, item names, and character names.
@@ -412,11 +412,11 @@ def test_look_in_empty_room(game):
     current_room = game.state.current_room
     current_room.items.clear()
     current_room.characters.clear()
-    
+
     # Original description of VegetableField without items/chars
     original_description = "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky."
     current_room.description = original_description # Ensure it\'s set for the test
-    
+
     # Mock describe or check its output structure
     # If Room.describe() dynamically builds the string, we check for absence of item/char lines
     # For this test, let\'s assume describe() returns the base description if no items/chars
@@ -435,12 +435,12 @@ def test_inventory_with_items(game):
     from retroquest.act1.items.Stick import Stick
     apple = Apple()
     stick = Stick()
-    
+
     game.state.inventory.append(apple)
     game.state.inventory.append(stick)
-    
+
     result = game.inventory()
-    
+
     assert "You are carrying:" in result
     assert f"- [item_name]{apple.get_name()}[/item_name]" in result
     assert f"- [item_name]{stick.get_name()}[/item_name]" in result
@@ -454,12 +454,12 @@ def test_examine_item_in_inventory(game):
     apple_description = "A juicy red apple, looking perfectly ripe."
     apple.examine = MagicMock(return_value=apple_description)
     apple.get_name = MagicMock(return_value="apple")
-    
+
     game.state.inventory.append(apple)
     # Ensure it's not also in the room to avoid ambiguity for this specific test
     if apple in game.state.current_room.items:
         game.state.current_room.items.remove(apple)
-        
+
     result = game.examine("apple")
     assert result == apple_description
     apple.examine.assert_called_once()
@@ -471,12 +471,12 @@ def test_examine_item_in_room(game):
     apple_description = "A shiny green apple, lying on the ground."
     apple.examine = MagicMock(return_value=apple_description)
     apple.get_name = MagicMock(return_value="apple")
-    
+
     game.state.current_room.items.append(apple)
     # Ensure it's not in inventory for this specific test
     if apple in game.state.inventory:
         game.state.inventory.remove(apple)
-        
+
     result = game.examine("apple")
     assert result == apple_description
     apple.examine.assert_called_once()
@@ -487,9 +487,9 @@ def test_examine_character_in_room(game):
     char_description = "A weary-looking traveler, resting by the old oak tree."
     traveler = Villager()
     traveler.description = char_description
-    
+
     game.state.current_room.characters.append(traveler)
-    
+
     result = game.examine("Villager")
     assert result == '[event]You examine [character_name]villager[/character_name]. ' + char_description + '[/event]'
 
@@ -498,7 +498,7 @@ def test_examine_target_not_found(game):
     game.state.inventory.clear()
     game.state.current_room.items.clear()
     game.state.current_room.characters.clear()
-    
+
     result = game.examine("dragon")
     assert result == "You don't see any 'dragon' here."
 
@@ -516,7 +516,7 @@ def test_examine_case_insensitivity(game):
     apple.description = apple_description
     apple.get_name = MagicMock(return_value="Golden Apple") # Name with space and caps
     game.state.inventory.append(apple)
-    
+
     result_item = game.examine("golden apple")
     assert result_item == '[event]You examine the [item_name]Golden Apple[/item_name]. ' + apple_description + '[/event]'
     game.state.inventory.clear() # Clean up for next part of test
@@ -527,7 +527,7 @@ def test_examine_case_insensitivity(game):
     blacksmith.name = "Blacksmith John"
     blacksmith.description = char_description
     game.state.current_room.characters.append(blacksmith)
-    
+
     result_char = game.examine("blacksmith JOHN")
     assert result_char == '[event]You examine [character_name]Blacksmith John[/character_name]. ' + char_description + '[/event]'
     game.state.current_room.characters.clear() # Clean up
@@ -541,7 +541,7 @@ def test_buy_item_successful(game):
 
     shopkeeper = Shopkeeper()
     rope_instance = Rope() # The item instance the shopkeeper would sell
-    
+
     # Setup shopkeeper's wares and mock buy_item
     # For this test, we assume Shopkeeper.buy_item handles coin deduction and item addition
     # and returns a success message.
@@ -552,7 +552,7 @@ def test_buy_item_successful(game):
     game.state.inventory.append(Coin()) # Player has one coin
 
     result = game.buy("rope from shopkeeper")
-    
+
     assert f"You bought a [item_name]{rope_instance.get_name()}[/item_name] for 1 [item_name]coin[/item_name](s)." in result
     shopkeeper.buy_item.assert_called_once_with("rope", game.state)
     # Further checks could be:
@@ -582,7 +582,7 @@ def test_buy_item_not_enough_coins(game):
     # Assume rope costs 1 coin, but player has 0
     shopkeeper.wares = {"rope": {"item": rope_instance, "price": 1}}
     shopkeeper.buy_item = MagicMock(return_value="You don't have enough [item_name]coins[/item_name] for the [item_name]rope[/item_name]. It costs 1 [item_name]coin[/item_name](s).")
-    
+
     game.state.current_room.characters.append(shopkeeper)
     # game.state.inventory is empty (no coins)
 
@@ -593,7 +593,7 @@ def test_buy_item_not_enough_coins(game):
 def test_buy_item_character_not_present(game):
     from retroquest.act1.items.Coin import Coin
     game.state.inventory.append(Coin())
-    
+
     result = game.buy("rope from Ghostly Shopkeeper")
     assert "There is no character named 'Ghostly shopkeeper' here." in result
 
@@ -638,7 +638,7 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
 
     def get_short_name(self):
         return self._short_name
-    
+
     def get_description(self):
         return self._description
 
@@ -666,7 +666,7 @@ class MockItemToUse: # Renamed to avoid conflict if Item is imported elsewhere b
 def test_use_item_from_inventory_successful(game):
     item1 = MockItemToUse(name="widget")
     game.state.add_item_to_inventory(item1)
-    
+
     result = game.use("widget")
     assert result == "You used the [item]widget[/item]."
     assert item1.use_called_with_state == game.state
@@ -674,7 +674,7 @@ def test_use_item_from_inventory_successful(game):
 def test_use_item_from_room_successful_no_pickup_needed(game):
     item1 = MockItemToUse(name="lever")
     game.state.current_room.add_item(item1)
-    
+
     result = game.use("lever")
     assert result == "You used the [item]lever[/item]."
     assert item1.use_called_with_state == game.state
@@ -690,11 +690,11 @@ def test_use_item1_inv_with_item2_inv_successful(game):
     item2 = MockItemToUse(name="chest")
     game.state.add_item_to_inventory(item1)
     game.state.add_item_to_inventory(item2)
-    
+
     result = game.use("key", "chest")
     assert result == "You used the [item]key[/item] with [item]chest[/item]."
     assert item1.use_with_called_with_state_and_item == (game.state, item2)
-    assert item2.use_called_with_state is None 
+    assert item2.use_called_with_state is None
 
 def test_use_item1_inv_with_item2_room_successful(game):
     item1 = MockItemToUse(name="key")
@@ -702,18 +702,18 @@ def test_use_item1_inv_with_item2_room_successful(game):
     # item2.requires_pickup is False by default
     game.state.add_item_to_inventory(item1)
     game.state.current_room.add_item(item2)
-    
+
     result = game.use("key", "locked_door")
     assert result == "You used the [item]key[/item] with [item]locked_door[/item]."
     assert item1.use_with_called_with_state_and_item == (game.state, item2)
 
 def test_use_item1_room_with_item2_inv_successful(game):
-    item1 = MockItemToUse(name="lever") 
+    item1 = MockItemToUse(name="lever")
     # item1.requires_pickup is False by default
     item2 = MockItemToUse(name="mechanism_part")
     game.state.current_room.add_item(item1)
     game.state.add_item_to_inventory(item2)
-    
+
     result = game.use("lever", "mechanism_part")
     assert result == "You used the [item]lever[/item] with [item]mechanism_part[/item]."
     assert item1.use_with_called_with_state_and_item == (game.state, item2)
@@ -753,12 +753,12 @@ def test_use_item_on_character_successful(game):
     """Test using an item on a character when the item supports it."""
     healing_potion = MockItemWithCharacterUse(name="healing potion")
     wounded_soldier = MockCharacter("wounded soldier")
-    
+
     game.state.add_item_to_inventory(healing_potion)
     game.state.current_room.add_character(wounded_soldier)
-    
+
     result = game.use("healing potion", "wounded soldier")
-    
+
     assert result == "You used the [item_name]healing potion[/item_name] on [character_name]wounded soldier[/character_name]."
     assert healing_potion.use_on_character_called_with == (game.state, wounded_soldier)
 
@@ -766,12 +766,12 @@ def test_use_item_on_character_item_from_room(game):
     """Test using an item from the room on a character."""
     bandages = MockItemWithCharacterUse(name="bandages")
     injured_traveler = MockCharacter("injured traveler")
-    
+
     game.state.current_room.add_item(bandages)
     game.state.current_room.add_character(injured_traveler)
-    
+
     result = game.use("bandages", "injured traveler")
-    
+
     assert result == "You used the [item_name]bandages[/item_name] on [character_name]injured traveler[/character_name]."
     assert bandages.use_on_character_called_with == (game.state, injured_traveler)
 
@@ -779,12 +779,12 @@ def test_use_item_on_character_not_supported(game):
     """Test using an item that doesn't support use_on_character method."""
     regular_item = MockItemToUse(name="apple")  # Has default use_on_character method
     hungry_person = MockCharacter("hungry person")
-    
+
     game.state.add_item_to_inventory(regular_item)
     game.state.current_room.add_character(hungry_person)
-    
+
     result = game.use("apple", "hungry person")
-    
+
     # Should use the default use_on_character implementation which returns a failure message
     assert "[failure]You can't use the [item_name]apple[/item_name] on [character_name]hungry person[/character_name].[/failure]" in result
     assert regular_item.use_on_character_called_with == (game.state, hungry_person)
@@ -793,9 +793,9 @@ def test_use_item_on_nonexistent_character(game):
     """Test using an item on a character that doesn't exist."""
     magic_wand = MockItemWithCharacterUse(name="magic wand")
     game.state.add_item_to_inventory(magic_wand)
-    
+
     result = game.use("magic wand", "unicorn")
-    
+
     assert "You don't see a 'unicorn' to use with the [item_name]magic wand[/item_name]" in result
     assert magic_wand.use_on_character_called_with is None
 
@@ -803,12 +803,12 @@ def test_use_item_on_character_case_insensitive(game):
     """Test that using items on characters is case-insensitive."""
     crystal = MockItemWithCharacterUse(name="Crystal Shard")
     wizard = MockCharacter("Wise Wizard")
-    
+
     game.state.add_item_to_inventory(crystal)
     game.state.current_room.add_character(wizard)
-    
+
     result = game.use("crystal shard", "wise wizard")
-    
+
     assert result == "You used the [item_name]Crystal Shard[/item_name] on [character_name]Wise Wizard[/character_name]."
     assert crystal.use_on_character_called_with == (game.state, wizard)
 
@@ -816,9 +816,9 @@ def test_use_item_on_character_item_not_found(game):
     """Test using a non-existent item on a character."""
     friendly_npc = MockCharacter("friendly npc")
     game.state.current_room.add_character(friendly_npc)
-    
+
     result = game.use("nonexistent item", "friendly npc")
-    
+
     assert result == "[failure]You don't have a 'nonexistent item' to use, and there isn't one here.[/failure]"
 
 def test_use_item_on_character_prefers_item_over_character_for_second_param(game):
@@ -826,13 +826,13 @@ def test_use_item_on_character_prefers_item_over_character_for_second_param(game
     tool = MockItemToUse(name="hammer")
     target_item = MockItemToUse(name="target")
     target_character = MockCharacter("target")  # Same name as item
-    
+
     game.state.add_item_to_inventory(tool)
     game.state.add_item_to_inventory(target_item)
     game.state.current_room.add_character(target_character)
-    
+
     result = game.use("hammer", "target")
-    
+
     # Should use hammer with target item, not target character
     assert result == "You used the [item]hammer[/item] with [item]target[/item]."
     assert tool.use_with_called_with_state_and_item == (game.state, target_item)
@@ -841,16 +841,16 @@ def test_use_item_on_character_when_no_item_match(game):
     """Test that when object_name doesn't match any item, it tries character."""
     staff = MockItemWithCharacterUse(name="healing staff")
     patient = MockCharacter("patient")
-    
+
     game.state.add_item_to_inventory(staff)
     game.state.current_room.add_character(patient)
-    
+
     # Make sure there's no item named "patient"
     assert not any(item.get_name().lower() == "patient" for item in game.state.inventory)
     assert not any(item.get_name().lower() == "patient" for item in game.state.current_room.items)
-    
+
     result = game.use("healing staff", "patient")
-    
+
     assert result == "You used the [item_name]healing staff[/item_name] on [character_name]patient[/character_name]."
     assert staff.use_on_character_called_with == (game.state, patient)
 
@@ -859,7 +859,7 @@ class MockItemWithoutCharacterUse(MockItemToUse):
     def __init__(self, name, short_name=None):
         super().__init__(name, short_name)
         # Deliberately override use_on_character to simulate old behavior
-    
+
     def use_on_character(self, game_state, target_character):
         """Override to return the same failure message as the default Item implementation."""
         self.use_on_character_called_with = (game_state, target_character)  # Track the call
@@ -869,12 +869,12 @@ def test_use_item_without_character_support_on_character(game):
     """Test using an item that doesn't have use_on_character method on a character."""
     regular_sword = MockItemWithoutCharacterUse(name="sword")
     enemy = MockCharacter("goblin")
-    
+
     game.state.add_item_to_inventory(regular_sword)
     game.state.current_room.add_character(enemy)
-    
+
     result = game.use("sword", "goblin")
-    
+
     # Should use the default use_on_character implementation which returns a failure message
     assert "[failure]You can't use the [item_name]sword[/item_name] on [character_name]goblin[/character_name].[/failure]" in result
     assert regular_sword.use_on_character_called_with == (game.state, enemy)
@@ -886,9 +886,9 @@ def test_listen_no_target_room_ambient_sound(game):
     """Tests listening with no target, expecting room's ambient sound."""
     expected_sound = "You hear the gentle rustling of leaves."
     game.state.current_room.get_ambient_sound = MagicMock(return_value=expected_sound)
-    
+
     result = game.listen()
-    
+
     assert result == expected_sound
     game.state.current_room.get_ambient_sound.assert_called_once()
 
@@ -898,11 +898,11 @@ def test_listen_item_in_inventory(game):
     # Override default listen message for this test
     expected_sound = "The [item]pocket_watch[/item] ticks softly."
     mock_item.listen = MagicMock(return_value=expected_sound)
-    
+
     game.state.add_item_to_inventory(mock_item)
-    
+
     result = game.listen("pocket_watch")
-    
+
     assert result == expected_sound
     mock_item.listen.assert_called_once_with(game.state)
 
@@ -912,11 +912,11 @@ def test_listen_item_in_room(game):
     # Override default listen message
     expected_sound = "Static crackles from the [item]old_radio[/item]."
     mock_item.listen = MagicMock(return_value=expected_sound)
-    
+
     game.state.current_room.add_item(mock_item)
-    
+
     result = game.listen("old_radio")
-    
+
     assert result == expected_sound
     mock_item.listen.assert_called_once_with(game.state)
 
@@ -927,14 +927,14 @@ def test_listen_item_not_found(game):
     # Based on Game.examine, a similar message is "You don't see a 'dragon' here."
     # For listen, it might be "You can't find 'nonexistent_relic' to listen to."
     # or "There is no 'nonexistent_relic' here."
-    
+
     # Clear inventory and room to be sure
     game.state.inventory.clear()
     game.state.current_room.items.clear()
 
     target_item_name = "nonexistent_relic"
     result = game.listen(target_item_name)
-    
+
     # This assertion depends on the actual message from Game.listen() when an item is not found.
     # Adjust if the actual message is different.
     # A plausible message:
@@ -943,11 +943,11 @@ def test_listen_item_not_found(game):
 def test_listen_item_uses_mock_default_listen(game):
     """Tests listening to an item that uses the default listen method from MockItemToUse."""
     mock_item = MockItemToUse(name="strange_device") # Uses the default listen from MockItemToUse
-    
+
     game.state.add_item_to_inventory(mock_item)
-    
+
     result = game.listen("strange_device")
-    
+
     expected_default_sound = f"You hear a faint click from the [item]{mock_item.get_name()}[/item]."
     assert result == expected_default_sound
     assert mock_item.listen_called_with_state == game.state
@@ -957,11 +957,11 @@ def test_listen_item_name_case_insensitivity(game):
     mock_item = MockItemToUse(name="Whispering Shell")
     expected_sound = "You hear the faint echo of the sea from the [item]Whispering Shell[/item]."
     mock_item.listen = MagicMock(return_value=expected_sound)
-    
+
     game.state.current_room.add_item(mock_item)
-    
+
     result = game.listen("whispering SHELL") # Case-insensitive target
-    
+
     assert result == expected_sound
     mock_item.listen.assert_called_once_with(game.state)
 
@@ -971,21 +971,21 @@ class MockSpell:
     def __init__(self, name, description="A test spell"):
         self.name = name
         self.description = description
-    
+
     def get_name(self):
         return self.name
-    
+
     def get_description(self):
         return self.description
-    
+
     def cast_spell(self, _game_state):
         """Cast spell without a target."""
         return f"[event]You cast [spell_name]{self.name}[/spell_name] without a target.[/event]"
-    
+
     def cast_on_item(self, _game_state, target_item):
         """Cast spell on an item."""
         return f"[event]You cast [spell_name]{self.name}[/spell_name] on [item_name]{target_item.get_name()}[/item_name].[/event]"
-    
+
     def cast_on_character(self, _game_state, target_character):
         """Cast spell on a character."""
         return f"[event]You cast [spell_name]{self.name}[/spell_name] on [character_name]{target_character.get_name()}[/character_name].[/event]"
@@ -994,26 +994,26 @@ class MockItem:
     def __init__(self, name, short_name=None):
         self.name = name
         self.short_name = short_name
-    
+
     def get_name(self):
         return self.name
-    
+
     def get_short_name(self):
         return self.short_name or ""
-    
+
     def use(self, _game_state):
         return f"You use the [item_name]{self.name}[/item_name]."
 
 class MockCharacter:
     def __init__(self, name):
         self.name = name
-    
+
     def get_name(self):
         return self.name
-    
+
     def examine(self, _game_state):
         return f"You examine [character_name]{self.name}[/character_name]."
-    
+
     def say_to(self, word, _game_state):
         """Mock implementation of say_to method."""
         if word.lower() == "hello":
@@ -1027,22 +1027,22 @@ class MockCharacter:
 def game_with_spells_fixture(basic_rooms):
     act = Act("TestAct", basic_rooms, [], '', '')
     game = Game([act])
-    
+
     # Add some test spells
     heal_spell = MockSpell("heal", "A healing spell")
     light_spell = MockSpell("light", "A light spell")
     unlock_spell = MockSpell("unlock", "An unlocking spell")
-    
+
     game.state.known_spells = [heal_spell, light_spell, unlock_spell]
-    
+
     # Add test items and characters
     test_item = MockItem("test item", "item")
     test_character = MockCharacter("test character")
-    
+
     game.state.current_room.add_item(test_item)
     game.state.current_room.add_character(test_character)
     game.state.inventory.append(MockItem("inventory item"))
-    
+
     return game
 
 def test_cast_unknown_spell(game_with_spells):
@@ -1081,10 +1081,10 @@ def test_cast_spell_prefers_item_over_character(game_with_spells):
     # Add an item and character with same name to test priority
     same_name_item = MockItem("target")
     same_name_character = MockCharacter("target")
-    
+
     game_with_spells.state.current_room.add_item(same_name_item)
     game_with_spells.state.current_room.add_character(same_name_character)
-    
+
     result = game_with_spells.cast("heal on target")
     # Should cast on item (has 'use' method), not character
     assert "[item_name]target[/item_name]" in result
@@ -1092,11 +1092,11 @@ def test_cast_spell_prefers_item_over_character(game_with_spells):
 
 def test_cast_command_parsing_variations(game_with_spells):
     # Test different ways of specifying targets
-    
+
     # Standard format: "spell on target"
     result1 = game_with_spells.cast("heal on test item")
     assert "[event]You cast [spell_name]heal[/spell_name] on [item_name]test item[/item_name].[/event]" in result1
-    
+
     # Extra spaces
     result2 = game_with_spells.cast("heal  on  test item")
     assert "[event]You cast [spell_name]heal[/spell_name] on [item_name]test item[/item_name].[/event]" in result2
@@ -1121,63 +1121,63 @@ def test_say_word_to_character_successful(game):
     """Test saying a word to a character that recognizes it."""
     mock_char = MockCharacter("guard")
     game.state.current_room.add_character(mock_char)
-    
+
     result = game.say("hello", "guard")
-    
+
     assert "[dialogue][character_name]guard[/character_name] responds: 'Hello there!'[/dialogue]" in result
 
 def test_say_password_to_character(game):
     """Test saying a password to a character."""
     mock_char = MockCharacter("gatekeeper")
     game.state.current_room.add_character(mock_char)
-    
+
     result = game.say("password", "gatekeeper")
-    
+
     assert "[dialogue][character_name]gatekeeper[/character_name] nods and steps aside.[/dialogue]" in result
 
 def test_say_unrecognized_word_to_character(game):
     """Test saying a word that the character doesn't recognize."""
     mock_char = MockCharacter("villager")
     game.state.current_room.add_character(mock_char)
-    
+
     result = game.say("xyzzy", "villager")
-    
+
     assert "[dialogue][character_name]villager[/character_name] looks confused and doesn't understand 'xyzzy'.[/dialogue]" in result
 
 def test_say_word_to_nonexistent_character(game):
     """Test saying a word to a character that doesn't exist in the room."""
     result = game.say("hello", "ghost")
-    
+
     assert "[failure]There is no character named '[character_name]ghost[/character_name]' here to speak to.[/failure]" in result
 
 def test_say_empty_word(game):
     """Test saying an empty word."""
     mock_char = MockCharacter("merchant")
     game.state.current_room.add_character(mock_char)
-    
+
     result = game.say("", "merchant")
-    
+
     assert "[failure]What do you want to say?[/failure]" in result
 
 def test_say_to_empty_character(game):
     """Test saying a word to an empty character name."""
     result = game.say("hello", "")
-    
+
     assert "[failure]Who do you want to say that to?[/failure]" in result
 
 def test_say_both_empty(game):
     """Test saying with both word and character empty."""
     result = game.say("", "")
-    
+
     assert "[failure]What do you want to say?[/failure]" in result
 
 def test_say_multi_word_phrase(game):
     """Test saying a multi-word phrase to a character."""
     mock_char = MockCharacter("oracle")
     game.state.current_room.add_character(mock_char)
-    
+
     result = game.say("the answer is wisdom", "oracle")
-    
+
     # The mock character doesn't recognize this phrase, so should get confused response
     assert "[dialogue][character_name]oracle[/character_name] looks confused and doesn't understand 'the answer is wisdom'.[/dialogue]" in result
 
@@ -1185,17 +1185,17 @@ def test_say_case_insensitive_character_name(game):
     """Test that character names are case-insensitive."""
     mock_char = MockCharacter("Guard Captain")
     game.state.current_room.add_character(mock_char)
-    
+
     result = game.say("hello", "guard captain")
-    
+
     assert "[dialogue][character_name]Guard Captain[/character_name] responds: 'Hello there!'[/dialogue]" in result
 
 def test_say_word_with_spaces(game):
     """Test saying a word/phrase that contains spaces."""
     mock_char = MockCharacter("wizard")
     game.state.current_room.add_character(mock_char)
-    
+
     result = game.say("magic words", "wizard")
-    
+
     assert "[dialogue][character_name]wizard[/character_name] looks confused and doesn't understand 'magic words'.[/dialogue]" in result
 

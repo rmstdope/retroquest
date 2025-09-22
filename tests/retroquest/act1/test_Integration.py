@@ -133,7 +133,7 @@ def test_golden_path_act1_completion(monkeypatch):
     check_current_room(game.state, "Blacksmith's Forge")
     execute_commands(game, ["talk to blacksmith", "give coin to blacksmith"])
     check_item_in_inventory(game.state, "coin", should_be_present=False)
-    check_item_in_inventory(game.state, "dull knife", should_be_present=False) 
+    check_item_in_inventory(game.state, "dull knife", should_be_present=False)
     check_item_in_inventory(game.state, "sharp knife")
 
     # Step 7: Vegetable Field
@@ -161,19 +161,19 @@ def test_golden_path_act1_completion(monkeypatch):
     execute_commands(game, ["talk to shopkeeper", "buy rope from shopkeeper"]) # Added "take apple"
     check_item_in_inventory(game.state, "apple") # Added check for apple
     check_item_in_inventory(game.state, "rope")
-    check_item_in_inventory(game.state, "coin", should_be_present=False) 
+    check_item_in_inventory(game.state, "coin", should_be_present=False)
 
     # Step 9: Abandoned Shed - Use Key
     # Path: General Store (current) -> Village Square -> Village Well -> Abandoned Shed
-    execute_commands(game, ["go south", "go west", "go south"]) 
+    execute_commands(game, ["go south", "go west", "go south"])
     check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Curiosity killed the cat"])
     check_current_room(game.state, "Abandoned Shed")
     check_item_in_room(game.state.current_room, "mysterious box", should_be_present=False) # Box is not present yet
- 
+
     execute_commands(game, ["search"]) # Search does not reveals items since door is locked
     check_item_in_room(game.state.current_room, "fishing rod", should_be_present=False)
     check_item_in_room(game.state.current_room, "magnet", should_be_present=False)
- 
+
     check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Curiosity killed the cat"])
     execute_commands(game, ["use key with door"]) # Changed: Assumes 'use key' unlocks the shed door
     check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
@@ -188,7 +188,7 @@ def test_golden_path_act1_completion(monkeypatch):
 
     check_item_in_inventory(game.state, "fishing rod")
     check_item_in_room(game.state.current_room, "fishing rod", should_be_present=False)
-    
+
     check_item_in_inventory(game.state, "magnet")
     check_item_in_room(game.state.current_room, "magnet", should_be_present=False)
 
@@ -250,7 +250,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Sharp Knife should be removed from inventory (it breaks)
     check_item_in_inventory(game.state, "sharp knife", should_be_present=False)
     # Stick should be added to the room
-    check_item_in_room(game.state.current_room, "stick", should_be_present=True) 
+    check_item_in_room(game.state.current_room, "stick", should_be_present=True)
 
     execute_commands(game, ["take stick"])
     check_item_in_inventory(game.state, "stick")
@@ -261,13 +261,13 @@ def test_golden_path_act1_completion(monkeypatch):
     execute_commands(game, ["go south"])
     check_current_room(game.state, "Hidden Glade")
     # Deer and Rare Flower should not be present initially
-    check_character_in_room(game.state.current_room, "deer", should_be_present=False) 
+    check_character_in_room(game.state.current_room, "deer", should_be_present=False)
     check_item_in_room(game.state.current_room, "rare flower", should_be_present=False)
 
     # Elior rests, and if deer_can_be_observed is true (set by Blacksmith), Deer and Rare Flower appear
     # The flag deer_can_be_observed was set in step 11.
     check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village", "Oh deer, oh deer"])
-    execute_commands(game, ["rest"]) 
+    execute_commands(game, ["rest"])
     check_character_in_room(game.state.current_room, "deer", should_be_present=True)
     check_item_in_room(game.state.current_room, "rare flower", should_be_present=True)
     check_quests(game.state, ["Shadows Over Willowbrook", "Magic for real", "Know your village"])
@@ -291,7 +291,7 @@ def test_golden_path_act1_completion(monkeypatch):
     # Path: Village Chapel (current) -> Hidden Glade -> Forest Path -> Riverbank -> Old Mill -> Abandoned Shed -> Village Well -> Blacksmith's Forge -> General Store
     execute_commands(game, ["go north", "go north", "go north", "go west", "go north", "go north", "go east", "go north"])
     check_current_room(game.state, "General Store")
-    
+
     check_item_in_room(game.state.current_room, "matches") # Matches in room
     execute_commands(game, ["talk to shopkeeper"]) # Ask for matches
     check_item_in_inventory(game.state, "matches") # Matches obtained
@@ -335,14 +335,14 @@ def test_golden_path_act1_completion(monkeypatch):
     execute_commands(game, ["go south", "go west", "go south", "go east", "go south"])
     check_current_room(game.state, "Abandoned Shed")
     # Box should be in the room from the first visit
-    check_item_in_room(game.state.current_room, "mysterious box") 
-    
+    check_item_in_room(game.state.current_room, "mysterious box")
+
     # Make sure the box is locked initially
     mysterious_box = game.find_item("mysterious box", look_in_inventory=False, look_in_room=True)
     assert mysterious_box is not None, "Mysterious Box not found in Abandoned Shed"
     assert mysterious_box.locked, "Mysterious Box should be locked initially"
-    
-    execute_commands(game, ["cast unlock on mysterious box"]) 
+
+    execute_commands(game, ["cast unlock on mysterious box"])
     assert not mysterious_box.locked, "Mysterious Box should be unlocked after casting Unlock spell"
     check_item_in_room(game.state.current_room, "map", should_be_present=False) # Map is still in the box
 
@@ -497,7 +497,7 @@ def test_golden_path_act1_completion(monkeypatch):
     check_current_room(game.state, "Road to Greendale")
     check_item_in_inventory(game.state, "map")
     check_item_in_inventory(game.state, "ancient amulet") # Ensure amulet is still there
-    
+
     # This command should ideally trigger an Act I completion state.
     # We'll check for the command execution. Further checks depend on how game handles act completion.
     execute_commands(game, ["use map"])

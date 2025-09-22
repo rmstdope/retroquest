@@ -23,7 +23,7 @@ class MockGameState:
     """Mock GameState for testing that only provides get_story_flag method"""
     def __init__(self):
         self.story_flags = []
-    
+
     def get_story_flag(self, flag):
         return flag in self.story_flags
 
@@ -64,10 +64,10 @@ def test_room_creation(_room_name, room_class):
 def test_all_rooms_have_valid_exits():
     """Test that all room exits reference valid room names"""
     valid_room_names = set(ROOM_CLASSES.keys())
-    
+
     # Create a mock GameState for testing
     mock_game_state = MockGameState()
-    
+
     for room_name, room_class in ROOM_CLASSES.items():
         room = room_class()
         exits = room.get_exits(mock_game_state)
@@ -81,30 +81,30 @@ def test_all_rooms_have_valid_exits():
 def test_room_connectivity():
     """Test that room connections are bidirectional where expected"""
     rooms = {name: cls() for name, cls in ROOM_CLASSES.items()}
-    
+
     # Check that if room A has an exit to room B, room B should have a corresponding exit back to A
     # (with some exceptions for special exits like upstairs/downstairs, secret passages)
-    
+
     direction_opposites = {
         "north": "south",
         "south": "north",
         "east": "west",
         "west": "east",
     }
-    
+
     for room_name, room in rooms.items():
         for direction, target_room_name in room.exits.items():
             if direction in direction_opposites and target_room_name in rooms:
                 target_room = rooms[target_room_name]
                 opposite_direction = direction_opposites[direction]
-                
+
                 # Special handling for inn - call use_key to unlock exits
                 if room_name == "SilverStagInn" or target_room_name == "SilverStagInn":
                     if hasattr(room, 'use_key'):
                         room.use_key()
                     if hasattr(target_room, 'use_key'):
                         target_room.use_key()
-                
+
                 # Check if the target room has the expected return exit
                 assert opposite_direction in target_room.exits, \
                     f"Room {target_room_name} should have {opposite_direction} exit back to {room_name}"
@@ -123,7 +123,7 @@ def test_room_names_match_class_names():
     """Test that room names match their expected values"""
     expected_names = {
         "MountainPath": "Mountain Path",
-        "GreendaleGates": "Greendale Gates", 
+        "GreendaleGates": "Greendale Gates",
         "MainSquare": "Main Square",
         "MarketDistrict": "Market District",
         "SilverStagInn": "The Silver Stag Inn",
@@ -141,7 +141,7 @@ def test_room_names_match_class_names():
         "WhisperingGlade": "Whispering Glade",
         "HeartOfTheForest": "Heart of the Forest",
     }
-    
+
     for class_name, room_class in ROOM_CLASSES.items():
         room = room_class()
         expected_name = expected_names[class_name]

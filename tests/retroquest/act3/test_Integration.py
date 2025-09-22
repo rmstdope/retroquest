@@ -12,26 +12,26 @@ class TestAct3Integration:
     """Integration tests for Act 3."""
     act3: Optional[Act3] = None
     game: Optional[Game] = None
-    
+
     def setup_method(self):
         """Set up test fixtures."""
         self.act3 = Act3()
         self.act3.music_file = ''
         self.game = Game([self.act3])
-        
+
     def test_act3_initialization(self):
         """Test that Act 3 initializes correctly."""
         assert self.act3 is not None
         assert isinstance(self.act3.rooms, dict)
         assert isinstance(self.act3.quests, list)
         assert self.act3.get_act_intro() is not None
-        
+
     def test_game_with_act3(self):
         """Test that Game can be initialized with Act 3."""
         assert self.game is not None
         assert len(self.game.acts) == 1
         assert self.game.acts[0] == self.act3
-        
+
     def test_golden_path_act3_completion(self):
         """Run the Act 3 golden path and assert expected progressions."""
         game = self.game
