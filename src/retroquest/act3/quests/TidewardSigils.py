@@ -6,6 +6,7 @@ from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
 
 
 class TidewardSigilsQuest(Quest):
+    """Quest to stabilize flood wards by engraving Tideward Sigils."""
     def __init__(self) -> None:
         super().__init__(
             name="Tideward Sigils",

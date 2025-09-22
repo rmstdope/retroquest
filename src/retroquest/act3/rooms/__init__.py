@@ -1,3 +1,4 @@
+""""Package for all Act 3 room definitions."""
 from .CavernMouth import CavernMouth
 from .CollapsedGalleries import CollapsedGalleries
 from .CollapsedPier import CollapsedPier

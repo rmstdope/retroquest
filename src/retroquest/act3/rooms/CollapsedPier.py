@@ -1,9 +1,11 @@
+"""Module defining the CollapsedPier room in Act 3."""
 from ...engine.GameState import GameState
 from ...engine.Room import Room
 from ..items import Locker, RustedLockerKey
 
 
 class CollapsedPier(Room):
+    """A shattered jetty with sunken vaults beneath; barnacled beams jut like ribs."""
     def __init__(self) -> None:
         super().__init__(
             name="Collapsed Pier",

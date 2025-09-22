@@ -18,11 +18,19 @@ from ...engine.GameState import GameState
 from ..Act2StoryFlags import FLAG_DEMONSTRATED_COMBAT_SKILLS, FLAG_SPOKEN_TO_SIR_CEDRIC
 
 class TheKnightsTestQuest(Quest):
+    """Quest to prove combat skills to Sir Cedric."""
     def __init__(self) -> None:
         super().__init__(
             name="The Knight's Test",
-            description="Sir Cedric wants to see proof of your combat abilities before trusting you with important responsibilities. Demonstrate your martial skills with a training sword.",
-            completion="You have successfully demonstrated your combat skills to Sir Cedric. He now trusts your abilities!"
+            description=(
+                "Sir Cedric wants to see proof of your combat abilities before "
+                "trusting you with important responsibilities. Demonstrate your "
+                "martial skills with a training sword."
+            ),
+            completion=(
+                "You have successfully demonstrated your combat skills to Sir "
+                "Cedric. He now trusts your abilities!"
+            )
         )
 
     def check_trigger(self, game_state: GameState) -> bool:

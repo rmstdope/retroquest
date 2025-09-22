@@ -1,3 +1,4 @@
+"""Module defining the SanctumOfTheTide room and its characters in Act 3."""
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ...engine.Room import Room
@@ -10,6 +11,7 @@ from ..items import CrystalOfLight
 
 
 class TideBornGuardian(Character):
+    """The Tide-Born Guardian: a figure of gathered waters and ward-sigils."""
     def __init__(self) -> None:
         super().__init__(
             name="Tide-Born Guardian",

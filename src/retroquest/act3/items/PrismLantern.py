@@ -1,3 +1,4 @@
+"""A prismatic lantern used to illuminate underwater passages."""
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 

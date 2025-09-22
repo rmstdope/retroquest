@@ -1,7 +1,9 @@
+"""Module defining the CavernMouth room in Act 3."""
 from ...engine.Room import Room
 
 
 class CavernMouth(Room):
+    """The misty entrance to the ancient cavern system."""
     def __init__(self) -> None:
         super().__init__(
             name="Cavern Mouth",

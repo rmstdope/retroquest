@@ -6,6 +6,7 @@ from ..Act3StoryFlags import FLAG_ACT3_MAIN_STARTED
 
 
 class SirCedric(Character):
+    """A steadfast knight who aids the player in their quest against Malakar."""
     def __init__(self) -> None:
         super().__init__(
             name="sir cedric",

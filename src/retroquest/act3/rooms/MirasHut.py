@@ -1,3 +1,4 @@
+"""Module defining the MirasHut room in Act 3."""
 from ...engine.Room import Room
 from ..characters.Mira import Mira
 from ..characters.SirCedric import SirCedric
@@ -7,6 +8,7 @@ from ..items.TeleportationFocus import TeleportationFocus
 
 
 class MirasHut(Room):
+    """A fragrant hut filled with drying herbs and mysterious potions. """
     def __init__(self) -> None:
         super().__init__(
             name="Mira's Hut",

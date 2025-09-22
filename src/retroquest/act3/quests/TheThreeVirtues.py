@@ -6,6 +6,7 @@ from ..Act3StoryFlags import FLAG_ACT3_MAIN_COMPLETED, FLAG_ACT3_MAIN_STARTED
 
 
 class TheThreeVirtuesQuest(Quest):
+    """Quest to prove Courage, Wisdom, and Selflessness to unlock the final ritual."""
     def __init__(self) -> None:
         super().__init__(
             name="The Three Virtues",
