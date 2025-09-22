@@ -3,10 +3,20 @@
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
 from typing import Optional
-from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED, FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
-from ..utils.utils import (check_character_in_room, check_current_room, check_quests, check_story_flag,
-                            execute_commands, check_item_in_inventory, check_quest_completed,
-                            check_item_count_in_inventory)
+from retroquest.act3.Act3StoryFlags import (
+    FLAG_ACT3_MAIN_STARTED, 
+    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
+)
+from ..utils.utils import (
+    check_character_in_room, 
+    check_current_room, 
+    check_quests, 
+    check_story_flag,
+    execute_commands, 
+    check_item_in_inventory, 
+    check_quest_completed,
+    check_item_count_in_inventory
+)
 
 class TestAct3Integration:
     """Integration tests for Act 3."""
@@ -84,7 +94,8 @@ class TestAct3Integration:
         execute_commands(game, ['take rusted locker key'])
         check_item_in_inventory(game.state, 'Rusted Locker Key', True)
 
-        # Step 7: Collapsed Pier (Vault) — key fails, cast unlock, open locker, take three prism lanterns
+        # Step 7: Collapsed Pier (Vault) — key fails, cast unlock, open locker, 
+        # take three prism lanterns
         # Give the hint by examining the locker
         exam = execute_commands(game, ['examine locker'])
         assert 'fused' in exam.lower() or 'lock' in exam.lower()
@@ -93,7 +104,8 @@ class TestAct3Integration:
         assert 'fused' in fail_key.lower() or 'need more than metal' in fail_key.lower()
         # Cast unlock on locker
         unlocked = execute_commands(game, ['cast unlock on locker'])
-        assert 'locker' in unlocked.lower() and ('click' in unlocked.lower() or 'release' in unlocked.lower())
+        assert ('locker' in unlocked.lower() and 
+                ('click' in unlocked.lower() or 'release' in unlocked.lower()))
         # Open locker and take all lanterns
         opened = execute_commands(game, ['open locker'])
         assert 'prism lantern' in opened.lower()
@@ -128,7 +140,8 @@ class TestAct3Integration:
         execute_commands(game, ['east', 'east'])
         check_current_room(game.state, 'Sanctum of the Tide')
         vow = execute_commands(game, ['say myself to tide-born guardian'])
-        assert 'vow' in vow.lower() or 'waters draw back' in vow.lower() or 'you may now take' in vow.lower()
+        assert ('vow' in vow.lower() or 'waters draw back' in vow.lower() or 
+                'you may now take' in vow.lower())
         execute_commands(game, ['take crystal of light'])
         check_item_in_inventory(game.state, 'crystal of light', True)
 

@@ -1,3 +1,5 @@
+"""Tests for the Game class and game mechanics."""
+
 import pytest
 from unittest.mock import MagicMock
 from engine import GameState
@@ -7,17 +9,28 @@ from retroquest.engine.Act import Act
 
 # --- Mock Room classes for testing ---
 class MockRoom(Room):
+    """Mock room class for testing purposes."""
+    
     def __init__(self, name, description="A mock room."):
+        """Initialize a mock room with the given name and description."""
         super().__init__(name, description)
         self.items = []
         self.characters = []
+        
     def can_leave(self):
+        """Always allow leaving the room."""
         return True
+        
     def add_exit(self, direction, room):
+        """Add an exit in the given direction to the specified room."""
         self.exits[direction] = room
+        
     def add_item(self, item):
+        """Add an item to the room."""
         self.items.append(item)
+        
     def add_character(self, character):
+        """Add a character to the room."""
         self.characters.append(character)
 
 # ==== Begin migrated take multiple tests support classes ====
@@ -26,20 +39,26 @@ from retroquest.engine.Item import Item
 class TakeMockItem(Item):
     """Mock item for take command tests supporting prevent_pickup and picked_up hooks."""
     def __init__(self, name, description="A test item", can_pickup=True, pickup_message=None):
+        """Initialize a mock item with pickup behavior configuration."""
         super().__init__(name, description)
         self._can_pickup = can_pickup
         self._pickup_message = pickup_message
 
-    def prevent_pickup(self):  # Mirror logic of real items; return failure string or None
+    def prevent_pickup(self):
+        """Return failure message if item cannot be picked up, otherwise None."""
         if not self._can_pickup:
             return f"[failure]The {self.name} is too heavy to lift.[/failure]"
         return None
 
     def picked_up(self, _game_state):
+        """Return custom message when item is successfully picked up."""
         return self._pickup_message
 
 class TakeMockAct(Act):
+    """Mock act class for testing take command functionality."""
+    
     def __init__(self):
+        """Initialize the mock act with test rooms."""
         test_room = Room("Test Room", "A room for testing the take command.")
         empty_room = Room("Empty Room", "A room with no items.")
         super().__init__(
@@ -49,6 +68,7 @@ class TakeMockAct(Act):
             music_file='',
             music_info=''
         )
+        
     def is_completed(self, _game_state: GameState) -> bool:
         """Return True when the act's completion conditions are met."""
         return False
@@ -57,7 +77,10 @@ class TakeMockAct(Act):
 # Dummy room and item setup for test
 ROOMS = {
     "EliorsCottage": MockRoom("Elior's Cottage", "A cozy cottage with a warm hearth."),
-    "VegetableField": MockRoom("Vegetable Field", "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky."),
+    "VegetableField": MockRoom(
+        "Vegetable Field",
+        "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky."
+    ),
     "ChickenCoop": MockRoom("Chicken Coop"),
     "VillageSquare": MockRoom("Village Square"),
     "MirasHut": MockRoom("Mira's Hut"),
@@ -75,9 +98,13 @@ ROOMS = {
 
 @pytest.fixture(name="basic_rooms")
 def basic_rooms_fixture():
+    """Create minimal room network for testing."""
     # Minimal room network for testing
     cottage = MockRoom("EliorsCottage", "A cozy cottage with a warm hearth.")
-    field = MockRoom("VegetableField", "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky.")
+    field = MockRoom(
+        "VegetableField",
+        "A patch of tilled earth where vegetables struggle to grow. The soil is dry and rocky."
+    )
     # Add exits for movement tests
     cottage.add_exit('south', field.name)
     field.add_exit('north', cottage.name)
@@ -92,12 +119,14 @@ def game_fixture(basic_rooms):
     return Game([act])
 
 def test_game_initial_state(game, basic_rooms):
+    """Test that the game initializes with correct default state."""
     assert game.state.current_room == basic_rooms["EliorsCottage"]
     assert game.is_running is True
     assert game.state.inventory == []
     assert game.state.history == []
 
 def test_move_valid(game, basic_rooms):
+    """Test moving in a valid direction between rooms."""
     # EliorsCottage south -> VegetableField
     result = game.move('south')
     assert game.state.current_room == basic_rooms["VegetableField"]
@@ -105,20 +134,24 @@ def test_move_valid(game, basic_rooms):
     assert f"[room_name]{basic_rooms['VegetableField'].name}[/room_name]" in result
 
 def test_move_invalid(game):
+    """Test moving in an invalid direction returns appropriate error."""
     result = game.move('west')
     assert "can't go that way" in result
 
 def test_visited_rooms_initial(game):
+    """Test that only the starting room is visited initially."""
     # Only the starting room should be visited
     assert game.state.visited_rooms == [game.state.current_room.name]
 
 def test_visited_rooms_after_move(game, basic_rooms):
+    """Test that visited rooms are tracked correctly after movement."""
     basic_rooms["EliorsCottage"].can_leave()
     # Move to another room
     game.move('south')
     assert basic_rooms["VegetableField"].name in game.state.visited_rooms
     # Both rooms should be in visited_rooms
-    assert set(game.state.visited_rooms) == {basic_rooms["EliorsCottage"].name, basic_rooms["VegetableField"].name}
+    expected_rooms = {basic_rooms["EliorsCottage"].name, basic_rooms["VegetableField"].name}
+    assert set(game.state.visited_rooms) == expected_rooms
 
 def test_visited_rooms_no_duplicates(game, basic_rooms):
     basic_rooms["EliorsCottage"].can_leave()

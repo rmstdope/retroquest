@@ -1,3 +1,5 @@
+"""Integration tests for Act 1: golden path and story progression."""
+
 import pytest
 from act1.Act1 import Act1
 from engine.Game import Game
@@ -66,6 +68,7 @@ QUESTS = [
 ]
 
 def test_golden_path_act1_completion(monkeypatch):
+    """Test the complete golden path through Act 1 from start to finish."""
     # Setup Game
     act = Act1()
     act.music_file = ''
