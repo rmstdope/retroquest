@@ -13,6 +13,7 @@ from ..items import CrystalOfLight
 class TideBornGuardian(Character):
     """The Tide-Born Guardian: a figure of gathered waters and ward-sigils."""
     def __init__(self) -> None:
+        """Initialize Tide-Born Guardian with description."""
         super().__init__(
             name="Tide-Born Guardian",
             description=(
@@ -22,12 +23,14 @@ class TideBornGuardian(Character):
         )
 
     def talk_to(self, _game_state: GameState) -> str:
+        """Return dialogue asking for vow when talking to the guardian."""
         return (
             "[dialogue]The guardian's voice is the hush of a turning tide: 'Name what "
             "you will not abandon.'[/dialogue]"
         )
 
     def say_to(self, words: str, game_state: GameState) -> str:
+        """Handle the vow of courage when saying specific words to the guardian."""
         w = words.strip().lower()
         if w == "myself":
             # Only accept if local rites are complete
@@ -52,7 +55,10 @@ class TideBornGuardian(Character):
 
 
 class SanctumOfTheTide(Room):
+    """A domed chamber where water stands glass-still with rippling sigils."""
+
     def __init__(self) -> None:
+        """Initialize Sanctum of the Tide with crystal, guardian, and exits."""
         super().__init__(
             name="Sanctum of the Tide",
             description=(
@@ -65,6 +71,7 @@ class SanctumOfTheTide(Room):
         )
 
     def on_enter(self, game_state: GameState) -> None:
+        """Ensure Mira and Sir Cedric are present when entering the sanctum."""
         # Ensure Mira and Sir Cedric are present when entering the sanctum
         for name in ("Mira", "Sir Cedric"):
             # If they exist in any room, move them here

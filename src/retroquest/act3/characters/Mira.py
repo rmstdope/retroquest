@@ -10,6 +10,7 @@ class Mira(Character):
     sites."""
 
     def __init__(self) -> None:
+        """Initialize Mira with description."""
         super().__init__(
             name="Mira",
             description=(
@@ -20,6 +21,7 @@ class Mira(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
+        """Handle conversation with Mira, including quest start and teleportation."""
         event_msg = (
             f"[event]You speak with [character_name]{self.name}[/character_name]."
             "[/event]"

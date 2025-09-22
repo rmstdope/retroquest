@@ -16,6 +16,7 @@ class WardingPillars(Item):
         interactions.
     """
     def __init__(self) -> None:
+        """Initialize Warding Pillars with description and purified state."""
         super().__init__(
             name="Warding Pillars",
             description=(
@@ -29,12 +30,14 @@ class WardingPillars(Item):
         self.purified: bool = False
 
     def prevent_pickup(self):
+        """Prevent pickup of the immovable warding pillars."""
         return (
             "[failure]You can't take the [item_name]Warding Pillars[/item_name]. They are "
             "fixed stone, older than the pier.[/failure]"
         )
 
     def examine(self, _game_state: GameState) -> str:
+        """Examine the warding pillars showing their current purification state."""
         state = "cleansed" if self.purified else "encrusted"
         return (
             f"[event]The pillars stand weathered and {state}. Channels for a "

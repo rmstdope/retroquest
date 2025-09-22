@@ -18,6 +18,7 @@ class RustedLockerKey(Item):
     - Pickup text reinforces its compromised condition
     """
     def __init__(self) -> None:
+        """Initialize Rusted Locker Key with description and properties."""
         super().__init__(
             name="Rusted Locker Key",
             description=(

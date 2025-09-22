@@ -17,6 +17,7 @@ class AncientAmulet(Item):
     """
 
     def __init__(self) -> None:
+        """Initialize Ancient Amulet with description and restrictions."""
         super().__init__(
             name="ancient amulet",
             short_name="amulet",

@@ -21,6 +21,7 @@ class CoquinaRunes(Item):
     - Provides flavor text on pickup (salt residue)
     """
     def __init__(self) -> None:
+        """Initialize Coquina Runes with description and properties."""
         super().__init__(
             name="Coquina Runes",
             description=(

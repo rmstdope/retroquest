@@ -7,6 +7,7 @@ from ..items import Locker, RustedLockerKey
 class CollapsedPier(Room):
     """A shattered jetty with sunken vaults beneath; barnacled beams jut like ribs."""
     def __init__(self) -> None:
+        """Initialize Collapsed Pier with locker and exits."""
         super().__init__(
             name="Collapsed Pier",
             description=(
@@ -19,6 +20,7 @@ class CollapsedPier(Room):
         )
 
     def search(self, game_state: GameState, _target: str = None) -> str:
+        """Search the pier vaults to find the rusted locker key."""
         # If key already present or in inventory, return idempotent vault description
         if any(isinstance(i, RustedLockerKey) for i in self.items) or any(
             isinstance(i, RustedLockerKey) for i in game_state.inventory

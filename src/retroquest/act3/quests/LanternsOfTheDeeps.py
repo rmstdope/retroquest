@@ -13,6 +13,7 @@ class LanternsOfTheDeepsQuest(Quest):
     path."""
 
     def __init__(self) -> None:
+        """Initialize Lanterns of the Deeps quest with description."""
         super().__init__(
             name="Lanterns of the Deeps",
             description=(
@@ -27,6 +28,7 @@ class LanternsOfTheDeepsQuest(Quest):
         )
 
     def check_trigger(self, game_state: GameState) -> bool:
+        """Check if quest should trigger in specific rooms after sigils are complete."""
         # Trigger when entering Submerged Antechamber or Collapsed Pier,
         # but only after Tideward Sigils complete.
         if not game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED):
@@ -34,4 +36,5 @@ class LanternsOfTheDeepsQuest(Quest):
         return game_state.current_room.name in ("Collapsed Pier", "Submerged Antechamber")
 
     def check_completion(self, game_state: GameState) -> bool:
+        """Check if quest is completed based on lanterns being lit."""
         return game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)

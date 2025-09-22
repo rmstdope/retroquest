@@ -10,6 +10,7 @@ from ..items.TeleportationFocus import TeleportationFocus
 class MirasHut(Room):
     """A fragrant hut filled with drying herbs and mysterious potions. """
     def __init__(self) -> None:
+        """Initialize Mira's Hut with items, characters, and exits."""
         super().__init__(
             name="Mira's Hut",
             description=(

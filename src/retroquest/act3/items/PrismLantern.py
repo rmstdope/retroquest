@@ -7,6 +7,7 @@ class PrismLantern(Item):
     """A prismatic lantern used to illuminate underwater passages."""
 
     def __init__(self) -> None:
+        """Initialize Prism Lantern with description and properties."""
         super().__init__(
             name="Prism Lantern",
             description=(

@@ -5,6 +5,7 @@ from ...engine.Room import Room
 class MirrorTerraces(Room):
     """The Mirror Terraces: stepped platforms with sockets for polished mirrors."""
     def __init__(self) -> None:
+        """Initialize Mirror Terraces with description and exits."""
         super().__init__(
             name="Mirror Terraces",
             description=(

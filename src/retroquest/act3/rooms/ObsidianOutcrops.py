@@ -5,6 +5,7 @@ from ...engine.Room import Room
 class ObsidianOutcrops(Room):
     """The Obsidian Outcrops: sharp volcanic glass formations."""
     def __init__(self) -> None:
+        """Initialize Obsidian Outcrops with description and exits."""
         super().__init__(
             name="Obsidian Outcrops",
             description=(
