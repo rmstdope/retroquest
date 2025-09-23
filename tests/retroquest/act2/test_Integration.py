@@ -1,4 +1,5 @@
 """Integration tests for Act2: golden path, navigation, quests, and interactions."""
+# pylint: disable=too-many-lines
 
 from retroquest.engine.Game import Game
 from retroquest.act2.Act2 import Act2

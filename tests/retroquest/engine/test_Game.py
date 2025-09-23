@@ -1,4 +1,5 @@
 """Tests for the Game class and game mechanics."""
+# pylint: disable=too-many-lines
 
 from unittest.mock import MagicMock
 import pytest
