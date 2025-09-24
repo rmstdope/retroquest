@@ -39,7 +39,7 @@ class AncientAmulet(Item):
             short_name="amulet"
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Always blocks pickup with narrative justification (no readiness check yet)."""
         return (
             "[character_name]Mira[/character_name] places a protective hand over the "

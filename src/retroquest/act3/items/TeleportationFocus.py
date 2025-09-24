@@ -36,7 +36,7 @@ class TeleportationFocus(Item):
             "a doorway waiting for Mira's word.[/event]"
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Prevent pickup, reminding the player of its ritual function."""
         return (
             "[character_name]Mira[/character_name] steadies the prism. "

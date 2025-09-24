@@ -2,7 +2,7 @@
 
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-
+from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
 
 class WardingPillars(Item):
     """Tideward ritual pillars requiring purification (Act III).
@@ -29,7 +29,7 @@ class WardingPillars(Item):
         )
         self.purified: bool = False
 
-    def prevent_pickup(self):
+    def prevent_pickup(self) -> str:
         """Prevent pickup of the immovable warding pillars."""
         return (
             "[failure]You can't take the [item_name]Warding Pillars[/item_name]. They are "
@@ -38,11 +38,21 @@ class WardingPillars(Item):
 
     def examine(self, _game_state: GameState) -> str:
         """Examine the warding pillars showing their current purification state."""
-        state = "cleansed" if self.purified else "encrusted"
+        # Return completely different strings depending on purification state.
+        if self.purified:
+            # Pulsating, radiant description when purified.
+            return (
+                "[event]The pillars pulse with a quiet, radiant rhythm. Light seems to "
+                "gather in the carved channels, a steady heartbeat that draws the tide "
+                "toward the stone. The air tastes of moonwater; the ward answers, ready "
+                "to pull the sea back when the sigil is set.[/event]"
+            )
+
+        # Dark, faint-hum description when not purified.
         return (
-            f"[event]The pillars stand weathered and {state}. Channels for a "
-            "tideward sigil thread their faces; with proper cleansing and coquina "
-            "tiles, the ward could be restored.[/event]"
+            "[event]The pillars stand mute in the dim, their faces ringed with crust and "
+            "shadow. A faint, weary hum hides under the stone, a thread of old magic "
+            "barely holding. They watch the water but do not command it.[/event]"
         )
 
     def purify(self, _game_state: GameState) -> str:
@@ -53,4 +63,34 @@ class WardingPillars(Item):
         return (
             "[event]You rinse salt and scrape coral from the carved channels. Glyph-lines "
             "breathe again, ready to take the Tideward Sigil.[/event]"
+        )
+
+    def use_with(self, game_state: GameState, other_item: 'Item') -> str:
+        """Handle being used together with another item.
+
+        If `other_item` is Moon Rune Shards (by name/short name), attempt to engrave
+        the pillars. This follows the same rules as the previous `engrave()` helper:
+        pillars must be purified and the player must have shards in inventory. The
+        shards are consumed and the attuned flag is set.
+        """
+        # Use isinstance to check for MoonRuneShards without circular import.
+        from .MoonRuneShards import MoonRuneShards
+        if not isinstance(other_item, MoonRuneShards):
+            return super().use_with(game_state, other_item)
+
+        # Now handle engraving flow
+        if not self.purified:
+            return (
+                "[failure]The carved channels are still clogged with crust. The shards "
+                "will not take until the pillars are cleansed.[/failure]"
+            )
+
+        # Consume shards (remove all matching entries) and set story flag
+        game_state.remove_item_from_inventory(other_item.name)
+        game_state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED, True)
+        return (
+            "[event]You press the pale shards into the cleansed grooves. Pale runes "
+            "flare and sink into the stone like stored moonlight. The air leans in; "
+            "a subtle pull runs through the courtyard as the tide answers the sigils, "
+            "drawing the sea closer to the pillars.[/event]"
         )

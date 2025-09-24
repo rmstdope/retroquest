@@ -29,7 +29,7 @@ class AncientAmulet(Item):
             can_be_carried=False,
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Block premature pickup, giving narrative feedback through Mira."""
         return (
             "[character_name]Mira[/character_name] rests a gentle hand on the "

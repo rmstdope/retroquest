@@ -25,13 +25,16 @@ class Item:
         """Returns the short name of the item."""
         return self.short_name
 
-    def prevent_pickup(self) -> Union[str, None]:
+    def prevent_pickup(self) -> str:
         """
         Return a message if the item cannot be picked up. Override in subclasses for
         special cases.
+
+        Subclasses should return a string describing why the item cannot be taken.
+        If the item is carriable, the base implementation returns an empty string.
         """
         return (
-            None if self.can_be_carried_flag else
+            "" if self.can_be_carried_flag else
             f"[failure]You can't take the [item_name]{self.get_name()}[/item_name].[/failure]"
         )
 

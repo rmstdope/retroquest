@@ -2,7 +2,10 @@
 
 from ...engine.Character import Character
 from ...engine.GameState import GameState
-from ..Act3StoryFlags import FLAG_ACT3_MAIN_STARTED
+from ..Act3StoryFlags import (
+    FLAG_ACT3_MAIN_STARTED,
+    FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+)
 
 
 class Mira(Character):
@@ -60,8 +63,27 @@ class Mira(Character):
             )
 
         # Subsequent conversation: teleport onward based on current location.
-        # - From Sanctum of the Tide -> Mount Ember (Lower Switchbacks)
-        # - Otherwise -> Sunken Ruins entry (Tidal Causeway)
+        # Special-case: if we're at the Tidal Causeway, talk about the relic
+        # found here (the Crystal of Light). If the crystal has already been
+        # acquired, teleport everyone to the next site instead.
+        if game_state.current_room.name == "Tidal Causeway":
+            # If the Crystal of Light hasn't been acquired yet, give a hint
+            # about the relic the party should seek here.
+            if not game_state.get_story_flag(
+                FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED
+            ):
+                return (
+                    event_msg
+                    + "\n"
+                    + (
+                        "[dialogue]'This place keeps its secrets in salt and song. "
+                        "Within the Sunken Ruins lies the Crystal of Light—an old "
+                        "relic that answers to courage. When you stand before the "
+                        "tide-born guardian, speak your vow and let it steady you.'" 
+                        "[/dialogue]"
+                    )
+                )
+            # Otherwise fall through and teleport to the next location.
         if game_state.current_room.name == "Sanctum of the Tide":
             destination_key = "LowerSwitchbacks"
             flavor = (

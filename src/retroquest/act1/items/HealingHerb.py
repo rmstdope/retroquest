@@ -28,7 +28,7 @@ class HealingHerb(Item):
             short_name="herb",
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Block pickup and deliver Mira's stewardship dialogue."""
         return (
             "[character_name]Mira[/character_name] gently but firmly stops you. "

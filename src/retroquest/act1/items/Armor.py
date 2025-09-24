@@ -40,7 +40,7 @@ class Armor(Item):
             short_name="armor"
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Shopkeeper prevents taking the armor unless it's been purchased."""
         if not self.can_be_carried_flag:
             return (
@@ -49,7 +49,7 @@ class Armor(Item):
                 f"is merchandise, not a free sample. If you want it, you'll need to buy "
                 f"it proper-like.'[/dialogue]"
             )
-        return None  # Allow pickup if can_be_carried is True
+        return ""  # Allow pickup if can_be_carried is True
 
     def use(self, _game_state: GameState) -> str:
         """Examine the armor for its protective qualities."""

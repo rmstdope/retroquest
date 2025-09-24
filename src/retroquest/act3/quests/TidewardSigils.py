@@ -4,7 +4,7 @@ from ...engine.GameState import GameState
 from ...engine.Quest import Quest
 from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
 
-
+#TODO Rework how the quest is activated
 class TidewardSigilsQuest(Quest):
     """Quest to stabilize flood wards by engraving Tideward Sigils."""
     def __init__(self) -> None:
@@ -12,11 +12,11 @@ class TidewardSigilsQuest(Quest):
         super().__init__(
             name="Tideward Sigils",
             description=(
-                "Collect coquina runes at the shore and engrave a complete Tideward Sigil "
-                "upon the leaning pillars to stabilize the flood wards."
+                "Collect Moon Rune shards at the shore and engrave a complete Moon "
+                "Sigil upon the leaning pillars to stabilize the flood wards."
             ),
             completion=(
-                "You cleansed the pillars and set the coquina runes— the Tideward "
+                "You cleansed the pillars and set the Moon Rune shards—the Moon "
                 "Sigil resonates and the flood wards steady, granting safe passage "
                 "toward the sanctum."
             ),

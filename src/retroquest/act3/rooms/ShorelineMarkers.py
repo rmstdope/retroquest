@@ -2,19 +2,23 @@
 
 from ...engine.GameState import GameState
 from ...engine.Room import Room
-from ..items import CoquinaRunes, Steles
+from ..items import MoonRuneShards, Steles
 
 
 class ShorelineMarkers(Room):
-    """Shore location with weathered steles containing searchable coquina runes."""
+    """Shore location with weathered steles containing moon rune shards."""
 
     def __init__(self) -> None:
         """Initialize Shoreline Markers with steles and exits."""
         super().__init__(
             name="Shoreline Markers",
             description=(
-                "Weathered stone steles stand at the surf's edge, carved with "
-                "coquina runes encrusted in coral."
+                "The shore here is quiet and cold. Weathered steles rise from the sand, "
+                "their worn faces full of shallow marks. Salt and time have smudged "
+                "many lines, but faint moon sigils still show when the tide drops. "
+                "Loose pale flakes sit in the grooves; they shimmer like old stars. "
+                "When the moon is high, the stones seem to hum with a slow, patient "
+                "voice—an old magic tied to the sea."
             ),
             items=[Steles()],
             characters=[],
@@ -22,19 +26,20 @@ class ShorelineMarkers(Room):
         )
 
     def search(self, game_state: GameState, _target: str = None) -> str:
-        """Search the steles to find coquina runes for ward construction."""
+        """Search the steles to find Moon Rune shards for ward construction."""
         # If runes already present either in room or inventory, return idempotent message
-        already_here = any(isinstance(i, CoquinaRunes) for i in self.items)
-        already_owned = any(isinstance(i, CoquinaRunes) for i in game_state.inventory)
+        already_here = any(isinstance(i, MoonRuneShards) for i in self.items)
+        already_owned = any(isinstance(i, MoonRuneShards) for i in game_state.inventory)
         if already_here or already_owned:
             return (
-                "[event]You comb the surf-slick stones again. Coquina fragments "
-                "gleam in the cracks, but you've already gathered what you "
-                "need.[/event]"
+                "[event]You comb the surf-slick stones again. pale shards gleam in "
+                "the cracks, but you've already gathered what you need.[/event]"
             )
         # Reveal runes
-        self.items.append(CoquinaRunes())
+        self.items.append(MoonRuneShards())
         return (
-            "[event]You brush aside kelp and barnacle crusts. A cluster of coquina rune "
-            "tiles comes free—salt-white and ready to set into ward pillars.[/event]"
+            "[event]You brush aside kelp and barnacle crusts. A cluster of pale moon "
+            "shards comes free—etched with curved lines that seem to hum when the "
+            "moon leans toward the sea. They feel keyed to the tide, as if the "
+            "lunar pull listens to these marks.[/event]"
         )

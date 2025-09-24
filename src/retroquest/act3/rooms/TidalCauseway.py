@@ -1,70 +1,7 @@
 """Tidal Causeway room and related items for Act 3."""
 
-from ...engine.GameState import GameState
-from ...engine.Item import Item
 from ...engine.Room import Room
-from ..Act3StoryFlags import FLAG_ACT3_SEA_SEALED_LETTER_FOUND
-
-
-class Mural(Item):
-    """A weathered mural along a half-drowned arch showing a guardian."""
-
-    def __init__(self) -> None:
-        """Initialize the mural with its description."""
-        super().__init__(
-            name="mural",
-            short_name="mural",
-            description=(
-                "A weathered mural along a half-drowned arch, a figure shielding a "
-                "child against a storm of sigils."
-            ),
-            can_be_carried=False,
-        )
-
-    def examine(self, game_state: GameState) -> str:
-        """Examine the mural to reveal hidden secrets or the letter."""
-        if game_state.get_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_FOUND):
-            return (
-                "[event]The mural's scene is clear now: a guardian's silhouette "
-                "shelters a child. The reliquary has been opened.[/event]"
-            )
-        # Reveal the letter in the room if not already found
-        letter_present = any(
-            i.get_name().lower() == "sea-sealed letter"
-            for i in game_state.current_room.get_items()
-        )
-        if not letter_present:
-            game_state.current_room.add_item(SeaSealedLetter())
-        return (
-            "[event]Salt lines trace a hidden reliquary in the mural's base. Within, "
-            "something pale and dry has been kept from the waves. A [item_name]Sea-Sealed "
-            "Letter[/item_name] slips free.[/event]"
-        )
-
-
-class SeaSealedLetter(Item):
-    """A scrap of vellum preserved by salt-crystal varnish."""
-
-    def __init__(self) -> None:
-        """Initialize the sea-sealed letter with its description."""
-        super().__init__(
-            name="Sea-Sealed Letter",
-            short_name="letter",
-            description=(
-                "A scrap of vellum preserved by salt-crystal varnish. The ink hints at "
-                "names and a warding bargain."
-            ),
-            can_be_carried=True,
-        )
-
-    def picked_up(self, game_state: GameState) -> str | None:
-        """Handle letter pickup and set story flag."""
-        if not game_state.get_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_FOUND):
-            game_state.set_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_FOUND, True)
-        return (
-            "[item_effect]You carefully fold the preserved fragment — a testament "
-            "kept by the sea.[/item_effect]"
-        )
+from ..items import Mural
 
 
 class TidalCauseway(Room):
@@ -75,8 +12,10 @@ class TidalCauseway(Room):
         super().__init__(
             name="Tidal Causeway",
             description=(
-                "Moon‑washed causeways slick with seaweed rise and fall with the tide, "
-                "linking broken arches to half‑drowned plazas."
+                "Thin causeways of old stone lift from the black water like ribs. "
+                "Moonlight skims the wet stones; salt and wind carry half‑heard "
+                "songs. Broken arches stand like quiet mouths, guarding what the "
+                "sea keeps."
             ),
             items=[Mural()],
             characters=[],

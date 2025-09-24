@@ -191,6 +191,10 @@ These instructions are mandatory for all code contributions to ensure consistenc
 
 ### Details
 
--   Try to use isinstance when checking types, as it is more robust than comparing types directly.
+-   Try to use isinstance when checking types, as it is more robust than comparing types directly. Avoid circular imports by doing local imports inside functions if needed.
 -   Avoid using magic strings or numbers; instead, use constants or enums to represent important values.
 -   When using multi-line strings, align the lines so that they match the indentation of the surrounding code.
+
+## Chat
+
+In the chat, try to be concise when describing what you are about to do, what you are doing and what you have done. Avoid unnecessary verbosity. Focus on the key changes or additions you are making to the codebase. This helps in maintaining clarity and efficiency in communication.

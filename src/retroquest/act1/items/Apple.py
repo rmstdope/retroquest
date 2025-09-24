@@ -38,7 +38,7 @@ class Apple(Item):
             )
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Shopkeeper prevents taking the apple unless it's been given/purchased."""
         if not self.can_be_carried_flag:
             return (
@@ -47,4 +47,4 @@ class Apple(Item):
                 f"is merchandise, not a free sample. If you want it, you'll need to buy it "
                 f"proper-like.'[/dialogue]"
             )
-        return None  # Allow pickup if can_be_carried is True
+        return ""  # Allow pickup if can_be_carried is True

@@ -17,7 +17,7 @@ class Matches(Item):
             ),
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Shopkeeper prevents taking the matches unless they've been purchased."""
         if not self.can_be_carried_flag:
             return (
@@ -26,7 +26,7 @@ class Matches(Item):
                 f"[item_name]{self.get_name()}[/item_name] is merchandise, not a free sample. "
                 "If you want it, you'll need to buy it proper-like.'[/dialogue]"
             )
-        return None  # Allow pickup if can_be_carried is True
+        return ""  # Allow pickup if can_be_carried is True
 
     def use_with(self, game_state: 'GameState', other_item: Item) -> str:
         """Delegate to Candle's use_with if applicable, otherwise fallback."""

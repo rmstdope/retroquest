@@ -2,7 +2,7 @@
 from ...engine.GameState import GameState
 from ...engine.Room import Room
 from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
-from ..items import CoquinaRunes, WardingPillars
+from ..items import WardingPillars
 
 
 class OuterWards(Room):
@@ -17,7 +17,7 @@ class OuterWards(Room):
     Key Mechanics:
     - Search action attunes sigils when first performed
     - Supports purify spell casting on pillars via room hook
-    - Enables coquina rune + pillar combination for sigil completion
+    - Enables moon rune shard + pillar combination for sigil completion
     - Sets FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED when quest completed
     """
     def __init__(self) -> None:
@@ -25,8 +25,10 @@ class OuterWards(Room):
         super().__init__(
             name="Outer Wards",
             description=(
-                "Three leaning pillars surround a drowned courtyard; faint glyphs glow "
-                "when touched with brine."
+                "The courtyard lies half-swallowed by the sea. Three ancient pillars "
+                "rise from the black water, their faces scored with shallow marks. "
+                "Brine beads along the carved lines and they catch the moon in small "
+                "rings of light. The air here tastes of old promises and slow tides."
             ),
             items=[WardingPillars()],
             characters=[],
@@ -61,26 +63,10 @@ class OuterWards(Room):
             "the sigil."
         )
 
-    # Support sequence: cast purify on pillars, then use coquina runes with pillars
+    # Support sequence: cast purify on pillars, then use moon rune shards with pillars
     def cast_purify_on_pillars(self, _game_state: GameState) -> str:
         """Handle purify spell targeting on warding pillars."""
         pillars = next((i for i in self.items if isinstance(i, WardingPillars)), None)
         if pillars is None:
             return "[failure]There are no warding pillars here to purify.[/failure]"
         return pillars.purify(_game_state)
-
-    def use_runes_with_pillars(self, game_state: GameState) -> str:
-        """Handle coquina runes + warding pillars combination for sigil completion."""
-        # Require that player has Coquina Runes in inventory
-        if not any(isinstance(i, CoquinaRunes) for i in game_state.inventory):
-            return (
-                "[failure]You need [item_name]Coquina Runes[/item_name] to engrave the "
-                "Tideward Sigil on these pillars.[/failure]"
-            )
-        # Set the attuned flag as the outcome of completing the sigil
-        game_state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED, True)
-        return (
-            "[success]You press the coquina rune tiles into cleaned grooves; lines knit "
-            "into a complete Tideward Sigil. The flood ward steadies—safe passage to the "
-            "sanctum draws nearer.[/success]"
-        )

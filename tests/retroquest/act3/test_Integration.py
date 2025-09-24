@@ -69,9 +69,9 @@ class TestAct3Integration:
         # Newly activated side quest should now be active alongside the main quest
         check_quests(game.state, ['The Three Virtues', 'Tideward Sigils'])
         # Search/examine/take runes
-        combined = execute_commands(game, ['search', 'examine steles', 'take coquina runes'])
-        assert 'coquina' in combined.lower()
-        check_item_in_inventory(game.state, 'Coquina Runes', True)
+        combined = execute_commands(game, ['search', 'examine steles', 'take moon rune shards'])
+        assert 'moon' in combined.lower() or 'shard' in combined.lower()
+        check_item_in_inventory(game.state, 'Moon Rune Shards', True)
         again = execute_commands(game, ['search'])
         assert 'already' in again.lower()
 
@@ -80,7 +80,7 @@ class TestAct3Integration:
         check_current_room(game.state, 'Outer Wards')
         purify_result = execute_commands(game, ['cast purify on warding pillars'])
         assert any(k in purify_result.lower() for k in ['cleanse', 'rinse', 'cleansed'])
-        use_result = execute_commands(game, ['use coquina runes with warding pillars'])
+        use_result = execute_commands(game, ['use moon rune shards with warding pillars'])
         assert 'sigil' in use_result.lower()
         check_story_flag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED, True)
         # Quest should be marked completed

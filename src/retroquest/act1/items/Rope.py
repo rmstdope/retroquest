@@ -16,7 +16,7 @@ class Rope(Item):
             )
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Shopkeeper prevents taking the rope unless it has been purchased."""
         if not self.can_be_carried_flag:
             name_html = f"[item_name]{self.get_name()}[/item_name]"
@@ -29,7 +29,7 @@ class Rope(Item):
                     "you'll need to buy it proper-like.'[/dialogue]"
                 )
             )
-        return None
+        return ""
 
     def use_with(self, game_state: 'GameState', other_item: Item) -> str:
         """Delegate to Mechanism's use_with if applicable, otherwise fallback."""

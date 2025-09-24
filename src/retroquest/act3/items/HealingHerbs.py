@@ -27,7 +27,7 @@ class HealingHerbs(Item):
             can_be_carried=False,
         )
 
-    def prevent_pickup(self) -> str | None:
+    def prevent_pickup(self) -> str:
         """Block pickup with narrative explanation through Mira."""
         return (
             "[character_name]Mira[/character_name] lifts a sachet, then shakes her "

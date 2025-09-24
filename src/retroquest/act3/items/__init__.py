@@ -1,7 +1,7 @@
 """Item classes for Act 3."""
 
 from .AncientAmulet import AncientAmulet
-from .CoquinaRunes import CoquinaRunes
+from .MoonRuneShards import MoonRuneShards
 from .CrystalOfLight import CrystalOfLight
 from .HealingHerbs import HealingHerbs
 from .LanternBracket import LanternBracket
@@ -11,10 +11,12 @@ from .RustedLockerKey import RustedLockerKey
 from .Steles import Steles
 from .TeleportationFocus import TeleportationFocus
 from .WardingPillars import WardingPillars
+from .Mural import Mural
+from .SeaSealedLetter import SeaSealedLetter
 
 __all__ = [
     "AncientAmulet",
-    "CoquinaRunes",
+    "MoonRuneShards",
     "CrystalOfLight",
     "HealingHerbs",
     "LanternBracket",
@@ -24,4 +26,6 @@ __all__ = [
     "Steles",
     "TeleportationFocus",
     "WardingPillars",
+    "Mural",
+    "SeaSealedLetter",
 ]

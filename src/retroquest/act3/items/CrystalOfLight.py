@@ -40,11 +40,11 @@ class CrystalOfLight(Item):
             "refractions. It seems to breathe with the tide.[/event]"
         )
 
-    def prevent_pickup(self) -> str | None:  # noqa: D401
+    def prevent_pickup(self) -> str:  # noqa: D401
         """No direct blocking; gating enforced during `picked_up()`."""
-        return None
+        return ""
 
-    def picked_up(self, game_state: GameState) -> str | None:
+    def picked_up(self, game_state: GameState) -> str:
         """Handle gated acquisition, reversing pickup if prerequisites unmet."""
         sigils = game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED)
         lanterns = game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)
