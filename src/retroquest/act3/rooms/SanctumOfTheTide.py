@@ -4,7 +4,7 @@ from ...engine.GameState import GameState
 from ...engine.Room import Room
 from ..Act3StoryFlags import (
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
-    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED,
+    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
     FLAG_ACT3_VOW_OF_COURAGE_MADE,
 )
 from ..items import CrystalOfLight
@@ -34,7 +34,7 @@ class TideBornGuardian(Character):
         w = words.strip().lower()
         if w == "myself":
             # Only accept if local rites are complete
-            sigils_attuned = game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED)
+            sigils_attuned = game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)
             lanterns_lit = game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)
             if not (sigils_attuned and lanterns_lit):
                 return (
@@ -67,7 +67,7 @@ class SanctumOfTheTide(Room):
             ),
             items=[CrystalOfLight()],
             characters=[TideBornGuardian()],
-            exits={"north": "CollapsedPier", "west": "SubmergedAntechamber"},
+            exits={"west": "SubmergedAntechamber"},
         )
 
     def on_enter(self, game_state: GameState) -> None:

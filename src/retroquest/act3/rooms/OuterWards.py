@@ -1,7 +1,7 @@
 """Drowned courtyard with tideward sigil pillars."""
 from ...engine.GameState import GameState
 from ...engine.Room import Room
-from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
+from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
 from ..items import WardingPillars
 
 
@@ -18,7 +18,7 @@ class OuterWards(Room):
     - Search action attunes sigils when first performed
     - Supports purify spell casting on pillars via room hook
     - Enables moon rune shard + pillar combination for sigil completion
-    - Sets FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED when quest completed
+    - Sets FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED when quest completed
     """
     def __init__(self) -> None:
         """Initialize Outer Wards with warding pillars and exits."""
@@ -41,12 +41,12 @@ class OuterWards(Room):
 
     def search(self, game_state: GameState, _target: str = None) -> str:
         """Override search to handle tideward sigil attunement on first use."""
-        if game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED):
+        if game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED):
             return (
                 "[info]The pillars hum quietly — the Tideward Sigils remain in gentle "
                 "resonance, already attuned.[/info]"
             )
-        game_state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED, True)
+        game_state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
         return (
             "[event]You trace the salt-damp glyphs with wetted fingers. One by one, the "
             "Tideward Sigils answer with a soft chord, knitting the ward's broken "

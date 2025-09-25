@@ -238,7 +238,6 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Characters: Pier Warden (guardian of the vaults)
 -   Quest Relevance: Retrieve lanterns for “Lanterns of the Deeps.”
 -   Exits:
-    -   South to Sanctum of the Tide
     -   West to Outer Wards
 
 5. Submerged Antechamber
@@ -259,7 +258,6 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Characters: Tide‑Born Guardian (final test of Courage)
 -   Quest Relevance: Main Quest phase completion for the Crystal of Light.
 -   Exits:
-    -   North to Collapsed Pier
     -   West to Submerged Antechamber
 
 ---
@@ -428,7 +426,7 @@ Teleportation only (no cardinal exits)
 
 ```
 [SM] ---- [OW] ---- [CP]
-  |         |         |
+  |         |
 [TC] ---- [SA] ---- [ST]
 ```
 
@@ -446,9 +444,9 @@ The connections reflect exits:
 -   Tidal Causeway: N→SM, E→SA
 -   Shoreline Markers: S→TC, E→OW
 -   Outer Wards: S→SA, E→CP, W→SM
--   Collapsed Pier: S→ST, W→OW
+-   Collapsed Pier: W→OW
 -   Submerged Antechamber: N→OW, E→ST, W→TC
--   Sanctum of the Tide: N→CP, W→SA
+-   Sanctum of the Tide: W→SA
 
 ### Mount Ember — Wisdom (Phoenix Feather)
 

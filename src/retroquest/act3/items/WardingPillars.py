@@ -2,7 +2,7 @@
 
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
+from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
 
 class WardingPillars(Item):
     """Tideward ritual pillars requiring purification (Act III).
@@ -87,7 +87,7 @@ class WardingPillars(Item):
 
         # Consume shards (remove all matching entries) and set story flag
         game_state.remove_item_from_inventory(other_item.name)
-        game_state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED, True)
+        game_state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
         return (
             "[event]You press the pale shards into the cleansed grooves. Pale runes "
             "flare and sink into the stone like stored moonlight. The air leans in; "

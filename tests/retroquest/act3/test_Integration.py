@@ -5,7 +5,7 @@ from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
 from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_MAIN_STARTED,
-    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
+    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
 )
 from ..utils.utils import (
     check_character_in_room,
@@ -82,7 +82,7 @@ class TestAct3Integration:
         assert any(k in purify_result.lower() for k in ['cleanse', 'rinse', 'cleansed'])
         use_result = execute_commands(game, ['use moon rune shards with warding pillars'])
         assert 'sigil' in use_result.lower()
-        check_story_flag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED, True)
+        check_story_flag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
         # Quest should be marked completed
         check_quest_completed(game.state, 'Tideward Sigils')
 
@@ -113,10 +113,12 @@ class TestAct3Integration:
         execute_commands(game, ['take prism lantern', 'take prism lantern', 'take prism lantern'])
         check_item_count_in_inventory(game.state, 'Prism Lantern', 3)
 
-        # Step 8: Submerged Antechamber — mount lanterns and cast light
-        execute_commands(game, ['south'])
-        check_current_room(game.state, 'Sanctum of the Tide')
+        # Step 8: Submerged Antechamber — navigate, mount lanterns and cast light
+        # Move from Collapsed Pier back toward the Outer Wards and the submerged
+        # antechamber where lanterns are mounted.
         execute_commands(game, ['west'])
+        check_current_room(game.state, 'Outer Wards')
+        execute_commands(game, ['south'])
         check_current_room(game.state, 'Submerged Antechamber')
         # Mount three lanterns to brackets
         execute_commands(game, ['use prism lantern with lantern bracket'])
@@ -127,6 +129,9 @@ class TestAct3Integration:
         # Cast light to reveal the path
         light_result = execute_commands(game, ['cast light'])
         assert 'path' in light_result.lower() or 'lanterns' in light_result.lower()
+        # After lighting, head west to the Tidal Causeway
+        execute_commands(game, ['west'])
+        check_current_room(game.state, 'Tidal Causeway')
 
         # Step 9: Tidal Causeway — examine mural, take Sea-Sealed Letter
         execute_commands(game, ['west'])

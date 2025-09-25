@@ -4,7 +4,7 @@ from ...engine.GameState import GameState
 from ...engine.Quest import Quest
 from ..Act3StoryFlags import (
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
-    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
+    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
 )
 
 
@@ -31,7 +31,7 @@ class LanternsOfTheDeepsQuest(Quest):
         """Check if quest should trigger in specific rooms after sigils are complete."""
         # Trigger when entering Submerged Antechamber or Collapsed Pier,
         # but only after Tideward Sigils complete.
-        if not game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED):
+        if not game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED):
             return False
         return game_state.current_room.name in ("Collapsed Pier", "Submerged Antechamber")
 

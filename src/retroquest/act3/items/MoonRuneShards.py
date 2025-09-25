@@ -1,7 +1,5 @@
 """Moon Rune shards used to engrave tideward sigils."""
 
-from typing import Union
-
 from ...engine.GameState import GameState
 from ...engine.Item import Item
 
@@ -27,7 +25,7 @@ class MoonRuneShards(Item):
             can_be_carried=True,
         )
 
-    def picked_up(self, _game_state: GameState) -> Union[str, None]:
+    def picked_up(self, _game_state: GameState) -> str:
         """Override pickup to provide tactile flavor text."""
         return "[dim]The shards whisper with tide-salt; they leave a faint dust on your fingers.[/dim]"
 

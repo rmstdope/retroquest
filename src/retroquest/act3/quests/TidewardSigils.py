@@ -2,7 +2,7 @@
 
 from ...engine.GameState import GameState
 from ...engine.Quest import Quest
-from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED
+from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
 
 #TODO Rework how the quest is activated
 class TidewardSigilsQuest(Quest):
@@ -12,8 +12,10 @@ class TidewardSigilsQuest(Quest):
         super().__init__(
             name="Tideward Sigils",
             description=(
-                "Collect Moon Rune shards at the shore and engrave a complete Moon "
-                "Sigil upon the leaning pillars to stabilize the flood wards."
+                "Ancient warding pillars stand along the drowned causeway — relics of "
+                "coastal rites that once bent the tides to human will. You must cleanse "
+                "and activate them by engraving a full Moon Sigil to steady the flood "
+                "wards and gain safe passage to the sanctum."
             ),
             completion=(
                 "You cleansed the pillars and set the Moon Rune shards—the Moon "
@@ -28,5 +30,5 @@ class TidewardSigilsQuest(Quest):
         return game_state.current_room.name == "Shoreline Markers"
 
     def check_completion(self, game_state: GameState) -> bool:
-        """Check if quest is completed based on sigils being attuned."""
-        return game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED)
+        """Check if quest is completed based on sigils being completed."""
+        return game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)

@@ -286,6 +286,28 @@ def test_take_with_pickup_messages():
     assert len(test_room.get_items()) == 0
     assert len(game.state.inventory) == 3
 
+
+def test_take_with_empty_pickup_message_treated_as_no_message():
+    """Ensure an empty-string pickup message is treated as no message.
+
+    This guards the change where item.picked_up() now returns str instead of
+    Optional[str]. The engine should treat an empty string as falsy and not
+    append it to the main take event line.
+    """
+    act = TakeMockAct()
+    game = Game([act])
+    gem1 = TakeMockItem("gem", "A sparkling gem", pickup_message="The gem glows!")
+    gem2 = TakeMockItem("gem", "A silent gem", pickup_message="")
+    test_room = game.state.all_rooms["TestRoom"]
+    for gem in (gem1, gem2):
+        test_room.add_item(gem)
+    game.state.current_room = test_room
+    result = game.command_parser.parse("take gem")
+    # The non-empty message should be present
+    assert "The gem glows!" in result
+    # The main event line should reflect two items taken
+    assert "[event]You take 2 [item_name]gem[/item_name].[/event]" in result
+
 def test_take_backward_compatibility_with_existing_behavior():
     """Regression test ensuring single-item take behavior remains compatible."""
     test_items = [

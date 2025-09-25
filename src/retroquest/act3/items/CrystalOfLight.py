@@ -5,7 +5,7 @@ from ...engine.Item import Item
 from ..Act3StoryFlags import (
     FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
-    FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED,
+    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
     FLAG_ACT3_VOW_OF_COURAGE_MADE,
 )
 
@@ -46,7 +46,7 @@ class CrystalOfLight(Item):
 
     def picked_up(self, game_state: GameState) -> str:
         """Handle gated acquisition, reversing pickup if prerequisites unmet."""
-        sigils = game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_ATTUNED)
+        sigils = game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)
         lanterns = game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)
         vow = game_state.get_story_flag(FLAG_ACT3_VOW_OF_COURAGE_MADE)
         if not (sigils and lanterns and vow):

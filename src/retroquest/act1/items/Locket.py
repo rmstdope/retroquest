@@ -21,7 +21,7 @@ class Locket(Item):
             can_be_carried=True
         )
 
-    def picked_up(self, game_state: GameState) -> str | None:
+    def picked_up(self, game_state: GameState) -> str:
         """Teach Bless spell if Priest is present and spell not known."""
         if not game_state.has_spell(BlessSpell().name):
             bless_spell = BlessSpell()
@@ -35,4 +35,4 @@ class Locket(Item):
                 "you on your path.'[/dialogue]\nHe teaches you the [spell_name]bless[/spell_name] "
                 "spell!\n[event]You have learned [spell_name]bless[/spell_name].[/event]"
             )
-        return None
+        return ""

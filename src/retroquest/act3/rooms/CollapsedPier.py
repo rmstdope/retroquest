@@ -16,7 +16,7 @@ class CollapsedPier(Room):
             ),
             items=[Locker()],
             characters=[],
-            exits={"south": "SanctumOfTheTide", "west": "OuterWards"},
+            exits={"west": "OuterWards"},
         )
 
     def search(self, game_state: GameState, _target: str = None) -> str:
