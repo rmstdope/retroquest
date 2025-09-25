@@ -1,7 +1,10 @@
 """Flooded antechamber with lantern mounting system for underwater passage."""
 from ...engine.GameState import GameState
 from ...engine.Room import Room
-from ..Act3StoryFlags import FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT
+from ..Act3StoryFlags import (
+    FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
+    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+)
 from ..items import LanternBracket, PrismLantern
 
 
@@ -83,3 +86,21 @@ class SubmergedAntechamber(Room):
             "[success]Light pours from the prisms, weaving a clear path through "
             "the flooded hall. The way to the sanctum stands revealed.[/success]"
         )
+
+    def get_exits(self, game_state: GameState) -> dict[str, str]:
+        """Return exits, gating the sanctum entrance on two Act III story flags.
+
+        The east exit leading to the Sanctum of the Tide is only available once
+        the Tideward sigils have been completed and the Lanterns of the Deeps
+        have been lit.
+        """
+        exits = dict(self.exits)
+        lanterns_lit = game_state.get_story_flag(
+            FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT
+        )
+        sigils_done = game_state.get_story_flag(
+            FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
+        )
+        if not (lanterns_lit and sigils_done):
+            exits.pop("east", None)
+        return exits

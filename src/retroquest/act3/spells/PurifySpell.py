@@ -31,9 +31,7 @@ class PurifySpell(Spell):
         """Cast purify on target item, with special handling for warding pillars."""
         # Special handling for the warding pillars in the Outer Wards
         if isinstance(target_item, WardingPillars):
-            hook = getattr(game_state.current_room, 'cast_purify_on_pillars', None)
-            if hook:
-                return hook(game_state)
+            return target_item.purify(game_state)
         return (
             f"[event]You cast [spell_name]{self.get_name()}[/spell_name] on "
             f"[item_name]{target_item.get_name()}[/item_name].[/event]\n"

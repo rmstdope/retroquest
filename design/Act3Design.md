@@ -578,10 +578,14 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 10. Room: Sanctum of the Tide
 
 -   Commands and yields:
+
     -   `search` → Shows a glass‑still basin and the tide‑born guardian’s presence.
+    -   `talk to tide-born guardian` → The guardian intones a riddle testing your resolve; it hints
+        that the true vow must name who you will never abandon.
+
     -   `say myself to tide-born guardian` → Vow accepted; waters part; enables `take crystal of light` to claim the relic and complete the Sunken Ruins phase. The relic can be taken only after completing “Tideward Sigils” and “Lanterns of the Deeps”.
 
-11. Room: Sanctum of the Tide
+11. Room: Tidal Causeway
 
 -   Commands and yields:
     -   `talk to Mira` → Teleports the party to Mount Ember (arrive at Lower Switchbacks).

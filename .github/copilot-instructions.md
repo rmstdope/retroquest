@@ -185,9 +185,9 @@ These instructions are mandatory for all code contributions to ensure consistenc
 
 ### Testing
 
--   Implement unit tests for each major component, including quests, spells, and character interactions.
--   Use integration tests to ensure that quest chains and character interactions work as intended.
--   Conduct end-to-end testing to verify that the act can be completed successfully and that all quests are properly integrated.
+-   All components in the engine should have extensive unit tests.
+-   Every component in every act should also have unit tests. These tests should test the dynamics and behavior of the component, e.g. dynamic dialogues and things that change in the component depending on actions. Try to mock as little as possible and instead use the real implementations where feasible. The component tests should be placed in a similar structure to the code, ie. tests/retroquest/act<num>/rooms for rooms.
+-   Use integration tests to verify that all steps in the golden path of the act works as expected, that the act can be completed successfully and that all quests are properly integrated.
 
 ### Details
 

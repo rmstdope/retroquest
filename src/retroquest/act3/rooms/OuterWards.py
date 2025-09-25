@@ -41,32 +41,9 @@ class OuterWards(Room):
 
     def search(self, game_state: GameState, _target: str = None) -> str:
         """Override search to handle tideward sigil attunement on first use."""
-        if game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED):
-            return (
-                "[info]The pillars hum quietly — the Tideward Sigils remain in gentle "
-                "resonance, already attuned.[/info]"
-            )
-        game_state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
         return (
-            "[event]You trace the salt-damp glyphs with wetted fingers. One by one, the "
-            "Tideward Sigils answer with a soft chord, knitting the ward's broken "
-            "cadence.[/event]"
+            "[event]You search the drowned courtyard thoroughly. Apart from the "
+            "three ancient warding pillars rising from the black water, there is "
+            "little of interest; the pillars alone seem keyed to the moon and tide." 
+            "[/event]"
         )
-
-    # Allow casting 'purify' in this room to acknowledge cleansing, even if spells are
-    # learned elsewhere
-    def light(self, _game_state: GameState) -> str:
-        """Override light spell to provide context-appropriate guidance."""
-        # Reuse light hook to return a neutral message if players try 'cast light' here
-        return (
-            "The faint glyphs flicker but the true work here is in cleansing and setting "
-            "the sigil."
-        )
-
-    # Support sequence: cast purify on pillars, then use moon rune shards with pillars
-    def cast_purify_on_pillars(self, _game_state: GameState) -> str:
-        """Handle purify spell targeting on warding pillars."""
-        pillars = next((i for i in self.items if isinstance(i, WardingPillars)), None)
-        if pillars is None:
-            return "[failure]There are no warding pillars here to purify.[/failure]"
-        return pillars.purify(_game_state)

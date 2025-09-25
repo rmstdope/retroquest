@@ -2,6 +2,10 @@
 
 from typing import Optional
 from retroquest.act3.Act3 import Act3
+from retroquest.act3.Act3StoryFlags import (
+    FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
+    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+)
 from retroquest.engine.Game import Game
 
 class TestAct3Rooms:
@@ -23,6 +27,11 @@ class TestAct3Rooms:
         """Ensure every cardinal exit has a matching reverse exit back to the origin room."""
         game = Game([self.act3])
         reverse = {"north": "south", "south": "north", "east": "west", "west": "east"}
+
+        # Enable Act 3 gating flags so conditional exits (like the sanctum)
+        # are visible for the purpose of validating bidirectionality.
+        game.state.set_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, True)
+        game.state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
 
         # Iterate through rooms by key so we can validate target links precisely
         for room_key, room in self.act3.rooms.items():
