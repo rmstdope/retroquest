@@ -7,8 +7,10 @@ Use these constants to avoid magic strings when checking Act III progression.
 FLAG_ACT3_COMPLETED = "act3_completed"
 
 # Sunken Ruins progression flags
-FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED = "act3_tideward_sigils_completed"
 FLAG_ACT3_TIDEWARD_SIGILS_STARTED = "act3_tideward_sigils_started"
+FLAG_ACT3_WARDING_PILLARS_PURIFIED = "act3_warding_pillars_purified"
+FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED = "act3_tideward_sigils_completed"
+
 FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT = "act3_lanterns_of_the_deeps_lit"
 FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED = "act3_crystal_of_light_acquired"
 FLAG_ACT3_VOW_OF_COURAGE_MADE = "act3_vow_of_courage_made"

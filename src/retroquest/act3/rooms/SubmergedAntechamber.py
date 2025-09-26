@@ -19,7 +19,7 @@ class SubmergedAntechamber(Room):
                 "A partially flooded hall; carved niches hold lantern brackets;"
                 " light lines the underwater path."
             ),
-            items=[LanternBracket(), LanternBracket(), LanternBracket()],
+            items=[],
             characters=[],
             exits={
                 "north": "OuterWards", 
@@ -30,15 +30,33 @@ class SubmergedAntechamber(Room):
 
     def search(self, game_state: GameState, _target: str = None) -> str:
         """Search the antechamber to examine the lantern mounting system."""
+        # If the Tideward sigils haven't been completed, the water remains too
+        # deep and obscures the niches — nothing can be revealed by searching.
+        if not game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED):
+            return (
+                "[info]The water in the hall sits high and murky. It's impossible to "
+                "search effectively here — the flooded approach hides whatever might "
+                "lie beneath the surface.[/info]"
+            )
         if game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT):
             return (
                 "[info]The niches glow with steady, pearlescent flame. The Lanterns of the "
                 "Deeps are already lit.[/info]"
             )
+        # If brackets are not present yet, reveal them for mounting lanterns
+        from ..items.LanternBracket import LanternBracket as _LB
+        already_here = any(isinstance(i, _LB) for i in self.items)
+        if not already_here:
+            # Add three brackets to the room for players to mount lanterns on
+            self.items.extend([LanternBracket(), LanternBracket(), LanternBracket()])
+            return (
+                "[event]You wade through chilled water. As you peer into the niches, "
+                "three carved brackets become apparent; their grooves catch the "
+                "faint tide-light.[/event]"
+            )
         return (
-            "[event]You wade through chilled water. Three empty brackets line the "
-            "approach, awaiting lanterns. Set them, then kindle the way "
-            "forward.[/event]"
+            "[info]You wade through chilled water. Three empty brackets line the "
+            "approach; their carved grooves catch the faint tide-light.[/info]"
         )
 
     def mount_lantern(self, game_state: GameState) -> str:

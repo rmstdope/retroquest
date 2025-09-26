@@ -27,7 +27,8 @@ class MoonRuneShards(Item):
 
     def picked_up(self, _game_state: GameState) -> str:
         """Override pickup to provide tactile flavor text."""
-        return "[dim]The shards whisper with tide-salt; they leave a faint dust on your fingers.[/dim]"
+        return "[dim]The shards whisper with tide-salt; they leave a faint dust on" \
+               " your fingers.[/dim]"
 
     def use_with(self, game_state: GameState, other_item: 'Item') -> str:
         """Delegate pillar combinations to the room hook when used with pillars."""

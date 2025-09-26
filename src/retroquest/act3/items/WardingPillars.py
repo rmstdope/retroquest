@@ -2,7 +2,10 @@
 
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
+from ..Act3StoryFlags import (
+    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+    FLAG_ACT3_WARDING_PILLARS_PURIFIED,
+)
 
 class WardingPillars(Item):
     """Tideward ritual pillars requiring purification (Act III).
@@ -55,11 +58,13 @@ class WardingPillars(Item):
             "barely holding. They watch the water but do not command it.[/event]"
         )
 
-    def purify(self, _game_state: GameState) -> str:
+    def purify(self, game_state: GameState) -> str:
         """Purify the pillars, enabling their use in the Tideward Sigil quest."""
         if self.purified:
             return "[info]The pillars are already cleansed of brine and coral.[/info]"
         self.purified = True
+        # Mark purification story flag so other systems can react to the change.
+        game_state.set_story_flag(FLAG_ACT3_WARDING_PILLARS_PURIFIED, True)
         return (
             "[event]You rinse salt and scrape coral from the carved channels. Glyph-lines "
             "breathe again, ready to take the Tideward Sigil.[/event]"

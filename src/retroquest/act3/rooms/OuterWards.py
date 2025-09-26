@@ -1,7 +1,6 @@
 """Drowned courtyard with tideward sigil pillars."""
 from ...engine.GameState import GameState
 from ...engine.Room import Room
-from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
 from ..items import WardingPillars
 
 
@@ -14,11 +13,12 @@ class OuterWards(Room):
     - Demonstrates the connection between purification magic and sigil crafting
     - Gateway area that controls access to deeper sanctum areas
 
-    Key Mechanics:
-    - Search action attunes sigils when first performed
-    - Supports purify spell casting on pillars via room hook
-    - Enables moon rune shard + pillar combination for sigil completion
-    - Sets FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED when quest completed
+        Key Mechanics:
+        - Search action describes the courtyard and points out the warding pillars;
+            it does not itself attune the sigils.
+        - Pillar purification and sigil engraving are implemented on the
+            `WardingPillars` item (purify/use_with), which is responsible for
+            setting the attunement flag when the player performs the correct steps.
     """
     def __init__(self) -> None:
         """Initialize Outer Wards with warding pillars and exits."""
@@ -39,8 +39,14 @@ class OuterWards(Room):
             },
         )
 
-    def search(self, game_state: GameState, _target: str = None) -> str:
-        """Override search to handle tideward sigil attunement on first use."""
+    def search(self, _game_state: GameState, _target: str = None) -> str:
+        """Describe the courtyard and warding pillars without performing attunement.
+
+        Note: sigil attunement is performed by interacting with the
+        `WardingPillars` item (for example, casting purify on the pillars and
+        using Moon Rune Shards with them). This method only returns flavor
+        text describing the pillars.
+        """
         return (
             "[event]You search the drowned courtyard thoroughly. Apart from the "
             "three ancient warding pillars rising from the black water, there is "

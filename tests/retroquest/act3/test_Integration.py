@@ -66,6 +66,8 @@ class TestAct3Integration:
         # Step 3: move north to Shoreline Markers => should activate Tideward Sigils
         execute_commands(game, ['north'])
         check_current_room(game.state, 'Shoreline Markers')
+        # Reveal the runes so the Tideward Sigils started flag is set
+        execute_commands(game, ['search'])
         # Newly activated side quest should now be active alongside the main quest
         check_quests(game.state, ['The Three Virtues', 'Tideward Sigils'])
         # Search/examine/take runes
@@ -120,6 +122,9 @@ class TestAct3Integration:
         check_current_room(game.state, 'Outer Wards')
         execute_commands(game, ['south'])
         check_current_room(game.state, 'Submerged Antechamber')
+        # Reveal the lantern brackets in the antechamber, then mount lanterns
+        search_result = execute_commands(game, ['search'])
+        assert 'bracket' in search_result.lower() or 'brackets' in search_result.lower()
         # Mount three lanterns to brackets
         execute_commands(game, ['use prism lantern with lantern bracket'])
         execute_commands(game, ['use prism lantern with lantern bracket'])

@@ -3,6 +3,7 @@
 from ...engine.GameState import GameState
 from ...engine.Room import Room
 from ..items import MoonRuneShards, Steles
+from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_STARTED
 
 
 class ShorelineMarkers(Room):
@@ -25,6 +26,7 @@ class ShorelineMarkers(Room):
             exits={"south": "TidalCauseway", "east": "OuterWards"},
         )
 
+
     def search(self, game_state: GameState, _target: str = None) -> str:
         """Search the steles to find Moon Rune shards for ward construction."""
         # If runes already present either in room or inventory, return idempotent message
@@ -37,6 +39,11 @@ class ShorelineMarkers(Room):
             )
         # Reveal runes
         self.items.append(MoonRuneShards())
+        # Mark that the Tideward Sigils side quest has been started by reaching
+        # the shoreline markers. This flag is used to trigger the quest in the
+        # quest system.
+        if not game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_STARTED):
+            game_state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_STARTED, True)
         return (
             "[event]You brush aside kelp and barnacle crusts. A cluster of pale moon "
             "shards comes free—etched with curved lines that seem to hum when the "
