@@ -53,6 +53,26 @@ def test_examine_changes_with_purification():
     assert 'pulse' in out_after.lower() or 'radiant' in out_after.lower()
 
 
+def test_name_changes_on_purify():
+    """After purification the item's name should indicate purified state."""
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+
+    room = game.state.all_rooms['OuterWards']
+    pillars = next((i for i in room.items if i.__class__.__name__ == 'WardingPillars'), None)
+    assert pillars is not None
+
+    # Name before purification
+    assert pillars.get_name() == 'Warding Pillars'
+
+    # Purify and verify name changed
+    game.state.current_room = room
+    pillars.purify(game.state)
+    assert pillars.get_name() == 'Warding Pillars (purified)'
+    assert pillars.get_short_name() == 'Pillars'
+
+
 def test_use_with_shards_before_and_after_purify():
     """Using MoonRuneShards on unpurified pillars fails; succeeds after purify.
 

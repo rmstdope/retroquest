@@ -27,7 +27,7 @@ class WardingPillars(Item):
                 "clogged with brine and coral crust that must be cleared to restore "
                 "their ward function."
             ),
-            short_name="warding pillars",
+            short_name="Pillars",
             can_be_carried=False,
         )
         self.purified: bool = False
@@ -35,8 +35,8 @@ class WardingPillars(Item):
     def prevent_pickup(self) -> str:
         """Prevent pickup of the immovable warding pillars."""
         return (
-            "[failure]You can't take the [item_name]Warding Pillars[/item_name]. They are "
-            "fixed stone, older than the pier.[/failure]"
+            f"[failure]You can't take the [item_name]{self.get_name()}[/item_name]. "
+            "They are fixed stone, older than the pier.[/failure]"
         )
 
     def examine(self, _game_state: GameState) -> str:
@@ -63,6 +63,8 @@ class WardingPillars(Item):
         if self.purified:
             return "[info]The pillars are already cleansed of brine and coral.[/info]"
         self.purified = True
+        # Update the item's displayed name to reflect purified state.
+        self.name = "Warding Pillars (purified)"
         # Mark purification story flag so other systems can react to the change.
         game_state.set_story_flag(FLAG_ACT3_WARDING_PILLARS_PURIFIED, True)
         return (

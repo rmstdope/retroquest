@@ -80,9 +80,9 @@ class TestAct3Integration:
         # Step 5: Outer Wards — purify and set sigil; completes Tideward Sigils
         execute_commands(game, ['east'])
         check_current_room(game.state, 'Outer Wards')
-        purify_result = execute_commands(game, ['cast purify on warding pillars'])
+        purify_result = execute_commands(game, ['cast purify on pillars'])
         assert any(k in purify_result.lower() for k in ['cleanse', 'rinse', 'cleansed'])
-        use_result = execute_commands(game, ['use moon rune shards with warding pillars'])
+        use_result = execute_commands(game, ['use moon rune shards with pillars'])
         assert 'sigil' in use_result.lower()
         check_story_flag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
         # Quest should be marked completed
