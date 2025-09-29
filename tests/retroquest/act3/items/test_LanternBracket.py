@@ -5,9 +5,10 @@ from retroquest.engine.Game import Game
 
 
 def test_lantern_bracket_default_state():
+    """Verify that a new LanternBracket starts empty (no lantern mounted)."""
     act3 = Act3()
     act3.music_file = ''
-    game = Game([act3])
+    _game = Game([act3])
 
     from retroquest.act3.items.LanternBracket import LanternBracket
     lb = LanternBracket()

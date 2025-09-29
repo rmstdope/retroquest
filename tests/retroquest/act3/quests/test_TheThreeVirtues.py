@@ -2,18 +2,29 @@
 
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
-from ...utils.utils import check_quests, execute_commands
+from retroquest.act3.quests.TheThreeVirtues import TheThreeVirtuesQuest
+from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED, FLAG_ACT3_MAIN_COMPLETED
 
 
-def test_the_three_virtues_activates_on_talk_to_mira():
-    """Starting the act by talking to Mira activates The Three Virtues quest."""
+def test_the_three_virtues_trigger_and_completion_flags():
+    """Quest triggers when main started flag set and completes when main completed."""
     act3 = Act3()
     act3.music_file = ''
-    game = Game([act3])
+    _game = Game([act3])
 
-    # Before talking, no quests should be active
-    check_quests(game.state, [])
+    quest = TheThreeVirtuesQuest()
 
-    # Talk to Mira to start the main quest
-    execute_commands(game, ['talk to mira'])
-    check_quests(game.state, ['The Three Virtues'])
+    # Not started by default
+    _game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, False)
+    assert quest.check_trigger(_game.state) is False
+
+    # When main started flag set -> triggers
+    _game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
+    assert quest.check_trigger(_game.state) is True
+
+    # Completion follows main completed flag
+    _game.state.set_story_flag(FLAG_ACT3_MAIN_COMPLETED, False)
+    assert quest.check_completion(_game.state) is False
+
+    _game.state.set_story_flag(FLAG_ACT3_MAIN_COMPLETED, True)
+    assert quest.check_completion(_game.state) is True

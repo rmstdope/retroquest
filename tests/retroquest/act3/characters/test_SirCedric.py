@@ -6,14 +6,16 @@ from retroquest.engine.Game import Game
 
 
 def test_sir_cedric_name_and_speak():
+    """Sir Cedric reports the expected name in lowercase."""
     act3 = Act3()
     act3.music_file = ''
-    game = Game([act3])
+    _game = Game([act3])
     s = SirCedric()
     assert s.get_name().lower() == 'sir cedric'
 
 
 def test_sir_cedric_directs_to_mira_before_quest():
+    """Before the main quest, Sir Cedric points the player to Mira."""
     act3 = Act3()
     act3.music_file = ''
     game = Game([act3])
@@ -23,6 +25,7 @@ def test_sir_cedric_directs_to_mira_before_quest():
 
 
 def test_sir_cedric_tidal_causeway_responses():
+    """Sir Cedric replies differently at Tidal Causeway based on flags."""
     act3 = Act3()
     act3.music_file = ''
     game = Game([act3])

@@ -5,9 +5,10 @@ from retroquest.engine.Game import Game
 
 
 def test_teleportation_focus_name():
+    """Teleportation Focus exposes a clear, non-empty name."""
     act3 = Act3()
     act3.music_file = ''
-    game = Game([act3])
+    _game = Game([act3])
 
     from retroquest.act3.items.TeleportationFocus import TeleportationFocus
     tf = TeleportationFocus()

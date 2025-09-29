@@ -6,14 +6,18 @@ from retroquest.engine.Game import Game
 
 
 def test_mira_has_name_and_talk():
+    """Ensure Mira exposes a name and the basic talk interface."""
     act3 = Act3()
     act3.music_file = ''
-    game = Game([act3])
+    _game = Game([act3])
     m = Mira()
     assert m.get_name().lower() == 'mira'
 
 
 def test_mira_starts_main_quest_on_first_talk():
+    """Talking to Mira for the first time should set the main-quest flag
+    and present the player with the three-relics exposition.
+    """
     act3 = Act3()
     act3.music_file = ''
     game = Game([act3])
@@ -29,6 +33,9 @@ def test_mira_starts_main_quest_on_first_talk():
 
 
 def test_mira_at_tidal_causeway_hints_or_teleports():
+    """At the Tidal Causeway Mira should hint about the Crystal when it
+    is not acquired and teleport the party onward when it is acquired.
+    """
     act3 = Act3()
     act3.music_file = ''
     game = Game([act3])
@@ -65,6 +72,9 @@ def test_mira_at_tidal_causeway_hints_or_teleports():
 
 
 def test_mira_from_sanctum_teleports_to_lower_switchbacks():
+    """From the Sanctum of the Tide, talking to Mira teleports the party
+    toward the Lower Switchbacks; tests accept reasonable name variants.
+    """
     act3 = Act3()
     act3.music_file = ''
     game = Game([act3])

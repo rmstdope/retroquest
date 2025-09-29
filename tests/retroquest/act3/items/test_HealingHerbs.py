@@ -5,9 +5,13 @@ from retroquest.engine.Game import Game
 
 
 def test_healing_herbs_get_name():
+    """Ensure HealingHerbs exposes a sensible name string for display.
+
+    The test accepts any non-empty name that mentions 'herb' or is not None.
+    """
     act3 = Act3()
     act3.music_file = ''
-    game = Game([act3])
+    _game = Game([act3])
 
     from retroquest.act3.items.HealingHerbs import HealingHerbs
     hh = HealingHerbs()

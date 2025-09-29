@@ -4,10 +4,14 @@ from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
 from retroquest.act3.Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, \
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, FLAG_ACT3_VOW_OF_COURAGE_MADE
-from ...utils.utils import check_story_flag
 
 
 def test_crystal_pickup_gated_by_flags():
+    """Verify CrystalOfLight pickup is gated by the required story flags.
+
+    When required flags are unset, the pickup should return a failure-like
+    message; when flags are set, pickup should succeed with expected text.
+    """
     act3 = Act3()
     act3.music_file = ''
     game = Game([act3])

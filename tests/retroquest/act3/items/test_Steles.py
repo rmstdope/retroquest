@@ -5,6 +5,7 @@ from retroquest.engine.Game import Game
 
 
 def test_steles_in_room_and_searchable():
+    """Assert Steles exist in the ShorelineMarkers room and can be examined."""
     act3 = Act3()
     act3.music_file = ''
     game = Game([act3])
