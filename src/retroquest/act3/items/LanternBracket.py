@@ -34,3 +34,9 @@ class LanternBracket(Item):
         if self.has_lantern:
             return "A prism lantern rests here, ready to be lit."
         return "An empty bracket waits for a lantern."
+
+    def put_lantern(self) -> None:
+        """Mark that a lantern has been placed in the bracket."""
+        self.has_lantern = True
+        self.name = 'Mounted Lantern'
+        self.short_name = 'mounted lantern'

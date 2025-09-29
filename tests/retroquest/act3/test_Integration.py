@@ -10,6 +10,7 @@ from retroquest.act3.Act3StoryFlags import (
 from ..utils.utils import (
     check_character_in_room,
     check_current_room,
+    check_item_in_room,
     check_quests,
     check_story_flag,
     execute_commands,
@@ -58,10 +59,19 @@ class TestAct3Integration:
         check_quests(game.state, ['The Three Virtues'])
 
         # Second talk: teleport to Tidal Causeway (Sunken Ruins entry) with companions
+        # Cast light to find key
         result = execute_commands(game, ['talk to mira'])
         check_current_room(game.state, 'Tidal Causeway')
         check_character_in_room(game.state.current_room, 'mira', True)
         check_character_in_room(game.state.current_room, 'sir cedric', True)
+        check_item_in_inventory(game.state, 'Rusted Locker Key', False)
+        result = execute_commands(game, ['cast light'])
+        assert 'shadow' in result.lower() and 'hollow' in result.lower() and'key' in result.lower()
+        # Ensure rusted key present
+        check_item_in_room(game.state.current_room, 'Rusted Locker Key', True)
+        result = execute_commands(game, ['take rusted locker key'])
+        check_item_in_inventory(game.state, 'Rusted Locker Key', True)
+        check_item_in_room(game.state.current_room, 'Rusted Locker Key', False)
 
         # Step 3: move north to Shoreline Markers => should activate Tideward Sigils
         execute_commands(game, ['north'])
@@ -88,22 +98,18 @@ class TestAct3Integration:
         # Quest should be marked completed
         check_quest_completed(game.state, 'Tideward Sigils')
 
-        # Step 6: Collapsed Pier — reveal vault and recover the Rusted Locker Key
-        execute_commands(game, ['east'])
-        check_current_room(game.state, 'Collapsed Pier')
-        pier_search = execute_commands(game, ['search'])
-        assert 'vault' in pier_search.lower() and 'locker' in pier_search.lower()
-        execute_commands(game, ['take rusted locker key'])
-        check_item_in_inventory(game.state, 'Rusted Locker Key', True)
+        # Step 6: Removed
 
         # Step 7: Collapsed Pier (Vault) — key fails, cast unlock, open locker,
         # take three prism lanterns
         # Give the hint by examining the locker
+        execute_commands(game, ['east'])
+        check_current_room(game.state, 'Collapsed Pier')
         exam = execute_commands(game, ['examine locker'])
         assert 'fused' in exam.lower() or 'lock' in exam.lower()
         # Try the key and fail
         fail_key = execute_commands(game, ['use rusted locker key with locker'])
-        assert 'fused' in fail_key.lower() or 'need more than metal' in fail_key.lower()
+        assert 'too corroded' in fail_key.lower() or 'jams in the mechanism' in fail_key.lower()
         # Cast unlock on locker
         unlocked = execute_commands(game, ['cast unlock on locker'])
         assert ('locker' in unlocked.lower() and

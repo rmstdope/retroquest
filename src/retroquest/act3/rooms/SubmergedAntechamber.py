@@ -1,4 +1,4 @@
-"""Flooded antechamber with lantern mounting system for underwater passage."""
+"""An antechamber long caressed by tides and old rites."""
 from ...engine.GameState import GameState
 from ...engine.Room import Room
 from ..Act3StoryFlags import (
@@ -7,17 +7,20 @@ from ..Act3StoryFlags import (
 )
 from ..items import LanternBracket, PrismLantern
 
-
 class SubmergedAntechamber(Room):
-    """Flooded antechamber with lantern mounting system for underwater passage."""
+    """An antechamber where salt and memory linger in the stones."""
 
     def __init__(self) -> None:
-        """Initialize Submerged Antechamber with lantern brackets and exits."""
+        """Initialize the Submerged Antechamber and its exits."""
         super().__init__(
             name="Submerged Antechamber",
             description=(
-                "A partially flooded hall; carved niches hold lantern brackets;"
-                " light lines the underwater path."
+                "The hall lies half-swallowed by tide and time. Salt-smoothed stone "
+                "arches bear weathered carvings that pulse with a cold, inner glow. "
+                "A hush hangs in the air as if the sea itself listens; faint, "
+                "distant echoes suggest something patient and watchful beyond the "
+                "veil of gloom. The place tastes of old prayers and the memory of "
+                "rituals long since folded into the stones."
             ),
             items=[],
             characters=[],
@@ -28,8 +31,26 @@ class SubmergedAntechamber(Room):
             },
         )
 
+    def describe(self, game_state: GameState) -> str:
+        """Return the room description by delegating to the base class.
+
+        This method intentionally forwards to the engine's `describe` helper
+        so that common formatting (items, characters, exits) is preserved.
+        """
+        # If the Tideward sigils have been completed, the tide has withdrawn
+        # and the room should no longer be described as submerged.
+        # Adjust the stored description so the engine formatting reflects the
+        # changed state, then restore the original text after describing.
+        if game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED):
+            self.description = (
+                "The hall, recently unmasked by a withdrawing tide, shows the bare "
+                "lines of its carved work. Salt crystals glitter on exposed stone; "
+                "the air feels colder and the rooms' echoes are clearer than before."
+            )
+        return super().describe(game_state)
+
     def search(self, game_state: GameState, _target: str = None) -> str:
-        """Search the antechamber to examine the lantern mounting system."""
+        """Search the antechamber for subtle traces and hidden marks."""
         # If the Tideward sigils haven't been completed, the water remains too
         # deep and obscures the niches — nothing can be revealed by searching.
         if not game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED):
@@ -49,6 +70,9 @@ class SubmergedAntechamber(Room):
         if not already_here:
             # Add three brackets to the room for players to mount lanterns on
             self.items.extend([LanternBracket(), LanternBracket(), LanternBracket()])
+            # Mark that the lantern brackets have been discovered for quest logic
+            from ..Act3StoryFlags import FLAG_ACT3_LANTERN_BRACKETS_FOUND
+            game_state.set_story_flag(FLAG_ACT3_LANTERN_BRACKETS_FOUND, True)
             return (
                 "[event]You wade through chilled water. As you peer into the niches, "
                 "three carved brackets become apparent; their grooves catch the "
@@ -60,7 +84,7 @@ class SubmergedAntechamber(Room):
         )
 
     def mount_lantern(self, game_state: GameState) -> str:
-        """Mount a prism lantern on an empty bracket."""
+        """Place a prism lantern into an available mount in the hall."""
         # Find an empty bracket
         empty = next(
             (
@@ -82,20 +106,23 @@ class SubmergedAntechamber(Room):
             )
         # Mount it
         game_state.inventory.remove(lantern)
-        empty.has_lantern = True
+        empty.put_lantern()
         return (
             "[event]You seat the prism lantern; water hums softly as the bracket takes its "
             "weight.[/event]"
         )
 
     def cast_light_here(self, game_state: GameState) -> str:
-        """Cast light to illuminate the underwater passage using mounted lanterns."""
+        """Cast light to awaken the hall's latent illumination using mounted lanterns."""
         # Light lanterns only if all three brackets have lanterns
         brackets = [b for b in self.items if isinstance(b, LanternBracket)]
-        if not brackets or not all(b.has_lantern for b in brackets):
+        if not brackets:
+            return ("[event]A warm spark flares in your palm and fades—nothing here seems to "
+                    "catch.[/event]")
+        if not all(b.has_lantern for b in brackets):
             return (
-                "[failure]You kindle a spark, but without all lanterns mounted, the path "
-                "won't reveal itself.[/failure]"
+                "[failure]You kindle a spark, but without lanterns mounted, nothing "
+                "gets lit.[/failure]"
             )
         if game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT):
             return "[info]The prism lanterns already burn with steady, cold flame.[/info]"

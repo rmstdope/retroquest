@@ -25,7 +25,7 @@ class RustedLockerKey(Item):
                 "A corroded iron key recovered from the pier vaults. Its teeth are "
                 "pitted with salt and age."
             ),
-            short_name="rusted locker key",
+            short_name="key",
             can_be_carried=True,
         )
 
@@ -40,8 +40,7 @@ class RustedLockerKey(Item):
         """Override item interaction to provide failure feedback with locker."""
         from .Locker import Locker
         if isinstance(other_item, Locker):
-            return (
-                "[failure]You work the key into the corroded lock, but the fused pins "
-                "refuse to budge. You'll need more than metal to free it.[/failure]"
-            )
+            # Delegate to the locker interaction handler, providing this rusted
+            # key as the 'other_item' so the Locker can decide how to respond.
+            return other_item.use_with(_game_state, self)
         return super().use_with(_game_state, other_item)

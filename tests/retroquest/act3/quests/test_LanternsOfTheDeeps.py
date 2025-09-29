@@ -6,6 +6,7 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
 )
+from retroquest.act3.Act3StoryFlags import FLAG_ACT3_LANTERN_BRACKETS_FOUND
 from retroquest.act3.quests.LanternsOfTheDeeps import LanternsOfTheDeepsQuest
 from ...utils.utils import check_quests, check_story_flag
 
@@ -25,6 +26,16 @@ def test_trigger_only_after_sigils_and_in_correct_rooms():
 
     # After sigils complete -> triggers in Collapsed Pier
     game.state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
+    # But brackets not yet found -> still no trigger
+    assert quest.check_trigger(game.state) is False
+
+    # Discover brackets via SubmergedAntechamber.search which should set flag
+    game.state.current_room = game.state.all_rooms['SubmergedAntechamber']
+    game.state.current_room.search(game.state)
+    assert game.state.get_story_flag(FLAG_ACT3_LANTERN_BRACKETS_FOUND) is True
+
+    # Now the quest should trigger in the Collapsed Pier and the Antechamber
+    game.state.current_room = game.state.all_rooms['CollapsedPier']
     assert quest.check_trigger(game.state) is True
 
     # Triggers in Submerged Antechamber as well

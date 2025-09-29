@@ -9,6 +9,7 @@ from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_STARTED
 class ShorelineMarkers(Room):
     """Shore location with weathered steles containing moon rune shards."""
 
+
     def __init__(self) -> None:
         """Initialize Shoreline Markers with steles and exits."""
         super().__init__(
@@ -25,20 +26,23 @@ class ShorelineMarkers(Room):
             characters=[],
             exits={"south": "TidalCauseway", "east": "OuterWards"},
         )
-
+        # Track whether runes have been revealed here at least once.
+        self.runes_revealed = False
 
     def search(self, game_state: GameState, _target: str = None) -> str:
         """Search the steles to find Moon Rune shards for ward construction."""
-        # If runes already present either in room or inventory, return idempotent message
-        already_here = any(isinstance(i, MoonRuneShards) for i in self.items)
-        already_owned = any(isinstance(i, MoonRuneShards) for i in game_state.inventory)
-        if already_here or already_owned:
+        # If runes have already been revealed at this location, return an
+        # idempotent message even if the shards are not currently present.
+        if self.runes_revealed:
             return (
                 "[event]You comb the surf-slick stones again. pale shards gleam in "
                 "the cracks, but you've already gathered what you need.[/event]"
             )
         # Reveal runes
         self.items.append(MoonRuneShards())
+        # Remember that the runes were revealed here so future searches do not
+        # recreate them even if they are later removed.
+        self.runes_revealed = True
         # Mark that the Tideward Sigils side quest has been started by reaching
         # the shoreline markers. This flag is used to trigger the quest in the
         # quest system.

@@ -18,18 +18,9 @@ class PrismLantern(Item):
             can_be_carried=True,
         )
 
-    def picked_up(self, _game_state: GameState) -> str:
-        """Handle when the lantern is picked up by the player."""
-        return (
-            "[info]The lantern's facets refract dim ambient glimmers into a soft fan of "
-            "color.[/info]"
-        )
-
     def use_with(self, game_state: GameState, other_item: Item) -> str:
         """Handle using the lantern with another item."""
         from .LanternBracket import LanternBracket
         if isinstance(other_item, LanternBracket):
-            hook = getattr(game_state.current_room, 'mount_lantern', None)
-            if hook:
-                return hook(game_state)
+            return game_state.current_room.mount_lantern(game_state)
         return super().use_with(game_state, other_item)

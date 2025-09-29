@@ -21,3 +21,17 @@ class LightSpell(Spell):
             return hook(game_state)
         return ("[event]A warm spark flares in your palm and fades—nothing here seems to "
                 "catch.[/event]")
+
+    def cast_on_item(self, game_state: GameState, target_item) -> str:
+        """Cast the spell on a specific item by delegating to the base class.
+
+        Most items do not react specially, so the base implementation handles
+        generic behavior. This override exists to permit room-level or
+        item-level specialization when needed.
+        """
+        # If the target is a lantern bracket, casting light should trigger the
+        # room-level lighting behavior (same as casting the spell normally).
+        from ..items.LanternBracket import LanternBracket
+        if isinstance(target_item, LanternBracket):
+            return self.cast_spell(game_state)
+        return super().cast_on_item(game_state, target_item)

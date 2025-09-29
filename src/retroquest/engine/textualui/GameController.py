@@ -110,7 +110,7 @@ class GameController:
             quest_type = "main" if quest.is_main() else "side"
             return (
                 f"[quest_name]{quest.name} ({quest_type} quest)"\
-                f"[/quest_name]\n\n{quest.description}"
+                f"[/quest_name]\n\n{quest.completion}"
             )
         return None
 
