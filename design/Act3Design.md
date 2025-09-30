@@ -205,7 +205,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 1. Tidal Causeway
 
 -   Description: Moon‑washed causeways slick with seaweed rise and fall with the tide, linking broken arches to half‑drowned plazas.
--   Items: Rope Lines, Salt‑scraped Map Shards
+ -   Items: Rope Lines, Salt‑scraped Map Shards, Barnacled Beam Fragment
 -   Characters: Water‑Wardens (silent spirits that watch), Cedric
 -   Quest Relevance: Entry to the Ruins; orientation point for locating shoreline markers and ward pillars (Tideward Sigils).
 -   Exits:
@@ -219,6 +219,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: Weathered stone steles stand at the surf’s edge, carved with faint moon sigils worn by salt.
 -   Items: Moon Rune shards (collectible quest components), Tidal Chalk
+ -   Items: Moon Rune shards (collectible quest components), Tidal Chalk, Polished Shell
 -   Characters: Ward‑Scribe Spirit (observes and instructs), Mira (advises)
 -   Quest Relevance: Collect Moon Rune shards for “Tideward Sigils.”
 -   Exits:
@@ -229,6 +230,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: Three leaning pillars surround a drowned courtyard; faint glyphs glow when touched with brine.
 -   Items: Warding Pillar Caps, Brine Flask
+ -   Items: Warding Pillar Caps, Brine Flask, Seaweed Tangle
 -   Characters: Drowned Knight Spirit (tests resolve), Warden Echoes
 -   Quest Relevance: Align pillars to engrave the complete Tideward Sigil (completes “Tideward Sigils”).
 -   Exits:
@@ -240,6 +242,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: A shattered jetty with sunken vaults beneath; barnacled beams jut like ribs.
 -   Items: Prism Lanterns (three, stored within a corroded locker in a vault)
+ -   Items: Prism Lanterns (three, stored within a corroded locker in a vault), Weathered Coin
 -   Characters: Pier Warden (guardian of the vaults)
 -   Notes: A Rusted Locker Key may be recovered earlier at the Tidal Causeway but
     attempting to use it on the locker will jam the mechanism – the key is too
