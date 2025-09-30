@@ -19,7 +19,7 @@ class PurifySpell(Spell):
             ),
         )
 
-    def cast_spell(self, game_state: GameState) -> str:
+    def cast_spell(self, _game_state: GameState) -> str:
         """Cast purify spell providing cleansing aura."""
         # Act III version has no global gating; it always responds with a cleansing aura
         return (
@@ -38,7 +38,7 @@ class PurifySpell(Spell):
             "Saltlight skims its surface, though nothing more changes."
         )
 
-    def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
+    def cast_on_character(self, _game_state: GameState, target_character: Character) -> str:
         """Cast purify on target character to provide cleansing calm."""
         return (
             f"[event]You cast [spell_name]{self.get_name()}[/spell_name] on "

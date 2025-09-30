@@ -21,7 +21,7 @@ class BlessSpell(Spell):
             "challenges that lie ahead on your journey."
         )
 
-    def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
+    def cast_on_character(self, _game_state: GameState, target_character: Character) -> str:
         name = target_character.get_name()
         return (
             f"[event]You cast [spell_name]bless[/spell_name] on "

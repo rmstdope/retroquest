@@ -13,7 +13,7 @@ class HealSpell(Spell):
             "A restorative spell that mends wounds and alleviates ailments.",
         )
 
-    def cast_spell(self, game_state: GameState) -> str:
+    def cast_spell(self, _game_state: GameState) -> str:
         """Cast the spell without a target (self-cast behavior)."""
 
         # Placeholder for future health logic (e.g., game_state.player.heal(20)).
@@ -22,7 +22,7 @@ class HealSpell(Spell):
             "A warm light envelops you, and you feel your wounds mending."
         )
 
-    def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
+    def cast_on_character(self, _game_state: GameState, target_character: Character) -> str:
         """Heal a target character and return the narrative describing the effect."""
 
         name = target_character.get_name()

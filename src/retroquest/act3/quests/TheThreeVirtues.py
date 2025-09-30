@@ -2,7 +2,11 @@
 
 from ...engine.GameState import GameState
 from ...engine.Quest import Quest
-from ..Act3StoryFlags import FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, FLAG_ACT3_MAIN_COMPLETED, FLAG_ACT3_MAIN_STARTED
+from ..Act3StoryFlags import (
+    FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+    FLAG_ACT3_MAIN_COMPLETED,
+    FLAG_ACT3_MAIN_STARTED,
+)
 
 
 class TheThreeVirtuesQuest(Quest):

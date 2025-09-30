@@ -13,6 +13,10 @@ from .TeleportationFocus import TeleportationFocus
 from .WardingPillars import WardingPillars
 from .Mural import Mural
 from .SeaSealedLetter import SeaSealedLetter
+from .PolishedShell import PolishedShell
+from .WeatheredCoin import WeatheredCoin
+from .SeaweedTangle import SeaweedTangle
+from .BarnacledBeamFragment import BarnacledBeamFragment
 
 __all__ = [
     "AncientAmulet",
@@ -28,4 +32,8 @@ __all__ = [
     "WardingPillars",
     "Mural",
     "SeaSealedLetter",
+    "PolishedShell",
+    "WeatheredCoin",
+    "SeaweedTangle",
+    "BarnacledBeamFragment",
 ]

@@ -2,7 +2,7 @@
 
 from ...engine.GameState import GameState
 from ...engine.Room import Room
-from ..items import MoonRuneShards, Steles
+from ..items import MoonRuneShards, Steles, PolishedShell
 from ..Act3StoryFlags import FLAG_ACT3_TIDEWARD_SIGILS_STARTED
 
 
@@ -22,7 +22,7 @@ class ShorelineMarkers(Room):
                 "When the moon is high, the stones seem to hum with a slow, patient "
                 "voice—an old magic tied to the sea."
             ),
-            items=[Steles()],
+            items=[Steles(), PolishedShell()],
             characters=[],
             exits={"south": "TidalCauseway", "east": "OuterWards"},
         )

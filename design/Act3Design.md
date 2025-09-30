@@ -94,12 +94,14 @@ Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns b
 
 -   Name: Lanterns of the Deeps
     -   Type: Side Quest
-    -   Location: Collapsed pier and submerged antechambers
+    -   Location: Collapsed Pier and Submerged Antechamber
     -   Prerequisites: Tideward Sigils completed
     -   Objectives:
-        -   Retrieve three prism lanterns from the pier vaults
-        -   Mount lanterns along the sanctum approach to reveal the submerged path
-    -   Outcome: Illuminates the approach; required to reach the tide‑born guardian and the Crystal of Light
+        -   Retrieve three Prism Lanterns from the pier vaults (locker)
+        -   Search the Submerged Antechamber to reveal hidden lantern brackets
+        -   Mount the Prism Lanterns into the brackets and cast `light` to reveal the path
+    -   Outcome: Illuminates the approach; required to reach the tide‑born guardian and
+        the Crystal of Light
 
 #### Mount Ember (Wisdom)
 
@@ -209,6 +211,9 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Exits:
     -   North to Shoreline Markers
     -   East to Submerged Antechamber
+    -   Notes: Casting the Light spell here can reveal a hidden Rusted Locker Key
+        washed into a hollow — a clue that is later used at the pier vaults.
+    -   Items (additional): Sea‑Sealed Letter (hidden in a mural/reliquary)
 
 2. Shoreline Markers
 
@@ -234,8 +239,12 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 4. Collapsed Pier
 
 -   Description: A shattered jetty with sunken vaults beneath; barnacled beams jut like ribs.
--   Items: Prism Lanterns (three), Rusted Locker Key
+-   Items: Prism Lanterns (three, stored within a corroded locker in a vault)
 -   Characters: Pier Warden (guardian of the vaults)
+-   Notes: A Rusted Locker Key may be recovered earlier at the Tidal Causeway but
+    attempting to use it on the locker will jam the mechanism – the key is too
+    corroded. The `unlock` spell must be cast on the locker to free its catches
+    and release the lanterns.
 -   Quest Relevance: Retrieve lanterns for “Lanterns of the Deeps.”
 -   Exits:
     -   West to Outer Wards

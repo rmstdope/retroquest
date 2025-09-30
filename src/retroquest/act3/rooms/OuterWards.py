@@ -1,7 +1,7 @@
 """Drowned courtyard with tideward sigil pillars."""
 from ...engine.GameState import GameState
 from ...engine.Room import Room
-from ..items import WardingPillars
+from ..items import WardingPillars, SeaweedTangle
 
 
 class OuterWards(Room):
@@ -30,7 +30,7 @@ class OuterWards(Room):
                 "Brine beads along the carved lines and they catch the moon in small "
                 "rings of light. The air here tastes of old promises and slow tides."
             ),
-            items=[WardingPillars()],
+            items=[WardingPillars(), SeaweedTangle()],
             characters=[],
             exits={
                 "south": "SubmergedAntechamber",

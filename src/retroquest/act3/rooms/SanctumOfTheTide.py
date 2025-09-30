@@ -1,5 +1,4 @@
 """Module defining the SanctumOfTheTide room and its characters in Act 3."""
-from ...engine.GameState import GameState
 from ...engine.Room import Room
 from ..items import CrystalOfLight
 from ..characters.TideBornGuardian import TideBornGuardian

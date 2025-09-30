@@ -2,8 +2,6 @@
 from ...engine.Character import Character
 from ...engine.GameState import GameState
 from ..Act3StoryFlags import (
-    FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
-    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
     FLAG_ACT3_VOW_OF_COURAGE_MADE,
 )
 

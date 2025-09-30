@@ -86,7 +86,7 @@ class ForestSpeechSpell(Spell):
                 "[/info]"
             )
 
-    def cast_on_character(self, game_state: GameState, target_character: Any) -> str:
+    def cast_on_character(self, _game_state: GameState, target_character: Any) -> str:
         """Allow communication with forest creatures."""
         from ..characters.AncientTreeSpirit import AncientTreeSpirit
         from ..characters.ForestSprites import ForestSprites

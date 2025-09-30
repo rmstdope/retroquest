@@ -57,7 +57,7 @@ class MendSpell(Spell):
             ),
         )
 
-    def cast_spell(self, game_state: GameState) -> str:
+    def cast_spell(self, _game_state: GameState) -> str:
         name = self.get_name()
         return (
             f"[success]You cast [spell_name]{name}[/spell_name] into the air. The spell "

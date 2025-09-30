@@ -11,7 +11,7 @@ class GrowSpell(Spell):
         desc = "A nature spell that encourages plants to flourish."
         super().__init__("grow", desc)
 
-    def cast_spell(self, game_state: GameState) -> str:
+    def cast_spell(self, _game_state: GameState) -> str:
         return (
             "[event]You cast [spell_name]grow[/spell_name].[/event]\n"
             "The nearby plants seem to respond with vibrant energy, "

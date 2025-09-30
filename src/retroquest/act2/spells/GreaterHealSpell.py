@@ -49,7 +49,7 @@ class GreaterHealSpell(Spell):
             ),
         )
 
-    def cast_spell(self, game_state: GameState) -> str:
+    def cast_spell(self, _game_state: GameState) -> str:
         name = self.get_name()
         return (
             f"[success]You cast [spell_name]{name}[/spell_name], channeling powerful "
@@ -57,7 +57,7 @@ class GreaterHealSpell(Spell):
             "ailments, but finds no one in immediate need of healing nearby.[/success]"
         )
 
-    def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
+    def cast_on_character(self, _game_state: GameState, target_character: Character) -> str:
         from ..characters.BarmaidElena import BarmaidElena  # Import here to avoid circular imports
         # Special handling for Elena's curse
         if isinstance(target_character, BarmaidElena):

@@ -52,7 +52,7 @@ class DispelSpell(Spell):
             ),
         )
 
-    def cast_spell(self, game_state: GameState) -> str:
+    def cast_spell(self, _game_state: GameState) -> str:
         name = self.get_name()
         return (
             f"[success]You cast [spell_name]{name}[/spell_name], sending out waves of "
@@ -78,7 +78,7 @@ class DispelSpell(Spell):
                 "effects they may have been affected by.[/success]"
             )
 
-    def cast_on_item(self, game_state: GameState, target_item) -> str:
+    def cast_on_item(self, _game_state: GameState, target_item) -> str:
         # This could be used for breaking magical barriers or dispelling cursed items
         name = self.get_name()
         iname = target_item.get_name()

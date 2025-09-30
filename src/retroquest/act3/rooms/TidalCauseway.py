@@ -2,7 +2,7 @@
 
 from ...engine.Room import Room
 from ..items import Mural
-from ..items import RustedLockerKey
+from ..items import RustedLockerKey, BarnacledBeamFragment
 
 class TidalCauseway(Room):
     """Moon-washed causeways linking broken arches to half-drowned plazas."""
@@ -17,7 +17,7 @@ class TidalCauseway(Room):
                 "songs. Broken arches stand like quiet mouths, guarding what the "
                 "sea keeps."
             ),
-            items=[Mural()],
+            items=[Mural(), BarnacledBeamFragment()],
             characters=[],
             exits={"north": "ShorelineMarkers", "east": "SubmergedAntechamber"},
         )

@@ -35,7 +35,7 @@ class UnlockSpell(Spell):
             f"but it seems to lack any locks or magical seals to open.[/failure]"
         )
 
-    def cast_on_character(self, game_state: GameState, target_character: Character) -> str:
+    def cast_on_character(self, _game_state: GameState, target_character: Character) -> str:
         """Casting on characters always fails; characters are not unlockable objects."""
 
         name = target_character.get_name()
