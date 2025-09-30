@@ -63,12 +63,10 @@ class Mira(Character):
             )
 
         # Subsequent conversation: teleport onward based on current location.
-        # Special-case: if we're at the Tidal Causeway, talk about the relic
-        # found here (the Crystal of Light). If the crystal has already been
-        # acquired, teleport everyone to the next site instead.
+        # Special-case: if we're at the Tidal Causeway, hint about the relic
+        # unless the Crystal of Light has been acquired. If acquired, Mira can
+        # draw the circle onward to Mount Ember.
         if game_state.current_room.name == "Tidal Causeway":
-            # If the Crystal of Light hasn't been acquired yet, give a hint
-            # about the relic the party should seek here.
             if not game_state.get_story_flag(
                 FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED
             ):
@@ -79,16 +77,17 @@ class Mira(Character):
                         "[dialogue]'This place keeps its secrets in salt and song. "
                         "Within the Sunken Ruins lies the Crystal of Light—an old "
                         "relic that answers to courage. When you stand before the "
-                        "tide-born guardian, speak your vow and let it steady you.'" 
+                        "tide-born guardian, speak your vow and let it steady you.'"
                         "[/dialogue]"
                     )
                 )
-            # Otherwise fall through and teleport to the next location.
-        if game_state.current_room.name == "Sanctum of the Tide":
             destination_key = "LowerSwitchbacks"
             flavor = (
-                "[dialogue]'The circle to Mount Ember is set. Brace for ash on the "
-                "wind.'[/dialogue]"
+                "[dialogue]'Well done, Elior. The Crystal answers to courage; you "
+                "have steadied the tide. Ahead lies the Lower Switchbacks—ridges "
+                "of ember and knife-rolled stone where ash chokes the air and the "
+                "path winds like a fever dream. Keep your footing and watch the "
+                "skies for falling cinders.'[/dialogue]"
             )
         else:
             destination_key = "TidalCauseway"

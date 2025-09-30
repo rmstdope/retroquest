@@ -4,8 +4,6 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ..Act3StoryFlags import (
     FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
-    FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
-    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
     FLAG_ACT3_VOW_OF_COURAGE_MADE,
 )
 
@@ -46,19 +44,15 @@ class CrystalOfLight(Item):
 
     def picked_up(self, game_state: GameState) -> str:
         """Handle gated acquisition, reversing pickup if prerequisites unmet."""
-        sigils = game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)
-        lanterns = game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)
         vow = game_state.get_story_flag(FLAG_ACT3_VOW_OF_COURAGE_MADE)
-        if not (sigils and lanterns and vow):
+        if not vow:
             game_state.remove_item_from_inventory(self.get_name(), 1)
             game_state.current_room.add_item(self)
             return (
                 "[failure]Wards flare as you touch the crystal, locking it in place. "
-                "Complete the rites: attune Tideward Sigils, light the Lanterns of the "
-                "Deeps, and swear the vow before it will yield.[/failure]"
+                "[/failure]"
             )
-        if not game_state.get_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED):
-            game_state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)
+        game_state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)
         return (
             "[item_effect]The crystal steadies in your grasp, radiance aligning with your "
             "resolve.[/item_effect]"

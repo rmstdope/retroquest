@@ -162,5 +162,5 @@ class TestAct3Integration:
         check_item_in_inventory(game.state, 'crystal of light', True)
 
         # Step 11: Talk to Mira to teleport to Mount Ember
-        execute_commands(game, ['talk to mira'])
+        execute_commands(game, ['w', 'w', 'talk to mira'])
         check_current_room(game.state, 'Lower Switchbacks (Base Camp)')

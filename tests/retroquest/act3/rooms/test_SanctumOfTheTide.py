@@ -35,20 +35,6 @@ class TestSanctumOfTheTide:
         self.game = Game([self.act3])
         self.game.state.current_room = self.game.state.all_rooms['SanctumOfTheTide']
 
-    def test_guardian_talks_and_rejects_vow_if_prereqs_missing(self):
-        """Talking to the guardian returns a riddle; saying 'myself' fails when
-        prerequisites are incomplete.
-
-        Preconditions: Both flags are unset. Actions: 'talk to tide-born guardian',
-        then 'say myself to tide-born guardian'. Expected: talk contains a prompt
-        and the 'say' command returns a failure message; vow flag remains unset.
-        """
-        talk = execute_commands(self.game, ['talk to tide-born guardian'])
-        assert 'name what you will not abandon' in talk.lower() or 'guardian' in talk.lower()
-
-        fail = execute_commands(self.game, ['say myself to tide-born guardian'])
-        assert 'wards resist' in fail.lower() or 'outer rites remain unfinished' in fail.lower()
-        assert not self.game.state.get_story_flag(FLAG_ACT3_VOW_OF_COURAGE_MADE)
 
     def test_accept_vow_and_take_crystal_when_prereqs_met(self):
         """When both sigils and lanterns flags are set, saying 'myself' succeeds

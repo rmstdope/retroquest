@@ -72,8 +72,8 @@ def test_mira_at_tidal_causeway_hints_or_teleports():
 
 
 def test_mira_from_sanctum_teleports_to_lower_switchbacks():
-    """From the Sanctum of the Tide, talking to Mira teleports the party
-    toward the Lower Switchbacks; tests accept reasonable name variants.
+    """From the Tidal Causeway, talking to Mira teleports the party toward
+    the Lower Switchbacks; tests accept reasonable name variants.
     """
     act3 = Act3()
     act3.music_file = ''
@@ -81,8 +81,10 @@ def test_mira_from_sanctum_teleports_to_lower_switchbacks():
     # ensure main quest started so Mira uses teleport branches
     from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED
     game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
-    # place player in Sanctum of the Tide
-    game.state.current_room = game.state.all_rooms['SanctumOfTheTide']
+    # place player at the Tidal Causeway and mark the crystal acquired
+    game.state.current_room = game.state.all_rooms['TidalCauseway']
+    from retroquest.act3.Act3StoryFlags import FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED
+    game.state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)
     m = Mira()
     # ensure Mira is in the room so she can be removed and moved
     game.state.current_room.characters.append(m)
