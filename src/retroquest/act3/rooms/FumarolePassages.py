@@ -10,8 +10,14 @@ class FumarolePassages(Room):
         super().__init__(
             name="Fumarole Passages",
             description=(
-                "Narrow tunnels exhaling rhythmic heat; stone vents chuff like a great "
-                "sleeping bellows."
+                "Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff "
+                "and sigh as if the mountain itself sleeps and dreams. Curtains of "
+                "steam veil the low passages, and the air tastes faintly of sulfur "
+                "and warm metal. Here and there a vent hisses sparks that glass the "
+                "rock into smoky, translucent streaks, while the floor bears the "
+                "pale scars of old fittings—tiny holes and rubbed brass where mounts "
+                "were once bolted. Each step sends a warm gust that carries a distant "
+                "clink of metal and the steady, low sigh of fumaroles farther below."
             ),
             items=[],
             characters=[],

@@ -163,4 +163,26 @@ class TestAct3Integration:
 
         # Step 11: Talk to Mira to teleport to Mount Ember
         execute_commands(game, ['w', 'w', 'talk to mira'])
-        check_current_room(game.state, 'Lower Switchbacks (Base Camp)')
+        check_current_room(game.state, 'Lower Switchbacks')
+
+        # Step 12: Lower Switchbacks — talk to Ash Scholar to receive a brass mirror
+        # Inspect the Emberwater Canteen for lore and a possible mirror hint
+        examine_canteen = execute_commands(game, ['examine emberwater canteen'])
+        assert ('expedition' in examine_canteen.lower() or
+                'brass' in examine_canteen.lower() or 'canteen' in examine_canteen.lower())
+        examine_canteen = execute_commands(game, ['take brass mirror segment'])
+        check_item_count_in_inventory(game.state, 'Brass Mirror Segment', 1)
+
+        talk_scholar = execute_commands(game, ['talk to ash scholar'])
+        assert 'scholar' in talk_scholar.lower() or 'brass' in talk_scholar.lower()
+        check_item_count_in_inventory(game.state, 'Brass Mirror Segment', 2)
+
+        # Step 13: Obsidian Outcrops — search to reveal mirror segments and binding resin
+        execute_commands(game, ['north'])
+        check_current_room(game.state, 'Obsidian Outcrops')
+        search_out = execute_commands(game, ['search'])
+        assert 'brass' in search_out.lower() or 'resin' in search_out.lower()
+        # Take discovered items
+        execute_commands(game, ['take brass mirror segment', 'take binding resin'])
+        check_item_count_in_inventory(game.state, 'Brass Mirror Segment', 3)
+        check_item_count_in_inventory(game.state, 'Binding Resin', 1)

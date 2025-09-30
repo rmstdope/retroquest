@@ -21,3 +21,7 @@ FLAG_ACT3_SEA_SEALED_LETTER_FOUND = "act3_sea_sealed_letter_found"
 # Main quest lifecycle flags
 FLAG_ACT3_MAIN_STARTED = "act3_main_started"
 FLAG_ACT3_MAIN_COMPLETED = "act3_main_completed"
+
+# Mount Ember / Mirrors of Emberlight progression
+FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_STARTED = "act3_mirrors_of_ember_light_started"
+FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED = "act3_mirrors_of_ember_light_completed"

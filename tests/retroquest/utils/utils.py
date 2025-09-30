@@ -106,4 +106,3 @@ def _debug_print_history():
     """Print the command execution history for debugging purposes."""
     for res_str in results:
         print(res_str)
-

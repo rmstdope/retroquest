@@ -62,10 +62,28 @@ class Mira(Character):
                 )
             )
 
+        destination_key = ""
+        flavor = ""
         # Subsequent conversation: teleport onward based on current location.
         # Special-case: if we're at the Tidal Causeway, hint about the relic
         # unless the Crystal of Light has been acquired. If acquired, Mira can
         # draw the circle onward to Mount Ember.
+        # If we're already at Lower Switchbacks, do not teleport; instead
+        # provide lore about the second virtue and the phoenix legend.
+        if game_state.current_room.name == "Lower Switchbacks":
+            return (
+                event_msg
+                + "\n"
+                + (
+                    "[dialogue]'There the second virtue, Wisdom, is taught in "
+                    "embers. Old guides here tell of a phoenix that nested where "
+                    "the rock blooms with heat — a bird of returning flame. From "
+                    "its ash a single feather rises renewed, and such a feather "
+                    "is said to clear the eyes and steady a wavering hand. "
+                    "Listen for songs on the wind, and tend any sparks you find; "
+                    "they may be more than mere kindle.'[/dialogue]"
+                )
+            )
         if game_state.current_room.name == "Tidal Causeway":
             if not game_state.get_story_flag(
                 FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED
@@ -89,11 +107,11 @@ class Mira(Character):
                 "path winds like a fever dream. Keep your footing and watch the "
                 "skies for falling cinders.'[/dialogue]"
             )
-        else:
+        if game_state.current_room.name == "Mira's Hut":
             destination_key = "TidalCauseway"
             flavor = (
-                "[dialogue]'Hold steady, Elior. I will draw a circle to the Tidal "
-                "Causeway—salt and moonlight will carry us.'[/dialogue]\n"
+                "[dialogue]'The hour is upon us, Elior. We will draw the first circle "
+                "at the Tidal Causeway, where moonlight marries the sea.'[/dialogue]\n"
                 "[dialogue]'When the air folds and the mist closes, breathe. It will "
                 "pass in a heartbeat.'[/dialogue]"
             )

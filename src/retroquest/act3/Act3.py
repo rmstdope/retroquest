@@ -4,8 +4,12 @@ from retroquest.engine.Act import Act
 from retroquest.engine.GameState import GameState
 
 from .Act3StoryFlags import FLAG_ACT3_COMPLETED
-from .quests import TheThreeVirtuesQuest, TidewardSigilsQuest
-from .quests.LanternsOfTheDeeps import LanternsOfTheDeepsQuest
+from .quests import (
+    TheThreeVirtuesQuest,
+    TidewardSigilsQuest,
+    LanternsOfTheDeepsQuest,
+    MirrorsOfEmberlightQuest,
+)
 from .rooms import (
     CavernMouth,
     CollapsedGalleries,
@@ -74,6 +78,8 @@ class Act3(Act):
             # Sunken Ruins Side Quests
             TidewardSigilsQuest(),
             LanternsOfTheDeepsQuest(),
+            # Mount Ember Side Quest
+            MirrorsOfEmberlightQuest(),
         ]
 
         music_file = "Orchestronika - Feel The Storm (freetouse.com).mp3"

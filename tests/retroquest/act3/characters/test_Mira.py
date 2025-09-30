@@ -93,3 +93,31 @@ def test_mira_from_sanctum_teleports_to_lower_switchbacks():
     # accept variants of the room name (some rooms include suffixes like
     # ' (Base Camp)') so check substring membership
     assert 'LowerSwitchbacks' in out or 'Lower Switchbacks' in game.state.current_room.name
+
+
+def test_mira_in_lower_switchbacks_only_lore():
+    """When already at Lower Switchbacks, Mira should not teleport but
+    should speak about the second virtue (Wisdom) and the phoenix legend.
+    """
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+    # ensure main quest started so we don't hit the initial talk path
+    from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED
+
+    game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
+    # place player at the Lower Switchbacks (accept either key variant)
+    if 'LowerSwitchbacks' in game.state.all_rooms:
+        room_key = 'LowerSwitchbacks'
+    else:
+        room_key = 'Lower Switchbacks'
+    game.state.current_room = game.state.all_rooms[room_key]
+    m = Mira()
+    # put Mira in the room characters list to ensure she remains
+    game.state.current_room.characters.append(m)
+    out = m.talk_to(game.state)
+    # should mention Wisdom and phoenix, and should not perform a teleport
+    assert 'wisdom' in out.lower()
+    assert 'phoenix' in out.lower()
+    assert 'You arrive at' not in out
+    assert m in game.state.current_room.characters

@@ -62,14 +62,6 @@ class SirCedric(Character):
                 "are prepared."
             )
 
-        # Sanctum of the Tide: reflective encouragement for the trial ahead
-        if room_name == "Sanctum of the Tide":
-            return (
-                "[character_name]Sir Cedric[/character_name]: These halls remember "
-                "ancient oaths. Keep your courage steady and your eyes open; "
-                "the path ahead demands both."
-            )
-
         # Default reply when the main quest is active
         return (
             "[character_name]Sir Cedric[/character_name]: The path is set. "

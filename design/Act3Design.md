@@ -276,7 +276,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 ### Mount Ember — Wisdom (Phoenix Feather)
 
-1. Lower Switchbacks (Base Camp)
+1. Lower Switchbacks
 
 -   Description: Wind‑carved paths zig‑zag across black rock; canvas shelters flap and braziers glow low.
 -   Items: Climbing Kit, Emberwater Canteen
@@ -293,7 +293,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Characters: Mirror‑Keeper Adept (catalogs fragments)
 -   Quest Relevance: Recover segments for “Mirrors of Emberlight.”
 -   Exits:
-    -   South to Lower Switchbacks (Base Camp)
+    -   South to Lower Switchbacks
     -   East to Mirror Terraces
 
 3. Mirror Terraces
@@ -314,8 +314,8 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Characters: Fumarole Keeper (guides timing)
 -   Quest Relevance: Calibrate vent stones and prepare heat ward (Breath of the Mountain).
 -   Exits:
-    -   South to Phoenix Crater
     -   West to Mirror Terraces
+    -   South to Phoenix Crater
 
 5. Ember Gallery
 
@@ -325,8 +325,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Quest Relevance: Gather components for the heat ward (progress for “Breath of the Mountain”).
 -   Exits:
     -   North to Mirror Terraces
-    -   East to Phoenix Crater
-    -   West to Lower Switchbacks (Base Camp)
+    -   West to Lower Switchbacks
 
 6. Phoenix Crater
 
@@ -336,7 +335,6 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Quest Relevance: Main Quest phase completion for the Phoenix Feather.
 -   Exits:
     -   North to Fumarole Passages
-    -   West to Ember Gallery
 
 ---
 
@@ -465,7 +463,7 @@ The connections reflect exits:
 ```
 [OO] ---- [MT] ---- [FP]
   |         |         |
-[LS] ---- [EG] ---- [PC]
+[LS] ---- [EG]      [PC]
 ```
 
 Legend:
@@ -473,7 +471,7 @@ Legend:
 -   OO = Obsidian Outcrops
 -   MT = Mirror Terraces
 -   FP = Fumarole Passages
--   LS = Lower Switchbacks (Base Camp)
+-   LS = Lower Switchbacks
 -   EG = Ember Gallery
 -   PC = Phoenix Crater
 
@@ -482,9 +480,9 @@ The connections reflect exits:
 -   Lower Switchbacks: N→OO, E→EG
 -   Obsidian Outcrops: S→LS, E→MT
 -   Mirror Terraces: S→EG, E→FP, W→OO
--   Fumarole Passages: S→PC, W→MT
--   Ember Gallery: N→MT, E→PC, W→LS
--   Phoenix Crater: N→FP, W→EG
+-   Fumarole Passages: W→MT, S→PC
+-   Ember Gallery: N→MT, W→LS
+-   Phoenix Crater: N→FP
 
 ### Caverns of Shadow — Selflessness (Dragon’s Scale)
 
@@ -606,11 +604,13 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 ### Mount Ember — Wisdom (Phoenix Feather)
 
-12. Room: Lower Switchbacks (Base Camp)
+12. Room: Lower Switchbacks
 
 -   Commands and yields:
-    -   `search` → Describes base camp; identifies nearby paths.
-    -   `talk to ash scholars` → Points you toward Mirror Terraces and Obsidian Outcrops.
+    -   `search` → identifies nearby paths that were previously hidden.
+    -   `talk to ash scholars` → Points you toward Mirror Terraces and Obsidian Outcrops. Gives brass mirror segment.
+    -   `examine Emberwater Canteen` → Provides lore on past expeditions and the mountain's history. Finds brass mirror segment.
+    -   `take brass mirror segment` → Adds segments to inventory.
 
 13. Room: Obsidian Outcrops
 
@@ -623,8 +623,9 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `search` → Shows sockets, mounts, and the etched light channels.
-    -   `use brass mirror segment with mirror mount` → Installs segments; once all placed, the beam path forms.
-    -   `cast mend on mirror` → Repairs cracks; restores a continuous light channel; completes “Mirrors of Emberlight”; opens upper terraces.
+    -   `examine mirror mounts` → Provides lore on the mirror system and its purpose. Finds last mirror segment.
+    -   `use brass mirror segment with mirror mount` → Installs all segments in inventory; once all placed, the beam path forms.
+    -   `cast mend on mirror` → Repairs cracks; restores a continuous light channel; completes “Mirrors of Emberlight”; opens upper the path to Fumarole Passages as the ray of light from the mirror can be walked upon.
 
 15. Room: Ember Gallery
 
@@ -638,7 +639,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 -   Commands and yields:
     -   `use ash-fern with cooled slag` → Crafts a Heat‑Ward Mix.
     -   `use heat-ward mix` → Applies the heat ward for safe vent crossing.
-    -   `use vent stones` → Calibrates vent timing; completes “Breath of the Mountain”; enables access to the crater.
+    -   `use vent stones` → Calibrates vent timing; completes “Breath of the Mountain”; enables the pathway to the crater which was previously hidden.
 
 17. Room: Phoenix Crater (Story Clue)
 
@@ -651,7 +652,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
     -   `search` → Reveals the phoenix within the luminous crater.
     -   `say patience to phoenix` → Answer accepted; enables `take phoenix feather` to claim the relic; completes Mount Ember phase. The relic can be taken only after completing “Mirrors of Emberlight” and “Breath of the Mountain”.
 
-19. Room: Phoenix Crater
+19. Room: Lower Switchbacks
 
 -   Commands and yields:
     -   `talk to Mira` → Teleports the party to the Caverns of Shadow (arrive at Cavern Mouth).

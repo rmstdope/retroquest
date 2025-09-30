@@ -17,6 +17,9 @@ from .PolishedShell import PolishedShell
 from .WeatheredCoin import WeatheredCoin
 from .SeaweedTangle import SeaweedTangle
 from .BarnacledBeamFragment import BarnacledBeamFragment
+from .BrassMirrorSegment import BrassMirrorSegment
+from .BindingResin import BindingResin
+from .EmberwaterCanteen import EmberwaterCanteen
 
 __all__ = [
     "AncientAmulet",
@@ -36,4 +39,7 @@ __all__ = [
     "WeatheredCoin",
     "SeaweedTangle",
     "BarnacledBeamFragment",
+    "BrassMirrorSegment",
+    "BindingResin",
+    "EmberwaterCanteen",
 ]

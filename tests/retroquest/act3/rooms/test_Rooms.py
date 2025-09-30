@@ -4,6 +4,7 @@ from typing import Optional
 from retroquest.act3.Act3 import Act3
 from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
+    FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
 )
 from retroquest.engine.Game import Game
@@ -32,6 +33,7 @@ class TestAct3Rooms:
         # are visible for the purpose of validating bidirectionality.
         game.state.set_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, True)
         game.state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
+        game.state.set_story_flag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, True)
 
         # Iterate through rooms by key so we can validate target links precisely
         for room_key, room in self.act3.rooms.items():
