@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 from typing import Any, TYPE_CHECKING
-from . import DEV_MODE
-
 
 class CommandParser:
     """Parses and handles player commands for RetroQuest.
@@ -15,9 +13,10 @@ class CommandParser:
     if TYPE_CHECKING:
         from .Game import Game
 
-    def __init__(self, game: "Game") -> None:
+    def __init__(self, game: "Game", dev_mode: bool = False) -> None:
         self.game = game
         self.last_raw: str | None = None
+        self.dev_mode = dev_mode
 
     def parse(self, command: str) -> Any:
         """Parse and execute a player command, returning the result."""
@@ -216,7 +215,7 @@ class CommandParser:
             return self.game.map()
         elif cmd == 'stats':
             return self.game.stats()
-        elif cmd.startswith('dev_execute_commands ') and DEV_MODE:
+        elif cmd.startswith('dev_execute_commands ') and self.dev_mode:
             filename = cmd[len('dev_execute_commands '):].strip()
             return self.game.dev_execute_commands(filename)
         else:

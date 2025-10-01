@@ -174,7 +174,7 @@ class DummyGame:
 def game_parser_fixture():
     """Provide a DummyGame and its CommandParser for tests."""
     game = DummyGame()
-    parser = CommandParser(game)
+    parser = CommandParser(game, True)
     return game, parser
 
 def test_movement_commands(game_parser):
@@ -375,8 +375,6 @@ def test_miscellaneous_commands(game_parser):
 def test_dev_execute_commands(monkeypatch, game_parser):
     """Test dev_execute_commands path when DEV_MODE is enabled."""
     game, parser = game_parser
-    import engine.CommandParser as cp_mod
-    monkeypatch.setattr(cp_mod, "DEV_MODE", True)
     parser.parse("dev_execute_commands commands.txt")
     assert game.calls == [("dev_execute_commands", "commands.txt")]
 

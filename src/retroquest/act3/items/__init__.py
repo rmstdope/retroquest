@@ -20,6 +20,7 @@ from .BarnacledBeamFragment import BarnacledBeamFragment
 from .BrassMirrorSegment import BrassMirrorSegment
 from .BindingResin import BindingResin
 from .EmberwaterCanteen import EmberwaterCanteen
+from .MirrorMount import MirrorMount
 
 __all__ = [
     "AncientAmulet",
@@ -42,4 +43,5 @@ __all__ = [
     "BrassMirrorSegment",
     "BindingResin",
     "EmberwaterCanteen",
+    "MirrorMount",
 ]

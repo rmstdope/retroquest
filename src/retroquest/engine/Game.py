@@ -10,7 +10,6 @@ from .CommandParser import CommandParser
 from .GameState import GameState
 from .Item import Item
 from .Spell import Spell
-from . import DEV_MODE
 from .Act import Act
 from .Audio import Audio
 
@@ -26,7 +25,7 @@ class Game:
     Main Game class for RetroQuest: The Awakening.
     Handles the game loop, command parsing, and room transitions.
     """
-    def __init__(self, acts: list[Act]) -> None:
+    def __init__(self, acts: list[Act], dev_mode: bool = False) -> None:
         self.is_running = True
         self.acts = acts
         self.current_act = 0
@@ -38,7 +37,8 @@ class Game:
             all_quests=self.acts[self.current_act].quests
         )
         self.acts[self.current_act].setup_gamestate(self.state)
-        self.command_parser = CommandParser(self)
+        self.dev_mode = dev_mode
+        self.command_parser = CommandParser(self, dev_mode)
         # Flag to indicate if we need to describe the room after a command
         self.has_changed_room = False
         self.run_state = GameRunState.SHOW_LOGO
@@ -338,8 +338,8 @@ Welcome to
             'stats': None,
         }
 
-        # Add dev_execute_commands to completions if DEV_MODE is True
-        if DEV_MODE:
+        # Add dev_execute_commands to completions if DEV_MODE
+        if self.dev_mode:
             completions['dev_execute_commands'] = file_names
 
         # Process completions to split multi-word keys into nested levels

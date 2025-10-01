@@ -32,7 +32,7 @@ from .rooms import (
     TidalCauseway,
     ToolCache,
 )
-from .spells import LightSpell, PurifySpell, UnlockSpell
+from .spells import LightSpell, PurifySpell, UnlockSpell, MendSpell
 
 
 class Act3(Act):
@@ -120,3 +120,5 @@ class Act3(Act):
             game_state.learn_spell(UnlockSpell())
         if not game_state.has_spell(LightSpell().name):
             game_state.learn_spell(LightSpell())
+        if not game_state.has_spell(MendSpell().name):
+            game_state.learn_spell(MendSpell())

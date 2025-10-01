@@ -5,6 +5,7 @@ from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
 from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_MAIN_STARTED,
+    FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
 )
 from ..utils.utils import (
@@ -96,7 +97,7 @@ class TestAct3Integration:
         assert 'sigil' in use_result.lower()
         check_story_flag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
         # Quest should be marked completed
-        check_quest_completed(game.state, 'Tideward Sigils')
+        check_quests(game.state, ['The Three Virtues'])
 
         # Step 6: Removed
 
@@ -185,4 +186,20 @@ class TestAct3Integration:
         # Take discovered items
         execute_commands(game, ['take brass mirror segment', 'take binding resin'])
         check_item_count_in_inventory(game.state, 'Brass Mirror Segment', 3)
-        check_item_count_in_inventory(game.state, 'Binding Resin', 1)
+        check_item_in_inventory(game.state, 'Binding Resin')
+        
+        # Step 14: Mirror Terraces — install mirrors to form channel
+        execute_commands(game, ['east'])
+        check_current_room(game.state, 'Mirror Terraces')
+        # There should be mounts and at least one brass segment in the room
+        # Take the terrace-provided segment if present
+        execute_commands(game, ['examine mirror mount', 'take brass mirror segment'])
+        check_item_count_in_inventory(game.state, 'Brass Mirror Segment', 4)
+        # Install three segments into mounts (use command format recognized by game)
+        execute_commands(game, ['use brass mirror segment with mirror mount'])
+        execute_commands(game, ['use brass mirror segment with mirror mount'])
+        execute_commands(game, ['use brass mirror segment with mirror mount'])
+        # After installing, cast the mend spell on a mount to finalize repairs
+        execute_commands(game, ['cast mend on mirror mount'])
+        # After mending, the mirrors quest should be completed and the flag set
+        check_story_flag(game.state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, True)

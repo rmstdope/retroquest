@@ -1,5 +1,5 @@
 """A cracked brass mirror segment used in Mirror Terraces quests."""
-from ...engine.Item import Item
+from ...engine import Item,  GameState
 
 
 class BrassMirrorSegment(Item):
@@ -16,3 +16,16 @@ class BrassMirrorSegment(Item):
             short_name="mirror segment",
             can_be_carried=True,
         )
+
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
+        """Allow using the brass segment with mounts by delegating to the mount.
+
+        If `other_item` is a MirrorMount instance, delegate the action to its
+        use_with so the mount handles inventory checks and state changes.
+        """
+        from ..items.MirrorMount import MirrorMount
+
+        if isinstance(other_item, MirrorMount):
+            return other_item.use_with(game_state, self)
+
+        return super().use_with(game_state, other_item)
