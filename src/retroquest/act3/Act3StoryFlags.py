@@ -25,3 +25,7 @@ FLAG_ACT3_MAIN_COMPLETED = "act3_main_completed"
 # Mount Ember / Mirrors of Emberlight progression
 FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_STARTED = "act3_mirrors_of_ember_light_started"
 FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED = "act3_mirrors_of_ember_light_completed"
+
+# Breath of the Mountain (vent calibration / heat ward)
+FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_STARTED = "act3_breath_of_the_mountain_started"
+FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED = "act3_breath_of_the_mountain_completed"

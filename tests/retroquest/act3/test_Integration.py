@@ -6,6 +6,7 @@ from retroquest.engine.Game import Game
 from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_MAIN_STARTED,
     FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
+    FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
 )
 from ..utils.utils import (
@@ -16,7 +17,6 @@ from ..utils.utils import (
     check_story_flag,
     execute_commands,
     check_item_in_inventory,
-    check_quest_completed,
     check_item_count_in_inventory
 )
 
@@ -187,7 +187,7 @@ class TestAct3Integration:
         execute_commands(game, ['take brass mirror segment', 'take binding resin'])
         check_item_count_in_inventory(game.state, 'Brass Mirror Segment', 3)
         check_item_in_inventory(game.state, 'Binding Resin')
-        
+
         # Step 14: Mirror Terraces — install mirrors to form channel
         execute_commands(game, ['east'])
         check_current_room(game.state, 'Mirror Terraces')
@@ -204,3 +204,40 @@ class TestAct3Integration:
         execute_commands(game, ['cast mend on mirror mount'])
         # After mending, the mirrors quest should be completed and the flag set
         check_story_flag(game.state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, True)
+
+        # --- Step 15: Ember Gallery — find ash-fern and cooled slag, craft heat ward
+        # Move back south to the Ember Gallery to gather ward components
+        execute_commands(game, ['south'])
+        check_current_room(game.state, 'Ember Gallery')
+        # Search reveals ash-fern and cooled slag
+        search_result = execute_commands(game, ['search'])
+        assert 'ash-fern' in search_result.lower() or 'cooled slag' in search_result.lower()
+        execute_commands(game, ['take ash-fern', 'take cooled slag'])
+        check_item_in_inventory(game.state, 'ash-fern', True)
+        check_item_in_inventory(game.state, 'cooled slag', True)
+        # Combine to craft the heat-ward mix
+        craft_result = execute_commands(game, ['use ash-fern with cooled slag'])
+        assert 'heat' in craft_result.lower() or 'ward' in craft_result.lower()
+        check_item_in_inventory(game.state, 'heat-ward mix', True)
+
+        # --- Step 16: Fumarole Passages — calibrate vents and apply heat ward
+        # Move east to the Fumarole Passages (now open because mirrors completed)
+        execute_commands(game, ['north', 'east'])
+        check_current_room(game.state, 'Fumarole Passages')
+        # It should not be possible to move south
+        execute_commands(game, ['south'])
+        check_current_room(game.state, 'Fumarole Passages')
+        # Take and use three vent stones to calibrate
+        execute_commands(game, ['take vent stone', 'take vent stone', 'take vent stone'])
+        check_item_count_in_inventory(game.state, 'Vent Stone', 3)
+        # Use each vent stone to calibrate the vents
+        execute_commands(game, ['use vent stone', 'use vent stone'])
+        # Before the third calibration, applying the ward should fail
+        fail_apply = execute_commands(game, ['use heat-ward mix'])
+        assert 'not yet synchronized' in fail_apply.lower() or 'unstable' in fail_apply.lower()
+        # Final calibration
+        execute_commands(game, ['use vent stone'])
+        # Now apply the heat-ward mix
+        apply_result = execute_commands(game, ['use heat-ward mix'])
+        assert 'ward' in apply_result.lower() or 'seals' in apply_result.lower()
+        check_story_flag(game.state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, True)

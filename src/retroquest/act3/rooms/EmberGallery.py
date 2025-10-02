@@ -1,6 +1,8 @@
 """Ember Gallery room for Act 3."""
 
 from ...engine.Room import Room
+from ..items.AshFern import AshFern
+from ..items.CooledSlag import CooledSlag
 
 
 class EmberGallery(Room):
@@ -27,3 +29,24 @@ class EmberGallery(Room):
                 "west": "LowerSwitchbacks"
             },
         )
+
+        # Track whether deposits have been discovered by searching
+        self._deposits_revealed = False
+
+    def search(self, _game_state, _target: str = None) -> str:
+        """Reveal ash-fern and cooled slag deposits when searched the first time."""
+        if not self._deposits_revealed:
+            self._deposits_revealed = True
+            # Add items to the room so they can be taken
+            self.items.append(AshFern())
+            self.items.append(CooledSlag())
+            return (
+                "[event]You sift through the sorted fragments on the worktable and "
+                "find a brittle frond of ash-fern tucked in a tool roll, and a pile "
+                "of cooled slag fragments sifted into a shallow basin. They look "
+                "suitable for warding mixtures.[/event]"
+            )
+
+        return (
+            "You search the Ember Gallery again but find nothing new beyond the "
+            "worktables and sorted fragments.")

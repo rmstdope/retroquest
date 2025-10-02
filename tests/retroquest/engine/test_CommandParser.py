@@ -372,7 +372,7 @@ def test_miscellaneous_commands(game_parser):
         expected_calls.append(expected_call)
     assert game.calls == expected_calls
 
-def test_dev_execute_commands(monkeypatch, game_parser):
+def test_dev_execute_commands(game_parser):
     """Test dev_execute_commands path when DEV_MODE is enabled."""
     game, parser = game_parser
     parser.parse("dev_execute_commands commands.txt")

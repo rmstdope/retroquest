@@ -5,6 +5,7 @@ from retroquest.engine.Game import Game
 
 
 def setup_game():
+    """Set up a Game instance with Act 3 for MirrorMount tests."""
     act3 = Act3()
     act3.music_file = ''
     game = Game([act3])
@@ -12,6 +13,7 @@ def setup_game():
 
 
 def test_mount_examine_reveals_segment_once():
+    """Test that examining the mount reveals a brass mirror segment only once."""
     game = setup_game()
     mount = __import__(
         'retroquest.act3.items.MirrorMount', fromlist=['MirrorMount']
@@ -34,22 +36,16 @@ def test_mount_examine_reveals_segment_once():
 
 
 def test_install_resin_mend_flow():
+    """Test the full install, resin, and mend flow for the MirrorMount item."""
     game = setup_game()
     state = game.state
 
-    # Create mount and items
-    MirrorMount = __import__(
-        'retroquest.act3.items.MirrorMount', fromlist=['MirrorMount']
-    ).MirrorMount
-    BrassMirrorSegment = __import__(
-        'retroquest.act3.items.BrassMirrorSegment', fromlist=['BrassMirrorSegment']
-    ).BrassMirrorSegment
-    BindingResin = __import__(
-        'retroquest.act3.items.BindingResin', fromlist=['BindingResin']
-    ).BindingResin
-    MendSpell = __import__(
-        'retroquest.act3.spells.MendSpell', fromlist=['MendSpell']
-    ).MendSpell
+
+    # Create mount and items using direct imports
+    from retroquest.act3.items.MirrorMount import MirrorMount
+    from retroquest.act3.items.BrassMirrorSegment import BrassMirrorSegment
+    from retroquest.act3.items.BindingResin import BindingResin
+    from retroquest.act3.spells.MendSpell import MendSpell
 
     mount = MirrorMount()
 

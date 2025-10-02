@@ -12,10 +12,10 @@ def _import_pygame() -> Optional[object]:
     imported without a hard dependency on pygame.
     """
     try:
-        import pygame  # type: ignore
+        import pygame as pygame_module  # type: ignore
 
-        return pygame
-    except Exception:
+        return pygame_module
+    except ImportError:
         return None
 
 

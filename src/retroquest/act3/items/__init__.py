@@ -21,6 +21,10 @@ from .BrassMirrorSegment import BrassMirrorSegment
 from .BindingResin import BindingResin
 from .EmberwaterCanteen import EmberwaterCanteen
 from .MirrorMount import MirrorMount
+from .VentStone import VentStone
+from .HeatWardMix import HeatWardMix
+from .AshFern import AshFern
+from .CooledSlag import CooledSlag
 
 __all__ = [
     "AncientAmulet",
@@ -44,4 +48,8 @@ __all__ = [
     "BindingResin",
     "EmberwaterCanteen",
     "MirrorMount",
+    "VentStone",
+    "HeatWardMix",
+    "AshFern",
+    "CooledSlag",
 ]

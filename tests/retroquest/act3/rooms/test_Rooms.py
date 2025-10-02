@@ -6,6 +6,7 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
     FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+    FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
 )
 from retroquest.engine.Game import Game
 
@@ -34,6 +35,9 @@ class TestAct3Rooms:
         game.state.set_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, True)
         game.state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
         game.state.set_story_flag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, True)
+        # Breath of the Mountain must be considered completed so the south exit
+        # from Fumarole Passages is visible during the bidirectionality check.
+        game.state.set_story_flag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, True)
 
         # Iterate through rooms by key so we can validate target links precisely
         for room_key, room in self.act3.rooms.items():
