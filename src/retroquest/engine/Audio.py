@@ -19,6 +19,22 @@ def _import_pygame() -> Optional[object]:
         return None
 
 
+# Expose a module-level `pygame` object. If pygame isn't available, provide a
+# small dummy with a `mixer` attribute so tests can monkeypatch
+# `audio_module.pygame.mixer.*` without AttributeError.
+_pygame_module = _import_pygame()
+if _pygame_module is None:
+    class _DummyMixer:
+        """Minimal dummy mixer namespace used in tests when pygame is absent."""
+
+    class _DummyPygame:
+        mixer = _DummyMixer()
+
+    pygame = _DummyPygame()
+else:
+    pygame = _pygame_module
+
+
 class Audio:
     """Encapsulate audio playback (music and sound effects)."""
 
