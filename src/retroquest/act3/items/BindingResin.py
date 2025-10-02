@@ -1,6 +1,5 @@
 """Binding resin for repairing brass mirror segments."""
-from ...engine.Item import Item
-
+from ...engine import Item, GameState
 
 class BindingResin(Item):
     """A viscous resin useful for securing mirror segments in mounts."""
@@ -16,3 +15,16 @@ class BindingResin(Item):
             short_name="resin",
             can_be_carried=True,
         )
+
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
+        """Delegate using resin on a MirrorMount to the mount's use_with.
+
+        This allows commands like 'use resin with mirror mount' to be handled
+        by the mount which enforces ordering and inventory rules.
+        """
+        from ..items.MirrorMount import MirrorMount
+
+        if isinstance(other_item, MirrorMount):
+            return other_item.use_with(game_state, self)
+
+        return super().use_with(game_state, other_item)

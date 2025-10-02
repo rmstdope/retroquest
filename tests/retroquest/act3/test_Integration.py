@@ -197,8 +197,9 @@ class TestAct3Integration:
         check_item_count_in_inventory(game.state, 'Brass Mirror Segment', 4)
         # Install three segments into mounts (use command format recognized by game)
         execute_commands(game, ['use brass mirror segment with mirror mount'])
-        execute_commands(game, ['use brass mirror segment with mirror mount'])
-        execute_commands(game, ['use brass mirror segment with mirror mount'])
+        execute_commands(game, ['use binding resin with mirror mount'])
+        # Before mending, the mirrors quest should not be completed and the flag not set
+        check_story_flag(game.state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, False)
         # After installing, cast the mend spell on a mount to finalize repairs
         execute_commands(game, ['cast mend on mirror mount'])
         # After mending, the mirrors quest should be completed and the flag set

@@ -24,6 +24,8 @@ class MirrorMount(Item):
         self._installed = False
         # Track whether this mount has already revealed its hidden segment
         self._segment_revealed = False
+        # Track whether binding resin has been applied after installation
+        self._resin_applied = False
 
     def use_with(self, game_state: GameState, other_item: Item) -> str:
         """Allow use with a BrassMirrorSegment to install it into the mount.
@@ -32,6 +34,25 @@ class MirrorMount(Item):
         consumes four and marks this mount as prepared.
         """
         from ..items.BrassMirrorSegment import BrassMirrorSegment
+        from ..items.BindingResin import BindingResin
+
+        # If the player uses binding resin on the mount, handle it here
+        if isinstance(other_item, BindingResin):
+            if not self._installed:
+                return (
+                    "[failure]There is nothing to bind yet — prepare the mount with "
+                    "the mirror segments first.[/failure]"
+                )
+            if self._resin_applied:
+                return "[info]Binding resin has already been applied to this mount.[/info]"
+            # Remove one resin from inventory
+            resin_name = BindingResin().get_name()
+            game_state.remove_item_from_inventory(resin_name, 1)
+            self._resin_applied = True
+            return (
+                "[success]You apply the binding resin carefully around the seams; "
+                "the brass segments sit firmer and the joints set.[/success]"
+            )
 
         if not isinstance(other_item, BrassMirrorSegment):
             return (
@@ -50,8 +71,7 @@ class MirrorMount(Item):
         # Remove four segments from the player's inventory
         game_state.remove_item_from_inventory(seg_name, 4)
 
-        # Mark this mount as installed; the global completion flag is set by
-        # calling `mend` after all mounts have been prepared.
+        # Mark this mount as installed; resin still needs to be applied before mend
         self._installed = True
 
         return (
@@ -67,23 +87,28 @@ class MirrorMount(Item):
         """
         from ..Act3StoryFlags import FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED
 
-        # Type hinting guard and ensure we only set the flag for installed mounts
-        if not isinstance(game_state, GameState):
-            return (
-                "[failure]Invalid game state provided to mend operation.[/failure]"
-            )
-        if not getattr(self, "_installed", False):
+        if not self._installed:
             return (
                 "[info]This mount has not yet been prepared with the brass segments; "
                 "there is nothing to mend.[/info]"
             )
 
+        # Require binding resin to have been applied before final mending
+        if not self._resin_applied:
+            return (
+                "[info]The mirror segments are seated but still loose. You should "
+                "apply Binding Resin to the mount before attempting the final mend.[/info]"
+            )
+
         # Set the completion flag; idempotent
         game_state.set_story_flag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, True)
         return (
-            "[success]You complete the final adjustments and the terraces sing as "
-            "the light channel locks into place. The Mirrors of Emberlight quest "
-            "is now complete.[/success]"
+            "[success]A whispered mend gathers in your hands and the mirrors "
+            "answer — seams knit, polish brightens, and the whole face hums. "
+            "When the sun's beams strike the great mirror they are coaxed and "
+            "folded together until they pour from the terraces as a single, "
+            "piercing ray. The light lances into the mountainside, strikes a "
+            "hidden trigger, and a narrow passage grinds open to the east.[/success]"
         )
 
     def examine(self, game_state: GameState) -> str:

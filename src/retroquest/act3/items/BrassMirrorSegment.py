@@ -1,6 +1,5 @@
 """A cracked brass mirror segment used in Mirror Terraces quests."""
-from ...engine import Item,  GameState
-
+from ...engine import Item, GameState
 
 class BrassMirrorSegment(Item):
     """A curved brass segment for reassembling the mirror channel."""
@@ -26,6 +25,7 @@ class BrassMirrorSegment(Item):
         from ..items.MirrorMount import MirrorMount
 
         if isinstance(other_item, MirrorMount):
+            # Delegate to the mount; pass this segment as the other_item
             return other_item.use_with(game_state, self)
 
         return super().use_with(game_state, other_item)
