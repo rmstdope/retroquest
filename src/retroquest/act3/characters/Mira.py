@@ -5,6 +5,7 @@ from ...engine.GameState import GameState
 from ..Act3StoryFlags import (
     FLAG_ACT3_MAIN_STARTED,
     FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+    FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
 )
 
 
@@ -71,20 +72,30 @@ class Mira(Character):
         # If we're already at Lower Switchbacks, do not teleport; instead
         # provide lore about the second virtue and the phoenix legend.
         if game_state.current_room.name == "Lower Switchbacks":
-            return (
-                event_msg
-                + "\n"
-                + (
-                    "[dialogue]'There the second virtue, Wisdom, is taught in "
-                    "embers. Old guides here tell of a phoenix that nested where "
-                    "the rock blooms with heat — a bird of returning flame. From "
-                    "its ash a single feather rises renewed, and such a feather "
-                    "is said to clear the eyes and steady a wavering hand. "
-                    "Listen for songs on the wind, and tend any sparks you find; "
-                    "they may be more than mere kindle.'[/dialogue]"
+            if not game_state.get_story_flag(
+                FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED
+            ):
+                return (
+                    event_msg
+                    + "\n"
+                    + (
+                        "[dialogue]'There the second virtue, Wisdom, is taught in "
+                        "embers. Old guides here tell of a phoenix that nested where "
+                        "the rock blooms with heat — a bird of returning flame. From "
+                        "its ash a single feather rises renewed, and such a feather "
+                        "is said to clear the eyes and steady a wavering hand. "
+                        "Listen for songs on the wind, and tend any sparks you find; "
+                        "they may be more than mere kindle.'[/dialogue]"
+                    )
                 )
+            destination_key = "CavernMouth"
+            flavor = (
+                "[dialogue]'You have done well, Elior. The Phoenix Feather is a "
+                "token of wisdom; it will guide you through darkness and flame. "
+                "Ahead lies the Cavern Mouth—gaping stone jaws that breathe cold "
+                "and shadow. Steel your heart and hold your light high.'[/dialogue]"
             )
-        if game_state.current_room.name == "Tidal Causeway":
+        elif game_state.current_room.name == "Tidal Causeway":
             if not game_state.get_story_flag(
                 FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED
             ):
@@ -107,7 +118,7 @@ class Mira(Character):
                 "path winds like a fever dream. Keep your footing and watch the "
                 "skies for falling cinders.'[/dialogue]"
             )
-        if game_state.current_room.name == "Mira's Hut":
+        elif game_state.current_room.name == "Mira's Hut":
             destination_key = "TidalCauseway"
             flavor = (
                 "[dialogue]'The hour is upon us, Elior. We will draw the first circle "

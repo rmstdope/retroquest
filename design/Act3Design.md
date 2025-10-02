@@ -649,7 +649,8 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 18. Room: Phoenix Crater (Relic Trial)
 
 -   Commands and yields:
-    -   `search` → Reveals the phoenix within the luminous crater.
+    -   `rest` → Reveals the phoenix within the luminous crater.
+    -   `talk to phoenix` → Engages in a telepathic conversation, posing a riddle.
     -   `say patience to phoenix` → Answer accepted; enables `take phoenix feather` to claim the relic; completes Mount Ember phase. The relic can be taken only after completing “Mirrors of Emberlight” and “Breath of the Mountain”.
 
 19. Room: Lower Switchbacks

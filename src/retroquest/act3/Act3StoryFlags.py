@@ -29,3 +29,6 @@ FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED = "act3_mirrors_of_ember_light_comple
 # Breath of the Mountain (vent calibration / heat ward)
 FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_STARTED = "act3_breath_of_the_mountain_started"
 FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED = "act3_breath_of_the_mountain_completed"
+
+# Phoenix Feather acquisition (Mount Ember)
+FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED = "act3_phoenix_feather_acquired"

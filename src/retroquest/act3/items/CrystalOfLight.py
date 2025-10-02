@@ -22,8 +22,8 @@ class CrystalOfLight(Item):
     def __init__(self) -> None:
         """Initialize Crystal of Light with description and properties."""
         super().__init__(
-            name="crystal of light",
-            short_name="crystal",
+            name="Crystal of Light",
+            short_name="Crystal",
             description=(
                 "A palm-sized prism humming with soft radiance. Within it swirl echoes "
                 "of moonlit tides and layered ward patterns waiting to converge."

@@ -241,3 +241,18 @@ class TestAct3Integration:
         apply_result = execute_commands(game, ['use heat-ward mix'])
         assert 'ward' in apply_result.lower() or 'seals' in apply_result.lower()
         check_story_flag(game.state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, True)
+
+        # --- Step 18: Phoenix Crater (Relic Trial) ---
+        # Move south to Phoenix Crater
+        execute_commands(game, ['south'])
+        check_current_room(game.state, 'Phoenix Crater')
+        # Reveal the phoenix
+        execute_commands(game, ['rest'])
+        check_character_in_room(game.state.current_room, 'phoenix', True)
+        # Talk to the phoenix to get the riddle
+        talk_result = execute_commands(game, ['talk to phoenix'])
+        assert 'wisdom' in talk_result.lower() and 'time is short' in talk_result.lower()
+        # Say the correct answer
+        execute_commands(game, ['say patience to phoenix'])
+        # Take the phoenix feather
+        check_item_in_inventory(game.state, 'phoenix feather', True)

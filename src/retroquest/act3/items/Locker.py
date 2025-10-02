@@ -96,6 +96,7 @@ class Locker(Item):
         if isinstance(other_item, RustedLockerKey):
             # The rusted key gets stuck and does not unlock the mechanism.
             self.rusted_key_stuck = True
+            game_state.remove_item_from_inventory(other_item.get_name())
             return (
                 "[failure]The lock is too corroded for the key to turn. As you tug, "
                 "the corroded key jams in the mechanism and will not come free.[/failure]"
