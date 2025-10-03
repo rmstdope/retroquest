@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "retroquest"
-version = "0.1.0"
-description = "Simple retro style text based adventure game."
+version = "0.2.0"
+description = "A retro style text based adventure game."
 readme = "README.md"
 authors = [
   {name = "Henrik Kurelid", email = "henrik@kurelid.se"}
@@ -14,14 +14,18 @@ maintainers = [
   {name = "Henrik Kurelid", email = "henrik@kurelid.se"}
 ]
 classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python :: 3"
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: End Users/Desktop",
+  "Environment :: Console"
 ]
 license = {file = "LICENSE"}
 dependencies = [
   "prompt_toolkit",
-  "pygame>=2.0.0"
+  "pygame>=2.0.0",
+  "textual==3.5.0"
 ]
+keywords = ["text-adventure", "game", "retro", "adventure", "interactive-fiction"]
 
 [project.optional-dependencies] 
 dev = [

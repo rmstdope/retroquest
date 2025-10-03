@@ -24,12 +24,11 @@ import sys
 from retroquest.engine.textualui.TextualApp import TextualApp
 from retroquest.engine.promptui.PromptSessionApp import PromptSessionApp
 from retroquest.engine.Game import Game
-# from retroquest.act1.Act1 import Act1
-# from retroquest.act2.Act2 import Act2
+from retroquest.act1.Act1 import Act1
+from retroquest.act2.Act2 import Act2
 from retroquest.act3.Act3 import Act3
 
 USE_TEXTUAL_UI = True
-DEV_MODE = True
 
 if '-oldschool' in sys.argv:
     USE_TEXTUAL_UI = False
@@ -47,8 +46,8 @@ def main() -> None:
     - Creates UI application object and begins its run loop.
     - May read future CLI arguments (currently only `-oldschool`).
     """
-    # game = Game([Act1(), Act2(), Act3()], DEV_MODE)
-    game = Game([Act3()], DEV_MODE)
+    game = Game([Act1(), Act2(), Act3()], dev_mode=False)
+    # game = Game([Act3()], dev_mode=True)
     app = TextualApp(game) if USE_TEXTUAL_UI else PromptSessionApp(game)
     app.run()
 
