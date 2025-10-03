@@ -1,6 +1,7 @@
 """Fumarole Passages room for Act 3."""
 
 from ...engine.Room import Room
+from ...engine.GameState import GameState
 from ..Act3StoryFlags import (
     FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_STARTED,
     FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
@@ -99,7 +100,7 @@ class FumarolePassages(Room):
             "[/event]"
         )
 
-    def get_exits(self, game_state):
+    def get_exits(self, game_state: GameState) -> dict[str, str]:
         """Return exits, hiding south until Breath of the Mountain completed.
 
         The south exit to Phoenix Crater is a hazardous crossing while the vents
@@ -113,3 +114,7 @@ class FumarolePassages(Room):
             exits.pop('south', None)
 
         return exits
+
+    def on_enter(self, game_state: GameState) -> None:
+        """Set the Breath of the Mountain started flag when entering the room."""
+        game_state.set_story_flag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_STARTED, True)

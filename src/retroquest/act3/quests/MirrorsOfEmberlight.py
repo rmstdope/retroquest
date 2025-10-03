@@ -21,9 +21,14 @@ class MirrorsOfEmberlightQuest(Quest):
         super().__init__(
             name="Mirrors of Emberlight",
             description=(
-                "Recover cracked brass mirror segments and repair them on the "
-                "Mirror Terraces to form an unbroken light channel to the high "
-                "altar."
+                "The terraces are lined with ancient, cracked mirrors. Find a way to repair the "
+                "mirrors and restore the channel of light to the high altar."
+            ),
+            completion=(
+                "Elior gathers the scattered brass mirror segments and, with care and skill, "
+                "restores the ancient light channel atop Mount Ember. The mirrors blaze with "
+                "reflected sunlight, opening the way to the volcano's heart and the Phoenix's "
+                "trial of wisdom."
             ),
         )
 

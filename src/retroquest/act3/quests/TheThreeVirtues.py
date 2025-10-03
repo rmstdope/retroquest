@@ -49,6 +49,20 @@ class TheThreeVirtuesQuest(Quest):
                 "Cedric bids you to press on—dark forces gather, and he needs allies "
                 "skilled in magic to stand with him when the hour comes. "
             )
+
+        # Add block for Phoenix Feather acquisition
+        from ..Act3StoryFlags import FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED
+        if game_state.get_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED):
+            if not self._flag_state.get(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED):
+                self._flag_state[FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\n\nYou have obtained the Phoenix Feather. Its warmth pulses in your grasp, "
+                "a living ember that refuses to die. The memory of fire and flight lingers, "
+                "reminding you that hope can rise from ashes. The path ahead is clearer, "
+                "but the final virtue remains. "
+            )
         self.description += new_desc
         return updated
 

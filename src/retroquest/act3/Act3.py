@@ -9,6 +9,7 @@ from .quests import (
     TidewardSigilsQuest,
     LanternsOfTheDeepsQuest,
     MirrorsOfEmberlightQuest,
+    BreathOfTheMountain,
 )
 from .rooms import (
     CavernMouth,
@@ -78,8 +79,9 @@ class Act3(Act):
             # Sunken Ruins Side Quests
             TidewardSigilsQuest(),
             LanternsOfTheDeepsQuest(),
-            # Mount Ember Side Quest
+            # Mount Ember Side Quests
             MirrorsOfEmberlightQuest(),
+            BreathOfTheMountain(),
         ]
 
         music_file = "Orchestronika - Feel The Storm (freetouse.com).mp3"
