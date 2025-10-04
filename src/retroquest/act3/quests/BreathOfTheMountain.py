@@ -15,8 +15,9 @@ class BreathOfTheMountain(Quest):
                 "Find a way to cross the shifting vents and reach the heights to the south."
             ),
             completion=(
-                "With patience and ingenuity, Elior crafts a heat ward from ash-fern and cooled slag, "
-                "then calibrates the mountain's ancient vents to breathe in a steady, safe rhythm. "
+                "With patience and ingenuity, Elior crafts a heat ward from ash-fern and cooled "
+                "slag, then calibrates the mountain's ancient vents to breathe in a steady, safe "
+                "rhythm. "
                 "The searing passages yield, opening the way to the Phoenix's crater and the next "
                 "trial of wisdom."
             ),

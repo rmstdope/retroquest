@@ -46,8 +46,8 @@ def main() -> None:
     - Creates UI application object and begins its run loop.
     - May read future CLI arguments (currently only `-oldschool`).
     """
-    game = Game([Act1(), Act2(), Act3()], dev_mode=False)
-    # game = Game([Act3()], dev_mode=True)
+    # game = Game([Act1(), Act2(), Act3()], dev_mode=False)
+    game = Game([Act3()], dev_mode=True)
     app = TextualApp(game) if USE_TEXTUAL_UI else PromptSessionApp(game)
     app.run()
 
