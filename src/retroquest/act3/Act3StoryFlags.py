@@ -39,3 +39,12 @@ FLAG_ACT3_MINERS_RESCUE_COMPLETED = "act3_miners_rescue_completed"
 # Oath of Stillness (Echo Chambers / Dragon's Hall)
 FLAG_ACT3_OATH_OF_STILLNESS_STARTED = "act3_oath_of_stillness_started"
 FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED = "act3_oath_of_stillness_completed"
+
+# Dragon's Memory (storytelling quest)
+FLAG_ACT3_DRAGONS_MEMORY_RECEIVED = "act3_dragons_memory_received"
+
+# Dragon's Scale acquisition
+FLAG_ACT3_DRAGONS_SCALE_ACQUIRED = "act3_dragons_scale_acquired"
+
+# Dragon's Oath (oath spoken to the dragon)
+FLAG_ACT3_DRAGON_OATH_SPOKEN = "act3_dragon_oath_spoken"

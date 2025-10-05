@@ -9,6 +9,8 @@ from .PhoenixGuardian import PhoenixGuardian
 from .PierWarden import PierWarden
 from .SirCedric import SirCedric
 from .TideBornGuardian import TideBornGuardian
+from .SilenceKeeper import SilenceKeeper
+from .AncientDragon import AncientDragon
 
 __all__ = [
     "AshScholar",
@@ -19,5 +21,7 @@ __all__ = [
     "PhoenixGuardian",
     "PierWarden",
     "SirCedric",
-    "TideBornGuardian"
+    "TideBornGuardian",
+    "SilenceKeeper",
+    "AncientDragon"
 ]

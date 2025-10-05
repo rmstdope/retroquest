@@ -34,6 +34,11 @@ from .MinersKey import MinersKey
 from .FallenRock import FallenRock
 from .RunicWalls import RunicWalls
 from .ResonantChantRubbings import ResonantChantRubbings
+from .EchoStones import EchoStones
+from .StillwaterPhial import StillwaterPhial
+from .QuietCharm import QuietCharm
+from .DragonsScale import DragonsScale
+from .OldOathScrolls import OldOathScrolls
 
 __all__ = [
     "AncientAmulet",
@@ -69,4 +74,9 @@ __all__ = [
     "FallenRock",
     "RunicWalls",
     "ResonantChantRubbings",
+    "EchoStones",
+    "StillwaterPhial",
+    "QuietCharm",
+    "DragonsScale",
+    "OldOathScrolls",
 ]

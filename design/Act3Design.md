@@ -702,8 +702,8 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 26. Room: Dragon’s Hall (Relic Trial)
 
 -   Commands and yields:
-    -   `search` → Reveals the vast chamber and the dragon’s sigiled dais.
-    -   `say oath to dragon` → The pledge is accepted; enables `take dragon's scale` to claim the relic; completes Caverns phase. The relic can be taken only after completing “Miners’ Rescue” and “Oath of Stillness”.
+    -   `say oath to dragon` → The pledge is accepted; adds the dragon's scale to the room's items. 
+    -   `take dragon's scale` → Add the scale to the inventory; completes Caverns phase.
 
 ---
 

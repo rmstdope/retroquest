@@ -8,6 +8,7 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
     FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
     FLAG_ACT3_MINERS_RESCUE_COMPLETED,
+    FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
 )
 from retroquest.engine.Game import Game
 
@@ -42,6 +43,9 @@ class TestAct3Rooms:
         # Miners rescue must be completed so the east exit from CollapsedGalleries
         # to EchoChambers is visible during the bidirectionality check.
         game.state.set_story_flag(FLAG_ACT3_MINERS_RESCUE_COMPLETED, True)
+        # Oath of Stillness must be completed so the east exit from StillnessVestibule
+        # to DragonsHall is visible during the bidirectionality check.
+        game.state.set_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, True)
 
         # Iterate through rooms by key so we can validate target links precisely
         for room_key, room in self.act3.rooms.items():

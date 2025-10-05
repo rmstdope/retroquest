@@ -8,7 +8,10 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
     FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
-    FLAG_ACT3_MINERS_RESCUE_COMPLETED
+    FLAG_ACT3_MINERS_RESCUE_COMPLETED,
+    FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
+    FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+    FLAG_ACT3_DRAGON_OATH_SPOKEN
 )
 from ..utils.utils import (
     check_character_in_room,
@@ -331,3 +334,51 @@ class TestAct3Integration:
         take_result = execute_commands(game, ['take resonant chant rubbings'])
         assert 'resonant chant rubbings' in take_result.lower()
         check_item_in_inventory(game.state, 'Resonant Chant Rubbings', True)
+
+        # --- Step 24: Stillness Vestibule - Oath of Stillness sequence ---
+        execute_commands(game, ['west', 'south'])
+        check_current_room(game.state, 'Stillness Vestibule')
+        check_item_in_room(game.state.current_room, 'echo stones', True)
+        check_character_in_room(game.state.current_room, 'silence keeper', True)
+
+        # Cast bless on echo stones (sanctifies them for the rite)
+        bless_result = execute_commands(game, ['cast bless on echo stones'])
+        assert 'sacred light' in bless_result.lower() and 'ready to amplify' in bless_result.lower()
+
+        # Use resonant chant rubbings on echo stones (performs the Oath of Stillness)
+        oath_result = execute_commands(game, ['use resonant chant rubbings with echo stones'])
+        assert 'recite the resonant chant' in oath_result.lower()
+        assert 'harmonious silence' in oath_result.lower() 
+        assert "dragon's hall now lies open" in oath_result.lower()
+        check_story_flag(game.state, FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, True)
+
+        # Now east exit to Dragon's Hall should be available
+        execute_commands(game, ['east'])
+        check_current_room(game.state, "Dragon's Hall")
+
+        # --- Step 25: Dragon's Hall - Dragon's Memory (Story Clue) ---
+        check_character_in_room(game.state.current_room, 'ancient dragon', True)
+        # Dragon's scale should NOT be present initially (only after oath in step 26)
+        check_item_in_room(game.state.current_room, "dragon's scale", False)
+
+        # Talk to dragon (grants the Dragon's Memory)
+        memory_result = execute_commands(game, ['talk to ancient dragon'])
+        assert 'Lyra and Theron' in memory_result
+        assert 'protected until the time of choosing' in memory_result.lower()
+        assert 'ward—not of stone or steel, but of love' in memory_result.lower()
+        check_story_flag(game.state, FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
+
+        # --- Step 26: Dragon's Hall - Relic Trial (Oath and Scale) ---
+        # Say oath to dragon (adds dragon's scale to room)
+        oath_result = execute_commands(game, ['say oath to ancient dragon'])
+        assert 'oath' in oath_result.lower()
+        assert 'scale' in oath_result.lower()
+        check_story_flag(game.state, FLAG_ACT3_DRAGON_OATH_SPOKEN, True)
+        
+        # Dragon's scale should now be present in the room
+        check_item_in_room(game.state.current_room, "dragon's scale", True)
+        
+        # Take dragon's scale
+        execute_commands(game, ['take dragon\'s scale'])
+        check_item_in_inventory(game.state, "dragon's scale", True)
+        check_item_in_room(game.state.current_room, "dragon's scale", False)
