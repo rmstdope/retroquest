@@ -3,7 +3,12 @@
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
 from retroquest.act3.quests.TheThreeVirtues import TheThreeVirtuesQuest
-from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED, FLAG_ACT3_MAIN_COMPLETED, FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED
+from retroquest.act3.Act3StoryFlags import (
+    FLAG_ACT3_MAIN_STARTED,
+    FLAG_ACT3_MAIN_COMPLETED,
+    FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+    FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED
+)
 
 
 def test_the_three_virtues_trigger_and_completion_flags():

@@ -23,8 +23,14 @@ from .EmberwaterCanteen import EmberwaterCanteen
 from .MirrorMount import MirrorMount
 from .VentStone import VentStone
 from .HeatWardMix import HeatWardMix
+
 from .AshFern import AshFern
 from .CooledSlag import CooledSlag
+from .SupplyCrate import SupplyCrate
+from .SupportStraps import SupportStraps
+from .WedgeBlocks import WedgeBlocks
+from .ReinforcedBraces import ReinforcedBraces
+from .MinersKey import MinersKey
 
 __all__ = [
     "AncientAmulet",
@@ -52,4 +58,9 @@ __all__ = [
     "HeatWardMix",
     "AshFern",
     "CooledSlag",
+    "SupplyCrate",
+    "SupportStraps",
+    "WedgeBlocks",
+    "ReinforcedBraces",
+    "MinersKey",
 ]

@@ -256,3 +256,32 @@ class TestAct3Integration:
         execute_commands(game, ['say patience to phoenix'])
         # Take the phoenix feather
         check_item_in_inventory(game.state, 'phoenix feather', True)
+
+        # --- Step 19: Talk to Mira to teleport to Cavern Mouth (Caverns of Shadow) ---
+        execute_commands(game, ['n', 'w', 'w', 's', 'talk to mira'])
+        check_current_room(game.state, 'Cavern Mouth')
+        check_character_in_room(game.state.current_room, 'mine overseer', True)
+
+        # --- Step 20: Cavern Mouth: search and talk to Mine Overseer ---
+        talk_result = execute_commands(game, ['talk to mine overseer'])
+        assert 'tool cache' in talk_result.lower() and 'key' in talk_result.lower()
+        check_item_in_inventory(game.state, "Miner's Key", True)
+        # Should have started Miners' Rescue quest (side quest activation is implicit)
+        # (If a helper for quest exists, could check for 'Miners' Rescue' in active quests)
+
+        # --- Step 21: Tool Cache: unlock and open crate, take supply items ---
+        execute_commands(game, ['north'])
+        check_current_room(game.state, 'Tool Cache')
+        # Use key on crate
+        unlock_result = execute_commands(game, ["use miner's key with crate"])
+        assert 'unlock' in unlock_result.lower() or 'padlock' in unlock_result.lower()
+        # Open crate
+        open_result = execute_commands(game, ['open crate'])
+        assert 'open' in open_result.lower() and 'braces' in open_result.lower()
+        # Take all three supply items
+        execute_commands(game, ['take reinforced braces'])
+        execute_commands(game, ['take support straps'])
+        execute_commands(game, ['take wedge blocks'])
+        check_item_in_inventory(game.state, 'Reinforced Braces', True)
+        check_item_in_inventory(game.state, 'Support Straps', True)
+        check_item_in_inventory(game.state, 'Wedge Blocks', True)

@@ -15,6 +15,7 @@ def test_lantern_bracket_default_state():
     assert lb.has_lantern is False
 
 def test_lanternbracket_examine():
+    """Verify examining the LanternBracket reflects its state correctly."""
     bracket = LanternBracket()
     # Examine with no lantern
     result_empty = bracket.examine(None)

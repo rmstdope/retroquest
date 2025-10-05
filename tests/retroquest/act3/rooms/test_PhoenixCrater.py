@@ -1,14 +1,19 @@
 """Unit tests for PhoenixCrater room in Act 3."""
 from retroquest.act3.rooms.PhoenixCrater import PhoenixCrater
 
+
 class DummyPhoenix:
+    """Dummy Phoenix character for testing PhoenixCrater room."""
     def get_name(self):
+        """Return the name of the dummy Phoenix."""
         return "Phoenix"
 
+
 class DummyGameState:
-    pass
+    """Minimal dummy game state for PhoenixCrater tests."""
 
 def test_phoenixcrater_init():
+    """Test initialization of PhoenixCrater room."""
     room = PhoenixCrater()
     assert room.name == "Phoenix Crater"
     assert "vitrified rock" in room.description or "crater" in room.description
@@ -16,7 +21,9 @@ def test_phoenixcrater_init():
     assert room.items == []
     assert room.characters == []
 
-def test_phoenixcrater_rest_reveals_phoenix(monkeypatch):
+
+def test_phoenixcrater_rest_reveals_phoenix():
+    """Test that resting in PhoenixCrater reveals the Phoenix only once and updates description."""
     room = PhoenixCrater()
     gs = DummyGameState()
     # First rest: should add Phoenix and update description

@@ -6,8 +6,7 @@ from retroquest.act3.items.TeleportationFocus import TeleportationFocus
 
 
 class DummyGameState:
-    pass
-
+    """Dummy game state for use in TeleportationFocus tests."""
 
 def test_teleportation_focus_name():
     """Teleportation Focus exposes a clear, non-empty name."""
@@ -20,6 +19,7 @@ def test_teleportation_focus_name():
 
 
 def test_teleportationfocus_init():
+    """Test initialization and properties of TeleportationFocus item."""
     focus = TeleportationFocus()
     assert focus.get_name() == "teleportation focus"
     assert "prism" in focus.description.lower() or "circle" in focus.description.lower()
@@ -27,6 +27,7 @@ def test_teleportationfocus_init():
 
 
 def test_teleportationfocus_examine():
+    """Test examining TeleportationFocus returns correct event text."""
     focus = TeleportationFocus()
     gs = DummyGameState()
     result = focus.examine(gs)
@@ -35,6 +36,7 @@ def test_teleportationfocus_examine():
 
 
 def test_teleportationfocus_prevent_pickup():
+    """Test prevent_pickup returns correct dialogue for TeleportationFocus."""
     focus = TeleportationFocus()
     result = focus.prevent_pickup()
     assert "Mira" in result

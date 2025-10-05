@@ -368,7 +368,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Quest Relevance: Clear debris and escort miners to safety (completes “Miners’ Rescue”).
 -   Exits:
     -   South to Stillness Vestibule
-    -   East to Echo Chambers
+    -   East to Echo Chambers (only after miners have been rescued)
     -   West to Tool Cache
 
 4. Echo Chambers
@@ -389,7 +389,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Quest Relevance: Finalize the Oath of Stillness to silence illusions (completes “Oath of Stillness”).
 -   Exits:
     -   North to Collapsed Galleries
-    -   East to Dragon’s Hall
+    -   East to Dragon’s Hall (only after “Oath of Stillness” is completed)
     -   West to Cavern Mouth
 
 6. Dragon’s Hall
@@ -399,7 +399,6 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Characters: The Ancient Dragon (voice of burdens)
 -   Quest Relevance: Main Quest phase completion for the Dragon’s Scale; also delivers the Dragon’s Memory for the storytelling quest.
 -   Exits:
-    -   North to Echo Chambers
     -   West to Stillness Vestibule
 
 ---
@@ -488,8 +487,8 @@ The connections reflect exits:
 
 ```
 [ToC] ---- [CG] ---- [EC]
-   |          |         |
-[CM]  ----  [SV] ---- [DH]
+   |         |
+[CM]  ---- [SV] ---- [DH]
 ```
 
 Legend:
@@ -506,9 +505,9 @@ The connections reflect exits:
 -   Cavern Mouth: N→ToC, E→SV
 -   Tool Cache: S→CM, E→CG
 -   Collapsed Galleries: S→SV, E→EC, W→ToC
--   Echo Chambers: S→DH, W→CG
+-   Echo Chambers: W→CG
 -   Stillness Vestibule: N→CG, E→DH, W→CM
--   Dragon’s Hall: N→EC, W→SV
+-   Dragon’s Hall: W→SV
 
 ### Ending Room — Entrance to Malakar’s Fortress
 
@@ -665,12 +664,12 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 20. Room: Cavern Mouth
 
 -   Commands and yields:
-    -   `search` → Describes the misted entry and reveals the situation within.
-    -   `talk to mine overseer` → Identifies Collapsed Galleries and marks Tool Cache on your mental map.
+    -   `talk to mine overseer` → Identifies Collapsed Galleries and marks Tool Cache on your mental map. Triggers the quest "Miners' Rescue". Receives a miner's key.
 
 21. Room: Tool Cache
 
 -   Commands and yields:
+    -   `use miner's key on crate` → Unlocks the crate.
     -   `open crate` → Opens supply crates holding structural materials.
     -   `take reinforced braces` → Adds Reinforced Braces to inventory.
     -   `take support straps` → Adds Support Straps to inventory.
@@ -681,7 +680,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 -   Commands and yields:
     -   `use reinforced braces with fallen rock` → Stabilizes the collapse.
     -   `use wedge blocks with fallen rock` → Frees the blocked passage.
-    -   `talk to miners` → Initiates escort; completes “Miners’ Rescue”; opens a stable inner route.
+    -   `talk to miners` → Initiates escort; completes “Miners’ Rescue”; opens a stable inner route to the Echo Chambers.
 
 23. Room: Echo Chambers
 
@@ -693,7 +692,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `cast bless` → Sanctifies the echo stones for the rite.
-    -   `use resonant chant rubbings` → Performs the Oath; silences illusions; completes “Oath of Stillness”; opens the path to Dragon’s Hall.
+    -   `use resonant chant rubbings on echo stones` → Performs the Oath; silences illusions; completes “Oath of Stillness”; opens the path to Dragon’s Hall.
 
 25. Room: Dragon’s Hall (Story Clue)
 

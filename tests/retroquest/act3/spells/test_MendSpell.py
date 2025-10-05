@@ -41,7 +41,7 @@ def test_cast_on_item_mirror_mount():
     gs = DummyGameState()
     mount = MirrorMount()
     called = {}
-    def mock_mend(self, game_state):
+    def mock_mend(_self, game_state):
         called['game_state'] = game_state
         return "[success]The mirror mount is now fully restored![/success]"
     mount.mend = types.MethodType(mock_mend, mount)

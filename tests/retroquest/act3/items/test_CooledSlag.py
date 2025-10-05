@@ -2,20 +2,28 @@
 from retroquest.act3.items.CooledSlag import CooledSlag
 
 class DummyGameState:
+    """Dummy game state for testing inventory interactions."""
+
     def __init__(self):
+        """Initialize with empty inventory."""
         self.inventory = []
 
 class DummyItem:
+    """Dummy item for use in tests."""
+
     def get_name(self):
+        """Return the name of the dummy item."""
         return "dummy item"
 
 def test_cooledslag_init():
+    """Test initialization and properties of CooledSlag item."""
     slag = CooledSlag()
     assert slag.get_name() == "cooled slag"
     assert "glassy" in slag.description or "slag" in slag.description.lower()
     assert slag.can_be_carried_flag is True
 
 def test_cooledslag_use_with_non_ashfern():
+    """Test using CooledSlag with a non-AshFern item returns appropriate message."""
     slag = CooledSlag()
     gs = DummyGameState()
     item = DummyItem()
@@ -25,6 +33,7 @@ def test_cooledslag_use_with_non_ashfern():
     assert "dummy item" in result
 
 def test_cooledslag_use_with_ashfern_delegates():
+    """Test using CooledSlag with AshFern crafts HeatWardMix and updates inventory."""
     from retroquest.act3.items.AshFern import AshFern
     slag = CooledSlag()
     gs = DummyGameState()

@@ -71,7 +71,19 @@ class Mira(Character):
         # draw the circle onward to Mount Ember.
         # If we're already at Lower Switchbacks, do not teleport; instead
         # provide lore about the second virtue and the phoenix legend.
-        if game_state.current_room.name == "Lower Switchbacks":
+        # Special dialogue for Cavern Mouth
+        if game_state.current_room.name == "Cavern Mouth":
+            return (
+                event_msg
+                + "\n"
+                + (
+                    "[dialogue]'The shadows here run deep, Elior. The miners' plight is a test of "
+                    "selflessness—lend your strength, and the path to the dragon will open. "
+                    "When you are ready, I can draw the next circle, but the caverns will "
+                    "not yield their heart until all are safe.'[/dialogue]"
+                )
+            )
+        elif game_state.current_room.name == "Lower Switchbacks":
             if not game_state.get_story_flag(
                 FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED
             ):
@@ -126,6 +138,7 @@ class Mira(Character):
                 "[dialogue]'When the air folds and the mist closes, breathe. It will "
                 "pass in a heartbeat.'[/dialogue]"
             )
+
         if destination_key in game_state.all_rooms:
             # Capture origin and destination rooms
             origin_room = game_state.current_room

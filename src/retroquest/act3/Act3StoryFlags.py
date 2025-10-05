@@ -32,3 +32,10 @@ FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED = "act3_breath_of_the_mountain_comple
 
 # Phoenix Feather acquisition (Mount Ember)
 FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED = "act3_phoenix_feather_acquired"
+
+# Caverns of Shadow / Miners' Rescue
+FLAG_ACT3_MINERS_RESCUE_STARTED = "act3_miners_rescue_started"
+FLAG_ACT3_MINERS_RESCUE_COMPLETED = "act3_miners_rescue_completed"
+# Oath of Stillness (Echo Chambers / Dragon's Hall)
+FLAG_ACT3_OATH_OF_STILLNESS_STARTED = "act3_oath_of_stillness_started"
+FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED = "act3_oath_of_stillness_completed"

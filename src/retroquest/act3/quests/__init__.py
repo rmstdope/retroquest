@@ -5,6 +5,7 @@ from .TidewardSigils import TidewardSigilsQuest
 from .LanternsOfTheDeeps import LanternsOfTheDeepsQuest
 from .MirrorsOfEmberlight import MirrorsOfEmberlightQuest
 from .BreathOfTheMountain import BreathOfTheMountain
+from .MinersRescue import MinersRescue
 
 __all__ = [
 	"TheThreeVirtuesQuest",
@@ -12,4 +13,5 @@ __all__ = [
 	"LanternsOfTheDeepsQuest",
 	"MirrorsOfEmberlightQuest",
 	"BreathOfTheMountain",
+	"MinersRescue",
 ]

@@ -1,12 +1,13 @@
 """Unit tests for EmberGallery room in Act 3."""
 from retroquest.act3.rooms.EmberGallery import EmberGallery
-from retroquest.act3.items.AshFern import AshFern
-from retroquest.act3.items.CooledSlag import CooledSlag
+
 
 class DummyGameState:
-    pass
+    """Minimal dummy game state for testing EmberGallery."""
+
 
 def test_embergallery_init():
+    """Test initialization of EmberGallery room."""
     room = EmberGallery()
     assert room.name == "Ember Gallery"
     assert "charcoal" in room.description or "iron" in room.description
@@ -14,7 +15,9 @@ def test_embergallery_init():
     assert room.items == []
     assert room.characters == []
 
+
 def test_embergallery_search_first_time_reveals_deposits():
+    """Test that searching EmberGallery reveals deposits only once and does not duplicate items."""
     room = EmberGallery()
     gs = DummyGameState()
     result = room.search(gs)

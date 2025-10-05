@@ -1,12 +1,12 @@
 """Unit tests for PhoenixGuardian character in Act 3."""
-import pytest
 from retroquest.act3.characters.PhoenixGuardian import PhoenixGuardian
 
 class DummyGameState:
     """Minimal dummy game state for flag testing."""
     def __init__(self, flag_value=False):
         self._flag = flag_value
-    def get_story_flag(self, flag):
+    def get_story_flag(self, _flag):
+        """Return the dummy story flag value for testing."""
         return self._flag
 
 def test_phoenix_guardian_initialization():
