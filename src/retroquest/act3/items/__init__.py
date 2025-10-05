@@ -31,6 +31,9 @@ from .SupportStraps import SupportStraps
 from .WedgeBlocks import WedgeBlocks
 from .ReinforcedBraces import ReinforcedBraces
 from .MinersKey import MinersKey
+from .FallenRock import FallenRock
+from .RunicWalls import RunicWalls
+from .ResonantChantRubbings import ResonantChantRubbings
 
 __all__ = [
     "AncientAmulet",
@@ -63,4 +66,7 @@ __all__ = [
     "WedgeBlocks",
     "ReinforcedBraces",
     "MinersKey",
+    "FallenRock",
+    "RunicWalls",
+    "ResonantChantRubbings",
 ]

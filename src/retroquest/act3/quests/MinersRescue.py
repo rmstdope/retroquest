@@ -1,5 +1,5 @@
 """Miners' Rescue quest for Caverns of Shadow (Act 3)."""
-from engine.GameState import GameState
+from ...engine.GameState import GameState
 from ...engine.Quest import Quest
 from ..Act3StoryFlags import (
     FLAG_ACT3_MINERS_RESCUE_STARTED,

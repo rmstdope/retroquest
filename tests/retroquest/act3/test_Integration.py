@@ -7,7 +7,8 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_MAIN_STARTED,
     FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
     FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
-    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED
+    FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+    FLAG_ACT3_MINERS_RESCUE_COMPLETED
 )
 from ..utils.utils import (
     check_character_in_room,
@@ -285,3 +286,48 @@ class TestAct3Integration:
         check_item_in_inventory(game.state, 'Reinforced Braces', True)
         check_item_in_inventory(game.state, 'Support Straps', True)
         check_item_in_inventory(game.state, 'Wedge Blocks', True)
+
+        # --- Step 22: Collapsed Galleries - Miners' Rescue sequence ---
+        execute_commands(game, ['east'])
+        check_current_room(game.state, 'Collapsed Galleries')
+        check_character_in_room(game.state.current_room, 'miners', True)
+        check_item_in_room(game.state.current_room, 'fallen rock', True)
+
+        # Initially, east exit should be blocked
+        execute_commands(game, ['east'])
+        check_current_room(game.state, 'Collapsed Galleries')  # Should still be here
+
+        # Use reinforced braces with fallen rock (stabilizes collapse)
+        stabilize_result = execute_commands(game, ['use reinforced braces with fallen rock'])
+        assert 'stabilizing the collapse' in stabilize_result.lower()
+
+        # Use wedge blocks with fallen rock (frees passage)
+        free_result = execute_commands(game, ['use wedge blocks with fallen rock'])
+        assert 'freeing the blocked passage' in free_result.lower()
+
+        # Talk to miners (completes rescue and opens east exit)
+        rescue_result = execute_commands(game, ['talk to miners'])
+        assert ('lead the miners' in rescue_result.lower() or
+                'newly opened passage' in rescue_result.lower())
+        check_story_flag(game.state, FLAG_ACT3_MINERS_RESCUE_COMPLETED, True)
+
+        # Now east exit should be available
+        execute_commands(game, ['east'])
+        check_current_room(game.state, 'Echo Chambers')
+
+        # --- Step 23: Echo Chambers - Resonant Chant sequence ---
+        check_item_in_room(game.state.current_room, 'runic walls', True)
+
+        # Examine runic walls (reveals chant instructions and adds rubbings to room)
+        examine_result = execute_commands(game, ['examine runic walls'])
+        assert 'Let stillness echo, let silence bind' in examine_result
+        assert 'chant to quiet the phantoms' in examine_result.lower()
+
+        # After examining, rubbings should be available in the room
+        check_item_in_room(game.state.current_room, 'Resonant Chant Rubbings', True)
+
+        # Take resonant chant rubbings (adds to inventory)
+        check_item_in_inventory(game.state, 'Resonant Chant Rubbings', False)
+        take_result = execute_commands(game, ['take resonant chant rubbings'])
+        assert 'resonant chant rubbings' in take_result.lower()
+        check_item_in_inventory(game.state, 'Resonant Chant Rubbings', True)
