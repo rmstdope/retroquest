@@ -6,6 +6,8 @@ from ..Act3StoryFlags import (
     FLAG_ACT3_MAIN_STARTED,
     FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
     FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+    FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
+    FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
 )
 
 
@@ -73,15 +75,24 @@ class Mira(Character):
         # provide lore about the second virtue and the phoenix legend.
         # Special dialogue for Cavern Mouth
         if game_state.current_room.name == "Cavern Mouth":
-            return (
-                event_msg
-                + "\n"
-                + (
-                    "[dialogue]'The shadows here run deep, Elior. The miners' plight is a test of "
-                    "selflessness—lend your strength, and the path to the dragon will open. "
-                    "When you are ready, I can draw the next circle, but the caverns will "
-                    "not yield their heart until all are safe.'[/dialogue]"
+            # Check if dragon's scale has been acquired
+            if not game_state.get_story_flag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED):
+                return (
+                    event_msg
+                    + "\n"
+                    + (
+                        "[dialogue]'The shadows here run deep, Elior. The miners' plight is a test of "
+                        "selflessness—lend your strength, and the path to the dragon will open. "
+                        "When you are ready, I can draw the next circle, but the caverns will "
+                        "not yield their heart until all are safe.'[/dialogue]"
+                    )
                 )
+            destination_key = "MirasHut"
+            flavor = (
+                "[dialogue]'The three relics are yours, Elior. The dragon's "
+                "wisdom runs deep—its scale will turn aside shadow and bind "
+                "your oath. Let us return to my hut where we can combine their "
+                "power into something that can save the king.'[/dialogue]"
             )
         elif game_state.current_room.name == "Lower Switchbacks":
             if not game_state.get_story_flag(
@@ -131,13 +142,69 @@ class Mira(Character):
                 "skies for falling cinders.'[/dialogue]"
             )
         elif game_state.current_room.name == "Mira's Hut":
-            destination_key = "TidalCauseway"
-            flavor = (
-                "[dialogue]'The hour is upon us, Elior. We will draw the first circle "
-                "at the Tidal Causeway, where moonlight marries the sea.'[/dialogue]\n"
-                "[dialogue]'When the air folds and the mist closes, breathe. It will "
-                "pass in a heartbeat.'[/dialogue]"
+            # Check if all three relics have been gathered
+            all_relics_gathered = (
+                game_state.get_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED) and
+                game_state.get_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED) and
+                game_state.get_story_flag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)
             )
+            
+            if all_relics_gathered and not game_state.get_story_flag(
+                FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED
+            ):
+                # Step 28: Perform the Warding Rite to create Lifelight Elixir
+                game_state.set_story_flag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, True)
+                
+                # Add Lifelight Elixir to the room for pickup
+                from ..items.LifelightElixir import LifelightElixir
+                lifelight_elixir = LifelightElixir()
+                game_state.current_room.add_item(lifelight_elixir)
+                
+                return (
+                    event_msg
+                    + "\n"
+                    + (
+                        "[dialogue]'The three relics resonate with ancient power, "
+                        "Elior. The Crystal of Light, the Phoenix Feather, and the "
+                        "Dragon's Scale—courage, wisdom, and selflessness made "
+                        "manifest.'[/dialogue]\n"
+                        "[event]Mira carefully arranges the three relics in a precise "
+                        "triangle. She begins an intricate ritual, weaving threads of "
+                        "starlight around each relic. The Crystal flares with brilliant "
+                        "light, the Feather ignites with phoenix fire, and the Scale "
+                        "hums with draconic power.[/event]\n"
+                        "[dialogue]'By light and flame and ancient oath, let these "
+                        "virtues merge into one vessel of protection!'[/dialogue]\n"
+                        "[event]The three relics dissolve into streams of pure essence "
+                        "that spiral together into a crystalline vial. The resulting "
+                        "elixir shimmers with liquid starlight—the Lifelight Elixir, "
+                        "born from the union of three virtues.[/event]\n"
+                        "[dialogue]'It is done. This elixir can counter Malakar's "
+                        "life-draining ritual and save King Alden. Take it, and we "
+                        "shall proceed to the fortress.'[/dialogue]"
+                    )
+                )
+            elif game_state.get_story_flag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED):
+                # Step 28 continued: Teleport to fortress
+                destination_key = "FortressEntrance"
+                flavor = (
+                    "[dialogue]'The Lifelight Elixir pulses with the power of three "
+                    "virtues. Now we make our final journey—to Malakar's fortress, "
+                    "where the kingdom's fate awaits.'[/dialogue]\n"
+                    "[dialogue]'Steel yourself, Elior. Beyond this circle lies the "
+                    "heart of shadow itself. But you carry the light that can pierce "
+                    "even Malakar's darkness.'[/dialogue]"
+                )
+            else:
+                # Initial teleport to start the quest
+                destination_key = "TidalCauseway"
+                flavor = (
+                    "[dialogue]'The hour is upon us, Elior. We will draw the first "
+                    "circle at the Tidal Causeway, where moonlight marries the "
+                    "sea.'[/dialogue]\n"
+                    "[dialogue]'When the air folds and the mist closes, breathe. It "
+                    "will pass in a heartbeat.'[/dialogue]"
+                )
 
         if destination_key in game_state.all_rooms:
             # Capture origin and destination rooms

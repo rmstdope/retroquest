@@ -3,9 +3,6 @@
 Use these constants to avoid magic strings when checking Act III progression.
 """
 
-# Overall Act completion flag (set when the final objective is met)
-FLAG_ACT3_COMPLETED = "act3_completed"
-
 # Sunken Ruins progression flags
 FLAG_ACT3_TIDEWARD_SIGILS_STARTED = "act3_tideward_sigils_started"
 FLAG_ACT3_WARDING_PILLARS_PURIFIED = "act3_warding_pillars_purified"
@@ -48,3 +45,9 @@ FLAG_ACT3_DRAGONS_SCALE_ACQUIRED = "act3_dragons_scale_acquired"
 
 # Dragon's Oath (oath spoken to the dragon)
 FLAG_ACT3_DRAGON_OATH_SPOKEN = "act3_dragon_oath_spoken"
+
+# Warding Rite and Lifelight Elixir creation
+FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED = "act3_lifelight_elixir_created"
+
+# Fortress approach
+FLAG_ACT3_FORTRESS_GATES_EXAMINED = "act3_fortress_gates_examined"

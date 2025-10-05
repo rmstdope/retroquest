@@ -1,9 +1,9 @@
 """Act 3 of RetroQuest: The Awakening."""
 
+from .Act3StoryFlags import FLAG_ACT3_FORTRESS_GATES_EXAMINED
 from retroquest.engine.Act import Act
 from retroquest.engine.GameState import GameState
 
-from .Act3StoryFlags import FLAG_ACT3_COMPLETED
 from .quests import (
     TheThreeVirtuesQuest,
     TidewardSigilsQuest,
@@ -111,7 +111,7 @@ class Act3(Act):
     def is_completed(self, game_state: GameState) -> bool:
         """Check if Act III is completed based on the completion flag."""
         # Act III completes when the fortress gate is opened and the endgame is triggered.
-        return game_state.get_story_flag(FLAG_ACT3_COMPLETED)
+        return game_state.get_story_flag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)
 
     def setup_gamestate(self, game_state: GameState) -> None:
         """Ensure essential Act III magic is available at start."""

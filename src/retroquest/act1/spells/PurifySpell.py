@@ -5,7 +5,6 @@ from ...engine.GameState import GameState
 from ...engine.Item import Item
 from ...engine.Character import Character
 from ..items.Well import Well
-from ...act3.items.WardingPillars import WardingPillars
 
 class PurifySpell(Spell):
     """Cleansing spell that removes impurities from items or environments."""
@@ -38,12 +37,6 @@ class PurifySpell(Spell):
             )
         if isinstance(target_item, Well):
             return target_item.purify(game_state)
-        if isinstance(target_item, WardingPillars):
-            # Delegate to the room hook to handle narrative/state
-            hook = getattr(game_state.current_room, 'cast_purify_on_pillars', None)
-            if hook:
-                return hook(game_state)
-
         name = target_item.get_name()
         return (
             f"[event]You cast [spell_name]{self.get_name()}[/spell_name] on "

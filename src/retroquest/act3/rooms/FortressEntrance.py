@@ -1,6 +1,8 @@
 """Fortress Entrance room for Act 3."""
 
 from ...engine.Room import Room
+from ...engine.GameState import GameState
+from ..items.FortressGates import FortressGates
 
 
 class FortressEntrance(Room):
@@ -12,9 +14,10 @@ class FortressEntrance(Room):
             description=(
                 "A blackstone bastion rises from a shattered ridge; gate sigils pulse "
                 "like a heartbeat behind iron lattices. The air tastes of cold metal and "
-                "distant thunder."
+                "distant thunder. The massive gates loom ahead, wreathed in shadow and "
+                "bound with eldritch wards."
             ),
-            items=[],
+            items=[FortressGates()],
             characters=[],
             exits={},
         )

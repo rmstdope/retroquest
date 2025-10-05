@@ -11,7 +11,9 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_MINERS_RESCUE_COMPLETED,
     FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
     FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
-    FLAG_ACT3_DRAGON_OATH_SPOKEN
+    FLAG_ACT3_DRAGON_OATH_SPOKEN,
+    FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
+    FLAG_ACT3_FORTRESS_GATES_EXAMINED,
 )
 from ..utils.utils import (
     check_character_in_room,
@@ -382,3 +384,38 @@ class TestAct3Integration:
         execute_commands(game, ['take dragon\'s scale'])
         check_item_in_inventory(game.state, "dragon's scale", True)
         check_item_in_room(game.state.current_room, "dragon's scale", False)
+
+        # --- Step 27: Dragon's Hall - Return to Mira's Hut ---
+        # Talk to Mira to teleport back to Mira's Hut
+        talk_result = execute_commands(game, ['w', 'w', 'talk to mira'])
+        assert 'three relics are yours' in talk_result.lower()
+        assert 'return to my hut' in talk_result.lower()
+        check_current_room(game.state, "Mira's Hut")
+
+        # --- Step 28: Mira's Hut - Warding Rite and Lifelight Elixir ---
+        # Talk to Mira to perform the Warding Rite
+        warding_result = execute_commands(game, ['talk to mira'])
+        assert 'three relics resonate' in warding_result.lower()
+        assert 'lifelight elixir' in warding_result.lower()
+        assert 'courage, wisdom, and selflessness' in warding_result.lower()
+        check_story_flag(game.state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, True)
+
+        # Lifelight Elixir should now be available in the room
+        check_item_in_room(game.state.current_room, "lifelight elixir", True)
+
+        # Take Lifelight Elixir
+        execute_commands(game, ['take lifelight elixir'])
+        check_item_in_inventory(game.state, "lifelight elixir", True)
+        check_item_in_room(game.state.current_room, "lifelight elixir", False)
+
+        # Talk to Mira again to teleport to fortress
+        fortress_result = execute_commands(game, ['talk to mira'])
+        assert 'final journey' in fortress_result.lower()
+        assert 'fortress' in fortress_result.lower()
+        check_current_room(game.state, "Entrance to Malakar's Fortress")
+
+        # --- Step 29: Entrance to Malakar's Fortress - Examine Gates ---
+        examine_result = execute_commands(game, ['examine gates'])
+        assert 'massive gates' in examine_result.lower()
+        assert 'act iii is complete' in examine_result.lower()
+        check_story_flag(game.state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, True)
