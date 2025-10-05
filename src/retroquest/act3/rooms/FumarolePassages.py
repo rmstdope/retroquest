@@ -80,13 +80,7 @@ class FumarolePassages(Room):
             )
 
         # Consume the mix from inventory if present
-        if mix in game_state.inventory:
-            game_state.inventory.remove(mix)
-        else:
-            try:
-                self.items.remove(mix)
-            except ValueError:
-                pass
+        game_state.inventory.remove(mix)
 
         # Set completion flag and open the path to Phoenix Crater
         game_state.set_story_flag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, True)

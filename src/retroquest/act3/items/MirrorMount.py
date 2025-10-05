@@ -6,7 +6,6 @@ via use_with, and supports a mend operation to finalize repairs.
 """
 from ...engine.Item import Item, GameState
 
-
 class MirrorMount(Item):
     """A simple mount for holding a brass mirror segment."""
 

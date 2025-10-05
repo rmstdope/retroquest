@@ -1,3 +1,30 @@
+def test_mira_in_lower_switchbacks_teleports_to_cavern_mouth():
+    """When at Lower Switchbacks and Phoenix Feather is acquired, Mira teleports to Cavern Mouth."""
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+    from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED, FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED
+    game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
+    # Place player at Lower Switchbacks
+    if 'LowerSwitchbacks' in game.state.all_rooms:
+        room_key = 'LowerSwitchbacks'
+    else:
+        room_key = 'Lower Switchbacks'
+    game.state.current_room = game.state.all_rooms[room_key]
+    # Set Phoenix Feather acquired
+    game.state.set_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, True)
+    m = Mira()
+    # Ensure Mira and Sir Cedric are in the room
+    game.state.current_room.characters.append(m)
+    from retroquest.act3.characters.SirCedric import SirCedric
+    sc = SirCedric()
+    game.state.current_room.characters.append(sc)
+    # Call talk_to and verify teleport to Cavern Mouth
+    out = m.talk_to(game.state)
+    assert 'You arrive at' in out
+    assert 'Cavern Mouth' in out or 'CavernMouth' in game.state.current_room.name
+    assert m in game.state.current_room.characters
+    assert any(c.get_name().lower() == 'sir cedric' for c in game.state.current_room.characters)
 """Smoke tests for Mira character."""
 
 from retroquest.act3.characters.Mira import Mira

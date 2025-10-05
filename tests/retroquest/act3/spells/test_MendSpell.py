@@ -10,21 +10,6 @@ class DummyItem:
         """Return the name of the dummy item."""
         return "dummy item"
 
-class DummyMirrorMount:
-    """Mock MirrorMount for MendSpell tests."""
-    def __init__(self):
-        """Initialize dummy MirrorMount with tracking fields."""
-        self.mended = False
-        self.called_with = None
-    def get_name(self):
-        """Return the name of the dummy mirror mount."""
-        return "mirror mount"
-    def mend(self, game_state):
-        """Simulate mending and record call arguments."""
-        self.mended = True
-        self.called_with = game_state
-        return "[success]The mirror mount is now fully restored![/success]"
-
 def test_mendspell_init():
     """Test MendSpell initialization and description."""
     spell = MendSpell()
@@ -50,10 +35,16 @@ def test_cast_on_item_non_mirror_mount():
 
 def test_cast_on_item_mirror_mount():
     """Test casting MendSpell on a MirrorMount triggers mend and returns success."""
+    import types
+    from retroquest.act3.items.MirrorMount import MirrorMount
     spell = MendSpell()
     gs = DummyGameState()
-    mount = DummyMirrorMount()
+    mount = MirrorMount()
+    called = {}
+    def mock_mend(self, game_state):
+        called['game_state'] = game_state
+        return "[success]The mirror mount is now fully restored![/success]"
+    mount.mend = types.MethodType(mock_mend, mount)
     result = spell.cast_on_item(gs, mount)
-    assert mount.mended is True
-    assert mount.called_with is gs
+    assert called['game_state'] is gs
     assert "fully restored" in result
