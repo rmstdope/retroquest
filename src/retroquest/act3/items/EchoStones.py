@@ -31,9 +31,20 @@ class EchoStones(Item):
             self._blessed = True
             _game_state.set_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED, True)
             return (
-                "[event]The echo stones shimmer with sacred light, their carved "
-                "channels now glowing faintly. They are ready to amplify the "
-                "resonant chant.[/event]"
+                "[event]As the blessing flows from your lips, the echo stones awaken "
+                "with a resonance that vibrates through your very bones. Tendrils of "
+                "silver-white radiance spiral up from their carved channels, each groove "
+                "igniting like liquid starlight flowing through ancient runes. The air "
+                "itself seems to crystallize around the stones, forming prismatic veils "
+                "that shimmer with otherworldly harmonics. A low, ethereal hum fills "
+                "the chamber as the stones synchronize their energies, their surfaces "
+                "now pulsing with a gentle, sacred luminescence that casts dancing "
+                "shadows on the obsidian pools. The mystical conduits glow with "
+                "patient anticipation, ready to weave spoken words into the very "
+                "fabric of reality. [/event]\n"
+                "[success]You sense that these hallowed stones now await "
+                "the ancient chant that will complete the ritual and banish the "
+                "restless spirits from this sacred place.[/success]"
             )
         elif spell_name == "bless" and self._blessed:
             return "[info]The echo stones are already blessed.[/info]"

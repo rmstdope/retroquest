@@ -369,7 +369,7 @@ class TestAct3Integration:
 
         # Cast bless on echo stones (sanctifies them for the rite)
         bless_result = execute_commands(game, ['cast bless on echo stones'])
-        assert 'sacred light' in bless_result.lower() and 'ready to amplify' in bless_result.lower()
+        assert 'sacred luminescence' in bless_result.lower() and 'ancient chant' in bless_result.lower()
 
         # Use resonant chant rubbings on echo stones (performs the Oath of Stillness)
         oath_result = execute_commands(game, ['use resonant chant rubbings with echo stones'])

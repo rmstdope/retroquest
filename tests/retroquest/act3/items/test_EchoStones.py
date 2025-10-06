@@ -55,7 +55,7 @@ def test_echo_stones_bless_spell():
 
     # First blessing should succeed and start the quest
     result = stones.receive_spell("bless", gs)
-    assert "sacred light" in result.lower() and "ready to amplify" in result.lower()
+    assert "sacred luminescence" in result.lower() and "ancient chant" in result.lower()
     assert stones.are_blessed()
     assert gs.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED)
 
