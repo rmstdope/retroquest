@@ -22,9 +22,10 @@ class AshFern(Item):
         """Delegate combining with cooled slag to craft a heat ward mix."""
         # Import locally to avoid circular imports at module import time
         from ..items.HeatWardMix import HeatWardMix  # type: ignore
+        from ..items.CooledSlag import CooledSlag
 
         # If combined with cooled slag, produce a HeatWardMix in inventory
-        if other_item.get_name().lower() == "cooled slag":
+        if isinstance(other_item, CooledSlag):
             # Remove components from inventory if present
             if self in game_state.inventory:
                 game_state.inventory.remove(self)
