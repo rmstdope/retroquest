@@ -14,5 +14,6 @@ class QuietCharm(Item):
                 "that seem to dampen sound. It feels warm to the touch and "
                 "emanates a sense of tranquility."
             ),
-            can_be_carried=True
+            can_be_carried=True,
+            short_name="charm",
         )

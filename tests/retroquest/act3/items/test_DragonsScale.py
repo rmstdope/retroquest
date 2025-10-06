@@ -32,10 +32,10 @@ def test_dragons_scale_pickup_with_all_prerequisites():
     """Test successful pickup with all prerequisites."""
     scale = DragonsScale()
     gs = DummyGameState()
-    
+
     # Add scale to inventory to simulate pickup attempt
     gs.inventory.append(scale)
-    
+
     # Try to pick up with all prerequisites
     result = scale.picked_up(gs)
     assert "settles into your hands" in result.lower()

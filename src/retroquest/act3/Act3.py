@@ -1,8 +1,8 @@
 """Act 3 of RetroQuest: The Awakening."""
 
-from .Act3StoryFlags import FLAG_ACT3_FORTRESS_GATES_EXAMINED
 from retroquest.engine.Act import Act
 from retroquest.engine.GameState import GameState
+from .Act3StoryFlags import FLAG_ACT3_FORTRESS_GATES_EXAMINED
 
 from .quests import (
     TheThreeVirtuesQuest,
@@ -10,6 +10,7 @@ from .quests import (
     LanternsOfTheDeepsQuest,
     MirrorsOfEmberlightQuest,
     BreathOfTheMountain,
+    MinersRescue,
 )
 from .rooms import (
     CavernMouth,
@@ -82,6 +83,8 @@ class Act3(Act):
             # Mount Ember Side Quests
             MirrorsOfEmberlightQuest(),
             BreathOfTheMountain(),
+            # Caverns of Shadow Side Quests
+            MinersRescue(),
         ]
 
         music_file = "Orchestronika - Feel The Storm (freetouse.com).mp3"

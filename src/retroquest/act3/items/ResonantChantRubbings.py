@@ -16,7 +16,8 @@ class ResonantChantRubbings(Item):
                 "Carefully made rubbings of ancient runes containing the "
                 "Resonant Chant: 'Let stillness echo, let silence bind.'"
             ),
-            can_be_carried=True
+            can_be_carried=True,
+            short_name="rubbings"
         )
 
     def use_with(self, game_state: GameState, other_item: Item) -> str:

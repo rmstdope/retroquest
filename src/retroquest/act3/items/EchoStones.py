@@ -14,7 +14,8 @@ class EchoStones(Item):
                 "Three weathered stones arranged in a triangle, each one carved "
                 "with spiraling channels that catch and hold whispered words."
             ),
-            can_be_carried=False
+            can_be_carried=False,
+            short_name="stones",
         )
         self._blessed = False
 

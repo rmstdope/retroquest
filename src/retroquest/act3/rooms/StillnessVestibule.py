@@ -11,7 +11,7 @@ from ..Act3StoryFlags import FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED
 
 class StillnessVestibule(Room):
     """A quiet chamber where hush falls over dark water pools."""
-    
+
     def __init__(self) -> None:
         """Initialize Stillness Vestibule with description and exits."""
         super().__init__(
@@ -36,9 +36,7 @@ class StillnessVestibule(Room):
     def get_exits(self, game_state: GameState) -> dict[str, str]:
         """Return exits, opening path to Dragon's Hall after Oath completion."""
         exits = self.exits.copy()
-        
         # Only allow east to Dragon's Hall after Oath of Stillness is completed
         if game_state.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED):
             exits["east"] = "DragonsHall"
-            
         return exits

@@ -11,18 +11,14 @@ class CavernMouth(Room):
         super().__init__(
             name="Cavern Mouth",
             description=(
-                "A broad entry arch curtained by cold mist; lantern light dims at "
-                "the threshold."
+                "A broad entry arch yawns before you, curtained by tendrils of cold mist "
+                "that coil and writhe like spectral fingers. Lantern light wavers and dims "
+                "at the threshold, as if the darkness within hungers to devour illumination. "
+                "Ancient symbols are carved into the weathered stone archway, their meanings "
+                "lost to time but somehow still resonating with a faint, otherworldly power. "
+                "The air carries whispers of forgotten secrets and the weight of ages past."
             ),
             items=[],
             characters=[MineOverseer()],
             exits={"north": "ToolCache", "east": "StillnessVestibule"},
-        )
-
-    def search(self, _game_state, _target: str = None) -> str:
-        """Describe the misted entry and situation within."""
-        return (
-            "You peer into the mist. Voices echo from deeper in the tunnels—miners are trapped "
-            "beyond a collapse, and the overseer stands ready to help. The Tool Cache lies north, "
-            "and the Collapsed Galleries are blocked by fallen rock."
         )

@@ -27,13 +27,13 @@ def test_stillness_vestibule_init():
     assert room.name == "Stillness Vestibule"
     assert "hush falls" in room.description
     assert "echo stones" in room.description
-    
+
     # Check items
     item_names = [item.get_name() for item in room.items]
     assert "echo stones" in item_names
     assert "stillwater phial" in item_names
     assert "quiet charm" in item_names
-    
+
     # Check character
     assert any(isinstance(char, SilenceKeeper) for char in room.characters)
 
@@ -42,7 +42,7 @@ def test_stillness_vestibule_exits_blocked():
     """Test that Dragon's Hall exit is blocked initially."""
     room = StillnessVestibule()
     gs = DummyGameState()
-    
+
     exits = room.get_exits(gs)
     assert "north" in exits  # CollapsedGalleries
     assert "west" in exits   # CavernMouth
@@ -54,7 +54,7 @@ def test_stillness_vestibule_exits_open():
     room = StillnessVestibule()
     gs = DummyGameState()
     gs.set_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, True)
-    
+
     exits = room.get_exits(gs)
     assert "north" in exits  # CollapsedGalleries
     assert "west" in exits   # CavernMouth
@@ -65,13 +65,13 @@ def test_stillness_vestibule_exits_open():
 def test_echo_stones_in_room():
     """Test that echo stones are properly configured in the room."""
     room = StillnessVestibule()
-    
+
     # Find echo stones
     echo_stones = None
     for item in room.items:
         if isinstance(item, EchoStones):
             echo_stones = item
             break
-    
+
     assert echo_stones is not None
     assert not echo_stones.are_blessed()  # Should start unblessed

@@ -275,14 +275,32 @@ class TestAct3Integration:
         # Should have started Miners' Rescue quest (side quest activation is implicit)
         # (If a helper for quest exists, could check for 'Miners' Rescue' in active quests)
 
-        # --- Step 21: Tool Cache: unlock and open crate, take supply items ---
+        # --- Step 21: Tool Cache: search to find crate, unlock and open crate, take supplies ---
         execute_commands(game, ['north'])
         check_current_room(game.state, 'Tool Cache')
+
+        # Initially, the supply crate should not be visible in the room
+        check_item_in_room(game.state.current_room, 'supply crate', False)
+
+        # Search the room to discover the hidden supply crate
+        search_result = execute_commands(game, ['search'])
+        assert 'discover a heavy supply crate' in search_result.lower()
+        assert 'hidden behind stacked timbers' in search_result.lower()
+        assert 'rescue supplies' in search_result.lower()
+
+        # After searching, the supply crate should now be visible in the room
+        check_item_in_room(game.state.current_room, 'supply crate', True)
+
+        # Search again should give a different message indicating it's already found
+        search_again = execute_commands(game, ['search'])
+        assert 'already found' in search_again.lower()
+
         # Use key on crate
-        unlock_result = execute_commands(game, ["use miner's key with crate"])
+        unlock_result = execute_commands(game, ["use miner's key with supply crate"])
         assert 'unlock' in unlock_result.lower() or 'padlock' in unlock_result.lower()
+
         # Open crate
-        open_result = execute_commands(game, ['open crate'])
+        open_result = execute_commands(game, ['open supply crate'])
         assert 'open' in open_result.lower() and 'braces' in open_result.lower()
         # Take all three supply items
         execute_commands(game, ['take reinforced braces'])
@@ -295,7 +313,8 @@ class TestAct3Integration:
         # --- Step 22: Collapsed Galleries - Miners' Rescue sequence ---
         execute_commands(game, ['east'])
         check_current_room(game.state, 'Collapsed Galleries')
-        check_character_in_room(game.state.current_room, 'miners', True)
+        # Miners should not be present initially - they appear after passage is freed
+        check_character_in_room(game.state.current_room, 'miners', False)
         check_item_in_room(game.state.current_room, 'fallen rock', True)
 
         # Initially, east exit should be blocked
@@ -306,14 +325,19 @@ class TestAct3Integration:
         stabilize_result = execute_commands(game, ['use reinforced braces with fallen rock'])
         assert 'stabilizing the collapse' in stabilize_result.lower()
 
-        # Use wedge blocks with fallen rock (frees passage)
+        # Use wedge blocks with fallen rock (frees passage and adds miners to room)
         free_result = execute_commands(game, ['use wedge blocks with fallen rock'])
         assert 'freeing the blocked passage' in free_result.lower()
+        assert 'trapped miners emerging' in free_result.lower()
+
+        # After freeing passage, miners should now be present and fallen rock should be gone
+        check_character_in_room(game.state.current_room, 'miners', True)
+        check_item_in_room(game.state.current_room, 'fallen rock', False)
 
         # Talk to miners (completes rescue and opens east exit)
         rescue_result = execute_commands(game, ['talk to miners'])
-        assert ('lead the miners' in rescue_result.lower() or
-                'newly opened passage' in rescue_result.lower())
+        assert ('miner steps forward' in rescue_result.lower() and
+                'thank the gods' in rescue_result.lower())
         check_story_flag(game.state, FLAG_ACT3_MINERS_RESCUE_COMPLETED, True)
 
         # Now east exit should be available
@@ -350,7 +374,7 @@ class TestAct3Integration:
         # Use resonant chant rubbings on echo stones (performs the Oath of Stillness)
         oath_result = execute_commands(game, ['use resonant chant rubbings with echo stones'])
         assert 'recite the resonant chant' in oath_result.lower()
-        assert 'harmonious silence' in oath_result.lower() 
+        assert 'harmonious silence' in oath_result.lower()
         assert "dragon's hall now lies open" in oath_result.lower()
         check_story_flag(game.state, FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, True)
 
@@ -376,10 +400,10 @@ class TestAct3Integration:
         assert 'oath' in oath_result.lower()
         assert 'scale' in oath_result.lower()
         check_story_flag(game.state, FLAG_ACT3_DRAGON_OATH_SPOKEN, True)
-        
+
         # Dragon's scale should now be present in the room
         check_item_in_room(game.state.current_room, "dragon's scale", True)
-        
+
         # Take dragon's scale
         execute_commands(game, ['take dragon\'s scale'])
         check_item_in_inventory(game.state, "dragon's scale", True)

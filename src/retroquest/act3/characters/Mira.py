@@ -81,8 +81,9 @@ class Mira(Character):
                     event_msg
                     + "\n"
                     + (
-                        "[dialogue]'The shadows here run deep, Elior. The miners' plight is a test of "
-                        "selflessness—lend your strength, and the path to the dragon will open. "
+                        "[dialogue]'The shadows here run deep, Elior. The miners' plight is a "
+                        "test of selflessness—lend your strength, and the path to the dragon "
+                        "will open. "
                         "When you are ready, I can draw the next circle, but the caverns will "
                         "not yield their heart until all are safe.'[/dialogue]"
                     )
@@ -148,18 +149,15 @@ class Mira(Character):
                 game_state.get_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED) and
                 game_state.get_story_flag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)
             )
-            
             if all_relics_gathered and not game_state.get_story_flag(
                 FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED
             ):
                 # Step 28: Perform the Warding Rite to create Lifelight Elixir
                 game_state.set_story_flag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, True)
-                
                 # Add Lifelight Elixir to the room for pickup
                 from ..items.LifelightElixir import LifelightElixir
                 lifelight_elixir = LifelightElixir()
                 game_state.current_room.add_item(lifelight_elixir)
-                
                 return (
                     event_msg
                     + "\n"

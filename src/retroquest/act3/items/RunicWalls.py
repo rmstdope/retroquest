@@ -14,7 +14,8 @@ class RunicWalls(Item):
                 "Ancient walls carved with mystical runes that describe a chant "
                 "to quiet phantoms and wandering spirits."
             ),
-            can_be_carried=False
+            can_be_carried=False,
+            short_name="walls",
         )
         self._rubbings_discovered = False
 

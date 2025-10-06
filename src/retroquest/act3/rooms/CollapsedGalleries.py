@@ -2,7 +2,6 @@
 from ...engine.Room import Room
 from ...engine.GameState import GameState
 from ..items.FallenRock import FallenRock
-from ..characters.Miners import Miners
 from ..Act3StoryFlags import FLAG_ACT3_MINERS_RESCUE_COMPLETED
 
 
@@ -14,11 +13,16 @@ class CollapsedGalleries(Room):
         super().__init__(
             name="Collapsed Galleries",
             description=(
-                "Passages pinched by fallen rock; dust motes hang in still air. "
-                "Trapped miners wait anxiously behind the collapse."
+                "Ancient passages lie strangled by fallen stone, their throats choked with "
+                "the weight of ages. Dust motes drift like restless spirits in the stagnant "
+                "air, and shadows pool in the broken archways where starlight once danced. "
+                "The walls bear scars of some long-forgotten catastrophe, and you sense the "
+                "presence of those who await deliverance from this tomb of earth and shadow. "
+                "A palpable tension hangs in the darkness, as if the very stones remember "
+                "their violent collapse."
             ),
             items=[FallenRock()],
-            characters=[Miners()],
+            characters=[],
             exits={
                 "south": "StillnessVestibule",
                 "east": "EchoChambers",

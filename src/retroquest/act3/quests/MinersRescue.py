@@ -12,7 +12,7 @@ class MinersRescue(Quest):
         super().__init__(
             name="Miners' Rescue",
             description=(
-                "Collapsed Galleries have trapped miners behind tons of stone. "
+                "Collapsed Galleries have trapped people behind tons of stone. "
                 "You must find a way to free them."
             ),
             completion=(
@@ -27,8 +27,6 @@ class MinersRescue(Quest):
     def check_trigger(self, game_state: GameState) -> bool:
         """Trigger when the overseer starts the rescue (flag set)."""
         return game_state.get_story_flag(FLAG_ACT3_MINERS_RESCUE_STARTED)
-
-
 
     def check_completion(self, game_state: GameState) -> bool:
         """Complete when collapse is stabilized and miners have been escorted."""

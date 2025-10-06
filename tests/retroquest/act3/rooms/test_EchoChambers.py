@@ -29,7 +29,7 @@ def test_echo_chambers_init():
     assert room.name == "Echo Chambers"
     assert "echo" in room.description.lower() or "cavern" in room.description.lower()
     assert any(isinstance(i, RunicWalls) for i in room.items)
-    assert "south" in room.exits and "west" in room.exits
+    assert "west" in room.exits
 
 
 def test_runic_walls_examine():

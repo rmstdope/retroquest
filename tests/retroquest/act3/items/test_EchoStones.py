@@ -5,23 +5,35 @@ from retroquest.act3.Act3StoryFlags import FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED
 
 
 class DummyGameState:
-    """Dummy game state for testing."""
+    """Dummy game state for testing EchoStones functionality."""
 
     def __init__(self):
-        """Initialize with empty story flags."""
+        """Initialize with empty story flags dictionary."""
         self.story_flags = {}
 
     def get_story_flag(self, flag_name):
-        """Get a story flag value."""
+        """Get a story flag value.
+        
+        Args:
+            flag_name: Name of the story flag to retrieve
+            
+        Returns:
+            The flag value if set, False otherwise
+        """
         return self.story_flags.get(flag_name, False)
 
     def set_story_flag(self, flag_name, value):
-        """Set a story flag value."""
+        """Set a story flag value.
+        
+        Args:
+            flag_name: Name of the story flag to set
+            value: Value to set for the flag
+        """
         self.story_flags[flag_name] = value
 
 
 def test_echo_stones_init():
-    """Test initialization of EchoStones."""
+    """Test initialization and basic properties of EchoStones."""
     stones = EchoStones()
     assert stones.get_name() == "echo stones"
     assert "carved" in stones.description and "channels" in stones.description
@@ -30,35 +42,35 @@ def test_echo_stones_init():
 
 
 def test_echo_stones_bless_spell():
-    """Test blessing the echo stones."""
+    """Test blessing the echo stones with the bless spell."""
     stones = EchoStones()
     gs = DummyGameState()
-    
+
     # First blessing should succeed
     result = stones.receive_spell("bless", gs)
     assert "sacred light" in result.lower() and "ready to amplify" in result.lower()
     assert stones.are_blessed()
-    
+
     # Second blessing should indicate already blessed
     result = stones.receive_spell("bless", gs)
     assert "already blessed" in result.lower()
 
 
 def test_echo_stones_wrong_spell():
-    """Test casting wrong spell on echo stones."""
+    """Test casting an incorrect spell on echo stones."""
     stones = EchoStones()
     gs = DummyGameState()
-    
+
     result = stones.receive_spell("light", gs)
     assert "no effect" in result.lower()
 
 
 def test_resonant_chant_rubbings_use_with_unblessed_stones():
-    """Test using chant rubbings with unblessed stones."""
+    """Test using resonant chant rubbings with unblessed echo stones fails."""
     stones = EchoStones()
     rubbings = ResonantChantRubbings()
     gs = DummyGameState()
-    
+
     result = rubbings.use_with(gs, stones)
     assert "cold and unresponsive" in result.lower()
     assert "sanctified" in result.lower()
@@ -66,14 +78,14 @@ def test_resonant_chant_rubbings_use_with_unblessed_stones():
 
 
 def test_resonant_chant_rubbings_use_with_blessed_stones():
-    """Test using chant rubbings with blessed stones."""
+    """Test using resonant chant rubbings with blessed echo stones completes oath."""
     stones = EchoStones()
     rubbings = ResonantChantRubbings()
     gs = DummyGameState()
-    
+
     # First bless the stones
     stones.receive_spell("bless", gs)
-    
+
     # Then use chant rubbings with stones
     result = rubbings.use_with(gs, stones)
     assert "recite the resonant chant" in result.lower()
@@ -83,15 +95,17 @@ def test_resonant_chant_rubbings_use_with_blessed_stones():
 
 
 def test_resonant_chant_rubbings_use_with_wrong_item():
-    """Test using chant rubbings with wrong item."""
+    """Test using resonant chant rubbings with an incompatible item."""
     rubbings = ResonantChantRubbings()
     gs = DummyGameState()
-    
+
     # Create a dummy item
     class DummyItem:
+        """Dummy item for testing wrong item usage."""
         def get_name(self):
+            """Return the dummy item name."""
             return "random item"
-    
+
     dummy = DummyItem()
     result = rubbings.use_with(gs, dummy)
     assert "no effect" in result.lower()

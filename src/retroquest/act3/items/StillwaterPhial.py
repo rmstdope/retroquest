@@ -13,5 +13,6 @@ class StillwaterPhial(Item):
                 "A crystal vial containing water so still it seems solid. The "
                 "liquid captures and holds reflections that shouldn't be there."
             ),
-            can_be_carried=True
+            can_be_carried=True,
+            short_name="phial",
         )

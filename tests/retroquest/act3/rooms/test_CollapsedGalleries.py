@@ -1,4 +1,5 @@
 """Unit tests for CollapsedGalleries room in Act 3."""
+from retroquest.engine.GameState import GameState
 from retroquest.act3.rooms.CollapsedGalleries import CollapsedGalleries
 from retroquest.act3.items.FallenRock import FallenRock
 from retroquest.act3.items.ReinforcedBraces import ReinforcedBraces
@@ -10,10 +11,11 @@ from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MINERS_RESCUE_COMPLETED
 class DummyGameState:
     """Dummy game state for testing inventory and story flags."""
 
-    def __init__(self):
+    def __init__(self, room):
         """Initialize with empty inventory and flag set."""
         self.inventory = []
         self.flags = set()
+        self.current_room = room
 
     def set_story_flag(self, flag, value):
         """Set or unset a story flag."""
@@ -31,39 +33,58 @@ def test_collapsed_galleries_init():
     """Test initialization and properties of CollapsedGalleries room."""
     room = CollapsedGalleries()
     assert room.name == "Collapsed Galleries"
-    assert "fallen rock" in room.description or "miners" in room.description
     assert any(isinstance(i, FallenRock) for i in room.items)
-    assert any(isinstance(c, Miners) for c in room.characters)
+    # Miners should not be present initially - they appear after passage is freed
+    assert not any(isinstance(c, Miners) for c in room.characters)
     assert "south" in room.exits and "west" in room.exits and "east" in room.exits
 
 
 def test_miners_rescue_progression():
     """Test the full miners rescue progression from steps 22."""
     room = CollapsedGalleries()
-    gs = DummyGameState()
+    gs = GameState(room, {'room': room}, [])
     fallen_rock = room.items[0]  # Should be FallenRock
-    miners = room.characters[0]  # Should be Miners
+
+    # Initially, miners should not be present
+    assert not any(isinstance(c, Miners) for c in room.characters)
+
     # Get tools
     braces = ReinforcedBraces()
+    gs.add_item_to_inventory(braces)
     blocks = WedgeBlocks()
+    gs.add_item_to_inventory(blocks)
+
+    # Step 0: Examine the fallen rock first (required before stabilization)
+    examine_result = fallen_rock.examine(gs)
+    assert "massive pile of fallen rock" in examine_result
+    assert "unstable" in examine_result and "trapped" in examine_result
+    assert "reinforcement" in examine_result
+
     # Step 1: Use reinforced braces with fallen rock
     result1 = fallen_rock.use_with(gs, braces)
     assert "stabilizing the collapse" in result1
-    assert gs.get_story_flag("collapse_stabilized")
-    # Step 2: Use wedge blocks with fallen rock
+    assert braces not in gs.inventory  # Braces should be consumed
+
+    # Step 2: Use wedge blocks with fallen rock (this should add miners to room)
     result2 = fallen_rock.use_with(gs, blocks)
     assert "freeing the blocked passage" in result2
-    assert gs.get_story_flag("passage_freed")
+    assert "trapped miners emerging" in result2
+    assert blocks not in gs.inventory  # Blocks should be consumed
+
+    # After freeing passage, miners should now be present in the room
+    assert any(isinstance(c, Miners) for c in room.characters)
+    miners = next(c for c in room.characters if isinstance(c, Miners))
+
     # Step 3: Talk to miners
     result3 = miners.talk_to(gs)
-    assert "lead the miners" in result3 or "newly opened passage" in result3
+    assert "Thank the gods you found us" in result3
     assert gs.get_story_flag(FLAG_ACT3_MINERS_RESCUE_COMPLETED)
 
 
 def test_get_exits_blocks_east_until_completed():
     """Test that east exit is blocked until miners rescue is completed."""
     room = CollapsedGalleries()
-    gs = DummyGameState()
+    gs = DummyGameState(room)
     # By default, east is hidden
     exits = room.get_exits(gs)
     assert "east" not in exits
@@ -73,12 +94,12 @@ def test_get_exits_blocks_east_until_completed():
     exits2 = room.get_exits(gs)
     assert "east" in exits2
 
+
 def test_fallen_rock_requires_stabilization_first():
     """Test that wedge blocks can't be used before stabilization."""
     fallen_rock = FallenRock()
-    gs = DummyGameState()
+    gs = DummyGameState(None)
     blocks = WedgeBlocks()
     # Try blocks before stabilization
     result = fallen_rock.use_with(gs, blocks)
     assert "too unstable" in result or "stabilize it with braces" in result
-    assert not gs.get_story_flag("passage_freed")

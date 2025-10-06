@@ -1,7 +1,6 @@
 """Fortress Entrance room for Act 3."""
 
 from ...engine.Room import Room
-from ...engine.GameState import GameState
 from ..items.FortressGates import FortressGates
 
 

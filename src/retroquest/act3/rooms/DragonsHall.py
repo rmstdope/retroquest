@@ -7,7 +7,7 @@ from ..characters.AncientDragon import AncientDragon
 
 class DragonsHall(Room):
     """A vast chamber lit by slow-breathing embers beneath scaled coils."""
-    
+
     def __init__(self) -> None:
         """Initialize Dragon's Hall with description and exits."""
         super().__init__(
@@ -23,7 +23,6 @@ class DragonsHall(Room):
             ],
             characters=[AncientDragon()],
             exits={
-                "north": "EchoChambers",
                 "west": "StillnessVestibule"
             },
         )

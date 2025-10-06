@@ -16,7 +16,7 @@ class DummyRoom:
     def __init__(self, name: str) -> None:
         self.name = name
         self.items = []
-        
+
     def add_item(self, item) -> None:
         """Add item to room."""
         self.items.append(item)
@@ -39,7 +39,6 @@ def test_talk_to_dragon_first_time():
     """Test talking to dragon for the first time gives memory."""
     dragon = AncientDragon()
     game_state = _make_gs()
-    
     # First talk should give memory
     result = dragon.talk_to(game_state)
     assert 'Lyra and Theron' in result
@@ -51,10 +50,10 @@ def test_talk_to_dragon_second_time():
     """Test talking to dragon second time gives shorter response."""
     dragon = AncientDragon()
     game_state = _make_gs()
-    
+
     # Set flag as if already talked
     game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
-    
+
     result = dragon.talk_to(game_state)
     assert 'memory has been shared' in result.lower()
     assert 'scale awaits' in result.lower()
@@ -66,20 +65,20 @@ def test_say_oath_to_dragon():
     game_state = _make_gs()
     room = DragonsHall()
     game_state.current_room = room
-    
+
     # First need to talk to get memory
     dragon.talk_to(game_state)
-    
+
     # Initially no dragon's scale in room
     assert not any(isinstance(item, DragonsScale) for item in room.items)
-    
+
     # Say oath to dragon
     result = dragon.say_to("oath", game_state)
-    
+
     assert 'oath' in result.lower()
     assert 'scale is yours to bear' in result.lower()
     assert game_state.get_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN)
-    
+
     # Dragon's scale should now be in room
     assert any(isinstance(item, DragonsScale) for item in room.items)
 
@@ -90,11 +89,11 @@ def test_say_oath_twice():
     game_state = _make_gs()
     room = DragonsHall()
     game_state.current_room = room
-    
+
     # Set flags as if already done
     game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
     game_state.set_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN, True)
-    
+
     result = dragon.say_to("oath", game_state)
     assert 'oath has been given and accepted' in result.lower()
     assert 'scale is yours to claim' in result.lower()
@@ -106,7 +105,7 @@ def test_say_wrong_word_to_dragon():
     game_state = _make_gs()
     room = DragonsHall()
     game_state.current_room = room
-    
+
     result = dragon.say_to("hello", game_state)
     assert 'does not respond to those words' in result.lower()
     assert 'meaningful pledge' in result.lower()
