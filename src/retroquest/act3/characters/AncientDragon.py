@@ -1,7 +1,7 @@
 """AncientDragon character for the Dragon's Hall in Act 3."""
 from ...engine.Character import Character
 from ...engine.GameState import GameState
-from ..Act3StoryFlags import FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, FLAG_ACT3_DRAGON_OATH_SPOKEN
+from ..Act3StoryFlags import FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, FLAG_ACT3_DRAGON_OATH_SPOKEN, FLAG_ACT3_OATH_SCROLLS_EXAMINED
 
 
 class AncientDragon(Character):
@@ -39,12 +39,19 @@ class AncientDragon(Character):
             return (
                 "[dialogue]'The memory has been shared,' the dragon rumbles softly. "
                 "'Your path leads forward now, not back. The scale awaits when you "
-                "are ready to bear its burden.'[/dialogue]"
+                "are ready to prove your selflessness.'[/dialogue]"
             )
 
     def say_to(self, words: str, game_state: GameState) -> str:
         """Handle saying something to the dragon, particularly oaths."""
         if words.lower() == "oath":
+            if game_state.get_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED) is not True:
+                return (
+                    "The dragon's golden eyes narrow slightly. [dialogue]'You "
+                    "must first understand the weight of the oath you wish to "
+                    "speak. You can not just speak any oath. You must speak one "
+                    "that proves your selflessness.'[/dialogue]"
+                )
             # Check if the oath has already been spoken
             if game_state.get_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN):
                 return (
@@ -60,10 +67,10 @@ class AncientDragon(Character):
                 game_state.current_room.add_item(dragons_scale)
                 return (
                     "[event]You speak your oath to the ancient dragon, pledging "
-                    "your commitment to selflessness and the protection of others. "
-                    "The dragon's golden eyes regard you with ancient wisdom. "
+                    "your commitment to selflessness and the protection of others. [/event]"
+                    "[success]The dragon's golden eyes regard you with ancient wisdom. "
                     "'Your words ring true, young one. The scale is yours to bear. "
-                    "May you carry its burden with honor.'[/event]"
+                    "May you carry its burden with honor.'[/success]"
                 )
         else:
             return (

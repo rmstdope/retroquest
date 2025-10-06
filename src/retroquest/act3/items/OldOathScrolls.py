@@ -1,5 +1,7 @@
 """OldOathScrolls item for the Dragon's Hall in Act 3."""
 from ...engine.Item import Item
+from ...engine.GameState import GameState
+from ..Act3StoryFlags import FLAG_ACT3_OATH_SCROLLS_EXAMINED
 
 
 class OldOathScrolls(Item):
@@ -26,3 +28,8 @@ class OldOathScrolls(Item):
             ),
             can_be_carried=True
         )
+
+    def examine(self, game_state: GameState) -> str:
+        """Examine the oath scrolls and set the examined flag."""
+        game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
+        return super().examine(game_state)

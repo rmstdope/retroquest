@@ -15,7 +15,6 @@ def test_dragons_hall_init():
     # Check items - dragon's scale should NOT be present initially
     item_names = [item.get_name() for item in room.items]
     assert "dragon's scale" not in item_names
-    assert "old oath scrolls" in item_names
 
     # Check character
     assert any(isinstance(char, AncientDragon) for char in room.characters)

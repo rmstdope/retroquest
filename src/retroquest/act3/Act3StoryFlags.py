@@ -46,6 +46,9 @@ FLAG_ACT3_DRAGONS_SCALE_ACQUIRED = "act3_dragons_scale_acquired"
 # Dragon's Oath (oath spoken to the dragon)
 FLAG_ACT3_DRAGON_OATH_SPOKEN = "act3_dragon_oath_spoken"
 
+# Old Oath Scrolls examination
+FLAG_ACT3_OATH_SCROLLS_EXAMINED = "act3_oath_scrolls_examined"
+
 # Warding Rite and Lifelight Elixir creation
 FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED = "act3_lifelight_elixir_created"
 

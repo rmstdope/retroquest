@@ -1,6 +1,8 @@
 """EchoChambers room for the resonant chant sequence in Act 3."""
 from ...engine.Room import Room
+from ...engine.GameState import GameState
 from ..items.RunicWalls import RunicWalls
+from ..items.OldOathScrolls import OldOathScrolls
 
 
 class EchoChambers(Room):
@@ -25,3 +27,23 @@ class EchoChambers(Room):
                 "west": "CollapsedGalleries"
             },
         )
+        self._scrolls_discovered = False
+
+    def search(self, _game_state: GameState, _target: str = None) -> str:
+        """Search the Echo Chambers to discover hidden Old Oath Scrolls."""
+        if not self._scrolls_discovered:
+            self._scrolls_discovered = True
+            old_oath_scrolls = OldOathScrolls()
+            self.add_item(old_oath_scrolls)
+            return (
+                "Your careful search of the shadowed alcoves reveals a bundle of "
+                "ancient scrolls tucked away in a stone niche, their parchment "
+                "yellowed with age and covered in faded script. These appear to be "
+                "old oath scrolls, containing wisdom about sacred promises and "
+                "the true nature of selfless vows."
+            )
+        else:
+            return (
+                "You have already discovered the old oath scrolls hidden in this "
+                "chamber. The alcoves hold no further secrets."
+            )

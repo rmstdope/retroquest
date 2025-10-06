@@ -2,6 +2,7 @@
 from retroquest.act3.rooms.EchoChambers import EchoChambers
 from retroquest.act3.items.RunicWalls import RunicWalls
 from retroquest.act3.items.ResonantChantRubbings import ResonantChantRubbings
+from retroquest.act3.items.OldOathScrolls import OldOathScrolls
 
 
 class DummyGameState:
@@ -29,6 +30,8 @@ def test_echo_chambers_init():
     assert room.name == "Echo Chambers"
     assert "echo" in room.description.lower() or "cavern" in room.description.lower()
     assert any(isinstance(i, RunicWalls) for i in room.items)
+    # Old Oath Scrolls should NOT be present initially
+    assert not any(isinstance(i, OldOathScrolls) for i in room.items)
     assert "west" in room.exits
 
 
@@ -88,3 +91,34 @@ def test_resonant_chant_rubbings_properties():
     assert rubbings.get_name() == "Resonant Chant Rubbings"
     assert "Let stillness echo, let silence bind" in rubbings.description
     assert rubbings.can_be_carried_flag is True
+
+
+def test_echo_chambers_search_reveals_scrolls():
+    """Test that searching Echo Chambers reveals the Old Oath Scrolls."""
+    room = EchoChambers()
+    gs = DummyGameState()
+    gs.current_room = room
+    
+    # Initially, Old Oath Scrolls should not be present
+    initial_items = [item.get_name() for item in room.get_items()]
+    assert "old oath scrolls" not in initial_items
+    
+    # Search the room
+    search_result = room.search(gs)
+    assert "ancient scrolls" in search_result
+    assert "stone niche" in search_result
+    assert "sacred promises" in search_result
+    
+    # After searching, Old Oath Scrolls should be present
+    final_items = [item.get_name() for item in room.get_items()]
+    assert "old oath scrolls" in final_items
+    
+    # Search again - should get different message
+    search_again = room.search(gs)
+    assert "already discovered" in search_again
+    assert "no further secrets" in search_again
+    
+    # Should not add duplicate scrolls
+    items_after_second_search = [item.get_name() for item in room.get_items()]
+    scrolls_count = sum(1 for name in items_after_second_search if name == "old oath scrolls")
+    assert scrolls_count == 1

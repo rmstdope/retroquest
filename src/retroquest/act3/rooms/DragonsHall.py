@@ -1,7 +1,6 @@
 """Dragon's Hall room for Act 3."""
 
 from ...engine.Room import Room
-from ..items.OldOathScrolls import OldOathScrolls
 from ..characters.AncientDragon import AncientDragon
 
 
@@ -29,9 +28,6 @@ class DragonsHall(Room):
                 "power through the mystical atmosphere that makes your very bones resonate "
                 "with otherworldly harmonics."
             ),
-            items=[
-                OldOathScrolls()
-            ],
             characters=[AncientDragon()],
             exits={
                 "west": "StillnessVestibule"

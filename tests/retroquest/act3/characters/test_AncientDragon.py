@@ -6,7 +6,8 @@ from retroquest.act3.rooms.DragonsHall import DragonsHall
 from retroquest.engine.GameState import GameState
 from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
-    FLAG_ACT3_DRAGON_OATH_SPOKEN
+    FLAG_ACT3_DRAGON_OATH_SPOKEN,
+    FLAG_ACT3_OATH_SCROLLS_EXAMINED
 )
 
 
@@ -69,6 +70,9 @@ def test_say_oath_to_dragon():
     # First need to talk to get memory
     dragon.talk_to(game_state)
 
+    # Need to examine oath scrolls first
+    game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
+
     # Initially no dragon's scale in room
     assert not any(isinstance(item, DragonsScale) for item in room.items)
 
@@ -92,6 +96,7 @@ def test_say_oath_twice():
 
     # Set flags as if already done
     game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
+    game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
     game_state.set_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN, True)
 
     result = dragon.say_to("oath", game_state)
@@ -109,3 +114,65 @@ def test_say_wrong_word_to_dragon():
     result = dragon.say_to("hello", game_state)
     assert 'does not respond to those words' in result.lower()
     assert 'meaningful pledge' in result.lower()
+
+
+def test_say_oath_without_examining_scrolls():
+    """Test saying oath without examining scrolls first."""
+    dragon = AncientDragon()
+    game_state = _make_gs()
+    room = DragonsHall()
+    game_state.current_room = room
+
+    # Don't set the oath scrolls examined flag
+    assert not game_state.get_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)
+
+    # Try to say oath
+    result = dragon.say_to("oath", game_state)
+
+    assert 'must first understand the weight of the oath' in result.lower()
+    assert 'proves your selflessness' in result.lower()
+    # Should not set the oath spoken flag
+    assert not game_state.get_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN)
+    # Should not add dragon scale to room
+    assert not any(isinstance(item, DragonsScale) for item in room.items)
+
+
+def test_say_oath_after_examining_scrolls():
+    """Test saying oath after examining scrolls allows the oath."""
+    dragon = AncientDragon()
+    game_state = _make_gs()
+    room = DragonsHall()
+    game_state.current_room = room
+
+    # Set the oath scrolls examined flag
+    game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
+
+    # Say oath to dragon
+    result = dragon.say_to("oath", game_state)
+
+    assert 'speak your oath' in result.lower()
+    assert 'scale is yours to bear' in result.lower()
+    assert game_state.get_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN)
+    # Dragon's scale should now be in room
+    assert any(isinstance(item, DragonsScale) for item in room.items)
+
+
+def test_oath_requirements_case_insensitive():
+    """Test that oath command is case insensitive."""
+    dragon = AncientDragon()
+    game_state = _make_gs()
+    room = DragonsHall()
+    game_state.current_room = room
+
+    # Set the oath scrolls examined flag
+    game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
+
+    # Test different cases
+    for oath_word in ["oath", "OATH", "Oath", "OaTh"]:
+        # Reset flags for each test
+        game_state.set_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN, False)
+        room.items.clear()
+
+        result = dragon.say_to(oath_word, game_state)
+        assert 'speak your oath' in result.lower()
+        assert game_state.get_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN)

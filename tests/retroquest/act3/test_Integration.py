@@ -12,6 +12,7 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
     FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
     FLAG_ACT3_DRAGON_OATH_SPOKEN,
+    FLAG_ACT3_OATH_SCROLLS_EXAMINED,
     FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
     FLAG_ACT3_FORTRESS_GATES_EXAMINED,
 )
@@ -346,6 +347,16 @@ class TestAct3Integration:
 
         # --- Step 23: Echo Chambers - Resonant Chant sequence ---
         check_item_in_room(game.state.current_room, 'runic walls', True)
+
+        # Search to discover the Old Oath Scrolls
+        search_result = execute_commands(game, ['search'])
+        assert 'ancient scrolls' in search_result
+        assert 'stone niche' in search_result
+        
+        # First examine the Old Oath Scrolls to understand the oath requirements
+        examine_scrolls = execute_commands(game, ['examine old oath scrolls'])
+        assert 'selflessness' in examine_scrolls.lower()
+        check_story_flag(game.state, FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
 
         # Examine runic walls (reveals chant instructions and adds rubbings to room)
         examine_result = execute_commands(game, ['examine runic walls'])
