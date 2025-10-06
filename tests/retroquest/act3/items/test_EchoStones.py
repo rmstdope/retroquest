@@ -1,7 +1,10 @@
 """Unit tests for EchoStones item in Act 3."""
 from retroquest.act3.items.EchoStones import EchoStones
 from retroquest.act3.items.ResonantChantRubbings import ResonantChantRubbings
-from retroquest.act3.Act3StoryFlags import FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED
+from retroquest.act3.Act3StoryFlags import (
+    FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
+    FLAG_ACT3_OATH_OF_STILLNESS_STARTED,
+)
 
 
 class DummyGameState:
@@ -10,6 +13,7 @@ class DummyGameState:
     def __init__(self):
         """Initialize with empty story flags dictionary."""
         self.story_flags = {}
+        self.current_room = None
 
     def get_story_flag(self, flag_name):
         """Get a story flag value.
@@ -46,14 +50,34 @@ def test_echo_stones_bless_spell():
     stones = EchoStones()
     gs = DummyGameState()
 
-    # First blessing should succeed
+    # Initially the quest flag should not be set
+    assert not gs.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED)
+
+    # First blessing should succeed and start the quest
     result = stones.receive_spell("bless", gs)
     assert "sacred light" in result.lower() and "ready to amplify" in result.lower()
     assert stones.are_blessed()
+    assert gs.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED)
 
     # Second blessing should indicate already blessed
     result = stones.receive_spell("bless", gs)
     assert "already blessed" in result.lower()
+
+
+def test_echo_stones_examine_starts_quest():
+    """Test that examining echo stones sets the oath of stillness started flag."""
+    stones = EchoStones()
+    gs = DummyGameState()
+
+    # Initially the flag should not be set
+    assert not gs.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED)
+
+    # Examine the stones
+    result = stones.examine(gs)
+    assert "carved" in result and "channels" in result
+
+    # Flag should now be set
+    assert gs.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED)
 
 
 def test_echo_stones_wrong_spell():

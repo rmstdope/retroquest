@@ -27,6 +27,16 @@ class ResonantChantRubbings(Item):
             if other_item.are_blessed():
                 # Perform the Oath of Stillness
                 game_state.set_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, True)
+                
+                # Remove phantoms from current room if it's StillnessVestibule
+                current_room = game_state.current_room
+                if current_room and current_room.__class__.__name__ == "StillnessVestibule":
+                    from ..characters.WanderingPhantoms import WanderingPhantoms
+                    phantoms_to_remove = [char for char in current_room.characters 
+                                          if isinstance(char, WanderingPhantoms)]
+                    for phantom in phantoms_to_remove:
+                        current_room.characters.remove(phantom)
+                
                 return (
                     "[event]You recite the resonant chant at each stone. The words "
                     "echo and re-echo, building into a harmonious silence that "

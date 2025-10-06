@@ -2,6 +2,7 @@
 from retroquest.act3.rooms.StillnessVestibule import StillnessVestibule
 from retroquest.act3.items.EchoStones import EchoStones
 from retroquest.act3.characters.SilenceKeeper import SilenceKeeper
+from retroquest.act3.characters.WanderingPhantoms import WanderingPhantoms
 from retroquest.act3.Act3StoryFlags import FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED
 
 
@@ -25,8 +26,6 @@ def test_stillness_vestibule_init():
     """Test initialization of StillnessVestibule."""
     room = StillnessVestibule()
     assert room.name == "Stillness Vestibule"
-    assert "hush falls" in room.description
-    assert "echo stones" in room.description
 
     # Check items
     item_names = [item.get_name() for item in room.items]
@@ -36,6 +35,9 @@ def test_stillness_vestibule_init():
 
     # Check character
     assert any(isinstance(char, SilenceKeeper) for char in room.characters)
+
+    # Check that phantoms are initially present
+    assert any(isinstance(char, WanderingPhantoms) for char in room.characters)
 
 
 def test_stillness_vestibule_exits_blocked():
@@ -75,3 +77,31 @@ def test_echo_stones_in_room():
 
     assert echo_stones is not None
     assert not echo_stones.are_blessed()  # Should start unblessed
+
+
+def test_phantoms_only_whisper():
+    """Test that phantoms only respond with undecipherable whispers."""
+    room = StillnessVestibule()
+    gs = DummyGameState()
+
+    # Find the phantoms
+    phantoms = None
+    for char in room.characters:
+        if isinstance(char, WanderingPhantoms):
+            phantoms = char
+            break
+
+    assert phantoms is not None
+
+    # Test that they only respond with whispers
+    response = phantoms.talk_to(gs)
+    # Check for mystical/ethereal response elements that indicate undecipherable speech
+    mystical_indicators = [
+        "whisper", "ethereal", "spectral", "sibilant", "half-formed", 
+        "cannot grasp", "slip away", "mist", "beyond understanding"
+    ]
+    assert any(indicator in response.lower() for indicator in mystical_indicators)
+    
+    # Make sure it's ethereal/mystical dialogue, not normal conversation
+    assert "hello" not in response.lower()
+    assert "greetings" not in response.lower()

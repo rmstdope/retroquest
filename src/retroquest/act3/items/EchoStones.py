@@ -1,6 +1,7 @@
 """EchoStones item for the Stillness Vestibule in Act 3."""
 from ...engine.Item import Item
 from ...engine.GameState import GameState
+from ..Act3StoryFlags import FLAG_ACT3_OATH_OF_STILLNESS_STARTED
 
 
 class EchoStones(Item):
@@ -19,10 +20,16 @@ class EchoStones(Item):
         )
         self._blessed = False
 
+    def examine(self, game_state: GameState) -> str:
+        """Examine the echo stones and start the Oath of Stillness quest."""
+        game_state.set_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED, True)
+        return super().examine(game_state)
+
     def receive_spell(self, spell_name: str, _game_state: GameState) -> str:
         """Handle bless spell cast on the echo stones."""
         if spell_name == "bless" and not self._blessed:
             self._blessed = True
+            _game_state.set_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED, True)
             return (
                 "[event]The echo stones shimmer with sacred light, their carved "
                 "channels now glowing faintly. They are ready to amplify the "

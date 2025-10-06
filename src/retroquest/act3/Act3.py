@@ -11,6 +11,7 @@ from .quests import (
     MirrorsOfEmberlightQuest,
     BreathOfTheMountain,
     MinersRescue,
+    OathOfStillness,
 )
 from .rooms import (
     CavernMouth,
@@ -85,6 +86,7 @@ class Act3(Act):
             BreathOfTheMountain(),
             # Caverns of Shadow Side Quests
             MinersRescue(),
+            OathOfStillness(),
         ]
 
         music_file = "Orchestronika - Feel The Storm (freetouse.com).mp3"
