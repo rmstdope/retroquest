@@ -6,6 +6,7 @@ from ..Act3StoryFlags import (
     FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
     FLAG_ACT3_MAIN_COMPLETED,
     FLAG_ACT3_MAIN_STARTED,
+    FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
 )
 
 
@@ -62,6 +63,19 @@ class TheThreeVirtuesQuest(Quest):
                 "a living ember that refuses to die. The memory of fire and flight lingers, "
                 "reminding you that hope can rise from ashes. The path ahead is clearer, "
                 "but the final virtue remains. "
+            )
+
+        # Add block for Dragon's Scale acquisition
+        if game_state.get_story_flag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED):
+            if not self._flag_state.get(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED):
+                self._flag_state[FLAG_ACT3_DRAGONS_SCALE_ACQUIRED] = True
+                updated = True
+            self.description += '[dim]' + new_desc + '[/dim]'
+            new_desc = (
+                "\n\nYou have claimed the Dragon's Scale, its obsidian surface gleaming "
+                "with ancient power. The dragon's wisdom echoes in your mind, a testament "
+                "to the selflessness you have proven. With all three relics in hand, the "
+                "final trial awaits—the Warding Rite that will determine the fate of all. "
             )
         self.description += new_desc
         return updated
