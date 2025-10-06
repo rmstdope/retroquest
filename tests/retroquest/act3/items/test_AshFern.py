@@ -40,9 +40,10 @@ def test_ashfern_use_with_non_slag():
 
 def test_ashfern_use_with_slag_adds_mix():
     """Test AshFern use_with cooled slag adds HeatWardMix and removes both items."""
+    from retroquest.act3.items.CooledSlag import CooledSlag
     ash = AshFern()
     gs = DummyGameState()
-    slag = DummyItem("cooled slag")
+    slag = CooledSlag()
     gs.inventory = [ash, slag]
     result = ash.use_with(gs, slag)
     # Should remove both from inventory and add HeatWardMix
