@@ -9,8 +9,8 @@ def test_dragons_hall_init():
     room = DragonsHall()
     assert room.name == "Dragon's Hall"
     assert "vast chamber" in room.description
-    assert "scaled coils" in room.description
-    assert "ancient dragon" in room.description
+    assert "massive coils" in room.description
+    assert "Ancient Dragon" in room.description
 
     # Check items - dragon's scale should NOT be present initially
     item_names = [item.get_name() for item in room.items]

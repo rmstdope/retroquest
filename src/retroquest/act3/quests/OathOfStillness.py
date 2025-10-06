@@ -23,8 +23,20 @@ class OathOfStillness(Quest):
                 "precision to quiet the wandering spirits."
             ),
             completion=(
-                "The Resonant Chant has quieted the wandering phantoms. The illusions have "
-                "fallen silent, and the path to the dragon's hall now lies open."
+                "The Resonant Chant has quieted the wandering phantoms, its sacred words "
+                "echoing through the stillness like ripples across a mirror-dark pond. One "
+                "by one, the restless spirits begin to shimmer and fade, their ethereal forms "
+                "growing translucent as centuries of anguish finally release their hold. "
+                "Ancient faces turn toward you with expressions of profound gratitude before "
+                "dissolving into motes of silver light that drift upward like falling stars "
+                "in reverse. The phantoms' whispered syllables transform into gentle sighs "
+                "of relief as they slip between the boundaries of reality, crossing from "
+                "this dimension into the peaceful void beyond. Their luminous essence swirls "
+                "in spiraling patterns before vanishing entirely, leaving behind only the "
+                "faintest trace of ozone and the profound silence they had so desperately "
+                "sought. The illusions have fallen silent, the ancient burden lifted, and "
+                "the path to the dragon's hall now lies open, bathed in the sacred "
+                "luminescence of your completed ritual."
             ),
         )
 

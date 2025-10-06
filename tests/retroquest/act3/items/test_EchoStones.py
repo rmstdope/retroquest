@@ -133,3 +133,38 @@ def test_resonant_chant_rubbings_use_with_wrong_item():
     dummy = DummyItem()
     result = rubbings.use_with(gs, dummy)
     assert "no effect" in result.lower()
+
+
+def test_echo_stones_use_with_rubbings():
+    """Test using echo stones with resonant chant rubbings delegates properly."""
+    stones = EchoStones()
+    rubbings = ResonantChantRubbings()
+    gs = DummyGameState()
+
+    # First bless the stones
+    stones.receive_spell("bless", gs)
+    assert stones.are_blessed()
+
+    # Use echo stones with rubbings (should delegate to rubbings.use_with)
+    result = stones.use_with(gs, rubbings)
+    
+    # Should complete the oath quest
+    assert gs.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)
+    assert "banishes the wandering phantoms" in result
+
+
+def test_echo_stones_use_with_other_item():
+    """Test using echo stones with other items fails gracefully."""
+    stones = EchoStones()
+    gs = DummyGameState()
+    
+    # Create a mock item
+    class MockItem:
+        def get_name(self):
+            return "mock item"
+
+    mock_item = MockItem()
+    result = stones.use_with(gs, mock_item)
+    
+    # Should fall back to base class behavior
+    assert "can't use" in result and "echo stones" in result and "mock item" in result

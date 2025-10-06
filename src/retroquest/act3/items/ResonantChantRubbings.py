@@ -38,10 +38,11 @@ class ResonantChantRubbings(Item):
                         current_room.characters.remove(phantom)
                 
                 return (
-                    "[event]You recite the resonant chant at each stone. The words "
+                    "[event]You recite the resonant chant at each stone. [/event]\n"
+                    "[success]The words "
                     "echo and re-echo, building into a harmonious silence that "
                     "banishes the wandering phantoms. The path to the dragon's hall "
-                    "now lies open.[/event]"
+                    "now lies open.[/success]"
                 )
             else:
                 return (

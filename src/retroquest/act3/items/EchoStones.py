@@ -54,3 +54,13 @@ class EchoStones(Item):
     def are_blessed(self) -> bool:
         """Check if the echo stones have been blessed."""
         return self._blessed
+
+    def use_with(self, game_state: GameState, other_item: Item) -> str:
+        """Handle using other items with the echo stones."""
+        from .ResonantChantRubbings import ResonantChantRubbings
+        
+        if isinstance(other_item, ResonantChantRubbings):
+            # Delegate to the ResonantChantRubbings' use_with method
+            return other_item.use_with(game_state, self)
+        else:
+            return super().use_with(game_state, other_item)
