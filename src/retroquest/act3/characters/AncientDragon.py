@@ -22,28 +22,34 @@ class AncientDragon(Character):
     def talk_to(self, game_state: GameState) -> str:
         """Provide the Dragon's Memory for the storytelling quest."""
         # Check if this is the first conversation
+        dialogue = ''
         if not game_state.get_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED):
             game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
-            return (
-                "[dialogue]The dragon's voice resonates through your mind like "
-                "distant thunder: 'Young one, I remember your parents well. Lyra "
+            dialogue = (
+                "The dragon's voice resonates through your mind like "
+                "distant thunder: [dialogue]'Young one, I remember your parents well. Lyra "
                 "and Theron came to me when shadows first stirred. They spoke of "
                 "a child who must be hidden from Malakar's sight, protected until "
                 "the time of choosing arrived. They forged a ward—not of stone or "
                 "steel, but of love itself. This ward yet shields you, woven into "
                 "your very being. They did not perish, child. They walk paths "
                 "beyond sight, guardians still, waiting for the moment when all "
-                "debts are paid and all bonds may be renewed.'[/dialogue]"
+                "debts are paid and all bonds may be renewed.'[/dialogue]\n\n"
             )
-        else:
-            return (
-                "[dialogue]'The memory has been shared,' the dragon rumbles softly. "
-                "'Your path leads forward now, not back. The scale awaits when you "
-                "are ready to prove your selflessness.'[/dialogue]"
-            )
+        dialogue = dialogue + (
+            "[dialogue]'The memory has been shared,'[/dialogue] the dragon rumbles softly. "
+            "[dialogue]'Your path leads forward now, not back. The scale awaits when you "
+            "are ready to prove your selflessness.'[/dialogue]"
+        )
+        return dialogue
 
     def say_to(self, words: str, game_state: GameState) -> str:
         """Handle saying something to the dragon, particularly oaths."""
+        if game_state.get_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED) is not True:
+            return (
+                "The dragon's eyes glint with ancient wisdom. You should probably "
+                "listen to what it has to say first."
+            )
         if words.lower() == "oath":
             if game_state.get_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED) is not True:
                 return (

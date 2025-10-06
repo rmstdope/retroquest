@@ -356,7 +356,12 @@ class TestAct3Integration:
         # First examine the Old Oath Scrolls to understand the oath requirements
         examine_scrolls = execute_commands(game, ['examine old oath scrolls'])
         assert 'selflessness' in examine_scrolls.lower()
+        assert 'disintegrate' in examine_scrolls.lower()
         check_story_flag(game.state, FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
+        
+        # After examination, scrolls should be consumed and no longer available
+        check_item_in_room(game.state.current_room, 'Old Oath Scrolls', False)
+        check_item_in_inventory(game.state, 'Old Oath Scrolls', False)
 
         # Examine runic walls (reveals chant instructions and adds rubbings to room)
         examine_result = execute_commands(game, ['examine runic walls'])
@@ -388,6 +393,9 @@ class TestAct3Integration:
         assert 'harmonious silence' in oath_result.lower()
         assert "dragon's hall now lies open" in oath_result.lower()
         check_story_flag(game.state, FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, True)
+        
+        # Resonant chant rubbings should be consumed and removed from inventory
+        check_item_in_inventory(game.state, 'Resonant Chant Rubbings', False)
 
         # Now east exit to Dragon's Hall should be available
         execute_commands(game, ['east'])

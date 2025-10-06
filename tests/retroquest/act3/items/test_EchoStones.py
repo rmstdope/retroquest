@@ -35,6 +35,13 @@ class DummyGameState:
         """
         self.story_flags[flag_name] = value
 
+    def remove_item_from_inventory(self, item_name):
+        """Remove an item from inventory (dummy implementation)."""
+        # In real implementation, this would remove the item from inventory
+        # For testing purposes, we just acknowledge the method was called
+        # and verify the item_name is a string
+        assert isinstance(item_name, str)
+
 
 def test_echo_stones_init():
     """Test initialization and basic properties of EchoStones."""

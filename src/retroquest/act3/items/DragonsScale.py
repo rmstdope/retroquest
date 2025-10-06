@@ -17,7 +17,8 @@ class DragonsScale(Item):
                 "warmth and weighs heavy with the promise of protection and "
                 "sacrifice."
             ),
-            can_be_carried=True
+            can_be_carried=True,
+            short_name="scale"
         )
 
     def picked_up(self, game_state: GameState) -> str:

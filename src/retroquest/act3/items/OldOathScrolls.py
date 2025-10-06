@@ -10,7 +10,7 @@ class OldOathScrolls(Item):
     def __init__(self) -> None:
         """Initialize OldOathScrolls as a collectible item."""
         super().__init__(
-            name="old oath scrolls",
+            name="Old Oath Scrolls",
             description=(
                 "Weathered parchment scrolls bound with golden thread that shimmer with "
                 "an inner light, inscribed with sacred vows and solemn pledges in "
@@ -24,12 +24,24 @@ class OldOathScrolls(Item):
                 "syllable pulses faintly with residual magic, as if the very essence "
                 "of countless noble souls who have spoken these words still lingers "
                 "within the parchment, waiting to recognize a kindred spirit worthy "
-                "of the dragon's trust and wisdom."
+                "of the dragon's trust and wisdom.\n"
+                "[success]After having read the scrolls, you know that you will be able "
+                "to speak the oath from your heart. With that understanding, the scrolls "
+                "disintegrate, leaving you only with a pile of dust in your hands.[/success]"
             ),
-            can_be_carried=True
+            can_be_carried=True,
+            short_name="scrolls"
         )
 
     def examine(self, game_state: GameState) -> str:
         """Examine the oath scrolls and set the examined flag."""
         game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
+        
+        # Remove the scrolls from inventory (they disintegrate after being read)
+        game_state.remove_item_from_inventory(self.get_name())
+        
+        # Remove the scrolls from the current room as well
+        if game_state.current_room and self in game_state.current_room.items:
+            game_state.current_room.items.remove(self)
+        
         return super().examine(game_state)

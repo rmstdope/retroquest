@@ -101,7 +101,7 @@ def test_echo_chambers_search_reveals_scrolls():
     
     # Initially, Old Oath Scrolls should not be present
     initial_items = [item.get_name() for item in room.get_items()]
-    assert "old oath scrolls" not in initial_items
+    assert "Old Oath Scrolls" not in initial_items
     
     # Search the room
     search_result = room.search(gs)
@@ -111,7 +111,7 @@ def test_echo_chambers_search_reveals_scrolls():
     
     # After searching, Old Oath Scrolls should be present
     final_items = [item.get_name() for item in room.get_items()]
-    assert "old oath scrolls" in final_items
+    assert "Old Oath Scrolls" in final_items
     
     # Search again - should get different message
     search_again = room.search(gs)
@@ -120,5 +120,5 @@ def test_echo_chambers_search_reveals_scrolls():
     
     # Should not add duplicate scrolls
     items_after_second_search = [item.get_name() for item in room.get_items()]
-    scrolls_count = sum(1 for name in items_after_second_search if name == "old oath scrolls")
+    scrolls_count = sum(1 for name in items_after_second_search if name == "Old Oath Scrolls")
     assert scrolls_count == 1

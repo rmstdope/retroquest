@@ -28,6 +28,9 @@ class ResonantChantRubbings(Item):
                 # Perform the Oath of Stillness
                 game_state.set_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, True)
                 
+                # Remove the rubbings from inventory (consumed in the ritual)
+                game_state.remove_item_from_inventory(self.get_name())
+                
                 # Remove phantoms from current room if it's StillnessVestibule
                 current_room = game_state.current_room
                 if current_room and current_room.__class__.__name__ == "StillnessVestibule":

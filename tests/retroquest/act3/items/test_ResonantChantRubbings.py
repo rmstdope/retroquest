@@ -30,6 +30,13 @@ class DummyGameState:
         """Set the current room."""
         self.current_room = room
 
+    def remove_item_from_inventory(self, item_name):
+        """Remove an item from inventory (dummy implementation)."""
+        # In real implementation, this would remove the item from inventory
+        # For testing purposes, we just acknowledge the method was called
+        # and verify the item_name is a string
+        assert isinstance(item_name, str)
+
 
 def test_resonant_chant_rubbings_init():
     """Test initialization of ResonantChantRubbings."""
