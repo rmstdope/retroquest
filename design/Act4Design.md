@@ -2,6 +2,11 @@
 
 ## Narrative Overview
 
+**Note:** At the end of Act III, Mira combined the three relics (Crystal of Light, Phoenix 
+Feather, and Dragon's Scale) into the Lifelight Elixir—a powerful potion that channels the 
+combined virtues of courage, wisdom, and selflessness. Elior enters Act IV carrying this elixir, 
+which is destined to save King Alden from Malakar's life-draining ritual.
+
 Act IV represents the climax of Elior's journey as they infiltrate Malakar's fortress with the 
 Lifelight Elixir in hand. The act focuses on navigating deadly traps, confronting illusions, 
 facing Malakar's lieutenants, and ultimately making critical moral choices that determine the 
