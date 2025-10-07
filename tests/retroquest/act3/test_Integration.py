@@ -333,6 +333,10 @@ class TestAct3Integration:
         stabilize_result = execute_commands(game, ['use reinforced braces with fallen rock'])
         assert 'stabilizing the collapse' in stabilize_result.lower()
 
+        # Use support straps with fallen rock (secures the braces)
+        secure_result = execute_commands(game, ['use support straps with fallen rock'])
+        assert 'bind the reinforced braces securely' in secure_result.lower()
+
         # Use wedge blocks with fallen rock (frees passage and adds miners to room)
         free_result = execute_commands(game, ['use wedge blocks with fallen rock'])
         assert 'freeing the blocked passage' in free_result.lower()

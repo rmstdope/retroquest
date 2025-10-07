@@ -3,6 +3,7 @@ from retroquest.engine.GameState import GameState
 from retroquest.act3.rooms.CollapsedGalleries import CollapsedGalleries
 from retroquest.act3.items.FallenRock import FallenRock
 from retroquest.act3.items.ReinforcedBraces import ReinforcedBraces
+from retroquest.act3.items.SupportStraps import SupportStraps
 from retroquest.act3.items.WedgeBlocks import WedgeBlocks
 from retroquest.act3.characters.Miners import Miners
 from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MINERS_RESCUE_COMPLETED
@@ -51,6 +52,8 @@ def test_miners_rescue_progression():
     # Get tools
     braces = ReinforcedBraces()
     gs.add_item_to_inventory(braces)
+    straps = SupportStraps()
+    gs.add_item_to_inventory(straps)
     blocks = WedgeBlocks()
     gs.add_item_to_inventory(blocks)
 
@@ -65,19 +68,24 @@ def test_miners_rescue_progression():
     assert "stabilizing the collapse" in result1
     assert braces not in gs.inventory  # Braces should be consumed
 
-    # Step 2: Use wedge blocks with fallen rock (this should add miners to room)
-    result2 = fallen_rock.use_with(gs, blocks)
-    assert "freeing the blocked passage" in result2
-    assert "trapped miners emerging" in result2
+    # Step 2: Use support straps with fallen rock
+    result2 = fallen_rock.use_with(gs, straps)
+    assert "bind the reinforced braces securely" in result2
+    assert straps not in gs.inventory  # Straps should be consumed
+
+    # Step 3: Use wedge blocks with fallen rock (this should add miners to room)
+    result3 = fallen_rock.use_with(gs, blocks)
+    assert "freeing the blocked passage" in result3
+    assert "trapped miners emerging" in result3
     assert blocks not in gs.inventory  # Blocks should be consumed
 
     # After freeing passage, miners should now be present in the room
     assert any(isinstance(c, Miners) for c in room.characters)
     miners = next(c for c in room.characters if isinstance(c, Miners))
 
-    # Step 3: Talk to miners
-    result3 = miners.talk_to(gs)
-    assert "Thank the gods you found us" in result3
+    # Step 4: Talk to miners
+    result4 = miners.talk_to(gs)
+    assert "Thank the gods you found us" in result4
     assert gs.get_story_flag(FLAG_ACT3_MINERS_RESCUE_COMPLETED)
 
 
@@ -96,10 +104,10 @@ def test_get_exits_blocks_east_until_completed():
 
 
 def test_fallen_rock_requires_stabilization_first():
-    """Test that wedge blocks can't be used before stabilization."""
+    """Test that support straps can't be used before stabilization."""
     fallen_rock = FallenRock()
     gs = DummyGameState(None)
-    blocks = WedgeBlocks()
-    # Try blocks before stabilization
-    result = fallen_rock.use_with(gs, blocks)
-    assert "too unstable" in result or "stabilize it with braces" in result
+    straps = SupportStraps()
+    # Try straps before stabilization
+    result = straps.use_with(gs, fallen_rock)
+    assert "stabilize the collapse with braces" in result

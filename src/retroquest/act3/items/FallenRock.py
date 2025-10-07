@@ -10,6 +10,7 @@ class FallenRock(Item):
     def __init__(self) -> None:
         """Initialize FallenRock as an unmovable obstacle."""
         self._collapse_stabilized = False
+        self._straps_secured = False
         self._passage_freed = False
         super().__init__(
             name="fallen rock",
@@ -40,6 +41,7 @@ class FallenRock(Item):
     def use_with(self, game_state: GameState, other_item: "Item") -> str:
         """Handle rescue item usage on the fallen rock."""
         from .ReinforcedBraces import ReinforcedBraces
+        from .SupportStraps import SupportStraps
         from .WedgeBlocks import WedgeBlocks
 
         if isinstance(other_item, ReinforcedBraces):
@@ -53,17 +55,39 @@ class FallenRock(Item):
                 game_state.remove_item_from_inventory(other_item.name)
                 return (
                     "[event]You wedge the reinforced braces under the sagging "
-                    "ceiling, stabilizing the collapse.[/event]"
+                    "ceiling, stabilizing the collapse. The immediate danger of "
+                    "further cave-in is reduced, but the braces need to be secured "
+                    "before you can safely clear the passage.[/event]"
                 )
             return (
                 "[info]The braces are already in place, holding the ceiling "
                 "steady.[/info]"
             )
-        if isinstance(other_item, WedgeBlocks):
+        
+        if isinstance(other_item, SupportStraps):
             if not self._collapse_stabilized:
                 return (
-                    "[info]The collapse is too unstable. Stabilize it with "
-                    "braces before using the blocks.[/info]"
+                    "[info]You need to stabilize the collapse with braces before "
+                    "securing them with straps.[/info]"
+                )
+            if not self._straps_secured:
+                self._straps_secured = True
+                game_state.remove_item_from_inventory(other_item.name)
+                return (
+                    "[event]You bind the reinforced braces securely with the "
+                    "support straps, ensuring they can withstand the pressure "
+                    "when the debris is cleared. The structure is now stable "
+                    "enough for the final excavation.[/event]"
+                )
+            return (
+                "[info]The straps are already securing the braces.[/info]"
+            )
+            
+        if isinstance(other_item, WedgeBlocks):
+            if not self._straps_secured:
+                return (
+                    "[info]The braces need to be secured with support straps "
+                    "before you can safely clear the passage.[/info]"
                 )
             if not self._passage_freed:
                 self._passage_freed = True
