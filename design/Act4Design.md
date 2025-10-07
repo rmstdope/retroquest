@@ -79,11 +79,11 @@ chain follows this dependency structure:
 
     -   **Type:** Side Quest (Required for Main Quest)
     -   **Trigger:** Enter the fortress's bewildering mirror labyrinth
-    -   **Prerequisites:** Truth-seeing abilities and wisdom gained from previous acts, plus Servant's Pendant for ally guidance
-    -   **Dependencies:** Completion of "The Trapped Servants"
-    -   **Completion:** Use wisdom, truth-seeing abilities, and freed servants' knowledge to navigate through illusions
+    -   **Prerequisites:** Echo knowledge from Hall of Echoes and Servant's Pendant for complete navigation
+    -   **Dependencies:** Initial visit after "The Trapped Servants", completion requires echo knowledge from Hall of Echoes
+    -   **Completion:** Use echo navigation knowledge plus servant guidance and truth-seeing abilities
     -   **Rewards:** Direct route to lieutenant chambers, Mirror Shard, Ancient Iron Key
-    -   **Story Impact:** Tests Elior's ability to distinguish truth from deception while utilizing allies' help
+    -   **Story Impact:** Tests Elior's ability to combine multiple sources of knowledge and wisdom
 
 -   **Name:** The Trapped Servants
 
@@ -103,7 +103,7 @@ chain follows this dependency structure:
     -   **Trigger:** Encounter Malakar's first lieutenant in the Hall of Echoes
     -   **Prerequisites:** Completion of all infiltration quests, Guardian's Chain for protection
     -   **Dependencies:** Must have demonstrated the three virtues through previous encounters
-    -   **Completion:** Use Guardian's Chain for protection, then offer redemption using Guardian's Essence
+    -   **Completion:** Use Guardian's Chain for protection, then say redemption to knight using Guardian's Essence
     -   **Rewards:** Knight's Redemption, Echo Stone, access to the Tower of Shadows
     -   **Story Impact:** Shows mercy can triumph over corruption when backed by courage
 
@@ -122,10 +122,10 @@ chain follows this dependency structure:
     -   **Type:** Side Quest (Required for Main Quest)
     -   **Trigger:** Confront an apparition of Malakar's former self in the Memory Vault
     -   **Prerequisites:** Completion of "The Sorceress of Lies", Echo Stone and Time Crystal required
-    -   **Dependencies:** Must have Sorceress's Truth, Echo Stone from knight, and Time Crystal from sorceress
-    -   **Completion:** Use Echo Stone to restore memories, Time Crystal to stabilize visions, and Sorceress's Truth to prove redemption possible
+    -   **Dependencies:** Initial visit possible after sorceress encounter, completion requires all three stabilizing items
+    -   **Completion:** Two-visit process: initial assessment, then return with Enhanced Echo Stone, Time Crystal, and Sorceress's Truth
     -   **Rewards:** Memory Fragment, combined Mirror-Memory Shard, the truth about Elior's heritage
-    -   **Story Impact:** Reveals the full backstory and sets up the final confrontation
+    -   **Story Impact:** Reveals the full backstory and sets up the final confrontation through patient preparation
 
 #### Inner Sanctum Phase Quests
 
@@ -282,8 +282,9 @@ an eerie trance, their eyes glowing with unnatural light.
 #### Description
 
 Countless mirrors line the corridors of this bewildering maze, each reflecting not your true
-form but distorted versions of yourself and false paths. The wisdom gained from your journey
-helps guide you toward truth hidden behind the illusions.
+form but distorted versions of yourself and false paths. The maze cannot be fully navigated
+without echo knowledge from the Hall of Echoes. Servant guidance provides partial help, but
+complete navigation requires acoustic wisdom from the echoing halls.
 
 #### Items
 
@@ -293,10 +294,12 @@ helps guide you toward truth hidden behind the illusions.
 
 #### Spells
 
--   Truth Sight (learned by solving the maze correctly)
+-   Truth Sight (learned by solving the maze correctly with echo knowledge)
 
 #### Usable Items
 
+-   Echo Stone (required navigation knowledge from Hall of Echoes)
+-   Servant's Pendant (provides partial guidance but insufficient alone)
 -   Mirror Shard (collect for later combination with Memory Fragment)
 -   Ancient Iron Key (collect for accessing parent's hidden vault)
 -   Servant's Pendant (from freed servants, provides guidance through maze)
@@ -319,11 +322,13 @@ helps guide you toward truth hidden behind the illusions.
 
 This grand hall stretches into shadows, its vaulted ceiling lost in darkness. Ancient banners
 hang in tatters, and the sound of your footsteps echoes strangely, as if accompanied by the
-ghosts of past battles. At the hall's center stands the Knight of Despair.
+ghosts of past battles. The echoes here contain ancient knowledge about navigating the Mirror
+Labyrinth. At the hall's center stands the Knight of Despair, but he cannot be defeated without
+proper preparation.
 
 #### Items
 
--   Echo Stone (captures sounds and memories)
+-   Echo Stone (captures sounds and memories - initially basic, enhanced after knight's redemption)
 -   Fallen Banner (symbol of lost honor)
 -   Knight's Crest (proof of redemption)
 
@@ -333,8 +338,9 @@ ghosts of past battles. At the hall's center stands the Knight of Despair.
 
 #### Usable Items
 
--   Guardian's Essence (purifies corrupted souls)
--   Echo Stone (reveals the knight's true history)
+-   Echo Stone (initially captures navigation knowledge for Mirror Labyrinth, later enhanced for memories)
+-   Guardian's Chain (required protection for knight encounter)
+-   Guardian's Essence (proves worthiness to challenge knight after maze completion)
 
 #### Characters
 
@@ -416,9 +422,11 @@ hide the pain and loneliness that drove her to serve Malakar.
 
 #### Description
 
-A mysterious chamber filled with floating memory orbs that show scenes from the past. Here, the
-shadow of Malakar's former self dwells among memories of friendship, hope, and the tragic events
-that led to his corruption.
+A mysterious chamber filled with floating memory orbs that show scenes from the past. However,
+the orbs are fragmented and unstable without proper preparation. The shadow of Malakar's former
+self dwells here but cannot be reached without the three stabilizing components: Enhanced Echo
+Stone, Time Crystal, and Sorceress's Truth. Initial visits reveal the chamber's potential but
+require return with proper tools.
 
 #### Items
 
@@ -725,23 +733,38 @@ Based on player choices throughout the act:
 ## Golden Path (Optimal Solution to Complete Act IV)
 
 This sequence completes all Act IV requirements following the most merciful path while
-demonstrating all three virtues. Each step lists the room, exact commands, and their
-consequences.
+demonstrating all three virtues. The path requires multiple visits to different rooms as
+information and items from one area unlock possibilities in others, creating a web of
+interconnected exploration rather than linear progression.
 
-### Phase 1: Fortress Infiltration
+### Design Philosophy: Interconnected Exploration
 
-1. **Fortress Gates:**
+The golden path intentionally creates dependencies that require backtracking and multiple visits:
+
+-   **Mirror Labyrinth** needs echo knowledge from **Hall of Echoes** for completion
+-   **Hall of Echoes** knight cannot be defeated without **Guardian's Chain** and maze completion proof
+-   **Memory Vault** requires **three separate components** gathered from different lieutenants
+-   **Throne Chamber Approach** has **two distinct phases** requiring different preparations
+-   **Cross-room revelations** where information from one area unlocks understanding in another
+
+This design ensures players explore the full fortress, understand the interconnected nature of
+Malakar's corruption, and appreciate how patience and preparation lead to ultimate success.
+
+### Phase 1: Initial Fortress Breach
+
+1. **Fortress Gates (First Visit):**
 
     - Commands and yields:
         - `examine ward stones` → Reveals the shadow guardians' anchor points and magical barriers
         - `take ward stone fragment` → Collect magical component
-        - `use ward stone fragment on barriers` → Disables magical defenses
+        - `use ward stone fragment with barriers` → Disables magical defenses
         - `cast light on ward stones` → Light magic dispels the shadow energy, banishing guardians
             - Quest completed: "Shattered Ward Guardians"
             - Item obtained: `Guardian's Essence`
-        - `take guardian's chain` → Protective charm against shadow magic (REQUIRED for Knight encounter)
+        - `take guardian's chain` → Protective charm against shadow magic
+        - **Note:** Cannot proceed further until servant knowledge is gained
 
-2. **Outer Courtyard:**
+2. **Outer Courtyard (First Visit):**
 
     - Commands and yields:
         - `examine servants` → Reveals their enchanted state and suffering
@@ -750,99 +773,145 @@ consequences.
             - Quest completed: "The Trapped Servants"
             - Item obtained: `Loyalty Token`
             - Item obtained: `Servant's Pendant`
-        - `talk to freed servants` → They provide fortress layout and hidden passages
+        - `take loyalty token` → Add to inventory for later use
+        - `take servant's pendant` → Add to inventory for Mirror Labyrinth navigation
+        - `talk to freed servants` → They reveal the Mirror Labyrinth entrance but warn of incomplete knowledge
+        - **Servants tell you:** "The mirrors show truth, but only echoes from the halls can reveal the full path"
 
-3. **Mirror Labyrinth:**
+3. **Mirror Labyrinth (First Visit):**
 
     - Commands and yields:
         - `examine mirrors` → Reveals multiple false reflections and paths
-        - `use servant's pendant` → Freed servants provide guidance through mental link
+        - `use servant's pendant` → Freed servants provide partial guidance through mental link
+        - `go north` → Partial progress made, but missing crucial knowledge
+        - **Discovery:** Need echo knowledge from Hall of Echoes to complete the maze
+        - **Return to:** Must visit Hall of Echoes first
+
+### Phase 2: Cross-Area Information Gathering
+
+4. **Hall of Echoes (First Visit):**
+
+    - Commands and yields:
+        - `examine hall` → Discover ancient echoes that contain maze navigation secrets
+        - `examine echoes` → Learn the true pattern for mirror navigation
+        - `take echo stone` → Capture the navigation knowledge (not yet enhanced)
+        - `examine knight of despair` → Knight is too powerful without proper preparation
+        - **Knight says:** "Your chain provides protection, but your essence is spent. Return when you have wisdom's truth."
+
+5. **Mirror Labyrinth (Second Visit - Completion):**
+
+    - Commands and yields:
+        - `use echo stone` → Apply navigation knowledge gained from Hall of Echoes
         - `cast truth sight` → Reveals which reflections show truth and which show lies
             - Spell learned: `Truth Sight`
-        - `follow true path` → Navigate through correct path using wisdom and ally guidance
+        - `go north` → Navigate through correct path using combined knowledge
             - Quest completed: "The Maze of Mirrors"
             - Item obtained: `Mirror Shard` (will combine with Memory Fragment later)
             - Item obtained: `Ancient Iron Key` (unlocks parent's vault in sanctum)
+        - `take mirror shard` → Add to inventory for combining with memory fragment
+        - `take ancient iron key` → Add to inventory for accessing parent's vault
+        - **Discovery:** Mirror reveals vision of Tower of Shadows containing Time Crystal needed for Memory Vault
 
-### Phase 2: Lieutenant Confrontations
+### Phase 3: Lieutenant Confrontations and Cross-Dependencies
 
-4. **Hall of Echoes:**
+6. **Hall of Echoes (Second Visit - Knight Battle):**
 
     - Commands and yields:
-        - `equip guardian's chain` → Provides protection against the knight's despair attacks
-        - `talk to knight of despair` → Knight challenges Elior to combat
-        - `use guardian's essence on knight` → Purifies some corruption, revealing pain beneath
-        - `offer redemption to knight` → Choose mercy over violence
+        - `use guardian's chain` → Provides protection against the knight's despair attacks
+        - `talk to knight of despair` → Knight challenges Elior to combat, now acknowledges truth sight
+        - `say redemption to knight` → Choose mercy over violence
             - Quest completed: "The Knight of Despair"
             - Item obtained: `Knight's Redemption`
-            - Item obtained: `Echo Stone` (captures memories)
+            - Item obtained: `Enhanced Echo Stone` (now captures memories)
             - Spell learned: `Redemption's Light`
+        - `take knight's redemption` → Add to inventory for proving mercy's power
+        - `take enhanced echo stone` → Replaces the basic echo stone in inventory
+        - **Knight reveals:** "The sorceress in the tower above holds temporal crystals, but beware her lies."
 
-5. **Tower of Shadows:**
+7. **Tower of Shadows (First Visit):**
 
     - Commands and yields:
-        - `climb tower` → Ascend while resisting shadow whispers and lies
+        - `go up` → Ascend while resisting shadow whispers and lies
         - `use loyalty token` → Proves allies' trust, dispelling doubt magic
             - Spell learned: `Dispel Lies`
-        - `use light crystal` → Illuminates path through deceptive shadows
+        - `examine shadows` → Discover they contain echoes from the Chamber of Whispers
+        - **Discovery:** Cannot proceed to Chamber of Whispers without Knight's Redemption as proof
 
-6. **Chamber of Whispers:**
+8. **Chamber of Whispers (First Visit):**
 
     - Commands and yields:
         - `talk to sorceress of lies` → Sorceress attacks with illusions and deception
-        - `use knight's redemption` → Show example of mercy's power
+        - `use knight's redemption` → Show example of mercy's power, sorceress becomes curious
         - `use loyalty token` → Prove bonds of trust resist her lies
         - `cast heart's truth on sorceress` → Reveals her pain and loneliness beneath deception
-        - `offer understanding to sorceress` → Show compassion for her suffering
+        - `say understanding to sorceress` → Show compassion for her suffering
             - Quest completed: "The Sorceress of Lies"
             - Item obtained: `Sorceress's Truth`
             - Item obtained: `Time Crystal` (stabilizes temporal magic)
             - Spell learned: `Heart's Truth`
+        - `take sorceress's truth` → Add to inventory for Memory Vault empathy
+        - `take time crystal` → Add to inventory for temporal stabilization
+        - **Sorceress reveals:** "The Memory Vault holds the key to understanding Malakar, but you need all three components: echo, crystal, and truth."
 
-7. **Memory Vault:**
+### Phase 4: Memory Vault Preparation and Return Visits
+
+9. **Memory Vault (First Visit - Preparation):**
 
     - Commands and yields:
-        - `examine memory orbs` → Shows scenes of Malakar's past friendship with Elior's parents
-        - `use echo stone on memory orbs` → Captures and restores fragmented memories
+        - `examine memory orbs` → Shows scenes of Malakar's past, but they're fragmented and unstable
+        - `examine shadow` → Shadow of the Past appears but is too weak to communicate
+        - **Discovery:** Need all three items (Enhanced Echo Stone, Time Crystal, Sorceress's Truth) to stabilize the vault
+
+10. **Memory Vault (Second Visit - Completion):**
+
+    - Commands and yields:
+        - `use enhanced echo stone with memory orbs` → Captures and restores fragmented memories
         - `use time crystal` → Stabilizes temporal distortions to prevent damage
+        - `use sorceress's truth` → Provides empathy needed to understand shadow's pain
         - `talk to shadow of the past` → Shadow shares memories of corruption's beginning
-        - `use sorceress's truth with shadow` → Shows redemption is possible through understanding
-        - `combine mirror shard with memory fragment` → Creates enhanced Mirror-Memory Shard
+        - `say understanding to shadow` → Prove redemption is possible through gathered evidence
+        - `use mirror shard with memory fragment` → Creates enhanced Mirror-Memory Shard
             - Quest completed: "The Shadow of the Past"
             - Item obtained: `Combined Mirror-Memory Shard`
             - Spell learned: `Memory Restoration`
+        - `take combined mirror-memory shard` → Add to inventory for final confrontations
+        - **Shadow reveals:** "The king awaits salvation, but you must prove your worth through all you have learned."
 
-### Phase 3: Inner Sanctum Resolution
+### Phase 5: Sanctum Access and Final Preparation
 
-8. **Throne Chamber Approach:**
+11. **Throne Chamber Approach (First Visit - King's Rescue):**
 
-    - Commands and yields:
-        - `examine king alden` → Shows king trapped in crystal prison, life draining
-        - `examine prison` → Reveals the dark ritual's structure and the king's weakening state
-        - `present knight's redemption` → Prove worthiness through mercy demonstration
-        - `present sorceress's truth` → Prove worthiness through understanding others
-        - `present combined mirror-memory shard` → Prove worthiness through accepting truth
-        - `use lifelight elixir on king alden` → The combined power of courage, wisdom, and selflessness breaks the ritual and saves the king
-            - Quest completed: "King Alden's Rescue"
-            - Item obtained: `Royal Sigil`
-            - Item obtained: `Hero's Memorial`
-            - Spell learned: `Royal Blessing`
-            - Event: The Lifelight Elixir is consumed, its purpose fulfilled
+    -   Commands and yields:
+        -   `examine king alden` → Shows king trapped in crystal prison, life draining
+        -   `examine prison` → Reveals the dark ritual's structure and the king's weakening state
+        -   `use knight's redemption` → Prove worthiness through mercy demonstration
+        -   `use sorceress's truth` → Prove worthiness through understanding others
+        -   `use combined mirror-memory shard` → Prove worthiness through accepting truth
+        -   `use lifelight elixir on king alden` → The combined power breaks the ritual and saves the king
+            -   Quest completed: "King Alden's Rescue"
+            -   Item obtained: `Royal Sigil`
+            -   Item obtained: `Hero's Memorial`
+            -   Spell learned: `Royal Blessing`
+            -   Event: The Lifelight Elixir is consumed, its purpose fulfilled
+        -   `take royal sigil` → Add to inventory for final confrontation
+        -   `take hero's memorial` → Add to inventory as proof of heroism
+        -   **King Alden says:** "Your parents' sacrifice is recorded in the hidden vault. Use what you have learned to unlock their legacy."
 
-9. **Throne Chamber Approach (Parent's Legacy):**
+12. **Throne Chamber Approach (Second Visit - Parent's Legacy):**
 
-    - Commands and yields:
-        - `examine hero statues` → Reveals hidden vault behind the memorials
-        - `use ancient iron key on vault` → Opens hidden compartment containing parent's memories
-        - `use combined mirror-memory shard in vault` → Activates memory viewing chamber
-        - `view parent's final memories` → See their sacrifice to hide Elior and weaken Malakar
-            - Quest completed: "The Parent's Legacy"
-            - Item obtained: `Throne Key`
-            - Spell learned: `Parent's Blessing`
+    -   Commands and yields:
+        -   `examine hero statues` → Reveals hidden vault behind the memorials
+        -   `use ancient iron key with vault` → Opens hidden compartment (key found in Mirror Labyrinth)
+        -   `use combined mirror-memory shard with vault` → Activates memory viewing chamber
+        -   `examine parent's final memories` → See their sacrifice to hide Elior and weaken Malakar
+            -   Quest completed: "The Parent's Legacy"
+            -   Item obtained: `Throne Key`
+            -   Spell learned: `Parent's Blessing`
+        -   `take throne key` → Add to inventory for accessing Malakar's sanctum
 
-### Phase 4: Final Confrontation
+### Phase 6: Final Confrontation
 
-10. **Throne Chamber:**
+13. **Throne Chamber (Final Battle):**
 
     -   Commands and yields:
         -   `examine throne` → Reveals it's locked with ancient magic requiring rightful key
@@ -852,12 +921,12 @@ consequences.
         -   `refuse malakar's offer` → Choose to resist corruption despite temptation
         -   `use combined mirror-memory shard on malakar` → Shows him his true self and past friendship
         -   `use hero's memorial` → Gain inspiration against final despair attacks
-        -   `offer forgiveness to malakar` → Choose mercy over vengeance in final choice
+        -   `say forgiveness to malakar` → Choose mercy over vengeance in final choice
             -   Quest completed: "The Final Stand"
             -   Spell learned: `Forgiveness`
             -   Achievement: Redemption Ending unlocked
 
-11. **Royal Gardens:**
+14. **Royal Gardens (Ending Choice):**
 
     -   Commands and yields:
         -   `talk to king alden` → King offers Elior permanent rulership in gratitude
@@ -865,32 +934,30 @@ consequences.
         -   `decline crown politely` → Choose humility over power (Home Ending)
         -   `use crown of eldoria ceremonially` → Crown used to officially decline rule
         -   `plant restoration seed` → Symbol of new beginnings for the kingdom
-            -   Achievement: Home Ending - Return to Willowbrook as a humble hero
-
-## Quest Completion Verification
+            -   Achievement: Home Ending - Return to Willowbrook as a humble hero## Quest Completion Verification
 
 **All Required Fortress Infiltration Quests Completed:**
 
--   ✅ **Shattered Ward Guardians** (Step 1) - Demonstrated courage against darkness, obtained Guardian's Essence and Guardian's Chain
+-   ✅ **Shattered Ward Guardians** (Step 1) - Demonstrated courage, obtained Guardian's Essence and Guardian's Chain
 -   ✅ **The Trapped Servants** (Step 2) - Showed selflessness using Guardian's Essence, obtained Loyalty Token and Servant's Pendant
--   ✅ **The Maze of Mirrors** (Step 3) - Applied wisdom with servant guidance, obtained Mirror Shard and Ancient Iron Key
+-   ✅ **The Maze of Mirrors** (Steps 3 & 5) - Applied wisdom with multi-source knowledge: servant guidance + echo navigation
 
 **All Required Lieutenant Confrontation Quests Completed:**
 
--   ✅ **The Knight of Despair** (Step 4) - Used Guardian's Chain protection, chose mercy, obtained Knight's Redemption and Echo Stone
--   ✅ **The Sorceress of Lies** (Step 6) - Used Knight's Redemption and Loyalty Token, obtained Sorceress's Truth and Time Crystal
--   ✅ **The Shadow of the Past** (Step 7) - Used Echo Stone, Time Crystal, and Sorceress's Truth to create Combined Mirror-Memory Shard
+-   ✅ **The Knight of Despair** (Steps 4 & 6) - First visit for echo knowledge, second visit for redemption with Guardian's Chain
+-   ✅ **The Sorceress of Lies** (Step 8) - Used Knight's Redemption and Loyalty Token, obtained Sorceress's Truth and Time Crystal
+-   ✅ **The Shadow of the Past** (Steps 9 & 10) - Two-visit process: assessment then completion with all three components
 
 **All Required Inner Sanctum Quests Completed:**
 
--   ✅ **King Alden's Rescue** (Step 8) - Proved worthiness with all lieutenant items, consumed Lifelight Elixir, obtained Royal Sigil and Hero's Memorial
--   ✅ **The Parent's Legacy** (Step 9) - Used Ancient Iron Key and Combined Mirror-Memory Shard to access vault, obtained Throne Key
+-   ✅ **King Alden's Rescue** (Step 11) - Proved worthiness with all lieutenant items, consumed Lifelight Elixir
+-   ✅ **The Parent's Legacy** (Step 12) - Used Ancient Iron Key and Combined Mirror-Memory Shard to access vault
 
 **All Required Spells Learned:**
 
--   ✅ **`Truth Sight`** (Step 3) - From navigating Mirror Labyrinth
--   ✅ **`Redemption's Light`** (Step 4) - From showing mercy to Knight of Despair
--   ✅ **`Dispel Lies`** (Step 5) - From resisting Tower of Shadows
+-   ✅ **`Truth Sight`** (Step 5) - From completing Mirror Labyrinth with echo knowledge
+-   ✅ **`Redemption's Light`** (Step 6) - From showing mercy to Knight of Despair
+-   ✅ **`Dispel Lies`** (Step 7) - From resisting Tower of Shadows
 -   ✅ **`Heart's Truth`** (Step 6) - From understanding Sorceress of Lies
 -   ✅ **`Memory Restoration`** (Step 7) - From helping Shadow of the Past
 -   ✅ **`Royal Blessing`** (Step 8) - From saving King Alden
@@ -926,6 +993,19 @@ through the story.
 -   `Crown of Eldoria` (symbol for ending choice)
 -   All learned spells are necessary for moral and practical progression
 
+## Room Visitation Pattern
+
+The golden path creates the following back-and-forth exploration pattern:
+
+1. **Fortress Gates** → **Outer Courtyard** → **Mirror Labyrinth** (incomplete)
+2. **Hall of Echoes** (knowledge gathering) → **Mirror Labyrinth** (completion)
+3. **Hall of Echoes** (knight battle) → **Tower of Shadows** → **Chamber of Whispers**
+4. **Memory Vault** (assessment) → **Memory Vault** (completion with all components)
+5. **Throne Chamber Approach** (king rescue) → **Throne Chamber Approach** (parent's legacy)
+6. **Throne Chamber** → **Royal Gardens**
+
+**Total Room Visits:** 14 visits across 10 rooms, with 4 rooms requiring multiple visits for different purposes.
+
 ## Golden Path Item Usage Summary
 
 **The Lifelight Elixir (Essential):**
@@ -933,6 +1013,12 @@ through the story.
 -   **Primary Purpose:** Used to save King Alden by countering Malakar's life-draining ritual
 -   **Consumption:** Single-use item that is consumed when saving the king
 -   **Represents:** The combined power of the three virtues (Courage, Wisdom, Selflessness) forged into a single, potent remedy
+
+**Multi-Visit Dependencies:**
+
+-   **Echo Stone:** Basic navigation tool (Step 4) → Enhanced memory capture (Step 6) → Vault stabilization (Step 10)
+-   **Mirror Shard:** Found in maze (Step 5) → Combined in vault (Step 10) → Truth revelation (Steps 12-13)
+-   **Guardian's Chain:** Protection preparation (Step 1) → Knight battle usage (Step 6)
 
 **Progressive Item Chain:**
 
