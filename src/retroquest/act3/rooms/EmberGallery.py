@@ -25,7 +25,7 @@ class EmberGallery(Room):
             items=[],
             characters=[],
             exits={
-                "north": "MirrorTerraces", 
+                "north": "MirrorTerraces",
                 "west": "LowerSwitchbacks"
             },
         )

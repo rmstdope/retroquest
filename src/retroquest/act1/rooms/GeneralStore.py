@@ -25,7 +25,7 @@ class GeneralStore(Room):
         - NPC: ``Shopkeeper``.
 
     Design Notes:
-        Future economy: migrate to merchant inventory abstraction with dynamic stock.  
+        Future economy: migrate to merchant inventory abstraction with dynamic stock.
     """
     def __init__(self) -> None:
         """Initialize the General Store with its static inventory and NPC."""

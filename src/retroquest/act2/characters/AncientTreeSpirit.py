@@ -142,7 +142,7 @@ class AncientTreeSpirit(Character):
                     "secrets of communication with the natural world.\n\n"
                 )
                 + (
-                    "You have learned the [spell_name]Forest Speech[/spell_name] spell!" 
+                    "You have learned the [spell_name]Forest Speech[/spell_name] spell!"
                     "[/success]\n\n"
                 )
                 + (
@@ -200,7 +200,7 @@ class AncientTreeSpirit(Character):
                     "tested your wisdom and found you worthy. These sacred items - water "
                     "blessed with purification magic and flowers touched by moonlight - "
                     "are treasures of the forest's heart. You have shown respect for the "
-                    "old ways and proven yourself a true friend to the woodland spirits.'" 
+                    "old ways and proven yourself a true friend to the woodland spirits.'"
                     "[/dialogue]\n\n"
                     "The great tree's bark glows more brightly, and you feel a deep sense "
                     "of accomplishment. The forest itself seems to acknowledge your "

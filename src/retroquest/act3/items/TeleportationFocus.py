@@ -8,7 +8,7 @@ class TeleportationFocus(Item):
     """Anchor focus for long-range circle magic (Act III).
 
     Narrative Role:
-        Stabilizes Mira's ritual spaces, enabling safe transitions once multi-room 
+        Stabilizes Mira's ritual spaces, enabling safe transitions once multi-room
         prerequisites are met.
 
     Key Mechanics:

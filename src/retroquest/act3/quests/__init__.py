@@ -7,6 +7,7 @@ from .MirrorsOfEmberlight import MirrorsOfEmberlightQuest
 from .BreathOfTheMountain import BreathOfTheMountain
 from .MinersRescue import MinersRescue
 from .OathOfStillness import OathOfStillness
+from .EchoesOfTheHiddenBond import EchoesOfTheHiddenBondQuest
 
 __all__ = [
 	"TheThreeVirtuesQuest",
@@ -16,4 +17,5 @@ __all__ = [
 	"BreathOfTheMountain",
 	"MinersRescue",
 	"OathOfStillness",
+	"EchoesOfTheHiddenBondQuest",
 ]

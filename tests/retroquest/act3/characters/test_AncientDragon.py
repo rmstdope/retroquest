@@ -110,7 +110,7 @@ def test_say_wrong_word_to_dragon():
     game_state = _make_gs()
     room = DragonsHall()
     game_state.current_room = room
-    
+
     # Set dragons memory received flag first
     game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
 
@@ -128,7 +128,7 @@ def test_say_oath_without_examining_scrolls():
 
     # Set dragons memory received flag first
     game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
-    
+
     # Don't set the oath scrolls examined flag
     assert not game_state.get_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)
 
@@ -152,7 +152,7 @@ def test_say_oath_after_examining_scrolls():
 
     # Set dragons memory received flag first
     game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
-    
+
     # Set the oath scrolls examined flag
     game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
 
@@ -175,7 +175,7 @@ def test_oath_requirements_case_insensitive():
 
     # Set dragons memory received flag first
     game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
-    
+
     # Set the oath scrolls examined flag
     game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
 

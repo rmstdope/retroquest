@@ -25,7 +25,7 @@ class VegetableField(Room):
         - Characters: None.
 
     Design Notes:
-        Later visual state swap possible after growth spell or quest resolution.  
+        Later visual state swap possible after growth spell or quest resolution.
     """
     def __init__(self) -> None:
         """Initialize the Vegetable Field and its passive investigation flag behavior."""

@@ -130,20 +130,20 @@ def test_check_update_reflects_all_three_relics():
     act3.music_file = ''
     game = Game([act3])
     quest = TheThreeVirtuesQuest()
-    
+
     # Set all three flags
     game.state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)
     game.state.set_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, True)
     game.state.set_story_flag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, True)
-    
+
     updated = quest.check_update(game.state)
     assert updated is True
-    
+
     # All three relics should be mentioned
     assert 'Crystal of Light' in quest.description
     assert 'Phoenix Feather' in quest.description
     assert "Dragon's Scale" in quest.description
-    
+
     # Final message should indicate all relics are obtained
     assert 'all three relics' in quest.description
     assert 'final trial awaits' in quest.description
@@ -155,7 +155,7 @@ def test_check_update_sequential_acquisition():
     act3.music_file = ''
     game = Game([act3])
     quest = TheThreeVirtuesQuest()
-    
+
     # First acquire Crystal
     game.state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)
     assert quest.check_update(game.state) is True
@@ -164,7 +164,7 @@ def test_check_update_sequential_acquisition():
     # Should not have specific messages for other relics yet
     assert 'Phoenix Feather. Its warmth pulses' not in quest.description
     assert "Dragon's Scale, its obsidian surface" not in quest.description
-    
+
     # Then acquire Phoenix Feather
     game.state.set_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, True)
     assert quest.check_update(game.state) is True
@@ -172,7 +172,7 @@ def test_check_update_sequential_acquisition():
     assert 'Phoenix Feather. Its warmth pulses' in quest.description
     # Should not have Dragon's Scale specific message yet
     assert "Dragon's Scale, its obsidian surface" not in quest.description
-    
+
     # Finally acquire Dragon's Scale
     game.state.set_story_flag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, True)
     assert quest.check_update(game.state) is True

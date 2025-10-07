@@ -100,7 +100,9 @@ def test_use_with_other_item():
 
     # Create a mock item
     class MockItem:
+        """Mock item for testing incompatible item usage."""
         def get_name(self):
+            """Return the mock item name."""
             return "mock item"
 
     mock_item = MockItem()

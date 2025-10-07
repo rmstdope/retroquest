@@ -33,6 +33,7 @@ class TheThreeVirtuesQuest(Quest):
         return game_state.get_story_flag(FLAG_ACT3_MAIN_STARTED)
 
     def check_update(self, game_state: GameState) -> bool:
+        """Update quest description based on acquired relics."""
         updated = False
         self.description = ''
         new_desc = (

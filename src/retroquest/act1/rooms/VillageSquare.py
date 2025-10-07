@@ -22,7 +22,7 @@ class VillageSquare(Room):
         - NPC: ``Villager``.
 
     Design Notes:
-        Candidate for timed announcements or seasonal event layering later.  
+        Candidate for timed announcements or seasonal event layering later.
     """
     def __init__(self) -> None:
         """Initialize the Village Square with its ambient items and villagers."""

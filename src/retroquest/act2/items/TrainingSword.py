@@ -48,7 +48,7 @@ class TrainingSword(Item):
                     "gathering aren't ordinary threats - they're connected to ancient magical "
                     "energies that have been dormant for centuries.'\n\n"
                     "[character_name]Sir Cedric[/character_name] leans closer, lowering his "
-                    "voice. 'There are legends of a being known as [character_name]Nyx" 
+                    "voice. 'There are legends of a being known as [character_name]Nyx"
                     "[/character_name] - "
                     "a mystical entity who dwells deep within the enchanted forest beyond our "
                     "borders. Nyx is said to possess knowledge of the oldest magics, including "

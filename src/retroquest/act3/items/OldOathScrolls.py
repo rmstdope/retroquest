@@ -36,12 +36,12 @@ class OldOathScrolls(Item):
     def examine(self, game_state: GameState) -> str:
         """Examine the oath scrolls and set the examined flag."""
         game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
-        
+
         # Remove the scrolls from inventory (they disintegrate after being read)
         game_state.remove_item_from_inventory(self.get_name())
-        
+
         # Remove the scrolls from the current room as well
         if game_state.current_room and self in game_state.current_room.items:
             game_state.current_room.items.remove(self)
-        
+
         return super().examine(game_state)

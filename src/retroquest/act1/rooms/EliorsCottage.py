@@ -26,7 +26,7 @@ class EliorsCottage(Room):
         - NPC: ``Grandmother``.
 
     Design Notes:
-        Exit reveal pattern could migrate to a ``TutorialRoom`` abstraction if reused.  
+        Exit reveal pattern could migrate to a ``TutorialRoom`` abstraction if reused.
     """
     def __init__(self) -> None:
         """Initialize the cottage room with base items and no exits initially.

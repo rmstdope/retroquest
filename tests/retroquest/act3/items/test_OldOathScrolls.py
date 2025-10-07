@@ -58,10 +58,10 @@ def test_old_oath_scrolls_examine():
 
     # Examine the scrolls
     result = scrolls.examine(gs)
-    
+
     # Flag should now be set
     assert gs.get_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)
-    
+
     # Should return description
     assert "binding oaths" in result
     assert "selflessness" in result
@@ -76,7 +76,7 @@ def test_old_oath_scrolls_examine_multiple_times():
     scrolls.examine(gs)
     scrolls.examine(gs)
     scrolls.examine(gs)
-    
+
     # Flag should still be set
     assert gs.get_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)
 
@@ -86,16 +86,16 @@ def test_old_oath_scrolls_removal_from_room():
     scrolls = OldOathScrolls()
     room = DummyRoom()
     gs = DummyGameState()
-    
+
     # Add scrolls to room and set as current room
     room.items.append(scrolls)
     gs.current_room = room
-    
+
     # Initially, scrolls should be in room
     assert scrolls in room.items
-    
+
     # Examine the scrolls
     scrolls.examine(gs)
-    
+
     # Scrolls should now be removed from room
     assert scrolls not in room.items

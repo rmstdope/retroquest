@@ -97,11 +97,11 @@ def test_phantoms_only_whisper():
     response = phantoms.talk_to(gs)
     # Check for mystical/ethereal response elements that indicate undecipherable speech
     mystical_indicators = [
-        "whisper", "ethereal", "spectral", "sibilant", "half-formed", 
+        "whisper", "ethereal", "spectral", "sibilant", "half-formed",
         "cannot grasp", "slip away", "mist", "beyond understanding"
     ]
     assert any(indicator in response.lower() for indicator in mystical_indicators)
-    
+
     # Make sure it's ethereal/mystical dialogue, not normal conversation
     assert "hello" not in response.lower()
     assert "greetings" not in response.lower()

@@ -11,6 +11,7 @@ class MendSpell(Spell):
     """
 
     def __init__(self) -> None:
+        """Initialize the Mend spell."""
         super().__init__(
             name="mend",
             description=(
@@ -20,6 +21,7 @@ class MendSpell(Spell):
         )
 
     def cast_spell(self, _game_state: GameState) -> str:
+        """Cast the mend spell without a specific target."""
         name = self.get_name()
         return (
             f"[success]You cast [spell_name]{name}[/spell_name] into the air. The "

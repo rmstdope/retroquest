@@ -2,7 +2,6 @@
 
 from ...engine.GameState import GameState
 from ...engine.Item import Item
-from ..Act3StoryFlags import FLAG_ACT3_SEA_SEALED_LETTER_FOUND
 from .SeaSealedLetter import SeaSealedLetter
 
 
@@ -22,10 +21,11 @@ class Mural(Item):
             ),
             can_be_carried=False,
         )
+        self._letter_found = False
 
     def examine(self, game_state: GameState) -> str:
         """Examine the mural to reveal hidden secrets or the letter."""
-        if game_state.get_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_FOUND):
+        if self._letter_found:
             return (
                 "[event]The mural's quiet scene is whole again: the guardian's "
                 "shape holds the child as if the image itself was a tide shield. "
@@ -33,7 +33,7 @@ class Mural(Item):
                 "shows its place.[/event]"
             )
         # Mark the story flag the first time the letter is revealed
-        game_state.set_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_FOUND, True)
+        self._letter_found = True
         game_state.current_room.add_item(SeaSealedLetter())
         return (
             "[event]Fine salt lines run along the mural's base. Pressing the stone, "

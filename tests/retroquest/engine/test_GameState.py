@@ -490,7 +490,10 @@ class TestGameState(unittest.TestCase):
 
         # Create a room without items attribute
         class RoomWithoutItems:
+            """Test room that deliberately lacks an items attribute."""
+
             def __init__(self, name):
+                """Initialize room with name but no items attribute."""
                 self.name = name
                 # Intentionally no items attribute
 

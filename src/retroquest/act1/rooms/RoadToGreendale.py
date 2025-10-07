@@ -21,7 +21,7 @@ class RoadToGreendale(Room):
         - NPC: ``Merchant``.
 
     Design Notes:
-        Could introduce conditional unlocking tied to core village quest completion.  
+        Could introduce conditional unlocking tied to core village quest completion.
     """
     def __init__(self) -> None:
         """Initialize the Road to Greendale with its item and traveling merchant NPC."""

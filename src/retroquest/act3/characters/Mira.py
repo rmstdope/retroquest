@@ -8,11 +8,13 @@ from ..Act3StoryFlags import (
     FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
     FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
     FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
+    FLAG_ACT3_SEA_SEALED_LETTER_READ,
+    FLAG_ACT3_CHARRED_INSCRIPTION_READ,
 )
 
 
 class Mira(Character):
-    """Act III version of Mira: starts the main quest and handles teleportation between 
+    """Act III version of Mira: starts the main quest and handles teleportation between
     sites."""
 
     def __init__(self) -> None:
@@ -36,6 +38,12 @@ class Mira(Character):
         # First conversation in Act III: start the main quest
         if not game_state.get_story_flag(FLAG_ACT3_MAIN_STARTED):
             game_state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
+
+            # Give Elior the Keepsake Note
+            from ..items.KeepsakeNote import KeepsakeNote
+            keepsake_note = KeepsakeNote()
+            game_state.inventory.append(keepsake_note)
+
             return (
                 event_msg
                 + "\n"
@@ -59,6 +67,9 @@ class Mira(Character):
                     "the edges of each site: first the Tidal Causeway of the Sunken "
                     "Ruins, then the Lower Switchbacks on Mount Ember, and finally the "
                     "Cavern Mouth of the shadowed halls.'[/dialogue]\n"
+                    "[dialogue]'Before we depart, take this note. It contains guidance "
+                    "about traces of the past you may find on your journey.'[/dialogue]\n"
+                    "[event]Mira hands you a small, worn piece of parchment.[/event]\n"
                     "[dialogue]'When all three are gathered, I will set our last "
                     "circle at the fortress gate. Say the word, and I will draw the "
                     "first circle—where moonlight marries the sea.'[/dialogue]"
@@ -127,6 +138,20 @@ class Mira(Character):
                         "they may be more than mere kindle.'[/dialogue]"
                     )
                 )
+
+            # Check if Charred Inscription has been read before proceeding to Cavern Mouth
+            if not game_state.get_story_flag(FLAG_ACT3_CHARRED_INSCRIPTION_READ):
+                return (
+                    event_msg
+                    + "\n"
+                    + (
+                        "[dialogue]'Before we descend into shadow, Elior, you must "
+                        "discover the words your parents left burned into stone upon "
+                        "these ember heights. Their message will guide you through "
+                        "the darkness ahead.'[/dialogue]"
+                    )
+                )
+
             destination_key = "CavernMouth"
             flavor = (
                 "[dialogue]'You have done well, Elior. The Phoenix Feather is a "
@@ -149,6 +174,20 @@ class Mira(Character):
                         "[/dialogue]"
                     )
                 )
+
+            # Check if Sea-Sealed Letter has been read before proceeding to Lower Switchback
+            if not game_state.get_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_READ):
+                return (
+                    event_msg
+                    + "\n"
+                    + (
+                        "[dialogue]'Before we venture into the shadowed depths, Elior, "
+                        "you should seek the traces your parents left behind in the "
+                        "sunken ruins. Their story will give you strength for what "
+                        "lies ahead in the caverns.'[/dialogue]"
+                    )
+                )
+
             destination_key = "LowerSwitchbacks"
             flavor = (
                 "[dialogue]'Well done, Elior. The Crystal answers to courage; you "
@@ -158,6 +197,19 @@ class Mira(Character):
                 "skies for falling cinders.'[/dialogue]"
             )
         elif game_state.current_room.name == "Mira's Hut":
+            # Check if Elior has read the Keepsake Note first
+            from ..Act3StoryFlags import FLAG_ACT3_ECHOES_QUEST_STARTED
+            if not game_state.get_story_flag(FLAG_ACT3_ECHOES_QUEST_STARTED):
+                return (
+                    event_msg
+                    + "\n"
+                    + (
+                        "[dialogue]'Before we proceed, Elior, you should read the note "
+                        "I gave you. It contains important guidance about your journey "
+                        "that you may find... enlightening.'[/dialogue]"
+                    )
+                )
+
             # Check if all three relics have been gathered
             all_relics_gathered = (
                 game_state.get_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED) and
@@ -169,12 +221,12 @@ class Mira(Character):
             ):
                 # Step 28: Perform the Warding Rite to create Lifelight Elixir
                 game_state.set_story_flag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, True)
-                
+
                 # Remove the three virtue relics from inventory/room
                 game_state.remove_item_from_inventory_or_room("Crystal of Light", 1)
                 game_state.remove_item_from_inventory_or_room("Phoenix Feather", 1)
                 game_state.remove_item_from_inventory_or_room("Dragon's Scale", 1)
-                
+
                 # Add Lifelight Elixir to the room for pickup
                 from ..items.LifelightElixir import LifelightElixir
                 lifelight_elixir = LifelightElixir()

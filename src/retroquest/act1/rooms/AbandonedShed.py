@@ -33,7 +33,7 @@ class AbandonedShed(Room):
     Design Notes:
         Demonstrates reusable staged revelation pattern. Future abstraction could be a
         ``LockableLootRoom`` base capturing common sequencing logic. Narrative strings
-        intentionally inline (localization not yet scoped).  
+        intentionally inline (localization not yet scoped).
     """
     def __init__(self) -> None:
         """Initialize the Abandoned Shed room and its initial locked/search state."""

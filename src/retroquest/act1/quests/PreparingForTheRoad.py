@@ -37,7 +37,7 @@ class PreparingForTheRoadQuest(Quest):
         # Spells
         required_spells = ["revive", "purify", "bless", "heal", "unlock", "light", "grow"]
         self.knows_all_spells = all(game_state.has_spell(spell_name) for spell_name in required_spells)
-        
+
         # Action: Bless cast for journey (assuming this flag is set elsewhere when player casts bless on self)
         self.journey_bless_completed = game_state.get_story_flag(FLAG_JOURNEY_BLESS_COMPLETED)
 

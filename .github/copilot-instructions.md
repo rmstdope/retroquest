@@ -182,6 +182,7 @@ These instructions are mandatory for all code contributions to ensure consistenc
 -   Always have a single newline at the end of each file
 -   Prefix unused parameters with an underscore (e.g., \_game_state, \_target)
 -   When mixing strings and variables, prioritize using f-strings when constructing messages or dialogues.
+-   No trailing whitespaces at the end of lines
 
 ### Testing
 

@@ -22,7 +22,7 @@ class Riverbank(Room):
         - NPC: ``Fisherman``.
 
     Design Notes:
-        Time-of-day or seasonal variants could later deepen atmosphere.  
+        Time-of-day or seasonal variants could later deepen atmosphere.
     """
     def __init__(self) -> None:
         super().__init__(

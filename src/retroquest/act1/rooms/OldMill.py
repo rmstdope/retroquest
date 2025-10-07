@@ -22,7 +22,7 @@ class OldMill(Room):
         - Characters: None.
 
     Design Notes:
-        Could expand into crafting throughput, speed buffs, or timing-based events.  
+        Could expand into crafting throughput, speed buffs, or timing-based events.
     """
     def __init__(self) -> None:
         """Initialize the Old Mill room and its static contents."""

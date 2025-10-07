@@ -36,7 +36,7 @@ class StillnessVestibule(Room):
             ],
             characters=[SilenceKeeper(), WanderingPhantoms()],
             exits={
-                "north": "CollapsedGalleries", 
+                "north": "CollapsedGalleries",
                 "west": "CavernMouth"
             },
         )

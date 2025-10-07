@@ -8,11 +8,11 @@ class Locker(Item):
     """Corroded pier locker containing prism lanterns (Act III).
 
     Narrative Role:
-        Environmental container gating access to multiple prism lanterns used in ritual 
+        Environmental container gating access to multiple prism lanterns used in ritual
         lighting.
 
     Key Mechanics:
-        Requires external unlocking (spell or effect). Once unlocked, opening spawns 
+        Requires external unlocking (spell or effect). Once unlocked, opening spawns
         lantern items.
     """
 

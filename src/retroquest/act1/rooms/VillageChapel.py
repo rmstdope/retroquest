@@ -22,7 +22,7 @@ class VillageChapel(Room):
         - NPC: ``Priest``.
 
     Design Notes:
-        Potential resurrection / penalty mitigation hub in later acts.  
+        Potential resurrection / penalty mitigation hub in later acts.
     """
     def __init__(self) -> None:
         """Initialize the Village Chapel with items and a resident priest NPC."""

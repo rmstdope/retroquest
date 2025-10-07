@@ -22,7 +22,7 @@ class MirasHut(Room):
         - NPC: ``Mira``.
 
     Design Notes:
-        Serves as base for potential later blessing or spell tutoring systems.  
+        Serves as base for potential later blessing or spell tutoring systems.
     """
     def __init__(self) -> None:
         """Initialize Mira's Hut with its items and resident mentor NPC."""

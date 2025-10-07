@@ -23,7 +23,7 @@ class ForestPath(Room):
         - Characters: None.
 
     Design Notes:
-        Could later externalize transformation into a reusable description state mixin.  
+        Could later externalize transformation into a reusable description state mixin.
     """
     def __init__(self) -> None:
         """Initialize the Forest Path room with its items and exits."""

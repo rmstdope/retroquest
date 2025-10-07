@@ -7,7 +7,7 @@ class FishingExpeditionQuest(Quest):
         super().__init__(
             name="Fishing expedition",
             description="You can't help but feel sorry for the fisherman—he seems troubled and in need of help. Perhaps if you assist him, you'll uncover something important.",
-            completion="You have helped the fisherman and learned something new about the world around you. Your kindness is rewarded." 
+            completion="You have helped the fisherman and learned something new about the world around you. Your kindness is rewarded."
         )
 
     def check_trigger(self, game_state: GameState) -> bool:

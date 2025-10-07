@@ -1,7 +1,11 @@
 """AncientDragon character for the Dragon's Hall in Act 3."""
 from ...engine.Character import Character
 from ...engine.GameState import GameState
-from ..Act3StoryFlags import FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, FLAG_ACT3_DRAGON_OATH_SPOKEN, FLAG_ACT3_OATH_SCROLLS_EXAMINED
+from ..Act3StoryFlags import (
+    FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+    FLAG_ACT3_DRAGON_OATH_SPOKEN,
+    FLAG_ACT3_OATH_SCROLLS_EXAMINED
+)
 
 
 class AncientDragon(Character):

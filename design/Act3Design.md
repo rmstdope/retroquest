@@ -2,9 +2,20 @@
 
 ## Narrative Overview
 
-Elior leaves the Enchanted Forest carrying the echo of Nyx’s last words: “Power follows purpose; purpose follows truth.” The air feels thinner now, charged with the knowledge that Malakar holds King Alden captive and leeches his life to call forth a kingdom-wide curse. The path ahead is no longer about learning who Elior might become—it is about deciding the kind of person he will be while the kingdom watches.
+Elior leaves t### Storytelling Quest (Spans All Three Locations)
 
-Act III unfolds as a pilgrimage across Eldoria to recover three ancient relics—each bound to a virtue that shapes Elior’s character: Courage, Wisdom, and Selflessness. As Elior travels with Mira and Sir Cedric, he confronts enemies, moral trials, and the creeping weight of his parents’ mystery. Rumors now speak plainly: Malakar once knew them, and he wants something that only Elior can unlock.
+-   Name: Echoes of the Hidden Bond
+    -   Type: Storytelling Quest
+    -   Trigger: Pick up the keepsake note from Mira's Hut at the start of Act III
+    -   Structure: Three linked discoveries, one at each relic site
+    -   Objectives:
+        1. Sunken Ruins — Recover the Sea‑Sealed Letter fragment preserved in a coral reliquary
+        2. Mount Ember — Read the Charred Inscription etched into cooled lava near the mirror terraces
+        3. Caverns of Shadow — Hear the Dragon's Memory, a spoken recollection naming Elior's parents and the ward they forged
+    -   Completion: Assemble the three testimonies into a single account explaining how Elior was hidden from Malakar
+    -   Story Impact: Clarifies parentage and motive without altering main progression Forest carrying the echo of Nyx’s last words: “Power follows purpose; purpose follows truth.” The air feels thinner now, charged with the knowledge that Malakar holds King Alden captive and leeches his life to call forth a kingdom-wide curse. The path ahead is no longer about learning who Elior might become—it is about deciding the kind of person he will be while the kingdom watches.
+
+Act III unfolds as a pilgrimage across Eldoria to recover three ancient relics—each bound to a virtue that shapes Elior’s character: Courage, Wisdom, and Selflessness. As Elior travels with Mira and Sir Cedric, he confronts enemies and riddles. He learns more of the creeping weight of his parents’ mystery. Rumors now speak plainly: Malakar once knew them, and he wants something that only Elior can unlock.
 
 ## Journey Between Relic Sites
 
@@ -62,7 +73,7 @@ Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns b
         -   Phase 1: Crystal of Light (Courage) — Requires completion of both Sunken Ruins side quests
         -   Phase 2: Phoenix Feather (Wisdom) — Requires completion of both Mount Ember side quests
         -   Phase 3: Dragon’s Scale (Selflessness) — Requires completion of both Caverns of Shadow side quests
-        -   Final: Warding Rite — Combine the three relics to create a potion that can save King Alden. This potion is a crucial preparation for the Act IV assault
+        -   Final: Warding Rite — Combine the three relics (consuming them from inventory/room) to create the Lifelight Elixir that can save King Alden. This elixir is a crucial preparation for the Act IV assault
     -   Story Impact: Establishes the relics as the counter to Malakar’s ritual and leads directly to the transition into Act IV
 
 ### Storytelling Quest (Spans All Three Locations)

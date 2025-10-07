@@ -24,7 +24,7 @@ class BlacksmithsForge(Room):
 
     Design Notes:
         If forging expands, introduce a ``ForgingStation`` item (encapsulating recipe
-        validation, heat states, material slotting).  
+        validation, heat states, material slotting).
     """
     def __init__(self) -> None:
         super().__init__(

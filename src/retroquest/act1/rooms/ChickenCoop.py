@@ -24,7 +24,7 @@ class ChickenCoop(Room):
 
     Design Notes:
         ``Chicken`` could migrate to a Character if behavior/emotion systems appear.
-        Hidden hint supplies expandable narrative path (golden egg, lost trinket).  
+        Hidden hint supplies expandable narrative path (golden egg, lost trinket).
     """
     def __init__(self) -> None:
         super().__init__(

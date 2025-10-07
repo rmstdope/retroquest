@@ -11,6 +11,7 @@ class OathOfStillness(Quest):
     """Quiet the wandering phantoms in the Echo Chambers before the dragon's hall."""
 
     def __init__(self) -> None:
+        """Initialize the Oath of Stillness quest."""
         super().__init__(
             name="Oath of Stillness",
             description=(
@@ -49,4 +50,5 @@ class OathOfStillness(Quest):
         return game_state.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)
 
     def is_main(self) -> bool:
+        """Return False as this is a side quest."""
         return False

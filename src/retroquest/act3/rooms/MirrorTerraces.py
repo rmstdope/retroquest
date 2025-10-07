@@ -1,6 +1,7 @@
 """Module defining the MirrorTerraces room in Act 3."""
 from ...engine import Room
 from ..items import MirrorMount
+from ..items.CharredInscription import CharredInscription
 from ..Act3StoryFlags import (
     FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_STARTED,
     FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
@@ -25,7 +26,7 @@ class MirrorTerraces(Room):
                 "of warm metal, singed cloth, and the mineral tang of cooling slag."
             ),
             # A prepared mount is present at the terraces for the player to use
-            items=[MirrorMount()],
+            items=[MirrorMount(), CharredInscription()],
             characters=[],
             exits={
                 "south": "EmberGallery",

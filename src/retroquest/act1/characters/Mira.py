@@ -78,7 +78,7 @@ class Mira(Character):
                 "[character_name]Mira[/character_name] smiles, accepting the "
                 "[item_name]flower[/item_name]. [dialogue]'This bloom,' she says, her "
                 "voice soft, 'is a testament to your growing bond with the living world, "
-                "Elior. It shows you are ready to truly channel the energies around us.'" 
+                "Elior. It shows you are ready to truly channel the energies around us.'"
                 "[/dialogue] She then guides you through ancient words and gestures, "
                 "awakening your innate abilities. [event]You feel a new understanding "
                 "dawn as she imparts the knowledge of [spell_name]heal[/spell_name] to mend, "

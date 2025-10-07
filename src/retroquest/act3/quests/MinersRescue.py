@@ -9,6 +9,7 @@ from ..Act3StoryFlags import (
 class MinersRescue(Quest):
     """Rescue the trapped miners and secure the passage in the Caverns of Shadow."""
     def __init__(self) -> None:
+        """Initialize the Miners' Rescue quest."""
         super().__init__(
             name="Miners' Rescue",
             description=(
@@ -34,4 +35,5 @@ class MinersRescue(Quest):
         return game_state.get_story_flag(FLAG_ACT3_MINERS_RESCUE_COMPLETED)
 
     def is_main(self) -> bool:
+        """Return False as this is a side quest."""
         return False

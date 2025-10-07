@@ -2,7 +2,6 @@
 
 from retroquest.engine.Act import Act
 from retroquest.engine.GameState import GameState
-from .Act3StoryFlags import FLAG_ACT3_FORTRESS_GATES_EXAMINED
 
 from .quests import (
     TheThreeVirtuesQuest,
@@ -12,6 +11,7 @@ from .quests import (
     BreathOfTheMountain,
     MinersRescue,
     OathOfStillness,
+    EchoesOfTheHiddenBondQuest,
 )
 from .rooms import (
     CavernMouth,
@@ -78,6 +78,8 @@ class Act3(Act):
         quests = [
             # Main Quest
             TheThreeVirtuesQuest(),
+            # Storytelling Quest
+            EchoesOfTheHiddenBondQuest(),
             # Sunken Ruins Side Quests
             TidewardSigilsQuest(),
             LanternsOfTheDeepsQuest(),
@@ -113,10 +115,12 @@ class Act3(Act):
             "Let's begin. (Type 'help' for a list of commands.)\n"
         )
 
-    def is_completed(self, game_state: GameState) -> bool:
+    def is_completed(self, _game_state: GameState) -> bool:
         """Check if Act III is completed based on the completion flag."""
         # Act III completes when the fortress gate is opened and the endgame is triggered.
-        return game_state.get_story_flag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)
+        # Note: This will be updated when Act IV is implemented
+        return False
+        # return game_state.get_story_flag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)
 
     def setup_gamestate(self, game_state: GameState) -> None:
         """Ensure essential Act III magic is available at start."""

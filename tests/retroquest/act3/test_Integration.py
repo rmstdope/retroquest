@@ -66,6 +66,10 @@ class TestAct3Integration:
         # Ensure quest is activated (helpers auto-flush activations)
         check_quests(game.state, ['The Three Virtues'])
 
+        # Examine note to start another quest
+        result = execute_commands(game, ['examine keepsake note'])
+        check_quests(game.state, ['Echoes of the Hidden Bond', 'The Three Virtues'])
+
         # Second talk: teleport to Tidal Causeway (Sunken Ruins entry) with companions
         # Cast light to find key
         result = execute_commands(game, ['talk to mira'])
@@ -87,7 +91,8 @@ class TestAct3Integration:
         # Reveal the runes so the Tideward Sigils started flag is set
         execute_commands(game, ['search'])
         # Newly activated side quest should now be active alongside the main quest
-        check_quests(game.state, ['The Three Virtues', 'Tideward Sigils'])
+        check_quests(game.state, ['Echoes of the Hidden Bond', 'The Three Virtues',
+                                  'Tideward Sigils'])
         # Search/examine/take runes
         combined = execute_commands(game, ['search', 'examine steles', 'take moon rune shards'])
         assert 'moon' in combined.lower() or 'shard' in combined.lower()
@@ -104,7 +109,7 @@ class TestAct3Integration:
         assert 'sigil' in use_result.lower()
         check_story_flag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
         # Quest should be marked completed
-        check_quests(game.state, ['The Three Virtues'])
+        check_quests(game.state, ['Echoes of the Hidden Bond', 'The Three Virtues'])
 
         # Step 6: Removed
 
@@ -157,7 +162,7 @@ class TestAct3Integration:
         check_current_room(game.state, 'Tidal Causeway')
         mural_reveal = execute_commands(game, ['examine mural'])
         assert 'reliquary' in mural_reveal.lower() or 'sea-sealed letter' in mural_reveal.lower()
-        execute_commands(game, ['take sea-sealed letter'])
+        execute_commands(game, ['take sea-sealed letter', 'examine sea-sealed letter'])
         check_item_in_inventory(game.state, 'Sea-Sealed Letter', True)
 
         # Step 10: Sanctum — speak vow, then take crystal
@@ -199,6 +204,8 @@ class TestAct3Integration:
         execute_commands(game, ['east'])
         check_current_room(game.state, 'Mirror Terraces')
         # There should be mounts and at least one brass segment in the room
+        # Examine the inscription to update quest log
+        execute_commands(game, ['examine inscription'])
         # Take the terrace-provided segment if present
         execute_commands(game, ['examine mirror mount', 'take brass mirror segment'])
         check_item_count_in_inventory(game.state, 'Brass Mirror Segment', 4)
@@ -352,13 +359,13 @@ class TestAct3Integration:
         search_result = execute_commands(game, ['search'])
         assert 'ancient scrolls' in search_result
         assert 'stone niche' in search_result
-        
+
         # First examine the Old Oath Scrolls to understand the oath requirements
         examine_scrolls = execute_commands(game, ['examine old oath scrolls'])
         assert 'selflessness' in examine_scrolls.lower()
         assert 'disintegrate' in examine_scrolls.lower()
         check_story_flag(game.state, FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
-        
+
         # After examination, scrolls should be consumed and no longer available
         check_item_in_room(game.state.current_room, 'Old Oath Scrolls', False)
         check_item_in_inventory(game.state, 'Old Oath Scrolls', False)
@@ -385,7 +392,10 @@ class TestAct3Integration:
 
         # Cast bless on echo stones (sanctifies them for the rite)
         bless_result = execute_commands(game, ['cast bless on echo stones'])
-        assert 'sacred luminescence' in bless_result.lower() and 'ancient chant' in bless_result.lower()
+        assert (
+            'sacred luminescence' in bless_result.lower() and
+            'ancient chant' in bless_result.lower()
+        )
 
         # Use resonant chant rubbings on echo stones (performs the Oath of Stillness)
         oath_result = execute_commands(game, ['use resonant chant rubbings with echo stones'])
@@ -393,7 +403,7 @@ class TestAct3Integration:
         assert 'harmonious silence' in oath_result.lower()
         assert "dragon's hall now lies open" in oath_result.lower()
         check_story_flag(game.state, FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, True)
-        
+
         # Resonant chant rubbings should be consumed and removed from inventory
         check_item_in_inventory(game.state, 'Resonant Chant Rubbings', False)
 

@@ -11,7 +11,7 @@ class SeaweedTangle(Item):
             name="Seaweed Tangle",
             description=(
                 "A dense mat of seaweed clings to the stones, slick and knotted. "
-                "It seems rooted to the surf." 
+                "It seems rooted to the surf."
             ),
             short_name="seaweed",
             can_be_carried=False,

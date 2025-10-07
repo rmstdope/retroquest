@@ -43,7 +43,7 @@ class Shopkeeper(Character):
         self.dialogue_index = 0
         self.closed_dialogue = (
             "The [character_name]Shopkeeper[/character_name] shakes his head. "
-            "[dialogue]'Sorry, not open for business just yet. Come back later, lad—" 
+            "[dialogue]'Sorry, not open for business just yet. Come back later, lad—"
             "there's something you need to discover first.'[/dialogue]"
         )
 

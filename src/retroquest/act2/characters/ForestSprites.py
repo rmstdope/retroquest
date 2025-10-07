@@ -55,7 +55,7 @@ class ForestSprites(Character):
                 )
 
                 + (
-                    "guardians of the ancient paths, keepers of riddles and secrets old.'" 
+                    "guardians of the ancient paths, keepers of riddles and secrets old.'"
                     "[/dialogue]\n\n"
                 )
 
@@ -72,7 +72,7 @@ class ForestSprites(Character):
                     "[dialogue]'But beware - the forest tests not just knowledge, but heart "
                     "and spirit as well. Show respect to all living things, and the "
                     "ancient powers will guide your steps. Show arrogance or harm, and "
-                    "the very trees will lead you astray until you learn better ways.'" 
+                    "the very trees will lead you astray until you learn better ways.'"
                     "[/dialogue]"
                 )
             )

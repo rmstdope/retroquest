@@ -20,6 +20,6 @@ class BarnacledBeamFragment(Item):
     def prevent_pickup(self) -> str:
         """Explain why the fragment cannot be taken."""
         return (
-            "[failure]The beam is fused into the pier's wreckage; you cannot pry it free." 
+            "[failure]The beam is fused into the pier's wreckage; you cannot pry it free."
             "[/failure]"
         )

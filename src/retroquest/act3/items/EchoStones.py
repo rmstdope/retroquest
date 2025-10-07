@@ -58,7 +58,7 @@ class EchoStones(Item):
     def use_with(self, game_state: GameState, other_item: Item) -> str:
         """Handle using other items with the echo stones."""
         from .ResonantChantRubbings import ResonantChantRubbings
-        
+
         if isinstance(other_item, ResonantChantRubbings):
             # Delegate to the ResonantChantRubbings' use_with method
             return other_item.use_with(game_state, self)

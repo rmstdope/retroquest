@@ -12,7 +12,7 @@ class CrystalOfLight(Item):
     """Central luminous relic binding multiple quest prerequisites (Act III).
 
     Narrative Role:
-        Acts as a synthesis reward once sigils are attuned, deep lanterns lit, and a 
+        Acts as a synthesis reward once sigils are attuned, deep lanterns lit, and a
         courage vow made.
 
     Key Mechanics:

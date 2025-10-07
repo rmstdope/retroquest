@@ -7,12 +7,12 @@ class AncientAmulet(Item):
     """Heirloom catalyst linking three relic threads (Act III).
 
     Narrative Role:
-        Serves as the convergence focus for three prerequisite relic quests. The amulet 
-        remains bound until conditions are satisfied elsewhere, reinforcing multi-quest 
+        Serves as the convergence focus for three prerequisite relic quests. The amulet
+        remains bound until conditions are satisfied elsewhere, reinforcing multi-quest
         synthesis.
 
     Key Mechanics:
-        Non-carriable until narrative completion; interception via `prevent_pickup()` 
+        Non-carriable until narrative completion; interception via `prevent_pickup()`
         provides flavor feedback and defers acquisition.
     """
 

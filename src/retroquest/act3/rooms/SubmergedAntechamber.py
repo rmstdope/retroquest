@@ -25,8 +25,8 @@ class SubmergedAntechamber(Room):
             items=[],
             characters=[],
             exits={
-                "north": "OuterWards", 
-                "east": "SanctumOfTheTide", 
+                "north": "OuterWards",
+                "east": "SanctumOfTheTide",
                 "west": "TidalCauseway"
             },
         )

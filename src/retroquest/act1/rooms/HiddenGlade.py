@@ -31,7 +31,7 @@ class HiddenGlade(Room):
         - Spell: ``Grow`` via illumination event.
 
     Design Notes:
-        Future refactor: unify dynamic description pattern across similar rooms.  
+        Future refactor: unify dynamic description pattern across similar rooms.
     """
     def __init__(self) -> None:
         """Initialize the Hidden Glade and its initial state for spells and fauna."""

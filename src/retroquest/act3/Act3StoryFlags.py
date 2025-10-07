@@ -12,7 +12,7 @@ FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT = "act3_lanterns_of_the_deeps_lit"
 FLAG_ACT3_LANTERN_BRACKETS_FOUND = "act3_lantern_brackets_found"
 FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED = "act3_crystal_of_light_acquired"
 FLAG_ACT3_VOW_OF_COURAGE_MADE = "act3_vow_of_courage_made"
-FLAG_ACT3_SEA_SEALED_LETTER_FOUND = "act3_sea_sealed_letter_found"
+FLAG_ACT3_SEA_SEALED_LETTER_READ = "act3_sea_sealed_letter_read"
 
 
 # Main quest lifecycle flags
@@ -54,3 +54,8 @@ FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED = "act3_lifelight_elixir_created"
 
 # Fortress approach
 FLAG_ACT3_FORTRESS_GATES_EXAMINED = "act3_fortress_gates_examined"
+
+# Echoes of the Hidden Bond storytelling quest
+FLAG_ACT3_ECHOES_QUEST_STARTED = "act3_echoes_quest_started"
+FLAG_ACT3_CHARRED_INSCRIPTION_READ = "act3_charred_inscription_read"
+FLAG_ACT3_ECHOES_QUEST_COMPLETED = "act3_echoes_quest_completed"

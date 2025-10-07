@@ -11,7 +11,7 @@ class WardingPillars(Item):
     """Tideward ritual pillars requiring purification (Act III).
 
     Narrative Role:
-        Environmental anchor for sigil completion; demonstrates interaction between spell 
+        Environmental anchor for sigil completion; demonstrates interaction between spell
         effects and quest progression.
 
     Key Mechanics:

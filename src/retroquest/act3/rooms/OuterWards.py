@@ -50,6 +50,6 @@ class OuterWards(Room):
         return (
             "[event]You search the drowned courtyard thoroughly. Apart from the "
             "three ancient warding pillars rising from the black water, there is "
-            "little of interest; the pillars alone seem keyed to the moon and tide." 
+            "little of interest; the pillars alone seem keyed to the moon and tide."
             "[/event]"
         )

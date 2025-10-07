@@ -20,7 +20,7 @@ class VillageWell(Room):
         - Characters: None.
 
     Design Notes:
-        Potential site for divination, wishes, or spirit encounters.  
+        Potential site for divination, wishes, or spirit encounters.
     """
     def __init__(self) -> None:
         """Initialize the Village Well and its quiet, mystical presence."""

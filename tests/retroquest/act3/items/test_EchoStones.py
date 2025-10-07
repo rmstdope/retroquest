@@ -17,10 +17,10 @@ class DummyGameState:
 
     def get_story_flag(self, flag_name):
         """Get a story flag value.
-        
+
         Args:
             flag_name: Name of the story flag to retrieve
-            
+
         Returns:
             The flag value if set, False otherwise
         """
@@ -28,7 +28,7 @@ class DummyGameState:
 
     def set_story_flag(self, flag_name, value):
         """Set a story flag value.
-        
+
         Args:
             flag_name: Name of the story flag to set
             value: Value to set for the flag
@@ -154,7 +154,7 @@ def test_echo_stones_use_with_rubbings():
 
     # Use echo stones with rubbings (should delegate to rubbings.use_with)
     result = stones.use_with(gs, rubbings)
-    
+
     # Should complete the oath quest
     assert gs.get_story_flag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)
     assert "banishes the wandering phantoms" in result
@@ -164,14 +164,16 @@ def test_echo_stones_use_with_other_item():
     """Test using echo stones with other items fails gracefully."""
     stones = EchoStones()
     gs = DummyGameState()
-    
+
     # Create a mock item
     class MockItem:
+        """Mock item for testing incompatible item usage."""
         def get_name(self):
+            """Return the mock item name."""
             return "mock item"
 
     mock_item = MockItem()
     result = stones.use_with(gs, mock_item)
-    
+
     # Should fall back to base class behavior
     assert "can't use" in result and "echo stones" in result and "mock item" in result
