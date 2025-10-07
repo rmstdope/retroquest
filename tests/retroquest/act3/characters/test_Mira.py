@@ -153,3 +153,140 @@ def test_mira_in_lower_switchbacks_teleports_to_cavern_mouth():
     assert 'Cavern Mouth' in out or 'CavernMouth' in game.state.current_room.name
     assert m in game.state.current_room.characters
     assert any(c.get_name().lower() == 'sir cedric' for c in game.state.current_room.characters)
+
+
+def test_mira_at_hut_requires_elixir_before_fortress_teleport():
+    """At Mira's Hut after elixir creation, Mira should require the elixir to be 
+    in inventory before teleporting to the fortress."""
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+    
+    from retroquest.act3.Act3StoryFlags import (
+        FLAG_ACT3_MAIN_STARTED,
+        FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED
+    )
+    
+    # Set up initial state
+    game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
+    game.state.set_story_flag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, True)
+    
+    # Place player at Mira's Hut
+    game.state.current_room = game.state.all_rooms['MirasHut']
+    m = Mira()
+    
+    # Test without elixir in inventory - should urge to take it
+    out = m.talk_to(game.state)
+    assert 'take the Lifelight Elixir' in out
+    assert 'before we depart' in out
+    assert 'You arrive at' not in out  # Should not teleport
+    
+    # Test with elixir in inventory - should allow teleport
+    from retroquest.act3.items.LifelightElixir import LifelightElixir
+    elixir = LifelightElixir()
+    game.state.inventory.append(elixir)
+    
+    # Add Mira and Sir Cedric to the room for teleport
+    game.state.current_room.characters.append(m)
+    from retroquest.act3.characters.SirCedric import SirCedric
+    sc = SirCedric()
+    game.state.current_room.characters.append(sc)
+    
+    out = m.talk_to(game.state)
+    assert 'final journey' in out
+    assert 'You arrive at' in out  # Should teleport
+
+
+def test_mira_at_fortress_entrance_discusses_fatigue():
+    """At Fortress Entrance, Mira should talk about being fatigued and needing rest."""
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+    
+    from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MAIN_STARTED
+    game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
+    
+    # Place player at Fortress Entrance
+    game.state.current_room = game.state.all_rooms['FortressEntrance']
+    m = Mira()
+    
+    out = m.talk_to(game.state)
+    assert 'journey has taken its toll' in out
+    assert 'drained much of my strength' in out
+    assert 'must rest and recover' in out
+    assert 'Sir Cedric press forward' in out
+    assert 'three virtues you have proven' in out
+    assert 'You arrive at' not in out  # Should not teleport
+
+
+def test_mira_creates_elixir_and_removes_relics():
+    """At Mira's Hut with all three relics, Mira should create the elixir and remove the relics."""
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+    
+    from retroquest.act3.Act3StoryFlags import (
+        FLAG_ACT3_MAIN_STARTED,
+        FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+        FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+        FLAG_ACT3_DRAGONS_SCALE_ACQUIRED
+    )
+    
+    # Set up initial state with all relics acquired
+    game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
+    game.state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)
+    game.state.set_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, True)
+    game.state.set_story_flag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, True)
+    
+    # Place player at Mira's Hut
+    game.state.current_room = game.state.all_rooms['MirasHut']
+    
+    # Add the three relics to inventory and room
+    from retroquest.act3.items.CrystalOfLight import CrystalOfLight
+    from retroquest.act3.items.PhoenixFeather import PhoenixFeather
+    from retroquest.act3.items.DragonsScale import DragonsScale
+    
+    crystal = CrystalOfLight()
+    feather = PhoenixFeather()
+    scale = DragonsScale()
+    
+    # Add items to different locations to test removal from both inventory and room
+    game.state.inventory.append(crystal)  # Crystal in inventory
+    game.state.inventory.append(feather)  # Feather in inventory
+    game.state.current_room.items.append(scale)  # Scale in room
+    
+    # Verify items are present before ritual
+    assert game.state.has_item("Crystal of Light")
+    assert game.state.has_item("Phoenix Feather") 
+    # For scale in room, check manually since has_item only checks inventory
+    scale_in_room = any(
+        item.get_name() == "Dragon's Scale" 
+        for item in game.state.current_room.items
+    )
+    assert scale_in_room
+    
+    m = Mira()
+    out = m.talk_to(game.state)
+    
+    # Should perform the ritual
+    assert 'three relics resonate' in out
+    assert 'Warding Rite' in out or 'elixir' in out
+    assert 'Lifelight Elixir' in out
+    
+    # Verify relics have been removed from both inventory and room
+    assert not game.state.has_item("Crystal of Light")
+    assert not game.state.has_item("Phoenix Feather")
+    
+    # Check that scale was removed from room
+    scale_still_in_room = any(
+        item.get_name() == "Dragon's Scale" 
+        for item in game.state.current_room.items
+    )
+    assert not scale_still_in_room
+    
+    # Verify elixir was created in the room
+    lifelight_elixir_in_room = any(
+        item.get_name() == "Lifelight Elixir" 
+        for item in game.state.current_room.items
+    )
+    assert lifelight_elixir_in_room

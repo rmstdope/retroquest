@@ -18,4 +18,5 @@ class LifelightElixir(Item):
                 "needed to counter Malakar's dark ritual and save King Alden's life."
             ),
             can_be_carried=True,
+            short_name="elixir"
         )

@@ -439,6 +439,72 @@ class TestGameState(unittest.TestCase):
         # Verify total inventory size
         self.assertEqual(len(self.gs.inventory), 9)  # 8 coins + 1 sword
 
+    def test_remove_item_from_inventory_or_room(self):
+        """Test removing items from inventory first, then from current room."""
+        from engine.Item import Item
+
+        # Create test items
+        coin = Item("coin", "A golden coin")
+        sword = Item("sword", "A sharp sword")
+
+        # Add items to inventory
+        self.gs.add_item_to_inventory(coin, count=3)
+        self.gs.add_item_to_inventory(sword, count=1)
+
+        # Add items to current room
+        self.gs.current_room.items.append(Item("coin", "A golden coin"))
+        self.gs.current_room.items.append(Item("coin", "A golden coin"))
+        self.gs.current_room.items.append(Item("gem", "A precious gem"))
+
+        # Test removing from inventory only (sufficient items available)
+        removed = self.gs.remove_item_from_inventory_or_room("sword", 1)
+        self.assertEqual(removed, 1)
+        self.assertEqual(self.gs.get_item_count("sword"), 0)
+        self.assertEqual(len(self.gs.current_room.items), 3)  # Room items unchanged
+
+        # Test removing from inventory and room (not enough in inventory)
+        removed = self.gs.remove_item_from_inventory_or_room("coin", 5)
+        self.assertEqual(removed, 5)  # 3 from inventory + 2 from room
+        self.assertEqual(self.gs.get_item_count("coin"), 0)
+        self.assertEqual(len(self.gs.current_room.items), 1)  # Only gem left
+
+        # Test removing more than available
+        removed = self.gs.remove_item_from_inventory_or_room("gem", 3)
+        self.assertEqual(removed, 1)  # Only 1 gem was available in room
+        self.assertEqual(len(self.gs.current_room.items), 0)  # Room now empty
+
+        # Test removing non-existent item
+        removed = self.gs.remove_item_from_inventory_or_room("nonexistent", 1)
+        self.assertEqual(removed, 0)
+
+        # Test with short names
+        potion = Item("Health Potion", "A red potion", short_name="potion")
+        self.gs.add_item_to_inventory(potion)
+        removed = self.gs.remove_item_from_inventory_or_room("potion", 1)
+        self.assertEqual(removed, 1)
+        self.assertEqual(self.gs.get_item_count("Health Potion"), 0)
+
+    def test_remove_item_from_inventory_or_room_no_room_items(self):
+        """Test removing items when current room has no items attribute."""
+        from engine.Item import Item
+
+        # Create a room without items attribute
+        class RoomWithoutItems:
+            def __init__(self, name):
+                self.name = name
+                # Intentionally no items attribute
+
+        room_without_items = RoomWithoutItems("Test Room")
+        self.gs.current_room = room_without_items
+
+        # Add item to inventory
+        coin = Item("coin", "A golden coin")
+        self.gs.add_item_to_inventory(coin, count=2)
+
+        # Try to remove more items than in inventory - should handle gracefully
+        removed = self.gs.remove_item_from_inventory_or_room("coin", 5)
+        self.assertEqual(removed, 2)  # Only got 2 from inventory, room has no items
+        self.assertEqual(self.gs.get_item_count("coin"), 0)
 
 
 # if __name__ == "__main__":

@@ -23,7 +23,7 @@ class DummyGameState:
 def test_dragons_scale_init():
     """Test initialization of DragonsScale."""
     scale = DragonsScale()
-    assert scale.get_name() == "dragon's scale"
+    assert scale.get_name() == "Dragon's Scale"
     assert "dark as midnight" in scale.description and "deep gold" in scale.description
     assert scale.can_be_carried_flag is True
 

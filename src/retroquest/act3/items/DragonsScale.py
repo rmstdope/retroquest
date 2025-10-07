@@ -10,7 +10,7 @@ class DragonsScale(Item):
     def __init__(self) -> None:
         """Initialize DragonsScale as a precious relic."""
         super().__init__(
-            name="dragon's scale",
+            name="Dragon's Scale",
             description=(
                 "A scale from the ancient dragon, dark as midnight yet shot "
                 "through with veins of deep gold. It pulses with a slow, steady "

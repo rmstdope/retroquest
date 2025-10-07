@@ -74,7 +74,22 @@ class Mira(Character):
         # If we're already at Lower Switchbacks, do not teleport; instead
         # provide lore about the second virtue and the phoenix legend.
         # Special dialogue for Cavern Mouth
-        if game_state.current_room.name == "Cavern Mouth":
+        if game_state.current_room.name == "Entrance to Malakar's Fortress":
+            return (
+                event_msg
+                + "\n"
+                + (
+                    "[dialogue]'The journey has taken its toll on me, Elior. The magic "
+                    "required to transport us here has drained much of my strength.'[/dialogue]\n"
+                    "[dialogue]'I must rest and recover while you and Sir Cedric press "
+                    "forward into the fortress. The fate of the kingdom now rests in "
+                    "your capable hands.'[/dialogue]\n"
+                    "[dialogue]'Go with courage, wisdom, and selflessness—the three "
+                    "virtues you have proven. The Lifelight Elixir will guide you to "
+                    "victory. I will await your return.'[/dialogue]"
+                )
+            )
+        elif game_state.current_room.name == "Cavern Mouth":
             # Check if dragon's scale has been acquired
             if not game_state.get_story_flag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED):
                 return (
@@ -154,6 +169,12 @@ class Mira(Character):
             ):
                 # Step 28: Perform the Warding Rite to create Lifelight Elixir
                 game_state.set_story_flag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, True)
+                
+                # Remove the three virtue relics from inventory/room
+                game_state.remove_item_from_inventory_or_room("Crystal of Light", 1)
+                game_state.remove_item_from_inventory_or_room("Phoenix Feather", 1)
+                game_state.remove_item_from_inventory_or_room("Dragon's Scale", 1)
+                
                 # Add Lifelight Elixir to the room for pickup
                 from ..items.LifelightElixir import LifelightElixir
                 lifelight_elixir = LifelightElixir()
@@ -183,6 +204,18 @@ class Mira(Character):
                     )
                 )
             elif game_state.get_story_flag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED):
+                # Step 28 continued: Check if elixir is in inventory before teleporting to fortress
+                if not game_state.has_item("Lifelight Elixir"):
+                    return (
+                        event_msg
+                        + "\n"
+                        + (
+                            "[dialogue]'Elior, you must take the Lifelight Elixir before we "
+                            "depart for the fortress. We cannot face Malakar without it—the "
+                            "elixir is our only hope of countering his life-draining ritual "
+                            "and saving King Alden.'[/dialogue]"
+                        )
+                    )
                 # Step 28 continued: Teleport to fortress
                 destination_key = "FortressEntrance"
                 flavor = (

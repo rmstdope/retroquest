@@ -112,6 +112,46 @@ class GameState:
             self.inventory.remove(item)
         return len(items_to_remove)
 
+    def remove_item_from_inventory_or_room(self, item_name: str, count: int = 1) -> int:
+        """
+        Removes up to 'count' items from the player's inventory first, then from the
+        current room if more are needed. Returns the actual number of items removed.
+        """
+        item_name_lower = item_name.lower()
+        removed_count = 0
+        
+        # First, try to remove from inventory
+        items_to_remove_from_inventory = []
+        for item in self.inventory:
+            if removed_count >= count:
+                break
+            if (item.get_name().lower() == item_name_lower or
+                item.get_short_name().lower() == item_name_lower):
+                items_to_remove_from_inventory.append(item)
+                removed_count += 1
+        
+        for item in items_to_remove_from_inventory:
+            self.inventory.remove(item)
+        
+        # If we still need more items, try to remove from current room
+        if removed_count < count:
+            remaining_needed = count - removed_count
+            items_to_remove_from_room = []
+            current_room_items = getattr(self.current_room, 'items', [])
+            
+            for item in current_room_items:
+                if removed_count >= count:
+                    break
+                if (item.get_name().lower() == item_name_lower or
+                    item.get_short_name().lower() == item_name_lower):
+                    items_to_remove_from_room.append(item)
+                    removed_count += 1
+            
+            for item in items_to_remove_from_room:
+                self.current_room.items.remove(item)
+        
+        return removed_count
+
     def add_item_to_inventory(self, item_object: "Item", count: int = 1) -> None:
         """Adds an item object to the player's inventory, optionally multiple times."""
         for _ in range(count):
