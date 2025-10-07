@@ -1,72 +1,52 @@
-# RetroQuest: An AI-Forged Text Adventure!
+# RetroQuest: A Text Adventure Built with AI
 
-Welcome to RetroQuest, an experimental voyage into the heart of game development, powered by GitHub Copilot! This isn't just a game; it's a chronicle of collaboration between human ingenuity and artificial intelligence, exploring just how far we can push the boundaries of automated code generation.
+Welcome to RetroQuest, a text adventure game built with GitHub Copilot! This project explores how far AI can go in creating a complete game with tests and game mechanics.
 
-## The Genesis: A Spark Rekindled
+## How It Started
 
-Picture this: December 2024. A classic text adventure, a nostalgic dream, begins to take shape in Python. But alas, the relentless march of time left this fledgling project dormant, a nearly forgotten relic in a digital tomb.
+I started working on this text adventure in December 2024, but the project went dormant after just the initial commits.
 
-Fast forward to the vibrant spring of May 2025! A new, audacious experiment was conceived: What if an AI could breathe life into this forgotten quest? What if GitHub Copilot could not only write the code but also weave the intricate tapestry of tests and game mechanics, with minimal human intervention? And so, RetroQuest was reborn, not just as a game, but as a testament to the evolving landscape of software creation.
+In May 2025, I decided to try an experiment: What if GitHub Copilot could help finish this game? Could AI write all of the code and tests with just guidance from me? That's how RetroQuest was reborn - not just as a game, but as a test of pure AI-agent development.
 
-## The Grand Experiment: Human & AI in Concert
+## How Human and AI Work Together
 
-So, what's the human role in this AI-driven epic? Imagine a director guiding a prodigious, tireless actor:
+Here's how I work with the AI to build this game:
 
--   **The Prompter Supreme:** I, your human collaborator, chart the course, whispering prompts and grand designs to the AI.
--   **The Discerning Eye:** I meticulously review every line of code, every test case, offering constructive feedback to refine the AI's creations.
--   **The Last Bastion:** Should the AI encounter an unyielding enigma, a bug too cunning, I step in as the final troubleshooter.
+-   **Planning:** I give the AI prompts and describe what needs to be built.
+-   **Review:** I check all the code and tests the AI creates, giving feedback to make them better.
+-   **Debugging:** When the AI gets stuck or makes mistakes, I work with AI to find the issues and then let the AI do the actual fixing.
 
-This is a dance of wits, a partnership where the human provides the vision and the AI, the tireless execution.
+It's a partnership where I provide direction and the AI does all of the coding work.
+My role is to provide prompts and occationally do minor string edits, whitespace removals, etc.
 
-## The Blueprint: Crafting Worlds in Markdown
+## How to Play
 
-### Designing the Digital Realm
+### Starting the game
 
-Before a single line of Python was penned, the world of RetroQuest was meticulously sculpted within the flexible confines of Markdown files. This wasn't about rigid specifications, but about creating a living, breathing design document. As the adventure unfolds, these files evolve, reflecting new insights, thrilling plot twists, and those delightful "aha!" moments that make game development so captivating. We embrace the flux, allowing the game to grow organically, becoming richer and more engaging with each iteration.
-
-### The Golden Path: A Guiding Star
-
-To navigate this ambitious undertaking, we've charted a "Golden Path"—a meticulously planned sequence of steps that carves the optimal route through Act I of our adventure. This path, detailed in `design/RoomsAct1.md`, serves as our North Star. It informs every implementation choice, every character interaction, and every puzzle's intricate solution when not explicitly dictated by a prompt. More than just a walkthrough, the Golden Path is the very backbone of our integration tests, ensuring that the complete journey is not only possible but also a seamless and rewarding experience for the player.
-
-Join us as RetroQuest unfolds, one prompt, one line of code, one AI-generated marvel at a time!
-
----
-
-_PS: Yes, you guessed it - this README was also artfully crafted by GitHub Copilot!_
-
-## Development & Formatting Standards
-
-All contributions must satisfy strict formatting and structural rules:
-
-Hard constraints (CI enforced):
-
-1. Max physical line length: 99 characters (including indentation).
-2. No tabs; 4-space indentation.
-3. No trailing whitespace; exactly one newline at EOF.
-4. One-line module docstring for single-class modules.
-5. All overridden methods (`search`, `get_exits`, gating helpers) have docstrings.
-6. Unused parameters prefixed with underscore.
-
-Before committing, run:
+A simple command in your terminal gets the adventure underway:
 
 ```bash
-python scripts/check_line_length.py
-ruff check
-ruff format --check
+python -m retroquest
 ```
 
-(Install tooling first: `pip install pre-commit ruff` then `pre-commit install`).
+This will run the game in Text mode, allowing you to immerse yourself in the adventure. If you instead want to run the game in more old-school terminal mode, you can use:
 
-Pre-commit hooks automatically enforce line length and Ruff diagnostics.
-
-Narrative wrapping pattern:
-
-```python
-description = (
-	"First clause describing the space. "
-	"Second clause continuing the thought. "
-	"Final clause concluding the description."
-)
+```bash
+python -m retroquest -oldschool
 ```
 
-Pull requests must include the phrase: `Formatting constraints verified` in the description.
+### Commands
+
+The game supports a variety of commands to navigate and interact with the world. However, the only command you will need to use to complete the game is:
+
+```
+help
+```
+
+This command will show you the list of all available commands in the game. You can also use the `?` command as a shortcut for `help`.
+
+### Found issues?
+Write an issue on GitHub and I'll have copilot take a look at it.
+
+### Got stuck?
+Likely a bug as well, look at the design files to see how to actually move forward or write an issue here as well.
