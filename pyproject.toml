@@ -23,7 +23,7 @@ license = {file = "LICENSE"}
 dependencies = [
   "prompt_toolkit",
   "pygame>=2.0.0",
-  "textual==6.2.1"
+  "textual>=6.2.1"
 ]
 keywords = ["text-adventure", "game", "retro", "adventure", "interactive-fiction"]
 
