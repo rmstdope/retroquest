@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "retroquest"
-version = "0.2.0"
+version = "0.2.1"
 description = "A retro style text based adventure game."
 readme = "README.md"
 authors = [
