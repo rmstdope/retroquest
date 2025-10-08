@@ -197,6 +197,12 @@ def test_movement_commands(game_parser):
         "move west": ("move", "west", None),
         "west": ("move", "west", None),
         "w": ("move", "west", None),
+        "go up": ("move", "up", None),
+        "move up": ("move", "up", None),
+        "up": ("move", "up", None),
+        "go down": ("move", "down", None),
+        "move down": ("move", "down", None),
+        "down": ("move", "down", None),
         # "enter cottage": ("move", "in", "cottage"), # CommandParser sends "cottage" as arg
         # "go in": ("move", "in", None),
         # "go inside": ("move", "in", None),

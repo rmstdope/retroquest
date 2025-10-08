@@ -27,6 +27,7 @@ from retroquest.engine.Game import Game
 from retroquest.act1.Act1 import Act1
 from retroquest.act2.Act2 import Act2
 from retroquest.act3.Act3 import Act3
+from retroquest.act4.Act4 import Act4
 
 USE_TEXTUAL_UI = True
 
@@ -46,8 +47,8 @@ def main() -> None:
     - Creates UI application object and begins its run loop.
     - May read future CLI arguments (currently only `-oldschool`).
     """
-    game = Game([Act1(), Act2(), Act3()], dev_mode=False)
-    game = Game([Act3()], dev_mode=True)
+    #game = Game([Act1(), Act2(), Act3()], dev_mode=False)
+    game = Game([Act4()], dev_mode=True)
     app = TextualApp(game) if USE_TEXTUAL_UI else PromptSessionApp(game)
     app.run()
 

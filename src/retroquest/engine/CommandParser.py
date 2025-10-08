@@ -31,6 +31,10 @@ class CommandParser:
             return self.game.move('east')
         elif cmd in ('go west', 'move west', 'west', 'w'):
             return self.game.move('west')
+        elif cmd in ('go up', 'move up', 'up'):
+            return self.game.move('up')
+        elif cmd in ('go down', 'move down', 'down'):
+            return self.game.move('down')
         elif cmd.startswith('go '):
             # Handle other directions like "go secret_passage"
             direction = cmd[len('go '):].strip()

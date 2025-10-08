@@ -562,8 +562,8 @@ flowers and hope renewed.
 ## Room Map
 
 ```
-                    [RG]
-                      |
+                  [RG]
+                   |
         [MV] ---- [TCA] ---- [TC]
           |
         [CW]
@@ -588,7 +588,7 @@ Legend:
 -   TC = Throne Chamber
 -   RG = Royal Gardens
 
-Notes:
+Notes:¶
 
 -   The Tower of Shadows (TS) is a vertical structure accessed from Hall of Echoes
 -   Connections marked with "|" can be north/south or up/down as appropriate
