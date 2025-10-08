@@ -10,11 +10,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 -   go west / move west / west / w
 -   go up / move up / up
 -   go down / move down / down
-    <!-- - enter [location] / go in / go inside -->
-    <!-- - leave [location] / exit [location] / go out -->
-    <!-- - climb [object] / ascend [object] -->
-    <!-- - descend [object] / go down [object] -->
-    <!-- - follow [path] / walk [path] -->
 
 ## Interaction
 
@@ -28,7 +23,6 @@ Below is a comprehensive list of all commands that should be possible to use in 
 -   look / observe / survey
 -   look at [object] / inspect [object] / examine [object] / check [object] / look [object]
 -   search / investigate
-<!-- - listen to [object/location] -->
 
 ## Inventory Management
 
