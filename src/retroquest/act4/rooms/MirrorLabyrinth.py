@@ -37,5 +37,5 @@ class MirrorLabyrinth(Room):
             ),
             items=[],
             characters=[],
-            exits={"south": "OuterCourtyard", "west": "HallOfEchoes"}
+            exits={"south": "OuterCourtyard"}
         )

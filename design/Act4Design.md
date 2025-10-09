@@ -313,7 +313,6 @@ complete navigation requires acoustic wisdom from the echoing halls.
 #### Exits
 
 -   South: Outer Courtyard
--   North: Hall of Echoes (correct path through maze)
 -   Multiple false exits (lead back to entrance)
 
 ### 4. Hall of Echoes
@@ -349,7 +348,7 @@ proper preparation.
 
 #### Exits
 
--   South: Mirror Labyrinth
+-   South: Fortress Gates
 -   East: Tower of Shadows (after redeeming the knight)
 
 ### 5. Tower of Shadows
@@ -570,7 +569,7 @@ flowers and hope renewed.
           |
         [TS]
           |
-        [HE] ---- [ML]
+        [HE]      [ML]
           |         |
         [FG] ---- [OC]
 ```
@@ -588,7 +587,7 @@ Legend:
 -   TC = Throne Chamber
 -   RG = Royal Gardens
 
-Notes:¶
+Notes:
 
 -   The Tower of Shadows (TS) is a vertical structure accessed from Hall of Echoes
 -   Connections marked with "|" can be north/south or up/down as appropriate
@@ -783,9 +782,9 @@ Malakar's corruption, and appreciate how patience and preparation lead to ultima
     - Commands and yields:
         - `examine mirrors` → Reveals multiple false reflections and paths
         - `use servant's pendant` → Freed servants provide partial guidance through mental link
-        - `go north` → Partial progress made, but missing crucial knowledge
+        - `examine reflections` → Attempt to navigate but missing crucial knowledge
         - **Discovery:** Need echo knowledge from Hall of Echoes to complete the maze
-        - **Return to:** Must visit Hall of Echoes first
+        - **Return to:** Must visit Hall of Echoes first (via Fortress Gates)
 
 ### Phase 2: Cross-Area Information Gathering
 
@@ -804,7 +803,7 @@ Malakar's corruption, and appreciate how patience and preparation lead to ultima
         - `use echo stone` → Apply navigation knowledge gained from Hall of Echoes
         - `cast truth sight` → Reveals which reflections show truth and which show lies
             - Spell learned: `Truth Sight`
-        - `go north` → Navigate through correct path using combined knowledge
+        - `solve maze puzzle` → Navigate through correct path using combined knowledge
             - Quest completed: "The Maze of Mirrors"
             - Item obtained: `Mirror Shard` (will combine with Memory Fragment later)
             - Item obtained: `Ancient Iron Key` (unlocks parent's vault in sanctum)
@@ -998,13 +997,15 @@ through the story.
 The golden path creates the following back-and-forth exploration pattern:
 
 1. **Fortress Gates** → **Outer Courtyard** → **Mirror Labyrinth** (incomplete)
-2. **Hall of Echoes** (knowledge gathering) → **Mirror Labyrinth** (completion)
-3. **Hall of Echoes** (knight battle) → **Tower of Shadows** → **Chamber of Whispers**
-4. **Memory Vault** (assessment) → **Memory Vault** (completion with all components)
-5. **Throne Chamber Approach** (king rescue) → **Throne Chamber Approach** (parent's legacy)
-6. **Throne Chamber** → **Royal Gardens**
+2. **Outer Courtyard** → **Fortress Gates** → **Hall of Echoes** (knowledge gathering)
+3. **Hall of Echoes** → **Fortress Gates** → **Outer Courtyard** → **Mirror Labyrinth** (completion)
+4. **Mirror Labyrinth** → **Outer Courtyard** → **Fortress Gates** → **Hall of Echoes** (knight battle)
+5. **Hall of Echoes** → **Tower of Shadows** → **Chamber of Whispers**
+6. **Memory Vault** (assessment) → **Memory Vault** (completion with all components)
+7. **Throne Chamber Approach** (king rescue) → **Throne Chamber Approach** (parent's legacy)
+8. **Throne Chamber** → **Royal Gardens**
 
-**Total Room Visits:** 14 visits across 10 rooms, with 4 rooms requiring multiple visits for different purposes.
+**Total Room Visits:** 16 visits across 10 rooms, with 4 rooms requiring multiple visits for different purposes.
 
 ## Golden Path Item Usage Summary
 

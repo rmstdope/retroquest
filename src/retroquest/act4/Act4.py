@@ -15,6 +15,7 @@ from .rooms import (
     ThroneChamer,
     RoyalGardens,
 )
+from .spells import Light, Bless
 
 
 class Act4(Act):
@@ -72,6 +73,18 @@ class Act4(Act):
         # Completion check will be implemented when quests are added
         return False
 
-    def setup_gamestate(self, _game_state: GameState) -> None:
+    def setup_gamestate(self, game_state: GameState) -> None:
         """Setup initial state for Act IV."""
-        # Spell and item setup will be added when quests are implemented
+        # Add basic spells that player needs for phase 1
+        light_spell = Light()
+        bless_spell = Bless()
+        
+        # Add spells to known spells if not already known
+        if light_spell not in game_state.known_spells:
+            game_state.known_spells.append(light_spell)
+        if bless_spell not in game_state.known_spells:
+            game_state.known_spells.append(bless_spell)
+            
+        # Set starting room to Fortress Gates
+        if "FortressGates" in self.rooms:
+            game_state.current_room = self.rooms["FortressGates"]

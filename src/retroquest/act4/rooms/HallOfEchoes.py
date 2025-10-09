@@ -37,5 +37,5 @@ class HallOfEchoes(Room):
             ),
             items=[],
             characters=[],
-            exits={"south": "FortressGates", "east": "MirrorLabyrinth", "north": "TowerOfShadows"}
+            exits={"south": "FortressGates", "north": "TowerOfShadows"}
         )

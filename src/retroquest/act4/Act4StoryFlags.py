@@ -8,11 +8,14 @@ FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED = "act4_shattered_ward_guardians_star
 FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED = "act4_shattered_ward_guardians_completed"
 FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED = "act4_guardians_essence_acquired"
 FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED = "act4_guardians_chain_acquired"
+FLAG_ACT4_BARRIERS_DISABLED = "act4_barriers_disabled"
 
 FLAG_ACT4_TRAPPED_SERVANTS_STARTED = "act4_trapped_servants_started"
 FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED = "act4_trapped_servants_completed"
 FLAG_ACT4_LOYALTY_TOKEN_ACQUIRED = "act4_loyalty_token_acquired"
 FLAG_ACT4_SERVANTS_PENDANT_ACQUIRED = "act4_servants_pendant_acquired"
+FLAG_ACT4_SERVANTS_TRUST_EARNED = "act4_servants_trust_earned"
+FLAG_ACT4_SERVANTS_FREED = "act4_servants_freed"
 
 FLAG_ACT4_MAZE_OF_MIRRORS_STARTED = "act4_maze_of_mirrors_started"
 FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED = "act4_maze_of_mirrors_completed"
