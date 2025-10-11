@@ -44,8 +44,8 @@ class WardStoneFragment(Item):
 
     def use_with(self, game_state: GameState, other_item) -> str:
         """Use ward stone fragment with barriers specifically."""
-        if (hasattr(other_item, 'name') and 
-            'barrier' in other_item.name.lower() and 
+        if (hasattr(other_item, 'name') and
+            'barrier' in other_item.name.lower() and
             game_state.current_room.name == "Fortress Gates"):
             return self.use(game_state)
         return super().use_with(game_state, other_item)

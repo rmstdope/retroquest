@@ -63,7 +63,7 @@ class FallenRock(Item):
                 "[info]The braces are already in place, holding the ceiling "
                 "steady.[/info]"
             )
-        
+
         if isinstance(other_item, SupportStraps):
             if not self._collapse_stabilized:
                 return (
@@ -82,7 +82,7 @@ class FallenRock(Item):
             return (
                 "[info]The straps are already securing the braces.[/info]"
             )
-            
+
         if isinstance(other_item, WedgeBlocks):
             if not self._straps_secured:
                 return (

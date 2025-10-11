@@ -42,42 +42,42 @@ class TestAct4Integration:
 
     def test_golden_path_phase1_fortress_breach(self):
         """Test Phase 1 of the Act 4 golden path: Fortress Breach.
-        
+
         This test implements steps 1-3 of the golden path:
         1. Fortress Gates - Ward guardians quest
-        2. Outer Courtyard - Trapped servants quest  
+        2. Outer Courtyard - Trapped servants quest
         3. Mirror Labyrinth - Initial incomplete visit
         """
         game = self.game
 
         # Should start in Fortress Gates
         check_current_room(game.state, "Fortress Gates")
-        
+
         # Phase 1.1: Examine ward stones to understand the mechanism
         result = execute_commands(game, ['examine ward stones'])
         assert 'shadow guardians' in result.lower() or 'anchor points' in result.lower()
-        
+
         # Phase 1.2: Take ward stone fragment (should be available)
         result = execute_commands(game, ['take ward stone fragment'])
         check_item_in_inventory(game.state, 'Ward Stone Fragment', True)
-        
+
         # Phase 1.3: Use ward stone fragment to disable barriers
         result = execute_commands(game, ['use ward stone fragment with barriers'])
         assert 'disable' in result.lower() or 'barrier' in result.lower()
-        
+
         # Phase 1.4: Cast light to dispel shadow guardians
         result = execute_commands(game, ['cast light on ward stones'])
-        assert ('dispel' in result.lower() or 'banish' in result.lower() or 
+        assert ('dispel' in result.lower() or 'banish' in result.lower() or
                 'guardians' in result.lower())
-        
+
         # Quest should be completed and Guardian's Essence obtained
         check_story_flag(game.state, FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, True)
-        
+
         # Phase 1.5: Take Guardian's Chain for later protection
         result = execute_commands(game, ['take guardian\'s chain'])
         check_item_in_inventory(game.state, "Guardian's Chain", True)
         check_story_flag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, True)
-        
+
         # Phase 1.6: Take Guardian's Essence (should be available after light spell)
         result = execute_commands(game, ['take guardian\'s essence'])
         check_item_in_inventory(game.state, "Guardian's Essence", True)
@@ -86,14 +86,14 @@ class TestAct4Integration:
     def test_required_items_available_in_fortress_gates(self):
         """Test that required items are available in Fortress Gates."""
         game = self.game
-        
+
         # Start at Fortress Gates
         check_current_room(game.state, "Fortress Gates")
-        
+
         # Check that we can take ward stone fragment
         execute_commands(game, ['take ward stone fragment'])
         check_item_in_inventory(game.state, 'Ward Stone Fragment', True)
-        
+
         # Check that we can take guardian's chain
         execute_commands(game, ['take guardian\'s chain'])
         check_item_in_inventory(game.state, "Guardian's Chain", True)
@@ -101,22 +101,22 @@ class TestAct4Integration:
     def test_room_transitions_work_correctly(self):
         """Test that room transitions work as expected in phase 1."""
         game = self.game
-        
+
         # Start in Fortress Gates
         check_current_room(game.state, "Fortress Gates")
-        
+
         # Move to Outer Courtyard
         execute_commands(game, ['east'])
         check_current_room(game.state, "Outer Courtyard")
-        
+
         # Move to Mirror Labyrinth
         execute_commands(game, ['north'])
         check_current_room(game.state, "Mirror Labyrinth")
-        
+
         # Return to Outer Courtyard
         execute_commands(game, ['south'])
         check_current_room(game.state, "Outer Courtyard")
-        
+
         # Return to Fortress Gates
         execute_commands(game, ['west'])
         check_current_room(game.state, "Fortress Gates")
@@ -124,19 +124,19 @@ class TestAct4Integration:
     def test_story_flags_progression(self):
         """Test that story flags are set correctly during phase 1."""
         game = self.game
-        
+
         # Initially no flags should be set
         check_story_flag(game.state, FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, False)
         check_story_flag(game.state, FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, False)
         check_story_flag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, False)
         check_story_flag(game.state, FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, False)
-        
+
         # Simulate ward guardians quest completion
         # (Actual implementation would involve the quest system)
         game.state.set_story_flag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, True)
         game.state.set_story_flag(FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, True)
         game.state.set_story_flag(FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, True)
-        
+
         # Check flags are now set
         check_story_flag(game.state, FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, True)
         check_story_flag(game.state, FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, True)

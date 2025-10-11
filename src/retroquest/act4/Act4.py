@@ -27,14 +27,14 @@ class Act4(Act):
             # Fortress entrance
             "FortressGates": FortressGates(),
             "OuterCourtyard": OuterCourtyard(),
-            
+
             # Inner fortress
             "MirrorLabyrinth": MirrorLabyrinth(),
             "HallOfEchoes": HallOfEchoes(),
             "TowerOfShadows": TowerOfShadows(),
             "ChamberOfWhispers": ChamberOfWhispers(),
             "MemoryVault": MemoryVault(),
-            
+
             # Final areas
             "ThroneChamberApproach": ThroneChamberApproach(),
             "ThroneChamer": ThroneChamer(),
@@ -78,13 +78,13 @@ class Act4(Act):
         # Add basic spells that player needs for phase 1
         light_spell = Light()
         bless_spell = Bless()
-        
+
         # Add spells to known spells if not already known
         if light_spell not in game_state.known_spells:
             game_state.known_spells.append(light_spell)
         if bless_spell not in game_state.known_spells:
             game_state.known_spells.append(bless_spell)
-            
+
         # Set starting room to Fortress Gates
         if "FortressGates" in self.rooms:
             game_state.current_room = self.rooms["FortressGates"]

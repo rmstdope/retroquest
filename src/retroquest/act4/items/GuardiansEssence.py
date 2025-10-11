@@ -28,7 +28,7 @@ class GuardiansEssence(Item):
 
     def use_on_character(self, game_state: GameState, target_character) -> str:
         """Use Guardian's Essence on servants to prove worthiness."""
-        if (hasattr(target_character, 'name') and 
+        if (hasattr(target_character, 'name') and
             'servant' in target_character.name.lower() and
             game_state.current_room.name == "Outer Courtyard"):
             if not game_state.get_story_flag(FLAG_ACT4_SERVANTS_TRUST_EARNED):

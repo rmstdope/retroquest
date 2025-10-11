@@ -41,5 +41,6 @@ class TrappedServants(Character):
             return (
                 "[character_talk]The freed servants bow gratefully. 'Thank you for our "
                 "freedom! The Mirror Labyrinth ahead is treacherous - our pendant will "
-                "help guide you, but beware: only the ancient echoes know the full truth.'[/character_talk]"
+                "help guide you, but beware: only the ancient echoes know the full "
+                "truth.'[/character_talk]"
             )

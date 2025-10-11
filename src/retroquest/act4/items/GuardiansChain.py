@@ -39,7 +39,8 @@ class GuardiansChain(Item):
                 return (
                     "[event]You hold the Guardian's Chain aloft, and its crystals blaze "
                     "with brilliant light. A protective barrier forms around you, "
-                    "shielding you from the despair that emanates from the corrupted knight.[/event]"
+                    "shielding you from the despair that emanates from the corrupted "
+                    "knight.[/event]"
                 )
             else:
                 return (

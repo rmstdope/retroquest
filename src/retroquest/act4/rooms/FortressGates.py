@@ -91,7 +91,8 @@ class FortressGates(Room):
                 return (
                     "[event]The spectral guardians drift menacingly between the ward stones, "
                     "their forms shifting between solid and ethereal. Their hollow eyes burn "
-                    "with malevolent purpose, and they seem bound to the stones' dark energy.[/event]"
+                    "with malevolent purpose, and they seem bound to the stones' dark "
+                    "energy.[/event]"
                 )
             else:
                 return (
@@ -106,7 +107,8 @@ class FortressGates(Room):
                 )
             else:
                 return (
-                    "[info]The magical barriers have been disabled and no longer block your way.[/info]"
+                    "[info]The magical barriers have been disabled and no longer "
+                    "block your way.[/info]"
                 )
         else:
             return (

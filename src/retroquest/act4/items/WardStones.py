@@ -19,7 +19,7 @@ class WardStones(Item):
             can_be_carried=False
         )
 
-    def examine(self, game_state: GameState) -> str:
+    def examine(self, _game_state: GameState) -> str:
         """Examine the ward stones."""
         return (
             "[event]You examine the ward stones closely. Each stone is carved with "
