@@ -199,3 +199,7 @@ These instructions are mandatory for all code contributions to ensure consistenc
 ## Chat
 
 In the chat, try to be concise when describing what you are about to do, what you are doing and what you have done. Avoid unnecessary verbosity. Focus on the key changes or additions you are making to the codebase. This helps in maintaining clarity and efficiency in communication.
+
+## Committing and pushing
+
+Never commit code or push/sync with github unless I explicitly say so.

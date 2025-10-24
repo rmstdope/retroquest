@@ -4,8 +4,8 @@ from prompt_toolkit.completion import NestedCompleter
 from rich.console import Console
 from rich.theme import Theme
 
-from audio.soundeffects.SoundEffects import NEW_QUEST_SOUND, QUEST_COMPLETED_SOUND
-from retroquest.engine import Game
+from ...audio.soundeffects.SoundEffects import NEW_QUEST_SOUND, QUEST_COMPLETED_SOUND
+from ...engine import Game
 
 class PromptSessionApp:
     """

@@ -4,7 +4,7 @@ from textual.widgets import Header, Footer, Input
 from textual.containers import Horizontal, Vertical
 from textual.css.query import NoMatches
 
-from audio.soundeffects.SoundEffects import NEW_QUEST_SOUND, QUEST_COMPLETED_SOUND
+from ...audio.soundeffects.SoundEffects import NEW_QUEST_SOUND, QUEST_COMPLETED_SOUND
 
 from ...engine.Game import Game
 from .GameController import GameController
