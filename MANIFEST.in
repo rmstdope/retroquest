@@ -1,0 +1,1 @@
+recursive-include src/retroquest/audio *.mp3 *.wav *.ogg

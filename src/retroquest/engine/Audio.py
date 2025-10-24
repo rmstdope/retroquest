@@ -20,6 +20,10 @@ def _import_pygame() -> Optional[object]:
     except ImportError:
         return None
 
+# TODO Change volume through the command interface
+# Default playback volume for music and sound effects (0.0 .. 1.0)
+DEFAULT_VOLUME = 0.4
+
 
 # Expose a module-level `pygame` object. If pygame isn't available, provide a
 # small dummy with a `mixer` attribute so tests can monkeypatch
@@ -69,6 +73,12 @@ class Audio:
                     pygame.mixer.init()
                 sound_path = os.path.join(_audio_root(), 'soundeffects', filename)
                 sound = pygame.mixer.Sound(sound_path)
+                try:
+                    # ensure reasonable default volume for sound effects
+                    sound.set_volume(DEFAULT_VOLUME)
+                except Exception:
+                    # some pygame implementations may not support set_volume
+                    pass
                 sound.play()
             except RuntimeError as e:
                 print(f"[dim]Could not play sound effect '{filename}': {e}[/dim]")
@@ -89,6 +99,11 @@ class Audio:
                     pygame.mixer.init()
                 music_path = os.path.join(_audio_root(), 'music', music_file)
                 pygame.mixer.music.load(music_path)
+                try:
+                    # set default music volume (0.0 .. 1.0)
+                    pygame.mixer.music.set_volume(DEFAULT_VOLUME)
+                except Exception:
+                    pass
                 pygame.mixer.music.play(loops=-1)
             except RuntimeError as e:
                 print(f"[dim]Could not play music: {e}[/dim]")
