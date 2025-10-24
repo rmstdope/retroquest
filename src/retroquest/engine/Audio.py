@@ -1,6 +1,8 @@
 """Audio subsystem: handles music and sound effects playback."""
 
 import threading
+import os
+from pathlib import Path
 from typing import Optional
 
 
@@ -35,6 +37,19 @@ else:
     pygame = _pygame_module
 
 
+def _audio_root() -> str:
+    """Return the absolute path to the package's `audio` directory.
+
+    This keeps audio assets colocated under `src/retroquest/audio` while
+    allowing the code to resolve them regardless of the current working
+    directory.
+    """
+    here = Path(__file__).resolve().parent
+    # ../audio from engine/ -> retroquest/audio
+    audio_dir = (here.parent / 'audio').resolve()
+    return str(audio_dir)
+
+
 class Audio:
     """Encapsulate audio playback (music and sound effects)."""
 
@@ -52,7 +67,8 @@ class Audio:
             try:
                 if not pygame.mixer.get_init():
                     pygame.mixer.init()
-                sound = pygame.mixer.Sound('audio/soundeffects/' + filename)
+                sound_path = os.path.join(_audio_root(), 'soundeffects', filename)
+                sound = pygame.mixer.Sound(sound_path)
                 sound.play()
             except RuntimeError as e:
                 print(f"[dim]Could not play sound effect '{filename}': {e}[/dim]")
@@ -71,7 +87,7 @@ class Audio:
                     pygame.mixer.music.stop()
                 else:
                     pygame.mixer.init()
-                music_path = 'audio/music/' + music_file
+                music_path = os.path.join(_audio_root(), 'music', music_file)
                 pygame.mixer.music.load(music_path)
                 pygame.mixer.music.play(loops=-1)
             except RuntimeError as e:

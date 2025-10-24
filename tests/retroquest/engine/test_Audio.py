@@ -1,6 +1,7 @@
 """Tests for audio-related Game behavior and for the Audio helper class."""
 
 import importlib
+import os
 
 def test_audio_play_soundeffect_and_start_music(monkeypatch):
     """Audio should initialize mixer, load sound and play it, and start music."""
@@ -45,7 +46,13 @@ def test_audio_play_soundeffect_and_start_music(monkeypatch):
     # Test play_soundeffect
     a = audio_module.Audio()
     a.play_soundeffect('sfx.wav')
-    assert ('sound_loaded', 'audio/soundeffects/sfx.wav') in events
+    # Audio module now resolves absolute package paths; assert the loaded
+    # path ends with the expected audio-relative suffix so tests work across
+    # working directories.
+    expected_suffix = os.path.normpath(os.path.join('audio', 'soundeffects', 'sfx.wav'))
+    assert any(isinstance(ev, tuple) and ev[0] == 'sound_loaded' and
+               os.path.normpath(ev[1]).endswith(expected_suffix)
+               for ev in events)
     assert 'sound_played' in events
 
     # Clear events and test start_music
@@ -70,7 +77,10 @@ def test_audio_play_soundeffect_and_start_music(monkeypatch):
     monkeypatch.setattr(audio_module.pygame.mixer, 'music', FakeMusic())
 
     a.start_music('bg.mp3')
-    assert ('music_loaded', 'audio/music/bg.mp3') in events
+    expected_music_suffix = os.path.normpath(os.path.join('audio', 'music', 'bg.mp3'))
+    assert any(isinstance(ev, tuple) and ev[0] == 'music_loaded' and
+               os.path.normpath(ev[1]).endswith(expected_music_suffix)
+               for ev in events)
     assert ('music_played', -1) in events
 
 
