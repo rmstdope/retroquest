@@ -10,6 +10,11 @@ export default defineConfig({
       srcDir: resolve(__dirname, '..', 'src'),
     }),
   ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
   build: {
     outDir: 'dist',
     rollupOptions: {
