@@ -136,6 +136,46 @@ class GameController:
             )
         return None
 
+    def get_room_name(self) -> str:
+        """Return the current room's display name."""
+        return self.game.state.current_room.name
+
+    def get_room_description(self) -> str:
+        """Return the current room's narrative description text."""
+        return self.game.state.current_room.description
+
+    def get_room_characters(self) -> list[str]:
+        """Return names of characters present in the current room."""
+        return [
+            c.get_name()
+            for c in self.game.state.current_room.get_characters()
+        ]
+
+    def get_room_items(self) -> list[str]:
+        """Return names of items visible in the current room."""
+        return [
+            item.get_name()
+            for item in self.game.state.current_room.get_items()
+        ]
+
+    def get_room_exits(self) -> dict[str, str]:
+        """Return direction-to-destination mapping for the current room."""
+        return self.game.state.current_room.get_exits(
+            self.game.state
+        )
+
+    def load_game(self) -> str:
+        """Load the game state from saved data and return result text."""
+        return self.game.load()
+
+    def is_game_running(self) -> bool:
+        """Return True if the game is still running."""
+        return self.game.is_running
+
+    def is_act_running(self) -> bool:
+        """Return True if the current act is in running state."""
+        return self.game.is_act_running()
+
     def play_soundeffect(self, filename: str) -> None:
         """Play a sound effect using the underlying Game's play_soundeffect method."""
         self.game.play_soundeffect(filename)
