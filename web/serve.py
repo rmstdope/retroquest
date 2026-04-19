@@ -49,7 +49,13 @@ class RetroQuestHandler(http.server.SimpleHTTPRequestHandler):
             # URL-decode so filenames with spaces (e.g. MP3 tracks) resolve
             # correctly — mirrors what SimpleHTTPRequestHandler does by default.
             rel = unquote(path[len('/src/'):])
-            return os.path.join(self.src_dir, rel)
+            src_root = Path(self.src_dir).resolve()
+            candidate = (src_root / rel).resolve()
+            try:
+                candidate.relative_to(src_root)
+            except ValueError:
+                return str(src_root / '__forbidden_path__')
+            return str(candidate)
 
         # Default: serve from web/ directory
         return os.path.join(
