@@ -28,6 +28,7 @@ export interface GameBridge {
   isAcceptingInput(): boolean
   advanceTurn(): string
   getMusicInfo(): { musicFile: string; musicInfo: string }
+  look(): string
 }
 
 interface QuestEvent {
@@ -74,6 +75,7 @@ export const useGameStore = defineStore('game', () => {
   const modalTitle = ref('')
   const modalBody = ref('')
   const modalQueue = ref<QuestEvent[]>([])
+  let pendingLookOnDismiss = false
 
   // --- Music (exposed for useMusic composable) ---
   const musicFile = ref('')
@@ -105,6 +107,7 @@ export const useGameStore = defineStore('game', () => {
 
       // Block input until the player dismisses the act intro modal
       acceptInput.value = false
+      pendingLookOnDismiss = true
       modalQueue.value.push({
         title: '📖 Act Intro',
         body: renderMarkup(actIntroRaw),
@@ -139,15 +142,19 @@ export const useGameStore = defineStore('game', () => {
 
   function refreshPanels(): void {
     const b = requireBridge()
+    const renderItem = (item: NamedItem): NamedItem => ({
+      name: renderMarkup(item.name),
+      description: renderMarkup(item.description),
+    })
     roomName.value = b.getRoomName()
     roomDescription.value = b.getRoomDescription()
     characters.value = b.getRoomCharacters()
     items.value = b.getRoomItems()
     exits.value = b.getRoomExits()
-    inventory.value = b.getInventory()
-    spells.value = b.getSpells()
-    activeQuests.value = b.getActiveQuests()
-    completedQuests.value = b.getCompletedQuests()
+    inventory.value = b.getInventory().map(renderItem)
+    spells.value = b.getSpells().map(renderItem)
+    activeQuests.value = b.getActiveQuests().map(renderItem)
+    completedQuests.value = b.getCompletedQuests().map(renderItem)
     const m = b.getMusicInfo()
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
@@ -202,8 +209,14 @@ export const useGameStore = defineStore('game', () => {
       }
     }
 
-    activeQuests.value = b.getActiveQuests()
-    completedQuests.value = b.getCompletedQuests()
+    activeQuests.value = b.getActiveQuests().map((item) => ({
+      name: renderMarkup(item.name),
+      description: renderMarkup(item.description),
+    }))
+    completedQuests.value = b.getCompletedQuests().map((item) => ({
+      name: renderMarkup(item.name),
+      description: renderMarkup(item.description),
+    }))
   }
 
   function showNextModal(): void {
@@ -223,6 +236,13 @@ export const useGameStore = defineStore('game', () => {
     if (!showModal.value) {
       const b = requireBridge()
       acceptInput.value = b.isAcceptingInput()
+      // If this was the act intro modal, fire a look to trigger quest start
+      if (pendingLookOnDismiss) {
+        pendingLookOnDismiss = false
+        lastOutput.value = renderMarkup(b.look())
+        refreshPanels()
+        pollQuestEvents()
+      }
     }
   }
 

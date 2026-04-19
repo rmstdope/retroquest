@@ -171,11 +171,40 @@ describe('useGameStore', () => {
       expect(store.acceptInput).toBe(true)
     })
 
+    it('calls look() when intro modal is dismissed', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      await store.initGame()
+      store.dismissModal()
+      expect(bridge.look).toHaveBeenCalledTimes(1)
+    })
+
+    it('shows look() result as lastOutput when intro modal is dismissed', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      bridge.look.mockReturnValue('You see rolling hills.')
+      await store.initGame()
+      store.dismissModal()
+      expect(store.lastOutput).toBe('<rendered>You see rolling hills.</rendered>')
+    })
+
+    it('polls quest events after intro modal is dismissed', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      bridge.activateQuest
+        .mockReturnValueOnce('Main quest started!')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      await store.initGame()
+      store.dismissModal() // dismiss intro → triggers look + pollQuestEvents
+      // intro modal is replaced by quest modal
+      expect(store.showModal).toBe(true)
+      expect(store.modalTitle).toBe('📜 New Quest!')
+    })
+
     it('refreshes panels after init', async () => {
       await store.initGame()
       expect(store.roomName).toBe('Village Square')
       expect(store.characters).toEqual(['Mira'])
-      expect(store.inventory).toEqual([{ name: 'Sword', description: 'Sharp' }])
+      expect(store.inventory).toEqual([{ name: '<rendered>Sword</rendered>', description: '<rendered>Sharp</rendered>' }])
     })
 
     it('acceptInput is false during init regardless of bridge state', async () => {
@@ -293,9 +322,9 @@ describe('useGameStore', () => {
       bridge.getSpells.mockReturnValue([{ name: 'Fire', description: 'Burns' }])
       store.refreshPanels()
       expect(store.inventory).toEqual([
-        { name: 'Potion', description: 'Heals' },
+        { name: '<rendered>Potion</rendered>', description: '<rendered>Heals</rendered>' },
       ])
-      expect(store.spells).toEqual([{ name: 'Fire', description: 'Burns' }])
+      expect(store.spells).toEqual([{ name: '<rendered>Fire</rendered>', description: '<rendered>Burns</rendered>' }])
     })
 
     it('updates quests', () => {
@@ -307,11 +336,42 @@ describe('useGameStore', () => {
       ])
       store.refreshPanels()
       expect(store.activeQuests).toEqual([
-        { name: 'Quest A', description: 'Do A' },
+        { name: '<rendered>Quest A</rendered>', description: '<rendered>Do A</rendered>' },
       ])
       expect(store.completedQuests).toEqual([
-        { name: 'Quest B', description: 'Did B' },
+        { name: '<rendered>Quest B</rendered>', description: '<rendered>Did B</rendered>' },
       ])
+    })
+
+    it('applies renderMarkup to quest names containing engine markup', () => {
+      bridge.getActiveQuests.mockReturnValue([
+        {
+          name: '[quest_name]Shadows Over Willowbrook (main)[/quest_name]',
+          description: 'Stop the shadows.',
+        },
+      ])
+      store.refreshPanels()
+      expect(store.activeQuests[0].name).toBe(
+        '<rendered>[quest_name]Shadows Over Willowbrook (main)[/quest_name]</rendered>',
+      )
+    })
+
+    it('applies renderMarkup to inventory item names and descriptions', () => {
+      bridge.getInventory.mockReturnValue([
+        { name: '[item_name]Sword[/item_name]', description: 'Sharp blade.' },
+      ])
+      store.refreshPanels()
+      expect(store.inventory[0].name).toBe('<rendered>[item_name]Sword[/item_name]</rendered>')
+      expect(store.inventory[0].description).toBe('<rendered>Sharp blade.</rendered>')
+    })
+
+    it('applies renderMarkup to spell names and descriptions', () => {
+      bridge.getSpells.mockReturnValue([
+        { name: '[spell_name]Fireball[/spell_name]', description: 'Burns.' },
+      ])
+      store.refreshPanels()
+      expect(store.spells[0].name).toBe('<rendered>[spell_name]Fireball[/spell_name]</rendered>')
+      expect(store.spells[0].description).toBe('<rendered>Burns.</rendered>')
     })
 
     it('syncs acceptInput', () => {
@@ -462,6 +522,22 @@ describe('useGameStore', () => {
       bridge.completeQuest.mockReturnValue(null)
       store.pollQuestEvents()
       expect(store.showModal).toBe(false)
+    })
+
+    it('applies renderMarkup to activeQuests updated after polling', () => {
+      bridge.activateQuest.mockReturnValue(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      bridge.getActiveQuests.mockReturnValue([
+        {
+          name: '[quest_name]Shadows Over Willowbrook (main)[/quest_name]',
+          description: 'Stop the shadows.',
+        },
+      ])
+      store.pollQuestEvents()
+      expect(store.activeQuests[0].name).toBe(
+        '<rendered>[quest_name]Shadows Over Willowbrook (main)[/quest_name]</rendered>',
+      )
     })
   })
 

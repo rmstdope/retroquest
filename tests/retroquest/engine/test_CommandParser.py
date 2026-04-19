@@ -410,3 +410,39 @@ def test_say_command_validation(game_parser):
 
     result = parser.parse("say  to ")  # Empty word and character
     assert "You need to specify who to say that to" in result
+
+
+def test_cheat_act_1_executes_commands_in_sequence(game_parser):
+    """cheat act 1 should execute the Act 1 golden-path commands in sequence."""
+    game, parser = game_parser
+    parser.parse("cheat act 1")
+    assert ("use", "lantern", None) in game.calls
+    assert ("take", "bread") in game.calls
+    assert ("talk", "grandmother") in game.calls
+    assert len(game.calls) > 20
+
+
+def test_cheat_act_2_executes_commands_in_sequence(game_parser):
+    """cheat act 2 should execute the Act 2 golden-path commands in sequence."""
+    game, parser = game_parser
+    parser.parse("cheat act 2")
+    assert ("take", "flower") in game.calls
+    assert ("take", "stick") in game.calls
+    assert ("talk", "mountain hermit") in game.calls
+    assert len(game.calls) > 20
+
+
+def test_cheat_act_3_executes_commands_in_sequence(game_parser):
+    """cheat act 3 should execute the Act 3 golden-path commands in sequence."""
+    game, parser = game_parser
+    parser.parse("cheat act 3")
+    assert ("talk", "mira") in game.calls
+    assert ("examine", "note") in game.calls
+    assert len(game.calls) > 20
+
+
+def test_cheat_act_4_falls_through_to_unknown(game_parser):
+    """cheat act 4 should be treated as an unknown command (not supported)."""
+    game, parser = game_parser
+    parser.parse("cheat act 4")
+    assert ("unknown", "cheat act 4") in game.calls
