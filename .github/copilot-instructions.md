@@ -136,7 +136,7 @@ cd web
 npx eslint .
 
 # Format check
-npx prettier --check "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*"
+npx prettier --check "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*" --write
 
 # Type check
 npx vue-tsc --noEmit
