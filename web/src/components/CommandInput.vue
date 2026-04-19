@@ -13,9 +13,14 @@ const emit = defineEmits<{
 
 const commandInput = ref('')
 const suggestions = ref<string[]>([])
+const activeSuggestionIndex = ref(-1)
 const inputEl = ref<HTMLInputElement | null>(null)
 
 function onKeyEnter() {
+  if (activeSuggestionIndex.value >= 0 && suggestions.value.length > 0) {
+    applySuggestion(suggestions.value[activeSuggestionIndex.value])
+    return
+  }
   closeSuggestions()
   emit('submitCommand', commandInput.value)
   commandInput.value = ''
@@ -28,8 +33,8 @@ function onSendClick() {
 }
 
 function onKeyTab(e: KeyboardEvent) {
-  e.preventDefault()
   if (!props.acceptInput) return
+  e.preventDefault()
 
   const { newInput, candidates } = props.tabComplete(commandInput.value)
 
@@ -47,6 +52,20 @@ function onKeyTab(e: KeyboardEvent) {
   // Multiple candidates — show dropdown
   commandInput.value = newInput
   suggestions.value = candidates
+  activeSuggestionIndex.value = -1
+}
+
+function onKeyArrowDown() {
+  if (suggestions.value.length === 0) return
+  activeSuggestionIndex.value =
+    (activeSuggestionIndex.value + 1) % suggestions.value.length
+}
+
+function onKeyArrowUp() {
+  if (suggestions.value.length === 0) return
+  activeSuggestionIndex.value =
+    (activeSuggestionIndex.value - 1 + suggestions.value.length) %
+    suggestions.value.length
 }
 
 function onKeyEscape() {
@@ -56,13 +75,15 @@ function onKeyEscape() {
 function applySuggestion(candidate: string) {
   const tokens = commandInput.value.trimEnd().split(' ')
   tokens[tokens.length - 1] = candidate
-  commandInput.value = tokens.join(' ') + ' '
+  const { newInput } = props.tabComplete(tokens.join(' ') + ' ')
+  commandInput.value = newInput
   closeSuggestions()
   nextTick(() => inputEl.value?.focus())
 }
 
 function closeSuggestions() {
   suggestions.value = []
+  activeSuggestionIndex.value = -1
 }
 </script>
 
@@ -109,9 +130,19 @@ function closeSuggestions() {
       class="relative flex gap-2 px-3 py-2.5 bg-bg-secondary border-t border-border shrink-0"
     >
       <input
+        :id="'cmd-input'"
         ref="inputEl"
         v-model="commandInput"
         type="text"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-controls="completions-list"
+        :aria-expanded="suggestions.length > 0"
+        :aria-activedescendant="
+          activeSuggestionIndex >= 0
+            ? `completion-${suggestions[activeSuggestionIndex]}`
+            : undefined
+        "
         :placeholder="
           acceptInput ? 'What do you want to do?' : 'Press Enter to continue'
         "
@@ -123,21 +154,27 @@ function closeSuggestions() {
         spellcheck="false"
         autofocus
         @keydown.enter="acceptInput ? onKeyEnter() : $emit('advanceTurn')"
-        @keydown.tab.prevent="onKeyTab"
+        @keydown.tab="onKeyTab"
         @keydown.escape="onKeyEscape"
+        @keydown.arrow-down.prevent="onKeyArrowDown"
+        @keydown.arrow-up.prevent="onKeyArrowUp"
         @blur="closeSuggestions"
       />
 
       <!-- Tab-completion suggestion dropdown -->
       <ul
         v-if="suggestions.length > 0"
+        id="completions-list"
         class="absolute bottom-full left-3 mb-1 min-w-40 rounded-lg border border-border bg-bg-secondary shadow-lg z-50 overflow-hidden"
         role="listbox"
         aria-label="Completions"
       >
         <li
-          v-for="s in suggestions"
+          v-for="(s, idx) in suggestions"
+          :id="`completion-${s}`"
           :key="s"
+          :aria-selected="idx === activeSuggestionIndex"
+          :class="{ 'bg-chip-hover': idx === activeSuggestionIndex }"
           class="px-4 py-2 text-[0.9rem] text-text-primary cursor-pointer hover:bg-chip-hover"
           role="option"
           @mousedown.prevent="applySuggestion(s)"

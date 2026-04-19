@@ -7,6 +7,7 @@ import type {
   NamedItem,
   MusicInfo,
   RoomExits,
+  CompletionTree,
 } from '@/types/bridge'
 
 /**
@@ -242,7 +243,7 @@ with open('retroquest.save', 'wb') as f:
     return py('game.accept_input') as boolean
   }
 
-  function getCommandCompletions(): Record<string, unknown> {
+  function getCommandCompletions(): CompletionTree {
     const result = py('game.get_command_completions()')
     if (!result || typeof result !== 'object') return {}
     const proxy = result as {
@@ -252,10 +253,7 @@ with open('retroquest.save', 'wb') as f:
         ) => Record<string, unknown>
       }) => unknown
     }
-    return proxy.toJs({ dict_converter: Object.fromEntries }) as Record<
-      string,
-      unknown
-    >
+    return proxy.toJs({ dict_converter: Object.fromEntries }) as CompletionTree
   }
 
   function advanceTurn(): string {

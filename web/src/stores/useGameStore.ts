@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { NamedItem, RoomExits } from '@/types/bridge'
+import type { NamedItem, RoomExits, CompletionTree } from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
 
 /**
@@ -26,7 +26,7 @@ export interface GameBridge {
   saveGame(): string
   loadGame(): string
   isAcceptingInput(): boolean
-  getCommandCompletions(): Record<string, unknown>
+  getCommandCompletions(): CompletionTree
   advanceTurn(): string
   getMusicInfo(): { musicFile: string; musicInfo: string }
   look(): string
@@ -66,7 +66,7 @@ export const useGameStore = defineStore('game', () => {
   const acceptInput = ref(false)
 
   // --- Completion tree (refreshed after every command / panel refresh) ---
-  const completionTree = ref<Record<string, unknown>>({})
+  const completionTree = ref<CompletionTree>({})
 
   // --- Sidebar sections ---
   const showActiveQuests = ref(true)
@@ -284,14 +284,10 @@ export const useGameStore = defineStore('game', () => {
     const lastToken = tokens[tokens.length - 1]
     const prevTokens = tokens.slice(0, -1)
 
-    let node: unknown = completionTree.value
+    let node: CompletionTree | null = completionTree.value
     for (const token of prevTokens) {
-      if (
-        node &&
-        typeof node === 'object' &&
-        token in (node as Record<string, unknown>)
-      ) {
-        node = (node as Record<string, unknown>)[token]
+      if (node && token in node) {
+        node = node[token]
       } else {
         return { newInput: input, candidates: [] }
       }
@@ -301,19 +297,17 @@ export const useGameStore = defineStore('game', () => {
       return { newInput: input, candidates: [] }
     }
 
-    const candidates = Object.keys(node as Record<string, unknown>).filter(
-      (k) => k.startsWith(lastToken),
-    )
+    const candidates = Object.keys(node).filter((k) => k.startsWith(lastToken))
 
     if (candidates.length === 1) {
       const words = [...prevTokens, candidates[0]]
-      let currentNode = (node as Record<string, unknown>)[candidates[0]]
+      let currentNode: CompletionTree | null = node[candidates[0]]
 
       while (currentNode && typeof currentNode === 'object') {
-        const keys = Object.keys(currentNode as Record<string, unknown>)
+        const keys = Object.keys(currentNode)
         if (keys.length === 1) {
           words.push(keys[0])
-          currentNode = (currentNode as Record<string, unknown>)[keys[0]]
+          currentNode = currentNode[keys[0]]
         } else {
           break
         }

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore } from './useGameStore'
 import { renderMarkup } from '@/utils/theme'
+import type { CompletionTree } from '@/types/bridge'
 
 vi.mock('@/utils/theme', () => ({
   renderMarkup: vi.fn((s: string) => `<rendered>${s}</rendered>`),
@@ -46,7 +47,7 @@ function createMockBridge() {
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
     })),
-    getCommandCompletions: vi.fn((): Record<string, unknown> => ({})),
+    getCommandCompletions: vi.fn((): CompletionTree => ({})),
   }
 }
 
