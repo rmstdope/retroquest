@@ -461,10 +461,20 @@ document.addEventListener('alpine:init', () => {
          * @param {string} info - Attribution text for the track.
          */
         _loadMusicTrack(file, info) {
-            if (!file || file === this.currentMusicFile) return;
+            const audio = document.getElementById('bg-music');
+            if (!file) {
+                this.currentMusicFile = '';
+                this.musicInfo = '';
+                if (audio) {
+                    audio.pause();
+                    audio.removeAttribute('src');
+                    audio.load();
+                }
+                return;
+            }
+            if (file === this.currentMusicFile) return;
             this.currentMusicFile = file;
             this.musicInfo = info;
-            const audio = document.getElementById('bg-music');
             const url = '/src/retroquest/audio/music/'
                 + encodeURIComponent(file);
             audio.src = url;
