@@ -14,7 +14,7 @@ class EliorsCottage(Room):
         Establishes emotional baseline (Grandmother) and safe exploratory cadence.
 
     Key Mechanics:
-        - Exits hidden until ``can_leave()`` invoked (soft tutorial pacing).
+        - Exits hidden until the player has learned the ``revive`` spell (soft tutorial pacing).
         - ``search()`` spawns ``FadedPhotograph`` once and sets ``FLAG_FOUND_PHOTO``.
 
     Story Flags:
@@ -26,14 +26,16 @@ class EliorsCottage(Room):
         - NPC: ``Grandmother``.
 
     Design Notes:
-        Exit reveal pattern could migrate to a ``TutorialRoom`` abstraction if reused.
+        Exits are derived dynamically from ``game_state`` so that quest side-effects
+        (e.g. learning the revive spell during a cheat sequence) are picked up
+        immediately, without requiring an explicit ``can_leave()`` call.
     """
     def __init__(self) -> None:
         """Initialize the cottage room with base items and no exits initially.
 
-        Exits are intentionally empty to delay outward movement until
-        ``can_leave`` is invoked (tutorial pacing). Adds the starting
-        ``Lantern`` item and the ``Grandmother`` character.
+        Exits are intentionally empty at construction time; they become visible
+        once ``get_exits`` detects the revive spell in the game state.
+        Adds the starting ``Lantern`` item and the ``Grandmother`` character.
         """
         super().__init__(
             name="Elior's Cottage",
@@ -51,14 +53,21 @@ class EliorsCottage(Room):
             exits={}  # Start with empty exits
         )
 
-    def can_leave(self) -> None:
-        """Populate exits if they have not yet been revealed.
+    def get_exits(self, game_state: GameState) -> dict[str, str]:
+        """Return exits based on game state.
 
-        This lazy population models a soft gating tutorial step so the
-        player engages with the room (dialogue / search) before leaving.
+        Exits are unlocked once the player has learned the ``revive`` spell,
+        completing the introductory *Hint of Magic* tutorial step.
+
+        Parameters:
+            game_state: Global game progression state for spell checks.
+
+        Returns:
+            A direction-to-room-key mapping, or an empty dict while locked.
         """
-        if not self.exits:
-            self.exits = {"south": "VegetableField", "east": "VillageSquare"}
+        if game_state.has_spell("revive"):
+            return {"south": "VegetableField", "east": "VillageSquare"}
+        return {}
 
     def search(self, game_state: GameState, _target: str = None) -> str:
         """Search the cottage for hidden items.

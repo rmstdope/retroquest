@@ -19,13 +19,44 @@ from retroquest.act1.rooms.RoadToGreendale import RoadToGreendale
 
 class MockGameState:
     """Mock GameState for testing room functionality without complex dependencies."""
-    def __init__(self):
+    def __init__(self, spells: list[str] | None = None):
         """Initialize mock game state with empty story flags."""
         self.story_flags = []
+        self._spells = spells or []
 
     def get_story_flag(self, flag):
         """Check if a story flag is set."""
         return flag in self.story_flags
+
+    def has_spell(self, spell_name: str) -> bool:
+        """Return True if spell_name is in the known spells list."""
+        return spell_name in self._spells
+
+
+def test_cottage_exits_locked_before_learning_revive():
+    """Cottage exits must be empty until the player knows the revive spell."""
+    cottage = EliorsCottage()
+    state = MockGameState(spells=[])
+    assert cottage.get_exits(state) == {}
+
+
+def test_cottage_exits_available_after_learning_revive():
+    """Cottage exits must be populated once the player knows the revive spell."""
+    cottage = EliorsCottage()
+    state = MockGameState(spells=["revive"])
+    exits = cottage.get_exits(state)
+    assert "south" in exits
+    assert "east" in exits
+
+
+def test_cottage_exits_available_without_calling_can_leave():
+    """get_exits must not require can_leave() to be called first."""
+    cottage = EliorsCottage()
+    state = MockGameState(spells=["revive"])
+    # Intentionally skip can_leave()
+    exits = cottage.get_exits(state)
+    assert exits != {}, "Exits should be populated based on game state alone"
+
 
 ROOM_CLASSES = {
     "EliorsCottage": EliorsCottage,
@@ -57,8 +88,8 @@ OPPOSITE = {
 def test_room_reachability(start_key):
     """Test that all rooms are reachable from any starting room."""
     # Instantiate all rooms
+    state = MockGameState(spells=["revive"])
     rooms = {k: v() for k, v in ROOM_CLASSES.items()}
-    rooms['EliorsCottage'].can_leave()
     visited = set()
     queue = [start_key]
     while queue:
@@ -66,7 +97,7 @@ def test_room_reachability(start_key):
         if current in visited:
             continue
         visited.add(current)
-        for dest in rooms[current].get_exits(MockGameState()).values():
+        for dest in rooms[current].get_exits(state).values():
             if dest not in visited and dest in rooms:
                 queue.append(dest)
     # All rooms should be reachable from the start room
@@ -110,9 +141,9 @@ def test_room_transitions_bidirectional(_room_class, room_key):
         "VillageChapel": VillageChapel(),
         "RoadToGreendale": RoadToGreendale(),
     }
-    rooms['EliorsCottage'].can_leave()  # Ensure Elior's Cottage can be left
+    state = MockGameState(spells=["revive"])
     room = rooms[room_key]
-    for direction, dest_key in room.get_exits(MockGameState()).items():
+    for direction, dest_key in room.get_exits(state).items():
         # Only test cardinal directions
         if direction not in OPPOSITE:
             continue
@@ -120,7 +151,7 @@ def test_room_transitions_bidirectional(_room_class, room_key):
         opposite = OPPOSITE[direction]
         # The destination room must have an exit back to the original room
         assert (
-            dest_room.get_exits(MockGameState()).get(opposite) == room_key
+            dest_room.get_exits(state).get(opposite) == room_key
         ), (
             f"{room_key} -> {direction} -> {dest_key} but {dest_key} does not have "
             f"{opposite} back to {room_key}"
