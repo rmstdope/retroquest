@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test'
 
-const APP_URL = '/index-vue.html'
+const APP_URL = '/'
 
 /* ------------------------------------------------------------------ */
 /*  Helper: inject mock game state to bypass Pyodide loading          */

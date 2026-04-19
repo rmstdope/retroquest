@@ -19,11 +19,8 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    rollupOptions: {
-      input: resolve(__dirname, 'index-vue.html'),
-    },
   },
   server: {
-    open: '/index-vue.html',
+    open: true,
   },
 })

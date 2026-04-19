@@ -1,6 +1,6 @@
 /**
  * Vite plugin that serves Python source files from the project's
- * src/ directory at the /python-src/ URL path, replacing serve.py.
+ * src/ directory at the /python-src/ URL path.
  */
 import { type Plugin } from 'vite'
 import type { ServerResponse } from 'node:http'
