@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { pythonSourcePlugin, collectPythonFiles } from './pythonSourcePlugin'
+import { pythonSourcePlugin, collectPythonFiles, collectAudioFiles, getMimeType } from './pythonSourcePlugin'
 import { resolve } from 'node:path'
 
 const srcDir = resolve(__dirname, '..', '..', 'src')
@@ -13,6 +13,57 @@ describe('pythonSourcePlugin', () => {
   it('has a configureServer hook', () => {
     const plugin = pythonSourcePlugin({ srcDir })
     expect(plugin.configureServer).toBeTypeOf('function')
+  })
+
+  it('has a buildStart hook to emit audio files for production builds', () => {
+    const plugin = pythonSourcePlugin({ srcDir })
+    expect(plugin.buildStart).toBeTypeOf('function')
+  })
+})
+
+describe('getMimeType', () => {
+  it('returns text/plain for .py files', () => {
+    expect(getMimeType('game.py')).toBe('text/plain')
+  })
+
+  it('returns audio/mpeg for .mp3 files', () => {
+    expect(getMimeType('music.mp3')).toBe('audio/mpeg')
+  })
+
+  it('returns audio/ogg for .ogg files', () => {
+    expect(getMimeType('track.ogg')).toBe('audio/ogg')
+  })
+
+  it('returns audio/wav for .wav files', () => {
+    expect(getMimeType('sound.wav')).toBe('audio/wav')
+  })
+
+  it('returns application/octet-stream for unknown types', () => {
+    expect(getMimeType('data.bin')).toBe('application/octet-stream')
+  })
+})
+
+describe('collectAudioFiles', () => {
+  it('finds .mp3 files in the source tree', () => {
+    const files = collectAudioFiles(srcDir, srcDir)
+    expect(files.length).toBeGreaterThan(0)
+    expect(files.some((f) => f.endsWith('.mp3'))).toBe(true)
+  })
+
+  it('only includes audio file extensions (.mp3, .ogg, .wav)', () => {
+    const files = collectAudioFiles(srcDir, srcDir)
+    const valid = (f: string) => f.endsWith('.mp3') || f.endsWith('.ogg') || f.endsWith('.wav')
+    expect(files.every(valid)).toBe(true)
+  })
+
+  it('returns paths sorted alphabetically', () => {
+    const files = collectAudioFiles(srcDir, srcDir)
+    expect(files).toEqual([...files].sort())
+  })
+
+  it('returns paths relative to the base directory', () => {
+    const files = collectAudioFiles(srcDir, srcDir)
+    expect(files.every((f) => !f.startsWith('/'))).toBe(true)
   })
 })
 

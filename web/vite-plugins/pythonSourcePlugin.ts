@@ -5,7 +5,7 @@
 import { type Plugin } from 'vite'
 import type { ServerResponse } from 'node:http'
 import { readFileSync, readdirSync, statSync } from 'node:fs'
-import { resolve, relative } from 'node:path'
+import { resolve, relative, extname } from 'node:path'
 
 interface PythonSourcePluginOptions {
   /** Absolute path to the project src/ directory. */
@@ -33,6 +33,35 @@ export function collectPythonFiles(dir: string, base: string): string[] {
 /** Remove query string and fragment from a URL. */
 function stripQueryAndFragment(url: string): string {
   return url.split('?')[0].split('#')[0]
+}
+
+/** Map a file path extension to an HTTP Content-Type value. */
+export function getMimeType(filePath: string): string {
+  if (filePath.endsWith('.py')) return 'text/plain'
+  if (filePath.endsWith('.mp3')) return 'audio/mpeg'
+  if (filePath.endsWith('.ogg')) return 'audio/ogg'
+  if (filePath.endsWith('.wav')) return 'audio/wav'
+  return 'application/octet-stream'
+}
+
+const AUDIO_EXTENSIONS = new Set(['.mp3', '.ogg', '.wav'])
+
+/**
+ * Recursively collect all audio files under a directory,
+ * returning sorted paths relative to the base directory.
+ */
+export function collectAudioFiles(dir: string, base: string): string[] {
+  const files: string[] = []
+  for (const entry of readdirSync(dir)) {
+    const fullPath = resolve(dir, entry)
+    const stat = statSync(fullPath)
+    if (stat.isDirectory()) {
+      files.push(...collectAudioFiles(fullPath, base))
+    } else if (AUDIO_EXTENSIONS.has(extname(entry))) {
+      files.push(relative(base, fullPath))
+    }
+  }
+  return files.sort()
 }
 
 /** Respond with the JSON manifest of all Python source files. */
@@ -66,9 +95,7 @@ function serveSourceFile(
 
   try {
     const content = readFileSync(filePath)
-    const contentType = filePath.endsWith('.py')
-      ? 'text/plain'
-      : 'application/octet-stream'
+    const contentType = getMimeType(filePath)
     res.setHeader('Content-Type', contentType)
     res.setHeader('Content-Length', content.length)
     res.end(content)
@@ -86,8 +113,25 @@ function serveSourceFile(
 export function pythonSourcePlugin(options: PythonSourcePluginOptions): Plugin {
   const { srcDir } = options
 
+  let isBuild = false
+
   return {
     name: 'retroquest-python-source',
+    configResolved(config) {
+      isBuild = config.command === 'build'
+    },
+    buildStart() {
+      if (!isBuild) return
+      const audioFiles = collectAudioFiles(srcDir, srcDir)
+      for (const filePath of audioFiles) {
+        const content = readFileSync(resolve(srcDir, filePath))
+        this.emitFile({
+          type: 'asset',
+          fileName: `python-src/${filePath}`,
+          source: content,
+        })
+      }
+    },
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const urlPath = stripQueryAndFragment(req.url ?? '')
