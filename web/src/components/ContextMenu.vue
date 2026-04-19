@@ -1,8 +1,7 @@
 <script setup lang="ts">
-export interface MenuAction {
-  label: string
-  command: string
-}
+import type { EntityMenuAction } from '@/composables/useEntityMenu'
+
+export type MenuAction = EntityMenuAction
 
 defineProps<{
   visible: boolean
