@@ -14,6 +14,7 @@ import ContextMenu from './ContextMenu.vue'
 import ActionSheet from './ActionSheet.vue'
 import MobileDrawer from './MobileDrawer.vue'
 import QuestModal from './QuestModal.vue'
+import ActTransitionOverlay from './ActTransitionOverlay.vue'
 
 const store = useGameStore()
 const {
@@ -38,6 +39,8 @@ const {
   modalBody,
   musicFile,
   musicInfo: musicInfoText,
+  actTransitioning,
+  transitionText,
 } = storeToRefs(store)
 
 // --- Music ---
@@ -207,6 +210,12 @@ function closeMenus() {
       :title="modalTitle"
       :body="modalBody"
       @dismiss="store.dismissModal()"
+    />
+
+    <ActTransitionOverlay
+      :visible="actTransitioning"
+      :text="transitionText"
+      @advance="store.advanceTurn()"
     />
   </div>
 </template>

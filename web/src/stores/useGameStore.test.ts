@@ -42,6 +42,8 @@ function createMockBridge() {
     advanceTurn: vi.fn(() => 'Turn advanced'),
     isGameRunning: vi.fn(() => true),
     isActRunning: vi.fn(() => true),
+    isActTransitioning: vi.fn(() => false),
+    getResultText: vi.fn(() => 'Result text'),
     getMusicInfo: vi.fn(() => ({
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
@@ -104,6 +106,11 @@ describe('useGameStore', () => {
       expect(store.showModal).toBe(false)
       expect(store.modalTitle).toBe('')
       expect(store.modalBody).toBe('')
+    })
+
+    it('has act transition hidden initially', () => {
+      expect(store.actTransitioning).toBe(false)
+      expect(store.transitionText).toBe('')
     })
   })
 
@@ -206,6 +213,40 @@ describe('useGameStore', () => {
       expect(store.showModal).toBe(true)
       expect(store.modalTitle).toBe('📜 New Quest!')
     })
+
+    it('shows transition overlay when act is not running after command', () => {
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getResultText.mockReturnValue('Act 1 complete! Congratulations!')
+      store.submitCommand('complete quest')
+      expect(store.actTransitioning).toBe(true)
+      expect(store.transitionText).toBe(
+        '<rendered>Act 1 complete! Congratulations!</rendered>',
+      )
+    })
+
+    it('does not call refreshPanels during act transition', () => {
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getResultText.mockReturnValue('Transition text')
+      bridge.getRoomName.mockReturnValue('Should Not Update')
+      store.submitCommand('complete quest')
+      // roomName was set during initGame; transition should not change it
+      expect(store.roomName).toBe('Village Square')
+    })
+
+    it('does not poll quest events during act transition', () => {
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getResultText.mockReturnValue('Transition text')
+      bridge.activateQuest.mockReturnValue('Quest!')
+      store.submitCommand('complete quest')
+      expect(store.showModal).toBe(false)
+    })
+
+    it('sets acceptInput to false during act transition', () => {
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getResultText.mockReturnValue('Transition text')
+      store.submitCommand('complete quest')
+      expect(store.acceptInput).toBe(false)
+    })
   })
 
   // --- advanceTurn ---
@@ -225,6 +266,43 @@ describe('useGameStore', () => {
       bridge.getRoomName.mockReturnValue('Castle Gate')
       store.advanceTurn()
       expect(store.roomName).toBe('Castle Gate')
+    })
+
+    it('hides transition overlay when act becomes running', () => {
+      // Put store in transition state
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getResultText.mockReturnValue('Act outro')
+      store.submitCommand('finish act')
+      expect(store.actTransitioning).toBe(true)
+
+      // Now advance: act becomes running
+      bridge.isActRunning.mockReturnValue(true)
+      store.advanceTurn()
+      expect(store.actTransitioning).toBe(false)
+    })
+
+    it('refreshes panels after transition overlay clears', () => {
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getResultText.mockReturnValue('Act outro')
+      store.submitCommand('finish act')
+
+      bridge.isActRunning.mockReturnValue(true)
+      bridge.getRoomName.mockReturnValue('New Act Room')
+      store.advanceTurn()
+      expect(store.roomName).toBe('New Act Room')
+    })
+
+    it('updates transition text while still transitioning', () => {
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getResultText.mockReturnValue('Act outro')
+      store.submitCommand('finish act')
+
+      // Still not running, now shows intro text
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getResultText.mockReturnValue('Act 2 intro text')
+      store.advanceTurn()
+      expect(store.actTransitioning).toBe(true)
+      expect(store.transitionText).toBe('<rendered>Act 2 intro text</rendered>')
     })
   })
 

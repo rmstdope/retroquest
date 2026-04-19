@@ -234,6 +234,21 @@ describe('useBridge', () => {
       expect(bridge.isActRunning()).toBe(true)
     })
 
+    it('isActTransitioning returns boolean', () => {
+      mock.pythonResults.set('game.is_act_transitioning()', true)
+      expect(bridge.isActTransitioning()).toBe(true)
+    })
+
+    it('isActTransitioning returns false when not transitioning', () => {
+      mock.pythonResults.set('game.is_act_transitioning()', false)
+      expect(bridge.isActTransitioning()).toBe(false)
+    })
+
+    it('getResultText returns current result text', () => {
+      mock.pythonResults.set('game.get_result_text()', 'Congratulations on completing Act 1!')
+      expect(bridge.getResultText()).toBe('Congratulations on completing Act 1!')
+    })
+
     it('getMusicInfo returns MusicInfo object', () => {
       mock.pythonResults.set(
         'controller.get_current_music()',

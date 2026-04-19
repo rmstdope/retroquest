@@ -27,6 +27,9 @@ export interface GameBridge {
   loadGame(): string
   isAcceptingInput(): boolean
   advanceTurn(): string
+  isActRunning(): boolean
+  isActTransitioning(): boolean
+  getResultText(): string
   getMusicInfo(): { musicFile: string; musicInfo: string }
 }
 
@@ -79,6 +82,10 @@ export const useGameStore = defineStore('game', () => {
   const musicFile = ref('')
   const musicInfo = ref('')
 
+  // --- Act Transition ---
+  const actTransitioning = ref(false)
+  const transitionText = ref('')
+
   function setBridge(b: GameBridge) {
     bridge = b
   }
@@ -112,12 +119,30 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     const result = b.handleCommand(cmd.trim())
     lastOutput.value = renderMarkup(result)
+
+    if (!b.isActRunning()) {
+      transitionText.value = renderMarkup(b.getResultText())
+      actTransitioning.value = true
+      acceptInput.value = false
+      return
+    }
+
     refreshPanels()
     pollQuestEvents()
   }
 
   function advanceTurn(): void {
     const b = requireBridge()
+    if (actTransitioning.value) {
+      b.advanceTurn()
+      if (b.isActRunning()) {
+        actTransitioning.value = false
+        refreshPanels()
+      } else {
+        transitionText.value = renderMarkup(b.getResultText())
+      }
+      return
+    }
     const result = b.advanceTurn()
     lastOutput.value = renderMarkup(result)
     refreshPanels()
@@ -243,6 +268,8 @@ export const useGameStore = defineStore('game', () => {
     modalBody,
     musicFile,
     musicInfo,
+    actTransitioning,
+    transitionText,
     // Actions
     setBridge,
     initGame,

@@ -125,6 +125,7 @@ results
     pyodide.globals.set('_cmd', command)
     return py(`
 result = controller.handle_command(_cmd)
+game.command_result = result
 game.new_turn()
 result
     `) as string
@@ -258,6 +259,14 @@ _result_text
     return py('controller.is_act_running()') as boolean
   }
 
+  function isActTransitioning(): boolean {
+    return py('game.is_act_transitioning()') as boolean
+  }
+
+  function getResultText(): string {
+    return py('game.get_result_text()') as string
+  }
+
   function getMusicInfo(): MusicInfo {
     const result = py('controller.get_current_music()')
     const [musicFile, musicInfo] = (result as { toJs(): unknown }).toJs() as [
@@ -298,6 +307,8 @@ _result_text
     advanceTurn,
     isGameRunning,
     isActRunning,
+    isActTransitioning,
+    getResultText,
     getMusicInfo,
   }
 }
