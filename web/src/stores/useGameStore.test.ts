@@ -463,6 +463,55 @@ describe('useGameStore', () => {
       store.pollQuestEvents()
       expect(store.showModal).toBe(false)
     })
+
+    it('calls playNewQuest when a quest is activated', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.activateQuest
+        .mockReturnValueOnce('Quest A')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      store.pollQuestEvents()
+      expect(audio.playNewQuest).toHaveBeenCalledOnce()
+      expect(audio.playQuestComplete).not.toHaveBeenCalled()
+    })
+
+    it('calls playNewQuest when a quest is updated', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.activateQuest.mockReturnValue(null)
+      bridge.updateQuest
+        .mockReturnValueOnce('Quest updated')
+        .mockReturnValueOnce(null)
+      bridge.completeQuest.mockReturnValue(null)
+      store.pollQuestEvents()
+      expect(audio.playNewQuest).toHaveBeenCalledOnce()
+      expect(audio.playQuestComplete).not.toHaveBeenCalled()
+    })
+
+    it('calls playQuestComplete when a quest is completed', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.activateQuest.mockReturnValue(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest
+        .mockReturnValueOnce('Quest done!')
+        .mockReturnValueOnce(null)
+      store.pollQuestEvents()
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+      expect(audio.playNewQuest).not.toHaveBeenCalled()
+    })
+
+    it('does not call audio when no audio player is set', () => {
+      // No setAudioPlayer call - should not throw
+      bridge.activateQuest
+        .mockReturnValueOnce('Quest A')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      expect(() => store.pollQuestEvents()).not.toThrow()
+    })
   })
 
   // --- toggleSection ---

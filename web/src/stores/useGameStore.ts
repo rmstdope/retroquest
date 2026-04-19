@@ -30,6 +30,12 @@ export interface GameBridge {
   getMusicInfo(): { musicFile: string; musicInfo: string }
 }
 
+/** Minimal interface required for quest sound-effect playback. */
+export interface QuestAudioPlayer {
+  playNewQuest(): void
+  playQuestComplete(): void
+}
+
 interface QuestEvent {
   title: string
   body: string
@@ -38,6 +44,9 @@ interface QuestEvent {
 export const useGameStore = defineStore('game', () => {
   // --- Bridge reference ---
   let bridge: GameBridge | null = null
+
+  // --- Audio player reference ---
+  let audioPlayer: QuestAudioPlayer | null = null
 
   // --- Loading ---
   const loading = ref(true)
@@ -81,6 +90,10 @@ export const useGameStore = defineStore('game', () => {
 
   function setBridge(b: GameBridge) {
     bridge = b
+  }
+
+  function setAudioPlayer(player: QuestAudioPlayer) {
+    audioPlayer = player
   }
 
   function requireBridge(): GameBridge {
@@ -177,6 +190,7 @@ export const useGameStore = defineStore('game', () => {
         title: '📜 New Quest!',
         body: renderMarkup(activated),
       })
+      audioPlayer?.playNewQuest()
     }
 
     let updated: string | null
@@ -185,6 +199,7 @@ export const useGameStore = defineStore('game', () => {
         title: '📜 Quest Updated',
         body: renderMarkup(updated),
       })
+      audioPlayer?.playNewQuest()
     }
 
     let completed: string | null
@@ -193,6 +208,7 @@ export const useGameStore = defineStore('game', () => {
         title: '🏆 Quest Complete!',
         body: renderMarkup(completed),
       })
+      audioPlayer?.playQuestComplete()
     }
 
     if (events.length > 0) {
@@ -264,6 +280,7 @@ export const useGameStore = defineStore('game', () => {
     musicInfo,
     // Actions
     setBridge,
+    setAudioPlayer,
     initGame,
     submitCommand,
     advanceTurn,
