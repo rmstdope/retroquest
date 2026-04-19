@@ -129,7 +129,7 @@ function closeMenus() {
 </script>
 
 <template>
-  <div style="display: flex; flex-direction: column; height: 100vh">
+  <div class="flex flex-col h-screen">
     <TopBar
       title="RetroQuest"
       :music-muted="music.musicMuted.value"
@@ -140,7 +140,7 @@ function closeMenus() {
       @toggle-drawer="showDrawer = !showDrawer"
     />
 
-    <div class="app-layout">
+    <div class="flex h-[calc(100vh-48px)] overflow-hidden">
       <GameOutput
         :room-name="roomName"
         :room-description="roomDescription"

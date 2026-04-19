@@ -14,10 +14,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="store.loading" class="loading-screen">
-    <div class="loading-content">
-      <div class="loading-spinner"></div>
-      <div class="loading-status">{{ store.loadingStatus }}</div>
+  <div
+    v-if="store.loading"
+    class="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-bg-primary gap-6"
+  >
+    <div class="text-[2.5rem] font-bold text-accent tracking-wide">
+      RetroQuest
+    </div>
+    <div class="loading-spinner"></div>
+    <div class="text-text-secondary text-sm">
+      {{ store.loadingStatus }}
     </div>
   </div>
   <GameLayout v-else />
