@@ -61,6 +61,14 @@ function pyProxy(jsValue: unknown) {
   return { toJs: () => jsValue }
 }
 
+/**
+ * Helper to create a mock PyProxy whose toJs() ignores options and returns
+ * the JS value directly (used for dict conversions in getCommandCompletions).
+ */
+function pyProxyWithToJs(jsValue: unknown) {
+  return { toJs: () => jsValue }
+}
+
 describe('useBridge', () => {
   let mock: ReturnType<typeof createMockPyodide>
   let bridge: ReturnType<typeof useBridge>
@@ -322,6 +330,26 @@ describe('useBridge', () => {
         'Intro text',
         'Running text',
       ])
+    })
+
+    it('getCommandCompletions converts nested Python dict to plain JS object', () => {
+      const completionsTree = {
+        go: { north: null, south: null },
+        take: { sword: null },
+      }
+      mock.pythonResults.set(
+        'game.get_command_completions()',
+        pyProxyWithToJs(completionsTree),
+      )
+      expect(bridge.getCommandCompletions()).toEqual(completionsTree)
+    })
+
+    it('getCommandCompletions returns empty object when no completions', () => {
+      mock.pythonResults.set(
+        'game.get_command_completions()',
+        pyProxyWithToJs({}),
+      )
+      expect(bridge.getCommandCompletions()).toEqual({})
     })
   })
 

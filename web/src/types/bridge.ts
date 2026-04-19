@@ -15,6 +15,13 @@ export interface RoomExits {
 }
 
 /**
+ * Recursive type for the nested completion tree returned by
+ * `game.get_command_completions()`. Each key maps to either another subtree
+ * (more tokens available) or `null` (leaf / terminal token).
+ */
+export type CompletionTree = { [token: string]: CompletionTree | null }
+
+/**
  * Pyodide runtime interface — subset of the loadPyodide() result
  * used by the bridge.
  */
