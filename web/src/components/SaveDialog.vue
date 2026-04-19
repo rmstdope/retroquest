@@ -16,10 +16,10 @@ const emit = defineEmits<{
 const saveName = ref('')
 
 watch(
-  () => [props.visible, props.defaultName] as const,
-  ([visible, defaultName]) => {
+  () => props.visible,
+  (visible) => {
     if (visible) {
-      saveName.value = defaultName
+      saveName.value = props.defaultName
     }
   },
 )
