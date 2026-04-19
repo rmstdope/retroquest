@@ -281,6 +281,25 @@ describe('useGameStore', () => {
       expect(store.showModal).toBe(true)
       expect(store.modalTitle).toBe('📜 New Quest!')
     })
+
+    it('refreshes panels after quest completion to pick up newly unlocked exits', () => {
+      // Simulate quest completion that unlocks exits (like HintOfMagicQuest.check_completion
+      // calling cottage.can_leave(), which mutates the Python room object's exits dict).
+      // First getRoomExits call (first refreshPanels inside submitCommand) returns empty.
+      // Second call (a second refreshPanels after pollQuestEvents, with the fix) returns exits.
+      bridge.getRoomExits
+        .mockReturnValueOnce({})
+        .mockReturnValueOnce({ south: 'VegetableField', east: 'VillageSquare' })
+      bridge.activateQuest.mockReturnValue(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest
+        .mockReturnValueOnce('Hint of Magic complete!')
+        .mockReturnValueOnce(null)
+
+      store.submitCommand('talk to grandmother')
+
+      expect(store.exits).toEqual({ south: 'VegetableField', east: 'VillageSquare' })
+    })
   })
 
   // --- advanceTurn ---
