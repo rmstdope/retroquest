@@ -523,6 +523,22 @@ describe('useGameStore', () => {
       store.pollQuestEvents()
       expect(store.showModal).toBe(false)
     })
+
+    it('applies renderMarkup to activeQuests updated after polling', () => {
+      bridge.activateQuest.mockReturnValue(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      bridge.getActiveQuests.mockReturnValue([
+        {
+          name: '[quest_name]Shadows Over Willowbrook (main)[/quest_name]',
+          description: 'Stop the shadows.',
+        },
+      ])
+      store.pollQuestEvents()
+      expect(store.activeQuests[0].name).toBe(
+        '<rendered>[quest_name]Shadows Over Willowbrook (main)[/quest_name]</rendered>',
+      )
+    })
   })
 
   // --- toggleSection ---

@@ -209,8 +209,14 @@ export const useGameStore = defineStore('game', () => {
       }
     }
 
-    activeQuests.value = b.getActiveQuests()
-    completedQuests.value = b.getCompletedQuests()
+    activeQuests.value = b.getActiveQuests().map((item) => ({
+      name: renderMarkup(item.name),
+      description: renderMarkup(item.description),
+    }))
+    completedQuests.value = b.getCompletedQuests().map((item) => ({
+      name: renderMarkup(item.name),
+      description: renderMarkup(item.description),
+    }))
   }
 
   function showNextModal(): void {
