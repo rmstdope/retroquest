@@ -142,6 +142,63 @@ test.describe('Game UI with mock state', () => {
 })
 
 /* ------------------------------------------------------------------ */
+/*  QuestModal Escape key tests                                        */
+/* ------------------------------------------------------------------ */
+
+test.describe('QuestModal – Escape key dismissal', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(APP_URL)
+    await expect(page.locator('.loading-spinner')).toBeVisible({
+      timeout: 10_000,
+    })
+    await injectMockGameState(page)
+  })
+
+  async function openModal(page: Page) {
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const pinia = app.config.globalProperties.$pinia
+      const store = pinia.state.value.game
+      store.showModal = true
+      store.modalTitle = 'Test Quest'
+      store.modalBody = '<p>A new adventure awaits.</p>'
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+    await page.waitForTimeout(300)
+  }
+
+  test('modal is visible after being opened', async ({ page }) => {
+    await openModal(page)
+    await expect(page.getByText('Test Quest', { exact: true })).toBeVisible()
+  })
+
+  test('pressing Escape closes the modal', async ({ page }) => {
+    await openModal(page)
+    await expect(page.getByText('Test Quest', { exact: true })).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.getByText('Test Quest', { exact: true })).toBeHidden()
+  })
+
+  test('pressing Escape when no modal is open has no effect', async ({
+    page,
+  }) => {
+    await page.keyboard.press('Escape')
+    // The game UI should still be visible and stable
+    await expect(page.locator('input[type="text"]')).toBeVisible()
+  })
+
+  test('Close button still works after Escape feature is added', async ({
+    page,
+  }) => {
+    await openModal(page)
+    await expect(page.getByText('Test Quest', { exact: true })).toBeVisible()
+    await page.getByRole('button', { name: 'Continue' }).click()
+    await expect(page.getByText('Test Quest', { exact: true })).toBeHidden()
+  })
+})
+
+/* ------------------------------------------------------------------ */
 /*  Mobile layout tests                                               */
 /* ------------------------------------------------------------------ */
 
