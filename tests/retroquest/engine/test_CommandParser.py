@@ -122,13 +122,15 @@ class DummyGame:
         """Record a request to list available spells."""
         self.calls.append(('spells',))
 
-    def save(self):
-        """Record a save request."""
-        self.calls.append(('save',))
+    def save(self, name: str = '') -> str:
+        """Record a save request with optional save name."""
+        self.calls.append(('save', name))
+        return ''
 
-    def load(self):
-        """Record a load request."""
-        self.calls.append(('load',))
+    def load(self, name: str = '') -> str:
+        """Record a load request with optional save name."""
+        self.calls.append(('load', name))
+        return ''
 
     def quit(self):
         """Record a quit/exit request."""
@@ -350,8 +352,8 @@ def test_game_management_commands(game_parser):
     """Game-management commands (save/load/help/quit) map correctly."""
     game, parser = game_parser
     commands = {
-        "save": ("save",),
-        "load": ("load",),
+        "save": ("save", ""),
+        "load": ("load", ""),
         "help": ("help", None), # Parameterless help
         "?": ("help", None),   # Parameterless help
         "quit": ("quit",),
@@ -446,3 +448,17 @@ def test_cheat_act_4_falls_through_to_unknown(game_parser):
     game, parser = game_parser
     parser.parse("cheat act 4")
     assert ("unknown", "cheat act 4") in game.calls
+
+
+def test_save_with_name_dispatches_name_to_game(game_parser):
+    """'save <name>' passes the save name to game.save."""
+    game, parser = game_parser
+    parser.parse("save myadventure")
+    assert game.calls == [("save", "myadventure")]
+
+
+def test_load_with_name_dispatches_name_to_game(game_parser):
+    """'load <name>' passes the save name to game.load."""
+    game, parser = game_parser
+    parser.parse("load myadventure")
+    assert game.calls == [("load", "myadventure")]

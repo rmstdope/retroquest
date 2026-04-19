@@ -498,7 +498,7 @@ Welcome to
             "  spells\n"
             "\n"
             "[bold]Game Management:[/bold]\n"
-            "  save, load\n"
+            "  save [name], load [name]\n"
             "  help, ?\n"
             "  quit, exit\n"
             "\n"
@@ -931,21 +931,21 @@ Welcome to
                 "inventory.[/failure]"
             )
 
-    def save(self) -> str:
-        """Save the game state to a file."""
+    def save(self, name: str = 'retroquest') -> str:
+        """Save the game state to a file identified by name."""
         try:
-            with open('retroquest.save', 'wb') as f:
+            with open(f'{name}.save', 'wb') as f:
                 pickle.dump(self.state, f)
             return "[event]Game saved successfully.[/event]"
         except OSError as e:
             return f"[failure]Failed to save game: {e}[/failure]"
 
-    def load(self) -> str:
-        """Load the game state from a file."""
-        if not os.path.exists('retroquest.save'):
+    def load(self, name: str = 'retroquest') -> str:
+        """Load the game state from a file identified by name."""
+        if not os.path.exists(f'{name}.save'):
             return "[failure]No save file found.[/failure]"
         try:
-            with open('retroquest.save', 'rb') as f:
+            with open(f'{name}.save', 'rb') as f:
                 self.state = pickle.load(f)
             return "[event]Game loaded successfully.[/event]"
         except OSError as e:

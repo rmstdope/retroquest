@@ -1541,3 +1541,60 @@ def test_help_does_not_contain_cheat(game):
     """The help text must not reveal the secret cheat command."""
     result = game.help()
     assert 'cheat' not in result.lower()
+
+
+# ---- Save / Load tests ----
+
+def test_save_default_creates_retroquest_save(game, tmp_path, monkeypatch):
+    """save() with no name writes to retroquest.save."""
+    monkeypatch.chdir(tmp_path)
+    game.save()
+    assert (tmp_path / "retroquest.save").exists()
+
+
+def test_save_via_parser_default_creates_retroquest_save(game, tmp_path, monkeypatch):
+    """Parser 'save' with no name writes to retroquest.save."""
+    from engine.CommandParser import CommandParser  # noqa: PLC0415
+    monkeypatch.chdir(tmp_path)
+    parser = CommandParser(game)
+    parser.parse("save")
+    assert (tmp_path / "retroquest.save").exists()
+
+
+def test_save_with_name_creates_named_file(game, tmp_path, monkeypatch):
+    """save('myadventure') writes to myadventure.save."""
+    monkeypatch.chdir(tmp_path)
+    game.save("myadventure")
+    assert (tmp_path / "myadventure.save").exists()
+
+
+def test_save_with_name_does_not_overwrite_default(game, tmp_path, monkeypatch):
+    """save('slot2') and save() create separate files."""
+    monkeypatch.chdir(tmp_path)
+    game.save()
+    game.save("slot2")
+    assert (tmp_path / "retroquest.save").exists()
+    assert (tmp_path / "slot2.save").exists()
+
+
+def test_load_with_name_loads_from_named_file(game, tmp_path, monkeypatch):
+    """load('myadventure') reads from myadventure.save."""
+    monkeypatch.chdir(tmp_path)
+    game.save("myadventure")
+    result = game.load("myadventure")
+    assert "successfully" in result.lower()
+
+
+def test_load_default_loads_from_retroquest_save(game, tmp_path, monkeypatch):
+    """load() with no name reads from retroquest.save."""
+    monkeypatch.chdir(tmp_path)
+    game.save()
+    result = game.load()
+    assert "successfully" in result.lower()
+
+
+def test_load_named_file_not_found_returns_failure(game, tmp_path, monkeypatch):
+    """load('unknown') returns a failure message when the file doesn't exist."""
+    monkeypatch.chdir(tmp_path)
+    result = game.load("unknown")
+    assert "No save file found" in result
