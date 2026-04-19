@@ -11,10 +11,12 @@
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --ext .ts,.vue",
     "format": "prettier --write \"src/**/*.{ts,vue}\" \"vite-plugins/**/*.ts\" \"*.config.*\"",
-    "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"vite-plugins/**/*.ts\" \"*.config.*\""
+    "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"vite-plugins/**/*.ts\" \"*.config.*\"",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^25.6.0",
     "@vitejs/plugin-vue": "^6.0.6",

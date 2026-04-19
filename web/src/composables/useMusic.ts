@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { escapeHtml } from '@/utils/theme'
 
 const STORAGE_KEY = 'retroquest_music_muted'
-const MUSIC_BASE_PATH = '/src/retroquest/audio/music/'
+const MUSIC_BASE_PATH = '/python-src/retroquest/audio/music/'
 const URL_PATTERN = /(https?:\/\/[^\s]+)/g
 
 export function useMusic(audio: HTMLAudioElement) {

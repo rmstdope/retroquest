@@ -1,6 +1,6 @@
 /**
  * Vite plugin that serves Python source files from the project's
- * src/ directory at the /src/ URL path, replacing serve.py.
+ * src/ directory at the /python-src/ URL path, replacing serve.py.
  */
 import { type Plugin } from 'vite'
 import type { ServerResponse } from 'node:http'
@@ -44,13 +44,18 @@ function serveManifest(srcDir: string, res: ServerResponse): void {
   res.end(body)
 }
 
+/** URL prefix used to serve Python source files. */
+const PYTHON_SRC_PREFIX = '/python-src/'
+
 /** Respond with a single file from the source directory. */
 function serveSourceFile(
   srcDir: string,
   urlPath: string,
   res: ServerResponse,
 ): void {
-  const relativePath = decodeURIComponent(urlPath.slice('/src/'.length))
+  const relativePath = decodeURIComponent(
+    urlPath.slice(PYTHON_SRC_PREFIX.length),
+  )
   const filePath = resolve(srcDir, relativePath)
 
   if (!filePath.startsWith(resolve(srcDir))) {
@@ -74,8 +79,9 @@ function serveSourceFile(
 }
 
 /**
- * Vite plugin that mounts the Python source tree at /src/ and
- * provides a /src/manifest.json endpoint listing all .py files.
+ * Vite plugin that mounts the Python source tree at /python-src/
+ * and provides a /python-src/manifest.json endpoint listing all
+ * .py files.
  */
 export function pythonSourcePlugin(options: PythonSourcePluginOptions): Plugin {
   const { srcDir } = options
@@ -86,12 +92,12 @@ export function pythonSourcePlugin(options: PythonSourcePluginOptions): Plugin {
       server.middlewares.use((req, res, next) => {
         const urlPath = stripQueryAndFragment(req.url ?? '')
 
-        if (urlPath === '/src/manifest.json') {
+        if (urlPath === '/python-src/manifest.json') {
           serveManifest(srcDir, res)
           return
         }
 
-        if (urlPath.startsWith('/src/')) {
+        if (urlPath.startsWith(PYTHON_SRC_PREFIX)) {
           serveSourceFile(srcDir, urlPath, res)
           return
         }
