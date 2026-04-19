@@ -135,8 +135,10 @@ cd web
 # Lint
 npx eslint .
 
-# Format check
-npx prettier --check "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*" --write
+# Format check (mirrors CI — fails if any file is not formatted)
+npx prettier --check "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*"
+# To auto-fix formatting issues, run the following and commit the result:
+# npx prettier --write "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*"
 
 # Type check
 npx vue-tsc --noEmit

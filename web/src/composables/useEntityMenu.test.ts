@@ -98,6 +98,25 @@ describe('useEntityMenu', () => {
       expect(menu.target.value).toBe('Arrows')
     })
 
+    it('strips HTML tags from name', () => {
+      menu.openMenu(
+        'inventory',
+        '<span class="theme-item_name">egg</span>',
+        event,
+      )
+      expect(menu.target.value).toBe('egg')
+    })
+
+    it('generates clean look-at command when name contains HTML tags', () => {
+      menu.openMenu(
+        'inventory',
+        '<span class="theme-item_name">egg</span>',
+        event,
+      )
+      const look = menu.actions.value.find((a) => a.label.includes('Look at'))
+      expect(look?.command).toBe('look egg')
+    })
+
     it('provides inventory actions', () => {
       menu.openMenu('inventory', 'Potion', event)
       const labels = menu.actions.value.map((a) => a.label)

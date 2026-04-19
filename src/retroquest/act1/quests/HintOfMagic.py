@@ -23,10 +23,7 @@ class HintOfMagicQuest(Quest):
         return True
 
     def check_completion(self, game_state: GameState) -> bool:
-        # Completed when the player has learned the 'revive' spell
-        if game_state.has_spell('revive'):
-            # Call can_leave on Elior's Cottage before returning
-            cottage = game_state.all_rooms.get("EliorsCottage")
-            cottage.can_leave()  # or any direction, just to trigger exits
-            return True
-        return False
+        # Completed when the player has learned the 'revive' spell.
+        # Exits in EliorsCottage are unlocked dynamically via get_exits() once the
+        # spell is known, so no explicit can_leave() call is needed here.
+        return game_state.has_spell('revive')

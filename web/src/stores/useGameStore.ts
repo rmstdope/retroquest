@@ -148,6 +148,7 @@ export const useGameStore = defineStore('game', () => {
     lastOutput.value = renderMarkup(result)
     refreshPanels()
     pollQuestEvents()
+    refreshPanels()
   }
 
   function advanceTurn(): void {

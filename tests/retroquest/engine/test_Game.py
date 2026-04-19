@@ -145,7 +145,6 @@ def test_visited_rooms_initial(game):
 
 def test_visited_rooms_after_move(game, basic_rooms):
     """Visited rooms should include rooms after movement."""
-    basic_rooms["EliorsCottage"].can_leave()
     # Move to another room
     game.move('south')
     assert basic_rooms["VegetableField"].name in game.state.visited_rooms
@@ -155,7 +154,6 @@ def test_visited_rooms_after_move(game, basic_rooms):
 
 def test_visited_rooms_no_duplicates(game, basic_rooms):
     """Visited rooms list should not contain duplicates after moves."""
-    basic_rooms["EliorsCottage"].can_leave()
     # Move to another room and back
     game.move('south')
     game.move('north')  # Assuming VegetableField has north exit back
