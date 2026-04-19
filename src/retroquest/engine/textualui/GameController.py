@@ -92,9 +92,9 @@ class GameController:
             spell_tuples.append((spell_name, spell_description))
         return spell_tuples
 
-    def save_game(self) -> None:
-        """Save the game state."""
-        self.game.save()
+    def save_game(self, name: str = 'retroquest') -> None:
+        """Save the game state to the save slot identified by name."""
+        self.game.save(name)
 
     def get_act_intro(self) -> str:
         """Get the act introduction text."""
@@ -164,9 +164,9 @@ class GameController:
             self.game.state
         )
 
-    def load_game(self) -> str:
-        """Load the game state from saved data and return result text."""
-        return self.game.load()
+    def load_game(self, name: str = 'retroquest') -> str:
+        """Load the game state from the save slot identified by name."""
+        return self.game.load(name)
 
     def is_game_running(self) -> bool:
         """Return True if the game is still running."""
