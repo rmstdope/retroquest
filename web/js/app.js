@@ -97,10 +97,31 @@ document.addEventListener('alpine:init', () => {
                 this.refreshPanels();
 
                 this.loading = false;
+
+                // Focus the input so Enter is captured immediately.
+                this.$nextTick(() => {
+                    const input = document.querySelector('.input-bar input');
+                    if (input) input.focus();
+                });
             } catch (err) {
                 this.loadingStatus = `Error: ${err.message}`;
                 console.error('Failed to initialize game:', err);
             }
+
+            // Document-level Enter handler: advances turn or submits even when
+            // focus has drifted away from the input field.
+            document.addEventListener('keydown', (e) => {
+                if (e.key !== 'Enter' || this.loading) return;
+                const active = document.activeElement;
+                const inputEl = document.querySelector('.input-bar input');
+                // Let the input's own handler fire when it is focused.
+                if (active === inputEl) return;
+                // Dismiss modal with Enter when one is open.
+                if (this.showModal) { this.dismissModal(); return; }
+                if (!this.acceptInput) {
+                    this.advanceTurn();
+                }
+            });
         },
 
         /**
@@ -139,6 +160,9 @@ document.addEventListener('alpine:init', () => {
             this.commandInput = '';
             this.refreshPanels();
             this._ensureMusicStarted();
+            // Re-focus the input so subsequent Enter presses are captured.
+            const input = document.querySelector('.input-bar input');
+            if (input) input.focus();
         },
 
         /**

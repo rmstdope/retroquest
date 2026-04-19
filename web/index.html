@@ -162,7 +162,8 @@
                                :class="{ 'input-accept-off': !$store.game.acceptInput }"
                                autocomplete="off"
                                autocapitalize="off"
-                               spellcheck="false">
+                               spellcheck="false"
+                               autofocus>
                         <button class="send-btn"
                                 :disabled="!$store.game.acceptInput"
                                 @click="$store.game.submitCommand($store.game.commandInput)">

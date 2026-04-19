@@ -338,14 +338,14 @@ with open('retroquest.save', 'wb') as f:
     },
 
     /**
-     * Advance the game by one turn (used during ACT_INTRO / ACT_TRANSITION).
-     * Calls game.new_turn() and returns the current result text.
-     * @returns {string} The current result text after advancing.
+     * Returns the current result text, then advances to the next turn.
+     * @returns {string} The current result text before advancing.
      */
     advanceTurn() {
         return this.pyodide.runPython(`
+_result_text = game.get_result_text()
 game.new_turn()
-game.get_result_text()
+_result_text
         `);
     },
 
