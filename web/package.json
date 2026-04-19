@@ -8,13 +8,22 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .ts,.vue",
+    "format": "prettier --write \"src/**/*.{ts,vue}\" \"vite-plugins/**/*.ts\" \"*.config.*\"",
+    "format:check": "prettier --check \"src/**/*.{ts,vue}\" \"vite-plugins/**/*.ts\" \"*.config.*\""
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^25.6.0",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.8.0",
+    "prettier": "^3.8.3",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.58.2",
     "vite": "^8.0.8",
     "vitest": "^4.1.4",
     "vue": "^3.5.32",

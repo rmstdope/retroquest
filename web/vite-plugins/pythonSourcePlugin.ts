@@ -16,10 +16,7 @@ interface PythonSourcePluginOptions {
  * Recursively collect all .py files under a directory,
  * returning sorted paths relative to the base directory.
  */
-export function collectPythonFiles(
-  dir: string,
-  base: string
-): string[] {
+export function collectPythonFiles(dir: string, base: string): string[] {
   const files: string[] = []
   for (const entry of readdirSync(dir)) {
     const fullPath = resolve(dir, entry)
@@ -39,10 +36,7 @@ function stripQueryAndFragment(url: string): string {
 }
 
 /** Respond with the JSON manifest of all Python source files. */
-function serveManifest(
-  srcDir: string,
-  res: ServerResponse
-): void {
+function serveManifest(srcDir: string, res: ServerResponse): void {
   const manifest = collectPythonFiles(srcDir, srcDir)
   const body = JSON.stringify(manifest)
   res.setHeader('Content-Type', 'application/json')
@@ -54,11 +48,9 @@ function serveManifest(
 function serveSourceFile(
   srcDir: string,
   urlPath: string,
-  res: ServerResponse
+  res: ServerResponse,
 ): void {
-  const relativePath = decodeURIComponent(
-    urlPath.slice('/src/'.length)
-  )
+  const relativePath = decodeURIComponent(urlPath.slice('/src/'.length))
   const filePath = resolve(srcDir, relativePath)
 
   if (!filePath.startsWith(resolve(srcDir))) {
@@ -85,9 +77,7 @@ function serveSourceFile(
  * Vite plugin that mounts the Python source tree at /src/ and
  * provides a /src/manifest.json endpoint listing all .py files.
  */
-export function pythonSourcePlugin(
-  options: PythonSourcePluginOptions
-): Plugin {
+export function pythonSourcePlugin(options: PythonSourcePluginOptions): Plugin {
   const { srcDir } = options
 
   return {
