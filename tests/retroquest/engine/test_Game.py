@@ -1531,3 +1531,15 @@ def test_say_word_with_spaces(game):
         "and doesn't understand 'magic words'.[/dialogue]"
     )
     assert expected in result
+
+
+def test_cheat_not_in_command_completions(game):
+    """The cheat command must not appear in tab-completion suggestions."""
+    completions = game.get_command_completions()
+    assert 'cheat' not in completions
+
+
+def test_help_does_not_contain_cheat(game):
+    """The help text must not reveal the secret cheat command."""
+    result = game.help()
+    assert 'cheat' not in result.lower()
