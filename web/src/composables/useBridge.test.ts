@@ -2,6 +2,30 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useBridge } from '@/composables/useBridge'
 
 /**
+ * Minimal localStorage mock shared across all tests in this file.
+ */
+const localStorageMock = (() => {
+  let store: Record<string, string | null> = {}
+  return {
+    getItem: vi.fn((key: string) => store[key] ?? null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    clear: vi.fn(() => {
+      store = {}
+    }),
+    _setRaw: (key: string, value: string | null) => {
+      store[key] = value
+    },
+  }
+})()
+
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+})
+
+/**
  * Create a mock PyodideRuntime that records calls and returns
  * configurable results.
  */
@@ -76,6 +100,8 @@ describe('useBridge', () => {
 
   describe('after init', () => {
     beforeEach(async () => {
+      localStorageMock.clear()
+      vi.clearAllMocks()
       await bridge.init()
     })
 
@@ -214,6 +240,45 @@ describe('useBridge', () => {
       expect(bridge.getActIntro()).toBe('Act 1 begins...')
     })
 
+    it('saveGame stores base64 save data in localStorage', () => {
+      mock.pythonResults.set(
+        'controller.save_game()',
+        'Game saved successfully.',
+      )
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+      const result = bridge.saveGame()
+      expect(result).toBe('Game saved successfully.')
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'retroquest_save',
+        'c2F2ZWRhdGE=',
+      )
+    })
+
+    it('saveGame returns default message when controller returns empty string', () => {
+      mock.pythonResults.set('controller.save_game()', '')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+      const result = bridge.saveGame()
+      expect(result).toBe('Game saved.')
+    })
+
+    it('saveGame does not write to localStorage when no save data', () => {
+      mock.pythonResults.set('controller.save_game()', 'Saved.')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", '')
+      bridge.saveGame()
+      expect(localStorageMock.setItem).not.toHaveBeenCalled()
+    })
+
+    it('loadGame restores game state when save exists', () => {
+      localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
+      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
+      const result = bridge.loadGame()
+      expect(result).toBe('Game loaded.')
+      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
+        '_save_b64',
+        'c2F2ZWRhdGE=',
+      )
+    })
+
     it('isAcceptingInput returns boolean', () => {
       mock.pythonResults.set('game.accept_input', true)
       expect(bridge.isAcceptingInput()).toBe(true)
@@ -266,12 +331,6 @@ describe('useBridge', () => {
     })
 
     it('loadGame returns failure message when no save exists', async () => {
-      // Mock localStorage
-      const getItem = vi.fn().mockReturnValue(null)
-      Object.defineProperty(globalThis, 'localStorage', {
-        value: { getItem, setItem: vi.fn() },
-        writable: true,
-      })
       await bridge.init()
       expect(bridge.loadGame()).toBe('[failure]No save file found.[/failure]')
     })
