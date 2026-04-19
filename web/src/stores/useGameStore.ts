@@ -28,6 +28,7 @@ export interface GameBridge {
   isAcceptingInput(): boolean
   advanceTurn(): string
   getMusicInfo(): { musicFile: string; musicInfo: string }
+  look(): string
 }
 
 interface QuestEvent {
@@ -74,6 +75,7 @@ export const useGameStore = defineStore('game', () => {
   const modalTitle = ref('')
   const modalBody = ref('')
   const modalQueue = ref<QuestEvent[]>([])
+  let pendingLookOnDismiss = false
 
   // --- Music (exposed for useMusic composable) ---
   const musicFile = ref('')
@@ -105,6 +107,7 @@ export const useGameStore = defineStore('game', () => {
 
       // Block input until the player dismisses the act intro modal
       acceptInput.value = false
+      pendingLookOnDismiss = true
       modalQueue.value.push({
         title: '📖 Act Intro',
         body: renderMarkup(actIntroRaw),
@@ -223,6 +226,13 @@ export const useGameStore = defineStore('game', () => {
     if (!showModal.value) {
       const b = requireBridge()
       acceptInput.value = b.isAcceptingInput()
+      // If this was the act intro modal, fire a look to trigger quest start
+      if (pendingLookOnDismiss) {
+        pendingLookOnDismiss = false
+        lastOutput.value = renderMarkup(b.look())
+        refreshPanels()
+        pollQuestEvents()
+      }
     }
   }
 

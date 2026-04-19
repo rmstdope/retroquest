@@ -171,6 +171,35 @@ describe('useGameStore', () => {
       expect(store.acceptInput).toBe(true)
     })
 
+    it('calls look() when intro modal is dismissed', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      await store.initGame()
+      store.dismissModal()
+      expect(bridge.look).toHaveBeenCalledTimes(1)
+    })
+
+    it('shows look() result as lastOutput when intro modal is dismissed', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      bridge.look.mockReturnValue('You see rolling hills.')
+      await store.initGame()
+      store.dismissModal()
+      expect(store.lastOutput).toBe('<rendered>You see rolling hills.</rendered>')
+    })
+
+    it('polls quest events after intro modal is dismissed', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      bridge.activateQuest
+        .mockReturnValueOnce('Main quest started!')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      await store.initGame()
+      store.dismissModal() // dismiss intro → triggers look + pollQuestEvents
+      // intro modal is replaced by quest modal
+      expect(store.showModal).toBe(true)
+      expect(store.modalTitle).toBe('📜 New Quest!')
+    })
+
     it('refreshes panels after init', async () => {
       await store.initGame()
       expect(store.roomName).toBe('Village Square')
