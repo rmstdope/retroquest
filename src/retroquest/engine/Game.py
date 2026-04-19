@@ -935,10 +935,12 @@ Welcome to
     def _validate_save_name(self, name: str) -> tuple[bool, str]:
         """Validate and normalize a save slot name.
 
-        Normalizes to lowercase and restricts to alphanumerics, hyphens, and underscores.
+        Normalizes to lowercase and restricts to one or more alphanumerics, hyphens,
+        and underscores. This prevents path traversal and empty name issues.
         Returns (True, normalized_name) on success or (False, error_message) on failure.
         """
         normalized = name.strip().lower()
+        # Pattern requires at least one character; rejects empty, spaces, slashes, dots
         if not re.fullmatch(r'[a-z0-9_-]+', normalized):
             return (
                 False,
@@ -960,7 +962,12 @@ Welcome to
             return f"[failure]Failed to save game: {e}[/failure]"
 
     def load(self, name: str = 'retroquest') -> str:
-        """Load the game state from a file identified by name."""
+        """Load the game state from a file identified by name.
+
+        Save files are user-created local files in the game directory.
+        Loading them with pickle is intentional; path traversal is prevented
+        by _validate_save_name before reaching this point.
+        """
         valid, result = self._validate_save_name(name)
         if not valid:
             return result
@@ -968,7 +975,7 @@ Welcome to
             return "[failure]No save file found.[/failure]"
         try:
             with open(f'{result}.save', 'rb') as f:
-                self.state = pickle.load(f)  # nosec B301
+                self.state = pickle.load(f)  # nosec B301 - path validated above
             return "[event]Game loaded successfully.[/event]"
         except OSError as e:
             return f"[failure]Failed to load game: {e}[/failure]"

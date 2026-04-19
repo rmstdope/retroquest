@@ -1635,7 +1635,8 @@ def test_load_with_invalid_name_returns_failure(game, tmp_path, monkeypatch, bad
 def test_save_normalizes_name_to_lowercase(game, tmp_path, monkeypatch):
     """save('MySlot') writes to myslot.save (name normalized to lowercase)."""
     monkeypatch.chdir(tmp_path)
-    game.save("MySlot")
+    result = game.save("MySlot")
+    assert "successfully" in result.lower()
     assert (tmp_path / "myslot.save").exists()
     assert not (tmp_path / "MySlot.save").exists()
 
