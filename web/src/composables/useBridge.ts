@@ -8,6 +8,7 @@ import type {
   MusicInfo,
   RoomExits,
   CompletionTree,
+  NamedSave,
 } from '@/types/bridge'
 
 /**
@@ -205,6 +206,14 @@ result
   }
 
   function saveGame(): string {
+    return quickSaveGame()
+  }
+
+  function loadGame(): string {
+    return quickLoadGame()
+  }
+
+  function quickSaveGame(): string {
     const result = py('controller.save_game() or ""')
     try {
       // Assign to a variable and return it as the last top-level expression so
@@ -229,7 +238,7 @@ _save_data
     return (result as string) || 'Game saved.'
   }
 
-  function loadGame(): string {
+  function quickLoadGame(): string {
     const saveData = localStorage.getItem('retroquest_save')
     if (!saveData) {
       return '[failure]No save file found.[/failure]'
@@ -242,6 +251,73 @@ with open('retroquest.save', 'wb') as f:
     f.write(base64.b64decode(_save_b64))
     `)
     return py('controller.load_game()') as string
+  }
+
+  function listNamedSaves(): NamedSave[] {
+    try {
+      const raw = localStorage.getItem('retroquest_named_saves')
+      if (!raw) return []
+      return JSON.parse(raw) as NamedSave[]
+    } catch {
+      return []
+    }
+  }
+
+  function saveNamedGame(name: string): string {
+    const result = py('controller.save_game() or ""')
+    try {
+      const saveData = py(`
+import base64
+_save_data = ''
+try:
+    with open('retroquest.save', 'rb') as f:
+        _save_data = base64.b64encode(f.read()).decode('ascii')
+except FileNotFoundError:
+    pass
+_save_data
+      `) as string
+      if (saveData) {
+        const saves = listNamedSaves()
+        const existingIndex = saves.findIndex((s) => s.name === name)
+        const entry: NamedSave & { data: string } = {
+          name,
+          timestamp: new Date().toISOString(),
+          data: saveData,
+        } as NamedSave & { data: string }
+        if (existingIndex >= 0) {
+          saves[existingIndex] = entry
+        } else {
+          saves.push(entry)
+        }
+        localStorage.setItem('retroquest_named_saves', JSON.stringify(saves))
+      }
+    } catch {
+      // Silently handle localStorage failures
+    }
+    return (result as string) || 'Game saved.'
+  }
+
+  function loadNamedGame(name: string): string {
+    try {
+      const raw = localStorage.getItem('retroquest_named_saves')
+      if (!raw) return '[failure]No save file found.[/failure]'
+      const saves = JSON.parse(raw) as Array<NamedSave & { data: string }>
+      const entry = saves.find((s) => s.name === name)
+      if (!entry || !entry.data) {
+        return '[failure]No save file found.[/failure]'
+      }
+      if (!pyodide) throw new Error('Pyodide not initialized')
+      pyodide.globals.set('_save_b64', entry.data)
+      pyodide.runPython(`
+import base64
+with open('retroquest.save', 'wb') as f:
+    f.write(base64.b64decode(_save_b64))
+      `)
+      return py('controller.load_game()') as string
+    } catch (e) {
+      if (e instanceof Error && e.message === 'Pyodide not initialized') throw e
+      return '[failure]No save file found.[/failure]'
+    }
   }
 
   function isAcceptingInput(): boolean {
@@ -313,6 +389,11 @@ _result_text
     getActIntro,
     saveGame,
     loadGame,
+    quickSaveGame,
+    quickLoadGame,
+    saveNamedGame,
+    loadNamedGame,
+    listNamedSaves,
     isAcceptingInput,
     getCommandCompletions,
     advanceTurn,

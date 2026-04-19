@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore } from './useGameStore'
 import { renderMarkup } from '@/utils/theme'
-import type { CompletionTree } from '@/types/bridge'
+import type { CompletionTree, NamedSave } from '@/types/bridge'
 
 vi.mock('@/utils/theme', () => ({
   renderMarkup: vi.fn((s: string) => `<rendered>${s}</rendered>`),
@@ -39,6 +39,11 @@ function createMockBridge() {
     getActIntro: vi.fn(() => 'Act intro'),
     saveGame: vi.fn(() => 'Game saved.'),
     loadGame: vi.fn(() => 'Game loaded.'),
+    quickSaveGame: vi.fn(() => 'Game saved.'),
+    quickLoadGame: vi.fn(() => 'Game loaded.'),
+    saveNamedGame: vi.fn(() => 'Game saved.') as ReturnType<typeof vi.fn>,
+    loadNamedGame: vi.fn(() => 'Game loaded.') as ReturnType<typeof vi.fn>,
+    listNamedSaves: vi.fn((): NamedSave[] => []),
     isAcceptingInput: vi.fn(() => true),
     advanceTurn: vi.fn(() => 'Turn advanced'),
     isGameRunning: vi.fn(() => true),
@@ -417,8 +422,8 @@ describe('useGameStore', () => {
       await store.initGame()
     })
 
-    it('calls bridge.saveGame and renders output', () => {
-      bridge.saveGame.mockReturnValue('Saved!')
+    it('calls bridge.quickSaveGame and renders output', () => {
+      bridge.quickSaveGame.mockReturnValue('Saved!')
       store.saveGame()
       expect(store.lastOutput).toBe('<rendered>Saved!</rendered>')
     })
@@ -429,8 +434,8 @@ describe('useGameStore', () => {
       await store.initGame()
     })
 
-    it('calls bridge.loadGame and renders output', () => {
-      bridge.loadGame.mockReturnValue('Loaded!')
+    it('calls bridge.quickLoadGame and renders output', () => {
+      bridge.quickLoadGame.mockReturnValue('Loaded!')
       store.loadGame()
       expect(store.lastOutput).toBe('<rendered>Loaded!</rendered>')
     })
@@ -442,7 +447,54 @@ describe('useGameStore', () => {
     })
   })
 
-  // --- pollQuestEvents ---
+  // --- saveNamedGame / loadNamedGame / listNamedSaves ---
+
+  describe('saveNamedGame', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('calls bridge.saveNamedGame and renders output', () => {
+      bridge.saveNamedGame.mockReturnValue('Game saved as "Before boss".')
+      store.saveNamedGame('Before boss')
+      expect(bridge.saveNamedGame).toHaveBeenCalledWith('Before boss')
+      expect(store.lastOutput).toBe(
+        '<rendered>Game saved as "Before boss".</rendered>',
+      )
+    })
+  })
+
+  describe('loadNamedGame', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('calls bridge.loadNamedGame, renders output, and refreshes panels', () => {
+      bridge.loadNamedGame.mockReturnValue('Game loaded.')
+      bridge.getRoomName.mockReturnValue('Boss Room')
+      store.loadNamedGame('Before boss')
+      expect(bridge.loadNamedGame).toHaveBeenCalledWith('Before boss')
+      expect(store.lastOutput).toBe('<rendered>Game loaded.</rendered>')
+      expect(store.roomName).toBe('Boss Room')
+    })
+  })
+
+  describe('listNamedSaves', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('returns saves from bridge', () => {
+      const saves = [{ name: 'Save 1', timestamp: '2024-01-01T00:00:00.000Z' }]
+      bridge.listNamedSaves.mockReturnValue(saves)
+      expect(store.listNamedSaves()).toEqual(saves)
+    })
+
+    it('returns empty array when no saves exist', () => {
+      bridge.listNamedSaves.mockReturnValue([])
+      expect(store.listNamedSaves()).toEqual([])
+    })
+  })
 
   describe('pollQuestEvents', () => {
     beforeEach(async () => {

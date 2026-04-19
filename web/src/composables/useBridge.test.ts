@@ -276,6 +276,37 @@ describe('useBridge', () => {
       expect(localStorageMock.setItem).not.toHaveBeenCalled()
     })
 
+    it('quickSaveGame stores base64 save data in localStorage', () => {
+      mock.pythonResults.set(
+        'controller.save_game()',
+        'Game saved successfully.',
+      )
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+      const result = bridge.quickSaveGame()
+      expect(result).toBe('Game saved successfully.')
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'retroquest_save',
+        'c2F2ZWRhdGE=',
+      )
+    })
+
+    it('quickLoadGame restores game state when save exists', () => {
+      localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
+      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
+      const result = bridge.quickLoadGame()
+      expect(result).toBe('Game loaded.')
+      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
+        '_save_b64',
+        'c2F2ZWRhdGE=',
+      )
+    })
+
+    it('quickLoadGame returns failure when no save exists', () => {
+      expect(bridge.quickLoadGame()).toBe(
+        '[failure]No save file found.[/failure]',
+      )
+    })
+
     it('loadGame restores game state when save exists', () => {
       localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
       mock.pythonResults.set('controller.load_game()', 'Game loaded.')
@@ -285,6 +316,90 @@ describe('useBridge', () => {
         '_save_b64',
         'c2F2ZWRhdGE=',
       )
+    })
+
+    it('saveNamedGame stores save under named slots in localStorage', () => {
+      mock.pythonResults.set('controller.save_game()', 'Saved.')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+      bridge.saveNamedGame('Before Boss')
+      const raw = localStorageMock.setItem.mock.calls.find(
+        (args: unknown[]) => args[0] === 'retroquest_named_saves',
+      )
+      expect(raw).toBeDefined()
+      const saves = JSON.parse(raw![1] as string) as Array<{
+        name: string
+        data: string
+      }>
+      expect(saves).toHaveLength(1)
+      expect(saves[0].name).toBe('Before Boss')
+      expect(saves[0].data).toBe('c2F2ZWRhdGE=')
+    })
+
+    it('saveNamedGame overwrites existing save with same name', () => {
+      const existing = JSON.stringify([
+        {
+          name: 'Before Boss',
+          timestamp: '2024-01-01T00:00:00.000Z',
+          data: 'b2xkZGF0YQ==',
+        },
+      ])
+      localStorageMock._setRaw('retroquest_named_saves', existing)
+      mock.pythonResults.set('controller.save_game()', 'Saved.')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3ZGF0YQ==')
+      bridge.saveNamedGame('Before Boss')
+      const raw = localStorageMock.setItem.mock.calls.find(
+        (args: unknown[]) => args[0] === 'retroquest_named_saves',
+      )
+      const saves = JSON.parse(raw![1] as string) as Array<{
+        name: string
+        data: string
+      }>
+      expect(saves).toHaveLength(1)
+      expect(saves[0].data).toBe('bmV3ZGF0YQ==')
+    })
+
+    it('listNamedSaves returns empty array when no named saves', () => {
+      expect(bridge.listNamedSaves()).toEqual([])
+    })
+
+    it('listNamedSaves returns saved slots without data field', () => {
+      const saves = [
+        { name: 'Save 1', timestamp: '2024-01-01T00:00:00.000Z', data: 'abc' },
+      ]
+      localStorageMock._setRaw('retroquest_named_saves', JSON.stringify(saves))
+      const result = bridge.listNamedSaves()
+      expect(result).toHaveLength(1)
+      expect(result[0].name).toBe('Save 1')
+      expect(result[0].timestamp).toBe('2024-01-01T00:00:00.000Z')
+    })
+
+    it('loadNamedGame loads a named save', () => {
+      const saves = [
+        {
+          name: 'Before Boss',
+          timestamp: '2024-01-01T00:00:00.000Z',
+          data: 'c2F2ZWRhdGE=',
+        },
+      ]
+      localStorageMock._setRaw('retroquest_named_saves', JSON.stringify(saves))
+      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
+      const result = bridge.loadNamedGame('Before Boss')
+      expect(result).toBe('Game loaded.')
+      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
+        '_save_b64',
+        'c2F2ZWRhdGE=',
+      )
+    })
+
+    it('loadNamedGame returns failure when save name not found', () => {
+      localStorageMock._setRaw('retroquest_named_saves', JSON.stringify([]))
+      const result = bridge.loadNamedGame('Nonexistent')
+      expect(result).toBe('[failure]No save file found.[/failure]')
+    })
+
+    it('loadNamedGame returns failure when no named saves exist', () => {
+      const result = bridge.loadNamedGame('Any')
+      expect(result).toBe('[failure]No save file found.[/failure]')
     })
 
     it('isAcceptingInput returns boolean', () => {

@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { NamedItem, RoomExits, CompletionTree } from '@/types/bridge'
+import type {
+  NamedItem,
+  RoomExits,
+  CompletionTree,
+  NamedSave,
+} from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
 
 /**
@@ -25,6 +30,11 @@ export interface GameBridge {
   completeQuest(): string | null
   saveGame(): string
   loadGame(): string
+  quickSaveGame(): string
+  quickLoadGame(): string
+  saveNamedGame(name: string): string
+  loadNamedGame(name: string): string
+  listNamedSaves(): NamedSave[]
   isAcceptingInput(): boolean
   getCommandCompletions(): CompletionTree
   advanceTurn(): string
@@ -181,15 +191,33 @@ export const useGameStore = defineStore('game', () => {
 
   function saveGame(): void {
     const b = requireBridge()
-    const result = b.saveGame()
+    const result = b.quickSaveGame()
     lastOutput.value = renderMarkup(result)
   }
 
   function loadGame(): void {
     const b = requireBridge()
-    const result = b.loadGame()
+    const result = b.quickLoadGame()
     lastOutput.value = renderMarkup(result)
     refreshPanels()
+  }
+
+  function saveNamedGame(name: string): void {
+    const b = requireBridge()
+    const result = b.saveNamedGame(name)
+    lastOutput.value = renderMarkup(result)
+  }
+
+  function loadNamedGame(name: string): void {
+    const b = requireBridge()
+    const result = b.loadNamedGame(name)
+    lastOutput.value = renderMarkup(result)
+    refreshPanels()
+  }
+
+  function listNamedSaves(): NamedSave[] {
+    const b = requireBridge()
+    return b.listNamedSaves()
   }
 
   function pollQuestEvents(): void {
@@ -369,6 +397,9 @@ export const useGameStore = defineStore('game', () => {
     refreshPanels,
     saveGame,
     loadGame,
+    saveNamedGame,
+    loadNamedGame,
+    listNamedSaves,
     pollQuestEvents,
     dismissModal,
     toggleSection,
