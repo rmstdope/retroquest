@@ -269,6 +269,6 @@ These instructions are mandatory for all code contributions to ensure consistenc
 
 In the chat, try to be concise when describing what you are about to do, what you are doing and what you have done. Avoid unnecessary verbosity. Focus on the key changes or additions you are making to the codebase. This helps in maintaining clarity and efficiency in communication.
 
-## Committing and pushing
+## Communication with user
 
-Never commit code or push/sync with github unless I explicitly say so.
+When asking questions to the user, always try to use the question UI/tool with pre-defined answers. This makes communication more efficient and reduces the risk of misunderstandings. If the question cannot be answered with predefined options there also need to be a free text option to use.
