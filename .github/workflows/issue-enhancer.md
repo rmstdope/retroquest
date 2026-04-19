@@ -16,7 +16,7 @@ network:
     - defaults
 safe-outputs:
   assign-to-agent:
-    model: gpt-5-mini
+    model: claude-opus-4-6
   add-labels:
     allowed: [bug, enhancement, documentation, engine, story, act1, act2, act3, act4, enhanced]
     blocked: ["~*", "*[bot]"]
