@@ -15,6 +15,9 @@ import ContextMenu from './ContextMenu.vue'
 import ActionSheet from './ActionSheet.vue'
 import MobileDrawer from './MobileDrawer.vue'
 import QuestModal from './QuestModal.vue'
+import SaveDialog from './SaveDialog.vue'
+import LoadDialog from './LoadDialog.vue'
+import type { NamedSave } from '@/types/bridge'
 
 const store = useGameStore()
 const {
@@ -77,6 +80,32 @@ onUnmounted(() => {
 
 // --- UI State ---
 const showDrawer = ref(false)
+const showSaveDialog = ref(false)
+const showLoadDialog = ref(false)
+const saveDialogSaves = ref<NamedSave[]>([])
+const saveDialogDefaultName = ref('')
+const loadDialogSaves = ref<NamedSave[]>([])
+
+function onOpenSaveDialog() {
+  saveDialogSaves.value = store.listNamedSaves()
+  saveDialogDefaultName.value = `${roomName.value} – ${new Date().toLocaleString()}`
+  showSaveDialog.value = true
+}
+
+function onSaveDialogConfirm(name: string) {
+  showSaveDialog.value = false
+  store.saveNamedGame(name)
+}
+
+function onOpenLoadDialog() {
+  loadDialogSaves.value = store.listNamedSaves()
+  showLoadDialog.value = true
+}
+
+function onLoadDialogConfirm(name: string) {
+  showLoadDialog.value = false
+  store.loadNamedGame(name)
+}
 
 function onEntityClick(event: MouseEvent, name: string, type: string) {
   entityMenu.openMenu(type as EntityType, name, event)
@@ -139,8 +168,10 @@ function closeMenus() {
       title="RetroQuest"
       :music-muted="music.musicMuted.value"
       :sound-muted="sfx.soundMuted.value"
-      @save="store.saveGame()"
-      @load="store.loadGame()"
+      @quick-save="store.saveGame()"
+      @quick-load="store.loadGame()"
+      @save="onOpenSaveDialog"
+      @load="onOpenLoadDialog"
       @toggle-mute="music.toggleMute()"
       @toggle-sound-mute="sfx.toggleMute()"
       @help="onHelp"
@@ -215,6 +246,21 @@ function closeMenus() {
       :title="modalTitle"
       :body="modalBody"
       @dismiss="store.dismissModal()"
+    />
+
+    <SaveDialog
+      :visible="showSaveDialog"
+      :existing-saves="saveDialogSaves"
+      :default-name="saveDialogDefaultName"
+      @confirm="onSaveDialogConfirm"
+      @cancel="showSaveDialog = false"
+    />
+
+    <LoadDialog
+      :visible="showLoadDialog"
+      :saves="loadDialogSaves"
+      @confirm="onLoadDialogConfirm"
+      @cancel="showLoadDialog = false"
     />
   </div>
 </template>
