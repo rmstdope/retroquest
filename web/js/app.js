@@ -502,14 +502,29 @@ document.addEventListener('alpine:init', () => {
          * @returns {string} HTML string to append to command output.
          */
         _buildMusicAttributionHtml() {
+            const urlPattern = /(https?:\/\/[^\s]+)/g;
             const lines = this.musicInfo
                 .split('\n')
                 .map(l => l.trim())
                 .filter(l => l.length > 0)
-                .map(l => l.replace(
-                    /(https?:\/\/[^\s]+)/g,
-                    '<a href="$1" target="_blank" rel="noopener">$1</a>'
-                ))
+                .map(l => {
+                    let html = '';
+                    let lastIndex = 0;
+                    let match;
+                    while ((match = urlPattern.exec(l)) !== null) {
+                        const url = match[0];
+                        html += RetroTheme.escapeHtml(
+                            l.slice(lastIndex, match.index)
+                        );
+                        const safeUrl = RetroTheme.escapeHtml(url);
+                        html += '<a href="' + safeUrl + '" target="_blank" '
+                            + 'rel="noopener">' + safeUrl + '</a>';
+                        lastIndex = match.index + url.length;
+                    }
+                    html += RetroTheme.escapeHtml(l.slice(lastIndex));
+                    urlPattern.lastIndex = 0;
+                    return html;
+                })
                 .join('<br>');
             return '<hr style="border-color:var(--border-color);margin:12px 0">'
                 + '<div style="opacity:0.7;font-size:0.85em">'
