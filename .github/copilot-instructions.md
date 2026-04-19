@@ -19,7 +19,7 @@ However, when trying to pinpoint a bug, you are free to add any traces, try fixe
 
 ### Collaboration
 
-As the driver, you will collaborate closely with the navigator (the user) to ensure that the application meets their needs and expectations. Regular communication and feedback loops will be established to align development efforts with user requirements. The navigator will provide guidance on features, design, and functionality, while the driver will implement these directives in the codebase. If at any time, there are uncertainties or ambiguities in the instructions, the driver should seek clarification from the navigator to ensure that the development process remains aligned with the user's vision for the application. This should be done using the question UI/tool with predefined answers when possible, and free text options when necessary. Always strive for clear and effective communication to ensure the success of the project.
+Always seek clarification from the navigator when requirements are ambiguous. Use the question UI/tool with predefined answers when possible, and a free-text option when necessary.
 
 ### Design
 
@@ -42,7 +42,7 @@ When working on an issue, this is important:
 - ALWAYS assign the issue to the developer working on it.
 - ALWAYS create a new branch from **the latest main** (unless instructed otherwise) named after the issue number and a short description of the work to be done, e.g., `42-add-user-authentication`. Run `git checkout main && git pull origin main` before branching. Once the work is completed and reviewed, merge the branch back into main using a pull request.
 - ALWAYS create a pull request (PR) for merging the sub-issue branch back into main.
-- Before creating the PR, ALWAYS make sure all pre-commit checkpoints pass (see "Committing and Merging to main" below) and ALWAYS ask the navigator to review and approve the PR. Even if any issue existed previously, it shall be fixed before merging. Do not merge any code that has known issues, even if they existed before.
+- Before creating the PR, ALWAYS make sure all pre-commit checkpoints pass (see "Pre-merge Checklist" below) and ALWAYS ask the navigator to review and approve the PR. Even if any issue existed previously, it shall be fixed before merging. Do not merge any code that has known issues, even if they existed before.
 - ALWAYS merge an issue branch back into main before starting to work on another issue. This ensures that the latest changes are always incorporated and reduces the risk of merge conflicts.
 
 When a PR is merged, the issue should be closed and the branch deleted to keep the repository clean and organized. If the issue is a sub-issue of a larger feature, ensure that the main issue is updated with relevant information about the progress made and that it is closed when all sub-issues are completed.
@@ -116,67 +116,43 @@ For every Python file, ensure:
 - [ ] Unused parameters underscored.
 - [ ] Docstrings updated to reflect changes.
 
-### Automation (Recommended)
+### Pre-merge Checklist (Must Pass Before Creating a PR)
 
-Add a custom line-length gate plus Ruff to enforce style:
+Before creating a pull request, run **all** of the checks below locally — they mirror the CI pipeline in `.github/workflows/ci.yml` exactly. NEVER open a PR or request a merge if any of these fail.
 
-`scripts/check_line_length.py` (example):
+#### Python (run when `src/`, `tests/`, or `pyproject.toml` changed)
 
-```
-import sys
-from pathlib import Path
-
-MAX = 99
-errors = []
-for path in Path('src').rglob('*.py'):
-		for i, line in enumerate(path.read_text().splitlines(), start=1):
-				if len(line) > MAX:
-						errors.append(f"{path}:{i}: {len(line)} > {MAX}")
-if errors:
-		print('Line length violations:')
-		print('\n'.join(errors))
-		sys.exit(1)
+```sh
+# Run tests
+pytest
 ```
 
-Pre-commit hook snippet:
+#### Web (run when anything under `web/` changed)
 
-```
-repos:
-	- repo: local
-		hooks:
-			- id: line-length
-				name: Enforce 99-char line length
-				entry: python scripts/check_line_length.py
-				language: system
-				pass_filenames: false
-	- repo: https://github.com/astral-sh/ruff-pre-commit
-		rev: v0.6.9
-		hooks:
-			- id: ruff
-				args: [--line-length=99]
-			- id: ruff-format
-```
+```sh
+cd web
 
-`.editorconfig` excerpt:
+# Lint
+npx eslint .
 
-```
-[*]
-indent_style = space
-indent_size = 4
-trim_trailing_whitespace = true
-insert_final_newline = true
-max_line_length = 99
+# Format check
+npx prettier --check "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*"
+
+# Type check
+npx vue-tsc --noEmit
+
+# Unit tests
+npm run test
+
+# E2E tests (requires Playwright browsers installed)
+npx playwright install --with-deps chromium
+npx playwright test
+
+# Build
+npm run build
 ```
 
-VS Code settings suggestion:
-
-```
-{
-	"editor.rulers": [99],
-	"files.trimTrailingWhitespace": true,
-	"editor.wordWrap": "off"
-}
-```
+If in doubt whether a check is relevant, run it anyway.
 
 ## Game Story Design Rules
 
@@ -242,16 +218,9 @@ These instructions are mandatory for all code contributions to ensure consistenc
 - Follow PEP 8 style guidelines for Python code to ensure consistency across the codebase.
 - Do not share code between acts; each act should be self-contained. All common functionality should be implemented in the engine module.
 - Always update docstrings and comments to reflect any changes made to the code.
-- For files that contain only one class, make the module docstring a one-liner summarizing the class's purpose. no more than that! Just one line!
 - For files with multiple classes or functions, provide a somewhat more detailed module docstring explaining the overall purpose and functionality of the module.
-- Lines MUST NEVER exceed a maximum of 99 characters (including indentation spaces) for better readability. Be sure to really count EVERY character on a line. Be very thourough when counting characters!
-- Indentation spaces should be just that, spaces, not tab characters
-- Never use pylint inline directives in the code. All pylint configuration should be global
-- Never have trailing whitespace in any line
-- Always have a single newline at the end of each file
-- Prefix unused parameters with an underscore (e.g., \_game_state, \_target)
+- Never use pylint inline directives in the code. All pylint configuration should be global.
 - When mixing strings and variables, prioritize using f-strings when constructing messages or dialogues.
-- No trailing whitespaces at the end of lines
 
 ### Testing
 
