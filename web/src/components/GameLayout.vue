@@ -170,6 +170,7 @@ function closeMenus() {
 
     <CommandInput
       :accept-input="acceptInput"
+      :tab-complete="store.tabComplete"
       @submit-command="onSubmitCommand"
       @advance-turn="onAdvanceTurn"
     />

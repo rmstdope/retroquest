@@ -242,6 +242,22 @@ with open('retroquest.save', 'wb') as f:
     return py('game.accept_input') as boolean
   }
 
+  function getCommandCompletions(): Record<string, unknown> {
+    const result = py('game.get_command_completions()')
+    if (!result || typeof result !== 'object') return {}
+    const proxy = result as {
+      toJs: (opts: {
+        dict_converter: (
+          entries: [string, unknown][],
+        ) => Record<string, unknown>
+      }) => unknown
+    }
+    return proxy.toJs({ dict_converter: Object.fromEntries }) as Record<
+      string,
+      unknown
+    >
+  }
+
   function advanceTurn(): string {
     return py(`
 _result_text = game.get_result_text()
@@ -295,6 +311,7 @@ _result_text
     saveGame,
     loadGame,
     isAcceptingInput,
+    getCommandCompletions,
     advanceTurn,
     isGameRunning,
     isActRunning,

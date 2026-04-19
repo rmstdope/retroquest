@@ -26,6 +26,7 @@ export interface GameBridge {
   saveGame(): string
   loadGame(): string
   isAcceptingInput(): boolean
+  getCommandCompletions(): Record<string, unknown>
   advanceTurn(): string
   getMusicInfo(): { musicFile: string; musicInfo: string }
   look(): string
@@ -63,6 +64,9 @@ export const useGameStore = defineStore('game', () => {
 
   // --- Input ---
   const acceptInput = ref(false)
+
+  // --- Completion tree (refreshed after every command / panel refresh) ---
+  const completionTree = ref<Record<string, unknown>>({})
 
   // --- Sidebar sections ---
   const showActiveQuests = ref(true)
@@ -159,6 +163,7 @@ export const useGameStore = defineStore('game', () => {
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
     acceptInput.value = b.isAcceptingInput()
+    completionTree.value = b.getCommandCompletions()
   }
 
   function saveGame(): void {
@@ -257,6 +262,69 @@ export const useGameStore = defineStore('game', () => {
     if (toggle) toggle.value = !toggle.value
   }
 
+  /**
+   * Perform Tab completion on the current command input.
+   *
+   * Mirrors the logic of NestedSuggester.get_suggestion() in the Python engine:
+   * - Splits the input into previously-completed tokens and a partial last token.
+   * - Traverses the completion tree for the completed tokens.
+   * - Collects candidates that match the partial last token as a prefix.
+   * - When exactly one candidate is found, auto-expands and keeps going while
+   *   each subsequent level also has exactly one option (chain expansion).
+   *
+   * Returns an object with:
+   *   - `newInput`: the expanded command string (unchanged if ambiguous / no match)
+   *   - `candidates`: the list of matching next tokens (empty if no match)
+   */
+  function tabComplete(input: string): {
+    newInput: string
+    candidates: string[]
+  } {
+    const tokens = input.split(' ')
+    const lastToken = tokens[tokens.length - 1]
+    const prevTokens = tokens.slice(0, -1)
+
+    let node: unknown = completionTree.value
+    for (const token of prevTokens) {
+      if (
+        node &&
+        typeof node === 'object' &&
+        token in (node as Record<string, unknown>)
+      ) {
+        node = (node as Record<string, unknown>)[token]
+      } else {
+        return { newInput: input, candidates: [] }
+      }
+    }
+
+    if (!node || typeof node !== 'object') {
+      return { newInput: input, candidates: [] }
+    }
+
+    const candidates = Object.keys(node as Record<string, unknown>).filter(
+      (k) => k.startsWith(lastToken),
+    )
+
+    if (candidates.length === 1) {
+      const words = [...prevTokens, candidates[0]]
+      let currentNode = (node as Record<string, unknown>)[candidates[0]]
+
+      while (currentNode && typeof currentNode === 'object') {
+        const keys = Object.keys(currentNode as Record<string, unknown>)
+        if (keys.length === 1) {
+          words.push(keys[0])
+          currentNode = (currentNode as Record<string, unknown>)[keys[0]]
+        } else {
+          break
+        }
+      }
+
+      return { newInput: words.join(' ') + ' ', candidates }
+    }
+
+    return { newInput: input, candidates }
+  }
+
   return {
     // State
     loading,
@@ -293,5 +361,6 @@ export const useGameStore = defineStore('game', () => {
     pollQuestEvents,
     dismissModal,
     toggleSection,
+    tabComplete,
   }
 })

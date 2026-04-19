@@ -46,6 +46,7 @@ function createMockBridge() {
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
     })),
+    getCommandCompletions: vi.fn((): Record<string, unknown> => ({})),
   }
 }
 
@@ -183,7 +184,9 @@ describe('useGameStore', () => {
       bridge.look.mockReturnValue('You see rolling hills.')
       await store.initGame()
       store.dismissModal()
-      expect(store.lastOutput).toBe('<rendered>You see rolling hills.</rendered>')
+      expect(store.lastOutput).toBe(
+        '<rendered>You see rolling hills.</rendered>',
+      )
     })
 
     it('polls quest events after intro modal is dismissed', async () => {
@@ -204,7 +207,12 @@ describe('useGameStore', () => {
       await store.initGame()
       expect(store.roomName).toBe('Village Square')
       expect(store.characters).toEqual(['Mira'])
-      expect(store.inventory).toEqual([{ name: '<rendered>Sword</rendered>', description: '<rendered>Sharp</rendered>' }])
+      expect(store.inventory).toEqual([
+        {
+          name: '<rendered>Sword</rendered>',
+          description: '<rendered>Sharp</rendered>',
+        },
+      ])
     })
 
     it('acceptInput is false during init regardless of bridge state', async () => {
@@ -322,9 +330,17 @@ describe('useGameStore', () => {
       bridge.getSpells.mockReturnValue([{ name: 'Fire', description: 'Burns' }])
       store.refreshPanels()
       expect(store.inventory).toEqual([
-        { name: '<rendered>Potion</rendered>', description: '<rendered>Heals</rendered>' },
+        {
+          name: '<rendered>Potion</rendered>',
+          description: '<rendered>Heals</rendered>',
+        },
       ])
-      expect(store.spells).toEqual([{ name: '<rendered>Fire</rendered>', description: '<rendered>Burns</rendered>' }])
+      expect(store.spells).toEqual([
+        {
+          name: '<rendered>Fire</rendered>',
+          description: '<rendered>Burns</rendered>',
+        },
+      ])
     })
 
     it('updates quests', () => {
@@ -336,10 +352,16 @@ describe('useGameStore', () => {
       ])
       store.refreshPanels()
       expect(store.activeQuests).toEqual([
-        { name: '<rendered>Quest A</rendered>', description: '<rendered>Do A</rendered>' },
+        {
+          name: '<rendered>Quest A</rendered>',
+          description: '<rendered>Do A</rendered>',
+        },
       ])
       expect(store.completedQuests).toEqual([
-        { name: '<rendered>Quest B</rendered>', description: '<rendered>Did B</rendered>' },
+        {
+          name: '<rendered>Quest B</rendered>',
+          description: '<rendered>Did B</rendered>',
+        },
       ])
     })
 
@@ -361,8 +383,12 @@ describe('useGameStore', () => {
         { name: '[item_name]Sword[/item_name]', description: 'Sharp blade.' },
       ])
       store.refreshPanels()
-      expect(store.inventory[0].name).toBe('<rendered>[item_name]Sword[/item_name]</rendered>')
-      expect(store.inventory[0].description).toBe('<rendered>Sharp blade.</rendered>')
+      expect(store.inventory[0].name).toBe(
+        '<rendered>[item_name]Sword[/item_name]</rendered>',
+      )
+      expect(store.inventory[0].description).toBe(
+        '<rendered>Sharp blade.</rendered>',
+      )
     })
 
     it('applies renderMarkup to spell names and descriptions', () => {
@@ -370,7 +396,9 @@ describe('useGameStore', () => {
         { name: '[spell_name]Fireball[/spell_name]', description: 'Burns.' },
       ])
       store.refreshPanels()
-      expect(store.spells[0].name).toBe('<rendered>[spell_name]Fireball[/spell_name]</rendered>')
+      expect(store.spells[0].name).toBe(
+        '<rendered>[spell_name]Fireball[/spell_name]</rendered>',
+      )
       expect(store.spells[0].description).toBe('<rendered>Burns.</rendered>')
     })
 
@@ -594,6 +622,84 @@ describe('useGameStore', () => {
       store.refreshPanels()
       expect(store.musicFile).toBe('new.mp3')
       expect(store.musicInfo).toBe('New info')
+    })
+  })
+
+  // --- tabComplete ---
+
+  describe('tabComplete', () => {
+    beforeEach(async () => {
+      bridge.getCommandCompletions.mockReturnValue({
+        go: { north: null, south: null, east: null },
+        take: { sword: null, shield: null },
+        talk: { to: { mira: null } },
+        inventory: null,
+      })
+      await store.initGame()
+    })
+
+    it('returns candidates for a top-level prefix with single match', () => {
+      const result = store.tabComplete('inv')
+      expect(result.candidates).toEqual(['inventory'])
+    })
+
+    it('auto-expands to single unambiguous match plus trailing space', () => {
+      const result = store.tabComplete('inv')
+      expect(result.newInput).toBe('inventory ')
+    })
+
+    it('returns all top-level candidates when prefix matches multiple', () => {
+      const result = store.tabComplete('t')
+      expect(result.candidates.sort()).toEqual(['take', 'talk'])
+    })
+
+    it('does not expand input when multiple candidates exist', () => {
+      const result = store.tabComplete('t')
+      expect(result.newInput).toBe('t')
+    })
+
+    it('returns empty candidates for unrecognised prefix', () => {
+      const result = store.tabComplete('xyz')
+      expect(result.candidates).toEqual([])
+      expect(result.newInput).toBe('xyz')
+    })
+
+    it('returns sub-level candidates after fully typed token plus space', () => {
+      const result = store.tabComplete('go ')
+      expect(result.candidates.sort()).toEqual(['east', 'north', 'south'])
+    })
+
+    it('auto-expands sub-level prefix to single match', () => {
+      const result = store.tabComplete('go n')
+      expect(result.newInput).toBe('go north ')
+      expect(result.candidates).toEqual(['north'])
+    })
+
+    it('traverses multiple levels and auto-expands chain of single options', () => {
+      // talk -> to (only option) -> mira (only option): should expand fully
+      const result = store.tabComplete('talk ')
+      expect(result.newInput).toBe('talk to mira ')
+    })
+
+    it('returns empty when navigating into a leaf node (null value)', () => {
+      const result = store.tabComplete('inventory ')
+      expect(result.candidates).toEqual([])
+      expect(result.newInput).toBe('inventory ')
+    })
+
+    it('returns empty when intermediate token is not in tree', () => {
+      const result = store.tabComplete('fly ')
+      expect(result.candidates).toEqual([])
+    })
+
+    it('completions refresh after submitCommand', () => {
+      store.dismissModal() // unlock input
+      bridge.getCommandCompletions.mockReturnValue({
+        examine: null,
+      })
+      store.submitCommand('look')
+      const result = store.tabComplete('ex')
+      expect(result.candidates).toEqual(['examine'])
     })
   })
 })
