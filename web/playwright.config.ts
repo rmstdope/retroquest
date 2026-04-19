@@ -23,7 +23,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run dev -- --host 0.0.0.0',
-    url: 'http://localhost:5173/index-vue.html',
+    url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,
   },
