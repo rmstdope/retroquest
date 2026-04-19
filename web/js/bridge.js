@@ -332,6 +332,23 @@ with open('retroquest.save', 'wb') as f:
         return this.pyodide.runPython('controller.load_game()');
     },
 
+    /** @returns {boolean} Whether the game currently accepts free-form input. */
+    isAcceptingInput() {
+        return this.pyodide.runPython('game.accept_input');
+    },
+
+    /**
+     * Advance the game by one turn (used during ACT_INTRO / ACT_TRANSITION).
+     * Calls game.new_turn() and returns the current result text.
+     * @returns {string} The current result text after advancing.
+     */
+    advanceTurn() {
+        return this.pyodide.runPython(`
+game.new_turn()
+game.get_result_text()
+        `);
+    },
+
     /** @returns {boolean} Whether the game is still running. */
     isGameRunning() {
         return this.pyodide.runPython(

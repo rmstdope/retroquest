@@ -152,12 +152,19 @@
                     <div class="input-bar">
                         <input type="text"
                                x-model="$store.game.commandInput"
-                               @keydown.enter="$store.game.submitCommand($store.game.commandInput)"
-                               placeholder="Type a command or click on something..."
+                               @keydown.enter="$store.game.acceptInput
+                                   ? $store.game.submitCommand($store.game.commandInput)
+                                   : $store.game.advanceTurn()"
+                               :placeholder="$store.game.acceptInput
+                                   ? 'What do you want to do?'
+                                   : 'Press Enter to continue'"
+                               :readonly="!$store.game.acceptInput"
+                               :class="{ 'input-accept-off': !$store.game.acceptInput }"
                                autocomplete="off"
                                autocapitalize="off"
                                spellcheck="false">
                         <button class="send-btn"
+                                :disabled="!$store.game.acceptInput"
                                 @click="$store.game.submitCommand($store.game.commandInput)">
                             Send
                         </button>

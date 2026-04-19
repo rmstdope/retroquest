@@ -61,6 +61,9 @@ document.addEventListener('alpine:init', () => {
         currentMusicFile: '',
         musicInfo: '',
 
+        // --- Input state ---
+        acceptInput: false,
+
         // Direction arrows for exit display
         directionArrows: {
             north: '↑', south: '↓', east: '→', west: '←',
@@ -82,11 +85,13 @@ document.addEventListener('alpine:init', () => {
                     this.loadingStatus = status;
                 });
 
-                // Advance through logo and act intro
-                const texts = RetroBridge.advanceToRunning();
-                this.introText = texts
-                    .map(t => RetroTheme.renderMarkup(t))
-                    .join('<hr style="border-color:var(--border-color);margin:12px 0">');
+                // Advance from SHOW_LOGO to ACT_INTRO; stop there so the
+                // player must press Enter to proceed to ACT_RUNNING.
+                const introRaw = RetroBridge.advanceTurn();
+                this.introText = RetroTheme.renderMarkup(introRaw);
+
+                // Sync acceptInput — should be false at ACT_INTRO
+                this.acceptInput = RetroBridge.isAcceptingInput();
 
                 // Refresh all panel data
                 this.refreshPanels();
@@ -102,6 +107,7 @@ document.addEventListener('alpine:init', () => {
          * Submit a command (from text input, chip click, etc.)
          */
         submitCommand(cmd) {
+            if (!this.acceptInput) return;
             if (!cmd || !cmd.trim()) return;
 
             const result = RetroBridge.handleCommand(cmd.trim());
@@ -124,6 +130,18 @@ document.addEventListener('alpine:init', () => {
         },
 
         /**
+         * Advance the game turn during ACT_INTRO or ACT_TRANSITION phases.
+         * Called when the player presses Enter while acceptInput is false.
+         */
+        advanceTurn() {
+            const result = RetroBridge.advanceTurn();
+            this.lastOutput = RetroTheme.renderMarkup(result);
+            this.commandInput = '';
+            this.refreshPanels();
+            this._ensureMusicStarted();
+        },
+
+        /**
          * Refresh all panel data from the bridge.
          */
         refreshPanels() {
@@ -138,6 +156,7 @@ document.addEventListener('alpine:init', () => {
             this.completedQuests = RetroBridge.getCompletedQuests();
             const m = RetroBridge.getMusicInfo();
             this._loadMusicTrack(m.musicFile, m.musicInfo);
+            this.acceptInput = RetroBridge.isAcceptingInput();
         },
 
         /**

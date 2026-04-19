@@ -393,6 +393,11 @@ html, body {
     color: var(--text-secondary);
 }
 
+.input-bar input.input-accept-off {
+    opacity: 0.5;
+    cursor: default;
+}
+
 .send-btn {
     padding: 10px 20px;
     border-radius: 8px;
@@ -407,6 +412,11 @@ html, body {
 
 .send-btn:hover {
     opacity: 0.85;
+}
+
+.send-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
 }
 
 /* ---------- Sidebar ---------- */
