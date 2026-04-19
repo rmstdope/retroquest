@@ -2,12 +2,14 @@
 defineProps<{
   title: string
   musicMuted: boolean
+  soundMuted: boolean
 }>()
 
 defineEmits<{
   save: []
   load: []
   toggleMute: []
+  toggleSoundMute: []
   help: []
   toggleDrawer: []
 }>()
@@ -41,6 +43,14 @@ defineEmits<{
           @click="$emit('toggleMute')"
         >
           {{ musicMuted ? '🔇' : '🎵' }}
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          :title="soundMuted ? 'Unmute sounds' : 'Mute sounds'"
+          :aria-label="soundMuted ? 'Unmute sounds' : 'Mute sounds'"
+          @click="$emit('toggleSoundMute')"
+        >
+          {{ soundMuted ? '🔕' : '🔔' }}
         </button>
         <button
           class="bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"

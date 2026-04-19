@@ -3,6 +3,7 @@ import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useGameStore } from '@/stores/useGameStore'
 import { useMusic } from '@/composables/useMusic'
+import { useAudio } from '@/composables/useAudio'
 import { useEntityMenu } from '@/composables/useEntityMenu'
 import type { EntityType, EntityMenuAction } from '@/composables/useEntityMenu'
 import { renderMarkup } from '@/utils/theme'
@@ -52,6 +53,10 @@ watch(
   },
   { immediate: true },
 )
+
+// --- Sound effects ---
+const sfx = useAudio()
+store.setAudioPlayer(sfx)
 
 // --- Entity Menu ---
 const entityMenu = useEntityMenu((cmd: string) => {
@@ -133,9 +138,11 @@ function closeMenus() {
     <TopBar
       title="RetroQuest"
       :music-muted="music.musicMuted.value"
+      :sound-muted="sfx.soundMuted.value"
       @save="store.saveGame()"
       @load="store.loadGame()"
       @toggle-mute="music.toggleMute()"
+      @toggle-sound-mute="sfx.toggleMute()"
       @help="onHelp"
       @toggle-drawer="showDrawer = !showDrawer"
     />
