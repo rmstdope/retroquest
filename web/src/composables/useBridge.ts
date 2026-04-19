@@ -73,7 +73,7 @@ controller = GameController(game)
     onProgress: (status: string) => void,
   ): Promise<void> {
     if (!pyodide) throw new Error('Pyodide not initialized')
-    const resp = await fetch('/src/manifest.json')
+    const resp = await fetch('/python-src/manifest.json')
     const manifest: string[] = await resp.json()
     const total = manifest.length
     let loaded = 0
@@ -84,7 +84,7 @@ controller = GameController(game)
         `import os\nos.makedirs('/home/pyodide/src/${dir}', exist_ok=True)`,
       )
 
-      const fileResp = await fetch(`/src/${filePath}`)
+      const fileResp = await fetch(`/python-src/${filePath}`)
       const content = await fileResp.text()
 
       pyodide.runPython(
