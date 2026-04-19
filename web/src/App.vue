@@ -1,9 +1,7 @@
-<template>
-  <div id="retroquest-app">
-    <p>RetroQuest loading...</p>
-  </div>
-</template>
-
 <script setup lang="ts">
-// Minimal root component — will be expanded in later sub-issues.
+import GameLayout from './components/GameLayout.vue'
 </script>
+
+<template>
+  <GameLayout />
+</template>
