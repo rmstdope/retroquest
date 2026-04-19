@@ -206,13 +206,18 @@ result
   function saveGame(): string {
     const result = py('controller.save_game() or ""')
     try {
+      // Assign to a variable and return it as the last top-level expression so
+      // pyodide.runPython() returns the value. Expressions inside compound
+      // statements (try/with) are not returned by pyodide.runPython().
       const saveData = py(`
 import base64
+_save_data = ''
 try:
     with open('retroquest.save', 'rb') as f:
-        base64.b64encode(f.read()).decode('ascii')
+        _save_data = base64.b64encode(f.read()).decode('ascii')
 except FileNotFoundError:
-    ''
+    pass
+_save_data
       `) as string
       if (saveData) {
         localStorage.setItem('retroquest_save', saveData)
