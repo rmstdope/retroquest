@@ -12,8 +12,10 @@ defineEmits<{
 <template>
   <div
     v-if="visible"
+    role="button"
     tabindex="0"
-    class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg-primary px-8 py-12 cursor-pointer"
+    aria-label="Act transition — press Enter or tap to continue"
+    class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg-primary px-8 py-12 cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent"
     @click="$emit('advance')"
     @keydown.enter="$emit('advance')"
   >

@@ -121,14 +121,18 @@ export const useGameStore = defineStore('game', () => {
     lastOutput.value = renderMarkup(result)
 
     if (!b.isActRunning()) {
-      transitionText.value = renderMarkup(b.getResultText())
-      actTransitioning.value = true
-      acceptInput.value = false
+      showTransitionPhase(b)
       return
     }
 
     refreshPanels()
     pollQuestEvents()
+  }
+
+  function showTransitionPhase(b: GameBridge): void {
+    transitionText.value = renderMarkup(b.getResultText())
+    actTransitioning.value = true
+    acceptInput.value = false
   }
 
   function advanceTurn(): void {
@@ -139,7 +143,7 @@ export const useGameStore = defineStore('game', () => {
         actTransitioning.value = false
         refreshPanels()
       } else {
-        transitionText.value = renderMarkup(b.getResultText())
+        showTransitionPhase(b)
       }
       return
     }
