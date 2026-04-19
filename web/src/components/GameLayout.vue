@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { NamedItem } from '@/types/bridge'
-import type { MenuAction } from './ContextMenu.vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useGameStore } from '@/stores/useGameStore'
+import { useMusic } from '@/composables/useMusic'
+import { useEntityMenu } from '@/composables/useEntityMenu'
+import type { EntityType, EntityMenuAction } from '@/composables/useEntityMenu'
+import { renderMarkup } from '@/utils/theme'
 import TopBar from './TopBar.vue'
 import GameOutput from './GameOutput.vue'
 import CommandInput from './CommandInput.vue'
@@ -11,60 +15,116 @@ import ActionSheet from './ActionSheet.vue'
 import MobileDrawer from './MobileDrawer.vue'
 import QuestModal from './QuestModal.vue'
 
-// Placeholder state — will be replaced by Pinia stores in #50
-const musicMuted = ref(false)
-const acceptInput = ref(true)
-const showDrawer = ref(false)
-const showContextMenu = ref(false)
-const showActionSheet = ref(false)
-const showModal = ref(false)
+const store = useGameStore()
+const {
+  roomName,
+  roomDescription,
+  characters,
+  items,
+  exits,
+  lastOutput,
+  introText,
+  acceptInput,
+  activeQuests,
+  completedQuests,
+  inventory,
+  spells,
+  showActiveQuests,
+  showCompletedQuests,
+  showInventory,
+  showSpells,
+  showModal,
+  modalTitle,
+  modalBody,
+  musicFile,
+  musicInfo: musicInfoText,
+} = storeToRefs(store)
 
-const roomName = ref('Village Square')
-const roomDescription = ref('A peaceful village center with a well.')
-const characters = ref<string[]>(['Mira', 'Merchant'])
-const items = ref<string[]>(['Old Map'])
-const exits = ref<Record<string, string>>({
-  north: 'Forest Path',
-  south: 'Village Gate',
+// --- Music ---
+const audio = new Audio()
+audio.loop = true
+const music = useMusic(audio)
+
+watch(
+  [musicFile, musicInfoText],
+  ([file, info]) => {
+    music.loadTrack(file, info)
+  },
+  { immediate: true },
+)
+
+// --- Entity Menu ---
+const entityMenu = useEntityMenu((cmd: string) => {
+  store.submitCommand(cmd)
 })
-const lastOutput = ref('')
-const introText = ref('Welcome to RetroQuest!')
 
-const activeQuests = ref<NamedItem[]>([])
-const completedQuests = ref<NamedItem[]>([])
-const inventory = ref<NamedItem[]>([])
-const spells = ref<NamedItem[]>([])
+// --- Mobile detection ---
+function updateMobile() {
+  entityMenu.isMobile.value = window.innerWidth <= 768
+}
+onMounted(() => {
+  updateMobile()
+  window.addEventListener('resize', updateMobile)
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', updateMobile)
+})
 
-const showActiveQuests = ref(true)
-const showCompletedQuests = ref(false)
-const showInventory = ref(true)
-const showSpells = ref(true)
+// --- UI State ---
+const showDrawer = ref(false)
 
-const contextMenuTarget = ref('')
-const contextMenuActions = ref<MenuAction[]>([])
-const contextMenuX = ref(0)
-const contextMenuY = ref(0)
+function onEntityClick(event: MouseEvent, name: string, type: string) {
+  entityMenu.openMenu(type as EntityType, name, event)
+}
 
-const actionSheetTarget = ref('')
-const actionSheetActions = ref<MenuAction[]>([])
+function onInventoryClick(event: MouseEvent, name: string) {
+  entityMenu.openMenu('inventory', name, event)
+}
 
-const modalTitle = ref('')
-const modalBody = ref('')
+function onSpellClick(event: MouseEvent, name: string) {
+  entityMenu.openMenu('spell', name, event)
+}
 
-function toggleSection(section: string) {
-  const map: Record<string, typeof showActiveQuests> = {
-    activeQuests: showActiveQuests,
-    completedQuests: showCompletedQuests,
-    inventory: showInventory,
-    spells: showSpells,
+function onGoDirection(direction: string) {
+  store.submitCommand(`go ${direction}`)
+}
+
+function onSubmitCommand(cmd: string) {
+  store.submitCommand(cmd)
+  music.ensureMusicStarted()
+  if (cmd.trim().toLowerCase() === 'help') {
+    const attribution = music.buildAttributionHtml()
+    if (attribution) {
+      store.lastOutput += attribution
+    }
   }
-  const toggle = map[section]
-  if (toggle) toggle.value = !toggle.value
+}
+
+function onAdvanceTurn() {
+  store.advanceTurn()
+}
+
+function onExecuteAction(action: EntityMenuAction) {
+  const result = entityMenu.selectAction(action, inventory.value, spells.value)
+  if (result === 'no-items') {
+    store.lastOutput = renderMarkup(
+      '[failure]You have no items to give.[/failure]',
+    )
+  } else if (result === 'no-spells') {
+    store.lastOutput = renderMarkup('[failure]You know no spells.[/failure]')
+  }
+}
+
+function onHelp() {
+  store.submitCommand('help')
+  const attribution = music.buildAttributionHtml()
+  if (attribution) {
+    store.lastOutput += attribution
+  }
 }
 
 function closeMenus() {
-  showContextMenu.value = false
-  showActionSheet.value = false
+  entityMenu.closeMenu()
 }
 </script>
 
@@ -72,11 +132,11 @@ function closeMenus() {
   <div style="display: flex; flex-direction: column; height: 100vh">
     <TopBar
       title="RetroQuest"
-      :music-muted="musicMuted"
-      @save="() => {}"
-      @load="() => {}"
-      @toggle-mute="musicMuted = !musicMuted"
-      @help="() => {}"
+      :music-muted="music.musicMuted.value"
+      @save="store.saveGame()"
+      @load="store.loadGame()"
+      @toggle-mute="music.toggleMute()"
+      @help="onHelp"
       @toggle-drawer="showDrawer = !showDrawer"
     />
 
@@ -89,8 +149,8 @@ function closeMenus() {
         :exits="exits"
         :last-output="lastOutput"
         :intro-text="introText"
-        @entity-click="() => {}"
-        @go-direction="() => {}"
+        @entity-click="onEntityClick"
+        @go-direction="onGoDirection"
       />
 
       <SidePanel
@@ -102,34 +162,34 @@ function closeMenus() {
         :show-completed-quests="showCompletedQuests"
         :show-inventory="showInventory"
         :show-spells="showSpells"
-        @toggle-section="toggleSection"
-        @inventory-click="() => {}"
-        @spell-click="() => {}"
+        @toggle-section="store.toggleSection"
+        @inventory-click="onInventoryClick"
+        @spell-click="onSpellClick"
       />
     </div>
 
     <CommandInput
       :accept-input="acceptInput"
-      @submit-command="() => {}"
-      @advance-turn="() => {}"
+      @submit-command="onSubmitCommand"
+      @advance-turn="onAdvanceTurn"
     />
 
     <ContextMenu
-      :visible="showContextMenu"
-      :target="contextMenuTarget"
-      :actions="contextMenuActions"
-      :x="contextMenuX"
-      :y="contextMenuY"
+      :visible="!entityMenu.isMobile.value && entityMenu.visible.value"
+      :target="entityMenu.target.value"
+      :actions="entityMenu.actions.value"
+      :x="entityMenu.x.value"
+      :y="entityMenu.y.value"
       @close="closeMenus"
-      @execute-action="() => {}"
+      @execute-action="onExecuteAction"
     />
 
     <ActionSheet
-      :visible="showActionSheet"
-      :target="actionSheetTarget"
-      :actions="actionSheetActions"
+      :visible="entityMenu.isMobile.value && entityMenu.visible.value"
+      :target="entityMenu.target.value"
+      :actions="entityMenu.actions.value"
       @close="closeMenus"
-      @execute-action="() => {}"
+      @execute-action="onExecuteAction"
     />
 
     <MobileDrawer
@@ -138,15 +198,15 @@ function closeMenus() {
       :inventory="inventory"
       :spells="spells"
       @close="showDrawer = false"
-      @inventory-click="() => {}"
-      @spell-click="() => {}"
+      @inventory-click="onInventoryClick"
+      @spell-click="onSpellClick"
     />
 
     <QuestModal
       :visible="showModal"
       :title="modalTitle"
       :body="modalBody"
-      @dismiss="showModal = false"
+      @dismiss="store.dismissModal()"
     />
   </div>
 </template>
