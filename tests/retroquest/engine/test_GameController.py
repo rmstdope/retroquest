@@ -174,8 +174,8 @@ def _make_controller_with_music(
     room = Room(name="Test Room", description="A test room.")
     rooms = {"TestRoom": room}
     act = SimpleAct(rooms=rooms)
-    # Override music fields after construction (Game.__init__ already ran
-    # audio.start_music with the empty default — safe to override here)
+    # Override music fields before Game construction so Game.__init__
+    # sees these test-specific values when it initializes audio state.
     act.music_file = music_file
     act.music_info = music_info
     game = Game([act], dev_mode=True)
