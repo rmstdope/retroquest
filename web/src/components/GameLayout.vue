@@ -159,6 +159,21 @@ function closeMenus() {
 }
 </script>
 
+const saveDialogSaves = ref<ReturnType<typeof store.listNamedSaves>>([])
+const loadDialogSaves = ref<ReturnType<typeof store.listNamedSaves>>([])
+
+watch(showSaveDialog, (visible) => {
+  if (visible) {
+    saveDialogSaves.value = store.listNamedSaves()
+  }
+})
+
+watch(showLoadDialog, (visible) => {
+  if (visible) {
+    loadDialogSaves.value = store.listNamedSaves()
+  }
+})
+
 <template>
   <div class="flex flex-col h-screen">
     <TopBar
@@ -247,7 +262,7 @@ function closeMenus() {
 
     <SaveDialog
       :visible="showSaveDialog"
-      :existing-saves="store.listNamedSaves()"
+      :existing-saves="saveDialogSaves"
       :default-name="buildDefaultSaveName()"
       @confirm="onSaveDialogConfirm"
       @cancel="showSaveDialog = false"
@@ -255,7 +270,7 @@ function closeMenus() {
 
     <LoadDialog
       :visible="showLoadDialog"
-      :saves="store.listNamedSaves()"
+      :saves="loadDialogSaves"
       @confirm="onLoadDialogConfirm"
       @cancel="showLoadDialog = false"
     />
