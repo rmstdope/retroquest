@@ -142,15 +142,19 @@ export const useGameStore = defineStore('game', () => {
 
   function refreshPanels(): void {
     const b = requireBridge()
+    const renderItem = (item: NamedItem): NamedItem => ({
+      name: renderMarkup(item.name),
+      description: renderMarkup(item.description),
+    })
     roomName.value = b.getRoomName()
     roomDescription.value = b.getRoomDescription()
     characters.value = b.getRoomCharacters()
     items.value = b.getRoomItems()
     exits.value = b.getRoomExits()
-    inventory.value = b.getInventory()
-    spells.value = b.getSpells()
-    activeQuests.value = b.getActiveQuests()
-    completedQuests.value = b.getCompletedQuests()
+    inventory.value = b.getInventory().map(renderItem)
+    spells.value = b.getSpells().map(renderItem)
+    activeQuests.value = b.getActiveQuests().map(renderItem)
+    completedQuests.value = b.getCompletedQuests().map(renderItem)
     const m = b.getMusicInfo()
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
