@@ -39,6 +39,7 @@
                         <button @click="$store.game.loadGame()">📂 Load</button>
                         <button @click="$store.game.toggleMute()"
                                 :title="$store.game.musicMuted ? 'Unmute music' : 'Mute music'"
+                                :aria-label="$store.game.musicMuted ? 'Unmute music' : 'Mute music'"
                                 x-text="$store.game.musicMuted ? '🔇' : '🎵'"></button>
                         <button @click="$store.game.submitCommand('help')">❓ Help</button>
                     </div>
