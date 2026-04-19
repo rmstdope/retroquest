@@ -118,7 +118,7 @@ For every Python file, ensure:
 
 ### Pre-merge Checklist (Must Pass Before Creating a PR)
 
-Before creating a pull request, run **all** of the checks below locally — they mirror the CI pipeline in `.github/workflows/ci.yml` exactly. NEVER open a PR or request a merge if any of these fail.
+Before creating a pull request, run **all** of the checks below locally — they mirror the CI pipeline in `.github/workflows/ci.yml` exactly. NEVER open a PR or request a merge if any of these fail or produce warnings.
 
 #### Python (run when `src/`, `tests/`, or `pyproject.toml` changed)
 
