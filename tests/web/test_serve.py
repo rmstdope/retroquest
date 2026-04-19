@@ -1,4 +1,5 @@
 """Tests for the RetroQuest development web server."""
+
 import importlib.util
 import os
 from pathlib import Path
