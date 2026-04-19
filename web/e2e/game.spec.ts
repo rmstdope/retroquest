@@ -165,17 +165,17 @@ test.describe('QuestModal – Escape key dismissal', () => {
       store.modalBody = '<p>A new adventure awaits.</p>'
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
-    await page.waitForTimeout(300)
+    await expect(page.getByText('Test Quest', { exact: true })).toBeVisible()
   }
 
   test('modal is visible after being opened', async ({ page }) => {
     await openModal(page)
+    // visibility is already asserted inside openModal
     await expect(page.getByText('Test Quest', { exact: true })).toBeVisible()
   })
 
   test('pressing Escape closes the modal', async ({ page }) => {
     await openModal(page)
-    await expect(page.getByText('Test Quest', { exact: true })).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(page.getByText('Test Quest', { exact: true })).toBeHidden()
   })
@@ -192,9 +192,74 @@ test.describe('QuestModal – Escape key dismissal', () => {
     page,
   }) => {
     await openModal(page)
-    await expect(page.getByText('Test Quest', { exact: true })).toBeVisible()
     await page.getByRole('button', { name: 'Continue' }).click()
     await expect(page.getByText('Test Quest', { exact: true })).toBeHidden()
+  })
+})
+
+/* ------------------------------------------------------------------ */
+/*  LoadDialog Escape key tests                                        */
+/* ------------------------------------------------------------------ */
+
+test.describe('LoadDialog – Escape key dismissal', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(APP_URL)
+    await expect(page.locator('.loading-spinner')).toBeVisible({
+      timeout: 10_000,
+    })
+    await injectMockGameState(page)
+  })
+
+  test('pressing Escape closes the Load dialog', async ({ page }) => {
+    await page.getByRole('button', { name: '📂 Load' }).click()
+    await expect(page.getByText('📂 Load Game', { exact: true })).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.getByText('📂 Load Game', { exact: true })).toBeHidden()
+  })
+
+  test('Cancel button still works in Load dialog', async ({ page }) => {
+    await page.getByRole('button', { name: '📂 Load' }).click()
+    await expect(page.getByText('📂 Load Game', { exact: true })).toBeVisible()
+    await page.getByRole('button', { name: 'Cancel' }).click()
+    await expect(page.getByText('📂 Load Game', { exact: true })).toBeHidden()
+  })
+})
+
+/* ------------------------------------------------------------------ */
+/*  SaveDialog Escape key tests                                        */
+/* ------------------------------------------------------------------ */
+
+test.describe('SaveDialog – Escape key dismissal', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(APP_URL)
+    await expect(page.locator('.loading-spinner')).toBeVisible({
+      timeout: 10_000,
+    })
+    await injectMockGameState(page)
+  })
+
+  test('pressing Escape closes the Save dialog', async ({ page }) => {
+    await page.getByRole('button', { name: '💾 Save' }).click()
+    await expect(page.getByText('💾 Save Game', { exact: true })).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.getByText('💾 Save Game', { exact: true })).toBeHidden()
+  })
+
+  test('pressing Escape with focus in the name input closes the Save dialog', async ({
+    page,
+  }) => {
+    await page.getByRole('button', { name: '💾 Save' }).click()
+    await expect(page.getByText('💾 Save Game', { exact: true })).toBeVisible()
+    await page.locator('#save-name-input').focus()
+    await page.keyboard.press('Escape')
+    await expect(page.getByText('💾 Save Game', { exact: true })).toBeHidden()
+  })
+
+  test('Cancel button still works in Save dialog', async ({ page }) => {
+    await page.getByRole('button', { name: '💾 Save' }).click()
+    await expect(page.getByText('💾 Save Game', { exact: true })).toBeVisible()
+    await page.getByRole('button', { name: 'Cancel' }).click()
+    await expect(page.getByText('💾 Save Game', { exact: true })).toBeHidden()
   })
 })
 

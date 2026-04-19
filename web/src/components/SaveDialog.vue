@@ -72,7 +72,6 @@ function onConfirm() {
         class="w-full bg-bg-secondary border border-border rounded-md px-3 py-2 text-text-primary text-sm mb-4 focus:outline-none focus:border-accent"
         placeholder="Enter save name…"
         @keydown.enter="onConfirm"
-        @keydown.escape="$emit('cancel')"
       />
 
       <div v-if="existingSaves.length > 0" class="mb-4">
