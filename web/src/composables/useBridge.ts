@@ -11,12 +11,44 @@ import type {
   NamedSave,
 } from '@/types/bridge'
 
+type StoredNamedSave = {
+  name: string
+  timestamp: string
+  data: string
+}
+
 /**
  * Convert a Python list of (name, description) tuples to typed JS objects.
  */
 function tuplesToNamedItems(pyResult: { toJs(): unknown }): NamedItem[] {
   const tuples = pyResult.toJs() as [string, string][]
   return tuples.map(([name, description]) => ({ name, description }))
+}
+
+/**
+ * Read and validate persisted named saves from local storage.
+ */
+function readStoredNamedSaves(): StoredNamedSave[] {
+  try {
+    const raw = localStorage.getItem('retroquest_named_saves')
+    if (!raw) return []
+
+    const parsed: unknown = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+
+    return parsed.filter((entry): entry is StoredNamedSave => {
+      if (typeof entry !== 'object' || entry === null) return false
+
+      const candidate = entry as Record<string, unknown>
+      return (
+        typeof candidate.name === 'string' &&
+        typeof candidate.timestamp === 'string' &&
+        typeof candidate.data === 'string'
+      )
+    })
+  } catch {
+    return []
+  }
 }
 
 /**
@@ -254,13 +286,10 @@ with open('retroquest.save', 'wb') as f:
   }
 
   function listNamedSaves(): NamedSave[] {
-    try {
-      const raw = localStorage.getItem('retroquest_named_saves')
-      if (!raw) return []
-      return JSON.parse(raw) as NamedSave[]
-    } catch {
-      return []
-    }
+    return readStoredNamedSaves().map(({ name, timestamp }) => ({
+      name,
+      timestamp,
+    }))
   }
 
   function saveNamedGame(name: string): string {
