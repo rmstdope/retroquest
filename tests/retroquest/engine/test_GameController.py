@@ -160,3 +160,53 @@ class TestIsActRunning:
         ctrl = _make_controller()
         # Game starts in SHOW_LOGO state, not ACT_RUNNING
         assert ctrl.is_act_running() is False
+
+
+def _make_controller_with_music(
+    music_file: str = "track.mp3",
+    music_info: str = "Track Info",
+    advance_to_running: bool = True,
+) -> GameController:
+    """Create a controller backed by an act with specific music metadata.
+
+    Optionally advances the game to ACT_RUNNING state (two new_turn() calls).
+    """
+    room = Room(name="Test Room", description="A test room.")
+    rooms = {"TestRoom": room}
+    act = SimpleAct(rooms=rooms)
+    # Override music fields after construction (Game.__init__ already ran
+    # audio.start_music with the empty default — safe to override here)
+    act.music_file = music_file
+    act.music_info = music_info
+    game = Game([act], dev_mode=True)
+    if advance_to_running:
+        game.new_turn()  # SHOW_LOGO → ACT_INTRO
+        game.new_turn()  # ACT_INTRO → ACT_RUNNING
+    return GameController(game)
+
+
+class TestGetCurrentMusic:
+    """Tests for GameController.get_current_music."""
+
+    def test_returns_empty_strings_when_act_not_running(self) -> None:
+        """Return ('', '') when the act is not yet running (logo state)."""
+        ctrl = _make_controller()
+        assert ctrl.get_current_music() == ('', '')
+
+    def test_returns_music_file_when_act_running(self) -> None:
+        """Return the correct music_file for the current act when running."""
+        ctrl = _make_controller_with_music(
+            music_file="market.mp3",
+            music_info="Market by Composer",
+        )
+        file_, _ = ctrl.get_current_music()
+        assert file_ == "market.mp3"
+
+    def test_returns_music_info_when_act_running(self) -> None:
+        """Return the correct music_info for the current act when running."""
+        ctrl = _make_controller_with_music(
+            music_file="market.mp3",
+            music_info="Market by Composer",
+        )
+        _, info = ctrl.get_current_music()
+        assert info == "Market by Composer"

@@ -37,6 +37,9 @@
                     <div class="top-bar-actions">
                         <button @click="$store.game.saveGame()">💾 Save</button>
                         <button @click="$store.game.loadGame()">📂 Load</button>
+                        <button @click="$store.game.toggleMute()"
+                                :title="$store.game.musicMuted ? 'Unmute music' : 'Mute music'"
+                                x-text="$store.game.musicMuted ? '🔇' : '🎵'"></button>
                         <button @click="$store.game.submitCommand('help')">❓ Help</button>
                     </div>
                     <button class="hamburger-btn"
@@ -398,6 +401,9 @@
             </div>
         </div>
     </template>
+
+    <!-- Hidden background music player -->
+    <audio id="bg-music" loop></audio>
 
 </body>
 </html>

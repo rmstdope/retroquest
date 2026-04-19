@@ -176,6 +176,18 @@ class GameController:
         """Return True if the current act is in running state."""
         return self.game.is_act_running()
 
+    def get_current_music(self) -> tuple[str, str]:
+        """Return (music_file, music_info) for the current act when running.
+
+        Returns ('', '') when the act is not yet in running state (e.g. during
+        the logo or intro phases) so that the web frontend plays no music
+        before the act has started.
+        """
+        if not self.game.is_act_running():
+            return ('', '')
+        act = self.game.acts[self.game.current_act]
+        return (act.music_file, act.music_info)
+
     def play_soundeffect(self, filename: str) -> None:
         """Play a sound effect using the underlying Game's play_soundeffect method."""
         self.game.play_soundeffect(filename)

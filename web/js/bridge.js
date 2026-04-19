@@ -345,6 +345,19 @@ with open('retroquest.save', 'wb') as f:
             'controller.is_act_running()'
         );
     },
+
+    /**
+     * Get the music file and attribution info for the current act.
+     * Returns { musicFile: '', musicInfo: '' } when act is not running.
+     * @returns {{ musicFile: string, musicInfo: string }}
+     */
+    getMusicInfo() {
+        const result = this.pyodide.runPython(
+            'controller.get_current_music()'
+        );
+        const [musicFile, musicInfo] = result.toJs();
+        return { musicFile, musicInfo };
+    },
 };
 
 window.RetroBridge = RetroBridge;

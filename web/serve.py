@@ -5,6 +5,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 
 def _build_manifest(src_dir: str) -> list[str]:
@@ -44,8 +45,10 @@ class RetroQuestHandler(http.server.SimpleHTTPRequestHandler):
         path = path.split('?', 1)[0].split('#', 1)[0]
 
         if path.startswith('/src/'):
-            # Serve Python source files from the src/ directory
-            rel = path[len('/src/'):]
+            # Serve Python source files from the src/ directory.
+            # URL-decode so filenames with spaces (e.g. MP3 tracks) resolve
+            # correctly — mirrors what SimpleHTTPRequestHandler does by default.
+            rel = unquote(path[len('/src/'):])
             return os.path.join(self.src_dir, rel)
 
         # Default: serve from web/ directory
