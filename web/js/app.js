@@ -56,6 +56,11 @@ document.addEventListener('alpine:init', () => {
         showInventory: true,
         showSpells: true,
 
+        // --- Music ---
+        musicMuted: false,
+        currentMusicFile: '',
+        musicInfo: '',
+
         // Direction arrows for exit display
         directionArrows: {
             north: '↑', south: '↓', east: '→', west: '←',
@@ -68,6 +73,10 @@ document.addEventListener('alpine:init', () => {
          * Initialize the game: boot Pyodide and load the engine.
          */
         async init() {
+            // Restore persisted mute preference before the game starts.
+            this.musicMuted =
+                localStorage.getItem('retroquest_music_muted') === 'true';
+
             try {
                 await RetroBridge.init((status) => {
                     this.loadingStatus = status;
@@ -102,6 +111,14 @@ document.addEventListener('alpine:init', () => {
             // Refresh all panels after command
             this.refreshPanels();
 
+            // Retry music playback on first user gesture (browser autoplay policy)
+            this._ensureMusicStarted();
+
+            // Append music attribution to help output
+            if (cmd.trim().toLowerCase() === 'help' && this.musicInfo) {
+                this.lastOutput += this._buildMusicAttributionHtml();
+            }
+
             // Check for quest events
             this.pollQuestEvents();
         },
@@ -119,6 +136,8 @@ document.addEventListener('alpine:init', () => {
             this.spells = RetroBridge.getSpells();
             this.activeQuests = RetroBridge.getActiveQuests();
             this.completedQuests = RetroBridge.getCompletedQuests();
+            const m = RetroBridge.getMusicInfo();
+            this._loadMusicTrack(m.musicFile, m.musicInfo);
         },
 
         /**
@@ -416,6 +435,7 @@ document.addEventListener('alpine:init', () => {
             const result = RetroBridge.loadGame();
             this.lastOutput = RetroTheme.renderMarkup(result);
             this.refreshPanels();
+            this._ensureMusicStarted();
         },
 
         /**
@@ -431,6 +451,102 @@ document.addEventListener('alpine:init', () => {
         getArrow(direction) {
             return this.directionArrows[direction.toLowerCase()]
                 || '•';
+        },
+
+        /**
+         * Load a music track into the <audio> element when the file changes.
+         * Silently swallows autoplay rejection (browser policy) — playback
+         * will be retried via _ensureMusicStarted() on the next user gesture.
+         * @param {string} file - Filename (no path) of the MP3 to play.
+         * @param {string} info - Attribution text for the track.
+         */
+        _loadMusicTrack(file, info) {
+            const audio = document.getElementById('bg-music');
+            if (!file) {
+                this.currentMusicFile = '';
+                this.musicInfo = '';
+                if (audio) {
+                    audio.pause();
+                    audio.removeAttribute('src');
+                    audio.load();
+                }
+                return;
+            }
+            if (file === this.currentMusicFile) return;
+            this.currentMusicFile = file;
+            this.musicInfo = info;
+            const url = '/src/retroquest/audio/music/'
+                + encodeURIComponent(file);
+            audio.src = url;
+            if (!this.musicMuted) {
+                audio.play().catch(() => {});
+            }
+        },
+
+        /**
+         * Retry music playback if the track is loaded but paused.
+         * Call this inside user-gesture handlers to recover from
+         * browser autoplay blocking.
+         */
+        _ensureMusicStarted() {
+            if (!this.currentMusicFile || this.musicMuted) return;
+            const audio = document.getElementById('bg-music');
+            if (audio && audio.paused) {
+                audio.play().catch(() => {});
+            }
+        },
+
+        /**
+         * Build the HTML snippet that shows the current track attribution.
+         * Renders each non-empty line of musicInfo, with URLs linkified.
+         * @returns {string} HTML string to append to command output.
+         */
+        _buildMusicAttributionHtml() {
+            const urlPattern = /(https?:\/\/[^\s]+)/g;
+            const lines = this.musicInfo
+                .split('\n')
+                .map(l => l.trim())
+                .filter(l => l.length > 0)
+                .map(l => {
+                    let html = '';
+                    let lastIndex = 0;
+                    let match;
+                    while ((match = urlPattern.exec(l)) !== null) {
+                        const url = match[0];
+                        html += RetroTheme.escapeHtml(
+                            l.slice(lastIndex, match.index)
+                        );
+                        const safeUrl = RetroTheme.escapeHtml(url);
+                        html += '<a href="' + safeUrl + '" target="_blank" '
+                            + 'rel="noopener">' + safeUrl + '</a>';
+                        lastIndex = match.index + url.length;
+                    }
+                    html += RetroTheme.escapeHtml(l.slice(lastIndex));
+                    urlPattern.lastIndex = 0;
+                    return html;
+                })
+                .join('<br>');
+            return '<hr style="border-color:var(--border-color);margin:12px 0">'
+                + '<div style="opacity:0.7;font-size:0.85em">'
+                + '🎵 <strong>Now playing:</strong><br>' + lines
+                + '</div>';
+        },
+
+        /**
+         * Toggle music mute state and persist the preference to localStorage.
+         */
+        toggleMute() {
+            this.musicMuted = !this.musicMuted;
+            localStorage.setItem(
+                'retroquest_music_muted', String(this.musicMuted)
+            );
+            const audio = document.getElementById('bg-music');
+            if (!audio) return;
+            if (this.musicMuted) {
+                audio.pause();
+            } else if (this.currentMusicFile) {
+                audio.play().catch(() => {});
+            }
         },
     });
 });
