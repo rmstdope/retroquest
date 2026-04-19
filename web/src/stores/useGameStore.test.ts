@@ -298,7 +298,10 @@ describe('useGameStore', () => {
 
       store.submitCommand('talk to grandmother')
 
-      expect(store.exits).toEqual({ south: 'VegetableField', east: 'VillageSquare' })
+      expect(store.exits).toEqual({
+        south: 'VegetableField',
+        east: 'VillageSquare',
+      })
     })
   })
 
