@@ -283,7 +283,7 @@ _save_data
           name,
           timestamp: new Date().toISOString(),
           data: saveData,
-        } as NamedSave & { data: string }
+        }
         if (existingIndex >= 0) {
           saves[existingIndex] = entry
         } else {
@@ -301,9 +301,18 @@ _save_data
     try {
       const raw = localStorage.getItem('retroquest_named_saves')
       if (!raw) return '[failure]No save file found.[/failure]'
-      const saves = JSON.parse(raw) as Array<NamedSave & { data: string }>
-      const entry = saves.find((s) => s.name === name)
-      if (!entry || !entry.data) {
+      const parsed: unknown = JSON.parse(raw)
+      if (!Array.isArray(parsed))
+        return '[failure]No save file found.[/failure]'
+      const entry = parsed.find(
+        (s): s is NamedSave & { data: string } =>
+          s !== null &&
+          typeof s === 'object' &&
+          typeof (s as Record<string, unknown>).name === 'string' &&
+          typeof (s as Record<string, unknown>).data === 'string' &&
+          (s as Record<string, unknown>).name === name,
+      )
+      if (!entry) {
         return '[failure]No save file found.[/failure]'
       }
       if (!pyodide) throw new Error('Pyodide not initialized')
