@@ -20,10 +20,13 @@ const MENU_WIDTH = 200
 const MENU_HEIGHT = 250
 
 /**
- * Strip markup tags like [gold]...[/gold] from a string.
+ * Strip markup tags like [gold]...[/gold] and HTML tags from a string.
  */
 function stripMarkup(text: string): string {
-  return text.replace(/\[.*?\]/g, '').trim()
+  return text
+    .replace(/\[.*?\]/g, '')
+    .replace(/<[^>]*>/g, '')
+    .trim()
 }
 
 /**
