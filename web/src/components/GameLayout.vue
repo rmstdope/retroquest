@@ -17,6 +17,7 @@ import MobileDrawer from './MobileDrawer.vue'
 import QuestModal from './QuestModal.vue'
 import SaveDialog from './SaveDialog.vue'
 import LoadDialog from './LoadDialog.vue'
+import type { NamedSave } from '@/types/bridge'
 
 const store = useGameStore()
 const {
@@ -81,12 +82,13 @@ onUnmounted(() => {
 const showDrawer = ref(false)
 const showSaveDialog = ref(false)
 const showLoadDialog = ref(false)
-
-function buildDefaultSaveName(): string {
-  return `${roomName.value} – ${new Date().toLocaleString()}`
-}
+const saveDialogSaves = ref<NamedSave[]>([])
+const saveDialogDefaultName = ref('')
+const loadDialogSaves = ref<NamedSave[]>([])
 
 function onOpenSaveDialog() {
+  saveDialogSaves.value = store.listNamedSaves()
+  saveDialogDefaultName.value = `${roomName.value} – ${new Date().toLocaleString()}`
   showSaveDialog.value = true
 }
 
@@ -96,6 +98,7 @@ function onSaveDialogConfirm(name: string) {
 }
 
 function onOpenLoadDialog() {
+  loadDialogSaves.value = store.listNamedSaves()
   showLoadDialog.value = true
 }
 
@@ -158,21 +161,6 @@ function closeMenus() {
   entityMenu.closeMenu()
 }
 </script>
-
-const saveDialogSaves = ref<ReturnType<typeof store.listNamedSaves>>([])
-const loadDialogSaves = ref<ReturnType<typeof store.listNamedSaves>>([])
-
-watch(showSaveDialog, (visible) => {
-  if (visible) {
-    saveDialogSaves.value = store.listNamedSaves()
-  }
-})
-
-watch(showLoadDialog, (visible) => {
-  if (visible) {
-    loadDialogSaves.value = store.listNamedSaves()
-  }
-})
 
 <template>
   <div class="flex flex-col h-screen">
@@ -263,7 +251,7 @@ watch(showLoadDialog, (visible) => {
     <SaveDialog
       :visible="showSaveDialog"
       :existing-saves="saveDialogSaves"
-      :default-name="buildDefaultSaveName()"
+      :default-name="saveDialogDefaultName"
       @confirm="onSaveDialogConfirm"
       @cancel="showSaveDialog = false"
     />
