@@ -1598,3 +1598,51 @@ def test_load_named_file_not_found_returns_failure(game, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     result = game.load("unknown")
     assert "No save file found" in result
+
+
+@pytest.mark.parametrize("bad_name", [
+    "../evil",
+    "../../etc/passwd",
+    "/absolute/path",
+    "has spaces",
+    "has/slash",
+    "has\\backslash",
+    "has\x00null",
+])
+def test_save_with_invalid_name_returns_failure(game, tmp_path, monkeypatch, bad_name):
+    """save() rejects names with path separators or invalid characters."""
+    monkeypatch.chdir(tmp_path)
+    result = game.save(bad_name)
+    assert "[failure]" in result
+
+
+@pytest.mark.parametrize("bad_name", [
+    "../evil",
+    "../../etc/passwd",
+    "/absolute/path",
+    "has spaces",
+    "has/slash",
+    "has\\backslash",
+    "has\x00null",
+])
+def test_load_with_invalid_name_returns_failure(game, tmp_path, monkeypatch, bad_name):
+    """load() rejects names with path separators or invalid characters."""
+    monkeypatch.chdir(tmp_path)
+    result = game.load(bad_name)
+    assert "[failure]" in result
+
+
+def test_save_normalizes_name_to_lowercase(game, tmp_path, monkeypatch):
+    """save('MySlot') writes to myslot.save (name normalized to lowercase)."""
+    monkeypatch.chdir(tmp_path)
+    game.save("MySlot")
+    assert (tmp_path / "myslot.save").exists()
+    assert not (tmp_path / "MySlot.save").exists()
+
+
+def test_load_normalizes_name_to_lowercase(game, tmp_path, monkeypatch):
+    """load('MySlot') reads from myslot.save (name normalized to lowercase)."""
+    monkeypatch.chdir(tmp_path)
+    game.save("myslot")
+    result = game.load("MySlot")
+    assert "successfully" in result.lower()

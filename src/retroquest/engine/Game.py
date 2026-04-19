@@ -4,6 +4,7 @@ from enum import Enum, auto
 
 import pickle
 import os
+import re
 
 from .Character import Character
 from .CommandParser import CommandParser
@@ -931,10 +932,28 @@ Welcome to
                 "inventory.[/failure]"
             )
 
+    def _validate_save_name(self, name: str) -> tuple[bool, str]:
+        """Validate and normalize a save slot name.
+
+        Normalizes to lowercase and restricts to alphanumerics, hyphens, and underscores.
+        Returns (True, normalized_name) on success or (False, error_message) on failure.
+        """
+        normalized = name.strip().lower()
+        if not re.fullmatch(r'[a-z0-9_-]+', normalized):
+            return (
+                False,
+                "[failure]Invalid save name. Use only letters, digits, hyphens, "
+                "and underscores.[/failure]",
+            )
+        return (True, normalized)
+
     def save(self, name: str = 'retroquest') -> str:
         """Save the game state to a file identified by name."""
+        valid, result = self._validate_save_name(name)
+        if not valid:
+            return result
         try:
-            with open(f'{name}.save', 'wb') as f:
+            with open(f'{result}.save', 'wb') as f:
                 pickle.dump(self.state, f)
             return "[event]Game saved successfully.[/event]"
         except OSError as e:
@@ -942,11 +961,14 @@ Welcome to
 
     def load(self, name: str = 'retroquest') -> str:
         """Load the game state from a file identified by name."""
-        if not os.path.exists(f'{name}.save'):
+        valid, result = self._validate_save_name(name)
+        if not valid:
+            return result
+        if not os.path.exists(f'{result}.save'):
             return "[failure]No save file found.[/failure]"
         try:
-            with open(f'{name}.save', 'rb') as f:
-                self.state = pickle.load(f)
+            with open(f'{result}.save', 'rb') as f:
+                self.state = pickle.load(f)  # nosec B301
             return "[event]Game loaded successfully.[/event]"
         except OSError as e:
             return f"[failure]Failed to load game: {e}[/failure]"
