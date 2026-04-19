@@ -371,6 +371,7 @@ describe('useBridge', () => {
       expect(result).toHaveLength(1)
       expect(result[0].name).toBe('Save 1')
       expect(result[0].timestamp).toBe('2024-01-01T00:00:00.000Z')
+      expect('data' in result[0]).toBe(false)
     })
 
     it('loadNamedGame loads a named save', () => {
