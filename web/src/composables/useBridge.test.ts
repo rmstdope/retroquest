@@ -214,6 +214,61 @@ describe('useBridge', () => {
       expect(bridge.getActIntro()).toBe('Act 1 begins...')
     })
 
+    it('saveGame stores base64 save data in localStorage', () => {
+      const setItem = vi.fn()
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: { getItem: vi.fn(), setItem },
+        writable: true,
+      })
+      mock.pythonResults.set(
+        'controller.save_game()',
+        'Game saved successfully.',
+      )
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+      const result = bridge.saveGame()
+      expect(result).toBe('Game saved successfully.')
+      expect(setItem).toHaveBeenCalledWith('retroquest_save', 'c2F2ZWRhdGE=')
+    })
+
+    it('saveGame returns default message when controller returns empty string', () => {
+      const setItem = vi.fn()
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: { getItem: vi.fn(), setItem },
+        writable: true,
+      })
+      mock.pythonResults.set('controller.save_game()', '')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+      const result = bridge.saveGame()
+      expect(result).toBe('Game saved.')
+    })
+
+    it('saveGame does not write to localStorage when no save data', () => {
+      const setItem = vi.fn()
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: { getItem: vi.fn(), setItem },
+        writable: true,
+      })
+      mock.pythonResults.set('controller.save_game()', 'Saved.')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", '')
+      bridge.saveGame()
+      expect(setItem).not.toHaveBeenCalled()
+    })
+
+    it('loadGame restores game state when save exists', () => {
+      const getItem = vi.fn().mockReturnValue('c2F2ZWRhdGE=')
+      Object.defineProperty(globalThis, 'localStorage', {
+        value: { getItem, setItem: vi.fn() },
+        writable: true,
+      })
+      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
+      const result = bridge.loadGame()
+      expect(result).toBe('Game loaded.')
+      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
+        '_save_b64',
+        'c2F2ZWRhdGE=',
+      )
+    })
+
     it('isAcceptingInput returns boolean', () => {
       mock.pythonResults.set('game.accept_input', true)
       expect(bridge.isAcceptingInput()).toBe(true)

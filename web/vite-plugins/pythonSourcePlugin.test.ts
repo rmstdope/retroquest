@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { pythonSourcePlugin, collectPythonFiles, collectAudioFiles, getMimeType, collectStaticFiles } from './pythonSourcePlugin'
+import {
+  pythonSourcePlugin,
+  collectPythonFiles,
+  collectAudioFiles,
+  getMimeType,
+  collectStaticFiles,
+} from './pythonSourcePlugin'
 import { resolve } from 'node:path'
 
 const srcDir = resolve(__dirname, '..', '..', 'src')
@@ -80,7 +86,8 @@ describe('collectAudioFiles', () => {
 
   it('only includes audio file extensions (.mp3, .ogg, .wav)', () => {
     const files = collectAudioFiles(srcDir, srcDir)
-    const valid = (f: string) => f.endsWith('.mp3') || f.endsWith('.ogg') || f.endsWith('.wav')
+    const valid = (f: string) =>
+      f.endsWith('.mp3') || f.endsWith('.ogg') || f.endsWith('.wav')
     expect(files.every(valid)).toBe(true)
   })
 
