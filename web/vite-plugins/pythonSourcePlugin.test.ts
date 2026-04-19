@@ -20,7 +20,7 @@ describe('collectPythonFiles', () => {
   it('finds .py files in the source tree', () => {
     const files = collectPythonFiles(srcDir, srcDir)
     expect(files.length).toBeGreaterThan(0)
-    expect(files.every(f => f.endsWith('.py'))).toBe(true)
+    expect(files.every((f) => f.endsWith('.py'))).toBe(true)
   })
 
   it('returns paths sorted alphabetically', () => {
@@ -31,6 +31,6 @@ describe('collectPythonFiles', () => {
 
   it('returns paths relative to the base directory', () => {
     const files = collectPythonFiles(srcDir, srcDir)
-    expect(files.every(f => !f.startsWith('/'))).toBe(true)
+    expect(files.every((f) => !f.startsWith('/'))).toBe(true)
   })
 })
