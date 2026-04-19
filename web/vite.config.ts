@@ -10,6 +10,7 @@ export default defineConfig({
     vue(),
     pythonSourcePlugin({
       srcDir: resolve(__dirname, '..', 'src'),
+      iconsDir: resolve(__dirname, '..', 'icons'),
     }),
   ],
   resolve: {

@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { pythonSourcePlugin, collectPythonFiles, collectAudioFiles, getMimeType } from './pythonSourcePlugin'
+import { pythonSourcePlugin, collectPythonFiles, collectAudioFiles, getMimeType, collectStaticFiles } from './pythonSourcePlugin'
 import { resolve } from 'node:path'
 
 const srcDir = resolve(__dirname, '..', '..', 'src')
+const iconsDir = resolve(__dirname, '..', '..', 'icons')
 
 describe('pythonSourcePlugin', () => {
   it('returns a Vite plugin with the correct name', () => {
@@ -18,6 +19,33 @@ describe('pythonSourcePlugin', () => {
   it('has a buildStart hook to emit audio files for production builds', () => {
     const plugin = pythonSourcePlugin({ srcDir })
     expect(plugin.buildStart).toBeTypeOf('function')
+  })
+
+  it('serves icons directory at /icons/ prefix when iconsDir is provided', () => {
+    const plugin = pythonSourcePlugin({ srcDir, iconsDir })
+    expect(plugin.configureServer).toBeTypeOf('function')
+  })
+
+  it('emits icon files under icons/ during build when iconsDir is provided', () => {
+    const plugin = pythonSourcePlugin({ srcDir, iconsDir })
+    expect(plugin.buildStart).toBeTypeOf('function')
+  })
+})
+
+describe('collectStaticFiles', () => {
+  it('finds favicon.png in the icons directory', () => {
+    const files = collectStaticFiles(iconsDir, iconsDir)
+    expect(files.some((f) => f === 'favicon.png')).toBe(true)
+  })
+
+  it('returns paths relative to the base directory', () => {
+    const files = collectStaticFiles(iconsDir, iconsDir)
+    expect(files.every((f) => !f.startsWith('/'))).toBe(true)
+  })
+
+  it('returns paths sorted alphabetically', () => {
+    const files = collectStaticFiles(iconsDir, iconsDir)
+    expect(files).toEqual([...files].sort())
   })
 })
 
