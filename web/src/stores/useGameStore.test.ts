@@ -128,11 +128,47 @@ describe('useGameStore', () => {
       expect(store.loadingStatus).toBe('Loading Python...')
     })
 
-    it('renders intro text from advanceTurn', async () => {
+    it('calls advanceTurn twice to advance through logo and act intro', async () => {
+      await store.initGame()
+      expect(bridge.advanceTurn).toHaveBeenCalledTimes(2)
+    })
+
+    it('stores logo text (first advanceTurn) in introText', async () => {
+      bridge.advanceTurn
+        .mockReturnValueOnce('Logo text')
+        .mockReturnValueOnce('Act intro!')
+      await store.initGame()
+      expect(store.introText).toBe('<rendered>Logo text</rendered>')
+    })
+
+    it('renders intro text from first advanceTurn call', async () => {
       bridge.advanceTurn.mockReturnValue('Welcome!')
       await store.initGame()
       expect(store.introText).toBe('<rendered>Welcome!</rendered>')
       expect(renderMarkup).toHaveBeenCalledWith('Welcome!')
+    })
+
+    it('shows act intro (second advanceTurn) in modal', async () => {
+      bridge.advanceTurn
+        .mockReturnValueOnce('Logo text')
+        .mockReturnValueOnce('Act intro!')
+      await store.initGame()
+      expect(store.showModal).toBe(true)
+      expect(store.modalTitle).toBe('📖 Act Intro')
+      expect(store.modalBody).toBe('<rendered>Act intro!</rendered>')
+    })
+
+    it('blocks acceptInput until intro modal is dismissed', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      await store.initGame()
+      expect(store.acceptInput).toBe(false)
+    })
+
+    it('restores acceptInput after intro modal is dismissed', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      await store.initGame()
+      store.dismissModal()
+      expect(store.acceptInput).toBe(true)
     })
 
     it('refreshes panels after init', async () => {
@@ -142,7 +178,7 @@ describe('useGameStore', () => {
       expect(store.inventory).toEqual([{ name: 'Sword', description: 'Sharp' }])
     })
 
-    it('syncs acceptInput from bridge', async () => {
+    it('acceptInput is false during init regardless of bridge state', async () => {
       bridge.isAcceptingInput.mockReturnValue(false)
       await store.initGame()
       expect(store.acceptInput).toBe(false)
@@ -161,6 +197,7 @@ describe('useGameStore', () => {
   describe('submitCommand', () => {
     beforeEach(async () => {
       await store.initGame()
+      store.dismissModal() // unlock input after intro modal
     })
 
     it('calls bridge.handleCommand with trimmed input', () => {
@@ -321,6 +358,7 @@ describe('useGameStore', () => {
   describe('pollQuestEvents', () => {
     beforeEach(async () => {
       await store.initGame()
+      store.dismissModal() // dismiss intro modal so quest modal tests start clean
     })
 
     it('shows modal for activated quest', () => {
@@ -388,6 +426,34 @@ describe('useGameStore', () => {
       store.pollQuestEvents()
       store.dismissModal()
       expect(store.showModal).toBe(false)
+    })
+
+    it('dismissModal restores acceptInput from bridge when last modal dismissed', () => {
+      bridge.activateQuest
+        .mockReturnValueOnce('Quest A')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      bridge.isAcceptingInput.mockReturnValue(true)
+      store.pollQuestEvents()
+      store.dismissModal()
+      expect(store.acceptInput).toBe(true)
+    })
+
+    it('dismissModal does not restore acceptInput while more modals remain', () => {
+      bridge.activateQuest
+        .mockReturnValueOnce('Quest A')
+        .mockReturnValueOnce('Quest B')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      bridge.isAcceptingInput.mockReturnValue(true)
+      // Start with acceptInput false to detect an incorrect restore
+      store.acceptInput = false
+      store.pollQuestEvents()
+      store.dismissModal() // Quest B still in queue
+      expect(store.showModal).toBe(true)
+      expect(store.acceptInput).toBe(false)
     })
 
     it('does nothing when no events', () => {

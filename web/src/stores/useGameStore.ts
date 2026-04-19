@@ -95,10 +95,24 @@ export const useGameStore = defineStore('game', () => {
         loadingStatus.value = status
       })
 
-      const introRaw = b.advanceTurn()
-      introText.value = renderMarkup(introRaw)
-      acceptInput.value = b.isAcceptingInput()
+      // Advance SHOW_LOGO → ACT_INTRO: get the logo/splash text for the output area
+      const logoRaw = b.advanceTurn()
+      introText.value = renderMarkup(logoRaw)
+
+      // Advance ACT_INTRO → ACT_RUNNING: get the act intro text
+      const actIntroRaw = b.advanceTurn()
       refreshPanels()
+
+      // Block input until the player dismisses the act intro modal
+      acceptInput.value = false
+      modalQueue.value.push({
+        title: '📖 Act Intro',
+        body: renderMarkup(actIntroRaw),
+      })
+      if (!showModal.value) {
+        showNextModal()
+      }
+
       loading.value = false
     } catch (err) {
       loadingStatus.value = `Error: ${(err as Error).message}`
@@ -205,6 +219,11 @@ export const useGameStore = defineStore('game', () => {
 
   function dismissModal(): void {
     showNextModal()
+    // When the last modal is dismissed, restore input acceptance from the bridge
+    if (!showModal.value) {
+      const b = requireBridge()
+      acceptInput.value = b.isAcceptingInput()
+    }
   }
 
   function toggleSection(section: string): void {
