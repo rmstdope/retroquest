@@ -39,10 +39,10 @@ onUnmounted(() => {
       <div class="text-[1.1rem] font-bold text-quest mb-3 shrink-0">
         {{ title }}
       </div>
-      <div class="relative flex-1 min-h-0 overflow-hidden">
+      <div class="relative flex-1 min-h-0">
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div
-          class="overflow-y-auto h-full leading-relaxed mb-4 pr-1"
+          class="overflow-y-auto h-full leading-relaxed pr-1 touch-pan-y"
           v-html="body"
         ></div>
         <div
