@@ -27,25 +27,25 @@ defineEmits<{
     <div class="flex items-center gap-2">
       <div class="flex gap-2">
         <button
-          class="bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          class="max-md:hidden bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
           @click="$emit('quickSave')"
         >
           ⚡ Quicksave
         </button>
         <button
-          class="bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          class="max-md:hidden bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
           @click="$emit('quickLoad')"
         >
           ⚡ Quickload
         </button>
         <button
-          class="bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          class="max-md:hidden bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
           @click="$emit('save')"
         >
           💾 Save
         </button>
         <button
-          class="bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          class="max-md:hidden bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
           @click="$emit('load')"
         >
           📂 Load
@@ -67,7 +67,7 @@ defineEmits<{
           {{ soundMuted ? '🔕' : '🔔' }}
         </button>
         <button
-          class="bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          class="max-md:hidden bg-chip-bg text-text-primary border border-border rounded-md px-3.5 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
           @click="$emit('help')"
         >
           ❓ Help

@@ -20,11 +20,27 @@ defineProps<{
   spells: NamedItem[]
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   close: []
   inventoryClick: [event: MouseEvent, name: string]
   spellClick: [event: MouseEvent, name: string]
+  quickSave: []
+  quickLoad: []
+  save: []
+  load: []
+  help: []
 }>()
+
+function emitAndClose(
+  action: 'quickSave' | 'quickLoad' | 'save' | 'load' | 'help',
+) {
+  if (action === 'quickSave') emit('quickSave')
+  else if (action === 'quickLoad') emit('quickLoad')
+  else if (action === 'save') emit('save')
+  else if (action === 'load') emit('load')
+  else emit('help')
+  emit('close')
+}
 </script>
 
 <template>
@@ -47,6 +63,40 @@ defineEmits<{
           @click="$emit('close')"
         >
           ✕
+        </button>
+      </div>
+
+      <!-- Action chips -->
+      <div class="flex flex-wrap gap-2 pb-3 border-b border-border mb-3">
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="emitAndClose('quickSave')"
+        >
+          ⚡ Quicksave
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="emitAndClose('quickLoad')"
+        >
+          ⚡ Quickload
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="emitAndClose('save')"
+        >
+          💾 Save
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="emitAndClose('load')"
+        >
+          📂 Load
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="emitAndClose('help')"
+        >
+          ❓ Help
         </button>
       </div>
 
