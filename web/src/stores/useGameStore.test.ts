@@ -651,6 +651,41 @@ describe('useGameStore', () => {
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })
 
+    it('plays sound per modal shown, not all at once when two quests activate', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.activateQuest
+        .mockReturnValueOnce('Quest A')
+        .mockReturnValueOnce('Quest B')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      store.pollQuestEvents()
+      // First modal shown immediately — one sound
+      expect(audio.playNewQuest).toHaveBeenCalledTimes(1)
+      store.dismissModal()
+      // Second modal shown on dismiss — second sound
+      expect(audio.playNewQuest).toHaveBeenCalledTimes(2)
+    })
+
+    it('plays correct sound for each modal when quest types are mixed', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.activateQuest
+        .mockReturnValueOnce('Quest A')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest
+        .mockReturnValueOnce('Quest done!')
+        .mockReturnValueOnce(null)
+      store.pollQuestEvents()
+      expect(audio.playNewQuest).toHaveBeenCalledTimes(1)
+      expect(audio.playQuestComplete).toHaveBeenCalledTimes(0)
+      store.dismissModal()
+      expect(audio.playQuestComplete).toHaveBeenCalledTimes(1)
+      expect(audio.playNewQuest).toHaveBeenCalledTimes(1)
+    })
+
     it('calls playNewQuest when a quest is updated', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)

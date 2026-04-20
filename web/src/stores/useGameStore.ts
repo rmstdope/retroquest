@@ -56,6 +56,7 @@ export interface QuestAudioPlayer {
 interface QuestEvent {
   title: string
   body: string
+  sound: 'newQuest' | 'questComplete' | null
 }
 
 export const useGameStore = defineStore('game', () => {
@@ -143,6 +144,7 @@ export const useGameStore = defineStore('game', () => {
       modalQueue.value.push({
         title: '📖 Act Intro',
         body: renderMarkup(actIntroRaw),
+        sound: null,
       })
       if (!showModal.value) {
         showNextModal()
@@ -253,8 +255,8 @@ export const useGameStore = defineStore('game', () => {
       events.push({
         title: '📜 New Quest!',
         body: renderMarkup(activated),
+        sound: 'newQuest',
       })
-      audioPlayer?.playNewQuest()
     }
 
     let updated: string | null
@@ -262,8 +264,8 @@ export const useGameStore = defineStore('game', () => {
       events.push({
         title: '📜 Quest Updated',
         body: renderMarkup(updated),
+        sound: 'newQuest',
       })
-      audioPlayer?.playNewQuest()
     }
 
     let completed: string | null
@@ -271,8 +273,8 @@ export const useGameStore = defineStore('game', () => {
       events.push({
         title: '🏆 Quest Complete!',
         body: renderMarkup(completed),
+        sound: 'questComplete',
       })
-      audioPlayer?.playQuestComplete()
     }
 
     if (events.length > 0) {
@@ -301,6 +303,8 @@ export const useGameStore = defineStore('game', () => {
     modalTitle.value = event.title
     modalBody.value = event.body
     showModal.value = true
+    if (event.sound === 'newQuest') audioPlayer?.playNewQuest()
+    else if (event.sound === 'questComplete') audioPlayer?.playQuestComplete()
   }
 
   function dismissModal(): void {
