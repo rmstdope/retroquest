@@ -39,16 +39,11 @@ onUnmounted(() => {
       <div class="text-[1.1rem] font-bold text-quest mb-3 shrink-0">
         {{ title }}
       </div>
-      <div class="relative flex-1 min-h-0">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <div
-          class="overflow-y-auto h-full leading-relaxed pr-1 touch-pan-y"
-          v-html="body"
-        ></div>
-        <div
-          class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-bg-card to-transparent pointer-events-none"
-        ></div>
-      </div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div
+        class="flex-1 min-h-0 overflow-y-auto leading-relaxed pr-1 touch-pan-y overscroll-contain"
+        v-html="body"
+      ></div>
       <div class="shrink-0 flex justify-end pt-2">
         <button
           class="px-6 py-2 rounded-md bg-accent text-white border-none cursor-pointer text-[0.9rem] hover:opacity-85"
