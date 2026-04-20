@@ -70,12 +70,26 @@ const entityMenu = useEntityMenu((cmd: string) => {
 function updateMobile() {
   entityMenu.isMobile.value = window.innerWidth <= 768
 }
+
+// One-shot handler: start music on the very first user gesture (keydown or click).
+// Browsers block autoplay until a user gesture occurs; this ensures music starts
+// as soon as the user interacts with anything, even while the intro popup is still visible.
+function unlockAudio() {
+  music.ensureMusicStarted()
+  window.removeEventListener('keydown', unlockAudio)
+  window.removeEventListener('click', unlockAudio)
+}
+
 onMounted(() => {
   updateMobile()
   window.addEventListener('resize', updateMobile)
+  window.addEventListener('keydown', unlockAudio)
+  window.addEventListener('click', unlockAudio)
 })
 onUnmounted(() => {
   window.removeEventListener('resize', updateMobile)
+  window.removeEventListener('keydown', unlockAudio)
+  window.removeEventListener('click', unlockAudio)
 })
 
 // --- UI State ---
