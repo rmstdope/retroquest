@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 
 const props = defineProps<{
   visible: boolean
@@ -12,21 +12,14 @@ const emit = defineEmits<{
 }>()
 
 function onKeyDown(e: KeyboardEvent) {
-  if (e.key === 'Escape') {
+  if (e.key === 'Escape' && props.visible) {
     emit('dismiss')
   }
 }
 
-watch(
-  () => props.visible,
-  (visible) => {
-    if (visible) {
-      window.addEventListener('keydown', onKeyDown)
-    } else {
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  },
-)
+onMounted(() => {
+  window.addEventListener('keydown', onKeyDown)
+})
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeyDown)
