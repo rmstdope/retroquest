@@ -264,6 +264,84 @@ test.describe('SaveDialog – Escape key dismissal', () => {
 })
 
 /* ------------------------------------------------------------------ */
+/*  Quest collapse/expand tests (desktop)                             */
+/* ------------------------------------------------------------------ */
+
+test.describe('Quest collapse/expand – desktop sidebar', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(APP_URL)
+    await expect(page.locator('.loading-spinner')).toBeVisible({
+      timeout: 10_000,
+    })
+    await injectMockGameState(page)
+  })
+
+  test('quest description is hidden by default (collapsed)', async ({
+    page,
+  }) => {
+    await expect(page.getByText('The Missing Amulet').first()).toBeVisible()
+    await expect(page.getByText('Find it.')).toBeHidden()
+  })
+
+  test('clicking a quest expands its description', async ({ page }) => {
+    await page.getByText('The Missing Amulet').first().click()
+    await expect(page.getByText('Find it.').first()).toBeVisible()
+  })
+
+  test('clicking an expanded quest collapses it again', async ({ page }) => {
+    await page.getByText('The Missing Amulet').first().click()
+    await expect(page.getByText('Find it.').first()).toBeVisible()
+    await page.getByText('The Missing Amulet').first().click()
+    await expect(page.getByText('Find it.')).toBeHidden()
+  })
+})
+
+/* ------------------------------------------------------------------ */
+/*  Quest collapse/expand tests (mobile)                              */
+/* ------------------------------------------------------------------ */
+
+test.describe('Quest collapse/expand – mobile drawer', () => {
+  test.use({ viewport: { width: 375, height: 812 } })
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(APP_URL)
+    await expect(page.locator('.loading-spinner')).toBeVisible({
+      timeout: 10_000,
+    })
+    await injectMockGameState(page)
+    // Open the mobile drawer
+    await page.getByRole('button', { name: 'Open sidebar' }).click()
+    await expect(page.getByText('Menu').first()).toBeVisible()
+  })
+
+  test('quest description is hidden by default in mobile drawer', async ({
+    page,
+  }) => {
+    const drawer = page.getByTestId('mobile-drawer-panel')
+    await expect(drawer.getByText('The Missing Amulet').first()).toBeVisible()
+    await expect(drawer.getByText('Find it.')).toBeHidden()
+  })
+
+  test('clicking a quest in mobile drawer expands its description', async ({
+    page,
+  }) => {
+    const drawer = page.getByTestId('mobile-drawer-panel')
+    await drawer.getByText('The Missing Amulet').first().click()
+    await expect(drawer.getByText('Find it.').first()).toBeVisible()
+  })
+
+  test('clicking an expanded quest in mobile drawer collapses it', async ({
+    page,
+  }) => {
+    const drawer = page.getByTestId('mobile-drawer-panel')
+    await drawer.getByText('The Missing Amulet').first().click()
+    await expect(drawer.getByText('Find it.').first()).toBeVisible()
+    await drawer.getByText('The Missing Amulet').first().click()
+    await expect(drawer.getByText('Find it.')).toBeHidden()
+  })
+})
+
+/* ------------------------------------------------------------------ */
 /*  Mobile layout tests                                               */
 /* ------------------------------------------------------------------ */
 

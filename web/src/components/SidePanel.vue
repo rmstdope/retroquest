@@ -1,5 +1,18 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { NamedItem } from '@/types/bridge'
+
+const expandedQuests = ref<Set<string>>(new Set())
+
+function toggleQuest(name: string) {
+  if (expandedQuests.value.has(name)) {
+    expandedQuests.value.delete(name)
+  } else {
+    expandedQuests.value.add(name)
+  }
+  // Trigger reactivity for Sets
+  expandedQuests.value = new Set(expandedQuests.value)
+}
 
 defineProps<{
   activeQuests: NamedItem[]
@@ -48,10 +61,21 @@ defineEmits<{
           :key="quest.name"
           class="px-2.5 py-2 rounded-md mb-1 transition-colors hover:bg-chip-hover"
         >
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div class="font-semibold text-[0.9rem]" v-html="quest.name"></div>
+          <div
+            class="font-semibold text-[0.9rem] cursor-pointer select-none flex items-center justify-between"
+            @click="toggleQuest(quest.name)"
+          >
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <span v-html="quest.name"></span>
+            <span
+              class="text-xs transition-transform duration-200 ml-1 shrink-0"
+              :class="{ '-rotate-90': !expandedQuests.has(quest.name) }"
+              >▼</span
+            >
+          </div>
           <!-- eslint-disable vue/no-v-html -->
           <div
+            v-if="expandedQuests.has(quest.name)"
             class="text-[0.8rem] text-text-secondary mt-0.5"
             v-html="quest.description"
           ></div>
@@ -85,10 +109,21 @@ defineEmits<{
           :key="quest.name"
           class="px-2.5 py-2 rounded-md mb-1 transition-colors hover:bg-chip-hover"
         >
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div class="font-semibold text-[0.9rem]" v-html="quest.name"></div>
+          <div
+            class="font-semibold text-[0.9rem] cursor-pointer select-none flex items-center justify-between"
+            @click="toggleQuest(quest.name)"
+          >
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <span v-html="quest.name"></span>
+            <span
+              class="text-xs transition-transform duration-200 ml-1 shrink-0"
+              :class="{ '-rotate-90': !expandedQuests.has(quest.name) }"
+              >▼</span
+            >
+          </div>
           <!-- eslint-disable vue/no-v-html -->
           <div
+            v-if="expandedQuests.has(quest.name)"
             class="text-[0.8rem] text-text-secondary mt-0.5"
             v-html="quest.description"
           ></div>
