@@ -50,9 +50,12 @@ defineEmits<{
         >
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div class="font-semibold text-[0.9rem]" v-html="quest.name"></div>
-          <div class="text-[0.8rem] text-text-secondary mt-0.5">
-            {{ quest.description }}
-          </div>
+          <!-- eslint-disable vue/no-v-html -->
+          <div
+            class="text-[0.8rem] text-text-secondary mt-0.5"
+            v-html="quest.description"
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
         </div>
       </div>
     </div>
