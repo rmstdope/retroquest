@@ -245,12 +245,12 @@ test.describe('SaveDialog – Escape key dismissal', () => {
     await expect(page.getByText('💾 Save Game', { exact: true })).toBeHidden()
   })
 
-  test('pressing Escape with focus in the name input closes the Save dialog', async ({
+  test('pressing Escape with focus on a slot button closes the Save dialog', async ({
     page,
   }) => {
     await page.getByRole('button', { name: '💾 Save' }).click()
     await expect(page.getByText('💾 Save Game', { exact: true })).toBeVisible()
-    await page.locator('#save-name-input').focus()
+    await page.getByRole('button', { name: /Slot 1/ }).focus()
     await page.keyboard.press('Escape')
     await expect(page.getByText('💾 Save Game', { exact: true })).toBeHidden()
   })

@@ -1,6 +1,7 @@
 """Tests for the Game class and game mechanics."""
 # pylint: disable=too-many-lines
 
+import os
 from unittest.mock import MagicMock
 import pytest
 from engine import GameState
@@ -1638,7 +1639,8 @@ def test_save_normalizes_name_to_lowercase(game, tmp_path, monkeypatch):
     result = game.save("MySlot")
     assert "successfully" in result.lower()
     assert (tmp_path / "myslot.save").exists()
-    assert not (tmp_path / "MySlot.save").exists()
+    # Use os.listdir to check actual stored name (case-sensitive even on macOS HFS+)
+    assert "MySlot.save" not in os.listdir(tmp_path)
 
 
 def test_load_normalizes_name_to_lowercase(game, tmp_path, monkeypatch):

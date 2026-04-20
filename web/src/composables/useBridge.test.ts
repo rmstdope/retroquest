@@ -635,5 +635,4 @@ describe('useBridge', () => {
       expect(result).toBe('[failure]Invalid save slot.[/failure]')
     })
   })
-
 })
