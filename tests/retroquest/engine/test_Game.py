@@ -1647,3 +1647,8 @@ def test_load_normalizes_name_to_lowercase(game, tmp_path, monkeypatch):
     game.save("myslot")
     result = game.load("MySlot")
     assert "successfully" in result.lower()
+
+
+def test_get_act_name_returns_act_1_initially(game):
+    """get_act_name() returns 'Act 1' when the game starts on act index 0."""
+    assert game.get_act_name() == "Act 1"

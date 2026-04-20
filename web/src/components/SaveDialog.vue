@@ -1,31 +1,16 @@
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from 'vue'
-import type { NamedSave } from '@/types/bridge'
+import { onMounted, onUnmounted } from 'vue'
+import type { SaveSlot } from '@/types/bridge'
 
-const props = defineProps<{
+defineProps<{
   visible: boolean
-  existingSaves: NamedSave[]
-  defaultName: string
+  slots: SaveSlot[]
 }>()
 
 const emit = defineEmits<{
-  confirm: [name: string]
+  confirm: [slot: number]
   cancel: []
 }>()
-
-const saveName = ref('')
-
-watch(
-  () => props.visible,
-  (visible) => {
-    if (visible) {
-      saveName.value = props.defaultName
-      window.addEventListener('keydown', onKeyDown)
-    } else {
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  },
-)
 
 function onKeyDown(e: KeyboardEvent) {
   if (e.key === 'Escape') {
@@ -33,18 +18,18 @@ function onKeyDown(e: KeyboardEvent) {
   }
 }
 
+onMounted(() => {
+  window.addEventListener('keydown', onKeyDown)
+})
+
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeyDown)
 })
 
-function onSlotClick(save: NamedSave) {
-  saveName.value = save.name
-}
-
-function onConfirm() {
-  const trimmed = saveName.value.trim()
-  if (!trimmed) return
-  emit('confirm', trimmed)
+function formatSlotLabel(slot: SaveSlot): string {
+  if (!slot.act) return 'Empty'
+  const ts = slot.timestamp ? new Date(slot.timestamp).toLocaleString() : ''
+  return `${slot.act}, ${slot.room}${ts ? ' – ' + ts : ''}`
 }
 </script>
 
@@ -55,57 +40,37 @@ function onConfirm() {
     @click.self="$emit('cancel')"
   >
     <div
-      class="bg-bg-card border border-border rounded-xl p-6 max-w-[480px] w-[90%] shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+      class="bg-bg-card border border-border rounded-xl p-6 max-w-[520px] w-[92%] shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
     >
       <div class="text-[1.1rem] font-bold text-quest mb-4">💾 Save Game</div>
 
-      <label
-        class="block text-sm text-text-secondary mb-1"
-        for="save-name-input"
-      >
-        Save name
-      </label>
-      <input
-        id="save-name-input"
-        v-model="saveName"
-        type="text"
-        class="w-full bg-bg-secondary border border-border rounded-md px-3 py-2 text-text-primary text-sm mb-4 focus:outline-none focus:border-accent"
-        placeholder="Enter save name…"
-        @keydown.enter="onConfirm"
-      />
+      <div class="text-sm text-text-secondary mb-3">Select a slot to save:</div>
 
-      <div v-if="existingSaves.length > 0" class="mb-4">
-        <div class="text-sm text-text-secondary mb-2">
-          Existing saves (click to overwrite):
-        </div>
-        <div class="max-h-40 overflow-y-auto border border-border rounded-md">
-          <div
-            v-for="save in existingSaves"
-            :key="save.name"
-            class="px-3 py-2 cursor-pointer text-sm flex justify-between items-center transition-colors hover:bg-chip-hover"
-            @click="onSlotClick(save)"
+      <div class="grid grid-cols-2 gap-2 mb-4">
+        <button
+          v-for="slot in slots"
+          :key="slot.slot"
+          class="flex flex-col items-start px-3 py-2 rounded-md border text-sm transition-colors cursor-pointer"
+          :class="
+            slot.act
+              ? 'border-accent bg-chip-bg hover:bg-chip-hover text-text-primary'
+              : 'border-border bg-bg-secondary hover:bg-chip-hover text-text-secondary'
+          "
+          @click="emit('confirm', slot.slot)"
+        >
+          <span class="font-semibold text-xs text-text-secondary mb-0.5"
+            >Slot {{ slot.slot }}</span
           >
-            <span class="font-medium text-text-primary">{{ save.name }}</span>
-            <span class="text-text-secondary text-xs ml-2">
-              {{ new Date(save.timestamp).toLocaleString() }}
-            </span>
-          </div>
-        </div>
+          <span class="truncate w-full">{{ formatSlotLabel(slot) }}</span>
+        </button>
       </div>
 
-      <div class="flex justify-end gap-2">
+      <div class="flex justify-end">
         <button
           class="px-5 py-2 rounded-md bg-chip-bg text-text-primary border border-border cursor-pointer text-sm hover:bg-chip-hover"
           @click="$emit('cancel')"
         >
           Cancel
-        </button>
-        <button
-          class="px-5 py-2 rounded-md bg-accent text-white border-none cursor-pointer text-sm hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
-          :disabled="!saveName.trim()"
-          @click="onConfirm"
-        >
-          Save
         </button>
       </div>
     </div>
