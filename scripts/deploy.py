@@ -15,7 +15,6 @@ import paramiko
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DIST_DIR = REPO_ROOT / "web" / "dist"
 HTACCESS_SRC = REPO_ROOT / "web" / ".htaccess"
-REMOTE_BASE = "webroots/www/retroquest"
 PRESERVE_DIRS: set[str] = set()
 
 
@@ -151,9 +150,9 @@ def upload_dir(
 
 
 def deploy(
-    username: str, hostname: str, password: str, dry_run: bool = False
+    username: str, hostname: str, password: str, remote_base: str, dry_run: bool = False
 ) -> None:
-    """Connect via SSH and deploy dist/ to REMOTE_BASE on the server."""
+    """Connect via SSH and deploy dist/ to remote_base on the server."""
     print(f"Connecting to {username}@{hostname}...")
     ssh = paramiko.SSHClient()
     ssh.load_system_host_keys()
@@ -162,12 +161,12 @@ def deploy(
     try:
         sftp = ssh.open_sftp()
         try:
-            clean_remote(sftp, REMOTE_BASE, dry_run=dry_run)
+            clean_remote(sftp, remote_base, dry_run=dry_run)
             if not dry_run:
-                print(f"Uploading dist/ -> {REMOTE_BASE}/")
-                upload_dir(sftp, DIST_DIR, REMOTE_BASE)
+                print(f"Uploading dist/ -> {remote_base}/")
+                upload_dir(sftp, DIST_DIR, remote_base)
             else:
-                print(f"[dry-run] Would upload dist/ -> {REMOTE_BASE}/")
+                print(f"[dry-run] Would upload dist/ -> {remote_base}/")
         finally:
             sftp.close()
     finally:
@@ -181,6 +180,7 @@ def main() -> None:
     )
     parser.add_argument("username", help="SSH username for the remote host")
     parser.add_argument("hostname", help="Hostname or IP of the remote server")
+    parser.add_argument("remote_base", help="Remote directory path to deploy into")
     parser.add_argument(
         "tag",
         nargs="?",
@@ -201,7 +201,7 @@ def main() -> None:
 
     try:
         build(args.tag)
-        deploy(args.username, args.hostname, password, dry_run=args.dry_run)
+        deploy(args.username, args.hostname, password, args.remote_base, dry_run=args.dry_run)
         print("Deployment successful!")
     except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
