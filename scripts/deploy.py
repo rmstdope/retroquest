@@ -97,9 +97,10 @@ def build(tag: str | None = None) -> None:
         print(f"Building current branch: {git_current_ref()}")
     print("Building web app...")
     run(["npm", "run", "build"], cwd=REPO_ROOT / "web")
-    if HTACCESS_SRC.exists():
-        print("Copying .htaccess into dist/")
-        shutil.copy2(HTACCESS_SRC, DIST_DIR / ".htaccess")
+    if not HTACCESS_SRC.exists():
+        raise RuntimeError(f".htaccess not found at {HTACCESS_SRC}")
+    print("Copying .htaccess into dist/")
+    shutil.copy2(HTACCESS_SRC, DIST_DIR / ".htaccess")
 
 
 def rmtree_sftp(sftp: paramiko.SFTPClient, remote_path: str) -> None:
