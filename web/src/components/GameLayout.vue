@@ -256,6 +256,11 @@ function closeMenus() {
       @close="showDrawer = false"
       @inventory-click="onInventoryClick"
       @spell-click="onSpellClick"
+      @quick-save="store.saveGame()"
+      @quick-load="store.loadGame()"
+      @save="onOpenSaveDialog"
+      @load="onOpenLoadDialog"
+      @help="onHelp"
     />
 
     <QuestModal

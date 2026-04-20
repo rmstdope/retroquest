@@ -375,3 +375,59 @@ test.describe('Mobile viewport', () => {
     await expect(page.getByRole('button', { name: 'Close menu' })).toBeHidden()
   })
 })
+
+/* ------------------------------------------------------------------ */
+/*  Mobile toolbar overflow fix                                        */
+/* ------------------------------------------------------------------ */
+
+test.describe('Mobile toolbar overflow fix', () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(APP_URL)
+    await expect(page.locator('.loading-spinner')).toBeVisible({
+      timeout: 10_000,
+    })
+    await injectMockGameState(page)
+  })
+
+  test('Quicksave, Quickload, Save, Load, Help are hidden in toolbar on mobile', async ({
+    page,
+  }) => {
+    await expect(
+      page.getByRole('button', { name: /Quicksave/i }).first(),
+    ).toBeHidden()
+    await expect(
+      page.getByRole('button', { name: /Quickload/i }).first(),
+    ).toBeHidden()
+    await expect(
+      page.getByRole('button', { name: /^💾 Save$/i }),
+    ).toBeHidden()
+    await expect(
+      page.getByRole('button', { name: /^📂 Load$/i }),
+    ).toBeHidden()
+    await expect(
+      page.getByRole('button', { name: /^❓ Help$/i }),
+    ).toBeHidden()
+  })
+
+  test('drawer shows Quicksave, Quickload, Save, Load, Help action chips', async ({
+    page,
+  }) => {
+    await page.getByRole('button', { name: 'Open sidebar' }).click()
+    const drawer = page.getByTestId('mobile-drawer-panel')
+    await expect(drawer.getByRole('button', { name: /Quicksave/i })).toBeVisible()
+    await expect(drawer.getByRole('button', { name: /Quickload/i })).toBeVisible()
+    await expect(drawer.getByRole('button', { name: /Save/i }).first()).toBeVisible()
+    await expect(drawer.getByRole('button', { name: /Load/i }).first()).toBeVisible()
+    await expect(drawer.getByRole('button', { name: /Help/i }).first()).toBeVisible()
+  })
+
+  test('tapping a drawer action chip closes the drawer', async ({ page }) => {
+    await page.getByRole('button', { name: 'Open sidebar' }).click()
+    const drawer = page.getByTestId('mobile-drawer-panel')
+    await expect(drawer).toBeVisible()
+    await drawer.getByRole('button', { name: /Quicksave/i }).click()
+    await expect(drawer).toBeHidden()
+  })
+})

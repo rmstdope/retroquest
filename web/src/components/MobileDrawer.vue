@@ -24,6 +24,11 @@ defineEmits<{
   close: []
   inventoryClick: [event: MouseEvent, name: string]
   spellClick: [event: MouseEvent, name: string]
+  quickSave: []
+  quickLoad: []
+  save: []
+  load: []
+  help: []
 }>()
 </script>
 
@@ -47,6 +52,55 @@ defineEmits<{
           @click="$emit('close')"
         >
           ✕
+        </button>
+      </div>
+
+      <!-- Action chips -->
+      <div class="flex flex-wrap gap-2 pb-3 border-b border-border mb-3">
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="
+            $emit('quickSave')
+            $emit('close')
+          "
+        >
+          ⚡ Quicksave
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="
+            $emit('quickLoad')
+            $emit('close')
+          "
+        >
+          ⚡ Quickload
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="
+            $emit('save')
+            $emit('close')
+          "
+        >
+          💾 Save
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="
+            $emit('load')
+            $emit('close')
+          "
+        >
+          📂 Load
+        </button>
+        <button
+          class="bg-chip-bg text-text-primary border border-border rounded-md px-3 py-1.5 cursor-pointer text-sm transition-colors hover:bg-chip-hover"
+          @click="
+            $emit('help')
+            $emit('close')
+          "
+        >
+          ❓ Help
         </button>
       </div>
 
