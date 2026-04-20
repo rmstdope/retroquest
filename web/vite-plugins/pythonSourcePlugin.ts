@@ -172,6 +172,24 @@ export function pythonSourcePlugin(options: PythonSourcePluginOptions): Plugin {
     },
     buildStart() {
       if (!isBuild) return
+
+      const pythonFiles = collectPythonFiles(srcDir, srcDir)
+      for (const filePath of pythonFiles) {
+        const content = readFileSync(resolve(srcDir, filePath))
+        this.emitFile({
+          type: 'asset',
+          fileName: `python-src/${filePath}`,
+          source: content,
+        })
+      }
+
+      const manifest = JSON.stringify(pythonFiles)
+      this.emitFile({
+        type: 'asset',
+        fileName: 'python-src/manifest.json',
+        source: manifest,
+      })
+
       const audioFiles = collectAudioFiles(srcDir, srcDir)
       for (const filePath of audioFiles) {
         const content = readFileSync(resolve(srcDir, filePath))
