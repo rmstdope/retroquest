@@ -132,6 +132,11 @@ function onSubmitCommand(cmd: string) {
   }
 }
 
+function onDismissModal() {
+  music.ensureMusicStarted()
+  store.dismissModal()
+}
+
 function onAdvanceTurn() {
   store.advanceTurn()
 }
@@ -243,7 +248,7 @@ function closeMenus() {
       :visible="showModal"
       :title="modalTitle"
       :body="modalBody"
-      @dismiss="store.dismissModal()"
+      @dismiss="onDismissModal()"
     />
 
     <SaveDialog

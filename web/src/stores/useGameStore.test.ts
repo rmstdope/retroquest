@@ -220,6 +220,21 @@ describe('useGameStore', () => {
       expect(store.modalTitle).toBe('📜 New Quest!')
     })
 
+    it('plays sound for quest modal shown after act intro is dismissed', async () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.isAcceptingInput.mockReturnValue(true)
+      bridge.activateQuest
+        .mockReturnValueOnce('Main quest started!')
+        .mockReturnValueOnce(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      await store.initGame()
+      store.dismissModal()
+      expect(store.showModal).toBe(true)
+      expect(audio.playNewQuest).toHaveBeenCalledOnce()
+    })
+
     it('refreshes panels after init', async () => {
       await store.initGame()
       expect(store.roomName).toBe('Village Square')
