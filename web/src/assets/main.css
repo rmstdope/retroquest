@@ -48,6 +48,12 @@
     background: var(--color-bg-primary);
     color: var(--color-text-primary);
   }
+
+  @media (max-width: 767px) {
+    html {
+      font-size: 15px;
+    }
+  }
 }
 
 /* ---------- Theme Tag Styles ---------- */

@@ -71,13 +71,14 @@ function updateMobile() {
   entityMenu.isMobile.value = window.innerWidth <= 768
 }
 
-// One-shot handler: start music on the very first user gesture (keydown or click).
+// One-shot handler: start music on the very first user gesture (keydown, click, or touch).
 // Browsers block autoplay until a user gesture occurs; this ensures music starts
 // as soon as the user interacts with anything, even while the intro popup is still visible.
 function unlockAudio() {
   music.ensureMusicStarted()
   window.removeEventListener('keydown', unlockAudio)
   window.removeEventListener('click', unlockAudio)
+  window.removeEventListener('touchstart', unlockAudio)
 }
 
 onMounted(() => {
@@ -85,11 +86,13 @@ onMounted(() => {
   window.addEventListener('resize', updateMobile)
   window.addEventListener('keydown', unlockAudio)
   window.addEventListener('click', unlockAudio)
+  window.addEventListener('touchstart', unlockAudio, { passive: true })
 })
 onUnmounted(() => {
   window.removeEventListener('resize', updateMobile)
   window.removeEventListener('keydown', unlockAudio)
   window.removeEventListener('click', unlockAudio)
+  window.removeEventListener('touchstart', unlockAudio)
 })
 
 // --- UI State ---

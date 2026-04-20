@@ -94,34 +94,34 @@ function closeSuggestions() {
       class="flex gap-1.5 px-3 py-2 border-t border-border bg-bg-secondary shrink-0 overflow-x-auto max-[375px]:px-2 max-[375px]:py-1.5"
     >
       <button
-        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-[375px]:min-h-11 max-[375px]:min-w-11 max-[375px]:px-3 max-[375px]:py-2"
+        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'look')"
       >
-        👀 Look
+        👀<span class="max-md:hidden"> Look</span>
       </button>
       <button
-        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-[375px]:min-h-11 max-[375px]:min-w-11 max-[375px]:px-3 max-[375px]:py-2"
+        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'search')"
       >
-        🔍 Search
+        🔍<span class="max-md:hidden"> Search</span>
       </button>
       <button
-        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-[375px]:min-h-11 max-[375px]:min-w-11 max-[375px]:px-3 max-[375px]:py-2"
+        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'inventory')"
       >
-        🎒 Inventory
+        🎒<span class="max-md:hidden"> Inventory</span>
       </button>
       <button
-        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-[375px]:min-h-11 max-[375px]:min-w-11 max-[375px]:px-3 max-[375px]:py-2"
+        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'spells')"
       >
-        ✨ Spells
+        ✨<span class="max-md:hidden"> Spells</span>
       </button>
       <button
-        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-[375px]:min-h-11 max-[375px]:min-w-11 max-[375px]:px-3 max-[375px]:py-2"
+        class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'help')"
       >
-        ❓ Help
+        ❓<span class="max-md:hidden"> Help</span>
       </button>
     </div>
 
