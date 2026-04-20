@@ -9,10 +9,19 @@ import type {
   RoomExits,
   CompletionTree,
   NamedSave,
+  SaveSlot,
 } from '@/types/bridge'
 
 type StoredNamedSave = {
   name: string
+  timestamp: string
+  data: string
+}
+
+type StoredSaveSlot = {
+  slot: number
+  act: string
+  room: string
   timestamp: string
   data: string
 }
@@ -48,6 +57,23 @@ function readStoredNamedSaves(): StoredNamedSave[] {
     })
   } catch {
     return []
+  }
+}
+
+/**
+ * Read persisted 8-slot save data from localStorage.
+ * Always returns an array of exactly 8 entries (null = empty slot).
+ */
+function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
+  try {
+    const raw = localStorage.getItem('retroquest_save_slots')
+    if (!raw) return Array(8).fill(null)
+    const parsed: unknown = JSON.parse(raw)
+    if (!Array.isArray(parsed) || parsed.length !== 8)
+      return Array(8).fill(null)
+    return parsed as (StoredSaveSlot | null)[]
+  } catch {
+    return Array(8).fill(null)
   }
 }
 
@@ -292,6 +318,78 @@ with open('retroquest.save', 'wb') as f:
     }))
   }
 
+  function getActName(): string {
+    return py('controller.get_act_name()') as string
+  }
+
+  function getSaveSlots(): SaveSlot[] {
+    const stored = readStoredSaveSlots()
+    return Array.from({ length: 8 }, (_, i) => {
+      const entry = stored[i]
+      const slot = i + 1
+      if (!entry) return { slot, act: null, room: null, timestamp: null }
+      return {
+        slot,
+        act: entry.act ?? null,
+        room: entry.room ?? null,
+        timestamp: entry.timestamp ?? null,
+      }
+    })
+  }
+
+  function saveToSlot(slot: number): string {
+    if (slot < 1 || slot > 8) return '[failure]Invalid save slot.[/failure]'
+    const result = py('controller.save_game() or ""')
+    try {
+      const saveData = py(`
+import base64
+_save_data = ''
+try:
+    with open('retroquest.save', 'rb') as f:
+        _save_data = base64.b64encode(f.read()).decode('ascii')
+except FileNotFoundError:
+    pass
+_save_data
+      `) as string
+      if (saveData) {
+        const actName = py('controller.get_act_name()') as string
+        const roomName = py('controller.get_room_name()') as string
+        const stored = readStoredSaveSlots()
+        stored[slot - 1] = {
+          slot,
+          act: actName,
+          room: roomName,
+          timestamp: new Date().toISOString(),
+          data: saveData,
+        }
+        localStorage.setItem('retroquest_save_slots', JSON.stringify(stored))
+      }
+    } catch {
+      // Silently handle localStorage failures
+    }
+    return (result as string) || 'Game saved.'
+  }
+
+  function loadFromSlot(slot: number): string {
+    try {
+      if (slot < 1 || slot > 8) return '[failure]No save file found.[/failure]'
+      const stored = readStoredSaveSlots()
+      const entry = stored[slot - 1]
+      if (!entry) return '[failure]No save file found.[/failure]'
+      if (!pyodide) throw new Error('Pyodide not initialized')
+      pyodide.globals.set('_save_b64', entry.data)
+      pyodide.runPython(`
+import base64
+with open('retroquest.save', 'wb') as f:
+    f.write(base64.b64decode(_save_b64))
+      `)
+      return py('controller.load_game()') as string
+    } catch (e) {
+      if (e instanceof Error && e.message === 'Pyodide not initialized') throw e
+      return '[failure]No save file found.[/failure]'
+    }
+  }
+
   function saveNamedGame(name: string): string {
     const result = py('controller.save_game() or ""')
     try {
@@ -432,6 +530,10 @@ _result_text
     saveNamedGame,
     loadNamedGame,
     listNamedSaves,
+    getActName,
+    getSaveSlots,
+    saveToSlot,
+    loadFromSlot,
     isAcceptingInput,
     getCommandCompletions,
     advanceTurn,

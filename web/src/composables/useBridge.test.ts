@@ -479,4 +479,160 @@ describe('useBridge', () => {
       expect(bridge.loadGame()).toBe('[failure]No save file found.[/failure]')
     })
   })
+
+  describe('save slots (8-slot system)', () => {
+    beforeEach(async () => {
+      localStorageMock.clear()
+      vi.clearAllMocks()
+      await bridge.init()
+    })
+
+    it('getActName returns act name from controller', () => {
+      mock.pythonResults.set('controller.get_act_name()', 'Act 1')
+      expect(bridge.getActName()).toBe('Act 1')
+    })
+
+    it('getSaveSlots returns exactly 8 slots when localStorage is empty', () => {
+      const slots = bridge.getSaveSlots()
+      expect(slots).toHaveLength(8)
+      expect(slots.every((s) => s.act === null)).toBe(true)
+      expect(slots.every((s) => s.room === null)).toBe(true)
+      expect(slots.every((s) => s.timestamp === null)).toBe(true)
+      expect(slots.map((s) => s.slot)).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
+    })
+
+    it('saveToSlot stores slot data with act, room and timestamp', () => {
+      mock.pythonResults.set('controller.save_game() or ""', 'Game saved.')
+      mock.pythonResults.set('controller.get_act_name()', 'Act 2')
+      mock.pythonResults.set('controller.get_room_name()', 'Forest Path')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+
+      bridge.saveToSlot(3)
+
+      const raw = localStorageMock.setItem.mock.calls.find(
+        (args: unknown[]) => args[0] === 'retroquest_save_slots',
+      )
+      expect(raw).toBeDefined()
+      const slots = JSON.parse(raw![1] as string) as Array<{
+        slot: number
+        act: string
+        room: string
+        timestamp: string
+        data: string
+      } | null>
+      const slot3 = slots[2]
+      expect(slot3).not.toBeNull()
+      expect(slot3!.slot).toBe(3)
+      expect(slot3!.act).toBe('Act 2')
+      expect(slot3!.room).toBe('Forest Path')
+      expect(typeof slot3!.timestamp).toBe('string')
+      expect(slot3!.data).toBe('c2F2ZWRhdGE=')
+    })
+
+    it('saveToSlot overwrites existing data in the same slot', () => {
+      const existing = Array.from({ length: 8 }, (_, i) =>
+        i === 1
+          ? {
+              slot: 2,
+              act: 'Act 1',
+              room: 'Old Room',
+              timestamp: '2024-01-01T00:00:00.000Z',
+              data: 'b2xk',
+            }
+          : null,
+      )
+      localStorageMock._setRaw(
+        'retroquest_save_slots',
+        JSON.stringify(existing),
+      )
+      mock.pythonResults.set('controller.save_game() or ""', 'Game saved.')
+      mock.pythonResults.set('controller.get_act_name()', 'Act 3')
+      mock.pythonResults.set('controller.get_room_name()', 'New Room')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3')
+
+      bridge.saveToSlot(2)
+
+      const raw = localStorageMock.setItem.mock.calls.find(
+        (args: unknown[]) => args[0] === 'retroquest_save_slots',
+      )
+      const slots = JSON.parse(raw![1] as string) as Array<{
+        slot: number
+        act: string
+        room: string
+        data: string
+      } | null>
+      expect(slots[1]!.act).toBe('Act 3')
+      expect(slots[1]!.room).toBe('New Room')
+      expect(slots[1]!.data).toBe('bmV3')
+    })
+
+    it('getSaveSlots returns occupied slot after saving', () => {
+      const stored = Array.from({ length: 8 }, (_, i) =>
+        i === 4
+          ? {
+              slot: 5,
+              act: 'Act 1',
+              room: 'Village Square',
+              timestamp: '2025-04-20T10:00:00.000Z',
+              data: 'abc',
+            }
+          : null,
+      )
+      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
+      const slots = bridge.getSaveSlots()
+      expect(slots).toHaveLength(8)
+      const slot5 = slots.find((s) => s.slot === 5)!
+      expect(slot5.act).toBe('Act 1')
+      expect(slot5.room).toBe('Village Square')
+      expect(slot5.timestamp).toBe('2025-04-20T10:00:00.000Z')
+      const emptySlots = slots.filter((s) => s.slot !== 5)
+      expect(emptySlots.every((s) => s.act === null)).toBe(true)
+    })
+
+    it('loadFromSlot restores game state from the slot', () => {
+      const stored = Array.from({ length: 8 }, (_, i) =>
+        i === 2
+          ? {
+              slot: 3,
+              act: 'Act 1',
+              room: 'Market',
+              timestamp: '2025-04-20T10:00:00.000Z',
+              data: 'c2F2ZWRhdGE=',
+            }
+          : null,
+      )
+      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
+      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
+
+      const result = bridge.loadFromSlot(3)
+
+      expect(result).toBe('Game loaded.')
+      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
+        '_save_b64',
+        'c2F2ZWRhdGE=',
+      )
+    })
+
+    it('loadFromSlot returns failure when slot is empty', () => {
+      const stored = Array.from({ length: 8 }, () => null)
+      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
+      const result = bridge.loadFromSlot(1)
+      expect(result).toBe('[failure]No save file found.[/failure]')
+    })
+
+    it('loadFromSlot returns failure when no slots data exists', () => {
+      const result = bridge.loadFromSlot(1)
+      expect(result).toBe('[failure]No save file found.[/failure]')
+    })
+
+    it('saveToSlot returns failure when slot is out of range (0)', () => {
+      const result = bridge.saveToSlot(0)
+      expect(result).toBe('[failure]Invalid save slot.[/failure]')
+    })
+
+    it('saveToSlot returns failure when slot is out of range (9)', () => {
+      const result = bridge.saveToSlot(9)
+      expect(result).toBe('[failure]Invalid save slot.[/failure]')
+    })
+  })
 })

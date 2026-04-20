@@ -5,6 +5,7 @@ import type {
   RoomExits,
   CompletionTree,
   NamedSave,
+  SaveSlot,
 } from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
 
@@ -35,6 +36,10 @@ export interface GameBridge {
   saveNamedGame(name: string): string
   loadNamedGame(name: string): string
   listNamedSaves(): NamedSave[]
+  getActName(): string
+  getSaveSlots(): SaveSlot[]
+  saveToSlot(slot: number): string
+  loadFromSlot(slot: number): string
   isAcceptingInput(): boolean
   getCommandCompletions(): CompletionTree
   advanceTurn(): string
@@ -221,6 +226,24 @@ export const useGameStore = defineStore('game', () => {
     return b.listNamedSaves()
   }
 
+  function getSaveSlots(): SaveSlot[] {
+    const b = requireBridge()
+    return b.getSaveSlots()
+  }
+
+  function saveToSlot(slot: number): void {
+    const b = requireBridge()
+    const result = b.saveToSlot(slot)
+    lastOutput.value = renderMarkup(result)
+  }
+
+  function loadFromSlot(slot: number): void {
+    const b = requireBridge()
+    const result = b.loadFromSlot(slot)
+    lastOutput.value = renderMarkup(result)
+    refreshPanels()
+  }
+
   function pollQuestEvents(): void {
     const b = requireBridge()
     const events: QuestEvent[] = []
@@ -401,6 +424,9 @@ export const useGameStore = defineStore('game', () => {
     saveNamedGame,
     loadNamedGame,
     listNamedSaves,
+    getSaveSlots,
+    saveToSlot,
+    loadFromSlot,
     pollQuestEvents,
     dismissModal,
     toggleSection,

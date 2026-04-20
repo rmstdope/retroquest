@@ -210,3 +210,12 @@ class TestGetCurrentMusic:
         )
         _, info = ctrl.get_current_music()
         assert info == "Market by Composer"
+
+
+class TestGetActName:
+    """Tests for GameController.get_act_name."""
+
+    def test_returns_act_1_initially(self) -> None:
+        """Return 'Act 1' when the game is on the first act (index 0)."""
+        ctrl = _make_controller()
+        assert ctrl.get_act_name() == "Act 1"

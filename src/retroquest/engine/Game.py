@@ -148,6 +148,10 @@ Welcome to
         """Get the introduction text for the current act."""
         return self.acts[self.current_act].get_act_intro()
 
+    def get_act_name(self) -> str:
+        """Return the human-readable name of the current act, e.g. 'Act 1'."""
+        return f"Act {self.current_act + 1}"
+
     def get_command_completions(self) -> dict[str, Any]:
         """
         Generate command completion suggestions based on current game state.

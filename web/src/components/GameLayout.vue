@@ -17,7 +17,7 @@ import MobileDrawer from './MobileDrawer.vue'
 import QuestModal from './QuestModal.vue'
 import SaveDialog from './SaveDialog.vue'
 import LoadDialog from './LoadDialog.vue'
-import type { NamedSave } from '@/types/bridge'
+import type { SaveSlot } from '@/types/bridge'
 
 const store = useGameStore()
 const {
@@ -82,29 +82,27 @@ onUnmounted(() => {
 const showDrawer = ref(false)
 const showSaveDialog = ref(false)
 const showLoadDialog = ref(false)
-const saveDialogSaves = ref<NamedSave[]>([])
-const saveDialogDefaultName = ref('')
-const loadDialogSaves = ref<NamedSave[]>([])
+const saveDialogSlots = ref<SaveSlot[]>([])
+const loadDialogSlots = ref<SaveSlot[]>([])
 
 function onOpenSaveDialog() {
-  saveDialogSaves.value = store.listNamedSaves()
-  saveDialogDefaultName.value = `${roomName.value} – ${new Date().toLocaleString()}`
+  saveDialogSlots.value = store.getSaveSlots()
   showSaveDialog.value = true
 }
 
-function onSaveDialogConfirm(name: string) {
+function onSaveDialogConfirm(slot: number) {
   showSaveDialog.value = false
-  store.saveNamedGame(name)
+  store.saveToSlot(slot)
 }
 
 function onOpenLoadDialog() {
-  loadDialogSaves.value = store.listNamedSaves()
+  loadDialogSlots.value = store.getSaveSlots()
   showLoadDialog.value = true
 }
 
-function onLoadDialogConfirm(name: string) {
+function onLoadDialogConfirm(slot: number) {
   showLoadDialog.value = false
-  store.loadNamedGame(name)
+  store.loadFromSlot(slot)
 }
 
 function onEntityClick(event: MouseEvent, name: string, type: string) {
@@ -250,15 +248,14 @@ function closeMenus() {
 
     <SaveDialog
       :visible="showSaveDialog"
-      :existing-saves="saveDialogSaves"
-      :default-name="saveDialogDefaultName"
+      :slots="saveDialogSlots"
       @confirm="onSaveDialogConfirm"
       @cancel="showSaveDialog = false"
     />
 
     <LoadDialog
       :visible="showLoadDialog"
-      :saves="loadDialogSaves"
+      :slots="loadDialogSlots"
       @confirm="onLoadDialogConfirm"
       @cancel="showLoadDialog = false"
     />

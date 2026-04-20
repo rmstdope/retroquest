@@ -140,6 +140,10 @@ class GameController:
         """Return the current room's display name."""
         return self.game.state.current_room.name
 
+    def get_act_name(self) -> str:
+        """Return the human-readable name of the current act, e.g. 'Act 1'."""
+        return self.game.get_act_name()
+
     def get_room_description(self) -> str:
         """Return the current room's narrative description text."""
         return self.game.state.current_room.description

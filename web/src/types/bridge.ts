@@ -6,6 +6,14 @@ export interface NamedSave {
   timestamp: string
 }
 
+/** One entry in the 8-slot save system. */
+export interface SaveSlot {
+  slot: number
+  act: string | null
+  room: string | null
+  timestamp: string | null
+}
+
 export interface NamedItem {
   name: string
   description: string

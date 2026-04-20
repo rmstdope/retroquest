@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore } from './useGameStore'
 import { renderMarkup } from '@/utils/theme'
-import type { CompletionTree, NamedSave } from '@/types/bridge'
+import type { CompletionTree, NamedSave, SaveSlot } from '@/types/bridge'
 
 vi.mock('@/utils/theme', () => ({
   renderMarkup: vi.fn((s: string) => `<rendered>${s}</rendered>`),
@@ -44,6 +44,17 @@ function createMockBridge() {
     saveNamedGame: vi.fn(() => 'Game saved.'),
     loadNamedGame: vi.fn(() => 'Game loaded.'),
     listNamedSaves: vi.fn((): NamedSave[] => []),
+    getActName: vi.fn(() => 'Act 1'),
+    getSaveSlots: vi.fn((): SaveSlot[] => [
+      ...Array.from({ length: 8 }, (_, i) => ({
+        slot: i + 1,
+        act: null,
+        room: null,
+        timestamp: null,
+      })),
+    ]),
+    saveToSlot: vi.fn(() => 'Game saved.'),
+    loadFromSlot: vi.fn(() => 'Game loaded.'),
     isAcceptingInput: vi.fn(() => true),
     advanceTurn: vi.fn(() => 'Turn advanced'),
     isGameRunning: vi.fn(() => true),
@@ -824,6 +835,53 @@ describe('useGameStore', () => {
       store.submitCommand('look')
       const result = store.tabComplete('ex')
       expect(result.candidates).toEqual(['examine'])
+    })
+  })
+
+  // --- getSaveSlots / saveToSlot / loadFromSlot ---
+
+  describe('getSaveSlots', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('returns 8 slots from bridge', () => {
+      const slots: SaveSlot[] = Array.from({ length: 8 }, (_, i) => ({
+        slot: i + 1,
+        act: null,
+        room: null,
+        timestamp: null,
+      }))
+      bridge.getSaveSlots.mockReturnValue(slots)
+      expect(store.getSaveSlots()).toHaveLength(8)
+    })
+  })
+
+  describe('saveToSlot', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('calls bridge.saveToSlot and renders output', () => {
+      bridge.saveToSlot.mockReturnValue('Game saved.')
+      store.saveToSlot(3)
+      expect(bridge.saveToSlot).toHaveBeenCalledWith(3)
+      expect(store.lastOutput).toBe('<rendered>Game saved.</rendered>')
+    })
+  })
+
+  describe('loadFromSlot', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('calls bridge.loadFromSlot, renders output, and refreshes panels', () => {
+      bridge.loadFromSlot.mockReturnValue('Game loaded.')
+      bridge.getRoomName.mockReturnValue('Dungeon')
+      store.loadFromSlot(2)
+      expect(bridge.loadFromSlot).toHaveBeenCalledWith(2)
+      expect(store.lastOutput).toBe('<rendered>Game loaded.</rendered>')
+      expect(store.roomName).toBe('Dungeon')
     })
   })
 })
