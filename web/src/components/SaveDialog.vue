@@ -26,10 +26,9 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKeyDown)
 })
 
-function formatSlotLabel(slot: SaveSlot): string {
-  if (!slot.act) return 'Empty'
-  const ts = slot.timestamp ? new Date(slot.timestamp).toLocaleString() : ''
-  return `${slot.act}, ${slot.room}${ts ? ' – ' + ts : ''}`
+function formatTimestamp(ts: string | null): string {
+  if (!ts) return ''
+  return new Date(ts).toLocaleString()
 }
 </script>
 
@@ -61,7 +60,15 @@ function formatSlotLabel(slot: SaveSlot): string {
           <span class="font-semibold text-xs text-text-secondary mb-0.5"
             >Slot {{ slot.slot }}</span
           >
-          <span class="truncate w-full">{{ formatSlotLabel(slot) }}</span>
+          <template v-if="slot.act">
+            <span class="text-xs font-medium truncate w-full">
+              {{ slot.act }}, {{ slot.room }}
+            </span>
+            <span class="text-[0.65rem] text-text-secondary mt-0.5">{{
+              formatTimestamp(slot.timestamp)
+            }}</span>
+          </template>
+          <span v-else class="text-xs italic">Empty</span>
         </button>
       </div>
 
