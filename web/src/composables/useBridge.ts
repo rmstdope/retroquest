@@ -338,6 +338,7 @@ with open('retroquest.save', 'wb') as f:
   }
 
   function saveToSlot(slot: number): string {
+    if (slot < 1 || slot > 8) return '[failure]Invalid save slot.[/failure]'
     const result = py('controller.save_game() or ""')
     try {
       const saveData = py(`
