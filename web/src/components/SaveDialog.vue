@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import type { NamedSave } from '@/types/bridge'
 
 const props = defineProps<{
@@ -20,9 +20,22 @@ watch(
   (visible) => {
     if (visible) {
       saveName.value = props.defaultName
+      window.addEventListener('keydown', onKeyDown)
+    } else {
+      window.removeEventListener('keydown', onKeyDown)
     }
   },
 )
+
+function onKeyDown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    emit('cancel')
+  }
+}
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown)
+})
 
 function onSlotClick(save: NamedSave) {
   saveName.value = save.name
@@ -59,7 +72,6 @@ function onConfirm() {
         class="w-full bg-bg-secondary border border-border rounded-md px-3 py-2 text-text-primary text-sm mb-4 focus:outline-none focus:border-accent"
         placeholder="Enter save name…"
         @keydown.enter="onConfirm"
-        @keydown.escape="$emit('cancel')"
       />
 
       <div v-if="existingSaves.length > 0" class="mb-4">

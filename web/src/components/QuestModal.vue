@@ -1,13 +1,36 @@
 <script setup lang="ts">
-defineProps<{
+import { watch, onUnmounted } from 'vue'
+
+const props = defineProps<{
   visible: boolean
   title: string
   body: string
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   dismiss: []
 }>()
+
+function onKeyDown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    emit('dismiss')
+  }
+}
+
+watch(
+  () => props.visible,
+  (visible) => {
+    if (visible) {
+      window.addEventListener('keydown', onKeyDown)
+    } else {
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  },
+)
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown)
+})
 </script>
 
 <template>

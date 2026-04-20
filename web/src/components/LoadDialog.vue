@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import type { NamedSave } from '@/types/bridge'
 
 const props = defineProps<{
@@ -19,9 +19,22 @@ watch(
   (visible) => {
     if (visible) {
       selectedName.value = null
+      window.addEventListener('keydown', onKeyDown)
+    } else {
+      window.removeEventListener('keydown', onKeyDown)
     }
   },
 )
+
+function onKeyDown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    emit('cancel')
+  }
+}
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown)
+})
 
 function onConfirm() {
   if (!selectedName.value) return
