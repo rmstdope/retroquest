@@ -1,0 +1,18 @@
+{
+  "name": "RetroQuest — The Awakening",
+  "short_name": "RetroQuest",
+  "description": "A classic text adventure game",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [
+    {
+      "src": "/icons/favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
