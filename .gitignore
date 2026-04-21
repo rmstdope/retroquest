@@ -166,3 +166,7 @@ src/run.py
 *.txt
 
 .tmp
+
+# Playwright test artefacts (generated at repo root when tests run from here)
+test-results/
+playwright-report/
