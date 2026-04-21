@@ -27,7 +27,6 @@ from retroquest.act1.quests.MagnetFishingExpedition import MagnetFishingExpediti
 from retroquest.act1.quests.OhDeerOhDeer import OhDeerOhDeerQuest
 from retroquest.act1.quests.PreparingForTheRoad import PreparingForTheRoadQuest
 from retroquest.act1.quests.FadedPhotograph import FadedPhotographQuest
-from retroquest.act1.quests.LostLetter import LostLetterQuest
 from retroquest.act1.quests.ShadowsOverWillowbrook import ShadowsOverWillowbrookQuest
 from ..utils.utils import (check_character_in_room, check_current_room, check_quests,
                             execute_commands, check_item_in_inventory, check_item_in_room,
@@ -65,7 +64,6 @@ QUESTS = [
     PreparingForTheRoadQuest(),
     FadedPhotographQuest(),
     ShadowsOverWillowbrookQuest(),
-    LostLetterQuest()
 ]
 
 def test_golden_path_act1_completion():
@@ -517,12 +515,6 @@ def test_cheat_act_1_completes_all_side_quests_and_leaves_main_active():
     quest-activation and quest-completion state between commands. Without
     that, check_completion returns False when the frontend later calls
     completeQuest() because the flower is no longer in inventory or rooms.
-
-    Note: FadedPhotograph and LostLetter are intentionally excluded —
-    FadedPhotograph requires 'search' in EliorsCottage which the cheat
-    sequence does not perform; LostLetter references flags that are not
-    set by any game action yet (incomplete implementation).
-    Both remain in non_activated_quests after the cheat.
     """
     act = Act1()
     act.music_file = ''
@@ -564,6 +556,7 @@ def test_cheat_act_1_completes_all_side_quests_and_leaves_main_active():
         "Magnet fishing expedition",
         "Oh deer, oh deer",
         "Preparing for the road",
+        "The Faded Photograph",
     ])
     assert completed_side == expected_side_quests, (
         f"All completable side quests should be completed after 'cheat act 1', "

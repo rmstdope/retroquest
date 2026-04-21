@@ -17,8 +17,6 @@ Flags include:
 These constants are intended for use throughout the game's codebase to ensure consistent
 reference to story flags and facilitate maintainable game logic.
 """
-FLAG_FOUND_LOST_LETTER = "found_lost_letter"
-FLAG_ASKED_GRANDMOTHER_ABOUT_LETTER = "asked_grandmother_about_letter"
 FLAG_INVESTIGATED_WITHERED_CROPS = "investigated_withered_crops"
 FLAG_WITNESSED_SHADOW_EVENT = "witnessed_shadow_event"
 FLAG_ACCEPTED_MIRA_APPRENTICESHIP = "accepted_mira_apprenticeship"
