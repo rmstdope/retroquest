@@ -46,9 +46,9 @@ class Nyx(Character):
                 "of prophetic vision, allowing you to glimpse the threads of fate. "
                 "Nyx then places two precious items in your hands.\n\n"
 
-                "[item_gained]You have learned the spell: Prophetic Vision[/item_gained]\n"
-                "[item_gained]You have received: Nyx's Token[/item_gained]\n"
-                "[item_gained]You have received: Forest Heart Crystal[/item_gained]\n\n"
+                "You have learned the spell: [spell_name]Prophetic Vision[/spell_name]\n"
+                "You have received: [item_name]Nyx's Token[/item_name]\n"
+                "You have received: [item_name]Forest Heart Crystal[/item_name]\n\n"
                 "\"Use these gifts wisely, young one. The prophetic vision will help you "
                 "prepare for the gathering storm that approaches. May the forest's blessing "
                 "guide you on your path.\""
