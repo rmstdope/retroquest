@@ -508,3 +508,34 @@ def test_golden_path_act1_completion():
     # Final check: Act I should be completed
     assert game.acts[game.current_act].is_completed(game.state), "Act I is not marked as completed."
 
+
+def test_cheat_act_1_completes_oh_deer_oh_deer_quest():
+    """cheat act 1 must fully complete the 'Oh deer, oh deer' side quest.
+
+    The cheat sequence gives the Rare Flower to Mira before any quest
+    processing normally occurs. The cheat engine must therefore drain
+    quest-activation and quest-completion state between commands. Without
+    that, check_completion returns False when the frontend later calls
+    completeQuest() because the flower is no longer in inventory or rooms.
+    """
+    act = Act1()
+    act.music_file = ''
+    game = Game([act])
+
+    game.command_parser.parse("cheat act 1")
+
+    # Drain quest events, simulating what the web frontend's pollQuestEvents()
+    # does after a command returns.
+    while game.state.next_activated_quest():
+        pass
+    while game.state.next_updated_quest():
+        pass
+    while game.state.next_completed_quest():
+        pass
+
+    completed_names = [q.name for q in game.state.completed_quests]
+    assert "Oh deer, oh deer" in completed_names, (
+        f"'Oh deer, oh deer' should be completed after 'cheat act 1', "
+        f"but completed quests are: {completed_names}"
+    )
+

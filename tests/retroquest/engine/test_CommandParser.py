@@ -3,12 +3,30 @@
 import pytest
 from engine.CommandParser import CommandParser
 
+
+class DummyGameState:
+    """Minimal stub for GameState used by DummyGame in CommandParser tests."""
+
+    def next_activated_quest(self):
+        """Always return None: no quests to activate in unit tests."""
+        return None
+
+    def next_updated_quest(self):
+        """Always return None: no quests to update in unit tests."""
+        return None
+
+    def next_completed_quest(self):
+        """Always return None: no quests to complete in unit tests."""
+        return None
+
+
 class DummyGame:
     """A minimal fake Game that records calls for CommandParser tests."""
 
     def __init__(self):
         """Create the fake game and a list to record calls."""
         self.calls = []
+        self.state = DummyGameState()
 
     def move(self, direction, arg=None):
         """Record a movement request."""

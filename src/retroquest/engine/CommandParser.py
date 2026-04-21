@@ -313,4 +313,10 @@ class CommandParser:
             result = self.parse(command)
             if result is not None:
                 results.append(str(result))
+            while self.game.state.next_activated_quest():
+                pass
+            while self.game.state.next_updated_quest():
+                pass
+            while self.game.state.next_completed_quest():
+                pass
         return '\n'.join(results)
