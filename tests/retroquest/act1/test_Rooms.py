@@ -1,6 +1,10 @@
 """Tests for Act 1 room definitions and connectivity."""
 
 import pytest
+from retroquest.act1.Act1 import Act1
+from retroquest.act1.characters.Grandmother import Grandmother
+from retroquest.act1.items.FadedPhotograph import FadedPhotograph
+from retroquest.engine.Game import Game
 from retroquest.act1.rooms.EliorsCottage import EliorsCottage
 from retroquest.act1.rooms.VegetableField import VegetableField
 from retroquest.act1.rooms.ChickenCoop import ChickenCoop
@@ -156,3 +160,31 @@ def test_room_transitions_bidirectional(_room_class, room_key):
             f"{room_key} -> {direction} -> {dest_key} but {dest_key} does not have "
             f"{opposite} back to {room_key}"
         )
+
+
+def _make_game_with_photo_in_inventory() -> Game:
+    """Create an Act1 game with the faded photograph in the player's inventory."""
+    act = Act1()
+    act.music_file = ''
+    game = Game([act])
+    photo = FadedPhotograph()
+    game.state.add_item_to_inventory(photo)
+    return game
+
+
+def test_grandmother_returns_photo_when_not_yet_examined():
+    """Giving the photo to grandmother before examining it must keep it in inventory.
+
+    She says she 'gently returns the photo', so the item must remain in the player's
+    inventory after the interaction.
+    """
+    game = _make_game_with_photo_in_inventory()
+    grandmother = Grandmother()
+    photo = next(i for i in game.state.inventory if isinstance(i, FadedPhotograph))
+
+    grandmother.give_item(game.state, photo)
+
+    inventory_names = [i.get_name().lower() for i in game.state.inventory]
+    assert "faded photograph" in inventory_names, (
+        "Faded photograph should still be in inventory after grandmother 'returns' it."
+    )

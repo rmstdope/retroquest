@@ -186,7 +186,6 @@ class Grandmother(Character):
                 + "the [character_name]" + self.get_name() + "[/character_name].[/event]"
             )
             if not game_state.get_story_flag(FLAG_READ_PHOTO_MESSAGE):
-                game_state.remove_item_from_inventory(item_object.get_name())
                 return (
                     event_msg
                     + "\n"
