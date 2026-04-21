@@ -118,8 +118,10 @@ class AncientTreeSpirit(Character):
             self.acorn_received = True
             game_state.remove_item_from_inventory("enchanted acorn")
             from ..spells.ForestSpeechSpell import ForestSpeechSpell
+            from ..items.SilverLeaves import SilverLeaves
             game_state.learn_spell(ForestSpeechSpell())
             game_state.set_story_flag(FLAG_WHISPERS_IN_WIND_OFFERED, True)
+            game_state.current_room.items.append(SilverLeaves())
 
             return (
                 event_msg
