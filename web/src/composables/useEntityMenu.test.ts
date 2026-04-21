@@ -308,6 +308,7 @@ describe('useEntityMenu', () => {
     })
 
     afterEach(() => {
+      vi.clearAllTimers()
       vi.useRealTimers()
     })
 

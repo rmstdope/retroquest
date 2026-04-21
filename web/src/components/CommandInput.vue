@@ -94,30 +94,35 @@ function closeSuggestions() {
       class="flex gap-1.5 px-3 py-2 border-t border-border bg-bg-secondary shrink-0 overflow-x-auto max-[375px]:px-2 max-[375px]:py-1.5"
     >
       <button
+        aria-label="Look"
         class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'look')"
       >
         👀<span class="max-md:hidden"> Look</span>
       </button>
       <button
+        aria-label="Search"
         class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'search')"
       >
         🔍<span class="max-md:hidden"> Search</span>
       </button>
       <button
+        aria-label="Inventory"
         class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'inventory')"
       >
         🎒<span class="max-md:hidden"> Inventory</span>
       </button>
       <button
+        aria-label="Spells"
         class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'spells')"
       >
         ✨<span class="max-md:hidden"> Spells</span>
       </button>
       <button
+        aria-label="Help"
         class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-chip-bg border border-border text-text-primary cursor-pointer text-sm whitespace-nowrap transition-colors hover:bg-chip-hover max-md:px-2.5 max-md:min-h-11 max-md:min-w-11"
         @click="$emit('submitCommand', 'help')"
       >

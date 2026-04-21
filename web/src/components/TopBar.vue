@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 defineProps<{
   title: string
@@ -20,9 +20,9 @@ defineEmits<{
 
 const isFullscreen = ref(false)
 
-document.addEventListener('fullscreenchange', () => {
+function onFullscreenChange() {
   isFullscreen.value = !!document.fullscreenElement
-})
+}
 
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
@@ -31,6 +31,15 @@ function toggleFullscreen() {
     document.exitFullscreen().catch(() => {})
   }
 }
+
+onMounted(() => {
+  isFullscreen.value = !!document.fullscreenElement
+  document.addEventListener('fullscreenchange', onFullscreenChange)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('fullscreenchange', onFullscreenChange)
+})
 </script>
 
 <template>

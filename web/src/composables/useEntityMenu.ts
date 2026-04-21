@@ -1,5 +1,5 @@
 /** Composable for entity context menu / action sheet interactions. */
-import { ref } from 'vue'
+import { getCurrentInstance, onUnmounted, ref } from 'vue'
 import type { NamedItem } from '@/types/bridge'
 
 export type EntityType = 'character' | 'item' | 'inventory' | 'spell'
@@ -198,6 +198,12 @@ export function useEntityMenu(submitCommand: (cmd: string) => void) {
     closeMenu()
     submitCommand(action.command)
     return undefined
+  }
+
+  if (getCurrentInstance()) {
+    onUnmounted(() => {
+      clearTimeout(ghostGuardTimer)
+    })
   }
 
   return {

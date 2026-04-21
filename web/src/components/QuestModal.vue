@@ -40,10 +40,15 @@ onUnmounted(() => {
         {{ title }}
       </div>
       <!-- eslint-disable vue/no-v-html -->
-      <div
-        class="flex-1 min-h-0 overflow-y-auto leading-relaxed pr-1 touch-pan-y overscroll-contain"
-        v-html="body"
-      ></div>
+      <div class="relative flex-1 min-h-0">
+        <div
+          class="h-full overflow-y-auto leading-relaxed pr-1 touch-pan-y overscroll-contain"
+          v-html="body"
+        ></div>
+        <div
+          class="pointer-events-none absolute bottom-0 inset-x-0 h-6 bg-gradient-to-t from-bg-card to-transparent"
+        ></div>
+      </div>
       <!-- eslint-enable vue/no-v-html -->
       <div class="shrink-0 flex justify-end pt-2">
         <button
