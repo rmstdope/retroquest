@@ -7,9 +7,27 @@ import GameLayout from './components/GameLayout.vue'
 const store = useGameStore()
 const bridge = useBridge()
 
+function requestFullscreenOnFirstInteraction() {
+  if (
+    !('ontouchstart' in window) ||
+    !document.documentElement.requestFullscreen
+  )
+    return
+
+  function onFirstInteraction() {
+    document.documentElement.requestFullscreen().catch(() => {})
+    window.removeEventListener('touchstart', onFirstInteraction)
+    window.removeEventListener('click', onFirstInteraction)
+  }
+
+  window.addEventListener('touchstart', onFirstInteraction, { once: true })
+  window.addEventListener('click', onFirstInteraction, { once: true })
+}
+
 onMounted(() => {
   store.setBridge(bridge)
   store.initGame()
+  requestFullscreenOnFirstInteraction()
 })
 </script>
 

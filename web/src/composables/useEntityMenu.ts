@@ -1,5 +1,5 @@
 /** Composable for entity context menu / action sheet interactions. */
-import { ref } from 'vue'
+import { getCurrentInstance, onUnmounted, ref } from 'vue'
 import type { NamedItem } from '@/types/bridge'
 
 export type EntityType = 'character' | 'item' | 'inventory' | 'spell'
@@ -89,6 +89,8 @@ export function useEntityMenu(submitCommand: (cmd: string) => void) {
   const x = ref(0)
   const y = ref(0)
   const isMobile = ref(false)
+  let canOpen = true
+  let ghostGuardTimer: ReturnType<typeof setTimeout> | undefined
 
   /**
    * Open menu for a given entity type and name.
@@ -99,6 +101,7 @@ export function useEntityMenu(submitCommand: (cmd: string) => void) {
     event: MouseEvent,
     viewport?: ViewportSize,
   ): void {
+    if (!canOpen) return
     let name: string
     let menuActions: EntityMenuAction[]
 
@@ -135,9 +138,14 @@ export function useEntityMenu(submitCommand: (cmd: string) => void) {
     y.value = Math.min(event.clientY, vh - MENU_HEIGHT)
   }
 
-  /** Close the menu. */
+  /** Close the menu and start the 300 ms ghost-click guard. */
   function closeMenu(): void {
     visible.value = false
+    canOpen = false
+    clearTimeout(ghostGuardTimer)
+    ghostGuardTimer = setTimeout(() => {
+      canOpen = true
+    }, 300)
   }
 
   /**
@@ -190,6 +198,12 @@ export function useEntityMenu(submitCommand: (cmd: string) => void) {
     closeMenu()
     submitCommand(action.command)
     return undefined
+  }
+
+  if (getCurrentInstance()) {
+    onUnmounted(() => {
+      clearTimeout(ghostGuardTimer)
+    })
   }
 
   return {

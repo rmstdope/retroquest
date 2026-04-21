@@ -33,18 +33,31 @@ onUnmounted(() => {
     @click.self="$emit('dismiss')"
   >
     <div
-      class="bg-bg-card border border-border rounded-xl p-6 max-w-[480px] w-[90%] shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+      data-testid="quest-modal-card"
+      class="bg-bg-card border border-border rounded-xl p-4 md:p-6 max-w-[480px] w-[90%] max-h-[90vh] flex flex-col shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
     >
-      <div class="text-[1.1rem] font-bold text-quest mb-3">{{ title }}</div>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div class="leading-relaxed mb-4" v-html="body"></div>
-      <button
-        class="float-right px-6 py-2 rounded-md bg-accent text-white border-none cursor-pointer text-[0.9rem] hover:opacity-85"
-        @click="$emit('dismiss')"
-      >
-        Continue
-      </button>
-      <div class="clear-both"></div>
+      <div class="text-[1.1rem] font-bold text-quest mb-3 shrink-0">
+        {{ title }}
+      </div>
+      <!-- eslint-disable vue/no-v-html -->
+      <div class="relative flex-1 min-h-0">
+        <div
+          class="h-full overflow-y-auto leading-relaxed pr-1 touch-pan-y overscroll-contain"
+          v-html="body"
+        ></div>
+        <div
+          class="pointer-events-none absolute bottom-0 inset-x-0 h-6 bg-gradient-to-t from-bg-card to-transparent"
+        ></div>
+      </div>
+      <!-- eslint-enable vue/no-v-html -->
+      <div class="shrink-0 flex justify-end pt-2">
+        <button
+          class="px-6 py-2 rounded-md bg-accent text-white border-none cursor-pointer text-[0.9rem] hover:opacity-85"
+          @click="$emit('dismiss')"
+        >
+          Continue
+        </button>
+      </div>
     </div>
   </div>
 </template>

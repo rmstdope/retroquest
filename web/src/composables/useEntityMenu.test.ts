@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { useEntityMenu } from './useEntityMenu'
 
 describe('useEntityMenu', () => {
@@ -299,6 +299,43 @@ describe('useEntityMenu', () => {
         viewportHeight: 600,
       })
       expect(menu.y.value).toBe(350) // 600 - 250
+    })
+  })
+
+  describe('ghost click guard after close', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    })
+
+    const event = { clientX: 100, clientY: 100 } as MouseEvent
+
+    it('blocks openMenu within 300 ms of closeMenu', () => {
+      menu.openMenu('item', 'Key', event)
+      menu.closeMenu()
+      // Synthetic ghost click fires immediately after close
+      menu.openMenu('item', 'Key', event)
+      expect(menu.visible.value).toBe(false)
+    })
+
+    it('allows openMenu after the 300 ms guard expires', () => {
+      menu.openMenu('item', 'Key', event)
+      menu.closeMenu()
+      vi.advanceTimersByTime(300)
+      menu.openMenu('item', 'Key', event)
+      expect(menu.visible.value).toBe(true)
+    })
+
+    it('guard also fires after selectAction closes the menu', () => {
+      menu.openMenu('item', 'Key', event)
+      menu.selectAction({ label: '✋ Take', command: 'take Key' })
+      // Ghost click immediately after action selection
+      menu.openMenu('item', 'Key', event)
+      expect(menu.visible.value).toBe(false)
     })
   })
 })

@@ -198,6 +198,65 @@ test.describe('QuestModal – Escape key dismissal', () => {
 })
 
 /* ------------------------------------------------------------------ */
+/*  QuestModal overflow fix – Continue button always reachable         */
+/* ------------------------------------------------------------------ */
+
+test.describe('QuestModal – overflow fix', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(APP_URL)
+    await expect(page.locator('.loading-spinner')).toBeVisible({
+      timeout: 10_000,
+    })
+    await injectMockGameState(page)
+  })
+
+  async function openLongModal(page: Page) {
+    const longBody = Array.from(
+      { length: 12 },
+      (_, i) =>
+        `<p>Paragraph ${i + 1}: The ancient prophecy speaks of a hero who shall rise from humble beginnings to face a darkness that has long plagued these lands. Only the chosen one may restore balance.</p>`,
+    ).join('')
+    await page.evaluate((body: string) => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const pinia = app.config.globalProperties.$pinia
+      const store = pinia.state.value.game
+      store.showModal = true
+      store.modalTitle = 'A Very Long Quest'
+      store.modalBody = body
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    }, longBody)
+    await expect(page.getByText('A Very Long Quest', { exact: true })).toBeVisible()
+  }
+
+  test('Continue button is visible in viewport when quest body is very long', async ({
+    page,
+  }) => {
+    await openLongModal(page)
+    const button = page.getByRole('button', { name: 'Continue' })
+    await expect(button).toBeVisible()
+    const box = await button.boundingBox()
+    const viewportSize = page.viewportSize()
+    expect(box).not.toBeNull()
+    expect(viewportSize).not.toBeNull()
+    expect(box!.y + box!.height).toBeLessThanOrEqual(viewportSize!.height)
+  })
+
+  test('modal card does not exceed viewport height when body is very long', async ({
+    page,
+  }) => {
+    await openLongModal(page)
+    const card = page.locator('[data-testid="quest-modal-card"]')
+    await expect(card).toBeVisible()
+    const box = await card.boundingBox()
+    const viewportSize = page.viewportSize()
+    expect(box).not.toBeNull()
+    expect(viewportSize).not.toBeNull()
+    expect(box!.height).toBeLessThanOrEqual(viewportSize!.height)
+  })
+})
+
+/* ------------------------------------------------------------------ */
 /*  LoadDialog Escape key tests                                        */
 /* ------------------------------------------------------------------ */
 

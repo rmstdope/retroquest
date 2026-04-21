@@ -158,11 +158,13 @@ defineEmits<{
           class="px-2.5 py-2 rounded-md mb-1 transition-colors cursor-pointer hover:bg-chip-hover"
           @click="$emit('inventoryClick', $event, item.name)"
         >
-          <!-- eslint-disable-next-line vue/no-v-html -->
+          <!-- eslint-disable vue/no-v-html -->
           <div class="font-semibold text-[0.9rem]" v-html="item.name"></div>
-          <div class="text-[0.8rem] text-text-secondary mt-0.5">
-            {{ item.description }}
-          </div>
+          <div
+            class="text-[0.8rem] text-text-secondary mt-0.5"
+            v-html="item.description"
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
         </div>
       </div>
     </div>
@@ -193,11 +195,13 @@ defineEmits<{
           class="px-2.5 py-2 rounded-md mb-1 transition-colors cursor-pointer hover:bg-chip-hover"
           @click="$emit('spellClick', $event, spell.name)"
         >
-          <!-- eslint-disable-next-line vue/no-v-html -->
+          <!-- eslint-disable vue/no-v-html -->
           <div class="font-semibold text-[0.9rem]" v-html="spell.name"></div>
-          <div class="text-[0.8rem] text-text-secondary mt-0.5">
-            {{ spell.description }}
-          </div>
+          <div
+            class="text-[0.8rem] text-text-secondary mt-0.5"
+            v-html="spell.description"
+          ></div>
+          <!-- eslint-enable vue/no-v-html -->
         </div>
       </div>
     </div>
