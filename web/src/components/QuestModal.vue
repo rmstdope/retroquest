@@ -34,7 +34,7 @@ onUnmounted(() => {
   >
     <div
       data-testid="quest-modal-card"
-      class="bg-bg-card border border-border rounded-xl p-4 md:p-6 max-w-[480px] w-[90%] max-h-[90vh] flex flex-col shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+      class="bg-bg-card border border-border rounded-xl p-4 md:p-6 max-w-[480px] w-[90%] max-h-[90vh] overflow-hidden flex flex-col shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
     >
       <div class="text-[1.1rem] font-bold text-quest mb-3 shrink-0">
         {{ title }}
