@@ -41,8 +41,10 @@ export interface GameBridge {
   saveToSlot(slot: number): string
   loadFromSlot(slot: number): string
   isAcceptingInput(): boolean
+  isActRunning(): boolean
   getCommandCompletions(): CompletionTree
   advanceTurn(): string
+  advanceToRunning(): string[]
   getMusicInfo(): { musicFile: string; musicInfo: string }
   look(): string
 }
@@ -166,6 +168,33 @@ export const useGameStore = defineStore('game', () => {
     refreshPanels()
     pollQuestEvents()
     refreshPanels()
+    if (!acceptInput.value && !showModal.value && !b.isActRunning()) {
+      triggerActTransitionModals()
+    }
+  }
+
+  function triggerActTransitionModals(): void {
+    const b = requireBridge()
+    const texts = b.advanceToRunning().filter((t) => t.trim() !== '')
+    if (texts.length === 0) return
+    const transitionTexts = texts.slice(0, -1)
+    const actIntroText = texts[texts.length - 1]
+    for (const text of transitionTexts) {
+      modalQueue.value.push({
+        title: '🏆 Act Complete!',
+        body: renderMarkup(text),
+        sound: null,
+      })
+    }
+    modalQueue.value.push({
+      title: '📖 Act Intro',
+      body: renderMarkup(actIntroText),
+      sound: null,
+    })
+    pendingLookOnDismiss = true
+    if (!showModal.value) {
+      showNextModal()
+    }
   }
 
   function advanceTurn(): void {
@@ -319,6 +348,10 @@ export const useGameStore = defineStore('game', () => {
         lastOutput.value = renderMarkup(b.look())
         refreshPanels()
         pollQuestEvents()
+      } else if (!acceptInput.value && !b.isActRunning()) {
+        // Quest completion modals were dismissed but the act has transitioned;
+        // drive the transition forward and show the act intro modal.
+        triggerActTransitionModals()
       }
     }
   }
