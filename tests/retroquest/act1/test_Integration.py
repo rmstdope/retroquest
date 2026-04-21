@@ -509,14 +509,20 @@ def test_golden_path_act1_completion():
     assert game.acts[game.current_act].is_completed(game.state), "Act I is not marked as completed."
 
 
-def test_cheat_act_1_completes_oh_deer_oh_deer_quest():
-    """cheat act 1 must fully complete the 'Oh deer, oh deer' side quest.
+def test_cheat_act_1_completes_all_side_quests_and_leaves_main_active():
+    """cheat act 1 must complete every completable side quest and leave only the main quest active.
 
     The cheat sequence gives the Rare Flower to Mira before any quest
     processing normally occurs. The cheat engine must therefore drain
     quest-activation and quest-completion state between commands. Without
     that, check_completion returns False when the frontend later calls
     completeQuest() because the flower is no longer in inventory or rooms.
+
+    Note: FadedPhotograph and LostLetter are intentionally excluded —
+    FadedPhotograph requires 'search' in EliorsCottage which the cheat
+    sequence does not perform; LostLetter references flags that are not
+    set by any game action yet (incomplete implementation).
+    Both remain in non_activated_quests after the cheat.
     """
     act = Act1()
     act.music_file = ''
@@ -533,9 +539,34 @@ def test_cheat_act_1_completes_oh_deer_oh_deer_quest():
     while game.state.next_completed_quest():
         pass
 
-    completed_names = [q.name for q in game.state.completed_quests]
-    assert "Oh deer, oh deer" in completed_names, (
-        f"'Oh deer, oh deer' should be completed after 'cheat act 1', "
-        f"but completed quests are: {completed_names}"
+    active_names = [q.name for q in game.state.activated_quests]
+    active_main = [q.name for q in game.state.activated_quests if q.is_main()]
+    active_side = [q.name for q in game.state.activated_quests if not q.is_main()]
+
+    assert active_main == ["Shadows Over Willowbrook"], (
+        f"Only the main quest should remain active after 'cheat act 1', "
+        f"but active quests are: {active_names}"
+    )
+    assert active_side == [], (
+        f"No side quests should remain active after 'cheat act 1', "
+        f"but active side quests are: {active_side}"
+    )
+    completed_side = sorted(
+        q.name for q in game.state.completed_quests if not q.is_main()
+    )
+    expected_side_quests = sorted([
+        "Hint of Magic",
+        "Curiosity killed the cat",
+        "Fishing expedition",
+        "Know your village",
+        "Let there be light",
+        "Magic for real",
+        "Magnet fishing expedition",
+        "Oh deer, oh deer",
+        "Preparing for the road",
+    ])
+    assert completed_side == expected_side_quests, (
+        f"All completable side quests should be completed after 'cheat act 1', "
+        f"but completed side quests are: {completed_side}"
     )
 
