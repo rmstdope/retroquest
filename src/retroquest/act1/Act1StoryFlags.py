@@ -7,7 +7,7 @@ Each flag represents a specific event, interaction, or milestone that can be tra
 to manage game state and narrative progression.
 
 Flags include:
-- Discovery events (e.g., finding the lost letter, photo)
+- Discovery events (e.g., finding and returning the faded photograph)
 - Character interactions (e.g., talking to the grandmother, priest, fisherman, blacksmith, villager)
 - Investigation and observation events (e.g., investigating withered crops,
     observing deer, examining the well)

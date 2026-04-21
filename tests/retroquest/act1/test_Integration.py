@@ -520,6 +520,10 @@ def test_cheat_act_1_completes_all_side_quests_and_leaves_main_active():
     act.music_file = ''
     game = Game([act])
 
+    # Capture the expected side-quest names before the cheat runs, because
+    # act.quests is drained during cheat execution.
+    expected_side_quests = sorted(q.name for q in act.quests if not q.is_main())
+
     game.command_parser.parse("cheat act 1")
 
     # Drain quest events, simulating what the web frontend's pollQuestEvents()
@@ -546,18 +550,6 @@ def test_cheat_act_1_completes_all_side_quests_and_leaves_main_active():
     completed_side = sorted(
         q.name for q in game.state.completed_quests if not q.is_main()
     )
-    expected_side_quests = sorted([
-        "Hint of Magic",
-        "Curiosity killed the cat",
-        "Fishing expedition",
-        "Know your village",
-        "Let there be light",
-        "Magic for real",
-        "Magnet fishing expedition",
-        "Oh deer, oh deer",
-        "Preparing for the road",
-        "The Faded Photograph",
-    ])
     assert completed_side == expected_side_quests, (
         f"All completable side quests should be completed after 'cheat act 1', "
         f"but completed side quests are: {completed_side}"
