@@ -26,10 +26,10 @@ class RustyHoe(Item):
             if not player_has_coin:
                 game_state.add_item_to_inventory(Coin())
                 return (
-                    "[event]You till the soil with the [item_name]rusty hoe[/item_name].\n[/event]"
+                    "[event]You till the soil with the [item_name]rusty hoe[/item_name]. "
                     "The ground is tough, and you unearth a small, tarnished "
                     "[item_name]coin[/item_name]! "
-                    "You quickly pocket it."
+                    "You quickly pocket it.[/event]"
                 )
             else:
                 return (

@@ -36,7 +36,7 @@ class EliorsJournal(Item):
             "it mean?\"[/dialogue]\n"
         )
         event_msg = (
-            "[event]You open your journal and begin to read the latest entry.[/event]\n"
+            "[event]You open your [item_name]journal[/item_name] and begin to read the latest entry.[/event]\n"
         )
         game_state.set_story_flag('journal_read_prologue_entry', True)
         return event_msg + entry

@@ -71,11 +71,11 @@ class Merchant(Character):
                 event_msg
                 + "\n"
                 + (
-                    "[dialogue]The [character_name]"
+                    "The [character_name]"
                     + self.get_name()
                     + "[/character_name]'s eyes widen as you hand over the [item_name]"
                     + item_object.get_name()
-                    + "[/item_name]. 'A fine piece! As promised, here are the [item_name]"
+                    + "[/item_name]. [dialogue]'A fine piece! As promised, here are the [item_name]"
                     + boots.get_name()
                     + "[/item_name]. They'll serve you well on the road to Greendale.'[/dialogue]"
                 )

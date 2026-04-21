@@ -124,9 +124,9 @@ class Mira(Character):
                 and game_state.get_story_flag(FLAG_WELL_EXAMINED)):
                 game_state.set_story_flag(FLAG_CONNECT_WITH_NATURE, True)
                 extra = (
-                    "\n[dialogue]You describe to Mira the withered crops, the villagers' "
+                    "\nYou describe to Mira the withered crops, the villagers' "
                     "fears, and the foul stench from the well. Her expression grows "
-                    "troubled as she listens.[/dialogue] "
+                    "troubled as she listens. "
                     "[dialogue]'These are signs of a darkness that has long slumbered "
                     "beneath Willowbrook,'[/dialogue] she says sadly. "
                     "[dialogue]'The land is suffering, and so are its people. But there "

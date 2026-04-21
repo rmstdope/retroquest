@@ -33,8 +33,8 @@ class Fisherman(Character):
                 "to see you trying your luck with the rod. Any luck yet?'[/dialogue]"
             ),
             "received_fish_thanks": (
-                "[dialogue]The [character_name]fisherman[/character_name]'s eyes light "
-                "up. 'Ah, a fine catch! Thank you kindly. It's been a while since "
+                "The [character_name]fisherman[/character_name]'s eyes light "
+                "up. [dialogue]'Ah, a fine catch! Thank you kindly. It's been a while since "
                 "I've had a fresh river fish.'[/dialogue]"
             ),
             "taught_spells": (
@@ -58,8 +58,9 @@ class Fisherman(Character):
                 self.knows_fishing_basics = True
                 self.current_dialogue_key = "taught_fishing"
                 return (
-                    "[dialogue]The [character_name]fisherman[/character_name] notices "
-                    "your [item_name]fishing rod[/item_name]. 'Ah, a fellow angler! "
+                    "The [character_name]fisherman[/character_name] notices "
+                    "your [item_name]fishing rod[/item_name]. "
+                    "[dialogue]'Ah, a fellow angler! "
                     "My arm's busted, can't fish myself. But I can tell you a thing "
                     "or two. Cast your line near the reeds, that's where they like "
                     "to hide. Patience is key, my friend, patience.'[/dialogue]\n"
