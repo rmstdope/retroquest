@@ -26,7 +26,6 @@ from retroquest.act1.quests.OhDeerOhDeer import OhDeerOhDeerQuest
 from retroquest.act1.quests.PreparingForTheRoad import PreparingForTheRoadQuest
 from retroquest.act1.quests.FadedPhotograph import FadedPhotographQuest
 from retroquest.act1.quests.ShadowsOverWillowbrook import ShadowsOverWillowbrookQuest
-from retroquest.act1.quests.LostLetter import LostLetterQuest
 from retroquest.act1.Act1StoryFlags import FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED
 
 class Act1(Act):
@@ -60,7 +59,6 @@ class Act1(Act):
             OhDeerOhDeerQuest(),
             PreparingForTheRoadQuest(),
             FadedPhotographQuest(),
-            LostLetterQuest(),
         ]
         music_file = "Conquest - Market (freetouse.com).mp3"
         super().__init__(name="Act1", rooms=rooms, quests=quests, music_file=music_file, music_info='Market by Conquest\nSource: https://freetouse.com/music\nCopyright Free Background Music')

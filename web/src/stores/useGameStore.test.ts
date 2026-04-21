@@ -888,6 +888,86 @@ describe('useGameStore', () => {
     })
   })
 
+  // --- act transition ---
+
+  describe('act transition', () => {
+    function setupTransitionMocks() {
+      bridge.isAcceptingInput.mockReturnValue(false)
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.activateQuest.mockReturnValue(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      bridge.advanceToRunning.mockReturnValue([
+        'Congratulations Act 1!',
+        'Act 2 begins.',
+        '',
+      ])
+    }
+
+    beforeEach(async () => {
+      await store.initGame()
+      store.dismissModal() // dismiss init intro modal
+    })
+
+    it('shows act transition modal immediately when command causes transition', () => {
+      setupTransitionMocks()
+      store.submitCommand('use map')
+      expect(store.showModal).toBe(true)
+      expect(store.modalTitle).toBe('🏆 Act Complete!')
+      expect(store.modalBody).toBe(
+        '<rendered>Congratulations Act 1!</rendered>',
+      )
+    })
+
+    it('shows act intro modal after dismissing transition modal', () => {
+      setupTransitionMocks()
+      store.submitCommand('use map')
+      store.dismissModal()
+      expect(store.showModal).toBe(true)
+      expect(store.modalTitle).toBe('📖 Act Intro')
+      expect(store.modalBody).toBe('<rendered>Act 2 begins.</rendered>')
+    })
+
+    it('fires look after all transition modals are dismissed', () => {
+      setupTransitionMocks()
+      store.submitCommand('use map')
+      store.dismissModal() // dismiss transition modal
+      bridge.look.mockReturnValue('You are in Act 2.')
+      store.dismissModal() // dismiss intro modal
+      expect(bridge.look).toHaveBeenCalled()
+    })
+
+    it('shows transition modal after quest completion modals when act transitions', () => {
+      bridge.completeQuest
+        .mockReturnValueOnce('Main quest complete!')
+        .mockReturnValueOnce(null)
+      bridge.activateQuest.mockReturnValue(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.isAcceptingInput.mockReturnValue(false)
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.advanceToRunning.mockReturnValue([
+        'Congratulations Act 1!',
+        'Act 2 begins.',
+        '',
+      ])
+      store.submitCommand('use map')
+      expect(store.modalTitle).toBe('🏆 Quest Complete!')
+      store.dismissModal()
+      expect(store.showModal).toBe(true)
+      expect(store.modalTitle).toBe('🏆 Act Complete!')
+    })
+
+    it('does not trigger transition modals when act is running normally', () => {
+      // isActRunning stays true (default), so no transition modals
+      bridge.activateQuest.mockReturnValue(null)
+      bridge.updateQuest.mockReturnValue(null)
+      bridge.completeQuest.mockReturnValue(null)
+      store.submitCommand('look')
+      expect(store.showModal).toBe(false)
+      expect(bridge.advanceToRunning).not.toHaveBeenCalled()
+    })
+  })
+
   // --- getSaveSlots / saveToSlot / loadFromSlot ---
 
   describe('getSaveSlots', () => {

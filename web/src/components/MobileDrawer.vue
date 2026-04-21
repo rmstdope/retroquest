@@ -34,12 +34,15 @@ const emit = defineEmits<{
 function emitAndClose(
   action: 'quickSave' | 'quickLoad' | 'save' | 'load' | 'help',
 ) {
-  if (action === 'quickSave') emit('quickSave')
-  else if (action === 'quickLoad') emit('quickLoad')
-  else if (action === 'save') emit('save')
-  else if (action === 'load') emit('load')
-  else emit('help')
-  emit('close')
+  try {
+    if (action === 'quickSave') emit('quickSave')
+    else if (action === 'quickLoad') emit('quickLoad')
+    else if (action === 'save') emit('save')
+    else if (action === 'load') emit('load')
+    else emit('help')
+  } finally {
+    emit('close')
+  }
 }
 </script>
 

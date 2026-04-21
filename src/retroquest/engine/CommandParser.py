@@ -4,7 +4,9 @@ from __future__ import annotations
 from typing import Any, TYPE_CHECKING
 
 _ACT_1_CHEAT_COMMANDS: list[str] = [
-    "use lantern", "take bread", "use journal", "talk to grandmother",
+    "use lantern", "take bread", "use journal", "search",
+    "take faded photograph", "examine faded photograph",
+    "talk to grandmother",
     "e", "talk to villager", "w", "s", "take carrot", "use hoe",
     "take knife", "s", "take egg", "take feather",
     "use bread with chicken", "take key", "n", "e", "examine well",
@@ -32,7 +34,8 @@ _ACT_1_CHEAT_COMMANDS: list[str] = [
     "s", "s", "talk to priest", "n", "n", "n", "w", "n", "n", "e",
     "n", "talk to shopkeeper", "s", "w", "s", "s", "e", "s", "s",
     "s", "use matches with candle", "take locket", "n", "n", "n",
-    "w", "n", "n", "w", "n", "give locket to grandmother",
+    "w", "n", "n", "w", "n", "give faded photograph to grandmother",
+    "give locket to grandmother",
     "cast bless", "s", "e", "s", "s", "e", "s", "s", "s", "e",
     "give shiny ring to merchant",
 ]
@@ -313,4 +316,10 @@ class CommandParser:
             result = self.parse(command)
             if result is not None:
                 results.append(str(result))
+            while self.game.state.next_activated_quest():
+                pass
+            while self.game.state.next_updated_quest():
+                pass
+            while self.game.state.next_completed_quest():
+                pass
         return '\n'.join(results)

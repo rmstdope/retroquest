@@ -44,6 +44,7 @@ onUnmounted(() => {
 
 <template>
   <div
+    data-testid="top-bar"
     class="flex items-center justify-between px-4 py-2 bg-bg-secondary border-b border-border min-h-12"
   >
     <span class="text-xl font-bold text-accent tracking-wide"

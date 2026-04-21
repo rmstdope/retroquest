@@ -27,7 +27,6 @@ from retroquest.act1.quests.MagnetFishingExpedition import MagnetFishingExpediti
 from retroquest.act1.quests.OhDeerOhDeer import OhDeerOhDeerQuest
 from retroquest.act1.quests.PreparingForTheRoad import PreparingForTheRoadQuest
 from retroquest.act1.quests.FadedPhotograph import FadedPhotographQuest
-from retroquest.act1.quests.LostLetter import LostLetterQuest
 from retroquest.act1.quests.ShadowsOverWillowbrook import ShadowsOverWillowbrookQuest
 from ..utils.utils import (check_character_in_room, check_current_room, check_quests,
                             execute_commands, check_item_in_inventory, check_item_in_room,
@@ -65,7 +64,6 @@ QUESTS = [
     PreparingForTheRoadQuest(),
     FadedPhotographQuest(),
     ShadowsOverWillowbrookQuest(),
-    LostLetterQuest()
 ]
 
 def test_golden_path_act1_completion():
@@ -507,4 +505,53 @@ def test_golden_path_act1_completion():
     execute_commands(game, ["use map"])
     # Final check: Act I should be completed
     assert game.acts[game.current_act].is_completed(game.state), "Act I is not marked as completed."
+
+
+def test_cheat_act_1_completes_all_side_quests_and_leaves_main_active():
+    """cheat act 1 must complete every completable side quest and leave only the main quest active.
+
+    The cheat sequence gives the Rare Flower to Mira before any quest
+    processing normally occurs. The cheat engine must therefore drain
+    quest-activation and quest-completion state between commands. Without
+    that, check_completion returns False when the frontend later calls
+    completeQuest() because the flower is no longer in inventory or rooms.
+    """
+    act = Act1()
+    act.music_file = ''
+    game = Game([act])
+
+    # Capture the expected side-quest names before the cheat runs, because
+    # act.quests is drained during cheat execution.
+    expected_side_quests = sorted(q.name for q in act.quests if not q.is_main())
+
+    game.command_parser.parse("cheat act 1")
+
+    # Drain quest events, simulating what the web frontend's pollQuestEvents()
+    # does after a command returns.
+    while game.state.next_activated_quest():
+        pass
+    while game.state.next_updated_quest():
+        pass
+    while game.state.next_completed_quest():
+        pass
+
+    active_names = [q.name for q in game.state.activated_quests]
+    active_main = [q.name for q in game.state.activated_quests if q.is_main()]
+    active_side = [q.name for q in game.state.activated_quests if not q.is_main()]
+
+    assert active_main == ["Shadows Over Willowbrook"], (
+        f"Only the main quest should remain active after 'cheat act 1', "
+        f"but active quests are: {active_names}"
+    )
+    assert active_side == [], (
+        f"No side quests should remain active after 'cheat act 1', "
+        f"but active side quests are: {active_side}"
+    )
+    completed_side = sorted(
+        q.name for q in game.state.completed_quests if not q.is_main()
+    )
+    assert completed_side == expected_side_quests, (
+        f"All completable side quests should be completed after 'cheat act 1', "
+        f"but completed side quests are: {completed_side}"
+    )
 

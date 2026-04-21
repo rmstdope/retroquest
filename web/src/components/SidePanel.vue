@@ -34,6 +34,7 @@ defineEmits<{
 
 <template>
   <div
+    data-testid="side-panel"
     class="w-80 bg-bg-sidebar border-l border-border overflow-y-auto shrink-0 p-3 max-md:hidden"
   >
     <!-- Active Quests -->

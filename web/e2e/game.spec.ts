@@ -416,7 +416,7 @@ test.describe('Mobile viewport', () => {
   })
 
   test('sidebar is hidden on mobile', async ({ page }) => {
-    const sidebar = page.locator('.max-md\\:hidden')
+    const sidebar = page.getByTestId('side-panel')
     await expect(sidebar).toBeHidden()
   })
 
@@ -453,20 +453,21 @@ test.describe('Mobile toolbar overflow fix', () => {
   test('Quicksave, Quickload, Save, Load, Help are hidden in toolbar on mobile', async ({
     page,
   }) => {
+    const topBar = page.getByTestId('top-bar')
     await expect(
-      page.getByRole('button', { name: /Quicksave/i }).first(),
+      topBar.getByRole('button', { name: /Quicksave/i }),
     ).toBeHidden()
     await expect(
-      page.getByRole('button', { name: /Quickload/i }).first(),
+      topBar.getByRole('button', { name: /Quickload/i }),
     ).toBeHidden()
     await expect(
-      page.getByRole('button', { name: /^💾 Save$/i }),
+      topBar.getByRole('button', { name: /^💾 Save$/i }),
     ).toBeHidden()
     await expect(
-      page.getByRole('button', { name: /^📂 Load$/i }),
+      topBar.getByRole('button', { name: /^📂 Load$/i }),
     ).toBeHidden()
     await expect(
-      page.getByRole('button', { name: /^❓ Help$/i }),
+      topBar.getByRole('button', { name: /^❓ Help$/i }),
     ).toBeHidden()
   })
 
