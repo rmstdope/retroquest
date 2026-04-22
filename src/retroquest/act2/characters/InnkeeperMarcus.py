@@ -41,7 +41,7 @@ class InnkeeperMarcus(Character):
                 charm_name = druidic_charm.get_name()
                 name = self.get_name()
                 head = (
-                    f"[character_name]{name}[/character_name]: *tears of joy in his eyes* "
+                    f"[character_name]{name}[/character_name]: [dialogue]*tears of joy in his eyes* "
                     "You have given me back my daughter! There are no words to express my "
                     "gratitude. "
                 )
@@ -49,7 +49,7 @@ class InnkeeperMarcus(Character):
                     f"This [item_name]{charm_name}[/item_name] has been in my family for "
                     "generations - it was blessed by the ancient druids who first settled "
                     "in these lands. Please, take it as a token of our eternal gratitude. "
-                    "May it bring you protection and guidance on your heroic journey!\n\n"
+                    "May it bring you protection and guidance on your heroic journey![/dialogue]\n\n"
                 )
                 tail = (
                     "[success]Marcus places the sacred charm in your hands with reverence. "
@@ -58,10 +58,10 @@ class InnkeeperMarcus(Character):
                 return head + body + tail
             else:
                 return (
-                    f"[character_name]{self.get_name()}[/character_name]: My daughter is "
+                    f"[character_name]{self.get_name()}[/character_name]: [dialogue]My daughter is "
                     "healthy and happy again, all thanks to you! The Silver Stag Inn will "
                     "always be your home. Whatever you need - rooms, meals, information - "
-                    "it's yours freely."
+                    "it's yours freely.[/dialogue]"
                 )
 
         # Build wares information

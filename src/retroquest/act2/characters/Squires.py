@@ -44,22 +44,22 @@ class Squires(Character):
         if not game_state.get_story_flag(FLAG_CEDRIKS_HONOR_ACCEPTED):
             # Squires are too busy to talk if quest hasn't been accepted
             return (
-                "[character_name]Squires[/character_name]: *The squires are deeply "
+                "[character_name]Squires[/character_name]: [dialogue]*The squires are deeply "
                 "focused on their training exercises, practicing sword forms and "
                 "footwork with intense concentration. They seem too busy and "
                 "focused to engage in conversation right now.* 'Sorry, we can't "
                 "talk - the Training Master expects us to perfect these techniques "
-                "before the day is over.'"
+                "before the day is over.'[/dialogue]"
             )
         # Set flag that squires have been talked to (only if quest is accepted)
         game_state.set_story_flag(FLAG_SQUIRES_TALKED_TO, True)
         return (
-            "[character_name]Squires[/character_name]: *The young squires lower their voices and "
+            "[character_name]Squires[/character_name]: [dialogue]*The young squires lower their voices and "
             "glance around nervously.* We're not supposed to talk about it, but we've "
             "heard the older knights whispering about Sir Cedric's disgrace. They say he "
             "abandoned his post during a crucial battle and that soldiers died because of "
             "his cowardice. *One squire looks particularly troubled.* But it doesn't make "
             "sense - Sir Cedric has always taught us about honor and duty. He would never "
             "abandon his men. *Another squire nods.* We found an old diary under the stone "
-            "benches that tells a different story. Maybe you should take a look at it."
+            "benches that tells a different story. Maybe you should take a look at it.[/dialogue]"
         )

@@ -52,11 +52,11 @@ class Families(Character):
             )
 
         response = (
-            f"[character_name]{self.get_name()}[/character_name]: Welcome to our neighborhood! "
+            f"[character_name]{self.get_name()}[/character_name]: [dialogue]Welcome to our neighborhood! "
             "It's lovely to meet someone who takes time to help others. Greendale has a rich "
             "history - our families have been here for generations. The city has always been "
             "a place where those with good hearts and magical talents find a home. We're "
-            "grateful for folks like you who lend a hand to those in need."
+            "grateful for folks like you who lend a hand to those in need.[/dialogue]"
         )
 
         # Give healing herbs on first conversation after helping elderly residents

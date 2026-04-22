@@ -56,8 +56,8 @@ class ForestHermit(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                    "studies you with ancient eyes. 'I have been waiting for you, "
+                    f"The [character_name]{self.get_name()}[/character_name] "
+                    "studies you with ancient eyes. [dialogue]'I have been waiting for you, "
                 )
 
                 + (
@@ -89,8 +89,8 @@ class ForestHermit(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                    "nods knowingly. 'The forest awaits, but remember my warnings. "
+                    f"The [character_name]{self.get_name()}[/character_name] "
+                    "nods knowingly. [dialogue]'The forest awaits, but remember my warnings. "
                 )
                 + (
                     "Trust in nature's wisdom, and the ancient ways will guide your "

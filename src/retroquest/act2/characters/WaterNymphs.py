@@ -91,8 +91,8 @@ class WaterNymphs(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                    "shimmer with approval. 'You have proven your wisdom and "
+                    f"The [character_name]{self.get_name()}[/character_name] "
+                    "shimmer with approval. [dialogue]'You have proven your wisdom and "
                     "understanding of the forest's ways, young seeker. The sacred "
                     "gifts are yours to take - the crystal-clear water and moonflowers "
                     "that grow here. Use them wisely in your quest to protect the "
@@ -106,9 +106,9 @@ class WaterNymphs(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
+                    f"The [character_name]{self.get_name()}[/character_name] "
                     "speak in harmonious, flowing voices like water over stones. "
-                    "'Welcome, forest walker, to our sacred glade. To prove your "
+                    "[dialogue]'Welcome, forest walker, to our sacred glade. To prove your "
                     "wisdom and earn our trust, you must answer our riddles three. "
                     "Listen carefully to the "
                     f"{self._get_ordinal_word(self.current_riddle + 1)} riddle:'[/dialogue]"
@@ -116,9 +116,9 @@ class WaterNymphs(Character):
                 + "\n\n"
                 + f"[dialogue]'{riddle['question']}'[/dialogue]\n\n"
                 + (
-                    "[info]Think carefully and speak your answer when you believe you "
+                    "[dim]Think carefully and speak your answer when you believe you "
                     "know it. Use the command 'say <your_answer> to water nymphs' to "
-                    "give your solution.[/info]"
+                    "give your solution.[/dim]"
                 )
             )
         else:
@@ -138,10 +138,10 @@ class WaterNymphs(Character):
         """Process player speech for riddle answering (overrides base)."""
         if self.riddles_completed:
             return (
-                f"[info]The [character_name]{self.get_name()}[/character_name] have "
+                f"[dim]The [character_name]{self.get_name()}[/character_name] have "
                 "already accepted your wisdom. "
                 f"They listen to your words '{words}' with gentle understanding "
-                "but have no more riddles for you.[/info]"
+                "but have no more riddles for you.[/dim]"
             )
 
         if self.current_riddle >= len(self.riddles):
@@ -172,8 +172,8 @@ class WaterNymphs(Character):
                     f"[success]Correct! '{words}' is indeed the answer. "
                     f"{riddle['explanation']}[/success]\n\n"
                     + (
-                        f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                        "sing in harmonious delight. 'Wisely spoken, all three riddles "
+                        f"The [character_name]{self.get_name()}[/character_name] "
+                        "sing in harmonious delight. [dialogue]'Wisely spoken, all three riddles "
                         "answered! You have proven your deep understanding of the "
                         "forest's mysteries. Accept our gifts - the crystal-clear water "
                         "and moonflowers that grow in this sacred place. May they "
@@ -181,8 +181,8 @@ class WaterNymphs(Character):
                     )
                     + "\n\n"
                     + (
-                        "[info]The water nymphs gesture toward the stream and flowers, "
-                        "making them accessible for you to take.[/info]"
+                        "[event]The water nymphs gesture toward the stream and flowers, "
+                        "making them accessible for you to take.[/event]"
                     )
                 )
             else:
@@ -191,8 +191,8 @@ class WaterNymphs(Character):
                     f"[success]Correct! '{words}' is the right answer. "
                     f"{riddle['explanation']}[/success]\n\n"
                     + (
-                        f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                        "nod approvingly. 'Well spoken! Now for the "
+                        f"The [character_name]{self.get_name()}[/character_name] "
+                        "nod approvingly. [dialogue]'Well spoken! Now for the "
                         f"{self._get_ordinal_word(self.current_riddle + 1)} riddle:'"
                         "[/dialogue]"
                     )
@@ -208,8 +208,8 @@ class WaterNymphs(Character):
                 "world around you.'[/failure]\n\n"
                 + f"[dialogue]'{riddle['question']}'[/dialogue]\n\n"
                 + (
-                    "[info]Consider what you've learned about the forest during your "
-                    "journey.[/info]"
+                    "[dim]Consider what you've learned about the forest during your "
+                    "journey.[/dim]"
                 )
             )
 

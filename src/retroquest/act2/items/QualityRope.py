@@ -34,8 +34,8 @@ class QualityRope(Item):
             # Check if caravan has already been secured
             if game_state.get_story_flag(FLAG_FOUND_LOST_CARAVAN):
                 return (
-                    "[info]You've already used your rope to secure the caravan and help the "
-                    "merchants escape from the ravine.[/info]"
+                    "[dim]You've already used your rope to secure the caravan and help the "
+                    "merchants escape from the ravine.[/dim]"
                 )
 
             # Use the rope to rescue the caravan

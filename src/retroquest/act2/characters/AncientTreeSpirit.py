@@ -40,8 +40,8 @@ class AncientTreeSpirit(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                    "acknowledges your presence with a slow, measured gaze. 'Welcome, "
+                    f"The [character_name]{self.get_name()}[/character_name] "
+                    "acknowledges your presence with a slow, measured gaze. [dialogue]'Welcome, "
                     "young seeker, to my ancient domain. You show proper reverence, which "
                     "speaks well of your character.'[/dialogue]\n\n"
                 )
@@ -60,8 +60,8 @@ class AncientTreeSpirit(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                    "senses your presence and turns its ancient gaze upon you. 'Ah, "
+                    f"The [character_name]{self.get_name()}[/character_name] "
+                    "senses your presence and turns its ancient gaze upon you. [dialogue]'Ah, "
                     "young forest friend, you return to me. I sense you have been "
                     "learning to use the gift of forest speech, but your task is not yet "
                     "complete.'[/dialogue]\n\n"
@@ -88,9 +88,9 @@ class AncientTreeSpirit(Character):
             event_msg
             + "\n"
             + (
-                f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
+                f"The [character_name]{self.get_name()}[/character_name] "
                 "rustles gently in a breeze that touches only its silver branches. "
-                "You have learned much, young forest friend. Use your knowledge "
+                "[dialogue]'You have learned much, young forest friend. Use your knowledge "
                 "wisely, and remember that the greatest magic comes from "
                 "understanding the connections between all living things.'[/dialogue]"
             )
@@ -109,8 +109,8 @@ class AncientTreeSpirit(Character):
         if isinstance(item_object, EnchantedAcorn):
             if self.acorn_received:
                 return (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                    "gently refuses. 'You have already offered me the sacred acorn, young "
+                    f"The [character_name]{self.get_name()}[/character_name] "
+                    "gently refuses. [dialogue]'You have already offered me the sacred acorn, young "
                     "one. One gift of such significance is enough.'[/dialogue]"
                 )
 
@@ -127,9 +127,9 @@ class AncientTreeSpirit(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
+                    f"The [character_name]{self.get_name()}[/character_name] "
                     "stirs as you offer the [item_name]enchanted acorn[/item_name]. The "
-                    "ancient being's form brightens with approval. 'Ah, young one, you "
+                    "ancient being's form brightens with approval. [dialogue]'Ah, young one, you "
                     "bring me a gift of great significance. This acorn carries the essence "
                     "of new growth, the promise of future forests.'[/dialogue]\n\n"
                 )
@@ -148,8 +148,8 @@ class AncientTreeSpirit(Character):
                     "[/success]\n\n"
                 )
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] regards "
-                    "you with ancient, knowing eyes. 'Now that you can speak with the "
+                    f"The [character_name]{self.get_name()}[/character_name] regards "
+                    "you with ancient, knowing eyes. [dialogue]'Now that you can speak with the "
                     "forest, there is another service you could provide. The balance of "
                     "this grove has been disturbed by creatures in distress.'[/dialogue]\n\n"
                 )
@@ -176,8 +176,8 @@ class AncientTreeSpirit(Character):
 
             if game_state.get_story_flag(FLAG_WHISPERS_IN_WIND_COMPLETED):
                 return (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                    "nods approvingly but gently refuses. 'You have already proven "
+                    f"The [character_name]{self.get_name()}[/character_name] "
+                    "nods approvingly but gently refuses. [dialogue]'You have already proven "
                     "yourself, young one. Keep these sacred gifts as tokens of the "
                     "forest's trust in you.'[/dialogue]"
                 )
@@ -222,9 +222,9 @@ class AncientTreeSpirit(Character):
             # Player only has one of the required items
             missing_item = "moonflowers" if has_water else "crystal-clear water"
             return (
-                f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
+                f"The [character_name]{self.get_name()}[/character_name] "
                 f"examines the [item_name]{item_object.get_name()}[/item_name] with "
-                "approval. 'This is indeed a sacred gift from the water nymphs, "
+                "approval. [dialogue]'This is indeed a sacred gift from the water nymphs, "
                 "young one. However, to complete your task and prove your full "
                 "understanding of the forest's ways, you must bring me both the "
                 "crystal-clear water and the moonflowers. Return when you have the "
@@ -233,10 +233,10 @@ class AncientTreeSpirit(Character):
 
         # Default response for other items
         return (
-            f"[dialogue]The [character_name]{self.get_name()}[/character_name] regards the "
-            f"[item_name]{item_object.get_name()}[/item_name] with ancient wisdom. 'This is "
-            f"not what I seek, young one. The forest calls for a more sacred offering.'"
-            "[/dialogue]"
+            f"The [character_name]{self.get_name()}[/character_name] regards the "
+            f"[item_name]{item_object.get_name()}[/item_name] with ancient wisdom. "
+            f"[dialogue]'This is not what I seek, young one. The forest calls for "
+            "a more sacred offering.'[/dialogue]"
         )
 
     def examine(self, _game_state: GameState) -> str:

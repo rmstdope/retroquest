@@ -48,4 +48,4 @@ class SilverStagInn(Room):
                 "inn rooms upstairs. You can now 'go east' to enter them.[/success]"
             )
         else:
-            return "[info]The inn rooms are already unlocked.[/info]"
+            return "[dim]The inn rooms are already unlocked.[/dim]"

@@ -32,7 +32,7 @@ class SilverTree(Item):
                 ancient_spirit = AncientTreeSpirit()
                 game_state.current_room.characters.append(ancient_spirit)
                 return (
-                    "[environment_description]The ancient tree towers above you, its silver bark "
+                    "[event]The ancient tree towers above you, its silver bark "
                     "shimmering with an inner light that seems to pulse in rhythm with your "
                     "heartbeat. The bark is smooth as polished metal yet warm to the touch, and "
                     "intricate spiraling patterns flow across its surface like living veins of "
@@ -42,11 +42,11 @@ class SilverTree(Item):
                     "essence of the forest. As you study the tree more closely, the silver bark "
                     "begins to glow more brightly, and suddenly you feel a powerful presence "
                     "emerge from within. The Ancient Tree Spirit has awakened to your reverent "
-                    "attention.[/environment_description]"
+                    "attention.[/event]"
                 )
             else:
                 return (
-                    "[environment_description]The ancient tree towers above you, its silver bark "
+                    "[event]The ancient tree towers above you, its silver bark "
                     "shimmering with an inner light that seems to pulse in rhythm with your "
                     "heartbeat. The bark is smooth as polished metal yet warm to the touch, and "
                     "intricate spiraling patterns flow across its surface like living veins of "
@@ -54,11 +54,11 @@ class SilverTree(Item):
                     "reflect light in impossible ways. You sense an ancient presence within - "
                     "older than memory, wise beyond measure, and deeply connected to the very "
                     "essence of the forest. This is no mere tree, but the dwelling place of the "
-                    "Ancient Tree Spirit.[/environment_description]"
+                    "Ancient Tree Spirit.[/event]"
                 )
         else:
             return (
-                "[environment_description]The magnificent silver-barked tree continues to "
+                "[event]The magnificent silver-barked tree continues to "
                 "radiate ancient power and wisdom. Its presence fills you with a sense of "
-                "reverence and connection to the natural world.[/environment_description]"
+                "reverence and connection to the natural world.[/event]"
             )

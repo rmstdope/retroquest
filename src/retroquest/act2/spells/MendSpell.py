@@ -84,8 +84,8 @@ class MendSpell(Spell):
             else:
                 iname = target_item.get_name()
                 return (
-                    f"[info]The [item_name]{iname}[/item_name] have already been repaired "
-                    "and are functioning properly.[/info]"
+                    f"[dim]The [item_name]{iname}[/item_name] have already been repaired "
+                    "and are functioning properly.[/dim]"
                 )
         # Check if the item can be repaired (this is the original implementation)
         elif (
@@ -103,7 +103,7 @@ class MendSpell(Spell):
             name = self.get_name()
             iname = target_item.get_name()
             return (
-                f"[info]You cast [spell_name]{name}[/spell_name] on "
+                f"[dim]You cast [spell_name]{name}[/spell_name] on "
                 f"[item_name]{iname}[/item_name], but it doesn't appear to need any "
-                "repairs. The spell has no effect.[/info]"
+                "repairs. The spell has no effect.[/dim]"
             )

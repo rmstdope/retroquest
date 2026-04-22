@@ -34,10 +34,10 @@ class PropheticVision(Spell):
         )
         if not cedric_present:
             return (
-                "[info]As you begin to cast the prophetic vision spell, you sense that the "
+                "[dim]As you begin to cast the prophetic vision spell, you sense that the "
                 "visions would be most meaningful if shared with someone who can act upon the "
                 "knowledge. You should use this spell together with Sir Cedric, who has the "
-                "authority and wisdom to prepare for the threats that the visions reveal.[/info]"
+                "authority and wisdom to prepare for the threats that the visions reveal.[/dim]"
             )
 
         if not game_state.get_story_flag(FLAG_GATHERING_STORM_COMPLETED):

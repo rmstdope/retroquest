@@ -42,12 +42,12 @@ class StandingStones(Item):
             else:
                 spell_msg = ""
             return (
-                "[info]You approach the ancient standing stones and run your hands over their "
+                "[event]You approach the ancient standing stones and run your hands over their "
                 "weathered surfaces. The runes carved into the stone are clearly druidic—symbols "
                 "representing protection, passage, and the balance between civilization and "
                 "wilderness. These stones have stood here for centuries, marking the boundary "
                 "between worlds. You can feel the old magic thrumming within them, a gentle but "
-                "powerful force that has protected travelers for generations.[/info]"
+                "powerful force that has protected travelers for generations.[/event]"
                 + spell_msg
             )
         else:

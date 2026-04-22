@@ -76,7 +76,7 @@ class TheForestGuardiansRiddles(Quest):
                 exp_msg = f" You gain {self.experience_reward} experience!"
             else:
                 exp_msg = ""
-            return f"[quest_complete]Quest Complete: {self.name}[/quest_complete]{exp_msg}"
+            return f"[success]Quest Complete: {self.name}[/success]{exp_msg}"
         return self.completion
 
     def get_status(self) -> str:

@@ -23,12 +23,12 @@ class Door(Item):
         # Check if we're in the Silver Stag Inn
         if isinstance(game_state.current_room, SilverStagInn):
             return (
-                "[info]The door leads to the private inn rooms upstairs. You can 'go east' "
-                "to enter the room area.[/info]"
+                "[dim]The door leads to the private inn rooms upstairs. You can 'go east' "
+                "to enter the room area.[/dim]"
             )
         else:
             return (
-                "[info]This door is not accessible from your current location.[/info]"
+                "[dim]This door is not accessible from your current location.[/dim]"
             )
 
     def examine(self, _game_state: GameState) -> str:

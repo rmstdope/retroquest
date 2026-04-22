@@ -81,4 +81,4 @@ class CastleCourtyard(Room):
                 "that appears to have been left by a former squire.[/event]\n\n"
                 "[success]You found a [item_name]squire's diary[/item_name]![/success]"
             )
-        return "[info]You've already searched this area thoroughly.[/info]"
+        return "[dim]You've already searched this area thoroughly.[/dim]"

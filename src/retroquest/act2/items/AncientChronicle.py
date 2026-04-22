@@ -25,15 +25,15 @@ class AncientChronicle(Item):
             game_state.learn_spell(DispelSpell())
 
             return (
-                "[info]You study the ancient texts, reviewing the knowledge of the "
+                "[event]You study the ancient texts, reviewing the knowledge of the "
                 "[spell_name]dispel[/spell_name] spell and the revelations about your "
                 "heritage. The words of the Chosen One prophecy echo in your mind as you "
-                "contemplate your destiny.[/info]"
+                "contemplate your destiny.[/event]"
             )
         else:
             return (
-                "[info]The [character_name]Spectral Librarian[/character_name] materializes "
+                "[event]The [character_name]Spectral Librarian[/character_name] materializes "
                 "before you, blocking your access to the ancient texts. 'These sacred "
                 "chronicles are not for the unworthy,' the spirit intones. 'Prove yourself "
-                "first, then perhaps I will permit you to study these treasures.'[/info]"
+                "first, then perhaps I will permit you to study these treasures.'[/event]"
             )

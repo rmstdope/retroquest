@@ -49,9 +49,9 @@ class ForestSprites(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{name}[/character_name] flutter around you "
+                    f"The [character_name]{name}[/character_name] flutter around you "
                     "in a sparkling dance, their chiming voices creating a melodic chorus. "
-                    "'Welcome, traveler, to the threshold of the deep forest! We are the "
+                    "[dialogue]'Welcome, traveler, to the threshold of the deep forest! We are the "
                 )
 
                 + (
@@ -82,8 +82,8 @@ class ForestSprites(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{name}[/character_name] continue their "
-                    "eternal dance, chiming softly. 'The ancient ones await your wisdom, "
+                    f"The [character_name]{name}[/character_name] continue their "
+                    "eternal dance, chiming softly. [dialogue]'The ancient ones await your wisdom, "
                 )
 
                 + (

@@ -18,9 +18,9 @@ class CastleGuardCaptain(Character):
     def talk_to(self, _game_state: GameState) -> str:
         name = self.get_name()
         return (
-            f"[character_name]{name}[/character_name]: Welcome to the castle grounds. "
+            f"[character_name]{name}[/character_name]: [dialogue]Welcome to the castle grounds. "
             "[character_name]Sir Cedric[/character_name] can be found in the courtyard. "
             "When speaking with him, address him as 'Sir' and show proper respect. "
             "He's been seeking capable individuals for important work, so if you're "
-            "here about that, be prepared to demonstrate your abilities."
+            "here about that, be prepared to demonstrate your abilities.[/dialogue]"
         )

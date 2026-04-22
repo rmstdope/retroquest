@@ -68,20 +68,20 @@ class NatureSenseSpell(Spell):
                 game_state.current_room.characters.append(WaterNymphs())
                 name = self.get_name()
                 return (
-                    f"[spell_effect]You cast [spell_name]{name}[/spell_name] and extend "
+                    f"[event]You cast [spell_name]{name}[/spell_name] and extend "
                     "your awareness throughout the glade. Immediately, you "
                     "sense magical presences by the stream - graceful forms of "
                     "living water and moonlight. The water nymphs reveal "
                     "themselves, shimmering into visibility as they recognize "
                     "your magical sensitivity and respect for the natural "
-                    "world.[/spell_effect]"
+                    "world.[/event]"
                 )
             else:
                 name = self.get_name()
                 return (
-                    f"[info]Your [spell_name]{name}[/spell_name] reveals the familiar "
+                    f"[dim]Your [spell_name]{name}[/spell_name] reveals the familiar "
                     "presence of the water nymphs by the sacred stream, their forms "
-                    "visible and welcoming.[/info]"
+                    "visible and welcoming.[/dim]"
                 )
         elif (
             "forest" in game_state.current_room.name.lower()
@@ -111,8 +111,8 @@ class NatureSenseSpell(Spell):
             # In other areas, provide general nature awareness
             name = self.get_name()
             return (
-                f"[info]You cast [spell_name]{name}[/spell_name] and feel a subtle "
+                f"[dim]You cast [spell_name]{name}[/spell_name] and feel a subtle "
                 "connection to the natural world around you. While there isn't much "
                 "wilderness here, you gain a better understanding of the living "
-                "things in this area and their relationship to the environment.[/info]"
+                "things in this area and their relationship to the environment.[/dim]"
             )

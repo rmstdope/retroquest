@@ -32,12 +32,12 @@ class EnhancedLantern(Item):
                 )
                 self.name = 'enhanced lantern (lit)'
                 result = (
-                    "[item_effect]The Enhanced Lantern's crystal core pulses with magical "
+                    "[event]The Enhanced Lantern's crystal core pulses with magical "
                     "energy, casting ethereal blue light that reveals hidden paths through "
                     "the dense undergrowth. The light seems to resonate with the forest's "
                     "natural magic, illuminating safe routes and warning you away from "
                     "dangerous areas. With this enhanced vision, you can navigate the "
-                    "forest with confidence.[/item_effect]"
+                    "forest with confidence.[/event]"
                 )
 
                 # Check if both protective charm and enhanced lantern have been used
@@ -52,8 +52,8 @@ class EnhancedLantern(Item):
                 return result
             else:
                 return (
-                    "[info]The Enhanced Lantern continues to provide magical illumination, "
-                    "keeping the forest paths clearly visible.[/info]"
+                    "[dim]The Enhanced Lantern continues to provide magical illumination, "
+                    "keeping the forest paths clearly visible.[/dim]"
                 )
         else:
             return (

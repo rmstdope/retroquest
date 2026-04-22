@@ -33,7 +33,7 @@ class TrainingMaster(Character):
             game_state.set_story_flag(FLAG_CEDRIKS_HONOR_ACCEPTED, True)
 
             return (
-                "[character_name]Training Master[/character_name]: Ah, a visitor to our "
+                "[character_name]Training Master[/character_name]: [dialogue]Ah, a visitor to our "
                 "training grounds. I've been instructing knights and squires here for "
                 "many years. *He glances toward Sir Cedric with a troubled expression.* "
                 "It pains me to see a fine knight like Sir Cedric carrying such a heavy "
@@ -46,14 +46,14 @@ class TrainingMaster(Character):
                 "his voice.* I've heard rumors that there were supposed to be documents - "
                 "evidence that would clear his name. Perhaps someone with your skills could "
                 "help uncover the truth and restore honor to a good man who has suffered "
-                "long enough."
+                "long enough.[/dialogue]"
             )
         else:
             # Subsequent conversations
             return (
-                "[character_name]Training Master[/character_name]: *He nods respectfully.* "
+                "[character_name]Training Master[/character_name]: [dialogue]*He nods respectfully.* "
                 "You're looking into Sir Cedric's situation? Good. That man has suffered "
                 "under false accusations for far too long. The truth needs to come to "
                 "light. Perhaps the squires might know more about what happened - they "
-                "sometimes hear things that we older knights miss."
+                "sometimes hear things that we older knights miss.[/dialogue]"
             )

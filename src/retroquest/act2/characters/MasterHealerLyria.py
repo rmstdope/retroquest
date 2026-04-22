@@ -95,7 +95,7 @@ class MasterHealerLyria(Character):
                 "you've shown yourself ready for advanced training.' She teaches you the "
                 "[spell_name]greater_heal[/spell_name] spell! 'You've truly earned the title of "
                 "healer.'[/success]\n\n"
-                "[quest_complete]Quest Complete: The Healer's Apprentice[/quest_complete]"
+                "[success]Quest Complete: The Healer's Apprentice[/success]"
             )
         elif isinstance(item_object, HealingHerbs):
             # Check if apprentice quest is accepted but not completed

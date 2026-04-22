@@ -53,9 +53,9 @@ class ForestSpeechSpell(Spell):
             FLAG_FOUND_RAVINE
         ):
             return (
-                f"[info]You cast [spell_name]{name}[/spell_name], but the woodland creatures "
+                f"[dim]You cast [spell_name]{name}[/spell_name], but the woodland creatures "
                 "have no new information about the ravine - you've already located it."
-                "[/info]"
+                "[/dim]"
             )
         # Normal forest speech behavior for other locations
         room_name = current_room.name.lower()
@@ -79,11 +79,11 @@ class ForestSpeechSpell(Spell):
             )
         else:
             return (
-                f"[info]You cast [spell_name]{name}[/spell_name], but there are "
+                f"[dim]You cast [spell_name]{name}[/spell_name], but there are "
                 "few natural beings here to communicate with. You sense the faint whispers "
                 "of any plants nearby, but the spell would be much more powerful in a "
                 "forest or natural environment."
-                "[/info]"
+                "[/dim]"
             )
 
     def cast_on_character(self, _game_state: GameState, target_character: Any) -> str:
@@ -101,8 +101,8 @@ class ForestSpeechSpell(Spell):
             )
         else:
             return (
-                f"[info]You cast [spell_name]{self.get_name()}[/spell_name] on "
+                f"[dim]You cast [spell_name]{self.get_name()}[/spell_name] on "
                 f"[character_name]{tname}[/character_name], but this spell is designed for "
                 "communication with forest beings and natural spirits. It has no effect "
-                "on this character.[/info]"
+                "on this character.[/dim]"
             )

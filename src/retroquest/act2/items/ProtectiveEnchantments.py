@@ -38,6 +38,6 @@ class ProtectiveEnchantments(Item):
     def use_item(self, _game_state: GameState) -> str:
         """Use the protective enchantments (not directly usable)."""
         return (
-            "[info]The protective enchantments are magical barriers, not something you "
-            "can use directly.[/info]"
+            "[dim]The protective enchantments are magical barriers, not something you "
+            "can use directly.[/dim]"
         )

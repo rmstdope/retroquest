@@ -77,7 +77,7 @@ class MasterMerchantAldric(Character):
             game_state.current_room.add_wares()
             item_name = item_object.get_name()
             return (
-                f"[success]You present the [item]{item_name}[/item] to "
+                f"[success]You present the [item_name]{item_name}[/item_name] to "
                 "[character_name]Master Merchant Aldric[/character_name]. His eyes "
                 "light up as he examines it. 'Ah, excellent! This flyer grants you "
                 "access to our premium selection and preferred customer pricing. "

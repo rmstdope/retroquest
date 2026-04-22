@@ -48,7 +48,7 @@ class ResidentialQuarter(Room):
                 f"concealed entrance in the stone wall. A narrow tunnel leads underground to "
                 f"what appears to "
                 f"be an ancient chamber. You've found a secret passage to a "
-                f"[location_name]{hidden_library.name}[/location_name]! "
+                f"[room_name]{hidden_library.name}[/room_name]! "
                 f"Use 'go secret_passage' to enter this mysterious repository.[/success]"
             )
         else:
@@ -56,6 +56,6 @@ class ResidentialQuarter(Room):
             from ..rooms.HiddenLibrary import HiddenLibrary
             hidden_library = HiddenLibrary()
             return (
-                f"[info]You've already discovered the secret passage to the "
-                f"{hidden_library.name}.[/info]"
+                f"[dim]You've already discovered the secret passage to the "
+                f"{hidden_library.name}.[/dim]"
             )

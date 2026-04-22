@@ -32,13 +32,13 @@ class CourtHerald(Character):
             )
             herald_name = self.get_name()
             announcement = (
-                f"[character_name]{herald_name}[/character_name]: Excellent! This is a "
+                f"[character_name]{herald_name}[/character_name]: [dialogue]Excellent! This is a "
                 "properly certified entry pass. I hereby formally present you to the "
                 "court and grant you access to our historical archives."
             )
             announcement_tail = (
                 "Your credentials are now on record, and you may research freely in "
-                "our collections."
+                "our collections.[/dialogue]"
             )
             return event_msg + "\n" + announcement + " " + announcement_tail
         else:
@@ -50,15 +50,15 @@ class CourtHerald(Character):
         name = self.get_name()
         if game_state.get_story_flag(FLAG_COURT_HERALD_FORMAL_PRESENTATION):
             return (
-                f"[character_name]{name}[/character_name]: You have been formally "
+                f"[character_name]{name}[/character_name]: [dialogue]You have been formally "
                 "presented to the court and your credentials are on record. You may "
                 "access the historical archives and speak with court historians "
-                "about your research."
+                "about your research.[/dialogue]"
             )
         else:
             return (
-                f"[character_name]{name}[/character_name]: I handle formal presentations "
+                f"[character_name]{name}[/character_name]: [dialogue]I handle formal presentations "
                 "and credentials for court access. If you wish to research in the "
                 "historical archives or speak with court officials, you'll need proper "
-                "documentation of your standing."
+                "documentation of your standing.[/dialogue]"
             )

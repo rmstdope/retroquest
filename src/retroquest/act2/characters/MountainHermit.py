@@ -54,9 +54,9 @@ class MountainHermit(Character):
             self.warned_about_times = True
             name = self.get_name()
             warning_msg = (
-                "[dialogue]The [character_name]"
+                "The [character_name]"
                 f"{name}[/character_name] looks up from his fire with ancient eyes. "
-                "'Ah, a traveler heading to Greendale. I sense great changes coming to "
+                "[dialogue]'Ah, a traveler heading to Greendale. I sense great changes coming to "
                 "these lands. Dark forces stir, and heroes will be needed in the days "
                 "ahead. You have the look of one who might rise to such challenges.'[/dialogue]"
             )
@@ -75,8 +75,8 @@ class MountainHermit(Character):
                     event_msg
                     + "\n"
                     + (
-                        "[dialogue]The [character_name]"
-                        f"{name}[/character_name] nods sagely. 'The [item_name]"
+                        "The [character_name]"
+                        f"{name}[/character_name] nods sagely. [dialogue]'The [item_name]"
                         f"{sword_name}[/item_name] I gave you will serve you well in Greendale. "
                         "Show them your skill, and doors will open. May your journey be "
                         "blessed with wisdom and courage.'[/dialogue]"
@@ -95,8 +95,8 @@ class MountainHermit(Character):
         if self.sword_given:
             name = self.get_name()
             return (
-                "[dialogue]The [character_name]"
-                f"{name}[/character_name] smiles. 'I already gave you the sword, young one. "
+                "The [character_name]"
+                f"{name}[/character_name] smiles. [dialogue]'I already gave you the sword, young one. "
                 "Use it wisely.'[/dialogue]"
             )
 
@@ -106,8 +106,8 @@ class MountainHermit(Character):
 
         sword_name = training_sword.get_name()
         sword_dialogue = (
-            "[dialogue]He reaches into his pack and pulls out a [item_name]"
-            f"{sword_name}[/item_name]. 'Take this. If you truly are destined for "
+            "He reaches into his pack and pulls out a [item_name]"
+            f"{sword_name}[/item_name]. [dialogue]'Take this. If you truly are destined for "
             "greatness, you'll need to prove your skills to those who matter. "
             "This blade has served me well in teaching others.'[/dialogue]\n\n"
             f"[event]You receive a [item_name]{sword_name}[/item_name]![/event]"
@@ -125,8 +125,8 @@ class MountainHermit(Character):
         if self.sword_given:
             name = self.get_name()
             return (
-                "[dialogue]The [character_name]"
-                f"{name}[/character_name] smiles. 'I already gave you the sword, young one. "
+                "The [character_name]"
+                f"{name}[/character_name] smiles. [dialogue]'I already gave you the sword, young one. "
                 "Use it wisely.'[/dialogue]"
             )
 

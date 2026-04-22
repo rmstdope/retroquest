@@ -40,45 +40,45 @@ class BarmaidElena(Character):
         if game_state.get_story_flag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED):
             name = self.get_name()
             return (
-                f"[character_name]{name}[/character_name]: *beaming with health and vitality* "
+                f"[character_name]{name}[/character_name]: [dialogue]*beaming with health and vitality* "
                 "Oh, thank you so much! I feel like I'm alive again! The curse is "
                 "completely gone, and I owe you my life. My father is so grateful - "
                 "he insists you take our family's sacred charm as a token of our "
-                "eternal gratitude. You are truly a hero!"
+                "eternal gratitude. You are truly a hero![/dialogue]"
             )
         elif self.elena_purified:
             name = self.get_name()
             return (
-                f"[character_name]{name}[/character_name]: *glowing with pure energy* "
+                f"[character_name]{name}[/character_name]: [dialogue]*glowing with pure energy* "
                 "I feel so much cleaner now! The blessed water has washed away the "
                 "dark corruption that was clinging to my soul. The curse is almost "
                 "gone - I can sense just a few dark tendrils remaining. One powerful "
-                "dispelling spell should shatter the last of this evil enchantment!"
+                "dispelling spell should shatter the last of this evil enchantment![/dialogue]"
             )
         elif self.elena_initial_healing:
             name = self.get_name()
             return (
-                f"[character_name]{name}[/character_name]: *looking much better but still "
+                f"[character_name]{name}[/character_name]: [dialogue]*looking much better but still "
                 "weak* The healing magic has given me strength! I can feel the curse's "
                 "grip weakening, but it's still there, clinging to me. I think you'll "
                 "need to purify the dark magic with blessed water and then cast a "
-                "powerful dispelling spell to break it completely."
+                "powerful dispelling spell to break it completely.[/dialogue]"
             )
         elif not game_state.get_story_flag(FLAG_KNOWS_ELENA_CURSE):
             game_state.set_story_flag(FLAG_KNOWS_ELENA_CURSE, True)
             name = self.get_name()
             return (
-                f"[character_name]{name}[/character_name]: *coughs weakly* Hello, traveler. "
+                f"[character_name]{name}[/character_name]: [dialogue]*coughs weakly* Hello, traveler. "
                 "I apologize for my appearance... I've been cursed by a dark wizard who "
                 "passed through town weeks ago. The curse grows stronger each day, "
                 "draining my life force. My father searches desperately for a cure, but "
                 "I fear only someone with powerful magical abilities could break such "
-                "dark magic."
+                "dark magic.[/dialogue]"
             )
         else:
             return (
-                f"[character_name]{self.get_name()}[/character_name]: *weakly* Have you found "
-                "a way to break the curse? I can feel my strength fading more each day..."
+                f"[character_name]{self.get_name()}[/character_name]: [dialogue]*weakly* Have you found "
+                "a way to break the curse? I can feel my strength fading more each day...[/dialogue]"
             )
 
     def receive_greater_heal(self) -> str:

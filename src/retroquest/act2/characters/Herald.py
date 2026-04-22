@@ -23,16 +23,16 @@ class Herald(Character):
         name = self.get_name()
         if self.received_pass:
             return (
-                f"[character_name]{name}[/character_name]: Your credentials have been "
+                f"[character_name]{name}[/character_name]: [dialogue]Your credentials have been "
                 "verified and you have been granted formal audience rights. You may "
                 "proceed to meet with [character_name]Sir Cedric[/character_name] and "
-                "other members of the court."
+                "other members of the court.[/dialogue]"
             )
         else:
             return (
-                f"[character_name]{name}[/character_name]: Greetings, traveler. I must "
+                f"[character_name]{name}[/character_name]: [dialogue]Greetings, traveler. I must "
                 "examine your credentials before you can be granted audience with the "
-                "nobility. Do you have a formal pass or letter of recommendation?"
+                "nobility. Do you have a formal pass or letter of recommendation?[/dialogue]"
             )
 
     def give_item(self, game_state: GameState, item_object: Item) -> str:

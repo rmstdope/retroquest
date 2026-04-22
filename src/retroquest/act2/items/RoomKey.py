@@ -43,8 +43,8 @@ class RoomKey(Item):
                 return result
             else:
                 return (
-                    "[info]You need to be in The Silver Stag Inn to use the key "
-                    "with the door.[/info]"
+                    "[dim]You need to be in The Silver Stag Inn to use the key "
+                    "with the door.[/dim]"
                 )
         else:
             other_name = other_item.get_name()
