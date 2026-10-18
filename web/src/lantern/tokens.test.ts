@@ -32,12 +32,18 @@ function textPairs(p: LanternPalette): Array<[string, string, string]> {
       pairs.push([`${fg} on ${bg}`, p[fg], p[bg]])
     }
   }
-  pairs.push(['accentText on accentSoft', p.accentText, p.accentSoft])
+  // Quest cards, quick-save buttons and exits sit on the amber tint.
+  for (const fg of ['fg', 'muted', 'accentText'] as const) {
+    pairs.push([`${fg} on accentSoft`, p[fg], p.accentSoft])
+  }
+  pairs.push(['success on itemSoft', p.success, p.itemSoft])
   pairs.push(['onAccent on accent', p.onAccent, p.accent])
   pairs.push(['failure on failureSoft', p.failure, p.failureSoft])
   for (const kind of ['character', 'item', 'spell'] as const) {
     pairs.push([`${kind} on ${kind}Soft`, p[kind], p[`${kind}Soft`]])
     pairs.push([`${kind} on surface`, p[kind], p.surface])
+    // Chip notes ("to Bag") are muted text inside entity chips.
+    pairs.push([`muted on ${kind}Soft`, p.muted, p[`${kind}Soft`]])
   }
   return pairs
 }
@@ -97,8 +103,9 @@ describe('lantern.css', () => {
 
   it.each([
     ['dark', ":root[data-ui='lantern']"],
+    ['light', ":root[data-ui='lantern']:not([data-theme='dark'])"],
     ['light', ":root[data-ui='lantern'][data-theme='light']"],
-  ] as const)('the %s rule matches tokens.ts exactly', (theme, selector) => {
+  ] as const)('the %s rule %s matches tokens.ts exactly', (theme, selector) => {
     const expected = Object.fromEntries(
       Object.entries(LANTERN_PALETTES[theme]).map(([k, v]) => [
         cssVariableName(k),
