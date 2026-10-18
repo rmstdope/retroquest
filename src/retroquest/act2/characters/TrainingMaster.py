@@ -28,6 +28,7 @@ class TrainingMaster(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
+        """Start the honor investigation on first talk; later remind the player."""
         if not game_state.get_story_flag(FLAG_CEDRIKS_HONOR_ACCEPTED):
             # First time talking - trigger the quest
             game_state.set_story_flag(FLAG_CEDRIKS_HONOR_ACCEPTED, True)
@@ -40,20 +41,20 @@ class TrainingMaster(Character):
                 "burden. There are whispers about his past military service - accusations "
                 "of cowardice during a critical battle. But I've known Cedric for years, "
                 "and cowardice is not in his nature. Something about that whole affair "
-                "never sat right with me. The official reports seemed... incomplete.\n\n"
-
-                "[character_name]Training Master[/character_name]: *He leans closer, lowering "
-                "his voice.* I've heard rumors that there were supposed to be documents - "
-                "evidence that would clear his name. Perhaps someone with your skills could "
-                "help uncover the truth and restore honor to a good man who has suffered "
-                "long enough.[/dialogue]"
+                "never sat right with me. The official reports seemed... incomplete."
+                "[/dialogue]\n\n"
+                "[character_name]Training Master[/character_name]: [dialogue]*He leans "
+                "closer, lowering his voice.* I've heard rumors that there were supposed to "
+                "be documents - evidence that would clear his name. Perhaps someone with "
+                "your skills could help uncover the truth and restore honor to a good man "
+                "who has suffered long enough.[/dialogue]"
             )
         else:
             # Subsequent conversations
             return (
-                "[character_name]Training Master[/character_name]: [dialogue]*He nods respectfully.* "
-                "You're looking into Sir Cedric's situation? Good. That man has suffered "
-                "under false accusations for far too long. The truth needs to come to "
-                "light. Perhaps the squires might know more about what happened - they "
+                "[character_name]Training Master[/character_name]: [dialogue]*He nods "
+                "respectfully.* You're looking into Sir Cedric's situation? Good. That man "
+                "has suffered under false accusations for far too long. The truth needs to "
+                "come to light. Perhaps the squires might know more about what happened - they "
                 "sometimes hear things that we older knights miss.[/dialogue]"
             )

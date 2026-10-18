@@ -33,44 +33,45 @@ class MasterHealerLyria(Character):
                 return (
                     "[success][character_name]Master Healer Lyria[/character_name] recognizes "
                     "your magical potential and notices the [item_name]Crystal Focus[/item_name] "
-                    "you carry. 'That crystal focus! It's exactly what I need to help my "
-                    "patients who are on the brink of death. If you're willing to give it to "
-                    "me, I can use it to save lives and teach you advanced healing magic in "
-                    "return.' Her eyes show both desperation and hope.[/success]"
+                    "you carry. [dialogue]'That crystal focus! It's exactly what I need to "
+                    "help my patients who are on the brink of death. If you're willing to give "
+                    "it to me, I can use it to save lives and teach you advanced healing magic "
+                    "in return.'[/dialogue] Her eyes show both desperation and hope.[/success]"
                 )
             elif has_healing_herbs:
                 # First set the accepted flag to trigger the quest
                 return (
                     "[success][character_name]Master Healer Lyria[/character_name] recognizes "
-                    "your magical potential and says: 'I can see you have a natural gift for "
-                    "healing magic. If you're willing to give me those [item_name]Healing "
-                    "Herbs[/item_name] as proof of your commitment to the healing arts, I will "
-                    "teach you advanced techniques.' She gestures to her collection of healing "
-                    "supplies. '[/success]"
+                    "your magical potential and says: [dialogue]'I can see you have a natural "
+                    "gift for healing magic. If you're willing to give me those "
+                    "[item_name]Healing Herbs[/item_name] as proof of your commitment to the "
+                    "healing arts, I will teach you advanced techniques.'[/dialogue] She "
+                    "gestures to her collection of healing supplies.[/success]"
                 )
             else:
                 return (
-                    "[character_name]Master Healer Lyria[/character_name]: Welcome to my house of "
-                    "healing. I can sense magical potential in you, but I desperately need "
-                    "help. I have patients on the brink of death who need more powerful "
-                    "healing than I can provide alone. If you could bring me a "
+                    "[character_name]Master Healer Lyria[/character_name]: [dialogue]Welcome to "
+                    "my house of healing. I can sense magical potential in you, but I "
+                    "desperately need help. I have patients on the brink of death who need "
+                    "more powerful healing than I can provide alone. If you could bring me a "
                     "[item_name]Crystal Focus[/item_name] to amplify my magic, or some "
                     "[item_name]Healing Herbs[/item_name] to show your commitment to healing, I "
-                    "will teach you advanced techniques."
+                    "will teach you advanced techniques.[/dialogue]"
                 )
         elif game_state.get_story_flag(FLAG_HEALERS_APPRENTICE_COMPLETED):
             return (
-                "[character_name]Master Healer Lyria[/character_name]: It's wonderful to see "
-                "how far you've come with your healing abilities. You're truly a master of "
-                "the healing arts now. Continue to use your gifts to help those in need."
+                "[character_name]Master Healer Lyria[/character_name]: [dialogue]It's "
+                "wonderful to see how far you've come with your healing abilities. You're "
+                "truly a master of the healing arts now. Continue to use your gifts to help "
+                "those in need.[/dialogue]"
             )
         else:
             return (
-                "[character_name]Master Healer Lyria[/character_name]: I'm looking forward to "
-                "teaching you advanced healing techniques. Please bring me a "
+                "[character_name]Master Healer Lyria[/character_name]: [dialogue]I'm looking "
+                "forward to teaching you advanced healing techniques. Please bring me a "
                 "[item_name]Crystal Focus[/item_name] to help my dying patients, or some "
                 "[item_name]Healing Herbs[/item_name] to show your commitment, so we can begin "
-                "your training."
+                "your training.[/dialogue]"
             )
 
     def give_item(self, game_state: GameState, item_object) -> str:
@@ -88,13 +89,14 @@ class MasterHealerLyria(Character):
             game_state.learn_spell(GreaterHealSpell())
             return (
                 "[success][character_name]Master Healer Lyria[/character_name] accepts the "
-                "[item_name]Crystal Focus[/item_name] with great relief. 'This is exactly what "
-                "I needed! With this crystal focus, I can amplify my healing magic to treat "
-                "patients on the brink of death.' She immediately begins using it to help her "
-                "critically injured patients. 'Through your compassion and this magical aid, "
-                "you've shown yourself ready for advanced training.' She teaches you the "
-                "[spell_name]greater_heal[/spell_name] spell! 'You've truly earned the title of "
-                "healer.'[/success]\n\n"
+                "[item_name]Crystal Focus[/item_name] with great relief. [dialogue]'This is "
+                "exactly what I needed! With this crystal focus, I can amplify my healing "
+                "magic to treat patients on the brink of death.'[/dialogue] She immediately "
+                "begins using it to help her critically injured patients. [dialogue]'Through "
+                "your compassion and this magical aid, you've shown yourself ready for "
+                "advanced training.'[/dialogue] She teaches you the "
+                "[spell_name]greater_heal[/spell_name] spell! [dialogue]'You've truly earned "
+                "the title of healer.'[/dialogue][/success]\n\n"
                 "[success]Quest Complete: The Healer's Apprentice[/success]"
             )
         elif isinstance(item_object, HealingHerbs):
@@ -104,11 +106,11 @@ class MasterHealerLyria(Character):
             game_state.remove_item_from_inventory("Healing Herbs")
             return (
                 "[success][character_name]Master Healer Lyria[/character_name] accepts the "
-                "[item_name]Healing Herbs[/item_name] with approval. 'Excellent! Your "
-                "commitment shows you're ready to learn.' Through careful instruction, you "
-                "master the [spell_name]greater_heal[/spell_name] spell! 'Use this knowledge "
-                "wisely, young healer. You've successfully completed your apprenticeship.'"
-                "[/success]"
+                "[item_name]Healing Herbs[/item_name] with approval. [dialogue]'Excellent! "
+                "Your commitment shows you're ready to learn.'[/dialogue] Through careful "
+                "instruction, you master the [spell_name]greater_heal[/spell_name] spell! "
+                "[dialogue]'Use this knowledge wisely, young healer. You've successfully "
+                "completed your apprenticeship.'[/dialogue][/success]"
             )
         else:
             # Default response for other items

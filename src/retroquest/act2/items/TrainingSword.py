@@ -19,6 +19,7 @@ class TrainingSword(Item):
         )
 
     def use(self, game_state: GameState) -> str:
+        """Demonstrate combat skills to Sir Cedric in the Castle Courtyard."""
         # Local imports to avoid circular imports at module import time
         from ..characters.SirCedric import SirCedric
         from ..rooms.CastleCourtyard import CastleCourtyard
@@ -41,12 +42,14 @@ class TrainingSword(Item):
                     "for [character_name]Sir Cedric[/character_name]. Your movements are fluid "
                     "and precise, demonstrating skill with both offensive and defensive "
                     "techniques.\n\n"
-                    "Sir Cedric nods approvingly. 'Excellent! Your martial training is evident. "
-                    "I can trust someone with such disciplined combat skills.'\n\n"
-                    "He pauses, his expression growing more serious. 'Since you've proven your "
-                    "combat prowess, I can share more about what lies ahead. The dark forces "
-                    "gathering aren't ordinary threats - they're connected to ancient magical "
-                    "energies that have been dormant for centuries.'\n\n"
+                    "Sir Cedric nods approvingly. [dialogue]'Excellent! Your martial training "
+                    "is evident. I can trust someone with such disciplined combat skills.'"
+                    "[/dialogue]\n\n"
+                    "He pauses, his expression growing more serious. [dialogue]'Since you've "
+                    "proven your combat prowess, I can share more about what lies ahead. The "
+                    "dark forces gathering aren't ordinary threats - they're connected to "
+                    "ancient magical energies that have been dormant for centuries.'"
+                    "[/dialogue]\n\n"
                     "[character_name]Sir Cedric[/character_name] leans closer, lowering his "
                     "voice. [dialogue]'There are legends of a being known as [character_name]Nyx"
                     "[/character_name] - "
@@ -54,15 +57,16 @@ class TrainingSword(Item):
                     "borders. Nyx is said to possess knowledge of the oldest magics, including "
                     "secrets that could help us understand and combat these gathering "
                     "shadows.'[/dialogue]\n\n"
-                    "'But the enchanted forest is treacherous,' he continues. 'You'll need proper "
+                    "[dialogue]'But the enchanted forest is treacherous,'[/dialogue] he "
+                    "continues. [dialogue]'You'll need proper "
                     "supplies before attempting such a journey. Visit the Market District and "
                     "gather essential equipment: a forest survival kit, an enhanced lantern for "
                     "the dark woods, and quality rope for navigating difficult terrain. Only "
                     "when you're properly equipped should you venture into those mystical "
-                    "lands to seek out Nyx.'\n\nHe straightens up, his voice returning to its "
-                    "commanding tone. 'Time is of the essence, Elior. The darkness grows "
-                    "stronger each day, and we need Nyx's ancient wisdom to understand "
-                    "what we're truly facing.'[/success]"
+                    "lands to seek out Nyx.'[/dialogue]\n\nHe straightens up, his voice "
+                    "returning to its commanding tone. [dialogue]'Time is of the essence, "
+                    "Elior. The darkness grows stronger each day, and we need Nyx's ancient "
+                    "wisdom to understand what we're truly facing.'[/dialogue][/success]"
                 )
 
             elif game_state.get_story_flag(FLAG_DEMONSTRATED_COMBAT_SKILLS):
@@ -72,16 +76,17 @@ class TrainingSword(Item):
                     "[success]You practice a few more combat forms with the training sword, "
                     "and "
                     f"{prefix}"
-                    " watches with approval.\n\n'Your skills remain sharp,' he observes. "
-                    "'Remember what I told you about the enchanted forest and seeking out "
-                    "[character_name]Nyx[/character_name]. Gather those supplies from the Market "
-                    "District first - a forest survival kit, enhanced lantern, and quality "
-                    "rope. The mystical being Nyx holds ancient knowledge that could be "
-                    "crucial in our fight against the gathering darkness.'\n\nHe looks toward "
-                    "the forest beyond the city walls. 'The enchanted forest is dangerous, "
-                    "but with proper preparation and your proven combat skills, you may "
-                    "succeed where others have failed. Nyx's wisdom could be the key to "
-                    "saving both Greendale and the surrounding lands.'[/success]"
+                    " watches with approval.\n\n[dialogue]'Your skills remain sharp,'"
+                    "[/dialogue] he observes. [dialogue]'Remember what I told you about the "
+                    "enchanted forest and seeking out [character_name]Nyx[/character_name]. "
+                    "Gather those supplies from the Market District first - a forest survival "
+                    "kit, enhanced lantern, and quality rope. The mystical being Nyx holds "
+                    "ancient knowledge that could be crucial in our fight against the "
+                    "gathering darkness.'[/dialogue]\n\nHe looks toward the forest beyond the "
+                    "city walls. [dialogue]'The enchanted forest is dangerous, but with proper "
+                    "preparation and your proven combat skills, you may succeed where others "
+                    "have failed. Nyx's wisdom could be the key to saving both Greendale and "
+                    "the surrounding lands.'[/dialogue][/success]"
                 )
             else:
                 # Fallback if flags are inconsistent
