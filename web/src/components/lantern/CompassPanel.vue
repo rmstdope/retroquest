@@ -24,14 +24,14 @@ const CELLS: Record<string, number> = {
 const grid = computed(() =>
   Array.from({ length: 9 }, (_, cell) => {
     const entry = Object.entries(game.exits).find(
-      ([dir]) => CELLS[dir] === cell,
+      ([dir]) => Object.hasOwn(CELLS, dir) && CELLS[dir] === cell,
     )
     return entry ? { dir: entry[0], room: entry[1] } : null
   }),
 )
 const otherExits = computed(() =>
   Object.entries(game.exits)
-    .filter(([dir]) => !(dir in CELLS))
+    .filter(([dir]) => !Object.hasOwn(CELLS, dir))
     .map(([dir, room]) => ({ dir, room })),
 )
 const hasExits = computed(() => Object.keys(game.exits).length > 0)
@@ -132,6 +132,7 @@ function go(direction: string): void {
   border: 1px dashed var(--lq-line);
 }
 .lq-exit {
+  overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
   align-items: center;

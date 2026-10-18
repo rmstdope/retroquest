@@ -80,4 +80,11 @@ describe('CompassPanel', () => {
 
     expect(mountCompass().text()).toContain('No exits')
   })
+
+  it('treats an exit named like an object property as a named exit', () => {
+    useGameStore().exits = { north: 'Hall', constructor: 'Odd Place' }
+
+    const other = mountCompass().get('.lq-other-exits [data-dir="constructor"]')
+    expect(other.text()).toContain('Odd Place')
+  })
 })

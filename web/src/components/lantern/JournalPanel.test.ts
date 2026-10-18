@@ -68,7 +68,7 @@ describe('JournalPanel', () => {
       .findAll('[role="tab"]')
       .map((t) => t.text())
 
-    expect(tabs).toEqual(['Bag · 2', 'Spells · 1', 'Quests · 2'])
+    expect(tabs).toEqual(['Bag · 2', 'Spells · 1', 'Quests · 2 active'])
   })
 
   it('opens on the bag with display names and stack counts', () => {
@@ -210,5 +210,37 @@ describe('JournalPanel', () => {
   it('says when the bag is empty', () => {
     useGameStore().rawInventory = []
     expect(mountJournal().text()).toContain('Your bag is empty')
+  })
+
+  it('expands a bag row to show the whole description', async () => {
+    const w = mountJournal()
+    const toggle = w.get('button[aria-label="Bread: show description"]')
+    expect(toggle.attributes('aria-expanded')).toBe('false')
+    expect(w.find('.lq-row-note-full').exists()).toBe(false)
+
+    await toggle.trigger('click')
+
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+    expect(w.get('.lq-row-note-full').text()).toBe('A small loaf.')
+  })
+
+  it('expands a spell row too', async () => {
+    const w = mountJournal()
+    const tabs = w.findAll('[role="tab"]')
+    await tabs[1].trigger('click')
+
+    await w
+      .get('button[aria-label="Revive: show description"]')
+      .trigger('click')
+
+    expect(w.get('.lq-row-note-full').text()).toBe('Restores life.')
+  })
+
+  it('lets the keyboard reach the tab panel, even when it is empty', () => {
+    useGameStore().rawInventory = []
+
+    expect(mountJournal().get('[role="tabpanel"]').attributes('tabindex')).toBe(
+      '0',
+    )
   })
 })

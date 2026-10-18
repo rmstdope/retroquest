@@ -49,7 +49,7 @@ const tabs = computed(() => [
   },
   {
     id: 'quests' as const,
-    label: `Quests · ${game.rawActiveQuests.length}`,
+    label: `Quests · ${game.rawActiveQuests.length} active`,
     dot: false,
   },
 ])
@@ -86,7 +86,8 @@ function run(command: string): void {
   if (game.acceptInput) game.submitCommand(command)
 }
 
-function toggleQuest(name: string): void {
+/** Expand or collapse a row (keys are prefixed: bag:, spell:, or the quest name). */
+function toggle(name: string): void {
   const next = new Set(expanded.value)
   if (next.has(name)) next.delete(name)
   else next.add(name)
@@ -122,13 +123,22 @@ function toggleQuest(name: string): void {
       :id="`lq-panel-${active}`"
       class="lq-panel"
       role="tabpanel"
+      tabindex="0"
       :aria-labelledby="`lq-tab-${active}`"
     >
       <template v-if="active === 'bag'">
         <p v-if="!bag.length" class="lq-empty">Your bag is empty.</p>
         <ul v-else class="lq-rows">
           <li v-for="item in bag" :key="item.name" class="lq-row">
-            <span class="lq-row-text">
+            <button
+              type="button"
+              class="lq-row-text"
+              :aria-label="`${item.label}: show description`"
+              :aria-expanded="
+                expanded.has(`bag:${item.name}`) ? 'true' : 'false'
+              "
+              @click="toggle(`bag:${item.name}`)"
+            >
               <span class="lq-row-name lq-row-item"
                 >{{ item.label
                 }}<template v-if="item.count > 1">
@@ -136,9 +146,16 @@ function toggleQuest(name: string): void {
                 ></span
               >
               <!-- eslint-disable vue/no-v-html -->
-              <span class="lq-row-note" v-html="renderMarkup(item.note)"></span>
-            </span>
-            <!-- eslint-enable vue/no-v-html -->
+              <span
+                :class="
+                  expanded.has(`bag:${item.name}`)
+                    ? 'lq-row-note-full'
+                    : 'lq-row-note'
+                "
+                v-html="renderMarkup(item.note)"
+              ></span>
+              <!-- eslint-enable vue/no-v-html -->
+            </button>
             <button
               type="button"
               class="lq-row-btn"
@@ -156,15 +173,27 @@ function toggleQuest(name: string): void {
         <p v-if="!spells.length" class="lq-empty">You know no spells yet.</p>
         <ul v-else class="lq-rows">
           <li v-for="spell in spells" :key="spell.name" class="lq-row">
-            <span class="lq-row-text">
+            <button
+              type="button"
+              class="lq-row-text"
+              :aria-label="`${spell.label}: show description`"
+              :aria-expanded="
+                expanded.has(`spell:${spell.name}`) ? 'true' : 'false'
+              "
+              @click="toggle(`spell:${spell.name}`)"
+            >
               <span class="lq-row-name lq-row-spell">{{ spell.label }}</span>
               <!-- eslint-disable vue/no-v-html -->
               <span
-                class="lq-row-note"
+                :class="
+                  expanded.has(`spell:${spell.name}`)
+                    ? 'lq-row-note-full'
+                    : 'lq-row-note'
+                "
                 v-html="renderMarkup(spell.note)"
               ></span>
               <!-- eslint-enable vue/no-v-html -->
-            </span>
+            </button>
             <button
               type="button"
               class="lq-row-btn"
@@ -186,7 +215,7 @@ function toggleQuest(name: string): void {
               type="button"
               class="lq-quest-toggle"
               :aria-expanded="expanded.has(quest.name) ? 'true' : 'false'"
-              @click="toggleQuest(quest.name)"
+              @click="toggle(quest.name)"
             >
               <span class="lq-quest-name">{{ quest.name }}</span>
               <span
@@ -271,6 +300,18 @@ function toggleQuest(name: string): void {
 .lq-row-text {
   flex: 1;
   min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.lq-row-note-full {
+  display: block;
+  font-size: 12px;
+  color: var(--lq-muted);
 }
 .lq-row-name {
   display: block;
