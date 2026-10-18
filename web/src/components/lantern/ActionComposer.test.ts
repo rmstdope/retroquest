@@ -11,6 +11,13 @@ describe('ActionComposer', () => {
   let submit: ReturnType<typeof vi.fn<(command: string) => void>>
 
   beforeEach(() => {
+    // Settings persist in localStorage; give every test a fresh, empty one.
+    const stored = new Map<string, string>()
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => stored.get(key) ?? null,
+      setItem: (key: string, value: string) => stored.set(key, value),
+      removeItem: (key: string) => stored.delete(key),
+    })
     setActivePinia(createPinia())
     const game = useGameStore()
     game.acceptInput = true
@@ -27,6 +34,7 @@ describe('ActionComposer', () => {
   afterEach(() => {
     wrapper?.unmount()
     wrapper = undefined
+    vi.unstubAllGlobals()
   })
 
   function mountComposer() {
