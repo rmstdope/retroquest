@@ -19,6 +19,10 @@ const CONTEXT: ActionContext = {
     '[spell_name]greater_heal[/spell_name]',
   ],
   exits: { north: "Mira's Hut", east: 'General Store' },
+  wares: [
+    { name: 'rope', price: 1, seller: 'shopkeeper' },
+    { name: 'matches', price: 4, seller: 'shopkeeper' },
+  ],
 }
 
 describe('buildCommand', () => {
@@ -130,5 +134,32 @@ describe('VERBS', () => {
   it('puts reference commands in the "more" group', () => {
     const more = VERBS.filter((v) => v.group === 'more').map((v) => v.id)
     expect(more).toEqual(['inventory', 'spells', 'map', 'stats', 'help'])
+  })
+})
+
+describe('buying from a shop', () => {
+  it('offers the wares with their prices', () => {
+    expect(targetsFor(verbById('buy').slots[0], CONTEXT)).toEqual([
+      { value: 'rope', label: 'Rope · 1 coin', kind: 'item' },
+      { value: 'matches', label: 'Matches · 4 coins', kind: 'item' },
+    ])
+  })
+
+  it('offers only characters who sell something as the seller', () => {
+    expect(
+      targetsFor(verbById('buy').slots[1], {
+        ...CONTEXT,
+        characters: ['shopkeeper', 'villager'],
+      }),
+    ).toEqual([{ value: 'shopkeeper', label: 'Shopkeeper', kind: 'character' }])
+  })
+})
+
+describe('opening and closing', () => {
+  it('offers things in the room and in the bag', () => {
+    const values = targetsFor(verbById('open').slots[0], CONTEXT).map(
+      (t) => t.value,
+    )
+    expect(values).toEqual(['bucket', 'old notice', 'lantern', 'apple'])
   })
 })

@@ -11,6 +11,7 @@ import type {
   NamedSave,
   SaveSlot,
   QuestProgress,
+  RoomWare,
 } from '@/types/bridge'
 
 type StoredNamedSave = {
@@ -211,6 +212,12 @@ result
   function getRoomItems(): string[] {
     const result = py('controller.get_room_items()')
     return (result as { toJs(): unknown }).toJs() as string[]
+  }
+
+  function getRoomWares(): RoomWare[] {
+    const result = py('controller.get_room_wares()') as { toJs(): unknown }
+    const tuples = result.toJs() as [string, number, string][]
+    return tuples.map(([name, price, seller]) => ({ name, price, seller }))
   }
 
   function getRoomExits(): RoomExits {
@@ -528,6 +535,7 @@ _result_text
     getRoomCharacters,
     getRoomItems,
     getRoomExits,
+    getRoomWares,
     getInventory,
     getSpells,
     getActiveQuests,

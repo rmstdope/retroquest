@@ -174,6 +174,18 @@ class GameController:
             for c in self.game.state.current_room.get_characters()
         ]
 
+    def get_room_wares(self) -> list[tuple[str, int, str]]:
+        """Return (ware name, price, seller name) for everything sold in the room.
+
+        Merchants keep a ``wares`` mapping of name to ``{"item", "price"}``;
+        other characters sell nothing.
+        """
+        wares: list[tuple[str, int, str]] = []
+        for character in self.game.state.current_room.get_characters():
+            for name, details in getattr(character, "wares", {}).items():
+                wares.append((name, details["price"], character.get_name()))
+        return wares
+
     def get_room_items(self) -> list[str]:
         """Return names of items visible in the current room."""
         return [

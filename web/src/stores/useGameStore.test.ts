@@ -24,6 +24,9 @@ function createMockBridge() {
     getRoomCharacters: vi.fn(() => ['Mira']),
     getRoomItems: vi.fn(() => ['Map']),
     getRoomExits: vi.fn(() => ({ north: 'Forest' }) as Record<string, string>),
+    getRoomWares: vi.fn(
+      () => [] as Array<{ name: string; price: number; seller: string }>,
+    ),
     getInventory: vi.fn(() => [{ name: 'Sword', description: 'Sharp' }]),
     getSpells: vi.fn(() => [{ name: 'Heal', description: 'Restores HP' }]),
     getActiveQuests: vi.fn(() => [
@@ -1447,6 +1450,22 @@ describe('useGameStore', () => {
       store.submitCommand('look at map')
 
       expect(store.turns.at(-1)?.arrival).toBeNull()
+    })
+  })
+
+  // --- Room wares ---
+
+  describe('room wares', () => {
+    it('are refreshed with the panels', async () => {
+      bridge.getRoomWares.mockReturnValue([
+        { name: 'rope', price: 1, seller: 'shopkeeper' },
+      ])
+
+      await store.initGame()
+
+      expect(store.roomWares).toEqual([
+        { name: 'rope', price: 1, seller: 'shopkeeper' },
+      ])
     })
   })
 })
