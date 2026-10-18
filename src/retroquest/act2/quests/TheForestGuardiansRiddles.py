@@ -7,10 +7,9 @@ Trigger Conditions:
 - Offered upon acceptance of the guardians' intellectual challenge
     (``FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED``).
 
-Objectives:
-- Scripted list stored in ``self.objectives`` for UI/status rendering.
-- Early objectives implicitly satisfied by visiting key biomes; later ones by
-    solving riddle interactions (external logic sets completion flag).
+Progress:
+- No objectives are tracked; riddle interactions elsewhere set the completion
+    flag once the guardians' riddles are solved.
 
 Completion Logic:
 - Monitors ``FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED``; on first completion
@@ -46,12 +45,6 @@ class TheForestGuardiansRiddles(Quest):
                 "forest spirits acknowledge your understanding."
             )
         )
-        self.objectives = [
-            "Speak with the Ancient Tree Spirit in the Ancient Grove",
-            "Journey to the Whispering Glade and meet the water spirits",
-            "Solve the riddles posed by the forest guardians",
-            "Prove your wisdom and respect for the natural world"
-        ]
         self.experience_reward = 200
 
     def check_trigger(self, game_state: GameState) -> bool:
@@ -78,16 +71,3 @@ class TheForestGuardiansRiddles(Quest):
                 exp_msg = ""
             return f"[success]Quest Complete: {self.name}[/success]{exp_msg}"
         return self.completion
-
-    def get_status(self) -> str:
-        """Return the current status of the quest."""
-        if self.is_completed_flag:
-            return f"[quest_status_complete]{self.name} - COMPLETED[/quest_status_complete]"
-        else:
-            status = f"[quest_status_active]{self.name} - IN PROGRESS[/quest_status_active]\n"
-            for i, objective in enumerate(self.objectives):
-                if i < 2:  # First two objectives are typically completed by visiting the locations
-                    status += f"  ✓ {objective}\n"
-                else:
-                    status += f"  • {objective}\n"
-            return status
