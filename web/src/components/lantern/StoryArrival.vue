@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import type { Arrival } from '@/stores/useGameStore'
 import { displayName } from '@/lantern/displayName'
+import { exitArrow } from '@/lantern/exitArrow'
 import { renderMarkup } from '@/utils/theme'
 
 /**
@@ -20,14 +21,6 @@ const DIRECTIONS: Record<string, string> = {
   e: 'east',
   w: 'west',
 }
-const ARROWS: Record<string, string> = {
-  north: '↑',
-  south: '↓',
-  east: '→',
-  west: '←',
-  up: '⤒',
-  down: '⤓',
-}
 /** Move commands as the engine's CommandParser accepts them ("go" takes any exit). */
 const MOVE =
   /^(?:(?:go|move)\s+(north|south|east|west|up|down)|(north|south|east|west|up|down|n|s|e|w)|go\s+(\w+))$/i
@@ -38,11 +31,6 @@ const direction = computed(() => {
   const word = (match[1] ?? match[2] ?? match[3]).toLowerCase()
   return DIRECTIONS[word] ?? word
 })
-
-/** Arrow for a direction; other exits (e.g. secret_passage) get a dot. */
-function arrow(dir: string): string {
-  return ARROWS[dir] ?? '•'
-}
 
 const here = computed(() => [
   ...props.arrival.characters.map((name) => ({ name, kind: 'character' })),
@@ -59,7 +47,9 @@ const expanded = ref(false)
     <div class="lq-divider" data-testid="divider">
       <span class="lq-rule" aria-hidden="true"></span>
       <span v-if="direction" class="lq-direction"
-        ><span class="lq-arrow" aria-hidden="true">{{ arrow(direction) }}</span>
+        ><span class="lq-arrow" aria-hidden="true">{{
+          exitArrow(direction)
+        }}</span>
         {{ displayName(direction) }}</span
       >
       <span class="lq-room">{{ arrival.room }}</span>
@@ -98,7 +88,9 @@ const expanded = ref(false)
         <span class="lq-here-label">Exits</span>
         <span v-for="[dir, room] in exits" :key="dir" class="lq-exit">
           <span class="lq-exit-dir"
-            ><span class="lq-arrow" aria-hidden="true">{{ arrow(dir) }}</span>
+            ><span class="lq-arrow" aria-hidden="true">{{
+              exitArrow(dir)
+            }}</span>
             {{ dir.replace(/_/g, ' ') }}</span
           >
           ({{ room }})
