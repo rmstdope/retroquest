@@ -307,4 +307,34 @@ test.describe('Lantern UI (?ui=lantern)', () => {
       page.getByRole('region', { name: 'Current location' }),
     ).toBeHidden()
   })
+
+  test('keeps the story and actions in view when a long room is expanded', async ({
+    page,
+  }) => {
+    // Keep the real game from loading over the mock state.
+    await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
+    await page.setViewportSize({ width: 1024, height: 700 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.roomName = "Dragon's Hall"
+      store.roomDescription =
+        'The hall stretches on, banners stirring. '.repeat(60)
+      store.items = Array.from({ length: 12 }, (_, i) => `trinket ${i}`)
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    await page.getByRole('button', { name: 'Read more' }).click()
+
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport({
+      ratio: 1,
+    })
+    const story = await page
+      .getByRole('region', { name: 'Story' })
+      .boundingBox()
+    expect(story!.height).toBeGreaterThan(60)
+  })
 })

@@ -134,6 +134,12 @@ watch(
 .lq-wide .lq-composer {
   grid-column: 1;
 }
+/* An expanded long room scrolls inside the card instead of pushing the story
+   and the actions out of the window. */
+.lq-wide .lq-card {
+  max-height: 40vh;
+  overflow-y: auto;
+}
 .lq-aside {
   grid-column: 2;
   grid-row: 1 / -1;
