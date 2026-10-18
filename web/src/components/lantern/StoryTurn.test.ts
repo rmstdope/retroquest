@@ -135,4 +135,28 @@ describe('StoryTurn', () => {
       false,
     )
   })
+
+  it('labels only the first of several quotes by the same speaker', () => {
+    const w = mountTurn({
+      text:
+        "[character_name]Mira[/character_name] smiles. [dialogue]'Welcome.'[/dialogue] " +
+        "She pauses. [dialogue]'Sit down.'[/dialogue]",
+    })
+
+    const quotes = w.findAll('.lq-block-dialogue')
+    expect(quotes).toHaveLength(2)
+    expect(quotes[0].find('.lq-speaker').text()).toBe('Mira')
+    expect(quotes[1].find('.lq-speaker').exists()).toBe(false)
+  })
+
+  it('labels a quote again when the speaker changes', () => {
+    const w = mountTurn({
+      text:
+        "[character_name]Mira[/character_name] says [dialogue]'Hello.'[/dialogue] " +
+        "[character_name]Borin[/character_name] grunts. [dialogue]'Aye.'[/dialogue]",
+    })
+
+    const labels = w.findAll('.lq-speaker').map((l) => l.text())
+    expect(labels).toEqual(['Mira', 'Borin'])
+  })
 })

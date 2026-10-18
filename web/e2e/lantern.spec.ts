@@ -99,4 +99,62 @@ test.describe('Lantern UI (?ui=lantern)', () => {
 
     await expect(page.locator('html')).not.toHaveAttribute('data-ui', 'lantern')
   })
+
+  test('wraps many chips on a phone instead of hiding them', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      const gained = [
+        'Faded Photograph',
+        'Wandering Boots',
+        'Travel Cloak',
+        'Magnetic Fishing Rod',
+        'Lantern',
+      ].map((name) => ({ kind: 'item', name, count: 1 }))
+      store.turns = [{ ...store.turns[0], command: 'search', gained }]
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const row = page.getByRole('group', { name: 'Changes' })
+    await expect(row).toBeVisible()
+    const fits = await row.evaluate((el) => el.scrollWidth <= el.clientWidth)
+    expect(fits).toBe(true)
+  })
+
+  test('draws the not-yet checklist circle in the muted colour', async ({
+    page,
+  }) => {
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.turns = [
+        {
+          ...store.turns[0],
+          text: '[pending] * Sturdy footwear[/pending]',
+        },
+      ]
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const colours = await page
+      .locator('.lq-check-pending .lq-check-mark')
+      .evaluate((el) => {
+        const probe = document.createElement('span')
+        probe.style.color = 'var(--lq-muted)'
+        document.body.append(probe)
+        const muted = getComputedStyle(probe).color
+        probe.remove()
+        return { border: getComputedStyle(el).borderTopColor, muted }
+      })
+    expect(colours.border).toBe(colours.muted)
+  })
 })
