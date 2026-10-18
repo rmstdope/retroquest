@@ -59,6 +59,9 @@ export interface QuestAudioPlayer {
 /** Most recent turns kept for the story view; older ones are dropped. */
 export const MAX_TURNS = 200
 
+/** Save names the game accepts (mirrors Game._validate_save_name). */
+const SAVE_NAME_PATTERN = /^[a-z0-9_-]+$/
+
 /** One entry in the story: what the player did and what the game answered. */
 export interface Turn {
   /** Increasing id, unique for the session (stable key for rendering). */
@@ -326,12 +329,16 @@ export const useGameStore = defineStore('game', () => {
   /**
    * Typed `save` / `load` (optionally with a name) behave exactly like the
    * buttons, so saves reach browser storage and loads reset chips and dots.
-   * Returns true when the command was handled here.
+   * Names are lowercased like the game does; a name the game would reject
+   * (spaces, slashes, dots…) is left to the game so it answers with its own
+   * error. Returns true when the command was handled here.
    */
   function routeSaveOrLoad(command: string): boolean {
     const match = /^(save|load)(?:\s+(\S.*))?$/i.exec(command)
     if (!match) return false
-    const [, verb, name] = match
+    const [, verb, rawName] = match
+    const name = rawName?.toLowerCase()
+    if (name && !SAVE_NAME_PATTERN.test(name)) return false
     const isSave = verb.toLowerCase() === 'save'
     if (isSave && name) saveNamedGame(name, command)
     else if (isSave) saveGame(command)

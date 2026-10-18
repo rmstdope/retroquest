@@ -1329,6 +1329,24 @@ describe('useGameStore', () => {
       expect(bridge.handleCommand).not.toHaveBeenCalled()
     })
 
+    it('lowercases typed save names like the game does', () => {
+      store.submitCommand('save My-Adventure')
+      store.submitCommand('LOAD my-ADVENTURE')
+
+      expect(bridge.saveNamedGame).toHaveBeenCalledWith('my-adventure')
+      expect(bridge.loadNamedGame).toHaveBeenCalledWith('my-adventure')
+    })
+
+    it('leaves invalid save names to the game to reject', () => {
+      store.submitCommand('save my adventure')
+      store.submitCommand('load ../secret')
+
+      expect(bridge.saveNamedGame).not.toHaveBeenCalled()
+      expect(bridge.loadNamedGame).not.toHaveBeenCalled()
+      expect(bridge.handleCommand).toHaveBeenCalledWith('save my adventure')
+      expect(bridge.handleCommand).toHaveBeenCalledWith('load ../secret')
+    })
+
     it('still sends other commands that start with save or load to the game', () => {
       store.submitCommand('saveguard the village')
       store.submitCommand('loadstone')
