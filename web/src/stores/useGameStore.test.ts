@@ -1283,4 +1283,57 @@ describe('useGameStore', () => {
       expect(store.turns.at(-1)?.lost).toEqual([])
     })
   })
+
+  // --- Typed save / load ---
+
+  describe('typed save and load commands', () => {
+    beforeEach(async () => {
+      await store.initGame()
+      store.dismissModal()
+    })
+
+    it('treats a typed "save" like Quick save', () => {
+      store.submitCommand('  Save ')
+
+      expect(bridge.quickSaveGame).toHaveBeenCalledTimes(1)
+      expect(bridge.handleCommand).not.toHaveBeenCalled()
+      expect(store.turns.at(-1)).toMatchObject({
+        command: 'Save',
+        text: 'Game saved.',
+      })
+    })
+
+    it('treats a typed "load" like Quick load, without chips', () => {
+      bridge.getInventory.mockReturnValue([
+        { name: 'Lantern', description: '' },
+      ])
+
+      store.submitCommand('load')
+
+      expect(bridge.quickLoadGame).toHaveBeenCalledTimes(1)
+      expect(bridge.handleCommand).not.toHaveBeenCalled()
+      expect(store.turns.at(-1)).toMatchObject({
+        command: 'load',
+        text: 'Game loaded.',
+        gained: [],
+        lost: [],
+      })
+    })
+
+    it('routes "save <name>" and "load <name>" to the named saves', () => {
+      store.submitCommand('save my-adventure')
+      store.submitCommand('load my-adventure')
+
+      expect(bridge.saveNamedGame).toHaveBeenCalledWith('my-adventure')
+      expect(bridge.loadNamedGame).toHaveBeenCalledWith('my-adventure')
+      expect(bridge.handleCommand).not.toHaveBeenCalled()
+    })
+
+    it('still sends other commands that start with save or load to the game', () => {
+      store.submitCommand('saveguard the village')
+      store.submitCommand('loadstone')
+
+      expect(bridge.handleCommand).toHaveBeenCalledTimes(2)
+    })
+  })
 })
