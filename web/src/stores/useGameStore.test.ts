@@ -1230,6 +1230,29 @@ describe('useGameStore', () => {
       ])
     })
 
+    it('clears the tab dots when a save is loaded', async () => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([named('Sword'), named('Map')])
+      bridge.getSpells.mockReturnValue([named('Heal'), named('Light')])
+      store.submitCommand('take map')
+
+      store.loadFromSlot(2)
+
+      expect(store.bagHasNew).toBe(false)
+      expect(store.spellsHaveNew).toBe(false)
+    })
+
+    it('clears the tab dots when the act changes', async () => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([named('Sword'), named('Map')])
+      store.submitCommand('take map')
+      bridge.isActRunning.mockReturnValue(false)
+
+      store.submitCommand('use map')
+
+      expect(store.bagHasNew).toBe(false)
+    })
+
     it('shows no chips on the turn that ends an act', async () => {
       await startPlaying()
       bridge.isActRunning.mockReturnValue(false)
