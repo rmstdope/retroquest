@@ -45,6 +45,12 @@ function createMockBridge() {
     loadNamedGame: vi.fn(() => 'Game loaded.'),
     listNamedSaves: vi.fn((): NamedSave[] => []),
     getActName: vi.fn(() => 'Act 1'),
+    getQuestProgress: vi.fn(() => ({
+      completed: 4,
+      total: 11,
+      actNumber: 1,
+      mainQuest: 'Shadows Over Willowbrook',
+    })),
     getSaveSlots: vi.fn((): SaveSlot[] => [
       ...Array.from({ length: 8 }, (_, i) => ({
         slot: i + 1,
@@ -1352,6 +1358,35 @@ describe('useGameStore', () => {
       store.submitCommand('loadstone')
 
       expect(bridge.handleCommand).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  // --- Quest progress ---
+
+  describe('quest progress', () => {
+    it('is unknown before the game starts', () => {
+      expect(store.questProgress).toBeNull()
+    })
+
+    it('is refreshed with the panels', async () => {
+      await store.initGame()
+
+      expect(store.questProgress).toEqual({
+        completed: 4,
+        total: 11,
+        actNumber: 1,
+        mainQuest: 'Shadows Over Willowbrook',
+      })
+
+      bridge.getQuestProgress.mockReturnValue({
+        completed: 5,
+        total: 11,
+        actNumber: 1,
+        mainQuest: 'Shadows Over Willowbrook',
+      })
+      store.dismissModal()
+      store.submitCommand('give amulet to mira')
+      expect(store.questProgress?.completed).toBe(5)
     })
   })
 })

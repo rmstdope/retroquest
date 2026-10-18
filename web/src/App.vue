@@ -4,10 +4,13 @@ import { useGameStore } from './stores/useGameStore'
 import { useBridge } from './composables/useBridge'
 import { useAppearance } from './composables/useAppearance'
 import GameLayout from './components/GameLayout.vue'
+import LanternLayout from './components/lantern/LanternLayout.vue'
+import { useUiMode } from './composables/useUiMode'
 
 const store = useGameStore()
 const bridge = useBridge()
 useAppearance()
+const uiMode = useUiMode()
 
 function requestFullscreenOnFirstInteraction() {
   if (
@@ -46,5 +49,6 @@ onMounted(() => {
       {{ store.loadingStatus }}
     </div>
   </div>
+  <LanternLayout v-else-if="uiMode === 'lantern'" />
   <GameLayout v-else />
 </template>
