@@ -32,6 +32,33 @@ describe('StoryArrival', () => {
     )
   })
 
+  it('understands every move form the engine accepts', () => {
+    const divider = (command: string) =>
+      mountArrival(command).get('[data-testid="divider"]').text()
+
+    expect(divider('move west')).toContain('West')
+    expect(divider('  GO   East ')).toContain('East')
+    expect(divider('go secret_passage')).toContain('Secret Passage')
+  })
+
+  it('hides the direction arrows from screen readers', () => {
+    const w = mountArrival('go south')
+    const arrows = w.findAll('.lq-arrow')
+
+    expect(arrows.length).toBe(3)
+    for (const arrow of arrows) {
+      expect(arrow.attributes('aria-hidden')).toBe('true')
+    }
+  })
+
+  it('names non-compass exits readably', () => {
+    const exits = mountArrival('go south', {
+      exits: { secret_passage: 'Residential Quarter' },
+    }).get('[data-testid="exits"]')
+
+    expect(exits.text()).toContain('secret passage')
+  })
+
   it('shows only the room when the arrival was not a move', () => {
     const divider = mountArrival(null).get('[data-testid="divider"]')
 

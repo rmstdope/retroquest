@@ -19,8 +19,6 @@ const DIRECTIONS: Record<string, string> = {
   s: 'south',
   e: 'east',
   w: 'west',
-  u: 'up',
-  d: 'down',
 }
 const ARROWS: Record<string, string> = {
   north: '↑',
@@ -30,14 +28,21 @@ const ARROWS: Record<string, string> = {
   up: '⤒',
   down: '⤓',
 }
-const MOVE = /^(?:go\s+)?(north|south|east|west|up|down|n|s|e|w|u|d)$/i
+/** Move commands as the engine's CommandParser accepts them ("go" takes any exit). */
+const MOVE =
+  /^(?:(?:go|move)\s+(north|south|east|west|up|down)|(north|south|east|west|up|down|n|s|e|w)|go\s+(\w+))$/i
 
 const direction = computed(() => {
   const match = MOVE.exec(props.command?.trim() ?? '')
   if (!match) return null
-  const word = match[1].toLowerCase()
+  const word = (match[1] ?? match[2] ?? match[3]).toLowerCase()
   return DIRECTIONS[word] ?? word
 })
+
+/** Arrow for a direction; other exits (e.g. secret_passage) get a dot. */
+function arrow(dir: string): string {
+  return ARROWS[dir] ?? '•'
+}
 
 const here = computed(() => [
   ...props.arrival.characters.map((name) => ({ name, kind: 'character' })),
@@ -54,7 +59,8 @@ const expanded = ref(false)
     <div class="lq-divider" data-testid="divider">
       <span class="lq-rule" aria-hidden="true"></span>
       <span v-if="direction" class="lq-direction"
-        >{{ ARROWS[direction] }} {{ displayName(direction) }}</span
+        ><span class="lq-arrow" aria-hidden="true">{{ arrow(direction) }}</span>
+        {{ displayName(direction) }}</span
       >
       <span class="lq-room">{{ arrival.room }}</span>
       <span class="lq-rule" aria-hidden="true"></span>
@@ -91,7 +97,10 @@ const expanded = ref(false)
       <div v-if="exits.length" class="lq-exits" data-testid="exits">
         <span class="lq-here-label">Exits</span>
         <span v-for="[dir, room] in exits" :key="dir" class="lq-exit">
-          <span class="lq-exit-dir">{{ ARROWS[dir] ?? '•' }} {{ dir }}</span>
+          <span class="lq-exit-dir"
+            ><span class="lq-arrow" aria-hidden="true">{{ arrow(dir) }}</span>
+            {{ dir.replace(/_/g, ' ') }}</span
+          >
           ({{ room }})
         </span>
       </div>
