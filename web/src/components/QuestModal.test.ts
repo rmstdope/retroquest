@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import QuestModal from './QuestModal.vue'
 
@@ -53,14 +53,23 @@ describe('QuestModal', () => {
     expect(w.emitted('dismiss')).toHaveLength(1)
   })
 
-  it('stops listening for Escape after unmount', () => {
-    const w = mountModal()
-    w.unmount()
-    wrapper = undefined
+  it('removes its keydown listener on unmount', () => {
+    // emitted() stops recording after unmount, so assert on the listener itself.
+    const addSpy = vi.spyOn(window, 'addEventListener')
+    const removeSpy = vi.spyOn(window, 'removeEventListener')
+    try {
+      const w = mountModal()
+      const keydownCall = addSpy.mock.calls.find(([type]) => type === 'keydown')
+      expect(keydownCall).toBeDefined()
 
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+      w.unmount()
+      wrapper = undefined
 
-    expect(w.emitted('dismiss')).toBeUndefined()
+      expect(removeSpy).toHaveBeenCalledWith('keydown', keydownCall![1])
+    } finally {
+      addSpy.mockRestore()
+      removeSpy.mockRestore()
+    }
   })
 
   it('emits dismiss on Escape only while visible', async () => {
