@@ -1,27 +1,38 @@
+"""PreparingForTheRoadQuest: Gather everything Mira says Elior needs for the journey."""
+
 from ...engine.Quest import Quest
 from ...engine.GameState import GameState
 from ..Act1StoryFlags import FLAG_MAGIC_FULLY_UNLOCKED, FLAG_JOURNEY_BLESS_COMPLETED
 
 class PreparingForTheRoadQuest(Quest):
+    """Checklist quest: done requirements are [success], unmet ones are [pending]."""
     def __init__(self) -> None:
         super().__init__(
             name="Preparing for the road",
             description=(
-                "Mira has tasked you with preparing for your journey. She says you will need: \n"
+                "Mira has tasked you with preparing for your journey. "
+                "She says you will need: \n"
                 " - Warm clothing -\n"
                 " - Magical protection -\n"
                 " - Food for the road (at least four different types) -\n"
                 " - Sturdy footwear -\n"
-                " - A map to find your way, and to have learned all the basic magic the village elders can teach you -\n"
+                " - A map to find your way, and to have learned all the basic magic "
+                "the village elders can teach you -\n"
                 " - To have learned all the basic magic the village elders can teach you -\n"
             ),
-            completion="You have gathered all the items needed for your journey. With your preparations complete, you are ready to face whatever lies beyond Willowbrook."
+            completion=(
+                "You have gathered all the items needed for your journey. With your "
+                "preparations complete, you are ready to face whatever lies beyond "
+                "Willowbrook."
+            )
         )
 
     def check_trigger(self, game_state: GameState) -> bool:
+        """Activate once all of Willowbrook's basic magic has been unlocked."""
         return game_state.get_story_flag(FLAG_MAGIC_FULLY_UNLOCKED)
 
     def check_completion(self, game_state: GameState) -> bool:
+        """Rebuild the requirement checklist and report whether every item is met."""
         # Items
         self.has_travel_cloak = game_state.has_item("travel cloak")
         # Food items
@@ -36,12 +47,16 @@ class PreparingForTheRoadQuest(Quest):
 
         # Spells
         required_spells = ["revive", "purify", "bless", "heal", "unlock", "light", "grow"]
-        self.knows_all_spells = all(game_state.has_spell(spell_name) for spell_name in required_spells)
+        self.knows_all_spells = all(
+            game_state.has_spell(spell_name) for spell_name in required_spells
+        )
 
-        # Action: Bless cast for journey (assuming this flag is set elsewhere when player casts bless on self)
+        # Action: Bless cast for the journey (flag set when the player blesses themselves)
         self.journey_bless_completed = game_state.get_story_flag(FLAG_JOURNEY_BLESS_COMPLETED)
 
-        self.description = ["Mira has tasked you with preparing for your journey. She says you will need: \n"]
+        self.description = [
+            "Mira has tasked you with preparing for your journey. She says you will need: \n"
+        ]
         requirements = [
             (" * Warm clothing", self.has_travel_cloak),
             (" * Magical protection", self.journey_bless_completed),
@@ -54,8 +69,10 @@ class PreparingForTheRoadQuest(Quest):
             if completed:
                 self.description.append(f"[success]{req}[/success]")
             else:
-                self.description.append(f"[failure]{req}[/failure]")
+                self.description.append(f"[pending]{req}[/pending]")
         self.description = "\n".join(self.description)
 
-        return (self.has_travel_cloak and self.all_food_collected and self.has_wandering_boots and self.has_map and
-                self.knows_all_spells and self.journey_bless_completed)
+        return (
+            self.has_travel_cloak and self.all_food_collected and self.has_wandering_boots
+            and self.has_map and self.knows_all_spells and self.journey_bless_completed
+        )

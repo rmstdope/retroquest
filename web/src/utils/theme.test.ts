@@ -13,6 +13,7 @@ describe('theme', () => {
         'quest_name',
         'event',
         'failure',
+        'pending',
         'success',
         'exits',
         'bold',
@@ -105,6 +106,12 @@ describe('theme', () => {
     it('converts failure tag', () => {
       expect(renderMarkup('[failure]You failed.[/failure]')).toBe(
         '<span class="theme-failure">You failed.</span>',
+      )
+    })
+
+    it('converts pending tag', () => {
+      expect(renderMarkup('[pending] * Sturdy footwear[/pending]')).toBe(
+        '<span class="theme-pending"> * Sturdy footwear</span>',
       )
     })
 

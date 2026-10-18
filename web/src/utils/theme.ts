@@ -18,6 +18,7 @@ export const THEME_TAGS: readonly string[] = [
   'quest_name',
   'event',
   'failure',
+  'pending',
   'success',
   'exits',
   'bold',

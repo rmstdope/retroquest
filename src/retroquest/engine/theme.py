@@ -9,6 +9,7 @@ custom_theme = {
     "quest_name": "#5050d0",
     "event": "dim",
     "failure": "bold red",
+    "pending": "dim italic",
     "success": "bold green",
     "exits": "bold yellow"
 }
