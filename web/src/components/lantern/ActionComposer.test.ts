@@ -248,6 +248,53 @@ describe('ActionComposer', () => {
     expect(document.activeElement).toBe(button(w, 'Take').element)
   })
 
+  it('leaves focus in a pop-up that the command opened', async () => {
+    const game = useGameStore()
+    const continueButton = document.createElement('button')
+    document.body.appendChild(continueButton)
+    submit.mockImplementation(() => {
+      game.showModal = true
+      continueButton.focus()
+    })
+    const w = mountComposer()
+    await button(w, 'Take').trigger('click')
+    await button(w, 'Bucket').trigger('click')
+
+    await button(w, 'Do it').trigger('click')
+    await w.vm.$nextTick()
+
+    expect(document.activeElement).toBe(continueButton)
+    continueButton.remove()
+  })
+
+  it('keeps focus in the go row after moving to a room with other exits', async () => {
+    const game = useGameStore()
+    submit.mockImplementation(() => {
+      game.exits = { south: 'Village Square' }
+    })
+    const w = mountComposer()
+    ;(button(w, "Go north to Mira's Hut").element as HTMLElement).focus()
+
+    await button(w, "Go north to Mira's Hut").trigger('click')
+    await w.vm.$nextTick()
+
+    expect(document.activeElement).toBe(
+      button(w, 'Go south to Village Square').element,
+    )
+  })
+
+  it('returns focus to More… after running one of its commands', async () => {
+    const w = mountComposer()
+    await button(w, 'More…').trigger('click')
+    ;(button(w, 'Inventory').element as HTMLElement).focus()
+
+    await button(w, 'Inventory').trigger('click')
+    await w.vm.$nextTick()
+
+    expect(submit).toHaveBeenCalledWith('inventory')
+    expect(document.activeElement).toBe(button(w, 'More…').element)
+  })
+
   it('returns focus to the verb after Cancel', async () => {
     const w = mountComposer()
     await button(w, 'Say').trigger('click')

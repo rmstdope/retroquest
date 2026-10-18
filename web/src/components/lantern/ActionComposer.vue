@@ -115,9 +115,13 @@ const canClear = computed(
     !!args.value[activeSlot.value],
 )
 
-/** After the DOM updates, focus the first element matching one of `selectors`. */
+/**
+ * After the DOM updates, focus the first element matching one of `selectors`
+ * — unless the command opened a pop-up, which keeps the focus.
+ */
 function focusFirst(...selectors: string[]): void {
   void nextTick(() => {
+    if (game.showModal) return
     for (const selector of selectors) {
       const element = root.value?.querySelector<HTMLElement>(selector)
       if (element) {
@@ -142,6 +146,12 @@ function run(text: string): void {
   game.submitCommand(text)
 }
 
+/** Move, keeping focus in the go row even when the new room has other exits. */
+function go(direction: string): void {
+  run(`go ${direction}`)
+  focusFirst(`[data-exit="${direction}"]`, '.lq-exit-btn', '.lq-verb')
+}
+
 function pickVerb(next: Verb): void {
   // Tapping the selected verb again puts the builder away (like Cancel).
   if (verb.value?.id === next.id) {
@@ -151,6 +161,8 @@ function pickVerb(next: Verb): void {
   if (next.slots.length === 0) {
     run(next.words)
     reset()
+    // A More… verb disappears as the list folds; focus its toggle instead.
+    focusFirst(`[data-verb="${next.id}"]`, '[data-more]')
     return
   }
   verb.value = next
@@ -228,8 +240,9 @@ function submitTyped(): void {
           type="button"
           class="lq-exit-btn"
           :aria-label="`Go ${dir} to ${room}`"
+          :data-exit="dir"
           :disabled="!game.acceptInput"
-          @click="run(`go ${dir}`)"
+          @click="go(dir)"
         >
           <span aria-hidden="true"
             >{{ exitArrow(dir) }} {{ displayName(dir) }}</span
@@ -322,6 +335,7 @@ function submitTyped(): void {
         <button
           type="button"
           class="lq-verb"
+          data-more
           :aria-expanded="showMore ? 'true' : 'false'"
           @click="showMore = !showMore"
         >
