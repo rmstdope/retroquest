@@ -128,6 +128,9 @@ export const useGameStore = defineStore('game', () => {
   // --- Panels ---
   const inventory = ref<NamedItem[]>([])
   const spells = ref<NamedItem[]>([])
+  /** Bag and spell names as the bridge lists them (markup, not HTML), for commands. */
+  const bagEntries = ref<string[]>([])
+  const spellEntries = ref<string[]>([])
   const activeQuests = ref<NamedItem[]>([])
   const completedQuests = ref<NamedItem[]>([])
   /** Quests done / total in the current act (null until the game starts). */
@@ -348,8 +351,12 @@ export const useGameStore = defineStore('game', () => {
     items.value = b.getRoomItems()
     exits.value = b.getRoomExits()
     roomWares.value = b.getRoomWares()
-    inventory.value = b.getInventory().map(renderItem)
-    spells.value = b.getSpells().map(renderItem)
+    const bag = b.getInventory()
+    const spellList = b.getSpells()
+    inventory.value = bag.map(renderItem)
+    spells.value = spellList.map(renderItem)
+    bagEntries.value = bag.map((entry) => entry.name)
+    spellEntries.value = spellList.map((entry) => entry.name)
     activeQuests.value = b.getActiveQuests().map(renderItem)
     completedQuests.value = b.getCompletedQuests().map(renderItem)
     questProgress.value = b.getQuestProgress()
@@ -588,6 +595,8 @@ export const useGameStore = defineStore('game', () => {
     turns,
     questProgress,
     roomWares,
+    bagEntries,
+    spellEntries,
     bagHasNew,
     spellsHaveNew,
     loadingStatus,

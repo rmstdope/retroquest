@@ -1468,4 +1468,22 @@ describe('useGameStore', () => {
       ])
     })
   })
+
+  // --- Raw names for the action composer ---
+
+  describe('raw bag and spell names', () => {
+    it('keep the bridge names (unrendered) for building commands', async () => {
+      bridge.getInventory.mockReturnValue([
+        { name: '[item_name]2 apple[/item_name]', description: '' },
+      ])
+      bridge.getSpells.mockReturnValue([
+        { name: '[spell_name]revive[/spell_name]', description: '' },
+      ])
+
+      await store.initGame()
+
+      expect(store.bagEntries).toEqual(['[item_name]2 apple[/item_name]'])
+      expect(store.spellEntries).toEqual(['[spell_name]revive[/spell_name]'])
+    })
+  })
 })
