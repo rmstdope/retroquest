@@ -1230,16 +1230,36 @@ describe('useGameStore', () => {
       ])
     })
 
-    it('clears the tab dots when a save is loaded', async () => {
+    it.each([
+      ['a quick save', () => store.loadGame()],
+      ['a named save', () => store.loadNamedGame('Before boss')],
+      ['a save slot', () => store.loadFromSlot(2)],
+    ])('clears the tab dots when %s is loaded', async (_, load) => {
       await startPlaying()
       bridge.getInventory.mockReturnValue([named('Sword'), named('Map')])
       bridge.getSpells.mockReturnValue([named('Heal'), named('Light')])
       store.submitCommand('take map')
 
-      store.loadFromSlot(2)
+      load()
 
       expect(store.bagHasNew).toBe(false)
       expect(store.spellsHaveNew).toBe(false)
+    })
+
+    it.each([
+      ['a quick save', () => store.saveGame()],
+      ['a named save', () => store.saveNamedGame('Before boss')],
+      ['a save slot', () => store.saveToSlot(2)],
+    ])('keeps the tab dots when %s is made', async (_, save) => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([named('Sword'), named('Map')])
+      bridge.getSpells.mockReturnValue([named('Heal'), named('Light')])
+      store.submitCommand('take map')
+
+      save()
+
+      expect(store.bagHasNew).toBe(true)
+      expect(store.spellsHaveNew).toBe(true)
     })
 
     it('clears the tab dots when the act changes', async () => {
