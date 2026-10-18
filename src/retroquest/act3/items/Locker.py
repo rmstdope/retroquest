@@ -50,7 +50,7 @@ class Locker(Item):
         """Open the locker, spawning prism lanterns if newly opened."""
         from .PrismLantern import PrismLantern  # Local import to avoid circular dependency
         if self.opened:
-            return "[info]The locker is already open.[/info]"
+            return "[dim]The locker is already open.[/dim]"
         if self.locked:
             return (
                 "[failure]You pull at the handle, but the fused lock holds tight. "
@@ -67,7 +67,7 @@ class Locker(Item):
     def unlock(self, _game_state: GameState) -> str:
         """Free the fused mechanism, allowing the locker to be opened."""
         if not self.locked:
-            return "[info]The mechanism is already free.[/info]"
+            return "[dim]The mechanism is already free.[/dim]"
 
         # Unlocking the fused mechanism requires that a rusted key has been
         # forced into the lock first (it provides purchase on the corroded

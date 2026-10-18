@@ -44,6 +44,6 @@ class SeaSealedLetter(Item):
     def picked_up(self, _game_state: GameState) -> str:
         """Handle letter pickup and set story flag."""
         return (
-            "[item_effect]You carefully fold the preserved fragment — a testament "
-            "kept by the sea.[/item_effect]"
+            "[event]You carefully fold the preserved fragment — a testament "
+            "kept by the sea.[/event]"
         )

@@ -14,6 +14,9 @@ from ...utils.utils import (
     check_item_count_in_inventory,
     check_story_flag,
 )
+from retroquest.act3.items.PrismLantern import PrismLantern
+from retroquest.act3.rooms.SubmergedAntechamber import SubmergedAntechamber
+from ..markup_helpers import assert_markup_well_formed
 
 
 class TestSubmergedAntechamber:
@@ -122,3 +125,35 @@ class TestSubmergedAntechamber:
         after = [type(i).__name__ for i in room.get_items()]
         # After searching with sigils complete, the room should include three brackets
         assert after.count('LanternBracket') == 3
+
+
+def _create_markup_game() -> Game:
+    """Create an Act III game for markup checks."""
+    act = Act3()
+    act.music_file = ''
+    return Game([act])
+
+
+def test_antechamber_state_messages_use_known_tags():
+    """Search, mount and light messages in every state use only known tags."""
+    game = _create_markup_game()
+    room = SubmergedAntechamber()
+    flooded = room.search(game.state)
+    game.state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
+    room.search(game.state)
+    brackets_again = room.search(game.state)
+    game.state.add_item_to_inventory(PrismLantern(), 3)
+    for _ in range(3):
+        room.mount_lantern(game.state)
+    all_filled = room.mount_lantern(game.state)
+    room.cast_light_here(game.state)
+    light_again = room.cast_light_here(game.state)
+    lit_search = room.search(game.state)
+
+    assert "sits high and murky" in flooded
+    assert "Three empty brackets" in brackets_again
+    assert "already filled" in all_filled
+    assert "already burn" in light_again
+    assert "already lit" in lit_search
+    for answer in (flooded, brackets_again, all_filled, light_again, lit_search):
+        assert_markup_well_formed(answer)

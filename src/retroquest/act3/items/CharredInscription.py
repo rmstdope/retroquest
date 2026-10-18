@@ -29,11 +29,11 @@ class CharredInscription(Item):
         return (
             "[event]You trace the charred letters with your finger, feeling the "
             "heat that once shaped them. The inscription reads:[/event]\n\n"
-            "[italic]'In fire and flame we forge the final ward. Should our son "
+            "[dim]'In fire and flame we forge the final ward. Should our son "
             "face the darkness we once served, let him know that love burns "
             "brighter than any shadow. The binding is set in three parts: "
             "courage from the depths, wisdom from the heights, and sacrifice "
-            "from the heart. When united, they shall be his shield.'[/italic]\n\n"
+            "from the heart. When united, they shall be his shield.'[/dim]\n\n"
             "[event]The words seem to pulse with warmth, as if the love that "
             "wrote them still burns in the stone.[/event]"
         )

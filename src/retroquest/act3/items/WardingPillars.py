@@ -61,7 +61,7 @@ class WardingPillars(Item):
     def purify(self, game_state: GameState) -> str:
         """Purify the pillars, enabling their use in the Tideward Sigil quest."""
         if self.purified:
-            return "[info]The pillars are already cleansed of brine and coral.[/info]"
+            return "[dim]The pillars are already cleansed of brine and coral.[/dim]"
         self.purified = True
         # Update the item's displayed name to reflect purified state.
         self.name = "Warding Pillars (purified)"

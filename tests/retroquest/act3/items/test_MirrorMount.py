@@ -2,6 +2,10 @@
 
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from retroquest.act3.items.BindingResin import BindingResin
+from retroquest.act3.items.BrassMirrorSegment import BrassMirrorSegment
+from retroquest.act3.items.MirrorMount import MirrorMount
+from ..markup_helpers import assert_markup_well_formed
 
 
 def setup_game():
@@ -77,3 +81,23 @@ def test_install_resin_mend_flow():
     # Completion flag should be set in the game state
     from retroquest.act3.Act3StoryFlags import FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED
     assert state.get_story_flag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED)
+
+
+def test_mount_refusals_use_known_tags():
+    """Mending too early and re-applying resin use only known, balanced tags."""
+    game = setup_game()
+    mount = MirrorMount()
+
+    unprepared = mount.mend(game.state)
+    game.state.add_item_to_inventory(BrassMirrorSegment(), 4)
+    mount.use_with(game.state, BrassMirrorSegment())
+    loose = mount.mend(game.state)
+    game.state.add_item_to_inventory(BindingResin())
+    mount.use_with(game.state, BindingResin())
+    resin_again = mount.use_with(game.state, BindingResin())
+
+    assert "nothing to mend" in unprepared
+    assert "still loose" in loose
+    assert "already been applied" in resin_again
+    for answer in (unprepared, loose, resin_again):
+        assert_markup_well_formed(answer)

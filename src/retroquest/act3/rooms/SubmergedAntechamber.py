@@ -55,14 +55,14 @@ class SubmergedAntechamber(Room):
         # deep and obscures the niches — nothing can be revealed by searching.
         if not game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED):
             return (
-                "[info]The water in the hall sits high and murky. It's impossible to "
+                "[event]The water in the hall sits high and murky. It's impossible to "
                 "search effectively here — the flooded approach hides whatever might "
-                "lie beneath the surface.[/info]"
+                "lie beneath the surface.[/event]"
             )
         if game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT):
             return (
-                "[info]The niches glow with steady, pearlescent flame. The Lanterns of the "
-                "Deeps are already lit.[/info]"
+                "[event]The niches glow with steady, pearlescent flame. The Lanterns of the "
+                "Deeps are already lit.[/event]"
             )
         # If brackets are not present yet, reveal them for mounting lanterns
         from ..items.LanternBracket import LanternBracket as _LB
@@ -79,8 +79,8 @@ class SubmergedAntechamber(Room):
                 "faint tide-light.[/event]"
             )
         return (
-            "[info]You wade through chilled water. Three empty brackets line the "
-            "approach; their carved grooves catch the faint tide-light.[/info]"
+            "[event]You wade through chilled water. Three empty brackets line the "
+            "approach; their carved grooves catch the faint tide-light.[/event]"
         )
 
     def mount_lantern(self, game_state: GameState) -> str:
@@ -94,7 +94,7 @@ class SubmergedAntechamber(Room):
             None
         )
         if empty is None:
-            return "[info]All brackets here are already filled.[/info]"
+            return "[dim]All brackets here are already filled.[/dim]"
         # Check inventory for a Prism Lantern
         lantern = next(
             (i for i in game_state.inventory if isinstance(i, PrismLantern)), None
@@ -125,7 +125,7 @@ class SubmergedAntechamber(Room):
                 "gets lit.[/failure]"
             )
         if game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT):
-            return "[info]The prism lanterns already burn with steady, cold flame.[/info]"
+            return "[dim]The prism lanterns already burn with steady, cold flame.[/dim]"
         game_state.set_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, True)
         return (
             "[success]Light pours from the prisms, weaving a clear path through "

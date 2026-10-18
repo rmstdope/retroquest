@@ -43,7 +43,7 @@ class MirrorMount(Item):
                     "the mirror segments first.[/failure]"
                 )
             if self._resin_applied:
-                return "[info]Binding resin has already been applied to this mount.[/info]"
+                return "[dim]Binding resin has already been applied to this mount.[/dim]"
             # Remove one resin from inventory
             resin_name = BindingResin().get_name()
             game_state.remove_item_from_inventory(resin_name, 1)
@@ -88,15 +88,15 @@ class MirrorMount(Item):
 
         if not self._installed:
             return (
-                "[info]This mount has not yet been prepared with the brass segments; "
-                "there is nothing to mend.[/info]"
+                "[failure]This mount has not yet been prepared with the brass segments; "
+                "there is nothing to mend.[/failure]"
             )
 
         # Require binding resin to have been applied before final mending
         if not self._resin_applied:
             return (
-                "[info]The mirror segments are seated but still loose. You should "
-                "apply Binding Resin to the mount before attempting the final mend.[/info]"
+                "[failure]The mirror segments are seated but still loose. You should "
+                "apply Binding Resin to the mount before attempting the final mend.[/failure]"
             )
 
         # Set the completion flag; idempotent

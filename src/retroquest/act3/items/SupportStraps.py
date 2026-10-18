@@ -17,4 +17,4 @@ class SupportStraps(Item):
         from .FallenRock import FallenRock
         if isinstance(other_item, FallenRock):
             return other_item.use_with(game_state, self)
-        return f"[info]You can't use the Support Straps with {other_item.get_name()}.[/info]"
+        return f"[failure]You can't use the Support Straps with {other_item.get_name()}.[/failure]"

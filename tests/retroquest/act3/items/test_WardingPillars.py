@@ -7,6 +7,8 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
 )
 from ...utils.utils import check_story_flag
+from retroquest.act3.items.WardingPillars import WardingPillars
+from ..markup_helpers import assert_markup_well_formed
 
 
 def test_purify_sets_flag():
@@ -110,3 +112,22 @@ def test_use_with_shards_before_and_after_purify():
     assert game.state.get_item_count('Moon Rune Shards') == 0
     # Sigils completed flag set
     check_story_flag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
+
+
+def _create_markup_game() -> Game:
+    """Create an Act III game for markup checks."""
+    act = Act3()
+    act.music_file = ''
+    return Game([act])
+
+
+def test_purifying_pillars_twice_uses_known_tags():
+    """Purifying already cleansed pillars uses only known, balanced tags."""
+    game = _create_markup_game()
+    pillars = WardingPillars()
+    pillars.purify(game.state)
+
+    answer = pillars.purify(game.state)
+
+    assert "already cleansed" in answer
+    assert_markup_well_formed(answer)

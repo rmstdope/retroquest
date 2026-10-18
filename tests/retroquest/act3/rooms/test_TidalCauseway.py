@@ -4,6 +4,8 @@ from typing import Optional
 
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from retroquest.act3.rooms.TidalCauseway import TidalCauseway
+from ..markup_helpers import assert_markup_well_formed
 
 class TestTidalCauseway:
     """Tests for mural interactions on the Tidal Causeway."""
@@ -35,3 +37,22 @@ def test_cast_light_reveals_rusted_key_and_updates_room():
 
     # Now a RustedLockerKey should be present in the room
     assert any(i.__class__.__name__ == 'RustedLockerKey' for i in room.items)
+
+
+def _create_markup_game() -> Game:
+    """Create an Act III game for markup checks."""
+    act = Act3()
+    act.music_file = ''
+    return Game([act])
+
+
+def test_second_light_cast_uses_known_tags():
+    """Casting light on the causeway again uses only known, balanced tags."""
+    game = _create_markup_game()
+    room = TidalCauseway()
+    room.cast_light_here(game.state)
+
+    answer = room.cast_light_here(game.state)
+
+    assert "nothing new comes free" in answer
+    assert_markup_well_formed(answer)
