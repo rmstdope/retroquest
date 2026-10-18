@@ -13,6 +13,7 @@ function turn(partial: Partial<Turn>): Turn {
     roomChanged: false,
     gained: [],
     lost: [],
+    arrival: null,
     ...partial,
   }
 }
@@ -158,5 +159,33 @@ describe('StoryTurn', () => {
 
     const labels = w.findAll('.lq-speaker').map((l) => l.text())
     expect(labels).toEqual(['Mira', 'Borin'])
+  })
+
+  it('shows the arrival in a new room after the answer', () => {
+    const w = mountTurn({
+      command: 'go south',
+      text: '[event]You move south to [room_name]Vegetable Field[/room_name].[/event]',
+      roomChanged: true,
+      arrival: {
+        room: 'Vegetable Field',
+        description: 'Rows of withered crops.',
+        characters: [],
+        items: ['rusty hoe'],
+        exits: { north: "Elior's Cottage" },
+      },
+    })
+
+    const arrival = w.get('[data-testid="divider"]')
+    expect(arrival.text()).toContain('Vegetable Field')
+    expect(w.text()).toContain('Rows of withered crops.')
+    expect(w.html().indexOf('lq-block-event')).toBeLessThan(
+      w.html().indexOf('data-testid="divider"'),
+    )
+  })
+
+  it('shows no arrival when the room did not change', () => {
+    expect(
+      mountTurn({ text: 'Nothing.' }).find('[data-testid="divider"]').exists(),
+    ).toBe(false)
   })
 })

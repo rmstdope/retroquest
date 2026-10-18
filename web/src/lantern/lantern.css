@@ -142,6 +142,13 @@
   --lq-motion: 0;
 }
 
+/* The page behind the shell uses the Lantern ground, not the classic one. */
+:root[data-ui='lantern'],
+:root[data-ui='lantern'] body {
+  background: var(--lq-bg);
+  color: var(--lq-fg);
+}
+
 /*
  * Inline game tags (rendered by renderMarkup) in the Lantern look. Colours come
  * from the tokens above, which are checked for WCAG AA contrast.
