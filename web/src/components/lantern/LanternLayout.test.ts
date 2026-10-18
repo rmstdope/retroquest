@@ -169,4 +169,10 @@ describe('LanternLayout', () => {
   it('shows no pop-up when none is pending', () => {
     expect(mountLayout().find('[role="dialog"]').exists()).toBe(false)
   })
+
+  it('heads the story with a level-two heading for screen readers', () => {
+    expect(mountLayout().get('section[aria-label="Story"] h2').text()).toBe(
+      'Story',
+    )
+  })
 })

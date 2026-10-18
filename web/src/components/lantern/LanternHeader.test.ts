@@ -107,4 +107,8 @@ describe('LanternHeader', () => {
       true,
     )
   })
+
+  it('names the page with a top-level heading', () => {
+    expect(mountHeader().get('h1').text()).toBe('RetroQuest')
+  })
 })
