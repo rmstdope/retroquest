@@ -226,4 +226,27 @@ describe('parseTurn', () => {
       },
     ])
   })
+
+  it('adds no empty block for a span that closes right after a dialogue', () => {
+    // Shape of Act II TrainingSword.use and Act III AncientDragon answers.
+    const raw =
+      "[success]Sir Cedric nods. [dialogue]'Well done.'[/dialogue]\n\n" +
+      "He straightens up. [dialogue]'Time is of the essence.'[/dialogue][/success]"
+
+    const blocks = parseTurn(raw)
+
+    expect(blocks.map((b) => b.kind)).toEqual([
+      'text',
+      'dialogue',
+      'text',
+      'dialogue',
+    ])
+  })
+
+  it('keeps a line of bracketed words that are not markup tags', () => {
+    // Help text uses placeholders such as `[name]`, which render as-is.
+    const blocks = parseTurn('[name] [target]')
+
+    expect(blocks).toEqual([{ kind: 'text', markup: '[name] [target]' }])
+  })
 })

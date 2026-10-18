@@ -64,6 +64,9 @@ function balance(markup: string, open: string[]): string {
   return reopen + body + close
 }
 
+/** Any opening or closing markup tag (bracketed words in prose don't count). */
+const ANY_TAG = new RegExp(`\\[/?(${THEME_TAGS.join('|')})\\]`, 'g')
+
 /** Inner markup if `line` is wholly one `[tag]…[/tag]` span, else null. */
 function wholeLine(line: string, tag: string): string | null {
   const open = `[${tag}]`
@@ -87,6 +90,9 @@ export function parseTurn(raw: string): TurnBlock[] {
   function addLine(line: string): void {
     if (!line.trim()) return
     const text = balance(line.trim(), openTags)
+    // A line that is only tags (e.g. a `[/success]` closing a span after a
+    // dialogue) has nothing to show.
+    if (!text.replace(ANY_TAG, '').trim()) return
     for (const match of text.matchAll(CHARACTER_NAME)) speaker = match[1]
 
     const event = wholeLine(text, 'event')
