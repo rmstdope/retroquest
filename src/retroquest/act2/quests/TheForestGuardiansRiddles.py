@@ -7,10 +7,9 @@ Trigger Conditions:
 - Offered upon acceptance of the guardians' intellectual challenge
     (``FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED``).
 
-Objectives:
-- Scripted list stored in ``self.objectives`` (not rendered anywhere yet).
-- Early objectives implicitly satisfied by visiting key biomes; later ones by
-    solving riddle interactions (external logic sets completion flag).
+Progress:
+- No objectives are tracked; riddle interactions elsewhere set the completion
+    flag once the guardians' riddles are solved.
 
 Completion Logic:
 - Monitors ``FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED``; on first completion
@@ -46,12 +45,6 @@ class TheForestGuardiansRiddles(Quest):
                 "forest spirits acknowledge your understanding."
             )
         )
-        self.objectives = [
-            "Speak with the Ancient Tree Spirit in the Ancient Grove",
-            "Journey to the Whispering Glade and meet the water spirits",
-            "Solve the riddles posed by the forest guardians",
-            "Prove your wisdom and respect for the natural world"
-        ]
         self.experience_reward = 200
 
     def check_trigger(self, game_state: GameState) -> bool:
