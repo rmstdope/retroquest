@@ -19,6 +19,7 @@ class AncientChronicle(Item):
         )
 
     def use(self, game_state: GameState) -> str:
+        """Study the tome; blocked by the librarian until they are friendly."""
         if game_state.get_story_flag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY):
             # Learn dispel spell from ancient texts
             from ..spells.DispelSpell import DispelSpell
@@ -33,7 +34,8 @@ class AncientChronicle(Item):
         else:
             return (
                 "[event]The [character_name]Spectral Librarian[/character_name] materializes "
-                "before you, blocking your access to the ancient texts. 'These sacred "
-                "chronicles are not for the unworthy,' the spirit intones. 'Prove yourself "
-                "first, then perhaps I will permit you to study these treasures.'[/event]"
+                "before you, blocking your access to the ancient texts.[/event]\n"
+                "[dialogue]'These sacred chronicles are not for the unworthy,'[/dialogue] "
+                "the spirit intones. [dialogue]'Prove yourself first, then perhaps I will "
+                "permit you to study these treasures.'[/dialogue]"
             )

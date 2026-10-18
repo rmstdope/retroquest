@@ -44,7 +44,7 @@ class PropheticVision(Spell):
             # First casting - complete The Gathering Storm quest
             game_state.set_story_flag(FLAG_GATHERING_STORM_COMPLETED, True)
             return (
-                "[magic]You close your eyes and reach out with your newly granted sight beyond "
+                "[event]You close your eyes and reach out with your newly granted sight beyond "
                 "sight. With Sir Cedric standing beside you, you share the visions as they flood "
                 "your mind like fragments of a shattered mirror, each reflecting a possible "
                 "future:\n\n"
@@ -61,12 +61,12 @@ class PropheticVision(Spell):
                 "as he witnesses the prophetic revelations. You understand now that your journey "
                 "has only just begun, and the gathering storm spoken of by Sir Cedric is far "
                 "greater than anyone imagined. Together, armed with this foresight, you are "
-                "better prepared for whatever challenges lie ahead.[/magic]"
+                "better prepared for whatever challenges lie ahead.[/event]"
             )
 
         return (
-            "[magic]You cast the prophetic vision spell, and brief glimpses of possible futures "
+            "[event]You cast the prophetic vision spell, and brief glimpses of possible futures "
             "dance before your eyes. The gift of foresight reminds you that every choice creates "
             "ripples through the tapestry of time, and wisdom lies in understanding the "
-            "consequences of your actions.[/magic]"
+            "consequences of your actions.[/event]"
         )
