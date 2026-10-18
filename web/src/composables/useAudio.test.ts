@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
 import { useAudio } from './useAudio'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 import type { AudioFactory } from './useAudio'
 
 /**
@@ -28,14 +30,20 @@ Object.defineProperty(globalThis, 'localStorage', {
 
 function createMockFactory() {
   const playFn = vi.fn(() => Promise.resolve())
-  const factory = vi.fn(() => ({ play: playFn })) as unknown as AudioFactory
-  return { factory, playFn }
+  const created: Array<{ play: typeof playFn; volume: number }> = []
+  const factory = vi.fn(() => {
+    const element = { play: playFn, volume: 1 }
+    created.push(element)
+    return element
+  }) as unknown as AudioFactory
+  return { factory, playFn, created }
 }
 
 describe('useAudio', () => {
   beforeEach(() => {
     localStorageMock.clear()
     vi.clearAllMocks()
+    setActivePinia(createPinia())
   })
 
   afterEach(() => {
@@ -158,13 +166,17 @@ describe('useAudio', () => {
       expect(soundMuted.value).toBe(false)
     })
 
-    it('persists muted state to localStorage', () => {
+    it('stores the mute choice in the settings, not the old key', () => {
       const { factory } = createMockFactory()
       const { toggleMute } = useAudio(factory)
       toggleMute()
-      expect(localStorage.getItem('retroquest_sfx_muted')).toBe('true')
+      expect(useSettingsStore().effectsOn).toBe(false)
       toggleMute()
-      expect(localStorage.getItem('retroquest_sfx_muted')).toBe('false')
+      expect(useSettingsStore().effectsOn).toBe(true)
+      expect(localStorageMock.setItem).not.toHaveBeenCalledWith(
+        'retroquest_sfx_muted',
+        expect.anything(),
+      )
     })
 
     it('silences sounds after being muted', () => {
@@ -174,6 +186,26 @@ describe('useAudio', () => {
       playNewQuest()
       expect(factory).not.toHaveBeenCalled()
       expect(playFn).not.toHaveBeenCalled()
+    })
+  })
+
+  // --- Settings ---
+
+  describe('settings', () => {
+    it('plays effects at the effects volume from the settings', () => {
+      useSettingsStore().effectsVolume = 30
+      const { factory, created } = createMockFactory()
+      useAudio(factory).playQuestComplete()
+      expect(created[0].volume).toBe(0.3)
+    })
+
+    it('stays silent when effects are turned off in the settings', () => {
+      const { factory } = createMockFactory()
+      const { playNewQuest, soundMuted } = useAudio(factory)
+      useSettingsStore().effectsOn = false
+      playNewQuest()
+      expect(soundMuted.value).toBe(true)
+      expect(factory).not.toHaveBeenCalled()
     })
   })
 })

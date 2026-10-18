@@ -54,6 +54,8 @@
   --lq-story-line-height: 1.5;
   --lq-density: 0.7;
   --lq-radius: 14px;
+  /* 1 = full motion, 0 = reduced; animations scale their movement by it */
+  --lq-motion: 1;
 
   color-scheme: dark;
 }
@@ -124,4 +126,15 @@
   --lq-spell-line: #c9ade6;
 
   color-scheme: light;
+}
+
+/* Reduce motion: follows the device unless the player picks on/off */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-ui='lantern']:not([data-reduce-motion='off']) {
+    --lq-motion: 0;
+  }
+}
+
+:root[data-ui='lantern'][data-reduce-motion='on'] {
+  --lq-motion: 0;
 }

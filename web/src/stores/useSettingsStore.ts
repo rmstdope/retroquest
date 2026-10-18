@@ -32,13 +32,18 @@ export const SETTINGS_STORAGE_KEY = 'retroquest_settings'
 /** Mute flag written by useMusic before settings existed. */
 export const LEGACY_MUTED_KEY = 'retroquest_music_muted'
 
+/** Mute flag written by useAudio (sound effects) before settings existed. */
+export const LEGACY_SFX_MUTED_KEY = 'retroquest_sfx_muted'
+
 export const DEFAULT_SETTINGS: Readonly<Settings> = {
   theme: 'device',
   textSize: 'medium',
   musicOn: true,
-  musicVolume: 60,
+  // Full volume until the Settings dialog (step 22) lets players adjust it,
+  // so current players hear no change.
+  musicVolume: 100,
   effectsOn: true,
-  effectsVolume: 80,
+  effectsVolume: 100,
   startMode: 'actions',
   reduceMotion: 'device',
 }
@@ -73,6 +78,7 @@ function loadSettings(): Settings {
   const defaults: Settings = {
     ...DEFAULT_SETTINGS,
     musicOn: readStorage(LEGACY_MUTED_KEY) !== 'true',
+    effectsOn: readStorage(LEGACY_SFX_MUTED_KEY) !== 'true',
   }
   let stored: Record<string, unknown> = {}
   try {

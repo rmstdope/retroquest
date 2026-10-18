@@ -124,4 +124,19 @@ describe('lantern.css', () => {
       ":root[data-ui='lantern']:not([data-theme='dark'])",
     )
   })
+
+  it('reduces motion when chosen, or when the device asks unless turned off', () => {
+    expect(declarations(":root[data-ui='lantern']")['--lq-motion']).toBe('1')
+    expect(
+      declarations(":root[data-ui='lantern'][data-reduce-motion='on']")[
+        '--lq-motion'
+      ],
+    ).toBe('0')
+    expect(lanternCss).toContain('@media (prefers-reduced-motion: reduce)')
+    expect(
+      declarations(":root[data-ui='lantern']:not([data-reduce-motion='off'])")[
+        '--lq-motion'
+      ],
+    ).toBe('0')
+  })
 })

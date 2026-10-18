@@ -2,10 +2,12 @@
 import { onMounted } from 'vue'
 import { useGameStore } from './stores/useGameStore'
 import { useBridge } from './composables/useBridge'
+import { useAppearance } from './composables/useAppearance'
 import GameLayout from './components/GameLayout.vue'
 
 const store = useGameStore()
 const bridge = useBridge()
+useAppearance()
 
 function requestFullscreenOnFirstInteraction() {
   if (
