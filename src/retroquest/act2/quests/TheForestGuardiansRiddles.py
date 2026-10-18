@@ -8,7 +8,7 @@ Trigger Conditions:
     (``FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED``).
 
 Objectives:
-- Scripted list stored in ``self.objectives`` for UI/status rendering.
+- Scripted list stored in ``self.objectives`` (not rendered anywhere yet).
 - Early objectives implicitly satisfied by visiting key biomes; later ones by
     solving riddle interactions (external logic sets completion flag).
 
@@ -78,16 +78,3 @@ class TheForestGuardiansRiddles(Quest):
                 exp_msg = ""
             return f"[success]Quest Complete: {self.name}[/success]{exp_msg}"
         return self.completion
-
-    def get_status(self) -> str:
-        """Return the current status of the quest."""
-        if self.is_completed_flag:
-            return f"[quest_status_complete]{self.name} - COMPLETED[/quest_status_complete]"
-        else:
-            status = f"[quest_status_active]{self.name} - IN PROGRESS[/quest_status_active]\n"
-            for i, objective in enumerate(self.objectives):
-                if i < 2:  # First two objectives are typically completed by visiting the locations
-                    status += f"  ✓ {objective}\n"
-                else:
-                    status += f"  • {objective}\n"
-            return status
