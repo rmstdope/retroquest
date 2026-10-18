@@ -11,6 +11,18 @@ const props = defineProps<{ turn: Turn }>()
 
 const blocks = computed(() => parseTurn(props.turn.text))
 
+/** Label a quote only when its speaker differs from the previous quote's. */
+const speakerLabels = computed(() => {
+  let previous: string | null = null
+  return blocks.value.map((block) => {
+    if (block.kind !== 'dialogue') return null
+    const label =
+      block.speaker && block.speaker !== previous ? block.speaker : null
+    previous = block.speaker
+    return label
+  })
+})
+
 const chips = computed(() => [
   ...props.turn.gained.map((chip) => ({ chip, sign: '+', spoken: 'Gained' })),
   ...props.turn.lost.map((chip) => ({ chip, sign: '−', spoken: 'Lost' })),
@@ -60,8 +72,8 @@ function chipLabel(chip: Chip): string {
         v-else-if="block.kind === 'dialogue'"
         class="lq-block-dialogue"
       >
-        <div v-if="block.speaker" class="lq-speaker">
-          {{ displayName(block.speaker) }}
+        <div v-if="speakerLabels[index]" class="lq-speaker">
+          {{ displayName(speakerLabels[index] ?? '') }}
         </div>
         <p class="lq-quote" v-html="renderMarkup(block.markup)"></p>
       </blockquote>
@@ -209,12 +221,12 @@ function chipLabel(chip: Chip): string {
   color: var(--lq-muted);
 }
 .lq-check-pending .lq-check-mark {
-  border: 1.5px dashed var(--lq-line2);
+  border: 1.5px dashed var(--lq-muted);
 }
 .lq-chips {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  overflow-x: auto;
 }
 .lq-chip {
   flex: 0 0 auto;
