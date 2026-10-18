@@ -47,6 +47,7 @@ describe('LanternLayout', () => {
         roomChanged: true,
         gained: [],
         lost: [],
+        arrival: null,
       },
       {
         id: 2,
@@ -56,6 +57,7 @@ describe('LanternLayout', () => {
         roomChanged: false,
         gained: [],
         lost: [],
+        arrival: null,
       },
     ]
     await w.vm.$nextTick()
@@ -153,6 +155,7 @@ describe('LanternLayout', () => {
       roomChanged: false,
       gained: [],
       lost: [],
+      arrival: null,
     }
     useGameStore().turns = [
       { id: 1, ...turn },

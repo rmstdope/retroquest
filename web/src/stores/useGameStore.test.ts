@@ -1045,6 +1045,13 @@ describe('useGameStore', () => {
           roomChanged: true,
           gained: [],
           lost: [],
+          arrival: {
+            room: 'Village Square',
+            description: 'A quiet village.',
+            characters: ['Mira'],
+            items: ['Map'],
+            exits: { north: 'Forest' },
+          },
         },
       ])
     })
@@ -1065,6 +1072,7 @@ describe('useGameStore', () => {
         roomChanged: false,
         gained: [],
         lost: [],
+        arrival: null,
       })
     })
 
@@ -1387,6 +1395,58 @@ describe('useGameStore', () => {
       store.dismissModal()
       store.submitCommand('give amulet to mira')
       expect(store.questProgress?.completed).toBe(5)
+    })
+  })
+
+  // --- Arrival snapshot ---
+
+  describe('arrival snapshot', () => {
+    beforeEach(async () => {
+      await store.initGame()
+      store.dismissModal()
+    })
+
+    it('captures the new room when a command moves the player', () => {
+      bridge.getRoomName.mockReturnValue('Vegetable Field')
+      bridge.getRoomDescription.mockReturnValue('Rows of withered crops.')
+      bridge.getRoomCharacters.mockReturnValue([])
+      bridge.getRoomItems.mockReturnValue(['rusty hoe', 'dull knife'])
+      bridge.getRoomExits.mockReturnValue({
+        north: "Elior's Cottage",
+        south: 'Chicken Coop',
+      })
+
+      store.submitCommand('go south')
+
+      expect(store.turns.at(-1)?.arrival).toEqual({
+        room: 'Vegetable Field',
+        description: 'Rows of withered crops.',
+        characters: [],
+        items: ['rusty hoe', 'dull knife'],
+        exits: { north: "Elior's Cottage", south: 'Chicken Coop' },
+      })
+    })
+
+    it('keeps the snapshot even after the room changes again', () => {
+      bridge.getRoomName.mockReturnValue('Vegetable Field')
+      bridge.getRoomDescription.mockReturnValue('Rows of withered crops.')
+      store.submitCommand('go south')
+      const field = store.turns.length - 1
+
+      bridge.getRoomName.mockReturnValue('Chicken Coop')
+      bridge.getRoomDescription.mockReturnValue('A noisy coop.')
+      store.submitCommand('go south')
+
+      expect(store.turns[field].arrival?.description).toBe(
+        'Rows of withered crops.',
+      )
+      expect(store.turns.at(-1)?.arrival?.room).toBe('Chicken Coop')
+    })
+
+    it('has no arrival when the player stays in the same room', () => {
+      store.submitCommand('look at map')
+
+      expect(store.turns.at(-1)?.arrival).toBeNull()
     })
   })
 })

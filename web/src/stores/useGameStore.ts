@@ -80,6 +80,18 @@ export interface Turn {
   gained: Chip[]
   /** Items and spells this command removed (none for system output). */
   lost: Chip[]
+  /** The room as found on arrival, kept for the story (null if no room change). */
+  arrival: Arrival | null
+}
+
+/** What the player found on entering a room (engine markup / names). */
+export interface Arrival {
+  room: string
+  description: string
+  characters: string[]
+  items: string[]
+  /** Direction → destination room name. */
+  exits: RoomExits
 }
 
 /** Journal tabs that show a dot when something new arrived. */
@@ -194,14 +206,26 @@ export const useGameStore = defineStore('game', () => {
     lastBag = bag
     lastSpells = spellList
 
+    const roomChanged = room !== lastTurnRoom
     turns.value.push({
       id: nextTurnId++,
       command,
       text: raw,
       room,
-      roomChanged: room !== lastTurnRoom,
+      roomChanged,
       gained,
       lost,
+      // The engine only says "You move north to …"; keep what the room looked
+      // like now so the story can show it later.
+      arrival: roomChanged
+        ? {
+            room,
+            description: b.getRoomDescription(),
+            characters: b.getRoomCharacters(),
+            items: b.getRoomItems(),
+            exits: b.getRoomExits(),
+          }
+        : null,
     })
     lastTurnRoom = room
     if (turns.value.length > MAX_TURNS) {

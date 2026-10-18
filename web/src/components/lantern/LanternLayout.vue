@@ -112,6 +112,7 @@ function submit(): void {
 .lq-root {
   height: 100vh;
   height: 100dvh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background: var(--lq-bg);
@@ -131,7 +132,12 @@ function submit(): void {
 }
 .lq-story {
   flex: 1;
+  /* Without this the story grows past the shell instead of scrolling in it. */
+  min-height: 0;
   overflow-y: auto;
+  /* Contains visually hidden (absolutely positioned) screen-reader text, which
+     would otherwise extend the page below the shell. */
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: calc(18px * var(--lq-density));

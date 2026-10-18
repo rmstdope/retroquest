@@ -5,6 +5,7 @@ import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn } from '@/lantern/parseTurn'
 import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
+import StoryArrival from './StoryArrival.vue'
 
 /** One turn in the Lantern story: the command echo, the answer's blocks and chips. */
 const props = defineProps<{ turn: Turn }>()
@@ -92,6 +93,12 @@ function chipLabel(chip: Chip): string {
       </ul>
       <!-- eslint-enable vue/no-v-html -->
     </template>
+
+    <StoryArrival
+      v-if="turn.arrival"
+      :arrival="turn.arrival"
+      :command="turn.command"
+    />
 
     <div v-if="chips.length" class="lq-chips" role="group" aria-label="Changes">
       <span

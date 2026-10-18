@@ -157,4 +157,42 @@ test.describe('Lantern UI (?ui=lantern)', () => {
       })
     expect(colours.border).toBe(colours.muted)
   })
+
+  test('keeps a long story inside the screen without scrolling the page', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      const long = 'The wind howls across the fields. '.repeat(20)
+      store.turns = Array.from({ length: 30 }, (_, i) => ({
+        ...store.turns[0],
+        id: i + 1,
+        command: `wait ${i}`,
+        text: long,
+        // Chips and checklists carry visually hidden screen-reader text.
+        gained: [{ kind: 'spell', name: 'revive', count: 1 }],
+      }))
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+    await page.waitForTimeout(300)
+
+    const layout = await page.evaluate(() => ({
+      pageHeight: document.documentElement.scrollHeight,
+      viewport: window.innerHeight,
+      scrollY: window.scrollY,
+      bodyBg: getComputedStyle(document.body).backgroundColor,
+      rootBg: getComputedStyle(
+        document.querySelector('.lq-root') as HTMLElement,
+      ).backgroundColor,
+    }))
+    expect(layout.pageHeight).toBeLessThanOrEqual(layout.viewport)
+    expect(layout.scrollY).toBe(0)
+    expect(layout.bodyBg).toBe(layout.rootBg)
+    await expect(page.getByLabel('Command')).toBeInViewport()
+  })
 })
