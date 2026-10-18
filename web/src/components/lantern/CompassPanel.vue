@@ -103,8 +103,10 @@ function go(direction: string): void {
   background: var(--lq-surface);
   font-family: var(--lq-font-ui);
 }
+/* Inset like the journal's heading (16px) so switching sections keeps it put. */
 .lq-compass-title {
   margin: 0;
+  padding: 0 4px;
   font-family: var(--lq-font-display);
   font-size: calc(20px * var(--lq-display-scale));
   font-weight: 500;
