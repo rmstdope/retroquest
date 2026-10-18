@@ -55,6 +55,23 @@ export interface QuestAudioPlayer {
   playQuestComplete(): void
 }
 
+/** Most recent turns kept for the story view; older ones are dropped. */
+export const MAX_TURNS = 200
+
+/** One entry in the story: what the player did and what the game answered. */
+export interface Turn {
+  /** Increasing id, unique for the session (stable key for rendering). */
+  id: number
+  /** The typed or built command; null for system output (arrival, load…). */
+  command: string | null
+  /** The engine's answer as raw markup (rendered by the story view). */
+  text: string
+  /** Room the player is in after this turn. */
+  room: string
+  /** True when this turn brought the player to a different room. */
+  roomChanged: boolean
+}
+
 interface QuestEvent {
   title: string
   body: string
@@ -87,6 +104,9 @@ export const useGameStore = defineStore('game', () => {
 
   // --- Output ---
   const lastOutput = ref('')
+  const turns = ref<Turn[]>([])
+  let nextTurnId = 1
+  let lastTurnRoom = ''
   const introText = ref('')
 
   // --- Input ---
@@ -118,6 +138,26 @@ export const useGameStore = defineStore('game', () => {
 
   function setAudioPlayer(player: QuestAudioPlayer) {
     audioPlayer = player
+  }
+
+  /**
+   * Show an engine answer: set lastOutput (classic UI) and record it as a
+   * turn in the story log (Lantern UI).
+   */
+  function showOutput(command: string | null, raw: string): void {
+    lastOutput.value = renderMarkup(raw)
+    const room = requireBridge().getRoomName()
+    turns.value.push({
+      id: nextTurnId++,
+      command,
+      text: raw,
+      room,
+      roomChanged: room !== lastTurnRoom,
+    })
+    lastTurnRoom = room
+    if (turns.value.length > MAX_TURNS) {
+      turns.value.splice(0, turns.value.length - MAX_TURNS)
+    }
   }
 
   function requireBridge(): GameBridge {
@@ -163,8 +203,9 @@ export const useGameStore = defineStore('game', () => {
     if (!cmd || !cmd.trim()) return
 
     const b = requireBridge()
-    const result = b.handleCommand(cmd.trim())
-    lastOutput.value = renderMarkup(result)
+    const command = cmd.trim()
+    const result = b.handleCommand(command)
+    showOutput(command, result)
     refreshPanels()
     pollQuestEvents()
     refreshPanels()
@@ -200,7 +241,7 @@ export const useGameStore = defineStore('game', () => {
   function advanceTurn(): void {
     const b = requireBridge()
     const result = b.advanceTurn()
-    lastOutput.value = renderMarkup(result)
+    showOutput(null, result)
     refreshPanels()
   }
 
@@ -229,26 +270,26 @@ export const useGameStore = defineStore('game', () => {
   function saveGame(): void {
     const b = requireBridge()
     const result = b.quickSaveGame()
-    lastOutput.value = renderMarkup(result)
+    showOutput(null, result)
   }
 
   function loadGame(): void {
     const b = requireBridge()
     const result = b.quickLoadGame()
-    lastOutput.value = renderMarkup(result)
+    showOutput(null, result)
     refreshPanels()
   }
 
   function saveNamedGame(name: string): void {
     const b = requireBridge()
     const result = b.saveNamedGame(name)
-    lastOutput.value = renderMarkup(result)
+    showOutput(null, result)
   }
 
   function loadNamedGame(name: string): void {
     const b = requireBridge()
     const result = b.loadNamedGame(name)
-    lastOutput.value = renderMarkup(result)
+    showOutput(null, result)
     refreshPanels()
   }
 
@@ -265,13 +306,13 @@ export const useGameStore = defineStore('game', () => {
   function saveToSlot(slot: number): void {
     const b = requireBridge()
     const result = b.saveToSlot(slot)
-    lastOutput.value = renderMarkup(result)
+    showOutput(null, result)
   }
 
   function loadFromSlot(slot: number): void {
     const b = requireBridge()
     const result = b.loadFromSlot(slot)
-    lastOutput.value = renderMarkup(result)
+    showOutput(null, result)
     refreshPanels()
   }
 
@@ -345,7 +386,7 @@ export const useGameStore = defineStore('game', () => {
       // If this was the act intro modal, fire a look to trigger quest start
       if (pendingLookOnDismiss) {
         pendingLookOnDismiss = false
-        lastOutput.value = renderMarkup(b.look())
+        showOutput(null, b.look())
         refreshPanels()
         pollQuestEvents()
       } else if (!acceptInput.value && !b.isActRunning()) {
@@ -427,6 +468,7 @@ export const useGameStore = defineStore('game', () => {
   return {
     // State
     loading,
+    turns,
     loadingStatus,
     roomName,
     roomDescription,
