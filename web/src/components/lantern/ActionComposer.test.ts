@@ -134,6 +134,17 @@ describe('ActionComposer', () => {
     expect(w.text()).toContain('Nothing to take here')
   })
 
+  it('puts the builder away when the selected verb is tapped again', async () => {
+    const w = mountComposer()
+    await button(w, 'Use').trigger('click')
+    await button(w, 'Lantern').trigger('click')
+
+    await button(w, 'Use').trigger('click')
+
+    expect(w.find('[data-testid="preview"]').exists()).toBe(false)
+    expect(submit).not.toHaveBeenCalled()
+  })
+
   it('cancels a half-built command', async () => {
     const w = mountComposer()
     await button(w, 'Take').trigger('click')
@@ -237,6 +248,53 @@ describe('ActionComposer', () => {
     expect(document.activeElement).toBe(button(w, 'Take').element)
   })
 
+  it('leaves focus in a pop-up that the command opened', async () => {
+    const game = useGameStore()
+    const continueButton = document.createElement('button')
+    document.body.appendChild(continueButton)
+    submit.mockImplementation(() => {
+      game.showModal = true
+      continueButton.focus()
+    })
+    const w = mountComposer()
+    await button(w, 'Take').trigger('click')
+    await button(w, 'Bucket').trigger('click')
+
+    await button(w, 'Do it').trigger('click')
+    await w.vm.$nextTick()
+
+    expect(document.activeElement).toBe(continueButton)
+    continueButton.remove()
+  })
+
+  it('keeps focus in the go row after moving to a room with other exits', async () => {
+    const game = useGameStore()
+    submit.mockImplementation(() => {
+      game.exits = { south: 'Village Square' }
+    })
+    const w = mountComposer()
+    ;(button(w, "Go north to Mira's Hut").element as HTMLElement).focus()
+
+    await button(w, "Go north to Mira's Hut").trigger('click')
+    await w.vm.$nextTick()
+
+    expect(document.activeElement).toBe(
+      button(w, 'Go south to Village Square').element,
+    )
+  })
+
+  it('returns focus to More… after running one of its commands', async () => {
+    const w = mountComposer()
+    await button(w, 'More…').trigger('click')
+    ;(button(w, 'Inventory').element as HTMLElement).focus()
+
+    await button(w, 'Inventory').trigger('click')
+    await w.vm.$nextTick()
+
+    expect(submit).toHaveBeenCalledWith('inventory')
+    expect(document.activeElement).toBe(button(w, 'More…').element)
+  })
+
   it('returns focus to the verb after Cancel', async () => {
     const w = mountComposer()
     await button(w, 'Say').trigger('click')
@@ -249,5 +307,17 @@ describe('ActionComposer', () => {
     await w.vm.$nextTick()
 
     expect(document.activeElement).toBe(button(w, 'Say').element)
+  })
+
+  it('focuses the first verb, or the command box in type mode', async () => {
+    wrapper = mount(ActionComposer, { attachTo: document.body })
+    const composer = wrapper.vm as unknown as { focus: () => void }
+
+    composer.focus()
+    expect(document.activeElement?.textContent?.trim()).toBe('Look')
+
+    await button(wrapper, 'Type').trigger('click')
+    composer.focus()
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('Command')
   })
 })

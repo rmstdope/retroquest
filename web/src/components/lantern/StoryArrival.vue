@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, useId } from 'vue'
 import type { Arrival } from '@/stores/useGameStore'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
@@ -40,6 +40,7 @@ const exits = computed(() => Object.entries(props.arrival.exits))
 
 const clampable = computed(() => props.arrival.description.length > CLAMP_CHARS)
 const expanded = ref(false)
+const descriptionId = useId()
 </script>
 
 <template>
@@ -51,13 +52,14 @@ const expanded = ref(false)
           exitArrow(direction)
         }}</span>
         {{ displayName(direction) }}</span
-      >
-      <span class="lq-room">{{ arrival.room }}</span>
+      >{{ direction ? ' ' : '' }}
+      <h3 class="lq-room">{{ arrival.room }}</h3>
       <span class="lq-rule" aria-hidden="true"></span>
     </div>
 
     <!-- eslint-disable vue/no-v-html -->
     <p
+      :id="descriptionId"
       class="lq-arrival-text"
       :class="{ 'lq-clamp': clampable && !expanded }"
       v-html="renderMarkup(arrival.description)"
@@ -67,6 +69,7 @@ const expanded = ref(false)
       v-if="clampable"
       type="button"
       class="lq-read-more"
+      :aria-controls="descriptionId"
       :aria-expanded="expanded ? 'true' : 'false'"
       @click="expanded = !expanded"
     >
@@ -127,6 +130,7 @@ const expanded = ref(false)
   white-space: nowrap;
 }
 .lq-room {
+  margin: 0;
   font-family: var(--lq-font-display);
   font-size: calc(21px * var(--lq-display-scale));
   font-weight: 500;
