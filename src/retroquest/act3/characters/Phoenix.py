@@ -22,7 +22,8 @@ class Phoenix(Character):
         """Telepathic riddle from the Phoenix."""
         self._riddle_posed = True
         return (
-            "The phoenix's voice does not come from its beak, but resounds within your mind: "
+            "The [character_name]phoenix[/character_name]'s voice does not come from its "
+            "beak, but resounds within your mind: "
             "[dialogue]'What is wisdom when time is short?'[/dialogue] The question lingers, "
             "bright and weightless, as if the answer might shape the very air around you."
         )
@@ -34,7 +35,8 @@ class Phoenix(Character):
             return super().say_to(words, game_state)
         if game_state.get_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED):
             return (
-                "The phoenix inclines its head, a knowing warmth in its eyes. "
+                "The [character_name]phoenix[/character_name] inclines its head, a knowing "
+                "warmth in its eyes. "
                 "[dialogue]'You already hold what you have earned.'[/dialogue]"
             )
         answer = words.strip().lower()
@@ -43,11 +45,11 @@ class Phoenix(Character):
             game_state.add_item_to_inventory(PhoenixFeather())
             game_state.set_story_flag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, True)
             return (
-                "The phoenix's eyes flare with approval. It plucks a single glowing feather and "
-                "offers it to you. [dialogue]'Wisdom is patience, even when the world burns. Take "
-                "this, and remember.'[/dialogue]"
+                "The [character_name]phoenix[/character_name]'s eyes flare with approval. It "
+                "plucks a single glowing feather and offers it to you. [dialogue]'Wisdom is "
+                "patience, even when the world burns. Take this, and remember.'[/dialogue]"
             )
         return (
-            "The phoenix studies you in silence. [dialogue]'Is that truly wisdom, when time is "
-            "short?'[/dialogue]"
+            "The [character_name]phoenix[/character_name] studies you in silence. "
+            "[dialogue]'Is that truly wisdom, when time is short?'[/dialogue]"
         )

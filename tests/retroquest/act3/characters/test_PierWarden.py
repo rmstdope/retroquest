@@ -47,3 +47,26 @@ def test_pierwarden_dialog_after_all_tasks():
     w = PierWarden()
     out = w.talk_to(game.state)
     assert 'steadier' in out.lower() or 'lanterns' in out.lower()
+
+
+def test_pierwarden_dialogue_is_attributed_in_every_state():
+    """Each of the warden's lines names the warden before the dialogue."""
+    from retroquest.act3.Act3StoryFlags import (
+        FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+        FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
+    )
+    from ..markup_helpers import assert_dialogue_speaker, assert_markup_well_formed
+
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+    warden = PierWarden()
+    answers = [warden.talk_to(game.state)]
+    game.state.set_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, True)
+    answers.append(warden.talk_to(game.state))
+    game.state.set_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, True)
+    answers.append(warden.talk_to(game.state))
+
+    for answer in answers:
+        assert_markup_well_formed(answer)
+        assert_dialogue_speaker(answer, warden.get_name())

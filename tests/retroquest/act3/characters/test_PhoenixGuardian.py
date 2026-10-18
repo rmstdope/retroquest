@@ -23,7 +23,7 @@ def test_talk_to_before_quest_complete():
     assert "bring the vents into harmony" in response
     assert "ward" in response
     assert "crater" in response
-    assert "Phoenix Guardian studies you" in response
+    assert "studies you" in response
 
 def test_talk_to_after_quest_complete():
     """Test talk_to gives post-completion advice after quest is done."""
@@ -33,3 +33,13 @@ def test_talk_to_after_quest_complete():
     assert "The way is open" in response
     assert "patience is your ally" in response
     assert "Phoenix will not appear" in response
+
+def test_talk_to_dialogue_is_attributed_before_and_after_quest():
+    """Both hints name the Phoenix Guardian before the dialogue."""
+    from ..markup_helpers import assert_dialogue_speaker, assert_markup_well_formed
+
+    pg = PhoenixGuardian()
+    for flag_value in (False, True):
+        answer = pg.talk_to(DummyGameState(flag_value=flag_value))
+        assert_markup_well_formed(answer)
+        assert_dialogue_speaker(answer, pg.get_name())

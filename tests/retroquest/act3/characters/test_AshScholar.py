@@ -55,3 +55,16 @@ def test_ashscholar_gives_one_even_if_player_has_one() -> None:
     res2 = scholar.talk_to(g)
     assert 'terraces' in res2.lower() or 'seek' in res2.lower()
     assert g.get_item_count('Brass Mirror Segment') == 2
+
+
+def test_ashscholar_dialogue_is_attributed_on_both_visits() -> None:
+    """Both the first and later talks name the scholar before the dialogue."""
+    from ..markup_helpers import assert_dialogue_speaker, assert_markup_well_formed
+
+    g = _make_gs()
+    scholar = AshScholar()
+    answers = [scholar.talk_to(g), scholar.talk_to(g)]
+
+    for answer in answers:
+        assert_markup_well_formed(answer)
+        assert_dialogue_speaker(answer, scholar.get_name())

@@ -30,8 +30,10 @@ class PierWarden(Character):
         sigils = game_state.get_story_flag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)
         lanterns = game_state.get_story_flag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)
 
+        name = self.get_name()
         if not sigils:
             return (
+                f"The [character_name]{name}[/character_name] squints toward the shore. "
                 "[dialogue]'I'd mind the high stones if I were you. The markers "
                 "along the shore keep strange fragments—take heed and look for "
                 "moon-signs before the tide turns.'[/dialogue]"
@@ -39,12 +41,14 @@ class PierWarden(Character):
 
         if sigils and not lanterns:
             return (
+                f"The [character_name]{name}[/character_name] nods slowly. "
                 "[dialogue]'You've done right by the pillars. There's a fused locker "
                 "down in the vaults; I tried a key once but it stuck. Magic will "
                 "loosen it, or so the old songs say.'[/dialogue]"
             )
 
         return (
+            f"The [character_name]{name}[/character_name] looks out over the calmer water. "
             "[dialogue]'With the sigils attuned and the lanterns lit, the way grows "
             "steadier. Those who brave the sanctum find the tide less quick to "
             "swallow their steps.'[/dialogue]"

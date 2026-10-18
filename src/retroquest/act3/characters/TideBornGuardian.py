@@ -21,8 +21,8 @@ class TideBornGuardian(Character):
     def talk_to(self, _game_state: GameState) -> str:
         """Return dialogue asking for vow when talking to the guardian."""
         return (
-            "[dialogue]The guardian's voice is the hush of a turning tide: 'Name "
-            "what you will not abandon.'[/dialogue]"
+            f"The [character_name]{self.get_name()}[/character_name]'s voice is the hush "
+            "of a turning tide: [dialogue]'Name what you will not abandon.'[/dialogue]"
         )
 
     def say_to(self, words: str, game_state: GameState) -> str:
@@ -36,6 +36,6 @@ class TideBornGuardian(Character):
                 "take the [item_name]Crystal of Light[/item_name].[/success]"
             )
         return (
-            "[dialogue]The tide listens, then falls quiet. That is not the vow the "
-            "guardian will bind to.[/dialogue]"
+            "The tide listens, then falls quiet. That is not the vow the "
+            f"[character_name]{self.get_name()}[/character_name] will bind to."
         )

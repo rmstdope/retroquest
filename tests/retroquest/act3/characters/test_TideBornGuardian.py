@@ -52,3 +52,26 @@ def test_tidebornguardian_say_to_rejects_other_words() -> None:
 
     assert "not the vow" in res
     assert not g.get_story_flag(FLAG_ACT3_VOW_OF_COURAGE_MADE)
+
+
+def test_tidebornguardian_prompt_is_attributed_dialogue() -> None:
+    """The vow prompt names the guardian before the spoken words."""
+    from ..markup_helpers import assert_dialogue_speaker, assert_markup_well_formed
+
+    guardian = TideBornGuardian()
+    answer = guardian.talk_to(_make_gs())
+
+    assert "Name what you will not abandon" in answer
+    assert_markup_well_formed(answer)
+    assert_dialogue_speaker(answer, guardian.get_name())
+
+
+def test_tidebornguardian_wrong_vow_has_no_speakerless_dialogue() -> None:
+    """A wrong vow is narrated without an unattributed dialogue block."""
+    from ..markup_helpers import assert_markup_well_formed, assert_no_speakerless_dialogue
+
+    answer = TideBornGuardian().say_to("gold", _make_gs())
+
+    assert "not the vow" in answer
+    assert_markup_well_formed(answer)
+    assert_no_speakerless_dialogue(answer)
