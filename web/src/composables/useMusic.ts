@@ -1,12 +1,18 @@
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { escapeHtml } from '@/utils/theme'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
-const STORAGE_KEY = 'retroquest_music_muted'
 const MUSIC_BASE_PATH = '/python-src/retroquest/audio/music/'
 const URL_PATTERN = /(https?:\/\/[^\s]+)/g
 
+/**
+ * Background music for the current act. On/off and volume come from the
+ * player's settings, so changes made anywhere (top bar, Settings dialog)
+ * apply immediately.
+ */
 export function useMusic(audio: HTMLAudioElement) {
-  const musicMuted = ref(localStorage.getItem(STORAGE_KEY) === 'true')
+  const settings = useSettingsStore()
+  const musicMuted = computed(() => !settings.musicOn)
   const currentMusicFile = ref('')
   const musicInfo = ref('')
 
@@ -31,15 +37,29 @@ export function useMusic(audio: HTMLAudioElement) {
     }
   }
 
-  function toggleMute(): void {
-    musicMuted.value = !musicMuted.value
-    localStorage.setItem(STORAGE_KEY, String(musicMuted.value))
+  // Sync flush so muting takes effect immediately, wherever it was changed.
+  watch(
+    () => settings.musicOn,
+    (on) => {
+      if (!on) {
+        audio.pause()
+      } else if (currentMusicFile.value) {
+        audio.play().catch(() => {})
+      }
+    },
+    { flush: 'sync' },
+  )
 
-    if (musicMuted.value) {
-      audio.pause()
-    } else if (currentMusicFile.value) {
-      audio.play().catch(() => {})
-    }
+  watch(
+    () => settings.musicVolume,
+    (volume) => {
+      audio.volume = volume / 100
+    },
+    { immediate: true },
+  )
+
+  function toggleMute(): void {
+    settings.musicOn = !settings.musicOn
   }
 
   function ensureMusicStarted(): void {

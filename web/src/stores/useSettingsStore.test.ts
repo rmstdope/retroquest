@@ -5,6 +5,7 @@ import {
   useSettingsStore,
   SETTINGS_STORAGE_KEY,
   LEGACY_MUTED_KEY,
+  LEGACY_SFX_MUTED_KEY,
   DEFAULT_SETTINGS,
 } from './useSettingsStore'
 
@@ -61,6 +62,12 @@ describe('useSettingsStore', () => {
     installLocalStorage({ [LEGACY_MUTED_KEY]: 'true' })
 
     expect(useSettingsStore().musicOn).toBe(false)
+  })
+
+  it('keeps an existing sound-effects mute choice', () => {
+    installLocalStorage({ [LEGACY_SFX_MUTED_KEY]: 'true' })
+
+    expect(useSettingsStore().effectsOn).toBe(false)
   })
 
   it('loads valid stored settings', () => {

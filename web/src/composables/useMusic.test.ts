@@ -1,5 +1,8 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
+import { nextTick } from 'vue'
 import { useMusic } from './useMusic'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
 /**
  * Minimal localStorage mock for Node test environment.
@@ -29,6 +32,7 @@ function createMockAudio() {
   return {
     src: '',
     paused: true,
+    volume: 1,
     play: vi.fn(() => Promise.resolve()),
     pause: vi.fn(),
     load: vi.fn(),
@@ -43,6 +47,7 @@ describe('useMusic', () => {
     audio = createMockAudio()
     localStorageMock.clear()
     vi.clearAllMocks()
+    setActivePinia(createPinia())
   })
 
   afterEach(() => {
@@ -155,12 +160,16 @@ describe('useMusic', () => {
       expect(audio.play).toHaveBeenCalled()
     })
 
-    it('persists muted state to localStorage', () => {
+    it('stores the mute choice in the settings, not the old key', () => {
       const { toggleMute } = useMusic(audio)
       toggleMute()
-      expect(localStorage.getItem('retroquest_music_muted')).toBe('true')
+      expect(useSettingsStore().musicOn).toBe(false)
       toggleMute()
-      expect(localStorage.getItem('retroquest_music_muted')).toBe('false')
+      expect(useSettingsStore().musicOn).toBe(true)
+      expect(localStorageMock.setItem).not.toHaveBeenCalledWith(
+        'retroquest_music_muted',
+        expect.anything(),
+      )
     })
 
     it('does not play when unmuting with no track', () => {
@@ -248,6 +257,41 @@ describe('useMusic', () => {
       const html = buildAttributionHtml()
       // Should not have consecutive <br>s for empty lines
       expect(html).not.toContain('<br><br>')
+    })
+  })
+
+  // --- Settings ---
+
+  describe('settings', () => {
+    it('plays at the music volume from the settings', () => {
+      useSettingsStore().musicVolume = 25
+      useMusic(audio)
+      expect(audio.volume).toBe(0.25)
+    })
+
+    it('follows volume changes', async () => {
+      useMusic(audio)
+      useSettingsStore().musicVolume = 40
+      await nextTick()
+      expect(audio.volume).toBe(0.4)
+    })
+
+    it('pauses when music is turned off in the settings', () => {
+      const { loadTrack, musicMuted } = useMusic(audio)
+      loadTrack('tavern.mp3', 'Theme')
+      useSettingsStore().musicOn = false
+      expect(musicMuted.value).toBe(true)
+      expect(audio.pause).toHaveBeenCalled()
+    })
+
+    it('resumes the track when music is turned on in the settings', () => {
+      const settings = useSettingsStore()
+      settings.musicOn = false
+      const { loadTrack } = useMusic(audio)
+      loadTrack('tavern.mp3', 'Theme')
+      expect(audio.play).not.toHaveBeenCalled()
+      settings.musicOn = true
+      expect(audio.play).toHaveBeenCalledTimes(1)
     })
   })
 })
