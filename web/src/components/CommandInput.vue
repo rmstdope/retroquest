@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
+import { useCommandCompletion } from '@/composables/useCommandCompletion'
 
 const props = defineProps<{
   acceptInput: boolean
@@ -12,78 +13,39 @@ const emit = defineEmits<{
 }>()
 
 const commandInput = ref('')
-const suggestions = ref<string[]>([])
-const activeSuggestionIndex = ref(-1)
 const inputEl = ref<HTMLInputElement | null>(null)
+const completion = useCommandCompletion(
+  commandInput,
+  (input) => props.tabComplete(input),
+  () => props.acceptInput,
+)
+const suggestions = completion.suggestions
+const activeSuggestionIndex = completion.activeIndex
 
 function onKeyEnter() {
-  if (activeSuggestionIndex.value >= 0 && suggestions.value.length > 0) {
-    applySuggestion(suggestions.value[activeSuggestionIndex.value])
+  if (completion.applyActive()) {
+    nextTick(() => inputEl.value?.focus())
     return
   }
-  closeSuggestions()
   emit('submitCommand', commandInput.value)
   commandInput.value = ''
 }
 
 function onSendClick() {
-  closeSuggestions()
+  completion.close()
   emit('submitCommand', commandInput.value)
   commandInput.value = ''
 }
 
-function onKeyTab(e: KeyboardEvent) {
-  if (!props.acceptInput) return
-  e.preventDefault()
-
-  const { newInput, candidates } = props.tabComplete(commandInput.value)
-
-  if (candidates.length === 0) {
-    closeSuggestions()
-    return
-  }
-
-  if (candidates.length === 1) {
-    commandInput.value = newInput
-    closeSuggestions()
-    return
-  }
-
-  // Multiple candidates — show dropdown
-  commandInput.value = newInput
-  suggestions.value = candidates
-  activeSuggestionIndex.value = -1
-}
-
-function onKeyArrowDown() {
-  if (suggestions.value.length === 0) return
-  activeSuggestionIndex.value =
-    (activeSuggestionIndex.value + 1) % suggestions.value.length
-}
-
-function onKeyArrowUp() {
-  if (suggestions.value.length === 0) return
-  activeSuggestionIndex.value =
-    (activeSuggestionIndex.value - 1 + suggestions.value.length) %
-    suggestions.value.length
-}
-
-function onKeyEscape() {
-  closeSuggestions()
-}
+const onKeyTab = completion.onTab
+const onKeyArrowDown = completion.onArrowDown
+const onKeyArrowUp = completion.onArrowUp
+const onKeyEscape = completion.close
+const closeSuggestions = completion.close
 
 function applySuggestion(candidate: string) {
-  const tokens = commandInput.value.trimEnd().split(' ')
-  tokens[tokens.length - 1] = candidate
-  const { newInput } = props.tabComplete(tokens.join(' ') + ' ')
-  commandInput.value = newInput
-  closeSuggestions()
+  completion.apply(candidate)
   nextTick(() => inputEl.value?.focus())
-}
-
-function closeSuggestions() {
-  suggestions.value = []
-  activeSuggestionIndex.value = -1
 }
 </script>
 

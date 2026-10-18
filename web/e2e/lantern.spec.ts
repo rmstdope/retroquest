@@ -242,4 +242,31 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     expect(selected).not.toBe(other)
     expect(other).toBe('rgba(0, 0, 0, 0)')
   })
+
+  test('completes typed commands with Tab in Type mode', async ({ page }) => {
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.completionTree = { take: { bucket: null, bread: null }, look: null }
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+    const actions = page.getByRole('region', { name: 'Actions' })
+    await actions.getByRole('button', { name: 'Type', exact: true }).click()
+    const input = page.getByLabel('Command')
+
+    await input.fill('lo')
+    await input.press('Tab')
+    await expect(input).toHaveValue('look ')
+
+    await input.fill('take b')
+    await input.press('Tab')
+    await expect(page.getByRole('option')).toHaveText(['bucket', 'bread'])
+    await input.press('ArrowDown')
+    await input.press('Enter')
+    await expect(input).toHaveValue('take bucket ')
+    await expect(page.getByRole('option')).toHaveCount(0)
+  })
 })
