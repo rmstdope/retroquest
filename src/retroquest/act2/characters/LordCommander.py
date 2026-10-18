@@ -7,6 +7,7 @@ from ..items.SecretDocuments import SecretDocuments
 
 if TYPE_CHECKING:
     from ...engine.GameState import GameState
+    from ...engine.Item import Item
 
 class LordCommander(Character):
     """The military leader of Greendale who can officially restore Sir Cedric's honor."""
@@ -47,14 +48,16 @@ class LordCommander(Character):
             "soldiers.'[/dialogue]"
         )
 
-    def give_item(self, game_state: 'GameState', item_object) -> str:
-        """Handle giving items to the Lord Commander (override matching base signature)."""
+    def give_item(self, game_state: 'GameState', item_object: 'Item') -> str:
+        """Handle giving items to the Lord Commander, who accepts only the secret documents."""
+        name = f"[character_name]{self.get_name()}[/character_name]"
         if isinstance(item_object, SecretDocuments):
             if not game_state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS):
                 return (
-                    "The Lord Commander examines the documents carefully but shakes his head. "
-                    "\"These appear to be legal papers, but I need you to understand their "
-                    "significance first. Please examine them thoroughly and then return to me.\""
+                    f"The {name} examines the documents carefully but shakes his head. "
+                    "[dialogue]'These appear to be legal papers, but I need you to understand "
+                    "their significance first. Please examine them thoroughly and then return "
+                    "to me.'[/dialogue]"
                 )
 
             # Player has examined the documents and understands their importance
@@ -64,13 +67,14 @@ class LordCommander(Character):
             game_state.inventory.remove(item_object)
 
             return (
-                "[success]The Lord Commander carefully reviews the secret documents. "
+                f"[success]The {name} carefully reviews the secret documents. "
                 "His expression grows solemn as he reads the testimonies and evidence. "
-                "\"These documents clearly prove Sir Cedric's innocence in the Battle of "
-                "Thornfield Pass. The accusations of cowardice were completely unfounded - "
-                "he was following direct orders and protecting civilians. I hereby officially "
-                "restore Sir Cedric's honor and expunge all false charges from his record. "
-                "Justice has been served at last.\"[/success]"
+                "[dialogue]'These documents clearly prove Sir Cedric's innocence in the "
+                "Battle of Thornfield Pass. The accusations of cowardice were completely "
+                "unfounded - he was following direct orders and protecting civilians. "
+                "I hereby officially restore Sir Cedric's honor and expunge all false charges "
+                "from his record. Justice has been served at last.'[/dialogue][/success]"
             )
 
-        return f"The Lord Commander has no need for your {item_object.name}."
+        item_name = f"[item_name]{item_object.get_name()}[/item_name]"
+        return f"The {name} has no need for your {item_name}."
