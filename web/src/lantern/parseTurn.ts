@@ -7,12 +7,17 @@
  *   dialogue never count. No such name → speaker is null.
  * - Outside dialogue, each non-blank line becomes one block:
  *   a line wholly wrapped in `[event]` or `[failure]` → event / failure;
- *   lines wholly wrapped in `[success]` / `[pending]` → items of one checklist
- *   (consecutive items are grouped); anything else → text.
+ *   bulleted (`*`) lines wholly wrapped in `[success]` / `[pending]` → items of
+ *   one checklist (consecutive items are grouped); anything else → text.
+ * - A tag span that runs over several lines (e.g. an `[event]` of two lines) is
+ *   closed at the end of each line and reopened on the next, so every block's
+ *   markup is balanced on its own; stray closing tags are dropped.
  *
  * Blocks keep their inner markup (inline tags like `[item_name]`); rendering
  * to HTML is the view's job.
  */
+
+import { THEME_TAGS } from '../utils/theme'
 
 export interface ChecklistItem {
   markup: string
@@ -30,6 +35,34 @@ const DIALOGUE_OPEN = '[dialogue]'
 const DIALOGUE_CLOSE = '[/dialogue]'
 const CHARACTER_NAME = /\[character_name\]([\s\S]*?)\[\/character_name\]/g
 const CHECKLIST_BULLET = /^\*\s*/
+const SPAN_TAG = new RegExp(
+  `\\[(/?)(${THEME_TAGS.filter((tag) => tag !== 'dialogue').join('|')})\\]`,
+  'g',
+)
+
+/**
+ * Make `markup` self-contained: reopen the tags in `open` (left open by earlier
+ * lines), drop closing tags with no opener and close what is still open. `open`
+ * is updated to the tags left open at the end of `markup`.
+ */
+function balance(markup: string, open: string[]): string {
+  const reopen = open.map((tag) => `[${tag}]`).join('')
+  const body = markup.replace(SPAN_TAG, (match, slash: string, tag: string) => {
+    if (!slash) {
+      open.push(tag)
+      return match
+    }
+    const index = open.lastIndexOf(tag)
+    if (index < 0) return ''
+    open.splice(index, 1)
+    return match
+  })
+  const close = [...open]
+    .reverse()
+    .map((tag) => `[/${tag}]`)
+    .join('')
+  return reopen + body + close
+}
 
 /** Inner markup if `line` is wholly one `[tag]…[/tag]` span, else null. */
 function wholeLine(line: string, tag: string): string | null {
@@ -37,12 +70,13 @@ function wholeLine(line: string, tag: string): string | null {
   const close = `[/${tag}]`
   if (!line.startsWith(open) || !line.endsWith(close)) return null
   const inner = line.slice(open.length, line.length - close.length)
-  return inner.includes(open) || inner.includes(close) ? null : inner
+  return inner.includes(open) || inner.includes(close) ? null : inner.trim()
 }
 
 export function parseTurn(raw: string): TurnBlock[] {
   const blocks: TurnBlock[] = []
   let speaker: string | null = null
+  const openTags: string[] = []
 
   function addChecklistItem(item: ChecklistItem): void {
     const last = blocks[blocks.length - 1]
@@ -51,8 +85,8 @@ export function parseTurn(raw: string): TurnBlock[] {
   }
 
   function addLine(line: string): void {
-    const text = line.trim()
-    if (!text) return
+    if (!line.trim()) return
+    const text = balance(line.trim(), openTags)
     for (const match of text.matchAll(CHARACTER_NAME)) speaker = match[1]
 
     const event = wholeLine(text, 'event')
@@ -61,10 +95,9 @@ export function parseTurn(raw: string): TurnBlock[] {
     const pending = wholeLine(text, 'pending')
     if (event !== null) blocks.push({ kind: 'event', markup: event })
     else if (failure !== null) blocks.push({ kind: 'failure', markup: failure })
-    else if (success !== null || pending !== null) {
-      const inner = (success ?? pending) as string
+    else if (CHECKLIST_BULLET.test(success ?? pending ?? '')) {
       addChecklistItem({
-        markup: inner.trim().replace(CHECKLIST_BULLET, ''),
+        markup: (success ?? pending ?? '').replace(CHECKLIST_BULLET, ''),
         done: success !== null,
       })
     } else blocks.push({ kind: 'text', markup: text })
@@ -87,7 +120,8 @@ export function parseTurn(raw: string): TurnBlock[] {
     const body = (
       close < 0 ? rest.slice(bodyStart) : rest.slice(bodyStart, close)
     ).trim()
-    if (body) blocks.push({ kind: 'dialogue', speaker, markup: body })
+    if (body)
+      blocks.push({ kind: 'dialogue', speaker, markup: balance(body, []) })
     if (close < 0) break
     rest = rest.slice(close + DIALOGUE_CLOSE.length)
   }

@@ -13,6 +13,27 @@ const MIRA =
   "[dialogue]'Welcome, [character_name]Elior[/character_name]. I sense a stirring of " +
   "the old powers within you.'[/dialogue]"
 
+// Real answers whose [event] / [success] spans run over several lines
+const GRANDMOTHER_REVIVE =
+  '[event]You speak with [character_name]grandmother[/character_name].[/event]\n\n' +
+  '[dialogue]He thought it might be a key. Keep your eyes open, ' +
+  '[character_name]Elior[/character_name].[/dialogue]\n\n' +
+  '[event]As she speak of it, the words your father wrote seem to settle in your mind. \n' +
+  'You feel a new understanding... You have learned the ' +
+  '[spell_name]Revive[/spell_name] spell![/event]'
+
+const ENCHANTED_ACORN =
+  '[character_name]ancient tree spirit[/character_name] stirs. ' +
+  "[dialogue]'You have shown respect and understanding.'[/dialogue]\n\n" +
+  "[success]The tree spirit's wisdom flows into your mind, teaching you the secrets of " +
+  'communication with the natural world.\n\n' +
+  'You have learned the [spell_name]Forest Speech[/spell_name] spell![/success]'
+
+const ECHO_STONES =
+  '[event]You recite the resonant chant at each stone. [/event]\n' +
+  '[success]The words echo and re-echo, building into a harmonious silence that ' +
+  "banishes the wandering phantoms. The path to the dragon's hall now lies open.[/success]"
+
 describe('parseTurn', () => {
   it('returns no blocks for empty or whitespace-only text', () => {
     expect(parseTurn('')).toEqual([])
@@ -158,5 +179,51 @@ describe('parseTurn', () => {
     const raw = '[event]A door creaks.[/event] Something moves inside.'
 
     expect(parseTurn(raw)).toEqual([{ kind: 'text', markup: raw }])
+  })
+
+  it('keeps an event that runs over several lines as event blocks', () => {
+    expect(parseTurn(GRANDMOTHER_REVIVE).slice(2)).toEqual([
+      {
+        kind: 'event',
+        markup:
+          'As she speak of it, the words your father wrote seem to settle in your mind.',
+      },
+      {
+        kind: 'event',
+        markup:
+          'You feel a new understanding... You have learned the ' +
+          '[spell_name]Revive[/spell_name] spell!',
+      },
+    ])
+  })
+
+  it('closes and reopens a span that runs over several lines', () => {
+    expect(parseTurn(ENCHANTED_ACORN).slice(2)).toEqual([
+      {
+        kind: 'text',
+        markup:
+          "[success]The tree spirit's wisdom flows into your mind, teaching you the " +
+          'secrets of communication with the natural world.[/success]',
+      },
+      {
+        kind: 'text',
+        markup:
+          '[success]You have learned the [spell_name]Forest Speech[/spell_name] ' +
+          'spell![/success]',
+      },
+    ])
+  })
+
+  it('trims an event and keeps a success line without a bullet as text', () => {
+    expect(parseTurn(ECHO_STONES)).toEqual([
+      { kind: 'event', markup: 'You recite the resonant chant at each stone.' },
+      {
+        kind: 'text',
+        markup:
+          '[success]The words echo and re-echo, building into a harmonious silence that ' +
+          "banishes the wandering phantoms. The path to the dragon's hall now lies open." +
+          '[/success]',
+      },
+    ])
   })
 })
