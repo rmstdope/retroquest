@@ -21,27 +21,30 @@ class LordCommander(Character):
             ),
         )
 
-    def talk(self, game_state: 'GameState') -> str:
-        """Handle talking to the Lord Commander (override matching base signature)."""
+    def talk_to(self, game_state: 'GameState') -> str:
+        """Return the Lord Commander's words, which follow Sir Cedric's case."""
+        name = f"[character_name]{self.get_name()}[/character_name]"
         if game_state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED):
             return (
-                "The Lord Commander nods with satisfaction. "
-                "\"Sir Cedric's honor has been fully restored. The false accusations against "
-                "him have been officially stricken from the record. It brings me great "
-                "pleasure to see justice served and a good knight vindicated.\""
+                f"The {name} nods with satisfaction. "
+                "[dialogue]'Sir Cedric's honor has been fully restored. The false accusations "
+                "against him have been officially stricken from the record. It brings me "
+                "great pleasure to see justice served and a good knight "
+                "vindicated.'[/dialogue]"
             )
         if game_state.get_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS):
             # Player has the secret documents and should present them
             return (
-                "The Lord Commander looks at you with interest. "
-                "\"I understand you have evidence regarding Sir Cedric's case? If you have "
-                "the secret documents that prove his innocence, please present them to me so "
-                "I can officially restore his honor.\""
+                f"The {name} looks at you with interest. "
+                "[dialogue]'I understand you have evidence regarding Sir Cedric's case? If "
+                "you have the secret documents that prove his innocence, please present them "
+                "to me so I can officially restore his honor.'[/dialogue]"
             )
         return (
-            "The Lord Commander greets you formally. "
-            "\"Welcome to Greendale's Great Hall. I oversee the military affairs of our "
-            "realm and ensure that justice is served among our knights and soldiers.\""
+            f"The {name} greets you formally. "
+            "[dialogue]'Welcome to Greendale's Great Hall. I oversee the military affairs of "
+            "our realm and ensure that justice is served among our knights and "
+            "soldiers.'[/dialogue]"
         )
 
     def give_item(self, game_state: 'GameState', item_object) -> str:
