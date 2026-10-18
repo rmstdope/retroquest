@@ -123,7 +123,8 @@ export const VERBS: readonly Verb[] = [
     words: 'buy',
     slots: [
       { sources: ['text'] },
-      { sources: ['characters'], joiner: 'from', optional: true },
+      // Required: the engine rejects "buy <item>" without "from <seller>".
+      { sources: ['characters'], joiner: 'from' },
     ],
     group: 'main',
   },

@@ -40,7 +40,6 @@ describe('buildCommand', () => {
     ['talk', ['mira'], 'talk to mira'],
     ['say', ['hello there', 'mira'], 'say hello there to mira'],
     ['give', ['apple', 'mira'], 'give apple to mira'],
-    ['buy', ['rope'], 'buy rope'],
     ['buy', ['rope', 'shopkeeper'], 'buy rope from shopkeeper'],
     ['open', ['chest'], 'open chest'],
     ['close', ['chest'], 'close chest'],
@@ -54,6 +53,8 @@ describe('buildCommand', () => {
     expect(buildCommand(verbById('take'), [])).toBeNull()
     expect(buildCommand(verbById('give'), ['apple'])).toBeNull()
     expect(buildCommand(verbById('say'), ['', 'mira'])).toBeNull()
+    // The engine rejects "buy rope": the seller is required.
+    expect(buildCommand(verbById('buy'), ['rope'])).toBeNull()
   })
 
   it('leaves out an empty optional slot', () => {
