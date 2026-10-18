@@ -272,6 +272,7 @@ describe('LanternLayout', () => {
 
       await open(w, 'Map')
 
+      expect(w.get('[aria-label="Map"] h2').text()).toBe('Map')
       expect(w.find('[aria-label="Map"]').exists()).toBe(true)
       expect(w.find('[aria-label="Journal"]').exists()).toBe(false)
     })
@@ -343,6 +344,32 @@ describe('LanternLayout', () => {
       await flushPromises()
 
       expect(document.activeElement?.textContent?.trim()).toBe('Look')
+    })
+
+    it('returns to the story after the window was laptop-wide', async () => {
+      const listeners: Array<(e: { matches: boolean }) => void> = []
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn((query: string) => ({
+          matches: false,
+          addEventListener: (
+            _: string,
+            fn: (e: { matches: boolean }) => void,
+          ) => {
+            if (query.includes('min-width')) listeners.push(fn)
+          },
+          removeEventListener: vi.fn(),
+        })),
+      )
+      const w = mountLayout()
+      await open(w, 'Map')
+
+      listeners.forEach((fn) => fn({ matches: true }))
+      await w.vm.$nextTick()
+      listeners.forEach((fn) => fn({ matches: false }))
+      await w.vm.$nextTick()
+
+      expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
     })
 
     it('moves the section tabs into the header on a short screen', () => {

@@ -378,4 +378,26 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     )
     expect(overflow).toBeLessThanOrEqual(0)
   })
+
+  test('lines the Map heading up with the Bag heading on a phone', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 640 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    const sections = page.getByRole('navigation', { name: 'Sections' })
+    const textStart = (name: string) =>
+      page.getByRole('heading', { name }).evaluate((h) => {
+        const range = document.createRange()
+        range.selectNodeContents(h)
+        const box = range.getBoundingClientRect()
+        return { x: Math.round(box.x), y: Math.round(box.y) }
+      })
+
+    await sections.getByRole('button', { name: 'Bag' }).click()
+    const bag = await textStart('Bag')
+    await sections.getByRole('button', { name: 'Map' }).click()
+
+    expect(await textStart('Map')).toEqual(bag)
+  })
 })
