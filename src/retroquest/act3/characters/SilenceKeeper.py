@@ -20,9 +20,9 @@ class SilenceKeeper(Character):
     def talk_to(self, _game_state: GameState) -> str:
         """Provide guidance on the Oath of Stillness."""
         return (
-            "[dialogue]'The echo stones await sanctification,'[/dialogue] "
-            "the Silence Keeper whispers, their voice barely "
-            "disturbing the air. [dialogue]'Only when blessed "
+            "The [character_name]Silence Keeper[/character_name] whispers, their voice "
+            "barely disturbing the air: [dialogue]'The echo stones await sanctification. "
+            "Only when blessed "
             "can they amplify the ancient words that will quiet the restless "
             "spirits. Speak the resonant chant to the stones, and the path to "
             "the ancient one will open.'[/dialogue]"

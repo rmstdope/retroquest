@@ -39,4 +39,4 @@ class WanderingPhantoms(Character):
         ]
 
         import random
-        return f"[dialogue]{random.choice(whispers)}[/dialogue]"
+        return random.choice(whispers)

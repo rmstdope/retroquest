@@ -188,3 +188,34 @@ def test_oath_requirements_case_insensitive():
         result = dragon.say_to(oath_word, game_state)
         assert 'speak your oath' in result.lower()
         assert game_state.get_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN)
+
+
+def test_dragon_dialogue_is_attributed_in_every_branch():
+    """Every dragon line with dialogue names the dragon before it."""
+    from ..markup_helpers import assert_dialogue_speaker, assert_markup_well_formed
+
+    dragon = AncientDragon()
+    game_state = _make_gs()
+    game_state.current_room = DragonsHall()
+    answers = [dragon.talk_to(game_state), dragon.talk_to(game_state)]
+    answers.append(dragon.say_to("oath", game_state))
+    game_state.set_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, True)
+    answers.append(dragon.say_to("oath", game_state))
+    answers.append(dragon.say_to("oath", game_state))
+
+    for answer in answers:
+        assert_markup_well_formed(answer)
+        assert_dialogue_speaker(answer, dragon.get_name())
+
+
+def test_dragon_ignoring_words_has_no_speakerless_dialogue():
+    """Words the dragon ignores are narrated without unattributed dialogue."""
+    from ..markup_helpers import assert_markup_well_formed, assert_no_speakerless_dialogue
+
+    game_state = _make_gs()
+    game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
+
+    answer = AncientDragon().say_to("hello", game_state)
+
+    assert_markup_well_formed(answer)
+    assert_no_speakerless_dialogue(answer)

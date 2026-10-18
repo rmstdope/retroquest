@@ -29,7 +29,8 @@ class AshScholar(Character):
             game_state.add_item_to_inventory(segment)
             self._gave_segment = True
             return (
-                "The scholar straightens and studies you for a long moment before "
+                f"The [character_name]{self.get_name()}[/character_name] straightens and "
+                "studies you for a long moment before "
                 "speaking. "
                 "[dialogue]'We are on an expedition — a small band of scholars and "
                 "tinkerers tracing the terraces and cataloguing anything that "
@@ -43,7 +44,7 @@ class AshScholar(Character):
                 f"[event]You receive the [item_name]{segment.get_name()}[/item_name].[/event]"
             )
         return (
-            "The scholar offers a small nod. "
+            f"The [character_name]{self.get_name()}[/character_name] offers a small nod. "
             "[dialogue]'The terraces favor steady hands. We're on an expedition "
             "cataloguing glass and shards; seek the outcrops for what the mountain "
             "has shed. When you find fragments, set them carefully—alignment "

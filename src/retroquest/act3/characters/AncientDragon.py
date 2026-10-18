@@ -25,13 +25,15 @@ class AncientDragon(Character):
 
     def talk_to(self, game_state: GameState) -> str:
         """Provide the Dragon's Memory for the storytelling quest."""
+        name = self.get_name()
         # Check if this is the first conversation
         dialogue = ''
         if not game_state.get_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED):
             game_state.set_story_flag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, True)
             dialogue = (
-                "The dragon's voice resonates through your mind like "
-                "distant thunder: [dialogue]'Young one, I remember your parents well. Lyra "
+                f"The [character_name]{name}[/character_name]'s voice resonates through "
+                "your mind like distant thunder: [dialogue]'Young one, I remember your "
+                "parents well. Lyra "
                 "and Theron came to me when shadows first stirred. They spoke of "
                 "a child who must be hidden from Malakar's sight, protected until "
                 "the time of choosing arrived. They forged a ward—not of stone or "
@@ -41,9 +43,10 @@ class AncientDragon(Character):
                 "debts are paid and all bonds may be renewed.'[/dialogue]\n\n"
             )
         dialogue = dialogue + (
-            "[dialogue]'The memory has been shared,'[/dialogue] the dragon rumbles softly. "
-            "[dialogue]'Your path leads forward now, not back. The scale awaits when you "
-            "are ready to prove your selflessness.'[/dialogue]"
+            f"The [character_name]{name}[/character_name] rumbles softly: "
+            "[dialogue]'The memory has been shared. Your path leads forward now, not "
+            "back. The scale awaits when you are ready to prove your "
+            "selflessness.'[/dialogue]"
         )
         return dialogue
 
@@ -57,7 +60,8 @@ class AncientDragon(Character):
         if words.lower() == "oath":
             if game_state.get_story_flag(FLAG_ACT3_OATH_SCROLLS_EXAMINED) is not True:
                 return (
-                    "The dragon's golden eyes narrow slightly. [dialogue]'You "
+                    f"The [character_name]{self.get_name()}[/character_name]'s golden eyes "
+                    "narrow slightly. [dialogue]'You "
                     "must first understand the weight of the oath you wish to "
                     "speak. You can not just speak any oath. You must speak one "
                     "that proves your selflessness.'[/dialogue]"
@@ -65,8 +69,9 @@ class AncientDragon(Character):
             # Check if the oath has already been spoken
             if game_state.get_story_flag(FLAG_ACT3_DRAGON_OATH_SPOKEN):
                 return (
-                    "[dialogue]'The oath has been given and accepted,' the dragon "
-                    "rumbles. 'The scale is yours to claim.'[/dialogue]"
+                    f"The [character_name]{self.get_name()}[/character_name] rumbles: "
+                    "[dialogue]'The oath has been given and accepted. The scale is yours "
+                    "to claim.'[/dialogue]"
                 )
             else:
                 # Accept the oath and make the scale available
@@ -76,14 +81,16 @@ class AncientDragon(Character):
                 dragons_scale = DragonsScale()
                 game_state.current_room.add_item(dragons_scale)
                 return (
-                    "[event]You speak your oath to the ancient dragon, pledging "
-                    "your commitment to selflessness and the protection of others. [/event]"
+                    "[event]You speak your oath to the "
+                    f"[character_name]{self.get_name()}[/character_name], pledging "
+                    "your commitment to selflessness and the protection of others.[/event]\n"
                     "[success]The dragon's golden eyes regard you with ancient wisdom. "
-                    "'Your words ring true, young one. The scale is yours to bear. "
-                    "May you carry its burden with honor.'[/success]"
+                    "[dialogue]'Your words ring true, young one. The scale is yours to bear. "
+                    "May you carry its burden with honor.'[/dialogue][/success]"
                 )
         else:
             return (
-                "[dialogue]The dragon listens but does not respond to those words. "
-                "Perhaps you need to speak a more meaningful pledge.[/dialogue]"
+                f"The [character_name]{self.get_name()}[/character_name] listens but does "
+                "not respond to those words. Perhaps you need to speak a more meaningful "
+                "pledge."
             )

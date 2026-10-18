@@ -36,7 +36,10 @@ class SeaSealedLetter(Item):
     def examine(self, game_state: GameState) -> str:
         """Examine the letter and set the read flag."""
         game_state.set_story_flag(FLAG_ACT3_SEA_SEALED_LETTER_READ, True)
-        return super().examine(game_state)
+        return (
+            f"[event]You examine the [item_name]{self.get_name()}[/item_name].[/event]\n"
+            f"{self.description}"
+        )
 
     def picked_up(self, _game_state: GameState) -> str:
         """Handle letter pickup and set story flag."""

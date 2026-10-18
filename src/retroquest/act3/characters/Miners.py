@@ -24,7 +24,8 @@ class Miners(Character):
         if not game_state.get_story_flag(FLAG_ACT3_MINERS_RESCUE_COMPLETED):
             game_state.set_story_flag(FLAG_ACT3_MINERS_RESCUE_COMPLETED, True)
             return (
-                "The lead miner steps forward, dust-covered but relieved: "
+                f"The [character_name]{self.get_name()}[/character_name] gather around as "
+                "the lead miner steps forward, dust-covered but relieved: "
                 "[dialogue]'Thank the gods you found us. When that section collapsed this "
                 "morning, we thought we were done for. The whole ceiling came down like "
                 "thunder—trapped us behind tons of rock with barely any air.'[/dialogue]\n\n"
@@ -41,7 +42,8 @@ class Miners(Character):
                 "to continue your journey.[/event]"
             )
         return (
-            "The miners look up from their work, tools in hand: [dialogue]'Still "
+            f"The [character_name]{self.get_name()}[/character_name] look up from their "
+            "work, tools in hand: [dialogue]'Still "
             "here, Elior? We're making good progress on these support beams. "
             "The passage to the Echo Chambers is secure now—you can head east "
             "whenever you're ready. We'll keep working to make sure these old "
