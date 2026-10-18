@@ -1,0 +1,262 @@
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useGameStore } from '@/stores/useGameStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
+import type { LanternTextSize } from '@/lantern/tokens'
+
+const game = useGameStore()
+const settings = useSettingsStore()
+
+const ROMAN = ['I', 'II', 'III', 'IV', 'V']
+
+const progress = computed(() => game.questProgress)
+const actLabel = computed(() =>
+  progress.value
+    ? `Act ${ROMAN[progress.value.actNumber - 1] ?? progress.value.actNumber}`
+    : '',
+)
+const progressPercent = computed(() =>
+  progress.value && progress.value.total > 0
+    ? Math.round((progress.value.completed / progress.value.total) * 100)
+    : 0,
+)
+
+// --- Text size popover ---
+const textSizeOpen = ref(false)
+const SIZES: Array<{ value: LanternTextSize; label: string; px: number }> = [
+  { value: 'small', label: 'Small text', px: 13 },
+  { value: 'medium', label: 'Medium text', px: 17 },
+  { value: 'large', label: 'Large text', px: 21 },
+]
+
+// --- Theme toggle: device preference until the player picks one ---
+const deviceLight = ref(false)
+let mediaQuery: MediaQueryList | null = null
+function onDeviceThemeChange(): void {
+  deviceLight.value = mediaQuery?.matches ?? false
+}
+onMounted(() => {
+  if (typeof window.matchMedia !== 'function') return
+  mediaQuery = window.matchMedia('(prefers-color-scheme: light)')
+  mediaQuery.addEventListener('change', onDeviceThemeChange)
+  onDeviceThemeChange()
+})
+onUnmounted(() => {
+  mediaQuery?.removeEventListener('change', onDeviceThemeChange)
+})
+
+const effectiveTheme = computed(() =>
+  settings.theme === 'device'
+    ? deviceLight.value
+      ? 'light'
+      : 'dark'
+    : settings.theme,
+)
+const nextTheme = computed(() =>
+  effectiveTheme.value === 'dark' ? 'light' : 'dark',
+)
+function toggleTheme(): void {
+  settings.theme = nextTheme.value
+}
+</script>
+
+<template>
+  <header class="lq-header">
+    <div class="lq-title">
+      <span class="lq-logo">RetroQuest</span>
+      <span v-if="progress" class="lq-act" data-testid="act">{{
+        actLabel
+      }}</span>
+    </div>
+
+    <div v-if="progress" class="lq-progress" data-testid="quest-progress">
+      <span class="lq-progress-label">Quests</span>
+      <span
+        class="lq-progress-track"
+        role="progressbar"
+        aria-label="Quests completed"
+        :aria-valuenow="progress.completed"
+        aria-valuemin="0"
+        :aria-valuemax="progress.total"
+      >
+        <span
+          class="lq-progress-fill"
+          :style="{ width: `${progressPercent}%` }"
+        />
+      </span>
+      <span>{{ progress.completed }}/{{ progress.total }}</span>
+    </div>
+
+    <div class="lq-actions">
+      <div class="lq-popover-anchor">
+        <button
+          type="button"
+          class="lq-icon-btn"
+          aria-label="Text size"
+          :aria-expanded="textSizeOpen ? 'true' : 'false'"
+          @click="textSizeOpen = !textSizeOpen"
+        >
+          <span class="lq-aa">Aa</span>
+        </button>
+        <div
+          v-if="textSizeOpen"
+          class="lq-popover"
+          role="group"
+          aria-label="Text size"
+        >
+          <button
+            v-for="size in SIZES"
+            :key="size.value"
+            type="button"
+            class="lq-size"
+            :class="{ 'lq-size-on': settings.textSize === size.value }"
+            :aria-label="size.label"
+            :aria-pressed="settings.textSize === size.value ? 'true' : 'false'"
+            :style="{ fontSize: `${size.px}px` }"
+            @click="settings.textSize = size.value"
+          >
+            A
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="lq-icon-btn"
+        :aria-label="`Switch to ${nextTheme} theme`"
+        @click="toggleTheme"
+      >
+        <svg
+          v-if="effectiveTheme === 'dark'"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path
+            d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+          />
+        </svg>
+        <svg
+          v-else
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+</template>
+
+<style scoped>
+.lq-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(16px * var(--lq-density));
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--lq-line);
+  background: var(--lq-bg);
+  color: var(--lq-fg);
+  font-family: var(--lq-font-ui);
+}
+.lq-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.lq-logo {
+  font-family: var(--lq-font-display);
+  font-size: calc(22px * var(--lq-display-scale));
+  font-weight: 600;
+}
+.lq-act,
+.lq-progress {
+  font-size: 13px;
+  color: var(--lq-muted);
+}
+.lq-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lq-progress-track {
+  display: inline-block;
+  width: 96px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--lq-line);
+  overflow: hidden;
+}
+.lq-progress-fill {
+  display: block;
+  height: 6px;
+  background: var(--lq-accent);
+}
+.lq-actions {
+  display: flex;
+  gap: 8px;
+}
+.lq-icon-btn {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--lq-radius);
+  border: 1px solid var(--lq-line);
+  background: var(--lq-surface);
+  color: var(--lq-fg);
+  cursor: pointer;
+}
+.lq-aa {
+  font-family: var(--lq-font-display);
+  font-size: 17px;
+}
+.lq-popover-anchor {
+  position: relative;
+}
+.lq-popover {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  width: 200px;
+  padding: 8px;
+  border-radius: var(--lq-radius);
+  border: 1px solid var(--lq-line2);
+  background: var(--lq-surface);
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.3);
+}
+.lq-size {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--lq-fg);
+  font-family: var(--lq-font-display);
+  cursor: pointer;
+}
+.lq-size-on {
+  background: var(--lq-accent);
+  color: var(--lq-on-accent);
+}
+</style>

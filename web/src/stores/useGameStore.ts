@@ -6,6 +6,7 @@ import type {
   CompletionTree,
   NamedSave,
   SaveSlot,
+  QuestProgress,
 } from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
@@ -38,6 +39,7 @@ export interface GameBridge {
   loadNamedGame(name: string): string
   listNamedSaves(): NamedSave[]
   getActName(): string
+  getQuestProgress(): QuestProgress
   getSaveSlots(): SaveSlot[]
   saveToSlot(slot: number): string
   loadFromSlot(slot: number): string
@@ -112,6 +114,8 @@ export const useGameStore = defineStore('game', () => {
   const spells = ref<NamedItem[]>([])
   const activeQuests = ref<NamedItem[]>([])
   const completedQuests = ref<NamedItem[]>([])
+  /** Quests done / total in the current act (null until the game starts). */
+  const questProgress = ref<QuestProgress | null>(null)
 
   // --- Output ---
   const lastOutput = ref('')
@@ -319,6 +323,7 @@ export const useGameStore = defineStore('game', () => {
     spells.value = b.getSpells().map(renderItem)
     activeQuests.value = b.getActiveQuests().map(renderItem)
     completedQuests.value = b.getCompletedQuests().map(renderItem)
+    questProgress.value = b.getQuestProgress()
     const m = b.getMusicInfo()
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
@@ -552,6 +557,7 @@ export const useGameStore = defineStore('game', () => {
     // State
     loading,
     turns,
+    questProgress,
     bagHasNew,
     spellsHaveNew,
     loadingStatus,
