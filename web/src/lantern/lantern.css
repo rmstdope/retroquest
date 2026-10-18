@@ -1,0 +1,127 @@
+/*
+ * Lantern design tokens as CSS variables (--lq-*), mirrored from tokens.ts
+ * (a unit test keeps them in sync). Everything is scoped to
+ * :root[data-ui='lantern'] so the classic UI is unaffected.
+ *
+ * Theme: dark by default, light when the device prefers light, unless the
+ * player picks one explicitly via data-theme='dark' | 'light'.
+ */
+@import '@fontsource/fraunces/500.css';
+@import '@fontsource/fraunces/600.css';
+@import '@fontsource/source-serif-4/400.css';
+@import '@fontsource/source-serif-4/400-italic.css';
+@import '@fontsource/source-serif-4/500.css';
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
+@import '@fontsource/dm-sans/600.css';
+@import '@fontsource/dm-mono/400.css';
+
+:root[data-ui='lantern'] {
+  --lq-bg: #10151a;
+  --lq-surface: #161d24;
+  --lq-raised: #1c242c;
+  --lq-line: #26313b;
+  --lq-line2: #34404b;
+  --lq-fg: #ece6d6;
+  --lq-prose: #d9d3c3;
+  --lq-muted: #a39d8e;
+  --lq-accent: #ffa914;
+  --lq-on-accent: #1a1408;
+  --lq-accent-text: #ffb836;
+  --lq-accent-soft: #36270a;
+  --lq-accent-line: #a8740f;
+  --lq-failure: #e8896b;
+  --lq-failure-soft: #2a1814;
+  --lq-success: #8fcf7a;
+  --lq-character: #7fb0e6;
+  --lq-character-soft: #172433;
+  --lq-character-line: #34506b;
+  --lq-item: #8fcf7a;
+  --lq-item-soft: #18261b;
+  --lq-item-line: #355236;
+  --lq-spell: #c79bf0;
+  --lq-spell-soft: #241a33;
+  --lq-spell-line: #4a3866;
+
+  /* Type: tight scale, compact spacing (chosen on the design canvas) */
+  --lq-font-display: 'Fraunces', Georgia, serif;
+  --lq-font-prose: 'Source Serif 4', Georgia, serif;
+  --lq-font-ui: 'DM Sans', system-ui, sans-serif;
+  --lq-font-mono: 'DM Mono', ui-monospace, monospace;
+  --lq-display-scale: 0.92;
+  --lq-text-scale: 1;
+  --lq-story-size: calc(15px * var(--lq-text-scale));
+  --lq-story-line-height: 1.5;
+  --lq-density: 0.7;
+  --lq-radius: 14px;
+
+  color-scheme: dark;
+}
+
+@media (min-width: 1024px) {
+  :root[data-ui='lantern'] {
+    --lq-story-size: calc(16px * var(--lq-text-scale));
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-ui='lantern']:not([data-theme='dark']) {
+    --lq-bg: #f5f0e6;
+    --lq-surface: #fffcf5;
+    --lq-raised: #efe8da;
+    --lq-line: #e2d9c6;
+    --lq-line2: #cfc4ad;
+    --lq-fg: #22201b;
+    --lq-prose: #36322a;
+    --lq-muted: #6b6455;
+    --lq-accent: #f29e00;
+    --lq-on-accent: #1a1408;
+    --lq-accent-text: #7a4300;
+    --lq-accent-soft: #ffe0a0;
+    --lq-accent-line: #eba526;
+    --lq-failure: #a63d1f;
+    --lq-failure-soft: #fbe9e2;
+    --lq-success: #2e6e27;
+    --lq-character: #2a5d9f;
+    --lq-character-soft: #e3edf9;
+    --lq-character-line: #a9c3e6;
+    --lq-item: #2e6e27;
+    --lq-item-soft: #e4f2df;
+    --lq-item-line: #a9d29e;
+    --lq-spell: #6b35a3;
+    --lq-spell-soft: #efe5f9;
+    --lq-spell-line: #c9ade6;
+
+    color-scheme: light;
+  }
+}
+
+:root[data-ui='lantern'][data-theme='light'] {
+  --lq-bg: #f5f0e6;
+  --lq-surface: #fffcf5;
+  --lq-raised: #efe8da;
+  --lq-line: #e2d9c6;
+  --lq-line2: #cfc4ad;
+  --lq-fg: #22201b;
+  --lq-prose: #36322a;
+  --lq-muted: #6b6455;
+  --lq-accent: #f29e00;
+  --lq-on-accent: #1a1408;
+  --lq-accent-text: #7a4300;
+  --lq-accent-soft: #ffe0a0;
+  --lq-accent-line: #eba526;
+  --lq-failure: #a63d1f;
+  --lq-failure-soft: #fbe9e2;
+  --lq-success: #2e6e27;
+  --lq-character: #2a5d9f;
+  --lq-character-soft: #e3edf9;
+  --lq-character-line: #a9c3e6;
+  --lq-item: #2e6e27;
+  --lq-item-soft: #e4f2df;
+  --lq-item-line: #a9d29e;
+  --lq-spell: #6b35a3;
+  --lq-spell-soft: #efe5f9;
+  --lq-spell-line: #c9ade6;
+
+  color-scheme: light;
+}

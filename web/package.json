@@ -37,6 +37,10 @@
     "vue-tsc": "^3.2.7"
   },
   "dependencies": {
+    "@fontsource/dm-mono": "^5.3.0",
+    "@fontsource/dm-sans": "^5.3.0",
+    "@fontsource/fraunces": "^5.3.0",
+    "@fontsource/source-serif-4": "^5.3.1",
     "pinia": "^3.0.4"
   }
 }
