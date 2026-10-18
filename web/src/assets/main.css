@@ -98,6 +98,12 @@
     font-weight: 700;
   }
 
+  /* "Not yet" checklist items: muted, never alarming like failures */
+  .theme-pending {
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+
   .theme-success {
     color: var(--color-success);
     font-weight: 700;

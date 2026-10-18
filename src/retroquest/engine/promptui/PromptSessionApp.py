@@ -24,6 +24,7 @@ class PromptSessionApp:
             "quest_name": "red",
             "event": "dim",
             "failure": "bold red",
+            "pending": "dim italic",
             "success": "bold green",
             "exits": "bold yellow"
         })
