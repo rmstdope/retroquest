@@ -492,6 +492,41 @@ describe('useBridge', () => {
       expect(bridge.getActName()).toBe('Act 1')
     })
 
+    it('getQuestProgress maps the controller dict to QuestProgress', () => {
+      mock.pythonResults.set(
+        'controller.get_quest_progress()',
+        pyProxy(
+          new Map<string, unknown>([
+            ['completed', 8],
+            ['total', 12],
+            ['act_number', 2],
+            ['main_quest', 'The Gathering Storm'],
+          ]),
+        ),
+      )
+      expect(bridge.getQuestProgress()).toEqual({
+        completed: 8,
+        total: 12,
+        actNumber: 2,
+        mainQuest: 'The Gathering Storm',
+      })
+    })
+
+    it('getQuestProgress reports a missing main quest as null', () => {
+      mock.pythonResults.set(
+        'controller.get_quest_progress()',
+        pyProxy(
+          new Map<string, unknown>([
+            ['completed', 0],
+            ['total', 3],
+            ['act_number', 1],
+            ['main_quest', undefined],
+          ]),
+        ),
+      )
+      expect(bridge.getQuestProgress().mainQuest).toBeNull()
+    })
+
     it('getSaveSlots returns exactly 8 slots when localStorage is empty', () => {
       const slots = bridge.getSaveSlots()
       expect(slots).toHaveLength(8)
