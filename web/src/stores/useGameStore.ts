@@ -131,6 +131,11 @@ export const useGameStore = defineStore('game', () => {
   /** Bag and spell names as the bridge lists them (markup, not HTML), for commands. */
   const bagEntries = ref<string[]>([])
   const spellEntries = ref<string[]>([])
+  /** Journal data as the bridge delivers it (markup, not HTML). */
+  const rawInventory = ref<NamedItem[]>([])
+  const rawSpells = ref<NamedItem[]>([])
+  const rawActiveQuests = ref<NamedItem[]>([])
+  const rawCompletedQuests = ref<NamedItem[]>([])
   const activeQuests = ref<NamedItem[]>([])
   const completedQuests = ref<NamedItem[]>([])
   /** Quests done / total in the current act (null until the game starts). */
@@ -357,8 +362,14 @@ export const useGameStore = defineStore('game', () => {
     spells.value = spellList.map(renderItem)
     bagEntries.value = bag.map((entry) => entry.name)
     spellEntries.value = spellList.map((entry) => entry.name)
-    activeQuests.value = b.getActiveQuests().map(renderItem)
-    completedQuests.value = b.getCompletedQuests().map(renderItem)
+    rawInventory.value = bag
+    rawSpells.value = spellList
+    const active = b.getActiveQuests()
+    const completed = b.getCompletedQuests()
+    activeQuests.value = active.map(renderItem)
+    completedQuests.value = completed.map(renderItem)
+    rawActiveQuests.value = active
+    rawCompletedQuests.value = completed
     questProgress.value = b.getQuestProgress()
     const m = b.getMusicInfo()
     musicFile.value = m.musicFile
@@ -598,6 +609,10 @@ export const useGameStore = defineStore('game', () => {
     bagEntries,
     spellEntries,
     completionTree,
+    rawInventory,
+    rawSpells,
+    rawActiveQuests,
+    rawCompletedQuests,
     bagHasNew,
     spellsHaveNew,
     loadingStatus,

@@ -1486,4 +1486,36 @@ describe('useGameStore', () => {
       expect(store.spellEntries).toEqual(['[spell_name]revive[/spell_name]'])
     })
   })
+
+  // --- Raw journal data ---
+
+  describe('raw journal data', () => {
+    it('keeps bag, spells and quests as the bridge delivers them', async () => {
+      bridge.getInventory.mockReturnValue([
+        { name: '[item_name]bread[/item_name]', description: 'A small loaf.' },
+      ])
+      bridge.getActiveQuests.mockReturnValue([
+        {
+          name: '[quest_name]Q (main)[/quest_name]',
+          description: '[dim]Old[/dim]',
+        },
+      ])
+      bridge.getCompletedQuests.mockReturnValue([
+        { name: '[quest_name]Done (side)[/quest_name]', description: 'Fin.' },
+      ])
+
+      await store.initGame()
+
+      expect(store.rawInventory).toEqual([
+        { name: '[item_name]bread[/item_name]', description: 'A small loaf.' },
+      ])
+      expect(store.rawActiveQuests[0].description).toBe('[dim]Old[/dim]')
+      expect(store.rawCompletedQuests[0].name).toBe(
+        '[quest_name]Done (side)[/quest_name]',
+      )
+      expect(store.rawSpells).toEqual([
+        { name: 'Heal', description: 'Restores HP' },
+      ])
+    })
+  })
 })
