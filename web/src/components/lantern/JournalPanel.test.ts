@@ -57,6 +57,14 @@ describe('JournalPanel', () => {
     return wrapper
   }
 
+  function rowToggle(w: VueWrapper, name: string) {
+    const found = w
+      .findAll('button[aria-expanded]')
+      .find((b) => b.get('.lq-row-name').text().startsWith(name))
+    if (!found) throw new Error(`No row toggle for ${name}`)
+    return found
+  }
+
   function tab(w: VueWrapper, name: RegExp) {
     const found = w.findAll('[role="tab"]').find((t) => name.test(t.text()))
     if (!found) throw new Error(`No tab ${name}`)
@@ -214,7 +222,7 @@ describe('JournalPanel', () => {
 
   it('expands a bag row to show the whole description', async () => {
     const w = mountJournal()
-    const toggle = w.get('button[aria-label="Bread: show description"]')
+    const toggle = rowToggle(w, 'Bread')
     expect(toggle.attributes('aria-expanded')).toBe('false')
     expect(w.find('.lq-row-note-full').exists()).toBe(false)
 
@@ -229,9 +237,7 @@ describe('JournalPanel', () => {
     const tabs = w.findAll('[role="tab"]')
     await tabs[1].trigger('click')
 
-    await w
-      .get('button[aria-label="Revive: show description"]')
-      .trigger('click')
+    await rowToggle(w, 'Revive').trigger('click')
 
     expect(w.get('.lq-row-note-full').text()).toBe('Restores life.')
   })
@@ -242,5 +248,14 @@ describe('JournalPanel', () => {
     expect(mountJournal().get('[role="tabpanel"]').attributes('tabindex')).toBe(
       '0',
     )
+  })
+
+  it('names a row toggle by what it shows, so the description is read out', () => {
+    const w = mountJournal()
+    const apple = rowToggle(w, 'Apple')
+
+    expect(apple.attributes('aria-label')).toBeUndefined()
+    expect(apple.text()).toContain('×2')
+    expect(apple.text()).toContain('Crisp.')
   })
 })

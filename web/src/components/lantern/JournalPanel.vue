@@ -8,7 +8,9 @@ import { renderMarkup } from '@/utils/theme'
 
 /**
  * The journal beside the story on laptops: Bag, Spells and Quests tabs.
- * Bag rows can be used and spells cast directly; a dot marks a tab with
+ * Bag rows can be used and spells cast directly, and tapping a row's text
+ * expands its full description (the toggle is named by that visible text, so
+ * screen readers hear the description). A dot marks a tab with
  * something new until it is opened. The tabs follow the WAI-ARIA tabs
  * pattern: one tab stop, Left/Right (wrapping), Home and End select a tab.
  */
@@ -133,7 +135,6 @@ function toggle(name: string): void {
             <button
               type="button"
               class="lq-row-text"
-              :aria-label="`${item.label}: show description`"
               :aria-expanded="
                 expanded.has(`bag:${item.name}`) ? 'true' : 'false'
               "
@@ -176,7 +177,6 @@ function toggle(name: string): void {
             <button
               type="button"
               class="lq-row-text"
-              :aria-label="`${spell.label}: show description`"
               :aria-expanded="
                 expanded.has(`spell:${spell.name}`) ? 'true' : 'false'
               "
@@ -300,6 +300,7 @@ function toggle(name: string): void {
 .lq-row-text {
   flex: 1;
   min-width: 0;
+  overflow-wrap: anywhere;
   padding: 0;
   border: none;
   background: none;

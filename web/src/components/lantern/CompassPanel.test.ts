@@ -86,5 +86,6 @@ describe('CompassPanel', () => {
 
     const other = mountCompass().get('.lq-other-exits [data-dir="constructor"]')
     expect(other.text()).toContain('Odd Place')
+    expect(other.get('.lq-exit-dir').text()).toBe('• Constructor')
   })
 })

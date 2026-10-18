@@ -9,5 +9,5 @@ const ARROWS: Readonly<Record<string, string>> = {
 
 /** Arrow shown for an exit direction; other exits (e.g. secret_passage) get a dot. */
 export function exitArrow(direction: string): string {
-  return ARROWS[direction] ?? '•'
+  return Object.hasOwn(ARROWS, direction) ? ARROWS[direction] : '•'
 }
