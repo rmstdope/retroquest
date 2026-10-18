@@ -4,6 +4,8 @@ from typing import Optional
 
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from retroquest.act3.items.PrismLantern import PrismLantern
+from retroquest.act3.rooms.SubmergedAntechamber import SubmergedAntechamber
 from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
@@ -14,8 +16,6 @@ from ...utils.utils import (
     check_item_count_in_inventory,
     check_story_flag,
 )
-from retroquest.act3.items.PrismLantern import PrismLantern
-from retroquest.act3.rooms.SubmergedAntechamber import SubmergedAntechamber
 from ..markup_helpers import assert_markup_well_formed
 
 

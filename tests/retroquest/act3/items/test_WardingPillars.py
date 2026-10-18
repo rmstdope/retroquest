@@ -2,12 +2,12 @@
 
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from retroquest.act3.items.WardingPillars import WardingPillars
 from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_WARDING_PILLARS_PURIFIED,
     FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
 )
 from ...utils.utils import check_story_flag
-from retroquest.act3.items.WardingPillars import WardingPillars
 from ..markup_helpers import assert_markup_well_formed
 
 
