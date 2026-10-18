@@ -50,9 +50,9 @@ describe('useSettingsStore', () => {
       theme: 'device',
       textSize: 'medium',
       musicOn: true,
-      musicVolume: 60,
+      musicVolume: 100,
       effectsOn: true,
-      effectsVolume: 80,
+      effectsVolume: 100,
       startMode: 'actions',
       reduceMotion: 'device',
     })

@@ -39,9 +39,11 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = {
   theme: 'device',
   textSize: 'medium',
   musicOn: true,
-  musicVolume: 60,
+  // Full volume until the Settings dialog (step 22) lets players adjust it,
+  // so current players hear no change.
+  musicVolume: 100,
   effectsOn: true,
-  effectsVolume: 80,
+  effectsVolume: 100,
   startMode: 'actions',
   reduceMotion: 'device',
 }
