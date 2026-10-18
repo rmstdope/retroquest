@@ -48,6 +48,7 @@ class Shopkeeper(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
+        """Greet Elior, hand over the priest's matches or list the wares for sale."""
         # If Elior hasn't been tasked to connect with nature, shop is not open yet
         if not game_state.get_story_flag(FLAG_CONNECT_WITH_NATURE):
             return self.closed_dialogue
@@ -93,7 +94,7 @@ class Shopkeeper(Character):
 
         return (
             "The [character_name]Shopkeeper[/character_name] says: "
-            f'[dialogue]"{dialogue} {wares_info.strip()}[/dialogue]"'
+            f'[dialogue]"{dialogue} {wares_info.strip()}"[/dialogue]'
         )
 
     def give_item(self, _game_state: GameState, _item_object: Item) -> str:
@@ -106,6 +107,7 @@ class Shopkeeper(Character):
         )
 
     def buy_item(self, item_name_to_buy: str, game_state: GameState) -> str:
+        """Sell a ware for coins, adding the bonus apple to the inventory."""
         if not game_state.get_story_flag(FLAG_CONNECT_WITH_NATURE):
             return self.closed_dialogue
         item_name_to_buy = item_name_to_buy.lower()
