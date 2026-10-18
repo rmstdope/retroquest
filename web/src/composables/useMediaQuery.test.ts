@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from 'vitest'
 import { effectScope } from 'vue'
-import { useIsWide, WIDE_QUERY } from './useIsWide'
+import { useMediaQuery, WIDE_QUERY, SHORT_QUERY } from './useMediaQuery'
 
 function fakeMatchMedia(initial: boolean) {
   const listeners: Array<(e: { matches: boolean }) => void> = []
@@ -11,42 +11,46 @@ function fakeMatchMedia(initial: boolean) {
       listeners.push(fn),
     removeEventListener: vi.fn(),
   }
-  vi.stubGlobal(
-    'matchMedia',
-    vi.fn(() => query),
-  )
+  const matchMedia = vi.fn(() => query)
+  vi.stubGlobal('matchMedia', matchMedia)
   return {
     change(matches: boolean) {
       query.matches = matches
       listeners.forEach((fn) => fn({ matches }))
     },
     query,
+    matchMedia,
   }
 }
 
-describe('useIsWide', () => {
+describe('useMediaQuery', () => {
   afterEach(() => vi.unstubAllGlobals())
 
-  it('asks for at least 1024px', () => {
-    expect(WIDE_QUERY).toBe('(min-width: 1024px)')
+  it('uses the laptop layout from 1024 × 560', () => {
+    expect(WIDE_QUERY).toBe('(min-width: 1024px) and (min-height: 560px)')
   })
 
-  it('follows the window width', () => {
+  it('treats a screen under 520px tall as short (phone landscape)', () => {
+    expect(SHORT_QUERY).toBe('(max-height: 519px)')
+  })
+
+  it('follows the query until its scope ends', () => {
     const media = fakeMatchMedia(true)
     const scope = effectScope()
-    const wide = scope.run(() => useIsWide())!
+    const matches = scope.run(() => useMediaQuery('(min-width: 1px)'))!
 
-    expect(wide.value).toBe(true)
+    expect(media.matchMedia).toHaveBeenCalledWith('(min-width: 1px)')
+    expect(matches.value).toBe(true)
     media.change(false)
-    expect(wide.value).toBe(false)
+    expect(matches.value).toBe(false)
     scope.stop()
     expect(media.query.removeEventListener).toHaveBeenCalled()
   })
 
-  it('is narrow when the browser cannot tell', () => {
+  it('does not match when the browser cannot tell', () => {
     vi.stubGlobal('matchMedia', undefined)
     const scope = effectScope()
-    expect(scope.run(() => useIsWide())!.value).toBe(false)
+    expect(scope.run(() => useMediaQuery(WIDE_QUERY))!.value).toBe(false)
     scope.stop()
   })
 })

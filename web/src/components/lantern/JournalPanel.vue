@@ -13,11 +13,19 @@ import { renderMarkup } from '@/utils/theme'
  * screen readers hear the description). A dot marks a tab with
  * something new until it is opened. The tabs follow the WAI-ARIA tabs
  * pattern: one tab stop, Left/Right (wrapping), Home and End select a tab.
+ * Phones show one tab at a time from their section tabs (the `tab` prop):
+ * then there is no tab row, just a heading.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
+const props = defineProps<{ tab?: Tab }>()
+const TITLES: Record<Tab, string> = {
+  bag: 'Bag',
+  spells: 'Spells',
+  quests: 'Quests',
+}
 const game = useGameStore()
-const active = ref<Tab>('bag')
+const active = ref<Tab>(props.tab ?? 'bag')
 const expanded = ref<Set<string>>(new Set())
 const tabButtons = ref<HTMLButtonElement[]>([])
 
@@ -55,6 +63,13 @@ const tabs = computed(() => [
     dot: false,
   },
 ])
+
+watch(
+  () => props.tab,
+  (tab) => {
+    if (tab) active.value = tab
+  },
+)
 
 // Seeing a tab clears its "new" dot, including news that arrives while open.
 watch(
@@ -99,7 +114,10 @@ function toggle(name: string): void {
 
 <template>
   <section class="lq-journal" aria-label="Journal">
-    <div class="lq-tabs" role="tablist" aria-label="Journal">
+    <h2 v-if="tab" class="lq-journal-title">
+      {{ TITLES[tab] }}
+    </h2>
+    <div v-else class="lq-tabs" role="tablist" aria-label="Journal">
       <button
         v-for="(t, index) in tabs"
         :id="`lq-tab-${t.id}`"
@@ -122,11 +140,17 @@ function toggle(name: string): void {
     </div>
 
     <div
-      :id="`lq-panel-${active}`"
       class="lq-panel"
-      role="tabpanel"
-      tabindex="0"
-      :aria-labelledby="`lq-tab-${active}`"
+      v-bind="
+        tab
+          ? {}
+          : {
+              id: `lq-panel-${active}`,
+              role: 'tabpanel',
+              tabindex: 0,
+              'aria-labelledby': `lq-tab-${active}`,
+            }
+      "
     >
       <template v-if="active === 'bag'">
         <p v-if="!bag.length" class="lq-empty">Your bag is empty.</p>
@@ -248,6 +272,14 @@ function toggle(name: string): void {
   border: 1px solid var(--lq-line);
   background: var(--lq-surface);
   font-family: var(--lq-font-ui);
+}
+.lq-journal-title {
+  margin: 0;
+  padding: 12px 16px 4px;
+  font-family: var(--lq-font-display);
+  font-size: calc(20px * var(--lq-display-scale));
+  font-weight: 500;
+  color: var(--lq-fg);
 }
 .lq-tabs {
   display: flex;

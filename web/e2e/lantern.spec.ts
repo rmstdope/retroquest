@@ -337,4 +337,45 @@ test.describe('Lantern UI (?ui=lantern)', () => {
       .boundingBox()
     expect(story!.height).toBeGreaterThan(60)
   })
+
+  test('switches sections with the tabs on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.rawInventory = [{ name: 'bread', description: 'A small loaf.' }]
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+    const sections = page.getByRole('navigation', { name: 'Sections' })
+
+    await sections.getByRole('button', { name: 'Bag' }).click()
+
+    await expect(page.getByRole('heading', { name: 'Bag' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Use Bread' })).toBeVisible()
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeHidden()
+    const navBox = await sections.boundingBox()
+    expect(navBox!.y + navBox!.height).toBeCloseTo(844, 0)
+
+    await sections.getByRole('button', { name: 'Story' }).click()
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
+  })
+
+  test('puts the section tabs in the header in phone landscape', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 844, height: 390 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+
+    await expect(
+      page.getByRole('banner').getByRole('navigation', { name: 'Sections' }),
+    ).toBeVisible()
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollHeight - window.innerHeight,
+    )
+    expect(overflow).toBeLessThanOrEqual(0)
+  })
 })

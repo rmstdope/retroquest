@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Arrival } from '@/stores/useGameStore'
-import { useIsWide } from '@/composables/useIsWide'
+import { useMediaQuery, WIDE_QUERY } from '@/composables/useMediaQuery'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
 import { renderMarkup } from '@/utils/theme'
@@ -12,7 +12,7 @@ import { renderMarkup } from '@/utils/theme'
  * map already show the room, so the story keeps only the divider.
  */
 const props = defineProps<{ arrival: Arrival; command: string | null }>()
-const wide = useIsWide()
+const wide = useMediaQuery(WIDE_QUERY)
 
 const DIRECTIONS: Record<string, string> = {
   n: 'north',

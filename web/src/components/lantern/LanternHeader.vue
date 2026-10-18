@@ -103,6 +103,9 @@ function toggleTheme(): void {
       <span>{{ progress.completed }}/{{ progress.total }}</span>
     </div>
 
+    <!-- Phone landscape puts the section tabs here. -->
+    <slot name="nav" />
+
     <div class="lq-actions">
       <div ref="textSizeAnchor" class="lq-popover-anchor">
         <button

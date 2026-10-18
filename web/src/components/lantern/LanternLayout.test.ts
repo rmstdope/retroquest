@@ -1,9 +1,19 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { mount, type VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
+
+const TURN = {
+  command: 'look',
+  text: 'Hi',
+  room: 'Square',
+  roomChanged: false,
+  gained: [],
+  lost: [],
+  arrival: null,
+}
 
 describe('LanternLayout', () => {
   let wrapper: VueWrapper | undefined
@@ -211,5 +221,138 @@ describe('LanternLayout', () => {
 
     expect(w.find('aside').exists()).toBe(false)
     expect(w.find('[aria-label="Current location"]').exists()).toBe(false)
+  })
+
+  describe('on a phone', () => {
+    function stubScreen(short: boolean) {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn((query: string) => ({
+          matches: query.includes('max-height') ? short : false,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
+    }
+
+    beforeEach(() => stubScreen(false))
+    afterEach(() => vi.unstubAllGlobals())
+
+    function sections(w: VueWrapper) {
+      return w.get('nav[aria-label="Sections"]')
+    }
+
+    async function open(w: VueWrapper, name: string) {
+      const button = sections(w)
+        .findAll('button')
+        .find((b) => b.text() === name)
+      await button!.trigger('click')
+    }
+
+    it('starts on the story with the section tabs at the bottom', () => {
+      const w = mountLayout()
+
+      expect(sections(w).classes()).toContain('lq-nav-bottom')
+      expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
+      expect(w.get('[aria-label="Story"]').isVisible()).toBe(true)
+    })
+
+    it('shows the bag in place of the story and keeps the story', async () => {
+      const w = mountLayout()
+
+      await open(w, 'Bag')
+
+      expect(w.get('[aria-label="Journal"] h2').text()).toBe('Bag')
+      expect(w.get('section[aria-label="Story"]').isVisible()).toBe(false)
+      expect(w.get('section[aria-label="Actions"]').isVisible()).toBe(false)
+    })
+
+    it('shows the map', async () => {
+      const w = mountLayout()
+
+      await open(w, 'Map')
+
+      expect(w.find('[aria-label="Map"]').exists()).toBe(true)
+      expect(w.find('[aria-label="Journal"]').exists()).toBe(false)
+    })
+
+    it('returns to the story when a command runs from another section', async () => {
+      const w = mountLayout()
+      await open(w, 'Map')
+
+      useGameStore().turns = [
+        {
+          id: 1,
+          command: 'go north',
+          text: 'You walk north.',
+          room: 'Hall',
+          roomChanged: false,
+          gained: [],
+          lost: [],
+          arrival: null,
+        },
+      ]
+      await w.vm.$nextTick()
+
+      expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
+    })
+
+    it('returns to the story once the story is full (oldest turn dropped)', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      game.turns = [{ ...TURN, id: 1 }]
+      await w.vm.$nextTick()
+      await open(w, 'Map')
+
+      // At the turn cap a new turn replaces the oldest: the count stays.
+      game.turns = [{ ...TURN, id: 2 }]
+      await flushPromises()
+
+      expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
+    })
+
+    it('scrolls to the new turn once the story is shown again', async () => {
+      const shownWhenScrolled: boolean[] = []
+      Element.prototype.scrollIntoView = function (this: Element) {
+        const story = this.closest<HTMLElement>('.lq-story')
+        shownWhenScrolled.push(story?.style.display !== 'none')
+      }
+      const w = mountLayout()
+      await open(w, 'Map')
+
+      useGameStore().turns = [{ ...TURN, id: 1 }]
+      await flushPromises()
+
+      expect(shownWhenScrolled).toEqual([true])
+    })
+
+    it('moves focus to the actions after Use from the bag', async () => {
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      const w = wrapper
+      const game = useGameStore()
+      game.acceptInput = true
+      game.rawInventory = [{ name: 'bread', description: 'A loaf.' }]
+      vi.spyOn(game, 'submitCommand').mockImplementation(() => {
+        game.turns = [{ ...TURN, id: 1, command: 'use bread' }]
+      })
+      await open(w, 'Bag')
+      const use = w.get('[aria-label="Use Bread"]')
+      ;(use.element as HTMLElement).focus()
+
+      await use.trigger('click')
+      await flushPromises()
+
+      expect(document.activeElement?.textContent?.trim()).toBe('Look')
+    })
+
+    it('moves the section tabs into the header on a short screen', () => {
+      stubScreen(true)
+      const w = mountLayout()
+
+      expect(w.get('header').find('nav[aria-label="Sections"]').exists()).toBe(
+        true,
+      )
+      expect(sections(w).classes()).toContain('lq-nav-top')
+    })
   })
 })
