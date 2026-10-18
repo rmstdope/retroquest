@@ -258,4 +258,33 @@ describe('JournalPanel', () => {
     expect(apple.text()).toContain('×2')
     expect(apple.text()).toContain('Crisp.')
   })
+
+  describe('locked to one tab (phone sections)', () => {
+    it('shows only that tab, without the tab row', () => {
+      wrapper = mount(JournalPanel, { props: { tab: 'spells' } })
+
+      expect(wrapper.find('[role="tablist"]').exists()).toBe(false)
+      expect(wrapper.find('[role="tabpanel"]').exists()).toBe(false)
+      expect(wrapper.get('h2').text()).toBe('Spells')
+      expect(wrapper.find('button[aria-label="Cast Revive"]').exists()).toBe(
+        true,
+      )
+    })
+
+    it('marks the shown tab seen', () => {
+      useGameStore().spellsHaveNew = true
+      wrapper = mount(JournalPanel, { props: { tab: 'spells' } })
+
+      expect(markSeen).toHaveBeenCalledWith('spells')
+    })
+
+    it('follows a change of tab', async () => {
+      wrapper = mount(JournalPanel, { props: { tab: 'bag' } })
+
+      await wrapper.setProps({ tab: 'quests' })
+
+      expect(wrapper.get('h2').text()).toBe('Quests')
+      expect(wrapper.findAll('.lq-quest-name')).toHaveLength(3)
+    })
+  })
 })

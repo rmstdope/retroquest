@@ -212,4 +212,89 @@ describe('LanternLayout', () => {
     expect(w.find('aside').exists()).toBe(false)
     expect(w.find('[aria-label="Current location"]').exists()).toBe(false)
   })
+
+  describe('on a phone', () => {
+    function stubScreen(short: boolean) {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn((query: string) => ({
+          matches: query.includes('max-height') ? short : false,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
+    }
+
+    beforeEach(() => stubScreen(false))
+    afterEach(() => vi.unstubAllGlobals())
+
+    function sections(w: VueWrapper) {
+      return w.get('nav[aria-label="Sections"]')
+    }
+
+    async function open(w: VueWrapper, name: string) {
+      const button = sections(w)
+        .findAll('button')
+        .find((b) => b.text() === name)
+      await button!.trigger('click')
+    }
+
+    it('starts on the story with the section tabs at the bottom', () => {
+      const w = mountLayout()
+
+      expect(sections(w).classes()).toContain('lq-nav-bottom')
+      expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
+      expect(w.get('[aria-label="Story"]').isVisible()).toBe(true)
+    })
+
+    it('shows the bag in place of the story and keeps the story', async () => {
+      const w = mountLayout()
+
+      await open(w, 'Bag')
+
+      expect(w.get('[aria-label="Journal"] h2').text()).toBe('Bag')
+      expect(w.get('section[aria-label="Story"]').isVisible()).toBe(false)
+      expect(w.get('section[aria-label="Actions"]').isVisible()).toBe(false)
+    })
+
+    it('shows the map', async () => {
+      const w = mountLayout()
+
+      await open(w, 'Map')
+
+      expect(w.find('[aria-label="Map"]').exists()).toBe(true)
+      expect(w.find('[aria-label="Journal"]').exists()).toBe(false)
+    })
+
+    it('returns to the story when a command runs from another section', async () => {
+      const w = mountLayout()
+      await open(w, 'Map')
+
+      useGameStore().turns = [
+        {
+          id: 1,
+          command: 'go north',
+          text: 'You walk north.',
+          room: 'Hall',
+          roomChanged: false,
+          gained: [],
+          lost: [],
+          arrival: null,
+        },
+      ]
+      await w.vm.$nextTick()
+
+      expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
+    })
+
+    it('moves the section tabs into the header on a short screen', () => {
+      stubScreen(true)
+      const w = mountLayout()
+
+      expect(w.get('header').find('nav[aria-label="Sections"]').exists()).toBe(
+        true,
+      )
+      expect(sections(w).classes()).toContain('lq-nav-top')
+    })
+  })
 })
