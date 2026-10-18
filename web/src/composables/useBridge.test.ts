@@ -158,6 +158,20 @@ describe('useBridge', () => {
       expect(bridge.getRoomItems()).toEqual(['Sword', 'Shield'])
     })
 
+    it('getRoomWares maps tuples to RoomWare[]', () => {
+      mock.pythonResults.set(
+        'controller.get_room_wares()',
+        pyProxy([
+          ['rope', 1, 'shopkeeper'],
+          ['sword', 5, 'shopkeeper'],
+        ]),
+      )
+      expect(bridge.getRoomWares()).toEqual([
+        { name: 'rope', price: 1, seller: 'shopkeeper' },
+        { name: 'sword', price: 5, seller: 'shopkeeper' },
+      ])
+    })
+
     it('getRoomExits returns direction map', () => {
       mock.pythonResults.set(
         'controller.get_room_exits()',

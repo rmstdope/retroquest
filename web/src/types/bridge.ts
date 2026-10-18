@@ -26,6 +26,13 @@ export interface QuestProgress {
   mainQuest: string | null
 }
 
+/** Something a merchant in the current room sells (controller.get_room_wares()). */
+export interface RoomWare {
+  name: string
+  price: number
+  seller: string
+}
+
 export interface NamedItem {
   name: string
   description: string

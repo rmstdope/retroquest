@@ -2,12 +2,12 @@
  * The verbs of the Lantern action composer and how they become engine commands.
  *
  * Each verb lists its slots: where the slot's choices come from (room items,
- * characters, the bag, spells, exits or free text) and the word that joins it
- * to the previous part ("use X with Y"). Only canonical command forms accepted
- * by the engine's CommandParser are produced. Save, load and quit belong to the
- * game menu, not here.
+ * characters, the bag, spells, exits, shop wares and sellers, or free text) and
+ * the word that joins it to the previous part ("use X with Y"). Only canonical
+ * command forms accepted by the engine's CommandParser are produced. Save, load
+ * and quit belong to the game menu, not here.
  */
-import type { RoomExits } from '@/types/bridge'
+import type { RoomExits, RoomWare } from '@/types/bridge'
 import { displayName } from './displayName'
 import { parseCountedName } from './inventoryChanges'
 
@@ -17,6 +17,8 @@ export type TargetSource =
   | 'inventory'
   | 'spells'
   | 'exits'
+  | 'wares'
+  | 'sellers'
   | 'text'
 
 export interface Slot {
@@ -45,6 +47,8 @@ export interface ActionContext {
   /** Spell entries as the bridge lists them, e.g. "[spell_name]revive[/spell_name]". */
   spells: string[]
   exits: RoomExits
+  /** What merchants in the room sell. */
+  wares: RoomWare[]
 }
 
 export type TargetKind = 'item' | 'character' | 'spell' | 'exit'
@@ -58,6 +62,8 @@ export interface Target {
 
 const THINGS: TargetSource[] = ['inventory', 'roomItems']
 const ANYTHING: TargetSource[] = ['inventory', 'roomItems', 'characters']
+/** The engine looks in the room and the bag for things to open or close. */
+const THINGS_HERE_FIRST: TargetSource[] = ['roomItems', 'inventory']
 
 export const VERBS: readonly Verb[] = [
   { id: 'look', label: 'Look', words: 'look', slots: [], group: 'main' },
@@ -122,9 +128,9 @@ export const VERBS: readonly Verb[] = [
     label: 'Buy',
     words: 'buy',
     slots: [
-      { sources: ['text'] },
+      { sources: ['wares'] },
       // Required: the engine rejects "buy <item>" without "from <seller>".
-      { sources: ['characters'], joiner: 'from' },
+      { sources: ['sellers'], joiner: 'from' },
     ],
     group: 'main',
   },
@@ -132,14 +138,14 @@ export const VERBS: readonly Verb[] = [
     id: 'open',
     label: 'Open',
     words: 'open',
-    slots: [{ sources: ['roomItems'] }],
+    slots: [{ sources: THINGS_HERE_FIRST }],
     group: 'main',
   },
   {
     id: 'close',
     label: 'Close',
     words: 'close',
-    slots: [{ sources: ['roomItems'] }],
+    slots: [{ sources: THINGS_HERE_FIRST }],
     group: 'main',
   },
   {
@@ -230,6 +236,19 @@ export function targetsFor(slot: Slot, context: ActionContext): Target[] {
         const { name } = parseCountedName(entry)
         add(name, displayName(name), 'spell')
       }
+    } else if (source === 'wares') {
+      for (const ware of context.wares) {
+        const coins = ware.price === 1 ? 'coin' : 'coins'
+        add(
+          ware.name,
+          `${displayName(ware.name)} · ${ware.price} ${coins}`,
+          'item',
+        )
+      }
+    } else if (source === 'sellers') {
+      const sellers = new Set(context.wares.map((ware) => ware.seller))
+      for (const name of context.characters)
+        if (sellers.has(name)) add(name, displayName(name), 'character')
     } else if (source === 'exits') {
       for (const [direction, room] of Object.entries(context.exits))
         add(direction, `${displayName(direction)} · ${room}`, 'exit')

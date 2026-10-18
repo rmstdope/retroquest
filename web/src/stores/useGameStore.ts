@@ -7,6 +7,7 @@ import type {
   NamedSave,
   SaveSlot,
   QuestProgress,
+  RoomWare,
 } from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
@@ -24,6 +25,7 @@ export interface GameBridge {
   getRoomCharacters(): string[]
   getRoomItems(): string[]
   getRoomExits(): RoomExits
+  getRoomWares(): RoomWare[]
   getInventory(): NamedItem[]
   getSpells(): NamedItem[]
   getActiveQuests(): NamedItem[]
@@ -120,6 +122,8 @@ export const useGameStore = defineStore('game', () => {
   const characters = ref<string[]>([])
   const items = ref<string[]>([])
   const exits = ref<RoomExits>({})
+  /** What merchants in the room sell (for the Buy action). */
+  const roomWares = ref<RoomWare[]>([])
 
   // --- Panels ---
   const inventory = ref<NamedItem[]>([])
@@ -343,6 +347,7 @@ export const useGameStore = defineStore('game', () => {
     characters.value = b.getRoomCharacters()
     items.value = b.getRoomItems()
     exits.value = b.getRoomExits()
+    roomWares.value = b.getRoomWares()
     inventory.value = b.getInventory().map(renderItem)
     spells.value = b.getSpells().map(renderItem)
     activeQuests.value = b.getActiveQuests().map(renderItem)
@@ -582,6 +587,7 @@ export const useGameStore = defineStore('game', () => {
     loading,
     turns,
     questProgress,
+    roomWares,
     bagHasNew,
     spellsHaveNew,
     loadingStatus,

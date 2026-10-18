@@ -289,3 +289,36 @@ class TestGetQuestProgress:
         """Acts without a main quest report None."""
         ctrl = _make_controller()
         assert ctrl.get_quest_progress()["main_quest"] is None
+
+
+class SimpleMerchant(SimpleCharacter):
+    """Character that sells wares, like the act shopkeepers."""
+
+    def __init__(self, name: str, wares: dict) -> None:
+        """Initialize with a wares mapping of name to item and price."""
+        super().__init__(name)
+        self.wares = wares
+
+
+class TestGetRoomWares:
+    """Tests for GameController.get_room_wares."""
+
+    def test_empty_when_nobody_sells_anything(self) -> None:
+        """Characters without wares contribute nothing."""
+        ctrl = _make_controller(characters=[SimpleCharacter("guard")])
+        assert ctrl.get_room_wares() == []
+
+    def test_lists_each_ware_with_price_and_seller(self) -> None:
+        """Every ware of every merchant in the room is listed."""
+        shopkeeper = SimpleMerchant(
+            "shopkeeper",
+            {
+                "rope": {"item": SimpleItem("rope"), "price": 1},
+                "sword": {"item": SimpleItem("sword"), "price": 5},
+            },
+        )
+        ctrl = _make_controller(characters=[shopkeeper, SimpleCharacter("guard")])
+        assert ctrl.get_room_wares() == [
+            ("rope", 1, "shopkeeper"),
+            ("sword", 5, "shopkeeper"),
+        ]
