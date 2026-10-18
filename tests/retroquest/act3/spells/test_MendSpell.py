@@ -1,5 +1,9 @@
 """Unit tests for MendSpell in Act 3."""
 from retroquest.act3.spells.MendSpell import MendSpell
+from retroquest.act3.Act3 import Act3
+from retroquest.engine.Game import Game
+from retroquest.act3.items.RustedLockerKey import RustedLockerKey
+from ..markup_helpers import assert_markup_well_formed
 
 class DummyGameState:
     """Minimal dummy GameState for MendSpell tests."""
@@ -48,3 +52,20 @@ def test_cast_on_item_mirror_mount():
     result = spell.cast_on_item(gs, mount)
     assert called['game_state'] is gs
     assert "fully restored" in result
+
+
+def _create_markup_game() -> Game:
+    """Create an Act III game for markup checks."""
+    act = Act3()
+    act.music_file = ''
+    return Game([act])
+
+
+def test_cast_on_item_without_need_uses_known_tags():
+    """Mending an item that needs no repair uses only known, balanced tags."""
+    game = _create_markup_game()
+
+    answer = MendSpell().cast_on_item(game.state, RustedLockerKey())
+
+    assert "doesn't appear to need mending" in answer
+    assert_markup_well_formed(answer)

@@ -3,6 +3,7 @@
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
 from retroquest.act3.items.RustedLockerKey import RustedLockerKey
+from ..markup_helpers import assert_markup_well_formed
 
 
 def test_locker_examine_and_open_behaviour():
@@ -91,3 +92,23 @@ def test_locker_unlock_fails_without_rusted_key():
     unlock_result = locker.unlock(game.state)
     assert '[failure]' in unlock_result
     assert locker.locked is True
+
+
+def test_locker_repeat_actions_use_known_tags():
+    """Unlocking or opening the locker again uses only known, balanced tags."""
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+    room = game.state.all_rooms['CollapsedPier']
+    game.state.current_room = room
+    locker = next(i for i in room.items if i.__class__.__name__ == 'Locker')
+    locker.locked = False
+    locker.open(game.state)
+
+    unlock_again = locker.unlock(game.state)
+    open_again = locker.open(game.state)
+
+    assert "already free" in unlock_again
+    assert "already open" in open_again
+    for answer in (unlock_again, open_again):
+        assert_markup_well_formed(answer)

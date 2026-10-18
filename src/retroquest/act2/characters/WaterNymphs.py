@@ -145,7 +145,7 @@ class WaterNymphs(Character):
             )
 
         if self.current_riddle >= len(self.riddles):
-            return "[error]There are no more riddles to answer.[/error]"
+            return "[failure]There are no more riddles to answer.[/failure]"
 
         riddle = self.riddles[self.current_riddle]
         word_lower = words.lower().strip()

@@ -54,6 +54,6 @@ class CrystalOfLight(Item):
             )
         game_state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)
         return (
-            "[item_effect]The crystal steadies in your grasp, radiance aligning with your "
-            "resolve.[/item_effect]"
+            "[event]The crystal steadies in your grasp, radiance aligning with your "
+            "resolve.[/event]"
         )

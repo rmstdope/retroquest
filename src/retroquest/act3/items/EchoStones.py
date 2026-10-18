@@ -47,7 +47,7 @@ class EchoStones(Item):
                 "restless spirits from this sacred place.[/success]"
             )
         elif spell_name == "bless" and self._blessed:
-            return "[info]The echo stones are already blessed.[/info]"
+            return "[dim]The echo stones are already blessed.[/dim]"
         else:
             return f"[failure]The {spell_name} spell has no effect on the echo stones.[/failure]"
 

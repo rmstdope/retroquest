@@ -28,7 +28,7 @@ class RunicWalls(Item):
             current_room.add_item(ResonantChantRubbings())
             self._rubbings_discovered = True
         return (
-            "[info]The runes describe a chant to quiet the phantoms: "
+            "[event]The runes describe a chant to quiet the phantoms: "
             "'Let stillness echo, let silence bind.' You notice you could make "
-            "rubbings of these ancient symbols.[/info]"
+            "rubbings of these ancient symbols.[/event]"
         )

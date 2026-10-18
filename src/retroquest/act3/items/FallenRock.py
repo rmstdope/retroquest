@@ -47,8 +47,8 @@ class FallenRock(Item):
         if isinstance(other_item, ReinforcedBraces):
             if not game_state.get_story_flag(FLAG_ACT3_MINERS_RESCUE_STARTED):
                 return (
-                    "[info]You should examine the fallen rock first to understand "
-                    "the situation before attempting anything.[/info]"
+                    "[failure]You should examine the fallen rock first to understand "
+                    "the situation before attempting anything.[/failure]"
                 )
             if not self._collapse_stabilized:
                 self._collapse_stabilized = True
@@ -60,15 +60,15 @@ class FallenRock(Item):
                     "before you can safely clear the passage.[/event]"
                 )
             return (
-                "[info]The braces are already in place, holding the ceiling "
-                "steady.[/info]"
+                "[dim]The braces are already in place, holding the ceiling "
+                "steady.[/dim]"
             )
 
         if isinstance(other_item, SupportStraps):
             if not self._collapse_stabilized:
                 return (
-                    "[info]You need to stabilize the collapse with braces before "
-                    "securing them with straps.[/info]"
+                    "[failure]You need to stabilize the collapse with braces before "
+                    "securing them with straps.[/failure]"
                 )
             if not self._straps_secured:
                 self._straps_secured = True
@@ -80,14 +80,14 @@ class FallenRock(Item):
                     "enough for the final excavation.[/event]"
                 )
             return (
-                "[info]The straps are already securing the braces.[/info]"
+                "[dim]The straps are already securing the braces.[/dim]"
             )
 
         if isinstance(other_item, WedgeBlocks):
             if not self._straps_secured:
                 return (
-                    "[info]The braces need to be secured with support straps "
-                    "before you can safely clear the passage.[/info]"
+                    "[failure]The braces need to be secured with support straps "
+                    "before you can safely clear the passage.[/failure]"
                 )
             if not self._passage_freed:
                 self._passage_freed = True
@@ -105,6 +105,6 @@ class FallenRock(Item):
                     "trapped miners emerging from the depths![/event]"
                 )
             return (
-                "[info]The wedge blocks are already securing the passage.[/info]"
+                "[dim]The wedge blocks are already securing the passage.[/dim]"
             )
-        return "[info]That won't help with the fallen rock.[/info]"
+        return "[failure]That won't help with the fallen rock.[/failure]"

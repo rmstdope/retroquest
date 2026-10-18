@@ -50,7 +50,8 @@ class GateCaptain(Character):
             if self.entry_pass_given:
                 name = self.get_name()
                 return (
-                    f"You have already shown the entry pass to the [character]{name}[/character]. "
+                    "You have already shown the entry pass to the "
+                    f"[character_name]{name}[/character_name]. "
                     "He waves you through with respect."
                 )
 

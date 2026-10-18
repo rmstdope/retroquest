@@ -72,8 +72,8 @@ class FortressGates(Room):
             )
         else:
             return (
-                "[info]The shadow guardians have already been banished. The way forward "
-                "is clear.[/info]"
+                "[dim]The shadow guardians have already been banished. The way forward "
+                "is clear.[/dim]"
             )
 
     def examine(self, game_state, target: str) -> str:
@@ -96,7 +96,7 @@ class FortressGates(Room):
                 )
             else:
                 return (
-                    "[info]The shadow guardians have been banished by your light magic.[/info]"
+                    "[event]The shadow guardians have been banished by your light magic.[/event]"
                 )
         elif "barrier" in target_lower:
             if not game_state.get_story_flag(FLAG_ACT4_BARRIERS_DISABLED):
@@ -107,8 +107,8 @@ class FortressGates(Room):
                 )
             else:
                 return (
-                    "[info]The magical barriers have been disabled and no longer "
-                    "block your way.[/info]"
+                    "[event]The magical barriers have been disabled and no longer "
+                    "block your way.[/event]"
                 )
         else:
             return (

@@ -40,11 +40,11 @@ class ServantsPendant(Item):
                 )
             else:
                 return (
-                    "[info]The servants have already shared their guidance about the "
-                    "mirror labyrinth.[/info]"
+                    "[dim]The servants have already shared their guidance about the "
+                    "mirror labyrinth.[/dim]"
                 )
         else:
             return (
-                "[info]The Servant's Pendant glows softly, ready to provide guidance "
-                "when you need their knowledge.[/info]"
+                "[event]The Servant's Pendant glows softly, ready to provide guidance "
+                "when you need their knowledge.[/event]"
             )

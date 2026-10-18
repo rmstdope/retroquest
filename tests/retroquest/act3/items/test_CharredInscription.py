@@ -4,6 +4,7 @@ import unittest
 from retroquest.act3.items.CharredInscription import CharredInscription
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from ..markup_helpers import assert_markup_well_formed
 
 
 class TestCharredInscription(unittest.TestCase):
@@ -59,3 +60,15 @@ class TestCharredInscription(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_inscription_reading_uses_known_tags():
+    """Reading the charred inscription uses only known, balanced tags."""
+    act = Act3()
+    act.music_file = ''
+    game = Game([act])
+
+    answer = CharredInscription().examine(game.state)
+
+    assert "In fire and flame we forge the final ward" in answer
+    assert_markup_well_formed(answer)

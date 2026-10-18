@@ -4,6 +4,7 @@ import unittest
 from retroquest.act3.items.KeepsakeNote import KeepsakeNote
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from ..markup_helpers import assert_markup_well_formed
 
 
 class TestKeepsakeNote(unittest.TestCase):
@@ -45,3 +46,15 @@ class TestKeepsakeNote(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_note_reading_uses_known_tags():
+    """Reading Mira's note uses only known, balanced tags."""
+    act = Act3()
+    act.music_file = ''
+    game = Game([act])
+
+    answer = KeepsakeNote().examine(game.state)
+
+    assert "keep your eyes open for traces of the past" in answer
+    assert_markup_well_formed(answer)

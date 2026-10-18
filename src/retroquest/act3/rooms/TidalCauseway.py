@@ -32,8 +32,8 @@ class TidalCauseway(Room):
         # If we've already focused light here, nothing new will be found.
         if self.light_cast:
             return (
-                "[info]Your light washes over the stones; the mural's shadows are "
-                "familiar now and nothing new comes free.[/info]"
+                "[event]Your light washes over the stones; the mural's shadows are "
+                "familiar now and nothing new comes free.[/event]"
             )
 
         # Reveal the rusted key into the room and mark we've cast light.

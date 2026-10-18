@@ -43,6 +43,6 @@ class MendSpell(Spell):
         name = self.get_name()
         iname = target_item.get_name()
         return (
-            f"[info]You cast [spell_name]{name}[/spell_name] on "
-            f"[item_name]{iname}[/item_name], but it doesn't appear to need mending.[/info]"
+            f"[dim]You cast [spell_name]{name}[/spell_name] on "
+            f"[item_name]{iname}[/item_name], but it doesn't appear to need mending.[/dim]"
         )

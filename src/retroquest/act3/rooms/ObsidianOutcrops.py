@@ -30,8 +30,8 @@ class ObsidianOutcrops(Room):
         """Search the outcrops; reveal mirror segments and resin once."""
         if self._revealed:
             return (
-                "[info]You pick through the crevices again; the scattered fragments are "
-                "the same as before—nothing new comes loose.[/info]"
+                "[event]You pick through the crevices again; the scattered fragments are "
+                "the same as before—nothing new comes loose.[/event]"
             )
         # Reveal a mirror segment and some resin
         self.items.append(BrassMirrorSegment())

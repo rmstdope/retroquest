@@ -2,6 +2,8 @@
 
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from retroquest.act3.rooms.ObsidianOutcrops import ObsidianOutcrops
+from ..markup_helpers import assert_markup_well_formed
 
 
 def test_obsidian_outcrops_search_reveals_items_once():
@@ -28,3 +30,22 @@ def test_obsidian_outcrops_search_reveals_items_once():
     # Count remains the same (still contains the two revealed items)
     assert names_after2.count('brass mirror segment') == 1
     assert names_after2.count('binding resin') == 1
+
+
+def _create_markup_game() -> Game:
+    """Create an Act III game for markup checks."""
+    act = Act3()
+    act.music_file = ''
+    return Game([act])
+
+
+def test_second_search_uses_known_tags():
+    """Searching the outcrops again uses only known, balanced tags."""
+    game = _create_markup_game()
+    room = ObsidianOutcrops()
+    room.search(game.state)
+
+    answer = room.search(game.state)
+
+    assert "nothing new comes loose" in answer
+    assert_markup_well_formed(answer)

@@ -2,6 +2,8 @@
 
 from retroquest.act3.Act3 import Act3
 from retroquest.engine.Game import Game
+from retroquest.act3.items.RustedLockerKey import RustedLockerKey
+from ..markup_helpers import assert_markup_well_formed
 
 def test_rusted_locker_key_name_and_pickup():
     """Check the Rusted Locker Key provides a plausible name."""
@@ -53,3 +55,20 @@ def test_rusted_locker_key_use_with_locker_fails_and_no_state_change():
     # No PrismLanterns should have been added to the room as a result.
     lanterns = [i for i in room.items if i.__class__.__name__ == 'PrismLantern']
     assert len(lanterns) == 0
+
+
+def _create_markup_game() -> Game:
+    """Create an Act III game for markup checks."""
+    act = Act3()
+    act.music_file = ''
+    return Game([act])
+
+
+def test_key_pickup_uses_known_tags():
+    """Picking up the rusted key uses only known, balanced tags."""
+    game = _create_markup_game()
+
+    answer = RustedLockerKey().picked_up(game.state)
+
+    assert "ragged with corrosion" in answer
+    assert_markup_well_formed(answer)

@@ -22,6 +22,6 @@ class WedgeBlocks(Item):
             # Delegate to FallenRock's use_with method
             return other_item.use_with(game_state, self)
         return (
-            f"[info]You can't use the wedge blocks with the "
-            f"{other_item.get_name()}.[/info]"
+            f"[failure]You can't use the wedge blocks with the "
+            f"{other_item.get_name()}.[/failure]"
         )

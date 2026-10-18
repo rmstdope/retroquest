@@ -5,6 +5,9 @@ from retroquest.act3.Act3StoryFlags import (
     FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
     FLAG_ACT3_OATH_OF_STILLNESS_STARTED,
 )
+from retroquest.act3.Act3 import Act3
+from retroquest.engine.Game import Game
+from ..markup_helpers import assert_markup_well_formed
 
 
 class DummyGameState:
@@ -177,3 +180,22 @@ def test_echo_stones_use_with_other_item():
 
     # Should fall back to base class behavior
     assert "can't use" in result and "echo stones" in result and "mock item" in result
+
+
+def _create_markup_game() -> Game:
+    """Create an Act III game for markup checks."""
+    act = Act3()
+    act.music_file = ''
+    return Game([act])
+
+
+def test_blessing_stones_twice_uses_known_tags():
+    """Blessing already blessed echo stones uses only known, balanced tags."""
+    game = _create_markup_game()
+    stones = EchoStones()
+    stones.receive_spell("bless", game.state)
+
+    answer = stones.receive_spell("bless", game.state)
+
+    assert "already blessed" in answer
+    assert_markup_well_formed(answer)

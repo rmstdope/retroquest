@@ -30,5 +30,6 @@ class Barriers(Item):
             )
         else:
             return (
-                "[info]The magical barriers have been disabled and no longer block your way.[/info]"
+                "[event]The magical barriers have been disabled and no longer block "
+                "your way.[/event]"
             )

@@ -40,10 +40,10 @@ class LoyaltyToken(Item):
                 )
             else:
                 return (
-                    "[info]The Loyalty Token is already protecting you from deception.[/info]"
+                    "[dim]The Loyalty Token is already protecting you from deception.[/dim]"
                 )
         else:
             return (
-                "[info]The Loyalty Token glows softly, ready to prove the strength "
-                "of your bonds when facing deception.[/info]"
+                "[event]The Loyalty Token glows softly, ready to prove the strength "
+                "of your bonds when facing deception.[/event]"
             )

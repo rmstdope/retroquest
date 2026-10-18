@@ -32,8 +32,8 @@ class RustedLockerKey(Item):
     def picked_up(self, _game_state: GameState) -> str:
         """Override pickup to emphasize the key's compromised condition."""
         return (
-            "[info]Its teeth are ragged with corrosion; it might fit, but the lock "
-            "has long since fused.[/info]"
+            "[event]Its teeth are ragged with corrosion; it might fit, but the lock "
+            "has long since fused.[/event]"
         )
 
     def use_with(self, _game_state: GameState, other_item: Item) -> str:
