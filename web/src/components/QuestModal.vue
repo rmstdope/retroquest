@@ -29,6 +29,7 @@ onUnmounted(() => {
 <template>
   <div
     v-if="visible"
+    data-testid="quest-modal-backdrop"
     class="fixed inset-0 z-[200] flex items-center justify-center bg-bg-overlay"
     @click.self="$emit('dismiss')"
   >
@@ -39,11 +40,12 @@ onUnmounted(() => {
       <div class="text-[1.1rem] font-bold text-quest mb-3 shrink-0">
         {{ title }}
       </div>
-      <!-- eslint-disable-next-line vue/no-v-html -->
+      <!-- eslint-disable vue/no-v-html -->
       <div
         class="flex-1 min-h-0 overflow-y-auto leading-relaxed touch-pan-y overscroll-contain"
         v-html="body"
       ></div>
+      <!-- eslint-enable vue/no-v-html -->
       <div class="shrink-0 flex justify-end pt-3">
         <button
           class="px-6 py-2 rounded-md bg-accent text-white border-none cursor-pointer text-[0.9rem] hover:opacity-85"
