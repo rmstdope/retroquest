@@ -3,10 +3,9 @@
  *
  * Each verb lists its slots: where the slot's choices come from (room items,
  * characters, the bag, spells, exits, shop wares and sellers, or free text) and
- * the word that joins it
- * to the previous part ("use X with Y"). Only canonical command forms accepted
- * by the engine's CommandParser are produced. Save, load and quit belong to the
- * game menu, not here.
+ * the word that joins it to the previous part ("use X with Y"). Only canonical
+ * command forms accepted by the engine's CommandParser are produced. Save, load
+ * and quit belong to the game menu, not here.
  */
 import type { RoomExits, RoomWare } from '@/types/bridge'
 import { displayName } from './displayName'
