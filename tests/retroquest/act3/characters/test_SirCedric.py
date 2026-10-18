@@ -2,7 +2,13 @@
 
 from retroquest.act3.characters.SirCedric import SirCedric
 from retroquest.act3.Act3 import Act3
+from retroquest.act3.Act3StoryFlags import (
+    FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+    FLAG_ACT3_MAIN_STARTED,
+    FLAG_ACT3_VOW_OF_COURAGE_MADE,
+)
 from retroquest.engine.Game import Game
+from ..markup_helpers import assert_dialogue_speaker, assert_markup_well_formed
 
 
 def test_sir_cedric_name_and_speak():
@@ -53,3 +59,30 @@ def test_sir_cedric_tidal_causeway_responses():
     game.state.set_story_flag(FLAG_ACT3_VOW_OF_COURAGE_MADE, True)
     out = s.talk_to(game.state)
     assert 'vow' in out.lower() or 'let us press onward' in out.lower()
+
+
+def test_sir_cedric_replies_are_attributed_dialogue():
+    """Every Sir Cedric reply, in each quest state, is tagged, attributed dialogue."""
+    act3 = Act3()
+    act3.music_file = ''
+    game = Game([act3])
+    cedric = SirCedric()
+    before_quest = cedric.talk_to(game.state)
+    game.state.set_story_flag(FLAG_ACT3_MAIN_STARTED, True)
+    default = cedric.talk_to(game.state)
+    game.state.current_room = game.state.all_rooms['TidalCauseway']
+    no_crystal = cedric.talk_to(game.state)
+    game.state.set_story_flag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, True)
+    no_vow = cedric.talk_to(game.state)
+    game.state.set_story_flag(FLAG_ACT3_VOW_OF_COURAGE_MADE, True)
+
+    vow_spoken = cedric.talk_to(game.state)
+
+    assert "speak with" in before_quest
+    assert "The path is set" in default
+    assert "The tide tests the brave" in no_crystal
+    assert "The Crystal is ours" in no_vow
+    assert "Your vow has been spoken" in vow_spoken
+    for answer in (before_quest, default, no_crystal, no_vow, vow_spoken):
+        assert_markup_well_formed(answer)
+        assert_dialogue_speaker(answer, "Sir Cedric")
