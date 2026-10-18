@@ -14,6 +14,10 @@ from .Spell import Spell
 from .Act import Act
 from .Audio import Audio
 
+# Keys of the save payload. Older saves contain only a pickled GameState.
+SAVE_KEY_STATE = "state"
+SAVE_KEY_ACT_INDEX = "act_index"
+
 # The runtime phase of the game: controls startup/logo/act intro/act transitions
 class GameRunState(Enum):
     """Enumeration of game run states."""
@@ -959,8 +963,9 @@ Welcome to
         if not valid:
             return result
         try:
+            payload = {SAVE_KEY_STATE: self.state, SAVE_KEY_ACT_INDEX: self.current_act}
             with open(f'{result}.save', 'wb') as f:
-                pickle.dump(self.state, f)
+                pickle.dump(payload, f)
             return "[event]Game saved successfully.[/event]"
         except OSError as e:
             return f"[failure]Failed to save game: {e}[/failure]"
@@ -979,10 +984,40 @@ Welcome to
             return "[failure]No save file found.[/failure]"
         try:
             with open(f'{result}.save', 'rb') as f:
-                self.state = pickle.load(f)  # nosec B301 - path validated above
+                payload = pickle.load(f)  # nosec B301 - path validated above
+            self._restore_saved_game(payload)
             return "[event]Game loaded successfully.[/event]"
         except OSError as e:
             return f"[failure]Failed to load game: {e}[/failure]"
+
+    def _restore_saved_game(self, payload: Any) -> None:
+        """Restore state and act from a save payload, switching music if the act changed.
+
+        New saves are a dict holding the GameState and the act index. Older saves are a
+        bare GameState; their act is found by matching the saved rooms to an act.
+        """
+        if isinstance(payload, dict):
+            state = payload[SAVE_KEY_STATE]
+            act_index = payload[SAVE_KEY_ACT_INDEX]
+        else:
+            state = payload
+            act_index = self._find_act_index(state)
+        previous_act = self.current_act
+        self.state = state
+        self.current_act = act_index
+        if act_index != previous_act:
+            self.start_music()
+
+    def _find_act_index(self, state: GameState) -> int:
+        """Return the index of the act whose rooms match the state's rooms.
+
+        Falls back to the current act when no act matches.
+        """
+        saved_rooms = set(state.all_rooms)
+        for index, act in enumerate(self.acts):
+            if set(act.rooms) == saved_rooms:
+                return index
+        return self.current_act
 
     def stats(self) -> str:
         """Display game statistics."""
