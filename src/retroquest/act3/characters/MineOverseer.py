@@ -6,6 +6,7 @@ from ..Act3StoryFlags import FLAG_ACT3_MINERS_RESCUE_STARTED
 class MineOverseer(Character):
     """Overseer who triggers Miners' Rescue and gives the miner's key."""
     def __init__(self) -> None:
+        """Initialize the Mine Overseer with name and description."""
         super().__init__(
             name="Mine Overseer",
             description="A grizzled foreman with a ring of keys and a worried look.",

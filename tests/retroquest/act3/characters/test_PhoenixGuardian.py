@@ -23,7 +23,7 @@ def test_talk_to_before_quest_complete():
     assert "bring the vents into harmony" in response
     assert "ward" in response
     assert "crater" in response
-    assert "studies you" in response
+    assert "Phoenix Guardian[/character_name] studies you" in response
 
 def test_talk_to_after_quest_complete():
     """Test talk_to gives post-completion advice after quest is done."""
