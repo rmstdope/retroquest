@@ -14,4 +14,9 @@ describe('exitArrow', () => {
   it('gives a dot for other exits', () => {
     expect(exitArrow('secret_passage')).toBe('•')
   })
+
+  it('gives a dot for an exit named like an object property', () => {
+    expect(exitArrow('constructor')).toBe('•')
+    expect(exitArrow('toString')).toBe('•')
+  })
 })

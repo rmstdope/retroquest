@@ -57,6 +57,14 @@ describe('JournalPanel', () => {
     return wrapper
   }
 
+  function rowToggle(w: VueWrapper, name: string) {
+    const found = w
+      .findAll('button[aria-expanded]')
+      .find((b) => b.get('.lq-row-name').text().startsWith(name))
+    if (!found) throw new Error(`No row toggle for ${name}`)
+    return found
+  }
+
   function tab(w: VueWrapper, name: RegExp) {
     const found = w.findAll('[role="tab"]').find((t) => name.test(t.text()))
     if (!found) throw new Error(`No tab ${name}`)
@@ -68,7 +76,7 @@ describe('JournalPanel', () => {
       .findAll('[role="tab"]')
       .map((t) => t.text())
 
-    expect(tabs).toEqual(['Bag · 2', 'Spells · 1', 'Quests · 2'])
+    expect(tabs).toEqual(['Bag · 2', 'Spells · 1', 'Quests · 2 active'])
   })
 
   it('opens on the bag with display names and stack counts', () => {
@@ -210,5 +218,44 @@ describe('JournalPanel', () => {
   it('says when the bag is empty', () => {
     useGameStore().rawInventory = []
     expect(mountJournal().text()).toContain('Your bag is empty')
+  })
+
+  it('expands a bag row to show the whole description', async () => {
+    const w = mountJournal()
+    const toggle = rowToggle(w, 'Bread')
+    expect(toggle.attributes('aria-expanded')).toBe('false')
+    expect(w.find('.lq-row-note-full').exists()).toBe(false)
+
+    await toggle.trigger('click')
+
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+    expect(w.get('.lq-row-note-full').text()).toBe('A small loaf.')
+  })
+
+  it('expands a spell row too', async () => {
+    const w = mountJournal()
+    const tabs = w.findAll('[role="tab"]')
+    await tabs[1].trigger('click')
+
+    await rowToggle(w, 'Revive').trigger('click')
+
+    expect(w.get('.lq-row-note-full').text()).toBe('Restores life.')
+  })
+
+  it('lets the keyboard reach the tab panel, even when it is empty', () => {
+    useGameStore().rawInventory = []
+
+    expect(mountJournal().get('[role="tabpanel"]').attributes('tabindex')).toBe(
+      '0',
+    )
+  })
+
+  it('names a row toggle by what it shows, so the description is read out', () => {
+    const w = mountJournal()
+    const apple = rowToggle(w, 'Apple')
+
+    expect(apple.attributes('aria-label')).toBeUndefined()
+    expect(apple.text()).toContain('×2')
+    expect(apple.text()).toContain('Crisp.')
   })
 })
