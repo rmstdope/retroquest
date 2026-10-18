@@ -43,6 +43,7 @@ class Families(Character):
         self.healing_herbs_given = False
 
     def talk_to(self, game_state: GameState) -> str:
+        """Ignore strangers; welcome helpers and hand over herbs on the first visit."""
         if not game_state.get_story_flag(FLAG_HELPED_ELDERLY_RESIDENTS):
             return (
                 f"[failure]The [character_name]{self.get_name()}[/character_name] seem busy "
@@ -52,8 +53,9 @@ class Families(Character):
             )
 
         response = (
-            f"[character_name]{self.get_name()}[/character_name]: [dialogue]Welcome to our neighborhood! "
-            "It's lovely to meet someone who takes time to help others. Greendale has a rich "
+            f"[character_name]{self.get_name()}[/character_name]: "
+            "[dialogue]Welcome to our neighborhood! It's lovely to meet someone who takes "
+            "time to help others. Greendale has a rich "
             "history - our families have been here for generations. The city has always been "
             "a place where those with good hearts and magical talents find a home. We're "
             "grateful for folks like you who lend a hand to those in need.[/dialogue]"
@@ -66,10 +68,12 @@ class Families(Character):
             herbs = HealingHerbs()
             game_state.add_item_to_inventory(herbs)
             response += (
-                "\n\n[event]An elderly woman from one of the families approaches you with a warm "
-                "smile. 'Here, dear,' she says, pressing a bundle into your hands. 'These are "
-                "rare healing herbs that have been in our family for generations. Someone who "
-                f"helps others as you do should have them.' You receive "
+                "\n\n[event]An elderly woman from one of the "
+                f"[character_name]{self.get_name()}[/character_name] approaches you with a "
+                "warm smile. [dialogue]'Here, dear,'[/dialogue] she says, pressing a bundle "
+                "into your hands. [dialogue]'These are rare healing herbs that have been in "
+                "our family for generations. Someone who helps others as you do should have "
+                "them.'[/dialogue] You receive "
                 f"[item_name]{herbs.get_name()}[/item_name]![/event]"
             )
 

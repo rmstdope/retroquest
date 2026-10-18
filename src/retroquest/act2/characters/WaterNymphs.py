@@ -1,5 +1,4 @@
-"""Water Nymphs NPC definition.
-"""
+"""Water Nymphs NPC definition."""
 
 from ...engine.Character import Character
 from ...engine.GameState import GameState
@@ -81,6 +80,7 @@ class WaterNymphs(Character):
             return str(number)  # fallback for numbers beyond our list
 
     def talk_to(self, _game_state: GameState) -> str:
+        """Present the current riddle, or praise the player once all are solved."""
         event_msg = (
             f"[event]You approach the [character_name]{self.get_name()}[/character_name] "
             "by the sacred stream.[/event]"
@@ -127,10 +127,9 @@ class WaterNymphs(Character):
                 event_msg
                 + "\n"
                 + (
-                    f"[dialogue]The [character_name]{self.get_name()}[/character_name] "
-                    "smile mysteriously. 'The riddles have been answered, young "
-                    "one.'"
-                    "[/dialogue]"
+                    f"The [character_name]{self.get_name()}[/character_name] "
+                    "smile mysteriously. [dialogue]'The riddles have been answered, young "
+                    "one.'[/dialogue]"
                 )
             )
 
@@ -202,10 +201,10 @@ class WaterNymphs(Character):
         else:
             return (
                 f"[failure]The [character_name]{self.get_name()}[/character_name] "
-                f"shake their heads gently as you say '{words}'. "
-                "'Not quite, young seeker. Think more deeply about the forest "
+                f"shake their heads gently as you say '{words}'.[/failure] "
+                "[dialogue]'Not quite, young seeker. Think more deeply about the forest "
                 "and its ways. The answer lies in understanding the natural "
-                "world around you.'[/failure]\n\n"
+                "world around you.'[/dialogue]\n\n"
                 + f"[dialogue]'{riddle['question']}'[/dialogue]\n\n"
                 + (
                     "[dim]Consider what you've learned about the forest during your "
@@ -214,6 +213,7 @@ class WaterNymphs(Character):
             )
 
     def examine(self, _game_state: GameState) -> str:
+        """Describe the nymphs' ethereal appearance."""
         return (
             f"[event]You study the [character_name]{self.get_name()}[/character_name] "
             f"in wonder. {self.description} They move with fluid grace, and you can "

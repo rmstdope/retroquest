@@ -20,6 +20,7 @@ class Herald(Character):
         self.received_pass = False
 
     def talk_to(self, _game_state: GameState) -> str:
+        """Ask for credentials, or confirm audience rights once the pass is registered."""
         name = self.get_name()
         if self.received_pass:
             return (
@@ -52,9 +53,10 @@ class Herald(Character):
                     f"the [character_name]{name}[/character_name]. He examines the seal "
                 )
                 + (
-                    "carefully and nods with approval. 'This is a formal recommendation "
-                    "of excellent standing. You are granted formal audience rights with "
-                    "the nobility.' The pass has been officially registered.[/success]"
+                    "carefully and nods with approval. [dialogue]'This is a formal "
+                    "recommendation of excellent standing. You are granted formal audience "
+                    "rights with the nobility.'[/dialogue] The pass has been officially "
+                    "registered.[/success]"
                 )
             )
         else:

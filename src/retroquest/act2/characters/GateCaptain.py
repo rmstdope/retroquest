@@ -17,21 +17,23 @@ class GateCaptain(Character):
         self.entry_pass_given = False
 
     def talk_to(self, game_state: GameState) -> str:
+        """Ask for entry papers, or bid farewell and leave once the pass was shown."""
         if not self.entry_pass_given:
             return (
-                "The Gate Captain looks at you with a professional but guarded "
-                "expression. 'State your business in Greendale, traveler. Do you "
-                "have proper documentation for entry?'"
+                "The [character_name]Gate Captain[/character_name] looks at you with a "
+                "professional but guarded expression. [dialogue]'State your business in "
+                "Greendale, traveler. Do you have proper documentation for entry?'[/dialogue]"
             )
         else:
             if self in game_state.current_room.characters:
                 # Remove self from the current room
                 game_state.current_room.characters.remove(self)
                 return (
-                    "The Gate Captain nods respectfully. 'Welcome to Greendale, honored "
-                    "visitor. You'll need a map to navigate the city - the streets "
-                    "can be quite maze-like for newcomers. Feel free to look around "
-                    "here for anything that might help you find your way.' With that, "
+                    "The [character_name]Gate Captain[/character_name] nods respectfully. "
+                    "[dialogue]'Welcome to Greendale, honored visitor. You'll need a map "
+                    "to navigate the city - the streets can be quite maze-like for "
+                    "newcomers. Feel free to look around here for anything that might "
+                    "help you find your way.'[/dialogue] With that, "
                     "he salutes smartly and walks back to his patrol duties, leaving "
                     "you free to explore the gate area."
                 )
@@ -44,6 +46,7 @@ class GateCaptain(Character):
     def give_item(
         self, _game_state: GameState, item_object
     ) -> str:  # parameter name aligned with base class
+        """Accept the entry pass and politely decline any other item."""
         from ..items.EntryPass import EntryPass  # Import here to avoid circular imports
 
         if isinstance(item_object, EntryPass):
@@ -58,15 +61,16 @@ class GateCaptain(Character):
             self.entry_pass_given = True
 
             return (
-                "The Gate Captain examines the entry pass carefully when you show it to "
-                "him, noting the official seal. His expression changes to one of "
-                "respect as he recognizes the authority behind it. 'This is legitimate "
-                "documentation indeed. You are welcome in Greendale, honored visitor. "
-                "Please, proceed with our blessing.' He steps aside and gestures toward "
-                "the city."
+                "The [character_name]Gate Captain[/character_name] examines the entry pass "
+                "carefully when you show it to him, noting the official seal. His expression "
+                "changes to one of respect as he recognizes the authority behind it. "
+                "[dialogue]'This is legitimate documentation indeed. You are welcome in "
+                "Greendale, honored visitor. Please, proceed with our blessing.'[/dialogue] "
+                "He steps aside and gestures toward the city."
             )
 
         return (
-            f"The Gate Captain politely declines the {item_object.get_name()}. "
-            "'I only need to see proper entry documentation.'"
+            "The [character_name]Gate Captain[/character_name] politely declines the "
+            f"{item_object.get_name()}. "
+            "[dialogue]'I only need to see proper entry documentation.'[/dialogue]"
         )

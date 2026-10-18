@@ -41,6 +41,7 @@ class MasterMerchantAldric(Character):
         self.gave_flyer = False
 
     def talk_to(self, _game_state: GameState) -> str:
+        """Turn away newcomers, or present the wares once the flyer was shown."""
         # If merchant hasn't been given the flyer, shop is not fully open yet
         if not self.gave_flyer:
             return self.closed_dialogue
@@ -79,9 +80,9 @@ class MasterMerchantAldric(Character):
             return (
                 f"[success]You present the [item_name]{item_name}[/item_name] to "
                 "[character_name]Master Merchant Aldric[/character_name]. His eyes "
-                "light up as he examines it. 'Ah, excellent! This flyer grants you "
-                "access to our premium selection and preferred customer pricing. "
-                "What quality goods can I help you acquire today?'[/success]"
+                "light up as he examines it. [dialogue]'Ah, excellent! This flyer grants "
+                "you access to our premium selection and preferred customer pricing. "
+                "What quality goods can I help you acquire today?'[/dialogue][/success]"
             )
 
         # Non-flyer items are politely declined
