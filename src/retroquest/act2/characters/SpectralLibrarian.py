@@ -52,6 +52,7 @@ class SpectralLibrarian(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
+        """Speak with the librarian; reveals heritage once the wards are mended."""
         # Check if player has mended the protective enchantments first
         mended_enchantments = game_state.get_story_flag(FLAG_MENDED_LIBRARY_ENCHANTMENTS)
         if not game_state.get_story_flag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY):
@@ -70,44 +71,47 @@ class SpectralLibrarian(Character):
                 dispel_name = dispel_spell.get_name()
                 crystal_name = crystal_focus.get_name()
                 return (
-                    f"[success][character_name]{self.get_name()}[/character_name]: 'Ah, you have "
-                    "repaired the protective enchantments with your "
+                    f"[success][character_name]{self.get_name()}[/character_name]: "
+                    "[dialogue]'Ah, you have repaired the protective enchantments with your "
                     f"[spell_name]{mend_name}[/spell_name] "
                     "spell. This shows both magical ability and respect for ancient "
-                    "knowledge. I shall reveal what you seek.' The spirit's eyes glow "
-                    "brighter as they speak: 'Your bloodline traces back to the ancient "
-                    "mages of Willowbrook, those who were chosen to guard against the "
-                    "rising darkness. Malakar's interest in your village was no "
+                    "knowledge. I shall reveal what you seek.'[/dialogue] The spirit's eyes "
+                    "glow brighter as they speak: [dialogue]'Your bloodline traces back to "
+                    "the ancient mages of Willowbrook, those who were chosen to guard "
+                    "against the rising darkness. Malakar's interest in your village was no "
                     "coincidence - he seeks to corrupt or destroy the magical heritage "
-                    "that flows through your veins.' They gesture to the ancient texts: '"
-                    f"Study these tomes to learn the [spell_name]{dispel_name}[/spell_name] "
+                    "that flows through your veins.'[/dialogue] They gesture to the ancient "
+                    "texts: [dialogue]'Study these tomes "
+                    f"to learn the [spell_name]{dispel_name}[/spell_name] "
                     f"spell, and take this [item_name]{crystal_name}[/item_name] to "
                     "enhance your abilities. Your destiny as one of the Chosen is "
-                    "beginning to unfold.'[/success]"
+                    "beginning to unfold.'[/dialogue][/success]"
                 )
             else:
                 return (
-                    f"[character_name]{self.get_name()}[/character_name]: 'Welcome, "
-                    f"seeker of knowledge. "
+                    f"[character_name]{self.get_name()}[/character_name]: [dialogue]'Welcome, "
+                    "seeker of knowledge. "
                     "I am the eternal guardian of this repository. The protective enchantments "
                     "around the most valuable texts have been damaged by time. Prove your "
                     "worthiness by repairing them, and I shall share the knowledge you "
-                    "seek about your heritage and destiny.'"
+                    "seek about your heritage and destiny.'[/dialogue]"
                 )
         else:
             # Get spell name
             from ..spells.DispelSpell import DispelSpell
             dispel_spell = DispelSpell()
             return (
-                f"[character_name]{self.get_name()}[/character_name]: 'You have proven yourself "
-                f"worthy and learned what this library can teach. The knowledge of your "
+                f"[character_name]{self.get_name()}[/character_name]: [dialogue]'You have "
+                "proven yourself worthy and learned what this library can teach. The "
+                "knowledge of your "
                 f"bloodline and the [spell_name]{dispel_spell.get_name()}[/spell_name] spell "
                 "will serve you well in the challenges ahead. Remember: you are part of "
                 "an ancient lineage chosen to stand against the darkness. Use this "
-                "knowledge wisely.'"
+                "knowledge wisely.'[/dialogue]"
             )
 
     def examine(self, _game_state: GameState) -> str:
+        """Describe the librarian's ghostly scholarly appearance."""
         return (
             f"The [character_name]{self.get_name()}[/character_name] appears to be a scholar from "
             "ancient times, their ethereal form bound to this library by duty and purpose. "

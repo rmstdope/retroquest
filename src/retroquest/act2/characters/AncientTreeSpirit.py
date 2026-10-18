@@ -110,8 +110,8 @@ class AncientTreeSpirit(Character):
             if self.acorn_received:
                 return (
                     f"The [character_name]{self.get_name()}[/character_name] "
-                    "gently refuses. [dialogue]'You have already offered me the sacred acorn, young "
-                    "one. One gift of such significance is enough.'[/dialogue]"
+                    "gently refuses. [dialogue]'You have already offered me the sacred "
+                    "acorn, young one. One gift of such significance is enough.'[/dialogue]"
                 )
 
             # Receive the acorn, teach the spell, and offer the quest
@@ -191,8 +191,9 @@ class AncientTreeSpirit(Character):
                 game_state.remove_item_from_inventory("moonflowers")
 
                 return (
-                    "You approach the Ancient Tree Spirit with the sacred items from "
-                    "the Whispering Glade - the Crystal-Clear Water and the Moonflowers. "
+                    f"You approach the [character_name]{self.get_name()}[/character_name] "
+                    "with the sacred items from the Whispering Glade - the Crystal-Clear "
+                    "Water and the Moonflowers. "
                     "At the spirit's gentle guidance, you pour some of the crystal-clear "
                     "water at the base of the silver tree, where the moonflowers immediately "
                     "take root in the blessed soil. The Ancient Tree Spirit's voice fills "
