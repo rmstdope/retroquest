@@ -384,4 +384,79 @@ describe('ActionComposer', () => {
 
     expect(w.find('[data-testid="preview"]').exists()).toBe(false)
   })
+
+  describe('type mode completion', () => {
+    async function typeMode() {
+      useGameStore().completionTree = {
+        take: { bucket: null, bread: null },
+        look: null,
+      }
+      const w = mountComposer()
+      await button(w, 'Type').trigger('click')
+      return { w, input: w.get('input[aria-label="Command"]') }
+    }
+
+    it('completes a single match with Tab', async () => {
+      const { input } = await typeMode()
+      await input.setValue('lo')
+
+      await input.trigger('keydown', { key: 'Tab' })
+
+      expect((input.element as HTMLInputElement).value).toBe('look ')
+    })
+
+    it('lists several matches and applies the chosen one with Enter', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('take b')
+
+      await input.trigger('keydown', { key: 'Tab' })
+      const options = w.findAll('[role="option"]').map((o) => o.text())
+      expect(options).toEqual(['bucket', 'bread'])
+
+      await input.trigger('keydown', { key: 'ArrowDown' })
+      await input.trigger('keydown', { key: 'ArrowDown' })
+      await input.trigger('keydown', { key: 'Enter' })
+
+      expect((input.element as HTMLInputElement).value).toBe('take bread ')
+      expect(submit).not.toHaveBeenCalled()
+      expect(w.find('[role="option"]').exists()).toBe(false)
+    })
+
+    it('scrolls the highlighted match into view in a long list', async () => {
+      // jsdom has no scrollIntoView; record which option asks for it.
+      const scrolled: string[] = []
+      HTMLElement.prototype.scrollIntoView = function (this: HTMLElement) {
+        scrolled.push(this.textContent?.trim() ?? '')
+      }
+      const { input } = await typeMode()
+      await input.setValue('take b')
+      await input.trigger('keydown', { key: 'Tab' })
+
+      await input.trigger('keydown', { key: 'ArrowDown' })
+      await input.trigger('keydown', { key: 'ArrowDown' })
+
+      expect(scrolled).toEqual(['bucket', 'bread'])
+      delete (HTMLElement.prototype as Partial<HTMLElement>).scrollIntoView
+    })
+
+    it('closes the list with Escape and keeps the text', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('take b')
+      await input.trigger('keydown', { key: 'Tab' })
+
+      await input.trigger('keydown', { key: 'Escape' })
+
+      expect(w.find('[role="option"]').exists()).toBe(false)
+      expect((input.element as HTMLInputElement).value).toBe('take b')
+    })
+
+    it('sends the command with Enter when no match is chosen', async () => {
+      const { input } = await typeMode()
+      await input.setValue('look')
+
+      await input.trigger('keydown', { key: 'Enter' })
+
+      expect(submit).toHaveBeenCalledWith('look')
+    })
+  })
 })

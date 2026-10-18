@@ -597,6 +597,7 @@ export const useGameStore = defineStore('game', () => {
     roomWares,
     bagEntries,
     spellEntries,
+    completionTree,
     bagHasNew,
     spellsHaveNew,
     loadingStatus,

@@ -2,6 +2,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useCommandCompletion } from '@/composables/useCommandCompletion'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
 import {
@@ -231,10 +232,36 @@ function doIt(): void {
 }
 
 function submitTyped(): void {
+  completion.close()
   const text = typed.value.trim()
   if (!text) return
   run(text)
   typed.value = ''
+}
+
+// Type mode: Tab completion from the engine's completion tree.
+const completion = useCommandCompletion(
+  typed,
+  (input) => game.tabComplete(input),
+  () => game.acceptInput,
+)
+const completionListId = 'lq-completions'
+
+/** Keep the highlighted match visible when the list scrolls. */
+watch(
+  completion.activeIndex,
+  (index) => {
+    if (index < 0) return
+    root.value
+      ?.querySelector(`#${completionListId}-${index}`)
+      ?.scrollIntoView?.({ block: 'nearest' })
+  },
+  { flush: 'post' },
+)
+
+/** Enter in the command box: apply a highlighted match, else send. */
+function onTypedEnter(): void {
+  if (!completion.applyActive()) submitTyped()
 }
 </script>
 
@@ -400,14 +427,50 @@ function submitTyped(): void {
     </template>
 
     <form v-else class="lq-type-row" @submit.prevent="submitTyped">
-      <input
-        v-model="typed"
-        class="lq-type-input"
-        aria-label="Command"
-        placeholder="What do you do?"
-        autocomplete="off"
-        :disabled="!game.acceptInput"
-      />
+      <div class="lq-type-field">
+        <input
+          v-model="typed"
+          class="lq-type-input"
+          aria-label="Command"
+          placeholder="What do you do?"
+          autocomplete="off"
+          role="combobox"
+          aria-autocomplete="list"
+          :aria-controls="completionListId"
+          :aria-expanded="completion.suggestions.value.length > 0"
+          :aria-activedescendant="
+            completion.activeIndex.value >= 0
+              ? `${completionListId}-${completion.activeIndex.value}`
+              : undefined
+          "
+          :disabled="!game.acceptInput"
+          @keydown.tab="completion.onTab"
+          @keydown.down.prevent="completion.onArrowDown"
+          @keydown.up.prevent="completion.onArrowUp"
+          @keydown.escape="completion.close"
+          @keydown.enter.prevent="onTypedEnter"
+          @blur="completion.close"
+        />
+        <ul
+          v-if="completion.suggestions.value.length"
+          :id="completionListId"
+          class="lq-completions"
+          role="listbox"
+          aria-label="Matching words"
+        >
+          <li
+            v-for="(word, index) in completion.suggestions.value"
+            :id="`${completionListId}-${index}`"
+            :key="word"
+            role="option"
+            class="lq-completion"
+            :aria-selected="index === completion.activeIndex.value"
+            @mousedown.prevent="completion.apply(word)"
+          >
+            {{ word }}
+          </li>
+        </ul>
+      </div>
       <button type="submit" class="lq-do" :disabled="!game.acceptInput">
         Do it
       </button>
@@ -636,6 +699,43 @@ function submitTyped(): void {
 .lq-type-row {
   display: flex;
   gap: 8px;
+}
+.lq-type-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+.lq-completions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 6px);
+  z-index: 5;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid var(--lq-line2);
+  background: var(--lq-raised);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.3);
+}
+.lq-completion {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-family: var(--lq-font-mono);
+  font-size: 14px;
+  color: var(--lq-fg);
+  cursor: pointer;
+}
+.lq-completion[aria-selected='true'] {
+  background: var(--lq-accent-soft);
+  color: var(--lq-accent-text);
 }
 .lq-type-input {
   flex: 1;
