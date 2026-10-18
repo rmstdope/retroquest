@@ -1,1 +1,1 @@
-# Test package for Act 2 spells.
+"""Test package for Act 2 spells."""

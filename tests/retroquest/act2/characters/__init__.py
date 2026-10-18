@@ -1,1 +1,1 @@
-# Test package for Act 2 characters.
+"""Test package for Act 2 characters."""
