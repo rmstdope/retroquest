@@ -30,7 +30,7 @@ describe('ActionComposer', () => {
   })
 
   function mountComposer() {
-    wrapper = mount(ActionComposer)
+    wrapper = mount(ActionComposer, { attachTo: document.body })
     return wrapper
   }
 
@@ -47,7 +47,8 @@ describe('ActionComposer', () => {
   it('starts in actions mode by default', () => {
     const w = mountComposer()
 
-    expect(button(w, 'Actions').attributes('aria-checked')).toBe('true')
+    expect(button(w, 'Actions').attributes('aria-pressed')).toBe('true')
+    expect(button(w, 'Type').attributes('aria-pressed')).toBe('false')
     expect(w.find('input[aria-label="Command"]').exists()).toBe(false)
   })
 
@@ -55,7 +56,7 @@ describe('ActionComposer', () => {
     useSettingsStore().startMode = 'type'
     const w = mountComposer()
 
-    expect(button(w, 'Type').attributes('aria-checked')).toBe('true')
+    expect(button(w, 'Type').attributes('aria-pressed')).toBe('true')
     expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
   })
 
@@ -164,5 +165,81 @@ describe('ActionComposer', () => {
     expect(button(w, "Go north to Mira's Hut").attributes()).toHaveProperty(
       'disabled',
     )
+  })
+
+  it('marks the chosen verb as pressed', async () => {
+    const w = mountComposer()
+
+    await button(w, 'Take').trigger('click')
+
+    expect(button(w, 'Take').attributes('aria-pressed')).toBe('true')
+    expect(button(w, 'Drop').attributes('aria-pressed')).toBe('false')
+  })
+
+  it('names the part of the sentence each slot pill fills', async () => {
+    const w = mountComposer()
+    await button(w, 'Use').trigger('click')
+
+    expect(button(w, 'Use: choose…').exists()).toBe(true)
+    expect(button(w, 'with: optional').exists()).toBe(true)
+
+    await button(w, 'Lantern').trigger('click')
+    expect(button(w, 'Use: Lantern').exists()).toBe(true)
+  })
+
+  it('lets the player clear the optional target again', async () => {
+    const w = mountComposer()
+    await button(w, 'Use').trigger('click')
+    await button(w, 'Lantern').trigger('click')
+    await button(w, 'Bucket').trigger('click')
+
+    await button(w, 'with: Bucket').trigger('click')
+    await button(w, 'None').trigger('click')
+
+    expect(w.get('[data-testid="preview"]').text()).toBe('use lantern')
+  })
+
+  it('drops a chosen target that is no longer here', async () => {
+    const game = useGameStore()
+    const w = mountComposer()
+    await button(w, 'Use').trigger('click')
+    await button(w, 'Bucket').trigger('click')
+    expect(w.get('[data-testid="preview"]').text()).toBe('use bucket')
+
+    game.items = ['old notice']
+    await w.vm.$nextTick()
+
+    expect(w.get('[data-testid="preview"]').text()).toBe('use …')
+    expect(button(w, 'Do it').attributes()).toHaveProperty('disabled')
+  })
+
+  it('moves focus to the choices, then to Do it, then back to the verb', async () => {
+    const w = mountComposer()
+
+    await button(w, 'Take').trigger('click')
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(button(w, 'Bucket').element)
+
+    await button(w, 'Bucket').trigger('click')
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(button(w, 'Do it').element)
+
+    await button(w, 'Do it').trigger('click')
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(button(w, 'Take').element)
+  })
+
+  it('returns focus to the verb after Cancel', async () => {
+    const w = mountComposer()
+    await button(w, 'Say').trigger('click')
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(
+      w.get('input[aria-label="Words to say"]').element,
+    )
+
+    await button(w, 'Cancel').trigger('click')
+    await w.vm.$nextTick()
+
+    expect(document.activeElement).toBe(button(w, 'Say').element)
   })
 })

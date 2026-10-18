@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { displayName } from '@/lantern/displayName'
+import { exitArrow } from '@/lantern/exitArrow'
 import {
   VERBS,
   buildCommand,
@@ -14,7 +15,8 @@ import {
 /**
  * The Lantern action composer: tap a verb, pick its targets as chips and
  * "Do it" — or switch to Type and write the command. A live preview shows the
- * command the game will receive.
+ * command the game will receive. Focus follows the sentence: verb → choices →
+ * Do it → back to the verb.
  */
 const game = useGameStore()
 const settings = useSettingsStore()
@@ -25,15 +27,7 @@ const args = ref<Array<string | null>>([])
 const chosenSlot = ref<number | null>(null)
 const showMore = ref(false)
 const typed = ref('')
-
-const ARROWS: Record<string, string> = {
-  north: '↑',
-  south: '↓',
-  east: '→',
-  west: '←',
-  up: '⤒',
-  down: '⤓',
-}
+const root = ref<HTMLElement | null>(null)
 
 const context = computed<ActionContext>(() => ({
   roomItems: game.items,
@@ -47,6 +41,20 @@ const context = computed<ActionContext>(() => ({
 const mainVerbs = VERBS.filter((v) => v.group === 'main' && v.id !== 'go')
 const moreVerbs = VERBS.filter((v) => v.group === 'more')
 const exits = computed(() => Object.entries(game.exits))
+
+/** Drop chosen targets that are no longer available (e.g. after another command). */
+watch(context, () => {
+  const current = verb.value
+  if (!current) return
+  current.slots.forEach((slot, index) => {
+    const value = args.value[index]
+    if (!value || isText(index)) return
+    const available = targetsFor(slot, context.value)
+    if (!available.some((target) => target.value === value)) {
+      args.value[index] = null
+    }
+  })
+})
 
 function isText(index: number): boolean {
   return verb.value?.slots[index]?.sources.includes('text') ?? false
@@ -93,6 +101,33 @@ function labelFor(index: number): string {
   return match?.label ?? displayName(value)
 }
 
+/** Accessible name of a slot pill: the word before it plus its current value. */
+function slotName(index: number): string {
+  const word = verb.value!.slots[index].joiner ?? verb.value!.label
+  return `${word}: ${labelFor(index)}`
+}
+
+/** Whether the active slot is optional and filled, so "None" can clear it. */
+const canClear = computed(
+  () =>
+    activeSlot.value !== null &&
+    !!verb.value?.slots[activeSlot.value].optional &&
+    !!args.value[activeSlot.value],
+)
+
+/** After the DOM updates, focus the first element matching one of `selectors`. */
+function focusFirst(...selectors: string[]): void {
+  void nextTick(() => {
+    for (const selector of selectors) {
+      const element = root.value?.querySelector<HTMLElement>(selector)
+      if (element) {
+        element.focus()
+        return
+      }
+    }
+  })
+}
+
 function run(text: string): void {
   if (!game.acceptInput) return
   game.submitCommand(text)
@@ -107,15 +142,19 @@ function pickVerb(next: Verb): void {
   verb.value = next
   args.value = next.slots.map(() => null)
   chosenSlot.value = null
+  focusFirst('.lq-text-slot', '.lq-target', '.lq-do')
 }
 
-function pickTarget(value: string): void {
+function pickTarget(value: string | null): void {
   if (activeSlot.value === null) return
   args.value[activeSlot.value] = value
   chosenSlot.value = null
+  focusFirst('.lq-target', '.lq-do')
 }
 
+/** Close the builder and give focus back to the verb that opened it. */
 function reset(): void {
+  if (verb.value) focusFirst(`[data-verb="${verb.value.id}"]`)
   verb.value = null
   args.value = []
   chosenSlot.value = null
@@ -137,13 +176,12 @@ function submitTyped(): void {
 </script>
 
 <template>
-  <section class="lq-composer" aria-label="Actions">
+  <section ref="root" class="lq-composer" aria-label="Actions">
     <div class="lq-composer-top">
-      <div role="radiogroup" aria-label="Input mode" class="lq-seg">
+      <div role="group" aria-label="Input mode" class="lq-seg">
         <button
           type="button"
-          role="radio"
-          :aria-checked="mode === 'actions' ? 'true' : 'false'"
+          :aria-pressed="mode === 'actions' ? 'true' : 'false'"
           class="lq-seg-btn"
           @click="mode = 'actions'"
         >
@@ -151,17 +189,20 @@ function submitTyped(): void {
         </button>
         <button
           type="button"
-          role="radio"
-          :aria-checked="mode === 'type' ? 'true' : 'false'"
+          :aria-pressed="mode === 'type' ? 'true' : 'false'"
           class="lq-seg-btn"
           @click="mode = 'type'"
         >
           Type
         </button>
       </div>
-      <span v-if="verb" class="lq-preview" data-testid="preview">{{
-        preview
-      }}</span>
+      <span
+        v-if="verb"
+        class="lq-preview"
+        data-testid="preview"
+        aria-live="polite"
+        >{{ preview }}</span
+      >
     </div>
 
     <template v-if="mode === 'actions'">
@@ -177,7 +218,7 @@ function submitTyped(): void {
           @click="run(`go ${dir}`)"
         >
           <span aria-hidden="true"
-            >{{ ARROWS[dir] ?? '•' }} {{ displayName(dir) }}</span
+            >{{ exitArrow(dir) }} {{ displayName(dir) }}</span
           >
           <span class="lq-exit-room" aria-hidden="true">{{ room }}</span>
         </button>
@@ -200,6 +241,7 @@ function submitTyped(): void {
               type="button"
               class="lq-slot"
               :class="{ 'lq-slot-active': activeSlot === index }"
+              :aria-label="slotName(index)"
               @click="chosenSlot = index"
             >
               {{ labelFor(index) }}
@@ -207,7 +249,12 @@ function submitTyped(): void {
           </template>
         </div>
 
-        <div v-if="activeSlot !== null" class="lq-targets">
+        <div
+          v-if="activeSlot !== null"
+          class="lq-targets"
+          role="group"
+          :aria-label="`Choices for ${slotName(activeSlot)}`"
+        >
           <button
             v-for="target in targets"
             :key="target.value"
@@ -218,7 +265,15 @@ function submitTyped(): void {
           >
             {{ target.label }}
           </button>
-          <span v-if="!targets.length" class="lq-empty"
+          <button
+            v-if="canClear"
+            type="button"
+            class="lq-target lq-target-none"
+            @click="pickTarget(null)"
+          >
+            None
+          </button>
+          <span v-if="!targets.length && !canClear" class="lq-empty"
             >Nothing to {{ verb.label.toLowerCase() }} here</span
           >
         </div>
@@ -243,6 +298,8 @@ function submitTyped(): void {
           type="button"
           class="lq-verb"
           :class="{ 'lq-verb-on': verb?.id === v.id }"
+          :aria-pressed="verb?.id === v.id ? 'true' : 'false'"
+          :data-verb="v.id"
           :disabled="!game.acceptInput"
           @click="pickVerb(v)"
         >
@@ -313,7 +370,7 @@ function submitTyped(): void {
   border: 1px solid var(--lq-line);
 }
 .lq-seg-btn {
-  min-height: 36px;
+  min-height: 44px;
   padding: 0 14px;
   border: none;
   border-radius: 9px;
@@ -398,7 +455,7 @@ function submitTyped(): void {
 }
 .lq-slot,
 .lq-text-slot {
-  min-height: 36px;
+  min-height: 44px;
   padding: 0 12px;
   border-radius: 999px;
   border: 1px dashed var(--lq-line2);
@@ -420,7 +477,7 @@ function submitTyped(): void {
 }
 .lq-target {
   flex: 0 0 auto;
-  min-height: 36px;
+  min-height: 44px;
   padding: 0 12px;
   border-radius: 999px;
   font: inherit;
@@ -443,6 +500,11 @@ function submitTyped(): void {
   background: var(--lq-spell-soft);
   color: var(--lq-spell);
 }
+.lq-target-none {
+  border: 1px dashed var(--lq-line2);
+  background: transparent;
+  color: var(--lq-fg);
+}
 .lq-target-exit {
   border: 1px solid var(--lq-accent-line);
   background: var(--lq-accent-soft);
@@ -458,7 +520,7 @@ function submitTyped(): void {
   gap: 8px;
 }
 .lq-cancel {
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 14px;
   border-radius: 10px;
   border: 1px solid var(--lq-line2);
@@ -469,7 +531,7 @@ function submitTyped(): void {
   cursor: pointer;
 }
 .lq-do {
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 18px;
   border: none;
   border-radius: 10px;
