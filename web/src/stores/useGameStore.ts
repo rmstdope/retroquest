@@ -8,6 +8,7 @@ import type {
   SaveSlot,
 } from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
+import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 
 /**
  * Shape of the bridge object injected via setBridge().
@@ -70,7 +71,14 @@ export interface Turn {
   room: string
   /** True when this turn brought the player to a different room. */
   roomChanged: boolean
+  /** Items and spells this command added (none for system output). */
+  gained: Chip[]
+  /** Items and spells this command removed (none for system output). */
+  lost: Chip[]
 }
+
+/** Journal tabs that show a dot when something new arrived. */
+export type JournalTab = 'bag' | 'spells'
 
 interface QuestEvent {
   title: string
@@ -107,6 +115,11 @@ export const useGameStore = defineStore('game', () => {
   const turns = ref<Turn[]>([])
   let nextTurnId = 1
   let lastTurnRoom = ''
+  // Bag and spells as the bridge listed them after the previous turn
+  let lastBag: string[] = []
+  let lastSpells: string[] = []
+  const bagHasNew = ref(false)
+  const spellsHaveNew = ref(false)
   const introText = ref('')
 
   // --- Input ---
@@ -150,18 +163,43 @@ export const useGameStore = defineStore('game', () => {
   function showOutput(command: string | null, raw: string): void {
     lastOutput.value = renderMarkup(raw)
     const b = requireBridge()
-    const room = b.isActRunning() ? b.getRoomName() : lastTurnRoom
+    const actRunning = b.isActRunning()
+    const room = actRunning ? b.getRoomName() : lastTurnRoom
+    const bag = b.getInventory().map((entry) => entry.name)
+    const spellList = b.getSpells().map((entry) => entry.name)
+    // Only a player's command changes the bag; arrivals, loads and act
+    // changes just set the new starting point.
+    const showChips = command !== null && actRunning
+    const itemChanges = inventoryChanges(lastBag, bag, 'item')
+    const spellChanges = inventoryChanges(lastSpells, spellList, 'spell')
+    const gained = showChips
+      ? [...itemChanges.gained, ...spellChanges.gained]
+      : []
+    const lost = showChips ? [...itemChanges.lost, ...spellChanges.lost] : []
+    if (showChips && itemChanges.gained.length) bagHasNew.value = true
+    if (showChips && spellChanges.gained.length) spellsHaveNew.value = true
+    lastBag = bag
+    lastSpells = spellList
+
     turns.value.push({
       id: nextTurnId++,
       command,
       text: raw,
       room,
       roomChanged: room !== lastTurnRoom,
+      gained,
+      lost,
     })
     lastTurnRoom = room
     if (turns.value.length > MAX_TURNS) {
       turns.value.splice(0, turns.value.length - MAX_TURNS)
     }
+  }
+
+  /** The player opened a journal tab: clear its "new" dot. */
+  function markSeen(tab: JournalTab): void {
+    if (tab === 'bag') bagHasNew.value = false
+    else spellsHaveNew.value = false
   }
 
   function requireBridge(): GameBridge {
@@ -474,6 +512,8 @@ export const useGameStore = defineStore('game', () => {
     // State
     loading,
     turns,
+    bagHasNew,
+    spellsHaveNew,
     loadingStatus,
     roomName,
     roomDescription,
@@ -513,6 +553,7 @@ export const useGameStore = defineStore('game', () => {
     loadFromSlot,
     pollQuestEvents,
     dismissModal,
+    markSeen,
     toggleSection,
     tabComplete,
   }

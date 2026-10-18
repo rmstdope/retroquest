@@ -1037,6 +1037,8 @@ describe('useGameStore', () => {
           text: 'You look around',
           room: 'Village Square',
           roomChanged: true,
+          gained: [],
+          lost: [],
         },
       ])
     })
@@ -1055,6 +1057,8 @@ describe('useGameStore', () => {
         text: '[item_name]Bucket[/item_name] taken.',
         room: 'Village Square',
         roomChanged: false,
+        gained: [],
+        lost: [],
       })
     })
 
@@ -1147,6 +1151,93 @@ describe('useGameStore', () => {
       store.submitCommand('look')
 
       expect(store.lastOutput).toBe('<rendered>You see a forest.</rendered>')
+    })
+  })
+
+  // --- Gained / lost chips ---
+
+  describe('gained and lost chips', () => {
+    async function startPlaying() {
+      await store.initGame()
+      store.dismissModal()
+    }
+
+    const named = (name: string) => ({ name, description: '' })
+
+    it('shows no chips for the arrival, even with starting items', async () => {
+      await startPlaying()
+
+      expect(store.turns[0].gained).toEqual([])
+      expect(store.turns[0].lost).toEqual([])
+      expect(store.bagHasNew).toBe(false)
+    })
+
+    it('records items and spells gained by a command', async () => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([
+        named('[item_name]Sword[/item_name]'),
+        named('[item_name]Bucket[/item_name]'),
+      ])
+      bridge.getSpells.mockReturnValue([
+        named('Heal'),
+        named('[spell_name]Revive[/spell_name]'),
+      ])
+
+      store.submitCommand('take bucket')
+
+      expect(store.turns.at(-1)?.gained).toEqual([
+        { kind: 'item', name: 'Bucket', count: 1 },
+        { kind: 'spell', name: 'Revive', count: 1 },
+      ])
+      expect(store.bagHasNew).toBe(true)
+      expect(store.spellsHaveNew).toBe(true)
+    })
+
+    it('records items lost by a command without marking the bag new', async () => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([])
+
+      store.submitCommand('give sword to mira')
+
+      expect(store.turns.at(-1)?.lost).toEqual([
+        { kind: 'item', name: 'Sword', count: 1 },
+      ])
+      expect(store.bagHasNew).toBe(false)
+    })
+
+    it('clears a tab dot once the tab has been seen', async () => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([named('Sword'), named('Map')])
+      store.submitCommand('take map')
+
+      store.markSeen('bag')
+
+      expect(store.bagHasNew).toBe(false)
+    })
+
+    it('shows no chips when a save is loaded, and compares later turns with it', async () => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([named('Lantern'), named('Rope')])
+
+      store.loadFromSlot(1)
+      expect(store.turns.at(-1)?.gained).toEqual([])
+      expect(store.bagHasNew).toBe(false)
+
+      bridge.getInventory.mockReturnValue([named('Lantern')])
+      store.submitCommand('drop rope')
+      expect(store.turns.at(-1)?.lost).toEqual([
+        { kind: 'item', name: 'Rope', count: 1 },
+      ])
+    })
+
+    it('shows no chips on the turn that ends an act', async () => {
+      await startPlaying()
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getInventory.mockReturnValue([])
+
+      store.submitCommand('give amulet to mira')
+
+      expect(store.turns.at(-1)?.lost).toEqual([])
     })
   })
 })
