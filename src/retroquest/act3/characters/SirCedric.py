@@ -32,9 +32,9 @@ class SirCedric(Character):
         # If the main quest hasn't started, direct the player to Mira.
         if not game_state.get_story_flag(FLAG_ACT3_MAIN_STARTED):
             return (
-                "[character_name]Sir Cedric[/character_name]: If we're to take the "
-                "fight to Malakar, speak with [character_name]Mira[/character_name]. "
-                "She understands the rites and the way to begin."
+                "[character_name]Sir Cedric[/character_name]: [dialogue]If we're to take "
+                "the fight to Malakar, speak with [character_name]Mira[/character_name]. "
+                "She understands the rites and the way to begin.[/dialogue]"
             )
 
         # Main quest active: tailor replies to location and state.
@@ -46,25 +46,25 @@ class SirCedric(Character):
                 FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED
             ):
                 return (
-                    "[character_name]Sir Cedric[/character_name]: The tide tests "
-                    "the brave. Stand strong with Mira—speak your vow before the "
-                    "guardian and let courage steady your hand."
+                    "[character_name]Sir Cedric[/character_name]: [dialogue]The tide "
+                    "tests the brave. Stand strong with Mira—speak your vow before the "
+                    "guardian and let courage steady your hand.[/dialogue]"
                 )
             if not game_state.get_story_flag(FLAG_ACT3_VOW_OF_COURAGE_MADE):
                 return (
-                    "[character_name]Sir Cedric[/character_name]: The Crystal is "
-                    "ours. When you are ready, make your vow to bind its power; "
-                    "I will stand with you."
+                    "[character_name]Sir Cedric[/character_name]: [dialogue]The Crystal "
+                    "is ours. When you are ready, make your vow to bind its power; "
+                    "I will stand with you.[/dialogue]"
                 )
             return (
-                "[character_name]Sir Cedric[/character_name]: Your vow has been "
-                "spoken. Let us press onward—Mira will open the circle when you "
-                "are prepared."
+                "[character_name]Sir Cedric[/character_name]: [dialogue]Your vow has "
+                "been spoken. Let us press onward—Mira will open the circle when you "
+                "are prepared.[/dialogue]"
             )
 
         # Default reply when the main quest is active
         return (
-            "[character_name]Sir Cedric[/character_name]: The path is set. "
+            "[character_name]Sir Cedric[/character_name]: [dialogue]The path is set. "
             "Courage, Wisdom, Selflessness—name them with your deeds, and we "
-            "will see this through."
+            "will see this through.[/dialogue]"
         )
