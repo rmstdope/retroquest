@@ -56,6 +56,44 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     expect(['#ffa914', '#f29e00']).toContain(accent)
   })
 
+  test('on a phone the text size popover stays on screen', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+
+    await page.getByRole('button', { name: 'Text size' }).click()
+    const box = await page
+      .getByRole('group', { name: 'Text size' })
+      .boundingBox()
+    expect(box!.x).toBeGreaterThanOrEqual(0)
+    expect(box!.x + box!.width).toBeLessThanOrEqual(390)
+  })
+
+  test('the command box stays on screen with a long story', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.turns = Array.from({ length: 20 }, (_, i) => ({
+        id: i + 1,
+        command: 'look',
+        text: 'A long answer about the village square. '.repeat(8),
+        room: 'Village Square',
+        roomChanged: false,
+        gained: [],
+        lost: [],
+      }))
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    await expect(page.getByLabel('Command')).toBeInViewport()
+  })
+
   test('the classic UI stays the default', async ({ page }) => {
     await page.goto('/')
 

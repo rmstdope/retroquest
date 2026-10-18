@@ -106,6 +106,65 @@ describe('LanternLayout', () => {
     expect(dismiss).toHaveBeenCalledTimes(1)
   })
 
+  it('moves focus to Continue when a pop-up opens', async () => {
+    wrapper = mount(LanternLayout, { attachTo: document.body })
+    const game = useGameStore()
+    game.modalTitle = 'Act Intro'
+    game.showModal = true
+    await wrapper.vm.$nextTick()
+
+    expect(document.activeElement?.textContent?.trim()).toBe('Continue')
+  })
+
+  it('returns focus to the command box when the last pop-up closes', async () => {
+    wrapper = mount(LanternLayout, { attachTo: document.body })
+    const game = useGameStore()
+    game.showModal = true
+    await wrapper.vm.$nextTick()
+
+    game.showModal = false
+    game.acceptInput = true
+    await wrapper.vm.$nextTick()
+
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('Command')
+  })
+
+  it('continues the pop-up with Escape', async () => {
+    const w = mountLayout()
+    const game = useGameStore()
+    const dismiss = vi.spyOn(game, 'dismissModal').mockImplementation(() => {})
+    game.showModal = true
+    await w.vm.$nextTick()
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    expect(dismiss).toHaveBeenCalledTimes(1)
+  })
+
+  it('brings the start of the newest turn into view', async () => {
+    const scrolled: Element[] = []
+    Element.prototype.scrollIntoView = function (this: Element) {
+      scrolled.push(this)
+    }
+    const w = mountLayout()
+    const turn = {
+      command: 'look',
+      text: 'Hi',
+      room: 'Square',
+      roomChanged: false,
+      gained: [],
+      lost: [],
+    }
+    useGameStore().turns = [
+      { id: 1, ...turn },
+      { id: 2, ...turn },
+    ]
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+
+    const turns = w.findAll('[data-testid="turn"]')
+    expect(scrolled.at(-1)).toBe(turns[1].element)
+  })
+
   it('shows no pop-up when none is pending', () => {
     expect(mountLayout().find('[role="dialog"]').exists()).toBe(false)
   })

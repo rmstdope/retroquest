@@ -21,8 +21,20 @@ const progressPercent = computed(() =>
     : 0,
 )
 
-// --- Text size popover ---
+// --- Text size popover: Escape or a click outside closes it ---
 const textSizeOpen = ref(false)
+const textSizeAnchor = ref<HTMLElement | null>(null)
+const textSizeButton = ref<HTMLButtonElement | null>(null)
+function onDocumentKeydown(e: KeyboardEvent): void {
+  if (e.key !== 'Escape' || !textSizeOpen.value) return
+  textSizeOpen.value = false
+  textSizeButton.value?.focus()
+}
+function onDocumentClick(e: MouseEvent): void {
+  if (!textSizeAnchor.value?.contains(e.target as Node)) {
+    textSizeOpen.value = false
+  }
+}
 const SIZES: Array<{ value: LanternTextSize; label: string; px: number }> = [
   { value: 'small', label: 'Small text', px: 13 },
   { value: 'medium', label: 'Medium text', px: 17 },
@@ -36,12 +48,16 @@ function onDeviceThemeChange(): void {
   deviceLight.value = mediaQuery?.matches ?? false
 }
 onMounted(() => {
+  document.addEventListener('keydown', onDocumentKeydown)
+  document.addEventListener('click', onDocumentClick)
   if (typeof window.matchMedia !== 'function') return
   mediaQuery = window.matchMedia('(prefers-color-scheme: light)')
   mediaQuery.addEventListener('change', onDeviceThemeChange)
   onDeviceThemeChange()
 })
 onUnmounted(() => {
+  document.removeEventListener('keydown', onDocumentKeydown)
+  document.removeEventListener('click', onDocumentClick)
   mediaQuery?.removeEventListener('change', onDeviceThemeChange)
 })
 
@@ -88,8 +104,9 @@ function toggleTheme(): void {
     </div>
 
     <div class="lq-actions">
-      <div class="lq-popover-anchor">
+      <div ref="textSizeAnchor" class="lq-popover-anchor">
         <button
+          ref="textSizeButton"
           type="button"
           class="lq-icon-btn"
           aria-label="Text size"
@@ -211,6 +228,7 @@ function toggleTheme(): void {
 .lq-actions {
   display: flex;
   gap: 8px;
+  margin-left: auto;
 }
 .lq-icon-btn {
   width: 44px;
@@ -247,7 +265,7 @@ function toggleTheme(): void {
   box-shadow: 0 12px 30px rgb(0 0 0 / 0.3);
 }
 .lq-size {
-  height: 40px;
+  height: 44px;
   border: none;
   border-radius: 10px;
   background: transparent;

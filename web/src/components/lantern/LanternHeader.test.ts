@@ -70,6 +70,31 @@ describe('LanternHeader', () => {
     ).toBe('true')
   })
 
+  it('closes the text size popover with Escape and refocuses Aa', async () => {
+    wrapper = mount(LanternHeader, { attachTo: document.body })
+    const aa = wrapper.get('button[aria-label="Text size"]')
+    await aa.trigger('click')
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await wrapper.vm.$nextTick()
+
+    expect(aa.attributes('aria-expanded')).toBe('false')
+    expect(document.activeElement).toBe(aa.element)
+  })
+
+  it('closes the text size popover on a click outside it', async () => {
+    wrapper = mount(LanternHeader, { attachTo: document.body })
+    const aa = wrapper.get('button[aria-label="Text size"]')
+    await aa.trigger('click')
+
+    await wrapper.get('button[aria-label="Small text"]').trigger('click')
+    expect(aa.attributes('aria-expanded')).toBe('true')
+
+    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await wrapper.vm.$nextTick()
+    expect(aa.attributes('aria-expanded')).toBe('false')
+  })
+
   it('switches from the device theme to an explicit opposite theme', async () => {
     // jsdom has no matchMedia, so the device theme counts as dark.
     const w = mountHeader()

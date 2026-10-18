@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import LanternHeader from './LanternHeader.vue'
@@ -11,13 +11,42 @@ import LanternHeader from './LanternHeader.vue'
  */
 const game = useGameStore()
 const command = ref('')
+const storyEl = ref<HTMLElement | null>(null)
+const continueButton = ref<HTMLButtonElement | null>(null)
+const commandInput = ref<HTMLInputElement | null>(null)
+
+function onKeydown(e: KeyboardEvent): void {
+  if (e.key === 'Escape' && game.showModal) game.dismissModal()
+}
 
 onMounted(() => {
   document.documentElement.setAttribute('data-ui', 'lantern')
+  document.addEventListener('keydown', onKeydown)
 })
 onUnmounted(() => {
   document.documentElement.removeAttribute('data-ui')
+  document.removeEventListener('keydown', onKeydown)
 })
+
+// Show a new turn from its start (jsdom has no scrollIntoView).
+watch(
+  () => game.turns.length,
+  () => {
+    storyEl.value?.lastElementChild?.scrollIntoView?.({ block: 'start' })
+  },
+  { flush: 'post' },
+)
+
+// Move keyboard focus into each pop-up as it opens, and back to the
+// command box when the last one closes.
+watch(
+  () => game.showModal,
+  (open) => {
+    if (open) continueButton.value?.focus()
+    else commandInput.value?.focus()
+  },
+  { flush: 'post' },
+)
 
 function submit(): void {
   const text = command.value.trim()
@@ -32,7 +61,7 @@ function submit(): void {
     <LanternHeader />
 
     <main class="lq-main">
-      <section class="lq-story" aria-label="Story">
+      <section ref="storyEl" class="lq-story" aria-label="Story">
         <article
           v-for="turn in game.turns"
           :key="turn.id"
@@ -48,6 +77,7 @@ function submit(): void {
 
       <form class="lq-input-row" @submit.prevent="submit">
         <input
+          ref="commandInput"
           v-model="command"
           class="lq-input"
           aria-label="Command"
@@ -75,7 +105,12 @@ function submit(): void {
         <!-- eslint-disable vue/no-v-html -->
         <div class="lq-dialog-body" v-html="game.modalBody"></div>
         <!-- eslint-enable vue/no-v-html -->
-        <button type="button" class="lq-send" @click="game.dismissModal()">
+        <button
+          ref="continueButton"
+          type="button"
+          class="lq-send"
+          @click="game.dismissModal()"
+        >
           Continue
         </button>
       </section>
@@ -85,7 +120,8 @@ function submit(): void {
 
 <style scoped>
 .lq-root {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   background: var(--lq-bg);
