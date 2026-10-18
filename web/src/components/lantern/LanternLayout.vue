@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import {
   SHORT_QUERY,
@@ -25,11 +25,6 @@ const game = useGameStore()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 const section = ref<Section>('story')
-const journalTabs = ['bag', 'spells', 'quests'] as const
-type JournalTab = (typeof journalTabs)[number]
-function isJournalTab(s: Section): s is JournalTab {
-  return (journalTabs as readonly Section[]).includes(s)
-}
 const storyEl = ref<HTMLElement | null>(null)
 const continueButton = ref<HTMLButtonElement | null>(null)
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
@@ -47,13 +42,18 @@ onUnmounted(() => {
   document.removeEventListener('keydown', onKeydown)
 })
 
-// Show a new turn from its start (jsdom has no scrollIntoView); a command
-// run from another section (Use, Cast, Go) brings the story back.
+// Show a new turn from its start (jsdom has no scrollIntoView). A command
+// run from another section (Use, Cast, Go) first brings the story back, and
+// focus moves to the actions as the pressed button has gone. Follows the
+// newest turn's id: at the turn cap the count stops changing.
 watch(
-  () => game.turns.length,
-  () => {
+  () => game.turns.at(-1)?.id,
+  async () => {
+    const away = !wide.value && section.value !== 'story'
     section.value = 'story'
+    await nextTick()
     storyEl.value?.lastElementChild?.scrollIntoView?.({ block: 'start' })
+    if (away && !game.showModal) composer.value?.focus()
   },
   { flush: 'post' },
 )
@@ -99,7 +99,7 @@ watch(
       <template v-if="!wide">
         <CompassPanel v-if="section === 'map'" />
         <JournalPanel
-          v-else-if="isJournalTab(section)"
+          v-else-if="section !== 'story'"
           :tab="section"
           class="lq-section-view"
         />
