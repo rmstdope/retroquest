@@ -59,6 +59,9 @@ export interface QuestAudioPlayer {
 /** Most recent turns kept for the story view; older ones are dropped. */
 export const MAX_TURNS = 200
 
+/** Save names the game accepts (mirrors Game._validate_save_name). */
+const SAVE_NAME_PATTERN = /^[a-z0-9_-]+$/
+
 /** One entry in the story: what the player did and what the game answered. */
 export interface Turn {
   /** Increasing id, unique for the session (stable key for rendering). */
@@ -160,7 +163,11 @@ export const useGameStore = defineStore('game', () => {
    * A command that completes an act already swaps in the next act's state, so
    * while the act is not running the answer stays in the previous turn's room.
    */
-  function showOutput(command: string | null, raw: string): void {
+  function showOutput(
+    command: string | null,
+    raw: string,
+    { chips = command !== null }: { chips?: boolean } = {},
+  ): void {
     lastOutput.value = renderMarkup(raw)
     const b = requireBridge()
     const actRunning = b.isActRunning()
@@ -169,7 +176,7 @@ export const useGameStore = defineStore('game', () => {
     const spellList = b.getSpells().map((entry) => entry.name)
     // Only a player's command changes the bag; arrivals, loads and act
     // changes just set the new starting point.
-    const showChips = command !== null && actRunning
+    const showChips = chips && actRunning
     const itemChanges = inventoryChanges(lastBag, bag, 'item')
     const spellChanges = inventoryChanges(lastSpells, spellList, 'spell')
     const gained = showChips
@@ -254,6 +261,7 @@ export const useGameStore = defineStore('game', () => {
 
     const b = requireBridge()
     const command = cmd.trim()
+    if (routeSaveOrLoad(command)) return
     const result = b.handleCommand(command)
     showOutput(command, result)
     refreshPanels()
@@ -318,31 +326,52 @@ export const useGameStore = defineStore('game', () => {
     completionTree.value = b.getCommandCompletions()
   }
 
-  function saveGame(): void {
-    const b = requireBridge()
-    const result = b.quickSaveGame()
-    showOutput(null, result)
+  /**
+   * Typed `save` / `load` (optionally with a name) behave exactly like the
+   * buttons, so saves reach browser storage and loads reset chips and dots.
+   * Names are lowercased like the game does; a name the game would reject
+   * (spaces, slashes, dots…) is left to the game so it answers with its own
+   * error. Returns true when the command was handled here.
+   */
+  function routeSaveOrLoad(command: string): boolean {
+    const match = /^(save|load)(?:\s+(\S.*))?$/i.exec(command)
+    if (!match) return false
+    const [, verb, rawName] = match
+    const name = rawName?.toLowerCase()
+    if (name && !SAVE_NAME_PATTERN.test(name)) return false
+    const isSave = verb.toLowerCase() === 'save'
+    if (isSave && name) saveNamedGame(name, command)
+    else if (isSave) saveGame(command)
+    else if (name) loadNamedGame(name, command)
+    else loadGame(command)
+    return true
   }
 
-  function loadGame(): void {
+  function saveGame(command: string | null = null): void {
+    const b = requireBridge()
+    const result = b.quickSaveGame()
+    showOutput(command, result, { chips: false })
+  }
+
+  function loadGame(command: string | null = null): void {
     const b = requireBridge()
     const result = b.quickLoadGame()
     clearNewDots()
-    showOutput(null, result)
+    showOutput(command, result, { chips: false })
     refreshPanels()
   }
 
-  function saveNamedGame(name: string): void {
+  function saveNamedGame(name: string, command: string | null = null): void {
     const b = requireBridge()
     const result = b.saveNamedGame(name)
-    showOutput(null, result)
+    showOutput(command, result, { chips: false })
   }
 
-  function loadNamedGame(name: string): void {
+  function loadNamedGame(name: string, command: string | null = null): void {
     const b = requireBridge()
     const result = b.loadNamedGame(name)
     clearNewDots()
-    showOutput(null, result)
+    showOutput(command, result, { chips: false })
     refreshPanels()
   }
 
