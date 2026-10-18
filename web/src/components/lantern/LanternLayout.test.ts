@@ -175,4 +175,41 @@ describe('LanternLayout', () => {
       'Story',
     )
   })
+
+  describe('on a laptop (at least 1024px wide)', () => {
+    beforeEach(() => {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn(() => ({
+          matches: true,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
+    })
+
+    afterEach(() => vi.unstubAllGlobals())
+
+    it('shows the room card above the story', () => {
+      useGameStore().roomName = 'Village Square'
+      const w = mountLayout()
+
+      expect(w.find('[aria-label="Current location"]').exists()).toBe(true)
+    })
+
+    it('shows the map and journal beside the story', () => {
+      const w = mountLayout()
+
+      const aside = w.get('aside')
+      expect(aside.find('[aria-label="Map"]').exists()).toBe(true)
+      expect(aside.find('[aria-label="Journal"]').exists()).toBe(true)
+    })
+  })
+
+  it('keeps the single column on smaller screens', () => {
+    const w = mountLayout()
+
+    expect(w.find('aside').exists()).toBe(false)
+    expect(w.find('[aria-label="Current location"]').exists()).toBe(false)
+  })
 })

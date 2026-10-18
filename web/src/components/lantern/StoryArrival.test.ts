@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import StoryArrival from './StoryArrival.vue'
 import type { Arrival } from '@/stores/useGameStore'
@@ -95,26 +95,13 @@ describe('StoryArrival', () => {
     expect(w.find('[data-testid="exits"]').exists()).toBe(false)
   })
 
-  it('offers Read more for a long description and expands it', async () => {
+  it('shows a long description in full (phones have no room card)', () => {
     const w = mountArrival('go south', {
       description: 'Long text. '.repeat(40),
     })
-    const toggle = w.get('button.lq-read-more')
-    expect(toggle.text()).toBe('Read more')
-    expect(toggle.attributes('aria-expanded')).toBe('false')
-    expect(w.get('.lq-arrival-text').classes()).toContain('lq-clamp')
 
-    await toggle.trigger('click')
-
-    expect(toggle.text()).toBe('Show less')
-    expect(toggle.attributes('aria-expanded')).toBe('true')
+    expect(w.find('button.lq-read-more').exists()).toBe(false)
     expect(w.get('.lq-arrival-text').classes()).not.toContain('lq-clamp')
-  })
-
-  it('has no Read more for a short description', () => {
-    expect(mountArrival('go south').find('button.lq-read-more').exists()).toBe(
-      false,
-    )
   })
 
   it('marks the room name as a heading for screen-reader navigation', () => {
@@ -129,15 +116,27 @@ describe('StoryArrival', () => {
     expect(divider.element.textContent).toMatch(/South\s+Vegetable Field/)
   })
 
-  it('links Read more to the description it expands', () => {
-    const w = mountArrival('go south', {
-      description: 'Long text. '.repeat(40),
+  describe('on a laptop (the room card shows the room)', () => {
+    beforeEach(() => {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn(() => ({
+          matches: true,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
     })
-    const text = w.get('.lq-arrival-text')
 
-    expect(text.attributes('id')).toBeTruthy()
-    expect(w.get('button.lq-read-more').attributes('aria-controls')).toBe(
-      text.attributes('id'),
-    )
+    afterEach(() => vi.unstubAllGlobals())
+
+    it('shows only the divider', () => {
+      const w = mountArrival('go south')
+
+      expect(w.get('h3').text()).toBe('Vegetable Field')
+      expect(w.find('.lq-arrival-text').exists()).toBe(false)
+      expect(w.find('[data-testid="here"]').exists()).toBe(false)
+      expect(w.find('[data-testid="exits"]').exists()).toBe(false)
+    })
   })
 })
