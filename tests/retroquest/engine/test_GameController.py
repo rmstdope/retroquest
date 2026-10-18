@@ -132,6 +132,18 @@ class TestGetRoomExits:
         result = ctrl.get_room_exits()
         assert result == {"north": "MarketRoad", "east": "FarmPath"}
 
+    def test_uses_the_destination_rooms_display_name(self) -> None:
+        """Show 'Village Square', not the internal room key 'VillageSquare'."""
+        square = Room(name="Village Square", description="A busy square.")
+        cottage = Room(
+            name="Elior's Cottage",
+            description="A cottage.",
+            exits={"east": "VillageSquare"},
+        )
+        act = SimpleAct({"EliorsCottage": cottage, "VillageSquare": square})
+        ctrl = GameController(Game([act], dev_mode=True))
+        assert ctrl.get_room_exits() == {"east": "Village Square"}
+
 
 class TestLoadGame:
     """Tests for GameController.load_game."""

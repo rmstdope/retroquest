@@ -182,10 +182,18 @@ class GameController:
         ]
 
     def get_room_exits(self) -> dict[str, str]:
-        """Return direction-to-destination mapping for the current room."""
-        return self.game.state.current_room.get_exits(
-            self.game.state
-        )
+        """Return direction to destination display name for the current room.
+
+        Exits store internal room keys (e.g. 'VillageSquare'); the destination
+        room's name ('Village Square') is shown instead, falling back to the key
+        for rooms not in the current act.
+        """
+        rooms = self.game.state.all_rooms
+        exits = self.game.state.current_room.get_exits(self.game.state)
+        return {
+            direction: rooms[key].name if key in rooms else key
+            for direction, key in exits.items()
+        }
 
     def load_game(self, name: str = 'retroquest') -> str:
         """Load the game state from the save slot identified by name."""
