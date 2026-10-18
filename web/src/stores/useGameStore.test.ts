@@ -1230,6 +1230,49 @@ describe('useGameStore', () => {
       ])
     })
 
+    it.each([
+      ['a quick save', () => store.loadGame()],
+      ['a named save', () => store.loadNamedGame('Before boss')],
+      ['a save slot', () => store.loadFromSlot(2)],
+    ])('clears the tab dots when %s is loaded', async (_, load) => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([named('Sword'), named('Map')])
+      bridge.getSpells.mockReturnValue([named('Heal'), named('Light')])
+      store.submitCommand('take map')
+
+      load()
+
+      expect(store.bagHasNew).toBe(false)
+      expect(store.spellsHaveNew).toBe(false)
+    })
+
+    it.each([
+      ['a quick save', () => store.saveGame()],
+      ['a named save', () => store.saveNamedGame('Before boss')],
+      ['a save slot', () => store.saveToSlot(2)],
+    ])('keeps the tab dots when %s is made', async (_, save) => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([named('Sword'), named('Map')])
+      bridge.getSpells.mockReturnValue([named('Heal'), named('Light')])
+      store.submitCommand('take map')
+
+      save()
+
+      expect(store.bagHasNew).toBe(true)
+      expect(store.spellsHaveNew).toBe(true)
+    })
+
+    it('clears the tab dots when the act changes', async () => {
+      await startPlaying()
+      bridge.getInventory.mockReturnValue([named('Sword'), named('Map')])
+      store.submitCommand('take map')
+      bridge.isActRunning.mockReturnValue(false)
+
+      store.submitCommand('use map')
+
+      expect(store.bagHasNew).toBe(false)
+    })
+
     it('shows no chips on the turn that ends an act', async () => {
       await startPlaying()
       bridge.isActRunning.mockReturnValue(false)

@@ -176,6 +176,8 @@ export const useGameStore = defineStore('game', () => {
       ? [...itemChanges.gained, ...spellChanges.gained]
       : []
     const lost = showChips ? [...itemChanges.lost, ...spellChanges.lost] : []
+    // A new act starts a new bag: nothing in it is "new" yet.
+    if (!actRunning) clearNewDots()
     if (showChips && itemChanges.gained.length) bagHasNew.value = true
     if (showChips && spellChanges.gained.length) spellsHaveNew.value = true
     lastBag = bag
@@ -194,6 +196,12 @@ export const useGameStore = defineStore('game', () => {
     if (turns.value.length > MAX_TURNS) {
       turns.value.splice(0, turns.value.length - MAX_TURNS)
     }
+  }
+
+  /** A loaded save or a new act: no item or spell is "new" any more. */
+  function clearNewDots(): void {
+    bagHasNew.value = false
+    spellsHaveNew.value = false
   }
 
   /** The player opened a journal tab: clear its "new" dot. */
@@ -319,6 +327,7 @@ export const useGameStore = defineStore('game', () => {
   function loadGame(): void {
     const b = requireBridge()
     const result = b.quickLoadGame()
+    clearNewDots()
     showOutput(null, result)
     refreshPanels()
   }
@@ -332,6 +341,7 @@ export const useGameStore = defineStore('game', () => {
   function loadNamedGame(name: string): void {
     const b = requireBridge()
     const result = b.loadNamedGame(name)
+    clearNewDots()
     showOutput(null, result)
     refreshPanels()
   }
@@ -355,6 +365,7 @@ export const useGameStore = defineStore('game', () => {
   function loadFromSlot(slot: number): void {
     const b = requireBridge()
     const result = b.loadFromSlot(slot)
+    clearNewDots()
     showOutput(null, result)
     refreshPanels()
   }
