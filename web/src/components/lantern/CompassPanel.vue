@@ -8,7 +8,9 @@ import { exitArrow } from '@/lantern/exitArrow'
  * The map compass beside the story on laptops: the exits laid out around the
  * current room in a 3 × 3 grid (up/down in the top/bottom-right corners),
  * other named exits listed below. Each exit is a button that moves there.
+ * As a phone section it gets a "Map" heading (`heading`).
  */
+defineProps<{ heading?: boolean }>()
 const game = useGameStore()
 
 /** Grid cell (row-major, 0–8) for each compass direction; 4 is the room. */
@@ -43,6 +45,7 @@ function go(direction: string): void {
 
 <template>
   <section class="lq-compass" aria-label="Map">
+    <h2 v-if="heading" class="lq-compass-title">Map</h2>
     <div class="lq-grid">
       <template v-for="(exit, cell) in grid" :key="cell">
         <div v-if="cell === 4" class="lq-here">
@@ -99,6 +102,13 @@ function go(direction: string): void {
   border: 1px solid var(--lq-line);
   background: var(--lq-surface);
   font-family: var(--lq-font-ui);
+}
+.lq-compass-title {
+  margin: 0;
+  font-family: var(--lq-font-display);
+  font-size: calc(20px * var(--lq-display-scale));
+  font-weight: 500;
+  color: var(--lq-fg);
 }
 .lq-grid {
   display: grid;

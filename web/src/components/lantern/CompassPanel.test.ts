@@ -88,4 +88,14 @@ describe('CompassPanel', () => {
     expect(other.text()).toContain('Odd Place')
     expect(other.get('.lq-exit-dir').text()).toBe('• Constructor')
   })
+
+  it('has no heading beside the story on laptops', () => {
+    expect(mountCompass().find('h2').exists()).toBe(false)
+  })
+
+  it('can show a Map heading (phone section)', () => {
+    wrapper = mount(CompassPanel, { props: { heading: true } })
+
+    expect(wrapper.get('h2').text()).toBe('Map')
+  })
 })

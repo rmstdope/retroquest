@@ -25,6 +25,11 @@ const game = useGameStore()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 const section = ref<Section>('story')
+
+// The laptop shows everything at once; coming back from it starts on the story.
+watch(wide, (isWide) => {
+  if (isWide) section.value = 'story'
+})
 const storyEl = ref<HTMLElement | null>(null)
 const continueButton = ref<HTMLButtonElement | null>(null)
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
@@ -97,7 +102,7 @@ watch(
       />
 
       <template v-if="!wide">
-        <CompassPanel v-if="section === 'map'" />
+        <CompassPanel v-if="section === 'map'" heading />
         <JournalPanel
           v-else-if="section !== 'story'"
           :tab="section"
