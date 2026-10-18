@@ -1097,6 +1097,43 @@ describe('useGameStore', () => {
       })
     })
 
+    it('keeps the act-completing answer in the old room; arrival marks the new one', async () => {
+      await startPlaying()
+      // The command completes the act: the engine already holds the next act's state
+      bridge.getRoomName.mockReturnValue('Act 2 Start')
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.isAcceptingInput.mockReturnValue(false)
+      bridge.advanceToRunning.mockReturnValue(['Act 1 done!', 'Act 2 begins.'])
+
+      store.submitCommand('use map')
+
+      expect(lastTurn()).toMatchObject({
+        command: 'use map',
+        room: 'Village Square',
+        roomChanged: false,
+      })
+
+      bridge.isActRunning.mockReturnValue(true)
+      bridge.look.mockReturnValue('You are in Act 2.')
+      store.dismissModal() // act complete
+      store.dismissModal() // act intro -> arrival look
+
+      expect(lastTurn()).toMatchObject({
+        command: null,
+        text: 'You are in Act 2.',
+        room: 'Act 2 Start',
+        roomChanged: true,
+      })
+    })
+
+    it('does not record advanceTurn output (it only repeats the last answer)', async () => {
+      await startPlaying()
+
+      store.advanceTurn()
+
+      expect(store.turns).toHaveLength(1)
+    })
+
     it(`keeps only the last ${MAX_TURNS} turns`, async () => {
       await startPlaying()
 

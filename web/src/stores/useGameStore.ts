@@ -143,10 +143,14 @@ export const useGameStore = defineStore('game', () => {
   /**
    * Show an engine answer: set lastOutput (classic UI) and record it as a
    * turn in the story log (Lantern UI).
+   *
+   * A command that completes an act already swaps in the next act's state, so
+   * while the act is not running the answer stays in the previous turn's room.
    */
   function showOutput(command: string | null, raw: string): void {
     lastOutput.value = renderMarkup(raw)
-    const room = requireBridge().getRoomName()
+    const b = requireBridge()
+    const room = b.isActRunning() ? b.getRoomName() : lastTurnRoom
     turns.value.push({
       id: nextTurnId++,
       command,
@@ -241,7 +245,8 @@ export const useGameStore = defineStore('game', () => {
   function advanceTurn(): void {
     const b = requireBridge()
     const result = b.advanceTurn()
-    showOutput(null, result)
+    // Not a turn: while input is blocked this only repeats the last answer.
+    lastOutput.value = renderMarkup(result)
     refreshPanels()
   }
 
