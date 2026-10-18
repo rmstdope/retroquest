@@ -5,6 +5,8 @@ from retroquest.act2.Act2StoryFlags import (
     FLAG_CEDRIKS_HONOR_COMPLETED,
     FLAG_EXAMINED_SECRET_DOCUMENTS,
 )
+from retroquest.act2.items.SecretDocuments import SecretDocuments
+from retroquest.act2.items.WalkingStick import WalkingStick
 from retroquest.engine.Game import Game
 from ..markup_helpers import (
     assert_dialogue_speaker,
@@ -62,3 +64,49 @@ def test_talk_after_honor_restored_confirms_justice():
 
     assert "Sir Cedric's honor has been fully restored" in answer
     _assert_attributed_dialogue(answer)
+
+
+def test_give_unexamined_documents_asks_to_examine_them():
+    """Unexamined documents are handed back with a request to examine them first."""
+    game = _create_game_in_great_hall()
+    documents = SecretDocuments()
+    game.state.inventory.append(documents)
+
+    answer = game.command_parser.parse("give secret documents to lord commander")
+
+    assert "Please examine them thoroughly" in answer
+    _assert_attributed_dialogue(answer)
+    assert documents in game.state.inventory
+    assert not game.state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED)
+
+
+def test_give_examined_documents_restores_cedrics_honor():
+    """Examined documents prove Sir Cedric's innocence and complete the quest."""
+    game = _create_game_in_great_hall()
+    documents = SecretDocuments()
+    game.state.inventory.append(documents)
+    game.state.set_story_flag(FLAG_EXAMINED_SECRET_DOCUMENTS, True)
+
+    answer = game.command_parser.parse("give secret documents to lord commander")
+
+    assert "I hereby officially restore Sir Cedric's honor" in answer
+    assert answer.startswith("[success]") and answer.endswith("[/success]")
+    _assert_attributed_dialogue(answer)
+    assert documents not in game.state.inventory
+    assert game.state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED)
+
+
+def test_give_other_item_is_declined():
+    """Any other item is declined and kept by the player."""
+    game = _create_game_in_great_hall()
+    stick = WalkingStick()
+    game.state.inventory.append(stick)
+
+    answer = game.command_parser.parse(f"give {stick.get_name()} to lord commander")
+
+    assert f"has no need for your [item_name]{stick.get_name()}[/item_name]" in answer
+    assert_markup_well_formed(answer)
+    assert f"[character_name]{SPEAKER}[/character_name]" in answer
+    assert_no_speech_outside_dialogue(answer)
+    assert stick in game.state.inventory
+    assert not game.state.get_story_flag(FLAG_CEDRIKS_HONOR_COMPLETED)
