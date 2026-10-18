@@ -22,4 +22,3 @@ def apply_theme(s: str) -> str:
         s = s.replace(f"[{key}]", f"[{value}]")
         s = s.replace(f"[/{key}]", f"[/{value}]")
     return s
-
