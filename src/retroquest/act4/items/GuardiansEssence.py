@@ -41,7 +41,7 @@ class GuardiansEssence(Item):
                 )
             else:
                 return (
-                    "[info]The servants already recognize your worthiness.[/info]"
+                    "[dim]The servants already recognize your worthiness.[/dim]"
                 )
         return super().use_on_character(game_state, target_character)
 
@@ -49,16 +49,16 @@ class GuardiansEssence(Item):
         """Use Guardian's Essence to prove worthiness."""
         if game_state.current_room.name == "Outer Courtyard":
             return (
-                "[info]The Guardian's Essence glows brightly, ready to prove your "
-                "worthiness to those who need your help. Try using it on the servants.[/info]"
+                "[event]The Guardian's Essence glows brightly, ready to prove your "
+                "worthiness to those who need your help. Try using it on the servants.[/event]"
             )
         elif game_state.current_room.name == "Hall of Echoes":
             return (
-                "[info]The Guardian's Essence resonates with the ancient hall, "
-                "recognizing the nobility that once existed here.[/info]"
+                "[event]The Guardian's Essence resonates with the ancient hall, "
+                "recognizing the nobility that once existed here.[/event]"
             )
         else:
             return (
-                "[info]The Guardian's Essence pulses gently, waiting for the right "
-                "moment to demonstrate your courage.[/info]"
+                "[event]The Guardian's Essence pulses gently, waiting for the right "
+                "moment to demonstrate your courage.[/event]"
             )

@@ -44,10 +44,10 @@ class GuardiansChain(Item):
                 )
             else:
                 return (
-                    "[info]The Guardian's Chain is already providing its protection.[/info]"
+                    "[dim]The Guardian's Chain is already providing its protection.[/dim]"
                 )
         else:
             return (
-                "[info]The Guardian's Chain glows softly, ready to protect you when "
-                "facing shadow magic.[/info]"
+                "[event]The Guardian's Chain glows softly, ready to protect you when "
+                "facing shadow magic.[/event]"
             )

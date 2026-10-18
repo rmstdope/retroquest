@@ -58,7 +58,7 @@ class OuterCourtyard(Room):
                 return servants.examine(game_state)
             else:
                 return (
-                    "[info]The servants have been freed and are no longer trapped here.[/info]"
+                    "[event]The servants have been freed and are no longer trapped here.[/event]"
                 )
         else:
             return (
@@ -90,5 +90,5 @@ class OuterCourtyard(Room):
             )
         else:
             return (
-                "[info]The servants have already been freed from their cursed bonds.[/info]"
+                "[dim]The servants have already been freed from their cursed bonds.[/dim]"
             )
