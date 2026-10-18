@@ -58,6 +58,7 @@ class MendSpell(Spell):
         )
 
     def cast_spell(self, _game_state: GameState) -> str:
+        """Cast mend without a target; nothing nearby needs repair."""
         name = self.get_name()
         return (
             f"[success]You cast [spell_name]{name}[/spell_name] into the air. The spell "
@@ -66,6 +67,7 @@ class MendSpell(Spell):
         )
 
     def cast_on_item(self, game_state: GameState, target_item: Item) -> str:
+        """Repair the target item, restoring library wards when they are the target."""
         from ..items.ProtectiveEnchantments import ProtectiveEnchantments
         # Special handling for protective enchantments in Hidden Library
         if isinstance(target_item, ProtectiveEnchantments):
@@ -89,8 +91,8 @@ class MendSpell(Spell):
                 )
         # Check if the item can be repaired (this is the original implementation)
         elif (
-            "broken" in target_item.get_description().lower()
-            or "damaged" in target_item.get_description().lower()
+            "broken" in target_item.description.lower()
+            or "damaged" in target_item.description.lower()
         ):
             name = self.get_name()
             iname = target_item.get_name()
