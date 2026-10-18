@@ -43,6 +43,7 @@ class LocalCraftsmen(Character):
         )
 
     def talk_to(self, game_state: GameState) -> str:
+        """Refuse until the player helped residents, then teach mend, then greet."""
         from ..spells.MendSpell import MendSpell
         if not game_state.get_story_flag(FLAG_HELPED_ELDERLY_RESIDENTS):
             name = self.get_name()
@@ -65,7 +66,7 @@ class LocalCraftsmen(Character):
         else:
             name = self.get_name()
             return (
-                f"[character_name]{name}[/character_name]: Good to see you again! "
+                f"[character_name]{name}[/character_name]: [dialogue]Good to see you again! "
                 "How has your repair magic been working? The mend spell is one of the "
-                "most useful pieces of magic a person can learn."
+                "most useful pieces of magic a person can learn.[/dialogue]"
             )

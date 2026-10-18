@@ -44,3 +44,20 @@ def assert_dialogue_speaker(text: str, speaker: str) -> None:
         assert names[-1].lower() == speaker.lower(), (
             f"Dialogue attributed to {names[-1]!r}, expected {speaker!r} in: {text}"
         )
+
+
+def assert_no_speaker_label_in_dialogue(text: str) -> None:
+    """Assert that no dialogue block contains a 'Name:' speaker label."""
+    for block in DIALOGUE_PATTERN.findall(text):
+        assert "[/character_name]:" not in block, f"Speaker label inside dialogue in: {text}"
+
+
+QUOTED_SPEECH_PATTERN = re.compile(r"(?<![A-Za-z])'[A-Z]")
+
+
+def assert_no_speech_outside_dialogue(text: str) -> None:
+    """Assert that no quoted speech appears in the narration outside dialogue."""
+    narration = DIALOGUE_PATTERN.sub("", text)
+    assert not QUOTED_SPEECH_PATTERN.search(narration), (
+        f"Quoted speech outside dialogue in: {text}"
+    )
