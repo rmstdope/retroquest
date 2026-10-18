@@ -247,6 +247,18 @@ const completion = useCommandCompletion(
 )
 const completionListId = 'lq-completions'
 
+/** Keep the highlighted match visible when the list scrolls. */
+watch(
+  completion.activeIndex,
+  (index) => {
+    if (index < 0) return
+    root.value
+      ?.querySelector(`#${completionListId}-${index}`)
+      ?.scrollIntoView?.({ block: 'nearest' })
+  },
+  { flush: 'post' },
+)
+
 /** Enter in the command box: apply a highlighted match, else send. */
 function onTypedEnter(): void {
   if (!completion.applyActive()) submitTyped()

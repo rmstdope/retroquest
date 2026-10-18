@@ -422,6 +422,23 @@ describe('ActionComposer', () => {
       expect(w.find('[role="option"]').exists()).toBe(false)
     })
 
+    it('scrolls the highlighted match into view in a long list', async () => {
+      // jsdom has no scrollIntoView; record which option asks for it.
+      const scrolled: string[] = []
+      HTMLElement.prototype.scrollIntoView = function (this: HTMLElement) {
+        scrolled.push(this.textContent?.trim() ?? '')
+      }
+      const { input } = await typeMode()
+      await input.setValue('take b')
+      await input.trigger('keydown', { key: 'Tab' })
+
+      await input.trigger('keydown', { key: 'ArrowDown' })
+      await input.trigger('keydown', { key: 'ArrowDown' })
+
+      expect(scrolled).toEqual(['bucket', 'bread'])
+      delete (HTMLElement.prototype as Partial<HTMLElement>).scrollIntoView
+    })
+
     it('closes the list with Escape and keeps the text', async () => {
       const { w, input } = await typeMode()
       await input.setValue('take b')
