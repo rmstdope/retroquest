@@ -8,6 +8,7 @@ import {
 } from '@/composables/useMediaQuery'
 import ActionComposer from './ActionComposer.vue'
 import CompassPanel from './CompassPanel.vue'
+import DockBar from './DockBar.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternHeader from './LanternHeader.vue'
 import RoomCard from './RoomCard.vue'
@@ -20,11 +21,18 @@ import StoryTurn from './StoryTurn.vue'
  * room card sits above the story and the map and journal in a side column.
  * Smaller screens show one section at a time (Story, Bag, Spells, Quests,
  * Map) with section tabs at the bottom, or in the header when short.
+ * There the actions are a sheet (at most 62% of the height) that folds into
+ * a one-row bar: by hand, or by itself only when an answer does not fit
+ * beside it (always on short screens, where it also starts folded).
  */
 const game = useGameStore()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 const section = ref<Section>('story')
+const dockOpen = ref(!short.value)
+watch(short, (isShort) => {
+  if (isShort) dockOpen.value = false
+})
 
 // The laptop shows everything at once; coming back from it starts on the story.
 watch(wide, (isWide) => {
@@ -33,6 +41,33 @@ watch(wide, (isWide) => {
 const storyEl = ref<HTMLElement | null>(null)
 const continueButton = ref<HTMLButtonElement | null>(null)
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
+const dock = ref<InstanceType<typeof DockBar> | null>(null)
+
+/** Focus the actions: the open composer, or the folded bar's Actions button. */
+function focusActions(): void {
+  if (!wide.value && !dockOpen.value) dock.value?.focus()
+  else composer.value?.focus()
+}
+
+async function fold(): Promise<void> {
+  dockOpen.value = false
+  await nextTick()
+  dock.value?.focus()
+}
+
+async function openDock(mode: 'actions' | 'type'): Promise<void> {
+  composer.value?.setMode(mode)
+  dockOpen.value = true
+  await nextTick()
+  composer.value?.focus()
+}
+
+/** Whether the newest turn is taller than the story area beside the actions. */
+function answerTooLong(): boolean {
+  const story = storyEl.value
+  const last = story?.lastElementChild as HTMLElement | null | undefined
+  return !!story && !!last && last.offsetHeight > story.clientHeight
+}
 
 function onKeydown(e: KeyboardEvent): void {
   if (e.key === 'Escape' && game.showModal) game.dismissModal()
@@ -58,7 +93,13 @@ watch(
     section.value = 'story'
     await nextTick()
     storyEl.value?.lastElementChild?.scrollIntoView?.({ block: 'start' })
-    if (away && !game.showModal) composer.value?.focus()
+    const folds =
+      !wide.value && dockOpen.value && (short.value || answerTooLong())
+    if (folds) {
+      dockOpen.value = false
+      await nextTick()
+    }
+    if ((away || folds) && !game.showModal) focusActions()
   },
   { flush: 'post' },
 )
@@ -69,7 +110,7 @@ watch(
   () => game.showModal,
   (open) => {
     if (open) continueButton.value?.focus()
-    else composer.value?.focus()
+    else focusActions()
   },
   { flush: 'post' },
 )
@@ -96,9 +137,17 @@ watch(
       </section>
 
       <ActionComposer
-        v-show="wide || section === 'story'"
+        v-show="wide || (section === 'story' && dockOpen)"
         ref="composer"
         class="lq-composer"
+        :class="{ 'lq-sheet': !wide }"
+        :foldable="!wide"
+        @fold="fold"
+      />
+      <DockBar
+        v-if="!wide && section === 'story' && !dockOpen"
+        ref="dock"
+        @open="openDock"
       />
 
       <template v-if="!wide">
@@ -196,6 +245,11 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.lq-sheet {
+  flex: 0 0 auto;
+  max-height: 62dvh;
+  overflow-y: auto;
 }
 .lq-journal-panel,
 .lq-section-view {

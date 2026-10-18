@@ -400,4 +400,40 @@ test.describe('Lantern UI (?ui=lantern)', () => {
 
     expect(await textStart('Map')).toEqual(bag)
   })
+
+  test('caps the open action sheet at 62% of a phone screen', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+
+    const sheet = page.getByRole('region', { name: 'Actions' })
+    await expect(sheet).toBeVisible()
+    await page.getByRole('button', { name: 'More…' }).click()
+    const box = await sheet.boundingBox()
+    expect(box!.height).toBeLessThanOrEqual(568 * 0.62 + 1)
+
+    await page.getByRole('button', { name: 'Hide actions' }).click()
+    await expect(sheet).toBeHidden()
+    await expect(page.getByRole('button', { name: 'Actions ▴' })).toBeFocused()
+  })
+
+  test('starts with the actions folded in phone landscape', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 844, height: 390 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+
+    await expect(page.getByRole('region', { name: 'Action bar' })).toBeVisible()
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeHidden()
+
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollHeight - window.innerHeight,
+    )
+    expect(overflow).toBeLessThanOrEqual(0)
+  })
 })

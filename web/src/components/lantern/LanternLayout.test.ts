@@ -382,4 +382,149 @@ describe('LanternLayout', () => {
       expect(sections(w).classes()).toContain('lq-nav-top')
     })
   })
+
+  describe('the action dock on a phone', () => {
+    function stubScreen(short: boolean) {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn((query: string) => ({
+          matches: query.includes('max-height') ? short : false,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
+    }
+
+    /** Pretend each turn is `turn` px tall in a story `story` px tall. */
+    function stubHeights(turn: number, story: number) {
+      vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(
+        function (this: HTMLElement) {
+          return this.classList.contains('lq-story') ? story : turn
+        },
+      )
+      vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockImplementation(
+        function (this: HTMLElement) {
+          return this.classList.contains('lq-story') ? story : turn
+        },
+      )
+    }
+
+    function mountAttached() {
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      return wrapper
+    }
+
+    function actions(w: VueWrapper) {
+      return w.get('section[aria-label="Actions"]')
+    }
+
+    async function addTurn(w: VueWrapper, id: number) {
+      useGameStore().turns = [
+        {
+          id,
+          command: 'look',
+          text: 'You look around.',
+          room: 'Hall',
+          roomChanged: false,
+          gained: [],
+          lost: [],
+          arrival: null,
+        },
+      ]
+      await flushPromises()
+      await w.vm.$nextTick()
+    }
+
+    beforeEach(() => stubScreen(false))
+    afterEach(() => {
+      vi.unstubAllGlobals()
+      vi.restoreAllMocks()
+    })
+
+    it('starts with the actions open as a sheet', () => {
+      const w = mountLayout()
+
+      expect(actions(w).isVisible()).toBe(true)
+      expect(actions(w).classes()).toContain('lq-sheet')
+      expect(w.find('[aria-label="Action bar"]').exists()).toBe(false)
+    })
+
+    it('starts folded on a short screen', () => {
+      stubScreen(true)
+      const w = mountLayout()
+
+      expect(actions(w).isVisible()).toBe(false)
+      expect(w.find('[aria-label="Action bar"]').exists()).toBe(true)
+    })
+
+    it('folds with Hide actions and keeps the focus on the bar', async () => {
+      const w = mountAttached()
+
+      await w.get('button[aria-label="Hide actions"]').trigger('click')
+      await flushPromises()
+
+      expect(actions(w).isVisible()).toBe(false)
+      expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
+    })
+
+    it('opens again into Actions or straight into typing', async () => {
+      stubScreen(true)
+      useGameStore().acceptInput = true
+      const w = mountAttached()
+
+      await w.get('button[aria-label="Type a command"]').trigger('click')
+      await flushPromises()
+
+      expect(actions(w).isVisible()).toBe(true)
+      expect(document.activeElement).toBe(
+        w.get('input[aria-label="Command"]').element,
+      )
+    })
+
+    it('folds when the answer does not fit beside the actions', async () => {
+      stubHeights(900, 300)
+      const w = mountAttached()
+
+      await addTurn(w, 7)
+
+      expect(actions(w).isVisible()).toBe(false)
+      expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
+    })
+
+    it('stays open when the answer fits', async () => {
+      stubHeights(100, 300)
+      const w = mountLayout()
+
+      await addTurn(w, 7)
+
+      expect(actions(w).isVisible()).toBe(true)
+    })
+
+    it('folds after every answer on a short screen', async () => {
+      stubScreen(true)
+      stubHeights(50, 300)
+      const w = mountLayout()
+      await w.get('button.lq-dock-open').trigger('click')
+
+      await addTurn(w, 7)
+
+      expect(actions(w).isVisible()).toBe(false)
+    })
+  })
+
+  it('has no action dock or hide button on a laptop', () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn(() => ({
+        matches: true,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    const w = mountLayout()
+
+    expect(w.find('[aria-label="Action bar"]').exists()).toBe(false)
+    expect(w.find('button[aria-label="Hide actions"]').exists()).toBe(false)
+    vi.unstubAllGlobals()
+  })
 })

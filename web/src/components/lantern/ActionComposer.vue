@@ -17,8 +17,11 @@ import {
  * The Lantern action composer: tap a verb, pick its targets as chips and
  * "Do it" — or switch to Type and write the command. A live preview shows the
  * command the game will receive. Focus follows the sentence: verb → choices →
- * Do it → back to the verb.
+ * Do it → back to the verb. On phones it is a sheet that can fold away
+ * (`foldable` shows a hide button that emits `fold`).
  */
+defineProps<{ foldable?: boolean }>()
+const emit = defineEmits<{ fold: [] }>()
 const game = useGameStore()
 const settings = useSettingsStore()
 
@@ -160,7 +163,12 @@ function focus(): void {
   }
 }
 
-defineExpose({ focus })
+/** Switch between Actions and Type (the folded dock opens either). */
+function setMode(next: 'actions' | 'type'): void {
+  mode.value = next
+}
+
+defineExpose({ focus, setMode })
 
 function run(text: string): void {
   if (!game.acceptInput) return
@@ -291,6 +299,15 @@ function onTypedEnter(): void {
           Type
         </button>
       </div>
+      <button
+        v-if="foldable"
+        type="button"
+        class="lq-fold"
+        aria-label="Hide actions"
+        @click="emit('fold')"
+      >
+        ▾
+      </button>
       <span
         v-if="verb"
         class="lq-preview"
@@ -488,6 +505,19 @@ function onTypedEnter(): void {
   border: 1px solid var(--lq-line);
   background: var(--lq-surface);
   font-family: var(--lq-font-ui);
+}
+.lq-fold {
+  order: 1;
+  margin-left: auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--lq-line2);
+  background: transparent;
+  color: var(--lq-fg);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
 }
 .lq-composer-top {
   display: flex;

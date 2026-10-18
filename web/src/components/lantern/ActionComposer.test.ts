@@ -459,4 +459,32 @@ describe('ActionComposer', () => {
       expect(submit).toHaveBeenCalledWith('look')
     })
   })
+
+  describe('as a foldable sheet (phones)', () => {
+    it('has no hide button by default', () => {
+      expect(
+        mountComposer().find('button[aria-label="Hide actions"]').exists(),
+      ).toBe(false)
+    })
+
+    it('asks to fold with the hide button', async () => {
+      const w = mount(ActionComposer, { props: { foldable: true } })
+      wrapper = w
+
+      await w.get('button[aria-label="Hide actions"]').trigger('click')
+
+      expect(w.emitted('fold')).toHaveLength(1)
+    })
+
+    it('can be opened in a chosen mode', async () => {
+      const w = mountComposer()
+
+      ;(
+        w.vm as unknown as { setMode: (m: 'actions' | 'type') => void }
+      ).setMode('type')
+      await w.vm.$nextTick()
+
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+    })
+  })
 })
