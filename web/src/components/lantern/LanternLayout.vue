@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { renderMarkup } from '@/utils/theme'
 import LanternHeader from './LanternHeader.vue'
+import StoryTurn from './StoryTurn.vue'
 
 /**
- * Shell of the Lantern UI (shown with `?ui=lantern`). The story list and the
- * plain command box are temporary: the story view (step 11) and the action
- * composer (step 12) replace them.
+ * Shell of the Lantern UI (shown with `?ui=lantern`): header, story (one
+ * StoryTurn per turn) and a plain command box that the action composer
+ * (step 12) replaces.
  */
 const game = useGameStore()
 const command = ref('')
@@ -62,17 +62,7 @@ function submit(): void {
 
     <main class="lq-main">
       <section ref="storyEl" class="lq-story" aria-label="Story">
-        <article
-          v-for="turn in game.turns"
-          :key="turn.id"
-          class="lq-turn"
-          data-testid="turn"
-        >
-          <div v-if="turn.command" class="lq-command">› {{ turn.command }}</div>
-          <!-- eslint-disable vue/no-v-html -->
-          <p class="lq-text" v-html="renderMarkup(turn.text)"></p>
-          <!-- eslint-enable vue/no-v-html -->
-        </article>
+        <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
       </section>
 
       <form class="lq-input-row" @submit.prevent="submit">
@@ -145,23 +135,6 @@ function submit(): void {
   display: flex;
   flex-direction: column;
   gap: calc(18px * var(--lq-density));
-}
-.lq-turn {
-  display: flex;
-  flex-direction: column;
-  gap: calc(10px * var(--lq-density));
-}
-.lq-command {
-  font-family: var(--lq-font-mono);
-  font-size: 12px;
-  color: var(--lq-muted);
-}
-.lq-text {
-  margin: 0;
-  font-family: var(--lq-font-prose);
-  font-size: var(--lq-story-size);
-  line-height: var(--lq-story-line-height);
-  color: var(--lq-prose);
 }
 .lq-input-row {
   display: flex;

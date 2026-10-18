@@ -11,6 +11,9 @@
 @import '@fontsource/source-serif-4/400.css';
 @import '@fontsource/source-serif-4/400-italic.css';
 @import '@fontsource/source-serif-4/500.css';
+@import '@fontsource/source-serif-4/500-italic.css';
+@import '@fontsource/source-serif-4/600.css';
+@import '@fontsource/source-serif-4/600-italic.css';
 @import '@fontsource/dm-sans/400.css';
 @import '@fontsource/dm-sans/500.css';
 @import '@fontsource/dm-sans/600.css';
@@ -137,4 +140,59 @@
 
 :root[data-ui='lantern'][data-reduce-motion='on'] {
   --lq-motion: 0;
+}
+
+/*
+ * Inline game tags (rendered by renderMarkup) in the Lantern look. Colours come
+ * from the tokens above, which are checked for WCAG AA contrast.
+ */
+:root[data-ui='lantern'] .theme-character_name {
+  color: var(--lq-character);
+  font-weight: 500;
+}
+:root[data-ui='lantern'] .theme-item_name {
+  color: var(--lq-item);
+  font-weight: 500;
+}
+:root[data-ui='lantern'] .theme-spell_name {
+  color: var(--lq-spell);
+  font-weight: 500;
+}
+:root[data-ui='lantern'] .theme-room_name {
+  color: var(--lq-fg);
+  font-weight: 600;
+}
+:root[data-ui='lantern'] .theme-quest_name {
+  color: var(--lq-accent-text);
+  font-weight: 600;
+}
+:root[data-ui='lantern'] .theme-exits {
+  color: var(--lq-accent-text);
+  font-weight: 600;
+}
+:root[data-ui='lantern'] .theme-dialogue {
+  color: inherit;
+  font-style: italic;
+}
+:root[data-ui='lantern'] .theme-event {
+  color: var(--lq-muted);
+}
+:root[data-ui='lantern'] .theme-failure {
+  color: var(--lq-failure);
+  font-weight: 500;
+}
+:root[data-ui='lantern'] .theme-success {
+  color: var(--lq-success);
+  font-weight: 500;
+}
+:root[data-ui='lantern'] .theme-pending {
+  color: var(--lq-muted);
+  font-style: italic;
+}
+:root[data-ui='lantern'] .theme-bold {
+  font-weight: 600;
+}
+:root[data-ui='lantern'] .theme-dim {
+  color: var(--lq-muted);
+  opacity: 1;
 }
