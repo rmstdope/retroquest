@@ -7,6 +7,7 @@ import {
   cssVariableName,
   type LanternPalette,
 } from './tokens'
+import { THEME_TAGS } from '@/utils/theme'
 
 // Read from disk: Vitest replaces CSS imports (even ?raw) with empty strings.
 const lanternCss = readFileSync(
@@ -139,4 +140,11 @@ describe('lantern.css', () => {
       ],
     ).toBe('0')
   })
+
+  it.each(THEME_TAGS)(
+    'styles the inline [%s] tag for the Lantern look',
+    (tag) => {
+      expect(lanternCss).toContain(`:root[data-ui='lantern'] .theme-${tag}`)
+    },
+  )
 })
