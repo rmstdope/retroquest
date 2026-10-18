@@ -330,6 +330,16 @@ describe('ActionComposer', () => {
     expect(w.find('[data-testid="preview"]').exists()).toBe(false)
   })
 
+  it('leaves a half-built command alone when Escape continues a pop-up', async () => {
+    const w = mountComposer()
+    await button(w, 'Take').trigger('click')
+    useGameStore().showModal = true
+
+    await w.get('section').trigger('keydown', { key: 'Escape' })
+
+    expect(w.find('[data-testid="preview"]').text()).toBe('take …')
+  })
+
   it('moves on to choosing who to talk to after Enter in Say', async () => {
     wrapper = mount(ActionComposer, { attachTo: document.body })
     await button(wrapper, 'Say').trigger('click')

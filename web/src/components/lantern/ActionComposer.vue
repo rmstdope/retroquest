@@ -213,6 +213,11 @@ function clear(): void {
   showMore.value = false
 }
 
+/** Escape puts a half-built command away — unless it is continuing a pop-up. */
+function putAway(): void {
+  if (verb.value && !game.showModal) reset()
+}
+
 /** Enter in a text slot: run the command if complete, else go on to the choices. */
 function textEntered(): void {
   if (command.value) doIt()
@@ -238,7 +243,7 @@ function submitTyped(): void {
     ref="root"
     class="lq-composer"
     aria-label="Actions"
-    @keydown.escape="verb && reset()"
+    @keydown.escape="putAway"
   >
     <div class="lq-composer-top">
       <div role="group" aria-label="Input mode" class="lq-seg">
