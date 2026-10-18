@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { displayName } from '@/lantern/displayName'
 import { parseCountedName } from '@/lantern/inventoryChanges'
@@ -9,13 +9,15 @@ import { renderMarkup } from '@/utils/theme'
 /**
  * The journal beside the story on laptops: Bag, Spells and Quests tabs.
  * Bag rows can be used and spells cast directly; a dot marks a tab with
- * something new until it is opened.
+ * something new until it is opened. The tabs follow the WAI-ARIA tabs
+ * pattern: one tab stop, Left/Right (wrapping), Home and End select a tab.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
 const game = useGameStore()
 const active = ref<Tab>('bag')
 const expanded = ref<Set<string>>(new Set())
+const tabButtons = ref<HTMLButtonElement[]>([])
 
 const bag = computed(() =>
   game.rawInventory.map((entry) => {
@@ -62,6 +64,24 @@ watch(
   { immediate: true },
 )
 
+const TAB_KEYS: Record<string, (index: number, count: number) => number> = {
+  ArrowRight: (i, n) => (i + 1) % n,
+  ArrowLeft: (i, n) => (i - 1 + n) % n,
+  Home: () => 0,
+  End: (_i, n) => n - 1,
+}
+
+async function onTabKey(event: KeyboardEvent, index: number): Promise<void> {
+  const move = TAB_KEYS[event.key]
+  if (!move) return
+  event.preventDefault()
+  const next = tabs.value[move(index, tabs.value.length)].id
+  active.value = next
+  await nextTick()
+  // A v-for ref array is not guaranteed to follow the list order.
+  tabButtons.value.find((b) => b.id === `lq-tab-${next}`)?.focus()
+}
+
 function run(command: string): void {
   if (game.acceptInput) game.submitCommand(command)
 }
@@ -78,15 +98,18 @@ function toggleQuest(name: string): void {
   <section class="lq-journal" aria-label="Journal">
     <div class="lq-tabs" role="tablist" aria-label="Journal">
       <button
-        v-for="t in tabs"
+        v-for="(t, index) in tabs"
         :id="`lq-tab-${t.id}`"
+        ref="tabButtons"
         :key="t.id"
         type="button"
         role="tab"
         class="lq-tab"
         :aria-selected="active === t.id ? 'true' : 'false'"
-        :aria-controls="`lq-panel-${t.id}`"
+        :aria-controls="active === t.id ? `lq-panel-${t.id}` : undefined"
+        :tabindex="active === t.id ? 0 : -1"
         @click="active = t.id"
+        @keydown="onTabKey($event, index)"
       >
         {{ t.label
         }}<span v-if="t.dot && active !== t.id" class="lq-dot"

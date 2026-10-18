@@ -158,6 +158,55 @@ describe('JournalPanel', () => {
     )
   })
 
+  it('keeps only the selected tab in the tab order (roving tabindex)', async () => {
+    const w = mountJournal()
+    const tabIndexes = () =>
+      w.findAll('[role="tab"]').map((t) => t.attributes('tabindex'))
+    expect(tabIndexes()).toEqual(['0', '-1', '-1'])
+
+    await tab(w, /Quests/).trigger('click')
+
+    expect(tabIndexes()).toEqual(['-1', '-1', '0'])
+  })
+
+  it('moves between tabs with the arrow, Home and End keys', async () => {
+    wrapper = mount(JournalPanel, { attachTo: document.body })
+    const w = wrapper
+    const selected = () =>
+      w
+        .findAll('[role="tab"]')
+        .find((t) => t.attributes('aria-selected') === 'true')
+
+    await tab(w, /Bag/).trigger('keydown', { key: 'ArrowRight' })
+    expect(selected()?.text()).toMatch(/^Spells/)
+    expect(document.activeElement).toBe(selected()?.element)
+
+    await tab(w, /Spells/).trigger('keydown', { key: 'ArrowLeft' })
+    expect(selected()?.text()).toMatch(/^Bag/)
+
+    await tab(w, /Bag/).trigger('keydown', { key: 'ArrowLeft' })
+    expect(selected()?.text()).toMatch(/^Quests/)
+
+    await tab(w, /Quests/).trigger('keydown', { key: 'ArrowRight' })
+    expect(selected()?.text()).toMatch(/^Bag/)
+
+    await tab(w, /Bag/).trigger('keydown', { key: 'End' })
+    expect(selected()?.text()).toMatch(/^Quests/)
+
+    await tab(w, /Quests/).trigger('keydown', { key: 'Home' })
+    expect(selected()?.text()).toMatch(/^Bag/)
+  })
+
+  it('points aria-controls only at the panel that is rendered', () => {
+    const w = mountJournal()
+    const controls = w
+      .findAll('[role="tab"]')
+      .map((t) => t.attributes('aria-controls'))
+
+    expect(controls).toEqual(['lq-panel-bag', undefined, undefined])
+    expect(w.get('[role="tabpanel"]').attributes('id')).toBe('lq-panel-bag')
+  })
+
   it('says when the bag is empty', () => {
     useGameStore().rawInventory = []
     expect(mountJournal().text()).toContain('Your bag is empty')
