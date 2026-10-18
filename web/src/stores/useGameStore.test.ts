@@ -1018,10 +1018,6 @@ describe('useGameStore', () => {
   // --- Turn log ---
 
   describe('turn log', () => {
-    function lastTurn() {
-      return store.turns[store.turns.length - 1]
-    }
-
     async function startPlaying() {
       await store.initGame()
       store.dismissModal() // act intro dismissed -> automatic look
@@ -1053,7 +1049,7 @@ describe('useGameStore', () => {
 
       store.submitCommand('  take bucket  ')
 
-      expect(lastTurn()).toEqual({
+      expect(store.turns.at(-1)).toEqual({
         id: 2,
         command: 'take bucket',
         text: '[item_name]Bucket[/item_name] taken.',
@@ -1068,7 +1064,7 @@ describe('useGameStore', () => {
 
       store.submitCommand('go north')
 
-      expect(lastTurn()).toMatchObject({
+      expect(store.turns.at(-1)).toMatchObject({
         command: 'go north',
         room: 'Forest Path',
         roomChanged: true,
@@ -1089,7 +1085,7 @@ describe('useGameStore', () => {
 
       store.loadFromSlot(3)
 
-      expect(lastTurn()).toMatchObject({
+      expect(store.turns.at(-1)).toMatchObject({
         command: null,
         text: 'Game loaded.',
         room: 'Ancient Grove',
@@ -1107,7 +1103,7 @@ describe('useGameStore', () => {
 
       store.submitCommand('use map')
 
-      expect(lastTurn()).toMatchObject({
+      expect(store.turns.at(-1)).toMatchObject({
         command: 'use map',
         room: 'Village Square',
         roomChanged: false,
@@ -1118,7 +1114,7 @@ describe('useGameStore', () => {
       store.dismissModal() // act complete
       store.dismissModal() // act intro -> arrival look
 
-      expect(lastTurn()).toMatchObject({
+      expect(store.turns.at(-1)).toMatchObject({
         command: null,
         text: 'You are in Act 2.',
         room: 'Act 2 Start',
@@ -1140,8 +1136,8 @@ describe('useGameStore', () => {
       for (let i = 0; i < MAX_TURNS + 5; i++) store.submitCommand(`wait ${i}`)
 
       expect(store.turns).toHaveLength(MAX_TURNS)
-      expect(lastTurn().command).toBe(`wait ${MAX_TURNS + 4}`)
-      expect(lastTurn().id).toBe(MAX_TURNS + 6)
+      expect(store.turns.at(-1)?.command).toBe(`wait ${MAX_TURNS + 4}`)
+      expect(store.turns.at(-1)?.id).toBe(MAX_TURNS + 6)
     })
 
     it('keeps updating lastOutput for the classic UI', async () => {
