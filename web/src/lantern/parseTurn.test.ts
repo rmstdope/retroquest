@@ -242,4 +242,11 @@ describe('parseTurn', () => {
       'dialogue',
     ])
   })
+
+  it('keeps a line of bracketed words that are not markup tags', () => {
+    // Help text uses placeholders such as `[name]`, which render as-is.
+    const blocks = parseTurn('[name] [target]')
+
+    expect(blocks).toEqual([{ kind: 'text', markup: '[name] [target]' }])
+  })
 })

@@ -64,8 +64,8 @@ function balance(markup: string, open: string[]): string {
   return reopen + body + close
 }
 
-/** Any opening or closing markup tag. */
-const ANY_TAG = /\[\/?[a-z_]+\]/g
+/** Any opening or closing markup tag (bracketed words in prose don't count). */
+const ANY_TAG = new RegExp(`\\[/?(${THEME_TAGS.join('|')})\\]`, 'g')
 
 /** Inner markup if `line` is wholly one `[tag]…[/tag]` span, else null. */
 function wholeLine(line: string, tag: string): string | null {
