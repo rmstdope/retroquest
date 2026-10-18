@@ -54,6 +54,7 @@ watch(
 
     <main class="lq-main">
       <section ref="storyEl" class="lq-story" aria-label="Story">
+        <h2 class="lq-sr-only">Story</h2>
         <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
       </section>
 
@@ -167,5 +168,13 @@ watch(
   font-size: var(--lq-story-size);
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
+}
+.lq-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 </style>

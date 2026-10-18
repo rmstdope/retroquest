@@ -320,4 +320,58 @@ describe('ActionComposer', () => {
     composer.focus()
     expect(document.activeElement?.getAttribute('aria-label')).toBe('Command')
   })
+
+  it('puts a half-built command away with Escape', async () => {
+    const w = mountComposer()
+    await button(w, 'Take').trigger('click')
+
+    await w.get('section').trigger('keydown', { key: 'Escape' })
+
+    expect(w.find('[data-testid="preview"]').exists()).toBe(false)
+  })
+
+  it('moves on to choosing who to talk to after Enter in Say', async () => {
+    wrapper = mount(ActionComposer, { attachTo: document.body })
+    await button(wrapper, 'Say').trigger('click')
+    const words = wrapper.get('input[aria-label="Words to say"]')
+    await words.setValue('hello')
+
+    await words.trigger('keydown', { key: 'Enter' })
+    await wrapper.vm.$nextTick()
+
+    expect(document.activeElement?.textContent?.trim()).toBe('Mira')
+  })
+
+  it('runs Say on Enter once the command is complete', async () => {
+    const w = mountComposer()
+    await button(w, 'Say').trigger('click')
+    await button(w, 'Mira').trigger('click')
+    const words = w.get('input[aria-label="Words to say"]')
+    await words.setValue('hello')
+
+    await words.trigger('keydown', { key: 'Enter' })
+
+    expect(submit).toHaveBeenCalledWith('say hello to mira')
+  })
+
+  it('returns focus to the verb used last', async () => {
+    wrapper = mount(ActionComposer, { attachTo: document.body })
+    await button(wrapper, 'Talk').trigger('click')
+    await button(wrapper, 'Mira').trigger('click')
+    await button(wrapper, 'Do it').trigger('click')
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    ;(wrapper.vm as unknown as { focus: () => void }).focus()
+
+    expect(document.activeElement?.textContent?.trim()).toBe('Talk')
+  })
+
+  it('puts a half-built command away when the player changes room', async () => {
+    const w = mountComposer()
+    await button(w, 'Use').trigger('click')
+
+    useGameStore().roomName = 'Vegetable Field'
+    await w.vm.$nextTick()
+
+    expect(w.find('[data-testid="preview"]').exists()).toBe(false)
+  })
 })

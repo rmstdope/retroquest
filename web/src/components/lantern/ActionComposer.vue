@@ -56,6 +56,15 @@ watch(context, () => {
   })
 })
 
+/** Moving to another room puts a half-built command away (user decision). */
+watch(
+  () => game.roomName,
+  () => clear(),
+)
+
+/** The verb used last, so focus can return to it (e.g. after a pop-up). */
+const lastVerbId = ref<string | null>(null)
+
 function isText(index: number): boolean {
   return verb.value?.slots[index]?.sources.includes('text') ?? false
 }
@@ -132,11 +141,22 @@ function focusFirst(...selectors: string[]): void {
   })
 }
 
-/** Put keyboard focus in the composer: the command box, or the first verb. */
+/**
+ * Put keyboard focus in the composer: the command box in Type mode, else the
+ * verb used last (or the first verb).
+ */
 function focus(): void {
-  const selector =
-    mode.value === 'type' ? 'input[aria-label="Command"]' : '.lq-verb'
-  root.value?.querySelector<HTMLElement>(selector)?.focus()
+  const selectors =
+    mode.value === 'type'
+      ? ['input[aria-label="Command"]']
+      : [`[data-verb="${lastVerbId.value}"]`, '.lq-verb']
+  for (const selector of selectors) {
+    const element = root.value?.querySelector<HTMLElement>(selector)
+    if (element) {
+      element.focus()
+      return
+    }
+  }
 }
 
 defineExpose({ focus })
@@ -153,6 +173,7 @@ function go(direction: string): void {
 }
 
 function pickVerb(next: Verb): void {
+  lastVerbId.value = next.id
   // Tapping the selected verb again puts the builder away (like Cancel).
   if (verb.value?.id === next.id) {
     reset()
@@ -181,10 +202,21 @@ function pickTarget(value: string | null): void {
 /** Close the builder and give focus back to the verb that opened it. */
 function reset(): void {
   if (verb.value) focusFirst(`[data-verb="${verb.value.id}"]`)
+  clear()
+}
+
+/** Close the builder without moving focus. */
+function clear(): void {
   verb.value = null
   args.value = []
   chosenSlot.value = null
   showMore.value = false
+}
+
+/** Enter in a text slot: run the command if complete, else go on to the choices. */
+function textEntered(): void {
+  if (command.value) doIt()
+  else focusFirst('.lq-target', '.lq-do')
 }
 
 function doIt(): void {
@@ -202,7 +234,12 @@ function submitTyped(): void {
 </script>
 
 <template>
-  <section ref="root" class="lq-composer" aria-label="Actions">
+  <section
+    ref="root"
+    class="lq-composer"
+    aria-label="Actions"
+    @keydown.escape="verb && reset()"
+  >
     <div class="lq-composer-top">
       <div role="group" aria-label="Input mode" class="lq-seg">
         <button
@@ -262,6 +299,7 @@ function submitTyped(): void {
               class="lq-text-slot"
               :aria-label="verb.id === 'say' ? 'Words to say' : 'Text'"
               placeholder="words…"
+              @keydown.enter.prevent="textEntered"
             />
             <button
               v-else

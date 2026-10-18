@@ -79,7 +79,7 @@ function toggleTheme(): void {
 <template>
   <header class="lq-header">
     <div class="lq-title">
-      <span class="lq-logo">RetroQuest</span>
+      <h1 class="lq-logo">RetroQuest</h1>
       <span v-if="progress" class="lq-act" data-testid="act">{{
         actLabel
       }}</span>
@@ -198,6 +198,8 @@ function toggleTheme(): void {
   min-width: 0;
 }
 .lq-logo {
+  margin: 0;
+  line-height: 1.2;
   font-family: var(--lq-font-display);
   font-size: calc(22px * var(--lq-display-scale));
   font-weight: 600;
