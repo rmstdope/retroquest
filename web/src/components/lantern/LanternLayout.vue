@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useIsWide } from '@/composables/useIsWide'
 import ActionComposer from './ActionComposer.vue'
+import CompassPanel from './CompassPanel.vue'
+import JournalPanel from './JournalPanel.vue'
 import LanternHeader from './LanternHeader.vue'
+import RoomCard from './RoomCard.vue'
 import StoryTurn from './StoryTurn.vue'
 
 /**
  * Shell of the Lantern UI (shown with `?ui=lantern`): header, story (one
- * StoryTurn per turn) and the action composer.
+ * StoryTurn per turn) and the action composer. On laptops (≥1024px) a room
+ * card sits above the story and the map and journal in a side column.
  */
 const game = useGameStore()
+const wide = useIsWide()
 const storyEl = ref<HTMLElement | null>(null)
 const continueButton = ref<HTMLButtonElement | null>(null)
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
@@ -52,13 +58,19 @@ watch(
   <div class="lq-root">
     <LanternHeader />
 
-    <main class="lq-main">
+    <main class="lq-main" :class="{ 'lq-wide': wide }">
+      <RoomCard v-if="wide" class="lq-card" />
       <section ref="storyEl" class="lq-story" aria-label="Story">
         <h2 class="lq-sr-only">Story</h2>
         <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
       </section>
 
-      <ActionComposer ref="composer" />
+      <ActionComposer ref="composer" class="lq-composer" />
+
+      <aside v-if="wide" class="lq-aside" aria-label="Map and journal">
+        <CompassPanel />
+        <JournalPanel class="lq-journal-panel" />
+      </aside>
     </main>
 
     <!-- Temporary pop-up for act intros and quest news; steps 15–17 replace it. -->
@@ -109,6 +121,29 @@ watch(
   flex-direction: column;
   gap: 12px;
   padding: 16px;
+}
+.lq-wide {
+  max-width: 1240px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  column-gap: 20px;
+}
+.lq-wide .lq-card,
+.lq-wide .lq-story,
+.lq-wide .lq-composer {
+  grid-column: 1;
+}
+.lq-aside {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lq-journal-panel {
+  flex: 1;
 }
 .lq-story {
   flex: 1;

@@ -269,4 +269,42 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     await expect(input).toHaveValue('take bucket ')
     await expect(page.getByRole('option')).toHaveCount(0)
   })
+
+  test('puts the room card, map and journal around the story on a laptop', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.roomName = 'Village Square'
+      store.roomDescription = 'The heart of Willowbrook.'
+      store.exits = { north: "Mira's Hut" }
+      store.rawInventory = [{ name: 'bread', description: 'A small loaf.' }]
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    await expect(
+      page.getByRole('region', { name: 'Current location' }),
+    ).toBeVisible()
+    const aside = page.getByRole('complementary', { name: 'Map and journal' })
+    await expect(
+      aside.getByRole('button', { name: "Go north to Mira's Hut" }),
+    ).toBeVisible()
+    await expect(aside.getByRole('tab', { name: /Bag · 1/ })).toBeVisible()
+    // The tab labels fit the side column on one line each.
+    const tabHeights = await aside
+      .getByRole('tab')
+      .evaluateAll((tabs) => tabs.map((t) => t.getBoundingClientRect().height))
+    expect(Math.max(...tabHeights)).toBeLessThan(50)
+
+    await page.setViewportSize({ width: 390, height: 844 })
+    await expect(aside).toBeHidden()
+    await expect(
+      page.getByRole('region', { name: 'Current location' }),
+    ).toBeHidden()
+  })
 })
