@@ -958,12 +958,17 @@ Welcome to
         return (True, normalized)
 
     def save(self, name: str = 'retroquest') -> str:
-        """Save the game state to a file identified by name."""
+        """Save the game state and act to a file identified by name.
+
+        After the last act ends, current_act points past the final act, so the saved
+        act index is capped at the last act to keep the save loadable.
+        """
         valid, result = self._validate_save_name(name)
         if not valid:
             return result
         try:
-            payload = {SAVE_KEY_STATE: self.state, SAVE_KEY_ACT_INDEX: self.current_act}
+            act_index = min(self.current_act, len(self.acts) - 1)
+            payload = {SAVE_KEY_STATE: self.state, SAVE_KEY_ACT_INDEX: act_index}
             with open(f'{result}.save', 'wb') as f:
                 pickle.dump(payload, f)
             return "[event]Game saved successfully.[/event]"

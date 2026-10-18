@@ -102,3 +102,23 @@ def test_legacy_save_without_act_resumes_in_the_matching_act(tmp_path, monkeypat
     assert "successfully" in result.lower()
     assert fresh.current_act == 1
     assert fresh.state.current_room.name == "Second Room"
+
+
+def test_save_after_finishing_the_last_act_loads_into_the_last_act(
+    tmp_path, monkeypatch
+) -> None:
+    """A save made after the final act ends (e.g. save-on-quit) loads into that act."""
+    monkeypatch.chdir(tmp_path)
+    game = _new_game()
+    _advance_to_second_act(game)
+    game.acts[1].completed = True
+    game.new_turn()  # running -> game over
+    assert not game.is_running
+    game.save()
+
+    fresh = _new_game()
+    result = fresh.load()
+
+    assert "successfully" in result.lower()
+    assert fresh.current_act == 1
+    fresh.audio.start_music.assert_called_with("Second.mp3")
