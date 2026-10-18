@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useGameStore } from './useGameStore'
+import { useGameStore, MAX_TURNS } from './useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import type { CompletionTree, NamedSave, SaveSlot } from '@/types/bridge'
 
@@ -1012,6 +1012,145 @@ describe('useGameStore', () => {
       expect(bridge.loadFromSlot).toHaveBeenCalledWith(2)
       expect(store.lastOutput).toBe('<rendered>Game loaded.</rendered>')
       expect(store.roomName).toBe('Dungeon')
+    })
+  })
+
+  // --- Turn log ---
+
+  describe('turn log', () => {
+    function lastTurn() {
+      return store.turns[store.turns.length - 1]
+    }
+
+    async function startPlaying() {
+      await store.initGame()
+      store.dismissModal() // act intro dismissed -> automatic look
+    }
+
+    it('starts empty', () => {
+      expect(store.turns).toEqual([])
+    })
+
+    it('records the arrival look after the act intro as the first turn', async () => {
+      await startPlaying()
+
+      expect(store.turns).toEqual([
+        {
+          id: 1,
+          command: null,
+          text: 'You look around',
+          room: 'Village Square',
+          roomChanged: true,
+        },
+      ])
+    })
+
+    it('records a command with its raw (unrendered) answer', async () => {
+      await startPlaying()
+      bridge.handleCommand.mockReturnValue(
+        '[item_name]Bucket[/item_name] taken.',
+      )
+
+      store.submitCommand('  take bucket  ')
+
+      expect(lastTurn()).toEqual({
+        id: 2,
+        command: 'take bucket',
+        text: '[item_name]Bucket[/item_name] taken.',
+        room: 'Village Square',
+        roomChanged: false,
+      })
+    })
+
+    it('marks a turn whose command moved the player to another room', async () => {
+      await startPlaying()
+      bridge.getRoomName.mockReturnValue('Forest Path')
+
+      store.submitCommand('go north')
+
+      expect(lastTurn()).toMatchObject({
+        command: 'go north',
+        room: 'Forest Path',
+        roomChanged: true,
+      })
+    })
+
+    it('does not record ignored commands', async () => {
+      await startPlaying()
+
+      store.submitCommand('   ')
+
+      expect(store.turns).toHaveLength(1)
+    })
+
+    it('records system output such as loading a save without a command', async () => {
+      await startPlaying()
+      bridge.getRoomName.mockReturnValue('Ancient Grove')
+
+      store.loadFromSlot(3)
+
+      expect(lastTurn()).toMatchObject({
+        command: null,
+        text: 'Game loaded.',
+        room: 'Ancient Grove',
+        roomChanged: true,
+      })
+    })
+
+    it('keeps the act-completing answer in the old room; arrival marks the new one', async () => {
+      await startPlaying()
+      // The command completes the act: the engine already holds the next act's state
+      bridge.getRoomName.mockReturnValue('Act 2 Start')
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.isAcceptingInput.mockReturnValue(false)
+      bridge.advanceToRunning.mockReturnValue(['Act 1 done!', 'Act 2 begins.'])
+
+      store.submitCommand('use map')
+
+      expect(lastTurn()).toMatchObject({
+        command: 'use map',
+        room: 'Village Square',
+        roomChanged: false,
+      })
+
+      bridge.isActRunning.mockReturnValue(true)
+      bridge.look.mockReturnValue('You are in Act 2.')
+      store.dismissModal() // act complete
+      store.dismissModal() // act intro -> arrival look
+
+      expect(lastTurn()).toMatchObject({
+        command: null,
+        text: 'You are in Act 2.',
+        room: 'Act 2 Start',
+        roomChanged: true,
+      })
+    })
+
+    it('does not record advanceTurn output (it only repeats the last answer)', async () => {
+      await startPlaying()
+
+      store.advanceTurn()
+
+      expect(store.turns).toHaveLength(1)
+    })
+
+    it(`keeps only the last ${MAX_TURNS} turns`, async () => {
+      await startPlaying()
+
+      for (let i = 0; i < MAX_TURNS + 5; i++) store.submitCommand(`wait ${i}`)
+
+      expect(store.turns).toHaveLength(MAX_TURNS)
+      expect(lastTurn().command).toBe(`wait ${MAX_TURNS + 4}`)
+      expect(lastTurn().id).toBe(MAX_TURNS + 6)
+    })
+
+    it('keeps updating lastOutput for the classic UI', async () => {
+      await startPlaying()
+      bridge.handleCommand.mockReturnValue('You see a forest.')
+
+      store.submitCommand('look')
+
+      expect(store.lastOutput).toBe('<rendered>You see a forest.</rendered>')
     })
   })
 })
