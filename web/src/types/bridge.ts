@@ -14,6 +14,18 @@ export interface SaveSlot {
   timestamp: string | null
 }
 
+/** Quest progress for the current act (from controller.get_quest_progress()). */
+export interface QuestProgress {
+  /** Quests completed in the current act. */
+  completed: number
+  /** All quests of the current act, including ones not yet started. */
+  total: number
+  /** 1-based number of the current act. */
+  actNumber: number
+  /** Plain name of the act's main quest, or null when it has none. */
+  mainQuest: string | null
+}
+
 export interface NamedItem {
   name: string
   description: string

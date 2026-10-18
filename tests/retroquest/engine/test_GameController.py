@@ -6,6 +6,7 @@ from retroquest.engine.Item import Item
 from retroquest.engine.Character import Character
 from retroquest.engine.GameState import GameState
 from retroquest.engine.Act import Act
+from retroquest.engine.Quest import Quest
 from retroquest.engine.textualui.GameController import GameController
 
 
@@ -219,3 +220,60 @@ class TestGetActName:
         """Return 'Act 1' when the game is on the first act (index 0)."""
         ctrl = _make_controller()
         assert ctrl.get_act_name() == "Act 1"
+
+
+class SimpleQuest(Quest):
+    """Minimal quest; optionally the act's main quest."""
+
+    def __init__(self, name: str, main: bool = False) -> None:
+        """Initialize with a name and whether it is the main quest."""
+        super().__init__(name, f"Do {name}.")
+        self._main = main
+
+    def is_main(self) -> bool:
+        """Return True when created as the main quest."""
+        return self._main
+
+
+def _make_quest_controller() -> tuple[GameController, list[SimpleQuest]]:
+    """Create a controller whose act has one main and two side quests."""
+    quests = [SimpleQuest("Main Arc", main=True), SimpleQuest("Side A"), SimpleQuest("Side B")]
+    room = Room(name="Test Room", description="A test room.")
+    game = Game([SimpleAct({"TestRoom": room}, quests=list(quests))], dev_mode=True)
+    return GameController(game), quests
+
+
+class TestGetQuestProgress:
+    """Tests for GameController.get_quest_progress."""
+
+    def test_counts_all_quests_of_the_act_before_any_start(self) -> None:
+        """Total includes quests that are not yet activated."""
+        ctrl, _ = _make_quest_controller()
+        progress = ctrl.get_quest_progress()
+        assert progress["completed"] == 0
+        assert progress["total"] == 3
+
+    def test_counts_completed_quests(self) -> None:
+        """Completed counts quests moved to completed_quests; total stays the same."""
+        ctrl, quests = _make_quest_controller()
+        state = ctrl.game.state
+        state.non_activated_quests.remove(quests[1])
+        state.completed_quests.append(quests[1])
+        progress = ctrl.get_quest_progress()
+        assert progress["completed"] == 1
+        assert progress["total"] == 3
+
+    def test_reports_act_number(self) -> None:
+        """Act number is 1-based."""
+        ctrl, _ = _make_quest_controller()
+        assert ctrl.get_quest_progress()["act_number"] == 1
+
+    def test_reports_plain_main_quest_name(self) -> None:
+        """The main quest name has no markup or (main) suffix."""
+        ctrl, _ = _make_quest_controller()
+        assert ctrl.get_quest_progress()["main_quest"] == "Main Arc"
+
+    def test_main_quest_is_none_when_act_has_none(self) -> None:
+        """Acts without a main quest report None."""
+        ctrl = _make_controller()
+        assert ctrl.get_quest_progress()["main_quest"] is None

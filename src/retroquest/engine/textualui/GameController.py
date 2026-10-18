@@ -1,6 +1,6 @@
 """Bridge between core game logic and Textual UI panels/state queries."""
 
-from typing import Optional, List, Tuple
+from typing import Any, Optional, List, Tuple
 from ..Game import Game
 from ..theme import apply_theme
 
@@ -143,6 +143,25 @@ class GameController:
     def get_act_name(self) -> str:
         """Return the human-readable name of the current act, e.g. 'Act 1'."""
         return self.game.get_act_name()
+
+    def get_quest_progress(self) -> dict[str, Any]:
+        """Return quest progress for the current act as plain data.
+
+        Keys: ``completed`` and ``total`` (quest counts, including quests not yet
+        activated), ``act_number`` (1-based) and ``main_quest`` (the main quest's
+        plain name, or None when the act has none).
+        """
+        state = self.game.state
+        all_quests = (
+            state.non_activated_quests + state.activated_quests + state.completed_quests
+        )
+        main_quest = next((quest.name for quest in all_quests if quest.is_main()), None)
+        return {
+            "completed": len(state.completed_quests),
+            "total": len(all_quests),
+            "act_number": self.game.current_act + 1,
+            "main_quest": main_quest,
+        }
 
     def get_room_description(self) -> str:
         """Return the current room's narrative description text."""

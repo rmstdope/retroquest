@@ -10,6 +10,7 @@ import type {
   CompletionTree,
   NamedSave,
   SaveSlot,
+  QuestProgress,
 } from '@/types/bridge'
 
 type StoredNamedSave = {
@@ -322,6 +323,19 @@ with open('retroquest.save', 'wb') as f:
     return py('controller.get_act_name()') as string
   }
 
+  function getQuestProgress(): QuestProgress {
+    const result = py('controller.get_quest_progress()') as { toJs(): unknown }
+    const data = Object.fromEntries(
+      result.toJs() as Iterable<[string, unknown]>,
+    )
+    return {
+      completed: data.completed as number,
+      total: data.total as number,
+      actNumber: data.act_number as number,
+      mainQuest: optionalString(data.main_quest),
+    }
+  }
+
   function getSaveSlots(): SaveSlot[] {
     const stored = readStoredSaveSlots()
     return Array.from({ length: 8 }, (_, i) => {
@@ -531,6 +545,7 @@ _result_text
     loadNamedGame,
     listNamedSaves,
     getActName,
+    getQuestProgress,
     getSaveSlots,
     saveToSlot,
     loadFromSlot,
