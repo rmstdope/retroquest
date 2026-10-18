@@ -12,13 +12,13 @@ const props = defineProps<{ turn: Turn }>()
 const blocks = computed(() => parseTurn(props.turn.text))
 
 const chips = computed(() => [
-  ...props.turn.gained.map((chip) => ({ chip, sign: '+' })),
-  ...props.turn.lost.map((chip) => ({ chip, sign: '−' })),
+  ...props.turn.gained.map((chip) => ({ chip, sign: '+', spoken: 'Gained' })),
+  ...props.turn.lost.map((chip) => ({ chip, sign: '−', spoken: 'Lost' })),
 ])
 
-function chipLabel(sign: string, chip: Chip): string {
+function chipLabel(chip: Chip): string {
   const count = chip.count > 1 ? ` ×${chip.count}` : ''
-  return `${sign} ${displayName(chip.name)}${count}`
+  return `${displayName(chip.name)}${count}`
 }
 </script>
 
@@ -81,9 +81,9 @@ function chipLabel(sign: string, chip: Chip): string {
       <!-- eslint-enable vue/no-v-html -->
     </template>
 
-    <div v-if="chips.length" class="lq-chips" aria-label="Changes">
+    <div v-if="chips.length" class="lq-chips" role="group" aria-label="Changes">
       <span
-        v-for="({ chip, sign }, index) in chips"
+        v-for="({ chip, sign, spoken }, index) in chips"
         :key="index"
         class="lq-chip"
         :class="[
@@ -91,7 +91,9 @@ function chipLabel(sign: string, chip: Chip): string {
           sign === '+' ? 'lq-chip-gained' : 'lq-chip-lost',
         ]"
         data-testid="chip"
-        >{{ chipLabel(sign, chip) }}</span
+        ><span aria-hidden="true">{{ sign }}&nbsp;</span
+        ><span class="lq-sr-only">{{ `${spoken} ` }}</span
+        >{{ chipLabel(chip) }}</span
       >
     </div>
   </article>

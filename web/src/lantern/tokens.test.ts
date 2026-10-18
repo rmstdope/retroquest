@@ -43,6 +43,9 @@ function textPairs(p: LanternPalette): Array<[string, string, string]> {
   for (const kind of ['character', 'item', 'spell'] as const) {
     pairs.push([`${kind} on ${kind}Soft`, p[kind], p[`${kind}Soft`]])
     pairs.push([`${kind} on surface`, p[kind], p.surface])
+    // Inline names in the story and inside failure boxes.
+    pairs.push([`${kind} on bg`, p[kind], p.bg])
+    pairs.push([`${kind} on failureSoft`, p[kind], p.failureSoft])
     // Chip notes ("to Bag") are muted text inside entity chips.
     pairs.push([`muted on ${kind}Soft`, p.muted, p[`${kind}Soft`]])
   }
@@ -147,4 +150,22 @@ describe('lantern.css', () => {
       expect(lanternCss).toContain(`:root[data-ui='lantern'] .theme-${tag}`)
     },
   )
+
+  it('bundles a prose face for every weight the inline tags use, upright and italic', () => {
+    // Tags sit in prose and in italic dialogue; a missing face makes the browser
+    // fake the bold, which smears the text.
+    const weights = new Set(
+      [...lanternCss.matchAll(/\.theme-\w+ \{[^}]*font-weight: (\d+)/g)].map(
+        (m) => m[1],
+      ),
+    )
+    expect(weights.size).toBeGreaterThan(0)
+    for (const weight of weights) {
+      for (const face of [weight, `${weight}-italic`]) {
+        expect(lanternCss).toContain(
+          `@import '@fontsource/source-serif-4/${face}.css'`,
+        )
+      }
+    }
+  })
 })

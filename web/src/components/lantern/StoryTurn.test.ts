@@ -17,6 +17,20 @@ function turn(partial: Partial<Turn>): Turn {
   }
 }
 
+/** Text a sighted player sees (screen-reader-only text removed). */
+function visibleText(w: { element: Element }): string {
+  const copy = w.element.cloneNode(true) as Element
+  copy.querySelectorAll('.lq-sr-only').forEach((el) => el.remove())
+  return (copy.textContent ?? '').replace(/\s+/g, ' ').trim()
+}
+
+/** Text a screen reader announces (aria-hidden parts removed). */
+function spokenText(w: { element: Element }): string {
+  const copy = w.element.cloneNode(true) as Element
+  copy.querySelectorAll('[aria-hidden="true"]').forEach((el) => el.remove())
+  return (copy.textContent ?? '').replace(/\s+/g, ' ').trim()
+}
+
 function mountTurn(partial: Partial<Turn>) {
   return mount(StoryTurn, { props: { turn: turn(partial) } })
 }
@@ -97,9 +111,23 @@ describe('StoryTurn', () => {
       lost: [{ kind: 'item', name: 'coin', count: 2 }],
     })
 
-    const chips = w.findAll('[data-testid="chip"]').map((c) => c.text())
+    const chips = w.findAll('[data-testid="chip"]').map(visibleText)
     expect(chips).toEqual(['+ Bucket', '+ Greater Heal', '− Coin ×2'])
-    expect(w.get('.lq-chip-spell').text()).toBe('+ Greater Heal')
+    expect(visibleText(w.get('.lq-chip-spell'))).toBe('+ Greater Heal')
+  })
+
+  it('names the chips for screen readers as gained and lost', () => {
+    const w = mountTurn({
+      text: 'Done.',
+      gained: [{ kind: 'item', name: 'bucket', count: 1 }],
+      lost: [{ kind: 'item', name: 'coin', count: 2 }],
+    })
+
+    const row = w.get('.lq-chips')
+    expect(row.attributes('role')).toBe('group')
+    expect(row.attributes('aria-label')).toBe('Changes')
+    const chips = w.findAll('[data-testid="chip"]').map(spokenText)
+    expect(chips).toEqual(['Gained Bucket', 'Lost Coin ×2'])
   })
 
   it('shows no chip row when nothing changed', () => {
