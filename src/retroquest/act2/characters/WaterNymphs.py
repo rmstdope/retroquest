@@ -1,5 +1,4 @@
-"""Water Nymphs NPC definition.
-"""
+"""Water Nymphs NPC definition."""
 
 from ...engine.Character import Character
 from ...engine.GameState import GameState
