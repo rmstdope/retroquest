@@ -134,6 +134,17 @@ describe('ActionComposer', () => {
     expect(w.text()).toContain('Nothing to take here')
   })
 
+  it('puts the builder away when the selected verb is tapped again', async () => {
+    const w = mountComposer()
+    await button(w, 'Use').trigger('click')
+    await button(w, 'Lantern').trigger('click')
+
+    await button(w, 'Use').trigger('click')
+
+    expect(w.find('[data-testid="preview"]').exists()).toBe(false)
+    expect(submit).not.toHaveBeenCalled()
+  })
+
   it('cancels a half-built command', async () => {
     const w = mountComposer()
     await button(w, 'Take').trigger('click')
@@ -249,5 +260,17 @@ describe('ActionComposer', () => {
     await w.vm.$nextTick()
 
     expect(document.activeElement).toBe(button(w, 'Say').element)
+  })
+
+  it('focuses the first verb, or the command box in type mode', async () => {
+    wrapper = mount(ActionComposer, { attachTo: document.body })
+    const composer = wrapper.vm as unknown as { focus: () => void }
+
+    composer.focus()
+    expect(document.activeElement?.textContent?.trim()).toBe('Look')
+
+    await button(wrapper, 'Type').trigger('click')
+    composer.focus()
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('Command')
   })
 })

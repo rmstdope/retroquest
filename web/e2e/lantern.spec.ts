@@ -41,7 +41,9 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     await expect(page.getByTestId('act')).toHaveText('Act I')
     await expect(page.getByTestId('quest-progress')).toContainText('4/11')
     await expect(page.getByText('bustles with life')).toBeVisible()
-    await expect(page.getByLabel('Command')).toBeEnabled()
+    await expect(
+      page.getByRole('button', { name: 'Look', exact: true }),
+    ).toBeEnabled()
   })
 
   test('uses the Lantern colours', async ({ page }) => {
@@ -91,7 +93,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
-    await expect(page.getByLabel('Command')).toBeInViewport()
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport()
   })
 
   test('the classic UI stays the default', async ({ page }) => {
@@ -193,6 +195,51 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     expect(layout.pageHeight).toBeLessThanOrEqual(layout.viewport)
     expect(layout.scrollY).toBe(0)
     expect(layout.bodyBg).toBe(layout.rootBg)
-    await expect(page.getByLabel('Command')).toBeInViewport()
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport()
+  })
+
+  test('builds a command with the action composer', async ({ page }) => {
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.items = ['old key']
+      store.characters = ['mira']
+      store.exits = { north: "Mira's Hut" }
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const actions = page.getByRole('region', { name: 'Actions' })
+    await expect(
+      actions.getByRole('button', { name: "Go north to Mira's Hut" }),
+    ).toBeVisible()
+
+    await actions.getByRole('button', { name: 'Take', exact: true }).click()
+    await actions.getByRole('button', { name: 'Old Key', exact: true }).click()
+    await expect(page.getByTestId('preview')).toHaveText('take old key')
+    await expect(
+      actions.getByRole('button', { name: 'Do it', exact: true }),
+    ).toBeEnabled()
+
+    await actions.getByRole('button', { name: 'Type', exact: true }).click()
+    await expect(page.getByLabel('Command')).toBeVisible()
+  })
+
+  test('highlights the selected input mode', async ({ page }) => {
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    const actions = page.getByRole('region', { name: 'Actions' })
+    const background = (name: string) =>
+      actions
+        .getByRole('button', { name, exact: true })
+        .evaluate((el) => getComputedStyle(el).backgroundColor)
+
+    const selected = await background('Actions')
+    const other = await background('Type')
+
+    expect(selected).not.toBe(other)
+    expect(other).toBe('rgba(0, 0, 0, 0)')
   })
 })

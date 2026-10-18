@@ -128,12 +128,26 @@ function focusFirst(...selectors: string[]): void {
   })
 }
 
+/** Put keyboard focus in the composer: the command box, or the first verb. */
+function focus(): void {
+  const selector =
+    mode.value === 'type' ? 'input[aria-label="Command"]' : '.lq-verb'
+  root.value?.querySelector<HTMLElement>(selector)?.focus()
+}
+
+defineExpose({ focus })
+
 function run(text: string): void {
   if (!game.acceptInput) return
   game.submitCommand(text)
 }
 
 function pickVerb(next: Verb): void {
+  // Tapping the selected verb again puts the builder away (like Cancel).
+  if (verb.value?.id === next.id) {
+    reset()
+    return
+  }
   if (next.slots.length === 0) {
     run(next.words)
     reset()
@@ -380,7 +394,7 @@ function submitTyped(): void {
   font-size: 13px;
   cursor: pointer;
 }
-.lq-seg-btn[aria-checked='true'] {
+.lq-seg-btn[aria-pressed='true'] {
   background: var(--lq-raised);
   color: var(--lq-fg);
   font-weight: 600;

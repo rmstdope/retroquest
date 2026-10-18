@@ -68,27 +68,25 @@ describe('LanternLayout', () => {
     expect(turns[1].find('.theme-item_name').text()).toBe('Bucket')
   })
 
-  it('sends a typed command to the game and clears the box', async () => {
+  it('plays through the action composer', async () => {
     const w = mountLayout()
     const game = useGameStore()
     game.acceptInput = true
     const submit = vi.spyOn(game, 'submitCommand').mockImplementation(() => {})
     await w.vm.$nextTick()
 
-    const input = w.get('input[aria-label="Command"]')
-    await input.setValue('look')
-    await w.get('form').trigger('submit')
+    expect(w.find('[aria-label="Actions"]').exists()).toBe(true)
+    const look = w.findAll('button').find((b) => b.text() === 'Look')
+    await look!.trigger('click')
 
     expect(submit).toHaveBeenCalledWith('look')
-    expect((input.element as HTMLInputElement).value).toBe('')
   })
 
-  it('disables the command box while the game is not accepting input', () => {
+  it('disables the actions while the game is not accepting input', () => {
     const w = mountLayout()
 
-    expect(w.get('input[aria-label="Command"]').attributes()).toHaveProperty(
-      'disabled',
-    )
+    const look = w.findAll('button').find((b) => b.text() === 'Look')
+    expect(look!.attributes()).toHaveProperty('disabled')
   })
 
   it('shows pending pop-ups (act intro, quests) and continues on request', async () => {
@@ -118,7 +116,7 @@ describe('LanternLayout', () => {
     expect(document.activeElement?.textContent?.trim()).toBe('Continue')
   })
 
-  it('returns focus to the command box when the last pop-up closes', async () => {
+  it('returns focus to the actions when the last pop-up closes', async () => {
     wrapper = mount(LanternLayout, { attachTo: document.body })
     const game = useGameStore()
     game.showModal = true
@@ -128,7 +126,7 @@ describe('LanternLayout', () => {
     game.acceptInput = true
     await wrapper.vm.$nextTick()
 
-    expect(document.activeElement?.getAttribute('aria-label')).toBe('Command')
+    expect(document.activeElement?.textContent?.trim()).toBe('Look')
   })
 
   it('continues the pop-up with Escape', async () => {

@@ -116,4 +116,28 @@ describe('StoryArrival', () => {
       false,
     )
   })
+
+  it('marks the room name as a heading for screen-reader navigation', () => {
+    const heading = mountArrival('go south').get('h3')
+
+    expect(heading.text()).toBe('Vegetable Field')
+  })
+
+  it('keeps the direction and the room name as separate words', () => {
+    const divider = mountArrival('go south').get('[data-testid="divider"]')
+
+    expect(divider.element.textContent).toMatch(/South\s+Vegetable Field/)
+  })
+
+  it('links Read more to the description it expands', () => {
+    const w = mountArrival('go south', {
+      description: 'Long text. '.repeat(40),
+    })
+    const text = w.get('.lq-arrival-text')
+
+    expect(text.attributes('id')).toBeTruthy()
+    expect(w.get('button.lq-read-more').attributes('aria-controls')).toBe(
+      text.attributes('id'),
+    )
+  })
 })
