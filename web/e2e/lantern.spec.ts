@@ -29,11 +29,11 @@ async function injectMockState(page: Page) {
   })
 }
 
-test.describe('Lantern UI (?ui=lantern)', () => {
+test.describe('Lantern UI (the default)', () => {
   test('shows the Lantern shell with header, story and command box', async ({
     page,
   }) => {
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
 
     await expect(page.locator('html')).toHaveAttribute('data-ui', 'lantern')
@@ -47,7 +47,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
   })
 
   test('uses the Lantern colours', async ({ page }) => {
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
 
     const accent = await page.evaluate(() =>
@@ -60,7 +60,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
 
   test('on a phone the text size popover stays on screen', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
 
     await page.getByRole('button', { name: 'Text size' }).click()
@@ -75,7 +75,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -96,9 +96,13 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport()
   })
 
-  test('the classic UI stays the default', async ({ page }) => {
+  test('is the default, and the classic UI stays at ?ui=classic', async ({
+    page,
+  }) => {
     await page.goto('/')
+    await expect(page.locator('html')).toHaveAttribute('data-ui', 'lantern')
 
+    await page.goto('/?ui=classic')
     await expect(page.locator('html')).not.toHaveAttribute('data-ui', 'lantern')
   })
 
@@ -106,7 +110,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -132,7 +136,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
   test('draws the not-yet checklist circle in the muted colour', async ({
     page,
   }) => {
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -164,7 +168,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -199,7 +203,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
   })
 
   test('builds a command with the action composer', async ({ page }) => {
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -228,7 +232,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
   })
 
   test('highlights the selected input mode', async ({ page }) => {
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     const actions = page.getByRole('region', { name: 'Actions' })
     const background = (name: string) =>
@@ -244,7 +248,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
   })
 
   test('completes typed commands with Tab in Type mode', async ({ page }) => {
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -274,7 +278,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -314,7 +318,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     // Keep the real game from loading over the mock state.
     await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
     await page.setViewportSize({ width: 1024, height: 700 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -340,7 +344,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
 
   test('switches sections with the tabs on a phone', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -367,7 +371,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 844, height: 390 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
 
     await expect(
@@ -383,7 +387,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 320, height: 640 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     const sections = page.getByRole('navigation', { name: 'Sections' })
     const textStart = (name: string) =>
@@ -405,7 +409,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 320, height: 568 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
 
     const sheet = page.getByRole('region', { name: 'Actions' })
@@ -423,7 +427,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 844, height: 390 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
 
     await expect(page.getByRole('region', { name: 'Action bar' })).toBeVisible()
@@ -441,7 +445,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 320, height: 568 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -482,7 +486,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
       // Keep the real game (and its intro pop-up) from loading over the mock.
       await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
       await page.setViewportSize({ width, height })
-      await page.goto('/?ui=lantern')
+      await page.goto('/')
       await injectMockState(page)
       await page.evaluate(() => {
         /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -541,7 +545,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 320, height: 568 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -568,7 +572,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     await page.setViewportSize({ width: 320, height: 568 })
     // Keep the real game from loading over the mock state.
     await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -598,7 +602,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
   })
 
   test('lines the title art up at its left edge', async ({ page }) => {
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -630,7 +634,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
   test('shows a wordmark instead of the tiny title art on narrow phones', async ({
     page,
   }) => {
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -654,7 +658,7 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/?ui=lantern')
+    await page.goto('/')
     await injectMockState(page)
     const button = page.getByRole('button', { name: 'Full screen' })
     await expect(button).toBeVisible()
