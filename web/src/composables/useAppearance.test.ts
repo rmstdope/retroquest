@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { nextTick, effectScope } from 'vue'
 import { useAppearance } from './useAppearance'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { LANTERN_PALETTES } from '@/lantern/tokens'
 
 describe('useAppearance', () => {
   let root: HTMLElement
@@ -11,6 +12,10 @@ describe('useAppearance', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     root = document.createElement('html')
+  })
+
+  afterEach(() => {
+    document.head.innerHTML = ''
   })
 
   /** Run useAppearance inside a scope, as a component's setup would. */
@@ -76,5 +81,38 @@ describe('useAppearance', () => {
     useSettingsStore().theme = 'light'
     await nextTick()
     expect(root.hasAttribute('data-theme')).toBe(false)
+  })
+
+  it('gives the browser chrome the theme chosen in Settings', async () => {
+    document.head.innerHTML =
+      '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f0e6">' +
+      '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#10151a">'
+    const colours = () =>
+      [...document.querySelectorAll('meta[name="theme-color"]')].map((m) =>
+        m.getAttribute('content'),
+      )
+    start()
+    const settings = useSettingsStore()
+
+    settings.theme = 'dark'
+    await nextTick()
+    expect(colours()).toEqual([
+      LANTERN_PALETTES.dark.bg,
+      LANTERN_PALETTES.dark.bg,
+    ])
+
+    settings.theme = 'light'
+    await nextTick()
+    expect(colours()).toEqual([
+      LANTERN_PALETTES.light.bg,
+      LANTERN_PALETTES.light.bg,
+    ])
+
+    settings.theme = 'device'
+    await nextTick()
+    expect(colours()).toEqual([
+      LANTERN_PALETTES.light.bg,
+      LANTERN_PALETTES.dark.bg,
+    ])
   })
 })
