@@ -105,8 +105,13 @@ class GameController:
         return self.game.look()
 
     def complete_quest(self) -> Optional[str]:
-        """Return completion popup payload if a quest just completed else None."""
-        if (quest := self.game.state.next_completed_quest()) is not None:
+        """Return completion popup payload if a quest just completed else None.
+
+        Between acts this reports the finished act, whose last completion (usually
+        its main quest) ends the act in the same turn.
+        """
+        state = self.game.finished_act_state or self.game.state
+        if (quest := state.next_completed_quest()) is not None:
             quest_type = "main" if quest.is_main() else "side"
             return (
                 f"[quest_name]{quest.name} ({quest_type} quest)"\
@@ -149,9 +154,12 @@ class GameController:
 
         Keys: ``completed`` and ``total`` (quest counts, including quests not yet
         activated), ``act_number`` (1-based) and ``main_quest`` (the main quest's
-        plain name, or None when the act has none).
+        plain name, or None when the act has none). Between acts it still reports
+        the act that just ended.
         """
-        state = self.game.state
+        finished = self.game.finished_act_state
+        state = finished or self.game.state
+        act_index = self.game.current_act - 1 if finished else self.game.current_act
         all_quests = (
             state.non_activated_quests + state.activated_quests + state.completed_quests
         )
@@ -159,7 +167,7 @@ class GameController:
         return {
             "completed": len(state.completed_quests),
             "total": len(all_quests),
-            "act_number": self.game.current_act + 1,
+            "act_number": act_index + 1,
             "main_quest": main_quest,
         }
 
