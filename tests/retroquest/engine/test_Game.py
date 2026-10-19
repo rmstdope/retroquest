@@ -1662,3 +1662,13 @@ def test_unknown_command_is_a_failure(game):
         "[failure]I don't understand the command: 'xyzzy'. "
         "Try 'help' for a list of valid commands.[/failure]"
     )
+
+
+def test_logo_art_lines_end_cleanly(game):
+    """Every line of the ASCII logo art ends with its letters, not a stray dot."""
+    logo = game.get_ascii_logo()
+    art = logo.split("[bold yellow]")[1].split("[/bold yellow]")[0]
+    lines = [line for line in art.splitlines() if line.strip()]
+
+    assert lines
+    assert all(line.rstrip().endswith("#") for line in lines)
