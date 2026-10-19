@@ -2,6 +2,7 @@
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useAudio } from '@/composables/useAudio'
 import {
   SHORT_QUERY,
   useMediaQuery,
@@ -171,6 +172,9 @@ watch(
   { flush: 'post' },
 )
 
+// The quest chime and fanfare (sound settings apply).
+game.setAudioPlayer(useAudio())
+
 // Move keyboard focus into each pop-up as it opens, and back to the
 // actions when the last one closes.
 watch(
@@ -258,8 +262,10 @@ watch(
         aria-modal="true"
         aria-labelledby="lq-dialog-title"
       >
+        <!-- Keyed so each pop-up's text opens from its top. -->
         <QuestCompleteContent
           v-if="game.modalQuest"
+          :key="game.modalQuest.name"
           :news="game.modalQuest"
           title-id="lq-dialog-title"
         />
