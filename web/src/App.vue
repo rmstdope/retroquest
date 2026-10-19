@@ -13,6 +13,11 @@ const bridge = useBridge()
 useAppearance()
 const uiMode = useUiMode()
 
+/** Start over after a failed load: a fresh page restarts the engine cleanly. */
+function reload(): void {
+  window.location.reload()
+}
+
 function requestFullscreenOnFirstInteraction() {
   if (
     !('ontouchstart' in window) ||
@@ -41,6 +46,8 @@ onMounted(() => {
   <LanternLoading
     v-if="store.loading && uiMode === 'lantern'"
     :status="store.loadingStatus"
+    :failed="store.loadFailed"
+    @retry="reload"
   />
   <div
     v-else-if="store.loading"

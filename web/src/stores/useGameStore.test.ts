@@ -153,6 +153,17 @@ describe('useGameStore', () => {
       expect(bridge.init).toHaveBeenCalledWith(expect.any(Function))
     })
 
+    it('marks the load as failed when the engine cannot start', async () => {
+      expect(store.loadFailed).toBe(false)
+      bridge.init.mockRejectedValue(new Error('Network error'))
+
+      await store.initGame()
+
+      expect(store.loadFailed).toBe(true)
+      expect(store.loading).toBe(true)
+      expect(store.loadingStatus).toBe('Error: Network error')
+    })
+
     it('sets loading to false after init', async () => {
       await store.initGame()
       expect(store.loading).toBe(false)
