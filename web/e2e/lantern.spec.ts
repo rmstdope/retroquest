@@ -400,4 +400,74 @@ test.describe('Lantern UI (?ui=lantern)', () => {
 
     expect(await textStart('Map')).toEqual(bag)
   })
+
+  test('caps the open action sheet at 62% of a phone screen', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+
+    const sheet = page.getByRole('region', { name: 'Actions' })
+    await expect(sheet).toBeVisible()
+    await page.getByRole('button', { name: 'More…' }).click()
+    const box = await sheet.boundingBox()
+    expect(box!.height).toBeLessThanOrEqual(568 * 0.62 + 1)
+
+    await page.getByRole('button', { name: 'Hide actions' }).click()
+    await expect(sheet).toBeHidden()
+    await expect(page.getByRole('button', { name: 'Actions ▴' })).toBeFocused()
+  })
+
+  test('starts with the actions folded in phone landscape', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 844, height: 390 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+
+    await expect(page.getByRole('region', { name: 'Action bar' })).toBeVisible()
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeHidden()
+
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
+    await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollHeight - window.innerHeight,
+    )
+    expect(overflow).toBeLessThanOrEqual(0)
+  })
+
+  test('keeps Actions ▴ on one line and scrolls the exits on a narrow phone', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      app.config.globalProperties.$pinia.state.value.game.exits = {
+        north: "Mira's Hut",
+        east: 'General Store',
+        south: 'Village Well',
+        west: "Elior's Cottage",
+        up: 'Bell Tower',
+      }
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+    await page.getByRole('button', { name: 'Hide actions' }).click()
+
+    const open = page.getByRole('button', { name: 'Actions ▴' })
+    const lines = await open.evaluate((el) => {
+      const range = document.createRange()
+      range.selectNodeContents(el)
+      return new Set([...range.getClientRects()].map((r) => Math.round(r.top)))
+        .size
+    })
+    expect(lines).toBe(1)
+    const exits = page.locator('.lq-dock-exits')
+    expect(await exits.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(
+      true,
+    )
+  })
 })
