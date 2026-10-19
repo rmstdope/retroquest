@@ -8,11 +8,13 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * stays put while the body scrolls; buttons go in the footer slot. Focus
  * stays inside while it is open; Escape, the close button and the backdrop
  * emit `close` (the backdrop only when there is a close button: a game
- * pop-up goes on with its own button or Escape, not a stray tap). Focus starts on an element marked `data-autofocus`, else on
- * the first focusable one, else on the dialog itself (it takes focus when
- * its text is clicked, so Escape and Tab keep working). On close it gives
- * focus back to what had it when it opened, unless `restoreFocus` is off
- * (the game's own pop-ups send it to the actions instead).
+ * pop-up goes on with its own button or Escape, not a stray tap, which
+ * just puts focus back in the dialog). Focus starts on an element marked
+ * `data-autofocus`, else on the first focusable one, else on the dialog
+ * itself (it takes focus when its text is clicked, so Escape and Tab keep
+ * working). On close it gives focus back to what had it when it opened,
+ * unless `restoreFocus` is off (the game's own pop-ups send it to the
+ * actions instead).
  */
 const props = withDefaults(
   defineProps<{
@@ -37,6 +39,11 @@ function onKeydown(event: KeyboardEvent): void {
   trap.onKeydown(event)
 }
 
+function onBackdrop(): void {
+  if (props.closable) emit('close')
+  else trap.focusFirst()
+}
+
 let opener: HTMLElement | null = null
 onMounted(() => {
   opener = document.activeElement as HTMLElement | null
@@ -51,11 +58,7 @@ defineExpose({ focusFirst: trap.focusFirst })
 
 <template>
   <div class="lq-dialog-layer">
-    <div
-      class="lq-dialog-scrim"
-      aria-hidden="true"
-      @click="closable && emit('close')"
-    ></div>
+    <div class="lq-dialog-scrim" aria-hidden="true" @click="onBackdrop"></div>
     <section
       ref="panel"
       class="lq-dialog-panel"
