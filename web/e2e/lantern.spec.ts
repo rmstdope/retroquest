@@ -561,4 +561,39 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     )
     expect(height).toBeLessThan(72)
   })
+
+  test('shows quest complete as a bottom sheet on a small phone', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
+    // Keep the real game from loading over the mock state.
+    await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.modalTitle = '🏆 Quest Complete!'
+      store.modalQuest = {
+        kind: 'completed',
+        name: 'Oath of Stillness',
+        main: false,
+        text: 'You kept your vow through the long night. '.repeat(30),
+        progress: { completed: 5, total: 8 },
+      }
+      store.showModal = true
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const dialog = page.getByRole('dialog', { name: 'Oath of Stillness' })
+    await expect(dialog).toBeVisible()
+    const box = await dialog.boundingBox()
+    expect(Math.round(box!.y + box!.height)).toBe(568)
+    expect(box!.width).toBe(320)
+    await expect(
+      dialog.getByRole('button', { name: 'Continue' }),
+    ).toBeInViewport()
+    await expect(dialog.getByText('5 of 8 quests')).toBeAttached()
+  })
 })

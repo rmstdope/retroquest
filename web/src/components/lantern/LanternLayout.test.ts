@@ -34,6 +34,61 @@ describe('LanternLayout', () => {
     return wrapper
   }
 
+  it('shows a completed quest in the pop-up', async () => {
+    const w = mountLayout()
+    const game = useGameStore()
+    game.modalTitle = '🏆 Quest Complete!'
+    game.modalQuest = {
+      kind: 'completed',
+      name: 'Hint of Magic',
+      main: false,
+      text: 'It begins.',
+      progress: { completed: 5, total: 11 },
+    }
+    game.showModal = true
+    await w.vm.$nextTick()
+
+    const dialog = w.get('[role="dialog"]')
+    expect(dialog.get('#lq-dialog-title').text()).toBe('Hint of Magic')
+    expect(dialog.find('.lq-complete-count').exists()).toBe(true)
+    expect(dialog.text()).not.toContain('🏆')
+    expect(dialog.get('button').text()).toBe('Continue')
+  })
+
+  it('opens the next completion pop-up from its top', async () => {
+    const w = mountLayout()
+    const game = useGameStore()
+    const quest = (name: string) => ({
+      kind: 'completed' as const,
+      name,
+      main: false,
+      text: 'Done.',
+      progress: { completed: 1, total: 11 },
+    })
+    game.modalQuest = quest('First')
+    game.showModal = true
+    await w.vm.$nextTick()
+    const first = w.get('.lq-complete').element
+
+    game.modalQuest = quest('Second')
+    await w.vm.$nextTick()
+
+    // A fresh scroll box, so the text does not open where the last one was
+    // scrolled to.
+    expect(w.get('.lq-complete').element).not.toBe(first)
+  })
+
+  it('plays the quest sounds (chime and fanfare)', () => {
+    const game = useGameStore()
+    const setPlayer = vi.spyOn(game, 'setAudioPlayer')
+    mountLayout()
+
+    expect(setPlayer).toHaveBeenCalledOnce()
+    const player = setPlayer.mock.calls[0]![0]
+    expect(typeof player.playNewQuest).toBe('function')
+    expect(typeof player.playQuestComplete).toBe('function')
+  })
+
   it('switches the page to the Lantern look while it is shown', () => {
     const w = mountLayout()
     expect(document.documentElement.getAttribute('data-ui')).toBe('lantern')
