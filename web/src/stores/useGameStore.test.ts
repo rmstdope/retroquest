@@ -1791,6 +1791,32 @@ describe('useGameStore', () => {
       })
     })
 
+    it.each([
+      ['a quick load', (s: typeof store) => s.loadGame()],
+      ['a named load', (s: typeof store) => s.loadNamedGame('act2')],
+      ['a slot load', (s: typeof store) => s.loadFromSlot(1)],
+    ])('closes the act of %s with its own title', async (_, load) => {
+      await store.initGame()
+      store.dismissModal()
+      bridge.getActIntro.mockReturnValue(INTRO_2)
+      load(store)
+      bridge.isAcceptingInput.mockReturnValue(false)
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.advanceToRunning.mockReturnValue([
+        'Congratulations — you have completed Act 2!',
+        '[bold]ACT III: THE AWAKENING[/bold]\n\nText.',
+      ])
+
+      store.submitCommand('use orb')
+
+      expect(store.modalChapter).toMatchObject({
+        kind: 'complete',
+        act: 'Act II',
+        title: 'The Gathering Storm',
+        nextAct: 'Act III',
+      })
+    })
+
     it('has no chapter for a quest pop-up', async () => {
       await store.initGame()
       store.dismissModal()

@@ -49,6 +49,7 @@ export interface GameBridge {
   loadNamedGame(name: string): string
   listNamedSaves(): NamedSave[]
   getActName(): string
+  getActIntro(): string
   getQuestProgress(): QuestProgress
   getActStats(): ActStats
   getSaveSlots(): SaveSlot[]
@@ -193,6 +194,11 @@ export const useGameStore = defineStore('game', () => {
   const modalChapter = ref<Chapter | null>(null)
   /** The running act's heading, kept for its act-complete page. */
   let currentAct: ActIntro | null = null
+
+  /** A loaded save may be in another act: keep its heading instead. */
+  function rememberLoadedAct(b: GameBridge): void {
+    currentAct = parseActIntro(b.getActIntro())
+  }
 
   /** Queue an act intro pop-up, with its chapter page. */
   function queueActIntro(raw: string): void {
@@ -459,6 +465,7 @@ export const useGameStore = defineStore('game', () => {
   function loadGame(command: string | null = null): void {
     const b = requireBridge()
     const result = b.quickLoadGame()
+    rememberLoadedAct(b)
     clearNewDots()
     showOutput(command, result, { chips: false })
     refreshPanels()
@@ -473,6 +480,7 @@ export const useGameStore = defineStore('game', () => {
   function loadNamedGame(name: string, command: string | null = null): void {
     const b = requireBridge()
     const result = b.loadNamedGame(name)
+    rememberLoadedAct(b)
     clearNewDots()
     showOutput(command, result, { chips: false })
     refreshPanels()
@@ -497,6 +505,7 @@ export const useGameStore = defineStore('game', () => {
   function loadFromSlot(slot: number): void {
     const b = requireBridge()
     const result = b.loadFromSlot(slot)
+    rememberLoadedAct(b)
     clearNewDots()
     showOutput(null, result)
     refreshPanels()
