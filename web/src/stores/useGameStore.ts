@@ -135,6 +135,8 @@ export const useGameStore = defineStore('game', () => {
   // --- Loading ---
   const loading = ref(true)
   const loadingStatus = ref('Initializing...')
+  /** The engine could not start (loadingStatus says why). */
+  const loadFailed = ref(false)
 
   // --- Room data ---
   const roomName = ref('')
@@ -354,6 +356,7 @@ export const useGameStore = defineStore('game', () => {
       loading.value = false
     } catch (err) {
       loadingStatus.value = `Error: ${(err as Error).message}`
+      loadFailed.value = true
     }
   }
 
@@ -838,6 +841,7 @@ export const useGameStore = defineStore('game', () => {
     showQuest,
     openQuestInJournal,
     loadingStatus,
+    loadFailed,
     roomName,
     roomDescription,
     characters,

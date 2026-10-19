@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import LanternLoading from './LanternLoading.vue'
 
@@ -27,5 +28,23 @@ describe('LanternLoading', () => {
 
     await w.setProps({ status: 'Error: Network error' })
     expect(w.get('[role="status"]').text()).toBe('Error: Network error')
+  })
+
+  it('offers to try again when loading failed', async () => {
+    const w = mount(LanternLoading, {
+      props: { status: 'Error: Network error', failed: true },
+      attachTo: document.body,
+    })
+    await nextTick()
+
+    expect(w.find('.lq-loading-spinner').exists()).toBe(false)
+    expect(w.get('[role="alert"]').text()).toContain('Error: Network error')
+    const retry = w.get('button')
+    expect(retry.text()).toBe('Try again')
+    expect(document.activeElement).toBe(retry.element)
+
+    await retry.trigger('click')
+    expect(w.emitted('retry')).toHaveLength(1)
+    w.unmount()
   })
 })
