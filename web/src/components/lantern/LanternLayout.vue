@@ -12,6 +12,7 @@ import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternHeader from './LanternHeader.vue'
+import QuestCompleteContent from './QuestCompleteContent.vue'
 import RoomCard from './RoomCard.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StoryTurn from './StoryTurn.vue'
@@ -248,7 +249,8 @@ watch(
       class="lq-nav-bottom"
     />
 
-    <!-- Temporary pop-up for act intros and quest news; steps 15–17 replace it. -->
+    <!-- Pop-ups: quest complete (step 16); act intro/complete still the
+         temporary text pop-up until step 17. -->
     <div v-if="game.showModal" class="lq-scrim">
       <section
         class="lq-dialog"
@@ -256,12 +258,19 @@ watch(
         aria-modal="true"
         aria-labelledby="lq-dialog-title"
       >
-        <h2 id="lq-dialog-title" class="lq-dialog-title">
-          {{ game.modalTitle }}
-        </h2>
-        <!-- eslint-disable vue/no-v-html -->
-        <div class="lq-dialog-body" v-html="game.modalBody"></div>
-        <!-- eslint-enable vue/no-v-html -->
+        <QuestCompleteContent
+          v-if="game.modalQuest"
+          :news="game.modalQuest"
+          title-id="lq-dialog-title"
+        />
+        <template v-else>
+          <h2 id="lq-dialog-title" class="lq-dialog-title">
+            {{ game.modalTitle }}
+          </h2>
+          <!-- eslint-disable vue/no-v-html -->
+          <div class="lq-dialog-body" v-html="game.modalBody"></div>
+          <!-- eslint-enable vue/no-v-html -->
+        </template>
         <button
           ref="continueButton"
           type="button"
@@ -412,6 +421,21 @@ watch(
   border: 1px solid var(--lq-accent-line);
   background: var(--lq-surface);
   color: var(--lq-fg);
+}
+/* Small phones: pop-ups are bottom sheets; the text scrolls and Continue
+   stays in view. */
+@media (max-width: 639px) {
+  .lq-scrim {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .lq-dialog {
+    max-width: none;
+    max-height: 88dvh;
+    border-radius: 18px 18px 0 0;
+    border-bottom: none;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
 }
 .lq-dialog-title {
   margin: 0;

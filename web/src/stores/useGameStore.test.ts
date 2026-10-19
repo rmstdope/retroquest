@@ -1596,6 +1596,32 @@ describe('useGameStore', () => {
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
     })
 
+    it('gives the completion pop-up the quest it is about', () => {
+      bridge.completeQuest
+        .mockReturnValueOnce(
+          '[quest_name]Hint of Magic (side quest)[/quest_name]\n\nIt begins.',
+        )
+        .mockReturnValue(null)
+      bridge.getQuestProgress.mockReturnValue({
+        completed: 5,
+        total: 11,
+        actNumber: 1,
+        mainQuest: 'Shadows',
+      })
+
+      store.submitCommand('talk to grandmother')
+
+      expect(store.modalQuest).toEqual({
+        kind: 'completed',
+        name: 'Hint of Magic',
+        main: false,
+        text: 'It begins.',
+        progress: { completed: 5, total: 11 },
+      })
+      store.dismissModal()
+      expect(store.modalQuest).toBe(null)
+    })
+
     it('lets the fanfare alone mark a turn that also completes a quest', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
@@ -1680,5 +1706,19 @@ describe('useGameStore', () => {
 
       expect(store.turns.at(-1)!.quests ?? []).toEqual([])
     })
+  })
+
+  it('has no quest for the classic completion pop-up', async () => {
+    bridge.isAcceptingInput.mockReturnValue(true)
+    await store.initGame()
+    store.dismissModal()
+    bridge.completeQuest
+      .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
+      .mockReturnValue(null)
+
+    store.submitCommand('look')
+
+    expect(store.showModal).toBe(true)
+    expect(store.modalQuest).toBe(null)
   })
 })

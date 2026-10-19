@@ -106,6 +106,8 @@ interface QuestEvent {
   title: string
   body: string
   sound: 'newQuest' | 'questComplete' | null
+  /** The completed quest (Lantern only), for a pop-up made for it. */
+  quest?: QuestNews
 }
 
 export const useGameStore = defineStore('game', () => {
@@ -175,6 +177,8 @@ export const useGameStore = defineStore('game', () => {
   const showModal = ref(false)
   const modalTitle = ref('')
   const modalBody = ref('')
+  /** The completed quest the open pop-up is about (Lantern; else null). */
+  const modalQuest = ref<QuestNews | null>(null)
   const modalQueue = ref<QuestEvent[]>([])
   /**
    * The Lantern UI shows new and updated quests in the story (on the turn
@@ -499,27 +503,31 @@ export const useGameStore = defineStore('game', () => {
 
     let completed: string | null
     const completions: string[] = []
+    const completionEvents: QuestEvent[] = []
     while ((completed = b.completeQuest()) !== null) {
       completions.push(completed)
-      events.push({
+      completionEvents.push({
         title: '🏆 Quest Complete!',
         body: renderMarkup(completed),
         sound: 'questComplete',
       })
     }
+    events.push(...completionEvents)
 
     // Completions also stay in the story as records, each with the act's
     // quest count as it stood once that quest was done.
     if (questNewsInStory.value && completions.length) {
       const { completed: done, total } = b.getQuestProgress()
       completions.forEach((payload, index) => {
-        news.push({
+        const record: QuestNews = {
           ...parseQuestNews('completed', payload),
           progress: {
             completed: done - (completions.length - 1 - index),
             total,
           },
-        })
+        }
+        news.push(record)
+        completionEvents[index].quest = record
       })
     }
 
@@ -551,11 +559,13 @@ export const useGameStore = defineStore('game', () => {
   function showNextModal(): void {
     if (modalQueue.value.length === 0) {
       showModal.value = false
+      modalQuest.value = null
       return
     }
     const event = modalQueue.value.shift()!
     modalTitle.value = event.title
     modalBody.value = event.body
+    modalQuest.value = event.quest ?? null
     showModal.value = true
     if (event.sound === 'newQuest') audioPlayer?.playNewQuest()
     else if (event.sound === 'questComplete') audioPlayer?.playQuestComplete()
@@ -690,6 +700,7 @@ export const useGameStore = defineStore('game', () => {
     showModal,
     modalTitle,
     modalBody,
+    modalQuest,
     musicFile,
     musicInfo,
     // Actions
