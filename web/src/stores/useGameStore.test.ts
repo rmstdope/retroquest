@@ -1608,7 +1608,44 @@ describe('useGameStore', () => {
 
       expect(audio.playNewQuest).not.toHaveBeenCalled()
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
-      expect(store.turns.at(-1)!.quests).toHaveLength(1)
+      expect(store.turns.at(-1)!.quests!.map((q) => q.kind)).toEqual([
+        'new',
+        'completed',
+      ])
+    })
+
+    it('keeps each completion in the story with its quest count', () => {
+      const done = (name: string) =>
+        `[quest_name]${name} (side quest)[/quest_name]\n\nWell done.`
+      bridge.completeQuest
+        .mockReturnValueOnce(done('First'))
+        .mockReturnValueOnce(done('Second'))
+        .mockReturnValue(null)
+      bridge.getQuestProgress.mockReturnValue({
+        completed: 5,
+        total: 11,
+        actNumber: 1,
+        mainQuest: 'Shadows',
+      })
+
+      store.submitCommand('give flower to mira')
+
+      expect(store.turns.at(-1)!.quests).toEqual([
+        {
+          kind: 'completed',
+          name: 'First',
+          main: false,
+          text: 'Well done.',
+          progress: { completed: 4, total: 11 },
+        },
+        {
+          kind: 'completed',
+          name: 'Second',
+          main: false,
+          text: 'Well done.',
+          progress: { completed: 5, total: 11 },
+        },
+      ])
     })
 
     it('still shows a pop-up when a quest completes', () => {

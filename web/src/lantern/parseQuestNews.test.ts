@@ -69,4 +69,18 @@ describe('parseQuestNews', () => {
       ).text,
     ).toBe(description)
   })
+
+  it('reads a completion with its whole text', () => {
+    expect(
+      parseQuestNews(
+        'completed',
+        '[quest_name]Hint of Magic (side quest)[/quest_name]\n\n[dim]Old.[/dim] You found it.',
+      ),
+    ).toEqual({
+      kind: 'completed',
+      name: 'Hint of Magic',
+      main: false,
+      text: '[dim]Old.[/dim] You found it.',
+    })
+  })
 })

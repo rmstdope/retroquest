@@ -1,12 +1,17 @@
 import { parseQuest } from './parseQuest'
 
-/** A quest that started or moved on, shown in the story (Lantern). */
+/** A quest that started, moved on or was completed, shown in the story (Lantern). */
 export interface QuestNews {
-  kind: 'new' | 'updated'
+  kind: 'new' | 'updated' | 'completed'
   name: string
   main: boolean
-  /** Engine markup: the description, or for an update its newest stage. */
+  /**
+   * Engine markup: the description, for an update its newest stage, for a
+   * completion the completion text.
+   */
   text: string
+  /** Quests done in the act once this one completed (completions only). */
+  progress?: { completed: number; total: number }
 }
 
 /** Earlier stages of a quest description, which the engine dims. */
@@ -15,9 +20,9 @@ const EARLIER_STAGE = /\[dim\][\s\S]*?\[\/dim\]/g
 const OPEN_CLUE = /^(?:\[dim\])?○ /m
 
 /**
- * Read an activate/update payload from the engine:
- * "[quest_name]Name (main quest)[/quest_name]\n\nDescription". An update
- * shows its newest stage; checklists and clue lists are shown whole.
+ * Read an activate/update/complete payload from the engine:
+ * "[quest_name]Name (main quest)[/quest_name]\n\nText". An update shows its
+ * newest stage; checklists, clue lists and completion texts are shown whole.
  */
 export function parseQuestNews(
   kind: QuestNews['kind'],
