@@ -89,6 +89,34 @@ describe('LanternLayout', () => {
     expect(typeof player.playQuestComplete).toBe('function')
   })
 
+  it("plays the act's music", async () => {
+    const play = vi.fn(() => Promise.resolve())
+    const created: Array<{ src: string }> = []
+    vi.stubGlobal(
+      'Audio',
+      class {
+        src = ''
+        loop = false
+        volume = 1
+        paused = true
+        play = play
+        pause = vi.fn()
+        load = vi.fn()
+        removeAttribute = vi.fn()
+        constructor() {
+          created.push(this)
+        }
+      },
+    )
+    mountLayout()
+
+    useGameStore().musicFile = 'willowbrook.mp3'
+    await flushPromises()
+
+    expect(created.at(-1)!.src).toContain('willowbrook.mp3')
+    vi.unstubAllGlobals()
+  })
+
   it('switches the page to the Lantern look while it is shown', () => {
     const w = mountLayout()
     expect(document.documentElement.getAttribute('data-ui')).toBe('lantern')

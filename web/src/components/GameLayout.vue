@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useGameStore } from '@/stores/useGameStore'
-import { useMusic } from '@/composables/useMusic'
+import { useActMusic } from '@/composables/useActMusic'
 import { useAudio } from '@/composables/useAudio'
 import { useEntityMenu } from '@/composables/useEntityMenu'
 import type { EntityType, EntityMenuAction } from '@/composables/useEntityMenu'
@@ -40,22 +40,10 @@ const {
   showModal,
   modalTitle,
   modalBody,
-  musicFile,
-  musicInfo: musicInfoText,
 } = storeToRefs(store)
 
-// --- Music ---
-const audio = new Audio()
-audio.loop = true
-const music = useMusic(audio)
-
-watch(
-  [musicFile, musicInfoText],
-  ([file, info]) => {
-    music.loadTrack(file, info)
-  },
-  { immediate: true },
-)
+// --- Music (also starts on the first key press, click or touch) ---
+const music = useActMusic()
 
 // --- Sound effects ---
 const sfx = useAudio()
@@ -71,28 +59,12 @@ function updateMobile() {
   entityMenu.isMobile.value = window.innerWidth <= 768
 }
 
-// One-shot handler: start music on the very first user gesture (keydown, click, or touch).
-// Browsers block autoplay until a user gesture occurs; this ensures music starts
-// as soon as the user interacts with anything, even while the intro popup is still visible.
-function unlockAudio() {
-  music.ensureMusicStarted()
-  window.removeEventListener('keydown', unlockAudio)
-  window.removeEventListener('click', unlockAudio)
-  window.removeEventListener('touchstart', unlockAudio)
-}
-
 onMounted(() => {
   updateMobile()
   window.addEventListener('resize', updateMobile)
-  window.addEventListener('keydown', unlockAudio)
-  window.addEventListener('click', unlockAudio)
-  window.addEventListener('touchstart', unlockAudio, { passive: true })
 })
 onUnmounted(() => {
   window.removeEventListener('resize', updateMobile)
-  window.removeEventListener('keydown', unlockAudio)
-  window.removeEventListener('click', unlockAudio)
-  window.removeEventListener('touchstart', unlockAudio)
 })
 
 // --- UI State ---
