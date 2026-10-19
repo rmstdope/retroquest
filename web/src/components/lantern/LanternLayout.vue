@@ -267,7 +267,8 @@ watch(
       class="lq-nav-bottom"
     />
 
-    <!-- Act intro / act complete: a full-screen chapter page. -->
+    <!-- Act intro / act complete: a full-screen chapter page. Each chapter
+         is a new page, so it opens at its top. -->
     <section
       v-if="game.showModal && game.modalChapter"
       class="lq-chapter-dialog"
@@ -276,6 +277,7 @@ watch(
       aria-labelledby="lq-dialog-title"
     >
       <ChapterPage
+        :key="`${game.modalChapter.kind} ${game.modalChapter.act}`"
         ref="chapterPage"
         :chapter="game.modalChapter"
         title-id="lq-dialog-title"

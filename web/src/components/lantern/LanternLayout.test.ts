@@ -86,6 +86,20 @@ describe('LanternLayout', () => {
       expect(document.activeElement?.className).toContain('lq-chapter-button')
     })
 
+    it('opens the next chapter at its top, not where the last was read to', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      game.modalChapter = { ...INTRO, kind: 'complete' }
+      game.showModal = true
+      await w.vm.$nextTick()
+      w.get('.lq-chapter').element.scrollTop = 400
+
+      game.modalChapter = { ...INTRO, act: 'Act II' }
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-chapter').element.scrollTop).toBe(0)
+    })
+
     it('focuses a chapter that is already open when the page appears', async () => {
       const game = useGameStore()
       game.modalChapter = INTRO
