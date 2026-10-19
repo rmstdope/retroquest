@@ -95,4 +95,18 @@ describe('QuestNewsCard', () => {
     expect(w.get('button.lq-open-journal').text()).toBe('Open in journal')
     expect(useGameStore().questToOpen).toBe('Hint of Magic')
   })
+
+  it('ties each Open in journal button to its quest name', () => {
+    const w = mount(QuestNewsCard, {
+      props: {
+        news: { kind: 'new', name: 'Hint of Magic', main: false, text: 'x' },
+      },
+      attachTo: document.body,
+    })
+
+    const id = w.get('button.lq-open-journal').attributes('aria-describedby')
+    expect(id).toBeTruthy()
+    expect(document.getElementById(id!)?.textContent).toBe('Hint of Magic')
+    w.unmount()
+  })
 })
