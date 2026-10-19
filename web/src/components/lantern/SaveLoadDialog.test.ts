@@ -122,6 +122,20 @@ describe('SaveLoadDialog', () => {
     expect(document.activeElement).toBe(card(w, '2').get('button').element)
   })
 
+  it('cancels the question with Escape before closing', async () => {
+    const w = mountDialog('save')
+    const filled = card(w, '2')
+    await filled.get('button').trigger('click')
+    await w.vm.$nextTick()
+
+    await filled.get('.lq-ask-cancel').trigger('keydown', { key: 'Escape' })
+
+    expect(filled.find('[role="group"]').exists()).toBe(false)
+    expect(w.emitted('close')).toBeUndefined()
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(card(w, '2').get('button').element)
+  })
+
   it('cancels the question', async () => {
     const w = mountDialog('save')
     const filled = card(w, '2')

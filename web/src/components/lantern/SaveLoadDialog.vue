@@ -9,7 +9,8 @@ import LanternDialog from './LanternDialog.vue'
  * Save or load a game: the 8 slots (and, when loading, the quick save
  * first) as cards with the act, room, quests and time. An empty slot saves
  * at once; replacing a save or loading one asks first, inside its card.
- * A load closes the dialog; a save stays, marked "Just saved".
+ * A load closes the dialog; a save stays, marked "Just saved". Escape in a
+ * question cancels it first; the next Escape closes the dialog.
  */
 const props = defineProps<{ mode: 'save' | 'load' }>()
 const emit = defineEmits<{ close: [] }>()
@@ -179,6 +180,7 @@ function cardLabel(card: SaveSlot): string {
           class="lq-ask"
           role="group"
           :aria-label="`${saving ? 'Replace' : 'Load'} ${slotName(card)}`"
+          @keydown.escape.stop="cancel(card.slot)"
         >
           <span class="lq-ask-text">{{
             saving
