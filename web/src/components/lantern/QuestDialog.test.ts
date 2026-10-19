@@ -89,6 +89,12 @@ describe('QuestDialog', () => {
     ])
   })
 
+  it("calls a completed quest's text its outcome", () => {
+    const w = mountQuest({ ...JOURNAL, done: true, description: 'You did it.' })
+
+    expect(w.get('.lq-label').text()).toBe('Outcome')
+  })
+
   it('closes', async () => {
     const w = mountQuest(JOURNAL)
 

@@ -279,6 +279,26 @@ describe('LanternLayout', () => {
     vi.unstubAllGlobals()
   })
 
+  it("shows a quest's details", async () => {
+    const w = mountLayout()
+    const game = useGameStore()
+    game.rawCompletedQuests = [
+      {
+        name: '[quest_name]Hint of Magic (side)[/quest_name]',
+        description: '[dim]You found it.[/dim]',
+      },
+    ]
+
+    game.shownQuest = 'Hint of Magic'
+    await w.vm.$nextTick()
+
+    const dialog = w.get('[role="dialog"]')
+    expect(dialog.get('h2').text()).toBe('Hint of Magic')
+    expect(dialog.text()).toContain('Done')
+    await dialog.get('button[aria-label="Close"]').trigger('click')
+    expect(game.shownQuest).toBe(null)
+  })
+
   it('asks before quitting', async () => {
     const w = mountLayout()
 

@@ -55,7 +55,8 @@ const checks = computed(() => {
     </div>
 
     <template v-if="details.kind === 'journal'">
-      <span class="lq-label">Latest</span>
+      <!-- A completed quest's text is how it ended (the engine keeps no history). -->
+      <span class="lq-label">{{ quest.done ? 'Outcome' : 'Latest' }}</span>
       <!-- eslint-disable vue/no-v-html -->
       <p class="lq-latest lq-prose" v-html="renderMarkup(details.latest)"></p>
       <!-- eslint-enable vue/no-v-html -->

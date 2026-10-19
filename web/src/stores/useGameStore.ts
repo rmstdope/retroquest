@@ -173,6 +173,8 @@ export const useGameStore = defineStore('game', () => {
   const questsHaveNew = ref(false)
   /** A quest the story asked the journal to open ("Open in journal"). */
   const questToOpen = ref<string | null>(null)
+  /** The quest whose details dialog is open (Lantern), by name. */
+  const shownQuest = ref<string | null>(null)
   const introText = ref('')
 
   // --- Input ---
@@ -323,7 +325,12 @@ export const useGameStore = defineStore('game', () => {
     else questsHaveNew.value = false
   }
 
-  /** Show a quest in the journal (its Quests tab, expanded). */
+  /** Open a quest's details (QuestDialog). */
+  function showQuest(name: string): void {
+    shownQuest.value = name
+  }
+
+  /** Show a quest in the journal (its Quests tab), then its details. */
   function openQuestInJournal(name: string): void {
     questToOpen.value = name
   }
@@ -384,6 +391,7 @@ export const useGameStore = defineStore('game', () => {
     currentAct = null
     clearNewDots()
     questToOpen.value = null
+    shownQuest.value = null
     modalQueue.value = []
     showModal.value = false
     modalQuest.value = null
@@ -808,6 +816,8 @@ export const useGameStore = defineStore('game', () => {
     spellsHaveNew,
     questsHaveNew,
     questToOpen,
+    shownQuest,
+    showQuest,
     openQuestInJournal,
     loadingStatus,
     roomName,

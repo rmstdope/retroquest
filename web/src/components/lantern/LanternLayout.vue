@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
+import { parseQuest } from '@/lantern/parseQuest'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
@@ -18,6 +19,7 @@ import DockBar from './DockBar.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
 import GameMenu, { type InfoKind, type MenuKind } from './GameMenu.vue'
+import QuestDialog, { type QuestView } from './QuestDialog.vue'
 import QuitDialog from './QuitDialog.vue'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import SettingsDialog from './SettingsDialog.vue'
@@ -218,6 +220,23 @@ async function closeGameDialog(): Promise<void> {
     dialogOpener.focus()
 }
 
+/** The quest whose details are open, from the active or completed list. */
+const shownQuestView = computed<QuestView | null>(() => {
+  const name = game.shownQuest
+  if (!name) return null
+  const lists = [
+    { done: false, raw: game.rawActiveQuests },
+    { done: true, raw: game.rawCompletedQuests },
+  ]
+  for (const { done, raw } of lists) {
+    for (const entry of raw) {
+      const quest = parseQuest(entry)
+      if (quest.name === name) return { ...quest, done }
+    }
+  }
+  return null
+})
+
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
   const kind = gameDialog.value
@@ -346,6 +365,12 @@ watch(
     <!-- Dialogs the player opens (a game pop-up takes precedence). -->
     <template v-if="!game.showModal">
       <QuitDialog v-if="game.quitAsked" />
+      <QuestDialog
+        v-else-if="shownQuestView"
+        :key="shownQuestView.name"
+        :quest="shownQuestView"
+        @close="game.shownQuest = null"
+      />
       <GameMenu
         v-else-if="gameDialog === 'menu'"
         @close="closeGameDialog"

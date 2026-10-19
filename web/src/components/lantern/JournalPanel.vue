@@ -87,7 +87,8 @@ watch(
   { immediate: true },
 )
 
-// "Open in journal" from the story: show that quest expanded and in view.
+// "Open in journal" from the story: go to that quest's row (so closing its
+// details comes back to it) and open its details.
 const root = ref<HTMLElement | null>(null)
 watch(
   () => game.questToOpen,
@@ -95,13 +96,13 @@ watch(
     if (!name) return
     game.questToOpen = null
     active.value = 'quests'
-    expanded.value = new Set([...expanded.value, name])
     await nextTick()
-    const toggleButton = [
+    const row = [
       ...(root.value?.querySelectorAll<HTMLElement>('.lq-quest-toggle') ?? []),
     ].find((b) => b.dataset.quest === name)
-    toggleButton?.scrollIntoView?.({ block: 'nearest' })
-    toggleButton?.focus()
+    row?.scrollIntoView?.({ block: 'nearest' })
+    row?.focus()
+    game.showQuest(name)
   },
   { immediate: true },
 )
@@ -264,8 +265,8 @@ function toggle(name: string): void {
               type="button"
               class="lq-quest-toggle"
               :data-quest="quest.name"
-              :aria-expanded="expanded.has(quest.name) ? 'true' : 'false'"
-              @click="toggle(quest.name)"
+              aria-haspopup="dialog"
+              @click="game.showQuest(quest.name)"
             >
               <span class="lq-quest-name">{{ quest.name }}</span>
               <span
@@ -275,13 +276,6 @@ function toggle(name: string): void {
               >
               <span v-if="quest.done" class="lq-badge lq-badge-done">Done</span>
             </button>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-if="expanded.has(quest.name)"
-              class="lq-quest-details"
-              v-html="renderMarkup(quest.description)"
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
           </li>
         </ul>
       </template>
@@ -443,13 +437,6 @@ function toggle(name: string): void {
 .lq-badge-done {
   color: var(--lq-muted);
   border: 1px solid var(--lq-line);
-}
-.lq-quest-details {
-  padding: 0 0 12px;
-  font-family: var(--lq-font-prose);
-  font-size: calc(14px * var(--lq-text-scale));
-  line-height: var(--lq-story-line-height);
-  color: var(--lq-prose);
 }
 .lq-empty {
   margin: 12px 0;

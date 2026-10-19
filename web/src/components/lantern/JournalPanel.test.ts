@@ -145,18 +145,16 @@ describe('JournalPanel', () => {
     expect(w.findAll('.lq-badge-done')).toHaveLength(1)
   })
 
-  it('expands a quest to show its description', async () => {
+  it("opens a quest's details", async () => {
     const w = mountJournal()
     await tab(w, /Quests/).trigger('click')
-    const toggle = w.findAll('.lq-quest-toggle')[0]
-    expect(toggle.attributes('aria-expanded')).toBe('false')
+    const row = w.findAll('.lq-quest-toggle')[0]
+    expect(row.attributes('aria-haspopup')).toBe('dialog')
 
-    await toggle.trigger('click')
+    await row.trigger('click')
 
-    expect(toggle.attributes('aria-expanded')).toBe('true')
-    expect(w.find('.lq-quest-details .theme-character_name').text()).toBe(
-      'shadowy figure',
-    )
+    expect(useGameStore().shownQuest).toBe('Shadows Over Willowbrook')
+    expect(w.find('.lq-quest-details').exists()).toBe(false)
   })
 
   it('disables the row actions while the game is not accepting input', () => {
@@ -312,11 +310,12 @@ describe('JournalPanel', () => {
     await flushPromises()
 
     expect(tab(wrapper, /Quests/).attributes('aria-selected')).toBe('true')
-    const toggle = wrapper
+    const row = wrapper
       .findAll('.lq-quest-toggle')
       .find((b) => b.text().includes('Know your village'))!
-    expect(toggle.attributes('aria-expanded')).toBe('true')
-    expect(document.activeElement).toBe(toggle.element)
+    // Focus on its row first, so closing the details comes back to it.
+    expect(document.activeElement).toBe(row.element)
+    expect(game.shownQuest).toBe('Know your village')
     expect(game.questToOpen).toBe(null)
   })
 })
