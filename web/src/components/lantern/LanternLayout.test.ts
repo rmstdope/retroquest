@@ -425,6 +425,30 @@ describe('LanternLayout', () => {
       await w.get('[role="menuitem"]').trigger('click')
       expect(submit).toHaveBeenCalledWith('talk to grandmother')
     })
+
+    it('closes on a scroll without scrolling back to the chip', async () => {
+      const w = await storyWith('You arrive.')
+      const game = useGameStore()
+      game.roomName = 'Cottage'
+      game.turns[0].arrival = {
+        room: 'Cottage',
+        description: 'A cottage.',
+        characters: ['grandmother'],
+        items: [],
+        exits: {},
+      }
+      await flushPromises()
+      const chip = w.get('[data-testid="here"] button.lq-here-character')
+      await chip.trigger('click')
+      await flushPromises()
+      const focus = vi.spyOn(chip.element as HTMLElement, 'focus')
+
+      await w.get('.lq-story').trigger('scroll')
+
+      expect(w.find('[role="menu"]').exists()).toBe(false)
+      // The player scrolled away: focus goes back without moving the story.
+      expect(focus).toHaveBeenCalledWith({ preventScroll: true })
+    })
   })
 
   it('opens the menu from a Here chip in the laptop room card', async () => {
