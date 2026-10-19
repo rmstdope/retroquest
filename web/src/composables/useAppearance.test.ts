@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { nextTick, effectScope } from 'vue'
 import { useAppearance } from './useAppearance'
@@ -12,6 +12,10 @@ describe('useAppearance', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     root = document.createElement('html')
+  })
+
+  afterEach(() => {
+    document.head.innerHTML = ''
   })
 
   /** Run useAppearance inside a scope, as a component's setup would. */
@@ -110,6 +114,5 @@ describe('useAppearance', () => {
       LANTERN_PALETTES.light.bg,
       LANTERN_PALETTES.dark.bg,
     ])
-    document.head.innerHTML = ''
   })
 })
