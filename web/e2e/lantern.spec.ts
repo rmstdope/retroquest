@@ -596,4 +596,34 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     ).toBeInViewport()
     await expect(dialog.getByText('5 of 8 quests')).toBeAttached()
   })
+
+  test('lines the title art up at its left edge', async ({ page }) => {
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.titleText = '[bold yellow]\n########\n##   ##.\n##\n[/bold yellow]'
+      store.showTitle = true
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const art = page.locator('.lq-art')
+    await expect(art).toBeVisible()
+    const lineStarts = await art.evaluate((pre) => {
+      const text = pre.firstChild as Text
+      const range = document.createRange()
+      const starts: number[] = []
+      let offset = 0
+      for (const line of text.data.split('\n')) {
+        range.setStart(text, offset)
+        range.setEnd(text, offset + 1)
+        starts.push(Math.round(range.getBoundingClientRect().left))
+        offset += line.length + 1
+      }
+      return starts
+    })
+    expect(new Set(lineStarts).size).toBe(1)
+  })
 })
