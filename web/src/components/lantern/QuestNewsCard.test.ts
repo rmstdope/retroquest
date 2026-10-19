@@ -109,4 +109,30 @@ describe('QuestNewsCard', () => {
     expect(document.getElementById(id!)?.textContent).toBe('Hint of Magic')
     w.unmount()
   })
+
+  it('keeps a completed quest as a record with the quest count', () => {
+    const w = mount(QuestNewsCard, {
+      props: {
+        news: {
+          kind: 'completed',
+          name: 'Hint of Magic',
+          main: false,
+          text: 'Your journey has begun.',
+          progress: { completed: 5, total: 11 },
+        },
+      },
+    })
+
+    expect(w.get('.lq-record .lq-kicker').text()).toBe(
+      'Side quest complete · 5 of 11',
+    )
+    expect(w.get('.lq-record .lq-quest-title').text()).toBe('Hint of Magic')
+    expect(w.get('.lq-record .lq-record-text').text()).toBe(
+      'Your journey has begun.',
+    )
+    expect(w.attributes('aria-label')).toBe(
+      'Side quest complete: Hint of Magic',
+    )
+    expect(w.find('button.lq-open-journal').exists()).toBe(false)
+  })
 })

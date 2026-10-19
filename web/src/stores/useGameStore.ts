@@ -498,13 +498,28 @@ export const useGameStore = defineStore('game', () => {
     }
 
     let completed: string | null
-    let completedAny = false
+    const completions: string[] = []
     while ((completed = b.completeQuest()) !== null) {
-      completedAny = true
+      completions.push(completed)
       events.push({
         title: '🏆 Quest Complete!',
         body: renderMarkup(completed),
         sound: 'questComplete',
+      })
+    }
+
+    // Completions also stay in the story as records, each with the act's
+    // quest count as it stood once that quest was done.
+    if (questNewsInStory.value && completions.length) {
+      const { completed: done, total } = b.getQuestProgress()
+      completions.forEach((payload, index) => {
+        news.push({
+          ...parseQuestNews('completed', payload),
+          progress: {
+            completed: done - (completions.length - 1 - index),
+            total,
+          },
+        })
       })
     }
 
@@ -513,7 +528,7 @@ export const useGameStore = defineStore('game', () => {
     if (news.length && turn) {
       turn.quests = [...(turn.quests ?? []), ...news]
       questsHaveNew.value = true
-      if (!completedAny) audioPlayer?.playNewQuest()
+      if (!completions.length) audioPlayer?.playNewQuest()
     }
 
     if (events.length > 0) {
