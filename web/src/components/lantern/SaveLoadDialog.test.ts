@@ -177,6 +177,33 @@ describe('SaveLoadDialog', () => {
     expect(useGameStore().loadFromSlot).toHaveBeenCalledWith(2)
   })
 
+  it('loads an older quick save that has no details', async () => {
+    vi.mocked(useGameStore().getQuickSave).mockReturnValue(slot(0, false))
+    const w = mountDialog('load')
+    const quick = card(w, 'Q')
+
+    expect(quick.get('button').attributes()).not.toHaveProperty('disabled')
+    expect(quick.get('button').attributes('aria-label')).toBe(
+      'Load the quick save',
+    )
+    await quick.get('button').trigger('click')
+    await quick
+      .findAll('[role="group"] button')
+      .find((b) => b.text() === 'Load')!
+      .trigger('click')
+
+    expect(useGameStore().loadGame).toHaveBeenCalledOnce()
+  })
+
+  it('names a card with its quests and time', () => {
+    slots[1] = { ...slot(2, true), timestamp: new Date().toISOString() }
+    const w = mountDialog('load')
+
+    expect(card(w, '2').get('button').attributes('aria-label')).toMatch(
+      /^Load slot 2: Act II, Forest Path, 3 of 12 quests, Today · \d\d:\d\d$/,
+    )
+  })
+
   it('says where the saves are kept', () => {
     expect(mountDialog('save').text()).toContain(
       'Saves are kept in this browser only.',

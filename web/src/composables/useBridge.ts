@@ -37,7 +37,10 @@ const QUICK_META_KEY = 'retroquest_save_meta'
 function readQuickMeta(): Partial<Omit<SaveSlot, 'slot'>> {
   try {
     const raw = localStorage.getItem(QUICK_META_KEY)
-    return raw ? (JSON.parse(raw) as Partial<Omit<SaveSlot, 'slot'>>) : {}
+    const meta: unknown = raw ? JSON.parse(raw) : null
+    return meta && typeof meta === 'object'
+      ? (meta as Partial<Omit<SaveSlot, 'slot'>>)
+      : {}
   } catch {
     return {}
   }

@@ -29,8 +29,9 @@ const cards = computed<SaveSlot[]>(() => {
   return quick ? [quick, ...slots] : slots
 })
 
+/** A slot in use (the quick save is only listed when there is one). */
 function filled(card: SaveSlot): boolean {
-  return card.room !== null
+  return card.slot === QUICK || card.room !== null
 }
 
 function badge(card: SaveSlot): string {
@@ -89,6 +90,25 @@ function confirm(card: SaveSlot): void {
 
 const slotName = (card: SaveSlot) =>
   card.slot === QUICK ? 'the quick save' : `slot ${card.slot}`
+
+/** The card's name: what it does, then what the card shows (if known). */
+function cardLabel(card: SaveSlot): string {
+  const name = slotName(card)
+  if (!filled(card)) return `${saving.value ? 'Save to' : 'Empty'} ${name}`
+  const quests = card.quests
+    ? `${card.quests.completed} of ${card.quests.total} quests`
+    : ''
+  const details = [
+    actLabel(card.act),
+    card.room,
+    quests,
+    savedWhen(card.timestamp),
+  ]
+    .filter(Boolean)
+    .join(', ')
+  const action = `${saving.value ? 'Save to' : 'Load'} ${name}`
+  return details ? `${action}: ${details}` : action
+}
 </script>
 
 <template>
@@ -119,11 +139,7 @@ const slotName = (card: SaveSlot) =>
           type="button"
           class="lq-slot-btn"
           :disabled="!saving && !filled(card)"
-          :aria-label="
-            filled(card)
-              ? `${saving ? 'Save to' : 'Load'} ${slotName(card)}: ${actLabel(card.act)}, ${card.room}`
-              : `${saving ? 'Save to' : 'Empty'} ${slotName(card)}`
-          "
+          :aria-label="cardLabel(card)"
           @click="pick(card)"
         >
           <span
@@ -135,7 +151,7 @@ const slotName = (card: SaveSlot) =>
           <span class="lq-slot-main" aria-hidden="true">
             <template v-if="filled(card)">
               <span class="lq-slot-act">{{ actLabel(card.act) }}</span>
-              <span class="lq-slot-room">{{ card.room }}</span>
+              <span class="lq-slot-room">{{ card.room ?? 'Quick save' }}</span>
               <span class="lq-slot-meta">
                 <template v-if="card.quests">
                   <span class="lq-track"
