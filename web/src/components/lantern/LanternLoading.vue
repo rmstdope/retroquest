@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 
 /**
  * The Lantern UI's loading screen while the game engine starts: the
- * RetroQuest wordmark, a lantern-glow spinner and the loading status (a
- * polite live region). It switches the page to Lantern's look at once, so
- * there is no classic dark screen before a light Lantern; the layout keeps
- * it on after loading.
+ * RetroQuest wordmark, a lantern-glow spinner and the loading status. A
+ * polite live region announces each step once, without its running file
+ * count. It switches the page to Lantern's look at once, so there is no
+ * classic dark screen before a light Lantern; the layout keeps it on after
+ * loading.
  */
-defineProps<{ status: string }>()
+const props = defineProps<{ status: string }>()
+
+/** A trailing progress count such as " (10/363)". */
+const PROGRESS_COUNT = /\s*\(\d+\/\d+\)$/
+
+const step = computed(() => props.status.replace(PROGRESS_COUNT, ''))
 
 onMounted(() => document.documentElement.setAttribute('data-ui', 'lantern'))
 </script>
@@ -17,7 +23,8 @@ onMounted(() => document.documentElement.setAttribute('data-ui', 'lantern'))
   <div class="lq-loading">
     <h1 class="lq-loading-title">RetroQuest</h1>
     <span class="lq-loading-spinner" aria-hidden="true"></span>
-    <p class="lq-loading-status" role="status">{{ status }}</p>
+    <p class="lq-loading-status" aria-hidden="true">{{ status }}</p>
+    <p class="lq-sr-only" role="status">{{ step }}</p>
   </div>
 </template>
 
@@ -55,6 +62,14 @@ onMounted(() => document.documentElement.setAttribute('data-ui', 'lantern'))
   margin: 0;
   font-size: 14px;
   color: var(--lq-muted);
+}
+.lq-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 /* Turns with --lq-motion, so reduced motion keeps it still. */
 @keyframes lq-loading-spin {

@@ -15,6 +15,7 @@ describe('App while the game loads', () => {
   afterEach(() => {
     wrapper?.unmount()
     window.history.replaceState(null, '', '/')
+    document.documentElement.removeAttribute('data-ui')
   })
 
   function mountAt(search: string) {
@@ -37,5 +38,6 @@ describe('App while the game loads', () => {
 
     expect(w.find('.lq-loading').exists()).toBe(false)
     expect(w.text()).toContain('Initializing...')
+    expect(document.documentElement.hasAttribute('data-ui')).toBe(false)
   })
 })
