@@ -9,7 +9,8 @@ import { renderMarkup } from '@/utils/theme'
 /**
  * Arrival in a room inside the story: a chapter-style divider, the room
  * description and a "Here + exits" box. On laptops the room card and the
- * map already show the room, so the story keeps only the divider.
+ * map already show the room, so the story keeps only the divider. The
+ * Here chips are buttons: the layout opens their actions menu.
  */
 const props = defineProps<{ arrival: Arrival; command: string | null }>()
 const wide = useMediaQuery(WIDE_QUERY)
@@ -59,13 +60,18 @@ const exits = computed(() => Object.entries(props.arrival.exits))
       <div v-if="here.length || exits.length" class="lq-here-box">
         <div v-if="here.length" class="lq-here" data-testid="here">
           <span class="lq-here-label">Here</span>
-          <span
+          <button
             v-for="entry in here"
             :key="`${entry.kind}:${entry.name}`"
+            type="button"
             class="lq-here-chip"
             :class="`lq-here-${entry.kind}`"
-            >{{ displayName(entry.name) }}</span
+            :data-name-kind="entry.kind"
+            :data-name="entry.name"
+            aria-haspopup="menu"
           >
+            {{ displayName(entry.name) }}
+          </button>
         </div>
         <div v-if="exits.length" class="lq-exits" data-testid="exits">
           <span class="lq-here-label">Exits</span>
@@ -156,8 +162,10 @@ const exits = computed(() => Object.entries(props.arrival.exits))
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
+  font: inherit;
   font-size: 13px;
   white-space: nowrap;
+  cursor: pointer;
 }
 .lq-here-character {
   border: 1px solid var(--lq-character-line);

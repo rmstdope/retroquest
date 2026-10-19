@@ -387,6 +387,63 @@ describe('LanternLayout', () => {
 
       expect(w.find('[role="menu"]').exists()).toBe(false)
     })
+
+    it('opens the menu from a Here chip on arrival, and focus goes back to it', async () => {
+      const w = await storyWith('You arrive.')
+      const game = useGameStore()
+      game.turns[0].arrival = {
+        room: 'Cottage',
+        description: 'A cottage.',
+        characters: ['grandmother'],
+        items: ['bucket'],
+        exits: {},
+      }
+      await flushPromises()
+      const submit = vi
+        .spyOn(game, 'submitCommand')
+        .mockImplementation(() => {})
+
+      const chip = w.get('[data-testid="here"] button.lq-here-character')
+      ;(chip.element as HTMLElement).focus()
+      await chip.trigger('click')
+      await flushPromises()
+      const menu = w.get('[role="menu"]')
+      expect(menu.findAll('[role="menuitem"]').map((m) => m.text())).toEqual([
+        'Talk to',
+        'Examine',
+      ])
+      await menu.trigger('keydown', { key: 'Escape' })
+      expect(document.activeElement).toBe(chip.element)
+
+      await chip.trigger('click')
+      await w.get('[role="menuitem"]').trigger('click')
+      expect(submit).toHaveBeenCalledWith('talk to grandmother')
+    })
+  })
+
+  it('opens the menu from a Here chip in the laptop room card', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn(() => ({
+        matches: true,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    wrapper = mount(LanternLayout, { attachTo: document.body })
+    const game = useGameStore()
+    game.acceptInput = true
+    game.items = ["Elior's Journal"]
+    await flushPromises()
+    const submit = vi.spyOn(game, 'submitCommand').mockImplementation(() => {})
+
+    await wrapper
+      .get('[aria-label="Current location"] button.lq-here-item')
+      .trigger('click')
+    await wrapper.get('[role="menuitem"]').trigger('click')
+
+    expect(submit).toHaveBeenCalledWith("take elior's journal")
+    vi.unstubAllGlobals()
   })
 
   it('shows the title page over the first chapter, then the chapter', async () => {
