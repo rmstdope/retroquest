@@ -7,8 +7,9 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
  * polite live region announces each step once, without its running file
  * count. It switches the page to Lantern's look at once, so there is no
  * classic dark screen before a light Lantern; the layout keeps it on after
- * loading. When loading `failed`, the spinner stops, the error is an alert
- * and Try again (focused) emits `retry`.
+ * loading. When loading `failed`, the spinner stops, a plain sentence is
+ * the alert (the raw error, which can be a long Python traceback, is in a
+ * closed Details section) and Try again (focused) emits `retry`.
  */
 const props = defineProps<{ status: string; failed?: boolean }>()
 const emit = defineEmits<{ retry: [] }>()
@@ -35,7 +36,7 @@ watch(
     <h1 class="lq-loading-title">RetroQuest</h1>
     <template v-if="failed">
       <p class="lq-loading-status" role="alert">
-        RetroQuest could not start. {{ status }}
+        RetroQuest could not start. Check your connection and try again.
       </p>
       <button
         ref="retryButton"
@@ -45,6 +46,10 @@ watch(
       >
         Try again
       </button>
+      <details class="lq-loading-details">
+        <summary>Details</summary>
+        <pre>{{ status }}</pre>
+      </details>
     </template>
     <template v-else>
       <span class="lq-loading-spinner" aria-hidden="true"></span>
@@ -75,6 +80,28 @@ watch(
   font-size: 40px;
   font-weight: 500;
   color: var(--lq-accent-text);
+}
+.lq-loading-details {
+  max-width: min(36rem, 100%);
+  font-size: 13px;
+  color: var(--lq-muted);
+}
+.lq-loading-details summary {
+  padding: 13px 0;
+  text-align: center;
+  cursor: pointer;
+}
+.lq-loading-details pre {
+  margin: 0;
+  max-height: 40vh;
+  overflow: auto;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--lq-raised);
+  font-family: var(--lq-font-mono);
+  font-size: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .lq-loading-retry {
   min-height: 44px;
