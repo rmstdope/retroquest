@@ -8,7 +8,6 @@ import type {
   MusicInfo,
   RoomExits,
   CompletionTree,
-  NamedSave,
   SaveSlot,
   QuestProgress,
   ActStats,
@@ -367,13 +366,6 @@ with open('retroquest.save', 'wb') as f:
     return py('controller.load_game()') as string
   }
 
-  function listNamedSaves(): NamedSave[] {
-    return readStoredNamedSaves().map(({ name, timestamp }) => ({
-      name,
-      timestamp,
-    }))
-  }
-
   function getActName(): string {
     return py('controller.get_act_name()') as string
   }
@@ -519,9 +511,9 @@ except FileNotFoundError:
 _save_data
       `) as string
       if (!saveData) return SAVE_FAILED
-      const saves = listNamedSaves()
+      const saves = readStoredNamedSaves()
       const existingIndex = saves.findIndex((s) => s.name === name)
-      const entry: NamedSave & { data: string } = {
+      const entry: StoredNamedSave = {
         name,
         timestamp: new Date().toISOString(),
         data: saveData,
@@ -546,7 +538,7 @@ _save_data
       if (!Array.isArray(parsed))
         return '[failure]No save file found.[/failure]'
       const entry = parsed.find(
-        (s): s is NamedSave & { data: string } =>
+        (s): s is StoredNamedSave =>
           s !== null &&
           typeof s === 'object' &&
           typeof (s as Record<string, unknown>).name === 'string' &&
@@ -646,7 +638,6 @@ _result_text
     quickLoadGame,
     saveNamedGame,
     loadNamedGame,
-    listNamedSaves,
     getActName,
     getQuestProgress,
     getActStats,

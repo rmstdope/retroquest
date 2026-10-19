@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, MAX_TURNS } from './useGameStore'
-import { renderMarkup } from '@/utils/theme'
-import type { CompletionTree, NamedSave, SaveSlot } from '@/types/bridge'
+import type { CompletionTree, SaveSlot } from '@/types/bridge'
 
 vi.mock('@/utils/theme', () => ({
   renderMarkup: vi.fn((s: string) => `<rendered>${s}</rendered>`),
@@ -46,7 +45,6 @@ function createMockBridge() {
     quickLoadGame: vi.fn(() => 'Game loaded.'),
     saveNamedGame: vi.fn(() => 'Game saved.'),
     loadNamedGame: vi.fn(() => 'Game loaded.'),
-    listNamedSaves: vi.fn((): NamedSave[] => []),
     getActName: vi.fn(() => 'Act 1'),
     getQuestProgress: vi.fn(() => ({
       completed: 4,
@@ -115,27 +113,8 @@ describe('useGameStore', () => {
       expect(store.exits).toEqual({})
     })
 
-    it('has empty panel data', () => {
-      expect(store.inventory).toEqual([])
-      expect(store.spells).toEqual([])
-      expect(store.activeQuests).toEqual([])
-      expect(store.completedQuests).toEqual([])
-    })
-
-    it('has empty output', () => {
-      expect(store.lastOutput).toBe('')
-      expect(store.introText).toBe('')
-    })
-
     it('does not accept input initially', () => {
       expect(store.acceptInput).toBe(false)
-    })
-
-    it('has sidebar sections visible by default', () => {
-      expect(store.showActiveQuests).toBe(true)
-      expect(store.showCompletedQuests).toBe(false)
-      expect(store.showInventory).toBe(true)
-      expect(store.showSpells).toBe(true)
     })
 
     it('has modal hidden', () => {
@@ -187,21 +166,6 @@ describe('useGameStore', () => {
       expect(bridge.advanceTurn).toHaveBeenCalledTimes(2)
     })
 
-    it('stores logo text (first advanceTurn) in introText', async () => {
-      bridge.advanceTurn
-        .mockReturnValueOnce('Logo text')
-        .mockReturnValueOnce('Act intro!')
-      await store.initGame()
-      expect(store.introText).toBe('<rendered>Logo text</rendered>')
-    })
-
-    it('renders intro text from first advanceTurn call', async () => {
-      bridge.advanceTurn.mockReturnValue('Welcome!')
-      await store.initGame()
-      expect(store.introText).toBe('<rendered>Welcome!</rendered>')
-      expect(renderMarkup).toHaveBeenCalledWith('Welcome!')
-    })
-
     it('shows act intro (second advanceTurn) in modal', async () => {
       bridge.advanceTurn
         .mockReturnValueOnce('Logo text')
@@ -232,28 +196,19 @@ describe('useGameStore', () => {
       expect(bridge.look).toHaveBeenCalledTimes(1)
     })
 
-    it('shows look() result as lastOutput when intro modal is dismissed', async () => {
-      bridge.isAcceptingInput.mockReturnValue(true)
-      bridge.look.mockReturnValue('You see rolling hills.')
-      await store.initGame()
-      store.dismissModal()
-      expect(store.lastOutput).toBe(
-        '<rendered>You see rolling hills.</rendered>',
-      )
-    })
-
-    it('polls quest events after intro modal is dismissed', async () => {
+    it('puts quests started by the first look in its turn', async () => {
       bridge.isAcceptingInput.mockReturnValue(true)
       bridge.activateQuest
-        .mockReturnValueOnce('Main quest started!')
+        .mockReturnValueOnce('[quest_name]Q (main quest)[/quest_name]\n\nGo.')
         .mockReturnValueOnce(null)
       bridge.updateQuest.mockReturnValue(null)
       bridge.completeQuest.mockReturnValue(null)
       await store.initGame()
       store.dismissModal() // dismiss intro → triggers look + pollQuestEvents
-      // intro modal is replaced by quest modal
-      expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('📜 New Quest!')
+      expect(store.showModal).toBe(false)
+      expect(store.turns.at(-1)!.quests).toEqual([
+        { kind: 'new', name: 'Q', main: true, text: 'Go.' },
+      ])
     })
 
     it('lists quests started by the first look after the act intro', async () => {
@@ -289,7 +244,7 @@ describe('useGameStore', () => {
       expect(store.questProgress?.total).toBe(11)
     })
 
-    it('plays sound for quest modal shown after act intro is dismissed', async () => {
+    it('plays the chime for a quest started by the first look', async () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.isAcceptingInput.mockReturnValue(true)
@@ -300,7 +255,6 @@ describe('useGameStore', () => {
       bridge.completeQuest.mockReturnValue(null)
       await store.initGame()
       store.dismissModal()
-      expect(store.showModal).toBe(true)
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
     })
 
@@ -308,11 +262,8 @@ describe('useGameStore', () => {
       await store.initGame()
       expect(store.roomName).toBe('Village Square')
       expect(store.characters).toEqual(['Mira'])
-      expect(store.inventory).toEqual([
-        {
-          name: '<rendered>Sword</rendered>',
-          description: '<rendered>Sharp</rendered>',
-        },
+      expect(store.rawInventory).toEqual([
+        { name: 'Sword', description: 'Sharp' },
       ])
     })
 
@@ -334,12 +285,6 @@ describe('useGameStore', () => {
     it('calls bridge.handleCommand with trimmed input', () => {
       store.submitCommand('  look  ')
       expect(bridge.handleCommand).toHaveBeenCalledWith('look')
-    })
-
-    it('updates lastOutput with rendered result', () => {
-      bridge.handleCommand.mockReturnValue('You see a forest.')
-      store.submitCommand('look')
-      expect(store.lastOutput).toBe('<rendered>You see a forest.</rendered>')
     })
 
     it('refreshes panels after command', () => {
@@ -366,13 +311,15 @@ describe('useGameStore', () => {
 
     it('polls quest events after command', () => {
       bridge.activateQuest
-        .mockReturnValueOnce('New quest activated!')
+        .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nGo.')
         .mockReturnValueOnce(null)
       bridge.updateQuest.mockReturnValue(null)
       bridge.completeQuest.mockReturnValue(null)
       store.submitCommand('talk to mira')
-      expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('📜 New Quest!')
+      expect(store.turns.at(-1)!.quests?.[0]).toMatchObject({
+        kind: 'new',
+        name: 'Q',
+      })
     })
 
     it('refreshes panels after quest completion to pick up newly unlocked exits', () => {
@@ -398,26 +345,6 @@ describe('useGameStore', () => {
     })
   })
 
-  // --- advanceTurn ---
-
-  describe('advanceTurn', () => {
-    beforeEach(async () => {
-      await store.initGame()
-    })
-
-    it('calls bridge.advanceTurn and renders output', () => {
-      bridge.advanceTurn.mockReturnValue('Act 2 begins...')
-      store.advanceTurn()
-      expect(store.lastOutput).toBe('<rendered>Act 2 begins...</rendered>')
-    })
-
-    it('refreshes panels', () => {
-      bridge.getRoomName.mockReturnValue('Castle Gate')
-      store.advanceTurn()
-      expect(store.roomName).toBe('Castle Gate')
-    })
-  })
-
   // --- refreshPanels ---
 
   describe('refreshPanels', () => {
@@ -439,83 +366,22 @@ describe('useGameStore', () => {
       expect(store.exits).toEqual({ south: 'Exit' })
     })
 
-    it('updates inventory and spells', () => {
-      bridge.getInventory.mockReturnValue([
-        { name: 'Potion', description: 'Heals' },
-      ])
-      bridge.getSpells.mockReturnValue([{ name: 'Fire', description: 'Burns' }])
+    it('updates the bag, spells and quests as the bridge delivers them', () => {
+      const potion = { name: '[item_name]Potion[/item_name]', description: '' }
+      const fire = { name: '[spell_name]Fire[/spell_name]', description: '' }
+      const questA = { name: '[quest_name]A[/quest_name]', description: 'Do A' }
+      const questB = { name: '[quest_name]B[/quest_name]', description: 'Did' }
+      bridge.getInventory.mockReturnValue([potion])
+      bridge.getSpells.mockReturnValue([fire])
+      bridge.getActiveQuests.mockReturnValue([questA])
+      bridge.getCompletedQuests.mockReturnValue([questB])
       store.refreshPanels()
-      expect(store.inventory).toEqual([
-        {
-          name: '<rendered>Potion</rendered>',
-          description: '<rendered>Heals</rendered>',
-        },
-      ])
-      expect(store.spells).toEqual([
-        {
-          name: '<rendered>Fire</rendered>',
-          description: '<rendered>Burns</rendered>',
-        },
-      ])
-    })
-
-    it('updates quests', () => {
-      bridge.getActiveQuests.mockReturnValue([
-        { name: 'Quest A', description: 'Do A' },
-      ])
-      bridge.getCompletedQuests.mockReturnValue([
-        { name: 'Quest B', description: 'Did B' },
-      ])
-      store.refreshPanels()
-      expect(store.activeQuests).toEqual([
-        {
-          name: '<rendered>Quest A</rendered>',
-          description: '<rendered>Do A</rendered>',
-        },
-      ])
-      expect(store.completedQuests).toEqual([
-        {
-          name: '<rendered>Quest B</rendered>',
-          description: '<rendered>Did B</rendered>',
-        },
-      ])
-    })
-
-    it('applies renderMarkup to quest names containing engine markup', () => {
-      bridge.getActiveQuests.mockReturnValue([
-        {
-          name: '[quest_name]Shadows Over Willowbrook (main)[/quest_name]',
-          description: 'Stop the shadows.',
-        },
-      ])
-      store.refreshPanels()
-      expect(store.activeQuests[0].name).toBe(
-        '<rendered>[quest_name]Shadows Over Willowbrook (main)[/quest_name]</rendered>',
-      )
-    })
-
-    it('applies renderMarkup to inventory item names and descriptions', () => {
-      bridge.getInventory.mockReturnValue([
-        { name: '[item_name]Sword[/item_name]', description: 'Sharp blade.' },
-      ])
-      store.refreshPanels()
-      expect(store.inventory[0].name).toBe(
-        '<rendered>[item_name]Sword[/item_name]</rendered>',
-      )
-      expect(store.inventory[0].description).toBe(
-        '<rendered>Sharp blade.</rendered>',
-      )
-    })
-
-    it('applies renderMarkup to spell names and descriptions', () => {
-      bridge.getSpells.mockReturnValue([
-        { name: '[spell_name]Fireball[/spell_name]', description: 'Burns.' },
-      ])
-      store.refreshPanels()
-      expect(store.spells[0].name).toBe(
-        '<rendered>[spell_name]Fireball[/spell_name]</rendered>',
-      )
-      expect(store.spells[0].description).toBe('<rendered>Burns.</rendered>')
+      expect(store.rawInventory).toEqual([potion])
+      expect(store.bagEntries).toEqual([potion.name])
+      expect(store.rawSpells).toEqual([fire])
+      expect(store.spellEntries).toEqual([fire.name])
+      expect(store.rawActiveQuests).toEqual([questA])
+      expect(store.rawCompletedQuests).toEqual([questB])
     })
 
     it('syncs acceptInput', () => {
@@ -532,10 +398,10 @@ describe('useGameStore', () => {
       await store.initGame()
     })
 
-    it('calls bridge.quickSaveGame and renders output', () => {
-      bridge.quickSaveGame.mockReturnValue('Saved!')
+    it('calls bridge.quickSaveGame and shows a notice', () => {
       store.saveGame()
-      expect(store.lastOutput).toBe('<rendered>Saved!</rendered>')
+      expect(bridge.quickSaveGame).toHaveBeenCalledOnce()
+      expect(store.notice?.text).toBe('Game saved')
     })
   })
 
@@ -544,10 +410,10 @@ describe('useGameStore', () => {
       await store.initGame()
     })
 
-    it('calls bridge.quickLoadGame and renders output', () => {
-      bridge.quickLoadGame.mockReturnValue('Loaded!')
+    it('calls bridge.quickLoadGame and shows a notice', () => {
       store.loadGame()
-      expect(store.lastOutput).toBe('<rendered>Loaded!</rendered>')
+      expect(bridge.quickLoadGame).toHaveBeenCalledOnce()
+      expect(store.notice?.text).toBe('Game loaded')
     })
 
     it('refreshes panels after loading', () => {
@@ -557,20 +423,17 @@ describe('useGameStore', () => {
     })
   })
 
-  // --- saveNamedGame / loadNamedGame / listNamedSaves ---
+  // --- saveNamedGame / loadNamedGame ---
 
   describe('saveNamedGame', () => {
     beforeEach(async () => {
       await store.initGame()
     })
 
-    it('calls bridge.saveNamedGame and renders output', () => {
-      bridge.saveNamedGame.mockReturnValue('Game saved as "Before boss".')
-      store.saveNamedGame('Before boss')
-      expect(bridge.saveNamedGame).toHaveBeenCalledWith('Before boss')
-      expect(store.lastOutput).toBe(
-        '<rendered>Game saved as "Before boss".</rendered>',
-      )
+    it('calls bridge.saveNamedGame and shows a notice', () => {
+      store.saveNamedGame('before-boss')
+      expect(bridge.saveNamedGame).toHaveBeenCalledWith('before-boss')
+      expect(store.notice?.text).toBe('Game saved · before-boss')
     })
   })
 
@@ -579,112 +442,77 @@ describe('useGameStore', () => {
       await store.initGame()
     })
 
-    it('calls bridge.loadNamedGame, renders output, and refreshes panels', () => {
-      bridge.loadNamedGame.mockReturnValue('Game loaded.')
+    it('calls bridge.loadNamedGame, shows a notice, and refreshes panels', () => {
       bridge.getRoomName.mockReturnValue('Boss Room')
-      store.loadNamedGame('Before boss')
-      expect(bridge.loadNamedGame).toHaveBeenCalledWith('Before boss')
-      expect(store.lastOutput).toBe('<rendered>Game loaded.</rendered>')
+      store.loadNamedGame('before-boss')
+      expect(bridge.loadNamedGame).toHaveBeenCalledWith('before-boss')
+      expect(store.notice?.text).toBe('Game loaded · before-boss')
       expect(store.roomName).toBe('Boss Room')
     })
   })
 
-  describe('listNamedSaves', () => {
-    beforeEach(async () => {
-      await store.initGame()
-    })
-
-    it('returns saves from bridge', () => {
-      const saves = [{ name: 'Save 1', timestamp: '2024-01-01T00:00:00.000Z' }]
-      bridge.listNamedSaves.mockReturnValue(saves)
-      expect(store.listNamedSaves()).toEqual(saves)
-    })
-
-    it('returns empty array when no saves exist', () => {
-      bridge.listNamedSaves.mockReturnValue([])
-      expect(store.listNamedSaves()).toEqual([])
-    })
-  })
-
   describe('pollQuestEvents', () => {
+    const done = (name: string) =>
+      `[quest_name]${name} (side quest)[/quest_name]\n\nDone.`
+
     beforeEach(async () => {
       await store.initGame()
       store.dismissModal() // dismiss intro modal so quest modal tests start clean
     })
 
-    it('shows modal for activated quest', () => {
+    it('puts an activated quest in the story, not in a pop-up', () => {
       bridge.activateQuest
         .mockReturnValueOnce('Quest: Find the gem')
         .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
       store.pollQuestEvents()
-      expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('📜 New Quest!')
-      expect(store.modalBody).toBe('<rendered>Quest: Find the gem</rendered>')
-    })
-
-    it('shows modal for updated quest', () => {
-      bridge.activateQuest.mockReturnValue(null)
-      bridge.updateQuest
-        .mockReturnValueOnce('Quest updated: progress')
-        .mockReturnValueOnce(null)
-      bridge.completeQuest.mockReturnValue(null)
-      store.pollQuestEvents()
-      expect(store.modalTitle).toBe('📜 Quest Updated')
+      expect(store.showModal).toBe(false)
+      expect(store.turns.at(-1)!.quests).toEqual([
+        { kind: 'new', name: 'Quest: Find the gem', main: false, text: '' },
+      ])
     })
 
     it('shows modal for completed quest', () => {
-      bridge.activateQuest.mockReturnValue(null)
-      bridge.updateQuest.mockReturnValue(null)
       bridge.completeQuest
         .mockReturnValueOnce('Quest complete!')
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
+      expect(store.showModal).toBe(true)
       expect(store.modalTitle).toBe('🏆 Quest Complete!')
+      expect(store.modalBody).toBe('<rendered>Quest complete!</rendered>')
     })
 
-    it('queues multiple events and shows first', () => {
-      bridge.activateQuest
-        .mockReturnValueOnce('Quest A')
-        .mockReturnValueOnce('Quest B')
+    it('queues multiple completions and shows the first', () => {
+      bridge.completeQuest
+        .mockReturnValueOnce(done('A'))
+        .mockReturnValueOnce(done('B'))
         .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
       store.pollQuestEvents()
-      expect(store.modalTitle).toBe('📜 New Quest!')
-      expect(store.modalBody).toBe('<rendered>Quest A</rendered>')
+      expect(store.modalQuest?.name).toBe('A')
     })
 
     it('dismissModal advances to next queued event', () => {
-      bridge.activateQuest
-        .mockReturnValueOnce('Quest A')
-        .mockReturnValueOnce('Quest B')
+      bridge.completeQuest
+        .mockReturnValueOnce(done('A'))
+        .mockReturnValueOnce(done('B'))
         .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
       store.pollQuestEvents()
       store.dismissModal()
-      expect(store.modalBody).toBe('<rendered>Quest B</rendered>')
+      expect(store.modalQuest?.name).toBe('B')
     })
 
     it('dismissModal hides modal when queue empty', () => {
-      bridge.activateQuest
-        .mockReturnValueOnce('Quest A')
+      bridge.completeQuest
+        .mockReturnValueOnce(done('A'))
         .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
       store.pollQuestEvents()
       store.dismissModal()
       expect(store.showModal).toBe(false)
     })
 
     it('dismissModal restores acceptInput from bridge when last modal dismissed', () => {
-      bridge.activateQuest
-        .mockReturnValueOnce('Quest A')
+      bridge.completeQuest
+        .mockReturnValueOnce(done('A'))
         .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
       bridge.isAcceptingInput.mockReturnValue(true)
       store.pollQuestEvents()
       store.dismissModal()
@@ -692,27 +520,24 @@ describe('useGameStore', () => {
     })
 
     it('dismissModal does not restore acceptInput while more modals remain', () => {
-      bridge.activateQuest
-        .mockReturnValueOnce('Quest A')
-        .mockReturnValueOnce('Quest B')
+      bridge.completeQuest
+        .mockReturnValueOnce(done('A'))
+        .mockReturnValueOnce(done('B'))
         .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
       bridge.isAcceptingInput.mockReturnValue(true)
       // Start with acceptInput false to detect an incorrect restore
       store.acceptInput = false
       store.pollQuestEvents()
-      store.dismissModal() // Quest B still in queue
+      store.dismissModal() // B still in queue
       expect(store.showModal).toBe(true)
       expect(store.acceptInput).toBe(false)
     })
 
     it('does nothing when no events', () => {
-      bridge.activateQuest.mockReturnValue(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
       store.pollQuestEvents()
       expect(store.showModal).toBe(false)
+      expect(store.turns.at(-1)!.quests ?? []).toEqual([])
+      expect(store.questsHaveNew).toBe(false)
     })
 
     it('calls playNewQuest when a quest is activated', () => {
@@ -721,56 +546,17 @@ describe('useGameStore', () => {
       bridge.activateQuest
         .mockReturnValueOnce('Quest A')
         .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
       store.pollQuestEvents()
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })
 
-    it('plays sound per modal shown, not all at once when two quests activate', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
-      store.setAudioPlayer(audio)
-      bridge.activateQuest
-        .mockReturnValueOnce('Quest A')
-        .mockReturnValueOnce('Quest B')
-        .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
-      store.pollQuestEvents()
-      // First modal shown immediately — one sound
-      expect(audio.playNewQuest).toHaveBeenCalledTimes(1)
-      store.dismissModal()
-      // Second modal shown on dismiss — second sound
-      expect(audio.playNewQuest).toHaveBeenCalledTimes(2)
-    })
-
-    it('plays correct sound for each modal when quest types are mixed', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
-      store.setAudioPlayer(audio)
-      bridge.activateQuest
-        .mockReturnValueOnce('Quest A')
-        .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest
-        .mockReturnValueOnce('Quest done!')
-        .mockReturnValueOnce(null)
-      store.pollQuestEvents()
-      expect(audio.playNewQuest).toHaveBeenCalledTimes(1)
-      expect(audio.playQuestComplete).toHaveBeenCalledTimes(0)
-      store.dismissModal()
-      expect(audio.playQuestComplete).toHaveBeenCalledTimes(1)
-      expect(audio.playNewQuest).toHaveBeenCalledTimes(1)
-    })
-
     it('calls playNewQuest when a quest is updated', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
-      bridge.activateQuest.mockReturnValue(null)
       bridge.updateQuest
         .mockReturnValueOnce('Quest updated')
         .mockReturnValueOnce(null)
-      bridge.completeQuest.mockReturnValue(null)
       store.pollQuestEvents()
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
@@ -779,8 +565,6 @@ describe('useGameStore', () => {
     it('calls playQuestComplete when a quest is completed', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
-      bridge.activateQuest.mockReturnValue(null)
-      bridge.updateQuest.mockReturnValue(null)
       bridge.completeQuest
         .mockReturnValueOnce('Quest done!')
         .mockReturnValueOnce(null)
@@ -789,63 +573,28 @@ describe('useGameStore', () => {
       expect(audio.playNewQuest).not.toHaveBeenCalled()
     })
 
+    it('plays the fanfare per pop-up shown, not all at once', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.completeQuest
+        .mockReturnValueOnce(done('A'))
+        .mockReturnValueOnce(done('B'))
+        .mockReturnValueOnce(null)
+      store.pollQuestEvents()
+      expect(audio.playQuestComplete).toHaveBeenCalledTimes(1)
+      store.dismissModal()
+      expect(audio.playQuestComplete).toHaveBeenCalledTimes(2)
+    })
+
     it('does not call audio when no audio player is set', () => {
       // No setAudioPlayer call - should not throw
       bridge.activateQuest
         .mockReturnValueOnce('Quest A')
         .mockReturnValueOnce(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
+      bridge.completeQuest
+        .mockReturnValueOnce('Quest B')
+        .mockReturnValueOnce(null)
       expect(() => store.pollQuestEvents()).not.toThrow()
-    })
-
-    it('applies renderMarkup to activeQuests updated after polling', () => {
-      bridge.activateQuest.mockReturnValue(null)
-      bridge.updateQuest.mockReturnValue(null)
-      bridge.completeQuest.mockReturnValue(null)
-      bridge.getActiveQuests.mockReturnValue([
-        {
-          name: '[quest_name]Shadows Over Willowbrook (main)[/quest_name]',
-          description: 'Stop the shadows.',
-        },
-      ])
-      store.pollQuestEvents()
-      expect(store.activeQuests[0].name).toBe(
-        '<rendered>[quest_name]Shadows Over Willowbrook (main)[/quest_name]</rendered>',
-      )
-    })
-  })
-
-  // --- toggleSection ---
-
-  describe('toggleSection', () => {
-    it('toggles activeQuests', () => {
-      expect(store.showActiveQuests).toBe(true)
-      store.toggleSection('activeQuests')
-      expect(store.showActiveQuests).toBe(false)
-      store.toggleSection('activeQuests')
-      expect(store.showActiveQuests).toBe(true)
-    })
-
-    it('toggles completedQuests', () => {
-      expect(store.showCompletedQuests).toBe(false)
-      store.toggleSection('completedQuests')
-      expect(store.showCompletedQuests).toBe(true)
-    })
-
-    it('toggles inventory', () => {
-      store.toggleSection('inventory')
-      expect(store.showInventory).toBe(false)
-    })
-
-    it('toggles spells', () => {
-      store.toggleSection('spells')
-      expect(store.showSpells).toBe(false)
-    })
-
-    it('ignores unknown sections', () => {
-      store.toggleSection('unknown')
-      // No error thrown
     })
   })
 
@@ -1055,11 +804,10 @@ describe('useGameStore', () => {
       await store.initGame()
     })
 
-    it('calls bridge.saveToSlot and renders output', () => {
-      bridge.saveToSlot.mockReturnValue('Game saved.')
+    it('calls bridge.saveToSlot and shows a notice', () => {
       store.saveToSlot(3)
       expect(bridge.saveToSlot).toHaveBeenCalledWith(3)
-      expect(store.lastOutput).toBe('<rendered>Game saved.</rendered>')
+      expect(store.notice?.text).toBe('Game saved · Slot 3')
     })
   })
 
@@ -1068,12 +816,11 @@ describe('useGameStore', () => {
       await store.initGame()
     })
 
-    it('calls bridge.loadFromSlot, renders output, and refreshes panels', () => {
-      bridge.loadFromSlot.mockReturnValue('Game loaded.')
+    it('calls bridge.loadFromSlot, shows a notice, and refreshes panels', () => {
       bridge.getRoomName.mockReturnValue('Dungeon')
       store.loadFromSlot(2)
       expect(bridge.loadFromSlot).toHaveBeenCalledWith(2)
-      expect(store.lastOutput).toBe('<rendered>Game loaded.</rendered>')
+      expect(store.notice?.text).toBe('Game loaded · Slot 2')
       expect(store.roomName).toBe('Dungeon')
     })
   })
@@ -1154,7 +901,7 @@ describe('useGameStore', () => {
       expect(store.turns).toHaveLength(1)
     })
 
-    it('records system output such as loading a save without a command', async () => {
+    it('records loading a save as an arrival without a command', async () => {
       await startPlaying()
       bridge.getRoomName.mockReturnValue('Ancient Grove')
 
@@ -1162,7 +909,7 @@ describe('useGameStore', () => {
 
       expect(store.turns.at(-1)).toMatchObject({
         command: null,
-        text: 'Game loaded.',
+        text: '',
         room: 'Ancient Grove',
         roomChanged: true,
       })
@@ -1197,14 +944,6 @@ describe('useGameStore', () => {
       })
     })
 
-    it('does not record advanceTurn output (it only repeats the last answer)', async () => {
-      await startPlaying()
-
-      store.advanceTurn()
-
-      expect(store.turns).toHaveLength(1)
-    })
-
     it(`keeps only the last ${MAX_TURNS} turns`, async () => {
       await startPlaying()
 
@@ -1213,15 +952,6 @@ describe('useGameStore', () => {
       expect(store.turns).toHaveLength(MAX_TURNS)
       expect(store.turns.at(-1)?.command).toBe(`wait ${MAX_TURNS + 4}`)
       expect(store.turns.at(-1)?.id).toBe(MAX_TURNS + 6)
-    })
-
-    it('keeps updating lastOutput for the classic UI', async () => {
-      await startPlaying()
-      bridge.handleCommand.mockReturnValue('You see a forest.')
-
-      store.submitCommand('look')
-
-      expect(store.lastOutput).toBe('<rendered>You see a forest.</rendered>')
     })
   })
 
@@ -1364,14 +1094,14 @@ describe('useGameStore', () => {
     })
 
     it('treats a typed "save" like Quick save', () => {
+      const turns = store.turns.length
+
       store.submitCommand('  Save ')
 
       expect(bridge.quickSaveGame).toHaveBeenCalledTimes(1)
       expect(bridge.handleCommand).not.toHaveBeenCalled()
-      expect(store.turns.at(-1)).toMatchObject({
-        command: 'Save',
-        text: 'Game saved.',
-      })
+      expect(store.notice?.text).toBe('Game saved')
+      expect(store.turns.length).toBe(turns)
     })
 
     it('treats a typed "load" like Quick load, without chips', () => {
@@ -1383,9 +1113,10 @@ describe('useGameStore', () => {
 
       expect(bridge.quickLoadGame).toHaveBeenCalledTimes(1)
       expect(bridge.handleCommand).not.toHaveBeenCalled()
+      expect(store.notice?.text).toBe('Game loaded')
       expect(store.turns.at(-1)).toMatchObject({
-        command: 'load',
-        text: 'Game loaded.',
+        command: null,
+        text: '',
         gained: [],
         lost: [],
       })
@@ -1585,7 +1316,6 @@ describe('useGameStore', () => {
       bridge.isAcceptingInput.mockReturnValue(true)
       await store.initGame()
       store.dismissModal()
-      store.lanternFeedback = true
     })
 
     it('adds new and updated quests to the turn instead of a pop-up', () => {
@@ -1729,20 +1459,6 @@ describe('useGameStore', () => {
     })
   })
 
-  it('has no quest for the classic completion pop-up', async () => {
-    bridge.isAcceptingInput.mockReturnValue(true)
-    await store.initGame()
-    store.dismissModal()
-    bridge.completeQuest
-      .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
-      .mockReturnValue(null)
-
-    store.submitCommand('look')
-
-    expect(store.showModal).toBe(true)
-    expect(store.modalQuest).toBe(null)
-  })
-
   // --- Chapter pages (Lantern) ---
 
   describe('chapter pages', () => {
@@ -1853,7 +1569,6 @@ describe('useGameStore', () => {
       bridge.isAcceptingInput.mockReturnValue(true)
       await store.initGame()
       store.dismissModal()
-      store.lanternFeedback = true
     })
 
     it('shows a saved game as a notice, not in the story', () => {
@@ -1903,13 +1618,16 @@ describe('useGameStore', () => {
       )
     })
 
-    it('leaves the classic UI as it was', () => {
-      store.lanternFeedback = false
+    it('keeps a failed save in the story', () => {
+      bridge.quickSaveGame.mockReturnValue('[failure]Could not save.[/failure]')
 
-      store.saveToSlot(2)
+      store.submitCommand('save')
 
       expect(store.notice).toBe(null)
-      expect(store.turns.at(-1)!.text).toBe('Game saved.')
+      expect(store.turns.at(-1)).toMatchObject({
+        command: 'save',
+        text: '[failure]Could not save.[/failure]',
+      })
     })
   })
 
@@ -1946,8 +1664,7 @@ describe('useGameStore', () => {
       store.dismissModal()
     })
 
-    it('asks before quitting in the Lantern UI', () => {
-      store.lanternFeedback = true
+    it('asks before quitting', () => {
       bridge.handleCommand.mockClear()
 
       store.submitCommand('quit')
@@ -1958,15 +1675,7 @@ describe('useGameStore', () => {
       expect(bridge.handleCommand).not.toHaveBeenCalled()
     })
 
-    it('leaves quit to the engine in the classic UI', () => {
-      store.submitCommand('quit')
-
-      expect(store.quitAsked).toBe(false)
-      expect(bridge.handleCommand).toHaveBeenCalledWith('quit')
-    })
-
     it('starts again from Act I', () => {
-      store.lanternFeedback = true
       store.submitCommand('look')
       store.bagHasNew = true
       store.quitAsked = true

@@ -1,11 +1,5 @@
 /** TypeScript interfaces for the Pyodide bridge return types. */
 
-/** A named save slot with metadata. */
-export interface NamedSave {
-  name: string
-  timestamp: string
-}
-
 /** One entry in the 8-slot save system. */
 export interface SaveSlot {
   /** 1–8, or 0 for the quick save. */

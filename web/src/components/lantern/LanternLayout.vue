@@ -150,7 +150,6 @@ let storyResize: ResizeObserver | undefined
 
 onMounted(() => {
   document.documentElement.setAttribute('data-ui', 'lantern')
-  game.lanternFeedback = true
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
@@ -160,7 +159,6 @@ onMounted(() => {
 })
 onUnmounted(() => {
   document.documentElement.removeAttribute('data-ui')
-  game.lanternFeedback = false
   storyResize?.disconnect()
 })
 
@@ -679,7 +677,7 @@ watch(
   line-height: 1.55;
   color: var(--lq-prose);
   white-space: pre-wrap;
-  /* The music credits' divider colour (shared with the classic UI). */
+  /* The divider colour of the music credits' markup. */
   --border-color: var(--lq-line);
 }
 .lq-info :deep(a) {

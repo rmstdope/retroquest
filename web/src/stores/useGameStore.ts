@@ -4,7 +4,6 @@ import type {
   NamedItem,
   RoomExits,
   CompletionTree,
-  NamedSave,
   SaveSlot,
   QuestProgress,
   ActStats,
@@ -47,7 +46,6 @@ export interface GameBridge {
   quickLoadGame(): string
   saveNamedGame(name: string): string
   loadNamedGame(name: string): string
-  listNamedSaves(): NamedSave[]
   getActName(): string
   getActIntro(): string
   getQuestProgress(): QuestProgress
@@ -98,7 +96,7 @@ export interface Turn {
   lost: Chip[]
   /** The room as found on arrival, kept for the story (null if no room change). */
   arrival: Arrival | null
-  /** Quests that started or moved on with this turn (Lantern story only). */
+  /** Quests that started, moved on or were completed with this turn. */
   quests?: QuestNews[]
 }
 
@@ -115,13 +113,14 @@ export interface Arrival {
 /** Journal tabs that show a dot when something new arrived. */
 export type JournalTab = 'bag' | 'spells' | 'quests'
 
+/** A pop-up waiting its turn: a quest completion or a chapter page. */
 interface QuestEvent {
   title: string
   body: string
-  sound: 'newQuest' | 'questComplete' | null
-  /** The completed quest (Lantern only), for a pop-up made for it. */
+  sound: 'questComplete' | null
+  /** The completed quest, for a pop-up made for it. */
   quest?: QuestNews
-  /** An act intro or act completion, for a chapter page (Lantern). */
+  /** An act intro or act completion, for a chapter page. */
   chapter?: Chapter
 }
 
@@ -149,9 +148,7 @@ export const useGameStore = defineStore('game', () => {
   /** What merchants in the room sell (for the Buy action). */
   const roomWares = ref<RoomWare[]>([])
 
-  // --- Panels ---
-  const inventory = ref<NamedItem[]>([])
-  const spells = ref<NamedItem[]>([])
+  // --- Journal ---
   /** Bag and spell names as the bridge lists them (markup, not HTML), for commands. */
   const bagEntries = ref<string[]>([])
   const spellEntries = ref<string[]>([])
@@ -160,13 +157,10 @@ export const useGameStore = defineStore('game', () => {
   const rawSpells = ref<NamedItem[]>([])
   const rawActiveQuests = ref<NamedItem[]>([])
   const rawCompletedQuests = ref<NamedItem[]>([])
-  const activeQuests = ref<NamedItem[]>([])
-  const completedQuests = ref<NamedItem[]>([])
   /** Quests done / total in the current act (null until the game starts). */
   const questProgress = ref<QuestProgress | null>(null)
 
-  // --- Output ---
-  const lastOutput = ref('')
+  // --- Story ---
   const turns = ref<Turn[]>([])
   let nextTurnId = 1
   let lastTurnRoom = ''
@@ -178,9 +172,8 @@ export const useGameStore = defineStore('game', () => {
   const questsHaveNew = ref(false)
   /** A quest the story asked the journal to open ("Open in journal"). */
   const questToOpen = ref<string | null>(null)
-  /** The quest whose details dialog is open (Lantern), by name. */
+  /** The quest whose details dialog is open, by name. */
   const shownQuest = ref<string | null>(null)
-  const introText = ref('')
 
   // --- Input ---
   const acceptInput = ref(false)
@@ -188,17 +181,11 @@ export const useGameStore = defineStore('game', () => {
   // --- Completion tree (refreshed after every command / panel refresh) ---
   const completionTree = ref<CompletionTree>({})
 
-  // --- Sidebar sections ---
-  const showActiveQuests = ref(true)
-  const showCompletedQuests = ref(false)
-  const showInventory = ref(true)
-  const showSpells = ref(true)
-
   // --- Modal ---
   const showModal = ref(false)
   const modalTitle = ref('')
   const modalBody = ref('')
-  /** The completed quest the open pop-up is about (Lantern; else null). */
+  /** The completed quest the open pop-up is about, else null. */
   const modalQuest = ref<QuestNews | null>(null)
   /** The chapter page the open pop-up is (act intro / complete), else null. */
   const modalChapter = ref<Chapter | null>(null)
@@ -220,20 +207,18 @@ export const useGameStore = defineStore('game', () => {
       chapter: { kind: 'intro', ...currentAct },
     })
   }
-  const modalQueue = ref<QuestEvent[]>([])
   /**
-   * The Lantern UI's feedback: new and updated quests go in the story (on the
-   * turn that caused them) instead of pop-ups, completions stay pop-ups, and
-   * saves and loads are short notices (a toast) instead of story lines.
+   * Pop-ups wait here. New and updated quests are not pop-ups: they go in the
+   * story, on the turn that caused them.
    */
-  const lanternFeedback = ref(false)
-  /** The latest save/load notice (Lantern); a new id shows it again. */
+  const modalQueue = ref<QuestEvent[]>([])
+  /** The latest save/load notice (a toast); a new id shows it again. */
   const notice = ref<{ id: number; text: string } | null>(null)
   let nextNoticeId = 1
 
-  /** In the Lantern UI a successful save or load is a notice; true if shown so. */
+  /** A successful save or load is a notice, not a story line; true if shown so. */
   function showNotice(result: string, text: string): boolean {
-    if (!lanternFeedback.value || result.includes('[failure]')) return false
+    if (result.includes('[failure]')) return false
     notice.value = { id: nextNoticeId++, text }
     return true
   }
@@ -252,8 +237,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
-   * Show an engine answer: set lastOutput (classic UI) and record it as a
-   * turn in the story log (Lantern UI).
+   * Show an engine answer: record it as a turn in the story log.
    *
    * A command that completes an act already swaps in the next act's state, so
    * while the act is not running the answer stays in the previous turn's room.
@@ -266,7 +250,6 @@ export const useGameStore = defineStore('game', () => {
       arrive = false,
     }: { chips?: boolean; arrive?: boolean } = {},
   ): void {
-    lastOutput.value = renderMarkup(raw)
     const b = requireBridge()
     const actRunning = b.isActRunning()
     const room = actRunning ? b.getRoomName() : lastTurnRoom
@@ -371,9 +354,8 @@ export const useGameStore = defineStore('game', () => {
 
   /** From the game's logo to the first act's intro pop-up (input waits for it). */
   function openFirstAct(b: GameBridge): void {
-    // Advance SHOW_LOGO → ACT_INTRO: get the logo/splash text for the output area
+    // Advance SHOW_LOGO → ACT_INTRO: get the logo/splash text for the title page
     const logoRaw = b.advanceTurn()
-    introText.value = renderMarkup(logoRaw)
     titleText.value = logoRaw
     showTitle.value = true
 
@@ -390,7 +372,7 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
-  /** The Lantern UI asks before `quit` / `exit` (see QuitDialog). */
+  /** The UI asks before `quit` / `exit` (see QuitDialog). */
   const quitAsked = ref(false)
   /** Counts restarts, so views can start afresh with a new game. */
   const gameNumber = ref(0)
@@ -423,7 +405,7 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     const command = cmd.trim()
     if (routeSaveOrLoad(command)) return
-    if (lanternFeedback.value && /^(quit|exit)$/i.test(command)) {
+    if (/^(quit|exit)$/i.test(command)) {
       quitAsked.value = true
       return
     }
@@ -469,20 +451,9 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
-  function advanceTurn(): void {
-    const b = requireBridge()
-    const result = b.advanceTurn()
-    // Not a turn: while input is blocked this only repeats the last answer.
-    lastOutput.value = renderMarkup(result)
-    refreshPanels()
-  }
-
+  /** Read the room, journal, music, input state and completions from the bridge. */
   function refreshPanels(): void {
     const b = requireBridge()
-    const renderItem = (item: NamedItem): NamedItem => ({
-      name: renderMarkup(item.name),
-      description: renderMarkup(item.description),
-    })
     roomName.value = b.getRoomName()
     roomDescription.value = b.getRoomDescription()
     characters.value = b.getRoomCharacters()
@@ -491,18 +462,12 @@ export const useGameStore = defineStore('game', () => {
     roomWares.value = b.getRoomWares()
     const bag = b.getInventory()
     const spellList = b.getSpells()
-    inventory.value = bag.map(renderItem)
-    spells.value = spellList.map(renderItem)
     bagEntries.value = bag.map((entry) => entry.name)
     spellEntries.value = spellList.map((entry) => entry.name)
     rawInventory.value = bag
     rawSpells.value = spellList
-    const active = b.getActiveQuests()
-    const completed = b.getCompletedQuests()
-    activeQuests.value = active.map(renderItem)
-    completedQuests.value = completed.map(renderItem)
-    rawActiveQuests.value = active
-    rawCompletedQuests.value = completed
+    rawActiveQuests.value = b.getActiveQuests()
+    rawCompletedQuests.value = b.getCompletedQuests()
     questProgress.value = b.getQuestProgress()
     const m = b.getMusicInfo()
     musicFile.value = m.musicFile
@@ -573,7 +538,7 @@ export const useGameStore = defineStore('game', () => {
     refreshPanels()
   }
 
-  /** A load: a notice and the room in the story (Lantern), or the engine's text. */
+  /** A load: a notice and the room in the story, or the engine's failure. */
   function showLoaded(
     command: string | null,
     result: string,
@@ -587,11 +552,6 @@ export const useGameStore = defineStore('game', () => {
   /** The engine's stats or help text, for a dialog (adds nothing to the story). */
   function readInfo(kind: 'stats' | 'help'): string {
     return requireBridge().readCommand(kind)
-  }
-
-  function listNamedSaves(): NamedSave[] {
-    const b = requireBridge()
-    return b.listNamedSaves()
   }
 
   function getQuickSave(): SaveSlot | null {
@@ -620,50 +580,34 @@ export const useGameStore = defineStore('game', () => {
     refreshPanels()
   }
 
+  /**
+   * Collect the engine's quest events: new and updated quests go in the story
+   * on the latest turn (with a chime); each completion is also a pop-up.
+   */
   function pollQuestEvents(): void {
     const b = requireBridge()
-    const events: QuestEvent[] = []
-
     const news: QuestNews[] = []
 
     let activated: string | null
     while ((activated = b.activateQuest()) !== null) {
-      if (lanternFeedback.value) news.push(parseQuestNews('new', activated))
-      else
-        events.push({
-          title: '📜 New Quest!',
-          body: renderMarkup(activated),
-          sound: 'newQuest',
-        })
+      news.push(parseQuestNews('new', activated))
     }
 
     let updated: string | null
     while ((updated = b.updateQuest()) !== null) {
-      if (lanternFeedback.value) news.push(parseQuestNews('updated', updated))
-      else
-        events.push({
-          title: '📜 Quest Updated',
-          body: renderMarkup(updated),
-          sound: 'newQuest',
-        })
+      news.push(parseQuestNews('updated', updated))
     }
 
     let completed: string | null
     const completions: string[] = []
-    const completionEvents: QuestEvent[] = []
     while ((completed = b.completeQuest()) !== null) {
       completions.push(completed)
-      completionEvents.push({
-        title: '🏆 Quest Complete!',
-        body: renderMarkup(completed),
-        sound: 'questComplete',
-      })
     }
-    events.push(...completionEvents)
 
     // Completions also stay in the story as records, each with the act's
     // quest count as it stood once that quest was done.
-    if (lanternFeedback.value && completions.length) {
+    const events: QuestEvent[] = []
+    if (completions.length) {
       const { completed: done, total } = b.getQuestProgress()
       completions.forEach((payload, index) => {
         const record: QuestNews = {
@@ -674,7 +618,12 @@ export const useGameStore = defineStore('game', () => {
           },
         }
         news.push(record)
-        completionEvents[index].quest = record
+        events.push({
+          title: '🏆 Quest Complete!',
+          body: renderMarkup(payload),
+          sound: 'questComplete',
+          quest: record,
+        })
       })
     }
 
@@ -692,15 +641,6 @@ export const useGameStore = defineStore('game', () => {
         showNextModal()
       }
     }
-
-    activeQuests.value = b.getActiveQuests().map((item) => ({
-      name: renderMarkup(item.name),
-      description: renderMarkup(item.description),
-    }))
-    completedQuests.value = b.getCompletedQuests().map((item) => ({
-      name: renderMarkup(item.name),
-      description: renderMarkup(item.description),
-    }))
   }
 
   function showNextModal(): void {
@@ -716,8 +656,7 @@ export const useGameStore = defineStore('game', () => {
     modalQuest.value = event.quest ?? null
     modalChapter.value = event.chapter ?? null
     showModal.value = true
-    if (event.sound === 'newQuest') audioPlayer?.playNewQuest()
-    else if (event.sound === 'questComplete') audioPlayer?.playQuestComplete()
+    if (event.sound === 'questComplete') audioPlayer?.playQuestComplete()
   }
 
   function dismissModal(): void {
@@ -740,17 +679,6 @@ export const useGameStore = defineStore('game', () => {
         triggerActTransitionModals()
       }
     }
-  }
-
-  function toggleSection(section: string): void {
-    const map: Record<string, typeof showActiveQuests> = {
-      activeQuests: showActiveQuests,
-      completedQuests: showCompletedQuests,
-      inventory: showInventory,
-      spells: showSpells,
-    }
-    const toggle = map[section]
-    if (toggle) toggle.value = !toggle.value
   }
 
   /**
@@ -820,7 +748,6 @@ export const useGameStore = defineStore('game', () => {
     spellEntries,
     completionTree,
     shortNames,
-    lanternFeedback,
     readInfo,
     quitAsked,
     titleText,
@@ -848,17 +775,7 @@ export const useGameStore = defineStore('game', () => {
     characters,
     items,
     exits,
-    inventory,
-    spells,
-    activeQuests,
-    completedQuests,
-    lastOutput,
-    introText,
     acceptInput,
-    showActiveQuests,
-    showCompletedQuests,
-    showInventory,
-    showSpells,
     showModal,
     modalTitle,
     modalBody,
@@ -871,20 +788,17 @@ export const useGameStore = defineStore('game', () => {
     setAudioPlayer,
     initGame,
     submitCommand,
-    advanceTurn,
     refreshPanels,
     saveGame,
     loadGame,
     saveNamedGame,
     loadNamedGame,
-    listNamedSaves,
     getSaveSlots,
     saveToSlot,
     loadFromSlot,
     pollQuestEvents,
     dismissModal,
     markSeen,
-    toggleSection,
     tabComplete,
   }
 })

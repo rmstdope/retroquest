@@ -429,20 +429,29 @@ describe('useBridge', () => {
       expect(saves[0].data).toBe('bmV3ZGF0YQ==')
     })
 
-    it('listNamedSaves returns empty array when no named saves', () => {
-      expect(bridge.listNamedSaves()).toEqual([])
-    })
-
-    it('listNamedSaves returns saved slots without data field', () => {
-      const saves = [
-        { name: 'Save 1', timestamp: '2024-01-01T00:00:00.000Z', data: 'abc' },
-      ]
-      localStorageMock._setRaw('retroquest_named_saves', JSON.stringify(saves))
-      const result = bridge.listNamedSaves()
-      expect(result).toHaveLength(1)
-      expect(result[0].name).toBe('Save 1')
-      expect(result[0].timestamp).toBe('2024-01-01T00:00:00.000Z')
-      expect('data' in result[0]).toBe(false)
+    it('saveNamedGame keeps the other named saves loadable', () => {
+      const existing = JSON.stringify([
+        {
+          name: 'morning',
+          timestamp: '2024-01-01T00:00:00.000Z',
+          data: 'b2xkZGF0YQ==',
+        },
+      ])
+      localStorageMock._setRaw('retroquest_named_saves', existing)
+      mock.pythonResults.set('controller.save_game()', 'Saved.')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3ZGF0YQ==')
+      bridge.saveNamedGame('evening')
+      const raw = localStorageMock.setItem.mock.calls.find(
+        (args: unknown[]) => args[0] === 'retroquest_named_saves',
+      )
+      const saves = JSON.parse(raw![1] as string) as Array<{
+        name: string
+        data: string
+      }>
+      expect(saves.map((s) => [s.name, s.data])).toEqual([
+        ['morning', 'b2xkZGF0YQ=='],
+        ['evening', 'bmV3ZGF0YQ=='],
+      ])
     })
 
     it('loadNamedGame loads a named save', () => {
