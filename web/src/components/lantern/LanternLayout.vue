@@ -38,6 +38,14 @@ watch(short, (isShort) => {
   if (isShort) dockOpen.value = false
 })
 
+// "Open in journal" on a phone: show the Quests section (it opens the quest).
+watch(
+  () => game.questToOpen,
+  (name) => {
+    if (name && !wide.value) section.value = 'quests'
+  },
+)
+
 // The laptop shows everything at once; coming back from it starts on the story.
 watch(wide, (isWide) => {
   if (isWide) section.value = 'story'

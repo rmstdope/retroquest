@@ -1,9 +1,13 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { createPinia, setActivePinia } from 'pinia'
+import { useGameStore } from '@/stores/useGameStore'
 import QuestNewsCard from './QuestNewsCard.vue'
 
 describe('QuestNewsCard', () => {
+  beforeEach(() => setActivePinia(createPinia()))
+
   it('shows a new side quest as a card', () => {
     const w = mount(QuestNewsCard, {
       props: {
@@ -77,5 +81,18 @@ describe('QuestNewsCard', () => {
         block: 'nearest',
       })
     })
+  })
+
+  it('opens a new quest in the journal', async () => {
+    const w = mount(QuestNewsCard, {
+      props: {
+        news: { kind: 'new', name: 'Hint of Magic', main: false, text: 'x' },
+      },
+    })
+
+    await w.get('button.lq-open-journal').trigger('click')
+
+    expect(w.get('button.lq-open-journal').text()).toBe('Open in journal')
+    expect(useGameStore().questToOpen).toBe('Hint of Magic')
   })
 })

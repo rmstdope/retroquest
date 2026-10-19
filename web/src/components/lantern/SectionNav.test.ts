@@ -47,4 +47,10 @@ describe('SectionNav', () => {
     expect(buttons[2].find('.lq-dot').exists()).toBe(true)
     expect(buttons[3].find('.lq-dot').exists()).toBe(false)
   })
+
+  it('shows a dot on Quests when there is quest news', () => {
+    useGameStore().questsHaveNew = true
+
+    expect(mountNav().findAll('button')[3].text()).toBe('Quests (new)')
+  })
 })

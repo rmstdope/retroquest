@@ -4,7 +4,7 @@ import { useGameStore } from '@/stores/useGameStore'
 
 /**
  * Section tabs on phones: Story, Bag, Spells, Quests and Map. A dot marks
- * Bag or Spells while something new is in it.
+ * Bag, Spells or Quests while something new is in it.
  */
 export type Section = 'story' | 'bag' | 'spells' | 'quests' | 'map'
 
@@ -15,7 +15,7 @@ const sections = computed(() => [
   { id: 'story' as const, label: 'Story', dot: false },
   { id: 'bag' as const, label: 'Bag', dot: game.bagHasNew },
   { id: 'spells' as const, label: 'Spells', dot: game.spellsHaveNew },
-  { id: 'quests' as const, label: 'Quests', dot: false },
+  { id: 'quests' as const, label: 'Quests', dot: game.questsHaveNew },
   { id: 'map' as const, label: 'Map', dot: false },
 ])
 </script>
