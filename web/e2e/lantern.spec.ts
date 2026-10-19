@@ -512,8 +512,16 @@ test.describe('Lantern UI (?ui=lantern)', () => {
       ]
       expect(Math.abs(turnBox!.y - storyBox!.y)).toBeLessThan(24)
 
-      const pill = page.getByRole('button', { name: 'More below ↓' })
+      const pill = page.getByRole('button', { name: 'More below', exact: true })
       await expect(pill).toBeVisible()
+      // A 44px touch target around the slimmer pill.
+      const pillBox = (await pill.boundingBox())!
+      const hit = await page.evaluate(
+        ([x, y]) =>
+          !!document.elementFromPoint(x, y)?.closest('.lq-more-below'),
+        [pillBox.x + pillBox.width / 2, pillBox.y - 3],
+      )
+      expect(hit).toBe(true)
       for (let i = 0; i < 40 && (await pill.isVisible()); i++) {
         await pill.click()
         await page.waitForTimeout(400)

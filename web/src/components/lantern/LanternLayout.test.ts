@@ -4,6 +4,7 @@ import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
 const TURN = {
   command: 'look',
@@ -616,6 +617,88 @@ describe('LanternLayout', () => {
       await w.get('section[aria-label="Story"]').trigger('scroll')
 
       expect(w.find('button.lq-more-below').exists()).toBe(false)
+    })
+
+    it('is named "More below" for screen readers (the arrow is decoration)', async () => {
+      const w = mountLayout()
+      stubStory(w, 2000)
+      await addTurn(w)
+
+      const arrow = w.get('button.lq-more-below [aria-hidden="true"]')
+      expect(arrow.text()).toBe('↓')
+    })
+
+    it('has no pill when the story is too short to hold it', async () => {
+      const w = mountLayout()
+      const { story } = stubStory(w, 2000)
+      Object.defineProperty(story, 'clientHeight', {
+        configurable: true,
+        value: 30,
+      })
+
+      await addTurn(w)
+
+      expect(w.find('button.lq-more-below').exists()).toBe(false)
+    })
+
+    it('follows the story when it is resized without scrolling', async () => {
+      const observed: Array<() => void> = []
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          constructor(cb: () => void) {
+            observed.push(cb)
+          }
+          observe() {}
+          disconnect() {}
+        },
+      )
+      const w = mountLayout()
+      const { story } = stubStory(w, 300)
+      await addTurn(w)
+      expect(w.find('button.lq-more-below').exists()).toBe(false)
+
+      Object.defineProperty(story, 'clientHeight', {
+        configurable: true,
+        value: 150,
+      })
+      observed.forEach((cb) => cb())
+      await w.vm.$nextTick()
+
+      expect(w.find('button.lq-more-below').exists()).toBe(true)
+      vi.unstubAllGlobals()
+    })
+
+    it('follows the story when the text size changes', async () => {
+      const w = mountLayout()
+      const { story } = stubStory(w, 300)
+      await addTurn(w)
+      expect(w.find('button.lq-more-below').exists()).toBe(false)
+
+      Object.defineProperty(story, 'scrollHeight', {
+        configurable: true,
+        value: 400,
+      })
+      useSettingsStore().textSize = 'large'
+      await flushPromises()
+
+      expect(w.find('button.lq-more-below').exists()).toBe(true)
+    })
+
+    it('hands focus to the actions when the pill goes at the end', async () => {
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      const w = wrapper
+      useGameStore().acceptInput = true
+      const { story } = stubStory(w, 2000)
+      await addTurn(w)
+      const pill = w.get('button.lq-more-below')
+      ;(pill.element as HTMLElement).focus()
+
+      story.scrollTop = 1700
+      await w.get('section[aria-label="Story"]').trigger('scroll')
+
+      expect(w.find('button.lq-more-below').exists()).toBe(false)
+      expect(document.activeElement?.textContent?.trim()).toBe('Look')
     })
   })
 })
