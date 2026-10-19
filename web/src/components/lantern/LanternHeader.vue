@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useFullscreen } from '@/composables/useFullscreen'
 import type { LanternTextSize } from '@/lantern/tokens'
 
 /**
@@ -16,6 +17,7 @@ const emit = defineEmits<{
 }>()
 const game = useGameStore()
 const settings = useSettingsStore()
+const fullscreen = useFullscreen()
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V']
 
@@ -172,6 +174,33 @@ function toggleTheme(): void {
     </nav>
 
     <div class="lq-actions">
+      <button
+        v-if="fullscreen.supported"
+        type="button"
+        class="lq-icon-btn"
+        :aria-label="
+          fullscreen.active.value ? 'Exit full screen' : 'Full screen'
+        "
+        @click="fullscreen.toggle"
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            v-if="fullscreen.active.value"
+            d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"
+          />
+          <path v-else d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+        </svg>
+      </button>
       <div ref="textSizeAnchor" class="lq-popover-anchor">
         <button
           ref="textSizeButton"
