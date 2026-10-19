@@ -383,6 +383,34 @@ describe('LanternLayout', () => {
       expect(document.activeElement).toBe(before)
     })
 
+    it('sends focus to the actions when nothing had it before the menu', async () => {
+      const w = await storyWith('You see a [item_name]bucket[/item_name].')
+      ;(document.activeElement as HTMLElement | null)?.blur()
+      await w.get('.lq-story .theme-item_name').trigger('click')
+      await flushPromises()
+
+      await w.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
+      await flushPromises()
+
+      expect(document.activeElement).not.toBe(document.body)
+      expect(w.get('.lq-story').element.contains(document.activeElement)).toBe(
+        false,
+      )
+    })
+
+    it('leaves focus be when a scroll closes the menu', async () => {
+      const w = await storyWith('You see a [item_name]bucket[/item_name].')
+      ;(document.activeElement as HTMLElement | null)?.blur()
+      await w.get('.lq-story .theme-item_name').trigger('click')
+      await flushPromises()
+
+      document.body.dispatchEvent(new Event('scroll'))
+      await flushPromises()
+
+      expect(w.find('[role="menu"]').exists()).toBe(false)
+      expect(document.activeElement).toBe(document.body)
+    })
+
     it('opens nothing for something that is not here', async () => {
       const w = await storyWith(
         'You remember [character_name]Mira[/character_name].',

@@ -39,7 +39,7 @@ describe('StoryNameMenu', () => {
 
     document.body.dispatchEvent(new Event('scroll'))
 
-    expect(wrapper!.emitted('close')).toHaveLength(1)
+    expect(wrapper!.emitted('close')).toEqual([[false]])
   })
 
   it('stays inside a short window when the choices are many, and scrolls', async () => {
@@ -108,5 +108,38 @@ describe('StoryNameMenu', () => {
 
     await menu.findAll('[role="menuitem"]')[1].trigger('click')
     expect(wrapper.emitted('pick')).toEqual([['give map to grandmother']])
+  })
+
+  it('goes back to the actions with Escape in a list of choices', async () => {
+    wrapper = mount(StoryNameMenu, {
+      props: {
+        actions: [
+          { label: 'Talk to', command: 'talk to grandmother' },
+          {
+            label: 'Give…',
+            choices: [{ label: 'Bread', command: 'give bread to grandmother' }],
+          },
+        ],
+        x: 100,
+        top: 200,
+        bottom: 218,
+      },
+      attachTo: document.body,
+    })
+    await wrapper.findAll('[role="menuitem"]')[1].trigger('click')
+    await nextTick()
+
+    await wrapper.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
+    await nextTick()
+
+    expect(wrapper.emitted('close')).toBeUndefined()
+    expect(wrapper.findAll('[role="menuitem"]').map((m) => m.text())).toEqual([
+      'Talk to',
+      'Give…',
+    ])
+    expect(document.activeElement?.textContent?.trim()).toBe('Give…')
+
+    await wrapper.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
+    expect(wrapper.emitted('close')).toEqual([[true]])
   })
 })

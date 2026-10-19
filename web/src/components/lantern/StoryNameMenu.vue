@@ -5,8 +5,9 @@ import type { NameAction } from '@/lantern/nameActions'
 /**
  * A small menu next to a name clicked in the story: the actions that fit
  * it. Picking one runs it; an action with choices (Give…, Cast…) shows
- * them in its place, named after it; Escape, a click elsewhere, Tab or scrolling
- * (the name would move away from it) closes it.
+ * them in its place, named after it (Escape there goes back to the
+ * actions); Escape, a click elsewhere, Tab or scrolling (the name would
+ * move away from it) closes it.
  * Arrow keys move between the actions.
  */
 /** `x`, `top` and `bottom` are where the clicked name is in the window. */
@@ -16,7 +17,8 @@ const props = defineProps<{
   top: number
   bottom: number
 }>()
-const emit = defineEmits<{ pick: [command: string]; close: [] }>()
+/** `close` says whether a key (Escape, Tab) closed it. */
+const emit = defineEmits<{ pick: [command: string]; close: [byKey: boolean] }>()
 const menu = ref<HTMLElement | null>(null)
 /** The action whose choices are shown, if one was picked. */
 const opened = ref<NameAction | null>(null)
@@ -65,10 +67,20 @@ function items(): HTMLElement[] {
 function onKeydown(event: KeyboardEvent): void {
   const list = items()
   const index = list.indexOf(document.activeElement as HTMLElement)
-  if (event.key === 'Escape' || event.key === 'Tab') {
+  if (event.key === 'Escape' && opened.value) {
     event.preventDefault()
     event.stopPropagation()
-    emit('close')
+    const back = opened.value
+    opened.value = null
+    void nextTick(() =>
+      items()
+        .find((item) => item.textContent?.trim() === back.label)
+        ?.focus(),
+    )
+  } else if (event.key === 'Escape' || event.key === 'Tab') {
+    event.preventDefault()
+    event.stopPropagation()
+    emit('close', true)
   } else if (event.key === 'ArrowDown') {
     event.preventDefault()
     list[(index + 1) % list.length]?.focus()
@@ -79,12 +91,12 @@ function onKeydown(event: KeyboardEvent): void {
 }
 
 function onPointerDown(event: PointerEvent): void {
-  if (!menu.value?.contains(event.target as Node)) emit('close')
+  if (!menu.value?.contains(event.target as Node)) emit('close', false)
 }
 
 /** The story scrolling closes it; its own long list scrolling does not. */
 function onScroll(event: Event): void {
-  if (!menu.value?.contains(event.target as Node)) emit('close')
+  if (!menu.value?.contains(event.target as Node)) emit('close', false)
 }
 
 onMounted(() => {
