@@ -460,3 +460,13 @@ class TestGetShortNames:
             "journal": "Elior's Journal",
             "hoe": "Rusty Hoe",
         }
+
+    def test_shared_short_name_maps_to_the_item_the_engine_picks(self) -> None:
+        """Like the engine's lookup: the bag before the room, the first match wins."""
+        ctrl = _make_controller(items=[ShortItem("Rusted Locker Key", "key")])
+        ctrl.game.state.inventory.extend(
+            [ShortItem("Miner's Key", "key"), ShortItem("Old Key", "key")]
+        )
+
+        assert ctrl.get_short_names() == {"key": "Miner's Key"}
+        assert ctrl.game.find_item("key").get_name() == "Miner's Key"

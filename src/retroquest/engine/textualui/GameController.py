@@ -220,15 +220,18 @@ class GameController:
     def get_short_names(self) -> dict[str, str]:
         """Return short item names (as the story uses them) mapped to full names.
 
-        Covers the items in the current room and in the inventory whose short
+        Covers the items in the inventory and in the current room whose short
         name differs from their name, e.g. ``{"journal": "Elior's Journal"}``.
+        A short name shared by several items maps to the one the engine's own
+        lookup (Game.find_item) picks: the inventory first, the first match.
         """
-        items = self.game.state.current_room.get_items() + self.game.state.inventory
-        return {
-            item.get_short_name().lower(): item.get_name()
-            for item in items
-            if item.get_short_name().lower() != item.get_name().lower()
-        }
+        items = self.game.state.inventory + self.game.state.current_room.get_items()
+        short_names: dict[str, str] = {}
+        for item in items:
+            short = item.get_short_name().lower()
+            if short != item.get_name().lower():
+                short_names.setdefault(short, item.get_name())
+        return short_names
 
     def get_room_exits(self) -> dict[str, str]:
         """Return direction to destination display name for the current room.
