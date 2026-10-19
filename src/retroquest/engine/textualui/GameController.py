@@ -171,6 +171,22 @@ class GameController:
             "main_quest": main_quest,
         }
 
+    def get_act_stats(self) -> dict[str, int]:
+        """Return the act's statistics for its act-complete page as plain data.
+
+        Keys: ``quests_completed`` and ``quests_total`` (as in get_quest_progress),
+        ``spells`` (spells known) and ``places`` (rooms visited). Between acts it
+        reports the act that just ended.
+        """
+        progress = self.get_quest_progress()
+        state = self.game.finished_act_state or self.game.state
+        return {
+            "quests_completed": progress["completed"],
+            "quests_total": progress["total"],
+            "spells": len(state.known_spells),
+            "places": len(state.visited_rooms),
+        }
+
     def get_room_description(self) -> str:
         """Return the current room's narrative description text."""
         return self.game.state.current_room.description

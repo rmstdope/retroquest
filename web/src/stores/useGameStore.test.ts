@@ -54,6 +54,12 @@ function createMockBridge() {
       actNumber: 1,
       mainQuest: 'Shadows Over Willowbrook',
     })),
+    getActStats: vi.fn(() => ({
+      questsCompleted: 4,
+      questsTotal: 11,
+      spells: 1,
+      places: 3,
+    })),
     getSaveSlots: vi.fn((): SaveSlot[] => [
       ...Array.from({ length: 8 }, (_, i) => ({
         slot: i + 1,

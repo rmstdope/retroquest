@@ -406,3 +406,33 @@ class TestActEndQuestCompletion:
         progress = ctrl.get_quest_progress()
         assert progress["act_number"] == 2
         assert progress["main_quest"] == "Next Arc"
+
+
+class TestGetActStats:
+    """Act statistics for the act-complete page."""
+
+    def test_counts_quests_spells_and_places_of_the_running_act(self) -> None:
+        """Quests done/total, spells known and rooms visited so far."""
+        ctrl, quests = _make_quest_controller()
+        state = ctrl.game.state
+        state.non_activated_quests.remove(quests[1])
+        state.completed_quests.append(quests[1])
+        state.visited_rooms.append("Cellar")
+
+        assert ctrl.get_act_stats() == {
+            "quests_completed": 1,
+            "quests_total": 3,
+            "spells": 0,
+            "places": 2,
+        }
+
+    def test_reports_the_finished_act_during_the_transition(self) -> None:
+        """Between acts the stats are the finished act's, not the next one's."""
+        ctrl = _make_two_act_controller()
+        ctrl.game.state.visited_rooms.append("Cellar")
+        _end_first_act(ctrl)
+        ctrl.complete_quest()
+
+        stats = ctrl.get_act_stats()
+        assert (stats["quests_completed"], stats["quests_total"]) == (1, 2)
+        assert stats["places"] == 2
