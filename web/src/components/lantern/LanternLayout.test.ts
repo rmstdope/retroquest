@@ -1034,6 +1034,19 @@ describe('LanternLayout', () => {
       expect(w.get('[role="dialog"] h2').text()).toBe('Load game')
     })
 
+    it('opens Settings from the menu', async () => {
+      phone()
+      const w = mountLayout()
+
+      await w.get('button[aria-label="Game menu"]').trigger('click')
+      await w
+        .findAll('[role="dialog"] button')
+        .find((b) => b.text().startsWith('Settings'))!
+        .trigger('click')
+
+      expect(w.get('[role="dialog"] h2').text()).toBe('Settings')
+    })
+
     it('closes the menu when a game pop-up opens', async () => {
       phone()
       const w = mountLayout()

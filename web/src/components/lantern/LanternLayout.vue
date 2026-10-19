@@ -20,6 +20,7 @@ import LanternDialog from './LanternDialog.vue'
 import GameMenu, { type InfoKind, type MenuKind } from './GameMenu.vue'
 import QuitDialog from './QuitDialog.vue'
 import SaveLoadDialog from './SaveLoadDialog.vue'
+import SettingsDialog from './SettingsDialog.vue'
 import LanternHeader from './LanternHeader.vue'
 import QuestCompleteContent from './QuestCompleteContent.vue'
 import RoomCard from './RoomCard.vue'
@@ -349,6 +350,10 @@ watch(
         v-else-if="gameDialog === 'menu'"
         @close="closeGameDialog"
         @open="openGameDialog"
+      />
+      <SettingsDialog
+        v-else-if="gameDialog === 'settings'"
+        @close="closeGameDialog"
       />
       <SaveLoadDialog
         v-else-if="gameDialog === 'save' || gameDialog === 'load'"

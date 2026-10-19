@@ -165,9 +165,16 @@ describe('LanternHeader', () => {
     await button('Save').trigger('click')
     await button('Load').trigger('click')
     await button('Stats').trigger('click')
+    await button('Settings').trigger('click')
     await button('Help').trigger('click')
 
-    expect(w.emitted('open')).toEqual([['save'], ['load'], ['stats'], ['help']])
+    expect(w.emitted('open')).toEqual([
+      ['save'],
+      ['load'],
+      ['stats'],
+      ['settings'],
+      ['help'],
+    ])
     expect(w.find('button[aria-label="Game menu"]').exists()).toBe(false)
   })
 })
