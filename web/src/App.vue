@@ -5,6 +5,7 @@ import { useBridge } from './composables/useBridge'
 import { useAppearance } from './composables/useAppearance'
 import GameLayout from './components/GameLayout.vue'
 import LanternLayout from './components/lantern/LanternLayout.vue'
+import LanternLoading from './components/lantern/LanternLoading.vue'
 import { useUiMode } from './composables/useUiMode'
 
 const store = useGameStore()
@@ -37,8 +38,12 @@ onMounted(() => {
 </script>
 
 <template>
+  <LanternLoading
+    v-if="store.loading && uiMode === 'lantern'"
+    :status="store.loadingStatus"
+  />
   <div
-    v-if="store.loading"
+    v-else-if="store.loading"
     class="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-bg-primary gap-6"
   >
     <div class="text-[2.5rem] font-bold text-accent tracking-wide">
