@@ -8,7 +8,8 @@ const GESTURES = ['keydown', 'click', 'touchstart'] as const
 /**
  * The current act's background music, looping. Browsers block autoplay until
  * the player interacts, so it also starts on the first key press, click or
- * touch. Listeners are removed when the calling component's scope ends.
+ * touch. When the calling component's scope ends, the music stops and the
+ * listeners are removed.
  */
 export function useActMusic(): ReturnType<typeof useMusic> {
   const { musicFile, musicInfo } = storeToRefs(useGameStore())
@@ -34,7 +35,10 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   for (const gesture of GESTURES) {
     window.addEventListener(gesture, unlock, { passive: true })
   }
-  onScopeDispose(removeListeners)
+  onScopeDispose(() => {
+    removeListeners()
+    if (!audio.paused) audio.pause()
+  })
 
   return music
 }

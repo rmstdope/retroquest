@@ -71,4 +71,16 @@ describe('useActMusic', () => {
 
     expect(FakeAudio.last.play).not.toHaveBeenCalled()
   })
+
+  it('stops the music when its scope ends (no second track on a remount)', async () => {
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    useGameStore().musicFile = 'willowbrook.mp3'
+    await nextTick()
+    expect(FakeAudio.last.paused).toBe(false)
+
+    scope.stop()
+
+    expect(FakeAudio.last.paused).toBe(true)
+  })
 })
