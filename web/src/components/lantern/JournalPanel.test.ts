@@ -148,13 +148,12 @@ describe('JournalPanel', () => {
   it("opens a quest's details", async () => {
     const w = mountJournal()
     await tab(w, /Quests/).trigger('click')
-    const row = w.findAll('.lq-quest-toggle')[0]
+    const row = w.findAll('.lq-quest-row')[0]
     expect(row.attributes('aria-haspopup')).toBe('dialog')
 
     await row.trigger('click')
 
     expect(useGameStore().shownQuest).toBe('Shadows Over Willowbrook')
-    expect(w.find('.lq-quest-details').exists()).toBe(false)
   })
 
   it('disables the row actions while the game is not accepting input', () => {
@@ -311,7 +310,7 @@ describe('JournalPanel', () => {
 
     expect(tab(wrapper, /Quests/).attributes('aria-selected')).toBe('true')
     const row = wrapper
-      .findAll('.lq-quest-toggle')
+      .findAll('.lq-quest-row')
       .find((b) => b.text().includes('Know your village'))!
     // Focus on its row first, so closing the details comes back to it.
     expect(document.activeElement).toBe(row.element)

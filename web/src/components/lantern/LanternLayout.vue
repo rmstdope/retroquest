@@ -208,7 +208,9 @@ function openGameDialog(kind: 'menu' | MenuKind): void {
 watch(
   () => game.showModal,
   (open) => {
-    if (open) gameDialog.value = null
+    if (!open) return
+    gameDialog.value = null
+    game.shownQuest = null
   },
 )
 

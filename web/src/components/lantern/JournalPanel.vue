@@ -10,7 +10,8 @@ import { renderMarkup } from '@/utils/theme'
  * The journal beside the story on laptops: Bag, Spells and Quests tabs.
  * Bag rows can be used and spells cast directly, and tapping a row's text
  * expands its full description (the toggle is named by that visible text, so
- * screen readers hear the description). A dot marks a tab with
+ * screen readers hear the description); a quest row opens its details
+ * (QuestDialog, via the store's `showQuest`). A dot marks a tab with
  * something new until it is opened. The tabs follow the WAI-ARIA tabs
  * pattern: one tab stop, Left/Right (wrapping), Home and End select a tab.
  * Phones show one tab at a time from their section tabs (the `tab` prop):
@@ -98,7 +99,7 @@ watch(
     active.value = 'quests'
     await nextTick()
     const row = [
-      ...(root.value?.querySelectorAll<HTMLElement>('.lq-quest-toggle') ?? []),
+      ...(root.value?.querySelectorAll<HTMLElement>('.lq-quest-row') ?? []),
     ].find((b) => b.dataset.quest === name)
     row?.scrollIntoView?.({ block: 'nearest' })
     row?.focus()
@@ -129,7 +130,7 @@ function run(command: string): void {
   if (game.acceptInput) game.submitCommand(command)
 }
 
-/** Expand or collapse a row (keys are prefixed: bag:, spell:, or the quest name). */
+/** Expand or collapse a Bag or Spells row (keys are prefixed: bag:, spell:). */
 function toggle(name: string): void {
   const next = new Set(expanded.value)
   if (next.has(name)) next.delete(name)
@@ -263,7 +264,7 @@ function toggle(name: string): void {
           <li v-for="quest in quests" :key="quest.name" class="lq-quest">
             <button
               type="button"
-              class="lq-quest-toggle"
+              class="lq-quest-row"
               :data-quest="quest.name"
               aria-haspopup="dialog"
               @click="game.showQuest(quest.name)"
@@ -404,7 +405,7 @@ function toggle(name: string): void {
 .lq-quest {
   border-bottom: 1px solid var(--lq-line);
 }
-.lq-quest-toggle {
+.lq-quest-row {
   width: 100%;
   min-height: 48px;
   display: flex;
