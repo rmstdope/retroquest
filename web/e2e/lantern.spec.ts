@@ -470,4 +470,60 @@ test.describe('Lantern UI (?ui=lantern)', () => {
       true,
     )
   })
+
+  for (const [width, height] of [
+    [390, 844],
+    [320, 568],
+    [844, 390],
+  ] as const) {
+    test(`opens a long turn at its start with More below at ${width}×${height}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height })
+      await page.goto('/?ui=lantern')
+      await injectMockState(page)
+      await page.evaluate(() => {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const app = (document.querySelector('#app') as any).__vue_app__
+        const store = app.config.globalProperties.$pinia.state.value.game
+        store.turns = [
+          ...store.turns,
+          {
+            ...store.turns[0],
+            id: 2,
+            command: 'talk to spirit',
+            text:
+              'The spirit speaks. ' +
+              'Moonlight pools between the roots as it tells its tale. '.repeat(
+                40,
+              ),
+            roomChanged: false,
+          },
+        ]
+        /* eslint-enable @typescript-eslint/no-explicit-any */
+      })
+
+      const story = page.getByRole('region', { name: 'Story' })
+      const newest = story.locator('> *').last()
+      await expect(newest).toContainText('The spirit speaks.')
+      const [storyBox, turnBox] = [
+        await story.boundingBox(),
+        await newest.boundingBox(),
+      ]
+      expect(Math.abs(turnBox!.y - storyBox!.y)).toBeLessThan(24)
+
+      const pill = page.getByRole('button', { name: 'More below ↓' })
+      await expect(pill).toBeVisible()
+      for (let i = 0; i < 40 && (await pill.isVisible()); i++) {
+        await pill.click()
+        await page.waitForTimeout(400)
+      }
+      await expect(pill).toBeHidden()
+      await expect(newest.getByText(/tells its tale\.\s*$/)).toBeInViewport()
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollHeight - window.innerHeight,
+      )
+      expect(overflow).toBeLessThanOrEqual(0)
+    })
+  }
 })

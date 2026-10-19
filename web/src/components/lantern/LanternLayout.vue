@@ -39,6 +39,31 @@ watch(wide, (isWide) => {
   if (isWide) section.value = 'story'
 })
 const storyEl = ref<HTMLElement | null>(null)
+/** Unread story below the visible part (a long turn opens at its start). */
+const moreBelow = ref(false)
+/** Slack so rounding never leaves the pill up at the very end. */
+const END_SLACK = 8
+
+function updateMoreBelow(): void {
+  const story = storyEl.value
+  moreBelow.value =
+    !!story &&
+    story.scrollTop + story.clientHeight < story.scrollHeight - END_SLACK
+}
+
+/** Scroll on by almost a screen, keeping a line or two for context. */
+function readOn(): void {
+  const story = storyEl.value
+  if (!story) return
+  const still =
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--lq-motion')
+      .trim() === '0'
+  story.scrollBy({
+    top: story.clientHeight - 48,
+    behavior: still ? 'auto' : 'smooth',
+  })
+}
 const continueButton = ref<HTMLButtonElement | null>(null)
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
 const dock = ref<InstanceType<typeof DockBar> | null>(null)
@@ -100,6 +125,7 @@ watch(
       dockOpen.value = false
       await nextTick()
     }
+    updateMoreBelow()
     const lost =
       !wide.value && !dockOpen.value && document.activeElement === document.body
     if ((away || folds || lost) && !game.showModal) focusActions()
@@ -129,15 +155,25 @@ watch(
 
     <main class="lq-main" :class="{ 'lq-wide': wide }">
       <RoomCard v-if="wide" class="lq-card" />
-      <section
-        v-show="wide || section === 'story'"
-        ref="storyEl"
-        class="lq-story"
-        aria-label="Story"
-      >
-        <h2 class="lq-sr-only">Story</h2>
-        <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
-      </section>
+      <div v-show="wide || section === 'story'" class="lq-story-wrap">
+        <section
+          ref="storyEl"
+          class="lq-story"
+          aria-label="Story"
+          @scroll.passive="updateMoreBelow"
+        >
+          <h2 class="lq-sr-only">Story</h2>
+          <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
+        </section>
+        <button
+          v-if="moreBelow"
+          type="button"
+          class="lq-more-below"
+          @click="readOn"
+        >
+          More below ↓
+        </button>
+      </div>
 
       <ActionComposer
         v-show="wide || (section === 'story' && dockOpen)"
@@ -231,7 +267,7 @@ watch(
   column-gap: 20px;
 }
 .lq-wide .lq-card,
-.lq-wide .lq-story,
+.lq-wide .lq-story-wrap,
 .lq-wide .lq-composer {
   grid-column: 1;
 }
@@ -263,6 +299,30 @@ watch(
   border-top: 1px solid var(--lq-line);
   background: var(--lq-surface);
   padding-bottom: env(safe-area-inset-bottom);
+}
+.lq-story-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.lq-more-below {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  border: 1px solid var(--lq-accent-line);
+  background: var(--lq-surface);
+  color: var(--lq-accent-text);
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.3);
 }
 .lq-story {
   flex: 1;
