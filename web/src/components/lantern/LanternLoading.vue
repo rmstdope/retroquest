@@ -67,7 +67,9 @@ watch(
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* Safe, so open Details on a short screen scrolls instead of clipping. */
+  justify-content: safe center;
+  overflow-y: auto;
   gap: 24px;
   padding: 16px;
   background: var(--lq-bg);
