@@ -521,6 +521,12 @@ watch(
   line-height: 1.55;
   color: var(--lq-prose);
   white-space: pre-wrap;
+  /* The music credits' divider colour (shared with the classic UI). */
+  --border-color: var(--lq-line);
+}
+.lq-info :deep(a) {
+  color: var(--lq-accent-text);
+  text-decoration: underline;
 }
 .lq-dialog-body {
   font-family: var(--lq-font-prose);
