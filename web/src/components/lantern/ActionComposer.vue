@@ -174,14 +174,18 @@ defineExpose({ focus, setMode })
 // the verb used last — gives a short shake when a command fails (it does
 // not move when motion is reduced, see .lq-shake). The shake ends after its
 // length even when nothing showed it (no verb used yet, the sheet folded),
-// so a later Do it does not shake for an old failure.
+// so a later Do it does not shake for an old failure. Only commands sent
+// from here shake: a failed move from the compass or a journal Use does not.
 const SHAKE_MS = 320 // the length of the lq-shake animation
 const shaking = ref(false)
 let shakeTimer: ReturnType<typeof setTimeout> | undefined
+let sentHere = false
 watch(
   () => game.turns.at(-1),
   (turn) => {
-    if (!turn?.command || !turn.text.includes('[failure]')) return
+    const mine = sentHere
+    sentHere = false
+    if (!mine || !turn?.command || !turn.text.includes('[failure]')) return
     shaking.value = true
     clearTimeout(shakeTimer)
     shakeTimer = setTimeout(() => (shaking.value = false), SHAKE_MS)
@@ -190,7 +194,11 @@ watch(
 
 function run(text: string): void {
   if (!game.acceptInput) return
+  sentHere = true
   game.submitCommand(text)
+  // Its answer (if any) is seen before the next tick; a command without one
+  // (a save) must not mark a later answer from elsewhere as ours.
+  void nextTick(() => (sentHere = false))
 }
 
 /** Move, keeping focus in the go row even when the new room has other exits. */
