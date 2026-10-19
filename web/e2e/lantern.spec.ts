@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test'
 
-/* Inject mock game state to bypass Pyodide loading (same approach as game.spec.ts). */
+/* Inject mock game state to bypass Pyodide loading. */
 async function injectMockState(page: Page) {
   await page.evaluate(() => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -96,14 +96,11 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport()
   })
 
-  test('is the default, and the classic UI stays at ?ui=classic', async ({
-    page,
-  }) => {
-    await page.goto('/')
-    await expect(page.locator('html')).toHaveAttribute('data-ui', 'lantern')
-
-    await page.goto('/?ui=classic')
-    await expect(page.locator('html')).not.toHaveAttribute('data-ui', 'lantern')
+  test('is the only UI, also for old ?ui= links', async ({ page }) => {
+    for (const url of ['/', '/?ui=classic', '/?ui=lantern']) {
+      await page.goto(url)
+      await expect(page.locator('html')).toHaveAttribute('data-ui', 'lantern')
+    }
   })
 
   test('wraps many chips on a phone instead of hiding them', async ({

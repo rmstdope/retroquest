@@ -33,11 +33,10 @@ describe('App while the game loads', () => {
     expect(document.documentElement.getAttribute('data-ui')).toBe('lantern')
   })
 
-  it('keeps the classic loading screen in the classic UI', () => {
+  it('shows the Lantern loading screen for an old ?ui=classic link too', () => {
     const w = mountAt('?ui=classic')
 
-    expect(w.find('.lq-loading').exists()).toBe(false)
-    expect(w.text()).toContain('Initializing...')
-    expect(document.documentElement.hasAttribute('data-ui')).toBe(false)
+    expect(w.find('.lq-loading').exists()).toBe(true)
+    expect(document.documentElement.getAttribute('data-ui')).toBe('lantern')
   })
 })

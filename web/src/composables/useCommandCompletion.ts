@@ -3,8 +3,8 @@ import { ref, type Ref } from 'vue'
 type TabComplete = (input: string) => { newInput: string; candidates: string[] }
 
 /**
- * Keyboard completion for a typed command (shared by the classic and Lantern
- * command boxes): Tab completes a single match or lists the choices, the arrow
+ * Keyboard completion for a typed command (the Lantern command box): Tab
+ * completes a single match or lists the choices, the arrow
  * keys move through them, Enter applies the highlighted one and Escape closes
  * the list. `tabComplete` walks the engine's completion tree (game store).
  */
