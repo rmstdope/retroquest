@@ -4,6 +4,12 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import type { LanternTextSize } from '@/lantern/tokens'
 
+/**
+ * `compact` (phones): one row with the room name and "Act I · Quests 4/11"
+ * (that line is left out on short screens) instead of the title, act and
+ * progress bar; the title stays as a hidden top-level heading.
+ */
+defineProps<{ compact?: boolean }>()
 const game = useGameStore()
 const settings = useSettingsStore()
 
@@ -77,15 +83,28 @@ function toggleTheme(): void {
 </script>
 
 <template>
-  <header class="lq-header">
-    <div class="lq-title">
+  <header class="lq-header" :class="{ 'lq-header-compact': compact }">
+    <div v-if="compact" class="lq-compact">
+      <h1 class="lq-sr-only">RetroQuest</h1>
+      <span class="lq-compact-room">{{ game.roomName }}</span>
+      <span v-if="progress" class="lq-compact-sub"
+        >{{ actLabel }} · Quests {{ progress.completed }}/{{
+          progress.total
+        }}</span
+      >
+    </div>
+    <div v-else class="lq-title">
       <h1 class="lq-logo">RetroQuest</h1>
       <span v-if="progress" class="lq-act" data-testid="act">{{
         actLabel
       }}</span>
     </div>
 
-    <div v-if="progress" class="lq-progress" data-testid="quest-progress">
+    <div
+      v-if="progress && !compact"
+      class="lq-progress"
+      data-testid="quest-progress"
+    >
       <span class="lq-progress-label">Quests</span>
       <span
         class="lq-progress-track"
@@ -192,6 +211,50 @@ function toggleTheme(): void {
   background: var(--lq-bg);
   color: var(--lq-fg);
   font-family: var(--lq-font-ui);
+}
+.lq-header-compact {
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 8px 10px;
+}
+.lq-compact {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.lq-compact-room,
+.lq-compact-sub {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lq-compact-room {
+  font-family: var(--lq-font-display);
+  font-size: calc(19px * var(--lq-display-scale));
+  font-weight: 500;
+  color: var(--lq-fg);
+}
+.lq-compact-sub {
+  font-size: 12px;
+  color: var(--lq-muted);
+}
+/* Phone landscape: the room name alone. */
+@media (max-height: 519px) {
+  .lq-compact-room {
+    font-size: calc(17px * var(--lq-display-scale));
+  }
+  .lq-compact-sub {
+    display: none;
+  }
+}
+.lq-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 .lq-title {
   display: flex;

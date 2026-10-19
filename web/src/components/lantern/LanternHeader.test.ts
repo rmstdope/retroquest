@@ -111,4 +111,41 @@ describe('LanternHeader', () => {
   it('names the page with a top-level heading', () => {
     expect(mountHeader().get('h1').text()).toBe('RetroQuest')
   })
+
+  describe('compact (phones)', () => {
+    function mountCompact() {
+      wrapper = mount(LanternHeader, { props: { compact: true } })
+      return wrapper
+    }
+
+    it('names the room where the title was', async () => {
+      const w = mountCompact()
+      useGameStore().roomName = "Elior's Cottage"
+      setProgress(4, 11, 1)
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-compact-room').text()).toBe("Elior's Cottage")
+      expect(w.get('.lq-compact-sub').text()).toBe('Act I · Quests 4/11')
+    })
+
+    it('leaves out the progress bar and act chip', async () => {
+      const w = mountCompact()
+      setProgress(4, 11, 1)
+      await w.vm.$nextTick()
+
+      expect(w.find('[role="progressbar"]').exists()).toBe(false)
+      expect(w.find('[data-testid="act"]').exists()).toBe(false)
+    })
+
+    it('keeps the game title as a hidden top-level heading', () => {
+      const h1 = mountCompact().get('h1')
+
+      expect(h1.text()).toBe('RetroQuest')
+      expect(h1.classes()).toContain('lq-sr-only')
+    })
+
+    it('shows no act line before the game has started', () => {
+      expect(mountCompact().find('.lq-compact-sub').exists()).toBe(false)
+    })
+  })
 })
