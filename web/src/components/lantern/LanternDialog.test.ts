@@ -57,6 +57,27 @@ describe('LanternDialog', () => {
     expect(w.find('button[aria-label="Close"]').exists()).toBe(false)
   })
 
+  it('ignores the backdrop when it has no close button', async () => {
+    const w = mountDialog({ closable: false })
+
+    await w.get('.lq-dialog-scrim').trigger('click')
+
+    expect(w.emitted('close')).toBeUndefined()
+  })
+
+  it('takes focus back when its backdrop is tapped, so Escape still works', async () => {
+    const w = mountDialog({ closable: false })
+    await w.vm.$nextTick()
+    // A tap on the backdrop leaves focus on the page body in a browser.
+    ;(document.activeElement as HTMLElement | null)?.blur()
+
+    await w.get('.lq-dialog-scrim').trigger('click')
+
+    expect(
+      w.get('[role="dialog"]').element.contains(document.activeElement),
+    ).toBe(true)
+  })
+
   it('keeps Tab inside the dialog', async () => {
     const w = mountDialog()
     const dialog = w.get('[role="dialog"]')
