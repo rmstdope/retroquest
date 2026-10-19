@@ -57,6 +57,14 @@ describe('LanternDialog', () => {
     expect(w.find('button[aria-label="Close"]').exists()).toBe(false)
   })
 
+  it('ignores the backdrop when it has no close button', async () => {
+    const w = mountDialog({ closable: false })
+
+    await w.get('.lq-dialog-scrim').trigger('click')
+
+    expect(w.emitted('close')).toBeUndefined()
+  })
+
   it('keeps Tab inside the dialog', async () => {
     const w = mountDialog()
     const dialog = w.get('[role="dialog"]')
