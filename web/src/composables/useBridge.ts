@@ -27,6 +27,20 @@ type StoredSaveSlot = {
   room: string
   timestamp: string
   data: string
+  /** Missing in saves made before quest counts were kept. */
+  quests?: SaveSlot['quests']
+}
+
+/** The quick save's details (its data stays under 'retroquest_save'). */
+const QUICK_META_KEY = 'retroquest_save_meta'
+
+function readQuickMeta(): Partial<Omit<SaveSlot, 'slot'>> {
+  try {
+    const raw = localStorage.getItem(QUICK_META_KEY)
+    return raw ? (JSON.parse(raw) as Partial<Omit<SaveSlot, 'slot'>>) : {}
+  } catch {
+    return {}
+  }
 }
 
 /**
@@ -304,7 +318,19 @@ except FileNotFoundError:
 _save_data
       `) as string
       if (saveData) {
+        const meta = JSON.stringify({
+          act: py('controller.get_act_name()') as string,
+          room: py('controller.get_room_name()') as string,
+          timestamp: new Date().toISOString(),
+          quests: readQuests(),
+        })
         localStorage.setItem('retroquest_save', saveData)
+        try {
+          localStorage.setItem(QUICK_META_KEY, meta)
+        } catch {
+          // No details rather than the previous save's.
+          localStorage.removeItem(QUICK_META_KEY)
+        }
       }
     } catch {
       // Silently handle localStorage failures
@@ -364,17 +390,42 @@ with open('retroquest.save', 'wb') as f:
     }
   }
 
+  /** The act's quests done/total for a save card, or null if unreadable. */
+  function readQuests(): SaveSlot['quests'] {
+    try {
+      const { completed, total } = getQuestProgress()
+      return { completed, total }
+    } catch {
+      return null
+    }
+  }
+
+  /** The quick save as a card (slot 0), or null when there is none. */
+  function getQuickSave(): SaveSlot | null {
+    if (!localStorage.getItem('retroquest_save')) return null
+    const meta = readQuickMeta()
+    return {
+      slot: 0,
+      act: meta.act ?? null,
+      room: meta.room ?? null,
+      timestamp: meta.timestamp ?? null,
+      quests: meta.quests ?? null,
+    }
+  }
+
   function getSaveSlots(): SaveSlot[] {
     const stored = readStoredSaveSlots()
     return Array.from({ length: 8 }, (_, i) => {
       const entry = stored[i]
       const slot = i + 1
-      if (!entry) return { slot, act: null, room: null, timestamp: null }
+      if (!entry)
+        return { slot, act: null, room: null, timestamp: null, quests: null }
       return {
         slot,
         act: entry.act ?? null,
         room: entry.room ?? null,
         timestamp: entry.timestamp ?? null,
+        quests: entry.quests ?? null,
       }
     })
   }
@@ -403,6 +454,7 @@ _save_data
           room: roomName,
           timestamp: new Date().toISOString(),
           data: saveData,
+          quests: readQuests(),
         }
         localStorage.setItem('retroquest_save_slots', JSON.stringify(stored))
       }
@@ -578,6 +630,7 @@ _result_text
     getQuestProgress,
     getActStats,
     getSaveSlots,
+    getQuickSave,
     saveToSlot,
     loadFromSlot,
     isAcceptingInput,

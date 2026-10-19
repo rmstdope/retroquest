@@ -11,6 +11,9 @@ const localStorageMock = (() => {
     setItem: vi.fn((key: string, value: string) => {
       store[key] = value
     }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
     clear: vi.fn(() => {
       store = {}
     }),
@@ -607,6 +610,44 @@ describe('useBridge', () => {
       expect(slot3!.data).toBe('c2F2ZWRhdGE=')
     })
 
+    it('saveToSlot also keeps the quest count of the act', () => {
+      mock.pythonResults.set('controller.save_game() or ""', 'Game saved.')
+      mock.pythonResults.set('controller.get_act_name()', 'Act 1')
+      mock.pythonResults.set('controller.get_room_name()', 'Square')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+      mock.pythonResults.set(
+        'controller.get_quest_progress()',
+        pyProxy(
+          new Map<string, unknown>([
+            ['completed', 3],
+            ['total', 11],
+            ['act_number', 1],
+            ['main_quest', 'Shadows'],
+          ]),
+        ),
+      )
+
+      bridge.saveToSlot(4)
+
+      expect(bridge.getSaveSlots()[3].quests).toEqual({
+        completed: 3,
+        total: 11,
+      })
+    })
+
+    it('saveToSlot still saves when the quest count cannot be read', () => {
+      mock.pythonResults.set('controller.save_game() or ""', 'Game saved.')
+      mock.pythonResults.set('controller.get_act_name()', 'Act 1')
+      mock.pythonResults.set('controller.get_room_name()', 'Square')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+
+      bridge.saveToSlot(4)
+
+      const slot = bridge.getSaveSlots()[3]
+      expect(slot.room).toBe('Square')
+      expect(slot.quests).toBe(null)
+    })
+
     it('saveToSlot overwrites existing data in the same slot', () => {
       const existing = Array.from({ length: 8 }, (_, i) =>
         i === 1
@@ -642,6 +683,76 @@ describe('useBridge', () => {
       expect(slots[1]!.act).toBe('Act 3')
       expect(slots[1]!.room).toBe('New Room')
       expect(slots[1]!.data).toBe('bmV3')
+    })
+
+    it('reads older slots without a quest count', () => {
+      const stored = Array.from({ length: 8 }, (_, i) =>
+        i === 0
+          ? {
+              slot: 1,
+              act: 'Act 1',
+              room: 'Square',
+              timestamp: 't',
+              data: 'abc',
+            }
+          : null,
+      )
+      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
+
+      expect(bridge.getSaveSlots()[0].quests).toBe(null)
+    })
+
+    it('quickSaveGame keeps the details of the quick save', () => {
+      mock.pythonResults.set('controller.save_game()', 'Game saved.')
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+      mock.pythonResults.set('controller.get_act_name()', 'Act 2')
+      mock.pythonResults.set('controller.get_room_name()', 'Forest Path')
+
+      bridge.quickSaveGame()
+
+      const quick = bridge.getQuickSave()!
+      expect(quick.slot).toBe(0)
+      expect(quick.act).toBe('Act 2')
+      expect(quick.room).toBe('Forest Path')
+      expect(typeof quick.timestamp).toBe('string')
+    })
+
+    it('drops the old details when the new ones cannot be stored', () => {
+      localStorageMock._setRaw(
+        'retroquest_save_meta',
+        JSON.stringify({ act: 'Act 1', room: 'Square', timestamp: 'old' }),
+      )
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3')
+      mock.pythonResults.set('controller.get_act_name()', 'Act 2')
+      mock.pythonResults.set('controller.get_room_name()', 'Forest Path')
+      localStorageMock.setItem
+        .mockImplementationOnce((key: string, value: string) =>
+          localStorageMock._setRaw(key, value),
+        )
+        .mockImplementationOnce(() => {
+          throw new Error('QuotaExceededError')
+        })
+
+      bridge.quickSaveGame()
+
+      expect(localStorageMock.getItem('retroquest_save')).toBe('bmV3')
+      expect(bridge.getQuickSave()!.room).toBe(null)
+    })
+
+    it('has no quick save until one is made', () => {
+      expect(bridge.getQuickSave()).toBe(null)
+    })
+
+    it('shows an older quick save without its details', () => {
+      localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
+
+      expect(bridge.getQuickSave()).toEqual({
+        slot: 0,
+        act: null,
+        room: null,
+        timestamp: null,
+        quests: null,
+      })
     })
 
     it('getSaveSlots returns occupied slot after saving', () => {
