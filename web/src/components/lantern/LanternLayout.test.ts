@@ -255,6 +255,30 @@ describe('LanternLayout', () => {
     expect(w.get('[role="status"]').text()).toBe('Game saved · Slot 2')
   })
 
+  it('starts the journal and the actions afresh in a new game', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: query.includes('min-width'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    const w = mountLayout()
+    const quests = w
+      .findAll('[role="tab"]')
+      .find((t) => t.text().startsWith('Quests'))!
+    await quests.trigger('click')
+    expect(quests.attributes('aria-selected')).toBe('true')
+
+    useGameStore().gameNumber++
+    await w.vm.$nextTick()
+
+    const selected = w.get('[role="tab"][aria-selected="true"]')
+    expect(selected.text()).toMatch(/^Bag/)
+    vi.unstubAllGlobals()
+  })
+
   it('asks before quitting', async () => {
     const w = mountLayout()
 

@@ -14,7 +14,10 @@ describe('QuitDialog', () => {
     const game = useGameStore()
     game.quitAsked = true
     order = []
-    vi.spyOn(game, 'saveGame').mockImplementation(() => order.push('save'))
+    vi.spyOn(game, 'saveGame').mockImplementation(() => {
+      order.push('save')
+      return true
+    })
     vi.spyOn(game, 'restartGame').mockImplementation(() =>
       order.push('restart'),
     )
@@ -38,7 +41,8 @@ describe('QuitDialog', () => {
     const w = mountQuit()
 
     expect(w.get('[role="dialog"] h2').text()).toBe('Quit game?')
-    expect(w.text()).toContain('A new game then starts from Act I.')
+    // "Act I" is kept on one line (no-break space).
+    expect(w.text()).toContain('game then starts from Act\u00a0I.')
   })
 
   it('saves, then starts again', async () => {
@@ -47,6 +51,23 @@ describe('QuitDialog', () => {
     await button(w, 'Save and quit').trigger('click')
 
     expect(order).toEqual(['save', 'restart'])
+  })
+
+  it('does not quit when the save fails', async () => {
+    const game = useGameStore()
+    vi.mocked(game.saveGame).mockImplementation(() => {
+      order.push('save')
+      return false
+    })
+    const w = mountQuit()
+
+    await button(w, 'Save and quit').trigger('click')
+
+    expect(order).toEqual(['save'])
+    expect(game.quitAsked).toBe(true)
+    expect(w.get('[role="alert"]').text()).toContain(
+      'could not be saved, so it was not quit',
+    )
   })
 
   it('starts again without saving', async () => {

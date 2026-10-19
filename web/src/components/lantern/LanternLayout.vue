@@ -57,6 +57,15 @@ watch(
   },
 )
 
+// A new game (after quit) starts on the story, with the journal and the
+// actions afresh (they are keyed by the game number).
+watch(
+  () => game.gameNumber,
+  () => {
+    section.value = 'story'
+  },
+)
+
 // The laptop shows everything at once; coming back from it starts on the story.
 watch(wide, (isWide) => {
   if (isWide) section.value = 'story'
@@ -293,6 +302,7 @@ watch(
 
       <ActionComposer
         v-show="wide || (section === 'story' && dockOpen)"
+        :key="`composer-${game.gameNumber}`"
         ref="composer"
         class="lq-composer"
         :class="{ 'lq-sheet': !wide }"
@@ -309,6 +319,7 @@ watch(
         <CompassPanel v-if="section === 'map'" heading />
         <JournalPanel
           v-else-if="section !== 'story'"
+          :key="`journal-${game.gameNumber}`"
           :tab="section"
           class="lq-section-view"
         />
@@ -316,7 +327,10 @@ watch(
 
       <aside v-if="wide" class="lq-aside" aria-label="Map and journal">
         <CompassPanel />
-        <JournalPanel class="lq-journal-panel" />
+        <JournalPanel
+          :key="`journal-${game.gameNumber}`"
+          class="lq-journal-panel"
+        />
       </aside>
     </main>
 

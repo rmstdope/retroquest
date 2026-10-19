@@ -33,6 +33,7 @@ describe('SaveLoadDialog', () => {
     })
     vi.spyOn(game, 'saveToSlot').mockImplementation((n: number) => {
       slots[n - 1] = slot(n, true)
+      return true
     })
     vi.spyOn(game, 'loadFromSlot').mockImplementation(() => {})
     vi.spyOn(game, 'loadGame').mockImplementation(() => {})
@@ -78,6 +79,18 @@ describe('SaveLoadDialog', () => {
 
     expect(useGameStore().saveToSlot).toHaveBeenCalledWith(1)
     expect(card(w, '1').text()).toContain('Just saved')
+    expect(w.emitted('close')).toBeUndefined()
+  })
+
+  it('says so, and marks nothing, when a save fails', async () => {
+    vi.mocked(useGameStore().saveToSlot).mockReturnValue(false)
+    const w = mountDialog('save')
+
+    await card(w, '1').get('button').trigger('click')
+
+    expect(card(w, '1').text()).not.toContain('Just saved')
+    expect(card(w, '1').text()).toContain('Empty slot')
+    expect(w.get('[role="alert"]').text()).toContain('could not be saved')
     expect(w.emitted('close')).toBeUndefined()
   })
 

@@ -324,6 +324,43 @@ describe('useBridge', () => {
       )
     })
 
+    describe('a save that cannot be stored', () => {
+      function storageFull() {
+        localStorageMock.setItem.mockImplementationOnce(() => {
+          throw new Error('QuotaExceededError')
+        })
+      }
+
+      beforeEach(() => {
+        mock.pythonResults.set('controller.save_game()', 'Game saved.')
+        mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
+        mock.pythonResults.set('controller.get_act_name()', 'Act 1')
+        mock.pythonResults.set('controller.get_room_name()', 'Square')
+      })
+
+      it('is a failure for the quick save', () => {
+        storageFull()
+        expect(bridge.quickSaveGame()).toMatch(
+          /^\[failure\]The game could not be saved/,
+        )
+      })
+
+      it('is a failure for a slot', () => {
+        storageFull()
+        expect(bridge.saveToSlot(2)).toMatch(/^\[failure\]/)
+      })
+
+      it('is a failure for a named save', () => {
+        storageFull()
+        expect(bridge.saveNamedGame('morning')).toMatch(/^\[failure\]/)
+      })
+
+      it('is a failure when the game wrote nothing', () => {
+        mock.pythonResults.set("open('retroquest.save', 'rb')", '')
+        expect(bridge.quickSaveGame()).toMatch(/^\[failure\]/)
+      })
+    })
+
     it('quickLoadGame restores game state when save exists', () => {
       localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
       mock.pythonResults.set('controller.load_game()', 'Game loaded.')
