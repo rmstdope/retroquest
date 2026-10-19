@@ -35,15 +35,24 @@ function pick(action: NameAction): void {
 const MENU_WIDTH = 180
 const ITEM_HEIGHT = 44
 const HEADING_HEIGHT = 28
-/** Below the name, or above it when it would not fit below. */
+/**
+ * Below the name, or above it when it would not fit below; a list too long
+ * for the window is kept inside it (over the name) and scrolls.
+ */
 const position = computed(() => {
-  const height =
-    shown.value.length * ITEM_HEIGHT + (heading.value ? HEADING_HEIGHT : 0) + 10
+  const maxHeight = window.innerHeight - 16
+  const height = Math.min(
+    maxHeight,
+    shown.value.length * ITEM_HEIGHT +
+      (heading.value ? HEADING_HEIGHT : 0) +
+      10,
+  )
   const fitsBelow = props.bottom + 4 + height <= window.innerHeight - 8
   const top = fitsBelow ? props.bottom + 4 : props.top - 4 - height
   return {
     left: `${Math.max(8, Math.min(props.x, window.innerWidth - MENU_WIDTH - 8))}px`,
-    top: `${Math.max(8, top)}px`,
+    top: `${Math.max(8, Math.min(top, window.innerHeight - 8 - height))}px`,
+    maxHeight: `${maxHeight}px`,
   }
 })
 
@@ -73,8 +82,9 @@ function onPointerDown(event: PointerEvent): void {
   if (!menu.value?.contains(event.target as Node)) emit('close')
 }
 
-function onScroll(): void {
-  emit('close')
+/** The story scrolling closes it; its own long list scrolling does not. */
+function onScroll(event: Event): void {
+  if (!menu.value?.contains(event.target as Node)) emit('close')
 }
 
 onMounted(() => {
@@ -128,8 +138,11 @@ onBeforeUnmount(() => {
   background: var(--lq-surface);
   box-shadow: 0 12px 30px rgb(0 0 0 / 0.3);
   font-family: var(--lq-font-ui);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .lq-name-heading {
+  flex-shrink: 0;
   padding: 6px 12px 4px;
   font-size: 11px;
   font-weight: 600;
@@ -138,6 +151,7 @@ onBeforeUnmount(() => {
   color: var(--lq-muted);
 }
 .lq-name-action {
+  flex-shrink: 0;
   min-height: 44px;
   padding: 0 12px;
   border: none;

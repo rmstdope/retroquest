@@ -42,6 +42,38 @@ describe('StoryNameMenu', () => {
     expect(wrapper!.emitted('close')).toHaveLength(1)
   })
 
+  it('stays inside a short window when the choices are many, and scrolls', async () => {
+    window.innerHeight = 390
+    const bag = Array.from({ length: 16 }, (_, i) => ({
+      label: `Thing ${i}`,
+      command: `give thing ${i} to elena`,
+    }))
+    wrapper = mount(StoryNameMenu, {
+      props: {
+        actions: [{ label: 'Give…', choices: bag }],
+        x: 100,
+        top: 180,
+        bottom: 198,
+      },
+      attachTo: document.body,
+    })
+    await wrapper.get('[role="menuitem"]').trigger('click')
+    await nextTick()
+
+    const style = (wrapper.get('[role="menu"]').element as HTMLElement).style
+    const top = parseFloat(style.top)
+    expect(top).toBeGreaterThanOrEqual(8)
+    expect(top + parseFloat(style.maxHeight)).toBeLessThanOrEqual(390 - 8)
+  })
+
+  it('stays open while its own list scrolls', () => {
+    menuAt({ x: 100, top: 200, bottom: 218 })
+
+    wrapper!.get('[role="menu"]').element.dispatchEvent(new Event('scroll'))
+
+    expect(wrapper!.emitted('close')).toBeUndefined()
+  })
+
   it('opens the choices of an action that has them, and picks one', async () => {
     wrapper = mount(StoryNameMenu, {
       props: {
