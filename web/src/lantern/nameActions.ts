@@ -17,10 +17,6 @@ const same = (a: string, b: string) =>
   a.trim().toLowerCase() === b.trim().toLowerCase()
 
 /**
- * The actions that fit a character or item named in the story, given what is
- * in the room and the bag; none when it is not here.
- */
-/**
  * The item name the story means: its short name resolved ("journal" →
  * "Elior's Journal"), or the singular of a plain plural ("chickens") when
  * only that is around.
@@ -38,6 +34,10 @@ function itemName(said: string, around: Around): string {
   return said
 }
 
+/**
+ * The actions that fit a character or item named in the story, given what is
+ * in the room and the bag; none when it is not here.
+ */
 export function nameActions(
   kind: 'character' | 'item',
   text: string,
