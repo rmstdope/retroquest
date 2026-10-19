@@ -3,6 +3,7 @@ import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useAudio } from '@/composables/useAudio'
+import { useActMusic } from '@/composables/useActMusic'
 import {
   SHORT_QUERY,
   useMediaQuery,
@@ -174,6 +175,7 @@ watch(
 
 // The quest chime and fanfare (sound settings apply).
 game.setAudioPlayer(useAudio())
+useActMusic()
 
 // Move keyboard focus into each pop-up as it opens, and back to the
 // actions when the last one closes.
