@@ -204,13 +204,22 @@ describe('LanternLayout', () => {
     expect(document.documentElement.hasAttribute('data-ui')).toBe(false)
   })
 
+  it('shows save and load notices as a toast', async () => {
+    const w = mountLayout()
+
+    useGameStore().notice = { id: 1, text: 'Game saved · Slot 2' }
+    await w.vm.$nextTick()
+
+    expect(w.get('[role="status"]').text()).toBe('Game saved · Slot 2')
+  })
+
   it('shows quest news in the story while it is shown', () => {
     const w = mountLayout()
-    expect(useGameStore().questNewsInStory).toBe(true)
+    expect(useGameStore().lanternFeedback).toBe(true)
 
     w.unmount()
     wrapper = undefined
-    expect(useGameStore().questNewsInStory).toBe(false)
+    expect(useGameStore().lanternFeedback).toBe(false)
   })
 
   it('shows the header', () => {

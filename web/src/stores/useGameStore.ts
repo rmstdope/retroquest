@@ -212,10 +212,21 @@ export const useGameStore = defineStore('game', () => {
   }
   const modalQueue = ref<QuestEvent[]>([])
   /**
-   * The Lantern UI shows new and updated quests in the story (on the turn
-   * that caused them) instead of pop-ups; completions stay pop-ups.
+   * The Lantern UI's feedback: new and updated quests go in the story (on the
+   * turn that caused them) instead of pop-ups, completions stay pop-ups, and
+   * saves and loads are short notices (a toast) instead of story lines.
    */
-  const questNewsInStory = ref(false)
+  const lanternFeedback = ref(false)
+  /** The latest save/load notice (Lantern); a new id shows it again. */
+  const notice = ref<{ id: number; text: string } | null>(null)
+  let nextNoticeId = 1
+
+  /** In the Lantern UI a successful save or load is a notice; true if shown so. */
+  function showNotice(result: string, text: string): boolean {
+    if (!lanternFeedback.value || result.includes('[failure]')) return false
+    notice.value = { id: nextNoticeId++, text }
+    return true
+  }
   let pendingLookOnDismiss = false
 
   // --- Music (exposed for useMusic composable) ---
@@ -240,7 +251,10 @@ export const useGameStore = defineStore('game', () => {
   function showOutput(
     command: string | null,
     raw: string,
-    { chips = command !== null }: { chips?: boolean } = {},
+    {
+      chips = command !== null,
+      arrive = false,
+    }: { chips?: boolean; arrive?: boolean } = {},
   ): void {
     lastOutput.value = renderMarkup(raw)
     const b = requireBridge()
@@ -264,7 +278,8 @@ export const useGameStore = defineStore('game', () => {
     lastBag = bag
     lastSpells = spellList
 
-    const roomChanged = room !== lastTurnRoom
+    // A load shows the room even when it is the same one.
+    const roomChanged = arrive || room !== lastTurnRoom
     turns.value.push({
       id: nextTurnId++,
       command,
@@ -459,7 +474,8 @@ export const useGameStore = defineStore('game', () => {
   function saveGame(command: string | null = null): void {
     const b = requireBridge()
     const result = b.quickSaveGame()
-    showOutput(command, result, { chips: false })
+    if (!showNotice(result, 'Game saved'))
+      showOutput(command, result, { chips: false })
   }
 
   function loadGame(command: string | null = null): void {
@@ -467,14 +483,15 @@ export const useGameStore = defineStore('game', () => {
     const result = b.quickLoadGame()
     rememberLoadedAct(b)
     clearNewDots()
-    showOutput(command, result, { chips: false })
+    showLoaded(command, result, 'Game loaded')
     refreshPanels()
   }
 
   function saveNamedGame(name: string, command: string | null = null): void {
     const b = requireBridge()
     const result = b.saveNamedGame(name)
-    showOutput(command, result, { chips: false })
+    if (!showNotice(result, `Game saved · ${name}`))
+      showOutput(command, result, { chips: false })
   }
 
   function loadNamedGame(name: string, command: string | null = null): void {
@@ -482,8 +499,19 @@ export const useGameStore = defineStore('game', () => {
     const result = b.loadNamedGame(name)
     rememberLoadedAct(b)
     clearNewDots()
-    showOutput(command, result, { chips: false })
+    showLoaded(command, result, `Game loaded · ${name}`)
     refreshPanels()
+  }
+
+  /** A load: a notice and the room in the story (Lantern), or the engine's text. */
+  function showLoaded(
+    command: string | null,
+    result: string,
+    text: string,
+  ): void {
+    if (showNotice(result, text))
+      showOutput(null, '', { chips: false, arrive: true })
+    else showOutput(command, result, { chips: false })
   }
 
   function listNamedSaves(): NamedSave[] {
@@ -499,7 +527,8 @@ export const useGameStore = defineStore('game', () => {
   function saveToSlot(slot: number): void {
     const b = requireBridge()
     const result = b.saveToSlot(slot)
-    showOutput(null, result)
+    if (!showNotice(result, `Game saved · Slot ${slot}`))
+      showOutput(null, result)
   }
 
   function loadFromSlot(slot: number): void {
@@ -507,7 +536,7 @@ export const useGameStore = defineStore('game', () => {
     const result = b.loadFromSlot(slot)
     rememberLoadedAct(b)
     clearNewDots()
-    showOutput(null, result)
+    showLoaded(null, result, `Game loaded · Slot ${slot}`)
     refreshPanels()
   }
 
@@ -519,7 +548,7 @@ export const useGameStore = defineStore('game', () => {
 
     let activated: string | null
     while ((activated = b.activateQuest()) !== null) {
-      if (questNewsInStory.value) news.push(parseQuestNews('new', activated))
+      if (lanternFeedback.value) news.push(parseQuestNews('new', activated))
       else
         events.push({
           title: '📜 New Quest!',
@@ -530,7 +559,7 @@ export const useGameStore = defineStore('game', () => {
 
     let updated: string | null
     while ((updated = b.updateQuest()) !== null) {
-      if (questNewsInStory.value) news.push(parseQuestNews('updated', updated))
+      if (lanternFeedback.value) news.push(parseQuestNews('updated', updated))
       else
         events.push({
           title: '📜 Quest Updated',
@@ -554,7 +583,7 @@ export const useGameStore = defineStore('game', () => {
 
     // Completions also stay in the story as records, each with the act's
     // quest count as it stood once that quest was done.
-    if (questNewsInStory.value && completions.length) {
+    if (lanternFeedback.value && completions.length) {
       const { completed: done, total } = b.getQuestProgress()
       completions.forEach((payload, index) => {
         const record: QuestNews = {
@@ -710,7 +739,8 @@ export const useGameStore = defineStore('game', () => {
     bagEntries,
     spellEntries,
     completionTree,
-    questNewsInStory,
+    lanternFeedback,
+    notice,
     rawInventory,
     rawSpells,
     rawActiveQuests,

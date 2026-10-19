@@ -17,6 +17,7 @@ import JournalPanel from './JournalPanel.vue'
 import LanternHeader from './LanternHeader.vue'
 import QuestCompleteContent from './QuestCompleteContent.vue'
 import RoomCard from './RoomCard.vue'
+import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StoryTurn from './StoryTurn.vue'
 
@@ -131,7 +132,7 @@ let storyResize: ResizeObserver | undefined
 
 onMounted(() => {
   document.documentElement.setAttribute('data-ui', 'lantern')
-  game.questNewsInStory = true
+  game.lanternFeedback = true
   document.addEventListener('keydown', onKeydown)
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
@@ -142,7 +143,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
   document.documentElement.removeAttribute('data-ui')
-  game.questNewsInStory = false
+  game.lanternFeedback = false
   document.removeEventListener('keydown', onKeydown)
   storyResize?.disconnect()
 })
@@ -266,6 +267,8 @@ watch(
       v-model="section"
       class="lq-nav-bottom"
     />
+
+    <SaveToast />
 
     <!-- Act intro / act complete: a full-screen chapter page. Each chapter
          is a new page, so it opens at its top. -->
