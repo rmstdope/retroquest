@@ -252,9 +252,12 @@ const infoHtml = computed(() => {
 })
 
 // --- Names in the story: click one for a small menu of what fits ---
-const nameMenu = ref<{ actions: NameAction[]; x: number; y: number } | null>(
-  null,
-)
+const nameMenu = ref<{
+  actions: NameAction[]
+  x: number
+  top: number
+  bottom: number
+} | null>(null)
 /** What had focus before the menu opened (a name in the text cannot take it). */
 let focusBeforeMenu: HTMLElement | null = null
 
@@ -273,7 +276,7 @@ function onStoryClick(event: MouseEvent): void {
   if (!actions.length) return
   const box = name.getBoundingClientRect()
   focusBeforeMenu = document.activeElement as HTMLElement | null
-  nameMenu.value = { actions, x: box.left, y: box.bottom }
+  nameMenu.value = { actions, x: box.left, top: box.top, bottom: box.bottom }
 }
 
 function closeNameMenu(): void {
@@ -417,7 +420,8 @@ watch(
       v-if="nameMenu"
       :actions="nameMenu.actions"
       :x="nameMenu.x"
-      :y="nameMenu.y"
+      :top="nameMenu.top"
+      :bottom="nameMenu.bottom"
       @pick="runNameAction"
       @close="closeNameMenu"
     />

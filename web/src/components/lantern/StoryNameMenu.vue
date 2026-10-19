@@ -7,18 +7,26 @@ import type { NameAction } from '@/lantern/nameActions'
  * it. Picking one runs it; Escape, a click elsewhere or Tab closes it.
  * Arrow keys move between the actions.
  */
-const props = defineProps<{ actions: NameAction[]; x: number; y: number }>()
+/** `x`, `top` and `bottom` are where the clicked name is in the window. */
+const props = defineProps<{
+  actions: NameAction[]
+  x: number
+  top: number
+  bottom: number
+}>()
 const emit = defineEmits<{ pick: [command: string]; close: [] }>()
 const menu = ref<HTMLElement | null>(null)
 
 const MENU_WIDTH = 180
 const ITEM_HEIGHT = 44
-/** Below the name, kept inside the window (above it near the bottom). */
+/** Below the name, or above it when it would not fit below. */
 const position = computed(() => {
   const height = props.actions.length * ITEM_HEIGHT + 10
+  const fitsBelow = props.bottom + 4 + height <= window.innerHeight - 8
+  const top = fitsBelow ? props.bottom + 4 : props.top - 4 - height
   return {
     left: `${Math.max(8, Math.min(props.x, window.innerWidth - MENU_WIDTH - 8))}px`,
-    top: `${Math.max(8, Math.min(props.y + 4, window.innerHeight - height - 8))}px`,
+    top: `${Math.max(8, top)}px`,
   }
 })
 
