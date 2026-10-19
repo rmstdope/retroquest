@@ -129,4 +129,32 @@ describe('LanternDialog', () => {
 
     expect(w.get('footer').text()).toBe('Continue')
   })
+
+  it('gives focus back to what had it when it opened', async () => {
+    const opener = document.createElement('button')
+    document.body.appendChild(opener)
+    opener.focus()
+    const w = mountDialog()
+    await w.vm.$nextTick()
+
+    w.unmount()
+    wrapper = undefined
+
+    expect(document.activeElement).toBe(opener)
+    opener.remove()
+  })
+
+  it('can leave focus to its caller', async () => {
+    const opener = document.createElement('button')
+    document.body.appendChild(opener)
+    opener.focus()
+    const w = mountDialog({ restoreFocus: false })
+    await w.vm.$nextTick()
+
+    w.unmount()
+    wrapper = undefined
+
+    expect(document.activeElement).not.toBe(opener)
+    opener.remove()
+  })
 })

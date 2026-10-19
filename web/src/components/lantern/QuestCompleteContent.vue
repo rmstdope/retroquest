@@ -4,15 +4,13 @@ import type { QuestNews } from '@/lantern/parseQuestNews'
 import { renderMarkup } from '@/utils/theme'
 
 /**
- * The quest-complete pop-up's content (the one quest moment that blocks):
- * a check seal, which kind of quest, its name as the dialog title, the
- * completion text and how many of the act's quests are done.
+ * The quest-complete pop-up's body (the one quest moment that blocks): a
+ * check seal, the completion text and how many of the act's quests are
+ * done. Which quest it is ("Side quest complete", its name) is in the
+ * dialog's fixed header, so it stays in view while a long text scrolls.
  */
-const props = defineProps<{ news: QuestNews; titleId: string }>()
+const props = defineProps<{ news: QuestNews }>()
 
-const kicker = computed(
-  () => `${props.news.main ? 'Main' : 'Side'} quest complete`,
-)
 const percent = computed(() => {
   const progress = props.news.progress
   return progress && progress.total > 0
@@ -37,8 +35,6 @@ const percent = computed(() => {
         <path d="M5 12.5l4.5 4.5L19 7.5" />
       </svg>
     </span>
-    <span class="lq-kicker">{{ kicker }}</span>
-    <h2 :id="titleId" class="lq-complete-title">{{ news.name }}</h2>
     <!-- eslint-disable vue/no-v-html -->
     <p class="lq-complete-text" v-html="renderMarkup(news.text)"></p>
     <!-- eslint-enable vue/no-v-html -->
@@ -61,8 +57,6 @@ const percent = computed(() => {
 
 <style scoped>
 .lq-complete {
-  min-height: 0;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,21 +78,6 @@ const percent = computed(() => {
     0 0 0 6px var(--lq-accent-soft),
     0 0 0 7px var(--lq-accent-line);
 }
-.lq-kicker {
-  font-family: var(--lq-font-ui);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--lq-accent-text);
-}
-.lq-complete-title {
-  margin: 2px 0 0;
-  font-family: var(--lq-font-display);
-  font-size: calc(28px * var(--lq-display-scale));
-  font-weight: 500;
-  color: var(--lq-fg);
-}
 .lq-complete-text {
   margin: 8px 0 0;
   max-width: 52ch;
@@ -107,6 +86,12 @@ const percent = computed(() => {
   font-size: var(--lq-story-size);
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
+}
+/* Short screens (phone landscape): no room for the seal. */
+@media (max-height: 519px) {
+  .lq-seal {
+    display: none;
+  }
 }
 .lq-complete-progress {
   width: 100%;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref, useId } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, useId } from 'vue'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 
 /**
@@ -9,11 +9,18 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * stays inside while it is open; Escape, the close button and the backdrop
  * emit `close`. Focus starts on an element marked `data-autofocus`, else on
  * the first focusable one, else on the dialog itself (it takes focus when
- * its text is clicked, so Escape and Tab keep working).
+ * its text is clicked, so Escape and Tab keep working). On close it gives
+ * focus back to what had it when it opened, unless `restoreFocus` is off
+ * (the game's own pop-ups send it to the actions instead).
  */
-withDefaults(
-  defineProps<{ title: string; eyebrow?: string; closable?: boolean }>(),
-  { eyebrow: '', closable: true },
+const props = withDefaults(
+  defineProps<{
+    title: string
+    eyebrow?: string
+    closable?: boolean
+    restoreFocus?: boolean
+  }>(),
+  { eyebrow: '', closable: true, restoreFocus: true },
 )
 const emit = defineEmits<{ close: [] }>()
 const titleId = useId()
@@ -29,7 +36,14 @@ function onKeydown(event: KeyboardEvent): void {
   trap.onKeydown(event)
 }
 
-onMounted(() => nextTick(trap.focusFirst))
+let opener: HTMLElement | null = null
+onMounted(() => {
+  opener = document.activeElement as HTMLElement | null
+  void nextTick(trap.focusFirst)
+})
+onBeforeUnmount(() => {
+  if (props.restoreFocus && opener?.isConnected) opener.focus()
+})
 
 defineExpose({ focusFirst: trap.focusFirst })
 </script>

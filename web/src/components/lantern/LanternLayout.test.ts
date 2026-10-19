@@ -58,6 +58,35 @@ describe('LanternLayout', () => {
       expect(w.find('.lq-scrim').exists()).toBe(false)
     })
 
+    it('goes on with Escape as with its button', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      const dismiss = vi
+        .spyOn(game, 'dismissModal')
+        .mockImplementation(() => {})
+      game.modalChapter = INTRO
+      game.showModal = true
+      await w.vm.$nextTick()
+
+      await w.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
+
+      expect(dismiss).toHaveBeenCalledOnce()
+    })
+
+    it('keeps Tab on the chapter page', async () => {
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      const game = useGameStore()
+      game.modalChapter = INTRO
+      game.showModal = true
+      await flushPromises()
+      const button = wrapper.get('.lq-chapter-button').element
+      ;(document.activeElement as HTMLElement | null)?.blur()
+
+      await wrapper.get('[role="dialog"]').trigger('keydown', { key: 'Tab' })
+
+      expect(document.activeElement).toBe(button)
+    })
+
     it('goes on with the game from the chapter button', async () => {
       const w = mountLayout()
       const game = useGameStore()
@@ -127,10 +156,13 @@ describe('LanternLayout', () => {
     await w.vm.$nextTick()
 
     const dialog = w.get('[role="dialog"]')
-    expect(dialog.get('#lq-dialog-title').text()).toBe('Hint of Magic')
+    const title = dialog.get('h2')
+    expect(title.text()).toBe('Hint of Magic')
+    expect(dialog.attributes('aria-labelledby')).toBe(title.attributes('id'))
+    expect(dialog.get('.lq-dialog-eyebrow').text()).toBe('Side quest complete')
     expect(dialog.find('.lq-complete-count').exists()).toBe(true)
     expect(dialog.text()).not.toContain('🏆')
-    expect(dialog.get('button').text()).toBe('Continue')
+    expect(dialog.get('footer button').text()).toBe('Continue')
   })
 
   it('opens the next completion pop-up from its top', async () => {
@@ -326,7 +358,7 @@ describe('LanternLayout', () => {
     game.showModal = true
     await w.vm.$nextTick()
 
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await w.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
     expect(dismiss).toHaveBeenCalledTimes(1)
   })
 

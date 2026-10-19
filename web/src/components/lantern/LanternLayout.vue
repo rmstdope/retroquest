@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
+import { useFocusTrap } from '@/composables/useFocusTrap'
 import {
   SHORT_QUERY,
   useMediaQuery,
@@ -14,6 +15,7 @@ import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
 import JournalPanel from './JournalPanel.vue'
+import LanternDialog from './LanternDialog.vue'
 import LanternHeader from './LanternHeader.vue'
 import QuestCompleteContent from './QuestCompleteContent.vue'
 import RoomCard from './RoomCard.vue'
@@ -122,10 +124,6 @@ function answerTooLong(): boolean {
   return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
-function onKeydown(e: KeyboardEvent): void {
-  if (e.key === 'Escape' && game.showModal) game.dismissModal()
-}
-
 // The story also changes size without scrolling: the sheet opens or folds,
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
@@ -133,7 +131,6 @@ let storyResize: ResizeObserver | undefined
 onMounted(() => {
   document.documentElement.setAttribute('data-ui', 'lantern')
   game.lanternFeedback = true
-  document.addEventListener('keydown', onKeydown)
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
@@ -144,7 +141,6 @@ onMounted(() => {
 onUnmounted(() => {
   document.documentElement.removeAttribute('data-ui')
   game.lanternFeedback = false
-  document.removeEventListener('keydown', onKeydown)
   storyResize?.disconnect()
 })
 
@@ -182,6 +178,22 @@ game.setAudioPlayer(useAudio())
 useActMusic()
 
 const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
+const chapterDialog = ref<HTMLElement | null>(null)
+const chapterTrap = useFocusTrap(chapterDialog)
+
+/** A chapter page keeps Tab inside, and Escape goes on like its button. */
+function onChapterKeydown(event: KeyboardEvent): void {
+  if (event.key === 'Escape') {
+    event.stopPropagation()
+    game.dismissModal()
+  } else chapterTrap.onKeydown(event)
+}
+
+/** The quest-complete pop-up's eyebrow (none for the engine's text pop-ups). */
+const questEyebrow = computed(() => {
+  const quest = game.modalQuest
+  return quest ? `${quest.main ? 'Main' : 'Side'} quest complete` : ''
+})
 
 /** Focus the open pop-up's button (a chapter page's, or Continue). */
 function focusPopUp(): void {
@@ -274,10 +286,12 @@ watch(
          is a new page, so it opens at its top. -->
     <section
       v-if="game.showModal && game.modalChapter"
+      ref="chapterDialog"
       class="lq-chapter-dialog"
       role="dialog"
       aria-modal="true"
       aria-labelledby="lq-dialog-title"
+      @keydown="onChapterKeydown"
     >
       <ChapterPage
         :key="`${game.modalChapter.kind} ${game.modalChapter.act}`"
@@ -288,39 +302,33 @@ watch(
       />
     </section>
 
-    <!-- Other pop-ups: quest complete, or the engine's text. -->
-    <div v-else-if="game.showModal" class="lq-scrim">
-      <section
-        class="lq-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="lq-dialog-title"
-      >
-        <!-- Keyed so each pop-up's text opens from its top. -->
-        <QuestCompleteContent
-          v-if="game.modalQuest"
-          :key="game.modalQuest.name"
-          :news="game.modalQuest"
-          title-id="lq-dialog-title"
-        />
-        <template v-else>
-          <h2 id="lq-dialog-title" class="lq-dialog-title">
-            {{ game.modalTitle }}
-          </h2>
-          <!-- eslint-disable vue/no-v-html -->
-          <div class="lq-dialog-body" v-html="game.modalBody"></div>
-          <!-- eslint-enable vue/no-v-html -->
-        </template>
+    <!-- Other pop-ups: quest complete, or the engine's text. Keyed so each
+         one opens from its top. Focus goes to the actions afterwards. -->
+    <LanternDialog
+      v-else-if="game.showModal"
+      :key="game.modalQuest?.name ?? game.modalTitle"
+      :title="game.modalQuest?.name ?? game.modalTitle"
+      :eyebrow="questEyebrow"
+      :closable="false"
+      :restore-focus="false"
+      @close="game.dismissModal()"
+    >
+      <QuestCompleteContent v-if="game.modalQuest" :news="game.modalQuest" />
+      <!-- eslint-disable vue/no-v-html -->
+      <div v-else class="lq-dialog-body" v-html="game.modalBody"></div>
+      <!-- eslint-enable vue/no-v-html -->
+      <template #footer>
         <button
           ref="continueButton"
           type="button"
           class="lq-send"
+          data-autofocus
           @click="game.dismissModal()"
         >
           Continue
         </button>
-      </section>
-    </div>
+      </template>
+    </LanternDialog>
   </div>
 </template>
 
@@ -430,6 +438,7 @@ watch(
   gap: calc(18px * var(--lq-density));
 }
 .lq-send {
+  width: 100%;
   height: 48px;
   padding: 0 18px;
   border: none;
@@ -444,53 +453,7 @@ watch(
   inset: 0;
   z-index: 50;
 }
-.lq-scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgb(5 8 11 / 0.72);
-}
-.lq-dialog {
-  width: 100%;
-  max-width: 560px;
-  max-height: 88vh;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 20px;
-  border-radius: 18px;
-  border: 1px solid var(--lq-accent-line);
-  background: var(--lq-surface);
-  color: var(--lq-fg);
-}
-/* Small phones: pop-ups are bottom sheets; the text scrolls and Continue
-   stays in view. */
-@media (max-width: 639px) {
-  .lq-scrim {
-    align-items: flex-end;
-    padding: 0;
-  }
-  .lq-dialog {
-    max-width: none;
-    max-height: 88dvh;
-    border-radius: 18px 18px 0 0;
-    border-bottom: none;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  }
-}
-.lq-dialog-title {
-  margin: 0;
-  font-family: var(--lq-font-display);
-  font-weight: 500;
-  font-size: calc(24px * var(--lq-display-scale));
-}
 .lq-dialog-body {
-  min-height: 0;
-  overflow-y: auto;
   font-family: var(--lq-font-prose);
   font-size: var(--lq-story-size);
   line-height: var(--lq-story-line-height);
