@@ -104,6 +104,18 @@ function optionalString(value: unknown): string | null {
   return value === undefined || value === null ? null : (value as string)
 }
 
+/** Python that creates a fresh game from Act I (at start-up and on restart). */
+const NEW_GAME = `
+from retroquest.engine.Game import Game
+from retroquest.engine.textualui.GameController import GameController
+from retroquest.act1.Act1 import Act1
+from retroquest.act2.Act2 import Act2
+from retroquest.act3.Act3 import Act3
+
+game = Game([Act1(), Act2(), Act3()], dev_mode=False)
+controller = GameController(game)
+`
+
 export function useBridge() {
   let pyodide: PyodideRuntime | null = null
   let ready = false
@@ -134,16 +146,7 @@ sys.path.insert(0, '/home/pyodide/src')
 
     onProgress('Starting game...')
 
-    await pyodide.runPythonAsync(`
-from retroquest.engine.Game import Game
-from retroquest.engine.textualui.GameController import GameController
-from retroquest.act1.Act1 import Act1
-from retroquest.act2.Act2 import Act2
-from retroquest.act3.Act3 import Act3
-
-game = Game([Act1(), Act2(), Act3()], dev_mode=False)
-controller = GameController(game)
-    `)
+    await pyodide.runPythonAsync(NEW_GAME)
 
     ready = true
     onProgress('Ready!')
@@ -208,6 +211,11 @@ result = controller.handle_command(_cmd)
 game.new_turn()
 result
     `) as string
+  }
+
+  /** Throw the running game away and start a fresh one from Act I. */
+  function newGame(): void {
+    py(NEW_GAME)
   }
 
   /** Ask the game something that changes nothing (stats, help): no new turn. */
@@ -606,6 +614,7 @@ _result_text
     advanceToRunning,
     handleCommand,
     readCommand,
+    newGame,
     getRoom,
     getRoomName,
     getRoomDescription,

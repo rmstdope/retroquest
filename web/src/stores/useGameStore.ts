@@ -53,6 +53,7 @@ export interface GameBridge {
   getQuestProgress(): QuestProgress
   getActStats(): ActStats
   readCommand(command: 'stats' | 'help'): string
+  newGame(): void
   getQuickSave(): SaveSlot | null
   getSaveSlots(): SaveSlot[]
   saveToSlot(slot: number): string
@@ -339,26 +340,52 @@ export const useGameStore = defineStore('game', () => {
         loadingStatus.value = status
       })
 
-      // Advance SHOW_LOGO → ACT_INTRO: get the logo/splash text for the output area
-      const logoRaw = b.advanceTurn()
-      introText.value = renderMarkup(logoRaw)
-
-      // Advance ACT_INTRO → ACT_RUNNING: get the act intro text
-      const actIntroRaw = b.advanceTurn()
-      refreshPanels()
-
-      // Block input until the player dismisses the act intro modal
-      acceptInput.value = false
-      pendingLookOnDismiss = true
-      queueActIntro(actIntroRaw)
-      if (!showModal.value) {
-        showNextModal()
-      }
-
+      openFirstAct(b)
       loading.value = false
     } catch (err) {
       loadingStatus.value = `Error: ${(err as Error).message}`
     }
+  }
+
+  /** From the game's logo to the first act's intro pop-up (input waits for it). */
+  function openFirstAct(b: GameBridge): void {
+    // Advance SHOW_LOGO → ACT_INTRO: get the logo/splash text for the output area
+    const logoRaw = b.advanceTurn()
+    introText.value = renderMarkup(logoRaw)
+
+    // Advance ACT_INTRO → ACT_RUNNING: get the act intro text
+    const actIntroRaw = b.advanceTurn()
+    refreshPanels()
+
+    // Block input until the player dismisses the act intro modal
+    acceptInput.value = false
+    pendingLookOnDismiss = true
+    queueActIntro(actIntroRaw)
+    if (!showModal.value) {
+      showNextModal()
+    }
+  }
+
+  /** The Lantern UI asks before `quit` / `exit` (see QuitDialog). */
+  const quitAsked = ref(false)
+
+  /** Start a new game from Act I: the story, dots and pop-ups start empty. */
+  function restartGame(): void {
+    const b = requireBridge()
+    quitAsked.value = false
+    b.newGame()
+    turns.value = []
+    lastTurnRoom = ''
+    lastBag = []
+    lastSpells = []
+    currentAct = null
+    clearNewDots()
+    questToOpen.value = null
+    modalQueue.value = []
+    showModal.value = false
+    modalQuest.value = null
+    modalChapter.value = null
+    openFirstAct(b)
   }
 
   function submitCommand(cmd: string): void {
@@ -368,6 +395,10 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     const command = cmd.trim()
     if (routeSaveOrLoad(command)) return
+    if (lanternFeedback.value && /^(quit|exit)$/i.test(command)) {
+      quitAsked.value = true
+      return
+    }
     const result = b.handleCommand(command)
     showOutput(command, result)
     refreshPanels()
@@ -752,6 +783,8 @@ export const useGameStore = defineStore('game', () => {
     completionTree,
     lanternFeedback,
     readInfo,
+    quitAsked,
+    restartGame,
     getQuickSave,
     notice,
     rawInventory,

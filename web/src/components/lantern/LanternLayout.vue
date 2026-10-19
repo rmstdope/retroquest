@@ -18,6 +18,7 @@ import DockBar from './DockBar.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
 import GameMenu, { type InfoKind, type MenuKind } from './GameMenu.vue'
+import QuitDialog from './QuitDialog.vue'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import LanternHeader from './LanternHeader.vue'
 import QuestCompleteContent from './QuestCompleteContent.vue'
@@ -329,8 +330,9 @@ watch(
 
     <!-- Dialogs the player opens (a game pop-up takes precedence). -->
     <template v-if="!game.showModal">
+      <QuitDialog v-if="game.quitAsked" />
       <GameMenu
-        v-if="gameDialog === 'menu'"
+        v-else-if="gameDialog === 'menu'"
         @close="closeGameDialog"
         @open="openGameDialog"
       />
