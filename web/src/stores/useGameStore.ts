@@ -354,11 +354,21 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
+  /** The game's opening screen (logo + music credits) for the Lantern title page. */
+  const titleText = ref('')
+  const showTitle = ref(false)
+
+  function dismissTitle(): void {
+    showTitle.value = false
+  }
+
   /** From the game's logo to the first act's intro pop-up (input waits for it). */
   function openFirstAct(b: GameBridge): void {
     // Advance SHOW_LOGO → ACT_INTRO: get the logo/splash text for the output area
     const logoRaw = b.advanceTurn()
     introText.value = renderMarkup(logoRaw)
+    titleText.value = logoRaw
+    showTitle.value = true
 
     // Advance ACT_INTRO → ACT_RUNNING: get the act intro text
     const actIntroRaw = b.advanceTurn()
@@ -804,6 +814,9 @@ export const useGameStore = defineStore('game', () => {
     lanternFeedback,
     readInfo,
     quitAsked,
+    titleText,
+    showTitle,
+    dismissTitle,
     gameNumber,
     restartGame,
     getQuickSave,

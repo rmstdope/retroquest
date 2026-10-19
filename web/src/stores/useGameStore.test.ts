@@ -1993,4 +1993,22 @@ describe('useGameStore', () => {
       expect(store.saveToSlot(2)).toBe(false)
     })
   })
+
+  describe('title page', () => {
+    it('opens the game on its title before Act I', async () => {
+      bridge.advanceTurn
+        .mockReturnValueOnce('Welcome LOGO')
+        .mockReturnValueOnce(
+          '[bold]ACT 1: THE CALL TO ADVENTURE[/bold]\n\nYou are Elior.',
+        )
+
+      await store.initGame()
+
+      expect(store.showTitle).toBe(true)
+      expect(store.titleText).toBe('Welcome LOGO')
+      store.dismissTitle()
+      expect(store.showTitle).toBe(false)
+      expect(store.modalChapter).toMatchObject({ kind: 'intro', act: 'Act I' })
+    })
+  })
 })

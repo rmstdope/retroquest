@@ -318,6 +318,28 @@ describe('LanternLayout', () => {
     expect(w.find('[role="dialog"]').exists()).toBe(false)
   })
 
+  it('shows the title page over the first chapter, then the chapter', async () => {
+    wrapper = mount(LanternLayout, { attachTo: document.body })
+    const game = useGameStore()
+    game.modalChapter = {
+      kind: 'intro',
+      act: 'Act I',
+      title: 'The Call to Adventure',
+      body: 'You are Elior.',
+    }
+    game.showModal = true
+    game.titleText = 'Welcome\n[bold yellow]\n###\n[/bold yellow]'
+    game.showTitle = true
+    await flushPromises()
+    expect(document.activeElement?.textContent?.trim()).toBe('Start')
+
+    await wrapper.get('.lq-title-start').trigger('click')
+    await flushPromises()
+
+    expect(wrapper.find('.lq-title-start').exists()).toBe(false)
+    expect(document.activeElement?.className).toContain('lq-chapter-button')
+  })
+
   it('asks before quitting', async () => {
     const w = mountLayout()
 

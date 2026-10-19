@@ -29,6 +29,7 @@ import RoomCard from './RoomCard.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StoryTurn from './StoryTurn.vue'
+import TitlePage from './TitlePage.vue'
 
 /**
  * Shell of the Lantern UI (shown with `?ui=lantern`): header, story (one
@@ -248,6 +249,13 @@ const infoHtml = computed(() => {
 })
 
 const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
+
+/** Leave the title page for the first act's chapter page. */
+async function startGame(): Promise<void> {
+  game.dismissTitle()
+  await nextTick()
+  focusPopUp()
+}
 const chapterDialog = ref<HTMLElement | null>(null)
 const chapterTrap = useFocusTrap(chapterDialog)
 
@@ -270,6 +278,8 @@ const questEyebrow = computed(() => {
 
 /** Focus the open pop-up's button (a chapter page's, or Continue). */
 function focusPopUp(): void {
+  // The title page comes first; the pop-up under it gets focus after Start.
+  if (game.showTitle) return
   if (chapterPage.value) chapterPage.value.focus()
   else continueButton.value?.focus()
 }
@@ -363,6 +373,13 @@ watch(
     />
 
     <SaveToast />
+
+    <!-- The game's title page, over the first act's chapter page. -->
+    <TitlePage
+      v-if="game.showTitle"
+      :text="game.titleText"
+      @start="startGame"
+    />
 
     <!-- Dialogs the player opens (a game pop-up takes precedence). -->
     <template v-if="!game.showModal">
