@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Arrival } from '@/stores/useGameStore'
+import { useGameStore, type Arrival } from '@/stores/useGameStore'
 import { useMediaQuery, WIDE_QUERY } from '@/composables/useMediaQuery'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
@@ -10,10 +10,12 @@ import { renderMarkup } from '@/utils/theme'
  * Arrival in a room inside the story: a chapter-style divider, the room
  * description and a "Here + exits" box. On laptops the room card and the
  * map already show the room, so the story keeps only the divider. The
- * Here chips are buttons: the layout opens their actions menu.
+ * Here chips of what is still around are buttons: the layout opens their
+ * actions menu. The rest (an earlier room, or gone since) are plain text.
  */
 const props = defineProps<{ arrival: Arrival; command: string | null }>()
 const wide = useMediaQuery(WIDE_QUERY)
+const game = useGameStore()
 
 const DIRECTIONS: Record<string, string> = {
   n: 'north',
@@ -32,10 +34,21 @@ const direction = computed(() => {
   return DIRECTIONS[word] ?? word
 })
 
-const here = computed(() => [
-  ...props.arrival.characters.map((name) => ({ name, kind: 'character' })),
-  ...props.arrival.items.map((name) => ({ name, kind: 'item' })),
-])
+const here = computed(() => {
+  const inRoom = props.arrival.room === game.roomName
+  return [
+    ...props.arrival.characters.map((name) => ({
+      name,
+      kind: 'character',
+      present: inRoom && game.characters.includes(name),
+    })),
+    ...props.arrival.items.map((name) => ({
+      name,
+      kind: 'item',
+      present: inRoom && game.items.includes(name),
+    })),
+  ]
+})
 const exits = computed(() => Object.entries(props.arrival.exits))
 </script>
 
@@ -60,18 +73,25 @@ const exits = computed(() => Object.entries(props.arrival.exits))
       <div v-if="here.length || exits.length" class="lq-here-box">
         <div v-if="here.length" class="lq-here" data-testid="here">
           <span class="lq-here-label">Here</span>
-          <button
-            v-for="entry in here"
-            :key="`${entry.kind}:${entry.name}`"
-            type="button"
-            class="lq-here-chip"
-            :class="`lq-here-${entry.kind}`"
-            :data-name-kind="entry.kind"
-            :data-name="entry.name"
-            aria-haspopup="menu"
-          >
-            {{ displayName(entry.name) }}
-          </button>
+          <template v-for="entry in here" :key="`${entry.kind}:${entry.name}`">
+            <button
+              v-if="entry.present"
+              type="button"
+              class="lq-here-chip"
+              :class="`lq-here-${entry.kind}`"
+              :data-name-kind="entry.kind"
+              :data-name="entry.name"
+              aria-haspopup="menu"
+            >
+              {{ displayName(entry.name) }}
+            </button>
+            <span
+              v-else
+              class="lq-here-chip"
+              :class="`lq-here-${entry.kind}`"
+              >{{ displayName(entry.name) }}</span
+            >
+          </template>
         </div>
         <div v-if="exits.length" class="lq-exits" data-testid="exits">
           <span class="lq-here-label">Exits</span>
@@ -165,6 +185,8 @@ const exits = computed(() => Object.entries(props.arrival.exits))
   font: inherit;
   font-size: 13px;
   white-space: nowrap;
+}
+button.lq-here-chip {
   cursor: pointer;
 }
 .lq-here-character {

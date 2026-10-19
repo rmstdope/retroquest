@@ -300,9 +300,11 @@ function closeNameMenu(): void {
   if (focusBeforeMenu?.isConnected) focusBeforeMenu.focus()
 }
 
+/** Run the picked action; focus goes on to the actions, as after a command. */
 function runNameAction(command: string): void {
   nameMenu.value = null
   game.submitCommand(command)
+  void nextTick(focusActions)
 }
 
 const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)

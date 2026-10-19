@@ -161,6 +161,11 @@
   color: var(--lq-item);
   font-weight: 500;
 }
+/* Names in the story open a menu of what to do with them. */
+:root[data-ui='lantern'] .lq-story .theme-character_name,
+:root[data-ui='lantern'] .lq-story .theme-item_name {
+  cursor: pointer;
+}
 :root[data-ui='lantern'] .theme-spell_name {
   color: var(--lq-spell);
   font-weight: 500;
