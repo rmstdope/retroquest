@@ -53,7 +53,7 @@ web/
 ├── src/
 │   ├── assets/          # Global CSS (Tailwind theme)
 │   ├── components/      # Vue components
-│   ├── composables/     # Reusable logic (useBridge, useMusic, useEntityMenu)
+│   ├── composables/     # Reusable logic (useBridge, useMusic, useCommandCompletion)
 │   ├── stores/          # Pinia store (useGameStore)
 │   └── utils/           # Shared utilities (theme)
 ├── e2e/                 # Playwright E2E tests

@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test'
 
-/* Inject mock game state to bypass Pyodide loading (same approach as game.spec.ts). */
+/* Inject mock game state to bypass Pyodide loading. */
 async function injectMockState(page: Page) {
   await page.evaluate(() => {
     /* eslint-disable @typescript-eslint/no-explicit-any */

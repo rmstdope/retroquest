@@ -35,7 +35,7 @@ import StoryTurn from './StoryTurn.vue'
 import TitlePage from './TitlePage.vue'
 
 /**
- * Shell of the Lantern UI (the default; `?ui=classic` shows the old one): header, story (one
+ * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): header, story (one
  * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) a
  * room card sits above the story and the map and journal in a side column.
  * Smaller screens show one section at a time (Story, Bag, Spells, Quests,
