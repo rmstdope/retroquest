@@ -25,8 +25,8 @@ describe('App while the game loads', () => {
     return wrapper
   }
 
-  it('shows the Lantern loading screen in the Lantern UI', () => {
-    const w = mountAt('?ui=lantern')
+  it('shows the Lantern loading screen by default', () => {
+    const w = mountAt('')
 
     expect(w.find('.lq-loading').exists()).toBe(true)
     expect(w.get('[role="status"]').text()).toBe('Initializing...')
@@ -34,7 +34,7 @@ describe('App while the game loads', () => {
   })
 
   it('keeps the classic loading screen in the classic UI', () => {
-    const w = mountAt('')
+    const w = mountAt('?ui=classic')
 
     expect(w.find('.lq-loading').exists()).toBe(false)
     expect(w.text()).toContain('Initializing...')
