@@ -4,11 +4,12 @@ import LanternDialog from './LanternDialog.vue'
 
 /**
  * The game menu (the ☰ sheet on phones): Quick save and Quick load, then
- * Stats and Help. Save, Load and Settings join it with their dialogs.
+ * Save game, Load game, Stats and Help. Settings joins it with its dialog.
  */
 export type InfoKind = 'stats' | 'help'
+export type MenuKind = 'save' | 'load' | InfoKind
 
-const emit = defineEmits<{ close: []; open: [kind: InfoKind] }>()
+const emit = defineEmits<{ close: []; open: [kind: MenuKind] }>()
 const game = useGameStore()
 
 function quickSave(): void {
@@ -21,7 +22,9 @@ function quickLoad(): void {
   emit('close')
 }
 
-const ROWS: Array<{ kind: InfoKind; label: string; note: string }> = [
+const ROWS: Array<{ kind: MenuKind; label: string; note: string }> = [
+  { kind: 'save', label: 'Save game', note: '8 slots · pick one' },
+  { kind: 'load', label: 'Load game', note: 'The quick save or a slot' },
   {
     kind: 'stats',
     label: 'Stats',

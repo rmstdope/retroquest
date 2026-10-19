@@ -10,7 +10,10 @@ import type { LanternTextSize } from '@/lantern/tokens'
  * progress bar; the title stays as a hidden top-level heading.
  */
 defineProps<{ compact?: boolean }>()
-const emit = defineEmits<{ menu: []; open: [kind: 'stats' | 'help'] }>()
+const emit = defineEmits<{
+  menu: []
+  open: [kind: 'save' | 'load' | 'stats' | 'help']
+}>()
 const game = useGameStore()
 const settings = useSettingsStore()
 
@@ -147,6 +150,12 @@ function toggleTheme(): void {
     <slot name="nav" />
 
     <nav v-if="!compact" class="lq-game-nav" aria-label="Game">
+      <button type="button" class="lq-text-btn" @click="emit('open', 'save')">
+        Save
+      </button>
+      <button type="button" class="lq-text-btn" @click="emit('open', 'load')">
+        Load
+      </button>
       <button type="button" class="lq-text-btn" @click="emit('open', 'stats')">
         Stats
       </button>

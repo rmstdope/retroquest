@@ -985,6 +985,37 @@ describe('LanternLayout', () => {
       expect(document.activeElement).toBe(menuButton.element)
     })
 
+    it('opens Load game from the menu', async () => {
+      phone()
+      const game = useGameStore()
+      vi.spyOn(game, 'getSaveSlots').mockReturnValue([])
+      vi.spyOn(game, 'getQuickSave').mockReturnValue(null)
+      const w = mountLayout()
+
+      await w.get('button[aria-label="Game menu"]').trigger('click')
+      await w
+        .findAll('[role="dialog"] button')
+        .find((b) => b.text().startsWith('Load game'))!
+        .trigger('click')
+
+      expect(w.get('[role="dialog"] h2').text()).toBe('Load game')
+    })
+
+    it('closes the menu when a game pop-up opens', async () => {
+      phone()
+      const w = mountLayout()
+      await w.get('button[aria-label="Game menu"]').trigger('click')
+      const game = useGameStore()
+
+      game.modalTitle = 'News'
+      game.showModal = true
+      await w.vm.$nextTick()
+      game.showModal = false
+      await w.vm.$nextTick()
+
+      expect(w.find('[role="dialog"]').exists()).toBe(false)
+    })
+
     it('shows Help from the laptop header', async () => {
       vi.stubGlobal(
         'matchMedia',
