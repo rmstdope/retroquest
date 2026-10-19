@@ -82,6 +82,18 @@ describe('SaveLoadDialog', () => {
     expect(w.emitted('close')).toBeUndefined()
   })
 
+  it('says so, and marks nothing, when a save fails', async () => {
+    vi.mocked(useGameStore().saveToSlot).mockReturnValue(false)
+    const w = mountDialog('save')
+
+    await card(w, '1').get('button').trigger('click')
+
+    expect(card(w, '1').text()).not.toContain('Just saved')
+    expect(card(w, '1').text()).toContain('Empty slot')
+    expect(w.get('[role="alert"]').text()).toContain('could not be saved')
+    expect(w.emitted('close')).toBeUndefined()
+  })
+
   it('asks in the card before replacing a save', async () => {
     const w = mountDialog('save')
     const filled = card(w, '2')

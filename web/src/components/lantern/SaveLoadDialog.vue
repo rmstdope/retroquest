@@ -9,8 +9,9 @@ import LanternDialog from './LanternDialog.vue'
  * Save or load a game: the 8 slots (and, when loading, the quick save
  * first) as cards with the act, room, quests and time. An empty slot saves
  * at once; replacing a save or loading one asks first, inside its card.
- * A load closes the dialog; a save stays, marked "Just saved". Escape in a
- * question cancels it first; the next Escape closes the dialog.
+ * A load closes the dialog; a save stays, marked "Just saved" (or the
+ * dialog says the save failed). Escape in a question cancels it first;
+ * the next Escape closes the dialog.
  */
 const props = defineProps<{ mode: 'save' | 'load' }>()
 const emit = defineEmits<{ close: [] }>()
@@ -21,6 +22,7 @@ const saving = computed(() => props.mode === 'save')
 const version = ref(0) // bumped after a save so the cards are read again
 const asking = ref<number | null>(null)
 const justSaved = ref<number | null>(null)
+const saveFailed = ref(false)
 const list = ref<HTMLElement | null>(null)
 
 const cards = computed<SaveSlot[]>(() => {
@@ -53,9 +55,10 @@ async function focusSlot(slot: number): Promise<void> {
 }
 
 async function save(slot: number): Promise<void> {
-  game.saveToSlot(slot)
+  const ok = game.saveToSlot(slot)
   asking.value = null
-  justSaved.value = slot
+  justSaved.value = ok ? slot : null
+  saveFailed.value = !ok
   version.value++
   await focusSlot(slot)
 }
@@ -124,6 +127,9 @@ function cardLabel(card: SaveSlot): string {
           ? 'Pick a slot. A slot in use asks before it is replaced.'
           : 'Pick a save to go back to.'
       }}
+    </p>
+    <p v-if="saveFailed" class="lq-save-error" role="alert">
+      Your game could not be saved: this browser's storage is full or blocked.
     </p>
     <ul ref="list" class="lq-slots">
       <li
@@ -211,6 +217,14 @@ function cardLabel(card: SaveSlot): string {
   margin: 0 0 12px;
   font-size: 14px;
   color: var(--lq-muted);
+}
+.lq-save-error {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--lq-failure-soft);
+  color: var(--lq-failure);
+  font-size: 14px;
 }
 .lq-slots {
   list-style: none;
