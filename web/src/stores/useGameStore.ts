@@ -487,19 +487,22 @@ export const useGameStore = defineStore('game', () => {
         })
     }
 
-    const turn = turns.value.at(-1)
-    if (news.length && turn) {
-      turn.quests = [...(turn.quests ?? []), ...news]
-      audioPlayer?.playNewQuest()
-    }
-
     let completed: string | null
+    let completedAny = false
     while ((completed = b.completeQuest()) !== null) {
+      completedAny = true
       events.push({
         title: '🏆 Quest Complete!',
         body: renderMarkup(completed),
         sound: 'questComplete',
       })
+    }
+
+    // A completion's fanfare alone marks the turn; the chime would clash.
+    const turn = turns.value.at(-1)
+    if (news.length && turn) {
+      turn.quests = [...(turn.quests ?? []), ...news]
+      if (!completedAny) audioPlayer?.playNewQuest()
     }
 
     if (events.length > 0) {

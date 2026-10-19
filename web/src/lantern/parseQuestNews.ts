@@ -11,10 +11,13 @@ export interface QuestNews {
 
 /** Earlier stages of a quest description, which the engine dims. */
 const EARLIER_STAGE = /\[dim\][\s\S]*?\[\/dim\]/g
+/** A clue list with open clues (Act III): there [dim] marks "not found yet". */
+const OPEN_CLUE = /^(?:\[dim\])?○ /m
 
 /**
  * Read an activate/update payload from the engine:
- * "[quest_name]Name (main quest)[/quest_name]\n\nDescription".
+ * "[quest_name]Name (main quest)[/quest_name]\n\nDescription". An update
+ * shows its newest stage; checklists and clue lists are shown whole.
  */
 export function parseQuestNews(
   kind: QuestNews['kind'],
@@ -29,6 +32,9 @@ export function parseQuestNews(
     kind,
     name,
     main,
-    text: kind === 'updated' && newest ? newest : description,
+    text:
+      kind === 'updated' && newest && !OPEN_CLUE.test(description)
+        ? newest
+        : description,
   }
 }
