@@ -1,12 +1,10 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import LanternLoading from './LanternLoading.vue'
 
 describe('LanternLoading', () => {
-  afterEach(() => document.documentElement.removeAttribute('data-ui'))
-
   it('shows the full status, file count included', () => {
     const w = mount(LanternLoading, {
       props: { status: 'Loading game files... (10/363)' },

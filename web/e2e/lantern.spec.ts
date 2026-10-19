@@ -36,7 +36,6 @@ test.describe('Lantern UI (the default)', () => {
     await page.goto('/')
     await injectMockState(page)
 
-    await expect(page.locator('html')).toHaveAttribute('data-ui', 'lantern')
     await expect(page.getByText('RetroQuest', { exact: true })).toBeVisible()
     await expect(page.getByTestId('act')).toHaveText('Act I')
     await expect(page.getByTestId('quest-progress')).toContainText('4/11')
@@ -99,7 +98,13 @@ test.describe('Lantern UI (the default)', () => {
   test('is the only UI, also for old ?ui= links', async ({ page }) => {
     for (const url of ['/', '/?ui=classic', '/?ui=lantern']) {
       await page.goto(url)
-      await expect(page.locator('html')).toHaveAttribute('data-ui', 'lantern')
+      // The page has the Lantern ground (light, as the browser prefers light)
+      await expect(page.locator('body')).toHaveCSS(
+        'background-color',
+        'rgb(245, 240, 230)',
+      )
+      // and no browser default margin around the shell
+      await expect(page.locator('body')).toHaveCSS('margin', '0px')
     }
   })
 

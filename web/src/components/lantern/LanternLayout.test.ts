@@ -26,7 +26,6 @@ describe('LanternLayout', () => {
   afterEach(() => {
     wrapper?.unmount()
     wrapper = undefined
-    document.documentElement.removeAttribute('data-ui')
   })
 
   function mountLayout() {
@@ -235,15 +234,6 @@ describe('LanternLayout', () => {
 
     expect(created.at(-1)!.src).toContain('willowbrook.mp3')
     vi.unstubAllGlobals()
-  })
-
-  it('switches the page to the Lantern look while it is shown', () => {
-    const w = mountLayout()
-    expect(document.documentElement.getAttribute('data-ui')).toBe('lantern')
-
-    w.unmount()
-    wrapper = undefined
-    expect(document.documentElement.hasAttribute('data-ui')).toBe(false)
   })
 
   it('shows save and load notices as a toast', async () => {

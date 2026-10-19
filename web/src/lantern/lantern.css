@@ -1,7 +1,7 @@
 /*
  * Lantern design tokens as CSS variables (--lq-*), mirrored from tokens.ts
- * (a unit test keeps them in sync). Everything is scoped to
- * :root[data-ui='lantern'] so the classic UI is unaffected.
+ * (a unit test keeps them in sync), the page's base styles and the inline
+ * game tags.
  *
  * Theme: dark by default, light when the device prefers light, unless the
  * player picks one explicitly via data-theme='dark' | 'light'.
@@ -19,7 +19,76 @@
 @import '@fontsource/dm-sans/600.css';
 @import '@fontsource/dm-mono/400.css';
 
-:root[data-ui='lantern'] {
+/*
+ * A small reset under the components' own styles (a layer, so any unlayered
+ * rule wins): no default margins, padding or borders, border-box sizing, a
+ * full-height page, and headings, links, lists, icons and form controls
+ * that take their look from the component instead of the browser.
+ */
+@layer base {
+  *,
+  ::before,
+  ::after,
+  ::backdrop {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html,
+  body {
+    height: 100%;
+  }
+  html {
+    line-height: 1.5;
+    font-family: system-ui, sans-serif;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+  ol,
+  ul,
+  menu {
+    list-style: none;
+  }
+  img,
+  svg {
+    display: block;
+    vertical-align: middle;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  button {
+    appearance: button;
+  }
+  ::placeholder {
+    opacity: 1;
+    color: color-mix(in oklab, currentcolor 50%, transparent);
+  }
+}
+
+:root {
   --lq-bg: #10151a;
   --lq-surface: #161d24;
   --lq-raised: #1c242c;
@@ -64,13 +133,13 @@
 }
 
 @media (min-width: 1024px) {
-  :root[data-ui='lantern'] {
+  :root {
     --lq-story-size: calc(16px * var(--lq-text-scale));
   }
 }
 
 @media (prefers-color-scheme: light) {
-  :root[data-ui='lantern']:not([data-theme='dark']) {
+  :root:not([data-theme='dark']) {
     --lq-bg: #f5f0e6;
     --lq-surface: #fffcf5;
     --lq-raised: #efe8da;
@@ -101,7 +170,7 @@
   }
 }
 
-:root[data-ui='lantern'][data-theme='light'] {
+:root[data-theme='light'] {
   --lq-bg: #f5f0e6;
   --lq-surface: #fffcf5;
   --lq-raised: #efe8da;
@@ -133,18 +202,18 @@
 
 /* Reduce motion: follows the device unless the player picks on/off */
 @media (prefers-reduced-motion: reduce) {
-  :root[data-ui='lantern']:not([data-reduce-motion='off']) {
+  :root:not([data-reduce-motion='off']) {
     --lq-motion: 0;
   }
 }
 
-:root[data-ui='lantern'][data-reduce-motion='on'] {
+:root[data-reduce-motion='on'] {
   --lq-motion: 0;
 }
 
-/* The page behind the shell uses the Lantern ground, not the classic one. */
-:root[data-ui='lantern'],
-:root[data-ui='lantern'] body {
+/* The page behind the shell uses the Lantern ground. */
+:root,
+body {
   background: var(--lq-bg);
   color: var(--lq-fg);
 }
@@ -153,58 +222,58 @@
  * Inline game tags (rendered by renderMarkup) in the Lantern look. Colours come
  * from the tokens above, which are checked for WCAG AA contrast.
  */
-:root[data-ui='lantern'] .theme-character_name {
+.theme-character_name {
   color: var(--lq-character);
   font-weight: 500;
 }
-:root[data-ui='lantern'] .theme-item_name {
+.theme-item_name {
   color: var(--lq-item);
   font-weight: 500;
 }
 /* Names in the story open a menu of what to do with them. */
-:root[data-ui='lantern'] .lq-story .theme-character_name,
-:root[data-ui='lantern'] .lq-story .theme-item_name {
+.lq-story .theme-character_name,
+.lq-story .theme-item_name {
   cursor: pointer;
 }
-:root[data-ui='lantern'] .theme-spell_name {
+.theme-spell_name {
   color: var(--lq-spell);
   font-weight: 500;
 }
-:root[data-ui='lantern'] .theme-room_name {
+.theme-room_name {
   color: var(--lq-fg);
   font-weight: 600;
 }
-:root[data-ui='lantern'] .theme-quest_name {
+.theme-quest_name {
   color: var(--lq-accent-text);
   font-weight: 600;
 }
-:root[data-ui='lantern'] .theme-exits {
+.theme-exits {
   color: var(--lq-accent-text);
   font-weight: 600;
 }
-:root[data-ui='lantern'] .theme-dialogue {
+.theme-dialogue {
   color: inherit;
   font-style: italic;
 }
-:root[data-ui='lantern'] .theme-event {
+.theme-event {
   color: var(--lq-muted);
 }
-:root[data-ui='lantern'] .theme-failure {
+.theme-failure {
   color: var(--lq-failure);
   font-weight: 500;
 }
-:root[data-ui='lantern'] .theme-success {
+.theme-success {
   color: var(--lq-success);
   font-weight: 500;
 }
-:root[data-ui='lantern'] .theme-pending {
+.theme-pending {
   color: var(--lq-muted);
   font-style: italic;
 }
-:root[data-ui='lantern'] .theme-bold {
+.theme-bold {
   font-weight: 600;
 }
-:root[data-ui='lantern'] .theme-dim {
+.theme-dim {
   color: var(--lq-muted);
   opacity: 1;
 }

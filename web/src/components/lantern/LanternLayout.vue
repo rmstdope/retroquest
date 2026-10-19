@@ -149,7 +149,6 @@ function answerTooLong(): boolean {
 let storyResize: ResizeObserver | undefined
 
 onMounted(() => {
-  document.documentElement.setAttribute('data-ui', 'lantern')
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
@@ -158,7 +157,6 @@ onMounted(() => {
   }
 })
 onUnmounted(() => {
-  document.documentElement.removeAttribute('data-ui')
   storyResize?.disconnect()
 })
 

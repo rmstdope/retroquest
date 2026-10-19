@@ -107,9 +107,9 @@ describe('lantern.css', () => {
   }
 
   it.each([
-    ['dark', ":root[data-ui='lantern']"],
-    ['light', ":root[data-ui='lantern']:not([data-theme='dark'])"],
-    ['light', ":root[data-ui='lantern'][data-theme='light']"],
+    ['dark', ':root'],
+    ['light', ":root:not([data-theme='dark'])"],
+    ['light', ":root[data-theme='light']"],
   ] as const)('the %s rule %s matches tokens.ts exactly', (theme, selector) => {
     const expected = Object.fromEntries(
       Object.entries(LANTERN_PALETTES[theme]).map(([k, v]) => [
@@ -123,32 +123,30 @@ describe('lantern.css', () => {
     }
   })
 
+  it('styles the whole page, with no UI switch to scope it to', () => {
+    expect(lanternCss).not.toContain('data-ui')
+  })
+
   it('follows a light device preference unless dark is chosen explicitly', () => {
     expect(lanternCss).toContain('@media (prefers-color-scheme: light)')
-    expect(lanternCss).toContain(
-      ":root[data-ui='lantern']:not([data-theme='dark'])",
-    )
+    expect(lanternCss).toContain(":root:not([data-theme='dark'])")
   })
 
   it('reduces motion when chosen, or when the device asks unless turned off', () => {
-    expect(declarations(":root[data-ui='lantern']")['--lq-motion']).toBe('1')
-    expect(
-      declarations(":root[data-ui='lantern'][data-reduce-motion='on']")[
-        '--lq-motion'
-      ],
-    ).toBe('0')
+    expect(declarations(':root')['--lq-motion']).toBe('1')
+    expect(declarations(":root[data-reduce-motion='on']")['--lq-motion']).toBe(
+      '0',
+    )
     expect(lanternCss).toContain('@media (prefers-reduced-motion: reduce)')
     expect(
-      declarations(":root[data-ui='lantern']:not([data-reduce-motion='off'])")[
-        '--lq-motion'
-      ],
+      declarations(":root:not([data-reduce-motion='off'])")['--lq-motion'],
     ).toBe('0')
   })
 
   it.each(THEME_TAGS)(
     'styles the inline [%s] tag for the Lantern look',
     (tag) => {
-      expect(lanternCss).toContain(`:root[data-ui='lantern'] .theme-${tag}`)
+      expect(lanternCss).toContain(`\n.theme-${tag} {`)
     },
   )
 
