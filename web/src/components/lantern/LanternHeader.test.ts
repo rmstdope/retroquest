@@ -118,6 +118,14 @@ describe('LanternHeader', () => {
       return wrapper
     }
 
+    it('opens the game menu', async () => {
+      const w = mountCompact()
+
+      await w.get('button[aria-label="Game menu"]').trigger('click')
+
+      expect(w.emitted('menu')).toHaveLength(1)
+    })
+
     it('names the room where the title was', async () => {
       const w = mountCompact()
       useGameStore().roomName = "Elior's Cottage"
@@ -147,5 +155,17 @@ describe('LanternHeader', () => {
     it('shows no act line before the game has started', () => {
       expect(mountCompact().find('.lq-compact-sub').exists()).toBe(false)
     })
+  })
+
+  it('has Stats and Help buttons on a laptop', async () => {
+    const w = mountHeader()
+    const button = (label: string) =>
+      w.findAll('button').find((b) => b.text() === label)!
+
+    await button('Stats').trigger('click')
+    await button('Help').trigger('click')
+
+    expect(w.emitted('open')).toEqual([['stats'], ['help']])
+    expect(w.find('button[aria-label="Game menu"]').exists()).toBe(false)
   })
 })

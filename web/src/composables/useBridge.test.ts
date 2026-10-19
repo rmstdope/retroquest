@@ -124,6 +124,15 @@ describe('useBridge', () => {
       expect(mock.runtime.globals.set).toHaveBeenCalledWith('_cmd', 'go north')
     })
 
+    it('readCommand asks the game without starting a new turn', () => {
+      mock.pythonResults.set('controller.handle_command', 'Stats text')
+
+      expect(bridge.readCommand('stats')).toBe('Stats text')
+      expect(mock.runtime.globals.set).toHaveBeenCalledWith('_cmd', 'stats')
+      const code = mock.runtime.runPython.mock.calls.at(-1)![0] as string
+      expect(code).not.toContain('new_turn')
+    })
+
     it('getRoom returns room description', () => {
       mock.pythonResults.set('controller.get_room()', 'A dark room.')
       expect(bridge.getRoom()).toBe('A dark room.')

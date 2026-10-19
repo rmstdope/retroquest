@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
@@ -16,6 +17,7 @@ import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
+import GameMenu, { type InfoKind } from './GameMenu.vue'
 import LanternHeader from './LanternHeader.vue'
 import QuestCompleteContent from './QuestCompleteContent.vue'
 import RoomCard from './RoomCard.vue'
@@ -175,7 +177,34 @@ watch(
 
 // The quest chime and fanfare (sound settings apply).
 game.setAudioPlayer(useAudio())
-useActMusic()
+const music = useActMusic()
+
+// --- Game menu, Stats and Help (dialogs the player opens) ---
+const gameDialog = ref<'menu' | InfoKind | null>(null)
+const INFO_TITLES: Record<InfoKind, string> = { stats: 'Stats', help: 'Help' }
+let dialogOpener: HTMLElement | null = null
+
+function openGameDialog(kind: 'menu' | InfoKind): void {
+  if (!gameDialog.value)
+    dialogOpener = document.activeElement as HTMLElement | null
+  gameDialog.value = kind
+}
+
+/** Closing the last one gives focus back to what opened the first one. */
+async function closeGameDialog(): Promise<void> {
+  gameDialog.value = null
+  await nextTick()
+  if (document.activeElement === document.body && dialogOpener?.isConnected)
+    dialogOpener.focus()
+}
+
+/** Stats or Help as HTML (Help ends with the music credits). */
+const infoHtml = computed(() => {
+  const kind = gameDialog.value
+  if (kind !== 'stats' && kind !== 'help') return ''
+  const html = renderMarkup(game.readInfo(kind))
+  return kind === 'help' ? html + music.buildAttributionHtml() : html
+})
 
 const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
 const chapterDialog = ref<HTMLElement | null>(null)
@@ -219,7 +248,11 @@ watch(
 
 <template>
   <div class="lq-root">
-    <LanternHeader :compact="!wide">
+    <LanternHeader
+      :compact="!wide"
+      @menu="openGameDialog('menu')"
+      @open="openGameDialog"
+    >
       <template v-if="!wide && short" #nav>
         <SectionNav v-model="section" class="lq-nav-top" />
       </template>
@@ -284,6 +317,26 @@ watch(
     />
 
     <SaveToast />
+
+    <!-- Dialogs the player opens (a game pop-up takes precedence). -->
+    <template v-if="!game.showModal">
+      <GameMenu
+        v-if="gameDialog === 'menu'"
+        @close="closeGameDialog"
+        @open="openGameDialog"
+      />
+      <LanternDialog
+        v-else-if="gameDialog"
+        :key="gameDialog"
+        :title="INFO_TITLES[gameDialog]"
+        eyebrow="RetroQuest"
+        @close="closeGameDialog"
+      >
+        <!-- eslint-disable vue/no-v-html -->
+        <div class="lq-info" v-html="infoHtml"></div>
+        <!-- eslint-enable vue/no-v-html -->
+      </LanternDialog>
+    </template>
 
     <!-- Act intro / act complete: a full-screen chapter page. Each chapter
          is a new page, so it opens at its top. -->
@@ -461,6 +514,13 @@ watch(
    Tab keep working. */
 .lq-chapter-dialog:focus {
   outline: none;
+}
+.lq-info {
+  font-family: var(--lq-font-ui);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--lq-prose);
+  white-space: pre-wrap;
 }
 .lq-dialog-body {
   font-family: var(--lq-font-prose);

@@ -193,6 +193,13 @@ result
     `) as string
   }
 
+  /** Ask the game something that changes nothing (stats, help): no new turn. */
+  function readCommand(command: 'stats' | 'help'): string {
+    if (!pyodide) throw new Error('Pyodide not initialized')
+    pyodide.globals.set('_cmd', command)
+    return py('controller.handle_command(_cmd)') as string
+  }
+
   function getRoom(): string {
     return py('controller.get_room()') as string
   }
@@ -543,6 +550,7 @@ _result_text
     startGame,
     advanceToRunning,
     handleCommand,
+    readCommand,
     getRoom,
     getRoomName,
     getRoomDescription,
