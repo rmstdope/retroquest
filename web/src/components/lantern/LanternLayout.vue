@@ -181,7 +181,10 @@ const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
 const chapterDialog = ref<HTMLElement | null>(null)
 const chapterTrap = useFocusTrap(chapterDialog)
 
-/** A chapter page keeps Tab inside, and Escape goes on like its button. */
+/**
+ * A chapter page keeps Tab inside, and Escape goes on like its button (also
+ * after a click on its text, which focuses the page itself).
+ */
 function onChapterKeydown(event: KeyboardEvent): void {
   if (event.key === 'Escape') {
     event.stopPropagation()
@@ -291,6 +294,7 @@ watch(
       role="dialog"
       aria-modal="true"
       aria-labelledby="lq-dialog-title"
+      tabindex="-1"
       @keydown="onChapterKeydown"
     >
       <ChapterPage
@@ -452,6 +456,11 @@ watch(
   position: fixed;
   inset: 0;
   z-index: 50;
+}
+/* Not a Tab stop: it takes focus when its text is clicked, so Escape and
+   Tab keep working. */
+.lq-chapter-dialog:focus {
+  outline: none;
 }
 .lq-dialog-body {
   font-family: var(--lq-font-prose);

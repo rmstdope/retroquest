@@ -55,7 +55,7 @@ describe('LanternLayout', () => {
       expect(dialog.get('#lq-dialog-title').text()).toBe(
         'The Call to Adventure',
       )
-      expect(w.find('.lq-scrim').exists()).toBe(false)
+      expect(w.find('.lq-dialog-layer').exists()).toBe(false)
     })
 
     it('goes on with Escape as with its button', async () => {
@@ -85,6 +85,16 @@ describe('LanternLayout', () => {
       await wrapper.get('[role="dialog"]').trigger('keydown', { key: 'Tab' })
 
       expect(document.activeElement).toBe(button)
+    })
+
+    it('takes focus when its text is clicked (Escape and Tab still work)', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      game.modalChapter = INTRO
+      game.showModal = true
+      await w.vm.$nextTick()
+
+      expect(w.get('[role="dialog"]').attributes('tabindex')).toBe('-1')
     })
 
     it('goes on with the game from the chapter button', async () => {
