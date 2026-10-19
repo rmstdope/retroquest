@@ -479,6 +479,8 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     test(`opens a long turn at its start with More below at ${width}×${height}`, async ({
       page,
     }) => {
+      // Keep the real game (and its intro pop-up) from loading over the mock.
+      await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
       await page.setViewportSize({ width, height })
       await page.goto('/?ui=lantern')
       await injectMockState(page)
