@@ -4,7 +4,8 @@ import type { NameAction } from '@/lantern/nameActions'
 
 /**
  * A small menu next to a name clicked in the story: the actions that fit
- * it. Picking one runs it; Escape, a click elsewhere, Tab or scrolling
+ * it. Picking one runs it; an action with choices (Give…, Cast…) shows
+ * them in its place, named after it; Escape, a click elsewhere, Tab or scrolling
  * (the name would move away from it) closes it.
  * Arrow keys move between the actions.
  */
@@ -17,17 +18,41 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ pick: [command: string]; close: [] }>()
 const menu = ref<HTMLElement | null>(null)
+/** The action whose choices are shown, if one was picked. */
+const opened = ref<NameAction | null>(null)
+const shown = computed(() => opened.value?.choices ?? props.actions)
+const heading = computed(() => opened.value?.label.replace('…', '') ?? '')
+
+function pick(action: NameAction): void {
+  if (action.command) {
+    emit('pick', action.command)
+    return
+  }
+  opened.value = action
+  void nextTick(() => items()[0]?.focus())
+}
 
 const MENU_WIDTH = 180
 const ITEM_HEIGHT = 44
-/** Below the name, or above it when it would not fit below. */
+const HEADING_HEIGHT = 28
+/**
+ * Below the name, or above it when it would not fit below; a list too long
+ * for the window is kept inside it (over the name) and scrolls.
+ */
 const position = computed(() => {
-  const height = props.actions.length * ITEM_HEIGHT + 10
+  const maxHeight = window.innerHeight - 16
+  const height = Math.min(
+    maxHeight,
+    shown.value.length * ITEM_HEIGHT +
+      (heading.value ? HEADING_HEIGHT : 0) +
+      10,
+  )
   const fitsBelow = props.bottom + 4 + height <= window.innerHeight - 8
   const top = fitsBelow ? props.bottom + 4 : props.top - 4 - height
   return {
     left: `${Math.max(8, Math.min(props.x, window.innerWidth - MENU_WIDTH - 8))}px`,
-    top: `${Math.max(8, top)}px`,
+    top: `${Math.max(8, Math.min(top, window.innerHeight - 8 - height))}px`,
+    maxHeight: `${maxHeight}px`,
   }
 })
 
@@ -57,8 +82,9 @@ function onPointerDown(event: PointerEvent): void {
   if (!menu.value?.contains(event.target as Node)) emit('close')
 }
 
-function onScroll(): void {
-  emit('close')
+/** The story scrolling closes it; its own long list scrolling does not. */
+function onScroll(event: Event): void {
+  if (!menu.value?.contains(event.target as Node)) emit('close')
 }
 
 onMounted(() => {
@@ -77,16 +103,21 @@ onBeforeUnmount(() => {
     ref="menu"
     class="lq-name-menu"
     role="menu"
+    :aria-label="heading || undefined"
     :style="position"
     @keydown="onKeydown"
   >
+    <span v-if="heading" class="lq-name-heading" aria-hidden="true">{{
+      heading
+    }}</span>
     <button
-      v-for="action in actions"
-      :key="action.command"
+      v-for="action in shown"
+      :key="action.label"
       type="button"
       role="menuitem"
       class="lq-name-action"
-      @click="emit('pick', action.command)"
+      :aria-haspopup="action.choices ? 'menu' : undefined"
+      @click="pick(action)"
     >
       {{ action.label }}
     </button>
@@ -107,8 +138,20 @@ onBeforeUnmount(() => {
   background: var(--lq-surface);
   box-shadow: 0 12px 30px rgb(0 0 0 / 0.3);
   font-family: var(--lq-font-ui);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.lq-name-heading {
+  flex-shrink: 0;
+  padding: 6px 12px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lq-muted);
 }
 .lq-name-action {
+  flex-shrink: 0;
   min-height: 44px;
   padding: 0 12px;
   border: none;

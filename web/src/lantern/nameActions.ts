@@ -1,7 +1,13 @@
-/** One thing to do with a name clicked in the story. */
+import { displayName } from './displayName'
+
+/**
+ * One thing to do with a name clicked in the story: a command, or (Give…,
+ * Cast…) a list of choices that each have one.
+ */
 export interface NameAction {
   label: string
-  command: string
+  command?: string
+  choices?: NameAction[]
 }
 
 /** What is around: names as the engine gives them (no markup, no counts). */
@@ -9,6 +15,8 @@ export interface Around {
   characters: string[]
   items: string[]
   bag: string[]
+  /** Spells the player knows, by name. */
+  spells?: string[]
   /** Short names the story uses ("journal") → full item names. */
   shortNames?: Record<string, string>
 }
@@ -36,7 +44,8 @@ function itemName(said: string, around: Around): string {
 
 /**
  * The actions that fit a character or item named in the story, given what is
- * in the room and the bag; none when it is not here.
+ * in the room, the bag and the spells known; none when it is not here. A
+ * character also gets Give… (each thing in the bag) and Cast… (each spell).
  */
 export function nameActions(
   kind: 'character' | 'item',
@@ -48,12 +57,37 @@ export function nameActions(
   const actions = (labels: Array<[string, string]>) =>
     labels.map(([label, verb]) => ({ label, command: `${verb} ${name}` }))
   if (kind === 'character') {
-    return around.characters.some((c) => same(c, name))
-      ? actions([
-          ['Talk to', 'talk to'],
-          ['Examine', 'examine'],
-        ])
-      : []
+    if (!around.characters.some((c) => same(c, name))) return []
+    const [talk, examine] = actions([
+      ['Talk to', 'talk to'],
+      ['Examine', 'examine'],
+    ])
+    const choices = (
+      label: string,
+      things: string[],
+      command: (t: string) => string,
+    ) =>
+      things.length
+        ? [
+            {
+              label,
+              choices: things.map((t) => ({
+                label: displayName(t),
+                command: command(t.toLowerCase()),
+              })),
+            },
+          ]
+        : []
+    return [
+      talk,
+      ...choices('Give…', around.bag, (item) => `give ${item} to ${name}`),
+      ...choices(
+        'Cast…',
+        around.spells ?? [],
+        (spell) => `cast ${spell} on ${name}`,
+      ),
+      examine,
+    ]
   }
   if (around.bag.some((i) => same(i, name)))
     return actions([

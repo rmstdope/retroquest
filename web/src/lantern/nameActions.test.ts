@@ -5,12 +5,14 @@ const HERE = {
   characters: ['grandmother'],
   items: ['bucket', 'lantern (lit)', "Elior's Journal", 'chicken'],
   bag: ['bread', 'map'],
+  spells: ['light'],
   shortNames: { journal: "Elior's Journal", hoe: 'Rusty Hoe' },
 }
 
 describe('nameActions', () => {
   it('offers talking to and examining a character who is here', () => {
-    expect(nameActions('character', 'Grandmother', HERE)).toEqual([
+    const emptyHanded = { ...HERE, bag: [], spells: [] }
+    expect(nameActions('character', 'Grandmother', emptyHanded)).toEqual([
       { label: 'Talk to', command: 'talk to grandmother' },
       { label: 'Examine', command: 'examine grandmother' },
     ])
@@ -48,5 +50,23 @@ describe('nameActions', () => {
       label: 'Take',
       command: 'take chicken',
     })
+  })
+
+  it('offers giving something from the bag and casting a spell on a character', () => {
+    expect(nameActions('character', 'Grandmother', HERE)).toEqual([
+      { label: 'Talk to', command: 'talk to grandmother' },
+      {
+        label: 'Give…',
+        choices: [
+          { label: 'Bread', command: 'give bread to grandmother' },
+          { label: 'Map', command: 'give map to grandmother' },
+        ],
+      },
+      {
+        label: 'Cast…',
+        choices: [{ label: 'Light', command: 'cast light on grandmother' }],
+      },
+      { label: 'Examine', command: 'examine grandmother' },
+    ])
   })
 })
