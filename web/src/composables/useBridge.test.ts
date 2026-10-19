@@ -563,6 +563,14 @@ describe('useBridge', () => {
       expect(bridge.getActName()).toBe('Act 1')
     })
 
+    it('getShortNames maps the controller dict to an object', () => {
+      mock.pythonResults.set(
+        'controller.get_short_names()',
+        pyProxy(new Map<string, unknown>([['journal', "Elior's Journal"]])),
+      )
+      expect(bridge.getShortNames()).toEqual({ journal: "Elior's Journal" })
+    })
+
     it('getActStats maps the controller dict to ActStats', () => {
       mock.pythonResults.set(
         'controller.get_act_stats()',

@@ -436,3 +436,27 @@ class TestGetActStats:
         stats = ctrl.get_act_stats()
         assert (stats["quests_completed"], stats["quests_total"]) == (1, 2)
         assert stats["places"] == 2
+
+
+class ShortItem(Item):
+    """Item with a short name, like "journal" for "Elior's Journal"."""
+
+    def __init__(self, name: str, short_name: str) -> None:
+        """Initialize with a full name and a short name."""
+        super().__init__(name, f"A {name}.", short_name=short_name)
+
+
+class TestGetShortNames:
+    """Short item names the story uses, for the web's name menu."""
+
+    def test_maps_short_names_of_room_and_bag_items_to_full_names(self) -> None:
+        """Room and inventory items with a short name map it to their full name."""
+        ctrl = _make_controller(
+            items=[ShortItem("Elior's Journal", "journal"), SimpleItem("bucket")]
+        )
+        ctrl.game.state.inventory.append(ShortItem("Rusty Hoe", "hoe"))
+
+        assert ctrl.get_short_names() == {
+            "journal": "Elior's Journal",
+            "hoe": "Rusty Hoe",
+        }

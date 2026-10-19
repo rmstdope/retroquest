@@ -272,6 +272,7 @@ function onStoryClick(event: MouseEvent): void {
     characters: game.characters,
     items: game.items,
     bag: game.rawInventory.map((entry) => parseCountedName(entry.name).name),
+    shortNames: game.shortNames,
   })
   if (!actions.length) return
   const box = name.getBoundingClientRect()

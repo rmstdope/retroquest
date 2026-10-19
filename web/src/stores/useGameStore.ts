@@ -53,6 +53,7 @@ export interface GameBridge {
   getQuestProgress(): QuestProgress
   getActStats(): ActStats
   readCommand(command: 'stats' | 'help'): string
+  getShortNames(): Record<string, string>
   newGame(): void
   getQuickSave(): SaveSlot | null
   getSaveSlots(): SaveSlot[]
@@ -140,6 +141,8 @@ export const useGameStore = defineStore('game', () => {
   const roomDescription = ref('')
   const characters = ref<string[]>([])
   const items = ref<string[]>([])
+  /** Short item names the story uses ("journal") → full names (room and bag). */
+  const shortNames = ref<Record<string, string>>({})
   const exits = ref<RoomExits>({})
   /** What merchants in the room sell (for the Buy action). */
   const roomWares = ref<RoomWare[]>([])
@@ -502,6 +505,7 @@ export const useGameStore = defineStore('game', () => {
     musicInfo.value = m.musicInfo
     acceptInput.value = b.isAcceptingInput()
     completionTree.value = b.getCommandCompletions()
+    shortNames.value = b.getShortNames()
   }
 
   /**
@@ -811,6 +815,7 @@ export const useGameStore = defineStore('game', () => {
     bagEntries,
     spellEntries,
     completionTree,
+    shortNames,
     lanternFeedback,
     readInfo,
     quitAsked,
