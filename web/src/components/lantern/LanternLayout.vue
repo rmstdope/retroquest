@@ -84,7 +84,8 @@ onUnmounted(() => {
 
 // Show a new turn from its start (jsdom has no scrollIntoView). A command
 // run from another section (Use, Cast, Go) first brings the story back, and
-// focus moves to the actions as the pressed button has gone. Follows the
+// focus moves to the actions as the pressed button has gone (likewise for
+// the folded bar's exit buttons, which change with the room). Follows the
 // newest turn's id: at the turn cap the count stops changing.
 watch(
   () => game.turns.at(-1)?.id,
@@ -99,7 +100,9 @@ watch(
       dockOpen.value = false
       await nextTick()
     }
-    if ((away || folds) && !game.showModal) focusActions()
+    const lost =
+      !wide.value && !dockOpen.value && document.activeElement === document.body
+    if ((away || folds || lost) && !game.showModal) focusActions()
   },
   { flush: 'post' },
 )

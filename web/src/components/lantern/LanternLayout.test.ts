@@ -500,6 +500,20 @@ describe('LanternLayout', () => {
       expect(actions(w).isVisible()).toBe(true)
     })
 
+    it('puts the focus back on the bar when its exit button has gone', async () => {
+      stubScreen(true)
+      const game = useGameStore()
+      game.acceptInput = true
+      game.exits = { north: 'Hall' }
+      const w = mountAttached()
+      ;(w.get('button.lq-dock-exit').element as HTMLElement).focus()
+
+      game.exits = { south: 'Square' }
+      await addTurn(w, 7)
+
+      expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
+    })
+
     it('folds after every answer on a short screen', async () => {
       stubScreen(true)
       stubHeights(50, 300)

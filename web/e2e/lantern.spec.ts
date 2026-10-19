@@ -436,4 +436,38 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     )
     expect(overflow).toBeLessThanOrEqual(0)
   })
+
+  test('keeps Actions ▴ on one line and scrolls the exits on a narrow phone', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      app.config.globalProperties.$pinia.state.value.game.exits = {
+        north: "Mira's Hut",
+        east: 'General Store',
+        south: 'Village Well',
+        west: "Elior's Cottage",
+        up: 'Bell Tower',
+      }
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+    await page.getByRole('button', { name: 'Hide actions' }).click()
+
+    const open = page.getByRole('button', { name: 'Actions ▴' })
+    const lines = await open.evaluate((el) => {
+      const range = document.createRange()
+      range.selectNodeContents(el)
+      return new Set([...range.getClientRects()].map((r) => Math.round(r.top)))
+        .size
+    })
+    expect(lines).toBe(1)
+    const exits = page.locator('.lq-dock-exits')
+    expect(await exits.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(
+      true,
+    )
+  })
 })

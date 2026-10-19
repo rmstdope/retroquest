@@ -119,8 +119,11 @@ defineExpose({ focus })
   color: var(--lq-fg);
 }
 .lq-dock-open {
-  flex: 1 1 auto;
+  /* Never squeezed: the exits scroll sideways instead. */
+  flex: 1 0 auto;
   height: 44px;
+  padding: 0 14px;
+  white-space: nowrap;
   border: none;
   border-radius: 10px;
   background: var(--lq-accent);
