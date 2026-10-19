@@ -11,6 +11,9 @@ const localStorageMock = (() => {
     setItem: vi.fn((key: string, value: string) => {
       store[key] = value
     }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
     clear: vi.fn(() => {
       store = {}
     }),
@@ -712,6 +715,28 @@ describe('useBridge', () => {
       expect(quick.act).toBe('Act 2')
       expect(quick.room).toBe('Forest Path')
       expect(typeof quick.timestamp).toBe('string')
+    })
+
+    it('drops the old details when the new ones cannot be stored', () => {
+      localStorageMock._setRaw(
+        'retroquest_save_meta',
+        JSON.stringify({ act: 'Act 1', room: 'Square', timestamp: 'old' }),
+      )
+      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3')
+      mock.pythonResults.set('controller.get_act_name()', 'Act 2')
+      mock.pythonResults.set('controller.get_room_name()', 'Forest Path')
+      localStorageMock.setItem
+        .mockImplementationOnce((key: string, value: string) =>
+          localStorageMock._setRaw(key, value),
+        )
+        .mockImplementationOnce(() => {
+          throw new Error('QuotaExceededError')
+        })
+
+      bridge.quickSaveGame()
+
+      expect(localStorageMock.getItem('retroquest_save')).toBe('bmV3')
+      expect(bridge.getQuickSave()!.room).toBe(null)
     })
 
     it('has no quick save until one is made', () => {

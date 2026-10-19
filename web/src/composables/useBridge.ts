@@ -318,16 +318,19 @@ except FileNotFoundError:
 _save_data
       `) as string
       if (saveData) {
+        const meta = JSON.stringify({
+          act: py('controller.get_act_name()') as string,
+          room: py('controller.get_room_name()') as string,
+          timestamp: new Date().toISOString(),
+          quests: readQuests(),
+        })
         localStorage.setItem('retroquest_save', saveData)
-        localStorage.setItem(
-          QUICK_META_KEY,
-          JSON.stringify({
-            act: py('controller.get_act_name()') as string,
-            room: py('controller.get_room_name()') as string,
-            timestamp: new Date().toISOString(),
-            quests: readQuests(),
-          }),
-        )
+        try {
+          localStorage.setItem(QUICK_META_KEY, meta)
+        } catch {
+          // No details rather than the previous save's.
+          localStorage.removeItem(QUICK_META_KEY)
+        }
       }
     } catch {
       // Silently handle localStorage failures
