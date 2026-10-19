@@ -119,6 +119,7 @@ let storyResize: ResizeObserver | undefined
 
 onMounted(() => {
   document.documentElement.setAttribute('data-ui', 'lantern')
+  game.questNewsInStory = true
   document.addEventListener('keydown', onKeydown)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
     storyResize = new ResizeObserver(updateMoreBelow)
@@ -127,6 +128,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
   document.documentElement.removeAttribute('data-ui')
+  game.questNewsInStory = false
   document.removeEventListener('keydown', onKeydown)
   storyResize?.disconnect()
 })

@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn } from '@/lantern/parseTurn'
+import QuestNewsCard from './QuestNewsCard.vue'
 import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
 import StoryArrival from './StoryArrival.vue'
@@ -115,6 +116,12 @@ function chipLabel(chip: Chip): string {
         >{{ chipLabel(chip) }}</span
       >
     </div>
+
+    <QuestNewsCard
+      v-for="(news, index) in turn.quests ?? []"
+      :key="`quest-${index}`"
+      :news="news"
+    />
   </article>
 </template>
 

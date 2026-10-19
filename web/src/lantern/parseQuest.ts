@@ -12,7 +12,7 @@ export interface QuestEntry {
 }
 
 const MARKUP_TAG = /\[\/?[a-z_]+\]/g
-const TYPE_SUFFIX = /\s*\((main|side)\)\s*$/
+const TYPE_SUFFIX = /\s*\((main|side)(?: quest)?\)\s*$/
 
 export function parseQuest(raw: NamedItem): QuestEntry {
   const text = raw.name.replace(MARKUP_TAG, '').trim()

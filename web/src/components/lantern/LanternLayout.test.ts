@@ -43,6 +43,15 @@ describe('LanternLayout', () => {
     expect(document.documentElement.hasAttribute('data-ui')).toBe(false)
   })
 
+  it('shows quest news in the story while it is shown', () => {
+    const w = mountLayout()
+    expect(useGameStore().questNewsInStory).toBe(true)
+
+    w.unmount()
+    wrapper = undefined
+    expect(useGameStore().questNewsInStory).toBe(false)
+  })
+
   it('shows the header', () => {
     expect(mountLayout().text()).toContain('RetroQuest')
   })

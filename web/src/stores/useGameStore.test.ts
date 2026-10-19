@@ -1518,4 +1518,66 @@ describe('useGameStore', () => {
       ])
     })
   })
+
+  // --- Quest news in the story (Lantern) ---
+
+  describe('quest news in the story', () => {
+    const NEW =
+      '[quest_name]Hint of Magic (side quest)[/quest_name]\n\nA force stirs.'
+    const UPDATED =
+      '[quest_name]Shadows (main quest)[/quest_name]\n\n[dim]Old.[/dim]\nNew.'
+
+    beforeEach(async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      await store.initGame()
+      store.dismissModal()
+      store.questNewsInStory = true
+    })
+
+    it('adds new and updated quests to the turn instead of a pop-up', () => {
+      bridge.activateQuest.mockReturnValueOnce(NEW).mockReturnValue(null)
+      bridge.updateQuest.mockReturnValueOnce(UPDATED).mockReturnValue(null)
+
+      store.submitCommand('look')
+
+      expect(store.showModal).toBe(false)
+      expect(store.turns.at(-1)!.quests).toEqual([
+        {
+          kind: 'new',
+          name: 'Hint of Magic',
+          main: false,
+          text: 'A force stirs.',
+        },
+        { kind: 'updated', name: 'Shadows', main: true, text: 'New.' },
+      ])
+    })
+
+    it('plays the chime once for the news of a turn', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.activateQuest.mockReturnValueOnce(NEW).mockReturnValue(null)
+      bridge.updateQuest.mockReturnValueOnce(UPDATED).mockReturnValue(null)
+
+      store.submitCommand('look')
+
+      expect(audio.playNewQuest).toHaveBeenCalledOnce()
+    })
+
+    it('still shows a pop-up when a quest completes', () => {
+      bridge.completeQuest
+        .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
+        .mockReturnValue(null)
+
+      store.submitCommand('look')
+
+      expect(store.showModal).toBe(true)
+      expect(store.modalTitle).toBe('🏆 Quest Complete!')
+    })
+
+    it('leaves turns without news empty', () => {
+      store.submitCommand('look')
+
+      expect(store.turns.at(-1)!.quests ?? []).toEqual([])
+    })
+  })
 })

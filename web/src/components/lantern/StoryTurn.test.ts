@@ -188,4 +188,13 @@ describe('StoryTurn', () => {
       mountTurn({ text: 'Nothing.' }).find('[data-testid="divider"]').exists(),
     ).toBe(false)
   })
+
+  it('shows the quest news of the turn after its text', () => {
+    const w = mountTurn({
+      text: 'You feel strange.',
+      quests: [{ kind: 'new', name: 'Hint of Magic', main: false, text: 'x' }],
+    })
+
+    expect(w.get('.lq-quest-card .lq-quest-title').text()).toBe('Hint of Magic')
+  })
 })

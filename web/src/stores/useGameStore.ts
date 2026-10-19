@@ -11,6 +11,7 @@ import type {
 } from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
+import { parseQuestNews, type QuestNews } from '@/lantern/parseQuestNews'
 
 /**
  * Shape of the bridge object injected via setBridge().
@@ -84,6 +85,8 @@ export interface Turn {
   lost: Chip[]
   /** The room as found on arrival, kept for the story (null if no room change). */
   arrival: Arrival | null
+  /** Quests that started or moved on with this turn (Lantern story only). */
+  quests?: QuestNews[]
 }
 
 /** What the player found on entering a room (engine markup / names). */
@@ -170,6 +173,11 @@ export const useGameStore = defineStore('game', () => {
   const modalTitle = ref('')
   const modalBody = ref('')
   const modalQueue = ref<QuestEvent[]>([])
+  /**
+   * The Lantern UI shows new and updated quests in the story (on the turn
+   * that caused them) instead of pop-ups; completions stay pop-ups.
+   */
+  const questNewsInStory = ref(false)
   let pendingLookOnDismiss = false
 
   // --- Music (exposed for useMusic composable) ---
@@ -455,22 +463,34 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     const events: QuestEvent[] = []
 
+    const news: QuestNews[] = []
+
     let activated: string | null
     while ((activated = b.activateQuest()) !== null) {
-      events.push({
-        title: '📜 New Quest!',
-        body: renderMarkup(activated),
-        sound: 'newQuest',
-      })
+      if (questNewsInStory.value) news.push(parseQuestNews('new', activated))
+      else
+        events.push({
+          title: '📜 New Quest!',
+          body: renderMarkup(activated),
+          sound: 'newQuest',
+        })
     }
 
     let updated: string | null
     while ((updated = b.updateQuest()) !== null) {
-      events.push({
-        title: '📜 Quest Updated',
-        body: renderMarkup(updated),
-        sound: 'newQuest',
-      })
+      if (questNewsInStory.value) news.push(parseQuestNews('updated', updated))
+      else
+        events.push({
+          title: '📜 Quest Updated',
+          body: renderMarkup(updated),
+          sound: 'newQuest',
+        })
+    }
+
+    const turn = turns.value.at(-1)
+    if (news.length && turn) {
+      turn.quests = [...(turn.quests ?? []), ...news]
+      audioPlayer?.playNewQuest()
     }
 
     let completed: string | null
@@ -609,6 +629,7 @@ export const useGameStore = defineStore('game', () => {
     bagEntries,
     spellEntries,
     completionTree,
+    questNewsInStory,
     rawInventory,
     rawSpells,
     rawActiveQuests,
