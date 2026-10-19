@@ -7,7 +7,8 @@ import { renderMarkup } from '@/utils/theme'
 /**
  * The room card above the story on laptops: where the player is, the room
  * description (long ones clamped to three lines with Read more) and who and
- * what is here.
+ * what is here (the Here chips are buttons: the layout opens their
+ * actions menu).
  */
 const game = useGameStore()
 
@@ -55,13 +56,18 @@ watch(
     </button>
     <div v-if="here.length" class="lq-here">
       <span class="lq-label">Here</span>
-      <span
+      <button
         v-for="entry in here"
         :key="`${entry.kind}:${entry.name}`"
+        type="button"
         class="lq-here-chip"
         :class="`lq-here-${entry.kind}`"
-        >{{ displayName(entry.name) }}</span
+        :data-name-kind="entry.kind"
+        :data-name="entry.name"
+        aria-haspopup="menu"
       >
+        {{ displayName(entry.name) }}
+      </button>
     </div>
   </section>
 </template>
@@ -126,8 +132,10 @@ watch(
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
+  font: inherit;
   font-family: var(--lq-font-ui);
   font-size: 13px;
+  cursor: pointer;
 }
 .lq-here-character {
   border: 1px solid var(--lq-character-line);

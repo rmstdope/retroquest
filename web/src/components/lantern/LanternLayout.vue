@@ -258,25 +258,40 @@ const nameMenu = ref<{
   top: number
   bottom: number
 } | null>(null)
-/** What had focus before the menu opened (a name in the text cannot take it). */
+/** Where focus goes when the menu closes: the chip, or what had focus. */
 let focusBeforeMenu: HTMLElement | null = null
 
-/** A click on an item or character name in the story opens its menu. */
-function onStoryClick(event: MouseEvent): void {
+/**
+ * A click on an item or character name in the story, or on a Here chip
+ * (which carries the engine's name), opens its menu.
+ */
+function onNameClick(event: MouseEvent): void {
   const name = (event.target as HTMLElement).closest<HTMLElement>(
-    '.theme-item_name, .theme-character_name',
+    '.theme-item_name, .theme-character_name, [data-name-kind]',
   )
   if (!name || !game.acceptInput) return
-  const kind = name.classList.contains('theme-item_name') ? 'item' : 'character'
-  const actions = nameActions(kind, name.textContent ?? '', {
-    characters: game.characters,
-    items: game.items,
-    bag: game.rawInventory.map((entry) => parseCountedName(entry.name).name),
-    shortNames: game.shortNames,
-  })
+  const kind =
+    name.dataset.nameKind === 'character' ||
+    name.classList.contains('theme-character_name')
+      ? 'character'
+      : 'item'
+  const actions = nameActions(
+    kind,
+    name.dataset.name ?? name.textContent ?? '',
+    {
+      characters: game.characters,
+      items: game.items,
+      bag: game.rawInventory.map((entry) => parseCountedName(entry.name).name),
+      shortNames: game.shortNames,
+    },
+  )
   if (!actions.length) return
   const box = name.getBoundingClientRect()
-  focusBeforeMenu = document.activeElement as HTMLElement | null
+  // A chip takes focus back (Safari does not focus a clicked button).
+  focusBeforeMenu =
+    name instanceof HTMLButtonElement
+      ? name
+      : (document.activeElement as HTMLElement | null)
   nameMenu.value = { actions, x: box.left, top: box.top, bottom: box.bottom }
 }
 
@@ -352,13 +367,13 @@ watch(
     </LanternHeader>
 
     <main class="lq-main" :class="{ 'lq-wide': wide }">
-      <RoomCard v-if="wide" class="lq-card" />
+      <RoomCard v-if="wide" class="lq-card" @click="onNameClick" />
       <div v-show="wide || section === 'story'" class="lq-story-wrap">
         <section
           ref="storyEl"
           class="lq-story"
           aria-label="Story"
-          @click="onStoryClick"
+          @click="onNameClick"
           @scroll.passive="updateMoreBelow"
         >
           <h2 class="lq-sr-only">Story</h2>
