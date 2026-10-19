@@ -279,6 +279,45 @@ describe('LanternLayout', () => {
     vi.unstubAllGlobals()
   })
 
+  it("shows a quest's details", async () => {
+    const w = mountLayout()
+    const game = useGameStore()
+    game.rawCompletedQuests = [
+      {
+        name: '[quest_name]Hint of Magic (side)[/quest_name]',
+        description: '[dim]You found it.[/dim]',
+      },
+    ]
+
+    game.shownQuest = 'Hint of Magic'
+    await w.vm.$nextTick()
+
+    const dialog = w.get('[role="dialog"]')
+    expect(dialog.get('h2').text()).toBe('Hint of Magic')
+    expect(dialog.text()).toContain('Done')
+    await dialog.get('button[aria-label="Close"]').trigger('click')
+    expect(game.shownQuest).toBe(null)
+  })
+
+  it("closes a quest's details when a game pop-up opens", async () => {
+    const w = mountLayout()
+    const game = useGameStore()
+    game.rawActiveQuests = [
+      { name: '[quest_name]Hint of Magic[/quest_name]', description: 'Look.' },
+    ]
+    game.shownQuest = 'Hint of Magic'
+    await w.vm.$nextTick()
+
+    game.modalTitle = 'News'
+    game.showModal = true
+    await w.vm.$nextTick()
+    game.showModal = false
+    await w.vm.$nextTick()
+
+    expect(game.shownQuest).toBe(null)
+    expect(w.find('[role="dialog"]').exists()).toBe(false)
+  })
+
   it('asks before quitting', async () => {
     const w = mountLayout()
 

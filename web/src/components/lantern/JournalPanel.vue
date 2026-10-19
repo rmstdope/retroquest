@@ -10,7 +10,8 @@ import { renderMarkup } from '@/utils/theme'
  * The journal beside the story on laptops: Bag, Spells and Quests tabs.
  * Bag rows can be used and spells cast directly, and tapping a row's text
  * expands its full description (the toggle is named by that visible text, so
- * screen readers hear the description). A dot marks a tab with
+ * screen readers hear the description); a quest row opens its details
+ * (QuestDialog, via the store's `showQuest`). A dot marks a tab with
  * something new until it is opened. The tabs follow the WAI-ARIA tabs
  * pattern: one tab stop, Left/Right (wrapping), Home and End select a tab.
  * Phones show one tab at a time from their section tabs (the `tab` prop):
@@ -87,7 +88,8 @@ watch(
   { immediate: true },
 )
 
-// "Open in journal" from the story: show that quest expanded and in view.
+// "Open in journal" from the story: go to that quest's row (so closing its
+// details comes back to it) and open its details.
 const root = ref<HTMLElement | null>(null)
 watch(
   () => game.questToOpen,
@@ -95,13 +97,13 @@ watch(
     if (!name) return
     game.questToOpen = null
     active.value = 'quests'
-    expanded.value = new Set([...expanded.value, name])
     await nextTick()
-    const toggleButton = [
-      ...(root.value?.querySelectorAll<HTMLElement>('.lq-quest-toggle') ?? []),
+    const row = [
+      ...(root.value?.querySelectorAll<HTMLElement>('.lq-quest-row') ?? []),
     ].find((b) => b.dataset.quest === name)
-    toggleButton?.scrollIntoView?.({ block: 'nearest' })
-    toggleButton?.focus()
+    row?.scrollIntoView?.({ block: 'nearest' })
+    row?.focus()
+    game.showQuest(name)
   },
   { immediate: true },
 )
@@ -128,7 +130,7 @@ function run(command: string): void {
   if (game.acceptInput) game.submitCommand(command)
 }
 
-/** Expand or collapse a row (keys are prefixed: bag:, spell:, or the quest name). */
+/** Expand or collapse a Bag or Spells row (keys are prefixed: bag:, spell:). */
 function toggle(name: string): void {
   const next = new Set(expanded.value)
   if (next.has(name)) next.delete(name)
@@ -262,10 +264,10 @@ function toggle(name: string): void {
           <li v-for="quest in quests" :key="quest.name" class="lq-quest">
             <button
               type="button"
-              class="lq-quest-toggle"
+              class="lq-quest-row"
               :data-quest="quest.name"
-              :aria-expanded="expanded.has(quest.name) ? 'true' : 'false'"
-              @click="toggle(quest.name)"
+              aria-haspopup="dialog"
+              @click="game.showQuest(quest.name)"
             >
               <span class="lq-quest-name">{{ quest.name }}</span>
               <span
@@ -275,13 +277,6 @@ function toggle(name: string): void {
               >
               <span v-if="quest.done" class="lq-badge lq-badge-done">Done</span>
             </button>
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              v-if="expanded.has(quest.name)"
-              class="lq-quest-details"
-              v-html="renderMarkup(quest.description)"
-            ></div>
-            <!-- eslint-enable vue/no-v-html -->
           </li>
         </ul>
       </template>
@@ -410,7 +405,7 @@ function toggle(name: string): void {
 .lq-quest {
   border-bottom: 1px solid var(--lq-line);
 }
-.lq-quest-toggle {
+.lq-quest-row {
   width: 100%;
   min-height: 48px;
   display: flex;
@@ -443,13 +438,6 @@ function toggle(name: string): void {
 .lq-badge-done {
   color: var(--lq-muted);
   border: 1px solid var(--lq-line);
-}
-.lq-quest-details {
-  padding: 0 0 12px;
-  font-family: var(--lq-font-prose);
-  font-size: calc(14px * var(--lq-text-scale));
-  line-height: var(--lq-story-line-height);
-  color: var(--lq-prose);
 }
 .lq-empty {
   margin: 12px 0;
