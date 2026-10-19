@@ -1570,7 +1570,7 @@ describe('useGameStore', () => {
       bridge.isAcceptingInput.mockReturnValue(true)
       await store.initGame()
       store.dismissModal()
-      store.questNewsInStory = true
+      store.lanternFeedback = true
     })
 
     it('adds new and updated quests to the turn instead of a pop-up', () => {
@@ -1828,6 +1828,73 @@ describe('useGameStore', () => {
 
       expect(store.showModal).toBe(true)
       expect(store.modalChapter).toBe(null)
+    })
+  })
+
+  // --- Save / load notices (Lantern) ---
+
+  describe('save and load notices', () => {
+    beforeEach(async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      await store.initGame()
+      store.dismissModal()
+      store.lanternFeedback = true
+    })
+
+    it('shows a saved game as a notice, not in the story', () => {
+      const turns = store.turns.length
+
+      store.submitCommand('save')
+
+      expect(store.notice?.text).toBe('Game saved')
+      expect(store.turns.length).toBe(turns)
+    })
+
+    it('names the slot or the save', () => {
+      store.saveToSlot(2)
+      expect(store.notice?.text).toBe('Game saved · Slot 2')
+
+      store.submitCommand('save morning')
+      expect(store.notice?.text).toBe('Game saved · morning')
+    })
+
+    it('gives each notice its own id, so the same one shows again', () => {
+      store.saveToSlot(2)
+      const first = store.notice?.id
+      store.saveToSlot(2)
+
+      expect(store.notice?.id).not.toBe(first)
+    })
+
+    it('shows a load as a notice and the room in the story', () => {
+      store.loadFromSlot(3)
+
+      expect(store.notice?.text).toBe('Game loaded · Slot 3')
+      const turn = store.turns.at(-1)!
+      expect(turn.text).toBe('')
+      expect(turn.arrival?.room).toBe('Village Square')
+    })
+
+    it('keeps a failed load in the story', () => {
+      bridge.quickLoadGame.mockReturnValue(
+        '[failure]No save file found.[/failure]',
+      )
+
+      store.submitCommand('load')
+
+      expect(store.notice).toBe(null)
+      expect(store.turns.at(-1)!.text).toBe(
+        '[failure]No save file found.[/failure]',
+      )
+    })
+
+    it('leaves the classic UI as it was', () => {
+      store.lanternFeedback = false
+
+      store.saveToSlot(2)
+
+      expect(store.notice).toBe(null)
+      expect(store.turns.at(-1)!.text).toBe('Game saved.')
     })
   })
 })
