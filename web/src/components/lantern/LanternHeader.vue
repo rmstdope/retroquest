@@ -12,7 +12,7 @@ import type { LanternTextSize } from '@/lantern/tokens'
 defineProps<{ compact?: boolean }>()
 const emit = defineEmits<{
   menu: []
-  open: [kind: 'save' | 'load' | 'stats' | 'help']
+  open: [kind: 'save' | 'load' | 'stats' | 'settings' | 'help']
 }>()
 const game = useGameStore()
 const settings = useSettingsStore()
@@ -158,6 +158,13 @@ function toggleTheme(): void {
       </button>
       <button type="button" class="lq-text-btn" @click="emit('open', 'stats')">
         Stats
+      </button>
+      <button
+        type="button"
+        class="lq-text-btn"
+        @click="emit('open', 'settings')"
+      >
+        Settings
       </button>
       <button type="button" class="lq-text-btn" @click="emit('open', 'help')">
         Help
