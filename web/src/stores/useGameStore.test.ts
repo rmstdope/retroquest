@@ -1727,4 +1727,107 @@ describe('useGameStore', () => {
     expect(store.showModal).toBe(true)
     expect(store.modalQuest).toBe(null)
   })
+
+  // --- Chapter pages (Lantern) ---
+
+  describe('chapter pages', () => {
+    const INTRO_1 =
+      '[bold]ACT 1: THE CALL TO ADVENTURE[/bold]\n\nYou are Elior.'
+    const INTRO_2 = '[bold]ACT 2: THE GATHERING STORM[/bold]\n\nGreendale.'
+    const STATS = {
+      questsCompleted: 10,
+      questsTotal: 11,
+      spells: 4,
+      places: 15,
+    }
+
+    beforeEach(() => {
+      bridge.advanceTurn
+        .mockReturnValueOnce('LOGO')
+        .mockReturnValueOnce(INTRO_1)
+    })
+
+    it('opens the game with the first act as a chapter', async () => {
+      await store.initGame()
+
+      expect(store.modalChapter).toEqual({
+        kind: 'intro',
+        act: 'Act I',
+        title: 'The Call to Adventure',
+        body: 'You are Elior.',
+      })
+    })
+
+    it('closes an act with its numbers, then opens the next', async () => {
+      await store.initGame()
+      store.dismissModal()
+      bridge.isAcceptingInput.mockReturnValue(false)
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.getActStats.mockReturnValue(STATS)
+      bridge.advanceToRunning.mockReturnValue([
+        'The map aligns.\n\nCongratulations — you have completed Act 1!',
+        INTRO_2,
+      ])
+
+      store.submitCommand('use map')
+
+      expect(store.modalChapter).toEqual({
+        kind: 'complete',
+        act: 'Act I',
+        title: 'The Call to Adventure',
+        body: 'Congratulations — you have completed Act 1!',
+        stats: STATS,
+        nextAct: 'Act II',
+      })
+      // The finished act's numbers are read before the next act starts.
+      expect(bridge.getActStats.mock.invocationCallOrder[0]).toBeLessThan(
+        bridge.advanceToRunning.mock.invocationCallOrder[0],
+      )
+      store.dismissModal()
+      expect(store.modalChapter).toMatchObject({
+        kind: 'intro',
+        act: 'Act II',
+        title: 'The Gathering Storm',
+      })
+    })
+
+    it.each([
+      ['a quick load', (s: typeof store) => s.loadGame()],
+      ['a named load', (s: typeof store) => s.loadNamedGame('act2')],
+      ['a slot load', (s: typeof store) => s.loadFromSlot(1)],
+    ])('closes the act of %s with its own title', async (_, load) => {
+      await store.initGame()
+      store.dismissModal()
+      bridge.getActIntro.mockReturnValue(INTRO_2)
+      load(store)
+      bridge.isAcceptingInput.mockReturnValue(false)
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.advanceToRunning.mockReturnValue([
+        'Congratulations — you have completed Act 2!',
+        '[bold]ACT III: THE AWAKENING[/bold]\n\nText.',
+      ])
+
+      store.submitCommand('use orb')
+
+      expect(store.modalChapter).toMatchObject({
+        kind: 'complete',
+        act: 'Act II',
+        title: 'The Gathering Storm',
+        nextAct: 'Act III',
+      })
+    })
+
+    it('has no chapter for a quest pop-up', async () => {
+      await store.initGame()
+      store.dismissModal()
+      bridge.completeQuest
+        .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
+        .mockReturnValue(null)
+
+      store.submitCommand('look')
+
+      expect(store.showModal).toBe(true)
+      expect(store.modalChapter).toBe(null)
+    })
+  })
 })

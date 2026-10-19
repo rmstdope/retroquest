@@ -10,6 +10,7 @@ import {
   WIDE_QUERY,
 } from '@/composables/useMediaQuery'
 import ActionComposer from './ActionComposer.vue'
+import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
 import JournalPanel from './JournalPanel.vue'
@@ -132,6 +133,8 @@ onMounted(() => {
   document.documentElement.setAttribute('data-ui', 'lantern')
   game.questNewsInStory = true
   document.addEventListener('keydown', onKeydown)
+  // The game opens with its first act intro already showing.
+  if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
     storyResize = new ResizeObserver(updateMoreBelow)
     storyResize.observe(storyEl.value)
@@ -177,13 +180,22 @@ watch(
 game.setAudioPlayer(useAudio())
 useActMusic()
 
-// Move keyboard focus into each pop-up as it opens, and back to the
-// actions when the last one closes.
+const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
+
+/** Focus the open pop-up's button (a chapter page's, or Continue). */
+function focusPopUp(): void {
+  if (chapterPage.value) chapterPage.value.focus()
+  else continueButton.value?.focus()
+}
+
+// Move keyboard focus into each pop-up as it opens or one follows another
+// (a quest pop-up, then a chapter page), and back to the actions when the
+// last one closes.
 watch(
-  () => game.showModal,
-  (open) => {
-    if (open) continueButton.value?.focus()
-    else focusActions()
+  () => [game.showModal, game.modalChapter, game.modalQuest] as const,
+  ([open], [wasOpen]) => {
+    if (open) focusPopUp()
+    else if (wasOpen) focusActions()
   },
   { flush: 'post' },
 )
@@ -255,9 +267,26 @@ watch(
       class="lq-nav-bottom"
     />
 
-    <!-- Pop-ups: quest complete (step 16); act intro/complete still the
-         temporary text pop-up until step 17. -->
-    <div v-if="game.showModal" class="lq-scrim">
+    <!-- Act intro / act complete: a full-screen chapter page. Each chapter
+         is a new page, so it opens at its top. -->
+    <section
+      v-if="game.showModal && game.modalChapter"
+      class="lq-chapter-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="lq-dialog-title"
+    >
+      <ChapterPage
+        :key="`${game.modalChapter.kind} ${game.modalChapter.act}`"
+        ref="chapterPage"
+        :chapter="game.modalChapter"
+        title-id="lq-dialog-title"
+        @continue="game.dismissModal()"
+      />
+    </section>
+
+    <!-- Other pop-ups: quest complete, or the engine's text. -->
+    <div v-else-if="game.showModal" class="lq-scrim">
       <section
         class="lq-dialog"
         role="dialog"
@@ -406,6 +435,11 @@ watch(
   color: var(--lq-on-accent);
   font-weight: 600;
   cursor: pointer;
+}
+.lq-chapter-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
 }
 .lq-scrim {
   position: fixed;

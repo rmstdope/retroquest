@@ -34,6 +34,84 @@ describe('LanternLayout', () => {
     return wrapper
   }
 
+  describe('chapter pages', () => {
+    const INTRO = {
+      kind: 'intro' as const,
+      act: 'Act I',
+      title: 'The Call to Adventure',
+      body: 'You are Elior.',
+    }
+
+    it('shows an act intro as a full-screen chapter', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      game.modalChapter = INTRO
+      game.showModal = true
+      await w.vm.$nextTick()
+
+      const dialog = w.get('[role="dialog"]')
+      expect(dialog.classes()).toContain('lq-chapter-dialog')
+      expect(dialog.attributes('aria-labelledby')).toBe('lq-dialog-title')
+      expect(dialog.get('#lq-dialog-title').text()).toBe(
+        'The Call to Adventure',
+      )
+      expect(w.find('.lq-scrim').exists()).toBe(false)
+    })
+
+    it('goes on with the game from the chapter button', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      const dismiss = vi
+        .spyOn(game, 'dismissModal')
+        .mockImplementation(() => {})
+      game.modalChapter = INTRO
+      game.showModal = true
+      await w.vm.$nextTick()
+
+      await w.get('.lq-chapter-button').trigger('click')
+
+      expect(dismiss).toHaveBeenCalledOnce()
+    })
+
+    it('moves focus to the chapter when it follows another pop-up', async () => {
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      const game = useGameStore()
+      game.modalTitle = '🏆 Quest Complete!'
+      game.showModal = true
+      await flushPromises()
+
+      game.modalChapter = { ...INTRO, kind: 'complete' }
+      await flushPromises()
+
+      expect(document.activeElement?.className).toContain('lq-chapter-button')
+    })
+
+    it('opens the next chapter at its top, not where the last was read to', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      game.modalChapter = { ...INTRO, kind: 'complete' }
+      game.showModal = true
+      await w.vm.$nextTick()
+      w.get('.lq-chapter').element.scrollTop = 400
+
+      game.modalChapter = { ...INTRO, act: 'Act II' }
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-chapter').element.scrollTop).toBe(0)
+    })
+
+    it('focuses a chapter that is already open when the page appears', async () => {
+      const game = useGameStore()
+      game.modalChapter = INTRO
+      game.showModal = true
+
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      await flushPromises()
+
+      expect(document.activeElement?.className).toContain('lq-chapter-button')
+    })
+  })
+
   it('shows a completed quest in the pop-up', async () => {
     const w = mountLayout()
     const game = useGameStore()
