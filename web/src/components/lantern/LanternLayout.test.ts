@@ -318,6 +318,77 @@ describe('LanternLayout', () => {
     expect(w.find('[role="dialog"]').exists()).toBe(false)
   })
 
+  describe('names in the story', () => {
+    async function storyWith(text: string) {
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      const game = useGameStore()
+      game.acceptInput = true
+      game.items = ['bucket']
+      game.characters = ['grandmother']
+      game.turns = [
+        {
+          id: 1,
+          command: 'look',
+          text,
+          room: 'Cottage',
+          roomChanged: false,
+          gained: [],
+          lost: [],
+          arrival: null,
+        },
+      ]
+      await flushPromises()
+      return wrapper
+    }
+
+    it('opens a menu of what fits and runs the picked action', async () => {
+      const w = await storyWith('You see a [item_name]bucket[/item_name].')
+      const submit = vi
+        .spyOn(useGameStore(), 'submitCommand')
+        .mockImplementation(() => {})
+
+      await w.get('.lq-story .theme-item_name').trigger('click')
+      const menu = w.get('[role="menu"]')
+      expect(menu.findAll('[role="menuitem"]').map((m) => m.text())).toEqual([
+        'Take',
+        'Examine',
+      ])
+      expect(document.activeElement?.textContent?.trim()).toBe('Take')
+
+      await menu.findAll('[role="menuitem"]')[0].trigger('click')
+
+      expect(submit).toHaveBeenCalledWith('take bucket')
+      expect(w.find('[role="menu"]').exists()).toBe(false)
+    })
+
+    it('closes the menu with Escape', async () => {
+      const w = await storyWith(
+        '[character_name]Grandmother[/character_name] smiles.',
+      )
+      const before = w.get('button[aria-label="Text size"]')
+        .element as HTMLElement
+      before.focus()
+      await w.get('.lq-story .theme-character_name').trigger('click')
+      await flushPromises()
+
+      await w.get('[role="menu"]').trigger('keydown', { key: 'Escape' })
+
+      expect(w.find('[role="menu"]').exists()).toBe(false)
+      // Focus goes back to where it was (a name in the text cannot take it).
+      expect(document.activeElement).toBe(before)
+    })
+
+    it('opens nothing for something that is not here', async () => {
+      const w = await storyWith(
+        'You remember [character_name]Mira[/character_name].',
+      )
+
+      await w.get('.lq-story .theme-character_name').trigger('click')
+
+      expect(w.find('[role="menu"]').exists()).toBe(false)
+    })
+  })
+
   it('shows the title page over the first chapter, then the chapter', async () => {
     wrapper = mount(LanternLayout, { attachTo: document.body })
     const game = useGameStore()

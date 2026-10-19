@@ -7,6 +7,8 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
+import { nameActions, type NameAction } from '@/lantern/nameActions'
+import { parseCountedName } from '@/lantern/inventoryChanges'
 import {
   SHORT_QUERY,
   useMediaQuery,
@@ -28,6 +30,7 @@ import QuestCompleteContent from './QuestCompleteContent.vue'
 import RoomCard from './RoomCard.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
+import StoryNameMenu from './StoryNameMenu.vue'
 import StoryTurn from './StoryTurn.vue'
 import TitlePage from './TitlePage.vue'
 
@@ -248,6 +251,44 @@ const infoHtml = computed(() => {
   return kind === 'help' ? html + music.buildAttributionHtml() : html
 })
 
+// --- Names in the story: click one for a small menu of what fits ---
+const nameMenu = ref<{
+  actions: NameAction[]
+  x: number
+  top: number
+  bottom: number
+} | null>(null)
+/** What had focus before the menu opened (a name in the text cannot take it). */
+let focusBeforeMenu: HTMLElement | null = null
+
+/** A click on an item or character name in the story opens its menu. */
+function onStoryClick(event: MouseEvent): void {
+  const name = (event.target as HTMLElement).closest<HTMLElement>(
+    '.theme-item_name, .theme-character_name',
+  )
+  if (!name || !game.acceptInput) return
+  const kind = name.classList.contains('theme-item_name') ? 'item' : 'character'
+  const actions = nameActions(kind, name.textContent ?? '', {
+    characters: game.characters,
+    items: game.items,
+    bag: game.rawInventory.map((entry) => parseCountedName(entry.name).name),
+  })
+  if (!actions.length) return
+  const box = name.getBoundingClientRect()
+  focusBeforeMenu = document.activeElement as HTMLElement | null
+  nameMenu.value = { actions, x: box.left, top: box.top, bottom: box.bottom }
+}
+
+function closeNameMenu(): void {
+  nameMenu.value = null
+  if (focusBeforeMenu?.isConnected) focusBeforeMenu.focus()
+}
+
+function runNameAction(command: string): void {
+  nameMenu.value = null
+  game.submitCommand(command)
+}
+
 const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
 
 /** Leave the title page for the first act's chapter page. */
@@ -316,6 +357,7 @@ watch(
           ref="storyEl"
           class="lq-story"
           aria-label="Story"
+          @click="onStoryClick"
           @scroll.passive="updateMoreBelow"
         >
           <h2 class="lq-sr-only">Story</h2>
@@ -373,6 +415,16 @@ watch(
     />
 
     <SaveToast />
+
+    <StoryNameMenu
+      v-if="nameMenu"
+      :actions="nameMenu.actions"
+      :x="nameMenu.x"
+      :top="nameMenu.top"
+      :bottom="nameMenu.bottom"
+      @pick="runNameAction"
+      @close="closeNameMenu"
+    />
 
     <!-- The game's title page, over the first act's chapter page. -->
     <TitlePage
