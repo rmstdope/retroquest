@@ -13,6 +13,12 @@ import type {
 import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { parseQuestNews, type QuestNews } from '@/lantern/parseQuestNews'
+import {
+  actCompleteText,
+  parseActIntro,
+  type ActIntro,
+} from '@/lantern/parseActIntro'
+import type { Chapter } from '@/lantern/chapter'
 
 /**
  * Shape of the bridge object injected via setBridge().
@@ -110,6 +116,8 @@ interface QuestEvent {
   sound: 'newQuest' | 'questComplete' | null
   /** The completed quest (Lantern only), for a pop-up made for it. */
   quest?: QuestNews
+  /** An act intro or act completion, for a chapter page (Lantern). */
+  chapter?: Chapter
 }
 
 export const useGameStore = defineStore('game', () => {
@@ -181,6 +189,21 @@ export const useGameStore = defineStore('game', () => {
   const modalBody = ref('')
   /** The completed quest the open pop-up is about (Lantern; else null). */
   const modalQuest = ref<QuestNews | null>(null)
+  /** The chapter page the open pop-up is (act intro / complete), else null. */
+  const modalChapter = ref<Chapter | null>(null)
+  /** The running act's heading, kept for its act-complete page. */
+  let currentAct: ActIntro | null = null
+
+  /** Queue an act intro pop-up, with its chapter page. */
+  function queueActIntro(raw: string): void {
+    currentAct = parseActIntro(raw)
+    modalQueue.value.push({
+      title: '📖 Act Intro',
+      body: renderMarkup(raw),
+      sound: null,
+      chapter: { kind: 'intro', ...currentAct },
+    })
+  }
   const modalQueue = ref<QuestEvent[]>([])
   /**
    * The Lantern UI shows new and updated quests in the story (on the turn
@@ -304,11 +327,7 @@ export const useGameStore = defineStore('game', () => {
       // Block input until the player dismisses the act intro modal
       acceptInput.value = false
       pendingLookOnDismiss = true
-      modalQueue.value.push({
-        title: '📖 Act Intro',
-        body: renderMarkup(actIntroRaw),
-        sound: null,
-      })
+      queueActIntro(actIntroRaw)
       if (!showModal.value) {
         showNextModal()
       }
@@ -338,22 +357,30 @@ export const useGameStore = defineStore('game', () => {
 
   function triggerActTransitionModals(): void {
     const b = requireBridge()
+    // Read the finished act's numbers before the next act starts.
+    const stats = b.getActStats()
+    const finished = currentAct
     const texts = b.advanceToRunning().filter((t) => t.trim() !== '')
     if (texts.length === 0) return
     const transitionTexts = texts.slice(0, -1)
     const actIntroText = texts[texts.length - 1]
+    const nextAct = parseActIntro(actIntroText).act || undefined
     for (const text of transitionTexts) {
       modalQueue.value.push({
         title: '🏆 Act Complete!',
         body: renderMarkup(text),
         sound: null,
+        chapter: {
+          kind: 'complete',
+          act: finished?.act ?? '',
+          title: finished?.title ?? '',
+          body: actCompleteText(text),
+          stats,
+          nextAct,
+        },
       })
     }
-    modalQueue.value.push({
-      title: '📖 Act Intro',
-      body: renderMarkup(actIntroText),
-      sound: null,
-    })
+    queueActIntro(actIntroText)
     pendingLookOnDismiss = true
     if (!showModal.value) {
       showNextModal()
@@ -562,12 +589,14 @@ export const useGameStore = defineStore('game', () => {
     if (modalQueue.value.length === 0) {
       showModal.value = false
       modalQuest.value = null
+      modalChapter.value = null
       return
     }
     const event = modalQueue.value.shift()!
     modalTitle.value = event.title
     modalBody.value = event.body
     modalQuest.value = event.quest ?? null
+    modalChapter.value = event.chapter ?? null
     showModal.value = true
     if (event.sound === 'newQuest') audioPlayer?.playNewQuest()
     else if (event.sound === 'questComplete') audioPlayer?.playQuestComplete()
@@ -703,6 +732,7 @@ export const useGameStore = defineStore('game', () => {
     modalTitle,
     modalBody,
     modalQuest,
+    modalChapter,
     musicFile,
     musicInfo,
     // Actions
