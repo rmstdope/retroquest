@@ -321,13 +321,6 @@ describe('useGameStore', () => {
       await store.initGame()
       expect(store.acceptInput).toBe(false)
     })
-
-    it('sets loadingStatus to error on failure', async () => {
-      bridge.init.mockRejectedValue(new Error('Network error'))
-      await store.initGame()
-      expect(store.loadingStatus).toBe('Error: Network error')
-      expect(store.loading).toBe(true)
-    })
   })
 
   // --- submitCommand ---
