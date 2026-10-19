@@ -8,7 +8,8 @@ import type { LanternTextSize } from '@/lantern/tokens'
 /**
  * `compact` (phones): one row with the room name and "Act I · Quests 4/11"
  * (that line is left out on short screens) instead of the title, act and
- * progress bar; the title stays as a hidden top-level heading.
+ * progress bar; the title stays as a hidden top-level heading. The
+ * full-screen button (where supported) is left out under 360px wide.
  */
 defineProps<{ compact?: boolean }>()
 const emit = defineEmits<{
@@ -177,7 +178,7 @@ function toggleTheme(): void {
       <button
         v-if="fullscreen.supported"
         type="button"
-        class="lq-icon-btn"
+        class="lq-icon-btn lq-fullscreen-btn"
         :aria-label="
           fullscreen.active.value ? 'Exit full screen' : 'Full screen'
         "
@@ -434,5 +435,11 @@ function toggleTheme(): void {
 .lq-size-on {
   background: var(--lq-accent);
   color: var(--lq-on-accent);
+}
+/* The narrowest phones need the room for the room name. */
+@media (max-width: 359px) {
+  .lq-fullscreen-btn {
+    display: none;
+  }
 }
 </style>

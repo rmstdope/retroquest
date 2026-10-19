@@ -5,8 +5,9 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
 
 /**
  * The game's title page, before the first act: the RetroQuest ASCII art
- * (scaled to the screen, hidden from screen readers, who hear the title),
- * the music credits and Start. Enter on Start or Escape goes on.
+ * (scaled to the screen, hidden from screen readers, who hear the title;
+ * a plain wordmark under 400px wide, where the art gets too small), the
+ * music credits and Start. Enter on Start or Escape goes on.
  */
 const props = defineProps<{ text: string }>()
 const emit = defineEmits<{ start: [] }>()
@@ -44,6 +45,7 @@ onMounted(() => nextTick(trap.focusFirst))
     <div class="lq-title-inner">
       <span class="lq-welcome">Welcome to</span>
       <h2 :id="titleId" class="lq-sr-only">RetroQuest</h2>
+      <span class="lq-wordmark" aria-hidden="true">RetroQuest</span>
       <pre v-if="screen.art" class="lq-art" aria-hidden="true">{{
         screen.art
       }}</pre>
@@ -115,6 +117,22 @@ onMounted(() => nextTick(trap.focusFirst))
   font-size: min(12px, calc((100vw - 32px) / 62));
   line-height: 1.15;
   color: var(--lq-accent-text);
+}
+.lq-wordmark {
+  display: none;
+  font-family: var(--lq-font-display);
+  font-size: 44px;
+  line-height: 1.1;
+  color: var(--lq-accent-text);
+}
+/* Under 400px the art would be under 6px: a wordmark reads better. */
+@media (max-width: 399px) {
+  .lq-wordmark {
+    display: block;
+  }
+  .lq-art {
+    display: none;
+  }
 }
 .lq-credits {
   margin: 0;

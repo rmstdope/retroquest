@@ -626,4 +626,40 @@ test.describe('Lantern UI (?ui=lantern)', () => {
     })
     expect(new Set(lineStarts).size).toBe(1)
   })
+
+  test('shows a wordmark instead of the tiny title art on narrow phones', async ({
+    page,
+  }) => {
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.titleText = '[bold yellow]\n########\n##   ##\n[/bold yellow]'
+      store.showTitle = true
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    await page.setViewportSize({ width: 320, height: 568 })
+    await expect(page.locator('.lq-wordmark')).toBeVisible()
+    await expect(page.locator('.lq-art')).toBeHidden()
+
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await expect(page.locator('.lq-art')).toBeVisible()
+    await expect(page.locator('.lq-wordmark')).toBeHidden()
+  })
+
+  test('leaves the full-screen button out of the narrowest header', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    const button = page.getByRole('button', { name: 'Full screen' })
+    await expect(button).toBeVisible()
+
+    await page.setViewportSize({ width: 320, height: 568 })
+    await expect(button).toBeHidden()
+  })
 })
