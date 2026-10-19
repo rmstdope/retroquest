@@ -53,6 +53,7 @@ export interface GameBridge {
   getQuestProgress(): QuestProgress
   getActStats(): ActStats
   readCommand(command: 'stats' | 'help'): string
+  getQuickSave(): SaveSlot | null
   getSaveSlots(): SaveSlot[]
   saveToSlot(slot: number): string
   loadFromSlot(slot: number): string
@@ -525,6 +526,10 @@ export const useGameStore = defineStore('game', () => {
     return b.listNamedSaves()
   }
 
+  function getQuickSave(): SaveSlot | null {
+    return requireBridge().getQuickSave()
+  }
+
   function getSaveSlots(): SaveSlot[] {
     const b = requireBridge()
     return b.getSaveSlots()
@@ -747,6 +752,7 @@ export const useGameStore = defineStore('game', () => {
     completionTree,
     lanternFeedback,
     readInfo,
+    getQuickSave,
     notice,
     rawInventory,
     rawSpells,

@@ -55,6 +55,7 @@ function createMockBridge() {
       mainQuest: 'Shadows Over Willowbrook',
     })),
     readCommand: vi.fn((): string => ''),
+    getQuickSave: vi.fn((): SaveSlot | null => null),
     getActStats: vi.fn(() => ({
       questsCompleted: 4,
       questsTotal: 11,
@@ -67,6 +68,7 @@ function createMockBridge() {
         act: null,
         room: null,
         timestamp: null,
+        quests: null,
       })),
     ]),
     saveToSlot: vi.fn(() => 'Game saved.'),
@@ -1030,6 +1032,7 @@ describe('useGameStore', () => {
         act: null,
         room: null,
         timestamp: null,
+        quests: null,
       }))
       bridge.getSaveSlots.mockReturnValue(slots)
       expect(store.getSaveSlots()).toHaveLength(8)
@@ -1909,5 +1912,19 @@ describe('useGameStore', () => {
       expect(bridge.readCommand).toHaveBeenCalledWith('stats')
       expect(store.turns.length).toBe(turns)
     })
+  })
+
+  it('tells about the quick save', async () => {
+    const quick = {
+      slot: 0,
+      act: 'Act 1',
+      room: 'Square',
+      timestamp: 't',
+      quests: { completed: 2, total: 11 },
+    }
+    bridge.getQuickSave.mockReturnValue(quick)
+    await store.initGame()
+
+    expect(store.getQuickSave()).toEqual(quick)
   })
 })
