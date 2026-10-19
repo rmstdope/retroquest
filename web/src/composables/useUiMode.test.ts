@@ -2,17 +2,17 @@ import { describe, it, expect } from 'vitest'
 import { uiModeFromSearch } from './useUiMode'
 
 describe('uiModeFromSearch', () => {
-  it('is lantern for ?ui=lantern', () => {
+  it('is lantern by default', () => {
+    expect(uiModeFromSearch('')).toBe('lantern')
     expect(uiModeFromSearch('?ui=lantern')).toBe('lantern')
+    expect(uiModeFromSearch('?ui=other')).toBe('lantern')
+  })
+
+  it('is classic for ?ui=classic', () => {
+    expect(uiModeFromSearch('?ui=classic')).toBe('classic')
   })
 
   it('ignores case and other parameters', () => {
-    expect(uiModeFromSearch('?debug=1&ui=Lantern')).toBe('lantern')
-  })
-
-  it('is classic otherwise', () => {
-    expect(uiModeFromSearch('')).toBe('classic')
-    expect(uiModeFromSearch('?ui=classic')).toBe('classic')
-    expect(uiModeFromSearch('?ui=other')).toBe('classic')
+    expect(uiModeFromSearch('?debug=1&ui=Classic')).toBe('classic')
   })
 })

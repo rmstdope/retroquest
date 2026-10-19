@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test'
 
-const APP_URL = '/'
+// The classic UI, kept for one release after Lantern became the default.
+const APP_URL = '/?ui=classic'
 
 /* ------------------------------------------------------------------ */
 /*  Helper: inject mock game state to bypass Pyodide loading          */
@@ -226,7 +227,9 @@ test.describe('QuestModal – overflow fix', () => {
       store.modalBody = body
       /* eslint-enable @typescript-eslint/no-explicit-any */
     }, longBody)
-    await expect(page.getByText('A Very Long Quest', { exact: true })).toBeVisible()
+    await expect(
+      page.getByText('A Very Long Quest', { exact: true }),
+    ).toBeVisible()
   }
 
   test('Continue button is visible in viewport when quest body is very long', async ({
@@ -476,11 +479,21 @@ test.describe('Mobile toolbar overflow fix', () => {
   }) => {
     await page.getByRole('button', { name: 'Open sidebar' }).click()
     const drawer = page.getByTestId('mobile-drawer-panel')
-    await expect(drawer.getByRole('button', { name: /Quicksave/i })).toBeVisible()
-    await expect(drawer.getByRole('button', { name: /Quickload/i })).toBeVisible()
-    await expect(drawer.getByRole('button', { name: /Save/i }).first()).toBeVisible()
-    await expect(drawer.getByRole('button', { name: /Load/i }).first()).toBeVisible()
-    await expect(drawer.getByRole('button', { name: /Help/i }).first()).toBeVisible()
+    await expect(
+      drawer.getByRole('button', { name: /Quicksave/i }),
+    ).toBeVisible()
+    await expect(
+      drawer.getByRole('button', { name: /Quickload/i }),
+    ).toBeVisible()
+    await expect(
+      drawer.getByRole('button', { name: /Save/i }).first(),
+    ).toBeVisible()
+    await expect(
+      drawer.getByRole('button', { name: /Load/i }).first(),
+    ).toBeVisible()
+    await expect(
+      drawer.getByRole('button', { name: /Help/i }).first(),
+    ).toBeVisible()
   })
 
   test('tapping a drawer action chip closes the drawer', async ({ page }) => {
