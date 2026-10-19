@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { mount, type VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import JournalPanel from './JournalPanel.vue'
 import { useGameStore } from '@/stores/useGameStore'
@@ -8,7 +8,9 @@ import { useGameStore } from '@/stores/useGameStore'
 describe('JournalPanel', () => {
   let wrapper: VueWrapper | undefined
   let submit: ReturnType<typeof vi.fn<(command: string) => void>>
-  let markSeen: ReturnType<typeof vi.fn<(tab: 'bag' | 'spells') => void>>
+  let markSeen: ReturnType<
+    typeof vi.fn<(tab: 'bag' | 'spells' | 'quests') => void>
+  >
 
   beforeEach(() => {
     setActivePinia(createPinia())
@@ -42,7 +44,7 @@ describe('JournalPanel', () => {
       },
     ]
     submit = vi.fn<(command: string) => void>()
-    markSeen = vi.fn<(tab: 'bag' | 'spells') => void>()
+    markSeen = vi.fn<(tab: 'bag' | 'spells' | 'quests') => void>()
     vi.spyOn(game, 'submitCommand').mockImplementation(submit)
     vi.spyOn(game, 'markSeen').mockImplementation(markSeen)
   })
@@ -286,5 +288,35 @@ describe('JournalPanel', () => {
       expect(wrapper.get('h2').text()).toBe('Quests')
       expect(wrapper.findAll('.lq-quest-name')).toHaveLength(3)
     })
+  })
+
+  it('shows a dot on Quests and clears it when the tab is opened', async () => {
+    useGameStore().questsHaveNew = true
+    const w = mountJournal()
+    expect(
+      tab(w, /Quests/)
+        .find('.lq-dot')
+        .exists(),
+    ).toBe(true)
+
+    await tab(w, /Quests/).trigger('click')
+
+    expect(markSeen).toHaveBeenCalledWith('quests')
+  })
+
+  it('opens a quest asked for from the story', async () => {
+    wrapper = mount(JournalPanel, { attachTo: document.body })
+    const game = useGameStore()
+
+    game.questToOpen = 'Know your village'
+    await flushPromises()
+
+    expect(tab(wrapper, /Quests/).attributes('aria-selected')).toBe('true')
+    const toggle = wrapper
+      .findAll('.lq-quest-toggle')
+      .find((b) => b.text().includes('Know your village'))!
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+    expect(document.activeElement).toBe(toggle.element)
+    expect(game.questToOpen).toBe(null)
   })
 })

@@ -100,7 +100,7 @@ export interface Arrival {
 }
 
 /** Journal tabs that show a dot when something new arrived. */
-export type JournalTab = 'bag' | 'spells'
+export type JournalTab = 'bag' | 'spells' | 'quests'
 
 interface QuestEvent {
   title: string
@@ -154,6 +154,9 @@ export const useGameStore = defineStore('game', () => {
   let lastSpells: string[] = []
   const bagHasNew = ref(false)
   const spellsHaveNew = ref(false)
+  const questsHaveNew = ref(false)
+  /** A quest the story asked the journal to open ("Open in journal"). */
+  const questToOpen = ref<string | null>(null)
   const introText = ref('')
 
   // --- Input ---
@@ -257,12 +260,19 @@ export const useGameStore = defineStore('game', () => {
   function clearNewDots(): void {
     bagHasNew.value = false
     spellsHaveNew.value = false
+    questsHaveNew.value = false
   }
 
   /** The player opened a journal tab: clear its "new" dot. */
   function markSeen(tab: JournalTab): void {
     if (tab === 'bag') bagHasNew.value = false
-    else spellsHaveNew.value = false
+    else if (tab === 'spells') spellsHaveNew.value = false
+    else questsHaveNew.value = false
+  }
+
+  /** Show a quest in the journal (its Quests tab, expanded). */
+  function openQuestInJournal(name: string): void {
+    questToOpen.value = name
   }
 
   function requireBridge(): GameBridge {
@@ -502,6 +512,7 @@ export const useGameStore = defineStore('game', () => {
     const turn = turns.value.at(-1)
     if (news.length && turn) {
       turn.quests = [...(turn.quests ?? []), ...news]
+      questsHaveNew.value = true
       if (!completedAny) audioPlayer?.playNewQuest()
     }
 
@@ -547,6 +558,8 @@ export const useGameStore = defineStore('game', () => {
         showOutput(null, b.look())
         refreshPanels()
         pollQuestEvents()
+        // The look may start quests: list them (as submitCommand does).
+        refreshPanels()
       } else if (!acceptInput.value && !b.isActRunning()) {
         // Quest completion modals were dismissed but the act has transitioned;
         // drive the transition forward and show the act intro modal.
@@ -639,6 +652,9 @@ export const useGameStore = defineStore('game', () => {
     rawCompletedQuests,
     bagHasNew,
     spellsHaveNew,
+    questsHaveNew,
+    questToOpen,
+    openQuestInJournal,
     loadingStatus,
     roomName,
     roomDescription,

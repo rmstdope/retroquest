@@ -60,7 +60,7 @@ const tabs = computed(() => [
   {
     id: 'quests' as const,
     label: `Quests · ${game.rawActiveQuests.length} active`,
-    dot: false,
+    dot: game.questsHaveNew,
   },
 ])
 
@@ -73,10 +73,35 @@ watch(
 
 // Seeing a tab clears its "new" dot, including news that arrives while open.
 watch(
-  [active, () => game.bagHasNew, () => game.spellsHaveNew],
+  [
+    active,
+    () => game.bagHasNew,
+    () => game.spellsHaveNew,
+    () => game.questsHaveNew,
+  ],
   () => {
     if (active.value === 'bag' && game.bagHasNew) game.markSeen('bag')
     if (active.value === 'spells' && game.spellsHaveNew) game.markSeen('spells')
+    if (active.value === 'quests' && game.questsHaveNew) game.markSeen('quests')
+  },
+  { immediate: true },
+)
+
+// "Open in journal" from the story: show that quest expanded and in view.
+const root = ref<HTMLElement | null>(null)
+watch(
+  () => game.questToOpen,
+  async (name) => {
+    if (!name) return
+    game.questToOpen = null
+    active.value = 'quests'
+    expanded.value = new Set([...expanded.value, name])
+    await nextTick()
+    const toggleButton = [
+      ...(root.value?.querySelectorAll<HTMLElement>('.lq-quest-toggle') ?? []),
+    ].find((b) => b.dataset.quest === name)
+    toggleButton?.scrollIntoView?.({ block: 'nearest' })
+    toggleButton?.focus()
   },
   { immediate: true },
 )
@@ -113,7 +138,7 @@ function toggle(name: string): void {
 </script>
 
 <template>
-  <section class="lq-journal" aria-label="Journal">
+  <section ref="root" class="lq-journal" aria-label="Journal">
     <h2 v-if="tab" class="lq-journal-title">
       {{ TITLES[tab] }}
     </h2>
@@ -238,6 +263,7 @@ function toggle(name: string): void {
             <button
               type="button"
               class="lq-quest-toggle"
+              :data-quest="quest.name"
               :aria-expanded="expanded.has(quest.name) ? 'true' : 'false'"
               @click="toggle(quest.name)"
             >

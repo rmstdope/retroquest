@@ -383,6 +383,15 @@ describe('LanternLayout', () => {
       expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
     })
 
+    it('switches to Quests when a quest is opened from the story', async () => {
+      const w = mountLayout()
+
+      useGameStore().openQuestInJournal('Hint of Magic')
+      await flushPromises()
+
+      expect(sections(w).get('[aria-current="page"]').text()).toMatch(/^Quests/)
+    })
+
     it('moves the section tabs into the header on a short screen', () => {
       stubScreen(true)
       const w = mountLayout()

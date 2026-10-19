@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { createPinia, setActivePinia } from 'pinia'
 import StoryTurn from './StoryTurn.vue'
 import type { Turn } from '@/stores/useGameStore'
 
@@ -190,6 +191,7 @@ describe('StoryTurn', () => {
   })
 
   it('shows the quest news of the turn after its text', () => {
+    setActivePinia(createPinia())
     const w = mountTurn({
       text: 'You feel strange.',
       quests: [{ kind: 'new', name: 'Hint of Magic', main: false, text: 'x' }],

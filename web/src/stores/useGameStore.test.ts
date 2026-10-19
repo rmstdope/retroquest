@@ -229,6 +229,39 @@ describe('useGameStore', () => {
       expect(store.modalTitle).toBe('📜 New Quest!')
     })
 
+    it('lists quests started by the first look after the act intro', async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      await store.initGame()
+      // As in the engine, the quest is listed once its activation was polled.
+      let started = false
+      bridge.activateQuest.mockImplementation(() => {
+        if (started) return null
+        started = true
+        return '[quest_name]Q (main quest)[/quest_name]\n\nBegin.'
+      })
+      bridge.getActiveQuests.mockImplementation(() =>
+        started
+          ? [
+              {
+                name: '[quest_name]Q (main)[/quest_name]',
+                description: 'Begin.',
+              },
+            ]
+          : [],
+      )
+      bridge.getQuestProgress.mockImplementation(() => ({
+        completed: 0,
+        total: started ? 11 : 0,
+        actNumber: 1,
+        mainQuest: 'Q',
+      }))
+
+      store.dismissModal()
+
+      expect(store.rawActiveQuests).toHaveLength(1)
+      expect(store.questProgress?.total).toBe(11)
+    })
+
     it('plays sound for quest modal shown after act intro is dismissed', async () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
@@ -1587,6 +1620,22 @@ describe('useGameStore', () => {
 
       expect(store.showModal).toBe(true)
       expect(store.modalTitle).toBe('🏆 Quest Complete!')
+    })
+
+    it('puts a dot on the Quests tab until it is seen', () => {
+      bridge.activateQuest.mockReturnValueOnce(NEW).mockReturnValue(null)
+
+      store.submitCommand('look')
+      expect(store.questsHaveNew).toBe(true)
+
+      store.markSeen('quests')
+      expect(store.questsHaveNew).toBe(false)
+    })
+
+    it('asks the journal to open a quest', () => {
+      store.openQuestInJournal('Hint of Magic')
+
+      expect(store.questToOpen).toBe('Hint of Magic')
     })
 
     it('leaves turns without news empty', () => {

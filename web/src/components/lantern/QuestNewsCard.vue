@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, useId } from 'vue'
 import type { QuestNews } from '@/lantern/parseQuestNews'
+import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 
 /**
@@ -8,10 +9,14 @@ import { renderMarkup } from '@/utils/theme'
  * description; an update is a one-line banner that expands to show the
  * newest part, since updates come often. Opening it scrolls the revealed
  * part into view, as the banner often sits at the bottom of the story.
+ * A card's "Open in journal" button is described by its quest name, so two
+ * cards in view are told apart.
  */
 const props = defineProps<{ news: QuestNews }>()
 const open = ref(false)
+const game = useGameStore()
 const updateBody = ref<HTMLElement | null>(null)
+const titleId = useId()
 
 async function toggle(): Promise<void> {
   open.value = !open.value
@@ -30,10 +35,18 @@ const kicker = computed(() => `New ${props.news.main ? 'main' : 'side'} quest`)
     :aria-label="`${kicker}: ${news.name}`"
   >
     <span class="lq-kicker">{{ kicker }}</span>
-    <span class="lq-quest-title">{{ news.name }}</span>
+    <span :id="titleId" class="lq-quest-title">{{ news.name }}</span>
     <!-- eslint-disable vue/no-v-html -->
     <p class="lq-quest-body" v-html="renderMarkup(news.text)"></p>
     <!-- eslint-enable vue/no-v-html -->
+    <button
+      type="button"
+      class="lq-open-journal"
+      :aria-describedby="titleId"
+      @click="game.openQuestInJournal(news.name)"
+    >
+      Open in journal
+    </button>
   </section>
 
   <div v-else class="lq-update-wrap">
@@ -104,6 +117,19 @@ const kicker = computed(() => `New ${props.news.main ? 'main' : 'side'} quest`)
   font-size: calc(15px * var(--lq-text-scale));
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
+}
+.lq-open-journal {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--lq-accent-line);
+  background: transparent;
+  color: var(--lq-accent-text);
+  font-family: var(--lq-font-ui);
+  font-size: 13px;
+  cursor: pointer;
 }
 .lq-update {
   width: 100%;
