@@ -172,12 +172,19 @@ defineExpose({ focus, setMode })
 
 // "Not like that": Do it — or in Actions mode, which clears the sentence,
 // the verb used last — gives a short shake when a command fails (it does
-// not move when motion is reduced, see .lq-shake).
+// not move when motion is reduced, see .lq-shake). The shake ends after its
+// length even when nothing showed it (no verb used yet, the sheet folded),
+// so a later Do it does not shake for an old failure.
+const SHAKE_MS = 320 // the length of the lq-shake animation
 const shaking = ref(false)
+let shakeTimer: ReturnType<typeof setTimeout> | undefined
 watch(
   () => game.turns.at(-1),
   (turn) => {
-    if (turn?.command && turn.text.includes('[failure]')) shaking.value = true
+    if (!turn?.command || !turn.text.includes('[failure]')) return
+    shaking.value = true
+    clearTimeout(shakeTimer)
+    shakeTimer = setTimeout(() => (shaking.value = false), SHAKE_MS)
   },
 )
 
@@ -411,7 +418,6 @@ function onTypedEnter(): void {
             :class="{ 'lq-shake': shaking }"
             :disabled="!command || !game.acceptInput"
             @click="doIt"
-            @animationend="shaking = false"
           >
             Do it
           </button>
@@ -432,7 +438,6 @@ function onTypedEnter(): void {
           :data-verb="v.id"
           :disabled="!game.acceptInput"
           @click="pickVerb(v)"
-          @animationend="shaking = false"
         >
           {{ v.label }}
         </button>
@@ -510,7 +515,6 @@ function onTypedEnter(): void {
         class="lq-do"
         :class="{ 'lq-shake': shaking }"
         :disabled="!game.acceptInput"
-        @animationend="shaking = false"
       >
         Do it
       </button>

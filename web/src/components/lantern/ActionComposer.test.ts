@@ -35,6 +35,7 @@ describe('ActionComposer', () => {
     wrapper?.unmount()
     wrapper = undefined
     vi.unstubAllGlobals()
+    vi.useRealTimers()
   })
 
   function mountComposer() {
@@ -519,11 +520,28 @@ describe('ActionComposer', () => {
     })
 
     it('stops shaking when the shake is over', async () => {
+      vi.useFakeTimers()
       const w = mountComposer()
       answer('go south', "[failure]You can't go that way.[/failure]")
       await w.vm.$nextTick()
 
-      await w.get('.lq-do').trigger('animationend')
+      vi.advanceTimersByTime(320)
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
+    })
+
+    it('does not shake later when nothing showed the failure', async () => {
+      // A failed move from the compass before any verb was used: no verb
+      // shakes, and opening a verb afterwards must not shake its Do it.
+      vi.useFakeTimers()
+      useSettingsStore().startMode = 'actions'
+      const w = mountComposer()
+      answer('go south', "[failure]You can't go that way.[/failure]")
+      await w.vm.$nextTick()
+
+      vi.advanceTimersByTime(320)
+      await button(w, 'Take').trigger('click')
 
       expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
     })
