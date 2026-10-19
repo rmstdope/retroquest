@@ -510,10 +510,24 @@ describe('ActionComposer', () => {
       ]
     }
 
+    /**
+     * Send a command from the composer (Type mode) whose answer arrives at
+     * once, as the store's submitCommand adds it.
+     */
+    async function typeAndRun(w: VueWrapper, command: string, reply: string) {
+      submit.mockImplementationOnce(() => answer(command, reply))
+      await w.get('input[aria-label="Command"]').setValue(command)
+      await w.get('form').trigger('submit')
+    }
+
     it('shakes Do it when the command failed', async () => {
       const w = mountComposer()
 
-      answer('go south', "[failure]You can't go that way.[/failure]")
+      await typeAndRun(
+        w,
+        'go south',
+        "[failure]You can't go that way.[/failure]",
+      )
       await w.vm.$nextTick()
 
       expect(w.get('.lq-do').classes()).toContain('lq-shake')
@@ -522,7 +536,11 @@ describe('ActionComposer', () => {
     it('stops shaking when the shake is over', async () => {
       vi.useFakeTimers()
       const w = mountComposer()
-      answer('go south', "[failure]You can't go that way.[/failure]")
+      await typeAndRun(
+        w,
+        'go south',
+        "[failure]You can't go that way.[/failure]",
+      )
       await w.vm.$nextTick()
 
       vi.advanceTimersByTime(320)
@@ -549,13 +567,38 @@ describe('ActionComposer', () => {
     it('shakes the verb used last in Actions mode', async () => {
       useSettingsStore().startMode = 'actions'
       const w = mountComposer()
-      await button(w, 'Look').trigger('click')
+      submit.mockImplementationOnce(() =>
+        answer('look', '[failure]It is too dark to see.[/failure]'),
+      )
 
-      answer('look', '[failure]It is too dark to see.[/failure]')
+      await button(w, 'Look').trigger('click')
       await w.vm.$nextTick()
 
       expect(button(w, 'Look').classes()).toContain('lq-shake')
       expect(button(w, 'Take').classes()).not.toContain('lq-shake')
+    })
+
+    it('does not shake for a later failure after a command with no answer', async () => {
+      const w = mountComposer()
+      // A save adds no turn (it shows a toast).
+      submit.mockImplementationOnce(() => {})
+      await w.get('input[aria-label="Command"]').setValue('save')
+      await w.get('form').trigger('submit')
+      await w.vm.$nextTick()
+
+      answer('go south', "[failure]You can't go that way.[/failure]", 2)
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
+    })
+
+    it('does not shake for a command sent from elsewhere (compass, journal)', async () => {
+      const w = mountComposer()
+
+      answer('go south', "[failure]You can't go that way.[/failure]")
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
     })
 
     it('does not shake when the command worked', async () => {
