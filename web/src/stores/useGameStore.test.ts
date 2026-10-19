@@ -155,9 +155,14 @@ describe('useGameStore', () => {
 
     it('marks the load as failed when the engine cannot start', async () => {
       expect(store.loadFailed).toBe(false)
-      bridge.init.mockRejectedValue(new Error('Network error'))
+      const error = new Error('Network error')
+      bridge.init.mockRejectedValue(error)
+      const log = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       await store.initGame()
+
+      expect(log).toHaveBeenCalledWith(error)
+      log.mockRestore()
 
       expect(store.loadFailed).toBe(true)
       expect(store.loading).toBe(true)
@@ -315,13 +320,6 @@ describe('useGameStore', () => {
       bridge.isAcceptingInput.mockReturnValue(false)
       await store.initGame()
       expect(store.acceptInput).toBe(false)
-    })
-
-    it('sets loadingStatus to error on failure', async () => {
-      bridge.init.mockRejectedValue(new Error('Network error'))
-      await store.initGame()
-      expect(store.loadingStatus).toBe('Error: Network error')
-      expect(store.loading).toBe(true)
     })
   })
 

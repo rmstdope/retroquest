@@ -598,6 +598,30 @@ test.describe('Lantern UI (the default)', () => {
     await expect(dialog.getByText('5 of 8 quests')).toBeAttached()
   })
 
+  test('keeps the failed-load screen reachable with a long error on a short screen', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 568, height: 320 })
+    const traceback = '  File "retroquest/act1/Act1.py", line 1\n'.repeat(40)
+    await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) =>
+      r.fulfill({
+        contentType: 'text/javascript',
+        body: `window.loadPyodide = () => Promise.reject(new Error(${JSON.stringify(traceback)}))`,
+      }),
+    )
+    await page.goto('/')
+    await page.getByText('Details', { exact: true }).click()
+
+    const title = page.getByRole('heading', { name: 'RetroQuest' })
+    await title.scrollIntoViewIfNeeded()
+    const box = await title.boundingBox()
+    expect(box!.y).toBeGreaterThanOrEqual(0)
+    const width = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    )
+    expect(width).toBe(568)
+  })
+
   test('lines the title art up at its left edge', async ({ page }) => {
     await page.goto('/')
     await injectMockState(page)

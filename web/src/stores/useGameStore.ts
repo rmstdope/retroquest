@@ -355,6 +355,7 @@ export const useGameStore = defineStore('game', () => {
       openFirstAct(b)
       loading.value = false
     } catch (err) {
+      console.error(err)
       loadingStatus.value = `Error: ${(err as Error).message}`
       loadFailed.value = true
     }
