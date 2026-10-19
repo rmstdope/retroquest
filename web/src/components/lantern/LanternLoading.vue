@@ -5,8 +5,8 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
  * The Lantern UI's loading screen while the game engine starts: the
  * RetroQuest wordmark, a lantern-glow spinner and the loading status. A
  * polite live region announces each step once, without its running file
- * count. It switches the page to Lantern's look at once, so there is no
- * classic dark screen before a light Lantern; the layout keeps it on after
+ * count. It switches the page to Lantern's look at once, so the page does
+ * not flash the plain default styles first; the layout keeps it on after
  * loading. When loading `failed`, the spinner stops, a plain sentence is
  * the alert (the raw error, which can be a long Python traceback, is in a
  * closed Details section) and Try again (focused) emits `retry`.

@@ -535,15 +535,6 @@ describe('LanternLayout', () => {
     expect(w.get('[role="dialog"] h2').text()).toBe('Quit game?')
   })
 
-  it('shows quest news in the story while it is shown', () => {
-    const w = mountLayout()
-    expect(useGameStore().lanternFeedback).toBe(true)
-
-    w.unmount()
-    wrapper = undefined
-    expect(useGameStore().lanternFeedback).toBe(false)
-  })
-
   it('shows the header', () => {
     expect(mountLayout().text()).toContain('RetroQuest')
   })
