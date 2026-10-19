@@ -104,9 +104,11 @@ onMounted(() => nextTick(trap.focusFirst))
   text-transform: uppercase;
   color: var(--lq-muted);
 }
-/* About 100 characters wide: scale the type to the screen. */
+/* About 100 characters wide: scale the type to the screen. The lines differ
+   in length, so they start at the left edge (centred, they would skew). */
 .lq-art {
   margin: 0;
+  text-align: left;
   max-width: 100%;
   overflow: hidden;
   font-family: var(--lq-font-mono, monospace);
