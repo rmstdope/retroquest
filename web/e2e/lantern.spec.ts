@@ -536,4 +536,29 @@ test.describe('Lantern UI (?ui=lantern)', () => {
       expect(overflow).toBeLessThanOrEqual(0)
     })
   }
+
+  test('uses a one-row header with the room name on a phone', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
+    await page.goto('/?ui=lantern')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.roomName = "Entrance to Malakar's Fortress"
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const header = page.getByRole('banner')
+    await expect(header).toContainText('Act I · Quests 4/11')
+    await expect(
+      header.getByRole('heading', { name: 'RetroQuest' }),
+    ).toBeAttached()
+    const height = await header.evaluate(
+      (e) => e.getBoundingClientRect().height,
+    )
+    expect(height).toBeLessThan(72)
+  })
 })

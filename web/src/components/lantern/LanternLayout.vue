@@ -174,7 +174,7 @@ watch(
 
 <template>
   <div class="lq-root">
-    <LanternHeader>
+    <LanternHeader :compact="!wide">
       <template v-if="!wide && short" #nav>
         <SectionNav v-model="section" class="lq-nav-top" />
       </template>

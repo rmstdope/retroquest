@@ -253,6 +253,7 @@ describe('LanternLayout', () => {
     it('starts on the story with the section tabs at the bottom', () => {
       const w = mountLayout()
 
+      expect(w.find('header .lq-compact-room').exists()).toBe(true)
       expect(sections(w).classes()).toContain('lq-nav-bottom')
       expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
       expect(w.get('[aria-label="Story"]').isVisible()).toBe(true)
