@@ -5,12 +5,14 @@ import { useGameStore } from '@/stores/useGameStore'
 /**
  * A short notice in the top corner when the game is saved or loaded; it
  * fades out by itself and adds nothing to the story. Screen readers hear it
- * through the status region.
+ * through the status region. A repeated notice pops up anew (a new pill), so
+ * a second save is seen and announced again.
  */
 const SHOW_MS = 2600
 
 const game = useGameStore()
 const text = ref('')
+const id = ref(0)
 let timer: ReturnType<typeof setTimeout> | undefined
 
 watch(
@@ -18,6 +20,7 @@ watch(
   () => {
     if (!game.notice) return
     text.value = game.notice.text
+    id.value = game.notice.id
     clearTimeout(timer)
     timer = setTimeout(() => (text.value = ''), SHOW_MS)
   },
@@ -27,8 +30,8 @@ onScopeDispose(() => clearTimeout(timer))
 
 <template>
   <div class="lq-toast-region" role="status" aria-live="polite">
-    <Transition name="lq-toast">
-      <span v-if="text" class="lq-toast">
+    <Transition name="lq-toast" mode="out-in">
+      <span v-if="text" :key="id" class="lq-toast">
         <svg
           width="16"
           height="16"

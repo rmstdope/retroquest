@@ -41,4 +41,18 @@ describe('SaveToast', () => {
 
     expect(w.find('.lq-toast').exists()).toBe(true)
   })
+
+  it('pops up anew for a repeated notice, so it is seen and heard again', async () => {
+    const w = mount(SaveToast)
+    const game = useGameStore()
+    game.notice = { id: 1, text: 'Game saved' }
+    await w.vm.$nextTick()
+    const first = w.get('.lq-toast').element
+
+    game.notice = { id: 2, text: 'Game saved' }
+    await w.vm.$nextTick()
+
+    // A new pill in the status region: screen readers announce the addition.
+    expect(w.get('.lq-toast').element).not.toBe(first)
+  })
 })
