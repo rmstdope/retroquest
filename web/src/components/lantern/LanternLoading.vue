@@ -36,7 +36,8 @@ watch(
     <h1 class="lq-loading-title">RetroQuest</h1>
     <template v-if="failed">
       <p class="lq-loading-status" role="alert">
-        RetroQuest could not start. Check your connection and try again.
+        RetroQuest could not start. Try again, or open Details to see what went
+        wrong.
       </p>
       <button
         ref="retryButton"

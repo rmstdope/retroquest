@@ -39,7 +39,7 @@ describe('LanternLoading', () => {
 
     expect(w.find('.lq-loading-spinner').exists()).toBe(false)
     expect(w.get('[role="alert"]').text()).toBe(
-      'RetroQuest could not start. Check your connection and try again.',
+      'RetroQuest could not start. Try again, or open Details to see what went wrong.',
     )
     const details = w.get('details')
     expect(details.attributes('open')).toBeUndefined()

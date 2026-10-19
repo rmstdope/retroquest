@@ -613,7 +613,7 @@ test.describe('Lantern UI (the default)', () => {
       }),
     )
     await page.goto('/')
-    await page.getByText('Details').click()
+    await page.getByText('Details', { exact: true }).click()
 
     const title = page.getByRole('heading', { name: 'RetroQuest' })
     await title.scrollIntoViewIfNeeded()
