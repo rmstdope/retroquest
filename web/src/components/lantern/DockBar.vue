@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
 
 /**
@@ -12,7 +13,16 @@ const emit = defineEmits<{ open: [mode: 'actions' | 'type'] }>()
 const game = useGameStore()
 const openButton = ref<HTMLButtonElement | null>(null)
 
-const exits = computed(() => Object.entries(game.exits))
+const COMPASS = new Set(['north', 'south', 'east', 'west', 'up', 'down'])
+
+/** Exit names read as the compass reads them ("Go north", "Go Secret Passage"). */
+const exits = computed(() =>
+  Object.entries(game.exits).map(([dir, room]) => ({
+    dir,
+    room,
+    name: COMPASS.has(dir) ? dir : displayName(dir),
+  })),
+)
 
 function go(direction: string): void {
   if (game.acceptInput) game.submitCommand(`go ${direction}`)
@@ -30,11 +40,11 @@ defineExpose({ focus })
   <section class="lq-dock" aria-label="Action bar">
     <div v-if="exits.length" class="lq-dock-exits">
       <button
-        v-for="[dir, room] in exits"
+        v-for="{ dir, room, name } in exits"
         :key="dir"
         type="button"
         class="lq-dock-exit"
-        :aria-label="`Go ${dir.replace(/_/g, ' ')} to ${room}`"
+        :aria-label="`Go ${name} to ${room}`"
         :disabled="!game.acceptInput"
         @click="go(dir)"
       >

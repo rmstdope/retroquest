@@ -26,7 +26,7 @@ describe('DockBar', () => {
     expect(submit).toHaveBeenCalledWith('go north')
     expect(
       w
-        .find('button[aria-label="Go secret passage to Hidden Library"]')
+        .find('button[aria-label="Go Secret Passage to Hidden Library"]')
         .exists(),
     ).toBe(true)
   })

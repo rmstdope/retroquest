@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
   SHORT_QUERY,
   useMediaQuery,
@@ -24,8 +25,11 @@ import StoryTurn from './StoryTurn.vue'
  * There the actions are a sheet (at most 62% of the height) that folds into
  * a one-row bar: by hand, or by itself only when an answer does not fit
  * beside it (always on short screens, where it also starts folded).
+ * A new turn opens at its start, with a "More below" pill while the story
+ * goes on below the visible part.
  */
 const game = useGameStore()
+const settings = useSettingsStore()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 const section = ref<Section>('story')
@@ -39,6 +43,42 @@ watch(wide, (isWide) => {
   if (isWide) section.value = 'story'
 })
 const storyEl = ref<HTMLElement | null>(null)
+/** Unread story below the visible part (a long turn opens at its start). */
+const moreBelow = ref(false)
+const moreBelowButton = ref<HTMLButtonElement | null>(null)
+/** Slack so rounding never leaves the pill up at the very end. */
+const END_SLACK = 8
+/** A story sliver (beside the open sheet on a small phone) has no room for it. */
+const PILL_ROOM = 96
+
+/**
+ * Show the pill while story text continues below the visible part. When it
+ * goes while focused (pressed to the end), focus moves on to the actions.
+ */
+function updateMoreBelow(): void {
+  const story = storyEl.value
+  const hadFocus =
+    !!moreBelowButton.value && document.activeElement === moreBelowButton.value
+  moreBelow.value =
+    !!story &&
+    story.clientHeight >= PILL_ROOM &&
+    story.scrollTop + story.clientHeight < story.scrollHeight - END_SLACK
+  if (hadFocus && !moreBelow.value) focusActions()
+}
+
+/** Scroll on by almost a screen, keeping a line or two for context. */
+function readOn(): void {
+  const story = storyEl.value
+  if (!story) return
+  const still =
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--lq-motion')
+      .trim() === '0'
+  story.scrollBy({
+    top: story.clientHeight - 48,
+    behavior: still ? 'auto' : 'smooth',
+  })
+}
 const continueButton = ref<HTMLButtonElement | null>(null)
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
 const dock = ref<InstanceType<typeof DockBar> | null>(null)
@@ -73,14 +113,26 @@ function onKeydown(e: KeyboardEvent): void {
   if (e.key === 'Escape' && game.showModal) game.dismissModal()
 }
 
+// The story also changes size without scrolling: the sheet opens or folds,
+// the window turns, a section is shown again, the room card grows.
+let storyResize: ResizeObserver | undefined
+
 onMounted(() => {
   document.documentElement.setAttribute('data-ui', 'lantern')
   document.addEventListener('keydown', onKeydown)
+  if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
+    storyResize = new ResizeObserver(updateMoreBelow)
+    storyResize.observe(storyEl.value)
+  }
 })
 onUnmounted(() => {
   document.documentElement.removeAttribute('data-ui')
   document.removeEventListener('keydown', onKeydown)
+  storyResize?.disconnect()
 })
+
+// Larger or smaller text changes how much of the turn is still below.
+watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
 
 // Show a new turn from its start (jsdom has no scrollIntoView). A command
 // run from another section (Use, Cast, Go) first brings the story back, and
@@ -100,6 +152,7 @@ watch(
       dockOpen.value = false
       await nextTick()
     }
+    updateMoreBelow()
     const lost =
       !wide.value && !dockOpen.value && document.activeElement === document.body
     if ((away || folds || lost) && !game.showModal) focusActions()
@@ -129,15 +182,26 @@ watch(
 
     <main class="lq-main" :class="{ 'lq-wide': wide }">
       <RoomCard v-if="wide" class="lq-card" />
-      <section
-        v-show="wide || section === 'story'"
-        ref="storyEl"
-        class="lq-story"
-        aria-label="Story"
-      >
-        <h2 class="lq-sr-only">Story</h2>
-        <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
-      </section>
+      <div v-show="wide || section === 'story'" class="lq-story-wrap">
+        <section
+          ref="storyEl"
+          class="lq-story"
+          aria-label="Story"
+          @scroll.passive="updateMoreBelow"
+        >
+          <h2 class="lq-sr-only">Story</h2>
+          <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
+        </section>
+        <button
+          v-if="moreBelow"
+          ref="moreBelowButton"
+          type="button"
+          class="lq-more-below"
+          @click="readOn"
+        >
+          More below <span aria-hidden="true">↓</span>
+        </button>
+      </div>
 
       <ActionComposer
         v-show="wide || (section === 'story' && dockOpen)"
@@ -231,7 +295,7 @@ watch(
   column-gap: 20px;
 }
 .lq-wide .lq-card,
-.lq-wide .lq-story,
+.lq-wide .lq-story-wrap,
 .lq-wide .lq-composer {
   grid-column: 1;
 }
@@ -263,6 +327,36 @@ watch(
   border-top: 1px solid var(--lq-line);
   background: var(--lq-surface);
   padding-bottom: env(safe-area-inset-bottom);
+}
+.lq-story-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.lq-more-below {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  border: 1px solid var(--lq-accent-line);
+  background: var(--lq-surface);
+  color: var(--lq-accent-text);
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.3);
+}
+/* The pill stays slim; its touch target is 44px tall like the other controls. */
+.lq-more-below::before {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
 }
 .lq-story {
   flex: 1;
