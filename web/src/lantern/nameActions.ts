@@ -26,10 +26,11 @@ const same = (a: string, b: string) =>
 
 /**
  * The item name the story means: its short name resolved ("journal" →
- * "Elior's Journal"), or the singular of a plain plural ("chickens") when
- * only that is around.
+ * "Elior's Journal"), or the singular of a plain plural ("chickens",
+ * the shop's "coin(s)") when only that is around.
  */
-function itemName(said: string, around: Around): string {
+function itemName(text: string, around: Around): string {
+  const said = text.replace(/\(s\)$/, 's')
   const full = around.shortNames?.[said]
   if (full) return full.toLowerCase()
   const known = [...around.items, ...around.bag].map((i) => i.toLowerCase())
@@ -40,6 +41,19 @@ function itemName(said: string, around: Around): string {
   )
     return said.slice(0, -1)
   return said
+}
+
+/**
+ * The name to put in a command: an item whose name is its short name plus a
+ * state ("bucket (full)", short name "bucket") goes by the short name; the
+ * engine finds the same item by it.
+ */
+function commandName(name: string, around: Around): string {
+  const short = Object.entries(around.shortNames ?? {}).find(
+    ([short, full]) =>
+      full.toLowerCase() === name && name.startsWith(`${short} (`),
+  )
+  return short ? short[0] : name
 }
 
 /**
@@ -54,8 +68,9 @@ export function nameActions(
 ): NameAction[] {
   const said = text.trim().toLowerCase()
   const name = itemName(said, around)
+  const target = commandName(name, around)
   const actions = (labels: Array<[string, string]>) =>
-    labels.map(([label, verb]) => ({ label, command: `${verb} ${name}` }))
+    labels.map(([label, verb]) => ({ label, command: `${verb} ${target}` }))
   if (kind === 'character') {
     if (!around.characters.some((c) => same(c, name))) return []
     const [talk, examine] = actions([
@@ -80,7 +95,11 @@ export function nameActions(
         : []
     return [
       talk,
-      ...choices('Give…', around.bag, (item) => `give ${item} to ${name}`),
+      ...choices(
+        'Give…',
+        around.bag,
+        (item) => `give ${commandName(item, around)} to ${name}`,
+      ),
       ...choices(
         'Cast…',
         around.spells ?? [],

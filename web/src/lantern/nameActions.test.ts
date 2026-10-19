@@ -69,4 +69,28 @@ describe('nameActions', () => {
       { label: 'Examine', command: 'examine grandmother' },
     ])
   })
+
+  it('knows the coin from the shop\'s "coin(s)"', () => {
+    const shop = { ...HERE, bag: ['coin'] }
+    expect(nameActions('item', 'coin(s)', shop)[0]).toEqual({
+      label: 'Use',
+      command: 'use coin',
+    })
+  })
+
+  it('leaves the state text out of commands when the short name says it', () => {
+    const full = {
+      ...HERE,
+      bag: ['bucket (full)'],
+      shortNames: { bucket: 'bucket (full)' },
+    }
+    expect(nameActions('item', 'bucket (full)', full)[0]).toEqual({
+      label: 'Use',
+      command: 'use bucket',
+    })
+    const give = nameActions('character', 'grandmother', full)[1]
+    expect(give.choices).toEqual([
+      { label: 'Bucket (full)', command: 'give bucket to grandmother' },
+    ])
+  })
 })
