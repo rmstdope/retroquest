@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import QuestNewsCard from './QuestNewsCard.vue'
 
@@ -51,5 +51,31 @@ describe('QuestNewsCard', () => {
     expect(banner.attributes('aria-expanded')).toBe('true')
     expect(w.get('.lq-quest-body').text()).toBe('Villagers whisper.')
     expect(banner.text()).toContain('Hide')
+  })
+
+  describe('when the story cannot show the opened text', () => {
+    const original = Element.prototype.scrollIntoView
+    afterEach(() => {
+      Element.prototype.scrollIntoView = original
+    })
+
+    it('scrolls the opened update into view', async () => {
+      const scrolled: Element[] = []
+      Element.prototype.scrollIntoView = vi.fn(function (this: Element) {
+        scrolled.push(this)
+      })
+      const w = mount(QuestNewsCard, {
+        props: {
+          news: { kind: 'updated', name: 'Shadows', main: true, text: 'x' },
+        },
+      })
+
+      await w.get('button.lq-update').trigger('click')
+
+      expect(scrolled).toEqual([w.get('.lq-update-body').element])
+      expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({
+        block: 'nearest',
+      })
+    })
   })
 })

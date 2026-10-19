@@ -33,8 +33,9 @@ function textPairs(p: LanternPalette): Array<[string, string, string]> {
       pairs.push([`${fg} on ${bg}`, p[fg], p[bg]])
     }
   }
-  // Quest cards, quick-save buttons and exits sit on the amber tint.
-  for (const fg of ['fg', 'muted', 'accentText'] as const) {
+  // Quest cards (with their prose), quick-save buttons and exits sit on the
+  // amber tint.
+  for (const fg of ['fg', 'prose', 'muted', 'accentText'] as const) {
     pairs.push([`${fg} on accentSoft`, p[fg], p.accentSoft])
   }
   pairs.push(['success on itemSoft', p.success, p.itemSoft])

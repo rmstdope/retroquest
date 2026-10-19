@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import type { QuestNews } from '@/lantern/parseQuestNews'
 import { renderMarkup } from '@/utils/theme'
 
 /**
  * Quest news inside the story (non-blocking): a new quest is a card with its
  * description; an update is a one-line banner that expands to show the
- * newest part, since updates come often.
+ * newest part, since updates come often. Opening it scrolls the revealed
+ * part into view, as the banner often sits at the bottom of the story.
  */
 const props = defineProps<{ news: QuestNews }>()
 const open = ref(false)
+const updateBody = ref<HTMLElement | null>(null)
+
+async function toggle(): Promise<void> {
+  open.value = !open.value
+  if (!open.value) return
+  await nextTick()
+  updateBody.value?.scrollIntoView?.({ block: 'nearest' })
+}
 
 const kicker = computed(() => `New ${props.news.main ? 'main' : 'side'} quest`)
 </script>
@@ -32,7 +41,7 @@ const kicker = computed(() => `New ${props.news.main ? 'main' : 'side'} quest`)
       type="button"
       class="lq-update"
       :aria-expanded="open ? 'true' : 'false'"
-      @click="open = !open"
+      @click="toggle"
     >
       <svg
         width="16"
@@ -57,6 +66,7 @@ const kicker = computed(() => `New ${props.news.main ? 'main' : 'side'} quest`)
     <!-- eslint-disable vue/no-v-html -->
     <p
       v-if="open"
+      ref="updateBody"
       class="lq-quest-body lq-update-body"
       v-html="renderMarkup(news.text)"
     ></p>
