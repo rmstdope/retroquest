@@ -322,3 +322,87 @@ class TestGetRoomWares:
             ("rope", 1, "shopkeeper"),
             ("sword", 5, "shopkeeper"),
         ]
+
+
+FLAG_ACT_DONE = "act_done"
+
+
+class FlagQuest(SimpleQuest):
+    """Quest that starts at once and completes when the act's flag is set."""
+
+    def check_trigger(self, _game_state: GameState) -> bool:
+        """Start straight away."""
+        return True
+
+    def check_completion(self, game_state: GameState) -> bool:
+        """Complete once the act's flag is set."""
+        return game_state.get_story_flag(FLAG_ACT_DONE)
+
+
+class FlagAct(SimpleAct):
+    """Act that ends when its flag is set (like the real acts' main quests)."""
+
+    def is_completed(self, game_state: GameState) -> bool:
+        """End once the act's flag is set."""
+        return game_state.get_story_flag(FLAG_ACT_DONE)
+
+
+def _make_two_act_controller() -> GameController:
+    """Two acts; the first one's main quest completes as the act ends."""
+    first = FlagAct(
+        {"Hall": Room(name="Hall", description="A hall.")},
+        quests=[FlagQuest("Main Arc", main=True), SimpleQuest("Side A")],
+    )
+    second = SimpleAct(
+        {"Gate": Room(name="Gate", description="A gate.")},
+        quests=[SimpleQuest("Next Arc", main=True)],
+    )
+    ctrl = GameController(Game([first, second], dev_mode=True))
+    ctrl.game.new_turn()  # logo -> act intro
+    ctrl.game.new_turn()  # act intro -> running
+    while ctrl.activate_quest() is not None:
+        pass
+    return ctrl
+
+
+def _end_first_act(ctrl: GameController) -> None:
+    """Set the flag and advance the turn, as a finishing command does."""
+    ctrl.game.state.set_story_flag(FLAG_ACT_DONE, True)
+    ctrl.game.new_turn()
+
+
+class TestActEndQuestCompletion:
+    """The quest that ends an act is still reported after the act changes."""
+
+    def test_reports_the_completion_that_ended_the_act(self) -> None:
+        """complete_quest() returns the finished act's main quest once."""
+        ctrl = _make_two_act_controller()
+        _end_first_act(ctrl)
+
+        assert ctrl.game.is_act_transitioning()
+        payload = ctrl.complete_quest()
+        assert payload is not None
+        assert payload.startswith("[quest_name]Main Arc (main quest)[/quest_name]")
+        assert ctrl.complete_quest() is None
+
+    def test_reports_the_finished_act_progress_during_the_transition(self) -> None:
+        """Progress stays on the finished act until the next act starts."""
+        ctrl = _make_two_act_controller()
+        _end_first_act(ctrl)
+        ctrl.complete_quest()
+
+        progress = ctrl.get_quest_progress()
+        assert progress["act_number"] == 1
+        assert progress["main_quest"] == "Main Arc"
+        assert (progress["completed"], progress["total"]) == (1, 2)
+
+    def test_moves_on_to_the_next_act_after_the_transition(self) -> None:
+        """Once the next act is introduced, progress and quests are its own."""
+        ctrl = _make_two_act_controller()
+        _end_first_act(ctrl)
+        ctrl.game.new_turn()  # transition -> next act intro
+
+        assert ctrl.complete_quest() is None
+        progress = ctrl.get_quest_progress()
+        assert progress["act_number"] == 2
+        assert progress["main_quest"] == "Next Arc"

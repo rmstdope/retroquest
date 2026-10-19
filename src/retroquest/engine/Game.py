@@ -43,6 +43,9 @@ class Game:
         )
         self.acts[self.current_act].setup_gamestate(self.state)
         self.dev_mode = dev_mode
+        # The state of the act that just ended, kept until the next act's intro so
+        # UIs can still report the quest completion that ended it.
+        self.finished_act_state: GameState | None = None
         self.command_parser = CommandParser(self, dev_mode)
         # Flag to indicate if we need to describe the room after a command
         self.has_changed_room = False
@@ -76,6 +79,7 @@ class Game:
                 if self.current_act < len(self.acts):
                     self.run_state = GameRunState.ACT_TRANSITION
                     self.accept_input = False
+                    self.finished_act_state = self.state
                     # Transition to next act
                     starting_room = next(iter(self.acts[self.current_act].rooms.values()))
                     self.state = GameState(
@@ -93,6 +97,7 @@ class Game:
             self.start_music()
             self.run_state = GameRunState.ACT_INTRO
             self.accept_input = False
+            self.finished_act_state = None
 
     def get_result_text(self) -> str:
         """Get the next text to display."""
