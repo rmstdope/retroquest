@@ -932,4 +932,79 @@ describe('LanternLayout', () => {
       expect(document.activeElement?.textContent?.trim()).toBe('Look')
     })
   })
+
+  describe('game menu, stats and help', () => {
+    function phone() {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn(() => ({
+          matches: false,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
+    }
+
+    afterEach(() => vi.unstubAllGlobals())
+
+    it('opens the game menu from the header on a phone', async () => {
+      phone()
+      const w = mountLayout()
+
+      await w.get('button[aria-label="Game menu"]').trigger('click')
+
+      expect(w.get('[role="dialog"] h2').text()).toBe('Game')
+    })
+
+    it('shows Stats from the menu and gives focus back to the menu button', async () => {
+      phone()
+      const game = useGameStore()
+      vi.spyOn(game, 'readInfo').mockReturnValue(
+        '[bold]Current Room:[/bold] Square',
+      )
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      const menuButton = wrapper.get('button[aria-label="Game menu"]')
+      ;(menuButton.element as HTMLElement).focus()
+      await menuButton.trigger('click')
+      await flushPromises()
+
+      const stats = wrapper
+        .findAll('[role="dialog"] button')
+        .find((b) => b.text().startsWith('Stats'))!
+      await stats.trigger('click')
+      await flushPromises()
+
+      const dialog = wrapper.get('[role="dialog"]')
+      expect(dialog.get('h2').text()).toBe('Stats')
+      expect(dialog.text()).toContain('Current Room: Square')
+      expect(game.readInfo).toHaveBeenCalledWith('stats')
+
+      await dialog.get('button[aria-label="Close"]').trigger('click')
+      await flushPromises()
+      expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
+      expect(document.activeElement).toBe(menuButton.element)
+    })
+
+    it('shows Help from the laptop header', async () => {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn((query: string) => ({
+          matches: query.includes('min-width'),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
+      const game = useGameStore()
+      vi.spyOn(game, 'readInfo').mockReturnValue(
+        '[bold]Available Commands:[/bold]',
+      )
+      const w = mountLayout()
+
+      const help = w.findAll('header button').find((b) => b.text() === 'Help')!
+      await help.trigger('click')
+
+      expect(w.get('[role="dialog"] h2').text()).toBe('Help')
+      expect(w.get('[role="dialog"]').text()).toContain('Available Commands:')
+    })
+  })
 })

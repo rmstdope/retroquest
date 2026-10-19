@@ -52,6 +52,7 @@ export interface GameBridge {
   getActIntro(): string
   getQuestProgress(): QuestProgress
   getActStats(): ActStats
+  readCommand(command: 'stats' | 'help'): string
   getSaveSlots(): SaveSlot[]
   saveToSlot(slot: number): string
   loadFromSlot(slot: number): string
@@ -514,6 +515,11 @@ export const useGameStore = defineStore('game', () => {
     else showOutput(command, result, { chips: false })
   }
 
+  /** The engine's stats or help text, for a dialog (adds nothing to the story). */
+  function readInfo(kind: 'stats' | 'help'): string {
+    return requireBridge().readCommand(kind)
+  }
+
   function listNamedSaves(): NamedSave[] {
     const b = requireBridge()
     return b.listNamedSaves()
@@ -740,6 +746,7 @@ export const useGameStore = defineStore('game', () => {
     spellEntries,
     completionTree,
     lanternFeedback,
+    readInfo,
     notice,
     rawInventory,
     rawSpells,

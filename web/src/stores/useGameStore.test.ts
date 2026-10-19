@@ -54,6 +54,7 @@ function createMockBridge() {
       actNumber: 1,
       mainQuest: 'Shadows Over Willowbrook',
     })),
+    readCommand: vi.fn((): string => ''),
     getActStats: vi.fn(() => ({
       questsCompleted: 4,
       questsTotal: 11,
@@ -1895,6 +1896,18 @@ describe('useGameStore', () => {
 
       expect(store.notice).toBe(null)
       expect(store.turns.at(-1)!.text).toBe('Game saved.')
+    })
+  })
+
+  describe('stats and help', () => {
+    it('reads the engine text without adding to the story', async () => {
+      bridge.readCommand.mockReturnValue('[bold]Current Room:[/bold] Square')
+      await store.initGame()
+      const turns = store.turns.length
+
+      expect(store.readInfo('stats')).toBe('[bold]Current Room:[/bold] Square')
+      expect(bridge.readCommand).toHaveBeenCalledWith('stats')
+      expect(store.turns.length).toBe(turns)
     })
   })
 })

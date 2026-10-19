@@ -10,6 +10,7 @@ import type { LanternTextSize } from '@/lantern/tokens'
  * progress bar; the title stays as a hidden top-level heading.
  */
 defineProps<{ compact?: boolean }>()
+const emit = defineEmits<{ menu: []; open: [kind: 'stats' | 'help'] }>()
 const game = useGameStore()
 const settings = useSettingsStore()
 
@@ -84,6 +85,26 @@ function toggleTheme(): void {
 
 <template>
   <header class="lq-header" :class="{ 'lq-header-compact': compact }">
+    <button
+      v-if="compact"
+      type="button"
+      class="lq-icon-btn"
+      aria-label="Game menu"
+      @click="emit('menu')"
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+    </button>
     <div v-if="compact" class="lq-compact">
       <h1 class="lq-sr-only">RetroQuest</h1>
       <span class="lq-compact-room">{{ game.roomName }}</span>
@@ -124,6 +145,15 @@ function toggleTheme(): void {
 
     <!-- Phone landscape puts the section tabs here. -->
     <slot name="nav" />
+
+    <nav v-if="!compact" class="lq-game-nav" aria-label="Game">
+      <button type="button" class="lq-text-btn" @click="emit('open', 'stats')">
+        Stats
+      </button>
+      <button type="button" class="lq-text-btn" @click="emit('open', 'help')">
+        Help
+      </button>
+    </nav>
 
     <div class="lq-actions">
       <div ref="textSizeAnchor" class="lq-popover-anchor">
@@ -292,6 +322,21 @@ function toggleTheme(): void {
   display: block;
   height: 6px;
   background: var(--lq-accent);
+}
+.lq-game-nav {
+  display: flex;
+  gap: 4px;
+}
+.lq-text-btn {
+  height: 44px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--lq-fg);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
 }
 .lq-actions {
   display: flex;
