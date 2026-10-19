@@ -11,6 +11,7 @@ import type {
   NamedSave,
   SaveSlot,
   QuestProgress,
+  ActStats,
   RoomWare,
 } from '@/types/bridge'
 
@@ -343,6 +344,19 @@ with open('retroquest.save', 'wb') as f:
     }
   }
 
+  function getActStats(): ActStats {
+    const result = py('controller.get_act_stats()') as { toJs(): unknown }
+    const data = Object.fromEntries(
+      result.toJs() as Iterable<[string, unknown]>,
+    )
+    return {
+      questsCompleted: data.quests_completed as number,
+      questsTotal: data.quests_total as number,
+      spells: data.spells as number,
+      places: data.places as number,
+    }
+  }
+
   function getSaveSlots(): SaveSlot[] {
     const stored = readStoredSaveSlots()
     return Array.from({ length: 8 }, (_, i) => {
@@ -554,6 +568,7 @@ _result_text
     listNamedSaves,
     getActName,
     getQuestProgress,
+    getActStats,
     getSaveSlots,
     saveToSlot,
     loadFromSlot,

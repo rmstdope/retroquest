@@ -7,6 +7,7 @@ import type {
   NamedSave,
   SaveSlot,
   QuestProgress,
+  ActStats,
   RoomWare,
 } from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
@@ -43,6 +44,7 @@ export interface GameBridge {
   listNamedSaves(): NamedSave[]
   getActName(): string
   getQuestProgress(): QuestProgress
+  getActStats(): ActStats
   getSaveSlots(): SaveSlot[]
   saveToSlot(slot: number): string
   loadFromSlot(slot: number): string

@@ -506,6 +506,26 @@ describe('useBridge', () => {
       expect(bridge.getActName()).toBe('Act 1')
     })
 
+    it('getActStats maps the controller dict to ActStats', () => {
+      mock.pythonResults.set(
+        'controller.get_act_stats()',
+        pyProxy(
+          new Map<string, unknown>([
+            ['quests_completed', 10],
+            ['quests_total', 11],
+            ['spells', 4],
+            ['places', 15],
+          ]),
+        ),
+      )
+      expect(bridge.getActStats()).toEqual({
+        questsCompleted: 10,
+        questsTotal: 11,
+        spells: 4,
+        places: 15,
+      })
+    })
+
     it('getQuestProgress maps the controller dict to QuestProgress', () => {
       mock.pythonResults.set(
         'controller.get_quest_progress()',

@@ -26,6 +26,16 @@ export interface QuestProgress {
   mainQuest: string | null
 }
 
+/** An act's statistics for its act-complete page (controller.get_act_stats()). */
+export interface ActStats {
+  questsCompleted: number
+  questsTotal: number
+  /** Spells known. */
+  spells: number
+  /** Rooms visited. */
+  places: number
+}
+
 /** Something a merchant in the current room sells (controller.get_room_wares()). */
 export interface RoomWare {
   name: string
