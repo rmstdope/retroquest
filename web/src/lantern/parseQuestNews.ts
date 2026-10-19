@@ -20,9 +20,9 @@ const EARLIER_STAGE = /\[dim\][\s\S]*?\[\/dim\]/g
 const OPEN_CLUE = /^(?:\[dim\])?○ /m
 
 /**
- * Read an activate/update payload from the engine:
- * "[quest_name]Name (main quest)[/quest_name]\n\nDescription". An update
- * shows its newest stage; checklists and clue lists are shown whole.
+ * Read an activate/update/complete payload from the engine:
+ * "[quest_name]Name (main quest)[/quest_name]\n\nText". An update shows its
+ * newest stage; checklists, clue lists and completion texts are shown whole.
  */
 export function parseQuestNews(
   kind: QuestNews['kind'],
