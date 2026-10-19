@@ -251,15 +251,15 @@ describe('useGameStore', () => {
       )
       bridge.getQuestProgress.mockImplementation(() => ({
         completed: 0,
-        total: 11,
+        total: started ? 11 : 0,
         actNumber: 1,
-        mainQuest: started ? 'Q' : null,
+        mainQuest: 'Q',
       }))
 
       store.dismissModal()
 
       expect(store.rawActiveQuests).toHaveLength(1)
-      expect(store.questProgress?.mainQuest).toBe('Q')
+      expect(store.questProgress?.total).toBe(11)
     })
 
     it('plays sound for quest modal shown after act intro is dismissed', async () => {
