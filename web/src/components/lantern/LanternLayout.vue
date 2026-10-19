@@ -282,6 +282,7 @@ function onNameClick(event: MouseEvent): void {
       characters: game.characters,
       items: game.items,
       bag: game.rawInventory.map((entry) => parseCountedName(entry.name).name),
+      spells: game.spellEntries.map((entry) => parseCountedName(entry).name),
       shortNames: game.shortNames,
     },
   )

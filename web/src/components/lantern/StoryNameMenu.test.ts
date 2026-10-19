@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest'
+import { nextTick } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import StoryNameMenu from './StoryNameMenu.vue'
 
@@ -39,5 +40,41 @@ describe('StoryNameMenu', () => {
     document.body.dispatchEvent(new Event('scroll'))
 
     expect(wrapper!.emitted('close')).toHaveLength(1)
+  })
+
+  it('opens the choices of an action that has them, and picks one', async () => {
+    wrapper = mount(StoryNameMenu, {
+      props: {
+        actions: [
+          {
+            label: 'Give…',
+            choices: [
+              { label: 'Bread', command: 'give bread to grandmother' },
+              { label: 'Map', command: 'give map to grandmother' },
+            ],
+          },
+          { label: 'Examine', command: 'examine grandmother' },
+        ],
+        x: 100,
+        top: 200,
+        bottom: 218,
+      },
+      attachTo: document.body,
+    })
+
+    await wrapper.get('[role="menuitem"]').trigger('click')
+    await nextTick()
+
+    expect(wrapper.emitted('pick')).toBeUndefined()
+    const menu = wrapper.get('[role="menu"]')
+    expect(menu.attributes('aria-label')).toBe('Give')
+    expect(menu.findAll('[role="menuitem"]').map((m) => m.text())).toEqual([
+      'Bread',
+      'Map',
+    ])
+    expect(document.activeElement?.textContent?.trim()).toBe('Bread')
+
+    await menu.findAll('[role="menuitem"]')[1].trigger('click')
+    expect(wrapper.emitted('pick')).toEqual([['give map to grandmother']])
   })
 })
