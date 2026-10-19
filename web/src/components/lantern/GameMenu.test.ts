@@ -45,13 +45,15 @@ describe('GameMenu', () => {
     expect(w.emitted('close')).toHaveLength(2)
   })
 
-  it('opens Stats and Help', async () => {
+  it('opens Save, Load, Stats and Help', async () => {
     const w = mountMenu()
 
+    await item(w, 'Save game').trigger('click')
+    await item(w, 'Load game').trigger('click')
     await item(w, 'Stats').trigger('click')
     await item(w, 'Help').trigger('click')
 
-    expect(w.emitted('open')).toEqual([['stats'], ['help']])
+    expect(w.emitted('open')).toEqual([['save'], ['load'], ['stats'], ['help']])
   })
 
   it('closes with its close button', async () => {

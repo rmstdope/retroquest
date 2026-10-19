@@ -157,15 +157,17 @@ describe('LanternHeader', () => {
     })
   })
 
-  it('has Stats and Help buttons on a laptop', async () => {
+  it('has Save, Load, Stats and Help buttons on a laptop', async () => {
     const w = mountHeader()
     const button = (label: string) =>
       w.findAll('button').find((b) => b.text() === label)!
 
+    await button('Save').trigger('click')
+    await button('Load').trigger('click')
     await button('Stats').trigger('click')
     await button('Help').trigger('click')
 
-    expect(w.emitted('open')).toEqual([['stats'], ['help']])
+    expect(w.emitted('open')).toEqual([['save'], ['load'], ['stats'], ['help']])
     expect(w.find('button[aria-label="Game menu"]').exists()).toBe(false)
   })
 })

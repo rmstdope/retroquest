@@ -755,6 +755,13 @@ describe('useBridge', () => {
       })
     })
 
+    it('shows the quick save when its details are unreadable', () => {
+      localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
+      localStorageMock._setRaw('retroquest_save_meta', 'null')
+
+      expect(bridge.getQuickSave()!.room).toBe(null)
+    })
+
     it('getSaveSlots returns occupied slot after saving', () => {
       const stored = Array.from({ length: 8 }, (_, i) =>
         i === 4

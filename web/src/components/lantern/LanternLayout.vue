@@ -17,7 +17,8 @@ import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
-import GameMenu, { type InfoKind } from './GameMenu.vue'
+import GameMenu, { type InfoKind, type MenuKind } from './GameMenu.vue'
+import SaveLoadDialog from './SaveLoadDialog.vue'
 import LanternHeader from './LanternHeader.vue'
 import QuestCompleteContent from './QuestCompleteContent.vue'
 import RoomCard from './RoomCard.vue'
@@ -180,15 +181,23 @@ game.setAudioPlayer(useAudio())
 const music = useActMusic()
 
 // --- Game menu, Stats and Help (dialogs the player opens) ---
-const gameDialog = ref<'menu' | InfoKind | null>(null)
+const gameDialog = ref<'menu' | MenuKind | null>(null)
 const INFO_TITLES: Record<InfoKind, string> = { stats: 'Stats', help: 'Help' }
 let dialogOpener: HTMLElement | null = null
 
-function openGameDialog(kind: 'menu' | InfoKind): void {
+function openGameDialog(kind: 'menu' | MenuKind): void {
   if (!gameDialog.value)
     dialogOpener = document.activeElement as HTMLElement | null
   gameDialog.value = kind
 }
+
+// A game pop-up closes the player's dialogs (they do not come back after).
+watch(
+  () => game.showModal,
+  (open) => {
+    if (open) gameDialog.value = null
+  },
+)
 
 /** Closing the last one gives focus back to what opened the first one. */
 async function closeGameDialog(): Promise<void> {
@@ -324,6 +333,11 @@ watch(
         v-if="gameDialog === 'menu'"
         @close="closeGameDialog"
         @open="openGameDialog"
+      />
+      <SaveLoadDialog
+        v-else-if="gameDialog === 'save' || gameDialog === 'load'"
+        :mode="gameDialog"
+        @close="closeGameDialog"
       />
       <LanternDialog
         v-else-if="gameDialog"
