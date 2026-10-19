@@ -1969,11 +1969,28 @@ describe('useGameStore', () => {
       store.restartGame()
 
       expect(bridge.newGame).toHaveBeenCalledOnce()
+      expect(store.gameNumber).toBe(1)
       expect(store.quitAsked).toBe(false)
       expect(store.turns).toEqual([])
       expect(store.bagHasNew).toBe(false)
       expect(store.modalChapter).toMatchObject({ kind: 'intro', act: 'Act I' })
       expect(store.acceptInput).toBe(false)
+    })
+  })
+
+  describe('save results', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('tells whether a save worked', () => {
+      expect(store.saveGame()).toBe(true)
+      expect(store.saveToSlot(2)).toBe(true)
+
+      bridge.quickSaveGame.mockReturnValue('[failure]Could not save.[/failure]')
+      bridge.saveToSlot.mockReturnValue('[failure]Could not save.[/failure]')
+      expect(store.saveGame()).toBe(false)
+      expect(store.saveToSlot(2)).toBe(false)
     })
   })
 })

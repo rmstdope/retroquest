@@ -33,7 +33,7 @@ describe('GameMenu', () => {
 
   it('saves and loads quickly, then closes', async () => {
     const game = useGameStore()
-    const save = vi.spyOn(game, 'saveGame').mockImplementation(() => {})
+    const save = vi.spyOn(game, 'saveGame').mockImplementation(() => true)
     const load = vi.spyOn(game, 'loadGame').mockImplementation(() => {})
     const w = mountMenu()
 

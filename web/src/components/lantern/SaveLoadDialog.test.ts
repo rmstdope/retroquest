@@ -33,6 +33,7 @@ describe('SaveLoadDialog', () => {
     })
     vi.spyOn(game, 'saveToSlot').mockImplementation((n: number) => {
       slots[n - 1] = slot(n, true)
+      return true
     })
     vi.spyOn(game, 'loadFromSlot').mockImplementation(() => {})
     vi.spyOn(game, 'loadGame').mockImplementation(() => {})

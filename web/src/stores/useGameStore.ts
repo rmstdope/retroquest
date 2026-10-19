@@ -368,11 +368,14 @@ export const useGameStore = defineStore('game', () => {
 
   /** The Lantern UI asks before `quit` / `exit` (see QuitDialog). */
   const quitAsked = ref(false)
+  /** Counts restarts, so views can start afresh with a new game. */
+  const gameNumber = ref(0)
 
   /** Start a new game from Act I: the story, dots and pop-ups start empty. */
   function restartGame(): void {
     const b = requireBridge()
     quitAsked.value = false
+    gameNumber.value++
     b.newGame()
     turns.value = []
     lastTurnRoom = ''
@@ -504,11 +507,18 @@ export const useGameStore = defineStore('game', () => {
     return true
   }
 
-  function saveGame(command: string | null = null): void {
+  /** Quick save; true when the game was saved (a failure goes in the story). */
+  function saveGame(command: string | null = null): boolean {
     const b = requireBridge()
     const result = b.quickSaveGame()
     if (!showNotice(result, 'Game saved'))
       showOutput(command, result, { chips: false })
+    return saved(result)
+  }
+
+  /** A save's answer says it worked (not a failure). */
+  function saved(result: string): boolean {
+    return !result.includes('[failure]')
   }
 
   function loadGame(command: string | null = null): void {
@@ -520,11 +530,12 @@ export const useGameStore = defineStore('game', () => {
     refreshPanels()
   }
 
-  function saveNamedGame(name: string, command: string | null = null): void {
+  function saveNamedGame(name: string, command: string | null = null): boolean {
     const b = requireBridge()
     const result = b.saveNamedGame(name)
     if (!showNotice(result, `Game saved · ${name}`))
       showOutput(command, result, { chips: false })
+    return saved(result)
   }
 
   function loadNamedGame(name: string, command: string | null = null): void {
@@ -566,11 +577,12 @@ export const useGameStore = defineStore('game', () => {
     return b.getSaveSlots()
   }
 
-  function saveToSlot(slot: number): void {
+  function saveToSlot(slot: number): boolean {
     const b = requireBridge()
     const result = b.saveToSlot(slot)
     if (!showNotice(result, `Game saved · Slot ${slot}`))
       showOutput(null, result)
+    return saved(result)
   }
 
   function loadFromSlot(slot: number): void {
@@ -784,6 +796,7 @@ export const useGameStore = defineStore('game', () => {
     lanternFeedback,
     readInfo,
     quitAsked,
+    gameNumber,
     restartGame,
     getQuickSave,
     notice,

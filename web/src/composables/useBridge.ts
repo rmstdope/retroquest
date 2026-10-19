@@ -34,6 +34,10 @@ type StoredSaveSlot = {
 /** The quick save's details (its data stays under 'retroquest_save'). */
 const QUICK_META_KEY = 'retroquest_save_meta'
 
+/** A save the browser could not keep (storage full or blocked) or the game did not write. */
+const SAVE_FAILED =
+  "[failure]The game could not be saved: this browser's storage is full or blocked.[/failure]"
+
 function readQuickMeta(): Partial<Omit<SaveSlot, 'slot'>> {
   try {
     const raw = localStorage.getItem(QUICK_META_KEY)
@@ -328,23 +332,22 @@ except FileNotFoundError:
     pass
 _save_data
       `) as string
-      if (saveData) {
-        const meta = JSON.stringify({
-          act: py('controller.get_act_name()') as string,
-          room: py('controller.get_room_name()') as string,
-          timestamp: new Date().toISOString(),
-          quests: readQuests(),
-        })
-        localStorage.setItem('retroquest_save', saveData)
-        try {
-          localStorage.setItem(QUICK_META_KEY, meta)
-        } catch {
-          // No details rather than the previous save's.
-          localStorage.removeItem(QUICK_META_KEY)
-        }
+      if (!saveData) return SAVE_FAILED
+      const meta = JSON.stringify({
+        act: py('controller.get_act_name()') as string,
+        room: py('controller.get_room_name()') as string,
+        timestamp: new Date().toISOString(),
+        quests: readQuests(),
+      })
+      localStorage.setItem('retroquest_save', saveData)
+      try {
+        localStorage.setItem(QUICK_META_KEY, meta)
+      } catch {
+        // No details rather than the previous save's.
+        localStorage.removeItem(QUICK_META_KEY)
       }
     } catch {
-      // Silently handle localStorage failures
+      return SAVE_FAILED
     }
     return (result as string) || 'Game saved.'
   }
@@ -455,22 +458,21 @@ except FileNotFoundError:
     pass
 _save_data
       `) as string
-      if (saveData) {
-        const actName = py('controller.get_act_name()') as string
-        const roomName = py('controller.get_room_name()') as string
-        const stored = readStoredSaveSlots()
-        stored[slot - 1] = {
-          slot,
-          act: actName,
-          room: roomName,
-          timestamp: new Date().toISOString(),
-          data: saveData,
-          quests: readQuests(),
-        }
-        localStorage.setItem('retroquest_save_slots', JSON.stringify(stored))
+      if (!saveData) return SAVE_FAILED
+      const actName = py('controller.get_act_name()') as string
+      const roomName = py('controller.get_room_name()') as string
+      const stored = readStoredSaveSlots()
+      stored[slot - 1] = {
+        slot,
+        act: actName,
+        room: roomName,
+        timestamp: new Date().toISOString(),
+        data: saveData,
+        quests: readQuests(),
       }
+      localStorage.setItem('retroquest_save_slots', JSON.stringify(stored))
     } catch {
-      // Silently handle localStorage failures
+      return SAVE_FAILED
     }
     return (result as string) || 'Game saved.'
   }
@@ -508,23 +510,22 @@ except FileNotFoundError:
     pass
 _save_data
       `) as string
-      if (saveData) {
-        const saves = listNamedSaves()
-        const existingIndex = saves.findIndex((s) => s.name === name)
-        const entry: NamedSave & { data: string } = {
-          name,
-          timestamp: new Date().toISOString(),
-          data: saveData,
-        }
-        if (existingIndex >= 0) {
-          saves[existingIndex] = entry
-        } else {
-          saves.push(entry)
-        }
-        localStorage.setItem('retroquest_named_saves', JSON.stringify(saves))
+      if (!saveData) return SAVE_FAILED
+      const saves = listNamedSaves()
+      const existingIndex = saves.findIndex((s) => s.name === name)
+      const entry: NamedSave & { data: string } = {
+        name,
+        timestamp: new Date().toISOString(),
+        data: saveData,
       }
+      if (existingIndex >= 0) {
+        saves[existingIndex] = entry
+      } else {
+        saves.push(entry)
+      }
+      localStorage.setItem('retroquest_named_saves', JSON.stringify(saves))
     } catch {
-      // Silently handle localStorage failures
+      return SAVE_FAILED
     }
     return (result as string) || 'Game saved.'
   }
