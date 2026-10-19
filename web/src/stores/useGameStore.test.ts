@@ -55,6 +55,7 @@ function createMockBridge() {
       mainQuest: 'Shadows Over Willowbrook',
     })),
     readCommand: vi.fn((): string => ''),
+    getShortNames: vi.fn((): Record<string, string> => ({})),
     newGame: vi.fn(),
     getQuickSave: vi.fn((): SaveSlot | null => null),
     getActStats: vi.fn(() => ({
@@ -2010,5 +2011,13 @@ describe('useGameStore', () => {
       expect(store.showTitle).toBe(false)
       expect(store.modalChapter).toMatchObject({ kind: 'intro', act: 'Act I' })
     })
+  })
+
+  it('keeps the short names of the items around', async () => {
+    bridge.getShortNames.mockReturnValue({ journal: "Elior's Journal" })
+
+    await store.initGame()
+
+    expect(store.shortNames).toEqual({ journal: "Elior's Journal" })
   })
 })

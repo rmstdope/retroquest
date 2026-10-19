@@ -3,8 +3,9 @@ import { nameActions } from './nameActions'
 
 const HERE = {
   characters: ['grandmother'],
-  items: ['bucket', 'lantern (lit)'],
+  items: ['bucket', 'lantern (lit)', "Elior's Journal", 'chicken'],
   bag: ['bread', 'map'],
+  shortNames: { journal: "Elior's Journal", hoe: 'Rusty Hoe' },
 }
 
 describe('nameActions', () => {
@@ -33,5 +34,19 @@ describe('nameActions', () => {
   it('offers nothing for something that is not here', () => {
     expect(nameActions('character', 'Mira', HERE)).toEqual([])
     expect(nameActions('item', 'sword', HERE)).toEqual([])
+  })
+
+  it("knows an item by the story's short name", () => {
+    expect(nameActions('item', 'journal', HERE)).toEqual([
+      { label: 'Take', command: "take elior's journal" },
+      { label: 'Examine', command: "examine elior's journal" },
+    ])
+  })
+
+  it('knows an item named in the plural', () => {
+    expect(nameActions('item', 'chickens', HERE)[0]).toEqual({
+      label: 'Take',
+      command: 'take chicken',
+    })
   })
 })

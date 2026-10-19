@@ -391,6 +391,14 @@ with open('retroquest.save', 'wb') as f:
     }
   }
 
+  /** Short item names the story uses, mapped to the items' full names. */
+  function getShortNames(): Record<string, string> {
+    const result = py('controller.get_short_names()') as { toJs(): unknown }
+    return Object.fromEntries(
+      result.toJs() as Iterable<[string, string]>,
+    ) as Record<string, string>
+  }
+
   function getActStats(): ActStats {
     const result = py('controller.get_act_stats()') as { toJs(): unknown }
     const data = Object.fromEntries(
@@ -642,6 +650,7 @@ _result_text
     getActName,
     getQuestProgress,
     getActStats,
+    getShortNames,
     getSaveSlots,
     getQuickSave,
     saveToSlot,
