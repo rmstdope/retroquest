@@ -32,4 +32,12 @@ describe('StoryNameMenu', () => {
     // Two 44px actions plus padding end above the name.
     expect(top + 2 * 44 + 10).toBeLessThanOrEqual(280)
   })
+
+  it('closes when the story scrolls under it', async () => {
+    menuAt({ x: 100, top: 200, bottom: 218 })
+
+    document.body.dispatchEvent(new Event('scroll'))
+
+    expect(wrapper!.emitted('close')).toHaveLength(1)
+  })
 })

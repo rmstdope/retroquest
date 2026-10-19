@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { createPinia, setActivePinia } from 'pinia'
 import StoryArrival from './StoryArrival.vue'
-import type { Arrival } from '@/stores/useGameStore'
+import { useGameStore, type Arrival } from '@/stores/useGameStore'
 
 const FIELD: Arrival = {
   room: 'Vegetable Field',
@@ -19,6 +20,35 @@ function mountArrival(command: string | null, arrival: Partial<Arrival> = {}) {
 }
 
 describe('StoryArrival', () => {
+  beforeEach(() => setActivePinia(createPinia()))
+
+  it('makes buttons only of the chips for what is still here', () => {
+    const game = useGameStore()
+    game.roomName = 'Vegetable Field'
+    game.characters = ['old farmer']
+    game.items = ['dull knife']
+
+    const here = mountArrival('go south').get('[data-testid="here"]')
+
+    expect(here.findAll('button.lq-here-chip').map((c) => c.text())).toEqual([
+      'Old Farmer',
+      'Dull Knife',
+    ])
+    expect(here.findAll('span.lq-here-chip').map((c) => c.text())).toEqual([
+      'Rusty Hoe',
+    ])
+  })
+
+  it('makes no buttons of an earlier room', () => {
+    const game = useGameStore()
+    game.roomName = 'Chicken Coop'
+    game.characters = ['old farmer']
+
+    const here = mountArrival('go south').get('[data-testid="here"]')
+
+    expect(here.findAll('button').length).toBe(0)
+  })
+
   it('names the room and the direction of a move in the divider', () => {
     const divider = mountArrival('go south').get('[data-testid="divider"]')
 

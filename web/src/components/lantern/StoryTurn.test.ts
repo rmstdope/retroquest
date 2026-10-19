@@ -163,6 +163,7 @@ describe('StoryTurn', () => {
   })
 
   it('shows the arrival in a new room after the answer', () => {
+    setActivePinia(createPinia())
     const w = mountTurn({
       command: 'go south',
       text: '[event]You move south to [room_name]Vegetable Field[/room_name].[/event]',

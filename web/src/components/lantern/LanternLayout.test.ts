@@ -359,6 +359,11 @@ describe('LanternLayout', () => {
 
       expect(submit).toHaveBeenCalledWith('take bucket')
       expect(w.find('[role="menu"]').exists()).toBe(false)
+      // Focus goes on to the actions, not lost with the menu.
+      expect(document.activeElement).not.toBe(document.body)
+      expect(w.get('.lq-story').element.contains(document.activeElement)).toBe(
+        false,
+      )
     })
 
     it('closes the menu with Escape', async () => {
@@ -391,6 +396,7 @@ describe('LanternLayout', () => {
     it('opens the menu from a Here chip on arrival, and focus goes back to it', async () => {
       const w = await storyWith('You arrive.')
       const game = useGameStore()
+      game.roomName = 'Cottage'
       game.turns[0].arrival = {
         room: 'Cottage',
         description: 'A cottage.',
@@ -418,6 +424,30 @@ describe('LanternLayout', () => {
       await chip.trigger('click')
       await w.get('[role="menuitem"]').trigger('click')
       expect(submit).toHaveBeenCalledWith('talk to grandmother')
+    })
+
+    it('closes on a scroll without scrolling back to the chip', async () => {
+      const w = await storyWith('You arrive.')
+      const game = useGameStore()
+      game.roomName = 'Cottage'
+      game.turns[0].arrival = {
+        room: 'Cottage',
+        description: 'A cottage.',
+        characters: ['grandmother'],
+        items: [],
+        exits: {},
+      }
+      await flushPromises()
+      const chip = w.get('[data-testid="here"] button.lq-here-character')
+      await chip.trigger('click')
+      await flushPromises()
+      const focus = vi.spyOn(chip.element as HTMLElement, 'focus')
+
+      await w.get('.lq-story').trigger('scroll')
+
+      expect(w.find('[role="menu"]').exists()).toBe(false)
+      // The player scrolled away: focus goes back without moving the story.
+      expect(focus).toHaveBeenCalledWith({ preventScroll: true })
     })
   })
 

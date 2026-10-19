@@ -4,7 +4,8 @@ import type { NameAction } from '@/lantern/nameActions'
 
 /**
  * A small menu next to a name clicked in the story: the actions that fit
- * it. Picking one runs it; Escape, a click elsewhere or Tab closes it.
+ * it. Picking one runs it; Escape, a click elsewhere, Tab or scrolling
+ * (the name would move away from it) closes it.
  * Arrow keys move between the actions.
  */
 /** `x`, `top` and `bottom` are where the clicked name is in the window. */
@@ -56,13 +57,19 @@ function onPointerDown(event: PointerEvent): void {
   if (!menu.value?.contains(event.target as Node)) emit('close')
 }
 
+function onScroll(): void {
+  emit('close')
+}
+
 onMounted(() => {
   void nextTick(() => items()[0]?.focus())
   document.addEventListener('pointerdown', onPointerDown, true)
+  document.addEventListener('scroll', onScroll, true)
 })
-onBeforeUnmount(() =>
-  document.removeEventListener('pointerdown', onPointerDown, true),
-)
+onBeforeUnmount(() => {
+  document.removeEventListener('pointerdown', onPointerDown, true)
+  document.removeEventListener('scroll', onScroll, true)
+})
 </script>
 
 <template>

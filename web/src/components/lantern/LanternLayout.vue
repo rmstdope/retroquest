@@ -295,14 +295,18 @@ function onNameClick(event: MouseEvent): void {
   nameMenu.value = { actions, x: box.left, top: box.top, bottom: box.bottom }
 }
 
+/** Focus goes back without scrolling: a scroll away also closes the menu. */
 function closeNameMenu(): void {
   nameMenu.value = null
-  if (focusBeforeMenu?.isConnected) focusBeforeMenu.focus()
+  if (focusBeforeMenu?.isConnected)
+    focusBeforeMenu.focus({ preventScroll: true })
 }
 
+/** Run the picked action; focus goes on to the actions, as after a command. */
 function runNameAction(command: string): void {
   nameMenu.value = null
   game.submitCommand(command)
+  void nextTick(focusActions)
 }
 
 const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
