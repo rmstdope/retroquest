@@ -170,6 +170,24 @@ function setMode(next: 'actions' | 'type'): void {
 
 defineExpose({ focus, setMode })
 
+// "Not like that": Do it — or in Actions mode, which clears the sentence,
+// the verb used last — gives a short shake when a command fails (it does
+// not move when motion is reduced, see .lq-shake). The shake ends after its
+// length even when nothing showed it (no verb used yet, the sheet folded),
+// so a later Do it does not shake for an old failure.
+const SHAKE_MS = 320 // the length of the lq-shake animation
+const shaking = ref(false)
+let shakeTimer: ReturnType<typeof setTimeout> | undefined
+watch(
+  () => game.turns.at(-1),
+  (turn) => {
+    if (!turn?.command || !turn.text.includes('[failure]')) return
+    shaking.value = true
+    clearTimeout(shakeTimer)
+    shakeTimer = setTimeout(() => (shaking.value = false), SHAKE_MS)
+  },
+)
+
 function run(text: string): void {
   if (!game.acceptInput) return
   game.submitCommand(text)
@@ -397,6 +415,7 @@ function onTypedEnter(): void {
           <button
             type="button"
             class="lq-do"
+            :class="{ 'lq-shake': shaking }"
             :disabled="!command || !game.acceptInput"
             @click="doIt"
           >
@@ -411,7 +430,10 @@ function onTypedEnter(): void {
           :key="v.id"
           type="button"
           class="lq-verb"
-          :class="{ 'lq-verb-on': verb?.id === v.id }"
+          :class="{
+            'lq-verb-on': verb?.id === v.id,
+            'lq-shake': shaking && !verb && lastVerbId === v.id,
+          }"
           :aria-pressed="verb?.id === v.id ? 'true' : 'false'"
           :data-verb="v.id"
           :disabled="!game.acceptInput"
@@ -488,7 +510,12 @@ function onTypedEnter(): void {
           </li>
         </ul>
       </div>
-      <button type="submit" class="lq-do" :disabled="!game.acceptInput">
+      <button
+        type="submit"
+        class="lq-do"
+        :class="{ 'lq-shake': shaking }"
+        :disabled="!game.acceptInput"
+      >
         Do it
       </button>
     </form>
@@ -693,6 +720,20 @@ function onTypedEnter(): void {
   font: inherit;
   font-size: 14px;
   cursor: pointer;
+}
+/* Movement scales with --lq-motion, so reduced motion keeps it still. */
+.lq-shake {
+  animation: lq-shake 0.32s ease-in-out;
+}
+@keyframes lq-shake {
+  20%,
+  60% {
+    transform: translateX(calc(-4px * var(--lq-motion)));
+  }
+  40%,
+  80% {
+    transform: translateX(calc(4px * var(--lq-motion)));
+  }
 }
 .lq-do {
   min-height: 44px;
