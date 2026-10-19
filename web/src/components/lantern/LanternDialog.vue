@@ -8,7 +8,8 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * stays put while the body scrolls; buttons go in the footer slot. Focus
  * stays inside while it is open; Escape, the close button and the backdrop
  * emit `close`. Focus starts on an element marked `data-autofocus`, else on
- * the first focusable one.
+ * the first focusable one, else on the dialog itself (it takes focus when
+ * its text is clicked, so Escape and Tab keep working).
  */
 withDefaults(
   defineProps<{ title: string; eyebrow?: string; closable?: boolean }>(),
@@ -45,6 +46,7 @@ defineExpose({ focusFirst: trap.focusFirst })
       class="lq-dialog-panel"
       role="dialog"
       aria-modal="true"
+      tabindex="-1"
       :aria-labelledby="titleId"
       @keydown="onKeydown"
     >
@@ -114,6 +116,10 @@ defineExpose({ focusFirst: trap.focusFirst })
   color: var(--lq-fg);
   font-family: var(--lq-font-ui);
   box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
+}
+/* Not a Tab stop: it only holds focus when nothing inside can. */
+.lq-dialog-panel:focus {
+  outline: none;
 }
 .lq-dialog-grabber {
   display: none;

@@ -23,6 +23,13 @@ describe('LanternDialog', () => {
     return wrapper
   }
 
+  /** Press Tab where focus is, as a browser would send it. */
+  function pressTab(target: HTMLElement, shiftKey = false) {
+    target.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true }),
+    )
+  }
+
   it('is a modal dialog named by its title', () => {
     const w = mountDialog()
     const dialog = w.get('[role="dialog"]')
@@ -62,6 +69,44 @@ describe('LanternDialog', () => {
 
     await dialog.trigger('keydown', { key: 'Tab', shiftKey: true })
     expect(document.activeElement).toBe(last)
+  })
+
+  it('skips hidden and untabbable elements when wrapping Tab', async () => {
+    const w = mountDialog(
+      {},
+      {
+        default:
+          '<button class="last">Last</button><button class="gone">Gone</button>' +
+          '<button tabindex="-1">Skipped</button>',
+      },
+    )
+    const close = w.get('button[aria-label="Close"]').element as HTMLElement
+    const last = w.get('.last').element as HTMLElement
+    // jsdom has no layout: mark the element as not rendered, as a browser would.
+    const gone = w.get('.gone').element as HTMLElement
+    gone.checkVisibility = () => false
+
+    last.focus()
+    pressTab(last)
+    expect(document.activeElement).toBe(close)
+  })
+
+  it('focuses the dialog itself when it has nothing to focus', async () => {
+    const w = mountDialog({ closable: false }, { default: '<p>Only text</p>' })
+    await w.vm.$nextTick()
+    const dialog = w.get('[role="dialog"]').element as HTMLElement
+
+    expect(document.activeElement).toBe(dialog)
+    expect(dialog.getAttribute('tabindex')).toBe('-1')
+  })
+
+  it('wraps Shift+Tab from the dialog itself to the last element', async () => {
+    const w = mountDialog()
+    const dialog = w.get('[role="dialog"]').element as HTMLElement
+    dialog.focus()
+
+    pressTab(dialog, true)
+    expect(document.activeElement).toBe(w.get('.last').element)
   })
 
   it('puts focus on the element marked to get it, else the first one', async () => {
