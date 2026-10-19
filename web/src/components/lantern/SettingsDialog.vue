@@ -62,14 +62,13 @@ function volume(event: Event): number {
           ><span class="lq-row-label">Theme</span
           ><span class="lq-note">Device follows your system</span></span
         >
-        <div class="lq-seg" role="radiogroup" aria-label="Theme">
+        <div class="lq-seg" role="group" aria-label="Theme">
           <button
             v-for="t in THEMES"
             :key="t.value"
             type="button"
-            role="radio"
             class="lq-seg-btn"
-            :aria-checked="settings.theme === t.value ? 'true' : 'false'"
+            :aria-pressed="settings.theme === t.value ? 'true' : 'false'"
             @click="settings.theme = t.value"
           >
             {{ t.label }}
@@ -81,15 +80,14 @@ function volume(event: Event): number {
           ><span class="lq-row-label">Text size</span
           ><span class="lq-note">Story text only</span></span
         >
-        <div class="lq-seg" role="radiogroup" aria-label="Text size">
+        <div class="lq-seg" role="group" aria-label="Text size">
           <button
             v-for="s in SIZES"
             :key="s.value"
             type="button"
-            role="radio"
             class="lq-seg-btn"
             :aria-label="s.label"
-            :aria-checked="settings.textSize === s.value ? 'true' : 'false'"
+            :aria-pressed="settings.textSize === s.value ? 'true' : 'false'"
             :style="{ fontSize: `${s.px}px` }"
             @click="settings.textSize = s.value"
           >
@@ -173,14 +171,13 @@ function volume(event: Event): number {
           ><span class="lq-row-label">Start with</span
           ><span class="lq-note">You can switch any time</span></span
         >
-        <div class="lq-seg" role="radiogroup" aria-label="Start with">
+        <div class="lq-seg" role="group" aria-label="Start with">
           <button
             v-for="s in STARTS"
             :key="s.value"
             type="button"
-            role="radio"
             class="lq-seg-btn"
-            :aria-checked="settings.startMode === s.value ? 'true' : 'false'"
+            :aria-pressed="settings.startMode === s.value ? 'true' : 'false'"
             @click="settings.startMode = s.value"
           >
             {{ s.label }}
@@ -257,7 +254,7 @@ function volume(event: Event): number {
 }
 .lq-seg-btn {
   min-width: 44px;
-  height: 38px;
+  min-height: 44px;
   padding: 0 12px;
   border: none;
   border-radius: 9px;
@@ -267,7 +264,7 @@ function volume(event: Event): number {
   font-size: 14px;
   cursor: pointer;
 }
-.lq-seg-btn[aria-checked='true'] {
+.lq-seg-btn[aria-pressed='true'] {
   background: var(--lq-accent);
   color: var(--lq-on-accent);
   font-weight: 600;

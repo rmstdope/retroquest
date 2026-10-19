@@ -36,11 +36,12 @@ describe('SettingsDialog', () => {
     return wrapper
   }
 
-  function radio(w: VueWrapper, group: string, label: string) {
+  /** A choice in a segmented group: toggle buttons, as in the composer. */
+  function choice(w: VueWrapper, group: string, label: string) {
     return w
-      .get(`[role="radiogroup"][aria-label="${group}"]`)
-      .findAll('[role="radio"]')
-      .find((r) => (r.attributes('aria-label') ?? r.text()) === label)!
+      .get(`[role="group"][aria-label="${group}"]`)
+      .findAll('button')
+      .find((b) => (b.attributes('aria-label') ?? b.text()) === label)!
   }
 
   it('is the settings dialog with its groups', () => {
@@ -57,19 +58,24 @@ describe('SettingsDialog', () => {
   it('picks the theme', async () => {
     const w = mountSettings()
 
-    await radio(w, 'Theme', 'Dark').trigger('click')
+    await choice(w, 'Theme', 'Dark').trigger('click')
 
     expect(useSettingsStore().theme).toBe('dark')
-    expect(radio(w, 'Theme', 'Dark').attributes('aria-checked')).toBe('true')
-    expect(radio(w, 'Theme', 'Device').attributes('aria-checked')).toBe('false')
+    expect(choice(w, 'Theme', 'Dark').attributes('aria-pressed')).toBe('true')
+    expect(choice(w, 'Theme', 'Device').attributes('aria-pressed')).toBe(
+      'false',
+    )
   })
 
   it('picks the text size', async () => {
     const w = mountSettings()
 
-    await radio(w, 'Text size', 'Large text').trigger('click')
+    await choice(w, 'Text size', 'Large text').trigger('click')
 
     expect(useSettingsStore().textSize).toBe('large')
+    expect(
+      choice(w, 'Text size', 'Large text').attributes('aria-pressed'),
+    ).toBe('true')
   })
 
   it('turns music off and on and sets its volume', async () => {
@@ -109,9 +115,12 @@ describe('SettingsDialog', () => {
   it('picks how the actions start', async () => {
     const w = mountSettings()
 
-    await radio(w, 'Start with', 'Type').trigger('click')
+    await choice(w, 'Start with', 'Type').trigger('click')
 
     expect(useSettingsStore().startMode).toBe('type')
+    expect(choice(w, 'Start with', 'Type').attributes('aria-pressed')).toBe(
+      'true',
+    )
   })
 
   it('follows the device for reduce motion until changed', async () => {
