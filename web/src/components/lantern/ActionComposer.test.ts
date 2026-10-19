@@ -35,6 +35,7 @@ describe('ActionComposer', () => {
     wrapper?.unmount()
     wrapper = undefined
     vi.unstubAllGlobals()
+    vi.useRealTimers()
   })
 
   function mountComposer() {
@@ -485,6 +486,94 @@ describe('ActionComposer', () => {
       await w.vm.$nextTick()
 
       expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+    })
+  })
+
+  describe('shake on failure', () => {
+    // Type mode always shows Do it.
+    beforeEach(() => {
+      useSettingsStore().startMode = 'type'
+    })
+
+    function answer(command: string | null, text: string, id = 1) {
+      useGameStore().turns = [
+        {
+          id,
+          command,
+          text,
+          room: 'Hall',
+          roomChanged: false,
+          gained: [],
+          lost: [],
+          arrival: null,
+        },
+      ]
+    }
+
+    it('shakes Do it when the command failed', async () => {
+      const w = mountComposer()
+
+      answer('go south', "[failure]You can't go that way.[/failure]")
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-do').classes()).toContain('lq-shake')
+    })
+
+    it('stops shaking when the shake is over', async () => {
+      vi.useFakeTimers()
+      const w = mountComposer()
+      answer('go south', "[failure]You can't go that way.[/failure]")
+      await w.vm.$nextTick()
+
+      vi.advanceTimersByTime(320)
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
+    })
+
+    it('does not shake later when nothing showed the failure', async () => {
+      // A failed move from the compass before any verb was used: no verb
+      // shakes, and opening a verb afterwards must not shake its Do it.
+      vi.useFakeTimers()
+      useSettingsStore().startMode = 'actions'
+      const w = mountComposer()
+      answer('go south', "[failure]You can't go that way.[/failure]")
+      await w.vm.$nextTick()
+
+      vi.advanceTimersByTime(320)
+      await button(w, 'Take').trigger('click')
+
+      expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
+    })
+
+    it('shakes the verb used last in Actions mode', async () => {
+      useSettingsStore().startMode = 'actions'
+      const w = mountComposer()
+      await button(w, 'Look').trigger('click')
+
+      answer('look', '[failure]It is too dark to see.[/failure]')
+      await w.vm.$nextTick()
+
+      expect(button(w, 'Look').classes()).toContain('lq-shake')
+      expect(button(w, 'Take').classes()).not.toContain('lq-shake')
+    })
+
+    it('does not shake when the command worked', async () => {
+      const w = mountComposer()
+
+      answer('look', 'You look around.')
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
+    })
+
+    it("does not shake for the game's own output", async () => {
+      const w = mountComposer()
+
+      answer(null, '[failure]No save file found.[/failure]')
+      await w.vm.$nextTick()
+
+      expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
     })
   })
 })
