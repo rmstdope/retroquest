@@ -1654,3 +1654,11 @@ def test_load_normalizes_name_to_lowercase(game, tmp_path, monkeypatch):
 def test_get_act_name_returns_act_1_initially(game):
     """get_act_name() returns 'Act 1' when the game starts on act index 0."""
     assert game.get_act_name() == "Act 1"
+
+
+def test_unknown_command_is_a_failure(game):
+    """A command the game does not understand is shown as a failure."""
+    assert game.unknown("xyzzy") == (
+        "[failure]I don't understand the command: 'xyzzy'. "
+        "Try 'help' for a list of valid commands.[/failure]"
+    )

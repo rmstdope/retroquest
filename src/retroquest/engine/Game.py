@@ -571,8 +571,8 @@ Welcome to
     def unknown(self, command: str) -> str:
         """Handle unknown commands."""
         return (
-            f"I don't understand the command: '{command}'. "
-            "Try 'help' for a list of valid commands."
+            f"[failure]I don't understand the command: '{command}'. "
+            "Try 'help' for a list of valid commands.[/failure]"
         )
 
     def quit(self) -> str:
