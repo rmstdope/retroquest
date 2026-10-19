@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternHeader from './LanternHeader.vue'
@@ -176,5 +176,35 @@ describe('LanternHeader', () => {
       ['help'],
     ])
     expect(w.find('button[aria-label="Game menu"]').exists()).toBe(false)
+  })
+
+  describe('full screen', () => {
+    function browser(enabled: boolean) {
+      Object.defineProperty(document, 'fullscreenEnabled', {
+        configurable: true,
+        value: enabled,
+      })
+    }
+
+    afterEach(() => browser(false))
+
+    it('offers full screen where the browser supports it', async () => {
+      browser(true)
+      const enter = vi.fn(() => Promise.resolve())
+      document.documentElement.requestFullscreen = enter
+      const w = mountHeader()
+
+      await w.get('button[aria-label="Full screen"]').trigger('click')
+
+      expect(enter).toHaveBeenCalledOnce()
+    })
+
+    it('leaves it out where it is not supported', () => {
+      browser(false)
+
+      expect(
+        mountHeader().find('button[aria-label="Full screen"]').exists(),
+      ).toBe(false)
+    })
   })
 })
