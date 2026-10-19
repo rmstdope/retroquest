@@ -55,4 +55,18 @@ describe('parseQuestNews', () => {
       ).text,
     ).toBe('[dim]Only old.[/dim]')
   })
+
+  it('keeps a clue list with open (○) clues whole', () => {
+    const description =
+      '[dim]Your parents walked these paths.[/dim]\n\n' +
+      '✓ Depths: you found traces.\n' +
+      '[dim]○ On the heights, their words may echo.[/dim]'
+
+    expect(
+      parseQuestNews(
+        'updated',
+        `[quest_name]Echoes (side quest)[/quest_name]\n\n${description}`,
+      ).text,
+    ).toBe(description)
+  })
 })

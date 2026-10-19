@@ -1563,6 +1563,21 @@ describe('useGameStore', () => {
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
     })
 
+    it('lets the fanfare alone mark a turn that also completes a quest', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      bridge.activateQuest.mockReturnValueOnce(NEW).mockReturnValue(null)
+      bridge.completeQuest
+        .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
+        .mockReturnValue(null)
+
+      store.submitCommand('talk to grandmother')
+
+      expect(audio.playNewQuest).not.toHaveBeenCalled()
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+      expect(store.turns.at(-1)!.quests).toHaveLength(1)
+    })
+
     it('still shows a pop-up when a quest completes', () => {
       bridge.completeQuest
         .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
