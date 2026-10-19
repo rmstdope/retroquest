@@ -55,6 +55,7 @@ function createMockBridge() {
       mainQuest: 'Shadows Over Willowbrook',
     })),
     readCommand: vi.fn((): string => ''),
+    newGame: vi.fn(),
     getQuickSave: vi.fn((): SaveSlot | null => null),
     getActStats: vi.fn(() => ({
       questsCompleted: 4,
@@ -1926,5 +1927,53 @@ describe('useGameStore', () => {
     await store.initGame()
 
     expect(store.getQuickSave()).toEqual(quick)
+  })
+
+  describe('quit', () => {
+    beforeEach(async () => {
+      bridge.isAcceptingInput.mockReturnValue(true)
+      await store.initGame()
+      store.dismissModal()
+    })
+
+    it('asks before quitting in the Lantern UI', () => {
+      store.lanternFeedback = true
+      bridge.handleCommand.mockClear()
+
+      store.submitCommand('quit')
+      expect(store.quitAsked).toBe(true)
+      store.quitAsked = false
+      store.submitCommand('EXIT')
+      expect(store.quitAsked).toBe(true)
+      expect(bridge.handleCommand).not.toHaveBeenCalled()
+    })
+
+    it('leaves quit to the engine in the classic UI', () => {
+      store.submitCommand('quit')
+
+      expect(store.quitAsked).toBe(false)
+      expect(bridge.handleCommand).toHaveBeenCalledWith('quit')
+    })
+
+    it('starts again from Act I', () => {
+      store.lanternFeedback = true
+      store.submitCommand('look')
+      store.bagHasNew = true
+      store.quitAsked = true
+      bridge.advanceTurn
+        .mockReturnValueOnce('LOGO')
+        .mockReturnValueOnce(
+          '[bold]ACT 1: THE CALL TO ADVENTURE[/bold]\n\nYou are Elior.',
+        )
+
+      store.restartGame()
+
+      expect(bridge.newGame).toHaveBeenCalledOnce()
+      expect(store.quitAsked).toBe(false)
+      expect(store.turns).toEqual([])
+      expect(store.bagHasNew).toBe(false)
+      expect(store.modalChapter).toMatchObject({ kind: 'intro', act: 'Act I' })
+      expect(store.acceptInput).toBe(false)
+    })
   })
 })

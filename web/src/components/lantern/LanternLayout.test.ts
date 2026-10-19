@@ -255,6 +255,15 @@ describe('LanternLayout', () => {
     expect(w.get('[role="status"]').text()).toBe('Game saved · Slot 2')
   })
 
+  it('asks before quitting', async () => {
+    const w = mountLayout()
+
+    useGameStore().quitAsked = true
+    await w.vm.$nextTick()
+
+    expect(w.get('[role="dialog"] h2').text()).toBe('Quit game?')
+  })
+
   it('shows quest news in the story while it is shown', () => {
     const w = mountLayout()
     expect(useGameStore().lanternFeedback).toBe(true)
