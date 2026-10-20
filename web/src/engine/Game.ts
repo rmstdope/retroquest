@@ -2,6 +2,7 @@
  * The game: its acts, the run-state machine (logo, act intro, act running,
  * act transition, game over), every player command, command completion and save/load.
  */
+import type { MusicInfo } from './GameController'
 import type { Act } from './Act'
 import { Character } from './Character'
 import { ClassRegistry } from './ClassRegistry'
@@ -161,10 +162,10 @@ export class Game implements CommandTarget {
    * The presented act's music once it runs, and still after game over; empty
    * before that so nothing plays early.
    */
-  presentedMusic(): { musicFile: string; musicInfo: string } {
+  presentedMusic(): MusicInfo {
     if (!this.isActRunning() && !this.isGameOver())
       return { musicFile: '', musicInfo: '' }
-    const act = this.acts[this.currentAct]
+    const act = this.acts[this.presentedActIndex()]
     return { musicFile: act.musicFile, musicInfo: act.musicInfo }
   }
 
