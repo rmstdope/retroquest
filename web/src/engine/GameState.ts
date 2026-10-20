@@ -229,6 +229,15 @@ export class GameState {
     return this.activatedQuests.find((quest) => quest.checkUpdate(this)) ?? null
   }
 
+  /**
+   * Rebuild the log of every active quest from the story flags, without
+   * reporting anything as news. A save made before quests kept their log as
+   * data lacks it; this brings a loaded game level with a played one.
+   */
+  refreshQuestLogs(): void {
+    for (const quest of this.activatedQuests) quest.checkUpdate(this)
+  }
+
   /** Complete the first active quest whose completion is met and return it, or null. */
   nextCompletedQuest(): Quest | null {
     const index = this.activatedQuests.findIndex((quest) =>

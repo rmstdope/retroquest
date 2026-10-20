@@ -51,12 +51,3 @@ export function parseActIntro(text: string): ActIntro {
     body: text.slice(match[0].length).trim(),
   }
 }
-
-/** Where the engine's act-complete text starts, after the act's last answer. */
-const CONGRATULATIONS = 'Congratulations'
-
-/** The act-complete text without the last answer (already shown in the story). */
-export function actCompleteText(text: string): string {
-  const start = text.indexOf(CONGRATULATIONS)
-  return start < 0 ? text : text.slice(start).trim()
-}

@@ -7,6 +7,19 @@ import {
   FLAG_ACT3_ECHOES_QUEST_COMPLETED,
 } from '../Act3StoryFlags'
 
+/** The lead-in of the clue list. */
+const INTRO =
+  'Your parents once walked these same paths in their own desperate ' +
+  'search for the three relics. As you face the trials they faced, ' +
+  'you may discover traces of their passage.'
+
+/** The clues still open, in order: depths, heights, shadows. */
+const OPEN_CLUES = [
+  'In the depths where courage is tested, echoes of the past linger.',
+  'On the heights where wisdom burns, their words may still echo.',
+  'In the shadows where sacrifice dwells, ancient memories await.',
+]
+
 /** Storytelling quest to discover the truth about Elior's parents and their ward. */
 export class EchoesOfTheHiddenBondQuest extends Quest {
   private discoveries: Record<string, boolean> = {}
@@ -30,6 +43,20 @@ export class EchoesOfTheHiddenBondQuest extends Quest {
         "Malakar's sight, ensuring he would grow strong enough to face " +
         'the darkness when the time came.',
     })
+    this.setChecklist(
+      {
+        intro: INTRO,
+        // Matches the opening description above, whose last clue is worded
+        // differently from the one `checkUpdate` shows; the next update poll
+        // replaces it.
+        items: [
+          OPEN_CLUES[0],
+          OPEN_CLUES[1],
+          'In the shadows where secrets are kept, their choices may still resonate.',
+        ].map((text) => ({ done: false, text })),
+      },
+      this.description,
+    )
   }
 
   /** Return false as this is a storytelling side quest. */
@@ -48,67 +75,52 @@ export class EchoesOfTheHiddenBondQuest extends Quest {
   override checkUpdate(gameState: GameState): boolean {
     let updated = false
 
-    // Build dynamic description based on discoveries
-    const baseDesc =
-      '[dim]Your parents once walked these same paths in their own desperate ' +
-      'search for the three relics. As you face the trials they faced, ' +
-      'you may discover traces of their passage.[/dim]'
+    // The prose form of each clue, for readers of the description.
+    const baseDesc = `[dim]${INTRO}[/dim]`
+    const items: { done: boolean; text: string }[] = []
+    const lines: string[] = []
 
-    const discoveries: string[] = []
-
-    // Check Sea-Sealed Letter
-    if (gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ)) {
-      if (!this.discoveries.sea_letter) {
-        this.discoveries.sea_letter = true
-        updated = true
-      }
-      discoveries.push(
-        "✓ Depths of the Sunken Ruins: You found traces of your parents' " +
+    const found = [
+      {
+        key: 'sea_letter',
+        flag: FLAG_ACT3_SEA_SEALED_LETTER_READ,
+        text:
+          "Depths of the Sunken Ruins: You found traces of your parents' " +
           "first passage, revealing their past as Malakar's apprentices and " +
           'the moment they chose to defy him.',
-      )
-    } else {
-      discoveries.push(
-        '[dim]○ In the depths where courage is tested, echoes of the past linger.[/dim]',
-      )
-    }
-
-    // Check Charred Inscription
-    if (gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)) {
-      if (!this.discoveries.charred_inscription) {
-        this.discoveries.charred_inscription = true
-        updated = true
-      }
-      discoveries.push(
-        "✓ Heights of Mount Ember: You discovered your parents' words " +
+      },
+      {
+        key: 'charred_inscription',
+        flag: FLAG_ACT3_CHARRED_INSCRIPTION_READ,
+        text:
+          "Heights of Mount Ember: You discovered your parents' words " +
           'burned into stone, describing the protective ward they forged ' +
           'through fire and sacrifice.',
-      )
-    } else {
-      discoveries.push(
-        '[dim]○ On the heights where wisdom burns, their words may still echo.[/dim]',
-      )
-    }
-
-    // Check Dragon's Memory
-    if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {
-      if (!this.discoveries.dragons_memory) {
-        this.discoveries.dragons_memory = true
-        updated = true
-      }
-      discoveries.push(
-        '✓ Shadows of the Caverns: The ancient dragon shared memories ' +
+      },
+      {
+        key: 'dragons_memory',
+        flag: FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+        text:
+          'Shadows of the Caverns: The ancient dragon shared memories ' +
           "of your parents' final act, naming them and the completion of " +
           'their ward.',
-      )
-    } else {
-      discoveries.push(
-        '[dim]○ In the shadows where sacrifice dwells, ancient memories await.[/dim]',
-      )
-    }
+      },
+    ]
+    found.forEach(({ key, flag, text }, index) => {
+      const done = gameState.getStoryFlag(flag)
+      if (done && !this.discoveries[key]) {
+        this.discoveries[key] = true
+        updated = true
+      }
+      const open = OPEN_CLUES[index]
+      items.push({ done, text: done ? text : open })
+      lines.push(done ? `✓ ${text}` : `[dim]○ ${open}[/dim]`)
+    })
 
-    // Update description with current progress
-    this.description = baseDesc + '\n\n' + discoveries.join('\n')
+    this.setChecklist(
+      { intro: INTRO, items },
+      baseDesc + '\n\n' + lines.join('\n'),
+    )
 
     return updated
   }

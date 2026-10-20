@@ -1,11 +1,39 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, MAX_TURNS } from './useGameStore'
-import type { CompletionTree, SaveSlot } from '@/types/bridge'
+import type {
+  CompletionTree,
+  QuestReport,
+  QuestSummary,
+  ResultScreen,
+  SaveSlot,
+} from '@/types/bridge'
 
 vi.mock('@/utils/theme', () => ({
   renderMarkup: vi.fn((s: string) => `<rendered>${s}</rendered>`),
 }))
+
+/**
+ * A quest report as the engine would hand it: a pop-up text of the form
+ * `[quest_name]Name (main quest)[/quest_name]\n\nText` gives its name, type
+ * and text; any other string is a plain report named Q with that text.
+ */
+function quest(popup: string): QuestReport {
+  const match =
+    /^\[quest_name\](.+) \((main|side) quest\)\[\/quest_name\]\n\n([\s\S]*)$/.exec(
+      popup,
+    )
+  if (!match) return { name: 'Q', main: false, text: popup, popup }
+  return { name: match[1], main: match[2] === 'main', text: match[3], popup }
+}
+
+/** Result screens whose act-complete text starts at "Congratulations", if any. */
+function screens(texts: string[]): ResultScreen[] {
+  return texts.map((text) => {
+    const at = text.indexOf('Congratulations')
+    return { text, actComplete: at === -1 ? null : text.slice(at).trim() }
+  })
+}
 
 /**
  * Minimal mock matching the useBridge() return shape; the engine read model
@@ -13,7 +41,7 @@ vi.mock('@/utils/theme', () => ({
  */
 function createMockBridge() {
   const controller = {
-    advanceToRunning: vi.fn(() => ['Intro text']),
+    advanceToRunning: vi.fn(() => screens(['Intro text'])),
     takeTurn: vi.fn(() => 'command result'),
     getRoomName: vi.fn(() => 'Village Square'),
     getRoomDescription: vi.fn(() => 'A quiet village.'),
@@ -25,15 +53,18 @@ function createMockBridge() {
     ),
     getInventory: vi.fn(() => [{ name: 'Sword', description: 'Sharp' }]),
     getSpells: vi.fn(() => [{ name: 'Heal', description: 'Restores HP' }]),
-    getActiveQuests: vi.fn(() => [
-      { name: 'Find Key', description: 'Find the key' },
+    getActiveQuests: vi.fn((): QuestSummary[] => [
+      {
+        name: 'Find Key',
+        main: false,
+        done: false,
+        details: { kind: 'journal', latest: 'Find the key', earlier: [] },
+      },
     ]),
-    getCompletedQuests: vi.fn(
-      () => [] as { name: string; description: string }[],
-    ),
-    activateQuest: vi.fn((): string | null => null),
-    updateQuest: vi.fn((): string | null => null),
-    completeQuest: vi.fn((): string | null => null),
+    getCompletedQuests: vi.fn((): QuestSummary[] => []),
+    activateQuest: vi.fn((): QuestReport | null => null),
+    updateQuest: vi.fn((): QuestReport | null => null),
+    completeQuest: vi.fn((): QuestReport | null => null),
     look: vi.fn(() => 'You look around'),
     getActIntro: vi.fn(() => 'Act intro'),
     getActName: vi.fn(() => 'Act 1'),
@@ -57,6 +88,7 @@ function createMockBridge() {
     goldenPath: vi.fn((_n: number): string[] => []),
     isGameOver: vi.fn(() => false),
     getResultText: vi.fn(() => ''),
+    getActCompleteText: vi.fn((): string | null => null),
     getCurrentMusic: vi.fn(() => ({
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
@@ -65,8 +97,8 @@ function createMockBridge() {
   }
   // The tests script each kind of quest event with the three mocks above, one
   // payload per call, until null; settleQuests drains them like the engine.
-  const drain = (next: () => string | null): string[] => {
-    const payloads: string[] = []
+  const drain = (next: () => QuestReport | null): QuestReport[] => {
+    const payloads: QuestReport[] = []
     for (let p = next(); p !== null; p = next()) payloads.push(p)
     return payloads
   }
@@ -215,7 +247,9 @@ describe('useGameStore', () => {
     it('puts quests started by the first look in its turn', async () => {
       bridge.controller.isAcceptingInput.mockReturnValue(true)
       bridge.controller.activateQuest
-        .mockReturnValueOnce('[quest_name]Q (main quest)[/quest_name]\n\nGo.')
+        .mockReturnValueOnce(
+          quest('[quest_name]Q (main quest)[/quest_name]\n\nGo.'),
+        )
         .mockReturnValueOnce(null)
       bridge.controller.updateQuest.mockReturnValue(null)
       bridge.controller.completeQuest.mockReturnValue(null)
@@ -235,14 +269,16 @@ describe('useGameStore', () => {
       bridge.controller.activateQuest.mockImplementation(() => {
         if (started) return null
         started = true
-        return '[quest_name]Q (main quest)[/quest_name]\n\nBegin.'
+        return quest('[quest_name]Q (main quest)[/quest_name]\n\nBegin.')
       })
       bridge.controller.getActiveQuests.mockImplementation(() =>
         started
           ? [
               {
-                name: '[quest_name]Q (main)[/quest_name]',
-                description: 'Begin.',
+                name: 'Q',
+                main: true,
+                done: false,
+                details: { kind: 'journal', latest: 'Begin.', earlier: [] },
               },
             ]
           : [],
@@ -256,7 +292,7 @@ describe('useGameStore', () => {
 
       store.dismissModal()
 
-      expect(store.rawActiveQuests).toHaveLength(1)
+      expect(store.activeQuests).toHaveLength(1)
       expect(store.questProgress?.total).toBe(11)
     })
 
@@ -265,7 +301,7 @@ describe('useGameStore', () => {
       store.setAudioPlayer(audio)
       bridge.controller.isAcceptingInput.mockReturnValue(true)
       bridge.controller.activateQuest
-        .mockReturnValueOnce('Main quest started!')
+        .mockReturnValueOnce(quest('Main quest started!'))
         .mockReturnValueOnce(null)
       bridge.controller.updateQuest.mockReturnValue(null)
       bridge.controller.completeQuest.mockReturnValue(null)
@@ -434,7 +470,9 @@ describe('useGameStore', () => {
 
     it('polls quest events after command', () => {
       bridge.controller.activateQuest
-        .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nGo.')
+        .mockReturnValueOnce(
+          quest('[quest_name]Q (side quest)[/quest_name]\n\nGo.'),
+        )
         .mockReturnValueOnce(null)
       bridge.controller.updateQuest.mockReturnValue(null)
       bridge.controller.completeQuest.mockReturnValue(null)
@@ -456,7 +494,7 @@ describe('useGameStore', () => {
       bridge.controller.activateQuest.mockReturnValue(null)
       bridge.controller.updateQuest.mockReturnValue(null)
       bridge.controller.completeQuest
-        .mockReturnValueOnce('Hint of Magic complete!')
+        .mockReturnValueOnce(quest('Hint of Magic complete!'))
         .mockReturnValueOnce(null)
 
       store.submitCommand('talk to grandmother')
@@ -492,8 +530,18 @@ describe('useGameStore', () => {
     it('updates the bag, spells and quests as the bridge delivers them', () => {
       const potion = { name: '[item_name]Potion[/item_name]', description: '' }
       const fire = { name: '[spell_name]Fire[/spell_name]', description: '' }
-      const questA = { name: '[quest_name]A[/quest_name]', description: 'Do A' }
-      const questB = { name: '[quest_name]B[/quest_name]', description: 'Did' }
+      const questA: QuestSummary = {
+        name: 'A',
+        main: false,
+        done: false,
+        details: { kind: 'journal', latest: 'Do A', earlier: [] },
+      }
+      const questB: QuestSummary = {
+        name: 'B',
+        main: false,
+        done: true,
+        details: { kind: 'journal', latest: 'Did', earlier: [] },
+      }
       bridge.controller.getInventory.mockReturnValue([potion])
       bridge.controller.getSpells.mockReturnValue([fire])
       bridge.controller.getActiveQuests.mockReturnValue([questA])
@@ -503,8 +551,8 @@ describe('useGameStore', () => {
       expect(store.bagEntries).toEqual([potion.name])
       expect(store.rawSpells).toEqual([fire])
       expect(store.spellEntries).toEqual([fire.name])
-      expect(store.rawActiveQuests).toEqual([questA])
-      expect(store.rawCompletedQuests).toEqual([questB])
+      expect(store.activeQuests).toEqual([questA])
+      expect(store.completedQuests).toEqual([questB])
     })
 
     it('syncs acceptInput', () => {
@@ -585,18 +633,18 @@ describe('useGameStore', () => {
 
     it('puts an activated quest in the story, not in a pop-up', () => {
       bridge.controller.activateQuest
-        .mockReturnValueOnce('Quest: Find the gem')
+        .mockReturnValueOnce(quest('Quest: Find the gem'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(store.showModal).toBe(false)
       expect(store.turns.at(-1)!.quests).toEqual([
-        { kind: 'new', name: 'Quest: Find the gem', main: false, text: '' },
+        { kind: 'new', name: 'Q', main: false, text: 'Quest: Find the gem' },
       ])
     })
 
     it('shows modal for completed quest', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce('Quest complete!')
+        .mockReturnValueOnce(quest('Quest complete!'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(store.showModal).toBe(true)
@@ -606,8 +654,8 @@ describe('useGameStore', () => {
 
     it('queues multiple completions and shows the first', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce(done('A'))
-        .mockReturnValueOnce(done('B'))
+        .mockReturnValueOnce(quest(done('A')))
+        .mockReturnValueOnce(quest(done('B')))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(store.modalQuest?.name).toBe('A')
@@ -615,8 +663,8 @@ describe('useGameStore', () => {
 
     it('dismissModal advances to next queued event', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce(done('A'))
-        .mockReturnValueOnce(done('B'))
+        .mockReturnValueOnce(quest(done('A')))
+        .mockReturnValueOnce(quest(done('B')))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       store.dismissModal()
@@ -625,7 +673,7 @@ describe('useGameStore', () => {
 
     it('dismissModal hides modal when queue empty', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce(done('A'))
+        .mockReturnValueOnce(quest(done('A')))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       store.dismissModal()
@@ -634,7 +682,7 @@ describe('useGameStore', () => {
 
     it('dismissModal restores acceptInput from bridge when last modal dismissed', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce(done('A'))
+        .mockReturnValueOnce(quest(done('A')))
         .mockReturnValueOnce(null)
       bridge.controller.isAcceptingInput.mockReturnValue(true)
       store.pollQuestEvents()
@@ -644,8 +692,8 @@ describe('useGameStore', () => {
 
     it('dismissModal does not restore acceptInput while more modals remain', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce(done('A'))
-        .mockReturnValueOnce(done('B'))
+        .mockReturnValueOnce(quest(done('A')))
+        .mockReturnValueOnce(quest(done('B')))
         .mockReturnValueOnce(null)
       bridge.controller.isAcceptingInput.mockReturnValue(true)
       // Start with acceptInput false to detect an incorrect restore
@@ -667,7 +715,7 @@ describe('useGameStore', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.controller.activateQuest
-        .mockReturnValueOnce('Quest A')
+        .mockReturnValueOnce(quest('Quest A'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
@@ -678,7 +726,7 @@ describe('useGameStore', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.controller.updateQuest
-        .mockReturnValueOnce('Quest updated')
+        .mockReturnValueOnce(quest('Quest updated'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
@@ -689,7 +737,7 @@ describe('useGameStore', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.controller.completeQuest
-        .mockReturnValueOnce('Quest done!')
+        .mockReturnValueOnce(quest('Quest done!'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
@@ -700,8 +748,8 @@ describe('useGameStore', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.controller.completeQuest
-        .mockReturnValueOnce(done('A'))
-        .mockReturnValueOnce(done('B'))
+        .mockReturnValueOnce(quest(done('A')))
+        .mockReturnValueOnce(quest(done('B')))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(audio.playQuestComplete).toHaveBeenCalledTimes(1)
@@ -712,10 +760,10 @@ describe('useGameStore', () => {
     it('does not call audio when no audio player is set', () => {
       // No setAudioPlayer call - should not throw
       bridge.controller.activateQuest
-        .mockReturnValueOnce('Quest A')
+        .mockReturnValueOnce(quest('Quest A'))
         .mockReturnValueOnce(null)
       bridge.controller.completeQuest
-        .mockReturnValueOnce('Quest B')
+        .mockReturnValueOnce(quest('Quest B'))
         .mockReturnValueOnce(null)
       expect(() => store.pollQuestEvents()).not.toThrow()
     })
@@ -922,11 +970,9 @@ describe('useGameStore', () => {
       bridge.controller.activateQuest.mockReturnValue(null)
       bridge.controller.updateQuest.mockReturnValue(null)
       bridge.controller.completeQuest.mockReturnValue(null)
-      bridge.controller.advanceToRunning.mockReturnValue([
-        'Congratulations Act 1!',
-        'Act 2 begins.',
-        '',
-      ])
+      bridge.controller.advanceToRunning.mockReturnValue(
+        screens(['Congratulations Act 1!', 'Act 2 begins.', '']),
+      )
     }
 
     beforeEach(async () => {
@@ -953,6 +999,19 @@ describe('useGameStore', () => {
       expect(store.modalBody).toBe('<rendered>Act 2 begins.</rendered>')
     })
 
+    it('takes the chapter body from the bridge, not from the text', () => {
+      setupTransitionMocks()
+      bridge.controller.advanceToRunning.mockReturnValue([
+        { text: 'The map aligns. Done.', actComplete: 'Rest now.' },
+        { text: 'Act 2 begins.', actComplete: null },
+      ])
+      store.submitCommand('use map')
+      expect(store.modalChapter).toMatchObject({
+        kind: 'complete',
+        body: 'Rest now.',
+      })
+    })
+
     it('fires look after all transition modals are dismissed', () => {
       setupTransitionMocks()
       store.submitCommand('use map')
@@ -964,17 +1023,15 @@ describe('useGameStore', () => {
 
     it('shows transition modal after quest completion modals when act transitions', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce('Main quest complete!')
+        .mockReturnValueOnce(quest('Main quest complete!'))
         .mockReturnValueOnce(null)
       bridge.controller.activateQuest.mockReturnValue(null)
       bridge.controller.updateQuest.mockReturnValue(null)
       bridge.controller.isAcceptingInput.mockReturnValue(false)
       bridge.controller.isActRunning.mockReturnValue(false)
-      bridge.controller.advanceToRunning.mockReturnValue([
-        'Congratulations Act 1!',
-        'Act 2 begins.',
-        '',
-      ])
+      bridge.controller.advanceToRunning.mockReturnValue(
+        screens(['Congratulations Act 1!', 'Act 2 begins.', '']),
+      )
       store.submitCommand('use map')
       expect(store.modalTitle).toBe('🏆 Quest Complete!')
       store.dismissModal()
@@ -1135,10 +1192,9 @@ describe('useGameStore', () => {
       bridge.controller.getRoomName.mockReturnValue('Act 2 Start')
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.isAcceptingInput.mockReturnValue(false)
-      bridge.controller.advanceToRunning.mockReturnValue([
-        'Act 1 done!',
-        'Act 2 begins.',
-      ])
+      bridge.controller.advanceToRunning.mockReturnValue(
+        screens(['Act 1 done!', 'Act 2 begins.']),
+      )
 
       store.submitCommand('use map')
 
@@ -1528,12 +1584,19 @@ describe('useGameStore', () => {
       ])
       bridge.controller.getActiveQuests.mockReturnValue([
         {
-          name: '[quest_name]Q (main)[/quest_name]',
-          description: '[dim]Old[/dim]',
+          name: 'Q',
+          main: true,
+          done: false,
+          details: { kind: 'journal', latest: 'Old', earlier: [] },
         },
       ])
       bridge.controller.getCompletedQuests.mockReturnValue([
-        { name: '[quest_name]Done (side)[/quest_name]', description: 'Fin.' },
+        {
+          name: 'Done',
+          main: false,
+          done: true,
+          details: { kind: 'journal', latest: 'Fin.', earlier: [] },
+        },
       ])
 
       await store.initGame()
@@ -1541,10 +1604,12 @@ describe('useGameStore', () => {
       expect(store.rawInventory).toEqual([
         { name: '[item_name]bread[/item_name]', description: 'A small loaf.' },
       ])
-      expect(store.rawActiveQuests[0].description).toBe('[dim]Old[/dim]')
-      expect(store.rawCompletedQuests[0].name).toBe(
-        '[quest_name]Done (side)[/quest_name]',
-      )
+      expect(store.activeQuests[0].details).toEqual({
+        kind: 'journal',
+        latest: 'Old',
+        earlier: [],
+      })
+      expect(store.completedQuests[0].name).toBe('Done')
       expect(store.rawSpells).toEqual([
         { name: 'Heal', description: 'Restores HP' },
       ])
@@ -1567,10 +1632,10 @@ describe('useGameStore', () => {
 
     it('adds new and updated quests to the turn instead of a pop-up', () => {
       bridge.controller.activateQuest
-        .mockReturnValueOnce(NEW)
+        .mockReturnValueOnce(quest(NEW))
         .mockReturnValue(null)
       bridge.controller.updateQuest
-        .mockReturnValueOnce(UPDATED)
+        .mockReturnValueOnce({ ...quest(UPDATED), text: 'New.' })
         .mockReturnValue(null)
 
       store.submitCommand('look')
@@ -1591,10 +1656,10 @@ describe('useGameStore', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.controller.activateQuest
-        .mockReturnValueOnce(NEW)
+        .mockReturnValueOnce(quest(NEW))
         .mockReturnValue(null)
       bridge.controller.updateQuest
-        .mockReturnValueOnce(UPDATED)
+        .mockReturnValueOnce({ ...quest(UPDATED), text: 'New.' })
         .mockReturnValue(null)
 
       store.submitCommand('look')
@@ -1605,7 +1670,9 @@ describe('useGameStore', () => {
     it('gives the completion pop-up the quest it is about', () => {
       bridge.controller.completeQuest
         .mockReturnValueOnce(
-          '[quest_name]Hint of Magic (side quest)[/quest_name]\n\nIt begins.',
+          quest(
+            '[quest_name]Hint of Magic (side quest)[/quest_name]\n\nIt begins.',
+          ),
         )
         .mockReturnValue(null)
       bridge.controller.getQuestProgress.mockReturnValue({
@@ -1632,10 +1699,12 @@ describe('useGameStore', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.controller.activateQuest
-        .mockReturnValueOnce(NEW)
+        .mockReturnValueOnce(quest(NEW))
         .mockReturnValue(null)
       bridge.controller.completeQuest
-        .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
+        .mockReturnValueOnce(
+          quest('[quest_name]Q (side quest)[/quest_name]\n\nDone.'),
+        )
         .mockReturnValue(null)
 
       store.submitCommand('talk to grandmother')
@@ -1652,8 +1721,8 @@ describe('useGameStore', () => {
       const done = (name: string) =>
         `[quest_name]${name} (side quest)[/quest_name]\n\nWell done.`
       bridge.controller.completeQuest
-        .mockReturnValueOnce(done('First'))
-        .mockReturnValueOnce(done('Second'))
+        .mockReturnValueOnce(quest(done('First')))
+        .mockReturnValueOnce(quest(done('Second')))
         .mockReturnValue(null)
       bridge.controller.getQuestProgress.mockReturnValue({
         completed: 5,
@@ -1684,7 +1753,9 @@ describe('useGameStore', () => {
 
     it('still shows a pop-up when a quest completes', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
+        .mockReturnValueOnce(
+          quest('[quest_name]Q (side quest)[/quest_name]\n\nDone.'),
+        )
         .mockReturnValue(null)
 
       store.submitCommand('look')
@@ -1695,7 +1766,7 @@ describe('useGameStore', () => {
 
     it('puts a dot on the Quests tab until it is seen', () => {
       bridge.controller.activateQuest
-        .mockReturnValueOnce(NEW)
+        .mockReturnValueOnce(quest(NEW))
         .mockReturnValue(null)
 
       store.submitCommand('look')
@@ -1754,10 +1825,12 @@ describe('useGameStore', () => {
       bridge.controller.isAcceptingInput.mockReturnValue(false)
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.getActStats.mockReturnValue(STATS)
-      bridge.controller.advanceToRunning.mockReturnValue([
-        'The map aligns.\n\nCongratulations — you have completed Act 1!',
-        INTRO_2,
-      ])
+      bridge.controller.advanceToRunning.mockReturnValue(
+        screens([
+          'The map aligns.\n\nCongratulations — you have completed Act 1!',
+          INTRO_2,
+        ]),
+      )
 
       store.submitCommand('use map')
 
@@ -1794,10 +1867,12 @@ describe('useGameStore', () => {
       load(store)
       bridge.controller.isAcceptingInput.mockReturnValue(false)
       bridge.controller.isActRunning.mockReturnValue(false)
-      bridge.controller.advanceToRunning.mockReturnValue([
-        'Congratulations — you have completed Act 2!',
-        '[bold]ACT III: THE AWAKENING[/bold]\n\nText.',
-      ])
+      bridge.controller.advanceToRunning.mockReturnValue(
+        screens([
+          'Congratulations — you have completed Act 2!',
+          '[bold]ACT III: THE AWAKENING[/bold]\n\nText.',
+        ]),
+      )
 
       store.submitCommand('use orb')
 
@@ -1824,7 +1899,9 @@ describe('useGameStore', () => {
       await store.initGame()
       store.dismissModal()
       bridge.controller.completeQuest
-        .mockReturnValueOnce('[quest_name]Q (side quest)[/quest_name]\n\nDone.')
+        .mockReturnValueOnce(
+          quest('[quest_name]Q (side quest)[/quest_name]\n\nDone.'),
+        )
         .mockReturnValue(null)
 
       store.submitCommand('look')
@@ -1991,6 +2068,9 @@ describe('useGameStore', () => {
       store.dismissModal()
       bridge.controller.getActStats.mockReturnValue(STATS)
       bridge.controller.getResultText.mockReturnValue(CLOSING)
+      bridge.controller.getActCompleteText.mockReturnValue(
+        CLOSING.slice(CLOSING.indexOf('Congratulations')).trim(),
+      )
     })
 
     /** The command that completes the last act. */
@@ -2013,7 +2093,9 @@ describe('useGameStore', () => {
 
     it('shows the final chapter after the last quest pop-up', () => {
       bridge.controller.completeQuest
-        .mockReturnValueOnce('[quest_name]Q (main quest)[/quest_name]\n\nDone.')
+        .mockReturnValueOnce(
+          quest('[quest_name]Q (main quest)[/quest_name]\n\nDone.'),
+        )
         .mockReturnValue(null)
       finishLastAct()
       expect(store.modalQuest).not.toBe(null)

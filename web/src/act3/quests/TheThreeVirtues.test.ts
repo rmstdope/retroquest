@@ -163,4 +163,17 @@ describe('The Three Virtues quest', () => {
     expect(quest.description).toContain("Dragon's Scale, its obsidian surface")
     expect(quest.description).toContain('all three relics')
   })
+
+  it('keeps earlier entries apart from the newest as data', () => {
+    const quest = new TheThreeVirtuesQuest()
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    quest.checkUpdate(game.state)
+
+    const details = quest.details()
+    if (details.kind !== 'journal') throw new Error('expected a journal')
+    expect(details.earlier).toHaveLength(1)
+    expect(details.earlier[0]).toMatch(/^Prove Courage/)
+    expect(details.latest).toMatch(/^You have claimed the Crystal of Light/)
+  })
 })

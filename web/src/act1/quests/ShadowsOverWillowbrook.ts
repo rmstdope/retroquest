@@ -45,14 +45,14 @@ export class ShadowsOverWillowbrookQuest extends Quest {
 
   override checkUpdate(gameState: GameState): boolean {
     let updated = false
-    this.description = ''
+    const earlier: string[] = []
     let newDesc =
       'Elior dreams of a shadowy figure lurking in the fields, its presence felt ' +
       'even in the waking world. The dream is unsettling, leaving him with a sense ' +
       'of foreboding that something is wrong in Willowbrook.'
     if (gameState.getStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS)) {
       if (this.noteFlag(FLAG_INVESTIGATED_WITHERED_CROPS)) updated = true
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\nElior has witnessed the devastation firsthand: once lush rows of crops now ' +
         'stand wilted and brown, their leaves curled and brittle. The earth beneath ' +
@@ -62,7 +62,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     }
     if (gameState.getStoryFlag(FLAG_VILLAGER_TALKED_TO)) {
       if (this.noteFlag(FLAG_VILLAGER_TALKED_TO)) updated = true
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\nVillagers speak in hushed tones of strange happenings: animals refusing to ' +
         'leave their shelters, and shadows moving where none should be. Elior senses ' +
@@ -70,7 +70,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     }
     if (gameState.getStoryFlag(FLAG_WELL_EXAMINED)) {
       if (this.noteFlag(FLAG_WELL_EXAMINED)) updated = true
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\nRumors spread of the village well: a foul stench rising from its depths, ' +
         'and water that no one dares to drink. Elior wonders if the source of the ' +
@@ -78,7 +78,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     }
     if (gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)) {
       if (this.noteFlag(FLAG_CONNECT_WITH_NATURE)) updated = true
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\nMira has urged Elior to connect with the living world and learn from its ' +
         'magic. The path forward is uncertain, but hope stirs in the heart of ' +
@@ -86,7 +86,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     }
     if (gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
       if (this.noteFlag(FLAG_MAGIC_FULLY_UNLOCKED)) updated = true
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\nElior has proven his magical abilities are real. The villagers will look to ' +
         'him with new hope, and Mira believes he may be the key to dispelling the ' +
@@ -95,7 +95,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         "the deeper mysteries of nature's magic and find the knowledge needed to " +
         'save Willowbrook.'
     }
-    this.description += newDesc
+    this.setJournal(earlier, newDesc)
     return updated
   }
 

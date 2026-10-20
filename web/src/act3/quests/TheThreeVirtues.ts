@@ -34,7 +34,7 @@ export class TheThreeVirtuesQuest extends Quest {
   /** Update quest description based on acquired relics. */
   override checkUpdate(gameState: GameState): boolean {
     let updated = false
-    this.description = ''
+    const earlier: string[] = []
     let newDesc =
       'Prove Courage, Wisdom, and Selflessness by recovering the three relics: ' +
       "the Crystal of Light, the Phoenix Feather, and the Dragon's Scale."
@@ -43,7 +43,7 @@ export class TheThreeVirtuesQuest extends Quest {
         this.flagState[FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nYou have claimed the Crystal of Light; its steady brilliance answers ' +
         'your courage and steadies what the deep waters once denied. Sir ' +
@@ -57,7 +57,7 @@ export class TheThreeVirtuesQuest extends Quest {
         this.flagState[FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nYou have obtained the Phoenix Feather. Its warmth pulses in your grasp, ' +
         'a living ember that refuses to die. The memory of fire and flight lingers, ' +
@@ -71,14 +71,14 @@ export class TheThreeVirtuesQuest extends Quest {
         this.flagState[FLAG_ACT3_DRAGONS_SCALE_ACQUIRED] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         "\n\nYou have claimed the Dragon's Scale, its obsidian surface gleaming " +
         "with ancient power. The dragon's wisdom echoes in your mind, a testament " +
         'to the selflessness you have proven. With all three relics in hand, the ' +
         'final trial awaits—the Warding Rite that will determine the fate of all. '
     }
-    this.description += newDesc
+    this.setJournal(earlier, newDesc)
     return updated
   }
 

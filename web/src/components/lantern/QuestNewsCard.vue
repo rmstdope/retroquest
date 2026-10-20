@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId } from 'vue'
-import type { QuestNews } from '@/lantern/parseQuestNews'
+import type { QuestNews } from '@/lantern/questNews'
 import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 

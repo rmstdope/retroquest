@@ -366,10 +366,12 @@ describe('LanternLayout', () => {
   it("shows a quest's details", async () => {
     const w = mountLayout()
     const game = useGameStore()
-    game.rawCompletedQuests = [
+    game.completedQuests = [
       {
-        name: '[quest_name]Hint of Magic (side)[/quest_name]',
-        description: '[dim]You found it.[/dim]',
+        name: 'Hint of Magic',
+        main: false,
+        done: true,
+        details: { kind: 'journal', latest: 'You found it.', earlier: [] },
       },
     ]
 
@@ -386,8 +388,13 @@ describe('LanternLayout', () => {
   it("closes a quest's details when a game pop-up opens", async () => {
     const w = mountLayout()
     const game = useGameStore()
-    game.rawActiveQuests = [
-      { name: '[quest_name]Hint of Magic[/quest_name]', description: 'Look.' },
+    game.activeQuests = [
+      {
+        name: 'Hint of Magic',
+        main: false,
+        done: false,
+        details: { kind: 'journal', latest: 'Look.', earlier: [] },
+      },
     ]
     game.shownQuest = 'Hint of Magic'
     await w.vm.$nextTick()

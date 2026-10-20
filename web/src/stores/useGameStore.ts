@@ -6,18 +6,15 @@ import type {
   CompletionTree,
   SaveSlot,
   QuestProgress,
+  QuestSummary,
   RoomWare,
 } from '@/types/bridge'
 import type { useBridge } from '@/composables/useBridge'
 import { normalizeSaveName } from '@/engine'
 import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
-import { parseQuestNews, type QuestNews } from '@/lantern/parseQuestNews'
-import {
-  actCompleteText,
-  parseActIntro,
-  type ActIntro,
-} from '@/lantern/parseActIntro'
+import { toQuestNews, type QuestNews } from '@/lantern/questNews'
+import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
 import type { Chapter } from '@/lantern/chapter'
 
 /**
@@ -124,8 +121,8 @@ export const useGameStore = defineStore('game', () => {
   /** Journal data as the bridge delivers it (markup, not HTML). */
   const rawInventory = ref<NamedItem[]>([])
   const rawSpells = ref<NamedItem[]>([])
-  const rawActiveQuests = ref<NamedItem[]>([])
-  const rawCompletedQuests = ref<NamedItem[]>([])
+  const activeQuests = ref<QuestSummary[]>([])
+  const completedQuests = ref<QuestSummary[]>([])
   /** Quests done / total in the current act (null until the game starts). */
   const questProgress = ref<QuestProgress | null>(null)
 
@@ -453,7 +450,7 @@ export const useGameStore = defineStore('game', () => {
         kind: 'complete',
         act: currentAct?.act ?? '',
         title: currentAct?.title ?? '',
-        body: actCompleteText(text),
+        body: b.controller.getActCompleteText() ?? '',
         stats: b.controller.getActStats(),
         final: true,
       },
@@ -492,12 +489,14 @@ export const useGameStore = defineStore('game', () => {
     // Read the finished act's numbers before the next act starts.
     const stats = b.controller.getActStats()
     const finished = currentAct
-    const texts = b.controller.advanceToRunning().filter((t) => t.trim() !== '')
-    if (texts.length === 0) return
-    const transitionTexts = texts.slice(0, -1)
-    const actIntroText = texts[texts.length - 1]
+    const screens = b.controller
+      .advanceToRunning()
+      .filter((screen) => screen.text.trim() !== '')
+    if (screens.length === 0) return
+    const transitionScreens = screens.slice(0, -1)
+    const actIntroText = screens[screens.length - 1].text
     const nextAct = parseActIntro(actIntroText).act || undefined
-    for (const text of transitionTexts) {
+    for (const { text, actComplete } of transitionScreens) {
       modalQueue.value.push({
         title: '🏆 Act Complete!',
         body: renderMarkup(text),
@@ -506,7 +505,7 @@ export const useGameStore = defineStore('game', () => {
           kind: 'complete',
           act: finished?.act ?? '',
           title: finished?.title ?? '',
-          body: actCompleteText(text),
+          body: actComplete ?? '',
           stats,
           nextAct,
         },
@@ -534,8 +533,8 @@ export const useGameStore = defineStore('game', () => {
     spellEntries.value = spellList.map((entry) => entry.name)
     rawInventory.value = bag
     rawSpells.value = spellList
-    rawActiveQuests.value = b.controller.getActiveQuests()
-    rawCompletedQuests.value = b.controller.getCompletedQuests()
+    activeQuests.value = b.controller.getActiveQuests()
+    completedQuests.value = b.controller.getCompletedQuests()
     questProgress.value = b.controller.getQuestProgress()
     const m = b.controller.getCurrentMusic()
     musicFile.value = m.musicFile
@@ -657,11 +656,11 @@ export const useGameStore = defineStore('game', () => {
     const news: QuestNews[] = []
 
     const settled = b.controller.settleQuests()
-    for (const payload of settled.activated) {
-      news.push(parseQuestNews('new', payload))
+    for (const report of settled.activated) {
+      news.push(toQuestNews('new', report))
     }
-    for (const payload of settled.updated) {
-      news.push(parseQuestNews('updated', payload))
+    for (const report of settled.updated) {
+      news.push(toQuestNews('updated', report))
     }
     const completions = settled.completed
 
@@ -670,9 +669,9 @@ export const useGameStore = defineStore('game', () => {
     const events: QuestEvent[] = []
     if (completions.length) {
       const { completed: done, total } = b.controller.getQuestProgress()
-      completions.forEach((payload, index) => {
+      completions.forEach((completion, index) => {
         const record: QuestNews = {
-          ...parseQuestNews('completed', payload),
+          ...toQuestNews('completed', completion),
           progress: {
             completed: done - (completions.length - 1 - index),
             total,
@@ -681,7 +680,7 @@ export const useGameStore = defineStore('game', () => {
         news.push(record)
         events.push({
           title: '🏆 Quest Complete!',
-          body: renderMarkup(payload),
+          body: renderMarkup(completion.popup),
           sound: 'questComplete',
           quest: record,
         })
@@ -884,8 +883,8 @@ export const useGameStore = defineStore('game', () => {
     notice,
     rawInventory,
     rawSpells,
-    rawActiveQuests,
-    rawCompletedQuests,
+    activeQuests,
+    completedQuests,
     bagHasNew,
     spellsHaveNew,
     questsHaveNew,

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Act } from './Act'
 import { Character } from './Character'
 import { Game } from './Game'
-import { GameController } from './GameController'
+import { GameController, type QuestReport } from './GameController'
 import { GameState } from './GameState'
 import { Item } from './Item'
 import { Quest } from './Quest'
@@ -219,7 +219,7 @@ describe('GameController', () => {
   })
 
   describe('journal data', () => {
-    it('lists inventory with counts, spells and quests as markup', () => {
+    it('lists inventory with counts and spells as markup, and quests as data', () => {
       const ctrl = makeController()
       const state = ctrl.game.state
       state.addItemToInventory(item('coin'), 3)
@@ -240,14 +240,18 @@ describe('GameController', () => {
       ])
       expect(ctrl.getActiveQuests()).toEqual([
         {
-          name: '[quest_name]Main Arc (main)[/quest_name]',
-          description: 'Do Main Arc.',
+          name: 'Main Arc',
+          main: true,
+          done: false,
+          details: { kind: 'journal', latest: 'Do Main Arc.', earlier: [] },
         },
       ])
       expect(ctrl.getCompletedQuests()).toEqual([
         {
-          name: '[quest_name]Side A (side)[/quest_name]',
-          description: '[dim]Side A done.[/dim]',
+          name: 'Side A',
+          main: false,
+          done: true,
+          details: { kind: 'journal', latest: 'Side A done.', earlier: [] },
         },
       ])
     })
@@ -266,8 +270,12 @@ describe('GameController', () => {
       const none = { activated: [], updated: [], completed: [] }
       expect(ctrl.settleQuests()).toEqual(none) // not running yet
       startAct(ctrl)
-      const started =
-        '[quest_name]Main Arc (main quest)[/quest_name]\n\nDo Main Arc.'
+      const started = {
+        name: 'Main Arc',
+        main: true,
+        text: 'Do Main Arc.',
+        popup: '[quest_name]Main Arc (main quest)[/quest_name]\n\nDo Main Arc.',
+      }
       expect(ctrl.settleQuests()).toEqual({ ...none, activated: [started] })
       expect(ctrl.settleQuests()).toEqual(none)
       updated = true
@@ -276,10 +284,100 @@ describe('GameController', () => {
       expect(ctrl.settleQuests()).toEqual({
         ...none,
         completed: [
-          "[quest_name]Main Arc (main quest)[/quest_name]\n\nYou have completed the quest 'Main Arc'.",
+          {
+            name: 'Main Arc',
+            main: true,
+            text: "You have completed the quest 'Main Arc'.",
+            popup:
+              "[quest_name]Main Arc (main quest)[/quest_name]\n\nYou have completed the quest 'Main Arc'.",
+          },
         ],
       })
       expect(ctrl.settleQuests()).toEqual(none)
+    })
+  })
+
+  /** A `checkUpdate` that reports a change the first time only. */
+  function once(): () => boolean {
+    let fired = false
+    return () => !fired && (fired = true)
+  }
+
+  /** The first quest report of the turn whose log changed, once the act runs. */
+  function settleUpdate(ctrl: GameController): QuestReport | undefined {
+    startAct(ctrl)
+    return ctrl.settleQuests().updated[0]
+  }
+
+  describe('quest log data', () => {
+    /** A quest with a journal of stages and a checklist, set by hand. */
+    class LoggedQuest extends SimpleQuest {
+      journal(earlier: string[], latest: string): void {
+        this.setJournal(earlier, latest)
+      }
+      list(): void {
+        this.setChecklist(
+          { intro: 'Find:', items: [{ done: false, text: 'a key' }] },
+          'Find:\n○ a key',
+        )
+      }
+    }
+
+    it('shows an update as its newest journal entry', () => {
+      const quest = new LoggedQuest('Arc')
+      quest.journal(['First.'], 'Second.')
+      const ctrl = makeController()
+      quest.checkUpdate = once()
+      ctrl.game.state.activatedQuests = [quest]
+      expect(settleUpdate(ctrl)).toMatchObject({ text: 'Second.' })
+      expect(ctrl.getActiveQuests()[0].details).toEqual({
+        kind: 'journal',
+        latest: 'Second.',
+        earlier: ['First.'],
+      })
+    })
+
+    it('shows an update of a checklist whole, and lists its items', () => {
+      const quest = new LoggedQuest('Arc')
+      quest.list()
+      const ctrl = makeController()
+      quest.checkUpdate = once()
+      ctrl.game.state.activatedQuests = [quest]
+      expect(settleUpdate(ctrl)).toMatchObject({ text: 'Find:\n○ a key' })
+      expect(ctrl.getActiveQuests()[0].details).toEqual({
+        kind: 'checklist',
+        intro: 'Find:',
+        items: [{ done: false, text: 'a key' }],
+      })
+    })
+  })
+
+  describe('a finished checklist in the news', () => {
+    it('shows only its items once none is open', () => {
+      class Done extends Quest {
+        constructor() {
+          super({ name: 'Clues', description: 'Intro\n\n✓ a\n✓ b' })
+          this.setChecklist(
+            {
+              intro: 'Intro',
+              items: [
+                { done: true, text: 'a' },
+                { done: true, text: 'b' },
+              ],
+            },
+            this.description,
+          )
+        }
+        private fired = false
+        override checkUpdate(): boolean {
+          const fire = !this.fired
+          this.fired = true
+          return fire
+        }
+      }
+      const ctrl = makeController()
+      ctrl.game.state.activatedQuests = [new Done()]
+      expect(settleUpdate(ctrl)).toMatchObject({ text: '✓ a\n✓ b' })
     })
   })
 
@@ -346,7 +444,9 @@ describe('GameController', () => {
       expect(ctrl.game.isGameOver()).toBe(true)
       const { completed } = ctrl.settleQuests()
       expect(completed).toHaveLength(1)
-      expect(completed[0]).toContain("You have completed the quest 'Final'.")
+      expect(completed[0].text).toContain(
+        "You have completed the quest 'Final'.",
+      )
     })
 
     function twoActController(): GameController {
@@ -378,11 +478,7 @@ describe('GameController', () => {
       expect(ctrl.game.isActTransitioning()).toBe(true)
       const { completed } = ctrl.settleQuests()
       expect(completed).toHaveLength(1)
-      expect(
-        completed[0].startsWith(
-          '[quest_name]Main Arc (main quest)[/quest_name]',
-        ),
-      ).toBe(true)
+      expect(completed[0].name).toBe('Main Arc')
       expect(ctrl.settleQuests().completed).toEqual([])
     })
 

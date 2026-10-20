@@ -3,7 +3,6 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { displayName } from '@/lantern/displayName'
 import { parseCountedName } from '@/lantern/inventoryChanges'
-import { parseQuest } from '@/lantern/parseQuest'
 import { renderMarkup } from '@/utils/theme'
 
 /**
@@ -42,10 +41,7 @@ const spells = computed(() =>
     return { name, label: displayName(name), note: entry.description }
   }),
 )
-const quests = computed(() => [
-  ...game.rawActiveQuests.map((raw) => ({ ...parseQuest(raw), done: false })),
-  ...game.rawCompletedQuests.map((raw) => ({ ...parseQuest(raw), done: true })),
-])
+const quests = computed(() => [...game.activeQuests, ...game.completedQuests])
 
 const tabs = computed(() => [
   {
@@ -60,7 +56,7 @@ const tabs = computed(() => [
   },
   {
     id: 'quests' as const,
-    label: `Quests · ${game.rawActiveQuests.length} active`,
+    label: `Quests · ${game.activeQuests.length} active`,
     dot: game.questsHaveNew,
   },
 ])

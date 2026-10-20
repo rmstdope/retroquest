@@ -89,4 +89,21 @@ describe('Echoes of the Hidden Bond quest', () => {
     expect(completionText).toContain('once apprentices to Malakar')
     expect(completionText).toContain("hid Elior from Malakar's sight")
   })
+
+  it('reports its clues as checklist data', () => {
+    const open = quest.details()
+    expect(open.kind).toBe('checklist')
+    quest.checkUpdate(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    quest.checkUpdate(game.state)
+
+    const details = quest.details()
+    if (details.kind !== 'checklist') throw new Error('expected a checklist')
+    expect(details.items.map((item) => item.done)).toEqual([false, true, false])
+    expect(details.items[1].text).toContain('Heights of Mount Ember')
+    expect(details.items[0].text).toBe(
+      'In the depths where courage is tested, echoes of the past linger.',
+    )
+    expect(details.intro).toMatch(/^Your parents once walked/)
+  })
 })

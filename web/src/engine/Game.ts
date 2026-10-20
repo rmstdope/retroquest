@@ -179,20 +179,31 @@ export class Game implements CommandTarget {
       case GameRunState.ActRunning:
         return this.commandResult
       case GameRunState.ActTransition:
-        return (
-          this.commandResult +
-          `\n\nCongratulations — you have completed Act ${this.currentAct}!\n\n` +
+      case GameRunState.GameOver:
+        return `${this.commandResult}\n\n${this.actCompleteBody()}\n`
+    }
+  }
+
+  /** The act-complete message of the transition and game-over screens. */
+  private actCompleteBody(): string {
+    return this.runState === GameRunState.GameOver
+      ? `Congratulations — you have completed Act ${this.currentAct + 1}, ` +
+          'the final act of RetroQuest!'
+      : `Congratulations — you have completed Act ${this.currentAct}!\n\n` +
           'Take a moment to catch your breath and grab a cup of coffee. ' +
           `Get ready for Act ${this.currentAct + 1}, where new challenges, ` +
-          'characters, and mysteries await.\n'
-        )
-      case GameRunState.GameOver:
-        return (
-          this.commandResult +
-          `\n\nCongratulations — you have completed Act ${this.currentAct + 1}, ` +
-          'the final act of RetroQuest!\n'
-        )
-    }
+          'characters, and mysteries await.'
+  }
+
+  /**
+   * The act-complete text (without the act's last answer) while a transition
+   * or the game-over screen shows; null in every other state.
+   */
+  getActCompleteText(): string | null {
+    return this.runState === GameRunState.ActTransition ||
+      this.runState === GameRunState.GameOver
+      ? this.actCompleteBody()
+      : null
   }
 
   /** Run the player's command when the act is running; ignored otherwise. */
@@ -777,6 +788,7 @@ Welcome to
       const state = deserialize(payload.state, this.registry)
       if (!(state instanceof GameState))
         throw new Error('no game state in the save')
+      state.refreshQuestLogs()
       this.state = state
       this.currentAct = payload.actIndex
     } catch (error) {

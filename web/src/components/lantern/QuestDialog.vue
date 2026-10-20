@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { parseQuestDetails } from '@/lantern/parseQuestDetails'
+import type { QuestDetails } from '@/types/bridge'
 import { renderMarkup } from '@/utils/theme'
 import LanternDialog from './LanternDialog.vue'
 
@@ -13,15 +13,15 @@ export interface QuestView {
   name: string
   main: boolean
   done: boolean
-  /** Engine markup (dimmed earlier stages, or checklist lines). */
-  description: string
+  /** The quest log as the engine hands it over. */
+  details: QuestDetails
 }
 
 const props = defineProps<{ quest: QuestView }>()
 const emit = defineEmits<{ close: [] }>()
 const showEarlier = ref(false)
 
-const details = computed(() => parseQuestDetails(props.quest.description))
+const details = computed(() => props.quest.details)
 const tags = computed(() => {
   const list = [props.quest.main ? 'Main quest' : 'Side quest']
   if (props.quest.done) list.push('Done')
