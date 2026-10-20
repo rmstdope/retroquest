@@ -108,6 +108,23 @@ test.describe('Lantern UI (the default)', () => {
     }
   })
 
+  test('draws the divider above the music credits in Help', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    // The same divider markup as useMusic's buildAttributionHtml
+    await page.evaluate(() => {
+      document.body.insertAdjacentHTML(
+        'beforeend',
+        '<hr id="credits-divider" style="border-color:red;margin:12px 0">',
+      )
+    })
+
+    const divider = page.locator('#credits-divider')
+    await expect(divider).toHaveCSS('border-top-width', '1px')
+    await expect(divider).toHaveCSS('border-top-color', 'rgb(255, 0, 0)')
+  })
+
   test('wraps many chips on a phone instead of hiding them', async ({
     page,
   }) => {

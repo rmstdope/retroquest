@@ -58,6 +58,12 @@
     color: inherit;
     text-decoration: inherit;
   }
+  /* A one-line divider, such as the one above Help's music credits */
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
   ol,
   ul,
   menu {
