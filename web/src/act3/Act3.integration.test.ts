@@ -15,6 +15,7 @@ import {
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
+  FLAG_ACT3_MAIN_COMPLETED,
 } from './Act3StoryFlags'
 import {
   executeCommands,
@@ -32,6 +33,15 @@ const MAIN = 'The Three Virtues'
 const ECHOES = 'Echoes of the Hidden Bond'
 
 describe('Act 3 integration', () => {
+  it('completes only after the fortress gates are examined', () => {
+    const act = new Act3()
+    const game = new Game([act])
+
+    expect(act.isCompleted(game.state)).toBe(false)
+    game.state.setStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
+    expect(act.isCompleted(game.state)).toBe(true)
+  })
+
   it('initializes correctly', () => {
     const act3 = new Act3()
     expect(act3).not.toBeNull()
@@ -571,6 +581,9 @@ describe('Act 3 golden path', () => {
     expect(examineResult.toLowerCase()).toContain('massive gates')
     expect(examineResult.toLowerCase()).toContain('act iii is complete')
     expectStoryFlag(state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
+    expectStoryFlag(state, FLAG_ACT3_MAIN_COMPLETED, true)
+    expect(state.isQuestCompleted(MAIN)).toBe(true)
+    expect(new Act3().isCompleted(state)).toBe(true)
   })
 
   it('survives a save and load round-trip at the end', () => {
@@ -588,7 +601,7 @@ describe('Act 3 golden path', () => {
 })
 
 describe('Act 3 golden path as declared by the act', () => {
-  it('completes every side quest, leaving the main quest to the finale', () => {
+  it('completes every non-main quest before completing the main quest', () => {
     const game = new Game([new Act3()])
     executeCommands(game, ACT3_GOLDEN_PATH)
     expect(game.state.completedQuests.map((q) => q.name).sort()).toEqual([
@@ -598,6 +611,7 @@ describe('Act 3 golden path as declared by the act', () => {
       "Miners' Rescue",
       'Mirrors of Emberlight',
       'Oath of Stillness',
+      'The Three Virtues',
       'Tideward Sigils',
     ])
   })

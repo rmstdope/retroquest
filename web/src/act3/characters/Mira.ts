@@ -13,6 +13,7 @@ import {
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
+  FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_ECHOES_QUEST_STARTED,
@@ -249,8 +250,25 @@ export class Mira extends Character {
         allRelicsGathered &&
         !gameState.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)
       ) {
+        const unfinishedSideQuests = [
+          ...gameState.nonActivatedQuests,
+          ...gameState.activatedQuests,
+        ].some((quest) => !quest.isMain())
+        if (unfinishedSideQuests) {
+          return (
+            eventMsg +
+            '\n' +
+            speech(
+              "'Before the Warding Rite, every remaining quest in " +
+                'this act must be complete. Only then can the three relics ' +
+                "be joined safely.'",
+            )
+          )
+        }
+
         // Step 28: Perform the Warding Rite to create Lifelight Elixir
         gameState.setStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
+        gameState.setStoryFlag(FLAG_ACT3_MAIN_COMPLETED, true)
 
         // Remove the three virtue relics from inventory/room
         gameState.removeItemFromInventoryOrRoom('Crystal of Light', 1)
