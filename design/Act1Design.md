@@ -64,7 +64,7 @@
   - **Update:** Give the Rare Flower to Mira to unlock Elior's magic; she promises him the Ancient Amulet once he is ready for the road.
   - **Update:** Fish the ring out of the purified well; a black-iron rune token comes up with it. The well did not sour by itself.
   - **Update (optional):** Water the Vegetable Field with purified well water; the whole field recovers.
-  - **Update:** Give the rune token to Mira. She names it a _fouling sigil_: someone poisoned the well on purpose. Whoever carried it (perhaps the cloaked stranger of the villagers' rumours) was searching Willowbrook for something, "or for someone". Malakar is not named.
+  - **Update:** Give the rune token to Mira. She names it a _fouling sigil_: someone poisoned the well on purpose. She says the cloaked stranger of the villagers' rumours came to her door asking for the amulet, and that whoever carried the token was searching Willowbrook for something, "or for someone". Malakar is not named.
   - **Update:** Mira adds that the sickness in the land and the sickness of King Alden feel like one wound (see _Story Beats_).
   - **Completion:** When act 1 is completed
 
@@ -104,7 +104,7 @@
 - **Unusable:** old notice (start).
 - **Spells:** None.
 - **Usable Items:** (None based on Golden Path actions in this room).
-- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours, among them that King Alden is ill and the roads are no longer safe, and that a cloaked stranger was seen asking after "an old amulet, from a family that left" before he took the road to the mill; once the well is purified she asks, once, "The water's clean! Was that you?"; once Elior carries Mira's amulet she knows he is leaving.
+- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours, among them that King Alden is ill and the roads are no longer safe, and that a cloaked stranger was seen asking after "an old amulet, from a family that left" before he took the road to the mill; once the well is purified she asks, once, "The water's clean! Was that you?" (Elior may stay silent, and she decides the spring ran clear by itself; or answer `say truth to tilda`, accepted for as long as the well stays purified and she has asked, see _Optional choices_); once Elior carries Mira's amulet she knows he is leaving.
 - **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east)
 
 ### 5. Mira’s Hut
@@ -181,9 +181,10 @@
 ### 12. Forest Path
 
 - **Description:** A winding path leading into the woods. A section of the path is blocked by thick, thorny vines.
-- **Items:** Stick (later), wild berries (later), Vines (start), Bush (start).
+- **Items:** Stick (later), wild berries (later), Vines (start), Bush (start), snare (appears once the vines are cleared; optional).
 - **Spells:** None.
-- **Usable Items:** Sharp knife (on Vines to clear path), `grow` spell (on bush).
+- **Usable Items:** Sharp knife (on Vines to clear path; on the snare, optional), `grow` spell (on bush).
+- **Optional:** Once the vines are cleared, a fox kit is caught in a poacher's snare in the alcove. Cutting it free (`use sharp knife with snare`, see _Optional choices_) sends it bolting into the undergrowth; skipping it changes nothing, and the kit stays caught. Not needed for any quest.
 - **Characters:** None.
 - **Exits:** Riverbank (north), Hidden Glade (south)
 
@@ -216,7 +217,7 @@
 - **Unusable:** Rusty saw (start).
 - **Spells:** None.
 - **Usable Items:** Shiny ring or horseshoe (trade with Merchant), map (reveals shortcut to Greendale; ends the act with the farewell scene).
-- **Characters:** Merchant (sells wares, provides travel advice). He asks for fine jewelry, or failing that an iron horseshoe; he trades one pair of `wandering boots` for either the shiny ring or the forge's horseshoe ("my old mare threw a shoe on the hill road").
+- **Characters:** Merchant (sells wares, provides travel advice). He asks for fine jewelry, or failing that an iron horseshoe; he is plainly hungry after two days on the road, and the closed roads have cost him his supplies. He trades one pair of `wandering boots` for either the shiny ring or the forge's horseshoe ("my old mare threw a shoe on the hill road").
 - **Exits:** Village Chapel (west)
 
 ## Room Map
@@ -267,9 +268,9 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
 
 The red-line threads of Act I (see `GameStory.md`, Story Canon and Red Line). All ride on existing talks, examines and gives; none adds a puzzle or changes the golden path. Malakar, the Wardens, the ward and the parents' fate are not named in Act I.
 
-- **The ill king.** Tilda says King Alden is ill and the roads are no longer safe; Hemlock adds that the caravans have stopped coming. Mira says the sickness in the land and the king's sickness feel like one wound: the blight is the first ripple of the same draining magic.
+- **The ill king.** Tilda says King Alden is ill and the roads are no longer safe; Hemlock adds that the caravans have stopped coming. Mira says the sickness in the land and the king's sickness feel like one wound (in the same talk as the rare flower, step 18): the blight is the first ripple of the same draining magic.
 - **The dream voice.** Elior's journal records a voice that called for help, achingly familiar but unplaced. When he repeats what it asked to Grandmother she goes quiet, turns to the bread and says "Some voices are older than memory." She is guarded and plainly knows more. The voice is never tied to a parent.
-- **The amulet reacts.** In Mira's hut it is faintly warm and glows brighter once Elior carries the founders' locket or his mother's letter into the room. In his hand it hums at the jammed Old Mill and glows beside the moss-covered stone in the Hidden Glade. It reacts only to things tied to his parents and the founders' line.
+- **The amulet reacts.** In Mira's hut it is faintly warm and glows brighter once Elior carries the founders' locket or his mother's letter into the room. In his hand it hums at the jammed Old Mill and glows beside the moss-covered stone in the Hidden Glade. It reacts to things tied to his parents and the founders' line, and at the mill to the old power beneath it being freed. The hum and the glow in his hand come only if he goes back to the mill and the glade after step 27; they are optional and off the golden path.
 - **The refrain.** "Power follows purpose; purpose follows truth." is carved beneath the `grow` inscription on the moss-covered stone.
 - **Mira's hint.** "I knew your parents better than I have said. Once you are truly ready, I will tell you."
 - **The cloaked stranger.** Tilda saw him asking after "an old amulet, from a family that left" and he took the road to the mill; Mira says he came to her door. The rune token and the mill's mechanism are his work.
@@ -282,7 +283,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 | Where                       | The choice                                                                                                                               | Records      |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | Village Square, Tilda       | When she asks "The water's clean! Was that you?", admit it was Elior's magic instead of letting the credit go to the spring (`say truth to tilda`) | **truth**    |
-| Road to Greendale, Merchant | Give Grandmother's `fresh bread` to the hungry Merchant and ask nothing in return (`give fresh bread to merchant`)                         | **selfless** |
+| Road to Greendale, Merchant | Give Grandmother's `fresh bread` to the hungry Merchant and ask nothing in return (`give fresh bread to merchant`; the golden path's four food kinds are berries, apple, egg and carrot, so _Food for the road_ is unaffected)                         | **selfless** |
 | Forest Path                 | Cut a fox kit free from a poacher's snare with the sharp knife instead of walking past (`use sharp knife with snare`)                     | **mercy**    |
 
 ## Golden Path (Optimal Solution to Complete Act I)
@@ -292,8 +293,8 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
     - Use lantern to light up the room. _The lantern illuminates the cottage, revealing the bread and Elior’s journal._
       - Take bread. _Bread is added to inventory._
       - Take lantern. _The lit lantern is added to inventory; it will light the dark Abandoned Shed._
-      - Read journal. Opens up new conversion story with Grandmother.
-    - Speak to Grandmother for advice. _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell._
+      - Read journal. Opens up new conversion story with Grandmother. _The dream entry records the voice that called for help, achingly familiar but unplaced._
+    - Speak to Grandmother for advice. _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell. When Elior tells her what the voice asked of him (the same talk, after the journal), she goes quiet and says only "Some voices are older than memory."_
       - Spell Learned: `revive` (can not be used until magic is learned for real)
     - Search the cottage and take the faded photograph.
     - Examine the photograph to read the message on its back, then show it to Grandmother to learn more about Elior's family. _She points him to the old fisherman at the Riverbank, who will remember his mother._
@@ -414,7 +415,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
 18. **Return to Mira’s Hut:**
 
-    - Give rare flower to Mira. \_Mira smiles, saying the flower is a sign of Elior's connection to the natural world. Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. Her tone then turns practical: "You'll need warmth, protection, food, boots and a map", and all the basic magic the village elders can teach. The Ancient Amulet will be his once he is truly ready. She keeps it to that one line (the scene is told in short beats so it reads well on a phone); the quest log carries the full checklist:\_
+    - Give rare flower to Mira. \_Mira smiles, saying the flower is a sign of Elior's connection to the natural world. Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. On the golden path Elior already carries the locket and his mother's letter, so the amulet on its stand glows brighter as he enters. Her tone then turns practical: "You'll need warmth, protection, food, boots and a map", and all the basic magic the village elders can teach. The Ancient Amulet will be his once he is truly ready. She keeps it to that one line (the scene is told in short beats so it reads well on a phone); the quest log carries the full checklist:\_
       - Warm clothing (`travel cloak`)
       - Magical protection (cast `bless` on himself)
       - Food for the road: any four of six kinds (`bread` or `fresh bread`, `apple`, `egg`, `carrot`, `wild berries`, `fish`); the checklist shows how many are gathered. The golden path gathers `wild berries`, `apple`, `egg` and `carrot`; Grandmother's `fresh bread` (talk to her after this step) and a `fish` not given to the Fisherman also count.
@@ -487,13 +488,13 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 27. **Return to Mira's Hut (Final Visit):**
 
     - Give rune token to Mira. _Mira turns it over and the color drains from her face: it is a fouling sigil, and the well was poisoned on purpose. If the mill mechanism is jammed she recognises the same hand there, drinking the old power. Whoever carried it, perhaps the cloaked stranger, was searching Willowbrook "for something. Or for someone." She hands the token back: keep it close, and keep it hidden._
-    - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you." Then she sends him toward Greendale: "I knew your parents better than I have said. Once you are truly ready, I will tell you." She adds that the cloaked stranger came to her door asking for it, and sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
+    - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you." Then, more quietly: "I knew your parents better than I have said. Once you are truly ready, I will tell you." She sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
       - Item obtained: `ancient amulet` (ESSENTIAL)
       - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field are four of the six kinds and complete: Food)
 
 28. **Road to Greendale (Departure):**
 
-    - Use `map`. _Grandmother catches up on the road to say goodbye, the chapel bell rings once by itself, and the `map` aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. Act I is completed._
+    - Use `map`. _Grandmother catches up on the road to say goodbye and, in the farewell, names Aren and Lysa and says someone has come for the amulet (the red-line ending), the chapel bell rings once by itself, and the `map` aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. Act I is completed._
       - Item used: `map` (ESSENTIAL)
 
     **Items strictly necessary to complete Act I:**

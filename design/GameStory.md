@@ -22,7 +22,7 @@ Elior, a humble farmer boy, lives in the quiet village of Willowbrook on the out
 
 ## Act I: The Awakening
 
-Elior awakens to find his crops withered and the village in distress. The healer, Mira, senses a dark magic at work and reveals to Elior that he possesses latent magical abilities. She gives him an ancient amulet, hinting that it once belonged to someone important in his family, and instructs him to seek out the wise knight, Sir Cedric, in the nearby town of Greendale. A cloaked stranger has been seen in the village, and Elior learns that the amulet was his parents’ and that someone has come to Willowbrook looking for it. The refrain “Power follows purpose; purpose follows truth.” is carved on the moss-covered stone in the glade.
+Elior awakens to find his crops withered and the village in distress. The healer, Mira, senses a dark magic at work and reveals to Elior that he possesses latent magical abilities. She gives him an ancient amulet, hinting that it once belonged to someone important in his family, and sends him toward the nearby town of Greendale, where those who know what the amulet is will find him. A cloaked stranger has been seen in the village, and Elior learns that the amulet was his parents’ and that someone has come to Willowbrook looking for it. The refrain “Power follows purpose; purpose follows truth.” is carved on the moss-covered stone in the glade.
 
 **Key Events:**
 
@@ -38,7 +38,7 @@ Elior awakens to find his crops withered and the village in distress. The healer
 - **The family mystery:** _The Faded Photograph_ and the locket draw a tender but guarded memory of Elior's parents from Grandmother and tie his family to the darkness over Eldoria. The Priest speaks of the village founders' ancient safeguards, and the Old Mill is said to hold secrets older than the village.
 - **Spells:** `revive`, `purify`, `bless`, `heal`, `unlock`, `light`, and `grow` (read from the moss-covered stone in the glade).
 - **Ending:** Mira presents the **Ancient Amulet** ("May this guide and protect you"), and the map reveals a hidden road to Greendale.
-- **Canon:** King Alden is said to be ill and the roads unsafe; Elior’s journal records the dream voice as familiar but unplaced and Grandmother reacts guardedly to it; the Ancient Amulet reacts to the locket, the Old Mill and the glade; the refrain is carved on the moss-covered stone; Mira hints she knew his parents; a cloaked stranger has come looking for the amulet; and Grandmother names Aren and Lysa at the farewell. Malakar, the Wardens and the prophecy are not yet named. Three optional virtue moments (truth, selfless, mercy) are recorded.
+- **Canon:** King Alden is said to be ill and the roads unsafe; Elior’s journal records the dream voice as familiar but unplaced and Grandmother reacts guardedly to it; the Ancient Amulet reacts to the locket, his mother’s letter, the Old Mill and the glade; the refrain is carved on the moss-covered stone; Mira hints she knew his parents; a cloaked stranger has come looking for the amulet; and Grandmother names Aren and Lysa at the farewell. Malakar, the Wardens and the prophecy are not yet named, and Mira does not mention Sir Cedric by name. Three optional virtue moments (truth, selfless, mercy) are recorded.
 
 ## Act II: The Gathering
 
