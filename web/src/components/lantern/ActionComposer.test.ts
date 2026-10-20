@@ -101,14 +101,152 @@ describe('ActionComposer', () => {
 
     await button(w, 'Take').trigger('click')
     expect(w.get('[data-testid="preview"]').text()).toContain('take')
-    expect(button(w, 'Do it').attributes()).toHaveProperty('disabled')
+    expect(submit).not.toHaveBeenCalled()
 
     await button(w, 'Bucket').trigger('click')
-    expect(w.get('[data-testid="preview"]').text()).toBe('take bucket')
-
-    await button(w, 'Do it').trigger('click')
     expect(submit).toHaveBeenCalledWith('take bucket')
     expect(w.find('[data-testid="preview"]').exists()).toBe(false)
+  })
+
+  describe('instant actions', () => {
+    it.each(['Examine', 'Take', 'Drop', 'Talk', 'Open', 'Close'])(
+      'has only Cancel, no Do it, for %s',
+      async (verb) => {
+        const w = mountComposer()
+        await button(w, verb).trigger('click')
+
+        expect(w.findAll('.lq-do')).toHaveLength(0)
+        expect(button(w, 'Cancel').exists()).toBe(true)
+      },
+    )
+
+    it('performs Talk and Examine at once on the last choice', async () => {
+      const w = mountComposer()
+      await button(w, 'Talk').trigger('click')
+      await button(w, 'Mira').trigger('click')
+      await button(w, 'Examine').trigger('click')
+      await button(w, 'Bucket').trigger('click')
+
+      expect(submit.mock.calls).toEqual([['talk to mira'], ['examine bucket']])
+    })
+
+    it('performs Give whichever part is chosen last', async () => {
+      const w = mountComposer()
+      await button(w, 'Give').trigger('click')
+      expect(w.findAll('.lq-do')).toHaveLength(0)
+      await button(w, 'Lantern').trigger('click')
+      expect(submit).not.toHaveBeenCalled()
+      await button(w, 'Mira').trigger('click')
+      expect(submit).toHaveBeenLastCalledWith('give lantern to mira')
+
+      await button(w, 'Give').trigger('click')
+      await button(w, 'to: choose…').trigger('click')
+      await button(w, 'Mira').trigger('click')
+      expect(submit).toHaveBeenCalledTimes(1)
+      await button(w, 'Lantern').trigger('click')
+      expect(submit).toHaveBeenLastCalledWith('give lantern to mira')
+    })
+
+    it('performs Buy once the seller is chosen', async () => {
+      const game = useGameStore()
+      game.roomWares = [{ name: 'rope', price: 1, seller: 'mira' }]
+      const w = mountComposer()
+      await button(w, 'Buy').trigger('click')
+      await button(w, 'Rope · 1 coin').trigger('click')
+      expect(submit).not.toHaveBeenCalled()
+      await button(w, 'Mira').trigger('click')
+
+      expect(submit).toHaveBeenCalledWith('buy rope from mira')
+    })
+
+    it.each([
+      ['Use', 'Lantern', 'use lantern', 'Bucket', 'use lantern with bucket'],
+      ['Cast', 'Revive', 'cast revive', 'Mira', 'cast revive on mira'],
+    ])(
+      'waits for Do it after the first choice of %s',
+      async (verb, first, partial, second, full) => {
+        const w = mountComposer()
+        await button(w, verb).trigger('click')
+        await button(w, first).trigger('click')
+
+        expect(submit).not.toHaveBeenCalled()
+        expect(w.get('[data-testid="preview"]').text()).toBe(partial)
+        await button(w, 'Do it').trigger('click')
+        expect(submit).toHaveBeenLastCalledWith(partial)
+
+        await button(w, verb).trigger('click')
+        await button(w, first).trigger('click')
+        await button(w, second).trigger('click')
+        expect(submit).toHaveBeenLastCalledWith(full)
+        expect(w.find('.lq-builder').exists()).toBe(false)
+      },
+    )
+
+    it('keeps Do it for Say; the to-choice sends once words are typed', async () => {
+      const w = mountComposer()
+      await button(w, 'Say').trigger('click')
+      expect(button(w, 'Do it').attributes()).toHaveProperty('disabled')
+      await button(w, 'Mira').trigger('click')
+      expect(submit).not.toHaveBeenCalled()
+      await w.get('input[aria-label="Words to say"]').setValue('hi')
+      expect(button(w, 'Do it').attributes()).not.toHaveProperty('disabled')
+      await button(w, 'Do it').trigger('click')
+      expect(submit).toHaveBeenCalledWith('say hi to mira')
+    })
+
+    it('sends Say at once when Mira is tapped after the words', async () => {
+      const w = mountComposer()
+      await button(w, 'Say').trigger('click')
+      await w.get('input[aria-label="Words to say"]').setValue('hi')
+      await button(w, 'Mira').trigger('click')
+
+      expect(submit).toHaveBeenCalledWith('say hi to mira')
+    })
+
+    it('does not send when the optional choice is cleared again', async () => {
+      const w = mountComposer()
+      await button(w, 'Use').trigger('click')
+      await button(w, 'with: optional').trigger('click')
+      await button(w, 'Bucket').trigger('click')
+      await button(w, 'Use: choose…').trigger('click')
+      await button(w, 'Lantern').trigger('click')
+      expect(submit).toHaveBeenLastCalledWith('use lantern with bucket')
+
+      await button(w, 'Use').trigger('click')
+      await button(w, 'with: optional').trigger('click')
+      await button(w, 'Bucket').trigger('click')
+      await button(w, 'with: Bucket').trigger('click')
+      await button(w, 'None').trigger('click')
+
+      expect(submit).toHaveBeenCalledTimes(1)
+      expect(w.get('[data-testid="preview"]').text()).toBe('use …')
+    })
+
+    it('keeps the builder and sends nothing on Enter when input is closed', async () => {
+      const game = useGameStore()
+      const w = mountComposer()
+      await button(w, 'Say').trigger('click')
+      await button(w, 'Mira').trigger('click')
+      const words = w.get('input[aria-label="Words to say"]')
+      await words.setValue('hi')
+      game.acceptInput = false
+      await words.trigger('keydown', { key: 'Enter' })
+
+      expect(submit).not.toHaveBeenCalled()
+      expect(w.find('.lq-builder').exists()).toBe(true)
+    })
+
+    it('greys the choices while the game is not taking commands', async () => {
+      const game = useGameStore()
+      const w = mountComposer()
+      await button(w, 'Take').trigger('click')
+      game.acceptInput = false
+      await w.vm.$nextTick()
+
+      expect(button(w, 'Bucket').attributes()).toHaveProperty('disabled')
+      await button(w, 'Bucket').trigger('click')
+      expect(submit).not.toHaveBeenCalled()
+    })
   })
 
   it('allows an optional second target', async () => {
@@ -120,9 +258,7 @@ describe('ActionComposer', () => {
     expect(button(w, 'Do it').attributes()).not.toHaveProperty('disabled')
 
     await button(w, 'Bucket').trigger('click')
-    expect(w.get('[data-testid="preview"]').text()).toBe(
-      'use lantern with bucket',
-    )
+    expect(submit).toHaveBeenCalledWith('use lantern with bucket')
   })
 
   it('takes free text for what to say', async () => {
@@ -130,11 +266,10 @@ describe('ActionComposer', () => {
     await button(w, 'Say').trigger('click')
 
     await w.get('input[aria-label="Words to say"]').setValue('hello there')
+    expect(w.get('[data-testid="preview"]').text()).toBe('say hello there …')
     await button(w, 'Mira').trigger('click')
 
-    expect(w.get('[data-testid="preview"]').text()).toBe(
-      'say hello there to mira',
-    )
+    expect(submit).toHaveBeenCalledWith('say hello there to mira')
   })
 
   it('explains when there is nothing to choose', async () => {
@@ -218,18 +353,6 @@ describe('ActionComposer', () => {
     expect(button(w, 'Use: Lantern').exists()).toBe(true)
   })
 
-  it('lets the player clear the optional target again', async () => {
-    const w = mountComposer()
-    await button(w, 'Use').trigger('click')
-    await button(w, 'Lantern').trigger('click')
-    await button(w, 'Bucket').trigger('click')
-
-    await button(w, 'with: Bucket').trigger('click')
-    await button(w, 'None').trigger('click')
-
-    expect(w.get('[data-testid="preview"]').text()).toBe('use lantern')
-  })
-
   it('drops a chosen target that is no longer here', async () => {
     const game = useGameStore()
     const w = mountComposer()
@@ -244,7 +367,7 @@ describe('ActionComposer', () => {
     expect(button(w, 'Do it').attributes()).toHaveProperty('disabled')
   })
 
-  it('moves focus to the choices, then to Do it, then back to the verb', async () => {
+  it('moves focus to the choices, then back to the verb when performed', async () => {
     const w = mountComposer()
 
     await button(w, 'Take').trigger('click')
@@ -252,10 +375,6 @@ describe('ActionComposer', () => {
     expect(document.activeElement).toBe(button(w, 'Bucket').element)
 
     await button(w, 'Bucket').trigger('click')
-    await w.vm.$nextTick()
-    expect(document.activeElement).toBe(button(w, 'Do it').element)
-
-    await button(w, 'Do it').trigger('click')
     await w.vm.$nextTick()
     expect(document.activeElement).toBe(button(w, 'Take').element)
   })
@@ -271,8 +390,6 @@ describe('ActionComposer', () => {
     const w = mountComposer()
     await button(w, 'Take').trigger('click')
     await button(w, 'Bucket').trigger('click')
-
-    await button(w, 'Do it').trigger('click')
     await w.vm.$nextTick()
 
     expect(document.activeElement).toBe(continueButton)
@@ -380,7 +497,6 @@ describe('ActionComposer', () => {
     wrapper = mount(ActionComposer, { attachTo: document.body })
     await button(wrapper, 'Talk').trigger('click')
     await button(wrapper, 'Mira').trigger('click')
-    await button(wrapper, 'Do it').trigger('click')
     ;(document.activeElement as HTMLElement | null)?.blur()
     ;(wrapper.vm as unknown as { focus: () => void }).focus()
 
@@ -711,7 +827,7 @@ describe('ActionComposer', () => {
       await w.vm.$nextTick()
 
       vi.advanceTimersByTime(320)
-      await button(w, 'Take').trigger('click')
+      await button(w, 'Use').trigger('click')
 
       expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
     })
@@ -728,6 +844,20 @@ describe('ActionComposer', () => {
 
       expect(button(w, 'Look').classes()).toContain('lq-shake')
       expect(button(w, 'Take').classes()).not.toContain('lq-shake')
+    })
+
+    it('shakes the verb after a failing instant action', async () => {
+      useSettingsStore().startMode = 'actions'
+      const w = mountComposer()
+      submit.mockImplementationOnce(() =>
+        answer('take bucket', "[failure]It won't budge.[/failure]"),
+      )
+
+      await button(w, 'Take').trigger('click')
+      await button(w, 'Bucket').trigger('click')
+      await w.vm.$nextTick()
+
+      expect(button(w, 'Take').classes()).toContain('lq-shake')
     })
 
     it('does not shake for a later failure after a command with no answer', async () => {

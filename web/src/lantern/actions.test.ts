@@ -3,6 +3,8 @@ import {
   VERBS,
   verbById,
   buildCommand,
+  keepsDoIt,
+  isFinished,
   targetsFor,
   type ActionContext,
 } from './actions'
@@ -161,5 +163,30 @@ describe('opening and closing', () => {
       (t) => t.value,
     )
     expect(values).toEqual(['bucket', 'old notice', 'lantern', 'apple'])
+  })
+})
+
+describe('keepsDoIt', () => {
+  it('is true only for verbs that can take more after a complete command', () => {
+    const keeping = VERBS.filter((v) => keepsDoIt(v)).map((v) => v.id)
+    expect([...keeping].sort()).toEqual(['cast', 'say', 'use'])
+  })
+})
+
+describe('isFinished', () => {
+  it('is false while a required choice is missing', () => {
+    expect(isFinished(verbById('take'), [null])).toBe(false)
+    expect(isFinished(verbById('give'), ['lantern', null])).toBe(false)
+  })
+
+  it('is true when every choice is made', () => {
+    expect(isFinished(verbById('take'), ['bucket'])).toBe(true)
+    expect(isFinished(verbById('give'), ['lantern', 'mira'])).toBe(true)
+    expect(isFinished(verbById('say'), ['hi', 'mira'])).toBe(true)
+  })
+
+  it('waits while an optional choice is still empty', () => {
+    expect(isFinished(verbById('use'), ['lantern', null])).toBe(false)
+    expect(isFinished(verbById('use'), ['lantern', 'bucket'])).toBe(true)
   })
 })

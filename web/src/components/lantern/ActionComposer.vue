@@ -8,16 +8,20 @@ import { exitArrow } from '@/lantern/exitArrow'
 import {
   VERBS,
   buildCommand,
+  isFinished,
+  keepsDoIt,
   targetsFor,
   type ActionContext,
   type Verb,
 } from '@/lantern/actions'
 
 /**
- * The Lantern action composer: tap a verb, pick its targets as chips and
- * "Do it" — or switch to Type and write the command. A live preview shows the
- * command the game will receive. Focus follows the sentence: verb → choices →
- * Do it → back to the verb. On phones it is a sheet that can fold away
+ * The Lantern action composer: tap a verb and pick its targets as chips — the
+ * command is performed as soon as the last choice is made. Only Use, Cast and
+ * Say (whose last part may still be added) keep a "Do it" button. Or switch
+ * to Type and write the command. A live preview shows the command the game
+ * will receive. Focus follows the sentence: verb → choices → (Do it →) back
+ * to the verb. On phones it is a sheet that can fold away
  * (`foldable` shows a hide button that emits `fold`). In Type mode its root
  * carries `lq-typing`, so the sheet can let the completion list (which opens
  * above the command box) show outside it.
@@ -233,6 +237,10 @@ function pickTarget(value: string | null): void {
   if (activeSlot.value === null) return
   args.value[activeSlot.value] = value
   chosenSlot.value = null
+  if (verb.value && isFinished(verb.value, args.value)) {
+    doIt()
+    return
+  }
   focusFirst('.lq-target', '.lq-do')
 }
 
@@ -262,7 +270,7 @@ function textEntered(): void {
 }
 
 function doIt(): void {
-  if (!command.value) return
+  if (!command.value || !game.acceptInput) return
   run(command.value)
   reset()
 }
@@ -408,6 +416,7 @@ function onTypedEnter(): void {
             type="button"
             class="lq-target"
             :class="`lq-target-${target.kind}`"
+            :disabled="!game.acceptInput"
             @click="pickTarget(target.value)"
           >
             {{ target.label }}
@@ -416,6 +425,7 @@ function onTypedEnter(): void {
             v-if="canClear"
             type="button"
             class="lq-target lq-target-none"
+            :disabled="!game.acceptInput"
             @click="pickTarget(null)"
           >
             None
@@ -428,6 +438,7 @@ function onTypedEnter(): void {
         <div class="lq-builder-actions">
           <button type="button" class="lq-cancel" @click="reset">Cancel</button>
           <button
+            v-if="keepsDoIt(verb)"
             type="button"
             class="lq-do"
             :class="{ 'lq-shake': shaking }"
