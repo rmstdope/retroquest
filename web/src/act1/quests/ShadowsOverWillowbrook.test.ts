@@ -3,6 +3,7 @@ import { characterName, Game } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_INVESTIGATED_WITHERED_CROPS,
+  FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_VILLAGER_TALKED_TO,
 } from '../Act1StoryFlags'
 import { ShadowsOverWillowbrookQuest } from './ShadowsOverWillowbrook'
@@ -61,5 +62,16 @@ describe('Shadows Over Willowbrook log', () => {
     expect(details.earlier).toHaveLength(2)
     expect(details.latest).toContain('Villagers speak in hushed tones')
     expect(fresh.state.nextUpdatedQuest()).toBeNull()
+  })
+
+  it('records the amulet promise rather than a druid once magic is unlocked', () => {
+    const game = new Game([new Act1()])
+    const quest = new ShadowsOverWillowbrookQuest()
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+
+    quest.checkUpdate(game.state)
+
+    expect(quest.latestStage).toContain('[item_name]Ancient Amulet[/item_name]')
+    expect(quest.description).not.toContain('druid')
   })
 })

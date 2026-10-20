@@ -90,10 +90,9 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       newDesc =
         `\n${characterName('Elior')} has proven his magical abilities are real. The villagers will look to ` +
         `him with new hope, and ${characterName('Mira')} believes he may be the key to dispelling the ` +
-        `darkness. ${characterName('Mira')} tells ${characterName('Elior')} that his journey must continue to Greendale, where ` +
-        "he is to seek out the old druid at the forest's edge. Only there can he learn " +
-        "the deeper mysteries of nature's magic and find the knowledge needed to " +
-        'save Willowbrook.'
+        `darkness. ${characterName('Mira')} has promised ${characterName('Elior')} the ` +
+        '[item_name]Ancient Amulet[/item_name] once he is truly ready for the road ' +
+        'ahead.'
     }
     this.setJournal(earlier, newDesc)
     return updated

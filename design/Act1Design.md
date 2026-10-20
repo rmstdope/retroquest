@@ -59,7 +59,7 @@
   - **Update:** Speak with a villager about the disturbances in Willowbrook.
   - **Update:** Examine the Village Well.
   - **Update:** Discuss the crops, villagers' fears and well with Mira; she urges Elior to connect with nature.
-  - **Update:** Give the Rare Flower to Mira to unlock Elior's magic.
+  - **Update:** Give the Rare Flower to Mira to unlock Elior's magic; she promises him the Ancient Amulet once he is ready for the road.
   - **Completion:** When act 1 is completed
 
 ## Rooms
@@ -366,13 +366,13 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 18. **Return to Mira’s Hut:**
 
-    - Give rare flower to Mira. \_Mira smiles, saying the flower is a sign of Elior's connection to the natural world. Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. She then tasks Elior with preparing for the journey ahead, mentioning that the Ancient Amulet will be his once he is truly ready. She tells him he needs:
+    - Give rare flower to Mira. \_Mira smiles, saying the flower is a sign of Elior's connection to the natural world. Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. Her tone then turns practical: "You'll need warmth, protection, food, boots and a map", and all the basic magic the village elders can teach. The Ancient Amulet will be his once he is truly ready. She keeps it to that one line (the scene is told in short beats so it reads well on a phone); the quest log carries the full checklist:\_
       - Warm clothing (`travel cloak`)
       - Magical protection (cast `bless` on himself)
       - Food for the road (`wild berries`, `apple`, `egg`, `carrot`)
       - Sturdy footwear (`wandering boots`)
       - A `map` to find his way
-      - To have learned all the basic magic the village elders can teach him.\_
+      - All basic magic learned
       - Item used: `rare flower`
       - Spells Learned: `heal`, `unlock`, `light`
       - Quest given: Prepare for the Journey
@@ -437,7 +437,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 27. **Return to Mira's Hut (Final Visit):**
 
-    - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you."_
+    - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you." Then she sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
       - Item obtained: `ancient amulet` (ESSENTIAL)
       - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field complete: Food)
 
