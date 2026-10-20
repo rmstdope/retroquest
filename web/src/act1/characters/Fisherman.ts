@@ -76,12 +76,7 @@ export class Fisherman extends Character {
         return (
           `The ${characterName('fisherman')} notices ` +
           'your [item_name]fishing rod[/item_name]. ' +
-          speech(
-            'Ah, a fellow angler! ' +
-              "My arm's busted, can't fish myself. But I can tell you a thing " +
-              "or two. Cast your line near the reeds, that's where they like " +
-              'to hide. Patience is key, my friend, patience.',
-          ) +
+          speech(this.fishingLesson(gameState)) +
           '\n' +
           'He teaches you the basics of fishing.'
         )
@@ -89,6 +84,8 @@ export class Fisherman extends Character {
         // If already taught, but currentDialogueKey is still initial, switch
         // to taught_fishing so the dialogue falls through below.
         this.currentDialogueKey = 'taught_fishing'
+      } else if (gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)) {
+        return this.healedGreeting()
       } else {
         return this.dialogueStates.initial
       }
@@ -96,6 +93,44 @@ export class Fisherman extends Character {
 
     const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
     return eventMsg + '\n' + this.dialogueStates[this.currentDialogueKey]
+  }
+
+  /**
+   * His greeting once heal has mended his arm. Kept out of `dialogueStates`
+   * so saves made before this line existed still greet correctly.
+   */
+  private healedGreeting(): string {
+    return (
+      `The ${characterName('fisherman')} nods at you and rolls his mended ` +
+      'shoulder. ' +
+      speech(
+        "The river's been a bit strange lately. Not many fish biting, but " +
+          "thanks to you this arm's mended, and I'll have a pike or two out " +
+          'of her yet!',
+      )
+    )
+  }
+
+  /**
+   * The words he teaches fishing with: before heal he cannot fish with his
+   * busted arm, after it he shares his know-how out of gratitude.
+   */
+  private fishingLesson(gameState: GameState): string {
+    const tips =
+      "Cast your line near the reeds, that's where they like to hide. " +
+      'Patience is key, my friend, patience.'
+    if (gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)) {
+      return (
+        'Ah, a fellow angler! ' +
+        'You mended this old arm, so the least I can do is share what I ' +
+        `know. ${tips}`
+      )
+    }
+    return (
+      'Ah, a fellow angler! ' +
+      "My arm's busted, can't fish myself. But I can tell you a thing " +
+      `or two. ${tips}`
+    )
   }
 
   /** Handle items offered to the fisherman and teach spells if appropriate. */

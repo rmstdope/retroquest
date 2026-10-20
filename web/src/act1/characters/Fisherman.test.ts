@@ -8,6 +8,7 @@ import {
 import { Act1 } from '../Act1'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Fish } from '../items/Fish'
+import { FishingRod } from '../items/FishingRod'
 import { HealSpell } from '../spells/HealSpell'
 import {
   FLAG_FISHERMAN_TOLD_OF_TIN,
@@ -99,6 +100,29 @@ describe('Fisherman', () => {
 
       expect(response).toContain('nothing left to mend')
       expect(response).not.toContain('Thank you')
+    })
+
+    it('no longer speaks of a bad arm when talked to without a rod', () => {
+      executeCommands(game, ['cast heal on fisherman'])
+
+      const response = executeCommands(game, ['talk to fisherman'])
+
+      expect(response).not.toContain('seen better days')
+      expect(response).toContain('mended')
+      expectDialogueSpeaker(response, 'fisherman')
+    })
+
+    it('teaches fishing out of gratitude when talked to with a rod', () => {
+      executeCommands(game, ['cast heal on fisherman'])
+      game.state.addItemToInventory(new FishingRod())
+
+      const response = executeCommands(game, ['talk to fisherman'])
+
+      expect(response).not.toContain('busted')
+      expect(response).not.toContain("can't fish myself")
+      expect(response).toContain('He teaches you the basics of fishing.')
+      expect(game.state.getStoryFlag('learned_fishing_basics')).toBe(true)
+      expectDialogueSpeaker(response, 'fisherman')
     })
   })
 })

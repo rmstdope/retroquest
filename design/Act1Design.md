@@ -168,7 +168,7 @@
 - **Usable Items:** Fishing rod (on River to catch a fish), fish (give to fisherman), faded photograph (show to fisherman).
 - **Search:** Once the fisherman has told of the tin, searching finds it under the smooth stone; the mother's letter is inside.
 - **Characters:** Fisherman (the bend of the river from the photograph is his spot; he was the mother's friend; offers fishing tips, trades a fish for `purify`, tells of the tin when shown the read photograph).
-- **Optional:** Cast `heal` on the fisherman to mend his busted arm. He thanks Elior and remembers the mother mending his scrapes the same way. Not needed for any quest.
+- **Optional:** Cast `heal` on the fisherman to mend his busted arm. He thanks Elior and remembers the mother mending his scrapes the same way. From then on he no longer speaks of a bad arm; if Elior has not yet learned to fish, he teaches him out of gratitude instead. Not needed for any quest.
 - **Exits:** Old Mill (west), Forest Path (south)
 
 ### 12. Forest Path
