@@ -25,8 +25,17 @@ export class TrainingMaster extends Character {
         ': ' +
         speech(
           "Ah, a visitor to our training grounds. I've been instructing " +
-            'knights and squires here for many years. *He glances toward Sir ' +
-            'Cedric with a troubled expression.* It pains me to see a fine ' +
+            'knights and squires here for many years.',
+        ) +
+        '\n\n' +
+        'He glances toward ' +
+        characterName('Sir Cedric') +
+        ' with a troubled expression.' +
+        '\n\n' +
+        characterName('Training Master') +
+        ': ' +
+        speech(
+          'It pains me to see a fine ' +
             'knight like Sir Cedric carrying such a heavy burden. There are ' +
             'whispers about his past military service - accusations of ' +
             "cowardice during a critical battle. But I've known Cedric for " +
@@ -35,10 +44,12 @@ export class TrainingMaster extends Character {
             'seemed... incomplete.',
         ) +
         '\n\n' +
+        'He leans closer, lowering his voice.' +
+        '\n\n' +
         characterName('Training Master') +
         ': ' +
         speech(
-          "*He leans closer, lowering his voice.* I've heard rumors that " +
+          "I've heard rumors that " +
             'there were supposed to be documents - evidence that would clear ' +
             'his name. Perhaps someone with your skills could help uncover the ' +
             'truth and restore honor to a good man who has suffered long ' +
@@ -48,10 +59,14 @@ export class TrainingMaster extends Character {
     }
     // Subsequent conversations
     return (
+      'The ' +
+      characterName('Training Master') +
+      ' nods respectfully.' +
+      '\n\n' +
       characterName('Training Master') +
       ': ' +
       speech(
-        "*He nods respectfully.* You're looking into Sir Cedric's " +
+        "You're looking into Sir Cedric's " +
           'situation? Good. That man has suffered under false accusations ' +
           'for far too long. The truth needs to come to light. Perhaps the ' +
           'squires might know more about what happened - they sometimes hear ' +

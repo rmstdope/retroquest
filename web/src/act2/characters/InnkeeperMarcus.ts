@@ -57,8 +57,9 @@ export class InnkeeperMarcus extends Character {
 
         const charmName = druidicCharm.name
         const name = this.name
+        const direction =
+          characterName('Marcus') + ' has tears of joy in his eyes.'
         const head =
-          '*tears of joy in his eyes* ' +
           'You have given me back my daughter! There are no words to express my ' +
           'gratitude. '
         const body =
@@ -69,7 +70,15 @@ export class InnkeeperMarcus extends Character {
         const tail =
           '[success]Marcus places the sacred charm in your hands with reverence. ' +
           'You can feel the ancient magic thrumming within the carved wood.[/success]'
-        return characterName(name) + ': ' + speech(head + body) + '\n\n' + tail
+        return (
+          direction +
+          '\n\n' +
+          characterName(name) +
+          ': ' +
+          speech(head + body) +
+          '\n\n' +
+          tail
+        )
       } else {
         return (
           characterName(this.name) +
