@@ -61,7 +61,7 @@ describe('LanternLayout', () => {
       const w = mountLayout()
       const game = useGameStore()
       const dismiss = vi
-        .spyOn(game, 'dismissModal')
+        .spyOn(game, 'continueChapter')
         .mockImplementation(() => {})
       game.modalChapter = INTRO
       game.showModal = true
@@ -100,7 +100,7 @@ describe('LanternLayout', () => {
       const w = mountLayout()
       const game = useGameStore()
       const dismiss = vi
-        .spyOn(game, 'dismissModal')
+        .spyOn(game, 'continueChapter')
         .mockImplementation(() => {})
       game.modalChapter = INTRO
       game.showModal = true
@@ -109,6 +109,58 @@ describe('LanternLayout', () => {
       await w.get('.lq-chapter-button').trigger('click')
 
       expect(dismiss).toHaveBeenCalledOnce()
+    })
+
+    const FINAL = {
+      kind: 'complete' as const,
+      act: 'Act IV',
+      title: 'The Long Night Ends',
+      body: 'Congratulations — you have completed Act 4!',
+      stats: { questsCompleted: 6, questsTotal: 6, spells: 14, places: 18 },
+      final: true,
+    }
+
+    it('asks to save over the last chapter, then gives focus back to Finish the game', async () => {
+      wrapper = mount(LanternLayout, { attachTo: document.body })
+      const game = useGameStore()
+      game.modalChapter = FINAL
+      game.showModal = true
+      await flushPromises()
+      const finish = wrapper.get('.lq-chapter-button')
+      expect(finish.text()).toBe('Finish the game')
+
+      await finish.trigger('click')
+      await flushPromises()
+
+      expect(game.finishAsked).toBe(true)
+      const dialog = wrapper.get('.lq-dialog-layer [role="dialog"]')
+      expect(dialog.get('h2').text()).toBe('Save before you finish?')
+      expect(wrapper.find('.lq-chapter-dialog').exists()).toBe(true)
+      expect(document.activeElement?.textContent?.trim()).toBe(
+        'Save and finish',
+      )
+
+      await dialog.trigger('keydown', { key: 'Escape' })
+      await flushPromises()
+
+      expect(game.finishAsked).toBe(false)
+      expect(wrapper.find('.lq-dialog-layer').exists()).toBe(false)
+      expect(document.activeElement).toBe(
+        wrapper.get('.lq-chapter-button').element,
+      )
+    })
+
+    it('opens the save dialog with Escape on the last chapter', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      game.modalChapter = FINAL
+      game.showModal = true
+      await w.vm.$nextTick()
+
+      await w.get('.lq-chapter-dialog').trigger('keydown', { key: 'Escape' })
+
+      expect(game.finishAsked).toBe(true)
+      expect(game.showModal).toBe(true)
     })
 
     it('moves focus to the chapter when it follows another pop-up', async () => {
@@ -233,6 +285,48 @@ describe('LanternLayout', () => {
     await flushPromises()
 
     expect(created.at(-1)!.src).toContain('willowbrook.mp3')
+    vi.unstubAllGlobals()
+  })
+
+  it('shows only the end screen once the game has ended, music still playing', async () => {
+    const pause = vi.fn()
+    vi.stubGlobal(
+      'Audio',
+      class {
+        src = ''
+        loop = false
+        volume = 1
+        paused = false
+        play = vi.fn(() => Promise.resolve())
+        pause = pause
+        load = vi.fn()
+        removeAttribute = vi.fn()
+      },
+    )
+    wrapper = mount(LanternLayout, { attachTo: document.body })
+    const game = useGameStore()
+    game.musicFile = 'act4.mp3'
+    game.turns = [{ ...TURN, id: 1 }]
+    await flushPromises()
+    // Loading the track pauses the old one; only a pause after it counts.
+    pause.mockClear()
+
+    game.ending = { text: 'The realm breathes again.', saved: true }
+    game.notice = { id: 1, text: 'Game saved' }
+    await flushPromises()
+
+    const w = wrapper
+    expect(w.get('h1').text()).toBe('Thank you for playing RetroQuest')
+    expect(w.text()).toContain('The realm breathes again.')
+    expect(w.text()).toContain('Your game is saved in the quick slot.')
+    expect(w.find('header').exists()).toBe(false)
+    expect(w.find('[aria-label="Story"]').exists()).toBe(false)
+    expect(w.find('.lq-composer').exists()).toBe(false)
+    expect(w.find('[role="dialog"]').exists()).toBe(false)
+    expect(w.text()).not.toContain('Game saved')
+    expect(w.findAll('button, input, textarea, select, a')).toHaveLength(0)
+    expect(document.activeElement).toBe(w.get('h1').element)
+    expect(pause).not.toHaveBeenCalled()
     vi.unstubAllGlobals()
   })
 

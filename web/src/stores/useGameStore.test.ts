@@ -1550,6 +1550,17 @@ describe('useGameStore', () => {
       })
     })
 
+    it('goes on from any chapter but the last as before', async () => {
+      await store.initGame()
+      expect(store.modalChapter).toMatchObject({ kind: 'intro' })
+
+      store.continueChapter()
+
+      expect(store.finishAsked).toBe(false)
+      expect(store.modalChapter).toBe(null)
+      expect(bridge.look).toHaveBeenCalled()
+    })
+
     it('has no chapter for a quest pop-up', async () => {
       await store.initGame()
       store.dismissModal()
@@ -1781,11 +1792,6 @@ describe('useGameStore', () => {
       expect(store.finishAsked).toBe(false)
       expect(store.modalChapter).toEqual(FINAL_CHAPTER)
       expect(store.ending).toBe(null)
-    })
-
-    it('goes on as before from any other chapter', () => {
-      store.continueChapter()
-      expect(store.finishAsked).toBe(false)
     })
 
     it('saves to the quick slot and ends the game', () => {
