@@ -98,6 +98,24 @@ describe('GameController', () => {
     expect(ctrl.getActIntro()).toBe('')
   })
 
+  describe('golden path', () => {
+    it('is the golden path of the numbered act, empty when it has none', () => {
+      const act = new Act({
+        name: 'Act1',
+        rooms: {
+          Start: new Room({ name: 'Start', description: 'A room.' }),
+        },
+        quests: [],
+        musicFile: '',
+        musicInfo: '',
+        goldenPath: ['look'],
+      })
+      const controller = new GameController(new Game([act]))
+      expect(controller.goldenPath(1)).toEqual(['look'])
+      expect(controller.goldenPath(2)).toEqual([])
+    })
+  })
+
   describe('room data', () => {
     it('reports the room name and description', () => {
       const ctrl = makeController({

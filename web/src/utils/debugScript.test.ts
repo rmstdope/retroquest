@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import {
   isDebugScriptName,
   parseDebugScript,
@@ -60,6 +60,10 @@ describe('goldenPathLines', () => {
 })
 
 describe('playDebugScript for an act name', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
   function host(path: string[]): DebugScriptHost & { shown: string[] } {
     const shown: string[] = []
     return {
@@ -80,7 +84,6 @@ describe('playDebugScript for an act name', () => {
     expect(h.play).toHaveBeenNthCalledWith(2, 'take bread')
     expect(fetchSpy).not.toHaveBeenCalled()
     expect(h.shown.at(-1)).toContain('played 2 commands')
-    vi.unstubAllGlobals()
   })
 
   it('says so when the act has no golden path', async () => {

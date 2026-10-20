@@ -1,11 +1,12 @@
 /**
- * Helpers for the dev-only `debug <name>` command, which plays a file of game
- * commands (`web/debug-scripts/<name>.txt`) as if the player had typed them.
+ * Helpers for the dev-only `debug <name>` command, which plays a list of game
+ * commands as if the player had typed them: `act<N>` plays act N's golden
+ * path, any other name a file `web/debug-scripts/<name>.txt`.
  */
 
-/** One command of a debug script and the line of the file it came from. */
+/** One command of a debug script and the line it came from. */
 export interface DebugLine {
-  /** 1-based line number in the script file. */
+  /** 1-based line number in the script file, or position in a golden path. */
   line: number
   command: string
 }
