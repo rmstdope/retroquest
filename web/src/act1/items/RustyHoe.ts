@@ -1,5 +1,9 @@
 import { Item, type GameState } from '@/engine'
 import { Coin } from './Coin'
+import {
+  FLAG_RUSTY_HOE_FIRST_COIN_FOUND,
+  FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
+} from '../Act1StoryFlags'
 
 /** Gardening hoe with a rusted blade and splintered handle, useful for tilling soil. */
 export class RustyHoe extends Item {
@@ -14,13 +18,25 @@ export class RustyHoe extends Item {
     })
   }
 
-  /** Till the soil in Vegetable Field to find a coin, otherwise fail. */
+  /** Till the field to find its two coins, otherwise fail. */
   override use(gameState: GameState): string {
     if (gameState.currentRoom.name === 'Vegetable Field') {
       const playerHasCoin = gameState.inventory.some(
         (item) => item instanceof Coin,
       )
-      if (!playerHasCoin) {
+      const firstCoinFound = gameState.getStoryFlag(
+        FLAG_RUSTY_HOE_FIRST_COIN_FOUND,
+      )
+      const secondCoinFound = gameState.getStoryFlag(
+        FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
+      )
+      if (!playerHasCoin && !secondCoinFound) {
+        gameState.setStoryFlag(
+          firstCoinFound
+            ? FLAG_RUSTY_HOE_SECOND_COIN_FOUND
+            : FLAG_RUSTY_HOE_FIRST_COIN_FOUND,
+          true,
+        )
         gameState.addItemToInventory(new Coin())
         return (
           '[event]You till the soil with the [item_name]rusty hoe[/item_name]. ' +

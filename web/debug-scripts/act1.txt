@@ -7,6 +7,10 @@ take bread
 talk to grandmother
 use journal
 talk to grandmother
+search
+take faded photograph
+examine faded photograph
+give faded photograph to grandmother
 # Step 2: Vegetable Field
 go south
 take rusty hoe

@@ -37,6 +37,13 @@ describe('Act 1 golden path', () => {
     executeCommands(game, ['use journal', 'talk to grandmother'])
     expectSpellKnown(state, 'revive')
     expectQuests(state, [MAIN, 'Magic for real'])
+    executeCommands(game, [
+      'search',
+      'take faded photograph',
+      'examine faded photograph',
+      'give faded photograph to grandmother',
+    ])
+    expect(state.isQuestCompleted('The Faded Photograph')).toBe(true)
 
     // Step 2: Vegetable Field
     executeCommands(game, ['go south', 'take rusty hoe'])
