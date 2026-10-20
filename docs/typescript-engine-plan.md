@@ -1,5 +1,8 @@
 # TypeScript engine — implementation plan
 
+Status (2026-10-20): all steps done — engine #180–#182, Act 1 #183, Act 2 #184, Act 3 #185,
+Act 4 #186, bridge switch and Python removal in the two PRs that followed.
+
 Goal: rewrite the Python game engine and the act content in TypeScript so the web
 frontend runs the game natively. The Textual/prompt UIs, pygame audio and the Pyodide
 loader go away; only the Vue web app remains.

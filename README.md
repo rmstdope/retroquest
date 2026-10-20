@@ -23,17 +23,14 @@ My role is to provide prompts and occationally do minor string edits, whitespace
 
 ### Starting the game
 
-A simple command in your terminal gets the adventure underway:
+RetroQuest runs in the browser. From a checkout:
 
 ```bash
-python -m retroquest
+npm install --prefix web
+npm run dev
 ```
 
-This will run the game in Text mode, allowing you to immerse yourself in the adventure. If you instead want to run the game in more old-school terminal mode, you can use:
-
-```bash
-python -m retroquest -oldschool
-```
+This opens the game at `http://localhost:5173`. The game engine and all acts are TypeScript (see `web/README.md`); they started out in Python and were ported in October 2026 (`docs/typescript-engine-plan.md`).
 
 ### Commands
 
