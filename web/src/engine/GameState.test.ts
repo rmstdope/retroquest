@@ -144,6 +144,26 @@ describe('GameState', () => {
   })
 
   describe('inventory', () => {
+    it('resolves a story name once: bag first, then room, short or full', () => {
+      const roomKey = item('Rusted Locker Key', 'key')
+      const bagKey = item("Miner's Key", 'key')
+      room.addItem(roomKey)
+      gs.addItemToInventory(bagKey)
+      expect(gs.findItems('KEY')).toEqual([bagKey, roomKey])
+      expect(gs.findItem('key')).toBe(bagKey)
+      expect(gs.findItem('rusted locker key')).toBe(roomKey)
+      expect(gs.findItems('key', { inventory: false })).toEqual([roomKey])
+      expect(gs.findItems('key', { room: false })).toEqual([bagKey])
+      expect(gs.findItem('nope')).toBeNull()
+    })
+
+    it('removes carried items by short name as well as full name', () => {
+      gs.addItemToInventory(item('Rusty Hoe', 'hoe'), 2)
+      expect(gs.removeItemFromInventory('hoe')).toBe(1)
+      expect(gs.removeAllItemsFromInventory('hoe')).toBe(1)
+      expect(gs.hasItem('Rusty Hoe')).toBe(false)
+    })
+
     it('adds, finds (by name or short name) and removes items', () => {
       gs.addItemToInventory(item('item1', 'itm1'))
       expect(gs.hasItem('item1')).toBe(true)

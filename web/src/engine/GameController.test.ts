@@ -184,6 +184,20 @@ describe('GameController', () => {
       expect(ctrl.getShortNames()).toEqual({ key: "Miner's Key" })
       expect(ctrl.game.findItem('key')?.name).toBe("Miner's Key")
     })
+
+    it('agrees with the engine lookup for every short name it lists', () => {
+      const ctrl = makeController({
+        items: [item('Cellar Key', 'key'), item('Torch', 'light')],
+      })
+      ctrl.game.state.inventory.push(
+        item('Brass Key', 'key'),
+        item('Lamp', 'light'),
+      )
+      for (const [short, name] of Object.entries(ctrl.getShortNames())) {
+        expect(ctrl.game.findItem(short)?.name).toBe(name)
+        expect(ctrl.game.state.findItem(short)?.name).toBe(name)
+      }
+    })
   })
 
   describe('journal data', () => {

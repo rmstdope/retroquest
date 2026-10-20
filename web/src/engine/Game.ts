@@ -348,19 +348,12 @@ Welcome to
     target: string,
     { inventory = true, room = true } = {},
   ): Item | null {
-    return this.findAllItems(target, { inventory, room })[0] ?? null
+    return this.state.findItem(target, { inventory, room })
   }
 
   /** Every item named by full or short name, inventory first, then the room. */
   findAllItems(target: string, { inventory = true, room = true } = {}): Item[] {
-    const wanted = target.toLowerCase()
-    const matches = (item: Item) =>
-      item.name.toLowerCase() === wanted ||
-      item.shortName.toLowerCase() === wanted
-    return [
-      ...(inventory ? this.state.inventory.filter(matches) : []),
-      ...(room ? this.state.currentRoom.items.filter(matches) : []),
-    ]
+    return this.state.findItems(target, { inventory, room })
   }
 
   move(direction: string): string {

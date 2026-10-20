@@ -49,6 +49,17 @@ describe('Room', () => {
       ).toBeNull()
     })
 
+    it('finds items by short name too', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      const i = new Item({
+        name: 'Golden Apple',
+        description: 'An apple.',
+        shortName: 'apple',
+      })
+      r.addItem(i)
+      expect(r.getItemByName('Apple')).toBe(i)
+    })
+
     it('removes an item by name and returns it', () => {
       const r = new Room({ name: 'R', description: 'Desc' })
       const i = item('Lantern')

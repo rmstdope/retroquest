@@ -222,22 +222,18 @@ export class GameController {
 
   /**
    * Short names (as the story uses them) of carried and room items mapped
-   * to their full names, e.g. `{ journal: "Elior's Journal" }`. A shared
-   * short name maps to the item Game.findItem picks: the bag first, first match.
+   * to their full names, e.g. `{ journal: "Elior's Journal" }`. Each short
+   * name is resolved through `GameState.findItem`, the same lookup the
+   * parser's verbs use, so a shared short name maps to the item they pick.
    */
   getShortNames(): Record<string, string> {
+    const state = this.game.state
     const shortNames: Record<string, string> = {}
-    const items = [
-      ...this.game.state.inventory,
-      ...this.game.state.currentRoom.items,
-    ]
-    for (const item of items) {
+    for (const item of [...state.inventory, ...state.currentRoom.items]) {
       const short = item.shortName.toLowerCase()
-      if (
-        short !== item.name.toLowerCase() &&
-        !Object.hasOwn(shortNames, short)
-      ) {
-        shortNames[short] = item.name
+      const resolved = state.findItem(short)
+      if (short !== item.name.toLowerCase() && resolved) {
+        shortNames[short] = resolved.name
       }
     }
     return shortNames

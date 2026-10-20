@@ -104,6 +104,19 @@ describe('Game', () => {
     game = makeGame(rooms)
   })
 
+  describe('item lookup', () => {
+    it('delegates to the state lookup, honouring the where-to-look options', () => {
+      const roomKey = item('Cellar Key', 'key')
+      const bagKey = item('Brass Key', 'key')
+      game.state.currentRoom.addItem(roomKey)
+      game.state.inventory.push(bagKey)
+      expect(game.findAllItems('key')).toEqual(game.state.findItems('key'))
+      expect(game.findItem('key')).toBe(bagKey)
+      expect(game.findItem('key', { inventory: false })).toBe(roomKey)
+      expect(game.findAllItems('key', { room: false })).toEqual([bagKey])
+    })
+  })
+
   describe('start', () => {
     it('begins in the first room, running, showing the logo and not accepting input', () => {
       expect(game.state.currentRoom).toBe(rooms.EliorsCottage)

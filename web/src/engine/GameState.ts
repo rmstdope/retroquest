@@ -1,16 +1,8 @@
 import type { Item } from './Item'
+import { isNamed } from './itemNames'
 import type { Quest } from './Quest'
 import type { Room } from './Room'
 import type { Spell } from './Spell'
-
-/** The item's full name or the name the story uses, case-insensitively. */
-function isNamed(item: Item, name: string): boolean {
-  const wanted = name.toLowerCase()
-  return (
-    item.name.toLowerCase() === wanted ||
-    item.shortName.toLowerCase() === wanted
-  )
-}
 
 /**
  * The mutable state of the act being played: where the player is, what they
@@ -70,22 +62,43 @@ export class GameState {
     return this.inventory.some((item) => isNamed(item, itemName))
   }
 
-  /** Remove up to `count` carried items with the full name; returns how many went. */
+  /**
+   * Every item the story name refers to, in the one lookup order: the
+   * inventory first, then the current room. Matching is `isNamed`.
+   */
+  findItems(itemName: string, { inventory = true, room = true } = {}): Item[] {
+    return [
+      ...(inventory
+        ? this.inventory.filter((item) => isNamed(item, itemName))
+        : []),
+      ...(room
+        ? this.currentRoom.items.filter((item) => isNamed(item, itemName))
+        : []),
+    ]
+  }
+
+  /** The first item `findItems` returns for the name, or null. */
+  findItem(
+    itemName: string,
+    options: { inventory?: boolean; room?: boolean } = {},
+  ): Item | null {
+    return this.findItems(itemName, options)[0] ?? null
+  }
+
+  /** Remove up to `count` carried items named by full or short name; returns how many went. */
   removeItemFromInventory(itemName: string, count = 1): number {
-    const wanted = itemName.toLowerCase()
     return this.removeFrom(
       this.inventory,
-      (item) => item.name.toLowerCase() === wanted,
+      (item) => isNamed(item, itemName),
       count,
     )
   }
 
-  /** Remove every carried item with the full name; returns how many went. */
+  /** Remove every carried item named by full or short name; returns how many went. */
   removeAllItemsFromInventory(itemName: string): number {
-    const wanted = itemName.toLowerCase()
     return this.removeFrom(
       this.inventory,
-      (item) => item.name.toLowerCase() === wanted,
+      (item) => isNamed(item, itemName),
       Number.POSITIVE_INFINITY,
     )
   }
