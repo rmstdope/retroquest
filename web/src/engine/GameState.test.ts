@@ -302,6 +302,11 @@ describe('GameState', () => {
       expect(stats).toContain('Quest2 (main)')
     })
 
+    it('lists a multi-word spell by its spaced name', () => {
+      gs.learnSpell(new Spell({ name: 'foo_bar', description: '' }))
+      expect(gs.stats()).toContain('[spell_name]foo bar[/spell_name]')
+    })
+
     it('shows placeholders when there is nothing to list', () => {
       const stats = gs.stats()
       expect(stats).toContain('(empty)')

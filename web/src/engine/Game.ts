@@ -660,7 +660,7 @@ Welcome to
     if (character) return spell.castOnCharacter(this.state, character)
     return (
       `[failure]You don't see a '${targetName}' to cast ` +
-      `[spell_name]${spellName}[/spell_name] on.[/failure]`
+      `[spell_name]${spell.displayName}[/spell_name] on.[/failure]`
     )
   }
 
