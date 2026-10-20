@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
-const SFX_BASE_PATH = '/python-src/retroquest/audio/soundeffects/'
+const SFX_BASE_PATH = '/audio/soundeffects/'
 
 const NEW_QUEST_FILE = 'Voicy_New Quest.mp3'
 const QUEST_COMPLETE_FILE = 'Voicy_Quest Completed.mp3'

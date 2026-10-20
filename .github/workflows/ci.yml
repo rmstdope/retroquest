@@ -71,7 +71,7 @@ jobs:
               run: npx eslint .
 
             - name: Format check
-              run: npx prettier --check "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*"
+              run: npx prettier --check "src/**/*.{ts,vue}" "*.config.*"
 
     web-typecheck:
         runs-on: ubuntu-latest

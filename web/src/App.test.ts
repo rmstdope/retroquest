@@ -3,7 +3,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 
-// Pyodide never finishes loading here: the app stays on its loading screen.
+// the game never finishes starting here: the app stays on its loading screen.
 vi.mock('./composables/useBridge', () => ({
   useBridge: () => ({ init: () => new Promise(() => {}) }),
 }))

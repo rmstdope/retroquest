@@ -1,13 +1,30 @@
 import { test, expect, type Page } from '@playwright/test'
 
-/* Inject mock game state to bypass Pyodide loading. */
+/** Wait for the game to start (the act chunks load after the page's load event). */
+async function waitForGame(page: Page) {
+  await page.waitForFunction(() => {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const app = (document.querySelector('#app') as any).__vue_app__
+    return app && !app.config.globalProperties.$pinia.state.value.game.loading
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+  })
+}
+
+/* Replace the started game's state with a known mock state. */
 async function injectMockState(page: Page) {
+  await waitForGame(page)
   await page.evaluate(() => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     const app = (document.querySelector('#app') as any).__vue_app__
     const store = app.config.globalProperties.$pinia.state.value.game
     store.loading = false
     store.acceptInput = true
+    // The real game opens on its title page and act intro: close them.
+    store.showTitle = false
+    store.showModal = false
+    store.modalChapter = null
+    store.modalQuest = null
+    store.modalQueue = []
     store.questProgress = {
       completed: 4,
       total: 11,
@@ -334,8 +351,6 @@ test.describe('Lantern UI (the default)', () => {
   test('keeps the story and actions in view when a long room is expanded', async ({
     page,
   }) => {
-    // Keep the real game from loading over the mock state.
-    await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
     await page.setViewportSize({ width: 1024, height: 700 })
     await page.goto('/')
     await injectMockState(page)
@@ -502,8 +517,6 @@ test.describe('Lantern UI (the default)', () => {
     test(`opens a long turn at its start with More below at ${width}×${height}`, async ({
       page,
     }) => {
-      // Keep the real game (and its intro pop-up) from loading over the mock.
-      await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
       await page.setViewportSize({ width, height })
       await page.goto('/')
       await injectMockState(page)
@@ -589,8 +602,6 @@ test.describe('Lantern UI (the default)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 320, height: 568 })
-    // Keep the real game from loading over the mock state.
-    await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) => r.abort())
     await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
@@ -624,14 +635,19 @@ test.describe('Lantern UI (the default)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 568, height: 320 })
-    const traceback = '  File "retroquest/act1/Act1.py", line 1\n'.repeat(40)
-    await page.route('https://cdn.jsdelivr.net/pyodide/**', (r) =>
-      r.fulfill({
-        contentType: 'text/javascript',
-        body: `window.loadPyodide = () => Promise.reject(new Error(${JSON.stringify(traceback)}))`,
-      }),
-    )
     await page.goto('/')
+    await waitForGame(page)
+    // A start-up failure as the store shows it (the engine itself starts at once).
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.loading = true
+      store.loadFailed = true
+      store.loadingStatus =
+        'Error: ' + '  at Act1.getActIntro (act1/Act1.ts:1)\n'.repeat(40)
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
     await page.getByText('Details', { exact: true }).click()
 
     const title = page.getByRole('heading', { name: 'RetroQuest' })

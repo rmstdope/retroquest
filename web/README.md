@@ -1,6 +1,6 @@
 # RetroQuest Web Frontend
 
-Browser-based frontend for RetroQuest, running the Python game engine in-browser via Pyodide.
+Browser-based frontend for RetroQuest: the game engine and the acts are TypeScript and run in the page.
 
 ## Tech Stack
 
@@ -11,7 +11,6 @@ Browser-based frontend for RetroQuest, running the Python game engine in-browser
 | [TypeScript](https://www.typescriptlang.org/) | Type safety |
 | [Pinia](https://pinia.vuejs.org/) | State management |
 | Plain CSS | Styling: scoped styles per component, Lantern tokens in `src/lantern/lantern.css` |
-| [Pyodide](https://pyodide.org/) | Python runtime in the browser (via CDN) |
 | [Vitest](https://vitest.dev/) | Unit tests |
 | [Playwright](https://playwright.dev/) | End-to-end tests |
 | [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) | Linting and formatting |
@@ -31,7 +30,7 @@ npm install
 npm run dev
 ```
 
-The game loads at `http://localhost:5173`. Pyodide and the Python source files are fetched on first load — this takes 30–60 seconds depending on network speed.
+The game loads at `http://localhost:5173` and starts at once.
 
 ## Available Scripts
 
@@ -51,13 +50,16 @@ The game loads at `http://localhost:5173`. Pyodide and the Python source files a
 ```
 web/
 ├── src/
+│   ├── engine/          # The game engine (Game, GameState, Room, Item, …, saves)
+│   ├── act1/ … act4/    # The acts: rooms, items, characters, quests, spells, tests
 │   ├── components/      # Vue components (the Lantern UI in lantern/)
 │   ├── lantern/         # Lantern tokens and styles (lantern.css), parsers and helpers
 │   ├── composables/     # Reusable logic (useBridge, useMusic, useCommandCompletion)
 │   ├── stores/          # Pinia store (useGameStore)
+│   ├── testing/         # Shared helpers for the act tests
 │   └── utils/           # Shared utilities (theme)
+├── public/              # Audio tracks, icons and the web manifest
 ├── e2e/                 # Playwright E2E tests
-├── vite-plugins/        # Custom Vite plugin (serves Python source files)
 ├── index.html           # Entry point
 ├── vite.config.ts
 └── playwright.config.ts
@@ -65,4 +67,4 @@ web/
 
 ## How It Works
 
-The Python game engine runs entirely in the browser via [Pyodide](https://pyodide.org/). On startup, `useBridge.ts` fetches the Python source tree from `/python-src/` (served by `pythonSourcePlugin`) and loads it into Pyodide's virtual filesystem. Commands typed in the UI are passed to `GameController` running in Python, and the output is rendered as HTML.
+The game engine (`src/engine/`) and the acts (`src/act1/` …) are plain TypeScript classes. `useBridge.ts` creates a `Game` with the acts and a `GameController` (the read model for the UI); commands typed in the UI go through the controller to the command parser, and the engine's markup answers are rendered as HTML. Saves are JSON made by the engine's serializer and kept in the browser's storage (a quick save, eight slots and named saves). See `docs/typescript-engine-plan.md` and `docs/typescript-porting-guide.md` for how the engine and acts were ported from Python.

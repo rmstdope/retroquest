@@ -1,9 +1,9 @@
 /**
- * Vue composable wrapping the Pyodide bridge to the Python game engine.
- * Provides typed access to all GameController methods.
+ * Vue composable wrapping the TypeScript game engine. Provides typed access
+ * to the game and its controller, and keeps saves in the browser's storage.
  */
+import { Game, GameController, type Act } from '@/engine'
 import type {
-  PyodideRuntime,
   NamedItem,
   MusicInfo,
   RoomExits,
@@ -30,12 +30,18 @@ type StoredSaveSlot = {
   quests?: SaveSlot['quests']
 }
 
-/** The quick save's details (its data stays under 'retroquest_save'). */
+/** The quick save's data and its details. */
+const QUICK_KEY = 'retroquest_save'
 const QUICK_META_KEY = 'retroquest_save_meta'
+const SLOTS_KEY = 'retroquest_save_slots'
+const NAMED_KEY = 'retroquest_named_saves'
+const SLOT_COUNT = 8
 
-/** A save the browser could not keep (storage full or blocked) or the game did not write. */
+/** A save the browser could not keep (storage full or blocked). */
 const SAVE_FAILED =
   "[failure]The game could not be saved: this browser's storage is full or blocked.[/failure]"
+const NO_SAVE = '[failure]No save file found.[/failure]'
+const SAVED = 'Game saved.'
 
 function readQuickMeta(): Partial<Omit<SaveSlot, 'slot'>> {
   try {
@@ -49,34 +55,22 @@ function readQuickMeta(): Partial<Omit<SaveSlot, 'slot'>> {
   }
 }
 
-/**
- * Convert a Python list of (name, description) tuples to typed JS objects.
- */
-function tuplesToNamedItems(pyResult: { toJs(): unknown }): NamedItem[] {
-  const tuples = pyResult.toJs() as [string, string][]
-  return tuples.map(([name, description]) => ({ name, description }))
+/** True for save data this engine wrote (JSON); saves of the Python engine are not. */
+function isSaveData(data: unknown): data is string {
+  return typeof data === 'string' && data.startsWith('{')
 }
 
-/**
- * Read and validate persisted named saves from local storage.
- */
+/** Read and validate persisted named saves from local storage. */
 function readStoredNamedSaves(): StoredNamedSave[] {
   try {
-    const raw = localStorage.getItem('retroquest_named_saves')
+    const raw = localStorage.getItem(NAMED_KEY)
     if (!raw) return []
-
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
-
     return parsed.filter((entry): entry is StoredNamedSave => {
       if (typeof entry !== 'object' || entry === null) return false
-
       const candidate = entry as Record<string, unknown>
-      return (
-        typeof candidate.name === 'string' &&
-        typeof candidate.timestamp === 'string' &&
-        typeof candidate.data === 'string'
-      )
+      return typeof candidate.name === 'string' && isSaveData(candidate.data)
     })
   } catch {
     return []
@@ -89,319 +83,170 @@ function readStoredNamedSaves(): StoredNamedSave[] {
  */
 function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
   try {
-    const raw = localStorage.getItem('retroquest_save_slots')
-    if (!raw) return Array(8).fill(null)
+    const raw = localStorage.getItem(SLOTS_KEY)
+    if (!raw) return Array(SLOT_COUNT).fill(null)
     const parsed: unknown = JSON.parse(raw)
-    if (!Array.isArray(parsed) || parsed.length !== 8)
-      return Array(8).fill(null)
-    return parsed as (StoredSaveSlot | null)[]
+    if (!Array.isArray(parsed) || parsed.length !== SLOT_COUNT) {
+      return Array(SLOT_COUNT).fill(null)
+    }
+    return parsed.map((entry: unknown) =>
+      entry &&
+      typeof entry === 'object' &&
+      isSaveData((entry as StoredSaveSlot).data)
+        ? (entry as StoredSaveSlot)
+        : null,
+    )
   } catch {
-    return Array(8).fill(null)
+    return Array(SLOT_COUNT).fill(null)
   }
 }
 
-/**
- * Return a nullable string from a Python optional result.
- */
-function optionalString(value: unknown): string | null {
-  return value === undefined || value === null ? null : (value as string)
+/** The acts, loaded on demand so each is its own chunk of the build. */
+type ActClass = new () => Act
+
+async function loadActs(): Promise<ActClass[]> {
+  const [{ Act1 }, { Act2 }, { Act3 }] = await Promise.all([
+    import('@/act1/Act1'),
+    import('@/act2/Act2'),
+    import('@/act3/Act3'),
+  ])
+  return [Act1, Act2, Act3]
 }
 
-/** Python that creates a fresh game from Act I (at start-up and on restart). */
-const NEW_GAME = `
-from retroquest.engine.Game import Game
-from retroquest.engine.textualui.GameController import GameController
-from retroquest.act1.Act1 import Act1
-from retroquest.act2.Act2 import Act2
-from retroquest.act3.Act3 import Act3
-
-game = Game([Act1(), Act2(), Act3()], dev_mode=False)
-controller = GameController(game)
-`
-
 export function useBridge() {
-  let pyodide: PyodideRuntime | null = null
-  let ready = false
+  let acts: ActClass[] = []
+  let game: Game | null = null
+  let controller: GameController | null = null
+
+  function requireGame(): { game: Game; controller: GameController } {
+    if (!game || !controller) throw new Error('Game not started')
+    return { game, controller }
+  }
 
   async function init(
     onProgress: (status: string) => void = () => {},
   ): Promise<void> {
-    onProgress('Loading Python runtime...')
-
-    const loadPyodide = (
-      globalThis as unknown as {
-        loadPyodide: (opts: { indexURL: string }) => Promise<PyodideRuntime>
-      }
-    ).loadPyodide
-
-    pyodide = await loadPyodide({
-      indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.7/full/',
-    })
-
-    onProgress('Loading game engine...')
-
-    await pyodide.runPythonAsync(`
-import sys
-sys.path.insert(0, '/home/pyodide/src')
-    `)
-
-    await loadPythonSources(onProgress)
-
+    onProgress('Loading the acts...')
+    acts = await loadActs()
     onProgress('Starting game...')
-
-    await pyodide.runPythonAsync(NEW_GAME)
-
-    ready = true
+    newGame()
     onProgress('Ready!')
   }
 
-  async function loadPythonSources(
-    onProgress: (status: string) => void,
-  ): Promise<void> {
-    if (!pyodide) throw new Error('Pyodide not initialized')
-    const resp = await fetch('/python-src/manifest.json')
-    const manifest: string[] = await resp.json()
-    const total = manifest.length
-    let loaded = 0
-
-    for (const filePath of manifest) {
-      const dir = filePath.substring(0, filePath.lastIndexOf('/'))
-      pyodide.runPython(
-        `import os\nos.makedirs('/home/pyodide/src/${dir}', exist_ok=True)`,
-      )
-
-      const fileResp = await fetch(`/python-src/${filePath}`)
-      const content = await fileResp.text()
-
-      pyodide.runPython(
-        `with open('/home/pyodide/src/${filePath}', 'w') as f:\n    f.write(${JSON.stringify(content)})`,
-      )
-
-      loaded++
-      if (loaded % 10 === 0 || loaded === total) {
-        onProgress(`Loading game files... (${loaded}/${total})`)
-      }
-    }
-  }
-
-  function py(code: string): unknown {
-    if (!pyodide) throw new Error('Pyodide not initialized')
-    return pyodide.runPython(code)
+  function isReady(): boolean {
+    return game !== null
   }
 
   function startGame(): string {
-    return py('controller.start()') as string
+    return requireGame().controller.start()
   }
 
+  /** The texts of the logo and intro screens, then the running act's first text. */
   function advanceToRunning(): string[] {
-    const result = py(`
-results = []
-while not game.is_act_running():
-    text = game.get_result_text()
-    results.append(text)
-    game.new_turn()
-results.append(game.get_result_text())
-results
-    `)
-    return (result as { toJs(): unknown }).toJs() as string[]
+    const { game } = requireGame()
+    const results: string[] = []
+    while (!game.isActRunning()) {
+      results.push(game.getResultText())
+      game.newTurn()
+    }
+    results.push(game.getResultText())
+    return results
   }
 
   function handleCommand(command: string): string {
-    if (!pyodide) throw new Error('Pyodide not initialized')
-    pyodide.globals.set('_cmd', command)
-    return py(`
-result = controller.handle_command(_cmd)
-game.new_turn()
-result
-    `) as string
+    const { game, controller } = requireGame()
+    const result = controller.handleCommand(command)
+    game.newTurn()
+    return result
   }
 
   /** Throw the running game away and start a fresh one from Act I. */
   function newGame(): void {
-    py(NEW_GAME)
+    if (acts.length === 0) throw new Error('Game not started')
+    game = new Game(acts.map((ActClass) => new ActClass()))
+    controller = new GameController(game)
   }
 
   /** Ask the game something that changes nothing (stats, help): no new turn. */
   function readCommand(command: 'stats' | 'help'): string {
-    if (!pyodide) throw new Error('Pyodide not initialized')
-    pyodide.globals.set('_cmd', command)
-    return py('controller.handle_command(_cmd)') as string
-  }
-
-  function getRoom(): string {
-    return py('controller.get_room()') as string
+    return requireGame().controller.handleCommand(command)
   }
 
   function getRoomName(): string {
-    return py('controller.get_room_name()') as string
+    return requireGame().controller.getRoomName()
   }
 
   function getRoomDescription(): string {
-    return py('controller.get_room_description()') as string
+    return requireGame().controller.getRoomDescription()
   }
 
   function getRoomCharacters(): string[] {
-    const result = py('controller.get_room_characters()')
-    return (result as { toJs(): unknown }).toJs() as string[]
+    return requireGame().controller.getRoomCharacters()
   }
 
   function getRoomItems(): string[] {
-    const result = py('controller.get_room_items()')
-    return (result as { toJs(): unknown }).toJs() as string[]
+    return requireGame().controller.getRoomItems()
   }
 
   function getRoomWares(): RoomWare[] {
-    const result = py('controller.get_room_wares()') as { toJs(): unknown }
-    const tuples = result.toJs() as [string, number, string][]
-    return tuples.map(([name, price, seller]) => ({ name, price, seller }))
+    return requireGame().controller.getRoomWares()
   }
 
   function getRoomExits(): RoomExits {
-    const result = py('controller.get_room_exits()')
-    return Object.fromEntries(
-      (result as { toJs(): unknown }).toJs() as Iterable<[string, string]>,
-    )
+    return requireGame().controller.getRoomExits()
   }
 
   function getInventory(): NamedItem[] {
-    return tuplesToNamedItems(
-      py('controller.get_inventory()') as { toJs(): unknown },
-    )
+    return requireGame().controller.getInventory()
   }
 
   function getSpells(): NamedItem[] {
-    return tuplesToNamedItems(
-      py('controller.get_spells()') as { toJs(): unknown },
-    )
+    return requireGame().controller.getSpells()
   }
 
   function getActiveQuests(): NamedItem[] {
-    return tuplesToNamedItems(
-      py('controller.get_active_quests()') as { toJs(): unknown },
-    )
+    return requireGame().controller.getActiveQuests()
   }
 
   function getCompletedQuests(): NamedItem[] {
-    return tuplesToNamedItems(
-      py('controller.get_completed_quests()') as { toJs(): unknown },
-    )
+    return requireGame().controller.getCompletedQuests()
   }
 
   function activateQuest(): string | null {
-    return optionalString(py('controller.activate_quest()'))
+    return requireGame().controller.activateQuest()
   }
 
   function updateQuest(): string | null {
-    return optionalString(py('controller.update_quest()'))
+    return requireGame().controller.updateQuest()
   }
 
   function completeQuest(): string | null {
-    return optionalString(py('controller.complete_quest()'))
+    return requireGame().controller.completeQuest()
   }
 
   function look(): string {
-    return py('controller.look()') as string
+    return requireGame().controller.look()
   }
 
   function getActIntro(): string {
-    return py('controller.get_act_intro()') as string
-  }
-
-  function saveGame(): string {
-    return quickSaveGame()
-  }
-
-  function loadGame(): string {
-    return quickLoadGame()
-  }
-
-  function quickSaveGame(): string {
-    const result = py('controller.save_game() or ""')
-    try {
-      // Assign to a variable and return it as the last top-level expression so
-      // pyodide.runPython() returns the value. Expressions inside compound
-      // statements (try/with) are not returned by pyodide.runPython().
-      const saveData = py(`
-import base64
-_save_data = ''
-try:
-    with open('retroquest.save', 'rb') as f:
-        _save_data = base64.b64encode(f.read()).decode('ascii')
-except FileNotFoundError:
-    pass
-_save_data
-      `) as string
-      if (!saveData) return SAVE_FAILED
-      const meta = JSON.stringify({
-        act: py('controller.get_act_name()') as string,
-        room: py('controller.get_room_name()') as string,
-        timestamp: new Date().toISOString(),
-        quests: readQuests(),
-      })
-      localStorage.setItem('retroquest_save', saveData)
-      try {
-        localStorage.setItem(QUICK_META_KEY, meta)
-      } catch {
-        // No details rather than the previous save's.
-        localStorage.removeItem(QUICK_META_KEY)
-      }
-    } catch {
-      return SAVE_FAILED
-    }
-    return (result as string) || 'Game saved.'
-  }
-
-  function quickLoadGame(): string {
-    const saveData = localStorage.getItem('retroquest_save')
-    if (!saveData) {
-      return '[failure]No save file found.[/failure]'
-    }
-    if (!pyodide) throw new Error('Pyodide not initialized')
-    pyodide.globals.set('_save_b64', saveData)
-    pyodide.runPython(`
-import base64
-with open('retroquest.save', 'wb') as f:
-    f.write(base64.b64decode(_save_b64))
-    `)
-    return py('controller.load_game()') as string
+    return requireGame().controller.getActIntro()
   }
 
   function getActName(): string {
-    return py('controller.get_act_name()') as string
+    return requireGame().controller.getActName()
   }
 
   function getQuestProgress(): QuestProgress {
-    const result = py('controller.get_quest_progress()') as { toJs(): unknown }
-    const data = Object.fromEntries(
-      result.toJs() as Iterable<[string, unknown]>,
-    )
-    return {
-      completed: data.completed as number,
-      total: data.total as number,
-      actNumber: data.act_number as number,
-      mainQuest: optionalString(data.main_quest),
-    }
+    return requireGame().controller.getQuestProgress()
   }
 
   /** Short item names the story uses, mapped to the items' full names. */
   function getShortNames(): Record<string, string> {
-    const result = py('controller.get_short_names()') as { toJs(): unknown }
-    return Object.fromEntries(
-      result.toJs() as Iterable<[string, string]>,
-    ) as Record<string, string>
+    return requireGame().controller.getShortNames()
   }
 
   function getActStats(): ActStats {
-    const result = py('controller.get_act_stats()') as { toJs(): unknown }
-    const data = Object.fromEntries(
-      result.toJs() as Iterable<[string, unknown]>,
-    )
-    return {
-      questsCompleted: data.quests_completed as number,
-      questsTotal: data.quests_total as number,
-      spells: data.spells as number,
-      places: data.places as number,
-    }
+    return requireGame().controller.getActStats()
   }
 
   /** The act's quests done/total for a save card, or null if unreadable. */
@@ -414,9 +259,51 @@ with open('retroquest.save', 'wb') as f:
     }
   }
 
-  /** The quick save as a card (slot 0), or null when there is none. */
+  /** The details stored next to a save: where the player was and when. */
+  function saveDetails(): Omit<StoredSaveSlot, 'slot' | 'data'> {
+    return {
+      act: getActName(),
+      room: getRoomName(),
+      timestamp: new Date().toISOString(),
+      quests: readQuests(),
+    }
+  }
+
+  function saveGame(): string {
+    return quickSaveGame()
+  }
+
+  function loadGame(): string {
+    return quickLoadGame()
+  }
+
+  function quickSaveGame(): string {
+    const { game } = requireGame()
+    try {
+      const data = game.toSaveData()
+      const meta = JSON.stringify(saveDetails())
+      localStorage.setItem(QUICK_KEY, data)
+      try {
+        localStorage.setItem(QUICK_META_KEY, meta)
+      } catch {
+        // No details rather than the previous save's.
+        localStorage.removeItem(QUICK_META_KEY)
+      }
+    } catch {
+      return SAVE_FAILED
+    }
+    return SAVED
+  }
+
+  function quickLoadGame(): string {
+    const data = localStorage.getItem(QUICK_KEY)
+    if (!isSaveData(data)) return NO_SAVE
+    return requireGame().game.loadSaveData(data)
+  }
+
+  /** The quick save as a card (slot 0), or null when there is none this engine can read. */
   function getQuickSave(): SaveSlot | null {
-    if (!localStorage.getItem('retroquest_save')) return null
+    if (!isSaveData(localStorage.getItem(QUICK_KEY))) return null
     const meta = readQuickMeta()
     return {
       slot: 0,
@@ -429,7 +316,7 @@ with open('retroquest.save', 'wb') as f:
 
   function getSaveSlots(): SaveSlot[] {
     const stored = readStoredSaveSlots()
-    return Array.from({ length: 8 }, (_, i) => {
+    return Array.from({ length: SLOT_COUNT }, (_, i) => {
       const entry = stored[i]
       const slot = i + 1
       if (!entry)
@@ -445,167 +332,77 @@ with open('retroquest.save', 'wb') as f:
   }
 
   function saveToSlot(slot: number): string {
-    if (slot < 1 || slot > 8) return '[failure]Invalid save slot.[/failure]'
-    const result = py('controller.save_game() or ""')
+    if (slot < 1 || slot > SLOT_COUNT)
+      return '[failure]Invalid save slot.[/failure]'
+    const { game } = requireGame()
     try {
-      const saveData = py(`
-import base64
-_save_data = ''
-try:
-    with open('retroquest.save', 'rb') as f:
-        _save_data = base64.b64encode(f.read()).decode('ascii')
-except FileNotFoundError:
-    pass
-_save_data
-      `) as string
-      if (!saveData) return SAVE_FAILED
-      const actName = py('controller.get_act_name()') as string
-      const roomName = py('controller.get_room_name()') as string
       const stored = readStoredSaveSlots()
-      stored[slot - 1] = {
-        slot,
-        act: actName,
-        room: roomName,
-        timestamp: new Date().toISOString(),
-        data: saveData,
-        quests: readQuests(),
-      }
-      localStorage.setItem('retroquest_save_slots', JSON.stringify(stored))
+      stored[slot - 1] = { slot, data: game.toSaveData(), ...saveDetails() }
+      localStorage.setItem(SLOTS_KEY, JSON.stringify(stored))
     } catch {
       return SAVE_FAILED
     }
-    return (result as string) || 'Game saved.'
+    return SAVED
   }
 
   function loadFromSlot(slot: number): string {
-    try {
-      if (slot < 1 || slot > 8) return '[failure]No save file found.[/failure]'
-      const stored = readStoredSaveSlots()
-      const entry = stored[slot - 1]
-      if (!entry) return '[failure]No save file found.[/failure]'
-      if (!pyodide) throw new Error('Pyodide not initialized')
-      pyodide.globals.set('_save_b64', entry.data)
-      pyodide.runPython(`
-import base64
-with open('retroquest.save', 'wb') as f:
-    f.write(base64.b64decode(_save_b64))
-      `)
-      return py('controller.load_game()') as string
-    } catch (e) {
-      if (e instanceof Error && e.message === 'Pyodide not initialized') throw e
-      return '[failure]No save file found.[/failure]'
-    }
+    if (slot < 1 || slot > SLOT_COUNT) return NO_SAVE
+    const entry = readStoredSaveSlots()[slot - 1]
+    if (!entry) return NO_SAVE
+    return requireGame().game.loadSaveData(entry.data)
   }
 
   function saveNamedGame(name: string): string {
-    const result = py('controller.save_game() or ""')
+    const { game } = requireGame()
     try {
-      const saveData = py(`
-import base64
-_save_data = ''
-try:
-    with open('retroquest.save', 'rb') as f:
-        _save_data = base64.b64encode(f.read()).decode('ascii')
-except FileNotFoundError:
-    pass
-_save_data
-      `) as string
-      if (!saveData) return SAVE_FAILED
       const saves = readStoredNamedSaves()
-      const existingIndex = saves.findIndex((s) => s.name === name)
       const entry: StoredNamedSave = {
         name,
         timestamp: new Date().toISOString(),
-        data: saveData,
+        data: game.toSaveData(),
       }
-      if (existingIndex >= 0) {
-        saves[existingIndex] = entry
-      } else {
-        saves.push(entry)
-      }
-      localStorage.setItem('retroquest_named_saves', JSON.stringify(saves))
+      const existing = saves.findIndex((s) => s.name === name)
+      if (existing >= 0) saves[existing] = entry
+      else saves.push(entry)
+      localStorage.setItem(NAMED_KEY, JSON.stringify(saves))
     } catch {
       return SAVE_FAILED
     }
-    return (result as string) || 'Game saved.'
+    return SAVED
   }
 
   function loadNamedGame(name: string): string {
-    try {
-      const raw = localStorage.getItem('retroquest_named_saves')
-      if (!raw) return '[failure]No save file found.[/failure]'
-      const parsed: unknown = JSON.parse(raw)
-      if (!Array.isArray(parsed))
-        return '[failure]No save file found.[/failure]'
-      const entry = parsed.find(
-        (s): s is StoredNamedSave =>
-          s !== null &&
-          typeof s === 'object' &&
-          typeof (s as Record<string, unknown>).name === 'string' &&
-          typeof (s as Record<string, unknown>).data === 'string' &&
-          (s as Record<string, unknown>).name === name,
-      )
-      if (!entry) {
-        return '[failure]No save file found.[/failure]'
-      }
-      if (!pyodide) throw new Error('Pyodide not initialized')
-      pyodide.globals.set('_save_b64', entry.data)
-      pyodide.runPython(`
-import base64
-with open('retroquest.save', 'wb') as f:
-    f.write(base64.b64decode(_save_b64))
-      `)
-      return py('controller.load_game()') as string
-    } catch (e) {
-      if (e instanceof Error && e.message === 'Pyodide not initialized') throw e
-      return '[failure]No save file found.[/failure]'
-    }
+    const entry = readStoredNamedSaves().find((s) => s.name === name)
+    if (!entry) return NO_SAVE
+    return requireGame().game.loadSaveData(entry.data)
   }
 
   function isAcceptingInput(): boolean {
-    return py('game.accept_input') as boolean
+    return requireGame().game.acceptInput
   }
 
   function getCommandCompletions(): CompletionTree {
-    const result = py('game.get_command_completions()')
-    if (!result || typeof result !== 'object') return {}
-    const proxy = result as {
-      toJs: (opts: {
-        dict_converter: (
-          entries: [string, unknown][],
-        ) => Record<string, unknown>
-      }) => unknown
-    }
-    return proxy.toJs({ dict_converter: Object.fromEntries }) as CompletionTree
+    return requireGame().game.getCommandCompletions()
   }
 
+  /** The current result text, then a new turn (used for logo/intro screens). */
   function advanceTurn(): string {
-    return py(`
-_result_text = game.get_result_text()
-game.new_turn()
-_result_text
-    `) as string
+    const { game } = requireGame()
+    const text = game.getResultText()
+    game.newTurn()
+    return text
   }
 
   function isGameRunning(): boolean {
-    return py('controller.is_game_running()') as boolean
+    return requireGame().controller.isGameRunning()
   }
 
   function isActRunning(): boolean {
-    return py('controller.is_act_running()') as boolean
+    return requireGame().controller.isActRunning()
   }
 
   function getMusicInfo(): MusicInfo {
-    const result = py('controller.get_current_music()')
-    const [musicFile, musicInfo] = (result as { toJs(): unknown }).toJs() as [
-      string,
-      string,
-    ]
-    return { musicFile, musicInfo }
-  }
-
-  function isReady(): boolean {
-    return ready
+    return requireGame().controller.getCurrentMusic()
   }
 
   return {
@@ -616,7 +413,6 @@ _result_text
     handleCommand,
     readCommand,
     newGame,
-    getRoom,
     getRoomName,
     getRoomDescription,
     getRoomCharacters,

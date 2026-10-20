@@ -2,7 +2,7 @@ import { computed, ref, watch } from 'vue'
 import { escapeHtml } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
-const MUSIC_BASE_PATH = '/python-src/retroquest/audio/music/'
+const MUSIC_BASE_PATH = '/audio/music/'
 const URL_PATTERN = /(https?:\/\/[^\s]+)/g
 
 /**
