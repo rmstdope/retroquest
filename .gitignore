@@ -27,3 +27,6 @@ playwright-report/
 .beads-credential-key
 .beads/proxieddb/
 *.gate.lock*
+
+# Node
+node_modules
