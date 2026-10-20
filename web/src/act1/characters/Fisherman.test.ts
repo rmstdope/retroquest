@@ -1,0 +1,104 @@
+import { describe, it, expect, beforeEach } from 'vitest'
+import { Game } from '@/engine'
+import {
+  executeCommands,
+  expectDialogueSpeaker,
+  expectItemInInventory,
+} from '@/testing/gameHelpers'
+import { Act1 } from '../Act1'
+import { FadedPhotograph } from '../items/FadedPhotograph'
+import { Fish } from '../items/Fish'
+import { HealSpell } from '../spells/HealSpell'
+import {
+  FLAG_FISHERMAN_TOLD_OF_TIN,
+  FLAG_HEALED_FISHERMAN_ARM,
+} from '../Act1StoryFlags'
+
+describe('Fisherman', () => {
+  let game: Game
+
+  beforeEach(() => {
+    game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.Riverbank
+  })
+
+  describe('shown the faded photograph', () => {
+    beforeEach(() => {
+      game.state.addItemToInventory(new FadedPhotograph())
+    })
+
+    it('recognises the mother but keeps the tin to himself before the message is read', () => {
+      const response = executeCommands(game, [
+        'give faded photograph to fisherman',
+      ])
+
+      expect(response).toContain('your mother')
+      expect(response).not.toContain('tin')
+      expect(game.state.getStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN)).toBe(false)
+      expectItemInInventory(game.state, 'faded photograph')
+    })
+
+    it('tells of the tin under the smooth stone once the message is read', () => {
+      executeCommands(game, ['examine faded photograph'])
+
+      const response = executeCommands(game, [
+        'give faded photograph to fisherman',
+      ])
+
+      expect(response).toContain('You show the [item_name]faded photograph')
+      expect(response).toContain('tin')
+      expect(response).toContain('[item_name]smooth stone[/item_name]')
+      expectDialogueSpeaker(response, 'fisherman')
+      expect(game.state.getStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN)).toBe(true)
+      expectItemInInventory(game.state, 'faded photograph')
+    })
+
+    it('points back to the stone when shown the photograph again', () => {
+      executeCommands(game, [
+        'examine faded photograph',
+        'give faded photograph to fisherman',
+      ])
+
+      const response = executeCommands(game, [
+        'give faded photograph to fisherman',
+      ])
+
+      expect(response).toContain('[item_name]smooth stone[/item_name]')
+      expect(response).not.toContain('The night before she went away')
+    })
+  })
+
+  it('credits the mother when teaching purify', () => {
+    game.state.addItemToInventory(new Fish())
+
+    const response = executeCommands(game, ['give fish to fisherman'])
+
+    expect(response).toContain('Your mother taught me this, by the bend.')
+    expect(response).toContain("I reckon it's yours more than mine.")
+    expect(game.state.hasSpell('purify')).toBe(true)
+  })
+
+  describe('healed', () => {
+    beforeEach(() => {
+      game.state.learnSpell(new HealSpell())
+    })
+
+    it('mends his arm and thanks Elior', () => {
+      const response = executeCommands(game, ['cast heal on fisherman'])
+
+      expect(response).toContain('arm')
+      expect(response).toContain('Thank you')
+      expectDialogueSpeaker(response, 'fisherman')
+      expect(game.state.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)).toBe(true)
+    })
+
+    it('has nothing left to mend the second time', () => {
+      executeCommands(game, ['cast heal on fisherman'])
+
+      const response = executeCommands(game, ['cast heal on fisherman'])
+
+      expect(response).toContain('nothing left to mend')
+      expect(response).not.toContain('Thank you')
+    })
+  })
+})

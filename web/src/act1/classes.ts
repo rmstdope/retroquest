@@ -30,6 +30,7 @@ import { GameMap } from './items/GameMap'
 import { Matches } from './items/Matches'
 import { Mechanism } from './items/Mechanism'
 import { MillstoneFragment } from './items/MillstoneFragment'
+import { MothersLetter } from './items/MothersLetter'
 import { MysteriousBox } from './items/MysteriousBox'
 import { OldNotice } from './items/OldNotice'
 import { PrayerBook } from './items/PrayerBook'
@@ -126,6 +127,7 @@ export const ACT1_CLASSES = {
   Matches,
   Mechanism,
   MillstoneFragment,
+  MothersLetter,
   MysteriousBox,
   OldNotice,
   PrayerBook,

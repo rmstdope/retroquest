@@ -1,12 +1,11 @@
 import { characterName, Quest, type GameState } from '@/engine'
-import {
-  FLAG_FOUND_PHOTO,
-  FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO,
-} from '../Act1StoryFlags'
+import { FLAG_FOUND_PHOTO, FLAG_READ_MOTHERS_LETTER } from '../Act1StoryFlags'
 
 /**
  * The Faded Photograph quest: find the photograph in Elior's cottage, read the
- * cryptic message on its back and talk to Grandmother about it.
+ * cryptic message on its back, ask Grandmother about it, then follow the
+ * message to the river bend, where the fisherman leads Elior to his mother's
+ * letter. Reading the letter completes the quest.
  */
 export class FadedPhotographQuest extends Quest {
   constructor() {
@@ -14,11 +13,11 @@ export class FadedPhotographQuest extends Quest {
       name: 'The Faded Photograph',
       description:
         'Somewhere in the cottage lies an old photograph of your parents, tucked away in a drawer. ' +
-        `Read the cryptic message on its back, then show it to your ${characterName('grandmother')} ` +
-        'and ask her what she remembers.',
+        `Read the cryptic message on its back and show it to your ${characterName('grandmother')}. ` +
+        'Then seek the truth where the river bends.',
       completion:
-        `You have found the photograph, read its cryptic message and shown it to your ${characterName('grandmother')}, ` +
-        "deepening the mystery of your parents' fate.",
+        "At the river bend you found your mother's letter, hidden beneath the smooth stone. " +
+        'Its words raise more questions than they answer, but they are hers.',
     })
   }
 
@@ -27,8 +26,8 @@ export class FadedPhotographQuest extends Quest {
     return gameState.getStoryFlag(FLAG_FOUND_PHOTO)
   }
 
-  /** Completed when the player finishes the dialogue with Grandmother about the photograph. */
+  /** Completed when the player reads the mother's letter from the river bend. */
   override checkCompletion(gameState: GameState): boolean {
-    return gameState.getStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO)
+    return gameState.getStoryFlag(FLAG_READ_MOTHERS_LETTER)
   }
 }

@@ -7,9 +7,21 @@ import {
   speech,
 } from '@/engine'
 import { Fish } from '../items/Fish'
+import { FadedPhotograph } from '../items/FadedPhotograph'
 import { PurifySpell } from '../spells/PurifySpell'
+import {
+  FLAG_FISHERMAN_TOLD_OF_TIN,
+  FLAG_FOUND_MOTHERS_LETTER,
+  FLAG_HEALED_FISHERMAN_ARM,
+  FLAG_READ_PHOTO_MESSAGE,
+} from '../Act1StoryFlags'
 
-/** Fisherman NPC who teaches fishing basics and can accept fish. */
+/**
+ * Fisherman NPC at the river bend: an old friend of Elior's mother who
+ * teaches fishing basics, trades a fish for the purify spell she once taught
+ * him, tells of the tin she hid when shown the faded photograph, and can have
+ * his arm mended with heal.
+ */
 export class Fisherman extends Character {
   knowsFishingBasics = false
   receivedFish = false
@@ -105,8 +117,8 @@ export class Fisherman extends Character {
         ' ' +
         speech(
           "The river's water... it's not been right. Murky. " +
-            'But I sense you have a connection to the old ways. Let me ' +
-            'teach you something to help. With this, you can cleanse ' +
+            'Your mother taught me this, by the bend. ' +
+            "I reckon it's yours more than mine. With this, you can cleanse " +
             'water,',
         ) +
         ' ' +
@@ -126,6 +138,10 @@ export class Fisherman extends Character {
       )
     }
 
+    if (item instanceof FadedPhotograph) {
+      return this.showPhotograph(gameState, item)
+    }
+
     const eventMsg = event(
       `You offer the [item_name]${item.name}[/item_name] to the ` +
         `${characterName('Fisherman')}.`,
@@ -137,6 +153,91 @@ export class Fisherman extends Character {
       '[item_name]' +
       item.name +
       "[/item_name] curiously but doesn't seem to need it."
+    )
+  }
+
+  /**
+   * Show the faded photograph: he recognises Elior's mother, and once its
+   * message has been read he tells of the tin she hid under the smooth stone.
+   * The photograph stays with Elior.
+   */
+  private showPhotograph(gameState: GameState, item: Item): string {
+    const eventMsg = event(
+      `You show the [item_name]${item.name}[/item_name] to the ` +
+        `${characterName(this.name)}.`,
+    )
+    if (!gameState.getStoryFlag(FLAG_READ_PHOTO_MESSAGE)) {
+      return (
+        eventMsg +
+        '\n' +
+        `The ${characterName('fisherman')} squints at the photograph, ` +
+        'and his face softens. ' +
+        speech(
+          "That's your mother, sure as the river runs. She was a dear " +
+            'friend to me. Turn it over sometime, lad. She never wrote a word ' +
+            'without a reason.',
+        ) +
+        '\nHe hands the photograph back.'
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_FOUND_MOTHERS_LETTER)) {
+      return (
+        eventMsg +
+        '\n' +
+        `The ${characterName('fisherman')} nods slowly. ` +
+        speech("She'd be proud of you, lad. Keep her words close.")
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN)) {
+      return (
+        eventMsg +
+        '\n' +
+        `The ${characterName('fisherman')} points to the water's edge. ` +
+        speech(
+          'Under the [item_name]smooth stone[/item_name], lad, ' +
+            'where the water turns. Go on, search there.',
+        )
+      )
+    }
+    gameState.setStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN, true)
+    return (
+      eventMsg +
+      '\n' +
+      `The ${characterName('fisherman')} turns the photograph over and reads ` +
+      'the back. For a long while he says nothing. ' +
+      speech(
+        "Where the river bends... that's here, lad. This very spot. " +
+          'Your mother came to the bend near every evening. Said the water ' +
+          'here was old, older than the village, and it had things to teach.',
+      ) +
+      '\nHe hands the photograph back. ' +
+      speech(
+        'The night before she went away, she pressed a little tin into the ' +
+          'mud under that [item_name]smooth stone[/item_name] yonder, and made ' +
+          'me promise to watch over it. Said if her boy ever came asking, ' +
+          "he'd know where to look. I reckon you've come asking.",
+      )
+    )
+  }
+
+  /** Mend his busted arm with heal; he thanks Elior the first time. */
+  healArm(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)) {
+      return (
+        `The warm light settles over the ${characterName('fisherman')}, ` +
+        'but there is nothing left to mend. ' +
+        speech("Arm's as good as new, lad. Save your magic.")
+      )
+    }
+    gameState.setStoryFlag(FLAG_HEALED_FISHERMAN_ARM, true)
+    return (
+      `A warm light gathers around the ${characterName('fisherman')}'s arm. ` +
+      'He flexes his fingers, then lifts the arm above his head and laughs. ' +
+      speech(
+        'Well, would you look at that! Not a twinge. Your mother mended my ' +
+          'scrapes the same way, down by the bend. Thank you, lad. ' +
+          "Tomorrow I'll cast my own line again.",
+      )
     )
   }
 }
