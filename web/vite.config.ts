@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
 import { debugScriptsPlugin } from './debugScripts.config'
+import { shouldOpenBrowser } from './devServerOpen.config'
 
 export default defineConfig({
   plugins: [vue(), debugScriptsPlugin(resolve(__dirname, 'debug-scripts'))],
@@ -14,6 +15,6 @@ export default defineConfig({
     outDir: 'dist',
   },
   server: {
-    open: true,
+    open: shouldOpenBrowser(process.env, process.stdout.isTTY),
   },
 })
