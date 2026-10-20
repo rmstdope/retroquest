@@ -1146,8 +1146,10 @@ describe('Game', () => {
       expect(game.loadSaveData('{"version":1}')).toContain(
         '[failure]Failed to load game',
       )
-      expect(game.loadSaveData('{"version":2}')).toContain(
-        '[failure]Failed to load game',
+      const oldSave = JSON.parse(data) as Record<string, unknown>
+      oldSave.version = 2
+      expect(game.loadSaveData(JSON.stringify(oldSave))).toContain(
+        'unsupported save format',
       )
     })
 

@@ -99,16 +99,14 @@ export class Game implements CommandTarget {
   }
 
   /**
-   * A new state for the current act, starting in its first room. The virtues
-   * of the state it replaces are carried over.
+   * A new state for the current act, starting in its first room, holding the
+   * given virtues carried over from the act before.
    */
-  private freshState(): GameState {
+  private freshState(virtues: string[] = []): GameState {
     const act = this.acts[this.currentAct]
     const startingRoom = Object.values(act.rooms)[0]
     const state = new GameState(startingRoom, act.rooms, act.quests)
-    // `state` is not assigned yet while the constructor builds the first one.
-    if ((this.state as GameState | undefined) !== undefined)
-      state.virtues = [...this.state.virtues]
+    state.virtues = [...virtues]
     act.setupGameState(state)
     return state
   }
@@ -132,7 +130,7 @@ export class Game implements CommandTarget {
             this.runState = GameRunState.ActTransition
             this.acceptInput = false
             this.finishedActState = this.state
-            this.state = this.freshState()
+            this.state = this.freshState(this.state.virtues)
             this.hasChangedRoom = true
           } else {
             this.runState = GameRunState.GameOver
