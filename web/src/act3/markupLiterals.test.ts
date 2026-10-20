@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-const SOURCES = import.meta.glob<string>(
-  ['./{characters,items,rooms,spells}/*.ts', '!./**/*.test.ts'],
-  { query: '?raw', import: 'default', eager: true },
-)
+const SOURCES = import.meta.glob<string>(['./**/*.ts', '!./**/*.test.ts'], {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+})
 
 const TAG_LITERAL = /\[\/?(character_name|dialogue|event)\]/
 
