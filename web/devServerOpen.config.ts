@@ -7,7 +7,10 @@
 
 /**
  * True when the dev server should open the page: standard output is a
- * terminal, `CI` is unset or empty, and `BROWSER` is not `none`.
+ * terminal, `CI` is unset or empty, and `BROWSER` is not `none` (which
+ * mirrors Vite's own opt-out, kept here so the whole rule is testable in one
+ * place). A dev server an agent runs inside a terminal pane would open the
+ * page again; set `BROWSER=none` there.
  */
 export function shouldOpenBrowser(
   env: Record<string, string | undefined>,
