@@ -272,7 +272,7 @@ Welcome to
       give: withCharacters(inventoryItemNames, 'to'),
       hand: nested(inventoryItemNames),
       buy: withCharacters(roomItemNames, 'from'),
-      look: { at: itemsAndCharacters, ...itemsAndCharacters },
+      look: { '@': null, at: itemsAndCharacters, ...itemsAndCharacters },
       l: null,
       observe: null,
       survey: null,

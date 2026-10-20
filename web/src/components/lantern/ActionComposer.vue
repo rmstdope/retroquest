@@ -275,12 +275,16 @@ function submitTyped(): void {
   typed.value = ''
 }
 
-// Type mode: Tab completion from the engine's completion tree.
+// Type mode: the word list from the engine's completion tree, live while typing.
 const completion = useCommandCompletion(
   typed,
-  (input) => game.tabComplete(input),
+  (input) => game.completionState(input),
+  (input) => game.tabComplete(input).newInput,
   () => game.acceptInput,
 )
+
+/** Switching away from Type puts the word list away. */
+watch(mode, () => completion.close())
 const completionListId = 'lq-completions'
 
 /** Keep the highlighted match visible when the list scrolls. */
@@ -487,7 +491,7 @@ function onTypedEnter(): void {
           role="combobox"
           aria-autocomplete="list"
           :aria-controls="completionListId"
-          :aria-expanded="completion.suggestions.value.length > 0"
+          :aria-expanded="completion.open.value"
           :aria-activedescendant="
             completion.activeIndex.value >= 0
               ? `${completionListId}-${completion.activeIndex.value}`
@@ -502,12 +506,15 @@ function onTypedEnter(): void {
           @blur="completion.close"
         />
         <ul
-          v-if="completion.suggestions.value.length"
+          v-if="completion.open.value"
           :id="completionListId"
           class="lq-completions"
           role="listbox"
           aria-label="Matching words"
         >
+          <li v-if="completion.noMatch.value" class="lq-completion-none">
+            No match for “{{ completion.word.value }}”
+          </li>
           <li
             v-for="(word, index) in completion.suggestions.value"
             :id="`${completionListId}-${index}`"
@@ -517,7 +524,8 @@ function onTypedEnter(): void {
             :aria-selected="index === completion.activeIndex.value"
             @mousedown.prevent="completion.apply(word)"
           >
-            {{ word }}
+            <b>{{ word.slice(0, completion.word.value.length) }}</b
+            >{{ word.slice(completion.word.value.length) }}
           </li>
         </ul>
       </div>
@@ -806,14 +814,29 @@ function onTypedEnter(): void {
 }
 .lq-completion {
   min-height: 40px;
-  display: flex;
-  align-items: center;
+  line-height: 40px;
   padding: 0 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border-radius: 8px;
   font-family: var(--lq-font-mono);
   font-size: 14px;
   color: var(--lq-fg);
   cursor: pointer;
+}
+.lq-completion b {
+  font-weight: 700;
+  color: var(--lq-accent-text);
+}
+.lq-completion-none {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--lq-muted);
 }
 .lq-completion[aria-selected='true'] {
   background: var(--lq-accent-soft);

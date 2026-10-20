@@ -401,12 +401,55 @@ describe('ActionComposer', () => {
     async function typeMode() {
       useGameStore().completionTree = {
         take: { bucket: null, bread: null },
-        look: null,
+        talk: { to: { mira: null } },
+        look: { '@': null, at: { well: null } },
+        inventory: null,
       }
       const w = mountComposer()
       await button(w, 'Type').trigger('click')
       return { w, input: w.get('input[aria-label="Command"]') }
     }
+
+    const options = (w: VueWrapper) =>
+      w.findAll('[role="option"]').map((o) => o.text())
+    const value = (input: { element: Element }) =>
+      (input.element as HTMLInputElement).value
+
+    it('shows no list while the box is empty', async () => {
+      const { w } = await typeMode()
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
+    })
+
+    it('opens the list with the first letter typed, first match picked', async () => {
+      const { w, input } = await typeMode()
+
+      await input.setValue('t')
+
+      expect(options(w)).toEqual(['take', 'talk'])
+      const selected = w
+        .findAll('[role="option"]')
+        .map((o) => o.attributes('aria-selected'))
+      expect(selected).toEqual(['true', 'false'])
+      expect(input.attributes('aria-expanded')).toBe('true')
+    })
+
+    it('highlights the matching start of each word', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('ta')
+      const first = w.get('[role="option"]')
+      expect(first.get('b').text()).toBe('ta')
+      expect(first.text()).toBe('take')
+    })
+
+    it('follows the input, including deletions', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('take b')
+      expect(options(w)).toEqual(['bucket', 'bread'])
+      await input.setValue('take bu')
+      expect(options(w)).toEqual(['bucket'])
+      await input.setValue('take b')
+      expect(options(w)).toEqual(['bucket', 'bread'])
+    })
 
     it('completes a single match with Tab', async () => {
       const { input } = await typeMode()
@@ -414,24 +457,64 @@ describe('ActionComposer', () => {
 
       await input.trigger('keydown', { key: 'Tab' })
 
-      expect((input.element as HTMLInputElement).value).toBe('look ')
+      expect(value(input)).toBe('look ')
     })
 
-    it('lists several matches and applies the chosen one with Enter', async () => {
-      const { w, input } = await typeMode()
+    it('inserts the first match on Tab even with several choices', async () => {
+      const { input } = await typeMode()
       await input.setValue('take b')
 
       await input.trigger('keydown', { key: 'Tab' })
-      const options = w.findAll('[role="option"]').map((o) => o.text())
-      expect(options).toEqual(['bucket', 'bread'])
 
+      expect(value(input)).toBe('take bucket ')
+    })
+
+    it('applies the highlighted word with Enter instead of sending', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('take b')
       await input.trigger('keydown', { key: 'ArrowDown' })
-      await input.trigger('keydown', { key: 'ArrowDown' })
+
       await input.trigger('keydown', { key: 'Enter' })
 
-      expect((input.element as HTMLInputElement).value).toBe('take bread ')
+      expect(value(input)).toBe('take bread ')
       expect(submit).not.toHaveBeenCalled()
       expect(w.find('[role="option"]').exists()).toBe(false)
+    })
+
+    it('sends a sendable command with Enter, listing what could follow', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('look ')
+      expect(options(w)).toEqual(['at'])
+      expect(w.get('[role="option"]').attributes('aria-selected')).toBe('false')
+
+      await input.trigger('keydown', { key: 'Enter' })
+
+      expect(submit).toHaveBeenCalledWith('look')
+    })
+
+    it('says so when nothing matches, and Enter sends what is typed', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('xyz')
+
+      expect(w.find('[role="option"]').exists()).toBe(false)
+      expect(w.get('[role="listbox"]').text()).toBe('No match for “xyz”')
+
+      await input.trigger('keydown', { key: 'Enter' })
+      expect(submit).toHaveBeenCalledWith('xyz')
+    })
+
+    it('quotes only the last word in the no-match line', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('talk to bob')
+      expect(w.get('[role="listbox"]').text()).toBe('No match for “bob”')
+    })
+
+    it('closes on a complete command', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('talk to mira')
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
+      await input.setValue('inventory')
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
     })
 
     it('scrolls the highlighted match into view in a long list', async () => {
@@ -441,34 +524,68 @@ describe('ActionComposer', () => {
         scrolled.push(this.textContent?.trim() ?? '')
       }
       const { input } = await typeMode()
-      await input.setValue('take b')
-      await input.trigger('keydown', { key: 'Tab' })
+      await input.setValue('take ')
 
       await input.trigger('keydown', { key: 'ArrowDown' })
       await input.trigger('keydown', { key: 'ArrowDown' })
 
-      expect(scrolled).toEqual(['bucket', 'bread'])
+      expect(scrolled).toContain('bread')
       delete (HTMLElement.prototype as Partial<HTMLElement>).scrollIntoView
     })
 
-    it('closes the list with Escape and keeps the text', async () => {
+    it('hides the list with Escape, keeps the text, and reopens on typing', async () => {
       const { w, input } = await typeMode()
       await input.setValue('take b')
-      await input.trigger('keydown', { key: 'Tab' })
 
       await input.trigger('keydown', { key: 'Escape' })
 
-      expect(w.find('[role="option"]').exists()).toBe(false)
-      expect((input.element as HTMLInputElement).value).toBe('take b')
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
+      expect(value(input)).toBe('take b')
+
+      await input.setValue('take br')
+      expect(options(w)).toEqual(['bread'])
     })
 
-    it('sends the command with Enter when no match is chosen', async () => {
-      const { input } = await typeMode()
-      await input.setValue('look')
+    it('inserts a clicked word and keeps the list for the next word', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('take b')
 
+      await w.findAll('[role="option"]')[1].trigger('mousedown')
+
+      expect(value(input)).toBe('take bread ')
+      expect(submit).not.toHaveBeenCalled()
+    })
+
+    it('closes when the command is sent', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('look ')
       await input.trigger('keydown', { key: 'Enter' })
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
+      expect(value(input)).toBe('')
+    })
 
-      expect(submit).toHaveBeenCalledWith('look')
+    it('closes when focus leaves the box', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('ta')
+      await input.trigger('blur')
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
+    })
+
+    it('closes when switching to Actions', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('ta')
+      await button(w, 'Actions').trigger('click')
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
+      await button(w, 'Type').trigger('click')
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
+    })
+
+    it('shows no list while the game is not accepting input', async () => {
+      const { w, input } = await typeMode()
+      await input.setValue('ta')
+      useGameStore().acceptInput = false
+      await w.vm.$nextTick()
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
     })
   })
 
