@@ -127,6 +127,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Prerequisites:** Access to Residential Quarter basement
   - **Dependencies:** Learn `mend` to repair the Protective Enchantments
   - **Completion:** Repair the wards, earn the Spectral Librarian's trust, learn `dispel` by using the Ancient Chronicle, and take the Crystal Focus
+  - **Order Flexibility:** If the Crystal Focus is given to Lyria before learning `dispel`, acquiring it still counts; the quest completes once `dispel` is learned.
   - **Rewards:** `dispel`, Crystal Focus, and knowledge of Elior's heritage
   - **Story Impact:** Reveals crucial information about Chosen One prophecy
 
