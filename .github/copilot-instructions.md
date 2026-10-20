@@ -78,11 +78,11 @@ These MUST be satisfied for every TypeScript and Vue file. Pull requests must ex
 
 1. Prettier is the formatter. Every file under `web/src/` (and the config files in `web/`) must be formatted exactly as `npx prettier --write` leaves it; CI runs `npx prettier --check` and fails on any difference.
 2. ESLint must pass with zero errors and zero warnings (`npx eslint .` in `web/`).
-3. The type check must pass (`npx vue-tsc --noEmit` in `web/`). Never use `any`; prefer precise types, `unknown` with narrowing, or a small type guard.
+3. The type check must pass (`npx vue-tsc --noEmit` in `web/`). Never use `any` under `web/src/`; prefer precise types, `unknown` with narrowing, or a small type guard.
 4. No ESLint or TypeScript inline directives (`eslint-disable`, `@ts-ignore`, `@ts-expect-error`) in the code. All lint and type configuration is global (`web/eslint.config.js`, `web/tsconfig.json`). The single accepted exception is `<!-- eslint-disable vue/no-v-html -->` in a Vue template that renders HTML produced by the engine's markup parser.
 5. Unused parameters must be prefixed with an underscore (e.g., `_gameState`), which is the only way ESLint lets them through.
 6. Overridden methods are marked `override` and carry a `/** … */` doc comment explaining what the override does differently.
-7. Every exported class, function and type has a `/** … */` doc comment; every content file (room, item, character, quest, spell) starts with a one-line `/** … */` comment describing the class.
+7. Every exported class, function and type has a `/** … */` doc comment; every content file (room, item, character, quest, spell) has a one-line `/** … */` comment directly above its class.
 8. Long narrative strings are split on sentence or clause boundaries and joined with `+` (or written as template literals); never split inside a word, and never change existing wording, punctuation or `[markup]` tags unless the change is the point of the task.
 
 Violation of any item is grounds for rejection in code review / CI.
@@ -105,6 +105,7 @@ Before creating a pull request, run **all** of the checks below locally — they
 
 ```sh
 cd web
+npm ci
 
 # Lint
 npx eslint .
@@ -163,7 +164,7 @@ Run each check as its own command and read its exit status; never chain them wit
 - Follow established design patterns for quest management, character interactions, and spell systems.
 - Implement a centralized game state management system to track player progress, story flags, and inventory.
 - The engine (`web/src/engine/`) owns all game rules: `Game` (run state, commands, save/load), `GameState`, `CommandParser`, `GameController` (the read model the UI consumes) and the base classes `Act`, `Room`, `Item`, `Character`, `Quest`, `Spell`.
-- Each act is a directory `web/src/act<N>/` with `Act<N>.ts`, `Act<N>StoryFlags.ts`, `classes.ts` and the sub-directories `rooms/`, `items/`, `characters/`, `quests/`, `spells/`. See `docs/typescript-porting-guide.md` for the conventions in detail.
+- Each act is a directory `web/src/act<N>/` with `Act<N>.ts`, `Act<N>StoryFlags.ts`, `classes.ts` and the sub-directories `rooms/`, `items/`, `characters/`, `spells/` and (where the act has quests) `quests/`. See `docs/typescript-porting-guide.md` for the conventions in detail.
 - The UI talks to the engine only through `GameController` and the `useBridge` composable; Vue components never import act classes.
 
 ### Quest Management
@@ -210,7 +211,7 @@ These instructions are mandatory for all code contributions to ensure consistenc
 - For files with multiple classes or functions, provide a somewhat more detailed file-level comment explaining the overall purpose and functionality of the module.
 - Never use ESLint or TypeScript inline directives in the code (apart from the `vue/no-v-html` exception above). All lint configuration should be global.
 - When mixing strings and variables, prioritize using template literals when constructing messages or dialogues.
-- Methods that only some content classes implement (for example `receiveSpell` on a character) are detected with a structural check (`'receiveSpell' in obj` plus a type guard), never with `any`.
+- Methods that only some content classes implement (for example `receiveSpell` on a character) are detected with a structural check (a structural type assertion or an `in` check plus a `typeof` guard), never with `any`.
 
 ### Testing
 
