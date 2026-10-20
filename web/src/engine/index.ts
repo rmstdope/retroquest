@@ -13,6 +13,7 @@ export {
   Game,
   GameRunState,
   MemorySaveStorage,
+  normalizeSaveName,
   type CompletionTree,
   type GameOptions,
   type SaveStorage,
