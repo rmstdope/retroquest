@@ -312,6 +312,25 @@ describe('GameController', () => {
   })
 
   describe('act end', () => {
+    it('still reports the completion that ended the last act', () => {
+      const act = new FlagAct({
+        name: 'Only',
+        rooms: { Hall: new Room({ name: 'Hall', description: 'A hall.' }) },
+        quests: [new FlagQuest('Final', true)],
+        musicFile: '',
+        musicInfo: '',
+      })
+      const ctrl = new GameController(new Game([act]))
+      startAct(ctrl)
+      ctrl.settleQuests()
+      ctrl.game.state.setStoryFlag(FLAG_ACT_DONE, true)
+      ctrl.game.newTurn()
+      expect(ctrl.game.isGameOver()).toBe(true)
+      const { completed } = ctrl.settleQuests()
+      expect(completed).toHaveLength(1)
+      expect(completed[0]).toContain("You have completed the quest 'Final'.")
+    })
+
     function twoActController(): GameController {
       const first = new FlagAct({
         name: 'First',
