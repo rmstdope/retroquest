@@ -445,6 +445,8 @@ describe('Act 1 golden path', () => {
     ])
     expectItemInInventory(state, 'shiny ring')
     expectItemInInventory(state, 'extended magnetic fishing rod', false)
+    expectItemInInventory(state, 'rune token')
+    expectStoryFlag(state, 'found_rune_token', true)
     expectQuests(state, [MAIN, 'Know your village', 'Preparing for the road'])
 
     // Step 22: Hidden Glade (second visit)
@@ -548,6 +550,9 @@ describe('Act 1 golden path', () => {
       expectSpellKnown(state, spell)
     }
     expectStoryFlag(state, 'journey_bless_completed', true)
+    executeCommands(game, ['give rune token to mira'])
+    expectStoryFlag(state, 'mira_named_fouling_sigil', true)
+    expectItemInInventory(state, 'rune token')
     executeCommands(game, ['talk to mira'])
     expectItemInInventory(state, 'ancient amulet')
 
@@ -586,6 +591,25 @@ describe('Act 1 golden path', () => {
       game.state.inventory.map((i) => i.name),
     )
     expect(fresh.state.storyFlags).toEqual(game.state.storyFlags)
+  })
+})
+
+describe('Act 1 optional watering of the Vegetable Field', () => {
+  it('lets Elior refill the bucket from the purified well and revive the field', () => {
+    const game = new Game([new Act1()])
+    const ringFished = ACT1_GOLDEN_PATH.lastIndexOf(
+      'use extended magnetic fishing rod with well',
+    )
+    executeCommands(game, ACT1_GOLDEN_PATH.slice(0, ringFished + 1))
+    expectCurrentRoom(game.state, 'Village Well')
+
+    executeCommands(game, ['use bucket with well', 'go west', 'use bucket'])
+
+    expectStoryFlag(game.state, 'vegetable_field_watered', true)
+    expect(game.state.currentRoom.description).toContain('green crops')
+    expect(game.state.getQuest(MAIN)?.description).toContain(
+      '[room_name]Vegetable Field[/room_name] back to life',
+    )
   })
 })
 

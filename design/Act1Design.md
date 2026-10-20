@@ -53,7 +53,7 @@
   - **Trigger:** Search Elior's Cottage and discover the photograph.
   - **Steps:** Examine the photograph to read its message (_Seek the truth where the river bends_), then show it to Grandmother. She reveals that Elior's family is connected to the darkness threatening Eldoria, and that his mother loved the river: the old fisherman at the Riverbank will remember her. The Riverbank is the bend. Show the photograph to the fisherman: he was the mother's friend, and tells of a tin she hid in the mud under the smooth stone the night before she went away. Search the Riverbank to find the tin and the mother's letter inside it.
   - **Completion:** Read the mother's letter.
-  - **Reward:** A fragment of a letter from Elior's mother. It names Malakar, who has been asking about Willowbrook and "our line", tells Elior not to answer him, and says Mira keeps the amulet for him and that "when you are ready, it will know you". It hints at Act II without explaining Malakar.
+  - **Reward:** A fragment of a letter from Elior's mother. It names Malakar as someone the family knew ("If Malakar comes asking about our line, do not answer him. He is not the friend we knew."), and says Mira keeps the amulet for him and that "when you are ready, it will know you". It hints at Act II without explaining Malakar.
 
 - **Name:** Shadows Over Willowbrook (Main Quest)
   - **Trigger:** At the start of the act; Elior's dream introduces the mystery.
@@ -62,6 +62,9 @@
   - **Update:** Examine the Village Well.
   - **Update:** Discuss the crops, villagers' fears and well with Mira; she urges Elior to connect with nature.
   - **Update:** Give the Rare Flower to Mira to unlock Elior's magic; she promises him the Ancient Amulet once he is ready for the road.
+  - **Update:** Fish the ring out of the purified well; a black-iron rune token comes up with it. The well did not sour by itself.
+  - **Update (optional):** Water the Vegetable Field with purified well water; the whole field recovers.
+  - **Update:** Give the rune token to Mira. She names it a _fouling sigil_: someone poisoned the well on purpose. Whoever carried it (perhaps the cloaked stranger of the villagers' rumours) was searching Willowbrook for something, "or for someone". Malakar is not named.
   - **Completion:** When act 1 is completed
 
 ## Rooms
@@ -76,10 +79,10 @@
 
 ### 2. Vegetable Field
 
-- **Description:** Rows of withered crops under a gray sky.
+- **Description:** Rows of withered crops under a gray sky. Once watered with purified well water, the description shows green crops and dark, soft earth (story flag `vegetable_field_watered`).
 - **Items:** rusty hoe (start), dull knife (start), Withered carrot (start), coin (1st) (later), carrot (later).
 - **Spells:** None.
-- **Usable Items:** Hoe (uncovers a hidden coin, once), `revive` spell (on `Withered carrot` to transform it into `carrot`).
+- **Usable Items:** Hoe (uncovers a hidden coin, once), `revive` spell (on `Withered carrot` to transform it into `carrot`), bucket of purified water (optional: `use bucket`, or `use bucket with carrot`, makes the whole field recover; murky water is refused).
 - **Characters:** None.
 - **Exits:** Elior’s Cottage (north), Village Well (east), Chicken Coop (south)
 
@@ -109,7 +112,7 @@
 - **Items:** Ancient Amulet (visible from the start; Mira prevents pickup until journey preparations are complete, then awards it).
 - **Unusable:** Healing herb (Mira's stock; cannot be taken).
 - **Spells:** `heal`, `unlock`, `light` (learned from Mira).
-- **Usable Items:** Rare flower (give to Mira).
+- **Usable Items:** Rare flower (give to Mira), rune token (give to Mira: she names it a fouling sigil, ties it to the mill if the mechanism is jammed, and hands it back).
 - **Characters:** Mira (teaches basic magic, gives quests).
 - **Exits:** Village Square (south)
 
@@ -136,9 +139,9 @@
 ### 8. Village Well
 
 - **Description:** An old stone well. Its water is dark, still and sour-smelling until the well is purified, and crystal clear afterwards (the room description follows the well's state). No rope hangs by it.
-- **Items:** Shiny ring (later), Well (start).
+- **Items:** Shiny ring (later), rune token (later), Well (start).
 - **Spells:** None.
-- **Usable Items:** Bucket (draws murky, sour-smelling water before the well is purified; clear water after), fishing rod + magnet + stick (assemble an extended magnetic fishing rod to retrieve the ring after purifying the well), `purify` spell (target the Well item after examining it).
+- **Usable Items:** Bucket (draws murky, sour-smelling water before the well is purified; clear water after, tipping out murky water already in it), fishing rod + magnet + stick (assemble an extended magnetic fishing rod to retrieve the ring and the rune token after purifying the well), `purify` spell (target the Well item after examining it; the text hints that the parched Vegetable Field could use the clean water).
 - **Characters:** None.
 - **Exits:** Vegetable Field (west), Blacksmith’s Forge (east), Abandoned Shed (south)
 
@@ -154,11 +157,11 @@
 
 ### 10. Old Mill
 
-- **Description:** A creaky windmill with dusty gears.
+- **Description:** A creaky windmill with dusty gears, built on an old seat of power. The strange mechanism is the cloaked stranger's device: black iron scored with the same kind of twisted rune as the token in the well, whirring on its own as it drains the power beneath the mill. The description follows its state (whirring, then jammed).
 - **Items:** millstone fragment (later), Mechanism (start).
 - **Unusable:** Sack of flour (start).
 - **Spells:** None.
-- **Usable Items:** Rope (fixes broken mechanism, reveals hidden compartment).
+- **Usable Items:** Rope (jams the mechanism's gears, which stops its draining whir and opens a hidden compartment).
 - **Characters:** None.
 - **Exits:** Abandoned Shed (north), Riverbank (east)
 
@@ -320,7 +323,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 10. **Old Mill:**
 
-    - Use rope to fix a strange mechanism. _Rope is removed from inventory, a hidden compartment in the mechanism clunks open._
+    - Use rope with the strange mechanism. _Elior threads the rope through its gears and they jam; the whirring dies and the hum in the floorboards fades as the device stops drawing on the power beneath the mill. Rope is removed from inventory, a hidden compartment in the mechanism clunks open._
       - Item used: `rope`
     - Take millstone fragment from the compartment. _Millstone fragment is added to inventory._
 
@@ -413,9 +416,10 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
       - Item transformed: `magnetic fishing rod` becomes `extended magnetic fishing rod`
     - Cast `purify` on the `Well` item. _The water shimmers with a clear light, and a murky film on the surface dissipates. Peering down, Elior spots something metallic gleaming at the bottom._
       - Spell used: `purify`
-    - Use `extended magnetic fishing rod` with the well. _Elior carefully lowers the extended magnetic tool into the depths, and it snags a shiny ring! Shiny ring is added to inventory._
+    - Use `extended magnetic fishing rod` with the well. _Elior carefully lowers the extended magnetic tool into the depths, and it snags a shiny ring! Something else clings to the magnet: a black-iron rune token, colder than the water. Wells do not grow things like this; someone put it there. Shiny ring and rune token are added to inventory._
       - Item used: `extended magnetic fishing rod`
-      - Item obtained: `shiny ring`
+      - Item obtained: `shiny ring`, `rune token`
+    - _Optional:_ Use bucket with the well to tip out the murky water and draw clear water, go west and use the bucket in the Vegetable Field. _The soil drinks it in and the whole field recovers; the Shadows Over Willowbrook journal records it._
 
 22. **Return to Hidden Glade:**
 
@@ -448,6 +452,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 27. **Return to Mira's Hut (Final Visit):**
 
+    - Give rune token to Mira. _Mira turns it over and the color drains from her face: it is a fouling sigil, and the well was poisoned on purpose. If the mill mechanism is jammed she recognises the same hand there, drinking the old power. Whoever carried it, perhaps the cloaked stranger, was searching Willowbrook "for something. Or for someone." She hands the token back: keep it close, and keep it hidden._
     - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you." Then she sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
       - Item obtained: `ancient amulet` (ESSENTIAL)
       - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field complete: Food)
@@ -515,6 +520,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Unlocked and opened in Step 19 to obtain the `map`.
 12. **`Bucket`** (Obtained: Step 4):
     - Used in Step 5 to draw water from the well for observation.
+    - Optionally, after Step 21: refilled with clear water from the purified well and used in the Vegetable Field to make the whole field recover.
 13. **`Sharp Knife`** (Obtained: Step 6):
     - Used in Step 13 to cut through thick vines on the Forest Path and open the alcove containing the `stick`.
 14. **`Coin` (2nd)** (Obtained: Step 8, Hemlock's reward for returning Patches):
@@ -522,7 +528,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 15. **`Apple`** (Obtained: Step 8):
     - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
 16. **`Rope`** (Obtained: Step 8):
-    - Used in Step 10 to fix the mechanism in the Old Mill, revealing the `millstone fragment`.
+    - Used in Step 10 to jam the mechanism in the Old Mill, revealing the `millstone fragment`.
 17. **`Fishing Rod`** (Obtained: Step 7):
     - Used in Step 12 to catch a `fish`.
     - Combined with the `magnet` and then the `stick` in Step 21 to create an `extended magnetic fishing rod`, which retrieves the `shiny ring` from the well.
@@ -553,11 +559,13 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
 29. **`Shiny Ring`** (Obtained: Step 21):
     - Used in Step 26 by trading it with the Merchant for `wandering boots`.
-30. **`Wild Berries`** (Obtained: Step 23, from the `grow` spell):
+30. **`Rune Token`** (Obtained: Step 21, with the `shiny ring`):
+    - Given to Mira in Step 27, who names it a fouling sigil and hands it back.
+31. **`Wild Berries`** (Obtained: Step 23, from the `grow` spell):
     - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
-31. **`Travel Cloak`** (Obtained: Step 24):
+32. **`Travel Cloak`** (Obtained: Step 24):
     - Fulfills Mira's quest requirement for "Warm clothing" when she checks the preparations in Step 27.
-32. **`Wandering Boots`** (Obtained: Step 26):
+33. **`Wandering Boots`** (Obtained: Step 26):
     - Fulfills Mira's quest requirement for "Sturdy footwear" when she checks the preparations in Step 27.
-33. **`Ancient Amulet`** (Obtained: Step 27):
+34. **`Ancient Amulet`** (Obtained: Step 27):
     - Its acquisition is the primary goal of Mira's quest and is required before using the map to complete Act I in Step 28.

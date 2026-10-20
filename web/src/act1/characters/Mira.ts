@@ -8,6 +8,8 @@ import {
 } from '@/engine'
 import { RareFlower } from '../items/RareFlower'
 import { AncientAmulet } from '../items/AncientAmulet'
+import { Mechanism } from '../items/Mechanism'
+import { RuneToken } from '../items/RuneToken'
 import { HealSpell } from '../spells/HealSpell'
 import { UnlockSpell } from '../spells/UnlockSpell'
 import { LightSpell } from '../spells/LightSpell'
@@ -17,6 +19,7 @@ import {
   FLAG_VILLAGER_TALKED_TO,
   FLAG_WELL_EXAMINED,
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_MIRA_NAMED_FOULING_SIGIL,
 } from '../Act1StoryFlags'
 
 /** Village healer and wise woman who teaches spells and guides quests. */
@@ -101,8 +104,65 @@ export class Mira extends Character {
     }
   }
 
-  /** Accept the rare flower, teach the basic spells and give the journey quest. */
+  /**
+   * Name the rune token from the well a fouling sigil and hand it back. The
+   * first time she tells all she reads in it, tying it to the mill when Elior
+   * has jammed the mechanism there.
+   */
+  private readRuneToken(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_MIRA_NAMED_FOULING_SIGIL)) {
+      return (
+        `${characterName(this.name)} closes your fingers over the ` +
+        '[item_name]rune token[/item_name] without taking it. ' +
+        speech(
+          'I have told you what I know of it. ' +
+            'Keep it hidden, and keep your eyes open.',
+        )
+      )
+    }
+    gameState.setStoryFlag(FLAG_MIRA_NAMED_FOULING_SIGIL, true)
+    const millJammed = gameState.allRooms.OldMill?.items.some(
+      (millItem) => millItem instanceof Mechanism && millItem.repaired,
+    )
+    const mill = millJammed
+      ? '\nYou tell her of the black-iron mechanism at the mill, and the ' +
+        'twisted rune on its housing. She nods slowly. ' +
+        speech(
+          'The same hand, then. The mill stands on old power, ' +
+            'and that thing was drinking it. You did well to stop it.',
+        )
+      : ''
+    return (
+      `${characterName(this.name)} turns the ` +
+      '[item_name]rune token[/item_name] over in her fingers, ' +
+      'and the color drains from her face. ' +
+      speech(
+        `This is a fouling sigil, ${characterName('Elior')}. ` +
+          'Dropped into a well, it sours the water from below, slowly, ' +
+          'so that no one thinks to look.',
+      ) +
+      '\n' +
+      speech('The well did not sicken. Someone poisoned it on purpose.') +
+      mill +
+      '\n' +
+      speech(
+        'The cloaked stranger the villagers whisper about, perhaps. ' +
+          'Whoever carried this was not here to spoil a well and leave. ' +
+          'They were searching Willowbrook for something.',
+      ) +
+      ' She is quiet a moment. ' +
+      speech('Or for someone.') +
+      '\nShe presses the token back into your palm. ' +
+      speech('Keep it close, and keep it hidden.')
+    )
+  }
+
+  /**
+   * Accept the rare flower, teach the basic spells and give the journey
+   * quest; read the rune token from the well and hand it back.
+   */
   override giveItem(gameState: GameState, item: Item): string {
+    if (item instanceof RuneToken) return this.readRuneToken(gameState)
     if (item instanceof RareFlower) {
       gameState.removeItemFromInventory(item.name)
 
