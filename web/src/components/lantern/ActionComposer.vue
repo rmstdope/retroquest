@@ -18,7 +18,9 @@ import {
  * "Do it" — or switch to Type and write the command. A live preview shows the
  * command the game will receive. Focus follows the sentence: verb → choices →
  * Do it → back to the verb. On phones it is a sheet that can fold away
- * (`foldable` shows a hide button that emits `fold`).
+ * (`foldable` shows a hide button that emits `fold`). In Type mode its root
+ * carries `lq-typing`, so the sheet can let the completion list (which opens
+ * above the command box) show outside it.
  */
 defineProps<{ foldable?: boolean }>()
 const emit = defineEmits<{ fold: [] }>()
@@ -303,6 +305,7 @@ function onTypedEnter(): void {
   <section
     ref="root"
     class="lq-composer"
+    :class="{ 'lq-typing': mode === 'type' }"
     aria-label="Actions"
     @keydown.escape="putAway"
   >

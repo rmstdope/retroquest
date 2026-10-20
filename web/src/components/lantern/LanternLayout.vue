@@ -596,6 +596,11 @@ watch(
   max-height: 62dvh;
   overflow-y: auto;
 }
+/* Type mode is too short to need the scroll, and a scrolling sheet would clip
+   the completion list that opens above the command box (rq-mvd). */
+.lq-sheet.lq-typing {
+  overflow-y: visible;
+}
 .lq-journal-panel,
 .lq-section-view {
   flex: 1;
