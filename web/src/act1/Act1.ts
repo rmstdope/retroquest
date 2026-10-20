@@ -27,6 +27,7 @@ import { FadedPhotographQuest } from './quests/FadedPhotograph'
 import { ShadowsOverWillowbrookQuest } from './quests/ShadowsOverWillowbrook'
 import { FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED } from './Act1StoryFlags'
 import { ACT1_CLASSES } from './classes'
+import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 
 /** Act 1: The Call to Adventure, set in the village of Willowbrook. */
 export class Act1 extends Act {
@@ -69,6 +70,7 @@ export class Act1 extends Act {
       musicInfo:
         'Market by Conquest\nSource: https://freetouse.com/music\nCopyright Free Background Music',
       classes: ACT1_CLASSES,
+      goldenPath: ACT1_GOLDEN_PATH,
     })
   }
 

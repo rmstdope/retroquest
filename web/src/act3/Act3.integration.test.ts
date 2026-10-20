@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from './Act3'
+import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import {
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
@@ -579,5 +580,27 @@ describe('Act 3 golden path', () => {
       game.state.inventory.map((i) => i.name),
     )
     expect(fresh.state.storyFlags).toEqual(game.state.storyFlags)
+  })
+})
+
+describe('Act 3 golden path as declared by the act', () => {
+  it('completes the four expedition quests, leaving the rest to the finale', () => {
+    const game = new Game([new Act3()])
+    executeCommands(game, ACT3_GOLDEN_PATH)
+    expect(game.state.completedQuests.map((q) => q.name).sort()).toEqual([
+      'Breath of the Mountain',
+      'Lanterns of the Deeps',
+      'Mirrors of Emberlight',
+      'Tideward Sigils',
+    ])
+  })
+
+  it('is what cheat act 3 plays', () => {
+    const viaPath = new Game([new Act3()])
+    executeCommands(viaPath, ACT3_GOLDEN_PATH)
+    const viaCheat = new Game([new Act3()])
+    viaCheat.commandParser.parse('cheat act 3')
+    expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
+    expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })
 })

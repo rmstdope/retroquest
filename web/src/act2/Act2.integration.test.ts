@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from './Act2'
+import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 import {
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_EXAMINED_SECRET_DOCUMENTS,
@@ -1244,5 +1245,25 @@ describe('Step 24: Lord Commander interaction', () => {
     ).toBe(true)
     expect(result).toContain("Nature's Charm")
     expect(result).toContain('blessed by the ancient knights')
+  })
+})
+
+describe('Act 2 golden path as declared by the act', () => {
+  it('completes every side quest, leaving the finale to the player', () => {
+    const act = new Act2()
+    const game = new Game([act])
+    executeCommands(game, ACT2_GOLDEN_PATH)
+    const sideQuests = act.quests.filter((q) => !q.isMain()).map((q) => q.name)
+    const completed = game.state.completedQuests.map((q) => q.name)
+    expect(completed).toEqual(expect.arrayContaining(sideQuests))
+  })
+
+  it('is what cheat act 2 plays', () => {
+    const viaPath = new Game([new Act2()])
+    executeCommands(viaPath, ACT2_GOLDEN_PATH)
+    const viaCheat = new Game([new Act2()])
+    viaCheat.commandParser.parse('cheat act 2')
+    expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
+    expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })
 })

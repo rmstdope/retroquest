@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from './Act1'
+import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { MysteriousBox } from './items/MysteriousBox'
 import {
   executeCommands,
@@ -560,5 +561,25 @@ describe('cheat act 1', () => {
       .map((q) => q.name)
       .sort()
     expect(completedSide).toEqual(expectedSideQuests)
+  })
+})
+
+describe('Act 1 golden path as declared by the act', () => {
+  it('completes every side quest, leaving the finale to the player', () => {
+    const act = new Act1()
+    const game = new Game([act])
+    executeCommands(game, ACT1_GOLDEN_PATH)
+    const sideQuests = act.quests.filter((q) => !q.isMain()).map((q) => q.name)
+    const completed = game.state.completedQuests.map((q) => q.name)
+    expect(completed).toEqual(expect.arrayContaining(sideQuests))
+  })
+
+  it('is what cheat act 1 plays', () => {
+    const viaPath = new Game([new Act1()])
+    executeCommands(viaPath, ACT1_GOLDEN_PATH)
+    const viaCheat = new Game([new Act1()])
+    viaCheat.commandParser.parse('cheat act 1')
+    expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
+    expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })
 })

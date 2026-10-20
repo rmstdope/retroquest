@@ -18,6 +18,11 @@ export interface ActOptions {
    * classes only: the engine registers its own. Defaults to none.
    */
   classes?: Record<string, SerializableClass>
+  /**
+   * The commands that play the act from a new game to its end, used by the
+   * `cheat act N` command and by the act's integration test. Defaults to none.
+   */
+  goldenPath?: string[]
 }
 
 /** An act: its rooms, quests, music and act-level hooks. */
@@ -28,6 +33,8 @@ export class Act {
   musicFile: string
   musicInfo: string
   classes: Record<string, SerializableClass>
+  /** The commands that play the act through; empty until the act has a path. */
+  goldenPath: string[]
 
   constructor({
     name,
@@ -36,6 +43,7 @@ export class Act {
     musicFile,
     musicInfo,
     classes,
+    goldenPath,
   }: ActOptions) {
     this.name = name
     this.rooms = rooms
@@ -43,6 +51,7 @@ export class Act {
     this.musicFile = musicFile
     this.musicInfo = musicInfo
     this.classes = classes ?? {}
+    this.goldenPath = goldenPath ?? []
   }
 
   getActIntro(): string {

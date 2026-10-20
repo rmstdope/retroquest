@@ -104,6 +104,42 @@ describe('Game', () => {
     game = makeGame(rooms)
   })
 
+  describe('golden path', () => {
+    it('is the path of the act named Act<N>, empty when there is none', () => {
+      const act = (name: string, goldenPath?: string[]): Act =>
+        new Act({
+          name,
+          rooms: basicRooms(),
+          quests: [],
+          musicFile: '',
+          musicInfo: '',
+          goldenPath,
+        })
+      const two = new Game([
+        act('Act1', ['look']),
+        act('Act2', ['map', 'look']),
+      ])
+      expect(two.goldenPath(2)).toEqual(['map', 'look'])
+      expect(two.goldenPath(3)).toEqual([])
+      expect(new Game([act('Act4')]).goldenPath(4)).toEqual([])
+    })
+
+    it('runs through the cheat command', () => {
+      const cheated = new Game([
+        new Act({
+          name: 'Act1',
+          rooms: basicRooms(),
+          quests: [],
+          musicFile: '',
+          musicInfo: '',
+          goldenPath: ['go south'],
+        }),
+      ])
+      cheated.commandParser.parse('cheat act 1')
+      expect(cheated.state.currentRoom.name).toBe('VegetableField')
+    })
+  })
+
   describe('item lookup', () => {
     it('delegates to the state lookup, honouring the where-to-look options', () => {
       const roomKey = item('Cellar Key', 'key')

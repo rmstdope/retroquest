@@ -462,6 +462,12 @@ Welcome to
     return output.join('\n')
   }
 
+  /** The golden path of the act named `Act<actNumber>`; empty when there is none. */
+  goldenPath(actNumber: number): string[] {
+    const name = `Act${actNumber}`
+    return this.acts.find((act) => act.name === name)?.goldenPath ?? []
+  }
+
   unknown(command: string): string {
     return (
       `[failure]I don't understand the command: '${command}'. ` +
