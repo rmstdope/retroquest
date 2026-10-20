@@ -48,14 +48,14 @@ describe('Master Healer Lyria dialogue markup', () => {
     expectLyriaSpeaks(answer)
   })
 
-  it('attributes the talk with the healing herbs to Lyria without stray quotes', () => {
+  it('asks for the crystal focus when the player has healing herbs', () => {
     const game = createGame()
     game.state.addItemToInventory(new HealingHerbs())
 
     const answer = new MasterHealerLyria().talkTo(game.state)
 
-    expect(answer).toContain('natural gift for healing magic')
-    expect(answer).not.toContain("supplies. '")
+    expect(answer).toContain('Crystal Focus')
+    expect(answer).not.toContain('Healing Herbs')
     expectLyriaSpeaks(answer)
   })
 
@@ -86,14 +86,36 @@ describe('Master Healer Lyria dialogue markup', () => {
     expectLyriaSpeaks(answer)
   })
 
-  it('attributes giving the healing herbs to Lyria', () => {
+  it('does not accept healing herbs as an apprenticeship offering', () => {
     const game = createGame()
     const herbs = new HealingHerbs()
     game.state.addItemToInventory(herbs)
 
     const answer = new MasterHealerLyria().giveItem(game.state, herbs)
 
-    expect(answer).toContain("Your commitment shows you're ready to learn")
-    expectLyriaSpeaks(answer)
+    expect(answer).toContain('too busy to receive any gifts')
+    expect(game.state.hasSpell('greater_heal')).toBe(false)
+    expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)).toBe(
+      false,
+    )
+    expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)).toBe(
+      false,
+    )
+    expectMarkupWellFormed(answer)
+    expect(answer).toContain(SPEAKER)
+  })
+
+  it('activates and completes the apprenticeship when given the crystal focus', () => {
+    const game = createGame()
+    const focus = new CrystalFocus()
+    game.state.addItemToInventory(focus)
+
+    new MasterHealerLyria().giveItem(game.state, focus)
+
+    expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)).toBe(
+      true,
+    )
+    expect(game.state.hasSpell('greater_heal')).toBe(true)
   })
 })

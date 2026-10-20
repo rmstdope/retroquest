@@ -2,17 +2,18 @@
 
 ## Narrative Overview
 
-Act II continues Elior's journey as they arrive in Greendale, a bustling city that serves as a crossroads between civilization and the mystical Enchanted Forest. The act focuses on building alliances, developing magical abilities, and uncovering deeper mysteries about Elior's heritage and the growing threat. Through completing side quests and building relationships with key characters, Elior gains the knowledge and power needed to face the challenges ahead.
+Act II continues Elior's journey as they arrive in Greendale, a bustling city that serves as a crossroads between civilization and the mystical Enchanted Forest. The act focuses on developing magical abilities, uncovering Elior's heritage, and helping Greendale and the forest communities before facing the growing threat.
 
 ## Quest Management Structure
 
 ### Main Quest Chain Architecture
 
-The main quest "The Gathering Storm" is built from completing all side quests, following the design rule that all side quests must be completed before the main quest can be finished. The quest chain follows this dependency structure:
+The main quest "The Gathering Storm" can only be completed after every Act II side quest is complete. Greendale entry and forest access have separate progression gates:
 
 **Phase 1: Arrival and Recognition (Greendale)**
 
-- All Greendale-based side quests must be completed before proceeding to the forest
+- Complete the Greendale quests that resolve in town: "The Knight's Test", "Supplies for the Journey", "Echoes of the Past", "The Healer's Apprentice", and "The Ancient Library".
+- The forest route also requires the Hermit's Warning. The Innkeeper's Daughter, The Merchant's Lost Caravan, and Cedric's Lost Honor are cross-phase quests that resolve after forest entry.
 
 **Phase 2: Forest Preparation**
 
@@ -31,20 +32,23 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Type:** Main Quest
   - **Trigger:** Arrival in Greendale from Willowbrook
   - **Prerequisites:** Completion of Act I
-  - **Dependencies:** ALL side quests in Act II must be completed before this quest can be finished
+  - **Dependencies:** All Act II side quests must be complete before the final Prophetic Vision can complete this quest.
   - **Quest Chain Phases:**
     1. **Initial Contact:** Find and speak with Sir Cedric
     2. **Proving Worth:** Complete "The Knight's Test"
     3. **Preparation:** Complete all Greendale side quests (supplies, knowledge, alliances)
     4. **Forest Journey:** Complete all Forest side quests
-    5. **Final Trial:** Meet with Nyx and unlock prophetic visions
-  - **Completion:** Unlock new magical abilities from Nyx and discover the connection between Malakar and Willowbrook
-  - **Rewards:** Prophetic Vision spell, Forest Heart Crystal, alliance with Nyx
+    5. **Nyx's Gift:** Summon Nyx at the offering altar with the three sacred charms. On the first conversation, Nyx grants Prophetic Vision, Nyx's Token, and the Forest Heart Crystal.
+    6. **Conclusion:** After every side quest is complete, cast Prophetic Vision while Sir Cedric is present to share the vision and finish the quest.
+  - **Completion:** Cast Prophetic Vision in the same room as Sir Cedric after all side quests are complete.
+  - **Completion Reward:** Shares the Prophetic Vision with Sir Cedric and completes The Gathering Storm. Nyx's first-conversation gifts are granted before this final cast.
   - **Story Impact:** Establishes Elior as a recognized hero with growing magical power
 
 ### Side Quests
 
-#### Greendale Phase Quests
+#### Greendale Quests and Cross-Phase Starts
+
+The five town-resolving quests below must be complete before the forest entrance opens. The Innkeeper's Daughter, The Merchant's Lost Caravan, and Cedric's Lost Honor are offered or advanced in Greendale but resolve after forest entry.
 
 - **Name:** The Knight's Test
 
@@ -53,7 +57,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Prerequisites:** Access to Castle Courtyard
   - **Dependencies:** None
   - **Completion:** Prove your worthiness by demonstrating combat skills to Cedric
-  - **Rewards:** Cedric's respect, Training Sword, access to "Supplies for the Journey"
+  - **Rewards:** Cedric's respect and 100 gold coins; the Mountain Hermit provides the Training Sword before the test
   - **Story Impact:** Establishes trust with a key ally
 
 - **Name:** Supplies for the Journey
@@ -69,41 +73,41 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
 - **Name:** The Merchant's Lost Caravan
 
   - **Type:** Side Quest (Required for Main Quest)
-  - **Trigger:** Speak with a worried merchant in Greendale's market
+  - **Trigger:** Speak with Caravan Master Thorne in Market District
   - **Prerequisites:** Access to Market District
-  - **Dependencies:** Must learn `forest_speech` spell to locate caravan
-  - **Completion:** Rescue the merchant's caravan from bandits through negotiation, earning valuable supplies and information about safe forest paths
-  - **Rewards:** Trade goods, safe forest path knowledge
+  - **Dependencies:** Learn `forest_speech` from the Ancient Tree Spirit and have Quality Rope from the Market District
+  - **Completion:** Cast Forest Speech to locate the caravan, then use Quality Rope with the Ravine to rescue the merchants; return to Thorne for the Secret Documents
+  - **Rewards:** Secret Documents from Thorne, which can help restore Cedric's honor
   - **Story Impact:** Establishes reputation as a reliable hero
 
 - **Name:** Echoes of the Past
 
   - **Type:** Side Quest (Required for Main Quest)
-  - **Trigger:** Find old records or artifacts in Greendale that mention Willowbrook
+  - **Trigger:** Research Willowbrook history in the Great Hall and Hidden Library
   - **Prerequisites:** Access to Great Hall
   - **Dependencies:** None
   - **Completion:** Piece together historical clues about why Malakar was interested in Willowbrook, revealing hints about Elior's family heritage
-  - **Rewards:** Ancient Chronicle, knowledge of family heritage
+  - **Rewards:** Knowledge of Elior's heritage and the Chosen One prophecy
   - **Story Impact:** Reveals crucial background lore
 
 - **Name:** The Healer's Apprentice
 
   - **Type:** Side Quest (Required for Main Quest)
-  - **Trigger:** Meet Greendale's local healer who recognizes magical potential in Elior
+  - **Trigger:** Give the Crystal Focus to Master Healer Lyria in Healer's House
   - **Prerequisites:** Access to Residential Quarter
   - **Dependencies:** Must have Crystal Focus from Hidden Library
-  - **Completion:** Obtain a crystal focus so that Lyria can treat her patients that are on the brink of death, learning advanced healing techniques and earning a powerful healing item
-  - **Rewards:** 'greated_heal' spell, alliance with Lyria
+  - **Completion:** Giving Lyria the Crystal Focus completes the quest and teaches Greater Heal
+  - **Rewards:** `greater_heal` spell and Lyria's apprenticeship
   - **Story Impact:** Develops healing abilities essential for later quests
 
 - **Name:** Cedric's Lost Honor
 
   - **Type:** Side Quest (Required for Main Quest)
   - **Trigger:** Learn that Cedric was once disgraced and stripped of his knighthood
-  - **Prerequisites:** Building relationship with castle inhabitants
-  - **Dependencies:** Must complete "Echoes of the Past" for research materials
+  - **Prerequisites:** Complete "Echoes of the Past" before the quest activates
+  - **Dependencies:** Recover the Secret Documents by rescuing Thorne's caravan
   - **Completion:** Help Cedric reclaim his honor by solving the mystery of his past disgrace and clearing his name with evidence
-  - **Rewards:** Cedric's deeper trust, Royal Seal, Nature's Charm (third of three sacred charms needed to summon Nyx)
+  - **Rewards:** Nature's Charm (third of three sacred charms needed to summon Nyx)
   - **Story Impact:** Strengthens alliance with key character
 
 - **Name:** The Innkeeper's Daughter
@@ -111,7 +115,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Type:** Side Quest (Required for Main Quest)
   - **Trigger:** A young girl in Greendale has been cursed by dark magic and needs help
   - **Prerequisites:** Access to The Silver Stag Inn
-  - **Dependencies:** Must learn `greater_heal` and `dispel` spells, need Crystal-Clear Water
+  - **Dependencies:** Learn `greater_heal` and `dispel`, and obtain Crystal-Clear Water from the Whispering Glade
   - **Completion:** Break the curse using a combination of Elior's growing magical abilities and items found throughout Greendale
   - **Rewards:** Innkeeper's gratitude, curse-breaking experience, Druidic Charm
   - **Story Impact:** Demonstrates growing magical power, saves innocent life
@@ -121,64 +125,46 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
   - **Type:** Side Quest (Required for Main Quest)
   - **Trigger:** Discover a hidden library beneath Greendale containing old magical texts
   - **Prerequisites:** Access to Residential Quarter basement
-  - **Dependencies:** Must learn `mend` spell to repair protective enchantments
-  - **Completion:** Solve the library's protective enchantments and study ancient texts to learn background lore about the Chosen One prophecy
-  - **Rewards:** `dispel` spell, Ancient Spellbook, Crystal Focus, Prophecy knowledge
+  - **Dependencies:** Learn `mend` to repair the Protective Enchantments
+  - **Completion:** Repair the wards, earn the Spectral Librarian's trust, learn `dispel` by using the Ancient Chronicle, and take the Crystal Focus
+  - **Rewards:** `dispel`, Crystal Focus, and knowledge of Elior's heritage
   - **Story Impact:** Reveals crucial information about Chosen One prophecy
 
-#### Forest Phase Quests
+#### Forest and Cross-Phase Quests
 
 - **Name:** The Hermit's Warning
 
   - **Type:** Side Quest (Required for Main Quest)
   - **Trigger:** Encounter a mysterious hermit on the outskirts of the Enchanted Forest
   - **Prerequisites:** Access to Forest Transition
-  - **Dependencies:** Must complete all Greendale phase quests
-  - **Completion:** Earn the hermit's trust and receive crucial warnings about the dangers that lie ahead in the forest, plus a protective charm
-  - **Rewards:** Protective Charm (one of three sacred charms needed to summon Nyx), Forest Guide, safety warnings
+  - **Dependencies:** Complete The Knight's Test, Supplies for the Journey, Echoes of the Past, The Healer's Apprentice, and The Ancient Library
+  - **Completion:** Speak with the hermit and use the Forest Survival Kit at Forest Transition
+  - **Rewards:** Protective Charm (one of three sacred charms needed to summon Nyx) and safety warnings
   - **Story Impact:** Provides essential forest survival knowledge
 
 - **Name:** The Forest Guardian's Riddles
 
   - **Type:** Side Quest (Required for Main Quest)
-  - **Trigger:** Enter the Enchanted Forest
-  - **Prerequisites:** Completion of "The Hermit's Warning"
-  - **Dependencies:** Must have `nature_sense` spell and forest survival gear
-  - **Completion:** Solve a series of magical puzzles and riddles scattered throughout the forest to prove wisdom and gain Nyx's trust
-  - **Rewards:** Water Nymph's trust, Crystal-Clear Water, Moonflowers
+  - **Trigger:** Speak to the Forest Sprites at Forest Entrance
+  - **Prerequisites:** Forest access; this quest is not a prerequisite for entering
+  - **Dependencies:** Cast `nature_sense` in the Whispering Glade to reveal the Water Nymphs, then answer all three riddles
+  - **Completion:** Answer the Water Nymphs' three riddles
+  - **Rewards:** Access to Crystal-Clear Water and Moonflowers in the Whispering Glade
   - **Story Impact:** Proves worthiness to forest spirits
 
 - **Name:** Whispers in the Wind
 
   - **Type:** Side Quest (Required for Main Quest)
-  - **Trigger:** Learn basic forest magic from encounters with minor forest spirits
+  - **Trigger:** Give the Enchanted Acorn to the Ancient Tree Spirit
   - **Prerequisites:** Access to Ancient Grove
-  - **Dependencies:** Must have `forest_speech` spell and forest tokens
-  - **Completion:** Help forest creatures with small problems, earning their guidance and learning preparatory spells needed to communicate with Nyx
-  - **Rewards:** Forest spirit alliance
+  - **Dependencies:** Bring both Crystal-Clear Water and Moonflowers from the Whispering Glade back to the spirit
+  - **Completion:** Give either item while carrying both; the spirit uses them to restore the grove and open the path to the Heart of the Forest
+  - **Rewards:** Access to the Heart of the Forest
   - **Story Impact:** Establishes connection with forest realm
 
-#### Optional Exploration Quests
+#### Optional Exploration
 
-- **Name:** Keys to the City
-
-  - **Type:** Tutorial/Exploration Quest
-  - **Trigger:** Entering Greendale Gates for the first time
-  - **Prerequisites:** None
-  - **Dependencies:** None
-  - **Completion:** Entering Main Square for the first time
-  - **Rewards:** City Map, basic orientation
-  - **Story Impact:** Familiarizes player with city layout
-
-- **Name:** Downtown Disorientation
-
-  - **Type:** Tutorial/Exploration Quest
-  - **Trigger:** Entering Main Square
-  - **Prerequisites:** Completion of "Keys to the City"
-  - **Dependencies:** None
-  - **Completion:** Entering Castle Approach, Market District, or Residential Quarter for the first time
-  - **Rewards:** Area familiarity, potential hidden items
-  - **Story Impact:** Encourages thorough exploration
+City orientation is handled through the City Map and movement behavior, not separate quests. The player finds the map at Greendale Gates after the Gate Captain leaves, then uses it in Main Square to navigate the city.
 
 ## Character Development
 
@@ -190,10 +176,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
 - **Motivations:** Restore his honor, protect Greendale from coming threats, prove his worth
 - **Character Arc:** Begins as a disgraced knight, through Elior's help reclaims honor and becomes a trusted ally
 - **Dialogue Style:** Formal, military-influenced speech with hints of vulnerability about his past
-- **Relationship Development:**
-  - Initial: Suspicious but hopeful
-  - After Knight's Test: Respectful recognition
-  - After Honor Restored: Deep trust and friendship
+- **State-Dependent Dialogue:** First recruits Elior; recognizes combat ability after The Knight's Test; after Cedric's honor is restored, grants Nature's Charm; after Nyx, comments on Elior's prophetic ability.
 - **Quest Involvement:** Central to main quest progression, gives multiple side quests
 - **Teaching Role:** Combat skills, leadership, strategic thinking
 
@@ -203,10 +186,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
 - **Motivations:** Heal the sick, pass on knowledge to worthy students, protect the innocent
 - **Character Arc:** Recognizes Elior's potential, becomes a mentor figure, grows to see Elior as an equal
 - **Dialogue Style:** Gentle but authoritative, uses medical metaphors, speaks with confidence about healing
-- **Relationship Development:**
-  - Initial: Professional interest in Elior's abilities
-  - After Apprenticeship: Mentor-student bond
-  - After Curse Breaking: Mutual respect as colleagues
+- **State-Dependent Dialogue:** Offers the apprenticeship when Elior brings the Crystal Focus, teaches Greater Heal when it is given, and later acknowledges Elior's progress.
 - **Quest Involvement:** "The Healer's Apprentice", "The Innkeeper's Daughter"
 - **Teaching Role:** Advanced healing magic, compassion, medical knowledge
 
@@ -214,12 +194,9 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
 
 - **Personality:** Ancient, wise, playful yet serious about forest protection
 - **Motivations:** Guard forest secrets, test worthy souls, maintain balance between human and natural worlds
-- **Character Arc:** Initially mysterious and testing, becomes Elior's spiritual guide after proving worthy
+- **Character Arc:** Summoned at the offering altar after the three sacred charms are presented; on the first conversation, grants Prophetic Vision, Nyx's Token, and the Forest Heart Crystal.
 - **Dialogue Style:** Speaks in riddles and nature metaphors, voice carries weight of ages
-- **Relationship Development:**
-  - Initial: Cryptic and testing
-  - After Trials: Respectful acknowledgment
-  - After Final Test: Spiritual guide and ally
+- **State-Dependent Dialogue:** The first conversation grants Nyx's gifts; later conversations provide encouragement.
 - **Quest Involvement:** Final phase of main quest, ultimate teacher
 - **Teaching Role:** Prophetic magic, understanding of destiny, connection to natural world
 
@@ -229,7 +206,7 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
 - **Motivations:** Marcus wants his daughter healed; Elena wants to be free of curse and help others
 - **Character Arc:** Family saved by Elior's intervention, become grateful allies
 - **Dialogue Style:** Marcus speaks like a concerned father and businessman; Elena's speech shows effects of curse initially
-- **Relationship Development:** Gratitude evolves into lasting friendship and support
+- **State-Dependent Dialogue:** Elena's dialogue changes as the three-step cure progresses; Marcus grants the Druidic Charm after she is cured.
 - **Quest Involvement:** "The Innkeeper's Daughter"
 - **Story Impact:** Demonstrates the personal stakes in Elior's growing power
 
@@ -253,28 +230,15 @@ The main quest "The Gathering Storm" is built from completing all side quests, f
 - **Personality Traits:** Ethereal, knowledge-focused, protective of texts
 - **Dialogue Interactions:** Tests Elior's worthiness for ancient knowledge
 
-### Dialogue System & Relationship Mechanics
+### State-Dependent Dialogue
 
-#### Dialogue Choice Impact Categories
+Act II dialogue is driven by story flags, quest progress, inventory, and character state rather than a separate relationship-level or dialogue-choice system.
 
-1. **Respectful/Honorable Choices:** Improve relationships with knights and nobility
-2. **Compassionate Choices:** Strengthen bonds with healers and common folk
-3. **Wise/Thoughtful Choices:** Gain favor with magical beings and scholars
-4. **Practical/Direct Choices:** Appeal to merchants and pragmatic characters
-
-#### Relationship Progression Stages
-
-1. **Stranger:** Basic interactions, limited information
-2. **Acquaintance:** Some personal details shared, minor quests available
-3. **Friend:** Deeper conversations, important quests unlocked
-4. **Trusted Ally:** Full character arc completion, maximum quest rewards
-
-#### Character State Changes Based on Quest Progress
-
-- **Sir Cedric:** Dialogue changes from formal distance to warm friendship as honor is restored
-- **Lyria:** Transitions from teacher to colleague as Elior masters healing arts
-- **Elena:** Speech patterns improve as curse is lifted
-- **Forest Spirits:** Communication becomes possible only after learning forest magic
+- **Sir Cedric:** His responses change after first contact, the combat test, his honor quest, and Nyx's gift.
+- **Lyria:** Her offer and follow-up dialogue change after receiving the Crystal Focus and completing the apprenticeship.
+- **Elena:** Her appearance and dialogue change during the healing, purification, and dispelling steps.
+- **Forest Spirits:** The sprites offer the riddles quest; the Ancient Tree Spirit teaches Forest Speech for the Enchanted Acorn; Nature Sense reveals the Water Nymphs.
+- **Nyx:** Her first conversation grants her gifts; later conversations use a follow-up response.
 
 ## Spell System Design
 
@@ -289,69 +253,69 @@ Spells in Act II follow a logical progression where each spell has specific cond
 - **`mend`**:
 
   - **Learned From:** Local craftsmen in the Residential Quarter
-  - **Prerequisites:** Observe craftsmen at work, show interest in their trade
-  - **Conditions:** Must have basic magical ability (established in Act I)
-  - **Used For:** Repair Hidden Library enchantments, general item repair
+  - **Prerequisites:** Help the Families in the Residential Quarter with the Walking Stick, then speak with the craftsmen
+  - **Conditions:** The craftsmen teach the spell on the first eligible conversation
+  - **Used For:** Repair the Hidden Library's Protective Enchantments
   - **Story Integration:** Demonstrates growing practical magic skills
 
 - **`dispel`**:
 
-  - **Learned From:** Ancient texts in the Hidden Library
-  - **Prerequisites:** Must have `mend` spell to repair protective enchantments first
-  - **Conditions:** Must prove worthiness to Spectral Librarian, demonstrate magical understanding
+  - **Learned From:** Study the Ancient Chronicle in the Hidden Library
+  - **Prerequisites:** Cast `mend` on the Protective Enchantments, then speak to the Spectral Librarian and use the Ancient Chronicle
+  - **Conditions:** The Spectral Librarian must have become friendly after the wards are repaired
   - **Used For:** Break magical barriers and curses, counter enemy magic
   - **Story Integration:** Advanced magical knowledge needed for complex problems
 
 - **`greater_heal`**:
 
   - **Learned From:** Master Healer Lyria in Healer's House
-  - **Prerequisites:** Must give Crystal Focus to Lyria to help treat critically injured patients
-  - **Conditions:** Must complete "The Healer's Apprentice" quest, demonstrate compassion for the suffering
+  - **Prerequisites:** Give Lyria the Crystal Focus from the Hidden Library
+  - **Conditions:** Giving her the focus completes "The Healer's Apprentice" and teaches the spell
   - **Used For:** Cure Elena's curse
   - **Story Integration:** Represents growth in both magical skill and empathy for others
 
 - **`nature_sense`**:
 
   - **Learned From:** Boundary standing stones at Forest Transition
-  - **Prerequisites:** Show respect for ancient magic, touch stones with proper reverence
-  - **Conditions:** Must have completed all Greendale quests showing wisdom
-  - **Used For:** Navigate forest safely, locate hidden creatures like water nymphs
+  - **Prerequisites:** Reach Forest Transition; the Mountain Path route opens after Supplies for the Journey
+  - **Conditions:** Examine the standing stones to learn it. This can happen before the other town quests and The Hermit's Warning are complete; those quests gate the route from Forest Transition into Forest Entrance.
+  - **Used For:** Sense nature in forest areas and reveal the Water Nymphs when cast in Whispering Glade
   - **Story Integration:** Bridge between human and natural magic
 
 - **`forest_speech`**:
 
   - **Learned From:** Ancient Tree Spirit in Ancient Grove
-  - **Prerequisites:** Must learn `nature_sense` first, make proper offering (Enchanted Acorn)
-  - **Conditions:** Demonstrate respect for forest, prove environmental commitment
+  - **Prerequisites:** Give the Enchanted Acorn to the Ancient Tree Spirit
+  - **Conditions:** The offering teaches the spell and offers "Whispers in the Wind"
   - **Used For:** Communicate with woodland creatures, find lost caravan
   - **Story Integration:** Establishes connection with forest realm
 
 - **`prophetic_vision`**:
   - **Learned From:** Nyx in Heart of the Forest
-  - **Prerequisites:** Complete ALL other spells and quests in Act II
-  - **Conditions:** Must have all forest tokens and offerings, pass Nyx's wisdom trials
-  - **Used For:** See glimpses of future threats, understand coming challenges
-  - **Story Integration:** Ultimate magical growth, prepares for Act III challenges
+  - **Prerequisites:** Summon Nyx at the Offering Altar with Druidic Charm, Protective Charm, and Nature's Charm
+  - **Conditions:** Nyx teaches it on the first conversation. The first cast completes "The Gathering Storm" only when all side quests are complete and Sir Cedric is present.
+  - **Used For:** Share a vision of the coming threat with Sir Cedric
+  - **Story Integration:** Completes the Act II main quest and prepares for Act III
 
 ### Spell Learning Conditions and Natural Flow
 
 The spell system is designed so that players naturally encounter learning opportunities through story progression:
 
-1. **Practical Magic First:** `mend` is learned from observing craftsmen, establishing magical growth through everyday observation
+1. **Practical Magic First:** `mend` is learned from craftsmen after helping the Families
 2. **Compassion-Based Magic:** `greater_heal` requires helping others, reinforcing heroic character development
 3. **Scholar Magic:** `dispel` comes from study and research, rewarding thorough exploration
-4. **Nature Connection:** `nature_sense` and `forest_speech` require environmental respect and proper offerings
-5. **Ultimate Wisdom:** `prophetic_vision` only comes after proving mastery of all other aspects
+4. **Nature Connection:** Examine the standing stones to learn `nature_sense`; offer the Enchanted Acorn to the Ancient Tree Spirit to learn `forest_speech`
+5. **Ultimate Vision:** Nyx teaches `prophetic_vision` when summoned with the three sacred charms; its first cast with Sir Cedric completes the main quest only after all side quests are complete
 
 ### Integration with Character Interactions
 
-Each spell learning experience is tied to character relationship development:
+Spell learning follows quest and item state rather than a separate relationship system:
 
-- Craftsmen teach through example and respect for their work
-- Lyria teaches through mentorship and medical partnership
-- Ancient texts require proving worthiness to their guardian
-- Forest spirits require environmental stewardship and proper rituals
-- Nyx requires complete spiritual and magical maturity
+- The craftsmen teach after Elior helps the Families.
+- Lyria teaches after receiving the Crystal Focus.
+- The librarian permits study after Elior repairs the wards.
+- The tree spirit teaches after receiving the Enchanted Acorn.
+- Nyx grants Prophetic Vision after being summoned with the three charms.
 
 ## World-Building & Lore Integration
 
@@ -401,831 +365,45 @@ The forest represents increasingly mystical realms:
 
 ### Items and Artifacts with Lore Significance
 
-#### Ancient Artifacts
+#### Implemented Artifacts
 
-- **Prophecy Scrolls:** Written by ancient seers, predict current events
-- **Crystal Focus:** Crafted by early magical practitioners, amplifies natural abilities
-- **Forest Heart Crystal:** Gift from Nyx, contains essence of forest's power
-
-#### Cultural Items
-
-- **Royal Seal:** Represents Greendale's authority and political connections
-- **Ancient Chronicle:** Records historical events connecting past to present
-- **Trade Agreements:** Show economic relationships between communities
-- **Family Heirlooms:** Connect characters to their ancestral heritage
+- **Ancient Chronicle:** Records regional history and Elior's bloodline; studying it after the librarian permits access teaches `dispel`.
+- **Crystal Focus:** The Spectral Librarian leaves it in the Hidden Library after Elior repairs the wards; Lyria needs it to teach `greater_heal`.
+- **Forest Heart Crystal and Nyx's Token:** Gifts from Nyx when first spoken to after the altar ritual.
+- **Three Sacred Charms:** The Protective Charm, Druidic Charm, and Nature's Charm are consumed by the Offering Altar to summon Nyx.
+- **Secret Documents:** Thorne gives them after the caravan rescue; they provide evidence to restore Cedric's honor.
 
 ### Exploration Opportunities and Hidden Content
 
-#### Secret Areas and Optional Content
+#### Implemented Exploration
 
-- **Hidden Library:** Contains deeper lore about magical history and prophecies
-- **Spectral Librarian:** Provides additional historical context for those who prove worthy
-- **Forest Hermit's Cache:** Hidden supplies and knowledge for dedicated explorers
-- **Sacred Grove Mysteries:** Additional forest spirit encounters for environmental champions
-
-#### Extended Lore for Deep Exploration
-
-- **Ancient Druidic Practices:** Historical magical traditions that shaped current world
-- **Forest Spirit Hierarchies:** Complex relationships between different nature beings
-- **Prophetic Visions:** Glimpses of possible futures based on current choices
-- **Bloodline Mysteries:** Deeper investigation into Elior's family heritage and its significance
+- **Hidden Library:** Discovered by searching the Residential Quarter after the quest is offered; its wards, Spectral Librarian, Ancient Chronicle, and Crystal Focus are part of the required path.
+- **Forest encounters:** The Standing Stones, Forest Sprites, Ancient Tree Spirit, and Water Nymphs are encountered through the required forest sequence.
 
 ## Rooms
 
-### 1. Greendale Gates
-
-#### Description
-
-A magnificent stone archway marks the entrance to Greendale, the largest settlement you've encountered. Guards in polished mail stand watch, their banners fluttering in the mountain breeze. Beyond the gates, cobblestone streets wind between well-built stone houses and bustling shops. The air carries the sounds of commerce and conversation - a stark contrast to Willowbrook's quiet charm.
-
-#### Items
-
-- **City Map**
-  - Present: From start (hidden, found by searching)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Entry Pass - shows to guards for easy entry
-
-#### Characters
-
-- Gate Captain (provides information about the city)
-- Gate Guards
-
-#### Exits
-
-- South to Mountain Path
-- North to Main Square
-
-### 2. Main Square
-
-#### Description
-
-The heart of Greendale pulses with activity. A grand fountain depicts ancient heroes battling mythical beasts, while merchants hawk their wares from colorful stalls. Stone buildings with red-tiled roofs surround the square, and you can see the castle's towers rising majestically to the north. The energy here is infectious - this is clearly a place where important things happen.
-
-#### Items
-
-- **City Notice Board**
-  - Present: From start
-  - Can be carried: No
-  - Useful: Yes
-- **Merchant's Flyer**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: No
-- **Ancient Coin**
-  - Present: From start (hidden, found by searching fountain base)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Dropped Message**
-  - Present: From start (hidden, found by searching merchant stalls)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Coin Purse - purchase items from various merchants
-- City Map - Without having the map in the inventory, all exits, but that to the gates leads back to the square
-
-#### Characters
-
-- Town Crier (provides city news and rumors)
-- Merchant (setting up shop and don't have time to talk)
-
-#### Exits
-
-- South to Greendale Gates
-- North to Castle Approach
-- East to Market District
-
-### 3. Market District
-
-#### Description
-
-Narrow streets packed with shops, inns, and trading posts create a maze of commerce. The air is thick with the scents of spices, leather, and fresh bread. Merchant wagons crowd the streets, and you can hear negotiations in multiple languages. This is where serious business gets done in Greendale.
-
-#### Items
-
-- **Forest Survival Kit**
-  - Present: Later (purchased with coins)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Quality Rope**
-  - Present: Later (purchased with coins)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Enhanced Lantern**
-  - Present: Later (purchased with coins)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Silver Pendant**
-  - Present: From start (hidden, found by searching behind merchant stalls)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Trade Agreement**
-  - Present: From start (hidden, found by searching wagon contents)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Coin Purse - purchase survival gear and equipment
-
-#### Characters
-
-- Master Merchant Aldric (sells rare goods)
-- Caravan Master Thorne (missing caravan quest)
-
-#### Exits
-
-- West to Main Square
-- North to The Silver Stag Inn
-- South to Merchant's Warehouse
-
-### 4. The Silver Stag Inn
-
-#### Description
-
-A three-story inn with warm yellow light spilling from its windows. The common room buzzes with conversation from travelers, locals, and adventurers sharing tales over hearty meals and strong ale. Mounted stag heads and adventuring trophies decorate the walls. The atmosphere is welcoming, and you sense this is where information flows as freely as the drink.
-
-#### Items
-
-- **Traveler's Journal**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Room Key**
-  - Present: Later (purchased with coins)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Mysterious Letter**
-  - Present: From start (hidden, found by searching under table cushions)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Adventurer's Map**
-  - Present: From start (hidden, found by searching trophy displays)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Druidic Charm**
-  - Present: Later (given by Innkeeper Marcus after breaking Elena's curse)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Coin Purse - rent rooms and buy meals and information
-
-#### Characters
-
-- Innkeeper Marcus (friendly host with local knowledge)
-- Barmaid Elena (cursed daughter - side quest)
-- Traveling Merchants
-
-#### Exits
-
-- South to Market District
-- Upstairs to Inn Rooms
-
-### 5. Inn Rooms
-
-#### Description
-
-Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, providing a peaceful retreat for travelers. From here, you can hear the gentle murmur of conversation from the common room below.
-
-#### Items
-
-- **Personal Journal**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Travel Pack**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Hidden Compartment Key**
-  - Present: From start (hidden, found by searching bed frame)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Guest Register**
-  - Present: From start (hidden, found by searching desk drawers)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Rest and recovery items, personal belongings storage
-
-#### Characters
-
-- Other Guests (occasional encounters)
-
-#### Exits
-
-- Downstairs to The Silver Stag Inn
-
-### 6. Merchant's Warehouse
-
-#### Description
-
-A large stone building filled with goods from distant lands. Crates and barrels are stacked high, creating narrow passages between towering shelves. The air smells of exotic spices and foreign crafts. This is where Greendale's merchants store their most valuable inventory.
-
-#### Items
-
-- **Exotic Goods**
-  - Present: From start
-  - Can be carried: No
-  - Useful: Yes
-- **Trading Records**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Merchant Supplies**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Smuggler's Note**
-  - Present: From start (hidden, found by searching behind crates)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Rare Gemstone**
-  - Present: From start (hidden, found by searching high shelves)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Trading documents and merchant credentials
-
-#### Characters
-
-- Warehouse Keeper
-- Foreign Traders
-
-#### Exits
-
-- North to Market District
-
-### 7. Castle Approach
-
-#### Description
-
-A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind. Guards in ceremonial armor patrol the approach, their presence both welcoming and imposing. This is clearly where power resides in Greendale.
-
-#### Items
-
-- **Royal Decree**
-  - Present: From start (hidden, found by searching statue bases)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Honor Guard Badge**
-  - Present: From start (hidden, found by searching near ceremonial posts)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Entry Pass - grants audience with Sir Cedric
-
-#### Characters
-
-- Castle Guard Captain
-- Herald
-
-#### Exits
-
-- South to Main Square
-- North to Castle Courtyard
-
-### 8. Castle Courtyard
-
-#### Description
-
-An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork. Ancient oak trees provide shade for stone benches, and a stable houses magnificent warhorses. The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses.
-
-#### Items
-
-- **Knight's Shield**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Battle Plans**
-  - Present: From start (hidden, found by searching training equipment)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Squire's Diary**
-  - Present: From start (hidden, found by searching under stone benches)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Nature's Charm**
-  - Present: Later (given by Sir Cedric after completing "Cedric's Lost Honor")
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Training weapons can be used to prove combat skills to Cedric
-
-#### Characters
-
-- Sir Cedric (main NPC for The Gathering Storm quest)
-- Training Master
-- Squires
-
-#### Exits
-
-- South to Castle Approach
-- North to Great Hall
-- West to Residential Quarter
-
-### 9. Great Hall
-
-#### Description
-
-A magnificent hall with soaring ceilings supported by massive stone columns. Tapestries depicting legendary battles cover the walls, and a throne sits on a raised dais at the far end. Sunlight streams through tall stained-glass windows, casting colorful patterns on the stone floor. This is where the lords of Greendale hold court and make important decisions.
-
-#### Items
-
-- **Ancient Chronicle**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Royal Seal**
-  - Present: Later (earned after proving worth to Lord Commander)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Secret Documents**
-  - Present: Later (given by Caravan Master Thorne after completing "The Merchant's Lost Caravan")
-  - Can be carried: Yes
-  - Useful: Yes
-- **Secret Correspondence**
-  - Present: From start (hidden, found by searching behind tapestries)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Ceremonial Dagger**
-  - Present: From start (hidden, found by searching throne area)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Entry Pass - formal presentation to local lords
-
-#### Characters
-
-- Lord Commander of Greendale
-- Court Herald
-- Noble Advisors
-
-#### Exits
-
-- South to Castle Courtyard
-
-### 10. Residential Quarter
-
-#### Description
-
-Quiet streets lined with comfortable two-story homes, each with small gardens and workshops. Smoke rises from chimneys, and the sound of craftsmen at work echoes from various buildings. This is where Greendale's skilled artisans and middle-class citizens live and work. The atmosphere is peaceful and industrious.
-
-#### Items
-
-- **Healing Herbs**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Craftsman's Tools**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Family Heirloom**
-  - Present: From start (hidden, found by searching garden plots)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Workshop Key**
-  - Present: From start (hidden, found by searching workshop areas)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-- Mend (later - learned from local craftsmen)
-
-#### Usable Items
-
-- Various tools and herbs for crafting and healing
-
-#### Characters
-
-- Master Healer Lyria (teaches advanced healing)
-- Local Craftsmen
-- Families
-
-#### Exits
-
-- South to Castle Courtyard
-- North to Healer's House
-- Secret passage to Hidden Library (basement)
-
-### 11. Healer's House
-
-#### Description
-
-A cozy cottage filled with the scents of medicinal herbs and healing potions. Dried plants hang from the rafters, and shelves line the walls, packed with bottles of various sizes and colors. A warm fire crackles in the hearth, and comfortable chairs invite rest and recovery. This is clearly a place of healing and learning.
-
-#### Items
-
-- **Herb Gathering Bag**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Medical Texts**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Ancient Recipe**
-  - Present: From start (hidden, found by searching herb storage)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Healer's Amulet**
-  - Present: From start (hidden, found by searching medicine cabinet)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-- Greater Heal (later - learned from Lyria)
-
-#### Usable Items
-
-- Medical supplies and herbs for healing injured characters
-
-#### Characters
-
-- Master Healer Lyria (teacher and quest giver)
-
-#### Exits
-
-- South to Residential Quarter
-
-### 12. Hidden Library
-
-#### Description
-
-Discovered beneath Greendale through a secret passage, this ancient library contains countless volumes of magical lore. Glowing crystals provide soft illumination, and the air hums with residual magic. Protective enchantments shimmer around the most valuable texts. This repository of knowledge holds secrets that could unlock the mysteries of your destiny.
-
-#### Items
-
-- **Ancient Spellbook**
-  - Present: Later (available after mending protective enchantments)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Prophecy Scroll**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Crystal Focus**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Forbidden Tome**
-  - Present: From start (hidden, found by searching restricted section)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Scholar's Notes**
-  - Present: From start (hidden, found by searching reading desks)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-- Dispel (later - learned from ancient texts)
-
-#### Usable Items
-
-- Magical items needed to bypass the library's protective enchantments
-
-#### Characters
-
-- Spectral Librarian (ghostly guardian of knowledge)
-
-#### Exits
-
-- Secret passage to Residential Quarter (basement)
-
-### 13. Mountain Path
-
-#### Description
-
-A winding trail that leads through rocky terrain between Willowbrook and Greendale. Sturdy mountain trees provide occasional shade, and the path is well-maintained despite its remote location. You can see both settlements from various points along the trail, and the journey offers time for reflection on your adventures. A small camp site, often used by travelers, sits just off the main path.
-
-#### Items
-
-- **Mountain Flower**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: No
-- **Walking Stick**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Camp Site**
-  - Present: From start
-  - Can be carried: No
-  - Useful: Yes
-- **Entry Pass**
-  - Present: After searching the camp site
-  - Can be carried: Yes
-  - Useful: Yes
-- **Training Sword**
-  - Present: Given by Mountain Hermit when speaking to him
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Camp site can be searched to reveal the Entry pass
-
-#### Characters
-
-- Mountain Hermit
-
-#### Exits
-
-- North to Greendale Gates
-- East to Forest Transition (initially closed)
-
-### 14. Forest Transition
-
-#### Description
-
-The boundary between the civilized mountain paths and the wild Enchanted Forest. Ancient standing stones mark the threshold, covered in moss and carved with protective runes that seem to pulse with faint magic. The air grows thicker here, and you can sense the forest's ancient power awakening. Beyond lies a realm where normal rules may not apply.
-
-#### Items
-
-- **Forest Guide**
-  - Present: Later (given by hermit)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Protective Charm**
-  - Present: Later (given by Forest Hermit after earning trust)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Hermit's Cache**
-  - Present: From start (hidden, found by searching around standing stones)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Ancient Inscription**
-  - Present: From start (hidden, found by searching stone carvings)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-- **Nature Sense**
-  - Present: Later (learned from the standing stones)
-  - Usable: Yes
-
-#### Usable Items
-
-- Protective charms and forest survival gear
-
-#### Characters
-
-- Forest Hermit (warning quest)
-- Border Spirits (brief encounters)
-
-#### Exits
-
-- West to Mountain Path
-- East to Forest Entrance
-
-### 15. Forest Entrance
-
-#### Description
-
-Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with the sounds of birds and rustling leaves, but underneath lies an expectant silence, as if the forest itself is watching and waiting. Two paths diverge deeper into the forest - one leads to an ancient grove that serves as the sacred gateway to the forest's heart, while the other leads to a peaceful glade.
-
-#### Items
-
-- **Forest Map Fragment**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Enchanted Acorn**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Sprite's Gift**
-  - Present: From start (hidden, found by searching hollow trees)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Nature's Blessing**
-  - Present: From start (hidden, found by searching among roots)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Lantern - illuminates hidden paths
-- Forest Herbs - communicate with forest spirits
-
-#### Characters
-
-- Forest Sprites (minor encounters)
-- Woodland Animals
-
-#### Exits
-
-- West to Forest Transition
-- South to Ancient Grove
-- East to Whispering Glade
-
-### 16. Ancient Grove
-
-#### Description
-
-A circular clearing dominated by trees so old and massive they seem to touch the sky. Their bark bears carved symbols that predate human memory, and the air shimmers with concentrated magic. At the center grows a tree unlike any other - its silver bark gleams and its leaves whisper secrets in an ancient tongue. This is clearly a place of power and the sacred gateway to the forest's deepest mysteries.
-
-#### Items
-
-- **Ancient Tree Bark**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Sacred Rune Stone**
-  - Present: From start (hidden, found by searching tree roots)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Elder's Wisdom**
-  - Present: From start (hidden, found by searching ancient symbols)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-- **Forest Speech**
-  - Present: Later (learned from Ancient Tree Spirit)
-  - Usable: Yes
-
-#### Usable Items
-
-- Magical focuses and components for forest magic
-
-#### Characters
-
-- Ancient Tree Spirit (provides wisdom)
-- Forest Guardian
-
-#### Exits
-
-- North to Forest Entrance
-- South to Heart of the Forest
-
-### 17. Whispering Glade
-
-#### Description
-
-A peaceful meadow where the forest opens to reveal a small stream babbling over smooth stones. Wildflowers carpet the ground in brilliant colors, and butterflies dance in the warm sunlight. The sound of moving water creates a soothing melody, but you occasionally hear voices in the wind - whispers from unseen forest dwellers sharing ancient secrets.
-
-#### Items
-
-- **Crystal-Clear Water**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Moonflowers**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Butterfly Wings**
-  - Present: From start (magical component)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Hidden Spring**
-  - Present: From start (hidden, found by searching water source)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Nymph's Treasure**
-  - Present: From start (hidden, found by searching flower beds)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-None
-
-#### Usable Items
-
-- Stream water - purifies cursed items
-- Moonflowers - enhance magical abilities at night
-
-#### Characters
-
-- Water Nymphs (riddle givers)
-- Talking Animals
-
-#### Exits
-
-- West to Forest Entrance
-
-### 18. Heart of the Forest
-
-#### Description
-
-The deepest part of the Enchanted Forest, where reality seems more fluid and magic flows like water. Impossible colors paint the landscape, and the very air sparkles with enchantment. At the center stands a magnificent tree whose branches seem to hold up the sky itself. Before the great tree sits an ancient offering altar, carved from a single piece of starstone and adorned with mystical runes that pulse with otherworldly light. This is Nyx's domain, where the forest sprite dwells and where the greatest secrets are revealed. The sacred grove that leads here is the only passage to this mystical realm.
-
-#### Items
-
-- **Offering Altar**
-  - Present: From start
-  - Can be carried: No
-  - Useful: Yes
-- **Nyx's Token**
-  - Present: Later (given by Nyx after completing trials)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Forest Heart Crystal**
-  - Present: Later (given by Nyx after completing trials)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Prophetic Leaves**
-  - Present: From start
-  - Can be carried: Yes
-  - Useful: Yes
-- **Divine Essence**
-  - Present: From start (hidden, found by searching the great tree)
-  - Can be carried: Yes
-  - Useful: Yes
-- **Cosmic Fragment**
-  - Present: From start (hidden, found by searching starlit pools)
-  - Can be carried: Yes
-  - Useful: Yes
-
-#### Spells
-
-- **Prophetic Vision**
-  - Present: Later (learned from Nyx)
-  - Usable: Yes
-
-#### Usable Items
-
-- All forest-related items reach their full potential here
-- Offering Altar: Place the three sacred charms (Druidic Charm, Protective Charm, and Nature's Charm) to summon Nyx for the final wisdom trials
-
-#### Characters
-
-- Nyx (forest sprite and quest completion)
-- Ancient Spirits
-- Forest Council
-
-#### Exits
-
-- North to Ancient Grove
+This is the implemented Act II room roster and topology. Items and characters marked dynamic appear only after the stated interaction; exits are listed when available, with their gates noted.
+
+| Room | Items and dynamic content | Characters | Exits and gates |
+|---|---|---|---|
+| Mountain Path | Mountain Flower, Walking Stick, Camp Site; examining the camp reveals the Entry Pass. The Mountain Hermit gives the Training Sword. | Mountain Hermit | North to Greendale Gates; east to Forest Transition after Supplies for the Journey. |
+| Greendale Gates | City Map appears after the Gate Captain accepts the Entry Pass and leaves; searching then reveals it. | Gate Captain (leaves after accepting the pass) | South to Mountain Path; north to Main Square after the pass is accepted. |
+| Main Square | City Notice Board, Merchant's Flyer | Town Crier | South to Greendale Gates, north to Castle Approach, east to Market District; city navigation is enabled after using the City Map. |
+| Market District | Aldric sells Forest Survival Kit, Enhanced Lantern, and Quality Rope. | Master Merchant Aldric, Caravan Master Thorne | West to Main Square, north to The Silver Stag Inn, south to Merchant's Warehouse. |
+| The Silver Stag Inn | Room Key and Door; the Room Key is purchased from Marcus. | Innkeeper Marcus, Barmaid Elena | South to Market District; east to Inn Rooms after using the key with the door. |
+| Inn Rooms | Twenty Coins; searching reveals the Traveler's Journal. | None | West to The Silver Stag Inn. |
+| Merchant's Warehouse | None | None | North to Market District. |
+| Castle Approach | None | Herald, Castle Guard Captain | South to Main Square; west to Castle Courtyard after showing the Entry Pass to the Herald. |
+| Castle Courtyard | Squire's Diary appears after talking to the Training Master and Squires, then searching. | Sir Cedric, Training Master, Squires | East to Castle Approach, north to Residential Quarter, west to Great Hall. |
+| Great Hall | None; archive search is gated by formal presentation to the Court Herald. | Court Herald, Historians, Lord Commander | East to Castle Courtyard. |
+| Residential Quarter | Searching reveals the secret passage after The Ancient Library is offered. | Local Craftsmen, Families | South to Castle Courtyard, north to Healer's House, secret passage to Hidden Library after discovery. |
+| Healer's House | None | Master Healer Lyria | South to Residential Quarter. |
+| Hidden Library | Ancient Chronicle, Protective Enchantments; Crystal Focus appears after the wards are mended. | Spectral Librarian | Secret passage to Residential Quarter. |
+| Forest Transition | Standing Stones; examining them teaches Nature Sense. The Forest Hermit gives the Protective Charm. | Forest Hermit | West to Mountain Path; Mountain Path's east route opens after Supplies for the Journey. East to Forest Entrance only after the five Greendale gate quests and The Hermit's Warning are complete. |
+| Forest Entrance | Enchanted Acorn | Forest Sprites | West to Forest Transition; south to Ancient Grove and east to Whispering Glade after using both the Protective Charm and Enhanced Lantern here. |
+| Ancient Grove | Silver-Barked Tree; examining it awakens the Ancient Tree Spirit. | Ancient Tree Spirit (appears after examining the tree) | North to Forest Entrance; south to Heart of the Forest after Whispers in the Wind is complete. |
+| Whispering Glade | Crystal-Clear Water and Moonflowers appear after all three Water Nymph riddles are answered. | Water Nymphs (appear when Nature Sense is cast here) | West to Forest Entrance. |
+| Heart of the Forest | Offering Altar; using the three sacred charms summons Nyx. | Nyx (appears after the altar ritual) | North to Ancient Grove. |
 
 ## Room Map
 
@@ -1258,9 +436,9 @@ The deepest part of the Enchanted Forest, where reality seems more fluid and mag
 - **`mend`**: Learned from local craftsmen in the Residential Quarter (used to repair Hidden Library enchantments)
 - **`greater_heal`**: Learned from Master Healer Lyria in the Healer's House (used to cure Elena's curse)
 - **`dispel`**: Learned from ancient texts in the Hidden Library (used to break magical barriers and curses)
-- **`nature_sense`**: Learned from the boundary standing stones at Forest Transition (used to locate water nymphs)
+- **`nature_sense`**: Learned by examining the Standing Stones at Forest Transition (reveals Water Nymphs when cast in Whispering Glade)
 - **`forest_speech`**: Learned from the Ancient Tree Spirit in Ancient Grove (used to find lost caravan)
-- **`prophetic_vision`**: Learned from Nyx in Heart of the Forest (reveals future threats, completes main quest)
+- **`prophetic_vision`**: Learned by speaking to Nyx after summoning her (completes The Gathering Storm when cast with Cedric present after all side quests)
 
 ## Act Completion Requirements
 
@@ -1274,23 +452,24 @@ Following the design rule that all side quests must be completed before the main
 2. **Supplies for the Journey** - Gather essential equipment
 3. **Echoes of the Past** - Uncover family heritage and historical context
 4. **The Healer's Apprentice** - Master advanced healing magic
-5. **Cedric's Lost Honor** - Restore ally's standing and deepen relationship
-6. **The Innkeeper's Daughter** - Demonstrate curse-breaking abilities
-7. **The Ancient Library** - Gain access to ancient magical knowledge
+5. **The Ancient Library** - Gain access to ancient magical knowledge
+
+These five completed quests, plus completion of The Hermit's Warning at Forest Transition, are required to open the route into Forest Entrance. The remaining town-started quests are cross-phase and complete later.
 
 #### Phase 2: Forest Integration (All Required)
 
 1. **The Hermit's Warning** - Receive essential forest survival knowledge
 2. **The Forest Guardian's Riddles** - Prove wisdom to forest spirits
 3. **Whispers in the Wind** - Establish alliance with forest creatures
-4. **The Merchant's Lost Caravan** - Complete final practical demonstration
+4. **The Innkeeper's Daughter** - Break Elena's curse with healing, water, and Dispel
+5. **The Merchant's Lost Caravan** - Rescue Thorne's caravan and recover the Secret Documents
+6. **Cedric's Lost Honor** - Present the recovered evidence to the Lord Commander
 
 #### Phase 3: Spiritual Ascension (Final Test)
 
-1. **Meeting with Nyx** - Present all tokens and offerings
-2. **Wisdom Trials** - Demonstrate growth in all areas (combat, healing, wisdom, environmental stewardship)
-3. **Prophetic Vision Grant** - Receive ultimate magical ability
-4. **Understanding of Destiny** - Comprehend the true scope of coming challenges
+1. **Summon Nyx** - Use the three charms at the Offering Altar in Heart of the Forest
+2. **Receive Nyx's gifts** - On the first conversation, Nyx grants Prophetic Vision, Nyx's Token, and the Forest Heart Crystal
+3. **Complete the main quest** - After all side quests are complete, cast Prophetic Vision while Sir Cedric is in the same room
 
 ### Key Story Revelations at Completion
 
@@ -1298,7 +477,7 @@ Following the design rule that all side quests must be completed before the main
 
 - **Elior:** Transformed from village hero to recognized magical practitioner with prophetic abilities
 - **Sir Cedric:** Honor restored, becomes trusted ally for future challenges
-- **Relationship Network:** Established alliances with healers, forest spirits, and nobility
+- **Allies:** Earned support from Lyria, the forest spirits, and Sir Cedric through completed quests
 
 #### Lore and World Understanding
 
@@ -1315,6 +494,8 @@ Following the design rule that all side quests must be completed before the main
 - **Leadership Recognition:** Established reputation as someone capable of great deeds
 
 ### Optional Content for Extended Exploration
+
+The following are future-content ideas only; they are not implemented in Act II.
 
 #### Additional Character Interactions
 
@@ -1336,428 +517,32 @@ Following the design rule that all side quests must be completed before the main
 
 The completion of Act II marks Elior's transformation from a promising young hero to a true magical practitioner with the knowledge, abilities, and alliances needed to face the greater challenges that lie ahead. The act ensures that players have fully engaged with the world, its characters, and its magical systems before proceeding to more complex challenges.
 
-## Technical Implementation Considerations
+## Technical Implementation
 
-### Quest Management System Integration
+Act II is browser-based TypeScript content under `web/src/act2/`, using the shared engine in `web/src/engine/`. Its Vue UI accesses the engine through `GameController` and `useBridge`; Act classes are loaded as separate chunks.
 
-#### Quest Dependency Tracking
-
-- **Prerequisite Validation:** System must check that all prerequisite quests are completed before allowing new quest triggers
-- **Phase Management:** Clear separation between Greendale Phase, Forest Phase, and Final Phase quests
-- **Completion Validation:** Main quest "The Gathering Storm" cannot be completed until ALL side quests are finished
-
-#### Quest State Management
-
-- **Character State Updates:** Character dialogue and interactions must change based on quest completion status
-- **Item Dependencies:** System must track which items are required for which quest progressions
-- **Spell Prerequisites:** Spell learning must validate that proper conditions and prerequisites are met
-
-### Character Interaction Architecture
-
-#### Dialogue System Requirements
-
-- **Multiple Interaction Types:** Quest giving, teaching, trading, and relationship building
-- **State-Dependent Responses:** Character responses change based on relationship level and quest progress
-- **Choice Impact Tracking:** Player dialogue choices affect relationship scores and future interactions
-
-#### Relationship Management
-
-- **Relationship Levels:** Stranger → Acquaintance → Friend → Trusted Ally
-- **Progress Tracking:** System tracks relationship progression through quest completion and dialogue choices
-- **State Persistence:** Character relationships must be saved and maintained across game sessions
-
-### Spell Learning System Architecture
-
-#### Learning Condition Validation
-
-- **Prerequisites Check:** Verify character has required prior knowledge/spells before allowing new spell learning
-- **Environmental Conditions:** Some spells require specific locations or items to be learned
-- **Character Readiness:** System validates that character has shown appropriate growth for advanced magic
-
-#### Spell Usage Tracking
-
-- **Contextual Availability:** Certain spells only usable in appropriate situations
-- **Progress Integration:** Spell usage tied to quest progression and puzzle solving
-- **Power Scaling:** Magic effectiveness should reflect character's growing mastery
-
-### World State Management
-
-#### Location Access Control
-
-- **Progressive Unlocking:** Forest areas locked until appropriate quests completed
-- **Item-Gated Areas:** Some locations require specific items for safe access
-- **Character-Gated Content:** Certain NPCs/content only available after relationship building
-
-#### Persistent World Changes
-
-- **Quest Impact:** Completed quests should leave lasting changes in the world
-- **Character Memory:** NPCs remember player actions and reference them in future interactions
-- **Environmental Changes:** Some magical actions should have visible world impact
-
-### Save System Integration
-
-#### Comprehensive State Tracking
-
-- **Quest Progress:** All quest states, including partially completed objectives
-- **Character Relationships:** Current relationship levels with all NPCs
-- **Spell Knowledge:** Which spells learned and under what conditions
-- **Item States:** Location and usage status of all quest-relevant items
-- **World Changes:** Any permanent alterations to the game world
-
-#### Compatibility Considerations
-
-- **Game.py Integration:** All new systems must work with existing game engine
-- **GameState.py Compatibility:** Quest and character states must integrate with existing state management
-- **Quest.py Extension:** New quest types must extend existing Quest base class
-- **UI System Integration:** All new features must work with existing user interface
-
-### Testing Requirements
-
-#### Unit Testing Scope
-
-- **Quest Logic:** Individual quest trigger, update, and completion logic
-- **Character Interactions:** Dialogue trees and relationship progression
-- **Spell Learning:** Prerequisites, conditions, and learning validation
-- **Item Dependencies:** Proper item usage and requirement checking
-
-#### Integration Testing Focus
-
-- **Quest Chain Validation:** Ensure quest dependencies work correctly across the entire act
-- **Character Arc Progression:** Verify character development happens appropriately
-- **Spell System Integration:** Test spell learning and usage in context
-- **World State Consistency:** Ensure all systems maintain consistent world state
-
-#### End-to-End Validation
-
-- **Complete Act Playthrough:** Verify act can be completed successfully following the golden path
-- **Alternative Path Testing:** Ensure different quest completion orders work correctly
-- **Save/Load Functionality:** Test that all progress saves and loads correctly
-- **Character Persistence:** Verify relationships and character states persist properly
+- **Quests:** `Act2` registers the act's quests. Each quest implements its own trigger and completion checks, using `GameState` story flags, inventory, spell knowledge, and quest state. The Gathering Storm's final completion is additionally gated on every side quest being complete.
+- **Interactions and world state:** Characters, items, and rooms own their state-dependent interactions. Story flags, serializable class fields, dynamic NPCs/items, and gated exits represent changes in the world; there is no separate dialogue-choice or relationship-score system.
+- **Spells:** Spell acquisition is implemented by the relevant character/item interaction. Spell effects inspect the current room, target, inventory, and story flags as needed.
+- **Save compatibility:** Act content classes are registered in `web/src/act2/classes.ts`. Mutable state uses serializable fields and plain objects/arrays; Act II's integration tests cover save/load round-tripping.
+- **Tests:** Vitest unit tests live next to the content they cover. `Act2.integration.test.ts` exercises the golden path, quest completion, and save/load behavior; browser end-to-end tests live under `web/e2e/`.
 
 ## Golden Path (Optimal Solution to Complete Act II)
 
-1. **Mountain Path:**
+The implemented command sequence is `ACT2_GOLDEN_PATH` in `web/src/act2/Act2GoldenPath.ts`. It completes all side quests and intentionally stops before the player performs the final main-quest action. The route and interactions are:
 
-   - Arrive from Willowbrook. _Elior travels the winding mountain trail, seeing Greendale ahead._
-   - Take Walking Stick. _Walking Stick is added to inventory._
-   - Speak to Mountain Hermit. _The hermit shares warnings about the changing times._
-   - Receive Training Sword from Mountain Hermit. _Training Sword is added to inventory._
-   - Examine the camp site to find an Entry Pass to Greendale (dropped by a previous traveler).
-   - Take Entry Pass. _Entry Pass is added to inventory._
-
-2. **Greendale Gates:**
-
-   - Give Entry Pass (found at the Mountain Path camp site) to Gate Captain. _The captain recognizes the seal and waves Elior through with respect._
-     - Item used: `Entry Pass` (for identification)
-   - Not possible to search room while Gate Captain is present.
-   - Talk to Gate Captain for city information. _Captain says that you will need a map to find your way in the city._
-   - Search the room _City Map is revealed._
-   - Take City Map. _City Map is added to inventory._
-
-3. **Main Square:**
-
-   - Use City Map to orient yourself in Greendale. _The map reveals important locations and prevents getting lost in the maze of streets._
-     - Item used: `City Map` (navigation)
-     - **Navigation Rule:** As long as the map has not been used, moving in any direction other than back to Greendale Gates should return a message that you are lost and automatically return back to Main Square.
-   - Examine City Notice Board. _Elior reads about local events and a posting seeking brave souls for "The Gathering Storm."_
-   - Talk to Town Crier. _Crier mentions Sir Cedric seeks heroes and directs Elior to the castle._
-   - Take Merchant's Flyer. _Merchant's Flyer is added to inventory._
-
-4. **Castle Approach:**
-
-   - Give Entry Pass to Herald. _The herald examines the pass and grants formal audience rights._
-     - Item used: `Entry Pass` (for castle access)
-   - Talk to Castle Guard Captain. _Captain provides protocol for meeting Sir Cedric._
-
-5. **Castle Courtyard:**
-
-   - Talk to Sir Cedric. _Cedric explains "The Gathering Storm" quest - dark forces are gathering, and allies with magical knowledge are needed. He requests proof of Elior's abilities and commitment._
-     - Quest accepted: "The Gathering Storm"
-     - Quest accepted: "The Knight's Test"
-   - Use Training Sword to demonstrate combat skills. _Elior shows competence with the blade, earning Cedric's respect._
-     - Item used: `Training Sword` (demonstration)
-     - Quest completed: "The Knight's Test"
-
-6. **Market District:**
-
-   - Give Merchant's Flyer to Master Merchant Aldric. _The flyer serves as introduction and grants access to premium equipment._
-     - Item used: `Merchant's Flyer` (merchant introduction)
-   - Talk to Master Merchant Aldric. _Aldric offers quality survival gear for forest expeditions._
-   - Accept Cedric's supply gathering request. _Cedric mentioned needing proper equipment for the Enchanted Forest._
-     - Quest accepted: "Supplies for the Journey"
-   - Talk to Caravan Master Thorne. _Thorne desperately seeks help finding his lost caravan._
-     - Quest accepted: "The Merchant's Lost Caravan"
-   - Buy Forest Survival Kit and Enhanced Lantern from Master Merchant Aldric. _Items added to inventory._
-     - Item used: `coins` (payment)
-     - Item obtained: `Enhanced Lantern`, `Forest Survival Kit`
-
-7. **The Silver Stag Inn:**
-
-   - Talk to Innkeeper Marcus. _Marcus shares local rumors and mentions his daughter's curse._
-   - Talk to Barmaid Elena. _Elena appears sickly, clearly affected by dark magic._
-     - Quest accepted: "The Innkeeper's Daughter"
-   - Buy Room Key from Innkeeper Marcus and gather information. _Key obtained, local knowledge gained._
-   - Use Room Key to access Inn Rooms. _The private space allows Elior to study the Traveler's Journal safely._
-     - Item used: `Room Key` (access)
-   - Take Traveler's Journal. _Journal is added to inventory - contains historical references._
-
-8. **Return to Market District:**
-
-   - Buy Enhanced Lantern from Master Merchant Aldric. _Additional survival gear is added to inventory._
-   - Buy Quality Rope from Master Merchant Aldric. _Additional survival gear is added to inventory._
-     - Item used: `coins` (payment)
-     - Item obtained: `Quality Rope`
-     - Quest completed: "Supplies for the Journey"
-
-9. **Great Hall:**
-
-   - Give Entry Pass to Court Herald. _The herald presents Elior formally to the nobility._
-     - Item used: `Entry Pass` (formal presentation)
-   - Show Traveler's Journal to historians. _The journal provides crucial context for understanding historical records._
-     - Item used: `Traveler's Journal` (historical research)
-   - Read Ancient Chronicle. _Historical records mention Willowbrook and its connection to ancient powers._
-   - Search for records mentioning Willowbrook. _Discovery of old artifacts and documents._
-     - Quest accepted: "Echoes of the Past"
-
-10. **Residential Quarter:**
-
-    - Use Walking Stick to assist elderly residents. _Helping the community earns trust and demonstrates compassion._
-      - Item used: `Walking Stick` (community service)
-    - Look at local craftsmen at work. _Watching skilled artisans repair items, Elior learns the `mend` spell._
-      - Spell Learned: `mend` (repair magic)
-    - Take Healing Herbs. _Healing Herbs are added to inventory._
-    - Talk to families about local history. _Residents share stories about Greendale's past._
-
-11. **Healer's House:**
-
-    - Talk to Master Healer Lyria. _Lyria recognizes Elior's magical potential and explains her desperate need for a crystal focus._
-      - Quest accepted: "The Healer's Apprentice"
-    - Learn about patients on the brink of death. _Lyria explains that without a proper crystal focus, she cannot treat the most critically injured patients._
-    - Accept Lyria's crystal focus quest. _Lyria needs a crystal focus to amplify her healing magic for dying patients._
-    - Obtain Crystal Focus from Hidden Library (completed later). _This will be needed to help Lyria save lives._
-
-12. **Residential Quarter (Hidden Library Discovery):**
-
-    - Search basement areas. _Elior discovers a concealed entrance behind old storage._
-    - Find secret passage to Hidden Library. _A narrow tunnel leads to an ancient chamber._
-      - Quest accepted: "The Ancient Library"
-
-13. **Hidden Library:**
-
-    - Cast `mend` on damaged protective enchantments. _The magical barriers flicker and stabilize._
-      - Spell cast: `mend` (on magical barriers)
-    - Talk to Spectral Librarian. _The ghostly guardian tests Elior's worthiness to access the texts._
-      - The Spectral Librarian tells about Elior's heritage. _Reveals hints about family lineage._
-        - Quest completed: "Echoes of the Past"
-    - Read Ancient Spellbook. _From the tome's arcane knowledge, Elior learns the `dispel` spell._
-      - Spell Learned: `dispel` (counter-magic)
-    - Read Prophecy Scroll. _The scroll reveals ancient prophecies about the Chosen One and coming darkness._
-    - Use Crystal Focus to enhance magical understanding. _The focus amplifies comprehension of ancient texts._
-      - Item used: `Crystal Focus` (magical enhancement)
-    - Take Crystal Focus. _Crystal Focus is added to inventory._
-      - Quest completed: "The Ancient Library"
-
-14. **Return to Healer's House:**
-
-    - Give Crystal Focus to Master Healer Lyria. _Lyria uses the focus to amplify her healing magic for critically injured patients._
-      - Item given: `Crystal Focus`
-    - Assist with healing critically injured patients. _Elior helps treat patients on the brink of death, gaining practical experience._
-    - Learn advanced healing from Lyria. _Through careful instruction and with the crystal focus amplifying the magic, Elior masters the `greater_heal` spell._
-      - Spell Learned: `greater_heal` (enhanced healing magic)
-      - Quest completed: "The Healer's Apprentice"
-
-15. **Forest Transition:**
-
-    - Talk to Forest Hermit. _The hermit warns of forest dangers and offers protection._
-      - Quest accepted: "The Hermit's Warning"
-    - Use Forest Survival Kit to safely approach the magical boundary. _The protective gear shields Elior from harmful magical energies._
-      - Item used: `Forest Survival Kit` (magical protection)
-      - Quest completed: "The Hermit's Warning"
-    - Examine ancient standing stones. _The moss-covered runes pulse with ancient power._
-    - Use standing stones to learn nature magic. _The protective runes resonate, teaching Elior `nature_sense`._
-      - Spell Learned: `nature_sense` (forest awareness)
-    - Receive protective charm from hermit. _Protective Charm is added to inventory._
-
-16. **Forest Entrance:**
-
-    - Use Protective Charm to ward off hostile forest spirits. _The charm provides safe passage through the dangerous threshold._
-      - Item used: `Protective Charm` (spiritual protection)
-    - Use Enhanced Lantern to illuminate hidden paths. _The magical light reveals secret routes through the forest._
-      - Item used: `Enhanced Lantern` (navigation)
-    - Use Forest Map Fragment to navigate safely. _The partial map prevents dangerous wrong turns._
-      - Item used: `Forest Map Fragment` (navigation)
-    - Take Enchanted Acorn. _Enchanted Acorn is added to inventory._
-    - Talk to Forest Sprites. _Minor spirits provide guidance about deeper forest areas._
-      - Quest accepted: "The Forest Guardian's Riddles"
-
-17. **Ancient Grove:**
-
-    - Look at the silver-barked tree with reverence. _The ancient tree spirit awakens to Elior's presence._
-    - Give Enchanted Acorn to Ancient Tree Spirit. _The tree spirit accepts the gift with approval._
-      - Item used: `Enchanted Acorn` (offering)
-    - Talk to Ancient Tree Spirit. _The spirit shares wisdom of ages and teaches forest communication._
-      - Spell Learned: `forest_speech` (communicate with trees)
-    - Help solve the Ancient Grove's puzzle. _Using newly learned magic to assist forest creatures._
-      - Quest accepted: "Whispers in the Wind"
-
-18. **Whispering Glade:**
-
-    - Cast `nature_sense` to locate water nymphs. _The spell reveals shimmering forms by the stream._
-      - Spell cast: `nature_sense` (detection)
-    - Talk to Water Nymphs. _The nymphs pose riddles about the forest's secrets._
-    - Solve riddles using forest knowledge. _Correct answers earn the nymphs' trust._
-      - Quest completed: "The Forest Guardian's Riddles"
-    - Take Crystal-Clear Water. _Crystal Water is added to inventory._
-    - Take Moonflowers. _Moonflowers are added to inventory._
-
-19. **Return to Ancient Grove:**
-
-    - Complete helping forest creatures with newly learned magic. Ancient forest spirit shows the way to Nyx's home. _Full mastery of forest communication aids the spirits._
-      - Quest completed: "Whispers in the Wind"
-      - A pathway to the heart of the forest opens up
-
-20. **Return to The Silver Stag Inn:**
-
-    - Cast `greater_heal` on cursed Elena. _The enhanced healing magic battles the dark curse._
-      - Spell cast: `greater_heal` (on Elena)
-    - Use Crystal-Clear Water to purify the curse. _The pure water breaks the remaining dark magic._
-      - Item used: `Crystal-Clear Water` (purification)
-    - Cast `dispel` to break the final curse bindings. _The counter-magic completely frees Elena._
-      - Spell cast: `dispel` (curse breaking)
-      - Quest completed: "The Innkeeper's Daughter"
-    - Receive Druidic Charm from grateful Innkeeper Marcus. _Marcus presents an ancient charm as thanks for saving his daughter._
-      - Item obtained: `Druidic Charm`
-
-21. **Search for Lost Caravan (Forest Areas):**
-
-    - Cast `forest_speech` to communicate with woodland creatures. _Animals provide clues about the caravan's location, but it is located in a ravine._
-      - Spell cast: `forest_speech` (investigation)
-    - Use Quality Rope to traverse difficult forest terrain. _The rope allows safe passage through the ravine._
-      - Item used: `Quality Rope` (terrain navigation)
-    - Secure the caravan and ensure safe passage. _Caravan is safely recovered for Thorne._
-
-22. **Return to Market District:**
-
-    - Talk to Caravan Master Thorne with good news. _Thorne rewards Elior with secret documents._
-      - Item obtained: `Secret Documents`
-      - Quest completed: "The Merchant's Lost Caravan"
-
-23. **Castle Courtyard (Cedric's Honor Quest):**
-
-    - Talk to Training Master. _The training master shares rumors about Sir Cedric's past military service._
-    - Talk to Squires. _The squires whisper about their mentor's disgrace and lost honor._
-    - Search under stone benches. _Discovers a Squire's Diary containing details about Cedric's past._
-      - Item obtained: `Squire's Diary`
-    - Read Squire's Diary. _The diary reveals that secret documents from the city of Heavensforth would clear Cedric's name, but these documents mysteriously went missing when the caravan transporting them arrived. The diary suggests the documents may have been lost or stolen during the journey._
-      - Quest accepted: "Cedric's Lost Honor"
-
-24. **Return to Great Hall:**
-
-    - Read Secret Documents to prove Sir Cedric's innocence. _The documents contain evidence that clears Cedric of past accusations._
-      - Item used: `Secret Documents` (evidence of innocence)
-    - Present evidence to Lord Commander. _Official vindication restores Cedric's honor._
-      - Quest completed: "Cedric's Lost Honor"
-    - Talk to Sir Cedric again. stepReceive Nature's Charm from Cedric. _In gratitude, Cedric presents a sacred charm blessed by ancient knights._
-      - Item received: `Nature's Charm` (third sacred charm)
-
-25. **Heart of the Forest:**
-
-    - Look at Nyx's tree with all forest tokens. _The magnificent tree glows with recognition._
-    - Use the three sacred charms to summon Nyx. _Place Druidic Charm, Protective Charm, and Nature's Charm on the offering altar._
-      - Items used: `Druidic Charm`, `Protective Charm`, and `Nature's Charm` (summoning ritual)
-    - Talk to Nyx. _The forest sprite acknowledges Elior as a true friend of nature._
-    - Learn ultimate divination magic from Nyx. _She grants the power to see what is to come._
-      - Spell Learned: `prophetic_vision` (see possible futures)
-    - Receive Nyx's Token. _Nyx's Token is added to inventory._
-    - Receive Forest Heart Crystal. _Forest Heart Crystal is added to inventory._
-    - Cast `prophetic_vision` to see future threats. _Visions reveal the true scope of the gathering storm._
-      - Spell cast: `prophetic_vision` (divination)
-
-26. **Return to Castle Courtyard:**
-    - Talk to Sir Cedric with new knowledge. _Cedric is amazed by Elior's growth and magical mastery._
-    - Share prophetic visions of coming darkness. _The knowledge helps Cedric prepare defenses._
-    - Receive Cedric's blessing for the next phase. _The knight pledges his support for future challenges._
-      - Quest completed: "The Gathering Storm"
+1. **Mountain Path and city entry:** Take the Walking Stick, speak to the Mountain Hermit for the Training Sword, examine the Camp Site and take the Entry Pass. At Greendale Gates, give the pass to the Gate Captain, speak to the captain, then search for and take the City Map.
+2. **Greendale orientation and the castle:** Use the City Map in Main Square, examine the notice board, speak with the Town Crier, and take the Merchant's Flyer. At Castle Approach, show the Entry Pass to the Herald and speak with the Castle Guard Captain. In Castle Courtyard, meet Sir Cedric, use the Training Sword, and speak with him again to complete The Knight's Test and receive Supplies for the Journey.
+3. **Market and inn:** Give the Merchant's Flyer to Aldric, buy the Forest Survival Kit and Enhanced Lantern, and speak with Caravan Master Thorne to start The Merchant's Lost Caravan. At The Silver Stag Inn, speak with Marcus and Elena, buy and use the Room Key, then search Inn Rooms and take the Coins and Traveler's Journal. Return to the Market District and buy Quality Rope to complete Supplies for the Journey.
+4. **Archives, community, and healing apprenticeship:** In Great Hall, present the Entry Pass to the Court Herald and give the Traveler's Journal to the Historians, then search the archives. In Residential Quarter, give the Walking Stick to the Families and speak with the Local Craftsmen and Families. Speak with Lyria, discover the Hidden Library by searching, and enter through the secret passage. Cast `mend` on the Protective Enchantments, speak with the Spectral Librarian, use the Ancient Chronicle, and take the Crystal Focus. Return to Lyria and give her the focus to complete The Healer's Apprentice and learn `greater_heal`.
+5. **Forest threshold and riddles:** At Forest Transition, examine the Standing Stones to learn `nature_sense`, speak with the Forest Hermit, and use the Forest Survival Kit. In Forest Entrance, take the Enchanted Acorn, use the Protective Charm and Enhanced Lantern there, and speak with the Forest Sprites. In Ancient Grove, examine the Silver-Barked Tree to awaken its spirit, give it the Acorn, and take the Silver Leaves. In Whispering Glade, cast `nature_sense`, speak with the Water Nymphs, and answer `tree`, `water`, and `ants`; then take the Crystal-Clear Water and Moonflowers. Return to Ancient Grove and give the Moonflowers to the spirit while carrying the water to complete Whispers in the Wind and open the path to the Heart of the Forest.
+6. **Resolve cross-phase quests:** Return to the inn and cure Elena in order with `greater_heal`, Crystal-Clear Water, and `dispel`; speak with Marcus to receive the Druidic Charm. In the forest, cast `forest_speech`, use Quality Rope with the Ravine, and return to Thorne for the Secret Documents. In Castle Courtyard, speak with the Training Master and Squires, search for and read the Squire's Diary. In Great Hall, examine the Secret Documents and give them to the Lord Commander; speak with Sir Cedric to complete his honor quest and receive Nature's Charm.
+7. **Summon Nyx and finish the act:** At Heart of the Forest, use the Druidic Charm with the Offering Altar while carrying the Protective Charm and Nature's Charm, then speak with Nyx to receive `prophetic_vision`, Nyx's Token, and the Forest Heart Crystal. Return to Castle Courtyard and cast Prophetic Vision while Sir Cedric is present. This final cast completes The Gathering Storm only after every side quest is complete.
 
 ## Quest Completion Verification
 
-**All Required Greendale Phase Quests Completed:**
+The five quests gating entry into the forest are The Knight's Test, Supplies for the Journey, Echoes of the Past, The Healer's Apprentice, and The Ancient Library. The Hermit's Warning must also be completed at Forest Transition. The remaining side quests are cross-phase: The Forest Guardian's Riddles, Whispers in the Wind, The Innkeeper's Daughter, The Merchant's Lost Caravan, and Cedric's Lost Honor. The final cast of Prophetic Vision is blocked until all eleven side quests are complete and Sir Cedric is in the room.
 
-- ✅ **The Knight's Test** (Step 5) - Established trust with Sir Cedric
-- ✅ **Supplies for the Journey** (Step 8) - Gathered essential equipment
-- ✅ **Echoes of the Past** (Step 9) - Uncovered family heritage and historical context
-- ✅ **The Healer's Apprentice** (Step 14) - Mastered advanced healing magic
-- ✅ **Cedric's Lost Honor** (Step 24) - Restored ally's standing and deepened relationship
-- ✅ **The Innkeeper's Daughter** (Step 20) - Demonstrated curse-breaking abilities
-- ✅ **The Ancient Library** (Step 13) - Gained access to ancient magical knowledge
+`ACT2_GOLDEN_PATH` completes those eleven side quests; its integration test deliberately leaves The Gathering Storm for the player to finish. The final step after the declared route is `cast prophetic vision on sir cedric`.
 
-**All Required Forest Phase Quests Completed:**
-
-- ✅ **The Hermit's Warning** (Step 15) - Received essential forest survival knowledge
-- ✅ **The Forest Guardian's Riddles** (Step 18) - Proved wisdom to forest spirits
-- ✅ **Whispers in the Wind** (Step 19) - Established alliance with forest creatures
-- ✅ **The Merchant's Lost Caravan** (Step 22) - Completed final practical demonstration
-
-**All Required Spells Learned:**
-
-- ✅ **`mend`** (Step 10) - From craftsmen, used for library enchantments
-- ✅ **`greater_heal`** (Step 11) - From Lyria, used for curse breaking
-- ✅ **`dispel`** (Step 13) - From ancient texts, used for curse breaking
-- ✅ **`nature_sense`** (Step 15) - From standing stones, used for forest navigation
-- ✅ **`forest_speech`** (Step 17) - From tree spirit, used for caravan rescue
-- ✅ **`prophetic_vision`** (Step 25) - From Nyx, completes main quest
-
-**Main Quest Completion:**
-
-- ✅ **The Gathering Storm** (Step 25) - Only completed after ALL side quests finished
-
-This Golden Path ensures that the design rule "all side quests must be completed before the main quest can be finished" is properly followed.
-
-**Items strictly necessary to complete Act II:**
-
-- `Entry Pass` (access to castle and formal recognition)
-- `City Map` (navigate Greendale streets)
-- `Merchant's Flyer` (introduction to Master Merchant Aldric)
-- `Room Key` (access to Inn Rooms for safe journal study)
-- `Traveler's Journal` (historical research in Great Hall)
-- `Walking Stick` (community service in Residential Quarter)
-- `Coins` (purchase essential supplies in Market District)
-- `Healing Herbs` (required for Lyria's training)
-- `Crystal Focus` (enhance magical understanding in Hidden Library, give to Lyria for healing quest)
-- `Forest Survival Kit` (magical protection at Forest Transition)
-- `Enhanced Lantern` (illuminate hidden forest paths)
-- `Quality Rope` (traverse difficult forest terrain for caravan rescue)
-- `Crystal Focus` (enhance magical understanding in Hidden Library)
-- `Forest Map Fragment` (safe navigation in Forest Entrance)
-- `Enchanted Acorn` (offering to Ancient Tree Spirit)
-- `Crystal-Clear Water` (purify Elena's curse, general purification)
-- `Moonflowers` (offering to Nyx)
-- `Secret Documents` (evidence to prove Sir Cedric's innocence)
-- `Druidic Charm` (first of three sacred charms needed to summon Nyx)
-- `Protective Charm` (second of three sacred charms needed to summon Nyx)
-- `Nature's Charm` (third of three sacred charms needed to summon Nyx)
-- (All spells: `mend`, `greater_heal`, `dispel`, `nature_sense`, `forest_speech`, `prophetic_vision` are necessary for progression)
-
-## Golden Path Item Usage Summary
-
-**Essential Items:**
-
-- **Entry Pass**: Used to gain audience with Sir Cedric and access to castle
-- **Healing Herbs**: Gathered for Lyria's quest, used throughout for healing
-- **Forest Guide/Map**: Helps navigate the Enchanted Forest safely
-- **Crystal-Clear Water**: Used to purify cursed items and enhance magical abilities
-- **Ancient Spellbook**: Required to learn advanced spells in Hidden Library
-
-**Optional but Helpful:**
-
-- **Lantern**: Illuminates hidden paths in the forest
-- **Protective Charms**: Provide safety when dealing with forest spirits
-- **Medical Supplies**: Enhanced healing capabilities when working with Lyria
-- **Forest Herbs**: Enable communication with forest spirits
-- **Magical Focus**: Enhances spellcasting abilities throughout the act
-
-**Quest-Specific Items:**
-
-- **Training Sword**: Proves combat skills to Sir Cedric
-- **Nyx's Token**: Final reward that enables prophetic visions
-- **Forest Heart Crystal**: Magical artifact from completing Nyx's trials
+**Progression-critical items and spells:** Entry Pass, City Map, Merchant's Flyer, Walking Stick, Coins, Room Key, Traveler's Journal, Training Sword, Forest Survival Kit, Enhanced Lantern, Quality Rope, Crystal Focus, Enchanted Acorn, Crystal-Clear Water, Moonflowers, Secret Documents, Protective Charm, Druidic Charm, Nature's Charm, `mend`, `greater_heal`, `dispel`, `nature_sense`, `forest_speech`, and `prophetic_vision`. The three charms are consumed by the Offering Altar. Nyx's Token and the Forest Heart Crystal are rewards, not prerequisites for the final cast.

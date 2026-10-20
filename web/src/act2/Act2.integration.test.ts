@@ -317,15 +317,12 @@ describe('Act 2 golden path', () => {
     expectCurrentRoom(state, "Healer's House")
     // Check that Master Healer Lyria is present
     expectCharacterInRoom(room(), 'Master Healer Lyria')
-    // Talk to Lyria with Healing Herbs to trigger quest (first interaction)
+    // Lyria requires the Crystal Focus for her apprenticeship.
     executeCommands(game, ['talk to master healer lyria'])
-    // Give Healing Herbs to Lyria with Healing Herbs to trigger quest (first interaction)
-    executeCommands(game, ['give healing herbs to master healer lyria'])
     expectQuests(state, [
       MAIN,
       "The Merchant's Lost Caravan",
       "The Innkeeper's Daughter",
-      "The Healer's Apprentice",
     ])
     expectSpellKnown(state, 'greater_heal', false)
 
@@ -341,7 +338,6 @@ describe('Act 2 golden path', () => {
       MAIN,
       "The Merchant's Lost Caravan",
       "The Innkeeper's Daughter",
-      "The Healer's Apprentice",
       'The Ancient Library',
     ])
 
@@ -369,7 +365,6 @@ describe('Act 2 golden path', () => {
       MAIN,
       "The Merchant's Lost Caravan",
       "The Innkeeper's Daughter",
-      "The Healer's Apprentice",
     ])
 
     // Step 14: Healer's House - again
@@ -1142,6 +1137,11 @@ describe("Cedric's Lost Honor quest updates", () => {
   it('updates its description when the diary is read and the documents examined', () => {
     const game = new Game([new Act2()])
     const state = game.state
+
+    const echoesQuest = state.getQuest('Echoes of the Past')
+    if (echoesQuest === null)
+      throw new Error('Missing Echoes of the Past quest')
+    state.completedQuests.push(echoesQuest)
 
     // Navigate to Castle Courtyard and accept quest
     state.currentRoom = state.allRooms.CastleCourtyard

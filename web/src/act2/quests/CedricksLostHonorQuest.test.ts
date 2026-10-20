@@ -2,10 +2,27 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import {
+  FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_EXAMINED_SECRET_DOCUMENTS,
   FLAG_READ_SQUIRES_DIARY,
 } from '../Act2StoryFlags'
 import { CedricksLostHonorQuest } from './CedricksLostHonorQuest'
+
+describe("Cedric's Lost Honor prerequisites", () => {
+  it('waits for Echoes of the Past to be completed', () => {
+    const game = new Game([new Act2()])
+    const quest = new CedricksLostHonorQuest()
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
+
+    expect(quest.checkTrigger(game.state)).toBe(false)
+
+    const echoes = game.state.getQuest('Echoes of the Past')
+    if (echoes === null) throw new Error('Missing Echoes of the Past quest')
+    game.state.completedQuests.push(echoes)
+
+    expect(quest.checkTrigger(game.state)).toBe(true)
+  })
+})
 
 describe("Cedric's Lost Honor log", () => {
   it('is a journal of the accusation until the diary is read', () => {

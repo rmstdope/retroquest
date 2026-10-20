@@ -4,10 +4,19 @@ import { FLAG_HERMITS_WARNING_COMPLETED } from '../Act2StoryFlags'
 import { ForestHermit } from '../characters/ForestHermit'
 import { StandingStones } from '../items/StandingStones'
 
+const PRE_FOREST_QUESTS = [
+  "The Knight's Test",
+  'Supplies for the Journey',
+  'Echoes of the Past',
+  "The Healer's Apprentice",
+  'The Ancient Library',
+]
+
 /**
  * Forest Transition room: flag-gated boundary into the enchanted interior.
  *
- * `getExits()` hides `east` until FLAG_HERMITS_WARNING_COMPLETED is set.
+ * `getExits()` hides `east` until Greendale preparation and the hermit's
+ * warning are complete.
  */
 export class ForestTransition extends Room {
   constructor() {
@@ -25,11 +34,16 @@ export class ForestTransition extends Room {
     })
   }
 
-  /** Return exits; hide east until the hermit's warning flag is set. */
+  /** Return exits; hide east until Greendale preparation and the hermit's warning are complete. */
   override getExits(gameState: GameState): Exits {
     const exits: Exits = { ...super.getExits(gameState) }
-    // Remove east exit if survival kit hasn't been used
-    if (!gameState.getStoryFlag(FLAG_HERMITS_WARNING_COMPLETED)) {
+    const greendaleQuestsComplete = PRE_FOREST_QUESTS.every((questName) =>
+      gameState.isQuestCompleted(questName),
+    )
+    if (
+      !greendaleQuestsComplete ||
+      !gameState.getStoryFlag(FLAG_HERMITS_WARNING_COMPLETED)
+    ) {
       delete exits.east
     }
     return exits

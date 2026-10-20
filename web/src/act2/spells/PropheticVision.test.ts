@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { SirCedric } from '../characters/SirCedric'
+import type { GameState } from '@/engine'
 import { PropheticVision } from './PropheticVision'
 import { FLAG_GATHERING_STORM_COMPLETED } from '../Act2StoryFlags'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
@@ -13,9 +14,20 @@ function createGameWithCedric(): Game {
   return game
 }
 
+/** Mark every Act II side quest complete for finale tests. */
+function completeAllSideQuests(gameState: GameState): void {
+  const sideQuests = [
+    ...gameState.nonActivatedQuests,
+    ...gameState.activatedQuests,
+    ...gameState.completedQuests,
+  ].filter((quest) => !quest.isMain())
+  gameState.completedQuests.push(...sideQuests)
+}
+
 describe('Prophetic Vision markup', () => {
   it('uses only known tags for the first vision', () => {
     const game = createGameWithCedric()
+    completeAllSideQuests(game.state)
 
     const answer = new PropheticVision().castSpell(game.state)
 
@@ -25,6 +37,7 @@ describe('Prophetic Vision markup', () => {
 
   it('uses only known tags for a repeated vision', () => {
     const game = createGameWithCedric()
+    completeAllSideQuests(game.state)
     const spell = new PropheticVision()
     spell.castSpell(game.state)
 
@@ -36,8 +49,19 @@ describe('Prophetic Vision markup', () => {
 })
 
 describe('Prophetic Vision casting', () => {
+  it('does not complete the Gathering Storm before all side quests are complete', () => {
+    const game = createGameWithCedric()
+    game.state.knownSpells.push(new PropheticVision())
+
+    const answer = game.cast('prophetic vision')
+
+    expect(answer.toLowerCase()).toContain('complete every side quest')
+    expect(game.state.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)).toBe(false)
+  })
+
   it('is cast by its spaced name and completes the Gathering Storm quest', () => {
     const game = createGameWithCedric()
+    completeAllSideQuests(game.state)
     game.state.knownSpells.push(new PropheticVision())
 
     const answer = game.cast('prophetic vision')

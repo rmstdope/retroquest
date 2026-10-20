@@ -25,9 +25,12 @@ export class CedricksLostHonorQuest extends Quest {
     })
   }
 
-  /** Quest is triggered when the Training Master is talked to. */
+  /** Trigger after the Training Master is talked to and Echoes is complete. */
   override checkTrigger(gameState: GameState): boolean {
-    return gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED)
+    return (
+      gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED) &&
+      gameState.isQuestCompleted('Echoes of the Past')
+    )
   }
 
   /** Quest is completed when the secret documents have been used to clear Cedric's name. */
