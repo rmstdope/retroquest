@@ -210,6 +210,33 @@ export function buildCommand(
   return parts.join(' ')
 }
 
+/**
+ * Whether the composer keeps a "Do it" button for `verb`: only where the
+ * command can still take more after it is complete (an optional last part) or
+ * where free text may be the last thing filled. Every other verb is performed
+ * as soon as its last choice is picked.
+ */
+export function keepsDoIt(verb: Verb): boolean {
+  return verb.slots.some(
+    (slot) => slot.optional || slot.sources.includes('text'),
+  )
+}
+
+/**
+ * Whether the command for `verb` is complete with nothing left to add: every
+ * slot, optional ones included, has a value. Such a command is performed
+ * straight away when a choice completes it.
+ */
+export function isFinished(
+  verb: Verb,
+  args: Array<string | null | undefined>,
+): boolean {
+  return (
+    buildCommand(verb, args) !== null &&
+    verb.slots.every((_, index) => !!args[index]?.trim())
+  )
+}
+
 /** The choices for one slot in the current situation (no duplicates). */
 export function targetsFor(slot: Slot, context: ActionContext): Target[] {
   const targets: Target[] = []

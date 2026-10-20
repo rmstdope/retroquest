@@ -256,9 +256,9 @@ test.describe('Lantern UI (the default)', () => {
       actions.getByRole('button', { name: "Go north to Mira's Hut" }),
     ).toBeVisible()
 
-    await actions.getByRole('button', { name: 'Take', exact: true }).click()
+    await actions.getByRole('button', { name: 'Use', exact: true }).click()
     await actions.getByRole('button', { name: 'Old Key', exact: true }).click()
-    await expect(page.getByTestId('preview')).toHaveText('take old key')
+    await expect(page.getByTestId('preview')).toHaveText('use old key')
     await expect(
       actions.getByRole('button', { name: 'Do it', exact: true }),
     ).toBeEnabled()
