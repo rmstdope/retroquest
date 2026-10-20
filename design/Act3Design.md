@@ -4,16 +4,18 @@
 
 Elior leaves the forest carrying the echo of Nyx’s last words: “Power follows purpose; purpose follows truth.” The air feels thinner now, charged with the knowledge that Malakar holds King Alden captive and leeches his life to call forth a kingdom-wide curse. The path ahead is no longer about learning who Elior might become—it is about deciding the kind of person he will be while the kingdom watches.
 
-Act III unfolds as a pilgrimage across Eldoria to recover three ancient relics—each bound to a virtue that shapes Elior’s character: Courage, Wisdom, and Selflessness. As Elior travels with Mira and Sir Cedric, he confronts enemies and riddles. He learns more of the creeping weight of his parents’ mystery. Rumors now speak plainly: Malakar once knew them, and he wants something that only Elior can unlock.
+Act III unfolds as a pilgrimage across Eldoria to recover three ancient relics—each bound to a virtue that shapes Elior’s character: Courage, Wisdom, and Selflessness. As Elior travels with Mira and Sir Cedric, he confronts enemies and riddles. He learns more of the creeping weight of his parents’ mystery. Elior has believed his parents were Malakar’s victims. By the end of the act he knows better: **Aren** and **Lysa** were Malakar’s closest friends, fellow Wardens of the Dawn who made the three virtue relics together with him, and they are **warded away, not dead**. At each relic site the Ancient Amulet glows and the curse over the land is visibly worse, and the dream voice returns once, in the Dragon’s Hall.
 
 ## Journey Between Relic Sites
 
-Mira, drawing on her mastery of arcane teleportation, whisks the party between the distant relic sites. Her spells bend space, allowing Elior, Cedric, and herself to traverse Eldoria’s vast reaches in moments—first to the storm-lashed coast, then to the volcanic slopes, and finally deep beneath the hills. Elior must read Mira’s Keepsake Note before the first departure. Before leaving the Sunken Ruins and Mount Ember, Elior must also uncover their parentage clues: the Sea-Sealed Letter and Charred Inscription. After securing all three relics and completing every non-main quest, Mira performs the Warding Rite, creating the Lifelight Elixir and completing “The Three Virtues.” She can then teleport the party to the fortress threshold. Examining the fortress gates marks Act III complete and begins Act IV.
+Mira, drawing on her mastery of arcane teleportation, whisks the party between the distant relic sites. Her spells bend space, allowing Elior, Cedric, and herself to traverse Eldoria’s vast reaches in moments—first to the storm-lashed coast, then to the volcanic slopes, and finally deep beneath the hills. Elior must read Mira’s Keepsake Note before the first departure. Before leaving the Sunken Ruins and Mount Ember, Elior must also uncover their parentage clues: the Sea-Sealed Letter and Charred Inscription. After securing all three relics and completing every non-main quest, Mira confesses who she is (see *Mira’s Confession*), and then performs the Warding Rite, creating the Lifelight Elixir and completing “The Three Virtues.” She can then teleport the party to the fortress threshold. Examining the fortress gates marks Act III complete and begins Act IV.
 
 ## The Stakes
 
 -   Malakar’s ritual drains King Alden’s essence. If the king falls, the binding magics protecting Eldoria unravel.
 -   The relics are needed to counter the ritual and shield Elior from Malakar’s influence.
+-   The curse is visibly worse at every relic site, because the same draining magic that is killing King Alden is eating the land (see *The Curse Worsens*).
+-   The relics were made by three friends. Malakar’s wisdom failed when time was short; the Phoenix’s riddle names the virtue he lacked.
 
 ## The Relics and Their Trials
 
@@ -22,6 +24,8 @@ Mira, drawing on her mastery of arcane teleportation, whisks the party between t
 The journey leads to the coast where the sea swallows a shattered temple known as the Sunken Ruins. At dusk, stone causeways rise from the surf, slick with salt and seaweed. Spectral water-wardens—spirits bound to guard the ruins—test intruders with fear itself.
 
 -   Trial: In the sanctum, a tide-born guardian tests Elior’s resolve. The accepted vow is “myself.” After both Sunken Ruins side quests are complete, the waters part and the Crystal of Light becomes available.
+-   Curse: dead sea birds line the causeways and the surf runs grey (see *The Curse Worsens*).
+-   Amulet: when Elior reads the Sea-Sealed Letter, the Ancient Amulet glows and shows a fragment of two faces, a man and a woman, laughing beside a third figure turned away.
 
 Result: Elior claims the Crystal. The causeways collapse behind them; the sea keeps its secrets.
 
@@ -29,7 +33,9 @@ Result: Elior claims the Crystal. The causeways collapse behind them; the sea ke
 
 Mount Ember is an old volcano whose heart pulses with elemental puzzles. Its slopes are etched with obsidian channels and brass mirrors that once guided sunlight to a high altar.
 
--   Guardian: A phoenix wrought of ember and memory rises from a crater. It asks, “What is wisdom when time is short?” The accepted answer is “patience.” After both Mount Ember side quests are complete, the Phoenix offers the Feather.
+-   Guardian: A phoenix wrought of ember and memory rises from a crater. It asks, “What is wisdom when time is short?” The accepted answer is “patience.” After both Mount Ember side quests are complete, the Phoenix offers the Feather. The Phoenix links patience to a friend who had none: it tells Elior that the Feather was made for a Warden who could not wait when time was short, and who is the reason the answer matters. It does not yet name Malakar to Elior; the Charred Inscription and the Dragon do.
+-   Curse: ash falls like rain over the slopes (see *The Curse Worsens*).
+-   Amulet: when Elior reads the Charred Inscription, the Ancient Amulet glows again and the faces sharpen: the woman is Lysa, and the third figure still has his back turned.
 
 Result: The Phoenix offers a single Feather, warm as a heartbeat.
 
@@ -37,17 +43,31 @@ Result: The Phoenix offers a single Feather, warm as a heartbeat.
 
 Beneath Eldoria’s oldest hills, the Caverns of Shadow breathe a chill that dims torches. There, a dragon sleeps—not a beast of greed, but a creature of burdens, keeping darkness pinned beneath its coils.
 
--   The Dragon: Ancient, wise, and tired. It knows Elior’s parents’ names. It reveals they bargained their safety for a chance to hide Elior from Malakar. The dragon guards a scale that can ward a soul—but taking it without due cause weakens the prison it maintains.
+-   The Dragon: Ancient, wise, and tired. It knows Elior’s parents’ names, Aren and Lysa, and calls them Wardens of the Dawn. It reveals that they made the relics together with their friend Malakar, and that they gave themselves to hide Elior and to hold shut the wound Malakar tore in time: they are warded away, not dead. The ward is anchored in the Ancient Amulet and in King Alden’s royal bindings, which is why Malakar drains the king. The dragon guards a scale that can ward a soul—but taking it without due cause weakens the prison it maintains.
+-   The refrain: the Dragon echoes “Power follows purpose; purpose follows truth.”
+-   The dream voice: after the Dragon’s Memory, the voice from the Prologue speaks once more in the hall, asking Elior for help in words he almost knows. The Dragon answers that it is “the friend who stayed behind,” and says no more.
+-   Curse: the mines fall silent and the cavern’s old dripping stops (see *The Curse Worsens*).
+-   Amulet: when Elior hears the Dragon’s Memory, the Ancient Amulet glows a third time, and Aren stands beside Lysa, hand in hand, while the third figure still has his back turned. The Dragon names the amulet as the anchor of the ward. The amulet shows the faces; it does not say whether the parents live.
 -   Offering: After hearing the Dragon’s Memory and examining the Old Oath Scrolls found in Echo Chambers, Elior offers the binding oath. The dragon yields the Scale when it believes the promise.
 
 Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns brighten, not with light, but with trust.
 
 ## Malakar’s Shadow and Parentage Hints
 
--   Letters and sigils resurface: Malakar’s early research mentions two apprentices who defied him—Elior’s parents.
--   In the Sunken Ruins, a mural shows a figure shielding a child from a storm of sigils.
--   On Mount Ember’s Mirror Terraces, the Charred Inscription records the parents’ promise and the three virtues that will shield Elior.
--   The dragon names a place where the parents vanished from sight—not dead, but warded away.
+-   Letters and sigils resurface. The Sea-Sealed Letter is written by **Aren and Lysa** to their friend Malakar, signed as fellow Wardens of the Dawn, and it begs him not to reach for time magic. They defied him as equals and as friends.
+-   In the Sunken Ruins, a mural shows two figures shielding a child from a storm of sigils while a third reaches toward them.
+-   On Mount Ember’s Mirror Terraces, the Charred Inscription records the three Wardens’ shared promise, the three virtues they bound into the relics, and the words “what we pour into the ward, the ward will keep.”
+-   The Dragon names the ward: Aren and Lysa became it, and they are warded away, not dead.
+
+## The Curse Worsens
+
+At each relic site the curse is visibly worse than the last, and the beat plays once, when Elior reads or hears that site’s Echoes clue (the letter, the inscription, the Dragon’s Memory).
+
+-   Sunken Ruins: dead sea birds on the causeways, the surf running grey.
+-   Mount Ember: ash rain falling over the slopes and the braziers guttering.
+-   Caverns of Shadow: silent mines, the miners’ picks hanging unmoved.
+
+When Mira next teleports the party she says the king is weaker. Together with the clues, this builds to the Act III row of the red line: Elior’s parents were not Malakar’s victims; they were his closest friends.
 
 ## Quests in Act III
 
@@ -62,8 +82,13 @@ Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns b
         -   Phase 1: Crystal of Light (Courage) — Requires completion of both Sunken Ruins side quests
         -   Phase 2: Phoenix Feather (Wisdom) — Requires completion of both Mount Ember side quests
         -   Phase 3: Dragon’s Scale (Selflessness) — Requires completion of both Caverns of Shadow side quests
-        -   Final: Warding Rite — After every Act III non-main quest is complete, Mira combines and consumes the three relics to create the Lifelight Elixir. This completes “The Three Virtues” and prepares the party for the Act IV assault.
+        -   Mira’s Confession — After every Act III non-main quest is complete and before the rite, Mira tells Elior the truth about herself (see *Mira’s Confession*)
+        -   Final: Warding Rite — After the confession, Mira combines and consumes the three relics to create the Lifelight Elixir. This completes “The Three Virtues” and prepares the party for the Act IV assault.
     -   Story Impact: Establishes the relics as the counter to Malakar’s ritual; examining the fortress gates completes Act III and begins Act IV.
+
+#### Mira’s Confession
+
+Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned from Aren, Lysa and Malakar, and when Aren and Lysa became the ward she settled in Willowbrook as its healer to watch over Elior. Grandmother knew, and kept the secret with her. Elior confronts her: “Why didn’t you tell me?” Mira answers that she could not risk the seal, that Malakar’s cloaked agent was searching Willowbrook for the amulet and any word could have reached him, and that she is telling him now because Elior has earned the truth. The amulet, she adds, is the anchor of the ward his parents became. The confession is a fixed dialogue, not a branching choice; Mira performs the rite on her next conversation.
 
 ### Storytelling Quest (Spans All Three Locations)
 
@@ -74,9 +99,10 @@ Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns b
     -   Objectives:
         1. Sunken Ruins — Examine the mural to reveal the Sea‑Sealed Letter, then read the letter before leaving the site
         2. Mount Ember — Read the Charred Inscription on the Mirror Terraces before leaving the site
-        3. Caverns of Shadow — Hear the Dragon’s Memory, a spoken recollection naming Elior’s parents and the ward they forged
+        3. Caverns of Shadow — Hear the Dragon’s Memory, a spoken recollection naming Elior’s parents, Aren and Lysa, and the ward they became
+    -   The clues, in order: the **Sea-Sealed Letter** (Aren and Lysa, fellow Wardens, begging their friend Malakar not to reach for time magic), the **Charred Inscription** (the three Wardens’ promise and the three virtues) and the **Dragon’s Memory** (the parents became the ward; they are “warded away, not dead”). The Ancient Amulet glows at each one.
     -   Completion: Find all three testimonies to complete the quest and explain how Elior was hidden from Malakar
-    -   Story Impact: Clarifies parentage and motive; this storytelling quest must be completed before Mira can perform the Warding Rite
+    -   Story Impact: Turns the red line: Elior’s parents were Malakar’s closest friends, not his victims. This storytelling quest must be completed before Mira can confess and perform the Warding Rite
 
 ### Side Quests (Required, by Location)
 
@@ -189,10 +215,10 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Description: A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully among her concoctions, her eyes bright with knowledge and kindness.
 -   Items:
     -   Healing Herbs (basic curatives and components)
-    -   Ancient Amulet (family heirloom reminder; story flavor)
+    -   Ancient Amulet (Elior’s family heirloom; glows at each Echoes clue and shows a fragment of his parents’ faces)
     -   Teleportation Focus (crystal prism used by Mira to anchor travel between relic sites)
 -   Characters:
-    -   Mira (mentor; explains the relics and initiates Act III)
+    -   Mira (mentor; explains the relics, initiates Act III and makes her confession before the Warding Rite)
     -   Sir Cedric (companion; accompanies Elior)
 -   Quest Relevance: Entry point to the Main Quest “The Three Virtues”; Mira’s Teleportation Focus enables travel to each relic location and, later, to the fortress threshold.
 -   Exits:
@@ -398,12 +424,24 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 #### Entrance to Malakar’s Fortress
 
--   Description: A blackstone bastion rises from a shattered ridge; gate sigils pulse like a heartbeat behind iron lattices. The air tastes of cold metal and distant thunder.
+-   Description: A blackstone bastion rises from a shattered ridge; gate sigils pulse like a heartbeat behind iron lattices. The air tastes of cold metal and distant thunder. The Ancient Amulet is warm in Elior’s hand: the act ends on the Act III row of the red line, with Elior knowing his parents were Malakar’s closest friends and are warded away, not dead.
 -   Items: Fortress Gates (examining the gates marks Act III complete)
 -   Characters: None
 -   Quest Relevance: Arrival point after securing all three relics; transition into Act IV’s assault on the fortress.
 -   Exits:
     -   None (teleportation arrival point only)
+
+## Optional choices
+
+Optional virtue moments; none blocks the golden path, none adds a puzzle. Each records one count in the same three counters as Act IV (mercy, truth, selfless) and changes a few lines of dialogue.
+
+| Where                         | The choice                                                                           | Records      |
+| ----------------------------- | ------------------------------------------------------------------------------------ | ------------ |
+| Collapsed Pier, Pier Warden   | Tell the Pier Warden the true state of the ruins instead of the comforting lie       | **truth**    |
+| Stillness Vestibule, Phantoms | Free the wandering phantoms without banishing them (`say rest to wandering phantoms`) before the chant; the chant then still completes the quest | **mercy**    |
+| Dragon’s Hall, the Dragon     | After taking the scale, mend the prison it weakened (`cast bless on sigils`), gaining nothing | **selfless** |
+
+The endings read the counters across the whole game, as described in `Act4Design.md`.
 
 ## Maps
 
@@ -515,8 +553,9 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 1. Room: Mira’s Hut
 
 -   Commands and yields:
+    -   `take ancient amulet` → Elior takes his family heirloom and carries it from now on.
     -   `talk to Mira` → Starts “The Three Virtues”; Mira explains the relics and gives Elior the Keepsake Note.
-    -   `examine keepsake note` → Reads the note and starts “Echoes of the Hidden Bond.”
+    -   `examine keepsake note` → Reads the note and starts “Echoes of the Hidden Bond.” The note is in Mira’s hand and says only that Elior must read what the relics’ makers left behind.
 
 2. Room: Mira’s Hut
 
@@ -532,7 +571,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 -   Commands and yields:
     -   `examine mural` → Reveals the Sea-Sealed Letter.
     -   `take letter` → Adds it to inventory.
-    -   `examine letter` → Reads the clue and records progress for “Echoes of the Hidden Bond”; Mira requires it before teleporting the party onward.
+    -   `examine letter` → Reads the clue (written by Aren and Lysa, fellow Wardens, to their friend Malakar) and records progress for “Echoes of the Hidden Bond”; the Ancient Amulet glows and shows a fragment of two faces; Mira requires the letter before teleporting the party onward. The dead sea birds on the causeway mark the first curse escalation.
     -   `cast light` → Reveals the Rusted Locker Key in a hollow.
     -   `take key` → Adds the key to inventory.
     -   `north` → Moves to Shoreline Markers.
@@ -612,7 +651,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 -   Commands and yields:
     -   `east` → Enters Mirror Terraces from Obsidian Outcrops.
     -   `search` → Shows sockets, mounts, and the etched light channels.
-    -   `examine inscription` → Reads the Charred Inscription and records the second “Echoes of the Hidden Bond” clue; Mira requires it before the party can leave Mount Ember.
+    -   `examine inscription` → Reads the Charred Inscription (the three Wardens’ promise) and records the second “Echoes of the Hidden Bond” clue; the amulet glows and the woman’s face is Lysa’s; ash rain falls; Mira requires the inscription before the party can leave Mount Ember.
     -   `examine mirror mount` → Provides lore on the mirror system and its purpose.
     -   `take brass mirror segment` → Takes the segment revealed by examining the mount.
     -   `use brass mirror segment with mirror mount` → Installs all segments in inventory; once all placed, the beam path forms.
@@ -645,7 +684,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `talk to phoenix` → Engages in a telepathic conversation, posing a riddle.
-    -   `say patience to phoenix` → Answers “What is wisdom when time is short?” and gives the Phoenix Feather directly to Elior.
+    -   `say patience to phoenix` → Answers “What is wisdom when time is short?”, links patience to a friend who had none, and gives the Phoenix Feather directly to Elior.
 
 18. Room: Lower Switchbacks
 
@@ -700,7 +739,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `east` → Enters Dragon’s Hall after “Oath of Stillness” is complete.
-    -   `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues).
+    -   `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues): Aren and Lysa, Wardens of the Dawn, became the ward and are warded away, not dead. The Dragon echoes “Power follows purpose; purpose follows truth.” The Ancient Amulet glows a third time and shows Aren and Lysa together, and the Dragon names it the anchor of the ward. The mines fall silent. The dream voice speaks once; the Dragon says it is “the friend who stayed behind.”
 
 25. Room: Dragon’s Hall (Relic Trial)
 
@@ -721,11 +760,12 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 27. Room: Mira’s Hut
 
 -   Commands and yields:
-    -   `talk to Mira` → After every Act III non-main quest is complete, Mira performs the Warding Rite, consumes the relics, creates the Lifelight Elixir, and completes “The Three Virtues.”
+    -   `talk to Mira` → After every Act III non-main quest is complete, Mira makes her confession: she was the Wardens’ pupil, stayed in Willowbrook to watch over Elior, and Grandmother knew. Elior asks, “Why didn’t you tell me?”
+    -   `talk to Mira` → Mira performs the Warding Rite, consumes the relics, creates the Lifelight Elixir, and completes “The Three Virtues.”
     -   `take Lifelight Elixir` → Adds the elixir to inventory.
     -   `talk to Mira` → Teleports the party to the Entrance to Malakar’s Fortress.
 
 28. Room: Entrance to Malakar’s Fortress
 
 -   Commands and yields:
-    -   `examine gates` → Marks Act III completion and the beginning of Act IV.
+    -   `examine gates` → Marks Act III completion and the beginning of Act IV, ending on the Act III row of the red line.
