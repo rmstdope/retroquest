@@ -1,0 +1,31 @@
+# The VPS's shared edge: the one Caddy that holds ports 80 and 443 and gets the HTTPS certificate for
+# every site on the server. It serves RetroQuest's built files from /srv/retroquest (put there by the
+# Deploy to VPS workflow) and forwards dominos.rmstdope.eu to the Dominos stack over its Docker
+# network. Lives in /opt/edge on the server; see docs/deploy.md.
+
+services:
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /srv/retroquest:/srv/retroquest:ro
+      - data:/data
+      - config:/config
+    networks:
+      - default
+      - dominos
+
+networks:
+  # Made by the Dominos stack (/opt/dominos); its Caddy answers there as "web".
+  dominos:
+    external: true
+    name: dominos_default
+
+volumes:
+  data:
+  config:

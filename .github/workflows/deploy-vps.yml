@@ -1,0 +1,120 @@
+# Publishes RetroQuest to the HostUp VPS: builds the web app and copies the built files to
+# /srv/retroquest, where the server's edge Caddy (deploy/edge) serves them at the VPS_SITE address.
+# See docs/deploy.md.
+#
+# Runs after every green CI run on main, for exactly the commit CI tested. Running it by hand
+# deploys main as it is now.
+#
+# Required repository configuration:
+#   secrets:   VPS_HOST (address), VPS_SSH_KEY (private key of the deploy user),
+#              VPS_KNOWN_HOSTS (the line `ssh-keyscan <host>` prints)
+#   variables: VPS_SITE (the address to check afterwards, e.g. https://retroquest.rmstdope.eu)
+name: Deploy to VPS
+
+on:
+    workflow_dispatch:
+    workflow_run:
+        workflows: ["CI"]
+        types: [completed]
+        branches: [main]
+
+permissions:
+    contents: read
+
+# One deploy at a time, and none is cancelled half way through copying.
+concurrency:
+    group: deploy-vps
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        # Only CI runs for pushes to main: a pull request from a fork's own "main" branch also matches.
+        if: >-
+            github.event_name == 'workflow_dispatch' ||
+            (github.event.workflow_run.conclusion == 'success' &&
+             github.event.workflow_run.event == 'push')
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        env:
+            SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        steps:
+            - name: Refuse to publish anything but main
+              env:
+                  REF: ${{ github.event.workflow_run.head_branch || github.ref_name }}
+              run: |
+                  if [ "$REF" != "main" ]; then
+                    echo "::error::Refusing to deploy '$REF'. This workflow publishes the live site and runs only from main."
+                    exit 1
+                  fi
+
+            - name: Check the server is configured
+              env:
+                  HOST: ${{ secrets.VPS_HOST }}
+                  KEY: ${{ secrets.VPS_SSH_KEY }}
+                  KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+                  SITE: ${{ vars.VPS_SITE }}
+              run: |
+                  missing=""
+                  [ -n "$HOST" ] || missing="$missing VPS_HOST(secret)"
+                  [ -n "$KEY" ] || missing="$missing VPS_SSH_KEY(secret)"
+                  [ -n "$KNOWN_HOSTS" ] || missing="$missing VPS_KNOWN_HOSTS(secret)"
+                  [ -n "$SITE" ] || missing="$missing VPS_SITE(variable)"
+                  if [ -n "$missing" ]; then
+                    echo "::error::Not configured to deploy. Missing:$missing. See docs/deploy.md."
+                    exit 1
+                  fi
+
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ env.SHA }}
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: npm
+                  cache-dependency-path: web/package-lock.json
+
+            - name: Build
+              working-directory: web
+              run: |
+                  npm ci
+                  npm run build
+
+            - name: Set up SSH
+              env:
+                  KEY: ${{ secrets.VPS_SSH_KEY }}
+                  KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+              run: |
+                  install -d -m 700 ~/.ssh
+                  printf '%s\n' "$KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+                  printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+            # New files are copied in beside the old ones and swapped in together at the end
+            # (--delay-updates), and files the new build no longer has are removed only after that
+            # (--delete-after), so a player loading the page mid-copy never gets half of each.
+            - name: Copy the build to the server
+              env:
+                  HOST: ${{ secrets.VPS_HOST }}
+              run: |
+                  rsync -rlz --checksum --delay-updates --delete-after \
+                    -e "ssh -i $HOME/.ssh/id_deploy -o BatchMode=yes" \
+                    web/dist/ "deploy@$HOST:/srv/retroquest/"
+
+            - name: Check the site answers
+              env:
+                  SITE: ${{ vars.VPS_SITE }}
+              run: |
+                  asset="$(grep -o '/assets/index-[^"]*\.js' web/dist/index.html | head -1)"
+                  for attempt in 1 2 3 4 5 6; do
+                    if curl -fsS --max-time 15 "$SITE/" | grep -qF "$asset" &&
+                       curl -fsS --max-time 15 -o /dev/null "$SITE$asset"; then
+                      echo "::notice::Deployed $SHA to $SITE"
+                      exit 0
+                    fi
+                    echo "Attempt $attempt: $SITE is not serving this build yet"
+                    sleep 10
+                  done
+                  echo "::error::$SITE did not serve this build after the deploy. On the server: cd /opt/edge && docker compose logs"
+                  exit 1
