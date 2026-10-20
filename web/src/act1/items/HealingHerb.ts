@@ -18,7 +18,7 @@ export class HealingHerb extends Item {
       '[character_name]Mira[/character_name] gently but firmly stops you. ' +
       "[dialogue]'Those herbs are part of my stores, " +
       '[character_name]Elior[/character_name]. They are not for taking, but for ' +
-      "healing those who truly need them. If you require healing, simply ask.'" +
+      "healing those who truly need them.'" +
       '[/dialogue]'
     )
   }

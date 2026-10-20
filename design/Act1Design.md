@@ -9,7 +9,7 @@
 
 - **Name:** Know your village
 
-  - **Trigger:** Grandmother encourages you to explore and get to know every corner of Willowbrook.
+  - **Trigger:** Leave Elior's Cottage and begin exploring Willowbrook.
   - **Completion:** Visit all areas in the village.
 
 - **Name:** Curiosity killed the cat
@@ -49,21 +49,17 @@
 
 - **Name:** The Faded Photograph
 
-  - **Trigger:** Search the attic or storage room in the farmhouse.
-  - **Completion:** Decipher the message and show it to Grandmother.
-  - **Rewards:** New lead on the family mystery, unlocks a hidden room or item.
-
-- **Name:** The Lost Letter
-
-  - **Trigger:** Search the farmhouse after speaking with Grandmother.
-  - **Completion:** Deliver the letter to Mira and discuss its contents.
+  - **Trigger:** Search Elior's Cottage and discover the photograph.
+  - **Completion:** Examine the photograph to read its message, then show it to Grandmother.
+  - **Reward:** Grandmother reveals that Elior's family is connected to the darkness threatening Eldoria.
 
 - **Name:** Shadows Over Willowbrook (Main Quest)
-  - **Trigger:** When the act start
-  - **Update:** Speak with Mira about the dream
-  - **Update:** Speak with Mira about the faded photograph
-  - **Update:** Speak with Mira about the lost letter
-  - **Update:** Examine the withered crop, the infected well and the darkened glade and report back to Mira
+  - **Trigger:** At the start of the act; Elior's dream introduces the mystery.
+  - **Update:** Investigate the withered crops in the Vegetable Field.
+  - **Update:** Speak with a villager about the disturbances in Willowbrook.
+  - **Update:** Examine the Village Well.
+  - **Update:** Discuss the crops, villagers' fears and well with Mira; she urges Elior to connect with nature.
+  - **Update:** Give the Rare Flower to Mira to unlock Elior's magic.
   - **Completion:** When act 1 is completed
 
 ## Rooms
@@ -108,10 +104,10 @@
 ### 5. Mira’s Hut
 
 - **Description:** A fragrant hut filled with herbs and potions.
-- **Items:** ancient amulet (later).
-- **Unusable:** Healing herb (start).
+- **Items:** Ancient Amulet (visible from the start; Mira prevents pickup until journey preparations are complete, then awards it).
+- **Unusable:** Healing herb (Mira's stock; cannot be taken).
 - **Spells:** `heal`, `unlock`, `light` (learned from Mira).
-- **Usable Items:** Healing herb (restores health), rare flower (give to Mira).
+- **Usable Items:** Rare flower (give to Mira).
 - **Characters:** Mira (teaches basic magic, gives quests).
 - **Exits:** Village Square (south)
 
@@ -128,9 +124,9 @@
 ### 7. General Store
 
 - **Description:** A cluttered shop with shelves of goods.
-- **Items:** apple (start), rope (later), matches (start).
+- **Items:** Rope (store stock), apple (bonus with each purchase), matches (store stock; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act.
 - **Spells:** None.
-- **Usable Items:** Coin (2nd, purchase rope).
+- **Usable Items:** Coin (2nd, purchase rope and receive an apple bonus).
 - **Characters:** Shopkeeper (sells goods, shares gossip).
 - **Exits:** Village Square (west), Blacksmith’s Forge (south)
 
@@ -139,7 +135,7 @@
 - **Description:** An old stone well with clear water.
 - **Items:** Shiny ring (later), Well (start).
 - **Spells:** None.
-- **Usable Items:** Bucket (draws water, observe murkiness), fishing rod (retrieve ring), magnet (retrieve ring), stick (retrieve ring), `purify` spell (on well water).
+- **Usable Items:** Bucket (draws water and reveals murkiness), fishing rod + magnet + stick (assemble an extended magnetic fishing rod to retrieve the ring after purifying the well), `purify` spell (target the Well item after examining it).
 - **Characters:** None.
 - **Exits:** Vegetable Field (west), Blacksmith’s Forge (east), Abandoned Shed (south)
 
@@ -151,7 +147,7 @@
 - **Spells:** None.
 - **Usable Items:** Key (on shed door), mysterious box (unlock with spell, open to get map).
 - **Characters:** None.
-- **Exits:** Blacksmith’s Forge (north), Old Mill (south)
+- **Exits:** Village Well (north), Old Mill (south)
 
 ### 10. Old Mill
 
@@ -188,7 +184,7 @@
 - **Items:** Rare flower (later).
 - **Unusable:** shiny pebble (start).
 - **Spells:** `grow` (learned from inscriptions on a stone).
-- **Usable Items:** `light` spell (near moss-covered stone).
+- **Usable Items:** `light` spell (cast in the glade to illuminate the moss-covered stone).
 - **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer).
 - **Exits:** Forest Path (north), Village Chapel (south)
 
@@ -197,8 +193,8 @@
 - **Description:** A small stone chapel with stained glass windows.
 - **Items:** Candle (start), hidden locket (later).
 - **Unusable:** prayer book (start).
-- **Spells:** `bless` (learned from Priest).
-- **Usable Items:** Candle (use with matches, lights dark corners, reveals a hidden locket), hidden locket (show to Priest), `bless` spell (cast on self for protection).
+- **Spells:** `bless` (learned when picking up the hidden locket; the Priest recognizes it).
+- **Usable Items:** Candle (use with matches, lights dark corners, reveals a hidden locket), hidden locket (picking it up teaches `bless`), `bless` spell (cast on self for protection).
 - **Characters:** Priest (offers blessings, shares lore).
 - **Exits:** Hidden Glade (north), Road to Greendale (east)
 
@@ -237,7 +233,7 @@
 
 - **`revive`**: Learned from Grandmother in Elior’s Cottage (Step 1).
 - **`purify`**: Learned from the Fisherman at the Riverbank after giving him a fish (Step 12).
-- **`bless`**: Learned from the Priest in the Village Chapel after showing him the Hidden Locket (Step 17).
+- **`bless`**: Learned when picking up the Hidden Locket in the Village Chapel; the Priest recognizes the relic (Step 17).
 - **`heal`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
 - **`unlock`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
 - **`light`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
@@ -245,7 +241,7 @@
 
 ## Action that completes the act:
 
-After receiving the ancient amulet from Mira and gathering enough supplies and knowledge, use the `map` on the Road to Greendale. This unlocks the path to Greendale and triggers the transition to Act II.
+After receiving the Ancient Amulet from Mira, completing the _Preparing for the road_ quest, and completing every other side quest, use the `map` on the Road to Greendale. This unlocks the path to Greendale and triggers the transition to Act II.
 
 ## Golden Path (Optimal Solution to Complete Act I)
 
@@ -256,6 +252,8 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
       - Read journal. Opens up new conversion story with Grandmother.
     - Speak to Grandmother for advice. _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell._
       - Spell Learned: `revive` (can not be used until magic is learned for real)
+    - Search the cottage and take the faded photograph.
+    - Examine the photograph to read the message on its back, then show it to Grandmother to learn more about Elior's family.
     - **Note:** You cannot leave Elior’s Cottage until you have completed the sub-quest _Hint of Magic_ by learning the 'revive' spell from Grandmother.
 
 2.  **Vegetable Field:**
@@ -300,11 +298,10 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 8.  **General Store:**
 
-    - Take apple. _Apple is added to inventory._
-    - Use coin (2nd) to buy rope. _Coin (2nd) is removed from inventory, rope is added to inventory._
+    - Speak to the shopkeeper for gossip. _The shopkeeper mentions Mira’s knowledge of magic and lists the wares._
+    - Use coin (2nd) to buy rope. _Coin (2nd) is removed from inventory; rope and a bonus apple are added to inventory._
       - Item used: `coin` (2nd)
-      - Item obtained: `rope`
-    - Speak to shopkeeper for gossip. _Shopkeeper mentions Mira’s knowledge of magic._
+      - Items obtained: `rope`, `apple` (purchase bonus)
 
 9.  **Abandoned Shed (First Visit):**
 
@@ -346,8 +343,9 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 14. **Hidden Glade:**
 
-    - Observe deer. _The deer seem unusually calm, their gaze occasionally drifting towards an old, moss-covered stone._
-    - Take rare flower growing near the stone. _Rare flower is added to inventory._
+    - Rest in the glade after learning about the deer. _A magical deer appears, and a rare flower blooms near the moss-covered stone._
+    - Observe the deer. _The deer seems unusually calm, its gaze occasionally drifting towards the old, moss-covered stone._
+    - Take the rare flower growing near the stone. _Rare flower is added to inventory._
 
 15. **Village Chapel (First Visit - Part 1):**
 
@@ -383,7 +381,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
     - Cast `unlock` on the Mysterious Box. _A soft click is heard, and the intricate lock on the box springs open._
       - Spell used: `unlock`
-    - Open mysterious box. _Inside, nestled on faded velvet, lies a fragment of an old `map`. An `Map` with writings on an ancient language is added to inventory._
+    - Open mysterious box. _Inside, nestled on faded velvet, lies a detailed map of Willowbrook and the surrounding areas, showing landmarks and paths that are not immediately obvious._
       - Item obtained: `map` (ESSENTIAL)
 
 20. **Return to Vegetable Field:**
@@ -396,21 +394,21 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 21. **Return to Village Well:**
 
-    - Use `fishing rod` with `magnet`. _Elior attaches the magnet to the fishing rod, transforming it into a `magnet fishing rod`._
+    - Use `fishing rod` with `magnet`. _Elior attaches the magnet to the fishing rod, transforming it into a `magnetic fishing rod`._
       - Item used: `magnet` (consumed)
-      - Item transformed: `fishing rod` becomes `magnet fishing rod`
-    - Use `magnet fishing rod` with `stick`. _Elior firmly attaches the stick to the magnet fishing rod, creating a `long magnet fishing rod` with extended reach._
+      - Item transformed: `fishing rod` becomes `magnetic fishing rod`
+    - Use `magnetic fishing rod` with `stick`. _Elior firmly attaches the stick to the magnetic fishing rod, creating an `extended magnetic fishing rod` with extended reach._
       - Item used: `stick` (consumed)
-      - Item transformed: `magnet fishing rod` becomes `long magnet fishing rod`
-    - Cast `purify` on the well water. _The water shimmers with a clear light, and a murky film on the surface dissipates. Peering down, Elior spots something metallic gleaming at the bottom._
+      - Item transformed: `magnetic fishing rod` becomes `extended magnetic fishing rod`
+    - Cast `purify` on the `Well` item. _The water shimmers with a clear light, and a murky film on the surface dissipates. Peering down, Elior spots something metallic gleaming at the bottom._
       - Spell used: `purify`
-    - Use `long magnet fishing rod` on well. _Elior carefully lowers the extended magnetic tool into the depths, and it snags a shiny ring! Shiny ring is added to inventory._
-      - Item used: `long magnet fishing rod`
+    - Use `extended magnetic fishing rod` with the well. _Elior carefully lowers the extended magnetic tool into the depths, and it snags a shiny ring! Shiny ring is added to inventory._
+      - Item used: `extended magnetic fishing rod`
       - Item obtained: `shiny ring`
 
 22. **Return to Hidden Glade:**
 
-    - Cast `light` near the moss-covered stone. _As the magical light washes over the stone, faint inscriptions glow into view. Studying them, Elior learns the `grow` spell, a secret of the glade._
+    - Cast `light` while in the Hidden Glade. _The spell illuminates the moss-covered stone, and faint inscriptions glow into view. Studying them, Elior learns the `grow` spell, a secret of the glade._
       - Spell used: `light`
       - Spell Learned: `grow`
 
@@ -457,7 +455,7 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
     - `Sharp Knife` (to cut vines on Forest Path, enabling access to the `stick` and the Hidden Glade for the `rare flower`)
     - `Candle` (to find `hidden locket` in Village Chapel)
     - `Matches` (to light `candle` in Village Chapel)
-    - `Hidden Locket` (to learn `bless` spell from Priest and get `travel cloak` from Grandmother)
+    - `Hidden Locket` (picking it up teaches `bless`; giving it to Grandmother obtains the `travel cloak`)
     - `Fishing Rod` (to catch `fish` for the `purify` spell, and to retrieve the `shiny ring`)
     - `Magnet` (to retrieve the `shiny ring` from the well)
     - `Fish` (to give to the Fisherman to learn the `purify` spell)
@@ -479,63 +477,71 @@ After receiving the ancient amulet from Mira and gathering enough supplies and k
 
 This list tracks items obtained in the Golden Path and their subsequent uses within Act I:
 
-1.  **`Bread`** (Obtained: Step 1):
+1.  **`Lantern`** (Available in Elior's Cottage from the start):
+    - Used in Step 1 to reveal the bread and Elior's journal.
+2.  **`Bread`** (Obtained: Step 1):
     - Used in Step 3 to feed chickens and obtain the `key`.
-2.  **`Rusty Hoe`** (Obtained: Step 2):
+3.  **`Faded Photograph`** (Obtained: Step 1):
+    - Examined and shown to Grandmother in Step 1 to complete the "Faded Photograph" quest.
+4.  **`Elior's Journal`** (Revealed in Step 1):
+    - Read in Step 1 to open a further conversation with Grandmother and learn `revive`.
+5.  **`Rusty Hoe`** (Obtained: Step 2):
     - Used in Step 2 to uncover the first `coin`.
     - Used in Step 7 to find a second `coin`.
-3.  **`Coin` (1st)** (Obtained: Step 2):
+6.  **`Coin` (1st)** (Obtained: Step 2):
     - Used in Step 6 to pay the Blacksmith to sharpen the `dull knife`.
-4.  **`Dull Knife`** (Obtained: Step 2):
+7.  **`Dull Knife`** (Obtained: Step 2):
     - Used in Step 6 by giving it to the Blacksmith to be sharpened into a `sharp knife`.
-5.  **`Withered carrot`** (Available in Vegetable Field from start):
-    - Transformed in Step 18 using `revive` spell to become `carrot`.
-6.  **`Egg`** (Obtained: Step 3):
-    - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
-7.  **`Key`** (Obtained: Step 3):
+8.  **`Withered Carrot`** (Available in Vegetable Field from the start):
+    - Revived in Step 20 to become `fresh carrot`, then taken into inventory.
+9.  **`Egg`** (Obtained: Step 3):
+    - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
+10. **`Key`** (Obtained: Step 3):
     - Used in Step 9 to open the Abandoned Shed door.
-8.  **`Bucket`** (Obtained: Step 4):
+11. **`Mysterious Box`** (Found in the Abandoned Shed in Step 9):
+    - Unlocked and opened in Step 19 to obtain the `map`.
+12. **`Bucket`** (Obtained: Step 4):
     - Used in Step 5 to draw water from the well for observation.
-9.  **`Sharp Knife`** (Obtained: Step 6):
-    - Used in Step 13 to cut through thick vines on the Forest Path, obtaining a `stick` and clearing the way necessary for later obtaining the `rare flower` (from Hidden Glade) and `wild berries` (from Forest Path via `grow` spell).
-10. **`Coin` (2nd)** (Obtained: Step 7):
+13. **`Sharp Knife`** (Obtained: Step 6):
+    - Used in Step 13 to cut through thick vines on the Forest Path and open the alcove containing the `stick`.
+14. **`Coin` (2nd)** (Obtained: Step 7):
     - Used in Step 8 to buy `rope` from the General Store.
-11. **`Apple`** (Obtained: Step 8):
-    - Fulfills Mira's quest requirement for "Food for the road" (implicitly used by Step 25 when Mira acknowledges quest completion).
-12. **`rope`** (Obtained: Step 8):
+15. **`Apple`** (Obtained: Step 8):
+    - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
+16. **`Rope`** (Obtained: Step 8):
     - Used in Step 10 to fix the mechanism in the Old Mill, revealing the `millstone fragment`.
-13. **`Fishing Rod`** (Obtained: Step 9):
+17. **`Fishing Rod`** (Obtained: Step 9):
     - Used in Step 12 to catch a `fish`.
-    - Used in Step 19 (with `magnet` and `stick`) to retrieve the `shiny ring` from the well.
-14. **`Magnet`** (Obtained: Step 9):
-    - Used in Step 19 (with `fishing rod` and `stick`) to retrieve the `shiny ring`.
-15. **`Millstone Fragment`** (Obtained: Step 10):
+    - Combined with the `magnet` and then the `stick` in Step 21 to create an `extended magnetic fishing rod`, which retrieves the `shiny ring` from the well.
+18. **`Magnet`** (Obtained: Step 9):
+    - Combined with the `fishing rod` in Step 21 to create a `magnetic fishing rod`.
+19. **`Millstone Fragment`** (Obtained: Step 10):
     - Used in Step 11 by giving it to the Blacksmith for information.
-16. **`Fish`** (Obtained: Step 12):
+20. **`Fish`** (Obtained: Step 12):
     - Used in Step 12 by giving it to the Fisherman to learn the `purify` spell.
-17. **`Stick`** (Obtained: Step 13):
-    - Used in Step 19 (with `fishing rod` and `magnet`) to retrieve the `shiny ring`.
-18. **`Rare Flower`** (Obtained: Step 14):
+21. **`Stick`** (Obtained: Step 13):
+    - Combined with the `magnetic fishing rod` in Step 21 to create an `extended magnetic fishing rod`.
+22. **`Rare Flower`** (Obtained: Step 14):
     - Used in Step 18 by giving it to Mira to learn spells and receive her quest.
-19. **`Matches`** (Obtained: Step 16):
-    - Used in Step 17 with `candle` to light a dark corner in the chapel, revealing the `hidden locket`.
-20. **`Candle`** (Available in Village Chapel from start or obtained elsewhere - TBD if player needs to find it first):
+23. **`Matches`** (Obtained: Step 16):
+    - Used in Step 17 with the `candle` to light a dark corner in the chapel, revealing the `hidden locket`.
+24. **`Candle`** (Available in Village Chapel from the start):
     - Used in Step 17 with `matches` to light a dark corner in the chapel, revealing the `hidden locket`.
-21. **`Hidden Locket`** (Obtained: Step 17):
-    - Used in Step 17 by showing it to the Priest to learn the `bless` spell.
-    - Used in Step 23 by giving it to Grandmother to receive the `travel cloak`.
-22. **`Map`** (Obtained: Step 19):
-    - Fulfills Mira\'s quest requirement for "A `map` to find his way" (implicitly used by Step 26).
-    - Used in Step 27 to complete Act I.
-23. **`Carrot`** (Obtained: Step 20, by reviving `Withered carrot`):
-    - Fulfills Mira\'s quest requirement for "Food for the road" (implicitly used by Step 26 when Mira acknowledges quest completion).
-24. **`Shiny Ring`** (Obtained: Step 20):
-    - Used in Step 25 by trading it with the Merchant for `wandering boots`.
-25. **`Wild Berries`** (Obtained: Step 22, from `grow` spell):
-    - Fulfills Mira\'s quest requirement for "Food for the road" (implicitly used by Step 26 when Mira acknowledges quest completion).
-26. **`Travel Cloak`** (Obtained: Step 23):
-    - Fulfills Mira\'s quest requirement for "Warm clothing" (implicitly used by Step 26).
-27. **`Wandering Boots`** (Obtained: Step 25):
-    - Fulfills Mira\'s quest requirement for "Sturdy footwear" (implicitly used by Step 26).
-28. **`Ancient Amulet`** (Obtained: Step 26):
-    - Its acquisition is the primary goal of Mira\'s quest and is essential for completing Act I. Considered "used" upon receipt for quest completion.
+25. **`Hidden Locket`** (Obtained: Step 17):
+    - Picking it up in Step 17 prompts the Priest to recognize it and teach the `bless` spell.
+    - Used in Step 24 by giving it to Grandmother to receive the `travel cloak`.
+26. **`Map`** (Obtained: Step 19):
+    - Fulfills Mira's quest requirement for a map when she checks the preparations in Step 27.
+    - Used in Step 28 to complete Act I; its use also requires the Ancient Amulet, completion of the _Preparing for the road_ quest, and every other side quest.
+27. **`Fresh Carrot`** (Obtained: Step 20, by reviving and taking the `Withered Carrot`):
+    - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
+28. **`Shiny Ring`** (Obtained: Step 21):
+    - Used in Step 26 by trading it with the Merchant for `wandering boots`.
+29. **`Wild Berries`** (Obtained: Step 23, from the `grow` spell):
+    - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
+30. **`Travel Cloak`** (Obtained: Step 24):
+    - Fulfills Mira's quest requirement for "Warm clothing" when she checks the preparations in Step 27.
+31. **`Wandering Boots`** (Obtained: Step 26):
+    - Fulfills Mira's quest requirement for "Sturdy footwear" when she checks the preparations in Step 27.
+32. **`Ancient Amulet`** (Obtained: Step 27):
+    - Its acquisition is the primary goal of Mira's quest and is required before using the map to complete Act I in Step 28.

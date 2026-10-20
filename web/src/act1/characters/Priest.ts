@@ -23,7 +23,8 @@ export class Priest extends Character {
       `The [character_name]${this.name}[/character_name] ` +
       "offers a serene smile. [dialogue]'Welcome, child. The chapel is a sanctuary for " +
       'all who seek peace. The shadows in our land grow long, but faith can be a ' +
-      "guiding light.'[/dialogue]"
+      'guiding light. I am out of matches, and I usually get them for free from the ' +
+      "General Store. Could you bring me some?'[/dialogue]"
     )
   }
 }

@@ -19,6 +19,30 @@ export class GameMap extends Item {
   /** Returns a contextual description; may set the act completion flag. */
   override use(gameState: GameState): string {
     if (gameState.currentRoom.name.toLowerCase() === 'road to greendale') {
+      const preparationQuestName = 'Preparing for the road'
+      const incompleteSideQuests = [
+        ...gameState.nonActivatedQuests,
+        ...gameState.activatedQuests,
+      ].filter(
+        (quest) => !quest.isMain() && quest.name !== preparationQuestName,
+      )
+      const missingRequirements: string[] = []
+      if (!gameState.hasItem('ancient amulet')) {
+        missingRequirements.push('receive the Ancient Amulet')
+      }
+      if (!gameState.isQuestCompleted(preparationQuestName)) {
+        missingRequirements.push('complete your journey preparations')
+      }
+      if (incompleteSideQuests.length > 0) {
+        missingRequirements.push('complete every other side quest')
+      }
+      if (missingRequirements.length > 0) {
+        return (
+          '[failure]You are not ready to leave Willowbrook yet. You must ' +
+          `${missingRequirements.join(', ')} first.[/failure]`
+        )
+      }
+
       gameState.setStoryFlag(FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED, true)
       return (
         `[event]You use the [item_name]${this.name}[/item_name].[/event]\n` +
