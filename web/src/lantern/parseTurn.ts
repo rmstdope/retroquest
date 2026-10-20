@@ -13,6 +13,10 @@
  *   closed at the end of each line and reopened on the next, so every block's
  *   markup is balanced on its own; stray closing tags are dropped.
  *
+ * - A line holding only a speaker's name right before that speaker's quote is
+ *   dropped (the quote's label shows the name); `[character_name][/character_name]`
+ *   marks unsigned writing: the quote has no speaker and no label.
+ *
  * Blocks keep their inner markup (inline tags like `[item_name]`); rendering
  * to HTML is the view's job.
  */
@@ -34,6 +38,7 @@ export type TurnBlock =
 const DIALOGUE_OPEN = '[dialogue]'
 const DIALOGUE_CLOSE = '[/dialogue]'
 const CHARACTER_NAME = /\[character_name\]([\s\S]*?)\[\/character_name\]/g
+const NAME_ONLY = /^\[character_name\]([^[]+)\[\/character_name\]$/
 const CHECKLIST_BULLET = /^\*\s*/
 const SPAN_TAG = new RegExp(
   `\\[(/?)(${MARKUP_TAGS.filter((tag) => tag !== 'dialogue').join('|')})\\]`,
@@ -76,6 +81,20 @@ function wholeLine(line: string, tag: string): string | null {
   return inner.includes(open) || inner.includes(close) ? null : inner.trim()
 }
 
+/**
+ * Drop each line that holds only a speaker's name when the quote right after
+ * it is that speaker's: the quote's label already shows the name.
+ */
+function dropNameBeforeQuote(blocks: TurnBlock[]): TurnBlock[] {
+  return blocks.filter((block, index) => {
+    const next = blocks[index + 1]
+    if (block.kind !== 'text' || next?.kind !== 'dialogue') return true
+    const name = block.markup.match(NAME_ONLY)?.[1]
+    return name === undefined || name !== next.speaker
+  })
+}
+
+/** Split one turn's raw markup into story-view blocks (see the file comment). */
 export function parseTurn(raw: string): TurnBlock[] {
   const blocks: TurnBlock[] = []
   let speaker: string | null = null
@@ -90,10 +109,11 @@ export function parseTurn(raw: string): TurnBlock[] {
   function addLine(line: string): void {
     if (!line.trim()) return
     const text = balance(line.trim(), openTags)
+    for (const match of text.matchAll(CHARACTER_NAME))
+      speaker = match[1] || null
     // A line that is only tags (e.g. a `[/success]` closing a span after a
     // dialogue) has nothing to show.
     if (!text.replace(ANY_TAG, '').trim()) return
-    for (const match of text.matchAll(CHARACTER_NAME)) speaker = match[1]
 
     const event = wholeLine(text, 'event')
     const failure = wholeLine(text, 'failure')
@@ -131,5 +151,5 @@ export function parseTurn(raw: string): TurnBlock[] {
     if (close < 0) break
     rest = rest.slice(close + DIALOGUE_CLOSE.length)
   }
-  return blocks
+  return dropNameBeforeQuote(blocks)
 }

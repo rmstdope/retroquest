@@ -11,7 +11,7 @@ export class SeaSealedLetter extends Item {
         '[event]You unfold the salt-preserved vellum carefully. The ancient ' +
         'ink, protected by crystalline varnish, reveals words in a familiar ' +
         'hand:[/event]\n\n' +
-        '[character_name]Theron[/character_name]\n' +
+        '[character_name][/character_name]\n' +
         "[dialogue]'My beloved Mira, if you read this, then our fears have come " +
         'to pass and Malakar has discovered our betrayal. We were his ' +
         'apprentices once—Lyra and I both served in his shadow, learning ' +

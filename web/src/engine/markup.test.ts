@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { MARKUP_TAGS, dialogue, event, findMarkupProblems } from './markup'
+import {
+  MARKUP_TAGS,
+  dialogue,
+  event,
+  findMarkupProblems,
+  writing,
+} from './markup'
 
 describe('markup helpers', () => {
   it('wraps text in an event span', () => {
@@ -21,6 +27,15 @@ describe('markup helpers', () => {
   it('knows the full tag vocabulary', () => {
     expect(MARKUP_TAGS).toContain('dialogue')
     expect(MARKUP_TAGS).toContain('event')
+  })
+})
+
+describe('writing', () => {
+  it('marks words as deliberately unsigned and is well formed', () => {
+    expect(writing("'Dear Mira.'")).toBe(
+      "[character_name][/character_name]\n[dialogue]'Dear Mira.'[/dialogue]",
+    )
+    expect(findMarkupProblems(writing('x'))).toEqual([])
   })
 })
 

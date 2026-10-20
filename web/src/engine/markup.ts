@@ -30,14 +30,25 @@ export function event(text: string): string {
 }
 
 /**
- * Write a spoken line attributed to `speaker`: the speaker's name in
- * narration, then the words as `[dialogue]`, so the UI can show who speaks.
+ * Write a spoken line attributed to `speaker`: the speaker's name on a line of
+ * its own, then the words as `[dialogue]`. The story view drops a name-only
+ * line directly before its quote, so the player sees the name once, as the
+ * label above the quote.
  */
 export function dialogue(speaker: string, words: string): string {
   return (
     `[character_name]${speaker}[/character_name]\n` +
     `[dialogue]${words}[/dialogue]`
   )
+}
+
+/**
+ * Write words that have no speaker, such as a journal page or a letter. The
+ * empty `[character_name]` says the missing speaker is deliberate: the checker
+ * accepts it and the story view shows the quote with no label.
+ */
+export function writing(words: string): string {
+  return `[character_name][/character_name]\n[dialogue]${words}[/dialogue]`
 }
 
 const TAG_PATTERN = /\[(\/?)([a-z_]+)\]/g

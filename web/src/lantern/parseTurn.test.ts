@@ -84,6 +84,31 @@ describe('parseTurn', () => {
     ])
   })
 
+  it('drops a line holding only the speaker name before its quote', () => {
+    expect(
+      parseTurn(
+        "[character_name]Mira[/character_name]\n[dialogue]'Hello.'[/dialogue]",
+      ),
+    ).toEqual([{ kind: 'dialogue', speaker: 'Mira', markup: "'Hello.'" }])
+  })
+
+  it('keeps a name-only line that is not followed by a quote', () => {
+    expect(parseTurn('[character_name]Mira[/character_name]')).toEqual([
+      { kind: 'text', markup: '[character_name]Mira[/character_name]' },
+    ])
+  })
+
+  it('gives unsigned writing no speaker', () => {
+    expect(
+      parseTurn(
+        "[character_name]Mira[/character_name] nods.\n[character_name][/character_name]\n[dialogue]'Dear.'[/dialogue]",
+      ),
+    ).toEqual([
+      { kind: 'text', markup: '[character_name]Mira[/character_name] nods.' },
+      { kind: 'dialogue', speaker: null, markup: "'Dear.'" },
+    ])
+  })
+
   it('gives dialogue the speaker named in the event line before it', () => {
     expect(parseTurn(GRANDMOTHER)).toEqual([
       {

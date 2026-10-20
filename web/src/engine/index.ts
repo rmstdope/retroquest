@@ -27,4 +27,10 @@ export {
   type QuestProgress,
   type RoomWare,
 } from './GameController'
-export { MARKUP_TAGS, dialogue, event, findMarkupProblems } from './markup'
+export {
+  MARKUP_TAGS,
+  dialogue,
+  event,
+  findMarkupProblems,
+  writing,
+} from './markup'
