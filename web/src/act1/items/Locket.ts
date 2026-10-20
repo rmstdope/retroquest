@@ -1,14 +1,26 @@
-import { Item, type GameState, event, characterName, speech } from '@/engine'
+import {
+  Item,
+  type GameState,
+  event,
+  characterName,
+  speech,
+  writing,
+} from '@/engine'
 import { BlessSpell } from '../spells/BlessSpell'
 
-/** Small, intricately carved silver locket with narrative significance. */
+/**
+ * The founders' heirloom of Elior's mother's line: a small silver locket
+ * bearing the founders' crest, hidden in the chapel the night she left.
+ */
 export class Locket extends Item {
   constructor() {
     super({
       name: 'locket',
       description:
-        'A small, intricately carved silver locket, clearly very old. It feels cool ' +
-        'to the touch. Perhaps some elder in the village might know more about it.',
+        'A small, intricately carved silver locket, clearly very old. ' +
+        'A tiny crest, a willow above a bell, is worked into its lid. ' +
+        'It feels cool to the touch. ' +
+        'Perhaps someone in your family might know more about it.',
       shortName: 'locket',
       canBeCarried: true,
     })
@@ -23,18 +35,29 @@ export class Locket extends Item {
         event('You pick up the locket.') +
         '\nAs you do this, the ' +
         characterName('priest') +
-        ' gasps. The ' +
-        characterName('priest') +
-        ' nods gravely. ' +
+        ' gasps and looks closely at its crest. ' +
         speech(
-          'That locket... it is a relic of the village founders. It speaks ' +
-            'of your connection to this place and its history. May this blessing protect ' +
-            'you on your path.',
+          "The founders' relic... That crest, child, only the founders' line " +
+            "wore it. Your mother's line. " +
+            'She prayed here alone the night she left. ' +
+            'She must have hidden it then, for you.',
         ) +
+        '\nHe nods gravely. ' +
+        speech('May this blessing protect you on your path.') +
         '\nHe teaches you the [spell_name]bless[/spell_name] spell!\n' +
         event('You have learned [spell_name]bless[/spell_name].')
       )
     }
     return ''
+  }
+
+  /** Open the locket to read the engraving inside its lid. */
+  override use(_gameState: GameState): string {
+    return (
+      event('You press the tiny clasp, and the locket springs open.') +
+      '\nAround the inside of the lid, tiny letters are engraved:' +
+      writing("From the founders' line, to the next.") +
+      '\nThe silver warms in your palm for a moment, then cools again.'
+    )
   }
 }
