@@ -40,7 +40,7 @@ The game loads at `http://localhost:5173` and starts at once.
 | `npm run build` | Type-check and build for production (output: `dist/`) |
 | `npm run preview` | Preview the production build locally |
 | `npm run test` | Run Vitest unit tests |
-| `npm run test:e2e` | Run Playwright E2E tests (starts dev server automatically) |
+| `npm run test:e2e` | Run Playwright E2E tests (starts its own dev server on `E2E_PORT`, default 5173, and fails if that port is taken; set `E2E_PORT` to run alongside `npm run dev`) |
 | `npm run typecheck` | Run TypeScript type checking |
 | `npm run lint` | Run ESLint |
 | `npm run format` | Format code with Prettier |
