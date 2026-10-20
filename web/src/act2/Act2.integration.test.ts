@@ -662,7 +662,7 @@ describe('Act 2 golden path', () => {
       'go north',
       'go west',
     ])
-    executeCommands(game, ['cast prophetic_vision'])
+    executeCommands(game, ['cast prophetic vision'])
     expectQuests(state, [])
     expect(
       game.acts[game.currentAct].isCompleted(state),

@@ -579,6 +579,17 @@ describe('Game', () => {
       )
     })
 
+    it('casts a multi-word spell by its spaced name as well as its stored name', () => {
+      game.state.knownSpells.push(new EchoSpell('two_words'))
+      const expected =
+        '[event]You cast [spell_name]two_words[/spell_name] without a target.[/event]'
+      expect(game.cast('two words')).toBe(expected)
+      expect(game.cast('two_words')).toBe(expected)
+      expect(game.cast('Two Words on test item')).toContain(
+        '[item_name]test item[/item_name]',
+      )
+    })
+
     it('prefers items over characters with the same name', () => {
       rooms.EliorsCottage.addItem(item('target'))
       rooms.EliorsCottage.addCharacter(character('target'))
