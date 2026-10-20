@@ -51,6 +51,7 @@ describe('Locker', () => {
     expect(stuckResult).toContain('[event]')
     expect(stuckResult).not.toContain('[failure]')
     const unlockResult = locker.unlock(game.state).toLowerCase()
+    expect(unlockResult).toContain('[event]')
     expect(
       unlockResult.includes('locker') || unlockResult.includes('click'),
     ).toBe(true)

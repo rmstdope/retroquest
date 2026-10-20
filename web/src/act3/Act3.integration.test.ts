@@ -137,11 +137,13 @@ describe('Act 3 golden path', () => {
       exam.toLowerCase().includes('fused') ||
         exam.toLowerCase().includes('lock'),
     ).toBe(true)
-    // Try the key and fail
-    const failKey = executeCommands(game, ['use rusted locker key with locker'])
+    // Jam the key in the lock
+    const jammedKey = executeCommands(game, [
+      'use rusted locker key with locker',
+    ])
     expect(
-      failKey.toLowerCase().includes('too corroded') ||
-        failKey.toLowerCase().includes('jams in the mechanism'),
+      jammedKey.toLowerCase().includes('too corroded') ||
+        jammedKey.toLowerCase().includes('jams in the mechanism'),
     ).toBe(true)
     // Cast unlock on locker
     const unlocked = executeCommands(game, ['cast unlock on locker'])
