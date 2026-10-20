@@ -99,12 +99,12 @@ With all relics in hand, Elior and his companions infiltrate Malakar’s fortres
 **Highlights from the Act IV design** (see `Act4Design.md`):
 
 - **Setting:** a fortress that mirrors Malakar's crumbling mind: the Mirror Labyrinth, Hall of Echoes, Tower of Shadows, Chamber of Whispers, Memory Vault and Throne Chamber.
-- **Main quest – _The Final Stand_:** breach, lieutenant trials, revelation and the final choice, after eight side quests.
+- **Main quest – _The Final Stand_:** breach, lieutenant trials, the Parents' Vault and the final choice, after seven side quests. King Alden's rescue is part of the final choice.
 - **Redemption over violence:** the **Shattered Ward Guardians** are dispelled and the **Trapped Servants** freed. The **Knight of Despair** and the **Sorceress of Lies** are redeemed, not slain. In the Memory Vault, Elior restores **the Shadow of the Past**, the uncorrupted remnant of Malakar.
-- **The truth:** Malakar and Elior's parents were **friends and allies** who made the virtue relics to protect the kingdom. When catastrophe threatened them, Malakar reached for **time magic** to save them, and tore a temporal wound that feeds on life energy. That wound is both his corruption and the reason he drains King Alden. In _The Parent's Legacy_, the parents' final memories show they **poured themselves into the ward** to hide Elior and hold the wound shut. The dream voice is revealed as the Shadow of the Past.
-- **Climax:** the Lifelight Elixir frees **King Alden** from his crystal prison. Elior then opens the throne with the **Throne Key**, refuses Malakar's offer, shows him his true self with the Mirror-Memory Shard, and may choose **forgiveness**.
-- **Endings:** Redemption (the golden path), Justice and Sacrifice. All three end at home in Willowbrook; Crown and Home are no longer separate endings. When the wound is healed, the parents speak to Elior one last time and rest in peace.
-- **Spells:** Truth Sight, Redemption's Light, Dispel Lies, Heart's Truth, Memory Restoration, Royal Blessing, Parent's Blessing, Forgiveness and Triumphant Light.
+- **The truth:** Malakar and Elior's parents were **friends and allies** who made the virtue relics to protect the kingdom. When catastrophe threatened them, Malakar reached for **time magic** to save them, and tore a temporal wound that feeds on life energy. That wound is both his corruption and the reason he drains King Alden. In _The Parent's Legacy_, a vault opened by the **Ancient Amulet** before the throne room, the parents' final memories show they **poured themselves into the ward** to hide Elior and hold the wound shut. The dream voice is revealed as the Shadow of the Past.
+- **Climax:** Elior refuses Malakar's offer and says the refrain to him. The Lifelight Elixir then either breaks **King Alden's** crystal prison or is offered to heal Malakar's wound, and that one choice decides the ending.
+- **Endings:** Redemption (the golden path), Justice and Sacrifice. All three end at home in Willowbrook; Crown and Home are no longer separate endings. Redemption is always open; Justice and Sacrifice open through the optional virtue moments of the whole game. When the wound is healed, the parents speak to Elior one last time and rest in peace.
+- **Spells:** Truth Sight, Redemption's Light, Heart's Truth, Forgiveness and Grow.
 
 ## Epilogue
 
