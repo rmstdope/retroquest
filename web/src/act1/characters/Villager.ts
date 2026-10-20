@@ -1,4 +1,10 @@
-import { Character, type GameState, event, characterName } from '@/engine'
+import {
+  Character,
+  type GameState,
+  event,
+  characterName,
+  dialogue,
+} from '@/engine'
 import { FLAG_VILLAGER_TALKED_TO } from '../Act1StoryFlags'
 
 /** A friendly Willowbrook local who cycles through village rumors. */
@@ -29,10 +35,10 @@ export class Villager extends Character {
   /** Share the next rumor and record that a villager has been talked to. */
   override talkTo(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
-    const dialogue = this.dialogueOptions[this.dialogueIndex]
+    const rumor = this.dialogueOptions[this.dialogueIndex]
     // Cycle through dialogue
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
     const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
-    return eventMsg + '\n' + `'${dialogue}'`
+    return eventMsg + '\n' + dialogue('Villager', `'${rumor}'`)
   }
 }
