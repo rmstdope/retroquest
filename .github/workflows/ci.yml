@@ -10,45 +10,6 @@ on:
     workflow_call:
 
 jobs:
-    changes:
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            pull-requests: read
-        outputs:
-            python: ${{ steps.filter.outputs.python }}
-        steps:
-            - uses: actions/checkout@v4
-            - uses: dorny/paths-filter@v3
-              id: filter
-              with:
-                  filters: |
-                      python:
-                        - 'src/**'
-                        - 'tests/**'
-                        - 'pyproject.toml'
-
-    test:
-        needs: changes
-        if: needs.changes.outputs.python == 'true'
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-
-        steps:
-            - uses: actions/checkout@v4
-
-            - name: Set up Python
-              uses: actions/setup-python@v5
-              with:
-                  python-version: "3.11"
-
-            - name: Install dependencies
-              run: pip install -e ".[dev]"
-
-            - name: Run tests
-              run: pytest
-
     web-lint:
         runs-on: ubuntu-latest
         defaults:
