@@ -15,7 +15,7 @@ and fellow Wardens of the Dawn; Malakar tore a wound in time to save them, and t
 the ward that hides Elior and holds the wound shut.
 
 In the throne room there is **one final choice**. King Alden hangs in a crystal prison, drained
-by the wound, and Malakar is dying of the same wound. The Lifelight Elixir can only be used once:
+by the wound, and Malakar is failing, bound to the same wound. The Lifelight Elixir can only be used once:
 it either **breaks Alden's prison** or it is **offered to heal Malakar's wound**. Elior answers
 Malakar's temptation with the refrain, "Power follows purpose; purpose follows truth.", and the
 choice leads to one of three endings: **Redemption**, **Justice** or **Sacrifice**. All three end
@@ -36,7 +36,9 @@ This act follows the Story Canon in `GameStory.md`. In short:
     bindings, which is why Malakar drains the king. When the wound is healed the parents speak to
     Elior one last time and rest in peace. They are not alive.
 -   The dream voice is the Shadow of the Past, the uncorrupted remnant of Malakar. It feels
-    familiar because Malakar held baby Elior.
+    familiar because Malakar held baby Elior. It is a dream only in Acts I-III (once each); in Act IV
+    it speaks openly in the Memory Vault and once more at the climax, as the bead asks. This
+    stretches the canon's "heard once per act" and is flagged for the navigator.
 -   The cloaked stranger in Willowbrook is Malakar's agent, who also framed Sir Cedric.
 
 ## Quest Management Structure
@@ -116,7 +118,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Enter the mirror labyrinth
     -   **Prerequisites:** Servant's Pendant and the Echo Stone from the Hall of Echoes
-    -   **Completion:** Combine servant guidance, echo knowledge and `truth_sight`
+    -   **Completion:** Combine servant guidance and echo knowledge; solving it teaches `truth_sight`
     -   **Rewards:** The spell `truth_sight`
     -   **Story Impact:** Wisdom combines several sources of knowledge. `truth_sight` lets Elior
         see the Knight of Despair as he really is.
@@ -127,8 +129,8 @@ rule that all side quests must be completed before the main quest can be finishe
 
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Encounter the first lieutenant in the Hall of Echoes
-    -   **Prerequisites:** Guardian's Chain, Guardian's Essence, and `truth_sight`
-    -   **Completion:** Wear the Guardian's Chain, then say redemption to the knight
+    -   **Prerequisites:** Guardian's Chain and `truth_sight` (from the maze)
+    -   **Completion:** Wear the Guardian's Chain, then say redemption to the knight (nothing is consumed)
     -   **Rewards:** Knight's Redemption, Enhanced Echo Stone, the spell `redemptions_light`,
         access to the Tower of Shadows
     -   **Who he is:** **Malakar's agent from Acts I and II.** With `truth_sight` Elior sees that
@@ -183,8 +185,8 @@ rule that all side quests must be completed before the main quest can be finishe
         the ward, anchored in the amulet and the royal bindings, so that Elior would be hidden and
         the wound held shut; baby Elior in Malakar's arms. The amulet opens the door because it is
         part of the ward.
-    -   **Story Impact:** Elior learns that Malakar did this out of love and that the ward is the
-        parents themselves
+    -   **Story Impact:** Elior learns that Malakar began out of love and was corrupted by the power, and that the
+        ward is the parents themselves and lives in Elior
 
 ## Character Development
 
@@ -427,7 +429,7 @@ Malakar stands beside it, grey and failing; the wound is killing him too.
 #### Usable Items
 
 -   Lifelight Elixir (single use; consumed by the final choice)
--   Ancient Amulet (the anchor, held up in every ending)
+-   Ancient Amulet (the anchor; raised in every ending, and used on the wound in Justice and Sacrifice)
 
 #### Spells
 
@@ -465,15 +467,19 @@ The air is quiet.
 ## Room Map
 
 ```
-        [MV] ---- [PV] ---- [TC] -- (home) -- [WF]
-          |
+                      [TC] -- (home) -- [WF]
+                       |
+        [MV] -------- [PV]
+         |
         [CW]
-          |
+         |
         [TS]
-          |
-        [HE] ---- [FG] ---- [OC]
-                              |
-                            [ML]
+         |
+        [HE] -- [FG]
+                 |
+                [OC]
+                 |
+                [ML]
 ```
 
 Legend:
@@ -491,7 +497,9 @@ Legend:
 
 Notes:
 
--   Connections marked with "|" can be north/south or up/down as appropriate
+-   Layout is schematic; the Exits sections are authoritative (Hall of Echoes east of the Fortress
+    Gates, Mirror Labyrinth north of the Courtyard, Tower east of the Hall, Chamber of Whispers up
+    the Tower, Parents' Vault east of the Memory Vault, Throne Chamber north of the vault)
 -   Some connections only open after completing specific quests
 
 ## Learnable Spells in Act IV
@@ -507,7 +515,7 @@ Notes:
 The Act IV design was written before the story canon, and the following no longer serve the
 story. None of them are implemented yet.
 
--   **Items:** Throne Key and Ancient Iron Key (the Ancient Amulet opens everything), Time Crystal,
+-   **Items:** Throne Key and Ancient Iron Key (the Ancient Amulet replaces both as the key to the Parents' Vault), Time Crystal,
     Mirror Shard, Memory Fragment and the Combined Mirror-Memory Shard, Royal Sigil, Hero's
     Memorial, Crown of Eldoria, Parent's Journal, Restoration Seed, Peace Lily, Hero's Medal, and
     the decorative extras of the old room lists (Battle Standard, Fallen Banner, Knight's Crest,
@@ -523,8 +531,8 @@ story. None of them are implemented yet.
 
 Elior enters the Throne Chamber knowing the truth. Malakar tempts him: join me and I will tell
 you everything about your family. Elior refuses and speaks the refrain to him:
-**"Power follows purpose; purpose follows truth."** At this moment, with the amulet raised, the
-dream voice speaks once more, through the failing Malakar, asking his friend's son to finish
+**"Power follows purpose; purpose follows truth."** At this moment Elior raises the amulet: it opens, the ward unseals, and
+the dream voice speaks once more, through the amulet and the failing Malakar, asking his friend's son to finish
 what he could not.
 
 Then the one choice. The Lifelight Elixir can be used once:
@@ -541,21 +549,23 @@ Virtue moments (see Optional choices) are recorded as three counters shared acro
 
 | Ending         | What it is                                                                           | What opens it                                                                                              |
 | -------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| **Redemption** | Elior offers the elixir and says forgiveness; the wound is healed and Malakar is freed. | Always open: this is the golden path. Each mercy moment (2 or more in the game) adds a line from Malakar and the knight. |
+| **Redemption** | Elior offers the elixir and casts forgiveness; the wound is healed. Alden is freed as the drain stops, and Malakar lives, powerless and himself again. | Always open: this is the golden path. Each mercy moment in the game adds a line from Malakar and the knight (no threshold). |
 | **Justice**    | Alden is freed; Elior names Malakar's crimes and seals him with the amulet and royal bindings. | **2 truth moments** in the game. Act IV has one, so at least one from Acts I-III.                          |
-| **Sacrifice**  | Alden is freed; Elior gives his magic to close the wound.                            | **2 selfless moments** in the game. Act IV has one, so at least one from Acts I-III.                       |
+| **Sacrifice**  | Alden is freed; Elior gives his magic to close the wound; Malakar lives, powerless, to answer to the king.                            | **2 selfless moments** in the game. Act IV has one, so at least one from Acts I-III.                       |
 
-If Justice and Sacrifice are both closed, the crystal will not break and the elixir can only be
-offered to the wound, so Redemption is the one path left; no player is stranded. A closed ending
-is not shown as an option; a line from the prison explains why ("the crystal does not answer to
-one who has not spoken the truth" / "...given without asking").
+Alden is freed in every ending: by the elixir in Justice and Sacrifice, and by the wound closing
+in Redemption. What the choice decides is Malakar's fate and the cost. If neither Justice nor
+Sacrifice is open, `use lifelight elixir on prison` is refused ("the crystal does not answer
+to one who has not yet spoken the truth, or given without asking") and Redemption is the one path
+left, so no player is stranded. If the prison is broken and only one of the two is open, the
+closed command (`name malakar's crimes` or `give up magic`) is refused with a line that says why.
 
 In every ending the wound is closed, and the parents speak to Elior one last time, then rest in
 peace. They are not alive and nothing here hints that they are.
 
 -   **Redemption:** Malakar, healed, is the uncorrupted friend again; he thanks Elior and
-    fades with the wound. Elior learns `Forgiveness`.
--   **Justice:** Malakar is sealed, grieving. King Alden judges and restores order.
+    lives on, powerless, beside the closed wound. Elior learns `Forgiveness` and casts it with the elixir.
+-   **Justice:** Malakar is sealed away, grieving. King Alden judges and restores order.
 -   **Sacrifice:** Elior loses every spell but `grow`, a farmer's spell, which he keeps because it
     is the smallest. The kingdom is healed at his cost.
 
@@ -605,7 +615,9 @@ Elior chooses an ending.
 
 ### Key Story Revelations at Completion
 
--   Malakar is a fallen friend, not a pure villain
+-   Malakar is a fallen friend, not a pure villain: grief first, then the power of the wound
+-   The ward lives in Elior; the amulet and King Alden's royal bindings anchor it. Malakar drains
+    Alden and hunts the amulet to break the ward, believing that frees his friends
 -   The parents are the ward, and rest after one last farewell
 -   The dream voice was Malakar's remnant
 -   The knight, the sorceress and the cloaked stranger were all Malakar's servants
@@ -682,9 +694,8 @@ where they would occur.
 
 5. **Mirror Labyrinth (second visit):**
 
-    - `use echo stone`, `cast truth sight`
+    - `use echo stone`, `solve maze puzzle`
         - Spell learned: `truth_sight`
-    - `solve maze puzzle`
         - Quest completed: "The Maze of Mirrors"
     - Optional (**truth**): `say truth to true self`
 
@@ -741,10 +752,10 @@ where they would occur.
     - `talk to malakar` → he offers the answers about Elior's family for loyalty
     - `refuse malakar's offer`
     - `say refrain to malakar` → "Power follows purpose; purpose follows truth."
-    - The dream voice speaks through Malakar.
-    - `use lifelight elixir on malakar` → the elixir is consumed
-    - `say forgiveness to malakar`
-        - Spell learned: `forgiveness`
+    - `raise ancient amulet` → the amulet opens, the ward unseals, and the dream voice speaks
+      through it and Malakar: "Finish what I could not."
+    - `say forgiveness to malakar` → Spell learned: `forgiveness`
+    - `use lifelight elixir on malakar` then `cast forgiveness on wound` → the elixir is consumed
         - Quest completed: "The Final Stand"
         - Ending: Redemption
     - The wound closes; the parents speak to Elior one last time and rest.
@@ -807,5 +818,5 @@ the Throne Chamber (Step 11) as the anchor of the ward.
 -   **Knight's Redemption:** proves mercy's power to the Sorceress (Step 8)
 -   **Sorceress's Truth:** proves to the Shadow that redemption is possible (Step 9)
 
-**All items have a use.** Every item in this act has a required use that affects quest progress,
-conversations or the ending. The decorative items of the earlier design are cut.
+**All items have a use.** Every item in this act has a use in quest progress, conversations or an
+optional choice (the Healing Stones). The decorative items of the earlier design are cut.
