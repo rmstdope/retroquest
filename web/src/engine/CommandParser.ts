@@ -117,8 +117,10 @@ export class CommandParser {
     if (cmd === 'map') return this.game.map()
     if (cmd === 'stats') return this.game.stats()
     if (cmd.startsWith('cheat act ')) {
-      const actNumber = Number(cmd.slice('cheat act '.length).trim())
-      const commands = this.game.goldenPath(actNumber)
+      const argument = cmd.slice('cheat act '.length).trim()
+      const commands = /^[1-9]\d*$/.test(argument)
+        ? this.game.goldenPath(Number(argument))
+        : []
       if (commands.length > 0) return this.executeCheat(commands)
     }
     return this.game.unknown(cmd)

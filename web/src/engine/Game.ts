@@ -462,7 +462,10 @@ Welcome to
     return output.join('\n')
   }
 
-  /** The golden path of the act named `Act<actNumber>`; empty when there is none. */
+  /**
+   * The golden path of the act named `Act<actNumber>` (the acts' naming
+   * convention, so single-act games work too); empty when there is none.
+   */
   goldenPath(actNumber: number): string[] {
     const name = `Act${actNumber}`
     return this.acts.find((act) => act.name === name)?.goldenPath ?? []

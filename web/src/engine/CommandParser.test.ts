@@ -13,7 +13,7 @@ class RecordingGame implements CommandTarget {
     nextCompletedQuest: () => null,
   }
 
-  goldenPath(actNumber: number) {
+  goldenPath(actNumber: number): string[] {
     return this.paths[actNumber] ?? []
   }
 
@@ -271,6 +271,12 @@ describe('CommandParser', () => {
     it('does not know a cheat for an act without a golden path', () => {
       parser.parse('cheat act 4')
       expect(game.calls).toEqual([['unknown', 'cheat act 4']])
+    })
+
+    it('only accepts a plain act number', () => {
+      game.paths[1] = ['look']
+      parser.parse('cheat act 01')
+      expect(game.calls).toEqual([['unknown', 'cheat act 01']])
     })
 
     it('does not know a cheat for a non-numeric act', () => {

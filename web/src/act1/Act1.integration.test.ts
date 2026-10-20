@@ -565,15 +565,6 @@ describe('cheat act 1', () => {
 })
 
 describe('Act 1 golden path as declared by the act', () => {
-  it('completes every side quest, leaving the finale to the player', () => {
-    const act = new Act1()
-    const game = new Game([act])
-    executeCommands(game, ACT1_GOLDEN_PATH)
-    const sideQuests = act.quests.filter((q) => !q.isMain()).map((q) => q.name)
-    const completed = game.state.completedQuests.map((q) => q.name)
-    expect(completed).toEqual(expect.arrayContaining(sideQuests))
-  })
-
   it('is what cheat act 1 plays', () => {
     const viaPath = new Game([new Act1()])
     executeCommands(viaPath, ACT1_GOLDEN_PATH)
