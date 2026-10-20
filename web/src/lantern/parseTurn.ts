@@ -17,7 +17,7 @@
  * to HTML is the view's job.
  */
 
-import { THEME_TAGS } from '../utils/theme'
+import { MARKUP_TAGS } from '@/engine/markup'
 
 export interface ChecklistItem {
   markup: string
@@ -36,7 +36,7 @@ const DIALOGUE_CLOSE = '[/dialogue]'
 const CHARACTER_NAME = /\[character_name\]([\s\S]*?)\[\/character_name\]/g
 const CHECKLIST_BULLET = /^\*\s*/
 const SPAN_TAG = new RegExp(
-  `\\[(/?)(${THEME_TAGS.filter((tag) => tag !== 'dialogue').join('|')})\\]`,
+  `\\[(/?)(${MARKUP_TAGS.filter((tag) => tag !== 'dialogue').join('|')})\\]`,
   'g',
 )
 
@@ -65,7 +65,7 @@ function balance(markup: string, open: string[]): string {
 }
 
 /** Any opening or closing markup tag (bracketed words in prose don't count). */
-const ANY_TAG = new RegExp(`\\[/?(${THEME_TAGS.join('|')})\\]`, 'g')
+const ANY_TAG = new RegExp(`\\[/?(${MARKUP_TAGS.join('|')})\\]`, 'g')
 
 /** Inner markup if `line` is wholly one `[tag]…[/tag]` span, else null. */
 function wholeLine(line: string, tag: string): string | null {

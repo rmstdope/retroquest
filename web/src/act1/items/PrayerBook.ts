@@ -14,7 +14,7 @@ export class PrayerBook extends Item {
 
   /** Read the prayer book and return its mystical message. */
   read(_gameState: GameState): string {
-    const eventMsg = `[event]You read the [item_name]${this.name}[/item_name].\n`
+    const eventMsg = `[event]You read the [item_name]${this.name}[/item_name].[/event]\n`
     return (
       eventMsg +
       ('The pages shimmer with shifting runes and cryptic sigils. As you try to focus, ' +

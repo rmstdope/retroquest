@@ -4,13 +4,22 @@
  */
 import { expect } from 'vitest'
 import type { Game, GameState, Room } from '@/engine'
-import { THEME_TAGS } from '@/utils/theme'
+import { MARKUP_TAGS, findMarkupProblems } from '@/engine/markup'
 
-/** Run commands in order, settling quest changes after each, and return all answers. */
+/**
+ * Run commands in order, settling quest changes after each, and return all answers.
+ * Every answer must be well-formed markup (known, balanced, attributed): the
+ * check runs on all output here, so the act integration tests need no opt-in.
+ */
 export function executeCommands(game: Game, commands: string[]): string {
   const results: string[] = []
   for (const command of commands) {
-    results.push(game.commandParser.parse(command))
+    const answer = game.commandParser.parse(command)
+    const problems = findMarkupProblems(answer)
+    expect(problems, `malformed markup after "${command}": ${answer}`).toEqual(
+      [],
+    )
+    results.push(answer)
     game.state.settleQuests()
   }
   return results.join('')
@@ -125,7 +134,7 @@ export function expectMarkupWellFormed(text: string): void {
   const open: string[] = []
   for (const match of text.matchAll(TAG_PATTERN)) {
     const [, closing, tag] = match
-    expect(THEME_TAGS, `unknown tag [${tag}] in: ${text}`).toContain(tag)
+    expect(MARKUP_TAGS, `unknown tag [${tag}] in: ${text}`).toContain(tag)
     if (!closing) {
       expect(open, `nested [${tag}] in: ${text}`).not.toContain(tag)
       open.push(tag)

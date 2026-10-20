@@ -17,6 +17,7 @@ export class EliorsJournal extends Item {
     const entry =
       'The ink is slightly smudged on this page, as if written in haste or with a ' +
       'trembling hand...\n\n' +
+      '[character_name]Elior[/character_name]\n' +
       '[dialogue]"What a night. The wind howled like a hungry wolf, and rain lashed ' +
       'against the shutters. I swear the whole cottage shook with each thunderclap. ' +
       'Sleep was impossible for hours. Then, through a gap in the curtains, I saw it ' +

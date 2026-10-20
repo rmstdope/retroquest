@@ -8,22 +8,10 @@
  * Regexes are compiled once at module load time for performance.
  */
 
-/** All known theme tags of the engine markup. */
-export const THEME_TAGS: readonly string[] = [
-  'character_name',
-  'dialogue',
-  'item_name',
-  'spell_name',
-  'room_name',
-  'quest_name',
-  'event',
-  'failure',
-  'pending',
-  'success',
-  'exits',
-  'bold',
-  'dim',
-] as const
+import { MARKUP_TAGS } from '@/engine/markup'
+
+/** All known theme tags of the engine markup (the engine's vocabulary). */
+export const THEME_TAGS: readonly string[] = MARKUP_TAGS
 
 /** Pre-compiled regex pairs for each tag: [openRegex, closeRegex, cssClass]. */
 const TAG_PATTERNS: Array<[RegExp, RegExp, string]> = THEME_TAGS.map((tag) => [
