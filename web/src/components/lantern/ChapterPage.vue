@@ -6,7 +6,8 @@ import { renderMarkup } from '@/utils/theme'
 /**
  * A full-screen chapter page between acts: the intro opens an act (title,
  * text with a drop cap, Begin); the completion closes one with its quests,
- * spells and places, and leads on to the next act.
+ * spells and places, and leads on to the next act (the last act's page
+ * finishes the game instead).
  */
 const props = defineProps<{ chapter: Chapter; titleId: string }>()
 const emit = defineEmits<{ continue: [] }>()
@@ -18,6 +19,7 @@ const kicker = computed(() =>
 )
 const action = computed(() => {
   if (intro.value) return 'Begin'
+  if (props.chapter.final) return 'Finish the game'
   return props.chapter.nextAct
     ? `Continue to ${props.chapter.nextAct}`
     : 'Continue'

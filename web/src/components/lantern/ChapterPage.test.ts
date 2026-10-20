@@ -54,6 +54,20 @@ describe('ChapterPage', () => {
     expect(w.get('button').text()).toBe('Continue')
   })
 
+  it('finishes the game from the last act', async () => {
+    const w = mount(ChapterPage, {
+      props: {
+        chapter: { ...COMPLETE, nextAct: undefined, final: true },
+        titleId: 't',
+      },
+    })
+
+    expect(w.get('.lq-chapter-kicker').text()).toBe('Act I complete')
+    expect(w.get('button').text()).toBe('Finish the game')
+    await w.get('button').trigger('click')
+    expect(w.emitted('continue')).toHaveLength(1)
+  })
+
   it('can put focus on its button', () => {
     const w = mount(ChapterPage, {
       props: { chapter: INTRO, titleId: 't' },
