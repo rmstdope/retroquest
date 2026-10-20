@@ -585,13 +585,16 @@ describe('Act 3 golden path', () => {
 })
 
 describe('Act 3 golden path as declared by the act', () => {
-  it('completes the four expedition quests, leaving the rest to the finale', () => {
+  it('completes every side quest, leaving the main quest to the finale', () => {
     const game = new Game([new Act3()])
     executeCommands(game, ACT3_GOLDEN_PATH)
     expect(game.state.completedQuests.map((q) => q.name).sort()).toEqual([
       'Breath of the Mountain',
+      'Echoes of the Hidden Bond',
       'Lanterns of the Deeps',
+      "Miners' Rescue",
       'Mirrors of Emberlight',
+      'Oath of Stillness',
       'Tideward Sigils',
     ])
   })
