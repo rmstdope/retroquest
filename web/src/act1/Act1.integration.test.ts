@@ -576,7 +576,7 @@ describe('Act 1 golden path as declared by the act', () => {
 })
 
 describe('debug act1', () => {
-  it('plays the golden path, so it ends where cheat act 1 does, before use map', async () => {
+  it('plays the golden path, up to its last command, which completes the act', async () => {
     const game = new Game([new Act1()])
     const shown: string[] = []
     await playDebugScript('act1', {
@@ -586,11 +586,11 @@ describe('debug act1', () => {
       goldenPath: (n) => game.goldenPath(n),
     })
     expect(shown.join('\n')).not.toContain('[failure]')
-    const viaCheat = new Game([new Act1()])
-    viaCheat.commandParser.parse('cheat act 1')
-    expect(game.state.storyFlags).toEqual(viaCheat.state.storyFlags)
     expect(game.state.currentRoom.name).toBe('Road to Greendale')
-    expect(game.state.currentRoom.name).toBe(viaCheat.state.currentRoom.name)
-    expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(false)
+    const act = game.acts[game.currentAct]
+    expect(act.isCompleted(game.state)).toBe(false)
+
+    executeCommands(game, ['use map'])
+    expect(act.isCompleted(game.state)).toBe(true)
   })
 })

@@ -41,8 +41,8 @@ const ACT_SCRIPT_PATTERN = /^act([1-9]\d*)$/
 
 /**
  * The lines of `debug act<N>`: an act's golden path, numbered by their 1-based
- * position in it. The path itself leaves the act's completing step (Act I's
- * `use map`) to the player.
+ * position in it. The path itself stops before the act's completing step
+ * (Act I's `use map`), which is left to the player.
  */
 export function goldenPathLines(path: string[]): DebugLine[] {
   return path.map((command, index) => ({ line: index + 1, command }))
