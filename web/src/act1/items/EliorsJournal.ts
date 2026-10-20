@@ -29,7 +29,9 @@ export class EliorsJournal extends Item {
           'hearing, yet it felt like it was calling my name. ' +
           `${characterName('Elior')}... I woke with a start, ` +
           'my heart pounding. Even now, the memory sends a shiver down my spine. ' +
-          'And the strangest thing — I knew that voice. ' +
+          'And the strangest thing — I knew that voice. Not the way you know a ' +
+          "neighbour's, but the way you know a song someone sang to you before " +
+          'you had words for it. It made my chest ache. ' +
           "I just can't remember from where. What did it mean?",
       ) +
       '\n'
