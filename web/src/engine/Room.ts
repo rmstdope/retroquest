@@ -1,6 +1,7 @@
 import type { Character } from './Character'
 import type { GameState } from './GameState'
 import type { Item } from './Item'
+import { isNamed } from './itemNames'
 
 /** Direction → key of the destination room in the act's rooms. */
 export type Exits = Record<string, string>
@@ -46,9 +47,9 @@ export class Room {
     return 'It is quiet here.'
   }
 
+  /** The first item in the room named by full or short name, or null. */
   getItemByName(itemName: string): Item | null {
-    const wanted = itemName.toLowerCase()
-    return this.items.find((item) => item.name.toLowerCase() === wanted) ?? null
+    return this.items.find((item) => isNamed(item, itemName)) ?? null
   }
 
   getCharacterByName(characterName: string): Character | null {
