@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { GameState } from '@/engine'
 import { Mural } from '../items/Mural'
 import { RustedLockerKey } from '../items/RustedLockerKey'
@@ -30,17 +30,17 @@ export class TidalCauseway extends Room {
    */
   castLightHere(_gameState: GameState): string {
     if (this.lightCast) {
-      return (
-        "[event]Your light washes over the stones; the mural's shadows are " +
-        'familiar now and nothing new comes free.[/event]'
+      return event(
+        "Your light washes over the stones; the mural's shadows are " +
+          'familiar now and nothing new comes free.',
       )
     }
     this.addItem(new RustedLockerKey())
     this.lightCast = true
-    return (
-      '[event]Your light catches a patch of pigment and a small hollow. In the ' +
-      'shadowed cranny, something metallic flakes free — a corroded key rests ' +
-      'in the rock.[/event]'
+    return event(
+      'Your light catches a patch of pigment and a small hollow. In the ' +
+        'shadowed cranny, something metallic flakes free — a corroded key rests ' +
+        'in the rock.',
     )
   }
 }

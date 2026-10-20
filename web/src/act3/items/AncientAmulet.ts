@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, characterName, speech } from '@/engine'
 
 /**
  * Heirloom catalyst linking three relic threads (Act III). Non-carriable until
@@ -20,9 +20,12 @@ export class AncientAmulet extends Item {
   /** Block premature pickup, giving narrative feedback through Mira. */
   override preventPickup(): string {
     return (
-      '[character_name]Mira[/character_name] rests a gentle hand on the ' +
-      "[item_name]amulet[/item_name]. [dialogue]'Not yet. It will choose its " +
-      "bearer when the circle is complete.'[/dialogue]"
+      characterName('Mira') +
+      ' rests a gentle hand on the ' +
+      '[item_name]amulet[/item_name]. ' +
+      speech(
+        "'Not yet. It will choose its bearer when the circle is complete.'",
+      )
     )
   }
 }

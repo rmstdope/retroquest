@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import { CooledSlag } from './CooledSlag'
 import { HeatWardMix } from './HeatWardMix'
 
@@ -27,9 +27,9 @@ export class AshFern extends Item {
 
       const mix = new HeatWardMix()
       gameState.inventory.push(mix)
-      return (
-        '[event]You combine the ash-fern with cooled slag, grinding them ' +
-        'into a coarse paste. You now have a heat-ward mix.[/event]'
+      return event(
+        'You combine the ash-fern with cooled slag, grinding them ' +
+          'into a coarse paste. You now have a heat-ward mix.',
       )
     }
 

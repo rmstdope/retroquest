@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { Exits, GameState } from '@/engine'
 import {
   FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_STARTED,
@@ -53,17 +53,17 @@ export class FumarolePassages extends Room {
 
     this.ventCalibrations += 1
     if (this.ventCalibrations < 3) {
-      return (
-        '[event]You press the vent stone into the channel. The vents click and ' +
-        'a rhythmic hiss grows steadier—the timing seems closer to being ' +
-        'synchronized.[/event]'
+      return event(
+        'You press the vent stone into the channel. The vents click and ' +
+          'a rhythmic hiss grows steadier—the timing seems closer to being ' +
+          'synchronized.',
       )
     }
 
-    return (
-      "[event]With a final fit, the vents' rhythms align into a deep, slow " +
-      'breath. You sense the passages will now accept a heat ward to steady ' +
-      'the crossing intervals.[/event]'
+    return event(
+      "With a final fit, the vents' rhythms align into a deep, slow " +
+        'breath. You sense the passages will now accept a heat ward to steady ' +
+        'the crossing intervals.',
     )
   }
 
@@ -83,12 +83,11 @@ export class FumarolePassages extends Room {
     // Set completion flag and open the path to Phoenix Crater
     gameState.setStoryFlag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, true)
 
-    return (
-      '[event]You daub the heat-ward mix into the vents and seams. The rock ' +
-      'grows a touch cooler around your hands as the ward seals into place. ' +
-      'Down the tunnel you notice the gusting heat flatten into a steady ' +
-      'breath—passage through the fumaroles is now safe for a short interval.' +
-      '[/event]'
+    return event(
+      'You daub the heat-ward mix into the vents and seams. The rock ' +
+        'grows a touch cooler around your hands as the ward seals into place. ' +
+        'Down the tunnel you notice the gusting heat flatten into a steady ' +
+        'breath—passage through the fumaroles is now safe for a short interval.',
     )
   }
 

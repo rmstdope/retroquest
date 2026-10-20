@@ -1,4 +1,11 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  characterName,
+  event,
+  type Character,
+  type GameState,
+  type Item,
+} from '@/engine'
 
 /** Divine incantation granting protection and sanctifying power. */
 export class BlessSpell extends Spell {
@@ -15,7 +22,8 @@ export class BlessSpell extends Spell {
   override castSpell(gameState: GameState): string {
     gameState.setStoryFlag('journey_bless_completed', true)
     return (
-      '[event]You cast [spell_name]bless[/spell_name] on yourself.[/event]\n' +
+      event('You cast [spell_name]bless[/spell_name] on yourself.') +
+      '\n' +
       'Your resolve is strengthened, and you feel more prepared for the ' +
       'challenges that lie ahead on your journey.'
     )
@@ -28,10 +36,12 @@ export class BlessSpell extends Spell {
   ): string {
     const name = targetCharacter.name
     return (
-      '[event]You cast [spell_name]bless[/spell_name] on ' +
-      `[character_name]${name}[/character_name].[/event]\n` +
+      event(
+        `You cast [spell_name]bless[/spell_name] on ${characterName(name)}.`,
+      ) +
+      '\n' +
       'A divine light surrounds ' +
-      `[character_name]${name}[/character_name], and they seem ` +
+      `${characterName(name)}, and they seem ` +
       'strengthened and more resolute.'
     )
   }

@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import {
   FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
   FLAG_ACT3_WARDING_PILLARS_PURIFIED,
@@ -37,18 +37,18 @@ export class WardingPillars extends Item {
     // Return completely different strings depending on purification state.
     if (this.purified) {
       // Pulsating, radiant description when purified.
-      return (
-        '[event]The pillars pulse with a quiet, radiant rhythm. Light seems to ' +
-        'gather in the carved channels, a steady heartbeat that draws the tide ' +
-        'toward the stone. The air tastes of moonwater; the ward answers, ready ' +
-        'to pull the sea back when the sigil is set.[/event]'
+      return event(
+        'The pillars pulse with a quiet, radiant rhythm. Light seems to ' +
+          'gather in the carved channels, a steady heartbeat that draws the tide ' +
+          'toward the stone. The air tastes of moonwater; the ward answers, ready ' +
+          'to pull the sea back when the sigil is set.',
       )
     }
     // Dark, faint-hum description when not purified.
-    return (
-      '[event]The pillars stand mute in the dim, their faces ringed with crust and ' +
-      'shadow. A faint, weary hum hides under the stone, a thread of old magic ' +
-      'barely holding. They watch the water but do not command it.[/event]'
+    return event(
+      'The pillars stand mute in the dim, their faces ringed with crust and ' +
+        'shadow. A faint, weary hum hides under the stone, a thread of old magic ' +
+        'barely holding. They watch the water but do not command it.',
     )
   }
 
@@ -62,9 +62,9 @@ export class WardingPillars extends Item {
     this.name = 'Warding Pillars (purified)'
     // Mark purification story flag so other systems can react to the change.
     gameState.setStoryFlag(FLAG_ACT3_WARDING_PILLARS_PURIFIED, true)
-    return (
-      '[event]You rinse salt and scrape coral from the carved channels. Glyph-lines ' +
-      'breathe again, ready to take the Tideward Sigil.[/event]'
+    return event(
+      'You rinse salt and scrape coral from the carved channels. Glyph-lines ' +
+        'breathe again, ready to take the Tideward Sigil.',
     )
   }
 
@@ -86,11 +86,11 @@ export class WardingPillars extends Item {
     // Consume shards and set story flag
     gameState.removeItemFromInventory(other.name)
     gameState.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
-    return (
-      '[event]You press the pale shards into the cleansed grooves. Pale runes ' +
-      'flare and sink into the stone like stored moonlight. The air leans in; ' +
-      'a subtle pull runs through the courtyard as the tide answers the sigils, ' +
-      'drawing the sea closer to the pillars.[/event]'
+    return event(
+      'You press the pale shards into the cleansed grooves. Pale runes ' +
+        'flare and sink into the stone like stored moonlight. The air leans in; ' +
+        'a subtle pull runs through the courtyard as the tide answers the sigils, ' +
+        'drawing the sea closer to the pillars.',
     )
   }
 }

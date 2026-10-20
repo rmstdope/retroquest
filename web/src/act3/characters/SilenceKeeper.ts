@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 
 /** Guardian of the threshold to the dragon's hall. */
 export class SilenceKeeper extends Character {
@@ -15,12 +15,17 @@ export class SilenceKeeper extends Character {
   /** Provide guidance on the Oath of Stillness. */
   override talkTo(_gameState: GameState): string {
     return (
-      'The [character_name]Silence Keeper[/character_name] whispers, their voice ' +
-      "barely disturbing the air: [dialogue]'The echo stones await sanctification. " +
-      'Only when blessed ' +
-      'can they amplify the ancient words that will quiet the restless ' +
-      'spirits. Speak the resonant chant to the stones, and the path to ' +
-      "the ancient one will open.'[/dialogue]"
+      'The ' +
+      characterName('Silence Keeper') +
+      ' whispers, their voice ' +
+      'barely disturbing the air: ' +
+      speech(
+        "'The echo stones await sanctification. " +
+          'Only when blessed ' +
+          'can they amplify the ancient words that will quiet the restless ' +
+          'spirits. Speak the resonant chant to the stones, and the path to ' +
+          "the ancient one will open.'",
+      )
     )
   }
 }

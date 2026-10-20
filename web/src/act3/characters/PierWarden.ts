@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import {
   FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
   FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
@@ -29,27 +29,39 @@ export class PierWarden extends Character {
     const name = this.name
     if (!sigils) {
       return (
-        `The [character_name]${name}[/character_name] squints toward the shore. ` +
-        "[dialogue]'I'd mind the high stones if I were you. The markers " +
-        'along the shore keep strange fragments—take heed and look for ' +
-        "moon-signs before the tide turns.'[/dialogue]"
+        'The ' +
+        characterName(name) +
+        ' squints toward the shore. ' +
+        speech(
+          "'I'd mind the high stones if I were you. The markers " +
+            'along the shore keep strange fragments—take heed and look for ' +
+            "moon-signs before the tide turns.'",
+        )
       )
     }
 
     if (sigils && !lanterns) {
       return (
-        `The [character_name]${name}[/character_name] nods slowly. ` +
-        "[dialogue]'You've done right by the pillars. There's a fused locker " +
-        'down in the vaults; I tried a key once but it stuck. Magic will ' +
-        "loosen it, or so the old songs say.'[/dialogue]"
+        'The ' +
+        characterName(name) +
+        ' nods slowly. ' +
+        speech(
+          "'You've done right by the pillars. There's a fused locker " +
+            'down in the vaults; I tried a key once but it stuck. Magic will ' +
+            "loosen it, or so the old songs say.'",
+        )
       )
     }
 
     return (
-      `The [character_name]${name}[/character_name] looks out over the calmer water. ` +
-      "[dialogue]'With the sigils attuned and the lanterns lit, the way grows " +
-      'steadier. Those who brave the sanctum find the tide less quick to ' +
-      "swallow their steps.'[/dialogue]"
+      'The ' +
+      characterName(name) +
+      ' looks out over the calmer water. ' +
+      speech(
+        "'With the sigils attuned and the lanterns lit, the way grows " +
+          'steadier. Those who brave the sanctum find the tide less quick to ' +
+          "swallow their steps.'",
+      )
     )
   }
 }

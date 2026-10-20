@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { Exits, GameState } from '@/engine'
 import {
   FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
@@ -47,16 +47,16 @@ export class SubmergedAntechamber extends Room {
   /** Search the antechamber for subtle traces and hidden marks. */
   override search(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)) {
-      return (
-        "[event]The water in the hall sits high and murky. It's impossible to " +
-        'search effectively here — the flooded approach hides whatever might ' +
-        'lie beneath the surface.[/event]'
+      return event(
+        "The water in the hall sits high and murky. It's impossible to " +
+          'search effectively here — the flooded approach hides whatever might ' +
+          'lie beneath the surface.',
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)) {
-      return (
-        '[event]The niches glow with steady, pearlescent flame. The Lanterns of the ' +
-        'Deeps are already lit.[/event]'
+      return event(
+        'The niches glow with steady, pearlescent flame. The Lanterns of the ' +
+          'Deeps are already lit.',
       )
     }
     const alreadyHere = this.items.some((i) => i instanceof LanternBracket)
@@ -68,15 +68,15 @@ export class SubmergedAntechamber extends Room {
         new LanternBracket(),
       )
       gameState.setStoryFlag(FLAG_ACT3_LANTERN_BRACKETS_FOUND, true)
-      return (
-        '[event]You wade through chilled water. As you peer into the niches, ' +
-        'three carved brackets become apparent; their grooves catch the ' +
-        'faint tide-light.[/event]'
+      return event(
+        'You wade through chilled water. As you peer into the niches, ' +
+          'three carved brackets become apparent; their grooves catch the ' +
+          'faint tide-light.',
       )
     }
-    return (
-      '[event]You wade through chilled water. Three empty brackets line the ' +
-      'approach; their carved grooves catch the faint tide-light.[/event]'
+    return event(
+      'You wade through chilled water. Three empty brackets line the ' +
+        'approach; their carved grooves catch the faint tide-light.',
     )
   }
 
@@ -97,9 +97,9 @@ export class SubmergedAntechamber extends Room {
     }
     gameState.inventory.splice(gameState.inventory.indexOf(lantern), 1)
     empty.putLantern()
-    return (
-      '[event]You seat the prism lantern; water hums softly as the bracket takes its ' +
-      'weight.[/event]'
+    return event(
+      'You seat the prism lantern; water hums softly as the bracket takes its ' +
+        'weight.',
     )
   }
 
@@ -109,9 +109,9 @@ export class SubmergedAntechamber extends Room {
       (b): b is LanternBracket => b instanceof LanternBracket,
     )
     if (brackets.length === 0) {
-      return (
-        '[event]A warm spark flares in your palm and fades—nothing here seems to ' +
-        'catch.[/event]'
+      return event(
+        'A warm spark flares in your palm and fades—nothing here seems to ' +
+          'catch.',
       )
     }
     if (!brackets.every((b) => b.hasLantern)) {

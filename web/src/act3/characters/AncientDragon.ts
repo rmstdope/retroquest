@@ -1,4 +1,10 @@
-import { Character, type GameState } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  event,
+  speech,
+} from '@/engine'
 import { DragonsScale } from '../items/DragonsScale'
 import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
@@ -27,23 +33,33 @@ export class AncientDragon extends Character {
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
       dialogue =
-        `The [character_name]${name}[/character_name]'s voice resonates through ` +
-        "your mind like distant thunder: [dialogue]'Young one, I remember your " +
-        'parents well. Lyra ' +
-        'and Theron came to me when shadows first stirred. They spoke of ' +
-        "a child who must be hidden from Malakar's sight, protected until " +
-        'the time of choosing arrived. They forged a ward—not of stone or ' +
-        'steel, but of love itself. This ward yet shields you, woven into ' +
-        'your very being. They did not perish, child. They walk paths ' +
-        'beyond sight, guardians still, waiting for the moment when all ' +
-        "debts are paid and all bonds may be renewed.'[/dialogue]\n\n"
+        'The ' +
+        characterName(name) +
+        "'s voice resonates through " +
+        'your mind like distant thunder: ' +
+        speech(
+          "'Young one, I remember your " +
+            'parents well. Lyra ' +
+            'and Theron came to me when shadows first stirred. They spoke of ' +
+            "a child who must be hidden from Malakar's sight, protected until " +
+            'the time of choosing arrived. They forged a ward—not of stone or ' +
+            'steel, but of love itself. This ward yet shields you, woven into ' +
+            'your very being. They did not perish, child. They walk paths ' +
+            'beyond sight, guardians still, waiting for the moment when all ' +
+            "debts are paid and all bonds may be renewed.'",
+        ) +
+        '\n\n'
     }
     dialogue =
       dialogue +
-      (`The [character_name]${name}[/character_name] rumbles softly: ` +
-        "[dialogue]'The memory has been shared. Your path leads forward now, not " +
-        'back. The scale awaits when you are ready to prove your ' +
-        "selflessness.'[/dialogue]")
+      ('The ' +
+        characterName(name) +
+        ' rumbles softly: ' +
+        speech(
+          "'The memory has been shared. Your path leads forward now, not " +
+            'back. The scale awaits when you are ready to prove your ' +
+            "selflessness.'",
+        ))
     return dialogue
   }
 
@@ -58,19 +74,28 @@ export class AncientDragon extends Character {
     if (words.toLowerCase() === 'oath') {
       if (!gameState.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)) {
         return (
-          `The [character_name]${this.name}[/character_name]'s golden eyes ` +
-          "narrow slightly. [dialogue]'You " +
-          'must first understand the weight of the oath you wish to ' +
-          'speak. You can not just speak any oath. You must speak one ' +
-          "that proves your selflessness.'[/dialogue]"
+          'The ' +
+          characterName(this.name) +
+          "'s golden eyes " +
+          'narrow slightly. ' +
+          speech(
+            "'You " +
+              'must first understand the weight of the oath you wish to ' +
+              'speak. You can not just speak any oath. You must speak one ' +
+              "that proves your selflessness.'",
+          )
         )
       }
       // Check if the oath has already been spoken
       if (gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)) {
         return (
-          `The [character_name]${this.name}[/character_name] rumbles: ` +
-          "[dialogue]'The oath has been given and accepted. The scale is yours " +
-          "to claim.'[/dialogue]"
+          'The ' +
+          characterName(this.name) +
+          ' rumbles: ' +
+          speech(
+            "'The oath has been given and accepted. The scale is yours " +
+              "to claim.'",
+          )
         )
       }
       // Accept the oath and make the scale available
@@ -79,16 +104,25 @@ export class AncientDragon extends Character {
       const dragonsScale = new DragonsScale()
       gameState.currentRoom.addItem(dragonsScale)
       return (
-        '[event]You speak your oath to the ' +
-        `[character_name]${this.name}[/character_name], pledging ` +
-        'your commitment to selflessness and the protection of others.[/event]\n' +
+        event(
+          'You speak your oath to the ' +
+            characterName(this.name) +
+            ', pledging ' +
+            'your commitment to selflessness and the protection of others.',
+        ) +
+        '\n' +
         "[success]The dragon's golden eyes regard you with ancient wisdom. " +
-        "[dialogue]'Your words ring true, young one. The scale is yours to bear. " +
-        "May you carry its burden with honor.'[/dialogue][/success]"
+        speech(
+          "'Your words ring true, young one. The scale is yours to bear. " +
+            "May you carry its burden with honor.'",
+        ) +
+        '[/success]'
       )
     }
     return (
-      `The [character_name]${this.name}[/character_name] listens but does ` +
+      'The ' +
+      characterName(this.name) +
+      ' listens but does ' +
       'not respond to those words. Perhaps you need to speak a more meaningful ' +
       'pledge.'
     )

@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import { FLAG_ACT3_FORTRESS_GATES_EXAMINED } from '../Act3StoryFlags'
 
 /** The massive gates of Malakar's fortress, bound with eldritch wards. */
@@ -20,7 +20,8 @@ export class FortressGates extends Item {
     if (!gameState.getStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)) {
       gameState.setStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
       return (
-        '[event]You examine the massive gates that tower above you.[/event] ' +
+        event('You examine the massive gates that tower above you.') +
+        ' ' +
         'Their blackened iron is carved with sigils that seem to writhe in ' +
         'the corner of your vision. Beyond the lattice, you glimpse corridors ' +
         "that pulse with malevolent energy. This is the threshold of Malakar's " +
@@ -31,7 +32,8 @@ export class FortressGates extends Item {
       )
     } else {
       return (
-        '[event]You examine the fortress gates.[/event] The gates stand ' +
+        event('You examine the fortress gates.') +
+        ' The gates stand ' +
         'ready to be breached. The weight of destiny presses down as you ' +
         'prepare for the final assault.'
       )
