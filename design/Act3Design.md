@@ -35,7 +35,7 @@ Mount Ember is an old volcano whose heart pulses with elemental puzzles. Its slo
 
 -   Guardian: A phoenix wrought of ember and memory rises from a crater. It asks, “What is wisdom when time is short?” The accepted answer is “patience.” After both Mount Ember side quests are complete, the Phoenix offers the Feather. The Phoenix links patience to a friend who had none: it tells Elior that the Feather was made for a Warden who could not wait when time was short, and who is the reason the answer matters. It does not yet name Malakar to Elior; the Charred Inscription and the Dragon do.
 -   Curse: ash falls like rain over the slopes (see *The Curse Worsens*).
--   Amulet: when Elior reads the Charred Inscription, the Ancient Amulet glows again and the faces sharpen: the woman is Lysa, the man Aren, and the third figure still has his back turned.
+-   Amulet: when Elior reads the Charred Inscription, the Ancient Amulet glows again and the faces sharpen: the woman is Lysa, and the third figure still has his back turned.
 
 Result: The Phoenix offers a single Feather, warm as a heartbeat.
 
@@ -43,11 +43,11 @@ Result: The Phoenix offers a single Feather, warm as a heartbeat.
 
 Beneath Eldoria’s oldest hills, the Caverns of Shadow breathe a chill that dims torches. There, a dragon sleeps—not a beast of greed, but a creature of burdens, keeping darkness pinned beneath its coils.
 
--   The Dragon: Ancient, wise, and tired. It knows Elior’s parents’ names, Aren and Lysa, and calls them Wardens of the Dawn. It reveals that they made the relics together with their friend Malakar, and that they gave themselves to hide Elior and to hold shut the wound Malakar tore in time: they are warded away, not dead. The dragon guards a scale that can ward a soul—but taking it without due cause weakens the prison it maintains.
+-   The Dragon: Ancient, wise, and tired. It knows Elior’s parents’ names, Aren and Lysa, and calls them Wardens of the Dawn. It reveals that they made the relics together with their friend Malakar, and that they gave themselves to hide Elior and to hold shut the wound Malakar tore in time: they are warded away, not dead. The ward is anchored in the Ancient Amulet and in King Alden’s royal bindings, which is why Malakar drains the king. The dragon guards a scale that can ward a soul—but taking it without due cause weakens the prison it maintains.
 -   The refrain: the Dragon echoes “Power follows purpose; purpose follows truth.”
 -   The dream voice: after the Dragon’s Memory, the voice from the Prologue speaks once more in the hall, asking Elior for help in words he almost knows. The Dragon answers that it is “the friend who stayed behind,” and says no more.
 -   Curse: the mines fall silent and the cavern’s old dripping stops (see *The Curse Worsens*).
--   Amulet: when Elior hears the Dragon’s Memory, the Ancient Amulet glows a third time, and for a moment the third figure turns and holds a baby. The amulet shows the faces; it does not say whether the parents live.
+-   Amulet: when Elior hears the Dragon’s Memory, the Ancient Amulet glows a third time, and Aren stands beside Lysa, hand in hand, while the third figure still has his back turned. The Dragon names the amulet as the anchor of the ward. The amulet shows the faces; it does not say whether the parents live.
 -   Offering: After hearing the Dragon’s Memory and examining the Old Oath Scrolls found in Echo Chambers, Elior offers the binding oath. The dragon yields the Scale when it believes the promise.
 
 Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns brighten, not with light, but with trust.
@@ -61,13 +61,13 @@ Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns b
 
 ## The Curse Worsens
 
-The curse is visibly worse each time the party arrives at a relic site, and grows with the player’s progress in that site’s quests.
+At each relic site the curse is visibly worse than the last, and the beat plays once, when Elior reads or hears that site’s Echoes clue (the letter, the inscription, the Dragon’s Memory).
 
 -   Sunken Ruins: dead sea birds on the causeways, the surf running grey.
 -   Mount Ember: ash rain falling over the slopes and the braziers guttering.
 -   Caverns of Shadow: silent mines, the miners’ picks hanging unmoved.
 
-Mira says each time that the king is weaker. The final Act III row of the red line follows from it: Elior’s parents were not Malakar’s victims; they were his closest friends.
+When Mira next teleports the party she says the king is weaker. Together with the clues, this builds to the Act III row of the red line: Elior’s parents were not Malakar’s victims; they were his closest friends.
 
 ## Quests in Act III
 
@@ -88,7 +88,7 @@ Mira says each time that the king is weaker. The final Act III row of the red li
 
 #### Mira’s Confession
 
-Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned from Aren, Lysa and Malakar, and when Aren and Lysa became the ward she settled in Willowbrook as its healer to watch over Elior. Grandmother knew, and kept the secret with her. Elior confronts her: “Why didn’t you tell me?” Mira answers that she could not risk the seal, that the ward hides him only while he does not know what he carries, and that she is telling him now because he has earned it. The confession is a fixed dialogue, not a branching choice; the rite follows at once.
+Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned from Aren, Lysa and Malakar, and when Aren and Lysa became the ward she settled in Willowbrook as its healer to watch over Elior. Grandmother knew, and kept the secret with her. Elior confronts her: “Why didn’t you tell me?” Mira answers that she could not risk the seal, that Malakar’s cloaked agent was searching Willowbrook for the amulet and any word could have reached him, and that she is telling him now because Elior has earned the truth. The amulet, she adds, is the anchor of the ward his parents became. The confession is a fixed dialogue, not a branching choice; Mira performs the rite on her next conversation.
 
 ### Storytelling Quest (Spans All Three Locations)
 
@@ -438,8 +438,8 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle. Each r
 | Where                         | The choice                                                                           | Records      |
 | ----------------------------- | ------------------------------------------------------------------------------------ | ------------ |
 | Collapsed Pier, Pier Warden   | Tell the Pier Warden the true state of the ruins instead of the comforting lie       | **truth**    |
-| Stillness Vestibule, Phantoms | Free the wandering phantoms without banishing them (`say rest to wandering phantoms`) | **mercy**    |
-| Dragon’s Hall, the Dragon     | Spare the dragon’s prison: promise to return the scale and take it only after hearing the Dragon out (`say return to dragon`) | **selfless** |
+| Stillness Vestibule, Phantoms | Free the wandering phantoms without banishing them (`say rest to wandering phantoms`) before the chant; the chant then still completes the quest | **mercy**    |
+| Dragon’s Hall, the Dragon     | After taking the scale, mend the prison it weakened (`cast bless on sigils`), gaining nothing | **selfless** |
 
 The endings read the counters across the whole game, as described in `Act4Design.md`.
 
@@ -553,6 +553,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 1. Room: Mira’s Hut
 
 -   Commands and yields:
+    -   `take ancient amulet` → Elior takes his family heirloom and carries it from now on.
     -   `talk to Mira` → Starts “The Three Virtues”; Mira explains the relics and gives Elior the Keepsake Note.
     -   `examine keepsake note` → Reads the note and starts “Echoes of the Hidden Bond.” The note is in Mira’s hand and says only that Elior must read what the relics’ makers left behind.
 
@@ -650,7 +651,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 -   Commands and yields:
     -   `east` → Enters Mirror Terraces from Obsidian Outcrops.
     -   `search` → Shows sockets, mounts, and the etched light channels.
-    -   `examine inscription` → Reads the Charred Inscription (the three Wardens’ promise) and records the second “Echoes of the Hidden Bond” clue; the amulet glows and the faces are Aren’s and Lysa’s; ash rain falls; Mira requires the inscription before the party can leave Mount Ember.
+    -   `examine inscription` → Reads the Charred Inscription (the three Wardens’ promise) and records the second “Echoes of the Hidden Bond” clue; the amulet glows and the woman’s face is Lysa’s; ash rain falls; Mira requires the inscription before the party can leave Mount Ember.
     -   `examine mirror mount` → Provides lore on the mirror system and its purpose.
     -   `take brass mirror segment` → Takes the segment revealed by examining the mount.
     -   `use brass mirror segment with mirror mount` → Installs all segments in inventory; once all placed, the beam path forms.
@@ -738,7 +739,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `east` → Enters Dragon’s Hall after “Oath of Stillness” is complete.
-    -   `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues): Aren and Lysa, Wardens of the Dawn, became the ward and are warded away, not dead. The Dragon echoes “Power follows purpose; purpose follows truth.” The Ancient Amulet glows a third time. The dream voice speaks once; the Dragon says it is “the friend who stayed behind.”
+    -   `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues): Aren and Lysa, Wardens of the Dawn, became the ward and are warded away, not dead. The Dragon echoes “Power follows purpose; purpose follows truth.” The Ancient Amulet glows a third time and shows Aren and Lysa together, and the Dragon names it the anchor of the ward. The mines fall silent. The dream voice speaks once; the Dragon says it is “the friend who stayed behind.”
 
 25. Room: Dragon’s Hall (Relic Trial)
 
