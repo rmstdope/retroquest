@@ -38,8 +38,19 @@ export class PreparingForTheRoadQuest extends Quest {
     return gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)
   }
 
+  /** Keep the checklist current; it never counts as news, so always false. */
+  override checkUpdate(gameState: GameState): boolean {
+    this.refreshChecklist(gameState)
+    return false
+  }
+
   /** Rebuild the requirement checklist and report whether every item is met. */
   override checkCompletion(gameState: GameState): boolean {
+    return this.refreshChecklist(gameState)
+  }
+
+  /** Read the requirements from the game, set the checklist, tell if all are met. */
+  private refreshChecklist(gameState: GameState): boolean {
     // Items
     this.hasTravelCloak = gameState.hasItem('travel cloak')
     // Food items

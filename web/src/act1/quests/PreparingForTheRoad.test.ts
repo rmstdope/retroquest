@@ -68,4 +68,17 @@ describe('Preparing for the road checklist', () => {
     expect(details.items[0]).toEqual({ done: true, text: 'Warm clothing' })
     expect(details.items[3]).toEqual({ done: false, text: 'Sturdy footwear' })
   })
+
+  it('keeps its checklist current through checkUpdate without reporting news', () => {
+    const game = new Game([new Act1()])
+    game.state.addItemToInventory(new TravelCloak())
+    const quest = new PreparingForTheRoadQuest()
+
+    expect(quest.checkUpdate(game.state)).toBe(false)
+
+    const details = quest.details()
+    if (details.kind !== 'checklist') throw new Error('expected a checklist')
+    expect(details.items[0]).toEqual({ done: true, text: 'Warm clothing' })
+    expect(details.items[4].done).toBe(false)
+  })
 })
