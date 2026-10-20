@@ -59,8 +59,10 @@ export class SirCedric extends Character {
             'my honor and cleared my name of those terrible accusations. The ' +
             'weight I carried for so long has been lifted from my shoulders.',
         ) +
-        '\n\n*Sir Cedric reaches into his pack and withdraws an ancient ' +
-        'wooden charm*\n\n' +
+        '\n\n' +
+        characterName('Sir Cedric') +
+        ' reaches into his pack and withdraws an ancient wooden charm.' +
+        '\n\n' +
         characterName('Sir Cedric') +
         ': ' +
         speech(
@@ -121,8 +123,10 @@ export class SirCedric extends Character {
             'see you have the training and discipline needed for the ' +
             'challenges ahead.',
         ) +
-        '\n\n*Sir Cedric reaches into his pouch and hands you a bag of ' +
-        'coins*\n\n' +
+        '\n\n' +
+        characterName('Sir Cedric') +
+        ' reaches into his pouch and hands you a bag of coins.' +
+        '\n\n' +
         characterName('Sir Cedric') +
         ': ' +
         speech(

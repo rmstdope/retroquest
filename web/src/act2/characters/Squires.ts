@@ -28,31 +28,39 @@ export class Squires extends Character {
     if (!gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED)) {
       // Squires are too busy to talk if quest hasn't been accepted
       return (
+        'The squires are deeply focused on their training exercises, ' +
+        'practicing sword forms and footwork with intense concentration. ' +
+        'They seem too busy and focused to engage in conversation right ' +
+        'now.\n\n' +
         characterName('Squires') +
         ': ' +
         speech(
-          '*The squires are deeply focused on their training exercises, ' +
-            'practicing sword forms and footwork with intense concentration. ' +
-            'They seem too busy and focused to engage in conversation right ' +
-            "now.* 'Sorry, we can't talk - the Training Master expects us to " +
-            "perfect these techniques before the day is over.'",
+          "Sorry, we can't talk - the Training Master expects us to " +
+            'perfect these techniques before the day is over.',
         )
       )
     }
     // Set flag that squires have been talked to (only if quest is accepted)
     gameState.setStoryFlag(FLAG_SQUIRES_TALKED_TO, true)
     return (
+      'The young squires lower their voices and glance around nervously.\n\n' +
       characterName('Squires') +
       ': ' +
       speech(
-        '*The young squires lower their voices and glance around ' +
-          "nervously.* We're not supposed to talk about it, but we've heard " +
+        "We're not supposed to talk about it, but we've heard " +
           "the older knights whispering about Sir Cedric's disgrace. They " +
           'say he abandoned his post during a crucial battle and that ' +
-          'soldiers died because of his cowardice. *One squire looks ' +
-          "particularly troubled.* But it doesn't make sense - Sir Cedric " +
+          'soldiers died because of his cowardice.',
+      ) +
+      '\n\nOne squire looks particularly troubled.\n\n' +
+      speech(
+        "But it doesn't make sense - Sir Cedric " +
           'has always taught us about honor and duty. He would never abandon ' +
-          'his men. *Another squire nods.* We found an old diary under the ' +
+          'his men.',
+      ) +
+      '\n\nAnother squire nods.\n\n' +
+      speech(
+        'We found an old diary under the ' +
           'stone benches that tells a different story. Maybe you should take ' +
           'a look at it.',
       )
