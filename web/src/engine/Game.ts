@@ -637,15 +637,19 @@ Welcome to
     return item.useWith(this.state, other)
   }
 
-  /** `<spell>` or `<spell> on <target>`. */
+  /**
+   * `<spell>` or `<spell> on <target>`. A spell stored with underscores
+   * (`prophetic_vision`) is cast by its spaced name too (`prophetic vision`).
+   */
   cast(args: string): string {
     const lower = args.toLowerCase()
     const split = lower.indexOf(' on ')
     const spellName = (split < 0 ? lower : lower.slice(0, split)).trim()
     const targetName =
       split < 0 ? null : lower.slice(split + ' on '.length).trim()
+    const wanted = spellName.replaceAll('_', ' ')
     const spell = this.state.knownSpells.find(
-      (s) => s.name.toLowerCase() === spellName,
+      (s) => s.name.toLowerCase().replaceAll('_', ' ') === wanted,
     )
     if (!spell)
       return `[failure]You don't know any spell called '${spellName}'.[/failure]`
