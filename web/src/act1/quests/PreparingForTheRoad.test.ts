@@ -1,0 +1,52 @@
+import { describe, it, expect } from 'vitest'
+import { Game } from '@/engine'
+import { Act1 } from '../Act1'
+import { GameMap } from '../items/GameMap'
+import { TravelCloak } from '../items/TravelCloak'
+import { PreparingForTheRoadQuest } from './PreparingForTheRoad'
+
+describe('Preparing for the road checklist', () => {
+  it('marks met requirements as success', () => {
+    const game = new Game([new Act1()])
+    game.state.addItemToInventory(new TravelCloak())
+    game.state.addItemToInventory(new GameMap())
+    const quest = new PreparingForTheRoadQuest()
+
+    quest.checkCompletion(game.state)
+
+    expect(quest.description).toContain('[success] * Warm clothing[/success]')
+    expect(quest.description).toContain(
+      '[success] * A map to find your way[/success]',
+    )
+  })
+
+  it('marks unmet requirements as pending, never failure', () => {
+    const game = new Game([new Act1()])
+    game.state.addItemToInventory(new TravelCloak())
+    const quest = new PreparingForTheRoadQuest()
+
+    expect(quest.checkCompletion(game.state)).toBe(false)
+    expect(quest.description).toContain('[pending] * Sturdy footwear[/pending]')
+    expect(quest.description).toContain(
+      '[pending] * Magical protection[/pending]',
+    )
+    expect(quest.description).not.toContain('[failure]')
+  })
+
+  it('lists every requirement exactly once', () => {
+    const quest = new PreparingForTheRoadQuest()
+    quest.checkCompletion(new Game([new Act1()]).state)
+    for (const requirement of [
+      'Warm clothing',
+      'Magical protection',
+      'Food for the road (at least four different types)',
+      'Sturdy footwear',
+      'A map to find your way',
+      'All basic magic learned',
+    ]) {
+      expect(quest.description.split(requirement).length - 1, requirement).toBe(
+        1,
+      )
+    }
+  })
+})

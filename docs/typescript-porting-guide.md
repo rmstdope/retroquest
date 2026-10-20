@@ -27,7 +27,9 @@ Only import types with `import type` when nothing is used as a value (`instanceo
 needs the value import).
 
 `classes.ts` lists **every** class of the act (items, characters, rooms, quests,
-spells) as `{ Name }` entries; `Act1` passes it as `classes` so saves can name them.
+spells) as `{ Name }` entries; `Act1` passes it as `classes` so saves can name them as
+`<act name>.<class name>`. The act's `name` is therefore the short id `Act1`, `Act2`, …
+(not the Python display title), since it ends up inside every save.
 Python classes are never instantiated by the engine directly, so a constructor with no
 parameters is all a content class needs.
 
