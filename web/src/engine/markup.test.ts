@@ -1,15 +1,25 @@
 import { describe, it, expect } from 'vitest'
 import {
   MARKUP_TAGS,
+  characterName,
   dialogue,
   event,
   findMarkupProblems,
+  speech,
   writing,
 } from './markup'
 
 describe('markup helpers', () => {
   it('wraps text in an event span', () => {
     expect(event('You wait.')).toBe('[event]You wait.[/event]')
+  })
+
+  it('wraps a name and speech inline without adding a line', () => {
+    expect(characterName('Mira')).toBe('[character_name]Mira[/character_name]')
+    expect(speech("'Hi.'")).toBe("[dialogue]'Hi.'[/dialogue]")
+    expect(
+      findMarkupProblems(characterName('Mira') + ' says ' + speech('Hi')),
+    ).toEqual([])
   })
 
   it('attributes dialogue to its speaker', () => {
