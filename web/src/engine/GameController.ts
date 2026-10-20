@@ -5,7 +5,7 @@
 import type { Character } from './Character'
 import type { CompletionTree, Game } from './Game'
 import type { Item } from './Item'
-import type { Quest } from './Quest'
+import type { Quest, QuestDetails } from './Quest'
 
 /** A journal entry: a name (with markup) and its text. */
 export interface NamedItem {
@@ -20,14 +20,42 @@ export interface RoomWare {
   seller: string
 }
 
-/** The pop-up texts of the quest events one settling produced. */
+/** A quest as the journal lists it: who it is, whether it is done, its log. */
+export interface QuestSummary {
+  name: string
+  main: boolean
+  done: boolean
+  /** A completed quest is a journal holding its completion text. */
+  details: QuestDetails
+}
+
+/** A quest that started, moved on or completed in the last turn. */
+export interface QuestReport {
+  name: string
+  main: boolean
+  /**
+   * Engine markup for the story: the description (a start), the newest
+   * journal entry or the whole checklist (an update), the completion text.
+   */
+  text: string
+  /** The pop-up markup: the quest's name and type, then `text` or the log. */
+  popup: string
+}
+
+/** The quest events one settling produced. */
 export interface QuestPayloads {
   /** Quests that just started. */
-  activated: string[]
+  activated: QuestReport[]
   /** Quests whose log just changed. */
-  updated: string[]
+  updated: QuestReport[]
   /** Quests that just completed. */
-  completed: string[]
+  completed: QuestReport[]
+}
+
+/** One result screen: its text, and the act-complete part of it if it has one. */
+export interface ResultScreen {
+  text: string
+  actComplete: string | null
 }
 
 export interface QuestProgress {
@@ -73,9 +101,42 @@ function questType(quest: Quest): 'main' | 'side' {
   return quest.isMain() ? 'main' : 'side'
 }
 
-/** The pop-up text for a quest event. */
-function questPopup(quest: Quest, text: string): string {
-  return `[quest_name]${quest.name} (${questType(quest)} quest)[/quest_name]\n\n${text}`
+/** A quest event: the story text plus the pop-up form of the same text. */
+function questReport(
+  quest: Quest,
+  text: string,
+  popupText = text,
+): QuestReport {
+  return {
+    name: quest.name,
+    main: quest.isMain(),
+    text,
+    popup: `[quest_name]${quest.name} (${questType(quest)} quest)[/quest_name]\n\n${popupText}`,
+  }
+}
+
+/**
+ * What the story shows of an updated quest: a journal's newest entry, a
+ * checklist whole, or only its items once none is open.
+ */
+function newsText(quest: Quest): string {
+  const details = quest.details()
+  if (details.kind === 'journal') return details.latest || quest.description
+  if (details.items.every((item) => item.done))
+    return details.items.map((item) => `✓ ${item.text}`).join('\n')
+  return quest.description
+}
+
+/** A quest for the journal list. */
+function questSummary(quest: Quest, done: boolean): QuestSummary {
+  return {
+    name: quest.name,
+    main: quest.isMain(),
+    done,
+    details: done
+      ? { kind: 'journal', latest: quest.completion, earlier: [] }
+      : quest.details(),
+  }
 }
 
 export class GameController {
@@ -106,18 +167,30 @@ export class GameController {
   }
 
   /** The texts of the logo and intro screens, then the running act's first text. */
-  advanceToRunning(): string[] {
-    const results: string[] = []
-    while (!this.game.isActRunning()) {
-      results.push(this.advanceTurn())
+  advanceToRunning(): ResultScreen[] {
+    const screens: ResultScreen[] = []
+    const addScreen = (): void => {
+      screens.push({
+        text: this.game.getResultText(),
+        actComplete: this.game.getActCompleteText(),
+      })
     }
-    results.push(this.game.getResultText())
-    return results
+    while (!this.game.isActRunning()) {
+      addScreen()
+      this.game.newTurn()
+    }
+    addScreen()
+    return screens
   }
 
   /** The current run state's text, without a new turn. */
   getResultText(): string {
     return this.game.getResultText()
+  }
+
+  /** The act-complete text of the current screen, or null when it has none. */
+  getActCompleteText(): string | null {
+    return this.game.getActCompleteText()
   }
 
   /** True while the game takes a typed command. */
@@ -130,18 +203,18 @@ export class GameController {
     return this.game.getCommandCompletions()
   }
 
-  getActiveQuests(): NamedItem[] {
-    return this.game.state.activatedQuests.map((quest) => ({
-      name: `[quest_name]${quest.name} (${questType(quest)})[/quest_name]`,
-      description: quest.description,
-    }))
+  /** The active quests with their logs as data. */
+  getActiveQuests(): QuestSummary[] {
+    return this.game.state.activatedQuests.map((quest) =>
+      questSummary(quest, false),
+    )
   }
 
-  getCompletedQuests(): NamedItem[] {
-    return this.game.state.completedQuests.map((quest) => ({
-      name: `[quest_name]${quest.name} (${questType(quest)})[/quest_name]`,
-      description: `[dim]${quest.completion}[/dim]`,
-    }))
+  /** The completed quests; the log of each is how it ended. */
+  getCompletedQuests(): QuestSummary[] {
+    return this.game.state.completedQuests.map((quest) =>
+      questSummary(quest, true),
+    )
   }
 
   /** Carried items, equal ones counted together. */
@@ -205,17 +278,17 @@ export class GameController {
       payloads.completed = game
         .presentedState()
         .settleQuests()
-        .completed.map((q) => questPopup(q, q.completion))
+        .completed.map((q) => questReport(q, q.completion))
     } else if (game.isActRunning()) {
       const changes = game.state.settleQuests()
       payloads.activated = changes.activated.map((q) =>
-        questPopup(q, q.description),
+        questReport(q, q.description),
       )
       payloads.updated = changes.updated.map((q) =>
-        questPopup(q, q.description),
+        questReport(q, newsText(q), q.description),
       )
       payloads.completed = changes.completed.map((q) =>
-        questPopup(q, q.completion),
+        questReport(q, q.completion),
       )
     }
     return payloads

@@ -41,7 +41,7 @@ export class TheGatheringStormQuest extends Quest {
 
   override checkUpdate(gameState: GameState): boolean {
     let updated = false
-    this.description = ''
+    const earlier: string[] = []
     let newDesc =
       'Having just arrived in the bustling city of Greendale, Elior senses an ' +
       'ominous presence growing in the shadows. Strange whispers speak of dark ' +
@@ -55,7 +55,7 @@ export class TheGatheringStormQuest extends Quest {
         this.flagState[FLAG_SPOKEN_TO_SIR_CEDRIC] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nSir Cedric has explained that dark forces are gathering and he needs ' +
         'allies with magical knowledge. '
@@ -65,7 +65,7 @@ export class TheGatheringStormQuest extends Quest {
         this.flagState[FLAG_DEMONSTRATED_COMBAT_SKILLS] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nHaving proven your martial prowess with the training sword, you ' +
         "have earned Sir Cedric's trust in your combat abilities. This " +
@@ -86,7 +86,7 @@ export class TheGatheringStormQuest extends Quest {
         this.flagState[FLAG_SUPPLIES_QUEST_COMPLETED] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nWith all the essential supplies now gathered - the forest survival ' +
         'kit, enhanced lantern, and quality rope - you are properly equipped ' +
@@ -103,7 +103,7 @@ export class TheGatheringStormQuest extends Quest {
         this.flagState[FLAG_ANCIENT_LIBRARY_COMPLETED] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nThe ancient hidden library has revealed its secrets! Through the ' +
         "Spectral Librarian's guidance, you have uncovered crucial knowledge " +
@@ -123,7 +123,7 @@ export class TheGatheringStormQuest extends Quest {
         this.flagState[FLAG_HERMITS_WARNING_COMPLETED] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         "\n\nBy heeding the Hermit's warning and properly preparing with the " +
         'survival kit, you have successfully navigated the threshold between ' +
@@ -140,7 +140,7 @@ export class TheGatheringStormQuest extends Quest {
         this.flagState[FLAG_NYX_TRIALS_COMPLETED] = true
         updated = true
       }
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nThe trials are complete! You have successfully met with Nyx, the ' +
         'ancient forest sprite, and proven yourself worthy of her greatest ' +
@@ -157,7 +157,7 @@ export class TheGatheringStormQuest extends Quest {
         'all.'
     }
 
-    this.description += newDesc
+    this.setJournal(earlier, newDesc)
     return updated
   }
 

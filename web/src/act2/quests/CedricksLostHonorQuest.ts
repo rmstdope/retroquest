@@ -38,15 +38,15 @@ export class CedricksLostHonorQuest extends Quest {
   /** Refresh the quest description when new squire or document information exists. */
   override checkUpdate(gameState: GameState): boolean {
     let updated = false
-    this.description =
+    const earlier: string[] = []
+    let newDesc =
       'Sir Cedric has been living under a cloud of disgrace due to false ' +
       'accusations of cowardice. Investigate the rumors about his past and ' +
       'find evidence to clear his name.'
-    let newDesc = ''
     // First update: when diary is read
     if (gameState.getStoryFlag(FLAG_READ_SQUIRES_DIARY)) {
       // Update the description to include information from the squires
-      this.description = '[dim]' + this.description + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nAccording to the squires and their diary, secret documents from ' +
         'Heavensforth that would clear his name went missing when a merchant ' +
@@ -60,7 +60,7 @@ export class CedricksLostHonorQuest extends Quest {
     // Second update: when secret documents are examined
     if (gameState.getStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS)) {
       // Update the description to include information about finding the evidence
-      this.description += '[dim]' + newDesc + '[/dim]'
+      earlier.push(newDesc)
       newDesc =
         '\n\nYou have found the secret documents! The evidence clearly proves ' +
         "Sir Cedric's innocence - he was protecting civilians and following " +
@@ -71,7 +71,7 @@ export class CedricksLostHonorQuest extends Quest {
       }
       this.documentsExamined = true
     }
-    this.description += newDesc
+    this.setJournal(earlier, newDesc)
 
     return updated
   }

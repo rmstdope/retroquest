@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { QuestNews } from '@/lantern/parseQuestNews'
+import type { QuestNews } from '@/lantern/questNews'
 import { renderMarkup } from '@/utils/theme'
 
 /**

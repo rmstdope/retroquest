@@ -2,7 +2,6 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
-import { parseQuest } from '@/lantern/parseQuest'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
@@ -230,17 +229,11 @@ async function closeGameDialog(): Promise<void> {
 const shownQuestView = computed<QuestView | null>(() => {
   const name = game.shownQuest
   if (!name) return null
-  const lists = [
-    { done: false, raw: game.rawActiveQuests },
-    { done: true, raw: game.rawCompletedQuests },
-  ]
-  for (const { done, raw } of lists) {
-    for (const entry of raw) {
-      const quest = parseQuest(entry)
-      if (quest.name === name) return { ...quest, done }
-    }
-  }
-  return null
+  return (
+    [...game.activeQuests, ...game.completedQuests].find(
+      (quest) => quest.name === name,
+    ) ?? null
+  )
 })
 
 /** Stats or Help as HTML (Help ends with the music credits). */

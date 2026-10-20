@@ -71,28 +71,33 @@ export class PreparingForTheRoadQuest extends Quest {
       FLAG_JOURNEY_BLESS_COMPLETED,
     )
 
-    const lines = [
-      'Mira has tasked you with preparing for your journey. She says you will need: \n',
-    ]
+    const intro =
+      'Mira has tasked you with preparing for your journey. ' +
+      'She says you will need:'
     const requirements: [string, boolean][] = [
-      [' * Warm clothing', this.hasTravelCloak],
-      [' * Magical protection', this.journeyBlessCompleted],
+      ['Warm clothing', this.hasTravelCloak],
+      ['Magical protection', this.journeyBlessCompleted],
       [
-        ' * Food for the road (at least four different types)',
+        'Food for the road (at least four different types)',
         this.allFoodCollected,
       ],
-      [' * Sturdy footwear', this.hasWanderingBoots],
-      [' * A map to find your way', this.hasMap],
-      [' * All basic magic learned', this.knowsAllSpells],
+      ['Sturdy footwear', this.hasWanderingBoots],
+      ['A map to find your way', this.hasMap],
+      ['All basic magic learned', this.knowsAllSpells],
     ]
+    // The prose form keeps the old text layout for readers of the description.
+    const lines = [`${intro} \n`]
     for (const [req, completed] of requirements) {
-      if (completed) {
-        lines.push(`[success]${req}[/success]`)
-      } else {
-        lines.push(`[pending]${req}[/pending]`)
-      }
+      const tag = completed ? 'success' : 'pending'
+      lines.push(`[${tag}] * ${req}[/${tag}]`)
     }
-    this.description = lines.join('\n')
+    this.setChecklist(
+      {
+        intro,
+        items: requirements.map(([text, done]) => ({ done, text })),
+      },
+      lines.join('\n'),
+    )
 
     return (
       this.hasTravelCloak &&

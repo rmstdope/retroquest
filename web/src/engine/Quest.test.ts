@@ -36,4 +36,69 @@ describe('Quest', () => {
     expect(q.completed).toBe(true)
     expect(q.checkCompletion(gs)).toBe(true)
   })
+
+  describe('details', () => {
+    /** A quest exposing the protected helpers. */
+    class Logged extends Quest {
+      journal(earlier: string[], latest: string): void {
+        this.setJournal(earlier, latest)
+      }
+      list(): void {
+        this.setChecklist(
+          {
+            intro: 'You need:',
+            items: [
+              { done: true, text: 'Cloak' },
+              { done: false, text: 'Map' },
+            ],
+          },
+          'You need:\n[success]Cloak[/success]\n[pending]Map[/pending]',
+        )
+      }
+    }
+
+    it('is a journal of the description by default', () => {
+      const q = new Quest({ name: 'Q', description: ' Look around. ' })
+      expect(q.details()).toEqual({
+        kind: 'journal',
+        latest: 'Look around.',
+        earlier: [],
+      })
+    })
+
+    it('keeps earlier stages and rebuilds the description with them dimmed', () => {
+      const q = new Logged({ name: 'Q', description: 'd' })
+      q.journal(['One.', '\nTwo.'], '\nThree.')
+      expect(q.description).toBe('[dim]One.[/dim][dim]\nTwo.[/dim]\nThree.')
+      expect(q.details()).toEqual({
+        kind: 'journal',
+        latest: 'Three.',
+        earlier: ['One.', 'Two.'],
+      })
+    })
+
+    it('promotes the last stage when nothing follows them', () => {
+      const q = new Logged({ name: 'Q', description: 'd' })
+      q.journal(['One.', 'Two.'], '')
+      expect(q.details()).toEqual({
+        kind: 'journal',
+        latest: 'Two.',
+        earlier: ['One.'],
+      })
+    })
+
+    it('reports a checklist with its done flags', () => {
+      const q = new Logged({ name: 'Q', description: 'd' })
+      q.list()
+      expect(q.details()).toEqual({
+        kind: 'checklist',
+        intro: 'You need:',
+        items: [
+          { done: true, text: 'Cloak' },
+          { done: false, text: 'Map' },
+        ],
+      })
+      expect(q.description).toContain('[pending]Map[/pending]')
+    })
+  })
 })

@@ -2,6 +2,7 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import QuestDialog from './QuestDialog.vue'
+import type { QuestView } from './QuestDialog.vue'
 
 describe('QuestDialog', () => {
   let wrapper: VueWrapper | undefined
@@ -10,12 +11,7 @@ describe('QuestDialog', () => {
     wrapper = undefined
   })
 
-  function mountQuest(quest: {
-    name: string
-    main: boolean
-    done: boolean
-    description: string
-  }) {
+  function mountQuest(quest: QuestView) {
     wrapper = mount(QuestDialog, { props: { quest }, attachTo: document.body })
     return wrapper
   }
@@ -24,8 +20,11 @@ describe('QuestDialog', () => {
     name: 'Shadows Over Willowbrook',
     main: true,
     done: false,
-    description:
-      '[dim]Elior dreams.[/dim][dim]\nThe crops wilt.[/dim]\nVillagers whisper of [character_name]Mira[/character_name].',
+    details: {
+      kind: 'journal' as const,
+      earlier: ['Elior dreams.', 'The crops wilt.'],
+      latest: 'Villagers whisper of [character_name]Mira[/character_name].',
+    },
   }
 
   it('names the quest and tells what kind it is', () => {
@@ -55,7 +54,10 @@ describe('QuestDialog', () => {
   })
 
   it('has nothing to unfold for a one-entry quest', () => {
-    const w = mountQuest({ ...JOURNAL, description: 'Explore Willowbrook.' })
+    const w = mountQuest({
+      ...JOURNAL,
+      details: { kind: 'journal', earlier: [], latest: 'Explore Willowbrook.' },
+    })
 
     expect(w.find('button.lq-earlier-toggle').exists()).toBe(false)
     expect(w.findAll('.lq-tag').map((t) => t.text())).toEqual(['Main quest'])
@@ -66,8 +68,14 @@ describe('QuestDialog', () => {
       name: 'Preparing for the Road',
       main: false,
       done: false,
-      description:
-        'Mira says you will need:\n[success] * Warm clothing[/success]\n[pending] * A map[/pending]',
+      details: {
+        kind: 'checklist',
+        intro: 'Mira says you will need:',
+        items: [
+          { done: true, text: 'Warm clothing' },
+          { done: false, text: 'A map' },
+        ],
+      },
     })
 
     expect(w.get('.lq-intro').text()).toBe('Mira says you will need:')
@@ -81,7 +89,11 @@ describe('QuestDialog', () => {
   })
 
   it('marks a completed quest', () => {
-    const w = mountQuest({ ...JOURNAL, done: true, description: 'You did it.' })
+    const w = mountQuest({
+      ...JOURNAL,
+      done: true,
+      details: { kind: 'journal', earlier: [], latest: 'You did it.' },
+    })
 
     expect(w.findAll('.lq-tag').map((t) => t.text())).toEqual([
       'Main quest',
@@ -90,7 +102,11 @@ describe('QuestDialog', () => {
   })
 
   it("calls a completed quest's text its outcome", () => {
-    const w = mountQuest({ ...JOURNAL, done: true, description: 'You did it.' })
+    const w = mountQuest({
+      ...JOURNAL,
+      done: true,
+      details: { kind: 'journal', earlier: [], latest: 'You did it.' },
+    })
 
     expect(w.get('.lq-label').text()).toBe('Outcome')
   })

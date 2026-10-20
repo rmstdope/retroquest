@@ -267,7 +267,11 @@ describe('Game', () => {
         'Congratulations — you have completed Act 1!',
       )
       expect(game.getResultText()).toContain('Get ready for Act 2')
+      expect(game.getActCompleteText()).toMatch(
+        /^Congratulations — you have completed Act 1!\n\nTake a moment.*Act 2.*\.$/s,
+      )
       game.newTurn()
+      expect(game.getActCompleteText()).toBeNull()
       expect(game.isActIntroShowing()).toBe(true)
       expect(game.finishedActState).toBeNull()
       expect(game.getActName()).toBe('Act 2')
@@ -349,6 +353,10 @@ describe('Game', () => {
       expect(game.currentAct).toBe(0)
       expect(game.getActName()).toBe('Act 1')
       expect(game.getResultText()).toContain(
+        'Congratulations — you have completed Act 1, ' +
+          'the final act of RetroQuest!',
+      )
+      expect(game.getActCompleteText()).toBe(
         'Congratulations — you have completed Act 1, ' +
           'the final act of RetroQuest!',
       )

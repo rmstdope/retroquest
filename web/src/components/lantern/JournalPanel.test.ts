@@ -4,6 +4,17 @@ import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import JournalPanel from './JournalPanel.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import type { QuestSummary } from '@/types/bridge'
+
+/** A journal quest as the engine's quest list hands it over. */
+function quest(
+  name: string,
+  main: boolean,
+  done: boolean,
+  latest: string,
+): QuestSummary {
+  return { name, main, done, details: { kind: 'journal', latest, earlier: [] } }
+}
 
 describe('JournalPanel', () => {
   let wrapper: VueWrapper | undefined
@@ -26,23 +37,16 @@ describe('JournalPanel', () => {
         description: 'Restores life.',
       },
     ]
-    game.rawActiveQuests = [
-      {
-        name: '[quest_name]Shadows Over Willowbrook (main)[/quest_name]',
-        description:
-          'Elior dreams of a [character_name]shadowy figure[/character_name].',
-      },
-      {
-        name: '[quest_name]Know your village (side)[/quest_name]',
-        description: 'Explore Willowbrook.',
-      },
+    game.activeQuests = [
+      quest(
+        'Shadows Over Willowbrook',
+        true,
+        false,
+        'Elior dreams of a [character_name]shadowy figure[/character_name].',
+      ),
+      quest('Know your village', false, false, 'Explore Willowbrook.'),
     ]
-    game.rawCompletedQuests = [
-      {
-        name: '[quest_name]Hint of Magic (side)[/quest_name]',
-        description: 'Done.',
-      },
-    ]
+    game.completedQuests = [quest('Hint of Magic', false, true, 'Done.')]
     submit = vi.fn<(command: string) => void>()
     markSeen = vi.fn<(tab: 'bag' | 'spells' | 'quests') => void>()
     vi.spyOn(game, 'submitCommand').mockImplementation(submit)
