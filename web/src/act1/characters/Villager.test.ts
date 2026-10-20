@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { Act1 } from '../Act1'
+import { Villager } from './Villager'
 import { FLAG_VILLAGER_TALKED_TO } from '../Act1StoryFlags'
 import { expectDialogueSpeaker } from '@/testing/gameHelpers'
 
@@ -14,8 +15,13 @@ function gameInSquare(): Game {
 describe('Villager dialogue markup', () => {
   it('shows each rumour as well-formed dialogue spoken by the villager', () => {
     const game = gameInSquare()
-    for (let i = 0; i < 6; i++) {
+    const villager = game.state.currentRoom.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+    const rumours = villager.dialogueOptions
+    for (let i = 0; i < rumours.length + 1; i++) {
       const answer = game.commandParser.parse('talk to villager')
+      expect(answer).toContain(rumours[i % rumours.length])
       expectDialogueSpeaker(answer, 'villager')
       expect(findMarkupProblems(answer)).toEqual([])
     }
