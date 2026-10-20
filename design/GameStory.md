@@ -42,7 +42,7 @@ Elior awakens to find his crops withered and the village in distress. The healer
 
 ## Act II: The Gathering
 
-In Greendale, Elior meets Sir Cedric, who recognizes the amulet as a symbol of the Chosen One. Cedric, in disgrace for the night King Alden vanished, pledges his loyalty once the Secret Documents clear his name, and guides Elior to the Enchanted Forest, where they must find Nyx, the forest sprite, to unlock the next stage of Elior’s powers. Elior has believed Malakar a legend from old books; by the end of the act he learns Malakar is real and seeks the Willowbrook bloodline, which means Elior. Nyx speaks the refrain, the dream voice is heard again, and the Sorceress of Lies’ mark is found on Elena’s curse.
+In Greendale, Elior meets Sir Cedric, who recognizes the Warden sigil of the Wardens of the Dawn on the amulet. Cedric, in disgrace for the night King Alden vanished, pledges his loyalty once the Secret Documents clear his name, and guides Elior to the Enchanted Forest, where they must find Nyx, the forest sprite, to unlock the next stage of Elior’s powers. Elior has believed Malakar a legend from old books; by the end of the act he learns Malakar is real and seeks the Willowbrook bloodline, which means Elior. Nyx speaks the refrain, the dream voice is heard again, and the Sorceress of Lies’ mark is found on Elena’s curse.
 
 **Key Events:**
 
@@ -60,7 +60,7 @@ In Greendale, Elior meets Sir Cedric, who recognizes the amulet as a symbol of t
 - **Forest quests:** _The Hermit's Warning_, _The Forest Guardian's Riddles_ ("tree", "water", "ants") and _Whispers in the Wind_ (the Ancient Tree Spirit, the Enchanted Acorn and Moonflowers).
 - **Lore:** _Echoes of the Past_ and _The Ancient Library_ reveal that Malakar's interest in Willowbrook concerns **ancient bloodlines**, and that the library holds prophecies of the **Chosen One** and of a coming darkness.
 - **Spells:** `mend`, `dispel`, `greater_heal`, `nature_sense`, `forest_speech`, `prophetic_vision`.
-- **Canon to add (sibling bead):** Cedric recognises the amulet, the Secret Documents prove Malakar’s agents framed him, Nyx speaks the refrain, the Sorceress of Lies’ mark appears on Elena’s curse, the dream voice is heard and the virtue moments are placed. Nyx shows a vision rather than telling Malakar's legend, King Alden is absent, and there is no combat.
+- **Canon:** Cedric recognises the Warden sigil of the Wardens of the Dawn on the Ancient Amulet in his first conversation, King Alden has vanished and the castle is half-empty, the Secret Documents show Malakar’s agents framed Cedric, the archive and Ancient Chronicle name the Wardens and Malakar’s search for the Willowbrook bloodline, the Sorceress of Lies’ mark is on Elena’s curse, and Nyx speaks the refrain and shows a vision of the Shadow of the Past (the dream voice). Three optional virtue moments (selfless, truth, mercy) are recorded. There is no combat.
 
 ## Act III: Trials and Revelations
 
