@@ -1,8 +1,11 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import {
   isDebugScriptName,
   parseDebugScript,
   failureReason,
+  goldenPathLines,
+  playDebugScript,
+  type DebugScriptHost,
 } from './debugScript'
 
 describe('parseDebugScript', () => {
@@ -41,5 +44,52 @@ describe('failureReason', () => {
     expect(
       failureReason("[failure]There is no 'x' here to take.[/failure]"),
     ).toBe("There is no 'x' here to take.")
+  })
+})
+
+describe('goldenPathLines', () => {
+  it('numbers the path from 1', () => {
+    expect(goldenPathLines(['look', 'take bread'])).toEqual([
+      { line: 1, command: 'look' },
+      { line: 2, command: 'take bread' },
+    ])
+  })
+  it('is empty for an empty path', () => {
+    expect(goldenPathLines([])).toEqual([])
+  })
+})
+
+describe('playDebugScript for an act name', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  function host(path: string[]): DebugScriptHost & { shown: string[] } {
+    const shown: string[] = []
+    return {
+      shown,
+      play: vi.fn(() => 'ok'),
+      running: () => true,
+      show: (text) => shown.push(text),
+      goldenPath: () => path,
+    }
+  }
+
+  it('plays the act golden path, without fetching', async () => {
+    const fetchSpy = vi.fn()
+    vi.stubGlobal('fetch', fetchSpy)
+    const h = host(['look', 'take bread'])
+    await playDebugScript('act1', h)
+    expect(h.play).toHaveBeenCalledTimes(2)
+    expect(h.play).toHaveBeenNthCalledWith(2, 'take bread')
+    expect(fetchSpy).not.toHaveBeenCalled()
+    expect(h.shown.at(-1)).toContain('played 2 commands')
+  })
+
+  it('says so when the act has no golden path', async () => {
+    const h = host([])
+    await playDebugScript('act4', h)
+    expect(h.play).not.toHaveBeenCalled()
+    expect(h.shown[0]).toContain("'act4' not found")
   })
 })
