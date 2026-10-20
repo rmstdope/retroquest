@@ -4,7 +4,7 @@ import {
   FLAG_HEALERS_APPRENTICE_COMPLETED,
 } from '../Act2StoryFlags'
 
-/** Quest to become Master Healer Lyria's apprentice and learn greater_heal. */
+/** Quest to become Master Healer Lyria's apprentice and learn greater heal. */
 export class TheHealersApprenticeQuest extends Quest {
   constructor() {
     super({
@@ -12,10 +12,10 @@ export class TheHealersApprenticeQuest extends Quest {
       description:
         'Master Healer Lyria has recognized your magical potential and offered ' +
         'to teach you advanced healing techniques. Learn from her wisdom and ' +
-        'master the greater_heal spell.',
+        'master the greater heal spell.',
       completion:
         'You have successfully completed your apprenticeship with Master ' +
-        "Healer Lyria! You've learned the greater_heal spell through her " +
+        "Healer Lyria! You've learned the greater heal spell through her " +
         'advanced training. Your understanding of healing magic has grown ' +
         'significantly.',
     })
@@ -27,7 +27,7 @@ export class TheHealersApprenticeQuest extends Quest {
   }
 
   override checkCompletion(gameState: GameState): boolean {
-    // Quest completes when player has learned greater_heal spell and received training
+    // Quest completes when player has learned greater heal spell and received training
     return gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)
   }
 }

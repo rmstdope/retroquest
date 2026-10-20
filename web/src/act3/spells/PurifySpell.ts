@@ -23,7 +23,7 @@ export class PurifySpell extends Spell {
   override castSpell(_gameState: GameState): string {
     // Act III version has no global gating; it always responds with a cleansing aura
     return (
-      event(`You cast [spell_name]${this.name}[/spell_name].`) +
+      event(`You cast [spell_name]${this.displayName}[/spell_name].`) +
       '\n' +
       'A brine-bright clarity flows from your hands, cutting through the mire.'
     )
@@ -37,7 +37,7 @@ export class PurifySpell extends Spell {
     }
     return (
       event(
-        `You cast [spell_name]${this.name}[/spell_name] on ` +
+        `You cast [spell_name]${this.displayName}[/spell_name] on ` +
           `[item_name]${targetItem.name}[/item_name].`,
       ) +
       '\n' +
@@ -52,7 +52,7 @@ export class PurifySpell extends Spell {
   ): string {
     return (
       event(
-        `You cast [spell_name]${this.name}[/spell_name] on ` +
+        `You cast [spell_name]${this.displayName}[/spell_name] on ` +
           `${characterName(targetCharacter.name)}.`,
       ) +
       '\n' +

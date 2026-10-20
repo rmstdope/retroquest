@@ -660,7 +660,7 @@ Welcome to
     if (character) return spell.castOnCharacter(this.state, character)
     return (
       `[failure]You don't see a '${targetName}' to cast ` +
-      `[spell_name]${spellName}[/spell_name] on.[/failure]`
+      `[spell_name]${spell.displayName}[/spell_name] on.[/failure]`
     )
   }
 
@@ -668,7 +668,7 @@ Welcome to
   learn(spell: Spell): string {
     if (this.state.knownSpells.includes(spell)) return ''
     this.state.knownSpells.push(spell)
-    return `[event]You have learned the [spell_name]${spell.name}[/spell_name] spell![/event]`
+    return `[event]You have learned the [spell_name]${spell.displayName}[/spell_name] spell![/event]`
   }
 
   spells(): string {
@@ -676,7 +676,7 @@ Welcome to
       return "You don't know any spells yet."
     const lines = this.state.knownSpells.map(
       (spell) =>
-        `  - [spell_name]${spell.name}[/spell_name]: ${spell.description}`,
+        `  - [spell_name]${spell.displayName}[/spell_name]: ${spell.description}`,
     )
     return ['[bold]Known Spells:[/bold]', ...lines].join('\n')
   }

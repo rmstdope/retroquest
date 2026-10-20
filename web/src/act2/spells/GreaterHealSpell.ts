@@ -17,7 +17,7 @@ export class GreaterHealSpell extends Spell {
   }
 
   override castSpell(_gameState: GameState): string {
-    const name = this.name
+    const name = this.displayName
     return (
       `[success]You cast [spell_name]${name}[/spell_name], channeling powerful ` +
       'healing energy. The spell radiates outward, ready to cure serious ' +
@@ -34,7 +34,7 @@ export class GreaterHealSpell extends Spell {
       // Invoke Elena's staged recovery handler (no game state argument needed)
       return targetCharacter.receiveGreaterHeal()
     }
-    const name = this.name
+    const name = this.displayName
     const tname = targetCharacter.name
     return (
       `[success]You cast [spell_name]${name}[/spell_name] on ` +

@@ -23,7 +23,7 @@ export class PurifySpell extends Spell {
   private fizzle(): string {
     return (
       event(
-        `You attempt to cast [spell_name]${this.name}[/spell_name], ` +
+        `You attempt to cast [spell_name]${this.displayName}[/spell_name], ` +
           'but the magic fizzles out, achieving nothing.',
       ) +
       '\n' +
@@ -36,7 +36,7 @@ export class PurifySpell extends Spell {
       return this.fizzle()
     }
     return (
-      event(`You cast [spell_name]${this.name}[/spell_name].`) +
+      event(`You cast [spell_name]${this.displayName}[/spell_name].`) +
       '\n' +
       'A cleansing energy flows from your hands.'
     )
@@ -52,7 +52,7 @@ export class PurifySpell extends Spell {
     const name = item.name
     return (
       event(
-        `You cast [spell_name]${this.name}[/spell_name] on ` +
+        `You cast [spell_name]${this.displayName}[/spell_name] on ` +
           `[item_name]${name}[/item_name].`,
       ) +
       '\n' +
@@ -68,7 +68,7 @@ export class PurifySpell extends Spell {
     const name = character.name
     return (
       event(
-        `You cast [spell_name]${this.name}[/spell_name] on ` +
+        `You cast [spell_name]${this.displayName}[/spell_name] on ` +
           `${characterName(name)}.`,
       ) +
       '\n' +

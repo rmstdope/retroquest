@@ -14,6 +14,7 @@ import { SecretDocuments } from './items/SecretDocuments'
 import { SquiresDiary } from './items/SquiresDiary'
 import { NatureSenseSpell } from './spells/NatureSenseSpell'
 import { TheForestGuardiansRiddles } from './quests/TheForestGuardiansRiddles'
+import { TheHealersApprenticeQuest } from './quests/TheHealersApprentice'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
 import {
   executeCommands,
@@ -1272,5 +1273,18 @@ describe('Act 2 golden path as declared by the act', () => {
     executeCommands(viaCheat, ['cheat act 2'])
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
+  })
+
+  it('never names a spell by its underscored id in a message', () => {
+    const game = new Game([new Act2()])
+    const output = executeCommands(game, [
+      ...ACT2_GOLDEN_PATH,
+      'cast prophetic vision on sir cedric',
+      'cast greater_heal on nobody',
+      'spells',
+    ])
+    const quest = new TheHealersApprenticeQuest()
+    expect(quest.description + quest.completion).not.toContain('greater_heal')
+    expect(output).not.toMatch(/\[spell_name\][a-z]+_[a-z_]+\[\/spell_name\]/)
   })
 })

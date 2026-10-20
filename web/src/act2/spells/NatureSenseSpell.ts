@@ -30,7 +30,7 @@ export class NatureSenseSpell extends Spell {
         this.natureSenseUsed = true
         // Add the Water Nymphs to the room when first cast
         gameState.currentRoom.characters.push(new WaterNymphs())
-        const name = this.name
+        const name = this.displayName
         return event(
           `You cast [spell_name]${name}[/spell_name] and extend your ` +
             'awareness throughout the glade. Immediately, you sense magical ' +
@@ -40,7 +40,7 @@ export class NatureSenseSpell extends Spell {
             'for the natural world.',
         )
       }
-      const name = this.name
+      const name = this.displayName
       return (
         `[dim]Your [spell_name]${name}[/spell_name] reveals the familiar ` +
         'presence of the water nymphs by the sacred stream, their forms ' +
@@ -50,7 +50,7 @@ export class NatureSenseSpell extends Spell {
     const roomName = gameState.currentRoom.name.toLowerCase()
     if (roomName.includes('forest') || roomName.includes('enchanted')) {
       // In forest areas, provide enhanced sensory information
-      const name = this.name
+      const name = this.displayName
       return (
         `[success]You cast [spell_name]${name}[/spell_name] and feel your awareness ` +
         'expand throughout the surrounding forest. The whisper of leaves ' +
@@ -61,7 +61,7 @@ export class NatureSenseSpell extends Spell {
       )
     } else if (roomName.includes('transition')) {
       // In transition areas, help detect magical boundaries
-      const name = this.name
+      const name = this.displayName
       return (
         `[success]You cast [spell_name]${name}[/spell_name] and feel the magical ` +
         'boundaries that separate different realms. The spell reveals the ebb ' +
@@ -71,7 +71,7 @@ export class NatureSenseSpell extends Spell {
       )
     }
     // In other areas, provide general nature awareness
-    const name = this.name
+    const name = this.displayName
     return (
       `[dim]You cast [spell_name]${name}[/spell_name] and feel a subtle ` +
       "connection to the natural world around you. While there isn't much " +
