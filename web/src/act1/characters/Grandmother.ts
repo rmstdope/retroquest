@@ -78,7 +78,12 @@ export class Grandmother extends Character {
     const journalRead = gameState.getStoryFlag('journal_read_prologue_entry')
     if (journalRead && !gameState.hasSpell('revive')) {
       dialogue +=
-        '\n' + this.journalTale() + '\n\n' + this.teachRevive(gameState)
+        (dialogue ? '\n' : '') +
+        this.dreamReaction() +
+        '\n' +
+        this.journalTale() +
+        '\n\n' +
+        this.teachRevive(gameState)
     }
 
     const journeyLine = this.journeyLine(gameState)
@@ -112,6 +117,23 @@ export class Grandmother extends Character {
 
     const eventMsg = event(`You speak with ${characterName(this.name)}.`)
     return eventMsg + '\n' + dialogue
+  }
+
+  /**
+   * Her reaction when Elior tells her of the dream and the familiar voice.
+   * Part of the one talk that teaches revive, so it happens once only.
+   */
+  private dreamReaction(): string {
+    return (
+      'You tell her about the dream: the shadows, the figure, the voice ' +
+      'calling your name, and how you were sure you had heard it before. ' +
+      'She reaches for your hand and holds it tighter than she means to. ' +
+      speech(
+        'That voice... did it say anything more? Anything but your name?',
+      ) +
+      '\nYou shake your head. She lets go, and smooths her apron. ' +
+      speech("No. No, of course not. Never mind an old woman's fancies.")
+    )
   }
 
   /** What she tells of Elior's father's journal and the revive spell. */

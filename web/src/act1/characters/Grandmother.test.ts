@@ -146,6 +146,80 @@ describe('Grandmother and the journey', () => {
   })
 })
 
+describe('Grandmother and the dream', () => {
+  const REACTION = 'did it say anything more? Anything but your name?'
+  const READ = ['use lantern', 'take lantern', 'use journal']
+
+  it('reacts to the dream after the greeting and before the father’s tale', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, READ)
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    const greeting = response.indexOf('Oh, ')
+    const reaction = response.indexOf(REACTION)
+    const tale = response.indexOf('your father was')
+    const lesson = response.indexOf('learned the')
+    expect(greeting).toBeGreaterThan(-1)
+    expect(reaction).toBeGreaterThan(greeting)
+    expect(tale).toBeGreaterThan(reaction)
+    expect(lesson).toBeGreaterThan(tale)
+    expect(response).toContain('No. No, of course not.')
+    expect(findMarkupProblems(response)).toEqual([])
+  })
+
+  it('reacts without the greeting when it was already heard', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, ['talk to grandmother', ...READ])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).not.toContain('Oh, ')
+    expect(response.indexOf(REACTION)).toBeLessThan(
+      response.indexOf('your father was'),
+    )
+  })
+
+  it('does not react before the journal is read', () => {
+    const game = new Game([new Act1()])
+
+    expect(executeCommands(game, ['talk to grandmother'])).not.toContain(
+      REACTION,
+    )
+  })
+
+  it('never mentions the dream again on later talks', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, [...READ, 'talk to grandmother'])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).not.toContain(REACTION)
+    expect(response).toContain('You recall your father')
+  })
+
+  it('does not react for a player who already learned revive', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, [...READ, 'talk to grandmother'])
+    const fresh = new Game([new Act1()])
+    fresh.state.setStoryFlag('journal_read_prologue_entry', true)
+    fresh.state.knownSpells.push(...game.state.knownSpells)
+
+    expect(executeCommands(fresh, ['talk to grandmother'])).not.toContain(
+      REACTION,
+    )
+  })
+
+  it('still reacts after a save and reload between reading and talking', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, READ)
+    const loaded = new Game([new Act1()])
+    loaded.loadSaveData(game.toSaveData())
+
+    expect(executeCommands(loaded, ['talk to grandmother'])).toContain(REACTION)
+  })
+})
+
 /** An Act I game in the cottage with Patches, coaxed out of the shed, in Elior's arms. */
 function gameCarryingPatches(): Game {
   const game = new Game([new Act1()])
