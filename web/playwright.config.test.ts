@@ -48,6 +48,17 @@ describe('playwright.config', () => {
     expect(server.command).toContain('--port 5173')
   })
 
+  it('falls back to port 5173 when E2E_PORT is empty', async () => {
+    vi.stubEnv('E2E_PORT', '')
+    const config = await loadConfig()
+    expect(config.use?.baseURL).toBe('http://localhost:5173')
+  })
+
+  it('names a value of E2E_PORT that is not a port', async () => {
+    vi.stubEnv('E2E_PORT', 'abc')
+    await expect(loadConfig()).rejects.toThrow('E2E_PORT="abc" is not a port')
+  })
+
   it('never reuses a server that is already running', async () => {
     vi.stubEnv('CI', '')
     const config = await loadConfig()
