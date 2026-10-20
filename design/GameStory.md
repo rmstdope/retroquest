@@ -38,7 +38,7 @@ Elior awakens to find his crops withered and the village in distress. The healer
 - **The family mystery:** _The Faded Photograph_ and the locket draw a tender but guarded memory of Elior's parents from Grandmother and tie his family to the darkness over Eldoria. The Priest speaks of the village founders' ancient safeguards, and the Old Mill is said to hold secrets older than the village.
 - **Spells:** `revive`, `purify`, `bless`, `heal`, `unlock`, `light`, and `grow` (read from the moss-covered stone in the glade).
 - **Ending:** Mira presents the **Ancient Amulet** ("May this guide and protect you"), and the map reveals a hidden road to Greendale.
-- **Canon to add (sibling bead):** the cloaked stranger searching for the amulet, Mira hinting that she knew his parents, the refrain on the moss-covered stone, and the dream voice as the Shadow of the Past rather than a parent. Malakar, King Alden and the prophecy are not yet named, and Mira does not mention Sir Cedric.
+- **Canon:** King Alden is said to be ill and the roads unsafe; Elior’s journal records the dream voice as familiar but unplaced and Grandmother reacts guardedly to it; the Ancient Amulet reacts to the locket, the Old Mill and the glade; the refrain is carved on the moss-covered stone; Mira hints she knew his parents; a cloaked stranger has come looking for the amulet; and Grandmother names Aren and Lysa at the farewell. Malakar, the Wardens and the prophecy are not yet named. Three optional virtue moments (truth, selfless, mercy) are recorded.
 
 ## Act II: The Gathering
 

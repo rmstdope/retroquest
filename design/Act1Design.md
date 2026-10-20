@@ -53,7 +53,7 @@
   - **Trigger:** Search Elior's Cottage and discover the photograph.
   - **Steps:** Examine the photograph to read its message (_Seek the truth where the river bends_), then show it to Grandmother. She reveals that Elior's family is connected to the darkness threatening Eldoria, and that his mother loved the river: the old fisherman at the Riverbank will remember her. The Riverbank is the bend. Show the photograph to the fisherman: he was the mother's friend, and tells of a tin she hid in the mud under the smooth stone the night before she went away. Search the Riverbank to find the tin and the mother's letter inside it.
   - **Completion:** Read the mother's letter.
-  - **Reward:** A fragment of a letter from Elior's mother. It names Malakar as someone the family knew ("If Malakar comes asking about our line, do not answer him. He is not the friend we knew."), and says Mira keeps the amulet for him and that "when you are ready, it will know you". It hints at Act II without explaining Malakar.
+  - **Reward:** A fragment of a letter from Elior's mother. It does not name anyone ("If anyone comes asking about our line, do not answer them."), and says Mira keeps the amulet for him and that "when you are ready, it will know you". Carried into Mira's hut, it makes the amulet glow brighter (see _Story Beats_). Malakar is not named in Act I.
 
 - **Name:** Shadows Over Willowbrook (Main Quest)
   - **Trigger:** At the start of the act; Elior's dream introduces the mystery.
@@ -65,16 +65,17 @@
   - **Update:** Fish the ring out of the purified well; a black-iron rune token comes up with it. The well did not sour by itself.
   - **Update (optional):** Water the Vegetable Field with purified well water; the whole field recovers.
   - **Update:** Give the rune token to Mira. She names it a _fouling sigil_: someone poisoned the well on purpose. Whoever carried it (perhaps the cloaked stranger of the villagers' rumours) was searching Willowbrook for something, "or for someone". Malakar is not named.
+  - **Update:** Mira adds that the sickness in the land and the sickness of King Alden feel like one wound (see _Story Beats_).
   - **Completion:** When act 1 is completed
 
 ## Rooms
 ### 1. Elior’s Cottage
 
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
-- **Items:** Lantern (start), bread (later), Elior’s journal (later), travel cloak (later).
+- **Items:** Lantern (start), bread (later), Elior’s journal (later; the dream entry records a voice that called for help, achingly familiar though Elior cannot place it), travel cloak (later).
 - **Spells:** `revive` (learned from Grandmother).
 - **Usable Items:** Lantern (lights the cottage; once lit it can be taken and carried, and held lit it lights the dark Abandoned Shed), Elior's journal (read for story), hidden locket (give to Grandmother).
-- **Characters:** Grandmother (offers advice, can be spoken to). While Elior carries the shed key she admits she hid it in the coop rafters years ago: the shed was his father's workshop, she never could go in, and it is dark, so he should take the lantern. Her lines follow Elior's journey: the first time he talks to her after Mira's teaching she sees in him "your mother's gift" (she knows the truth, and only hints at it) and bakes him a `fresh bread` for the road, which counts as food; after that she asks after his preparations; once he carries the Ancient Amulet she says "So it's true, then. Come back to me, child." She tells the journal tale again only when she has nothing newer to say. While Elior carries Patches she offers to keep the cat (`say stay to grandmother`, see _Elior's choices_); once Patches has stayed, she mentions her asleep by the hearth.
+- **Characters:** Grandmother (offers advice, can be spoken to). While Elior carries the shed key she admits she hid it in the coop rafters years ago: the shed was his father's workshop, she never could go in, and it is dark, so he should take the lantern. Her lines follow Elior's journey: the first time he talks to her after Mira's teaching she sees in him "your mother's gift" (she knows the truth, and only hints at it) and bakes him a `fresh bread` for the road, which counts as food; after that she asks after his preparations; once he carries the Ancient Amulet she says "So it's true, then. Come back to me, child." Once Elior has read the dream entry in his journal and repeats what the voice asked of him, she goes quiet, turns to the bread and says only "Some voices are older than memory." She is guarded and plainly knows more, but never ties the voice to a parent. She tells the journal tale again only when she has nothing newer to say. While Elior carries Patches she offers to keep the cat (`say stay to grandmother`, see _Elior's choices_); once Patches has stayed, she mentions her asleep by the hearth.
 - **Exits:** Vegetable Field (south), Village Square (east)
 
 ### 2. Vegetable Field
@@ -103,17 +104,17 @@
 - **Unusable:** old notice (start).
 - **Spells:** None.
 - **Usable Items:** (None based on Golden Path actions in this room).
-- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours; once the well is purified she asks, once, "The water's clean! Was that you?"; once Elior carries Mira's amulet she knows he is leaving.
+- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours, among them that King Alden is ill and the roads are no longer safe, and that a cloaked stranger was seen asking after "an old amulet, from a family that left" before he took the road to the mill; once the well is purified she asks, once, "The water's clean! Was that you?"; once Elior carries Mira's amulet she knows he is leaving.
 - **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east)
 
 ### 5. Mira’s Hut
 
 - **Description:** A fragrant hut filled with herbs and potions.
-- **Items:** Ancient Amulet (visible from the start; Mira prevents pickup until journey preparations are complete, then awards it).
+- **Items:** Ancient Amulet (visible from the start; Mira prevents pickup until journey preparations are complete, then awards it). Examined, it is faintly warm, and glows brighter once Elior carries the founders' locket or his mother's letter into the hut.
 - **Unusable:** Healing herb (Mira's stock; cannot be taken).
 - **Spells:** `heal`, `unlock`, `light` (learned from Mira).
 - **Usable Items:** Rare flower (give to Mira), rune token (give to Mira: she names it a fouling sigil, ties it to the mill if the mechanism is jammed, and hands it back).
-- **Characters:** Mira (teaches basic magic, gives quests).
+- **Characters:** Mira (teaches basic magic, gives quests). When she hands over the amulet she hints at her secret: "I knew your parents better than I have said. Once you are truly ready, I will tell you." She says no more, and tells Elior the cloaked stranger came to her door asking for it.
 - **Exits:** Village Square (south)
 
 ### 6. Blacksmith’s Forge
@@ -132,7 +133,7 @@
 - **Items:** Rope (store stock), apple (bonus with each purchase), matches (kept for the Priest and not for sale — not among the wares, cannot be bought or taken; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act (the hoe's and Hemlock's reward).
 - **Spells:** None.
 - **Usable Items:** Coin (2nd, purchase rope and receive an apple bonus).
-- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). He introduces himself on the first talk and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter. If Patches stays with Grandmother instead, Hemlock has heard the news, reopens the store and gives Elior a `rope` and an `apple` (no coin), so the act stays completable without the second coin.
+- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). He introduces himself on the first talk, mentions that the caravans have stopped coming because the king is ill and the roads are unsafe, and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter. If Patches stays with Grandmother instead, Hemlock has heard the news, reopens the store and gives Elior a `rope` and an `apple` (no coin), so the act stays completable without the second coin.
 - **Save compatibility:** saves made when the hoe still gave a second coin keep the store open, and returning Patches in such a save earns no second coin.
 - **Exits:** Village Square (west), Blacksmith’s Forge (south)
 
@@ -158,7 +159,7 @@
 
 ### 10. Old Mill
 
-- **Description:** A creaky windmill with dusty gears, built on an old seat of power. The strange mechanism is the cloaked stranger's device: black iron scored with the same kind of twisted rune as the token in the well, whirring on its own as it drains the power beneath the mill. The description follows its state (whirring, then jammed).
+- **Description:** A creaky windmill with dusty gears, built on an old seat of power. The strange mechanism is the cloaked stranger's device: black iron scored with the same kind of twisted rune as the token in the well, whirring on its own as it drains the power beneath the mill. The description follows its state (whirring, then jammed). Once Elior carries the Ancient Amulet and the mechanism is jammed, the amulet hums in his hand.
 - **Items:** millstone fragment (later), Mechanism (start).
 - **Unusable:** Sack of flour (start).
 - **Spells:** None.
@@ -191,7 +192,7 @@
 - **Description:** A hidden clearing, dim and overgrown under an unnatural darkness, its stone's inscription too deep in shadow to read. Once `light` is cast the darkness lifts and the glade is bathed in golden sunlight.
 - **Items:** Rare flower (later).
 - **Unusable:** shiny pebble (start).
-- **Spells:** `grow` (learned from inscriptions on a stone).
+- **Spells:** `grow` (learned from inscriptions on a stone). Beneath the `grow` inscription the refrain is carved: "Power follows purpose; purpose follows truth." Elior reads it aloud and does not know what it means. If he carries the Ancient Amulet it glows beside the stone.
 - **Usable Items:** `light` spell (cast in the glade to illuminate the moss-covered stone).
 - **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer). It never speaks: `talk to deer` or `examine deer` gives a wordless moment, its gaze drifting to the mossy stone, then to Elior, nudging him to `light`; once the glade is lit it bows its head beside the glowing stone.
 - **Exits:** Forest Path (north), Village Chapel (south)
@@ -253,7 +254,7 @@
 
 After receiving the Ancient Amulet from Mira, completing the _Preparing for the road_ quest, and completing every other side quest, use the `map` on the Road to Greendale. This unlocks the path to Greendale and triggers the transition to Act II.
 
-**The farewell.** Before the map reveals the path, Grandmother, who has walked out from the village, catches up with Elior on the road. She straightens the travel cloak ("Wear your mother's cloak. She'd want you warm."), says a word about the ring and about Patches that follows Elior's choices, kisses his brow and turns for home. Then the chapel bell rings once with no hand on the rope: an omen that closes the rumour of the bell that rang the night Elior's mother left. Only then does the map reveal the hidden path. The scene is kept short, and later beads (the end-of-act revelation of Epic A) may extend it.
+**The farewell.** Before the map reveals the path, Grandmother, who has walked out from the village, catches up with Elior on the road. She straightens the travel cloak ("Wear your mother's cloak. She'd want you warm."), says a word about the ring and about Patches that follows Elior's choices, kisses his brow and, for the first time, names his parents: "Aren and Lysa gave that amulet to Mira to keep for you. Someone has come to Willowbrook looking for it, so keep it hidden." She turns for home. Then the chapel bell rings once with no hand on the rope: an omen that closes the rumour of the bell that rang the night Elior's mother left. Only then does the map reveal the hidden path. This is the red-line ending of Act I: the amulet was his parents', and someone has come for it. The scene is kept short, and later beads (the end-of-act revelation of Epic A) may extend it.
 
 ## Elior's choices
 
@@ -261,6 +262,28 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
 
 - **The ring.** Examining the shiny ring shows the initials _A & L_ inside the band: it was Elior's mother's wedding ring. Elior can trade it to the Merchant for the boots (golden path) or keep it and trade the forge's horseshoe instead (`kept_mothers_ring`). At the farewell, Grandmother either says the merchant showed her the ring and she would have given it gladly, or is glad he kept it.
 - **Patches.** Elior can carry Patches home to Hemlock (golden path, with the coin reward) or, in the cottage, let her stay with Grandmother (`say stay to grandmother`, `patches_stayed_with_grandmother`). Then Hemlock reopens the store, gives a rope and an apple instead of the coin (`hemlock_heard_patches_stayed`), and _Curiosity killed the cat_ still completes. Grandmother mentions Patches by the hearth, and again at the farewell.
+
+## Story Beats
+
+The red-line threads of Act I (see `GameStory.md`, Story Canon and Red Line). All ride on existing talks, examines and gives; none adds a puzzle or changes the golden path. Malakar, the Wardens, the ward and the parents' fate are not named in Act I.
+
+- **The ill king.** Tilda says King Alden is ill and the roads are no longer safe; Hemlock adds that the caravans have stopped coming. Mira says the sickness in the land and the king's sickness feel like one wound: the blight is the first ripple of the same draining magic.
+- **The dream voice.** Elior's journal records a voice that called for help, achingly familiar but unplaced. When he repeats what it asked to Grandmother she goes quiet, turns to the bread and says "Some voices are older than memory." She is guarded and plainly knows more. The voice is never tied to a parent.
+- **The amulet reacts.** In Mira's hut it is faintly warm and glows brighter once Elior carries the founders' locket or his mother's letter into the room. In his hand it hums at the jammed Old Mill and glows beside the moss-covered stone in the Hidden Glade. It reacts only to things tied to his parents and the founders' line.
+- **The refrain.** "Power follows purpose; purpose follows truth." is carved beneath the `grow` inscription on the moss-covered stone.
+- **Mira's hint.** "I knew your parents better than I have said. Once you are truly ready, I will tell you."
+- **The cloaked stranger.** Tilda saw him asking after "an old amulet, from a family that left" and he took the road to the mill; Mira says he came to her door. The rune token and the mill's mechanism are his work.
+- **The red-line ending.** At the farewell Grandmother names Aren and Lysa and says the amulet was theirs, and that someone has come to Willowbrook looking for it.
+
+## Optional choices
+
+Optional virtue moments; none blocks the golden path, none adds a puzzle or combat. Each records one count in the same three counters as Acts II to IV (mercy, truth, selfless) and changes a few lines of dialogue. The two earlier choices below (the ring, Patches) stay as they are.
+
+| Where                       | The choice                                                                                                                               | Records      |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| Village Square, Tilda       | When she asks "The water's clean! Was that you?", admit it was Elior's magic instead of letting the credit go to the spring (`say truth to tilda`) | **truth**    |
+| Road to Greendale, Merchant | Give Grandmother's `fresh bread` to the hungry Merchant and ask nothing in return (`give fresh bread to merchant`)                         | **selfless** |
+| Forest Path                 | Cut a fox kit free from a poacher's snare with the sharp knife instead of walking past (`use sharp knife with snare`)                     | **mercy**    |
 
 ## Golden Path (Optimal Solution to Complete Act I)
 
@@ -291,7 +314,7 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
 4.  **Village Square:**
 
     - Take bucket. _Bucket is added to inventory._
-    - Speak to villager for rumors. _Tilda, the baker's wife, shares information about the darkness affecting the village._
+    - Speak to villager for rumors. _Tilda, the baker's wife, shares information about the darkness affecting the village: King Alden is said to be ill and the roads are no longer safe, and a cloaked stranger was seen asking after an old amulet._
 
 5.  **Village Well:**
 
@@ -318,11 +341,11 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
 
 7.5. **Visit Mira’s Hut:**
 
-    - Speak to Mira. _Mira greets Elior warmly, offering encouragement and subtle hints about the journey ahead. She reminds Elior to seek out the rare flower and to pay attention to the well and the glade, as they may hold secrets vital to his quest._
+    - Speak to Mira. _Mira greets Elior warmly, offering encouragement and subtle hints about the journey ahead. The Ancient Amulet on its stand is faintly warm. She reminds Elior to seek out the rare flower and to pay attention to the well and the glade, as they may hold secrets vital to his quest._
 
 8.  **General Store:**
 
-    - Speak to the shopkeeper. _Old Man Hemlock is overjoyed to have Patches home: he introduces himself by name, pays the notice's reward and reopens the store. Patches curls up on the counter. Completes: Curiosity killed the cat._
+    - Speak to the shopkeeper. _Old Man Hemlock is overjoyed to have Patches home: he introduces himself by name, pays the notice's reward and reopens the store, and grumbles that the caravans stopped coming now that the king is ill. Patches curls up on the counter. Completes: Curiosity killed the cat._
       - Item obtained: `coin` (2nd)
     - Use coin (2nd) to buy rope. _Coin (2nd) is removed from inventory; rope and a bonus apple are added to inventory._
       - Item used: `coin` (2nd)
@@ -356,7 +379,7 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
     - Give faded photograph to fisherman. _He reads the message on the back: this very spot is the bend. Elior's mother came here near every evening to study the river's old magic, and the night before she went away she hid a tin under the smooth stone and made him promise to watch over it._
       - Item shown: `faded photograph` (it stays with Elior)
     - Search. _Elior tips the smooth stone aside and digs a small tin, sealed with wax, out of the mud. Inside lies the mother's letter._
-    - Take letter, then examine letter. _A water-stained fragment in his mother's hand: it names Malakar and the amulet Mira keeps for Elior. Completes: The Faded Photograph._
+    - Take letter, then examine letter. _A water-stained fragment in his mother's hand: it warns him not to answer anyone who comes asking after the family, and names the amulet Mira keeps for Elior. Completes: The Faded Photograph._
       - Item obtained: `mother's letter`
 
 13. **Forest Path:**
@@ -434,7 +457,7 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
 
 22. **Return to Hidden Glade:**
 
-    - Cast `light` while in the Hidden Glade. _The unnatural darkness lifts and sunlight spills into the glade. The moss-covered stone's faint inscriptions glow into view. Studying them, Elior learns the `grow` spell, a secret of the glade._
+    - Cast `light` while in the Hidden Glade. _The unnatural darkness lifts and sunlight spills into the glade. The moss-covered stone's faint inscriptions glow into view. Studying them, Elior learns the `grow` spell, a secret of the glade. Carved beneath it: "Power follows purpose; purpose follows truth." He reads it aloud and does not know what it means._
       - Spell used: `light`
       - Spell Learned: `grow`
 
@@ -464,7 +487,7 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
 27. **Return to Mira's Hut (Final Visit):**
 
     - Give rune token to Mira. _Mira turns it over and the color drains from her face: it is a fouling sigil, and the well was poisoned on purpose. If the mill mechanism is jammed she recognises the same hand there, drinking the old power. Whoever carried it, perhaps the cloaked stranger, was searching Willowbrook "for something. Or for someone." She hands the token back: keep it close, and keep it hidden._
-    - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you." Then she sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
+    - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you." Then she sends him toward Greendale: "I knew your parents better than I have said. Once you are truly ready, I will tell you." She adds that the cloaked stranger came to her door asking for it, and sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
       - Item obtained: `ancient amulet` (ESSENTIAL)
       - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field are four of the six kinds and complete: Food)
 
@@ -516,7 +539,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Examined and shown to Grandmother in Step 1.
     - Shown to the Fisherman in Step 12, who tells of the tin under the smooth stone.
 4.  **`Elior's Journal`** (Revealed in Step 1):
-    - Read in Step 1 to open a further conversation with Grandmother and learn `revive`. The dream entry ends with Elior sure he knew the voice, though he cannot remember from where (the voice stays unplaced).
+    - Read in Step 1 to open a further conversation with Grandmother and learn `revive`. The dream entry ends with Elior sure he knew the voice, though he cannot remember from where (the voice stays unplaced; in the journal it called for help, and Grandmother's reaction to it is in _Story Beats_).
 5.  **`Rusty Hoe`** (Obtained: Step 2):
     - Used in Step 2 to uncover the first `coin`. Tilling again finds nothing more.
 6.  **`Coin` (1st)** (Obtained: Step 2):
