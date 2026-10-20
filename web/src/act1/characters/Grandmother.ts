@@ -14,9 +14,13 @@ import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { FreshBread } from '../items/FreshBread'
+import { Patches } from './Patches'
 import {
   FLAG_GRANDMOTHER_BAKED_BREAD,
   FLAG_MAGIC_FULLY_UNLOCKED,
+  FLAG_PATCHES_FOUND,
+  FLAG_PATCHES_RETURNED,
+  FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_READ_PHOTO_MESSAGE,
   FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO,
 } from '../Act1StoryFlags'
@@ -42,8 +46,8 @@ export class Grandmother extends Character {
 
   /**
    * Dialogue varying by story flags: the greeting, then the journal tale
-   * (which grants the Revive spell), her lines on Elior's journey and the
-   * shed hint while he carries its key. The journal tale is told again only
+   * (which grants the Revive spell), her lines on Elior's journey, on
+   * Patches and the shed hint while he carries its key. The journal tale is told again only
    * when she has nothing newer to say.
    */
   override talkTo(gameState: GameState): string {
@@ -79,6 +83,9 @@ export class Grandmother extends Character {
 
     const journeyLine = this.journeyLine(gameState)
     if (journeyLine) dialogue += (dialogue ? '\n' : '') + journeyLine
+
+    const patchesLine = this.patchesLine(gameState)
+    if (patchesLine) dialogue += (dialogue ? '\n' : '') + patchesLine
 
     if (gameState.inventory.some((item) => item instanceof Key)) {
       dialogue += (dialogue ? '\n' : '') + this.shedKeyHint()
@@ -180,6 +187,76 @@ export class Grandmother extends Character {
       ) +
       '\n' +
       event(`You received a [item_name]${bread.name}[/item_name]!`)
+    )
+  }
+
+  /** Whether Elior is carrying Patches, found but not yet given a home. */
+  private carryingPatches(gameState: GameState): boolean {
+    return (
+      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
+    )
+  }
+
+  /**
+   * What she says of Patches: while Elior carries her, the offer to keep
+   * her; once she has stayed, how she has settled in. Null otherwise.
+   */
+  private patchesLine(gameState: GameState): string | null {
+    if (gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)) {
+      return (
+        `${characterName('Patches')} is asleep in the warm spot by the hearth. ` +
+        `Your ${characterName('grandmother')} follows your gaze and smiles. ` +
+        speech(
+          'She has the run of the cottage already. ' +
+            "I'll not be lonely with that one about.",
+        )
+      )
+    }
+    if (!this.carryingPatches(gameState)) return null
+    return (
+      `${characterName('Patches')} peers out of your arms, and your ` +
+      `${characterName('grandmother')} reaches out to scratch her ears. ` +
+      speech(
+        `${characterName('Hemlock')}'s ${characterName('Patches')}! The poor wee thing, ` +
+          "she's all dust and bones. She's taken to you, hasn't she?\n" +
+          'With you off on the road soon, this cottage will be terribly ' +
+          "quiet. If you'd have her stay with me, you need only say so, and " +
+          `I'll square it with ${characterName('Hemlock')} myself. ` +
+          "Or carry her home to him; he'll be worried sick.",
+      )
+    )
+  }
+
+  /**
+   * Saying "stay" (or "yes" or "keep") while Elior carries Patches lets her
+   * stay by the hearth: grandmother sends word to Hemlock, who reopens the
+   * store. Other words only get a fond look.
+   */
+  override sayTo(gameState: GameState, words: string): string {
+    const yes = /\b(stay|yes|keep)\b/i.test(words)
+    if (yes && this.carryingPatches(gameState)) {
+      gameState.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+      gameState.currentRoom.addCharacter(new Patches())
+      return (
+        event(`You set ${characterName('Patches')} down by the hearth.`) +
+        '\n' +
+        `${characterName('Patches')} sniffs the rug, circles twice and curls ` +
+        `up at your ${characterName('grandmother')}'s feet. She laughs softly. ` +
+        speech(
+          "Well, that's settled, then. I'll send word to " +
+            `${characterName('Hemlock')} this very afternoon. He's a kind ` +
+            "old soul; he'll be glad she's safe, and his store will be open " +
+            'again by the time you get there.',
+        )
+      )
+    }
+    return (
+      `Your ${characterName(this.name)} tilts her head. ` +
+      speech(
+        "I'm not sure what you mean, dear, but I do like to hear you talk.",
+      )
     )
   }
 

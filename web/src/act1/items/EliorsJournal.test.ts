@@ -16,4 +16,15 @@ describe('EliorsJournal', () => {
     expect(text).toContain('[dialogue]What a night.')
     expect(text).toContain('What did it mean?[/dialogue]')
   })
+
+  it('remembers the dream voice as familiar but never places it', () => {
+    const game = new Game([new Act1()])
+    const text = new EliorsJournal().use(game.state)
+
+    expect(text).toContain(
+      'And the strangest thing — I knew that voice. ' +
+        "I just can't remember from where.",
+    )
+    expect(text).not.toMatch(/mother|father/i)
+  })
 })

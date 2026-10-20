@@ -1,6 +1,9 @@
 import { Item } from '@/engine'
 
-/** Portable flavor/crafting seed item representing a bent iron horseshoe. */
+/**
+ * A bent iron horseshoe from the forge. The merchant on the Road to Greendale
+ * takes it for the wandering boots when Elior keeps his mother's ring.
+ */
 export class Horseshoe extends Item {
   constructor() {
     super({

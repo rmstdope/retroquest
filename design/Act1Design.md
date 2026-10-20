@@ -16,7 +16,7 @@
 
   - **Trigger:** Meet Hemlock at the General Store, or enter the Abandoned Shed for the first time.
   - **Steps:** Hemlock (the Shopkeeper) has shut his store until his missing cat, Patches, comes home; the old notice in the Village Square asks after her too. Unlock the shed door: Patches bolts behind the crates. Call her by name (`talk to patches`, or `say patches to patches`) or tempt her with the egg or the fish (Elior keeps them) to coax her out, then carry her home.
-  - **Completion:** Return Patches to Hemlock. He pays the notice's reward of a coin, reopens the store, and Patches settles on the counter.
+  - **Completion:** Return Patches to Hemlock. He pays the notice's reward of a coin, reopens the store, and Patches settles on the counter. Alternatively (a choice, see _Elior's choices_), let her stay with Grandmother: the store still reopens and the quest completes.
 
 - **Name:** Fishing expedition
 
@@ -74,7 +74,7 @@
 - **Items:** Lantern (start), bread (later), Elior’s journal (later), travel cloak (later).
 - **Spells:** `revive` (learned from Grandmother).
 - **Usable Items:** Lantern (lights the cottage; once lit it can be taken and carried, and held lit it lights the dark Abandoned Shed), Elior's journal (read for story), hidden locket (give to Grandmother).
-- **Characters:** Grandmother (offers advice, can be spoken to). While Elior carries the shed key she admits she hid it in the coop rafters years ago: the shed was his father's workshop, she never could go in, and it is dark, so he should take the lantern. Her lines follow Elior's journey: the first time he talks to her after Mira's teaching she sees in him "your mother's gift" (she knows the truth, and only hints at it) and bakes him a `fresh bread` for the road, which counts as food; after that she asks after his preparations; once he carries the Ancient Amulet she says "So it's true, then. Come back to me, child." She tells the journal tale again only when she has nothing newer to say.
+- **Characters:** Grandmother (offers advice, can be spoken to). While Elior carries the shed key she admits she hid it in the coop rafters years ago: the shed was his father's workshop, she never could go in, and it is dark, so he should take the lantern. Her lines follow Elior's journey: the first time he talks to her after Mira's teaching she sees in him "your mother's gift" (she knows the truth, and only hints at it) and bakes him a `fresh bread` for the road, which counts as food; after that she asks after his preparations; once he carries the Ancient Amulet she says "So it's true, then. Come back to me, child." She tells the journal tale again only when she has nothing newer to say. While Elior carries Patches she offers to keep the cat (`say stay to grandmother`, see _Elior's choices_); once Patches has stayed, she mentions her asleep by the hearth.
 - **Exits:** Vegetable Field (south), Village Square (east)
 
 ### 2. Vegetable Field
@@ -120,7 +120,7 @@
 
 - **Description:** A hot, smoky forge with tools and weapons.
 - **Items:** sharp knife (later).
-- **Unusable:** Horseshoe (start).
+- **Items:** Horseshoe (start; can be taken and traded to the Merchant in place of the shiny ring).
 - **Spells:** None.
 - **Usable Items:** Coin (1st, to get dull knife sharpened), dull knife (to be sharpened), millstone fragment (give to Blacksmith).
 - **Characters:** Blacksmith (Borin; can sharpen items, offers advice). Once met, he rotates through the lines that fit Elior's journey, newest first: after Mira's teaching ("Magic, eh? Can't hammer that into shape"), after the deer has been seen ("Saw it, did you? My grandfather swore by that deer"), after the knife was sharpened ("Keep that edge oiled"); with none of these he just welcomes Elior back. Optionally shown the rune token, he names it cold iron "not forged by any honest smith" and hands it back.
@@ -132,7 +132,7 @@
 - **Items:** Rope (store stock), apple (bonus with each purchase), matches (kept for the Priest and not for sale — not among the wares, cannot be bought or taken; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act (the hoe's and Hemlock's reward).
 - **Spells:** None.
 - **Usable Items:** Coin (2nd, purchase rope and receive an apple bonus).
-- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). He introduces himself on the first talk and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter.
+- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). He introduces himself on the first talk and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter. If Patches stays with Grandmother instead, Hemlock has heard the news, reopens the store and gives Elior a `rope` and an `apple` (no coin), so the act stays completable without the second coin.
 - **Save compatibility:** saves made when the hoe still gave a second coin keep the store open, and returning Patches in such a save earns no second coin.
 - **Exits:** Village Square (west), Blacksmith’s Forge (south)
 
@@ -214,8 +214,8 @@
 - **Items:** wandering boots (later - from Merchant).
 - **Unusable:** Rusty saw (start).
 - **Spells:** None.
-- **Usable Items:** Shiny ring (trade with Merchant), map (reveals shortcut to Greendale).
-- **Characters:** Merchant (sells wares, provides travel advice).
+- **Usable Items:** Shiny ring or horseshoe (trade with Merchant), map (reveals shortcut to Greendale; ends the act with the farewell scene).
+- **Characters:** Merchant (sells wares, provides travel advice). He asks for fine jewelry, or failing that an iron horseshoe; he trades one pair of `wandering boots` for either the shiny ring or the forge's horseshoe ("my old mare threw a shoe on the hill road").
 - **Exits:** Village Chapel (west)
 
 ## Room Map
@@ -252,6 +252,15 @@
 ## Action that completes the act:
 
 After receiving the Ancient Amulet from Mira, completing the _Preparing for the road_ quest, and completing every other side quest, use the `map` on the Road to Greendale. This unlocks the path to Greendale and triggers the transition to Act II.
+
+**The farewell.** Before the map reveals the path, Grandmother, who has walked out from the village, catches up with Elior on the road. She straightens the travel cloak ("Wear your mother's cloak. She'd want you warm."), says a word about the ring and about Patches that follows Elior's choices, kisses his brow and turns for home. Then the chapel bell rings once with no hand on the rope: an omen that closes the rumour of the bell that rang the night Elior's mother left. Only then does the map reveal the hidden path. The scene is kept short, and later beads (the end-of-act revelation of Epic A) may extend it.
+
+## Elior's choices
+
+Two light choices are recorded as Act I story flags, for a later virtue record. Neither blocks the golden path, which keeps the default.
+
+- **The ring.** Examining the shiny ring shows the initials _A & L_ inside the band: it was Elior's mother's wedding ring. Elior can trade it to the Merchant for the boots (golden path) or keep it and trade the forge's horseshoe instead (`kept_mothers_ring`). At the farewell, Grandmother either says the merchant showed her the ring and she would have given it gladly, or is glad he kept it.
+- **Patches.** Elior can carry Patches home to Hemlock (golden path, with the coin reward) or, in the cottage, let her stay with Grandmother (`say stay to grandmother`, `patches_stayed_with_grandmother`). Then Hemlock reopens the store, gives a rope and an apple instead of the coin (`hemlock_heard_patches_stayed`), and _Curiosity killed the cat_ still completes. Grandmother mentions Patches by the hearth, and again at the farewell.
 
 ## Golden Path (Optimal Solution to Complete Act I)
 
@@ -461,7 +470,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 28. **Road to Greendale (Departure):**
 
-    - Use `map`. _The `map` aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. Act I is completed._
+    - Use `map`. _Grandmother catches up on the road to say goodbye, the chapel bell rings once by itself, and the `map` aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. Act I is completed._
       - Item used: `map` (ESSENTIAL)
 
     **Items strictly necessary to complete Act I:**
@@ -480,7 +489,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
     - `Faded Photograph` (read, then shown to Grandmother and to the Fisherman, for _The Faded Photograph_)
     - `Mother's Letter` (found under the smooth stone at the Riverbank; reading it completes _The Faded Photograph_)
     - `Stick` (to use with `fishing rod` and `magnet` to retrieve the `shiny ring`)
-    - `Shiny Ring` (to trade for `wandering boots` with Merchant)
+    - `Shiny Ring` (to trade for `wandering boots` with Merchant; the `horseshoe` can be traded instead)
     - `Rare Flower` (to give to Mira to learn spells and get quest)
     - `Apple`
     - `Egg`
@@ -507,7 +516,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Examined and shown to Grandmother in Step 1.
     - Shown to the Fisherman in Step 12, who tells of the tin under the smooth stone.
 4.  **`Elior's Journal`** (Revealed in Step 1):
-    - Read in Step 1 to open a further conversation with Grandmother and learn `revive`.
+    - Read in Step 1 to open a further conversation with Grandmother and learn `revive`. The dream entry ends with Elior sure he knew the voice, though he cannot remember from where (the voice stays unplaced).
 5.  **`Rusty Hoe`** (Obtained: Step 2):
     - Used in Step 2 to uncover the first `coin`. Tilling again finds nothing more.
 6.  **`Coin` (1st)** (Obtained: Step 2):
@@ -562,7 +571,8 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 28. **`Fresh Carrot`** (Obtained: Step 20, by reviving and taking the `Withered Carrot`):
     - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
 29. **`Shiny Ring`** (Obtained: Step 21):
-    - Used in Step 26 by trading it with the Merchant for `wandering boots`.
+    - Examined, it shows the initials _A & L_: Elior's mother's wedding ring.
+    - Used in Step 26 by trading it with the Merchant for `wandering boots`, or kept by trading the forge's `horseshoe` instead.
 30. **`Rune Token`** (Obtained: Step 21, with the `shiny ring`):
     - Given to Mira in Step 27, who names it a fouling sigil and hands it back.
 31. **`Wild Berries`** (Obtained: Step 23, from the `grow` spell):

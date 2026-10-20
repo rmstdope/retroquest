@@ -48,3 +48,16 @@ export const FLAG_GRANDMOTHER_BAKED_BREAD = 'grandmother_baked_bread'
 export const FLAG_BLACKSMITH_SHARPENED_KNIFE = 'blacksmith_sharpened_knife'
 /** Set when Tilda has asked Elior whether he cleaned the well. */
 export const FLAG_TILDA_ASKED_ABOUT_WELL = 'tilda_asked_about_well'
+/**
+ * Choice: set when Elior trades the horseshoe, not his mother's wedding ring,
+ * for the merchant's boots. Absent means the ring was traded (the golden path).
+ */
+export const FLAG_KEPT_MOTHERS_RING = 'kept_mothers_ring'
+/**
+ * Choice: set when Elior lets Patches stay with grandmother instead of
+ * carrying her home to Hemlock (the golden path).
+ */
+export const FLAG_PATCHES_STAYED_WITH_GRANDMOTHER =
+  'patches_stayed_with_grandmother'
+/** Set when Hemlock, told that Patches stays with grandmother, gives Elior a rope. */
+export const FLAG_HEMLOCK_HEARD_PATCHES_STAYED = 'hemlock_heard_patches_stayed'
