@@ -1,0 +1,41 @@
+import { Item, type GameState } from '@/engine'
+import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
+import { Stick } from './Stick'
+import { Well } from './Well'
+
+/** Fishing rod with a magnet, used for attracting metallic objects and crafting upgrades. */
+export class MagneticFishingRod extends Item {
+  constructor() {
+    super({
+      name: 'magnetic fishing rod',
+      description:
+        'A fishing rod with a magnet attached to the end. Good for attracting ' +
+        'metallic objects.',
+    })
+  }
+
+  /** Combine with Stick to create ExtendedMagneticFishingRod, or fail with Well. */
+  override useWith(gameState: GameState, other: Item): string {
+    if (other instanceof Stick) {
+      const selfIndex = gameState.inventory.indexOf(this)
+      if (selfIndex >= 0) gameState.inventory.splice(selfIndex, 1)
+      const otherIndex = gameState.inventory.indexOf(other)
+      if (otherIndex >= 0) gameState.inventory.splice(otherIndex, 1)
+      const extendedRod = new ExtendedMagneticFishingRod()
+      gameState.inventory.push(extendedRod)
+      return (
+        `[event]You attach the [item_name]${other.name}[/item_name] ` +
+        `to the [item_name]${this.name}[/item_name], creating an ` +
+        `[item_name]${extendedRod.name}[/item_name].[/event]`
+      )
+    }
+    if (other instanceof Well) {
+      return (
+        `[failure]You try fishing in the [item_name]${other.name}[/item_name], ` +
+        `but the [item_name]${this.name}[/item_name] is too short to` +
+        ' reach the water.[/failure]'
+      )
+    }
+    return super.useWith(gameState, other)
+  }
+}
