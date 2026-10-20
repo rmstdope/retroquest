@@ -64,7 +64,10 @@ export class Shopkeeper extends Character {
     }
 
     // Check if priest needs matches and shopkeeper hasn't given them yet
-    if (gameState.getStoryFlag('priest_talked_to') && !this.hasGivenMatches()) {
+    if (
+      gameState.getStoryFlag('priest_talked_to') &&
+      !this.priestMatchesGiven
+    ) {
       // Give matches to player for the priest
       gameState.currentRoom.removeItem('Matches')
 
@@ -73,7 +76,6 @@ export class Shopkeeper extends Character {
 
       // Remember the hand-over so the matches can't be given again
       this.priestMatchesGiven = true
-      delete this.wares.matches
 
       return (
         `The ${characterName('Shopkeeper')} leans in. ` +
@@ -87,13 +89,9 @@ export class Shopkeeper extends Character {
       )
     }
 
-    // Standard dialogue if matches aren't being given for the priest; saves
-    // from before the matches left the wares may still hold them, so they
-    // are filtered from the price list.
+    // Standard dialogue if matches aren't being given for the priest
     let waresInfo = 'I have a few things for sale:\n'
-    const entries = Object.entries(this.wares).filter(
-      ([, details]) => !(details.item instanceof Matches),
-    )
+    const entries = Object.entries(this.wares)
     if (entries.length > 0) {
       for (const [name, details] of entries) {
         waresInfo +=
@@ -118,12 +116,14 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Whether the priest's matches have been handed over. Saves made before
-   * `priestMatchesGiven` existed still listed the matches among the wares
-   * until the hand-over, so their absence there means they were given.
+   * Bring a shopkeeper from a save made before the matches left the wares up
+   * to date. Such saves listed the matches for sale until the hand-over and
+   * had no `priestMatchesGiven`, so the hand-over is read from their absence
+   * before they are dropped from the wares. Safe to run more than once.
    */
-  private hasGivenMatches(): boolean {
-    return this.priestMatchesGiven ?? !('matches' in this.wares)
+  migrateLegacyWares(): void {
+    this.priestMatchesGiven ??= !('matches' in this.wares)
+    delete this.wares.matches
   }
 
   /** The shopkeeper does not accept gifts. */

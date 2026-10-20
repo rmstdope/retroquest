@@ -22,6 +22,22 @@ function gameInStore({ shopOpen = true, priestTalkedTo = false } = {}): Game {
   return game
 }
 
+/**
+ * An Act I game loaded from a save made before the matches left the
+ * shopkeeper's wares: `matches` is still for sale until the hand-over, and
+ * `priestMatchesGiven` does not exist yet.
+ */
+function legacySave({ handedOver }: { handedOver: boolean }): Game {
+  const game = gameInStore({ priestTalkedTo: true })
+  const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+  if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
+  if (!handedOver) shopkeeper.wares.matches = { item: new Matches(), price: 4 }
+  Reflect.deleteProperty(shopkeeper, 'priestMatchesGiven')
+  const loaded = new Game([new Act1()])
+  expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+  return loaded
+}
+
 /** No quote mark sits outside dialogue and each quoted block is closed. */
 function expectQuotesInsideDialogue(text: string): void {
   const narration = text.replace(DIALOGUE_PATTERN, '')
@@ -117,17 +133,25 @@ describe('Shopkeeper and the priest matches', () => {
     ).toHaveLength(1)
   })
 
-  it('remembers matches handed over in a save from before they left the wares', () => {
-    const game = gameInStore({ priestTalkedTo: true })
-    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
-    expect(shopkeeper).toBeInstanceOf(Shopkeeper)
-    if (!(shopkeeper instanceof Shopkeeper)) return
-    Reflect.deleteProperty(shopkeeper, 'priestMatchesGiven')
+  it.each([
+    { handedOver: true, onTheHouse: false },
+    { handedOver: false, onTheHouse: true },
+  ])(
+    'drops the matches from the wares of a save from before they left them ' +
+      '(handed over: $handedOver)',
+    ({ handedOver, onTheHouse }) => {
+      const game = legacySave({ handedOver })
 
-    const answer = game.commandParser.parse('talk to shopkeeper')
-
-    expect(answer).not.toContain('on the house')
-  })
+      const wares = new GameController(game).getRoomWares().map((w) => w.name)
+      expect(wares).toContain('rope')
+      expect(wares).not.toContain('matches')
+      const answer = game.commandParser.parse('talk to shopkeeper')
+      expect(answer.includes('on the house')).toBe(onTheHouse)
+      expect(game.commandParser.parse('talk to shopkeeper')).not.toContain(
+        'on the house',
+      )
+    },
+  )
 
   it('keeps the matches for the priest instead of selling them', () => {
     const game = gameInStore()

@@ -28,6 +28,7 @@ import { ShadowsOverWillowbrookQuest } from './quests/ShadowsOverWillowbrook'
 import { FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED } from './Act1StoryFlags'
 import { ACT1_CLASSES } from './classes'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
+import { Shopkeeper } from './characters/Shopkeeper'
 
 /** Act 1: The Call to Adventure, set in the village of Willowbrook. */
 export class Act1 extends Act {
@@ -92,6 +93,15 @@ export class Act1 extends Act {
       'With questions swirling in your mind, you take your first step into the unknown.\n' +
       "\nLet's get started! (Type 'help' for a list of commands.)\n"
     )
+  }
+
+  /** Drop the matches that saves from before they left the store's wares still sell. */
+  override afterLoad(gameState: GameState): void {
+    for (const room of Object.values(gameState.allRooms)) {
+      for (const character of room.characters) {
+        if (character instanceof Shopkeeper) character.migrateLegacyWares()
+      }
+    }
   }
 
   override isCompleted(gameState: GameState): boolean {
