@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from './Act3'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
+import { playDebugScript } from '@/utils/debugScript'
 import {
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
@@ -136,11 +137,13 @@ describe('Act 3 golden path', () => {
       exam.toLowerCase().includes('fused') ||
         exam.toLowerCase().includes('lock'),
     ).toBe(true)
-    // Try the key and fail
-    const failKey = executeCommands(game, ['use rusted locker key with locker'])
+    // Jam the key in the lock
+    const jammedKey = executeCommands(game, [
+      'use rusted locker key with locker',
+    ])
     expect(
-      failKey.toLowerCase().includes('too corroded') ||
-        failKey.toLowerCase().includes('jams in the mechanism'),
+      jammedKey.toLowerCase().includes('too corroded') ||
+        jammedKey.toLowerCase().includes('jams in the mechanism'),
     ).toBe(true)
     // Cast unlock on locker
     const unlocked = executeCommands(game, ['cast unlock on locker'])
@@ -585,13 +588,16 @@ describe('Act 3 golden path', () => {
 })
 
 describe('Act 3 golden path as declared by the act', () => {
-  it('completes the four expedition quests, leaving the rest to the finale', () => {
+  it('completes every side quest, leaving the main quest to the finale', () => {
     const game = new Game([new Act3()])
     executeCommands(game, ACT3_GOLDEN_PATH)
     expect(game.state.completedQuests.map((q) => q.name).sort()).toEqual([
       'Breath of the Mountain',
+      'Echoes of the Hidden Bond',
       'Lanterns of the Deeps',
+      "Miners' Rescue",
       'Mirrors of Emberlight',
+      'Oath of Stillness',
       'Tideward Sigils',
     ])
   })
@@ -603,5 +609,23 @@ describe('Act 3 golden path as declared by the act', () => {
     executeCommands(viaCheat, ['cheat act 3'])
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
+  })
+})
+
+describe('debug act3', () => {
+  it('plays the golden path without a failure, leaving the finale to the player', async () => {
+    const game = new Game([new Act3()])
+    const shown: string[] = []
+    await playDebugScript('act3', {
+      play: (command) => executeCommands(game, [command]),
+      running: () => true,
+      show: (text) => shown.push(text),
+      goldenPath: (n) => game.goldenPath(n),
+    })
+    expect(shown.join('\n')).not.toContain('[failure]')
+    expectStoryFlag(game.state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, false)
+
+    executeCommands(game, ['examine gates'])
+    expectStoryFlag(game.state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
   })
 })

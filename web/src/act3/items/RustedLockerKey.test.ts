@@ -30,7 +30,7 @@ describe('RustedLockerKey', () => {
 
     const out = rustedKey.useWith(game.state, locker as Locker)
 
-    expect(out).toContain('[failure]')
+    expect(out).toContain('[event]')
     expect((locker as Locker).locked).toBe(true)
     expect(room.items.filter((i) => i instanceof PrismLantern)).toHaveLength(0)
   })

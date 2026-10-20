@@ -48,8 +48,10 @@ describe('Locker', () => {
     game.state.currentRoom = room
     const rusted = new RustedLockerKey()
     const stuckResult = locker.useWith(game.state, rusted)
-    expect(stuckResult).toContain('[failure]')
+    expect(stuckResult).toContain('[event]')
+    expect(stuckResult).not.toContain('[failure]')
     const unlockResult = locker.unlock(game.state).toLowerCase()
+    expect(unlockResult).toContain('[event]')
     expect(
       unlockResult.includes('locker') || unlockResult.includes('click'),
     ).toBe(true)
