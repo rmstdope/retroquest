@@ -1273,4 +1273,14 @@ describe('Act 2 golden path as declared by the act', () => {
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })
+
+  it('never names a spell by its underscored id in a message', () => {
+    const game = new Game([new Act2()])
+    const output = executeCommands(game, [
+      ...ACT2_GOLDEN_PATH,
+      'cast prophetic vision on sir cedric',
+      'spells',
+    ])
+    expect(output).not.toMatch(/\[spell_name\][a-z]+_[a-z_]+\[\/spell_name\]/)
+  })
 })

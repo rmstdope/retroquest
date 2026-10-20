@@ -124,7 +124,7 @@ export class MasterHealerLyria extends Character {
           "'Through your compassion and this magical aid, you've shown " +
             "yourself ready for advanced training.'",
         ) +
-        ' She teaches you the [spell_name]greater_heal[/spell_name] spell! ' +
+        ' She teaches you the [spell_name]greater heal[/spell_name] spell! ' +
         speech("'You've truly earned the title of healer.'") +
         "[/success]\n\n[success]Quest Complete: The Healer's " +
         'Apprentice[/success]'
@@ -140,7 +140,7 @@ export class MasterHealerLyria extends Character {
         ' accepts the [item_name]Healing Herbs[/item_name] with approval. ' +
         speech("'Excellent! Your commitment shows you're ready to learn.'") +
         ' Through careful instruction, you master the ' +
-        '[spell_name]greater_heal[/spell_name] spell! ' +
+        '[spell_name]greater heal[/spell_name] spell! ' +
         speech(
           "'Use this knowledge wisely, young healer. You've successfully " +
             "completed your apprenticeship.'",

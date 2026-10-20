@@ -165,7 +165,9 @@ export class GameState {
     lines.push('', '[bold]Known Spells:[/bold]')
     lines.push(
       ...this.listOrNone(
-        this.knownSpells.map((s) => `- [spell_name]${s.name}[/spell_name]`),
+        this.knownSpells.map(
+          (s) => `- [spell_name]${s.displayName}[/spell_name]`,
+        ),
       ),
     )
     lines.push('', '[bold]Visited Rooms:[/bold]')

@@ -95,7 +95,7 @@ export class BarmaidElena extends Character {
     }
   }
 
-  /** Handle receiving the greater_heal spell as the first step of the cure. */
+  /** Handle receiving the greater heal spell as the first step of the cure. */
   receiveGreaterHeal(): string {
     if (this.elenaInitialHealing) {
       return 'Elena is already strengthened by your healing magic.'
@@ -112,7 +112,7 @@ export class BarmaidElena extends Character {
       'hope for the first time in weeks.'
 
     // Get spell name for display
-    const spellName = new GreaterHealSpell().name
+    const spellName = new GreaterHealSpell().displayName
 
     return (
       `[success]You cast [spell_name]${spellName}[/spell_name] on Elena, ` +

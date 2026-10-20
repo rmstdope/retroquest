@@ -25,7 +25,7 @@ export class DispelSpell extends Spell {
   }
 
   override castSpell(_gameState: GameState): string {
-    const name = this.name
+    const name = this.displayName
     return (
       `[success]You cast [spell_name]${name}[/spell_name], sending out waves of ` +
       'counter-magic that neutralize hostile enchantments. The spell ripples ' +
@@ -42,7 +42,7 @@ export class DispelSpell extends Spell {
     if (targetCharacter instanceof BarmaidElena) {
       return targetCharacter.receiveDispelFinalCure(gameState)
     }
-    const name = this.name
+    const name = this.displayName
     const tname = targetCharacter.name
     return (
       `[success]You cast [spell_name]${name}[/spell_name] on ` +
@@ -55,7 +55,7 @@ export class DispelSpell extends Spell {
 
   override castOnItem(_gameState: GameState, targetItem: Item): string {
     // This could be used for breaking magical barriers or dispelling cursed items
-    const name = this.name
+    const name = this.displayName
     const iname = targetItem.name
     return (
       `[success]You cast [spell_name]${name}[/spell_name] on ` +

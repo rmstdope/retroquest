@@ -27,4 +27,16 @@ describe('Spell', () => {
       'on [character_name]Mira[/character_name], but the spell fizzles',
     )
   })
+
+  it('names a multi-word spell by its spaced name in a fizzle', () => {
+    const vision = new Spell({
+      name: 'prophetic_vision',
+      description: 'Sees ahead.',
+    })
+    const mira = new Character({ name: 'Mira', description: 'd' })
+    expect(vision.castOnCharacter(gs, mira)).toContain(
+      '[spell_name]prophetic vision[/spell_name]',
+    )
+    expect(vision.castSpell(gs)).not.toContain('prophetic_vision')
+  })
 })

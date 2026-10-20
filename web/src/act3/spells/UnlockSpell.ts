@@ -16,7 +16,7 @@ export class UnlockSpell extends Spell {
       return targetItem.unlock(gameState)
     }
     return (
-      `[failure]You cast [spell_name]${this.name}[/spell_name] on ` +
+      `[failure]You cast [spell_name]${this.displayName}[/spell_name] on ` +
       `[item_name]${targetItem.name}[/item_name], but no lock ` +
       'yields.[/failure]'
     )

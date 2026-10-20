@@ -19,7 +19,7 @@ export class MendSpell extends Spell {
 
   /** Cast the mend spell without a specific target. */
   override castSpell(_gameState: GameState): string {
-    const name = this.name
+    const name = this.displayName
     return (
       `[success]You cast [spell_name]${name}[/spell_name] into the air. The ` +
       'magic shivers but finds nothing to mend nearby.[/success]'
@@ -34,7 +34,7 @@ export class MendSpell extends Spell {
     }
 
     // Fallback behavior: mimic the generic mend response
-    const name = this.name
+    const name = this.displayName
     const iname = targetItem.name
     return (
       `[dim]You cast [spell_name]${name}[/spell_name] on ` +
