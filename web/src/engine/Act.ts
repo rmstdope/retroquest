@@ -1,3 +1,4 @@
+import type { SerializableClass } from './ClassRegistry'
 import type { GameState } from './GameState'
 import type { Quest } from './Quest'
 import type { Room } from './Room'
@@ -11,6 +12,12 @@ export interface ActOptions {
   musicFile: string
   /** Credits shown for the music. */
   musicInfo: string
+  /**
+   * The act's content classes by name, so saves can name them as
+   * `<act name>.<class name>` (`{ Bread, Mira, EliorsCottage, ... }`). Content
+   * classes only: the engine registers its own. Defaults to none.
+   */
+  classes?: Record<string, SerializableClass>
 }
 
 /** An act: its rooms, quests, music and act-level hooks. */
@@ -20,13 +27,22 @@ export class Act {
   quests: Quest[]
   musicFile: string
   musicInfo: string
+  classes: Record<string, SerializableClass>
 
-  constructor({ name, rooms, quests, musicFile, musicInfo }: ActOptions) {
+  constructor({
+    name,
+    rooms,
+    quests,
+    musicFile,
+    musicInfo,
+    classes,
+  }: ActOptions) {
     this.name = name
     this.rooms = rooms
     this.quests = quests
     this.musicFile = musicFile
     this.musicInfo = musicInfo
+    this.classes = classes ?? {}
   }
 
   getActIntro(): string {

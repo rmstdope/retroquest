@@ -18,6 +18,20 @@ describe('Act', () => {
     expect(act.quests).toEqual([])
     expect(act.musicFile).toBe('song.mp3')
     expect(act.musicInfo).toBe('Song by Someone')
+    expect(act.classes).toEqual({})
+  })
+
+  it('names its content classes for saves', () => {
+    const room = new Room({ name: 'Start', description: '' })
+    const act = new Act({
+      name: 'A',
+      rooms: { Start: room },
+      quests: [],
+      musicFile: '',
+      musicInfo: '',
+      classes: { Room },
+    })
+    expect(act.classes).toEqual({ Room })
   })
 
   it('has no intro, no setup and never completes by default', () => {
