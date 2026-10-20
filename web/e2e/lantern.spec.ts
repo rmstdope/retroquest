@@ -304,6 +304,18 @@ test.describe('Lantern UI (the default)', () => {
     await input.fill('take b')
     await input.press('Tab')
     await expect(page.getByRole('option')).toHaveText(['bucket', 'bread'])
+    // Each option is what a click at its centre hits (not hidden or clipped).
+    for (const option of await page.getByRole('option').all()) {
+      const onTop = await option.evaluate((el) => {
+        const box = el.getBoundingClientRect()
+        const hit = document.elementFromPoint(
+          box.left + box.width / 2,
+          box.top + box.height / 2,
+        )
+        return hit !== null && el.contains(hit)
+      })
+      expect(onTop, `${await option.textContent()} is on top`).toBe(true)
+    }
     await input.press('ArrowDown')
     await input.press('Enter')
     await expect(input).toHaveValue('take bucket ')
@@ -311,65 +323,60 @@ test.describe('Lantern UI (the default)', () => {
   })
 
   // A desktop window narrower than 1024px gets the folding sheet, whose own
-  // scrolling once clipped the list (rq-mvd); a laptop gets the side column.
-  for (const { layout, width } of [
-    { layout: 'narrow window', width: 900 },
-    { layout: 'laptop', width: 1280 },
-  ]) {
-    test(`shows the Tab completion list above the command box (${layout})`, async ({
-      page,
-    }) => {
-      await page.setViewportSize({ width, height: 800 })
-      await page.goto('/')
-      await injectMockState(page)
-      await page.evaluate(() => {
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        const app = (document.querySelector('#app') as any).__vue_app__
-        const store = app.config.globalProperties.$pinia.state.value.game
-        store.completionTree = {
-          take: { bucket: null, bread: null, broom: null, bell: null },
-          look: null,
-        }
-        /* eslint-enable @typescript-eslint/no-explicit-any */
-      })
-      await page
-        .getByRole('region', { name: 'Actions' })
-        .getByRole('button', { name: 'Type', exact: true })
-        .click()
-      const input = page.getByLabel('Command')
-
-      await input.fill('take b')
-      await input.press('Tab')
-      const list = page.getByRole('listbox', { name: 'Matching words' })
-      await expect(list.getByRole('option')).toHaveText([
-        'bucket',
-        'bread',
-        'broom',
-        'bell',
-      ])
-      // Each option is what a click at its centre hits: not clipped by, or
-      // hidden under, another part of the page.
-      for (const option of await list.getByRole('option').all()) {
-        const onTop = await option.evaluate((el) => {
-          const box = el.getBoundingClientRect()
-          const hit = document.elementFromPoint(
-            box.left + box.width / 2,
-            box.top + box.height / 2,
-          )
-          return hit !== null && el.contains(hit)
-        })
-        expect(onTop, `${await option.textContent()} is on top`).toBe(true)
+  // scrolling once clipped the list (rq-mvd).
+  test('shows the Tab completion list above the folding sheet in a narrow window', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.completionTree = {
+        take: { bucket: null, bread: null, broom: null, bell: null },
+        look: null,
       }
-      await input.press('ArrowDown')
-      await input.press('ArrowDown')
-      await expect(list.getByRole('option', { selected: true })).toHaveText(
-        'bread',
-      )
-      await input.press('Enter')
-      await expect(input).toHaveValue('take bread ')
-      await expect(list).toHaveCount(0)
+      /* eslint-enable @typescript-eslint/no-explicit-any */
     })
-  }
+    await page
+      .getByRole('region', { name: 'Actions' })
+      .getByRole('button', { name: 'Type', exact: true })
+      .click()
+    const input = page.getByLabel('Command')
+
+    await input.fill('take b')
+    await input.press('Tab')
+    const list = page.getByRole('listbox', { name: 'Matching words' })
+    await expect(list.getByRole('option')).toHaveText([
+      'bucket',
+      'bread',
+      'broom',
+      'bell',
+    ])
+    // Each option is what a click at its centre hits: not clipped by, or
+    // hidden under, another part of the page.
+    for (const option of await list.getByRole('option').all()) {
+      const onTop = await option.evaluate((el) => {
+        const box = el.getBoundingClientRect()
+        const hit = document.elementFromPoint(
+          box.left + box.width / 2,
+          box.top + box.height / 2,
+        )
+        return hit !== null && el.contains(hit)
+      })
+      expect(onTop, `${await option.textContent()} is on top`).toBe(true)
+    }
+    await input.press('ArrowDown')
+    await input.press('ArrowDown')
+    await expect(list.getByRole('option', { selected: true })).toHaveText(
+      'bread',
+    )
+    await input.press('Enter')
+    await expect(input).toHaveValue('take bread ')
+    await expect(list).toHaveCount(0)
+  })
 
   test('puts the room card, map and journal around the story on a laptop', async ({
     page,
