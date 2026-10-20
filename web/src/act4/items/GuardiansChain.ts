@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED } from '../Act4StoryFlags'
 
 /** A mystical chain that provides protection against dark magic. */
@@ -20,10 +20,10 @@ export class GuardiansChain extends Item {
   /** Set flag when the chain is picked up. */
   override pickedUp(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, true)
-    return (
-      "[event]As you lift the Guardian's Chain, you feel a surge of protective " +
-      "energy coursing through your body. The chain's light grows brighter, " +
-      'recognizing you as its new bearer.[/event]'
+    return event(
+      "As you lift the Guardian's Chain, you feel a surge of protective " +
+        "energy coursing through your body. The chain's light grows brighter, " +
+        'recognizing you as its new bearer.',
     )
   }
 
@@ -32,18 +32,18 @@ export class GuardiansChain extends Item {
     if (gameState.currentRoom.name === 'Hall of Echoes') {
       if (!this.protectionActive) {
         this.protectionActive = true
-        return (
-          "[event]You hold the Guardian's Chain aloft, and its crystals blaze " +
-          'with brilliant light. A protective barrier forms around you, ' +
-          'shielding you from the despair that emanates from the corrupted ' +
-          'knight.[/event]'
+        return event(
+          "You hold the Guardian's Chain aloft, and its crystals blaze " +
+            'with brilliant light. A protective barrier forms around you, ' +
+            'shielding you from the despair that emanates from the corrupted ' +
+            'knight.',
         )
       }
       return "[dim]The Guardian's Chain is already providing its protection.[/dim]"
     }
-    return (
-      "[event]The Guardian's Chain glows softly, ready to protect you when " +
-      'facing shadow magic.[/event]'
+    return event(
+      "The Guardian's Chain glows softly, ready to protect you when " +
+        'facing shadow magic.',
     )
   }
 }

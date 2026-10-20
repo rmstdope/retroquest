@@ -1,4 +1,4 @@
-import { Item, type Character, type GameState } from '@/engine'
+import { Item, type Character, type GameState, event } from '@/engine'
 import {
   FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED,
   FLAG_ACT4_SERVANTS_TRUST_EARNED,
@@ -35,11 +35,11 @@ export class GuardiansEssence extends Item {
     ) {
       if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
         gameState.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
-        return (
-          "[event]You present the Guardian's Essence to the trapped servants. " +
-          'The golden light recognizes their suffering and your courage in ' +
-          "facing the shadow guardians. The servants' eyes brighten with hope " +
-          'as they sense your worthiness to help them.[/event]'
+        return event(
+          "You present the Guardian's Essence to the trapped servants. " +
+            'The golden light recognizes their suffering and your courage in ' +
+            "facing the shadow guardians. The servants' eyes brighten with hope " +
+            'as they sense your worthiness to help them.',
         )
       }
       return '[dim]The servants already recognize your worthiness.[/dim]'
@@ -50,20 +50,20 @@ export class GuardiansEssence extends Item {
   /** Use Guardian's Essence to prove worthiness. */
   override use(gameState: GameState): string {
     if (gameState.currentRoom.name === 'Outer Courtyard') {
-      return (
-        "[event]The Guardian's Essence glows brightly, ready to prove your " +
-        'worthiness to those who need your help. Try using it on the servants.[/event]'
+      return event(
+        "The Guardian's Essence glows brightly, ready to prove your " +
+          'worthiness to those who need your help. Try using it on the servants.',
       )
     }
     if (gameState.currentRoom.name === 'Hall of Echoes') {
-      return (
-        "[event]The Guardian's Essence resonates with the ancient hall, " +
-        'recognizing the nobility that once existed here.[/event]'
+      return event(
+        "The Guardian's Essence resonates with the ancient hall, " +
+          'recognizing the nobility that once existed here.',
       )
     }
-    return (
-      "[event]The Guardian's Essence pulses gently, waiting for the right " +
-      'moment to demonstrate your courage.[/event]'
+    return event(
+      "The Guardian's Essence pulses gently, waiting for the right " +
+        'moment to demonstrate your courage.',
     )
   }
 }
