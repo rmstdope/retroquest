@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, MAX_TURNS } from './useGameStore'
 import type { CompletionTree, SaveSlot } from '@/types/bridge'
@@ -273,6 +273,91 @@ describe('useGameStore', () => {
       bridge.isAcceptingInput.mockReturnValue(false)
       await store.initGame()
       expect(store.acceptInput).toBe(false)
+    })
+  })
+
+  // --- debug scripts (dev-only) ---
+
+  describe('debug scripts', () => {
+    function serveScript(text: string | null): void {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () =>
+          text === null
+            ? new Response('nope', { status: 404 })
+            : new Response(text),
+        ),
+      )
+    }
+
+    beforeEach(async () => {
+      await store.initGame()
+      store.dismissModal()
+      bridge.handleCommand.mockClear()
+    })
+
+    afterEach(() => {
+      vi.unstubAllGlobals()
+      vi.unstubAllEnvs()
+    })
+
+    it('plays every command of the script, each as a turn of its own', async () => {
+      serveScript('# comment\nlook\n\ntake bread\n')
+      await store.runDebugScript('act1')
+      expect(fetch).toHaveBeenCalledWith('/debug-scripts/act1.txt')
+      expect(bridge.handleCommand.mock.calls).toEqual([
+        ['look'],
+        ['take bread'],
+      ])
+      const commands = store.turns.map((turn) => turn.command)
+      expect(commands.slice(-3)).toEqual(['look', 'take bread', null])
+      expect(store.turns.at(-1)!.text).toContain('2 commands')
+    })
+
+    it('stops at a failing line and names the line, command and reason', async () => {
+      serveScript('look\ntake sword\ngo north\n')
+      bridge.handleCommand
+        .mockReturnValueOnce('A room.')
+        .mockReturnValueOnce(
+          "[failure]There is no 'sword' here to take.[/failure]",
+        )
+      await store.runDebugScript('act1')
+      expect(bridge.handleCommand).toHaveBeenCalledTimes(2)
+      const last = store.turns.at(-1)!
+      expect(last.text).toContain('[failure]')
+      expect(last.text).toContain('line 2')
+      expect(last.text).toContain("'take sword'")
+      expect(last.text).toContain("There is no 'sword' here to take.")
+    })
+
+    it('says so when the script does not exist', async () => {
+      serveScript(null)
+      await store.runDebugScript('missing')
+      expect(bridge.handleCommand).not.toHaveBeenCalled()
+      expect(store.turns.at(-1)!.text).toContain("'missing' not found")
+    })
+
+    it('refuses a name that is not a plain script name', async () => {
+      serveScript('look')
+      await store.runDebugScript('../secret')
+      expect(fetch).not.toHaveBeenCalled()
+      expect(store.turns.at(-1)!.text).toContain('not found')
+    })
+
+    it('is reached by typing "debug <name>" under the dev server', async () => {
+      serveScript('look\n')
+      store.submitCommand('debug act1')
+      await vi.waitFor(() =>
+        expect(bridge.handleCommand).toHaveBeenCalledWith('look'),
+      )
+    })
+
+    it('is an ordinary command in a production build', () => {
+      vi.stubEnv('DEV', false)
+      serveScript('look\n')
+      store.submitCommand('debug act1')
+      expect(fetch).not.toHaveBeenCalled()
+      expect(bridge.handleCommand).toHaveBeenCalledWith('debug act1')
     })
   })
 
