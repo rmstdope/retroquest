@@ -203,7 +203,7 @@ describe('useBridge', () => {
       bridge.controller.takeTurn('use lantern')
       expect(bridge.quickSaveGame()).toBe('Game saved.')
       const data = localStorageMock.getItem('retroquest_save')
-      expect(JSON.parse(data!)).toMatchObject({ version: 2, actIndex: 0 })
+      expect(JSON.parse(data!)).toMatchObject({ version: 3, actIndex: 0 })
       const quick = bridge.getQuickSave()!
       expect(quick.slot).toBe(0)
       expect(quick.act).toBe('Act 1')
@@ -367,7 +367,7 @@ describe('useBridge', () => {
         room: "Elior's Cottage",
       })
       expect(typeof slots[2]!.timestamp).toBe('string')
-      expect(JSON.parse(slots[2]!.data)).toMatchObject({ version: 2 })
+      expect(JSON.parse(slots[2]!.data)).toMatchObject({ version: 3 })
       expect(bridge.getSaveSlots()[2].quests).toEqual({
         completed: 0,
         total: 11,
