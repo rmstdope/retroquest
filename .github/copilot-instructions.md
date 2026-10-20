@@ -16,7 +16,7 @@ The application shall ALWAYS be developed in very small, manageable increments t
 
 ### Test-driven Development (TDD)
 
-In the development process, the application should be developed using Test-driven Development (TDD) principles. Always use the test-driven-development skill when writing code. This means that you should write tests before writing the actual implementation code. This should be the case also when fixing bugs. First write a test that reproduces the bug, then fix the bug and verify that the test passes along with all existing tests.
+In the development process, the application should be developed using Test-driven Development (TDD) principles. This means that you should write tests before writing the actual implementation code. This should be the case also when fixing bugs. First write a test that reproduces the bug, then fix the bug and verify that the test passes along with all existing tests.
 However, when trying to pinpoint a bug, you are free to add any traces, try fixes or anything else without having to write tests for that immediately. But once the issue has been pinpointed, either update existing tests or add a new test that triggers the error before applying the fix. This ensures no unnecessary modifications are done and helps to prevent regressions in the future.
 
 ### Collaboration
@@ -29,50 +29,8 @@ Always prefer simple design solutions. Avoid over-engineering. If unsure, ask th
 
 ### Four eye Principle
 
-All code changes must be reviewed by at least one other person (the navigator) before being merged into the main codebase. This practice helps to catch potential issues, improve code quality, and ensure adherence to coding standards and best practices. No automatic merging of code changes without review is allowed.
+All code changes must be reviewed by another instance before being merged into the main codebase. This practice helps to catch potential issues, improve code quality, and ensure adherence to coding standards and best practices. No automatic merging of code changes without review is allowed.
 Always ensure all pre-merge checks pass before merging any code changes to ensure that new changes do not introduce regressions or break existing functionality. NEVER merge code changes that have not passed all tests.
-
-### Issues and branches
-
-When starting to work on any feature that exists as a github issue, assign that feature to the user that is working on it. Each feature should have a corresponding issue in the issue tracker that describes the work to be done.
-
-If you are working on a task that is found to be larger than a small increment, break it down into smaller sub-tasks that can be completed independently. Each sub-task should have its own issue in the issue tracker and should be linked back to the main task issue for traceability. Prefix the sub-issues with "Sub-issue (<<issue-number>>):" to clearly indicate their relationship to the main feature issue. <<issue-number>> should be replaced with the main issue number.
-All sub-issues should be linked back to the main issue in their description to maintain clear traceability. Vice versa, all main issues should reference their sub-issues.
-
-When working on an issue, this is important:
-
-- ALWAYS assign the issue to the developer working on it.
-- ALWAYS create a new branch from **the latest main** (unless instructed otherwise) named after the issue number and a short description of the work to be done, e.g., `42-add-user-authentication`. Run `git checkout main && git pull origin main` before branching. Once the work is completed and reviewed, merge the branch back into main using a pull request.
-- ALWAYS create a pull request (PR) for merging the sub-issue branch back into main.
-- Before creating the PR, ALWAYS make sure all pre-commit checkpoints pass (see "Pre-merge Checklist" below) and ALWAYS ask the navigator to review and approve the PR. Even if any issue existed previously, it shall be fixed before merging. Do not merge any code that has known issues, even if they existed before.
-- ALWAYS merge an issue branch back into main before starting to work on another issue. This ensures that the latest changes are always incorporated and reduces the risk of merge conflicts.
-
-When a PR is merged, the issue should be closed and the branch deleted to keep the repository clean and organized. If the issue is a sub-issue of a larger feature, ensure that the main issue is updated with relevant information about the progress made and that it is closed when all sub-issues are completed.
-When a sub-issue is closed, the main issue's description should be updated to reflect the completion of that sub-issue and any remaining work that needs to be done on the main issue.
-
-### Github CLI
-
-Use the command line command 'gh' for interacting with github issues. Be careful with quoting when using gh. NEVER use backticks in the text with gh and use real newlines instead of \n.
-When creating issues, always add the appropriate labels to the issue using gh:
-
-- bug - for all bugs
-- enhancement - for any feature development
-- documentation - for changes to docs, design documents or instructions
-- engine - for anything in the game engine (web/src/engine)
-- act1, act2, act3, act4 - for anything that has to do with a specific act
-- story - for story and narrative design
-- web - for the Vue user interface
-- refactoring - for anything that has to do with refactoring the codebase
-- testing - for anything that has to do with testing
-- enhanced - for issues created or updated with AI assistance workflows
-
-### Definition of Done
-
-For any completed issue workflow task, the following is mandatory:
-
-- After creating a GitHub issue, ALWAYS run a `self-learning-skills` retrospective automatically.
-- After an issue is merged and closed, ALWAYS run a `self-learning-skills` retrospective automatically.
-- In that retrospective, ALWAYS ask the navigator for feedback and update skill documentation immediately when improvements are identified.
 
 ## Hard Formatting & Static Rules (Enforced)
 
