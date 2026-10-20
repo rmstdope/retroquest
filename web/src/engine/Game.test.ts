@@ -1114,10 +1114,26 @@ describe('Game', () => {
       expect(fresh.isGameOver()).toBe(true)
     })
 
+    it('carries a virtue into the next act and through a save round-trip', () => {
+      const game = twoActGame()
+      game.newTurn()
+      game.newTurn()
+      game.state.addVirtue('mercy')
+      ;(game.acts[0] as StateAct).done = true
+      game.newTurn()
+      game.newTurn()
+      game.newTurn()
+      expect(game.currentAct).toBe(1)
+      expect(game.state.hasVirtue('mercy')).toBe(true)
+      const fresh = twoActGame()
+      expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+      expect(fresh.state.hasVirtue('mercy')).toBe(true)
+    })
+
     it('exposes the save data for other storages and rejects broken data', () => {
       const game = twoActGame()
       const data = game.toSaveData()
-      expect(JSON.parse(data)).toMatchObject({ version: 2, actIndex: 0 })
+      expect(JSON.parse(data)).toMatchObject({ version: 3, actIndex: 0 })
       expect(game.loadSaveData(data)).toBe(
         '[event]Game loaded successfully.[/event]',
       )
@@ -1128,6 +1144,9 @@ describe('Game', () => {
         '[failure]Failed to load game',
       )
       expect(game.loadSaveData('{"version":1}')).toContain(
+        '[failure]Failed to load game',
+      )
+      expect(game.loadSaveData('{"version":2}')).toContain(
         '[failure]Failed to load game',
       )
     })

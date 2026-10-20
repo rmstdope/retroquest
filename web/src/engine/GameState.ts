@@ -30,6 +30,12 @@ export class GameState {
   nonActivatedQuests: Quest[]
   activatedQuests: Quest[] = []
   completedQuests: Quest[] = []
+  /**
+   * The virtue moments the player has chosen so far. Unlike the rest of the
+   * state it is carried into the next act's state; acts name their virtues
+   * with constants.
+   */
+  virtues: string[] = []
 
   constructor(
     startingRoom: Room,
@@ -49,6 +55,16 @@ export class GameState {
 
   setStoryFlag(flagName: string, value: boolean): void {
     this.storyFlags[flagName] = value
+  }
+
+  /** Records a virtue moment; recording the same virtue twice changes nothing. */
+  addVirtue(virtue: string): void {
+    if (!this.virtues.includes(virtue)) this.virtues.push(virtue)
+  }
+
+  /** True when the virtue has been recorded in this or an earlier act. */
+  hasVirtue(virtue: string): boolean {
+    return this.virtues.includes(virtue)
   }
 
   /** The flag's value; false when it was never set. */

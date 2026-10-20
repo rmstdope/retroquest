@@ -51,12 +51,12 @@ export interface GameOptions {
 
 /** The JSON a save holds. */
 interface SavePayload {
-  version: 2
+  version: 3
   actIndex: number
   state: SerializedGraph
 }
 
-const SAVE_VERSION = 2
+const SAVE_VERSION = 3
 const DEFAULT_SAVE_NAME = 'retroquest'
 const SAVE_NAME = /^[a-z0-9_-]+$/
 const INVALID_SAVE_NAME =
@@ -98,11 +98,17 @@ export class Game implements CommandTarget {
     }
   }
 
-  /** A new state for the current act, starting in its first room. */
+  /**
+   * A new state for the current act, starting in its first room. The virtues
+   * of the state it replaces are carried over.
+   */
   private freshState(): GameState {
     const act = this.acts[this.currentAct]
     const startingRoom = Object.values(act.rooms)[0]
     const state = new GameState(startingRoom, act.rooms, act.quests)
+    // `state` is not assigned yet while the constructor builds the first one.
+    if ((this.state as GameState | undefined) !== undefined)
+      state.virtues = [...this.state.virtues]
     act.setupGameState(state)
     return state
   }
