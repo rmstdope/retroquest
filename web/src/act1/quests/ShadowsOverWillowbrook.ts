@@ -4,6 +4,7 @@ import {
   FLAG_FOUND_RUNE_TOKEN,
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_MAGIC_FULLY_UNLOCKED,
+  FLAG_MERCHANT_NEWS_HEARD,
   FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED,
   FLAG_VEGETABLE_FIELD_WATERED,
@@ -110,6 +111,14 @@ export class ShadowsOverWillowbrookQuest extends Quest {
           'poisoned the well on purpose. Whoever carried it, perhaps the cloaked ' +
           'stranger the villagers whisper about, was searching Willowbrook for ' +
           'something, or for someone.',
+      ],
+      [
+        FLAG_MERCHANT_NEWS_HEARD,
+        `On the road to Greendale, the ${characterName('merchant')} brought ` +
+          'grim news from the capital: King Alden lies ill, and no physician ' +
+          'can name his sickness. The roads have turned dangerous, and crops ' +
+          'are failing in every valley between. Whatever troubles Willowbrook ' +
+          'may be part of something larger.',
       ],
     ]
     let updated = false

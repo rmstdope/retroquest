@@ -5,6 +5,7 @@ import {
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_FOUND_RUNE_TOKEN,
   FLAG_MAGIC_FULLY_UNLOCKED,
+  FLAG_MERCHANT_NEWS_HEARD,
   FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_VEGETABLE_FIELD_WATERED,
   FLAG_VILLAGER_TALKED_TO,
@@ -131,5 +132,22 @@ describe('Shadows Over Willowbrook log', () => {
     expect(quest.checkUpdate(game.state)).toBe(true)
     expect(quest.latestStage).toContain('[item_name]rune token[/item_name]')
     expect(quest.earlierStages).toHaveLength(2)
+  })
+
+  it('records the merchant news as the newest entry, then folds it in', () => {
+    const game = new Game([new Act1()])
+    const quest = new ShadowsOverWillowbrookQuest()
+    game.state.setStoryFlag(FLAG_MERCHANT_NEWS_HEARD, true)
+
+    expect(quest.checkUpdate(game.state)).toBe(true)
+    expect(quest.latestStage).toContain('King Alden lies ill')
+    expect(quest.latestStage).toContain(characterName('merchant'))
+    expect(quest.checkUpdate(game.state)).toBe(false)
+
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    quest.checkUpdate(game.state)
+
+    expect(quest.latestStage).toContain('Villagers speak in hushed tones')
+    expect(quest.earlierStages?.join('')).toContain('King Alden lies ill')
   })
 })
