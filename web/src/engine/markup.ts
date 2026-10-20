@@ -22,7 +22,7 @@ export const MARKUP_TAGS: readonly string[] = [
   'exits',
   'bold',
   'dim',
-] as const
+]
 
 /** Wrap `text` as an event line: `[event]text[/event]`. */
 export function event(text: string): string {
@@ -57,7 +57,9 @@ const TAG_PATTERN = /\[(\/?)([a-z_]+)\]/g
  * Find malformed markup in one piece of engine output: unknown tags, tags
  * that are unbalanced, unclosed or nested in themselves, and dialogue with no
  * `[character_name]` in the narration before it (names inside dialogue never
- * count, as in parseTurn). Returns one message per problem; empty when well formed.
+ * count, as in parseTurn). A speaker is any name seen so far, so after unsigned
+ * `writing()` a later plain `[dialogue]` in the same answer is accepted too and
+ * shown without a label; give it its own name line. Returns one message per problem; empty when well formed.
  */
 export function findMarkupProblems(text: string): string[] {
   const problems: string[] = []

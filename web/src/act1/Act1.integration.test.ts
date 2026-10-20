@@ -569,7 +569,7 @@ describe('Act 1 golden path as declared by the act', () => {
     const viaPath = new Game([new Act1()])
     executeCommands(viaPath, ACT1_GOLDEN_PATH)
     const viaCheat = new Game([new Act1()])
-    viaCheat.commandParser.parse('cheat act 1')
+    executeCommands(viaCheat, ['cheat act 1'])
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })

@@ -1057,7 +1057,7 @@ describe('Forest Transition spell learning', () => {
 
     // Talk to hermit
     const hermit = state.currentRoom.characters[0] // Should be Forest Hermit
-    hermit.talkTo(state)
+    expectMarkupWellFormed(hermit.talkTo(state))
     expectItemInInventory(state, 'protective charm')
   })
 })
@@ -1269,7 +1269,7 @@ describe('Act 2 golden path as declared by the act', () => {
     const viaPath = new Game([new Act2()])
     executeCommands(viaPath, ACT2_GOLDEN_PATH)
     const viaCheat = new Game([new Act2()])
-    viaCheat.commandParser.parse('cheat act 2')
+    executeCommands(viaCheat, ['cheat act 2'])
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })

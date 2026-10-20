@@ -33,7 +33,16 @@ describe('SeaSealedLetter', () => {
     expect(
       quotes.every((b) => b.kind === 'dialogue' && b.speaker === null),
     ).toBe(true)
-    expect(JSON.stringify(blocks.slice(0, -1))).not.toContain('Theron')
+    expect(
+      JSON.stringify(
+        blocks.slice(
+          0,
+          blocks.findIndex((b) =>
+            JSON.stringify(b).includes('signed with two names'),
+          ),
+        ),
+      ),
+    ).not.toContain('Theron')
   })
 
   it('picking up uses only known, balanced tags', () => {
