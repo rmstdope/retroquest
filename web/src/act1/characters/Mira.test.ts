@@ -2,10 +2,14 @@ import { describe, it, expect, vi } from 'vitest'
 import { Game, type GameState } from '@/engine'
 import { Act1 } from '../Act1'
 import { RareFlower } from '../items/RareFlower'
+import { RuneToken } from '../items/RuneToken'
+import { Mechanism } from '../items/Mechanism'
+import { Rope } from '../items/Rope'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_MAGIC_FULLY_UNLOCKED,
+  FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_VILLAGER_TALKED_TO,
   FLAG_WELL_EXAMINED,
 } from '../Act1StoryFlags'
@@ -104,5 +108,53 @@ describe('Mira handing over the Ancient Amulet', () => {
     const response = executeCommands(game, ['talk to mira'])
 
     expect(response).not.toContain('show the amulet to no one lightly')
+  })
+})
+
+describe('Mira and the rune token from the well', () => {
+  it('names it a fouling sigil, set in the well on purpose, and hands it back', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new RuneToken())
+
+    const response = executeCommands(game, ['give rune token to mira'])
+
+    expect(response).toContain('fouling sigil')
+    expect(response).toContain('on purpose')
+    expect(response).toContain('searching')
+    expect(response).not.toContain('Malakar')
+    expectItemInInventory(game.state, 'rune token')
+    expect(game.state.getStoryFlag(FLAG_MIRA_NAMED_FOULING_SIGIL)).toBe(true)
+    expectDialogueSpeaker(response, 'Mira')
+    const beats = response.split('\n').filter((beat) => beat.trim() !== '')
+    for (const beat of beats) expect(beat.length).toBeLessThan(400)
+  })
+
+  it('ties it to the mill once Elior has jammed the mechanism there', () => {
+    const game = gameInMirasHut()
+    const mechanism = game.state.allRooms.OldMill.items.find(
+      (item) => item instanceof Mechanism,
+    )
+    if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
+    const rope = new Rope()
+    game.state.addItemToInventory(rope)
+    mechanism.useWith(game.state, rope)
+    game.state.addItemToInventory(new RuneToken())
+
+    const response = executeCommands(game, ['give rune token to mira'])
+
+    expect(response).toContain('mill')
+    expectDialogueSpeaker(response, 'Mira')
+  })
+
+  it('does not tell the whole tale twice', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new RuneToken())
+    executeCommands(game, ['give rune token to mira'])
+
+    const response = executeCommands(game, ['give rune token to mira'])
+
+    expect(response).not.toContain('on purpose')
+    expectItemInInventory(game.state, 'rune token')
+    expectDialogueSpeaker(response, 'Mira')
   })
 })

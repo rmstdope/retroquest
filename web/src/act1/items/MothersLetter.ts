@@ -1,6 +1,24 @@
 import { Item, type GameState, characterName, writing } from '@/engine'
 import { FLAG_READ_MOTHERS_LETTER } from '../Act1StoryFlags'
 
+/** The letter as Elior reads it, built on demand so older saves read the current wording. */
+function letterDescription(): string {
+  return (
+    "A fragment of a letter, water-stained at the edges, in your mother's hand:" +
+    writing(
+      `My dearest ${characterName('Elior')}, if you are reading this, ` +
+        'you found the bend, as I knew you would. ' +
+        'The river remembers what the village forgets.\n' +
+        `If ${characterName('Malakar')} comes asking about our line, ` +
+        'do not answer him. He is not the friend we knew. ' +
+        `${characterName('Mira')} keeps the amulet for you. ` +
+        'When you are ready, it will know you.\n' +
+        'Your father and I',
+    ) +
+    '\nThe rest has blurred away in the water stains.'
+  )
+}
+
 /**
  * A water-stained fragment of a letter from Elior's mother, left in a tin
  * under the smooth stone at the river bend. Reading it completes the Faded
@@ -11,25 +29,17 @@ export class MothersLetter extends Item {
     super({
       name: "mother's letter",
       shortName: 'letter',
-      description:
-        "A fragment of a letter, water-stained at the edges, in your mother's hand:" +
-        writing(
-          `My dearest ${characterName('Elior')}, if you are reading this, ` +
-            'you found the bend, as I knew you would. ' +
-            'The river remembers what the village forgets.\n' +
-            `A man called ${characterName('Malakar')} has been asking about ` +
-            'Willowbrook, and about our line. Do not answer him. ' +
-            `${characterName('Mira')} keeps the amulet for you. ` +
-            'When you are ready, it will know you.\n' +
-            'Your father and I',
-        ) +
-        '\nThe rest has blurred away in the water stains.',
+      description: letterDescription(),
       canBeCarried: true,
     })
   }
 
-  /** Reading the letter sets FLAG_READ_MOTHERS_LETTER. */
+  /**
+   * Reading the letter sets FLAG_READ_MOTHERS_LETTER. The text is rebuilt
+   * first, so a letter restored from an older save reads the current wording.
+   */
   override examine(gameState: GameState): string {
+    this.description = letterDescription()
     gameState.setStoryFlag(FLAG_READ_MOTHERS_LETTER, true)
     return super.examine(gameState)
   }

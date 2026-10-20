@@ -166,6 +166,7 @@ export const ACT1_GOLDEN_PATH: string[] = [
   'go north',
   'go east',
   'go north',
+  'give rune token to mira',
   'talk to mira',
   'go south',
   'go west',

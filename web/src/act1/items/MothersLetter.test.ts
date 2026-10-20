@@ -93,4 +93,23 @@ describe("The mother's letter at the river bend", () => {
     expect(response).toContain(characterName('Malakar'))
     expect(game.state.getStoryFlag(FLAG_READ_MOTHERS_LETTER)).toBe(true)
   })
+
+  it('speaks of Malakar as someone the family knew, now gone wrong', () => {
+    const description = new MothersLetter().description
+
+    expect(description).not.toContain('A man called')
+    expect(description).toContain('He is not the friend we knew.')
+    expect(description).not.toContain('Warden')
+  })
+
+  it('shows the current wording to a letter restored from an older save', () => {
+    const letter = new MothersLetter()
+    letter.description = 'A man called Malakar has been asking.'
+    game.state.addItemToInventory(letter)
+
+    const response = executeCommands(game, ['examine letter'])
+
+    expect(response).toContain('He is not the friend we knew.')
+    expect(response).not.toContain('A man called')
+  })
 })

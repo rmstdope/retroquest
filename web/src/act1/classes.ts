@@ -37,6 +37,7 @@ import { PrayerBook } from './items/PrayerBook'
 import { RareFlower } from './items/RareFlower'
 import { River } from './items/River'
 import { Rope } from './items/Rope'
+import { RuneToken } from './items/RuneToken'
 import { RustyHoe } from './items/RustyHoe'
 import { RustySaw } from './items/RustySaw'
 import { SackOfFlour } from './items/SackOfFlour'
@@ -135,6 +136,7 @@ export const ACT1_CLASSES = {
   RareFlower,
   River,
   Rope,
+  RuneToken,
   RustyHoe,
   RustySaw,
   SackOfFlour,

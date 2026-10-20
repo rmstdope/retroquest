@@ -1,19 +1,14 @@
 import { Item, type GameState, event } from '@/engine'
 import { FLAG_WELL_EXAMINED } from '../Act1StoryFlags'
+import { refreshRoomDescription } from '../refreshRoomDescription'
 import { Bucket } from './Bucket'
 import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
 import { MagneticFishingRod } from './MagneticFishingRod'
 
-/** Let the room holding the well (the Village Well) update its water text. */
-function refreshRoomDescription(room: object): void {
-  if (
-    'refreshDescription' in room &&
-    typeof room.refreshDescription === 'function'
-  ) {
-    room.refreshDescription()
-  }
-}
+const FIELD_HINT =
+  ' Clean water at last; the parched [room_name]Vegetable Field[/room_name] ' +
+  'next door could surely use some.'
 
 /** Central multi-phase environmental puzzle object used for layered interactions. */
 export class Well extends Item {
@@ -123,7 +118,7 @@ export class Well extends Item {
       )
     }
     this.isPurified = true
-    refreshRoomDescription(gameState.currentRoom)
+    refreshRoomDescription(gameState)
     if (this.containsRing) {
       const name = this.name
       return event(
@@ -131,7 +126,8 @@ export class Well extends Item {
           name +
           '[/item_name]. The murky water shimmers and clears! You can now ' +
           "see a [item_name]shiny ring[/item_name] at the bottom, but it's " +
-          'still too deep to reach by hand.',
+          'still too deep to reach by hand.' +
+          FIELD_HINT,
       )
     }
     const name = this.name
@@ -139,7 +135,8 @@ export class Well extends Item {
       'You cast [spell_name]purify[/spell_name] on the [item_name]' +
         name +
         '[/item_name]. The murky water shimmers and clears! The bottom is ' +
-        "visible, but there's nothing of interest.",
+        "visible, but there's nothing of interest." +
+        FIELD_HINT,
     )
   }
 }

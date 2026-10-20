@@ -36,3 +36,9 @@ export const FLAG_HEALED_FISHERMAN_ARM = 'healed_fisherman_arm'
 export const FLAG_MET_HEMLOCK = 'met_hemlock'
 export const FLAG_PATCHES_FOUND = 'patches_found'
 export const FLAG_PATCHES_RETURNED = 'patches_returned'
+/** Set when the rune token comes up out of the purified well with the ring. */
+export const FLAG_FOUND_RUNE_TOKEN = 'found_rune_token'
+/** Set when Mira names the rune token a fouling sigil. */
+export const FLAG_MIRA_NAMED_FOULING_SIGIL = 'mira_named_fouling_sigil'
+/** Set when the Vegetable Field is watered with purified well water. */
+export const FLAG_VEGETABLE_FIELD_WATERED = 'vegetable_field_watered'
