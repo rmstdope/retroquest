@@ -45,7 +45,8 @@ export class Grandmother extends Character {
   }
 
   /**
-   * Dialogue varying by story flags: the greeting, then the journal tale
+   * Dialogue varying by story flags: the greeting, then (once, after the
+   * journal is read) her reaction to the dream, then the journal tale
    * (which grants the Revive spell), her lines on Elior's journey, on
    * Patches and the shed hint while he carries its key. The journal tale is told again only
    * when she has nothing newer to say.
