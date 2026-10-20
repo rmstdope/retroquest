@@ -68,7 +68,15 @@ describe('Merchant', () => {
     const first = executeCommands(game, ['talk to merchant'])
     const second = executeCommands(game, ['talk to merchant'])
 
-    expect(first).toContain('King Alden has fallen ill')
+    expect(first).toContain(
+      "You'll want news, if you're bound for Greendale. It's a sombre city " +
+        'this season: they say King Alden has fallen ill, and no physician ' +
+        'can name the sickness. And the roads have gone bad besides. I passed ' +
+        'a cart on its side by the hill road, and nobody with it. And ' +
+        "it's not only your fields that are failing. I've seen crops gone " +
+        'grey in every valley from here to the capital, ever since the king ' +
+        'took to his bed. Keep to the daylight, friend.',
+    )
     expect(first.indexOf('Keep to the daylight, friend.')).toBeLessThan(
       first.indexOf('[item_name]shiny ring[/item_name]'),
     )
@@ -89,6 +97,8 @@ describe('Merchant', () => {
     expect(first.indexOf('Keep to the daylight, friend.')).toBeLessThan(
       first.indexOf('should serve you well'),
     )
+    expectDialogueSpeaker(first, 'merchant')
+    expect(first.match(/\[dialogue\]/g)).toHaveLength(1)
     expect(executeCommands(game, ['talk to merchant'])).not.toContain('Alden')
   })
 
@@ -109,5 +119,19 @@ describe('Merchant', () => {
 
     expect(quest?.description).toContain('King Alden lies ill')
     expect(executeCommands(fresh, ['talk to merchant'])).not.toContain('Alden')
+  })
+
+  it('tells the news once to a save made before the news existed', () => {
+    const game = gameAtMerchant()
+    executeCommands(game, ['give shiny ring to merchant'])
+    const fresh = new Game([new Act1()])
+    fresh.loadSaveData(game.toSaveData())
+    expect(fresh.state.getStoryFlag(FLAG_MERCHANT_NEWS_HEARD)).toBe(false)
+
+    const first = executeCommands(fresh, ['talk to merchant'])
+    const second = executeCommands(fresh, ['talk to merchant'])
+
+    expect(first).toContain('King Alden has fallen ill')
+    expect(second).not.toContain('King Alden')
   })
 })
