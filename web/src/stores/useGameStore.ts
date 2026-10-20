@@ -428,13 +428,26 @@ export const useGameStore = defineStore('game', () => {
     if (!acceptInput.value) return
     if (!cmd || !cmd.trim()) return
 
-    const b = requireBridge()
+    requireBridge()
     const command = cmd.trim()
     if (routeSaveOrLoad(command)) return
     if (/^(quit|exit)$/i.test(command)) {
       quitAsked.value = true
       return
     }
+    if (import.meta.env.DEV) {
+      const script = /^debug\s+(\S+)$/i.exec(command)
+      if (script) {
+        void runDebugScript(script[1].toLowerCase())
+        return
+      }
+    }
+    playCommand(command)
+  }
+
+  /** Run one command as the player typed it: log it, refresh, raise quest news. */
+  function playCommand(command: string): string {
+    const b = requireBridge()
     const result = b.handleCommand(command)
     lastAnswer = result
     showOutput(command, result)
@@ -444,6 +457,22 @@ export const useGameStore = defineStore('game', () => {
     if (!acceptInput.value && !showModal.value && !b.isActRunning()) {
       afterActEnds()
     }
+    return result
+  }
+
+  /**
+   * Dev only (`debug <name>`): play the dev server's script `<name>` as
+   * typed commands (see `@/utils/debugScript`). The module is imported under
+   * the DEV flag only, so a production build carries none of it.
+   */
+  async function runDebugScript(name: string): Promise<void> {
+    if (!import.meta.env.DEV) return
+    const { playDebugScript } = await import('@/utils/debugScript')
+    await playDebugScript(name, {
+      play: playCommand,
+      running: () => requireBridge().isActRunning(),
+      show: (text) => showOutput(`debug ${name}`, text, { chips: false }),
+    })
   }
 
   /** An act has ended: the last one closes the game, any other leads on. */
@@ -876,6 +905,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   return {
+    runDebugScript,
     // State
     loading,
     turns,
