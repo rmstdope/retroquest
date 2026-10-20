@@ -9,6 +9,7 @@ import type {
   RoomWare,
 } from '@/types/bridge'
 import type { useBridge } from '@/composables/useBridge'
+import { normalizeSaveName } from '@/engine'
 import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { parseQuestNews, type QuestNews } from '@/lantern/parseQuestNews'
@@ -45,9 +46,6 @@ export interface CompletionState {
   /** The last word as typed ('' after a space); for `none` the last non-empty word. */
   word: string
 }
-
-/** Save names the game accepts (mirrors Game._validate_save_name). */
-const SAVE_NAME_PATTERN = /^[a-z0-9_-]+$/
 
 /** One entry in the story: what the player did and what the game answered. */
 export interface Turn {
@@ -557,8 +555,8 @@ export const useGameStore = defineStore('game', () => {
     const match = /^(save|load)(?:\s+(\S.*))?$/i.exec(command)
     if (!match) return false
     const [, verb, rawName] = match
-    const name = rawName?.toLowerCase()
-    if (name && !SAVE_NAME_PATTERN.test(name)) return false
+    const name = rawName === undefined ? null : normalizeSaveName(rawName)
+    if (rawName !== undefined && name === null) return false
     const isSave = verb.toLowerCase() === 'save'
     if (isSave && name) saveNamedGame(name, command)
     else if (isSave) saveGame(command)

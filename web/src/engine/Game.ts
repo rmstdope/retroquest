@@ -725,7 +725,7 @@ Welcome to
 
   /** Save under the name (lowercased; letters, digits, '-' and '_' only). */
   save(name = DEFAULT_SAVE_NAME): string {
-    const slot = validSaveName(name)
+    const slot = normalizeSaveName(name)
     if (slot === null) return INVALID_SAVE_NAME
     try {
       this.saveStorage.write(slot, this.toSaveData())
@@ -736,7 +736,7 @@ Welcome to
   }
 
   load(name = DEFAULT_SAVE_NAME): string {
-    const slot = validSaveName(name)
+    const slot = normalizeSaveName(name)
     if (slot === null) return INVALID_SAVE_NAME
     let data: string | null
     try {
@@ -786,7 +786,11 @@ Welcome to
   }
 }
 
-function validSaveName(name: string): string | null {
+/**
+ * The one save-name rule: the name trimmed and lowercased, or null when it
+ * holds anything but letters, digits, hyphens and underscores.
+ */
+export function normalizeSaveName(name: string): string | null {
   const normalized = name.trim().toLowerCase()
   return SAVE_NAME.test(normalized) ? normalized : null
 }

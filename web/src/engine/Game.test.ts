@@ -1,7 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { Act } from './Act'
 import { Character } from './Character'
-import { Game, GameRunState, MemorySaveStorage, type SaveStorage } from './Game'
+import {
+  Game,
+  GameRunState,
+  MemorySaveStorage,
+  normalizeSaveName,
+  type SaveStorage,
+} from './Game'
 import { GameState } from './GameState'
 import { Item } from './Item'
 import { Quest } from './Quest'
@@ -1086,5 +1092,15 @@ describe('Game', () => {
       expect(game.registry.names()).toContain('First.StateAct')
       expect(game.registry.names()).toContain('GameState')
     })
+  })
+})
+
+describe('normalizeSaveName', () => {
+  it('trims and lowercases a valid name', () => {
+    expect(normalizeSaveName('  My-Save_1 ')).toBe('my-save_1')
+  })
+
+  it.each(['', 'my save', 'a.b', 'a/b', 'é'])('rejects %j', (name) => {
+    expect(normalizeSaveName(name)).toBeNull()
   })
 })
