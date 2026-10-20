@@ -69,6 +69,17 @@ describe('ActionComposer', () => {
     expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
   })
 
+  it('marks its root as typing only in type mode, so the sheet lets the completion list out', async () => {
+    const w = mountComposer()
+    expect(w.classes()).not.toContain('lq-typing')
+
+    await button(w, 'Type').trigger('click')
+    expect(w.classes()).toContain('lq-typing')
+
+    await button(w, 'Actions').trigger('click')
+    expect(w.classes()).not.toContain('lq-typing')
+  })
+
   it('moves at once with a go button', async () => {
     const w = mountComposer()
 
