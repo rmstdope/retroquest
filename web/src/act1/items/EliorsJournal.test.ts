@@ -13,5 +13,7 @@ describe('EliorsJournal', () => {
     const quotes = parseTurn(text).filter((b) => b.kind === 'dialogue')
     expect(quotes).toHaveLength(1)
     expect(quotes[0]).toMatchObject({ speaker: null })
+    expect(text).toContain('[dialogue]What a night.')
+    expect(text).toContain('What did it mean?[/dialogue]')
   })
 })

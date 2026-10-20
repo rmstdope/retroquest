@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { characterName, Room } from '@/engine'
 import { SmoothStone } from '../items/SmoothStone'
 import { River } from '../items/River'
 import { Fisherman } from '../characters/Fisherman'
@@ -10,7 +10,7 @@ export class Riverbank extends Room {
       name: 'Riverbank',
       description:
         'A gentle river flows past the village. Reeds sway along the banks, and ' +
-        'the air is alive with the hum of insects. A weathered fisherman sits ' +
+        `the air is alive with the hum of insects. A weathered ${characterName('fisherman')} sits ` +
         'nearby, humming a quiet tune. The riverbank is peaceful, a place where ' +
         'time seems to slow and worries drift away.',
       items: [new SmoothStone(), new River()],

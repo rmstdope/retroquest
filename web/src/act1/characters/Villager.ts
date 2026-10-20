@@ -3,7 +3,7 @@ import {
   type GameState,
   event,
   characterName,
-  dialogue,
+  speech,
 } from '@/engine'
 import { FLAG_VILLAGER_TALKED_TO } from '../Act1StoryFlags'
 
@@ -18,7 +18,7 @@ export class Villager extends Character {
       'chickens refuse to leave their coop after dusk.',
     'Strange footprints appeared by the riverbank this morning—too large for any ' +
       'villager, and they led straight into the woods.',
-    'Mira says the air feels heavy with magic, and the chapel bell rang by itself at ' +
+    `${characterName('Mira')} says the air feels heavy with magic, and the chapel bell rang by itself at ` +
       "midnight. Something's not right in Willowbrook.",
   ]
   dialogueIndex = 0
@@ -39,6 +39,6 @@ export class Villager extends Character {
     // Cycle through dialogue
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
     const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
-    return eventMsg + '\n' + dialogue('Villager', `'${rumor}'`)
+    return eventMsg + '\n' + speech(rumor)
   }
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { characterName, Game } from '@/engine'
 import { Act1 } from '../Act1'
 import { GameMap } from '../items/GameMap'
 import { TravelCloak } from '../items/TravelCloak'
@@ -61,7 +61,7 @@ describe('Preparing for the road checklist', () => {
     expect(details.kind).toBe('checklist')
     if (details.kind !== 'checklist') return
     expect(details.intro).toBe(
-      'Mira has tasked you with preparing for your journey. ' +
+      `${characterName('Mira')} has tasked you with preparing for your journey. ` +
         'She says you will need:',
     )
     expect(details.items).toHaveLength(6)

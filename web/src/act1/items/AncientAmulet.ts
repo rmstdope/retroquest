@@ -21,11 +21,11 @@ export class AncientAmulet extends Item {
       characterName('Mira') +
       ' places a protective hand over the [item_name]amulet[/item_name]. ' +
       speech(
-        "'This is not yet yours to claim, " +
+        'This is not yet yours to claim, ' +
           characterName('Elior') +
           '. The [item_name]Ancient Amulet[/item_name] ' +
           'is a powerful artifact that must be earned through preparation and wisdom. ' +
-          "Complete your journey preparations first, and it shall be yours.'",
+          'Complete your journey preparations first, and it shall be yours.',
       )
     )
   }

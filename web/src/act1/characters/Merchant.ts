@@ -18,7 +18,8 @@ export class Merchant extends Character {
     super({
       name: 'merchant',
       description:
-        'A traveling merchant with a cart full of wares and stories from ' +
+        `A traveling ${characterName('merchant')} with a cart full of wares ` +
+        'and stories from ' +
         'distant lands. Always ready to trade or offer travel advice.',
     })
   }
@@ -31,23 +32,23 @@ export class Merchant extends Character {
       return (
         eventMsg +
         '\n' +
+        `The ${characterName(this.name)} offers a friendly nod. ` +
         speech(
-          `The ${characterName(this.name)} offers a friendly nod. ` +
-            "'Looking for something " +
+          'Looking for something ' +
             'specific, or just browsing? If you have any fine jewelry, especially ' +
             "a [item_name]shiny ring[/item_name], I'm ready to exchange it for a " +
-            "pair of sturdy [item_name]wandering boots[/item_name].'",
+            'pair of sturdy [item_name]wandering boots[/item_name].',
         )
       )
     }
     return (
       eventMsg +
       '\n' +
+      `The ${characterName(this.name)} grins. ` +
       speech(
-        `The ${characterName(this.name)} grins. ` +
-          "'Those [item_name]boots[/item_name] should " +
+        'Those [item_name]boots[/item_name] should ' +
           'serve you well on the road ahead! Let me know if you find anything ' +
-          "else of value.'",
+          'else of value.',
       )
     )
   }
@@ -71,9 +72,9 @@ export class Merchant extends Character {
         item.name +
         '[/item_name]. ' +
         speech(
-          "'A fine piece! As promised, here are the [item_name]" +
+          'A fine piece! As promised, here are the [item_name]' +
             boots.name +
-            "[/item_name]. They'll serve you well on the road to Greendale.'",
+            "[/item_name]. They'll serve you well on the road to Greendale.",
         ) +
         '\n\n' +
         event(`You receive a pair of [item_name]${boots.name}[/item_name]!`)
@@ -87,11 +88,10 @@ export class Merchant extends Character {
     return (
       eventMsg +
       '\n' +
-      speech(
-        `The ${characterName(this.name)} examines the [item_name]` +
-          item.name +
-          "[/item_name] but shakes his head. 'Not interested in that, friend.'",
-      )
+      `The ${characterName(this.name)} examines the [item_name]` +
+      item.name +
+      '[/item_name] but shakes his head. ' +
+      speech('Not interested in that, friend.')
     )
   }
 }

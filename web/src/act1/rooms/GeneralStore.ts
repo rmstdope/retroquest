@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { characterName, Room } from '@/engine'
 import { Rope } from '../items/Rope'
 import { Apple } from '../items/Apple'
 import { Matches } from '../items/Matches'
@@ -13,7 +13,7 @@ export class GeneralStore extends Room {
       name: 'General Store',
       description:
         'A cluttered shop overflowing with goods of every kind. Shelves groan under ' +
-        'the weight of rope, apples, matches, and trinkets. The shopkeeper bustles ' +
+        `the weight of rope, apples, matches, and trinkets. The ${characterName('shopkeeper')} bustles ` +
         'about, dusting jars and chatting with customers. The air is thick with the ' +
         'mingled scents of fruit, wax, and old wood. Every corner seems to hold a ' +
         'new surprise, and the promise of a good bargain.',

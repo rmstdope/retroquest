@@ -28,8 +28,10 @@ export class Grandmother extends Character {
     super({
       name: 'grandmother',
       description:
-        "Elior's wise and loving grandmother, always ready with advice and a " +
-        'gentle smile. She has raised Elior since his parents vanished.',
+        `${characterName('Elior')}'s wise and loving ` +
+        `${characterName('grandmother')}, always ready with advice and a ` +
+        `gentle smile. She has raised ${characterName('Elior')} since his ` +
+        'parents vanished.',
     })
   }
 
@@ -44,7 +46,7 @@ export class Grandmother extends Character {
           'Square[/room_name] is usually bustling, though folks seem more hushed ' +
           'these days. \n' +
           "If you're needing anything, the [room_name]General Store[/room_name] " +
-          'usually has a bit of everything. Old Man Hemlock, the ' +
+          `usually has a bit of everything. Old Man ${characterName('Hemlock')}, the ` +
           `${characterName('shopkeeper')}, sees and hears a lot, too.\n` +
           `And if it's wisdom or a remedy you seek, ${characterName('Mira')} ` +
           'in her hut to the north of the square is the one to talk to. She has a ' +
@@ -130,16 +132,16 @@ export class Grandmother extends Character {
           item.name +
           '[/item_name]. ' +
           speech(
-            "'This... this was your mother's. She said it would keep " +
+            "This... this was your mother's. She said it would keep " +
               'you safe. And this... she wanted you to have this when you were ' +
-              "old enough to understand its importance.'",
+              'old enough to understand its importance.',
           ) +
           '\n') +
         (`${characterName(this.name)} hands you a finely made [item_name]` +
           travelCloak.name +
           '[/item_name].\n' +
           speech(
-            `'May it protect you on your journeys, ${characterName('Elior')}.'`,
+            `May it protect you on your journeys, ${characterName('Elior')}.`,
           )) +
         '\n' +
         event(`You received a [item_name]${travelCloak.name}[/item_name]!`)
@@ -159,13 +161,11 @@ export class Grandmother extends Character {
         eventMsg +
         '\n' +
         speech(
-          "'Oh, [item_name]" +
-            item.name +
-            '[/item_name]! ' +
-            "Thank you, dear. These look lovely. I'll make a pie later.' " +
-            ` ${characterName(this.name)} smiles warmly. ` +
-            "'It's the little things that brighten the day, isn't it?'",
-        )
+          `Oh, [item_name]${item.name}[/item_name]! ` +
+            "Thank you, dear. These look lovely. I'll make a pie later.",
+        ) +
+        ` ${characterName(this.name)} smiles warmly. ` +
+        speech("It's the little things that brighten the day, isn't it?")
       )
     } else if (
       item instanceof WildBerries &&
@@ -181,11 +181,9 @@ export class Grandmother extends Character {
         eventMsg +
         '\n' +
         speech(
-          "'More [item_name]" +
-            item.name +
-            '[/item_name]? ' +
+          `More [item_name]${item.name}[/item_name]? ` +
             'You are too ' +
-            `kind, ${characterName('Elior')}. Thank you.'`,
+            `kind, ${characterName('Elior')}. Thank you.`,
         )
       )
     } else if (item instanceof FadedPhotograph) {
@@ -199,10 +197,11 @@ export class Grandmother extends Character {
           '\n' +
           'She takes the photograph, her eyes misty with memory. ' +
           speech(
-            "'This was taken long ago, before the troubles began. Your parents were so " +
-              "full of hope... They loved you dearly, Elior. I miss them every day.' " +
-              'She gently returns the photo to you, lost in thought.',
-          )
+            'This was taken long ago, before the troubles began. Your parents were so ' +
+              `full of hope... They loved you dearly, ${characterName('Elior')}. ` +
+              'I miss them every day.',
+          ) +
+          ' She gently returns the photo to you, lost in thought.'
         )
       }
       gameState.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
@@ -212,11 +211,11 @@ export class Grandmother extends Character {
         'She studies the back of the photograph, her expression growing ' +
         'serious. ' +
         speech(
-          "'You found the message, then? Your parents... " +
+          'You found the message, then? Your parents... ' +
             'they were involved in something much bigger than any of us realized. ' +
             'There is a darkness in Eldoria, and your family is tied to it. There ' +
-            "is a secret, Elior — a truth you must uncover. Promise me you'll be " +
-            "careful.'",
+            `is a secret, ${characterName('Elior')} — a truth you must uncover. ` +
+            "Promise me you'll be careful.",
         )
       )
     }
@@ -228,11 +227,10 @@ export class Grandmother extends Character {
     return (
       eventMsg +
       '\n' +
-      speech(
-        `${characterName(this.name)} looks at the [item_name]` +
-          item.name +
-          "[/item_name]. 'I'm not sure what to do with this, dear.'",
-      )
+      `${characterName(this.name)} looks at the [item_name]` +
+      item.name +
+      '[/item_name]. ' +
+      speech("I'm not sure what to do with this, dear.")
     )
   }
 }

@@ -98,9 +98,9 @@ export class Well extends Item {
     if (!gameState.getStoryFlag(FLAG_WELL_EXAMINED)) {
       const name = this.name
       return (
-        '[failure]You hesitate. Why would you cast [spell_name]purify[/spell_name] on the ' +
+        '[failure]You hesitate. Why would you cast [spell_name]purify[/spell_name] on the [item_name]' +
         name +
-        '[item_name][/item_name]? Perhaps you should examine it first.[/failure]'
+        '[/item_name]? Perhaps you should examine it first.[/failure]'
       )
     }
     if (this.isPurified) {

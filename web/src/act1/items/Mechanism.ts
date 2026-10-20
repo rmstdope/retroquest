@@ -45,7 +45,7 @@ export class Mechanism extends Item {
     return (
       '[failure]It looks like you need to use something with the ' +
       nameHtml +
-      '[/item_name].[/failure]'
+      '.[/failure]'
     )
   }
 

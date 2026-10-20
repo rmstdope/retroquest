@@ -18,10 +18,10 @@ export class HealingHerb extends Item {
       characterName('Mira') +
       ' gently but firmly stops you. ' +
       speech(
-        "'Those herbs are part of my stores, " +
+        'Those herbs are part of my stores, ' +
           characterName('Elior') +
           '. They are not for taking, but for ' +
-          "healing those who truly need them.'",
+          'healing those who truly need them.',
       )
     )
   }

@@ -27,9 +27,9 @@ export class Locket extends Item {
         characterName('priest') +
         ' nods gravely. ' +
         speech(
-          "'That locket... it is a relic of the village founders. It speaks " +
+          'That locket... it is a relic of the village founders. It speaks ' +
             'of your connection to this place and its history. May this blessing protect ' +
-            "you on your path.'",
+            'you on your path.',
         ) +
         '\nHe teaches you the [spell_name]bless[/spell_name] spell!\n' +
         event('You have learned [spell_name]bless[/spell_name].')

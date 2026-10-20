@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { characterName, Game } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_INVESTIGATED_WITHERED_CROPS,
@@ -38,7 +38,9 @@ describe('Shadows Over Willowbrook log', () => {
         .map((stage) => `[dim]${stage}[/dim]`)
         .join('') + quest.latestStage,
     )
-    expect(quest.description.startsWith('[dim]Elior dreams')).toBe(true)
+    expect(
+      quest.description.startsWith(`[dim]${characterName('Elior')} dreams`),
+    ).toBe(true)
   })
 
   it('shows its log right after loading a save made before logs were data', () => {

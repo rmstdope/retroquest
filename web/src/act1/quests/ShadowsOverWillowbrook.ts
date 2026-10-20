@@ -1,4 +1,4 @@
-import { Quest, type GameState } from '@/engine'
+import { characterName, Quest, type GameState } from '@/engine'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_INVESTIGATED_WITHERED_CROPS,
@@ -26,7 +26,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         'restless, and villagers whisper of a shadowy figure seen at night. ' +
         'Investigate the source of these disturbances.',
       completion:
-        'You have confirmed that a dark force is at work in Willowbrook. Mira ' +
+        `You have confirmed that a dark force is at work in Willowbrook. ${characterName('Mira')} ` +
         'warns you that your magical abilities may be the key to protecting ' +
         'the village.',
     })
@@ -47,14 +47,14 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     let updated = false
     const earlier: string[] = []
     let newDesc =
-      'Elior dreams of a shadowy figure lurking in the fields, its presence felt ' +
+      `${characterName('Elior')} dreams of a shadowy figure lurking in the fields, its presence felt ` +
       'even in the waking world. The dream is unsettling, leaving him with a sense ' +
       'of foreboding that something is wrong in Willowbrook.'
     if (gameState.getStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS)) {
       if (this.noteFlag(FLAG_INVESTIGATED_WITHERED_CROPS)) updated = true
       earlier.push(newDesc)
       newDesc =
-        '\nElior has witnessed the devastation firsthand: once lush rows of crops now ' +
+        `\n${characterName('Elior')} has witnessed the devastation firsthand: once lush rows of crops now ` +
         'stand wilted and brown, their leaves curled and brittle. The earth beneath ' +
         'his feet is cracked and dry, and the air is thick with the scent of decay. ' +
         'Where there was once the promise of a bountiful harvest, there is now only ' +
@@ -65,7 +65,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       earlier.push(newDesc)
       newDesc =
         '\nVillagers speak in hushed tones of strange happenings: animals refusing to ' +
-        'leave their shelters, and shadows moving where none should be. Elior senses ' +
+        `leave their shelters, and shadows moving where none should be. ${characterName('Elior')} senses ` +
         'the fear growing among his neighbors, and the mystery deepens.'
     }
     if (gameState.getStoryFlag(FLAG_WELL_EXAMINED)) {
@@ -73,14 +73,14 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       earlier.push(newDesc)
       newDesc =
         '\nRumors spread of the village well: a foul stench rising from its depths, ' +
-        'and water that no one dares to drink. Elior wonders if the source of the ' +
+        `and water that no one dares to drink. ${characterName('Elior')} wonders if the source of the ` +
         'corruption lies beneath the surface.'
     }
     if (gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)) {
       if (this.noteFlag(FLAG_CONNECT_WITH_NATURE)) updated = true
       earlier.push(newDesc)
       newDesc =
-        '\nMira has urged Elior to connect with the living world and learn from its ' +
+        `\n${characterName('Mira')} has urged ${characterName('Elior')} to connect with the living world and learn from its ` +
         'magic. The path forward is uncertain, but hope stirs in the heart of ' +
         'Willowbrook.'
     }
@@ -88,9 +88,9 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       if (this.noteFlag(FLAG_MAGIC_FULLY_UNLOCKED)) updated = true
       earlier.push(newDesc)
       newDesc =
-        '\nElior has proven his magical abilities are real. The villagers will look to ' +
-        'him with new hope, and Mira believes he may be the key to dispelling the ' +
-        'darkness. Mira tells Elior that his journey must continue to Greendale, where ' +
+        `\n${characterName('Elior')} has proven his magical abilities are real. The villagers will look to ` +
+        `him with new hope, and ${characterName('Mira')} believes he may be the key to dispelling the ` +
+        `darkness. ${characterName('Mira')} tells ${characterName('Elior')} that his journey must continue to Greendale, where ` +
         "he is to seek out the old druid at the forest's edge. Only there can he learn " +
         "the deeper mysteries of nature's magic and find the knowledge needed to " +
         'save Willowbrook.'
