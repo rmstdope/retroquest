@@ -59,6 +59,8 @@ export interface GameBridge {
   loadFromSlot(slot: number): string
   isAcceptingInput(): boolean
   isActRunning(): boolean
+  isGameOver(): boolean
+  getResultText(): string
   getCommandCompletions(): CompletionTree
   advanceTurn(): string
   advanceToRunning(): string[]
@@ -191,6 +193,14 @@ export const useGameStore = defineStore('game', () => {
   const modalChapter = ref<Chapter | null>(null)
   /** The running act's heading, kept for its act-complete page. */
   let currentAct: ActIntro | null = null
+  /** The answer to the player's latest command (the end screen's text). */
+  let lastAnswer = ''
+
+  // --- The end of the game (after the last act) ---
+  /** The save dialog over the last act's chapter page is open. */
+  const finishAsked = ref(false)
+  /** The end screen: the final answer and whether the game was saved. */
+  const ending = ref<{ text: string; saved: boolean } | null>(null)
 
   /** A loaded save may be in another act: keep its heading instead. */
   function rememberLoadedAct(b: GameBridge): void {
@@ -251,7 +261,8 @@ export const useGameStore = defineStore('game', () => {
     }: { chips?: boolean; arrive?: boolean } = {},
   ): void {
     const b = requireBridge()
-    const actRunning = b.isActRunning()
+    // The command that ends the game keeps its room and chips.
+    const actRunning = b.isActRunning() || b.isGameOver()
     const room = actRunning ? b.getRoomName() : lastTurnRoom
     const bag = b.getInventory().map((entry) => entry.name)
     const spellList = b.getSpells().map((entry) => entry.name)
@@ -381,6 +392,9 @@ export const useGameStore = defineStore('game', () => {
   function restartGame(): void {
     const b = requireBridge()
     quitAsked.value = false
+    finishAsked.value = false
+    ending.value = null
+    lastAnswer = ''
     gameNumber.value++
     b.newGame()
     turns.value = []
@@ -410,13 +424,66 @@ export const useGameStore = defineStore('game', () => {
       return
     }
     const result = b.handleCommand(command)
+    lastAnswer = result
     showOutput(command, result)
     refreshPanels()
     pollQuestEvents()
     refreshPanels()
     if (!acceptInput.value && !showModal.value && !b.isActRunning()) {
-      triggerActTransitionModals()
+      afterActEnds()
     }
+  }
+
+  /** An act has ended: the last one closes the game, any other leads on. */
+  function afterActEnds(): void {
+    if (requireBridge().isGameOver()) queueGameOver()
+    else triggerActTransitionModals()
+  }
+
+  /** The last act's chapter page, whose button finishes the game. */
+  function queueGameOver(): void {
+    const b = requireBridge()
+    const text = b.getResultText()
+    modalQueue.value.push({
+      title: '🏆 Act Complete!',
+      body: renderMarkup(text),
+      sound: null,
+      chapter: {
+        kind: 'complete',
+        act: currentAct?.act ?? '',
+        title: currentAct?.title ?? '',
+        body: actCompleteText(text),
+        stats: b.getActStats(),
+        final: true,
+      },
+    })
+    if (!showModal.value) showNextModal()
+  }
+
+  /** A chapter page's button: the final one asks to save, others go on. */
+  function continueChapter(): void {
+    if (modalChapter.value?.final) finishAsked.value = true
+    else dismissModal()
+  }
+
+  /** Close the save dialog: back to the last act's chapter page. */
+  function cancelFinish(): void {
+    finishAsked.value = false
+  }
+
+  /**
+   * Finish the game, after a quick save when `save` is set (no notice: the
+   * end screen says it). A failed save changes nothing and returns false.
+   */
+  function finishGame(save: boolean): boolean {
+    if (save && !saved(requireBridge().quickSaveGame())) return false
+    finishAsked.value = false
+    modalQueue.value = []
+    showModal.value = false
+    modalQuest.value = null
+    modalChapter.value = null
+    ending.value = { text: lastAnswer, saved: save }
+    return true
   }
 
   function triggerActTransitionModals(): void {
@@ -674,9 +741,9 @@ export const useGameStore = defineStore('game', () => {
         // The look may start quests: list them (as submitCommand does).
         refreshPanels()
       } else if (!acceptInput.value && !b.isActRunning()) {
-        // Quest completion modals were dismissed but the act has transitioned;
-        // drive the transition forward and show the act intro modal.
-        triggerActTransitionModals()
+        // Quest completion modals were dismissed but the act has ended:
+        // show the next act's pages, or the last act's final page.
+        afterActEnds()
       }
     }
   }
@@ -750,6 +817,11 @@ export const useGameStore = defineStore('game', () => {
     shortNames,
     readInfo,
     quitAsked,
+    finishAsked,
+    ending,
+    continueChapter,
+    cancelFinish,
+    finishGame,
     titleText,
     showTitle,
     dismissTitle,
