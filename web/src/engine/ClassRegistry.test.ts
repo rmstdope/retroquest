@@ -39,6 +39,11 @@ describe('ClassRegistry', () => {
     expect(() => registry.register('Lantern', Item)).toThrow(/Lantern/)
   })
 
+  it('refuses to register the same class under two names', () => {
+    const registry = new ClassRegistry().register('Lantern', Lantern)
+    expect(() => registry.register('Lamp', Lantern)).toThrow(/Lantern/)
+  })
+
   it('lists its names', () => {
     const registry = new ClassRegistry().registerAll({ Item, Lantern })
     expect(registry.names()).toEqual(['Item', 'Lantern'])

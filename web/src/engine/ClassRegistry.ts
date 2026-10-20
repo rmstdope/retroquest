@@ -1,6 +1,5 @@
-/** A class whose instances the serializer may save: any constructor. */
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export type SerializableClass = Function
+/** A class whose instances the serializer may save. */
+export type SerializableClass = abstract new (...args: never[]) => object
 
 /**
  * Names the classes a save may contain. Saves refer to classes by these
@@ -13,6 +12,9 @@ export class ClassRegistry {
   register(name: string, cls: SerializableClass): this {
     if (this.byName.has(name))
       throw new Error(`Class name registered twice: ${name}`)
+    const existing = this.byClass.get(cls)
+    if (existing !== undefined)
+      throw new Error(`Class already registered as ${existing}: ${name}`)
     this.byName.set(name, cls)
     this.byClass.set(cls, name)
     return this
@@ -30,7 +32,7 @@ export class ClassRegistry {
 
   /** The registered name of the object's exact class (not a parent class). */
   nameOf(instance: object): string | undefined {
-    return this.byClass.get(instance.constructor)
+    return this.byClass.get(instance.constructor as SerializableClass)
   }
 
   names(): string[] {
