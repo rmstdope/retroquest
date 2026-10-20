@@ -12,9 +12,13 @@ export class FadedPhotographQuest extends Quest {
   constructor() {
     super({
       name: 'The Faded Photograph',
-      description: `Your ${characterName('grandmother')} is often seen gazing at an old photograph. If you ask her about it, she shares a memory of your parents and gives you the photo, which has a cryptic message on the back.`,
+      description:
+        'Somewhere in the cottage lies an old photograph of your parents, tucked away in a drawer. ' +
+        `Read the cryptic message on its back, then show it to your ${characterName('grandmother')} ` +
+        'and ask her what she remembers.',
       completion:
-        "You have received the photograph and discovered a cryptic message, deepening the mystery of your parents' fate.",
+        `You have found the photograph, read its cryptic message and shown it to your ${characterName('grandmother')}, ` +
+        "deepening the mystery of your parents' fate.",
     })
   }
 

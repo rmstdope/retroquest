@@ -88,7 +88,7 @@ export class Grandmother extends Character {
         dialogue +=
           '\n\n' +
           event(
-            'As she speak of it, the words your father wrote seem to ' +
+            'As she speaks of it, the words your father wrote seem to ' +
               'settle in your mind. \nYou feel a new understanding... You have ' +
               'learned the [spell_name]Revive[/spell_name] spell!',
           )

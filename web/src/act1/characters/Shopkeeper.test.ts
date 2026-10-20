@@ -1,11 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_PRIEST_TALKED_TO,
 } from '../Act1StoryFlags'
 import { Coin } from '../items/Coin'
+import { Matches } from '../items/Matches'
+import { Shopkeeper } from './Shopkeeper'
 import { expectDialogueSpeaker } from '@/testing/gameHelpers'
 
 const DIALOGUE_PATTERN = /\[dialogue\](.*?)\[\/dialogue\]/gs
@@ -87,6 +89,54 @@ describe('Shopkeeper dialogue markup', () => {
     const answer = game.commandParser.parse('give coin to shopkeeper')
     expect(answer).toContain('donations')
     expectQuotesInsideDialogue(answer)
+    expectDialogueSpeaker(answer, 'shopkeeper')
+  })
+})
+
+describe('Shopkeeper and the priest matches', () => {
+  it('does not list the matches for sale', () => {
+    const game = gameInStore()
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('Rope')
+    expect(answer).not.toContain('Matches')
+    const wares = new GameController(game).getRoomWares().map((w) => w.name)
+    expect(wares).toContain('rope')
+    expect(wares).not.toContain('matches')
+  })
+
+  it('hands the matches over for the priest only once', () => {
+    const game = gameInStore({ priestTalkedTo: true })
+    game.commandParser.parse('talk to shopkeeper')
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).not.toContain('on the house')
+    expect(
+      game.state.inventory.filter((item) => item instanceof Matches),
+    ).toHaveLength(1)
+  })
+
+  it('remembers matches handed over in a save from before they left the wares', () => {
+    const game = gameInStore({ priestTalkedTo: true })
+    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+    expect(shopkeeper).toBeInstanceOf(Shopkeeper)
+    if (!(shopkeeper instanceof Shopkeeper)) return
+    Reflect.deleteProperty(shopkeeper, 'priestMatchesGiven')
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).not.toContain('on the house')
+  })
+
+  it('keeps the matches for the priest instead of selling them', () => {
+    const game = gameInStore()
+    for (let i = 0; i < 4; i++) game.state.addItemToInventory(new Coin())
+
+    const answer = game.commandParser.parse('buy matches from shopkeeper')
+
+    expect(answer).toContain('priest')
+    expect(answer).not.toContain('You bought')
     expectDialogueSpeaker(answer, 'shopkeeper')
   })
 })

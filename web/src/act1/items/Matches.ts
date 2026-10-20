@@ -11,16 +11,16 @@ export class Matches extends Item {
     })
   }
 
-  /** Shopkeeper prevents taking the matches unless they've been purchased. */
+  /** Shopkeeper prevents taking the store's matches, which are kept for the priest. */
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
         characterName('Shopkeeper') +
         ' quickly steps over. ' +
         speech(
-          'Hold on there, friend! That ' +
-            `[item_name]${this.name}[/item_name] is merchandise, not a free sample. ` +
-            "If you want it, you'll need to buy it proper-like.",
+          'Hold on there, friend! Those ' +
+            `[item_name]${this.name}[/item_name] are set aside for the ${characterName('priest')}. ` +
+            'He gets them on the house whenever he asks.',
         )
       )
     }

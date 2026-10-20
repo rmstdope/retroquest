@@ -19,14 +19,19 @@ function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 }
 
-/** The shopkeeper NPC in Willowbrook's General Store. */
+/**
+ * The shopkeeper NPC in Willowbrook's General Store.
+ *
+ * The store's matches are kept for the priest: they are not among the wares
+ * and are handed over for free once Elior has spoken with the priest.
+ */
 export class Shopkeeper extends Character {
   wares: Record<string, { item: Item; price: number }> = {
     rope: { item: new Rope(), price: 1 },
-    matches: { item: new Matches(), price: 4 },
     sword: { item: new Sword(), price: 5 },
     armor: { item: new Armor(), price: 10 },
   }
+  priestMatchesGiven = false
   dialogueOptions: string[] = [
     'Welcome to my humble store! Finest goods in Willowbrook, ' +
       'I assure you.',
@@ -59,14 +64,15 @@ export class Shopkeeper extends Character {
     }
 
     // Check if priest needs matches and shopkeeper hasn't given them yet
-    if (gameState.getStoryFlag('priest_talked_to') && 'matches' in this.wares) {
+    if (gameState.getStoryFlag('priest_talked_to') && !this.hasGivenMatches()) {
       // Give matches to player for the priest
       gameState.currentRoom.removeItem('Matches')
 
       const newMatches = new Matches() // Create a new instance for the inventory
       gameState.addItemToInventory(newMatches)
 
-      // Remove matches from wares so they can't be bought/given again
+      // Remember the hand-over so the matches can't be given again
+      this.priestMatchesGiven = true
       delete this.wares.matches
 
       return (
@@ -81,9 +87,13 @@ export class Shopkeeper extends Character {
       )
     }
 
-    // Standard dialogue if matches aren't being given for the priest
+    // Standard dialogue if matches aren't being given for the priest; saves
+    // from before the matches left the wares may still hold them, so they
+    // are filtered from the price list.
     let waresInfo = 'I have a few things for sale:\n'
-    const entries = Object.entries(this.wares)
+    const entries = Object.entries(this.wares).filter(
+      ([, details]) => !(details.item instanceof Matches),
+    )
     if (entries.length > 0) {
       for (const [name, details] of entries) {
         waresInfo +=
@@ -107,6 +117,15 @@ export class Shopkeeper extends Character {
     )
   }
 
+  /**
+   * Whether the priest's matches have been handed over. Saves made before
+   * `priestMatchesGiven` existed still listed the matches among the wares
+   * until the hand-over, so their absence there means they were given.
+   */
+  private hasGivenMatches(): boolean {
+    return this.priestMatchesGiven ?? !('matches' in this.wares)
+  }
+
   /** The shopkeeper does not accept gifts. */
   override giveItem(_gameState: GameState, _item: Item): string {
     return (
@@ -117,7 +136,10 @@ export class Shopkeeper extends Character {
     )
   }
 
-  /** Sell a ware for coins, adding the bonus apple to the inventory. */
+  /**
+   * Sell a ware for coins, adding the bonus apple to the inventory. The
+   * matches are kept for the priest and never sold.
+   */
   override buyItem(gameState: GameState, itemName: string): string {
     if (!gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)) {
       return this.closedDialogue
@@ -127,6 +149,16 @@ export class Shopkeeper extends Character {
       `You try to buy the [item_name]${itemNameToBuy}[/item_name] from the ` +
         `${characterName(this.name)}.`,
     )
+    if (gameState.currentRoom.getItemByName(itemNameToBuy) instanceof Matches) {
+      return (
+        eventMsg +
+        '\n' +
+        speech(
+          `Those [item_name]matches[/item_name] are the ${characterName('priest')}'s. ` +
+            "He gets them on the house whenever he asks, so they're not for sale.",
+        )
+      )
+    }
     if (!(itemNameToBuy in this.wares)) {
       return (
         eventMsg +
@@ -177,8 +209,6 @@ export class Shopkeeper extends Character {
     let newItem: Item
     if (itemNameToBuy === 'rope') {
       newItem = new Rope()
-    } else if (itemNameToBuy === 'matches') {
-      newItem = new Matches()
     } else if (itemNameToBuy === 'sword') {
       newItem = new Sword()
     } else if (itemNameToBuy === 'armor') {

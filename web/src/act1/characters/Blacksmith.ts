@@ -119,7 +119,7 @@ export class Blacksmith extends Character {
             'You know, old tales say the mill was built on a place of ancient ' +
             `power. Some say a magical ${characterName('deer')} sometimes ` +
             'appears in the Hidden ' +
-            'Glade, but only when all is calm and rest-ful—no voices, no ' +
+            'Glade, but only when all is calm and restful—no voices, no ' +
             'footsteps, just the hush of the wind and the song of the stream. ' +
             `If you seek the ${characterName('deer')}, remember: it will not ` +
             'show itself to those who rush or bring trouble.',

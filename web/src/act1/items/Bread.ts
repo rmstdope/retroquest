@@ -1,4 +1,4 @@
-import { Item, type GameState, event, characterName } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { Chicken } from './Chicken'
 import { Key } from './Key'
 
@@ -22,7 +22,7 @@ export class Bread extends Item {
       return (
         event(
           'You offer the [item_name]bread[/item_name] to the ' +
-            `${characterName('chickens')}.`,
+            '[item_name]chickens[/item_name].',
         ) +
         '\n' +
         'They peck at it excitedly, and in the commotion, something shiny falls ' +
