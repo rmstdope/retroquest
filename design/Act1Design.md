@@ -194,8 +194,10 @@
 - **Items:** Candle (start), hidden locket (later).
 - **Unusable:** prayer book (start).
 - **Spells:** `bless` (learned when picking up the hidden locket; the Priest recognizes it).
-- **Usable Items:** Candle (use with matches, lights dark corners, reveals a hidden locket), hidden locket (picking it up teaches `bless`), `bless` spell (cast on self for protection).
-- **Characters:** Priest (offers blessings, shares lore).
+- **Usable Items:** Candle (use with matches, lights dark corners, reveals a hidden locket), hidden locket (picking it up teaches `bless`; using it opens it to the engraving _From the founders' line, to the next._), `bless` spell (cast on self for protection).
+- **Characters:** Priest (offers blessings, shares lore). His first talk tells the story of the founders, their relic and the bell; after that he answers in one short line that follows Elior's progress, the latest milestone winning: blessed by Elior (`cast bless on priest`) → Elior has cast `bless` on himself → Elior carries the locket (he points him to Grandmother) → the locket has gone home → the candle is lit but the locket not yet taken (he points to the corner) → otherwise he asks after the matches.
+
+**The locket's history.** The locket is the founders' relic: an heirloom bearing the founders' crest (a silver tree beneath twin moons) that has passed down Elior's mother's family, from Grandmother to her daughter. Elior's mother hid it in the chapel the night she left; that night the chapel bell rang at midnight with no hand on the rope. The Priest knows the legend and recognises the crest of the founders' line; Grandmother recognises it as her daughter's. This quietly sets up Elior's heritage and Act II's bloodline research.
 - **Exits:** Hidden Glade (north), Road to Greendale (east)
 
 ### 15. Road to Greendale
@@ -349,7 +351,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 15. **Village Chapel (First Visit - Part 1):**
 
-    - Speak to priest. _The priest shares concerns about a growing shadow and speaks of ancient safeguards. Tells a story about a relic of the village's founders that have been lost for a long time. He also mentions that he is out of matches. He usually get his matches for free from the general store._
+    - Speak to priest. _The priest shares concerns about a growing shadow. He tells the story of the founders: they brought a relic to the valley and hung the chapel bell to watch over it; the relic passed quietly down their line until one night, years ago, it was lost, and the bell rang at midnight with no hand on the rope. He also mentions that he is out of matches. He usually get his matches for free from the general store._
 
 16. **General Store (Visit for Matches):**
 
@@ -361,7 +363,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
     - Use candle with matches to light a particularly dark corner of the chapel. _The flickering light reveals a small, hidden locket tucked into a crevice._
       - Item used: `candle`
       - Item used: `matches`
-    - Take hidden locket. _Hidden locket is added to inventory. As Elior picks up the locket, the Priest, noticing the relic, approaches. He recognizes it as a relic of the village's founders and, seeing Elior's earnestness, teaches him the `bless` spell to seek protection._
+    - Take hidden locket. _Hidden locket is added to inventory. As Elior picks up the locket, the Priest, noticing the relic, approaches. He recognizes the founders' crest, which only the founders' line wore: the line of Elior's mother, who prayed alone in the chapel the night she left and must have hidden it there for him. He then teaches Elior the `bless` spell to seek protection._
       - Spell Learned: `bless` (can not be used until magic is learned for real)
 
 18. **Return to Mira’s Hut:**
@@ -420,7 +422,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 24. **Return to Elior's Cottage:**
 
-    - Give hidden locket to Grandmother. _Tears well in her eyes as she recognizes it. She shares a tender memory of Elior\\'s parents and, for his journey, gives him a warm `travel cloak`._
+    - Give hidden locket to Grandmother. _Tears well in her eyes as she recognizes it as her daughter's: it came down to Elior's mother from her, and to her from her own mother, all the way back to the founders. She thought her daughter took it with her when she left. For his journey, she gives him a warm `travel cloak` his mother meant for him._
       - Item used: `hidden locket`
       - Item obtained: `travel cloak` (Completes: Warm clothing)
 
@@ -528,6 +530,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 24. **`Candle`** (Available in Village Chapel from the start):
     - Used in Step 17 with `matches` to light a dark corner in the chapel, revealing the `hidden locket`.
 25. **`Hidden Locket`** (Obtained: Step 17):
+    - The founders' heirloom of Elior's mother's line (see Village Chapel). Examining it shows the founders' crest; using it opens it to an engraving.
     - Picking it up in Step 17 prompts the Priest to recognize it and teach the `bless` spell.
     - Used in Step 24 by giving it to Grandmother to receive the `travel cloak`.
 26. **`Map`** (Obtained: Step 19):

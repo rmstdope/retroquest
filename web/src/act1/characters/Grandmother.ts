@@ -132,9 +132,14 @@ export class Grandmother extends Character {
           item.name +
           '[/item_name]. ' +
           speech(
-            "This... this was your mother's. She said it would keep " +
-              'you safe. And this... she wanted you to have this when you were ' +
-              'old enough to understand its importance.',
+            "This... this was your mother's. It came to her from me, and to " +
+              'me from my mother, all the way back to the founders, so the old ' +
+              'ones said. I thought she took it with her when she left.',
+          ) +
+          '\nShe closes her hand around it for a moment. ' +
+          speech(
+            'She said it would keep you safe. And this... she wanted you to ' +
+              'have this when you were old enough to understand its importance.',
           ) +
           '\n') +
         (`${characterName(this.name)} hands you a finely made [item_name]` +

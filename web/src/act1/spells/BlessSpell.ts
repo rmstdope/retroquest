@@ -5,7 +5,11 @@ import {
   event,
   characterName,
 } from '@/engine'
-import { FLAG_JOURNEY_BLESS_COMPLETED } from '../Act1StoryFlags'
+import { Priest } from '../characters/Priest'
+import {
+  FLAG_JOURNEY_BLESS_COMPLETED,
+  FLAG_PRIEST_BLESSED,
+} from '../Act1StoryFlags'
 
 /** Divine incantation granting temporary protection and strength to a target. */
 export class BlessSpell extends Spell {
@@ -18,6 +22,7 @@ export class BlessSpell extends Spell {
     })
   }
 
+  /** Bless Elior himself, readying him for the journey. */
   override castSpell(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_JOURNEY_BLESS_COMPLETED, true)
     return (
@@ -28,10 +33,10 @@ export class BlessSpell extends Spell {
     )
   }
 
-  override castOnCharacter(
-    _gameState: GameState,
-    character: Character,
-  ): string {
+  /** Bless another character; the priest remembers being blessed. */
+  override castOnCharacter(gameState: GameState, character: Character): string {
+    if (character instanceof Priest)
+      gameState.setStoryFlag(FLAG_PRIEST_BLESSED, true)
     const name = character.name
     return (
       event(
