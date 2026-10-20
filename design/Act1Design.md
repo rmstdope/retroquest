@@ -74,7 +74,7 @@
 - **Items:** Lantern (start), bread (later), Elior’s journal (later), travel cloak (later).
 - **Spells:** `revive` (learned from Grandmother).
 - **Usable Items:** Lantern (lights the cottage; once lit it can be taken and carried, and held lit it lights the dark Abandoned Shed), Elior's journal (read for story), hidden locket (give to Grandmother).
-- **Characters:** Grandmother (offers advice, can be spoken to). While Elior carries the shed key she admits she hid it in the coop rafters years ago: the shed was his father's workshop, she never could go in, and it is dark, so he should take the lantern.
+- **Characters:** Grandmother (offers advice, can be spoken to). While Elior carries the shed key she admits she hid it in the coop rafters years ago: the shed was his father's workshop, she never could go in, and it is dark, so he should take the lantern. Her lines follow Elior's journey: the first time he talks to her after Mira's teaching she sees in him "your mother's gift" (she knows the truth, and only hints at it) and bakes him a `fresh bread` for the road, which counts as food; after that she asks after his preparations; once he carries the Ancient Amulet she says "So it's true, then. Come back to me, child." She tells the journal tale again only when she has nothing newer to say.
 - **Exits:** Vegetable Field (south), Village Square (east)
 
 ### 2. Vegetable Field
@@ -103,7 +103,7 @@
 - **Unusable:** old notice (start).
 - **Spells:** None.
 - **Usable Items:** (None based on Golden Path actions in this room).
-- **Characters:** Villager (shares rumors, can be questioned).
+- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours; once the well is purified she asks, once, "The water's clean! Was that you?"; once Elior carries Mira's amulet she knows he is leaving.
 - **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east)
 
 ### 5. Mira’s Hut
@@ -123,7 +123,7 @@
 - **Unusable:** Horseshoe (start).
 - **Spells:** None.
 - **Usable Items:** Coin (1st, to get dull knife sharpened), dull knife (to be sharpened), millstone fragment (give to Blacksmith).
-- **Characters:** Blacksmith (can sharpen items, offers advice).
+- **Characters:** Blacksmith (Borin; can sharpen items, offers advice). Once met, he rotates through the lines that fit Elior's journey, newest first: after Mira's teaching ("Magic, eh? Can't hammer that into shape"), after the deer has been seen ("Saw it, did you? My grandfather swore by that deer"), after the knife was sharpened ("Keep that edge oiled"); with none of these he just welcomes Elior back. Optionally shown the rune token, he names it cold iron "not forged by any honest smith" and hands it back.
 - **Exits:** Village Well (west), General Store (north)
 
 ### 7. General Store
@@ -193,7 +193,7 @@
 - **Unusable:** shiny pebble (start).
 - **Spells:** `grow` (learned from inscriptions on a stone).
 - **Usable Items:** `light` spell (cast in the glade to illuminate the moss-covered stone).
-- **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer).
+- **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer). It never speaks: `talk to deer` or `examine deer` gives a wordless moment, its gaze drifting to the mossy stone, then to Elior, nudging him to `light`; once the glade is lit it bows its head beside the glowing stone.
 - **Exits:** Forest Path (north), Village Chapel (south)
 
 ### 14. Village Chapel
@@ -282,7 +282,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 4.  **Village Square:**
 
     - Take bucket. _Bucket is added to inventory._
-    - Speak to villager for rumors. _Villager shares information about the darkness affecting the village._
+    - Speak to villager for rumors. _Tilda, the baker's wife, shares information about the darkness affecting the village._
 
 5.  **Village Well:**
 
@@ -331,7 +331,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 11. **Return to Blacksmith's Forge:**
 
-    - Give millstone fragment to Blacksmith. _He examines it and nods. 'A fine piece from the Old Mill. They say the mill has secrets older than the village itself. Some folks with a touch of the arcane about them have even whispered tales of a magical deer seen in the Hidden Glade, a place the mill's old energies might be connected to. Be wary if you venture too deep into its workings.'_
+    - Give millstone fragment to Blacksmith. _He examines it and nods. 'A fine piece from the Old Mill. They say the mill has secrets older than the village itself. Some folks with a touch of the arcane about them have even whispered tales of a magical deer seen in the Hidden Glade, a place the mill's old energies might be connected to. Be wary if you venture too deep into its workings.' He says plainly how to meet the deer: go to the glade and sit quiet a while; have a rest, and let it come._
       - Item used: `millstone fragment`
       - Item obtained: Information (about magical deer in Hidden Glade)
 
@@ -360,7 +360,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 14. **Hidden Glade:**
 
     - Rest in the glade after learning about the deer. _A magical deer appears, and a rare flower blooms near the moss-covered stone._
-    - Observe the deer. _The deer seems unusually calm, its gaze occasionally drifting towards the old, moss-covered stone._
+    - Observe the deer (optional: `talk to deer` or `examine deer`). _The deer does not answer in words; its gaze drifts to the mossy stone... then to Elior, as if waiting for him to bring something to light._
     - Take the rare flower growing near the stone. _Rare flower is added to inventory._
 
 15. **Village Chapel (First Visit - Part 1):**
@@ -385,7 +385,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
     - Give rare flower to Mira. \_Mira smiles, saying the flower is a sign of Elior's connection to the natural world. Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. Her tone then turns practical: "You'll need warmth, protection, food, boots and a map", and all the basic magic the village elders can teach. The Ancient Amulet will be his once he is truly ready. She keeps it to that one line (the scene is told in short beats so it reads well on a phone); the quest log carries the full checklist:\_
       - Warm clothing (`travel cloak`)
       - Magical protection (cast `bless` on himself)
-      - Food for the road (`wild berries`, `apple`, `egg`, `carrot`)
+      - Food for the road: any four of six kinds (`bread`, `apple`, `egg`, `carrot`, `wild berries`, `fish`); the checklist shows how many are gathered. The golden path gathers `wild berries`, `apple`, `egg` and `carrot`; Grandmother's `fresh bread` (talk to her after this step) and a `fish` not given to the Fisherman also count.
       - Sturdy footwear (`wandering boots`)
       - A `map` to find his way
       - All basic magic learned
@@ -457,7 +457,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
     - Give rune token to Mira. _Mira turns it over and the color drains from her face: it is a fouling sigil, and the well was poisoned on purpose. If the mill mechanism is jammed she recognises the same hand there, drinking the old power. Whoever carried it, perhaps the cloaked stranger, was searching Willowbrook "for something. Or for someone." She hands the token back: keep it close, and keep it hidden._
     - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you." Then she sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
       - Item obtained: `ancient amulet` (ESSENTIAL)
-      - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field complete: Food)
+      - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field are four of the six kinds and complete: Food)
 
 28. **Road to Greendale (Departure):**
 
@@ -502,6 +502,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Held lit in Step 7 to search the dark Abandoned Shed.
 2.  **`Bread`** (Obtained: Step 1):
     - Used in Step 3 to feed chickens and obtain the `key`.
+    - Optionally, after Step 18: talking to Grandmother gives a `fresh bread`, which counts as a kind of food for "Food for the road".
 3.  **`Faded Photograph`** (Obtained: Step 1):
     - Examined and shown to Grandmother in Step 1.
     - Shown to the Fisherman in Step 12, who tells of the tin under the smooth stone.

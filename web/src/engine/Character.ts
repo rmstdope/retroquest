@@ -16,6 +16,14 @@ export class Character {
     this.description = description
   }
 
+  /**
+   * Whether the player's word for a character names this one; by default
+   * its name, compared case-insensitively. Override to accept other names.
+   */
+  answersTo(name: string): boolean {
+    return this.name.toLowerCase() === name.toLowerCase()
+  }
+
   examine(_gameState: GameState): string {
     return (
       `[event]You examine [character_name]${this.name}[/character_name]. ` +

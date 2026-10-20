@@ -85,6 +85,20 @@ describe('Room', () => {
         new Room({ name: 'E', description: '' }).getCharacterByName('x'),
       ).toBeNull()
     })
+
+    it('finds a character by any name it answers to', () => {
+      class Baker extends Character {
+        override answersTo(name: string): boolean {
+          return super.answersTo(name) || name.toLowerCase() === 'tilda'
+        }
+      }
+      const r = new Room({ name: 'R', description: '' })
+      const baker = new Baker({ name: 'villager', description: '' })
+      r.addCharacter(baker)
+      expect(r.getCharacterByName('Tilda')).toBe(baker)
+      expect(r.getCharacterByName('villager')).toBe(baker)
+      expect(r.getCharacterByName('baker')).toBeNull()
+    })
   })
 
   describe('exits', () => {

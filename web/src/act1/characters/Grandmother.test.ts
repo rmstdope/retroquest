@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, findMarkupProblems } from '@/engine'
 import { executeCommands, expectDialogueSpeaker } from '@/testing/gameHelpers'
+import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
+import { AncientAmulet } from '../items/AncientAmulet'
+import { FreshBread } from '../items/FreshBread'
 import { Act1 } from '../Act1'
 import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
@@ -54,5 +57,85 @@ describe('Grandmother and the shed key', () => {
     expect(executeCommands(game, ['talk to grandmother'])).not.toContain(
       'workshop',
     )
+  })
+})
+
+/** An Act I game where Mira has taught Elior and sent him to prepare. */
+function gameAfterMirasTeaching(): Game {
+  const game = new Game([new Act1()])
+  executeCommands(game, ['talk to grandmother'])
+  game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+  return game
+}
+
+describe('Grandmother and the journey', () => {
+  it('says nothing of the gift before Mira has taught Elior', () => {
+    const game = new Game([new Act1()])
+
+    const response = executeCommands(game, [
+      'talk to grandmother',
+      'talk to grandmother',
+    ])
+
+    expect(response).not.toContain("your mother's gift")
+    expect(game.state.hasItem('fresh bread')).toBe(false)
+  })
+
+  it("sees her daughter's gift after Mira's teaching and bakes bread for the road", () => {
+    const game = gameAfterMirasTeaching()
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain("your mother's gift")
+    expect(response).toContain('[item_name]fresh bread[/item_name]')
+    expect(
+      game.state.inventory.filter((item) => item instanceof FreshBread),
+    ).toHaveLength(1)
+    expectDialogueSpeaker(response, 'grandmother')
+    expect(findMarkupProblems(response)).toEqual([])
+  })
+
+  it('bakes only one loaf, and then just sees Elior off to his preparations', () => {
+    const game = gameAfterMirasTeaching()
+    executeCommands(game, ['talk to grandmother'])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).not.toContain("your mother's gift")
+    expect(response).toContain('preparations')
+    expect(
+      game.state.inventory.filter((item) => item instanceof FreshBread),
+    ).toHaveLength(1)
+    expectDialogueSpeaker(response, 'grandmother')
+  })
+
+  it('asks Elior to come back to her once he carries the amulet', () => {
+    const game = gameAfterMirasTeaching()
+    executeCommands(game, ['talk to grandmother'])
+    game.state.addItemToInventory(new AncientAmulet())
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain("So it's true, then.")
+    expect(response).toContain('Come back to me, child.')
+    expect(response).not.toContain('preparations')
+    expectDialogueSpeaker(response, 'grandmother')
+    expect(findMarkupProblems(response)).toEqual([])
+  })
+
+  it('keeps the long journal tale for the first telling once she has more to say', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, [
+      'use lantern',
+      'take lantern',
+      'use journal',
+      'talk to grandmother',
+    ])
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain("your mother's gift")
+    expect(response).not.toContain('your father was a great writer')
   })
 })

@@ -4,6 +4,17 @@ import {
   FLAG_MAGIC_FULLY_UNLOCKED,
 } from '../Act1StoryFlags'
 
+/** The kinds of food that count for the road; the quest wants any four. */
+const FOOD_KINDS = [
+  'bread',
+  'apple',
+  'egg',
+  'fresh carrot',
+  'wild berries',
+  'fish',
+]
+const FOOD_KINDS_NEEDED = 4
+
 /** Checklist quest: done requirements are [success], unmet ones are [pending]. */
 export class PreparingForTheRoadQuest extends Quest {
   hasTravelCloak = false
@@ -21,7 +32,8 @@ export class PreparingForTheRoadQuest extends Quest {
         'She says you will need: \n' +
         ' - Warm clothing -\n' +
         ' - Magical protection -\n' +
-        ' - Food for the road (at least four different types) -\n' +
+        ' - Food for the road (any four kinds: bread, apple, egg, carrot, ' +
+        'berries or fish) -\n' +
         ' - Sturdy footwear -\n' +
         ' - A map to find your way, and to have learned all the basic magic ' +
         'the village elders can teach you -\n' +
@@ -53,12 +65,9 @@ export class PreparingForTheRoadQuest extends Quest {
   private refreshChecklist(gameState: GameState): boolean {
     // Items
     this.hasTravelCloak = gameState.hasItem('travel cloak')
-    // Food items
-    const hasWildBerries = gameState.hasItem('wild berries')
-    const hasApple = gameState.hasItem('apple')
-    const hasEgg = gameState.hasItem('egg')
-    const hasCarrot = gameState.hasItem('fresh carrot')
-    this.allFoodCollected = hasWildBerries && hasApple && hasEgg && hasCarrot
+    // Food: any four of the six kinds ('bread' is also grandmother's fresh loaf)
+    const foodKinds = FOOD_KINDS.filter((food) => gameState.hasItem(food))
+    this.allFoodCollected = foodKinds.length >= FOOD_KINDS_NEEDED
 
     this.hasWanderingBoots = gameState.hasItem('wandering boots')
     this.hasMap = gameState.hasItem('map')
@@ -89,7 +98,8 @@ export class PreparingForTheRoadQuest extends Quest {
       ['Warm clothing', this.hasTravelCloak],
       ['Magical protection', this.journeyBlessCompleted],
       [
-        'Food for the road (at least four different types)',
+        `Food for the road (${foodKinds.length} of ${FOOD_KINDS.length} ` +
+          `kinds gathered, any ${FOOD_KINDS_NEEDED} will do)`,
         this.allFoodCollected,
       ],
       ['Sturdy footwear', this.hasWanderingBoots],

@@ -12,7 +12,11 @@ import { WildBerries } from '../items/WildBerries'
 import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
+import { AncientAmulet } from '../items/AncientAmulet'
+import { FreshBread } from '../items/FreshBread'
 import {
+  FLAG_GRANDMOTHER_BAKED_BREAD,
+  FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_READ_PHOTO_MESSAGE,
   FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO,
 } from '../Act1StoryFlags'
@@ -37,8 +41,10 @@ export class Grandmother extends Character {
   }
 
   /**
-   * Dialogue varying by story flags; grants the Revive spell when appropriate,
-   * and hints at the shed while Elior carries its key.
+   * Dialogue varying by story flags: the greeting, then the journal tale
+   * (which grants the Revive spell), her lines on Elior's journey and the
+   * shed hint while he carries its key. The journal tale is told again only
+   * when she has nothing newer to say.
    */
   override talkTo(gameState: GameState): string {
     let dialogue = ''
@@ -65,49 +71,28 @@ export class Grandmother extends Character {
       this.dialogueState.initial_talk = false // Change state after initial talk
     }
 
-    if (gameState.getStoryFlag('journal_read_prologue_entry')) {
-      const addedDialogue =
-        '\n' +
-        speech(
-          'That [item_name]journal[/item_name] of yours... your father was ' +
-            'a great writer, you know. He wrote of many things, some of which I am ' +
-            'only now beginning to understand.\n' +
-            'He sensed a darkness, a shadow stretching over Eldoria, long before ' +
-            'others did. He believed it was tied to the old tales, to the whispers of ' +
-            'forgotten magic.\n' +
-            'He even researched a peculiar enchantment, one that could supposedly ' +
-            'breathe life back into things on the very brink... a ' +
-            "'[spell_name]revive[/spell_name]' " +
-            'spell, he called it.\n' +
-            'He thought it might be a key, a way to mend what the encroaching ' +
-            'darkness sought to break. Keep your eyes open, ' +
-            `${characterName('Elior')}. What you've read might be more than ` +
-            'just stories.',
-        )
-      dialogue += addedDialogue
-
-      // Check if player already knows Revive spell by its name
-      if (!gameState.hasSpell('revive')) {
-        gameState.knownSpells.push(new ReviveSpell())
-        dialogue +=
-          '\n\n' +
-          event(
-            'As she speaks of it, the words your father wrote seem to ' +
-              'settle in your mind. \nYou feel a new understanding... You have ' +
-              'learned the [spell_name]Revive[/spell_name] spell!',
-          )
-      } else {
-        dialogue +=
-          '\n\n' +
-          event(
-            "You recall your father's writings on the " +
-              '[spell_name]Revive[/spell_name] spell. The knowledge feels familiar.',
-          )
-      }
+    const journalRead = gameState.getStoryFlag('journal_read_prologue_entry')
+    if (journalRead && !gameState.hasSpell('revive')) {
+      dialogue +=
+        '\n' + this.journalTale() + '\n\n' + this.teachRevive(gameState)
     }
+
+    const journeyLine = this.journeyLine(gameState)
+    if (journeyLine) dialogue += (dialogue ? '\n' : '') + journeyLine
 
     if (gameState.inventory.some((item) => item instanceof Key)) {
       dialogue += (dialogue ? '\n' : '') + this.shedKeyHint()
+    }
+
+    if (!dialogue && journalRead) {
+      // Nothing newer to say: she tells the journal tale again.
+      dialogue =
+        this.journalTale() +
+        '\n\n' +
+        event(
+          "You recall your father's writings on the " +
+            '[spell_name]Revive[/spell_name] spell. The knowledge feels familiar.',
+        )
     }
 
     if (!dialogue) {
@@ -120,6 +105,82 @@ export class Grandmother extends Character {
 
     const eventMsg = event(`You speak with ${characterName(this.name)}.`)
     return eventMsg + '\n' + dialogue
+  }
+
+  /** What she tells of Elior's father's journal and the revive spell. */
+  private journalTale(): string {
+    return speech(
+      'That [item_name]journal[/item_name] of yours... your father was ' +
+        'a great writer, you know. He wrote of many things, some of which I am ' +
+        'only now beginning to understand.\n' +
+        'He sensed a darkness, a shadow stretching over Eldoria, long before ' +
+        'others did. He believed it was tied to the old tales, to the whispers of ' +
+        'forgotten magic.\n' +
+        'He even researched a peculiar enchantment, one that could supposedly ' +
+        'breathe life back into things on the very brink... a ' +
+        "'[spell_name]revive[/spell_name]' " +
+        'spell, he called it.\n' +
+        'He thought it might be a key, a way to mend what the encroaching ' +
+        'darkness sought to break. Keep your eyes open, ' +
+        `${characterName('Elior')}. What you've read might be more than ` +
+        'just stories.',
+    )
+  }
+
+  /** Teach Elior the revive spell his father wrote of. */
+  private teachRevive(gameState: GameState): string {
+    gameState.knownSpells.push(new ReviveSpell())
+    return event(
+      'As she speaks of it, the words your father wrote seem to ' +
+        'settle in your mind. \nYou feel a new understanding... You have ' +
+        'learned the [spell_name]Revive[/spell_name] spell!',
+    )
+  }
+
+  /**
+   * What she says of Elior's journey, newest first: a farewell once he
+   * carries the amulet; after Mira's teaching, her daughter's gift seen in
+   * him and a fresh loaf for the road, then only a word on his preparations.
+   * Null before Mira has taught him.
+   */
+  private journeyLine(gameState: GameState): string | null {
+    if (gameState.inventory.some((item) => item instanceof AncientAmulet)) {
+      return (
+        'Her eyes fall on the [item_name]amulet[/item_name] you carry, and ' +
+        'she goes very still. ' +
+        speech(
+          "So it's true, then. I knew this day would come; I only hoped it " +
+            'would come later.\n' +
+            'Come back to me, child.',
+        )
+      )
+    }
+    if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) return null
+    if (gameState.getStoryFlag(FLAG_GRANDMOTHER_BAKED_BREAD)) {
+      return speech(
+        'How are your preparations coming along, dear? Mind you take ' +
+          'everything you need. The road is long, and I want you warm and fed.',
+      )
+    }
+    gameState.setStoryFlag(FLAG_GRANDMOTHER_BAKED_BREAD, true)
+    const bread = new FreshBread()
+    gameState.addItemToInventory(bread)
+    return (
+      'She looks at you for a long moment, as if seeing someone else ' +
+      'standing in your place. ' +
+      speech(
+        "There's a light about you since you came back from the healer's " +
+          "hut. You have her gift... your mother's gift. " +
+          'I would know it anywhere.',
+      ) +
+      '\nShe turns to the hearth before you can ask her what she means. ' +
+      speech(
+        "So you're to go on the road. Then you'll not go hungry on it. " +
+          'I baked this morning; take this for the way.',
+      ) +
+      '\n' +
+      event(`You received a [item_name]${bread.name}[/item_name]!`)
+    )
   }
 
   /** What she says on seeing the shed key she once hid in the chicken coop. */
