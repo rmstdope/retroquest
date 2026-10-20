@@ -6,9 +6,9 @@ import type {
   CompletionTree,
   SaveSlot,
   QuestProgress,
-  ActStats,
   RoomWare,
 } from '@/types/bridge'
+import type { useBridge } from '@/composables/useBridge'
 import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { parseQuestNews, type QuestNews } from '@/lantern/parseQuestNews'
@@ -20,53 +20,10 @@ import {
 import type { Chapter } from '@/lantern/chapter'
 
 /**
- * Shape of the bridge object injected via setBridge().
- * Matches the return type of useBridge().
+ * The bridge injected via setBridge(): the type `useBridge()` returns, so a new
+ * `GameController` member reaches the store without being declared again.
  */
-export interface GameBridge {
-  init(onProgress?: (status: string) => void): Promise<void>
-  isReady(): boolean
-  handleCommand(command: string): string
-  getRoomName(): string
-  getRoomDescription(): string
-  getRoomCharacters(): string[]
-  getRoomItems(): string[]
-  getRoomExits(): RoomExits
-  getRoomWares(): RoomWare[]
-  getInventory(): NamedItem[]
-  getSpells(): NamedItem[]
-  getActiveQuests(): NamedItem[]
-  getCompletedQuests(): NamedItem[]
-  activateQuest(): string | null
-  updateQuest(): string | null
-  completeQuest(): string | null
-  saveGame(): string
-  loadGame(): string
-  quickSaveGame(): string
-  quickLoadGame(): string
-  saveNamedGame(name: string): string
-  loadNamedGame(name: string): string
-  getActName(): string
-  getActIntro(): string
-  getQuestProgress(): QuestProgress
-  getActStats(): ActStats
-  readCommand(command: 'stats' | 'help'): string
-  getShortNames(): Record<string, string>
-  newGame(): void
-  getQuickSave(): SaveSlot | null
-  getSaveSlots(): SaveSlot[]
-  saveToSlot(slot: number): string
-  loadFromSlot(slot: number): string
-  isAcceptingInput(): boolean
-  isActRunning(): boolean
-  isGameOver(): boolean
-  getResultText(): string
-  getCommandCompletions(): CompletionTree
-  advanceTurn(): string
-  advanceToRunning(): string[]
-  getMusicInfo(): { musicFile: string; musicInfo: string }
-  look(): string
-}
+export type GameBridge = ReturnType<typeof useBridge>
 
 /** Minimal interface required for quest sound-effect playback. */
 export interface QuestAudioPlayer {
@@ -216,7 +173,7 @@ export const useGameStore = defineStore('game', () => {
 
   /** A loaded save may be in another act: keep its heading instead. */
   function rememberLoadedAct(b: GameBridge): void {
-    currentAct = parseActIntro(b.getActIntro())
+    currentAct = parseActIntro(b.controller.getActIntro())
   }
 
   /** Queue an act intro pop-up, with its chapter page. */
@@ -274,10 +231,10 @@ export const useGameStore = defineStore('game', () => {
   ): void {
     const b = requireBridge()
     // The command that ends the game keeps its room and chips.
-    const actRunning = b.isActRunning() || b.isGameOver()
-    const room = actRunning ? b.getRoomName() : lastTurnRoom
-    const bag = b.getInventory().map((entry) => entry.name)
-    const spellList = b.getSpells().map((entry) => entry.name)
+    const actRunning = b.controller.isActRunning() || b.controller.isGameOver()
+    const room = actRunning ? b.controller.getRoomName() : lastTurnRoom
+    const bag = b.controller.getInventory().map((entry) => entry.name)
+    const spellList = b.controller.getSpells().map((entry) => entry.name)
     // Only a player's command changes the bag; arrivals, loads and act
     // changes just set the new starting point.
     const showChips = chips && actRunning
@@ -309,10 +266,10 @@ export const useGameStore = defineStore('game', () => {
       arrival: roomChanged
         ? {
             room,
-            description: b.getRoomDescription(),
-            characters: b.getRoomCharacters(),
-            items: b.getRoomItems(),
-            exits: b.getRoomExits(),
+            description: b.controller.getRoomDescription(),
+            characters: b.controller.getRoomCharacters(),
+            items: b.controller.getRoomItems(),
+            exits: b.controller.getRoomExits(),
           }
         : null,
     })
@@ -378,12 +335,12 @@ export const useGameStore = defineStore('game', () => {
   /** From the game's logo to the first act's intro pop-up (input waits for it). */
   function openFirstAct(b: GameBridge): void {
     // Advance SHOW_LOGO → ACT_INTRO: get the logo/splash text for the title page
-    const logoRaw = b.advanceTurn()
+    const logoRaw = b.controller.advanceTurn()
     titleText.value = logoRaw
     showTitle.value = true
 
     // Advance ACT_INTRO → ACT_RUNNING: get the act intro text
-    const actIntroRaw = b.advanceTurn()
+    const actIntroRaw = b.controller.advanceTurn()
     refreshPanels()
 
     // Block input until the player dismisses the act intro modal
@@ -448,13 +405,17 @@ export const useGameStore = defineStore('game', () => {
   /** Run one command as the player typed it: log it, refresh, raise quest news. */
   function playCommand(command: string): string {
     const b = requireBridge()
-    const result = b.handleCommand(command)
+    const result = b.controller.takeTurn(command)
     lastAnswer = result
     showOutput(command, result)
     refreshPanels()
     pollQuestEvents()
     refreshPanels()
-    if (!acceptInput.value && !showModal.value && !b.isActRunning()) {
+    if (
+      !acceptInput.value &&
+      !showModal.value &&
+      !b.controller.isActRunning()
+    ) {
       afterActEnds()
     }
     return result
@@ -470,21 +431,21 @@ export const useGameStore = defineStore('game', () => {
     const { playDebugScript } = await import('@/utils/debugScript')
     await playDebugScript(name, {
       play: playCommand,
-      running: () => requireBridge().isActRunning(),
+      running: () => requireBridge().controller.isActRunning(),
       show: (text) => showOutput(`debug ${name}`, text, { chips: false }),
     })
   }
 
   /** An act has ended: the last one closes the game, any other leads on. */
   function afterActEnds(): void {
-    if (requireBridge().isGameOver()) queueGameOver()
+    if (requireBridge().controller.isGameOver()) queueGameOver()
     else triggerActTransitionModals()
   }
 
   /** The last act's chapter page, whose button finishes the game. */
   function queueGameOver(): void {
     const b = requireBridge()
-    const text = b.getResultText()
+    const text = b.controller.getResultText()
     modalQueue.value.push({
       title: '🏆 Act Complete!',
       body: renderMarkup(text),
@@ -494,7 +455,7 @@ export const useGameStore = defineStore('game', () => {
         act: currentAct?.act ?? '',
         title: currentAct?.title ?? '',
         body: actCompleteText(text),
-        stats: b.getActStats(),
+        stats: b.controller.getActStats(),
         final: true,
       },
     })
@@ -530,9 +491,9 @@ export const useGameStore = defineStore('game', () => {
   function triggerActTransitionModals(): void {
     const b = requireBridge()
     // Read the finished act's numbers before the next act starts.
-    const stats = b.getActStats()
+    const stats = b.controller.getActStats()
     const finished = currentAct
-    const texts = b.advanceToRunning().filter((t) => t.trim() !== '')
+    const texts = b.controller.advanceToRunning().filter((t) => t.trim() !== '')
     if (texts.length === 0) return
     const transitionTexts = texts.slice(0, -1)
     const actIntroText = texts[texts.length - 1]
@@ -562,27 +523,27 @@ export const useGameStore = defineStore('game', () => {
   /** Read the room, journal, music, input state and completions from the bridge. */
   function refreshPanels(): void {
     const b = requireBridge()
-    roomName.value = b.getRoomName()
-    roomDescription.value = b.getRoomDescription()
-    characters.value = b.getRoomCharacters()
-    items.value = b.getRoomItems()
-    exits.value = b.getRoomExits()
-    roomWares.value = b.getRoomWares()
-    const bag = b.getInventory()
-    const spellList = b.getSpells()
+    roomName.value = b.controller.getRoomName()
+    roomDescription.value = b.controller.getRoomDescription()
+    characters.value = b.controller.getRoomCharacters()
+    items.value = b.controller.getRoomItems()
+    exits.value = b.controller.getRoomExits()
+    roomWares.value = b.controller.getRoomWares()
+    const bag = b.controller.getInventory()
+    const spellList = b.controller.getSpells()
     bagEntries.value = bag.map((entry) => entry.name)
     spellEntries.value = spellList.map((entry) => entry.name)
     rawInventory.value = bag
     rawSpells.value = spellList
-    rawActiveQuests.value = b.getActiveQuests()
-    rawCompletedQuests.value = b.getCompletedQuests()
-    questProgress.value = b.getQuestProgress()
-    const m = b.getMusicInfo()
+    rawActiveQuests.value = b.controller.getActiveQuests()
+    rawCompletedQuests.value = b.controller.getCompletedQuests()
+    questProgress.value = b.controller.getQuestProgress()
+    const m = b.controller.getCurrentMusic()
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
-    acceptInput.value = b.isAcceptingInput()
-    completionTree.value = b.getCommandCompletions()
-    shortNames.value = b.getShortNames()
+    acceptInput.value = b.controller.isAcceptingInput()
+    completionTree.value = b.controller.getCommandCompletions()
+    shortNames.value = b.controller.getShortNames()
   }
 
   /**
@@ -659,7 +620,7 @@ export const useGameStore = defineStore('game', () => {
 
   /** The engine's stats or help text, for a dialog (adds nothing to the story). */
   function readInfo(kind: 'stats' | 'help'): string {
-    return requireBridge().readCommand(kind)
+    return requireBridge().controller.handleCommand(kind)
   }
 
   function getQuickSave(): SaveSlot | null {
@@ -697,18 +658,18 @@ export const useGameStore = defineStore('game', () => {
     const news: QuestNews[] = []
 
     let activated: string | null
-    while ((activated = b.activateQuest()) !== null) {
+    while ((activated = b.controller.activateQuest()) !== null) {
       news.push(parseQuestNews('new', activated))
     }
 
     let updated: string | null
-    while ((updated = b.updateQuest()) !== null) {
+    while ((updated = b.controller.updateQuest()) !== null) {
       news.push(parseQuestNews('updated', updated))
     }
 
     let completed: string | null
     const completions: string[] = []
-    while ((completed = b.completeQuest()) !== null) {
+    while ((completed = b.controller.completeQuest()) !== null) {
       completions.push(completed)
     }
 
@@ -716,7 +677,7 @@ export const useGameStore = defineStore('game', () => {
     // quest count as it stood once that quest was done.
     const events: QuestEvent[] = []
     if (completions.length) {
-      const { completed: done, total } = b.getQuestProgress()
+      const { completed: done, total } = b.controller.getQuestProgress()
       completions.forEach((payload, index) => {
         const record: QuestNews = {
           ...parseQuestNews('completed', payload),
@@ -772,16 +733,16 @@ export const useGameStore = defineStore('game', () => {
     // When the last modal is dismissed, restore input acceptance from the bridge
     if (!showModal.value) {
       const b = requireBridge()
-      acceptInput.value = b.isAcceptingInput()
+      acceptInput.value = b.controller.isAcceptingInput()
       // If this was the act intro modal, fire a look to trigger quest start
       if (pendingLookOnDismiss) {
         pendingLookOnDismiss = false
-        showOutput(null, b.look())
+        showOutput(null, b.controller.look())
         refreshPanels()
         pollQuestEvents()
         // The look may start quests: list them (as submitCommand does).
         refreshPanels()
-      } else if (!acceptInput.value && !b.isActRunning()) {
+      } else if (!acceptInput.value && !b.controller.isActRunning()) {
         // Quest completion modals were dismissed but the act has ended:
         // show the next act's pages, or the last act's final page.
         afterActEnds()

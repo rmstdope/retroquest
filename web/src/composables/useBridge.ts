@@ -3,16 +3,7 @@
  * to the game and its controller, and keeps saves in the browser's storage.
  */
 import { Game, GameController, type Act } from '@/engine'
-import type {
-  NamedItem,
-  MusicInfo,
-  RoomExits,
-  CompletionTree,
-  SaveSlot,
-  QuestProgress,
-  ActStats,
-  RoomWare,
-} from '@/types/bridge'
+import type { SaveSlot } from '@/types/bridge'
 
 type StoredNamedSave = {
   name: string
@@ -102,7 +93,8 @@ function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
 }
 
 /** The acts, loaded on demand so each is its own chunk of the build. */
-type ActClass = new () => Act
+/** An act the bridge can play. */
+export type ActClass = new () => Act
 
 async function loadActs(): Promise<ActClass[]> {
   const [{ Act1 }, { Act2 }, { Act3 }] = await Promise.all([
@@ -113,7 +105,14 @@ async function loadActs(): Promise<ActClass[]> {
   return [Act1, Act2, Act3]
 }
 
-export function useBridge() {
+/**
+ * The game the UI plays. `controller` is the engine's read model of the
+ * running game (it changes when `newGame` starts a fresh one); the rest is
+ * what only the browser can do: loading the acts and keeping saves in storage.
+ *
+ * @param loader Loads the acts to play; the real acts unless a test injects its own.
+ */
+export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   let acts: ActClass[] = []
   let game: Game | null = null
   let controller: GameController | null = null
@@ -127,7 +126,7 @@ export function useBridge() {
     onProgress: (status: string) => void = () => {},
   ): Promise<void> {
     onProgress('Loading the acts...')
-    acts = await loadActs()
+    acts = await loader()
     onProgress('Starting game...')
     newGame()
     onProgress('Ready!')
@@ -137,29 +136,6 @@ export function useBridge() {
     return game !== null
   }
 
-  function startGame(): string {
-    return requireGame().controller.start()
-  }
-
-  /** The texts of the logo and intro screens, then the running act's first text. */
-  function advanceToRunning(): string[] {
-    const { game } = requireGame()
-    const results: string[] = []
-    while (!game.isActRunning()) {
-      results.push(game.getResultText())
-      game.newTurn()
-    }
-    results.push(game.getResultText())
-    return results
-  }
-
-  function handleCommand(command: string): string {
-    const { game, controller } = requireGame()
-    const result = controller.handleCommand(command)
-    game.newTurn()
-    return result
-  }
-
   /** Throw the running game away and start a fresh one from Act I. */
   function newGame(): void {
     if (acts.length === 0) throw new Error('Game not started')
@@ -167,92 +143,10 @@ export function useBridge() {
     controller = new GameController(game)
   }
 
-  /** Ask the game something that changes nothing (stats, help): no new turn. */
-  function readCommand(command: 'stats' | 'help'): string {
-    return requireGame().controller.handleCommand(command)
-  }
-
-  function getRoomName(): string {
-    return requireGame().controller.getRoomName()
-  }
-
-  function getRoomDescription(): string {
-    return requireGame().controller.getRoomDescription()
-  }
-
-  function getRoomCharacters(): string[] {
-    return requireGame().controller.getRoomCharacters()
-  }
-
-  function getRoomItems(): string[] {
-    return requireGame().controller.getRoomItems()
-  }
-
-  function getRoomWares(): RoomWare[] {
-    return requireGame().controller.getRoomWares()
-  }
-
-  function getRoomExits(): RoomExits {
-    return requireGame().controller.getRoomExits()
-  }
-
-  function getInventory(): NamedItem[] {
-    return requireGame().controller.getInventory()
-  }
-
-  function getSpells(): NamedItem[] {
-    return requireGame().controller.getSpells()
-  }
-
-  function getActiveQuests(): NamedItem[] {
-    return requireGame().controller.getActiveQuests()
-  }
-
-  function getCompletedQuests(): NamedItem[] {
-    return requireGame().controller.getCompletedQuests()
-  }
-
-  function activateQuest(): string | null {
-    return requireGame().controller.activateQuest()
-  }
-
-  function updateQuest(): string | null {
-    return requireGame().controller.updateQuest()
-  }
-
-  function completeQuest(): string | null {
-    return requireGame().controller.completeQuest()
-  }
-
-  function look(): string {
-    return requireGame().controller.look()
-  }
-
-  function getActIntro(): string {
-    return requireGame().controller.getActIntro()
-  }
-
-  function getActName(): string {
-    return requireGame().controller.getActName()
-  }
-
-  function getQuestProgress(): QuestProgress {
-    return requireGame().controller.getQuestProgress()
-  }
-
-  /** Short item names the story uses, mapped to the items' full names. */
-  function getShortNames(): Record<string, string> {
-    return requireGame().controller.getShortNames()
-  }
-
-  function getActStats(): ActStats {
-    return requireGame().controller.getActStats()
-  }
-
   /** The act's quests done/total for a save card, or null if unreadable. */
   function readQuests(): SaveSlot['quests'] {
     try {
-      const { completed, total } = getQuestProgress()
+      const { completed, total } = requireGame().controller.getQuestProgress()
       return { completed, total }
     } catch {
       return null
@@ -261,20 +155,13 @@ export function useBridge() {
 
   /** The details stored next to a save: where the player was and when. */
   function saveDetails(): Omit<StoredSaveSlot, 'slot' | 'data'> {
+    const { controller } = requireGame()
     return {
-      act: getActName(),
-      room: getRoomName(),
+      act: controller.getActName(),
+      room: controller.getRoomName(),
       timestamp: new Date().toISOString(),
       quests: readQuests(),
     }
-  }
-
-  function saveGame(): string {
-    return quickSaveGame()
-  }
-
-  function loadGame(): string {
-    return quickLoadGame()
   }
 
   function quickSaveGame(): string {
@@ -377,88 +264,21 @@ export function useBridge() {
     return requireGame().game.loadSaveData(entry.data)
   }
 
-  function isAcceptingInput(): boolean {
-    return requireGame().game.acceptInput
-  }
-
-  function getCommandCompletions(): CompletionTree {
-    return requireGame().game.getCommandCompletions()
-  }
-
-  /** The current result text, then a new turn (used for logo/intro screens). */
-  function advanceTurn(): string {
-    const { game } = requireGame()
-    const text = game.getResultText()
-    game.newTurn()
-    return text
-  }
-
-  function isGameRunning(): boolean {
-    return requireGame().controller.isGameRunning()
-  }
-
-  function isActRunning(): boolean {
-    return requireGame().controller.isActRunning()
-  }
-
-  /** True once the last act is complete. */
-  function isGameOver(): boolean {
-    return requireGame().controller.isGameOver()
-  }
-
-  /** The current run state's text, without a new turn. */
-  function getResultText(): string {
-    return requireGame().game.getResultText()
-  }
-
-  function getMusicInfo(): MusicInfo {
-    return requireGame().controller.getCurrentMusic()
-  }
-
   return {
     init,
     isReady,
-    startGame,
-    advanceToRunning,
-    handleCommand,
-    readCommand,
     newGame,
-    getRoomName,
-    getRoomDescription,
-    getRoomCharacters,
-    getRoomItems,
-    getRoomExits,
-    getRoomWares,
-    getInventory,
-    getSpells,
-    getActiveQuests,
-    getCompletedQuests,
-    activateQuest,
-    updateQuest,
-    completeQuest,
-    look,
-    getActIntro,
-    saveGame,
-    loadGame,
+    /** The read model of the running game; throws before `init`. */
+    get controller(): GameController {
+      return requireGame().controller
+    },
     quickSaveGame,
     quickLoadGame,
     saveNamedGame,
     loadNamedGame,
-    getActName,
-    getQuestProgress,
-    getActStats,
-    getShortNames,
     getSaveSlots,
     getQuickSave,
     saveToSlot,
     loadFromSlot,
-    isAcceptingInput,
-    getCommandCompletions,
-    advanceTurn,
-    isGameRunning,
-    isActRunning,
-    isGameOver,
-    getResultText,
-    getMusicInfo,
   }
 }
