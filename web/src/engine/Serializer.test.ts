@@ -129,7 +129,9 @@ describe('serialize / deserialize', () => {
     const quest = new FindChest()
     const state = new GameState(cellar, { Cellar: cellar, Hall: hall }, [quest])
     state.setStoryFlag('door_open', true)
-    state.learnSpell(new Spell({ name: 'light', description: 'd' }))
+    state.learnSpell(
+      new Spell({ id: 'light', name: 'light', description: 'd' }),
+    )
     state.nextActivatedQuest()
     state.addItemToInventory(
       new Item({ name: 'key', description: 'd', canBeCarried: true }),

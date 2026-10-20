@@ -278,9 +278,19 @@ describe('GameState', () => {
 
   describe('spells', () => {
     it('learns a spell once and finds it by name', () => {
-      const fireball = new Spell({ name: 'fireball', description: 'Burns.' })
+      const fireball = new Spell({
+        id: 'fireball',
+        name: 'fireball',
+        description: 'Burns.',
+      })
       gs.learnSpell(fireball)
-      gs.learnSpell(new Spell({ name: 'Fireball', description: 'Burns.' }))
+      gs.learnSpell(
+        new Spell({
+          id: 'Fireball',
+          name: 'Fireball',
+          description: 'Burns.',
+        }),
+      )
       expect(gs.hasSpell('fireball')).toBe(true)
       expect(gs.hasSpell('FIREBALL')).toBe(true)
       expect(gs.knownSpells).toEqual([fireball])
@@ -290,7 +300,9 @@ describe('GameState', () => {
   describe('stats', () => {
     it('lists the room, items, spells, visited rooms and quests', () => {
       gs.addItemToInventory(item('item1'))
-      gs.learnSpell(new Spell({ name: 'fireball', description: '' }))
+      gs.learnSpell(
+        new Spell({ id: 'fireball', name: 'fireball', description: '' }),
+      )
       gs.activatedQuests = [quest1]
       quest2.main = true
       gs.completedQuests = [quest2]
@@ -302,8 +314,14 @@ describe('GameState', () => {
       expect(stats).toContain('Quest2 (main)')
     })
 
-    it('lists a multi-word spell by its spaced name', () => {
-      gs.learnSpell(new Spell({ name: 'foo_bar', description: '' }))
+    it('lists a spell by its shown name, not its id', () => {
+      gs.learnSpell(
+        new Spell({
+          id: 'foo_bar',
+          name: 'foo bar',
+          description: '',
+        }),
+      )
       expect(gs.stats()).toContain('[spell_name]foo bar[/spell_name]')
     })
 

@@ -4,6 +4,7 @@ import { Spell, type GameState } from '@/engine'
 export class LightSpell extends Spell {
   constructor() {
     super({
+      id: 'light',
       name: 'light',
       description:
         'A simple spell that conjures a sphere of light to illuminate dark areas.',

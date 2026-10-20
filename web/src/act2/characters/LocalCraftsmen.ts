@@ -31,7 +31,7 @@ export class LocalCraftsmen extends Character {
         'community first.[/failure]'
       )
     }
-    if (!gameState.hasSpell(new MendSpell().name)) {
+    if (!gameState.hasSpell(new MendSpell().id)) {
       gameState.learnSpell(new MendSpell())
       const name = this.name
       return (

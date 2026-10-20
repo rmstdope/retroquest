@@ -75,10 +75,10 @@ export class Act4 extends Act {
     const blessSpell = new Bless()
 
     // Add spells to known spells if not already known
-    if (!gameState.hasSpell(lightSpell.name)) {
+    if (!gameState.hasSpell(lightSpell.id)) {
       gameState.learnSpell(lightSpell)
     }
-    if (!gameState.hasSpell(blessSpell.name)) {
+    if (!gameState.hasSpell(blessSpell.id)) {
       gameState.learnSpell(blessSpell)
     }
 

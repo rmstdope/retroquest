@@ -23,9 +23,13 @@ export class EchoStones extends Item {
     return super.examine(gameState)
   }
 
-  /** Handle bless spell cast on the echo stones. */
-  receiveSpell(gameState: GameState, spellName: string): string {
-    if (spellName === 'bless' && !this.blessed) {
+  /** Handle a spell cast on the echo stones: `spellId` is matched, `spellName` is shown. */
+  receiveSpell(
+    gameState: GameState,
+    spellId: string,
+    spellName: string = spellId,
+  ): string {
+    if (spellId === 'bless' && !this.blessed) {
       this.blessed = true
       gameState.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED, true)
       return (
@@ -47,7 +51,7 @@ export class EchoStones extends Item {
         'the ancient chant that will complete the ritual and banish the ' +
         'restless spirits from this sacred place.[/success]'
       )
-    } else if (spellName === 'bless' && this.blessed) {
+    } else if (spellId === 'bless' && this.blessed) {
       return '[dim]The echo stones are already blessed.[/dim]'
     } else {
       return `[failure]The ${spellName} spell has no effect on the echo stones.[/failure]`

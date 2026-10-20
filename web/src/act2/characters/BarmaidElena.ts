@@ -127,7 +127,7 @@ export class BarmaidElena extends Character {
       'hope for the first time in weeks.'
 
     // Get spell name for display
-    const spellName = new GreaterHealSpell().displayName
+    const spellName = new GreaterHealSpell().name
 
     return (
       `[success]You cast [spell_name]${spellName}[/spell_name] on Elena, ` +

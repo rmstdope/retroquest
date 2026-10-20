@@ -14,7 +14,8 @@ import { WaterNymphs } from '../characters/WaterNymphs'
 export class ForestSpeechSpell extends Spell {
   constructor() {
     super({
-      name: 'forest_speech',
+      id: 'forest_speech',
+      name: 'forest speech',
       description:
         'An ancient druidic spell that grants the ability to communicate with ' +
         'trees, plants, and forest creatures. This magic opens your mind to the ' +
@@ -28,7 +29,7 @@ export class ForestSpeechSpell extends Spell {
   override castSpell(gameState: GameState): string {
     const currentRoom = gameState.currentRoom
     // Special caravan search logic for Forest Entrance
-    const name = this.displayName
+    const name = this.name
     if (
       currentRoom instanceof ForestEntrance &&
       !gameState.getStoryFlag(FLAG_FOUND_RAVINE)
@@ -100,7 +101,7 @@ export class ForestSpeechSpell extends Spell {
       targetCharacter instanceof WaterNymphs
     ) {
       return (
-        `[success]You cast [spell_name]${this.displayName}[/spell_name] on ` +
+        `[success]You cast [spell_name]${this.name}[/spell_name] on ` +
         characterName(tname) +
         ', opening a channel of deep, mystical communication. Through the ' +
         "spell's magic, you can understand their ancient wisdom and forest " +
@@ -108,7 +109,7 @@ export class ForestSpeechSpell extends Spell {
       )
     }
     return (
-      `[dim]You cast [spell_name]${this.displayName}[/spell_name] on ` +
+      `[dim]You cast [spell_name]${this.name}[/spell_name] on ` +
       characterName(tname) +
       ', but this spell is designed for communication with forest beings ' +
       'and natural spirits. It has no effect on this character.[/dim]'

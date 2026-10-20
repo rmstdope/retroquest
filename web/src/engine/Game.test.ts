@@ -50,8 +50,8 @@ class Talker extends Character {
 
 /** A spell that reports what it was cast on. */
 class EchoSpell extends Spell {
-  constructor(name: string) {
-    super({ name, description: `A ${name} spell` })
+  constructor(id: string, name: string = id) {
+    super({ id, name, description: `A ${name} spell` })
   }
 
   override castSpell(): string {
@@ -579,15 +579,23 @@ describe('Game', () => {
       )
     })
 
-    it('casts a multi-word spell by its spaced name as well as its stored name', () => {
-      game.state.knownSpells.push(new EchoSpell('two_words'))
+    it('casts a multi-word spell by its shown name as well as its id, never printing the id', () => {
+      game.state.knownSpells.push(new EchoSpell('two_words', 'Two Words'))
       const expected =
-        '[event]You cast [spell_name]two_words[/spell_name] without a target.[/event]'
+        '[event]You cast [spell_name]Two Words[/spell_name] without a target.[/event]'
       expect(game.cast('two words')).toBe(expected)
       expect(game.cast('two_words')).toBe(expected)
       expect(game.cast('Two Words on test item')).toContain(
         '[item_name]test item[/item_name]',
       )
+      const missing = game.cast('two words on dragon')
+      expect(missing).toContain('[spell_name]Two Words[/spell_name]')
+      expect(missing).not.toContain('two_words')
+      expect(game.spells()).toContain('[spell_name]Two Words[/spell_name]')
+      expect(game.spells()).not.toContain('two_words')
+      const learned = game.learn(new EchoSpell('other_one', 'Other One'))
+      expect(learned).toContain('[spell_name]Other One[/spell_name]')
+      expect(learned).not.toContain('other_one')
     })
 
     it('prefers items over characters with the same name', () => {
@@ -980,7 +988,10 @@ describe('Game', () => {
 
     function twoActGame(storage: SaveStorage = new MemorySaveStorage()): Game {
       return new Game(
-        [new StateAct('First', { StateAct }), new StateAct('Second')],
+        [
+          new StateAct('First', { StateAct, EchoSpell }),
+          new StateAct('Second'),
+        ],
         {
           saveStorage: storage,
         },
@@ -1094,7 +1105,7 @@ describe('Game', () => {
     it('exposes the save data for other storages and rejects broken data', () => {
       const game = twoActGame()
       const data = game.toSaveData()
-      expect(JSON.parse(data)).toMatchObject({ version: 1, actIndex: 0 })
+      expect(JSON.parse(data)).toMatchObject({ version: 2, actIndex: 0 })
       expect(game.loadSaveData(data)).toBe(
         '[event]Game loaded successfully.[/event]',
       )
@@ -1104,6 +1115,20 @@ describe('Game', () => {
       expect(game.loadSaveData('{"version":99}')).toContain(
         '[failure]Failed to load game',
       )
+      expect(game.loadSaveData('{"version":1}')).toContain(
+        '[failure]Failed to load game',
+      )
+    })
+
+    it('keeps a known spell castable by its shown name after a save round-trip', () => {
+      const game = twoActGame()
+      game.state.knownSpells.push(new EchoSpell('two_words', 'Two Words'))
+      const reloaded = twoActGame()
+      reloaded.loadSaveData(game.toSaveData())
+      const [spell] = reloaded.state.knownSpells
+      expect(spell).toMatchObject({ id: 'two_words', name: 'Two Words' })
+      expect(reloaded.state.hasSpell('two_words')).toBe(true)
+      expect(reloaded.cast('two words')).toContain('Two Words')
     })
 
     it('names act classes after their act so acts may share class names', () => {

@@ -13,6 +13,7 @@ import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
 export class ReviveSpell extends Spell {
   constructor() {
     super({
+      id: 'revive',
       name: 'revive',
       description:
         'A potent spell that can restore life to withered plants or even recently ' +

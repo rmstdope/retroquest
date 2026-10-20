@@ -10,6 +10,7 @@ import {
 export class HealSpell extends Spell {
   constructor() {
     super({
+      id: 'heal',
       name: 'heal',
       description:
         'A restorative spell that mends wounds and alleviates ailments.',

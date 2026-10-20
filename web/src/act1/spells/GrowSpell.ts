@@ -4,6 +4,7 @@ import { Spell, type GameState, type Item, event } from '@/engine'
 export class GrowSpell extends Spell {
   constructor() {
     super({
+      id: 'grow',
       name: 'grow',
       description: 'A nature spell that encourages plants to flourish.',
     })

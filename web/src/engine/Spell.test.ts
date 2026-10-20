@@ -12,7 +12,11 @@ function gameState(): GameState {
 
 describe('Spell', () => {
   const gs = gameState()
-  const light = new Spell({ name: 'light', description: 'Lights things.' })
+  const light = new Spell({
+    id: 'light',
+    name: 'light',
+    description: 'Lights things.',
+  })
 
   it('fizzles by default', () => {
     expect(light.castSpell(gs)).toBe(
@@ -30,13 +34,25 @@ describe('Spell', () => {
 
   it('names a multi-word spell by its spaced name in a fizzle', () => {
     const vision = new Spell({
-      name: 'prophetic_vision',
+      id: 'prophetic_vision',
+      name: 'Prophetic Vision',
       description: 'Sees ahead.',
     })
     const mira = new Character({ name: 'Mira', description: 'd' })
     expect(vision.castOnCharacter(gs, mira)).toContain(
-      '[spell_name]prophetic vision[/spell_name]',
+      '[spell_name]Prophetic Vision[/spell_name]',
     )
     expect(vision.castSpell(gs)).not.toContain('prophetic_vision')
+  })
+
+  it('answers to its id and its shown name, case-insensitively', () => {
+    const vision = new Spell({
+      id: 'prophetic_vision',
+      name: 'Prophetic Vision',
+      description: 'Sees ahead.',
+    })
+    expect(vision.answersTo('prophetic_vision')).toBe(true)
+    expect(vision.answersTo('PROPHETIC vision')).toBe(true)
+    expect(vision.answersTo('prophetic')).toBe(false)
   })
 })
