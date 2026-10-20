@@ -27,7 +27,8 @@ describe('Locket', () => {
 
     const response = executeCommands(game, ['examine locket'])
 
-    expect(response).toContain('a willow above a bell')
+    expect(response).toContain('a silver tree beneath twin moons')
+    expect(response).not.toContain('Ravencrest')
     expect(response).toContain('family')
   })
 

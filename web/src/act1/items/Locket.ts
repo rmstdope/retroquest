@@ -18,7 +18,7 @@ export class Locket extends Item {
       name: 'locket',
       description:
         'A small, intricately carved silver locket, clearly very old. ' +
-        'A tiny crest, a willow above a bell, is worked into its lid. ' +
+        'A tiny crest, a silver tree beneath twin moons, is worked into its lid. ' +
         'It feels cool to the touch. ' +
         'Perhaps someone in your family might know more about it.',
       shortName: 'locket',
