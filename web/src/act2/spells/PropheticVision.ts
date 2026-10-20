@@ -33,6 +33,20 @@ export class PropheticVision extends Spell {
     }
 
     if (!gameState.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)) {
+      const sideQuests = [
+        ...gameState.nonActivatedQuests,
+        ...gameState.activatedQuests,
+        ...gameState.completedQuests,
+      ].filter((quest) => !quest.isMain())
+      if (
+        !sideQuests.every((quest) => gameState.isQuestCompleted(quest.name))
+      ) {
+        return (
+          '[failure]Complete every side quest in Act II before sharing these ' +
+          'visions with Sir Cedric.[/failure]'
+        )
+      }
+
       // First casting - complete The Gathering Storm quest
       gameState.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
       return event(

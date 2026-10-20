@@ -6,7 +6,6 @@ import {
   speech,
 } from '@/engine'
 import { CrystalFocus } from '../items/CrystalFocus'
-import { HealingHerbs } from '../items/HealingHerbs'
 import { GreaterHealSpell } from '../spells/GreaterHealSpell'
 import {
   FLAG_HEALERS_APPRENTICE_ACCEPTED,
@@ -29,8 +28,7 @@ export class MasterHealerLyria extends Character {
 
   /** Handle dialogue based on inventory and apprenticeship story flags. */
   override talkTo(gameState: GameState): string {
-    // Check if player has healing herbs or crystal focus to give
-    const hasHealingHerbs = gameState.hasItem('Healing Herbs')
+    // The crystal focus is required before Lyria can begin the apprenticeship.
     const hasCrystalFocus = gameState.hasItem('Crystal Focus')
     if (!gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)) {
       if (hasCrystalFocus) {
@@ -47,20 +45,6 @@ export class MasterHealerLyria extends Character {
           ) +
           ' Her eyes show both desperation and hope.[/success]'
         )
-      } else if (hasHealingHerbs) {
-        // First set the accepted flag to trigger the quest
-        return (
-          '[success]' +
-          characterName('Master Healer Lyria') +
-          ' recognizes your magical potential and says: ' +
-          speech(
-            "'I can see you have a natural gift for healing magic. If you're " +
-              'willing to give me those [item_name]Healing Herbs[/item_name] as ' +
-              'proof of your commitment to the healing arts, I will teach you ' +
-              "advanced techniques.'",
-          ) +
-          ' She gestures to her collection of healing supplies.[/success]'
-        )
       } else {
         return (
           characterName('Master Healer Lyria') +
@@ -70,9 +54,7 @@ export class MasterHealerLyria extends Character {
               'you, but I desperately need help. I have patients on the brink of ' +
               'death who need more powerful healing than I can provide alone. If ' +
               'you could bring me a [item_name]Crystal Focus[/item_name] to ' +
-              'amplify my magic, or some [item_name]Healing Herbs[/item_name] to ' +
-              'show your commitment to healing, I will teach you advanced ' +
-              'techniques.',
+              'amplify my magic, I will teach you advanced healing techniques.',
           )
         )
       }
@@ -93,8 +75,7 @@ export class MasterHealerLyria extends Character {
         speech(
           "I'm looking forward to teaching you advanced healing techniques. " +
             'Please bring me a [item_name]Crystal Focus[/item_name] to help my ' +
-            'dying patients, or some [item_name]Healing Herbs[/item_name] to ' +
-            'show your commitment, so we can begin your training.',
+            'dying patients, so we can begin your training.',
         )
       )
     }
@@ -105,6 +86,7 @@ export class MasterHealerLyria extends Character {
     if (item instanceof CrystalFocus) {
       // Remove Crystal Focus from inventory as it's given to Lyria
       gameState.removeItemFromInventory('Crystal Focus')
+      gameState.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true)
       // Complete the quest and learn greater_heal spell
       gameState.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
       // Learn greater_heal spell
@@ -128,24 +110,6 @@ export class MasterHealerLyria extends Character {
         speech("'You've truly earned the title of healer.'") +
         "[/success]\n\n[success]Quest Complete: The Healer's " +
         'Apprentice[/success]'
-      )
-    } else if (item instanceof HealingHerbs) {
-      // Check if apprentice quest is accepted but not completed
-      gameState.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true)
-      // Remove healing herbs from inventory as they're given to Lyria
-      gameState.removeItemFromInventory('Healing Herbs')
-      return (
-        '[success]' +
-        characterName('Master Healer Lyria') +
-        ' accepts the [item_name]Healing Herbs[/item_name] with approval. ' +
-        speech("'Excellent! Your commitment shows you're ready to learn.'") +
-        ' Through careful instruction, you master the ' +
-        '[spell_name]greater heal[/spell_name] spell! ' +
-        speech(
-          "'Use this knowledge wisely, young healer. You've successfully " +
-            "completed your apprenticeship.'",
-        ) +
-        '[/success]'
       )
     }
     // Default response for other items

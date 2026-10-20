@@ -22,7 +22,7 @@ export class TheHealersApprenticeQuest extends Quest {
   }
 
   override checkTrigger(gameState: GameState): boolean {
-    // Quest triggers when player talks to Lyria with Healing Herbs
+    // Quest triggers when the player gives Lyria the Crystal Focus.
     return gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)
   }
 

@@ -1,9 +1,12 @@
 import { Quest, type GameState } from '@/engine'
-import { FLAG_ANCIENT_LIBRARY_ACCEPTED } from '../Act2StoryFlags'
+import {
+  FLAG_ANCIENT_LIBRARY_ACCEPTED,
+  FLAG_HEALERS_APPRENTICE_COMPLETED,
+} from '../Act2StoryFlags'
 
 /**
  * Quest to discover and explore the hidden ancient library beneath Greendale.
- * Completes when the dispel spell is known and the Crystal Focus is carried.
+ * Completes when Dispel is known and the Crystal Focus is carried or given to Lyria.
  */
 export class TheAncientLibraryQuest extends Quest {
   constructor() {
@@ -31,7 +34,10 @@ export class TheAncientLibraryQuest extends Quest {
   override checkCompletion(gameState: GameState): boolean {
     // Quest completes when player has:
     // 1. Learned the dispel spell
-    // 2. Gained the Crystal Focus
-    return gameState.hasSpell('dispel') && gameState.hasItem('Crystal Focus')
+    // 2. Gained the Crystal Focus, even if it was already given to Lyria
+    const crystalFocusAcquired =
+      gameState.hasItem('Crystal Focus') ||
+      gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)
+    return gameState.hasSpell('dispel') && crystalFocusAcquired
   }
 }
