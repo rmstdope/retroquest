@@ -91,6 +91,16 @@ describe('useBridge', () => {
       expect(bridge.handleCommand('xyzzy')).toContain("I don't understand")
     })
 
+    it('reads the current text without a new turn, and is not over yet', async () => {
+      const bridge = useBridge()
+      await bridge.init()
+      expect(bridge.getResultText()).toContain('Welcome to')
+      expect(bridge.getResultText()).toContain('Welcome to')
+      expect(bridge.isGameOver()).toBe(false)
+      bridge.advanceToRunning()
+      expect(bridge.isGameOver()).toBe(false)
+    })
+
     it('advances one screen at a time', async () => {
       const bridge = useBridge()
       await bridge.init()
