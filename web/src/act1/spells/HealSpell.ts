@@ -5,6 +5,7 @@ import {
   event,
   characterName,
 } from '@/engine'
+import { Fisherman } from '../characters/Fisherman'
 
 /** Simple restorative spell for Act I; supports self-cast and targeted healing. */
 export class HealSpell extends Spell {
@@ -26,16 +27,17 @@ export class HealSpell extends Spell {
     )
   }
 
-  /** Heal a target character and return the narrative describing the effect. */
-  override castOnCharacter(
-    _gameState: GameState,
-    character: Character,
-  ): string {
+  /** Heal a target character; the fisherman's busted arm mends for real. */
+  override castOnCharacter(gameState: GameState, character: Character): string {
     const name = character.name
+    const castMsg = event(
+      `You cast [spell_name]heal[/spell_name] on ${characterName(name)}.`,
+    )
+    if (character instanceof Fisherman) {
+      return castMsg + '\n' + character.healArm(gameState)
+    }
     return (
-      event(
-        `You cast [spell_name]heal[/spell_name] on ${characterName(name)}.`,
-      ) +
+      castMsg +
       '\nA warm light envelops ' +
       `${characterName(name)} and the character seems a bit healthier.`
     )

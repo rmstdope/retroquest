@@ -221,6 +221,12 @@ export class Grandmother extends Character {
             'There is a darkness in Eldoria, and your family is tied to it. There ' +
             `is a secret, ${characterName('Elior')} — a truth you must uncover. ` +
             "Promise me you'll be careful.",
+        ) +
+        '\nShe hands the photograph back. ' +
+        speech(
+          'Your mother loved the river. If anyone remembers what she did ' +
+            `there, it's the old ${characterName('fisherman')} down at the ` +
+            '[room_name]Riverbank[/room_name].',
         )
       )
     }

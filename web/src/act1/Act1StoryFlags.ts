@@ -25,3 +25,7 @@ export const FLAG_WELL_EXAMINED = 'well_examined'
 export const FLAG_CONNECT_WITH_NATURE = 'connect_with_nature'
 export const FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED =
   'shadows_over_willowbrook_completed'
+export const FLAG_FISHERMAN_TOLD_OF_TIN = 'fisherman_told_of_tin'
+export const FLAG_FOUND_MOTHERS_LETTER = 'found_mothers_letter'
+export const FLAG_READ_MOTHERS_LETTER = 'read_mothers_letter'
+export const FLAG_HEALED_FISHERMAN_ARM = 'healed_fisherman_arm'

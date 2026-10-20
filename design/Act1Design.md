@@ -50,8 +50,9 @@
 - **Name:** The Faded Photograph
 
   - **Trigger:** Search Elior's Cottage and discover the photograph.
-  - **Completion:** Examine the photograph to read its message, then show it to Grandmother.
-  - **Reward:** Grandmother reveals that Elior's family is connected to the darkness threatening Eldoria.
+  - **Steps:** Examine the photograph to read its message (_Seek the truth where the river bends_), then show it to Grandmother. She reveals that Elior's family is connected to the darkness threatening Eldoria, and that his mother loved the river: the old fisherman at the Riverbank will remember her. The Riverbank is the bend. Show the photograph to the fisherman: he was the mother's friend, and tells of a tin she hid in the mud under the smooth stone the night before she went away. Search the Riverbank to find the tin and the mother's letter inside it.
+  - **Completion:** Read the mother's letter.
+  - **Reward:** A fragment of a letter from Elior's mother. It names Malakar, who has been asking about Willowbrook and "our line", tells Elior not to answer him, and says Mira keeps the amulet for him and that "when you are ready, it will know you". It hints at Act II without explaining Malakar.
 
 - **Name:** Shadows Over Willowbrook (Main Quest)
   - **Trigger:** At the start of the act; Elior's dream introduces the mystery.
@@ -162,11 +163,12 @@
 ### 11. Riverbank
 
 - **Description:** A gentle river flows past the village.
-- **Items:** fish (later), River (start).
-- **Unusable:** Smooth stone (start).
-- **Spells:** `purify` (learned from Fisherman).
-- **Usable Items:** Fishing rod (on River to catch a fish), fish (give to fisherman).
-- **Characters:** Fisherman (offers fishing tips, trades fish for information).
+- **Items:** fish (later), River (start), Smooth stone (start, cannot be taken), mother's letter (later).
+- **Spells:** `purify` (learned from Fisherman, who learned it from Elior's mother).
+- **Usable Items:** Fishing rod (on River to catch a fish), fish (give to fisherman), faded photograph (show to fisherman).
+- **Search:** Once the fisherman has told of the tin, searching finds it under the smooth stone; the mother's letter is inside.
+- **Characters:** Fisherman (the bend of the river from the photograph is his spot; he was the mother's friend; offers fishing tips, trades a fish for `purify`, tells of the tin when shown the read photograph).
+- **Optional:** Cast `heal` on the fisherman to mend his busted arm. He thanks Elior and remembers the mother mending his scrapes the same way. From then on he no longer speaks of a bad arm; if Elior has not yet learned to fish, he teaches him out of gratitude instead. Not needed for any quest.
 - **Exits:** Old Mill (west), Forest Path (south)
 
 ### 12. Forest Path
@@ -234,9 +236,9 @@
 ## Learnable Spells in Act I
 
 - **`revive`**: Learned from Grandmother in Elior’s Cottage (Step 1).
-- **`purify`**: Learned from the Fisherman at the Riverbank after giving him a fish (Step 12).
+- **`purify`**: Learned from the Fisherman at the Riverbank after giving him a fish (Step 12). Elior's mother once taught it to him by the bend.
 - **`bless`**: Learned when picking up the Hidden Locket in the Village Chapel; the Priest recognizes the relic (Step 17).
-- **`heal`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
+- **`heal`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18). Optionally cast on the Fisherman to mend his arm.
 - **`unlock`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
 - **`light`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
 - **`grow`**: Learned from inscriptions on a moss-covered stone in the Hidden Glade after casting `light` on it (Step 22).
@@ -255,7 +257,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
     - Speak to Grandmother for advice. _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell._
       - Spell Learned: `revive` (can not be used until magic is learned for real)
     - Search the cottage and take the faded photograph.
-    - Examine the photograph to read the message on its back, then show it to Grandmother to learn more about Elior's family.
+    - Examine the photograph to read the message on its back, then show it to Grandmother to learn more about Elior's family. _She points him to the old fisherman at the Riverbank, who will remember his mother._
     - **Note:** You cannot leave Elior’s Cottage until you have completed the sub-quest _Hint of Magic_ by learning the 'revive' spell from Grandmother.
 
 2.  **Vegetable Field:**
@@ -332,9 +334,14 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
     - Use fishing rod with River. _Elior casts the line into the flowing River and catches a plump river fish! Fish is added to inventory._
       - Item used: `fishing rod` (with `River`)
       - Item obtained: `fish`
-    - Give fish to fisherman. _The fisherman is grateful. He speaks of strange changes in the river's water lately and, sensing a kindred spirit in Elior, teaches him the `purify` spell to cleanse water._
+    - Give fish to fisherman. _The fisherman is grateful. He speaks of strange changes in the river's water lately and teaches him the `purify` spell to cleanse water: "Your mother taught me this, by the bend. I reckon it's yours more than mine."_
       - Item used: `fish`
       - Spells Learned: `purify` (can not be used until magic is learned for real)
+    - Give faded photograph to fisherman. _He reads the message on the back: this very spot is the bend. Elior's mother came here near every evening to study the river's old magic, and the night before she went away she hid a tin under the smooth stone and made him promise to watch over it._
+      - Item shown: `faded photograph` (it stays with Elior)
+    - Search. _Elior tips the smooth stone aside and digs a small tin, sealed with wax, out of the mud. Inside lies the mother's letter._
+    - Take letter, then examine letter. _A water-stained fragment in his mother's hand: it names Malakar and the amulet Mira keeps for Elior. Completes: The Faded Photograph._
+      - Item obtained: `mother's letter`
 
 13. **Forest Path:**
 
@@ -461,6 +468,8 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
     - `Fishing Rod` (to catch `fish` for the `purify` spell, and to retrieve the `shiny ring`)
     - `Magnet` (to retrieve the `shiny ring` from the well)
     - `Fish` (to give to the Fisherman to learn the `purify` spell)
+    - `Faded Photograph` (read, then shown to Grandmother and to the Fisherman, for _The Faded Photograph_)
+    - `Mother's Letter` (found under the smooth stone at the Riverbank; reading it completes _The Faded Photograph_)
     - `Stick` (to use with `fishing rod` and `magnet` to retrieve the `shiny ring`)
     - `Shiny Ring` (to trade for `wandering boots` with Merchant)
     - `Rare Flower` (to give to Mira to learn spells and get quest)
@@ -484,7 +493,8 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 2.  **`Bread`** (Obtained: Step 1):
     - Used in Step 3 to feed chickens and obtain the `key`.
 3.  **`Faded Photograph`** (Obtained: Step 1):
-    - Examined and shown to Grandmother in Step 1 to complete the "Faded Photograph" quest.
+    - Examined and shown to Grandmother in Step 1.
+    - Shown to the Fisherman in Step 12, who tells of the tin under the smooth stone.
 4.  **`Elior's Journal`** (Revealed in Step 1):
     - Read in Step 1 to open a further conversation with Grandmother and learn `revive`.
 5.  **`Rusty Hoe`** (Obtained: Step 2):
@@ -521,30 +531,32 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
     - Used in Step 11 by giving it to the Blacksmith for information.
 20. **`Fish`** (Obtained: Step 12):
     - Used in Step 12 by giving it to the Fisherman to learn the `purify` spell.
-21. **`Stick`** (Obtained: Step 13):
+21. **`Mother's Letter`** (Obtained: Step 12, by searching the Riverbank once the Fisherman has told of the tin):
+    - Read in Step 12 to complete the "Faded Photograph" quest.
+22. **`Stick`** (Obtained: Step 13):
     - Combined with the `magnetic fishing rod` in Step 21 to create an `extended magnetic fishing rod`.
-22. **`Rare Flower`** (Obtained: Step 14):
+23. **`Rare Flower`** (Obtained: Step 14):
     - Used in Step 18 by giving it to Mira to learn spells and receive her quest.
-23. **`Matches`** (Obtained: Step 16):
+24. **`Matches`** (Obtained: Step 16):
     - Used in Step 17 with the `candle` to light a dark corner in the chapel, revealing the `hidden locket`.
-24. **`Candle`** (Available in Village Chapel from the start):
+25. **`Candle`** (Available in Village Chapel from the start):
     - Used in Step 17 with `matches` to light a dark corner in the chapel, revealing the `hidden locket`.
-25. **`Hidden Locket`** (Obtained: Step 17):
+26. **`Hidden Locket`** (Obtained: Step 17):
     - The founders' heirloom of Elior's mother's line (see Village Chapel). Examining it shows the founders' crest; using it opens it to an engraving.
     - Picking it up in Step 17 prompts the Priest to recognize it and teach the `bless` spell.
     - Used in Step 24 by giving it to Grandmother to receive the `travel cloak`.
-26. **`Map`** (Obtained: Step 19):
+27. **`Map`** (Obtained: Step 19):
     - Fulfills Mira's quest requirement for a map when she checks the preparations in Step 27.
     - Used in Step 28 to complete Act I; its use also requires the Ancient Amulet, completion of the _Preparing for the road_ quest, and every other side quest.
-27. **`Fresh Carrot`** (Obtained: Step 20, by reviving and taking the `Withered Carrot`):
+28. **`Fresh Carrot`** (Obtained: Step 20, by reviving and taking the `Withered Carrot`):
     - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
-28. **`Shiny Ring`** (Obtained: Step 21):
+29. **`Shiny Ring`** (Obtained: Step 21):
     - Used in Step 26 by trading it with the Merchant for `wandering boots`.
-29. **`Wild Berries`** (Obtained: Step 23, from the `grow` spell):
+30. **`Wild Berries`** (Obtained: Step 23, from the `grow` spell):
     - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
-30. **`Travel Cloak`** (Obtained: Step 24):
+31. **`Travel Cloak`** (Obtained: Step 24):
     - Fulfills Mira's quest requirement for "Warm clothing" when she checks the preparations in Step 27.
-31. **`Wandering Boots`** (Obtained: Step 26):
+32. **`Wandering Boots`** (Obtained: Step 26):
     - Fulfills Mira's quest requirement for "Sturdy footwear" when she checks the preparations in Step 27.
-32. **`Ancient Amulet`** (Obtained: Step 27):
+33. **`Ancient Amulet`** (Obtained: Step 27):
     - Its acquisition is the primary goal of Mira's quest and is required before using the map to complete Act I in Step 28.

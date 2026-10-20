@@ -11,12 +11,14 @@ import {
   expectCurrentRoom,
   expectItemInInventory,
   expectItemInRoom,
+  expectQuestCompleted,
   expectQuests,
   expectSpellKnown,
   expectStoryFlag,
 } from '@/testing/gameHelpers'
 
 const MAIN = 'Shadows Over Willowbrook'
+const PHOTO = 'The Faded Photograph'
 
 describe('Act 1 golden path', () => {
   it('can be completed from start to finish', () => {
@@ -46,11 +48,11 @@ describe('Act 1 golden path', () => {
       'examine faded photograph',
       'give faded photograph to grandmother',
     ])
-    expect(state.isQuestCompleted('The Faded Photograph')).toBe(true)
+    expect(state.isQuestCompleted(PHOTO)).toBe(false)
 
     // Step 2: Vegetable Field
     executeCommands(game, ['go south', 'take rusty hoe'])
-    expectQuests(state, [MAIN, 'Magic for real', 'Know your village'])
+    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
     expectCurrentRoom(state, 'Vegetable Field')
     expectItemInInventory(state, 'rusty hoe')
     expectItemInRoom(room(), 'rusty hoe', false)
@@ -105,7 +107,7 @@ describe('Act 1 golden path', () => {
     expectCurrentRoom(state, "Mira's Hut")
     expectCharacterInRoom(room(), 'mira')
     executeCommands(game, ['talk to mira'])
-    expectQuests(state, [MAIN, 'Magic for real', 'Know your village'])
+    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
 
     // Step 8: General Store - buy rope
     executeCommands(game, ['go south', 'go east'])
@@ -123,6 +125,7 @@ describe('Act 1 golden path', () => {
     executeCommands(game, ['go south', 'go west', 'go south'])
     expectQuests(state, [
       MAIN,
+      PHOTO,
       'Magic for real',
       'Know your village',
       'Curiosity killed the cat',
@@ -136,12 +139,13 @@ describe('Act 1 golden path', () => {
 
     expectQuests(state, [
       MAIN,
+      PHOTO,
       'Magic for real',
       'Know your village',
       'Curiosity killed the cat',
     ])
     executeCommands(game, ['use key with door'])
-    expectQuests(state, [MAIN, 'Magic for real', 'Know your village'])
+    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
     expectItemInInventory(state, 'key', false)
     expectItemInRoom(room(), 'mysterious box')
 
@@ -168,11 +172,12 @@ describe('Act 1 golden path', () => {
     // Step 11: back to the Blacksmith's Forge
     executeCommands(game, ['go north', 'go north', 'go east'])
     expectCurrentRoom(state, "Blacksmith's Forge")
-    expectQuests(state, [MAIN, 'Magic for real', 'Know your village'])
+    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
     executeCommands(game, ['give millstone fragment to blacksmith'])
     expectItemInInventory(state, 'millstone fragment', false)
     expectQuests(state, [
       MAIN,
+      PHOTO,
       'Magic for real',
       'Know your village',
       'Oh deer, oh deer',
@@ -186,6 +191,7 @@ describe('Act 1 golden path', () => {
     executeCommands(game, ['talk to fisherman'])
     expectQuests(state, [
       MAIN,
+      PHOTO,
       'Magic for real',
       'Know your village',
       'Oh deer, oh deer',
@@ -195,6 +201,7 @@ describe('Act 1 golden path', () => {
     expectItemInInventory(state, 'fish')
     expectQuests(state, [
       MAIN,
+      PHOTO,
       'Magic for real',
       'Know your village',
       'Oh deer, oh deer',
@@ -203,6 +210,29 @@ describe('Act 1 golden path', () => {
     executeCommands(game, ['give fish to fisherman'])
     expectItemInInventory(state, 'fish', false)
     expectSpellKnown(state, 'purify')
+    expectQuests(state, [
+      MAIN,
+      PHOTO,
+      'Magic for real',
+      'Know your village',
+      'Oh deer, oh deer',
+    ])
+    executeCommands(game, ['give faded photograph to fisherman'])
+    expectStoryFlag(state, 'fisherman_told_of_tin', true)
+    expectItemInRoom(room(), "mother's letter", false)
+    executeCommands(game, ['search'])
+    expectItemInRoom(room(), "mother's letter")
+    executeCommands(game, ['take letter'])
+    expectItemInInventory(state, "mother's letter")
+    expectQuests(state, [
+      MAIN,
+      PHOTO,
+      'Magic for real',
+      'Know your village',
+      'Oh deer, oh deer',
+    ])
+    executeCommands(game, ['examine letter'])
+    expectQuestCompleted(state, PHOTO)
     expectQuests(state, [
       MAIN,
       'Magic for real',
