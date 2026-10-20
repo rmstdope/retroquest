@@ -270,7 +270,7 @@ function textEntered(): void {
 }
 
 function doIt(): void {
-  if (!command.value) return
+  if (!command.value || !game.acceptInput) return
   run(command.value)
   reset()
 }

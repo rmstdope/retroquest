@@ -206,10 +206,34 @@ describe('ActionComposer', () => {
     it('does not send when the optional choice is cleared again', async () => {
       const w = mountComposer()
       await button(w, 'Use').trigger('click')
-      await button(w, 'Lantern').trigger('click')
       await button(w, 'with: optional').trigger('click')
+      await button(w, 'Bucket').trigger('click')
+      await button(w, 'Use: choose…').trigger('click')
+      await button(w, 'Lantern').trigger('click')
+      expect(submit).toHaveBeenLastCalledWith('use lantern with bucket')
+
+      await button(w, 'Use').trigger('click')
+      await button(w, 'with: optional').trigger('click')
+      await button(w, 'Bucket').trigger('click')
+      await button(w, 'with: Bucket').trigger('click')
+      await button(w, 'None').trigger('click')
+
+      expect(submit).toHaveBeenCalledTimes(1)
+      expect(w.get('[data-testid="preview"]').text()).toBe('use …')
+    })
+
+    it('keeps the builder and sends nothing on Enter when input is closed', async () => {
+      const game = useGameStore()
+      const w = mountComposer()
+      await button(w, 'Say').trigger('click')
+      await button(w, 'Mira').trigger('click')
+      const words = w.get('input[aria-label="Words to say"]')
+      await words.setValue('hi')
+      game.acceptInput = false
+      await words.trigger('keydown', { key: 'Enter' })
 
       expect(submit).not.toHaveBeenCalled()
+      expect(w.find('.lq-builder').exists()).toBe(true)
     })
 
     it('greys the choices while the game is not taking commands', async () => {
@@ -820,6 +844,20 @@ describe('ActionComposer', () => {
 
       expect(button(w, 'Look').classes()).toContain('lq-shake')
       expect(button(w, 'Take').classes()).not.toContain('lq-shake')
+    })
+
+    it('shakes the verb after a failing instant action', async () => {
+      useSettingsStore().startMode = 'actions'
+      const w = mountComposer()
+      submit.mockImplementationOnce(() =>
+        answer('take bucket', "[failure]It won't budge.[/failure]"),
+      )
+
+      await button(w, 'Take').trigger('click')
+      await button(w, 'Bucket').trigger('click')
+      await w.vm.$nextTick()
+
+      expect(button(w, 'Take').classes()).toContain('lq-shake')
     })
 
     it('does not shake for a later failure after a command with no answer', async () => {

@@ -169,7 +169,7 @@ describe('opening and closing', () => {
 describe('keepsDoIt', () => {
   it('is true only for verbs that can take more after a complete command', () => {
     const keeping = VERBS.filter((v) => keepsDoIt(v)).map((v) => v.id)
-    expect(keeping).toEqual(['use', 'say', 'cast'])
+    expect([...keeping].sort()).toEqual(['cast', 'say', 'use'])
   })
 })
 

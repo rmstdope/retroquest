@@ -245,7 +245,7 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const app = (document.querySelector('#app') as any).__vue_app__
       const store = app.config.globalProperties.$pinia.state.value.game
-      store.items = ['old key']
+      store.items = ['old key', 'old chest']
       store.characters = ['mira']
       store.exits = { north: "Mira's Hut" }
       /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -256,9 +256,18 @@ test.describe('Lantern UI (the default)', () => {
       actions.getByRole('button', { name: "Go north to Mira's Hut" }),
     ).toBeVisible()
 
-    await actions.getByRole('button', { name: 'Use', exact: true }).click()
+    // A complete action is performed at once: the builder closes, no Do it.
+    await actions.getByRole('button', { name: 'Take', exact: true }).click()
+    await expect(
+      actions.getByRole('button', { name: 'Do it', exact: true }),
+    ).toHaveCount(0)
     await actions.getByRole('button', { name: 'Old Key', exact: true }).click()
-    await expect(page.getByTestId('preview')).toHaveText('use old key')
+    await expect(page.getByTestId('preview')).toHaveCount(0)
+
+    // Use may still take "with …", so it waits for Do it.
+    await actions.getByRole('button', { name: 'Use', exact: true }).click()
+    await actions.getByRole('button', { name: 'Lantern', exact: true }).click()
+    await expect(page.getByTestId('preview')).toHaveText('use lantern')
     await expect(
       actions.getByRole('button', { name: 'Do it', exact: true }),
     ).toBeEnabled()
