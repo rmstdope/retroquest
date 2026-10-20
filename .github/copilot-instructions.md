@@ -1,6 +1,8 @@
 # Instructions
 
-This document outlines the design rules and guidelines for both the game story and the implementation the game, focusing on key design patterns, technical considerations, and content guidelines to ensure a cohesive and engaging player experience.
+This document outlines the design rules and guidelines for both the game story and the implementation of the game, focusing on key design patterns, technical considerations, and content guidelines to ensure a cohesive and engaging player experience.
+
+RetroQuest is a TypeScript web application. The game engine (`web/src/engine/`), the acts (`web/src/act1/` … `web/src/act4/`) and the Vue 3 user interface (`web/src/components/`, `web/src/stores/`, `web/src/composables/`) all live under `web/` and run in the browser. There is no server-side code.
 
 ## Skills Usage
 
@@ -34,7 +36,7 @@ Always ensure all pre-merge checks pass before merging any code changes to ensur
 
 When starting to work on any feature that exists as a github issue, assign that feature to the user that is working on it. Each feature should have a corresponding issue in the issue tracker that describes the work to be done.
 
-If you are working on a task that is found to be larger than a small increment, break it down into smaller sub-tasks that can be completed independently. Each sub-task should have its own issue in the issue tracker and should be linked back to the main task issue for traceability. Prefix the sub-issues with ""Sub-issue (<<issue-number>>):"" to clearly indicate their relationship to the main feature issue. <<issue-number>> should be replaced with the main issue number.
+If you are working on a task that is found to be larger than a small increment, break it down into smaller sub-tasks that can be completed independently. Each sub-task should have its own issue in the issue tracker and should be linked back to the main task issue for traceability. Prefix the sub-issues with "Sub-issue (<<issue-number>>):" to clearly indicate their relationship to the main feature issue. <<issue-number>> should be replaced with the main issue number.
 All sub-issues should be linked back to the main issue in their description to maintain clear traceability. Vice versa, all main issues should reference their sub-issues.
 
 When working on an issue, this is important:
@@ -50,13 +52,16 @@ When a sub-issue is closed, the main issue's description should be updated to re
 
 ### Github CLI
 
-Use the comand line command 'gh' for interacting with github issues. Be careful with quoting when using gh. NEVER use backticks in the text with gh and use real newlines instead of \n.
+Use the command line command 'gh' for interacting with github issues. Be careful with quoting when using gh. NEVER use backticks in the text with gh and use real newlines instead of \n.
 When creating issues, always add the appropriate labels to the issue using gh:
 
 - bug - for all bugs
 - enhancement - for any feature development
-- games - for anything that has to do with a specific game or games
-- mapper - for anything that has to do with a specific mapper or mappers
+- documentation - for changes to docs, design documents or instructions
+- engine - for anything in the game engine (web/src/engine)
+- act1, act2, act3, act4 - for anything that has to do with a specific act
+- story - for story and narrative design
+- web - for the Vue user interface
 - refactoring - for anything that has to do with refactoring the codebase
 - testing - for anything that has to do with testing
 - enhanced - for issues created or updated with AI assistance workflows
@@ -71,74 +76,47 @@ For any completed issue workflow task, the following is mandatory:
 
 ## Hard Formatting & Static Rules (Enforced)
 
-These MUST be satisfied for every Python file. Pull requests must explicitly state:
+These MUST be satisfied for every TypeScript and Vue file. Pull requests must explicitly state:
 "Formatting constraints verified".
 
-1. Maximum physical line length: 99 characters (count all characters including indentation).
-2. Prefer keeping narrative lines ≤95 chars to allow safe future edits.
-3. No tabs; indentation is 4 spaces.
-4. No trailing whitespace anywhere.
-5. Exactly one newline at end of file.
-6. One-line module docstring for single-class modules (strictly one line, no wrapping).
-7. All overridden methods (e.g., search, get_exits, gating helpers) require docstrings.
-8. Unused parameters must be prefixed with an underscore (e.g., \_game_state, \_target).
-9. Long prose must be wrapped by splitting into multiple adjacent string literals inside parentheses.
-10. Avoid lines ending at 99 if possible; leave a small buffer for later wording refinements.
+1. Prettier is the formatter. Every file under `web/src/` (and the config files in `web/`) must be formatted exactly as `npx prettier --write` leaves it; CI runs `npx prettier --check` and fails on any difference.
+2. ESLint must pass with zero errors and zero warnings (`npx eslint .` in `web/`).
+3. The type check must pass (`npx vue-tsc --noEmit` in `web/`). Never use `any` under `web/src/`; prefer precise types, `unknown` with narrowing, or a small type guard.
+4. No ESLint or TypeScript inline directives (`eslint-disable`, `@ts-ignore`, `@ts-expect-error`) in the code. All lint and type configuration is global (`web/eslint.config.js`, `web/tsconfig.json`). The single accepted exception is `<!-- eslint-disable vue/no-v-html -->` in a Vue template that renders HTML produced by the engine's markup parser.
+5. Unused parameters must be prefixed with an underscore (e.g., `_gameState`), which is the only way ESLint lets them through.
+6. Overridden methods are marked `override` (`noImplicitOverride` makes the type check enforce this). New or changed overrides carry a `/** … */` doc comment explaining what the override does differently.
+7. Every exported class, function and type has a `/** … */` doc comment; every content file (room, item, character, quest, spell) has a `/** … */` comment directly above its class.
+8. Long narrative strings are split on sentence or clause boundaries and joined with `+` (or written as template literals); never split inside a word, and never change existing wording, punctuation or `[markup]` tags unless the change is the point of the task.
 
 Violation of any item is grounds for rejection in code review / CI.
 
-### Wrapping Guidance
-
-When writing long narrative or return strings:
-
-- Wrap inside a parenthesized block using multiple string literals.
-- Break on sentence or clause boundaries; never split inside a word.
-- Keep each physical line ≤99 chars including indentation.
-- For f-strings nearing the limit, extract dynamic segments to variables first.
-
-Example:
-
-```
-description = (
-		"The hall extends into shadow, banners stirring in a draft that smells of old "
-		"parchment and steel. A faint glow outlines a sealed archway ahead."
-)
-```
-
 ### Developer Completion Checklist (Must Pass Before Commit)
 
-For every Python file, ensure:
+For every TypeScript / Vue file, ensure:
 
-- [ ] All lines ≤99 chars (`python scripts/check_line_length.py`).
-- [ ] No tabs / no trailing whitespace.
-- [ ] One-line module docstring where required.
-- [ ] All custom overrides documented.
+- [ ] Formatted with Prettier (`npm run format` in `web/`).
+- [ ] No ESLint errors or warnings.
+- [ ] Type check passes.
+- [ ] All overrides marked `override` and documented.
 - [ ] Unused parameters underscored.
-- [ ] Docstrings updated to reflect changes.
+- [ ] Doc comments updated to reflect changes.
+- [ ] New or changed behaviour covered by a vitest test next to the code.
 
 ### Pre-merge Checklist (Must Pass Before Creating a PR)
 
 Before creating a pull request, run **all** of the checks below locally — they mirror the CI pipeline in `.github/workflows/ci.yml` exactly. NEVER open a PR or request a merge if any of these fail or produce warnings.
 
-#### Python (run when `src/`, `tests/`, or `pyproject.toml` changed)
-
-```sh
-# Run tests
-pytest
-```
-
-#### Web (run when anything under `web/` changed)
-
 ```sh
 cd web
+npm ci
 
 # Lint
 npx eslint .
 
 # Format check (mirrors CI — fails if any file is not formatted)
-npx prettier --check "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*"
+npx prettier --check "src/**/*.{ts,vue}" "*.config.*"
 # To auto-fix formatting issues, run the following and commit the result:
-# npx prettier --write "src/**/*.{ts,vue}" "vite-plugins/**/*.ts" "*.config.*"
+# npx prettier --write "src/**/*.{ts,vue}" "*.config.*"
 
 # Type check
 npx vue-tsc --noEmit
@@ -154,7 +132,7 @@ npx playwright test
 npm run build
 ```
 
-If in doubt whether a check is relevant, run it anyway.
+Run each check as its own command and read its exit status; never chain them with `;` or pipe their output through `grep`, since that hides failures. If in doubt whether a check is relevant, run it anyway.
 
 ## Game Story Design Rules
 
@@ -188,6 +166,9 @@ If in doubt whether a check is relevant, run it anyway.
 - Use a modular architecture that allows for easy expansion and maintenance.
 - Follow established design patterns for quest management, character interactions, and spell systems.
 - Implement a centralized game state management system to track player progress, story flags, and inventory.
+- The engine (`web/src/engine/`) owns all game rules: `Game` (run state, commands, save/load), `GameState`, `CommandParser`, `GameController` (the read model the UI consumes) and the base classes `Act`, `Room`, `Item`, `Character`, `Quest`, `Spell`.
+- Each act is a directory `web/src/act<N>/` with `Act<N>.ts`, `Act<N>StoryFlags.ts`, `classes.ts` and the sub-directories `rooms/`, `items/`, `characters/`, `spells/` and (where the act has quests) `quests/`. See `docs/typescript-porting-guide.md` for the conventions in detail.
+- The UI talks to the engine only through `GameController` and the `useBridge` composable; Vue components never import act classes (only `useBridge` loads the acts, as separate chunks).
 
 ### Quest Management
 
@@ -206,35 +187,48 @@ If in doubt whether a check is relevant, run it anyway.
 - Characters should have rich dialogues.
 - Character states should change based on quest progress, affecting future interactions and story outcomes.
 
+### Save/Load Compatibility
+
+Saves are JSON produced by the engine's generic serializer and kept in the browser's storage. Every content class must stay serializable:
+
+- Register every class of an act in the act's `classes.ts` (`ACT<N>_CLASSES`); the `classes.test.ts` of each act fails when one is missing.
+- Keep all mutable state in declared class fields. TypeScript `private`/`protected` is fine, but never ECMAScript `#private` fields.
+- No `Map`, `Set` or `Date` in a field; use plain objects and arrays.
+- Fields may reference other content objects (items in rooms, items in wares); shared references and cycles are preserved.
+- Changing the shape of engine save data requires bumping `SAVE_VERSION` in `Game.ts`; older saves are then rejected on load unless you add explicit migration for them.
+
 ### Technical Considerations
 
-These instructions are mandatory for all code contributions to ensure consistency, maintainability, and quality across the codebase. It shall be taken into account when doing any edits in any python file.
+These instructions are mandatory for all code contributions to ensure consistency, maintainability, and quality across the codebase. It shall be taken into account when doing any edits in any TypeScript or Vue file.
 
-- Ensure integration with existing systems, such as Game.py, GameState.py, and Quest.py base classes.
+- Ensure integration with existing systems, such as the `Game`, `GameState` and `Quest` base classes in `web/src/engine/`.
 - Maintain compatibility with the user interface system and save/load functionality.
-- Uses object-oriented programming principles to encapsulate game logic and data.
-- Create one class per file and name files according to the class they contain.
-- Use descriptive names for classes, methods, and variables to enhance readability and maintainability.
-- Use type hints for all function signatures to improve code clarity and facilitate static analysis.
-- Include docstrings for all modules, classes, functions and methods to explain their purpose and usage.
-- Follow PEP 8 style guidelines for Python code to ensure consistency across the codebase.
+- Use object-oriented programming principles to encapsulate game logic and data.
+- Create one class per file and name files according to the class they contain, exported as a named export (`export class Mira extends Character`).
+- Import engine classes and types from `@/engine`; use relative paths for siblings inside an act. Use `import type` only when nothing is needed as a value (`instanceof` needs the value import).
+- Use descriptive names for classes, methods, and variables to enhance readability and maintainability. Classes are `PascalCase`, methods, fields and variables `camelCase`, constants `UPPER_SNAKE_CASE`.
+- Type every function signature (parameters and return type) explicitly; rely on inference only for local variables.
+- Include `/** … */` doc comments for all modules, classes, functions and methods to explain their purpose and usage.
 - Do not share code between acts; each act should be self-contained. All common functionality should be implemented in the engine module.
-- Always update docstrings and comments to reflect any changes made to the code.
-- For files with multiple classes or functions, provide a somewhat more detailed module docstring explaining the overall purpose and functionality of the module.
-- Never use pylint inline directives in the code. All pylint configuration should be global.
-- When mixing strings and variables, prioritize using f-strings when constructing messages or dialogues.
+- Always update doc comments and other comments to reflect any changes made to the code.
+- For files with multiple classes or functions, provide a somewhat more detailed file-level comment explaining the overall purpose and functionality of the module.
+- Never use ESLint or TypeScript inline directives in the code (apart from the `vue/no-v-html` exception above). All lint configuration should be global.
+- When mixing strings and variables, prioritize using template literals when constructing messages or dialogues.
+- Methods that only some content classes implement (for example `receiveSpell` on a character) are detected with a structural check (a structural type assertion or an `in` check plus a `typeof` guard), never with `any`.
 
 ### Testing
 
+- Tests use vitest and live next to the code they cover (`Foo.ts` → `Foo.test.ts`); Playwright end-to-end tests live in `web/e2e/`.
 - All components in the engine should have extensive unit tests.
-- Every component in every act should also have unit tests. These tests should test the dynamics and behavior of the component, e.g. dynamic dialogues and things that change in the component depending on actions. Try to mock as little as possible and instead use the real implementations where feasible. The component tests should be placed in a similar structure to the code, ie. tests/retroquest/act<num>/rooms for rooms.
-- Use integration tests to verify that all steps in the golden path of the act works as expected, that the act can be completed successfully and that all quests are properly integrated.
+- Every component in every act should also have unit tests. These tests should test the dynamics and behavior of the component, e.g. dynamic dialogues and things that change in the component depending on actions. Try to mock as little as possible and instead use the real implementations where feasible; drive the real engine through `new Game([new Act1()])` and the helpers in `web/src/testing/gameHelpers.ts`.
+- Use integration tests (`Act<N>.integration.test.ts`) to verify that all steps in the golden path of the act work as expected, that the act can be completed successfully and that all quests are properly integrated.
+- Every act has a `classes.test.ts` that checks the class registry, and its integration tests should include a save/load round-trip through `Game.toSaveData`.
 
 ### Details
 
-- Try to use isinstance when checking types, as it is more robust than comparing types directly. Avoid circular imports by doing local imports inside functions if needed.
-- Avoid using magic strings or numbers; instead, use constants or enums to represent important values.
-- When using multi-line strings, align the lines so that they match the indentation of the surrounding code.
+- Use `instanceof` when checking types, as it is more robust than comparing names or strings. Import the class as a value for that.
+- Avoid using magic strings or numbers; instead, use constants (story flags live in `Act<N>StoryFlags.ts`) or enums to represent important values.
+- Do not write prose as multi-line template literals (the indentation ends up in the text); split it into `+`-joined literals as rule 8 describes.
 
 ## Chat
 
