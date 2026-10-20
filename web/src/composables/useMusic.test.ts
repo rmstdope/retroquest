@@ -81,7 +81,7 @@ describe('useMusic', () => {
     it('sets audio src and plays when not muted', () => {
       const { loadTrack } = useMusic(audio)
       loadTrack('tavern.mp3', 'Tavern theme')
-      expect(audio.src).toBe('/python-src/retroquest/audio/music/tavern.mp3')
+      expect(audio.src).toBe('/audio/music/tavern.mp3')
       expect(audio.play).toHaveBeenCalled()
     })
 
@@ -96,7 +96,7 @@ describe('useMusic', () => {
       localStorage.setItem('retroquest_music_muted', 'true')
       const { loadTrack } = useMusic(audio)
       loadTrack('tavern.mp3', 'Tavern theme')
-      expect(audio.src).toBe('/python-src/retroquest/audio/music/tavern.mp3')
+      expect(audio.src).toBe('/audio/music/tavern.mp3')
       expect(audio.play).not.toHaveBeenCalled()
     })
 
@@ -121,9 +121,7 @@ describe('useMusic', () => {
     it('encodes special characters in filename', () => {
       const { loadTrack } = useMusic(audio)
       loadTrack('my track (remix).mp3', 'Info')
-      expect(audio.src).toBe(
-        '/python-src/retroquest/audio/music/my%20track%20(remix).mp3',
-      )
+      expect(audio.src).toBe('/audio/music/my%20track%20(remix).mp3')
     })
 
     it('silently catches autoplay rejection', async () => {

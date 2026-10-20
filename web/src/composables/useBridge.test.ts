@@ -1,9 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useBridge } from '@/composables/useBridge'
 
-/**
- * Minimal localStorage mock shared across all tests in this file.
- */
+/** Minimal localStorage mock shared across all tests in this file. */
 const localStorageMock = (() => {
   let store: Record<string, string | null> = {}
   return {
@@ -28,765 +26,199 @@ Object.defineProperty(globalThis, 'localStorage', {
   writable: true,
 })
 
-/**
- * Create a mock PyodideRuntime that records calls and returns
- * configurable results.
- */
-function createMockPyodide() {
-  const pythonResults = new Map<string, unknown>()
-  const globals = new Map<string, unknown>()
-
-  return {
-    pythonResults,
-    globals,
-    runtime: {
-      runPython: vi.fn((code: string) => {
-        for (const [pattern, result] of pythonResults) {
-          if (code.includes(pattern)) return result
-        }
-        return undefined
-      }),
-      runPythonAsync: vi.fn(async () => undefined),
-      globals: {
-        get: vi.fn((name: string) => globals.get(name)),
-        set: vi.fn((name: string, value: unknown) => {
-          globals.set(name, value)
-        }),
-      },
-    },
-  }
+function storageFull() {
+  localStorageMock.setItem.mockImplementationOnce(() => {
+    throw new Error('QuotaExceededError')
+  })
 }
 
-/**
- * Helper to create a mock PyProxy that mimics Python list.toJs().
- */
-function pyProxy(jsValue: unknown) {
-  return { toJs: () => jsValue }
-}
-
-/**
- * Helper to create a mock PyProxy whose toJs() ignores options and returns
- * the JS value directly (used for dict conversions in getCommandCompletions).
- */
-function pyProxyWithToJs(jsValue: unknown) {
-  return { toJs: () => jsValue }
+/** A bridge with the game running in Act I, ready for commands. */
+async function runningBridge() {
+  const bridge = useBridge()
+  await bridge.init()
+  bridge.advanceToRunning()
+  return bridge
 }
 
 describe('useBridge', () => {
-  let mock: ReturnType<typeof createMockPyodide>
-  let bridge: ReturnType<typeof useBridge>
-
   beforeEach(() => {
-    mock = createMockPyodide()
-    // Inject the mock pyodide via init's loadPyodide global
-    ;(globalThis as Record<string, unknown>).loadPyodide = vi
-      .fn()
-      .mockResolvedValue(mock.runtime)
-    // Mock fetch for manifest and source files
-    globalThis.fetch = vi.fn().mockResolvedValue({
-      json: () => Promise.resolve([]),
-      text: () => Promise.resolve(''),
-    }) as unknown as typeof fetch
-
-    bridge = useBridge()
+    localStorageMock.clear()
+    vi.clearAllMocks()
   })
 
   describe('init', () => {
-    it('calls loadPyodide and reports progress', async () => {
+    it('reports progress and becomes ready', async () => {
+      const bridge = useBridge()
       const progress = vi.fn()
+      expect(bridge.isReady()).toBe(false)
       await bridge.init(progress)
-
-      expect(progress).toHaveBeenCalledWith('Loading Python runtime...')
-      expect(progress).toHaveBeenCalledWith('Loading game engine...')
       expect(progress).toHaveBeenCalledWith('Starting game...')
       expect(progress).toHaveBeenCalledWith('Ready!')
+      expect(bridge.isReady()).toBe(true)
     })
 
-    it('sets isReady to true after init', async () => {
-      expect(bridge.isReady()).toBe(false)
-      await bridge.init()
-      expect(bridge.isReady()).toBe(true)
+    it('throws when used before init', () => {
+      expect(() => useBridge().getRoomName()).toThrow('Game not started')
     })
   })
 
-  describe('after init', () => {
-    beforeEach(async () => {
-      localStorageMock.clear()
-      vi.clearAllMocks()
+  describe('game flow', () => {
+    it('starts with the logo, then the act intro, then accepts input', async () => {
+      const bridge = useBridge()
       await bridge.init()
-    })
-
-    it('startGame calls controller.start()', () => {
-      mock.pythonResults.set('controller.start()', 'Welcome!')
-      expect(bridge.startGame()).toBe('Welcome!')
-    })
-
-    it('handleCommand sends command and advances turn', () => {
-      mock.pythonResults.set('controller.handle_command', 'You moved.')
-      bridge.handleCommand('go north')
-      expect(mock.runtime.globals.set).toHaveBeenCalledWith('_cmd', 'go north')
-    })
-
-    it('newGame starts a fresh game from Act I', () => {
-      bridge.newGame()
-
-      const code = mock.runtime.runPython.mock.calls.at(-1)![0] as string
-      expect(code).toContain('game = Game([Act1(), Act2(), Act3()]')
-      expect(code).toContain('controller = GameController(game)')
-    })
-
-    it('readCommand asks the game without starting a new turn', () => {
-      mock.pythonResults.set('controller.handle_command', 'Stats text')
-
-      expect(bridge.readCommand('stats')).toBe('Stats text')
-      expect(mock.runtime.globals.set).toHaveBeenCalledWith('_cmd', 'stats')
-      const code = mock.runtime.runPython.mock.calls.at(-1)![0] as string
-      expect(code).not.toContain('new_turn')
-    })
-
-    it('getRoom returns room description', () => {
-      mock.pythonResults.set('controller.get_room()', 'A dark room.')
-      expect(bridge.getRoom()).toBe('A dark room.')
-    })
-
-    it('getRoomName returns room name', () => {
-      mock.pythonResults.set('controller.get_room_name()', 'Village Square')
-      expect(bridge.getRoomName()).toBe('Village Square')
-    })
-
-    it('getRoomDescription returns description', () => {
-      mock.pythonResults.set(
-        'controller.get_room_description()',
-        'A peaceful village.',
-      )
-      expect(bridge.getRoomDescription()).toBe('A peaceful village.')
-    })
-
-    it('getRoomCharacters returns string array', () => {
-      mock.pythonResults.set(
-        'controller.get_room_characters()',
-        pyProxy(['Mira', 'Priest']),
-      )
-      expect(bridge.getRoomCharacters()).toEqual(['Mira', 'Priest'])
-    })
-
-    it('getRoomItems returns string array', () => {
-      mock.pythonResults.set(
-        'controller.get_room_items()',
-        pyProxy(['Sword', 'Shield']),
-      )
-      expect(bridge.getRoomItems()).toEqual(['Sword', 'Shield'])
-    })
-
-    it('getRoomWares maps tuples to RoomWare[]', () => {
-      mock.pythonResults.set(
-        'controller.get_room_wares()',
-        pyProxy([
-          ['rope', 1, 'shopkeeper'],
-          ['sword', 5, 'shopkeeper'],
-        ]),
-      )
-      expect(bridge.getRoomWares()).toEqual([
-        { name: 'rope', price: 1, seller: 'shopkeeper' },
-        { name: 'sword', price: 5, seller: 'shopkeeper' },
-      ])
-    })
-
-    it('getRoomExits returns direction map', () => {
-      mock.pythonResults.set(
-        'controller.get_room_exits()',
-        pyProxy(
-          new Map([
-            ['north', 'Forest'],
-            ['south', 'Village'],
-          ]),
-        ),
-      )
-      expect(bridge.getRoomExits()).toEqual({
-        north: 'Forest',
-        south: 'Village',
-      })
-    })
-
-    it('getInventory maps tuples to NamedItem[]', () => {
-      mock.pythonResults.set(
-        'controller.get_inventory()',
-        pyProxy([
-          ['Sword', 'A sharp blade'],
-          ['Potion', 'Restores health'],
-        ]),
-      )
-      expect(bridge.getInventory()).toEqual([
-        { name: 'Sword', description: 'A sharp blade' },
-        { name: 'Potion', description: 'Restores health' },
-      ])
-    })
-
-    it('getSpells maps tuples to NamedItem[]', () => {
-      mock.pythonResults.set(
-        'controller.get_spells()',
-        pyProxy([['Fireball', 'Deals fire damage']]),
-      )
-      expect(bridge.getSpells()).toEqual([
-        { name: 'Fireball', description: 'Deals fire damage' },
-      ])
-    })
-
-    it('getActiveQuests maps tuples to NamedItem[]', () => {
-      mock.pythonResults.set(
-        'controller.get_active_quests()',
-        pyProxy([['Find the key', 'Search the forest']]),
-      )
-      expect(bridge.getActiveQuests()).toEqual([
-        { name: 'Find the key', description: 'Search the forest' },
-      ])
-    })
-
-    it('getCompletedQuests maps tuples to NamedItem[]', () => {
-      mock.pythonResults.set(
-        'controller.get_completed_quests()',
-        pyProxy([['Saved the village', 'Heroes triumph']]),
-      )
-      expect(bridge.getCompletedQuests()).toEqual([
-        { name: 'Saved the village', description: 'Heroes triumph' },
-      ])
-    })
-
-    it('activateQuest returns string or null', () => {
-      mock.pythonResults.set('controller.activate_quest()', 'New quest!')
-      expect(bridge.activateQuest()).toBe('New quest!')
-    })
-
-    it('activateQuest returns null for undefined', () => {
-      mock.pythonResults.set('controller.activate_quest()', undefined)
-      expect(bridge.activateQuest()).toBeNull()
-    })
-
-    it('updateQuest returns string or null', () => {
-      mock.pythonResults.set('controller.update_quest()', 'Quest updated')
-      expect(bridge.updateQuest()).toBe('Quest updated')
-    })
-
-    it('completeQuest returns string or null', () => {
-      mock.pythonResults.set('controller.complete_quest()', null)
-      expect(bridge.completeQuest()).toBeNull()
-    })
-
-    it('look returns look result', () => {
-      mock.pythonResults.set('controller.look()', 'You see a door.')
-      expect(bridge.look()).toBe('You see a door.')
-    })
-
-    it('getActIntro returns intro text', () => {
-      mock.pythonResults.set('controller.get_act_intro()', 'Act 1 begins...')
-      expect(bridge.getActIntro()).toBe('Act 1 begins...')
-    })
-
-    it('saveGame stores base64 save data in localStorage', () => {
-      mock.pythonResults.set(
-        'controller.save_game()',
-        'Game saved successfully.',
-      )
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-      const result = bridge.saveGame()
-      expect(result).toBe('Game saved successfully.')
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        'retroquest_save',
-        'c2F2ZWRhdGE=',
-      )
-    })
-
-    it('saveGame returns default message when controller returns empty string', () => {
-      mock.pythonResults.set('controller.save_game()', '')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-      const result = bridge.saveGame()
-      expect(result).toBe('Game saved.')
-    })
-
-    it('saveGame does not write to localStorage when no save data', () => {
-      mock.pythonResults.set('controller.save_game()', 'Saved.')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", '')
-      bridge.saveGame()
-      expect(localStorageMock.setItem).not.toHaveBeenCalled()
-    })
-
-    it('quickSaveGame stores base64 save data in localStorage', () => {
-      mock.pythonResults.set(
-        'controller.save_game()',
-        'Game saved successfully.',
-      )
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-      const result = bridge.quickSaveGame()
-      expect(result).toBe('Game saved successfully.')
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        'retroquest_save',
-        'c2F2ZWRhdGE=',
-      )
-    })
-
-    describe('a save that cannot be stored', () => {
-      function storageFull() {
-        localStorageMock.setItem.mockImplementationOnce(() => {
-          throw new Error('QuotaExceededError')
-        })
-      }
-
-      beforeEach(() => {
-        mock.pythonResults.set('controller.save_game()', 'Game saved.')
-        mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-        mock.pythonResults.set('controller.get_act_name()', 'Act 1')
-        mock.pythonResults.set('controller.get_room_name()', 'Square')
-      })
-
-      it('is a failure for the quick save', () => {
-        storageFull()
-        expect(bridge.quickSaveGame()).toMatch(
-          /^\[failure\]The game could not be saved/,
-        )
-      })
-
-      it('is a failure for a slot', () => {
-        storageFull()
-        expect(bridge.saveToSlot(2)).toMatch(/^\[failure\]/)
-      })
-
-      it('is a failure for a named save', () => {
-        storageFull()
-        expect(bridge.saveNamedGame('morning')).toMatch(/^\[failure\]/)
-      })
-
-      it('is a failure when the game wrote nothing', () => {
-        mock.pythonResults.set("open('retroquest.save', 'rb')", '')
-        expect(bridge.quickSaveGame()).toMatch(/^\[failure\]/)
-      })
-    })
-
-    it('quickLoadGame restores game state when save exists', () => {
-      localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
-      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
-      const result = bridge.quickLoadGame()
-      expect(result).toBe('Game loaded.')
-      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
-        '_save_b64',
-        'c2F2ZWRhdGE=',
-      )
-    })
-
-    it('quickLoadGame returns failure when no save exists', () => {
-      expect(bridge.quickLoadGame()).toBe(
-        '[failure]No save file found.[/failure]',
-      )
-    })
-
-    it('loadGame restores game state when save exists', () => {
-      localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
-      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
-      const result = bridge.loadGame()
-      expect(result).toBe('Game loaded.')
-      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
-        '_save_b64',
-        'c2F2ZWRhdGE=',
-      )
-    })
-
-    it('saveNamedGame stores save under named slots in localStorage', () => {
-      mock.pythonResults.set('controller.save_game()', 'Saved.')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-      bridge.saveNamedGame('Before Boss')
-      const raw = localStorageMock.setItem.mock.calls.find(
-        (args: unknown[]) => args[0] === 'retroquest_named_saves',
-      )
-      expect(raw).toBeDefined()
-      const saves = JSON.parse(raw![1] as string) as Array<{
-        name: string
-        data: string
-      }>
-      expect(saves).toHaveLength(1)
-      expect(saves[0].name).toBe('Before Boss')
-      expect(saves[0].data).toBe('c2F2ZWRhdGE=')
-    })
-
-    it('saveNamedGame overwrites existing save with same name', () => {
-      const existing = JSON.stringify([
-        {
-          name: 'Before Boss',
-          timestamp: '2024-01-01T00:00:00.000Z',
-          data: 'b2xkZGF0YQ==',
-        },
-      ])
-      localStorageMock._setRaw('retroquest_named_saves', existing)
-      mock.pythonResults.set('controller.save_game()', 'Saved.')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3ZGF0YQ==')
-      bridge.saveNamedGame('Before Boss')
-      const raw = localStorageMock.setItem.mock.calls.find(
-        (args: unknown[]) => args[0] === 'retroquest_named_saves',
-      )
-      const saves = JSON.parse(raw![1] as string) as Array<{
-        name: string
-        data: string
-      }>
-      expect(saves).toHaveLength(1)
-      expect(saves[0].data).toBe('bmV3ZGF0YQ==')
-    })
-
-    it('saveNamedGame keeps the other named saves loadable', () => {
-      const existing = JSON.stringify([
-        {
-          name: 'morning',
-          timestamp: '2024-01-01T00:00:00.000Z',
-          data: 'b2xkZGF0YQ==',
-        },
-      ])
-      localStorageMock._setRaw('retroquest_named_saves', existing)
-      mock.pythonResults.set('controller.save_game()', 'Saved.')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3ZGF0YQ==')
-      bridge.saveNamedGame('evening')
-      const raw = localStorageMock.setItem.mock.calls.find(
-        (args: unknown[]) => args[0] === 'retroquest_named_saves',
-      )
-      const saves = JSON.parse(raw![1] as string) as Array<{
-        name: string
-        data: string
-      }>
-      expect(saves.map((s) => [s.name, s.data])).toEqual([
-        ['morning', 'b2xkZGF0YQ=='],
-        ['evening', 'bmV3ZGF0YQ=='],
-      ])
-    })
-
-    it('loadNamedGame loads a named save', () => {
-      const saves = [
-        {
-          name: 'Before Boss',
-          timestamp: '2024-01-01T00:00:00.000Z',
-          data: 'c2F2ZWRhdGE=',
-        },
-      ]
-      localStorageMock._setRaw('retroquest_named_saves', JSON.stringify(saves))
-      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
-      const result = bridge.loadNamedGame('Before Boss')
-      expect(result).toBe('Game loaded.')
-      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
-        '_save_b64',
-        'c2F2ZWRhdGE=',
-      )
-    })
-
-    it('loadNamedGame returns failure when save name not found', () => {
-      localStorageMock._setRaw('retroquest_named_saves', JSON.stringify([]))
-      const result = bridge.loadNamedGame('Nonexistent')
-      expect(result).toBe('[failure]No save file found.[/failure]')
-    })
-
-    it('loadNamedGame returns failure when no named saves exist', () => {
-      const result = bridge.loadNamedGame('Any')
-      expect(result).toBe('[failure]No save file found.[/failure]')
-    })
-
-    it('isAcceptingInput returns boolean', () => {
-      mock.pythonResults.set('game.accept_input', true)
+      expect(bridge.startGame()).toContain('Welcome to')
+      expect(bridge.isAcceptingInput()).toBe(false)
+      expect(bridge.isActRunning()).toBe(false)
+      expect(bridge.getMusicInfo()).toEqual({ musicFile: '', musicInfo: '' })
+      const texts = bridge.advanceToRunning()
+      expect(texts).toHaveLength(3)
+      expect(texts[0]).toContain('Welcome to')
+      expect(texts[1]).toContain('ACT 1: THE CALL TO ADVENTURE')
+      expect(bridge.isActRunning()).toBe(true)
       expect(bridge.isAcceptingInput()).toBe(true)
+      expect(bridge.isGameRunning()).toBe(true)
+      expect(bridge.getActName()).toBe('Act 1')
+      expect(bridge.getActIntro()).toContain('ACT 1')
+      expect(bridge.getMusicInfo().musicFile).toContain('.mp3')
     })
 
-    it('advanceTurn returns result text', () => {
-      mock.pythonResults.set('game.get_result_text()', 'Turn result')
-      expect(bridge.advanceTurn()).toBe('Turn result')
+    it('runs commands and advances the turn', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.getRoomItems()).not.toContain('bread')
+      const result = bridge.handleCommand('use lantern')
+      expect(result).toContain('[event]')
+      expect(bridge.getRoomItems()).toContain('bread')
+      expect(bridge.handleCommand('xyzzy')).toContain("I don't understand")
     })
 
-    it('isGameRunning returns boolean', () => {
-      mock.pythonResults.set('controller.is_game_running()', false)
-      expect(bridge.isGameRunning()).toBe(false)
-    })
-
-    it('isActRunning returns boolean', () => {
-      mock.pythonResults.set('controller.is_act_running()', true)
+    it('advances one screen at a time', async () => {
+      const bridge = useBridge()
+      await bridge.init()
+      expect(bridge.advanceTurn()).toContain('Welcome to')
+      expect(bridge.advanceTurn()).toContain('ACT 1')
       expect(bridge.isActRunning()).toBe(true)
     })
 
-    it('getMusicInfo returns MusicInfo object', () => {
-      mock.pythonResults.set(
-        'controller.get_current_music()',
-        pyProxy(['forest.mp3', 'Music by Composer']),
+    it('answers read-only commands without a new turn', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.readCommand('help')).toContain('Available Commands')
+      expect(bridge.readCommand('stats')).toContain(
+        "[room_name]Elior's Cottage[/room_name]",
       )
-      const info = bridge.getMusicInfo()
-      expect(info).toEqual({
-        musicFile: 'forest.mp3',
-        musicInfo: 'Music by Composer',
-      })
     })
 
-    it('advanceToRunning returns array of texts', () => {
-      mock.pythonResults.set('game.is_act_running()', pyProxy(['text1']))
-      // Since advanceToRunning calls a multi-line Python snippet, mock it
-      mock.runtime.runPython.mockReturnValueOnce(
-        pyProxy(['Logo text', 'Intro text', 'Running text']),
-      )
-      expect(bridge.advanceToRunning()).toEqual([
-        'Logo text',
-        'Intro text',
-        'Running text',
+    it('starts a fresh game from Act I', async () => {
+      const bridge = await runningBridge()
+      bridge.handleCommand('use lantern')
+      bridge.newGame()
+      bridge.advanceToRunning()
+      expect(bridge.getRoomItems()).not.toContain('bread')
+    })
+  })
+
+  describe('room and journal data', () => {
+    it('describes the current room', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.getRoomName()).toBe("Elior's Cottage")
+      expect(bridge.getRoomDescription()).toContain('cottage')
+      expect(bridge.getRoomCharacters()).toEqual(['grandmother'])
+      expect(bridge.getRoomItems()).toEqual(['lantern'])
+      expect(bridge.getRoomExits()).toEqual({})
+      expect(bridge.getRoomWares()).toEqual([])
+      expect(bridge.look()).toContain('surroundings')
+    })
+
+    it('lists the inventory, spells and quests as named items', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.getInventory()).toEqual([])
+      expect(bridge.getSpells()).toEqual([])
+      bridge.handleCommand('use lantern')
+      bridge.handleCommand('take bread')
+      expect(bridge.getInventory()).toEqual([
+        {
+          name: '[item_name]bread[/item_name]',
+          description: expect.any(String),
+        },
       ])
+      expect(bridge.getCompletedQuests()).toEqual([])
+      expect(bridge.activateQuest()).toContain('[quest_name]')
+      expect(bridge.getActiveQuests().length).toBeGreaterThan(0)
+      expect(bridge.updateQuest()).toBeNull()
+      expect(bridge.completeQuest()).toBeNull()
     })
 
-    it('getCommandCompletions converts nested Python dict to plain JS object', () => {
-      const completionsTree = {
-        go: { north: null, south: null },
-        take: { sword: null },
-      }
-      mock.pythonResults.set(
-        'game.get_command_completions()',
-        pyProxyWithToJs(completionsTree),
-      )
-      expect(bridge.getCommandCompletions()).toEqual(completionsTree)
-    })
-
-    it('getCommandCompletions returns empty object when no completions', () => {
-      mock.pythonResults.set(
-        'game.get_command_completions()',
-        pyProxyWithToJs({}),
-      )
-      expect(bridge.getCommandCompletions()).toEqual({})
-    })
-  })
-
-  describe('error handling', () => {
-    it('throws when calling methods before init', () => {
-      expect(() => bridge.startGame()).toThrow('Pyodide not initialized')
-    })
-
-    it('loadGame returns failure message when no save exists', async () => {
-      await bridge.init()
-      expect(bridge.loadGame()).toBe('[failure]No save file found.[/failure]')
-    })
-  })
-
-  describe('save slots (8-slot system)', () => {
-    beforeEach(async () => {
-      localStorageMock.clear()
-      vi.clearAllMocks()
-      await bridge.init()
-    })
-
-    it('getActName returns act name from controller', () => {
-      mock.pythonResults.set('controller.get_act_name()', 'Act 1')
-      expect(bridge.getActName()).toBe('Act 1')
-    })
-
-    it('getShortNames maps the controller dict to an object', () => {
-      mock.pythonResults.set(
-        'controller.get_short_names()',
-        pyProxy(new Map<string, unknown>([['journal', "Elior's Journal"]])),
-      )
-      expect(bridge.getShortNames()).toEqual({ journal: "Elior's Journal" })
-    })
-
-    it('getActStats maps the controller dict to ActStats', () => {
-      mock.pythonResults.set(
-        'controller.get_act_stats()',
-        pyProxy(
-          new Map<string, unknown>([
-            ['quests_completed', 10],
-            ['quests_total', 11],
-            ['spells', 4],
-            ['places', 15],
-          ]),
-        ),
-      )
-      expect(bridge.getActStats()).toEqual({
-        questsCompleted: 10,
-        questsTotal: 11,
-        spells: 4,
-        places: 15,
-      })
-    })
-
-    it('getQuestProgress maps the controller dict to QuestProgress', () => {
-      mock.pythonResults.set(
-        'controller.get_quest_progress()',
-        pyProxy(
-          new Map<string, unknown>([
-            ['completed', 8],
-            ['total', 12],
-            ['act_number', 2],
-            ['main_quest', 'The Gathering Storm'],
-          ]),
-        ),
-      )
+    it('reports quest progress, act stats and short names', async () => {
+      const bridge = await runningBridge()
       expect(bridge.getQuestProgress()).toEqual({
-        completed: 8,
-        total: 12,
-        actNumber: 2,
-        mainQuest: 'The Gathering Storm',
-      })
-    })
-
-    it('getQuestProgress reports a missing main quest as null', () => {
-      mock.pythonResults.set(
-        'controller.get_quest_progress()',
-        pyProxy(
-          new Map<string, unknown>([
-            ['completed', 0],
-            ['total', 3],
-            ['act_number', 1],
-            ['main_quest', undefined],
-          ]),
-        ),
-      )
-      expect(bridge.getQuestProgress().mainQuest).toBeNull()
-    })
-
-    it('getSaveSlots returns exactly 8 slots when localStorage is empty', () => {
-      const slots = bridge.getSaveSlots()
-      expect(slots).toHaveLength(8)
-      expect(slots.every((s) => s.act === null)).toBe(true)
-      expect(slots.every((s) => s.room === null)).toBe(true)
-      expect(slots.every((s) => s.timestamp === null)).toBe(true)
-      expect(slots.map((s) => s.slot)).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
-    })
-
-    it('saveToSlot stores slot data with act, room and timestamp', () => {
-      mock.pythonResults.set('controller.save_game() or ""', 'Game saved.')
-      mock.pythonResults.set('controller.get_act_name()', 'Act 2')
-      mock.pythonResults.set('controller.get_room_name()', 'Forest Path')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-
-      bridge.saveToSlot(3)
-
-      const raw = localStorageMock.setItem.mock.calls.find(
-        (args: unknown[]) => args[0] === 'retroquest_save_slots',
-      )
-      expect(raw).toBeDefined()
-      const slots = JSON.parse(raw![1] as string) as Array<{
-        slot: number
-        act: string
-        room: string
-        timestamp: string
-        data: string
-      } | null>
-      const slot3 = slots[2]
-      expect(slot3).not.toBeNull()
-      expect(slot3!.slot).toBe(3)
-      expect(slot3!.act).toBe('Act 2')
-      expect(slot3!.room).toBe('Forest Path')
-      expect(typeof slot3!.timestamp).toBe('string')
-      expect(slot3!.data).toBe('c2F2ZWRhdGE=')
-    })
-
-    it('saveToSlot also keeps the quest count of the act', () => {
-      mock.pythonResults.set('controller.save_game() or ""', 'Game saved.')
-      mock.pythonResults.set('controller.get_act_name()', 'Act 1')
-      mock.pythonResults.set('controller.get_room_name()', 'Square')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-      mock.pythonResults.set(
-        'controller.get_quest_progress()',
-        pyProxy(
-          new Map<string, unknown>([
-            ['completed', 3],
-            ['total', 11],
-            ['act_number', 1],
-            ['main_quest', 'Shadows'],
-          ]),
-        ),
-      )
-
-      bridge.saveToSlot(4)
-
-      expect(bridge.getSaveSlots()[3].quests).toEqual({
-        completed: 3,
+        completed: 0,
         total: 11,
+        actNumber: 1,
+        mainQuest: 'Shadows Over Willowbrook',
+      })
+      expect(bridge.getActStats()).toEqual({
+        questsCompleted: 0,
+        questsTotal: 11,
+        spells: 0,
+        places: 1,
+      })
+      bridge.handleCommand('use lantern')
+      expect(bridge.getShortNames()).toEqual({
+        lantern: 'lantern (lit)',
+        journal: "elior's journal",
       })
     })
 
-    it('saveToSlot still saves when the quest count cannot be read', () => {
-      mock.pythonResults.set('controller.save_game() or ""', 'Game saved.')
-      mock.pythonResults.set('controller.get_act_name()', 'Act 1')
-      mock.pythonResults.set('controller.get_room_name()', 'Square')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-
-      bridge.saveToSlot(4)
-
-      const slot = bridge.getSaveSlots()[3]
-      expect(slot.room).toBe('Square')
-      expect(slot.quests).toBe(null)
+    it('offers command completions for the current room', async () => {
+      const bridge = await runningBridge()
+      const tree = bridge.getCommandCompletions()
+      expect(tree.talk).toEqual({ to: { grandmother: null } })
+      expect(tree.help).toBeNull()
     })
+  })
 
-    it('saveToSlot overwrites existing data in the same slot', () => {
-      const existing = Array.from({ length: 8 }, (_, i) =>
-        i === 1
-          ? {
-              slot: 2,
-              act: 'Act 1',
-              room: 'Old Room',
-              timestamp: '2024-01-01T00:00:00.000Z',
-              data: 'b2xk',
-            }
-          : null,
-      )
-      localStorageMock._setRaw(
-        'retroquest_save_slots',
-        JSON.stringify(existing),
-      )
-      mock.pythonResults.set('controller.save_game() or ""', 'Game saved.')
-      mock.pythonResults.set('controller.get_act_name()', 'Act 3')
-      mock.pythonResults.set('controller.get_room_name()', 'New Room')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3')
-
-      bridge.saveToSlot(2)
-
-      const raw = localStorageMock.setItem.mock.calls.find(
-        (args: unknown[]) => args[0] === 'retroquest_save_slots',
-      )
-      const slots = JSON.parse(raw![1] as string) as Array<{
-        slot: number
-        act: string
-        room: string
-        data: string
-      } | null>
-      expect(slots[1]!.act).toBe('Act 3')
-      expect(slots[1]!.room).toBe('New Room')
-      expect(slots[1]!.data).toBe('bmV3')
-    })
-
-    it('reads older slots without a quest count', () => {
-      const stored = Array.from({ length: 8 }, (_, i) =>
-        i === 0
-          ? {
-              slot: 1,
-              act: 'Act 1',
-              room: 'Square',
-              timestamp: 't',
-              data: 'abc',
-            }
-          : null,
-      )
-      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
-
-      expect(bridge.getSaveSlots()[0].quests).toBe(null)
-    })
-
-    it('quickSaveGame keeps the details of the quick save', () => {
-      mock.pythonResults.set('controller.save_game()', 'Game saved.')
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'c2F2ZWRhdGE=')
-      mock.pythonResults.set('controller.get_act_name()', 'Act 2')
-      mock.pythonResults.set('controller.get_room_name()', 'Forest Path')
-
-      bridge.quickSaveGame()
-
+  describe('quick save', () => {
+    it('stores the save data and its details', async () => {
+      const bridge = await runningBridge()
+      bridge.handleCommand('use lantern')
+      expect(bridge.quickSaveGame()).toBe('Game saved.')
+      const data = localStorageMock.getItem('retroquest_save')
+      expect(JSON.parse(data!)).toMatchObject({ version: 1, actIndex: 0 })
       const quick = bridge.getQuickSave()!
       expect(quick.slot).toBe(0)
-      expect(quick.act).toBe('Act 2')
-      expect(quick.room).toBe('Forest Path')
+      expect(quick.act).toBe('Act 1')
+      expect(quick.room).toBe("Elior's Cottage")
       expect(typeof quick.timestamp).toBe('string')
+      expect(quick.quests).toEqual({ completed: 0, total: 11 })
     })
 
-    it('drops the old details when the new ones cannot be stored', () => {
+    it('saveGame and loadGame are the quick save', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.loadGame()).toBe('[failure]No save file found.[/failure]')
+      bridge.handleCommand('use lantern')
+      bridge.handleCommand('take bread')
+      expect(bridge.saveGame()).toBe('Game saved.')
+      bridge.newGame()
+      bridge.advanceToRunning()
+      expect(bridge.getInventory()).toEqual([])
+      expect(bridge.loadGame()).toContain('loaded')
+      expect(bridge.getInventory()[0].name).toContain('bread')
+      expect(bridge.quickLoadGame()).toContain('loaded')
+    })
+
+    it('is a failure when storage is full', async () => {
+      const bridge = await runningBridge()
+      storageFull()
+      expect(bridge.quickSaveGame()).toMatch(
+        /^\[failure\]The game could not be saved/,
+      )
+    })
+
+    it('drops the old details when the new ones cannot be stored', async () => {
+      const bridge = await runningBridge()
       localStorageMock._setRaw(
         'retroquest_save_meta',
         JSON.stringify({ act: 'Act 1', room: 'Square', timestamp: 'old' }),
       )
-      mock.pythonResults.set("open('retroquest.save', 'rb')", 'bmV3')
-      mock.pythonResults.set('controller.get_act_name()', 'Act 2')
-      mock.pythonResults.set('controller.get_room_name()', 'Forest Path')
       localStorageMock.setItem
         .mockImplementationOnce((key: string, value: string) =>
           localStorageMock._setRaw(key, value),
@@ -794,20 +226,19 @@ describe('useBridge', () => {
         .mockImplementationOnce(() => {
           throw new Error('QuotaExceededError')
         })
-
       bridge.quickSaveGame()
-
-      expect(localStorageMock.getItem('retroquest_save')).toBe('bmV3')
+      expect(localStorageMock.getItem('retroquest_save')).not.toBeNull()
       expect(bridge.getQuickSave()!.room).toBe(null)
     })
 
-    it('has no quick save until one is made', () => {
+    it('has no quick save until one is made', async () => {
+      const bridge = await runningBridge()
       expect(bridge.getQuickSave()).toBe(null)
     })
 
-    it('shows an older quick save without its details', () => {
-      localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
-
+    it('shows an older quick save without its details', async () => {
+      const bridge = await runningBridge()
+      localStorageMock._setRaw('retroquest_save', '{}')
       expect(bridge.getQuickSave()).toEqual({
         slot: 0,
         act: null,
@@ -815,82 +246,162 @@ describe('useBridge', () => {
         timestamp: null,
         quests: null,
       })
-    })
-
-    it('shows the quick save when its details are unreadable', () => {
-      localStorageMock._setRaw('retroquest_save', 'c2F2ZWRhdGE=')
       localStorageMock._setRaw('retroquest_save_meta', 'null')
-
       expect(bridge.getQuickSave()!.room).toBe(null)
     })
 
-    it('getSaveSlots returns occupied slot after saving', () => {
-      const stored = Array.from({ length: 8 }, (_, i) =>
-        i === 4
-          ? {
-              slot: 5,
-              act: 'Act 1',
-              room: 'Village Square',
-              timestamp: '2025-04-20T10:00:00.000Z',
-              data: 'abc',
-            }
-          : null,
+    it('refuses a save from the old Python engine', async () => {
+      const bridge = await runningBridge()
+      localStorageMock._setRaw('retroquest_save', 'gASVbQAAAAAAAAB9lC4=')
+      expect(bridge.quickLoadGame()).toMatch(/^\[failure\]Failed to load game/)
+    })
+  })
+
+  describe('named saves', () => {
+    it('stores, overwrites and loads named saves', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.loadNamedGame('morning')).toBe(
+        '[failure]No save file found.[/failure]',
       )
-      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
+      expect(bridge.saveNamedGame('morning')).toBe('Game saved.')
+      bridge.handleCommand('use lantern')
+      expect(bridge.saveNamedGame('evening')).toBe('Game saved.')
+      expect(bridge.saveNamedGame('morning')).toBe('Game saved.')
+      const saves = JSON.parse(
+        localStorageMock.getItem('retroquest_named_saves')!,
+      ) as {
+        name: string
+      }[]
+      expect(saves.map((s) => s.name)).toEqual(['morning', 'evening'])
+      bridge.newGame()
+      bridge.advanceToRunning()
+      expect(bridge.loadNamedGame('evening')).toContain('loaded')
+      expect(bridge.getRoomItems()).toContain('bread')
+      expect(bridge.loadNamedGame('missing')).toBe(
+        '[failure]No save file found.[/failure]',
+      )
+    })
+
+    it('is a failure when storage is full', async () => {
+      const bridge = await runningBridge()
+      storageFull()
+      expect(bridge.saveNamedGame('morning')).toMatch(/^\[failure\]/)
+    })
+
+    it('ignores unreadable named saves', async () => {
+      const bridge = await runningBridge()
+      localStorageMock._setRaw('retroquest_named_saves', '{"not":"a list"}')
+      expect(bridge.loadNamedGame('x')).toBe(
+        '[failure]No save file found.[/failure]',
+      )
+      localStorageMock._setRaw('retroquest_named_saves', 'garbage')
+      expect(bridge.saveNamedGame('x')).toBe('Game saved.')
+    })
+  })
+
+  describe('save slots (8-slot system)', () => {
+    it('returns exactly 8 empty slots when storage is empty', async () => {
+      const bridge = await runningBridge()
       const slots = bridge.getSaveSlots()
       expect(slots).toHaveLength(8)
-      const slot5 = slots.find((s) => s.slot === 5)!
-      expect(slot5.act).toBe('Act 1')
-      expect(slot5.room).toBe('Village Square')
-      expect(slot5.timestamp).toBe('2025-04-20T10:00:00.000Z')
-      const emptySlots = slots.filter((s) => s.slot !== 5)
-      expect(emptySlots.every((s) => s.act === null)).toBe(true)
+      expect(slots.every((s) => s.act === null && s.room === null)).toBe(true)
+      expect(slots.map((s) => s.slot)).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
     })
 
-    it('loadFromSlot restores game state from the slot', () => {
-      const stored = Array.from({ length: 8 }, (_, i) =>
-        i === 2
+    it('stores slot data with act, room, timestamp and quest count', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.saveToSlot(3)).toBe('Game saved.')
+      const slots = JSON.parse(
+        localStorageMock.getItem('retroquest_save_slots')!,
+      ) as ({
+        slot: number
+        act: string
+        room: string
+        timestamp: string
+        data: string
+      } | null)[]
+      expect(slots[2]).toMatchObject({
+        slot: 3,
+        act: 'Act 1',
+        room: "Elior's Cottage",
+      })
+      expect(typeof slots[2]!.timestamp).toBe('string')
+      expect(JSON.parse(slots[2]!.data)).toMatchObject({ version: 1 })
+      expect(bridge.getSaveSlots()[2].quests).toEqual({
+        completed: 0,
+        total: 11,
+      })
+    })
+
+    it('overwrites existing data in the same slot and keeps the others', async () => {
+      const bridge = await runningBridge()
+      const existing = Array.from({ length: 8 }, (_, i) =>
+        i === 1
           ? {
-              slot: 3,
+              slot: 2,
               act: 'Act 1',
-              room: 'Market',
-              timestamp: '2025-04-20T10:00:00.000Z',
-              data: 'c2F2ZWRhdGE=',
+              room: 'Old Room',
+              timestamp: 'old',
+              data: 'old',
             }
-          : null,
+          : i === 0
+            ? {
+                slot: 1,
+                act: 'Act 1',
+                room: 'Square',
+                timestamp: 't',
+                data: 'abc',
+              }
+            : null,
       )
-      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
-      mock.pythonResults.set('controller.load_game()', 'Game loaded.')
+      localStorageMock._setRaw(
+        'retroquest_save_slots',
+        JSON.stringify(existing),
+      )
+      bridge.saveToSlot(2)
+      const slots = bridge.getSaveSlots()
+      expect(slots[1].room).toBe("Elior's Cottage")
+      expect(slots[0]).toMatchObject({
+        act: 'Act 1',
+        room: 'Square',
+        quests: null,
+      })
+    })
 
-      const result = bridge.loadFromSlot(3)
-
-      expect(result).toBe('Game loaded.')
-      expect(mock.runtime.globals.set).toHaveBeenCalledWith(
-        '_save_b64',
-        'c2F2ZWRhdGE=',
+    it('loads a slot and reports empty or missing slots', async () => {
+      const bridge = await runningBridge()
+      bridge.handleCommand('use lantern')
+      bridge.saveToSlot(5)
+      bridge.newGame()
+      bridge.advanceToRunning()
+      expect(bridge.loadFromSlot(5)).toContain('loaded')
+      expect(bridge.getRoomItems()).toContain('bread')
+      expect(bridge.loadFromSlot(6)).toBe(
+        '[failure]No save file found.[/failure]',
+      )
+      localStorageMock.clear()
+      expect(bridge.loadFromSlot(5)).toBe(
+        '[failure]No save file found.[/failure]',
+      )
+      expect(bridge.loadFromSlot(0)).toBe(
+        '[failure]No save file found.[/failure]',
       )
     })
 
-    it('loadFromSlot returns failure when slot is empty', () => {
-      const stored = Array.from({ length: 8 }, () => null)
-      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(stored))
-      const result = bridge.loadFromSlot(1)
-      expect(result).toBe('[failure]No save file found.[/failure]')
+    it('refuses slots out of range and reports a full storage', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.saveToSlot(0)).toMatch(/^\[failure\]Invalid save slot/)
+      expect(bridge.saveToSlot(9)).toMatch(/^\[failure\]Invalid save slot/)
+      storageFull()
+      expect(bridge.saveToSlot(2)).toMatch(/^\[failure\]/)
     })
 
-    it('loadFromSlot returns failure when no slots data exists', () => {
-      const result = bridge.loadFromSlot(1)
-      expect(result).toBe('[failure]No save file found.[/failure]')
-    })
-
-    it('saveToSlot returns failure when slot is out of range (0)', () => {
-      const result = bridge.saveToSlot(0)
-      expect(result).toBe('[failure]Invalid save slot.[/failure]')
-    })
-
-    it('saveToSlot returns failure when slot is out of range (9)', () => {
-      const result = bridge.saveToSlot(9)
-      expect(result).toBe('[failure]Invalid save slot.[/failure]')
+    it('falls back to empty slots when the stored list is unreadable', async () => {
+      const bridge = await runningBridge()
+      localStorageMock._setRaw('retroquest_save_slots', '[1,2]')
+      expect(bridge.getSaveSlots().every((s) => s.act === null)).toBe(true)
+      localStorageMock._setRaw('retroquest_save_slots', 'garbage')
+      expect(bridge.getSaveSlots()).toHaveLength(8)
     })
   })
 })
