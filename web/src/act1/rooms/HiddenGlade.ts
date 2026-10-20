@@ -40,10 +40,15 @@ export class HiddenGlade extends Room {
     'center, a mossy stone bears a faint, magical inscription.'
 
   /** Build and return the dynamic base description for the glade. */
-  getRoomTextDescription(): string {
+  getRoomTextDescription(gameState: GameState): string {
     let baseDescription = this.lightSpellCast
       ? HiddenGlade.SUNLIT_DESCRIPTION
       : HiddenGlade.DIM_DESCRIPTION
+    if (gameState.hasItem('Ancient Amulet')) {
+      baseDescription +=
+        ' Beside the mossy stone, the [item_name]Ancient Amulet[/item_name] in ' +
+        'your hand begins to glow.'
+    }
     const dynamicParts: string[] = []
     if (this.getCharacterByName('Deer')) {
       dynamicParts.push(
@@ -114,7 +119,7 @@ export class HiddenGlade extends Room {
 
   /** Rebuild the description from its dynamic segments before describing. */
   override describe(gameState: GameState): string {
-    this.description = this.getRoomTextDescription()
+    this.description = this.getRoomTextDescription(gameState)
     return super.describe(gameState)
   }
 
