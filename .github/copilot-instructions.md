@@ -22,7 +22,7 @@ The board syncs through the Dolt remote on `origin`, not through git. A fresh cl
 
 Always select the appropriate skill for a specific task. Be sure to ALWAYS explicitly write in the chat what skills that are currently being used. Always follow the instructions in the skills to the letter.
 
-## Development Practices
+## Development practices
 
 ### Small Increments
 
