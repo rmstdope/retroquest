@@ -3,7 +3,7 @@
  * pop-ups, progress and stats as plain data (names still carry engine markup).
  */
 import type { Character } from './Character'
-import type { Game } from './Game'
+import type { CompletionTree, Game } from './Game'
 import type { Item } from './Item'
 import type { Quest } from './Quest'
 
@@ -76,8 +76,48 @@ export class GameController {
     return this.game.getResultText()
   }
 
+  /** Parse a command and answer it, without starting a new turn (stats, help). */
   handleCommand(command: string): string {
     return this.game.commandParser.parse(command)
+  }
+
+  /** Play a command: parse it, then start the next turn. */
+  takeTurn(command: string): string {
+    const result = this.handleCommand(command)
+    this.game.newTurn()
+    return result
+  }
+
+  /** The current result text, then a new turn (the logo and intro screens). */
+  advanceTurn(): string {
+    const text = this.game.getResultText()
+    this.game.newTurn()
+    return text
+  }
+
+  /** The texts of the logo and intro screens, then the running act's first text. */
+  advanceToRunning(): string[] {
+    const results: string[] = []
+    while (!this.game.isActRunning()) {
+      results.push(this.advanceTurn())
+    }
+    results.push(this.game.getResultText())
+    return results
+  }
+
+  /** The current run state's text, without a new turn. */
+  getResultText(): string {
+    return this.game.getResultText()
+  }
+
+  /** True while the game takes a typed command. */
+  isAcceptingInput(): boolean {
+    return this.game.acceptInput
+  }
+
+  /** The command words the game would accept next, as a tree. */
+  getCommandCompletions(): CompletionTree {
+    return this.game.getCommandCompletions()
   }
 
   getActiveQuests(): NamedItem[] {

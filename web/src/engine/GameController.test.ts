@@ -421,6 +421,26 @@ describe('GameController', () => {
       })
     })
 
+    it('takes a turn per command and advances through the intro screens', () => {
+      const ctrl = makeController()
+      expect(ctrl.isAcceptingInput()).toBe(false)
+      expect(ctrl.advanceToRunning().length).toBeGreaterThan(1)
+      expect(ctrl.isActRunning()).toBe(true)
+      expect(ctrl.isAcceptingInput()).toBe(true)
+      expect(ctrl.takeTurn('xyzzy')).toContain("I don't understand")
+      expect(ctrl.getResultText()).toBe(ctrl.game.getResultText())
+      expect(ctrl.getCommandCompletions()).toEqual(
+        ctrl.game.getCommandCompletions(),
+      )
+    })
+
+    it('advances one screen and returns its text', () => {
+      const ctrl = makeController()
+      const logo = ctrl.getResultText()
+      expect(ctrl.advanceTurn()).toBe(logo)
+      expect(ctrl.getResultText()).not.toBe(logo)
+    })
+
     it('saves and loads through the game', () => {
       const ctrl = makeController()
       expect(ctrl.loadGame()).toContain('No save file found')
