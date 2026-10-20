@@ -1,12 +1,28 @@
 # Game Story: RetroQuest – The Awakening
 
+## Story Canon
+
+This is the settled truth behind the story. Every act design must agree with it.
+
+- **The Wardens of the Dawn.** Elior's parents, **Aren** (father) and **Lysa** (mother), and **Malakar** were three equal friends who made the three virtue relics together: the Crystal of Light (courage), the Phoenix Feather (wisdom) and the Dragon's Scale (selflessness). They were fellow Wardens, not master and apprentices.
+- **Why Malakar fell: grief, then power.** Malakar was the Warden of Wisdom. When catastrophe threatened his friends he could not wait: he reached for time magic to save them, tore a wound in time that feeds on life, and the power he found there corrupted him into wanting more. The Phoenix's riddle in Act III ("What is wisdom when time is short?" / "patience") names the virtue he failed.
+- **The parents are the ward.** Aren and Lysa poured themselves into a seal that hides Elior and holds Malakar's wound shut. It is anchored in the **Ancient Amulet** and in King Alden's royal bindings, which is why Malakar drains the king. When the wound is healed, the parents speak to Elior one last time and then rest in peace. They are not alive, and nothing in the epilogue hints that they are.
+- **Willowbrook was their home.** The family lived in Willowbrook. Grandmother is Lysa's mother and knows the truth. **Mira** was the Wardens' pupil; when the parents became the ward she settled in Willowbrook as its healer to watch over Elior. This is hinted in Act I and confessed in Act III.
+- **The dream voice is the Shadow of the Past**, the uncorrupted remnant of Malakar, asking his friends' son for help. It feels familiar because Malakar held baby Elior. It is heard once per act, is never tied to a parent, and is met in Act IV's Memory Vault.
+- **Malakar's agent.** A cloaked stranger seen in Willowbrook is Malakar's agent, searching for the bloodline. His work feeds the same draining magic that is killing King Alden, so the blight has a single cause. The same agent framed Sir Cedric.
+- **Sir Cedric** was on guard the night King Alden vanished; Malakar's agents framed him, and the Secret Documents prove it.
+- **The Sorceress of Lies** (an Act IV lieutenant) left her mark on Elena's curse in Act II.
+- **The refrain** "Power follows purpose; purpose follows truth." is carved on the moss-covered stone (Act I), spoken by Nyx (Act II), echoed by the Dragon (Act III) and said by Elior to Malakar (Act IV).
+- **Three endings:** **Redemption** (the golden path: forgiveness heals the wound), **Justice** (Malakar is defeated and sealed away) and **Sacrifice** (Elior gives up his magic to seal the wound). All three end at home in Willowbrook; Crown and Home are no longer separate endings. The closing image is the withered field from Act I, green again, as Elior casts `grow`.
+- **Virtue moments:** two or three optional moments per act (mercy, truth, help that gains nothing). They never block the golden path and add no new puzzles. They are remembered across acts and decide which endings open, plus a few lines of dialogue. Old saves are rejected when the save format changes; no migration is written.
+
 ## Prologue
 
-Elior, a humble farmer boy, lives in the quiet village of Willowbrook on the outskirts of Eldoria. Raised by his grandmother after his parents vanished mysteriously, Elior’s life is simple—tending crops and caring for animals. Yet, he is haunted by dreams of his parents and a longing to uncover the truth behind their disappearance. One stormy night, a strange light appears in the sky, and Elior dreams of a shadowy figure calling his name—a voice that feels achingly familiar.
+Elior, a humble farmer boy, lives in the quiet village of Willowbrook on the outskirts of Eldoria. Raised by his grandmother after his parents vanished mysteriously, Elior’s life is simple—tending crops and caring for animals. He believes they simply vanished, and he longs to uncover the truth behind their disappearance. One stormy night, a strange light appears in the sky, and Elior dreams of a shadowy figure calling his name—a voice that feels achingly familiar. It is the first time he hears the dream voice, which is not tied to either parent.
 
 ## Act I: The Awakening
 
-Elior awakens to find his crops withered and the village in distress. The healer, Mira, senses a dark magic at work and reveals to Elior that he possesses latent magical abilities. She gives him an ancient amulet, hinting that it once belonged to someone important in his family, and instructs him to seek out the wise knight, Sir Cedric, in the nearby town of Greendale.
+Elior awakens to find his crops withered and the village in distress. The healer, Mira, senses a dark magic at work and reveals to Elior that he possesses latent magical abilities. She gives him an ancient amulet, hinting that it once belonged to someone important in his family, and instructs him to seek out the wise knight, Sir Cedric, in the nearby town of Greendale. A cloaked stranger has been seen in the village, and Elior learns that the amulet was his parents’ and that someone has come to Willowbrook looking for it. The refrain “Power follows purpose; purpose follows truth.” is carved on the moss-covered stone in the glade.
 
 **Key Events:**
 
@@ -22,11 +38,11 @@ Elior awakens to find his crops withered and the village in distress. The healer
 - **The family mystery:** _The Faded Photograph_ and the locket draw a tender but guarded memory of Elior's parents from Grandmother and tie his family to the darkness over Eldoria. The Priest speaks of the village founders' ancient safeguards, and the Old Mill is said to hold secrets older than the village.
 - **Spells:** `revive`, `purify`, `bless`, `heal`, `unlock`, `light`, and `grow` (read from the moss-covered stone in the glade).
 - **Ending:** Mira presents the **Ancient Amulet** ("May this guide and protect you"), and the map reveals a hidden road to Greendale.
-- **Not yet in the design:** Malakar, King Alden and the prophecy are never named, and Mira does not mention Sir Cedric.
+- **Canon to add (sibling bead):** the cloaked stranger searching for the amulet, Mira hinting that she knew his parents, the refrain on the moss-covered stone, and the first dream-voice scene. Malakar, King Alden and the prophecy are not yet named, and Mira does not mention Sir Cedric.
 
 ## Act II: The Gathering
 
-In Greendale, Elior meets Sir Cedric, who recognizes the amulet as a symbol of the Chosen One. Cedric pledges his loyalty and guides Elior to the Enchanted Forest, where they must find Nyx, the forest sprite, to unlock the next stage of Elior’s powers. Hints about Malakar’s past and his interest in Willowbrook begin to surface, making Elior wonder if there is a deeper connection to his family.
+In Greendale, Elior meets Sir Cedric, who recognizes the amulet as a symbol of the Chosen One. Cedric, in disgrace for the night King Alden vanished, pledges his loyalty once the Secret Documents clear his name, and guides Elior to the Enchanted Forest, where they must find Nyx, the forest sprite, to unlock the next stage of Elior’s powers. Elior has believed Malakar a legend from old books; by the end of the act he learns Malakar is real and seeks the Willowbrook bloodline, which means Elior. Nyx speaks the refrain, the dream voice is heard again, and the Sorceress of Lies’ mark is found on Elena’s curse.
 
 **Key Events:**
 
@@ -44,11 +60,11 @@ In Greendale, Elior meets Sir Cedric, who recognizes the amulet as a symbol of t
 - **Forest quests:** _The Hermit's Warning_, _The Forest Guardian's Riddles_ ("tree", "water", "ants") and _Whispers in the Wind_ (the Ancient Tree Spirit, the Enchanted Acorn and Moonflowers).
 - **Lore:** _Echoes of the Past_ and _The Ancient Library_ reveal that Malakar's interest in Willowbrook concerns **ancient bloodlines**, and that the library holds prophecies of the **Chosen One** and of a coming darkness.
 - **Spells:** `mend`, `dispel`, `greater_heal`, `nature_sense`, `forest_speech`, `prophetic_vision`.
-- **Not in the design:** Cedric never recognises the amulet, Nyx shows a vision rather than telling Malakar's legend, King Alden is absent, and there is no combat.
+- **Canon to add (sibling bead):** Cedric recognises the amulet, the Secret Documents prove Malakar’s agents framed him, Nyx speaks the refrain, the Sorceress of Lies’ mark appears on Elena’s curse, the dream voice is heard and the virtue moments are placed. Nyx shows a vision rather than telling Malakar's legend, King Alden is absent, and there is no combat.
 
 ## Act III: Trials and Revelations
 
-With Nyx’s help, Elior unlocks new magical abilities. The group learns that Malakar has captured King Alden and is draining his life force to unleash a curse upon Eldoria. To save the king, Elior must retrieve three ancient relics hidden across the kingdom: the Crystal of Light, the Phoenix Feather, and the Dragon’s Scale. Each relic represents a virtue Elior must embrace—courage, wisdom, and selflessness. Along the way, Elior faces Malakar’s minions and difficult moral choices that shape his destiny and the fate of his companions.
+With Nyx’s help, Elior unlocks new magical abilities. The group learns that Malakar has captured King Alden and is draining his life force; the same draining magic is behind the blight over Eldoria. To save the king, Elior must retrieve three ancient relics hidden across the kingdom: the Crystal of Light, the Phoenix Feather, and the Dragon’s Scale. Each relic represents a virtue Elior must embrace—courage, wisdom, and selflessness. Along the way, Elior faces Malakar’s minions and difficult moral choices that shape his destiny and the fate of his companions.
 
 **Key Events:**
 
@@ -57,7 +73,7 @@ With Nyx’s help, Elior unlocks new magical abilities. The group learns that Ma
     - **Phoenix Feather (Wisdom):** Located atop Mount Ember, requiring the player to solve elemental puzzles.
     - **Dragon’s Scale (Selflessness):** Deep within the Caverns of Shadow, protected by a sleeping dragon.
 - Player choices affect relationships with companions and the outcome of certain quests.
-- Hints about Elior’s parents and their connection to Malakar become more frequent.
+- Elior has believed his parents were Malakar’s victims. He learns they were Malakar’s closest friends and that they are warded away, not dead; Mira confesses she was the Wardens’ pupil. The Dragon echoes the refrain, and the dream voice is heard again.
 
 **Highlights from the Act III design** (see `Act3Design.md`):
 
@@ -66,38 +82,51 @@ With Nyx’s help, Elior unlocks new magical abilities. The group learns that Ma
     - **Sunken Ruins:** _Tideward Sigils_ and _Lanterns of the Deeps_. The Tide-Born Guardian asks for a vow naming who Elior will not abandon; the answer is **"myself"**.
     - **Mount Ember:** _Mirrors of Emberlight_ (with the Ash Scholar) and _Breath of the Mountain_. The Phoenix asks _"What is wisdom when time is short?"_; the answer is **"patience"**.
     - **Caverns of Shadow:** _Miners' Rescue_ and _Oath of Stillness_. A wise, tired **Ancient Dragon** surrenders its scale for a selfless binding oath, even though taking the scale weakens the prison it keeps.
-- **Storytelling quest – _Echoes of the Hidden Bond_:** the Sea-Sealed Letter, the Charred Inscription and the Dragon's Memory reveal that Elior's parents were **Malakar's apprentices who defied him**, bargained their own safety to hide Elior, and vanished: _"not dead, but warded away"_.
+- **Storytelling quest – _Echoes of the Hidden Bond_:** the Sea-Sealed Letter, the Charred Inscription and the Dragon's Memory reveal that Elior's parents, **Aren and Lysa, were Malakar's closest friends and fellow Wardens**, who gave themselves to hide Elior and vanished: _"not dead, but warded away"_. Act IV completes the truth: the ward is Elior himself and the parents are its seal.
 - **Ending:** Mira's Warding Rite fuses the relics into the **Lifelight Elixir** and teleports the party to the gates of Malakar's fortress.
-- **Not in the design:** the amulet is "story flavour" only, and the virtue tests are fixed answers rather than branching choices.
+- **Canon to add (sibling bead):** the amulet is revealed as the anchor of the ward, Mira’s confession, the refrain echoed by the Dragon, the dream voice and the virtue moments. The virtue tests remain fixed answers rather than branching choices.
 
 ## Act IV: The Final Confrontation
 
-With all relics in hand, Elior and his companions infiltrate Malakar’s fortress. They navigate traps, confront illusions, and face Malakar’s lieutenants. In the throne room, Malakar reveals his connection to Elior’s lost parents—he was once their friend, but was corrupted by his quest for power. Malakar tempts Elior to join him, offering answers about his family in exchange for loyalty.
+With all relics in hand, Elior and his companions infiltrate Malakar’s fortress. They navigate traps, confront illusions, and face Malakar’s lieutenants. In the throne room, Malakar reveals that he was Elior’s parents’ friend and fellow Warden, and that he did all this to bring them back; the ward that hides Elior and holds his wound shut is made of the parents themselves. Malakar tempts Elior to join him, offering answers about his family in exchange for loyalty. Elior answers with the refrain.
 
 **Key Events:**
 
 - The player must make critical choices: resist or accept Malakar’s offer, show mercy or vengeance, trust or doubt allies.
 - A climactic magical duel ensues, testing Elior’s mastery of his powers and the player’s decisions throughout the game.
-- With the help of his friends and the relics, Elior defeats Malakar and frees King Alden—or, if the player chooses, a different outcome may unfold.
+- With the help of his friends and the relics, Elior frees King Alden and decides Malakar’s fate: forgiveness, justice or sacrifice.
 
 **Highlights from the Act IV design** (see `Act4Design.md`):
 
 - **Setting:** a fortress that mirrors Malakar's crumbling mind: the Mirror Labyrinth, Hall of Echoes, Tower of Shadows, Chamber of Whispers, Memory Vault and Throne Chamber.
 - **Main quest – _The Final Stand_:** breach, lieutenant trials, revelation and the final choice, after eight side quests.
 - **Redemption over violence:** the **Shattered Ward Guardians** are dispelled and the **Trapped Servants** freed. The **Knight of Despair** and the **Sorceress of Lies** are redeemed, not slain. In the Memory Vault, Elior restores **the Shadow of the Past**, the uncorrupted remnant of Malakar.
-- **The truth:** Malakar and Elior's parents were **friends and allies** who made the virtue relics to protect the kingdom. When the parents were lost, Malakar tried to **reverse time** to save them, and tore a temporal wound that feeds on life energy. That wound is both his corruption and the reason he drains King Alden. In _The Parent's Legacy_, the parents' final memories show they **sacrificed themselves** to hide Elior and weaken Malakar.
+- **The truth:** Malakar and Elior's parents were **friends and allies** who made the virtue relics to protect the kingdom. When the parents were lost, Malakar tried to **reverse time** to save them, and tore a temporal wound that feeds on life energy. That wound is both his corruption and the reason he drains King Alden. In _The Parent's Legacy_, the parents' final memories show they **poured themselves into the ward** to hide Elior and hold the wound shut. The dream voice is revealed as the Shadow of the Past.
 - **Climax:** the Lifelight Elixir frees **King Alden** from his crystal prison. Elior then opens the throne with the **Throne Key**, refuses Malakar's offer, shows him his true self with the Mirror-Memory Shard, and may choose **forgiveness**.
-- **Endings:** Redemption, Justice, Sacrifice, Crown and Home. On the golden path Elior declines the crown, plants a **Restoration Seed** and goes home.
+- **Endings:** Redemption (the golden path), Justice and Sacrifice. All three end at home in Willowbrook; Crown and Home are no longer separate endings. When the wound is healed, the parents speak to Elior one last time and rest in peace.
 - **Spells:** Truth Sight, Redemption's Light, Dispel Lies, Heart's Truth, Memory Restoration, Royal Blessing, Parent's Blessing, Forgiveness and Triumphant Light.
 
 ## Epilogue
 
-Peace returns to Eldoria. Elior is celebrated as a hero but chooses to return to Willowbrook, humbled by his journey. Mira, Cedric, and Nyx remain close allies, and the kingdom flourishes once more. As Elior settles back into village life, he discovers a hidden letter from his parents, suggesting they may still be alive somewhere in the world. The fate of Malakar and Elior’s parents is left as a lingering mystery, hinting at future adventures.
+Peace returns to Eldoria. Elior is celebrated as a hero but chooses to return to Willowbrook, humbled by his journey. Mira, Cedric, and Nyx remain close allies, and the kingdom flourishes once more. His parents have spoken to him one last time and now rest in peace; the story does not suggest otherwise. In the last scene Elior walks out to the withered field from Act I, now green again, and casts `grow`.
+
+## Red Line
+
+What Elior believes and what is revealed, act by act, with the recurring threads.
+
+| Act | What Elior believes | What is revealed at the end | Amulet | Dream voice | Refrain |
+| --- | --- | --- | --- | --- | --- |
+| I | His parents simply vanished. | The amulet was his parents', and someone has come to Willowbrook looking for it. | Mira gives it to him. | Heard once, in the opening dream. | Carved on the moss-covered stone. |
+| II | Malakar is a legend from old books. | Malakar is real and seeks the Willowbrook bloodline, which means Elior. | Cedric recognises it. | Heard once. | Spoken by Nyx. |
+| III | His parents were Malakar's victims. | They were his closest friends, and they are warded away, not dead. | Revealed as an anchor of the ward. | Heard once. | Echoed by the Dragon. |
+| IV | Malakar must be destroyed. | Malakar did all this to bring them back; the ward is Elior himself. | The ward is opened. | Met in the Memory Vault as the Shadow of the Past. | Said by Elior to Malakar. |
+
+The final truth, told in Act IV and the Epilogue, is in the Story Canon: the parents are the ward, and rest in peace once the wound is healed.
 
 ## Story Path Summary
 
 - **Beginning:** Elior’s awakening, his bond with his grandmother, and the mystery of his parents.
 - **Middle:** Gathering allies, learning magic, retrieving relics, and facing moral choices.
-- **End:** Confrontation with Malakar, saving the kingdom, and Elior’s return home—with new hope for the future.
+- **End:** Confrontation with Malakar, saving the kingdom, and Elior’s return home to Willowbrook, where the withered field is green again as he casts `grow`.
 
-The story adapts to player choices, offering multiple paths and endings, but always centers on Elior’s growth from a simple farmer boy to the savior of Eldoria, and his quest to uncover the truth about his family.
+The story adapts to player choices, offering three endings (Redemption, Justice and Sacrifice) shaped by optional virtue moments, but always centers on Elior’s growth from a simple farmer boy to the savior of Eldoria, and his quest to uncover the truth about his family.
