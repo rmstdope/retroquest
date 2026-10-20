@@ -10,7 +10,7 @@ Browser-based frontend for RetroQuest, running the Python game engine in-browser
 | [Vite](https://vite.dev/) | Build tool and dev server |
 | [TypeScript](https://www.typescriptlang.org/) | Type safety |
 | [Pinia](https://pinia.vuejs.org/) | State management |
-| [Tailwind CSS v4](https://tailwindcss.com/) | Styling |
+| Plain CSS | Styling: scoped styles per component, Lantern tokens in `src/lantern/lantern.css` |
 | [Pyodide](https://pyodide.org/) | Python runtime in the browser (via CDN) |
 | [Vitest](https://vitest.dev/) | Unit tests |
 | [Playwright](https://playwright.dev/) | End-to-end tests |
@@ -51,8 +51,8 @@ The game loads at `http://localhost:5173`. Pyodide and the Python source files a
 ```
 web/
 ├── src/
-│   ├── assets/          # Global CSS (Tailwind theme)
-│   ├── components/      # Vue components
+│   ├── components/      # Vue components (the Lantern UI in lantern/)
+│   ├── lantern/         # Lantern tokens and styles (lantern.css), parsers and helpers
 │   ├── composables/     # Reusable logic (useBridge, useMusic, useCommandCompletion)
 │   ├── stores/          # Pinia store (useGameStore)
 │   └── utils/           # Shared utilities (theme)

@@ -15,7 +15,6 @@ describe('App while the game loads', () => {
   afterEach(() => {
     wrapper?.unmount()
     window.history.replaceState(null, '', '/')
-    document.documentElement.removeAttribute('data-ui')
   })
 
   function mountAt(search: string) {
@@ -30,13 +29,11 @@ describe('App while the game loads', () => {
 
     expect(w.find('.lq-loading').exists()).toBe(true)
     expect(w.get('[role="status"]').text()).toBe('Initializing...')
-    expect(document.documentElement.getAttribute('data-ui')).toBe('lantern')
   })
 
   it('shows the Lantern loading screen for an old ?ui=classic link too', () => {
     const w = mountAt('?ui=classic')
 
     expect(w.find('.lq-loading').exists()).toBe(true)
-    expect(document.documentElement.getAttribute('data-ui')).toBe('lantern')
   })
 })
