@@ -1,0 +1,140 @@
+import { describe, it, expect } from 'vitest'
+import { Room } from './Room'
+import { Item } from './Item'
+import { Character } from './Character'
+import { GameState } from './GameState'
+
+function item(name: string): Item {
+  return new Item({ name, description: 'A dummy item' })
+}
+
+function character(name: string): Character {
+  return new Character({ name, description: 'A test character' })
+}
+
+function gameState(): GameState {
+  const start = new Room({ name: 'Start', description: 'Starting room' })
+  return new GameState(start, { Start: start }, [])
+}
+
+describe('Room', () => {
+  it('initializes with empty items, characters and exits', () => {
+    const r = new Room({ name: 'TestRoom', description: 'A simple room.' })
+    expect(r.name).toBe('TestRoom')
+    expect(r.description).toBe('A simple room.')
+    expect(r.items).toEqual([])
+    expect(r.characters).toEqual([])
+    expect(r.exits).toEqual({})
+  })
+
+  describe('items', () => {
+    it('keeps added items in insertion order', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      const [i1, i2, i3] = [item('apple'), item('apple'), item('sword')]
+      r.addItem(i1)
+      r.addItem(i2)
+      r.addItem(i3)
+      expect(r.items).toEqual([i1, i2, i3])
+    })
+
+    it('finds items by name, case-insensitively', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      const i = item('Golden Apple')
+      r.addItem(i)
+      expect(r.getItemByName('golden apple')).toBe(i)
+      expect(r.getItemByName('GOLDEN APPLE')).toBe(i)
+      expect(r.getItemByName('nope')).toBeNull()
+      expect(
+        new Room({ name: 'E', description: '' }).getItemByName('x'),
+      ).toBeNull()
+    })
+
+    it('removes an item by name and returns it', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      const i = item('Lantern')
+      r.addItem(i)
+      expect(r.removeItem('lantern')).toBe(i)
+      expect(r.items).toEqual([])
+      expect(r.removeItem('ghost')).toBeNull()
+    })
+  })
+
+  describe('characters', () => {
+    it('keeps added characters and finds them case-insensitively', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      const c1 = character('Villager')
+      const c2 = character('Blacksmith John')
+      r.addCharacter(c1)
+      r.addCharacter(c2)
+      expect(r.characters).toEqual([c1, c2])
+      expect(r.getCharacterByName('blacksmith john')).toBe(c2)
+      expect(r.getCharacterByName('BLACKSMITH JOHN')).toBe(c2)
+      expect(r.getCharacterByName('wizard')).toBeNull()
+    })
+  })
+
+  describe('exits', () => {
+    it('returns the exits given at construction', () => {
+      const exits = { north: 'Forest', south: 'Village' }
+      const r = new Room({ name: 'R', description: 'Desc', exits })
+      expect(r.getExits(gameState())).toEqual(exits)
+    })
+  })
+
+  describe('describe', () => {
+    it('groups identical items with counts', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      r.addItem(item('apple'))
+      r.addItem(item('apple'))
+      r.addItem(item('sword'))
+      const desc = r.describe(gameState())
+      expect(desc).toContain('Items you can see:')
+      expect(desc).toContain('[item_name]2 apple[/item_name]')
+      expect(desc).toContain('[item_name]sword[/item_name]')
+    })
+
+    it('counts many identical items', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      for (let i = 0; i < 4; i++) r.addItem(item('coin'))
+      expect(r.describe(gameState())).toContain('4 coin')
+    })
+
+    it('lists characters and exits', () => {
+      const r = new Room({
+        name: 'R',
+        description: 'Desc',
+        exits: { north: 'Forest', east: 'River' },
+      })
+      r.addCharacter(character('Mira'))
+      const desc = r.describe(gameState())
+      expect(desc).toContain('[bold]R[/bold]')
+      expect(desc).toContain(
+        'Characters present: [character_name]Mira[/character_name]',
+      )
+      expect(desc).toContain(
+        'Exits: [exits]north[/exits] (Forest), [exits]east[/exits] (River)',
+      )
+    })
+
+    it('omits empty sections', () => {
+      const desc = new Room({ name: 'R', description: 'Desc' }).describe(
+        gameState(),
+      )
+      expect(desc).not.toContain('Items you can see:')
+      expect(desc).not.toContain('Characters present:')
+      expect(desc).not.toContain('Exits:')
+    })
+  })
+
+  describe('defaults', () => {
+    it('is quiet, finds nothing, rests, is lit and does nothing on enter', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      const gs = gameState()
+      expect(r.getAmbientSound()).toBe('It is quiet here.')
+      expect(r.search(gs)).toContain('find nothing of interest')
+      expect(r.rest(gs)).toBe('You rest for a moment, gathering your strength.')
+      expect(r.light(gs)).toBe('The room is already well lit.')
+      expect(r.onEnter(gs)).toBeUndefined()
+    })
+  })
+})

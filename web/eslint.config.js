@@ -12,6 +12,15 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
   {
+    // Unused parameters are kept for overriding methods; name them with a leading _.
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    },
+  },
+  {
     files: ['**/*.vue'],
     languageOptions: {
       globals: globals.browser,

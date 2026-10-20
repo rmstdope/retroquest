@@ -1,0 +1,266 @@
+import type { Item } from './Item'
+import type { Quest } from './Quest'
+import type { Room } from './Room'
+import type { Spell } from './Spell'
+
+/** The item's full name or the name the story uses, case-insensitively. */
+function isNamed(item: Item, name: string): boolean {
+  const wanted = name.toLowerCase()
+  return (
+    item.name.toLowerCase() === wanted ||
+    item.shortName.toLowerCase() === wanted
+  )
+}
+
+/**
+ * The mutable state of the act being played: where the player is, what they
+ * carry and know, which rooms they have seen, story flags and quest progress.
+ */
+export class GameState {
+  currentRoom: Room
+  allRooms: Record<string, Room>
+  /** One entry per carried item; several equal items are shown as a count. */
+  inventory: Item[] = []
+  /** Display names of the rooms the player has been in, in order. */
+  visitedRooms: string[]
+  knownSpells: Spell[] = []
+  storyFlags: Record<string, boolean> = {}
+  nonActivatedQuests: Quest[]
+  activatedQuests: Quest[] = []
+  completedQuests: Quest[] = []
+
+  constructor(
+    startingRoom: Room,
+    allRooms: Record<string, Room>,
+    allQuests: Quest[],
+  ) {
+    this.currentRoom = startingRoom
+    this.allRooms = allRooms
+    this.visitedRooms = [startingRoom.name]
+    this.nonActivatedQuests = allQuests
+  }
+
+  markVisited(room: Room): void {
+    if (!this.visitedRooms.includes(room.name))
+      this.visitedRooms.push(room.name)
+  }
+
+  setStoryFlag(flagName: string, value: boolean): void {
+    this.storyFlags[flagName] = value
+  }
+
+  /** The flag's value; false when it was never set. */
+  getStoryFlag(flagName: string): boolean {
+    return this.storyFlags[flagName] ?? false
+  }
+
+  /** Item name → how many are carried. */
+  getInventorySummary(): Record<string, number> {
+    const counts: Record<string, number> = {}
+    for (const item of this.inventory)
+      counts[item.name] = (counts[item.name] ?? 0) + 1
+    return counts
+  }
+
+  getItemCount(itemName: string): number {
+    return this.inventory.filter((item) => isNamed(item, itemName)).length
+  }
+
+  hasItem(itemName: string): boolean {
+    return this.inventory.some((item) => isNamed(item, itemName))
+  }
+
+  /** Remove up to `count` carried items with the full name; returns how many went. */
+  removeItemFromInventory(itemName: string, count = 1): number {
+    const wanted = itemName.toLowerCase()
+    return this.removeFrom(
+      this.inventory,
+      (item) => item.name.toLowerCase() === wanted,
+      count,
+    )
+  }
+
+  /** Remove every carried item with the full name; returns how many went. */
+  removeAllItemsFromInventory(itemName: string): number {
+    const wanted = itemName.toLowerCase()
+    return this.removeFrom(
+      this.inventory,
+      (item) => item.name.toLowerCase() === wanted,
+      Number.POSITIVE_INFINITY,
+    )
+  }
+
+  /**
+   * Remove up to `count` items named by full or short name, from the inventory
+   * first and then from the current room; returns how many went.
+   */
+  removeItemFromInventoryOrRoom(itemName: string, count = 1): number {
+    const matches = (item: Item) => isNamed(item, itemName)
+    let removed = this.removeFrom(this.inventory, matches, count)
+    if (removed < count) {
+      removed += this.removeFrom(
+        this.currentRoom.items,
+        matches,
+        count - removed,
+      )
+    }
+    return removed
+  }
+
+  addItemToInventory(item: Item, count = 1): void {
+    for (let i = 0; i < count; i++) this.inventory.push(item)
+  }
+
+  learnSpell(spell: Spell): void {
+    if (!this.hasSpell(spell.name)) this.knownSpells.push(spell)
+  }
+
+  hasSpell(spellName: string): boolean {
+    const wanted = spellName.toLowerCase()
+    return this.knownSpells.some((spell) => spell.name.toLowerCase() === wanted)
+  }
+
+  /** A summary of the state as markup. */
+  stats(): string {
+    const lines = [
+      `[bold]Current Room:[/bold] [room_name]${this.currentRoom.name}[/room_name]`,
+      '',
+      '[bold]Inventory:[/bold]',
+    ]
+    const counts = Object.entries(this.getInventorySummary())
+    if (counts.length > 0) {
+      for (const [name, count] of counts) {
+        lines.push(
+          count === 1
+            ? `- [item_name]${name}[/item_name]`
+            : `- [item_name]${count} ${name}[/item_name]`,
+        )
+      }
+    } else {
+      lines.push('(empty)')
+    }
+    lines.push('', '[bold]Known Spells:[/bold]')
+    lines.push(
+      ...this.listOrNone(
+        this.knownSpells.map((s) => `- [spell_name]${s.name}[/spell_name]`),
+      ),
+    )
+    lines.push('', '[bold]Visited Rooms:[/bold]')
+    lines.push(
+      ...this.listOrNone(
+        this.visitedRooms.map((r) => `- [room_name]${r}[/room_name]`),
+      ),
+    )
+    lines.push('', '[bold]Activated Quests:[/bold]')
+    lines.push(
+      ...this.listOrNone(
+        this.activatedQuests.map(
+          (q) =>
+            `- [quest_name]${q.name} (${questType(q)})[/quest_name]: ${q.description}`,
+        ),
+      ),
+    )
+    lines.push('', '[bold]Completed Quests:[/bold]')
+    lines.push(
+      ...this.listOrNone(
+        this.completedQuests.map(
+          (q) =>
+            `- [quest_name]${q.name} (${questType(q)})[/quest_name]: ${q.completion}`,
+        ),
+      ),
+    )
+    return lines.join('\n')
+  }
+
+  /** Activate the first quest whose trigger is met and return it, or null. */
+  nextActivatedQuest(): Quest | null {
+    const index = this.nonActivatedQuests.findIndex((quest) =>
+      quest.checkTrigger(this),
+    )
+    if (index < 0) return null
+    const [quest] = this.nonActivatedQuests.splice(index, 1)
+    this.activatedQuests.push(quest)
+    return quest
+  }
+
+  /** The first active quest whose log changed, or null. */
+  nextUpdatedQuest(): Quest | null {
+    return this.activatedQuests.find((quest) => quest.checkUpdate(this)) ?? null
+  }
+
+  /** Complete the first active quest whose completion is met and return it, or null. */
+  nextCompletedQuest(): Quest | null {
+    const index = this.activatedQuests.findIndex((quest) =>
+      quest.checkCompletion(this),
+    )
+    if (index < 0) return null
+    const [quest] = this.activatedQuests.splice(index, 1)
+    this.completedQuests.push(quest)
+    return quest
+  }
+
+  /** The room with the display name (case-insensitive), or null. */
+  getRoom(roomName: string): Room | null {
+    const wanted = roomName.toLowerCase()
+    return (
+      Object.values(this.allRooms).find(
+        (r) => r.name.toLowerCase() === wanted,
+      ) ?? null
+    )
+  }
+
+  /** The item named by full or short name: carried first, then in any room. */
+  getItem(itemName: string): Item | null {
+    const carried = this.inventory.find((item) => isNamed(item, itemName))
+    if (carried) return carried
+    for (const room of Object.values(this.allRooms)) {
+      const found = room.items.find((item) => isNamed(item, itemName))
+      if (found) return found
+    }
+    return null
+  }
+
+  /** The quest with the name (case-insensitive) in any list, or null. */
+  getQuest(questName: string): Quest | null {
+    const wanted = questName.toLowerCase()
+    const all = [
+      ...this.nonActivatedQuests,
+      ...this.activatedQuests,
+      ...this.completedQuests,
+    ]
+    return all.find((quest) => quest.name.toLowerCase() === wanted) ?? null
+  }
+
+  isQuestActivated(questName: string): boolean {
+    return this.activatedQuests.some((quest) => quest.name === questName)
+  }
+
+  isQuestCompleted(questName: string): boolean {
+    return this.completedQuests.some((quest) => quest.name === questName)
+  }
+
+  private removeFrom(
+    items: Item[],
+    matches: (item: Item) => boolean,
+    count: number,
+  ): number {
+    let removed = 0
+    for (let i = 0; i < items.length && removed < count; ) {
+      if (matches(items[i])) {
+        items.splice(i, 1)
+        removed++
+      } else {
+        i++
+      }
+    }
+    return removed
+  }
+
+  private listOrNone(lines: string[]): string[] {
+    return lines.length > 0 ? lines : ['(none)']
+  }
+}
+
+function questType(quest: Quest): 'main' | 'side' {
+  return quest.isMain() ? 'main' : 'side'
+}
