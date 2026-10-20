@@ -4,18 +4,18 @@
 
 Act II continues Elior's journey as they arrive in Greendale, a bustling city that serves as a crossroads between civilization and the mystical Enchanted Forest. The act focuses on developing magical abilities, uncovering Elior's heritage, and helping Greendale and the forest communities before facing the growing threat.
 
-This act is row II of the red line. Elior arrives believing Malakar is a legend from old books. By the end he knows Malakar is real and is searching for the Willowbrook bloodline, which means Elior. The act arrives with the **Ancient Amulet** in Elior's inventory (Act I) and ends when Nyx's vision is shared with Sir Cedric. There is no combat; the threat is shown, not fought.
+This act is row II of the red line. Elior arrives believing Malakar is a legend from old books. By the end he knows Malakar is real and is searching for the Willowbrook bloodline, which means Elior. Act I ends with Mira giving Elior the **Ancient Amulet**. Acts share no classes, so Act II's setup places an Act II Ancient Amulet item in Elior's inventory at the start (as Act III does); it is added to the Act II items and does not change `ACT2_GOLDEN_PATH`. The act ends when Nyx's vision is shared with Sir Cedric. The threat is shown, not fought: the only fighting is The Knight's Test, a sparring bout.
 
 ## Story Beats
 
 These beats ride on the existing conversations, items and quests below; none adds a room, a puzzle or a command to the golden path.
 
-- **The Warden sigil (Cedric's first conversation).** When Elior first talks to Sir Cedric with the Ancient Amulet in his inventory, Cedric stops mid-sentence. The sigil on the amulet is the **Warden sigil of the Wardens of the Dawn**, an order that guarded the kingdom and is half-forgotten. Cedric concludes that the amulet belonged to a Warden and that Elior's family is tied to them; he does not know more, and nobody names Aren, Lysa or any friendship with Malakar (Act III). This is why he agrees to guide Elior. It is a fixed scene on the first talk, not a choice.
+- **The Warden sigil (Cedric's first conversation).** When Elior first talks to Sir Cedric with the Ancient Amulet in his inventory, Cedric stops mid-sentence. The sigil on the amulet is the **Warden sigil of the Wardens of the Dawn**, an order that guarded the kingdom and is half-forgotten. Cedric concludes that the amulet belonged to a Warden and that Elior's family is tied to them; he does not know more, and nobody names Aren, Lysa or any friendship with Malakar (Act III). This is why he takes Elior seriously; he pledges his loyalty once the Secret Documents clear his name. It is a fixed scene on the first talk, not a choice.
 - **Alden is missing.** Greendale's castle is half-empty. King Alden vanished one night, the throne room is barred, and the Lord Commander rules in his name. Guards, Heralds and Historians speak of it in low voices; nobody knows where he went. The blight over the land and the king's absence are told as two troubles, not yet one.
 - **Cedric's disgrace.** Cedric was on guard the night Alden vanished and was stripped of his knighthood for it. He does not defend himself until the Secret Documents arrive.
 - **Cedric was framed.** The Secret Documents recovered from Thorne's caravan show that Malakar's agents bribed the night watch and framed Cedric. They carry the seal of the cloaked stranger seen in Willowbrook, and they name Malakar. The Lord Commander reads them in the Great Hall.
 - **The Sorceress of Lies' mark.** Elena's curse carries a silver, mask-shaped sigil on her wrist, first seen when Elior casts `greater_heal` on her. It fades when `dispel` breaks the curse. Elior cannot name it; Act IV's Sorceress of Lies recognises it.
-- **The Wardens in the archive.** Echoes of the Past and the Ancient Chronicle name the Wardens of the Dawn and their sigil, and record that Malakar's agents have asked after the Willowbrook bloodline. Malakar is no legend.
+- **The Wardens in the archive.** Echoes of the Past and the Ancient Chronicle name the Wardens of the Dawn and their sigil, and record that agents of Malakar have asked after the Willowbrook bloodline. The Secret Documents then name Malakar himself, and Nyx's vision shows he is hunting Elior.
 - **Nyx's vision.** Nyx speaks the refrain "Power follows purpose; purpose follows truth." in her first conversation. `prophetic_vision` then shows Elior a village, a withered field and a robed figure reaching toward him, and the dream voice from the Prologue is heard once more. It is the **Shadow of the Past**, not tied to either parent. Elior shares the vision with Cedric, who says: "Then Malakar is no tale, and it is you he is hunting."
 
 ## Quest Management Structure
@@ -91,6 +91,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Prerequisites:** Access to Market District
   - **Dependencies:** Learn `forest_speech` from the Ancient Tree Spirit and have Quality Rope from the Market District
   - **Completion:** Cast Forest Speech to locate the caravan, then use Quality Rope with the Ravine to rescue the merchants; return to Thorne for the Secret Documents
+  - **Setup line:** Thorne mentions that his guard Brenn fled when the ravine path gave way; Brenn is told about in Thorne's dialogue only and never appears.
   - **Rewards:** Secret Documents from Thorne, which can help restore Cedric's honor
   - **Story Impact:** Establishes reputation as a reliable hero
 
@@ -100,7 +101,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Trigger:** Research Willowbrook history in the Great Hall and Hidden Library
   - **Prerequisites:** Access to Great Hall
   - **Dependencies:** None
-  - **Completion:** Piece together historical clues about why Malakar was interested in Willowbrook: the archives name the Wardens of the Dawn and their sigil, and record that Malakar's agents have asked after the Willowbrook bloodline. The clues also tell of King Alden's disappearance and Cedric's disgrace.
+  - **Completion:** Piece together historical clues about why Malakar was interested in Willowbrook: the archives name the Wardens of the Dawn and their sigil, and record that agents of Malakar have asked after the Willowbrook bloodline. The clues also tell of King Alden's disappearance and Cedric's disgrace.
   - **Rewards:** Knowledge of the Wardens of the Dawn, of Elior's heritage and of the Chosen One prophecy
   - **Story Impact:** Reveals crucial background lore: Malakar is real, and he is looking for Elior's bloodline
 
@@ -230,6 +231,10 @@ City orientation is handled through the City Map and movement behavior, not sepa
 
 ### Minor Characters
 
+#### The Families (Residential Quarter)
+
+- **Role:** Residential Quarter townsfolk who take the Walking Stick; one of them mentions a sick child, which is the setup for the optional selfless moment (the Mountain Flower).
+
 #### Gate Captain & Castle Guards
 
 - **Role:** City protection, information sources
@@ -238,7 +243,7 @@ City orientation is handled through the City Map and movement behavior, not sepa
 
 #### Master Merchant Aldric & Caravan Master Thorne
 
-- **Role:** Commerce, supply sources
+- **Role:** Commerce, supply sources; Thorne speaks of Brenn, his guard who fled
 - **Personality Traits:** Business-focused, practical
 - **Dialogue Interactions:** Trading negotiations, caravan rescue quest
 
@@ -387,6 +392,7 @@ The forest represents increasingly mystical realms:
 
 #### Implemented Artifacts
 
+- **Ancient Amulet:** Placed in Elior's inventory by Act II's setup (Act I gave it to him). Its sigil is the Warden sigil Cedric recognises on the first talk.
 - **Ancient Chronicle:** Records regional history, the Wardens of the Dawn and their sigil, and Malakar's search for the Willowbrook bloodline; studying it after the librarian permits access teaches `dispel`.
 - **Crystal Focus:** The Spectral Librarian leaves it in the Hidden Library after Elior repairs the wards; Lyria needs it to teach `greater_heal`.
 - **Forest Heart Crystal and Nyx's Token:** Gifts from Nyx when first spoken to after the altar ritual.
@@ -466,9 +472,9 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
 | Where                                   | The choice                                                                                                   | Records      |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------ |
-| Residential Quarter, the Families       | Give the Mountain Flower to the Families' sick child, gaining nothing (`give mountain flower to families`)   | **selfless** |
-| The Silver Stag Inn, Innkeeper Marcus   | After Elena is cured, tell Marcus the true cause of her curse instead of the comforting "a passing illness" (`say truth to marcus`) | **truth**    |
-| Forest, Thorne after the caravan rescue | Speak for the caravan guard who abandoned the others, so Thorne does not turn him out (`say forgive to thorne`) | **mercy**    |
+| Residential Quarter, the Families       | Give the Mountain Flower to the sick child the Families mention, gaining nothing (`give mountain flower to families`)   | **selfless** |
+| The Silver Stag Inn, Innkeeper Marcus   | After Elena is cured, tell Marcus the curse was set on her on purpose (the mask-shaped mark), instead of letting him believe it was bad luck (`say truth to marcus`) | **truth**    |
+| Market District, Caravan Master Thorne  | After the rescue, speak for Brenn, the caravan guard who fled when the ravine path gave way, so Thorne does not turn him out (`say forgive to thorne`) | **mercy**    |
 
 The endings read the counters across the whole game, as described in `Act4Design.md`.
 
