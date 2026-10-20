@@ -44,9 +44,7 @@ describe('Echoes of the Hidden Bond integration', () => {
     state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
 
     // Process quest activations (might need multiple calls)
-    while (state.nextActivatedQuest()) {
-      // activate every quest whose trigger is met
-    }
+    state.settleQuests()
 
     // Find the Echoes quest
     const echoesQuest = state.activatedQuests.find(

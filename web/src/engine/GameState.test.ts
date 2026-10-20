@@ -95,6 +95,31 @@ describe('GameState', () => {
       expect(gs.nextCompletedQuest()).toBeNull()
     })
 
+    it('settles every pending quest event in one call, then reports nothing', () => {
+      const starts = new DummyQuest('Starts', true, false)
+      const changes = new DummyQuest('Changes')
+      changes.updates = true
+      // a real quest reports its log change once, then settles
+      changes.checkUpdate = (): boolean => {
+        const changed = changes.updates
+        changes.updates = false
+        return changed
+      }
+      const ends = new DummyQuest('Ends', false, true)
+      gs.nonActivatedQuests = [starts]
+      gs.activatedQuests = [changes, ends]
+      const settled = gs.settleQuests()
+      expect(settled.activated).toEqual([starts])
+      expect(settled.completed).toEqual([ends])
+      expect(gs.completedQuests).toEqual([ends])
+      expect(settled.updated).toEqual([changes])
+      expect(gs.settleQuests()).toEqual({
+        activated: [],
+        updated: [],
+        completed: [],
+      })
+    })
+
     it('tells whether a quest is activated or completed by name', () => {
       gs.activatedQuests = [quest1]
       expect(gs.isQuestActivated('Quest1')).toBe(true)

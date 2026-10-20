@@ -160,10 +160,11 @@ describe('useBridge', () => {
         },
       ])
       expect(bridge.controller.getCompletedQuests()).toEqual([])
-      expect(bridge.controller.activateQuest()).toContain('[quest_name]')
+      const settled = bridge.controller.settleQuests()
+      expect(settled.activated[0]).toContain('[quest_name]')
+      expect(settled.updated).toEqual([])
+      expect(settled.completed).toEqual([])
       expect(bridge.controller.getActiveQuests().length).toBeGreaterThan(0)
-      expect(bridge.controller.updateQuest()).toBeNull()
-      expect(bridge.controller.completeQuest()).toBeNull()
     })
 
     it('reports quest progress, act stats and short names', async () => {

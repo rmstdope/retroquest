@@ -657,21 +657,14 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     const news: QuestNews[] = []
 
-    let activated: string | null
-    while ((activated = b.controller.activateQuest()) !== null) {
-      news.push(parseQuestNews('new', activated))
+    const settled = b.controller.settleQuests()
+    for (const payload of settled.activated) {
+      news.push(parseQuestNews('new', payload))
     }
-
-    let updated: string | null
-    while ((updated = b.controller.updateQuest()) !== null) {
-      news.push(parseQuestNews('updated', updated))
+    for (const payload of settled.updated) {
+      news.push(parseQuestNews('updated', payload))
     }
-
-    let completed: string | null
-    const completions: string[] = []
-    while ((completed = b.controller.completeQuest()) !== null) {
-      completions.push(completed)
-    }
+    const completions = settled.completed
 
     // Completions also stay in the story as records, each with the act's
     // quest count as it stood once that quest was done.
