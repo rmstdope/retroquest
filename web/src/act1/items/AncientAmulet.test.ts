@@ -5,6 +5,7 @@ import { AncientAmulet } from './AncientAmulet'
 import { Locket } from './Locket'
 import { MothersLetter } from './MothersLetter'
 import { Mechanism } from './Mechanism'
+import { HiddenGlade } from '../rooms/HiddenGlade'
 import { executeCommands } from '@/testing/gameHelpers'
 
 const AMULET = '[item_name]Ancient Amulet[/item_name]'
@@ -137,9 +138,8 @@ describe('Ancient Amulet in his hand', () => {
     expect(dim.indexOf(GLADE_GLOW)).toBeGreaterThan(
       dim.indexOf('too deep in shadow to read.'),
     )
-    ;(
-      game.state.currentRoom as unknown as { lightSpellCast: boolean }
-    ).lightSpellCast = true
+    const glade = game.state.currentRoom
+    if (glade instanceof HiddenGlade) glade.lightSpellCast = true
     expect(game.state.currentRoom.describe(game.state)).toContain(GLADE_GLOW)
     expect(executeCommands(game, ['examine amulet'])).toContain(
       `${RUNES} It glows in your hand, brightest when you hold it near the mossy stone.`,
@@ -160,5 +160,30 @@ describe('Ancient Amulet in his hand', () => {
     const loaded = new Game([new Act1()])
     loaded.loadSaveData(game.toSaveData())
     expect(loaded.state.currentRoom.describe(loaded.state)).toContain(MILL_HUM)
+  })
+
+  it('keeps the bag line at "in your hand" after examining it elsewhere', () => {
+    const game = gameIn('OldMill')
+    handOver(game)
+    jamMechanism(game)
+    executeCommands(game, ['examine amulet'])
+    const amulet = game.state.inventory.find((i) => i.name === 'ancient amulet')
+    expect(amulet?.description).toBe(
+      `${RUNES} It is faintly warm in your hand.`,
+    )
+  })
+})
+
+describe('Ancient Amulet and the hut across a save', () => {
+  it('shows the empty stand exactly once after reload', () => {
+    const game = gameIn('MirasHut')
+    game.state.addItemToInventory(new MothersLetter())
+    handOver(game)
+    game.state.currentRoom.describe(game.state)
+    const loaded = new Game([new Act1()])
+    loaded.loadSaveData(game.toSaveData())
+    const hut = loaded.state.currentRoom.describe(loaded.state)
+    expect(hut.split(EMPTY_STAND)).toHaveLength(2)
+    expect(hut).not.toContain('glows brighter')
   })
 })

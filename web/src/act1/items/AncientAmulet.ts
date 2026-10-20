@@ -26,7 +26,7 @@ export class AncientAmulet extends Item {
   constructor() {
     super({
       name: 'ancient amulet',
-      description: NO_KEEPSAKE,
+      description: IN_HAND,
       shortName: 'amulet',
     })
   }
@@ -34,7 +34,10 @@ export class AncientAmulet extends Item {
   /** Describe the amulet as the place and the keepsakes Elior carries colour it. */
   override examine(gameState: GameState): string {
     this.description = this.reaction(gameState)
-    return super.examine(gameState)
+    const text = super.examine(gameState)
+    // The bag panel shows `description`, so it rests on the in-hand line.
+    this.description = IN_HAND
+    return text
   }
 
   /** The examine line for the current state. */
