@@ -144,6 +144,30 @@ export class Game implements CommandTarget {
     }
   }
 
+  /**
+   * The state of the act the player is being shown: the finished act during
+   * a transition, the current act otherwise (also after game over).
+   */
+  presentedState(): GameState {
+    return this.finishedActState ?? this.state
+  }
+
+  /** Zero-based index of the act `presentedState` belongs to. */
+  presentedActIndex(): number {
+    return this.finishedActState ? this.currentAct - 1 : this.currentAct
+  }
+
+  /**
+   * The presented act's music once it runs, and still after game over; empty
+   * before that so nothing plays early.
+   */
+  presentedMusic(): { musicFile: string; musicInfo: string } {
+    if (!this.isActRunning() && !this.isGameOver())
+      return { musicFile: '', musicInfo: '' }
+    const act = this.acts[this.currentAct]
+    return { musicFile: act.musicFile, musicInfo: act.musicInfo }
+  }
+
   /** The text to show for the current run state. */
   getResultText(): string {
     switch (this.runState) {
