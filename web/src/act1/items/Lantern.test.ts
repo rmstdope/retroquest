@@ -5,6 +5,14 @@ import { executeCommands } from '@/testing/gameHelpers'
 import { Lantern } from './Lantern'
 
 describe('Lantern', () => {
+  it('cannot be taken before it is lit', () => {
+    const game = new Game([new Act1()])
+    const answer = executeCommands(game, ['take lantern'])
+    expect(answer).toContain('[failure]')
+    expect(answer).toContain('light the')
+    expect(game.state.inventory.some((i) => i instanceof Lantern)).toBe(false)
+  })
+
   it('can be carried once lit', () => {
     const game = new Game([new Act1()])
     executeCommands(game, ['use lantern', 'take lantern'])
