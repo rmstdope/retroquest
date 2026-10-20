@@ -791,6 +791,12 @@ describe('Game', () => {
       expect(tree.look).toHaveProperty('at')
       expect(tree.help).toBeNull()
     })
+
+    it('treats item names that match object properties as plain tokens', () => {
+      rooms.EliorsCottage.addItem(item('constructor'))
+      const tree = game.getCommandCompletions()
+      expect(tree.take).toEqual({ constructor: null })
+    })
   })
 
   describe('save and load', () => {
@@ -873,10 +879,15 @@ describe('Game', () => {
         write: () => {
           throw new Error('quota')
         },
-        read: () => null,
+        read: () => {
+          throw new Error('blocked')
+        },
       }
       const game = twoActGame(broken)
       expect(game.save()).toBe('[failure]Failed to save game: quota[/failure]')
+      expect(game.load()).toBe(
+        '[failure]Failed to load game: blocked[/failure]',
+      )
     })
 
     it('restores the saved act and state in a fresh game', () => {

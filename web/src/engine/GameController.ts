@@ -52,7 +52,11 @@ interface Merchant extends Character {
 }
 
 function isMerchant(character: Character): character is Merchant {
-  return 'wares' in character && typeof character.wares === 'object'
+  return (
+    'wares' in character &&
+    typeof character.wares === 'object' &&
+    character.wares !== null
+  )
 }
 
 function questType(quest: Quest): 'main' | 'side' {
@@ -231,7 +235,10 @@ export class GameController {
     ]
     for (const item of items) {
       const short = item.shortName.toLowerCase()
-      if (short !== item.name.toLowerCase() && !(short in shortNames)) {
+      if (
+        short !== item.name.toLowerCase() &&
+        !Object.hasOwn(shortNames, short)
+      ) {
         shortNames[short] = item.name
       }
     }

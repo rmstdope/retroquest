@@ -24,7 +24,7 @@ export type GameRunState = (typeof GameRunState)[keyof typeof GameRunState]
 /** Nested completion tokens: a subtree for more tokens, null for a last token. */
 export type CompletionTree = { [token: string]: CompletionTree | null }
 
-/** Where named saves go. `write` throws when the save cannot be kept. */
+/** Where named saves go. `write`/`read` may throw when storage is unavailable. */
 export interface SaveStorage {
   write(name: string, data: string): void
   read(name: string): string | null
@@ -330,7 +330,7 @@ Welcome to
       room.name === 'Main Square' &&
       !this.state.getStoryFlag('used_city_map') &&
       direction !== 'south' &&
-      direction in room.exits
+      Object.hasOwn(room.exits, direction)
     ) {
       return (
         "[event]You wander through Greendale's winding streets, but without a proper " +
@@ -695,7 +695,12 @@ Welcome to
   load(name = DEFAULT_SAVE_NAME): string {
     const slot = validSaveName(name)
     if (slot === null) return INVALID_SAVE_NAME
-    const data = this.saveStorage.read(slot)
+    let data: string | null
+    try {
+      data = this.saveStorage.read(slot)
+    } catch (error) {
+      return `[failure]Failed to load game: ${message(error)}[/failure]`
+    }
     if (data === null) return '[failure]No save file found.[/failure]'
     return this.loadSaveData(data)
   }
@@ -767,7 +772,7 @@ function nested(names: string[]): CompletionTree {
         node[part] = null
         return
       }
-      let next = node[part]
+      let next = Object.hasOwn(node, part) ? node[part] : null
       if (!next) {
         next = {}
         node[part] = next
@@ -794,7 +799,7 @@ function splitMultiwordKeys(tree: CompletionTree): CompletionTree {
         node[part] = child
         return
       }
-      let next = node[part]
+      let next = Object.hasOwn(node, part) ? node[part] : null
       if (!next) {
         next = {}
         node[part] = next

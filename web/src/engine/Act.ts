@@ -13,8 +13,9 @@ export interface ActOptions {
   /** Credits shown for the music. */
   musicInfo: string
   /**
-   * The act's content classes by name, so saves can name them
-   * (`{ Bread, Mira, EliorsCottage, ... }`). Defaults to none.
+   * The act's content classes by name, so saves can name them as
+   * `<act name>.<class name>` (`{ Bread, Mira, EliorsCottage, ... }`). Content
+   * classes only: the engine registers its own. Defaults to none.
    */
   classes?: Record<string, SerializableClass>
 }
