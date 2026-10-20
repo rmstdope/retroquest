@@ -6,10 +6,15 @@ type Call = unknown[]
 /** A fake game that records which command methods the parser calls. */
 class RecordingGame implements CommandTarget {
   calls: Call[] = []
+  paths: Record<number, string[]> = {}
   state = {
     nextActivatedQuest: () => null,
     nextUpdatedQuest: () => null,
     nextCompletedQuest: () => null,
+  }
+
+  goldenPath(actNumber: number): string[] {
+    return this.paths[actNumber] ?? []
   }
 
   private record(...call: Call): string {
@@ -254,23 +259,33 @@ describe('CommandParser', () => {
   })
 
   describe('cheats', () => {
-    it.each([
-      [1, ['use', 'lantern', null], ['talk', 'grandmother']],
-      [2, ['take', 'flower'], ['talk', 'mountain hermit']],
-      [3, ['talk', 'mira'], ['examine', 'note']],
-    ])('cheat act %i runs the golden path commands', (act, first, second) => {
-      parser.parse(`cheat act ${act}`)
-      expect(game.calls).toContainEqual(first)
-      expect(game.calls).toContainEqual(second)
-      expect(game.calls.length).toBeGreaterThan(20)
+    it('runs the golden path the game gives for the act', () => {
+      game.paths[2] = ['take flower', 'talk to mountain hermit']
+      parser.parse('cheat act 2')
+      expect(game.calls).toEqual([
+        ['take', 'flower'],
+        ['talk', 'mountain hermit'],
+      ])
     })
 
-    it('does not know a cheat for act 4', () => {
+    it('does not know a cheat for an act without a golden path', () => {
       parser.parse('cheat act 4')
       expect(game.calls).toEqual([['unknown', 'cheat act 4']])
     })
 
+    it('only accepts a plain act number', () => {
+      game.paths[1] = ['look']
+      parser.parse('cheat act 01')
+      expect(game.calls).toEqual([['unknown', 'cheat act 01']])
+    })
+
+    it('does not know a cheat for a non-numeric act', () => {
+      parser.parse('cheat act x')
+      expect(game.calls).toEqual([['unknown', 'cheat act x']])
+    })
+
     it('settles quests after each cheat command', () => {
+      game.paths[1] = ['look', 'look']
       let activations = 0
       game.state.nextActivatedQuest = () =>
         activations++ === 0 ? ({} as never) : null

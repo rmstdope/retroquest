@@ -31,6 +31,7 @@ import { WhispersInTheWind } from './quests/WhispersInTheWind'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
 import { FLAG_GATHERING_STORM_COMPLETED } from './Act2StoryFlags'
 import { ACT2_CLASSES } from './classes'
+import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 
 /** Act 2: Greendale & The Forest Edge. */
 export class Act2 extends Act {
@@ -83,6 +84,7 @@ export class Act2 extends Act {
         'Music track: Medieval Village by Walen\nSource: https://freetouse.com/music\n' +
         'Free To Use Music for Video',
       classes: ACT2_CLASSES,
+      goldenPath: ACT2_GOLDEN_PATH,
     })
   }
 
