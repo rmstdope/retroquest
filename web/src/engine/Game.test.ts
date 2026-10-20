@@ -822,6 +822,7 @@ describe('Game', () => {
         },
       })
       expect(tree.look).toHaveProperty('at')
+      expect(tree.look).toHaveProperty('@', null)
       expect(tree.help).toBeNull()
     })
 

@@ -77,6 +77,18 @@ export interface QuestAudioPlayer {
 /** Most recent turns kept for the story view; older ones are dropped. */
 export const MAX_TURNS = 200
 
+/** Key in the completion tree marking that the command can be sent here. */
+const SENDABLE_MARKER = '@'
+
+/** What the Type mode word list shows for the text in the command box. */
+export interface CompletionState {
+  kind: 'matches' | 'none' | 'complete'
+  candidates: string[]
+  sendable: boolean
+  /** The last word as typed ('' after a space); for `none` the last non-empty word. */
+  word: string
+}
+
 /** Save names the game accepts (mirrors Game._validate_save_name). */
 const SAVE_NAME_PATTERN = /^[a-z0-9_-]+$/
 
@@ -754,9 +766,11 @@ export const useGameStore = defineStore('game', () => {
    * Mirrors the logic of NestedSuggester.get_suggestion() in the engine:
    * - Splits the input into previously-completed tokens and a partial last token.
    * - Traverses the completion tree for the completed tokens.
-   * - Collects candidates that match the partial last token as a prefix.
+   * - Collects candidates that match the partial last token as a prefix
+   *   (the `@` "can be sent here" marker is never a candidate).
    * - When exactly one candidate is found, auto-expands and keeps going while
-   *   each subsequent level also has exactly one option (chain expansion).
+   *   each subsequent level also has exactly one option (chain expansion). The
+   *   expansion stops where the command can already be sent (a `@` marker).
    *
    * Returns an object with:
    *   - `newInput`: the expanded command string (unchanged if ambiguous / no match)
@@ -766,13 +780,13 @@ export const useGameStore = defineStore('game', () => {
     newInput: string
     candidates: string[]
   } {
-    const tokens = input.split(' ')
+    const tokens = input.toLowerCase().split(' ')
     const lastToken = tokens[tokens.length - 1]
     const prevTokens = tokens.slice(0, -1)
 
     let node: CompletionTree | null = completionTree.value
     for (const token of prevTokens) {
-      if (node && token in node) {
+      if (node && token !== SENDABLE_MARKER && Object.hasOwn(node, token)) {
         node = node[token]
       } else {
         return { newInput: input, candidates: [] }
@@ -783,9 +797,12 @@ export const useGameStore = defineStore('game', () => {
       return { newInput: input, candidates: [] }
     }
 
-    const candidates = Object.keys(node).filter((k) => k.startsWith(lastToken))
+    const candidates = Object.keys(node).filter(
+      (k) => k !== SENDABLE_MARKER && k.startsWith(lastToken),
+    )
+    const sendableHere = lastToken === '' && SENDABLE_MARKER in node
 
-    if (candidates.length === 1) {
+    if (candidates.length === 1 && !sendableHere) {
       const words = [...prevTokens, candidates[0]]
       let currentNode: CompletionTree | null = node[candidates[0]]
 
@@ -803,6 +820,59 @@ export const useGameStore = defineStore('game', () => {
     }
 
     return { newInput: input, candidates }
+  }
+
+  /**
+   * What the word list shows for the command box text: the words that could
+   * come next for the word being typed, whether the text can already be sent
+   * as a command, and which of three states the list is in — `matches` (some
+   * words to offer), `none` (an earlier word is unknown, or the last word
+   * matches nothing) or `complete` (the command needs no more words). Matching
+   * ignores case; `word` is the last word as typed.
+   */
+  function completionState(input: string): CompletionState {
+    const typed = input.trimStart().toLowerCase()
+    const tokens = typed.split(/ +/)
+    const last = tokens[tokens.length - 1]
+    const typedWords = input.trim().split(/ +/)
+    const word = typed.endsWith(' ') ? '' : typedWords[typedWords.length - 1]
+    // An unknown word is quoted even when a space follows it.
+    const none: CompletionState = {
+      kind: 'none',
+      candidates: [],
+      sendable: false,
+      word: typedWords[typedWords.length - 1],
+    }
+
+    let node: CompletionTree | null = completionTree.value
+    for (const token of tokens.slice(0, -1)) {
+      if (node === null) {
+        // Words after a finished command: nothing to offer.
+        return { ...none, kind: 'complete', sendable: true }
+      }
+      if (token === SENDABLE_MARKER || !Object.hasOwn(node, token)) return none
+      node = node[token]
+    }
+    if (node === null) return { ...none, kind: 'complete', sendable: true }
+
+    const candidates = Object.keys(node).filter(
+      (k) => k !== SENDABLE_MARKER && k.startsWith(last),
+    )
+    const endNode =
+      last === '' ? node : Object.hasOwn(node, last) ? node[last] : undefined
+    const sendable =
+      tokens.length > 1 || last !== ''
+        ? endNode === null ||
+          (endNode !== undefined && SENDABLE_MARKER in endNode)
+        : false
+    const finished =
+      last === ''
+        ? candidates.length === 0
+        : candidates.length === 1 && candidates[0] === last && endNode === null
+    if (finished)
+      return { kind: 'complete', candidates: [], sendable: true, word }
+    if (candidates.length === 0) return { ...none, sendable }
+    return { kind: 'matches', candidates, sendable, word }
   }
 
   return {
@@ -872,5 +942,6 @@ export const useGameStore = defineStore('game', () => {
     dismissModal,
     markSeen,
     tabComplete,
+    completionState,
   }
 })

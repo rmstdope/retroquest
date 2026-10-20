@@ -283,7 +283,7 @@ test.describe('Lantern UI (the default)', () => {
     expect(other).toBe('rgba(0, 0, 0, 0)')
   })
 
-  test('completes typed commands with Tab in Type mode', async ({ page }) => {
+  test('shows the word list while typing in Type mode', async ({ page }) => {
     await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
@@ -302,8 +302,10 @@ test.describe('Lantern UI (the default)', () => {
     await expect(input).toHaveValue('look ')
 
     await input.fill('take b')
-    await input.press('Tab')
     await expect(page.getByRole('option')).toHaveText(['bucket', 'bread'])
+    await expect(page.getByRole('option', { selected: true })).toHaveText(
+      'bucket',
+    )
     // Each option is what a click at its centre hits (not hidden or clipped).
     for (const option of await page.getByRole('option').all()) {
       const onTop = await option.evaluate((el) => {
@@ -318,13 +320,16 @@ test.describe('Lantern UI (the default)', () => {
     }
     await input.press('ArrowDown')
     await input.press('Enter')
-    await expect(input).toHaveValue('take bucket ')
+    await expect(input).toHaveValue('take bread ')
     await expect(page.getByRole('option')).toHaveCount(0)
+
+    await input.fill('xyz')
+    await expect(page.getByRole('listbox')).toHaveText('No match for “xyz”')
   })
 
   // A desktop window narrower than 1024px gets the folding sheet, whose own
   // scrolling once clipped the list (rq-mvd).
-  test('shows the Tab completion list above the folding sheet in a narrow window', async ({
+  test('shows the word list above the folding sheet in a narrow window', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 900, height: 800 })
@@ -347,7 +352,6 @@ test.describe('Lantern UI (the default)', () => {
     const input = page.getByLabel('Command')
 
     await input.fill('take b')
-    await input.press('Tab')
     const list = page.getByRole('listbox', { name: 'Matching words' })
     await expect(list.getByRole('option')).toHaveText([
       'bucket',
@@ -368,7 +372,6 @@ test.describe('Lantern UI (the default)', () => {
       })
       expect(onTop, `${await option.textContent()} is on top`).toBe(true)
     }
-    await input.press('ArrowDown')
     await input.press('ArrowDown')
     await expect(list.getByRole('option', { selected: true })).toHaveText(
       'bread',

@@ -623,6 +623,97 @@ describe('useGameStore', () => {
     })
   })
 
+  // --- completionState ---
+
+  describe('completionState', () => {
+    beforeEach(async () => {
+      bridge.getCommandCompletions.mockReturnValue({
+        go: { north: null, south: null },
+        take: { sword: null, shield: null },
+        talk: { to: { mira: null } },
+        look: { '@': null, at: { well: null }, well: null },
+        use: { rope: { '@': null, with: { well: null } } },
+        i: null,
+        inventory: null,
+        constructor: null,
+      })
+      await store.initGame()
+    })
+
+    it('lists the matches for the word being typed', () => {
+      expect(store.completionState('ta')).toEqual({
+        kind: 'matches',
+        candidates: ['take', 'talk'],
+        sendable: false,
+        word: 'ta',
+      })
+    })
+
+    it('lists the next words after a space', () => {
+      const state = store.completionState('go ')
+      expect(state.candidates).toEqual(['north', 'south'])
+      expect(state.word).toBe('')
+    })
+
+    it('is sendable on a finished command that can go on, without offering @', () => {
+      const state = store.completionState('look ')
+      expect(state.kind).toBe('matches')
+      expect(state.sendable).toBe(true)
+      expect(state.candidates).toEqual(['at', 'well'])
+      expect(store.completionState('use rope ').candidates).toEqual(['with'])
+      expect(store.completionState('use rope ').sendable).toBe(true)
+      expect(store.completionState('look').sendable).toBe(true)
+    })
+
+    it('is sendable but still lists longer matches for a leaf prefix', () => {
+      const state = store.completionState('i')
+      expect(state.sendable).toBe(true)
+      expect(state.candidates).toEqual(['i', 'inventory'])
+    })
+
+    it('is complete when the command needs no more words', () => {
+      expect(store.completionState('talk to mira').kind).toBe('complete')
+      expect(store.completionState('talk to mira ').kind).toBe('complete')
+      expect(store.completionState('inventory ').kind).toBe('complete')
+      expect(store.completionState('inventory foo').kind).toBe('complete')
+    })
+
+    it('has no match for an unknown word, quoting the last word as typed', () => {
+      expect(store.completionState('xyz')).toMatchObject({
+        kind: 'none',
+        candidates: [],
+        word: 'xyz',
+      })
+      expect(store.completionState('talk to bob').word).toBe('bob')
+      expect(store.completionState('fly high ').kind).toBe('none')
+      expect(store.completionState('fly high ').word).toBe('high')
+    })
+
+    it('ignores case when matching', () => {
+      expect(store.completionState('Ta').candidates).toEqual(['take', 'talk'])
+      expect(store.completionState('Ta').word).toBe('Ta')
+    })
+
+    it('does not treat the @ marker as a word to type', () => {
+      expect(store.completionState('look @').kind).toBe('none')
+      expect(store.completionState('look @ x').kind).toBe('none')
+    })
+
+    it('chain-expands after a capitalised word too', () => {
+      expect(store.tabComplete('Talk ').newInput).toBe('talk to mira ')
+    })
+
+    it('treats names like constructor as plain words', () => {
+      expect(store.completionState('constructor').kind).toBe('complete')
+      expect(store.completionState('go constructor').kind).toBe('none')
+    })
+
+    it('does not list @ as a candidate or expand past a sendable command in tabComplete', () => {
+      expect(store.tabComplete('use rope ').candidates).toEqual(['with'])
+      expect(store.tabComplete('use rope ').newInput).toBe('use rope ')
+    })
+  })
+
   // --- tabComplete ---
 
   describe('tabComplete', () => {
