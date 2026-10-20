@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { NatureSenseSpell } from '../spells/NatureSenseSpell'
 
 /** Ancient druidic monoliths that convey nature magic and may teach a spell. */
@@ -32,20 +32,24 @@ export class StandingStones extends Item {
           '\n\n[success]As you trace the druidic runes with your finger, ' +
           'ancient knowledge flows into your mind. The symbols begin to make ' +
           "sense—they're not just markers, but a teaching tool! You feel a " +
-          'connection forming with the natural world around you, and suddenly ' +
-          "you understand how to cast the [spell_name]Nature's Sense[/spell_name] " +
-          'spell![/success]\n\n' +
-          '[event]You have learned the spell: ' +
-          "[spell_name]Nature's Sense[/spell_name]![/event]"
+          'connection forming with the natural world around you, and ' +
+          "suddenly you understand how to cast the [spell_name]Nature's " +
+          'Sense[/spell_name] spell![/success]\n\n' +
+          event(
+            "You have learned the spell: [spell_name]Nature's " +
+              'Sense[/spell_name]!',
+          )
       }
       return (
-        '[event]You approach the ancient standing stones and run your hands over their ' +
-        'weathered surfaces. The runes carved into the stone are clearly druidic—symbols ' +
-        'representing protection, passage, and the balance between civilization and ' +
-        'wilderness. These stones have stood here for centuries, marking the boundary ' +
-        'between worlds. You can feel the old magic thrumming within them, a gentle but ' +
-        'powerful force that has protected travelers for generations.[/event]' +
-        spellMsg
+        event(
+          'You approach the ancient standing stones and run your hands over ' +
+            'their weathered surfaces. The runes carved into the stone are ' +
+            'clearly druidic—symbols representing protection, passage, and the ' +
+            'balance between civilization and wilderness. These stones have ' +
+            'stood here for centuries, marking the boundary between worlds. ' +
+            'You can feel the old magic thrumming within them, a gentle but ' +
+            'powerful force that has protected travelers for generations.',
+        ) + spellMsg
       )
     }
     return (

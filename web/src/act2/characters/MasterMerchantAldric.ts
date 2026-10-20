@@ -1,4 +1,12 @@
-import { Character, type GameState, type Item, type Room } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  type Room,
+  characterName,
+  event,
+  speech,
+} from '@/engine'
 import { ForestSurvivalKit } from '../items/ForestSurvivalKit'
 import { EnhancedLantern } from '../items/EnhancedLantern'
 import { QualityRope } from '../items/QualityRope'
@@ -33,12 +41,14 @@ export class MasterMerchantAldric extends Character {
   ]
   dialogueIndex = 0
   closedDialogue =
-    'The [character_name]Master Merchant Aldric[/character_name] looks at you ' +
-    'appraisingly. ' +
-    "[dialogue]'I deal only with established customers and those with proper " +
-    'credentials. ' +
-    'Do you have any introduction or referral that would qualify you for ' +
-    "my premium services?'[/dialogue]"
+    'The ' +
+    characterName('Master Merchant Aldric') +
+    ' looks at you appraisingly. ' +
+    speech(
+      "'I deal only with established customers and those with proper " +
+        'credentials. Do you have any introduction or referral that would ' +
+        "qualify you for my premium services?'",
+    )
   gaveFlyer = false
 
   constructor() {
@@ -75,8 +85,10 @@ export class MasterMerchantAldric extends Character {
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
 
     return (
-      'The [character_name]Master Merchant Aldric[/character_name] says: ' +
-      `[dialogue]"${dialogue} ${waresInfo.trim()}"[/dialogue]`
+      'The ' +
+      characterName('Master Merchant Aldric') +
+      ' says: ' +
+      speech(`"${dialogue} ${waresInfo.trim()}"`)
     )
   }
 
@@ -91,20 +103,27 @@ export class MasterMerchantAldric extends Character {
       const itemName = item.name
       return (
         `[success]You present the [item_name]${itemName}[/item_name] to ` +
-        '[character_name]Master Merchant Aldric[/character_name]. His eyes ' +
-        "light up as he examines it. [dialogue]'Ah, excellent! This flyer grants " +
-        'you access to our premium selection and preferred customer pricing. ' +
-        "What quality goods can I help you acquire today?'[/dialogue][/success]"
+        characterName('Master Merchant Aldric') +
+        '. His eyes light up as he examines it. ' +
+        speech(
+          "'Ah, excellent! This flyer grants you access to our premium " +
+            'selection and preferred customer pricing. What quality goods can ' +
+            "I help you acquire today?'",
+        ) +
+        '[/success]'
       )
     }
 
     // Non-flyer items are politely declined
     const itemName = item.name
     return (
-      'The [character_name]Master Merchant Aldric[/character_name] examines the ' +
-      `${itemName}. ` +
-      "[dialogue]'I appreciate the offer, but I deal in adventure gear, not " +
-      "donations. Perhaps you could purchase something instead?'[/dialogue]"
+      'The ' +
+      characterName('Master Merchant Aldric') +
+      ` examines the ${itemName}. ` +
+      speech(
+        "'I appreciate the offer, but I deal in adventure gear, not " +
+          "donations. Perhaps you could purchase something instead?'",
+      )
     )
   }
 
@@ -117,22 +136,24 @@ export class MasterMerchantAldric extends Character {
 
     const itemNameToBuy = itemName.toLowerCase()
     const name = this.name
-    const eventMsg =
-      '[event]You try to buy the [item_name]' +
-      itemNameToBuy +
-      '[/item_name] from the [character_name]' +
-      name +
-      '[/character_name].[/event]'
+    const eventMsg = event(
+      'You try to buy the [item_name]' +
+        itemNameToBuy +
+        '[/item_name] from the ' +
+        characterName(name) +
+        '.',
+    )
 
     // Check if item is available
     if (!(itemNameToBuy in this.wares)) {
       return (
         eventMsg +
         '\n' +
-        ("[dialogue]\"Sorry, I don't have any ' " +
-          `[item_name]${itemNameToBuy}[/item_name]' for sale. ` +
-          'Check my current inventory for available items.' +
-          '[/dialogue]')
+        speech(
+          `"Sorry, I don't have any ' [item_name]${itemNameToBuy}` +
+            "[/item_name]' for sale. Check my current inventory for available " +
+            'items.',
+        )
       )
     }
 
@@ -164,9 +185,10 @@ export class MasterMerchantAldric extends Character {
       return (
         eventMsg +
         '\n' +
-        (`[dialogue]"You already have a [item_name]${itemNameToBuy}[/item_name]. ` +
-          'One should be sufficient for your needs.' +
-          '[/dialogue]')
+        speech(
+          `"You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
+            'should be sufficient for your needs.',
+        )
       )
     }
 
@@ -209,11 +231,11 @@ export class MasterMerchantAldric extends Character {
       const remainingCoins = gameState.getItemCount('coins')
       return (
         eventMsg +
-        '\n' +
-        `[success]You purchase the [item_name]${itemNameToBuy}[/item_name] from ` +
-        `[character_name]Master Merchant Aldric[/character_name] for ${price} ` +
-        `[item_name]gold coins[/item_name]. You have ${remainingCoins} ` +
-        '[item_name]coins[/item_name] remaining.[/success]'
+        `\n[success]You purchase the [item_name]${itemNameToBuy}` +
+        '[/item_name] from ' +
+        characterName('Master Merchant Aldric') +
+        ` for ${price} [item_name]gold coins[/item_name]. You have ${remainingCoins}` +
+        ' [item_name]coins[/item_name] remaining.[/success]'
       )
     }
     // Should not happen if item is in wares, but safety check

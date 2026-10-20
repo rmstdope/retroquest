@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { EntryPass } from './EntryPass'
 
 /** Abandoned rest node offering single hidden item discovery (entry pass). */
@@ -29,10 +29,11 @@ export class CampSite extends Item {
     const entryPass = new EntryPass()
     gameState.currentRoom.addItem(entryPass)
     return (
-      'You carefully examine the abandoned camp site. Hidden under leaves near the ' +
-      'fire pit you discover an [item_name]entry pass[/item_name] to Greendale — likely ' +
-      'dropped by a prior traveler in haste.\n\n[event]You found an ' +
-      '[item_name]entry pass[/item_name]![/event]'
+      'You carefully examine the abandoned camp site. Hidden under ' +
+      'leaves near the fire pit you discover an [item_name]entry ' +
+      'pass[/item_name] to Greendale — likely dropped by a prior ' +
+      'traveler in haste.\n\n' +
+      event('You found an [item_name]entry pass[/item_name]!')
     )
   }
 

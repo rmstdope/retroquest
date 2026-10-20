@@ -1,4 +1,4 @@
-import { Spell, type GameState } from '@/engine'
+import { Spell, type GameState, event } from '@/engine'
 import { WaterNymphs } from '../characters/WaterNymphs'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
 
@@ -31,14 +31,13 @@ export class NatureSenseSpell extends Spell {
         // Add the Water Nymphs to the room when first cast
         gameState.currentRoom.characters.push(new WaterNymphs())
         const name = this.name
-        return (
-          `[event]You cast [spell_name]${name}[/spell_name] and extend ` +
-          'your awareness throughout the glade. Immediately, you ' +
-          'sense magical presences by the stream - graceful forms of ' +
-          'living water and moonlight. The water nymphs reveal ' +
-          'themselves, shimmering into visibility as they recognize ' +
-          'your magical sensitivity and respect for the natural ' +
-          'world.[/event]'
+        return event(
+          `You cast [spell_name]${name}[/spell_name] and extend your ` +
+            'awareness throughout the glade. Immediately, you sense magical ' +
+            'presences by the stream - graceful forms of living water and ' +
+            'moonlight. The water nymphs reveal themselves, shimmering into ' +
+            'visibility as they recognize your magical sensitivity and respect ' +
+            'for the natural world.',
         )
       }
       const name = this.name

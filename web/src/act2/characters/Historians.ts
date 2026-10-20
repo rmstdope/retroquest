@@ -1,4 +1,10 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  characterName,
+  speech,
+} from '@/engine'
 import {
   FLAG_SHOWED_JOURNAL_TO_HISTORIANS,
   FLAG_READ_TRAVELERS_JOURNAL,
@@ -21,21 +27,27 @@ export class Historians extends Character {
   override talkTo(gameState: GameState): string {
     const name = this.name
     if (gameState.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)) {
-      const prefix =
-        `[character_name]${name}[/character_name]: ` +
-        '[dialogue]The journal you showed us was most '
+      const prefix = 'The journal you showed us was most '
       return (
-        prefix +
-        "illuminating! The references to Willowbrook's bloodlines confirm what " +
-        'we suspected from the ancient chronicles. Your heritage appears to be ' +
-        'quite significant indeed.[/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          prefix +
+            "illuminating! The references to Willowbrook's bloodlines confirm what " +
+            'we suspected from the ancient chronicles. Your heritage appears to be ' +
+            'quite significant indeed.',
+        )
       )
     } else {
       return (
-        `[character_name]${name}[/character_name]: [dialogue]Welcome to the historical ` +
-        'archives. We maintain records of regional history, family genealogies, and ' +
-        "ancient chronicles. Do you have any historical documents or artifacts you'd " +
-        'like us to examine?[/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          'Welcome to the historical archives. We maintain records of ' +
+            'regional history, family genealogies, and ancient chronicles. Do ' +
+            "you have any historical documents or artifacts you'd like us to " +
+            'examine?',
+        )
       )
     }
   }
@@ -56,14 +68,16 @@ export class Historians extends Character {
       const itemName = item.name
       const successMsg =
         `[success]You show the [item_name]${itemName}[/item_name] to the ` +
-        `[character_name]${histName}[/character_name]. ` +
-        'They examine it with great interest, ' +
-        'cross-referencing the records. ' +
-        'Their study of the genealogical information reveals details ' +
-        'that would take ordinary scholars years to compile. ' +
-        "[dialogue]'This is fascinating! The journal confirms several theories about " +
-        "Willowbrook's significance and provides crucial context for the " +
-        "ancient chronicles.'[/dialogue][/success]"
+        characterName(histName) +
+        '. They examine it with great interest, cross-referencing the ' +
+        'records. Their study of the genealogical information reveals ' +
+        'details that would take ordinary scholars years to compile. ' +
+        speech(
+          "'This is fascinating! The journal confirms several theories about " +
+            "Willowbrook's significance and provides crucial context for the " +
+            "ancient chronicles.'",
+        ) +
+        '[/success]'
       return successMsg
     } else {
       return super.giveItem(gameState, item)

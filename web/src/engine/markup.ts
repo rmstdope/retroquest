@@ -30,6 +30,23 @@ export function event(text: string): string {
 }
 
 /**
+ * Wrap `name` as a character name inside running text:
+ * `[character_name]name[/character_name]`.
+ */
+export function characterName(name: string): string {
+  return `[character_name]${name}[/character_name]`
+}
+
+/**
+ * Wrap `words` as speech inside running text, with no name line of its own:
+ * `[dialogue]words[/dialogue]`. Use it when narration already names the
+ * speaker; use `dialogue()` when the name should be written for you.
+ */
+export function speech(words: string): string {
+  return `[dialogue]${words}[/dialogue]`
+}
+
+/**
  * Write a spoken line attributed to `speaker`: the speaker's name on a line of
  * its own, then the words as `[dialogue]`. The story view drops a name-only
  * line directly before its quote, so the player sees the name once, as the

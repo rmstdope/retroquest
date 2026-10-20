@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { FLAG_CEDRIKS_HONOR_ACCEPTED } from '../Act2StoryFlags'
 
 /** Veteran instructor who seeds the Cedric honor investigation. */
@@ -21,29 +21,42 @@ export class TrainingMaster extends Character {
       gameState.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
 
       return (
-        '[character_name]Training Master[/character_name]: [dialogue]Ah, a visitor to our ' +
-        "training grounds. I've been instructing knights and squires here for " +
-        'many years. *He glances toward Sir Cedric with a troubled expression.* ' +
-        'It pains me to see a fine knight like Sir Cedric carrying such a heavy ' +
-        'burden. There are whispers about his past military service - accusations ' +
-        "of cowardice during a critical battle. But I've known Cedric for years, " +
-        'and cowardice is not in his nature. Something about that whole affair ' +
-        'never sat right with me. The official reports seemed... incomplete.' +
-        '[/dialogue]\n\n' +
-        '[character_name]Training Master[/character_name]: [dialogue]*He leans ' +
-        "closer, lowering his voice.* I've heard rumors that there were supposed to " +
-        'be documents - evidence that would clear his name. Perhaps someone with ' +
-        'your skills could help uncover the truth and restore honor to a good man ' +
-        'who has suffered long enough.[/dialogue]'
+        characterName('Training Master') +
+        ': ' +
+        speech(
+          "Ah, a visitor to our training grounds. I've been instructing " +
+            'knights and squires here for many years. *He glances toward Sir ' +
+            'Cedric with a troubled expression.* It pains me to see a fine ' +
+            'knight like Sir Cedric carrying such a heavy burden. There are ' +
+            'whispers about his past military service - accusations of ' +
+            "cowardice during a critical battle. But I've known Cedric for " +
+            'years, and cowardice is not in his nature. Something about that ' +
+            'whole affair never sat right with me. The official reports ' +
+            'seemed... incomplete.',
+        ) +
+        '\n\n' +
+        characterName('Training Master') +
+        ': ' +
+        speech(
+          "*He leans closer, lowering his voice.* I've heard rumors that " +
+            'there were supposed to be documents - evidence that would clear ' +
+            'his name. Perhaps someone with your skills could help uncover the ' +
+            'truth and restore honor to a good man who has suffered long ' +
+            'enough.',
+        )
       )
     }
     // Subsequent conversations
     return (
-      '[character_name]Training Master[/character_name]: [dialogue]*He nods ' +
-      "respectfully.* You're looking into Sir Cedric's situation? Good. That man " +
-      'has suffered under false accusations for far too long. The truth needs to ' +
-      'come to light. Perhaps the squires might know more about what happened - they ' +
-      'sometimes hear things that we older knights miss.[/dialogue]'
+      characterName('Training Master') +
+      ': ' +
+      speech(
+        "*He nods respectfully.* You're looking into Sir Cedric's " +
+          'situation? Good. That man has suffered under false accusations ' +
+          'for far too long. The truth needs to come to light. Perhaps the ' +
+          'squires might know more about what happened - they sometimes hear ' +
+          'things that we older knights miss.',
+      )
     )
   }
 }

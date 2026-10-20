@@ -1,4 +1,10 @@
-import { Character, type GameState } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  event,
+  speech,
+} from '@/engine'
 import { ProtectiveCharm } from '../items/ProtectiveCharm'
 import { FLAG_HERMITS_WARNING_ACCEPTED } from '../Act2StoryFlags'
 
@@ -25,10 +31,7 @@ export class ForestHermit extends Character {
   /** Warn the player and give the charm once, then repeat the guidance. */
   override talkTo(gameState: GameState): string {
     const name = this.name
-    const eventMsg =
-      '[event]You approach the [character_name]' +
-      name +
-      '[/character_name].[/event]'
+    const eventMsg = event('You approach the ' + characterName(name) + '.')
 
     if (!this.hasWarned) {
       this.hasWarned = true
@@ -42,32 +45,44 @@ export class ForestHermit extends Character {
       gameState.setStoryFlag(FLAG_HERMITS_WARNING_ACCEPTED, true)
       return (
         eventMsg +
-        '\n' +
-        (`The [character_name]${this.name}[/character_name] ` +
-          "studies you with ancient eyes. [dialogue]'I have been waiting for you, ") +
-        ('young one. The forest spirits whispered of your coming. You ' +
-          'seek to enter the Enchanted Forest, but few mortals who ' +
-          "venture unprepared ever return.'[/dialogue]\n\n") +
-        ("[dialogue]'The forest is alive with magic both beautiful and " +
-          'terrible. Ancient guardians protect its secrets, and the very ' +
-          'trees themselves judge the worth of those who walk among them. ' +
-          'Dark spirits prey upon the unwary, and the paths shift like ' +
-          "shadows at twilight.'[/dialogue]\n\n") +
-        ("[dialogue]'But you... you have the light of destiny about you. " +
-          "Take this charm—it will protect you from the forest's darker " +
-          'influences and mark you as one under my protection. Remember: ' +
-          'show respect to all forest beings, never take more than you give, ' +
-          "and listen to the wind's warnings.'[/dialogue]\n\n") +
-        '[event]You receive a [item_name]protective charm[/item_name]![/event]'
+        '\nThe ' +
+        characterName(this.name) +
+        ' studies you with ancient eyes. ' +
+        speech(
+          "'I have been waiting for you, young one. The forest spirits " +
+            'whispered of your coming. You seek to enter the Enchanted Forest, ' +
+            "but few mortals who venture unprepared ever return.'",
+        ) +
+        '\n\n' +
+        speech(
+          "'The forest is alive with magic both beautiful and terrible. " +
+            'Ancient guardians protect its secrets, and the very trees ' +
+            'themselves judge the worth of those who walk among them. Dark ' +
+            'spirits prey upon the unwary, and the paths shift like shadows at ' +
+            "twilight.'",
+        ) +
+        '\n\n' +
+        speech(
+          "'But you... you have the light of destiny about you. Take this " +
+            "charm—it will protect you from the forest's darker influences and " +
+            'mark you as one under my protection. Remember: show respect to ' +
+            'all forest beings, never take more than you give, and listen to ' +
+            "the wind's warnings.'",
+        ) +
+        '\n\n' +
+        event('You receive a [item_name]protective charm[/item_name]!')
       )
     } else {
       return (
         eventMsg +
-        '\n' +
-        (`The [character_name]${this.name}[/character_name] ` +
-          "nods knowingly. [dialogue]'The forest awaits, but remember my warnings. ") +
-        ("Trust in nature's wisdom, and the ancient ways will guide your " +
-          "steps. May the spirits of leaf and stone watch over you.'[/dialogue]")
+        '\nThe ' +
+        characterName(this.name) +
+        ' nods knowingly. ' +
+        speech(
+          "'The forest awaits, but remember my warnings. Trust in nature's " +
+            'wisdom, and the ancient ways will guide your steps. May the ' +
+            "spirits of leaf and stone watch over you.'",
+        )
       )
     }
   }

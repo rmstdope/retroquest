@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 
 /** Ambient NPC who broadcasts civic news and points players to key hubs. */
 export class TownCrier extends Character {
@@ -16,11 +16,16 @@ export class TownCrier extends Character {
   override talkTo(_gameState: GameState): string {
     const name = this.name
     return (
-      `[character_name]${name}[/character_name]: [dialogue]Hear ye, hear ye! Welcome to Greendale, ` +
-      'traveler! The great [character_name]Sir Cedric[/character_name] seeks brave souls ' +
-      "to aid in important matters. If you're looking for adventure and the chance " +
-      "to serve the realm, head to the castle! Also, don't forget to check the " +
-      'notice board for other opportunities![/dialogue]'
+      characterName(name) +
+      ': ' +
+      speech(
+        'Hear ye, hear ye! Welcome to Greendale, traveler! The great ' +
+          characterName('Sir Cedric') +
+          " seeks brave souls to aid in important matters. If you're looking " +
+          'for adventure and the chance to serve the realm, head to the ' +
+          "castle! Also, don't forget to check the notice board for other " +
+          'opportunities!',
+      )
     )
   }
 }

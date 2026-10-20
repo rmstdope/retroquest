@@ -1,4 +1,4 @@
-import { Act, type GameState } from '@/engine'
+import { Act, type GameState, speech } from '@/engine'
 import { MountainPath } from './rooms/MountainPath'
 import { GreendaleGates } from './rooms/GreendaleGates'
 import { MainSquare } from './rooms/MainSquare'
@@ -90,30 +90,34 @@ export class Act2 extends Act {
 
   override getActIntro(): string {
     return (
-      '[bold]ACT 2: THE GATHERING STORM[/bold]\n\n' +
-      'After the mysterious events in Willowbrook and the revelation of your growing magical ' +
-      'abilities, you have left your quiet village behind. The mountain path stretches ' +
-      'before you, winding through rocky terrain toward your destination: Greendale, a ' +
-      'bustling city that serves as the gateway between civilization and the mystical ' +
-      'Enchanted Forest.\n\n' +
-      'As you crest the final ridge, the sight takes your breath away. Below lies Greendale—' +
-      "larger than any settlement you've ever seen, with stone buildings, " +
-      'busy market squares, ' +
-      'and an impressive castle rising majestically above the city walls. Smoke rises from ' +
-      'countless chimneys, and you can hear the distant sounds of commerce and conversation ' +
-      'carried on the mountain breeze.\n' +
-      "\nYour grandmother's words echo in your mind: [dialogue]'Seek out Sir Cedric at the " +
-      'castle. He will help you understand your heritage and the growing darkness that ' +
-      "threatens our world.'[/dialogue] The ancient amulet she gave you feels warm against " +
-      'your chest, a reminder of the mysteries you must uncover.\n' +
-      '\nBeyond Greendale, you glimpse the edge of the Enchanted Forest—an ancient woodland ' +
-      'where magic flows like water and spirits older than memory dwell among the trees. The ' +
-      'very air seems to shimmer with possibility and danger.\n' +
-      '\nThis is where your true journey begins. In Greendale, you must prove yourself ' +
-      'worthy, forge alliances with powerful allies, and master the magical arts. Only ' +
-      "then will you be ready to face the forest's deepest secrets and the growing storm " +
-      'that threatens all you hold dear.\n' +
-      '\nTake a deep breath and step forward into your destiny.\n'
+      '[bold]ACT 2: THE GATHERING STORM[/bold]\n\nAfter the mysterious ' +
+      'events in Willowbrook and the revelation of your growing magical ' +
+      'abilities, you have left your quiet village behind. The mountain ' +
+      'path stretches before you, winding through rocky terrain toward ' +
+      'your destination: Greendale, a bustling city that serves as the ' +
+      'gateway between civilization and the mystical Enchanted ' +
+      'Forest.\n\nAs you crest the final ridge, the sight takes your ' +
+      'breath away. Below lies Greendale—larger than any settlement ' +
+      "you've ever seen, with stone buildings, busy market squares, and " +
+      'an impressive castle rising majestically above the city walls. ' +
+      'Smoke rises from countless chimneys, and you can hear the distant ' +
+      'sounds of commerce and conversation carried on the mountain ' +
+      "breeze.\n\nYour grandmother's words echo in your mind: " +
+      speech(
+        "'Seek out Sir Cedric at the castle. He will help you understand " +
+          "your heritage and the growing darkness that threatens our world.'",
+      ) +
+      ' The ancient amulet she gave you feels warm against your chest, a ' +
+      'reminder of the mysteries you must uncover.\n\nBeyond Greendale, ' +
+      'you glimpse the edge of the Enchanted Forest—an ancient woodland ' +
+      'where magic flows like water and spirits older than memory dwell ' +
+      'among the trees. The very air seems to shimmer with possibility ' +
+      'and danger.\n\nThis is where your true journey begins. In ' +
+      'Greendale, you must prove yourself worthy, forge alliances with ' +
+      'powerful allies, and master the magical arts. Only then will you ' +
+      "be ready to face the forest's deepest secrets and the growing " +
+      'storm that threatens all you hold dear.\n\nTake a deep breath and ' +
+      'step forward into your destiny.\n'
     )
   }
 

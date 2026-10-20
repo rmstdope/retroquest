@@ -1,4 +1,4 @@
-import { Spell, type Character, type GameState } from '@/engine'
+import { Spell, type Character, type GameState, characterName } from '@/engine'
 import { FLAG_FOUND_RAVINE } from '../Act2StoryFlags'
 import { Ravine } from '../items/Ravine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
@@ -101,17 +101,17 @@ export class ForestSpeechSpell extends Spell {
     ) {
       return (
         `[success]You cast [spell_name]${this.name}[/spell_name] on ` +
-        `[character_name]${tname}[/character_name], opening a channel of deep, ` +
-        "mystical communication. Through the spell's magic, you can understand " +
-        'their ancient wisdom and forest secrets.' +
-        '[/success]'
+        characterName(tname) +
+        ', opening a channel of deep, mystical communication. Through the ' +
+        "spell's magic, you can understand their ancient wisdom and forest " +
+        'secrets.[/success]'
       )
     }
     return (
       `[dim]You cast [spell_name]${this.name}[/spell_name] on ` +
-      `[character_name]${tname}[/character_name], but this spell is designed for ` +
-      'communication with forest beings and natural spirits. It has no effect ' +
-      'on this character.[/dim]'
+      characterName(tname) +
+      ', but this spell is designed for communication with forest beings ' +
+      'and natural spirits. It has no effect on this character.[/dim]'
     )
   }
 }

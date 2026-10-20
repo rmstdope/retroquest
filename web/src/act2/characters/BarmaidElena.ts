@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { GreaterHealSpell } from '../spells/GreaterHealSpell'
 import { DispelSpell } from '../spells/DispelSpell'
 import {
@@ -32,45 +32,65 @@ export class BarmaidElena extends Character {
     if (gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
       const name = this.name
       return (
-        `[character_name]${name}[/character_name]: [dialogue]*beaming with health and vitality* ` +
-        "Oh, thank you so much! I feel like I'm alive again! The curse is " +
-        'completely gone, and I owe you my life. My father is so grateful - ' +
-        "he insists you take our family's sacred charm as a token of our " +
-        'eternal gratitude. You are truly a hero![/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          '*beaming with health and vitality* Oh, thank you so much! I feel ' +
+            "like I'm alive again! The curse is completely gone, and I owe you " +
+            'my life. My father is so grateful - he insists you take our ' +
+            "family's sacred charm as a token of our eternal gratitude. You " +
+            'are truly a hero!',
+        )
       )
     } else if (this.elenaPurified) {
       const name = this.name
       return (
-        `[character_name]${name}[/character_name]: [dialogue]*glowing with pure energy* ` +
-        'I feel so much cleaner now! The blessed water has washed away the ' +
-        'dark corruption that was clinging to my soul. The curse is almost ' +
-        'gone - I can sense just a few dark tendrils remaining. One powerful ' +
-        'dispelling spell should shatter the last of this evil enchantment![/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          '*glowing with pure energy* I feel so much cleaner now! The ' +
+            'blessed water has washed away the dark corruption that was ' +
+            'clinging to my soul. The curse is almost gone - I can sense just ' +
+            'a few dark tendrils remaining. One powerful dispelling spell ' +
+            'should shatter the last of this evil enchantment!',
+        )
       )
     } else if (this.elenaInitialHealing) {
       const name = this.name
       return (
-        `[character_name]${name}[/character_name]: [dialogue]*looking much better but still ` +
-        "weak* The healing magic has given me strength! I can feel the curse's " +
-        "grip weakening, but it's still there, clinging to me. I think you'll " +
-        'need to purify the dark magic with blessed water and then cast a ' +
-        'powerful dispelling spell to break it completely.[/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          '*looking much better but still weak* The healing magic has given ' +
+            "me strength! I can feel the curse's grip weakening, but it's " +
+            "still there, clinging to me. I think you'll need to purify the " +
+            'dark magic with blessed water and then cast a powerful dispelling ' +
+            'spell to break it completely.',
+        )
       )
     } else if (!gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)) {
       gameState.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
       const name = this.name
       return (
-        `[character_name]${name}[/character_name]: [dialogue]*coughs weakly* Hello, traveler. ` +
-        "I apologize for my appearance... I've been cursed by a dark wizard who " +
-        'passed through town weeks ago. The curse grows stronger each day, ' +
-        'draining my life force. My father searches desperately for a cure, but ' +
-        'I fear only someone with powerful magical abilities could break such ' +
-        'dark magic.[/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          '*coughs weakly* Hello, traveler. I apologize for my appearance... ' +
+            "I've been cursed by a dark wizard who passed through town weeks " +
+            'ago. The curse grows stronger each day, draining my life force. ' +
+            'My father searches desperately for a cure, but I fear only ' +
+            'someone with powerful magical abilities could break such dark ' +
+            'magic.',
+        )
       )
     } else {
       return (
-        `[character_name]${this.name}[/character_name]: [dialogue]*weakly* Have you found ` +
-        'a way to break the curse? I can feel my strength fading more each day...[/dialogue]'
+        characterName(this.name) +
+        ': ' +
+        speech(
+          '*weakly* Have you found a way to break the curse? I can feel my ' +
+            'strength fading more each day...',
+        )
       )
     }
   }

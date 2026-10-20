@@ -1,4 +1,11 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  characterName,
+  event,
+  speech,
+} from '@/engine'
 import { EntryPass } from '../items/EntryPass'
 import { CastleApproach } from '../rooms/CastleApproach'
 
@@ -21,16 +28,24 @@ export class Herald extends Character {
     const name = this.name
     if (this.receivedPass) {
       return (
-        `[character_name]${name}[/character_name]: [dialogue]Your credentials have been ` +
-        'verified and you have been granted formal audience rights. You may ' +
-        'proceed to meet with [character_name]Sir Cedric[/character_name] and ' +
-        'other members of the court.[/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          'Your credentials have been verified and you have been granted ' +
+            'formal audience rights. You may proceed to meet with ' +
+            characterName('Sir Cedric') +
+            ' and other members of the court.',
+        )
       )
     } else {
       return (
-        `[character_name]${name}[/character_name]: [dialogue]Greetings, traveler. I must ` +
-        'examine your credentials before you can be granted audience with the ' +
-        'nobility. Do you have a formal pass or letter of recommendation?[/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          'Greetings, traveler. I must examine your credentials before you ' +
+            'can be granted audience with the nobility. Do you have a formal ' +
+            'pass or letter of recommendation?',
+        )
       )
     }
   }
@@ -48,14 +63,20 @@ export class Herald extends Character {
       const name = this.name
       const itemName = item.name
       return (
-        `[event]You offer the [item_name]${itemName}[/item_name] to the ` +
-        `[character_name]${name}[/character_name].[/event]\n` +
-        (`[success]You present the [item_name]${itemName}[/item_name] to ` +
-          `the [character_name]${name}[/character_name]. He examines the seal `) +
-        ("carefully and nods with approval. [dialogue]'This is a formal " +
-          'recommendation of excellent standing. You are granted formal audience ' +
-          "rights with the nobility.'[/dialogue] The pass has been officially " +
-          'registered.[/success]')
+        event(
+          `You offer the [item_name]${itemName}[/item_name] to the ` +
+            characterName(name) +
+            '.',
+        ) +
+        `\n[success]You present the [item_name]${itemName}[/item_name] to ` +
+        'the ' +
+        characterName(name) +
+        '. He examines the seal carefully and nods with approval. ' +
+        speech(
+          "'This is a formal recommendation of excellent standing. You are " +
+            "granted formal audience rights with the nobility.'",
+        ) +
+        ' The pass has been officially registered.[/success]'
       )
     } else {
       return super.giveItem(gameState, item)

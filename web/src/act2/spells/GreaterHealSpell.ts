@@ -1,4 +1,4 @@
-import { Spell, type Character, type GameState } from '@/engine'
+import { Spell, type Character, type GameState, characterName } from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
 
 /**
@@ -38,9 +38,9 @@ export class GreaterHealSpell extends Spell {
     const tname = targetCharacter.name
     return (
       `[success]You cast [spell_name]${name}[/spell_name] on ` +
-      `[character_name]${tname}[/character_name]. Healing energy flows ` +
-      'through them, restoring their vitality and curing any minor ailments ' +
-      'they may have had.[/success]'
+      characterName(tname) +
+      '. Healing energy flows through them, restoring their vitality and ' +
+      'curing any minor ailments they may have had.[/success]'
     )
   }
 }

@@ -1,4 +1,10 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  characterName,
+  speech,
+} from '@/engine'
 import { EntryPass } from '../items/EntryPass'
 
 /** Entry authority who validates `EntryPass` and may leave the gate area. */
@@ -19,9 +25,13 @@ export class GateCaptain extends Character {
   override talkTo(gameState: GameState): string {
     if (!this.entryPassGiven) {
       return (
-        'The [character_name]Gate Captain[/character_name] looks at you with a ' +
-        "professional but guarded expression. [dialogue]'State your business in " +
-        "Greendale, traveler. Do you have proper documentation for entry?'[/dialogue]"
+        'The ' +
+        characterName('Gate Captain') +
+        ' looks at you with a professional but guarded expression. ' +
+        speech(
+          "'State your business in Greendale, traveler. Do you have proper " +
+            "documentation for entry?'",
+        )
       )
     } else {
       const characters = gameState.currentRoom.characters
@@ -30,13 +40,17 @@ export class GateCaptain extends Character {
         // Remove self from the current room
         characters.splice(index, 1)
         return (
-          'The [character_name]Gate Captain[/character_name] nods respectfully. ' +
-          "[dialogue]'Welcome to Greendale, honored visitor. You'll need a map " +
-          'to navigate the city - the streets can be quite maze-like for ' +
-          'newcomers. Feel free to look around here for anything that might ' +
-          "help you find your way.'[/dialogue] With that, " +
-          'he salutes smartly and walks back to his patrol duties, leaving ' +
-          'you free to explore the gate area.'
+          'The ' +
+          characterName('Gate Captain') +
+          ' nods respectfully. ' +
+          speech(
+            "'Welcome to Greendale, honored visitor. You'll need a map to " +
+              'navigate the city - the streets can be quite maze-like for ' +
+              'newcomers. Feel free to look around here for anything that might ' +
+              "help you find your way.'",
+          ) +
+          ' With that, he salutes smartly and walks back to his patrol ' +
+          'duties, leaving you free to explore the gate area.'
         )
       } else {
         return (
@@ -54,27 +68,32 @@ export class GateCaptain extends Character {
         const name = this.name
         return (
           'You have already shown the entry pass to the ' +
-          `[character_name]${name}[/character_name]. ` +
-          'He waves you through with respect.'
+          characterName(name) +
+          '. He waves you through with respect.'
         )
       }
 
       this.entryPassGiven = true
 
       return (
-        'The [character_name]Gate Captain[/character_name] examines the entry pass ' +
-        'carefully when you show it to him, noting the official seal. His expression ' +
-        'changes to one of respect as he recognizes the authority behind it. ' +
-        "[dialogue]'This is legitimate documentation indeed. You are welcome in " +
-        "Greendale, honored visitor. Please, proceed with our blessing.'[/dialogue] " +
-        'He steps aside and gestures toward the city.'
+        'The ' +
+        characterName('Gate Captain') +
+        ' examines the entry pass carefully when you show it to him, ' +
+        'noting the official seal. His expression changes to one of ' +
+        'respect as he recognizes the authority behind it. ' +
+        speech(
+          "'This is legitimate documentation indeed. You are welcome in " +
+            "Greendale, honored visitor. Please, proceed with our blessing.'",
+        ) +
+        ' He steps aside and gestures toward the city.'
       )
     }
 
     return (
-      'The [character_name]Gate Captain[/character_name] politely declines the ' +
-      `${item.name}. ` +
-      "[dialogue]'I only need to see proper entry documentation.'[/dialogue]"
+      'The ' +
+      characterName('Gate Captain') +
+      ` politely declines the ${item.name}. ` +
+      speech("'I only need to see proper entry documentation.'")
     )
   }
 }

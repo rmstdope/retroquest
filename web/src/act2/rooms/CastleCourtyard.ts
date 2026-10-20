@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { GameState } from '@/engine'
 import { SirCedric } from '../characters/SirCedric'
 import { TrainingMaster } from '../characters/TrainingMaster'
@@ -39,11 +39,11 @@ export class CastleCourtyard extends Room {
     if (!this.diaryFound) {
       // Check if squires have been talked to first
       if (!gameState.getStoryFlag(FLAG_SQUIRES_TALKED_TO)) {
-        return (
-          '[event]You search around the stone benches and training equipment, ' +
-          "but you don't find anything of particular interest. The squires are " +
-          'watching you curiously — perhaps you should talk to them first to learn ' +
-          'more about this place.[/event]'
+        return event(
+          'You search around the stone benches and training equipment, but ' +
+            "you don't find anything of particular interest. The squires are " +
+            'watching you curiously — perhaps you should talk to them first to ' +
+            'learn more about this place.',
         )
       }
 
@@ -52,11 +52,14 @@ export class CastleCourtyard extends Room {
       this.addItem(diary)
       this.diaryFound = true
       return (
-        '[event]You search around the stone benches and training equipment. ' +
-        'Remembering what the squires told you, you look more carefully under ' +
-        'one of the ancient stone benches and discover a worn leather diary ' +
-        'that appears to have been left by a former squire.[/event]\n\n' +
-        "[success]You found a [item_name]squire's diary[/item_name]![/success]"
+        event(
+          'You search around the stone benches and training equipment. ' +
+            'Remembering what the squires told you, you look more carefully ' +
+            'under one of the ancient stone benches and discover a worn ' +
+            'leather diary that appears to have been left by a former squire.',
+        ) +
+        "\n\n[success]You found a [item_name]squire's " +
+        'diary[/item_name]![/success]'
       )
     }
     return "[dim]You've already searched this area thoroughly.[/dim]"

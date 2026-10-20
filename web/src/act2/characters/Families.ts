@@ -1,4 +1,11 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  characterName,
+  event,
+  speech,
+} from '@/engine'
 import { FLAG_HELPED_ELDERLY_RESIDENTS } from '../Act2StoryFlags'
 import { WalkingStick } from '../items/WalkingStick'
 import { HealingHerbs } from '../items/HealingHerbs'
@@ -25,20 +32,25 @@ export class Families extends Character {
   override talkTo(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_HELPED_ELDERLY_RESIDENTS)) {
       return (
-        `[failure]The [character_name]${this.name}[/character_name] seem busy ` +
-        'with their own affairs and no one seems to want to talk to you. They give ' +
-        'you polite but distant nods, clearly not interested in conversation with a ' +
-        'stranger.[/failure]'
+        '[failure]The ' +
+        characterName(this.name) +
+        ' seem busy with their own affairs and no one seems to want to ' +
+        'talk to you. They give you polite but distant nods, clearly not ' +
+        'interested in conversation with a stranger.[/failure]'
       )
     }
 
     let response =
-      `[character_name]${this.name}[/character_name]: ` +
-      "[dialogue]Welcome to our neighborhood! It's lovely to meet someone who takes " +
-      'time to help others. Greendale has a rich ' +
-      'history - our families have been here for generations. The city has always been ' +
-      "a place where those with good hearts and magical talents find a home. We're " +
-      'grateful for folks like you who lend a hand to those in need.[/dialogue]'
+      characterName(this.name) +
+      ': ' +
+      speech(
+        "Welcome to our neighborhood! It's lovely to meet someone who " +
+          'takes time to help others. Greendale has a rich history - our ' +
+          'families have been here for generations. The city has always been ' +
+          'a place where those with good hearts and magical talents find a ' +
+          "home. We're grateful for folks like you who lend a hand to those " +
+          'in need.',
+      )
 
     // Give healing herbs on first conversation after helping elderly residents
     if (!this.healingHerbsGiven) {
@@ -46,13 +58,19 @@ export class Families extends Character {
       const herbs = new HealingHerbs()
       gameState.addItemToInventory(herbs)
       response +=
-        '\n\n[event]An elderly woman from one of the ' +
-        `[character_name]${this.name}[/character_name] approaches you with a ` +
-        "warm smile. [dialogue]'Here, dear,'[/dialogue] she says, pressing a bundle " +
-        "into your hands. [dialogue]'These are rare healing herbs that have been in " +
-        'our family for generations. Someone who helps others as you do should have ' +
-        "them.'[/dialogue] You receive " +
-        `[item_name]${herbs.name}[/item_name]![/event]`
+        '\n\n' +
+        event(
+          'An elderly woman from one of the ' +
+            characterName(this.name) +
+            ' approaches you with a warm smile. ' +
+            speech("'Here, dear,'") +
+            ' she says, pressing a bundle into your hands. ' +
+            speech(
+              "'These are rare healing herbs that have been in our family for " +
+                "generations. Someone who helps others as you do should have them.'",
+            ) +
+            ` You receive [item_name]${herbs.name}[/item_name]!`,
+        )
     }
 
     return response

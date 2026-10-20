@@ -1,4 +1,10 @@
-import { Character, type GameState } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  event,
+  speech,
+} from '@/engine'
 import { CrystalClearWater } from '../items/CrystalClearWater'
 import { Moonflowers } from '../items/Moonflowers'
 import { FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED } from '../Act2StoryFlags'
@@ -80,47 +86,51 @@ export class WaterNymphs extends Character {
 
   /** Present the current riddle, or praise the player once all are solved. */
   override talkTo(_gameState: GameState): string {
-    const eventMsg =
-      `[event]You approach the [character_name]${this.name}[/character_name] ` +
-      'by the sacred stream.[/event]'
+    const eventMsg = event(
+      'You approach the ' + characterName(this.name) + ' by the sacred stream.',
+    )
     if (this.riddlesCompleted) {
       // After completing all riddles
       return (
         eventMsg +
-        '\n' +
-        (`The [character_name]${this.name}[/character_name] ` +
-          "shimmer with approval. [dialogue]'You have proven your wisdom and " +
-          "understanding of the forest's ways, young seeker. The sacred " +
-          'gifts are yours to take - the crystal-clear water and moonflowers ' +
-          'that grow here. Use them wisely in your quest to protect the ' +
-          "natural world.'[/dialogue]")
+        '\nThe ' +
+        characterName(this.name) +
+        ' shimmer with approval. ' +
+        speech(
+          "'You have proven your wisdom and understanding of the forest's " +
+            'ways, young seeker. The sacred gifts are yours to take - the ' +
+            'crystal-clear water and moonflowers that grow here. Use them ' +
+            "wisely in your quest to protect the natural world.'",
+        )
       )
     } else if (this.currentRiddle < this.riddles.length) {
       // Present the current riddle
       const riddle = this.riddles[this.currentRiddle]
       return (
         eventMsg +
-        '\n' +
-        (`The [character_name]${this.name}[/character_name] ` +
-          'speak in harmonious, flowing voices like water over stones. ' +
-          "[dialogue]'Welcome, forest walker, to our sacred glade. To prove your " +
-          'wisdom and earn our trust, you must answer our riddles three. ' +
-          'Listen carefully to the ' +
-          `${this.getOrdinalWord(this.currentRiddle + 1)} riddle:'[/dialogue]`) +
+        '\nThe ' +
+        characterName(this.name) +
+        ' speak in harmonious, flowing voices like water over stones. ' +
+        speech(
+          "'Welcome, forest walker, to our sacred glade. To prove your " +
+            'wisdom and earn our trust, you must answer our riddles three. ' +
+            `Listen carefully to the ${this.getOrdinalWord(this.currentRiddle + 1)}` +
+            " riddle:'",
+        ) +
         '\n\n' +
-        `[dialogue]'${riddle.question}'[/dialogue]\n\n` +
-        ('[dim]Think carefully and speak your answer when you believe you ' +
-          "know it. Use the command 'say <your_answer> to water nymphs' to " +
-          'give your solution.[/dim]')
+        speech(`'${riddle.question}'`) +
+        '\n\n[dim]Think carefully and speak your answer when you believe you ' +
+        "know it. Use the command 'say <your_answer> to water nymphs' to " +
+        'give your solution.[/dim]'
       )
     }
     // This shouldn't happen, but just in case
     return (
       eventMsg +
-      '\n' +
-      (`The [character_name]${this.name}[/character_name] ` +
-        "smile mysteriously. [dialogue]'The riddles have been answered, young " +
-        "one.'[/dialogue]")
+      '\nThe ' +
+      characterName(this.name) +
+      ' smile mysteriously. ' +
+      speech("'The riddles have been answered, young one.'")
     )
   }
 
@@ -128,10 +138,11 @@ export class WaterNymphs extends Character {
   override sayTo(gameState: GameState, words: string): string {
     if (this.riddlesCompleted) {
       return (
-        `[dim]The [character_name]${this.name}[/character_name] have ` +
-        'already accepted your wisdom. ' +
-        `They listen to your words '${words}' with gentle understanding ` +
-        'but have no more riddles for you.[/dim]'
+        '[dim]The ' +
+        characterName(this.name) +
+        ` have already accepted your wisdom. They listen to your words '${words}` +
+        "' with gentle understanding but have no more riddles for " +
+        'you.[/dim]'
       )
     }
 
@@ -158,50 +169,61 @@ export class WaterNymphs extends Character {
         gameState.currentRoom.items.push(new Moonflowers())
 
         return (
-          `[success]Correct! '${words}' is indeed the answer. ` +
-          `${riddle.explanation}[/success]\n\n` +
-          (`The [character_name]${this.name}[/character_name] ` +
-            "sing in harmonious delight. [dialogue]'Wisely spoken, all three riddles " +
-            'answered! You have proven your deep understanding of the ' +
-            "forest's mysteries. Accept our gifts - the crystal-clear water " +
-            'and moonflowers that grow in this sacred place. May they ' +
-            "serve you well in your noble quest.'[/dialogue]") +
+          `[success]Correct! '${words}' is indeed the answer. ${riddle.explanation}` +
+          '[/success]\n\nThe ' +
+          characterName(this.name) +
+          ' sing in harmonious delight. ' +
+          speech(
+            "'Wisely spoken, all three riddles answered! You have proven your " +
+              "deep understanding of the forest's mysteries. Accept our gifts - " +
+              'the crystal-clear water and moonflowers that grow in this sacred ' +
+              "place. May they serve you well in your noble quest.'",
+          ) +
           '\n\n' +
-          ('[event]The water nymphs gesture toward the stream and flowers, ' +
-            'making them accessible for you to take.[/event]')
+          event(
+            'The water nymphs gesture toward the stream and flowers, making ' +
+              'them accessible for you to take.',
+          )
         )
       }
       const nextRiddle = this.riddles[this.currentRiddle]
       return (
-        `[success]Correct! '${words}' is the right answer. ` +
-        `${riddle.explanation}[/success]\n\n` +
-        (`The [character_name]${this.name}[/character_name] ` +
-          "nod approvingly. [dialogue]'Well spoken! Now for the " +
-          `${this.getOrdinalWord(this.currentRiddle + 1)} riddle:'` +
-          '[/dialogue]') +
+        `[success]Correct! '${words}' is the right answer. ${riddle.explanation}` +
+        '[/success]\n\nThe ' +
+        characterName(this.name) +
+        ' nod approvingly. ' +
+        speech(
+          `'Well spoken! Now for the ${this.getOrdinalWord(this.currentRiddle + 1)}` +
+            " riddle:'",
+        ) +
         '\n\n' +
-        `[dialogue]'${nextRiddle.question}'[/dialogue]`
+        speech(`'${nextRiddle.question}'`)
       )
     }
     return (
-      `[failure]The [character_name]${this.name}[/character_name] ` +
-      `shake their heads gently as you say '${words}'.[/failure] ` +
-      "[dialogue]'Not quite, young seeker. Think more deeply about the forest " +
-      'and its ways. The answer lies in understanding the natural ' +
-      "world around you.'[/dialogue]\n\n" +
-      `[dialogue]'${riddle.question}'[/dialogue]\n\n` +
-      ("[dim]Consider what you've learned about the forest during your " +
-        'journey.[/dim]')
+      '[failure]The ' +
+      characterName(this.name) +
+      ` shake their heads gently as you say '${words}'.[/failure] ` +
+      speech(
+        "'Not quite, young seeker. Think more deeply about the forest and " +
+          'its ways. The answer lies in understanding the natural world ' +
+          "around you.'",
+      ) +
+      '\n\n' +
+      speech(`'${riddle.question}'`) +
+      "\n\n[dim]Consider what you've learned about the forest during your " +
+      'journey.[/dim]'
     )
   }
 
   /** Describe the nymphs' ethereal appearance. */
   override examine(_gameState: GameState): string {
-    return (
-      `[event]You study the [character_name]${this.name}[/character_name] ` +
-      `in wonder. ${this.description} They move with fluid grace, and you can ` +
-      'see the wisdom of ages in their ever-changing features. These are ' +
-      "ancient guardians of the forest's deepest secrets.[/event]"
+    return event(
+      'You study the ' +
+        characterName(this.name) +
+        ` in wonder. ${this.description} They move with fluid grace, and ` +
+        'you can see the wisdom of ages in their ever-changing features. ' +
+        "These are ancient guardians of the forest's deepest secrets.",
     )
   }
 }
