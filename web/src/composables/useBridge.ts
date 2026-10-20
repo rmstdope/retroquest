@@ -401,6 +401,16 @@ export function useBridge() {
     return requireGame().controller.isActRunning()
   }
 
+  /** True once the last act is complete. */
+  function isGameOver(): boolean {
+    return requireGame().controller.isGameOver()
+  }
+
+  /** The current run state's text, without a new turn. */
+  function getResultText(): string {
+    return requireGame().game.getResultText()
+  }
+
   function getMusicInfo(): MusicInfo {
     return requireGame().controller.getCurrentMusic()
   }
@@ -447,6 +457,8 @@ export function useBridge() {
     advanceTurn,
     isGameRunning,
     isActRunning,
+    isGameOver,
+    getResultText,
     getMusicInfo,
   }
 }

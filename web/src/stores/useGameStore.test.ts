@@ -77,6 +77,8 @@ function createMockBridge() {
     advanceTurn: vi.fn(() => 'Turn advanced'),
     isGameRunning: vi.fn(() => true),
     isActRunning: vi.fn(() => true),
+    isGameOver: vi.fn(() => false),
+    getResultText: vi.fn(() => ''),
     getMusicInfo: vi.fn(() => ({
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
@@ -1548,6 +1550,17 @@ describe('useGameStore', () => {
       })
     })
 
+    it('goes on from any chapter but the last as before', async () => {
+      await store.initGame()
+      expect(store.modalChapter).toMatchObject({ kind: 'intro' })
+
+      store.continueChapter()
+
+      expect(store.finishAsked).toBe(false)
+      expect(store.modalChapter).toBe(null)
+      expect(bridge.look).toHaveBeenCalled()
+    })
+
     it('has no chapter for a quest pop-up', async () => {
       await store.initGame()
       store.dismissModal()
@@ -1694,6 +1707,143 @@ describe('useGameStore', () => {
       expect(store.bagHasNew).toBe(false)
       expect(store.modalChapter).toMatchObject({ kind: 'intro', act: 'Act I' })
       expect(store.acceptInput).toBe(false)
+    })
+  })
+
+  describe('game over', () => {
+    const INTRO_4 = '[bold]ACT 4: THE LONG NIGHT ENDS[/bold]\n\nThe fortress.'
+    const STATS = {
+      questsCompleted: 6,
+      questsTotal: 6,
+      spells: 14,
+      places: 18,
+    }
+    const CLOSING =
+      'The realm breathes again.\n\nCongratulations — you have completed ' +
+      'Act 4, the final act of RetroQuest!\n'
+
+    beforeEach(async () => {
+      bridge.advanceTurn
+        .mockReturnValueOnce('LOGO')
+        .mockReturnValueOnce(INTRO_4)
+      await store.initGame()
+      store.dismissModal()
+      bridge.getActStats.mockReturnValue(STATS)
+      bridge.getResultText.mockReturnValue(CLOSING)
+    })
+
+    /** The command that completes the last act. */
+    function finishLastAct(): void {
+      bridge.handleCommand.mockReturnValue('The realm breathes again.')
+      bridge.isAcceptingInput.mockReturnValue(false)
+      bridge.isActRunning.mockReturnValue(false)
+      bridge.isGameOver.mockReturnValue(true)
+      store.submitCommand('use crown')
+    }
+
+    const FINAL_CHAPTER = {
+      kind: 'complete',
+      act: 'Act IV',
+      title: 'The Long Night Ends',
+      body: 'Congratulations — you have completed Act 4, the final act of RetroQuest!',
+      stats: STATS,
+      final: true,
+    }
+
+    it('closes the last act with a final chapter page', () => {
+      finishLastAct()
+      expect(store.showModal).toBe(true)
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      expect(bridge.advanceToRunning).not.toHaveBeenCalled()
+    })
+
+    it('shows the final chapter after the last quest pop-up', () => {
+      bridge.completeQuest
+        .mockReturnValueOnce('[quest_name]Q (main quest)[/quest_name]\n\nDone.')
+        .mockReturnValue(null)
+      finishLastAct()
+      expect(store.modalQuest).not.toBe(null)
+      store.dismissModal()
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      expect(bridge.advanceToRunning).not.toHaveBeenCalled()
+    })
+
+    it('keeps the story room and chips of the command that ended the game', () => {
+      bridge.getInventory
+        .mockReturnValueOnce([{ name: 'Sword', description: '' }])
+        .mockReturnValue([
+          { name: 'Sword', description: '' },
+          { name: '[item_name]Crown[/item_name]', description: '' },
+        ])
+      store.refreshPanels()
+      finishLastAct()
+      const turn = store.turns.at(-1)!
+      expect(turn.room).toBe('Village Square')
+      expect(turn.gained.length).toBeGreaterThan(0)
+    })
+
+    it('asks to save on the final chapter instead of going on', () => {
+      finishLastAct()
+      store.continueChapter()
+      expect(store.finishAsked).toBe(true)
+      expect(store.showModal).toBe(true)
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      store.cancelFinish()
+      expect(store.finishAsked).toBe(false)
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      expect(store.ending).toBe(null)
+    })
+
+    it('saves to the quick slot and ends the game', () => {
+      finishLastAct()
+      store.continueChapter()
+      bridge.quickSaveGame.mockClear()
+      expect(store.finishGame(true)).toBe(true)
+      expect(bridge.quickSaveGame).toHaveBeenCalledOnce()
+      expect(store.ending).toEqual({
+        text: 'The realm breathes again.',
+        saved: true,
+      })
+      expect(store.finishAsked).toBe(false)
+      expect(store.showModal).toBe(false)
+      expect(store.modalChapter).toBe(null)
+      expect(store.notice).toBe(null)
+    })
+
+    it('keeps the dialog open when the save fails', () => {
+      finishLastAct()
+      store.continueChapter()
+      const turns = store.turns.length
+      bridge.quickSaveGame.mockReturnValue('[failure]Could not save.[/failure]')
+      expect(store.finishGame(true)).toBe(false)
+      expect(store.ending).toBe(null)
+      expect(store.finishAsked).toBe(true)
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      expect(store.turns.length).toBe(turns)
+    })
+
+    it('ends the game without saving', () => {
+      finishLastAct()
+      store.continueChapter()
+      bridge.quickSaveGame.mockClear()
+      expect(store.finishGame(false)).toBe(true)
+      expect(bridge.quickSaveGame).not.toHaveBeenCalled()
+      expect(store.ending).toEqual({
+        text: 'The realm breathes again.',
+        saved: false,
+      })
+    })
+
+    it('starts afresh after a restart', () => {
+      finishLastAct()
+      store.continueChapter()
+      store.finishGame(false)
+      bridge.advanceTurn
+        .mockReturnValueOnce('LOGO')
+        .mockReturnValueOnce(INTRO_4)
+      store.restartGame()
+      expect(store.ending).toBe(null)
+      expect(store.finishAsked).toBe(false)
     })
   })
 

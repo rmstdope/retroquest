@@ -793,4 +793,108 @@ test.describe('Lantern UI (the default)', () => {
     await page.setViewportSize({ width: 320, height: 568 })
     await expect(button).toBeHidden()
   })
+
+  test('asks to save before finishing in a bottom sheet on a small phone', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.modalChapter = {
+        kind: 'complete',
+        act: 'Act IV',
+        title: 'The Long Night Ends',
+        body: 'Congratulations — you have completed Act 4!',
+        stats: { questsCompleted: 6, questsTotal: 6, spells: 14, places: 18 },
+        final: true,
+      }
+      store.showModal = true
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    await page.getByRole('button', { name: 'Finish the game' }).click()
+
+    const dialog = page.getByRole('dialog', { name: 'Save before you finish?' })
+    await expect(dialog).toBeVisible()
+    const box = await dialog.boundingBox()
+    expect(Math.round(box!.y + box!.height)).toBe(568)
+    expect(box!.width).toBe(320)
+    await expect(
+      dialog.getByRole('button', { name: 'Save and finish' }),
+    ).toBeInViewport()
+    await expect(
+      dialog.getByRole('button', { name: 'Finish without saving' }),
+    ).toBeInViewport()
+    await expect(
+      dialog.getByRole('button', { name: 'Save and finish' }),
+    ).toBeFocused()
+
+    await dialog.getByRole('button', { name: 'Finish without saving' }).click()
+
+    await expect(
+      page.getByRole('heading', { name: 'Thank you for playing RetroQuest' }),
+    ).toBeFocused()
+    await expect(page.getByText('This game was not saved.')).toBeVisible()
+  })
+
+  test('scrolls a long ending on a small phone and offers nothing to press', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.ending = {
+        text: 'The long night is over and the realm breathes again. '.repeat(
+          40,
+        ),
+        saved: true,
+      }
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const title = page.getByRole('heading', {
+      name: 'Thank you for playing RetroQuest',
+    })
+    await expect(title).toBeInViewport()
+    const foot = page.getByText('Your game is saved in the quick slot.')
+    await expect(foot).not.toBeInViewport()
+    await foot.scrollIntoViewIfNeeded()
+    await expect(foot).toBeInViewport()
+    // The page itself never scrolls; the end screen does.
+    expect(await page.evaluate(() => document.documentElement.scrollTop)).toBe(
+      0,
+    )
+    await expect(
+      page.locator('button, a, input, textarea, select, [role="dialog"]'),
+    ).toHaveCount(0)
+  })
+
+  test('starts afresh after a reload on the end screen', async ({ page }) => {
+    await page.goto('/')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.ending = { text: 'The end of it all.', saved: false }
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+    await expect(page.getByText('This game was not saved.')).toBeVisible()
+
+    await page.reload()
+    await waitForGame(page)
+
+    await expect(page.locator('.lq-title-page')).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'Thank you for playing RetroQuest' }),
+    ).toHaveCount(0)
+  })
 })

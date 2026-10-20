@@ -222,6 +222,39 @@ describe('Game', () => {
       expect(game.isRunning).toBe(false)
       expect(game.acceptInput).toBe(false)
     })
+
+    it('enters game over when the last act completes, staying in that act', () => {
+      const only = new Act({
+        name: 'Only',
+        rooms: basicRooms(),
+        quests: [],
+        musicFile: 'a.mp3',
+        musicInfo: 'A',
+      })
+      let done = false
+      only.isCompleted = () => done
+      const game = new Game([only])
+      game.newTurn()
+      game.newTurn()
+      expect(game.isGameOver()).toBe(false)
+      done = true
+      game.handleInput('look')
+      game.newTurn()
+      expect(game.isGameOver()).toBe(true)
+      expect(game.isActRunning()).toBe(false)
+      expect(game.isRunning).toBe(false)
+      expect(game.acceptInput).toBe(false)
+      expect(game.currentAct).toBe(0)
+      expect(game.getActName()).toBe('Act 1')
+      expect(game.getResultText()).toContain(
+        'Congratulations — you have completed Act 1, ' +
+          'the final act of RetroQuest!',
+      )
+      game.newTurn()
+      expect(game.isGameOver()).toBe(true)
+      game.handleInput('look')
+      expect(game.getResultText()).not.toContain('Vegetable')
+    })
   })
 
   describe('move', () => {
@@ -920,11 +953,20 @@ describe('Game', () => {
       advanceToSecondAct(game)
       ;(game.acts[1] as StateAct).done = true
       game.newTurn()
+      expect(game.isGameOver()).toBe(true)
       expect(game.isRunning).toBe(false)
       game.save()
       const fresh = twoActGame(storage)
+      fresh.newTurn()
+      fresh.newTurn()
       expect(fresh.load()).toContain('loaded')
       expect(fresh.currentAct).toBe(1)
+      expect(fresh.isActRunning()).toBe(true)
+      expect(fresh.state.currentRoom.name).toBe('Second Room')
+      // The finished act is complete again: the next turn ends the game.
+      ;(fresh.acts[1] as StateAct).done = true
+      fresh.newTurn()
+      expect(fresh.isGameOver()).toBe(true)
     })
 
     it('exposes the save data for other storages and rejects broken data', () => {

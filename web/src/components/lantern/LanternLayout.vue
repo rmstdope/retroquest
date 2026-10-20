@@ -18,6 +18,8 @@ import ActionComposer from './ActionComposer.vue'
 import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
+import EndScreen from './EndScreen.vue'
+import FinishDialog from './FinishDialog.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
 import GameMenu, { type InfoKind, type MenuKind } from './GameMenu.vue'
@@ -45,6 +47,8 @@ import TitlePage from './TitlePage.vue'
  * beside it (always on short screens, where it also starts folded).
  * A new turn opens at its start, with a "More below" pill while the story
  * goes on below the visible part.
+ * After the last act, Finish the game asks to save (FinishDialog), then
+ * only the end screen shows; the act's music keeps playing under it.
  */
 const game = useGameStore()
 const settings = useSettingsStore()
@@ -330,9 +334,18 @@ const chapterTrap = useFocusTrap(chapterDialog)
 function onChapterKeydown(event: KeyboardEvent): void {
   if (event.key === 'Escape') {
     event.stopPropagation()
-    game.dismissModal()
+    game.continueChapter()
   } else chapterTrap.onKeydown(event)
 }
+
+// Closing the save dialog puts focus back on the last chapter's button.
+watch(
+  () => game.finishAsked,
+  (asked) => {
+    if (!asked && game.showModal) chapterPage.value?.focus()
+  },
+  { flush: 'post' },
+)
 
 /** The quest-complete pop-up's eyebrow (none for the engine's text pop-ups). */
 const questEyebrow = computed(() => {
@@ -363,183 +376,193 @@ watch(
 
 <template>
   <div class="lq-root">
-    <LanternHeader
-      :compact="!wide"
-      @menu="openGameDialog('menu')"
-      @open="openGameDialog"
-    >
-      <template v-if="!wide && short" #nav>
-        <SectionNav v-model="section" class="lq-nav-top" />
-      </template>
-    </LanternHeader>
-
-    <main class="lq-main" :class="{ 'lq-wide': wide }">
-      <RoomCard v-if="wide" class="lq-card" @click="onNameClick" />
-      <div v-show="wide || section === 'story'" class="lq-story-wrap">
-        <section
-          ref="storyEl"
-          class="lq-story"
-          aria-label="Story"
-          @click="onNameClick"
-          @scroll.passive="updateMoreBelow"
-        >
-          <h2 class="lq-sr-only">Story</h2>
-          <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
-        </section>
-        <button
-          v-if="moreBelow"
-          ref="moreBelowButton"
-          type="button"
-          class="lq-more-below"
-          @click="readOn"
-        >
-          More below <span aria-hidden="true">↓</span>
-        </button>
-      </div>
-
-      <ActionComposer
-        v-show="wide || (section === 'story' && dockOpen)"
-        :key="`composer-${game.gameNumber}`"
-        ref="composer"
-        class="lq-composer"
-        :class="{ 'lq-sheet': !wide }"
-        :foldable="!wide"
-        @fold="fold"
-      />
-      <DockBar
-        v-if="!wide && section === 'story' && !dockOpen"
-        ref="dock"
-        @open="openDock"
-      />
-
-      <template v-if="!wide">
-        <CompassPanel v-if="section === 'map'" heading />
-        <JournalPanel
-          v-else-if="section !== 'story'"
-          :key="`journal-${game.gameNumber}`"
-          :tab="section"
-          class="lq-section-view"
-        />
-      </template>
-
-      <aside v-if="wide" class="lq-aside" aria-label="Map and journal">
-        <CompassPanel />
-        <JournalPanel
-          :key="`journal-${game.gameNumber}`"
-          class="lq-journal-panel"
-        />
-      </aside>
-    </main>
-
-    <SectionNav
-      v-if="!wide && !short"
-      v-model="section"
-      class="lq-nav-bottom"
+    <!-- The game has ended: nothing but the end screen. -->
+    <EndScreen
+      v-if="game.ending"
+      :text="game.ending.text"
+      :saved="game.ending.saved"
     />
-
-    <SaveToast />
-
-    <StoryNameMenu
-      v-if="nameMenu"
-      :actions="nameMenu.actions"
-      :x="nameMenu.x"
-      :top="nameMenu.top"
-      :bottom="nameMenu.bottom"
-      @pick="runNameAction"
-      @close="closeNameMenu"
-    />
-
-    <!-- The game's title page, over the first act's chapter page. -->
-    <TitlePage
-      v-if="game.showTitle"
-      :text="game.titleText"
-      @start="startGame"
-    />
-
-    <!-- Dialogs the player opens (a game pop-up takes precedence). -->
-    <template v-if="!game.showModal">
-      <QuitDialog v-if="game.quitAsked" />
-      <QuestDialog
-        v-else-if="shownQuestView"
-        :key="shownQuestView.name"
-        :quest="shownQuestView"
-        @close="game.shownQuest = null"
-      />
-      <GameMenu
-        v-else-if="gameDialog === 'menu'"
-        @close="closeGameDialog"
+    <template v-else>
+      <LanternHeader
+        :compact="!wide"
+        @menu="openGameDialog('menu')"
         @open="openGameDialog"
-      />
-      <SettingsDialog
-        v-else-if="gameDialog === 'settings'"
-        @close="closeGameDialog"
-      />
-      <SaveLoadDialog
-        v-else-if="gameDialog === 'save' || gameDialog === 'load'"
-        :mode="gameDialog"
-        @close="closeGameDialog"
-      />
-      <LanternDialog
-        v-else-if="gameDialog"
-        :key="gameDialog"
-        :title="INFO_TITLES[gameDialog]"
-        eyebrow="RetroQuest"
-        @close="closeGameDialog"
       >
-        <!-- eslint-disable vue/no-v-html -->
-        <div class="lq-info" v-html="infoHtml"></div>
-        <!-- eslint-enable vue/no-v-html -->
-      </LanternDialog>
-    </template>
+        <template v-if="!wide && short" #nav>
+          <SectionNav v-model="section" class="lq-nav-top" />
+        </template>
+      </LanternHeader>
 
-    <!-- Act intro / act complete: a full-screen chapter page. Each chapter
-         is a new page, so it opens at its top. -->
-    <section
-      v-if="game.showModal && game.modalChapter"
-      ref="chapterDialog"
-      class="lq-chapter-dialog"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="lq-dialog-title"
-      tabindex="-1"
-      @keydown="onChapterKeydown"
-    >
-      <ChapterPage
-        :key="`${game.modalChapter.kind} ${game.modalChapter.act}`"
-        ref="chapterPage"
-        :chapter="game.modalChapter"
-        title-id="lq-dialog-title"
-        @continue="game.dismissModal()"
+      <main class="lq-main" :class="{ 'lq-wide': wide }">
+        <RoomCard v-if="wide" class="lq-card" @click="onNameClick" />
+        <div v-show="wide || section === 'story'" class="lq-story-wrap">
+          <section
+            ref="storyEl"
+            class="lq-story"
+            aria-label="Story"
+            @click="onNameClick"
+            @scroll.passive="updateMoreBelow"
+          >
+            <h2 class="lq-sr-only">Story</h2>
+            <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
+          </section>
+          <button
+            v-if="moreBelow"
+            ref="moreBelowButton"
+            type="button"
+            class="lq-more-below"
+            @click="readOn"
+          >
+            More below <span aria-hidden="true">↓</span>
+          </button>
+        </div>
+
+        <ActionComposer
+          v-show="wide || (section === 'story' && dockOpen)"
+          :key="`composer-${game.gameNumber}`"
+          ref="composer"
+          class="lq-composer"
+          :class="{ 'lq-sheet': !wide }"
+          :foldable="!wide"
+          @fold="fold"
+        />
+        <DockBar
+          v-if="!wide && section === 'story' && !dockOpen"
+          ref="dock"
+          @open="openDock"
+        />
+
+        <template v-if="!wide">
+          <CompassPanel v-if="section === 'map'" heading />
+          <JournalPanel
+            v-else-if="section !== 'story'"
+            :key="`journal-${game.gameNumber}`"
+            :tab="section"
+            class="lq-section-view"
+          />
+        </template>
+
+        <aside v-if="wide" class="lq-aside" aria-label="Map and journal">
+          <CompassPanel />
+          <JournalPanel
+            :key="`journal-${game.gameNumber}`"
+            class="lq-journal-panel"
+          />
+        </aside>
+      </main>
+
+      <SectionNav
+        v-if="!wide && !short"
+        v-model="section"
+        class="lq-nav-bottom"
       />
-    </section>
 
-    <!-- Other pop-ups: quest complete, or the engine's text. Keyed so each
-         one opens from its top. Focus goes to the actions afterwards. -->
-    <LanternDialog
-      v-else-if="game.showModal"
-      :key="game.modalQuest?.name ?? game.modalTitle"
-      :title="game.modalQuest?.name ?? game.modalTitle"
-      :eyebrow="questEyebrow"
-      :closable="false"
-      :restore-focus="false"
-      @close="game.dismissModal()"
-    >
-      <QuestCompleteContent v-if="game.modalQuest" :news="game.modalQuest" />
-      <!-- eslint-disable vue/no-v-html -->
-      <div v-else class="lq-dialog-body" v-html="game.modalBody"></div>
-      <!-- eslint-enable vue/no-v-html -->
-      <template #footer>
-        <button
-          ref="continueButton"
-          type="button"
-          class="lq-send"
-          data-autofocus
-          @click="game.dismissModal()"
+      <SaveToast />
+
+      <StoryNameMenu
+        v-if="nameMenu"
+        :actions="nameMenu.actions"
+        :x="nameMenu.x"
+        :top="nameMenu.top"
+        :bottom="nameMenu.bottom"
+        @pick="runNameAction"
+        @close="closeNameMenu"
+      />
+
+      <!-- The game's title page, over the first act's chapter page. -->
+      <TitlePage
+        v-if="game.showTitle"
+        :text="game.titleText"
+        @start="startGame"
+      />
+
+      <!-- Dialogs the player opens (a game pop-up takes precedence). -->
+      <template v-if="!game.showModal">
+        <QuitDialog v-if="game.quitAsked" />
+        <QuestDialog
+          v-else-if="shownQuestView"
+          :key="shownQuestView.name"
+          :quest="shownQuestView"
+          @close="game.shownQuest = null"
+        />
+        <GameMenu
+          v-else-if="gameDialog === 'menu'"
+          @close="closeGameDialog"
+          @open="openGameDialog"
+        />
+        <SettingsDialog
+          v-else-if="gameDialog === 'settings'"
+          @close="closeGameDialog"
+        />
+        <SaveLoadDialog
+          v-else-if="gameDialog === 'save' || gameDialog === 'load'"
+          :mode="gameDialog"
+          @close="closeGameDialog"
+        />
+        <LanternDialog
+          v-else-if="gameDialog"
+          :key="gameDialog"
+          :title="INFO_TITLES[gameDialog]"
+          eyebrow="RetroQuest"
+          @close="closeGameDialog"
         >
-          Continue
-        </button>
+          <!-- eslint-disable vue/no-v-html -->
+          <div class="lq-info" v-html="infoHtml"></div>
+          <!-- eslint-enable vue/no-v-html -->
+        </LanternDialog>
       </template>
-    </LanternDialog>
+
+      <!-- Act intro / act complete: a full-screen chapter page. Each chapter
+         is a new page, so it opens at its top. -->
+      <section
+        v-if="game.showModal && game.modalChapter"
+        ref="chapterDialog"
+        class="lq-chapter-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lq-dialog-title"
+        tabindex="-1"
+        @keydown="onChapterKeydown"
+      >
+        <ChapterPage
+          :key="`${game.modalChapter.kind} ${game.modalChapter.act}`"
+          ref="chapterPage"
+          :chapter="game.modalChapter"
+          title-id="lq-dialog-title"
+          @continue="game.continueChapter()"
+        />
+      </section>
+      <!-- Other pop-ups: quest complete, or the engine's text. Keyed so each
+         one opens from its top. Focus goes to the actions afterwards. -->
+      <LanternDialog
+        v-else-if="game.showModal"
+        :key="game.modalQuest?.name ?? game.modalTitle"
+        :title="game.modalQuest?.name ?? game.modalTitle"
+        :eyebrow="questEyebrow"
+        :closable="false"
+        :restore-focus="false"
+        @close="game.dismissModal()"
+      >
+        <QuestCompleteContent v-if="game.modalQuest" :news="game.modalQuest" />
+        <!-- eslint-disable vue/no-v-html -->
+        <div v-else class="lq-dialog-body" v-html="game.modalBody"></div>
+        <!-- eslint-enable vue/no-v-html -->
+        <template #footer>
+          <button
+            ref="continueButton"
+            type="button"
+            class="lq-send"
+            data-autofocus
+            @click="game.dismissModal()"
+          >
+            Continue
+          </button>
+        </template>
+      </LanternDialog>
+
+      <!-- Save before finishing, over the last act's chapter page. -->
+      <FinishDialog v-if="game.showModal && game.finishAsked" />
+    </template>
   </div>
 </template>
 

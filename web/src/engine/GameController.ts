@@ -265,9 +265,18 @@ export class GameController {
     return this.game.isActRunning()
   }
 
-  /** The act's music once it runs; empty before that so nothing plays early. */
+  /** True once the last act is complete. */
+  isGameOver(): boolean {
+    return this.game.isGameOver()
+  }
+
+  /**
+   * The act's music once it runs, and still after the game is over; empty
+   * before that so nothing plays early.
+   */
   getCurrentMusic(): MusicInfo {
-    if (!this.game.isActRunning()) return { musicFile: '', musicInfo: '' }
+    if (!this.game.isActRunning() && !this.game.isGameOver())
+      return { musicFile: '', musicInfo: '' }
     const act = this.game.acts[this.game.currentAct]
     return { musicFile: act.musicFile, musicInfo: act.musicInfo }
   }

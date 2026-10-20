@@ -1,6 +1,6 @@
 /**
  * The game: its acts, the run-state machine (logo, act intro, act running,
- * act transition), every player command, command completion and save/load.
+ * act transition, game over), every player command, command completion and save/load.
  */
 import type { Act } from './Act'
 import { Character } from './Character'
@@ -18,6 +18,8 @@ export const GameRunState = {
   ActIntro: 'act_intro',
   ActRunning: 'act_running',
   ActTransition: 'act_transition',
+  /** The last act is complete: the game stays in it and takes no input. */
+  GameOver: 'game_over',
 } as const
 export type GameRunState = (typeof GameRunState)[keyof typeof GameRunState]
 
@@ -118,18 +120,21 @@ export class Game implements CommandTarget {
         break
       case GameRunState.ActRunning:
         if (this.acts[this.currentAct].isCompleted(this.state)) {
-          this.currentAct++
-          if (this.currentAct < this.acts.length) {
+          if (this.currentAct + 1 < this.acts.length) {
+            this.currentAct++
             this.runState = GameRunState.ActTransition
             this.acceptInput = false
             this.finishedActState = this.state
             this.state = this.freshState()
             this.hasChangedRoom = true
           } else {
+            this.runState = GameRunState.GameOver
             this.isRunning = false
             this.acceptInput = false
           }
         }
+        break
+      case GameRunState.GameOver:
         break
       case GameRunState.ActTransition:
         this.runState = GameRunState.ActIntro
@@ -156,6 +161,12 @@ export class Game implements CommandTarget {
           `Get ready for Act ${this.currentAct + 1}, where new challenges, ` +
           'characters, and mysteries await.\n'
         )
+      case GameRunState.GameOver:
+        return (
+          this.commandResult +
+          `\n\nCongratulations — you have completed Act ${this.currentAct + 1}, ` +
+          'the final act of RetroQuest!\n'
+        )
     }
   }
 
@@ -173,6 +184,11 @@ export class Game implements CommandTarget {
 
   isActTransitioning(): boolean {
     return this.runState === GameRunState.ActTransition
+  }
+
+  /** True once the last act is complete: the game is over. */
+  isGameOver(): boolean {
+    return this.runState === GameRunState.GameOver
   }
 
   isActIntroShowing(): boolean {

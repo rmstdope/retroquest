@@ -13,4 +13,6 @@ export interface Chapter {
   stats?: ActStats
   /** "Act II" — the act that follows (complete only; none after the last). */
   nextAct?: string
+  /** The last act's completion: its button finishes the game. */
+  final?: boolean
 }
