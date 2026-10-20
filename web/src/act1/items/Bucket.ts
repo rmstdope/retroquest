@@ -29,9 +29,19 @@ export class Bucket extends Item {
     })
   }
 
-  /** Whether the bucket holds clear water, read from older saves by its description. */
-  private hasPurifiedWater(): boolean {
-    return this.holdsPurifiedWater ?? this.description.includes('clear water')
+  /**
+   * Whether the bucket holds clear water. Saves made before the field could
+   * be watered lack the field and always called the water clear, so there it
+   * only counts once the Village Well's well is actually purified.
+   */
+  private hasPurifiedWater(gameState: GameState): boolean {
+    if (this.holdsPurifiedWater !== undefined) return this.holdsPurifiedWater
+    const well = gameState.getRoom('Village Well')?.getItemByName('well')
+    return (
+      well instanceof Well &&
+      well.isPurified &&
+      this.description.includes('clear water')
+    )
   }
 
   /** Fill the bucket with the water in the well. */
@@ -60,7 +70,7 @@ export class Bucket extends Item {
             `[item_name]well[/item_name] and draw it up, full of ${water}.`,
         )
       }
-      if (other.isPurified && !this.hasPurifiedWater()) {
+      if (other.isPurified && !this.hasPurifiedWater(gameState)) {
         const water = this.fill(other)
         return event(
           'You tip the old water out onto the stones, lower the ' +
@@ -89,7 +99,7 @@ export class Bucket extends Item {
         'The parched rows will need water from somewhere.[/failure]'
       )
     }
-    if (!this.hasPurifiedWater()) {
+    if (!this.hasPurifiedWater(gameState)) {
       return (
         '[failure]You lift the [item_name]bucket[/item_name], then think ' +
         'better of it. The sour water from the well would only sicken the ' +

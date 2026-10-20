@@ -83,6 +83,47 @@ describe('Watering the Vegetable Field', () => {
     expect(game.state.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)).toBe(true)
   })
 
+  /** A bucket as restored from a save made before #231: no water flag, "clear water" text. */
+  function oldSaveBucket(game: Game): Bucket {
+    const bucket = new Bucket()
+    bucket.name = 'bucket (full)'
+    bucket.description =
+      'A sturdy wooden bucket with a rope handle. It is full of clear water ' +
+      'drawn from the well.'
+    delete bucket.holdsPurifiedWater
+    game.state.addItemToInventory(bucket)
+    game.state.currentRoom = game.state.allRooms.VegetableField
+    return bucket
+  }
+
+  /** The Well item of the act's Village Well. */
+  function villageWell(game: Game): Well {
+    const well = game.state.allRooms.VillageWell.getItemByName('well')
+    if (!(well instanceof Well)) throw new Error('no well')
+    return well
+  }
+
+  it('treats an old-save bucket as sour while the well is murky', () => {
+    const game = new Game([new Act1()])
+    const bucket = oldSaveBucket(game)
+
+    const response = executeCommands(game, ['use bucket'])
+
+    expect(response).toContain('[failure]')
+    expect(game.state.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)).toBe(false)
+    expect(bucket.name).toBe('bucket (full)')
+  })
+
+  it('trusts an old-save bucket of clear water once the well is purified', () => {
+    const game = new Game([new Act1()])
+    villageWell(game).isPurified = true
+    oldSaveBucket(game)
+
+    executeCommands(game, ['use bucket'])
+
+    expect(game.state.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)).toBe(true)
+  })
+
   it('refuses to pour the sour water on the field', () => {
     const { game, bucket } = gameInTheField(false)
 
