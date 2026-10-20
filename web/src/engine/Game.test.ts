@@ -953,11 +953,20 @@ describe('Game', () => {
       advanceToSecondAct(game)
       ;(game.acts[1] as StateAct).done = true
       game.newTurn()
+      expect(game.isGameOver()).toBe(true)
       expect(game.isRunning).toBe(false)
       game.save()
       const fresh = twoActGame(storage)
+      fresh.newTurn()
+      fresh.newTurn()
       expect(fresh.load()).toContain('loaded')
       expect(fresh.currentAct).toBe(1)
+      expect(fresh.isActRunning()).toBe(true)
+      expect(fresh.state.currentRoom.name).toBe('Second Room')
+      // The finished act is complete again: the next turn ends the game.
+      ;(fresh.acts[1] as StateAct).done = true
+      fresh.newTurn()
+      expect(fresh.isGameOver()).toBe(true)
     })
 
     it('exposes the save data for other storages and rejects broken data', () => {
