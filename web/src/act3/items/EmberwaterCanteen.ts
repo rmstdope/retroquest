@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import { BrassMirrorSegment } from './BrassMirrorSegment'
 
 /**
@@ -35,12 +35,12 @@ export class EmberwaterCanteen extends Item {
       // from the ground; do not add directly to inventory.
       gameState.currentRoom.items.push(segment)
       this.gaveSegment = true
-      return (
-        `[event]${lore} You pry free a [item_name]${segment.name}` +
-        '[/item_name] from the lining; it falls to the ground nearby.[/event]'
+      return event(
+        `${lore} You pry free a [item_name]${segment.name}` +
+          '[/item_name] from the lining; it falls to the ground nearby.',
       )
     }
 
-    return `[event]${lore}[/event]`
+    return event(lore)
   }
 }

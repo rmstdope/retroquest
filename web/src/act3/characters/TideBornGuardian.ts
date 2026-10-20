@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { FLAG_ACT3_VOW_OF_COURAGE_MADE } from '../Act3StoryFlags'
 
 /** The Tide-Born Guardian: a figure of gathered waters and ward-sigils. */
@@ -15,8 +15,11 @@ export class TideBornGuardian extends Character {
   /** Return dialogue asking for vow when talking to the guardian. */
   override talkTo(_gameState: GameState): string {
     return (
-      `The [character_name]${this.name}[/character_name]'s voice is the hush ` +
-      "of a turning tide: [dialogue]'Name what you will not abandon.'[/dialogue]"
+      'The ' +
+      characterName(this.name) +
+      "'s voice is the hush " +
+      'of a turning tide: ' +
+      speech("'Name what you will not abandon.'")
     )
   }
 
@@ -33,7 +36,8 @@ export class TideBornGuardian extends Character {
     }
     return (
       'The tide listens, then falls quiet. That is not the vow the ' +
-      `[character_name]${this.name}[/character_name] will bind to.`
+      characterName(this.name) +
+      ' will bind to.'
     )
   }
 }

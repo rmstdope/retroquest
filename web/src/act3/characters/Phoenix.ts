@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { PhoenixFeather } from '../items/PhoenixFeather'
 import { FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED } from '../Act3StoryFlags'
 
@@ -21,9 +21,12 @@ export class Phoenix extends Character {
   override talkTo(_gameState: GameState): string {
     this.riddlePosed = true
     return (
-      "The [character_name]phoenix[/character_name]'s voice does not come from its " +
+      'The ' +
+      characterName('phoenix') +
+      "'s voice does not come from its " +
       'beak, but resounds within your mind: ' +
-      "[dialogue]'What is wisdom when time is short?'[/dialogue] The question lingers, " +
+      speech("'What is wisdom when time is short?'") +
+      ' The question lingers, ' +
       'bright and weightless, as if the answer might shape the very air around you.'
     )
   }
@@ -36,9 +39,11 @@ export class Phoenix extends Character {
     }
     if (gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
       return (
-        'The [character_name]phoenix[/character_name] inclines its head, a knowing ' +
+        'The ' +
+        characterName('phoenix') +
+        ' inclines its head, a knowing ' +
         'warmth in its eyes. ' +
-        "[dialogue]'You already hold what you have earned.'[/dialogue]"
+        speech("'You already hold what you have earned.'")
       )
     }
     const answer = words.trim().toLowerCase()
@@ -46,14 +51,21 @@ export class Phoenix extends Character {
       gameState.addItemToInventory(new PhoenixFeather())
       gameState.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
       return (
-        "The [character_name]phoenix[/character_name]'s eyes flare with approval. It " +
-        "plucks a single glowing feather and offers it to you. [dialogue]'Wisdom is " +
-        "patience, even when the world burns. Take this, and remember.'[/dialogue]"
+        'The ' +
+        characterName('phoenix') +
+        "'s eyes flare with approval. It " +
+        'plucks a single glowing feather and offers it to you. ' +
+        speech(
+          "'Wisdom is " +
+            "patience, even when the world burns. Take this, and remember.'",
+        )
       )
     }
     return (
-      'The [character_name]phoenix[/character_name] studies you in silence. ' +
-      "[dialogue]'Is that truly wisdom, when time is short?'[/dialogue]"
+      'The ' +
+      characterName('phoenix') +
+      ' studies you in silence. ' +
+      speech("'Is that truly wisdom, when time is short?'")
     )
   }
 }

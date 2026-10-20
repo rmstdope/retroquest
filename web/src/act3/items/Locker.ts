@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import { PrismLantern } from './PrismLantern'
 import { RustedLockerKey } from './RustedLockerKey'
 
@@ -80,9 +80,9 @@ export class Locker extends Item {
 
     // Proceed to free the mechanism when the rusted key is present.
     this.locked = false
-    return (
-      '[event]A subtle click echoes under the pier as fused pins release. ' +
-      'The locker can now be opened.[/event]'
+    return event(
+      'A subtle click echoes under the pier as fused pins release. ' +
+        'The locker can now be opened.',
     )
   }
 

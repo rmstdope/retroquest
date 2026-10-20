@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import { FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED } from '../Act3StoryFlags'
 import { WanderingPhantoms } from '../characters/WanderingPhantoms'
 import { StillnessVestibule } from '../rooms/StillnessVestibule'
@@ -34,7 +34,8 @@ export class ResonantChantRubbings extends Item {
           )
         }
         return (
-          '[event]You recite the resonant chant at each stone. [/event]\n' +
+          event('You recite the resonant chant at each stone. ') +
+          '\n' +
           '[success]The words ' +
           'echo and re-echo, building into a harmonious silence that ' +
           "banishes the wandering phantoms. The path to the dragon's hall " +

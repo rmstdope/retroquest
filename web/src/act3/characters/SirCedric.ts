@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import {
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
@@ -27,9 +27,15 @@ export class SirCedric extends Character {
     // If the main quest hasn't started, direct the player to Mira.
     if (!gameState.getStoryFlag(FLAG_ACT3_MAIN_STARTED)) {
       return (
-        "[character_name]Sir Cedric[/character_name]: [dialogue]If we're to take " +
-        'the fight to Malakar, speak with [character_name]Mira[/character_name]. ' +
-        'She understands the rites and the way to begin.[/dialogue]'
+        characterName('Sir Cedric') +
+        ': ' +
+        speech(
+          "If we're to take " +
+            'the fight to Malakar, speak with ' +
+            characterName('Mira') +
+            '. ' +
+            'She understands the rites and the way to begin.',
+        )
       )
     }
 
@@ -40,30 +46,46 @@ export class SirCedric extends Character {
     if (roomName === 'Tidal Causeway') {
       if (!gameState.getStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED)) {
         return (
-          '[character_name]Sir Cedric[/character_name]: [dialogue]The tide ' +
-          'tests the brave. Stand strong with Mira—speak your vow before the ' +
-          'guardian and let courage steady your hand.[/dialogue]'
+          characterName('Sir Cedric') +
+          ': ' +
+          speech(
+            'The tide ' +
+              'tests the brave. Stand strong with Mira—speak your vow before the ' +
+              'guardian and let courage steady your hand.',
+          )
         )
       }
       if (!gameState.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)) {
         return (
-          '[character_name]Sir Cedric[/character_name]: [dialogue]The Crystal ' +
-          'is ours. When you are ready, make your vow to bind its power; ' +
-          'I will stand with you.[/dialogue]'
+          characterName('Sir Cedric') +
+          ': ' +
+          speech(
+            'The Crystal ' +
+              'is ours. When you are ready, make your vow to bind its power; ' +
+              'I will stand with you.',
+          )
         )
       }
       return (
-        '[character_name]Sir Cedric[/character_name]: [dialogue]Your vow has ' +
-        'been spoken. Let us press onward—Mira will open the circle when you ' +
-        'are prepared.[/dialogue]'
+        characterName('Sir Cedric') +
+        ': ' +
+        speech(
+          'Your vow has ' +
+            'been spoken. Let us press onward—Mira will open the circle when you ' +
+            'are prepared.',
+        )
       )
     }
 
     // Default reply when the main quest is active
     return (
-      '[character_name]Sir Cedric[/character_name]: [dialogue]The path is set. ' +
-      'Courage, Wisdom, Selflessness—name them with your deeds, and we ' +
-      'will see this through.[/dialogue]'
+      characterName('Sir Cedric') +
+      ': ' +
+      speech(
+        'The path is set. ' +
+          'Courage, Wisdom, Selflessness—name them with your deeds, and we ' +
+          'will see this through.',
+      )
     )
   }
 }

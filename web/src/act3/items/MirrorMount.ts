@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import { FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED } from '../Act3StoryFlags'
 import { BindingResin } from './BindingResin'
 import { BrassMirrorSegment } from './BrassMirrorSegment'
@@ -120,10 +120,10 @@ export class MirrorMount extends Item {
     const segment = new BrassMirrorSegment()
     gameState.currentRoom.addItem(segment)
     this.segmentRevealed = true
-    return (
-      '[event]You sift the ash and grit beneath the mount and find a ' +
-      `[item_name]${segment.name}[/item_name]. It lies half-buried ` +
-      'in the sand and has been added to the terrace.[/event]'
+    return event(
+      'You sift the ash and grit beneath the mount and find a ' +
+        `[item_name]${segment.name}[/item_name]. It lies half-buried ` +
+        'in the sand and has been added to the terrace.',
     )
   }
 }

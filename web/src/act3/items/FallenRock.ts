@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import { FLAG_ACT3_MINERS_RESCUE_STARTED } from '../Act3StoryFlags'
 import { Miners } from '../characters/Miners'
 import { ReinforcedBraces } from './ReinforcedBraces'
@@ -30,7 +30,8 @@ export class FallenRock extends Item {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_STARTED, true)
     return (
-      '[event]You examine the massive pile of fallen rock.[/event] The collapse ' +
+      event('You examine the massive pile of fallen rock.') +
+      ' The collapse ' +
       'appears unstable, with loose stones precariously balanced above. You can ' +
       'hear desperate voices calling from beyond the barrier—miners are definitely ' +
       'trapped on the other side. The ceiling sags dangerously, but with the right ' +
@@ -51,11 +52,11 @@ export class FallenRock extends Item {
       if (!this.collapseStabilized) {
         this.collapseStabilized = true
         gameState.removeItemFromInventory(other.name)
-        return (
-          '[event]You wedge the reinforced braces under the sagging ' +
-          'ceiling, stabilizing the collapse. The immediate danger of ' +
-          'further cave-in is reduced, but the braces need to be secured ' +
-          'before you can safely clear the passage.[/event]'
+        return event(
+          'You wedge the reinforced braces under the sagging ' +
+            'ceiling, stabilizing the collapse. The immediate danger of ' +
+            'further cave-in is reduced, but the braces need to be secured ' +
+            'before you can safely clear the passage.',
         )
       }
       return (
@@ -74,11 +75,11 @@ export class FallenRock extends Item {
       if (!this.strapsSecured) {
         this.strapsSecured = true
         gameState.removeItemFromInventory(other.name)
-        return (
-          '[event]You bind the reinforced braces securely with the ' +
-          'support straps, ensuring they can withstand the pressure ' +
-          'when the debris is cleared. The structure is now stable ' +
-          'enough for the final excavation.[/event]'
+        return event(
+          'You bind the reinforced braces securely with the ' +
+            'support straps, ensuring they can withstand the pressure ' +
+            'when the debris is cleared. The structure is now stable ' +
+            'enough for the final excavation.',
         )
       }
       return '[dim]The straps are already securing the braces.[/dim]'
@@ -99,11 +100,11 @@ export class FallenRock extends Item {
         // Add the miners to the room now that they can be reached
         const miners = new Miners()
         gameState.currentRoom.addCharacter(miners)
-        return (
-          '[event]You hammer the wedge blocks into the cracks, freeing ' +
-          'the blocked passage. The fallen rock crumbles away, clearing ' +
-          'the path forward. Through the newly opened gap, you see the ' +
-          'trapped miners emerging from the depths![/event]'
+        return event(
+          'You hammer the wedge blocks into the cracks, freeing ' +
+            'the blocked passage. The fallen rock crumbles away, clearing ' +
+            'the path forward. Through the newly opened gap, you see the ' +
+            'trapped miners emerging from the depths!',
         )
       }
       return '[dim]The wedge blocks are already securing the passage.[/dim]'

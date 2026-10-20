@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 
 /** Ancient stone pillars at the shore's edge with ward sigils; source of Moon Rune shards. */
 export class Steles extends Item {
@@ -23,9 +23,9 @@ export class Steles extends Item {
 
   /** Override examine with detailed description of the steles and fragments. */
   override examine(_gameState: GameState): string {
-    return (
-      '[event]The steles bear shallow moon-marks, pores packed with salt. ' +
-      'Loose pale fragments glint in crevices—likely usable in sigil work.[/event]'
+    return event(
+      'The steles bear shallow moon-marks, pores packed with salt. ' +
+        'Loose pale fragments glint in crevices—likely usable in sigil work.',
     )
   }
 }

@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, characterName, speech, type GameState } from '@/engine'
 
 /**
  * Mira's herbal preparations for ritual stabilization (Act III). Non-carriable;
@@ -19,9 +19,12 @@ export class HealingHerbs extends Item {
   /** Block pickup with narrative explanation through Mira. */
   override preventPickup(): string {
     return (
-      '[character_name]Mira[/character_name] lifts a sachet, then shakes her ' +
-      "head. [dialogue]'Leave these for the circles and crossings. When the " +
-      "rite calls for them, I will place them in your hands.'[/dialogue]"
+      characterName('Mira') +
+      ' lifts a sachet, then shakes her head. ' +
+      speech(
+        "'Leave these for the circles and crossings. When the " +
+          "rite calls for them, I will place them in your hands.'",
+      )
     )
   }
 

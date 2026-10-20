@@ -1,4 +1,11 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  characterName,
+  event,
+  type Character,
+  type GameState,
+  type Item,
+} from '@/engine'
 import { WardingPillars } from '../items/WardingPillars'
 
 /** Act III variant of Purify, customized for Sunken Ruins interactions. */
@@ -16,7 +23,8 @@ export class PurifySpell extends Spell {
   override castSpell(_gameState: GameState): string {
     // Act III version has no global gating; it always responds with a cleansing aura
     return (
-      `[event]You cast [spell_name]${this.name}[/spell_name].[/event]\n` +
+      event(`You cast [spell_name]${this.name}[/spell_name].`) +
+      '\n' +
       'A brine-bright clarity flows from your hands, cutting through the mire.'
     )
   }
@@ -28,8 +36,11 @@ export class PurifySpell extends Spell {
       return targetItem.purify(gameState)
     }
     return (
-      `[event]You cast [spell_name]${this.name}[/spell_name] on ` +
-      `[item_name]${targetItem.name}[/item_name].[/event]\n` +
+      event(
+        `You cast [spell_name]${this.name}[/spell_name] on ` +
+          `[item_name]${targetItem.name}[/item_name].`,
+      ) +
+      '\n' +
       'Saltlight skims its surface, though nothing more changes.'
     )
   }
@@ -40,8 +51,11 @@ export class PurifySpell extends Spell {
     targetCharacter: Character,
   ): string {
     return (
-      `[event]You cast [spell_name]${this.name}[/spell_name] on ` +
-      `[character_name]${targetCharacter.name}[/character_name].[/event]\n` +
+      event(
+        `You cast [spell_name]${this.name}[/spell_name] on ` +
+          `${characterName(targetCharacter.name)}.`,
+      ) +
+      '\n' +
       'A cleansing calm settles, washing away lingering dread.'
     )
   }

@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { GameState } from '@/engine'
 import { MoonRuneShards } from '../items/MoonRuneShards'
 import { Steles } from '../items/Steles'
@@ -30,9 +30,9 @@ export class ShorelineMarkers extends Room {
   override search(gameState: GameState): string {
     // Idempotent message once revealed, even if the shards are gone.
     if (this.runesRevealed) {
-      return (
-        '[event]You comb the surf-slick stones again. pale shards gleam in ' +
-        "the cracks, but you've already gathered what you need.[/event]"
+      return event(
+        'You comb the surf-slick stones again. pale shards gleam in ' +
+          "the cracks, but you've already gathered what you need.",
       )
     }
     this.items.push(new MoonRuneShards())
@@ -41,11 +41,11 @@ export class ShorelineMarkers extends Room {
     if (!gameState.getStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_STARTED)) {
       gameState.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_STARTED, true)
     }
-    return (
-      '[event]You brush aside kelp and barnacle crusts. A cluster of pale moon ' +
-      'shards comes free—etched with curved lines that seem to hum when the ' +
-      'moon leans toward the sea. They feel keyed to the tide, as if the ' +
-      'lunar pull listens to these marks.[/event]'
+    return event(
+      'You brush aside kelp and barnacle crusts. A cluster of pale moon ' +
+        'shards comes free—etched with curved lines that seem to hum when the ' +
+        'moon leans toward the sea. They feel keyed to the tide, as if the ' +
+        'lunar pull listens to these marks.',
     )
   }
 }
