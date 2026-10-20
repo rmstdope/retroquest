@@ -1,0 +1,12 @@
+**
+!web/
+!web/**
+!deploy/
+!deploy/Caddyfile
+web/node_modules
+web/dist
+web/test-results
+web/playwright-report
+web/.env
+web/.env.*
+web/debug-scripts
