@@ -1,14 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { resolve } from 'node:path'
+import { mkdtempSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { debugScriptsPlugin, readDebugScript } from './debugScripts.config'
 
-const DIR = resolve(__dirname, 'debug-scripts')
+const DIR = mkdtempSync(join(tmpdir(), 'debug-scripts-'))
+writeFileSync(join(DIR, 'mine.txt'), 'use lantern\n')
 
 describe('readDebugScript', () => {
   it('reads a script by name', () => {
-    expect(readDebugScript(DIR, 'act1.txt')).toContain('use lantern')
+    expect(readDebugScript(DIR, 'mine.txt')).toContain('use lantern')
   })
-  it.each(['../package.json', 'nope.txt', 'act1', '.txt', 'a/b.txt'])(
+  it.each(['../package.json', 'nope.txt', 'mine', '.txt', 'a/b.txt'])(
     'refuses %s',
     (file) => {
       expect(readDebugScript(DIR, file)).toBeNull()

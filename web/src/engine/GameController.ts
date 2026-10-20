@@ -317,6 +317,11 @@ export class GameController {
     return this.game.isRunning
   }
 
+  /** The commands of act `actNumber`'s golden path; empty when it has none. */
+  goldenPath(actNumber: number): string[] {
+    return this.game.goldenPath(actNumber)
+  }
+
   isActRunning(): boolean {
     return this.game.isActRunning()
   }

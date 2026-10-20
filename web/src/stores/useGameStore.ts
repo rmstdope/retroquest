@@ -430,6 +430,7 @@ export const useGameStore = defineStore('game', () => {
     await playDebugScript(name, {
       play: playCommand,
       running: () => requireBridge().controller.isActRunning(),
+      goldenPath: (n) => requireBridge().controller.goldenPath(n),
       show: (text) => showOutput(`debug ${name}`, text, { chips: false }),
     })
   }

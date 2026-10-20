@@ -54,6 +54,7 @@ function createMockBridge() {
     isAcceptingInput: vi.fn(() => true),
     advanceTurn: vi.fn(() => 'Turn advanced'),
     isActRunning: vi.fn(() => true),
+    goldenPath: vi.fn((_n: number): string[] => []),
     isGameOver: vi.fn(() => false),
     getResultText: vi.fn(() => ''),
     getCurrentMusic: vi.fn(() => ({
@@ -316,15 +317,27 @@ describe('useGameStore', () => {
 
     it('plays every command of the script, each as a turn of its own', async () => {
       serveScript('# comment\nlook\n\ntake bread\n')
-      await store.runDebugScript('act1')
-      expect(fetch).toHaveBeenCalledWith('/debug-scripts/act1.txt')
+      await store.runDebugScript('mine')
+      expect(fetch).toHaveBeenCalledWith('/debug-scripts/mine.txt')
       expect(bridge.controller.takeTurn.mock.calls).toEqual([
         ['look'],
         ['take bread'],
       ])
       const commands = store.turns.map((turn) => turn.command)
-      expect(commands.slice(-3)).toEqual(['look', 'take bread', 'debug act1'])
+      expect(commands.slice(-3)).toEqual(['look', 'take bread', 'debug mine'])
       expect(store.turns.at(-1)!.text).toContain('2 commands')
+    })
+
+    it('plays an act golden path from the engine', async () => {
+      serveScript(null)
+      bridge.controller.goldenPath.mockReturnValue(['look', 'take bread'])
+      await store.runDebugScript('act1')
+      expect(bridge.controller.goldenPath).toHaveBeenCalledWith(1)
+      expect(fetch).not.toHaveBeenCalled()
+      expect(bridge.controller.takeTurn.mock.calls).toEqual([
+        ['look'],
+        ['take bread'],
+      ])
     })
 
     it('stops at a failing line and names the line, command and reason', async () => {
@@ -334,7 +347,7 @@ describe('useGameStore', () => {
         .mockReturnValueOnce(
           "[failure]There is no 'sword' here to take.[/failure]",
         )
-      await store.runDebugScript('act1')
+      await store.runDebugScript('mine')
       expect(bridge.controller.takeTurn).toHaveBeenCalledTimes(2)
       const last = store.turns.at(-1)!
       expect(last.text).toContain('[failure]')
@@ -348,7 +361,7 @@ describe('useGameStore', () => {
       bridge.controller.isActRunning
         .mockReturnValueOnce(true)
         .mockReturnValue(false)
-      await store.runDebugScript('act1')
+      await store.runDebugScript('mine')
       expect(bridge.controller.takeTurn).toHaveBeenCalledTimes(1)
       expect(store.turns.at(-1)!.text).toContain('the act ended')
     })
@@ -369,7 +382,7 @@ describe('useGameStore', () => {
 
     it('is reached by typing "debug <name>" under the dev server', async () => {
       serveScript('look\n')
-      store.submitCommand('debug act1')
+      store.submitCommand('debug mine')
       await vi.waitFor(() =>
         expect(bridge.controller.takeTurn).toHaveBeenCalledWith('look'),
       )

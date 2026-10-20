@@ -36,6 +36,17 @@ export function failureReason(answer: string): string | null {
   return match[1].replace(/\[\/?[a-z_]+\]/g, '').trim()
 }
 
+const ACT_SCRIPT_PATTERN = /^act([1-9]\d*)$/
+
+/**
+ * The lines of `debug act<N>`: an act's golden path, numbered by their 1-based
+ * position in it. The path itself leaves the act's completing step (Act I's
+ * `use map`) to the player.
+ */
+export function goldenPathLines(path: string[]): DebugLine[] {
+  return path.map((command, index) => ({ line: index + 1, command }))
+}
+
 /** What a running script needs from the game. */
 export interface DebugScriptHost {
   /** Play one command as the player typed it; returns the game's answer. */
@@ -44,11 +55,14 @@ export interface DebugScriptHost {
   running(): boolean
   /** Add a message of the debug command itself to the story. */
   show(text: string): void
+  /** The golden path of act `actNumber`; empty when the act has none. */
+  goldenPath(actNumber: number): string[]
 }
 
 /**
- * Fetch `debug-scripts/<name>.txt` from the dev server and play its commands
- * in order. The run stops at the first line the game answers with a failure
+ * Play the script `name` in order: `act<N>` plays the golden path of act N
+ * (the same list `cheat act N` plays); any other name
+ * is fetched from `debug-scripts/<name>.txt` on the dev server. The run stops at the first line the game answers with a failure
  * and says which line it was and why.
  */
 export async function playDebugScript(
@@ -58,6 +72,13 @@ export async function playDebugScript(
   const notFound = `[failure]Debug script '${name}' not found.[/failure]`
   if (!isDebugScriptName(name)) {
     host.show(notFound)
+    return
+  }
+  const act = ACT_SCRIPT_PATTERN.exec(name)
+  if (act !== null) {
+    const lines = goldenPathLines(host.goldenPath(Number(act[1])))
+    if (lines.length === 0) host.show(notFound)
+    else await playLines(name, lines, host)
     return
   }
   let text: string | null = null
@@ -71,7 +92,15 @@ export async function playDebugScript(
     host.show(notFound)
     return
   }
-  const lines = parseDebugScript(text)
+  await playLines(name, parseDebugScript(text), host)
+}
+
+/** Play `lines` in order, stopping at the first failure or when the act ends. */
+async function playLines(
+  name: string,
+  lines: DebugLine[],
+  host: DebugScriptHost,
+): Promise<void> {
   for (const { line, command } of lines) {
     const reason = failureReason(host.play(command))
     if (reason !== null) {

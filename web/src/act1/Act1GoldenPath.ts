@@ -41,7 +41,6 @@ export const ACT1_GOLDEN_PATH: string[] = [
   'talk to villager',
   'w',
   's',
-  'use hoe',
   'e',
   'use bucket with well',
   's',

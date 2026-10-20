@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from './Act1'
+import { playDebugScript } from '@/utils/debugScript'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { MysteriousBox } from './items/MysteriousBox'
 import {
@@ -571,5 +572,25 @@ describe('Act 1 golden path as declared by the act', () => {
     viaCheat.commandParser.parse('cheat act 1')
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
+  })
+})
+
+describe('debug act1', () => {
+  it('plays the golden path, so it ends where cheat act 1 does, before use map', async () => {
+    const game = new Game([new Act1()])
+    const shown: string[] = []
+    await playDebugScript('act1', {
+      play: (command) => executeCommands(game, [command]),
+      running: () => true,
+      show: (text) => shown.push(text),
+      goldenPath: (n) => game.goldenPath(n),
+    })
+    expect(shown.join('\n')).not.toContain('[failure]')
+    const viaCheat = new Game([new Act1()])
+    viaCheat.commandParser.parse('cheat act 1')
+    expect(game.state.storyFlags).toEqual(viaCheat.state.storyFlags)
+    expect(game.state.currentRoom.name).toBe('Road to Greendale')
+    expect(game.state.currentRoom.name).toBe(viaCheat.state.currentRoom.name)
+    expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(false)
   })
 })
