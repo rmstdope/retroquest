@@ -173,6 +173,30 @@ jobs:
                       org.opencontainers.image.revision=${{ github.sha }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
+            - name: Write deployment manifest
+              env:
+                  IMAGE_DIGEST: ${{ steps.image.outputs.digest }}
+                  REVISION: ${{ github.sha }}
+              run: |
+                  python3 - <<'PY'
+                  import json
+                  import os
+                  from pathlib import Path
+                  Path("deployment.json").write_text(json.dumps({
+                      "revision": os.environ["REVISION"],
+                      "images": {
+                          "web": "ghcr.io/rmstdope/retroquest@" + os.environ["IMAGE_DIGEST"]
+                      }
+                  }) + "\n")
+                  PY
+            - name: Upload deployment manifest
+              uses: actions/upload-artifact@v4
+              with:
+                  name: deployment-manifest
+                  path: deployment.json
+                  if-no-files-found: error
+                  retention-days: 90
+                  overwrite: true
             - name: Report immutable deployment reference
               env:
                   IMAGE_DIGEST: ${{ steps.image.outputs.digest }}

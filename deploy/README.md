@@ -5,6 +5,20 @@ main-branch CI checks pass, the publishing job pushes
 `ghcr.io/rmstdope/retroquest:sha-<commit>` and reports its immutable digest in the
 workflow summary. Pull requests do not publish. Publication does not deploy.
 
+The publishing job also uploads `deployment-manifest`, containing
+`deployment.json` with the source `revision` and immutable service `images`.
+With the updated infrastructure CLI, deploy the newest successful main build:
+
+```sh
+rmstdope-deploy release retroquest --latest
+```
+
+This requires an authenticated `gh` CLI on the operator machine. The selected
+run, revision and digest are displayed before confirmation. Newer pending or
+failed builds do not block selecting the newest successful build. If that run's
+artifact is absent or expired, publish another build or use the explicit command
+from the workflow summary; there is no silent fallback to an older artifact.
+
 Keep the GHCR package private in its package settings; if a package of this name
 already exists, verify its visibility and grant this repository Actions access.
 The deployment host needs a separate read-only package credential. Never add
