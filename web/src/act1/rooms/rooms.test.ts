@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { Game, GameState, Room, type Exits } from '@/engine'
+import { Game, GameController, GameState, Room, type Exits } from '@/engine'
 import { Act1 } from '../Act1'
+import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
 import { Grandmother } from '../characters/Grandmother'
 import { FadedPhotograph } from '../items/FadedPhotograph'
+import { PurifySpell } from '../spells/PurifySpell'
 import { ReviveSpell } from '../spells/ReviveSpell'
 import { AbandonedShed } from './AbandonedShed'
 import { BlacksmithsForge } from './BlacksmithsForge'
@@ -19,6 +21,7 @@ import { VegetableField } from './VegetableField'
 import { VillageChapel } from './VillageChapel'
 import { VillageSquare } from './VillageSquare'
 import { VillageWell } from './VillageWell'
+import { Well } from '../items/Well'
 
 /** A game state knowing the given spells, for exit checks. */
 function stateWithSpells(spells: string[]): GameState {
@@ -126,5 +129,48 @@ describe('Grandmother and the photograph', () => {
     expect(game.state.inventory.map((i) => i.name.toLowerCase())).toContain(
       'faded photograph',
     )
+  })
+})
+
+describe('Village Well description', () => {
+  /** An Act I game with Elior at the well, which he has examined. */
+  function gameAtWell(): Game {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VillageWell
+    game.commandParser.parse('examine well')
+    return game
+  }
+
+  it('shows dark, foul water before the well is purified', () => {
+    const game = gameAtWell()
+    const description = game.state.currentRoom.describe(game.state)
+
+    expect(description).toContain('dark and still')
+    expect(description).not.toContain('crystalline')
+    expect(description).not.toContain('rope')
+  })
+
+  it('shows clear water on the room card right after purify is cast', () => {
+    const game = gameAtWell()
+    game.state.learnSpell(new PurifySpell())
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+
+    game.commandParser.parse('cast purify on well')
+
+    const description = new GameController(game).getRoomDescription()
+    expect(description).toContain('crystalline clarity')
+    expect(description).not.toContain('dark and still')
+  })
+
+  it('shows clear water once the well is purified', () => {
+    const game = gameAtWell()
+    const well = game.state.currentRoom.getItemByName('well')
+    expect(well).toBeInstanceOf(Well)
+    if (well instanceof Well) well.purify(game.state)
+
+    const description = game.state.currentRoom.describe(game.state)
+
+    expect(description).toContain('crystalline clarity')
+    expect(description).not.toContain('dark and still')
   })
 })

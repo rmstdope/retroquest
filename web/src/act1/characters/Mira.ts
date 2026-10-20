@@ -176,7 +176,7 @@ export class Mira extends Character {
           ) +
           '\n' +
           speech(
-            'A rare [item_name]Rare Flower[/item_name] grows in the ' +
+            'A [item_name]Rare Flower[/item_name] grows in the ' +
               '[room_name]Hidden Glade[/room_name]. Seek it out, and pay close ' +
               'attention to the well and the glade; they may hold secrets vital to ' +
               'your quest.',

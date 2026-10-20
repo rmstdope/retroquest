@@ -93,7 +93,7 @@
 
 ### 4. Village Square
 
-- **Description:** The heart of Willowbrook, with a well and notice board.
+- **Description:** The heart of Willowbrook, with an old stone fountain and a notice board.
 - **Items:** Bucket (start).
 - **Unusable:** old notice (start).
 - **Spells:** None.
@@ -124,7 +124,7 @@
 ### 7. General Store
 
 - **Description:** A cluttered shop with shelves of goods.
-- **Items:** Rope (store stock), apple (bonus with each purchase), matches (store stock; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act.
+- **Items:** Rope (store stock), apple (bonus with each purchase), matches (kept for the Priest and not for sale — not among the wares, cannot be bought or taken; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act.
 - **Spells:** None.
 - **Usable Items:** Coin (2nd, purchase rope and receive an apple bonus).
 - **Characters:** Shopkeeper (sells goods, shares gossip).
@@ -132,10 +132,10 @@
 
 ### 8. Village Well
 
-- **Description:** An old stone well with clear water.
+- **Description:** An old stone well. Its water is dark, still and sour-smelling until the well is purified, and crystal clear afterwards (the room description follows the well's state). No rope hangs by it.
 - **Items:** Shiny ring (later), Well (start).
 - **Spells:** None.
-- **Usable Items:** Bucket (draws water and reveals murkiness), fishing rod + magnet + stick (assemble an extended magnetic fishing rod to retrieve the ring after purifying the well), `purify` spell (target the Well item after examining it).
+- **Usable Items:** Bucket (draws murky, sour-smelling water before the well is purified; clear water after), fishing rod + magnet + stick (assemble an extended magnetic fishing rod to retrieve the ring after purifying the well), `purify` spell (target the Well item after examining it).
 - **Characters:** None.
 - **Exits:** Vegetable Field (west), Blacksmith’s Forge (east), Abandoned Shed (south)
 
@@ -190,7 +190,7 @@
 
 ### 14. Village Chapel
 
-- **Description:** A small stone chapel with stained glass windows.
+- **Description:** A small stone chapel with stained glass windows. A dark corner by the altar swallows the light (the locket is not mentioned until the candle reveals it).
 - **Items:** Candle (start), hidden locket (later).
 - **Unusable:** prayer book (start).
 - **Spells:** `bless` (learned when picking up the hidden locket; the Priest recognizes it).
@@ -276,7 +276,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 5.  **Village Well:**
 
     - Examine the well. _Elior peers into the depths, noticing the stonework and the faint, unsettling shimmer on the water's surface. This observation hints that the well is not as pure as it seems and might need cleansing._
-    - Use bucket to draw water from the well. _The water appears surprisingly murky and still, hinting that the well is not as pure as it seems and might need cleansing._
+    - Use bucket to draw water from the well. _The water comes up murky, with a sour smell, hinting that the well is not as pure as it seems and might need cleansing._
       - Item used: `bucket` (for observation)
 
 6.  **Blacksmith’s Forge:**
@@ -433,7 +433,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
     - (If `shiny ring` was obtained) Give `shiny ring` to Merchant. _The merchant, impressed by the ring\'s quality, offers a sturdy pair of `wandering boots` in trade, mentioning its usefulness on long journeys._
       - Item used: `shiny ring`
-      - Item obtained: `wandering boots` (Completes: Wandering shoes)
+      - Item obtained: `wandering boots` (Completes: Sturdy footwear)
 
 27. **Return to Mira's Hut (Final Visit):**
 

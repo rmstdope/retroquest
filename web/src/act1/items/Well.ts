@@ -5,6 +5,16 @@ import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
 import { MagneticFishingRod } from './MagneticFishingRod'
 
+/** Let the room holding the well (the Village Well) update its water text. */
+function refreshRoomDescription(room: object): void {
+  if (
+    'refreshDescription' in room &&
+    typeof room.refreshDescription === 'function'
+  ) {
+    room.refreshDescription()
+  }
+}
+
 /** Central multi-phase environmental puzzle object used for layered interactions. */
 export class Well extends Item {
   containsRing = true
@@ -14,8 +24,8 @@ export class Well extends Item {
     super({
       name: 'well',
       description:
-        'An old stone well, its surface worn smooth. A frayed rope hangs nearby, ' +
-        'disappearing into the depths.',
+        'An old stone well, its surface worn smooth, its shaft disappearing into ' +
+        'the depths.',
     })
   }
 
@@ -23,8 +33,8 @@ export class Well extends Item {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_WELL_EXAMINED, true)
     const baseDesc =
-      'An old stone well, its surface worn smooth. A frayed rope hangs nearby, ' +
-      'disappearing into the depths.'
+      'An old stone well, its surface worn smooth, its shaft disappearing into ' +
+      'the depths.'
     if (this.isPurified) {
       if (this.containsRing) {
         this.description =
@@ -113,6 +123,7 @@ export class Well extends Item {
       )
     }
     this.isPurified = true
+    refreshRoomDescription(gameState.currentRoom)
     if (this.containsRing) {
       const name = this.name
       return event(

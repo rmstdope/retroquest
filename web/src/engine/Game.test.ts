@@ -1080,6 +1080,18 @@ describe('Game', () => {
       expect(game.currentAct).toBe(0)
     })
 
+    it('lets the loaded act migrate the loaded state', () => {
+      const game = twoActGame()
+      advanceToSecondAct(game)
+      const data = game.toSaveData()
+      const fresh = twoActGame()
+      const afterLoad = vi.spyOn(fresh.acts[1], 'afterLoad')
+
+      fresh.loadSaveData(data)
+
+      expect(afterLoad).toHaveBeenCalledWith(fresh.state)
+    })
+
     it('loads a save made after the last act ended into that act', () => {
       const storage = new MemorySaveStorage()
       const game = twoActGame(storage)

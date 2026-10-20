@@ -789,6 +789,7 @@ Welcome to
       const state = deserialize(payload.state, this.registry)
       if (!(state instanceof GameState))
         throw new Error('no game state in the save')
+      this.acts[payload.actIndex].afterLoad(state)
       state.refreshQuestLogs()
       this.state = state
       this.currentAct = payload.actIndex

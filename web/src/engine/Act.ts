@@ -61,6 +61,12 @@ export class Act {
   /** Act-specific set-up of a fresh state (starting items, spells…). */
   setupGameState(_gameState: GameState): void {}
 
+  /**
+   * Bring a state loaded from a save up to date, e.g. drop data that older
+   * saves still hold. Runs on every load, so it must be idempotent.
+   */
+  afterLoad(_gameState: GameState): void {}
+
   isCompleted(_gameState: GameState): boolean {
     return false
   }

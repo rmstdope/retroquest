@@ -19,14 +19,19 @@ function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 }
 
-/** The shopkeeper NPC in Willowbrook's General Store. */
+/**
+ * The shopkeeper NPC in Willowbrook's General Store.
+ *
+ * The store's matches are kept for the priest: they are not among the wares
+ * and are handed over for free once Elior has spoken with the priest.
+ */
 export class Shopkeeper extends Character {
   wares: Record<string, { item: Item; price: number }> = {
     rope: { item: new Rope(), price: 1 },
-    matches: { item: new Matches(), price: 4 },
     sword: { item: new Sword(), price: 5 },
     armor: { item: new Armor(), price: 10 },
   }
+  priestMatchesGiven = false
   dialogueOptions: string[] = [
     'Welcome to my humble store! Finest goods in Willowbrook, ' +
       'I assure you.',
@@ -59,15 +64,18 @@ export class Shopkeeper extends Character {
     }
 
     // Check if priest needs matches and shopkeeper hasn't given them yet
-    if (gameState.getStoryFlag('priest_talked_to') && 'matches' in this.wares) {
+    if (
+      gameState.getStoryFlag('priest_talked_to') &&
+      !this.priestMatchesGiven
+    ) {
       // Give matches to player for the priest
       gameState.currentRoom.removeItem('Matches')
 
       const newMatches = new Matches() // Create a new instance for the inventory
       gameState.addItemToInventory(newMatches)
 
-      // Remove matches from wares so they can't be bought/given again
-      delete this.wares.matches
+      // Remember the hand-over so the matches can't be given again
+      this.priestMatchesGiven = true
 
       return (
         `The ${characterName('Shopkeeper')} leans in. ` +
@@ -107,6 +115,17 @@ export class Shopkeeper extends Character {
     )
   }
 
+  /**
+   * Bring a shopkeeper from a save made before the matches left the wares up
+   * to date. Such saves listed the matches for sale until the hand-over and
+   * had no `priestMatchesGiven`, so the hand-over is read from their absence
+   * before they are dropped from the wares. Safe to run more than once.
+   */
+  migrateLegacyWares(): void {
+    this.priestMatchesGiven ??= !('matches' in this.wares)
+    delete this.wares.matches
+  }
+
   /** The shopkeeper does not accept gifts. */
   override giveItem(_gameState: GameState, _item: Item): string {
     return (
@@ -117,7 +136,10 @@ export class Shopkeeper extends Character {
     )
   }
 
-  /** Sell a ware for coins, adding the bonus apple to the inventory. */
+  /**
+   * Sell a ware for coins, adding the bonus apple to the inventory. The
+   * matches are kept for the priest and never sold.
+   */
   override buyItem(gameState: GameState, itemName: string): string {
     if (!gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)) {
       return this.closedDialogue
@@ -127,6 +149,16 @@ export class Shopkeeper extends Character {
       `You try to buy the [item_name]${itemNameToBuy}[/item_name] from the ` +
         `${characterName(this.name)}.`,
     )
+    if (gameState.currentRoom.getItemByName(itemNameToBuy) instanceof Matches) {
+      return (
+        eventMsg +
+        '\n' +
+        speech(
+          `Those [item_name]matches[/item_name] are the ${characterName('priest')}'s. ` +
+            "He gets them on the house whenever he asks, so they're not for sale.",
+        )
+      )
+    }
     if (!(itemNameToBuy in this.wares)) {
       return (
         eventMsg +
@@ -177,8 +209,6 @@ export class Shopkeeper extends Character {
     let newItem: Item
     if (itemNameToBuy === 'rope') {
       newItem = new Rope()
-    } else if (itemNameToBuy === 'matches') {
-      newItem = new Matches()
     } else if (itemNameToBuy === 'sword') {
       newItem = new Sword()
     } else if (itemNameToBuy === 'armor') {
