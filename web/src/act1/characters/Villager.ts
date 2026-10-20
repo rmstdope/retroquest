@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, event, characterName } from '@/engine'
 import { FLAG_VILLAGER_TALKED_TO } from '../Act1StoryFlags'
 
 /** A friendly Willowbrook local who cycles through village rumors. */
@@ -32,7 +32,7 @@ export class Villager extends Character {
     const dialogue = this.dialogueOptions[this.dialogueIndex]
     // Cycle through dialogue
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
-    const eventMsg = `[event]You speak with the [character_name]${this.name}[/character_name].[/event]`
+    const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
     return eventMsg + '\n' + `'${dialogue}'`
   }
 }

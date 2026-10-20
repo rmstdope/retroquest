@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { Fish } from './Fish'
 import { FishingRod } from './FishingRod'
 
@@ -37,13 +37,14 @@ export class River extends Item {
         const riverName = this.name
         const rodName = other.name
         return (
-          '[event]You cast your line into the [item_name]' +
-          riverName +
-          '[/item_name] using the [item_name]' +
-          rodName +
-          ('[/item_name]. After a moment, you feel a tug and reel in a ' +
-            'plump [item_name]fish[/item_name]![/event]\n' +
-            'You add the fish to your inventory.')
+          event(
+            'You cast your line into the [item_name]' +
+              riverName +
+              '[/item_name] using the [item_name]' +
+              rodName +
+              '[/item_name]. After a moment, you feel a tug and reel in a ' +
+              'plump [item_name]fish[/item_name]!',
+          ) + '\nYou add the fish to your inventory.'
         )
       }
       return (

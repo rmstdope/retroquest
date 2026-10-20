@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 
 /** Religious artifact grounding village spirituality and hinting at mystical currents. */
 export class PrayerBook extends Item {
@@ -14,7 +14,8 @@ export class PrayerBook extends Item {
 
   /** Read the prayer book and return its mystical message. */
   read(_gameState: GameState): string {
-    const eventMsg = `[event]You read the [item_name]${this.name}[/item_name].[/event]\n`
+    const eventMsg =
+      event(`You read the [item_name]${this.name}[/item_name].`) + '\n'
     return (
       eventMsg +
       ('The pages shimmer with shifting runes and cryptic sigils. As you try to focus, ' +

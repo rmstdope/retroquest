@@ -1,4 +1,11 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  event,
+  characterName,
+  speech,
+} from '@/engine'
 import { ShinyRing } from '../items/ShinyRing'
 import { WanderingBoots } from '../items/WanderingBoots'
 
@@ -19,30 +26,29 @@ export class Merchant extends Character {
   /** Dialogue when the player speaks to the merchant. */
   override talkTo(_gameState: GameState): string {
     // Use bootsGiven flag instead of checking inventory
-    const eventMsg =
-      '[event]You speak with the [character_name]' +
-      this.name +
-      '[/character_name].[/event]'
+    const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
     if (!this.bootsGiven) {
       return (
         eventMsg +
         '\n' +
-        '[dialogue]The [character_name]' +
-        this.name +
-        "[/character_name] offers a friendly nod. 'Looking for something " +
-        'specific, or just browsing? If you have any fine jewelry, especially ' +
-        "a [item_name]shiny ring[/item_name], I'm ready to exchange it for a " +
-        "pair of sturdy [item_name]wandering boots[/item_name].'[/dialogue]"
+        speech(
+          `The ${characterName(this.name)} offers a friendly nod. ` +
+            "'Looking for something " +
+            'specific, or just browsing? If you have any fine jewelry, especially ' +
+            "a [item_name]shiny ring[/item_name], I'm ready to exchange it for a " +
+            "pair of sturdy [item_name]wandering boots[/item_name].'",
+        )
       )
     }
     return (
       eventMsg +
       '\n' +
-      '[dialogue]The [character_name]' +
-      this.name +
-      "[/character_name] grins. 'Those [item_name]boots[/item_name] should " +
-      'serve you well on the road ahead! Let me know if you find anything ' +
-      "else of value.'[/dialogue]"
+      speech(
+        `The ${characterName(this.name)} grins. ` +
+          "'Those [item_name]boots[/item_name] should " +
+          'serve you well on the road ahead! Let me know if you find anything ' +
+          "else of value.'",
+      )
     )
   }
 
@@ -53,42 +59,39 @@ export class Merchant extends Character {
       const boots = new WanderingBoots()
       gameState.addItemToInventory(boots)
       this.bootsGiven = true // Set flag when boots are given
-      const eventMsg =
-        '[event]You give the [item_name]' +
-        item.name +
-        '[/item_name] to the [character_name]' +
-        this.name +
-        '[/character_name].[/event]'
+      const eventMsg = event(
+        'You give the [item_name]' +
+          item.name +
+          `[/item_name] to the ${characterName(this.name)}.`,
+      )
       return (
         eventMsg +
         '\n' +
-        'The [character_name]' +
-        this.name +
-        "[/character_name]'s eyes widen as you hand over the [item_name]" +
+        `The ${characterName(this.name)}'s eyes widen as you hand over the [item_name]` +
         item.name +
-        "[/item_name]. [dialogue]'A fine piece! As promised, here are the [item_name]" +
-        boots.name +
-        "[/item_name]. They'll serve you well on the road to Greendale.'[/dialogue]" +
+        '[/item_name]. ' +
+        speech(
+          "'A fine piece! As promised, here are the [item_name]" +
+            boots.name +
+            "[/item_name]. They'll serve you well on the road to Greendale.'",
+        ) +
         '\n\n' +
-        '[event]You receive a pair of [item_name]' +
-        boots.name +
-        '[/item_name]![/event]'
+        event(`You receive a pair of [item_name]${boots.name}[/item_name]!`)
       )
     }
-    const eventMsg =
-      '[event]You offer the [item_name]' +
-      item.name +
-      '[/item_name] to the [character_name]' +
-      this.name +
-      '[/character_name].[/event]'
+    const eventMsg = event(
+      'You offer the [item_name]' +
+        item.name +
+        `[/item_name] to the ${characterName(this.name)}.`,
+    )
     return (
       eventMsg +
       '\n' +
-      '[dialogue]The [character_name]' +
-      this.name +
-      '[/character_name] examines the [item_name]' +
-      item.name +
-      "[/item_name] but shakes his head. 'Not interested in that, friend.'[/dialogue]"
+      speech(
+        `The ${characterName(this.name)} examines the [item_name]` +
+          item.name +
+          "[/item_name] but shakes his head. 'Not interested in that, friend.'",
+      )
     )
   }
 }

@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  event,
+  characterName,
+} from '@/engine'
 
 /** Simple restorative spell for Act I; supports self-cast and targeted healing. */
 export class HealSpell extends Spell {
@@ -13,7 +19,8 @@ export class HealSpell extends Spell {
   /** Cast the spell without a target (self-cast behavior). */
   override castSpell(_gameState: GameState): string {
     return (
-      '[event]You cast [spell_name]heal[/spell_name] on yourself.[/event]\n' +
+      event('You cast [spell_name]heal[/spell_name] on yourself.') +
+      '\n' +
       'A warm light envelops you, and you feel your wounds mending.'
     )
   }
@@ -25,10 +32,11 @@ export class HealSpell extends Spell {
   ): string {
     const name = character.name
     return (
-      `[event]You cast [spell_name]heal[/spell_name] on [character_name]${name}` +
-      '[/character_name].[/event]\n' +
-      'A warm light envelops ' +
-      `[character_name]${name}[/character_name] and the character seems a bit healthier.`
+      event(
+        `You cast [spell_name]heal[/spell_name] on ${characterName(name)}.`,
+      ) +
+      '\nA warm light envelops ' +
+      `${characterName(name)} and the character seems a bit healthier.`
     )
   }
 }

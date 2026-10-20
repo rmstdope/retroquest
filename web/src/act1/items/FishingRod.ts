@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { Magnet } from './Magnet'
 import { MagneticFishingRod } from './MagneticFishingRod'
 import { River } from './River'
@@ -26,10 +26,10 @@ export class FishingRod extends Item {
 
         const magneticRod = new MagneticFishingRod()
         gameState.inventory.push(magneticRod)
-        return (
-          `[event]You attach the [item_name]${other.name}[/item_name] to ` +
-          `the [item_name]${this.name}[/item_name], creating a ` +
-          `[item_name]${magneticRod.name}[/item_name].[/event]`
+        return event(
+          `You attach the [item_name]${other.name}[/item_name] to ` +
+            `the [item_name]${this.name}[/item_name], creating a ` +
+            `[item_name]${magneticRod.name}[/item_name].`,
         )
       }
       return (

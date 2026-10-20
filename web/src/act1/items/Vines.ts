@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { SharpKnife } from './SharpKnife'
 import { Stick } from './Stick'
 
@@ -17,14 +17,14 @@ export class Vines extends Item {
       gameState.currentRoom.removeItem(this.name)
       gameState.removeItemFromInventory(other.name)
       gameState.currentRoom.addItem(new Stick())
-      return (
-        `[event]You use the [item_name]${other.name}[/item_name] ` +
-        'to cut through the ' +
-        `thick [item_name]${this.name}[/item_name], clearing the way ` +
-        'to a small alcove. ' +
-        `The [item_name]${other.name}[/item_name] shatters from the ` +
-        'effort! You can see ' +
-        'a sturdy [item_name]stick[/item_name] in the revealed alcove.[/event]'
+      return event(
+        `You use the [item_name]${other.name}[/item_name] ` +
+          'to cut through the ' +
+          `thick [item_name]${this.name}[/item_name], clearing the way ` +
+          'to a small alcove. ' +
+          `The [item_name]${other.name}[/item_name] shatters from the ` +
+          'effort! You can see ' +
+          'a sturdy [item_name]stick[/item_name] in the revealed alcove.',
       )
     }
     return super.useWith(gameState, other)

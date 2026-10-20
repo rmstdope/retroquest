@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { Matches } from './Matches'
 import { Locket } from './Locket'
 
@@ -23,8 +23,11 @@ export class Candle extends Item {
         this.description = 'The candle is lit, casting a warm, steady light.'
         gameState.currentRoom.addItem(new Locket())
         return (
-          `[event]You light the [item_name]${this.name}[/item_name] ` +
-          `with the [item_name]${other.name}[/item_name].[/event]\n` +
+          event(
+            `You light the [item_name]${this.name}[/item_name] ` +
+              `with the [item_name]${other.name}[/item_name].`,
+          ) +
+          '\n' +
           'It now casts a warm glow. The flickering candlelight reveals a ' +
           '[item_name]locket[/item_name] that was previously unseen!'
         )

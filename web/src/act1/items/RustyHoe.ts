@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { Coin } from './Coin'
 import {
   FLAG_RUSTY_HOE_FIRST_COIN_FOUND,
@@ -38,11 +38,11 @@ export class RustyHoe extends Item {
           true,
         )
         gameState.addItemToInventory(new Coin())
-        return (
-          '[event]You till the soil with the [item_name]rusty hoe[/item_name]. ' +
-          'The ground is tough, and you unearth a small, tarnished ' +
-          '[item_name]coin[/item_name]! ' +
-          'You quickly pocket it.[/event]'
+        return event(
+          'You till the soil with the [item_name]rusty hoe[/item_name]. ' +
+            'The ground is tough, and you unearth a small, tarnished ' +
+            '[item_name]coin[/item_name]! ' +
+            'You quickly pocket it.',
         )
       }
       return (

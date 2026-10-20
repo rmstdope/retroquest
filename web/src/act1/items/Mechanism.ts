@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { MillstoneFragment } from './MillstoneFragment'
 import { Rope } from './Rope'
 
@@ -67,9 +67,9 @@ export class Mechanism extends Item {
         'The mechanism has been repaired using a rope. A compartment is open.'
       const nameHtml = `[item_name]${this.name}[/item_name]`
       const eventMsg =
-        '[event]You try to use the [item_name]rope[/item_name] with the ' +
-        nameHtml +
-        '[/event]\n'
+        event(
+          'You try to use the [item_name]rope[/item_name] with the ' + nameHtml,
+        ) + '\n'
       const part1 =
         'You manage to thread the [item_name]rope[/item_name] through the ' +
         nameHtml +
@@ -85,7 +85,7 @@ export class Mechanism extends Item {
   /** Return sound feedback based on repaired state. */
   override listen(_gameState: GameState): string {
     const nameHtml = `[item_name]${this.name}[/item_name]`
-    const eventMsg = '[event]You listen to the ' + nameHtml + '[/event]\n'
+    const eventMsg = event('You listen to the ' + nameHtml) + '\n'
     if (this.repaired) {
       return (
         eventMsg + ('The ' + nameHtml + ' is silent now, its purpose served.')

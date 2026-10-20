@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { Well } from './Well'
 
 /** Early utility container for combining items with environmental features. */
@@ -21,9 +21,9 @@ export class Bucket extends Item {
         this.description =
           'A sturdy wooden bucket with a rope handle. It is full of clear water ' +
           'drawn from the well.'
-        return (
-          '[event]You lower the [item_name]bucket[/item_name] into the ' +
-          '[item_name]well[/item_name] and draw it up, full of clear water.[/event]'
+        return event(
+          'You lower the [item_name]bucket[/item_name] into the ' +
+            '[item_name]well[/item_name] and draw it up, full of clear water.',
         )
       }
       return '[failure]The [item_name]bucket[/item_name] is already full.[/failure]'

@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event, characterName, speech } from '@/engine'
 import { BlessSpell } from '../spells/BlessSpell'
 
 /** Small, intricately carved silver locket with narrative significance. */
@@ -20,13 +20,19 @@ export class Locket extends Item {
       const blessSpell = new BlessSpell()
       gameState.learnSpell(blessSpell)
       return (
-        '[event]You pick up the locket.[/event]\nAs you do this, the ' +
-        '[character_name]priest[/character_name] gasps. The ' +
-        '[character_name]priest[/character_name] nods gravely. ' +
-        "[dialogue]'That locket... it is a relic of the village founders. It speaks " +
-        'of your connection to this place and its history. May this blessing protect ' +
-        "you on your path.'[/dialogue]\nHe teaches you the [spell_name]bless[/spell_name] " +
-        'spell!\n[event]You have learned [spell_name]bless[/spell_name].[/event]'
+        event('You pick up the locket.') +
+        '\nAs you do this, the ' +
+        characterName('priest') +
+        ' gasps. The ' +
+        characterName('priest') +
+        ' nods gravely. ' +
+        speech(
+          "'That locket... it is a relic of the village founders. It speaks " +
+            'of your connection to this place and its history. May this blessing protect ' +
+            "you on your path.'",
+        ) +
+        '\nHe teaches you the [spell_name]bless[/spell_name] spell!\n' +
+        event('You have learned [spell_name]bless[/spell_name].')
       )
     }
     return ''

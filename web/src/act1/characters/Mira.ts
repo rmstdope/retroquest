@@ -1,4 +1,11 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  event,
+  characterName,
+  speech,
+} from '@/engine'
 import { RareFlower } from '../items/RareFlower'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { HealSpell } from '../spells/HealSpell'
@@ -28,31 +35,37 @@ export class Mira extends Character {
     })
     this.dialogueStates = {
       initial:
-        `[character_name]${this.name}[/character_name] smiles warmly as ` +
-        "you enter her fragrant hut. [dialogue]'Welcome, " +
-        '[character_name]Elior[/character_name]. I sense a stirring of the ' +
-        "old powers within you. What brings you to my door?'" +
-        '[/dialogue]',
+        `${characterName(this.name)} smiles warmly as ` +
+        'you enter her fragrant hut. ' +
+        speech(
+          `'Welcome, ${characterName('Elior')}. I sense a stirring of the ` +
+            "old powers within you. What brings you to my door?'",
+        ),
       quest_conditions_not_met:
-        `[character_name]${this.name}[/character_name] looks at you ` +
-        "thoughtfully. [dialogue]'You have made progress, " +
-        '[character_name]Elior[/character_name], but you are not yet fully ' +
-        'prepared for what lies ahead. Ensure you have all necessary items, ' +
-        'learned the essential spells, and received a blessing for your ' +
-        "journey.'[/dialogue]",
+        `${characterName(this.name)} looks at you thoughtfully. ` +
+        speech(
+          `'You have made progress, ${characterName('Elior')}, but you are not yet fully ` +
+            'prepared for what lies ahead. Ensure you have all necessary items, ' +
+            'learned the essential spells, and received a blessing for your ' +
+            "journey.'",
+        ),
       quest_complete_amulet_given:
-        `[character_name]${this.name}[/character_name] smiles, a deep ` +
-        "wisdom in her eyes. [dialogue]'You have done well, " +
-        '[character_name]Elior[/character_name]. You have gathered your ' +
-        'supplies, honed your magical skills, and prepared your spirit. ' +
-        "You are ready.'[/dialogue] She presents you with the " +
-        "[item_name]Ancient Amulet[/item_name]. [dialogue]'May this guide and " +
-        "protect you.'[/dialogue] [event]([item_name]Ancient Amulet[/item_name] " +
-        'added to inventory!)[/event]',
+        `${characterName(this.name)} smiles, a deep wisdom in her eyes. ` +
+        speech(
+          `'You have done well, ${characterName('Elior')}. You have gathered your ` +
+            'supplies, honed your magical skills, and prepared your spirit. ' +
+            "You are ready.'",
+        ) +
+        ' She presents you with the [item_name]Ancient Amulet[/item_name]. ' +
+        speech("'May this guide and protect you.'") +
+        ' ' +
+        event('([item_name]Ancient Amulet[/item_name] added to inventory!)'),
       post_amulet:
-        `[character_name]${this.name}[/character_name] looks at you kindly. ` +
-        "[dialogue]'The journey of a thousand miles begins with a single step. You " +
-        "have taken many already. Go now, and may your path be clear.'[/dialogue]",
+        `${characterName(this.name)} looks at you kindly. ` +
+        speech(
+          "'The journey of a thousand miles begins with a single step. You " +
+            "have taken many already. Go now, and may your path be clear.'",
+        ),
     }
   }
 
@@ -74,17 +87,26 @@ export class Mira extends Character {
 
       // Combined dialogue for receiving flower, teaching spells, and giving quest.
       return (
-        '[character_name]Mira[/character_name] smiles, accepting the ' +
-        "[item_name]flower[/item_name]. [dialogue]'This bloom,' she says, her " +
-        "voice soft, 'is a testament to your growing bond with the living world, " +
-        "Elior. It shows you are ready to truly channel the energies around us.'" +
-        '[/dialogue] She then guides you through ancient words and gestures, ' +
-        'awakening your innate abilities. [event]You feel a new understanding ' +
-        'dawn as she imparts the knowledge of [spell_name]heal[/spell_name] to mend, ' +
-        '[spell_name]unlock[/spell_name] to reveal, and [spell_name]light[/spell_name] to ' +
-        "illuminate the path.[/event] [dialogue]'The spark was always within " +
-        "you,'[/dialogue] [character_name]Mira[/character_name] explains, " +
-        "[dialogue]'but now, you can truly command these magics.'[/dialogue] With " +
+        `${characterName('Mira')} smiles, accepting the ` +
+        '[item_name]flower[/item_name]. ' +
+        speech(
+          "'This bloom,' she says, her " +
+            "voice soft, 'is a testament to your growing bond with the living world, " +
+            "Elior. It shows you are ready to truly channel the energies around us.'",
+        ) +
+        ' She then guides you through ancient words and gestures, ' +
+        'awakening your innate abilities. ' +
+        event(
+          'You feel a new understanding ' +
+            'dawn as she imparts the knowledge of [spell_name]heal[/spell_name] to mend, ' +
+            '[spell_name]unlock[/spell_name] to reveal, and [spell_name]light[/spell_name] to ' +
+            'illuminate the path.',
+        ) +
+        ' ' +
+        speech("'The spark was always within you,'") +
+        ` ${characterName('Mira')} explains, ` +
+        speech("'but now, you can truly command these magics.'") +
+        ' With ' +
         'your newfound power, she tasks you with preparing for the journey ahead, ' +
         'mentioning that the [item_name]Ancient Amulet[/item_name] will be yours once ' +
         'you are truly ready. She tells you that you will need:\n' +
@@ -94,26 +116,27 @@ export class Mira extends Character {
         '- Sturdy footwear\n' +
         '- A [item_name]map[/item_name] to find your way\n' +
         '- To have learned all the basic magic the village elders can teach you.\n' +
-        "[dialogue]'Your journey will take you to Greendale,' she continues, her " +
-        "tone serious. 'There, you must seek out the old druid who dwells at the " +
-        "forest's edge. He alone can teach you the deeper mysteries of nature's magic " +
-        'and help you understand the darkness threatening Willowbrook. Trust in ' +
-        'yourself, Elior, and remember: the fate of our village, or even more, may ' +
-        "rest in your hands.'[/dialogue]"
+        speech(
+          "'Your journey will take you to Greendale,' she continues, her " +
+            "tone serious. 'There, you must seek out the old druid who dwells at the " +
+            "forest's edge. He alone can teach you the deeper mysteries of nature's magic " +
+            'and help you understand the darkness threatening Willowbrook. Trust in ' +
+            'yourself, Elior, and remember: the fate of our village, or even more, may ' +
+            "rest in your hands.'",
+        )
       )
     }
     return (
-      '[character_name]Mira[/character_name] looks at the [item_name]' +
+      `${characterName('Mira')} looks at the [item_name]` +
       item.name +
       '[/item_name] but shakes her head gently. ' +
-      "[dialogue]'I have no need for this, child.'[/dialogue]"
+      speech("'I have no need for this, child.'")
     )
   }
 
   /** Dialogue depending on quest progress; hands over the amulet when ready. */
   override talkTo(gameState: GameState): string {
-    const eventMsg =
-      '[event]You speak with [character_name]Mira[/character_name].[/event]'
+    const eventMsg = event(`You speak with ${characterName('Mira')}.`)
     // 1. Give the post_amulet message if amulet is in inventory
     if (gameState.hasItem('Ancient Amulet')) {
       return eventMsg + '\n' + this.dialogueStates.post_amulet
@@ -133,18 +156,25 @@ export class Mira extends Character {
           "\nYou describe to Mira the withered crops, the villagers' " +
           'fears, and the foul stench from the well. Her expression grows ' +
           'troubled as she listens. ' +
-          "[dialogue]'These are signs of a darkness that has long slumbered " +
-          "beneath Willowbrook,'[/dialogue] she says sadly. " +
-          "[dialogue]'The land is suffering, and so are its people. But there " +
-          'is hope, Elior. You must connect with the living world—listen to ' +
-          'the wind, the water, the roots beneath your feet. Only by ' +
-          'understanding the magic of nature can you hope to confront what ' +
-          "is coming.'[/dialogue]" +
+          speech(
+            "'These are signs of a darkness that has long slumbered " +
+              "beneath Willowbrook,'",
+          ) +
+          ' she says sadly. ' +
+          speech(
+            "'The land is suffering, and so are its people. But there " +
+              'is hope, Elior. You must connect with the living world—listen to ' +
+              'the wind, the water, the roots beneath your feet. Only by ' +
+              'understanding the magic of nature can you hope to confront what ' +
+              "is coming.'",
+          ) +
           '\n' +
-          "[dialogue]'A rare [item_name]Rare Flower[/item_name] grows in the " +
-          '[room_name]Hidden Glade[/room_name]. Seek it out, and pay close ' +
-          'attention to the well and the glade; they may hold secrets vital to ' +
-          "your quest.'[/dialogue]"
+          speech(
+            "'A rare [item_name]Rare Flower[/item_name] grows in the " +
+              '[room_name]Hidden Glade[/room_name]. Seek it out, and pay close ' +
+              'attention to the well and the glade; they may hold secrets vital to ' +
+              "your quest.'",
+          )
         return eventMsg + '\n' + this.dialogueStates.initial + extra
       }
       return eventMsg + '\n' + this.dialogueStates.initial

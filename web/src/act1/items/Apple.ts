@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, characterName, speech } from '@/engine'
 
 /** Basic food item; the shopkeeper blocks pickup until it has been bought. */
 export class Apple extends Item {
@@ -14,10 +14,13 @@ export class Apple extends Item {
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
-        '[character_name]Shopkeeper[/character_name] quickly steps over. ' +
-        `[dialogue]'Hold on there, friend! That [item_name]${this.name}[/item_name] ` +
-        "is merchandise, not a free sample. If you want it, you'll need to buy it " +
-        "proper-like.'[/dialogue]"
+        characterName('Shopkeeper') +
+        ' quickly steps over. ' +
+        speech(
+          `'Hold on there, friend! That [item_name]${this.name}[/item_name] ` +
+            "is merchandise, not a free sample. If you want it, you'll need to buy it " +
+            "proper-like.'",
+        )
       )
     }
     return ''

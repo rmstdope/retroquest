@@ -1,4 +1,11 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  event,
+  characterName,
+  speech,
+} from '@/engine'
 import { Rope } from '../items/Rope'
 import { Apple } from '../items/Apple'
 import { Matches } from '../items/Matches'
@@ -29,9 +36,11 @@ export class Shopkeeper extends Character {
   ]
   dialogueIndex = 0
   closedDialogue =
-    'The [character_name]Shopkeeper[/character_name] shakes his head. ' +
-    "[dialogue]'Sorry, not open for business just yet. Come back later, lad—" +
-    "there's something you need to discover first.'[/dialogue]"
+    `The ${characterName('Shopkeeper')} shakes his head. ` +
+    speech(
+      "'Sorry, not open for business just yet. Come back later, lad—" +
+        "there's something you need to discover first.'",
+    )
 
   constructor() {
     super({
@@ -61,11 +70,14 @@ export class Shopkeeper extends Character {
       delete this.wares.matches
 
       return (
-        'The [character_name]Shopkeeper[/character_name] leans in. ' +
-        '[dialogue]"Ah, you spoke to the [character_name]priest[/character_name]? ' +
-        'He does get through his [item_name]matches[/item_name]. ' +
-        'Here, take these for him, on the house. Tell him I said hello!"[/dialogue]' +
-        '\n\n[event]You receive a box of [item_name]matches[/item_name].[/event]'
+        `The ${characterName('Shopkeeper')} leans in. ` +
+        speech(
+          `"Ah, you spoke to the ${characterName('priest')}? ` +
+            'He does get through his [item_name]matches[/item_name]. ' +
+            'Here, take these for him, on the house. Tell him I said hello!"',
+        ) +
+        '\n\n' +
+        event('You receive a box of [item_name]matches[/item_name].')
       )
     }
 
@@ -90,17 +102,19 @@ export class Shopkeeper extends Character {
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
 
     return (
-      'The [character_name]Shopkeeper[/character_name] says: ' +
-      `[dialogue]"${dialogue} ${waresInfo.trim()}"[/dialogue]`
+      `The ${characterName('Shopkeeper')} says: ` +
+      speech(`"${dialogue} ${waresInfo.trim()}"`)
     )
   }
 
   /** The shopkeeper does not accept gifts. */
   override giveItem(_gameState: GameState, _item: Item): string {
     return (
-      'The [character_name]Shopkeeper[/character_name] chuckles. ' +
-      '[dialogue]"Not looking for donations, friend, but I appreciate the ' +
-      'thought!"[/dialogue]'
+      `The ${characterName('Shopkeeper')} chuckles. ` +
+      speech(
+        '"Not looking for donations, friend, but I appreciate the ' +
+          'thought!"',
+      )
     )
   }
 
@@ -110,15 +124,18 @@ export class Shopkeeper extends Character {
       return this.closedDialogue
     }
     const itemNameToBuy = itemName.toLowerCase()
-    const eventMsg =
-      `[event]You try to buy the [item_name]${itemNameToBuy}[/item_name] from the ` +
-      `[character_name]${this.name}[/character_name].[/event]`
+    const eventMsg = event(
+      `You try to buy the [item_name]${itemNameToBuy}[/item_name] from the ` +
+        `${characterName(this.name)}.`,
+    )
     if (!(itemNameToBuy in this.wares)) {
       return (
         eventMsg +
         '\n' +
-        "[dialogue]Sorry, I don't have any '[item_name]" +
-        `${itemNameToBuy}[/item_name]' for sale.[/dialogue]`
+        speech(
+          "Sorry, I don't have any '[item_name]" +
+            `${itemNameToBuy}[/item_name]' for sale.`,
+        )
       )
     }
 
@@ -177,10 +194,12 @@ export class Shopkeeper extends Character {
     // The store has infinite stock; the player buys one instance.
 
     return (
-      '\n[event]You bought a [item_name]' +
-      `${newItem.name}[/item_name] for ${price} ` +
-      '[item_name]coin(s)[/item_name] and got an extra ' +
-      '[item_name]apple[/item_name] as a bonus![/event]'
+      '\n' +
+      event(
+        `You bought a [item_name]${newItem.name}[/item_name] for ${price} ` +
+          '[item_name]coin(s)[/item_name] and got an extra ' +
+          '[item_name]apple[/item_name] as a bonus!',
+      )
     )
   }
 }

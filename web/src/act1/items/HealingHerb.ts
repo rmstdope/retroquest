@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, characterName, speech } from '@/engine'
 
 /** Static, non-removable medicinal resource controlled by Mira (Act I healer). */
 export class HealingHerb extends Item {
@@ -15,11 +15,14 @@ export class HealingHerb extends Item {
   /** Block pickup and deliver Mira's stewardship dialogue. */
   override preventPickup(): string {
     return (
-      '[character_name]Mira[/character_name] gently but firmly stops you. ' +
-      "[dialogue]'Those herbs are part of my stores, " +
-      '[character_name]Elior[/character_name]. They are not for taking, but for ' +
-      "healing those who truly need them.'" +
-      '[/dialogue]'
+      characterName('Mira') +
+      ' gently but firmly stops you. ' +
+      speech(
+        "'Those herbs are part of my stores, " +
+          characterName('Elior') +
+          '. They are not for taking, but for ' +
+          "healing those who truly need them.'",
+      )
     )
   }
 }

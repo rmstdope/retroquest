@@ -1,4 +1,11 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  event,
+  characterName,
+} from '@/engine'
 import { Well } from '../items/Well'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
 
@@ -15,8 +22,11 @@ export class PurifySpell extends Spell {
 
   private fizzle(): string {
     return (
-      `[event]You attempt to cast [spell_name]${this.name}[/spell_name], ` +
-      'but the magic fizzles out, achieving nothing.[/event]\n' +
+      event(
+        `You attempt to cast [spell_name]${this.name}[/spell_name], ` +
+          'but the magic fizzles out, achieving nothing.',
+      ) +
+      '\n' +
       'It feels like the magic is just out of reach.'
     )
   }
@@ -26,7 +36,8 @@ export class PurifySpell extends Spell {
       return this.fizzle()
     }
     return (
-      `[event]You cast [spell_name]${this.name}[/spell_name].[/event]\n` +
+      event(`You cast [spell_name]${this.name}[/spell_name].`) +
+      '\n' +
       'A cleansing energy flows from your hands.'
     )
   }
@@ -40,8 +51,11 @@ export class PurifySpell extends Spell {
     }
     const name = item.name
     return (
-      `[event]You cast [spell_name]${this.name}[/spell_name] on ` +
-      `[item_name]${name}[/item_name].[/event]\n` +
+      event(
+        `You cast [spell_name]${this.name}[/spell_name] on ` +
+          `[item_name]${name}[/item_name].`,
+      ) +
+      '\n' +
       'A cleansing energy flows from your hands, but nothing else ' +
       'seems to happen.'
     )
@@ -53,8 +67,11 @@ export class PurifySpell extends Spell {
     }
     const name = character.name
     return (
-      `[event]You cast [spell_name]${this.name}[/spell_name] on ` +
-      `[character_name]${name}[/character_name].[/event]\n` +
+      event(
+        `You cast [spell_name]${this.name}[/spell_name] on ` +
+          `${characterName(name)}.`,
+      ) +
+      '\n' +
       'A cleansing energy flows around ' +
       `${name}, purifying their spirit and lifting any negative influences.`
     )

@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, characterName, speech } from '@/engine'
 import { Mechanism } from './Mechanism'
 
 /** Early shop item used for mechanical or traversal interactions. */
@@ -17,11 +17,14 @@ export class Rope extends Item {
     if (!this.canBeCarried) {
       const nameHtml = `[item_name]${this.name}[/item_name]`
       return (
-        '[character_name]Shopkeeper[/character_name] quickly steps over. ' +
-        "[dialogue]'Hold on there, friend! That " +
-        nameHtml +
-        (' is merchandise, not a free sample. If you want it, ' +
-          "you'll need to buy it proper-like.'[/dialogue]")
+        characterName('Shopkeeper') +
+        ' quickly steps over. ' +
+        speech(
+          "'Hold on there, friend! That " +
+            nameHtml +
+            ' is merchandise, not a free sample. If you want it, ' +
+            "you'll need to buy it proper-like.'",
+        )
       )
     }
     return ''

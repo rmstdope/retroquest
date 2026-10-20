@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event, characterName, speech } from '@/engine'
 
 /** Sword item representing a combat/heroism symbol with equip and examine actions. */
 export class Sword extends Item {
@@ -16,10 +16,13 @@ export class Sword extends Item {
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
-        '[character_name]Shopkeeper[/character_name] quickly steps over. ' +
-        `[dialogue]'Hold on there, friend! That [item_name]${this.name}[/item_name] ` +
-        "is merchandise, not a free sample. If you want it, you'll need to buy it " +
-        "proper-like.'[/dialogue]"
+        characterName('Shopkeeper') +
+        ' quickly steps over. ' +
+        speech(
+          `'Hold on there, friend! That [item_name]${this.name}[/item_name] ` +
+            "is merchandise, not a free sample. If you want it, you'll need to buy it " +
+            "proper-like.'",
+        )
       )
     }
     return ''
@@ -27,25 +30,24 @@ export class Sword extends Item {
 
   /** Examine the sword for its combat readiness. */
   override use(_gameState: GameState): string {
-    return (
-      '[event]You examine the [item_name]sword[/item_name]. ' +
-      'It feels perfectly balanced and ready for combat.[/event]'
+    return event(
+      'You examine the [item_name]sword[/item_name]. ' +
+        'It feels perfectly balanced and ready for combat.',
     )
   }
 
   /** Equip the sword to feel more confident and prepared. */
   override equip(_gameState: GameState): string {
-    return (
-      '[event]You grip the [item_name]sword[/item_name] firmly. ' +
-      'You feel more confident and prepared for any threats.[/event]'
+    return event(
+      'You grip the [item_name]sword[/item_name] firmly. ' +
+        'You feel more confident and prepared for any threats.',
     )
   }
 
   /** Examine the sword and read its description. */
   override examine(_gameState: GameState): string {
-    return (
-      '[event]You examine the [item_name]sword[/item_name]. ' +
-      `${this.description}[/event]`
+    return event(
+      `You examine the [item_name]sword[/item_name]. ${this.description}`,
     )
   }
 }

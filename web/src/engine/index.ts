@@ -29,8 +29,10 @@ export {
 } from './GameController'
 export {
   MARKUP_TAGS,
+  characterName,
   dialogue,
   event,
   findMarkupProblems,
+  speech,
   writing,
 } from './markup'

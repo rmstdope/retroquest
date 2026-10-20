@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, characterName, speech } from '@/engine'
 
 /**
  * Powerful heirloom artifact intentionally withheld early to establish
@@ -18,11 +18,15 @@ export class AncientAmulet extends Item {
   /** Always blocks pickup with narrative justification (no readiness check yet). */
   override preventPickup(): string {
     return (
-      '[character_name]Mira[/character_name] places a protective hand over the ' +
-      "[item_name]amulet[/item_name]. [dialogue]'This is not yet yours to claim, " +
-      '[character_name]Elior[/character_name]. The [item_name]Ancient Amulet[/item_name] ' +
-      'is a powerful artifact that must be earned through preparation and wisdom. ' +
-      "Complete your journey preparations first, and it shall be yours.'[/dialogue]"
+      characterName('Mira') +
+      ' places a protective hand over the [item_name]amulet[/item_name]. ' +
+      speech(
+        "'This is not yet yours to claim, " +
+          characterName('Elior') +
+          '. The [item_name]Ancient Amulet[/item_name] ' +
+          'is a powerful artifact that must be earned through preparation and wisdom. ' +
+          "Complete your journey preparations first, and it shall be yours.'",
+      )
     )
   }
 }

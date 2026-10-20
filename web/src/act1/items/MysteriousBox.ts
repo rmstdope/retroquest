@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { GameMap } from './GameMap'
 
 /** Small locked container introducing multi-step acquisition and object state transitions. */
@@ -25,7 +25,7 @@ export class MysteriousBox extends Item {
       this.description =
         `A small, ornate wooden ${nameHtml} covered in ` +
         'strange runes. The lock has clicked open.'
-      const eventMsg = `[event]You try to unlock the ${nameHtml}.[/event]\n`
+      const eventMsg = event(`You try to unlock the ${nameHtml}.`) + '\n'
       return (
         eventMsg +
         `A soft click is heard from the ${nameHtml} as the lock springs open!`
@@ -48,11 +48,12 @@ export class MysteriousBox extends Item {
       this.containsMap = false
       this.description = 'An open, ornate wooden box. It is now empty.'
       return (
-        `[event]You open the ${nameHtml}.[/event]\n` +
+        event(`You open the ${nameHtml}.`) +
+        '\n' +
         'Inside, you find a [item_name]map[/item_name]! You take the ' +
         '[item_name]map[/item_name] and place it in your inventory.'
       )
     }
-    return `[event]The ${nameHtml} is now empty.[/event]`
+    return event(`The ${nameHtml} is now empty.`)
   }
 }
