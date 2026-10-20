@@ -684,7 +684,7 @@ export const useGameStore = defineStore('game', () => {
   /**
    * Perform Tab completion on the current command input.
    *
-   * Mirrors the logic of NestedSuggester.get_suggestion() in the Python engine:
+   * Mirrors the logic of NestedSuggester.get_suggestion() in the engine:
    * - Splits the input into previously-completed tokens and a partial last token.
    * - Traverses the completion tree for the completed tokens.
    * - Collects candidates that match the partial last token as a prefix.

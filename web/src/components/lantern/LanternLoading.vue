@@ -6,7 +6,7 @@ import { computed, nextTick, ref, watch } from 'vue'
  * RetroQuest wordmark, a lantern-glow spinner and the loading status. A
  * polite live region announces each step once, without its running file
  * count. When loading `failed`, the spinner stops, a plain sentence is
- * the alert (the raw error, which can be a long Python traceback, is in a
+ * the alert (the raw error, which can be a long error text, is in a
  * closed Details section) and Try again (focused) emits `retry`.
  */
 const props = defineProps<{ status: string; failed?: boolean }>()

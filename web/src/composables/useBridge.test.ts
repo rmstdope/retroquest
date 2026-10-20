@@ -239,6 +239,9 @@ describe('useBridge', () => {
     it('shows an older quick save without its details', async () => {
       const bridge = await runningBridge()
       localStorageMock._setRaw('retroquest_save', '{}')
+      localStorageMock._setRaw('retroquest_save_meta', 'not json')
+      expect(bridge.getQuickSave()!.room).toBe(null)
+      localStorageMock.removeItem('retroquest_save_meta')
       expect(bridge.getQuickSave()).toEqual({
         slot: 0,
         act: null,
@@ -250,10 +253,26 @@ describe('useBridge', () => {
       expect(bridge.getQuickSave()!.room).toBe(null)
     })
 
-    it('refuses a save from the old Python engine', async () => {
+    it('treats a save of the old Python engine as no save', async () => {
       const bridge = await runningBridge()
       localStorageMock._setRaw('retroquest_save', 'gASVbQAAAAAAAAB9lC4=')
+      expect(bridge.getQuickSave()).toBeNull()
+      expect(bridge.quickLoadGame()).toBe(
+        '[failure]No save file found.[/failure]',
+      )
+      localStorageMock._setRaw('retroquest_save', '{"version":99}')
+      expect(bridge.getQuickSave()).not.toBeNull()
       expect(bridge.quickLoadGame()).toMatch(/^\[failure\]Failed to load game/)
+    })
+
+    it('reports progress while the acts load', async () => {
+      const progress = vi.fn()
+      await useBridge().init(progress)
+      expect(progress.mock.calls.map((c) => c[0])).toEqual([
+        'Loading the acts...',
+        'Starting game...',
+        'Ready!',
+      ])
     })
   })
 
@@ -342,7 +361,7 @@ describe('useBridge', () => {
               act: 'Act 1',
               room: 'Old Room',
               timestamp: 'old',
-              data: 'old',
+              data: '{}',
             }
           : i === 0
             ? {
@@ -350,7 +369,7 @@ describe('useBridge', () => {
                 act: 'Act 1',
                 room: 'Square',
                 timestamp: 't',
-                data: 'abc',
+                data: '{}',
               }
             : null,
       )
@@ -400,6 +419,22 @@ describe('useBridge', () => {
       const bridge = await runningBridge()
       localStorageMock._setRaw('retroquest_save_slots', '[1,2]')
       expect(bridge.getSaveSlots().every((s) => s.act === null)).toBe(true)
+      const old = Array.from({ length: 8 }, (_, i) =>
+        i === 0
+          ? {
+              slot: 1,
+              act: 'Act 1',
+              room: 'Square',
+              timestamp: 't',
+              data: 'gASV',
+            }
+          : null,
+      )
+      localStorageMock._setRaw('retroquest_save_slots', JSON.stringify(old))
+      expect(bridge.getSaveSlots()[0].act).toBeNull()
+      expect(bridge.loadFromSlot(1)).toBe(
+        '[failure]No save file found.[/failure]',
+      )
       localStorageMock._setRaw('retroquest_save_slots', 'garbage')
       expect(bridge.getSaveSlots()).toHaveLength(8)
     })

@@ -1,14 +1,14 @@
 /**
  * Theme rendering: converts engine markup tags to styled HTML spans.
  *
- * The Python engine outputs strings with Rich-style markup like
+ * The engine outputs strings with Rich-style markup like
  * [character_name]Mira[/character_name]. This module converts those
  * to <span class="theme-character_name">Mira</span> for CSS styling.
  *
  * Regexes are compiled once at module load time for performance.
  */
 
-/** All known theme tags from engine/theme.py. */
+/** All known theme tags of the engine markup. */
 export const THEME_TAGS: readonly string[] = [
   'character_name',
   'dialogue',

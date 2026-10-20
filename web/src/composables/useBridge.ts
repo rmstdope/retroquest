@@ -55,6 +55,11 @@ function readQuickMeta(): Partial<Omit<SaveSlot, 'slot'>> {
   }
 }
 
+/** True for save data this engine wrote (JSON); saves of the Python engine are not. */
+function isSaveData(data: unknown): data is string {
+  return typeof data === 'string' && data.startsWith('{')
+}
+
 /** Read and validate persisted named saves from local storage. */
 function readStoredNamedSaves(): StoredNamedSave[] {
   try {
@@ -65,11 +70,7 @@ function readStoredNamedSaves(): StoredNamedSave[] {
     return parsed.filter((entry): entry is StoredNamedSave => {
       if (typeof entry !== 'object' || entry === null) return false
       const candidate = entry as Record<string, unknown>
-      return (
-        typeof candidate.name === 'string' &&
-        typeof candidate.timestamp === 'string' &&
-        typeof candidate.data === 'string'
-      )
+      return typeof candidate.name === 'string' && isSaveData(candidate.data)
     })
   } catch {
     return []
@@ -91,7 +92,7 @@ function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
     return parsed.map((entry: unknown) =>
       entry &&
       typeof entry === 'object' &&
-      typeof (entry as StoredSaveSlot).data === 'string'
+      isSaveData((entry as StoredSaveSlot).data)
         ? (entry as StoredSaveSlot)
         : null,
     )
@@ -296,13 +297,13 @@ export function useBridge() {
 
   function quickLoadGame(): string {
     const data = localStorage.getItem(QUICK_KEY)
-    if (!data) return NO_SAVE
+    if (!isSaveData(data)) return NO_SAVE
     return requireGame().game.loadSaveData(data)
   }
 
-  /** The quick save as a card (slot 0), or null when there is none. */
+  /** The quick save as a card (slot 0), or null when there is none this engine can read. */
   function getQuickSave(): SaveSlot | null {
-    if (!localStorage.getItem(QUICK_KEY)) return null
+    if (!isSaveData(localStorage.getItem(QUICK_KEY))) return null
     const meta = readQuickMeta()
     return {
       slot: 0,

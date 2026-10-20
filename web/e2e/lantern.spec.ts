@@ -1,7 +1,18 @@
 import { test, expect, type Page } from '@playwright/test'
 
+/** Wait for the game to start (the act chunks load after the page's load event). */
+async function waitForGame(page: Page) {
+  await page.waitForFunction(() => {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const app = (document.querySelector('#app') as any).__vue_app__
+    return app && !app.config.globalProperties.$pinia.state.value.game.loading
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+  })
+}
+
 /* Replace the started game's state with a known mock state. */
 async function injectMockState(page: Page) {
+  await waitForGame(page)
   await page.evaluate(() => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     const app = (document.querySelector('#app') as any).__vue_app__
@@ -625,6 +636,7 @@ test.describe('Lantern UI (the default)', () => {
   }) => {
     await page.setViewportSize({ width: 568, height: 320 })
     await page.goto('/')
+    await waitForGame(page)
     // A start-up failure as the store shows it (the engine itself starts at once).
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
