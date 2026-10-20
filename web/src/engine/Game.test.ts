@@ -223,6 +223,53 @@ describe('Game', () => {
       expect(game.acceptInput).toBe(false)
     })
 
+    it('presents the finished act during a transition and the current act otherwise', () => {
+      const mk = (name: string, file: string): Act =>
+        new Act({
+          name,
+          rooms: basicRooms(),
+          quests: [],
+          musicFile: file,
+          musicInfo: name,
+        })
+      const first = mk('First', 'a.mp3')
+      const second = mk('Second', 'b.mp3')
+      let firstDone = false
+      let secondDone = false
+      first.isCompleted = () => firstDone
+      second.isCompleted = () => secondDone
+      const game = new Game([first, second])
+      const empty = { musicFile: '', musicInfo: '' }
+      expect(game.presentedMusic()).toEqual(empty)
+      game.newTurn()
+      game.newTurn()
+      expect(game.presentedState()).toBe(game.state)
+      expect(game.presentedActIndex()).toBe(0)
+      expect(game.presentedMusic()).toEqual({
+        musicFile: 'a.mp3',
+        musicInfo: 'First',
+      })
+      firstDone = true
+      const firstState = game.state
+      game.newTurn()
+      expect(game.presentedState()).toBe(firstState)
+      expect(game.presentedActIndex()).toBe(0)
+      expect(game.presentedMusic()).toEqual(empty)
+      game.newTurn()
+      expect(game.presentedState()).toBe(game.state)
+      expect(game.presentedActIndex()).toBe(1)
+      game.newTurn()
+      secondDone = true
+      game.newTurn()
+      expect(game.isGameOver()).toBe(true)
+      expect(game.presentedState()).toBe(game.state)
+      expect(game.presentedActIndex()).toBe(1)
+      expect(game.presentedMusic()).toEqual({
+        musicFile: 'b.mp3',
+        musicInfo: 'Second',
+      })
+    })
+
     it('enters game over when the last act completes, staying in that act', () => {
       const only = new Act({
         name: 'Only',

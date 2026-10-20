@@ -142,8 +142,7 @@ export class GameController {
    * reports the finished act, whose last completion ends it in the same turn.
    */
   completeQuest(): string | null {
-    const state = this.game.finishedActState ?? this.game.state
-    const quest = state.nextCompletedQuest()
+    const quest = this.game.presentedState().nextCompletedQuest()
     return quest ? questPopup(quest, quest.completion) : null
   }
 
@@ -170,9 +169,8 @@ export class GameController {
 
   /** Quest progress of the act; between acts, of the act that just ended. */
   getQuestProgress(): QuestProgress {
-    const finished = this.game.finishedActState
-    const state = finished ?? this.game.state
-    const actIndex = finished ? this.game.currentAct - 1 : this.game.currentAct
+    const state = this.game.presentedState()
+    const actIndex = this.game.presentedActIndex()
     const all = [
       ...state.nonActivatedQuests,
       ...state.activatedQuests,
@@ -189,7 +187,7 @@ export class GameController {
   /** The act's statistics; between acts, the finished act's. */
   getActStats(): ActStats {
     const progress = this.getQuestProgress()
-    const state = this.game.finishedActState ?? this.game.state
+    const state = this.game.presentedState()
     return {
       questsCompleted: progress.completed,
       questsTotal: progress.total,
@@ -275,9 +273,6 @@ export class GameController {
    * before that so nothing plays early.
    */
   getCurrentMusic(): MusicInfo {
-    if (!this.game.isActRunning() && !this.game.isGameOver())
-      return { musicFile: '', musicInfo: '' }
-    const act = this.game.acts[this.game.currentAct]
-    return { musicFile: act.musicFile, musicInfo: act.musicInfo }
+    return this.game.presentedMusic()
   }
 }
