@@ -512,7 +512,13 @@ function onTypedEnter(): void {
           role="listbox"
           aria-label="Matching words"
         >
-          <li v-if="completion.noMatch.value" class="lq-completion-none">
+          <li
+            v-if="completion.noMatch.value"
+            class="lq-completion-none"
+            role="option"
+            aria-disabled="true"
+            aria-selected="false"
+          >
             No match for “{{ completion.word.value }}”
           </li>
           <li
@@ -836,6 +842,11 @@ function onTypedEnter(): void {
   padding: 0 10px;
   font-size: 14px;
   font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 40px;
   color: var(--lq-muted);
 }
 .lq-completion[aria-selected='true'] {

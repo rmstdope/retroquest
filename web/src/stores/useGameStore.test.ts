@@ -694,6 +694,15 @@ describe('useGameStore', () => {
       expect(store.completionState('Ta').word).toBe('Ta')
     })
 
+    it('does not treat the @ marker as a word to type', () => {
+      expect(store.completionState('look @').kind).toBe('none')
+      expect(store.completionState('look @ x').kind).toBe('none')
+    })
+
+    it('chain-expands after a capitalised word too', () => {
+      expect(store.tabComplete('Talk ').newInput).toBe('talk to mira ')
+    })
+
     it('treats names like constructor as plain words', () => {
       expect(store.completionState('constructor').kind).toBe('complete')
       expect(store.completionState('go constructor').kind).toBe('none')

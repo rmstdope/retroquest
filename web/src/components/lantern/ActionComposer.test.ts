@@ -411,7 +411,7 @@ describe('ActionComposer', () => {
     }
 
     const options = (w: VueWrapper) =>
-      w.findAll('[role="option"]').map((o) => o.text())
+      w.findAll('[role="option"]:not([aria-disabled])').map((o) => o.text())
     const value = (input: { element: Element }) =>
       (input.element as HTMLInputElement).value
 
@@ -496,8 +496,12 @@ describe('ActionComposer', () => {
       const { w, input } = await typeMode()
       await input.setValue('xyz')
 
-      expect(w.find('[role="option"]').exists()).toBe(false)
+      expect(options(w)).toEqual([])
       expect(w.get('[role="listbox"]').text()).toBe('No match for “xyz”')
+
+      await input.trigger('keydown', { key: 'ArrowDown' })
+      await input.trigger('keydown', { key: 'Tab' })
+      expect(value(input)).toBe('xyz')
 
       await input.trigger('keydown', { key: 'Enter' })
       expect(submit).toHaveBeenCalledWith('xyz')
@@ -527,9 +531,8 @@ describe('ActionComposer', () => {
       await input.setValue('take ')
 
       await input.trigger('keydown', { key: 'ArrowDown' })
-      await input.trigger('keydown', { key: 'ArrowDown' })
 
-      expect(scrolled).toContain('bread')
+      expect(scrolled.at(-1)).toBe('bread')
       delete (HTMLElement.prototype as Partial<HTMLElement>).scrollIntoView
     })
 
@@ -544,6 +547,27 @@ describe('ActionComposer', () => {
 
       await input.setValue('take br')
       expect(options(w)).toEqual(['bread'])
+    })
+
+    it('sends what is typed with Enter after the list was hidden by Escape', async () => {
+      const { input } = await typeMode()
+      await input.setValue('take b')
+      await input.trigger('keydown', { key: 'Escape' })
+
+      await input.trigger('keydown', { key: 'Enter' })
+
+      expect(submit).toHaveBeenCalledWith('take b')
+    })
+
+    it('does not insert a word on Tab in an empty box', async () => {
+      const { w, input } = await typeMode()
+
+      await input.trigger('keydown', { key: 'Tab' })
+      expect(value(input)).toBe('')
+      await input.setValue('  ')
+      await input.trigger('keydown', { key: 'Tab' })
+      expect(value(input)).toBe('  ')
+      expect(w.find('[role="listbox"]').exists()).toBe(false)
     })
 
     it('inserts a clicked word and keeps the list for the next word', async () => {

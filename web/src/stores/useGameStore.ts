@@ -780,13 +780,13 @@ export const useGameStore = defineStore('game', () => {
     newInput: string
     candidates: string[]
   } {
-    const tokens = input.split(' ')
+    const tokens = input.toLowerCase().split(' ')
     const lastToken = tokens[tokens.length - 1]
     const prevTokens = tokens.slice(0, -1)
 
     let node: CompletionTree | null = completionTree.value
     for (const token of prevTokens) {
-      if (node && Object.hasOwn(node, token)) {
+      if (node && token !== SENDABLE_MARKER && Object.hasOwn(node, token)) {
         node = node[token]
       } else {
         return { newInput: input, candidates: [] }
@@ -850,7 +850,7 @@ export const useGameStore = defineStore('game', () => {
         // Words after a finished command: nothing to offer.
         return { ...none, kind: 'complete', sendable: true }
       }
-      if (!Object.hasOwn(node, token)) return none
+      if (token === SENDABLE_MARKER || !Object.hasOwn(node, token)) return none
       node = node[token]
     }
     if (node === null) return { ...none, kind: 'complete', sendable: true }

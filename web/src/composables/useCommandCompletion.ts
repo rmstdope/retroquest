@@ -73,7 +73,7 @@ export function useCommandCompletion(
 
   /** Replace the word being typed with `candidate` and complete further. */
   function apply(candidate: string): void {
-    const tokens = text.value.split(' ')
+    const tokens = text.value.trimStart().split(/ +/)
     tokens[tokens.length - 1] = candidate
     text.value = expand(`${tokens.join(' ')} `)
   }
@@ -82,6 +82,7 @@ export function useCommandCompletion(
   function onTab(event: KeyboardEvent): void {
     if (!enabled()) return
     event.preventDefault()
+    if (text.value.trim() === '') return
     const { candidates } = state.value
     if (candidates.length === 0) return
     apply(candidates[activeIndex.value >= 0 ? activeIndex.value : 0])

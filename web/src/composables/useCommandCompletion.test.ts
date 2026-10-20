@@ -146,6 +146,13 @@ describe('useCommandCompletion', () => {
     expect(c.text.value).toBe('xyz')
   })
 
+  it('does not insert anything on Tab in an empty box', () => {
+    const c = setup()
+    c.text.value = ''
+    c.onTab(key())
+    expect(c.text.value).toBe('')
+  })
+
   it('leaves Tab alone while input is not accepted', () => {
     const c = setup(false)
     const tab = tabKey()
