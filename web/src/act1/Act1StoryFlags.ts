@@ -20,6 +20,8 @@ export const FLAG_RUSTY_HOE_FIRST_COIN_FOUND = 'rusty_hoe_first_coin_found'
  * keep the General Store open and get no coin for returning Patches.
  */
 export const FLAG_RUSTY_HOE_SECOND_COIN_FOUND = 'rusty_hoe_second_coin_found'
+/** Set when the merchant has told Elior the news of the ill king. */
+export const FLAG_MERCHANT_NEWS_HEARD = 'merchant_news_heard'
 export const FLAG_FOUND_PHOTO = 'found_photo'
 export const FLAG_READ_PHOTO_MESSAGE = 'read_photo_message'
 export const FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO =
