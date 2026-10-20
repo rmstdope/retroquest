@@ -1,0 +1,44 @@
+import { Room } from '@/engine'
+import type { Exits, GameState } from '@/engine'
+import { Herald } from '../characters/Herald'
+import { CastleGuardCaptain } from '../characters/CastleGuardCaptain'
+
+/**
+ * Castle Approach room: ceremonial avenue gating access to the castle courtyard.
+ *
+ * `getExits()` removes `west` until `enableCastleCourtyard()` is invoked (after
+ * presenting the entry pass to the Herald).
+ */
+export class CastleApproach extends Room {
+  castleCourtyardEnabled = false
+
+  constructor() {
+    super({
+      name: 'Castle Approach',
+      description:
+        "A wide avenue lined with statues of Greendale's heroes leads to an impressive " +
+        'castle of white stone. Tall spires reach toward the sky, and colorful banners ' +
+        'snap in the wind. ' +
+        'Guards in ceremonial armor patrol the approach, their presence both welcoming ' +
+        'and imposing. This is clearly where power resides in Greendale.',
+      items: [],
+      characters: [new Herald(), new CastleGuardCaptain()],
+      exits: { south: 'MainSquare', west: 'CastleCourtyard' },
+    })
+  }
+
+  /** Return exits; withhold the west exit until protocol is fulfilled. */
+  override getExits(gameState: GameState): Exits {
+    const exits: Exits = { ...super.getExits(gameState) }
+    // Remove west exit to CastleCourtyard until entry pass has been shown to herald
+    if (!this.castleCourtyardEnabled && 'west' in exits) {
+      delete exits.west
+    }
+    return exits
+  }
+
+  /** Enable the west exit to the castle courtyard after entry pass validation. */
+  enableCastleCourtyard(): void {
+    this.castleCourtyardEnabled = true
+  }
+}

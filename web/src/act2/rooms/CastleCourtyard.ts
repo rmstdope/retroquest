@@ -1,0 +1,64 @@
+import { Room } from '@/engine'
+import type { GameState } from '@/engine'
+import { SirCedric } from '../characters/SirCedric'
+import { TrainingMaster } from '../characters/TrainingMaster'
+import { Squires } from '../characters/Squires'
+import { SquiresDiary } from '../items/SquiresDiary'
+import { FLAG_SQUIRES_TALKED_TO } from '../Act2StoryFlags'
+
+/**
+ * Castle Courtyard room: martial training hub with dialogue-gated hidden diary.
+ *
+ * `search()` grants the Squire's Diary only after FLAG_SQUIRES_TALKED_TO is set;
+ * `diaryFound` keeps the injection idempotent.
+ */
+export class CastleCourtyard extends Room {
+  diaryFound = false
+
+  constructor() {
+    super({
+      name: 'Castle Courtyard',
+      description:
+        'An expansive courtyard within the castle walls, featuring training grounds ' +
+        'where knights practice their swordwork. Ancient oak trees provide shade for ' +
+        "stone benches, and a stable houses magnificent warhorses. The castle's main " +
+        "hall rises before you, its great doors carved with the symbols of Greendale's " +
+        'noble houses.',
+      items: [],
+      characters: [new SirCedric(), new TrainingMaster(), new Squires()],
+      exits: {
+        east: 'CastleApproach',
+        north: 'ResidentialQuarter',
+        west: 'GreatHall',
+      },
+    })
+  }
+
+  /** Search for the hidden diary after the prerequisite dialogue. */
+  override search(gameState: GameState): string {
+    if (!this.diaryFound) {
+      // Check if squires have been talked to first
+      if (!gameState.getStoryFlag(FLAG_SQUIRES_TALKED_TO)) {
+        return (
+          '[event]You search around the stone benches and training equipment, ' +
+          "but you don't find anything of particular interest. The squires are " +
+          'watching you curiously — perhaps you should talk to them first to learn ' +
+          'more about this place.[/event]'
+        )
+      }
+
+      // Add the squire's diary when searching under stone benches (after talking to squires)
+      const diary = new SquiresDiary()
+      this.addItem(diary)
+      this.diaryFound = true
+      return (
+        '[event]You search around the stone benches and training equipment. ' +
+        'Remembering what the squires told you, you look more carefully under ' +
+        'one of the ancient stone benches and discover a worn leather diary ' +
+        'that appears to have been left by a former squire.[/event]\n\n' +
+        "[success]You found a [item_name]squire's diary[/item_name]![/success]"
+      )
+    }
+    return "[dim]You've already searched this area thoroughly.[/dim]"
+  }
+}
