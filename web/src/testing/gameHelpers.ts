@@ -11,15 +11,7 @@ export function executeCommands(game: Game, commands: string[]): string {
   const results: string[] = []
   for (const command of commands) {
     results.push(game.commandParser.parse(command))
-    while (game.state.nextActivatedQuest()) {
-      // activate every quest whose trigger is met
-    }
-    while (game.state.nextUpdatedQuest()) {
-      // drain pending updates
-    }
-    while (game.state.nextCompletedQuest()) {
-      // complete every quest whose completion is met
-    }
+    game.state.settleQuests()
   }
   return results.join('')
 }

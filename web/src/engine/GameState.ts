@@ -4,6 +4,16 @@ import type { Quest } from './Quest'
 import type { Room } from './Room'
 import type { Spell } from './Spell'
 
+/** The quests that changed while settling, grouped by kind of change. */
+export interface QuestChanges {
+  /** Quests that were activated, in the order they started. */
+  activated: Quest[]
+  /** Active quests whose log changed. */
+  updated: Quest[]
+  /** Quests that were completed, in the order they finished. */
+  completed: Quest[]
+}
+
 /**
  * The mutable state of the act being played: where the player is, what they
  * carry and know, which rooms they have seen, story flags and quest progress.
@@ -183,6 +193,24 @@ export class GameState {
       ),
     )
     return lines.join('\n')
+  }
+
+  /**
+   * Settle every pending quest event: activate each quest whose trigger is
+   * met, collect each log change, then complete each quest whose completion
+   * is met. Callers use this instead of looping over the next* methods.
+   * Each quest's `checkUpdate` must report a log change only once, or this
+   * never returns.
+   */
+  settleQuests(): QuestChanges {
+    const changes: QuestChanges = { activated: [], updated: [], completed: [] }
+    for (let q: Quest | null; (q = this.nextActivatedQuest()); )
+      changes.activated.push(q)
+    for (let q: Quest | null; (q = this.nextUpdatedQuest()); )
+      changes.updated.push(q)
+    for (let q: Quest | null; (q = this.nextCompletedQuest()); )
+      changes.completed.push(q)
+    return changes
   }
 
   /** Activate the first quest whose trigger is met and return it, or null. */

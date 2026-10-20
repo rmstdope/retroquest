@@ -545,15 +545,7 @@ describe('cheat act 1', () => {
       .sort()
 
     game.commandParser.parse('cheat act 1')
-    while (game.state.nextActivatedQuest()) {
-      // drain
-    }
-    while (game.state.nextUpdatedQuest()) {
-      // drain
-    }
-    while (game.state.nextCompletedQuest()) {
-      // drain
-    }
+    game.state.settleQuests()
 
     const activeMain = game.state.activatedQuests
       .filter((q) => q.isMain())

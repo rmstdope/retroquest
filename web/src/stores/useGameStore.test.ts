@@ -62,6 +62,13 @@ function createMockBridge() {
     })),
     getCommandCompletions: vi.fn((): CompletionTree => ({})),
   }
+  // The tests script each kind of quest event with the three mocks above, one
+  // payload per call, until null; settleQuests drains them like the engine.
+  const drain = (next: () => string | null): string[] => {
+    const payloads: string[] = []
+    for (let p = next(); p !== null; p = next()) payloads.push(p)
+    return payloads
+  }
   return {
     init: vi.fn(),
     isReady: vi.fn(() => true),
@@ -82,7 +89,14 @@ function createMockBridge() {
     ]),
     saveToSlot: vi.fn(() => 'Game saved.'),
     loadFromSlot: vi.fn(() => 'Game loaded.'),
-    controller,
+    controller: {
+      ...controller,
+      settleQuests: vi.fn(() => ({
+        activated: drain(controller.activateQuest),
+        updated: drain(controller.updateQuest),
+        completed: drain(controller.completeQuest),
+      })),
+    },
   }
 }
 

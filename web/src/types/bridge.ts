@@ -4,6 +4,7 @@ export type {
   CompletionTree,
   MusicInfo,
   NamedItem,
+  QuestPayloads,
   QuestProgress,
   RoomWare,
 } from '@/engine'

@@ -7,10 +7,12 @@ type Call = unknown[]
 class RecordingGame implements CommandTarget {
   calls: Call[] = []
   paths: Record<number, string[]> = {}
+  settlements = 0
   state = {
-    nextActivatedQuest: () => null,
-    nextUpdatedQuest: () => null,
-    nextCompletedQuest: () => null,
+    settleQuests: () => {
+      this.settlements++
+      return { activated: [], updated: [], completed: [] }
+    },
   }
 
   goldenPath(actNumber: number): string[] {
@@ -286,11 +288,9 @@ describe('CommandParser', () => {
 
     it('settles quests after each cheat command', () => {
       game.paths[1] = ['look', 'look']
-      let activations = 0
-      game.state.nextActivatedQuest = () =>
-        activations++ === 0 ? ({} as never) : null
       parser.parse('cheat act 1')
-      expect(activations).toBeGreaterThan(1)
+      expect(game.settlements).toBeGreaterThan(1)
+      expect(game.settlements).toBe(game.calls.length)
     })
   })
 })

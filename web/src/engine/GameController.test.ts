@@ -239,25 +239,29 @@ describe('GameController', () => {
     it('reports activation, update and completion once each as pop-up text', () => {
       const quest = new FlagQuest('Main Arc', true)
       let updated = false
-      quest.checkUpdate = () => updated
+      quest.checkUpdate = () => {
+        const changed = updated
+        updated = false
+        return changed
+      }
       const ctrl = makeController({ quests: [quest] })
-      expect(ctrl.activateQuest()).toBeNull() // not running yet
+      const none = { activated: [], updated: [], completed: [] }
+      expect(ctrl.settleQuests()).toEqual(none) // not running yet
       startAct(ctrl)
-      expect(ctrl.activateQuest()).toBe(
-        '[quest_name]Main Arc (main quest)[/quest_name]\n\nDo Main Arc.',
-      )
-      expect(ctrl.activateQuest()).toBeNull()
-      expect(ctrl.updateQuest()).toBeNull()
+      const started =
+        '[quest_name]Main Arc (main quest)[/quest_name]\n\nDo Main Arc.'
+      expect(ctrl.settleQuests()).toEqual({ ...none, activated: [started] })
+      expect(ctrl.settleQuests()).toEqual(none)
       updated = true
-      expect(ctrl.updateQuest()).toBe(
-        '[quest_name]Main Arc (main quest)[/quest_name]\n\nDo Main Arc.',
-      )
-      expect(ctrl.completeQuest()).toBeNull()
+      expect(ctrl.settleQuests()).toEqual({ ...none, updated: [started] })
       ctrl.game.state.setStoryFlag(FLAG_ACT_DONE, true)
-      expect(ctrl.completeQuest()).toBe(
-        "[quest_name]Main Arc (main quest)[/quest_name]\n\nYou have completed the quest 'Main Arc'.",
-      )
-      expect(ctrl.completeQuest()).toBeNull()
+      expect(ctrl.settleQuests()).toEqual({
+        ...none,
+        completed: [
+          "[quest_name]Main Arc (main quest)[/quest_name]\n\nYou have completed the quest 'Main Arc'.",
+        ],
+      })
+      expect(ctrl.settleQuests()).toEqual(none)
     })
   })
 
@@ -308,6 +312,25 @@ describe('GameController', () => {
   })
 
   describe('act end', () => {
+    it('still reports the completion that ended the last act', () => {
+      const act = new FlagAct({
+        name: 'Only',
+        rooms: { Hall: new Room({ name: 'Hall', description: 'A hall.' }) },
+        quests: [new FlagQuest('Final', true)],
+        musicFile: '',
+        musicInfo: '',
+      })
+      const ctrl = new GameController(new Game([act]))
+      startAct(ctrl)
+      ctrl.settleQuests()
+      ctrl.game.state.setStoryFlag(FLAG_ACT_DONE, true)
+      ctrl.game.newTurn()
+      expect(ctrl.game.isGameOver()).toBe(true)
+      const { completed } = ctrl.settleQuests()
+      expect(completed).toHaveLength(1)
+      expect(completed[0]).toContain("You have completed the quest 'Final'.")
+    })
+
     function twoActController(): GameController {
       const first = new FlagAct({
         name: 'First',
@@ -322,9 +345,7 @@ describe('GameController', () => {
       )
       const ctrl = new GameController(new Game([first, second]))
       startAct(ctrl)
-      while (ctrl.activateQuest() !== null) {
-        // activate everything
-      }
+      ctrl.settleQuests()
       return ctrl
     }
 
@@ -337,18 +358,21 @@ describe('GameController', () => {
       const ctrl = twoActController()
       endFirstAct(ctrl)
       expect(ctrl.game.isActTransitioning()).toBe(true)
-      const payload = ctrl.completeQuest()
+      const { completed } = ctrl.settleQuests()
+      expect(completed).toHaveLength(1)
       expect(
-        payload?.startsWith('[quest_name]Main Arc (main quest)[/quest_name]'),
+        completed[0].startsWith(
+          '[quest_name]Main Arc (main quest)[/quest_name]',
+        ),
       ).toBe(true)
-      expect(ctrl.completeQuest()).toBeNull()
+      expect(ctrl.settleQuests().completed).toEqual([])
     })
 
     it('reports the finished act progress and stats during the transition', () => {
       const ctrl = twoActController()
       ctrl.game.state.visitedRooms.push('Cellar')
       endFirstAct(ctrl)
-      ctrl.completeQuest()
+      ctrl.settleQuests()
       expect(ctrl.getQuestProgress()).toEqual({
         completed: 1,
         total: 2,
@@ -366,7 +390,7 @@ describe('GameController', () => {
       const ctrl = twoActController()
       endFirstAct(ctrl)
       ctrl.game.newTurn() // transition -> next act intro
-      expect(ctrl.completeQuest()).toBeNull()
+      expect(ctrl.settleQuests().completed).toEqual([])
       expect(ctrl.getQuestProgress()).toMatchObject({
         actNumber: 2,
         mainQuest: 'Next Arc',

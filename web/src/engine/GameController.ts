@@ -20,6 +20,16 @@ export interface RoomWare {
   seller: string
 }
 
+/** The pop-up texts of the quest events one settling produced. */
+export interface QuestPayloads {
+  /** Quests that just started. */
+  activated: string[]
+  /** Quests whose log just changed. */
+  updated: string[]
+  /** Quests that just completed. */
+  completed: string[]
+}
+
 export interface QuestProgress {
   /** Quests completed in the current act. */
   completed: number
@@ -178,25 +188,37 @@ export class GameController {
   }
 
   /**
-   * The pop-up for a quest that just completed, or null. Between acts this
-   * reports the finished act, whose last completion ends it in the same turn.
+   * Settle the quest events of the turn and return their pop-up texts: quests
+   * that started (only while an act runs), quests whose log changed, and
+   * quests that completed. Between acts and after the last one the
+   * completions are those of the presented state, so the completion that
+   * ended the act is still reported.
    */
-  completeQuest(): string | null {
-    const quest = this.game.presentedState().nextCompletedQuest()
-    return quest ? questPopup(quest, quest.completion) : null
-  }
-
-  /** The pop-up for a quest whose log just changed, or null. */
-  updateQuest(): string | null {
-    const quest = this.game.state.nextUpdatedQuest()
-    return quest ? questPopup(quest, quest.description) : null
-  }
-
-  /** The pop-up for a quest that just started, or null (also while no act runs). */
-  activateQuest(): string | null {
-    if (!this.game.isActRunning()) return null
-    const quest = this.game.state.nextActivatedQuest()
-    return quest ? questPopup(quest, quest.description) : null
+  settleQuests(): QuestPayloads {
+    const payloads: QuestPayloads = {
+      activated: [],
+      updated: [],
+      completed: [],
+    }
+    const game = this.game
+    if (game.finishedActState || game.isGameOver()) {
+      payloads.completed = game
+        .presentedState()
+        .settleQuests()
+        .completed.map((q) => questPopup(q, q.completion))
+    } else if (game.isActRunning()) {
+      const changes = game.state.settleQuests()
+      payloads.activated = changes.activated.map((q) =>
+        questPopup(q, q.description),
+      )
+      payloads.updated = changes.updated.map((q) =>
+        questPopup(q, q.description),
+      )
+      payloads.completed = changes.completed.map((q) =>
+        questPopup(q, q.completion),
+      )
+    }
+    return payloads
   }
 
   getRoomName(): string {

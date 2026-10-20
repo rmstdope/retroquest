@@ -2,14 +2,12 @@
  * Turns a typed command into a call on the game. `cheat act N` plays the
  * golden path the game gets from act N.
  */
-import type { Quest } from './Quest'
+import type { QuestChanges } from './GameState'
 
 /** The part of the game the parser drives (implemented by Game). */
 export interface CommandTarget {
   state: {
-    nextActivatedQuest(): Quest | null
-    nextUpdatedQuest(): Quest | null
-    nextCompletedQuest(): Quest | null
+    settleQuests(): QuestChanges
   }
   move(direction: string): string
   talk(target: string): string
@@ -170,15 +168,7 @@ export class CommandParser {
     const results: string[] = []
     for (const command of commands) {
       results.push(this.parse(command))
-      while (this.game.state.nextActivatedQuest()) {
-        // activate every quest whose trigger is met
-      }
-      while (this.game.state.nextUpdatedQuest()) {
-        // drain pending updates
-      }
-      while (this.game.state.nextCompletedQuest()) {
-        // complete every quest whose completion is met
-      }
+      this.game.state.settleQuests()
     }
     return results.join('\n')
   }
