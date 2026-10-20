@@ -1,6 +1,6 @@
 # Instructions
 
-This document outlines the design rules and guidelines for both the game story and the implementation the game, focusing on key design patterns, technical considerations, and content guidelines to ensure a cohesive and engaging player experience.
+This document outlines the design rules and guidelines for both the game story and the implementation of the game, focusing on key design patterns, technical considerations, and content guidelines to ensure a cohesive and engaging player experience.
 
 RetroQuest is a TypeScript web application. The game engine (`web/src/engine/`), the acts (`web/src/act1/` … `web/src/act4/`) and the Vue 3 user interface (`web/src/components/`, `web/src/stores/`, `web/src/composables/`) all live under `web/` and run in the browser. There is no server-side code.
 
@@ -36,7 +36,7 @@ Always ensure all pre-merge checks pass before merging any code changes to ensur
 
 When starting to work on any feature that exists as a github issue, assign that feature to the user that is working on it. Each feature should have a corresponding issue in the issue tracker that describes the work to be done.
 
-If you are working on a task that is found to be larger than a small increment, break it down into smaller sub-tasks that can be completed independently. Each sub-task should have its own issue in the issue tracker and should be linked back to the main task issue for traceability. Prefix the sub-issues with ""Sub-issue (<<issue-number>>):"" to clearly indicate their relationship to the main feature issue. <<issue-number>> should be replaced with the main issue number.
+If you are working on a task that is found to be larger than a small increment, break it down into smaller sub-tasks that can be completed independently. Each sub-task should have its own issue in the issue tracker and should be linked back to the main task issue for traceability. Prefix the sub-issues with "Sub-issue (<<issue-number>>):" to clearly indicate their relationship to the main feature issue. <<issue-number>> should be replaced with the main issue number.
 All sub-issues should be linked back to the main issue in their description to maintain clear traceability. Vice versa, all main issues should reference their sub-issues.
 
 When working on an issue, this is important:
@@ -52,13 +52,16 @@ When a sub-issue is closed, the main issue's description should be updated to re
 
 ### Github CLI
 
-Use the comand line command 'gh' for interacting with github issues. Be careful with quoting when using gh. NEVER use backticks in the text with gh and use real newlines instead of \n.
+Use the command line command 'gh' for interacting with github issues. Be careful with quoting when using gh. NEVER use backticks in the text with gh and use real newlines instead of \n.
 When creating issues, always add the appropriate labels to the issue using gh:
 
 - bug - for all bugs
 - enhancement - for any feature development
-- games - for anything that has to do with a specific game or games
-- mapper - for anything that has to do with a specific mapper or mappers
+- documentation - for changes to docs, design documents or instructions
+- engine - for anything in the game engine (web/src/engine)
+- act1, act2, act3, act4 - for anything that has to do with a specific act
+- story - for story and narrative design
+- web - for the Vue user interface
 - refactoring - for anything that has to do with refactoring the codebase
 - testing - for anything that has to do with testing
 - enhanced - for issues created or updated with AI assistance workflows
@@ -81,8 +84,8 @@ These MUST be satisfied for every TypeScript and Vue file. Pull requests must ex
 3. The type check must pass (`npx vue-tsc --noEmit` in `web/`). Never use `any` under `web/src/`; prefer precise types, `unknown` with narrowing, or a small type guard.
 4. No ESLint or TypeScript inline directives (`eslint-disable`, `@ts-ignore`, `@ts-expect-error`) in the code. All lint and type configuration is global (`web/eslint.config.js`, `web/tsconfig.json`). The single accepted exception is `<!-- eslint-disable vue/no-v-html -->` in a Vue template that renders HTML produced by the engine's markup parser.
 5. Unused parameters must be prefixed with an underscore (e.g., `_gameState`), which is the only way ESLint lets them through.
-6. Overridden methods are marked `override` and carry a `/** … */` doc comment explaining what the override does differently.
-7. Every exported class, function and type has a `/** … */` doc comment; every content file (room, item, character, quest, spell) has a one-line `/** … */` comment directly above its class.
+6. Overridden methods are marked `override` (`noImplicitOverride` makes the type check enforce this). New or changed overrides carry a `/** … */` doc comment explaining what the override does differently.
+7. Every exported class, function and type has a `/** … */` doc comment; every content file (room, item, character, quest, spell) has a `/** … */` comment directly above its class.
 8. Long narrative strings are split on sentence or clause boundaries and joined with `+` (or written as template literals); never split inside a word, and never change existing wording, punctuation or `[markup]` tags unless the change is the point of the task.
 
 Violation of any item is grounds for rejection in code review / CI.
@@ -165,7 +168,7 @@ Run each check as its own command and read its exit status; never chain them wit
 - Implement a centralized game state management system to track player progress, story flags, and inventory.
 - The engine (`web/src/engine/`) owns all game rules: `Game` (run state, commands, save/load), `GameState`, `CommandParser`, `GameController` (the read model the UI consumes) and the base classes `Act`, `Room`, `Item`, `Character`, `Quest`, `Spell`.
 - Each act is a directory `web/src/act<N>/` with `Act<N>.ts`, `Act<N>StoryFlags.ts`, `classes.ts` and the sub-directories `rooms/`, `items/`, `characters/`, `spells/` and (where the act has quests) `quests/`. See `docs/typescript-porting-guide.md` for the conventions in detail.
-- The UI talks to the engine only through `GameController` and the `useBridge` composable; Vue components never import act classes.
+- The UI talks to the engine only through `GameController` and the `useBridge` composable; Vue components never import act classes (only `useBridge` loads the acts, as separate chunks).
 
 ### Quest Management
 
@@ -192,7 +195,7 @@ Saves are JSON produced by the engine's generic serializer and kept in the brows
 - Keep all mutable state in declared class fields. TypeScript `private`/`protected` is fine, but never ECMAScript `#private` fields.
 - No `Map`, `Set` or `Date` in a field; use plain objects and arrays.
 - Fields may reference other content objects (items in rooms, items in wares); shared references and cycles are preserved.
-- Changing the shape of engine save data requires bumping the save version and handling old payloads.
+- Changing the shape of engine save data requires bumping `SAVE_VERSION` in `Game.ts`; older saves are then rejected on load unless you add explicit migration for them.
 
 ### Technical Considerations
 
@@ -225,7 +228,7 @@ These instructions are mandatory for all code contributions to ensure consistenc
 
 - Use `instanceof` when checking types, as it is more robust than comparing names or strings. Import the class as a value for that.
 - Avoid using magic strings or numbers; instead, use constants (story flags live in `Act<N>StoryFlags.ts`) or enums to represent important values.
-- When using multi-line strings, align the lines so that they match the indentation of the surrounding code.
+- Do not write prose as multi-line template literals (the indentation ends up in the text); split it into `+`-joined literals as rule 8 describes.
 
 ## Chat
 

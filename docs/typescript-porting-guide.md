@@ -1,9 +1,10 @@
 # Porting act content from Python to TypeScript
 
 How a Python act module (formerly under `src/retroquest/act<N>/`, removed in #188) became
-TypeScript under `web/src/act<N>/`; the conventions still apply to new content. The engine it targets lives in `web/src/engine/` (read `index.ts` and
-the class you extend before porting). Keep every narrative string and every piece of
-`[markup]` exactly as it is in Python: the web UI and the tests depend on the text.
+TypeScript under `web/src/act<N>/`; the conventions still apply to new content. The engine
+it targets lives in `web/src/engine/` (read `index.ts` and the class you extend before
+porting). Keep every narrative string and every piece of `[markup]` exactly as it is (the
+strings came verbatim from Python): the web UI and the tests depend on the text.
 
 ## Layout
 
