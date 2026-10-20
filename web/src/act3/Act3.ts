@@ -34,6 +34,7 @@ import { MendSpell } from './spells/MendSpell'
 import { BlessSpell } from './spells/BlessSpell'
 import { ACT3_CLASSES } from './classes'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
+import { FLAG_ACT3_FORTRESS_GATES_EXAMINED } from './Act3StoryFlags'
 
 /** Act 3 of RetroQuest: The Awakening. */
 export class Act3 extends Act {
@@ -115,12 +116,9 @@ export class Act3 extends Act {
     )
   }
 
-  /** Check if Act III is completed based on the completion flag. */
+  /** Complete Act III once the fortress gates have been examined. */
   override isCompleted(_gameState: GameState): boolean {
-    // Act III completes when the fortress gate is opened and the endgame is triggered.
-    // Note: This will be updated when Act IV is implemented
-    return false
-    // return gameState.getStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)
+    return _gameState.getStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)
   }
 
   /** Ensure essential Act III magic is available at start. */

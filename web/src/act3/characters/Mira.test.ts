@@ -7,6 +7,7 @@ import {
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_ECHOES_QUEST_STARTED,
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
+  FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
@@ -26,6 +27,23 @@ function hasCharacterNamed(room: Room, name: string): boolean {
 /** Whether an item with the given name lies in the room. */
 function hasItemNamed(room: Room, name: string): boolean {
   return room.items.some((item) => item.name === name)
+}
+
+/** Mark every non-main quest complete for a Warding Rite scenario. */
+function completeNonMainQuests(game: Game): void {
+  const pendingQuests = [
+    ...game.state.nonActivatedQuests,
+    ...game.state.activatedQuests,
+  ]
+  game.state.completedQuests.push(
+    ...pendingQuests.filter((quest) => !quest.isMain()),
+  )
+  game.state.nonActivatedQuests = game.state.nonActivatedQuests.filter(
+    (quest) => quest.isMain(),
+  )
+  game.state.activatedQuests = game.state.activatedQuests.filter((quest) =>
+    quest.isMain(),
+  )
 }
 
 describe('Mira', () => {
@@ -196,6 +214,7 @@ describe('Mira', () => {
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
     game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true) // Note read
     game.state.currentRoom = game.state.allRooms.MirasHut
+    completeNonMainQuests(game)
 
     // Add items to different locations to test removal from inventory and room
     game.state.inventory.push(new CrystalOfLight())
@@ -217,6 +236,56 @@ describe('Mira', () => {
     expect(game.state.hasItem('Phoenix Feather')).toBe(false)
     expect(hasItemNamed(game.state.currentRoom, "Dragon's Scale")).toBe(false)
     expect(hasItemNamed(game.state.currentRoom, 'Lifelight Elixir')).toBe(true)
+  })
+
+  it('does not perform the Warding Rite while any non-main quest remains', () => {
+    for (const questName of [
+      'Echoes of the Hidden Bond',
+      'Oath of Stillness',
+    ]) {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+      game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+      game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+      game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
+      game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+      game.state.currentRoom = game.state.allRooms.MirasHut
+      const incompleteQuest = game.state.nonActivatedQuests.find(
+        (quest) => quest.name === questName,
+      )
+      if (!incompleteQuest) throw new Error(`Missing quest: ${questName}`)
+      game.state.nonActivatedQuests =
+        questName === 'Echoes of the Hidden Bond' ? [incompleteQuest] : []
+      game.state.activatedQuests =
+        questName === 'Oath of Stillness' ? [incompleteQuest] : []
+
+      const out = new Mira().talkTo(game.state)
+
+      expect(out).toContain('every remaining quest')
+      expect(game.state.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)).toBe(
+        false,
+      )
+      expect(game.state.getStoryFlag(FLAG_ACT3_MAIN_COMPLETED)).toBe(false)
+      expect(hasItemNamed(game.state.currentRoom, 'Lifelight Elixir')).toBe(
+        false,
+      )
+    }
+  })
+
+  it('completes The Three Virtues when the Warding Rite is performed', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    completeNonMainQuests(game)
+
+    const out = new Mira().talkTo(game.state)
+
+    expect(out).toContain('three relics resonate')
+    expect(game.state.getStoryFlag(FLAG_ACT3_MAIN_COMPLETED)).toBe(true)
   })
 
   it('requires the note to be read in the hut', () => {
