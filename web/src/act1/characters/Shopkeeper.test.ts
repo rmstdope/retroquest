@@ -257,3 +257,36 @@ describe('Hemlock and his missing cat', () => {
     expect(coins(game)).toBe(0)
   })
 })
+
+describe('Shopkeeper restored from a save made before Patches', () => {
+  it('still talks and sells when the save holds the old closedDialogue text', () => {
+    const game = gameInStore({ shopOpen: false })
+    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+    if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
+    Object.defineProperty(shopkeeper, 'closedDialogue', {
+      value: 'Sorry, not open for business just yet.',
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    })
+    game.state.addItemToInventory(new Coin())
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+    const restored = loaded.state.currentRoom.getCharacterByName('shopkeeper')
+    expect(Object.keys(restored ?? {})).toContain('closedDialogue')
+
+    const closed = loaded.commandParser.parse('talk to shopkeeper')
+    expect(closed).toContain('[character_name]Patches[/character_name]')
+    expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
+      'Patches',
+    )
+
+    loaded.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    expect(loaded.commandParser.parse('talk to shopkeeper')).toContain(
+      'You found her',
+    )
+    expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
+      'You bought',
+    )
+  })
+})

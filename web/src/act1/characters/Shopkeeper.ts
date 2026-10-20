@@ -76,7 +76,7 @@ export class Shopkeeper extends Character {
    * Why the store is shut: Hemlock introduces himself the first time, then
    * only asks after Patches.
    */
-  private closedDialogue(gameState: GameState): string {
+  private shutDialogue(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_MET_HEMLOCK)) {
       gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
       return (
@@ -148,7 +148,7 @@ export class Shopkeeper extends Character {
     ) {
       return this.welcomePatchesHome(gameState)
     }
-    return this.isOpen(gameState) ? null : this.closedDialogue(gameState)
+    return this.isOpen(gameState) ? null : this.shutDialogue(gameState)
   }
 
   /**
