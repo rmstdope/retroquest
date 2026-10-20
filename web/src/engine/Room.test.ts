@@ -70,6 +70,9 @@ describe('Room', () => {
       expect(r.getCharacterByName('blacksmith john')).toBe(c2)
       expect(r.getCharacterByName('BLACKSMITH JOHN')).toBe(c2)
       expect(r.getCharacterByName('wizard')).toBeNull()
+      expect(
+        new Room({ name: 'E', description: '' }).getCharacterByName('x'),
+      ).toBeNull()
     })
   })
 

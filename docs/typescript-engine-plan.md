@@ -23,7 +23,9 @@ loader go away; only the Vue web app remains.
   Tests are colocated (`Foo.test.ts`) as the web code already does.
 - **API**: idiomatic TypeScript. camelCase methods (`useWith`, `talkTo`, `castOnItem`,
   `checkTrigger`…); `getName()`/`getShortName()`/`getDescription()` become the fields
-  `name`, `shortName`, `description`; story flags stay string constants per act.
+  `name`, `shortName`, `description`; `Room.search(gameState)` loses the unused
+  `_target` parameter (every room override drops it too); story flags stay string
+  constants per act.
 - **Save/load**: a generic serializer in the engine walks the `GameState` graph and
   writes JSON (`{version, actIndex, state}`) with a class registry: each act exports
   its classes, objects are written as `{$c: "ClassName", …own fields}` with `$ref`
@@ -33,7 +35,7 @@ loader go away; only the Vue web app remains.
 - **Act 4**: the existing stub (rooms/items/one character, no quests, not wired into
   the game) is ported as-is.
 - **Removed with the port**: `Audio.py`/pygame (the web plays music from
-  `getMusicInfo`), `theme.py` (`apply_theme` was for Rich), `Room.enter()` printing,
+  the controller's music info), `theme.py` (`apply_theme` was for Rich), `Room.enter()` printing,
   `dev_execute_commands`, listing `.txt` files for completion, pickle files on disk.
   `save`/`load` typed commands validate the name and go to an injectable
   `SaveStorage` (in-memory by default; the bridge keeps using `localStorage`).

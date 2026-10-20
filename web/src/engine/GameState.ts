@@ -37,7 +37,7 @@ export class GameState {
     this.currentRoom = startingRoom
     this.allRooms = allRooms
     this.visitedRooms = [startingRoom.name]
-    this.nonActivatedQuests = allQuests
+    this.nonActivatedQuests = [...allQuests]
   }
 
   markVisited(room: Room): void {

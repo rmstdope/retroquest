@@ -52,6 +52,13 @@ describe('GameState', () => {
     gs = new GameState(room, { TestRoom: room }, [quest1, quest2])
   })
 
+  it("keeps its own quest list, leaving the act's untouched", () => {
+    const quests = [quest1, quest2]
+    const state = new GameState(room, { TestRoom: room }, quests)
+    state.nextActivatedQuest()
+    expect(quests).toEqual([quest1, quest2])
+  })
+
   it('starts in the starting room, which counts as visited', () => {
     expect(gs.currentRoom).toBe(room)
     expect(gs.visitedRooms).toEqual(['TestRoom'])

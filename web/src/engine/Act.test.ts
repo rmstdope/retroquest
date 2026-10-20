@@ -22,10 +22,14 @@ describe('Act', () => {
 
   it('has no intro, no setup and never completes by default', () => {
     const room = new Room({ name: 'Start', description: '' })
-    const act = new Act({ name: 'A', rooms: { Start: room }, quests: [] })
+    const act = new Act({
+      name: 'A',
+      rooms: { Start: room },
+      quests: [],
+      musicFile: '',
+      musicInfo: '',
+    })
     const gs = new GameState(room, act.rooms, act.quests)
-    expect(act.musicFile).toBe('')
-    expect(act.musicInfo).toBe('')
     expect(act.getActIntro()).toBe('')
     expect(act.setupGameState(gs)).toBeUndefined()
     expect(act.isCompleted(gs)).toBe(false)

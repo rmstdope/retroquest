@@ -8,9 +8,9 @@ export interface ActOptions {
   rooms: Record<string, Room>
   quests: Quest[]
   /** File under the audio music directory, or '' for silence. */
-  musicFile?: string
+  musicFile: string
   /** Credits shown for the music. */
-  musicInfo?: string
+  musicInfo: string
 }
 
 /** An act: its rooms, quests, music and act-level hooks. */
@@ -25,8 +25,8 @@ export class Act {
     this.name = name
     this.rooms = rooms
     this.quests = quests
-    this.musicFile = musicFile ?? ''
-    this.musicInfo = musicInfo ?? ''
+    this.musicFile = musicFile
+    this.musicInfo = musicInfo
   }
 
   getActIntro(): string {
