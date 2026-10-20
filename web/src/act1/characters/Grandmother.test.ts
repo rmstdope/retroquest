@@ -1,7 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { executeCommands, expectDialogueSpeaker } from '@/testing/gameHelpers'
-import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
+import {
+  FLAG_MAGIC_FULLY_UNLOCKED,
+  FLAG_PATCHES_FOUND,
+  FLAG_PATCHES_RETURNED,
+  FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
+} from '../Act1StoryFlags'
+import { Patches } from './Patches'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { FreshBread } from '../items/FreshBread'
 import { Act1 } from '../Act1'
@@ -137,5 +143,80 @@ describe('Grandmother and the journey', () => {
 
     expect(response).toContain("your mother's gift")
     expect(response).not.toContain('your father was a great writer')
+  })
+})
+
+/** An Act I game in the cottage with Patches, coaxed out of the shed, in Elior's arms. */
+function gameCarryingPatches(): Game {
+  const game = new Game([new Act1()])
+  game.state.currentRoom = game.state.allRooms.EliorsCottage
+  game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+  return game
+}
+
+describe('Grandmother and Patches', () => {
+  it('offers to keep Patches while Elior carries her', () => {
+    const game = gameCarryingPatches()
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('[character_name]Patches[/character_name]')
+    expect(response).toContain('say so')
+    expectDialogueSpeaker(response, 'grandmother')
+  })
+
+  it('keeps Patches by the hearth when Elior says she may stay', () => {
+    const game = gameCarryingPatches()
+
+    const response = executeCommands(game, ['say stay to grandmother'])
+
+    expect(findMarkupProblems(response)).toEqual([])
+    expectDialogueSpeaker(response, 'grandmother')
+    expect(game.state.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)).toBe(
+      true,
+    )
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(false)
+    expect(
+      game.state.allRooms.EliorsCottage.characters.some(
+        (c) => c instanceof Patches,
+      ),
+    ).toBe(true)
+    expect(executeCommands(game, ['talk to patches'])).toContain('hearth')
+  })
+
+  it('mentions Patches in later talk once she has stayed', () => {
+    const game = gameCarryingPatches()
+    executeCommands(game, ['say stay to grandmother'])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('[character_name]Patches[/character_name]')
+    expect(response).not.toContain('say so')
+    expectDialogueSpeaker(response, 'grandmother')
+  })
+
+  it('does not take a cat Elior is not carrying', () => {
+    const game = new Game([new Act1()])
+
+    executeCommands(game, ['say stay to grandmother'])
+
+    expect(game.state.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)).toBe(
+      false,
+    )
+  })
+
+  it('does not take Patches back from Hemlock once she is home', () => {
+    const game = gameCarryingPatches()
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+
+    const response = executeCommands(game, [
+      'talk to grandmother',
+      'say stay to grandmother',
+    ])
+
+    expect(response).not.toContain('say so')
+    expect(game.state.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)).toBe(
+      false,
+    )
   })
 })

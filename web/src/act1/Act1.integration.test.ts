@@ -615,6 +615,56 @@ describe('Act 1 optional watering of the Vegetable Field', () => {
   })
 })
 
+describe('Act 1 with the alternative choices', () => {
+  /**
+   * The golden path, but Elior keeps his mother's ring (trading the forge's
+   * horseshoe for the boots) and lets Patches stay with grandmother.
+   */
+  function alternativePath(): string[] {
+    const path = [...ACT1_GOLDEN_PATH]
+    path.splice(path.indexOf('talk to blacksmith') + 1, 0, 'take horseshoe')
+    // From the shed: north to the well, west to the field, north to the cottage.
+    const home = path.indexOf('talk to patches') + 6
+    expect(path[home]).toBe('go north')
+    path.splice(home + 1, 0, 'say stay to grandmother')
+    path.splice(path.indexOf('buy rope from shopkeeper'), 1)
+    path[path.indexOf('give shiny ring to merchant')] =
+      'give horseshoe to merchant'
+    return path
+  }
+
+  it('can be completed with the ring kept and Patches staying home', () => {
+    const game = new Game([new Act1()])
+    const state = game.state
+    executeCommands(game, alternativePath())
+    expectStoryFlag(state, 'kept_mothers_ring', true)
+    expectStoryFlag(state, 'patches_stayed_with_grandmother', true)
+    expectStoryFlag(state, 'patches_returned', false)
+    expectQuestCompleted(state, CAT)
+    expectItemInInventory(state, 'shiny ring')
+    expectItemInInventory(state, 'wandering boots')
+    expectCurrentRoom(state, 'Road to Greendale')
+
+    const farewell = executeCommands(game, ['use map'])
+    expect(farewell).toContain('you kept her ring')
+    expect(farewell).toContain('claimed your pillow')
+    expect(
+      game.acts[game.currentAct].isCompleted(state),
+      'Act I completed',
+    ).toBe(true)
+  })
+
+  it('keeps the choices through a save and load round-trip', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, alternativePath())
+    const fresh = new Game([new Act1()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    const farewell = executeCommands(fresh, ['use map'])
+    expect(farewell).toContain('you kept her ring')
+    expect(farewell).toContain('claimed your pillow')
+  })
+})
+
 describe('cheat act 1', () => {
   it('completes every side quest and leaves only the main quest active', () => {
     const act = new Act1()

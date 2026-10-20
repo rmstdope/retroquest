@@ -3,11 +3,13 @@ import {
   FLAG_MET_HEMLOCK,
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
+  FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
 } from '../Act1StoryFlags'
 
 /**
  * Side quest: find Patches, the Hemlock family's missing cat, hiding in the
- * locked Abandoned Shed, and carry her home to the General Store.
+ * locked Abandoned Shed, and carry her home to the General Store, or let
+ * her stay with Elior's grandmother, who sends word to Hemlock.
  */
 export class CuriosityKilledTheCatQuest extends Quest {
   constructor() {
@@ -49,8 +51,19 @@ export class CuriosityKilledTheCatQuest extends Quest {
     return true
   }
 
-  /** Completed once Patches is back with Hemlock. */
+  /**
+   * Completed once Patches is back with Hemlock or stays with grandmother;
+   * in the second case the completion text tells of her new home.
+   */
   override checkCompletion(gameState: GameState): boolean {
+    if (gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)) {
+      this.completion =
+        `You let ${characterName('Patches')} stay by your ` +
+        `${characterName('grandmother')}'s hearth, and she sent word to Old Man ` +
+        `${characterName('Hemlock')}. The [room_name]General Store[/room_name] ` +
+        'is open again. Curiosity did not kill this cat after all.'
+      return true
+    }
     return gameState.getStoryFlag(FLAG_PATCHES_RETURNED)
   }
 }

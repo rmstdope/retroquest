@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { Act1 } from '../Act1'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Key } from '../items/Key'
+import { FLAG_PATCHES_FOUND } from '../Act1StoryFlags'
 
 const QUEST = 'Curiosity killed the cat'
 
@@ -28,5 +29,15 @@ describe('Curiosity killed the cat', () => {
 
     expect(game.state.isQuestCompleted(QUEST)).toBe(true)
     expect(game.state.isQuestActivated(QUEST)).toBe(false)
+  })
+
+  it('also completes when Patches stays with grandmother', () => {
+    const game = new Game([new Act1()])
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    executeCommands(game, ['say stay to grandmother'])
+
+    const completed = game.state.completedQuests.find((q) => q.name === QUEST)
+    expect(completed?.completion).toContain('hearth')
+    expect(completed?.completion).toContain('[character_name]grandmother')
   })
 })

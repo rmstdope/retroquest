@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, findMarkupProblems } from '@/engine'
+import { expectDialogueSpeaker } from '@/testing/gameHelpers'
+import {
+  FLAG_KEPT_MOTHERS_RING,
+  FLAG_PATCHES_RETURNED,
+  FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
+} from '../Act1StoryFlags'
 import { Act1 } from '../Act1'
 import { AncientAmulet } from './AncientAmulet'
 import { GameMap } from './GameMap'
@@ -81,5 +87,51 @@ describe('GameMap act completion', () => {
     map.use(game.state)
 
     expect(act.isCompleted(game.state)).toBe(true)
+  })
+})
+
+describe('GameMap farewell on the Road to Greendale', () => {
+  /** The answer to the map once Elior is ready to leave, with `flags` set. */
+  function farewell(flags: string[] = []): string {
+    const { game, map } = setupGameAtRoad()
+    completeSideQuestsExcept(game)
+    game.state.addItemToInventory(new AncientAmulet())
+    for (const flag of flags) game.state.setStoryFlag(flag, true)
+    return map.use(game.state)
+  }
+
+  it('lets grandmother see Elior off, rings the bell once, then shows the path', () => {
+    const answer = farewell([FLAG_PATCHES_RETURNED])
+
+    expect(findMarkupProblems(answer)).toEqual([])
+    expectDialogueSpeaker(answer, 'grandmother')
+    expect(answer).toContain("Wear your mother's cloak. She'd want you warm.")
+    const bell = answer.indexOf('chapel bell rings once')
+    expect(bell).toBeGreaterThan(answer.indexOf('Wear your mother'))
+    expect(answer.indexOf('hidden path')).toBeGreaterThan(bell)
+  })
+
+  it('has grandmother speak of the traded ring by default', () => {
+    const answer = farewell()
+
+    expect(answer).toContain('wedding ring')
+    expect(answer).not.toContain('you kept her ring')
+  })
+
+  it('has grandmother speak of the kept ring', () => {
+    const answer = farewell([FLAG_KEPT_MOTHERS_RING])
+
+    expect(answer).toContain('you kept her ring')
+    expect(answer).not.toContain('wedding ring')
+  })
+
+  it('has grandmother speak of Patches, wherever she went', () => {
+    expect(farewell([FLAG_PATCHES_RETURNED])).toContain(
+      'how you found his [character_name]Patches',
+    )
+    expect(farewell([FLAG_PATCHES_STAYED_WITH_GRANDMOTHER])).toContain(
+      'claimed your pillow',
+    )
+    expect(farewell()).not.toContain('Patches')
   })
 })

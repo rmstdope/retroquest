@@ -8,8 +8,14 @@ import {
 } from '@/engine'
 import { ShinyRing } from '../items/ShinyRing'
 import { WanderingBoots } from '../items/WanderingBoots'
+import { Horseshoe } from '../items/Horseshoe'
+import { FLAG_KEPT_MOTHERS_RING } from '../Act1StoryFlags'
 
-/** Traveling merchant NPC who trades valuables for useful gear. */
+/**
+ * Traveling merchant NPC who trades one pair of wandering boots: for the
+ * shiny ring (the golden path) or, so Elior can keep his mother's ring, for
+ * the blacksmith's old horseshoe.
+ */
 export class Merchant extends Character {
   /** Track if boots have been given. */
   bootsGiven = false
@@ -37,7 +43,9 @@ export class Merchant extends Character {
           'Looking for something ' +
             'specific, or just browsing? If you have any fine jewelry, especially ' +
             "a [item_name]shiny ring[/item_name], I'm ready to exchange it for a " +
-            'pair of sturdy [item_name]wandering boots[/item_name].',
+            'pair of sturdy [item_name]wandering boots[/item_name].\n' +
+            'Failing that, my old mare threw a shoe on the hill road; ' +
+            'a good iron [item_name]horseshoe[/item_name] would do me nearly as well.',
         )
       )
     }
@@ -53,8 +61,27 @@ export class Merchant extends Character {
     )
   }
 
-  /** Handle items offered to the merchant and perform trades or gifts. */
+  /**
+   * Trade the boots for the ring or the horseshoe, once; taking the
+   * horseshoe sets FLAG_KEPT_MOTHERS_RING. Anything else is declined.
+   */
   override giveItem(gameState: GameState, item: Item): string {
+    const tradeGoods = item instanceof ShinyRing || item instanceof Horseshoe
+    if (tradeGoods && this.bootsGiven) {
+      return (
+        event(
+          `You offer the [item_name]${item.name}[/item_name] to the ` +
+            `${characterName(this.name)}.`,
+        ) +
+        '\n' +
+        `The ${characterName(this.name)} waves it away. ` +
+        speech(
+          "You've had your boots, friend. Keep that; " +
+            'a fair trade is a fair trade.',
+        )
+      )
+    }
+    if (item instanceof Horseshoe) return this.tradeHorseshoe(gameState, item)
     if (item instanceof ShinyRing) {
       gameState.removeItemFromInventory(item.name)
       const boots = new WanderingBoots()
@@ -92,6 +119,31 @@ export class Merchant extends Character {
       item.name +
       '[/item_name] but shakes his head. ' +
       speech('Not interested in that, friend.')
+    )
+  }
+
+  /** Boots for the horseshoe: Elior keeps his mother's ring. */
+  private tradeHorseshoe(gameState: GameState, item: Item): string {
+    gameState.removeItemFromInventory(item.name)
+    const boots = new WanderingBoots()
+    gameState.addItemToInventory(boots)
+    this.bootsGiven = true
+    gameState.setStoryFlag(FLAG_KEPT_MOTHERS_RING, true)
+    return (
+      event(
+        `You give the [item_name]${item.name}[/item_name] to the ` +
+          `${characterName(this.name)}.`,
+      ) +
+      '\n' +
+      `The ${characterName(this.name)} raps the [item_name]${item.name}[/item_name] ` +
+      'with a knuckle and grins. ' +
+      speech(
+        'Good honest iron! A little bent, but the smith in Greendale will ' +
+          'straighten it, and my mare will thank you. ' +
+          `Here, the [item_name]${boots.name}[/item_name] are yours.`,
+      ) +
+      '\n\n' +
+      event(`You receive a pair of [item_name]${boots.name}[/item_name]!`)
     )
   }
 }

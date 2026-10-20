@@ -14,9 +14,11 @@ import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
 import { Patches } from './Patches'
 import {
+  FLAG_HEMLOCK_HEARD_PATCHES_STAYED,
   FLAG_MET_HEMLOCK,
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
+  FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
 } from '../Act1StoryFlags'
 
@@ -29,8 +31,11 @@ function capitalize(text: string): string {
  * Old Man Hemlock, the shopkeeper of Willowbrook's General Store.
  *
  * He has shut the store to look for his missing cat, Patches, and reopens it
- * when Elior carries her home, paying the notice's reward of a coin. Saves
- * made when the hoe still gave a second coin keep the store open and get no
+ * when Elior carries her home, paying the notice's reward of a coin. If
+ * Elior lets her stay with his grandmother instead, she sends word, the store
+ * reopens, and Hemlock gives Elior a rope and his usual apple in place of
+ * the coin. Saves made
+ * when the hoe still gave a second coin keep the store open and get no
  * second reward.
  *
  * The store's matches are kept for the priest: they are not among the wares
@@ -62,12 +67,14 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Whether the store is open: once Patches is home, or in a save made when
-   * the hoe's second coin, not Patches, paid for the rope.
+   * Whether the store is open: once Patches is home, or staying with
+   * grandmother, or in a save made when the hoe's second coin, not Patches,
+   * paid for the rope.
    */
   private isOpen(gameState: GameState): boolean {
     return (
       gameState.getStoryFlag(FLAG_PATCHES_RETURNED) ||
+      gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER) ||
       gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
     )
   }
@@ -137,16 +144,64 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Hemlock's answer while the store is shut, or null once it is open: Patches
-   * in Elior's arms is welcomed home first, otherwise he explains why it is
-   * shut.
+   * Hemlock's first word after grandmother has kept Patches: he thanks Elior
+   * and, unless the save already had the hoe's second coin, gives him a rope
+   * and the apple that goes with every sale, in place of the coin.
+   */
+  private patchesStayedNews(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED, true)
+    gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
+    const gift = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
+    if (gift) {
+      gameState.addItemToInventory(new Rope())
+      const apple = new Apple()
+      apple.canBeCarried = true
+      gameState.addItemToInventory(apple)
+    }
+    return (
+      `The ${characterName('Shopkeeper')} hurries over the moment you come in. ` +
+      speech(
+        `Your ${characterName('grandmother')} sent word, lad. ` +
+          `${characterName('Patches')} is safe and warm by her hearth. ` +
+          "I'll not drag her back; she always did like a fire better " +
+          'than a draughty old store, and I can call in and see her.',
+      ) +
+      '\n' +
+      speech(
+        (gift
+          ? 'The reward was for bringing her home, and she found a new one. ' +
+            "But you'll not leave empty-handed: take this " +
+            "[item_name]rope[/item_name], on the house, and there's " +
+            'always an [item_name]apple[/item_name] to go with it. '
+          : '') + "And the store's open again, so have a look around.",
+      ) +
+      (gift
+        ? '\n' +
+          event(
+            'You receive a [item_name]rope[/item_name] and an ' +
+              '[item_name]apple[/item_name].',
+          )
+        : '')
+    )
+  }
+
+  /**
+   * Hemlock's answer while the store is shut or a Patches scene is due, or
+   * null once it is open: Patches in Elior's arms is welcomed home first, then
+   * the news that she stays with grandmother; otherwise he explains why the
+   * store is shut.
    */
   private whileShut(gameState: GameState): string | null {
+    const stayed = gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
     if (
       gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
-      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED)
+      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
+      !stayed
     ) {
       return this.welcomePatchesHome(gameState)
+    }
+    if (stayed && !gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)) {
+      return this.patchesStayedNews(gameState)
     }
     return this.isOpen(gameState) ? null : this.shutDialogue(gameState)
   }

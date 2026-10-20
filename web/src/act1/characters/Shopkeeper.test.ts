@@ -3,8 +3,10 @@ import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_HEMLOCK_HEARD_PATCHES_STAYED,
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
+  FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_PRIEST_TALKED_TO,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
 } from '../Act1StoryFlags'
@@ -287,6 +289,59 @@ describe('Shopkeeper restored from a save made before Patches', () => {
     )
     expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
       'You bought',
+    )
+  })
+})
+
+describe('Shopkeeper when Patches stays with grandmother', () => {
+  /** A game in the shut store after grandmother has kept Patches. */
+  function gameAfterPatchesStayed(): Game {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    return game
+  }
+
+  it('reopens the store and gives a rope and an apple instead of the coin', () => {
+    const game = gameAfterPatchesStayed()
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('[character_name]grandmother[/character_name]')
+    expectDialogueSpeaker(answer, 'shopkeeper')
+    expect(game.state.hasItem('rope')).toBe(true)
+    expect(game.state.hasItem('apple')).toBe(true)
+    expect(game.state.inventory.some((i) => i instanceof Coin)).toBe(false)
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(false)
+    expect(
+      game.state.allRooms.GeneralStore.characters.some(
+        (c) => c instanceof Patches,
+      ),
+    ).toBe(false)
+  })
+
+  it('gives the rope only once, then lists his wares', () => {
+    const game = gameAfterPatchesStayed()
+    game.commandParser.parse('talk to shopkeeper')
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('for sale')
+    expect(game.state.inventory.filter((i) => i.name === 'rope')).toHaveLength(
+      1,
+    )
+  })
+
+  it('tells the news before selling anything', () => {
+    const game = gameAfterPatchesStayed()
+
+    game.commandParser.parse('buy rope from shopkeeper')
+
+    expect(game.state.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)).toBe(
+      true,
+    )
+    expect(game.state.inventory.filter((i) => i.name === 'rope')).toHaveLength(
+      1,
     )
   })
 })

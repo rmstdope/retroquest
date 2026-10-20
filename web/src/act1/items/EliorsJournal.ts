@@ -28,8 +28,9 @@ export class EliorsJournal extends Item {
           'shadows. And a figure, tall and indistinct, its voice a whisper on the edge of ' +
           'hearing, yet it felt like it was calling my name. ' +
           `${characterName('Elior')}... I woke with a start, ` +
-          'my heart pounding. Even now, the memory sends a shiver down my spine. What did ' +
-          'it mean?',
+          'my heart pounding. Even now, the memory sends a shiver down my spine. ' +
+          'And the strangest thing — I knew that voice. ' +
+          "I just can't remember from where. What did it mean?",
       ) +
       '\n'
     const eventMsg =
