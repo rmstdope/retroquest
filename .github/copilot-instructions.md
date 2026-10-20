@@ -4,11 +4,25 @@ This document outlines the design rules and guidelines for both the game story a
 
 RetroQuest is a TypeScript web application. The game engine (`web/src/engine/`), the acts (`web/src/act1/` … `web/src/act4/`) and the Vue 3 user interface (`web/src/components/`, `web/src/stores/`, `web/src/composables/`) all live under `web/` and run in the browser. There is no server-side code.
 
+## The project
+
+RetroQuest is a retro-style text adventure played in the browser. Players explore rooms, talk to characters, collect items, learn spells and complete the quests of each act, and their progress is saved in the browser's storage. "Working" means a player can play every act from start to finish along its golden path, that saves made at any point load back correctly, and that the game reads well on both desktop and phone.
+
+## Producer review
+
+Nothing merges red. Before delivery, a producer obtains and addresses one independent, full review of the complete diff and bead. If its changes are substantial enough to make another review useful, the producer chooses the right follow-up scope and obtains it; minor, self-contained answers need not create a review loop. Unresolved findings, a red or missing check, or a reviewer that cannot produce a usable result go to a person. Whether the navigator also takes part in the plan, the review or the merge is `navigator_gates` in `.cerebro/project.conf`; absent means none. This review satisfies the Four eye Principle below.
+
+## Work tracking
+
+Planned work is tracked in beads (`bd`), prefix `rq`; `skills/beads-workflow` carries the commands. GitHub issues are the inbox for outside requests and bug reports only. Every bead is created unranked and ranked later with the navigator; a bead is planned in one session and implemented in another.
+
+The board syncs through the Dolt remote on `origin`, not through git. A fresh clone runs `bd bootstrap` once (it refuses if a database already exists, so do not run `bd list` first); after that it is `bd dolt pull` and `bd dolt push`.
+
 ## Skills Usage
 
 Always select the appropriate skill for a specific task. Be sure to ALWAYS explicitly write in the chat what skills that are currently being used. Always follow the instructions in the skills to the letter.
 
-## Development Practices
+## Development practices
 
 ### Small Increments
 
