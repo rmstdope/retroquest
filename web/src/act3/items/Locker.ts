@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, event, type GameState } from '@/engine'
 import { PrismLantern } from './PrismLantern'
 import { RustedLockerKey } from './RustedLockerKey'
 
@@ -95,9 +95,9 @@ export class Locker extends Item {
       // The rusted key gets stuck and does not unlock the mechanism.
       this.rustedKeyStuck = true
       gameState.removeItemFromInventory(other.name)
-      return (
-        '[failure]The lock is too corroded for the key to turn. As you tug, ' +
-        'the corroded key jams in the mechanism and will not come free.[/failure]'
+      return event(
+        'The lock is too corroded for the key to turn. As you tug, ' +
+          'the corroded key jams in the mechanism and will not come free.',
       )
     }
     return super.useWith(gameState, other)
