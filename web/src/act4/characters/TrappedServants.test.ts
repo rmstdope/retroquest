@@ -1,0 +1,58 @@
+import { describe, it, expect } from 'vitest'
+import { Game } from '@/engine'
+import { Act4 } from '../Act4'
+import {
+  FLAG_ACT4_SERVANTS_FREED,
+  FLAG_ACT4_SERVANTS_TRUST_EARNED,
+} from '../Act4StoryFlags'
+import { TrappedServants } from './TrappedServants'
+import {
+  expectDialogueSpeaker,
+  expectMarkupWellFormed,
+} from '@/testing/gameHelpers'
+
+const SPEAKER = 'Trapped Servants'
+
+/** Create an Act IV game with the player in the Outer Courtyard. */
+function createGameInCourtyard(): Game {
+  const act = new Act4()
+  act.musicFile = ''
+  const game = new Game([act])
+  game.state.currentRoom = game.state.allRooms.OuterCourtyard
+  return game
+}
+
+describe('TrappedServants', () => {
+  it('asks for proof of courage before trust is earned', () => {
+    const game = createGameInCourtyard()
+
+    const answer = game.commandParser.parse('talk to trapped servants')
+
+    expect(answer).toContain('Prove your courage against the darkness')
+    expectDialogueSpeaker(answer, SPEAKER)
+    expectMarkupWellFormed(answer)
+  })
+
+  it('asks for compassion once trust is earned', () => {
+    const game = createGameInCourtyard()
+    game.state.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
+
+    const answer = game.commandParser.parse('talk to trapped servants')
+
+    expect(answer).toContain('use your compassion')
+    expectDialogueSpeaker(answer, SPEAKER)
+    expectMarkupWellFormed(answer)
+  })
+
+  it('thanks the player once freed', () => {
+    const game = createGameInCourtyard()
+    game.state.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
+    game.state.setStoryFlag(FLAG_ACT4_SERVANTS_FREED, true)
+
+    const answer = new TrappedServants().talkTo(game.state)
+
+    expect(answer).toContain('Thank you for our freedom!')
+    expectDialogueSpeaker(answer, SPEAKER)
+    expectMarkupWellFormed(answer)
+  })
+})
