@@ -14,7 +14,7 @@ export class OldNotice extends Item {
 
   /** Read the notice and return its message. */
   read(_gameState: GameState): string {
-    const eventMsg = `[event]You read the [item_name]${this.name}[/item_name].\n`
+    const eventMsg = `[event]You read the [item_name]${this.name}[/item_name].[/event]\n`
     return (
       eventMsg +
       ('The notice is weathered and old, but you can make out some of the words:\n\n' +

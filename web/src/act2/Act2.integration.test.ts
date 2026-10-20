@@ -17,6 +17,7 @@ import { TheForestGuardiansRiddles } from './quests/TheForestGuardiansRiddles'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
 import {
   executeCommands,
+  expectMarkupWellFormed,
   expectCharacterInRoom,
   expectCurrentRoom,
   expectItemCountInInventory,
@@ -673,7 +674,7 @@ describe('Act 2 golden path', () => {
 
   it('survives a save and load round-trip at the end', () => {
     const game = new Game([new Act2()])
-    game.commandParser.parse('cheat act 2')
+    expectMarkupWellFormed(game.commandParser.parse('cheat act 2'))
     const data = game.toSaveData()
     const fresh = new Game([new Act2()])
     expect(fresh.loadSaveData(data)).toContain('loaded')
@@ -710,6 +711,7 @@ describe('Main Square navigation restriction', () => {
 
     // Test navigation restriction - should get lost message when trying invalid directions
     let result = game.move('north')
+    expectMarkupWellFormed(result)
     expect(
       result.toLowerCase(),
       'Should get lost message when trying to go north without map',
@@ -719,6 +721,7 @@ describe('Main Square navigation restriction', () => {
     )
 
     result = game.move('east')
+    expectMarkupWellFormed(result)
     expect(
       result.toLowerCase(),
       'Should get lost message when trying to go east without map',
@@ -729,6 +732,7 @@ describe('Main Square navigation restriction', () => {
 
     // Invalid direction should still give standard error message
     result = game.move('west')
+    expectMarkupWellFormed(result)
     expect(
       result.toLowerCase(),
       'Should get standard error for truly invalid direction',
@@ -843,6 +847,7 @@ describe('Golden path step 15: Forest Transition', () => {
     if (!hermit) return
 
     result = hermit.talkTo(state)
+    expectMarkupWellFormed(result)
 
     // Verify hermit interaction results
     expect(
@@ -1052,7 +1057,7 @@ describe('Forest Transition spell learning', () => {
 
     // Talk to hermit
     const hermit = state.currentRoom.characters[0] // Should be Forest Hermit
-    hermit.talkTo(state)
+    expectMarkupWellFormed(hermit.talkTo(state))
     expectItemInInventory(state, 'protective charm')
   })
 })
@@ -1070,6 +1075,7 @@ describe('Secret documents quest dependency', () => {
 
     // Examine documents before reading diary - should not understand significance
     let examineResult = secretDocs.examine(state)
+    expectMarkupWellFormed(examineResult)
     expect(examineResult).toContain('legal papers and testimonies')
     expect(examineResult).toContain("can't make sense of their significance")
     expect(examineResult).toContain("don't mean anything to you")
@@ -1086,6 +1092,7 @@ describe('Secret documents quest dependency', () => {
 
     // Now examine documents after reading diary - should understand their significance
     examineResult = secretDocs.examine(state)
+    expectMarkupWellFormed(examineResult)
     expect(examineResult).toContain('Sir Cedric was falsely accused')
     expect(examineResult).toContain('protecting civilians')
     expect(examineResult).toContain('clear his name and restore his honor')
@@ -1262,7 +1269,7 @@ describe('Act 2 golden path as declared by the act', () => {
     const viaPath = new Game([new Act2()])
     executeCommands(viaPath, ACT2_GOLDEN_PATH)
     const viaCheat = new Game([new Act2()])
-    viaCheat.commandParser.parse('cheat act 2')
+    executeCommands(viaCheat, ['cheat act 2'])
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })

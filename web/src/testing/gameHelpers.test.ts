@@ -15,6 +15,18 @@ import {
   expectStoryFlag,
 } from './gameHelpers'
 
+/** An item whose examine text has an unclosed event tag. */
+class BadlyTagged extends Item {
+  constructor() {
+    super({ name: 'scroll', description: 'd' })
+  }
+
+  /** Returns markup with an unclosed `[event]`. */
+  override examine(): string {
+    return '[event]You examine the scroll.\nIt is blank.'
+  }
+}
+
 class StartsAtOnce extends Quest {
   constructor() {
     super({ name: 'Starts', description: 'd' })
@@ -68,6 +80,14 @@ describe('executeCommands', () => {
     g.state.setStoryFlag('seen', true)
     expectStoryFlag(g.state, 'seen')
     expectStoryFlag(g.state, 'unseen', false)
+  })
+
+  it('fails on output with malformed markup, naming the command', () => {
+    const g = game()
+    g.state.currentRoom.items.push(new BadlyTagged())
+    expect(() => executeCommands(g, ['examine scroll'])).toThrow(
+      /examine scroll[\s\S]*unclosed \[event\]/,
+    )
   })
 })
 

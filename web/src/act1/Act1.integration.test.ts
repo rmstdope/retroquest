@@ -5,6 +5,7 @@ import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { MysteriousBox } from './items/MysteriousBox'
 import {
   executeCommands,
+  expectMarkupWellFormed,
   expectCharacterInRoom,
   expectCurrentRoom,
   expectItemInInventory,
@@ -523,7 +524,7 @@ describe('Act 1 golden path', () => {
 
   it('survives a save and load round-trip at the end', () => {
     const game = new Game([new Act1()])
-    game.commandParser.parse('cheat act 1')
+    expectMarkupWellFormed(game.commandParser.parse('cheat act 1'))
     const data = game.toSaveData()
     const fresh = new Game([new Act1()])
     expect(fresh.loadSaveData(data)).toContain('loaded')
@@ -544,7 +545,7 @@ describe('cheat act 1', () => {
       .map((q) => q.name)
       .sort()
 
-    game.commandParser.parse('cheat act 1')
+    expectMarkupWellFormed(game.commandParser.parse('cheat act 1'))
     game.state.settleQuests()
 
     const activeMain = game.state.activatedQuests
@@ -568,7 +569,7 @@ describe('Act 1 golden path as declared by the act', () => {
     const viaPath = new Game([new Act1()])
     executeCommands(viaPath, ACT1_GOLDEN_PATH)
     const viaCheat = new Game([new Act1()])
-    viaCheat.commandParser.parse('cheat act 1')
+    executeCommands(viaCheat, ['cheat act 1'])
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })

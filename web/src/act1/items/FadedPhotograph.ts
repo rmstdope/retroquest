@@ -10,7 +10,8 @@ export class FadedPhotograph extends Item {
       description:
         'An old, faded photograph. The image is barely visible, but you can make out ' +
         "two adults and a child. On the back, in your mother's handwriting, is a " +
-        'cryptic message: [dialogue]Seek the truth where the river bends.[/dialogue]',
+        'cryptic message: ' +
+        '[character_name][/character_name][dialogue]Seek the truth where the river bends.[/dialogue]',
       canBeCarried: true,
     })
   }

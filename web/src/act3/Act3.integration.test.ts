@@ -17,6 +17,7 @@ import {
 } from './Act3StoryFlags'
 import {
   executeCommands,
+  expectMarkupWellFormed,
   expectCharacterInRoom,
   expectCurrentRoom,
   expectItemCountInInventory,
@@ -571,7 +572,7 @@ describe('Act 3 golden path', () => {
 
   it('survives a save and load round-trip at the end', () => {
     const game = new Game([new Act3()])
-    game.commandParser.parse('cheat act 3')
+    expectMarkupWellFormed(game.commandParser.parse('cheat act 3'))
     const data = game.toSaveData()
     const fresh = new Game([new Act3()])
     expect(fresh.loadSaveData(data)).toContain('loaded')
@@ -599,7 +600,7 @@ describe('Act 3 golden path as declared by the act', () => {
     const viaPath = new Game([new Act3()])
     executeCommands(viaPath, ACT3_GOLDEN_PATH)
     const viaCheat = new Game([new Act3()])
-    viaCheat.commandParser.parse('cheat act 3')
+    executeCommands(viaCheat, ['cheat act 3'])
     expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
     expect(viaCheat.state.currentRoom.name).toBe(viaPath.state.currentRoom.name)
   })

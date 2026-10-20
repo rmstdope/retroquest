@@ -3,14 +3,27 @@
  * tests/retroquest/utils/utils.py and the markup helpers).
  */
 import { expect } from 'vitest'
-import type { Game, GameState, Room } from '@/engine'
-import { THEME_TAGS } from '@/utils/theme'
+import {
+  findMarkupProblems,
+  type Game,
+  type GameState,
+  type Room,
+} from '@/engine'
 
-/** Run commands in order, settling quest changes after each, and return all answers. */
+/**
+ * Run commands in order, settling quest changes after each, and return all answers.
+ * Every answer must be well-formed markup (known, balanced, attributed): the
+ * check runs on all output here, so the act integration tests need no opt-in.
+ */
 export function executeCommands(game: Game, commands: string[]): string {
   const results: string[] = []
   for (const command of commands) {
-    results.push(game.commandParser.parse(command))
+    const answer = game.commandParser.parse(command)
+    const problems = findMarkupProblems(answer)
+    expect(problems, `malformed markup after "${command}": ${answer}`).toEqual(
+      [],
+    )
+    results.push(answer)
     game.state.settleQuests()
   }
   return results.join('')
@@ -115,26 +128,13 @@ export function expectQuests(state: GameState, expectedActive: string[]): void {
 
 // --- Markup, as the web UI parses it (web/src/lantern/parseTurn.ts) ---
 
-const TAG_PATTERN = /\[(\/?)([a-z_]+)\]/g
 const DIALOGUE_PATTERN = /\[dialogue\].*?\[\/dialogue\]/gs
 const CHARACTER_NAME_PATTERN = /\[character_name\](.*?)\[\/character_name\]/gs
 const QUOTED_SPEECH_PATTERN = /(?<![A-Za-z])'[A-Z]/
 
-/** Every tag is known, balanced and never nested in itself. */
+/** Every tag is known, balanced, never nested in itself, and dialogue is attributed. */
 export function expectMarkupWellFormed(text: string): void {
-  const open: string[] = []
-  for (const match of text.matchAll(TAG_PATTERN)) {
-    const [, closing, tag] = match
-    expect(THEME_TAGS, `unknown tag [${tag}] in: ${text}`).toContain(tag)
-    if (!closing) {
-      expect(open, `nested [${tag}] in: ${text}`).not.toContain(tag)
-      open.push(tag)
-    } else {
-      expect(open.at(-1), `unbalanced [/${tag}] in: ${text}`).toBe(tag)
-      open.pop()
-    }
-  }
-  expect(open, `unclosed tags in: ${text}`).toEqual([])
+  expect(findMarkupProblems(text), `markup problems in: ${text}`).toEqual([])
 }
 
 /** Every dialogue block is attributed (by the last character name before it) to speaker. */
