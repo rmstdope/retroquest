@@ -52,11 +52,15 @@ export class BlessSpell extends Spell {
     // Check if the item has a receiveSpell method
     const hook = (
       targetItem as {
-        receiveSpell?: (gs: GameState, spellId: string) => string
+        receiveSpell?: (
+          gs: GameState,
+          spellId: string,
+          spellName: string,
+        ) => string
       }
     ).receiveSpell
     if (typeof hook === 'function') {
-      return hook.call(targetItem, gameState, 'bless')
+      return hook.call(targetItem, gameState, this.id, this.name)
     }
     const name = targetItem.name
     return (

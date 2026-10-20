@@ -25,7 +25,7 @@ export class StandingStones extends Item {
       this.examined = true
       // Learn nature_sense spell automatically
       let spellMsg = ''
-      if (!gameState.hasSpell(new NatureSenseSpell().name)) {
+      if (!gameState.hasSpell(new NatureSenseSpell().id)) {
         const natureSense = new NatureSenseSpell()
         gameState.learnSpell(natureSense)
         spellMsg =

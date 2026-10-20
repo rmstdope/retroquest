@@ -126,19 +126,19 @@ export class Act3 extends Act {
   /** Ensure essential Act III magic is available at start. */
   override setupGameState(gameState: GameState): void {
     // Learn core Act III spells so Sunken Ruins progression is possible
-    if (!gameState.hasSpell(new PurifySpell().name)) {
+    if (!gameState.hasSpell(new PurifySpell().id)) {
       gameState.learnSpell(new PurifySpell())
     }
-    if (!gameState.hasSpell(new UnlockSpell().name)) {
+    if (!gameState.hasSpell(new UnlockSpell().id)) {
       gameState.learnSpell(new UnlockSpell())
     }
-    if (!gameState.hasSpell(new LightSpell().name)) {
+    if (!gameState.hasSpell(new LightSpell().id)) {
       gameState.learnSpell(new LightSpell())
     }
-    if (!gameState.hasSpell(new MendSpell().name)) {
+    if (!gameState.hasSpell(new MendSpell().id)) {
       gameState.learnSpell(new MendSpell())
     }
-    if (!gameState.hasSpell(new BlessSpell().name)) {
+    if (!gameState.hasSpell(new BlessSpell().id)) {
       gameState.learnSpell(new BlessSpell())
     }
   }

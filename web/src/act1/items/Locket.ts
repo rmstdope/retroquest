@@ -16,7 +16,7 @@ export class Locket extends Item {
 
   /** Teach Bless spell when picked up if the spell is not yet known. */
   override pickedUp(gameState: GameState): string {
-    if (!gameState.hasSpell(new BlessSpell().name)) {
+    if (!gameState.hasSpell(new BlessSpell().id)) {
       const blessSpell = new BlessSpell()
       gameState.learnSpell(blessSpell)
       return (

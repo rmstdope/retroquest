@@ -588,6 +588,14 @@ describe('Game', () => {
       expect(game.cast('Two Words on test item')).toContain(
         '[item_name]test item[/item_name]',
       )
+      const missing = game.cast('two words on dragon')
+      expect(missing).toContain('[spell_name]Two Words[/spell_name]')
+      expect(missing).not.toContain('two_words')
+      expect(game.spells()).toContain('[spell_name]Two Words[/spell_name]')
+      expect(game.spells()).not.toContain('two_words')
+      const learned = game.learn(new EchoSpell('other_one', 'Other One'))
+      expect(learned).toContain('[spell_name]Other One[/spell_name]')
+      expect(learned).not.toContain('other_one')
     })
 
     it('prefers items over characters with the same name', () => {
