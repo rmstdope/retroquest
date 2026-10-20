@@ -5,12 +5,15 @@ import { MysteriousBox } from '../items/MysteriousBox'
 import { FishingRod } from '../items/FishingRod'
 import { Magnet } from '../items/Magnet'
 import { ShedDoor } from '../items/ShedDoor'
+import { Patches } from '../characters/Patches'
+import { FLAG_PATCHES_FOUND } from '../Act1StoryFlags'
 
 /**
  * Abandoned Shed room: staged unlock and layered search progression.
  *
- * `unlock()` toggles the locked state and injects the MysteriousBox and
- * BrokenShovel; the first search after unlocking adds the FishingRod and Magnet.
+ * `unlock()` toggles the locked state and injects the MysteriousBox,
+ * BrokenShovel and Patches, the missing cat; the first search after unlocking
+ * adds the FishingRod and Magnet.
  */
 export class AbandonedShed extends Room {
   locked = true
@@ -39,6 +42,7 @@ export class AbandonedShed extends Room {
     this.locked = false
     this.addItem(new MysteriousBox())
     this.addItem(new BrokenShovel())
+    this.addCharacter(new Patches())
     return (
       'The old wooden door creaks open with a groan, revealing the dusty interior ' +
       'of the Abandoned Shed. A [item_name]Mysterious Box[/item_name] sits on a rickety ' +
@@ -47,8 +51,40 @@ export class AbandonedShed extends Room {
     )
   }
 
-  /** Search the shed; the first search after unlocking adds the loot. */
-  override search(_gameState: GameState): string {
+  /**
+   * Put Patches back behind the crates when the shed was unlocked by a save
+   * made before she hid there and she has not been found yet.
+   */
+  override onEnter(gameState: GameState): void {
+    this.hidePatches(gameState)
+    super.onEnter(gameState)
+  }
+
+  /** Add Patches to an unlocked shed unless she is there or already found. */
+  private hidePatches(gameState: GameState): void {
+    if (
+      !this.locked &&
+      !gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
+      !this.characters.some((c) => c instanceof Patches)
+    ) {
+      this.addCharacter(new Patches())
+    }
+  }
+
+  /**
+   * Search the shed; the first search after unlocking adds the loot, and
+   * Patches is seen hiding while she has not been coaxed out.
+   */
+  override search(gameState: GameState): string {
+    this.hidePatches(gameState)
+    const hiding = this.characters.some((c) => c instanceof Patches)
+      ? '\nA pair of frightened green eyes watches you from behind the crates.'
+      : ''
+    return this.searchClutter() + hiding
+  }
+
+  /** The search of the clutter itself: the loot the first time, then nothing. */
+  private searchClutter(): string {
     if (this.locked) {
       return (
         'You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] ' +

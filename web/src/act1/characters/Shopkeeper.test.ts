@@ -3,10 +3,14 @@ import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_PATCHES_FOUND,
+  FLAG_PATCHES_RETURNED,
   FLAG_PRIEST_TALKED_TO,
+  FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
 } from '../Act1StoryFlags'
 import { Coin } from '../items/Coin'
 import { Matches } from '../items/Matches'
+import { Patches } from './Patches'
 import { Shopkeeper } from './Shopkeeper'
 import { expectDialogueSpeaker } from '@/testing/gameHelpers'
 
@@ -17,7 +21,7 @@ const QUOTE_MARKS = '"\''
 function gameInStore({ shopOpen = true, priestTalkedTo = false } = {}): Game {
   const game = new Game([new Act1()])
   game.state.currentRoom = game.state.allRooms.GeneralStore
-  game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, shopOpen)
+  game.state.setStoryFlag(FLAG_PATCHES_RETURNED, shopOpen)
   game.state.setStoryFlag(FLAG_PRIEST_TALKED_TO, priestTalkedTo)
   return game
 }
@@ -68,7 +72,7 @@ describe('Shopkeeper dialogue markup', () => {
     const answer = gameInStore({ shopOpen: false }).commandParser.parse(
       'talk to shopkeeper',
     )
-    expect(answer).toContain('not open for business')
+    expect(answer).toContain('Patches')
     expectQuotesInsideDialogue(answer)
     expectDialogueSpeaker(answer, 'shopkeeper')
   })
@@ -162,5 +166,94 @@ describe('Shopkeeper and the priest matches', () => {
     expect(answer).toContain('priest')
     expect(answer).not.toContain('You bought')
     expectDialogueSpeaker(answer, 'shopkeeper')
+  })
+})
+
+/** Number of coins Elior carries. */
+function coins(game: Game): number {
+  return game.state.inventory.filter((item) => item instanceof Coin).length
+}
+
+describe('Hemlock and his missing cat', () => {
+  it('introduces himself by name and keeps the store shut for Patches', () => {
+    const game = gameInStore({ shopOpen: false })
+    const first = game.commandParser.parse('talk to shopkeeper')
+    expect(first).toContain('[character_name]Hemlock[/character_name]')
+    expect(first).toContain('[character_name]Patches[/character_name]')
+    expect(first).not.toContain('for sale')
+    const again = game.commandParser.parse('talk to shopkeeper')
+    expect(again).not.toEqual(first)
+    expect(again).toContain('[character_name]Patches[/character_name]')
+    expectDialogueSpeaker(again, 'shopkeeper')
+  })
+
+  it('stays shut after Mira asks Elior to connect with nature', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+    game.state.addItemToInventory(new Coin())
+    expect(game.commandParser.parse('buy rope from shopkeeper')).not.toContain(
+      'You bought',
+    )
+    expect(coins(game)).toBe(1)
+  })
+
+  it('rewards the return of Patches with a coin and reopens the store', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('[character_name]Hemlock[/character_name]')
+    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectQuotesInsideDialogue(answer)
+    expect(coins(game)).toBe(1)
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
+    expect(
+      game.state.currentRoom.characters.some((c) => c instanceof Patches),
+    ).toBe(true)
+    expect(game.commandParser.parse('talk to shopkeeper')).toContain('for sale')
+    expect(game.commandParser.parse('talk to shopkeeper')).not.toContain(
+      'You receive',
+    )
+    expect(coins(game)).toBe(1)
+    expect(game.commandParser.parse('buy rope from shopkeeper')).toContain(
+      'You bought',
+    )
+  })
+
+  it('takes Patches back first when Elior tries to buy while carrying her', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    const answer = game.commandParser.parse('buy rope from shopkeeper')
+
+    expect(answer).toContain('You found her')
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
+    expect(coins(game)).toBe(1)
+  })
+
+  it('lets Patches purr from the counter once she is home', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.commandParser.parse('talk to shopkeeper')
+    expect(game.commandParser.parse('talk to patches')).toContain('purr')
+  })
+
+  it('keeps the store open for a save that found the second hoe coin', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND, true)
+    expect(game.commandParser.parse('talk to shopkeeper')).toContain('for sale')
+  })
+
+  it('gives no second reward to a save that found the second hoe coin', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expectDialogueSpeaker(answer, 'shopkeeper')
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
+    expect(coins(game)).toBe(0)
   })
 })

@@ -20,7 +20,7 @@ export class OldNotice extends Item {
       eventMsg +
       'The notice is weathered and old, but you can make out some of the words:\n\n' +
       writing(
-        '[bold]MISSING[/bold] - Our dear cat, Patches, has vanished. ' +
+        `[bold]MISSING[/bold] - Our dear cat, ${characterName('Patches')}, has vanished. ` +
           'Last seen near the old well. ' +
           'She is very friendly but easily spooked. Responds to her name. ' +
           `If found, please return to the ${characterName('Hemlock')} family ` +

@@ -12,7 +12,13 @@ import { Matches } from '../items/Matches'
 import { Coin } from '../items/Coin'
 import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
-import { FLAG_CONNECT_WITH_NATURE } from '../Act1StoryFlags'
+import { Patches } from './Patches'
+import {
+  FLAG_MET_HEMLOCK,
+  FLAG_PATCHES_FOUND,
+  FLAG_PATCHES_RETURNED,
+  FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
+} from '../Act1StoryFlags'
 
 /** Python's str.capitalize(): first character upper-cased, the rest lower-cased. */
 function capitalize(text: string): string {
@@ -20,7 +26,12 @@ function capitalize(text: string): string {
 }
 
 /**
- * The shopkeeper NPC in Willowbrook's General Store.
+ * Old Man Hemlock, the shopkeeper of Willowbrook's General Store.
+ *
+ * He has shut the store to look for his missing cat, Patches, and reopens it
+ * when Elior carries her home, paying the notice's reward of a coin. Saves
+ * made when the hoe still gave a second coin keep the store open and get no
+ * second reward.
  *
  * The store's matches are kept for the priest: they are not among the wares
  * and are handed over for free once Elior has spoken with the priest.
@@ -40,28 +51,113 @@ export class Shopkeeper extends Character {
       "isn't as sleepy as it seems.",
   ]
   dialogueIndex = 0
-  closedDialogue =
-    `The ${characterName('Shopkeeper')} shakes his head. ` +
-    speech(
-      'Sorry, not open for business just yet. Come back later, lad—' +
-        "there's something you need to discover first.",
-    )
 
   constructor() {
     super({
       name: 'shopkeeper',
       description:
-        'The owner of the General Store, always bustling about and eager to ' +
-        'strike a bargain or share a rumor.',
+        `Old Man ${characterName('Hemlock')}, the owner of the General Store, ` +
+        'always bustling about and eager to strike a bargain or share a rumor.',
     })
   }
 
-  /** Greet Elior, hand over the priest's matches or list the wares for sale. */
-  override talkTo(gameState: GameState): string {
-    // If Elior hasn't been tasked to connect with nature, shop is not open yet
-    if (!gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)) {
-      return this.closedDialogue
+  /**
+   * Whether the store is open: once Patches is home, or in a save made when
+   * the hoe's second coin, not Patches, paid for the rope.
+   */
+  private isOpen(gameState: GameState): boolean {
+    return (
+      gameState.getStoryFlag(FLAG_PATCHES_RETURNED) ||
+      gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
+    )
+  }
+
+  /**
+   * Why the store is shut: Hemlock introduces himself the first time, then
+   * only asks after Patches.
+   */
+  private closedDialogue(gameState: GameState): string {
+    if (!gameState.getStoryFlag(FLAG_MET_HEMLOCK)) {
+      gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
+      return (
+        `The ${characterName('Shopkeeper')} looks up from the window, ` +
+        'his face creased with worry. ' +
+        speech(
+          `Oh! Forgive me, lad. ${characterName('Hemlock')}'s the name, ` +
+            'and this is my store. Or it would be, if I could keep my mind ' +
+            `on it. My cat, ${characterName('Patches')}, has been gone for days. ` +
+            `Can't think about business with ${characterName('Patches')} ` +
+            "out there in the cold, so the store stays shut until she's home.",
+        ) +
+        '\n' +
+        speech(
+          'She was last seen near the old well. If you find her, ' +
+            "there's a reward in it for you.",
+        )
+      )
     }
+    return (
+      `The ${characterName('Shopkeeper')} shakes his head. ` +
+      speech(
+        `No sign of ${characterName('Patches')} yet? ` +
+          "The store stays shut until she's home, lad. " +
+          'She was last seen near the old well.',
+      )
+    )
+  }
+
+  /**
+   * Take Patches back from Elior, pay the notice's coin (unless the save
+   * already had the hoe's second coin), reopen the store and settle her on
+   * the counter.
+   */
+  private welcomePatchesHome(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+    gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
+    gameState.currentRoom.addCharacter(new Patches())
+    const paid = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
+    if (paid) gameState.addItemToInventory(new Coin())
+    const reward = paid
+      ? "Here, the reward I promised. It isn't much, but it's honestly given."
+      : "You'll always be welcome in this store, lad."
+    return (
+      event(`You set ${characterName('Patches')} down on the counter.`) +
+      '\n' +
+      `${characterName('Patches')} butts her head against the ` +
+      `${characterName('Shopkeeper')}'s hand, and his face lights up. ` +
+      speech(
+        `${characterName('Patches')}! You found her! ` +
+          `Old ${characterName('Hemlock')} won't forget this. ` +
+          `${reward} And the store's open again, so have a look around.`,
+      ) +
+      (paid ? '\n' + event('You receive a [item_name]coin[/item_name].') : '') +
+      '\n' +
+      `${characterName('Patches')} curls up beside the till and begins to purr.`
+    )
+  }
+
+  /**
+   * Hemlock's answer while the store is shut, or null once it is open: Patches
+   * in Elior's arms is welcomed home first, otherwise he explains why it is
+   * shut.
+   */
+  private whileShut(gameState: GameState): string | null {
+    if (
+      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED)
+    ) {
+      return this.welcomePatchesHome(gameState)
+    }
+    return this.isOpen(gameState) ? null : this.closedDialogue(gameState)
+  }
+
+  /**
+   * Greet Elior: while the store is shut, welcome Patches home or ask after
+   * her; once open, hand over the priest's matches or list the wares.
+   */
+  override talkTo(gameState: GameState): string {
+    const shut = this.whileShut(gameState)
+    if (shut) return shut
 
     // Check if priest needs matches and shopkeeper hasn't given them yet
     if (
@@ -137,13 +233,14 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Sell a ware for coins, adding the bonus apple to the inventory. The
-   * matches are kept for the priest and never sold.
+   * Sell a ware for coins, adding the bonus apple to the inventory. Nothing
+   * is sold while the store is shut (Patches in Elior's arms is welcomed home
+   * instead), and the matches are kept for the priest
+   * and never sold.
    */
   override buyItem(gameState: GameState, itemName: string): string {
-    if (!gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)) {
-      return this.closedDialogue
-    }
+    const shut = this.whileShut(gameState)
+    if (shut) return shut
     const itemNameToBuy = itemName.toLowerCase()
     const eventMsg = event(
       `You try to buy the [item_name]${itemNameToBuy}[/item_name] from the ` +

@@ -16,7 +16,10 @@ export class ShedDoor extends Item {
     })
   }
 
-  /** Use a `Key` on the door to unlock it (consumes the key) or return failures. */
+  /**
+   * Use a `Key` on the door to unlock it (consumes the key), startling the
+   * hiding cat, or return failures.
+   */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Key) {
       if (this.locked) {
@@ -40,7 +43,9 @@ export class ShedDoor extends Item {
               '[/item_name] creaks open.',
           ) +
           '\n' +
-          'You can see a few interesting things inside.'
+          'You can see a few interesting things inside. ' +
+          'From the shadows comes a frightened mew, and a small patchwork ' +
+          'shape bolts behind the broken crates.'
         )
       }
       return (

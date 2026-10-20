@@ -11,7 +11,7 @@ import { Act1 } from './Act1'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 
 const CHARACTER_WORDS =
-  /\b(Elior|Mira|Hemlock|Borin|grandmother|shopkeeper|blacksmith|priest|fisherman|merchant|villager|deer)\b/i
+  /\b(Elior|Mira|Hemlock|Patches|Borin|grandmother|shopkeeper|blacksmith|priest|fisherman|merchant|villager|deer)\b/i
 const NAMED_SPANS =
   /\[(character_name|room_name|item_name|spell_name|quest_name)\][\s\S]*?\[\/\1\]/g
 const DIALOGUE_BLOCK = /\[dialogue\]([\s\S]*?)\[\/dialogue\]/g

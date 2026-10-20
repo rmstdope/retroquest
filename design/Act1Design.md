@@ -14,8 +14,9 @@
 
 - **Name:** Curiosity killed the cat
 
-  - **Trigger:** Enter the Abandoned Shed for the first time.
-  - **Completion:** Unlock the shed door.
+  - **Trigger:** Meet Hemlock at the General Store, or enter the Abandoned Shed for the first time.
+  - **Steps:** Hemlock (the Shopkeeper) has shut his store until his missing cat, Patches, comes home; the old notice in the Village Square asks after her too. Unlock the shed door: Patches bolts behind the crates. Call her by name (`talk to patches`, or `say patches to patches`) or tempt her with the egg or the fish (Elior keeps them) to coax her out, then carry her home.
+  - **Completion:** Return Patches to Hemlock. He pays the notice's reward of a coin, reopens the store, and Patches settles on the counter.
 
 - **Name:** Fishing expedition
 
@@ -76,9 +77,9 @@
 ### 2. Vegetable Field
 
 - **Description:** Rows of withered crops under a gray sky.
-- **Items:** rusty hoe (start), dull knife (start), Withered carrot (start), coin (1st) (later), coin (2nd) (later), carrot (later).
+- **Items:** rusty hoe (start), dull knife (start), Withered carrot (start), coin (1st) (later), carrot (later).
 - **Spells:** None.
-- **Usable Items:** Hoe (uncovers hidden coins), `revive` spell (on `Withered carrot` to transform it into `carrot`).
+- **Usable Items:** Hoe (uncovers a hidden coin, once), `revive` spell (on `Withered carrot` to transform it into `carrot`).
 - **Characters:** None.
 - **Exits:** Elior’s Cottage (north), Village Well (east), Chicken Coop (south)
 
@@ -125,10 +126,11 @@
 ### 7. General Store
 
 - **Description:** A cluttered shop with shelves of goods.
-- **Items:** Rope (store stock), apple (bonus with each purchase), matches (kept for the Priest and not for sale — not among the wares, cannot be bought or taken; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act.
+- **Items:** Rope (store stock), apple (bonus with each purchase), matches (kept for the Priest and not for sale — not among the wares, cannot be bought or taken; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act (the hoe's and Hemlock's reward).
 - **Spells:** None.
 - **Usable Items:** Coin (2nd, purchase rope and receive an apple bonus).
-- **Characters:** Shopkeeper (sells goods, shares gossip).
+- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). He introduces himself on the first talk and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter.
+- **Save compatibility:** saves made when the hoe still gave a second coin keep the store open, and returning Patches in such a save earns no second coin.
 - **Exits:** Village Square (west), Blacksmith’s Forge (south)
 
 ### 8. Village Well
@@ -147,7 +149,7 @@
 - **Unusable:** Broken shovel (later).
 - **Spells:** None.
 - **Usable Items:** Key (on shed door), mysterious box (unlock with spell, open to get map).
-- **Characters:** None.
+- **Characters:** Patches, Hemlock's missing cat (hides behind the crates once the door is unlocked, until coaxed out).
 - **Exits:** Village Well (north), Old Mill (south)
 
 ### 10. Old Mill
@@ -290,11 +292,15 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
       - Item obtained: `sharp knife`
     - Speak to blacksmith for advice. _Blacksmith gives tips on using tools and mentions strange happenings._
 
-7.  **Return to Vegetable Field:**
+7.  **Abandoned Shed (First Visit):**
 
-    - Use hoe again. _A second coin (2nd) is found and added to inventory._
-      - Item used: `rusty hoe`
-      - Item obtained: `coin` (2nd)
+    - Use key with shed door. _Key is removed from inventory, shed door is unlocked, revealing the interior. A frightened mew: a small cat bolts behind the crates._
+      - Item used: `key` (on `shed door`)
+    - Find Mysterious Box. _The box is intricately locked, and the key doesn't fit this lock._
+    - Talk to Patches (call her by name). _She creeps out and lets Elior carry her; the quest log points him to Hemlock at the General Store._
+    - Search shed. _Amidst the clutter, a fishing rod and a small magnet are found._
+    - Take fishing rod. _Fishing rod is added to inventory._
+    - Take magnet. _Magnet is added to inventory._
 
 7.5. **Visit Mira’s Hut:**
 
@@ -302,19 +308,15 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 8.  **General Store:**
 
-    - Speak to the shopkeeper for gossip. _The shopkeeper mentions Mira’s knowledge of magic and lists the wares._
+    - Speak to the shopkeeper. _Old Man Hemlock is overjoyed to have Patches home: he introduces himself by name, pays the notice's reward and reopens the store. Patches curls up on the counter. Completes: Curiosity killed the cat._
+      - Item obtained: `coin` (2nd)
     - Use coin (2nd) to buy rope. _Coin (2nd) is removed from inventory; rope and a bonus apple are added to inventory._
       - Item used: `coin` (2nd)
       - Items obtained: `rope`, `apple` (purchase bonus)
 
-9.  **Abandoned Shed (First Visit):**
+9.  **Back past the Abandoned Shed:**
 
-    - Use key with shed door. _Key is removed from inventory, shed door is unlocked, revealing the interior._
-      - Item used: `key` (on `shed door`)
-    - Find Mysterious Box. _The box is intricately locked, and the key doesn't fit this lock._
-    - Search shed. _Amidst the clutter, a fishing rod and a small magnet are found._
-    - Take fishing rod. _Fishing rod is added to inventory._
-    - Take magnet. _Magnet is added to inventory._
+    - Walk south through the shed (Patches is no longer there) on the way to the Old Mill.
 
 10. **Old Mill:**
 
@@ -498,8 +500,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 4.  **`Elior's Journal`** (Revealed in Step 1):
     - Read in Step 1 to open a further conversation with Grandmother and learn `revive`.
 5.  **`Rusty Hoe`** (Obtained: Step 2):
-    - Used in Step 2 to uncover the first `coin`.
-    - Used in Step 7 to find a second `coin`.
+    - Used in Step 2 to uncover the first `coin`. Tilling again finds nothing more.
 6.  **`Coin` (1st)** (Obtained: Step 2):
     - Used in Step 6 to pay the Blacksmith to sharpen the `dull knife`.
 7.  **`Dull Knife`** (Obtained: Step 2):
@@ -509,23 +510,23 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 9.  **`Egg`** (Obtained: Step 3):
     - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
 10. **`Key`** (Obtained: Step 3):
-    - Used in Step 9 to open the Abandoned Shed door.
-11. **`Mysterious Box`** (Found in the Abandoned Shed in Step 9):
+    - Used in Step 7 to open the Abandoned Shed door.
+11. **`Mysterious Box`** (Found in the Abandoned Shed in Step 7):
     - Unlocked and opened in Step 19 to obtain the `map`.
 12. **`Bucket`** (Obtained: Step 4):
     - Used in Step 5 to draw water from the well for observation.
 13. **`Sharp Knife`** (Obtained: Step 6):
     - Used in Step 13 to cut through thick vines on the Forest Path and open the alcove containing the `stick`.
-14. **`Coin` (2nd)** (Obtained: Step 7):
+14. **`Coin` (2nd)** (Obtained: Step 8, Hemlock's reward for returning Patches):
     - Used in Step 8 to buy `rope` from the General Store.
 15. **`Apple`** (Obtained: Step 8):
     - Fulfills Mira's quest requirement for "Food for the road" when she checks the preparations in Step 27.
 16. **`Rope`** (Obtained: Step 8):
     - Used in Step 10 to fix the mechanism in the Old Mill, revealing the `millstone fragment`.
-17. **`Fishing Rod`** (Obtained: Step 9):
+17. **`Fishing Rod`** (Obtained: Step 7):
     - Used in Step 12 to catch a `fish`.
     - Combined with the `magnet` and then the `stick` in Step 21 to create an `extended magnetic fishing rod`, which retrieves the `shiny ring` from the well.
-18. **`Magnet`** (Obtained: Step 9):
+18. **`Magnet`** (Obtained: Step 7):
     - Combined with the `fishing rod` in Step 21 to create a `magnetic fishing rod`.
 19. **`Millstone Fragment`** (Obtained: Step 10):
     - Used in Step 11 by giving it to the Blacksmith for information.

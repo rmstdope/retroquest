@@ -59,6 +59,7 @@ import { Fisherman } from './characters/Fisherman'
 import { Grandmother } from './characters/Grandmother'
 import { Merchant } from './characters/Merchant'
 import { Mira } from './characters/Mira'
+import { Patches } from './characters/Patches'
 import { Priest } from './characters/Priest'
 import { Shopkeeper } from './characters/Shopkeeper'
 import { Villager } from './characters/Villager'
@@ -158,6 +159,7 @@ export const ACT1_CLASSES = {
   Merchant,
   Mira,
   Priest,
+  Patches,
   Shopkeeper,
   Villager,
   // Rooms
