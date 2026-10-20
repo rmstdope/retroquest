@@ -8,15 +8,30 @@ import {
 } from '@/engine'
 import {
   FLAG_BLACKSMITH_MET,
+  FLAG_BLACKSMITH_SHARPENED_KNIFE,
   FLAG_DEER_CAN_BE_OBSERVED,
+  FLAG_MAGIC_FULLY_UNLOCKED,
 } from '../Act1StoryFlags'
 import { Coin } from '../items/Coin'
 import { DullKnife } from '../items/DullKnife'
 import { SharpKnife } from '../items/SharpKnife'
 import { MillstoneFragment } from '../items/MillstoneFragment'
+import { RuneToken } from '../items/RuneToken'
+import { Deer } from './Deer'
 
 /** Blacksmith NPC who forges tools, sharpens blades, and shares village lore. */
 export class Blacksmith extends Character {
+  /**
+   * How many times Borin has picked a line from those that fit Elior's
+   * journey so far; he rotates through them. Absent in older saves.
+   */
+  contextLinesSpoken?: number
+  /**
+   * How many lines fitted when he last picked one; when more fit now, he
+   * starts over with the newest. Absent in older saves.
+   */
+  contextLinesKnown?: number
+
   constructor() {
     super({
       name: 'blacksmith',
@@ -31,14 +46,24 @@ export class Blacksmith extends Character {
     const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
 
     if (gameState.getStoryFlag(FLAG_BLACKSMITH_MET)) {
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `Welcome back, young ${characterName('Elior')}. ` +
-            'Need something else?',
+      const lines = this.contextLines(gameState)
+      if (lines.length === 0) {
+        return (
+          eventMsg +
+          '\n' +
+          speech(
+            `Welcome back, young ${characterName('Elior')}. ` +
+              'Need something else?',
+          )
         )
-      )
+      }
+      const spoken =
+        lines.length > (this.contextLinesKnown ?? 0)
+          ? 0
+          : (this.contextLinesSpoken ?? 0)
+      this.contextLinesKnown = lines.length
+      this.contextLinesSpoken = spoken + 1
+      return eventMsg + '\n' + speech(lines[spoken % lines.length])
     }
 
     gameState.setStoryFlag(FLAG_BLACKSMITH_MET, true)
@@ -50,6 +75,60 @@ export class Blacksmith extends Character {
           `${characterName(this.name)}. If you need tools ` +
           "made or mended, I'm your man. A sharp blade can be a good friend.",
       )
+    )
+  }
+
+  /**
+   * The lines that fit what Elior has done so far, newest first: after he
+   * has learned magic for real, after he has seen the deer, after Borin
+   * sharpened his knife.
+   */
+  private contextLines(gameState: GameState): string[] {
+    const lines: string[] = []
+    if (gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
+      lines.push(
+        `Magic, eh? Word gets round, young ${characterName('Elior')}. ` +
+          "Can't hammer that into shape, but I'd wager it wants the same " +
+          'as iron: patience, and a steady hand.',
+      )
+    }
+    const glade = gameState.allRooms.HiddenGlade
+    if (glade?.characters.some((character) => character instanceof Deer)) {
+      lines.push(
+        `Saw it, did you? The ${characterName('deer')}? ` +
+          `My grandfather swore by that ${characterName('deer')}. ` +
+          'Said it only shows itself to ' +
+          'them as the land has need of.',
+      )
+    }
+    if (
+      gameState.getStoryFlag(FLAG_BLACKSMITH_SHARPENED_KNIFE) ||
+      gameState.inventory.some((item) => item instanceof SharpKnife)
+    ) {
+      lines.push(
+        'How is that blade holding up? Keep that edge oiled, mind, ' +
+          'or the damp will have it dull again before you know it.',
+      )
+    }
+    return lines
+  }
+
+  /** What Borin makes of the black-iron rune token; he hands it back. */
+  private readRuneToken(item: Item): string {
+    return (
+      event(
+        `You show the [item_name]${item.name}[/item_name] to the ` +
+          `${characterName(this.name)}.`,
+      ) +
+      '\n' +
+      `The ${characterName(this.name)} weighs the token in his palm, then ` +
+      'frowns and rubs his thumb over the rune. ' +
+      speech(
+        "Cold iron. Stays cold, too, however long you hold it. That's no " +
+          'village work. This was not forged by any honest smith, lad; ' +
+          "somebody beat a curse into it. I'd not keep it near my heart.",
+      ) +
+      '\nHe hands it back to you, and wipes his hand on his apron.'
     )
   }
 
@@ -66,6 +145,7 @@ export class Blacksmith extends Character {
         gameState.removeItemFromInventory(dullKnifeInstance.name)
         // Add a new sharp knife to inventory
         gameState.addItemToInventory(new SharpKnife())
+        gameState.setStoryFlag(FLAG_BLACKSMITH_SHARPENED_KNIFE, true)
 
         const givenMsg = event(
           `You give the [item_name]${item.name}[/item_name] ` +
@@ -98,6 +178,8 @@ export class Blacksmith extends Character {
             'need to pay me a coin for the service.',
         )
       )
+    } else if (item instanceof RuneToken) {
+      return this.readRuneToken(item)
     } else if (item instanceof MillstoneFragment) {
       gameState.removeItemFromInventory(item.name)
       // Optionally, set a story flag if needed
@@ -121,7 +203,8 @@ export class Blacksmith extends Character {
             'appears in the Hidden ' +
             'Glade, but only when all is calm and restful—no voices, no ' +
             'footsteps, just the hush of the wind and the song of the stream. ' +
-            `If you seek the ${characterName('deer')}, remember: it will not ` +
+            `If you seek the ${characterName('deer')}, go there and sit ` +
+            'quiet a while; have a rest, and let it come to you. It will not ' +
             'show itself to those who rush or bring trouble.',
         )
       )

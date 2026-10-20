@@ -19,6 +19,7 @@ import { FadedPhotograph } from './items/FadedPhotograph'
 import { Feather } from './items/Feather'
 import { Fish } from './items/Fish'
 import { FishingRod } from './items/FishingRod'
+import { FreshBread } from './items/FreshBread'
 import { HealingHerb } from './items/HealingHerb'
 import { Horseshoe } from './items/Horseshoe'
 import { Key } from './items/Key'
@@ -118,6 +119,7 @@ export const ACT1_CLASSES = {
   Feather,
   Fish,
   FishingRod,
+  FreshBread,
   HealingHerb,
   Horseshoe,
   Key,

@@ -29,6 +29,7 @@ import { FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED } from './Act1StoryFlags'
 import { ACT1_CLASSES } from './classes'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { Shopkeeper } from './characters/Shopkeeper'
+import { Villager } from './characters/Villager'
 
 /** Act 1: The Call to Adventure, set in the village of Willowbrook. */
 export class Act1 extends Act {
@@ -95,11 +96,15 @@ export class Act1 extends Act {
     )
   }
 
-  /** Drop the matches that saves from before they left the store's wares still sell. */
+  /**
+   * Bring older saves up to date: drop the matches the store's wares still
+   * sell, and give the villager her name, Tilda.
+   */
   override afterLoad(gameState: GameState): void {
     for (const room of Object.values(gameState.allRooms)) {
       for (const character of room.characters) {
         if (character instanceof Shopkeeper) character.migrateLegacyWares()
+        if (character instanceof Villager) character.migrateLegacyName()
       }
     }
   }

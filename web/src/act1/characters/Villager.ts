@@ -5,9 +5,19 @@ import {
   characterName,
   speech,
 } from '@/engine'
-import { FLAG_VILLAGER_TALKED_TO } from '../Act1StoryFlags'
+import {
+  FLAG_TILDA_ASKED_ABOUT_WELL,
+  FLAG_VILLAGER_TALKED_TO,
+} from '../Act1StoryFlags'
+import { AncientAmulet } from '../items/AncientAmulet'
+import { Well } from '../items/Well'
 
-/** A friendly Willowbrook local who cycles through village rumors. */
+/**
+ * Tilda, the baker's wife: a friendly Willowbrook local who cycles through
+ * village rumors, asks Elior about the well once it runs clean, and knows he
+ * is leaving when she sees Mira's amulet. She also answers to `villager`,
+ * the name she went by before she had one.
+ */
 export class Villager extends Character {
   dialogueOptions: string[] = [
     'Have you seen the fields lately? The crops are withering overnight, and no one ' +
@@ -25,20 +35,80 @@ export class Villager extends Character {
 
   constructor() {
     super({
-      name: 'villager',
-      description:
-        'A friendly Willowbrook local, always eager to share the latest gossip or ' +
-        'rumors about the village.',
+      name: Villager.NAME,
+      description: Villager.DESCRIPTION,
     })
   }
 
-  /** Share the next rumor and record that a villager has been talked to. */
+  private static readonly NAME = 'Tilda'
+  private static readonly DESCRIPTION =
+    `${characterName(Villager.NAME)}, the baker's wife: a friendly ` +
+    'Willowbrook local, always eager to share the latest gossip or rumors ' +
+    'about the village.'
+
+  /**
+   * Bring a villager from a save made before she was named up to date: she
+   * is Tilda now, with her new description. Safe to run more than once.
+   */
+  migrateLegacyName(): void {
+    this.name = Villager.NAME
+    this.description = Villager.DESCRIPTION
+  }
+
+  /** She answers to her name, Tilda, and still to villager. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'villager'
+  }
+
+  /**
+   * Say goodbye once Elior carries the amulet; ask about the well once it
+   * runs clean; otherwise share the next rumor. Records that a villager has
+   * been talked to.
+   */
   override talkTo(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    const eventMsg = event(
+      `You speak with ${characterName(this.name)}, the baker's wife.`,
+    )
+    if (gameState.inventory.some((item) => item instanceof AncientAmulet)) {
+      return (
+        eventMsg +
+        '\n' +
+        speech(
+          `${characterName('Mira')}'s amulet... ` +
+            "you're leaving, aren't you? " +
+            "Well. Don't you dare go without a proper send-off from the bakery. " +
+            'And mind you come home, love.',
+        )
+      )
+    }
+    if (
+      this.wellIsPurified(gameState) &&
+      !gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)
+    ) {
+      gameState.setStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL, true)
+      return (
+        eventMsg +
+        '\n' +
+        speech(
+          "The water's clean! Was that you? Don't look so modest, " +
+            `${characterName('Elior')}; word's all round the square. ` +
+            "I've not had dough rise so light in a year.",
+        )
+      )
+    }
     const rumor = this.dialogueOptions[this.dialogueIndex]
     // Cycle through dialogue
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
-    const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
     return eventMsg + '\n' + speech(rumor)
+  }
+
+  /** Whether the village well has been purified. */
+  private wellIsPurified(gameState: GameState): boolean {
+    return (
+      gameState.allRooms.VillageWell?.items.some(
+        (item) => item instanceof Well && item.isPurified,
+      ) ?? false
+    )
   }
 }

@@ -42,3 +42,9 @@ export const FLAG_FOUND_RUNE_TOKEN = 'found_rune_token'
 export const FLAG_MIRA_NAMED_FOULING_SIGIL = 'mira_named_fouling_sigil'
 /** Set when the Vegetable Field is watered with purified well water. */
 export const FLAG_VEGETABLE_FIELD_WATERED = 'vegetable_field_watered'
+/** Set when grandmother bakes Elior a fresh loaf for the road. */
+export const FLAG_GRANDMOTHER_BAKED_BREAD = 'grandmother_baked_bread'
+/** Set when Borin sharpens Elior's knife. */
+export const FLAG_BLACKSMITH_SHARPENED_KNIFE = 'blacksmith_sharpened_knife'
+/** Set when Tilda has asked Elior whether he cleaned the well. */
+export const FLAG_TILDA_ASKED_ABOUT_WELL = 'tilda_asked_about_well'

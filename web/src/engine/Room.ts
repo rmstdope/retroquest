@@ -52,12 +52,11 @@ export class Room {
     return this.items.find((item) => isNamed(item, itemName)) ?? null
   }
 
+  /** The first character in the room that answers to the name, or null. */
   getCharacterByName(characterName: string): Character | null {
-    const wanted = characterName.toLowerCase()
     return (
-      this.characters.find(
-        (character) => character.name.toLowerCase() === wanted,
-      ) ?? null
+      this.characters.find((character) => character.answersTo(characterName)) ??
+      null
     )
   }
 
