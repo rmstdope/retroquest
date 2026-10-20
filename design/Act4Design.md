@@ -3,41 +3,67 @@
 ## Narrative Overview
 
 **Note:** At the end of Act III, Mira combined the three relics (Crystal of Light, Phoenix
-Feather, and Dragon's Scale) into the Lifelight Elixir—a powerful potion that channels the
-combined virtues of courage, wisdom, and selflessness. Elior enters Act IV carrying this elixir,
-which is destined to save King Alden from Malakar's life-draining ritual.
+Feather, and Dragon's Scale) into the Lifelight Elixir, a potion that channels the combined
+virtues of courage, wisdom and selflessness. Elior enters Act IV carrying the elixir and the
+**Ancient Amulet** Mira gave him in Act I.
 
-Act IV represents the climax of Elior's journey as they infiltrate Malakar's fortress with the
-Lifelight Elixir in hand. The act focuses on navigating deadly traps, confronting illusions,
-facing Malakar's lieutenants, and ultimately making critical moral choices that determine the
-fate of the kingdom. The fortress serves as both a physical and psychological battleground where
-Elior must prove their growth while resisting Malakar's corruption.
+Act IV is the climax of Elior's journey and pays off the whole game. Elior infiltrates Malakar's
+fortress, redeems or overcomes his two lieutenants, meets the **Shadow of the Past** (the dream
+voice he has heard since the Prologue), and opens **the Parents' Vault** with the amulet. He
+walks into the throne room already knowing the truth: Malakar, Aren and Lysa were three friends
+and fellow Wardens of the Dawn; Malakar tore a wound in time to save them, and the parents became
+the ward that hides Elior and holds the wound shut.
 
-The act explores themes of forgiveness versus vengeance, trust versus doubt, and the true meaning
-of heroism. Through completing side quests that test the virtues embodied in the Lifelight Elixir
-(Courage, Wisdom, Selflessness), Elior gains the strength needed to face Malakar's ultimate
-temptation and the revelation about their parents.
+In the throne room there is **one final choice**. King Alden hangs in a crystal prison, drained
+by the wound, and Malakar is failing, bound to the same wound. The Lifelight Elixir can only be used once:
+it either **breaks Alden's prison** or it is **offered to heal Malakar's wound**. Elior answers
+Malakar's temptation with the refrain, "Power follows purpose; purpose follows truth.", and the
+choice leads to one of three endings: **Redemption**, **Justice** or **Sacrifice**. All three end
+at home in Willowbrook, where the withered field from Act I turns green again as Elior casts
+`grow`.
+
+The act explores forgiveness versus vengeance, truth versus comfort, and what heroism costs.
+
+## Story Canon Used in This Act
+
+This act follows the Story Canon in `GameStory.md`. In short:
+
+-   The parents are **Aren** and **Lysa**; with **Malakar** they were the Wardens of the Dawn and
+    made the three virtue relics together. Malakar was the Warden of Wisdom.
+-   Malakar fell through grief first and power second: he reached for time magic to save his
+    friends, tore a wound that feeds on life, and the power he found there corrupted him.
+-   The parents are the ward. It is anchored in the Ancient Amulet and in King Alden's royal
+    bindings, which is why Malakar drains the king. When the wound is healed the parents speak to
+    Elior one last time and rest in peace. They are not alive.
+-   The dream voice is the Shadow of the Past, the uncorrupted remnant of Malakar. It feels
+    familiar because Malakar held baby Elior. It is a dream only in Acts I-III (once each); in Act IV
+    it speaks openly in the Memory Vault and once more at the climax, as the bead asks. This
+    stretches the canon's "heard once per act" and is flagged for the navigator.
+-   The cloaked stranger in Willowbrook is Malakar's agent, who also framed Sir Cedric.
 
 ## Quest Management Structure
 
 ### Main Quest Chain Architecture
 
 The main quest "The Final Stand" is built from completing all side quests, following the design
-rule that all side quests must be completed before the main quest can be finished. The quest
-chain follows this dependency structure:
+rule that all side quests must be completed before the main quest can be finished.
 
 **Phase 1: Fortress Infiltration**
 
--   All outer fortress side quests must be completed before accessing inner sanctum
+-   The outer fortress quests open the way to the lieutenants.
 
-**Phase 2: Lieutenant Confrontations**
+**Phase 2: Lieutenant Confrontations and the Truth**
 
--   Each lieutenant encounter tests a different virtue and requires demonstrations of courage,
-    wisdom, and selflessness
+-   The Knight of Despair, the Sorceress of Lies and the Shadow of the Past. Each is redeemed or
+    understood, not slain.
 
-**Phase 3: The Inner Sanctum**
+**Phase 3: The Parent's Legacy**
 
--   Final confrontation with Malakar only possible after all trials completed
+-   The vault of the parents' memories, opened with the Ancient Amulet, before the throne room.
+
+**Phase 4: The Final Stand**
+
+-   One scene, one choice: the Lifelight Elixir breaks Alden's prison or heals Malakar's wound.
 
 ## Quests in Act IV
 
@@ -47,18 +73,23 @@ chain follows this dependency structure:
 
     -   **Type:** Main Quest
     -   **Trigger:** Arrival at Malakar's fortress with the Lifelight Elixir
-    -   **Prerequisites:** Completion of Act III (Lifelight Elixir obtained from combining the three
-        virtues)
-    -   **Dependencies:** ALL side quests in Act IV must be completed before this quest can be finished
+    -   **Prerequisites:** Completion of Act III
+    -   **Dependencies:** ALL seven side quests in Act IV must be completed before the Throne
+        Chamber opens
     -   **Quest Chain Phases:**
-        1. **Fortress Breach:** Penetrate the outer defenses using courage and cunning
-        2. **Inner Trials:** Face each lieutenant and their domain-specific challenges
-        3. **The Revelation:** Confront Malakar and learn the truth about Elior's parents
-        4. **Final Choice:** Decide Malakar's fate and the kingdom's future
-    -   **Completion:** Defeat or redeem Malakar, free King Alden using the Lifelight Elixir, and
-        restore peace to Eldoria
-    -   **Rewards:** Kingdom's salvation, resolution of family mystery, heroic legacy
-    -   **Story Impact:** Determines the ending and establishes Elior's ultimate character
+        1. **Fortress Breach:** Penetrate the outer defenses with courage and cunning
+        2. **Inner Trials:** Face the Knight and the Sorceress and meet the Shadow of the Past
+        3. **The Revelation:** See the parents' memories in the vault
+        4. **Final Choice:** In the throne room, answer Malakar with the refrain, then decide what
+           the Lifelight Elixir is for
+    -   **Completion:** Elior chooses an ending (Redemption, Justice or Sacrifice) and the wound
+        is closed; the quest is completed at the moment the ending is chosen
+    -   **Rewards:** The kingdom's salvation, the parents' farewell, the `Forgiveness` spell
+        (Redemption ending only), the return home
+    -   **Story Impact:** Determines the ending
+
+    **King Alden's Rescue is no longer a separate quest.** Freeing the king and deciding
+    Malakar's fate are the same choice, made once, in the throne room.
 
 ### Side Quests
 
@@ -66,147 +97,151 @@ chain follows this dependency structure:
 
 -   **Name:** Shattered Ward Guardians
 
-    -   **Type:** Side Quest (Required for Main Quest)
+    -   **Type:** Side Quest (Required)
     -   **Trigger:** Attempt to enter the fortress's outer courtyard
-    -   **Prerequisites:** Learned spells and skills from previous acts
-    -   **Dependencies:** None
-    -   **Completion:** Use courage and light magic to dispel the shadowy guardians protecting the
-        main gate
-    -   **Rewards:** Safe passage to inner fortress, Guardian's Essence
-    -   **Story Impact:** Demonstrates the power of courage against Malakar's servants
-
--   **Name:** The Maze of Mirrors
-
-    -   **Type:** Side Quest (Required for Main Quest)
-    -   **Trigger:** Enter the fortress's bewildering mirror labyrinth
-    -   **Prerequisites:** Echo knowledge from Hall of Echoes and Servant's Pendant for complete navigation
-    -   **Dependencies:** Initial visit after "The Trapped Servants", completion requires echo knowledge from Hall of Echoes
-    -   **Completion:** Use echo navigation knowledge plus servant guidance and truth-seeing abilities
-    -   **Rewards:** Direct route to lieutenant chambers, Mirror Shard, Ancient Iron Key
-    -   **Story Impact:** Tests Elior's ability to combine multiple sources of knowledge and wisdom
+    -   **Prerequisites:** None
+    -   **Completion:** Use the Ward Stone Fragment and light magic to dispel the shadow guardians
+    -   **Rewards:** Safe passage, Guardian's Essence
+    -   **Story Impact:** Courage against Malakar's servants
 
 -   **Name:** The Trapped Servants
 
-    -   **Type:** Side Quest (Required for Main Quest)
+    -   **Type:** Side Quest (Required)
     -   **Trigger:** Discover fortress servants enslaved by dark magic
-    -   **Prerequisites:** Guardian's Essence from "Shattered Ward Guardians"
-    -   **Dependencies:** Completion of "Shattered Ward Guardians"
-    -   **Completion:** Use Guardian's Essence and selfless magic to break the servants' enchantment
-    -   **Rewards:** Servant allies, knowledge of fortress layout, Loyalty Token, Servant's Pendant
-    -   **Story Impact:** Demonstrates that courage enables selflessness - the Guardian's Essence proves worthy of their trust
+    -   **Prerequisites:** Guardian's Essence (completion of "Shattered Ward Guardians")
+    -   **Completion:** Use Guardian's Essence and selfless magic (`bless`) to break the enchantment
+    -   **Rewards:** Loyalty Token, Servant's Pendant, knowledge of the fortress layout
+    -   **Story Impact:** Courage enables selflessness
+
+-   **Name:** The Maze of Mirrors
+
+    -   **Type:** Side Quest (Required)
+    -   **Trigger:** Enter the mirror labyrinth
+    -   **Prerequisites:** Servant's Pendant and the Echo Stone from the Hall of Echoes
+    -   **Completion:** Combine servant guidance and echo knowledge; solving it teaches `truth_sight`
+    -   **Rewards:** The spell `truth_sight`
+    -   **Story Impact:** Wisdom combines several sources of knowledge. `truth_sight` lets Elior
+        see the Knight of Despair as he really is.
 
 #### Lieutenant Confrontation Phase Quests
 
 -   **Name:** The Knight of Despair
 
-    -   **Type:** Side Quest (Required for Main Quest)
-    -   **Trigger:** Encounter Malakar's first lieutenant in the Hall of Echoes
-    -   **Prerequisites:** Completion of all infiltration quests, Guardian's Chain for protection
-    -   **Dependencies:** Must have demonstrated the three virtues through previous encounters
-    -   **Completion:** Use Guardian's Chain for protection, then say redemption to knight using Guardian's Essence
-    -   **Rewards:** Knight's Redemption, Echo Stone, access to the Tower of Shadows
-    -   **Story Impact:** Shows mercy can triumph over corruption when backed by courage
+    -   **Type:** Side Quest (Required)
+    -   **Trigger:** Encounter the first lieutenant in the Hall of Echoes
+    -   **Prerequisites:** Guardian's Chain and `truth_sight` (from the maze)
+    -   **Completion:** Wear the Guardian's Chain, then say redemption to the knight (nothing is consumed)
+    -   **Rewards:** Knight's Redemption, Enhanced Echo Stone, the spell `redemptions_light`,
+        access to the Tower of Shadows
+    -   **Who he is:** **Malakar's agent from Acts I and II.** With `truth_sight` Elior sees that
+        the shredded grey cloak is the one worn by the cloaked stranger in Willowbrook, and the
+        seal on the cloak's clasp is the seal on the Secret Documents that cleared Sir Cedric.
+        Sir Cedric, standing beside Elior, recognises the voice. The knight searched Willowbrook for
+        the amulet, framed Cedric, and has been in despair since because he no longer believes
+        the king can be saved. In his redemption he confesses all three.
+    -   **Story Impact:** Mercy triumphs over corruption; closes the loop on Acts I and II
 
 -   **Name:** The Sorceress of Lies
 
-    -   **Type:** Side Quest (Required for Main Quest)
-    -   **Trigger:** Face Malakar's second lieutenant in the Chamber of Whispers
-    -   **Prerequisites:** Completion of "The Knight of Despair", Knight's Redemption and Loyalty Token required
-    -   **Dependencies:** Must have Knight's Redemption from previous quest and Loyalty Token from servants
-    -   **Completion:** Use Knight's Redemption to prove mercy's power, Loyalty Token to resist deception, revealing her pain
-    -   **Rewards:** Sorceress's Truth, Time Crystal, key to the Throne Chamber
-    -   **Story Impact:** Demonstrates that understanding others' pain leads to true victory
+    -   **Type:** Side Quest (Required)
+    -   **Trigger:** Face the second lieutenant in the Chamber of Whispers
+    -   **Prerequisites:** "The Knight of Despair" completed; Knight's Redemption and Loyalty Token
+    -   **Completion:** Use the Knight's Redemption and the Loyalty Token, cast `hearts_truth`, say
+        understanding
+    -   **Rewards:** Sorceress's Truth, the spell `hearts_truth`, the secret passage to the Memory
+        Vault
+    -   **Who she is:** **The mark on Elena's curse in Greendale (Act II)** was a spiral of three
+        thorns. The same spiral is burned into the Sorceress's staff and into her palm. She cursed
+        Elena on Malakar's orders to draw healers away from the king, and she is lonely because
+        no one has ever spoken to her without a lie.
+    -   **Story Impact:** Understanding pain leads to true victory
 
 -   **Name:** The Shadow of the Past
 
-    -   **Type:** Side Quest (Required for Main Quest)
-    -   **Trigger:** Confront an apparition of Malakar's former self in the Memory Vault
-    -   **Prerequisites:** Completion of "The Sorceress of Lies", Echo Stone and Time Crystal required
-    -   **Dependencies:** Initial visit possible after sorceress encounter, completion requires all three stabilizing items
-    -   **Completion:** Two-visit process: initial assessment, then return with Enhanced Echo Stone, Time Crystal, and Sorceress's Truth
-    -   **Rewards:** Memory Fragment, combined Mirror-Memory Shard, the truth about Elior's heritage
-    -   **Story Impact:** Reveals the full backstory and sets up the final confrontation through patient preparation
+    -   **Type:** Side Quest (Required)
+    -   **Trigger:** Enter the Memory Vault
+    -   **Prerequisites:** "The Sorceress of Lies" completed; Enhanced Echo Stone and Sorceress's Truth
+    -   **Completion:** Restore the memory orbs with the Enhanced Echo Stone, show the Sorceress's
+        Truth to the Shadow, talk to it and say understanding
+    -   **Rewards:** The Shadow tells Elior the amulet will open the Parents' Vault, and the vault
+        door opens to the amulet
+    -   **Who it is:** **The dream voice from the Prologue.** Elior knows the voice at once. The
+        Shadow is the uncorrupted remnant of Malakar, asking his friends' son for help. It feels
+        familiar because Malakar held baby Elior.
+    -   **Story Impact:** Reveals who has been calling Elior and prepares the vault
 
-#### Inner Sanctum Phase Quests
-
--   **Name:** King Alden's Rescue
-
-    -   **Type:** Side Quest (Required for Main Quest)
-    -   **Trigger:** Discover King Alden imprisoned and drained by Malakar's ritual
-    -   **Prerequisites:** Access to Throne Chamber, all lieutenant redemption items as proof of worthiness
-    -   **Dependencies:** Completion of all lieutenant quests, possession of Knight's Redemption, Sorceress's Truth, and Memory Fragment
-    -   **Completion:** Present redemption proofs to prove worthiness, then use the Lifelight Elixir to save the king
-    -   **Rewards:** King's blessing, Royal Sigil, Hero's Memorial, weakened Malakar
-    -   **Story Impact:** Saves the kingdom's legitimate ruler and weakens the final boss, fulfilling the purpose of the three virtues combined
+#### The Parents' Vault
 
 -   **Name:** The Parent's Legacy
 
-    -   **Type:** Side Quest (Required for Main Quest)
-    -   **Trigger:** Find evidence of Elior's parents' final sacrifice in Malakar's sanctum
-    -   **Prerequisites:** Possession of combined Mirror-Memory Shard and Ancient Iron Key
-    -   **Dependencies:** Completion of "King Alden's Rescue", combined Mirror-Memory Shard unlocks hidden vault
-    -   **Completion:** Use Ancient Iron Key to open hidden vault, Mirror-Memory Shard to view parent's final memories
-    -   **Rewards:** Parent's Blessing, Throne Key, ultimate spell unlock, emotional closure
-    -   **Story Impact:** Provides the strength needed for the final confrontation
+    -   **Type:** Side Quest (Required; comes before the throne room)
+    -   **Trigger:** Find the sealed door east of the Memory Vault
+    -   **Prerequisites:** "The Shadow of the Past" completed; the Ancient Amulet
+    -   **Completion:** Use the Ancient Amulet on the vault door, then examine the parents' memories
+    -   **Rewards:** The whole truth, so Elior walks into the throne room knowing; the Throne
+        Chamber door opens
+    -   **What the memories show:** Aren, Lysa and Malakar making the relics together; the
+        catastrophe; Malakar tearing the wound to save them; the parents pouring themselves into
+        the ward, anchored in the amulet and the royal bindings, so that Elior would be hidden and
+        the wound held shut; baby Elior in Malakar's arms. The amulet opens the door because it is
+        part of the ward.
+    -   **Story Impact:** Elior learns that Malakar began out of love and was corrupted by the power, and that the
+        ward is the parents themselves and lives in Elior
 
 ## Character Development
 
 ### Elior's Ultimate Growth
 
-Act IV represents Elior's transformation from a simple farmer to a true hero. Through the
-trials, they learn to:
+Elior grows from a simple farmer to a hero who chooses mercy or justice knowing the whole truth:
 
--   Balance mercy with justice (lieutenant encounters)
--   Trust in allies while standing independently (servant rescue)
--   Face painful truths about family and past (parent's legacy)
--   Make decisions that affect an entire kingdom (final choice)
+-   Balance mercy with justice (lieutenants)
+-   Trust allies while standing independently (servants)
+-   Face painful truths about family (the vault)
+-   Decide the fate of a kingdom and a friend (the final choice)
 
 ### Companion Arcs Conclusion
 
--   **Mira:** Reveals her deepest magical knowledge to aid in the fortress assault
--   **Sir Cedric:** Proves his restored honor by standing with Elior against impossible odds
--   **Nyx:** Provides spiritual guidance for the final moral choices
+-   **Mira:** Confesses the last of what she knew in Act III; in the fortress she stands by Elior.
+    She was the Wardens' pupil.
+-   **Sir Cedric:** Recognises the Knight of Despair as the agent who framed him and chooses
+    mercy or not; his honour is restored.
+-   **Nyx:** Her refrain is the one Elior says to Malakar.
 
 ### Malakar's Complexity
 
-Malakar is revealed not as pure evil, but as a fallen friend consumed by grief and power. His
-corruption began when he tried to prevent the loss that took Elior's parents, leading to the
-very tragedy he sought to avoid.
+Malakar is a fallen friend. His corruption began as grief: he could not wait for the world to
+heal his friends and reached for time magic. The wound he tore feeds on life, and the power he
+found there corrupted him into wanting more. Aren and Lysa became the ward to stop him. The
+Phoenix's riddle in Act III names the virtue he failed: patience.
 
 ## Spell System Design
 
-### Ultimate Spell Combinations
+Act IV teaches only spells the story needs. The ultimate and combination spells of the earlier
+design are cut.
 
-Act IV introduces the ability to combine learned spells and virtues for enhanced effects:
-
--   **Triumphant Light:** Channel the three virtues for maximum power
--   **Truth Sight:** Combine courage and wisdom for seeing through illusions
--   **Sacrificial Shield:** Combine selflessness and courage for protecting others
--   **Wisdom's Flame:** Combine wisdom and selflessness for purifying corruption
-
-### Final Spell Unlock
-
--   **Parent's Blessing:** Ultimate protection spell learned from completing the family legacy quest
+-   **Truth Sight:** from the Mirror Labyrinth
+-   **Redemption's Light:** from the Knight of Despair
+-   **Heart's Truth:** from the Sorceress of Lies
+-   **Forgiveness:** learned in the Redemption ending only
+-   **Grow:** granted in the epilogue field if Elior does not have it; the final spell cast in
+    the game
 
 ## World-Building & Lore Integration
 
 ### Malakar's Fortress
 
-The fortress reflects Malakar's mental state - starting with organized defenses but becoming
-increasingly chaotic and desperate as players progress deeper. Each area tells the story of
-his fall from grace.
+The fortress reflects Malakar's mind: orderly defences at the gates, then chaos and grief deeper
+in. The rooms follow his fall.
 
 ### The Corruption's Source
 
-Revealed to be Malakar's attempt to reverse time and save Elior's parents, which instead
-created a temporal wound that consumes life energy.
+A temporal wound torn to save his friends, which consumes life energy. It is why Eldoria's land
+withers and why Alden is drained. The wound is held shut by the ward that is Elior's parents.
 
 ### Kingdom's True History
 
-The three virtues (courage, wisdom, selflessness) were originally embodied in relics created by
-an alliance between Malakar and Elior's parents to protect the kingdom, making the current
-conflict a tragic perversion of their original bond. These virtues were later combined into the
-Lifelight Elixir as the ultimate counter to Malakar's dark ritual.
+The relics were made by three friends. The Lifelight Elixir is the three virtues made one:
+courage, wisdom and selflessness, the same virtues Malakar's wisdom lacked when time was short.
 
 ## Rooms
 
@@ -214,841 +249,574 @@ Lifelight Elixir as the ultimate counter to Malakar's dark ritual.
 
 #### Description
 
-Massive iron gates wreathed in shadow rise before you, their surfaces carved with writhing
-forms that seem to move in your peripheral vision. Dark energy pulses from ward stones embedded
-in the gate frame, while spectral guardians materialize from the shadows.
+Massive iron gates wreathed in shadow rise before you, carved with writhing forms. Dark energy
+pulses from ward stones in the gate frame, and spectral guardians materialise from the shadows.
 
 #### Items
 
--   Ward Stone Fragment (magical component for bypassing defenses - used to dispel shadow guardians)
--   Guardian's Chain (protective charm against shadow magic - required for Knight of Despair encounter)
-
-#### Spells
-
--   None initially available (learned through quest completion)
-
-#### Usable Items
-
--   Ward Stone Fragment (disables magical barriers and dispels shadow guardians)
--   Guardian's Chain (take for later protection against Knight of Despair)
--   Light-based spells and items (dispels shadow guardians)
+-   Ward Stone Fragment (bypasses the defences)
+-   Guardian's Chain (protection against the Knight of Despair)
 
 #### Characters
 
--   Shadow Guardians (spectral protectors of the fortress)
--   Bound Spirits (souls trapped in the gate mechanisms)
+-   Shadow Guardians, Bound Spirits
 
 #### Exits
 
--   North: Outer Courtyard (after completing "Shattered Ward Guardians")
+-   North: Outer Courtyard (after "Shattered Ward Guardians")
+-   East: Hall of Echoes
 
 ### 2. Outer Courtyard
 
 #### Description
 
-A vast stone courtyard stretches before you, littered with the remnants of ancient battles.
-Twisted metal sculptures rise like grotesque monuments, while fortress servants move about in
-an eerie trance, their eyes glowing with unnatural light.
+A vast courtyard littered with the remnants of ancient battles, where fortress servants move in
+an eerie trance, their eyes glowing.
 
 #### Items
 
--   Servant's Pendant (key to breaking their enchantment)
--   Battle Standard (relic of past conflicts)
--   Healing Stones (restored vitality)
-
-#### Spells
-
--   None initially available
-
-#### Usable Items
-
--   Servant's Pendant (communicates with freed servants)
--   Compassion and selfless magic (frees enslaved servants)
+-   Servant's Pendant (from the freed servants)
+-   Healing Stones (used for the optional choice below)
 
 #### Characters
 
--   Enslaved Servants (victims of Malakar's magic)
--   Stone Sentinels (animated fortress defenses)
--   Captain of the Guard (corrupted but redeemable)
+-   Enslaved Servants, Stone Sentinels, Captain of the Guard (corrupted but redeemable; optional
+    choice)
 
 #### Exits
 
 -   South: Fortress Gates
 -   North: Mirror Labyrinth (after freeing the servants)
--   East: Servant Quarters (accessible after servant rescue)
 
 ### 3. Mirror Labyrinth
 
 #### Description
 
-Countless mirrors line the corridors of this bewildering maze, each reflecting not your true
-form but distorted versions of yourself and false paths. The maze cannot be fully navigated
-without echo knowledge from the Hall of Echoes. Servant guidance provides partial help, but
-complete navigation requires acoustic wisdom from the echoing halls.
-
-#### Items
-
--   Mirror Shard (fragment of broken truth - combines with Memory Fragment later)
--   Ancient Iron Key (hidden in true path - unlocks parent's vault in sanctum)
--   Compass of Truth (points toward reality)
+Countless mirrors reflect distorted versions of you and false paths. The maze cannot be solved
+without the echo knowledge of the Hall of Echoes.
 
 #### Spells
 
--   Truth Sight (learned by solving the maze correctly with echo knowledge)
-
-#### Usable Items
-
--   Echo Stone (required navigation knowledge from Hall of Echoes)
--   Servant's Pendant (provides partial guidance but insufficient alone)
--   Mirror Shard (collect for later combination with Memory Fragment)
--   Ancient Iron Key (collect for accessing parent's hidden vault)
--   Servant's Pendant (from freed servants, provides guidance through maze)
--   Truth-seeing abilities (reveals true paths through illusions)
+-   Truth Sight (learned by solving the maze)
 
 #### Characters
 
--   Mirror Wraiths (guardians of false paths)
--   The True Self (Elior's reflection that offers guidance)
+-   Mirror Wraiths, The True Self (optional choice)
 
 #### Exits
 
 -   South: Outer Courtyard
--   Multiple false exits (lead back to entrance)
 
 ### 4. Hall of Echoes
 
 #### Description
 
-This grand hall stretches into shadows, its vaulted ceiling lost in darkness. Ancient banners
-hang in tatters, and the sound of your footsteps echoes strangely, as if accompanied by the
-ghosts of past battles. The echoes here contain ancient knowledge about navigating the Mirror
-Labyrinth. At the hall's center stands the Knight of Despair, but he cannot be defeated without
-proper preparation.
+A grand hall of tattered banners where footsteps echo as if accompanied by the ghosts of past
+battles. At its centre stands the Knight of Despair in a shredded grey cloak.
 
 #### Items
 
--   Echo Stone (captures sounds and memories - initially basic, enhanced after knight's redemption)
--   Fallen Banner (symbol of lost honor)
--   Knight's Crest (proof of redemption)
+-   Echo Stone (basic at first; enhanced after the knight's redemption)
 
 #### Spells
 
--   Redemption's Light (learned through showing mercy)
-
-#### Usable Items
-
--   Echo Stone (initially captures navigation knowledge for Mirror Labyrinth, later enhanced for memories)
--   Guardian's Chain (required protection for knight encounter)
--   Guardian's Essence (proves worthiness to challenge knight after maze completion)
+-   Redemption's Light
 
 #### Characters
 
--   Knight of Despair (Malakar's first lieutenant)
--   Ghostly Warriors (echoes of the knight's past battles)
+-   Knight of Despair (Malakar's cloaked agent from Acts I and II), Ghostly Warriors (optional
+    choice)
 
 #### Exits
 
--   South: Fortress Gates
+-   West: Fortress Gates
 -   East: Tower of Shadows (after redeeming the knight)
 
 ### 5. Tower of Shadows
 
 #### Description
 
-A spiraling tower that seems to twist reality itself as you climb. Shadows dance independently
-of their sources, and whispered lies assault your mind from every direction. The very air seems
-thick with deception and false promises.
-
-#### Items
-
--   Shadow Essence (concentrated darkness)
--   Whispering Scroll (contains lies made manifest)
--   Light Crystal (beacon of truth)
-
-#### Spells
-
--   Dispel Lies (learned through resistance to deception)
+A spiral tower where shadows move independently and whispered lies come from every direction.
 
 #### Usable Items
 
--   Loyalty Token (proves your allies' trust)
--   Light Crystal (illuminates truth)
+-   Loyalty Token (proves your allies' trust and silences the whispers)
 
 #### Characters
 
--   Shadow Whispers (voices of doubt and fear)
--   Loyal Companions (manifestations of true friendship)
+-   Shadow Whispers
 
 #### Exits
 
 -   West: Hall of Echoes
--   Up: Chamber of Whispers (top of the tower)
+-   Up: Chamber of Whispers
 
 ### 6. Chamber of Whispers
 
 #### Description
 
-At the tower's peak, you find a circular chamber where the Sorceress of Lies holds court.
-Reality bends around her as she weaves false visions and poisonous words, but her power cannot
-hide the pain and loneliness that drove her to serve Malakar.
+At the tower's peak the Sorceress of Lies holds court, reality bending around her. The spiral
+of three thorns burned into her staff is the mark that was on Elena's curse.
 
 #### Items
 
--   Truth Serum (reveals hidden motivations)
--   Sorceress's Tears (crystallized sorrow)
--   Memory Orb (contains genuine experiences)
+-   Sorceress's Truth (given when she is understood)
 
 #### Spells
 
--   Heart's Truth (learned through understanding others' pain)
-
-#### Usable Items
-
--   Knight's Redemption (example of mercy's power)
--   Memory Orb (shows the sorceress's past)
+-   Heart's Truth
 
 #### Characters
 
 -   Sorceress of Lies (Malakar's second lieutenant)
--   Truth Spirits (embodiments of honest emotion)
 
 #### Exits
 
 -   Down: Tower of Shadows
--   North: Memory Vault (secret passage revealed after quest)
+-   North: Memory Vault (opens after her quest)
 
 ### 7. Memory Vault
 
 #### Description
 
-A mysterious chamber filled with floating memory orbs that show scenes from the past. However,
-the orbs are fragmented and unstable without proper preparation. The shadow of Malakar's former
-self dwells here but cannot be reached without the three stabilizing components: Enhanced Echo
-Stone, Time Crystal, and Sorceress's Truth. Initial visits reveal the chamber's potential but
-require return with proper tools.
-
-#### Items
-
--   Memory Fragment (piece of Malakar's lost goodness - combines with Mirror Shard)
--   Combined Mirror-Memory Shard (created by combining Mirror Shard with Memory Fragment)
-
-#### Spells
-
--   Memory Restoration (learned through helping the shadow)
+Floating memory orbs show scenes of the past but are fragmented. A faint figure, the Shadow of the
+Past, stands among them. When the orbs are restored it speaks with the voice Elior has heard in
+his dreams.
 
 #### Usable Items
 
--   Echo Stone (from Knight, captures and restores memory orbs)
--   Time Crystal (from Sorceress, stabilizes temporal distortions)
--   Sorceress's Truth (proves redemption is possible to shadow)
--   Mirror Shard (combines with Memory Fragment to create enhanced artifact)
-
--   Sorceress's Truth (evidence of redemption's possibility)
--   Time Crystal (stabilizes temporal distortions)
+-   Enhanced Echo Stone (restores the orbs)
+-   Sorceress's Truth (shows the Shadow that redemption is possible)
 
 #### Characters
 
--   Shadow of the Past (Malakar's uncorrupted essence)
--   Memory Echoes (visions of Elior's parents)
+-   Shadow of the Past (the dream voice; Malakar's uncorrupted essence)
 
 #### Exits
 
 -   South: Chamber of Whispers
--   East: Throne Chamber Approach (hidden passage)
+-   East: The Parents' Vault (a sealed door that answers to the Ancient Amulet)
 
-### 8. Throne Chamber Approach
+### 8. The Parents' Vault
 
 #### Description
 
-A grand corridor leading to Malakar's throne room, lined with statues of fallen heroes who
-challenged him before. King Alden hangs suspended in a crystal prison, his life force slowly
-draining into a dark ritual circle that pulses with malevolent energy. A hidden vault behind
-the hero statues contains evidence of Elior's parents' sacrifice.
-
-#### Items
-
--   Royal Sigil (King Alden's seal of authority - obtained after saving king)
--   Hero's Memorial (tribute to past challengers - grants inspiration against despair)
--   Parent's Journal (found in hidden vault using Ancient Iron Key and Mirror-Memory Shard)
-
-#### Spells
-
--   Royal Blessing (granted by saving the king)
+A quiet chamber behind a door carved with the same pattern as the amulet. Inside, the memories
+of Aren and Lysa hang like lanterns. Nothing in it is threatening; it is the saddest and warmest
+room in the fortress.
 
 #### Usable Items
 
--   Lifelight Elixir (saves the king and breaks the draining ritual - CONSUMED)
--   Knight's Redemption, Sorceress's Truth, Memory Fragment (prove worthiness to approach king)
--   Ancient Iron Key (opens hidden parent's vault)
--   Combined Mirror-Memory Shard (reveals parent's final memories in vault)
+-   Ancient Amulet (opens the door and anchors the memories)
 
 #### Characters
 
--   King Alden (imprisoned and weakened ruler)
--   Spirit Guards (protective magic around the king)
+-   Memory Echoes of Aren and Lysa (memories only)
 
 #### Exits
 
 -   West: Memory Vault
--   North: Throne Chamber (after saving the king)
+-   North: Throne Chamber (opens when the memories have been seen)
 
 ### 9. Throne Chamber
 
 #### Description
 
-The heart of Malakar's power, a vast chamber dominated by a twisted throne of black stone.
-Ancient murals depict the friendship between Malakar and Elior's parents, now scarred by
-centuries of bitterness. The throne itself is locked with ancient magic that requires the
-rightful ruler's key. Here, the final confrontation awaits.
-
-#### Items
-
--   Crown of Eldoria (rightful symbol of kingship - accessed after using Throne Key)
-
-#### Spells
-
--   Parent's Blessing (ultimate protection spell - from parent's legacy quest)
--   Forgiveness (learned through understanding Malakar's pain)
+A vast chamber with a twisted throne of black stone. King Alden hangs in a crystal prison above
+a ritual circle, his life draining into a bleeding rift in the air: Malakar's wound in time.
+Malakar stands beside it, grey and failing; the wound is killing him too.
 
 #### Usable Items
 
--   Combined Mirror-Memory Shard (shows Malakar his true self and past friendship)
--   Throne Key (unlocks the rightful throne and Crown of Eldoria)
--   Royal Sigil (validates Elior's authority to rule or abdicate)
--   Hero's Memorial (provides inspiration against final despair attacks)
+-   Lifelight Elixir (single use; consumed by the final choice)
+-   Ancient Amulet (the anchor; raised in every ending, and used on the wound in Justice and Sacrifice)
+
+#### Spells
+
+-   Forgiveness (learned in the Redemption ending)
 
 #### Characters
 
--   Malakar (corrupted sorcerer and final boss)
--   Parents' Spirits (manifestations of love and sacrifice)
+-   Malakar, King Alden (imprisoned), the Shadow of the Past (speaks once at the climax), the
+    parents' voices (only when the wound is closed)
 
 #### Exits
 
--   South: Throne Chamber Approach
--   East: Royal Gardens (peaceful ending location)
+-   South: The Parents' Vault
+-   After the ending: the way home to Willowbrook Field
 
-### 10. Royal Gardens
+### 10. Willowbrook Field (Epilogue)
 
 #### Description
 
-A tranquil garden where the story concludes, restored to beauty after Malakar's defeat or
-redemption. Sunlight streams through crystal windows, and the air carries the scent of blooming
-flowers and hope renewed.
-
-#### Items
-
--   Restoration Seed (symbol of new beginnings)
--   Peace Lily (flower of harmony)
--   Hero's Medal (recognition of victory)
+The field behind Elior's home in Willowbrook, withered since Act I. Grandmother is at the gate.
+The air is quiet.
 
 #### Spells
 
--   None (no magic needed in peace)
-
-#### Usable Items
-
--   Crown of Eldoria (ceremony item for ending)
+-   Grow (granted here if Elior does not have it)
 
 #### Characters
 
--   Restored Characters (all redeemed allies and former enemies)
--   King Alden (grateful ruler)
+-   Grandmother, Mira, Sir Cedric, Nyx's light in the hedge (companions who remain close)
 
 #### Exits
 
--   West: Throne Chamber (ceremonial return)
+-   None. The game ends here.
 
 ## Room Map
 
 ```
-                  [RG]
-                   |
-        [MV] ---- [TCA] ---- [TC]
-          |
+                      [TC] -- (home) -- [WF]
+                       |
+        [MV] -------- [PV]
+         |
         [CW]
-          |
+         |
         [TS]
-          |
-        [HE]      [ML]
-          |         |
-        [FG] ---- [OC]
+         |
+        [HE] -- [FG]
+                 |
+                [OC]
+                 |
+                [ML]
 ```
 
 Legend:
 
 -   FG = Fortress Gates
--   OC = Outer Courtyard (with side access to Servant Quarters)
+-   OC = Outer Courtyard
 -   ML = Mirror Labyrinth
 -   HE = Hall of Echoes
--   TS = Tower of Shadows (vertical tower accessed from HE, goes up to CW)
+-   TS = Tower of Shadows (vertical; goes up to CW)
 -   CW = Chamber of Whispers
 -   MV = Memory Vault
--   TCA = Throne Chamber Approach
+-   PV = The Parents' Vault
 -   TC = Throne Chamber
--   RG = Royal Gardens
+-   WF = Willowbrook Field (epilogue)
 
 Notes:
 
--   The Tower of Shadows (TS) is a vertical structure accessed from Hall of Echoes
--   Connections marked with "|" can be north/south or up/down as appropriate
+-   Layout is schematic; the Exits sections are authoritative (Hall of Echoes east of the Fortress
+    Gates, Mirror Labyrinth north of the Courtyard, Tower east of the Hall, Chamber of Whispers up
+    the Tower, Parents' Vault east of the Memory Vault, Throne Chamber north of the vault)
 -   Some connections only open after completing specific quests
 
 ## Learnable Spells in Act IV
 
-### Core Progression Spells
+-   **Truth Sight:** Mirror Labyrinth; reveals illusions and who is hiding behind them
+-   **Redemption's Light:** Knight of Despair; purifies corrupted souls
+-   **Heart's Truth:** Sorceress of Lies; reveals true motivations
+-   **Forgiveness:** Throne Chamber, Redemption ending only
+-   **Grow:** Willowbrook Field; the closing spell
 
--   **Truth Sight:** Learned in Mirror Labyrinth - reveals illusions and hidden paths
--   **Redemption's Light:** Learned from Knight of Despair - purifies corrupted souls
--   **Dispel Lies:** Learned in Tower of Shadows - counters deception magic
--   **Heart's Truth:** Learned from Sorceress of Lies - reveals true motivations
--   **Memory Restoration:** Learned in Memory Vault - helps restore lost memories
--   **Royal Blessing:** Granted by King Alden - protective magic for final battle
+## What Was Cut
 
-### Ultimate Spells
+The Act IV design was written before the story canon, and the following no longer serve the
+story. None of them are implemented yet.
 
--   **Parent's Blessing:** Ultimate protection - learned through family legacy quest
--   **Forgiveness:** Final spell - only learned by choosing mercy over vengeance
--   **Triumphant Light:** Combination spell channeling all three virtues
+-   **Items:** Throne Key and Ancient Iron Key (the Ancient Amulet replaces both as the key to the Parents' Vault), Time Crystal,
+    Mirror Shard, Memory Fragment and the Combined Mirror-Memory Shard, Royal Sigil, Hero's
+    Memorial, Crown of Eldoria, Parent's Journal, Restoration Seed, Peace Lily, Hero's Medal, and
+    the decorative extras of the old room lists (Battle Standard, Fallen Banner, Knight's Crest,
+    Shadow Essence, Whispering Scroll, Light Crystal, Truth Serum, Sorceress's Tears, Memory Orb, Compass of Truth).
+-   **Spells:** Dispel Lies, Memory Restoration, Royal Blessing, Parent's Blessing, Triumphant
+    Light, and the combination spells Sacrificial Shield and Wisdom's Flame.
+-   **Quests:** King Alden's Rescue (merged into The Final Stand).
+-   **Rooms:** Throne Chamber Approach (the king is now in the Throne Chamber) and Royal Gardens
+    (all endings end at Willowbrook).
+-   **Endings:** Crown and Home (the three endings below replace the five).
+
+## The Final Choice and the Three Endings
+
+Elior enters the Throne Chamber knowing the truth. Malakar tempts him: join me and I will tell
+you everything about your family. Elior refuses and speaks the refrain to him:
+**"Power follows purpose; purpose follows truth."** At this moment Elior raises the amulet: it opens, the ward unseals, and
+the dream voice speaks once more, through the amulet and the failing Malakar, asking his friend's son to finish
+what he could not.
+
+Then the one choice. The Lifelight Elixir can be used once:
+
+-   **Offer it to heal Malakar's wound.** Redemption.
+-   **Break Alden's crystal prison with it.** The wound still stands and Elior must close it:
+    either **Justice** (seal it and Malakar with the amulet and the royal bindings) or
+    **Sacrifice** (give up his magic to close it).
+
+### Virtue moments and what opens each ending
+
+Virtue moments (see Optional choices) are recorded as three counters shared across all four acts:
+**mercy**, **truth** and **selfless**. They never block the golden path.
+
+| Ending         | What it is                                                                           | What opens it                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| **Redemption** | Elior offers the elixir and casts forgiveness; the wound is healed. Alden is freed as the drain stops, and Malakar lives, powerless and himself again. | Always open: this is the golden path. Each mercy moment in the game adds a line from Malakar and the knight (no threshold). |
+| **Justice**    | Alden is freed; Elior names Malakar's crimes and seals him with the amulet and royal bindings. | **2 truth moments** in the game. Act IV has one, so at least one from Acts I-III.                          |
+| **Sacrifice**  | Alden is freed; Elior gives his magic to close the wound; Malakar lives, powerless, to answer to the king.                            | **2 selfless moments** in the game. Act IV has one, so at least one from Acts I-III.                       |
+
+Alden is freed in every ending: by the elixir in Justice and Sacrifice, and by the wound closing
+in Redemption. What the choice decides is Malakar's fate and the cost. If neither Justice nor
+Sacrifice is open, `use lifelight elixir on prison` is refused ("the crystal does not answer
+to one who has not yet spoken the truth, or given without asking") and Redemption is the one path
+left, so no player is stranded. If the prison is broken and only one of the two is open, the
+closed command (`name malakar's crimes` or `give up magic`) is refused with a line that says why.
+
+In every ending the wound is closed, and the parents speak to Elior one last time, then rest in
+peace. They are not alive and nothing here hints that they are.
+
+-   **Redemption:** Malakar, healed, is the uncorrupted friend again; he thanks Elior and
+    lives on, powerless, beside the closed wound. Elior learns `Forgiveness` and casts it with the elixir.
+-   **Justice:** Malakar is sealed away, grieving. King Alden judges and restores order.
+-   **Sacrifice:** Elior loses every spell but `grow`, a farmer's spell, which he keeps because it
+    is the smallest. The kingdom is healed at his cost.
+
+### The Epilogue
+
+After any ending Elior walks home. In Willowbrook Field, the withered field from Act I, Elior
+casts `grow` and it turns green. Grandmother is at the gate. The game ends there.
+
+## Optional choices
+
+Optional virtue moments; none blocks the golden path, none adds a puzzle. Each records one count
+and changes a few lines of dialogue.
+
+| Where                                   | The choice                                                              | Records     |
+| --------------------------------------- | ----------------------------------------------------------------------- | ----------- |
+| Outer Courtyard, Captain of the Guard   | Give him Healing Stones though he can give nothing back                | **selfless** |
+| Mirror Labyrinth, The True Self         | Tell the reflection the truth about Elior's fear (`say truth to true self`) | **truth**   |
+| Hall of Echoes, Ghostly Warriors        | Cast `redemptions_light` on the ghostly warriors and let them rest      | **mercy**   |
+
+Acts I-III each add their own two or three moments of the same three kinds (defined in their
+designs). The endings read the counters across the whole game, as described above.
 
 ## Act Completion Requirements
 
 ### Main Quest Completion Architecture
 
-Following the design rule that all side quests must be completed before the main quest can be
-finished, Act IV completion requires:
-
 #### Phase 1: Fortress Infiltration (All Required)
 
--   **Shattered Ward Guardians:** Demonstrates courage against overwhelming darkness
--   **The Trapped Servants:** Shows selflessness using courage as foundation (requires Guardian's Essence)
--   **The Maze of Mirrors:** Proves wisdom can overcome deception with allies' help (requires Servant's Pendant)
+-   **Shattered Ward Guardians**
+-   **The Trapped Servants**
+-   **The Maze of Mirrors**
 
-#### Phase 2: Lieutenant Confrontations (All Required)
+#### Phase 2: Lieutenants and the Truth (All Required)
 
--   **The Knight of Despair:** Tests mercy versus vengeance (requires Guardian's Chain protection)
--   **The Sorceress of Lies:** Requires understanding others' pain (needs Knight's Redemption and Loyalty Token)
--   **The Shadow of the Past:** Demands acceptance of difficult truths (uses Echo Stone, Time Crystal, Sorceress's Truth)
+-   **The Knight of Despair**
+-   **The Sorceress of Lies**
+-   **The Shadow of the Past**
 
-#### Phase 3: Inner Sanctum Resolution (All Required)
+#### Phase 3: The Vault (Required)
 
--   **King Alden's Rescue:** Saves the kingdom's rightful ruler (requires all lieutenant redemption items as proof)
--   **The Parent's Legacy:** Provides emotional closure and ultimate power (requires Ancient Iron Key and Combined Mirror-Memory Shard)
+-   **The Parent's Legacy**
 
 #### Final Confrontation
 
-Only after completing ALL side quests can "The Final Stand" be completed, ensuring players have
-demonstrated mastery of all three virtues and are prepared for the ultimate choice between
-forgiveness and vengeance.
+Only after all seven side quests does the Throne Chamber open. "The Final Stand" completes when
+Elior chooses an ending.
 
 ### Key Story Revelations at Completion
 
--   Malakar's true nature as a fallen friend rather than pure evil
--   The sacrifice Elior's parents made to hide him from corruption
--   The source of the kingdom's curse and how to truly heal it
--   Elior's choice between the crown and returning to simple life
-
-### Multiple Ending Paths
-
-Based on player choices throughout the act:
-
--   **Redemption Ending:** Malakar is purified and helps rebuild the kingdom
--   **Justice Ending:** Malakar is defeated but his corruption is contained
--   **Sacrifice Ending:** Elior gives their power to permanently seal the corruption
--   **Crown Ending:** Elior accepts the throne and rules wisely
--   **Home Ending:** Elior returns to Willowbrook, humble but transformed
+-   Malakar is a fallen friend, not a pure villain: grief first, then the power of the wound
+-   The ward lives in Elior; the amulet and King Alden's royal bindings anchor it. Malakar drains
+    Alden and hunts the amulet to break the ward, believing that frees his friends
+-   The parents are the ward, and rest after one last farewell
+-   The dream voice was Malakar's remnant
+-   The knight, the sorceress and the cloaked stranger were all Malakar's servants
 
 ## Technical Implementation Considerations
 
 ### Quest Management System Integration
 
-#### Quest Dependency Tracking
+-   **Prerequisite validation:** quests check their prerequisites before triggering.
+-   **Phase management:** Infiltration, Lieutenants, Vault and Final Stand.
+-   **Completion validation:** the Throne Chamber opens only when all seven side quests are done.
 
--   **Prerequisite Validation:** System must check that all prerequisite quests are completed
-    before allowing new quest triggers
--   **Phase Management:** Clear separation between Infiltration, Lieutenant, and Inner Sanctum phases
--   **Completion Validation:** Main quest "The Final Stand" cannot be completed until ALL side
-    quests are finished
+### Choice Consequence System
 
-#### Choice Consequence System
+-   **Virtue counters:** three counters (mercy, truth, selfless) kept in story flags, incremented
+    by virtue moments in all acts.
+-   **Ending determination:** the ending is chosen by the final choice and gated by the counters
+    above.
+-   **Character state:** dialogue reflects the counters (a few lines only).
 
--   **Moral Choice Tracking:** System must record mercy/vengeance choices throughout the act
--   **Character State Updates:** Character dialogue and interactions must reflect past choices
--   **Ending Determination:** Final ending must be calculated based on accumulated choices
+### Lifelight Elixir Usage
 
-### Boss Fight Mechanics
-
--   **Lieutenant Encounters:** Each requires demonstrations of virtue and teaches new spells
--   **Malakar Final Boss:** Multiple phases based on player choices and quest completion
--   **Non-Violence Options:** System must support redemption paths for all enemies
-
-### Lifelight Elixir Usage System
-
--   **Single Use Item:** The Lifelight Elixir is consumed when used to save King Alden
--   **Progressive Preparation:** Dialogue and hints throughout Act IV build to this crucial moment
--   **Virtue Validation:** System should track demonstrations of courage, wisdom, and selflessness
-    throughout the act
+-   **Single use:** consumed by the final choice on Malakar's wound or on Alden's prison.
 
 ### Save State Management
 
-#### Quest Progress
-
--   All quest states, including moral choices and redemption progress
--   Character relationship levels with all NPCs and former enemies
--   Spell knowledge and virtue demonstration abilities unlocked
--   Ending path determination based on accumulated choices
-
-#### Compatibility Considerations
-
--   **Game.py Integration:** All new choice systems must work with existing game engine
--   **GameState.py Compatibility:** Moral choice tracking must integrate with existing state
-    management
--   **Quest.py Extension:** Choice-based quest types must extend existing Quest base class
--   **UI System Integration:** Choice prompts and consequence displays must work with existing
-    interface
+-   All quest states, the virtue counters, the ending chosen and spell knowledge are saved. All
+    content classes are registered in `ACT4_CLASSES`.
 
 ### Testing Requirements
 
-#### Unit Testing Scope
-
--   **Choice Logic:** Individual choice validation and consequence tracking
--   **Quest Progression:** Each quest trigger, update, and completion with choice variations
--   **Lifelight Elixir Usage:** Proper validation and consumption when saving King Alden
--   **Ending Calculation:** Proper ending determination based on choice combinations
-
-#### Integration Testing Focus
-
--   **Choice Consequence Chains:** Ensure early choices properly affect later quest availability
--   **Redemption Arcs:** Verify character redemption mechanics work across all encounters
--   **Virtue Demonstration:** Test that courage, wisdom, and selflessness unlock correctly
--   **Ending Consistency:** Ensure ending matches player's choice pattern
-
-#### End-to-End Validation
-
--   **Complete Act Playthrough:** Verify act can be completed successfully following golden path
--   **Choice Path Testing:** Test different moral choice combinations lead to appropriate endings
--   **Save/Load Functionality:** Test that all choice progress and consequences save correctly
--   **Character Consistency:** Verify redeemed characters maintain proper state
+-   **Unit tests** for each room, character, item, quest and spell.
+-   **Integration test** `Act4.integration.test.ts` for the golden path and for each ending
+    (Redemption, Justice, Sacrifice), with a save/load round-trip through `Game.toSaveData`.
+-   **Choice tests** that Justice and Sacrifice are closed without their counters and that
+    Redemption is never closed.
 
 ## Golden Path (Optimal Solution to Complete Act IV)
 
-This sequence completes all Act IV requirements following the most merciful path while
-demonstrating all three virtues. The path requires multiple visits to different rooms as
-information and items from one area unlock possibilities in others, creating a web of
-interconnected exploration rather than linear progression.
+The golden path is the Redemption ending and needs no virtue moment. Optional moments are listed
+where they would occur.
 
-### Design Philosophy: Interconnected Exploration
+### Phase 1: Fortress Breach
 
-The golden path intentionally creates dependencies that require backtracking and multiple visits:
+1. **Fortress Gates:**
 
--   **Mirror Labyrinth** needs echo knowledge from **Hall of Echoes** for completion
--   **Hall of Echoes** knight cannot be defeated without **Guardian's Chain** and maze completion proof
--   **Memory Vault** requires **three separate components** gathered from different lieutenants
--   **Throne Chamber Approach** has **two distinct phases** requiring different preparations
--   **Cross-room revelations** where information from one area unlocks understanding in another
+    - `examine ward stones` → the guardians' anchor points
+    - `take ward stone fragment`
+    - `use ward stone fragment with barriers`
+    - `cast light on ward stones` → dispels the guardians
+        - Quest completed: "Shattered Ward Guardians"
+        - Item obtained: `Guardian's Essence`
+    - `take guardian's chain`
 
-This design ensures players explore the full fortress, understand the interconnected nature of
-Malakar's corruption, and appreciate how patience and preparation lead to ultimate success.
+2. **Outer Courtyard:**
 
-### Phase 1: Initial Fortress Breach
+    - `examine servants`
+    - `use guardian's essence on servants`
+    - `cast bless on servants`
+        - Quest completed: "The Trapped Servants"
+        - Items obtained: `Loyalty Token`, `Servant's Pendant`
+    - Optional (**selfless**): `give healing stones to captain of the guard`
+    - `talk to freed servants` → "The mirrors show truth, but only echoes from the halls can reveal
+      the full path."
 
-1. **Fortress Gates (First Visit):**
+3. **Mirror Labyrinth (first visit):** `examine mirrors`, `use servant's pendant` (partial
+   guidance only). Need the Hall of Echoes first.
 
-    - Commands and yields:
-        - `examine ward stones` → Reveals the shadow guardians' anchor points and magical barriers
-        - `take ward stone fragment` → Collect magical component
-        - `use ward stone fragment with barriers` → Disables magical defenses
-        - `cast light on ward stones` → Light magic dispels the shadow energy, banishing guardians
-            - Quest completed: "Shattered Ward Guardians"
-            - Item obtained: `Guardian's Essence`
-        - `take guardian's chain` → Protective charm against shadow magic
-        - **Note:** Cannot proceed further until servant knowledge is gained
+4. **Hall of Echoes (first visit):**
 
-2. **Outer Courtyard (First Visit):**
+    - `examine echoes` → the true pattern for the mirrors
+    - `take echo stone`
+    - `examine knight of despair` → "Return when you have the truth."
 
-    - Commands and yields:
-        - `examine servants` → Reveals their enchanted state and suffering
-        - `use guardian's essence on servants` → Proves worthiness through courage demonstration
-        - `cast bless on servants` → Selfless magic and compassion breaks their enslavement
-            - Quest completed: "The Trapped Servants"
-            - Item obtained: `Loyalty Token`
-            - Item obtained: `Servant's Pendant`
-        - `take loyalty token` → Add to inventory for later use
-        - `take servant's pendant` → Add to inventory for Mirror Labyrinth navigation
-        - `talk to freed servants` → They reveal the Mirror Labyrinth entrance but warn of incomplete knowledge
-        - **Servants tell you:** "The mirrors show truth, but only echoes from the halls can reveal the full path"
+5. **Mirror Labyrinth (second visit):**
 
-3. **Mirror Labyrinth (First Visit):**
+    - `use echo stone`, `solve maze puzzle`
+        - Spell learned: `truth_sight`
+        - Quest completed: "The Maze of Mirrors"
+    - Optional (**truth**): `say truth to true self`
 
-    - Commands and yields:
-        - `examine mirrors` → Reveals multiple false reflections and paths
-        - `use servant's pendant` → Freed servants provide partial guidance through mental link
-        - `examine reflections` → Attempt to navigate but missing crucial knowledge
-        - **Discovery:** Need echo knowledge from Hall of Echoes to complete the maze
-        - **Return to:** Must visit Hall of Echoes first (via Fortress Gates)
+### Phase 2: The Lieutenants and the Truth
 
-### Phase 2: Cross-Area Information Gathering
+6. **Hall of Echoes (second visit):**
 
-4. **Hall of Echoes (First Visit):**
+    - `cast truth sight on knight of despair` → the grey cloak and seal are the stranger's from
+      Willowbrook and from the Secret Documents; Cedric recognises him
+    - `use guardian's chain`, `talk to knight of despair`, `say redemption to knight`
+        - Quest completed: "The Knight of Despair"
+        - Items obtained: `Knight's Redemption`, `Enhanced Echo Stone`
+        - Spell learned: `redemptions_light`
+        - The knight confesses: Willowbrook, the amulet, the framing of Cedric
+    - Optional (**mercy**): `cast redemptions light on ghostly warriors`
 
-    - Commands and yields:
-        - `examine hall` → Discover ancient echoes that contain maze navigation secrets
-        - `examine echoes` → Learn the true pattern for mirror navigation
-        - `take echo stone` → Capture the navigation knowledge (not yet enhanced)
-        - `examine knight of despair` → Knight is too powerful without proper preparation
-        - **Knight says:** "Your chain provides protection, but your essence is spent. Return when you have wisdom's truth."
+7. **Tower of Shadows:** `go up`, `use loyalty token` (silences the whispers).
 
-5. **Mirror Labyrinth (Second Visit - Completion):**
+8. **Chamber of Whispers:**
 
-    - Commands and yields:
-        - `use echo stone` → Apply navigation knowledge gained from Hall of Echoes
-        - `cast truth sight` → Reveals which reflections show truth and which show lies
-            - Spell learned: `Truth Sight`
-        - `solve maze puzzle` → Navigate through correct path using combined knowledge
-            - Quest completed: "The Maze of Mirrors"
-            - Item obtained: `Mirror Shard` (will combine with Memory Fragment later)
-            - Item obtained: `Ancient Iron Key` (unlocks parent's vault in sanctum)
-        - `take mirror shard` → Add to inventory for combining with memory fragment
-        - `take ancient iron key` → Add to inventory for accessing parent's vault
-        - **Discovery:** Mirror reveals vision of Tower of Shadows containing Time Crystal needed for Memory Vault
+    - `examine staff` → the spiral of three thorns, the mark on Elena's curse
+    - `talk to sorceress of lies`, `use knight's redemption`, `use loyalty token`
+    - `cast hearts truth on sorceress`, `say understanding to sorceress`
+        - Quest completed: "The Sorceress of Lies"
+        - Item obtained: `Sorceress's Truth`
+        - Spell learned: `hearts_truth`
 
-### Phase 3: Lieutenant Confrontations and Cross-Dependencies
+9. **Memory Vault:**
 
-6. **Hall of Echoes (Second Visit - Knight Battle):**
+    - `examine memory orbs`
+    - `use enhanced echo stone with memory orbs`
+    - `use sorceress's truth`
+    - `talk to shadow of the past` → the dream voice. "Elior. You came."
+    - `say understanding to shadow`
+        - Quest completed: "The Shadow of the Past"
+    - The Shadow: "Take the amulet east. It will open for you."
 
-    - Commands and yields:
-        - `use guardian's chain` → Provides protection against the knight's despair attacks
-        - `talk to knight of despair` → Knight challenges Elior to combat, now acknowledges truth sight
-        - `say redemption to knight` → Choose mercy over violence
-            - Quest completed: "The Knight of Despair"
-            - Item obtained: `Knight's Redemption`
-            - Item obtained: `Enhanced Echo Stone` (now captures memories)
-            - Spell learned: `Redemption's Light`
-        - `take knight's redemption` → Add to inventory for proving mercy's power
-        - `take enhanced echo stone` → Replaces the basic echo stone in inventory
-        - **Knight reveals:** "The sorceress in the tower above holds temporal crystals, but beware her lies."
+### Phase 3: The Parents' Vault
 
-7. **Tower of Shadows (First Visit):**
+10. **The Parents' Vault:**
 
-    - Commands and yields:
-        - `go up` → Ascend while resisting shadow whispers and lies
-        - `use loyalty token` → Proves allies' trust, dispelling doubt magic
-            - Spell learned: `Dispel Lies`
-        - `examine shadows` → Discover they contain echoes from the Chamber of Whispers
-        - **Discovery:** Cannot proceed to Chamber of Whispers without Knight's Redemption as proof
+    - `examine door`
+    - `use ancient amulet on door` → the door opens
+    - `examine memories` → Aren, Lysa and Malakar making the relics; the catastrophe; the wound; the
+      parents pouring themselves into the ward; baby Elior in Malakar's arms
+        - Quest completed: "The Parent's Legacy"
+    - The Throne Chamber door opens.
 
-8. **Chamber of Whispers (First Visit):**
+### Phase 4: The Final Stand (Redemption)
 
-    - Commands and yields:
-        - `talk to sorceress of lies` → Sorceress attacks with illusions and deception
-        - `use knight's redemption` → Show example of mercy's power, sorceress becomes curious
-        - `use loyalty token` → Prove bonds of trust resist her lies
-        - `cast heart's truth on sorceress` → Reveals her pain and loneliness beneath deception
-        - `say understanding to sorceress` → Show compassion for her suffering
-            - Quest completed: "The Sorceress of Lies"
-            - Item obtained: `Sorceress's Truth`
-            - Item obtained: `Time Crystal` (stabilizes temporal magic)
-            - Spell learned: `Heart's Truth`
-        - `take sorceress's truth` → Add to inventory for Memory Vault empathy
-        - `take time crystal` → Add to inventory for temporal stabilization
-        - **Sorceress reveals:** "The Memory Vault holds the key to understanding Malakar, but you need all three components: echo, crystal, and truth."
+11. **Throne Chamber:**
 
-### Phase 4: Memory Vault Preparation and Return Visits
+    - `examine prison`, `examine wound`
+    - `talk to malakar` → he offers the answers about Elior's family for loyalty
+    - `refuse malakar's offer`
+    - `say refrain to malakar` → "Power follows purpose; purpose follows truth."
+    - `raise ancient amulet` → the amulet opens, the ward unseals, and the dream voice speaks
+      through it and Malakar: "Finish what I could not."
+    - `say forgiveness to malakar` → Spell learned: `forgiveness`
+    - `use lifelight elixir on malakar` then `cast forgiveness on wound` → the elixir is consumed
+        - Quest completed: "The Final Stand"
+        - Ending: Redemption
+    - The wound closes; the parents speak to Elior one last time and rest.
 
-9. **Memory Vault (First Visit - Preparation):**
+12. **Willowbrook Field (Epilogue):**
 
-    - Commands and yields:
-        - `examine memory orbs` → Shows scenes of Malakar's past, but they're fragmented and unstable
-        - `examine shadow` → Shadow of the Past appears but is too weak to communicate
-        - **Discovery:** Need all three items (Enhanced Echo Stone, Time Crystal, Sorceress's Truth) to stabilize the vault
+    - `cast grow` → the field turns green. Game ends.
 
-10. **Memory Vault (Second Visit - Completion):**
+### Ending variants (not on the golden path)
 
-    - Commands and yields:
-        - `use enhanced echo stone with memory orbs` → Captures and restores fragmented memories
-        - `use time crystal` → Stabilizes temporal distortions to prevent damage
-        - `use sorceress's truth` → Provides empathy needed to understand shadow's pain
-        - `talk to shadow of the past` → Shadow shares memories of corruption's beginning
-        - `say understanding to shadow` → Prove redemption is possible through gathered evidence
-        - `use mirror shard with memory fragment` → Creates enhanced Mirror-Memory Shard
-            - Quest completed: "The Shadow of the Past"
-            - Item obtained: `Combined Mirror-Memory Shard`
-            - Spell learned: `Memory Restoration`
-        - `take combined mirror-memory shard` → Add to inventory for final confrontations
-        - **Shadow reveals:** "The king awaits salvation, but you must prove your worth through all you have learned."
+-   **Justice:** at step 11, instead of the elixir on Malakar: `use lifelight elixir on prison`
+    (Alden is freed), `name malakar's crimes` (needs 2 truth moments), `use ancient amulet on wound`.
+    Malakar is sealed; the parents speak and rest. Epilogue as step 12.
+-   **Sacrifice:** at step 11: `use lifelight elixir on prison`, `give up magic` (needs 2 selfless
+    moments), `use ancient amulet on wound`. Elior keeps only `grow`. Epilogue as step 12.
 
-### Phase 5: Sanctum Access and Final Preparation
+## Quest Completion Verification
 
-11. **Throne Chamber Approach (First Visit - King's Rescue):**
+-   ✅ **Shattered Ward Guardians** (Step 1), **The Trapped Servants** (Step 2), **The Maze of
+    Mirrors** (Steps 3-5)
+-   ✅ **The Knight of Despair** (Steps 4, 6), **The Sorceress of Lies** (Step 8), **The Shadow of
+    the Past** (Step 9)
+-   ✅ **The Parent's Legacy** (Step 10)
+-   ✅ **The Final Stand** (Step 11), only after all seven side quests
 
-    -   Commands and yields:
-        -   `examine king alden` → Shows king trapped in crystal prison, life draining
-        -   `examine prison` → Reveals the dark ritual's structure and the king's weakening state
-        -   `use knight's redemption` → Prove worthiness through mercy demonstration
-        -   `use sorceress's truth` → Prove worthiness through understanding others
-        -   `use combined mirror-memory shard` → Prove worthiness through accepting truth
-        -   `use lifelight elixir on king alden` → The combined power breaks the ritual and saves the king
-            -   Quest completed: "King Alden's Rescue"
-            -   Item obtained: `Royal Sigil`
-            -   Item obtained: `Hero's Memorial`
-            -   Spell learned: `Royal Blessing`
-            -   Event: The Lifelight Elixir is consumed, its purpose fulfilled
-        -   `take royal sigil` → Add to inventory for final confrontation
-        -   `take hero's memorial` → Add to inventory as proof of heroism
-        -   **King Alden says:** "Your parents' sacrifice is recorded in the hidden vault. Use what you have learned to unlock their legacy."
-
-12. **Throne Chamber Approach (Second Visit - Parent's Legacy):**
-
-    -   Commands and yields:
-        -   `examine hero statues` → Reveals hidden vault behind the memorials
-        -   `use ancient iron key with vault` → Opens hidden compartment (key found in Mirror Labyrinth)
-        -   `use combined mirror-memory shard with vault` → Activates memory viewing chamber
-        -   `examine parent's final memories` → See their sacrifice to hide Elior and weaken Malakar
-            -   Quest completed: "The Parent's Legacy"
-            -   Item obtained: `Throne Key`
-            -   Spell learned: `Parent's Blessing`
-        -   `take throne key` → Add to inventory for accessing Malakar's sanctum
-
-### Phase 6: Final Confrontation
-
-13. **Throne Chamber (Final Battle):**
-
-    -   Commands and yields:
-        -   `examine throne` → Reveals it's locked with ancient magic requiring rightful key
-        -   `use throne key on throne` → Unlocks rightful throne and reveals Crown of Eldoria
-        -   `take crown of eldoria` → Acquire symbol of legitimate rule
-        -   `talk to malakar` → Malakar reveals his connection to Elior's parents and offers power
-        -   `refuse malakar's offer` → Choose to resist corruption despite temptation
-        -   `use combined mirror-memory shard on malakar` → Shows him his true self and past friendship
-        -   `use hero's memorial` → Gain inspiration against final despair attacks
-        -   `say forgiveness to malakar` → Choose mercy over vengeance in final choice
-            -   Quest completed: "The Final Stand"
-            -   Spell learned: `Forgiveness`
-            -   Achievement: Redemption Ending unlocked
-
-14. **Royal Gardens (Ending Choice):**
-
-    -   Commands and yields:
-        -   `talk to king alden` → King offers Elior permanent rulership in gratitude
-        -   `use royal sigil` → Validates authority to accept or decline crown
-        -   `decline crown politely` → Choose humility over power (Home Ending)
-        -   `use crown of eldoria ceremonially` → Crown used to officially decline rule
-        -   `plant restoration seed` → Symbol of new beginnings for the kingdom
-            -   Achievement: Home Ending - Return to Willowbrook as a humble hero## Quest Completion Verification
-
-**All Required Fortress Infiltration Quests Completed:**
-
--   ✅ **Shattered Ward Guardians** (Step 1) - Demonstrated courage, obtained Guardian's Essence and Guardian's Chain
--   ✅ **The Trapped Servants** (Step 2) - Showed selflessness using Guardian's Essence, obtained Loyalty Token and Servant's Pendant
--   ✅ **The Maze of Mirrors** (Steps 3 & 5) - Applied wisdom with multi-source knowledge: servant guidance + echo navigation
-
-**All Required Lieutenant Confrontation Quests Completed:**
-
--   ✅ **The Knight of Despair** (Steps 4 & 6) - First visit for echo knowledge, second visit for redemption with Guardian's Chain
--   ✅ **The Sorceress of Lies** (Step 8) - Used Knight's Redemption and Loyalty Token, obtained Sorceress's Truth and Time Crystal
--   ✅ **The Shadow of the Past** (Steps 9 & 10) - Two-visit process: assessment then completion with all three components
-
-**All Required Inner Sanctum Quests Completed:**
-
--   ✅ **King Alden's Rescue** (Step 11) - Proved worthiness with all lieutenant items, consumed Lifelight Elixir
--   ✅ **The Parent's Legacy** (Step 12) - Used Ancient Iron Key and Combined Mirror-Memory Shard to access vault
-
-**All Required Spells Learned:**
-
--   ✅ **`Truth Sight`** (Step 5) - From completing Mirror Labyrinth with echo knowledge
--   ✅ **`Redemption's Light`** (Step 6) - From showing mercy to Knight of Despair
--   ✅ **`Dispel Lies`** (Step 7) - From resisting Tower of Shadows
--   ✅ **`Heart's Truth`** (Step 6) - From understanding Sorceress of Lies
--   ✅ **`Memory Restoration`** (Step 7) - From helping Shadow of the Past
--   ✅ **`Royal Blessing`** (Step 8) - From saving King Alden
--   ✅ **`Parent's Blessing`** (Step 9) - From completing family legacy
--   ✅ **`Forgiveness`** (Step 10) - From final choice with Malakar
-
-**Main Quest Completion:**
-
--   ✅ **The Final Stand** (Step 10) - Only completed after ALL side quests finished
-
-This Golden Path ensures that the design rule "all side quests must be completed before the
-main quest can be finished" is properly followed while demonstrating the most virtuous path
-through the story.
+Spells: `truth_sight` (5), `redemptions_light` (6), `hearts_truth` (8), `forgiveness` (11), `grow` (12).
 
 **Items strictly necessary to complete Act IV:**
 
--   `Ward Stone Fragment` (disable fortress defenses)
--   `Guardian's Chain` (protection during Knight of Despair encounter)
--   `Guardian's Essence` (prove worthiness to servants and purify knight)
--   `Servant's Pendant` (guidance through Mirror Labyrinth)
--   `Loyalty Token` (resist sorceress's deceptions)
--   `Mirror Shard` (combines with Memory Fragment)
--   `Ancient Iron Key` (unlock parent's vault)
--   `Knight's Redemption` (prove mercy's power to sorceress)
--   `Echo Stone` (restore memory orbs in vault)
--   `Time Crystal` (stabilize temporal distortions)
--   `Sorceress's Truth` (convince shadow of redemption)
--   `Combined Mirror-Memory Shard` (show truth to Malakar, access vault)
--   `Lifelight Elixir` (save King Alden - CONSUMED)
--   `Royal Sigil` (validate authority)
--   `Hero's Memorial` (inspiration against despair)
--   `Throne Key` (unlock rightful throne)
--   `Crown of Eldoria` (symbol for ending choice)
--   All learned spells are necessary for moral and practical progression
+-   `Ward Stone Fragment`, `Guardian's Chain`, `Guardian's Essence`, `Servant's Pendant`,
+    `Loyalty Token`, `Echo Stone` (Enhanced after the knight), `Knight's Redemption`,
+    `Sorceress's Truth`, `Ancient Amulet` (carried from Act I), `Lifelight Elixir` (consumed)
 
 ## Room Visitation Pattern
 
-The golden path creates the following back-and-forth exploration pattern:
-
 1. **Fortress Gates** → **Outer Courtyard** → **Mirror Labyrinth** (incomplete)
-2. **Outer Courtyard** → **Fortress Gates** → **Hall of Echoes** (knowledge gathering)
-3. **Hall of Echoes** → **Fortress Gates** → **Outer Courtyard** → **Mirror Labyrinth** (completion)
-4. **Mirror Labyrinth** → **Outer Courtyard** → **Fortress Gates** → **Hall of Echoes** (knight battle)
-5. **Hall of Echoes** → **Tower of Shadows** → **Chamber of Whispers**
-6. **Memory Vault** (assessment) → **Memory Vault** (completion with all components)
-7. **Throne Chamber Approach** (king rescue) → **Throne Chamber Approach** (parent's legacy)
-8. **Throne Chamber** → **Royal Gardens**
-
-**Total Room Visits:** 16 visits across 10 rooms, with 4 rooms requiring multiple visits for different purposes.
+2. **Outer Courtyard** → **Fortress Gates** → **Hall of Echoes** (echo knowledge)
+3. **Hall of Echoes** → **Fortress Gates** → **Outer Courtyard** → **Mirror Labyrinth** (complete)
+4. **Mirror Labyrinth** → **Hall of Echoes** (knight)
+5. **Hall of Echoes** → **Tower of Shadows** → **Chamber of Whispers** → **Memory Vault**
+6. **Memory Vault** → **Parents' Vault** → **Throne Chamber** → **Willowbrook Field**
 
 ## Golden Path Item Usage Summary
 
-**The Lifelight Elixir (Essential):**
+**The Lifelight Elixir:** a single-use item, consumed by the final choice. It represents the three
+virtues made one: it breaks Alden's prison, or heals Malakar's wound.
 
--   **Primary Purpose:** Used to save King Alden by countering Malakar's life-draining ritual
--   **Consumption:** Single-use item that is consumed when saving the king
--   **Represents:** The combined power of the three virtues (Courage, Wisdom, Selflessness) forged into a single, potent remedy
+**The Ancient Amulet:** carried from Act I. It opens the Parents' Vault (Step 10) and is held up in
+the Throne Chamber (Step 11) as the anchor of the ward.
 
-**Multi-Visit Dependencies:**
+**Multi-visit dependencies:**
 
--   **Echo Stone:** Basic navigation tool (Step 4) → Enhanced memory capture (Step 6) → Vault stabilization (Step 10)
--   **Mirror Shard:** Found in maze (Step 5) → Combined in vault (Step 10) → Truth revelation (Steps 12-13)
--   **Guardian's Chain:** Protection preparation (Step 1) → Knight battle usage (Step 6)
+-   **Echo Stone:** basic navigation tool (Step 4) → enhanced memory tool (Step 6) → restores the
+    vault orbs (Step 9)
+-   **Guardian's Chain:** taken at the gates (Step 1), worn against the knight (Step 6)
+-   **Servant's Pendant:** servant guidance for the maze (Steps 3, 5)
 
-**Progressive Item Chain:**
+**Virtue demonstration items:**
 
--   **Ward Stone Fragment** → Disables fortress barriers (Step 1)
--   **Guardian's Chain** → Protects against Knight's despair attacks (Step 4)
--   **Guardian's Essence** → Proves courage to servants (Step 2) and purifies knight (Step 4)
--   **Servant's Pendant** → Provides ally guidance through maze (Step 3)
--   **Ancient Iron Key** → Found in maze (Step 3), unlocks parent's vault (Step 9)
--   **Mirror Shard** → Found in maze (Step 3), combines with Memory Fragment (Step 7)
--   **Loyalty Token** → Resists sorceress's lies (Step 6)
--   **Knight's Redemption** → Proves mercy's power to sorceress (Step 6)
--   **Echo Stone** → Captures knight's memories (Step 4), restores vault orbs (Step 7)
--   **Time Crystal** → From sorceress (Step 6), stabilizes vault (Step 7)
--   **Combined Mirror-Memory Shard** → Shows truth to Malakar (Step 10), accesses vault (Step 9)
+-   **Knight's Redemption:** proves mercy's power to the Sorceress (Step 8)
+-   **Sorceress's Truth:** proves to the Shadow that redemption is possible (Step 9)
 
-**Authority and Rulership Items:**
-
-**Authority and Rulership Items:**
-
--   **Royal Sigil** → Validates authority to rule or abdicate (Step 11)
--   **Throne Key** → Unlocks rightful throne and Crown of Eldoria (Step 10)
--   **Crown of Eldoria** → Symbol of legitimate rule, used ceremonially in ending choice (Step 11)
--   **Hero's Memorial** → Inspiration against Malakar's final despair attacks (Step 10)
-
-**Virtue Demonstration Items:**
-
--   **Sorceress's Truth** → Proves understanding leads to victory, convinces shadow (Step 7)
--   **Memory Fragment** → Combined into Mirror-Memory Shard for ultimate truth-revealing (Steps 7, 10)
-
-**All Items Have Meaningful Effects:**
-
-Every single item collected in Act IV has a specific, required use that affects quest progression, combat encounters, or story outcomes. No item is purely decorative - each serves a mechanical purpose in demonstrating virtues, accessing areas, or proving worthiness for the final confrontation.
+**All items have a use.** Every item in this act has a use in quest progress, conversations or an
+optional choice (the Healing Stones). The decorative items of the earlier design are cut.
