@@ -1,4 +1,4 @@
-import { Quest, type GameState } from '@/engine'
+import { characterName, Quest, type GameState } from '@/engine'
 import {
   FLAG_FOUND_PHOTO,
   FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO,
@@ -12,8 +12,7 @@ export class FadedPhotographQuest extends Quest {
   constructor() {
     super({
       name: 'The Faded Photograph',
-      description:
-        'Your grandmother is often seen gazing at an old photograph. If you ask her about it, she shares a memory of your parents and gives you the photo, which has a cryptic message on the back.',
+      description: `Your ${characterName('grandmother')} is often seen gazing at an old photograph. If you ask her about it, she shares a memory of your parents and gives you the photo, which has a cryptic message on the back.`,
       completion:
         "You have received the photograph and discovered a cryptic message, deepening the mystery of your parents' fate.",
     })

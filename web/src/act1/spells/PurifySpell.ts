@@ -74,7 +74,7 @@ export class PurifySpell extends Spell {
       ) +
       '\n' +
       'A cleansing energy flows around ' +
-      `${name}, purifying their spirit and lifting any negative influences.`
+      `${characterName(name)}, purifying their spirit and lifting any negative influences.`
     )
   }
 }

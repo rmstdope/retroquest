@@ -12,7 +12,8 @@ export class Priest extends Character {
     super({
       name: 'priest',
       description:
-        'A kindly priest who tends the chapel, offering blessings ' +
+        `A kindly ${characterName('priest')} who tends the chapel, ` +
+        'offering blessings ' +
         'and sharing the lore of Eldoria.',
     })
   }
@@ -27,10 +28,10 @@ export class Priest extends Character {
       `The ${characterName(this.name)} ` +
       'offers a serene smile. ' +
       speech(
-        "'Welcome, child. The chapel is a sanctuary for " +
+        'Welcome, child. The chapel is a sanctuary for ' +
           'all who seek peace. The shadows in our land grow long, but faith can be a ' +
           'guiding light. I am out of matches, and I usually get them for free from the ' +
-          "General Store. Could you bring me some?'",
+          'General Store. Could you bring me some?',
       )
     )
   }

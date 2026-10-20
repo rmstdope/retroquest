@@ -35,8 +35,8 @@ export class Blacksmith extends Character {
         eventMsg +
         '\n' +
         speech(
-          `'Welcome back, young ${characterName('Elior')}. ` +
-            "Need something else?'",
+          `Welcome back, young ${characterName('Elior')}. ` +
+            'Need something else?',
         )
       )
     }
@@ -46,9 +46,9 @@ export class Blacksmith extends Character {
       eventMsg +
       '\n' +
       speech(
-        "'Well met, young one. I am Borin, the village " +
+        `Well met, young one. I am ${characterName('Borin')}, the village ` +
           `${characterName(this.name)}. If you need tools ` +
-          "made or mended, I'm your man. A sharp blade can be a good friend.'",
+          "made or mended, I'm your man. A sharp blade can be a good friend.",
       )
     )
   }
@@ -93,9 +93,9 @@ export class Blacksmith extends Character {
         `The ${characterName(this.name)} eyes the ` +
         `[item_name]${item.name}[/item_name]. ` +
         speech(
-          "'Thanks for the offer, but I can only sharpen a " +
+          'Thanks for the offer, but I can only sharpen a ' +
             "[item_name]dull knife[/item_name] for ye if you have one—and you'll " +
-            "need to pay me a coin for the service.'",
+            'need to pay me a coin for the service.',
         )
       )
     } else if (item instanceof MillstoneFragment) {
@@ -115,13 +115,14 @@ export class Blacksmith extends Character {
         `[item_name]${item.name}[/item_name], turning it over in ` +
         'his calloused hands. ' +
         speech(
-          "'Aye, this is from the old mill, alright. Sturdy stone. " +
+          'Aye, this is from the old mill, alright. Sturdy stone. ' +
             'You know, old tales say the mill was built on a place of ancient ' +
-            'power. Some say a magical deer sometimes appears in the Hidden ' +
+            `power. Some say a magical ${characterName('deer')} sometimes ` +
+            'appears in the Hidden ' +
             'Glade, but only when all is calm and rest-ful—no voices, no ' +
             'footsteps, just the hush of the wind and the song of the stream. ' +
-            'If you seek the deer, remember: it will not show itself to those ' +
-            "who rush or bring trouble.'",
+            `If you seek the ${characterName('deer')}, remember: it will not ` +
+            'show itself to those who rush or bring trouble.',
         )
       )
     }
@@ -135,7 +136,7 @@ export class Blacksmith extends Character {
       '\n' +
       `The ${characterName(this.name)} looks at the ` +
       `[item_name]${item.name}[/item_name]. ` +
-      speech("'I don't have a use for this, lad.'")
+      speech("I don't have a use for this, lad.")
     )
   }
 }

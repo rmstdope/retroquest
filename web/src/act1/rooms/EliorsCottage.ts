@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { characterName, Room } from '@/engine'
 import type { Exits, GameState } from '@/engine'
 import { Lantern } from '../items/Lantern'
 import { Grandmother } from '../characters/Grandmother'
@@ -21,7 +21,7 @@ export class EliorsCottage extends Room {
         'Sunlight filters through lace curtains, illuminating ' +
         'shelves lined with trinkets and memories. A sturdy wooden ' +
         'table sits in the center, and a gentle fire crackles in the ' +
-        'hearth. Grandmother hums softly in her rocking chair, her ' +
+        `hearth. ${characterName('Grandmother')} hums softly in her rocking chair, her ` +
         'eyes twinkling with wisdom and warmth.',
       items: [new Lantern()],
       characters: [new Grandmother()],

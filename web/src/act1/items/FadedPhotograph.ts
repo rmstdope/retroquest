@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, speech } from '@/engine'
+import { Item, type GameState, writing } from '@/engine'
 import { FLAG_READ_PHOTO_MESSAGE } from '../Act1StoryFlags'
 
 /** Personal relic tying Elior to family backstory and exploration hints. */
@@ -11,8 +11,7 @@ export class FadedPhotograph extends Item {
         'An old, faded photograph. The image is barely visible, but you can make out ' +
         "two adults and a child. On the back, in your mother's handwriting, is a " +
         'cryptic message: ' +
-        characterName('') +
-        speech('Seek the truth where the river bends.'),
+        writing('Seek the truth where the river bends.'),
       canBeCarried: true,
     })
   }

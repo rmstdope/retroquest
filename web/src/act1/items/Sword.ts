@@ -19,9 +19,9 @@ export class Sword extends Item {
         characterName('Shopkeeper') +
         ' quickly steps over. ' +
         speech(
-          `'Hold on there, friend! That [item_name]${this.name}[/item_name] ` +
+          `Hold on there, friend! That [item_name]${this.name}[/item_name] ` +
             "is merchandise, not a free sample. If you want it, you'll need to buy it " +
-            "proper-like.'",
+            'proper-like.',
         )
       )
     }

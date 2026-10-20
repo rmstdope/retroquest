@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { characterName, Room } from '@/engine'
 import { RustySaw } from '../items/RustySaw'
 import { Merchant } from '../characters/Merchant'
 
@@ -10,7 +10,7 @@ export class RoadToGreendale extends Room {
       description:
         'The main road leaving Willowbrook stretches beneath ancient oaks, their ' +
         'branches arching overhead like a living tunnel. The path is well-trodden, ' +
-        "lined with wildflowers and scattered leaves. A merchant's cart creaks nearby, " +
+        `lined with wildflowers and scattered leaves. A ${characterName('merchant')}'s cart creaks nearby, ` +
         'and the air is filled with the promise of adventure and the unknown. The road ' +
         'beckons, leading onward to new lands and new stories.',
       items: [new RustySaw()],

@@ -14,27 +14,28 @@ export class Fisherman extends Character {
   knowsFishingBasics = false
   receivedFish = false
   dialogueStates: Record<string, string> = {
-    initial: speech(
+    initial:
       `The ${characterName('fisherman')} nods at you. ` +
-        "'The river's been a bit strange lately. Not many fish biting, and " +
-        "my arm... well, it's seen better days. Oh, I wish I could pull up " +
-        "a pike or two!'",
-    ),
-    taught_fishing: speech(
-      `The ${characterName('fisherman')} smiles. 'Good ` +
-        "to see you trying your luck with the rod. Any luck yet?'",
-    ),
+      speech(
+        "The river's been a bit strange lately. Not many fish biting, and " +
+          "my arm... well, it's seen better days. Oh, I wish I could pull up " +
+          'a pike or two!',
+      ),
+    taught_fishing:
+      `The ${characterName('fisherman')} smiles. ` +
+      speech('Good to see you trying your luck with the rod. Any luck yet?'),
     received_fish_thanks:
       `The ${characterName('fisherman')}'s eyes light up. ` +
       speech(
-        "'Ah, a fine catch! Thank you kindly. It's been a while since " +
-          "I've had a fresh river fish.'",
+        "Ah, a fine catch! Thank you kindly. It's been a while since " +
+          "I've had a fresh river fish.",
       ),
-    taught_spells: speech(
-      `The ${characterName('fisherman')} looks out ` +
-        "over the water. 'The river has many moods. Treat it with respect, " +
-        "and it might share its secrets with you.'",
-    ),
+    taught_spells:
+      `The ${characterName('fisherman')} looks out over the water. ` +
+      speech(
+        'The river has many moods. Treat it with respect, ' +
+          'and it might share its secrets with you.',
+      ),
   }
   currentDialogueKey = 'initial'
 
@@ -64,10 +65,10 @@ export class Fisherman extends Character {
           `The ${characterName('fisherman')} notices ` +
           'your [item_name]fishing rod[/item_name]. ' +
           speech(
-            "'Ah, a fellow angler! " +
+            'Ah, a fellow angler! ' +
               "My arm's busted, can't fish myself. But I can tell you a thing " +
               "or two. Cast your line near the reeds, that's where they like " +
-              "to hide. Patience is key, my friend, patience.'",
+              'to hide. Patience is key, my friend, patience.',
           ) +
           '\n' +
           'He teaches you the basics of fishing.'
@@ -103,10 +104,10 @@ export class Fisherman extends Character {
         this.dialogueStates.received_fish_thanks +
         ' ' +
         speech(
-          "'The river's water... it's not been right. Murky. " +
+          "The river's water... it's not been right. Murky. " +
             'But I sense you have a connection to the old ways. Let me ' +
             'teach you something to help. With this, you can cleanse ' +
-            "water,'",
+            'water,',
         ) +
         ' ' +
         '\n' +
@@ -120,10 +121,8 @@ export class Fisherman extends Character {
       return (
         eventMsg +
         '\n' +
-        speech(
-          `The ${characterName('fisherman')} smiles. ` +
-            "'Thank you, but I've already eaten. Save it for yourself!'",
-        )
+        `The ${characterName('fisherman')} smiles. ` +
+        speech("Thank you, but I've already eaten. Save it for yourself!")
       )
     }
 

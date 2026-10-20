@@ -10,4 +10,13 @@ describe('PrayerBook', () => {
     expect(findMarkupProblems(text)).toEqual([])
     expect(text).toContain('[event]You read the [item_name]')
   })
+
+  it('shows the passage as unquoted writing', () => {
+    const game = new Game([new Act1()])
+    const text = new PrayerBook().read(game.state)
+    expect(text).toContain(
+      "[character_name][/character_name]\n[dialogue]By the moon's forgotten echo, " +
+        'let the silent bells resound...[/dialogue]',
+    )
+  })
 })

@@ -1,4 +1,4 @@
-import { Quest, type GameState } from '@/engine'
+import { characterName, Quest, type GameState } from '@/engine'
 import { Candle } from '../items/Candle'
 import { FLAG_PRIEST_TALKED_TO } from '../Act1StoryFlags'
 
@@ -7,10 +7,8 @@ export class LetThereBeLightQuest extends Quest {
   constructor() {
     super({
       name: 'Let there be light',
-      description:
-        'The priest has asked you to help bring light to the chapel. Perhaps this small act will illuminate more than just the room for you.',
-      completion:
-        'You have brought light to the chapel, earning the gratitude of the priest and the respect of the villagers.',
+      description: `The ${characterName('priest')} has asked you to help bring light to the chapel. Perhaps this small act will illuminate more than just the room for you.`,
+      completion: `You have brought light to the chapel, earning the gratitude of the ${characterName('priest')} and the respect of the villagers.`,
     })
   }
 

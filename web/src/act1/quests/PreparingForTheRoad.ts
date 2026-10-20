@@ -1,4 +1,4 @@
-import { Quest, type GameState } from '@/engine'
+import { characterName, Quest, type GameState } from '@/engine'
 import {
   FLAG_JOURNEY_BLESS_COMPLETED,
   FLAG_MAGIC_FULLY_UNLOCKED,
@@ -17,7 +17,7 @@ export class PreparingForTheRoadQuest extends Quest {
     super({
       name: 'Preparing for the road',
       description:
-        'Mira has tasked you with preparing for your journey. ' +
+        `${characterName('Mira')} has tasked you with preparing for your journey. ` +
         'She says you will need: \n' +
         ' - Warm clothing -\n' +
         ' - Magical protection -\n' +
@@ -83,7 +83,7 @@ export class PreparingForTheRoadQuest extends Quest {
     )
 
     const intro =
-      'Mira has tasked you with preparing for your journey. ' +
+      `${characterName('Mira')} has tasked you with preparing for your journey. ` +
       'She says you will need:'
     const requirements: [string, boolean][] = [
       ['Warm clothing', this.hasTravelCloak],

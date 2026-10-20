@@ -20,10 +20,10 @@ export class Rope extends Item {
         characterName('Shopkeeper') +
         ' quickly steps over. ' +
         speech(
-          "'Hold on there, friend! That " +
+          'Hold on there, friend! That ' +
             nameHtml +
             ' is merchandise, not a free sample. If you want it, ' +
-            "you'll need to buy it proper-like.'",
+            "you'll need to buy it proper-like.",
         )
       )
     }

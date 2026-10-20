@@ -38,8 +38,8 @@ export class Shopkeeper extends Character {
   closedDialogue =
     `The ${characterName('Shopkeeper')} shakes his head. ` +
     speech(
-      "'Sorry, not open for business just yet. Come back later, lad—" +
-        "there's something you need to discover first.'",
+      'Sorry, not open for business just yet. Come back later, lad—' +
+        "there's something you need to discover first.",
     )
 
   constructor() {
@@ -72,9 +72,9 @@ export class Shopkeeper extends Character {
       return (
         `The ${characterName('Shopkeeper')} leans in. ` +
         speech(
-          `"Ah, you spoke to the ${characterName('priest')}? ` +
+          `Ah, you spoke to the ${characterName('priest')}? ` +
             'He does get through his [item_name]matches[/item_name]. ' +
-            'Here, take these for him, on the house. Tell him I said hello!"',
+            'Here, take these for him, on the house. Tell him I said hello!',
         ) +
         '\n\n' +
         event('You receive a box of [item_name]matches[/item_name].')
@@ -103,7 +103,7 @@ export class Shopkeeper extends Character {
 
     return (
       `The ${characterName('Shopkeeper')} says: ` +
-      speech(`"${dialogue} ${waresInfo.trim()}"`)
+      speech(`${dialogue} ${waresInfo.trim()}`)
     )
   }
 
@@ -112,8 +112,7 @@ export class Shopkeeper extends Character {
     return (
       `The ${characterName('Shopkeeper')} chuckles. ` +
       speech(
-        '"Not looking for donations, friend, but I appreciate the ' +
-          'thought!"',
+        'Not looking for donations, friend, but I appreciate the ' + 'thought!',
       )
     )
   }
