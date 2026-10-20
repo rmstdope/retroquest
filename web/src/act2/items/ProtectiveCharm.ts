@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import {
   FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE,
   FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE,
@@ -25,12 +25,13 @@ export class ProtectiveCharm extends Item {
     if (gameState.currentRoom instanceof ForestEntrance) {
       if (!gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)) {
         gameState.setStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, true)
-        let result =
-          '[event]The Protective Charm radiates a warm, golden light as you ' +
-          'invoke its power. A shimmering barrier of spiritual energy surrounds ' +
-          'you, and you feel the watchful gaze of the forest spirits become less ' +
-          'threatening. The ancient magic recognizes your respect and preparation, ' +
-          'granting you safe passage through these sacred woods.[/event]'
+        let result = event(
+          'The Protective Charm radiates a warm, golden light as you invoke ' +
+            'its power. A shimmering barrier of spiritual energy surrounds ' +
+            'you, and you feel the watchful gaze of the forest spirits become ' +
+            'less threatening. The ancient magic recognizes your respect and ' +
+            'preparation, granting you safe passage through these sacred woods.',
+        )
         // Check if both protective charm and enhanced lantern have been used
         if (
           gameState.getStoryFlag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE)

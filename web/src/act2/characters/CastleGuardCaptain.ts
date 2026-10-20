@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 
 /** Orientation NPC who advises visitors on castle protocol and introductions. */
 export class CastleGuardCaptain extends Character {
@@ -16,11 +16,16 @@ export class CastleGuardCaptain extends Character {
   override talkTo(_gameState: GameState): string {
     const name = this.name
     return (
-      `[character_name]${name}[/character_name]: [dialogue]Welcome to the castle grounds. ` +
-      '[character_name]Sir Cedric[/character_name] can be found in the courtyard. ' +
-      "When speaking with him, address him as 'Sir' and show proper respect. " +
-      "He's been seeking capable individuals for important work, so if you're " +
-      'here about that, be prepared to demonstrate your abilities.[/dialogue]'
+      characterName(name) +
+      ': ' +
+      speech(
+        'Welcome to the castle grounds. ' +
+          characterName('Sir Cedric') +
+          ' can be found in the courtyard. When speaking with him, address ' +
+          "him as 'Sir' and show proper respect. He's been seeking capable " +
+          "individuals for important work, so if you're here about that, be " +
+          'prepared to demonstrate your abilities.',
+      )
     )
   }
 }

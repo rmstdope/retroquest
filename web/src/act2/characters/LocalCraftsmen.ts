@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { MendSpell } from '../spells/MendSpell'
 import { FLAG_HELPED_ELDERLY_RESIDENTS } from '../Act2StoryFlags'
 
@@ -24,28 +24,35 @@ export class LocalCraftsmen extends Character {
     if (!gameState.getStoryFlag(FLAG_HELPED_ELDERLY_RESIDENTS)) {
       const name = this.name
       return (
-        `[failure]The [character_name]${name}[/character_name] eye you with ` +
-        "suspicion and refuse to talk to you. They don't seem to trust " +
-        'you yet. Perhaps you need to prove yourself to the community ' +
-        'first.[/failure]'
+        '[failure]The ' +
+        characterName(name) +
+        " eye you with suspicion and refuse to talk to you. They don't " +
+        'seem to trust you yet. Perhaps you need to prove yourself to the ' +
+        'community first.[/failure]'
       )
     }
     if (!gameState.hasSpell(new MendSpell().name)) {
       gameState.learnSpell(new MendSpell())
       const name = this.name
       return (
-        `[success]You speak with the [character_name]${name}[/character_name] and ` +
-        'watch them work, observing their techniques for repairing items. ' +
-        'As you study their methods, you begin to understand the magical ' +
-        'principles behind restoration and repair. Through careful study, ' +
-        'you learn the [spell_name]mend[/spell_name] spell![/success]'
+        '[success]You speak with the ' +
+        characterName(name) +
+        ' and watch them work, observing their techniques for repairing ' +
+        'items. As you study their methods, you begin to understand the ' +
+        'magical principles behind restoration and repair. Through careful ' +
+        'study, you learn the [spell_name]mend[/spell_name] ' +
+        'spell![/success]'
       )
     }
     const name = this.name
     return (
-      `[character_name]${name}[/character_name]: [dialogue]Good to see you again! ` +
-      'How has your repair magic been working? The mend spell is one of the ' +
-      'most useful pieces of magic a person can learn.[/dialogue]'
+      characterName(name) +
+      ': ' +
+      speech(
+        'Good to see you again! How has your repair magic been working? ' +
+          'The mend spell is one of the most useful pieces of magic a person ' +
+          'can learn.',
+      )
     )
   }
 }

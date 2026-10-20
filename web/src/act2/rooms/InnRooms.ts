@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { GameState } from '@/engine'
 import { TravelersJournal } from '../items/TravelersJournal'
 import { Coins } from '../items/Coins'
@@ -33,17 +33,19 @@ export class InnRooms extends Room {
       this.addItem(journal)
       this.journalFound = true
       return (
-        '[event]You search the inn rooms thoroughly.[/event]\n\nAs you examine the room ' +
-        'carefully, you notice a wooden floorboard near the bed is slightly raised. ' +
-        'Pressing it shifts the board with a soft creak. Lifting it reveals a hidden ' +
-        'space containing a ' +
-        'leather-bound journal deliberately concealed by a previous guest. The pages hold ' +
-        'detailed notes and observations that may aid your journey.'
+        event('You search the inn rooms thoroughly.') +
+        '\n\nAs you examine the room carefully, you notice a wooden ' +
+        'floorboard near the bed is slightly raised. Pressing it shifts ' +
+        'the board with a soft creak. Lifting it reveals a hidden space ' +
+        'containing a leather-bound journal deliberately concealed by a ' +
+        'previous guest. The pages hold detailed notes and observations ' +
+        'that may aid your journey.'
       )
     }
     return (
-      "[event]You search the inn rooms again.[/event]\n\nYou've already searched " +
-      'this room and found everything of interest.'
+      event('You search the inn rooms again.') +
+      "\n\nYou've already searched this room and found everything of " +
+      'interest.'
     )
   }
 }

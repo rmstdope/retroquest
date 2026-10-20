@@ -1,4 +1,10 @@
-import { Item, type Character, type GameState } from '@/engine'
+import {
+  Item,
+  type Character,
+  type GameState,
+  characterName,
+  event,
+} from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
 
 /** Purifying water item that can cleanse curses and dark enchantments. */
@@ -25,20 +31,22 @@ export class CrystalClearWater extends Item {
     }
     const name = target.name
     return (
-      'The [item_name]crystal-clear water[/item_name] glows faintly when near ' +
-      `[character_name]${name}[/character_name], but it seems this blessed water is ` +
-      'meant for someone specifically afflicted by dark magic.'
+      'The [item_name]crystal-clear water[/item_name] glows faintly when ' +
+      'near ' +
+      characterName(name) +
+      ', but it seems this blessed water is meant for someone ' +
+      'specifically afflicted by dark magic.'
     )
   }
 
   /** Examine the water and sense the purification magic within. */
   override examine(_gameState: GameState): string {
     const description = this.description
-    return (
-      '[event]You examine the [item_name]crystal-clear water[/item_name]. ' +
-      `${description} The liquid moves with an otherworldly fluidity, and you can ` +
-      'sense the powerful purification magic contained within. This water could break ' +
-      'even the strongest curses.[/event]'
+    return event(
+      `You examine the [item_name]crystal-clear water[/item_name]. ${description}` +
+        ' The liquid moves with an otherworldly fluidity, and you can ' +
+        'sense the powerful purification magic contained within. This ' +
+        'water could break even the strongest curses.',
     )
   }
 }

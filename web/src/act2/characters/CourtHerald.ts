@@ -1,4 +1,11 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  characterName,
+  event,
+  speech,
+} from '@/engine'
 import { FLAG_COURT_HERALD_FORMAL_PRESENTATION } from '../Act2StoryFlags'
 import { EntryPass } from '../items/EntryPass'
 
@@ -22,17 +29,25 @@ export class CourtHerald extends Character {
 
       const itemName = item.name
       const heraldName = this.name
-      const eventMsg =
-        `[event]You present the [item_name]${itemName}[/item_name] to the ` +
-        `[character_name]${heraldName}[/character_name].[/event]`
+      const eventMsg = event(
+        `You present the [item_name]${itemName}[/item_name] to the ` +
+          characterName(heraldName) +
+          '.',
+      )
       const announcement =
-        `[character_name]${heraldName}[/character_name]: [dialogue]Excellent! This is a ` +
+        'Excellent! This is a ' +
         'properly certified entry pass. I hereby formally present you to the ' +
         'court and grant you access to our historical archives.'
       const announcementTail =
         'Your credentials are now on record, and you may research freely in ' +
-        'our collections.[/dialogue]'
-      return eventMsg + '\n' + announcement + ' ' + announcementTail
+        'our collections.'
+      return (
+        eventMsg +
+        '\n' +
+        characterName(heraldName) +
+        ': ' +
+        speech(announcement + ' ' + announcementTail)
+      )
     } else {
       // Default behavior for other items
       return super.giveItem(gameState, item)
@@ -44,17 +59,24 @@ export class CourtHerald extends Character {
     const name = this.name
     if (gameState.getStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION)) {
       return (
-        `[character_name]${name}[/character_name]: [dialogue]You have been formally ` +
-        'presented to the court and your credentials are on record. You may ' +
-        'access the historical archives and speak with court historians ' +
-        'about your research.[/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          'You have been formally presented to the court and your ' +
+            'credentials are on record. You may access the historical archives ' +
+            'and speak with court historians about your research.',
+        )
       )
     } else {
       return (
-        `[character_name]${name}[/character_name]: [dialogue]I handle formal presentations ` +
-        'and credentials for court access. If you wish to research in the ' +
-        "historical archives or speak with court officials, you'll need proper " +
-        'documentation of your standing.[/dialogue]'
+        characterName(name) +
+        ': ' +
+        speech(
+          'I handle formal presentations and credentials for court access. ' +
+            'If you wish to research in the historical archives or speak with ' +
+            "court officials, you'll need proper documentation of your " +
+            'standing.',
+        )
       )
     }
   }

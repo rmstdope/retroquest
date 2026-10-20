@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, characterName, event, speech } from '@/engine'
 import { FLAG_SPECTRAL_LIBRARIAN_FRIENDLY } from '../Act2StoryFlags'
 import { DispelSpell } from '../spells/DispelSpell'
 
@@ -22,19 +22,27 @@ export class AncientChronicle extends Item {
       // Learn dispel spell from ancient texts
       gameState.learnSpell(new DispelSpell())
 
-      return (
-        '[event]You study the ancient texts, reviewing the knowledge of the ' +
-        '[spell_name]dispel[/spell_name] spell and the revelations about your ' +
-        'heritage. The words of the Chosen One prophecy echo in your mind as you ' +
-        'contemplate your destiny.[/event]'
+      return event(
+        'You study the ancient texts, reviewing the knowledge of the ' +
+          '[spell_name]dispel[/spell_name] spell and the revelations about ' +
+          'your heritage. The words of the Chosen One prophecy echo in your ' +
+          'mind as you contemplate your destiny.',
       )
     }
     return (
-      '[event]The [character_name]Spectral Librarian[/character_name] materializes ' +
-      'before you, blocking your access to the ancient texts.[/event]\n' +
-      "[dialogue]'These sacred chronicles are not for the unworthy,'[/dialogue] " +
-      "the spirit intones. [dialogue]'Prove yourself first, then perhaps I will " +
-      "permit you to study these treasures.'[/dialogue]"
+      event(
+        'The ' +
+          characterName('Spectral Librarian') +
+          ' materializes before you, blocking your access to the ancient ' +
+          'texts.',
+      ) +
+      '\n' +
+      speech("'These sacred chronicles are not for the unworthy,'") +
+      ' the spirit intones. ' +
+      speech(
+        "'Prove yourself first, then perhaps I will permit you to study " +
+          "these treasures.'",
+      )
     )
   }
 }

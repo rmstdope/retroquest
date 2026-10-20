@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  characterName,
+} from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
 
 /**
@@ -40,9 +46,10 @@ export class DispelSpell extends Spell {
     const tname = targetCharacter.name
     return (
       `[success]You cast [spell_name]${name}[/spell_name] on ` +
-      `[character_name]${tname}[/character_name]. Counter-magic flows ` +
-      'around them, dispelling any minor enchantments and magical ' +
-      'effects they may have been affected by.[/success]'
+      characterName(tname) +
+      '. Counter-magic flows around them, dispelling any minor ' +
+      'enchantments and magical effects they may have been affected ' +
+      'by.[/success]'
     )
   }
 

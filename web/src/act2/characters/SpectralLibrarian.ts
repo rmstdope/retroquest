@@ -1,4 +1,4 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { CrystalFocus } from '../items/CrystalFocus'
 import { MendSpell } from '../spells/MendSpell'
 import { DispelSpell } from '../spells/DispelSpell'
@@ -47,52 +47,70 @@ export class SpectralLibrarian extends Character {
         const dispelName = dispelSpell.name
         const crystalName = crystalFocus.name
         return (
-          `[success][character_name]${this.name}[/character_name]: ` +
-          "[dialogue]'Ah, you have repaired the protective enchantments with your " +
-          `[spell_name]${mendName}[/spell_name] ` +
-          'spell. This shows both magical ability and respect for ancient ' +
-          "knowledge. I shall reveal what you seek.'[/dialogue] The spirit's eyes " +
-          "glow brighter as they speak: [dialogue]'Your bloodline traces back to " +
-          'the ancient mages of Willowbrook, those who were chosen to guard ' +
-          "against the rising darkness. Malakar's interest in your village was no " +
-          'coincidence - he seeks to corrupt or destroy the magical heritage ' +
-          "that flows through your veins.'[/dialogue] They gesture to the ancient " +
-          "texts: [dialogue]'Study these tomes " +
-          `to learn the [spell_name]${dispelName}[/spell_name] ` +
-          `spell, and take this [item_name]${crystalName}[/item_name] to ` +
-          'enhance your abilities. Your destiny as one of the Chosen is ' +
-          "beginning to unfold.'[/dialogue][/success]"
+          '[success]' +
+          characterName(this.name) +
+          ': ' +
+          speech(
+            "'Ah, you have repaired the protective enchantments with your " +
+              `[spell_name]${mendName}[/spell_name] spell. This shows both ` +
+              'magical ability and respect for ancient knowledge. I shall reveal ' +
+              "what you seek.'",
+          ) +
+          " The spirit's eyes glow brighter as they speak: " +
+          speech(
+            "'Your bloodline traces back to the ancient mages of Willowbrook, " +
+              'those who were chosen to guard against the rising darkness. ' +
+              "Malakar's interest in your village was no coincidence - he seeks " +
+              'to corrupt or destroy the magical heritage that flows through ' +
+              "your veins.'",
+          ) +
+          ' They gesture to the ancient texts: ' +
+          speech(
+            `'Study these tomes to learn the [spell_name]${dispelName}` +
+              `[/spell_name] spell, and take this [item_name]${crystalName}` +
+              '[/item_name] to enhance your abilities. Your destiny as one of ' +
+              "the Chosen is beginning to unfold.'",
+          ) +
+          '[/success]'
         )
       }
       return (
-        `[character_name]${this.name}[/character_name]: [dialogue]'Welcome, ` +
-        'seeker of knowledge. ' +
-        'I am the eternal guardian of this repository. The protective enchantments ' +
-        'around the most valuable texts have been damaged by time. Prove your ' +
-        'worthiness by repairing them, and I shall share the knowledge you ' +
-        "seek about your heritage and destiny.'[/dialogue]"
+        characterName(this.name) +
+        ': ' +
+        speech(
+          "'Welcome, seeker of knowledge. I am the eternal guardian of this " +
+            'repository. The protective enchantments around the most valuable ' +
+            'texts have been damaged by time. Prove your worthiness by ' +
+            'repairing them, and I shall share the knowledge you seek about ' +
+            "your heritage and destiny.'",
+        )
       )
     }
     // Get spell name
     const dispelSpell = new DispelSpell()
     return (
-      `[character_name]${this.name}[/character_name]: [dialogue]'You have ` +
-      'proven yourself worthy and learned what this library can teach. The ' +
-      'knowledge of your ' +
-      `bloodline and the [spell_name]${dispelSpell.name}[/spell_name] spell ` +
-      'will serve you well in the challenges ahead. Remember: you are part of ' +
-      'an ancient lineage chosen to stand against the darkness. Use this ' +
-      "knowledge wisely.'[/dialogue]"
+      characterName(this.name) +
+      ': ' +
+      speech(
+        "'You have proven yourself worthy and learned what this library " +
+          `can teach. The knowledge of your bloodline and the [spell_name]${dispelSpell.name}` +
+          '[/spell_name] spell will serve you well in the challenges ahead. ' +
+          'Remember: you are part of an ancient lineage chosen to stand ' +
+          "against the darkness. Use this knowledge wisely.'",
+      )
     )
   }
 
   /** Describe the librarian's ghostly scholarly appearance. */
   override examine(_gameState: GameState): string {
     return (
-      `The [character_name]${this.name}[/character_name] appears to be a scholar from ` +
-      'ancient times, their ethereal form bound to this library by duty and purpose. ' +
-      'They radiate wisdom accumulated over centuries of guarding these precious texts. ' +
-      "There's something both melancholy and noble about their eternal vigil."
+      'The ' +
+      characterName(this.name) +
+      ' appears to be a scholar from ancient times, their ethereal form ' +
+      'bound to this library by duty and purpose. They radiate wisdom ' +
+      'accumulated over centuries of guarding these precious texts. ' +
+      "There's something both melancholy and noble about their eternal " +
+      'vigil.'
     )
   }
 }

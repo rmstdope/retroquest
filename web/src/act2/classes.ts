@@ -1,6 +1,3 @@
-/**
- * Every content class of Act 2 by name, so saves can refer to them.
- */
 import { AdvancedHealingPotion } from './items/AdvancedHealingPotion'
 import { AncientChronicle } from './items/AncientChronicle'
 import { BoundaryStoneFragment } from './items/BoundaryStoneFragment'

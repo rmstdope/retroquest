@@ -1,4 +1,11 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  characterName,
+  event,
+  speech,
+} from '@/engine'
 import { RoomKey } from '../items/RoomKey'
 import { DruidicCharm } from '../items/DruidicCharm'
 import {
@@ -51,24 +58,27 @@ export class InnkeeperMarcus extends Character {
         const charmName = druidicCharm.name
         const name = this.name
         const head =
-          `[character_name]${name}[/character_name]: [dialogue]*tears of joy in his eyes* ` +
+          '*tears of joy in his eyes* ' +
           'You have given me back my daughter! There are no words to express my ' +
           'gratitude. '
         const body =
           `This [item_name]${charmName}[/item_name] has been in my family for ` +
           'generations - it was blessed by the ancient druids who first settled ' +
           'in these lands. Please, take it as a token of our eternal gratitude. ' +
-          'May it bring you protection and guidance on your heroic journey![/dialogue]\n\n'
+          'May it bring you protection and guidance on your heroic journey!'
         const tail =
           '[success]Marcus places the sacred charm in your hands with reverence. ' +
           'You can feel the ancient magic thrumming within the carved wood.[/success]'
-        return head + body + tail
+        return characterName(name) + ': ' + speech(head + body) + '\n\n' + tail
       } else {
         return (
-          `[character_name]${this.name}[/character_name]: [dialogue]My daughter is ` +
-          'healthy and happy again, all thanks to you! The Silver Stag Inn will ' +
-          'always be your home. Whatever you need - rooms, meals, information - ' +
-          "it's yours freely.[/dialogue]"
+          characterName(this.name) +
+          ': ' +
+          speech(
+            'My daughter is healthy and happy again, all thanks to you! The ' +
+              'Silver Stag Inn will always be your home. Whatever you need - ' +
+              "rooms, meals, information - it's yours freely.",
+          )
         )
       }
     }
@@ -93,18 +103,26 @@ export class InnkeeperMarcus extends Character {
 
     if (gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)) {
       const dialogueBlock =
-        `The [character_name]${name}[/character_name] says: [dialogue]"${dialogue} ` +
-        `${waresInfo.trim()}"[/dialogue]\n\n`
+        'The ' +
+        characterName(name) +
+        ' says: ' +
+        speech(`"${dialogue} ${waresInfo.trim()}"`) +
+        '\n\n'
       const plea =
-        "You've spoken with [character_name]Elena[/character_name]? Then you " +
-        'understand my desperation. The curse grows stronger each day, and I ' +
-        "fear we don't have much time left. If you truly can help her, I'll " +
-        'give you anything - rooms, information, whatever you need.'
+        "You've spoken with " +
+        characterName('Elena') +
+        '? Then you understand my desperation. The curse grows stronger ' +
+        "each day, and I fear we don't have much time left. If you truly " +
+        "can help her, I'll give you anything - rooms, information, " +
+        'whatever you need.'
       return dialogueBlock + plea
     } else {
       const dialogueBlock =
-        `The [character_name]${name}[/character_name] says: [dialogue]"${dialogue} ` +
-        `${waresInfo.trim()}"[/dialogue]\n\n`
+        'The ' +
+        characterName(name) +
+        ' says: ' +
+        speech(`"${dialogue} ${waresInfo.trim()}"`) +
+        '\n\n'
       const closing =
         'Though I must say, these have been dark times for my family. My daughter... ' +
         "well, perhaps you should speak with her yourself if you're looking to help " +
@@ -117,9 +135,12 @@ export class InnkeeperMarcus extends Character {
   override buyItem(gameState: GameState, itemName: string): string {
     const itemNameToBuy = itemName.toLowerCase()
     const seller = this.name
-    const eventMsg =
-      `[event]You try to buy the [item_name]${itemNameToBuy}[/item_name] from the ` +
-      `[character_name]${seller}[/character_name].[/event]`
+    const eventMsg = event(
+      `You try to buy the [item_name]${itemNameToBuy}[/item_name] from ` +
+        'the ' +
+        characterName(seller) +
+        '.',
+    )
 
     // Check if item is available
     if (!(itemNameToBuy in this.wares)) {
@@ -127,8 +148,10 @@ export class InnkeeperMarcus extends Character {
       return (
         eventMsg +
         '\n' +
-        (`[dialogue]"Sorry, I don't have any '${itemDisp}' ` +
-          'for sale. Check what I can offer you."[/dialogue]')
+        speech(
+          `"Sorry, I don't have any '${itemDisp}' for sale. Check what I can ` +
+            'offer you."',
+        )
       )
     }
 
@@ -160,8 +183,10 @@ export class InnkeeperMarcus extends Character {
       return (
         eventMsg +
         '\n' +
-        (`[dialogue]"You already have a [item_name]${itemNameToBuy}[/item_name]. ` +
-          'One room should be sufficient for your stay."[/dialogue]')
+        speech(
+          `"You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
+            'room should be sufficient for your stay."',
+        )
       )
     }
 
@@ -195,11 +220,13 @@ export class InnkeeperMarcus extends Character {
       gameState.addItemToInventory(newItem)
       const remainingCoins = gameState.getItemCount('coins')
       const purchaseMsg =
-        `[success]You purchase the [item_name]${itemNameToBuy}[/item_name] from ` +
-        `[character_name]${seller}[/character_name] for ${price} ` +
-        '[item_name]gold coins[/item_name]. He hands you a brass key and ' +
-        'explains how to access the private rooms upstairs. ' +
-        `You have ${remainingCoins} [item_name]coins[/item_name] remaining.[/success]`
+        `[success]You purchase the [item_name]${itemNameToBuy}[/item_name] ` +
+        'from ' +
+        characterName(seller) +
+        ` for ${price} [item_name]gold coins[/item_name]. He hands you a ` +
+        'brass key and explains how to access the private rooms upstairs. ' +
+        `You have ${remainingCoins} [item_name]coins[/item_name] ` +
+        'remaining.[/success]'
       return eventMsg + '\n' + purchaseMsg
     } else {
       // Should not happen if item is in wares, but safety check

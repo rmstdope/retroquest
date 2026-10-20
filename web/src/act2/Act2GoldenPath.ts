@@ -1,4 +1,3 @@
-/** The commands that play Act 2's golden path from a new game to its end. */
 export const ACT2_GOLDEN_PATH: string[] = [
   'take flower',
   'take stick',
