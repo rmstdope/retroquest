@@ -4,6 +4,20 @@
 
 Act II continues Elior's journey as they arrive in Greendale, a bustling city that serves as a crossroads between civilization and the mystical Enchanted Forest. The act focuses on developing magical abilities, uncovering Elior's heritage, and helping Greendale and the forest communities before facing the growing threat.
 
+This act is row II of the red line. Elior arrives believing Malakar is a legend from old books. By the end he knows Malakar is real and is searching for the Willowbrook bloodline, which means Elior. The act arrives with the **Ancient Amulet** in Elior's inventory (Act I) and ends when Nyx's vision is shared with Sir Cedric. There is no combat; the threat is shown, not fought.
+
+## Story Beats
+
+These beats ride on the existing conversations, items and quests below; none adds a room, a puzzle or a command to the golden path.
+
+- **The Warden sigil (Cedric's first conversation).** When Elior first talks to Sir Cedric with the Ancient Amulet in his inventory, Cedric stops mid-sentence. The sigil on the amulet is the **Warden sigil of the Wardens of the Dawn**, an order that guarded the kingdom and is half-forgotten. Cedric concludes that the amulet belonged to a Warden and that Elior's family is tied to them; he does not know more, and nobody names Aren, Lysa or any friendship with Malakar (Act III). This is why he agrees to guide Elior. It is a fixed scene on the first talk, not a choice.
+- **Alden is missing.** Greendale's castle is half-empty. King Alden vanished one night, the throne room is barred, and the Lord Commander rules in his name. Guards, Heralds and Historians speak of it in low voices; nobody knows where he went. The blight over the land and the king's absence are told as two troubles, not yet one.
+- **Cedric's disgrace.** Cedric was on guard the night Alden vanished and was stripped of his knighthood for it. He does not defend himself until the Secret Documents arrive.
+- **Cedric was framed.** The Secret Documents recovered from Thorne's caravan show that Malakar's agents bribed the night watch and framed Cedric. They carry the seal of the cloaked stranger seen in Willowbrook, and they name Malakar. The Lord Commander reads them in the Great Hall.
+- **The Sorceress of Lies' mark.** Elena's curse carries a silver, mask-shaped sigil on her wrist, first seen when Elior casts `greater_heal` on her. It fades when `dispel` breaks the curse. Elior cannot name it; Act IV's Sorceress of Lies recognises it.
+- **The Wardens in the archive.** Echoes of the Past and the Ancient Chronicle name the Wardens of the Dawn and their sigil, and record that Malakar's agents have asked after the Willowbrook bloodline. Malakar is no legend.
+- **Nyx's vision.** Nyx speaks the refrain "Power follows purpose; purpose follows truth." in her first conversation. `prophetic_vision` then shows Elior a village, a withered field and a robed figure reaching toward him, and the dream voice from the Prologue is heard once more. It is the **Shadow of the Past**, not tied to either parent. Elior shares the vision with Cedric, who says: "Then Malakar is no tale, and it is you he is hunting."
+
 ## Quest Management Structure
 
 ### Main Quest Chain Architecture
@@ -34,7 +48,7 @@ The main quest "The Gathering Storm" can only be completed after every Act II si
   - **Prerequisites:** Completion of Act I
   - **Dependencies:** All Act II side quests must be complete before the final Prophetic Vision can complete this quest.
   - **Quest Chain Phases:**
-    1. **Initial Contact:** Find and speak with Sir Cedric
+    1. **Initial Contact:** Find and speak with Sir Cedric; on the first talk he recognises the Warden sigil on the Ancient Amulet
     2. **Proving Worth:** Complete "The Knight's Test"
     3. **Preparation:** Complete all Greendale side quests (supplies, knowledge, alliances)
     4. **Forest Journey:** Complete all Forest side quests
@@ -42,7 +56,7 @@ The main quest "The Gathering Storm" can only be completed after every Act II si
     6. **Conclusion:** After every side quest is complete, cast Prophetic Vision while Sir Cedric is present to share the vision and finish the quest.
   - **Completion:** Cast Prophetic Vision in the same room as Sir Cedric after all side quests are complete.
   - **Completion Reward:** Shares the Prophetic Vision with Sir Cedric and completes The Gathering Storm. Nyx's first-conversation gifts are granted before this final cast.
-  - **Story Impact:** Establishes Elior as a recognized hero with growing magical power
+  - **Story Impact:** Establishes Elior as a recognized hero with growing magical power; Malakar is shown to be real and to be hunting the Willowbrook bloodline
 
 ### Side Quests
 
@@ -58,7 +72,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Dependencies:** None
   - **Completion:** Prove your worthiness by demonstrating combat skills to Cedric
   - **Rewards:** Cedric's respect and 100 gold coins; the Mountain Hermit provides the Training Sword before the test
-  - **Story Impact:** Establishes trust with a key ally
+  - **Story Impact:** Establishes trust with a key ally; follows the Warden sigil scene, which is why Cedric will guide Elior
 
 - **Name:** Supplies for the Journey
 
@@ -86,9 +100,9 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Trigger:** Research Willowbrook history in the Great Hall and Hidden Library
   - **Prerequisites:** Access to Great Hall
   - **Dependencies:** None
-  - **Completion:** Piece together historical clues about why Malakar was interested in Willowbrook, revealing hints about Elior's family heritage
-  - **Rewards:** Knowledge of Elior's heritage and the Chosen One prophecy
-  - **Story Impact:** Reveals crucial background lore
+  - **Completion:** Piece together historical clues about why Malakar was interested in Willowbrook: the archives name the Wardens of the Dawn and their sigil, and record that Malakar's agents have asked after the Willowbrook bloodline. The clues also tell of King Alden's disappearance and Cedric's disgrace.
+  - **Rewards:** Knowledge of the Wardens of the Dawn, of Elior's heritage and of the Chosen One prophecy
+  - **Story Impact:** Reveals crucial background lore: Malakar is real, and he is looking for Elior's bloodline
 
 - **Name:** The Healer's Apprentice
 
@@ -106,9 +120,9 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Trigger:** Learn that Cedric was once disgraced and stripped of his knighthood
   - **Prerequisites:** Complete "Echoes of the Past" before the quest activates
   - **Dependencies:** Recover the Secret Documents by rescuing Thorne's caravan
-  - **Completion:** Help Cedric reclaim his honor by solving the mystery of his past disgrace and clearing his name with evidence
+  - **Completion:** Help Cedric reclaim his honor by solving the mystery of his past disgrace and clearing his name with evidence. Cedric was on guard the night King Alden vanished; the Secret Documents show that Malakar's agents framed him.
   - **Rewards:** Nature's Charm (third of three sacred charms needed to summon Nyx)
-  - **Story Impact:** Strengthens alliance with key character
+  - **Story Impact:** Strengthens alliance with key character and shows Malakar's agents at work in Greendale
 
 - **Name:** The Innkeeper's Daughter
 
@@ -116,9 +130,9 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Trigger:** A young girl in Greendale has been cursed by dark magic and needs help
   - **Prerequisites:** Access to The Silver Stag Inn
   - **Dependencies:** Learn `greater_heal` and `dispel`, and obtain Crystal-Clear Water from the Whispering Glade
-  - **Completion:** Break the curse using a combination of Elior's growing magical abilities and items found throughout Greendale
+  - **Completion:** Break the curse using a combination of Elior's growing magical abilities and items found throughout Greendale. On the first `greater_heal` Elior sees the curse's silver, mask-shaped mark on Elena's wrist; it fades when `dispel` breaks the curse.
   - **Rewards:** Innkeeper's gratitude, curse-breaking experience, Druidic Charm
-  - **Story Impact:** Demonstrates growing magical power, saves innocent life
+  - **Story Impact:** Demonstrates growing magical power, saves innocent life; the mark is the Sorceress of Lies' (recognised in Act IV)
 
 - **Name:** The Ancient Library
 
@@ -126,7 +140,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Trigger:** Discover a hidden library beneath Greendale containing old magical texts
   - **Prerequisites:** Access to Residential Quarter basement
   - **Dependencies:** Learn `mend` to repair the Protective Enchantments
-  - **Completion:** Repair the wards, earn the Spectral Librarian's trust, learn `dispel` by using the Ancient Chronicle, and take the Crystal Focus
+  - **Completion:** Repair the wards, earn the Spectral Librarian's trust, learn `dispel` by using the Ancient Chronicle (which names the Wardens of the Dawn and Malakar's search for the Willowbrook bloodline), and take the Crystal Focus
   - **Order Flexibility:** If the Crystal Focus is given to Lyria before learning `dispel`, acquiring it still counts; the quest completes once `dispel` is learned.
   - **Rewards:** `dispel`, Crystal Focus, and knowledge of Elior's heritage
   - **Story Impact:** Reveals crucial information about Chosen One prophecy
@@ -177,7 +191,8 @@ City orientation is handled through the City Map and movement behavior, not sepa
 - **Motivations:** Restore his honor, protect Greendale from coming threats, prove his worth
 - **Character Arc:** Begins as a disgraced knight, through Elior's help reclaims honor and becomes a trusted ally
 - **Dialogue Style:** Formal, military-influenced speech with hints of vulnerability about his past
-- **State-Dependent Dialogue:** First recruits Elior; recognizes combat ability after The Knight's Test; after Cedric's honor is restored, grants Nature's Charm; after Nyx, comments on Elior's prophetic ability.
+- **Story Role:** Recognises the Warden sigil on the Ancient Amulet; was on guard the night King Alden vanished and was framed by Malakar's agents; ends the act hearing Nyx's vision.
+- **State-Dependent Dialogue:** First recognises the Warden sigil on the amulet and recruits Elior; recognizes combat ability after The Knight's Test; after Cedric's honor is restored, grants Nature's Charm; after Nyx, comments on Elior's prophetic ability.
 - **Quest Involvement:** Central to main quest progression, gives multiple side quests
 - **Teaching Role:** Combat skills, leadership, strategic thinking
 
@@ -197,7 +212,8 @@ City orientation is handled through the City Map and movement behavior, not sepa
 - **Motivations:** Guard forest secrets, test worthy souls, maintain balance between human and natural worlds
 - **Character Arc:** Summoned at the offering altar after the three sacred charms are presented; on the first conversation, grants Prophetic Vision, Nyx's Token, and the Forest Heart Crystal.
 - **Dialogue Style:** Speaks in riddles and nature metaphors, voice carries weight of ages
-- **State-Dependent Dialogue:** The first conversation grants Nyx's gifts; later conversations provide encouragement.
+- **Story Role:** Speaks the refrain "Power follows purpose; purpose follows truth." in her first conversation; her vision shows the Shadow of the Past.
+- **State-Dependent Dialogue:** The first conversation speaks the refrain and grants Nyx's gifts; later conversations provide encouragement.
 - **Quest Involvement:** Final phase of main quest, ultimate teacher
 - **Teaching Role:** Prophetic magic, understanding of destiny, connection to natural world
 
@@ -207,6 +223,7 @@ City orientation is handled through the City Map and movement behavior, not sepa
 - **Motivations:** Marcus wants his daughter healed; Elena wants to be free of curse and help others
 - **Character Arc:** Family saved by Elior's intervention, become grateful allies
 - **Dialogue Style:** Marcus speaks like a concerned father and businessman; Elena's speech shows effects of curse initially
+- **Story Role:** Elena's curse carries the Sorceress of Lies' mask-shaped mark.
 - **State-Dependent Dialogue:** Elena's dialogue changes as the three-step cure progresses; Marcus grants the Druidic Charm after she is cured.
 - **Quest Involvement:** "The Innkeeper's Daughter"
 - **Story Impact:** Demonstrates the personal stakes in Elior's growing power
@@ -359,7 +376,9 @@ The forest represents increasingly mystical realms:
 
 #### Connection to Wider World Events
 
-- Malakar's interest in Willowbrook connected to ancient bloodlines
+- Malakar is real, and his agents (the cloaked stranger seen in Willowbrook) are searching for the Willowbrook bloodline
+- King Alden has vanished; Malakar's agents framed Sir Cedric, who was on guard that night
+- The Wardens of the Dawn, whose sigil is on the Ancient Amulet, guarded the kingdom long ago
 - Prophecies in Hidden Library reference coming darkness
 - Forest spirits sense disturbances in magical balance
 - Elior's heritage links to ancient magical traditions
@@ -368,11 +387,11 @@ The forest represents increasingly mystical realms:
 
 #### Implemented Artifacts
 
-- **Ancient Chronicle:** Records regional history and Elior's bloodline; studying it after the librarian permits access teaches `dispel`.
+- **Ancient Chronicle:** Records regional history, the Wardens of the Dawn and their sigil, and Malakar's search for the Willowbrook bloodline; studying it after the librarian permits access teaches `dispel`.
 - **Crystal Focus:** The Spectral Librarian leaves it in the Hidden Library after Elior repairs the wards; Lyria needs it to teach `greater_heal`.
 - **Forest Heart Crystal and Nyx's Token:** Gifts from Nyx when first spoken to after the altar ritual.
 - **Three Sacred Charms:** The Protective Charm, Druidic Charm, and Nature's Charm are consumed by the Offering Altar to summon Nyx.
-- **Secret Documents:** Thorne gives them after the caravan rescue; they provide evidence to restore Cedric's honor.
+- **Secret Documents:** Thorne gives them after the caravan rescue; they show that Malakar's agents (with the cloaked stranger's seal) framed Cedric, and so provide evidence to restore Cedric's honor.
 
 ### Exploration Opportunities and Hidden Content
 
@@ -441,6 +460,18 @@ This is the implemented Act II room roster and topology. Items and characters ma
 - **`forest_speech`**: Learned from the Ancient Tree Spirit in Ancient Grove (used to find lost caravan)
 - **`prophetic_vision`**: Learned by speaking to Nyx after summoning her (completes The Gathering Storm when cast with Cedric present after all side quests)
 
+## Optional choices
+
+Optional virtue moments; none blocks the golden path, none adds a puzzle or combat. Each records one count in the same three counters as Acts III and IV (mercy, truth, selfless) and changes a few lines of dialogue.
+
+| Where                                   | The choice                                                                                                   | Records      |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------ |
+| Residential Quarter, the Families       | Give the Mountain Flower to the Families' sick child, gaining nothing (`give mountain flower to families`)   | **selfless** |
+| The Silver Stag Inn, Innkeeper Marcus   | After Elena is cured, tell Marcus the true cause of her curse instead of the comforting "a passing illness" (`say truth to marcus`) | **truth**    |
+| Forest, Thorne after the caravan rescue | Speak for the caravan guard who abandoned the others, so Thorne does not turn him out (`say forgive to thorne`) | **mercy**    |
+
+The endings read the counters across the whole game, as described in `Act4Design.md`.
+
 ## Act Completion Requirements
 
 ### Main Quest Completion Architecture
@@ -482,6 +513,11 @@ These five completed quests, plus completion of The Hermit's Warning at Forest T
 
 #### Lore and World Understanding
 
+- **Malakar is real:** The red-line row II. Elior no longer thinks of Malakar as a legend from old books; Malakar's agents are searching for the Willowbrook bloodline, which means Elior.
+- **The Wardens of the Dawn:** The Warden sigil on the Ancient Amulet ties Elior's family to the old order.
+- **King Alden's absence and Cedric's framing:** Alden has vanished, and Malakar's agents framed the knight who was on guard.
+- **The Sorceress of Lies' mark:** Seen on Elena's curse; Act IV recognises it.
+- **The Shadow of the Past:** The dream voice is heard once more in Nyx's vision.
 - **Family Heritage:** Understanding of why Malakar was interested in Willowbrook bloodlines
 - **Prophecy Knowledge:** Comprehension of Chosen One predictions and their meaning
 - **Magical Mastery:** Command of healing, environmental, and divination magic
@@ -533,12 +569,14 @@ Act II is browser-based TypeScript content under `web/src/act2/`, using the shar
 The implemented command sequence is `ACT2_GOLDEN_PATH` in `web/src/act2/Act2GoldenPath.ts`. It completes all side quests and intentionally stops before the player performs the final main-quest action. The route and interactions are:
 
 1. **Mountain Path and city entry:** Take the Walking Stick, speak to the Mountain Hermit for the Training Sword, examine the Camp Site and take the Entry Pass. At Greendale Gates, give the pass to the Gate Captain, speak to the captain, then search for and take the City Map.
-2. **Greendale orientation and the castle:** Use the City Map in Main Square, examine the notice board, speak with the Town Crier, and take the Merchant's Flyer. At Castle Approach, show the Entry Pass to the Herald and speak with the Castle Guard Captain. In Castle Courtyard, meet Sir Cedric, use the Training Sword, and speak with him again to complete The Knight's Test and receive Supplies for the Journey.
+2. **Greendale orientation and the castle:** Use the City Map in Main Square, examine the notice board, speak with the Town Crier, and take the Merchant's Flyer. At Castle Approach, show the Entry Pass to the Herald and speak with the Castle Guard Captain. In Castle Courtyard, meet Sir Cedric (on the first talk he recognises the Warden sigil on the Ancient Amulet), use the Training Sword, and speak with him again to complete The Knight's Test and receive Supplies for the Journey.
 3. **Market and inn:** Give the Merchant's Flyer to Aldric, buy the Forest Survival Kit and Enhanced Lantern, and speak with Caravan Master Thorne to start The Merchant's Lost Caravan. At The Silver Stag Inn, speak with Marcus and Elena, buy and use the Room Key, then search Inn Rooms and take the Coins and Traveler's Journal. Return to the Market District and buy Quality Rope to complete Supplies for the Journey.
-4. **Archives, community, and healing apprenticeship:** In Great Hall, present the Entry Pass to the Court Herald and give the Traveler's Journal to the Historians, then search the archives. In Residential Quarter, give the Walking Stick to the Families and speak with the Local Craftsmen and Families. Speak with Lyria, discover the Hidden Library by searching, and enter through the secret passage. Cast `mend` on the Protective Enchantments, speak with the Spectral Librarian, use the Ancient Chronicle, and take the Crystal Focus. Return to Lyria and give her the focus to complete The Healer's Apprentice and learn `greater_heal`.
+4. **Archives, community, and healing apprenticeship:** In Great Hall, present the Entry Pass to the Court Herald and give the Traveler's Journal to the Historians, then search the archives (the Wardens of the Dawn and Malakar's search for the Willowbrook bloodline). In Residential Quarter, give the Walking Stick to the Families and speak with the Local Craftsmen and Families. Speak with Lyria, discover the Hidden Library by searching, and enter through the secret passage. Cast `mend` on the Protective Enchantments, speak with the Spectral Librarian, use the Ancient Chronicle (which names the Wardens of the Dawn), and take the Crystal Focus. Return to Lyria and give her the focus to complete The Healer's Apprentice and learn `greater_heal`.
 5. **Forest threshold and riddles:** At Forest Transition, examine the Standing Stones to learn `nature_sense`, speak with the Forest Hermit, and use the Forest Survival Kit. In Forest Entrance, take the Enchanted Acorn, use the Protective Charm and Enhanced Lantern there, and speak with the Forest Sprites. In Ancient Grove, examine the Silver-Barked Tree to awaken its spirit, give it the Acorn, and take the Silver Leaves. In Whispering Glade, cast `nature_sense`, speak with the Water Nymphs, and answer `tree`, `water`, and `ants`; then take the Crystal-Clear Water and Moonflowers. Return to Ancient Grove and give the Moonflowers to the spirit while carrying the water to complete Whispers in the Wind and open the path to the Heart of the Forest.
-6. **Resolve cross-phase quests:** Return to the inn and cure Elena in order with `greater_heal`, Crystal-Clear Water, and `dispel`; speak with Marcus to receive the Druidic Charm. In the forest, cast `forest_speech`, use Quality Rope with the Ravine, and return to Thorne for the Secret Documents. In Castle Courtyard, speak with the Training Master and Squires, search for and read the Squire's Diary. In Great Hall, examine the Secret Documents and give them to the Lord Commander; speak with Sir Cedric to complete his honor quest and receive Nature's Charm.
-7. **Summon Nyx and finish the act:** At Heart of the Forest, use the Druidic Charm with the Offering Altar while carrying the Protective Charm and Nature's Charm, then speak with Nyx to receive `prophetic_vision`, Nyx's Token, and the Forest Heart Crystal. Return to Castle Courtyard and cast Prophetic Vision while Sir Cedric is present. This final cast completes The Gathering Storm only after every side quest is complete.
+6. **Resolve cross-phase quests:** Return to the inn and cure Elena in order with `greater_heal` (revealing the Sorceress of Lies' mark on her wrist), Crystal-Clear Water, and `dispel` (the mark fades); speak with Marcus to receive the Druidic Charm. In the forest, cast `forest_speech`, use Quality Rope with the Ravine, and return to Thorne for the Secret Documents. In Castle Courtyard, speak with the Training Master and Squires, search for and read the Squire's Diary. In Great Hall, examine the Secret Documents (Malakar's agents framed Cedric) and give them to the Lord Commander; speak with Sir Cedric to complete his honor quest and receive Nature's Charm.
+7. **Summon Nyx and finish the act:** At Heart of the Forest, use the Druidic Charm with the Offering Altar while carrying the Protective Charm and Nature's Charm, then speak with Nyx, who speaks the refrain and gives `prophetic_vision`, Nyx's Token, and the Forest Heart Crystal. Return to Castle Courtyard and cast Prophetic Vision while Sir Cedric is present; the vision shows the Shadow of the Past and Cedric answers that Malakar is no tale and is hunting Elior (the red line, row II). This final cast completes The Gathering Storm only after every side quest is complete.
+
+The optional virtue moments (see Optional choices) add the commands `give mountain flower to families`, `say truth to marcus` and `say forgive to thorne` at the points they name; none is on the golden path.
 
 ## Quest Completion Verification
 
