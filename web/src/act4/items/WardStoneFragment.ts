@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { FLAG_ACT4_BARRIERS_DISABLED } from '../Act4StoryFlags'
 
 /** A fragment of a ward stone that can disable magical barriers. */
@@ -20,10 +20,10 @@ export class WardStoneFragment extends Item {
       // Check if barriers are still active
       if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
         gameState.setStoryFlag(FLAG_ACT4_BARRIERS_DISABLED, true)
-        return (
-          '[event]You press the ward stone fragment against the magical barriers. ' +
-          'The purple energy flickers and fades as the defensive wards are disrupted. ' +
-          'The barriers collapse with a resonant hum, clearing the way forward.[/event]'
+        return event(
+          'You press the ward stone fragment against the magical barriers. ' +
+            'The purple energy flickers and fades as the defensive wards are disrupted. ' +
+            'The barriers collapse with a resonant hum, clearing the way forward.',
         )
       }
       return (

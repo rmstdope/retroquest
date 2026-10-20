@@ -1,4 +1,4 @@
-import { Spell, type GameState, type Item } from '@/engine'
+import { Spell, type GameState, type Item, event } from '@/engine'
 
 /** A spell that creates brilliant light to dispel darkness and shadow magic. */
 export class Light extends Spell {
@@ -23,9 +23,9 @@ export class Light extends Spell {
       // Special handling for ward stones in Fortress Gates
       return gameState.currentRoom.light(gameState)
     }
-    return (
-      `[event]You shine light on the [item_name]${targetItem.name}[/item_name], ` +
-      'illuminating it clearly, but the light has no special effect.[/event]'
+    return event(
+      `You shine light on the [item_name]${targetItem.name}[/item_name], ` +
+        'illuminating it clearly, but the light has no special effect.',
     )
   }
 }

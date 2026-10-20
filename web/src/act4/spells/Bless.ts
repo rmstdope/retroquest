@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  characterName,
+  event,
+} from '@/engine'
 
 /** A spell that channels divine energy to purify and free the corrupted. */
 export class Bless extends Spell {
@@ -19,9 +25,9 @@ export class Bless extends Spell {
     if (typeof hook === 'function') {
       return hook.call(room, gameState)
     }
-    return (
-      '[event]You channel divine energy, filling the area with warm, golden ' +
-      'light, but there is nothing here that responds to the blessing.[/event]'
+    return event(
+      'You channel divine energy, filling the area with warm, golden ' +
+        'light, but there is nothing here that responds to the blessing.',
     )
   }
 
@@ -37,14 +43,14 @@ export class Bless extends Spell {
       if (typeof hook === 'function') {
         return hook.call(room, gameState)
       }
-      return (
-        '[event]You channel blessing energy toward the servants, but ' +
-        'the magic seems unable to reach them fully here.[/event]'
+      return event(
+        'You channel blessing energy toward the servants, but ' +
+          'the magic seems unable to reach them fully here.',
       )
     }
-    return (
-      `[event]You bless [character_name]${targetCharacter.name}[/character_name] ` +
-      'with divine energy, causing them to glow briefly with golden light.[/event]'
+    return event(
+      `You bless ${characterName(targetCharacter.name)} ` +
+        'with divine energy, causing them to glow briefly with golden light.',
     )
   }
 }

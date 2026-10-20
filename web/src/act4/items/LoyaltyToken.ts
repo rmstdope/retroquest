@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { FLAG_ACT4_LOYALTY_TOKEN_ACQUIRED } from '../Act4StoryFlags'
 
 /** A token that proves the bonds of trust with freed allies. */
@@ -28,18 +28,18 @@ export class LoyaltyToken extends Item {
     if (gameState.currentRoom.name === 'Tower of Shadows') {
       if (!this.protectionActive) {
         this.protectionActive = true
-        return (
-          '[event]You hold the Loyalty Token close to your heart, feeling the ' +
-          "warmth of true friendship and trust. The token's power forms a " +
-          'protective barrier against the lies and deceptions that whisper ' +
-          'through the shadowy tower.[/event]'
+        return event(
+          'You hold the Loyalty Token close to your heart, feeling the ' +
+            "warmth of true friendship and trust. The token's power forms a " +
+            'protective barrier against the lies and deceptions that whisper ' +
+            'through the shadowy tower.',
         )
       }
       return '[dim]The Loyalty Token is already protecting you from deception.[/dim]'
     }
-    return (
-      '[event]The Loyalty Token glows softly, ready to prove the strength ' +
-      'of your bonds when facing deception.[/event]'
+    return event(
+      'The Loyalty Token glows softly, ready to prove the strength ' +
+        'of your bonds when facing deception.',
     )
   }
 }

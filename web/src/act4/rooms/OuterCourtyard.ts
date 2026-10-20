@@ -1,4 +1,4 @@
-import { Room, type GameState } from '@/engine'
+import { Room, type GameState, event } from '@/engine'
 import { TrappedServants } from '../characters/TrappedServants'
 import { LoyaltyToken } from '../items/LoyaltyToken'
 import { ServantsPendant } from '../items/ServantsPendant'
@@ -39,11 +39,13 @@ export class OuterCourtyard extends Room {
       if (servants) {
         return servants.examine(gameState)
       }
-      return '[event]The servants have been freed and are no longer trapped here.[/event]'
+      return event(
+        'The servants have been freed and are no longer trapped here.',
+      )
     }
-    return (
-      `[event]You examine the ${target} but find nothing particularly ` +
-      'noteworthy about it.[/event]'
+    return event(
+      `You examine the ${target} but find nothing particularly ` +
+        'noteworthy about it.',
     )
   }
 
@@ -63,12 +65,12 @@ export class OuterCourtyard extends Room {
       this.addItem(new ServantsPendant())
       // Remove the trapped servants and replace with freed servants
       this.characters.splice(0)
-      return (
-        '[event]Your blessing magic flows out like golden light, shattering ' +
-        'the dark chains that bind the servants. They cry out in joy as their ' +
-        "spirits are freed from Malakar's curse. In gratitude, they offer you " +
-        'a loyalty token and a pendant that will help guide you through the ' +
-        'trials ahead.[/event]'
+      return event(
+        'Your blessing magic flows out like golden light, shattering ' +
+          'the dark chains that bind the servants. They cry out in joy as their ' +
+          "spirits are freed from Malakar's curse. In gratitude, they offer you " +
+          'a loyalty token and a pendant that will help guide you through the ' +
+          'trials ahead.',
       )
     }
     return '[dim]The servants have already been freed from their cursed bonds.[/dim]'

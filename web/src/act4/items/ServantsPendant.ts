@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { FLAG_ACT4_SERVANTS_PENDANT_ACQUIRED } from '../Act4StoryFlags'
 
 /** A pendant that allows communication with freed servants for guidance. */
@@ -28,11 +28,11 @@ export class ServantsPendant extends Item {
     if (gameState.currentRoom.name === 'Mirror Labyrinth') {
       if (!this.guidanceReceived) {
         this.guidanceReceived = true
-        return (
-          "[event]You hold the Servant's Pendant and feel a warm connection " +
-          'to the freed servants. Their voices whisper guidance through the ' +
-          "crystal: 'The mirrors show many paths, but only echoes from the " +
-          "ancient halls reveal the true way forward.'[/event]"
+        return event(
+          "You hold the Servant's Pendant and feel a warm connection " +
+            'to the freed servants. Their voices whisper guidance through the ' +
+            "crystal: 'The mirrors show many paths, but only echoes from the " +
+            "ancient halls reveal the true way forward.'",
         )
       }
       return (
@@ -40,9 +40,9 @@ export class ServantsPendant extends Item {
         'mirror labyrinth.[/dim]'
       )
     }
-    return (
-      "[event]The Servant's Pendant glows softly, ready to provide guidance " +
-      'when you need their knowledge.[/event]'
+    return event(
+      "The Servant's Pendant glows softly, ready to provide guidance " +
+        'when you need their knowledge.',
     )
   }
 }
