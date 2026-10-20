@@ -92,6 +92,22 @@ describe('parseTurn', () => {
     ).toEqual([{ kind: 'dialogue', speaker: 'Mira', markup: "'Hello.'" }])
   })
 
+  it('drops a "Name:" line before that speaker\'s quote', () => {
+    expect(
+      parseTurn(
+        "[character_name]Sir Cedric[/character_name]: [dialogue]'Greetings.'[/dialogue]",
+      ),
+    ).toEqual([
+      { kind: 'dialogue', speaker: 'Sir Cedric', markup: "'Greetings.'" },
+    ])
+  })
+
+  it('keeps a "Name:" line that is not followed by its own quote', () => {
+    expect(parseTurn('[character_name]Mira[/character_name]:')).toEqual([
+      { kind: 'text', markup: '[character_name]Mira[/character_name]:' },
+    ])
+  })
+
   it('keeps a name-only line that is not followed by a quote', () => {
     expect(parseTurn('[character_name]Mira[/character_name]')).toEqual([
       { kind: 'text', markup: '[character_name]Mira[/character_name]' },
