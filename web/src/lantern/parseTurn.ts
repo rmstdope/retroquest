@@ -13,7 +13,8 @@
  *   closed at the end of each line and reopened on the next, so every block's
  *   markup is balanced on its own; stray closing tags are dropped.
  *
- * - A line holding only a speaker's name right before that speaker's quote is
+ * - A line holding only a speaker's name (optionally followed by a colon, as
+ *   in `Name: quote`) right before that speaker's quote is
  *   dropped (the quote's label shows the name); `[character_name][/character_name]`
  *   marks unsigned writing: the quote has no speaker and no label.
  *
@@ -38,7 +39,7 @@ export type TurnBlock =
 const DIALOGUE_OPEN = '[dialogue]'
 const DIALOGUE_CLOSE = '[/dialogue]'
 const CHARACTER_NAME = /\[character_name\]([\s\S]*?)\[\/character_name\]/g
-const NAME_ONLY = /^\[character_name\]([^[]+)\[\/character_name\]$/
+const NAME_ONLY = /^\[character_name\]([^[]+)\[\/character_name\]:?$/
 const CHECKLIST_BULLET = /^\*\s*/
 const SPAN_TAG = new RegExp(
   `\\[(/?)(${MARKUP_TAGS.filter((tag) => tag !== 'dialogue').join('|')})\\]`,
