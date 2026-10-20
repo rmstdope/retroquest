@@ -34,8 +34,18 @@ describe('speaker names in the story view', () => {
     ['Act 1', () => new Game([new Act1()]), ACT1_GOLDEN_PATH],
     ['Act 2', () => new Game([new Act2()]), ACT2_GOLDEN_PATH],
     ['Act 3', () => new Game([new Act3()]), ACT3_GOLDEN_PATH],
-  ])('%s shows no "Name:" line before a labelled quote', (_act, make, path) => {
-    const lines = textBeforeQuotes(make(), path)
-    expect(lines.filter((line) => NAME_COLON.test(line))).toEqual([])
+  ])(
+    '%s golden path (guard) shows no "Name:" line before a labelled quote',
+    (_act, make, path) => {
+      const lines = textBeforeQuotes(make(), path)
+      expect(lines.filter((line) => NAME_COLON.test(line))).toEqual([])
+    },
+  )
+
+  it('Act 3 shows Sir Cedric once, as the label above his quote', () => {
+    const game = new Game([new Act3()])
+    const blocks = parseTurn(game.commandParser.parse('talk to sir cedric'))
+    expect(blocks.map((block) => block.kind)).toEqual(['dialogue'])
+    expect(blocks[0]).toMatchObject({ kind: 'dialogue', speaker: 'Sir Cedric' })
   })
 })
