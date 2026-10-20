@@ -17,6 +17,7 @@ import {
 } from './Act3StoryFlags'
 import {
   executeCommands,
+  expectMarkupWellFormed,
   expectCharacterInRoom,
   expectCurrentRoom,
   expectItemCountInInventory,
@@ -571,7 +572,7 @@ describe('Act 3 golden path', () => {
 
   it('survives a save and load round-trip at the end', () => {
     const game = new Game([new Act3()])
-    game.commandParser.parse('cheat act 3')
+    expectMarkupWellFormed(game.commandParser.parse('cheat act 3'))
     const data = game.toSaveData()
     const fresh = new Game([new Act3()])
     expect(fresh.loadSaveData(data)).toContain('loaded')
