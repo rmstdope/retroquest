@@ -10,6 +10,7 @@ import { ProtectiveEnchantments } from '../items/ProtectiveEnchantments'
 export class MendSpell extends Spell {
   constructor() {
     super({
+      id: 'mend',
       name: 'mend',
       description:
         'A basic repair spell that can fix broken objects, torn clothing, and ' +
@@ -20,7 +21,7 @@ export class MendSpell extends Spell {
 
   /** Cast mend without a target; nothing nearby needs repair. */
   override castSpell(_gameState: GameState): string {
-    const name = this.displayName
+    const name = this.name
     return (
       `[success]You cast [spell_name]${name}[/spell_name] into the air. The spell ` +
       'shimmers briefly, looking for something to repair, but finds nothing ' +
@@ -34,7 +35,7 @@ export class MendSpell extends Spell {
     if (targetItem instanceof ProtectiveEnchantments) {
       if (!gameState.getStoryFlag(FLAG_MENDED_LIBRARY_ENCHANTMENTS)) {
         gameState.setStoryFlag(FLAG_MENDED_LIBRARY_ENCHANTMENTS, true)
-        const name = this.displayName
+        const name = this.name
         const iname = targetItem.name
         return (
           `[success]You cast [spell_name]${name}[/spell_name] on the damaged ` +
@@ -54,7 +55,7 @@ export class MendSpell extends Spell {
     // Check if the item can be repaired (this is the original implementation)
     const lowered = targetItem.description.toLowerCase()
     if (lowered.includes('broken') || lowered.includes('damaged')) {
-      const name = this.displayName
+      const name = this.name
       const iname = targetItem.name
       return (
         `[success]You cast [spell_name]${name}[/spell_name] on ` +
@@ -62,7 +63,7 @@ export class MendSpell extends Spell {
         'item, repairing damage and restoring it to working condition![/success]'
       )
     }
-    const name = this.displayName
+    const name = this.name
     const iname = targetItem.name
     return (
       `[dim]You cast [spell_name]${name}[/spell_name] on ` +

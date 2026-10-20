@@ -11,6 +11,7 @@ import {
 export class BlessSpell extends Spell {
   constructor() {
     super({
+      id: 'bless',
       name: 'bless',
       description:
         'A divine incantation that offers protection and strength, and can ' +
@@ -51,7 +52,7 @@ export class BlessSpell extends Spell {
     // Check if the item has a receiveSpell method
     const hook = (
       targetItem as {
-        receiveSpell?: (gs: GameState, spellName: string) => string
+        receiveSpell?: (gs: GameState, spellId: string) => string
       }
     ).receiveSpell
     if (typeof hook === 'function') {

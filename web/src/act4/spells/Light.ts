@@ -4,6 +4,7 @@ import { Spell, type GameState, type Item, event } from '@/engine'
 export class Light extends Spell {
   constructor() {
     super({
+      id: 'light',
       name: 'light',
       description:
         'Creates a brilliant burst of pure light that illuminates dark areas ' +

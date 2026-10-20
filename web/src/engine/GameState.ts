@@ -135,12 +135,13 @@ export class GameState {
   }
 
   learnSpell(spell: Spell): void {
-    if (!this.hasSpell(spell.name)) this.knownSpells.push(spell)
+    if (!this.hasSpell(spell.id)) this.knownSpells.push(spell)
   }
 
-  hasSpell(spellName: string): boolean {
-    const wanted = spellName.toLowerCase()
-    return this.knownSpells.some((spell) => spell.name.toLowerCase() === wanted)
+  /** Whether a spell with this identifier (any case) is known. */
+  hasSpell(spellId: string): boolean {
+    const wanted = spellId.toLowerCase()
+    return this.knownSpells.some((spell) => spell.id.toLowerCase() === wanted)
   }
 
   /** A summary of the state as markup. */
@@ -165,9 +166,7 @@ export class GameState {
     lines.push('', '[bold]Known Spells:[/bold]')
     lines.push(
       ...this.listOrNone(
-        this.knownSpells.map(
-          (s) => `- [spell_name]${s.displayName}[/spell_name]`,
-        ),
+        this.knownSpells.map((s) => `- [spell_name]${s.name}[/spell_name]`),
       ),
     )
     lines.push('', '[bold]Visited Rooms:[/bold]')

@@ -224,7 +224,9 @@ describe('GameController', () => {
       const state = ctrl.game.state
       state.addItemToInventory(item('coin'), 3)
       state.addItemToInventory(item('sword'))
-      state.learnSpell(new Spell({ name: 'light', description: 'Lights.' }))
+      state.learnSpell(
+        new Spell({ id: 'light', name: 'light', description: 'Lights.' }),
+      )
       const main = new SimpleQuest('Main Arc', true)
       const side = new SimpleQuest('Side A')
       side.completion = 'Side A done.'

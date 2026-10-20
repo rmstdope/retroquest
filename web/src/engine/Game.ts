@@ -51,12 +51,12 @@ export interface GameOptions {
 
 /** The JSON a save holds. */
 interface SavePayload {
-  version: 1
+  version: 2
   actIndex: number
   state: SerializedGraph
 }
 
-const SAVE_VERSION = 1
+const SAVE_VERSION = 2
 const DEFAULT_SAVE_NAME = 'retroquest'
 const SAVE_NAME = /^[a-z0-9_-]+$/
 const INVALID_SAVE_NAME =
@@ -638,8 +638,8 @@ Welcome to
   }
 
   /**
-   * `<spell>` or `<spell> on <target>`. A spell stored with underscores
-   * (`prophetic_vision`) is cast by its spaced name too (`prophetic vision`).
+   * `<spell>` or `<spell> on <target>`. A spell is cast by its shown name or
+   * its id (`prophetic vision` or `prophetic_vision`).
    */
   cast(args: string): string {
     const lower = args.toLowerCase()
@@ -647,10 +647,7 @@ Welcome to
     const spellName = (split < 0 ? lower : lower.slice(0, split)).trim()
     const targetName =
       split < 0 ? null : lower.slice(split + ' on '.length).trim()
-    const wanted = spellName.replaceAll('_', ' ')
-    const spell = this.state.knownSpells.find(
-      (s) => s.name.toLowerCase().replaceAll('_', ' ') === wanted,
-    )
+    const spell = this.state.knownSpells.find((s) => s.answersTo(spellName))
     if (!spell)
       return `[failure]You don't know any spell called '${spellName}'.[/failure]`
     if (!targetName) return spell.castSpell(this.state)
@@ -660,7 +657,7 @@ Welcome to
     if (character) return spell.castOnCharacter(this.state, character)
     return (
       `[failure]You don't see a '${targetName}' to cast ` +
-      `[spell_name]${spell.displayName}[/spell_name] on.[/failure]`
+      `[spell_name]${spell.name}[/spell_name] on.[/failure]`
     )
   }
 
@@ -668,7 +665,7 @@ Welcome to
   learn(spell: Spell): string {
     if (this.state.knownSpells.includes(spell)) return ''
     this.state.knownSpells.push(spell)
-    return `[event]You have learned the [spell_name]${spell.displayName}[/spell_name] spell![/event]`
+    return `[event]You have learned the [spell_name]${spell.name}[/spell_name] spell![/event]`
   }
 
   spells(): string {
@@ -676,7 +673,7 @@ Welcome to
       return "You don't know any spells yet."
     const lines = this.state.knownSpells.map(
       (spell) =>
-        `  - [spell_name]${spell.displayName}[/spell_name]: ${spell.description}`,
+        `  - [spell_name]${spell.name}[/spell_name]: ${spell.description}`,
     )
     return ['[bold]Known Spells:[/bold]', ...lines].join('\n')
   }

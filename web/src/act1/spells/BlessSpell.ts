@@ -11,6 +11,7 @@ import { FLAG_JOURNEY_BLESS_COMPLETED } from '../Act1StoryFlags'
 export class BlessSpell extends Spell {
   constructor() {
     super({
+      id: 'bless',
       name: 'bless',
       description:
         'A divine incantation that offers protection and strength to the caster.',

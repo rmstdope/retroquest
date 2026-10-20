@@ -11,6 +11,7 @@ import { MysteriousBox } from '../items/MysteriousBox'
 export class UnlockSpell extends Spell {
   constructor() {
     super({
+      id: 'unlock',
       name: 'unlock',
       description:
         'A spell that can open magically sealed or complex mundane locks.',

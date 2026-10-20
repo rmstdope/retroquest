@@ -5,6 +5,7 @@ import { LanternBracket } from '../items/LanternBracket'
 export class LightSpell extends Spell {
   constructor() {
     super({
+      id: 'light',
       name: 'light',
       description: 'A steady kindling that coaxes prisms to life.',
     })

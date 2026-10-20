@@ -2,34 +2,43 @@ import type { Character } from './Character'
 import type { GameState } from './GameState'
 import type { Item } from './Item'
 
+/** Construction options: `id` is the identifier, `name` the text a player reads. */
 export interface SpellOptions {
+  id: string
   name: string
   description: string
 }
 
 /** Base class for all spells. Subclasses override the casts they support. */
 export class Spell {
+  /** Stable identifier used for lookups (`prophetic_vision`); never shown. */
+  id: string
+  /** The name a player reads and types (`prophetic vision`). */
   name: string
   description: string
 
-  constructor({ name, description }: SpellOptions) {
+  constructor({ id, name, description }: SpellOptions) {
+    this.id = id
     this.name = name
     this.description = description
   }
 
-  /** The name a player reads in messages: the id with underscores as spaces. */
-  get displayName(): string {
-    return this.name.replaceAll('_', ' ')
+  /** Whether typed text names this spell: its id or its shown name, any case. */
+  answersTo(text: string): boolean {
+    const wanted = text.trim().toLowerCase()
+    return (
+      this.id.toLowerCase() === wanted || this.name.toLowerCase() === wanted
+    )
   }
 
   /** Cast without a target. */
   castSpell(_gameState: GameState): string {
-    return `[failure]You cast [spell_name]${this.displayName}[/spell_name], but nothing happens.[/failure]`
+    return `[failure]You cast [spell_name]${this.name}[/spell_name], but nothing happens.[/failure]`
   }
 
   castOnItem(_gameState: GameState, target: Item): string {
     return (
-      `[failure]You attempt to cast [spell_name]${this.displayName}[/spell_name] on ` +
+      `[failure]You attempt to cast [spell_name]${this.name}[/spell_name] on ` +
       `[item_name]${target.name}[/item_name], but the spell fizzles and ` +
       'does not seem to work on this item.[/failure]'
     )
@@ -37,7 +46,7 @@ export class Spell {
 
   castOnCharacter(_gameState: GameState, target: Character): string {
     return (
-      `[failure]You attempt to cast [spell_name]${this.displayName}[/spell_name] on ` +
+      `[failure]You attempt to cast [spell_name]${this.name}[/spell_name] on ` +
       `[character_name]${target.name}[/character_name], but the spell ` +
       'fizzles and does not seem to work on this character.[/failure]'
     )

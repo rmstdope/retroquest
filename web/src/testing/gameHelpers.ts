@@ -87,18 +87,16 @@ export function expectCharacterInRoom(
     expect(names, `${characterName} not in ${room.name}`).not.toContain(wanted)
 }
 
+/** Assert whether the player knows the spell with this id (any case). */
 export function expectSpellKnown(
   state: GameState,
-  spellName: string,
+  spellId: string,
   known = true,
 ): void {
-  const names = lowerNames(state.knownSpells)
-  if (known)
-    expect(names, `${spellName} known`).toContain(spellName.toLowerCase())
+  const names = state.knownSpells.map((spell) => spell.id.toLowerCase())
+  if (known) expect(names, `${spellId} known`).toContain(spellId.toLowerCase())
   else
-    expect(names, `${spellName} not known`).not.toContain(
-      spellName.toLowerCase(),
-    )
+    expect(names, `${spellId} not known`).not.toContain(spellId.toLowerCase())
 }
 
 export function expectStoryFlag(

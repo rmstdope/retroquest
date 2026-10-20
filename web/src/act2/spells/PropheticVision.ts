@@ -10,7 +10,8 @@ import { SirCedric } from '../characters/SirCedric'
 export class PropheticVision extends Spell {
   constructor() {
     super({
-      name: 'prophetic_vision',
+      id: 'prophetic_vision',
+      name: 'prophetic vision',
       description:
         'A powerful divination spell that allows the caster to glimpse possible futures ' +
         'and see the threads of fate.',

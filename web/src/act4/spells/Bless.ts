@@ -10,6 +10,7 @@ import {
 export class Bless extends Spell {
   constructor() {
     super({
+      id: 'bless',
       name: 'bless',
       description:
         'Channels divine energy to purify corruption, break dark enchantments, ' +

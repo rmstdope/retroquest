@@ -93,7 +93,7 @@ export class SpectralLibrarian extends Character {
       ': ' +
       speech(
         "'You have proven yourself worthy and learned what this library " +
-          `can teach. The knowledge of your bloodline and the [spell_name]${dispelSpell.displayName}` +
+          `can teach. The knowledge of your bloodline and the [spell_name]${dispelSpell.name}` +
           '[/spell_name] spell will serve you well in the challenges ahead. ' +
           'Remember: you are part of an ancient lineage chosen to stand ' +
           "against the darkness. Use this knowledge wisely.'",
