@@ -4,14 +4,18 @@ import {
   FLAG_MAGIC_FULLY_UNLOCKED,
 } from '../Act1StoryFlags'
 
-/** The kinds of food that count for the road; the quest wants any four. */
+/**
+ * The kinds of food that count for the road, each by the item names that
+ * stand for it (the cottage loaf or grandmother's fresh one are both bread);
+ * the quest wants any four.
+ */
 const FOOD_KINDS = [
-  'bread',
-  'apple',
-  'egg',
-  'fresh carrot',
-  'wild berries',
-  'fish',
+  ['bread', 'fresh bread'],
+  ['apple'],
+  ['egg'],
+  ['fresh carrot'],
+  ['wild berries'],
+  ['fish'],
 ]
 const FOOD_KINDS_NEEDED = 4
 
@@ -65,8 +69,10 @@ export class PreparingForTheRoadQuest extends Quest {
   private refreshChecklist(gameState: GameState): boolean {
     // Items
     this.hasTravelCloak = gameState.hasItem('travel cloak')
-    // Food: any four of the six kinds ('bread' is also grandmother's fresh loaf)
-    const foodKinds = FOOD_KINDS.filter((food) => gameState.hasItem(food))
+    // Food: any four of the six kinds
+    const foodKinds = FOOD_KINDS.filter((names) =>
+      names.some((name) => gameState.hasItem(name)),
+    )
     this.allFoodCollected = foodKinds.length >= FOOD_KINDS_NEEDED
 
     this.hasWanderingBoots = gameState.hasItem('wandering boots')

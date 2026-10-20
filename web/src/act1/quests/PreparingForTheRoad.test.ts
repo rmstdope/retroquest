@@ -4,6 +4,7 @@ import { Act1 } from '../Act1'
 import { GameMap } from '../items/GameMap'
 import { TravelCloak } from '../items/TravelCloak'
 import { Apple } from '../items/Apple'
+import { Bread } from '../items/Bread'
 import { Egg } from '../items/Egg'
 import { Fish } from '../items/Fish'
 import { FreshBread } from '../items/FreshBread'
@@ -119,6 +120,14 @@ describe('Food for the road', () => {
     game.state.addItemToInventory(new WildBerries())
 
     expect(foodLine(game).done).toBe(true)
+  })
+
+  it('counts both loaves of bread as one kind', () => {
+    const game = new Game([new Act1()])
+    game.state.addItemToInventory(new FreshBread())
+    expect(foodLine(game).text).toContain('1 of 6')
+    game.state.addItemToInventory(new Bread())
+    expect(foodLine(game).text).toContain('1 of 6')
   })
 
   it('counts the carrot only once it has been revived', () => {

@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { Act1 } from '../Act1'
 import { Bread } from './Bread'
+import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
+import { executeCommands } from '@/testing/gameHelpers'
 
 describe('Bread and the chickens', () => {
   it('shakes the key loose from the rafter the coop describes', () => {
@@ -16,5 +18,20 @@ describe('Bread and the chickens', () => {
     expect(answer).toContain('rafter')
     expect(answer).toContain('hidden')
     expect(findMarkupProblems(answer)).toEqual([])
+  })
+})
+
+describe("Bread and grandmother's fresh loaf", () => {
+  it('still feeds the chickens when the fresh loaf is carried too', () => {
+    const game = new Game([new Act1()])
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+    executeCommands(game, ['talk to grandmother', 'use lantern', 'take bread'])
+    expect(game.state.hasItem('fresh bread')).toBe(true)
+    game.state.currentRoom = game.state.allRooms.ChickenCoop
+
+    const answer = game.commandParser.parse('use bread with chicken')
+
+    expect(answer).toContain('[item_name]small key[/item_name]')
+    expect(game.state.hasItem('fresh bread')).toBe(true)
   })
 })

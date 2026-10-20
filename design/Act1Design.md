@@ -385,7 +385,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
     - Give rare flower to Mira. \_Mira smiles, saying the flower is a sign of Elior's connection to the natural world. Pleased with Elior's progress and the offering, Mira teaches him the `heal` spell for mending wounds, the `unlock` spell for revealing secrets, and the `light` spell to illuminate darkness. From this point on, the spells learned can actually be used for something as Elior have learned magic for real. Her tone then turns practical: "You'll need warmth, protection, food, boots and a map", and all the basic magic the village elders can teach. The Ancient Amulet will be his once he is truly ready. She keeps it to that one line (the scene is told in short beats so it reads well on a phone); the quest log carries the full checklist:\_
       - Warm clothing (`travel cloak`)
       - Magical protection (cast `bless` on himself)
-      - Food for the road: any four of six kinds (`bread`, `apple`, `egg`, `carrot`, `wild berries`, `fish`); the checklist shows how many are gathered. The golden path gathers `wild berries`, `apple`, `egg` and `carrot`; Grandmother's `fresh bread` (talk to her after this step) and a `fish` not given to the Fisherman also count.
+      - Food for the road: any four of six kinds (`bread` or `fresh bread`, `apple`, `egg`, `carrot`, `wild berries`, `fish`); the checklist shows how many are gathered. The golden path gathers `wild berries`, `apple`, `egg` and `carrot`; Grandmother's `fresh bread` (talk to her after this step) and a `fish` not given to the Fisherman also count.
       - Sturdy footwear (`wandering boots`)
       - A `map` to find his way
       - All basic magic learned
