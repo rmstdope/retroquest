@@ -1,23 +1,6 @@
 # RetroQuest: A Text Adventure Built with AI
 
-Welcome to RetroQuest, a text adventure game built with GitHub Copilot! This project explores how far AI can go in creating a complete game with tests and game mechanics.
-
-## How It Started
-
-I started working on this text adventure in December 2024, but the project went dormant after just the initial commits.
-
-In May 2025, I decided to try an experiment: What if GitHub Copilot could help finish this game? Could AI write all of the code and tests with just guidance from me? That's how RetroQuest was reborn - not just as a game, but as a test of pure AI-agent development.
-
-## How Human and AI Work Together
-
-Here's how I work with the AI to build this game:
-
--   **Planning:** I give the AI prompts and describe what needs to be built.
--   **Review:** I check all the code and tests the AI creates, giving feedback to make them better.
--   **Debugging:** When the AI gets stuck or makes mistakes, I work with AI to find the issues and then let the AI do the actual fixing.
-
-It's a partnership where I provide direction and the AI does all of the coding work.
-My role is to provide prompts and occationally do minor string edits, whitespace removals, etc.
+Welcome to RetroQuest, a (as the name may give away) retro inspired text adventure game!
 
 ## How to Play
 
@@ -43,7 +26,7 @@ help
 This command will show you the list of all available commands in the game. You can also use the `?` command as a shortcut for `help`.
 
 ### Found issues?
-Write an issue on GitHub and I'll have copilot take a look at it.
+Write an issue on GitHub
 
 ### Got stuck?
-Likely a bug as well, look at the design files to see how to actually move forward or write an issue here as well.
+Look at the design files to see how to actually move forward or write an issue if you believe something is amiss.
