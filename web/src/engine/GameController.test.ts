@@ -384,6 +384,29 @@ describe('GameController', () => {
       })
     })
 
+    it('reports game over and keeps the last act playing after it', () => {
+      const room = new Room({ name: 'R', description: '' })
+      const act = new Act({
+        name: 'A',
+        rooms: { R: room },
+        quests: [],
+        musicFile: 'finale.mp3',
+        musicInfo: 'Finale by Composer',
+      })
+      let done = false
+      act.isCompleted = () => done
+      const ctrl = new GameController(new Game([act]))
+      startAct(ctrl)
+      expect(ctrl.isGameOver()).toBe(false)
+      done = true
+      ctrl.game.newTurn()
+      expect(ctrl.isGameOver()).toBe(true)
+      expect(ctrl.getCurrentMusic()).toEqual({
+        musicFile: 'finale.mp3',
+        musicInfo: 'Finale by Composer',
+      })
+    })
+
     it('saves and loads through the game', () => {
       const ctrl = makeController()
       expect(ctrl.loadGame()).toContain('No save file found')

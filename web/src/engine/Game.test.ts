@@ -222,6 +222,39 @@ describe('Game', () => {
       expect(game.isRunning).toBe(false)
       expect(game.acceptInput).toBe(false)
     })
+
+    it('enters game over when the last act completes, staying in that act', () => {
+      const only = new Act({
+        name: 'Only',
+        rooms: basicRooms(),
+        quests: [],
+        musicFile: 'a.mp3',
+        musicInfo: 'A',
+      })
+      let done = false
+      only.isCompleted = () => done
+      const game = new Game([only])
+      game.newTurn()
+      game.newTurn()
+      expect(game.isGameOver()).toBe(false)
+      done = true
+      game.handleInput('look')
+      game.newTurn()
+      expect(game.isGameOver()).toBe(true)
+      expect(game.isActRunning()).toBe(false)
+      expect(game.isRunning).toBe(false)
+      expect(game.acceptInput).toBe(false)
+      expect(game.currentAct).toBe(0)
+      expect(game.getActName()).toBe('Act 1')
+      expect(game.getResultText()).toContain(
+        'Congratulations — you have completed Act 1, ' +
+          'the final act of RetroQuest!',
+      )
+      game.newTurn()
+      expect(game.isGameOver()).toBe(true)
+      game.handleInput('look')
+      expect(game.getResultText()).not.toContain('Vegetable')
+    })
   })
 
   describe('move', () => {
