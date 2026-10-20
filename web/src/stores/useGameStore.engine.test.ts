@@ -1,11 +1,28 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { Act, Item, Room, type GameState } from '@/engine'
+import { Act, Item, Quest, Room, type GameState } from '@/engine'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { useGameStore } from './useGameStore'
 
 /** The name of the item whose pick-up finishes the one-act test game. */
 const CROWN = 'Crown'
+
+/** The one quest of the crown act: done when the crown is carried. */
+class CrownQuest extends Quest {
+  constructor() {
+    super({ name: 'Wear the Crown', description: 'Take the crown.' })
+  }
+
+  /** Active from the start. */
+  override checkTrigger(): boolean {
+    return true
+  }
+
+  /** Done when the crown is carried. */
+  override checkCompletion(gameState: GameState): boolean {
+    return gameState.inventory.some((item) => item.name === CROWN)
+  }
+}
 
 /** A one-act game that ends the moment the player holds the crown. */
 class CrownAct extends Act {
@@ -25,7 +42,7 @@ class CrownAct extends Act {
           ],
         }),
       },
-      quests: [],
+      quests: [new CrownQuest()],
       musicFile: 'finale.mp3',
       musicInfo: 'Finale',
     })
@@ -62,6 +79,7 @@ describe('useGameStore over the real engine: game over', () => {
   it('closes the final act with the engine’s own closing text and stats', async () => {
     const store = await startedStore()
     store.submitCommand(`take ${CROWN}`)
+    store.dismissModal() // the quest pop-up
     expect(store.showModal).toBe(true)
     expect(store.modalChapter).toMatchObject({
       kind: 'complete',
@@ -69,13 +87,14 @@ describe('useGameStore over the real engine: game over', () => {
       body: expect.stringContaining(
         'Congratulations — you have completed Act 1, the final act of RetroQuest!',
       ),
-      stats: { questsCompleted: 0, questsTotal: 0, spells: 0, places: 1 },
+      stats: { questsCompleted: 1, questsTotal: 1, spells: 0, places: 1 },
     })
   })
 
   it('asks to save on the final page, then ends with the engine’s last answer', async () => {
     const store = await startedStore()
     store.submitCommand(`take ${CROWN}`)
+    store.dismissModal() // the quest pop-up
     store.continueChapter()
     expect(store.finishAsked).toBe(true)
     store.cancelFinish()
@@ -86,5 +105,14 @@ describe('useGameStore over the real engine: game over', () => {
       text: expect.stringContaining(CROWN),
       saved: false,
     })
+  })
+
+  it('shows the quest pop-up first, then the final page', async () => {
+    const store = await startedStore()
+    store.submitCommand(`take ${CROWN}`)
+    expect(store.modalQuest).not.toBe(null)
+    expect(store.modalChapter).toBe(null)
+    store.dismissModal()
+    expect(store.modalChapter).toMatchObject({ kind: 'complete', final: true })
   })
 })

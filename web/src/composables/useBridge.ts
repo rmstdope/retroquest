@@ -92,10 +92,10 @@ function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
   }
 }
 
-/** The acts, loaded on demand so each is its own chunk of the build. */
 /** An act the bridge can play. */
 export type ActClass = new () => Act
 
+/** The acts, loaded on demand so each is its own chunk of the build. */
 async function loadActs(): Promise<ActClass[]> {
   const [{ Act1 }, { Act2 }, { Act3 }] = await Promise.all([
     import('@/act1/Act1'),
