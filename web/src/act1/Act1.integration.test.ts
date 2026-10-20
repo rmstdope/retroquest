@@ -35,9 +35,10 @@ describe('Act 1 golden path', () => {
     executeCommands(game, ['use lantern'])
     expectItemInRoom(room(), 'bread')
     expectItemInRoom(room(), "Elior's Journal")
-    executeCommands(game, ['take bread', 'talk to grandmother'])
+    executeCommands(game, ['take bread', 'take lantern', 'talk to grandmother'])
     expectSpellKnown(state, 'revive', false)
     expectItemInInventory(state, 'bread')
+    expectItemInInventory(state, 'lantern (lit)')
     expectItemInRoom(room(), 'bread', false)
     expectQuests(state, [MAIN, 'Hint of Magic'])
     executeCommands(game, ['use journal', 'talk to grandmother'])
@@ -130,7 +131,8 @@ describe('Act 1 golden path', () => {
     expectCharacterInRoom(room(), 'patches', false)
     expectStoryFlag(state, 'patches_found', true)
 
-    executeCommands(game, ['search'])
+    // The shed is dark: the lit lantern Elior carries lets him search it
+    expect(executeCommands(game, ['search'])).toContain('lantern')
     expectItemInRoom(room(), 'fishing rod')
     expectItemInRoom(room(), 'magnet')
 

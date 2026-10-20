@@ -1,23 +1,28 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { GameState } from '@/engine'
 import { BrokenShovel } from '../items/BrokenShovel'
 import { MysteriousBox } from '../items/MysteriousBox'
 import { FishingRod } from '../items/FishingRod'
 import { Magnet } from '../items/Magnet'
 import { ShedDoor } from '../items/ShedDoor'
+import { Lantern } from '../items/Lantern'
 import { Patches } from '../characters/Patches'
 import { FLAG_PATCHES_FOUND } from '../Act1StoryFlags'
 
 /**
  * Abandoned Shed room: staged unlock and layered search progression.
  *
- * `unlock()` toggles the locked state and injects the MysteriousBox,
- * BrokenShovel and Patches, the missing cat; the first search after unlocking
- * adds the FishingRod and Magnet.
+ * Once the workshop of Elior's father, it is dark inside. `unlock()` toggles
+ * the locked state and injects the MysteriousBox, BrokenShovel and Patches,
+ * the missing cat; the first search after unlocking adds the FishingRod and
+ * Magnet, but only by the light of a lit lantern Elior holds or of the
+ * `light` spell.
  */
 export class AbandonedShed extends Room {
   locked = true
   roomSearched = false
+  /** Set by the `light` spell; absent in saves made before the shed was dark. */
+  lit = false
 
   constructor() {
     super({
@@ -25,8 +30,9 @@ export class AbandonedShed extends Room {
       description:
         'A rickety shed leans precariously at the edge of Willowbrook, its weathered ' +
         'boards creaking in the wind. Rusty tools and broken crates are scattered ' +
-        'about, and a thick layer of dust covers everything. Shadows gather in the ' +
-        'corners, and the air smells of old earth and forgotten secrets. Something ' +
+        'about a long workbench, and a thick layer of dust covers everything. ' +
+        'Little light gets past the grimy boards; shadows gather in the corners, ' +
+        'and the air smells of old earth and forgotten secrets. Something ' +
         'about the place feels both forlorn and mysteriously inviting.',
       items: [new ShedDoor()],
       characters: [],
@@ -45,9 +51,9 @@ export class AbandonedShed extends Room {
     this.addCharacter(new Patches())
     return (
       'The old wooden door creaks open with a groan, revealing the dusty interior ' +
-      'of the Abandoned Shed. A [item_name]Mysterious Box[/item_name] sits on a rickety ' +
-      'table, and a [item_name]Broken Shovel[/item_name] leans against a cobweb-covered ' +
-      'wall.'
+      'of the Abandoned Shed. A [item_name]Mysterious Box[/item_name] sits on an old ' +
+      'workbench, and a [item_name]Broken Shovel[/item_name] leans against a ' +
+      'cobweb-covered wall.'
     )
   }
 
@@ -72,23 +78,32 @@ export class AbandonedShed extends Room {
   }
 
   /**
-   * Search the shed; the first search after unlocking adds the loot, and
-   * Patches is seen hiding while she has not been coaxed out.
+   * Search the shed; the first search after unlocking adds the loot when
+   * there is light to see by, and Patches is seen hiding, her eyes shining in
+   * the dark, while she has not been coaxed out.
    */
   override search(gameState: GameState): string {
     this.hidePatches(gameState)
     const hiding = this.characters.some((c) => c instanceof Patches)
       ? '\nA pair of frightened green eyes watches you from behind the crates.'
       : ''
-    return this.searchClutter() + hiding
+    return this.searchClutter(gameState) + hiding
   }
 
   /** The search of the clutter itself: the loot the first time, then nothing. */
-  private searchClutter(): string {
+  private searchClutter(gameState: GameState): string {
     if (this.locked) {
       return (
         'You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] ' +
         "is locked so you can't search inside."
+      )
+    }
+
+    if (!this.roomSearched && !this.hasLight(gameState)) {
+      return (
+        "It's too dark to rummage through the clutter. The shadows swallow the " +
+        'corners of the workbench, and you would need a light to see what lies ' +
+        'in them.'
       )
     }
 
@@ -103,13 +118,54 @@ export class AbandonedShed extends Room {
 
     if (itemsFoundMessages.length > 0) {
       return (
-        'You rummage through the clutter of rusty tools and broken crates. Tucked away in ' +
+        `${this.lightSource(gameState)}, you rummage through the clutter of ` +
+        'rusty tools and broken crates. Tucked away in ' +
         `dusty corners, you find ${itemsFoundMessages.join(', and ')}!`
       )
     }
     return (
       'You search around the shed again, but find nothing else of interest among the ' +
       'clutter.'
+    )
+  }
+
+  /** Whether Elior holds a lit lantern or has lit the shed with the spell. */
+  private hasLight(gameState: GameState): boolean {
+    return (
+      this.lit === true ||
+      gameState.inventory.some((i) => i instanceof Lantern && i.isLit())
+    )
+  }
+
+  /** How Elior sees in the shed: by the lantern he holds or the spell's glow. */
+  private lightSource(gameState: GameState): string {
+    return gameState.inventory.some((i) => i instanceof Lantern && i.isLit())
+      ? 'Holding the [item_name]lantern[/item_name] high'
+      : 'By the glow of your spell'
+  }
+
+  /**
+   * The `light` spell lights the dark shed, so it can be searched; while the
+   * door is locked it only shows the door.
+   */
+  override light(_gameState: GameState): string {
+    if (this.locked) {
+      return (
+        event('You cast a [spell_name]light[/spell_name] spell.') +
+        '\n' +
+        'The glow plays over the weathered boards and the locked ' +
+        '[item_name]Shed Door[/item_name]. Whatever lies inside stays dark.'
+      )
+    }
+    this.lit = true
+    return (
+      event(
+        'You cast a [spell_name]light[/spell_name] spell, and a soft glow ' +
+          'fills the shed.',
+      ) +
+      '\n' +
+      'Warm light spills over the old workbench and the dusty shelves above ' +
+      'it. Whoever worked here kept their tools in careful rows.'
     )
   }
 }

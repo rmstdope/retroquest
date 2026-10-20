@@ -11,6 +11,7 @@ import { TravelCloak } from '../items/TravelCloak'
 import { WildBerries } from '../items/WildBerries'
 import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
+import { Key } from '../items/Key'
 import {
   FLAG_READ_PHOTO_MESSAGE,
   FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO,
@@ -35,7 +36,10 @@ export class Grandmother extends Character {
     })
   }
 
-  /** Dialogue varying by story flags; grants the Revive spell when appropriate. */
+  /**
+   * Dialogue varying by story flags; grants the Revive spell when appropriate,
+   * and hints at the shed while Elior carries its key.
+   */
   override talkTo(gameState: GameState): string {
     let dialogue = ''
     if (this.dialogueState.initial_talk) {
@@ -102,6 +106,10 @@ export class Grandmother extends Character {
       }
     }
 
+    if (gameState.inventory.some((item) => item instanceof Key)) {
+      dialogue += (dialogue ? '\n' : '') + this.shedKeyHint()
+    }
+
     if (!dialogue) {
       // If no other dialogue was triggered
       dialogue = speech(
@@ -112,6 +120,17 @@ export class Grandmother extends Character {
 
     const eventMsg = event(`You speak with ${characterName(this.name)}.`)
     return eventMsg + '\n' + dialogue
+  }
+
+  /** What she says on seeing the shed key she once hid in the chicken coop. */
+  private shedKeyHint(): string {
+    return speech(
+      'So the chickens gave up my little secret. I tucked that key up in the ' +
+        'coop rafters years ago. It opens the old shed by the mill.\n' +
+        "It was a workshop once... your father's. I never could bring myself " +
+        "to go in. It's dark as a cellar in there, dear; take the " +
+        '[item_name]lantern[/item_name] with you.',
+    )
   }
 
   /** Handle items given to the grandmother and produce appropriate events. */
