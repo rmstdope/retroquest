@@ -458,7 +458,8 @@ export const useGameStore = defineStore('game', () => {
     const { playDebugScript } = await import('@/utils/debugScript')
     await playDebugScript(name, {
       play: playCommand,
-      show: (text) => showOutput(null, text, { chips: false }),
+      running: () => requireBridge().isActRunning(),
+      show: (text) => showOutput(`debug ${name}`, text, { chips: false }),
     })
   }
 

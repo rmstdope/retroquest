@@ -40,6 +40,8 @@ export function failureReason(answer: string): string | null {
 export interface DebugScriptHost {
   /** Play one command as the player typed it; returns the game's answer. */
   play(command: string): string
+  /** True while the act runs; a script stops when its act has ended. */
+  running(): boolean
   /** Add a message of the debug command itself to the story. */
   show(text: string): void
 }
@@ -76,6 +78,12 @@ export async function playDebugScript(
       host.show(
         `[failure]Debug script '${name}' stopped at line ${line}: ` +
           `'${command}'. ${reason}[/failure]`,
+      )
+      return
+    }
+    if (!host.running()) {
+      host.show(
+        `Debug script '${name}' stopped at line ${line}: the act ended.`,
       )
       return
     }

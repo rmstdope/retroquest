@@ -310,7 +310,7 @@ describe('useGameStore', () => {
         ['take bread'],
       ])
       const commands = store.turns.map((turn) => turn.command)
-      expect(commands.slice(-3)).toEqual(['look', 'take bread', null])
+      expect(commands.slice(-3)).toEqual(['look', 'take bread', 'debug act1'])
       expect(store.turns.at(-1)!.text).toContain('2 commands')
     })
 
@@ -328,6 +328,14 @@ describe('useGameStore', () => {
       expect(last.text).toContain('line 2')
       expect(last.text).toContain("'take sword'")
       expect(last.text).toContain("There is no 'sword' here to take.")
+    })
+
+    it('stops when a command ends the act', async () => {
+      serveScript('look\ntake bread\n')
+      bridge.isActRunning.mockReturnValueOnce(true).mockReturnValue(false)
+      await store.runDebugScript('act1')
+      expect(bridge.handleCommand).toHaveBeenCalledTimes(1)
+      expect(store.turns.at(-1)!.text).toContain('the act ended')
     })
 
     it('says so when the script does not exist', async () => {

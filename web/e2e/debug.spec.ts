@@ -1,17 +1,26 @@
 import { test, expect, type Page } from '@playwright/test'
 
+interface VueHost {
+  __vue_app__: {
+    config: {
+      globalProperties: {
+        $pinia: { state: { value: { game: Record<string, unknown> } } }
+      }
+    }
+  }
+}
+
 /** Wait for the real game to load, then close the title page and act intro. */
 async function openGame(page: Page) {
   await page.goto('/')
   await page.waitForFunction(() => {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    const app = (document.querySelector('#app') as any).__vue_app__
+    const app = (document.querySelector('#app') as unknown as VueHost)
+      .__vue_app__
     return app && !app.config.globalProperties.$pinia.state.value.game.loading
-    /* eslint-enable @typescript-eslint/no-explicit-any */
   })
   await page.evaluate(() => {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    const app = (document.querySelector('#app') as any).__vue_app__
+    const app = (document.querySelector('#app') as unknown as VueHost)
+      .__vue_app__
     const store = app.config.globalProperties.$pinia.state.value.game
     store.showTitle = false
     store.showModal = false
@@ -19,7 +28,6 @@ async function openGame(page: Page) {
     store.modalQuest = null
     store.modalQueue = []
     store.acceptInput = true
-    /* eslint-enable @typescript-eslint/no-explicit-any */
   })
 }
 
