@@ -1,3 +1,5 @@
+/** Story flag constants for Act II: Greendale & The Forest Edge */
+// Main Quest Progression Flags
 export const FLAG_SPOKEN_TO_SIR_CEDRIC = 'spoken_to_sir_cedric'
 export const FLAG_GATHERING_STORM_COMPLETED = 'gathering_storm_completed'
 
