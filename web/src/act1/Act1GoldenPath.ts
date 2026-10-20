@@ -2,6 +2,7 @@
 export const ACT1_GOLDEN_PATH: string[] = [
   'use lantern',
   'take bread',
+  'take lantern',
   'talk to grandmother',
   'use journal',
   'talk to grandmother',

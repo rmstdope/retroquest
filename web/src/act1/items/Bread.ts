@@ -25,8 +25,9 @@ export class Bread extends Item {
             '[item_name]chickens[/item_name].',
         ) +
         '\n' +
-        'They peck at it excitedly, and in the commotion, something shiny falls ' +
-        "from a rafter. It's a [item_name]small key[/item_name]!"
+        'They peck at it excitedly, and in the flapping commotion something shiny ' +
+        "is knocked from a high rafter. It's a [item_name]small key[/item_name], " +
+        'hidden up there long ago by someone who did not want it found!'
       )
     }
     return (

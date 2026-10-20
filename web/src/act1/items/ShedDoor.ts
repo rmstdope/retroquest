@@ -43,7 +43,8 @@ export class ShedDoor extends Item {
               '[/item_name] creaks open.',
           ) +
           '\n' +
-          'You can see a few interesting things inside. ' +
+          'In the gloom you make out an old workbench and a few interesting ' +
+          'things. ' +
           'From the shadows comes a frightened mew, and a small patchwork ' +
           'shape bolts behind the broken crates.'
         )

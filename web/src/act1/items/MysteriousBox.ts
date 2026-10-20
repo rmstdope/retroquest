@@ -1,7 +1,14 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, event, writing } from '@/engine'
 import { GameMap } from './GameMap'
 
-/** Small locked container introducing multi-step acquisition and object state transitions. */
+/** The words Elior's father left in the box for him. */
+const FATHERS_NOTE = 'For when the light comes back to you.'
+
+/**
+ * Small locked container introducing multi-step acquisition and object state
+ * transitions. Elior's father sealed it in his workshop so that only Elior's
+ * magic could open it; inside are the map and a note in the father's hand.
+ */
 export class MysteriousBox extends Item {
   locked = true
   containsMap = true
@@ -34,7 +41,10 @@ export class MysteriousBox extends Item {
     return `[failure]The ${nameHtml} is already unlocked.[/failure]`
   }
 
-  /** Open the box if unlocked and dispense the map, otherwise report locked or empty. */
+  /**
+   * Open the box if unlocked, dispense the map and show the father's note,
+   * which stays in the box; otherwise report it locked or empty.
+   */
   override open(gameState: GameState): string {
     const nameHtml = `[item_name]${this.name}[/item_name]`
     if (this.locked) {
@@ -46,12 +56,20 @@ export class MysteriousBox extends Item {
     if (this.containsMap) {
       gameState.addItemToInventory(new GameMap())
       this.containsMap = false
-      this.description = 'An open, ornate wooden box. It is now empty.'
+      const note = writing(FATHERS_NOTE)
+      this.description =
+        'An open, ornate wooden box. Only a folded note remains inside, in ' +
+        `your father's careful, slanting hand:\n${note}`
       return (
         event(`You open the ${nameHtml}.`) +
         '\n' +
         'Inside, you find a [item_name]map[/item_name]! You take the ' +
-        '[item_name]map[/item_name] and place it in your inventory.'
+        '[item_name]map[/item_name] and place it in your inventory.\n' +
+        'Beneath it lies a folded note. Something in you knows the careful, ' +
+        "slanting hand before you have read a word: it is your father's.\n" +
+        note +
+        '\nThe runes on the lid fade as you read, their work done. The box was ' +
+        'sealed so that only your magic could ever open it.'
       )
     }
     return event(`The ${nameHtml} is now empty.`)

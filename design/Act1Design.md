@@ -73,8 +73,8 @@
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
 - **Items:** Lantern (start), bread (later), Elior’s journal (later), travel cloak (later).
 - **Spells:** `revive` (learned from Grandmother).
-- **Usable Items:** Lantern (lights dark areas), Elior's journal (read for story), hidden locket (give to Grandmother).
-- **Characters:** Grandmother (offers advice, can be spoken to).
+- **Usable Items:** Lantern (lights the cottage; once lit it can be taken and carried, and held lit it lights the dark Abandoned Shed), Elior's journal (read for story), hidden locket (give to Grandmother).
+- **Characters:** Grandmother (offers advice, can be spoken to). While Elior carries the shed key she admits she hid it in the coop rafters years ago: the shed was his father's workshop, she never could go in, and it is dark, so he should take the lantern.
 - **Exits:** Vegetable Field (south), Village Square (east)
 
 ### 2. Vegetable Field
@@ -88,11 +88,11 @@
 
 ### 3. Chicken Coop
 
-- **Description:** A small wooden coop with nervous chickens.
+- **Description:** A small wooden coop with nervous chickens. High on a rafter, out of reach, something glints where no hen could have put it.
 - **Items:** egg (start), key (later).
 - **Unusable:** feather (start), chicken (start).
 - **Spells:** None.
-- **Usable Items:** Bread (feed chickens, they reveal a hidden key).
+- **Usable Items:** Bread (feed chickens; in the flapping commotion the shed key Grandmother hid long ago is knocked from the rafter).
 - **Characters:** None.
 - **Exits:** Vegetable Field (north)
 
@@ -147,11 +147,12 @@
 
 ### 9. Abandoned Shed
 
-- **Description:** A rickety shed on the village edge.
+- **Description:** A rickety shed on the village edge, once the workshop of Elior's father: rusty tools, a long workbench, and little light past the grimy boards.
 - **Items:** shed door (start), mysterious box (later), fishing rod (later), magnet (later), map (later).
 - **Unusable:** Broken shovel (later).
 - **Spells:** None.
-- **Usable Items:** Key (on shed door), mysterious box (unlock with spell, open to get map).
+- **Usable Items:** Key (on shed door), mysterious box (unlock with spell, open to get the map and the father's note), lit lantern (held, lets the dark shed be searched).
+- **Search:** Too dark to rummage until Elior holds the lit lantern (or casts `light` in the shed); then the first search finds the fishing rod and magnet. Patches can be found and coaxed out in the dark: her green eyes shine from behind the crates.
 - **Characters:** Patches, Hemlock's missing cat (hides behind the crates once the door is unlocked, until coaxed out).
 - **Exits:** Village Well (north), Old Mill (south)
 
@@ -187,7 +188,7 @@
 
 ### 13. Hidden Glade
 
-- **Description:** A peaceful clearing with sunlight filtering through trees.
+- **Description:** A hidden clearing, dim and overgrown under an unnatural darkness, its stone's inscription too deep in shadow to read. Once `light` is cast the darkness lifts and the glade is bathed in golden sunlight.
 - **Items:** Rare flower (later).
 - **Unusable:** shiny pebble (start).
 - **Spells:** `grow` (learned from inscriptions on a stone).
@@ -258,6 +259,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
     - Use lantern to light up the room. _The lantern illuminates the cottage, revealing the bread and Elior’s journal._
       - Take bread. _Bread is added to inventory._
+      - Take lantern. _The lit lantern is added to inventory; it will light the dark Abandoned Shed._
       - Read journal. Opens up new conversion story with Grandmother.
     - Speak to Grandmother for advice. _Grandmother gives hints about the village and Elior’s destiny, and teaches you the `revive` spell._
       - Spell Learned: `revive` (can not be used until magic is learned for real)
@@ -275,7 +277,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 3.  **Chicken Coop:**
 
     - Take egg. _Egg is added to inventory._
-    - Use bread to feed chickens, obtain hidden key. _Bread is removed from inventory, key is added to inventory._
+    - Use bread to feed chickens, obtain hidden key. _In the commotion the key Grandmother hid long ago is knocked from a high rafter. Bread is removed from inventory, key is added to inventory._
 
 4.  **Village Square:**
 
@@ -301,7 +303,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
       - Item used: `key` (on `shed door`)
     - Find Mysterious Box. _The box is intricately locked, and the key doesn't fit this lock._
     - Talk to Patches (call her by name). _She creeps out and lets Elior carry her; the quest log points him to Hemlock at the General Store._
-    - Search shed. _Amidst the clutter, a fishing rod and a small magnet are found._
+    - Search shed. _The shed is dark; holding the lit lantern high, Elior finds a fishing rod and a small magnet amidst the clutter. Without a light, it is too dark to rummage._
     - Take fishing rod. _Fishing rod is added to inventory._
     - Take magnet. _Magnet is added to inventory._
 
@@ -395,7 +397,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
     - Cast `unlock` on the Mysterious Box. _A soft click is heard, and the intricate lock on the box springs open._
       - Spell used: `unlock`
-    - Open mysterious box. _Inside, nestled on faded velvet, lies a detailed map of Willowbrook and the surrounding areas, showing landmarks and paths that are not immediately obvious._
+    - Open mysterious box. _Inside, nestled on faded velvet, lies a detailed map of Willowbrook and the surrounding areas, showing landmarks and paths that are not immediately obvious. Beneath it is a folded note in his father's hand: "For when the light comes back to you." The runes fade; the box was sealed so only Elior's magic could open it. The note stays in the box and can be read again by examining it._
       - Item obtained: `map` (ESSENTIAL)
 
 20. **Return to Vegetable Field:**
@@ -423,7 +425,7 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 
 22. **Return to Hidden Glade:**
 
-    - Cast `light` while in the Hidden Glade. _The spell illuminates the moss-covered stone, and faint inscriptions glow into view. Studying them, Elior learns the `grow` spell, a secret of the glade._
+    - Cast `light` while in the Hidden Glade. _The unnatural darkness lifts and sunlight spills into the glade. The moss-covered stone's faint inscriptions glow into view. Studying them, Elior learns the `grow` spell, a secret of the glade._
       - Spell used: `light`
       - Spell Learned: `grow`
 
@@ -496,7 +498,8 @@ After receiving the Ancient Amulet from Mira, completing the _Preparing for the 
 This list tracks items obtained in the Golden Path and their subsequent uses within Act I:
 
 1.  **`Lantern`** (Available in Elior's Cottage from the start):
-    - Used in Step 1 to reveal the bread and Elior's journal.
+    - Used in Step 1 to reveal the bread and Elior's journal, then taken lit.
+    - Held lit in Step 7 to search the dark Abandoned Shed.
 2.  **`Bread`** (Obtained: Step 1):
     - Used in Step 3 to feed chickens and obtain the `key`.
 3.  **`Faded Photograph`** (Obtained: Step 1):

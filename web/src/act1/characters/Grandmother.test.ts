@@ -4,6 +4,7 @@ import { executeCommands, expectDialogueSpeaker } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
+import { Key } from '../items/Key'
 
 describe('Grandmother and the locket', () => {
   it('recognises the locket as her daughter’s founders’ heirloom', () => {
@@ -32,5 +33,26 @@ describe('Grandmother and the faded photograph', () => {
     expect(response).toContain('Your mother loved the river.')
     expect(response).toContain('[room_name]Riverbank[/room_name]')
     expectDialogueSpeaker(response, 'grandmother')
+  })
+})
+
+describe('Grandmother and the shed key', () => {
+  it('hints that the shed was a workshop, and that it is dark', () => {
+    const game = new Game([new Act1()])
+    game.state.addItemToInventory(new Key())
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('workshop')
+    expect(response).toContain('[item_name]lantern[/item_name]')
+    expectDialogueSpeaker(response, 'grandmother')
+  })
+
+  it('says nothing of the shed without the key', () => {
+    const game = new Game([new Act1()])
+
+    expect(executeCommands(game, ['talk to grandmother'])).not.toContain(
+      'workshop',
+    )
   })
 })

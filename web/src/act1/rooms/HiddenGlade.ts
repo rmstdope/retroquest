@@ -9,7 +9,8 @@ import { GrowSpell } from '../spells/GrowSpell'
  * Hidden Glade room: enchanted clearing with conditional fauna and spell gain.
  *
  * `rest()` spawns the Deer and RareFlower once the `deer_can_be_observed` flag is
- * set; `light()` teaches the Grow spell and brightens the description.
+ * set; `light()` teaches the Grow spell and lifts the unnatural darkness, so
+ * the dim, overgrown clearing turns sunlit.
  */
 export class HiddenGlade extends Room {
   lightSpellCast = false
@@ -17,28 +18,32 @@ export class HiddenGlade extends Room {
   constructor() {
     super({
       name: 'Hidden Glade',
-      description:
-        'A peaceful clearing bathed in golden sunlight, hidden deep within the forest. ' +
-        'Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the ' +
-        'center, a mossy stone bears a faint, magical inscription. The glade feels ' +
-        'enchanted, a place where the world holds its breath.',
+      description: HiddenGlade.DIM_DESCRIPTION,
       items: [new ShinyPebble()],
       characters: [],
       exits: { north: 'ForestPath', south: 'VillageChapel' },
     })
   }
 
+  /** The glade before `light` is cast: dim, overgrown and unreadable. */
+  private static readonly DIM_DESCRIPTION =
+    'A hushed clearing hidden deep within the forest, dim and overgrown. ' +
+    'Brambles crowd its edges, and the tall grass stands grey and still beneath ' +
+    'branches that shut out the sun. In the center, a mossy stone bears a faint ' +
+    'inscription, too deep in shadow to read. An unnatural darkness lingers here, ' +
+    'as if the glade itself is waiting to be enlightened.'
+
+  /** The glade once `light` has lifted the darkness. */
+  private static readonly SUNLIT_DESCRIPTION =
+    'A peaceful clearing bathed in golden sunlight, hidden deep within the forest. ' +
+    'Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the ' +
+    'center, a mossy stone bears a faint, magical inscription.'
+
   /** Build and return the dynamic base description for the glade. */
   getRoomTextDescription(): string {
-    let baseDescription =
-      'A peaceful clearing bathed in golden sunlight, hidden deep within the forest. ' +
-      'Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the ' +
-      'center, a mossy stone bears a faint, magical inscription.'
-    if (!this.lightSpellCast) {
-      baseDescription +=
-        ' Yet, an unnatural darkness lingers here, as if the glade itself is waiting ' +
-        'to be enlightened.'
-    }
+    let baseDescription = this.lightSpellCast
+      ? HiddenGlade.SUNLIT_DESCRIPTION
+      : HiddenGlade.DIM_DESCRIPTION
     const dynamicParts: string[] = []
     if (this.getCharacterByName('Deer')) {
       dynamicParts.push(
@@ -122,7 +127,9 @@ export class HiddenGlade extends Room {
           'glade.',
       ) +
       '\n' +
-      'The inscription on the mossy stone glows faintly, revealing ancient runes. ' +
+      'The unnatural darkness lifts, and golden sunlight spills through the ' +
+      'branches. The inscription on the mossy stone glows faintly, revealing ' +
+      'ancient runes. ' +
       "They speak of a seed, a song, and the sun's embrace to awaken life."
     if (!gameState.hasSpell('Grow')) {
       const growSpell = new GrowSpell()

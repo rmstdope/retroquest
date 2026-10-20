@@ -4,7 +4,8 @@ import { EliorsJournal } from './EliorsJournal'
 
 /**
  * Primary early-game light source that reveals hidden items on first use.
- * State is tracked by renaming the item to "lantern (lit)".
+ * State is tracked by renaming the item to "lantern (lit)". It can be
+ * carried, and held lit it lights the dark Abandoned Shed for searching.
  */
 export class Lantern extends Item {
   constructor() {
@@ -13,12 +14,26 @@ export class Lantern extends Item {
       description:
         'A well-used brass lantern. Its glass is clean and the wick is fresh, ready to ' +
         'light up the darkest corners.',
+      canBeCarried: true,
     })
+  }
+
+  /** Whether the lantern has been lit. */
+  isLit(): boolean {
+    return this.name !== 'lantern'
+  }
+
+  /**
+   * The lantern can always be taken, even when restored from a save made
+   * while it was fixed in the cottage and its `canBeCarried` was false.
+   */
+  override preventPickup(): string {
+    return ''
   }
 
   /** Light the lantern and reveal hidden items the first time it is used. */
   override use(gameState: GameState): string {
-    if (this.name === 'lantern') {
+    if (!this.isLit()) {
       this.name = 'lantern (lit)'
       this.shortName = 'lantern'
       gameState.currentRoom.addItem(new Bread())
