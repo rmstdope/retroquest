@@ -19,6 +19,7 @@ import {
 
 const MAIN = 'Shadows Over Willowbrook'
 const PHOTO = 'The Faded Photograph'
+const CAT = 'Curiosity killed the cat'
 
 describe('Act 1 golden path', () => {
   it('can be completed from start to finish', () => {
@@ -97,38 +98,14 @@ describe('Act 1 golden path', () => {
     expectItemInInventory(state, 'dull knife', false)
     expectItemInInventory(state, 'sharp knife')
 
-    // Step 7: Vegetable Field
-    executeCommands(game, ['go west', 'go west', 'use hoe'])
-    expectCurrentRoom(state, 'Vegetable Field')
-    expectItemInInventory(state, 'coin')
-
-    // Step 7.5: Mira's Hut for encouragement and hints
-    executeCommands(game, ['go north', 'go east', 'go north'])
-    expectCurrentRoom(state, "Mira's Hut")
-    expectCharacterInRoom(room(), 'mira')
-    executeCommands(game, ['talk to mira'])
-    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
-
-    // Step 8: General Store - buy rope
-    executeCommands(game, ['go south', 'go east'])
-    expectCurrentRoom(state, 'General Store')
-    executeCommands(game, ['take apple', 'take rope', 'take matches'])
-    expectItemInInventory(state, 'apple', false)
-    expectItemInInventory(state, 'rope', false)
-    expectItemInInventory(state, 'matches', false)
-    executeCommands(game, ['talk to shopkeeper', 'buy rope from shopkeeper'])
-    expectItemInInventory(state, 'apple')
-    expectItemInInventory(state, 'rope')
-    expectItemInInventory(state, 'coin', false)
-
-    // Step 9: Abandoned Shed - use key
-    executeCommands(game, ['go south', 'go west', 'go south'])
+    // Step 7: Abandoned Shed - use key, find Patches
+    executeCommands(game, ['go west', 'go south'])
     expectQuests(state, [
       MAIN,
       PHOTO,
       'Magic for real',
       'Know your village',
-      'Curiosity killed the cat',
+      CAT,
     ])
     expectCurrentRoom(state, 'Abandoned Shed')
     expectItemInRoom(room(), 'mysterious box', false)
@@ -137,17 +114,21 @@ describe('Act 1 golden path', () => {
     expectItemInRoom(room(), 'fishing rod', false)
     expectItemInRoom(room(), 'magnet', false)
 
+    executeCommands(game, ['use key with door'])
+    expectItemInInventory(state, 'key', false)
+    expectItemInRoom(room(), 'mysterious box')
+    expectCharacterInRoom(room(), 'patches')
     expectQuests(state, [
       MAIN,
       PHOTO,
       'Magic for real',
       'Know your village',
-      'Curiosity killed the cat',
+      CAT,
     ])
-    executeCommands(game, ['use key with door'])
-    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
-    expectItemInInventory(state, 'key', false)
-    expectItemInRoom(room(), 'mysterious box')
+
+    executeCommands(game, ['talk to patches'])
+    expectCharacterInRoom(room(), 'patches', false)
+    expectStoryFlag(state, 'patches_found', true)
 
     executeCommands(game, ['search'])
     expectItemInRoom(room(), 'fishing rod')
@@ -158,6 +139,47 @@ describe('Act 1 golden path', () => {
     expectItemInRoom(room(), 'fishing rod', false)
     expectItemInInventory(state, 'magnet')
     expectItemInRoom(room(), 'magnet', false)
+
+    // Step 7.5: Mira's Hut for encouragement and hints
+    executeCommands(game, [
+      'go north',
+      'go west',
+      'go north',
+      'go east',
+      'go north',
+    ])
+    expectCurrentRoom(state, "Mira's Hut")
+    expectCharacterInRoom(room(), 'mira')
+    executeCommands(game, ['talk to mira'])
+    expectQuests(state, [
+      MAIN,
+      PHOTO,
+      'Magic for real',
+      'Know your village',
+      CAT,
+    ])
+
+    // Step 8: General Store - return Patches, buy rope
+    executeCommands(game, ['go south', 'go east'])
+    expectCurrentRoom(state, 'General Store')
+    executeCommands(game, ['take apple', 'take rope', 'take matches'])
+    expectItemInInventory(state, 'apple', false)
+    expectItemInInventory(state, 'rope', false)
+    expectItemInInventory(state, 'matches', false)
+    executeCommands(game, ['talk to shopkeeper'])
+    expectItemInInventory(state, 'coin')
+    expectCharacterInRoom(room(), 'patches')
+    expectQuestCompleted(state, CAT)
+    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
+    executeCommands(game, ['buy rope from shopkeeper'])
+    expectItemInInventory(state, 'apple')
+    expectItemInInventory(state, 'rope')
+    expectItemInInventory(state, 'coin', false)
+
+    // Step 9: back past the Abandoned Shed
+    executeCommands(game, ['go south', 'go west', 'go south'])
+    expectCurrentRoom(state, 'Abandoned Shed')
+    expectCharacterInRoom(room(), 'patches', false)
 
     // Step 10: Old Mill - use rope, take millstone fragment
     executeCommands(game, ['go south'])

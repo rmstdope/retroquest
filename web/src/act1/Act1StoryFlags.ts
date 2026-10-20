@@ -15,6 +15,10 @@ export const FLAG_TALKED_TO_FISHERMAN = 'talked_to_fisherman'
 export const FLAG_DEER_CAN_BE_OBSERVED = 'deer_can_be_observed'
 export const FLAG_BLACKSMITH_MET = 'blacksmith_met'
 export const FLAG_RUSTY_HOE_FIRST_COIN_FOUND = 'rusty_hoe_first_coin_found'
+/**
+ * Set only by saves made when the hoe still gave a second coin. Such saves
+ * keep the General Store open and get no coin for returning Patches.
+ */
 export const FLAG_RUSTY_HOE_SECOND_COIN_FOUND = 'rusty_hoe_second_coin_found'
 export const FLAG_FOUND_PHOTO = 'found_photo'
 export const FLAG_READ_PHOTO_MESSAGE = 'read_photo_message'
@@ -29,3 +33,6 @@ export const FLAG_FISHERMAN_TOLD_OF_TIN = 'fisherman_told_of_tin'
 export const FLAG_FOUND_MOTHERS_LETTER = 'found_mothers_letter'
 export const FLAG_READ_MOTHERS_LETTER = 'read_mothers_letter'
 export const FLAG_HEALED_FISHERMAN_ARM = 'healed_fisherman_arm'
+export const FLAG_MET_HEMLOCK = 'met_hemlock'
+export const FLAG_PATCHES_FOUND = 'patches_found'
+export const FLAG_PATCHES_RETURNED = 'patches_returned'

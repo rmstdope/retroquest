@@ -7,36 +7,35 @@ import {
 } from '../Act1StoryFlags'
 import { RustyHoe } from './RustyHoe'
 
-describe('RustyHoe coin discoveries', () => {
-  it('finds at most two coins, even after earlier coins are spent', () => {
-    const game = new Game([new Act1()])
+/** An Act I game in the Vegetable Field with the rusty hoe in hand. */
+function gameInField(): { game: Game; hoe: RustyHoe } {
+  const game = new Game([new Act1()])
+  const hoe = new RustyHoe()
+  game.state.currentRoom = game.state.allRooms.VegetableField
+  game.state.addItemToInventory(hoe)
+  return { game, hoe }
+}
+
+describe('RustyHoe coin discovery', () => {
+  it('finds a single coin, even after it is spent', () => {
+    const { game, hoe } = gameInField()
     const state = game.state
-    const hoe = new RustyHoe()
-    state.currentRoom = state.allRooms.VegetableField
-    state.addItemToInventory(hoe)
 
     expect(hoe.use(state)).toContain('unearth')
     expect(state.getItemCount('coin')).toBe(1)
     expect(state.getStoryFlag(FLAG_RUSTY_HOE_FIRST_COIN_FOUND)).toBe(true)
     expect(hoe.use(state)).toContain('[failure]')
-    expect(state.getItemCount('coin')).toBe(1)
-
-    state.removeItemFromInventory('coin')
-    expect(hoe.use(state)).toContain('unearth')
-    expect(state.getItemCount('coin')).toBe(1)
-    expect(state.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)).toBe(true)
 
     state.removeItemFromInventory('coin')
     expect(hoe.use(state)).toContain('[failure]')
     expect(state.getItemCount('coin')).toBe(0)
+    expect(state.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)).toBe(false)
 
-    const saveData = game.toSaveData()
     const restoredGame = new Game([new Act1()])
-    restoredGame.loadSaveData(saveData)
+    restoredGame.loadSaveData(game.toSaveData())
     const restoredHoe = restoredGame.state.inventory.find(
       (item) => item instanceof RustyHoe,
     )
-    expect(restoredHoe).toBeInstanceOf(RustyHoe)
     if (!(restoredHoe instanceof RustyHoe)) {
       throw new Error('The rusty hoe was not restored from the save.')
     }
