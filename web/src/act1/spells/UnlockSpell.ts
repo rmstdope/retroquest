@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  characterName,
+} from '@/engine'
 import { MysteriousBox } from '../items/MysteriousBox'
 
 /** Spell that attempts to open locks, magical or mundane, by focused intent. */
@@ -38,7 +44,7 @@ export class UnlockSpell extends Spell {
   ): string {
     const name = character.name
     return (
-      `[failure]You can't unlock [character_name]${name}[/character_name]. They are not a ` +
+      `[failure]You can't unlock ${characterName(name)}. They are not a ` +
       'locked object![/failure]'
     )
   }

@@ -1,4 +1,11 @@
-import { Character, type GameState, type Item } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  event,
+  characterName,
+  speech,
+} from '@/engine'
 import { Fish } from '../items/Fish'
 import { PurifySpell } from '../spells/PurifySpell'
 
@@ -7,22 +14,27 @@ export class Fisherman extends Character {
   knowsFishingBasics = false
   receivedFish = false
   dialogueStates: Record<string, string> = {
-    initial:
-      '[dialogue]The [character_name]fisherman[/character_name] nods at you. ' +
-      "'The river's been a bit strange lately. Not many fish biting, and " +
-      "my arm... well, it's seen better days. Oh, I wish I could pull up " +
-      "a pike or two!'[/dialogue]",
-    taught_fishing:
-      "[dialogue]The [character_name]fisherman[/character_name] smiles. 'Good " +
-      "to see you trying your luck with the rod. Any luck yet?'[/dialogue]",
+    initial: speech(
+      `The ${characterName('fisherman')} nods at you. ` +
+        "'The river's been a bit strange lately. Not many fish biting, and " +
+        "my arm... well, it's seen better days. Oh, I wish I could pull up " +
+        "a pike or two!'",
+    ),
+    taught_fishing: speech(
+      `The ${characterName('fisherman')} smiles. 'Good ` +
+        "to see you trying your luck with the rod. Any luck yet?'",
+    ),
     received_fish_thanks:
-      "The [character_name]fisherman[/character_name]'s eyes light " +
-      "up. [dialogue]'Ah, a fine catch! Thank you kindly. It's been a while since " +
-      "I've had a fresh river fish.'[/dialogue]",
-    taught_spells:
-      '[dialogue]The [character_name]fisherman[/character_name] looks out ' +
-      "over the water. 'The river has many moods. Treat it with respect, " +
-      "and it might share its secrets with you.'[/dialogue]",
+      `The ${characterName('fisherman')}'s eyes light up. ` +
+      speech(
+        "'Ah, a fine catch! Thank you kindly. It's been a while since " +
+          "I've had a fresh river fish.'",
+      ),
+    taught_spells: speech(
+      `The ${characterName('fisherman')} looks out ` +
+        "over the water. 'The river has many moods. Treat it with respect, " +
+        "and it might share its secrets with you.'",
+    ),
   }
   currentDialogueKey = 'initial'
 
@@ -49,12 +61,15 @@ export class Fisherman extends Character {
         this.knowsFishingBasics = true
         this.currentDialogueKey = 'taught_fishing'
         return (
-          'The [character_name]fisherman[/character_name] notices ' +
+          `The ${characterName('fisherman')} notices ` +
           'your [item_name]fishing rod[/item_name]. ' +
-          "[dialogue]'Ah, a fellow angler! " +
-          "My arm's busted, can't fish myself. But I can tell you a thing " +
-          "or two. Cast your line near the reeds, that's where they like " +
-          "to hide. Patience is key, my friend, patience.'[/dialogue]\n" +
+          speech(
+            "'Ah, a fellow angler! " +
+              "My arm's busted, can't fish myself. But I can tell you a thing " +
+              "or two. Cast your line near the reeds, that's where they like " +
+              "to hide. Patience is key, my friend, patience.'",
+          ) +
+          '\n' +
           'He teaches you the basics of fishing.'
         )
       } else if (gameState.getStoryFlag('learned_fishing_basics')) {
@@ -66,10 +81,7 @@ export class Fisherman extends Character {
       }
     }
 
-    const eventMsg =
-      '[event]You speak with the [character_name]' +
-      this.name +
-      '[/character_name].[/event]'
+    const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
     return eventMsg + '\n' + this.dialogueStates[this.currentDialogueKey]
   }
 
@@ -81,44 +93,48 @@ export class Fisherman extends Character {
       // Teach spell
       gameState.learnSpell(new PurifySpell())
       this.currentDialogueKey = 'taught_spells'
-      const eventMsg =
-        '[event]You give the [item_name]' +
-        item.name +
-        '[/item_name] to the [character_name]Fisherman[/character_name].[/event]'
+      const eventMsg = event(
+        `You give the [item_name]${item.name}[/item_name] to the ` +
+          `${characterName('Fisherman')}.`,
+      )
       return (
         eventMsg +
         '\n' +
         this.dialogueStates.received_fish_thanks +
         ' ' +
-        "[dialogue]'The river's water... it's not been right. Murky. " +
-        'But I sense you have a connection to the old ways. Let me ' +
-        'teach you something to help. With this, you can cleanse ' +
-        "water,'[/dialogue] " +
+        speech(
+          "'The river's water... it's not been right. Murky. " +
+            'But I sense you have a connection to the old ways. Let me ' +
+            'teach you something to help. With this, you can cleanse ' +
+            "water,'",
+        ) +
+        ' ' +
         '\n' +
         'You have learned [spell_name]purify[/spell_name]!'
       )
     } else if (item instanceof Fish && this.receivedFish) {
-      const eventMsg =
-        '[event]You offer the [item_name]' +
-        item.name +
-        '[/item_name] to the [character_name]Fisherman[/character_name].[/event]'
+      const eventMsg = event(
+        `You offer the [item_name]${item.name}[/item_name] to the ` +
+          `${characterName('Fisherman')}.`,
+      )
       return (
         eventMsg +
         '\n' +
-        '[dialogue]The [character_name]fisherman[/character_name] smiles. ' +
-        "'Thank you, but I've already eaten. Save it for yourself!'" +
-        '[/dialogue]'
+        speech(
+          `The ${characterName('fisherman')} smiles. ` +
+            "'Thank you, but I've already eaten. Save it for yourself!'",
+        )
       )
     }
 
-    const eventMsg =
-      '[event]You offer the [item_name]' +
-      item.name +
-      '[/item_name] to the [character_name]Fisherman[/character_name].[/event]'
+    const eventMsg = event(
+      `You offer the [item_name]${item.name}[/item_name] to the ` +
+        `${characterName('Fisherman')}.`,
+    )
     return (
       eventMsg +
       '\n' +
-      'The [character_name]fisherman[/character_name] looks at the ' +
+      `The ${characterName('fisherman')} looks at the ` +
       '[item_name]' +
       item.name +
       "[/item_name] curiously but doesn't seem to need it."

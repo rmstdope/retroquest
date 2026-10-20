@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event, characterName } from '@/engine'
 import type { GameState } from '@/engine'
 import { RareFlower } from '../items/RareFlower'
 import { ShinyPebble } from '../items/ShinyPebble'
@@ -42,7 +42,9 @@ export class HiddenGlade extends Room {
     const dynamicParts: string[] = []
     if (this.getCharacterByName('Deer')) {
       dynamicParts.push(
-        'A graceful [character_name]Deer[/character_name] grazes quietly, occasionally ' +
+        'A graceful ' +
+          characterName('Deer') +
+          ' grazes quietly, occasionally ' +
           'lifting its head to watch you with wise, gentle eyes.',
       )
       if (this.items.some((item) => item instanceof RareFlower)) {
@@ -77,7 +79,9 @@ export class HiddenGlade extends Room {
         const deer = new Deer()
         this.addCharacter(deer)
         messages.push(
-          'As you relax, a graceful [character_name]Deer[/character_name] emerges into ' +
+          'As you relax, a graceful ' +
+            characterName('Deer') +
+            ' emerges into ' +
             'the glade. It gazes at you with deep, ancient eyes, and for a moment, ' +
             'you feel a surge of gentle magical energy flow through your body, as if ' +
             'the glade itself is welcoming you.',
@@ -89,7 +93,9 @@ export class HiddenGlade extends Room {
         )
       } else {
         messages.push(
-          'The [character_name]Deer[/character_name] continues to graze ' +
+          'The ' +
+            characterName('Deer') +
+            ' continues to graze ' +
             'peacefully.',
         )
       }
@@ -111,8 +117,11 @@ export class HiddenGlade extends Room {
   override light(gameState: GameState): string {
     this.lightSpellCast = true
     let message =
-      '[event]You cast a [spell_name]light[/spell_name] spell that illuminates the ' +
-      'glade.[/event]\n' +
+      event(
+        'You cast a [spell_name]light[/spell_name] spell that illuminates the ' +
+          'glade.',
+      ) +
+      '\n' +
       'The inscription on the mossy stone glows faintly, revealing ancient runes. ' +
       "They speak of a seed, a song, and the sun's embrace to awaken life."
     if (!gameState.hasSpell('Grow')) {

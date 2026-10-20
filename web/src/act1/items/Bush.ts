@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { WildBerries } from './WildBerries'
 
 /** Environment vegetation that can be magically stimulated to generate wild berries. */
@@ -19,10 +19,10 @@ export class Bush extends Item {
     const currentRoom = gameState.currentRoom
     if (!currentRoom.getItemByName('wild berries')) {
       currentRoom.addItem(new WildBerries())
-      return (
-        '[event]You cast the [spell_name]grow[/spell_name] spell on the ' +
-        '[item_name]bush[/item_name]. It flourishes, and clusters of ' +
-        '[item_name]wild berries[/item_name] appear among its leaves![/event]'
+      return event(
+        'You cast the [spell_name]grow[/spell_name] spell on the ' +
+          '[item_name]bush[/item_name]. It flourishes, and clusters of ' +
+          '[item_name]wild berries[/item_name] appear among its leaves!',
       )
     }
     return (

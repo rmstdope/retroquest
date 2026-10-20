@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { Bread } from './Bread'
 import { EliorsJournal } from './EliorsJournal'
 
@@ -23,10 +23,10 @@ export class Lantern extends Item {
       this.shortName = 'lantern'
       gameState.currentRoom.addItem(new Bread())
       gameState.currentRoom.addItem(new EliorsJournal())
-      return (
-        `[event]You light the [item_name]${this.name}[/item_name]. The flickering ` +
-        'light reveals more of the room. A small loaf of [item_name]bread[/item_name] ' +
-        'and a [item_name]journal[/item_name] appear in the light.[/event]'
+      return event(
+        `You light the [item_name]${this.name}[/item_name]. The flickering ` +
+          'light reveals more of the room. A small loaf of [item_name]bread[/item_name] ' +
+          'and a [item_name]journal[/item_name] appear in the light.',
       )
     }
     return `[failure]The [item_name]${this.name}[/item_name] is already lit.[/failure]`

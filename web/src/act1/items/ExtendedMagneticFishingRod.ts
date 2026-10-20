@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { Well } from './Well'
 import { ShinyRing } from './ShinyRing'
 
@@ -17,8 +17,10 @@ export class ExtendedMagneticFishingRod extends Item {
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Well) {
       const eventMsg =
-        `[event]You try to use the [item_name]${this.name}[/item_name] ` +
-        `with the [item_name]${other.name}[/item_name].[/event]\n`
+        event(
+          `You try to use the [item_name]${this.name}[/item_name] ` +
+            `with the [item_name]${other.name}[/item_name].`,
+        ) + '\n'
       if (other.isPurified && other.containsRing) {
         const index = gameState.inventory.indexOf(this)
         if (index >= 0) gameState.inventory.splice(index, 1)

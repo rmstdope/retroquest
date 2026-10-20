@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, characterName, speech } from '@/engine'
 import { Candle } from './Candle'
 
 /** Basic ignition source enabling illumination and ritual flavor actions. */
@@ -15,10 +15,13 @@ export class Matches extends Item {
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
-        '[character_name]Shopkeeper[/character_name] quickly steps over. ' +
-        "[dialogue]'Hold on there, friend! That " +
-        `[item_name]${this.name}[/item_name] is merchandise, not a free sample. ` +
-        "If you want it, you'll need to buy it proper-like.'[/dialogue]"
+        characterName('Shopkeeper') +
+        ' quickly steps over. ' +
+        speech(
+          "'Hold on there, friend! That " +
+            `[item_name]${this.name}[/item_name] is merchandise, not a free sample. ` +
+            "If you want it, you'll need to buy it proper-like.'",
+        )
       )
     }
     return ''

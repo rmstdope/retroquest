@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED } from '../Act1StoryFlags'
 
 /**
@@ -45,16 +45,17 @@ export class GameMap extends Item {
 
       gameState.setStoryFlag(FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED, true)
       return (
-        `[event]You use the [item_name]${this.name}[/item_name].[/event]\n` +
+        event(`You use the [item_name]${this.name}[/item_name].`) +
+        '\n' +
         `The [item_name]${this.name}[/item_name] aligns with the landscape,` +
         ' revealing a ' +
         'hidden path that shortens the journey to Greendale. You feel a sense of ' +
         'accomplishment as you set forth.'
       )
     }
-    return (
-      `[event]You study the [item_name]${this.name}[/item_name]. It depicts the ` +
-      'local area with surprising detail.[/event]'
+    return event(
+      `You study the [item_name]${this.name}[/item_name]. It depicts the ` +
+        'local area with surprising detail.',
     )
   }
 }

@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { FLAG_WELL_EXAMINED } from '../Act1StoryFlags'
 import { Bucket } from './Bucket'
 import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
@@ -69,15 +69,15 @@ export class Well extends Item {
   search(_gameState: GameState): string {
     if (this.isPurified) {
       if (this.containsRing) {
-        return (
-          '[event]You peer into the crystal clear water. A [item_name]shiny ' +
-          'ring[/item_name] glints at the bottom, tantalizingly out of ' +
-          'reach by hand.[/event]'
+        return event(
+          'You peer into the crystal clear water. A [item_name]shiny ' +
+            'ring[/item_name] glints at the bottom, tantalizingly out of ' +
+            'reach by hand.',
         )
       }
-      return (
-        '[event]You peer into the crystal clear water. The bottom is visible and ' +
-        'empty.[/event]'
+      return event(
+        'You peer into the crystal clear water. The bottom is visible and ' +
+          'empty.',
       )
     }
     if (this.containsRing) {
@@ -115,20 +115,20 @@ export class Well extends Item {
     this.isPurified = true
     if (this.containsRing) {
       const name = this.name
-      return (
-        '[event]You cast [spell_name]purify[/spell_name] on the [item_name]' +
-        name +
-        ('[/item_name]. The murky water shimmers and clears! You can now ' +
+      return event(
+        'You cast [spell_name]purify[/spell_name] on the [item_name]' +
+          name +
+          '[/item_name]. The murky water shimmers and clears! You can now ' +
           "see a [item_name]shiny ring[/item_name] at the bottom, but it's " +
-          'still too deep to reach by hand.[/event]')
+          'still too deep to reach by hand.',
       )
     }
     const name = this.name
-    return (
-      '[event]You cast [spell_name]purify[/spell_name] on the [item_name]' +
-      name +
-      ('[/item_name]. The murky water shimmers and clears! The bottom is ' +
-        "visible, but there's nothing of interest.[/event]")
+    return event(
+      'You cast [spell_name]purify[/spell_name] on the [item_name]' +
+        name +
+        '[/item_name]. The murky water shimmers and clears! The bottom is ' +
+        "visible, but there's nothing of interest.",
     )
   }
 }

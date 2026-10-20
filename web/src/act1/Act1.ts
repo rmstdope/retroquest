@@ -1,4 +1,4 @@
-import { Act, type GameState } from '@/engine'
+import { Act, type GameState, speech } from '@/engine'
 import { EliorsCottage } from './rooms/EliorsCottage'
 import { VegetableField } from './rooms/VegetableField'
 import { ChickenCoop } from './rooms/ChickenCoop'
@@ -83,7 +83,11 @@ export class Act1 extends Act {
       "\nThe next morning, you awaken to find the village abuzz with rumors: livestock missing, strange footprints by the well, and the old mill's wheel turning on its own. " +
       'Your grandmother, usually cheerful, seems worried and distracted, her gaze lingering on a faded photograph.\n' +
       '\nAs you step outside, the air feels charged with something unfamiliar. The villagers gather in the square, debating what to do. ' +
-      "Mira, the wise woman, catches your eye and beckons you over. [dialogue]'There are secrets in Willowbrook, child,'[/dialogue] she says. [dialogue]'Secrets that have waited for you.'[/dialogue]\n" +
+      'Mira, the wise woman, catches your eye and beckons you over. ' +
+      speech("'There are secrets in Willowbrook, child,'") +
+      ' she says. ' +
+      speech("'Secrets that have waited for you.'") +
+      '\n' +
       '\nA distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. ' +
       'With questions swirling in your mind, you take your first step into the unknown.\n' +
       "\nLet's get started! (Type 'help' for a list of commands.)\n"

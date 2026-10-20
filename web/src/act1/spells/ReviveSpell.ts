@@ -1,4 +1,11 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  event,
+  characterName,
+} from '@/engine'
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
 
@@ -14,9 +21,9 @@ export class ReviveSpell extends Spell {
   }
 
   private outOfReach(): string {
-    return (
-      '[event]You focus your will, a faint warmth spreads from your fingertips, ' +
-      'but nothing happens. It feels like the magic is just out of reach.[/event]'
+    return event(
+      'You focus your will, a faint warmth spreads from your fingertips, ' +
+        'but nothing happens. It feels like the magic is just out of reach.',
     )
   }
 
@@ -37,8 +44,11 @@ export class ReviveSpell extends Spell {
       // The WitheredCarrot is revived in place (inventory or room).
       const revivalMessage = item.revive()
       return (
-        '[event]You channel the life-giving energy into the ' +
-        '[item_name]Withered Carrot[/item_name].[/event]\n' +
+        event(
+          'You channel the life-giving energy into the ' +
+            '[item_name]Withered Carrot[/item_name].',
+        ) +
+        '\n' +
         revivalMessage
       )
     }
@@ -53,7 +63,7 @@ export class ReviveSpell extends Spell {
     }
     const name = character.name
     return (
-      `[failure]You can't revive [character_name]${name}[/character_name]. ` +
+      `[failure]You can't revive ${characterName(name)}. ` +
       'They are very much alive![/failure]'
     )
   }

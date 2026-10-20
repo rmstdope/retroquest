@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { Stick } from './Stick'
 import { Well } from './Well'
@@ -23,10 +23,10 @@ export class MagneticFishingRod extends Item {
       if (otherIndex >= 0) gameState.inventory.splice(otherIndex, 1)
       const extendedRod = new ExtendedMagneticFishingRod()
       gameState.inventory.push(extendedRod)
-      return (
-        `[event]You attach the [item_name]${other.name}[/item_name] ` +
-        `to the [item_name]${this.name}[/item_name], creating an ` +
-        `[item_name]${extendedRod.name}[/item_name].[/event]`
+      return event(
+        `You attach the [item_name]${other.name}[/item_name] ` +
+          `to the [item_name]${this.name}[/item_name], creating an ` +
+          `[item_name]${extendedRod.name}[/item_name].`,
       )
     }
     if (other instanceof Well) {
