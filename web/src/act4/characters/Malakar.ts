@@ -7,6 +7,7 @@ import {
   FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED,
   FLAG_ACT4_SACRIFICE_SAID,
   FLAG_ACT4_THRONE_AMULET_OPENED,
+  FLAG_ACT4_THRONE_BARGAIN_SEEN,
   FLAG_ACT4_THRONE_EARLY_AMULET_SEEN,
   FLAG_ACT4_THRONE_EARLY_ELIXIR_SEEN,
   FLAG_ACT4_THRONE_OFFER_HEARD,
@@ -25,6 +26,11 @@ import { normaliseSpokenWord } from '../spokenWord'
 
 /** The speaker label of the dream voice, as in the Memory Vault. */
 const SHADOW_LABEL = 'Shadow of the Past'
+
+/** Set a line apart as a held moment: the amber-ruled italic passage. */
+function wrapBreath(text: string): string {
+  return `[breath]${text}[/breath]`
+}
 
 /** The words that are the refrain, when said in full. */
 const REFRAIN_LINE = 'power follows purpose; purpose follows truth'
@@ -115,6 +121,13 @@ export class Malakar extends Character {
     }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
       return dialogue(this.name, 'Then show me what they left you.')
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)) {
+      return dialogue(
+        this.name,
+        'You saw them. Then you know I was not lying. It would not break ' +
+          'for me. Perhaps it would for you.',
+      )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)) {
       return dialogue(
@@ -316,8 +329,47 @@ export class Malakar extends Character {
     if (ending === 'justice') return GONE_INTO_SEAL
     if (ending) return NOTHING_LEFT
     if (item instanceof LifelightElixir) return this.receiveElixir(gameState)
-    if (item instanceof AncientAmulet) return this.otherWords(gameState)
+    if (item instanceof AncientAmulet) return this.amuletGiven(gameState)
     return super.giveItem(gameState, item)
+  }
+
+  /**
+   * The amulet given to him by hand. After the offer and before the refrain
+   * it accepts the offer and plays the Bargain once (then a dim line);
+   * otherwise he only waits, as for any other words.
+   */
+  private amuletGiven(gameState: GameState): string {
+    const open =
+      gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD) &&
+      !gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
+    if (!open) return this.otherWords(gameState)
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)) {
+      return '[dim]Malakar does not reach for it. He has seen what it will not do.[/dim]'
+    }
+    gameState.setStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN, true)
+    return [
+      event(
+        "You hold out the amulet. Malakar's hand closes on it, and for a " +
+          'moment neither of you lets go. Then you do.',
+      ),
+      event(
+        'He lifts it toward the thread of light that bleeds from the ' +
+          "king's crown. The wound in the air yawns wide, and the chamber " +
+          'goes grey, and then gold.',
+      ),
+      wrapBreath(
+        'A workshop in the late sun. Aren bends over the workbench; Lysa ' +
+          'laughs at something he has said. They are young. They do not ' +
+          'look up.',
+      ),
+      dialogue(SHADOW_LABEL, 'Not like this. Not by force.'),
+      event(
+        'The amulet will not break. The light runs backwards through the ' +
+          'chamber and Malakar is thrown against the throne. You are ' +
+          'standing where you stood, and the amulet is warm in your hand.',
+      ),
+      dialogue(this.name, 'You saw. Then you know I was not lying.'),
+    ].join('\n')
   }
 
   /**
