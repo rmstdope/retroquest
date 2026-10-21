@@ -11,7 +11,9 @@ import {
 import { MasterHealerLyria } from './MasterHealerLyria'
 import { CrystalFocus } from '../items/CrystalFocus'
 import { HealingHerbs } from '../items/HealingHerbs'
+import { WalkingStick } from '../items/WalkingStick'
 import {
+  executeCommands,
   expectDialogueSpeaker,
   expectMarkupWellFormed,
   expectNoSpeechOutsideDialogue,
@@ -31,95 +33,200 @@ function expectLyriaSpeaks(answer: string): void {
   expectNoSpeechOutsideDialogue(answer)
 }
 
+/** The text with its markup tags removed. */
+function plain(text: string): string {
+  return text.replace(/\[\/?[a-z_]+\]/g, '')
+}
+
+const HERB_ASK =
+  'Bring me healing herbs, good ones, and I will let you watch me work.'
+const CARRYING_STAGE = "Lyria's eyes go straight to the bundle in your hands."
+const CARRYING_SPEECH = 'Are those from the old families?'
+const REMINDER_LINE =
+  "He's holding on. The herbs bought him days, not weeks. Find me that focus."
+const BED_SCENE = 'a carter lies grey under a blanket'
+const BED_ASK = 'wherever the old scholars hid their books'
+const TEACHING_STAGE =
+  "Lyria takes the Crystal Focus to the carter's bed and sets it on his chest."
+const HAND_BACK =
+  "Bring me healing herbs first. Then we'll see what this is for."
+
+/** A game where Lyria has been given the healing herbs. */
+function gameAfterHerbs(): Game {
+  const game = createGame()
+  const herbs = new HealingHerbs()
+  game.state.addItemToInventory(herbs)
+  new MasterHealerLyria().giveItem(game.state, herbs)
+  return game
+}
+
 describe('Master Healer Lyria dialogue markup', () => {
-  it('attributes the talk without offerings to Lyria', () => {
+  it('asks for healing herbs on every talk before the herbs', () => {
     const game = createGame()
+    const lyria = new MasterHealerLyria()
 
-    const answer = new MasterHealerLyria().talkTo(game.state)
-
-    expect(answer).toContain('Welcome to my house of healing')
-    expectLyriaSpeaks(answer)
+    for (let i = 0; i < 2; i++) {
+      const answer = lyria.talkTo(game.state)
+      expect(plain(answer)).toContain(HERB_ASK)
+      expect(plain(answer)).not.toContain('Crystal Focus')
+      expectLyriaSpeaks(answer)
+    }
   })
 
-  it('attributes the talk with the crystal focus to Lyria', () => {
+  it('gives the same herb ask when the player carries the focus only', () => {
     const game = createGame()
     game.state.addItemToInventory(new CrystalFocus())
 
     const answer = new MasterHealerLyria().talkTo(game.state)
 
-    expect(answer).toContain('That crystal focus!')
+    expect(plain(answer)).toContain(HERB_ASK)
+    expect(plain(answer)).not.toContain('That crystal focus!')
     expectLyriaSpeaks(answer)
   })
 
-  it('asks for the crystal focus when the player has healing herbs', () => {
+  it('invites the player to hand over carried herbs, even with the focus', () => {
     const game = createGame()
     game.state.addItemToInventory(new HealingHerbs())
+    game.state.addItemToInventory(new CrystalFocus())
 
     const answer = new MasterHealerLyria().talkTo(game.state)
 
-    expect(answer).toContain('Crystal Focus')
-    expect(answer).not.toContain('Healing Herbs')
+    expect(plain(answer)).toContain(CARRYING_STAGE)
+    expect(plain(answer)).toContain(CARRYING_SPEECH)
+    expect(plain(answer)).not.toContain(HERB_ASK)
     expectLyriaSpeaks(answer)
   })
 
-  it('attributes the talks during and after the apprenticeship to Lyria', () => {
-    const game = createGame()
+  it('reminds the player of the focus between herbs and focus', () => {
+    const game = gameAfterHerbs()
     const lyria = new MasterHealerLyria()
-    game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true)
-    const inProgress = lyria.talkTo(game.state)
-    game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
 
-    const completed = lyria.talkTo(game.state)
-
-    expect(inProgress).toContain('looking forward to teaching you')
-    expect(completed).toContain('truly a master of the healing arts')
-    for (const answer of [inProgress, completed]) {
+    for (let i = 0; i < 2; i++) {
+      const answer = lyria.talkTo(game.state)
+      expect(plain(answer)).toContain(REMINDER_LINE)
       expectLyriaSpeaks(answer)
     }
   })
 
-  it('attributes giving the crystal focus to Lyria', () => {
+  it('keeps her line after the apprenticeship', () => {
     const game = createGame()
-    const focus = new CrystalFocus()
-    game.state.addItemToInventory(focus)
+    game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true)
+    game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
 
-    const answer = new MasterHealerLyria().giveItem(game.state, focus)
+    const answer = new MasterHealerLyria().talkTo(game.state)
 
-    expect(answer).toContain('This is exactly what I needed!')
+    expect(plain(answer)).toContain('truly a master of the healing arts')
     expectLyriaSpeaks(answer)
   })
 
-  it('does not accept healing herbs as an apprenticeship offering', () => {
+  it('plays the bed scene when given the herbs', () => {
     const game = createGame()
     const herbs = new HealingHerbs()
     game.state.addItemToInventory(herbs)
 
     const answer = new MasterHealerLyria().giveItem(game.state, herbs)
 
-    expect(answer).toContain('too busy to receive any gifts')
-    expect(game.state.hasSpell('greater_heal')).toBe(false)
-    expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)).toBe(
-      false,
+    expect(plain(answer)).toContain(
+      'Lyria unties the bundle and breathes it in.',
     )
+    expect(plain(answer)).toContain(BED_SCENE)
+    expect(plain(answer)).toContain(BED_ASK)
+    expect(game.state.hasItem('healing herbs')).toBe(false)
+    expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)).toBe(
       false,
     )
-    expectMarkupWellFormed(answer)
-    expect(answer).toContain(SPEAKER)
+    expect(game.state.hasSpell('greater_heal')).toBe(false)
+    expectLyriaSpeaks(answer)
   })
 
-  it('activates and completes the apprenticeship when given the crystal focus', () => {
-    const game = createGame()
+  it('teaches greater heal over the bed when given the focus after the herbs', () => {
+    const game = gameAfterHerbs()
     const focus = new CrystalFocus()
     game.state.addItemToInventory(focus)
 
-    new MasterHealerLyria().giveItem(game.state, focus)
+    const answer = new MasterHealerLyria().giveItem(game.state, focus)
 
-    expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)).toBe(true)
+    expect(plain(answer)).toContain(TEACHING_STAGE)
+    expect(plain(answer)).toContain('Watch my hands, not the light.')
+    expect(answer).toContain('You learn [spell_name]greater heal[/spell_name].')
+    expect(plain(answer)).toContain('Quest Complete: The Healer')
+    expect(plain(answer)).not.toContain('truly earned the title')
+    expect(game.state.hasItem('Crystal Focus')).toBe(false)
     expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)).toBe(
       true,
     )
     expect(game.state.hasSpell('greater_heal')).toBe(true)
+    expectLyriaSpeaks(answer)
+  })
+
+  it('hands the focus back when given before the herbs', () => {
+    const game = createGame()
+    const focus = new CrystalFocus()
+    game.state.addItemToInventory(focus)
+
+    const answer = new MasterHealerLyria().giveItem(game.state, focus)
+
+    expect(plain(answer)).toContain(HAND_BACK)
+    expect(game.state.hasItem('Crystal Focus')).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)).toBe(
+      false,
+    )
+    expect(game.state.hasSpell('greater_heal')).toBe(false)
+    expectLyriaSpeaks(answer)
+  })
+
+  it('still refuses other gifts', () => {
+    const game = createGame()
+    const stick = new WalkingStick()
+    game.state.addItemToInventory(stick)
+
+    const answer = new MasterHealerLyria().giveItem(game.state, stick)
+
+    expect(plain(answer)).toContain('too busy to receive any gifts')
+  })
+
+  it('starts the quest at the bed and completes it over the focus', () => {
+    const game = createGame()
+    game.state.currentRoom = game.state.allRooms.HealersHouse
+    game.state.addItemToInventory(new HealingHerbs())
+    game.state.addItemToInventory(new CrystalFocus())
+
+    executeCommands(game, ['give healing herbs to master healer lyria'])
+    expect(game.state.activatedQuests.map((q) => q.name)).toContain(
+      "The Healer's Apprentice",
+    )
+    const second = executeCommands(game, [
+      'give crystal focus to master healer lyria',
+    ])
+
+    expect(plain(second)).toContain('Quest Complete')
+    expect(game.state.activatedQuests.map((q) => q.name)).not.toContain(
+      "The Healer's Apprentice",
+    )
+    expect(game.state.hasSpell('greater_heal')).toBe(true)
+  })
+})
+
+describe('Lyria apprenticeship across a save', () => {
+  it('keeps the herbs given, never replays the bed scene and still teaches', () => {
+    const game = createGame()
+    game.state.currentRoom = game.state.allRooms.HealersHouse
+    game.state.addItemToInventory(new HealingHerbs())
+    game.state.addItemToInventory(new CrystalFocus())
+    executeCommands(game, ['give healing herbs to master healer lyria'])
+    const reloaded = createGame()
+    expect(reloaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const talk = executeCommands(reloaded, ['talk to master healer lyria'])
+    const teach = executeCommands(reloaded, [
+      'give crystal focus to master healer lyria',
+    ])
+
+    expect(plain(talk)).toContain(REMINDER_LINE)
+    expect(plain(talk)).not.toContain(BED_SCENE)
+    expect(plain(teach)).toContain(TEACHING_STAGE)
+    expect(reloaded.state.hasSpell('greater_heal')).toBe(true)
   })
 })
 

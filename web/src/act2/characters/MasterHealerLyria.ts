@@ -6,6 +6,7 @@ import {
   speech,
 } from '@/engine'
 import { CrystalFocus } from '../items/CrystalFocus'
+import { HealingHerbs } from '../items/HealingHerbs'
 import { GreaterHealSpell } from '../spells/GreaterHealSpell'
 import {
   FLAG_HEALERS_APPRENTICE_ACCEPTED,
@@ -84,41 +85,17 @@ export class MasterHealerLyria extends Character {
     )
   }
 
-  /** Lyria's reply for the player's current point in the apprenticeship. */
+  /**
+   * Lyria's reply for the player's current point in the apprenticeship: the
+   * herb ask (or, when the herbs are carried, the invitation to hand them
+   * over), the reminder of the focus once the herbs are given, and her line
+   * after the apprenticeship.
+   */
   private usualReply(gameState: GameState): string {
-    // The crystal focus is required before Lyria can begin the apprenticeship.
-    const hasCrystalFocus = gameState.hasItem('Crystal Focus')
-    if (!gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)) {
-      if (hasCrystalFocus) {
-        return (
-          '[success]' +
-          characterName('Master Healer Lyria') +
-          ' recognizes your magical potential and notices the ' +
-          '[item_name]Crystal Focus[/item_name] you carry. ' +
-          speech(
-            "'That crystal focus! It's exactly what I need to help my patients " +
-              "who are on the brink of death. If you're willing to give it to " +
-              'me, I can use it to save lives and teach you advanced healing ' +
-              "magic in return.'",
-          ) +
-          ' Her eyes show both desperation and hope.[/success]'
-        )
-      } else {
-        return (
-          characterName('Master Healer Lyria') +
-          ': ' +
-          speech(
-            'Welcome to my house of healing. I can sense magical potential in ' +
-              'you, but I desperately need help. I have patients on the brink of ' +
-              'death who need more powerful healing than I can provide alone. If ' +
-              'you could bring me a [item_name]Crystal Focus[/item_name] to ' +
-              'amplify my magic, I will teach you advanced healing techniques.',
-          )
-        )
-      }
-    } else if (gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)) {
+    const name = characterName(this.name)
+    if (gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)) {
       return (
-        characterName('Master Healer Lyria') +
+        name +
         ': ' +
         speech(
           "It's wonderful to see how far you've come with your healing " +
@@ -126,53 +103,126 @@ export class MasterHealerLyria extends Character {
             'Continue to use your gifts to help those in need.',
         )
       )
-    } else {
+    }
+    if (gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)) {
       return (
-        characterName('Master Healer Lyria') +
+        name +
         ': ' +
         speech(
-          "I'm looking forward to teaching you advanced healing techniques. " +
-            'Please bring me a [item_name]Crystal Focus[/item_name] to help my ' +
-            'dying patients, so we can begin your training.',
+          "He's holding on. The herbs bought him days, not weeks. Find me " +
+            'that focus.',
         )
       )
     }
+    if (gameState.hasItem('healing herbs')) {
+      return (
+        characterName('Lyria') +
+        "'s eyes go straight to the bundle in your hands." +
+        '\n\n' +
+        name +
+        ': ' +
+        speech(
+          'Are those from the old families? Give them here, if you are ' +
+            'willing. I have a bed that cannot wait.',
+        )
+      )
+    }
+    return (
+      name +
+      ': ' +
+      speech(
+        'Welcome to my house of healing. I can sense magical potential in ' +
+          'you, and I could use it, but look at my shelves. Bare. I have ' +
+          'patients on the brink of death and nothing left to steep for ' +
+          'them. Bring me [item_name]healing herbs[/item_name], good ones, ' +
+          'and I will let you watch me work. That is how every healer ' +
+          'starts.',
+      )
+    )
   }
 
-  /** Handle giving items to Master Healer Lyria. */
+  /**
+   * Handle giving items to Master Healer Lyria. The healing herbs start the
+   * apprenticeship at the carter's bed; the Crystal Focus is taught over that
+   * bed and is handed back when the herbs have not been given yet.
+   */
   override giveItem(gameState: GameState, item: Item): string {
-    if (item instanceof CrystalFocus) {
-      // Remove Crystal Focus from inventory as it's given to Lyria
-      gameState.removeItemFromInventory('Crystal Focus')
+    const name = characterName(this.name)
+    const apprenticed = gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)
+    if (item instanceof HealingHerbs && !apprenticed) {
+      gameState.removeItemFromInventory(item.name)
       gameState.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true)
-      // Complete the quest and learn greater_heal spell
+      return (
+        characterName('Lyria') +
+        ' unties the bundle and breathes it in.' +
+        '\n\n' +
+        name +
+        ': ' +
+        speech(
+          "Greendale's old families grow these. They don't part with them " +
+            'lightly.',
+        ) +
+        '\n\n' +
+        'She leads you through to the back room, where a carter lies grey ' +
+        'under a blanket, his chest crushed under his own wagon. You watch ' +
+        'her steep the herbs, lay her hands on him and pour her healing in. ' +
+        'His breathing eases, but only a little.' +
+        '\n\n' +
+        name +
+        ': ' +
+        speech(
+          'This is the work. You give what you have, and sometimes it is ' +
+            'not enough. He needs more than these hands can give. The old ' +
+            'healers gathered their healing into a crystal, a ' +
+            '[item_name]Crystal Focus[/item_name], and it came out the ' +
+            'other side like sunlight through a glass. If one survives in ' +
+            'Greendale, it is wherever the old scholars hid their books.',
+        )
+      )
+    }
+    if (item instanceof CrystalFocus) {
+      if (!apprenticed) {
+        return (
+          characterName('Lyria') +
+          ' turns the crystal over in her hands and gives it back.' +
+          '\n\n' +
+          name +
+          ': ' +
+          speech(
+            'A focus gathers what you pour into it, and I have nothing ' +
+              'left to pour. Bring me [item_name]healing herbs[/item_name] ' +
+              "first. Then we'll see what this is for.",
+          )
+        )
+      }
+      gameState.removeItemFromInventory('Crystal Focus')
       gameState.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
-      // Learn greater_heal spell
       gameState.learnSpell(new GreaterHealSpell())
       return (
-        '[success]' +
-        characterName('Master Healer Lyria') +
-        ' accepts the [item_name]Crystal Focus[/item_name] with great ' +
-        'relief. ' +
-        speech(
-          "'This is exactly what I needed! With this crystal focus, I can " +
-            "amplify my healing magic to treat patients on the brink of death.'",
-        ) +
-        ' She immediately begins using it to help her critically injured ' +
-        'patients. ' +
-        speech(
-          "'Through your compassion and this magical aid, you've shown " +
-            "yourself ready for advanced training.'",
-        ) +
-        ' She teaches you the [spell_name]greater heal[/spell_name] spell! ' +
-        speech("'You've truly earned the title of healer.'") +
-        "[/success]\n\n[success]Quest Complete: The Healer's " +
-        'Apprentice[/success]'
+        characterName('Lyria') +
+        " takes the [item_name]Crystal Focus[/item_name] to the carter's " +
+        'bed and sets it on his chest.' +
+        '\n\n' +
+        name +
+        ': ' +
+        speech('Watch my hands, not the light.') +
+        '\n\n' +
+        'She gathers her healing into the crystal, and it comes out the ' +
+        'other side bright and narrow, straight into him. The grey goes out ' +
+        'of his face. Then she takes your hands, puts them where hers were, ' +
+        'and has you do it again, slower, until you feel the shape of it.' +
+        '\n\n' +
+        '[success]You learn [spell_name]greater heal[/spell_name].[/success]' +
+        '\n\n' +
+        name +
+        ': ' +
+        speech("He'll live. And you have the first of it now.") +
+        "\n\n[success]Quest Complete: The Healer's Apprentice[/success]"
       )
     }
     // Default response for other items
     return (
-      characterName('Master Healer Lyria') +
+      name +
       ' seems to be too busy to receive any gifts from you at the moment.'
     )
   }

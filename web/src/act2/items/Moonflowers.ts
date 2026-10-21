@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, characterName, event, speech } from '@/engine'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
 
 /** Rare bioluminescent blossoms used in healing and divinatory practices. */
@@ -21,8 +21,15 @@ export class Moonflowers extends Item {
     const currentRoom = gameState.currentRoom.name
     if (currentRoom.toLowerCase().includes('healer')) {
       return (
-        'The [item_name]moonflowers[/item_name] would be perfect for Master ' +
-        "Healer Lyria's advanced remedies and magical preparations."
+        characterName('Lyria') +
+        ' glances at the silver blooms and shakes her head.' +
+        '\n\n' +
+        characterName('Master Healer Lyria') +
+        ': ' +
+        speech(
+          'Not for my shelves. Those belong to things older than me. Take ' +
+            'them back to the forest.',
+        )
       )
     } else if (currentRoom.toLowerCase().includes('forest')) {
       return (
