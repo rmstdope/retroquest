@@ -100,7 +100,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Attempt to enter the fortress's outer courtyard
     -   **Prerequisites:** None
-    -   **Completion:** Use the Ward Stone Fragment and light magic to dispel the shadow guardians
+    -   **Completion:** Cast light on the right ward stone, the one out of time, to break the barrier and dispel the shadow guardians
     -   **Rewards:** Safe passage, Guardian's Essence
     -   **Story Impact:** Courage against Malakar's servants
 
@@ -254,8 +254,9 @@ pulses from ward stones in the gate frame, and spectral guardians materialise fr
 
 #### Items
 
--   Ward Stone Fragment (bypasses the defences)
--   Guardian's Chain (protection against the Knight of Despair)
+-   Left, middle and right ward stones (the right one keeps the barrier's time a breath late)
+-   After the guardians fall: Ward Stone Fragment (optional, nothing needs it), Guardian's Chain
+    (protection against the Knight of Despair) and Guardian's Essence
 
 #### Characters
 
@@ -665,13 +666,11 @@ where they would occur.
 
 1. **Fortress Gates:**
 
-    - `examine ward stones` → the guardians' anchor points
-    - `take ward stone fragment`
-    - `use ward stone fragment with barriers`
-    - `cast light on ward stones` → dispels the guardians
+    - `examine ward stones` → names the right stone as the one out of time
+    - `cast light on right stone` → the barrier falls and the guardians are dispelled
         - Quest completed: "Shattered Ward Guardians"
-        - Item obtained: `Guardian's Essence`
     - `take guardian's chain`
+    - `take guardian's essence`
 
 2. **Outer Courtyard:**
 

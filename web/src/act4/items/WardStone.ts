@@ -40,7 +40,7 @@ export class WardStone extends Item {
   }
 
   /** Whether the guardians' hold on the gates is already broken. */
-  isDark(gameState: GameState): boolean {
+  private isDark(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED)
   }
 

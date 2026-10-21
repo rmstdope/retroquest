@@ -190,7 +190,26 @@ describe('FortressGates', () => {
     })
   })
 
+  describe('a save made before the stones existed', () => {
+    it('gets its three stones back on load and can still be solved', () => {
+      const game = createGame()
+      const gates = game.state.currentRoom
+      for (const side of ['left', 'middle', 'right']) {
+        gates.removeItem(`${side} stone`)
+      }
+      expect(roomItems(game)).not.toContain('Right Stone')
+      const reloaded = new Game([new Act4()])
+      reloaded.loadSaveData(game.toSaveData())
+      expect(roomItems(reloaded)).toEqual(
+        expect.arrayContaining(['Left Stone', 'Middle Stone', 'Right Stone']),
+      )
+      executeCommands(reloaded, ['cast light on right stone'])
+      expectQuestCompleted(reloaded.state, 'Shattered Ward Guardians')
+    })
+  })
+
   describe('after the gates fall', () => {
+    /** A game where the right stone has been lit. */
     function solved(): Game {
       const game = createGame()
       executeCommands(game, ['cast light on right stone'])

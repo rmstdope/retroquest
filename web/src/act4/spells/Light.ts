@@ -28,8 +28,9 @@ export class Light extends Spell {
       if (targetItem instanceof WardStone) {
         return room.lightStone(gameState, targetItem)
       }
-      if (targetItem instanceof WardStones)
+      if (targetItem instanceof WardStones) {
         return room.lightAllStones(gameState)
+      }
     }
     return event(
       `You shine light on the [item_name]${targetItem.name}[/item_name], ` +
