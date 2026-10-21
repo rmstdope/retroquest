@@ -17,11 +17,13 @@ import {
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_ECHOES_QUEST_STARTED,
+  FLAG_ACT3_MIRA_CONFESSED,
 } from '../Act3StoryFlags'
 
 /**
- * Act III version of Mira: starts the main quest and handles teleportation
- * between sites.
+ * Act III version of Mira: starts the main quest, handles teleportation
+ * between sites and, once everything is complete, confesses that she was the
+ * Wardens' pupil before she performs the Warding Rite on the next talk.
  */
 export class Mira extends Character {
   constructor() {
@@ -266,6 +268,11 @@ export class Mira extends Character {
           )
         }
 
+        // The confession plays on one talk; the rite follows on the next.
+        if (!gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)) {
+          return this.confess(gameState, eventMsg)
+        }
+
         // Step 28: Perform the Warding Rite to create Lifelight Elixir
         gameState.setStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
         gameState.setStoryFlag(FLAG_ACT3_MAIN_COMPLETED, true)
@@ -406,5 +413,59 @@ export class Mira extends Character {
       '[failure]Mira hesitates—she cannot find the proper anchor to send ' +
       'you there yet.[/failure]'
     )
+  }
+
+  /**
+   * Plays Mira's confession (a fixed conversation), records it and gives her
+   * the description she has from now on.
+   */
+  private confess(gameState: GameState, eventMsg: string): string {
+    gameState.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, true)
+    this.description =
+      "The village healer — and, you know now, the Wardens' pupil, who " +
+      'stayed in Willowbrook for your sake. She meets your eyes more easily ' +
+      'than before.'
+    return [
+      eventMsg,
+      event(
+        "Mira's hands stop above the three relics. She does not begin the rite.",
+      ),
+      speech(
+        "'Before I join them, Elior, there is something you must hear from " +
+          "me, and not from a stone or a dragon.'",
+      ),
+      speech(
+        "'I knew your parents. Not as a healer knows a neighbour. I was " +
+          "their pupil — Aren's, Lysa's, and Malakar's. The three of them " +
+          "taught me everything I know of circles and wards.'",
+      ),
+      speech(
+        "'When Aren and Lysa poured themselves into the ward, someone had " +
+          'to stay with the child it hid. I came to Willowbrook as its ' +
+          "healer, and I have watched over you every day since.'",
+      ),
+      speech(
+        "'Your grandmother knew. She is Lysa's mother, and she kept the " +
+          "secret with me.'",
+      ),
+      event(
+        'For a moment you cannot speak. Then the words come out harder than ' +
+          "you meant them: 'Why didn't you tell me?'",
+      ),
+      speech(
+        "'Because the seal could not bear it. Malakar's cloaked agent " +
+          "walked Willowbrook's lanes searching for the amulet, and any " +
+          "word of who you were could have reached him.'",
+      ),
+      speech(
+        "'I am telling you now because you have earned the truth. The " +
+          "amulet you carry is the anchor of the ward your parents became.'",
+      ),
+      event('She looks down at the relics, and then back at you.'),
+      speech(
+        "'When you are ready, speak to me again, and I will begin the " +
+          "Warding Rite.'",
+      ),
+    ].join('\n')
   }
 }
