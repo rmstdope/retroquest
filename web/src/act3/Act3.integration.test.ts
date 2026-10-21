@@ -4,11 +4,15 @@ import { Act3 } from './Act3'
 import { DarkPool } from './items/DarkPool'
 import { StillwaterPhial } from './items/StillwaterPhial'
 import { Miners } from './characters/Miners'
+import { WanderingPhantoms } from './characters/WanderingPhantoms'
+import { PolishedShell } from './items/PolishedShell'
 import { QuietCharm } from './items/QuietCharm'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import { playDebugScript } from '@/utils/debugScript'
 import {
   FLAG_ACT3_MAIN_STARTED,
+  FLAG_ACT3_PHANTOMS_HEARD,
+  FLAG_ACT3_SHELL_HEARD,
   FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
   FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
   FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
@@ -1004,5 +1008,21 @@ describe('Act 3 saves from before the Stillwater Phial stilled the pools', () =>
     expect(executeCommands(game, ['examine pool'])).toContain(
       'Not a tremor crosses it.',
     )
+  })
+})
+
+describe('Act 3 lullaby', () => {
+  it('keeps what Elior has heard across a save and load', () => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom.addItem(new PolishedShell())
+    game.listen('shell')
+    new WanderingPhantoms().talkTo(game.state)
+
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expectStoryFlag(fresh.state, FLAG_ACT3_SHELL_HEARD, true)
+    expectStoryFlag(fresh.state, FLAG_ACT3_PHANTOMS_HEARD, true)
+    expect(fresh.listen('shell')).toContain('still humming')
   })
 })

@@ -14,6 +14,8 @@ import {
   FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
+  FLAG_ACT3_PHANTOMS_HEARD,
+  FLAG_ACT3_SHELL_HEARD,
   FLAG_ACT3_SIGILS_MENDED,
 } from '../Act3StoryFlags'
 
@@ -34,14 +36,18 @@ export class AncientDragon extends Character {
    * The dream voice and the Dragon naming it: narration with the whispered
    * words in italics (no speaker label), the Dragon's one line and the
    * closing event. Heard once; the caller guards it with the voice flag.
+   * Elior recognises the tune from the shell, or else from the phantoms,
+   * only if he heard it.
    */
-  private voiceMoment(): string {
+  private voiceMoment(gameState: GameState): string {
     return (
       "Then, beneath the dragon's breathing, another voice: the whisper " +
       'from your dream, at the very edge of hearing. ' +
       '[italic]“Elior… little one. Help me. I cannot hold it shut ' +
       'alone.”[/italic] You know it the way you know a song someone sang ' +
-      'to you before you had words for it. Then it is gone.\n\n' +
+      'to you before you had words for it.' +
+      this.tuneRecognition(gameState) +
+      ' Then it is gone.\n\n' +
       'You look up at the ' +
       characterName(this.name) +
       '. Its golden eyes are half closed.\n\n' +
@@ -50,6 +56,23 @@ export class AncientDragon extends Character {
       event('It says no more.') +
       '\n\n'
     )
+  }
+
+  /**
+   * The sentence in which Elior recognises the tune: the shell's if heard,
+   * else the phantoms'; empty when he heard neither.
+   */
+  private tuneRecognition(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT3_SHELL_HEARD)) {
+      return (
+        ' And under the words, faint as the sea in a shell, runs the tune ' +
+        'the woman hummed.'
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_PHANTOMS_HEARD)) {
+      return ' And under the words runs the tune the phantoms hummed.'
+    }
+    return ''
   }
 
   /**
@@ -114,7 +137,7 @@ export class AncientDragon extends Character {
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD)) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD, true)
-      dialogue = dialogue + this.voiceMoment()
+      dialogue = dialogue + this.voiceMoment(gameState)
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN)) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN, true)

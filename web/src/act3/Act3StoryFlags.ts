@@ -126,3 +126,7 @@ export const FLAG_ACT3_DRAGON_MESSAGE_GIVEN = 'act3_dragon_message_given'
 export const FLAG_ACT3_DRAGON_MESSAGE_RELAYED = 'act3_dragon_message_relayed'
 /** Set when Elior has answered Sir Cedric's gate line with the refrain. */
 export const FLAG_ACT3_CEDRIC_GATE_ANSWERED = 'act3_cedric_gate_answered'
+/** Set when Elior has held the Polished Shell to his ear and heard the tune. */
+export const FLAG_ACT3_SHELL_HEARD = 'act3_shell_heard'
+/** Set when Elior has heard the wandering phantoms hum the tune. */
+export const FLAG_ACT3_PHANTOMS_HEARD = 'act3_phantoms_heard'
