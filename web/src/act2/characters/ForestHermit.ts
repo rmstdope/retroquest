@@ -63,7 +63,8 @@ export class ForestHermit extends Character {
         ) +
         '\n\n' +
         speech(
-          "'But you... there is old magic on you, and not of your own making. Take this " +
+          "'But you... there is old magic on you, and not of your own making. " +
+            'Take this ' +
             "charm—it will protect you from the forest's darker influences and " +
             'mark you as one under my protection. Remember: show respect to ' +
             'all forest beings, never take more than you give, and listen to ' +

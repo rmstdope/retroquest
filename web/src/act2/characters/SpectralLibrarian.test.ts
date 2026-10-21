@@ -23,7 +23,9 @@ describe('Spectral Librarian dialogue markup', () => {
 
     const answer = librarian.talkTo(game.state)
 
-    expect(answer).toContain('about the mark you carry.')
+    expect(answer).toContain(
+      "Prove your worthiness by repairing them, and I shall share the knowledge you seek about the mark you carry.'",
+    )
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, librarian.name)
   })
@@ -87,14 +89,18 @@ describe('Spectral Librarian dialogue markup', () => {
 
     const answer = new SpectralLibrarian().talkTo(game.state)
 
-    expect(answer).toContain(
-      "I am a keeper, not a teller. The answer you came for is in that chronicle. The Wardens of the Dawn wrote it, and their mark is on its cover, the same mark you wear at your throat. Read it, and you will learn the [spell_name]dispel[/spell_name] spell.'",
-    )
-    expect(answer).toContain(
+    const lines = [
+      "'Ah, you have repaired the protective enchantments with your [spell_name]mend[/spell_name] spell. This shows both magical ability and respect for ancient knowledge. I shall reveal what you seek.'",
+      " The spirit's eyes glow brighter as they speak: ",
+      "'I am a keeper, not a teller. The answer you came for is in that chronicle. The Wardens of the Dawn wrote it, and their mark is on its cover, the same mark you wear at your throat. Read it, and you will learn the [spell_name]dispel[/spell_name] spell.'",
       ' They gesture to a crystal resting on the shelf: ',
-    )
-    expect(answer).toContain(
       "'And take this [item_name]Crystal Focus[/item_name]. What you do with them is yours to choose.'",
-    )
+    ]
+    let from = 0
+    for (const line of lines) {
+      const at = answer.indexOf(line, from)
+      expect(at, line).toBeGreaterThanOrEqual(from)
+      from = at + line.length
+    }
   })
 })

@@ -384,7 +384,7 @@ The forest represents increasingly mystical realms:
 - Malakar is real, and his agents (the cloaked stranger seen in Willowbrook) are searching for the Willowbrook bloodline
 - King Alden has vanished; Malakar's agents framed Sir Cedric, who was on guard that night
 - The Wardens of the Dawn, whose sigil is on the Ancient Amulet, guarded the kingdom long ago
-- Prophecies in Hidden Library reference coming darkness
+- The Hidden Library's chronicle, written by the Wardens, warns of Malakar's search for the Willowbrook bloodline
 - Forest spirits sense disturbances in magical balance
 - Elior's heritage links to ancient magical traditions
 
