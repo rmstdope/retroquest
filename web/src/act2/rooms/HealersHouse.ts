@@ -2,13 +2,9 @@ import { Room } from '@/engine'
 import { MasterHealerLyria } from '../characters/MasterHealerLyria'
 
 /**
- * Healer's House room: restorative enclave for future healing progression.
- *
- * Keeps an `emergencyHealingUsed` boolean reserved for a later one-time aid.
+ * Healer's House room: restorative enclave where Master Healer Lyria lives.
  */
 export class HealersHouse extends Room {
-  emergencyHealingUsed = false
-
   constructor() {
     super({
       name: "Healer's House",

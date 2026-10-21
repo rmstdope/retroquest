@@ -1,10 +1,8 @@
 /**
  * Every content class of Act 2 by name, so saves can refer to them.
  */
-import { AdvancedHealingPotion } from './items/AdvancedHealingPotion'
 import { AncientAmulet } from './items/AncientAmulet'
 import { AncientChronicle } from './items/AncientChronicle'
-import { BoundaryStoneFragment } from './items/BoundaryStoneFragment'
 import { CampSite } from './items/CampSite'
 import { Caravan } from './items/Caravan'
 import { CityMap } from './items/CityMap'
@@ -14,7 +12,6 @@ import { CrystalClearWater } from './items/CrystalClearWater'
 import { CrystalFocus } from './items/CrystalFocus'
 import { Door } from './items/Door'
 import { DruidicCharm } from './items/DruidicCharm'
-import { DruidicFocus } from './items/DruidicFocus'
 import { EnchantedAcorn } from './items/EnchantedAcorn'
 import { EnhancedLantern } from './items/EnhancedLantern'
 import { EntryPass } from './items/EntryPass'
@@ -103,10 +100,8 @@ import { PropheticVision } from './spells/PropheticVision'
 
 export const ACT2_CLASSES = {
   // Items
-  AdvancedHealingPotion,
   AncientAmulet,
   AncientChronicle,
-  BoundaryStoneFragment,
   CampSite,
   Caravan,
   CityMap,
@@ -116,7 +111,6 @@ export const ACT2_CLASSES = {
   CrystalFocus,
   Door,
   DruidicCharm,
-  DruidicFocus,
   EnchantedAcorn,
   EnhancedLantern,
   EntryPass,
