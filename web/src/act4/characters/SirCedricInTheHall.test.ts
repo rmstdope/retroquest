@@ -108,6 +108,12 @@ describe('Sir Cedric in the Hall of Echoes', () => {
     expect(game.state.currentRoom.describe(game.state)).toContain(DESC_DOOR)
   })
 
+  it('does not forgive while the warriors are never put to rest', () => {
+    const game = redeemed()
+    executeCommands(game, ["cast redemption's light on knight"])
+    expectStoryFlag(game.state, FLAG_ACT4_CEDRIC_FORGAVE, false)
+  })
+
   it('forgives when the warriors are put to rest, in the right place', () => {
     const game = redeemed()
     const out = executeCommands(game, [

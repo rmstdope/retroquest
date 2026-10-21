@@ -36,17 +36,25 @@ const CEDRIC_FIRST = [
   'You tell him what the captain of the guard said: that he is sorry he ever doubted him.',
   'He was the youngest on the walls that night. I never blamed him. I am glad he remembers.',
   'And the knight in grey said his piece to my face. I have not forgiven him. Not yet.',
+  'He looks out over the field for a while.',
   `Later. ${CEDRIC_OLD}`,
 ]
 
 type Ending = 'redemption' | 'justice' | 'sacrifice'
 
 /** A game at the end of the chosen ending, in the Throne Chamber. */
-function ended(ending: Ending): { game: Game; text: string } {
+function ended(
+  ending: Ending,
+  restWarriors = false,
+): { game: Game; text: string } {
   const game = new Game([new Act4()])
   game.newTurn()
   game.newTurn()
-  executeCommands(game, ACT4_GOLDEN_PATH.slice(0, AMULET_STEP))
+  const redeemAt = ACT4_GOLDEN_PATH.indexOf('say redemption to knight') + 1
+  executeCommands(game, ACT4_GOLDEN_PATH.slice(0, redeemAt))
+  if (restWarriors)
+    executeCommands(game, ["cast redemption's light on ghostly warriors"])
+  executeCommands(game, ACT4_GOLDEN_PATH.slice(redeemAt, AMULET_STEP))
   const virtue = ending === 'sacrifice' ? VIRTUE_SELFLESS : VIRTUE_TRUTH
   let text: string
   if (ending === 'redemption') {
@@ -258,6 +266,8 @@ describe('the companions', () => {
         expect(next).toBeGreaterThan(at)
         at = next
       }
+      expect(first).not.toContain('Tell me where he is')
+      expect(first).not.toContain('what the knight in grey said')
       reload(game)
       for (let i = 0; i < 2; i++) {
         const later = executeCommands(game, ['talk to cedric'])
@@ -265,6 +275,15 @@ describe('the companions', () => {
         expect(later).not.toContain('The knight in grey')
       }
     }
+  })
+
+  it('Sir Cedric forgives after the real cast in the hall, then says so at home', () => {
+    const { game } = ended('justice', true)
+    executeCommands(game, ['north'])
+    expectStoryFlag(game.state, FLAG_ACT4_CEDRIC_FORGAVE)
+    const first = executeCommands(game, ['talk to cedric'])
+    expect(first).toContain(CEDRIC_FORGAVE)
+    expect(first).not.toContain('Not yet')
   })
 
   it('Sir Cedric says he forgave the knight when he did', () => {

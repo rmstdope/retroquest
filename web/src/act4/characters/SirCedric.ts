@@ -45,6 +45,7 @@ export class SirCedric extends Character {
           : 'And the knight in grey said his piece to my face. I have not ' +
               'forgiven him. Not yet.',
       ),
+      'He looks out over the field for a while.',
       dialogue('Sir Cedric', `Later. ${OLD_LINE}`),
     ].join('\n')
   }
