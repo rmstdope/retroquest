@@ -19,7 +19,7 @@ export class TowerOfShadows extends Room {
         'very shadows appear to mock your every movement with silent, dancing forms.',
       items: [],
       characters: [],
-      exits: { south: 'HallOfEchoes', up: 'ChamberOfWhispers' },
+      exits: { west: 'HallOfEchoes', up: 'ChamberOfWhispers' },
     })
   }
 }

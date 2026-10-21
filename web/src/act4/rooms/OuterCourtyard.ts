@@ -47,20 +47,24 @@ export class OuterCourtyard extends Room {
     gameState.setStoryFlag(FLAG_ACT4_TRAPPED_SERVANTS_STARTED, true)
   }
 
-  /** Only the way west is open; `exits` keeps the finished map. */
-  override getExits(_gameState: GameState): Exits {
-    return { west: this.exits.west }
+  /** The way west is always open; north opens once the servants are free. */
+  override getExits(gameState: GameState): Exits {
+    if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)) {
+      return { west: this.exits.west }
+    }
+    return { west: this.exits.west, north: this.exits.north }
   }
 
-  /** The archway north is choked with fallen stone until the maze is built. */
+  /** The bound servants drift across the archway north. */
   override blockedExit(
     _gameState: GameState,
     direction: string,
   ): string | null {
     if (direction !== 'north') return null
     return (
-      '[failure]The archway to the north is choked with fallen stone. ' +
-      'There is no way through — not yet.[/failure]'
+      '[failure]The trapped servants drift across the archway, their chains ' +
+      'of shadow trailing behind them. You cannot pass while they are ' +
+      'bound.[/failure]'
     )
   }
 

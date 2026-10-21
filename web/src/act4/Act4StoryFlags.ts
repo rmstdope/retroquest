@@ -87,3 +87,9 @@ export const FLAG_ACT4_REDEMPTION_ENDING = 'act4_redemption_ending'
 export const FLAG_ACT4_JUSTICE_ENDING = 'act4_justice_ending'
 export const FLAG_ACT4_CROWN_ENDING = 'act4_crown_ending'
 export const FLAG_ACT4_HOME_ENDING = 'act4_home_ending'
+
+// The True Self in the Mirror Labyrinth (optional)
+export const FLAG_ACT4_TRUTH_TOLD = 'act4_truth_told'
+
+/** The virtue moment recorded when Elior tells the True Self the truth. */
+export const VIRTUE_TRUTH = 'truth'

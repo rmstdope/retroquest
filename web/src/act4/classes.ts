@@ -1,6 +1,13 @@
 /**
  * Every content class of Act 4 by name, so saves can refer to them.
  */
+import { Echoes } from './items/Echoes'
+import { EchoStone } from './items/EchoStone'
+import { Mirrors } from './items/Mirrors'
+import { KnightOfDespair } from './characters/KnightOfDespair'
+import { TrueSelf } from './characters/TrueSelf'
+import { TruthSight } from './spells/TruthSight'
+import { TheMazeOfMirrors } from './quests/TheMazeOfMirrors'
 import { Barriers } from './items/Barriers'
 import { GuardiansChain } from './items/GuardiansChain'
 import { GuardiansEssence } from './items/GuardiansEssence'
@@ -27,6 +34,9 @@ import { Light } from './spells/Light'
 export const ACT4_CLASSES = {
   // Items
   Barriers,
+  Echoes,
+  EchoStone,
+  Mirrors,
   GuardiansChain,
   GuardiansEssence,
   LoyaltyToken,
@@ -35,11 +45,14 @@ export const ACT4_CLASSES = {
   WardStones,
   // Characters
   CaptainOfTheGuard,
+  KnightOfDespair,
+  TrueSelf,
   TrappedServants,
   // Quests
   ShatteredWardGuardians,
   TheFinalStand,
   TheTrappedServants,
+  TheMazeOfMirrors,
   // Rooms
   ChamberOfWhispers,
   FortressGates,
@@ -52,4 +65,5 @@ export const ACT4_CLASSES = {
   // Spells
   Bless,
   Light,
+  TruthSight,
 }
