@@ -179,19 +179,28 @@ describe('Sir Cedric turns away an early vision', () => {
   })
 
   it('has a sentence for every Act II side quest', () => {
-    const game = createGameWithCedric()
-    const names = [
-      ...game.state.nonActivatedQuests,
-      ...game.state.activatedQuests,
-    ]
+    const names = [...createGameWithCedric().state.nonActivatedQuests]
       .filter((quest) => !quest.isMain())
       .map((quest) => quest.name)
-    leaveIncomplete(game.state, names, [])
+    expect(names.length).toBe(11)
+    for (const name of names) {
+      const game = createGameWithCedric()
+      leaveIncomplete(game.state, [name], [])
 
-    const answer = refusal(game.state)
+      const answer = refusal(game.state)
 
-    expect(answer.match(/\./g)!.length).toBeGreaterThanOrEqual(names.length + 3)
-    expect(answer).not.toContain('undefined')
+      expect(answer, name).toContain('One promise is still unkept. ')
+      expect(answer, name).not.toContain('more out there')
+    }
+  })
+
+  it('leaves the dim hint unchanged when Cedric is not in the room', () => {
+    const game = new Game([new Act2()])
+
+    const answer = new PropheticVision().castSpell(game.state)
+
+    expect(answer).toContain('most meaningful if shared')
+    expect(answer).not.toContain('Not yet.')
   })
 })
 
