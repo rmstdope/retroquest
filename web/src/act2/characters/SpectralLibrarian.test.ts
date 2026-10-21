@@ -190,7 +190,7 @@ describe('Spectral Librarian notices the amulet', () => {
     expectInOrder(answer, [
       THANKS,
       ' Their eyes go back to the [item_name]Ancient Amulet[/item_name]. ',
-      `'${CONFESSION}'`,
+      `${CONFESSION}`,
       " The spirit's eyes glow brighter as they speak: ",
       'I am a keeper, not a teller.',
       ' They gesture to a crystal resting on the shelf: ',
@@ -212,7 +212,7 @@ describe('Spectral Librarian notices the amulet', () => {
     expectInOrder(answer, [
       THANKS,
       ' Their eyes find the [item_name]Ancient Amulet[/item_name] at your throat, and stay there. ',
-      `'${GLANCE_LINE} ${CONFESSION}'`,
+      `${GLANCE_LINE} ${CONFESSION}`,
       " The spirit's eyes glow brighter as they speak: ",
     ])
     expect(answer.startsWith('[success]')).toBe(true)
@@ -245,7 +245,7 @@ describe('Spectral Librarian notices the amulet', () => {
 
     expectInOrder(delayed, [
       "The [character_name]Spectral Librarian[/character_name]'s eyes go to the [item_name]Ancient Amulet[/item_name].",
-      `'${GLANCE_LINE} ${CONFESSION}'`,
+      `${GLANCE_LINE} ${CONFESSION}`,
       'The chronicle is waiting on its shelf. We wrote it for whoever would read it; I cannot read it for you.',
     ])
     expect(again).not.toContain('I wore that mark')
@@ -298,7 +298,7 @@ describe('Spectral Librarian notices the amulet', () => {
 
     const answer = new SpectralLibrarian().talkTo(fresh.state)
 
-    expect(answer).toContain(`'${GLANCE_LINE} ${CONFESSION}'`)
+    expect(answer).toContain(`${GLANCE_LINE} ${CONFESSION}`)
   })
 
   it('plays the glance for a save made before mending', () => {
