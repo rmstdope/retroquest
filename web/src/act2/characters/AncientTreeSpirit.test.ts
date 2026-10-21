@@ -76,7 +76,9 @@ describe('Ancient Tree Spirit voice', () => {
     expect(learned).toBeGreaterThan(flavour)
     expect(answer.indexOf(POINTER)).toBeGreaterThan(learned)
     expect(answer).not.toContain('north')
-    expect(game.state.currentRoom.items.some((i) => i instanceof SilverLeaves))
+    expect(
+      game.state.currentRoom.items.some((i) => i instanceof SilverLeaves),
+    ).toBe(true)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'ancient tree spirit')
   })

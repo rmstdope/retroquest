@@ -154,16 +154,21 @@ describe('Water Nymphs voice', () => {
     expectDialogueSpeaker(talk, SPEAKER)
   })
 
-  it('speaks only in questions in the first talk and after the last riddle', () => {
+  it('puts a question in every spoken line of every talk and reply', () => {
     const { game, nymphs } = createGameWithNymphs()
-    const lines = [
-      ...spoken(nymphs.talkTo(game.state)).slice(0, 1),
-      ...spoken(nymphs.sayTo(game.state, 'tree')).slice(0, 1),
-      ...spoken(nymphs.sayTo(game.state, 'wrong')).slice(0, 1),
-    ]
+    const replies = [nymphs.talkTo(game.state)]
+    nymphs.currentRiddle = 1
+    replies.push(nymphs.talkTo(game.state))
+    replies.push(nymphs.sayTo(game.state, 'wrong'))
+    replies.push(nymphs.sayTo(game.state, 'water'))
+    nymphs.currentRiddle = 2
+    replies.push(nymphs.sayTo(game.state, 'ants'))
+    replies.push(nymphs.talkTo(game.state))
 
-    for (const line of lines) {
-      expect(line).toContain('?')
+    for (const reply of replies) {
+      for (const line of spoken(reply)) {
+        expect(line).toContain('?')
+      }
     }
   })
 
