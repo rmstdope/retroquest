@@ -1,5 +1,8 @@
 import { Spell, type GameState, characterName, dialogue, event } from '@/engine'
-import { FLAG_GATHERING_STORM_COMPLETED } from '../Act2StoryFlags'
+import {
+  FLAG_GATHERING_STORM_COMPLETED,
+  FLAG_VISION_SHARED,
+} from '../Act2StoryFlags'
 import { SirCedric } from '../characters/SirCedric'
 
 /** Cedric's sentence for each unfinished side quest he can name, by quest name. */
@@ -28,9 +31,10 @@ const ERRAND_SENTENCES: Record<string, string> = {
 
 /**
  * Ultimate divination spell concluding Act II foresight quest progression.
- * The first cast with Sir Cedric present completes the Gathering Storm quest
- * and shows the vision of the village, the robed figure and the dream voice;
- * later casts return a shorter variant.
+ * The first cast with Sir Cedric present shows the vision of the village, the
+ * robed figure and the dream voice, and leaves him waiting for Elior's answer;
+ * the Gathering Storm completes on Elior's next exchange with him. A cast while
+ * he waits gives a reminder; casts after the act ends return a shorter variant.
  */
 export class PropheticVision extends Spell {
   constructor() {
@@ -58,6 +62,16 @@ export class PropheticVision extends Spell {
       )
     }
 
+    if (
+      gameState.getStoryFlag(FLAG_VISION_SHARED) &&
+      !gameState.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)
+    ) {
+      return event(
+        'You have already shared the vision. ' +
+          `${characterName('Sir Cedric')} is waiting for you to speak.`,
+      )
+    }
+
     if (!gameState.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)) {
       const sideQuests = [
         ...gameState.nonActivatedQuests,
@@ -70,8 +84,8 @@ export class PropheticVision extends Spell {
         return this.cedricRefusal(gameState)
       }
 
-      // First casting - complete The Gathering Storm quest
-      gameState.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
+      // First casting - share the vision; the quest completes when Elior answers Cedric
+      gameState.setStoryFlag(FLAG_VISION_SHARED, true)
       return (
         event(
           this.visionOpening(gameState) +
@@ -94,14 +108,9 @@ export class PropheticVision extends Spell {
           'Then Malakar is no tale, and it is you he is hunting.',
         ) +
         '\n\n' +
-        'All your life, Malakar has been a name from old books, a story told ' +
-        'to frighten children. But the agents asking after the Willowbrook ' +
-        'bloodline, the seal on the [item_name]Secret Documents[/item_name], ' +
-        'the figure reaching for you in the vision: they all point the same ' +
-        'way. Malakar is real, and the bloodline he seeks is yours.\n\n' +
-        `${characterName('Sir Cedric')} rests a hand on his sword. ` +
-        '"Wherever this road leads, you will not walk it alone." ' +
-        '[bold]Act II is complete.[/bold] The storm has a name now.'
+        `And yet the voice did not sound like a hunter's. ` +
+        `${characterName('Sir Cedric')} waits, watching you, as if he can ` +
+        'see you have something to say.'
       )
     }
 

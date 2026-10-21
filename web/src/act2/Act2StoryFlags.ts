@@ -3,6 +3,8 @@
 export const FLAG_SPOKEN_TO_SIR_CEDRIC = 'spoken_to_sir_cedric'
 export const FLAG_GATHERING_STORM_COMPLETED = 'gathering_storm_completed'
 export const FLAG_CEDRIC_RECOGNISED_SIGIL = 'cedric_recognised_sigil'
+/** Set when the prophetic vision has been shared with Sir Cedric; he then waits for Elior to answer. */
+export const FLAG_VISION_SHARED = 'vision_shared'
 
 // Greendale Phase Quest Flags
 export const FLAG_DEMONSTRATED_COMBAT_SKILLS = 'demonstrated_combat_skills'

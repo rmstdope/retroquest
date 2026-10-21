@@ -5,7 +5,10 @@ import { SirCedric } from '../characters/SirCedric'
 import { ForestHeartCrystal } from '../items/ForestHeartCrystal'
 import type { GameState } from '@/engine'
 import { PropheticVision } from './PropheticVision'
-import { FLAG_GATHERING_STORM_COMPLETED } from '../Act2StoryFlags'
+import {
+  FLAG_GATHERING_STORM_COMPLETED,
+  FLAG_VISION_SHARED,
+} from '../Act2StoryFlags'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 /** An Act II game with Sir Cedric in the current room. */
@@ -221,6 +224,7 @@ describe('Prophetic Vision markup', () => {
     completeAllSideQuests(game.state)
     const spell = new PropheticVision()
     spell.castSpell(game.state)
+    game.state.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
 
     const answer = spell.castSpell(game.state)
 
@@ -277,7 +281,7 @@ describe('Prophetic Vision casting', () => {
     expect(game.state.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)).toBe(false)
   })
 
-  it('is cast by its spaced name and completes the Gathering Storm quest', () => {
+  it('is cast by its spaced name and shares the vision without ending the act', () => {
     const game = createGameWithCedric()
     completeAllSideQuests(game.state)
     game.state.knownSpells.push(new PropheticVision())
@@ -285,12 +289,13 @@ describe('Prophetic Vision casting', () => {
     const answer = game.cast('prophetic vision')
 
     expect(answer).toContain('a robed figure')
-    expect(game.state.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_VISION_SHARED)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)).toBe(false)
   })
 })
 
 describe('Prophetic Vision ending', () => {
-  it('ends Act II on Cedric, the realisation and the pledge', () => {
+  it('ends the cast on Cedric, the realisation and the hint, holding the closing back', () => {
     const game = createGameWithCedric()
     completeAllSideQuests(game.state)
 
@@ -299,19 +304,10 @@ describe('Prophetic Vision ending', () => {
     expect(answer).toContain(
       'has grown grave.[/event]\n\n' +
         '[character_name]Sir Cedric[/character_name]\n[dialogue]' +
-        'Then Malakar is no tale, and it is you he is hunting.[/dialogue]\n\n' +
-        'All your life, Malakar has been a name from old books, a story told ' +
-        'to frighten children. But the agents asking after the Willowbrook ' +
-        'bloodline, the seal on the [item_name]Secret Documents[/item_name], ' +
-        'the figure reaching for you in the vision: they all point the same ' +
-        'way. Malakar is real, and the bloodline he seeks is yours.\n\n' +
-        '[character_name]Sir Cedric[/character_name] rests a hand on his ' +
-        'sword. "Wherever this road leads, you will not walk it alone." ' +
-        '[bold]Act II is complete.[/bold] The storm has a name now.',
+        'Then Malakar is no tale, and it is you he is hunting.[/dialogue]\n\n',
     )
-    expect(answer.endsWith('The storm has a name now.')).toBe(true)
-    expect(answer).not.toContain('The vision fades, but the knowledge remains')
-    expect(answer).not.toContain('better prepared for whatever challenges')
+    expect(answer.endsWith('something to say.')).toBe(true)
+    expect(answer).not.toContain('Act II is complete')
     expectMarkupWellFormed(answer)
   })
 })
@@ -333,7 +329,7 @@ describe('Prophetic Vision and the Forest Heart Crystal', () => {
 
     expect(first.startsWith('[event]' + CRYSTAL_OPENING)).toBe(true)
     expect(first).not.toContain('newly granted sight')
-    expect(first).toContain('Act II is complete.')
+    expect(first).toContain('something to say.')
     expect(game.state.hasItem('forest heart crystal')).toBe(true)
     expectMarkupWellFormed(first)
   })

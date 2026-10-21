@@ -19,6 +19,8 @@ import {
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_GATHERING_STORM_COMPLETED,
+  FLAG_VISION_SHARED,
 } from '../Act2StoryFlags'
 
 /** Cedric's description while his name is not yet cleared: old mail, no device, an empty scabbard. */
@@ -33,6 +35,27 @@ export const CEDRIC_DESCRIPTION_AFTER =
   'A tall knight in old, dented mail, bearing the scars of many battles. His ' +
   'sword hangs at his hip once more, and he carries himself like a man who ' +
   'has been given back his name.'
+
+/** What Cedric and the narration say once the act ends, after the vision has been answered. */
+export const VISION_CLOSING =
+  'All your life, Malakar has been a name from old books, a story told ' +
+  'to frighten children. But the agents asking after the Willowbrook ' +
+  'bloodline, the seal on the [item_name]Secret Documents[/item_name], ' +
+  'the figure reaching for you in the vision: they all point the same ' +
+  'way. Malakar is real, and the bloodline he seeks is yours.\n\n' +
+  `${characterName('Sir Cedric')} rests a hand on his sword. ` +
+  '"Wherever this road leads, you will not walk it alone." ' +
+  '[bold]Act II is complete.[/bold] The storm has a name now.'
+
+/** Elior's telling, when he says the voice did not sound like a hunter. */
+const VISION_TELLING =
+  `You tell ${characterName('Sir Cedric')} the part you would rather keep ` +
+  'to yourself: the voice did not sound like a hunter. It sounded glad to ' +
+  'see you.'
+
+/** Cedric's answer to that telling. */
+const VISION_TELLING_REPLY =
+  'Then it is worse, not better. A thing that wants you to come to it.'
 
 /** The grey line that reminds the player how to answer Cedric during the bout. */
 const BOUT_REMINDER =
@@ -116,6 +139,11 @@ export class SirCedric extends Character {
     })
   }
 
+  /** Also answers to his short name, which the `say truth to cedric` command uses. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'cedric'
+  }
+
   /** Give every Sir Cedric in the game the description that matches the state of his name. */
   static refreshAll(gameState: GameState): void {
     for (const room of Object.values(gameState.allRooms))
@@ -146,9 +174,11 @@ export class SirCedric extends Character {
    * Recruit Elior, reward the knight's test and hand over Nature's Charm. The
    * first talk while Elior carries the Ancient Amulet also holds the one-time
    * recognition of the Wardens' sigil, which changes the amulet's description.
+   * While he waits after the vision, any talk ends Act II with the closing lines.
    */
   override talkTo(gameState: GameState): string {
     if (this.boutRunning()) return this.talkDuringBout()
+    if (this.waitingForElior(gameState)) return this.endAct(gameState)
     const charmDue =
       gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED) &&
       !this.receivedNaturesCharm
@@ -162,6 +192,20 @@ export class SirCedric extends Character {
       )
     }
     return reply
+  }
+
+  /** Whether the vision has been shared and Cedric waits for Elior to answer before the act ends. */
+  private waitingForElior(gameState: GameState): boolean {
+    return (
+      gameState.getStoryFlag(FLAG_VISION_SHARED) &&
+      !gameState.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)
+    )
+  }
+
+  /** Complete The Gathering Storm, which ends Act II; returns the closing lines after `opening`. */
+  private endAct(gameState: GameState, opening = ''): string {
+    gameState.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
+    return opening + VISION_CLOSING
   }
 
   /** Whether a bout is running; older saves lack the field, so compare rather than negate. */
@@ -244,9 +288,27 @@ export class SirCedric extends Character {
     this.boutCall = 0
   }
 
-  /** Answer an attack with a form; the wrong ones cost nothing and repeat the attack. */
+  /**
+   * Answer an attack with a form; the wrong ones cost nothing and repeat the
+   * attack. While Cedric waits after the vision, saying "truth" tells him the
+   * voice did not sound like a hunter and ends the act; no virtue is recorded.
+   */
   override sayTo(gameState: GameState, words: string): string {
-    if (!this.boutRunning()) return super.sayTo(gameState, words)
+    if (!this.boutRunning()) {
+      const spoken = words
+        .trim()
+        .toLowerCase()
+        .replace(/[.!?]+$/, '')
+      if (spoken === 'truth' && this.waitingForElior(gameState))
+        return this.endAct(
+          gameState,
+          VISION_TELLING +
+            '\n\n' +
+            dialogue('Sir Cedric', VISION_TELLING_REPLY) +
+            '\n\n',
+        )
+      return super.sayTo(gameState, words)
+    }
     const said = words
       .trim()
       .toLowerCase()

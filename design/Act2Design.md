@@ -4,7 +4,7 @@
 
 Act II continues Elior's journey as they arrive in Greendale, a bustling city that serves as a crossroads between civilization and the mystical Enchanted Forest. The act focuses on developing magical abilities, uncovering Elior's heritage, and helping Greendale and the forest communities before facing the growing threat.
 
-This act is row II of the red line. Elior arrives believing Malakar is a legend from old books. By the end he knows Malakar is real and is searching for the Willowbrook bloodline, which means Elior. Act I ends with Mira giving Elior the **Ancient Amulet**. Acts share no classes, so Act II's setup places an Act II Ancient Amulet item in Elior's inventory at the start (as Act III does); it is added to the Act II items and does not change `ACT2_GOLDEN_PATH`. The act ends when Nyx's vision is shared with Sir Cedric. The threat is shown, not fought: the only fighting is The Knight's Test, a sparring bout.
+This act is row II of the red line. Elior arrives believing Malakar is a legend from old books. By the end he knows Malakar is real and is searching for the Willowbrook bloodline, which means Elior. Act I ends with Mira giving Elior the **Ancient Amulet**. Acts share no classes, so Act II's setup places an Act II Ancient Amulet item in Elior's inventory at the start (as Act III does); it is added to the Act II items and does not change `ACT2_GOLDEN_PATH`. The act ends when Nyx's vision is shared with Sir Cedric and Elior has answered him (see below). The threat is shown, not fought: the only fighting is The Knight's Test, a sparring bout.
 
 ## Story Beats
 
@@ -53,8 +53,8 @@ The main quest "The Gathering Storm" can only be completed after every Act II si
     3. **Preparation:** Complete all Greendale side quests (supplies, knowledge, alliances)
     4. **Forest Journey:** Complete all Forest side quests
     5. **Nyx's Gift:** Summon Nyx at the offering altar with the three sacred charms. On the first conversation, Nyx grants Prophetic Vision, Nyx's Token, and the Forest Heart Crystal.
-    6. **Conclusion:** After every side quest is complete, cast Prophetic Vision while Sir Cedric is present to share the vision and finish the quest.
-  - **Completion:** Cast Prophetic Vision in the same room as Sir Cedric after all side quests are complete.
+    6. **Conclusion:** After every side quest is complete, cast Prophetic Vision while Sir Cedric is present to share the vision; he then waits, and the quest finishes when Elior answers him (`say truth to cedric`) or talks to him.
+  - **Completion:** Cast Prophetic Vision in the same room as Sir Cedric after all side quests are complete, then say truth to him or talk to him.
   - **Completion Reward:** Shares the Prophetic Vision with Sir Cedric and completes The Gathering Storm. Nyx's first-conversation gifts are granted before this final cast.
   - **Story Impact:** Establishes Elior as a recognized hero with growing magical power; Malakar is shown to be real and to be hunting the Willowbrook bloodline
 
@@ -464,7 +464,7 @@ This is the implemented Act II room roster and topology. Items and characters ma
 - **`dispel`**: Learned from ancient texts in the Hidden Library (used to break magical barriers and curses)
 - **`nature_sense`**: Learned by examining the Standing Stones at Forest Transition (reveals Water Nymphs when cast in Whispering Glade)
 - **`forest_speech`**: Learned from the Ancient Tree Spirit in Ancient Grove (used to find lost caravan)
-- **`prophetic_vision`**: Learned by speaking to Nyx after summoning her (completes The Gathering Storm when cast with Cedric present after all side quests)
+- **`prophetic_vision`**: Learned by speaking to Nyx after summoning her (cast with Cedric present after all side quests, it shares the vision; The Gathering Storm completes when Elior then answers Cedric)
 
 ## Optional choices
 
@@ -475,6 +475,8 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 | Residential Quarter, the Families       | Give the Mountain Flower to the sick child the Families mention, gaining nothing (`give mountain flower to families`)   | **selfless** |
 | The Silver Stag Inn, Innkeeper Marcus   | After Elena is cured, tell Marcus the curse was set on her on purpose (the mask-shaped mark), instead of letting him believe it was bad luck (`say truth to marcus`) | **truth**    |
 | Market District, Caravan Master Thorne  | After the rescue, speak for Brenn, the caravan guard who fled when the ravine path gave way, so Thorne does not turn him out (`say forgive to thorne`) | **mercy**    |
+
+Telling Cedric the voice did not sound like a hunter (`say truth to cedric`, after the vision) is deliberately **not** a virtue moment: it records nothing, so Act II keeps exactly these three and Act IV's totals are unchanged.
 
 The endings read the counters across the whole game, as described in `Act4Design.md`.
 
@@ -507,7 +509,7 @@ These five completed quests, plus completion of The Hermit's Warning at Forest T
 
 1. **Summon Nyx** - Use the three charms at the Offering Altar in Heart of the Forest
 2. **Receive Nyx's gifts** - On the first conversation, Nyx grants Prophetic Vision, Nyx's Token, and the Forest Heart Crystal
-3. **Complete the main quest** - After all side quests are complete, cast Prophetic Vision while Sir Cedric is in the same room
+3. **Complete the main quest** - After all side quests are complete, cast Prophetic Vision while Sir Cedric is in the same room, then answer him (`say truth to cedric`) or talk to him
 
 ### Key Story Revelations at Completion
 
@@ -580,7 +582,7 @@ The implemented command sequence is `ACT2_GOLDEN_PATH` in `web/src/act2/Act2Gold
 4. **Archives, community, and healing apprenticeship:** In Great Hall, present the Entry Pass to the Court Herald and give the Traveler's Journal to the Historians (they recognise their own birth rolls in the stranger's copied notes and offer to search with Elior), then search the archives (the Wardens of the Dawn and Malakar's search for the Willowbrook bloodline); afterwards the Historians add that the Willowbrook roll is missing the page for the year Elior was born, where the stranger's notes also stop. In Residential Quarter, give the Walking Stick to the Families and speak with the Local Craftsmen and Families. Speak with Lyria, discover the Hidden Library by searching, and enter through the secret passage. Cast `mend` on the Protective Enchantments, speak with the Spectral Librarian, use the Ancient Chronicle (which names the Wardens of the Dawn), and take the Crystal Focus. Return to Lyria and give her the focus to complete The Healer's Apprentice and learn `greater_heal`.
 5. **Forest threshold and riddles:** At Forest Transition, examine the Standing Stones to learn `nature_sense`, speak with the Forest Hermit, and use the Forest Survival Kit. In Forest Entrance, take the Enchanted Acorn, use the Protective Charm and Enhanced Lantern there, and speak with the Forest Sprites. In Ancient Grove, examine the Silver-Barked Tree to awaken its spirit, give it the Acorn, and take the Silver Leaves. In Whispering Glade, cast `nature_sense`, speak with the Water Nymphs, and answer `tree`, `water`, and `ants`; then take the Crystal-Clear Water and Moonflowers. Return to Ancient Grove and give the Moonflowers to the spirit while carrying the water to complete Whispers in the Wind and open the path to the Heart of the Forest. Step back to Forest Entrance, cast `forest_speech` and use Quality Rope with the Ravine to rescue the caravan while still on this first journey.
 6. **Resolve cross-phase quests:** Back in town, speak to Thorne for the Secret Documents, then return to the inn and cure Elena in order with `greater_heal` (revealing the Sorceress of Lies' mark on her wrist), Crystal-Clear Water, and `dispel` (the mark fades); speak with Marcus to receive the Druidic Charm. In Castle Courtyard, speak with the Training Master and Squires, search for and read the Squire's Diary. In Great Hall, examine the Secret Documents (Malakar's agents framed Cedric) and give them to the Lord Commander; speak with Sir Cedric to complete his honor quest and receive Nature's Charm.
-7. **Summon Nyx and finish the act:** The second forest journey goes straight to the Heart of the Forest, so the golden path takes two forest journeys in all. At Heart of the Forest, use the Druidic Charm with the Offering Altar while carrying the Protective Charm and Nature's Charm, then speak with Nyx, who speaks the refrain and gives `prophetic_vision`, Nyx's Token, and the Forest Heart Crystal. Return to Castle Courtyard and cast Prophetic Vision while Sir Cedric is present; the vision shows the Shadow of the Past and Cedric answers that Malakar is no tale and is hunting Elior (the red line, row II). This final cast completes The Gathering Storm only after every side quest is complete.
+7. **Summon Nyx and finish the act:** The second forest journey goes straight to the Heart of the Forest, so the golden path takes two forest journeys in all. At Heart of the Forest, use the Druidic Charm with the Offering Altar while carrying the Protective Charm and Nature's Charm, then speak with Nyx, who speaks the refrain and gives `prophetic_vision`, Nyx's Token, and the Forest Heart Crystal. Return to Castle Courtyard and cast Prophetic Vision while Sir Cedric is present; the vision shows the Shadow of the Past and Cedric answers that Malakar is no tale and is hunting Elior (the red line, row II). The cast shares the vision and leaves Cedric waiting; The Gathering Storm completes, and the act ends, on Elior's next exchange with him: `say truth to cedric` (Elior tells him the voice did not sound like a hunter; Cedric: "Then it is worse, not better. A thing that wants you to come to it.") or any `talk to sir cedric`. The cast works only after every side quest is complete.
 
 The optional virtue moments (see Optional choices) add the commands `give mountain flower to families`, `say truth to marcus` and `say forgive to thorne` at the points they name; none is on the golden path.
 
@@ -588,6 +590,6 @@ The optional virtue moments (see Optional choices) add the commands `give mounta
 
 The five quests gating entry into the forest are The Knight's Test, Supplies for the Journey, Echoes of the Past, The Healer's Apprentice, and The Ancient Library. The Hermit's Warning must also be completed at Forest Transition. The remaining side quests are cross-phase: The Forest Guardian's Riddles, Whispers in the Wind, The Innkeeper's Daughter, The Merchant's Lost Caravan, and Cedric's Lost Honor. The final cast of Prophetic Vision is blocked until all eleven side quests are complete and Sir Cedric is in the room.
 
-`ACT2_GOLDEN_PATH` completes those eleven side quests; its integration test deliberately leaves The Gathering Storm for the player to finish. The final step after the declared route is `cast prophetic vision on sir cedric`.
+`ACT2_GOLDEN_PATH` completes those eleven side quests; its integration test deliberately leaves The Gathering Storm for the player to finish. The final steps after the declared route are `cast prophetic vision on sir cedric`, then `say truth to cedric` or `talk to sir cedric`.
 
 **Progression-critical items and spells:** Entry Pass, City Map, Merchant's Flyer, Walking Stick, Coins, Room Key, Traveler's Journal, Training Sword, Forest Survival Kit, Enhanced Lantern, Quality Rope, Crystal Focus, Enchanted Acorn, Crystal-Clear Water, Moonflowers, Secret Documents, Protective Charm, Druidic Charm, Nature's Charm, `mend`, `greater_heal`, `dispel`, `nature_sense`, `forest_speech`, and `prophetic_vision`. The three charms are consumed by the Offering Altar. Nyx's Token and the Forest Heart Crystal are rewards, not prerequisites for the final cast.
