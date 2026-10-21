@@ -118,7 +118,9 @@ describe('Master Healer Lyria dialogue markup', () => {
 
     const answer = new MasterHealerLyria().talkTo(game.state)
 
-    expect(plain(answer)).toContain('truly a master of the healing arts')
+    expect(plain(answer)).toContain(MENTOR_LINE)
+    expect(plain(answer)).not.toContain('master of the healing arts')
+    expect(plain(answer)).not.toContain('Continue to use your gifts')
     expectLyriaSpeaks(answer)
   })
 
@@ -244,7 +246,9 @@ describe('Lyria with saves and the curse during the apprenticeship', () => {
 
     const answer = new MasterHealerLyria().talkTo(reloaded.state)
 
-    expect(plain(answer)).toContain('truly a master of the healing arts')
+    expect(plain(answer)).toContain(MENTOR_LINE)
+    expect(plain(answer)).not.toContain('master of the healing arts')
+    expect(plain(answer)).not.toContain('Continue to use your gifts')
     expect(reloaded.state.hasSpell('greater_heal')).toBe(true)
   })
 
@@ -277,6 +281,8 @@ const DIAGNOSIS_END =
 const REMINDER =
   'Elena still? Strengthen her, wash her in untouched water, then unbind ' +
   'it. In that order, or not at all.'
+const MENTOR_LINE =
+  'You have the first of it. Mastery is the next twenty years.'
 const USUAL = 'Welcome to my house of healing'
 
 describe("Lyria explains how Elena's curse is lifted (rq-nun)", () => {
