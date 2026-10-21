@@ -75,25 +75,20 @@ describe('Mira', () => {
   it('opens the first talk in four speech lines with the hand-over between the third and fourth', () => {
     const game = new Game([new Act3()])
     const out = new Mira().talkTo(game.state)
-    const lines = [
-      'Malakar is draining King Alden',
-      'Three relics can stand against him',
-      'take this, and read it. Then we can leave.',
-      'Mira hands you a small, worn piece of parchment.',
-      'Say the word, and I will draw the first circle.',
-    ]
-    const positions = lines.map((l) => out.indexOf(l))
-    expect(positions.every((p) => p >= 0)).toBe(true)
-    expect([...positions].sort((a, b) => a - b)).toEqual(positions)
-    for (const dropped of [
-      'hourglass',
-      'virtues',
-      'tide whispers',
-      'travel by my focus',
-      'fortress gate',
-    ]) {
-      expect(out).not.toContain(dropped)
-    }
+    const speeches = out.match(/\[dialogue\].*?\[\/dialogue\]/g) ?? []
+    expect(speeches).toEqual([
+      "[dialogue]'Elior. Malakar is draining King Alden's life to break " +
+        "Eldoria's wards, and the king grows weaker every day.'[/dialogue]",
+      "[dialogue]'Three relics can stand against him: the Crystal of Light, " +
+        "the Phoenix Feather and the Dragon's Scale. We will fetch them one " +
+        "at a time.'[/dialogue]",
+      "[dialogue]'Before we go, take this, and read it. Then we can leave.'" +
+        '[/dialogue]',
+      "[dialogue]'Say the word, and I will draw the first circle.'[/dialogue]",
+    ])
+    const handOver = out.indexOf('Mira hands you a small, worn piece')
+    expect(handOver).toBeGreaterThan(out.indexOf('take this, and read it'))
+    expect(handOver).toBeLessThan(out.indexOf('Say the word'))
   })
 
   it('tells the Crystal purpose at the Tidal Causeway', () => {
