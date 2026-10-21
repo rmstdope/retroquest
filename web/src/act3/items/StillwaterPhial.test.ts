@@ -117,7 +117,7 @@ describe('StillwaterPhial', () => {
       executeCommands(game, ['use resonant chant rubbings with echo stones']),
     ).toContain('They must be sanctified')
     expect(executeCommands(game, ['cast bless on echo stones'])).toContain(
-      'sacred luminescence',
+      'steady glow',
     )
   })
 })

@@ -131,7 +131,7 @@ describe('Submerged Antechamber markup', () => {
     expect(bracketsAgain).toContain('Three empty brackets')
     expect(allFilled).toContain('already filled')
     expect(lightAgain).toContain('already burn')
-    expect(litSearch).toContain('already lit')
+    expect(litSearch).toContain('still burn')
     for (const answer of [
       flooded,
       bracketsAgain,

@@ -190,7 +190,7 @@ describe('Phoenix tells who struck the name deeper', () => {
     expectDialogueSpeaker(first, phoenix.name)
     expect(first).toContain(STORY)
     expect(first).toContain('The stone would not let him.')
-    expect(first.endsWith(`[dialogue]'${FAREWELL}'[/dialogue]`)).toBe(true)
+    expect(first.endsWith(`[dialogue]${FAREWELL}[/dialogue]`)).toBe(true)
     const second = phoenix.talkTo(game.state)
     expect(second).not.toContain(STORY)
     expect(second).toContain(FAREWELL)
@@ -230,7 +230,7 @@ describe('Phoenix after the name is mended', () => {
       expectDialogueSpeaker(answer, phoenix.name)
       expect(answer).not.toContain(STORY)
       expect(answer).toContain(
-        `[dialogue]'${MENDED_LINE}'[/dialogue] [dialogue]'${FAREWELL}'[/dialogue]`,
+        `[dialogue]${MENDED_LINE}[/dialogue] [dialogue]${FAREWELL}[/dialogue]`,
       )
     }
   })

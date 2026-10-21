@@ -535,7 +535,7 @@ describe('Act 3 golden path', () => {
 
     // Cast bless on echo stones (sanctifies them for the rite)
     const blessResult = executeCommands(game, ['cast bless on echo stones'])
-    expect(blessResult.toLowerCase()).toContain('sacred luminescence')
+    expect(blessResult.toLowerCase()).toContain('steady glow')
     expect(blessResult.toLowerCase()).toContain('ancient chant')
 
     // Still the pools with the Stillwater Phial (the chant only carries over still water)
@@ -952,7 +952,7 @@ describe('Giving the Quiet Charm to Tobin', () => {
   it('plays through the commands, records one selfless moment and cannot be repeated', () => {
     const game = rescued()
     const gift = executeCommands(game, ['give quiet charm to young miner'])
-    expect(gift).toContain("'It's quiet.'")
+    expect(gift).toContain("It's quiet.")
     expect(gift).toContain('✦ Selflessness — this will be remembered')
     expect(game.state.virtueCount('selfless')).toBe(1)
     expect(game.state.hasItem('quiet charm')).toBe(false)

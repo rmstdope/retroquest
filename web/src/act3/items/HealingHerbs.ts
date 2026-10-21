@@ -22,8 +22,8 @@ export class HealingHerbs extends Item {
       characterName('Mira') +
       ' lifts a sachet, then shakes her head. ' +
       speech(
-        "'Leave these for the circles and crossings. When the " +
-          "rite calls for them, I will place them in your hands.'",
+        'Leave these for the circles and crossings. When the ' +
+          'rite calls for them, I will place them in your hands.',
       )
     )
   }

@@ -38,22 +38,22 @@ export class AshScholar extends Character {
         characterName(this.name) +
         ' straightens and studies you for a long moment before speaking.\n' +
         speech(
-          "'We are on an expedition: a small band of scholars and tinkerers, " +
-            "tracing the terraces and cataloguing anything that glints.'",
+          'We are on an expedition: a small band of scholars and tinkerers, ' +
+            'tracing the terraces and cataloguing anything that glints.',
         ) +
         '\n' +
         speech(
-          "'I found this brass mirror segment while prying at a collapsed " +
+          'I found this brass mirror segment while prying at a collapsed ' +
             'ledge. It is small, but it will mend a mount. There will be more ' +
-            "among the outcrops, if you search carefully.'",
+            'among the outcrops, if you search carefully.',
         ) +
         '\n' +
         event(`You receive the [item_name]${segment.name}[/item_name].`) +
         '\n' +
         speech(
-          "'This was in the same ledge. A notebook, burned nearly through. " +
+          'This was in the same ledge. A notebook, burned nearly through. ' +
             'Whoever wrote in it knew these mirrors better than any of us, ' +
-            "and I cannot make out who that was. Perhaps you can.'",
+            'and I cannot make out who that was. Perhaps you can.',
         ) +
         '\n' +
         event(`You receive the [item_name]${notebook.name}[/item_name].`)
@@ -64,8 +64,8 @@ export class AshScholar extends Character {
       characterName(this.name) +
       ' offers a small nod. ' +
       speech(
-        "'The terraces favour steady hands. Seek the outcrops for what the " +
-          "mountain has shed.'",
+        'The terraces favour steady hands. Seek the outcrops for what the ' +
+          'mountain has shed.',
       )
     )
   }

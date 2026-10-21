@@ -12,6 +12,16 @@ function dummyState(): GameState {
 }
 
 describe('Stillness Vestibule', () => {
+  it('has the agreed plain description', () => {
+    expect(new StillnessVestibule().description).toBe(
+      'A hush falls over this chamber like a shroud. Dark pools mirror the ' +
+        'ceiling, so still they look frozen in time, and the stone seems to ' +
+        'swallow every sound. At the centre, three weathered echo stones stand ' +
+        'in a triangle. Their carved channels look made to catch whispered ' +
+        'words and hold them.',
+    )
+  })
+
   it('initializes with its items, the keeper and the phantoms', () => {
     const room = new StillnessVestibule()
     expect(room.name).toBe('Stillness Vestibule')

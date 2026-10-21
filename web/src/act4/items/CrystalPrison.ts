@@ -20,7 +20,7 @@ export class CrystalPrison extends Item {
       description:
         'The crystal is clouded and cold. Inside it King Alden sleeps ' +
         'without breathing, his crown dark. A thread of light runs from ' +
-        'him into the wound.',
+        'his crown into the wound.',
       canBeCarried: false,
     })
   }

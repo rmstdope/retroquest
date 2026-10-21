@@ -29,6 +29,10 @@ describe('KeepsakeNote', () => {
     expect(result).toContain('depths where courage is tested')
     expect(result).toContain('heights where wisdom burns')
     expect(result).toContain('shadows where sacrifice echoes')
+    expect(result).toContain('[dim]Elior, as you journey')
+    expect(result).toContain('darkest power.[/dim]')
+    expect(result).toContain('purpose beyond the road ahead')
+    expect(result).not.toContain('immediate quest')
   })
 
   it('reading uses only known, balanced tags', () => {

@@ -39,12 +39,12 @@ const LINE_3 =
   'The old dripping has stopped; from the mines beyond comes no sound of ' +
   'picks at all.'
 const MIRA_1 =
-  "'And Elior—I can feel the king through the focus. He is weaker than when " +
-  "we set out.'"
+  'And Elior—I can feel the king through the focus. He is weaker than when ' +
+  'we set out.'
 const MIRA_2 =
-  "'The king is weaker still. Whatever drains him draws harder with every " +
-  "site we reach.'"
-const MIRA_3 = "'The king is fading, Elior. We have less time than I hoped.'"
+  'The king is weaker still. Whatever drains him draws harder with every ' +
+  'site we reach.'
+const MIRA_3 = 'The king is fading, Elior. We have less time than I hoped.'
 
 /** Number of times `needle` occurs in `text`. */
 function count(text: string, needle: string): number {

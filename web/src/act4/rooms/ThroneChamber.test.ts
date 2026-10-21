@@ -19,7 +19,7 @@ import {
 import { ThroneChamber } from './ThroneChamber'
 
 const FIRST_DESCRIPTION =
-  'A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from him a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too.'
+  'A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from his crown a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too.'
 const AMULET_DESCRIPTION =
   'The light of the ward fills the chamber from the open amulet. King Alden hangs in his crystal prison, the wound bleeds in the air beside him, and Malakar waits on his knees between them. The Lifelight Elixir is warm in your hand.'
 const HEALED_DESCRIPTION =
@@ -72,6 +72,18 @@ function shattered(): Game {
   return game
 }
 
+/** The four speech blocks of the first talk, in order. */
+const OFFER_BLOCKS = [
+  "Aren's son. You have their eyes, both of them. You have seen the vault, so you know what I did, and you know it worked. They woke, Elior. For a little while, they woke.",
+  'The wound runs backwards. Open it all the way and it pulls the days back to before the fever, and they wake at the workbench as they were. I am not lying to you. I have done the sums.',
+  "Only the ward holds it shut: half in your amulet, half in Alden's crown. I have been bleeding the king for years to loosen his half. Give me yours and he can stop dying today.",
+  'And the price is the rest of it. The king. Every year the kingdom has had since. And you. You were born after the tear, Elior. When the days go back, you go with them. I am sorry. The sums are still right.',
+]
+
+/** The sharper plea on every later talk before the refrain. */
+const PLEA =
+  'They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet.'
+
 describe('ThroneChamber', () => {
   it('survives a save at every point, and coming back replays nothing', () => {
     for (const make of [inThrone, refrained, opened, healed, shattered]) {
@@ -120,7 +132,7 @@ describe('ThroneChamber', () => {
       "A tall man in a grey robe that was once a Warden's blue. ",
     )
     expect(executeCommands(game, ['examine prison'])).toContain(
-      'The crystal is clouded and cold. Inside it King Alden sleeps without breathing, his crown dark. A thread of light runs from him into the wound.',
+      'The crystal is clouded and cold. Inside it King Alden sleeps without breathing, his crown dark. A thread of light runs from his crown into the wound.',
     )
     expect(executeCommands(game, ['examine wound'])).toContain(
       'A tear in the air, no wider than a door, its edges flickering with days that never happened. It drinks the light from the king, and from Malakar too.',
@@ -148,10 +160,20 @@ describe('ThroneChamber', () => {
     const first = executeCommands(game, ['talk to malakar'])
     expectDialogueSpeaker(first, 'Malakar')
     expect(first).toContain("Aren's son. You have their eyes, both of them.")
-    expect(first).toContain('Stand with me. Please.')
-    expect(executeCommands(game, ['talk to malakar'])).toContain(
-      'Please, Elior. The amulet, and they come home.',
-    )
+    let from = 0
+    for (const block of OFFER_BLOCKS) {
+      const at = first.indexOf(block, from)
+      expect(at).toBeGreaterThanOrEqual(from)
+      from = at + block.length
+    }
+    expect(first.match(/\[dialogue\]/g)).toHaveLength(4)
+    expect(
+      first.match(/\[character_name\]Malakar\[\/character_name\]/g),
+    ).toHaveLength(4)
+    expect(first).not.toContain('Stand with me. Please.')
+    for (let i = 0; i < 2; i++) {
+      expect(executeCommands(game, ['talk to malakar'])).toContain(PLEA)
+    }
     expect(executeCommands(game, ['say hello to malakar'])).toContain(
       'Malakar only waits for your answer.',
     )
@@ -200,7 +222,7 @@ describe('ThroneChamber', () => {
       )
       expectDialogueSpeaker(text, 'Shadow of the Past')
       expect(text).toContain(
-        'Elior. I tore the world to keep them, and I lost them anyway. Finish what I could not.',
+        'Elior. I tore the world to keep them, and I lost them anyway. I could not wait; you can. Be patient where I was not. Close what I opened, and let them rest.',
       )
       expect(text).toContain(
         'The Lifelight Elixir is warm in your hand. It can be used only once. It could break the crystal and free the king, or it could be offered to Malakar, to heal the wound that is killing him.',

@@ -9,7 +9,7 @@ import { ARCH_SENTENCE } from '../endings'
 export const THRONE_CHAMBER_FIRST =
   'A vast chamber under a broken dome. A throne of black stone, twisted ' +
   'like a root, stands at its head. Above a ritual circle King Alden hangs ' +
-  'in a prison of crystal, and from him a thin thread of light bleeds into ' +
+  'in a prison of crystal, and from his crown a thin thread of light bleeds into ' +
   'a rift in the air: the wound in time. Malakar stands beside it, grey and ' +
   'failing. The wound is killing him too.'
 

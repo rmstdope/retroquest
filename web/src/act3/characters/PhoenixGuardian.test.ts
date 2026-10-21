@@ -87,7 +87,7 @@ describe('PhoenixGuardian', () => {
     state.currentRoom.addCharacter(new SirCedric())
     const answer = new PhoenixGuardian().talkTo(state)
     expect(answer).toContain(
-      "[dialogue]'Patience. The king has had nothing from us but patience.'",
+      '[dialogue]Patience. The king has had nothing from us but patience.[/dialogue]',
     )
     expectMarkupWellFormed(answer)
   })

@@ -42,8 +42,8 @@ export class TeleportationFocus extends Item {
       characterName('Mira') +
       ' steadies the prism. ' +
       speech(
-        "'Careful. The circle anchors through this focus. I must bear " +
-          "it while the weave stays open.'",
+        'Careful. The circle anchors through this focus. I must bear ' +
+          'it while the weave stays open.',
       )
     )
   }
