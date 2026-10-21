@@ -4,6 +4,8 @@ import { Act3 } from '../Act3'
 import { MendSpell } from './MendSpell'
 import { CharredInscription } from '../items/CharredInscription'
 import { FLAG_ACT3_INSCRIPTION_MENDED } from '../Act3StoryFlags'
+import { Sigils } from '../items/Sigils'
+import { EchoStones } from '../items/EchoStones'
 import { MirrorMount } from '../items/MirrorMount'
 import { RustedLockerKey } from '../items/RustedLockerKey'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
@@ -75,5 +77,12 @@ describe('MendSpell', () => {
     expect(answer).toContain('The deeper cut fills.')
     expect(gs.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(true)
     expectMarkupWellFormed(answer)
+  })
+
+  it('leaves other items that react to spells with the generic reply', () => {
+    for (const item of [new Sigils(), new EchoStones()]) {
+      const answer = new MendSpell().castOnItem(makeGameState(), item)
+      expect(answer).toContain("doesn't appear to need mending")
+    }
   })
 })

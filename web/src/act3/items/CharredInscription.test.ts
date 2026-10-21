@@ -121,7 +121,12 @@ describe('CharredInscription mending', () => {
 
     const answer = inscription.receiveSpell(game.state, 'mend', 'mend')
 
-    expect(answer).toContain('You have not read them yet')
+    expect(answer).toBe(
+      '[event]You cast [spell_name]mend[/spell_name] on the ' +
+        '[item_name]Charred Inscription[/item_name].[/event]\n' +
+        'The magic settles over the blackened letters and waits. You have ' +
+        'not read them yet; you do not know what in them is broken.',
+    )
     expect(game.state.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(false)
     expect(game.state.virtueCount(VIRTUE_MERCY)).toBe(0)
     expectMarkupWellFormed(answer)
@@ -137,11 +142,27 @@ describe('CharredInscription mending', () => {
       "The deeper cut fills. Malakar's name sits level with your parents' " +
         'again, as it was the day they wrote it.',
     )
-    expect(answer).toContain('Mercy')
-    expect(answer).toContain('this will be remembered')
+    expect(answer).toBe(
+      '[event]You cast [spell_name]mend[/spell_name] on the ' +
+        '[item_name]Charred Inscription[/item_name].[/event]\n' +
+        "The deeper cut fills. Malakar's name sits level with your parents' " +
+        'again, as it was the day they wrote it.\n' +
+        '[event]✦ Mercy — this will be remembered[/event]',
+    )
     expect(game.state.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(true)
     expect(game.state.virtueCount(VIRTUE_MERCY)).toBe(1)
     expectMarkupWellFormed(answer)
+  })
+
+  it('still allows the mercy after an early cast once it has been read', () => {
+    const { game, inscription } = setup()
+    inscription.receiveSpell(game.state, 'mend', 'mend')
+    inscription.examine(game.state)
+
+    inscription.receiveSpell(game.state, 'mend', 'mend')
+    inscription.receiveSpell(game.state, 'mend', 'mend')
+
+    expect(game.state.virtueCount(VIRTUE_MERCY)).toBe(1)
   })
 
   it('says nothing is left to mend the second time, recording nothing', () => {

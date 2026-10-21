@@ -348,7 +348,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
     -   North to Mirror Terraces
     -   West to Lower Switchbacks
 
-6. Phoenix Crater (once the feather is earned and the Charred Inscription read, the Phoenix tells once that Malakar himself struck his name deeper)
+6. Phoenix Crater (once the feather is earned and the Charred Inscription read, the Phoenix tells once that Malakar himself struck his name deeper; if the name has been mended, its farewell adds “You gave him back his place. He could not do that for himself.”)
 
 -   Description: A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals.
 -   Items: Starts empty.

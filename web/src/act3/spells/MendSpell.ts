@@ -1,4 +1,5 @@
 import { Spell, type GameState, type Item } from '@/engine'
+import { CharredInscription } from '../items/CharredInscription'
 import { MirrorMount } from '../items/MirrorMount'
 
 /**
@@ -29,9 +30,8 @@ export class MendSpell extends Spell {
   }
 
   /**
-   * If targetItem is a MirrorMount call its mend method; if it has a
-   * `receiveSpell` hook (the Charred Inscription) let it answer; otherwise
-   * fall back.
+   * If targetItem is a MirrorMount call its mend method; if it is the
+   * Charred Inscription let it answer; otherwise fall back.
    */
   override castOnItem(gameState: GameState, targetItem: Item): string {
     if (targetItem instanceof MirrorMount) {
@@ -39,18 +39,8 @@ export class MendSpell extends Spell {
       return targetItem.mend(gameState)
     }
 
-    // Items that react to mend (the Charred Inscription) have a receiveSpell hook
-    const hook = (
-      targetItem as {
-        receiveSpell?: (
-          gs: GameState,
-          spellId: string,
-          spellName: string,
-        ) => string
-      }
-    ).receiveSpell
-    if (typeof hook === 'function') {
-      return hook.call(targetItem, gameState, this.id, this.name)
+    if (targetItem instanceof CharredInscription) {
+      return targetItem.receiveSpell(gameState, this.id, this.name)
     }
 
     // Fallback behavior: mimic the generic mend response
