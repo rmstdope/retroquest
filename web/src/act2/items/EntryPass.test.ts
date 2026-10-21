@@ -47,7 +47,10 @@ describe('Entry pass', () => {
 
   it('survives a save round-trip with the new text', () => {
     const game = new Game([new Act2()])
-    game.state.addItemToInventory(new EntryPass())
+    const pass = new EntryPass()
+    pass.description =
+      'An official-looking document with the seal of Greendale.'
+    game.state.addItemToInventory(pass)
 
     const fresh = new Game([new Act2()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
