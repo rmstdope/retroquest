@@ -159,7 +159,7 @@ export class CaravanMasterThorne extends Character {
           ': ' +
           speech(
             `Which leaves ${characterName('Brenn')}. A guard who runs is no ` +
-              "guard. He's sitting outside the warehouse waiting for his " +
+              "guard. He's sitting in the warehouse waiting for his " +
               "wages, and wages are all he'll get from me.",
           )
         )
@@ -192,7 +192,7 @@ export class CaravanMasterThorne extends Character {
         speech(
           `${characterName('Brenn')}, my guard, came stumbling back alone ` +
             'two nights ago. Says the ravine path gave way and he ran. Ran! ' +
-            "I'll deal with him once my people are home.",
+            "He's skulking in the warehouse now. I'll deal with him once my people are home.",
         )
       )
     } else {

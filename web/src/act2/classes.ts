@@ -39,6 +39,7 @@ import { TravelersJournal } from './items/TravelersJournal'
 import { WalkingStick } from './items/WalkingStick'
 import { AncientTreeSpirit } from './characters/AncientTreeSpirit'
 import { BarmaidElena } from './characters/BarmaidElena'
+import { Brenn } from './characters/Brenn'
 import { CaravanMasterThorne } from './characters/CaravanMasterThorne'
 import { CastleGuardCaptain } from './characters/CastleGuardCaptain'
 import { CourtHerald } from './characters/CourtHerald'
@@ -139,6 +140,7 @@ export const ACT2_CLASSES = {
   // Characters
   AncientTreeSpirit,
   BarmaidElena,
+  Brenn,
   CaravanMasterThorne,
   CastleGuardCaptain,
   CourtHerald,
