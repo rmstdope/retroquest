@@ -16,7 +16,6 @@ import {
 import {
   executeCommands,
   expectDialogueSpeaker,
-  expectItemInInventory,
   expectQuestCompleted,
   expectStoryFlag,
 } from '@/testing/gameHelpers'
@@ -44,23 +43,13 @@ function spellNames(game: Game): string[] {
   return game.state.knownSpells.map((s) => s.name)
 }
 
-describe('the gates of the endings', () => {
-  it('refuses the elixir on the prison when neither Justice nor Sacrifice is open', () => {
-    const game = opened([VIRTUE_TRUTH, VIRTUE_SELFLESS])
-    const text = executeCommands(game, ['use lifelight elixir on prison'])
-    expect(text).toContain(
-      'The crystal does not answer to one who has not yet spoken the truth, or given without asking.',
-    )
-    expectItemInInventory(game.state, 'Lifelight Elixir')
-    expect(game.state.currentRoom.description).toContain('light of the ward')
-  })
-
-  it('opens the prison for two truths, or two unselfish moments', () => {
-    for (const virtues of [TWO_TRUTHS, TWO_SELFLESS]) {
+describe('the endings are always open', () => {
+  it('breaks the prison whatever the virtue record', () => {
+    for (const virtues of [[], [VIRTUE_TRUTH, VIRTUE_SELFLESS]]) {
       const game = opened(virtues)
-      expect(
-        executeCommands(game, ['use lifelight elixir on prison']),
-      ).toContain('You pour the elixir over the crystal.')
+      const text = executeCommands(game, ['use lifelight elixir on prison'])
+      expect(text).toContain('You pour the elixir over the crystal.')
+      expect(text).not.toContain('does not answer to one who has not yet')
     }
   })
 
@@ -179,40 +168,53 @@ describe('Justice', () => {
     return game
   }
 
-  it('hints at only the open endings', () => {
-    const both = broken([...TWO_TRUTHS, ...TWO_SELFLESS])
-    const text = executeCommands(both, ['use ancient amulet on wound'])
-    expect(text).toContain(
-      'The wound will not close for nothing. You could name Malakar’s crimes'.replace(
-        '’',
-        "'",
-      ),
-    )
-    expect(text).toContain('in justice. Or you could give up your magic')
-    const onlyJustice = broken(TWO_TRUTHS)
-    const j = executeCommands(onlyJustice, ['use ancient amulet on wound'])
-    expect(j).toContain('seal him away with it, in justice.')
-    expect(j).not.toContain('sacrifice')
-    const onlySacrifice = broken(TWO_SELFLESS)
-    const s = executeCommands(onlySacrifice, ['use ancient amulet on wound'])
-    expect(s).toContain(
-      'The wound will not close for nothing. You could give up your magic to close it, in sacrifice.',
-    )
-    expect(s).not.toContain('justice')
+  it('always hints at both endings', () => {
+    for (const virtues of [[], TWO_TRUTHS, TWO_SELFLESS]) {
+      const text = executeCommands(broken(virtues), [
+        'use ancient amulet on wound',
+      ])
+      expect(text).toContain(
+        "The wound will not close for nothing. You could name Malakar's crimes and seal him away with it, in justice. Or you could give up your magic to close it, in sacrifice.",
+      )
+    }
   })
 
-  it('refuses forgiveness and the closed words', () => {
-    const game = broken(TWO_TRUTHS)
+  it('refuses forgiveness but accepts both words with no virtues', () => {
+    const game = broken([])
     expect(executeCommands(game, ['say forgiveness to malakar'])).toContain(
       'Forgiveness alone will not close it now.',
     )
     expect(executeCommands(game, ['say sacrifice to malakar'])).toContain(
-      'You reach for your magic to let it go, and your hands close on it instead.',
+      '“Take my magic,” you say.',
     )
-    const other = broken(TWO_SELFLESS)
-    expect(executeCommands(other, ['say justice to malakar'])).toContain(
-      'The words will not come. Naming another’s crimes'.replace('’', "'"),
+    expect(executeCommands(broken([]), ['say justice to malakar'])).toContain(
+      '“You tore the world, Malakar,” you say.',
     )
+  })
+
+  it('adds Alden’s line only after two truth moments', () => {
+    const line = 'You named every crime and did not add one.'
+    const play = (virtues: string[]): string => {
+      const game = broken(virtues)
+      executeCommands(game, ['say justice to malakar'])
+      return executeCommands(game, ['use ancient amulet on wound'])
+    }
+    const with2 = play(TWO_TRUTHS)
+    const rest =
+      'Then it falls to me to set right what he broke. Rest now. You have done enough.'
+    expect(with2.indexOf(line)).toBeGreaterThan(with2.indexOf(rest))
+    expect(with2.indexOf(line)).toBeLessThan(
+      with2.indexOf('Where the wound was'),
+    )
+    const without = play([VIRTUE_TRUTH, ...TWO_SELFLESS])
+    expect(without).not.toContain(line)
+    expect(without).toContain(rest)
+    expect(
+      with2.replace(
+        /\[character_name\]King Alden\[\/character_name\]\n\[dialogue\]You named every crime[^\n]*\n/,
+        '',
+      ),
+    ).toBe(without)
   })
 
   it('plays Justice in two steps and seals Malakar away', () => {
@@ -309,8 +311,36 @@ describe('Sacrifice', () => {
   })
 })
 
+describe('Sacrifice colouring', () => {
+  it('adds Aren’s line only after two selfless moments', () => {
+    const line = 'We watched you give, again and again'
+    const lysa = 'You gave it all away, and kept the smallest thing.'
+    const play = (virtues: string[]): string => {
+      const game = opened(virtues)
+      executeCommands(game, ['use lifelight elixir on prison'])
+      executeCommands(game, ['say sacrifice to malakar'])
+      return executeCommands(game, ['use ancient amulet on wound'])
+    }
+    const with2 = play(TWO_SELFLESS)
+    expect(with2.indexOf(line)).toBeGreaterThan(
+      with2.indexOf(lysa, with2.indexOf('Where the wound was')),
+    )
+    expect(with2.indexOf(line)).toBeLessThan(
+      with2.indexOf('The ward is finished'),
+    )
+    const without = play([])
+    expect(without).not.toContain(line)
+    expect(
+      with2.replace(
+        /\[character_name\]Aren\[\/character_name\]\n\[dialogue\]We watched you give[^\n]*\n/,
+        '',
+      ),
+    ).toBe(without)
+  })
+})
+
 describe('after the endings and around them', () => {
-  it('keeps both roads open for a save whose prison broke without a gate', () => {
+  it('keeps both roads open for a save with no virtue record', () => {
     const game = opened(TWO_TRUTHS)
     executeCommands(game, ['use lifelight elixir on prison'])
     game.state.virtues = []

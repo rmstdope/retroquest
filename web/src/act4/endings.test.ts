@@ -9,25 +9,26 @@ import {
   VIRTUE_SELFLESS,
   VIRTUE_TRUTH,
 } from './Act4StoryFlags'
-import { endingPlayed, farewell, justiceOpen, sacrificeOpen } from './endings'
+import { endingPlayed, farewell, selflessLine, truthLine } from './endings'
 
 function freshState(): Game['state'] {
   return new Game([new Act4()]).state
 }
 
 describe('endings', () => {
-  it('opens Justice on two truths and Sacrifice on two unselfish moments', () => {
+  it('adds the truth and selfless lines from two moments each', () => {
     const state = freshState()
-    expect([justiceOpen(state), sacrificeOpen(state)]).toEqual([false, false])
+    expect([truthLine(state), selflessLine(state)]).toEqual([null, null])
     state.addVirtue(VIRTUE_TRUTH)
     state.addVirtue(VIRTUE_SELFLESS)
     state.addVirtue(VIRTUE_MERCY)
     state.addVirtue(VIRTUE_MERCY)
-    expect([justiceOpen(state), sacrificeOpen(state)]).toEqual([false, false])
+    expect([truthLine(state), selflessLine(state)]).toEqual([null, null])
     state.addVirtue(VIRTUE_TRUTH)
-    expect([justiceOpen(state), sacrificeOpen(state)]).toEqual([true, false])
+    expect(truthLine(state)).toContain('You named every crime')
+    expect(selflessLine(state)).toBeNull()
     state.addVirtue(VIRTUE_SELFLESS)
-    expect([justiceOpen(state), sacrificeOpen(state)]).toEqual([true, true])
+    expect(selflessLine(state)).toContain('We watched you give')
   })
 
   it('reports the ending that was played', () => {
@@ -48,7 +49,7 @@ describe('endings', () => {
       sacrifice: 'You gave it all away, and kept the smallest thing.',
     } as const
     for (const [ending, line] of Object.entries(lines)) {
-      const text = farewell(ending as keyof typeof lines)
+      const text = farewell(ending as keyof typeof lines, freshState())
       expect(text).toContain(line)
       expect(text).toContain('Go home, love. The field is waiting.')
       for (const other of Object.values(lines)) {

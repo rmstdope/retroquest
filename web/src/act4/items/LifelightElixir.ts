@@ -1,17 +1,11 @@
 import { Item, type Character, type GameState, event } from '@/engine'
 import { Malakar } from '../characters/Malakar'
-import { justiceOpen, sacrificeOpen } from '../endings'
 import { CrystalPrison } from './CrystalPrison'
 import { Wound } from './Wound'
 
 /** What the elixir says when it is aimed at anything but the two targets. */
 const WRONG_TARGET =
   "[failure]The elixir is for the king's prison, or for Malakar's wound.[/failure]"
-
-/** What the prison says when neither Justice nor Sacrifice is open. */
-const PRISON_CLOSED =
-  '[failure]The crystal does not answer to one who has not yet spoken the ' +
-  'truth, or given without asking.[/failure]'
 
 /**
  * The Lifelight Elixir Elior carries through Act IV (Act III's elixir, made
@@ -57,9 +51,6 @@ export class LifelightElixir extends Item {
     const refusal = malakar.elixirRefusal(gameState)
     if (refusal) return refusal
     if (other instanceof CrystalPrison) {
-      if (!justiceOpen(gameState) && !sacrificeOpen(gameState)) {
-        return PRISON_CLOSED
-      }
       return other.breakWith(gameState)
     }
     if (other instanceof Wound) return malakar.receiveElixir(gameState)

@@ -1,6 +1,6 @@
 /**
  * The rules and texts shared by the three endings of Act IV: which endings
- * the virtue record opens, which ending has been played, and the parents'
+ * the virtue record colours, which ending has been played, and the parents'
  * farewell. Kept as plain functions over the game state so the wound, the
  * spell, Malakar and King Alden can all read the same answer without
  * importing one another.
@@ -15,38 +15,36 @@ import {
 } from './Act4StoryFlags'
 
 /**
- * How many truthful (or unselfish) moments open Justice (or Sacrifice).
- * Act IV adds at most one truthful moment and no unselfish one yet, so
- * reaching this number always needs a moment from Acts I-III.
+ * How many truthful (or unselfish) moments add a line to Justice (or
+ * Sacrifice). No ending is ever closed by the virtue record; it only
+ * colours the text.
  */
-export const MOMENTS_FOR_ENDING = 2
+export const MOMENTS_FOR_EXTRA_LINE = 2
+
+/** King Alden's extra line in Justice, or null below two truth moments. */
+export function truthLine(gameState: GameState): string | null {
+  if (gameState.virtueCount(VIRTUE_TRUTH) < MOMENTS_FOR_EXTRA_LINE) return null
+  return dialogue(
+    'King Alden',
+    'You named every crime and did not add one. Only someone who has paid ' +
+      'for the truth before speaks it like that. I will remember it.',
+  )
+}
+
+/** Aren's extra line in the Sacrifice farewell, or null below two moments. */
+export function selflessLine(gameState: GameState): string | null {
+  if (gameState.virtueCount(VIRTUE_SELFLESS) < MOMENTS_FOR_EXTRA_LINE) {
+    return null
+  }
+  return dialogue(
+    'Aren',
+    'We watched you give, again and again, and never ask for anything ' +
+      'back. Today was only the last time.',
+  )
+}
 
 /** The three endings. */
 export type Ending = 'redemption' | 'justice' | 'sacrifice'
-
-/** Whether the virtue record opens Justice. */
-export function justiceOpen(gameState: GameState): boolean {
-  return gameState.virtueCount(VIRTUE_TRUTH) >= MOMENTS_FOR_ENDING
-}
-
-/** Whether the virtue record opens Sacrifice. */
-export function sacrificeOpen(gameState: GameState): boolean {
-  return gameState.virtueCount(VIRTUE_SELFLESS) >= MOMENTS_FOR_ENDING
-}
-
-/**
- * Whether Justice can be chosen once the prison is broken. The elixir only
- * breaks the prison when an ending is open; a save made before that gate
- * existed may have none, and then both roads stay open so nobody is stranded.
- */
-export function justiceChoosable(gameState: GameState): boolean {
-  return justiceOpen(gameState) || !sacrificeOpen(gameState)
-}
-
-/** Whether Sacrifice can be chosen once the prison is broken (see above). */
-export function sacrificeChoosable(gameState: GameState): boolean {
-  return sacrificeOpen(gameState) || !justiceOpen(gameState)
-}
 
 /** The ending that has been played, or null while the wound is open. */
 export function endingPlayed(gameState: GameState): Ending | null {
@@ -74,8 +72,11 @@ const ENDING_LINES: Record<Ending, string> = {
   ),
 }
 
-/** The parents' farewell, the same in every ending but for one line. */
-export function farewell(ending: Ending): string {
+/**
+ * The parents' farewell, the same in every ending but for one line (and,
+ * in Sacrifice, Aren's extra line after two selfless moments).
+ */
+export function farewell(ending: Ending, gameState: GameState): string {
   return [
     'Where the wound was, the light of the amulet gathers into two shapes ' +
       "you have only ever seen in the vault's memories: a man with your " +
@@ -87,6 +88,7 @@ export function farewell(ending: Ending): string {
         'not hold you, but we could hold the door shut.',
     ),
     ENDING_LINES[ending],
+    ...(ending === 'sacrifice' ? [selflessLine(gameState)] : []),
     dialogue(
       'Aren',
       'The ward is finished, and so are we. Tell your grandmother we are ' +
@@ -95,7 +97,9 @@ export function farewell(ending: Ending): string {
     dialogue('Lysa', 'Go home, love. The field is waiting.'),
     'The light thins. They smile, and they are gone. The amulet in your ' +
       'hand is only a locket now, warm and quiet. Your parents are at rest.',
-  ].join('\n')
+  ]
+    .filter((line) => line !== null)
+    .join('\n')
 }
 
 /** The last line of every ending's answer: the way home opens. */
