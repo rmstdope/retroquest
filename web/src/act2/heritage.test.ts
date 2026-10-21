@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from './Act2'
 import { ForestHermit } from './characters/ForestHermit'
+import { MountainHermit } from './characters/MountainHermit'
 import { TravelersJournal } from './items/TravelersJournal'
 import { HiddenLibrary } from './rooms/HiddenLibrary'
 import { TheAncientLibraryQuest } from './quests/TheAncientLibrary'
@@ -81,5 +82,18 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
 
     expect(text).toContain('could prove vital when darkness stirs again.')
     expect(text).not.toMatch(CHOSEN_TALK)
+  })
+
+  it('has the mountain hermit send Elior to Greendale, not call him destined', () => {
+    const game = new Game([new Act2()])
+    const hermit = new MountainHermit()
+
+    const first = hermit.talkTo(game.state)
+
+    expect(first).toContain(
+      "'Take this. If you mean to help Greendale, you'll need to prove your skills to those who matter. This blade has served me well in teaching others.'",
+    )
+    expect(first).not.toMatch(CHOSEN_TALK)
+    expect(hermit.talkTo(game.state)).toContain('Show them your skill')
   })
 })

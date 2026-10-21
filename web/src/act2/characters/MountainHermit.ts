@@ -98,9 +98,9 @@ export class MountainHermit extends Character {
       `He reaches into his pack and pulls out a [item_name]${swordName}` +
       '[/item_name]. ' +
       speech(
-        "'Take this. If you truly are destined for greatness, you'll need " +
-          'to prove your skills to those who matter. This blade has served ' +
-          "me well in teaching others.'",
+        "'Take this. If you mean to help Greendale, you'll need to prove " +
+          'your skills to those who matter. This blade has served me well ' +
+          "in teaching others.'",
       ) +
       '\n\n' +
       event(`You receive a [item_name]${swordName}[/item_name]!`)
