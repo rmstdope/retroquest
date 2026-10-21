@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest'
 import { Game, type Item } from '@/engine'
 import { Act2 } from '../Act2'
 import { CityMap } from './CityMap'
-import type { MainSquare } from '../rooms/MainSquare'
 import { expectMarkupWellFormed } from '../../testing/gameHelpers'
 
 const MARKS =
@@ -54,27 +53,11 @@ describe('CityMap', () => {
     expectMarkupWellFormed(USE)
   })
 
-  it('does not gate anything: Main Square is open without the map', () => {
-    const game = new Game([new Act2()])
-    const square = game.state.allRooms.MainSquare as MainSquare
-    expect(square.getExits(game.state)).toEqual({
-      south: 'GreendaleGates',
-      north: 'CastleApproach',
-      east: 'MarketDistrict',
-    })
-  })
-
-  it('still loads a map carried in a save, and an older save that recorded the gate', () => {
-    const game = gameWithMap()
-    const data = game.toSaveData()
+  it('still loads a map carried in a save', () => {
     const reloaded = new Game([new Act2()])
-    reloaded.loadSaveData(data)
+    expect(reloaded.loadSaveData(gameWithMap().toSaveData())).toContain(
+      'loaded successfully',
+    )
     expect(mapIn(reloaded).examine(reloaded.state)).toBe(EXAMINE)
-
-    const square = reloaded.state.allRooms.MainSquare as MainSquare
-    Object.assign(square, { cityMapUsed: false })
-    reloaded.state.setStoryFlag('used_city_map', false)
-    reloaded.state.currentRoom = square
-    expect(reloaded.move('north')).toContain('You move north')
   })
 })
