@@ -1,0 +1,47 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces&family=JetBrains+Mono&family=Source+Serif+4:ital@0;1&display=swap');
+:root{--bg:#10151a;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--char:#7fb0e6;--item:#8fcf7a;--at:#ffb836;--fail:#e8896b;--ok:#9fd69a}
+*{box-sizing:border-box}body{margin:0;background:#0b0f12;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:24px 16px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:400;margin:0 0 4px}h2{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:20px;margin:28px 0 10px}.lead{color:var(--muted);max-width:860px;margin:0 0 24px;line-height:1.5}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}.step{display:flex;flex-direction:column;gap:8px;max-width:100%}
+.cap{font-size:13px;color:var(--at);font-weight:600;letter-spacing:.04em}.note{font-size:12px;color:var(--muted);max-width:440px;line-height:1.45}
+.frame{width:440px;max-width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--bg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.cmd{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.t{font-family:'Source Serif 4',Georgia,serif;color:var(--prose);margin:0;line-height:1.5}
+.dq{margin:0;border-left:2px solid var(--char);padding-left:12px}.sp{font-size:12px;color:var(--char);font-weight:600;margin-bottom:2px}
+.dq p{font-family:'Source Serif 4',Georgia,serif;font-style:italic;margin:0;line-height:1.5;color:var(--prose)}
+.ev{font-family:'Source Serif 4',Georgia,serif;color:var(--muted);font-style:italic;margin:0;line-height:1.5}
+.dim{opacity:.6}.new{color:var(--at);font-weight:700;font-style:normal;font-family:'DM Sans';font-size:11px}.c{color:var(--char)}.i{color:var(--item)}.gone{color:var(--fail);text-decoration:line-through;font-size:12px;margin:0}
+.alt{border:1px dashed var(--at);border-radius:8px;padding:10px}
+</style>
+<title>Brenn in person</title>
+<h1>Brenn, met in the warehouse</h1>
+<p class=lead>Brenn sits on a crate in the Merchant's Warehouse from the moment Elior reaches Greendale. One conversation, no quest; what he says follows the caravan story in three steps. Thorne's lines are moved to match where Brenn is. Every word below is the agreed final text; text marked <span class=new>NEW</span> or <span class=new>CHANGED</span> is what this piece of work adds.</p>
+
+<h2>Thorne points the way — first talk</h2>
+<div class=row>
+<div class=step><div class=cap>First talk</div><div class=frame><div class=cmd>› talk to caravan master thorne · first time</div>
+<blockquote class='dq dim'><div class=sp>Caravan Master Thorne</div><p>Thank the gods, someone who looks capable! … I would be forever in your debt.</p></blockquote>
+<blockquote class='dq dim'><div class=sp>Caravan Master Thorne</div><p>That forest road was safe enough a month ago. …</p></blockquote>
+<blockquote class=dq><div class=sp>Caravan Master Thorne</div><p><span class=c>Brenn</span>, my guard, came stumbling back alone two nights ago. Says the ravine path gave way and he ran. Ran! <span class=new>CHANGED</span> He's skulking in the warehouse now. I'll deal with him once my people are home.</p></blockquote>
+</div><p class=note>One added sentence tells players where Brenn is, before they ever go south.</p></div>
+</div>
+
+<h2>After he is forgiven</h2>
+<div class=row>
+<div class=step><div class=cap>Stays in the warehouse</div><div class=frame><div class=cmd>› south</div>
+<p class=t>Characters present: <span class=c>Brenn</span></p>
+<div class=cmd>› talk to brenn</div>
+<blockquote class=dq><div class=sp>Brenn</div><p>Thorne says one more road. …</p></blockquote>
+</div><p class=note>Step 3 is always there to be heard, for the rest of the act.</p></div>
+</div>
+
+<h2>Thorne after the rescue</h2>
+<div class=row><div class=step><div class=frame><div class=cmd>› talk to thorne · after the rescue, before forgiving</div>
+<blockquote class=dq><div class=sp>Caravan Master Thorne</div><p>Which leaves <span class=c>Brenn</span>. A guard who runs is no guard. He's sitting <span class=new>CHANGED</span> in the warehouse waiting for his wages, and wages are all he'll get from me.</p></blockquote>
+<p class=gone>was: …sitting outside the warehouse waiting for his wages…</p>
+</div><p class=note>Speaking for Brenn (say forgive to thorne) is unchanged.</p></div></div>
+
+<h2>Anything else said to Brenn</h2>
+<div class=row><div class=step><div class=frame><div class=cmd>› say hello to brenn</div>
+<p class=t dim>(the game's usual reply when a character has nothing to say to those words)</p>
+</div><p class=note>Brenn answers only to talk. Speaking for him is still done to Thorne.</p></div></div>
