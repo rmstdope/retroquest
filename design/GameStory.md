@@ -54,7 +54,7 @@ In Greendale, Elior meets Sir Cedric, who recognizes the Warden sigil of the War
 **Highlights from the Act II design** (see `Act2Design.md`):
 
 - **Setting:** Greendale is a trade city of gates, markets, a castle and the **Silver Stag Inn**, and the threshold to the Enchanted Forest. The forest deepens from the standing stones of the Forest Transition to the Heart of the Forest.
-- **Main quest – _The Gathering Storm_:** eleven side quests build up to summoning **Nyx** at the Offering Altar with three charms (Protective, Druidic, Nature's). Nyx grants `prophetic_vision`, and Elior shares the vision with Cedric to close the act.
+- **Main quest – _The Gathering Storm_:** eleven side quests build up to summoning **Nyx** at the Offering Altar with three charms (Protective, Druidic, Nature's). Nyx grants `prophetic_vision`, and Elior shares the vision with Cedric, then answers him (`say truth to cedric`) or talks to him, to close the act.
 - **Sir Cedric:** a formal, honourable knight in disgrace. _The Knight's Test_ earns his respect, and _Cedric's Lost Honor_ clears his name with **Secret Documents** recovered from **Caravan Master Thorne**'s lost caravan.
 - **Greendale's people:** **Master Healer Lyria** takes Elior on as an apprentice (`greater_heal`). **Innkeeper Marcus**'s daughter **Elena** is cured of a curse with `greater_heal`, Crystal-Clear Water and `dispel`. A **Spectral Librarian** guards the Hidden Library, whose **Ancient Chronicle** teaches `dispel`.
 - **Forest quests:** _The Hermit's Warning_, _The Forest Guardian's Riddles_ ("tree", "water", "ants") and _Whispers in the Wind_ (the Ancient Tree Spirit, the Enchanted Acorn and Moonflowers).

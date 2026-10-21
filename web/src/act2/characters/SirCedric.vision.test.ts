@@ -81,6 +81,10 @@ describe('the vision leaves Cedric waiting', () => {
   it('shows the waiting line in the courtyard while he waits', () => {
     const { game } = waitingGame()
     const room = game.state.currentRoom
+    const before = new Game([new Act2()])
+    expect(
+      before.state.allRooms.CastleCourtyard.descriptionFor(before.state),
+    ).not.toContain(WAITING_LINE)
     expect(room.descriptionFor(game.state)).toContain(WAITING_LINE)
     game.state.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
     expect(room.descriptionFor(game.state)).not.toContain(WAITING_LINE)

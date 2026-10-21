@@ -23,7 +23,8 @@ export const CASTLE_COURTYARD_DESCRIPTION =
  * Castle Courtyard room: martial training hub with dialogue-gated hidden diary.
  *
  * `search()` grants the Squire's Diary only after FLAG_SQUIRES_TALKED_TO is set;
- * `diaryFound` keeps the injection idempotent.
+ * `diaryFound` keeps the injection idempotent. `descriptionFor()` adds Cedric's
+ * waiting line between the shared vision and the end of the act.
  */
 export class CastleCourtyard extends Room {
   diaryFound = false

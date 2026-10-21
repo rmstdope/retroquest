@@ -174,6 +174,7 @@ export class SirCedric extends Character {
    * Recruit Elior, reward the knight's test and hand over Nature's Charm. The
    * first talk while Elior carries the Ancient Amulet also holds the one-time
    * recognition of the Wardens' sigil, which changes the amulet's description.
+   * While he waits after the vision, any talk ends Act II with the closing lines.
    */
   override talkTo(gameState: GameState): string {
     if (this.boutRunning()) return this.talkDuringBout()

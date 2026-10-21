@@ -1352,11 +1352,16 @@ describe('Act 2 answering Cedric after the vision', () => {
     expect(output).toContain('The storm has a name now.')
     expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
     expect(game.state.virtues).toEqual([])
+    for (let turn = 0; turn < 3; turn++) game.newTurn()
+    expect(game.getActCompleteText()).toContain('Congratulations')
   })
 
   it('lets the player roam while he waits and keeps the wait through a save', () => {
     const game = waitingGame()
-    executeCommands(game, ['go east', 'go west'])
+    executeCommands(game, ['go east'])
+    expect(game.state.currentRoom.name).toBe('Castle Approach')
+    executeCommands(game, ['go west'])
+    expect(game.state.currentRoom.name).toBe('Castle Courtyard')
     expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(false)
 
     const fresh = new Game([new Act2()])
