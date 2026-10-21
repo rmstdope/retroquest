@@ -14,16 +14,11 @@ export class StillnessVestibule extends Room {
     super({
       name: 'Stillness Vestibule',
       description:
-        'A profound hush descends like a shroud over obsidian water pools that ' +
-        'mirror the darkness above, their surfaces so still they seem frozen in ' +
-        'time. Sound itself appears to be devoured by the ancient stone, as if ' +
-        'the very walls hunger for silence. Three echo stones stand sentinel in ' +
-        "a perfect triangle at the chamber's heart, their surfaces carved with " +
-        'mystical channels that seem to writhe in the dim light. These weathered ' +
-        'monoliths pulse with an otherworldly energy, their carved conduits ' +
-        'waiting to amplify sacred whispers and bind them to the fabric of ' +
-        'reality itself. The air thrums with dormant power, heavy with the ' +
-        'weight of forgotten rituals.',
+        'A hush falls over this chamber like a shroud. Dark pools mirror the ' +
+        'ceiling, so still they look frozen in time, and the stone seems to ' +
+        'swallow every sound. At the centre, three weathered echo stones stand ' +
+        'in a triangle. Their carved channels look made to catch whispered ' +
+        'words and hold them.',
       items: [
         new EchoStones(),
         new DarkPool(),
