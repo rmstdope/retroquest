@@ -1281,3 +1281,20 @@ describe('Act 2 golden path as declared by the act', () => {
     expect(output).not.toMatch(/\[spell_name\][a-z]+_[a-z_]+\[\/spell_name\]/)
   })
 })
+
+describe('Act 2 complete page', () => {
+  it('opens on the hook, also on a game loaded from a save', () => {
+    const game = new Game([new Act2()])
+    executeCommands(game, ACT2_GOLDEN_PATH)
+    executeCommands(game, ['cast prophetic vision'])
+    for (let turn = 0; turn < 3; turn++) game.newTurn()
+    const hook = 'Malakar is real. And the bloodline he seeks is yours.'
+    expect(game.getActCompleteText()).toMatch(
+      new RegExp(`^${hook}\\n\\nCongratulations — you have completed`),
+    )
+    const fresh = new Game([new Act2()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    for (let turn = 0; turn < 3; turn++) fresh.newTurn()
+    expect(fresh.getActCompleteText()).toBe(game.getActCompleteText())
+  })
+})

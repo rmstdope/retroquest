@@ -97,6 +97,11 @@ export class Act2 extends Act {
     })
   }
 
+  /** The hook that opens Act II's complete page: Malakar is real and seeks Elior's bloodline. */
+  override getCompletionHook(): string {
+    return 'Malakar is real. And the bloodline he seeks is yours.'
+  }
+
   override getActIntro(): string {
     return (
       '[bold]ACT 2: THE GATHERING STORM[/bold]\n\nAfter the mysterious ' +

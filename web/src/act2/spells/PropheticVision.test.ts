@@ -105,3 +105,30 @@ describe('Prophetic Vision casting', () => {
     expect(game.state.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)).toBe(true)
   })
 })
+
+describe('Prophetic Vision ending', () => {
+  it('ends Act II on Cedric, the realisation and the pledge', () => {
+    const game = createGameWithCedric()
+    completeAllSideQuests(game.state)
+
+    const answer = new PropheticVision().castSpell(game.state)
+
+    expect(answer).toContain(
+      '[character_name]Sir Cedric[/character_name]\n[dialogue]' +
+        'Then Malakar is no tale, and it is you he is hunting.[/dialogue]',
+    )
+    expect(answer).toContain(
+      'Malakar is real, and the bloodline he seeks is yours.',
+    )
+    expect(answer).toContain('[item_name]Secret Documents[/item_name]')
+    expect(answer).toContain(
+      'Wherever this road leads, you will not walk it alone.',
+    )
+    expect(answer).toMatch(
+      /\[bold\]Act II is complete\.\[\/bold\] The storm has a name now\.$/,
+    )
+    expect(answer).not.toContain('The vision fades, but the knowledge remains')
+    expect(answer).not.toContain('better prepared for whatever challenges')
+    expectMarkupWellFormed(answer)
+  })
+})

@@ -1,4 +1,4 @@
-import { Spell, type GameState, characterName, event } from '@/engine'
+import { Spell, type GameState, characterName, dialogue, event } from '@/engine'
 import { FLAG_GATHERING_STORM_COMPLETED } from '../Act2StoryFlags'
 import { SirCedric } from '../characters/SirCedric'
 
@@ -51,23 +51,39 @@ export class PropheticVision extends Spell {
 
       // First casting - complete The Gathering Storm quest
       gameState.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
-      return event(
-        'You close your eyes and reach out with your newly granted sight ' +
-          'beyond sight. With ' +
-          characterName('Sir Cedric') +
-          ' standing beside you, you share the vision as it rises before ' +
-          'you:\n\n' +
-          'A village at dusk, its roofs low and familiar. Beyond it, a field ' +
-          'withered to grey stalks, the way yours was the morning all this ' +
-          "began. And at the field's edge, a robed figure, its face lost in " +
-          'shadow, reaching one hand toward you as if across a great ' +
-          'distance.\n\n' +
-          'Then the voice from your dream, the one that called your name on ' +
-          'the night of the storm: [italic]“Elior… how you have grown. Do ' +
-          'not be afraid of me.”[/italic] It is closer than it was. You do ' +
-          'not know whose it is, only that you have heard it before, long ' +
-          'before the dream.\n\n' +
-          "The vision fades. Sir Cedric's expression has grown grave.",
+      return (
+        event(
+          'You close your eyes and reach out with your newly granted sight ' +
+            'beyond sight. With ' +
+            characterName('Sir Cedric') +
+            ' standing beside you, you share the vision as it rises before ' +
+            'you:\n\n' +
+            'A village at dusk, its roofs low and familiar. Beyond it, a field ' +
+            'withered to grey stalks, the way yours was the morning all this ' +
+            "began. And at the field's edge, a robed figure, its face lost in " +
+            'shadow, reaching one hand toward you as if across a great ' +
+            'distance.\n\n' +
+            'Then the voice from your dream, the one that called your name on ' +
+            'the night of the storm: [italic]“Elior… how you have grown. Do ' +
+            'not be afraid of me.”[/italic] It is closer than it was. You do ' +
+            'not know whose it is, only that you have heard it before, long ' +
+            'before the dream.\n\n' +
+            "The vision fades. Sir Cedric's expression has grown grave.",
+        ) +
+        '\n\n' +
+        dialogue(
+          'Sir Cedric',
+          'Then Malakar is no tale, and it is you he is hunting.',
+        ) +
+        '\n\n' +
+        'All your life, Malakar has been a name from old books, a story told ' +
+        'to frighten children. But the agents asking after the Willowbrook ' +
+        'bloodline, the seal on the [item_name]Secret Documents[/item_name], ' +
+        'the figure reaching for you in the vision: they all point the same ' +
+        'way. Malakar is real, and the bloodline he seeks is yours.\n\n' +
+        `${characterName('Sir Cedric')} rests a hand on his sword. ` +
+        '"Wherever this road leads, you will not walk it alone." ' +
+        '[bold]Act II is complete.[/bold] The storm has a name now.'
       )
     }
 
