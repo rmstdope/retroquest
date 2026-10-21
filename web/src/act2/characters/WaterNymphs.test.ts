@@ -166,7 +166,8 @@ describe('Water Nymphs voice', () => {
     replies.push(nymphs.talkTo(game.state))
 
     for (const reply of replies) {
-      for (const line of spoken(reply)) {
+      // The blight remark (rq-vqi) is its own story beat, not a riddle line.
+      for (const line of spoken(reply).filter((l) => !l.includes('thinner'))) {
         expect(line).toContain('?')
       }
     }
