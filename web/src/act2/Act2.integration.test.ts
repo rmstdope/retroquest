@@ -8,7 +8,11 @@ import {
   FLAG_READ_SQUIRES_DIARY,
   FLAG_SQUIRES_TALKED_TO,
   FLAG_CEDRIC_RECOGNISED_SIGIL,
+  VIRTUE_MERCY,
+  VIRTUE_SELFLESS,
+  VIRTUE_TRUTH,
 } from './Act2StoryFlags'
+import { MountainFlower } from './items/MountainFlower'
 import { CityMap } from './items/CityMap'
 import { ForestSurvivalKit } from './items/ForestSurvivalKit'
 import { SecretDocuments } from './items/SecretDocuments'
@@ -1298,5 +1302,58 @@ describe('Act 2 complete page', () => {
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
     for (let turn = 0; turn < 3; turn++) fresh.newTurn()
     expect(fresh.getActCompleteText()).toBe(game.getActCompleteText())
+  })
+})
+
+describe('Act 2 optional virtue moments', () => {
+  /** The golden path played to the end, then the three moments one by one. */
+  function gameWithAllThree(): Game {
+    const game = new Game([new Act2()])
+    executeCommands(game, [...ACT2_GOLDEN_PATH, 'cast prophetic vision'])
+    game.state.addItemToInventory(new MountainFlower())
+    game.state.currentRoom = game.state.allRooms.ResidentialQuarter
+    executeCommands(game, ['give mountain flower to families'])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    executeCommands(game, ['say truth to marcus'])
+    game.state.currentRoom = game.state.allRooms.MarketDistrict
+    executeCommands(game, ['say forgive to thorne'])
+    return game
+  }
+
+  it('records nothing when every moment is skipped, and the act still completes', () => {
+    const game = new Game([new Act2()])
+    executeCommands(game, [...ACT2_GOLDEN_PATH, 'cast prophetic vision'])
+
+    expect(game.state.virtues).toEqual([])
+    expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
+  })
+
+  it('records selflessness, truth and mercy after the golden path', () => {
+    const game = gameWithAllThree()
+
+    expect(game.state.virtues.sort()).toEqual(
+      [VIRTUE_MERCY, VIRTUE_SELFLESS, VIRTUE_TRUTH].sort(),
+    )
+    expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
+  })
+
+  it('keeps the record through a save and load, and shows nothing again', () => {
+    const game = gameWithAllThree()
+    const fresh = new Game([new Act2()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(fresh.state.virtues.sort()).toEqual(game.state.virtues.sort())
+    fresh.state.currentRoom = fresh.state.allRooms.ResidentialQuarter
+    const families = executeCommands(fresh, ['talk to families'])
+    expect(families).not.toContain('Wren')
+    expect(families).not.toContain('remembered')
+    fresh.state.currentRoom = fresh.state.allRooms.MarketDistrict
+    const thorne = executeCommands(fresh, ['talk to caravan master thorne'])
+    expect(thorne).not.toContain('remembered')
+    expect(thorne).not.toContain('Which leaves')
+    fresh.state.currentRoom = fresh.state.allRooms.SilverStagInn
+    expect(executeCommands(fresh, ['talk to innkeeper marcus'])).not.toContain(
+      'ill wind',
+    )
   })
 })
