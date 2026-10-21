@@ -40,6 +40,8 @@ export const FLAG_PATCHES_FOUND = 'patches_found'
 export const FLAG_PATCHES_RETURNED = 'patches_returned'
 /** Set when the rune token comes up out of the purified well with the ring. */
 export const FLAG_FOUND_RUNE_TOKEN = 'found_rune_token'
+/** The cloaked stranger has been seen once at the Old Mill, his back turned. */
+export const FLAG_STRANGER_SEEN_AT_MILL = 'stranger_seen_at_mill'
 /** Set when Mira names the rune token a fouling sigil. */
 export const FLAG_MIRA_NAMED_FOULING_SIGIL = 'mira_named_fouling_sigil'
 /** Set when the Vegetable Field is watered with purified well water. */

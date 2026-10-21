@@ -121,19 +121,28 @@ export class Grandmother extends Character {
   }
 
   /**
-   * Her reaction when Elior tells her of the dream and the familiar voice.
-   * Part of the one talk that teaches revive, so it happens once only.
+   * Her reaction when Elior tells her of the dream and the familiar voice:
+   * she is humming the cradle tune when he comes in, and goes quiet over the
+   * three words he caught. Part of the one talk that teaches revive, so it
+   * happens once only.
    */
   private dreamReaction(): string {
     return (
+      'She is humming at the hearth when you come in: a slow tune that ' +
+      'climbs three notes and settles home again. You know it. You have ' +
+      'known it all your life, and you could not say from where. She ' +
+      'stops when she sees your face.\n' +
       'You tell her about the dream: the shadows, the figure, the voice ' +
       'calling your name, and how you were sure you had heard it before. ' +
       'She reaches for your hand and holds it tighter than she means to. ' +
       speech(
         'That voice... did it say anything more? Anything but your name?',
       ) +
-      '\nYou shake your head. She lets go, and smooths her apron. ' +
-      speech("No. No, of course not. Never mind an old woman's fancies.")
+      '\nYou tell her the three words you caught at the very end, the ones ' +
+      'you wrote down before they could go: let them rest. She goes ' +
+      'quiet. She turns to the bread on the board and does not turn back ' +
+      'for a while. ' +
+      speech('Some voices are older than memory.')
     )
   }
 

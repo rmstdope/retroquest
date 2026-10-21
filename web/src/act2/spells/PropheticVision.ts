@@ -97,7 +97,9 @@ export class PropheticVision extends Spell {
             'distance.\n\n' +
             'Then the voice from your dream, the one that called your name on ' +
             'the night of the storm: [italic]“Elior… how you have grown. Do ' +
-            'not be afraid of me.”[/italic] It is closer than it was. You do ' +
+            'not be afraid of me.”[/italic] And then, fainter, as if carried ' +
+            'off by the wind: [italic]“…close what I opened…”[/italic] It is ' +
+            'closer than it was. You do ' +
             'not know whose it is, only that you have heard it before, long ' +
             'before the dream.\n\n' +
             "The vision fades. Sir Cedric's expression has grown grave.",

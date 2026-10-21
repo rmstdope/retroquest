@@ -675,7 +675,8 @@ describe('Act 4 integration', () => {
       executeCommands(game, ['west', 'north'])
       expect(executeCommands(game, ['examine knight of despair'])).toContain(
         'A knight in tarnished armour, a shredded grey cloak hanging from his ' +
-          "shoulders. His visor is down, and he does not move. When he speaks, his voice is hollow: 'Return when you have the truth.'",
+          'shoulders. He stands with his back to the door you came in by. His visor is down, and he does not move. ' +
+          "When he speaks, his voice is hollow: 'Return when you have the truth.'",
       )
       const talk = executeCommands(game, ['talk to knight of despair'])
       expect(talk).toContain(

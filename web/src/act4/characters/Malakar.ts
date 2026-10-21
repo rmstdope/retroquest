@@ -73,9 +73,16 @@ export class Malakar extends Character {
         "A tall man in a grey robe that was once a Warden's blue. His hair " +
         'is white, though he cannot be much older than your father would ' +
         'have been. He leans on the throne as if it is the only thing ' +
-        'holding him up.',
+        'holding him up. He is looking at the wound, not at you.',
     })
   }
+
+  /** The look once the refrain has turned him from the wound. */
+  private static readonly DESCRIPTION_TURNED =
+    "A tall man in a grey robe that was once a Warden's blue. His hair " +
+    'is white, though he cannot be much older than your father would ' +
+    'have been. He leans on the throne as if it is the only thing ' +
+    'holding him up, and he does not look away from you.'
 
   /** His look. */
   override examine(gameState: GameState): string {
@@ -215,8 +222,13 @@ export class Malakar extends Character {
       ].join('\n')
     }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID, true)
+    this.description = Malakar.DESCRIPTION_TURNED
     return [
       refrainLine,
+      event(
+        'Malakar turns from the wound. For the first time since you came ' +
+          'in, he is looking at you.',
+      ),
       dialogue(
         this.name,
         'We carved those words together, your father and I. I had ' +

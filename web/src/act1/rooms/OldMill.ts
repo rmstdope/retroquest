@@ -1,6 +1,10 @@
-import { Room, type GameState } from '@/engine'
+import { Room, event, type GameState } from '@/engine'
 import { SackOfFlour } from '../items/SackOfFlour'
 import { Mechanism } from '../items/Mechanism'
+import {
+  FLAG_FOUND_RUNE_TOKEN,
+  FLAG_STRANGER_SEEN_AT_MILL,
+} from '../Act1StoryFlags'
 
 const DESCRIPTION_START =
   'A creaky windmill towers above, its sails turning slowly in the breeze. Dusty ' +
@@ -14,13 +18,22 @@ const MECHANISM_JAMMED =
   ' Amidst the old workings, the black-iron mechanism stands ' +
   'jammed with a rope, silent at last.'
 
+/** The one paragraph in which the cloaked stranger is seen, his back turned. */
+const STRANGER_SIGHTING =
+  'A man in a grey cloak stands at the far door with his back to you, ' +
+  'quite still, his head bent as if he were listening to the floor. You ' +
+  'have made no sound, and yet he knows you are there. He does not turn. ' +
+  'He steps out into the light toward the river, and when you reach the ' +
+  'door the path is empty.'
+
 const AMULET_HUM =
   ' At your side, the [item_name]Ancient Amulet[/item_name] hums softly, as if ' +
   'answering something stirring beneath the floor.'
 
 /**
  * Old Mill room: a weathered mill on an old seat of power, where the cloaked
- * stranger's mechanism whirs until Elior jams it.
+ * stranger's mechanism whirs until Elior jams it, and where the stranger
+ * himself is seen once, with his back turned, after the rune token is found.
  *
  * The description follows the Mechanism item. `Mechanism.useWith` calls
  * `refreshDescription()` so the room text changes the moment it is jammed.
@@ -54,5 +67,21 @@ export class OldMill extends Room {
   override describe(gameState: GameState): string {
     this.refreshDescription(gameState)
     return super.describe(gameState)
+  }
+
+  /**
+   * The first time Elior walks in after the rune token has come up from the
+   * well, the cloaked stranger is seen once, with his back turned, and
+   * leaves without turning. Only a move shows it, never `look` or a load.
+   */
+  override enterText(gameState: GameState): string {
+    if (
+      !gameState.getStoryFlag(FLAG_FOUND_RUNE_TOKEN) ||
+      gameState.getStoryFlag(FLAG_STRANGER_SEEN_AT_MILL)
+    ) {
+      return ''
+    }
+    gameState.setStoryFlag(FLAG_STRANGER_SEEN_AT_MILL, true)
+    return event(STRANGER_SIGHTING)
   }
 }

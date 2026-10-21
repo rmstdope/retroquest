@@ -5,6 +5,16 @@ import { Act1 } from '../Act1'
 import { EliorsJournal } from './EliorsJournal'
 
 describe('EliorsJournal', () => {
+  it('records the three words Elior caught from the voice', () => {
+    const journal = new EliorsJournal()
+    const entry = journal.use(new Game([new Act1()]).state)
+
+    expect(entry).toContain(
+      'And three words at the very end, which I wrote down the moment I ' +
+        'woke so I would not lose them: …and let them rest…',
+    )
+  })
+
   it('shows the journal entry as one unlabelled quote', () => {
     const game = new Game([new Act1()])
     const text = new EliorsJournal().use(game.state)

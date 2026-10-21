@@ -52,7 +52,8 @@ export class KnightOfDespair extends Character {
       name: 'Knight of Despair',
       description:
         'A knight in tarnished armour, a shredded grey cloak hanging from his ' +
-        'shoulders. His visor is down, and he does not move. When he speaks, ' +
+        'shoulders. He stands with his back to the door you came in by. His ' +
+        'visor is down, and he does not move. When he speaks, ' +
         "his voice is hollow: 'Return when you have the truth.'",
     })
   }

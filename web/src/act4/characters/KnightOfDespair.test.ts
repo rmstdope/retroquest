@@ -58,6 +58,14 @@ function createGameInHall(): Game {
 }
 
 describe('KnightOfDespair', () => {
+  it('stands with his back to the door Elior came in by', () => {
+    const knight = new KnightOfDespair()
+
+    expect(knight.description).toContain(
+      'He stands with his back to the door you came in by.',
+    )
+  })
+
   it('answers to knight, knight of despair and redeemed knight', () => {
     const knight = new KnightOfDespair()
     for (const name of ['knight', 'Knight of Despair', 'redeemed knight']) {

@@ -84,6 +84,26 @@ const OFFER_BLOCKS = [
 const PLEA =
   'They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet.'
 
+describe('Malakar and the turned back', () => {
+  it('looks at the wound, not at Elior, until the refrain turns him', () => {
+    const game = inThrone()
+
+    const before = executeCommands(game, ['examine malakar'])
+    const offer = executeCommands(game, ['talk to malakar'])
+    const refrain = executeCommands(game, ['say refrain to malakar'])
+
+    expect(before).toContain('He is looking at the wound, not at you.')
+    expect(offer).not.toContain('Malakar turns from the wound.')
+    expect(refrain).toContain(
+      'Malakar turns from the wound. For the first time since you came in, ' +
+        'he is looking at you.',
+    )
+    expect(executeCommands(game, ['examine malakar'])).not.toContain(
+      'not at you',
+    )
+  })
+})
+
 describe('ThroneChamber', () => {
   it('survives a save at every point, and coming back replays nothing', () => {
     for (const make of [inThrone, refrained, opened, healed, shattered]) {
