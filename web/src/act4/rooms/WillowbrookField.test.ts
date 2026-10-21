@@ -4,6 +4,7 @@ import { Act4 } from '../Act4'
 import { Grow } from '../spells/Grow'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
+  FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_FIELD_GREEN,
   VIRTUE_SELFLESS,
   VIRTUE_TRUTH,
@@ -29,12 +30,12 @@ const MIRA_ELENA_ANSWER =
   'Elena. I am going back through Greendale. I will tell her.'
 const CEDRIC_OLD =
   'I have walked a long way beside you. This is a good place to stop.'
+const CEDRIC_FORGAVE =
+  'And the knight in grey said his piece to my face. I forgave him. I find I meant it.'
 const CEDRIC_FIRST = [
   'You tell him what the captain of the guard said: that he is sorry he ever doubted him.',
   'He was the youngest on the walls that night. I never blamed him. I am glad he remembers.',
-  'Then what the knight in grey said: that he is sorry, and that he would say it to your face.',
-  'The knight in grey. I thought I would want to hear that more than I do. Tell me where he is.',
-  'He looks out over the field for a while.',
+  'And the knight in grey said his piece to my face. I have not forgiven him. Not yet.',
   `Later. ${CEDRIC_OLD}`,
 ]
 
@@ -264,6 +265,18 @@ describe('the companions', () => {
         expect(later).not.toContain('The knight in grey')
       }
     }
+  })
+
+  it('Sir Cedric says he forgave the knight when he did', () => {
+    const game = home('justice')
+    game.state.setStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE, true)
+    const first = executeCommands(game, ['talk to cedric'])
+    expect(first).toContain(CEDRIC_FORGAVE)
+    expect(first).not.toContain('Not yet')
+    expect(first).not.toContain('what the knight in grey said')
+    expect(first.indexOf(CEDRIC_FORGAVE)).toBeLessThan(
+      first.indexOf(`Later. ${CEDRIC_OLD}`),
+    )
   })
 
   it('Nyx answers with a touch before the cast', () => {

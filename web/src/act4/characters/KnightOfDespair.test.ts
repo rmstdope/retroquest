@@ -123,10 +123,14 @@ describe('KnightOfDespair', () => {
       const out = executeCommands(game, ['say redemption to knight'])
       const parts = [
         "You say the word, and the knight's despair breaks against the chain's light like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human.",
+        'You.',
+        'Me.',
         'I was the stranger in Willowbrook. Malakar sent me for an amulet, and for the child it hid. It was my token that fouled your well.',
         'The night King Alden was taken, I paid the watch to look away. The captain of the watch was a good man. I made sure he was asleep. And I put my seal to the lie that shamed Sir Cedric.',
         'And when I saw what my master was doing to the king, I stopped believing he could be saved. That is all despair is. You have given me something to believe in again.',
-        'When you see Sir Cedric again, tell him the knight in grey is sorry. Tell him I will say it to his face, if he will let me.',
+        'Sir Cedric. I am sorry. I have no right to ask anything of you, so I will not.',
+        'Sir Cedric does not move from the door.',
+        'I heard you. That will have to be enough, for now.',
         "You received [item_name]Knight's Redemption[/item_name]!",
         "The Echo Stone grows warm in your pack. A new voice has joined the echoes inside it: the knight's own, speaking the truth at last.",
         "Redemption's Light",
@@ -138,7 +142,7 @@ describe('KnightOfDespair', () => {
         expect(found, part).toBeGreaterThanOrEqual(at)
         at = found
       }
-      expect(out.match(/\[character_name\]Knight of Despair/g)).toHaveLength(4)
+      expect(out.match(/\[character_name\]Knight of Despair/g)).toHaveLength(5)
       expectMarkupWellFormed(out)
       expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)
       expectItemInInventory(game.state, "Knight's Redemption", true)

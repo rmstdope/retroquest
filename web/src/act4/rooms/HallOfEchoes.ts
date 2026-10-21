@@ -1,11 +1,14 @@
 import { Room, type Exits, type GameState } from '@/engine'
 import {
+  FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED,
 } from '../Act4StoryFlags'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
+import { SirCedricInTheHall } from '../characters/SirCedricInTheHall'
 import { Echoes } from '../items/Echoes'
 import { EchoStone } from '../items/EchoStone'
+import { HALL_CEDRIC_AT_DOOR, HALL_CEDRIC_ON_STAIR } from './hallDescriptions'
 
 /**
  * A mystical hall where the voices of the past linger in eternal resonance.
@@ -24,9 +27,17 @@ export class HallOfEchoes extends Room {
         'knight in tarnished armour stands without moving, the way a man ' +
         'stands at a grave.',
       items: [new Echoes(), new EchoStone()],
-      characters: [new KnightOfDespair()],
+      characters: [new KnightOfDespair(), new SirCedricInTheHall()],
       exits: { south: 'FortressGates', east: 'TowerOfShadows' },
     })
+  }
+
+  /** The description, with Sir Cedric by the door or, once he forgives, on the stair. */
+  override descriptionFor(gameState: GameState): string {
+    const forgave = gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)
+    return (
+      this.description + (forgave ? HALL_CEDRIC_ON_STAIR : HALL_CEDRIC_AT_DOOR)
+    )
   }
 
   /** Entering the hall starts the knight's side quest. */

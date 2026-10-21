@@ -69,11 +69,12 @@ describe('Act4', () => {
       "I'll be the light at the edge of your eye. Don't look for me. Just know.",
       'Mira presses something into your hand: a small silver medallion, two hands clasped on its face. Sir Cedric lays his hand over hers; the light on the gatepost leans in.',
       "If it goes quiet in there, say our names. We'll hear.",
-      'From here, you go on alone — or nearly.',
+      'The halls beyond are yours to walk, but you will not be far from them.',
       "Let's begin. (Type 'help' for a list of commands.)",
     ].map((line) => intro.indexOf(line))
     expect(order.every((i) => i >= 0)).toBe(true)
     expect([...order].sort((a, b) => a - b)).toEqual(order)
+    expect(intro).not.toContain('you go on alone')
     expect(intro).not.toContain('culmination')
     expect(intro).not.toContain('echo through eternity')
   })

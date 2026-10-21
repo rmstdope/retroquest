@@ -46,6 +46,7 @@ import { OuterCourtyard } from './rooms/OuterCourtyard'
 import { Malakar } from './characters/Malakar'
 import { KingAlden } from './characters/KingAlden'
 import { Grandmother } from './characters/Grandmother'
+import { SirCedricInTheHall } from './characters/SirCedricInTheHall'
 import { Mira } from './characters/Mira'
 import { SirCedric } from './characters/SirCedric'
 import { Nyx } from './characters/Nyx'
@@ -89,6 +90,7 @@ export const ACT4_CLASSES = {
   Grandmother,
   Mira,
   SirCedric,
+  SirCedricInTheHall,
   Nyx,
   Whispers,
   ShadowOfThePast,
