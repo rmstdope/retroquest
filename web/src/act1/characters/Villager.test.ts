@@ -42,6 +42,23 @@ describe('Villager dialogue markup', () => {
     )
   })
 
+  it('tells the current second rumour after loading a save that holds the old one', () => {
+    const game = gameInSquare()
+    const villager = game.state.currentRoom.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+    villager.dialogueOptions[1] = 'Folks say he vanished when the moon went.'
+    villager.dialogueIndex = 1
+    const fresh = new Game([new Act1()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    const loaded = fresh.state.allRooms.VillageSquare.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+
+    expect(loaded.dialogueOptions[1]).toContain('asking after an old amulet')
+    expect(loaded.dialogueIndex).toBe(1)
+  })
+
   it('records that a villager has been talked to', () => {
     const game = gameInSquare()
     game.commandParser.parse('talk to villager')

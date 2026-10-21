@@ -117,7 +117,7 @@ describe('GameMap farewell on the Road to Greendale', () => {
       const hand = answer.indexOf(
         'Her hand finds the [item_name]amulet[/item_name] at your chest and closes around it.',
       )
-      expect(hand).toBeGreaterThan(answer.indexOf('ring'))
+      expect(hand).toBeGreaterThan(answer.search(/wedding ring|kept her ring/))
       expect(hand).toBeGreaterThan(answer.indexOf('Wear your mother'))
       expect(answer).toContain(
         "This was theirs, you know. [character_name]Aren[/character_name] and [character_name]Lysa[/character_name]'s.",

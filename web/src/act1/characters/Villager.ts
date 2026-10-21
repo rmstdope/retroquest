@@ -19,7 +19,8 @@ import { Well } from '../items/Well'
  * the name she went by before she had one.
  */
 export class Villager extends Character {
-  dialogueOptions: string[] = [
+  /** Her rumours, in the order she tells them. */
+  private static readonly RUMOURS: readonly string[] = [
     'Have you seen the fields lately? The crops are withering overnight, and no one ' +
       "knows why. It's like the land itself is sick...",
     'Last night, someone spotted a cloaked stranger near the old well, asking after ' +
@@ -32,6 +33,8 @@ export class Villager extends Character {
     `${characterName('Mira')} says the air feels heavy with magic, and the chapel bell rang by itself at ` +
       "midnight. Something's not right in Willowbrook.",
   ]
+
+  dialogueOptions: string[] = [...Villager.RUMOURS]
   dialogueIndex = 0
 
   constructor() {
@@ -49,11 +52,12 @@ export class Villager extends Character {
 
   /**
    * Bring a villager from a save made before she was named up to date: she
-   * is Tilda now, with her new description. Safe to run more than once.
+   * is Tilda now, with her new description and current rumours (her place in the cycle is kept). Safe to run more than once.
    */
   migrateLegacyName(): void {
     this.name = Villager.NAME
     this.description = Villager.DESCRIPTION
+    this.dialogueOptions = [...Villager.RUMOURS]
   }
 
   /** She answers to her name, Tilda, and still to villager. */
