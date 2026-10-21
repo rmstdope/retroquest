@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from './Act4'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
+import { sacrificeOpen } from './endings'
 import { playDebugScript } from '@/utils/debugScript'
 import {
   FLAG_ACT4_FIELD_GREEN,
@@ -10,6 +11,8 @@ import {
   FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED,
   FLAG_ACT4_THRONE_AMULET_OPENED,
   FLAG_ACT4_REDEMPTION_ENDING,
+  FLAG_ACT4_CHAIN_GIVEN,
+  VIRTUE_SELFLESS,
 } from './Act4StoryFlags'
 import {
   executeCommands,
@@ -927,6 +930,19 @@ describe('Act 4 integration', () => {
         'Game loaded successfully.',
       )
     }
+
+    it('opens Sacrifice with the chain gift and one earlier moment, across a reload', () => {
+      toRedeemed()
+      game.state.currentRoom = game.state.allRooms.OuterCourtyard
+      game.state.addVirtue(VIRTUE_SELFLESS)
+      expect(sacrificeOpen(game.state)).toBe(false)
+      executeCommands(game, ["give guardian's chain to captain"])
+      expect(sacrificeOpen(game.state)).toBe(true)
+      reload()
+      expectStoryFlag(game.state, FLAG_ACT4_CHAIN_GIVEN)
+      expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(2)
+      expect(game.state.currentRoom.getCharacterByName('captain')).toBeNull()
+    })
 
     it('starts its quest on first entering the hall', () => {
       executeCommands(game, KNIGHT_PATH.slice(0, -6))

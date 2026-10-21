@@ -1,11 +1,13 @@
 import { Character, type GameState, dialogue, event } from '@/engine'
 import {
   FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED,
+  FLAG_ACT4_CHAIN_GIVEN,
   FLAG_ACT4_GUARDIANS_CHAIN_RAISED,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED,
   FLAG_ACT4_KNIGHT_SEEN_THROUGH,
   FLAG_ACT4_KNIGHTS_REDEMPTION_ACQUIRED,
+  FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
 } from '../Act4StoryFlags'
 import { EchoStone } from '../items/EchoStone'
 import { KnightsRedemption } from '../items/KnightsRedemption'
@@ -36,8 +38,8 @@ const CONFESSION = [
 
 /**
  * The knight who blocks the stair to the Tower of Shadows. Truth Sight shows
- * him as he is; with the Guardian's Chain raised, the word "redemption"
- * redeems him, and he kneels in the hall as the Redeemed Knight.
+ * him as he is; with the Guardian's Chain (still carried) or the Loyalty
+ * Token raised, the word "redemption" redeems him, and he kneels in the hall as the Redeemed Knight.
  */
 export class KnightOfDespair extends Character {
   constructor() {
@@ -134,21 +136,39 @@ export class KnightOfDespair extends Character {
         'does not even turn his head.[/failure]'
       )
     }
-    if (!gameState.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED)) {
-      return (
-        "[failure]You open your mouth, and the knight's despair rolls over " +
-        'you like cold water. The word dies in your throat. You could not ' +
-        'say it with nothing between you and his sorrow.[/failure]'
-      )
+    const chainHolds = this.chainHolds(gameState)
+    const tokenHolds = gameState.getStoryFlag(
+      FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
+    )
+    if (!chainHolds && !tokenHolds) {
+      const chainGone = gameState.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)
+      return chainGone
+        ? "[failure]You open your mouth, and the knight's despair rolls over " +
+            'you like cold water. The word dies in your throat. You need ' +
+            'something to shield you from it. The chain is gone with the ' +
+            'captain, but you are not as alone as the knight would have you ' +
+            'believe.[/failure]'
+        : "[failure]You open your mouth, and the knight's despair rolls over " +
+            'you like cold water. The word dies in your throat. You could ' +
+            'not say it with nothing between you and his sorrow.[/failure]'
     }
-    return this.redeem(gameState)
+    return this.redeem(gameState, chainHolds)
+  }
+
+  /** The chain shields Elior only while it was raised and has not been given away. */
+  private chainHolds(gameState: GameState): boolean {
+    return (
+      gameState.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED) &&
+      !gameState.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)
+    )
   }
 
   /**
-   * The redemption: the confession, then the rewards (the badge, the
+   * The redemption: the opening line (the chain's version when the chain
+   * holds, otherwise the token's), the confession, then the rewards (the badge, the
    * enhanced stone, the spell), the open stair and the changed hall.
    */
-  private redeem(gameState: GameState): string {
+  private redeem(gameState: GameState, byChain: boolean): string {
     gameState.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
     gameState.setStoryFlag(FLAG_ACT4_KNIGHTS_REDEMPTION_ACQUIRED, true)
     const confession = CONFESSION.map((speech) => dialogue(this.name, speech))
@@ -165,7 +185,10 @@ export class KnightOfDespair extends Character {
     const lines = [
       event(
         "You say the word, and the knight's despair breaks against the " +
-          "chain's light like a wave on stone. Slowly, he lifts his visor. " +
+          (byChain
+            ? "chain's light like a wave on stone. "
+            : 'warmth at your heart like a wave on stone. ') +
+          'Slowly, he lifts his visor. ' +
           'The face beneath is grey and tired, and very human.',
       ),
       ...confession,

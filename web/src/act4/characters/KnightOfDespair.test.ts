@@ -4,10 +4,12 @@ import { Act4 } from '../Act4'
 import { TruthSight } from '../spells/TruthSight'
 import { GuardiansChain } from '../items/GuardiansChain'
 import { EchoStone } from '../items/EchoStone'
+import { LoyaltyToken } from '../items/LoyaltyToken'
 import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED,
   FLAG_ACT4_KNIGHT_SEEN_THROUGH,
+  FLAG_ACT4_CHAIN_GIVEN,
 } from '../Act4StoryFlags'
 import { KnightOfDespair } from './KnightOfDespair'
 import {
@@ -177,5 +179,69 @@ describe('KnightOfDespair', () => {
     )
     executeCommands(game, ['go east'])
     expect(game.state.currentRoom.name).toBe('Tower of Shadows')
+  })
+
+  describe('with the Loyalty Token instead of the chain', () => {
+    const GONE =
+      "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. You need something to shield you from it. The chain is gone with the captain, but you are not as alone as the knight would have you believe."
+    const TOKEN_OPENING =
+      "You say the word, and the knight's despair breaks against the warmth at your heart like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human."
+
+    function gameWithoutChain(): Game {
+      const game = createGameInHall()
+      game.state.removeItemFromInventory("Guardian's Chain")
+      game.state.addItemToInventory(new LoyaltyToken())
+      game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_CHAIN_GIVEN, true)
+      return game
+    }
+
+    it('adds the nudge to the refusal once the chain is given away', () => {
+      const game = gameWithoutChain()
+      const answer = executeCommands(game, ['say redemption to knight'])
+      expect(answer).toContain(GONE)
+      expectMarkupWellFormed(answer)
+      expect(
+        game.state.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED),
+      ).toBe(false)
+    })
+
+    it('redeems him with the token raised, with the token opening', () => {
+      const game = gameWithoutChain()
+      executeCommands(game, ['use loyalty token'])
+      const answer = executeCommands(game, ['say redemption to knight'])
+      expect(answer).toContain(TOKEN_OPENING)
+      expect(answer).not.toContain("chain's light")
+      expect(answer).toContain('Knight’s Redemption'.replace('’', "'"))
+      expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)
+      expectMarkupWellFormed(answer)
+    })
+
+    it('loses the chain’s protection if it is given away after raising', () => {
+      const game = createGameInHall()
+      game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      executeCommands(game, ["use guardian's chain"])
+      game.state.removeItemFromInventory("Guardian's Chain")
+      game.state.setStoryFlag(FLAG_ACT4_CHAIN_GIVEN, true)
+      expect(executeCommands(game, ['say redemption to knight'])).toContain(
+        GONE,
+      )
+    })
+
+    it('keeps the chain version when the chain is raised and kept', () => {
+      const game = createGameInHall()
+      game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      executeCommands(game, ["use guardian's chain"])
+      const answer = executeCommands(game, ['say redemption to knight'])
+      expect(answer).toContain("breaks against the chain's light")
+    })
+
+    it('gives today’s refusal alone when the chain is kept but not raised', () => {
+      const game = createGameInHall()
+      game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      const answer = executeCommands(game, ['say redemption to knight'])
+      expect(answer).toContain(NO_CHAIN)
+      expect(answer).not.toContain('The chain is gone')
+    })
   })
 })
