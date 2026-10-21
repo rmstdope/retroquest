@@ -29,6 +29,10 @@ export const FLAG_LOST_CARAVAN_COMPLETED = 'lost_caravan_completed'
 export const FLAG_NYX_TRIALS_COMPLETED = 'nyx_trials_completed'
 export const FLAG_KNOWS_ELENA_CURSE = 'knows_elena_curse'
 export const FLAG_SPECTRAL_LIBRARIAN_FRIENDLY = 'spectral_librarian_friendly'
+/** Set once the Spectral Librarian has spoken the glance line about the amulet. */
+export const FLAG_LIBRARIAN_NOTICED_AMULET = 'librarian_noticed_amulet'
+/** Set once the Spectral Librarian has confessed to wearing the Wardens' mark. */
+export const FLAG_LIBRARIAN_CONFESSED = 'librarian_confessed'
 
 // Learning and Interaction Flags
 export const FLAG_SHOWED_JOURNAL_TO_HISTORIANS = 'showed_journal_to_historians'
