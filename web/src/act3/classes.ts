@@ -55,6 +55,7 @@ import { Phoenix } from './characters/Phoenix'
 import { PhoenixGuardian } from './characters/PhoenixGuardian'
 import { PierWarden } from './characters/PierWarden'
 import { SilenceKeeper } from './characters/SilenceKeeper'
+import { Tobin } from './characters/Tobin'
 import { SirCedric } from './characters/SirCedric'
 import { TideBornGuardian } from './characters/TideBornGuardian'
 import { WanderingPhantoms } from './characters/WanderingPhantoms'
@@ -149,6 +150,7 @@ export const ACT3_CLASSES = {
   PhoenixGuardian,
   PierWarden,
   SilenceKeeper,
+  Tobin,
   SirCedric,
   TideBornGuardian,
   WanderingPhantoms,

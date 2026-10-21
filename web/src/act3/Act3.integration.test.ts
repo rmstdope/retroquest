@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from './Act3'
+import { Miners } from './characters/Miners'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import { playDebugScript } from '@/utils/debugScript'
 import {
@@ -796,5 +797,42 @@ describe('debug act3', () => {
 
     executeCommands(game, ['examine gates'])
     expectStoryFlag(game.state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
+  })
+})
+
+describe('Tobin and the saves', () => {
+  const galleries = (game: Game): string[] =>
+    game.state.allRooms.CollapsedGalleries.characters.map((c) => c.name)
+
+  it('keeps Tobin and how often he was talked to through a save', () => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom = game.state.allRooms.CollapsedGalleries
+    game.state.currentRoom.addCharacter(new Miners())
+    executeCommands(game, ['talk to miners', 'talk to boy', 'talk to tobin'])
+
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(galleries(fresh)).toContain('tobin')
+    expect(executeCommands(fresh, ['talk to young miner'])).toContain(
+      'Tobin does not look up.',
+    )
+  })
+
+  it('gives Tobin to a save already past the rescue, once', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED, true)
+    expect(galleries(game)).not.toContain('tobin')
+
+    new Act3().afterLoad(game.state)
+    new Act3().afterLoad(game.state)
+
+    expect(galleries(game).filter((n) => n === 'tobin')).toHaveLength(1)
+  })
+
+  it('leaves Tobin out of a save from before the rescue', () => {
+    const game = new Game([new Act3()])
+    new Act3().afterLoad(game.state)
+    expect(galleries(game)).not.toContain('tobin')
   })
 })
