@@ -632,6 +632,20 @@ describe('Game', () => {
       )
     })
 
+    it('lets a character answer a spell cast on it before the spell does', () => {
+      class Wary extends Character {
+        override receiveSpell(_gameState: GameState, spell: Spell): string {
+          return `[event]${this.name} meets ${spell.name}.[/event]`
+        }
+      }
+      rooms.EliorsCottage.addCharacter(
+        new Wary({ name: 'wary one', description: 'd' }),
+      )
+      expect(game.cast('heal on wary one')).toBe(
+        '[event]wary one meets heal.[/event]',
+      )
+    })
+
     it('casts a multi-word spell by its shown name as well as its id, never printing the id', () => {
       game.state.knownSpells.push(new EchoSpell('two_words', 'Two Words'))
       const expected =

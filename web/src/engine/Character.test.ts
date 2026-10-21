@@ -3,6 +3,7 @@ import { Character } from './Character'
 import { Item } from './Item'
 import { GameState } from './GameState'
 import { Room } from './Room'
+import { Spell } from './Spell'
 
 function gameState(): GameState {
   const start = new Room({ name: 'Start', description: '' })
@@ -17,6 +18,11 @@ describe('Character', () => {
     expect(mira.examine(gs)).toBe(
       '[event]You examine [character_name]Mira[/character_name]. The wise woman.[/event]',
     )
+  })
+
+  it('has no special answer to a spell by default', () => {
+    const spell = new Spell({ id: 'mend', name: 'mend', description: 'd' })
+    expect(mira.receiveSpell(gs, spell)).toBeNull()
   })
 
   it('has nothing to say by default', () => {

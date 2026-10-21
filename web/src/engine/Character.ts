@@ -1,5 +1,6 @@
 import type { GameState } from './GameState'
 import type { Item } from './Item'
+import type { Spell } from './Spell'
 
 export interface CharacterOptions {
   name: string
@@ -45,6 +46,15 @@ export class Character {
       "but they don't seem to understand or respond to that particular phrase." +
       '[/dialogue]'
     )
+  }
+
+  /**
+   * A spell the player casts on this character, offered before the spell's own
+   * `castOnCharacter`. Return the story text to take over the cast, or null
+   * (the default) to let the spell act as usual.
+   */
+  receiveSpell(_gameState: GameState, _spell: Spell): string | null {
+    return null
   }
 
   giveItem(_gameState: GameState, item: Item): string {

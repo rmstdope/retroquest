@@ -1,4 +1,11 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Spell,
+  characterName,
+  dialogue,
+  speech,
+} from '@/engine'
 import {
   AncientAmulet,
   SIGIL_RECOGNISED_DESCRIPTION,
@@ -7,6 +14,7 @@ import { Coins } from '../items/Coins'
 import { NaturesCharm } from '../items/NaturesCharm'
 import {
   FLAG_CEDRIC_RECOGNISED_SIGIL,
+  FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
@@ -26,10 +34,80 @@ export const CEDRIC_DESCRIPTION_AFTER =
   'sword hangs at his hip once more, and he carries himself like a man who ' +
   'has been given back his name.'
 
+/** The grey line that reminds the player how to answer Cedric during the bout. */
+const BOUT_REMINDER =
+  '[dim](Answer him with: say strike, say guard or say turn to Sir Cedric.)[/dim]'
+
+/** The forms Cedric names; the player answers one of them with `say`. */
+type BoutForm = 'strike' | 'guard' | 'turn'
+
+/** One attack of the bout: what meets it, and the words that go with each outcome. */
+interface BoutCall {
+  /** The form that meets this attack. */
+  answer: BoutForm
+  /** Narration of the failed answer. */
+  failure: string
+  /** Cedric's correction after a wrong answer, up to the repeated attack. */
+  correction: string
+  /** The attack as it is repeated: narration, then the cry. */
+  attackAction: string
+  /** The cry that goes with the attack. */
+  cry: string
+  /** Narration of the right answer. */
+  success: string
+}
+
+/** The three attacks, in the order Cedric makes them. */
+const BOUT_CALLS: BoutCall[] = [
+  {
+    answer: 'guard',
+    failure:
+      'You step aside too late, and his blade stops a finger from your neck.',
+    correction: "'Dead, if this were steel. Again.'",
+    attackAction: 'He raises his blade high over his left shoulder.',
+    cry: "'High cut!'",
+    success: 'You bring the training sword up and his blade rings off it.',
+  },
+  {
+    answer: 'turn',
+    failure:
+      'You bring the sword down to block, and his point slides under it ' +
+      'and stops against your ribs.',
+    correction: "'You can't block a lunge with hope. Again.'",
+    attackAction: 'He drives straight at your middle.',
+    cry: "'Lunge!'",
+    success: 'You step aside and his point slides past your ribs.',
+  },
+  {
+    answer: 'strike',
+    failure: 'You hold your ground, and the opening closes before you move.',
+    correction: "'I gave you a door and you stood in it. Again.'",
+    attackAction: 'He swings wide and leaves his chest open.',
+    cry: "'Well?'",
+    success: 'You tap his chest with the flat of the blade.',
+  },
+]
+
+/** How Cedric goes on after a right answer: his acknowledgement and the next attack. */
+const BOUT_ACKNOWLEDGEMENTS: string[] = [
+  "'Guard. Good.'",
+  "'Turn. He taught you that much.'",
+]
+
+/** The next attack as first made, after a right answer (calls 2 and 3). */
+const BOUT_NEXT_ATTACKS: string[] = [
+  ' He steps back, then drives straight at your middle. ',
+  ' He swings wide and, for a heartbeat, leaves his chest open. ',
+]
+
 /** Disgraced knight who quietly recruits allies and awards honor-based quests. */
 export class SirCedric extends Character {
   receivedNaturesCharm = false
   cedricTrustsElior = false
+  /** Whether the Knight's Test bout has begun at least once, so the recognition scene plays only then. */
+  boutStarted = false
+  /** The attack the running bout is on, 1 to 3; 0 when no bout is running. */
+  boutCall = 0
 
   constructor() {
     super({
@@ -70,6 +148,7 @@ export class SirCedric extends Character {
    * recognition of the Wardens' sigil, which changes the amulet's description.
    */
   override talkTo(gameState: GameState): string {
+    if (this.boutRunning()) return this.talkDuringBout()
     const charmDue =
       gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED) &&
       !this.receivedNaturesCharm
@@ -83,6 +162,203 @@ export class SirCedric extends Character {
       )
     }
     return reply
+  }
+
+  /** Whether a bout is running; older saves lack the field, so compare rather than negate. */
+  private boutRunning(): boolean {
+    return this.boutCall > 0
+  }
+
+  /** The current attack as it is repeated: narration then the cry. */
+  private currentAttack(): string {
+    const call = BOUT_CALLS[this.boutCall - 1]
+    return `${call.attackAction} ${speech(call.cry)}`
+  }
+
+  /**
+   * Start the Knight's Test bout when Elior uses the training sword here: the
+   * first time with the recognition of the blade, later (after leaving
+   * mid-bout) with a restart from the first attack.
+   */
+  beginBout(): string {
+    const first = !this.boutStarted
+    this.boutStarted = true
+    this.boutCall = 1
+    if (!first) {
+      return (
+        characterName('Sir Cedric') +
+        ' takes up his practice blade again.\n' +
+        speech("'From the top, then. Strike, guard or turn.'") +
+        ' ' +
+        this.currentAttack() +
+        '\n' +
+        BOUT_REMINDER
+      )
+    }
+    return (
+      'You draw the [item_name]training sword[/item_name]. Before you can ' +
+      'take your stance, ' +
+      characterName('Sir Cedric') +
+      ' catches your wrist and turns the blade to the light.\n' +
+      speech(
+        "'That notch by the guard. I put it there at fourteen, swinging " +
+          "at a post I'd been told to leave alone. Where did you get this?'",
+      ) +
+      '\nYou tell him about the old man by the fire on the mountain path, ' +
+      'and what he asked you to say.\n' +
+      characterName('Sir Cedric') +
+      ' is silent for a long moment. When he speaks, his voice is low.\n' +
+      speech(
+        "'The sergeant never believed in anything he couldn't hit. That " +
+          "he believes in me...'",
+      ) +
+      ' He lets go of your wrist and steps back. ' +
+      speech("'Show me what he taught you, then.'") +
+      '\n\nHe takes a practice blade from the rack and squares off against you.\n' +
+      speech(
+        "'Three forms, the way he drilled them. When I come at you, answer " +
+          "me: strike, guard or turn. Say it as you do it.'",
+      ) +
+      '\n' +
+      BOUT_REMINDER +
+      '\n' +
+      characterName('Sir Cedric') +
+      ' raises his blade high over his left shoulder.\n' +
+      speech("'High cut!'")
+    )
+  }
+
+  /** Abandon a running bout, as when Elior leaves the courtyard; the next use of the sword restarts it. */
+  abandonBout(): void {
+    this.boutCall = 0
+  }
+
+  /** Answer an attack with a form; the wrong ones cost nothing and repeat the attack. */
+  override sayTo(gameState: GameState, words: string): string {
+    if (!this.boutRunning()) return super.sayTo(gameState, words)
+    const said = words
+      .trim()
+      .toLowerCase()
+      .replace(/[.!?]+$/, '')
+    const call = BOUT_CALLS[this.boutCall - 1]
+    if (said !== 'strike' && said !== 'guard' && said !== 'turn') {
+      return (
+        dialogue('Sir Cedric', "'Strike, guard or turn, Elior.'") +
+        ' ' +
+        this.currentAttack()
+      )
+    }
+    if (said !== call.answer) {
+      return (
+        call.failure +
+        '\n' +
+        dialogue('Sir Cedric', call.correction) +
+        ' ' +
+        this.currentAttack() +
+        '\n' +
+        BOUT_REMINDER
+      )
+    }
+    if (this.boutCall < BOUT_CALLS.length) {
+      const index = this.boutCall - 1
+      this.boutCall += 1
+      const next = BOUT_CALLS[this.boutCall - 1]
+      return (
+        call.success +
+        '\n' +
+        dialogue('Sir Cedric', BOUT_ACKNOWLEDGEMENTS[index]) +
+        BOUT_NEXT_ATTACKS[index] +
+        speech(next.cry)
+      )
+    }
+    return this.passTest(
+      gameState,
+      call.success +
+        '\n' +
+        characterName('Sir Cedric') +
+        ' lowers his blade and nods approvingly.\n' +
+        speech(
+          "'Excellent! Your martial training is evident. I can trust " +
+            "someone with such disciplined combat skills.'",
+        ),
+    )
+  }
+
+  /** During the bout Cedric will not talk; he repeats the attack. */
+  private talkDuringBout(): string {
+    return dialogue('Sir Cedric', "'Talk after.'") + ' ' + this.currentAttack()
+  }
+
+  /** Any spell cast on Cedric during the bout ends it: he meets a mage with wary respect. */
+  override receiveSpell(gameState: GameState, spell: Spell): string | null {
+    if (!this.boutRunning()) return null
+    return this.passTest(
+      gameState,
+      'You let the sword drop to your side and answer with ' +
+        `[spell_name]${spell.name}[/spell_name] instead. The air between you ` +
+        'hums, and ' +
+        characterName('Sir Cedric') +
+        "'s practice blade stops short, as if it had struck a wall.\n" +
+        characterName('Sir Cedric') +
+        ' lowers the blade slowly. He is watching your hands now, not your face.\n' +
+        speech(
+          "'A mage.' A long breath. 'The sergeant never trusted what he " +
+            "couldn't hit, and I couldn't hit that. Better it stands beside " +
+            'me than against me. I can trust someone who knows when not to ' +
+            "fight fair.'",
+        ),
+    )
+  }
+
+  /** Complete the Knight's Test: the sword leaves the pack and Cedric goes on to Nyx and the supplies. */
+  private passTest(gameState: GameState, opening: string): string {
+    this.boutCall = 0
+    gameState.setStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS, true)
+    gameState.removeItemFromInventory('training sword')
+    return (
+      '[success]' + opening + '\n\n' + this.missionBriefing() + '[/success]'
+    )
+  }
+
+  /** Cedric's warning about the dark forces, Nyx and the supplies from the Market District. */
+  private missionBriefing(): string {
+    return (
+      'He pauses, his expression growing more serious. ' +
+      speech(
+        "'Since you've proven your combat prowess, I can share more about " +
+          "what lies ahead. The dark forces gathering aren't ordinary " +
+          "threats - they're connected to ancient magical energies that have " +
+          "been dormant for centuries.'",
+      ) +
+      '\n\n' +
+      characterName('Sir Cedric') +
+      ' leans closer, lowering his voice. ' +
+      speech(
+        "'There are legends of a being known as " +
+          characterName('Nyx') +
+          ' - a mystical entity who dwells deep within the enchanted forest ' +
+          'beyond our borders. Nyx is said to possess knowledge of the ' +
+          'oldest magics, including secrets that could help us understand ' +
+          "and combat these gathering shadows.'",
+      ) +
+      '\n\n' +
+      speech("'But the enchanted forest is treacherous,'") +
+      ' he continues. ' +
+      speech(
+        "'You'll need proper supplies before attempting such a journey. " +
+          'Visit the Market District and gather essential equipment: a ' +
+          'forest survival kit, an enhanced lantern for the dark woods, and ' +
+          "quality rope for navigating difficult terrain. Only when you're " +
+          'properly equipped should you venture into those mystical lands to ' +
+          "seek out Nyx.'",
+      ) +
+      '\n\nHe straightens up, his voice returning to its commanding tone. ' +
+      speech(
+        "'Time is of the essence, Elior. The darkness grows stronger each " +
+          "day, and we need Nyx's ancient wisdom to understand what we're " +
+          "truly facing.'",
+      )
+    )
   }
 
   /** The reply to a talk without the one-time hilt line. */

@@ -177,7 +177,12 @@ describe('Act 2 golden path', () => {
     // Should now have "The Gathering Storm" and "The Knight's Test" quests
     expectQuests(state, [MAIN, "The Knight's Test"])
     // Use Training Sword to demonstrate combat skills
-    executeCommands(game, ['use training sword'])
+    executeCommands(game, [
+      'use training sword',
+      'say guard to sir cedric',
+      'say turn to sir cedric',
+      'say strike to sir cedric',
+    ])
     expectItemInInventory(state, 'Training Sword', false)
     // Quest "The Knight's Test" should now be completed and "Supplies for the Journey" activated
     expectQuests(state, [MAIN, 'Supplies for the Journey'])
@@ -1401,7 +1406,12 @@ describe("The sergeant's sword", () => {
     const recognition = executeCommands(saved, ['use training sword'])
     expect(recognition).toContain('That notch by the guard.')
     expect(recognition).toContain('Show me what he taught you, then.')
-    expect(recognition).toContain('perform a series of combat forms')
+    expect(recognition).toContain('squares off against you')
+    executeCommands(saved, [
+      'say guard to sir cedric',
+      'say turn to sir cedric',
+      'say strike to sir cedric',
+    ])
 
     const afterSave = new Game([new Act2()])
     expect(afterSave.loadSaveData(saved.toSaveData())).toContain('loaded')
