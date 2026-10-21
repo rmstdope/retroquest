@@ -3,6 +3,7 @@ import {
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
   FLAG_ACT4_VAULT_DOOR_OPENED,
 } from '../Act4StoryFlags'
+import { AncientAmulet } from './AncientAmulet'
 
 /** The door's look until the Shadow is answered. */
 const DOOR_DARK =
@@ -42,12 +43,17 @@ export class VaultDoor extends Item {
     return event(DOOR_DARK)
   }
 
+  /** The Ancient Amulet used on the door: see `openWith`. */
+  override useWith(gameState: GameState, other: Item): string {
+    if (other instanceof AncientAmulet) return this.openWith(gameState)
+    return super.useWith(gameState, other)
+  }
+
   /**
-   * The Ancient Amulet (an Act 1 item, so recognised by name) opens the door,
-   * but only once the Shadow is answered; any other item falls through.
+   * The Ancient Amulet opens the door, but only once the Shadow is answered;
+   * afterwards the door stays open.
    */
-  override usedBy(gameState: GameState, item: Item): string | null {
-    if (!item.answersTo('ancient amulet')) return null
+  openWith(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_VAULT_DOOR_OPENED)) {
       return '[dim]The door already stands open.[/dim]'
     }

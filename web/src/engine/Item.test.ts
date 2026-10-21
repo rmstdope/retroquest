@@ -86,11 +86,3 @@ describe('Item', () => {
     expect(isNamed(snare, 'fox')).toBe(true)
   })
 })
-
-describe('Item.usedBy', () => {
-  it('answers null by default so the used item answers', () => {
-    const a = new Item({ name: 'a', description: 'a' })
-    const b = new Item({ name: 'b', description: 'b' })
-    expect(a.usedBy(gameState(), b)).toBeNull()
-  })
-})

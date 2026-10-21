@@ -15,6 +15,7 @@ import {
   executeCommands,
   expectDialogueSpeaker,
   expectItemInInventory,
+  expectMarkupWellFormed,
   expectQuestCompleted,
   expectStoryFlag,
 } from '@/testing/gameHelpers'
@@ -24,6 +25,17 @@ const TO_VAULT = ACT4_GOLDEN_PATH.slice(
   0,
   ACT4_GOLDEN_PATH.indexOf('say understanding to sorceress') + 1,
 )
+
+/** The seven beats of the parents' memories, in play order. */
+const SCENE = [
+  'Three young Wardens bent over one workbench: your father, your mother, and a dark-haired man laughing at something Lysa said. Between them lie a crystal, a feather and a scale.',
+  'A dark year. A fever sweeps the land, and Aren and Lysa fall ill with it. Nothing the Wardens know can heal them. Malakar sits by their beds, reading, searching, unable to wait.',
+  'Malakar alone in a room full of clocks, tearing the air open to pull back the days before the fever. Aren and Lysa wake, well again. But the wound he opened does not close, and it begins to feed.',
+  'Your parents before the wound, hands joined, pouring themselves into it until they are only light, bound to the amulet and to the crown of King Alden, so that you would be hidden and the wound held shut.',
+  'Hold it shut, Aren. Hide him. That is enough.',
+  'Last, and smallest: Malakar by a cottage fire in Willowbrook, rocking a baby in his arms and humming. The baby is you.',
+  'The lanterns dim, one by one, until only the amulet glows in your hand.',
+]
 
 const MUTE = "The shadow's lips move, but the vault swallows the sound."
 const WAITS = 'The Shadow waits, as it has waited for years.'
@@ -112,12 +124,19 @@ describe('The Shadow of the Past', () => {
     const text = executeCommands(game, ['use enhanced echo stone'])
     expect(text).toContain('for the first time it has a face.')
     expectDialogueSpeaker(text, 'Shadow of the Past')
+    expect(text).toContain(
+      'You raise the Echo Stone. The voices inside it pour out into the vault, and the orbs drink them in. One by one the cracks close and the scenes grow still and clear. The shadow turns towards you, and for the first time it has a face.',
+    )
     expect(text).toContain('Elior. You came.')
+    expect(text).toContain(
+      "You know the voice before you know the face. It is the voice from your dream, the one that called your name on the stormy night in Willowbrook, and in Nyx's vision, and in the Dragon's hall.",
+    )
     expect(text).toContain('It is the voice from your dream')
     expectStoryFlag(game.state, FLAG_ACT4_MEMORY_ORBS_MENDED, true)
     expect(game.state.currentRoom.description).toContain(
-      'The orbs hang whole and still now',
+      'The orbs hang whole and still now, each holding its scene like a held breath. The Shadow of the Past stands among them, almost solid, its eyes on the sealed door to the east.',
     )
+    expect(game.state.currentRoom.description).not.toContain('wavers')
     expect(game.state.currentRoom.describe(game.state)).toContain(
       '[character_name]Shadow of the Past[/character_name]',
     )
@@ -125,7 +144,7 @@ describe('The Shadow of the Past', () => {
       'The orbs are whole. The stone lies quiet in your hand.',
     )
     expect(executeCommands(game, ['talk to shadow of the past'])).toContain(
-      'I was Malakar, once.',
+      'I was Malakar, once. Not the one who waits in the throne room: the part of him that remembered why he began. When he tore the wound, he tore himself in two, and I am the half he left behind. I held you once, when you were small enough to fit in my two hands. I have called to you ever since.',
     )
     expect(executeCommands(game, ['examine shadow'])).toContain(
       'His face is kind and very tired.',
@@ -141,14 +160,19 @@ describe('The Shadow of the Past', () => {
     const text = executeCommands(game, ["use sorceress's truth with shadow"])
     expect(text).toContain('gives it back.')
     expectDialogueSpeaker(text, 'Shadow of the Past')
-    expect(text).toContain('Never by force.')
+    expect(text).toContain(
+      'You hold out the silver mask. The Shadow turns it over in hands that are almost solid now, and gives it back.',
+    )
+    expect(text).toContain(
+      'She lied for him for years, and still she chose the truth. Then perhaps he can too. But not by force, Elior. Never by force.',
+    )
     expectItemInInventory(game.state, "Sorceress's Truth", true)
     expectStoryFlag(game.state, FLAG_ACT4_SHADOW_MASK_SHOWN, true)
     expect(executeCommands(game, ["use sorceress's truth"])).toContain(
       'The Shadow has seen the mask. It is enough.',
     )
     expect(executeCommands(game, ['talk to shadow'])).toContain(
-      'The Phoenix asked us once',
+      'The Phoenix asked us once what wisdom is when time is short. Aren and Lysa knew. I did not.',
     )
   })
 
@@ -156,10 +180,15 @@ describe('The Shadow of the Past', () => {
     const game = masked()
     expect(executeCommands(game, ['say hello to shadow'])).toContain(WAITS)
     const text = executeCommands(game, ['say patience to shadow'])
-    expect(text).toContain('You can wait a little longer, for me.')
+    expect(text).toContain(
+      '“Patience,” you say. “You could not wait for them. You can wait a little longer, for me.”',
+    )
     expectDialogueSpeaker(text, 'Shadow of the Past')
     expectQuestCompleted(game.state, 'The Shadow of the Past')
     expectStoryFlag(game.state, FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
+    expect(text).toContain(
+      'Patience. The one thing I never had. Then I will wait, a little longer. Take the amulet east, Elior. It will open for you.',
+    )
     expect(executeCommands(game, ['say patience to shadow'])).toContain(
       'The Shadow has its answer. It nods towards the door to the east.',
     )
@@ -181,6 +210,16 @@ describe('The Shadow of the Past', () => {
     expect(executeCommands(game, ['go west'])).toContain('Memory Vault')
   })
 
+  it('accepts the stone on the shadow and a quoted, capitalised word', () => {
+    const game = inVault()
+    expect(
+      executeCommands(game, ['use enhanced echo stone on shadow']),
+    ).toContain('Elior. You came.')
+    executeCommands(game, ["use sorceress's truth"])
+    executeCommands(game, ['say "Patience" to shadow'])
+    expectQuestCompleted(game.state, 'The Shadow of the Past')
+  })
+
   it('keeps every state through a save and load', () => {
     for (const make of [inVault, mended, masked, answered]) {
       const game = make()
@@ -199,6 +238,14 @@ describe('The Shadow of the Past', () => {
     expect(executeCommands(game, ['use ancient amulet on door'])).toContain(
       'rolls aside',
     )
+    reload(game)
+    expect(executeCommands(game, ['go east'])).toContain("Parents' Vault")
+    reload(game)
+    expectStoryFlag(game.state, FLAG_ACT4_PARENTS_LEGACY_STARTED, true)
+    expect(game.state.activatedQuests.map((q) => q.name)).toContain(
+      "The Parent's Legacy",
+    )
+    expect(executeCommands(game, ['go north'])).toContain(NORTH_SHUT)
   })
 })
 
@@ -226,13 +273,14 @@ describe("The Parent's Legacy", () => {
   it('plays the memories once, completes, and opens the way north', () => {
     const game = inParentsVault()
     const text = executeCommands(game, ['examine memories'])
-    expect(text).toContain('a dark-haired man laughing at something Lysa said')
-    expect(text).toContain('The baby is you.')
+    expectMarkupWellFormed(text)
     expectDialogueSpeaker(text, 'Lysa')
-    expect(text).toContain('Hold it shut, Aren. Hide him. That is enough.')
-    expect(text.indexOf('A dark year.')).toBeLessThan(
-      text.indexOf('Hold it shut'),
-    )
+    let at = -1
+    for (const line of SCENE) {
+      const next = text.indexOf(line)
+      expect(next, line).toBeGreaterThan(at)
+      at = next
+    }
     expectQuestCompleted(game.state, "The Parent's Legacy")
     expectStoryFlag(game.state, FLAG_ACT4_PARENTS_LEGACY_COMPLETED, true)
     expect(game.state.currentRoom.description).toContain(

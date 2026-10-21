@@ -59,15 +59,6 @@ export class Item {
     )
   }
 
-  /**
-   * Another item is used on this one. Return the answer to take over the
-   * use, or null (the default) to let the used item's own `useWith` answer.
-   * Lets scenery react to an item of another act without importing it.
-   */
-  usedBy(_gameState: GameState, _item: Item): string | null {
-    return null
-  }
-
   useOnCharacter(_gameState: GameState, target: Character): string {
     return (
       `[failure]You can't use the [item_name]${this.name}[/item_name] on ` +
