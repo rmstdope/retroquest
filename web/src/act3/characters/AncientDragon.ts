@@ -11,6 +11,7 @@ import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_DRAGON_OATH_SPOKEN,
   FLAG_ACT3_DRAGON_VOICE_HEARD,
+  FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
   FLAG_ACT3_SIGILS_MENDED,
@@ -47,6 +48,23 @@ export class AncientDragon extends Character {
       speech('The friend who stayed behind.') +
       '\n\n' +
       event('It says no more.') +
+      '\n\n'
+    )
+  }
+
+  /**
+   * The dragon's message for the healer who waits at the Cavern Mouth,
+   * given once, after the voice and before the closing rumble. Mira passes
+   * it on at her next talk.
+   */
+  private messageForMira(): string {
+    return (
+      event('As you turn to go, the great head lowers.') +
+      '\n\n' +
+      speech(
+        'And the healer who waits at the cavern mouth. Little Mira. Tell ' +
+          'her she has grown old.',
+      ) +
       '\n\n'
     )
   }
@@ -97,6 +115,10 @@ export class AncientDragon extends Character {
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD)) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD, true)
       dialogue = dialogue + this.voiceMoment()
+    }
+    if (!gameState.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN)) {
+      gameState.setStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN, true)
+      dialogue = dialogue + this.messageForMira()
     }
     return (
       dialogue +

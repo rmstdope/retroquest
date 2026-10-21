@@ -709,6 +709,40 @@ describe('Act 3 golden path as declared by the act', () => {
     expect(again).toContain('what will you give back, for what you take?')
   })
 
+  it("plays each of Mira's slips once on the golden path, before the confession", () => {
+    const game = new Game([new Act3()])
+    const out = executeCommands(game, ACT3_GOLDEN_PATH)
+    const count = (needle: string): number => out.split(needle).length - 1
+    expect(count('She always crossed her sevens.')).toBe(1)
+    expect(count('She looks at the feather a long time.')).toBe(1)
+    expect(count('Tell her she has grown old.')).toBe(1)
+    expect(count('does not answer.')).toBe(1)
+    expect(count('You noticed. I saw you notice.')).toBe(1)
+    expect(out.indexOf('crossed her sevens')).toBeLessThan(
+      out.indexOf('a long time'),
+    )
+    expect(out.indexOf('grown old')).toBeLessThan(
+      out.indexOf('I saw you notice'),
+    )
+  })
+
+  it("still relays the dragon's message after a save and load", () => {
+    const game = new Game([new Act3()])
+    executeCommands(
+      game,
+      ACT3_GOLDEN_PATH.slice(
+        0,
+        ACT3_GOLDEN_PATH.indexOf('talk to ancient dragon') + 1,
+      ),
+    )
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+
+    const relay = executeCommands(fresh, ['w', 'w', 'talk to mira'])
+
+    expect(relay).toContain('Mira[/character_name] does not answer.')
+  })
+
   it('ends with the amulet showing both parents, after three glows', () => {
     const game = new Game([new Act3()])
     const out = executeCommands(game, ACT3_GOLDEN_PATH)

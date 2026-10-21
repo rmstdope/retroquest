@@ -86,6 +86,10 @@ When Mira next teleports the party she says the king is weaker. Together with th
         -   Final: Warding Rite — After the confession, Mira combines and consumes the three relics to create the Lifelight Elixir. This completes “The Three Virtues” and prepares the party for the Act IV assault.
     -   Story Impact: Establishes the relics as the counter to Malakar’s ritual; examining the fortress gates completes Act III and begins Act IV.
 
+#### Mira’s Slips
+
+Mira lets slip, once per relic site, that she knew the Wardens; each is recognised only in hindsight. Sunken Ruins: reading the Sea-Sealed Letter with Mira in the room (or, if read elsewhere, her next talk) makes her say “Lysa’s hand. She always crossed her sevens.” and turn to the sea. Mount Ember: on the first talk at the Lower Switchbacks with the Phoenix Feather, she finishes the Phoenix’s line (“…even when the world burns.”). Caverns of Shadow: at the end of the first talk, the Ancient Dragon sends Mira a message (“Little Mira. Tell her she has grown old.”); at the Cavern Mouth she receives it without answering. The confession then opens with “You noticed. I saw you notice.”
+
 #### Mira’s Confession
 
 Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned from Aren, Lysa and Malakar, and when Aren and Lysa became the ward she settled in Willowbrook as its healer to watch over Elior. Grandmother knew, and kept the secret with her. Elior confronts her: “Why didn’t you tell me?” Mira answers that she could not risk the seal, that Malakar’s cloaked agent was searching Willowbrook for the amulet and any word could have reached him, and that she is telling him now because Elior has earned the truth. The amulet, she adds, is the anchor of the ward his parents became. The confession is a fixed dialogue, not a branching choice; Mira performs the rite on her next conversation.
