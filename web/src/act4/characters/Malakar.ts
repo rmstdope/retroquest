@@ -7,6 +7,7 @@ import {
   FLAG_ACT4_THRONE_OFFER_HEARD,
   FLAG_ACT4_THRONE_REFRAIN_SAID,
 } from '../Act4StoryFlags'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { LifelightElixir } from '../items/LifelightElixir'
 import {
   THRONE_CHAMBER_AMULET,
@@ -83,7 +84,7 @@ export class Malakar extends Character {
   override sayTo(gameState: GameState, words: string): string {
     const word = words
       .trim()
-      .replace(/^['"“]|['"”]$/g, '')
+      .replace(/^['"“]|['"”.!]+$/g, '')
       .toLowerCase()
     if (word !== 'refrain' && word !== REFRAIN_LINE) {
       return this.otherWords(gameState)
@@ -132,6 +133,7 @@ export class Malakar extends Character {
     item: Parameters<Character['giveItem']>[1],
   ): string {
     if (item instanceof LifelightElixir) return this.receiveElixir(gameState)
+    if (item instanceof AncientAmulet) return this.otherWords(gameState)
     return super.giveItem(gameState, item)
   }
 

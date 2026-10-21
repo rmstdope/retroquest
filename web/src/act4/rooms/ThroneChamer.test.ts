@@ -57,7 +57,52 @@ function reload(game: Game): void {
   )
 }
 
+function healed(): Game {
+  const game = opened()
+  executeCommands(game, ['use lifelight elixir on malakar'])
+  return game
+}
+
+function shattered(): Game {
+  const game = opened()
+  executeCommands(game, ['use lifelight elixir on prison'])
+  return game
+}
+
 describe('ThroneChamer', () => {
+  it('survives a save at every point, and coming back replays nothing', () => {
+    for (const make of [inThrone, refrained, opened, healed, shattered]) {
+      const game = make()
+      const description = game.state.currentRoom.description
+      const flags = { ...game.state.storyFlags }
+      reload(game)
+      expect(game.state.currentRoom.description).toBe(description)
+      expect(game.state.storyFlags).toEqual(flags)
+      expect(Object.keys(game.state.currentRoom.getExits(game.state))).toEqual([
+        'south',
+      ])
+      executeCommands(game, ['s', 'n'])
+      expect(game.state.currentRoom.description).toBe(description)
+    }
+  })
+
+  it('accepts the full refrain and answers the amulet given to Malakar', () => {
+    const game = inThrone()
+    expect(executeCommands(game, ['give ancient amulet to malakar'])).toContain(
+      'Malakar only waits for your answer.',
+    )
+    const text = executeCommands(game, [
+      'say "Power follows purpose; purpose follows truth." to malakar',
+    ])
+    expect(text).toContain('We carved those words together')
+  })
+
+  it('shows the freed king when examined', () => {
+    expect(executeCommands(shattered(), ['examine king alden'])).toContain(
+      'weak and grey, but breathing',
+    )
+  })
+
   it('has the correct name and a way back south only', () => {
     const room = new ThroneChamer()
     expect(room.name).toBe('Throne Chamber')
