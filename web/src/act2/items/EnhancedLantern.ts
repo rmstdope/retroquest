@@ -1,8 +1,5 @@
 import { Item, type GameState, event } from '@/engine'
-import {
-  FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE,
-  FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE,
-} from '../Act2StoryFlags'
+import { FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE } from '../Act2StoryFlags'
 import { ForestEntrance } from '../rooms/ForestEntrance'
 
 /** Magical lantern that reveals hidden paths and magical auras when used. */
@@ -25,7 +22,7 @@ export class EnhancedLantern extends Item {
       if (!gameState.getStoryFlag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE)) {
         gameState.setStoryFlag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, true)
         this.name = 'enhanced lantern (lit)'
-        let result = event(
+        const result = event(
           "The Enhanced Lantern's crystal core pulses with magical energy, " +
             'casting ethereal blue light that reveals hidden paths through the ' +
             "dense undergrowth. The light seems to resonate with the forest's " +
@@ -34,18 +31,10 @@ export class EnhancedLantern extends Item {
             'forest with confidence.',
         )
 
-        // Check if both protective charm and enhanced lantern have been used
-        if (
-          gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)
-        ) {
-          result +=
-            "\n\n[success]With both the protective charm's spiritual barrier and " +
-            "the enhanced lantern's magical illumination active, the forest's " +
-            'deeper paths are now revealed and safe to travel. You can now ' +
-            'venture deeper into the enchanted woods.[/success]'
-        }
-
-        return result
+        return (
+          result +
+          '\n\n[success]A narrow path east, toward a tranquil glade, is now open.[/success]'
+        )
       }
       return (
         '[dim]The Enhanced Lantern continues to provide magical illumination, ' +

@@ -5,7 +5,11 @@ import {
   event,
   speech,
 } from '@/engine'
-import { FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED } from '../Act2StoryFlags'
+import {
+  FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE,
+  FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
+  FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE,
+} from '../Act2StoryFlags'
 
 /**
  * Playful threshold guardians who offer the Forest Guardian's Riddles quest.
@@ -29,7 +33,38 @@ export class ForestSprites extends Character {
     })
   }
 
-  /** Offer the riddles quest on the first talk, then provide guidance. */
+  /**
+   * The sprites' closing line about the south path, finishing each other's
+   * sentences: a tease before the charm, a remark on the light when only the
+   * lantern is lit, and a step aside once the charm is used.
+   */
+  private pathLine(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)) {
+      return (
+        speech("'The hermit's mark—'") +
+        '\n\n' +
+        speech("'—we see it, we see it—'") +
+        '\n\n' +
+        speech("'—so the grove path is yours. No tricks.'")
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE)) {
+      return (
+        speech("'Pretty light! Pretty light—'") +
+        '\n\n' +
+        speech("'—but it won't walk you past us.'")
+      )
+    }
+    return (
+      speech("'The grove path? Walk it, walk it—'") +
+      '\n\n' +
+      speech("'—round and round—'") +
+      '\n\n' +
+      speech("'—and back you come! Unless you wear the hermit's mark.'")
+    )
+  }
+
+  /** Offer the riddles quest on the first talk; every talk ends with the path line. */
   override talkTo(gameState: GameState): string {
     const name = this.name
     const eventMsg = event('You approach the ' + characterName(name) + '.')
@@ -58,12 +93,7 @@ export class ForestSprites extends Character {
             "among the deepest mysteries of our forest.'",
         ) +
         '\n\n' +
-        speech(
-          "'But beware - the forest tests not just knowledge, but heart and " +
-            'spirit as well. Show respect to all living things, and the ' +
-            'ancient powers will guide your steps. Show arrogance or harm, and ' +
-            "the very trees will lead you astray until you learn better ways.'",
-        )
+        this.pathLine(gameState)
       )
     } else {
       // Subsequent conversations provide guidance
@@ -72,12 +102,7 @@ export class ForestSprites extends Character {
         '\nThe ' +
         characterName(name) +
         ' continue their eternal dance, chiming softly. ' +
-        speech(
-          "'The ancient ones await your wisdom, traveler. Remember - the " +
-            'forest rewards those who listen with their hearts as well as ' +
-            'their minds. The silver tree and the water spirits hold the keys ' +
-            "to deeper understanding.'",
-        )
+        this.pathLine(gameState)
       )
     }
   }
