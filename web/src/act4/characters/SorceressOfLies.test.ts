@@ -262,8 +262,11 @@ describe('The Sorceress of Lies', () => {
     reload(game)
     expectItemInInventory(game.state, "Sorceress's Truth", true)
     expectQuestCompleted(game.state, 'The Sorceress of Lies')
-    expect(executeCommands(game, ['talk to unmasked sorceress'])).toContain(
-      'tell Elena I am sorry',
+    const talk = executeCommands(game, ['talk to unmasked sorceress'])
+    expectDialogueSpeaker(talk, 'Unmasked Sorceress')
+    expect(talk).toContain('tell Elena I am sorry')
+    expect(game.state.currentRoom.describe(game.state)).toContain(
+      'The chamber is still now.',
     )
     expect(executeCommands(game, ['go north'])).toContain('Memory Vault')
   })
