@@ -77,10 +77,15 @@ describe('Gate Captain dialogue markup', () => {
     game.state.addItemToInventory(new EntryPass())
     game.commandParser.parse('give entry pass to gate captain')
 
-    const answer = game.commandParser.parse('talk to gate captain')
+    game.state.addItemToInventory(new EntryPass())
 
-    expect(answer).not.toContain('Welcome to Greendale')
-    expect(game.state.currentRoom.characters).toHaveLength(0)
+    const talk = game.commandParser.parse('talk to gate captain')
+    const give = game.commandParser.parse('give entry pass to gate captain')
+
+    expect(talk).toContain(
+      "There is no character named '[character_name]gate captain",
+    )
+    expect(give).toContain("There is no character named 'Gate captain' here.")
   })
 
   it('still sends off a captain left in the room by an older save', () => {

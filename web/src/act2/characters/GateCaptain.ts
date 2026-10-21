@@ -37,11 +37,7 @@ export class GateCaptain extends Character {
         )
       )
     } else {
-      const characters = gameState.currentRoom.characters
-      const index = characters.indexOf(this)
-      if (index !== -1) {
-        // Remove self from the current room
-        characters.splice(index, 1)
+      if (this.leaveRoom(gameState)) {
         return (
           'The ' +
           characterName('Gate Captain') +
@@ -64,6 +60,17 @@ export class GateCaptain extends Character {
     }
   }
 
+  /** Walk out of the current room; false when he was not in it. */
+  private leaveRoom(gameState: GameState): boolean {
+    const characters = gameState.currentRoom.characters
+    const index = characters.indexOf(this)
+    if (index === -1) {
+      return false
+    }
+    characters.splice(index, 1)
+    return true
+  }
+
   /**
    * Accept the entry pass, point the player to the information post and walk
    * away in the same turn; politely decline any other item.
@@ -80,11 +87,7 @@ export class GateCaptain extends Character {
       }
 
       this.entryPassGiven = true
-      const characters = gameState.currentRoom.characters
-      const index = characters.indexOf(this)
-      if (index !== -1) {
-        characters.splice(index, 1)
-      }
+      this.leaveRoom(gameState)
 
       return (
         'The ' +

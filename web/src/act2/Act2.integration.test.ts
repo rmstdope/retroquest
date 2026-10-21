@@ -93,7 +93,7 @@ describe('Act 2 golden path', () => {
     )
     // He leaves in the same turn, so the room can be searched at once
     expectCharacterInRoom(room(), 'Gate Captain', false)
-    // Search the room to find City Map (should now be possible after captain walked away)
+    // Search the room to find City Map (possible since the captain walked away)
     expectItemInRoom(room(), 'City Map', false)
     executeCommands(game, ['search'])
     expectItemInRoom(room(), 'City Map', true)

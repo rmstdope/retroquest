@@ -8,8 +8,8 @@ import { CityMap } from '../items/CityMap'
  *
  * `getExits()` withholds `north` until the gate captain grants entry; `search()`
  * is blocked until the captain has accepted the entry pass (he leaves in that
- * same turn; an older save may still have him present) and the first permissive search spawns a
- * CityMap (idempotent via `cityMapFound`).
+ * same turn; an older save may still have him present) and the first
+ * permissive search spawns a CityMap (idempotent via `cityMapFound`).
  */
 export class GreendaleGates extends Room {
   gateCaptain: GateCaptain
