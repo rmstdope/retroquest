@@ -5,7 +5,8 @@ import { MirrorMount } from '../items/MirrorMount'
  * Mend spell used to finish repairs on Mirror Mounts in Act 3.
  *
  * Casting this spell on a MirrorMount will call its `mend` method so the
- * mount can finalize and set the quest completion flag.
+ * mount can finalize and set the quest completion flag. Casting it on the
+ * Charred Inscription restores Malakar's struck name (an optional mercy).
  */
 export class MendSpell extends Spell {
   constructor() {
@@ -27,11 +28,29 @@ export class MendSpell extends Spell {
     )
   }
 
-  /** If targetItem is a MirrorMount call its mend method, otherwise fall back. */
+  /**
+   * If targetItem is a MirrorMount call its mend method; if it has a
+   * `receiveSpell` hook (the Charred Inscription) let it answer; otherwise
+   * fall back.
+   */
   override castOnItem(gameState: GameState, targetItem: Item): string {
     if (targetItem instanceof MirrorMount) {
       // Delegate to the mount's mend method which sets story flags when ready
       return targetItem.mend(gameState)
+    }
+
+    // Items that react to mend (the Charred Inscription) have a receiveSpell hook
+    const hook = (
+      targetItem as {
+        receiveSpell?: (
+          gs: GameState,
+          spellId: string,
+          spellName: string,
+        ) => string
+      }
+    ).receiveSpell
+    if (typeof hook === 'function') {
+      return hook.call(targetItem, gameState, this.id, this.name)
     }
 
     // Fallback behavior: mimic the generic mend response

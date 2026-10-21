@@ -4,6 +4,7 @@ import { Act3 } from '../Act3'
 import { Phoenix } from './Phoenix'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
+  FLAG_ACT3_INSCRIPTION_MENDED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_PHOENIX_STORY_TOLD,
 } from '../Act3StoryFlags'
@@ -209,5 +210,64 @@ describe('Phoenix tells who struck the name deeper', () => {
     expect(featherReply).not.toContain(STORY)
     expect(featherReply).toContain(TERRACES)
     expect(game.state.getStoryFlag(FLAG_ACT3_PHOENIX_STORY_TOLD)).toBe(false)
+  })
+})
+
+const MENDED_LINE =
+  'You gave him back his place. He could not do that for himself.'
+const MENDED_TERRACES =
+  'You think of the third name on the terraces, level with the others again.'
+
+describe('Phoenix after the name is mended', () => {
+  it('gives the new line then the refrain on every talk', () => {
+    const { game, phoenix } = earned(true)
+    phoenix.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED, true)
+
+    for (let i = 0; i < 2; i++) {
+      const answer = phoenix.talkTo(game.state)
+      expectMarkupWellFormed(answer)
+      expectDialogueSpeaker(answer, phoenix.name)
+      expect(answer).not.toContain(STORY)
+      expect(answer).toContain(
+        `[dialogue]'${MENDED_LINE}'[/dialogue] [dialogue]'${FAREWELL}'[/dialogue]`,
+      )
+    }
+  })
+
+  it('tells the pending story first, then the new line and refrain', () => {
+    const { game, phoenix } = earned(true)
+    game.state.setStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED, true)
+
+    const first = phoenix.talkTo(game.state)
+
+    expect(first).toContain(STORY)
+    expect(first.indexOf(STORY)).toBeLessThan(first.indexOf(MENDED_LINE))
+    expect(first.indexOf(MENDED_LINE)).toBeLessThan(first.indexOf(FAREWELL))
+    expect(game.state.getStoryFlag(FLAG_ACT3_PHOENIX_STORY_TOLD)).toBe(true)
+    expect(phoenix.talkTo(game.state)).not.toContain(STORY)
+  })
+
+  it('leaves the riddle unchanged before the feather', () => {
+    const game = new Game([new Act3()])
+    const phoenix = new Phoenix()
+    const before = phoenix.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED, true)
+
+    expect(phoenix.talkTo(game.state)).toBe(before)
+  })
+
+  it('ends the feather reply on the level-names line when mended first', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED, true)
+    const phoenix = new Phoenix()
+    phoenix.talkTo(game.state)
+
+    const reply = phoenix.sayTo(game.state, 'patience')
+
+    expect(reply.endsWith(MENDED_TERRACES)).toBe(true)
+    expect(reply).not.toContain('burned deeper')
   })
 })

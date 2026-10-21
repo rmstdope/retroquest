@@ -17,6 +17,8 @@ import {
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
   FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_PHOENIX_STORY_TOLD,
+  FLAG_ACT3_INSCRIPTION_MENDED,
+  VIRTUE_MERCY,
 } from './Act3StoryFlags'
 import {
   executeCommands,
@@ -644,6 +646,35 @@ describe('Act 3 Mount Ember notebook save and load', () => {
     const again = fresh.commandParser.parse('talk to ash scholar')
     expect(again).toContain('Seek the outcrops for what the mountain has shed.')
     expect(fresh.state.getItemCount('Charred Notebook')).toBe(1)
+  })
+})
+
+describe('Act 3 optional mercy: mending the inscription', () => {
+  it('records one mercy, skips nothing on the golden path and survives a save', () => {
+    const game = new Game([new Act3()])
+    const upToInscription = ACT3_GOLDEN_PATH.slice(
+      0,
+      ACT3_GOLDEN_PATH.indexOf('examine inscription') + 1,
+    )
+    executeCommands(game, upToInscription)
+
+    const mended = executeCommands(game, ['cast mend on inscription'])
+    expect(mended).toContain('The deeper cut fills.')
+    expect(mended).toContain('this will be remembered')
+    expect(game.state.virtueCount(VIRTUE_MERCY)).toBe(1)
+
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    expect(fresh.state.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(true)
+    expect(fresh.state.virtueCount(VIRTUE_MERCY)).toBe(1)
+    const again = executeCommands(fresh, ['cast mend on inscription'])
+    expect(again).toContain('There is nothing left to mend.')
+    expect(again).not.toContain('remembered')
+    expect(fresh.state.virtueCount(VIRTUE_MERCY)).toBe(1)
+
+    executeCommands(fresh, ACT3_GOLDEN_PATH.slice(upToInscription.length))
+    executeCommands(fresh, ['examine fortress gates'])
+    expect(new Act3().isCompleted(fresh.state)).toBe(true)
   })
 })
 

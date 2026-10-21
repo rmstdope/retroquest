@@ -553,6 +553,10 @@ Virtue moments (see Optional choices) are recorded as three counters shared acro
 | **Justice**    | Alden is freed; Elior names Malakar's crimes and seals him with the amulet and royal bindings. | **2 truth moments** in the game. Act IV has one, so at least one from Acts I-III.                          |
 | **Sacrifice**  | Alden is freed; Elior gives his magic to close the wound; Malakar lives, powerless, to answer to the king.                            | **2 selfless moments** in the game. Act IV has one, so at least one from Acts I-III.                       |
 
+The Act III mercy at the Charred Inscription (mending Malakar's struck name) only adds to the
+mercy counter. Mercy has no threshold, and Justice and Sacrifice read only truth and selfless, so
+it changes no ending's availability.
+
 Alden is freed in every ending: by the elixir in Justice and Sacrifice, and by the wound closing
 in Redemption. What the choice decides is Malakar's fate and the cost. If neither Justice nor
 Sacrifice is open, `use lifelight elixir on prison` is refused ("the crystal does not answer

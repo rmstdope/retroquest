@@ -443,6 +443,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle. Each r
 | Collapsed Pier, Pier Warden   | Tell the Pier Warden the true state of the ruins instead of the comforting lie       | **truth**    |
 | Stillness Vestibule, Phantoms | Free the wandering phantoms without banishing them (`say rest to wandering phantoms`) before the chant; the chant then still completes the quest | **mercy**    |
 | Dragon’s Hall, the Dragon     | After taking the scale, mend the prison it weakened (`cast bless on sigils`), gaining nothing | **selfless** |
+| Mirror Terraces, Charred Inscription | After reading it, restore Malakar’s deeper-struck name (`cast mend on inscription`). The inscription’s closing line, the Phoenix’s farewell and the feather reply change once it is done | **mercy**    |
 
 The endings read the counters across the whole game, as described in `Act4Design.md`.
 
