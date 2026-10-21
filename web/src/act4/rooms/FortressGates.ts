@@ -61,14 +61,15 @@ export class FortressGates extends Room {
     if (direction !== 'north' && direction !== 'east') return null
     if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
       gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
-      return event(
-        'A shimmering barrier of dark energy throws you back. ' +
-          'It pulses in rhythm with the ward stones.',
+      return (
+        '[failure]A shimmering barrier of dark energy throws you back. ' +
+        'It pulses in rhythm with the ward stones.[/failure]'
       )
     }
-    return event(
-      'Beyond the gates to the north, a great hall lies in darkness, its ' +
-        'doorway heaped with fallen stone. There is no way through — not yet.',
+    return (
+      '[failure]Beyond the gates to the north, a great hall lies in darkness, ' +
+      'its doorway heaped with fallen stone. There is no way through — ' +
+      'not yet.[/failure]'
     )
   }
 
@@ -103,7 +104,6 @@ export class FortressGates extends Room {
   examine(gameState: GameState, target: string): string {
     const targetLower = target.toLowerCase()
     if (targetLower.includes('ward stone') || targetLower.includes('stones')) {
-      gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
       return event(
         'You examine the ward stones closely. Each stone is carved with ' +
           'ancient protective runes that pulse with dark energy. The stones appear ' +

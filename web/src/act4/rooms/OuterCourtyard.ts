@@ -58,9 +58,9 @@ export class OuterCourtyard extends Room {
     direction: string,
   ): string | null {
     if (direction !== 'north') return null
-    return event(
-      'The archway to the north is choked with fallen stone. ' +
-        'There is no way through — not yet.',
+    return (
+      '[failure]The archway to the north is choked with fallen stone. ' +
+      'There is no way through — not yet.[/failure]'
     )
   }
 

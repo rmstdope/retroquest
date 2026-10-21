@@ -240,6 +240,11 @@ describe('Act 4 integration', () => {
       expectCurrentRoom(game.state, 'Fortress Gates')
     })
 
+    it('starts the guardians quest on trying east alone', () => {
+      executeCommands(game, ['go east'])
+      expect(active()).toContain('Shattered Ward Guardians')
+    })
+
     it('starts the guardians quest on examining the ward stones', () => {
       expect(active()).not.toContain('Shattered Ward Guardians')
       executeCommands(game, ['examine ward stones'])
@@ -332,7 +337,7 @@ describe('Act 4 integration', () => {
 
     it('frees the servants, wakes the captain and leaves the gifts to take', () => {
       enterCourtyard()
-      executeCommands(game, ["use guardian's essence with servants"])
+      executeCommands(game, ["use guardian's essence on servants"])
       const talkTrust = executeCommands(game, ['talk to servants'])
       expect(talkTrust).toContain('use your compassion')
       expect(
@@ -389,6 +394,9 @@ describe('Act 4 integration', () => {
       breakThrough()
       reload()
       expectQuestCompleted(game.state, 'Shattered Ward Guardians')
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'The ward stones stand dark and silent now',
+      )
       expect(executeCommands(game, ['go north'])).toContain(HALL_NOT_YET)
       executeCommands(game, ["take guardian's essence", 'east'])
       reload()
