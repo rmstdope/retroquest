@@ -8,9 +8,8 @@ export class GuardiansChain extends Item {
     super({
       name: "Guardian's Chain",
       description:
-        'A silver chain hung with small crystals, lying by the gates as if ' +
-        'someone set it down to rest and never came back for it. It is warmer ' +
-        'than it should be.',
+        'A silver chain, each link inscribed with runes. It bound the ' +
+        'guardians to the stones; now it binds nothing.',
       canBeCarried: true,
     })
   }
@@ -18,8 +17,9 @@ export class GuardiansChain extends Item {
   /** The chain's welcome when it is picked up. */
   override pickedUp(_gameState: GameState): string {
     return event(
-      "You lift the [item_name]Guardian's Chain[/item_name]. The crystals " +
-        'brighten a little, the way a face does when it knows you.',
+      "As you lift the [item_name]Guardian's Chain[/item_name], you feel a " +
+        'surge of protective energy coursing through your body. ' +
+        "The chain's light grows brighter, recognizing you as its new bearer.",
     )
   }
 

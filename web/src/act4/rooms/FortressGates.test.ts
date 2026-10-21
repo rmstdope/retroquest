@@ -1,70 +1,226 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
-import { FLAG_ACT4_BARRIERS_DISABLED } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_BARRIERS_DISABLED,
+  FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
+  FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
+} from '../Act4StoryFlags'
 import { FortressGates } from './FortressGates'
-import { expectMarkupWellFormed } from '@/testing/gameHelpers'
+import {
+  executeCommands,
+  expectItemInInventory,
+  expectQuestCompleted,
+} from '@/testing/gameHelpers'
 
-/** Create an Act IV game for markup checks. */
-function createMarkupGame(): Game {
+/** Create an Act IV game standing at the Fortress Gates. */
+function createGame(): Game {
   const act = new Act4()
   act.musicFile = ''
   return new Game([act])
 }
 
+/** The names of the items lying in the current room. */
+function roomItems(game: Game): string[] {
+  return game.state.currentRoom.items.map((item) => item.name)
+}
+
 describe('FortressGates', () => {
   it('has the correct name', () => {
-    const room = new FortressGates()
-    expect(room.name).toBe('Fortress Gates')
+    expect(new FortressGates().name).toBe('Fortress Gates')
   })
 
-  it('uses known tags in the messages after the guardians are banished', () => {
-    const game = createMarkupGame()
-    const room = new FortressGates()
-    game.state.setStoryFlag(FLAG_ACT4_BARRIERS_DISABLED, true)
-    room.light(game.state)
-
-    const lightAgain = room.light(game.state)
-
-    expect(lightAgain).toContain('nothing left here for your light')
-    expectMarkupWellFormed(lightAgain)
+  it('starts with three stones and no fragment or chain on the ground', () => {
+    const game = createGame()
+    expect(game.state.currentRoom).toBeInstanceOf(FortressGates)
+    const items = roomItems(game)
+    expect(items).toEqual(
+      expect.arrayContaining(['Left Stone', 'Middle Stone', 'Right Stone']),
+    )
+    expect(items).not.toContain('Ward Stone Fragment')
+    expect(items).not.toContain("Guardian's Chain")
+    expect(items).not.toContain("Guardian's Essence")
   })
 
-  it('describes the wall up, the wall down and the guardians gone', () => {
-    const game = createMarkupGame()
-    const room = new FortressGates()
-    const state = game.state
-
-    expect(room.descriptionFor(state)).toContain('thin wall of the same light')
-
-    state.setStoryFlag(FLAG_ACT4_BARRIERS_DISABLED, true)
-    const middle = room.descriptionFor(state)
-    expect(middle).toContain('The violet wall is gone')
-    expect(middle).toContain('still walk their short lines')
-
-    room.light(state)
-    const after = room.descriptionFor(state)
-    expect(after).toContain('The gates stand open.')
-    expect(after).not.toContain('still walk')
-  })
-
-  it('keeps the matching description through a save and load', () => {
-    const game = createMarkupGame()
-    const gates = game.state.currentRoom
-    expect(gates).toBeInstanceOf(FortressGates)
-    game.state.setStoryFlag(FLAG_ACT4_BARRIERS_DISABLED, true)
-
-    const reloaded = new Game([new Act4()])
-    reloaded.loadSaveData(game.toSaveData())
-
-    expect(reloaded.state.currentRoom.descriptionFor(reloaded.state)).toContain(
-      'The violet wall is gone',
+  it('names the three stones in the arrival description', () => {
+    const game = createGame()
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'Three ancient ward stones, left, middle and right, pulse with ' +
+        'malevolent energy',
     )
   })
 
-  it('tells the player nothing to type', () => {
-    const game = createMarkupGame()
-    const room = new FortressGates()
-    expect(room.light(game.state)).not.toContain('You must')
+  describe('before the gates fall', () => {
+    it('names the odd stone when the ward stones are examined', () => {
+      const game = createGame()
+      const answer = executeCommands(game, ['examine ward stones'])
+      expect(answer).toContain('the right stone brightens a breath after')
+      expect(
+        game.state.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED),
+      ).toBe(true)
+    })
+
+    it('examines each stone on its own', () => {
+      const game = createGame()
+      expect(executeCommands(game, ['examine left stone'])).toContain(
+        'The left stone swells and fades with the barrier, exactly on the beat.',
+      )
+      expect(executeCommands(game, ['examine middle ward stone'])).toContain(
+        'The middle stone swells and fades with the barrier',
+      )
+      expect(executeCommands(game, ['examine right stone'])).toContain(
+        'The right stone brightens a breath after the barrier does',
+      )
+    })
+
+    it('refuses light on all the stones and light without a target', () => {
+      const game = createGame()
+      expect(executeCommands(game, ['cast light on ward stones'])).toContain(
+        'They drink it together and keep their count.',
+      )
+      expect(executeCommands(game, ['cast light'])).toContain(
+        'Your light falls on the guardians and slides off them.',
+      )
+      expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(false)
+    })
+
+    it('answers light on a wrong stone and can be repeated', () => {
+      const game = createGame()
+      for (let i = 0; i < 2; i++) {
+        expect(executeCommands(game, ['cast light on left stone'])).toContain(
+          'The left stone drinks your light and pulses brighter, and the ' +
+            'guardians lean closer for a moment. The barrier keeps its rhythm.',
+        )
+      }
+      expect(executeCommands(game, ['cast light on middle stone'])).toContain(
+        'The middle stone drinks your light',
+      )
+      expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(false)
+      expect(
+        game.state.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED),
+      ).toBe(false)
+    })
+
+    it('throws the player back at the barrier', () => {
+      const game = createGame()
+      expect(executeCommands(game, ['go north'])).toContain(
+        'A shimmering barrier of dark energy throws you back. It pulses in ' +
+          'rhythm with the ward stones.',
+      )
+    })
+  })
+
+  describe('light on the right stone', () => {
+    it('solves everything in one cast, without examining first', () => {
+      const game = createGame()
+      const answer = executeCommands(game, ['cast light on right stone'])
+      expect(answer).toContain(
+        'Your light finds the right stone between its beats.',
+      )
+      expect(answer).toContain("Guardian's Essence[/item_name]")
+      expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(true)
+      expect(
+        game.state.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED),
+      ).toBe(true)
+      expectQuestCompleted(game.state, 'Shattered Ward Guardians')
+      expect(roomItems(game)).toEqual(
+        expect.arrayContaining([
+          'Ward Stone Fragment',
+          "Guardian's Chain",
+          "Guardian's Essence",
+        ]),
+      )
+      const room = game.state.currentRoom
+      expect(room.getExits(game.state)).toEqual({
+        north: 'HallOfEchoes',
+        east: 'OuterCourtyard',
+      })
+      expect(room.descriptionFor(game.state)).toContain(
+        'The ward stones stand dark and silent now, and the barrier is gone.',
+      )
+    })
+
+    it('lets the player take the chain and essence, and leave the fragment', () => {
+      const game = createGame()
+      executeCommands(game, ['cast light on right stone'])
+      executeCommands(game, [
+        "take guardian's chain",
+        "take guardian's essence",
+      ])
+      expectItemInInventory(game.state, "Guardian's Chain", true)
+      expectItemInInventory(game.state, "Guardian's Essence", true)
+      expectItemInInventory(game.state, 'Ward Stone Fragment', false)
+      expect(executeCommands(game, ['take ward stone fragment'])).toContain(
+        'You pick up the fragment.',
+      )
+    })
+
+    it('cannot use the fragment on the barrier any more', () => {
+      const game = createGame()
+      executeCommands(game, ['cast light on right stone'])
+      executeCommands(game, ['take ward stone fragment'])
+      const answer = executeCommands(game, [
+        'use ward stone fragment with barriers',
+      ])
+      expect(answer).toContain("can't use")
+    })
+
+    it('keeps the solved gates through a save and load', () => {
+      const game = createGame()
+      executeCommands(game, [
+        'cast light on right stone',
+        "take guardian's chain",
+      ])
+      const reloaded = new Game([new Act4()])
+      reloaded.loadSaveData(game.toSaveData())
+      expect(roomItems(reloaded)).toContain("Guardian's Essence")
+      expect(roomItems(reloaded)).not.toContain("Guardian's Chain")
+      expect(executeCommands(reloaded, ['examine ward stones'])).toContain(
+        'Three ward stones, dark and silent.',
+      )
+    })
+
+    it('keeps the unsolved gates through a save and load', () => {
+      const game = createGame()
+      const reloaded = new Game([new Act4()])
+      reloaded.loadSaveData(game.toSaveData())
+      expect(
+        executeCommands(reloaded, ['cast light on right stone']),
+      ).toContain('Your light finds the right stone')
+    })
+  })
+
+  describe('after the gates fall', () => {
+    function solved(): Game {
+      const game = createGame()
+      executeCommands(game, ['cast light on right stone'])
+      return game
+    }
+
+    it('describes the stones as dark', () => {
+      const game = solved()
+      expect(executeCommands(game, ['examine ward stones'])).toContain(
+        'Three ward stones, dark and silent. The right one is missing a piece ' +
+          'of its face.',
+      )
+      expect(executeCommands(game, ['examine left stone'])).toContain(
+        'The left stone is dark.',
+      )
+      expect(executeCommands(game, ['cast light on middle stone'])).toContain(
+        'The middle stone is dark. Your light shows only its runes.',
+      )
+      expect(executeCommands(game, ['cast light on right stone'])).toContain(
+        'The right stone is dark.',
+      )
+      expect(executeCommands(game, ['cast light on ward stones'])).toContain(
+        'The ward stones are dark.',
+      )
+    })
+
+    it('answers a bare light with the banished line', () => {
+      expect(executeCommands(solved(), ['cast light'])).toContain(
+        'The shadow guardians have already been banished. The way forward is clear.',
+      )
+    })
   })
 })

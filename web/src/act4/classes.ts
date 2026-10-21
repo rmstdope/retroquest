@@ -31,6 +31,7 @@ import { GuardiansEssence } from './items/GuardiansEssence'
 import { LoyaltyToken } from './items/LoyaltyToken'
 import { ServantsPendant } from './items/ServantsPendant'
 import { WardStoneFragment } from './items/WardStoneFragment'
+import { WardStone } from './items/WardStone'
 import { WardStones } from './items/WardStones'
 import { CaptainOfTheGuard } from './characters/CaptainOfTheGuard'
 import { TrappedServants } from './characters/TrappedServants'
@@ -73,6 +74,7 @@ export const ACT4_CLASSES = {
   LoyaltyToken,
   ServantsPendant,
   WardStoneFragment,
+  WardStone,
   WardStones,
   SorceressStaff,
   SorceressTruth,

@@ -10,9 +10,7 @@
  */
 export const ACT4_GOLDEN_PATH: string[] = [
   'examine ward stones',
-  'take ward stone fragment',
-  'use ward stone fragment with barriers',
-  'cast light on ward stones',
+  'cast light on right stone',
   "take guardian's chain",
   "take guardian's essence",
   'e',
