@@ -29,6 +29,9 @@ import { TheAncientLibraryQuest } from './quests/TheAncientLibrary'
 import { TheForestGuardiansRiddles } from './quests/TheForestGuardiansRiddles'
 import { TheHermitsWarningQuest } from './quests/TheHermitsWarning'
 import { WhispersInTheWind } from './quests/WhispersInTheWind'
+import { CASTLE_APPROACH_DESCRIPTION } from './rooms/CastleApproach'
+import { CASTLE_COURTYARD_DESCRIPTION } from './rooms/CastleCourtyard'
+import { GREAT_HALL_DESCRIPTION } from './rooms/GreatHall'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
 import {
   SECRET_DOCUMENTS_DESCRIPTION,
@@ -133,11 +136,15 @@ export class Act2 extends Act {
   }
 
   /**
-   * Bring older saves up to date: the secret documents, the squire's diary and
-   * Cedric's quest log keep the text they were saved with, so give them the
+   * Bring older saves up to date: the secret documents, the squire's diary,
+   * the castle rooms and Cedric's quest log keep the text they were saved with, so give them the
    * current wording. Safe to run on every load.
    */
   override afterLoad(gameState: GameState): void {
+    gameState.allRooms.CastleApproach.description = CASTLE_APPROACH_DESCRIPTION
+    gameState.allRooms.CastleCourtyard.description =
+      CASTLE_COURTYARD_DESCRIPTION
+    gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
     const items: Item[] = [...gameState.inventory]
     for (const room of Object.values(gameState.allRooms))
       items.push(...room.items)

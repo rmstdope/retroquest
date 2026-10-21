@@ -28,7 +28,7 @@ export class LordCommander extends Character {
     const name = characterName(this.name)
     if (gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)) {
       return (
-        `The ${name} nods slowly. ` +
+        `The ${name} nods with satisfaction. ` +
         speech(
           "'Sir Cedric's knighthood is restored and the charge struck from the " +
             'record. As for the name in that letter, I have sent riders to ' +

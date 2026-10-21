@@ -15,6 +15,16 @@ const VISITOR_ENTRY =
   'families who came there. Would not give his name. Said he came on the ' +
   "business of Malakar.'"
 
+/** The Great Hall description; `Act2.afterLoad` restores it in older saves. */
+export const GREAT_HALL_DESCRIPTION =
+  'A magnificent hall with soaring ceilings supported by massive stone columns. ' +
+  'Tapestries depicting legendary battles cover the walls, and the ' +
+  "king's throne stands empty on a raised dais at the far end, a dark cloth " +
+  'laid across its arms. Behind it, the doors to the throne room are barred. ' +
+  'Sunlight streams through tall stained-glass windows, casting colorful ' +
+  'patterns on the stone floor. This is where the lords of Greendale hold ' +
+  'court; for now, the Lord Commander holds it alone.'
+
 /**
  * Great Hall room: political nexus enabling a gated heritage research sequence.
  *
@@ -25,14 +35,7 @@ export class GreatHall extends Room {
   constructor() {
     super({
       name: 'Great Hall',
-      description:
-        'A magnificent hall with soaring ceilings supported by massive stone columns. ' +
-        'Tapestries depicting legendary battles cover the walls, and the ' +
-        "king's throne stands empty on a raised dais at the far end, a dark cloth " +
-        'laid across its arms. Behind it, the doors to the throne room are barred. ' +
-        'Sunlight streams through tall stained-glass windows, casting colorful ' +
-        'patterns on the stone floor. This is where the lords of Greendale hold ' +
-        'court; for now, the Lord Commander holds it alone.',
+      description: GREAT_HALL_DESCRIPTION,
       items: [],
       characters: [new CourtHerald(), new Historians(), new LordCommander()],
       exits: { east: 'CastleCourtyard' },

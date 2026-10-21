@@ -329,9 +329,15 @@ describe("Cedric's Lost Honor journal", () => {
 })
 
 describe('older saves', () => {
-  it('read in the new words after loading', () => {
+  /** Save a game whose Act II text is the old wording, load it into a new game. */
+  function loadOldSave(
+    prepare: (game: Game, quest: CedricksLostHonorQuest) => void,
+  ): Game {
     const game = new Game([new Act2()])
     const state = game.state
+    state.allRooms.CastleApproach.description = 'old Thornfield approach'
+    state.allRooms.CastleCourtyard.description = 'old Thornfield courtyard'
+    state.allRooms.GreatHall.description = 'old Thornfield hall'
     const docs = new SecretDocuments()
     docs.description = 'old Thornfield text'
     state.inventory.push(docs)
@@ -339,13 +345,85 @@ describe('older saves', () => {
     diary.description = 'old Thornfield diary'
     state.allRooms.CastleCourtyard.items.push(diary)
     const quest = state.getQuest("Cedric's Lost Honor")
-    if (!quest) throw new Error('no quest')
+    if (!(quest instanceof CedricksLostHonorQuest)) throw new Error('no quest')
     quest.description = 'old Thornfield journal'
     quest.completion = 'old Thornfield completion'
-
+    prepare(game, quest)
     const loaded = new Game([new Act2()])
     expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
-    const text = JSON.stringify(loaded.toSaveData())
+    return loaded
+  }
+
+  /** Everything the player can read that once spoke of Thornfield Pass. */
+  function readable(game: Game): string {
+    const state = game.state
+    const quest = state.getQuest("Cedric's Lost Honor")
+    if (!quest) throw new Error('no quest')
+    const d = quest.details()
+    return JSON.stringify([
+      state.allRooms.CastleApproach.description,
+      state.allRooms.CastleCourtyard.description,
+      state.allRooms.GreatHall.description,
+      state.inventory.map((i) => i.description),
+      state.allRooms.CastleCourtyard.items.map((i) => i.description),
+      quest.description,
+      quest.completion,
+      d,
+    ])
+  }
+
+  it('read in the new words when the quest has not started', () => {
+    const loaded = loadOldSave(() => {})
+    const text = readable(loaded)
     expect(text).not.toContain('Thornfield')
+    expect(text).toContain('Fewer guards than the posts were built for')
+    expect(text).toContain('A sealed packet of papers')
+    expect(text).toContain('the night the king vanished')
+  })
+
+  it('rebuild an active journal, earlier entries included', () => {
+    const loaded = loadOldSave((game, quest) => {
+      const state = game.state
+      state.nonActivatedQuests.splice(
+        state.nonActivatedQuests.indexOf(quest),
+        1,
+      )
+      state.activatedQuests.push(quest)
+      state.setStoryFlag(FLAG_READ_SQUIRES_DIARY, true)
+      state.setStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS, true)
+      quest.earlierStages = ['old Thornfield one', 'old Thornfield two']
+      quest.latestStage = 'old Thornfield three'
+    })
+    const text = readable(loaded)
+    expect(text).not.toContain('Thornfield')
+    expect(text).toContain('Present them to the Lord Commander')
+    expect(text).toContain('fled to Heavensforth')
+  })
+
+  it('read the new completion text for a completed quest', () => {
+    const loaded = loadOldSave((game, quest) => {
+      const state = game.state
+      state.nonActivatedQuests.splice(
+        state.nonActivatedQuests.indexOf(quest),
+        1,
+      )
+      state.completedQuests.push(quest)
+      quest.completed = true
+      state.setStoryFlag(FLAG_READ_SQUIRES_DIARY, true)
+      quest.earlierStages = ['old Thornfield one']
+      quest.latestStage = 'old Thornfield two'
+    })
+    const text = readable(loaded)
+    expect(text).not.toContain('Thornfield')
+    expect(text).toContain("written in Malakar's name.")
+  })
+
+  it('does not report news for a quest that has not started', () => {
+    const loaded = loadOldSave((game) => {
+      game.state.setStoryFlag(FLAG_READ_SQUIRES_DIARY, true)
+    })
+    const quest = loaded.state.getQuest("Cedric's Lost Honor")
+    if (!(quest instanceof CedricksLostHonorQuest)) throw new Error('no quest')
+    expect(quest.squiresInfoAdded).toBe(false)
   })
 })
