@@ -129,6 +129,10 @@ describe('Mira handing over the Ancient Amulet', () => {
     expect(response).toContain('Then, more quietly:')
     expect(response).toContain(hint)
     const gift = response.indexOf('added to inventory!')
+    expect(gift).toBeGreaterThan(-1)
+    expect(response.indexOf('Then, more quietly:')).toBeLessThan(
+      response.indexOf(hint),
+    )
     expect(response.indexOf('Then, more quietly:')).toBeGreaterThan(gift)
     expect(response.indexOf(hint)).toBeLessThan(
       response.indexOf('She holds your hand a moment longer'),
@@ -143,6 +147,13 @@ describe('Mira handing over the Ancient Amulet', () => {
     const game = gameInMirasHut()
     const response = executeCommands(game, ['talk to mira'])
     expect(response).not.toContain('your parents')
+
+    const flower = new RareFlower()
+    game.state.addItemToInventory(flower)
+    const given = executeCommands(game, ['give rare flower to mira'])
+    expect(given).not.toContain('your parents')
+    const notReady = executeCommands(game, ['talk to mira'])
+    expect(notReady).not.toContain('your parents')
   })
 
   it('does not repeat the parting words once the amulet is his', () => {
