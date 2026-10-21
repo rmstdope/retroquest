@@ -205,6 +205,8 @@ describe('Fumarole Passages — the breath of the mountain', () => {
       'talk to phoenix guardian',
       'examine phoenix guardian',
       'search',
+      'take heat-ward mix',
+      'use heat-ward mix',
     ])
     expect(seen(game)).toContain(breathLine(PAUSE))
   })
@@ -269,5 +271,23 @@ describe('Fumarole Passages — the breath of the mountain', () => {
     loaded.loadSaveData(game.toSaveData())
     expect(seen(loaded)).toContain(breathLine(PAUSE))
     expect(executeCommands(loaded, ['rest'])).toContain(breathLine(IN))
+  })
+
+  it('keeps the out-breath through a save and load', () => {
+    const game = wardedGame()
+    const loaded = new Game([new Act3()])
+    loaded.loadSaveData(game.toSaveData())
+    expect(seen(loaded)).toContain(breathLine(OUT))
+  })
+
+  it('reads a save made before the breath existed as the out-breath', () => {
+    const game = wardedGame()
+    const room = game.state.currentRoom as FumarolePassages
+    Reflect.deleteProperty(room, 'breath')
+    expect(seen(game)).toContain(breathLine(OUT))
+    expect(executeCommands(game, ['south'])).toContain(
+      'just as the mountain breathes out',
+    )
+    expect(seen(game)).toContain(breathLine(PAUSE))
   })
 })

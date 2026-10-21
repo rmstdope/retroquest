@@ -139,6 +139,11 @@ export class FumarolePassages extends Room {
     )
   }
 
+  /** The current breath; a save made before the breath existed has none, which reads as the out-breath. */
+  private currentBreath(): VentBreath {
+    return this.breath ?? 'out'
+  }
+
   /** Whether the ward is set (a quest completed under the old rules counts). */
   private isWarded(gameState: GameState): boolean {
     return (
@@ -150,14 +155,15 @@ export class FumarolePassages extends Room {
   /** The breath line for the current breath, or the wild gusting before the ward. */
   private breathLine(gameState: GameState): string {
     const text = this.isWarded(gameState)
-      ? BREATH_LINES[this.breath]
+      ? BREATH_LINES[this.currentBreath()]
       : WILD_BREATH
     return `[breath]${text}[/breath]`
   }
 
   /** Move the breath one step along out → pause → in → out. */
   private advanceBreath(): void {
-    const next = (BREATH_ORDER.indexOf(this.breath) + 1) % BREATH_ORDER.length
+    const next =
+      (BREATH_ORDER.indexOf(this.currentBreath()) + 1) % BREATH_ORDER.length
     this.breath = BREATH_ORDER[next]
   }
 
@@ -189,9 +195,9 @@ export class FumarolePassages extends Room {
    */
   override walk(gameState: GameState, direction: string): string | null {
     if (direction !== 'south' || !this.isWarded(gameState)) return null
-    if (this.breath === 'in') return null
+    if (this.currentBreath() === 'in') return null
     const text =
-      this.breath === 'out' ? DRIVEN_BACK_ON_OUT : DRIVEN_BACK_ON_PAUSE
+      this.currentBreath() === 'out' ? DRIVEN_BACK_ON_OUT : DRIVEN_BACK_ON_PAUSE
     this.advanceBreath()
     return event(text)
   }
