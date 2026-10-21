@@ -83,6 +83,7 @@ describe('before the ruling', () => {
 
   it('Cedric greets as plain Cedric and wears the disgrace', () => {
     const game = newGame()
+    game.state.inventory.length = 0
     const cedric = find(game, SirCedric)
     expect(cedric.description).toBe(CEDRIC_BEFORE)
     const text = cedric.talkTo(game.state)
@@ -153,7 +154,10 @@ describe('after the ruling', () => {
       expect(squires).toContain(
         'He said it was you who found the papers. Thank you.',
       )
+      expect(squires).toContain('Did you see? They gave')
       expect(squires).not.toContain('diary')
+      expect(crier).not.toContain('as was.')
+      expect(captain).not.toContain('no rank')
       const master = new TrainingMaster().talkTo(game.state)
       expect(master).toContain(
         "You've seen it, then? His sword at his hip again.",
@@ -162,9 +166,30 @@ describe('after the ruling', () => {
     }
   })
 
+  it('opens the charm scene with the hilt line when the amulet is recognised on the way', () => {
+    const game = newGame()
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    rule(game)
+    const text = find(game, SirCedric).talkTo(game.state)
+    expect(text.startsWith(HILT)).toBe(true)
+    expect(text).toContain('Malakar')
+  })
+
+  it('does not show the hilt line in a talk without the charm scene', () => {
+    const game = newGame()
+    game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    rule(game)
+    const cedric = find(game, SirCedric)
+    cedric.receivedNaturesCharm = true // a save made after the charm was given
+    expect(cedric.talkTo(game.state)).not.toContain(HILT)
+  })
+
   it('a talk in the game flow shows the hilt line through the parser', () => {
     const game = newGame()
     game.state.currentRoom = game.state.allRooms.CastleCourtyard
+    game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
     rule(game)
     expect(executeCommands(game, ['talk to sir cedric'])).toContain(HILT)
   })

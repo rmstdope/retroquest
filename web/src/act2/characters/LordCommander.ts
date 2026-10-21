@@ -77,10 +77,7 @@ export class LordCommander extends Character {
 
       // The player has examined the papers and understands them
       gameState.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
-      for (const room of Object.values(gameState.allRooms))
-        for (const character of room.characters)
-          if (character instanceof SirCedric)
-            character.refreshDescription(gameState)
+      SirCedric.refreshAll(gameState)
 
       // Remove the documents from inventory
       const index = gameState.inventory.indexOf(item)

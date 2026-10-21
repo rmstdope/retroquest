@@ -30,14 +30,20 @@ export const CEDRIC_DESCRIPTION_AFTER =
 export class SirCedric extends Character {
   receivedNaturesCharm = false
   cedricTrustsElior = false
-  /** Whether the hand on the sword hilt has been shown after the ruling. */
-  swordNoticed = false
 
   constructor() {
     super({
       name: 'sir cedric',
       description: CEDRIC_DESCRIPTION_BEFORE,
     })
+  }
+
+  /** Give every Sir Cedric in the game the description that matches the state of his name. */
+  static refreshAll(gameState: GameState): void {
+    for (const room of Object.values(gameState.allRooms))
+      for (const character of room.characters)
+        if (character instanceof SirCedric)
+          character.refreshDescription(gameState)
   }
 
   /** Set the description that matches whether his name has been cleared; safe to repeat. */
@@ -64,13 +70,12 @@ export class SirCedric extends Character {
    * recognition of the Wardens' sigil, which changes the amulet's description.
    */
   override talkTo(gameState: GameState): string {
-    const reply = this.replyToTalk(gameState)
-    if (
+    const charmDue =
       gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED) &&
-      !this.swordNoticed
-    ) {
-      // The first talk after the ruling opens with the sword at his hip
-      this.swordNoticed = true
+      !this.receivedNaturesCharm
+    const reply = this.replyToTalk(gameState)
+    if (charmDue && this.receivedNaturesCharm) {
+      // The talk that opens the charm scene after the ruling starts with the sword at his hip
       return (
         "Sir Cedric's sword hangs at his hip again. He rests a hand on its " +
         'hilt as you approach, as if to be sure it is real.\n\n' +

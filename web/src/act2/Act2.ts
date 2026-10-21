@@ -155,10 +155,7 @@ export class Act2 extends Act {
     gameState.allRooms.CastleCourtyard.description =
       CASTLE_COURTYARD_DESCRIPTION
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
-    for (const room of Object.values(gameState.allRooms))
-      for (const character of room.characters)
-        if (character instanceof SirCedric)
-          character.refreshDescription(gameState)
+    SirCedric.refreshAll(gameState)
     const items: Item[] = [...gameState.inventory]
     for (const room of Object.values(gameState.allRooms))
       items.push(...room.items)
