@@ -1,0 +1,21 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Ravine at the entrance</title><style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces&family=JetBrains+Mono&family=Source+Serif+4:ital@0;1&display=swap');
+:root{--bg:#10151a;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--char:#7fb0e6;--item:#8fcf7a;--at:#ffb836;--fail:#e8896b;--ok:#9fd69a}
+*{box-sizing:border-box}body{margin:0;background:#0b0f12;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:24px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:400;margin:0 0 4px}.lead{color:var(--muted);max-width:860px;margin:0 0 24px;line-height:1.5}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}.step{display:flex;flex-direction:column;gap:8px}
+.cap{font-size:13px;color:var(--at);font-weight:600;letter-spacing:.04em}.note{font-size:12px;color:var(--muted);max-width:440px;line-height:1.45}
+.frame{width:460px;max-width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--bg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.cmd{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.t{font-family:'Source Serif 4',Georgia,serif;color:var(--prose);margin:0;line-height:1.5}
+.dq{margin:0;border-left:2px solid var(--char);padding-left:12px}.sp{font-size:12px;color:var(--char);font-weight:600;margin-bottom:2px}
+.dq p{font-family:'Source Serif 4',Georgia,serif;font-style:italic;margin:0;line-height:1.5;color:var(--prose)}
+.dim{opacity:.6}.new{color:var(--at);font-weight:700;font-style:normal;font-family:'DM Sans'}.c{color:var(--char)}.i{color:var(--item)}
+.ev{font-size:13px;color:var(--muted)}.ev:before{content:'◆ ';color:var(--accent)}.gone{text-decoration:line-through;opacity:.5}
+.exits{font-size:12px;color:var(--muted);border-top:1px solid var(--line2);padding-top:8px}.exits b{color:var(--accent);font-weight:600}
+</style>
+<h2 style="font-family:Fraunces;font-weight:400">Q2 · Casting either spell again here</h2><div class=row>
+<div class=step><div class=cap>Option X — a short "nothing new" line for both (recommended)</div><div class=frame><div class=cmd>› cast nature sense</div><p class='t dim'><span class=new>NEW</span> · You cast nature sense and feel again the ravine to the north-east, the ground falling sharply away. Nothing has changed.</p><div class=cmd>› cast forest speech</div><p class='t dim'>(as today) You cast forest speech, but the woodland creatures have no new information about the ravine - you've already located it.</p></div><p class=note>Both spells answer the same way once there is nothing left to learn.</p></div>
+<div class=step><div class=cap>Option Y — nature sense goes back to its general forest text</div><div class=frame><div class=cmd>› cast nature sense</div><p class='t dim'>(as today) …You sense several hidden paths that wind through the trees, offering safer routes through the wilderness.</p></div><p class=note>Less work, but never mentions the ravine it just found.</p></div></div>
+<h2 style="font-family:Fraunces;font-weight:400">Q3 · The quest log</h2><div class=row>
+<div class=step><div class=cap>Option N — neutral wording, mentions both spells (recommended)</div><div class=frame><div class=cmd>quest log · The Merchant's Lost Caravan</div><p class=t>Search the Enchanted Forest for the missing caravan. <span class=new>NEW</span> · Try sensing the land, or speaking with the woodland creatures, at the forest's edge.</p><div class=cmd>when completed</div><p class=t>You successfully located the missing caravan trapped in a deep ravine within the Enchanted Forest. <span class=new>NEW</span> · Using your forest magic, you discovered their location, then employed quality rope …</p></div></div>
+<div class=step><div class=cap>Option K — keep today's words</div><div class=frame><div class=cmd>quest log</div><p class='t dim'>…Try using forest magic to communicate with woodland creatures for information.</p><div class=cmd>when completed</div><p class='t dim'>…Using forest speech magic to communicate with woodland creatures, you discovered their location…</p></div><p class=note>Wrong for a player who only used nature sense.</p></div></div>
