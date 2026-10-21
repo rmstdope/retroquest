@@ -37,6 +37,11 @@ import {
   SECRET_DOCUMENTS_DESCRIPTION,
   SecretDocuments,
 } from './items/SecretDocuments'
+import { SirCedric } from './characters/SirCedric'
+import {
+  CITY_NOTICE_BOARD_DESCRIPTION,
+  CityNoticeBoard,
+} from './items/CityNoticeBoard'
 import { SQUIRES_DIARY_DESCRIPTION, SquiresDiary } from './items/SquiresDiary'
 import { FLAG_GATHERING_STORM_COMPLETED } from './Act2StoryFlags'
 import { ACT2_CLASSES } from './classes'
@@ -150,6 +155,7 @@ export class Act2 extends Act {
     gameState.allRooms.CastleCourtyard.description =
       CASTLE_COURTYARD_DESCRIPTION
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
+    SirCedric.refreshAll(gameState)
     const items: Item[] = [...gameState.inventory]
     for (const room of Object.values(gameState.allRooms))
       items.push(...room.items)
@@ -158,6 +164,8 @@ export class Act2 extends Act {
         item.description = SECRET_DOCUMENTS_DESCRIPTION
       if (item instanceof SquiresDiary)
         item.description = SQUIRES_DIARY_DESCRIPTION
+      if (item instanceof CityNoticeBoard)
+        item.description = CITY_NOTICE_BOARD_DESCRIPTION
     }
     for (const quest of [
       ...gameState.nonActivatedQuests,

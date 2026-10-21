@@ -5,6 +5,7 @@ import {
   characterName,
   speech,
 } from '@/engine'
+import { SirCedric } from './SirCedric'
 import { SecretDocuments } from '../items/SecretDocuments'
 import {
   FLAG_CEDRIKS_HONOR_COMPLETED,
@@ -59,7 +60,8 @@ export class LordCommander extends Character {
     )
   }
 
-  /** Handle giving items to the Lord Commander, who accepts only the secret documents. */
+  /** Handle giving items to the Lord Commander, who accepts only the secret documents;
+   * clearing Cedric's name also returns his sword, which changes his description. */
   override giveItem(gameState: GameState, item: Item): string {
     const name = characterName(this.name)
     if (item instanceof SecretDocuments) {
@@ -75,6 +77,7 @@ export class LordCommander extends Character {
 
       // The player has examined the papers and understands them
       gameState.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+      SirCedric.refreshAll(gameState)
 
       // Remove the documents from inventory
       const index = gameState.inventory.indexOf(item)
@@ -93,6 +96,13 @@ export class LordCommander extends Character {
             'it, and on that night of all nights. Sir Cedric did not leave his ' +
             'post. He was chosen to carry the blame. I hereby restore his ' +
             "knighthood and strike the charge from the record.'",
+        ) +
+        ' He beckons a page and speaks a few quiet words. The boy runs off ' +
+        'toward the armoury, and returns carrying a long bundle wrapped in ' +
+        'oilcloth. ' +
+        speech(
+          "'Take this to the training yard. A knight should not stand among " +
+            "his squires with an empty scabbard.'",
         ) +
         '[/success]'
       )
