@@ -191,8 +191,8 @@ export class PierWarden extends Character {
         ' nods slowly. ' +
         speech(
           "'You've done right by the pillars. There's a fused locker " +
-            'down in the vaults; I tried a key once but it stuck. Magic will ' +
-            "loosen it, or so the old songs say.'",
+            "down in the vaults; I tried a key once but it stuck. Key's no " +
+            "good alone, and magic's no good alone. It wants both.'",
         )
       )
     }

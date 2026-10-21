@@ -33,6 +33,19 @@ describe('PierWarden dialogue branches', () => {
     expect(out.includes('stuck') || out.includes('magic')).toBe(true)
   })
 
+  it('says key and magic are each useless alone, without the order', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+
+    const out = new PierWarden().talkTo(game.state)
+
+    expect(out).toContain(
+      "I tried a key once but it stuck. Key's no good alone, and magic's " +
+        "no good alone. It wants both.'",
+    )
+    expect(out).not.toContain('old songs')
+  })
+
   it('praises the lit way when both tasks are done', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)

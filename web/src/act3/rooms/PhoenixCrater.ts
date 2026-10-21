@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { GameState } from '@/engine'
 import { Phoenix } from '../characters/Phoenix'
 
@@ -17,6 +17,12 @@ const PHOENIX_DESCRIPTION =
   'burning arc, embedding itself in the rim where it cools to a shard that still hums ' +
   'faintly.'
 
+const DROWSY_DESCRIPTION =
+  ' The warmth is drowsy here, as if the bowl would rather you sat and rested a ' +
+  'while.'
+
+const SILENT_CRATER = 'The crater is silent. Nothing comes to those who call.'
+
 /** The Phoenix Crater: a luminous bowl of vitrified rock. */
 export class PhoenixCrater extends Room {
   constructor() {
@@ -29,9 +35,25 @@ export class PhoenixCrater extends Room {
     })
   }
 
+  /** Whether the Phoenix has appeared. */
+  private phoenixPresent(): boolean {
+    return this.characters.some((c) => c.name.toLowerCase() === 'phoenix')
+  }
+
+  /** Until the Phoenix appears, the description ends with an invitation to rest. */
+  override descriptionFor(gameState: GameState): string {
+    const base = super.descriptionFor(gameState)
+    return this.phoenixPresent() ? base : base + DROWSY_DESCRIPTION
+  }
+
+  /** Until the Phoenix appears, calling out gets a quiet in-world answer. */
+  override talkToNobody(_gameState: GameState, _target: string): string | null {
+    return this.phoenixPresent() ? null : event(SILENT_CRATER)
+  }
+
   /** Reveal the Phoenix when the player rests. */
   override rest(_gameState: GameState): string {
-    if (!this.characters.some((c) => c.name.toLowerCase() === 'phoenix')) {
+    if (!this.phoenixPresent()) {
       this.addCharacter(new Phoenix())
       this.description = BASE_DESCRIPTION + PHOENIX_DESCRIPTION
       return (
