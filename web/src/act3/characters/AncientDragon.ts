@@ -10,6 +10,7 @@ import { DragonsScale } from '../items/DragonsScale'
 import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_DRAGON_OATH_SPOKEN,
+  FLAG_ACT3_DRAGON_VOICE_HEARD,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
 } from '../Act3StoryFlags'
 
@@ -27,8 +28,32 @@ export class AncientDragon extends Character {
   }
 
   /**
-   * Provide the Dragon's Memory for the storytelling quest; the first talk
-   * ends the memory with the amulet's third glow.
+   * The dream voice and the Dragon naming it: narration with the whispered
+   * words in italics (no speaker label), the Dragon's one line and the
+   * closing event. Heard once; the caller guards it with the voice flag.
+   */
+  private voiceMoment(): string {
+    return (
+      "Then, beneath the dragon's breathing, another voice: the whisper " +
+      'from your dream, at the very edge of hearing. ' +
+      '[italic]“Elior… little one. Help me. I cannot hold it shut ' +
+      'alone.”[/italic] You know it the way you know a song someone sang ' +
+      'to you before you had words for it. Then it is gone.\n\n' +
+      'You look up at the ' +
+      characterName(this.name) +
+      '. Its golden eyes are half closed.\n\n' +
+      speech('The friend who stayed behind.') +
+      '\n\n' +
+      event('It says no more.') +
+      '\n\n'
+    )
+  }
+
+  /**
+   * Provide the Dragon's Memory for the storytelling quest. The first talk
+   * ends the memory with the refrain, the amulet's third glow, the dream
+   * voice and the Dragon naming it; a save that heard the memory before the
+   * voice existed hears the voice and the naming once on its next talk.
    */
   override talkTo(gameState: GameState): string {
     const name = this.name
@@ -59,8 +84,17 @@ export class AncientDragon extends Character {
           'They are not gone as the dead are gone, child. They are ' +
             'warded away, not dead.',
         ) +
+        '\n\n' +
+        speech(
+          'They had a saying, the three of them, carved wherever they ' +
+            'worked: Power follows purpose; purpose follows truth.',
+        ) +
         AncientAmulet.glowInBag(gameState, 3) +
         '\n\n'
+    }
+    if (!gameState.getStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD)) {
+      gameState.setStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD, true)
+      dialogue = dialogue + this.voiceMoment()
     }
     dialogue =
       dialogue +
