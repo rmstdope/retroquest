@@ -24,8 +24,9 @@ const REDEEMED_NAME = 'Redeemed Knight'
 const CONFESSION = [
   'I was the stranger in Willowbrook. Malakar sent me for an amulet, and for ' +
     'the child it hid. It was my token that fouled your well.',
-  'The night King Alden was taken, I paid the watch to look away, and I put ' +
-    'my seal to the lie that shamed Sir Cedric.',
+  'The night King Alden was taken, I paid the watch to look away. The ' +
+    'captain of the watch was a good man. I made sure he was asleep. And I ' +
+    'put my seal to the lie that shamed Sir Cedric.',
   'And when I saw what my master was doing to the king, I stopped believing ' +
     'he could be saved. That is all despair is. You have given me something ' +
     'to believe in again.',
