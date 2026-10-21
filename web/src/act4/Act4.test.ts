@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from './Act4'
+import { Banners } from './items/Banners'
+import { CrystalWhispers } from './items/CrystalWhispers'
 import { LoyaltyToken } from './items/LoyaltyToken'
 import {
   FLAG_ACT4_TOWER_STAIR_OPEN,
@@ -121,5 +123,25 @@ describe('Act4', () => {
       expect(tower.getCharacterByName('whispers')).toBeNull()
       expect(tower.getExits(loaded.state)).toHaveProperty('up')
     })
+  })
+
+  it('gives an older save the hall banners and the chamber crystals on load', () => {
+    const game = new Game([new Act4()])
+    const hall = game.state.allRooms.HallOfEchoes
+    const chamber = game.state.allRooms.ChamberOfWhispers
+    hall.removeItem('banners')
+    chamber.removeItem('whispers')
+    expect(game.loadSaveData(game.toSaveData())).toContain(
+      'Game loaded successfully.',
+    )
+    const loaded = game.state.allRooms
+    expect(
+      loaded.HallOfEchoes.items.filter((i) => i instanceof Banners),
+    ).toHaveLength(1)
+    expect(
+      loaded.ChamberOfWhispers.items.filter(
+        (i) => i instanceof CrystalWhispers,
+      ),
+    ).toHaveLength(1)
   })
 })

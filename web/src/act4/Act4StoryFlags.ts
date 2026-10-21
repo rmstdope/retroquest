@@ -35,6 +35,14 @@ export const FLAG_ACT4_KNIGHTS_REDEMPTION_ACQUIRED =
 export const FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED =
   'act4_enhanced_echo_stone_acquired'
 export const FLAG_ACT4_KNIGHT_SEEN_THROUGH = 'act4_knight_seen_through'
+/** Truth Sight has been cast on the hall's banners. */
+export const FLAG_ACT4_BANNERS_SEEN = 'act4_banners_seen'
+/** Truth Sight has been cast on the Echo Stone. */
+export const FLAG_ACT4_ECHO_STONE_HEARD = 'act4_echo_stone_heard'
+/** Heart's Truth has been cast on the Sorceress's staff. */
+export const FLAG_ACT4_STAFF_HEARD = 'act4_staff_heard'
+/** Heart's Truth has been cast on the chamber's whispering crystals. */
+export const FLAG_ACT4_WHISPERS_HEARD = 'act4_whispers_heard'
 export const FLAG_ACT4_GUARDIANS_CHAIN_RAISED = 'act4_guardians_chain_raised'
 /** Elior has given the Guardian's Chain to the freed captain, who has left. */
 export const FLAG_ACT4_CHAIN_GIVEN = 'act4_chain_given'

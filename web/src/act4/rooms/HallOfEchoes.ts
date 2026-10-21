@@ -6,6 +6,7 @@ import {
 } from '../Act4StoryFlags'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { SirCedricInTheHall } from '../characters/SirCedricInTheHall'
+import { Banners } from '../items/Banners'
 import { Echoes } from '../items/Echoes'
 import { EchoStone } from '../items/EchoStone'
 import { HALL_CEDRIC_AT_DOOR, HALL_CEDRIC_ON_STAIR } from './hallDescriptions'
@@ -23,10 +24,11 @@ export class HallOfEchoes extends Room {
       description:
         'A long hall of old banners, so high the ceiling is lost. Everything ' +
         'that was ever said here is still being said, very quietly: orders, ' +
-        'jokes, names, someone counting. At the far end, before the stair, a ' +
+        'jokes, names, someone counting. Tattered banners hang high along the ' +
+        'walls, grimed past reading. At the far end, before the stair, a ' +
         'knight in tarnished armour stands without moving, the way a man ' +
         'stands at a grave.',
-      items: [new Echoes(), new EchoStone()],
+      items: [new Echoes(), new EchoStone(), new Banners()],
       characters: [new KnightOfDespair(), new SirCedricInTheHall()],
       exits: { south: 'FortressGates', east: 'TowerOfShadows' },
     })

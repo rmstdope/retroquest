@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { ShadowOfThePast } from '../characters/ShadowOfThePast'
+import { SorceressOfLies } from '../characters/SorceressOfLies'
+import { FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED } from '../Act4StoryFlags'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import { RedemptionsLight } from './RedemptionsLight'
@@ -19,6 +22,8 @@ function createRedeemedGame(): Game {
   game.state.currentRoom = game.state.allRooms.HallOfEchoes
   game.state.setStoryFlag('act4_guardians_chain_raised', true)
   game.state.setStoryFlag('act4_knight_seen_through', true)
+  game.state.setStoryFlag('act4_banners_seen', true)
+  game.state.setStoryFlag('act4_echo_stone_heard', true)
   game.commandParser.parse('say redemption to knight')
   return game
 }
@@ -80,5 +85,25 @@ describe('RedemptionsLight', () => {
     expect(
       executeCommands(game, ["cast redemption's light on ghostly warriors"]),
     ).toContain("You don't know any spell called")
+  })
+
+  it('lights the Shadow and the redeemed Sorceress, every time, and sets nothing', () => {
+    const game = createRedeemedGame()
+    const spell = new RedemptionsLight()
+    const shadow = new ShadowOfThePast()
+    const sorceress = new SorceressOfLies()
+    const line = spell.castOnCharacter(game.state, shadow)
+    expect(line).toContain('It is already remembering. It needs no light.')
+    expectMarkupWellFormed(line)
+    expect(spell.castOnCharacter(game.state, shadow)).toBe(line)
+    expect(spell.castOnCharacter(game.state, sorceress)).not.toContain(
+      'to be looked at without a lie',
+    )
+    game.state.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
+    const redeemed = spell.castOnCharacter(game.state, sorceress)
+    expect(redeemed).toContain('to be looked at without a lie')
+    expectMarkupWellFormed(redeemed)
+    expect(spell.castOnCharacter(game.state, sorceress)).toBe(redeemed)
+    expect(game.state.hasVirtue('mercy')).toBe(false)
   })
 })

@@ -2,6 +2,8 @@ import { Character, type GameState, dialogue, event } from '@/engine'
 import {
   FLAG_ACT4_BADGE_SHOWN,
   FLAG_ACT4_HEARTS_TRUTH_CAST,
+  FLAG_ACT4_STAFF_HEARD,
+  FLAG_ACT4_WHISPERS_HEARD,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
   FLAG_ACT4_SORCERESS_TRUTH_ACQUIRED,
@@ -12,6 +14,9 @@ import { normaliseSpokenWord } from '../spokenWord'
 
 /** What she is called once she is redeemed. */
 const UNMASKED_NAME = 'Unmasked Sorceress'
+
+/** The hearts (hers, the staff's, the whispers') needed before the word works. */
+const HEARTS_NEEDED = 3
 
 /** The three speeches of the confession, in order. */
 const CONFESSION = [
@@ -51,6 +56,15 @@ export class SorceressOfLies extends Character {
         name.toLowerCase(),
       )
     )
+  }
+
+  /** How many of the chamber's three hearts (hers, the staff's, the whispers') Elior has heard. */
+  heartsHeard(gameState: GameState): number {
+    return [
+      FLAG_ACT4_HEARTS_TRUTH_CAST,
+      FLAG_ACT4_STAFF_HEARD,
+      FLAG_ACT4_WHISPERS_HEARD,
+    ].filter((flag) => gameState.getStoryFlag(flag)).length
   }
 
   /** Heart's Truth: shows her loneliness and the girl sold in a hungry winter (once); starts the quest like any meeting. */
@@ -112,7 +126,7 @@ export class SorceressOfLies extends Character {
     )
   }
 
-  /** Only "understanding" works, and only once the badge is shown and her heart heard. */
+  /** Only "understanding" works, and only once the badge is shown and all three hearts are heard. */
   override sayTo(gameState: GameState, words: string): string {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
@@ -126,7 +140,14 @@ export class SorceressOfLies extends Character {
         'lost among the whispers.[/failure]'
       )
     }
-    if (!gameState.getStoryFlag(FLAG_ACT4_HEARTS_TRUTH_CAST)) {
+    const heard = this.heartsHeard(gameState)
+    if (heard > 0 && heard < HEARTS_NEEDED) {
+      return (
+        '[failure]You have heard some of her, but not all. There is more in ' +
+        'this chamber that is hers to listen to.[/failure]'
+      )
+    }
+    if (heard === 0) {
       return (
         '[failure]You cannot answer a pain you cannot hear. Beneath the ' +
         'whispers her heart is saying something, too quietly for ears ' +

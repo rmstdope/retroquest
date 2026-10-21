@@ -37,6 +37,13 @@ const LAUGHS =
   'She laughs, and the chamber laughs with her. Your word is lost among the whispers.'
 const LISTEN_FIRST =
   'You cannot answer a pain you cannot hear. Beneath the whispers her heart is saying something, too quietly for ears alone.'
+const SOME_HEARD =
+  'You have heard some of her, but not all. There is more in this chamber that is hers to listen to.'
+const THREE_HEARTS = [
+  "cast heart's truth on sorceress",
+  "cast heart's truth on staff",
+  "cast heart's truth on whispers",
+]
 const SMILES = 'The Sorceress only smiles.'
 const NORTH_WALL =
   'The north arch is a wall of whispering crystal. It will not open while the Sorceress holds the chamber.'
@@ -167,7 +174,10 @@ describe('The Sorceress of Lies', () => {
       'You listen for a hidden heart, but there is no lie here to hear beneath.',
     )
     expect(executeCommands(game, ["cast heart's truth on staff"])).toContain(
-      'You listen for a hidden heart',
+      'It was made to be looked at',
+    )
+    expect(executeCommands(game, ["cast heart's truth on tree"])).toContain(
+      "You don't see",
     )
     const cast = executeCommands(game, ["cast heart's truth on sorceress"])
     expect(cast).toContain(
@@ -182,12 +192,37 @@ describe('The Sorceress of Lies', () => {
     expect(again).not.toContain('a girl in a hungry winter')
   })
 
+  it('hears the staff and the whispers in any order, once each', () => {
+    const game = inChamber()
+    executeCommands(game, ["use knight's redemption"])
+    expect(executeCommands(game, ['examine whispers'])).toContain(
+      'You lean close to a crystal.',
+    )
+    const whispers = executeCommands(game, ["cast heart's truth on crystals"])
+    expect(whispers).toContain('They are one: hers')
+    expectMarkupWellFormed(whispers)
+    expect(executeCommands(game, ["cast heart's truth on whispers"])).toBe(
+      '[dim]You have already heard whose voice the whispers are.[/dim]',
+    )
+    expect(executeCommands(game, ['say understanding to sorceress'])).toContain(
+      SOME_HEARD,
+    )
+    executeCommands(game, ["cast heart's truth on staff"])
+    expect(executeCommands(game, ["cast heart's truth on staff"])).toBe(
+      '[dim]You have already heard what the mask hides.[/dim]',
+    )
+    expect(executeCommands(game, ['say understanding to sorceress'])).toContain(
+      SOME_HEARD,
+    )
+    executeCommands(game, [THREE_HEARTS[0]])
+    expect(executeCommands(game, ['say understanding to sorceress'])).toContain(
+      'I understand',
+    )
+  })
+
   it('is redeemed by understanding, with one scene of confession', () => {
     const game = inChamber()
-    executeCommands(game, [
-      "use knight's redemption",
-      "cast heart's truth on sorceress",
-    ])
+    executeCommands(game, ["use knight's redemption", ...THREE_HEARTS])
     const said = executeCommands(game, ['say understanding to sorceress'])
     expect(said).toContain(
       '“I understand,” you say. “You have been alone in here a long time.” The Sorceress goes very still. One by one the crystals stop whispering, until the chamber is silent for the first time in years.',
@@ -219,7 +254,7 @@ describe('The Sorceress of Lies', () => {
     const game = inChamber()
     executeCommands(game, [
       "use knight's redemption",
-      "cast heart's truth on sorceress",
+      ...THREE_HEARTS,
       'say understanding to sorceress',
     ])
     const look = game.state.currentRoom.describe(game.state)
@@ -244,6 +279,12 @@ describe('The Sorceress of Lies', () => {
     )
     expect(executeCommands(game, ['examine staff'])).toContain(
       'Her staff lies across her knees, bare where the mask once sat.',
+    )
+    expect(executeCommands(game, ['examine whispers'])).toBe(
+      '[event]The crystals are silent now.[/event]',
+    )
+    expect(executeCommands(game, ["cast heart's truth on whispers"])).toContain(
+      'You have already heard whose voice',
     )
     expect(executeCommands(game, ["examine sorceress's truth"])).toContain(
       'The silver mask from her staff, smooth and smiling, with no eyes behind it.',
@@ -273,6 +314,11 @@ describe('The Sorceress of Lies', () => {
     expect(
       executeCommands(game, ["cast heart's truth on sorceress"]),
     ).toContain('already hear her heart')
+    expect(executeCommands(game, ['say understanding to sorceress'])).toContain(
+      SOME_HEARD,
+    )
+    executeCommands(game, THREE_HEARTS.slice(1))
+    reload(game)
     executeCommands(game, ['say understanding to sorceress'])
     reload(game)
     expectItemInInventory(game.state, "Sorceress's Truth", true)

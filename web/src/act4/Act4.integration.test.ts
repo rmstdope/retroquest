@@ -929,18 +929,20 @@ describe('Act 4 integration', () => {
     })
 
     it('starts its quest on first entering the hall', () => {
-      executeCommands(game, KNIGHT_PATH.slice(0, -6))
+      executeCommands(game, KNIGHT_PATH.slice(0, -8))
       expect(game.state.activatedQuests.map((q) => q.name)).toContain(
         'The Knight of Despair',
       )
     })
 
     it('enhances the stone even when it was dropped elsewhere', () => {
-      executeCommands(game, KNIGHT_PATH.slice(0, -4))
+      executeCommands(game, KNIGHT_PATH.slice(0, -6))
+      executeCommands(game, ['cast truth sight on echo stone'])
       executeCommands(game, ['s', 'drop echo stone', 'n'])
       executeCommands(game, [
         "use guardian's chain",
         'cast truth sight on knight of despair',
+        'cast truth sight on banners',
         'say redemption to knight',
         's',
         'take enhanced echo stone',
@@ -980,13 +982,20 @@ describe('Act 4 integration', () => {
     })
 
     it('keeps every state through a save and load', () => {
-      executeCommands(game, KNIGHT_PATH.slice(0, -3))
+      executeCommands(game, KNIGHT_PATH.slice(0, -5))
       reload()
       expect(game.state.currentRoom.name).toBe('Hall of Echoes')
       expect(executeCommands(game, ['say redemption to knight'])).toContain(
         'cannot truly see',
       )
       executeCommands(game, ['cast truth sight on knight of despair'])
+      reload()
+      expect(executeCommands(game, ['say redemption to knight'])).toContain(
+        'There is more in this hall to see through.',
+      )
+      executeCommands(game, ['cast truth sight on banners'])
+      reload()
+      executeCommands(game, ['cast truth sight on echo stone'])
       reload()
       expect(executeCommands(game, ['say redemption to knight'])).toContain(
         'You could not say it with nothing between you and his sorrow.',

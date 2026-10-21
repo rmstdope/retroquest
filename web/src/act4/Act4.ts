@@ -4,6 +4,8 @@ import { LifelightElixir } from './items/LifelightElixir'
 import { LoyaltyToken } from './items/LoyaltyToken'
 import { WardStone } from './items/WardStone'
 import { Whispers } from './characters/Whispers'
+import { Banners } from './items/Banners'
+import { CrystalWhispers } from './items/CrystalWhispers'
 import { FortressGates } from './rooms/FortressGates'
 import { OuterCourtyard } from './rooms/OuterCourtyard'
 import { MirrorLabyrinth } from './rooms/MirrorLabyrinth'
@@ -149,7 +151,9 @@ export class Act4 extends Act {
    * for the raised token now means the stair is open, a tower still barred
    * gets its whispers, and the Loyalty Token (once found in the courtyard) is
    * moved into the pack. Saves from before the three ward stones stood at the
-   * Fortress Gates get them back, so the gates can still be solved.
+   * Fortress Gates get them back, so the gates can still be solved. The hall
+   * gets its banners and the chamber its whispering crystals when an older
+   * save lacks them.
    */
   override afterLoad(gameState: GameState): void {
     const gates = gameState.allRooms.FortressGates
@@ -172,6 +176,13 @@ export class Act4 extends Act {
     ) {
       tower.addCharacter(new Whispers())
       oldSave = true
+    }
+    // Saves made before the hall's banners and the chamber's crystals existed
+    const hall = gameState.allRooms.HallOfEchoes
+    if (hall && !hall.getItemByName('banners')) hall.addItem(new Banners())
+    const chamber = gameState.allRooms.ChamberOfWhispers
+    if (chamber && !chamber.getItemByName('whispers')) {
+      chamber.addItem(new CrystalWhispers())
     }
     if (oldSave && !gameState.hasItem('Loyalty Token')) {
       const room = Object.values(gameState.allRooms).find((r) =>

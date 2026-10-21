@@ -13,13 +13,25 @@ describe('HallOfEchoes', () => {
     expect(room.name).toBe('Hall of Echoes')
   })
 
-  it('holds the echoes, the stone and the knight', () => {
+  it('holds the echoes, the stone, the banners and the knight', () => {
     const room = new HallOfEchoes()
-    expect(room.items.map((i) => i.name)).toEqual(['Echoes', 'Echo Stone'])
+    expect(room.items.map((i) => i.name)).toEqual([
+      'Echoes',
+      'Echo Stone',
+      'Banners',
+    ])
     expect(room.characters.map((c) => c.name)).toEqual([
       'Knight of Despair',
       'Sir Cedric',
     ])
+  })
+
+  it('names the banners on first look, between the echoes and the knight', () => {
+    const game = new Game([new Act4()])
+    const room = new HallOfEchoes()
+    expect(room.describe(game.state)).toContain(
+      'someone counting. Tattered banners hang high along the walls, grimed past reading. At the far end',
+    )
   })
 
   it('offers only the way south and blocks the stair east', () => {
