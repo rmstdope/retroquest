@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  type Item,
   characterName,
   event,
   remembered,
@@ -12,10 +13,12 @@ import {
   FLAG_ACT3_RUINS_LEFT,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
   FLAG_ACT3_WARDEN_ASKED,
+  FLAG_ACT3_WARDEN_COIN_PRESSED_BACK,
   FLAG_ACT3_WARDEN_BAD_SEASON_SAID,
   FLAG_ACT3_WARDEN_TRUTH_TOLD,
   VIRTUE_TRUTH,
 } from '../Act3StoryFlags'
+import { WeatheredCoin } from '../items/WeatheredCoin'
 
 /** His question, asked once the curse has shown at the ruins. */
 const QUESTION =
@@ -122,6 +125,43 @@ export class PierWarden extends Character {
       ) +
       '\n' +
       remembered('Truth')
+    )
+  }
+
+  /**
+   * Refuse the Weathered Coin once Elior has told him the truth: he presses
+   * it back (the first time, which also rewrites the coin's description) or
+   * waves it away (every time after). The coin stays with Elior. Anything
+   * else, or the coin before the truth, gets the usual reply.
+   */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (
+      !(item instanceof WeatheredCoin) ||
+      !gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)
+    ) {
+      return super.giveItem(gameState, item)
+    }
+    const offer = event(
+      `You offer the [item_name]${item.name}[/item_name] to the ` +
+        `${characterName(this.name)}.`,
+    )
+    if (gameState.getStoryFlag(FLAG_ACT3_WARDEN_COIN_PRESSED_BACK)) {
+      return (
+        offer +
+        '\n' +
+        event('He pushes your hand away.') +
+        '\n' +
+        speech("'I said keep it, lad.'")
+      )
+    }
+    gameState.setStoryFlag(FLAG_ACT3_WARDEN_COIN_PRESSED_BACK, true)
+    item.pressedBack()
+    return (
+      offer +
+      '\n' +
+      event('He turns it over once, then folds your fingers back around it.') +
+      '\n' +
+      speech("'Keep it. Toll for the crossing, my da said.'")
     )
   }
 
