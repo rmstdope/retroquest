@@ -339,11 +339,24 @@ describe('Sacrifice colouring', () => {
   })
 })
 
+describe('Redemption colouring', () => {
+  it('stays unchanged with high counters', () => {
+    const game = opened([...TWO_TRUTHS, ...TWO_SELFLESS])
+    executeCommands(game, ['use lifelight elixir on wound'])
+    executeCommands(game, ['say forgiveness to malakar'])
+    const text = executeCommands(game, ['cast forgiveness on wound'])
+    expect(text).toContain('You gave him back to us')
+    expect(text).not.toContain('You named every crime')
+    expect(text).not.toContain('We watched you give')
+  })
+})
+
 describe('after the endings and around them', () => {
   it('keeps both roads open for a save with no virtue record', () => {
     const game = opened(TWO_TRUTHS)
     executeCommands(game, ['use lifelight elixir on prison'])
     game.state.virtues = []
+    reload(game)
     const hint = executeCommands(game, ['use ancient amulet on wound'])
     expect(hint).toContain('in justice. Or you could give up your magic')
     executeCommands(game, ['say justice to malakar'])

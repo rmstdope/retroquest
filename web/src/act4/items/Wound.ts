@@ -112,7 +112,10 @@ export class Wound extends Item {
     ].join('\n')
   }
 
-  /** Justice: the king's bindings and the ward seal the wound, with Malakar. */
+  /**
+   * Justice: the king's bindings and the ward seal the wound, with Malakar.
+   * After two truth moments King Alden adds a line of his own.
+   */
   private justiceEnding(gameState: GameState): string {
     this.finish(gameState, 'justice')
     return [
