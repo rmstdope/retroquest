@@ -11,20 +11,13 @@ import { EchoStone } from '../items/EchoStone'
 import { KnightsRedemption } from '../items/KnightsRedemption'
 import { RedemptionsLight } from '../spells/RedemptionsLight'
 import { GhostlyWarriors } from './GhostlyWarriors'
+import {
+  HALL_AFTER_REDEMPTION,
+  HALL_WARRIORS_SENTENCE,
+} from '../rooms/hallDescriptions'
 
 /** What the knight is called once he is redeemed. */
 const REDEEMED_NAME = 'Redeemed Knight'
-
-/** The Hall of Echoes once the knight kneels by the stair (no warriors left). */
-export const HALL_AFTER_REDEMPTION =
-  'This vast hall stretches into shadow, its vaulted ceiling lost in darkness ' +
-  'above. The echoes have softened to a murmur. By the stair to the east the ' +
-  'knight kneels with his helm beside him, his grey cloak folded on the stone.'
-
-/** The sentence about the warriors, added to the hall while they remain. */
-export const HALL_WARRIORS_SENTENCE =
-  ' Among the tattered banners, ghostly warriors still fight a battle that ' +
-  'ended long ago.'
 
 /** The four speeches of the confession, in order. */
 const CONFESSION = [

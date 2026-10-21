@@ -1,6 +1,7 @@
 import { Spell, event, type Character, type GameState } from '@/engine'
 import { GhostlyWarriors } from '../characters/GhostlyWarriors'
-import { HALL_AFTER_REDEMPTION } from '../characters/KnightOfDespair'
+import { KnightOfDespair } from '../characters/KnightOfDespair'
+import { HALL_AFTER_REDEMPTION } from '../rooms/hallDescriptions'
 import { FLAG_ACT4_WARRIORS_AT_PEACE, VIRTUE_MERCY } from '../Act4StoryFlags'
 
 /** What the light does where there is nothing to redeem. */
@@ -29,7 +30,7 @@ export class RedemptionsLight extends Spell {
   /** The warriors are put at peace (mercy, once); the knight needs no more. */
   override castOnCharacter(gameState: GameState, target: Character): string {
     if (!(target instanceof GhostlyWarriors)) {
-      return target.answersTo('knight')
+      return target instanceof KnightOfDespair
         ? NOTHING_TO_REDEEM
         : super.castOnCharacter(gameState, target)
     }
