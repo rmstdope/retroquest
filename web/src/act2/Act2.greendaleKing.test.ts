@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { Act2 } from './Act2'
 import {
+  FLAG_CEDRIC_RECOGNISED_SIGIL,
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_COURT_HERALD_FORMAL_PRESENTATION,
@@ -227,6 +228,7 @@ describe('Sir Cedric', () => {
   it('keeps the Nyx line first', () => {
     const game = gameIn('CastleCourtyard')
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
+    game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
     game.state.setStoryFlag(FLAG_NYX_TRIALS_COMPLETED, true)
     expect(talk(game, 'sir cedric')).toContain(
       'I sense something extraordinary',
