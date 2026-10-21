@@ -3,11 +3,14 @@ import {
   type GameState,
   event,
   characterName,
+  remembered,
   speech,
 } from '@/engine'
 import {
   FLAG_TILDA_ASKED_ABOUT_WELL,
+  FLAG_TILDA_SPRING_LINE_SAID,
   FLAG_VILLAGER_TALKED_TO,
+  VIRTUE_TRUTH,
 } from '../Act1StoryFlags'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { Well } from '../items/Well'
@@ -96,9 +99,24 @@ export class Villager extends Character {
         eventMsg +
         '\n' +
         speech(
-          "The water's clean! Was that you? Don't look so modest, " +
-            `${characterName('Elior')}; word's all round the square. ` +
+          `The water's clean! Was that you, ${characterName('Elior')}? ` +
+            "No — don't tell me, you've that look about you. " +
             "I've not had dough rise so light in a year.",
+        )
+      )
+    }
+    if (
+      gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL) &&
+      !gameState.getStoryFlag(FLAG_TILDA_SPRING_LINE_SAID) &&
+      !gameState.hasVirtue(VIRTUE_TRUTH)
+    ) {
+      gameState.setStoryFlag(FLAG_TILDA_SPRING_LINE_SAID, true)
+      return (
+        eventMsg +
+        '\n' +
+        speech(
+          "Not a word, eh? Then it'll be the old spring clearing itself, " +
+            'like my gran always said it would. Funny old world.',
         )
       )
     }
@@ -106,6 +124,47 @@ export class Villager extends Character {
     // Cycle through dialogue
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
     return eventMsg + '\n' + speech(rumor)
+  }
+
+  /**
+   * Take the truth about the well. Once the well is purified and she has
+   * asked, saying "truth" tells her it was Elior: her reply and the
+   * remembered line, recorded once. Earlier she is lost; later she keeps the
+   * secret. Any other words get the usual reply.
+   */
+  override sayTo(gameState: GameState, words: string): string {
+    if (words.trim().toLowerCase() !== 'truth') {
+      return super.sayTo(gameState, words)
+    }
+    if (!gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)) {
+      return (
+        event(`You speak with ${characterName(this.name)}.`) +
+        '\n' +
+        speech("The truth about what, love? You've lost me.")
+      )
+    }
+    if (gameState.hasVirtue(VIRTUE_TRUTH)) {
+      return (
+        event(`You speak with ${characterName(this.name)}.`) +
+        '\n' +
+        speech("I know, love. Your secret's safe with me, and so's your loaf.")
+      )
+    }
+    gameState.addVirtue(VIRTUE_TRUTH)
+    return (
+      event(
+        `You tell ${characterName(this.name)} it was you: ` +
+          'a spell, and a little help from the healer.',
+      ) +
+      '\n' +
+      speech(
+        'Magic? In Willowbrook? ... Well. ' +
+          "I'll not tell a soul if you'd rather I didn't. " +
+          "But I'll know, and I'll be saving you the first loaf every morning.",
+      ) +
+      '\n' +
+      remembered('Truth')
+    )
   }
 
   /** Whether the village well has been purified. */

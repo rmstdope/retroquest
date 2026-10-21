@@ -42,6 +42,7 @@ export {
   dialogue,
   event,
   findMarkupProblems,
+  remembered,
   speech,
   writing,
 } from './markup'

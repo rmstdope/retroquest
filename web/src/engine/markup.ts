@@ -30,6 +30,15 @@ export function event(text: string): string {
 }
 
 /**
+ * The amber "remembered" line that follows a virtue moment:
+ * `[event]✦ <label> — this will be remembered[/event]`. Acts name the virtue
+ * (Mercy, Truth, Selflessness) and share this one wording.
+ */
+export function remembered(label: string): string {
+  return event(`✦ ${label} — this will be remembered`)
+}
+
+/**
  * Wrap `name` as a character name inside running text:
  * `[character_name]name[/character_name]`.
  */

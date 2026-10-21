@@ -26,6 +26,18 @@ export class Item {
     this.canBeCarried = canBeCarried ?? false
   }
 
+  /**
+   * Whether the player's word for an item names this one: its full name or
+   * short name, compared case-insensitively. Override to accept more names.
+   */
+  answersTo(name: string): boolean {
+    const wanted = name.toLowerCase()
+    return (
+      this.name.toLowerCase() === wanted ||
+      this.shortName.toLowerCase() === wanted
+    )
+  }
+
   /** Why the item cannot be taken, or '' when it can. */
   preventPickup(): string {
     return this.canBeCarried

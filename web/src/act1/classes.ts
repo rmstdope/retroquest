@@ -46,6 +46,7 @@ import { SharpKnife } from './items/SharpKnife'
 import { ShedDoor } from './items/ShedDoor'
 import { ShinyPebble } from './items/ShinyPebble'
 import { ShinyRing } from './items/ShinyRing'
+import { Snare } from './items/Snare'
 import { SmoothStone } from './items/SmoothStone'
 import { Stick } from './items/Stick'
 import { Sword } from './items/Sword'
@@ -146,6 +147,7 @@ export const ACT1_CLASSES = {
   ShedDoor,
   ShinyPebble,
   ShinyRing,
+  Snare,
   SmoothStone,
   Stick,
   Sword,

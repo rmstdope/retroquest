@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { Act1 } from '../Act1'
 import { Villager } from './Villager'
-import { FLAG_VILLAGER_TALKED_TO } from '../Act1StoryFlags'
+import { FLAG_VILLAGER_TALKED_TO, VIRTUE_TRUTH } from '../Act1StoryFlags'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { Well } from '../items/Well'
 import { expectDialogueSpeaker } from '@/testing/gameHelpers'
@@ -105,7 +105,7 @@ describe('Tilda, the baker’s wife', () => {
     const first = game.commandParser.parse('talk to villager')
     const second = game.commandParser.parse('talk to villager')
 
-    expect(first).toContain("The water's clean! Was that you?")
+    expect(first).toContain("The water's clean! Was that you, ")
     expectDialogueSpeaker(first, 'Tilda')
     expect(findMarkupProblems(first)).toEqual([])
     expect(second).not.toContain("The water's clean!")
@@ -120,5 +120,141 @@ describe('Tilda, the baker’s wife', () => {
     expect(answer).toContain("you're leaving, aren't you?")
     expectDialogueSpeaker(answer, 'Tilda')
     expect(findMarkupProblems(answer)).toEqual([])
+  })
+})
+
+/** An Act I game in the square with the well purified and Tilda already asked. */
+function gameWhereTildaHasAsked(): Game {
+  const game = gameInSquare()
+  const well = game.state.allRooms.VillageWell.items.find(
+    (item) => item instanceof Well,
+  ) as Well
+  well.isPurified = true
+  game.commandParser.parse('talk to tilda')
+  return game
+}
+
+const REMEMBERED_TRUTH = '[event]✦ Truth — this will be remembered[/event]'
+
+describe('Tilda and the truth about the well', () => {
+  it('asks her rewritten question, leaving open who cleaned the well', () => {
+    const game = gameInSquare()
+    const well = game.state.allRooms.VillageWell.items.find(
+      (item) => item instanceof Well,
+    ) as Well
+    well.isPurified = true
+
+    const answer = game.commandParser.parse('talk to tilda')
+
+    expect(answer).toContain(
+      "The water's clean! Was that you, [character_name]Elior[/character_name]? " +
+        "No — don't tell me, you've that look about you. " +
+        "I've not had dough rise so light in a year.",
+    )
+    expect(answer).not.toContain("word's all round the square")
+  })
+
+  it('takes the truth: her reply, then the remembered line, and records it', () => {
+    const game = gameWhereTildaHasAsked()
+
+    const answer = game.commandParser.parse('say truth to tilda')
+
+    expect(answer).toContain(
+      'You tell [character_name]Tilda[/character_name] it was you: ' +
+        'a spell, and a little help from the healer.',
+    )
+    expect(answer).toContain("I'll not tell a soul if you'd rather I didn't.")
+    expect(answer.indexOf(REMEMBERED_TRUTH)).toBeGreaterThan(
+      answer.indexOf("I'll not tell a soul"),
+    )
+    expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(true)
+    expect(findMarkupProblems(answer)).toEqual([])
+    expectDialogueSpeaker(answer, 'Tilda')
+  })
+
+  it('says "secret\'s safe" the second time, with no second remembered line', () => {
+    const game = gameWhereTildaHasAsked()
+    game.commandParser.parse('say truth to tilda')
+
+    const answer = game.commandParser.parse('say truth to tilda')
+
+    expect(answer).toContain(
+      "I know, love. Your secret's safe with me, and so's your loaf.",
+    )
+    expect(answer).not.toContain('remembered')
+    expect(game.state.virtues.filter((v) => v === VIRTUE_TRUTH)).toHaveLength(1)
+  })
+
+  it('has lost her when the truth comes before she has asked, and records nothing', () => {
+    const game = gameInSquare()
+
+    const answer = game.commandParser.parse('say truth to tilda')
+
+    expect(answer).toContain("The truth about what, love? You've lost me.")
+    expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
+  })
+
+  it('has lost her too when the well is clean but she has not asked yet', () => {
+    const game = gameInSquare()
+    const well = game.state.allRooms.VillageWell.items.find(
+      (item) => item instanceof Well,
+    ) as Well
+    well.isPurified = true
+
+    expect(game.commandParser.parse('say truth to tilda')).toContain(
+      "You've lost me.",
+    )
+    expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
+  })
+
+  it('credits the spring once when Elior says nothing, then goes back to rumours', () => {
+    const game = gameWhereTildaHasAsked()
+
+    const spring = game.commandParser.parse('talk to tilda')
+    const next = game.commandParser.parse('talk to tilda')
+
+    expect(spring).toContain(
+      "Not a word, eh? Then it'll be the old spring clearing itself, " +
+        'like my gran always said it would. Funny old world.',
+    )
+    expect(next).not.toContain('old spring clearing itself')
+    expect(next).toContain('Have you seen the fields lately?')
+  })
+
+  it('still takes the truth after her spring line', () => {
+    const game = gameWhereTildaHasAsked()
+    game.commandParser.parse('talk to tilda')
+
+    const answer = game.commandParser.parse('say truth to tilda')
+
+    expect(answer).toContain(REMEMBERED_TRUTH)
+    expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(true)
+  })
+
+  it('never says the spring line once the truth is told', () => {
+    const game = gameWhereTildaHasAsked()
+    game.commandParser.parse('say truth to tilda')
+
+    const answer = game.commandParser.parse('talk to tilda')
+
+    expect(answer).not.toContain('spring clearing itself')
+    expect(answer).toContain('Have you seen the fields lately?')
+  })
+
+  it('answers other words as before', () => {
+    const game = gameWhereTildaHasAsked()
+
+    expect(game.commandParser.parse('say hello to tilda')).toContain(
+      "don't seem to understand",
+    )
+  })
+
+  it('keeps her farewell when Elior carries the amulet', () => {
+    const game = gameWhereTildaHasAsked()
+    game.state.addItemToInventory(new AncientAmulet())
+
+    expect(game.commandParser.parse('talk to tilda')).toContain(
+      "you're leaving, aren't you?",
+    )
   })
 })

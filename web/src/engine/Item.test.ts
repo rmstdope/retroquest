@@ -3,6 +3,7 @@ import { Item } from './Item'
 import { Character } from './Character'
 import { GameState } from './GameState'
 import { Room } from './Room'
+import { isNamed } from './itemNames'
 
 function gameState(): GameState {
   const start = new Room({ name: 'Start', description: '' })
@@ -63,5 +64,25 @@ describe('Item', () => {
     expect(rock.drink(gs)).toContain("can't drink")
     expect(rock.equip(gs)).toContain("can't equip")
     expect(rock.unequip(gs)).toContain("can't unequip")
+  })
+
+  it('answers to its name and short name, and a subclass can add more', () => {
+    const knife = new Item({
+      name: 'sharp knife',
+      description: 'd',
+      shortName: 'knife',
+    })
+    expect(knife.answersTo('Sharp Knife')).toBe(true)
+    expect(knife.answersTo('KNIFE')).toBe(true)
+    expect(knife.answersTo('fox')).toBe(false)
+
+    class Snarelike extends Item {
+      override answersTo(name: string): boolean {
+        return super.answersTo(name) || name === 'fox'
+      }
+    }
+    const snare = new Snarelike({ name: 'snare', description: 'd' })
+    expect(snare.answersTo('fox')).toBe(true)
+    expect(isNamed(snare, 'fox')).toBe(true)
   })
 })

@@ -20,6 +20,8 @@ import {
   FLAG_WELL_EXAMINED,
   FLAG_CONNECT_WITH_NATURE,
   FLAG_MIRA_NAMED_FOULING_SIGIL,
+  FLAG_FOX_KIT_FREED,
+  FLAG_MIRA_FOREST_REMARK_SAID,
 } from '../Act1StoryFlags'
 
 /** Village healer and wise woman who teaches spells and guides quests. */
@@ -223,8 +225,37 @@ export class Mira extends Character {
     )
   }
 
-  /** Dialogue depending on quest progress; hands over the amulet when ready. */
+  /**
+   * Dialogue depending on quest progress; hands over the amulet when ready.
+   * The first talk after the fox kit was freed opens with her one-time
+   * remark about the forest, then goes on as it would have.
+   */
   override talkTo(gameState: GameState): string {
+    return this.forestRemark(gameState) + this.talkByProgress(gameState)
+  }
+
+  /** Her one-time remark once the fox kit is freed, or nothing. */
+  private forestRemark(gameState: GameState): string {
+    if (
+      !gameState.getStoryFlag(FLAG_FOX_KIT_FREED) ||
+      gameState.getStoryFlag(FLAG_MIRA_FOREST_REMARK_SAID)
+    ) {
+      return ''
+    }
+    gameState.setStoryFlag(FLAG_MIRA_FOREST_REMARK_SAID, true)
+    return (
+      `${characterName(this.name)} tilts her head as you come in. ` +
+      speech(
+        'The forest has been whispering about you. A small red thing, ' +
+          'running free that ought not to be. ' +
+          `That was kindly done, ${characterName('Elior')}.`,
+      ) +
+      '\n'
+    )
+  }
+
+  /** Her dialogue for the stage Elior has reached in the act. */
+  private talkByProgress(gameState: GameState): string {
     const eventMsg = event(`You speak with ${characterName('Mira')}.`)
     // 1. Give the post_amulet message if amulet is in inventory
     if (gameState.hasItem('Ancient Amulet')) {
