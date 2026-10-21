@@ -1334,6 +1334,7 @@ describe('Act 2 optional virtue moments', () => {
     expect(game.state.virtues.sort()).toEqual(
       [VIRTUE_MERCY, VIRTUE_SELFLESS, VIRTUE_TRUTH].sort(),
     )
+    expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
   })
 
   it('keeps the record through a save and load, and shows nothing again', () => {
@@ -1342,6 +1343,10 @@ describe('Act 2 optional virtue moments', () => {
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
 
     expect(fresh.state.virtues.sort()).toEqual(game.state.virtues.sort())
+    fresh.state.currentRoom = fresh.state.allRooms.ResidentialQuarter
+    const families = executeCommands(fresh, ['talk to families'])
+    expect(families).not.toContain('Wren')
+    expect(families).not.toContain('remembered')
     fresh.state.currentRoom = fresh.state.allRooms.MarketDistrict
     const thorne = executeCommands(fresh, ['talk to caravan master thorne'])
     expect(thorne).not.toContain('remembered')

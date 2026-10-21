@@ -56,7 +56,11 @@ describe('Innkeeper Marcus and the truth (truth moment)', () => {
 
     expect(answer).toContain('You tell')
     expect(answer).toContain('the curse was no ill wind')
-    expect(answer).toContain('Someone chose my girl.')
+    expect(answer).toContain(
+      'On purpose. … Someone chose my girl. … Then this house sleeps with one ' +
+        'eye open from now on. Thank you for telling me. ' +
+        "I'd sooner know it than be comforted by a lie.",
+    )
     expect(answer).toContain(REMEMBERED)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'innkeeper marcus')

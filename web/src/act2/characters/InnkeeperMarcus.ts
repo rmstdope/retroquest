@@ -102,7 +102,7 @@ export class InnkeeperMarcus extends Character {
       speaker +
       ': ' +
       speech(
-        'On purpose. ... Someone chose my girl. ... Then this house sleeps ' +
+        'On purpose. … Someone chose my girl. … Then this house sleeps ' +
           'with one eye open from now on. Thank you for telling me. ' +
           "I'd sooner know it than be comforted by a lie.",
       ) +

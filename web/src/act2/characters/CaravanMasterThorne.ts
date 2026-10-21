@@ -39,7 +39,7 @@ export class CaravanMasterThorne extends Character {
   }
 
   /**
-   * Speak for Brenn. After the rescue, saying "forgive" gives Thorne's reply
+   * Speak for Brenn. Once Elior has returned with the caravan found (the documents talk), saying "forgive" gives Thorne's reply
    * and the remembered line, recorded once. Before it he asks to be asked
    * again; afterwards he keeps his word. Any other words get the usual reply.
    */
@@ -49,7 +49,7 @@ export class CaravanMasterThorne extends Character {
     }
     const speaker = characterName(this.name)
     const greeting = event(`You speak with ${speaker}.`)
-    if (!gameState.getStoryFlag(FLAG_FOUND_LOST_CARAVAN)) {
+    if (!this.hasGivenDocuments) {
       return (
         greeting +
         '\n' +
@@ -77,7 +77,7 @@ export class CaravanMasterThorne extends Character {
       speaker +
       ': ' +
       speech(
-        "... He did come back, didn't he. ... All right. One more road. " +
+        "… He did come back, didn't he. … All right. One more road. " +
           'If he runs again, he walks home.',
       ) +
       '\n' +

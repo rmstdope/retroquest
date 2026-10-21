@@ -97,7 +97,11 @@ describe('Families and the mountain flower (selfless moment)', () => {
       'You give the [item_name]mountain flower[/item_name]',
     )
     expect(answer).toContain('A little later a thin face appears at the window')
-    expect(answer).toContain("She's smiling. First time in a week.")
+    expect(answer).toContain(
+      "She's smiling. First time in a week. It's only a flower, and she knows " +
+        'it, but it came from the mountain and someone thought of her. ' +
+        'Thank you, truly.',
+    )
     expect(answer).toContain(REMEMBERED)
     expectFamiliesSpeak(answer)
     expect(game.state.hasItem('mountain flower')).toBe(false)
@@ -125,7 +129,10 @@ describe('Families and the mountain flower (selfless moment)', () => {
     expect(answer).toContain(
       'You give the [item_name]mountain flower[/item_name]',
     )
-    expect(answer).toContain('polite but distant nods')
+    expect(answer).toContain(
+      'give you polite but distant nods. Nobody seems to know what a ' +
+        'stranger wants with them, or with a flower.',
+    )
     expect(answer).not.toContain('remembered')
     expect(game.state.hasItem('mountain flower')).toBe(true)
     expect(game.state.hasVirtue(VIRTUE_SELFLESS)).toBe(false)

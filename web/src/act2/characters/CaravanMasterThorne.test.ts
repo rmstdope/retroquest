@@ -79,7 +79,9 @@ describe('Caravan Master Thorne and Brenn (mercy moment)', () => {
 
     expect(answer).toContain('You speak for')
     expect(answer).toContain('fear is not the same as cowardice')
-    expect(answer).toContain('One more road.')
+    expect(answer).toContain(
+      "… He did come back, didn't he. … All right. One more road. If he runs again, he walks home.",
+    )
     expect(answer).toContain(REMEMBERED)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'caravan master thorne')
@@ -127,5 +129,15 @@ describe('Caravan Master Thorne and Brenn (mercy moment)', () => {
     expect(answer).not.toContain('remembered')
     expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(false)
     expectDialogueSpeaker(answer, 'caravan master thorne')
+  })
+
+  it('asks again when the caravan is found but Elior has not yet returned', () => {
+    const game = gameAtThorne()
+    game.state.setStoryFlag(FLAG_FOUND_LOST_CARAVAN, true)
+
+    const answer = game.commandParser.parse('say forgive to thorne')
+
+    expect(answer).toContain('Ask me again when my people are home')
+    expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(false)
   })
 })
