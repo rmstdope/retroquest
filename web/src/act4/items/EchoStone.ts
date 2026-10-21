@@ -66,6 +66,7 @@ export class EchoStone extends Item {
   override use(gameState: GameState): string {
     if (this.enhanced) {
       const room = gameState.currentRoom
+      if (room instanceof MirrorLabyrinth) return room.useStone(gameState)
       if (room instanceof MemoryVault) return room.mendOrbs(gameState)
       return event(ENHANCED_USE)
     }

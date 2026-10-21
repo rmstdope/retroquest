@@ -55,6 +55,13 @@ describe('EchoStone', () => {
     expectMarkupWellFormed(alone)
   })
 
+  it('still repeats the route in the maze once enhanced', () => {
+    const { game } = inMaze()
+    const stone = new EchoStone()
+    stone.enhance()
+    expect(stone.use(game.state)).toContain('Left, then left, then the way')
+  })
+
   it('refuses other items as the base class does', () => {
     const { game } = inMaze()
     expect(new EchoStone().useWith(game.state, new Mirrors())).toContain(
