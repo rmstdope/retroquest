@@ -119,7 +119,8 @@ describe('Gate Captain welcome', () => {
     const game = createGameAtGates()
     const captain = new GateCaptain()
     game.state.currentRoom.characters.push(captain)
-    captain.giveItem(game.state, new EntryPass())
+    // An older save: the pass was accepted but he is still in the room.
+    captain.entryPassGiven = true
 
     const answer = captain.talkTo(game.state)
 
