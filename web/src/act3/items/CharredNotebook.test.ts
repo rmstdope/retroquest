@@ -20,7 +20,16 @@ describe('CharredNotebook', () => {
     expect(text).toContain('Lysa says I measure the light too carefully.')
     expect(text).toContain('The Wasting has reached Willowbrook.')
     expect(text).toContain('I have waited all my life.')
-    expect(text).toContain('The names in it are your parents')
+    expect(text).toContain(
+      'The second entry is pressed so hard into the page that the pen has torn it.',
+    )
+    expect(text).toContain("The names in it are your parents'.")
+    expect(text).toContain(
+      'Aren says that is why it never misses. We set the third mirror today, and the whole terrace caught fire with it, the good kind.',
+    )
+    expect(text).toContain(
+      'Aren sits up with her and pretends he is not afraid. They tell me to wait.',
+    )
     expect(text.indexOf('Lysa says')).toBeLessThan(text.indexOf('The Wasting'))
   })
 

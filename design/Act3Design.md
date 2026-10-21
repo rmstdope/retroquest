@@ -297,7 +297,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: Wind‑carved paths zig‑zag across black rock; canvas shelters flap and braziers glow low.
 -   Items: Emberwater Canteen
--   Characters: Ash Scholar (on the first talk gives a Brass Mirror Segment and a Charred Notebook, an optional read: two entries of Malakar's, one from the good years and one naming the Wasting that reached Willowbrook; the Phoenix, once the feather is earned and the Charred Inscription read, tells once that Malakar himself struck his name deeper)
+-   Characters: Ash Scholar (on the first talk gives a Brass Mirror Segment and a Charred Notebook, an optional read: two entries of Malakar's, one from the good years and one naming the Wasting that reached Willowbrook)
 -   Quest Relevance: Staging area; points to mirror terraces (Mirrors of Emberlight).
 -   Exits:
     -   North to Obsidian Outcrops
@@ -344,7 +344,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
     -   North to Mirror Terraces
     -   West to Lower Switchbacks
 
-6. Phoenix Crater
+6. Phoenix Crater (once the feather is earned and the Charred Inscription read, the Phoenix tells once that Malakar himself struck his name deeper)
 
 -   Description: A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals.
 -   Items: Starts empty.
@@ -633,7 +633,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 11. Room: Lower Switchbacks
 
 -   Commands and yields:
-    -   `talk to ash scholar` → Points you toward Mirror Terraces and Obsidian Outcrops; gives a Brass Mirror Segment.
+    -   `talk to ash scholar` → Points you toward Mirror Terraces and Obsidian Outcrops; gives a Brass Mirror Segment and a Charred Notebook (optional reading).
     -   `examine Emberwater Canteen` → Reveals another Brass Mirror Segment.
     -   `take brass mirror segment` → Adds the segment to inventory.
 

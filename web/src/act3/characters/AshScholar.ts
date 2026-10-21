@@ -10,7 +10,7 @@ import { CharredNotebook } from '../items/CharredNotebook'
 
 /** A scholar who studies mirrorcraft and offers a mirror segment and a charred notebook. */
 export class AshScholar extends Character {
-  /** Tracks whether this scholar has already given their mirror segment. */
+  /** Tracks whether this scholar has already given their mirror segment and notebook. */
   private gaveSegment = false
 
   constructor() {
@@ -24,7 +24,7 @@ export class AshScholar extends Character {
 
   /** Speak to the scholar; the first talk gives the segment and the notebook. */
   override talkTo(gameState: GameState): string {
-    // If the scholar hasn't yet given their segment, give one now.
+    // If the scholar hasn't yet given his gifts, give the segment and the notebook now.
     // Do NOT check the player's inventory; the scholar's gift is tracked
     // locally so the player may receive duplicates from other sources.
     if (!this.gaveSegment) {

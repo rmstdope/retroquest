@@ -163,19 +163,22 @@ describe('Phoenix accepts the riddle answer only as a whole word', () => {
 })
 
 const STORY =
-  'You saw his name on the terraces, burned deeper than the others. No fire did that.'
+  'You saw his name on the terraces, burned deeper than the others. No fire did that. ' +
+  'He came back, years after, and struck it again himself, to cut himself out of the promise. ' +
+  'The stone would not let him.'
 
 /** A game with the feather earned and the given inscription state. */
 function earned(inscriptionRead: boolean): {
   game: Game
   phoenix: Phoenix
+  featherReply: string
 } {
   const game = new Game([new Act3()])
   const phoenix = new Phoenix()
   phoenix.talkTo(game.state)
   game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, inscriptionRead)
-  phoenix.sayTo(game.state, 'patience')
-  return { game, phoenix }
+  const featherReply = phoenix.sayTo(game.state, 'patience')
+  return { game, phoenix, featherReply }
 }
 
 describe('Phoenix tells who struck the name deeper', () => {
@@ -202,7 +205,9 @@ describe('Phoenix tells who struck the name deeper', () => {
   })
 
   it('does not tell the story in the feather-giving reply', () => {
-    const { game } = earned(true)
+    const { game, featherReply } = earned(true)
+    expect(featherReply).not.toContain(STORY)
+    expect(featherReply).toContain(TERRACES)
     expect(game.state.getStoryFlag(FLAG_ACT3_PHOENIX_STORY_TOLD)).toBe(false)
   })
 })
