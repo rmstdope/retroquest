@@ -62,7 +62,14 @@ describe('TrappedServants', () => {
 
     const answer = servants.talkTo(game.state)
 
-    expect(answer).toContain('listen for the ones who have nothing left')
+    expect(answer).toContain(
+      'One of them, an old woman with flour still in the creases of her hands, looks up.',
+    )
+    expect(answer).toContain(
+      "I was the king's cook. I do not know how long ago.",
+    )
+    expect(answer).not.toContain('mirrors')
+    expect(servants.talkTo(game.state)).toBe(answer)
     expectDialogueSpeaker(answer, 'Freed Servants')
     expectMarkupWellFormed(answer)
   })

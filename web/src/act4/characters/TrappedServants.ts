@@ -56,12 +56,9 @@ export class TrappedServants extends Character {
       )
     }
     return (
-      `The ${name} bow, a little stiffly, as if they have forgotten how. ` +
-      speech(
-        "'The mirrors past the arch lie. We used to polish them, and they " +
-          'lied to us too. Keep the pendant close, and listen for the ones ' +
-          "who have nothing left to lie about.'",
-      )
+      `The ${name} bow. One of them, an old woman with flour still in the ` +
+      'creases of her hands, looks up. ' +
+      speech("'I was the king's cook. I do not know how long ago.'")
     )
   }
 }

@@ -374,7 +374,7 @@ describe('Act 4 integration', () => {
         'nothing left to bless away',
       )
       const servants = executeCommands(game, ['talk to freed servants'])
-      expect(servants).toContain('The mirrors past the arch lie.')
+      expect(servants).toContain('I was the king')
       expectDialogueSpeaker(servants, 'Freed Servants')
       const captain = executeCommands(game, ['talk to captain'])
       expect(captain).toContain('Cedric stood his post')
