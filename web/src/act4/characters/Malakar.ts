@@ -7,6 +7,8 @@ import {
   FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED,
   FLAG_ACT4_SACRIFICE_SAID,
   FLAG_ACT4_THRONE_AMULET_OPENED,
+  FLAG_ACT4_THRONE_EARLY_AMULET_SEEN,
+  FLAG_ACT4_THRONE_EARLY_ELIXIR_SEEN,
   FLAG_ACT4_THRONE_OFFER_HEARD,
   FLAG_ACT4_THRONE_REFRAIN_SAID,
   VIRTUE_MERCY,
@@ -122,6 +124,11 @@ export class Malakar extends Character {
           'that? Give me the amulet.',
       )
     }
+    return this.makeOffer(gameState)
+  }
+
+  /** His offer, the four paragraphs of the first talk; marks it heard. */
+  private makeOffer(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD, true)
     return [
       dialogue(
@@ -173,14 +180,30 @@ export class Malakar extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
       return '[dim]You have said it. Malakar heard.[/dim]'
     }
-    gameState.setStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD, true)
+    const refrainLine = event(
+      '“Power follows purpose; purpose follows truth,” you say. The ' +
+        "words from the stone in Willowbrook, from Nyx, from the Dragon's " +
+        'hall. They are yours now.',
+    )
+    if (!gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)) {
+      // Said before he has spoken: the refrain does not count yet.
+      return [
+        refrainLine,
+        event(
+          'Malakar laughs, a dry sound that goes on too long. Then it ' +
+            'stops, all at once.',
+        ),
+        dialogue(
+          this.name,
+          'Not yet. You have not heard me. Hear me, and then say it to my ' +
+            'face.',
+        ),
+        this.makeOffer(gameState),
+      ].join('\n')
+    }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID, true)
     return [
-      event(
-        '“Power follows purpose; purpose follows truth,” you say. The ' +
-          "words from the stone in Willowbrook, from Nyx, from the Dragon's " +
-          'hall. They are yours now.',
-      ),
+      refrainLine,
       dialogue(
         this.name,
         'We carved those words together, your father and I. I had ' +
@@ -309,10 +332,7 @@ export class Malakar extends Character {
       return '[dim]The amulet is already open, its light filling the chamber.[/dim]'
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
-      return (
-        '[failure]The amulet is cold. Malakar is still waiting for your ' +
-        'answer.[/failure]'
-      )
+      return this.burnedByAmulet(gameState)
     }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED, true)
     gameState.currentRoom.description = THRONE_CHAMBER_AMULET
@@ -336,6 +356,45 @@ export class Malakar extends Character {
     ].join('\n')
   }
 
+  /** The amulet raised too early: the burn plays once, then a dim line. */
+  private burnedByAmulet(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_EARLY_AMULET_SEEN)) {
+      return '[dim]The amulet is still warm. Malakar keeps his hand well away from it.[/dim]'
+    }
+    gameState.setStoryFlag(FLAG_ACT4_THRONE_EARLY_AMULET_SEEN, true)
+    return [
+      event(
+        'Malakar lunges for the amulet. The moment his fingers close on ' +
+          'it, it burns white, and he snatches his hand back.',
+      ),
+      dialogue(SHADOW_LABEL, 'Not like this.'),
+      event(
+        'The voice is gone as soon as it came. Malakar holds his hand ' +
+          'against his chest and will not look at you.',
+      ),
+    ].join('\n')
+  }
+
+  /** The elixir held out too early: the reach plays once, then a dim line. */
+  private reachedForElixir(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_EARLY_ELIXIR_SEEN)) {
+      return "[dim]Malakar's hand twitches toward the glass, and stays where it is.[/dim]"
+    }
+    gameState.setStoryFlag(FLAG_ACT4_THRONE_EARLY_ELIXIR_SEEN, true)
+    const reply = gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)
+      ? 'You would waste it on me? Keep it for them, then. Give me the ' +
+        'amulet, Elior, and your mother wakes before that glass is empty.'
+      : 'You would waste it on me? You have not even heard what I am ' +
+        'offering.'
+    return [
+      event(
+        "You hold out the elixir. Malakar's hand comes up for it, and " +
+          "stops a finger's width from the glass.",
+      ),
+      dialogue(this.name, reply),
+    ].join('\n')
+  }
+
   /**
    * Why the elixir cannot be used yet, or null once the amulet is open (the
    * choice is then open, and only its targets are accepted).
@@ -345,7 +404,7 @@ export class Malakar extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
       return '[failure]Not yet. The amulet at your chest is stirring.[/failure]'
     }
-    return '[failure]Not yet. Malakar is still waiting for your answer.[/failure]'
+    return this.reachedForElixir(gameState)
   }
 
   /** Malakar drinks the elixir: the grey leaves him and the wound waits. */

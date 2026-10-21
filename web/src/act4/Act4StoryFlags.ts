@@ -72,6 +72,12 @@ export const FLAG_ACT4_PARENTS_LEGACY_COMPLETED =
 export const FLAG_ACT4_THRONE_OFFER_HEARD = 'act4_throne_offer_heard'
 /** Elior has answered Malakar with the refrain. */
 export const FLAG_ACT4_THRONE_REFRAIN_SAID = 'act4_throne_refrain_said'
+/** The elixir was held out to Malakar before the refrain (plays once). */
+export const FLAG_ACT4_THRONE_EARLY_ELIXIR_SEEN =
+  'act4_throne_early_elixir_seen'
+/** The amulet was raised before the refrain and burned Malakar (plays once). */
+export const FLAG_ACT4_THRONE_EARLY_AMULET_SEEN =
+  'act4_throne_early_amulet_seen'
 /** The Ancient Amulet has opened in the Throne Chamber. */
 export const FLAG_ACT4_THRONE_AMULET_OPENED = 'act4_throne_amulet_opened'
 /** The Lifelight Elixir was given to Malakar. */
