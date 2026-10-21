@@ -14,6 +14,10 @@ const MECHANISM_JAMMED =
   ' Amidst the old workings, the black-iron mechanism stands ' +
   'jammed with a rope, silent at last.'
 
+const AMULET_HUM =
+  ' At your side, the [item_name]Ancient Amulet[/item_name] hums softly, as if ' +
+  'answering something stirring beneath the floor.'
+
 /**
  * Old Mill room: a weathered mill on an old seat of power, where the cloaked
  * stranger's mechanism whirs until Elior jams it.
@@ -32,18 +36,23 @@ export class OldMill extends Room {
     })
   }
 
-  /** Describe the mechanism as whirring or jammed. */
-  refreshDescription(): void {
+  /**
+   * Describe the mechanism as whirring or jammed; once it is jammed and
+   * Elior carries the amulet, the amulet hums.
+   */
+  refreshDescription(gameState: GameState): void {
     const jammed = this.items.some(
       (item) => item instanceof Mechanism && item.repaired,
     )
     this.description =
-      DESCRIPTION_START + (jammed ? MECHANISM_JAMMED : MECHANISM_WORKING)
+      DESCRIPTION_START +
+      (jammed ? MECHANISM_JAMMED : MECHANISM_WORKING) +
+      (jammed && gameState.hasItem('Ancient Amulet') ? AMULET_HUM : '')
   }
 
   /** Refresh the mechanism in the description before describing the room. */
   override describe(gameState: GameState): string {
-    this.refreshDescription()
+    this.refreshDescription(gameState)
     return super.describe(gameState)
   }
 }

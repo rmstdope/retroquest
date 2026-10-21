@@ -98,6 +98,23 @@ describe('Mira handing over the Ancient Amulet', () => {
     expectDialogueSpeaker(response, 'Mira')
   })
 
+  it('takes the amulet off its stand, so there is one amulet in the world', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new RareFlower())
+    executeCommands(game, ['give rare flower to mira'])
+    completeJourneyPreparations(game.state)
+
+    executeCommands(game, ['talk to mira'])
+
+    expect(game.state.currentRoom.getItemByName('amulet')).toBeNull()
+    expect(
+      game.state.inventory.filter((item) => item.name === 'ancient amulet'),
+    ).toHaveLength(1)
+    expect(game.state.currentRoom.describe(game.state)).toContain(
+      'The stand where the amulet rested stands empty.',
+    )
+  })
+
   it('does not repeat the parting words once the amulet is his', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())

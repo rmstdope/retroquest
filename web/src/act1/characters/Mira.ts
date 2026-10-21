@@ -272,7 +272,9 @@ export class Mira extends Character {
     const quest = gameState.getQuest('Preparing for the Road')!
     if (quest.checkCompletion(gameState)) {
       // Conditions are fulfilled: give amulet and quest_complete_amulet_given message
-      gameState.addItemToInventory(new AncientAmulet())
+      // The amulet leaves its stand: there is one amulet in the world.
+      const standAmulet = gameState.currentRoom.removeItem('ancient amulet')
+      gameState.addItemToInventory(standAmulet ?? new AncientAmulet())
       this.amuletGiven = true
       return eventMsg + '\n' + this.dialogue('quest_complete_amulet_given')
     }
