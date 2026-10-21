@@ -130,8 +130,8 @@ export class Act2 extends Act {
       'Greendale, you must prove yourself worthy, forge alliances with ' +
       'powerful allies, and master the magical arts. Only then will you ' +
       "be ready to face the forest's deepest secrets and the growing " +
-      'storm that threatens all you hold dear.\n\nTake a deep breath and ' +
-      'step forward into your destiny.\n'
+      'storm that threatens all you hold dear.\n\nTake a deep breath, and ' +
+      'start down the road into Greendale.\n'
     )
   }
 

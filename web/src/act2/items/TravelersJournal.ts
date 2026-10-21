@@ -53,8 +53,7 @@ export class TravelersJournal extends Item {
           'themselves in need of answers about our heritage, this journal ' +
           'contains references and genealogical charts that will grant them ' +
           'access to the deepest historical records. The knowledge within ' +
-          'could prove vital when darkness stirs again, as the ancient ' +
-          "prophecies foretell it inevitably will.'",
+          "could prove vital when darkness stirs again.'",
       ) +
       '\n\n' +
       event(

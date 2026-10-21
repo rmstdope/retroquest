@@ -4,15 +4,17 @@ import { MendSpell } from '../spells/MendSpell'
 import { DispelSpell } from '../spells/DispelSpell'
 import {
   FLAG_MENDED_LIBRARY_ENCHANTMENTS,
+  FLAG_READ_ANCIENT_CHRONICLE,
   FLAG_SPECTRAL_LIBRARIAN_FRIENDLY,
 } from '../Act2StoryFlags'
 
 /**
  * Ghostly guardian NPC who controls access to the library's deeper lore.
  *
- * Becomes friendly once FLAG_MENDED_LIBRARY_ENCHANTMENTS is set: reveals the
- * player's heritage, places the Crystal Focus in the room and points to the
- * dispel spell.
+ * Becomes friendly once FLAG_MENDED_LIBRARY_ENCHANTMENTS is set: points the
+ * player to the Wardens' chronicle, places the Crystal Focus in the room, and
+ * on later talks nudges back to the chronicle until FLAG_READ_ANCIENT_CHRONICLE
+ * is set, then closes the matter.
  */
 export class SpectralLibrarian extends Character {
   constructor() {
@@ -28,7 +30,7 @@ export class SpectralLibrarian extends Character {
     })
   }
 
-  /** Speak with the librarian; reveals heritage once the wards are mended. */
+  /** Speak with the librarian; points to the chronicle once the wards are mended. */
   override talkTo(gameState: GameState): string {
     // Check if player has mended the protective enchantments first
     const mendedEnchantments = gameState.getStoryFlag(
@@ -58,18 +60,16 @@ export class SpectralLibrarian extends Character {
           ) +
           " The spirit's eyes glow brighter as they speak: " +
           speech(
-            "'Your bloodline traces back to the ancient mages of Willowbrook, " +
-              'those who were chosen to guard against the rising darkness. ' +
-              "Malakar's interest in your village was no coincidence - he seeks " +
-              'to corrupt or destroy the magical heritage that flows through ' +
-              "your veins.'",
+            "'I am a keeper, not a teller. The answer you came for is in that " +
+              'chronicle. The Wardens of the Dawn wrote it, and their mark is ' +
+              'on its cover, the same mark you wear at your throat. Read it, ' +
+              `and you will learn the [spell_name]${dispelName}[/spell_name] ` +
+              "spell.'",
           ) +
-          ' They gesture to the ancient texts: ' +
+          ' They gesture to a crystal resting on the shelf: ' +
           speech(
-            `'Study these tomes to learn the [spell_name]${dispelName}` +
-              `[/spell_name] spell, and take this [item_name]${crystalName}` +
-              '[/item_name] to enhance your abilities. Your destiny as one of ' +
-              "the Chosen is beginning to unfold.'",
+            `'And take this [item_name]${crystalName}[/item_name]. What you ` +
+              "do with them is yours to choose.'",
           ) +
           '[/success]'
         )
@@ -82,21 +82,26 @@ export class SpectralLibrarian extends Character {
             'repository. The protective enchantments around the most valuable ' +
             'texts have been damaged by time. Prove your worthiness by ' +
             'repairing them, and I shall share the knowledge you seek about ' +
-            "your heritage and destiny.'",
+            "the mark you carry.'",
         )
       )
     }
-    // Get spell name
-    const dispelSpell = new DispelSpell()
+    if (!gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)) {
+      return (
+        characterName(this.name) +
+        ': ' +
+        speech(
+          "'The chronicle is waiting on its shelf. The Wardens wrote it for " +
+            "whoever would read it; I cannot read it for you.'",
+        )
+      )
+    }
     return (
       characterName(this.name) +
       ': ' +
       speech(
-        "'You have proven yourself worthy and learned what this library " +
-          `can teach. The knowledge of your bloodline and the [spell_name]${dispelSpell.name}` +
-          '[/spell_name] spell will serve you well in the challenges ahead. ' +
-          'Remember: you are part of an ancient lineage chosen to stand ' +
-          "against the darkness. Use this knowledge wisely.'",
+        "'You have read what the Wardens left. The rest is not written on " +
+          "any shelf of mine. Use this knowledge wisely.'",
       )
     )
   }

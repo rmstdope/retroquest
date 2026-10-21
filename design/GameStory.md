@@ -49,7 +49,7 @@ In Greendale, Elior meets Sir Cedric, who recognizes the Warden sigil of the War
 - The player navigates Greendale, gathering supplies and information.
 - Cedric joins the party, offering combat and guidance.
 - In the Enchanted Forest, the player solves riddles and puzzles set by Nyx.
-- Nyx reveals the legend of Malakar, the evil sorcerer, and the prophecy of the Chosen One, hinting that Malakar once sought something in Willowbrook.
+- Nyx reveals the legend of Malakar, the evil sorcerer, hinting that Malakar once sought something in Willowbrook.
 
 **Highlights from the Act II design** (see `Act2Design.md`):
 
@@ -58,7 +58,7 @@ In Greendale, Elior meets Sir Cedric, who recognizes the Warden sigil of the War
 - **Sir Cedric:** a formal, honourable knight in disgrace. _The Knight's Test_ earns his respect, and _Cedric's Lost Honor_ clears his name with **Secret Documents** recovered from **Caravan Master Thorne**'s lost caravan.
 - **Greendale's people:** **Master Healer Lyria** takes Elior on as an apprentice (`greater_heal`). **Innkeeper Marcus**'s daughter **Elena** is cured of a curse with `greater_heal`, Crystal-Clear Water and `dispel`. A **Spectral Librarian** guards the Hidden Library, whose **Ancient Chronicle** teaches `dispel`.
 - **Forest quests:** _The Hermit's Warning_, _The Forest Guardian's Riddles_ ("tree", "water", "ants") and _Whispers in the Wind_ (the Ancient Tree Spirit, the Enchanted Acorn and Moonflowers).
-- **Lore:** _Echoes of the Past_ and _The Ancient Library_ reveal that Malakar's interest in Willowbrook concerns **ancient bloodlines**, and that the library holds prophecies of the **Chosen One** and of a coming darkness.
+- **Lore:** _Echoes of the Past_ and _The Ancient Library_ reveal that Malakar's interest in Willowbrook concerns **ancient bloodlines**, and that the library's chronicle names the **Wardens of the Dawn** and warns that Malakar seeks the Willowbrook bloodline.
 - **Spells:** `mend`, `dispel`, `greater_heal`, `nature_sense`, `forest_speech`, `prophetic_vision`.
 - **Canon:** Cedric recognises the Warden sigil of the Wardens of the Dawn on the Ancient Amulet in his first conversation, King Alden has vanished and the castle is half-empty, the Secret Documents show Malakar’s agents framed Cedric, the archive and Ancient Chronicle name the Wardens and Malakar’s search for the Willowbrook bloodline, the Sorceress of Lies’ mark is on Elena’s curse, and Nyx speaks the refrain and shows a vision of the Shadow of the Past (the dream voice). Three optional virtue moments (selfless, truth, mercy) are recorded. There is no combat.
 

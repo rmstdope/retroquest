@@ -51,7 +51,7 @@ describe("Traveler's journal", () => {
     expect(quotes[0]).toMatch(/^'The bloodline of Ravencrest .*magics\.'$/)
     expect(quotes[1]).toMatch(/^'I have documented .*great libraries\.'$/)
     expect(quotes[2]).toMatch(
-      /^'Should any of my descendants .*inevitably will\.'$/,
+      /^'Should any of my descendants .*stirs again\.'$/,
     )
   })
 })
