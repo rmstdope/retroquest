@@ -1,0 +1,45 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Tower and chamber</title><style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces&family=JetBrains+Mono&family=Source+Serif+4:ital@0;1&display=swap');
+:root{--bg:#10151a;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--char:#7fb0e6;--item:#8fcf7a;--at:#ffb836}
+*{box-sizing:border-box}body{margin:0;background:#0b0f12;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:24px 16px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:400;margin:0 0 4px}h2{font-family:Fraunces,Georgia,serif;font-weight:400;font-size:20px;margin:32px 0 10px;color:var(--at)}
+.lead{color:var(--muted);max-width:860px;margin:0 0 24px;line-height:1.5}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}.step{display:flex;flex-direction:column;gap:8px}
+.cap{font-size:13px;color:var(--at);font-weight:600;letter-spacing:.04em}.note{font-size:12px;color:var(--muted);max-width:440px;line-height:1.45;margin:0}
+.frame{width:460px;max-width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--bg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.frame.phone{width:320px;border-radius:24px}.frame.old{opacity:.6}
+.cmd{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.t{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.55;color:var(--prose)}
+.rt{margin:0;font-family:Fraunces,Georgia,serif;font-size:20px;color:var(--fg)}
+.c{color:var(--char)}.it{color:var(--item)}.fail{color:#e8896b}.dim{opacity:.6;font-style:italic}
+.dq{margin:0 0 0 14px;padding-left:12px}.sp{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--char);font-weight:600;margin-bottom:2px}
+.dq p{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.55;font-style:italic;color:var(--fg)}
+.x{outline:1px dashed #e8896b;outline-offset:3px;border-radius:2px}
+</style>
+<style>
+.ln{display:grid;grid-template-columns:200px 1fr 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--line2);max-width:1200px}
+.ln .w{font-size:13px;color:var(--muted);line-height:1.4}.ln .w b{color:var(--fg);display:block;font-weight:600}
+.ln .old{font-family:'Source Serif 4',Georgia,serif;font-size:14px;line-height:1.5;color:var(--muted);opacity:.7}
+.ln .new{font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.55;color:var(--prose)}
+.hd{display:grid;grid-template-columns:200px 1fr 1fr;gap:16px;max-width:1200px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.same{font-size:12px;color:var(--item);font-family:'DM Sans',sans-serif}
+.var{border:1px dashed var(--at);border-radius:8px;padding:8px 10px;margin:6px 0}.var .k{font-family:'DM Sans';font-size:11px;color:var(--at);font-weight:600;letter-spacing:.06em;display:block;margin-bottom:2px}
+.n{color:var(--char)}.i{color:var(--item)}
+@media(max-width:760px){.ln,.hd{grid-template-columns:1fr}.hd span:nth-child(2){display:none}.ln .old::before{content:'Today: ';font-family:'DM Sans';font-size:11px}}
+</style>
+<h1>Tower and chamber: every line that changes</h1>
+<p class=lead>Voice A, spare. The tower is doubt and the chamber is the one beautiful room in the fortress, which is exactly what's wrong with it. The Sorceress's own words already read in this voice and stay as they are. One place, marked with a dashed box, needs your choice between options <b>1</b> and <b>2</b>.</p>
+<div class=hd><span>When the player sees it</span><span>Today</span><span>Proposed</span></div>
+
+<h2>Tower of Shadows</h2>
+<div class=ln><div class=w><b>Arriving · look</b></div><div class=old>A spiraling tower of black stone pierces the gloom, its walls seeming to absorb light itself. Tendrils of living shadow coil around the structure, reaching out with grasping fingers toward any source of warmth or hope. The air grows thicker with each step upward, and whispered doubts slither into your mind like poison. Windows reveal only deeper darkness, and the very shadows appear to mock your every movement with silent, dancing forms.</div><div class=new>A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come.</div></div>
+<div class=ln><div class=w><b>Holding up the Loyalty Token</b>in the tower</div><div class=old>You hold the Loyalty Token close to your heart, feeling the warmth of true friendship and trust. The token's power forms a protective barrier against the lies and deceptions that whisper through the shadowy tower.</div><div class=new>You hold the token against your chest. It is still warm. The whispers say no one is coming; the token says someone already did.</div></div>
+<div class=ln><div class=w><b>…and again</b></div><div class=old><span class=dim>The Loyalty Token is already protecting you from deception.</span></div><div class="new dim">The token is warm against your heart. The whispers cannot find their way in.</div></div>
+
+<h2>Chamber of Whispers</h2>
+<div class=ln><div class=w><b>Arriving · look</b></div><div class=old>This circular chamber pulses with an otherworldly beauty that feels wrong, as if reality itself has been twisted into a more pleasing shape. Crystalline formations jut from the walls, each one humming with barely audible whispers that speak of your deepest desires and fears. The floor shifts beneath your feet like liquid glass, and the air shimmers with illusions that promise everything you've ever wanted while hiding terrible truths in their depths. At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist.</div><div class=new>A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it. Crystals grow from the walls, each humming something kind and untrue, and the floor gives a little under your feet, like ice that might hold. At the chamber's heart the <span class=n>Sorceress of Lies</span> waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist.<br><span class=same>The last sentence is unchanged.</span></div></div>
+<div class=ln><div class=w><b>Saying “understanding”</b>after the badge, before you have heard her heart</div><div class=old><span class=fail>You cannot answer a pain you cannot hear. <u>Listen to her first.</u></span></div><div class=new><div class=var><span class=k>OPTION 1 · a nudge (recommended: it's the last step before the vault, so nobody should stall here)</span><span class=fail>You cannot answer a pain you cannot hear. Beneath the whispers her heart is saying something, too quietly for ears alone.</span></div><div class=var><span class=k>OPTION 2 · just the first sentence</span><span class=fail>You cannot answer a pain you cannot hear.</span></div></div></div>
+
+<h2>Already in the voice · unchanged</h2>
+<div class=ln><div class=w><b>Tower</b></div><div class=old></div><div class=new><span class=same>Unchanged.</span> Trying the stair before the token (“…your friends have left you, no one is coming, you were always alone. You stumble back down.”), and the token's line in the chamber.</div></div>
+<div class=ln><div class=w><b>Chamber</b></div><div class=old></div><div class=new><span class=same>Unchanged.</span> The chamber once she is redeemed, the north arch, the staff, the mask she gives you, and everything the Sorceress says and does.</div></div>
+<div class=ln><div class=w><b>Quest log</b></div><div class=old></div><div class=new><span class=same>Unchanged.</span> The Sorceress's quest lines.</div></div>
