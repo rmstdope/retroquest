@@ -1,0 +1,21 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Cut rooms, sealed</title><style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces&family=JetBrains+Mono&family=Source+Serif+4:ital@0;1&display=swap');
+:root{--bg:#10151a;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--char:#7fb0e6;--item:#8fcf7a;--at:#ffb836;--fail:#e8896b;--ok:#9fd69a}
+*{box-sizing:border-box}body{margin:0;background:#0b0f12;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:24px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:400;margin:0 0 4px}.lead{color:var(--muted);max-width:860px;margin:0 0 24px;line-height:1.5}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}.step{display:flex;flex-direction:column;gap:8px}
+.cap{font-size:13px;color:var(--at);font-weight:600;letter-spacing:.04em}.note{font-size:12px;color:var(--muted);max-width:440px;line-height:1.45}
+.frame{width:460px;max-width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--bg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.frame.phone{width:320px;border-radius:24px}
+.cmd{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.t{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.55;color:var(--prose)}
+.ev{margin:0;display:flex;gap:10px;align-items:baseline;font-size:14px;color:var(--muted)}.ev i{color:var(--accent);font-size:9px;font-style:normal}
+.f{color:var(--fail)}.dim{color:var(--muted)}.q{margin:0;font-size:14px;color:var(--ok)}
+.dq{margin:0 0 0 14px;padding-left:12px}.sp{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--char);font-weight:600;margin-bottom:2px}
+.dq p{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.55;font-style:italic;color:var(--fg)}
+.c{color:var(--char)}.it{color:var(--item)}.rm{font-family:Fraunces,serif;font-size:18px;color:var(--fg);margin:0}
+.ex{font-size:13px;color:var(--muted)}
+@media (max-width:520px){body{padding:16p<style>.map{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;color:var(--prose);white-space:pre;margin:0}.gone{color:var(--fail);text-decoration:line-through}.new{color:var(--at);font-weight:600}</style><h1>Option A — the two rooms go, and the Throne Chamber has no way in until the Parents' Vault is built</h1><p class=lead>Today the top of the fortress is Memory Vault → Throne Chamber Approach → Throne Chamber, with the Royal Gardens north of the Approach. The new design cuts the Approach and the Gardens. The Parents' Vault that will sit between the Memory Vault and the Throne Chamber is built by a later piece of work, not this one.</p><div class=row><div class=step><div class=cap>1 · The top of the fortress</div><div class='frame'><p class=map>        [Throne Chamber]   ← no way in yet
+        
+[Memory Vault]  <span class=gone>— [Throne Chamber Approach] — [Royal Gardens]</span>
+      |
+[Chamber of Whispers]</p></div><p class=note>The Throne Chamber stays in the game but nothing leads to it. It opens when the Parents' Vault arrives (north of it), exactly as the design draws.</p></div><div class=step><div class=cap>2 · Standing in the Memory Vault</div><div class='frame'><p class=rm>Memory Vault</p><p class=t>This mystical chamber exists partially outside of time itself, its walls covered in floating orbs of crystallized memory that flicker with scenes from long ago. The air ripples with temporal distortions, and fragments of the past drift like spectral snow through the space. At the room's center, a shadowy figure wavers between existence and void, reaching out with desperate longing toward memories that seem to slip away like morning mist.</p><p class=ex>Exits: south</p></div><p class=note>East is simply gone from the exits. Typing <span class=cmd>go east</span> gets the usual answer for a wall.</p></div><div class=step><div class=cap>3 · go east</div><div class='frame phone'><p class=cmd>&gt; go east</p><p class="t f">You can't go that way.</p></div><p class=note>The game's existing line, unchanged.</p></div></div>
