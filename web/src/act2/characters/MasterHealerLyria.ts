@@ -116,11 +116,7 @@ export class MasterHealerLyria extends Character {
       return (
         name +
         ': ' +
-        speech(
-          "It's wonderful to see how far you've come with your healing " +
-            "abilities. You're truly a master of the healing arts now. " +
-            'Continue to use your gifts to help those in need.',
-        )
+        speech('You have the first of it. Mastery is the next twenty years.')
       )
     }
     if (gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)) {
