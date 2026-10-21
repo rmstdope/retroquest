@@ -30,6 +30,7 @@ import { TheForestGuardiansRiddles } from './quests/TheForestGuardiansRiddles'
 import { TheHermitsWarningQuest } from './quests/TheHermitsWarning'
 import { WhispersInTheWind } from './quests/WhispersInTheWind'
 import { CASTLE_APPROACH_DESCRIPTION } from './rooms/CastleApproach'
+import { FOREST_ENTRANCE_DESCRIPTION } from './rooms/ForestEntrance'
 import { CASTLE_COURTYARD_DESCRIPTION } from './rooms/CastleCourtyard'
 import { GREAT_HALL_DESCRIPTION } from './rooms/GreatHall'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
@@ -155,6 +156,7 @@ export class Act2 extends Act {
     gameState.allRooms.CastleCourtyard.description =
       CASTLE_COURTYARD_DESCRIPTION
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
+    gameState.allRooms.ForestEntrance.description = FOREST_ENTRANCE_DESCRIPTION
     SirCedric.refreshAll(gameState)
     const items: Item[] = [...gameState.inventory]
     for (const room of Object.values(gameState.allRooms))
