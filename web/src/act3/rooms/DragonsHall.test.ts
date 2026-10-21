@@ -10,6 +10,16 @@ describe("Dragon's Hall", () => {
     expect(room.description).toContain('vast chamber')
     expect(room.description).toContain('massive coils')
     expect(room.description).toContain('Ancient Dragon')
+  })
+
+  it('describes the hall in a few plain sentences', () => {
+    const room = new DragonsHall()
+    const sentences = room.description.split(/(?<=[.!?])\s+/)
+    expect(sentences.length).toBeLessThanOrEqual(4)
+    expect(room.description).not.toContain('cathedral')
+    expect(room.description).not.toContain('otherworldly')
+    expect(room.description).toContain('embers')
+    expect(room.description).toContain('Sigils')
 
     // Check items - dragon's scale should NOT be present initially
     const itemNames = room.items.map((item) => item.name)

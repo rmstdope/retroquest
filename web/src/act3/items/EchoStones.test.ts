@@ -41,6 +41,15 @@ describe('EchoStones', () => {
     expect(result.toLowerCase()).toContain('already blessed')
   })
 
+  it('describes the blessing in a few plain sentences', () => {
+    const result = new EchoStones().receiveSpell(createState(), 'bless')
+    const blessing = result.split('\n')[0].replace(/\[[^\]]*\]/g, '')
+    const sentences = blessing.trim().split(/(?<=[.!?])\s+/)
+    expect(sentences.length).toBeLessThanOrEqual(4)
+    expect(result).not.toContain('otherworldly')
+    expect(result).toContain('[success]')
+  })
+
   it('starts the quest when examined', () => {
     const stones = new EchoStones()
     const gs = createState()

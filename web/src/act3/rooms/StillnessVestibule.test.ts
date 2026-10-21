@@ -12,6 +12,15 @@ function dummyState(): GameState {
 }
 
 describe('Stillness Vestibule', () => {
+  it('describes the room in a few plain sentences', () => {
+    const room = new StillnessVestibule()
+    const sentences = room.description.split(/(?<=[.!?])\s+/)
+    expect(sentences.length).toBeLessThanOrEqual(4)
+    expect(room.description).not.toContain('otherworldly')
+    expect(room.description).toContain('echo stones')
+    expect(room.description).toContain('pools')
+  })
+
   it('initializes with its items, the keeper and the phantoms', () => {
     const room = new StillnessVestibule()
     expect(room.name).toBe('Stillness Vestibule')
