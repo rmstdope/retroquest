@@ -201,7 +201,9 @@ describe('the companions', () => {
       expect(first.indexOf(endingLines[ending])).toBeLessThan(
         first.indexOf(MIRA_ELENA_TOLD),
       )
-      expect(first).toContain(MIRA_ELENA_ANSWER)
+      expect(first.indexOf(MIRA_ELENA_ANSWER)).toBeGreaterThan(
+        first.indexOf(MIRA_ELENA_TOLD),
+      )
       reload(game)
       const later = executeCommands(game, ['talk to mira'])
       expect(later).toContain(endingLines[ending])
@@ -210,19 +212,21 @@ describe('the companions', () => {
   })
 
   it('Sir Cedric delivers both apologies once, then keeps his old line', () => {
-    const game = home('justice')
-    const first = executeCommands(game, ['talk to sir cedric'])
-    let at = -1
-    for (const line of CEDRIC_FIRST) {
-      const next = first.indexOf(line)
-      expect(next).toBeGreaterThan(at)
-      at = next
-    }
-    reload(game)
-    for (let i = 0; i < 2; i++) {
-      const later = executeCommands(game, ['talk to cedric'])
-      expect(later).toContain(CEDRIC_OLD)
-      expect(later).not.toContain('The knight in grey')
+    for (const ending of ['redemption', 'justice', 'sacrifice'] as const) {
+      const game = home(ending)
+      const first = executeCommands(game, ['talk to sir cedric'])
+      let at = -1
+      for (const line of CEDRIC_FIRST) {
+        const next = first.indexOf(line)
+        expect(next).toBeGreaterThan(at)
+        at = next
+      }
+      reload(game)
+      for (let i = 0; i < 2; i++) {
+        const later = executeCommands(game, ['talk to cedric'])
+        expect(later).toContain(CEDRIC_OLD)
+        expect(later).not.toContain('The knight in grey')
+      }
     }
   })
 

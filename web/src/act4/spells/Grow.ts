@@ -63,8 +63,10 @@ export class Grow extends Spell {
     return super.castOnCharacter(gameState, target)
   }
 
-  /** The last cast of the game: the field turns green, Nyx says the refrain
-   * once, and the act ends on Grandmother's welcome. */
+  /**
+   * The last cast of the game: the field turns green, Nyx says the refrain
+   * once, and the act ends on Grandmother's welcome.
+   */
   private greenTheField(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_FIELD_GREEN, true)
     return [
