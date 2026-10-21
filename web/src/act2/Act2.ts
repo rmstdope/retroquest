@@ -154,9 +154,10 @@ export class Act2 extends Act {
 
   /**
    * Bring older saves up to date: the secret documents, the squire's diary,
-   * the castle rooms, Cedric's quest log and the riddles quest log keep the text they were saved with, so give them the
-   * current wording, and put Brenn in the warehouse of saves made before he
-   * was met there. Safe to run on every load.
+   * the castle rooms, Cedric's quest log and the riddles quest log keep the
+   * text they were saved with, so give them the current wording, and put Brenn
+   * in the warehouse of saves made before he was met there. Safe to run on
+   * every load.
    */
   override afterLoad(gameState: GameState): void {
     gameState.allRooms.CastleApproach.description = CASTLE_APPROACH_DESCRIPTION
