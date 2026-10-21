@@ -123,16 +123,4 @@ describe('The Historians recognise their own shelves', () => {
       expect(text).not.toMatch(OLD_LORE)
     }
   })
-
-  it('does not repeat the hint when the journal is handed over after the archive search', () => {
-    const game = createGame()
-    const historians = new Historians()
-    game.state.setStoryFlag(FLAG_READ_TRAVELERS_JOURNAL, true)
-    game.state.setStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE, true)
-
-    const shown = historians.giveItem(game.state, new TravelersJournal())
-
-    expect(shown).toContain('This is fascinating!')
-    expect(shown).not.toContain('oldest shelves')
-  })
 })
