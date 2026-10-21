@@ -415,11 +415,15 @@ describe('Act 4 integration', () => {
       const lines = [
         executeCommands(game, ['go north']),
         executeCommands(game, ['cast light on ward stones']),
-        executeCommands(game, ["take guardian's chain", 'go east']),
+      ]
+      breakThrough()
+      executeCommands(game, ["take guardian's essence", 'east'])
+      lines.push(
+        executeCommands(game, ["use guardian's essence"]),
         executeCommands(game, ['cast bless on servants']),
         executeCommands(game, ['talk to servants']),
-      ].join('\n')
-      for (const hint of hints) expect(lines).not.toContain(hint)
+      )
+      for (const hint of hints) expect(lines.join('\n')).not.toContain(hint)
     })
 
     it('keeps every state through a save and load', () => {

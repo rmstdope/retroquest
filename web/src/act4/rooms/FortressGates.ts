@@ -10,6 +10,15 @@ import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
 } from '../Act4StoryFlags'
 
+/** The gates while the wall of light is up and the guardians are walking. */
+const GATES_WALL_UP_DESCRIPTION =
+  'The gates are black stone, cut square and fitted without a seam. Four ' +
+  'ward stones stand before them at equal distances, each glowing the same ' +
+  'steady violet, and a thin wall of the same light hangs across the ' +
+  'gateway. Pale guardians walk the same short line between the stones, ' +
+  'turn, and walk it back. Nothing here looks broken. Someone took great ' +
+  'care over it.'
+
 /** The gates while the wall of light is down and the guardians still walk. */
 const GATES_WALL_DOWN_DESCRIPTION =
   'The gates are black stone, cut square and fitted without a seam. The ' +
@@ -35,13 +44,7 @@ export class FortressGates extends Room {
   constructor() {
     super({
       name: 'Fortress Gates',
-      description:
-        'The gates are black stone, cut square and fitted without a seam. Four ' +
-        'ward stones stand before them at equal distances, each glowing the same ' +
-        'steady violet, and a thin wall of the same light hangs across the ' +
-        'gateway. Pale guardians walk the same short line between the stones, ' +
-        'turn, and walk it back. Nothing here looks broken. Someone took great ' +
-        'care over it.',
+      description: GATES_WALL_UP_DESCRIPTION,
       items: [
         new WardStoneFragment(),
         new GuardiansChain(),
@@ -65,7 +68,7 @@ export class FortressGates extends Room {
     if (gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
       return GATES_WALL_DOWN_DESCRIPTION
     }
-    return this.description
+    return GATES_WALL_UP_DESCRIPTION
   }
 
   /** The ways north and east open once the barrier is down. */
