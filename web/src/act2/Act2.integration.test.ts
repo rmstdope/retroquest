@@ -1289,9 +1289,11 @@ describe('Act 2 complete page', () => {
     executeCommands(game, ['cast prophetic vision'])
     for (let turn = 0; turn < 3; turn++) game.newTurn()
     const hook = 'Malakar is real. And the bloodline he seeks is yours.'
-    expect(game.getActCompleteText()).toMatch(
-      new RegExp(`^${hook}\\n\\nCongratulations — you have completed`),
-    )
+    expect(
+      game
+        .getActCompleteText()
+        ?.startsWith(`${hook}\n\nCongratulations — you have completed`),
+    ).toBe(true)
     const fresh = new Game([new Act2()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
     for (let turn = 0; turn < 3; turn++) fresh.newTurn()
