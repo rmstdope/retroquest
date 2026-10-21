@@ -6,7 +6,7 @@
  * green again. Each act is played with the dev server's `debug act<N>` command
  * (the act's golden path), then finished with the act's completing commands.
  */
-import { test, expect, type Locator, type Page } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 /** One beat of the red line: what a player reads, and a phrase that proves it. */
 interface Beat {
@@ -20,6 +20,8 @@ interface Beat {
 interface ActPlay {
   /** The act's header in the browser. */
   header: string
+  /** What the debug command answers when the golden path played as expected. */
+  played: RegExp
   /** Commands typed after the act's golden path to complete the act. */
   completing: string[]
   /** The beats, read from the story the player has on screen at the act's end. */
@@ -32,10 +34,15 @@ const REFRAIN = 'Power follows purpose; purpose follows truth.'
 /** The dream voice's words from the second and third acts' visions. */
 const DREAM_VOICE_ACT2 = 'Elior… how you have grown. Do not be afraid of me.'
 
-/** The four acts of the red line, in order. */
+/**
+ * The four acts of the red line, in order. The story keeps only its newest 200
+ * turns (`MAX_TURNS` in the game store) and Act I's golden path is 180
+ * commands, so Act I has little room left before its early beats scroll away.
+ */
 const ACTS: ActPlay[] = [
   {
     header: 'Act I',
+    played: /Debug script 'act1' played \d+ commands/,
     completing: ['use map'],
     beats: [
       {
@@ -54,6 +61,7 @@ const ACTS: ActPlay[] = [
   },
   {
     header: 'Act II',
+    played: /Debug script 'act2' played \d+ commands/,
     completing: ['cast prophetic vision', 'talk to sir cedric'],
     beats: [
       {
@@ -72,6 +80,7 @@ const ACTS: ActPlay[] = [
   },
   {
     header: 'Act III',
+    played: /Debug script 'act3' played \d+ commands/,
     completing: ['examine fortress gates'],
     beats: [
       {
@@ -90,6 +99,7 @@ const ACTS: ActPlay[] = [
   },
   {
     header: 'Act IV',
+    played: /Debug script 'act4' stopped at line \d+: the act ended\./,
     completing: [],
     beats: [
       {
@@ -119,47 +129,50 @@ async function startGame(page: Page): Promise<void> {
 }
 
 /**
- * Close every chapter page and pop-up until the act is on screen, collecting
- * the text of the chapter pages on the way.
+ * Close every chapter page and pop-up until the act `header` is on screen,
+ * collecting the text of the chapter pages on the way. Waits for the next page
+ * to show instead of sleeping, so a slow machine only makes it wait longer.
  */
-async function readPages(page: Page): Promise<string[]> {
+async function readPages(page: Page, header: string): Promise<string[]> {
   const pages: string[] = []
   const chapterButton = page.locator('.lq-chapter-button')
   const popUpButton = page.getByRole('button', {
     name: 'Continue',
     exact: true,
   })
+  const actHeader = page.getByTestId('act')
   for (;;) {
-    await page.waitForTimeout(300)
     if (await chapterButton.isVisible()) {
       pages.push(await page.locator('.lq-chapter').innerText())
       await chapterButton.click()
     } else if (await popUpButton.isVisible()) {
       await popUpButton.click()
-    } else {
+    } else if ((await actHeader.textContent()) === header) {
       return pages
+    } else {
+      await expect(chapterButton.or(popUpButton)).toBeVisible()
     }
   }
 }
 
-/** Type one command into the command box and wait for it to show in the story. */
-async function type(page: Page, story: Locator, command: string) {
+/** Type one command into the command box and wait until it is the story's newest turn. */
+async function type(page: Page, command: string): Promise<void> {
   const input = page.getByLabel('Command')
   await input.fill(command)
   await input.press('Enter')
-  await expect(story).toContainText(`› ${command}`)
+  await expect(page.getByTestId('command').last()).toHaveText(`› ${command}`)
 }
 
 test('plays the red line from Act I to the Willowbrook epilogue', async ({
   page,
-}) => {
-  test.setTimeout(300_000)
+}): Promise<void> => {
+  test.setTimeout(120_000)
   await startGame(page)
   const story = page.getByRole('region', { name: 'Story' })
 
   for (const [index, act] of ACTS.entries()) {
-    const pages = await readPages(page)
-    await expect(page.getByTestId('act')).toHaveText(act.header)
+    if (index === 0) await expect(page.locator('.lq-chapter')).toBeVisible()
+    const pages = await readPages(page, act.header)
     if (index === 0) {
       // The dream voice's first appearance is in the opening chapter page.
       expect(
@@ -172,13 +185,9 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
         .click()
     }
 
-    await type(page, story, `debug act${index + 1}`)
-    await expect(
-      page.getByText(
-        new RegExp(`Debug script 'act${index + 1}' (played|stopped)`),
-      ),
-    ).toBeVisible({ timeout: 60_000 })
-    for (const command of act.completing) await type(page, story, command)
+    await type(page, `debug act${index + 1}`)
+    await expect(page.getByText(act.played)).toBeVisible({ timeout: 60_000 })
+    for (const command of act.completing) await type(page, command)
 
     const text = await story.innerText()
     for (const beat of act.beats) {
@@ -188,8 +197,10 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
 
   // The last act ends on its closing chapter page, after the quest pop-ups.
   const popUp = page.getByRole('button', { name: 'Continue', exact: true })
-  while (!(await page.locator('.lq-chapter').isVisible())) {
-    await popUp.click()
+  const closing = page.locator('.lq-chapter')
+  while (!(await closing.isVisible())) {
+    await expect(popUp.or(closing)).toBeVisible()
+    if (await popUp.isVisible()) await popUp.click()
   }
   await expect(page.locator('.lq-chapter')).toContainText(
     'Malakar is himself again. And Elior is home.',
