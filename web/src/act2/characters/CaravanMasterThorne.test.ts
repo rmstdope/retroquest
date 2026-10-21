@@ -141,3 +141,33 @@ describe('Caravan Master Thorne and Brenn (mercy moment)', () => {
     expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(false)
   })
 })
+
+describe('Caravan Master Thorne and the week the king went', () => {
+  const ROAD_LINE =
+    'That forest road was safe enough a month ago. Nobody patrols it since ' +
+    'the king went; every rider the castle has is out looking for him.'
+
+  it('puts the line between the plea and Brenn, in the first talk only', () => {
+    const game = gameAtThorne()
+
+    const first = game.commandParser.parse('talk to caravan master thorne')
+    const second = game.commandParser.parse('talk to caravan master thorne')
+
+    expect(first).toContain(ROAD_LINE)
+    expect(first.indexOf(ROAD_LINE)).toBeGreaterThan(
+      first.indexOf('forever in your debt'),
+    )
+    expect(first.indexOf(ROAD_LINE)).toBeLessThan(first.indexOf(BRENN_FIRST))
+    expectMarkupWellFormed(first)
+    expectDialogueSpeaker(first, 'caravan master thorne')
+    expect(second).not.toContain(ROAD_LINE)
+  })
+
+  it('leaves the rescue and later talks unchanged', () => {
+    const game = gameAfterRescue()
+
+    expect(
+      game.commandParser.parse('talk to caravan master thorne'),
+    ).not.toContain(ROAD_LINE)
+  })
+})

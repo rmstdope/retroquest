@@ -200,7 +200,15 @@ export class InnkeeperMarcus extends Character {
         "each day, and I fear we don't have much time left. If you truly " +
         "can help her, I'll give you anything - rooms, information, " +
         'whatever you need.'
-      return dialogueBlock + plea
+      const weekTheKingWent =
+        '\n\n' +
+        characterName(name) +
+        ': ' +
+        speech(
+          'It came on her the week the king went. The whole town was out in ' +
+            'the streets asking after him, and I was upstairs with a cold cloth.',
+        )
+      return dialogueBlock + plea + weekTheKingWent
     } else {
       const dialogueBlock =
         'The ' +

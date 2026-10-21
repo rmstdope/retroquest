@@ -37,6 +37,11 @@ export class Historians extends Character {
             'of it. The year you were born. His notes stop at the same ' +
             'place. Whatever he came for, someone hid it from him before he ' +
             'ever sat down.',
+        ) +
+        '\n\nOne of them adds, more quietly:\n\n' +
+        speech(
+          'You saw the last name in our register, then. The same week. We ' +
+            'have told ourselves it means nothing, and none of us believes it.',
         )
       )
     }

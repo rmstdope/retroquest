@@ -152,6 +152,14 @@ export class CaravanMasterThorne extends Character {
         characterName(this.name) +
         ': ' +
         speech(
+          'That forest road was safe enough a month ago. Nobody patrols it ' +
+            'since the king went; every rider the castle has is out looking ' +
+            'for him.',
+        ) +
+        '\n\n' +
+        characterName(this.name) +
+        ': ' +
+        speech(
           `${characterName('Brenn')}, my guard, came stumbling back alone ` +
             'two nights ago. Says the ravine path gave way and he ran. Ran! ' +
             "I'll deal with him once my people are home.",
