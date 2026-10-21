@@ -5,6 +5,7 @@ import { Coins } from '../items/Coins'
 import { InnkeeperMarcus } from './InnkeeperMarcus'
 import {
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
+  FLAG_KNOWS_ELENA_CURSE,
   FLAG_MARCUS_TOLD_TRUTH,
   VIRTUE_TRUTH,
 } from '../Act2StoryFlags'
@@ -171,5 +172,52 @@ describe('Innkeeper Marcus and the last lodger', () => {
     expect(
       new InnkeeperMarcus().talkTo(new Game([new Act2()]).state),
     ).not.toContain('grey cloak')
+  })
+})
+
+describe('Innkeeper Marcus and the week the king went', () => {
+  const WEEK_LINE =
+    'It came on her the week the king went. The whole town was out in the ' +
+    'streets asking after him, and I was upstairs with a cold cloth.'
+  const PLEA = "You've spoken with"
+
+  /** An Act II game at the inn with Elena met but not cured. */
+  function gameAfterElena(): Game {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    return game
+  }
+
+  it('follows the plea with the line, on every talk', () => {
+    const game = gameAfterElena()
+
+    for (let i = 0; i < 2; i++) {
+      const text = game.commandParser.parse('talk to innkeeper marcus')
+      expect(text).toContain(WEEK_LINE)
+      expect(text.indexOf(WEEK_LINE)).toBeGreaterThan(text.indexOf(PLEA))
+      expectMarkupWellFormed(text)
+      expectDialogueSpeaker(text, 'innkeeper marcus')
+    }
+  })
+
+  it('says nothing before meeting Elena', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+
+    expect(game.commandParser.parse('talk to innkeeper marcus')).not.toContain(
+      WEEK_LINE,
+    )
+  })
+
+  it('says nothing after the cure', () => {
+    const game = gameAfterCure()
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+
+    for (let i = 0; i < 2; i++) {
+      expect(
+        game.commandParser.parse('talk to innkeeper marcus'),
+      ).not.toContain(WEEK_LINE)
+    }
   })
 })

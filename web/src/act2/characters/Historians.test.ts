@@ -124,3 +124,37 @@ describe('The Historians recognise their own shelves', () => {
     }
   })
 })
+
+describe('The Historians and the week the king went', () => {
+  const WEEK_LINE =
+    'You saw the last name in our register, then. The same week. We have ' +
+    'told ourselves it means nothing, and none of us believes it.'
+  const LEAD_IN = 'One of them adds, more quietly:'
+
+  it('adds the line as a quiet aside after the archive, every talk', () => {
+    const game = newGame()
+    game.state.setStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION, true)
+    game.state.setStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS, true)
+    new GreatHall().search(game.state)
+    const historians = new Historians()
+
+    for (let i = 0; i < 2; i++) {
+      const text = historians.talkTo(game.state)
+      const roll = text.indexOf('We checked the Willowbrook roll')
+      expect(text).toContain(WEEK_LINE)
+      expect(text.indexOf(LEAD_IN)).toBeGreaterThan(roll)
+      expect(text.indexOf(WEEK_LINE)).toBeGreaterThan(text.indexOf(LEAD_IN))
+      expectMarkupWellFormed(text)
+      expectDialogueSpeaker(text, 'historians')
+    }
+  })
+
+  it('says nothing before the archive is worked through', () => {
+    const game = newGame()
+    const historians = new Historians()
+    expect(historians.talkTo(game.state)).not.toContain(WEEK_LINE)
+
+    game.state.setStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS, true)
+    expect(historians.talkTo(game.state)).not.toContain(WEEK_LINE)
+  })
+})
