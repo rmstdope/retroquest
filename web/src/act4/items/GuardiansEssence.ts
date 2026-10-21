@@ -10,10 +10,9 @@ export class GuardiansEssence extends Item {
     super({
       name: "Guardian's Essence",
       description:
-        'A swirling orb of golden light that contains the purified essence of ' +
-        "a guardian's courage. The light within shifts and dances, radiating " +
-        'warmth and determination. This essence proves your worthiness to those ' +
-        'who have suffered under shadow magic.',
+        'A small, steady light the colour of a candle flame, left where the ' +
+        'last guardian stood. Whoever the guardians were made from was brave ' +
+        'once. The light remembers it.',
       canBeCarried: true,
     })
   }
@@ -30,13 +29,13 @@ export class GuardiansEssence extends Item {
       if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
         gameState.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
         return event(
-          "You present the Guardian's Essence to the trapped servants. " +
-            'The golden light recognizes their suffering and your courage in ' +
-            "facing the shadow guardians. The servants' eyes brighten with hope " +
-            'as they sense your worthiness to help them.',
+          "You hold out the [item_name]Guardian's Essence[/item_name]. The " +
+            'servants stop their circling and gather to look at it. One reaches ' +
+            'out, but does not touch. They know what it is, and what it cost. ' +
+            'For the first time, they look at you instead of through you.',
         )
       }
-      return '[dim]The servants already recognize your worthiness.[/dim]'
+      return '[dim]The servants already know you. They watch you, and wait.[/dim]'
     }
     return super.useOnCharacter(gameState, targetCharacter)
   }
@@ -45,19 +44,17 @@ export class GuardiansEssence extends Item {
   override use(gameState: GameState): string {
     if (gameState.currentRoom instanceof OuterCourtyard) {
       return event(
-        "The Guardian's Essence glows brightly, ready to prove your " +
-          'worthiness to those who need your help. Try using it on the servants.',
+        'The light warms your hands. Across the courtyard, one of the ' +
+          'servants stops walking and turns towards it.',
       )
     }
     if (gameState.currentRoom instanceof HallOfEchoes) {
       return event(
-        "The Guardian's Essence resonates with the ancient hall, " +
-          'recognizing the nobility that once existed here.',
+        'The light steadies in the old hall, as if it has been here before.',
       )
     }
     return event(
-      "The Guardian's Essence pulses gently, waiting for the right " +
-        'moment to demonstrate your courage.',
+      'The light sits warm in your hand, waiting for someone to show it to.',
     )
   }
 }

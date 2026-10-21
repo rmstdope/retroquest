@@ -63,8 +63,8 @@ describe('Act 4 integration', () => {
     // Phase 1.1: Examine ward stones to understand the mechanism
     let result = executeCommands(game, ['examine ward stones'])
     expect(
-      result.toLowerCase().includes('shadow guardians') ||
-        result.toLowerCase().includes('anchor points'),
+      result.toLowerCase().includes('a corner has broken away') ||
+        result.toLowerCase().includes('the same hand on every one'),
     ).toBe(true)
 
     // Phase 1.2: Take ward stone fragment (should be available)
@@ -74,8 +74,8 @@ describe('Act 4 integration', () => {
     // Phase 1.3: Use ward stone fragment to disable barriers
     result = executeCommands(game, ['use ward stone fragment with barriers'])
     expect(
-      result.toLowerCase().includes('disable') ||
-        result.toLowerCase().includes('barrier'),
+      result.toLowerCase().includes('the wall shivers') ||
+        result.toLowerCase().includes('goes out'),
     ).toBe(true)
 
     // Phase 1.4: Cast light to dispel shadow guardians
@@ -181,11 +181,11 @@ describe('Act 4 integration', () => {
 
   describe('the gates and the courtyard', () => {
     const BARRIER_THROWS_BACK =
-      'A shimmering barrier of dark energy throws you back. ' +
-      'It pulses in rhythm with the ward stones.'
+      'The violet wall gives under your hand, then pushes you back, ' +
+      'gently and firmly. It hums in time with the ward stones.'
     const SERVANTS_BLOCK =
-      'The trapped servants drift across the archway, their chains of shadow ' +
-      'trailing behind them. You cannot pass while they are bound.'
+      'The servants drift across the archway, their chains trailing. ' +
+      'They do not stop for you, and you cannot get past them.'
 
     /** The names of the active quests. */
     function active(): string[] {
@@ -271,7 +271,10 @@ describe('Act 4 integration', () => {
 
     it('refuses light before the barrier is broken', () => {
       const answer = executeCommands(game, ['cast light on ward stones'])
-      expect(answer).toContain('You must disable the magical barriers first.')
+      expect(answer).toContain(
+        'Your light touches the nearest guardian and slides off it',
+      )
+      expect(answer).not.toContain('You must')
       expectStoryFlag(
         game.state,
         FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
@@ -291,10 +294,10 @@ describe('Act 4 integration', () => {
       )
       const room = game.state.currentRoom.describe(game.state)
       expect(room).toContain(
-        'The ward stones stand dark and silent now, and the barrier is gone. ' +
-          'Whispers of forgotten souls still echo from deep within the fortress.',
+        'The ward stones are dark now, and the paths between them are empty. ' +
+          'The gates stand open.',
       )
-      expect(room).not.toContain('Spectral guardians drift')
+      expect(room).not.toContain('still walk')
       expect(executeCommands(game, ['go north'])).toContain('You move north to')
       expectCurrentRoom(game.state, 'Hall of Echoes')
       executeCommands(game, ['go south'])
@@ -319,7 +322,7 @@ describe('Act 4 integration', () => {
     it('fails to bless the servants before trust is earned', () => {
       enterCourtyard()
       const answer = executeCommands(game, ['cast bless on servants'])
-      expect(answer).toContain('do not trust you enough')
+      expect(answer).toContain('they have learned what strangers bring')
       expectStoryFlag(game.state, FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, false)
     })
 
@@ -340,14 +343,14 @@ describe('Act 4 integration', () => {
       enterCourtyard()
       executeCommands(game, ["use guardian's essence on servants"])
       const talkTrust = executeCommands(game, ['talk to servants'])
-      expect(talkTrust).toContain('use your compassion')
+      expect(talkTrust).toContain('Whatever you can do for us, do it gently')
       expect(
         executeCommands(game, ["use guardian's essence with servants"]),
-      ).toContain('already recognize your worthiness')
+      ).toContain('The servants already know you')
       const bless = executeCommands(game, ['cast bless on servants'])
       expect(bless).toContain(
-        "freed from Malakar's curse. By the fountain, the captain blinks, " +
-          'as if waking from a long sleep. In gratitude, they offer you',
+        'By the fountain, the captain blinks, as if waking from a long ' +
+          'sleep. One of the servants presses two things into your hands',
       )
       expectQuestCompleted(game.state, 'The Trapped Servants')
       const done = game.state.completedQuests.find(
@@ -361,18 +364,18 @@ describe('Act 4 integration', () => {
       expectItemInInventory(game.state, "Servant's Pendant", false)
       const room = game.state.currentRoom.describe(game.state)
       expect(room).toContain(
-        'The black tears in the fountains have dried, and the storm overhead ' +
-          'has thinned to grey. The Freed Servants rest by the fountains, their ' +
-          'chains gone, and the captain of the guard sits among them with his ' +
-          'head in his hands.',
+        'The fountains have stopped running black, and the sky has thinned to ' +
+          'grey. The Freed Servants rest by the fountains, their chains gone, ' +
+          'and the captain of the guard sits among them with his head in his ' +
+          'hands.',
       )
       expect(room).toContain('Freed Servants')
       expect(room).toContain('Captain of the Guard')
       expect(executeCommands(game, ['cast bless on servants'])).toContain(
-        'already been freed',
+        'nothing left to bless away',
       )
       const servants = executeCommands(game, ['talk to freed servants'])
-      expect(servants).toContain('Thank you for our freedom!')
+      expect(servants).toContain('The mirrors past the arch lie.')
       expectDialogueSpeaker(servants, 'Freed Servants')
       const captain = executeCommands(game, ['talk to captain'])
       expect(captain).toContain('Cedric stood his post')
@@ -380,6 +383,45 @@ describe('Act 4 integration', () => {
       executeCommands(game, ['take loyalty token', "take servant's pendant"])
       expectItemInInventory(game.state, 'Loyalty Token', true)
       expectItemInInventory(game.state, "Servant's Pendant", true)
+    })
+
+    it('shows the middle gates description once the wall is down, also after a reload', () => {
+      const look = (): string => game.state.currentRoom.describe(game.state)
+      expect(look()).toContain('a thin wall of the same light')
+      executeCommands(game, [
+        'take ward stone fragment',
+        'use ward stone fragment with barriers',
+      ])
+      expect(look()).toContain('The violet wall is gone')
+      expect(look()).toContain('still walk their short lines')
+      const loaded = game.loadSaveData(game.toSaveData())
+      expect(loaded).toContain('Game loaded successfully.')
+      expect(look()).toContain('The violet wall is gone')
+      executeCommands(game, ['cast light on ward stones'])
+      expect(look()).toContain('The gates stand open.')
+    })
+
+    it('never tells the player what to type in the first half of the act', () => {
+      const hints = [
+        'You must disable the magical barriers first',
+        'You must prove your worthiness first',
+        'Try using it on the servants',
+        'You need something to light the true path',
+        'You need something to shield you from it',
+        'Listen to her first',
+      ]
+      const lines = [
+        executeCommands(game, ['go north']),
+        executeCommands(game, ['cast light on ward stones']),
+      ]
+      breakThrough()
+      executeCommands(game, ["take guardian's essence", 'east'])
+      lines.push(
+        executeCommands(game, ["use guardian's essence"]),
+        executeCommands(game, ['cast bless on servants']),
+        executeCommands(game, ['talk to servants']),
+      )
+      for (const hint of hints) expect(lines.join('\n')).not.toContain(hint)
     })
 
     it('keeps every state through a save and load', () => {
@@ -394,7 +436,7 @@ describe('Act 4 integration', () => {
       reload()
       expectQuestCompleted(game.state, 'Shattered Ward Guardians')
       expect(game.state.currentRoom.describe(game.state)).toContain(
-        'The ward stones stand dark and silent now',
+        'The ward stones are dark now',
       )
       expect(executeCommands(game, ['go north'])).toContain('You move north to')
       executeCommands(game, ['go south', "take guardian's essence", 'east'])
@@ -501,8 +543,9 @@ describe('Act 4 integration', () => {
       'The Knight of Despair stands before the stair to the tower. He does ' +
       'not lift his sword. He simply does not move, and there is no way past him.'
     const NO_LIGHT =
-      "The echoes whisper the way, but the mirrors' glare swallows every step " +
-      'they name. You need something to light the true path.'
+      'The echoes whisper the way, but every step they name opens onto three ' +
+      'more, all of them shining. You cannot tell which light is true. You ' +
+      'wish the servants were here; they would know.'
     const STONE_OUTSIDE =
       "You hold the Echo Stone to your ear. The hall's voices murmur inside " +
       'it, waiting for somewhere that needs them.'
@@ -571,10 +614,10 @@ describe('Act 4 integration', () => {
           'Every path looks real. Most of them are lies.',
       )
       expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        'only echoes from the ancient halls reveal the true way forward.',
+        'Bring us their voices.',
       )
       expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        'The servants have already shared their guidance about the mirror labyrinth.',
+        "The pendant's voices have said what they know.",
       )
     })
 
@@ -597,7 +640,7 @@ describe('Act 4 integration', () => {
       expect(room).toContain('Echo Stone')
       expect(room).toContain('Knight of Despair')
       expect(room).toContain(
-        "At the hall's heart stands a figure in tarnished armor",
+        'a knight in tarnished armour stands without moving',
       )
       const clue =
         "You stand still and listen. Beneath the battle cries and laments, one voice repeats the same words over and over, patient as a heartbeat: 'Carry our voices into the glass. Where the servants' light and the echoes meet, the true path shows itself.'"
@@ -768,7 +811,7 @@ describe('Act 4 integration', () => {
       executeCommands(game, ['north', "use servant's pendant"])
       reload()
       expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        'already shared',
+        'have said what they know',
       )
       expect(executeCommands(game, ['go north'])).toContain(GLASS)
       executeCommands(game, ['south', 'west', 'north'])
@@ -863,12 +906,12 @@ describe('Act 4 integration', () => {
       executeCommands(game, ['cast truth sight on knight of despair'])
       reload()
       expect(executeCommands(game, ['say redemption to knight'])).toContain(
-        'You need something to shield you from it.',
+        'You could not say it with nothing between you and his sorrow.',
       )
       executeCommands(game, ["use guardian's chain"])
       reload()
       expect(executeCommands(game, ["use guardian's chain"])).toContain(
-        'already providing',
+        'The chain is already lit',
       )
       executeCommands(game, ['say redemption to knight'])
       reload()

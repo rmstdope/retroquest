@@ -10,12 +10,27 @@ import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
 } from '../Act4StoryFlags'
 
-/** The gates once the ward stones have fallen dark and the barrier is gone. */
+/** The gates while the wall of light is up and the guardians are walking. */
+const GATES_WALL_UP_DESCRIPTION =
+  'The gates are black stone, cut square and fitted without a seam. Four ' +
+  'ward stones stand before them at equal distances, each glowing the same ' +
+  'steady violet, and a thin wall of the same light hangs across the ' +
+  'gateway. Pale guardians walk the same short line between the stones, ' +
+  'turn, and walk it back. Nothing here looks broken. Someone took great ' +
+  'care over it.'
+
+/** The gates while the wall of light is down and the guardians still walk. */
+const GATES_WALL_DOWN_DESCRIPTION =
+  'The gates are black stone, cut square and fitted without a seam. The ' +
+  'violet wall is gone, but the four ward stones still glow, and the pale ' +
+  'guardians still walk their short lines between them, turn, and walk them ' +
+  'back, as if nothing has changed.'
+
+/** The gates once the guardians are gone. */
 const GATES_AFTER_DESCRIPTION =
-  'Towering obsidian gates loom before you, carved with writhing shadows ' +
-  'that seem to move in the corners of your vision. The ward stones stand ' +
-  'dark and silent now, and the barrier is gone. Whispers of forgotten ' +
-  'souls still echo from deep within the fortress.'
+  'The gates are black stone, cut square and fitted without a seam. The ward ' +
+  'stones are dark now, and the paths between them are empty. The gates ' +
+  'stand open.'
 
 /**
  * The dark entrance to Malakar's fortress, protected by shadow guardians.
@@ -29,13 +44,7 @@ export class FortressGates extends Room {
   constructor() {
     super({
       name: 'Fortress Gates',
-      description:
-        'Towering obsidian gates loom before you, carved with writhing shadows that ' +
-        'seem to move in the corners of your vision. Ancient ward stones pulse with ' +
-        'malevolent energy, casting eerie purple light across the threshold. The air ' +
-        'crackles with dark magic, and whispers of forgotten souls echo from beyond ' +
-        'the barrier. Spectral guardians drift between the stones, their hollow eyes ' +
-        'fixed upon any who dare approach this cursed entrance.',
+      description: GATES_WALL_UP_DESCRIPTION,
       items: [
         new WardStoneFragment(),
         new GuardiansChain(),
@@ -45,6 +54,21 @@ export class FortressGates extends Room {
       characters: [],
       exits: { north: 'HallOfEchoes', east: 'OuterCourtyard' },
     })
+  }
+
+  /**
+   * The gates' look follows the story: the wall up, the wall down with the
+   * guardians still walking, and the guardians gone. Derived from the story
+   * flags, so a loaded game always shows the description that matches.
+   */
+  override descriptionFor(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED)) {
+      return GATES_AFTER_DESCRIPTION
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
+      return GATES_WALL_DOWN_DESCRIPTION
+    }
+    return GATES_WALL_UP_DESCRIPTION
   }
 
   /** The ways north and east open once the barrier is down. */
@@ -59,8 +83,8 @@ export class FortressGates extends Room {
     if (gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) return null
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
     return (
-      '[failure]A shimmering barrier of dark energy throws you back. ' +
-      'It pulses in rhythm with the ward stones.[/failure]'
+      '[failure]The violet wall gives under your hand, then pushes you back, ' +
+      'gently and firmly. It hums in time with the ward stones.[/failure]'
     )
   }
 
@@ -68,26 +92,27 @@ export class FortressGates extends Room {
   override light(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
       return (
-        '[failure]The shadow guardians resist your light magic while the ward ' +
-        'stones remain active. You must disable the magical barriers first.[/failure]'
+        '[failure]Your light touches the nearest guardian and slides off it, ' +
+        'like rain off a window. Behind it, the ward stones pulse once, all ' +
+        'together.[/failure]'
       )
     }
     if (!this.shadowGuardiansBanished) {
       this.shadowGuardiansBanished = true
-      this.description = GATES_AFTER_DESCRIPTION
       gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, true)
       // Add Guardian's Essence to the room
       this.addItem(new GuardiansEssence())
       return event(
-        'Your light magic blazes forth, dispelling the shadow guardians in ' +
-          'brilliant flashes of purifying energy. As they vanish, their essence ' +
-          'coalesces into a glowing orb that settles gently on the ground - the ' +
-          "Guardian's Essence, proof of your courage.",
+        'Your light fills the gateway. The guardians stop in the middle of ' +
+          'their lines, as if someone had called them by name, and are gone. ' +
+          'Where the last one stood, a small light the colour of a candle ' +
+          'flame hangs above the ground: the ' +
+          "[item_name]Guardian's Essence[/item_name].",
       )
     }
     return (
-      '[dim]The shadow guardians have already been banished. The way forward ' +
-      'is clear.[/dim]'
+      "[dim]The guardians' paths are empty. There is nothing left here for " +
+      'your light.[/dim]'
     )
   }
 }

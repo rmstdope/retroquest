@@ -13,10 +13,9 @@ export class TrappedServants extends Character {
     super({
       name: 'Trapped Servants',
       description:
-        'Several ethereal figures wander in endless circles, their faces ' +
-        'etched with torment. Dark chains of shadow magic bind their spirits ' +
-        'to this cursed ground, forcing them to serve Malakar against their will. ' +
-        'Their eyes plead for release from their eternal suffering.',
+        'Grey figures walk the courtyard paths in circles, chains of shadow ' +
+        'at their ankles. They wear what is left of kitchen aprons and stable ' +
+        'coats. None of them looks up.',
     })
   }
 
@@ -40,32 +39,28 @@ export class TrappedServants extends Character {
     const name = characterName(this.name)
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
       return (
-        `The eyes of the ${name} regard you with fear and suspicion. ` +
-        'One whispers: ' +
+        `The ${name} watch you from the corners of their eyes and keep ` +
+        'walking. One whispers, without stopping: ' +
         speech(
-          "'Many have come before... all have fallen to " +
-            'shadow. Prove your courage against the darkness before we dare ' +
-            "trust...'",
+          "'Others came through that gate. They were all brave, until the " +
+            'guardians. If you were braver than the guardians, you would ' +
+            "carry something of theirs.'",
         )
       )
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)) {
       return (
-        `The faces of the ${name} brighten with hope as they sense your ` +
-        'worthiness. ' +
-        speech(
-          "'You have shown courage! Please, use your " +
-            'compassion to break these cursed chains that bind us to eternal ' +
-            "servitude.'",
-        )
+        `The ${name} have stopped walking. They stand close together, ` +
+        'watching you. ' +
+        speech("'We are so tired. Whatever you can do for us, do it gently.'")
       )
     }
     return (
-      `The ${name} bow gratefully. ` +
+      `The ${name} bow, a little stiffly, as if they have forgotten how. ` +
       speech(
-        "'Thank you for our freedom! " +
-          'The Mirror Labyrinth ahead is treacherous - our pendant will help guide ' +
-          "you, but beware: only the ancient echoes know the full truth.'",
+        "'The mirrors past the arch lie. We used to polish them, and they " +
+          'lied to us too. Keep the pendant close, and listen for the ones ' +
+          "who have nothing left to lie about.'",
       )
     )
   }

@@ -16,8 +16,8 @@ describe('LoyaltyToken', () => {
 
     const again = item.use(game.state)
 
-    expect(elsewhere).toContain('glows softly')
-    expect(again).toContain('already protecting you')
+    expect(elsewhere).toContain('Someone, somewhere, is glad you came')
+    expect(again).toContain('The whispers cannot find their way in')
     for (const answer of [elsewhere, again]) {
       expectMarkupWellFormed(answer)
     }

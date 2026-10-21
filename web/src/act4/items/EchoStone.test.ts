@@ -43,7 +43,7 @@ describe('EchoStone', () => {
   it('needs the pendant in the pack to solve the maze', () => {
     const { game } = inMaze()
     const stone = new EchoStone()
-    expect(stone.use(game.state)).toContain('You need something to light')
+    expect(stone.use(game.state)).toContain('You wish the servants were here')
     game.state.inventory.push(new ServantsPendant())
     expect(stone.use(game.state)).toContain('a plain mirror')
     expect(stone.use(game.state)).toContain('already clear')

@@ -20,10 +20,10 @@ describe('GuardiansEssence', () => {
 
     const again = essence.useOnCharacter(game.state, new TrappedServants())
 
-    expect(elsewhere).toContain('pulses gently')
-    expect(hall).toContain('resonates with the ancient hall')
-    expect(courtyard).toContain('Try using it on the servants')
-    expect(again).toContain('already recognize your worthiness')
+    expect(elsewhere).toContain('waiting for someone to show it to')
+    expect(hall).toContain('steadies in the old hall')
+    expect(courtyard).toContain('turns towards it')
+    expect(again).toContain('The servants already know you')
     for (const answer of [elsewhere, hall, courtyard, again]) {
       expectMarkupWellFormed(answer)
     }

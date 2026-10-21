@@ -9,9 +9,9 @@ export class WardStoneFragment extends Item {
     super({
       name: 'Ward Stone Fragment',
       description:
-        'A jagged piece of dark stone that pulses with residual magical energy. ' +
-        'Ancient runes are carved into its surface, glowing faintly with purple light. ' +
-        "This fragment appears to be a key component of the fortress's defensive wards.",
+        'A corner of black stone, broken from one of the ward stones. Its runes ' +
+        'still glow, weakly and out of time, as if it is still trying to keep ' +
+        'the count.',
       canBeCarried: true,
     })
   }
@@ -23,19 +23,16 @@ export class WardStoneFragment extends Item {
       if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
         gameState.setStoryFlag(FLAG_ACT4_BARRIERS_DISABLED, true)
         return event(
-          'You press the ward stone fragment against the magical barriers. ' +
-            'The purple energy flickers and fades as the defensive wards are disrupted. ' +
-            'The barriers collapse with a resonant hum, clearing the way forward.',
+          'You press the broken corner against the violet wall. For a moment ' +
+            'the two lights try to agree, and cannot. The wall shivers, thins ' +
+            'and goes out. Behind it, the ward stones hum on alone.',
         )
       }
-      return (
-        '[failure]The barriers have already been disabled. The ward stone ' +
-        'fragment has served its purpose.[/failure]'
-      )
+      return '[failure]There is no wall left to press it against.[/failure]'
     }
     return (
-      '[failure]The ward stone fragment only responds to the specific magical ' +
-      'barriers of the fortress gates.[/failure]'
+      "[failure]The fragment's light stutters, looking for the stones it " +
+      'came from. It does nothing here.[/failure]'
     )
   }
 

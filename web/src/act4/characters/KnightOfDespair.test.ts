@@ -25,7 +25,7 @@ const SEEN =
 const NOT_SEEN =
   'The word means nothing to a man you cannot truly see. He does not even turn his head.'
 const NO_CHAIN =
-  "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. You need something to shield you from it."
+  "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. You could not say it with nothing between you and his sorrow."
 const BLOCK = 'there is no way past him'
 
 /** A game in the Hall of Echoes with Truth Sight, the chain and the stone. */
