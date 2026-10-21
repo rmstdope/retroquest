@@ -266,7 +266,7 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
 
 ## Story Beats
 
-The red-line threads of Act I (see `GameStory.md`, Story Canon and Red Line). All ride on existing talks, examines and gives; none adds a puzzle or changes the golden path. The Wardens, the ward and the parents' fate are not named in Act I, and Malakar only as a byword.
+The red-line threads of Act I (see `GameStory.md`, Story Canon and Red Line). All ride on existing talks, examines and gives; none adds a puzzle or changes the golden path. The Wardens, the ward and the parents' fate are not named in Act I, and Malakar only as a byword, save for one line of the mother's letter.
 
 - **The byword.** Willowbrook says Malakar's name the way a village names a bogeyman: Tilda's "Malakar's weather" over the restless animals, Hemlock's "Malakar's luck" over the stopped caravans, both with a knock on wood. Nobody in the village treats him as a living man; only the mother's letter does, in one line. This is the source of the Act II row of the red line, where Elior arrives still half-believing Malakar is a tale from old books, and it is chilling in hindsight: the man the village swears by held Elior as a baby.
 
