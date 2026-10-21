@@ -48,6 +48,9 @@ describe('Phoenix links patience to the Warden of Wisdom', () => {
     expect(first).toContain(HINT)
     expect(phoenix.talkTo(game.state)).toBe(first)
     expect(first).not.toContain('Malakar')
+    expect(first.indexOf(HINT)).toBeGreaterThan(
+      first.indexOf('What is wisdom when time is short?'),
+    )
   })
 
   it('leaves the wrong-answer reply unchanged', () => {
@@ -93,6 +96,7 @@ describe('Phoenix links patience to the Warden of Wisdom', () => {
     expect(farewell).toContain(NOD)
     expect(farewell).toContain(FAREWELL)
     expect(farewell).not.toContain('What is wisdom')
+    expect(farewell.indexOf(NOD)).toBeLessThan(farewell.indexOf(FAREWELL))
     expectMarkupWellFormed(farewell)
     expectDialogueSpeaker(farewell, phoenix.name)
     expect(phoenix.sayTo(game.state, 'anything')).toContain(
@@ -106,5 +110,16 @@ describe('Phoenix links patience to the Warden of Wisdom', () => {
     const reply = new Phoenix().talkTo(game.state)
     expect(reply).toContain(FAREWELL)
     expect(reply).not.toContain('What is wisdom')
+  })
+
+  it('still gives the farewell after a save and load', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+    expect(fresh.state.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)).toBe(
+      true,
+    )
+    expect(new Phoenix().talkTo(fresh.state)).toContain(FAREWELL)
   })
 })
