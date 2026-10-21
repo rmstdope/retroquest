@@ -90,7 +90,7 @@ export function farewell(ending: Ending): string {
     dialogue(
       'Aren',
       'The ward is finished, and so are we. Tell your grandmother we are ' +
-        'proud of you. Tell her we are resting.',
+        'proud of her. Tell her we are resting.',
     ),
     dialogue('Lysa', 'Go home, love. The field is waiting.'),
     'The light thins. They smile, and they are gone. The amulet in your ' +

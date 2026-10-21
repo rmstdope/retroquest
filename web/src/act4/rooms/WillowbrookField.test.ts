@@ -23,6 +23,21 @@ const KNEEL_KEPT =
 const ARCH_SENTENCE = 'Behind the throne an arch stands open on the road home.'
 const AMULET_STEP = ACT4_GOLDEN_PATH.indexOf('use ancient amulet') + 1
 
+const MIRA_ELENA_TOLD =
+  'You tell her, too, what the Sorceress asked you to carry: that she is sorry, and that Elena should hear it.'
+const MIRA_ELENA_ANSWER =
+  'Elena. I am going back through Greendale. I will tell her.'
+const CEDRIC_OLD =
+  'I have walked a long way beside you. This is a good place to stop.'
+const CEDRIC_FIRST = [
+  'You tell him what the captain of the guard said: that he is sorry he ever doubted him.',
+  'He was the youngest on the walls that night. I never blamed him. I am glad he remembers.',
+  'Then what the knight in grey said: that he is sorry, and that he would say it to your face.',
+  'The knight in grey. I thought I would want to hear that more than I do. Tell me where he is.',
+  'He looks out over the field for a while.',
+  `Later. ${CEDRIC_OLD}`,
+]
+
 type Ending = 'redemption' | 'justice' | 'sacrifice'
 
 /** A game at the end of the chosen ending, in the Throne Chamber. */
@@ -84,6 +99,17 @@ describe('the arch', () => {
         '[exits]north[/exits] (the way home)',
       )
       expect(game.state.currentRoom.description).toContain(ARCH_SENTENCE)
+    })
+  }
+})
+
+describe('the farewell', () => {
+  for (const ending of ['redemption', 'justice', 'sacrifice'] as const) {
+    it(`says "proud of her" in the ${ending} ending`, () => {
+      const { text } = ended(ending)
+      expect(text).toContain(
+        'The ward is finished, and so are we. Tell your grandmother we are proud of her. Tell her we are resting.',
+      )
     })
   }
 })
@@ -160,24 +186,53 @@ describe('the companions', () => {
     expect(later).not.toContain('You saw them')
   })
 
-  it('Mira follows the ending', () => {
-    expect(executeCommands(home('redemption'), ['talk to mira'])).toContain(
-      'He remembers. Then I will go and see him, one day. Not yet.',
-    )
-    expect(executeCommands(home('justice'), ['talk to mira'])).toContain(
-      'Good. And I am sorry, both at once. He taught me my first spell, too.',
-    )
-    expect(executeCommands(home('sacrifice'), ['talk to mira'])).toContain(
-      'All of it? Oh, Elior. Then I will teach you again, slowly, if you want to learn.',
-    )
+  it("Mira follows the ending, then delivers Elena's message once", () => {
+    const endingLines = {
+      redemption: 'He remembers. Then I will go and see him, one day. Not yet.',
+      justice:
+        'Good. And I am sorry, both at once. He taught me my first spell, too.',
+      sacrifice:
+        'All of it? Oh, Elior. Then I will teach you again, slowly, if you want to learn.',
+    }
+    for (const ending of Object.keys(endingLines) as Ending[]) {
+      const game = home(ending)
+      const first = executeCommands(game, ['talk to mira'])
+      expect(first).toContain(endingLines[ending])
+      expect(first.indexOf(endingLines[ending])).toBeLessThan(
+        first.indexOf(MIRA_ELENA_TOLD),
+      )
+      expect(first.indexOf(MIRA_ELENA_ANSWER)).toBeGreaterThan(
+        first.indexOf(MIRA_ELENA_TOLD),
+      )
+      reload(game)
+      const later = executeCommands(game, ['talk to mira'])
+      expect(later).toContain(endingLines[ending])
+      expect(later).not.toContain(MIRA_ELENA_TOLD)
+    }
   })
 
-  it('Sir Cedric and Nyx have one line each, repeated', () => {
+  it('Sir Cedric delivers both apologies once, then keeps his old line', () => {
+    for (const ending of ['redemption', 'justice', 'sacrifice'] as const) {
+      const game = home(ending)
+      const first = executeCommands(game, ['talk to sir cedric'])
+      let at = -1
+      for (const line of CEDRIC_FIRST) {
+        const next = first.indexOf(line)
+        expect(next).toBeGreaterThan(at)
+        at = next
+      }
+      reload(game)
+      for (let i = 0; i < 2; i++) {
+        const later = executeCommands(game, ['talk to cedric'])
+        expect(later).toContain(CEDRIC_OLD)
+        expect(later).not.toContain('The knight in grey')
+      }
+    }
+  })
+
+  it('Nyx answers with a touch before the cast', () => {
     const game = home('justice')
     for (let i = 0; i < 2; i++) {
-      expect(executeCommands(game, ['talk to sir cedric'])).toContain(
-        'I have walked a long way beside you. This is a good place to stop.',
-      )
       expect(executeCommands(game, ['talk to nyx'])).toContain(
         'The little light brushes your cheek, warm, and settles back into the hedge.',
       )
@@ -209,8 +264,16 @@ describe('casting grow at home', () => {
         '[event]You cast [spell_name]grow[/spell_name].[/event]',
       )
       expect(text).toContain('Green runs out from your fingers along the rows.')
-      expect(text).toContain('Grandmother opens the gate.')
-      expect(text).toContain('Welcome home, Elior.')
+      const order = [
+        'the whole field breathes out at once.',
+        'In the hedge the little light brightens. For the last time you hear Nyx, very small:',
+        'Power follows purpose; purpose follows truth.',
+        'Grandmother opens the gate.',
+        'Welcome home, Elior.',
+      ].map((line) => text.indexOf(line))
+      expect(order[0]).toBeGreaterThanOrEqual(0)
+      expect(order).toEqual([...order].sort((x, y) => x - y))
+      expect(text.trimEnd().endsWith('[/dialogue]')).toBe(true)
       expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, true)
       game.newTurn()
       expect(game.runState).toBe(GameRunState.GameOver)
