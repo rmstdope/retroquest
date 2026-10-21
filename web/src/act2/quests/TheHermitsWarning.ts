@@ -10,9 +10,9 @@ export class TheHermitsWarningQuest extends Quest {
     super({
       name: "The Hermit's Warning",
       description:
-        'A mysterious forest hermit has warned you about the dangers of the ' +
-        'Enchanted Forest. They spoke of ancient guardians, dark spirits, ' +
-        'and ever-shifting paths that trap the unwary. The hermit has given ' +
+        'A forest hermit at the edge of the Enchanted Forest has warned you ' +
+        "that the forest moves its paths and keeps old things that don't " +
+        'care for strangers. The hermit has given ' +
         'you a protective charm to help safeguard your journey through the ' +
         'magical wilderness, but you need to prepare yourself before venturing ' +
         'further into the Enchanted Forest.',

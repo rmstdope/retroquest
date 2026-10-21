@@ -24,8 +24,9 @@ describe('Spectral Librarian dialogue markup', () => {
     const answer = librarian.talkTo(game.state)
 
     expect(answer).toContain(
-      "Prove your worthiness by repairing them, and I shall share the knowledge you seek about the mark you carry.'",
+      "'Mind the shelves. Everything here has been kept a long time, and the wards on the oldest texts are failing. I can keep a book; I cannot mend one. Mend the wards, and I will show you where to look for the mark you carry.'",
     )
+    expect(answer).not.toMatch(/eternal|worthiness/i)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, librarian.name)
   })
@@ -90,7 +91,7 @@ describe('Spectral Librarian dialogue markup', () => {
     const answer = new SpectralLibrarian().talkTo(game.state)
 
     const lines = [
-      "'Ah, you have repaired the protective enchantments with your [spell_name]mend[/spell_name] spell. This shows both magical ability and respect for ancient knowledge. I shall reveal what you seek.'",
+      "'You mended the wards with your [spell_name]mend[/spell_name] spell. They have been failing longer than I care to count; thank you. Now, what you came for.'",
       " The spirit's eyes glow brighter as they speak: ",
       "'I am a keeper, not a teller. The answer you came for is in that chronicle. The Wardens of the Dawn wrote it, and their mark is on its cover, the same mark you wear at your throat. Read it, and you will learn the [spell_name]dispel[/spell_name] spell.'",
       ' They gesture to a crystal resting on the shelf: ',
@@ -102,5 +103,17 @@ describe('Spectral Librarian dialogue markup', () => {
       expect(at, line).toBeGreaterThanOrEqual(from)
       from = at + line.length
     }
+  })
+
+  it('examines as a working scholar who watches hands', () => {
+    const game = createGame()
+    const answer = new SpectralLibrarian().examine(game.state)
+
+    expect(answer).toContain(
+      "Up close, the [character_name]Spectral Librarian[/character_name]'s robes are worn thin at the cuffs, " +
+        "the way a working scholar's are. They watch your hands more than " +
+        'your face, the way a librarian watches anyone standing near the books.',
+    )
+    expect(answer).not.toMatch(/wisdom|ancient|eternal|vigil/i)
   })
 })
