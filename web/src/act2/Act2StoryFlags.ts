@@ -45,7 +45,6 @@ export const FLAG_COURT_HERALD_FORMAL_PRESENTATION =
 export const FLAG_READ_ANCIENT_CHRONICLE = 'read_ancient_chronicle'
 export const FLAG_RESEARCHED_FAMILY_HERITAGE = 'researched_family_heritage'
 export const FLAG_HELPED_ELDERLY_RESIDENTS = 'helped_elderly_residents'
-export const FLAG_USED_CITY_MAP = 'used_city_map'
 export const FLAG_FOUND_RAVINE = 'found_ravine'
 /** Set when nature sense found the ravine; cleared once forest speech tells the creatures' story. */
 export const FLAG_RAVINE_STORY_PENDING = 'ravine_story_pending'

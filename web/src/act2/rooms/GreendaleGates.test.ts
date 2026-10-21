@@ -33,6 +33,11 @@ describe('GreendaleGates', () => {
     const answer = game.commandParser.parse('search')
 
     expect(answer).toContain("With the Gate Captain gone, you're free")
+    expect(answer).toContain(
+      'a detailed [item_name]city map[/item_name] of Greendale. ' +
+        'Someone has drawn on it in grey ink.',
+    )
+    expect(answer).not.toContain('exactly what you need')
     expect(gates.items.map((i) => i.name)).toContain('city map')
     expect(gates.getExits(game.state)).toHaveProperty('north')
   })

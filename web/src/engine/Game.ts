@@ -385,20 +385,6 @@ Welcome to
   move(direction: string): string {
     const room = this.state.currentRoom
     const exits = room.getExits(this.state)
-    // Greendale's Main Square: without the city map the player gets lost.
-    if (
-      room.name === 'Main Square' &&
-      !this.state.getStoryFlag('used_city_map') &&
-      direction !== 'south' &&
-      Object.hasOwn(room.exits, direction)
-    ) {
-      return (
-        "[event]You wander through Greendale's winding streets, but without a proper " +
-        'map to guide you, you quickly become lost in the maze of alleys and ' +
-        'buildings. Eventually, you find your way back to the Main Square, ' +
-        'feeling disoriented.[/event]'
-      )
-    }
     if (!(direction in exits))
       return (
         room.blockedExit(this.state, direction) ??
