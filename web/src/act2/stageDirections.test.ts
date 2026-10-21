@@ -195,8 +195,10 @@ describe('Sir Cedric narration between quotes', () => {
     expect(out).not.toContain('*')
     expect(narration(out).filter((l) => l.startsWith('Sir Cedric '))).toEqual([
       'Sir Cedric reaches into his pouch and hands you a bag of coins.',
+      'Sir Cedric hesitates, then rests a hand on a small pouch at his belt.',
     ])
     expect(quotes(out).map((q) => q.speaker)).toEqual([
+      'Sir Cedric',
       'Sir Cedric',
       'Sir Cedric',
     ])

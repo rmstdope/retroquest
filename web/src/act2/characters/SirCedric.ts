@@ -153,6 +153,32 @@ export class SirCedric extends Character {
     )
   }
 
+  /**
+   * The words with which Cedric gives Nature's Charm: they refer back to his
+   * refusal at the send-off when Elior heard it, and stand alone otherwise.
+   */
+  private charmHandOverWords(): string {
+    if (this.cedricTrustsElior) {
+      return (
+        'Do you remember what I told you in the yard? That I would not give ' +
+        'an heirloom of my house to someone I had known a day. I have known ' +
+        "you long enough now. Take Nature's Charm. It was blessed by the " +
+        'ancient knights who first made pacts with the forest spirits, and ' +
+        'it is one of the three that call Nyx. You will need it more than I ' +
+        'will.'
+      )
+    }
+    return (
+      "Please accept this Nature's Charm. It has been in my family for " +
+      'generations, blessed by the ancient knights who first made pacts with ' +
+      'the forest spirits. A day ago I would not have given it to someone I ' +
+      'had only just met. But you have done more for me than men I have ' +
+      'known for years. The old texts say this is one of three sacred ' +
+      'charms needed to summon Nyx. I believe you will need it for the ' +
+      'greater challenges ahead.'
+    )
+  }
+
   /** Cedric's reply to a talk, by the stage of the act; the recognition never changes it. */
   private normalReply(gameState: GameState): string {
     // Check if Nyx trials are completed - highest priority response
@@ -202,14 +228,7 @@ export class SirCedric extends Character {
         '\n\n' +
         characterName('Sir Cedric') +
         ': ' +
-        speech(
-          "Please accept this Nature's Charm. It has been in my family for " +
-            'generations, blessed by the ancient knights who first made pacts ' +
-            'with the forest spirits. The old texts say this is one of three ' +
-            'sacred charms needed to summon Nyx. You have proven yourself a ' +
-            'true friend, and I believe you will need this for the greater ' +
-            'challenges ahead.',
-        )
+        speech(this.charmHandOverWords())
       )
     }
 
@@ -271,6 +290,21 @@ export class SirCedric extends Character {
             'for the forest expedition: a survival kit, an enhanced lantern, ' +
             'and quality rope from the Market District. The realm faces a ' +
             'great threat, and we must be prepared.',
+        ) +
+        '\n\n' +
+        characterName('Sir Cedric') +
+        ' hesitates, then rests a hand on a small pouch at his belt.' +
+        '\n\n' +
+        characterName('Sir Cedric') +
+        ': ' +
+        speech(
+          'One more thing, since the forest is where you are bound. My ' +
+            "family has kept a charm for generations: Nature's Charm, " +
+            'carved for the knights who first made pacts with the forest ' +
+            'spirits. The old texts say it is one of three that can call the ' +
+            'sprite Nyx. I will not hand an heirloom of my house to someone ' +
+            'I have known for a day. Prove yourself in more than a sparring ' +
+            'yard, and we will speak of it again.',
         )
       )
     } else if (this.cedricTrustsElior) {
