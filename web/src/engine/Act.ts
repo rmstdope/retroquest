@@ -60,10 +60,20 @@ export class Act {
 
   /**
    * A line that opens the act-complete page before the words every act
-   * shares, to leave the player on a hook. Empty for an act without one.
+   * shares, to leave the player on a hook. Empty for an act without one. The
+   * state is the finished act's, so the hook can follow the player's choices.
    */
-  getCompletionHook(): string {
+  getCompletionHook(_gameState: GameState): string {
     return ''
+  }
+
+  /**
+   * The failure for a spell the player does not know, or null for the
+   * engine's plain "You don't know any spell called ...". Override when the
+   * story has taken spells away.
+   */
+  unknownSpell(_gameState: GameState, _spellName: string): string | null {
+    return null
   }
 
   /** Act-specific set-up of a fresh state (starting items, spells…). */

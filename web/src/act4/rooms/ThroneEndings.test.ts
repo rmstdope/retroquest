@@ -23,8 +23,6 @@ import {
 
 const AMULET_STEP = ACT4_GOLDEN_PATH.indexOf('use ancient amulet') + 1
 
-const DONT_KNOW = "You don't know any spell called"
-
 /** A game with the amulet open in the Throne Chamber and the given virtues. */
 function opened(virtues: string[] = []): Game {
   const game = new Game([new Act4()])
@@ -137,7 +135,7 @@ describe('Redemption', () => {
     expectStoryFlag(game.state, FLAG_ACT4_FINAL_STAND_COMPLETED, true)
     expectQuestCompleted(game.state, 'The Final Stand')
     expect(game.state.currentRoom.description).toBe(
-      'The dome is quiet. Where the wound was there is only air. King Alden sits among the shards of his prison, alive, and Malakar sits beside him, himself again.',
+      'The dome is quiet. Where the wound was there is only air. King Alden sits among the shards of his prison, alive, and Malakar sits beside him, himself again. Behind the throne an arch stands open on the road home.',
     )
   })
 
@@ -270,7 +268,9 @@ describe('Sacrifice', () => {
     expectStoryFlag(game.state, FLAG_ACT4_SACRIFICE_ENDING, true)
     expectQuestCompleted(game.state, 'The Final Stand')
     expect(spellNames(game)).toEqual(['grow'])
-    expect(executeCommands(game, ['cast bless'])).toContain(DONT_KNOW)
+    expect(executeCommands(game, ['cast bless'])).toContain(
+      'That magic is gone from you now.',
+    )
     expect(executeCommands(game, ['talk to malakar'])).toContain(
       'You gave it all away. For them. For me.',
     )

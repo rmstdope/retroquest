@@ -4,6 +4,7 @@ import { Act4 } from './Act4'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
 import { playDebugScript } from '@/utils/debugScript'
 import {
+  FLAG_ACT4_FIELD_GREEN,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED,
   FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED,
@@ -456,8 +457,10 @@ describe('Act 4 integration', () => {
       expectSpellKnown(game.state, 'hearts_truth')
       expectQuestCompleted(game.state, 'The Shadow of the Past')
       expectQuestCompleted(game.state, "The Parent's Legacy")
-      expectCurrentRoom(game.state, 'Throne Chamber')
+      expectCurrentRoom(game.state, 'Willowbrook Field')
       expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
+      expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, true)
+      expect(game.acts[0].isCompleted(game.state)).toBe(true)
     })
 
     it('is what cheat act 4 plays', () => {
@@ -901,15 +904,16 @@ describe('Act 4 throne room', () => {
   it('plays the golden path to the Redemption ending and survives a save', () => {
     const game = new Game([new Act4()])
     executeCommands(game, ACT4_GOLDEN_PATH)
-    expectCurrentRoom(game.state, 'Throne Chamber')
+    expectCurrentRoom(game.state, 'Willowbrook Field')
     expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
     expectStoryFlag(game.state, FLAG_ACT4_REDEMPTION_ENDING, true)
+    expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, true)
     expectQuestCompleted(game.state, 'The Final Stand')
     expectSpellKnown(game.state, 'Forgiveness')
     expect(game.loadSaveData(game.toSaveData())).toContain(
       'Game loaded successfully.',
     )
-    expectCurrentRoom(game.state, 'Throne Chamber')
+    expectCurrentRoom(game.state, 'Willowbrook Field')
     expectStoryFlag(game.state, FLAG_ACT4_REDEMPTION_ENDING, true)
     expectQuestCompleted(game.state, 'The Final Stand')
     expectSpellKnown(game.state, 'Forgiveness')

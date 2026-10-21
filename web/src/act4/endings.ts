@@ -97,3 +97,21 @@ export function farewell(ending: Ending): string {
       'hand is only a locket now, warm and quiet. Your parents are at rest.',
   ].join('\n')
 }
+
+/** The last line of every ending's answer: the way home opens. */
+export const ARCH_LINE =
+  'Behind the throne an arch you had not noticed stands open. Beyond it, ' +
+  'far off, the road runs home.'
+
+/** The sentence that ends each after-the-ending description of the chamber. */
+export const ARCH_SENTENCE =
+  'Behind the throne an arch stands open on the road home.'
+
+/** The line that opens the Act IV complete page, by ending. */
+export const ENDING_HOOKS: Record<Ending, string> = {
+  redemption: 'Malakar is himself again. And Elior is home.',
+  justice:
+    'Malakar is sealed away, and the kingdom is set right. Elior is home.',
+  sacrifice:
+    'Elior gave his magic away and kept the smallest spell. He is home.',
+}

@@ -7,7 +7,7 @@ describe('Act4', () => {
     // The TS act name is the short id used in saves (see the porting guide),
     // not the Python display title "Act IV".
     expect(act4.name).toBe('Act4')
-    expect(Object.keys(act4.rooms)).toHaveLength(9)
+    expect(Object.keys(act4.rooms)).toHaveLength(10)
     expect(act4.quests.map((quest) => quest.name)).toEqual([
       'The Final Stand',
       'Shattered Ward Guardians',

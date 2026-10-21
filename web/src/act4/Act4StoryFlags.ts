@@ -116,6 +116,10 @@ export const FLAG_ACT4_JUSTICE_SAID = 'act4_justice_said'
 export const FLAG_ACT4_SACRIFICE_SAID = 'act4_sacrifice_said'
 export const FLAG_ACT4_CROWN_ENDING = 'act4_crown_ending'
 export const FLAG_ACT4_HOME_ENDING = 'act4_home_ending'
+/** Elior has walked home to Willowbrook Field. */
+export const FLAG_ACT4_HOME_REACHED = 'act4_home_reached'
+/** Elior has cast grow on the field: the story is over. */
+export const FLAG_ACT4_FIELD_GREEN = 'act4_field_green'
 
 // The True Self in the Mirror Labyrinth (optional)
 export const FLAG_ACT4_TRUTH_TOLD = 'act4_truth_told'

@@ -44,6 +44,15 @@ export class Spell {
     )
   }
 
+  /**
+   * Cast on a target that is neither an item nor a character in reach, named
+   * as typed (lower case). Return the story text, or null when the spell has
+   * nothing there, which leaves the usual "You don't see ..." failure.
+   */
+  castOnName(_gameState: GameState, _target: string): string | null {
+    return null
+  }
+
   castOnCharacter(_gameState: GameState, target: Character): string {
     return (
       `[failure]You attempt to cast [spell_name]${this.name}[/spell_name] on ` +

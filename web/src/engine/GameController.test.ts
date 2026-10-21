@@ -163,6 +163,27 @@ describe('GameController', () => {
       expect(ctrl.getRoomExits()).toEqual({ east: 'Village Square' })
     })
 
+    it('shows a room label for an exit instead of the destination name', () => {
+      class Gate extends Room {
+        override exitLabel(): string | null {
+          return 'the way home'
+        }
+      }
+      const gate = new Gate({
+        name: 'Gate',
+        description: 'A gate.',
+        exits: { north: 'Field' },
+      })
+      const field = new Room({ name: 'Field', description: 'A field.' })
+      const game = new Game([simpleAct({ Gate: gate, Field: field })])
+      expect(new GameController(game).getRoomExits()).toEqual({
+        north: 'the way home',
+      })
+      expect(game.commandParser.parse('map')).toContain(
+        'north -> [room_name]the way home',
+      )
+    })
+
     it('lists every ware of every merchant in the room', () => {
       expect(
         makeController({ characters: [character('guard')] }).getRoomWares(),

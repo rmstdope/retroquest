@@ -374,14 +374,15 @@ export class GameController {
     return shortNames
   }
 
-  /** Direction to the destination room's display name (or its key if unknown). */
+  /** Direction to the destination room's display name (or its key if unknown), or the room's own label for the way. */
   getRoomExits(): Record<string, string> {
     const rooms = this.game.state.allRooms
-    const exits = this.game.state.currentRoom.getExits(this.game.state)
+    const room = this.game.state.currentRoom
+    const exits = room.getExits(this.game.state)
     return Object.fromEntries(
       Object.entries(exits).map(([direction, key]) => [
         direction,
-        rooms[key]?.name ?? key,
+        room.exitLabel(this.game.state, direction) ?? rooms[key]?.name ?? key,
       ]),
     )
   }
