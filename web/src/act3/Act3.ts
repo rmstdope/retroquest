@@ -35,7 +35,11 @@ import { MendSpell } from './spells/MendSpell'
 import { BlessSpell } from './spells/BlessSpell'
 import { ACT3_CLASSES } from './classes'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
-import { FLAG_ACT3_FORTRESS_GATES_EXAMINED } from './Act3StoryFlags'
+import {
+  FLAG_ACT3_FORTRESS_GATES_EXAMINED,
+  FLAG_ACT3_MINERS_RESCUE_COMPLETED,
+} from './Act3StoryFlags'
+import { Tobin } from './characters/Tobin'
 import { CEDRIC_NAME } from './CedricLines'
 
 /** Act 3 of RetroQuest: The Awakening. */
@@ -147,8 +151,19 @@ export class Act3 extends Act {
     }
   }
 
-  /** Saves from before Sir Cedric was shown in title case still name him in lower case. */
+  /**
+   * Saves from before Sir Cedric was shown in title case still name him in
+   * lower case, and saves already past the miners' rescue lack Tobin.
+   */
   override afterLoad(gameState: GameState): void {
+    const galleries = gameState.allRooms.CollapsedGalleries
+    if (
+      galleries &&
+      gameState.getStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED) &&
+      !galleries.getCharacterByName('tobin')
+    ) {
+      galleries.addCharacter(new Tobin())
+    }
     for (const room of Object.values(gameState.allRooms)) {
       const cedric = room.getCharacterByName(CEDRIC_NAME)
       if (cedric) cedric.name = CEDRIC_NAME

@@ -57,6 +57,7 @@ import { PierWarden } from './characters/PierWarden'
 import { SilenceKeeper } from './characters/SilenceKeeper'
 import { SirCedric } from './characters/SirCedric'
 import { TideBornGuardian } from './characters/TideBornGuardian'
+import { Tobin } from './characters/Tobin'
 import { WanderingPhantoms } from './characters/WanderingPhantoms'
 import { CavernMouth } from './rooms/CavernMouth'
 import { CollapsedGalleries } from './rooms/CollapsedGalleries'
@@ -151,6 +152,7 @@ export const ACT3_CLASSES = {
   SilenceKeeper,
   SirCedric,
   TideBornGuardian,
+  Tobin,
   WanderingPhantoms,
   // Rooms
   CavernMouth,

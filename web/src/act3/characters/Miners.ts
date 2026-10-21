@@ -6,7 +6,11 @@ import {
   speech,
 } from '@/engine'
 import { CEDRIC_STAY_BEHIND, cedricAdds } from '../CedricLines'
-import { FLAG_ACT3_MINERS_RESCUE_COMPLETED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+  FLAG_ACT3_MINERS_RESCUE_COMPLETED,
+} from '../Act3StoryFlags'
+import { Tobin } from './Tobin'
 
 /** Trapped miners awaiting rescue in the collapsed galleries. */
 export class Miners extends Character {
@@ -25,6 +29,7 @@ export class Miners extends Character {
     // they can be rescued immediately when talked to
     if (!gameState.getStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED)) {
       gameState.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED, true)
+      gameState.currentRoom.addCharacter(new Tobin())
       return (
         'The ' +
         characterName(this.name) +
@@ -44,6 +49,13 @@ export class Miners extends Character {
             "our heads.'",
         ) +
         '\n\n' +
+        'The lead miner lowers his voice and nods toward a boy sitting apart ' +
+        'from the rest: ' +
+        speech(
+          "'That's Tobin. Youngest of us. He was the one shouting for help, hours of it, " +
+            "till his voice went. Hasn't said a word since. Not one.'",
+        ) +
+        '\n\n' +
         'The lead miner nods gratefully: ' +
         speech(
           "'We can't thank you enough, " +
@@ -58,6 +70,19 @@ export class Miners extends Character {
             'to continue your journey.',
         ) +
         cedricAdds(gameState, CEDRIC_STAY_BEHIND)
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {
+      return (
+        'The ' +
+        characterName('lead miner') +
+        " leans on his pick, but he isn't working: " +
+        speech(
+          "'You hear it too, don't you? The quiet. The picks stopped " +
+            "ringing. I've worked this seam thirty years and the rock always " +
+            'talked back — creaks, drips, the little groans before a fall. Now ' +
+            "it's gone dead. Like something down here forgot how to breathe.'",
+        )
       )
     }
     return (
