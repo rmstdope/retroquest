@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dispelling Elena too early — A: narration only</title><style>:root{--bg:#10151a;--surface:#161d24;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--ok:#9fd3a0;--fail:#e8896b;--line:#26303a;--new:#3a2a08}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;padding:24px 16px}
+h1{font-family:Georgia,serif;font-weight:500;font-size:22px;margin:0 0 6px}.note{color:var(--muted);max-width:760px;line-height:1.5;margin:0 0 24px;font-size:14px}
+.row{display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start}
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;width:600px;max-width:100%;box-sizing:border-box}
+.narrow{width:340px}.lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:18px 0 6px}
+.cmd{font-family:ui-monospace,monospace;font-size:13px;color:var(--muted)}
+p{margin:2px 0;line-height:1.5;color:var(--prose);font-size:15px}
+.who{color:var(--accent);font-weight:600}.say{color:var(--fg)}.sp{color:#c7a8ff}.ok{color:var(--ok)}.bad{color:var(--fail)}.ev{font-style:italic;color:#c9c2b0}.dim{color:var(--muted)}
+.new{background:var(--new);outline:1px dashed #a8740f;outline-offset:3px;border-radius:4px}</style></head><body><h1>Dispelling Elena too early — A: narration only</h1><p class="note">The failure is told in narration alone, so the hint about what comes next is the last thing read. Today both cases print one plain sentence: "Elena needs to be purified with crystal-clear water before the curse can be dispelled…". The cure order itself is unchanged: heal, water, dispel. Highlighted text is new.</p><div class="row">
+<div><div class="lbl">Dispel after the heal, before the water (the mask shows)</div><div class="frame"><div class="cmd">› cast dispel on barmaid elena</div>
+<p class="new bad">You cast <span class="sp">dispel</span> on Elena. The counter-magic breaks against the silver mask on her wrist like water on glass, and the mask smiles wider. Whatever it wears over itself must be washed away before it can be broken.</p></div></div>
+<div><div class="lbl">Dispel before the heal (no mask yet)</div><div class="frame"><div class="cmd">› cast dispel on barmaid elena</div>
+<p class="new bad">You cast <span class="sp">dispel</span> on Elena. The counter-magic finds nothing to take hold of: whatever holds her is buried too deep to show itself. Something must draw it to the surface first.</p></div></div>
+<div><div class="lbl">Dispel after the water</div><div class="frame"><div class="cmd">› cast dispel on barmaid elena</div><p class="dim">Exactly as today — the curse breaks and the mask fades.</p></div></div>
+<div><div class="lbl">Phone — the mask smiles wider</div><div class="frame narrow"><div class="cmd">› cast dispel on barmaid elena</div>
+<p class="new bad">You cast <span class="sp">dispel</span> on Elena. The counter-magic breaks against the silver mask on her wrist like water on glass, and the mask smiles wider. Whatever it wears over itself must be washed away before it can be broken.</p></div></div>
+</div></body></html>

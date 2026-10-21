@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Healing the merchants — A: an unnamed trader</title><style>:root{--bg:#10151a;--surface:#161d24;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--ok:#9fd3a0;--fail:#e8896b;--line:#26303a;--new:#3a2a08}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;padding:24px 16px}
+h1{font-family:Georgia,serif;font-weight:500;font-size:22px;margin:0 0 6px}.note{color:var(--muted);max-width:760px;line-height:1.5;margin:0 0 24px;font-size:14px}
+.row{display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start}
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;width:600px;max-width:100%;box-sizing:border-box}
+.narrow{width:340px}.lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:18px 0 6px}
+.cmd{font-family:ui-monospace,monospace;font-size:13px;color:var(--muted)}
+p{margin:2px 0;line-height:1.5;color:var(--prose);font-size:15px}
+.who{color:var(--accent);font-weight:600}.say{color:var(--fg)}.sp{color:#c7a8ff}.ok{color:var(--ok)}.bad{color:var(--fail)}.ev{font-style:italic;color:#c9c2b0}.dim{color:var(--muted)}
+.new{background:var(--new);outline:1px dashed #a8740f;outline-offset:3px;border-radius:4px}</style></head><body><h1>Healing the merchants — A: an unnamed trader</h1><p class="note">The merchants stay a crowd; one unnamed spice trader speaks for them. Highlighted text is new; everything else is as today. "cast greater_heal on caravan" gives the same response as "on merchants".</p><div class="row">
+<div><div class="lbl">First heal, at the ravine after the rescue</div><div class="frame"><div class="cmd">› cast greater_heal on merchants</div>
+<p class="new ok">You cast <span class="sp">greater heal</span> over the merchants. Golden light settles on split lips and wrenched ankles, and one by one they stop wincing.</p>
+<p class="new ev">A spice trader flexes a hand she has been cradling since the ravine.</p>
+<p class="new"><span class="who">Spice trader</span>: <span class="say">"Three days down there and I'd stopped feeling these fingers. Tell Thorne he owes you twice now."</span></p></div></div>
+<div><div class="lbl">Healing them again</div><div class="frame"><div class="cmd">› cast greater_heal on merchants</div>
+<p class="new dim">The merchants are already on the mend. A spice trader waves you off: "Save it for someone who needs it."</p></div></div>
+<div><div class="lbl">Before the rescue (merchants still in the ravine)</div><div class="frame"><div class="cmd">› cast greater_heal on merchants</div>
+<p class="bad">You don't see any merchants here.</p><p class="dim" style="font-size:13px">(unchanged — they are not here yet)</p></div></div>
+<div><div class="lbl">Thorne — the next talk after the heal (once)</div><div class="frame"><div class="cmd">› talk to caravan master thorne</div>
+<p class="dim">…his usual reply, as today (the reward on the first talk, his line about Brenn after it)…</p>
+<p class="new"><span class="who">Caravan Master Thorne</span>: <span class="say">"And my people tell me you didn't just haul them out of that hole — you mended them where they sat. One of the spice traders says her hand's never been better. I don't know how a man repays a debt twice over."</span></p></div></div>
+<div><div class="lbl">Thorne — every talk after that</div><div class="frame"><div class="cmd">› talk to caravan master thorne</div><p class="dim">…his usual reply, as today, with no healing line.</p></div></div>
+<div><div class="lbl">Never healed them</div><div class="frame"><div class="cmd">› talk to caravan master thorne</div><p class="dim">Exactly as today. Nothing is missed or hinted at; no virtue is recorded either way.</p></div></div>
+<div><div class="lbl">Phone — first heal</div><div class="frame narrow"><div class="cmd">› cast greater_heal on merchants</div>
+<p class="new ok">You cast <span class="sp">greater heal</span> over the merchants. Golden light settles on split lips and wrenched ankles, and one by one they stop wincing.</p>
+<p class="new ev">A spice trader flexes a hand she has been cradling since the ravine.</p>
+<p class="new"><span class="who">Spice trader</span>: <span class="say">"Three days down there and I'd stopped feeling these fingers. Tell Thorne he owes you twice now."</span></p></div></div>
+</div></body></html>
