@@ -64,12 +64,41 @@ describe('Mira', () => {
     const out = m.talkTo(game.state)
 
     expect(game.state.getStoryFlag(FLAG_ACT3_MAIN_STARTED)).toBe(true)
-    expect(out).toContain('three relics')
-    expect(out).toContain('take this note')
+    expect(out).toContain('Three relics')
+    expect(out).toContain('take this, and read it')
     const keepsakeNoteInInventory = game.state.inventory.some(
       (item) => item.name === 'Keepsake Note',
     )
     expect(keepsakeNoteInInventory).toBe(true)
+  })
+
+  it('opens the first talk in four speech lines with the hand-over between the third and fourth', () => {
+    const game = new Game([new Act3()])
+    const out = new Mira().talkTo(game.state)
+    const speeches = out.match(/\[dialogue\].*?\[\/dialogue\]/g) ?? []
+    expect(speeches).toEqual([
+      "[dialogue]'Elior. Malakar is draining King Alden's life to break " +
+        "Eldoria's wards, and the king grows weaker every day.'[/dialogue]",
+      "[dialogue]'Three relics can stand against him: the Crystal of Light, " +
+        "the Phoenix Feather and the Dragon's Scale. We will fetch them one " +
+        "at a time.'[/dialogue]",
+      "[dialogue]'Before we go, take this, and read it. Then we can leave.'" +
+        '[/dialogue]',
+      "[dialogue]'Say the word, and I will draw the first circle.'[/dialogue]",
+    ])
+    const handOver = out.indexOf('Mira hands you a small, worn piece')
+    expect(handOver).toBeGreaterThan(out.indexOf('take this, and read it'))
+    expect(handOver).toBeLessThan(out.indexOf('Say the word'))
+  })
+
+  it('tells the Crystal purpose at the Tidal Causeway', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.currentRoom = game.state.allRooms.TidalCauseway
+    const out = new Mira().talkTo(game.state)
+    expect(out).toContain(
+      'answers to courage. It parts veils and steadies the spirit. When you stand',
+    )
   })
 
   it('hints or teleports at the Tidal Causeway', () => {
@@ -129,6 +158,8 @@ describe('Mira', () => {
 
     const out = m.talkTo(game.state)
 
+    expect(out).toContain('Here, Wisdom is taught in embers.')
+    expect(out).not.toContain('second virtue')
     expect(out.toLowerCase()).toContain('wisdom')
     expect(out.toLowerCase()).toContain('phoenix')
     expect(out).not.toContain('You arrive at')
