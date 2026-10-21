@@ -85,6 +85,12 @@ export class Act {
    */
   afterLoad(_gameState: GameState): void {}
 
+  /**
+   * Called after the player has walked from one room to another, before the
+   * new room's `onEnter` runs. Override to let characters follow the player.
+   */
+  onRoomChanged(_gameState: GameState, _from: Room, _to: Room): void {}
+
   isCompleted(_gameState: GameState): boolean {
     return false
   }

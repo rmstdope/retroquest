@@ -1,5 +1,6 @@
 import { Item, event, type GameState } from '@/engine'
 import { FLAG_ACT3_MINERS_RESCUE_STARTED } from '../Act3StoryFlags'
+import { CEDRIC_BRACES, CEDRIC_WEDGE, cedricAdds } from '../CedricLines'
 import { Miners } from '../characters/Miners'
 import { ReinforcedBraces } from './ReinforcedBraces'
 import { SupportStraps } from './SupportStraps'
@@ -52,11 +53,13 @@ export class FallenRock extends Item {
       if (!this.collapseStabilized) {
         this.collapseStabilized = true
         gameState.removeItemFromInventory(other.name)
-        return event(
-          'You wedge the reinforced braces under the sagging ' +
-            'ceiling, stabilizing the collapse. The immediate danger of ' +
-            'further cave-in is reduced, but the braces need to be secured ' +
-            'before you can safely clear the passage.',
+        return (
+          event(
+            'You wedge the reinforced braces under the sagging ' +
+              'ceiling, stabilizing the collapse. The immediate danger of ' +
+              'further cave-in is reduced, but the braces need to be secured ' +
+              'before you can safely clear the passage.',
+          ) + cedricAdds(gameState, CEDRIC_BRACES)
         )
       }
       return (
@@ -100,11 +103,13 @@ export class FallenRock extends Item {
         // Add the miners to the room now that they can be reached
         const miners = new Miners()
         gameState.currentRoom.addCharacter(miners)
-        return event(
-          'You hammer the wedge blocks into the cracks, freeing ' +
-            'the blocked passage. The fallen rock crumbles away, clearing ' +
-            'the path forward. Through the newly opened gap, you see the ' +
-            'trapped miners emerging from the depths!',
+        return (
+          event(
+            'You hammer the wedge blocks into the cracks, freeing ' +
+              'the blocked passage. The fallen rock crumbles away, clearing ' +
+              'the path forward. Through the newly opened gap, you see the ' +
+              'trapped miners emerging from the depths!',
+          ) + cedricAdds(gameState, CEDRIC_WEDGE)
         )
       }
       return '[dim]The wedge blocks are already securing the passage.[/dim]'

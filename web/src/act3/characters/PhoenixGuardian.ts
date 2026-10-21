@@ -1,4 +1,5 @@
 import { Character, type GameState, characterName, speech } from '@/engine'
+import { CEDRIC_PATIENCE, cedricAdds } from '../CedricLines'
 import { FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED } from '../Act3StoryFlags'
 
 /** A silent, vigilant figure who tends the vents and watches the passage to the crater. */
@@ -37,7 +38,8 @@ export class PhoenixGuardian extends Character {
         'The way is open, but patience is your ally. The Phoenix will not ' +
           'appear for those who rush. Be patient, and the mighty one will reveal ' +
           'itself.',
-      )
+      ) +
+      cedricAdds(gameState, CEDRIC_PATIENCE)
     )
   }
 }

@@ -111,3 +111,5 @@ export const FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED = 'act3_mira_ember_slip_played'
 export const FLAG_ACT3_DRAGON_MESSAGE_GIVEN = 'act3_dragon_message_given'
 /** Set when Mira has received the Ancient Dragon's message at the Cavern Mouth. */
 export const FLAG_ACT3_DRAGON_MESSAGE_RELAYED = 'act3_dragon_message_relayed'
+/** Set when Elior has answered Sir Cedric's gate line with the refrain. */
+export const FLAG_ACT3_CEDRIC_GATE_ANSWERED = 'act3_cedric_gate_answered'

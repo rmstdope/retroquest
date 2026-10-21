@@ -5,6 +5,7 @@ import {
   event,
   speech,
 } from '@/engine'
+import { CEDRIC_STAY_BEHIND, cedricAdds } from '../CedricLines'
 import { FLAG_ACT3_MINERS_RESCUE_COMPLETED } from '../Act3StoryFlags'
 
 /** Trapped miners awaiting rescue in the collapsed galleries. */
@@ -55,7 +56,8 @@ export class Miners extends Character {
         event(
           'The miners begin setting up additional supports as you prepare ' +
             'to continue your journey.',
-        )
+        ) +
+        cedricAdds(gameState, CEDRIC_STAY_BEHIND)
       )
     }
     return (
