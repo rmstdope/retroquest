@@ -1029,9 +1029,6 @@ describe('Forest Transition spell learning', () => {
     state.inventory.push(new ForestSurvivalKit())
     state.currentRoom = state.allRooms.ForestTransition
 
-    // Use survival kit
-    executeCommands(game, ['use forest survival kit'])
-
     // Examine stones
     executeCommands(game, ['examine stones'])
 

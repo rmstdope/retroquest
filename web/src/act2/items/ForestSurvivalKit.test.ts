@@ -32,6 +32,12 @@ describe('Forest survival kit', () => {
     expectMarkupWellFormed(answer)
     expectItemInInventory(game.state, 'forest survival kit')
     expect(game.state.getStoryFlag(FLAG_HERMITS_WARNING_COMPLETED)).toBe(false)
+    expect(game.state.completedQuests.map((quest) => quest.name)).not.toContain(
+      "The Hermit's Warning",
+    )
+    expect(game.state.currentRoom.getExits(game.state)).not.toHaveProperty(
+      'east',
+    )
   })
 
   it('plays the whole camp scene after the first talk and is used up', () => {
