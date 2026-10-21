@@ -582,6 +582,8 @@ describe('Act 3 golden path', () => {
     expect(examineResult.toLowerCase()).toContain('massive gates')
     expect(examineResult.toLowerCase()).toContain('act iii is complete')
     expectStoryFlag(state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
+    expect(examineResult).toContain('They are not dead. They are warded away.')
+    expect(examineResult).toContain('The Lifelight Elixir pulses')
 
     // The page opens on the hook, also on a game loaded from a save.
     for (let turn = 0; turn < 3; turn++) game.newTurn()
