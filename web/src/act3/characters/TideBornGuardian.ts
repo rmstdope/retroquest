@@ -35,7 +35,7 @@ export class TideBornGuardian extends Character {
     return (
       event(
         `The ${characterName(this.name)} turns its rippling face to ` +
-          `${characterName(CEDRIC_NAME)}.`,
+          `${CEDRIC_NAME}.`,
       ) +
       ' ' +
       speech("'Name what you will not abandon.'") +

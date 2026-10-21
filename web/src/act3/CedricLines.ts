@@ -92,9 +92,10 @@ export const CEDRIC_STAY_BEHIND =
   '\n' +
   cedricSays('Someone should stay until the braces settle. I will.') +
   '\n' +
-  event(
-    'The oldest miner puts a grey hand on his arm. ' +
-      "'You have a king to fetch, ser. We have stood in worse holes than " +
+  event(`The ${characterName('oldest miner')} puts a grey hand on his arm.`) +
+  ' ' +
+  speech(
+    "'You have a king to fetch, ser. We have stood in worse holes than " +
       "this one.'",
   ) +
   '\n' +

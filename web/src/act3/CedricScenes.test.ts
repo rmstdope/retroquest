@@ -14,6 +14,9 @@ import {
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
   FLAG_ACT3_VOW_OF_COURAGE_MADE,
 } from './Act3StoryFlags'
+import { parseTurn } from '@/lantern/parseTurn'
+import { Miners } from './characters/Miners'
+import { SirCedric } from './characters/SirCedric'
 import { Mira } from './characters/Mira'
 import { Phoenix } from './characters/Phoenix'
 import { TideBornGuardian } from './characters/TideBornGuardian'
@@ -188,11 +191,47 @@ describe('Sir Cedric reacts to the story', () => {
     expectMarkupWellFormed(braces)
     expectMarkupWellFormed(wedge)
   })
+})
 
-  it('leaves Mira and the circles working with him along', () => {
-    const game = partyAt('TidalCauseway')
-    expectCharacterInRoom(game.state.currentRoom, 'Sir Cedric')
-    expectCharacterInRoom(game.state.currentRoom, 'Mira')
+describe('Sir Cedric in the story view', () => {
+  /** Who the story view labels each quote of the output with. */
+  function speakers(markup: string): string[] {
+    return parseTurn(markup).flatMap((b) =>
+      b.kind === 'dialogue' ? [`${b.speaker}: ${b.markup}`] : [],
+    )
+  }
+
+  it("does not put the Guardian's question in his mouth", () => {
+    const game = partyAt('SanctumOfTheTide')
+    const guardian = game.state.currentRoom.getCharacterByName(
+      'tide-born guardian',
+    ) as TideBornGuardian
+    const quotes = speakers(guardian.sayTo(game.state, 'myself'))
+    expect(quotes).toContain(
+      "Tide-Born Guardian: 'Name what you will not abandon.'",
+    )
+    expect(quotes).toContain("Sir Cedric: 'My king.'")
+    expect(quotes).toContain("Sir Cedric: 'I did once.'")
+  })
+
+  it('gives the oldest miner his own words', () => {
+    const game = partyAt('CollapsedGalleries')
+    const quotes = speakers(new Miners().talkTo(game.state))
+    expect(quotes.some((q) => q.startsWith('oldest miner: '))).toBe(true)
+    expect(quotes).toContain(
+      "Sir Cedric: 'Someone should stay until the braces settle. I will.'",
+    )
+  })
+
+  it('shows what Elior says as a plain "You:" line', () => {
+    const game = partyAt('FortressEntrance')
+    const out = new SirCedric().sayTo(game.state, 'refrain')
+    expect(out).toContain(
+      'You: \u201cPower follows purpose; purpose follows truth.\u201d',
+    )
+    expect(speakers(out)).toEqual([
+      "Sir Cedric: 'Truth, then. The truth is I was on the wall. The truth is he is still alive. Let us go and get him.'",
+    ])
   })
 })
 

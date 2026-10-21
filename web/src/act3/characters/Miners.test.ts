@@ -32,7 +32,9 @@ describe('Miners dialogue markup', () => {
     const second = miners.talkTo(game.state)
 
     expect(first).toContain('Someone should stay until the braces settle')
-    expect(first).toContain('The oldest miner puts a grey hand on his arm')
+    expect(first).toContain(
+      'oldest miner[/character_name] puts a grey hand on his arm',
+    )
     expect(first.endsWith('then nods.[/event]')).toBe(true)
     expectMarkupWellFormed(first)
     expect(second).not.toContain('Sir Cedric')
