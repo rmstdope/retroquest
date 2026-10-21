@@ -6,6 +6,7 @@ import { BarmaidElena } from './BarmaidElena'
 import { CrystalClearWater } from '../items/CrystalClearWater'
 import {
   FLAG_ELENA_HEALED,
+  FLAG_MARCUS_TOLD_TRUTH,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
 } from '../Act2StoryFlags'
 
@@ -216,5 +217,102 @@ describe('Elena names no next step (rq-nun)', () => {
     expect(elena.receiveDispelFinalCure(game.state)).toContain(
       'The counter-magic finds nothing to take hold of',
     )
+  })
+})
+
+describe('Elena remarks on her father after the truth (rq-coj)', () => {
+  const TRUTH_STAGE =
+    '[character_name]Elena[/character_name] glances toward the taproom.'
+  const TRUTH_SPEECH =
+    'Father has bolted every shutter in the house, and he sleeps down in the ' +
+    "taproom now with the poker across his knees. I'm glad you told him. " +
+    "He'd have gone on blaming the wind."
+  const USUAL = 'Oh, thank you so much!'
+
+  function cured(): { game: Game; elena: BarmaidElena } {
+    const { game, elena } = setup()
+    elena.receiveGreaterHeal(game.state)
+    purify(game, elena)
+    elena.receiveDispelFinalCure(game.state)
+    return { game, elena }
+  }
+
+  function reload(game: Game): { fresh: Game; loaded: BarmaidElena } {
+    const fresh = new Game([new Act2()])
+    fresh.loadSaveData(game.toSaveData())
+    const loaded = fresh.state.allRooms.SilverStagInn.characters.find(
+      (c): c is BarmaidElena => c instanceof BarmaidElena,
+    )!
+    return { fresh, loaded }
+  }
+
+  it('first talk after the truth: stage line, speech, blank line, usual reply', () => {
+    const { game, elena } = cured()
+    game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    const first = elena.talkTo(game.state)
+    expect(
+      first.startsWith(
+        TRUTH_STAGE +
+          '\n\n[character_name]barmaid elena[/character_name]: ' +
+          '[dialogue]' +
+          TRUTH_SPEECH +
+          '[/dialogue]\n\n',
+      ),
+    ).toBe(true)
+    expect(first).toContain(USUAL)
+  })
+
+  it('never repeats after the first talk', () => {
+    const { game, elena } = cured()
+    game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    elena.talkTo(game.state)
+    const second = elena.talkTo(game.state)
+    expect(second).not.toContain('taproom')
+    expect(second).toContain(USUAL)
+  })
+
+  it('says nothing new when cured but the truth is not told', () => {
+    const { game, elena } = cured()
+    expect(elena.talkTo(game.state)).not.toContain('taproom')
+    expect(elena.talkTo(game.state)).not.toContain('taproom')
+  })
+
+  it('waits for the next talk, then plays once after a later truth', () => {
+    const { game, elena } = cured()
+    elena.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    expect(elena.talkTo(game.state)).toContain(TRUTH_STAGE)
+    expect(elena.talkTo(game.state)).not.toContain(TRUTH_STAGE)
+  })
+
+  it('does not play while she is still cursed', () => {
+    const { game, elena } = setup()
+    game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    expect(elena.talkTo(game.state)).not.toContain('taproom')
+  })
+
+  it('save before the talk plays it once after loading', () => {
+    const { game } = cured()
+    game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    const { fresh, loaded } = reload(game)
+    expect(loaded.talkTo(fresh.state)).toContain(TRUTH_STAGE)
+    expect(loaded.talkTo(fresh.state)).not.toContain(TRUTH_STAGE)
+  })
+
+  it('an older save without the field plays the remark once', () => {
+    const { game } = cured()
+    game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    const { fresh, loaded } = reload(game)
+    Reflect.deleteProperty(loaded, 'truthRemarkSpoken')
+    expect(loaded.talkTo(fresh.state)).toContain(TRUTH_STAGE)
+    expect(loaded.talkTo(fresh.state)).not.toContain(TRUTH_STAGE)
+  })
+
+  it('save after the remark does not replay it', () => {
+    const { game, elena } = cured()
+    game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    elena.talkTo(game.state)
+    const { fresh, loaded } = reload(game)
+    expect(loaded.talkTo(fresh.state)).not.toContain(TRUTH_STAGE)
   })
 })
