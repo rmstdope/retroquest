@@ -813,26 +813,27 @@ describe('Tobin and the saves', () => {
     const fresh = new Game([new Act3()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
 
-    expect(galleries(fresh)).toContain('tobin')
+    expect(galleries(fresh)).toContain('Tobin')
     expect(executeCommands(fresh, ['talk to young miner'])).toContain(
-      'Tobin does not look up.',
+      '[character_name]Tobin[/character_name] does not look up.',
     )
   })
 
   it('gives Tobin to a save already past the rescue, once', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED, true)
-    expect(galleries(game)).not.toContain('tobin')
+    expect(galleries(game)).not.toContain('Tobin')
 
-    new Act3().afterLoad(game.state)
-    new Act3().afterLoad(game.state)
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    new Act3().afterLoad(fresh.state)
 
-    expect(galleries(game).filter((n) => n === 'tobin')).toHaveLength(1)
+    expect(galleries(fresh).filter((n) => n === 'Tobin')).toHaveLength(1)
   })
 
   it('leaves Tobin out of a save from before the rescue', () => {
     const game = new Game([new Act3()])
     new Act3().afterLoad(game.state)
-    expect(galleries(game)).not.toContain('tobin')
+    expect(galleries(game)).not.toContain('Tobin')
   })
 })

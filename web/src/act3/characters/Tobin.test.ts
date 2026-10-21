@@ -6,12 +6,12 @@ import { Tobin } from './Tobin'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 const FIRST =
-  'Tobin looks at you for a long moment. His lips part, then close again. ' +
+  '[character_name]Tobin[/character_name] looks at you for a long moment. His lips part, then close again. ' +
   'He turns the cracked lamp over in his hands and goes back to watching the ceiling.'
 const SECOND =
-  'Tobin swallows, and you see what it costs him. No sound comes. He shakes his head, once.'
+  '[character_name]Tobin[/character_name] swallows, and you see what it costs him. No sound comes. He shakes his head, once.'
 const THIRD =
-  "Tobin does not look up. His thumb traces the crack in the lamp's glass, back and forth."
+  "[character_name]Tobin[/character_name] does not look up. His thumb traces the crack in the lamp's glass, back and forth."
 
 describe('Tobin', () => {
   it('answers to tobin, young miner and boy, however cased', () => {

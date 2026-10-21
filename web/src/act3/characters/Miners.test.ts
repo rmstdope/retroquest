@@ -86,6 +86,9 @@ describe('Miners and Tobin', () => {
     const a = miners.talkTo(game.state)
     const b = miners.talkTo(game.state)
 
+    expect(a).toContain(
+      'the rock always talked back — creaks, drips, the little groans before a fall.',
+    )
     expect(a).toContain('The picks stopped ringing.')
     expect(a).toContain('Like something down here forgot how to breathe.')
     expect(a).not.toContain('Still here, Elior?')

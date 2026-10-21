@@ -1,4 +1,4 @@
-import { Character, type GameState, event } from '@/engine'
+import { Character, type GameState, characterName, event } from '@/engine'
 
 /** Names the player may use for Tobin. */
 const TOBIN_NAMES: readonly string[] = ['tobin', 'young miner', 'boy']
@@ -13,7 +13,7 @@ export class Tobin extends Character {
 
   constructor() {
     super({
-      name: 'tobin',
+      name: 'Tobin',
       description:
         'A boy of perhaps fifteen sits apart from the others on an upturned ' +
         'bucket, knees drawn up, a cracked lamp in his lap. His throat is ' +
@@ -31,19 +31,19 @@ export class Tobin extends Character {
     this.talks += 1
     if (this.talks === 1) {
       return event(
-        'Tobin looks at you for a long moment. His lips part, then close ' +
+        `${characterName(this.name)} looks at you for a long moment. His lips part, then close ` +
           'again. He turns the cracked lamp over in his hands and goes back ' +
           'to watching the ceiling.',
       )
     }
     if (this.talks === 2) {
       return event(
-        'Tobin swallows, and you see what it costs him. No sound comes. ' +
+        `${characterName(this.name)} swallows, and you see what it costs him. No sound comes. ` +
           'He shakes his head, once.',
       )
     }
     return event(
-      "Tobin does not look up. His thumb traces the crack in the lamp's " +
+      `${characterName(this.name)} does not look up. His thumb traces the crack in the lamp's ` +
         'glass, back and forth.',
     )
   }

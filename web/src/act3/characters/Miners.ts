@@ -80,7 +80,7 @@ export class Miners extends Character {
         speech(
           "'You hear it too, don't you? The quiet. The picks stopped " +
             "ringing. I've worked this seam thirty years and the rock always " +
-            'talked back—creaks, drips, the little groans before a fall. Now ' +
+            'talked back — creaks, drips, the little groans before a fall. Now ' +
             "it's gone dead. Like something down here forgot how to breathe.'",
         )
       )

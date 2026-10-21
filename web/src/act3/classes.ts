@@ -55,9 +55,9 @@ import { Phoenix } from './characters/Phoenix'
 import { PhoenixGuardian } from './characters/PhoenixGuardian'
 import { PierWarden } from './characters/PierWarden'
 import { SilenceKeeper } from './characters/SilenceKeeper'
-import { Tobin } from './characters/Tobin'
 import { SirCedric } from './characters/SirCedric'
 import { TideBornGuardian } from './characters/TideBornGuardian'
+import { Tobin } from './characters/Tobin'
 import { WanderingPhantoms } from './characters/WanderingPhantoms'
 import { CavernMouth } from './rooms/CavernMouth'
 import { CollapsedGalleries } from './rooms/CollapsedGalleries'
@@ -150,9 +150,9 @@ export const ACT3_CLASSES = {
   PhoenixGuardian,
   PierWarden,
   SilenceKeeper,
-  Tobin,
   SirCedric,
   TideBornGuardian,
+  Tobin,
   WanderingPhantoms,
   // Rooms
   CavernMouth,
