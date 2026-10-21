@@ -217,12 +217,13 @@ describe('Act 4 integration', () => {
       executeCommands(game, ["take guardian's essence", 'east'])
     }
 
-    it('tells that Mira and Sir Cedric stay at the threshold', () => {
+    it('tells that Mira steps through the gates and holds the way out inside', () => {
       const intro = act4.getActIntro()
       expect(intro).toContain(
         'The obsidian gates loom ahead, wreathed in shadow and ancient magic. ' +
-          'Mira and Sir Cedric take up their places at the threshold — someone ' +
-          'must hold the way out. From here, you go on alone. ' +
+          'Mira steps through the gates beside you, pale but unbending. She ' +
+          'and Sir Cedric take up their places just inside the threshold — ' +
+          'someone must hold the way out. From here, you go on alone. ' +
           'This is the culmination',
       )
     })

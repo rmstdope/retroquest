@@ -18,6 +18,7 @@ import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_ECHOES_QUEST_STARTED,
   FLAG_ACT3_MIRA_CONFESSED,
+  FLAG_ACT3_MIRA_GATE_TALKED,
   FLAG_ACT3_RUINS_LEFT,
 } from '../Act3StoryFlags'
 
@@ -114,26 +115,7 @@ export class Mira extends Character {
     // provide lore about the second virtue and the phoenix legend.
     // Special dialogue for Cavern Mouth
     if (gameState.currentRoom.name === "Entrance to Malakar's Fortress") {
-      return (
-        eventMsg +
-        '\n' +
-        (speech(
-          "'The journey has taken its toll on me, Elior. The magic " +
-            "required to transport us here has drained much of my strength.'",
-        ) +
-          '\n' +
-          speech(
-            "'I must rest and recover while you and Sir Cedric press " +
-              'forward into the fortress. The fate of the kingdom now rests in ' +
-              "your capable hands.'",
-          ) +
-          '\n' +
-          speech(
-            "'Go with courage, wisdom, and selflessness—the three " +
-              'virtues you have proven. The Lifelight Elixir will guide you to ' +
-              "victory. I will await your return.'",
-          ))
-      )
+      return this.talkAtGate(gameState, eventMsg)
     } else if (gameState.currentRoom.name === 'Cavern Mouth') {
       // Check if dragon's scale has been acquired
       if (!gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)) {
@@ -430,6 +412,37 @@ export class Mira extends Character {
       '[failure]Mira hesitates—she cannot find the proper anchor to send ' +
       'you there yet.[/failure]'
     )
+  }
+
+  /**
+   * Mira's talk at the fortress gate: the first time she refuses to stay
+   * behind and says she is coming along; every later time one short line.
+   */
+  private talkAtGate(gameState: GameState, eventMsg: string): string {
+    if (gameState.getStoryFlag(FLAG_ACT3_MIRA_GATE_TALKED)) {
+      return (
+        eventMsg +
+        '\n' +
+        speech(
+          "'I am right behind you, Elior. The gates will not open " +
+            "themselves.'",
+        )
+      )
+    }
+    gameState.setStoryFlag(FLAG_ACT3_MIRA_GATE_TALKED, true)
+    return [
+      eventMsg,
+      event(
+        'Mira leans on the cold stone of the gate. Her hands are still ' +
+          'shaking from the last circle.',
+      ),
+      speech("'I know how I look, Elior. Do not ask me to stay behind.'"),
+      speech(
+        "'Your parents walked into the dark without me once. I will not " +
+          'let you do the same. Go with courage, wisdom, and ' +
+          "selflessness—I am coming with you.'",
+      ),
+    ].join('\n')
   }
 
   /**

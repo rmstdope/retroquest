@@ -76,6 +76,9 @@ export const FLAG_ACT3_ECHOES_QUEST_COMPLETED = 'act3_echoes_quest_completed'
 // Mira's confession before the Warding Rite
 export const FLAG_ACT3_MIRA_CONFESSED = 'act3_mira_confessed'
 
+// Mira's coming-along scene at the fortress gate (played once, then a short line)
+export const FLAG_ACT3_MIRA_GATE_TALKED = 'act3_mira_gate_talked'
+
 // Dragon's dream voice (heard once, straight after the Dragon's memory)
 export const FLAG_ACT3_DRAGON_VOICE_HEARD = 'act3_dragon_voice_heard'
 
