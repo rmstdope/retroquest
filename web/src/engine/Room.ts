@@ -88,7 +88,8 @@ export class Room {
     return ''
   }
 
-  getAmbientSound(): string {
+  /** What `listen` with no target hears; rooms override it to react to the game state. */
+  getAmbientSound(_gameState: GameState): string {
     return 'It is quiet here.'
   }
 

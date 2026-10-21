@@ -115,6 +115,12 @@ export const FLAG_ACT3_PHOENIX_STORY_TOLD = 'act3_phoenix_story_told'
 /** Set when Malakar's struck name on the Charred Inscription has been mended. */
 export const FLAG_ACT3_INSCRIPTION_MENDED = 'act3_inscription_mended'
 
+/** Set when the player has overheard the echo of the Wardens parting in the Echo Chambers. */
+export const FLAG_ACT3_ECHO_HEARD = 'act3_echo_heard'
+/** Set when the Silence Keeper has told what the wandering phantoms are (once). */
+export const FLAG_ACT3_KEEPER_PHANTOM_LINE_TOLD =
+  'act3_keeper_phantom_line_told'
+
 // Mira's slips: she lets on, once per relic site, that she knew the Wardens
 /** Set when Mira's Sunken Ruins slip about Lysa's hand has played. */
 export const FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED = 'act3_mira_ruins_slip_played'

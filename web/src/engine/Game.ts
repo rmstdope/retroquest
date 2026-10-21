@@ -711,7 +711,7 @@ Welcome to
   }
 
   listen(target?: string): string {
-    if (!target) return this.state.currentRoom.getAmbientSound()
+    if (!target) return this.state.currentRoom.getAmbientSound(this.state)
     const item = this.findItem(target)
     if (item) return item.listen(this.state)
     return `[failure]You don't see a '${target}' to listen to here or in your inventory.[/failure]`
