@@ -674,6 +674,11 @@ describe('Act 2 golden path', () => {
       'go west',
     ])
     executeCommands(game, ['cast prophetic vision'])
+    expect(
+      game.acts[game.currentAct].isCompleted(state),
+      'the cast alone leaves Cedric waiting',
+    ).toBe(false)
+    executeCommands(game, ['talk to sir cedric'])
     expectQuests(state, [])
     expect(
       game.acts[game.currentAct].isCompleted(state),
@@ -1313,7 +1318,7 @@ describe('Act 2 complete page', () => {
   it('opens on the hook, also on a game loaded from a save', () => {
     const game = new Game([new Act2()])
     executeCommands(game, ACT2_GOLDEN_PATH)
-    executeCommands(game, ['cast prophetic vision'])
+    executeCommands(game, ['cast prophetic vision', 'talk to sir cedric'])
     for (let turn = 0; turn < 3; turn++) game.newTurn()
     const hook = 'Malakar is real. And the bloodline he seeks is yours.'
     expect(
@@ -1328,11 +1333,51 @@ describe('Act 2 complete page', () => {
   })
 })
 
+describe('Act 2 answering Cedric after the vision', () => {
+  /** The golden path played to the cast, with Cedric left waiting. */
+  function waitingGame(): Game {
+    const game = new Game([new Act2()])
+    executeCommands(game, [...ACT2_GOLDEN_PATH, 'cast prophetic vision'])
+    return game
+  }
+
+  it('ends the act on say truth to cedric and records no virtue', () => {
+    const game = waitingGame()
+    expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(false)
+
+    const output = executeCommands(game, ['say truth to cedric'])
+
+    expect(output).toContain('It sounded glad to see you.')
+    expect(output).toContain('A thing that wants you to come to it.')
+    expect(output).toContain('The storm has a name now.')
+    expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
+    expect(game.state.virtues).toEqual([])
+  })
+
+  it('lets the player roam while he waits and keeps the wait through a save', () => {
+    const game = waitingGame()
+    executeCommands(game, ['go east', 'go west'])
+    expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(false)
+
+    const fresh = new Game([new Act2()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    expect(fresh.acts[fresh.currentAct].isCompleted(fresh.state)).toBe(false)
+    const output = fresh.state.currentRoom.describe(fresh.state)
+    expect(output).toContain('is still waiting for you, his hand on his sword.')
+    executeCommands(fresh, ['talk to sir cedric'])
+    expect(fresh.acts[fresh.currentAct].isCompleted(fresh.state)).toBe(true)
+  })
+})
+
 describe('Act 2 optional virtue moments', () => {
   /** The golden path played to the end, then the three moments one by one. */
   function gameWithAllThree(): Game {
     const game = new Game([new Act2()])
-    executeCommands(game, [...ACT2_GOLDEN_PATH, 'cast prophetic vision'])
+    executeCommands(game, [
+      ...ACT2_GOLDEN_PATH,
+      'cast prophetic vision',
+      'talk to sir cedric',
+    ])
     game.state.addItemToInventory(new MountainFlower())
     game.state.currentRoom = game.state.allRooms.ResidentialQuarter
     executeCommands(game, ['give mountain flower to families'])
@@ -1345,7 +1390,11 @@ describe('Act 2 optional virtue moments', () => {
 
   it('records nothing when every moment is skipped, and the act still completes', () => {
     const game = new Game([new Act2()])
-    executeCommands(game, [...ACT2_GOLDEN_PATH, 'cast prophetic vision'])
+    executeCommands(game, [
+      ...ACT2_GOLDEN_PATH,
+      'cast prophetic vision',
+      'talk to sir cedric',
+    ])
 
     expect(game.state.virtues).toEqual([])
     expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)

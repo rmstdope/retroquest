@@ -1,10 +1,14 @@
-import { Room, event } from '@/engine'
+import { Room, characterName, event } from '@/engine'
 import type { GameState } from '@/engine'
 import { SirCedric } from '../characters/SirCedric'
 import { TrainingMaster } from '../characters/TrainingMaster'
 import { Squires } from '../characters/Squires'
 import { SquiresDiary } from '../items/SquiresDiary'
-import { FLAG_SQUIRES_TALKED_TO } from '../Act2StoryFlags'
+import {
+  FLAG_GATHERING_STORM_COMPLETED,
+  FLAG_SQUIRES_TALKED_TO,
+  FLAG_VISION_SHARED,
+} from '../Act2StoryFlags'
 
 /** The Castle Courtyard description; `Act2.afterLoad` restores it in older saves. */
 export const CASTLE_COURTYARD_DESCRIPTION =
@@ -42,6 +46,20 @@ export class CastleCourtyard extends Room {
   override onEnter(_gameState: GameState): void {
     for (const character of this.characters)
       if (character instanceof SirCedric) character.abandonBout()
+  }
+
+  /** The description, with Cedric's waiting line while he waits for Elior to answer the vision. */
+  override descriptionFor(gameState: GameState): string {
+    if (
+      gameState.getStoryFlag(FLAG_VISION_SHARED) &&
+      !gameState.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)
+    )
+      return (
+        this.description +
+        `\n\n${characterName('Sir Cedric')} is still waiting for you, his ` +
+        'hand on his sword.'
+      )
+    return this.description
   }
 
   /** Search for the hidden diary after the prerequisite dialogue. */
