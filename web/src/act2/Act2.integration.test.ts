@@ -12,6 +12,7 @@ import {
   VIRTUE_SELFLESS,
   VIRTUE_TRUTH,
 } from './Act2StoryFlags'
+import { MountainHermit } from './characters/MountainHermit'
 import { MountainFlower } from './items/MountainFlower'
 import { CityMap } from './items/CityMap'
 import { ForestSurvivalKit } from './items/ForestSurvivalKit'
@@ -1361,5 +1362,40 @@ describe('Act 2 optional virtue moments', () => {
     expect(executeCommands(fresh, ['talk to innkeeper marcus'])).not.toContain(
       'ill wind',
     )
+  })
+})
+
+describe("The sergeant's sword", () => {
+  /** Walk to the courtyard with the sword in hand but unused. */
+  function walkToCourtyard(game: Game): void {
+    executeCommands(game, ['take walking stick', 'talk to mountain hermit'])
+    const upToCourtyard = ACT2_GOLDEN_PATH.slice(
+      ACT2_GOLDEN_PATH.indexOf('talk to mountain hermit') + 1,
+      ACT2_GOLDEN_PATH.indexOf('use training sword'),
+    )
+    executeCommands(game, upToCourtyard)
+  }
+
+  it('gives the before line, the recognition and then the after line, across a save', () => {
+    const game = new Game([new Act2()])
+    walkToCourtyard(game)
+    const hermitBefore = game.state.allRooms.MountainPath.characters.find(
+      (c) => c instanceof MountainHermit,
+    )
+    expect(hermitBefore?.talkTo(game.state)).toContain('give him my words')
+    const saved = new Game([new Act2()])
+    expect(saved.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const recognition = executeCommands(saved, ['use training sword'])
+    expect(recognition).toContain('That notch by the guard.')
+    expect(recognition).toContain('Show me what he taught you, then.')
+    expect(recognition).toContain('perform a series of combat forms')
+
+    const afterSave = new Game([new Act2()])
+    expect(afterSave.loadSaveData(saved.toSaveData())).toContain('loaded')
+    const hermit = afterSave.state.allRooms.MountainPath.characters.find(
+      (c) => c instanceof MountainHermit,
+    )
+    expect(hermit?.talkTo(afterSave.state)).toContain('Knew the notch, did he?')
   })
 })

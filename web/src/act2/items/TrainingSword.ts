@@ -10,14 +10,18 @@ export class TrainingSword extends Item {
       name: 'training sword',
       shortName: 'sword',
       description:
-        'A well-balanced practice sword with a dulled blade. Though not sharp ' +
-        "enough for real combat, it's perfect for demonstrating martial skills " +
-        'and training exercises.',
+        'A well-balanced practice sword with a dulled blade. The grip is worn ' +
+        'smooth by years of a young hand, and there is a small notch near the ' +
+        "guard. Though not sharp enough for real combat, it's perfect for " +
+        'demonstrating martial skills and training exercises.',
       canBeCarried: true,
     })
   }
 
-  /** Demonstrate combat skills to Sir Cedric in the Castle Courtyard. */
+  /**
+   * Demonstrate combat skills to Sir Cedric in the Castle Courtyard. The first
+   * time, Cedric recognises the blade as his own before the forms begin.
+   */
   override use(gameState: GameState): string {
     // Check if we're in the Castle Courtyard with Sir Cedric present
     const chars = gameState.currentRoom.characters
@@ -34,7 +38,25 @@ export class TrainingSword extends Item {
 
         // Build a multi-paragraph success message using adjacent literal fragments
         return (
-          '[success]You draw the training sword and perform a series of ' +
+          '[success]You draw the [item_name]training sword[/item_name]. ' +
+          'Before you can take your stance, ' +
+          characterName('Sir Cedric') +
+          ' catches your wrist and turns the blade to the light.\n' +
+          speech(
+            "'That notch by the guard. I put it there at fourteen, swinging " +
+              "at a post I'd been told to leave alone. Where did you get this?'",
+          ) +
+          '\nYou tell him about the old man by the fire on the mountain path, ' +
+          'and what he asked you to say.\n' +
+          characterName('Sir Cedric') +
+          ' is silent for a long moment. When he speaks, his voice is low.\n' +
+          speech(
+            "'The sergeant never believed in anything he couldn't hit. That " +
+              "he believes in me...'",
+          ) +
+          ' He lets go of your wrist and steps back. ' +
+          speech("'Show me what he taught you, then.'") +
+          '\n\nYou draw the training sword and perform a series of ' +
           'combat forms for ' +
           characterName('Sir Cedric') +
           '. Your movements are fluid and precise, demonstrating skill with ' +
