@@ -15,8 +15,6 @@ import { HallOfEchoes } from './rooms/HallOfEchoes'
 import { MemoryVault } from './rooms/MemoryVault'
 import { MirrorLabyrinth } from './rooms/MirrorLabyrinth'
 import { OuterCourtyard } from './rooms/OuterCourtyard'
-import { RoyalGardens } from './rooms/RoyalGardens'
-import { ThroneChamberApproach } from './rooms/ThroneChamberApproach'
 import { ThroneChamer } from './rooms/ThroneChamer'
 import { TowerOfShadows } from './rooms/TowerOfShadows'
 import { Bless } from './spells/Bless'
@@ -40,8 +38,6 @@ export const ACT4_CLASSES = {
   MemoryVault,
   MirrorLabyrinth,
   OuterCourtyard,
-  RoyalGardens,
-  ThroneChamberApproach,
   ThroneChamer,
   TowerOfShadows,
   // Spells

@@ -6,4 +6,8 @@ describe('ThroneChamer', () => {
     const room = new ThroneChamer()
     expect(room.name).toBe('Throne Chamber')
   })
+
+  it('has no exits until the vault work gives it a way in', () => {
+    expect(new ThroneChamer().exits).toEqual({})
+  })
 })

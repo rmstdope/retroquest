@@ -19,7 +19,7 @@ export class ThroneChamer extends Room {
         'darkness remains—waiting for someone brave enough to challenge its dominion.',
       items: [],
       characters: [],
-      exits: { west: 'ThroneChamberApproach' },
+      exits: {},
     })
   }
 }
