@@ -152,9 +152,10 @@ export class CaravanMasterThorne extends Character {
         characterName(this.name) +
         ': ' +
         speech(
-          'That forest road was safe enough a month ago. Nobody patrols it ' +
-            'since the king went; every rider the castle has is out looking ' +
-            'for him.',
+          "Our road to Heavensforth runs along the forest's edge. It was " +
+            "safe enough a month ago, while the king's riders patrolled it. " +
+            'Nobody patrols it since the king went; every rider the castle ' +
+            'has is out looking for him.',
         ) +
         '\n\n' +
         characterName(this.name) +

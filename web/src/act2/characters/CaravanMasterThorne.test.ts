@@ -144,8 +144,10 @@ describe('Caravan Master Thorne and Brenn (mercy moment)', () => {
 
 describe('Caravan Master Thorne and the week the king went', () => {
   const ROAD_LINE =
-    'That forest road was safe enough a month ago. Nobody patrols it since ' +
-    'the king went; every rider the castle has is out looking for him.'
+    "Our road to Heavensforth runs along the forest's edge. It was safe " +
+    "enough a month ago, while the king's riders patrolled it. Nobody " +
+    'patrols it since the king went; every rider the castle has is out ' +
+    'looking for him.'
 
   it('puts the line between the plea and Brenn, in the first talk only', () => {
     const game = gameAtThorne()
