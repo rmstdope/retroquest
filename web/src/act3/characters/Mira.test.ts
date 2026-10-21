@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest'
-import { Game, type Room, characterName, event, speech } from '@/engine'
+import {
+  Game,
+  type Room,
+  characterName,
+  dialogue,
+  event,
+  speech,
+} from '@/engine'
 import { Act3 } from '../Act3'
 import { executeCommands } from '@/testing/gameHelpers'
 import {
@@ -16,6 +23,7 @@ import {
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
 import { Mira } from './Mira'
+import { MIRA_TOPICS_REMINDER } from '../MiraTopics'
 import { SirCedric } from './SirCedric'
 import { CrystalOfLight } from '../items/CrystalOfLight'
 import { DragonsScale } from '../items/DragonsScale'
@@ -72,7 +80,7 @@ describe('Mira', () => {
     expect(keepsakeNoteInInventory).toBe(true)
   })
 
-  it('opens the first talk in four speech lines with the hand-over between the third and fourth', () => {
+  it('opens the first talk in five speech lines with the hand-over between the third and fourth', () => {
     const game = new Game([new Act3()])
     const out = new Mira().talkTo(game.state)
     const speeches = out.match(/\[dialogue\].*?\[\/dialogue\]/g) ?? []
@@ -85,7 +93,10 @@ describe('Mira', () => {
       "[dialogue]'Before we go, take this, and read it. Then we can leave.'" +
         '[/dialogue]',
       "[dialogue]'Say the word, and I will draw the first circle.'[/dialogue]",
+      "[dialogue]'On the road, ask me what you need to. I may not be able to " +
+        "answer all of it yet.'[/dialogue]",
     ])
+    expect(out.endsWith(MIRA_TOPICS_REMINDER)).toBe(true)
     const handOver = out.indexOf('Mira hands you a small, worn piece')
     expect(handOver).toBeGreaterThan(out.indexOf('take this, and read it'))
     expect(handOver).toBeLessThan(out.indexOf('Say the word'))
@@ -535,6 +546,10 @@ describe('Mira confesses before the Warding Rite', () => {
       speech(
         "'When you are ready, speak to me again, and I will begin the Warding Rite.'",
       ),
+      speech(
+        "'And ask me anything you like now — about your parents, Malakar, the amulet, your grandmother. I will not hide from you again.'",
+      ),
+      MIRA_TOPICS_REMINDER,
     ].join('\n')
     expect(out).toBe(expected)
     expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)).toBe(true)
@@ -600,6 +615,56 @@ describe('Mira confesses before the Warding Rite', () => {
     expect(executeCommands(fresh, ['look at mira'])).toContain(NEW_DESCRIPTION)
     expect(executeCommands(fresh, ['talk to mira'])).toContain(
       'three relics resonate',
+    )
+  })
+})
+
+describe('Mira topics', () => {
+  it('dodges a topic before the confession and repeats it word for word', () => {
+    const game = new Game([new Act3()])
+    const first = new Mira().sayTo(game.state, 'parents')
+    expect(first).toBe(dialogue('Mira', "'Later, Elior. Not here.'"))
+    expect(new Mira().sayTo(game.state, 'parents')).toBe(first)
+  })
+
+  it('answers honestly once she has confessed, in any room', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, true)
+    for (const key of ['MirasHut', 'FortressEntrance']) {
+      game.state.currentRoom = game.state.allRooms[key]
+      expect(new Mira().sayTo(game.state, 'say gran')).toContain(
+        "She is Lysa's mother",
+      )
+    }
+  })
+
+  it('answers through the say command and fails when she is absent', () => {
+    const game = new Game([new Act3()])
+    expect(executeCommands(game, ['say malakar to mira'])).toContain(
+      'A name in the old books',
+    )
+    game.state.currentRoom = game.state.allRooms['TidalCauseway']
+    expect(executeCommands(game, ['say malakar to mira'])).toContain(
+      "There is no character named '[character_name]mira[/character_name]' here to speak to.",
+    )
+  })
+
+  it('ends the confession with the invitation and the grey reminder', () => {
+    const game = new Game([new Act3()])
+    const out = new Mira().talkTo(game.state)
+    expect(out).toContain('Say the word')
+    completeNonMainQuests(game)
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
+    const confession = new Mira().talkTo(game.state)
+    expect(confession.endsWith(MIRA_TOPICS_REMINDER)).toBe(true)
+    expect(confession).toContain(
+      speech(
+        "'And ask me anything you like now — about your parents, Malakar, " +
+          "the amulet, your grandmother. I will not hide from you again.'",
+      ),
     )
   })
 })

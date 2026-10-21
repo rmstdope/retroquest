@@ -591,12 +591,19 @@ describe('Act 3 golden path', () => {
     // The first talk is Mira's confession; the rite is held back
     const confession = executeCommands(game, ['talk to mira'])
     expect(confession.toLowerCase()).toContain('i was their pupil')
+    expect(confession).toContain('say parents, say malakar')
+    expect(executeCommands(game, ['say mother to mira'])).toContain(
+      'They became the ward',
+    )
     expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, false)
 
     // A save made before the rite still has the herbs, and the rite takes them
     const beforeRite = new Game([new Act3()])
     expect(beforeRite.loadSaveData(game.toSaveData())).toContain('loaded')
     expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', true)
+    expect(executeCommands(beforeRite, ['say amulet to mira'])).toContain(
+      'anchor of their ward',
+    )
     executeCommands(beforeRite, ['talk to mira'])
     expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', false)
 

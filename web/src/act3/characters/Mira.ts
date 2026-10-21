@@ -32,6 +32,11 @@ import {
   FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
   FLAG_ACT3_DRAGON_MESSAGE_RELAYED,
 } from '../Act3StoryFlags'
+import {
+  MIRA_TOPICS_REMINDER,
+  miraTopicIn,
+  miraTopicReply,
+} from '../MiraTopics'
 
 /**
  * Act III version of Mira: starts the main quest, handles teleportation
@@ -81,7 +86,14 @@ export class Mira extends Character {
         '\n' +
         event('Mira hands you a small, worn piece of parchment.') +
         '\n' +
-        speech("'Say the word, and I will draw the first circle.'")
+        speech("'Say the word, and I will draw the first circle.'") +
+        '\n' +
+        speech(
+          "'On the road, ask me what you need to. I may not be able to " +
+            "answer all of it yet.'",
+        ) +
+        '\n' +
+        MIRA_TOPICS_REMINDER
       )
     }
 
@@ -413,6 +425,19 @@ export class Mira extends Character {
   }
 
   /**
+   * Elior asks Mira about his past: parents, Malakar, the amulet or his
+   * grandmother. She dodges before her confession and answers honestly after
+   * it; any other words get the same shake of the head. Works in every room
+   * she is in.
+   */
+  override sayTo(gameState: GameState, words: string): string {
+    return miraTopicReply(
+      miraTopicIn(words),
+      gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED),
+    )
+  }
+
+  /**
    * Mira's talk at the fortress gate: the first time she refuses to stay
    * behind and says she is coming along; every later time one short line.
    */
@@ -561,6 +586,11 @@ export class Mira extends Character {
         "'When you are ready, speak to me again, and I will begin the " +
           "Warding Rite.'",
       ),
+      speech(
+        "'And ask me anything you like now — about your parents, Malakar, " +
+          "the amulet, your grandmother. I will not hide from you again.'",
+      ),
+      MIRA_TOPICS_REMINDER,
     ].join('\n')
   }
 }
