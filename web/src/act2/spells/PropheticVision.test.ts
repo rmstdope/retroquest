@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, characterName, dialogue } from '@/engine'
 import { Act2 } from '../Act2'
 import { SirCedric } from '../characters/SirCedric'
 import type { GameState } from '@/engine'
@@ -23,6 +23,186 @@ function completeAllSideQuests(gameState: GameState): void {
   ].filter((quest) => !quest.isMain())
   gameState.completedQuests.push(...sideQuests)
 }
+
+/**
+ * Leave exactly the named side quests incomplete: `started` ones in the
+ * journal (in the given order), `unfound` ones not yet activated.
+ */
+function leaveIncomplete(
+  gameState: GameState,
+  started: string[],
+  unfound: string[],
+): void {
+  const sideQuests = [
+    ...gameState.nonActivatedQuests,
+    ...gameState.activatedQuests,
+    ...gameState.completedQuests,
+  ].filter((quest) => !quest.isMain())
+  const named = [...started, ...unfound]
+  gameState.nonActivatedQuests = gameState.nonActivatedQuests.filter((quest) =>
+    quest.isMain(),
+  )
+  gameState.activatedQuests = gameState.activatedQuests.filter((quest) =>
+    quest.isMain(),
+  )
+  gameState.completedQuests = sideQuests.filter(
+    (quest) => !named.includes(quest.name),
+  )
+  for (const name of started)
+    gameState.activatedQuests.push(sideQuests.find((q) => q.name === name)!)
+  for (const name of unfound)
+    gameState.nonActivatedQuests.push(sideQuests.find((q) => q.name === name)!)
+}
+
+const STAGE =
+  `The vision has barely begun to stir when ${characterName('Sir Cedric')} ` +
+  'lays a hand on your arm.\n\n'
+const OPENER =
+  'Not yet. Whatever you have seen, I would hear it with our promises ' +
+  'kept, not with work still undone.'
+const HINT =
+  'And I would wager there is more out there that has not yet found you.'
+const HERMIT =
+  "The hermit at the forest's edge asked you to make ready, and you have not."
+const ELENA = 'Elena at the Silver Stag still carries her curse.'
+const THORNE = "Thorne's merchants are still lost somewhere in the forest."
+
+/** The refusal an early cast gives, for the current state of the game. */
+function refusal(gameState: GameState): string {
+  return new PropheticVision().castSpell(gameState)
+}
+
+/** Cedric's whole speech as the engine renders it. */
+function speech(words: string): string {
+  return STAGE + dialogue('Sir Cedric', `"${words}"`)
+}
+
+describe('Sir Cedric turns away an early vision', () => {
+  it('names several started errands in journal order (state 1)', () => {
+    const game = createGameWithCedric()
+    leaveIncomplete(
+      game.state,
+      [
+        "The Innkeeper's Daughter",
+        "The Merchant's Lost Caravan",
+        "The Hermit's Warning",
+      ],
+      [],
+    )
+
+    expect(refusal(game.state)).toBe(
+      speech(
+        `${OPENER} ${ELENA} ${THORNE} ${HERMIT} See to them, and then show me.`,
+      ),
+    )
+  })
+
+  it('uses the one-left opener and closer for a single started errand (state 2)', () => {
+    const game = createGameWithCedric()
+    leaveIncomplete(game.state, ["Cedric's Lost Honor"], [])
+
+    expect(refusal(game.state)).toBe(
+      speech(
+        'Not yet. One promise is still unkept. My own name is not yet ' +
+          'cleared. See to it, and then show me.',
+      ),
+    )
+  })
+
+  it('adds the hint after one started errand when others are unfound (state 3)', () => {
+    const game = createGameWithCedric()
+    leaveIncomplete(game.state, ["The Knight's Test"], ['Whispers in the Wind'])
+
+    const answer = refusal(game.state)
+
+    expect(answer).toBe(
+      speech(
+        `${OPENER} You have not yet shown me what you can do in the yard. ` +
+          `${HINT} See to it, and then show me.`,
+      ),
+    )
+    expect(answer).not.toContain('spirits')
+  })
+
+  it('adds the hint after several started errands when others are unfound (state 4)', () => {
+    const game = createGameWithCedric()
+    leaveIncomplete(
+      game.state,
+      ["The Innkeeper's Daughter", "The Hermit's Warning"],
+      ['The Ancient Library'],
+    )
+
+    expect(refusal(game.state)).toBe(
+      speech(
+        `${OPENER} ${ELENA} ${HERMIT} ${HINT} See to them, and then show me.`,
+      ),
+    )
+  })
+
+  it('gives the only-unfound speech when nothing started is unfinished (state 5)', () => {
+    const game = createGameWithCedric()
+    leaveIncomplete(game.state, [], ['The Ancient Library'])
+
+    expect(refusal(game.state)).toBe(
+      speech(
+        'Not yet. There is more out there that has not yet found you, and I ' +
+          'would not have us leave it behind. Find it, and then show me.',
+      ),
+    )
+  })
+
+  it('drops finished errands on a later cast (state 6)', () => {
+    const game = createGameWithCedric()
+    leaveIncomplete(
+      game.state,
+      ["The Innkeeper's Daughter", "The Hermit's Warning"],
+      [],
+    )
+    expect(refusal(game.state)).toContain(ELENA)
+
+    leaveIncomplete(game.state, ["The Hermit's Warning"], [])
+    const again = refusal(game.state)
+
+    expect(again).not.toContain(ELENA)
+    expect(again).toContain('One promise is still unkept.')
+  })
+
+  it('never sets the story flag and shows nothing of the vision', () => {
+    const game = createGameWithCedric()
+    leaveIncomplete(game.state, ["Cedric's Lost Honor"], [])
+
+    const answer = refusal(game.state)
+
+    expect(answer).not.toContain('robed figure')
+    expect(game.state.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)).toBe(false)
+    expectMarkupWellFormed(answer)
+  })
+
+  it('has a sentence for every Act II side quest', () => {
+    const names = [...createGameWithCedric().state.nonActivatedQuests]
+      .filter((quest) => !quest.isMain())
+      .map((quest) => quest.name)
+    expect(names.length).toBe(11)
+    for (const name of names) {
+      const game = createGameWithCedric()
+      leaveIncomplete(game.state, [name], [])
+
+      const answer = refusal(game.state)
+
+      expect(answer, name).toContain('One promise is still unkept. ')
+      expect(answer, name).not.toContain('more out there')
+    }
+  })
+
+  it('leaves the dim hint unchanged when Cedric is not in the room', () => {
+    const game = new Game([new Act2()])
+
+    const answer = new PropheticVision().castSpell(game.state)
+
+    expect(answer).toContain('most meaningful if shared')
+    expect(answer).not.toContain('Not yet.')
+  })
+})
 
 describe('Prophetic Vision markup', () => {
   it('uses only known tags for the first vision', () => {
@@ -91,7 +271,8 @@ describe('Prophetic Vision casting', () => {
 
     const answer = game.cast('prophetic vision')
 
-    expect(answer.toLowerCase()).toContain('complete every side quest')
+    expect(answer).toContain('Not yet.')
+    expect(answer).not.toContain('[failure]')
     expect(game.state.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)).toBe(false)
   })
 
