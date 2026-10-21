@@ -127,6 +127,12 @@ const DIAGNOSIS_STAGE =
   '[character_name]Lyria[/character_name] looks up from her mortar, and something in your face makes her ' +
   'set the pestle down.'
 const DIAGNOSIS_START = "You've been to the Silver Stag. Marcus's girl, Elena."
+const DIAGNOSIS_MIDDLE =
+  'First she must be made strong, or what comes after will kill her; that ' +
+  'wants a deeper healing than I can give alone. Then the mark must be ' +
+  'washed in water no shadow has ever touched. You will find none in this ' +
+  'city; every well here has seen the dark. And last, the thing must be ' +
+  'unbound. Not broken: unbound, with the old kind of unbinding,'
 const DIAGNOSIS_END =
   'the kind the scholars wrote down before any of us were born.'
 const REMINDER =
@@ -152,6 +158,7 @@ describe("Lyria explains how Elena's curse is lifted (rq-nun)", () => {
     )
     expect(answer).toContain(DIAGNOSIS_STAGE)
     expect(answer).toContain(DIAGNOSIS_START)
+    expect(answer).toContain(DIAGNOSIS_MIDDLE)
     expect(answer).toContain(DIAGNOSIS_END)
     expect(answer.indexOf(DIAGNOSIS_END)).toBeLessThan(answer.indexOf(USUAL))
     expectLyriaSpeaks(answer)
@@ -165,7 +172,7 @@ describe("Lyria explains how Elena's curse is lifted (rq-nun)", () => {
     )
   })
 
-  it('repeats only the one-line reminder on later talks, including after the water', () => {
+  it('repeats only the one-line reminder on later talks', () => {
     const game = createGame()
     const lyria = new MasterHealerLyria()
     game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
