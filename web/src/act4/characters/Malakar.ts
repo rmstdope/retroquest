@@ -19,6 +19,7 @@ import {
   THRONE_CHAMBER_AMULET,
   THRONE_CHAMBER_HEALED,
 } from '../rooms/throneDescriptions'
+import { normaliseSpokenWord } from '../spokenWord'
 
 /** The speaker label of the dream voice, as in the Memory Vault. */
 const SHADOW_LABEL = 'Shadow of the Past'
@@ -135,10 +136,7 @@ export class Malakar extends Character {
    * elixir is used; any other word only gets a dim answer.
    */
   override sayTo(gameState: GameState, words: string): string {
-    const word = words
-      .trim()
-      .replace(/^['"“]|['"”.!]+$/g, '')
-      .toLowerCase()
+    const word = normaliseSpokenWord(words)
     const ending = endingPlayed(gameState)
     if (ending === 'justice') return GONE_INTO_SEAL
     if (ending) return NOTHING_LEFT

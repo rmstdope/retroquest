@@ -1,6 +1,6 @@
 import { Item, type GameState, event } from '@/engine'
 import { EchoStone } from './EchoStone'
-import { FLAG_ACT4_SERVANTS_PENDANT_ACQUIRED } from '../Act4StoryFlags'
+import { MirrorLabyrinth } from '../rooms/MirrorLabyrinth'
 
 /** A pendant that allows communication with freed servants for guidance. */
 export class ServantsPendant extends Item {
@@ -18,12 +18,6 @@ export class ServantsPendant extends Item {
     })
   }
 
-  /** Set flag when the pendant is picked up. */
-  override pickedUp(gameState: GameState): string {
-    gameState.setStoryFlag(FLAG_ACT4_SERVANTS_PENDANT_ACQUIRED, true)
-    return ''
-  }
-
   /** Use the pendant with the Echo Stone: the same as using the stone. */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof EchoStone) return other.use(gameState)
@@ -32,7 +26,7 @@ export class ServantsPendant extends Item {
 
   /** Use the pendant to receive guidance from freed servants. */
   override use(gameState: GameState): string {
-    if (gameState.currentRoom.name === 'Mirror Labyrinth') {
+    if (gameState.currentRoom instanceof MirrorLabyrinth) {
       if (!this.guidanceReceived) {
         this.guidanceReceived = true
         return event(

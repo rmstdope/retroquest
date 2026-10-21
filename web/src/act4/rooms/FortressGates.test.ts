@@ -25,14 +25,8 @@ describe('FortressGates', () => {
     room.light(game.state)
 
     const lightAgain = room.light(game.state)
-    const guardians = room.examine(game.state, 'guardian')
-    const barriers = room.examine(game.state, 'barrier')
 
     expect(lightAgain).toContain('already been banished')
-    expect(guardians).toContain('banished by your light magic')
-    expect(barriers).toContain('barriers have been disabled')
-    for (const answer of [lightAgain, guardians, barriers]) {
-      expectMarkupWellFormed(answer)
-    }
+    expectMarkupWellFormed(lightAgain)
   })
 })

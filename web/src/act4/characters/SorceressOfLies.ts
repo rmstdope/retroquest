@@ -8,6 +8,7 @@ import {
 } from '../Act4StoryFlags'
 import { SorceressTruth } from '../items/SorceressTruth'
 import { CHAMBER_AFTER_REDEMPTION } from '../rooms/chamberDescriptions'
+import { normaliseSpokenWord } from '../spokenWord'
 
 /** What she is called once she is redeemed. */
 const UNMASKED_NAME = 'Unmasked Sorceress'
@@ -107,10 +108,7 @@ export class SorceressOfLies extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
       return '[dim]She has already been heard. She nods to you, once.[/dim]'
     }
-    const word = words
-      .trim()
-      .replace(/^['"]|['"]$/g, '')
-      .toLowerCase()
+    const word = normaliseSpokenWord(words)
     if (word !== 'understanding') return '[dim]The Sorceress only smiles.[/dim]'
     if (!gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
       return (

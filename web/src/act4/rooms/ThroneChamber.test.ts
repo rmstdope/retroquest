@@ -16,7 +16,7 @@ import {
   expectItemInInventory,
   expectStoryFlag,
 } from '@/testing/gameHelpers'
-import { ThroneChamer } from './ThroneChamer'
+import { ThroneChamber } from './ThroneChamber'
 
 const FIRST_DESCRIPTION =
   'A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from him a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too.'
@@ -72,7 +72,7 @@ function shattered(): Game {
   return game
 }
 
-describe('ThroneChamer', () => {
+describe('ThroneChamber', () => {
   it('survives a save at every point, and coming back replays nothing', () => {
     for (const make of [inThrone, refrained, opened, healed, shattered]) {
       const game = make()
@@ -107,7 +107,7 @@ describe('ThroneChamer', () => {
   })
 
   it('has the correct name and a way back south only', () => {
-    const room = new ThroneChamer()
+    const room = new ThroneChamber()
     expect(room.name).toBe('Throne Chamber')
     expect(room.exits).toEqual({ south: 'ParentsVault' })
   })

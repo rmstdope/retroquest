@@ -8,7 +8,7 @@ import { TowerOfShadows } from './TowerOfShadows'
 import { ChamberOfWhispers } from './ChamberOfWhispers'
 import { MemoryVault } from './MemoryVault'
 import { ParentsVault } from './ParentsVault'
-import { ThroneChamer } from './ThroneChamer'
+import { ThroneChamber } from './ThroneChamber'
 
 /** Map of direction to its opposite. */
 const OPPOSITE: Record<string, string> = {
@@ -30,7 +30,7 @@ const ROOM_CLASSES: Record<string, new () => Room> = {
   ChamberOfWhispers,
   MemoryVault,
   ParentsVault,
-  ThroneChamer,
+  ThroneChamber,
 }
 
 describe('Act 4 rooms', () => {

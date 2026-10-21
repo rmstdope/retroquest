@@ -1218,7 +1218,7 @@ describe('Game', () => {
     it('exposes the save data for other storages and rejects broken data', () => {
       const game = twoActGame()
       const data = game.toSaveData()
-      expect(JSON.parse(data)).toMatchObject({ version: 3, actIndex: 0 })
+      expect(JSON.parse(data)).toMatchObject({ version: 4, actIndex: 0 })
       expect(game.loadSaveData(data)).toBe(
         '[event]Game loaded successfully.[/event]',
       )
@@ -1232,7 +1232,7 @@ describe('Game', () => {
         '[failure]Failed to load game',
       )
       const oldSave = JSON.parse(data) as Record<string, unknown>
-      oldSave.version = 2
+      oldSave.version = 3
       expect(game.loadSaveData(JSON.stringify(oldSave))).toContain(
         'unsupported save format',
       )

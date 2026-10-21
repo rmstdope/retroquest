@@ -1,5 +1,6 @@
 import { Character, type GameState, dialogue, event } from '@/engine'
 import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
+import { normaliseSpokenWord } from '../spokenWord'
 
 /**
  * Elior's reflection in the plain mirror at the maze's heart, present once the
@@ -42,12 +43,7 @@ export class TrueSelf extends Character {
 
   /** Saying "truth" confesses (once); anything else is shaken off. */
   override sayTo(gameState: GameState, words: string): string {
-    if (
-      words
-        .trim()
-        .replace(/^['"]|['"]$/g, '')
-        .toLowerCase() !== 'truth'
-    ) {
+    if (normaliseSpokenWord(words) !== 'truth') {
       return '[dim]The reflection only shakes its head.[/dim]'
     }
     if (gameState.getStoryFlag(FLAG_ACT4_TRUTH_TOLD)) {

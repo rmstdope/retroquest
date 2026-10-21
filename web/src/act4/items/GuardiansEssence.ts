@@ -1,8 +1,8 @@
 import { Item, type Character, type GameState, event } from '@/engine'
-import {
-  FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED,
-  FLAG_ACT4_SERVANTS_TRUST_EARNED,
-} from '../Act4StoryFlags'
+import { FLAG_ACT4_SERVANTS_TRUST_EARNED } from '../Act4StoryFlags'
+import { TrappedServants } from '../characters/TrappedServants'
+import { HallOfEchoes } from '../rooms/HallOfEchoes'
+import { OuterCourtyard } from '../rooms/OuterCourtyard'
 
 /** The distilled essence of a guardian's courage, enabling acts of selflessness. */
 export class GuardiansEssence extends Item {
@@ -18,20 +18,14 @@ export class GuardiansEssence extends Item {
     })
   }
 
-  /** Set flag when the essence is acquired. */
-  override pickedUp(gameState: GameState): string {
-    gameState.setStoryFlag(FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, true)
-    return ''
-  }
-
   /** Use Guardian's Essence on servants to prove worthiness. */
   override useOnCharacter(
     gameState: GameState,
     targetCharacter: Character,
   ): string {
     if (
-      targetCharacter.name.toLowerCase().includes('servant') &&
-      gameState.currentRoom.name === 'Outer Courtyard'
+      targetCharacter instanceof TrappedServants &&
+      gameState.currentRoom instanceof OuterCourtyard
     ) {
       if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
         gameState.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
@@ -49,13 +43,13 @@ export class GuardiansEssence extends Item {
 
   /** Use Guardian's Essence to prove worthiness. */
   override use(gameState: GameState): string {
-    if (gameState.currentRoom.name === 'Outer Courtyard') {
+    if (gameState.currentRoom instanceof OuterCourtyard) {
       return event(
         "The Guardian's Essence glows brightly, ready to prove your " +
           'worthiness to those who need your help. Try using it on the servants.',
       )
     }
-    if (gameState.currentRoom.name === 'Hall of Echoes') {
+    if (gameState.currentRoom instanceof HallOfEchoes) {
       return event(
         "The Guardian's Essence resonates with the ancient hall, " +
           'recognizing the nobility that once existed here.',

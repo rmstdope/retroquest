@@ -1,5 +1,7 @@
 import { Item, type GameState, event } from '@/engine'
 import { FLAG_ACT4_BARRIERS_DISABLED } from '../Act4StoryFlags'
+import { FortressGates } from '../rooms/FortressGates'
+import { Barriers } from './Barriers'
 
 /** A fragment of a ward stone that can disable magical barriers. */
 export class WardStoneFragment extends Item {
@@ -16,7 +18,7 @@ export class WardStoneFragment extends Item {
 
   /** Use the ward stone fragment to disable barriers. */
   override use(gameState: GameState): string {
-    if (gameState.currentRoom.name === 'Fortress Gates') {
+    if (gameState.currentRoom instanceof FortressGates) {
       // Check if barriers are still active
       if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
         gameState.setStoryFlag(FLAG_ACT4_BARRIERS_DISABLED, true)
@@ -40,8 +42,8 @@ export class WardStoneFragment extends Item {
   /** Use ward stone fragment with barriers specifically. */
   override useWith(gameState: GameState, otherItem: Item): string {
     if (
-      otherItem.name.toLowerCase().includes('barrier') &&
-      gameState.currentRoom.name === 'Fortress Gates'
+      otherItem instanceof Barriers &&
+      gameState.currentRoom instanceof FortressGates
     ) {
       return this.use(gameState)
     }

@@ -68,21 +68,6 @@ export class OuterCourtyard extends Room {
     )
   }
 
-  /** Handle examining specific targets in the room. */
-  examine(gameState: GameState, target: string): string {
-    const targetLower = target.toLowerCase()
-    if (targetLower.includes('servant')) {
-      const servants = this.getCharacterByName('servants')
-      if (servants) {
-        return servants.examine(gameState)
-      }
-    }
-    return event(
-      `You examine the ${target} but find nothing particularly ` +
-        'noteworthy about it.',
-    )
-  }
-
   /** Handle casting bless spell on servants. */
   castBless(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {

@@ -51,12 +51,12 @@ export interface GameOptions {
 
 /** The JSON a save holds. */
 interface SavePayload {
-  version: 3
+  version: 4
   actIndex: number
   state: SerializedGraph
 }
 
-const SAVE_VERSION = 3
+const SAVE_VERSION = 4
 const DEFAULT_SAVE_NAME = 'retroquest'
 const SAVE_NAME = /^[a-z0-9_-]+$/
 const INVALID_SAVE_NAME =
