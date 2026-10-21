@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from './Act4'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
-import { sacrificeOpen } from './endings'
+import { selflessLine } from './endings'
 import { playDebugScript } from '@/utils/debugScript'
 import {
   FLAG_ACT4_FIELD_GREEN,
@@ -931,13 +931,13 @@ describe('Act 4 integration', () => {
       )
     }
 
-    it('opens Sacrifice with the chain gift and one earlier moment, across a reload', () => {
+    it("adds Aren's Sacrifice line with the chain gift and one earlier moment, across a reload", () => {
       toRedeemed()
       game.state.currentRoom = game.state.allRooms.OuterCourtyard
       game.state.addVirtue(VIRTUE_SELFLESS)
-      expect(sacrificeOpen(game.state)).toBe(false)
+      expect(selflessLine(game.state)).toBeNull()
       executeCommands(game, ["give guardian's chain to captain"])
-      expect(sacrificeOpen(game.state)).toBe(true)
+      expect(selflessLine(game.state)).not.toBeNull()
       reload()
       expectStoryFlag(game.state, FLAG_ACT4_CHAIN_GIVEN)
       expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(2)

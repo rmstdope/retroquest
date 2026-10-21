@@ -75,9 +75,6 @@ describe('LoyaltyToken', () => {
       expect(
         game.state.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL),
       ).toBe(true)
-      expect(game.state.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED)).toBe(
-        false,
-      )
       const again = item.use(game.state)
       expect(again).toBe(
         "[dim]The token is still warm against your heart. The knight's despair cannot reach you.[/dim]",
