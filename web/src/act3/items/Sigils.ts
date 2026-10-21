@@ -54,8 +54,8 @@ export class Sigils extends Item {
       'sigils brighten, steady, and hold.\n' +
       `The ${characterName('ancient dragon')} lowers its head. ` +
       speech(
-        "'You owed me nothing, and gained nothing by it, and you did it " +
-          "anyway. Your parents would have done the same.'",
+        "'You said you would return what you took. Most forget by the time " +
+          "they reach the door. Your parents would have done the same.'",
       ) +
       '\n' +
       remembered('Selflessness')

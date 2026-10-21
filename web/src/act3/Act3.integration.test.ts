@@ -468,13 +468,12 @@ describe('Act 3 golden path', () => {
 
     // First examine the Old Oath Scrolls to understand the oath requirements
     const examineScrolls = executeCommands(game, ['examine old oath scrolls'])
-    expect(examineScrolls.toLowerCase()).toContain('selflessness')
-    expect(examineScrolls.toLowerCase()).toContain('disintegrate')
+    expect(examineScrolls).toContain('I take what is given, and I return ___.')
+    expect(examineScrolls.toLowerCase()).not.toContain('disintegrate')
     expectStoryFlag(state, FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
 
-    // After examination, scrolls should be consumed and no longer available
-    expectItemInRoom(room(), 'Old Oath Scrolls', false)
-    expectItemInInventory(state, 'Old Oath Scrolls', false)
+    // The scrolls no longer crumble: they stay where they are
+    expectItemInRoom(room(), 'Old Oath Scrolls', true)
 
     // Examine runic walls (reveals chant instructions and adds rubbings to room)
     let examineResult = executeCommands(game, ['examine runic walls'])
@@ -530,9 +529,11 @@ describe('Act 3 golden path', () => {
     expectStoryFlag(state, FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
 
     // --- Step 26: Dragon's Hall - Relic Trial (Oath and Scale) ---
-    // Say oath to dragon (adds dragon's scale to room)
-    oathResult = executeCommands(game, ['say oath to ancient dragon'])
-    expect(oathResult.toLowerCase()).toContain('oath')
+    // Finish the old oath for the dragon (adds dragon's scale to room)
+    oathResult = executeCommands(game, ['say everything to ancient dragon'])
+    expect(oathResult).toContain(
+      'I take what is given, and I return everything.',
+    )
     expect(oathResult.toLowerCase()).toContain('scale')
     expectStoryFlag(state, FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
 
@@ -691,6 +692,35 @@ describe('Act 3 golden path as declared by the act', () => {
     expect(again).toContain('two faces linger')
   })
 
+  it('answers the dragon after a reload with the scrolls read but not in hand', () => {
+    const game = new Game([new Act3()])
+    const toDragon = ACT3_GOLDEN_PATH.indexOf(
+      'say everything to ancient dragon',
+    )
+    executeCommands(game, ACT3_GOLDEN_PATH.slice(0, toDragon))
+    game.state.removeItemFromInventory('Old Oath Scrolls')
+    const chambers = game.state.getRoom('Echo Chambers')?.items ?? []
+    chambers.splice(
+      0,
+      chambers.length,
+      ...chambers.filter((i) => i.name !== 'Old Oath Scrolls'),
+    )
+    expect(chambers.some((i) => i.name === 'Old Oath Scrolls')).toBe(false)
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+
+    const talk = executeCommands(fresh, ['talk to ancient dragon'])
+    expect(talk).toContain('what will you give back, for what you take?')
+
+    const early = executeCommands(fresh, ['say it to ancient dragon'])
+    expect(early).toContain('I take what is given, and I return it.')
+    expectStoryFlag(fresh.state, FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
+
+    const again = new Game([new Act3()])
+    again.loadSaveData(fresh.toSaveData())
+    expectStoryFlag(again.state, FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
+  })
+
   it('hears the dream voice once and does not replay it after a reload', () => {
     const game = new Game([new Act3()])
     const first = executeCommands(
@@ -707,7 +737,7 @@ describe('Act 3 golden path as declared by the act', () => {
     const again = executeCommands(fresh, ['talk to ancient dragon'])
 
     expect(again).not.toContain('stayed behind')
-    expect(again).toContain('The memory has been shared')
+    expect(again).toContain('what will you give back, for what you take?')
   })
 
   it("plays each of Mira's slips once on the golden path, before the confession", () => {
