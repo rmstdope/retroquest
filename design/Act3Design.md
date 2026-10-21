@@ -4,7 +4,7 @@
 
 Elior leaves the forest carrying the echo of Nyx’s last words: “Power follows purpose; purpose follows truth.” The air feels thinner now, charged with the knowledge that Malakar holds King Alden captive and leeches his life to call forth a kingdom-wide curse. The path ahead is no longer about learning who Elior might become—it is about deciding the kind of person he will be while the kingdom watches.
 
-Act III unfolds as a pilgrimage across Eldoria to recover three ancient relics—each bound to a virtue that shapes Elior’s character: Courage, Wisdom, and Selflessness. As Elior travels with Mira and Sir Cedric, he confronts enemies and riddles. He learns more of the creeping weight of his parents’ mystery. Elior has believed his parents were Malakar’s victims. By the end of the act he knows better: **Aren** and **Lysa** were Malakar’s closest friends, fellow Wardens of the Dawn who made the three virtue relics together with him, and they are **warded away, not dead**. At each relic site the Ancient Amulet glows and the curse over the land is visibly worse, and the dream voice returns once, in the Dragon’s Hall.
+Act III unfolds as a pilgrimage across Eldoria to recover three ancient relics—each bound to a virtue that shapes Elior’s character: Courage, Wisdom, and Selflessness. As Elior travels with Mira and Sir Cedric, he confronts enemies and riddles. He learns more of the creeping weight of his parents’ mystery. Elior has believed his parents were Malakar’s victims. By the end of the act he knows better: **Aren** and **Lysa** were Malakar’s closest friends, fellow Wardens of the Dawn who made the three virtue relics together with him, and the Dragon tells him they are **warded away, not dead**, though he does not yet know what that means. At each relic site the Ancient Amulet glows and the curse over the land is visibly worse, and the dream voice returns once, in the Dragon’s Hall.
 
 ## Journey Between Relic Sites
 
@@ -57,7 +57,7 @@ Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns b
 -   Letters and sigils resurface. The Sea-Sealed Letter is written by **Aren and Lysa** to their friend Malakar, signed as fellow Wardens of the Dawn, and it begs him not to reach for time magic. They defied him as equals and as friends.
 -   In the Sunken Ruins, a mural shows two figures shielding a child from a storm of sigils while a third reaches toward them.
 -   On Mount Ember’s Mirror Terraces, the Charred Inscription records the three Wardens’ shared promise, the three virtues they bound into the relics, and the words “what we pour into the ward, the ward will keep.”
--   The Dragon names the ward: Aren and Lysa became it, and they are warded away, not dead.
+-   The Dragon names the ward: Aren and Lysa became it, and the Dragon says they are warded away, not dead.
 
 ## The Curse Worsens
 
@@ -423,7 +423,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 #### Entrance to Malakar’s Fortress
 
--   Description: A blackstone bastion rises from a shattered ridge; gate sigils pulse like a heartbeat behind iron lattices. The air tastes of cold metal and distant thunder. The Ancient Amulet is warm in Elior’s hand: the act ends on the Act III row of the red line, with Elior knowing his parents were Malakar’s closest friends and are warded away, not dead.
+-   Description: A blackstone bastion rises from a shattered ridge; gate sigils pulse like a heartbeat behind iron lattices. The air tastes of cold metal and distant thunder. The Ancient Amulet is warm in Elior’s hand: the act ends on the Act III row of the red line, with Elior knowing his parents were Malakar’s closest friends; the Dragon says they are warded away, not dead, and Elior does not yet know what that means.
 -   Items: Fortress Gates (examining the gates marks Act III complete)
 -   Characters: None
 -   Quest Relevance: Arrival point after securing all three relics; transition into Act IV’s assault on the fortress.
@@ -738,7 +738,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `east` → Enters Dragon’s Hall after “Oath of Stillness” is complete.
-    -   `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues): Aren and Lysa, Wardens of the Dawn, became the ward and are warded away, not dead. The Dragon echoes “Power follows purpose; purpose follows truth.” The Ancient Amulet glows a third time and shows Aren and Lysa together, and the Dragon names it the anchor of the ward. The mines fall silent. The dream voice speaks once; the Dragon says it is “the friend who stayed behind.”
+    -   `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues): Aren and Lysa, Wardens of the Dawn, became the ward and, the Dragon says, are warded away, not dead. The Dragon echoes “Power follows purpose; purpose follows truth.” The Ancient Amulet glows a third time and shows Aren and Lysa together, and the Dragon names it the anchor of the ward. The mines fall silent. The dream voice speaks once; the Dragon says it is “the friend who stayed behind.”
 
 25. Room: Dragon’s Hall (Relic Trial)
 

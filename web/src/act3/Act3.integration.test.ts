@@ -582,13 +582,15 @@ describe('Act 3 golden path', () => {
     expect(examineResult.toLowerCase()).toContain('massive gates')
     expect(examineResult.toLowerCase()).toContain('act iii is complete')
     expectStoryFlag(state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
-    expect(examineResult).toContain('They are not dead. They are warded away.')
+    expect(examineResult).toContain(
+      'The Dragon said they were warded away, not dead. You do not yet know what that means.',
+    )
     expect(examineResult).toContain('The Lifelight Elixir pulses')
 
     // The page opens on the hook, also on a game loaded from a save.
     for (let turn = 0; turn < 3; turn++) game.newTurn()
     const hook =
-      "Your parents were Malakar's closest friends. They are warded away, not dead."
+      "Your parents were Malakar's closest friends. The Dragon says they are warded away, not dead."
     expect(game.getActCompleteText()).toMatch(
       new RegExp(`^${hook}\\n\\nCongratulations — you have completed`),
     )

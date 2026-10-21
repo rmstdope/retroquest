@@ -32,7 +32,8 @@ export class FortressGates extends Item {
         'you. You know better now. ' +
         `${characterName('Aren')} and ${characterName('Lysa')} were his ` +
         'closest friends, and the ward they became is still holding.\n\n' +
-        'They are not dead. They are warded away.\n\n' +
+        'The Dragon said they were warded away, not dead. You do not yet ' +
+        'know what that means.\n\n' +
         'The Lifelight Elixir pulses with protective power, ready to shield ' +
         "you from the sorcerer's influence. " +
         '[bold]Act III is complete.[/bold] The final confrontation awaits.'
