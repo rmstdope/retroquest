@@ -279,6 +279,9 @@ body {
 .theme-bold {
   font-weight: 600;
 }
+.theme-italic {
+  font-style: italic;
+}
 .theme-dim {
   color: var(--lq-muted);
   opacity: 1;

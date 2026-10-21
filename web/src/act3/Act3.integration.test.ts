@@ -617,6 +617,25 @@ describe('Act 3 golden path as declared by the act', () => {
     expect(again).toContain('two faces linger')
   })
 
+  it('hears the dream voice once and does not replay it after a reload', () => {
+    const game = new Game([new Act3()])
+    const first = executeCommands(
+      game,
+      ACT3_GOLDEN_PATH.slice(
+        0,
+        ACT3_GOLDEN_PATH.indexOf('talk to ancient dragon') + 1,
+      ),
+    )
+    expect(first).toContain('The friend who stayed behind.')
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+
+    const again = executeCommands(fresh, ['talk to ancient dragon'])
+
+    expect(again).not.toContain('stayed behind')
+    expect(again).toContain('The memory has been shared')
+  })
+
   it('ends with the amulet showing both parents, after three glows', () => {
     const game = new Game([new Act3()])
     const out = executeCommands(game, ACT3_GOLDEN_PATH)

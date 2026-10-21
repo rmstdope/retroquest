@@ -22,6 +22,7 @@ export const MARKUP_TAGS: readonly string[] = [
   'exits',
   'bold',
   'dim',
+  'italic',
 ]
 
 /** Wrap `text` as an event line: `[event]text[/event]`. */

@@ -75,3 +75,6 @@ export const FLAG_ACT3_ECHOES_QUEST_COMPLETED = 'act3_echoes_quest_completed'
 
 // Mira's confession before the Warding Rite
 export const FLAG_ACT3_MIRA_CONFESSED = 'act3_mira_confessed'
+
+// Dragon's dream voice (heard once, straight after the Dragon's memory)
+export const FLAG_ACT3_DRAGON_VOICE_HEARD = 'act3_dragon_voice_heard'

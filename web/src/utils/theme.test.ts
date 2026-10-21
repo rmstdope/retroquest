@@ -18,6 +18,7 @@ describe('theme', () => {
         'exits',
         'bold',
         'dim',
+        'italic',
       ]
       expect(THEME_TAGS).toEqual(expected)
     })
@@ -130,6 +131,12 @@ describe('theme', () => {
     it('converts bold tag', () => {
       expect(renderMarkup('[bold]Important[/bold]')).toBe(
         '<span class="theme-bold">Important</span>',
+      )
+    })
+
+    it('converts italic tag', () => {
+      expect(renderMarkup('[italic]Whispered[/italic]')).toBe(
+        '<span class="theme-italic">Whispered</span>',
       )
     })
 
