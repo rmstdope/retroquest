@@ -421,7 +421,7 @@ This is the implemented Act II room roster and topology. Items and characters ma
 | Merchant's Warehouse | None | None | North to Market District. |
 | Castle Approach | None | Herald, Castle Guard Captain | South to Main Square; west to Castle Courtyard after showing the Entry Pass to the Herald. |
 | Castle Courtyard | Squire's Diary appears after talking to the Training Master and Squires, then searching. | Sir Cedric, Training Master, Squires | East to Castle Approach, north to Residential Quarter, west to Great Hall. |
-| Great Hall | None; archive search is gated by formal presentation to the Court Herald. | Court Herald, Historians, Lord Commander | East to Castle Courtyard. |
+| Great Hall | None; archive search is gated by formal presentation to the Court Herald and by showing the Historians the stranger's notebook. | Court Herald, Historians, Lord Commander | East to Castle Courtyard. |
 | Residential Quarter | Searching reveals the secret passage after The Ancient Library is offered. | Local Craftsmen, Families | South to Castle Courtyard, north to Healer's House, secret passage to Hidden Library after discovery. |
 | Healer's House | None | Master Healer Lyria | South to Residential Quarter. |
 | Hidden Library | Ancient Chronicle, Protective Enchantments; Crystal Focus appears after the wards are mended. | Spectral Librarian | Secret passage to Residential Quarter. |
