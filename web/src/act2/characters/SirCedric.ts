@@ -1,7 +1,12 @@
 import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  AncientAmulet,
+  SIGIL_RECOGNISED_DESCRIPTION,
+} from '../items/AncientAmulet'
 import { Coins } from '../items/Coins'
 import { NaturesCharm } from '../items/NaturesCharm'
 import {
+  FLAG_CEDRIC_RECOGNISED_SIGIL,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_NYX_TRIALS_COMPLETED,
@@ -22,8 +27,81 @@ export class SirCedric extends Character {
     })
   }
 
-  /** Recruit Elior, reward the knight's test and hand over Nature's Charm. */
+  /**
+   * Recruit Elior, reward the knight's test and hand over Nature's Charm. The
+   * first talk while Elior carries the Ancient Amulet also holds the one-time
+   * recognition of the Wardens' sigil, which changes the amulet's description.
+   */
   override talkTo(gameState: GameState): string {
+    const amulet = gameState.inventory.find((i) => i instanceof AncientAmulet)
+    if (amulet && !gameState.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)) {
+      gameState.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
+      amulet.description = SIGIL_RECOGNISED_DESCRIPTION
+      if (!gameState.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)) {
+        gameState.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+        return this.interruptedGreeting()
+      }
+      return (
+        characterName('Sir Cedric') +
+        "'s eyes fall on the " +
+        '[item_name]Ancient Amulet[/item_name]' +
+        ' at your chest, and he goes very still.' +
+        '\n\n' +
+        characterName('Sir Cedric') +
+        ': ' +
+        speech(this.recognitionWords()) +
+        '\n\n' +
+        this.normalReply(gameState)
+      )
+    }
+    return this.normalReply(gameState)
+  }
+
+  /** The words in which Cedric names the sigil and Elior's family bound to the Wardens. */
+  private recognitionWords(): string {
+    return (
+      'That sigil. The sun rising over three linked rings. I have seen it ' +
+      'only in the old histories in the castle archive: it is the mark of ' +
+      'the Wardens of the Dawn. They guarded this kingdom long ago, and ' +
+      'most have forgotten them.' +
+      '\n\n' +
+      'Whoever wore that amulet before you was a Warden, and your family is ' +
+      'bound to them. I know no more than that. But I know enough to listen ' +
+      'to you.'
+    )
+  }
+
+  /** The first meeting when Elior carries the amulet: the greeting breaks off at the sigil. */
+  private interruptedGreeting(): string {
+    return (
+      characterName('Sir Cedric') +
+      ': ' +
+      speech(
+        'Greetings, traveler. I am ' +
+          characterName('Sir Cedric') +
+          '. I have been seeking individuals of courage and skill for a ' +
+          'matter of great—',
+      ) +
+      '\n\n' +
+      characterName('Sir Cedric') +
+      ' stops mid-sentence. His eyes have fallen on the ' +
+      '[item_name]Ancient Amulet[/item_name] at your chest.' +
+      '\n\n' +
+      characterName('Sir Cedric') +
+      ': ' +
+      speech(
+        this.recognitionWords() +
+          '\n\n' +
+          "Dark forces are gathering; I call it the 'Gathering Storm', and " +
+          'I need allies with magical knowledge and proven abilities. The ' +
+          'sigil tells me where you come from; it does not tell me what you ' +
+          'can do. Can you demonstrate your martial abilities?',
+      )
+    )
+  }
+
+  /** Cedric's reply to a talk, by the stage of the act; the recognition never changes it. */
+  private normalReply(gameState: GameState): string {
     // Check if Nyx trials are completed - highest priority response
     if (gameState.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)) {
       return (

@@ -7,6 +7,7 @@ import {
   FLAG_EXAMINED_SECRET_DOCUMENTS,
   FLAG_READ_SQUIRES_DIARY,
   FLAG_SQUIRES_TALKED_TO,
+  FLAG_CEDRIC_RECOGNISED_SIGIL,
 } from './Act2StoryFlags'
 import { CityMap } from './items/CityMap'
 import { ForestSurvivalKit } from './items/ForestSurvivalKit'
@@ -1207,6 +1208,8 @@ describe('Step 24: Lord Commander interaction', () => {
     state.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
     state.setStoryFlag(FLAG_READ_SQUIRES_DIARY, true)
     state.setStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS, true)
+    // Cedric has already named the amulet's sigil by now
+    state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
 
     // Add quest to activated quests
     const quest = new CedricksLostHonorQuest()
