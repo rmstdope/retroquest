@@ -337,6 +337,32 @@ describe('Mira', () => {
     expect(out).toContain('sunken ruins')
     expect(out).not.toContain('You arrive at')
   })
+
+  it('points to the ember heights, not the caverns, before the sea-sealed letter is read', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, false)
+    game.state.currentRoom = game.state.allRooms.TidalCauseway
+
+    const out = new Mira().talkTo(game.state)
+
+    expect(out).not.toContain('caverns')
+    expect(out).toContain('ember heights')
+  })
+
+  it('offers no next circle at the Cavern Mouth before the scale is won', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, false)
+    game.state.currentRoom = game.state.allRooms.CavernMouth
+
+    const out = new Mira().talkTo(game.state)
+
+    expect(out).toContain("The miners' plight is a test of selflessness")
+    expect(out).not.toContain('circle')
+    expect(out).not.toContain('You arrive at')
+  })
 })
 
 describe('Mira confesses before the Warding Rite', () => {
