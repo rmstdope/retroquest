@@ -22,7 +22,8 @@ import { HealingHerbs } from '../items/HealingHerbs'
  * Friendly dialogue requires FLAG_HELPED_ELDERLY_RESIDENTS (earned by giving a
  * WalkingStick). The first friendly conversation grants HealingHerbs once.
  * Every friendly talk then mentions the grey garden plots (the blight), and ends
- * with the line about little Wren until she has a MountainFlower: giving it is the optional selfless moment, recorded once.
+ * with the line about little Wren until she has a MountainFlower: giving it is
+ * the optional selfless moment, recorded once.
  */
 export class Families extends Character {
   healingHerbsGiven = false
