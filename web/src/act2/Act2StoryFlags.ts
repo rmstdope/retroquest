@@ -41,6 +41,8 @@ export const FLAG_RESEARCHED_FAMILY_HERITAGE = 'researched_family_heritage'
 export const FLAG_HELPED_ELDERLY_RESIDENTS = 'helped_elderly_residents'
 export const FLAG_USED_CITY_MAP = 'used_city_map'
 export const FLAG_FOUND_RAVINE = 'found_ravine'
+/** Set when nature sense found the ravine; cleared once forest speech tells the creatures' story. */
+export const FLAG_RAVINE_STORY_PENDING = 'ravine_story_pending'
 export const FLAG_FOUND_LOST_CARAVAN = 'found_lost_caravan'
 export const FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE =
   'protective_charm_used_forest_entrance'

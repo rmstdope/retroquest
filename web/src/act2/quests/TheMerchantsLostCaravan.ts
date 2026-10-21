@@ -15,8 +15,8 @@ export class TheMerchantsLostCaravanQuest extends Quest {
         'Forest. Find out what happened to the merchants and their goods.',
       completion:
         'You successfully located the missing caravan trapped in a deep ravine ' +
-        'within the Enchanted Forest. Using forest speech magic to communicate ' +
-        'with woodland creatures, you discovered their location, then employed ' +
+        'within the Enchanted Forest. Using your forest magic, you discovered ' +
+        'their location, then employed ' +
         'quality rope to rappel down and rescue the trapped merchants. All ' +
         'merchants survived the ordeal, and Caravan Master Thorne rewarded you ' +
         "with secret documents containing evidence that can clear Sir Cedric's " +
@@ -41,8 +41,8 @@ export class TheMerchantsLostCaravanQuest extends Quest {
       )
     }
     return (
-      'Search the Enchanted Forest for the missing caravan. Try using forest ' +
-      'magic to communicate with woodland creatures for information.'
+      'Search the Enchanted Forest for the missing caravan. Try sensing the land, or ' +
+      "speaking with the woodland creatures, at the forest's edge."
     )
   }
 }

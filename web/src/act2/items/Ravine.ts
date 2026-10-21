@@ -1,7 +1,7 @@
 import { Item, type GameState } from '@/engine'
 import { QualityRope } from './QualityRope'
 
-/** A steep ravine discovered through forest speech. This geographic feature cannot be carried. */
+/** A steep ravine discovered through nature sense or forest speech. This geographic feature cannot be carried. */
 export class Ravine extends Item {
   constructor() {
     super({

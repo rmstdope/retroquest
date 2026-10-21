@@ -1,10 +1,14 @@
 import { Spell, type GameState, event } from '@/engine'
+import { FLAG_FOUND_RAVINE, FLAG_RAVINE_STORY_PENDING } from '../Act2StoryFlags'
+import { Ravine } from '../items/Ravine'
+import { ForestEntrance } from '../rooms/ForestEntrance'
 import { WaterNymphs } from '../characters/WaterNymphs'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
 
 /**
  * Reveals hidden natural presences and spawns water nymphs in Whispering Glade
- * on the first cast there. Keyword-based room classification (forest /
+ * on the first cast there. At the Forest Entrance it also finds the Ravine
+ * (the drop only, not what lies in it). Keyword-based room classification (forest /
  * enchanted / transition) shapes the flavor output elsewhere.
  */
 export class NatureSenseSpell extends Spell {
@@ -24,6 +28,10 @@ export class NatureSenseSpell extends Spell {
     })
   }
 
+  /**
+   * Cast in the current room: nymphs in the Whispering Glade, the ravine at the
+   * Forest Entrance (found once, then a dim recast line), flavour text elsewhere.
+   */
   override castSpell(gameState: GameState): string {
     // Special handling for Whispering Glade
     if (gameState.currentRoom instanceof WhisperingGlade) {
@@ -46,6 +54,27 @@ export class NatureSenseSpell extends Spell {
         `[dim]Your [spell_name]${name}[/spell_name] reveals the familiar ` +
         'presence of the water nymphs by the sacred stream, their forms ' +
         'visible and welcoming.[/dim]'
+      )
+    }
+    if (gameState.currentRoom instanceof ForestEntrance) {
+      const name = this.name
+      if (gameState.getStoryFlag(FLAG_FOUND_RAVINE)) {
+        return (
+          `[dim]You cast [spell_name]${name}[/spell_name] and feel again the ` +
+          'ravine to the north-east, the ground falling sharply away. Nothing ' +
+          'has changed.[/dim]'
+        )
+      }
+      gameState.setStoryFlag(FLAG_FOUND_RAVINE, true)
+      gameState.setStoryFlag(FLAG_RAVINE_STORY_PENDING, true)
+      gameState.currentRoom.items.push(new Ravine())
+      return (
+        `[success]You cast [spell_name]${name}[/spell_name] and feel your ` +
+        'awareness spread out through the roots and undergrowth. To the ' +
+        'north-east the web of living things simply stops: the ground falls ' +
+        'away there into a steep, rocky ravine hidden beyond the thickest trees. ' +
+        'Down at the bottom, something heavy and still lies where nothing of ' +
+        'the forest belongs.[/success]'
       )
     }
     const roomName = gameState.currentRoom.name.toLowerCase()
