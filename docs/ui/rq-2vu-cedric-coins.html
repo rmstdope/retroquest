@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Option A — Cedric gives more</title><style>:root{--bg:#10151a;--surface:#161d24;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--ok:#9fd3a0;--fail:#e8896b;--line:#26303a;--new:#3a2a08}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:24px 16px}
+h1{font-family:Georgia,serif;font-weight:500;font-size:22px;margin:0 0 6px}.note{color:var(--muted);max-width:760px;line-height:1.5;margin:0 0 24px;font-size:14px}
+.row{display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start}
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:16px;width:600px;max-width:100%;box-sizing:border-box}
+.narrow{width:340px}
+.lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.cmd{font-family:ui-monospace,monospace;font-size:13px;color:var(--muted)}
+p{margin:4px 0;line-height:1.5;color:var(--prose);font-size:15px}
+.who{color:var(--accent);font-weight:600}.say{color:var(--fg)}.it{color:#8fc7ff}.ok{color:var(--ok)}.bad{color:var(--fail)}
+.new{background:var(--new);outline:1px dashed #a8740f;outline-offset:3px;border-radius:4px}
+table{border-collapse:collapse;font-size:14px;width:100%}td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}th{color:var(--muted);font-weight:500}td.n{text-align:right;font-family:ui-monospace,monospace}</style></head><body>
+<h1>Option A — Sir Cedric gives 150 coins instead of 100</h1>
+<p class="note">One change only: the bag Cedric hands over after the knight's test holds 150. Marcus still sells the room key for 10. Highlighted text is new; everything else plays as today.</p>
+<div class="row"><div><div class="lbl">Desktop — the training yard</div><div class="frame">
+<div class="cmd">› talk to sir cedric</div>
+<p><span class="who">Sir Cedric</span>: <span class="say">"Excellent demonstration! Your combat skills are impressive. I can see you have the training and discipline needed for the challenges ahead."</span></p>
+<p><span class="who">Sir Cedric</span> reaches into his pouch and hands you a bag of coins.</p>
+<p><span class="who">Sir Cedric</span>: <span class="say">"Please accept these <span class="new">150</span> gold coins. I should have provided them earlier for your supply purchasing. You'll need proper equipment for the forest expedition: a survival kit, an enhanced lantern, and quality rope from the Market District. The realm faces a great threat, and we must be prepared."</span></p>
+</div>
+<div class="lbl" style="margin-top:24px">The purse along the golden path</div><div class="frame">
+<table><tr><th>Step</th><th>Picked up the inn coins</th><th>Missed them</th></tr>
+<tr><td>Cedric's bag</td><td class="n">150</td><td class="n">150</td></tr>
+<tr><td>Survival kit −50, lantern −40</td><td class="n">60</td><td class="n">60</td></tr>
+<tr><td>Room key −10</td><td class="n">50</td><td class="n">50</td></tr>
+<tr><td>Inn-room coins +20</td><td class="n">70</td><td class="n">—</td></tr>
+<tr><td>Quality rope −20</td><td class="n ok">50 left</td><td class="n ok">30 left</td></tr></table>
+</div></div>
+<div><div class="lbl">Phone</div><div class="frame narrow">
+<div class="cmd">› buy quality rope from master merchant aldric</div>
+<p class="ok">You purchase the <span class="it">quality rope</span> from <span class="who">Master Merchant Aldric</span> for 20 <span class="it">gold coins</span>. You have <span class="new">30</span> <span class="it">coins</span> remaining.</p>
+<p style="font-size:13px;color:var(--muted)">(a player who never found the inn-room coins)</p>
+</div></div></div></body></html>
