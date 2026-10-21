@@ -156,6 +156,7 @@ describe('Nyx', () => {
           lines.join(' ') +
           ' That is enough.',
       )
+      expectMarkupWellFormed(answer)
     })
 
     it('names all three, exactly as agreed', () => {
