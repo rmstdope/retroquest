@@ -123,6 +123,7 @@ describe('Redemption', () => {
     )
     const text = executeCommands(game, ['cast forgiveness on wound'])
     expect(text).toContain('You lay forgiveness on the wound.')
+    expect(text).not.toContain('Then keep something.')
     expect(text).toContain('King Alden breathes again.')
     expect(text).toContain('Thank you, Elior. I will stay here')
     expect(text).toContain('Elior. Look at you. Taller than me, I think.')
@@ -228,6 +229,7 @@ describe('Justice', () => {
     )
     const text = executeCommands(game, ['use ancient amulet on wound'])
     expect(text).toContain('Threads of gold rise from King Alden')
+    expect(text).not.toContain('Then keep something.')
     expect(text).toContain('I am sorry. Tell them— no. They know.')
     expect(text).toContain('Then it falls to me to set right what he broke.')
     expect(text).toContain('You named what he did, and you did not hate him')
@@ -259,9 +261,26 @@ describe('Sacrifice', () => {
     executeCommands(game, ['use lifelight elixir on prison'])
     const said = executeCommands(game, ['say sacrifice to malakar'])
     expect(said).toContain('“Take my magic,” you say.')
-    expect(said).toContain('Everything you have learned—')
+    expect(said).not.toContain('Everything you have learned')
+    expect(said).toContain(
+      'No. Your parents poured themselves into that wound once already. It does not get to have you too.',
+    )
+    expect(said).toContain('The open amulet grows heavy in your hand, ready.')
+    expect(executeCommands(game, ['say sacrifice to malakar'])).not.toContain(
+      'Your parents poured themselves',
+    )
     expect(spellNames(game)).toContain('bless')
     const text = executeCommands(game, ['use ancient amulet on wound'])
+    const rise =
+      'Malakar half rises, reaching for the amulet, and stops his own hand.'
+    const keep =
+      'Then keep something. One thing. Anything. Do not let me take it all.'
+    const press = 'You press the open amulet to the wound and let go.'
+    expect(text.startsWith(`[event]${rise}`)).toBe(true)
+    expect(text.indexOf(keep)).toBeGreaterThan(text.indexOf(rise))
+    expect(text.indexOf(press)).toBeGreaterThan(text.indexOf(keep))
+    expect(text).toContain('the smallest of them all: grow.')
+    expect(text).not.toContain('the first and the smallest')
     expect(text).toContain('Your magic is gone. Only grow remains.')
     expect(text).toContain('He will answer to me, and he will live to do it.')
     expect(text).toContain('You gave it all away, and kept the smallest thing.')

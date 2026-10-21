@@ -17,7 +17,7 @@ import {
 const ARCH_LINE =
   'Behind the throne an arch you had not noticed stands open. Beyond it, far off, the road runs home.'
 const KNEEL_REMEMBER =
-  'You kneel at the edge of the field. Your hands remember the first spell you ever learned.'
+  'You kneel at the edge of the field. Your hands remember the smallest spell you ever learned.'
 const KNEEL_KEPT =
   'You kneel at the edge of the field. The one spell you kept stirs in your hands, small and certain.'
 const ARCH_SENTENCE = 'Behind the throne an arch stands open on the road home.'

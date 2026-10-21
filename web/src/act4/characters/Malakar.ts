@@ -267,7 +267,11 @@ export class Malakar extends Character {
     gameState.setStoryFlag(FLAG_ACT4_SACRIFICE_SAID, true)
     return [
       '“Take my magic,” you say. “All of it. Close the wound with that.”',
-      dialogue(this.name, 'Elior, no. Everything you have learned—'),
+      dialogue(
+        this.name,
+        'No. Your parents poured themselves into that wound once already. ' +
+          'It does not get to have you too.',
+      ),
       AMULET_READY,
     ].join('\n')
   }
