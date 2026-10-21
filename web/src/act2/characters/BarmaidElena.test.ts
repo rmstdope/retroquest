@@ -4,7 +4,10 @@ import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { BarmaidElena } from './BarmaidElena'
 import { CrystalClearWater } from '../items/CrystalClearWater'
-import { FLAG_INNKEEPERS_DAUGHTER_COMPLETED } from '../Act2StoryFlags'
+import {
+  FLAG_ELENA_HEALED,
+  FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
+} from '../Act2StoryFlags'
 
 const HEAL_PARAGRAPH =
   "As the golden light fades, something surfaces on the inside of Elena's " +
@@ -21,6 +24,16 @@ const STAGE_LINE =
 const ELENA_SPEECH =
   'It came the same night as the curse. Since then I dream of a smiling ' +
   'face with no eyes, and it never says a true word.'
+const HEALED_STAGE =
+  '[character_name]Elena[/character_name] turns her hand over and looks at it as if it belonged to someone else.'
+const DIDNT_TAKE =
+  "It didn't take. I felt it go in, warm as a hearth, and then the cold closed over it again."
+const LYRIA_HINT =
+  'Master Lyria sat with me once, when it began. If anyone knows what comes next, she does.'
+const WASHED_STAGE =
+  '[character_name]Elena[/character_name] rubs at the inside of her wrist.'
+const WASHED_SPEECH =
+  'The water stung, and then it was gone, and some of the cold went with it. But it is still holding on. I can feel it, here.'
 const DISPEL_SENTENCE =
   'On her wrist the silver mask goes on smiling a moment longer, then fades ' +
   'like breath on a cold window, and is gone.'
@@ -47,23 +60,23 @@ describe('Elena and the silver mask', () => {
   })
 
   it('heal: mark paragraph follows the success text as plain story text', () => {
-    const { elena } = setup()
-    const out = elena.receiveGreaterHeal()
+    const { game, elena } = setup()
+    const out = elena.receiveGreaterHeal(game.state)
     expect(out.endsWith('[/success]\n\n' + HEAL_PARAGRAPH)).toBe(true)
     expect(elena.description.endsWith(HEAL_SENTENCE)).toBe(true)
   })
 
   it('heal again: no second mark paragraph', () => {
-    const { elena } = setup()
-    elena.receiveGreaterHeal()
-    expect(elena.receiveGreaterHeal()).toBe(
+    const { game, elena } = setup()
+    elena.receiveGreaterHeal(game.state)
+    expect(elena.receiveGreaterHeal(game.state)).toBe(
       'Elena is already strengthened by your healing magic.',
     )
   })
 
   it('water: description swaps in the water sentence', () => {
     const { game, elena } = setup()
-    elena.receiveGreaterHeal()
+    elena.receiveGreaterHeal(game.state)
     purify(game, elena)
     expect(elena.description.endsWith(WATER_SENTENCE)).toBe(true)
     expect(elena.description).not.toContain(HEAL_SENTENCE)
@@ -71,11 +84,13 @@ describe('Elena and the silver mask', () => {
 
   it('first talk after the heal: stage line, speech, then today reply; once', () => {
     const { game, elena } = setup()
-    elena.receiveGreaterHeal()
+    elena.receiveGreaterHeal(game.state)
     const first = elena.talkTo(game.state)
     expect(first.startsWith(STAGE_LINE + '\n\n')).toBe(true)
     expect(first).toContain(ELENA_SPEECH)
-    expect(first).toContain('looks much better, but still weak.')
+    expect(first).toContain(HEALED_STAGE)
+    expect(first).toContain(DIDNT_TAKE)
+    expect(first).toContain(LYRIA_HINT)
     const second = elena.talkTo(game.state)
     expect(second).not.toContain('mask')
     expect(second).not.toContain(STAGE_LINE)
@@ -84,17 +99,18 @@ describe('Elena and the silver mask', () => {
 
   it('first talk after purification without an earlier talk gives the lines', () => {
     const { game, elena } = setup()
-    elena.receiveGreaterHeal()
+    elena.receiveGreaterHeal(game.state)
     purify(game, elena)
     const first = elena.talkTo(game.state)
     expect(first).toContain(STAGE_LINE)
-    expect(first).toContain('glows with pure energy.')
+    expect(first).toContain(WASHED_STAGE)
+    expect(first).toContain(WASHED_SPEECH)
     expect(elena.talkTo(game.state)).not.toContain(STAGE_LINE)
   })
 
   it('does not repeat after the lines were heard before the water', () => {
     const { game, elena } = setup()
-    elena.receiveGreaterHeal()
+    elena.receiveGreaterHeal(game.state)
     elena.talkTo(game.state)
     purify(game, elena)
     expect(elena.talkTo(game.state)).not.toContain(STAGE_LINE)
@@ -102,7 +118,7 @@ describe('Elena and the silver mask', () => {
 
   it('remembers across save and load that the lines were spoken', () => {
     const { game, elena } = setup()
-    elena.receiveGreaterHeal()
+    elena.receiveGreaterHeal(game.state)
     elena.talkTo(game.state)
     const fresh = new Game([new Act2()])
     fresh.loadSaveData(game.toSaveData())
@@ -115,7 +131,7 @@ describe('Elena and the silver mask', () => {
 
   it('remembers across save and load that the lines are still unspoken', () => {
     const { game, elena } = setup()
-    elena.receiveGreaterHeal()
+    elena.receiveGreaterHeal(game.state)
     const fresh = new Game([new Act2()])
     fresh.loadSaveData(game.toSaveData())
     const loaded = fresh.state.allRooms.SilverStagInn.characters.find(
@@ -126,7 +142,7 @@ describe('Elena and the silver mask', () => {
 
   it('dispel: sentence follows the success text, and no trace remains', () => {
     const { game, elena } = setup()
-    elena.receiveGreaterHeal()
+    elena.receiveGreaterHeal(game.state)
     purify(game, elena)
     const out = elena.receiveDispelFinalCure(game.state)
     expect(out.endsWith('[/success]\n\n' + DISPEL_SENTENCE)).toBe(true)
@@ -155,6 +171,50 @@ describe('Elena and the silver mask', () => {
     expect(loaded.description).not.toContain('mask')
     expect(loaded.receiveDispelFinalCure(fresh.state)).toContain(
       DISPEL_SENTENCE,
+    )
+  })
+})
+
+describe('Elena names no next step (rq-nun)', () => {
+  it('heal: sets the healed flag and the narration names no next step', () => {
+    const { game, elena } = setup()
+    const out = elena.receiveGreaterHeal(game.state)
+    expect(game.state.getStoryFlag(FLAG_ELENA_HEALED)).toBe(true)
+    expect(out).toContain(
+      'The healing has made her stronger, but the curse still clings to her.',
+    )
+    expect(out).not.toMatch(/purif|dispel/i)
+  })
+
+  it('every talk until the water says it did not take and points at Lyria', () => {
+    const { game, elena } = setup()
+    elena.receiveGreaterHeal(game.state)
+    elena.talkTo(game.state)
+    const again = elena.talkTo(game.state)
+    expect(again).toContain(HEALED_STAGE)
+    expect(again).toContain(DIDNT_TAKE)
+    expect(again).toContain(LYRIA_HINT)
+    expect(again).not.toMatch(/purif|dispel|blessed|water/i)
+  })
+
+  it('water: narration loses the dispelling sentence; talks name no next step', () => {
+    const { game, elena } = setup()
+    elena.receiveGreaterHeal(game.state)
+    game.state.inventory.push(new CrystalClearWater())
+    const out = elena.receiveCrystalWaterPurification(game.state)
+    expect(out).not.toContain('dispelling')
+    expect(out).toContain('greatly weakened by the purification.[/success]')
+    const talk = elena.talkTo(game.state)
+    expect(talk).not.toMatch(/dispel|spell|Lyria/i)
+  })
+
+  it('out-of-order refusals stay word for word', () => {
+    const { game, elena } = setup()
+    expect(elena.receiveCrystalWaterPurification(game.state)).toBe(
+      'Elena is too weak from the curse. You need to heal her before attempting purification.',
+    )
+    expect(elena.receiveDispelFinalCure(game.state)).toContain(
+      'Elena needs to be purified with crystal-clear water before the ',
     )
   })
 })

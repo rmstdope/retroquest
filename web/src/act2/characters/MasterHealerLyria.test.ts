@@ -4,6 +4,9 @@ import { Act2 } from '../Act2'
 import {
   FLAG_HEALERS_APPRENTICE_ACCEPTED,
   FLAG_HEALERS_APPRENTICE_COMPLETED,
+  FLAG_KNOWS_ELENA_CURSE,
+  FLAG_ELENA_HEALED,
+  FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
 } from '../Act2StoryFlags'
 import { MasterHealerLyria } from './MasterHealerLyria'
 import { CrystalFocus } from '../items/CrystalFocus'
@@ -117,5 +120,93 @@ describe('Master Healer Lyria dialogue markup', () => {
       true,
     )
     expect(game.state.hasSpell('greater_heal')).toBe(true)
+  })
+})
+
+const DIAGNOSIS_STAGE =
+  '[character_name]Lyria[/character_name] looks up from her mortar, and something in your face makes her ' +
+  'set the pestle down.'
+const DIAGNOSIS_START = "You've been to the Silver Stag. Marcus's girl, Elena."
+const DIAGNOSIS_MIDDLE =
+  'First she must be made strong, or what comes after will kill her; that ' +
+  'wants a deeper healing than I can give alone. Then the mark must be ' +
+  'washed in water no shadow has ever touched. You will find none in this ' +
+  'city; every well here has seen the dark. And last, the thing must be ' +
+  'unbound. Not broken: unbound, with the old kind of unbinding,'
+const DIAGNOSIS_END =
+  'the kind the scholars wrote down before any of us were born.'
+const REMINDER =
+  'Elena still? Strengthen her, wash her in untouched water, then unbind ' +
+  'it. In that order, or not at all.'
+const USUAL = 'Welcome to my house of healing'
+
+describe("Lyria explains how Elena's curse is lifted (rq-nun)", () => {
+  it('knows nothing of the curse until it is known: usual reply only', () => {
+    const game = createGame()
+    const answer = new MasterHealerLyria().talkTo(game.state)
+    expect(answer).toContain(USUAL)
+    expect(answer).not.toContain(DIAGNOSIS_STAGE)
+    expect(answer).not.toContain(REMINDER)
+  })
+
+  it('gives the diagnosis first and the usual reply after, once Elena has spoken', () => {
+    const game = createGame()
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    const answer = new MasterHealerLyria().talkTo(game.state)
+    expect(answer.startsWith('[character_name]Lyria[/character_name]')).toBe(
+      true,
+    )
+    expect(answer).toContain(DIAGNOSIS_STAGE)
+    expect(answer).toContain(DIAGNOSIS_START)
+    expect(answer).toContain(DIAGNOSIS_MIDDLE)
+    expect(answer).toContain(DIAGNOSIS_END)
+    expect(answer.indexOf(DIAGNOSIS_END)).toBeLessThan(answer.indexOf(USUAL))
+    expectLyriaSpeaks(answer)
+  })
+
+  it("gives the diagnosis after the first heal too, without Elena's first talk", () => {
+    const game = createGame()
+    game.state.setStoryFlag(FLAG_ELENA_HEALED, true)
+    expect(new MasterHealerLyria().talkTo(game.state)).toContain(
+      DIAGNOSIS_START,
+    )
+  })
+
+  it('repeats only the one-line reminder on later talks', () => {
+    const game = createGame()
+    const lyria = new MasterHealerLyria()
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    lyria.talkTo(game.state)
+    const later = lyria.talkTo(game.state)
+    expect(later).not.toContain(DIAGNOSIS_START)
+    expect(later).toContain(REMINDER)
+    expect(later.indexOf(REMINDER)).toBeLessThan(later.indexOf(USUAL))
+    expectLyriaSpeaks(later)
+  })
+
+  it('gives neither once Elena is cured', () => {
+    const game = createGame()
+    const lyria = new MasterHealerLyria()
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    lyria.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED, true)
+    const answer = lyria.talkTo(game.state)
+    expect(answer).toContain(USUAL)
+    expect(answer).not.toContain(REMINDER)
+    expect(answer).not.toContain(DIAGNOSIS_START)
+  })
+
+  it('does not repeat or skip the diagnosis across a save and load', () => {
+    const game = createGame()
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    const lyria = new MasterHealerLyria()
+    const before = new Game([new Act2()])
+    before.loadSaveData(game.toSaveData())
+    expect(lyria.talkTo(before.state)).toContain(DIAGNOSIS_START)
+    const after = new Game([new Act2()])
+    after.loadSaveData(before.toSaveData())
+    const answer = lyria.talkTo(after.state)
+    expect(answer).not.toContain(DIAGNOSIS_START)
+    expect(answer).toContain(REMINDER)
   })
 })
