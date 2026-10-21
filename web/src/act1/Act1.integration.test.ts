@@ -582,6 +582,32 @@ describe('Act 1 golden path', () => {
     ).toBe(true)
   })
 
+  it('ends on the hook, on the farewell and on the complete page, also after a load', () => {
+    const hook =
+      "The amulet was your parents'. And someone has come to Willowbrook looking for it."
+    const game = new Game([new Act1()])
+    game.newTurn()
+    game.newTurn()
+    game.handleInput('cheat act 1')
+    game.newTurn()
+    game.handleInput('use map')
+    const answer = game.getResultText()
+    expect(answer).toContain('Aren')
+    expect(answer).toContain(
+      "You tuck your parents' amulet beneath your mother's cloak, and set forth.",
+    )
+    game.newTurn()
+    expect(game.isGameOver()).toBe(true)
+    expect(game.getActCompleteText()).toMatch(
+      new RegExp(`^${hook}\\n\\nCongratulations — you have completed Act 1`),
+    )
+    const fresh = new Game([new Act1()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    // A loaded, finished act shows its complete page on the next turn.
+    for (let turn = 0; turn < 3; turn++) fresh.newTurn()
+    expect(fresh.getActCompleteText()).toBe(game.getActCompleteText())
+  })
+
   it('survives a save and load round-trip at the end', () => {
     const game = new Game([new Act1()])
     expectMarkupWellFormed(game.commandParser.parse('cheat act 1'))

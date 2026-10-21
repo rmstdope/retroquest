@@ -188,8 +188,17 @@ export class Game implements CommandTarget {
     }
   }
 
-  /** The act-complete message of the transition and game-over screens. */
+  /**
+   * The act-complete message of the transition and game-over screens: the
+   * finished act's hook, if it has one, then the words every act shares.
+   */
   private actCompleteBody(): string {
+    const hook = this.acts[this.presentedActIndex()].getCompletionHook()
+    return (hook ? `${hook}\n\n` : '') + this.sharedActCompleteWords()
+  }
+
+  /** The words every act-complete page shares. */
+  private sharedActCompleteWords(): string {
     return this.runState === GameRunState.GameOver
       ? `Congratulations — you have completed Act ${this.currentAct + 1}, ` +
           'the final act of RetroQuest!'

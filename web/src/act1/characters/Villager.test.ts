@@ -29,6 +29,36 @@ describe('Villager dialogue markup', () => {
     }
   })
 
+  it('carries the amulet and the mill in her cloaked-stranger rumour, second in her cycle of five', () => {
+    const villager = gameInSquare().state.currentRoom.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+
+    expect(villager.dialogueOptions).toHaveLength(5)
+    expect(villager.dialogueOptions[1]).toBe(
+      'Last night, someone spotted a cloaked stranger near the old well, asking after ' +
+        'an old amulet, from a family that left. Nobody would tell him a thing, ' +
+        'and he took the road to the mill.',
+    )
+  })
+
+  it('tells the current second rumour after loading a save that holds the old one', () => {
+    const game = gameInSquare()
+    const villager = game.state.currentRoom.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+    villager.dialogueOptions[1] = 'Folks say he vanished when the moon went.'
+    villager.dialogueIndex = 1
+    const fresh = new Game([new Act1()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    const loaded = fresh.state.allRooms.VillageSquare.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+
+    expect(loaded.dialogueOptions[1]).toContain('asking after an old amulet')
+    expect(loaded.dialogueIndex).toBe(1)
+  })
+
   it('records that a villager has been talked to', () => {
     const game = gameInSquare()
     game.commandParser.parse('talk to villager')

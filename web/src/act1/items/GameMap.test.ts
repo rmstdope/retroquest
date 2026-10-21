@@ -111,6 +111,45 @@ describe('GameMap farewell on the Road to Greendale', () => {
     expect(answer.indexOf('hidden path')).toBeGreaterThan(bell)
   })
 
+  it('has grandmother name the parents and warn of the stranger, after the ring and Patches and before the kiss', () => {
+    for (const flags of [[FLAG_PATCHES_RETURNED], []]) {
+      const answer = farewell(flags)
+      const hand = answer.indexOf(
+        'Her hand finds the [item_name]amulet[/item_name] at your chest and closes around it.',
+      )
+      expect(hand).toBeGreaterThan(answer.search(/wedding ring|kept her ring/))
+      expect(hand).toBeGreaterThan(answer.indexOf('Wear your mother'))
+      expect(answer).toContain(
+        "This was theirs, you know. [character_name]Aren[/character_name] and [character_name]Lysa[/character_name]'s.",
+      )
+      expect(answer).toContain(
+        'In all your years, you have never once heard her say their names.',
+      )
+      expect(answer).toContain(
+        'They gave it to [character_name]Mira[/character_name] to keep for you, until you were ready. ' +
+          'And someone has come to Willowbrook looking for it. Keep it hidden, child.',
+      )
+      expect(answer.indexOf('Keep it hidden, child.')).toBeLessThan(
+        answer.indexOf('She kisses your brow'),
+      )
+      expect(findMarkupProblems(answer)).toEqual([])
+    }
+    expect(
+      farewell([FLAG_PATCHES_RETURNED]).indexOf('Her hand finds'),
+    ).toBeGreaterThan(
+      farewell([FLAG_PATCHES_RETURNED]).indexOf('how you found his'),
+    )
+  })
+
+  it('ends the map line on hiding the amulet, not on accomplishment', () => {
+    const answer = farewell()
+
+    expect(answer).toContain(
+      "You tuck your parents' amulet beneath your mother's cloak, and set forth.",
+    )
+    expect(answer).not.toContain('accomplishment')
+  })
+
   it('has grandmother speak of the traded ring by default', () => {
     const answer = farewell()
 

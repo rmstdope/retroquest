@@ -229,6 +229,40 @@ describe('Game', () => {
       expect(game.isActRunning()).toBe(true)
     })
 
+    it('opens the act-complete text with the finished act’s hook, and only that act’s', () => {
+      class HookedAct extends Act {
+        /** A hook for the test. */
+        override getCompletionHook(): string {
+          return 'A hook.'
+        }
+      }
+      const options = {
+        rooms: basicRooms(),
+        quests: [],
+        musicFile: '',
+        musicInfo: '',
+      }
+      const first = new HookedAct({ ...options, name: 'First' })
+      const second = new Act({
+        ...options,
+        rooms: basicRooms(),
+        name: 'Second',
+      })
+      let firstDone = false
+      first.isCompleted = () => firstDone
+      const game = new Game([first, second])
+      game.newTurn()
+      game.newTurn()
+      firstDone = true
+      game.newTurn()
+      expect(game.getActCompleteText()).toMatch(
+        /^A hook\.\n\nCongratulations — you have completed Act 1!/,
+      )
+      expect(new Act({ ...options, name: 'Plain' }).getCompletionHook()).toBe(
+        '',
+      )
+    })
+
     it('moves on to the next act when the act completes, then ends the game', () => {
       const first = new Act({
         name: 'First',
