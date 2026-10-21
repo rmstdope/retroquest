@@ -1,6 +1,6 @@
 /** The vanished king, the framed Cedric and the Malakar reveal in Greendale (rq-roe.3). */
 import { describe, it, expect } from 'vitest'
-import { Game, findMarkupProblems } from '@/engine'
+import { Game, Quest, findMarkupProblems } from '@/engine'
 import { Act2 } from './Act2'
 import {
   FLAG_CEDRIC_RECOGNISED_SIGIL,
@@ -218,11 +218,59 @@ describe('Sir Cedric', () => {
     const first = talk(game, 'sir cedric')
     expect(first).toContain('the king was not lost on my watch. He was taken')
     expect(first).toContain('My grandmother frightened me with that name')
-    expect(first).toContain("Please accept this Nature's Charm.")
+    expect(first).toContain('Do you remember what I told you in the yard?')
+    expect(first).not.toContain('Please accept this Nature')
     const later = talk(game, 'sir cedric')
     expect(later).toContain(
       'finding the king, and whoever wears that old name.',
     )
+  })
+
+  it('keeps one of the three charms back at the send-off, once', () => {
+    const game = gameIn('CastleCourtyard')
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    game.state.completedQuests.push(
+      new Quest({ name: "The Knight's Test", description: '', completion: '' }),
+    )
+    const first = talk(game, 'sir cedric')
+    expect(first).toContain('we must be prepared.')
+    expect(first).toContain(
+      '[character_name]Sir Cedric[/character_name] hesitates, then rests a ' +
+        'hand on a small pouch at his belt.',
+    )
+    expect(first).toContain('My family has kept a charm for generations')
+    expect(first).toContain('one of three that can call the sprite Nyx')
+    expect(first).toContain(
+      'I will not hand an heirloom of my house to someone I have known for a day.',
+    )
+    const later = talk(game, 'sir cedric')
+    expect(later).toContain(PREPARATION)
+    expect(later).not.toContain('charm')
+    expect(later).not.toContain('heirloom')
+  })
+
+  it('refers to the refusal when the charm is given after the ruling', () => {
+    const game = gameIn('CastleCourtyard')
+    cedricOf(game).cedricTrustsElior = true
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+    const a = talk(game, 'sir cedric')
+    expect(a).toContain('withdraws an ancient wooden charm')
+    expect(a).toContain('I have known you long enough now. Take Nature')
+    expect(a).toContain('it is one of the three that call Nyx.')
+    expect(a).toContain('I mean to find him.')
+  })
+
+  it('gives the charm without a callback when he never refused it', () => {
+    const game = gameIn('CastleCourtyard')
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+    const a = talk(game, 'sir cedric')
+    expect(a).toContain('withdraws an ancient wooden charm')
+    expect(a).toContain("Please accept this Nature's Charm.")
+    expect(a).toContain('A day ago I would not have given it')
+    expect(a).not.toContain('in the yard')
+    expect(a).not.toContain('Do you remember')
   })
 
   it('keeps the Nyx line first', () => {
