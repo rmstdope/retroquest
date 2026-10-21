@@ -7,9 +7,8 @@ export class Barriers extends Item {
     super({
       name: 'Barriers',
       description:
-        'Shimmering barriers of dark energy block the entrances to the ' +
-        'fortress. The barriers pulse in rhythm with the ward stones, ' +
-        'drawing power from their dark magic.',
+        'A thin wall of violet light hangs across the gateway, humming in time ' +
+        'with the ward stones. It is the only thing between you and the gates.',
       canBeCarried: false,
     })
   }
@@ -18,14 +17,11 @@ export class Barriers extends Item {
   override examine(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
       return event(
-        'Shimmering barriers of dark energy block the entrances to the ' +
-          'fortress. The barriers pulse in rhythm with the ward stones, drawing ' +
-          'power from their dark magic.',
+        'A thin wall of violet light hangs across the gateway, humming in ' +
+          'time with the ward stones. It is the only thing between you and ' +
+          'the gates.',
       )
     }
-    return event(
-      'The magical barriers have been disabled and no longer block ' +
-        'your way.',
-    )
+    return event('The violet wall is gone. The gateway is only a gateway now.')
   }
 }

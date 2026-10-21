@@ -7,9 +7,9 @@ export class WardStones extends Item {
     super({
       name: 'Ward Stones',
       description:
-        'Ancient stone pillars carved with protective runes that pulse with ' +
-        'dark energy. These ward stones appear to be the anchor points for ' +
-        'the shadow guardians and magical barriers protecting the fortress.',
+        'Four pillars of black stone, carved with runes and glowing a steady ' +
+        'violet. They stand exactly as far apart as each other, and the ' +
+        'guardians never stray from the lines between them.',
       canBeCarried: false,
     })
   }
@@ -18,10 +18,10 @@ export class WardStones extends Item {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
     return event(
-      'You examine the ward stones closely. Each stone is carved with ' +
-        'ancient protective runes that pulse with dark energy. The stones appear ' +
-        'to be the anchor points for the shadow guardians and magical barriers. ' +
-        'A fragment has broken off from one stone, perhaps weakening the network.',
+      'You look at each stone in turn. The runes are cut deep and even, the ' +
+        'same hand on every one. Only one stone is not quite perfect: a corner ' +
+        'has broken away, and the piece lies at its foot. Its light stutters ' +
+        'where the others hold steady.',
     )
   }
 }

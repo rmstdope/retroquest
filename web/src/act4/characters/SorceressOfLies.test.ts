@@ -30,7 +30,7 @@ const FIRST_LOOK =
 const LAUGHS =
   'She laughs, and the chamber laughs with her. Your word is lost among the whispers.'
 const LISTEN_FIRST =
-  'You cannot answer a pain you cannot hear. Listen to her first.'
+  'You cannot answer a pain you cannot hear. Beneath the whispers her heart is saying something, too quietly for ears alone.'
 const SMILES = 'The Sorceress only smiles.'
 const NORTH_WALL =
   'The north arch is a wall of whispering crystal. It will not open while the Sorceress holds the chamber.'
@@ -61,7 +61,7 @@ describe('The Sorceress of Lies', () => {
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
     expect(game.state.currentRoom.name).toBe('Tower of Shadows')
     expect(executeCommands(game, ['use loyalty token'])).toContain(
-      'You hold the Loyalty Token close to your heart',
+      'You hold the token against your chest',
     )
     expect(executeCommands(game, ['go up'])).toContain('Chamber of Whispers')
   })
@@ -75,7 +75,7 @@ describe('The Sorceress of Lies', () => {
       'The Sorceress of Lies',
     )
     const look = game.state.currentRoom.describe(game.state)
-    expect(look).toContain("everything you've ever wanted")
+    expect(look).toContain('the only beautiful room in the fortress')
     expect(look).toContain(FIRST_LOOK)
     expectMarkupWellFormed(look)
   })

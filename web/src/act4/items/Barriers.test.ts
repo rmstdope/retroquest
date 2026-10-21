@@ -14,7 +14,7 @@ describe('Barriers', () => {
 
     const answer = new Barriers().examine(game.state)
 
-    expect(answer).toContain('barriers have been disabled')
+    expect(answer).toContain('The violet wall is gone')
     expectMarkupWellFormed(answer)
   })
 })

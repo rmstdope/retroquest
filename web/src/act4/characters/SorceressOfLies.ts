@@ -118,8 +118,9 @@ export class SorceressOfLies extends Character {
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_HEARTS_TRUTH_CAST)) {
       return (
-        '[failure]You cannot answer a pain you cannot hear. Listen to her ' +
-        'first.[/failure]'
+        '[failure]You cannot answer a pain you cannot hear. Beneath the ' +
+        'whispers her heart is saying something, too quietly for ears ' +
+        'alone.[/failure]'
       )
     }
     return this.redeem(gameState)

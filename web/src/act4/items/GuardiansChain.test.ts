@@ -17,9 +17,9 @@ describe('GuardiansChain', () => {
 
     const again = item.use(game.state)
 
-    expect(elsewhere).toContain('glows softly')
+    expect(elsewhere).toContain('The crystals stay quiet')
     expect(game.state.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED)).toBe(true)
-    expect(again).toContain('already providing its protection')
+    expect(again).toContain('The chain is already lit')
     for (const answer of [elsewhere, again]) {
       expectMarkupWellFormed(answer)
     }

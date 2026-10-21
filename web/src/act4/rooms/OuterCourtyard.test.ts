@@ -27,7 +27,7 @@ describe('OuterCourtyard', () => {
 
     const blessAgain = room.castBless(game.state)
 
-    expect(blessAgain).toContain('already been freed')
+    expect(blessAgain).toContain('nothing left to bless away')
     expectMarkupWellFormed(blessAgain)
   })
 })

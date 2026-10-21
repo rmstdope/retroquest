@@ -12,10 +12,9 @@ export class LoyaltyToken extends Item {
     super({
       name: 'Loyalty Token',
       description:
-        'A small silver medallion bearing the emblem of intertwined hands. ' +
-        'The surface is warm to the touch and emanates a sense of trust and ' +
-        'loyalty. This token represents the bonds formed with those you have ' +
-        'helped, and serves as proof against deception and lies.',
+        'A small silver token stamped with two clasped hands, still warm from ' +
+        'the servant who gave it to you. Whoever carries it is not alone, and ' +
+        'knows it.',
       canBeCarried: true,
     })
   }
@@ -26,13 +25,15 @@ export class LoyaltyToken extends Item {
       if (!gameState.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED)) {
         gameState.setStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED, true)
         return event(
-          'You hold the Loyalty Token close to your heart, feeling the ' +
-            "warmth of true friendship and trust. The token's power forms a " +
-            'protective barrier against the lies and deceptions that whisper ' +
-            'through the shadowy tower.',
+          'You hold the token against your chest. It is still warm. The ' +
+            'whispers say no one is coming; the token says someone already ' +
+            'did.',
         )
       }
-      return '[dim]The Loyalty Token is already protecting you from deception.[/dim]'
+      return (
+        '[dim]The token is warm against your heart. The whispers cannot find ' +
+        'their way in.[/dim]'
+      )
     }
     if (gameState.currentRoom instanceof ChamberOfWhispers) {
       return (
@@ -41,8 +42,8 @@ export class LoyaltyToken extends Item {
       )
     }
     return event(
-      'The Loyalty Token glows softly, ready to prove the strength ' +
-        'of your bonds when facing deception.',
+      'The token is warm in your hand. Someone, somewhere, is glad you ' +
+        'came.',
     )
   }
 }

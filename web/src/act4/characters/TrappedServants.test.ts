@@ -36,7 +36,8 @@ describe('TrappedServants', () => {
 
     const answer = game.commandParser.parse('talk to trapped servants')
 
-    expect(answer).toContain('Prove your courage against the darkness')
+    expect(answer).toContain('you would carry something of theirs')
+    expect(answer).not.toContain('Prove your courage')
     expectDialogueSpeaker(answer, SPEAKER)
     expectMarkupWellFormed(answer)
   })
@@ -47,7 +48,7 @@ describe('TrappedServants', () => {
 
     const answer = game.commandParser.parse('talk to trapped servants')
 
-    expect(answer).toContain('use your compassion')
+    expect(answer).toContain('do it gently')
     expectDialogueSpeaker(answer, SPEAKER)
     expectMarkupWellFormed(answer)
   })
@@ -61,7 +62,7 @@ describe('TrappedServants', () => {
 
     const answer = servants.talkTo(game.state)
 
-    expect(answer).toContain('Thank you for our freedom!')
+    expect(answer).toContain('listen for the ones who have nothing left')
     expectDialogueSpeaker(answer, 'Freed Servants')
     expectMarkupWellFormed(answer)
   })

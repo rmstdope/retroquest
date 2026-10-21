@@ -18,12 +18,10 @@ export class ChamberOfWhispers extends Room {
     super({
       name: 'Chamber of Whispers',
       description:
-        'This circular chamber pulses with an otherworldly beauty that feels wrong, ' +
-        'as if reality itself has been twisted into a more pleasing shape. Crystalline ' +
-        'formations jut from the walls, each one humming with barely audible whispers ' +
-        'that speak of your deepest desires and fears. The floor shifts beneath your ' +
-        'feet like liquid glass, and the air shimmers with illusions that promise ' +
-        "everything you've ever wanted while hiding terrible truths in their depths." +
+        'A round room at the top of the tower, and the only beautiful room in ' +
+        'the fortress. That is what is wrong with it. Crystals grow from the ' +
+        'walls, each humming something kind and untrue, and the floor gives a ' +
+        'little under your feet, like ice that might hold.' +
         CHAMBER_FIRST_LOOK_SENTENCE,
       items: [new SorceressStaff()],
       characters: [new SorceressOfLies()],

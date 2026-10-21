@@ -136,8 +136,8 @@ export class KnightOfDespair extends Character {
     if (!gameState.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED)) {
       return (
         "[failure]You open your mouth, and the knight's despair rolls over " +
-        'you like cold water. The word dies in your throat. You need ' +
-        'something to shield you from it.[/failure]'
+        'you like cold water. The word dies in your throat. You could not ' +
+        'say it with nothing between you and his sorrow.[/failure]'
       )
     }
     return this.redeem(gameState)

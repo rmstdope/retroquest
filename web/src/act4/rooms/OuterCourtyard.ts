@@ -12,9 +12,9 @@ import {
 
 /** The courtyard once the servants are free and the captain has woken. */
 const COURTYARD_AFTER_DESCRIPTION =
-  'The black tears in the fountains have dried, and the storm overhead has ' +
-  'thinned to grey. The Freed Servants rest by the fountains, their chains ' +
-  'gone, and the captain of the guard sits among them with his head in his hands.'
+  'The fountains have stopped running black, and the sky has thinned to ' +
+  'grey. The Freed Servants rest by the fountains, their chains gone, and ' +
+  'the captain of the guard sits among them with his head in his hands.'
 
 /**
  * A once-beautiful courtyard now tainted by shadow magic and trapped souls.
@@ -27,15 +27,12 @@ export class OuterCourtyard extends Room {
     super({
       name: 'Outer Courtyard',
       description:
-        'What was once a magnificent courtyard now writhes under a shroud of despair. ' +
-        'Withered fountains weep black tears, and twisted statues reach toward a sky ' +
-        'that seems perpetually stormy. Ethereal figures wander in endless circles, ' +
-        'their faces etched with torment as dark chains bind their spirits to this ' +
-        'cursed ground. ' +
+        'This was a garden once. The fountains still stand under a sky that ' +
+        'never quite rains, but what runs down them is black and slow, and the ' +
+        'statues have all turned their faces away. Grey figures walk the paths ' +
+        'in circles, chains of shadow at their ankles, never looking up. ' +
         'By the dry fountain a soldier in a soot-black royal tabard stands ' +
-        'rigid, staring at nothing. ' +
-        'The very stones beneath your feet pulse with anguish, and ' +
-        'the air tastes of lost hope and forgotten dreams.',
+        'rigid, staring at nothing.',
       items: [],
       characters: [new TrappedServants(), new CaptainOfTheGuard()],
       exits: { west: 'FortressGates', north: 'MirrorLabyrinth' },
@@ -62,9 +59,9 @@ export class OuterCourtyard extends Room {
   ): string | null {
     if (direction !== 'north') return null
     return (
-      '[failure]The trapped servants drift across the archway, their chains ' +
-      'of shadow trailing behind them. You cannot pass while they are ' +
-      'bound.[/failure]'
+      '[failure]The servants drift across the archway, their chains ' +
+      'trailing. They do not stop for you, and you cannot get past ' +
+      'them.[/failure]'
     )
   }
 
@@ -72,8 +69,8 @@ export class OuterCourtyard extends Room {
   castBless(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
       return (
-        '[failure]The servants do not trust you enough to accept your blessing. ' +
-        'You must prove your worthiness first.[/failure]'
+        '[failure]The servants flinch from the light and keep walking. They ' +
+        'do not know you, and they have learned what strangers bring.[/failure]'
       )
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)) {
@@ -87,15 +84,15 @@ export class OuterCourtyard extends Room {
       if (servants instanceof TrappedServants) servants.free()
       this.description = COURTYARD_AFTER_DESCRIPTION
       return event(
-        'Your blessing magic flows out like golden light, shattering ' +
-          'the dark chains that bind the servants. They cry out in joy as their ' +
-          "spirits are freed from Malakar's curse. " +
+        'Your blessing settles over the courtyard like warm light through a ' +
+          'window. The chains do not break so much as forget to hold, and fall ' +
+          'away. One by one the servants stand still and look up. ' +
           'By the fountain, the captain blinks, as if waking from a long sleep. ' +
-          'In gratitude, they offer you ' +
-          'a loyalty token and a pendant that will help guide you through the ' +
-          'trials ahead.',
+          'One of the servants presses two things into your hands: a silver ' +
+          '[item_name]Loyalty Token[/item_name] and a small blue ' +
+          "[item_name]Servant's Pendant[/item_name].",
       )
     }
-    return '[dim]The servants have already been freed from their cursed bonds.[/dim]'
+    return '[dim]The chains are gone. There is nothing left to bless away.[/dim]'
   }
 }

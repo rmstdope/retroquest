@@ -12,12 +12,10 @@ export class TowerOfShadows extends Room {
     super({
       name: 'Tower of Shadows',
       description:
-        'A spiraling tower of black stone pierces the gloom, its walls seeming to ' +
-        'absorb light itself. Tendrils of living shadow coil around the structure, ' +
-        'reaching out with grasping fingers toward any source of warmth or hope. ' +
-        'The air grows thicker with each step upward, and whispered doubts slither ' +
-        'into your mind like poison. Windows reveal only deeper darkness, and the ' +
-        'very shadows appear to mock your every movement with silent, dancing forms.',
+        'A stair winds up inside the black stone, narrow and dark. The walls ' +
+        'are cold, and there are no windows. The shadows on the stair move a ' +
+        'moment after you do. With every step, something quiet at your ear ' +
+        'tells you why you should not have come.',
       items: [],
       characters: [],
       exits: { west: 'HallOfEchoes', up: 'ChamberOfWhispers' },

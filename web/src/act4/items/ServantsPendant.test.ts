@@ -16,8 +16,8 @@ describe('ServantsPendant', () => {
 
     const again = item.use(game.state)
 
-    expect(elsewhere).toContain('glows softly')
-    expect(again).toContain('already shared their guidance')
+    expect(elsewhere).toContain('has nothing to say here')
+    expect(again).toContain('have said what they know')
     for (const answer of [elsewhere, again]) {
       expectMarkupWellFormed(answer)
     }

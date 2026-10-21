@@ -25,12 +25,11 @@ export class MirrorLabyrinth extends Room {
     super({
       name: 'Mirror Labyrinth',
       description:
-        'Endless corridors of gleaming mirrors stretch in impossible directions, ' +
-        'each surface reflecting not just your image but fragments of possible ' +
-        'futures and buried memories. The reflections move independently, some ' +
-        'beckoning you forward while others shake their heads in warning. Crystal ' +
-        'facets catch phantom light from unseen sources, creating a kaleidoscope ' +
-        'of truth and deception that makes your head spin and your heart race.',
+        'Mirrors. Everywhere, at every angle, and no two show the same thing. ' +
+        'In one you are older. In one you never left Willowbrook. Corridors ' +
+        'open in the glass and close again when you turn your head. Your ' +
+        'reflections do not keep time with you; some of them are already ' +
+        'walking away.',
       items: [new Mirrors()],
       characters: [],
       exits: { south: 'OuterCourtyard' },
@@ -74,9 +73,9 @@ export class MirrorLabyrinth extends Room {
     )
     if (!hasPendant) {
       return (
-        "[failure]The echoes whisper the way, but the mirrors' glare " +
-        'swallows every step they name. You need something to light the true ' +
-        'path.[/failure]'
+        '[failure]The echoes whisper the way, but every step they name opens ' +
+        'onto three more, all of them shining. You cannot tell which light is ' +
+        'true. You wish the servants were here; they would know.[/failure]'
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED, true)
