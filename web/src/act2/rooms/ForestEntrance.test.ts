@@ -187,8 +187,8 @@ describe('Forest sprites path lines', () => {
   it('tease on the first talk when nothing is used, with the offer intact', () => {
     const game = atEntrance()
     const answer = executeCommands(game, ['talk to forest sprites'])
-    expect(answer).toContain('Welcome, traveler, to the threshold')
-    expect(answer).toContain('Answer their riddles')
+    expect(answer).toContain("'A traveller—' '—with muddy boots—'")
+    expect(answer).toContain('the nymphs have riddles')
     expect(answer).not.toContain('beware')
     expect(answer).toContain(TEASE)
   })
@@ -197,9 +197,9 @@ describe('Forest sprites path lines', () => {
     const game = atEntrance()
     executeCommands(game, ['talk to forest sprites'])
     const later = executeCommands(game, ['talk to forest sprites'])
-    expect(later).toContain('continue their eternal dance, chiming softly.')
+    expect(later).toContain("'Back again—' '—did you forget?'")
     expect(later).not.toContain('ancient ones await')
-    expect(later).not.toContain('Welcome, traveler')
+    expect(later).not.toContain('A traveller')
     expect(later).toContain(TEASE)
   })
 

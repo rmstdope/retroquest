@@ -895,14 +895,11 @@ describe('Whispering Glade riddle system', () => {
 
     // Start riddle sequence
     let result = executeCommands(game, ['talk to water nymphs'])
-    expect(result.toLowerCase()).toContain('riddle')
+    expect(result).toContain('Here is the first.')
 
     // Test wrong answer first
     result = executeCommands(game, ['say wrong to water nymphs'])
-    expect(
-      result.toLowerCase().includes('not quite') ||
-        result.toLowerCase().includes('incorrect'),
-    ).toBe(true)
+    expect(result).toContain('shake their heads gently')
     expect(state.getStoryFlag('water_nymph_riddle_1_completed')).toBe(false)
 
     // Test correct answers in sequence

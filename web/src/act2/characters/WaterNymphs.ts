@@ -9,6 +9,12 @@ import { CrystalClearWater } from '../items/CrystalClearWater'
 import { Moonflowers } from '../items/Moonflowers'
 import { FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED } from '../Act2StoryFlags'
 
+/** The grey help line shown under every riddle. */
+const RIDDLE_HELP =
+  '[dim]Think carefully and speak your answer when you believe you know ' +
+  "it. Use the command 'say <your_answer> to water nymphs' to give your " +
+  'solution.[/dim]'
+
 /** One of the nymphs' riddles: the question, accepted answers and the explanation. */
 interface Riddle {
   question: string
@@ -16,7 +22,7 @@ interface Riddle {
   explanation: string
 }
 
-/** Ethereal guardians of the Whispering Glade who test visitors with riddles. */
+/** Guardians of the Whispering Glade who test visitors with riddles, and who answer only with questions. */
 export class WaterNymphs extends Character {
   riddlesCompleted = false
   currentRiddle = 0
@@ -65,13 +71,8 @@ export class WaterNymphs extends Character {
     super({
       name: 'water nymphs',
       description:
-        'Graceful ethereal beings who dwell in the sacred waters of the ' +
-        'Whispering Glade. Their forms seem to be made of living water and ' +
-        'moonlight, constantly shifting between transparency and solidity. ' +
-        'Their voices sound like the gentle babbling of streams mixed with ' +
-        'wind chimes, and their eyes hold the wisdom of countless seasons. ' +
-        'These ancient guardians are known to test visitors with riddles ' +
-        "that reveal the true depth of one's connection to the natural world.",
+        'Three of them, or four; it is hard to count water. They sit ' +
+        'waist-deep in the stream, and the stream runs through them.',
     })
   }
 
@@ -85,25 +86,20 @@ export class WaterNymphs extends Character {
   }
 
   /**
-   * Present the current riddle, or praise the player once all are solved and
-   * add the nymphs' remark about the thinning streams (the blight).
+   * Present the current riddle, or ask what more they could want once all are
+   * solved and add the nymphs' remark about the thinning streams (the blight).
    */
   override talkTo(_gameState: GameState): string {
     const eventMsg = event(
-      'You approach the ' + characterName(this.name) + ' by the sacred stream.',
+      'You approach the ' + characterName(this.name) + ' by the stream.',
     )
     if (this.riddlesCompleted) {
       // After completing all riddles
       return (
         eventMsg +
-        '\nThe ' +
-        characterName(this.name) +
-        ' shimmer with approval. ' +
+        '\n' +
         speech(
-          "'You have proven your wisdom and understanding of the forest's " +
-            'ways, young seeker. The sacred gifts are yours to take - the ' +
-            'crystal-clear water and moonflowers that grow here. Use them ' +
-            "wisely in your quest to protect the natural world.'",
+          "'Back again? Wasn't three enough? What more could we ask you?'",
         ) +
         '\n\n' +
         characterName(this.name) +
@@ -117,31 +113,32 @@ export class WaterNymphs extends Character {
     } else if (this.currentRiddle < this.riddles.length) {
       // Present the current riddle
       const riddle = this.riddles[this.currentRiddle]
+      const greeting =
+        this.currentRiddle === 0
+          ? 'The stream rises into shapes. ' +
+            speech(
+              "'Came all this way to stand in our water? Will you answer " +
+                "three questions, then? Here is the first.'",
+            )
+          : speech(
+              "'Back so soon? Do you remember where we were? The " +
+                `${this.getOrdinalWord(this.currentRiddle + 1)} one, wasn't it?'`,
+            )
       return (
         eventMsg +
-        '\nThe ' +
-        characterName(this.name) +
-        ' speak in harmonious, flowing voices like water over stones. ' +
-        speech(
-          "'Welcome, forest walker, to our sacred glade. To prove your " +
-            'wisdom and earn our trust, you must answer our riddles three. ' +
-            `Listen carefully to the ${this.getOrdinalWord(this.currentRiddle + 1)}` +
-            " riddle:'",
-        ) +
+        '\n' +
+        greeting +
         '\n\n' +
         speech(`'${riddle.question}'`) +
-        '\n\n[dim]Think carefully and speak your answer when you believe you ' +
-        "know it. Use the command 'say <your_answer> to water nymphs' to " +
-        'give your solution.[/dim]'
+        '\n\n' +
+        RIDDLE_HELP
       )
     }
     // This shouldn't happen, but just in case
     return (
       eventMsg +
-      '\nThe ' +
-      characterName(this.name) +
-      ' smile mysteriously. ' +
-      speech("'The riddles have been answered, young one.'")
+      '\n' +
+      speech("'Back again? Wasn't three enough? What more could we ask you?'")
     )
   }
 
@@ -151,9 +148,8 @@ export class WaterNymphs extends Character {
       return (
         '[dim]The ' +
         characterName(this.name) +
-        ` have already accepted your wisdom. They listen to your words '${words}` +
-        "' with gentle understanding but have no more riddles for " +
-        'you.[/dim]'
+        ` listen to '${words}' and only smile. They have no more riddles ` +
+        'for you.[/dim]'
       )
     }
 
@@ -183,17 +179,15 @@ export class WaterNymphs extends Character {
           `[success]Correct! '${words}' is indeed the answer. ${riddle.explanation}` +
           '[/success]\n\nThe ' +
           characterName(this.name) +
-          ' sing in harmonious delight. ' +
+          ' laugh, a sound like water over a weir. ' +
           speech(
-            "'Wisely spoken, all three riddles answered! You have proven your " +
-              "deep understanding of the forest's mysteries. Accept our gifts - " +
-              'the crystal-clear water and moonflowers that grow in this sacred ' +
-              "place. May they serve you well in your noble quest.'",
+            "'Three for three — who taught you to listen like that? Will you " +
+              "take what grows here? Who else would we give it to?'",
           ) +
           '\n\n' +
           event(
-            'The water nymphs gesture toward the stream and flowers, making ' +
-              'them accessible for you to take.',
+            'The water nymphs draw back from the bank. The clear pool and ' +
+              'the pale flowers at its edge are there for the taking.',
           )
         )
       }
@@ -202,10 +196,10 @@ export class WaterNymphs extends Character {
         `[success]Correct! '${words}' is the right answer. ${riddle.explanation}` +
         '[/success]\n\nThe ' +
         characterName(this.name) +
-        ' nod approvingly. ' +
+        ' nod. ' +
         speech(
-          `'Well spoken! Now for the ${this.getOrdinalWord(this.currentRiddle + 1)}` +
-            " riddle:'",
+          "'Did you know it, or guess it? Does it matter? What about this " +
+            "one?'",
         ) +
         '\n\n' +
         speech(`'${nextRiddle.question}'`)
@@ -215,11 +209,7 @@ export class WaterNymphs extends Character {
       '[failure]The ' +
       characterName(this.name) +
       ` shake their heads gently as you say '${words}'.[/failure] ` +
-      speech(
-        "'Not quite, young seeker. Think more deeply about the forest and " +
-          'its ways. The answer lies in understanding the natural world ' +
-          "around you.'",
-      ) +
+      speech("'Is that really what you think? Will you hear it again?'") +
       '\n\n' +
       speech(`'${riddle.question}'`) +
       "\n\n[dim]Consider what you've learned about the forest during your " +
@@ -227,14 +217,13 @@ export class WaterNymphs extends Character {
     )
   }
 
-  /** Describe the nymphs' ethereal appearance. */
+  /** Describe the nymphs and what they do when you lean closer. */
   override examine(_gameState: GameState): string {
     return event(
       'You study the ' +
         characterName(this.name) +
-        ` in wonder. ${this.description} They move with fluid grace, and ` +
-        'you can see the wisdom of ages in their ever-changing features. ' +
-        "These are ancient guardians of the forest's deepest secrets.",
+        `. ${this.description} When you lean closer, every one of them ` +
+        'leans closer too.',
     )
   }
 }
