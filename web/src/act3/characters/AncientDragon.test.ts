@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Game, type GameState } from '@/engine'
+import { parseTurn } from '@/lantern/parseTurn'
 import { Act3 } from '../Act3'
 import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
@@ -200,5 +201,29 @@ describe('AncientDragon', () => {
 
     expectMarkupWellFormed(answer)
     expectNoSpeakerlessDialogue(answer)
+  })
+
+  it('tells the memory as three speeches by the ancient dragon', () => {
+    const dragon = new AncientDragon()
+    const gameState = makeGameState()
+
+    const blocks = parseTurn(dragon.talkTo(gameState))
+
+    const speeches = blocks.filter((b) => b.kind === 'dialogue')
+    expect(speeches).toHaveLength(4)
+    expect(
+      speeches.every(
+        (b) => b.kind === 'dialogue' && b.speaker === 'ancient dragon',
+      ),
+    ).toBe(true)
+    expect(speeches[0].kind === 'dialogue' && speeches[0].markup).toBe(
+      'Young one, I remember your parents well. Aren and Lysa, Wardens of ' +
+        'the Dawn. They came to me with their friend Malakar, the three of ' +
+        'them laughing, and made the relics as equals.',
+    )
+    expect(speeches[2].kind === 'dialogue' && speeches[2].markup).toBe(
+      'They are not gone as the dead are gone, child. They are warded ' +
+        'away, not dead.',
+    )
   })
 })

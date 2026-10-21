@@ -38,22 +38,22 @@ export class AncientDragon extends Character {
         "'s voice resonates through " +
         'your mind like distant thunder:\n\n' +
         speech(
-          "'Young one, I remember your parents well. Aren and Lysa, " +
+          'Young one, I remember your parents well. Aren and Lysa, ' +
             'Wardens of the Dawn. They came to me with their friend ' +
-            "Malakar, the three of them laughing, and made the relics as equals.'",
+            'Malakar, the three of them laughing, and made the relics as equals.',
         ) +
         '\n\n' +
         speech(
-          "'When Malakar tore a wound in time, it was they who stood " +
+          'When Malakar tore a wound in time, it was they who stood ' +
             'against him. They poured themselves into a ward. It hides you ' +
             'from his sight, and it holds his wound shut. It is anchored in ' +
             'the amulet you carry, and in the bindings of your king. That ' +
-            "is why Malakar drains him.'",
+            'is why Malakar drains him.',
         ) +
         '\n\n' +
         speech(
-          "'They are not gone as the dead are gone, child. They are " +
-            "warded away, not dead.'",
+          'They are not gone as the dead are gone, child. They are ' +
+            'warded away, not dead.',
         ) +
         '\n\n'
     }

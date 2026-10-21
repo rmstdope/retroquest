@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { Act3 } from '../Act3'
 import { FLAG_ACT3_CHARRED_INSCRIPTION_READ } from '../Act3StoryFlags'
 import { CharredInscription } from './CharredInscription'
+import { parseTurn } from '@/lantern/parseTurn'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 /** An Act III game and a fresh inscription. */
@@ -70,5 +71,21 @@ describe('CharredInscription', () => {
 
     expect(answer).toContain('We are three, and we are one promise.')
     expectMarkupWellFormed(answer)
+  })
+
+  it('shows the five vows exactly, with no quote marks of its own', () => {
+    const { game, inscription } = setup()
+
+    const blocks = parseTurn(inscription.examine(game.state))
+
+    expect(
+      blocks.flatMap((b) => (b.kind === 'dialogue' ? [b.markup] : [])),
+    ).toEqual([
+      'We are three, and we are one promise.',
+      'I, Aren, pour courage into the Crystal of Light.',
+      "I, Lysa, pour selflessness into the Dragon's Scale.",
+      'I, Malakar, pour wisdom into the Phoenix Feather.',
+      'What we pour into the ward, the ward will keep.',
+    ])
   })
 })

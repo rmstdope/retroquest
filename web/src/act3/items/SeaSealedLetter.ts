@@ -13,31 +13,31 @@ export class SeaSealedLetter extends Item {
             'protected by crystalline varnish, is still clear:',
         ) +
         '\n\n' +
-        writing("'Malakar, our friend —'") +
+        writing('Malakar, our friend —') +
         '\n\n' +
         writing(
-          "'We made the relics together, the three of us, and swore they " +
+          'We made the relics together, the three of us, and swore they ' +
             'would only ever guard, never take. Now you speak of time as if ' +
             'it were a door you could open and close again. It is not a ' +
             'door. It is a wound, and what comes through it will not stop ' +
-            "at saving us.'",
+            'at saving us.',
         ) +
         '\n\n' +
         writing(
-          "'We are not afraid of what is coming. We are afraid of what you " +
+          'We are not afraid of what is coming. We are afraid of what you ' +
             'will become to stop it. Wait with us. Be patient, for once. If ' +
             'you will not, we will stand against you, not as your enemies ' +
-            "but as your friends, and as Wardens of the Dawn.'",
+            'but as your friends, and as Wardens of the Dawn.',
         ) +
         '\n\n' +
-        writing("'— Aren and Lysa'") +
+        writing('— Aren and Lysa') +
         '\n\n' +
         event(
           'Beneath their names, in a sharper hand and darker ink, someone ' +
             'has written a reply:',
         ) +
         '\n\n' +
-        writing("'You would have me wait while you die. — M.'") +
+        writing('You would have me wait while you die. — M.') +
         '\n\n' +
         event(
           'Your parents wrote to Malakar as a friend. He read it, and answered.',

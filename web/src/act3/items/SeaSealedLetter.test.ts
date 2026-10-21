@@ -58,4 +58,20 @@ describe('SeaSealedLetter', () => {
     expect(answer).toContain('a plea to a friend, kept by the sea')
     expectMarkupWellFormed(answer)
   })
+
+  it('shows exactly the agreed lines, with no quote marks of its own', () => {
+    const game = new Game([new Act3()])
+
+    const blocks = parseTurn(new SeaSealedLetter().examine(game.state))
+
+    const lines = blocks.flatMap((b) =>
+      b.kind === 'dialogue' ? [b.markup] : [],
+    )
+    expect(lines[0]).toBe('Malakar, our friend —')
+    expect(lines[3]).toBe('— Aren and Lysa')
+    expect(lines[4]).toBe('You would have me wait while you die. — M.')
+    expect(lines.every((l) => !l.startsWith("'") && !l.endsWith("'"))).toBe(
+      true,
+    )
+  })
 })

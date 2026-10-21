@@ -26,15 +26,15 @@ export class CharredInscription extends Item {
           'heat that once shaped them. The inscription reads:',
       ) +
       '\n\n' +
-      writing("'We are three, and we are one promise.'") +
+      writing('We are three, and we are one promise.') +
       '\n\n' +
-      writing("'I, Aren, pour courage into the Crystal of Light.'") +
+      writing('I, Aren, pour courage into the Crystal of Light.') +
       '\n\n' +
-      writing("'I, Lysa, pour selflessness into the Dragon's Scale.'") +
+      writing("I, Lysa, pour selflessness into the Dragon's Scale.") +
       '\n\n' +
-      writing("'I, Malakar, pour wisdom into the Phoenix Feather.'") +
+      writing('I, Malakar, pour wisdom into the Phoenix Feather.') +
       '\n\n' +
-      writing("'What we pour into the ward, the ward will keep.'") +
+      writing('What we pour into the ward, the ward will keep.') +
       '\n\n' +
       event(
         'The last name is burned deeper than the others, as if the stone ' +
