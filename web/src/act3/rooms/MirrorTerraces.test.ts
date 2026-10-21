@@ -71,16 +71,28 @@ describe('Mirror Terraces', () => {
       const room = findMirrorTerracesRoom(game)
       game.state.setStoryFlag(FLAG_ACT3_MIRRORS_MENDED, true)
 
-      const out = room.rest(game.state)
-      expect(out).toContain(
-        'You settle on the warm stone and let the hours pass.',
+      expect(room.rest(game.state)).toBe(
+        '[success]You settle on the warm stone and let the hours pass. The ' +
+          'sun climbs until it stands squarely over the terraces. When the ' +
+          "sun's beams strike the great mirror they are coaxed and folded " +
+          'together until they pour from the terraces as a single, piercing ' +
+          'ray. The light lances into the mountainside, strikes a hidden ' +
+          'trigger, and a narrow passage grinds open to the east.[/success]',
       )
-      expect(out).toContain('a narrow passage grinds open to the east.')
       expect(
         game.state.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED),
       ).toBe(true)
       expect(room.getExits(game.state).east).toBeDefined()
       expect(room.rest(game.state)).toBe(REST)
+    })
+
+    it('does not fire the beam when resting anywhere else', () => {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_MIRRORS_MENDED, true)
+      expect(game.state.allRooms.EmberGallery.rest(game.state)).toBe(REST)
+      expect(
+        game.state.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED),
+      ).toBe(false)
     })
 
     it('shows the waiting line before the curse line, only while waiting', () => {

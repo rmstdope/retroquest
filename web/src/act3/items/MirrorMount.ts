@@ -104,7 +104,11 @@ export class MirrorMount extends Item {
     }
 
     // Already mended: remind the player where things stand instead of repeating
-    if (gameState.getStoryFlag(FLAG_ACT3_MIRRORS_MENDED)) {
+    // (a save from before the mended flag existed only carries COMPLETED)
+    if (
+      gameState.getStoryFlag(FLAG_ACT3_MIRRORS_MENDED) ||
+      gameState.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED)
+    ) {
       return gameState.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED)
         ? '[dim]The mirrors are already whole, and the way east stands open.[/dim]'
         : '[dim]The mirrors are already whole. The sun is not where it needs ' +

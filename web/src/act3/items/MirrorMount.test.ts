@@ -90,6 +90,22 @@ describe('MirrorMount', () => {
     )
   })
 
+  it('gives the open-way reminder to a save made before the mended flag existed', () => {
+    const game = new Game([new Act3()])
+    const state = game.state
+    const mount = new MirrorMount()
+    for (let i = 0; i < 4; i++)
+      state.addItemToInventory(new BrassMirrorSegment())
+    state.addItemToInventory(new BindingResin())
+    mount.useWith(state, new BrassMirrorSegment())
+    mount.useWith(state, new BindingResin())
+    state.setStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, true)
+
+    expect(mount.mend(state)).toBe(
+      '[dim]The mirrors are already whole, and the way east stands open.[/dim]',
+    )
+  })
+
   it('refusals use only known, balanced tags', () => {
     const game = new Game([new Act3()])
     const mount = new MirrorMount()
