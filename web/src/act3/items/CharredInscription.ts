@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, event, writing, type GameState } from '@/engine'
 import { FLAG_ACT3_CHARRED_INSCRIPTION_READ } from '../Act3StoryFlags'
 
 /** A charred inscription etched into cooled lava, part of the Hidden Bond story. */
@@ -8,8 +8,7 @@ export class CharredInscription extends Item {
       name: 'Charred Inscription',
       description:
         'Words burned deep into cooled lava, the letters blackened by ' +
-        'intense heat. The inscription speaks of a ward forged in desperation, ' +
-        'written by hands that knew time was running short.',
+        'intense heat. Three hands wrote here, one after another.',
       canBeCarried: false,
       shortName: 'inscription',
     })
@@ -27,14 +26,20 @@ export class CharredInscription extends Item {
           'heat that once shaped them. The inscription reads:',
       ) +
       '\n\n' +
-      "[dim]'In fire and flame we forge the final ward. Should our son " +
-      'face the darkness we once served, let him know that love burns ' +
-      'brighter than any shadow. The binding is set in three parts: ' +
-      'courage from the depths, wisdom from the heights, and sacrifice ' +
-      "from the heart. When united, they shall be his shield.'[/dim]\n\n" +
+      writing("'We are three, and we are one promise.'") +
+      '\n\n' +
+      writing("'I, Aren, pour courage into the Crystal of Light.'") +
+      '\n\n' +
+      writing("'I, Lysa, pour selflessness into the Dragon's Scale.'") +
+      '\n\n' +
+      writing("'I, Malakar, pour wisdom into the Phoenix Feather.'") +
+      '\n\n' +
+      writing("'What we pour into the ward, the ward will keep.'") +
+      '\n\n' +
       event(
-        'The words seem to pulse with warmth, as if the love that ' +
-          'wrote them still burns in the stone.',
+        'The last name is burned deeper than the others, as if the stone ' +
+          'was struck again long after it cooled. Your parents and Malakar ' +
+          'made this promise together, and the wisdom was his.',
       )
     )
   }

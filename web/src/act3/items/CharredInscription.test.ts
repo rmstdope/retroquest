@@ -20,6 +20,9 @@ describe('CharredInscription', () => {
     expect(inscription.description).toContain(
       'Words burned deep into cooled lava',
     )
+    expect(inscription.description).toContain(
+      'Three hands wrote here, one after another.',
+    )
   })
 
   it('sets the story flag when examined', () => {
@@ -33,11 +36,16 @@ describe('CharredInscription', () => {
     expect(game.state.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)).toBe(
       true,
     )
-    expect(result).toContain('In fire and flame we forge the final ward')
-    expect(result).toContain('Should our son face the darkness')
-    expect(result).toContain('courage from the depths')
-    expect(result).toContain('wisdom from the heights')
-    expect(result).toContain('sacrifice from the heart')
+    expect(result).toContain('We are three, and we are one promise.')
+    expect(result).toContain('I, Aren, pour courage into the Crystal of Light.')
+    expect(result).toContain(
+      "I, Lysa, pour selflessness into the Dragon's Scale.",
+    )
+    expect(result).toContain(
+      'I, Malakar, pour wisdom into the Phoenix Feather.',
+    )
+    expect(result).toContain('What we pour into the ward, the ward will keep.')
+    expect(result).toContain('the wisdom was his')
   })
 
   it('can be examined multiple times', () => {
@@ -60,7 +68,7 @@ describe('CharredInscription', () => {
 
     const answer = new CharredInscription().examine(game.state)
 
-    expect(answer).toContain('In fire and flame we forge the final ward')
+    expect(answer).toContain('We are three, and we are one promise.')
     expectMarkupWellFormed(answer)
   })
 })

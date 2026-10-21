@@ -55,8 +55,12 @@ describe('AncientDragon', () => {
 
     const result = dragon.talkTo(gameState)
 
-    expect(result).toContain('Lyra and Theron')
-    expect(result).toContain('ward—not of stone or steel, but of love')
+    expect(result).toContain('Aren and Lysa, Wardens of the Dawn')
+    expect(result).toContain('their friend Malakar')
+    expect(result).toContain('anchored in the amulet you carry')
+    expect(result).toContain('That is why Malakar drains him.')
+    expect(result).toContain('warded away, not dead')
+    expect(result).toContain('The memory has been shared')
     expect(gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)).toBe(true)
   })
 
@@ -67,6 +71,7 @@ describe('AncientDragon', () => {
 
     const result = dragon.talkTo(gameState)
 
+    expect(result).not.toContain('Wardens of the Dawn')
     expect(result.toLowerCase()).toContain('memory has been shared')
     expect(result.toLowerCase()).toContain('scale awaits')
   })
