@@ -1501,7 +1501,7 @@ describe('Act 2 silver leaves and the Forest Heart Crystal', () => {
 
     const vision = executeCommands(game, ['cast prophetic vision'])
 
-    expect(vision).toContain('Act II is complete.')
+    expect(vision).toContain('something to say.')
   })
 
   it('gives the leaves on the golden path and opens the vision with the crystal', () => {
@@ -1512,7 +1512,7 @@ describe('Act 2 silver leaves and the Forest Heart Crystal', () => {
     expectItemInInventory(game.state, 'forest heart crystal')
     const vision = executeCommands(game, ['cast prophetic vision'])
     expect(vision).toContain('Forest Heart Crystal')
-    expect(vision).toContain('Act II is complete.')
+    expect(vision).toContain('something to say.')
   })
 
   it('keeps the gift through a save and load', () => {

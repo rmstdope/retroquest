@@ -329,7 +329,7 @@ describe('Prophetic Vision and the Forest Heart Crystal', () => {
 
     expect(first.startsWith('[event]' + CRYSTAL_OPENING)).toBe(true)
     expect(first).not.toContain('newly granted sight')
-    expect(first).toContain('Act II is complete.')
+    expect(first).toContain('something to say.')
     expect(game.state.hasItem('forest heart crystal')).toBe(true)
     expectMarkupWellFormed(first)
   })
