@@ -1322,6 +1322,18 @@ describe('Act 2 optional virtue moments', () => {
     expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
   })
 
+  it('has Elena remark on her father once, on the next talk after the truth', () => {
+    const game = gameWithAllThree()
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+
+    const first = game.commandParser.parse('talk to barmaid elena')
+    expect(first).toContain('glances toward the taproom')
+    expect(first).toContain('Oh, thank you so much!')
+    expect(game.commandParser.parse('talk to barmaid elena')).not.toContain(
+      'glances toward the taproom',
+    )
+  })
+
   it('records selflessness, truth and mercy after the golden path', () => {
     const game = gameWithAllThree()
 

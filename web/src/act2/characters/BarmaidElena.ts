@@ -5,6 +5,7 @@ import {
   FLAG_KNOWS_ELENA_CURSE,
   FLAG_ELENA_HEALED,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
+  FLAG_MARCUS_TOLD_TRUTH,
 } from '../Act2StoryFlags'
 
 /**
@@ -16,6 +17,9 @@ import {
  *
  * From the greater heal until the dispel the Sorceress of Lies' silver mask
  * shows on her wrist: it is in her description, and she remarks on it once.
+ *
+ * Once she is cured and Elior has told Marcus the truth, her next talk opens
+ * with one remark about her father; it never repeats.
  */
 export class BarmaidElena extends Character {
   elenaInitialHealing = false
@@ -24,6 +28,8 @@ export class BarmaidElena extends Character {
   markShown = false
   /** True once Elena has spoken her lines about the mark. */
   markSpoken = false
+  /** True once Elena has remarked on her father after he was told the truth. */
+  truthRemarkSpoken = false
 
   constructor() {
     super({
@@ -35,7 +41,7 @@ export class BarmaidElena extends Character {
     })
   }
 
-  /** Dialogue reflecting the current stage of Elena's recovery. */
+  /** Dialogue for the current stage of her recovery, with one-off remarks first. */
   override talkTo(gameState: GameState): string {
     const reply = this.stageReply(gameState)
     if (
@@ -54,6 +60,27 @@ export class BarmaidElena extends Character {
         speech(
           'It came the same night as the curse. Since then I dream of a ' +
             'smiling face with no eyes, and it never says a true word.',
+        ) +
+        '\n\n' +
+        reply
+      )
+    }
+    if (
+      gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED) &&
+      gameState.getStoryFlag(FLAG_MARCUS_TOLD_TRUTH) &&
+      !this.truthRemarkSpoken
+    ) {
+      this.truthRemarkSpoken = true
+      return (
+        characterName('Elena') +
+        ' glances toward the taproom.' +
+        '\n\n' +
+        characterName(this.name) +
+        ': ' +
+        speech(
+          'Father has bolted every shutter in the house, and he sleeps down ' +
+            'in the taproom now with the poker across his knees. ' +
+            "I'm glad you told him. He'd have gone on blaming the wind.",
         ) +
         '\n\n' +
         reply
