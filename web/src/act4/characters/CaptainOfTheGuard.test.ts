@@ -52,6 +52,9 @@ describe('CaptainOfTheGuard', () => {
     expect(answer).toContain(
       'King Alden used to walk the walls at night and talk to whoever was on them. That is how they got him.',
     )
+    expect(answer).toContain(
+      "'I remember now. King Alden used to walk the walls at night and talk to whoever was on them. That is how they got him. Cedric stood his post — it was shadows that came for Alden, not any blade of ours. If you see Sir Cedric again, tell him I am sorry I ever doubted him.'",
+    )
     expect(answer).not.toContain('man in grey')
     expect(game.state.getStoryFlag(FLAG_ACT4_CAPTAIN_MAN_IN_GREY_TOLD)).toBe(
       false,
