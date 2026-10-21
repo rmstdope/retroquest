@@ -20,7 +20,9 @@ const CONFESSION = [
     'mask on her wrist so they would know whose work it was, and fear it.',
   "I told the king's physicians he was only tired. I told the court he " +
     'had gone hunting. I have told so many lies that I forgot what my own ' +
-    'voice sounds like.',
+    'voice sounds like. And I told you your parents sold you. Mine did. I ' +
+    'wanted it to be true of everyone, so that it would not only be true of ' +
+    'me.',
   'No one has ever spoken to me without a lie. Not Malakar, not his ' +
     'servants, not the ones I cursed. You are the first. I did not know it ' +
     'would hurt.',
@@ -51,18 +53,26 @@ export class SorceressOfLies extends Character {
     )
   }
 
-  /** Heart's Truth: shows her loneliness (once); starts the quest like any meeting. */
+  /** Heart's Truth: shows her loneliness and the girl sold in a hungry winter (once); starts the quest like any meeting. */
   hearHeart(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_HEARTS_TRUTH_CAST)) {
       return '[dim]You already hear her heart beneath the lies.[/dim]'
     }
     gameState.setStoryFlag(FLAG_ACT4_HEARTS_TRUTH_CAST, true)
-    return event(
-      'The whispers fall away. Beneath them the Sorceress is alone, as she ' +
-        'has always been: no one has ever spoken to her without a lie, and ' +
-        'she has never answered with anything else.',
-    )
+    return [
+      event(
+        'The whispers fall away. Beneath them the Sorceress is alone, as she ' +
+          'has always been: no one has ever spoken to her without a lie, and ' +
+          'she has never answered with anything else.',
+      ),
+      event(
+        'And under the loneliness, older and smaller: a girl in a hungry ' +
+          'winter, and the parents who sold her for a sack of grain. She ' +
+          'tells you the lie because she believes it. It is the only story ' +
+          'about parents she has ever known.',
+      ),
+    ].join('\n')
   }
 
   /** Her look, which changes once she is redeemed. */

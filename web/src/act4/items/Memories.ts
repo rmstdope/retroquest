@@ -80,6 +80,12 @@ export class Memories extends Item {
         'The lanterns dim, one by one, until only the amulet glows in your ' +
           'hand.',
       ),
+      event(
+        '[italic]Your parents sold you to save themselves.[/italic] It was ' +
+          'the opposite. They gave themselves away to save you. Of all the ' +
+          'lies in the fortress, hers was the one that hurt most, because ' +
+          'for a day you could not be sure. You are sure now.',
+      ),
     ].join('\n')
   }
 }

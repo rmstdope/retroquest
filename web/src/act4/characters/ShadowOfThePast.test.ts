@@ -36,6 +36,7 @@ const SCENE = [
   'Hold it shut, Aren. Hide him. That is enough.',
   'Last, and smallest: Malakar by a cottage fire in Willowbrook, rocking a baby in his arms and singing, low: "Hush, little seed, the frost is going. Hush, the field will wake." The baby is you.',
   'The lanterns dim, one by one, until only the amulet glows in your hand.',
+  'It was the opposite. They gave themselves away to save you. Of all the lies in the fortress, hers was the one that hurt most, because for a day you could not be sure. You are sure now.',
 ]
 
 const MUTE = "The shadow's lips move, but the vault swallows the sound."
@@ -287,9 +288,12 @@ describe("The Parent's Legacy", () => {
     expect(game.state.currentRoom.description).toContain(
       'The lanterns hang dim and still now',
     )
-    expect(executeCommands(game, ['examine memories'])).toContain(
-      'The lanterns are dim now.',
+    expect(text).toContain(
+      '[italic]Your parents sold you to save themselves.[/italic]',
     )
+    const again = executeCommands(game, ['examine memories'])
+    expect(again).toContain('The lanterns are dim now.')
+    expect(again).not.toContain('It was the opposite.')
     reload(game)
     expect(game.state.currentRoom.description).toContain('hang dim and still')
     expect(executeCommands(game, ['go north'])).toContain('Throne Chamber')

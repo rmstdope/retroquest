@@ -173,10 +173,13 @@ describe('The Sorceress of Lies', () => {
     expect(cast).toContain(
       'The whispers fall away. Beneath them the Sorceress is alone, as she has always been: no one has ever spoken to her without a lie, and she has never answered with anything else.',
     )
+    expect(cast).toContain(
+      'And under the loneliness, older and smaller: a girl in a hungry winter, and the parents who sold her for a sack of grain. She tells you the lie because she believes it. It is the only story about parents she has ever known.',
+    )
     expectMarkupWellFormed(cast)
-    expect(
-      executeCommands(game, ["cast heart's truth on sorceress"]),
-    ).toContain('You already hear her heart beneath the lies.')
+    const again = executeCommands(game, ["cast heart's truth on sorceress"])
+    expect(again).toContain('You already hear her heart beneath the lies.')
+    expect(again).not.toContain('a girl in a hungry winter')
   })
 
   it('is redeemed by understanding, with one scene of confession', () => {
@@ -195,6 +198,9 @@ describe('The Sorceress of Lies', () => {
     const third = said.indexOf('No one has ever spoken to me without a lie.')
     const gift = said.indexOf('She lifts the silver mask from her staff')
     const received = said.indexOf('You received')
+    expect(said).toContain(
+      'I have told so many lies that I forgot what my own voice sounds like. And I told you your parents sold you. Mine did. I wanted it to be true of everyone, so that it would not only be true of me.',
+    )
     expect(first).toBeGreaterThan(0)
     expect(second).toBeGreaterThan(first)
     expect(third).toBeGreaterThan(second)
