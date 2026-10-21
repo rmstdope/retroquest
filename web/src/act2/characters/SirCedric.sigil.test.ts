@@ -6,9 +6,11 @@ import { parseTurn } from '@/lantern/parseTurn'
 import { Act2 } from '../Act2'
 import {
   FLAG_CEDRIC_RECOGNISED_SIGIL,
+  FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
 } from '../Act2StoryFlags'
 import { AncientAmulet } from '../items/AncientAmulet'
+import { NaturesCharm } from '../items/NaturesCharm'
 
 const OLD_EXAMINE =
   'A mysterious amulet inscribed with runes. At its centre is a worn sigil ' +
@@ -44,17 +46,20 @@ function newGame(): Game {
   return game
 }
 
+/** Drop the amulet in the current room. */
 function dropAmulet(game: Game): void {
   executeCommands(game, ['drop amulet'])
 }
 
+/** The amulet, wherever it is: the bag or the current room. */
 function amuletOf(game: Game): AncientAmulet {
   const all = [...game.state.inventory, ...game.state.currentRoom.items]
-  const amulet = all.find((i) => i instanceof AncientAmulet)
+  const amulet = all.find((i): i is AncientAmulet => i instanceof AncientAmulet)
   if (!amulet) throw new Error('no amulet')
-  return amulet as AncientAmulet
+  return amulet
 }
 
+/** The text with every markup tag removed. */
 function plain(raw: string): string {
   return raw.replace(/\[\/?[a-z_]+\]/g, '')
 }
@@ -80,6 +85,24 @@ describe('Sir Cedric and the sigil', () => {
         'Can you demonstrate your martial abilities?',
     )
     expect(text).not.toContain('proof of your combat skills')
+    const order = [
+      'matter of great—',
+      'stops mid-sentence',
+      SIGIL_WORDS,
+      BOUND_WORDS,
+      'Gathering Storm',
+    ].map((piece) => text.indexOf(piece))
+    expect(order).toEqual([...order].sort((a, b) => a - b))
+    expect(order.every((i) => i >= 0)).toBe(true)
+    expect(parseTurn(out).map((b) => b.kind)).toEqual([
+      'dialogue',
+      'text',
+      'dialogue',
+    ])
+    const last = parseTurn(out)[2]
+    expect('markup' in last && last.markup).toContain(
+      SIGIL_WORDS + '\n\n' + BOUND_WORDS,
+    )
     expect(out).toContain('[item_name]Ancient Amulet[/item_name]')
     expect(game.state.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)).toBe(true)
@@ -120,6 +143,11 @@ describe('Sir Cedric and the sigil', () => {
       'I await your demonstration of combat skills before we can proceed ' +
         'with more serious matters.',
     )
+    expect(parseTurn(out).map((b) => b.kind)).toEqual([
+      'text',
+      'dialogue',
+      'dialogue',
+    ])
     const again = executeCommands(game, ['talk to sir cedric'])
     expect(again).not.toContain('Wardens')
     expect(again).not.toContain('goes very still')
@@ -138,6 +166,20 @@ describe('Sir Cedric and the sigil', () => {
     expect(out).toContain('goes very still')
     expect(out).toContain('Please accept these 100 gold coins.')
     expect(game.state.getItemCount('coins')).toBe(100)
+  })
+
+  it('keeps the Nature’s Charm handover after the recognition', () => {
+    const game = newGame()
+    dropAmulet(game)
+    executeCommands(game, ['talk to sir cedric'])
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+    executeCommands(game, ['take amulet'])
+    const out = executeCommands(game, ['talk to sir cedric'])
+    expect(plain(out)).toContain(STAGE_LINE)
+    expect(out).toContain('withdraws an ancient wooden charm')
+    expect(game.state.inventory.some((i) => i instanceof NaturesCharm)).toBe(
+      true,
+    )
   })
 
   it('names the sigil in examine, bag and room after the recognition', () => {

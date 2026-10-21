@@ -179,6 +179,7 @@ describe('Act 2 golden path', () => {
     // Talk to Sir Cedric (accept quests)
     expectCharacterInRoom(room(), 'Sir Cedric')
     executeCommands(game, ['talk to sir cedric'])
+    expect(game.state.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)).toBe(true)
     // Should now have "The Gathering Storm" and "The Knight's Test" quests
     expectQuests(state, [MAIN, "The Knight's Test"])
     // Use Training Sword to demonstrate combat skills
