@@ -35,13 +35,13 @@ export class TrainingMaster extends Character {
         characterName('Training Master') +
         ': ' +
         speech(
-          'It pains me to see a fine ' +
-            'knight like Sir Cedric carrying such a heavy burden. There are ' +
-            'whispers about his past military service - accusations of ' +
-            "cowardice during a critical battle. But I've known Cedric for " +
-            'years, and cowardice is not in his nature. Something about that ' +
-            'whole affair never sat right with me. The official reports ' +
-            'seemed... incomplete.',
+          'It pains me to see a fine knight like Sir Cedric carrying such a ' +
+            "heavy burden. He held the watch on the king's wall the night His " +
+            'Majesty vanished, and the next morning two men of the night watch ' +
+            'swore he had left his post. They took his knighthood for it. But ' +
+            "I've known Cedric for years, and he has never left a post in his " +
+            'life. Something about that whole affair never sat right with me. ' +
+            "The watch's story was… too neat.",
         ) +
         '\n\n' +
         'He leans closer, lowering his voice.' +
@@ -49,11 +49,10 @@ export class TrainingMaster extends Character {
         characterName('Training Master') +
         ': ' +
         speech(
-          "I've heard rumors that " +
-            'there were supposed to be documents - evidence that would clear ' +
-            'his name. Perhaps someone with your skills could help uncover the ' +
-            'truth and restore honor to a good man who has suffered long ' +
-            'enough.',
+          "I've heard rumors that there are papers somewhere that tell a " +
+            'different story. Perhaps someone with your skills could help ' +
+            'uncover the truth and restore honor to a good man who has ' +
+            'suffered long enough.',
         )
       )
     }

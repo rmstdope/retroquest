@@ -28,32 +28,33 @@ export class LordCommander extends Character {
     const name = characterName(this.name)
     if (gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)) {
       return (
-        `The ${name} nods with satisfaction. ` +
+        `The ${name} nods slowly. ` +
         speech(
-          "'Sir Cedric's honor has been fully restored. The false " +
-            'accusations against him have been officially stricken from the ' +
-            'record. It brings me great pleasure to see justice served and a ' +
-            "good knight vindicated.'",
+          "'Sir Cedric's knighthood is restored and the charge struck from the " +
+            'record. As for the name in that letter, I have sent riders to ' +
+            'Heavensforth for the watchman who wrote it. Whoever paid in that ' +
+            "name will be found.'",
         )
       )
     }
     if (gameState.getStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS)) {
-      // Player has the secret documents and should present them
+      // Player carries the examined papers and should present them
       return (
         `The ${name} looks at you with interest. ` +
         speech(
-          "'I understand you have evidence regarding Sir Cedric's case? If " +
-            'you have the secret documents that prove his innocence, please ' +
-            "present them to me so I can officially restore his honor.'",
+          "'I am told you carry papers touching on Sir Cedric's case, and on " +
+            'the night His Majesty vanished. If they bear on either, give them ' +
+            "to me.'",
         )
       )
     }
     return (
       `The ${name} greets you formally. ` +
       speech(
-        "'Welcome to Greendale's Great Hall. I oversee the military " +
-          'affairs of our realm and ensure that justice is served among our ' +
-          "knights and soldiers.'",
+        "'Welcome to Greendale's Great Hall. I oversee the military affairs of " +
+          'our realm and, since King Alden vanished, I hold his court in his ' +
+          'name. If you hear any word of His Majesty, you bring it to me ' +
+          "first.'",
       )
     )
   }
@@ -64,16 +65,15 @@ export class LordCommander extends Character {
     if (item instanceof SecretDocuments) {
       if (!gameState.getStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS)) {
         return (
-          `The ${name} examines the documents carefully but shakes his head. ` +
+          `The ${name} glances at the papers and hands them back. ` +
           speech(
-            "'These appear to be legal papers, but I need you to understand " +
-              'their significance first. Please examine them thoroughly and then ' +
-              "return to me.'",
+            "'A confession and a letter, but about what? Read them and know " +
+              "what you bring me, then return.'",
           )
         )
       }
 
-      // Player has examined the documents and understands their importance
+      // The player has examined the papers and understands them
       gameState.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
 
       // Remove the documents from inventory
@@ -81,15 +81,18 @@ export class LordCommander extends Character {
       if (index >= 0) gameState.inventory.splice(index, 1)
 
       return (
-        `[success]The ${name} carefully reviews the secret documents. His ` +
-        'expression grows solemn as he reads the testimonies and evidence. ' +
+        `[success]The ${name} reads the confession, then the letter. At its ` +
+        'last line his face goes grey. ' +
         speech(
-          "'These documents clearly prove Sir Cedric's innocence in the " +
-            'Battle of Thornfield Pass. The accusations of cowardice were ' +
-            'completely unfounded - he was following direct orders and ' +
-            "protecting civilians. I hereby officially restore Sir Cedric's " +
-            'honor and expunge all false charges from his record. Justice has ' +
-            "been served at last.'",
+          "'This is the old court script. It reads: [italic]By the will of " +
+            "Malakar.[/italic]'",
+        ) +
+        ' He lowers the page. ' +
+        speech(
+          "'Malakar is a name from children's tales. Yet someone paid gold in " +
+            'it, and on that night of all nights. Sir Cedric did not leave his ' +
+            'post. He was chosen to carry the blame. I hereby restore his ' +
+            "knighthood and strike the charge from the record.'",
         ) +
         '[/success]'
       )

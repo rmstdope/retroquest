@@ -19,8 +19,8 @@ export class CastleApproach extends Room {
         "A wide avenue lined with statues of Greendale's heroes leads to an impressive " +
         'castle of white stone. Tall spires reach toward the sky, and colorful banners ' +
         'snap in the wind. ' +
-        'Guards in ceremonial armor patrol the approach, their presence both welcoming ' +
-        'and imposing. This is clearly where power resides in Greendale.',
+        'Fewer guards than the posts were built for patrol the approach, and those who ' +
+        'remain keep their voices low. The royal standard is gone from the highest spire.',
       items: [],
       characters: [new Herald(), new CastleGuardCaptain()],
       exits: { south: 'MainSquare', west: 'CastleCourtyard' },

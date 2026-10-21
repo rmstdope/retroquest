@@ -4,25 +4,27 @@ import {
   FLAG_READ_SQUIRES_DIARY,
 } from '../Act2StoryFlags'
 
-/** Secret documents containing evidence that proves Sir Cedric's innocence. */
+/** The documents' description; `Act2.afterLoad` restores it in older saves. */
+export const SECRET_DOCUMENTS_DESCRIPTION =
+  'A sealed packet of papers: a sworn confession and a letter closed with ' +
+  'black wax.'
+
+/** A watchman's confession and the letter that paid him, which clear Sir Cedric's name. */
 export class SecretDocuments extends Item {
   constructor() {
     super({
       name: 'secret documents',
-      description:
-        'A sealed envelope containing important legal documents and testimonies. ' +
-        'The papers inside appear to be evidence related to a past court case.',
+      description: SECRET_DOCUMENTS_DESCRIPTION,
     })
   }
 
+  /** Make no sense before the diary is read; afterwards reveal the confession and letter. */
   override examine(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_READ_SQUIRES_DIARY)) {
       return (
-        'You examine the sealed documents carefully. They appear to be official legal ' +
-        'papers and testimonies from some kind of court case or military tribunal, but ' +
-        "without more context about what you're looking for, you can't make sense of " +
-        "their significance. The names and details mentioned don't mean anything to " +
-        'you at the moment.'
+        'A sworn confession and a letter closed with black wax. They speak of ' +
+        'gold, a gate and a night, but without knowing whose night, you cannot ' +
+        'make sense of them.'
       )
     }
 
@@ -30,11 +32,13 @@ export class SecretDocuments extends Item {
     gameState.setStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS, true)
 
     return (
-      'The documents contain sworn testimonies and legal evidence proving that Sir ' +
-      'Cedric was falsely accused of cowardice during a past battle. The papers show ' +
-      'he was actually protecting civilians and following direct orders from his ' +
-      'commanding officer. This evidence would completely clear his name and restore ' +
-      'his honor.'
+      'A confession from a man of the night watch, written in Heavensforth ' +
+      'where he fled. He swears that he and another were paid to leave the ' +
+      "king's postern gate unguarded on the night King Alden vanished, and to " +
+      'say afterwards that Sir Cedric had left his post. Pinned to it is the ' +
+      'letter that paid them, closed with black wax pressed with a twisted ' +
+      "rune, the same kind of rune as the token you fished out of Willowbrook's " +
+      'well. It ends with a name in an old script you cannot read.'
     )
   }
 }

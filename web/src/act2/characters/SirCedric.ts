@@ -8,6 +8,7 @@ import { NaturesCharm } from '../items/NaturesCharm'
 import {
   FLAG_CEDRIC_RECOGNISED_SIGIL,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
+  FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_NYX_TRIALS_COMPLETED,
 } from '../Act2StoryFlags'
@@ -134,8 +135,14 @@ export class SirCedric extends Character {
         ': ' +
         speech(
           'My friend, I cannot express how grateful I am. You have restored ' +
-            'my honor and cleared my name of those terrible accusations. The ' +
-            'weight I carried for so long has been lifted from my shoulders.',
+            'my honor and cleared my name. And more: the king was not lost on ' +
+            'my watch. He was taken, by men who were paid to let it happen.',
+        ) +
+        '\n\nHe is quiet for a moment.\n\n' +
+        speech(
+          'Malakar. My grandmother frightened me with that name when I was ' +
+            'small. Whoever hides behind it took my king, and I mean to find ' +
+            'him.',
         ) +
         '\n\n' +
         characterName('Sir Cedric') +
@@ -159,9 +166,9 @@ export class SirCedric extends Character {
         characterName('Sir Cedric') +
         ': ' +
         speech(
-          'Thanks to your efforts, my honor has been restored and the false ' +
-            'accusations cleared from my record. I stand ready to face the ' +
-            'challenges ahead with renewed purpose and dignity.',
+          'Thanks to you, my knighthood is restored and the charge struck from ' +
+            'my record. Now I can turn to what matters: finding the king, and ' +
+            'whoever wears that old name.',
         )
       )
     }
@@ -216,13 +223,24 @@ export class SirCedric extends Character {
         )
       )
     } else if (this.cedricTrustsElior) {
-      return (
+      const preparation =
         characterName('Sir Cedric') +
         ': ' +
         speech(
           'How goes your preparation? The gathering storm grows stronger ' +
             'each day. I trust you are making good progress in gathering ' +
             'allies and supplies.',
+        )
+      if (!gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED))
+        return preparation
+      // He has heard of his own disgrace: he owns it without defending himself
+      return (
+        preparation +
+        "\n\nSir Cedric's jaw tightens.\n\n" +
+        speech(
+          "You will have heard what they say of me. I held the king's wall " +
+            'the night he vanished, and he was taken on my watch. Whatever ' +
+            'else is true, that is. I will not make excuses.',
         )
       )
     }

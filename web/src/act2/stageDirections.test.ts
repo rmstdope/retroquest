@@ -179,6 +179,7 @@ describe('Sir Cedric narration between quotes', () => {
     expect(quotes(out).map((q) => q.speaker)).toEqual([
       'Sir Cedric',
       'Sir Cedric',
+      'Sir Cedric',
     ])
   })
 

@@ -27,10 +27,12 @@ export class GreatHall extends Room {
       name: 'Great Hall',
       description:
         'A magnificent hall with soaring ceilings supported by massive stone columns. ' +
-        'Tapestries depicting legendary battles cover the walls, and a throne sits on ' +
-        'a raised dais at the far end. Sunlight streams through tall stained-glass ' +
-        'windows, casting colorful patterns on the stone floor. This is where the ' +
-        'lords of Greendale hold court and make important decisions.',
+        'Tapestries depicting legendary battles cover the walls, and the ' +
+        "king's throne stands empty on a raised dais at the far end, a dark cloth " +
+        'laid across its arms. Behind it, the doors to the throne room are barred. ' +
+        'Sunlight streams through tall stained-glass windows, casting colorful ' +
+        'patterns on the stone floor. This is where the lords of Greendale hold ' +
+        'court; for now, the Lord Commander holds it alone.',
       items: [],
       characters: [new CourtHerald(), new Historians(), new LordCommander()],
       exits: { east: 'CastleCourtyard' },

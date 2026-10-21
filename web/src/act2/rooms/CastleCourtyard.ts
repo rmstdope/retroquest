@@ -21,9 +21,10 @@ export class CastleCourtyard extends Room {
       description:
         'An expansive courtyard within the castle walls, featuring training grounds ' +
         'where knights practice their swordwork. Ancient oak trees provide shade for ' +
-        "stone benches, and a stable houses magnificent warhorses. The castle's main " +
-        "hall rises before you, its great doors carved with the symbols of Greendale's " +
-        'noble houses.',
+        'stone benches, and a stable houses magnificent warhorses, though half its ' +
+        "stalls stand empty since the king's own guard rode out to search for him. " +
+        "The castle's main hall rises before you, its great doors carved with the " +
+        "symbols of Greendale's noble houses.",
       items: [],
       characters: [new SirCedric(), new TrainingMaster(), new Squires()],
       exits: {

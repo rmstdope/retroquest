@@ -44,7 +44,8 @@ export class Herald extends Character {
         speech(
           'Greetings, traveler. I must examine your credentials before you ' +
             'can be granted audience with the nobility. Do you have a formal ' +
-            'pass or letter of recommendation?',
+            'pass or letter of recommendation? Forgive the quiet halls. Since King ' +
+            'Alden vanished, half the court has gone home to wait for news.',
         )
       )
     }
