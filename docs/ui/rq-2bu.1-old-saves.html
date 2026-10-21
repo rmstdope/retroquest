@@ -1,0 +1,17 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Old Act IV saves refused</title><style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces&family=JetBrains+Mono&family=Source+Serif+4:ital@0;1&display=swap');
+:root{--bg:#10151a;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--char:#7fb0e6;--item:#8fcf7a;--at:#ffb836;--fail:#e8896b;--ok:#9fd69a}
+*{box-sizing:border-box}body{margin:0;background:#0b0f12;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:24px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:400;margin:0 0 4px}.lead{color:var(--muted);max-width:860px;margin:0 0 24px;line-height:1.5}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}.step{display:flex;flex-direction:column;gap:8px}
+.cap{font-size:13px;color:var(--at);font-weight:600;letter-spacing:.04em}.note{font-size:12px;color:var(--muted);max-width:440px;line-height:1.45}
+.frame{width:460px;max-width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--bg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.frame.phone{width:320px;border-radius:24px}
+.cmd{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.t{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.55;color:var(--prose)}
+.ev{margin:0;display:flex;gap:10px;align-items:baseline;font-size:14px;color:var(--muted)}.ev i{color:var(--accent);font-size:9px;font-style:normal}
+.f{color:var(--fail)}.dim{color:var(--muted)}.q{margin:0;font-size:14px;color:var(--ok)}
+.dq{margin:0 0 0 14px;padding-left:12px}.sp{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--char);font-weight:600;margin-bottom:2px}
+.dq p{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.55;font-style:italic;color:var(--fg)}
+.c{color:var(--char)}.it{color:var(--item)}.rm{font-family:Fraunces,serif;font-size:18px;color:var(--fg);margin:0}
+.ex{font-size:13px;color:var(--muted)}
+@media (max-width:520px){body{padding:16p<style>.map{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.5;color:var(--prose);white-space:pre;margin:0}.gone{color:var(--fail);text-decoration:line-through}.new{color:var(--at);font-weight:600}</style><h1>Option A — an Act IV save from before the change is refused with the game's existing load-failure line</h1><p class=lead>A save made anywhere in Act IV today remembers every Act IV room, including the two being cut. Once they are gone, that save no longer matches the game. Saves made in Acts I–III are not affected either way.</p><div class=row><div class=step><div class=cap>Loading an older Act IV save</div><div class='frame'><p class=cmd>&gt; load fortress</p><p class="t f">Failed to load game: The save contains an unknown class: RoyalGardens</p></div><p class=note>This is the line the game already shows today for a save it can't read. Nothing new is written. The player can still start Act IV again from the Fortress Gates.</p></div><div class=step><div class=cap>On a phone</div><div class='frame phone'><p class=cmd>&gt; load fortress</p><p class="t f">Failed to load game: The save contains an unknown class: RoyalGardens</p></div><p class=note>Wraps as one line; no other change.</p></div></div>
