@@ -230,6 +230,7 @@ describe('Mira', () => {
         'I am right behind you, Elior. The gates will not open themselves.',
       )
       expect(out).not.toContain('I know how I look')
+      expect(out).not.toContain('Mira leans on the cold stone')
     })
 
     it('remembers the first talk across a save and load', () => {
@@ -237,9 +238,8 @@ describe('Mira', () => {
       mira.talkTo(game.state)
       const fresh = new Game([new Act3()])
       fresh.loadSaveData(game.toSaveData())
-      const loaded = fresh.state.currentRoom.getCharacterByName('Mira')
 
-      const out = (loaded ?? mira).talkTo(fresh.state)
+      const out = new Mira().talkTo(fresh.state)
 
       expect(out).toContain('I am right behind you')
       expect(out).not.toContain('I know how I look')

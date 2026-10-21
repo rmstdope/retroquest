@@ -113,7 +113,7 @@ export class Mira extends Character {
     // draw the circle onward to Mount Ember.
     // If we're already at Lower Switchbacks, do not teleport; instead
     // provide lore about the second virtue and the phoenix legend.
-    // Special dialogue for Cavern Mouth
+    // The fortress gate has its own talk (see talkAtGate).
     if (gameState.currentRoom.name === "Entrance to Malakar's Fortress") {
       return this.talkAtGate(gameState, eventMsg)
     } else if (gameState.currentRoom.name === 'Cavern Mouth') {
