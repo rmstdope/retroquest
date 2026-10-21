@@ -5,6 +5,7 @@ import { Act3 } from '../Act3'
 import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_DRAGON_VOICE_HEARD,
+  FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
   FLAG_ACT3_DRAGON_OATH_SPOKEN,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
 } from '../Act3StoryFlags'
@@ -89,6 +90,7 @@ describe('AncientDragon', () => {
     gameState.currentRoom = room
     gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     gameState.setStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD, true)
+    gameState.setStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN, true)
     gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, scrollsRead)
     return { gameState, room }
   }
