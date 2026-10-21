@@ -5,6 +5,20 @@ import {
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
 } from '../Act3StoryFlags'
 
+/**
+ * Words the Phoenix accepts as the answer to its riddle, matched only as whole
+ * words so that "impatience" or "please" do not earn the feather.
+ */
+const RIDDLE_ANSWERS = [
+  'patience',
+  'patient',
+  'patiently',
+  'calm',
+  'calmly',
+  'calmness',
+  'ease',
+]
+
 /** A majestic, telepathic phoenix who poses a riddle to the worthy. */
 export class Phoenix extends Character {
   private riddlePosed = false
@@ -50,7 +64,10 @@ export class Phoenix extends Character {
     )
   }
 
-  /** Accepts correct answers and gives the Phoenix Feather if appropriate. */
+  /**
+   * Accepts a correct answer, matched as a whole word, and gives the Phoenix
+   * Feather if appropriate.
+   */
   override sayTo(gameState: GameState, words: string): string {
     // Only accept answer if riddle was posed and feather not yet given
     if (!this.riddlePosed) {
@@ -65,8 +82,8 @@ export class Phoenix extends Character {
         speech("'You already hold what you have earned.'")
       )
     }
-    const answer = words.trim().toLowerCase()
-    if (['patience', 'calm', 'ease'].some((key) => answer.includes(key))) {
+    const answerWords = words.toLowerCase().split(/[^a-z]+/)
+    if (RIDDLE_ANSWERS.some((key) => answerWords.includes(key))) {
       gameState.addItemToInventory(new PhoenixFeather())
       gameState.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
       const link =

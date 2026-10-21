@@ -123,3 +123,40 @@ describe('Phoenix links patience to the Warden of Wisdom', () => {
     expect(new Phoenix().talkTo(fresh.state)).toContain(FAREWELL)
   })
 })
+
+describe('Phoenix accepts the riddle answer only as a whole word', () => {
+  const REFUSAL = 'Is that truly wisdom, when time is short?'
+
+  it.each(['impatience', 'uncalm', 'release', 'please', 'disease'])(
+    'refuses "%s" and keeps the feather',
+    (words) => {
+      const game = new Game([new Act3()])
+      const phoenix = new Phoenix()
+      phoenix.talkTo(game.state)
+      expect(phoenix.sayTo(game.state, words)).toContain(REFUSAL)
+      expect(game.state.hasItem('Phoenix Feather')).toBe(false)
+      expect(game.state.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)).toBe(
+        false,
+      )
+    },
+  )
+
+  it.each([
+    'patience',
+    'be patient',
+    'calm',
+    'Patience.',
+    'ease',
+    'calmly',
+    'calmness',
+    'patiently',
+  ])('gives the feather for "%s"', (words) => {
+    const game = new Game([new Act3()])
+    const phoenix = new Phoenix()
+    phoenix.talkTo(game.state)
+    expect(phoenix.sayTo(game.state, words)).toContain(
+      'Take this, and remember.',
+    )
+    expect(game.state.hasItem('Phoenix Feather')).toBe(true)
+  })
+})
