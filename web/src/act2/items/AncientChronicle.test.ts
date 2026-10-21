@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { Act2 } from '../Act2'
+import { DispelSpell } from '../spells/DispelSpell'
 import { FLAG_SPECTRAL_LIBRARIAN_FRIENDLY } from '../Act2StoryFlags'
 import { AncientChronicle } from './AncientChronicle'
 import {
@@ -70,5 +71,16 @@ describe('Ancient Chronicle (rq-roe.5)', () => {
     loaded.loadSaveData(game.toSaveData())
     const text = new AncientChronicle().use(loaded.state)
     expect(text).toContain('You turn again')
+  })
+
+  it('shows the learned line as a success line', () => {
+    const text = new AncientChronicle().use(friendlyGame().state)
+    expect(text).toContain('[success]You study the pages')
+  })
+
+  it('still shows the first reading when dispel was learned elsewhere', () => {
+    const game = friendlyGame()
+    game.state.learnSpell(new DispelSpell())
+    expect(new AncientChronicle().use(game.state)).toContain('Wardens were few')
   })
 })

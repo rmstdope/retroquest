@@ -58,4 +58,19 @@ describe('Great Hall archive search', () => {
     expect(text).toContain('Said he came on the business of Malakar.')
     expect(text).not.toContain('Wardens of the Dawn')
   })
+
+  it('opens with a success line', () => {
+    const text = new GreatHall().search(readyGame().state)
+    expect(text.startsWith("[success]With the historians' guidance")).toBe(true)
+  })
+
+  it('remembers the search across save and load', () => {
+    const game = readyGame()
+    new GreatHall().search(game.state)
+    const loaded = new Game([new Act2()])
+    loaded.loadSaveData(game.toSaveData())
+    expect(new GreatHall().search(loaded.state)).toContain(
+      'You have already been through the archive.',
+    )
+  })
 })

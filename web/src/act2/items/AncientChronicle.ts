@@ -63,10 +63,8 @@ export class AncientChronicle extends Item {
             "written here.'",
         ) +
         '\n' +
-        event(
-          'You study the pages until the words settle in your mind. You have ' +
-            'learned [spell_name]dispel[/spell_name].',
-        ) +
+        '[success]You study the pages until the words settle in your mind. ' +
+        'You have learned [spell_name]dispel[/spell_name].[/success]' +
         '\n' +
         event(
           'On the last page the ink is newer than the rest, as if someone ' +
