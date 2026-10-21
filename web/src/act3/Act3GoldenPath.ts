@@ -92,6 +92,8 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'w',
   's',
   'cast bless on echo stones',
+  'take phial',
+  'use stillwater phial with pool',
   'use resonant chant rubbings with echo stones',
   'e',
   'talk to ancient dragon',

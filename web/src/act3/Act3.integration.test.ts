@@ -524,6 +524,14 @@ describe('Act 3 golden path', () => {
     expect(blessResult.toLowerCase()).toContain('sacred luminescence')
     expect(blessResult.toLowerCase()).toContain('ancient chant')
 
+    // Still the pools with the Stillwater Phial (the chant only carries over still water)
+    executeCommands(game, ['take phial'])
+    const stillResult = executeCommands(game, [
+      'use stillwater phial with pool',
+    ])
+    expect(stillResult.toLowerCase()).toContain('the pools are mirror-still')
+    expectItemInInventory(state, 'stillwater phial', true)
+
     // Use resonant chant rubbings on echo stones (performs the Oath of Stillness)
     let oathResult = executeCommands(game, [
       'use resonant chant rubbings with echo stones',

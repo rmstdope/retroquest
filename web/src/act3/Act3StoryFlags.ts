@@ -51,6 +51,8 @@ export const FLAG_ACT3_OATH_OF_STILLNESS_STARTED =
   'act3_oath_of_stillness_started'
 export const FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED =
   'act3_oath_of_stillness_completed'
+/** The Stillwater Phial has stilled the vestibule pools, so the chant can carry. */
+export const FLAG_ACT3_POOLS_STILLED = 'act3_pools_stilled'
 
 // Dragon's Memory (storytelling quest)
 export const FLAG_ACT3_DRAGONS_MEMORY_RECEIVED = 'act3_dragons_memory_received'

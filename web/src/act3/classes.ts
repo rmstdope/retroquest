@@ -38,6 +38,7 @@ import { RustedLockerKey } from './items/RustedLockerKey'
 import { SeaSealedLetter } from './items/SeaSealedLetter'
 import { SeaweedTangle } from './items/SeaweedTangle'
 import { Steles } from './items/Steles'
+import { DarkPool } from './items/DarkPool'
 import { StillwaterPhial } from './items/StillwaterPhial'
 import { SupplyCrate } from './items/SupplyCrate'
 import { SupportStraps } from './items/SupportStraps'
@@ -132,6 +133,7 @@ export const ACT3_CLASSES = {
   SeaSealedLetter,
   SeaweedTangle,
   Steles,
+  DarkPool,
   StillwaterPhial,
   SupplyCrate,
   SupportStraps,

@@ -1,6 +1,7 @@
 import { Item, event, type GameState } from '@/engine'
 import { FLAG_ACT3_OATH_OF_STILLNESS_STARTED } from '../Act3StoryFlags'
 import { ResonantChantRubbings } from './ResonantChantRubbings'
+import { StillwaterPhial } from './StillwaterPhial'
 
 /** Sacred stones that amplify the resonant chant when blessed. */
 export class EchoStones extends Item {
@@ -65,8 +66,11 @@ export class EchoStones extends Item {
 
   /** Handle using other items with the echo stones. */
   override useWith(gameState: GameState, other: Item): string {
-    if (other instanceof ResonantChantRubbings) {
-      // Delegate to the ResonantChantRubbings' useWith method
+    if (
+      other instanceof ResonantChantRubbings ||
+      other instanceof StillwaterPhial
+    ) {
+      // Delegate to the other item's useWith method
       return other.useWith(gameState, this)
     } else {
       return super.useWith(gameState, other)

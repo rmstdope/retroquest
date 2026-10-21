@@ -174,6 +174,7 @@ Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned f
     -   Prerequisites: Miners’ Rescue completed
     -   Objectives:
         -   Copy the Resonant Chant from runic walls
+        -   Bless the echo stones, and still the vestibule pools with the Stillwater Phial (in either order); the chant only carries over still water
         -   Perform the chant at three echo stones to quiet the wandering phantoms
     -   Outcome: Silences the illusions; required to enter the dragon’s presence and obtain the Dragon’s Scale
 
@@ -208,7 +209,7 @@ Act III requires the use of five spells. Act III setup grants any of these that 
 -   Spell: `bless`
     -   Learned In: Act I (from the Priest)
     -   Used In: Caverns of Shadow — Stillness Vestibule
-    -   Purpose: Sanctify the echo stones before performing the Resonant Chant so the illusions fully quiet
+    -   Purpose: Sanctify the echo stones before performing the Resonant Chant so the illusions fully quiet (the Stillwater Phial must also have stilled the pools)
 
 ## Rooms
 
@@ -407,7 +408,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 5. Stillness Vestibule
 
 -   Description: A hush falls over dark water pools; sound seems to fold into the stone.
--   Items: Echo Stones, Stillwater Phial, and Quiet Charm.
+-   Items: Echo Stones, Dark Pool, Stillwater Phial, and Quiet Charm.
 -   Characters: Silence Keeper and Wandering Phantoms.
 -   Quest Relevance: Finalize the Oath of Stillness to silence illusions (completes “Oath of Stillness”).
 -   Exits:
@@ -742,6 +743,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 -   Commands and yields:
     -   `west` → Returns to Collapsed Galleries; `south` enters Stillness Vestibule.
     -   `cast bless on echo stones` → Sanctifies the stones for the rite.
+    -   `take phial`, `use stillwater phial with pool` → Stills the pools (the phial is kept; examining it always shows the young woman and her three teachers). The chant breaks apart on ripples until this is done; bless and still may come in either order.
     -   `use resonant chant rubbings with echo stones` → Performs the chant; silences illusions and completes “Oath of Stillness,” opening the east exit to Dragon’s Hall.
 
 24. Room: Dragon’s Hall (Story Clue)

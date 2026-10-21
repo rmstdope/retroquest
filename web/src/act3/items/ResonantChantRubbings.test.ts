@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { GameState, Item, Room } from '@/engine'
-import { FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
+  FLAG_ACT3_POOLS_STILLED,
+} from '../Act3StoryFlags'
 import { ResonantChantRubbings } from './ResonantChantRubbings'
 import { EchoStones } from './EchoStones'
 import { StillnessVestibule } from '../rooms/StillnessVestibule'
@@ -30,6 +33,7 @@ describe('ResonantChantRubbings', () => {
     const room = new StillnessVestibule()
     const gs = createState(room)
     echoStones.receiveSpell(gs, 'bless')
+    gs.setStoryFlag(FLAG_ACT3_POOLS_STILLED, true)
     expect(echoStones.areBlessed()).toBe(true)
     expect(room.characters.some((c) => c instanceof WanderingPhantoms)).toBe(
       true,

@@ -13,6 +13,7 @@ import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_MAIN_STARTED,
+  FLAG_ACT3_POOLS_STILLED,
   FLAG_ACT3_RUINS_LEFT,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
   VIRTUE_MERCY,
@@ -183,6 +184,7 @@ describe('Wandering phantoms: mercy', () => {
   /** Chant the rubbings at blessed stones in the vestibule. */
   function chant(game: Game): string {
     run(game, 'cast bless on echo stones')
+    game.state.setStoryFlag(FLAG_ACT3_POOLS_STILLED, true)
     const rubbings = new ResonantChantRubbings()
     game.state.addItemToInventory(rubbings)
     return run(game, 'use resonant chant rubbings with echo stones')
