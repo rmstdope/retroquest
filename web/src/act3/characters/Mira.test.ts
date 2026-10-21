@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, type Room } from '@/engine'
+import { Game, type Room, characterName, event, speech } from '@/engine'
 import { Act3 } from '../Act3'
 import { executeCommands } from '@/testing/gameHelpers'
 import {
@@ -364,15 +364,38 @@ describe('Mira confesses before the Warding Rite', () => {
 
     const out = executeCommands(game, ['talk to mira'])
 
-    expect(out).toContain("Mira's hands stop above the three relics")
-    expect(out).toContain('I was their pupil')
-    expect(out).toContain('Your grandmother knew.')
-    expect(out).toContain(
-      '[event]For a moment you cannot speak. Then the words come out harder ' +
-        "than you meant them: 'Why didn't you tell me?'[/event]",
-    )
-    expect(out).toContain('I will begin the Warding Rite.')
-    expect(out).not.toContain('three relics resonate')
+    const expected = [
+      event('You speak with ' + characterName('Mira') + '.'),
+      event(
+        "Mira's hands stop above the three relics. She does not begin the rite.",
+      ),
+      speech(
+        "'Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon.'",
+      ),
+      speech(
+        "'I knew your parents. Not as a healer knows a neighbour. I was their pupil — Aren's, Lysa's, and Malakar's. The three of them taught me everything I know of circles and wards.'",
+      ),
+      speech(
+        "'When Aren and Lysa poured themselves into the ward, someone had to stay with the child it hid. I came to Willowbrook as its healer, and I have watched over you every day since.'",
+      ),
+      speech(
+        "'Your grandmother knew. She is Lysa's mother, and she kept the secret with me.'",
+      ),
+      event(
+        "For a moment you cannot speak. Then the words come out harder than you meant them: 'Why didn't you tell me?'",
+      ),
+      speech(
+        "'Because the seal could not bear it. Malakar's cloaked agent walked Willowbrook's lanes searching for the amulet, and any word of who you were could have reached him.'",
+      ),
+      speech(
+        "'I am telling you now because you have earned the truth. The amulet you carry is the anchor of the ward your parents became.'",
+      ),
+      event('She looks down at the relics, and then back at you.'),
+      speech(
+        "'When you are ready, speak to me again, and I will begin the Warding Rite.'",
+      ),
+    ].join('\n')
+    expect(out).toBe(expected)
     expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)).toBe(
       false,
@@ -382,6 +405,9 @@ describe('Mira confesses before the Warding Rite', () => {
   it('performs the rite on the next talk, even after leaving and returning', () => {
     const game = readyForConfession()
     executeCommands(game, ['talk to mira'])
+    const hut = game.state.currentRoom
+    game.state.currentRoom = game.state.allRooms.TidalCauseway
+    game.state.currentRoom = hut
 
     const out = executeCommands(game, ['talk to mira'])
 
