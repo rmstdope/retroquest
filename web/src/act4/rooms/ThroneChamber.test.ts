@@ -160,8 +160,16 @@ describe('ThroneChamber', () => {
     const first = executeCommands(game, ['talk to malakar'])
     expectDialogueSpeaker(first, 'Malakar')
     expect(first).toContain("Aren's son. You have their eyes, both of them.")
-    for (const block of OFFER_BLOCKS) expect(first).toContain(block)
+    let from = 0
+    for (const block of OFFER_BLOCKS) {
+      const at = first.indexOf(block, from)
+      expect(at).toBeGreaterThanOrEqual(from)
+      from = at + block.length
+    }
     expect(first.match(/\[dialogue\]/g)).toHaveLength(4)
+    expect(
+      first.match(/\[character_name\]Malakar\[\/character_name\]/g),
+    ).toHaveLength(4)
     expect(first).not.toContain('Stand with me. Please.')
     for (let i = 0; i < 2; i++) {
       expect(executeCommands(game, ['talk to malakar'])).toContain(PLEA)
