@@ -296,6 +296,8 @@ export class Mira extends Character {
         gameState.removeItemFromInventoryOrRoom('Crystal of Light', 1)
         gameState.removeItemFromInventoryOrRoom('Phoenix Feather', 1)
         gameState.removeItemFromInventoryOrRoom("Dragon's Scale", 1)
+        // The rite calls for the herbs, as Mira promised: they leave the hut.
+        gameState.removeItemFromInventoryOrRoom('healing herbs', 1)
 
         // Add Lifelight Elixir to the room for pickup
         const lifelightElixir = new LifelightElixir()
@@ -316,6 +318,12 @@ export class Mira extends Character {
                 'starlight around each relic. The Crystal flares with brilliant ' +
                 'light, the Feather ignites with phoenix fire, and the Scale ' +
                 'hums with draconic power.',
+            ) +
+            '\n' +
+            event(
+              'Mira takes the healing herbs from the shelf and presses the ' +
+                'sachets into your hands. Their resin-sweet scent steadies ' +
+                'your breath as the starlight tightens around the relics.',
             ) +
             '\n' +
             speech(

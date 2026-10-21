@@ -341,6 +341,41 @@ describe('Mira', () => {
     expect(game.state.getStoryFlag(FLAG_ACT3_MAIN_COMPLETED)).toBe(true)
   })
 
+  it('uses the healing herbs in the Warding Rite and takes them from the hut', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    completeNonMainQuests(game)
+    const m = new Mira()
+    m.talkTo(game.state) // the confession
+    expect(hasItemNamed(game.state.currentRoom, 'healing herbs')).toBe(true)
+
+    const out = m.talkTo(game.state)
+
+    const herbsLine = event(
+      'Mira takes the healing herbs from the shelf and presses the sachets ' +
+        'into your hands. Their resin-sweet scent steadies your breath as ' +
+        'the starlight tightens around the relics.',
+    )
+    const arranging = out.indexOf('Mira carefully arranges')
+    const herbs = out.indexOf(herbsLine)
+    const incantation = out.indexOf('By light and flame')
+    expect(herbs).toBeGreaterThan(arranging)
+    expect(incantation).toBeGreaterThan(herbs)
+    expect(out.indexOf('The three relics dissolve')).toBeGreaterThan(
+      incantation,
+    )
+    expect(out.indexOf('It is done.')).toBeGreaterThan(
+      out.indexOf('The three relics dissolve'),
+    )
+    expect(hasItemNamed(game.state.currentRoom, 'healing herbs')).toBe(false)
+    expect(game.state.hasItem('healing herbs')).toBe(false)
+  })
+
   it('requires the note to be read in the hut', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
