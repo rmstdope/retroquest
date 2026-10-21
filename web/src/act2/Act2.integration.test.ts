@@ -844,17 +844,18 @@ describe('Golden path step 15: Forest Transition', () => {
     // Verify hermit interaction results
     expect(
       result.toLowerCase(),
-      'Should show hermit was expecting player',
-    ).toContain('waiting for you')
+      'Should show the hermit warning about the forest',
+    ).toContain('sour mood this season')
     expect(result.toLowerCase(), 'Should mention the charm').toContain(
       'protective charm',
     )
     expect(result.toLowerCase(), 'Should warn about forest dangers').toContain(
-      'ancient guardians',
+      'keeps old things',
     )
-    expect(result.toLowerCase(), 'Should warn about dark spirits').toContain(
-      'dark spirits',
-    )
+    expect(
+      result.toLowerCase(),
+      'Should tell the player to give back',
+    ).toContain('never take more than you give')
     expectItemInInventory(state, 'protective charm')
   })
 })

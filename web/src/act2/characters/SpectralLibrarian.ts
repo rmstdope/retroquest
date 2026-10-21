@@ -21,12 +21,9 @@ export class SpectralLibrarian extends Character {
     super({
       name: 'Spectral Librarian',
       description:
-        'A ghostly figure who appears to be the eternal guardian of this ancient library. ' +
-        'Their ethereal form shimmers with a soft blue light. Ancient wisdom gleams in ' +
-        'their otherworldly eyes. They wear the robes of a scholar from ages past. Their ' +
-        'presence emanates both knowledge and protective purpose. This spirit has ' +
-        'watched over these texts for countless years, ensuring only the worthy gain ' +
-        'access to the deepest secrets.',
+        'A ghostly figure in the worn robes of a working scholar, shimmering ' +
+        'with a soft blue light. They watch your hands more than your face, ' +
+        'the way a librarian watches anyone standing near the books.',
     })
   }
 
@@ -53,10 +50,9 @@ export class SpectralLibrarian extends Character {
           characterName(this.name) +
           ': ' +
           speech(
-            "'Ah, you have repaired the protective enchantments with your " +
-              `[spell_name]${mendName}[/spell_name] spell. This shows both ` +
-              'magical ability and respect for ancient knowledge. I shall reveal ' +
-              "what you seek.'",
+            `'You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
+              'spell. They have been failing longer than I care to count; ' +
+              "thank you. Now, what you came for.'",
           ) +
           " The spirit's eyes glow brighter as they speak: " +
           speech(
@@ -78,11 +74,10 @@ export class SpectralLibrarian extends Character {
         characterName(this.name) +
         ': ' +
         speech(
-          "'Welcome, seeker of knowledge. I am the eternal guardian of this " +
-            'repository. The protective enchantments around the most valuable ' +
-            'texts have been damaged by time. Prove your worthiness by ' +
-            'repairing them, and I shall share the knowledge you seek about ' +
-            "the mark you carry.'",
+          "'Mind the shelves. Everything here has been kept a long time, " +
+            'and the wards on the oldest texts are failing. I can keep a book; ' +
+            'I cannot mend one. Mend the wards, and I will show you where to ' +
+            "look for the mark you carry.'",
         )
       )
     }
@@ -106,16 +101,14 @@ export class SpectralLibrarian extends Character {
     )
   }
 
-  /** Describe the librarian's ghostly scholarly appearance. */
+  /** Describe the librarian's worn robes and the way they watch hands near the books. */
   override examine(_gameState: GameState): string {
     return (
-      'The ' +
+      'Up close, the ' +
       characterName(this.name) +
-      ' appears to be a scholar from ancient times, their ethereal form ' +
-      'bound to this library by duty and purpose. They radiate wisdom ' +
-      'accumulated over centuries of guarding these precious texts. ' +
-      "There's something both melancholy and noble about their eternal " +
-      'vigil.'
+      "'s robes are worn thin at the cuffs, the way a working scholar's are. " +
+      'They watch your hands more than your face, the way a librarian ' +
+      'watches anyone standing near the books.'
     )
   }
 }

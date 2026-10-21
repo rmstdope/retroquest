@@ -43,7 +43,7 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
     const answer = new ForestHermit().talkTo(game.state)
 
     expect(answer).toContain(
-      "'But you... there is old magic on you, and not of your own making. Take this charm",
+      "'But you... there is old magic on you, and not of your own making. She'll notice it.",
     )
     expect(answer).not.toMatch(CHOSEN_TALK)
   })
