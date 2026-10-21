@@ -1,0 +1,79 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tower — Option A</title><style>:root{--bg:#10151a;--surface:#161d24;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--ok:#9fd3a0;--fail:#e8896b;--line:#26303a;--new:#3a2a08}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;padding:24px 16px}
+h1{font-family:Georgia,serif;font-weight:500;font-size:22px;margin:0 0 6px}.note{color:var(--muted);max-width:760px;line-height:1.5;margin:0 0 24px;font-size:14px}
+.row{display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start}
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;width:600px;max-width:100%;box-sizing:border-box}
+.narrow{width:340px}
+.lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:18px 0 6px}
+.cmd{font-family:ui-monospace,monospace;font-size:13px;color:var(--muted)}
+p{margin:2px 0;line-height:1.5;color:var(--prose);font-size:15px}
+b.t{font-weight:700;color:var(--fg)}
+.who{color:var(--accent);font-weight:600}.say{color:var(--fg)}.it{color:#8fc7ff}.bad{color:var(--fail)}.ev{font-style:italic;color:#c9c2b0}.dim{color:var(--muted)}.good{color:var(--ok)}
+.new{background:var(--new);outline:1px dashed #a8740f;outline-offset:3px;border-radius:4px}
+.old{text-decoration:line-through;opacity:.6}</style></head><body>
+<h1>Tower — Option A: carrying the token is enough; using it is only the hint</h1>
+<p class="note">The player can name the friends straight away, as long as the token is in the pack. "use loyalty token" in the tower no longer opens anything; it gives the hint. Highlighted text is new.</p>
+<div class="row">
+<div><div class="lbl">Using the token — the first hint</div><div class="frame">
+<div class="cmd">› use loyalty token</div>
+<p class="new ev">You hold the token up, and it grows warm. Under the whispers, very faint, you think you hear your name, in Mira's voice. They are not gone. Say their names.</p>
+</div></div>
+<div><div class="lbl">Arriving (room text unchanged; the whispers are listed)</div><div class="frame">
+<div class="cmd">› east</div>
+<p><b class="t">Tower of Shadows</b></p>
+<p>A spiraling tower of black stone pierces the gloom, … the very shadows appear to mock your every movement with silent, dancing forms.</p>
+<p class="new">You hear: <span class="who">whispers</span></p>
+<p class="dim">Exits: west</p>
+<div class="cmd">› up</div>
+<p class="bad">You set your foot on the stair, and the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down.</p>
+<div class="cmd">› talk to whispers</div>
+<p class="new ev">They do not answer you. They only say it again, closer: your friends have left you. No one is coming. Name one who stayed, if you can.</p>
+</div></div>
+<div><div class="lbl">First name</div><div class="frame">
+<div class="cmd">› say mira to whispers</div>
+<p class="new ev">The token warms against your palm, and the whispers falter.</p>
+<p class="new"><span class="who">Mira</span>: <span class="say">"I'm at the gate, Elior. I said I'd hold it, and I'm holding it."</span></p>
+</div>
+<div class="lbl">Second name</div><div class="frame">
+<div class="cmd">› say cedric to whispers</div>
+<p class="new ev">The token warms again. The whispers draw back from the stair.</p>
+<p class="new"><span class="who">Sir Cedric</span>: <span class="say">"A knight does not leave his post. Mine is the threshold. Go on, lad."</span></p>
+</div>
+<div class="lbl">Third name — the stair opens</div><div class="frame">
+<div class="cmd">› say nyx to whispers</div>
+<p class="new ev">A small light flickers at the edge of your eye.</p>
+<p class="new"><span class="who">Nyx</span>: <span class="say">"Left? I'm right here. I never was anywhere else."</span></p>
+<p class="new good">The whispers have nothing left to say. They thin like smoke, and the stair above lies open.</p>
+<p class="dim">Exits: west, up</p>
+</div></div>
+<div><div class="lbl">Order does not matter · "Sir Cedric" and "cedric" both work</div><div class="frame">
+<div class="cmd">› say mira to whispers <span class="dim">(again)</span></div>
+<p class="new ev">The token is still warm from her. Mira is holding the gate; you know that now. The whispers want someone else.</p>
+<div class="cmd">› say grandmother to whispers</div>
+<p class="new ev">You say it into the dark, and something in you steadies — but she is far from here, and the whispers know it. Name one who came with you to the gate.</p>
+<div class="cmd">› say hello to whispers</div>
+<p class="new ev">The whispers swallow the word. Name one who stayed, if you can.</p>
+</div>
+<div class="lbl">Token not carried (dropped elsewhere)</div><div class="frame">
+<div class="cmd">› say mira to whispers</div>
+<p class="new ev">You say her name into the dark. Nothing answers but the whispers. Your hand closes on nothing, where the token used to be.</p>
+</div></div>
+<div><div class="lbl">After the stair is open</div><div class="frame">
+<div class="cmd">› look</div>
+<p><b class="t">Tower of Shadows</b></p>
+<p>A spiraling tower of black stone … <span class="new">The whispers are gone. The stair winds up into the dark, and it is only a stair.</span></p>
+<p class="dim">Exits: west, up</p>
+<div class="cmd">› say mira to whispers</div>
+<p class="bad">There is no character named 'whispers' here to speak to.</p>
+<div class="cmd">› use loyalty token</div>
+<p class="dim">The token is quiet and warm. The whispers are gone.</p>
+</div>
+<div class="lbl">Chamber of Whispers above (unchanged)</div><div class="frame"><div class="cmd">› use loyalty token</div><p class="dim">The token is still warm against your heart. Her whispers cannot reach you.</p></div></div>
+<div><div class="lbl">Phone — the third name</div><div class="frame narrow">
+<div class="cmd">› say nyx to whispers</div>
+<p class="new ev">A small light flickers at the edge of your eye.</p>
+<p class="new"><span class="who">Nyx</span>: <span class="say">"Left? I'm right here. I never was anywhere else."</span></p>
+<p class="new good">The whispers have nothing left to say. They thin like smoke, and the stair above lies open.</p>
+<p class="dim">Exits: west, up</p>
+</div></div>
+</div></body></html>
