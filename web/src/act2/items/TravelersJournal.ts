@@ -1,68 +1,58 @@
-import { Item, type GameState, characterName, event, writing } from '@/engine'
+import { Item, type GameState, event, writing } from '@/engine'
 import { FLAG_READ_TRAVELERS_JOURNAL } from '../Act2StoryFlags'
 
-/** A family journal containing genealogies and lore about Willowbrook and ley sites. */
+/**
+ * The notebook of the grey-cloaked stranger who lodged at the Silver Stag:
+ * notes copied from the castle archive. Nothing in it says whose it is.
+ */
 export class TravelersJournal extends Item {
   constructor() {
     super({
       name: "traveler's journal",
       shortName: 'journal',
       description:
-        'A well-worn leather journal containing historical notes, family genealogies, ' +
-        'and references to ancient bloodlines. Several passages mention Willowbrook ' +
-        'and its significance in regional history.',
+        'A plain leather journal, its cover rubbed grey at the corners. ' +
+        'There is no name inside. The pages are crowded with notes in a ' +
+        'small, careful hand, and many of them look copied from somewhere ' +
+        'else.',
       canBeCarried: true,
     })
   }
 
+  /** Read the stranger's notes; sets the read flag and shows the same text every time. */
   override use(gameState: GameState): string {
-    // Set flag to indicate the journal has been read
     gameState.setStoryFlag(FLAG_READ_TRAVELERS_JOURNAL, true)
     return (
       event(
-        "You carefully open the weathered traveler's journal and begin " +
-          'reading the faded entries...',
-      ) +
-      '\n\nThe journal belongs to ' +
-      characterName('Lysander Ravencrest') +
-      ', a distant ancestor who traveled these lands centuries ago. His ' +
-      "elegant script reveals fascinating details about your family's " +
-      'ancient heritage:\n\n' +
-      writing(
-        "'The bloodline of Ravencrest has long been " +
-          'tied to the mystical energies that flow through Willowbrook and ' +
-          'its surrounding lands. We are not mere wanderers, but guardians ' +
-          'of an ancient pact - keepers of balance between the mortal realm ' +
-          'and the forces beyond. The village of Willowbrook sits upon a ' +
-          'convergence of ley lines, making it a focal point for both ' +
-          "protective and destructive magics.'",
+        "You open the weathered traveler's journal. There is no name " +
+          'inside the cover, only page after page in a small, careful hand.',
       ) +
       '\n\n' +
       writing(
-        "'I have documented the " +
-          'locations of several hidden sanctuaries and the bloodline ' +
-          'connections to various noble houses throughout the region. The ' +
-          'Ravencrest family crest - a silver tree beneath twin moons - can ' +
-          'be found carved into stone markers at sites of power. These ' +
-          'markers serve as keys to accessing restricted archives in the ' +
-          "great libraries.'",
+        "'Third night in Greendale. The archivists doze at their desks. " +
+          "The birth rolls of Willowbrook were easy enough to reach.'",
       ) +
       '\n\n' +
       writing(
-        "'Should any of my descendants find " +
-          'themselves in need of answers about our heritage, this journal ' +
-          'contains references and genealogical charts that will grant them ' +
-          'access to the deepest historical records. The knowledge within ' +
-          "could prove vital when darkness stirs again.'",
+        "'Copied: the families who came to Willowbrook from elsewhere. " +
+          "Ten I can trace. One I cannot follow past the village gate.'",
       ) +
+      '\n\n' +
+      writing(
+        "'Called at the healer's hut. The amulet is not with her, she " +
+          "says. She lies well.'",
+      ) +
+      '\n\n' +
+      writing("'The innkeeper grows curious. I leave tonight.'") +
+      '\n\n' +
+      'Below the notes, a sketch, drawn twice over: a sun rising over three ' +
+      'linked rings. Beside it, a question mark, pressed so hard the nib ' +
+      'has torn the page.' +
       '\n\n' +
       event(
-        'The journal is filled with detailed maps, family trees, and ' +
-          'scholarly references that would serve as excellent credentials ' +
-          'when researching historical documents in libraries, archives, or ' +
-          'when speaking with historians and scholars. The information ' +
-          'clearly establishes your noble ancestry and legitimate claim to ' +
-          'accessing restricted historical records.',
+        "Whoever wrote this had sat with the castle's own records, and read " +
+          'them closely. The historians in the Great Hall would know where ' +
+          'these notes were copied from.',
       )
     )
   }

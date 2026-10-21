@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, findMarkupProblems } from '@/engine'
 import { Act2 } from '../Act2'
+import { Coins } from '../items/Coins'
+import { InnkeeperMarcus } from './InnkeeperMarcus'
 import {
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
   FLAG_MARCUS_TOLD_TRUTH,
@@ -11,6 +13,7 @@ import {
   expectMarkupWellFormed,
 } from '@/testing/gameHelpers'
 
+const LODGER_LINE = 'Its last lodger was a man in a grey cloak.'
 const ILL_WIND = 'An ill wind, the healer called it.'
 const REMEMBERED = '✦ Truth — this will be remembered'
 
@@ -127,5 +130,46 @@ describe('Innkeeper Marcus and the truth (truth moment)', () => {
 
     expect(answer).toContain("don't seem to understand")
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
+  })
+})
+
+describe('Innkeeper Marcus and the last lodger', () => {
+  /** A game with enough coins to rent the room. */
+  function richGame(coins: number): Game {
+    const game = new Game([new Act2()])
+    for (let i = 0; i < coins; i++) {
+      game.state.addItemToInventory(new Coins())
+    }
+    return game
+  }
+
+  it('mentions the lodger once, after the purchase text', () => {
+    const game = richGame(20)
+    const text = new InnkeeperMarcus().buyItem(game.state, 'room key')
+
+    expect(findMarkupProblems(text)).toEqual([])
+    expect(text).toContain(LODGER_LINE)
+    expectDialogueSpeaker(text, 'innkeeper marcus')
+    expect(text).toContain('It was the week the king went.')
+    expect(text.indexOf(LODGER_LINE)).toBeGreaterThan(
+      text.indexOf('remaining.'),
+    )
+    expect(text.split(LODGER_LINE)).toHaveLength(2)
+  })
+
+  it('stays silent when the purchase is refused', () => {
+    const poor = new InnkeeperMarcus().buyItem(richGame(0).state, 'room key')
+    expect(poor).not.toContain(LODGER_LINE)
+
+    const game = richGame(30)
+    const marcus = new InnkeeperMarcus()
+    marcus.buyItem(game.state, 'room key')
+    expect(marcus.buyItem(game.state, 'room key')).not.toContain(LODGER_LINE)
+  })
+
+  it('says nothing about the lodger in ordinary talk', () => {
+    expect(
+      new InnkeeperMarcus().talkTo(new Game([new Act2()]).state),
+    ).not.toContain('grey cloak')
   })
 })
