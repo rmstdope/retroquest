@@ -299,6 +299,15 @@ describe('Elena remarks on her father after the truth (rq-coj)', () => {
     expect(loaded.talkTo(fresh.state)).not.toContain(TRUTH_STAGE)
   })
 
+  it('an older save without the field plays the remark once', () => {
+    const { game } = cured()
+    game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    const { fresh, loaded } = reload(game)
+    Reflect.deleteProperty(loaded, 'truthRemarkSpoken')
+    expect(loaded.talkTo(fresh.state)).toContain(TRUTH_STAGE)
+    expect(loaded.talkTo(fresh.state)).not.toContain(TRUTH_STAGE)
+  })
+
   it('save after the remark does not replay it', () => {
     const { game, elena } = cured()
     game.state.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
