@@ -1,4 +1,4 @@
-import { Room, event, characterName } from '@/engine'
+import { Room, event, characterName, writing } from '@/engine'
 import type { GameState } from '@/engine'
 import { RareFlower } from '../items/RareFlower'
 import { ShinyPebble } from '../items/ShinyPebble'
@@ -10,7 +10,8 @@ import { GrowSpell } from '../spells/GrowSpell'
  *
  * `rest()` spawns the Deer and RareFlower once the `deer_can_be_observed` flag is
  * set; `light()` teaches the Grow spell and lifts the unnatural darkness, so
- * the dim, overgrown clearing turns sunlit.
+ * the dim, overgrown clearing turns sunlit. Both `light()` and the sunlit
+ * description show the refrain carved beneath the runes.
  */
 export class HiddenGlade extends Room {
   lightSpellCast = false
@@ -39,10 +40,19 @@ export class HiddenGlade extends Room {
     'Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the ' +
     'center, a mossy stone bears a faint, magical inscription.'
 
+  /** The refrain carved beneath the grow runes, word for word. */
+  private static readonly REFRAIN =
+    'Power follows purpose; purpose follows truth.'
+
+  /** The sentence in the lit glade that quotes the carved refrain. */
+  private static readonly CARVING_SENTENCE =
+    ' Beneath it, in a plainer hand, is carved: ' +
+    `\u201c${HiddenGlade.REFRAIN}\u201d`
+
   /** Build and return the dynamic base description for the glade. */
   getRoomTextDescription(gameState: GameState): string {
     let baseDescription = this.lightSpellCast
-      ? HiddenGlade.SUNLIT_DESCRIPTION
+      ? HiddenGlade.SUNLIT_DESCRIPTION + HiddenGlade.CARVING_SENTENCE
       : HiddenGlade.DIM_DESCRIPTION
     if (gameState.hasItem('Ancient Amulet')) {
       baseDescription +=
@@ -143,6 +153,10 @@ export class HiddenGlade extends Room {
         '\nAs you read the runes, you feel a connection to the ancient magic of nature. ' +
         'You have learned the [spell_name]grow[/spell_name] spell!'
     }
+    message +=
+      '\nCarved beneath the runes, in a plainer hand, are words you can read:' +
+      writing(HiddenGlade.REFRAIN) +
+      '\nYou read them aloud. They mean nothing to you, and yet they stay with you.'
     return message
   }
 }
