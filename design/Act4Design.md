@@ -201,7 +201,7 @@ Elior grows from a simple farmer to a hero who chooses mercy or justice knowing 
 
 ### Companion Arcs Conclusion
 
--   **Mira:** Confesses the last of what she knew in Act III; in the fortress she stands by Elior.
+-   **Mira:** Confesses the last of what she knew in Act III; she goes through the gate with Elior and holds the way out just inside it with Sir Cedric while he goes deeper alone.
     She was the Wardens' pupil.
 -   **Sir Cedric:** Recognises the Knight of Despair as the agent who framed him and chooses
     mercy or not; his honour is restored.

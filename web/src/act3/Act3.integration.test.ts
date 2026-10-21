@@ -577,6 +577,13 @@ describe('Act 3 golden path', () => {
     expect(fortressResult.toLowerCase()).toContain('fortress')
     expectCurrentRoom(state, "Entrance to Malakar's Fortress")
 
+    // Mira refuses to stay behind; the scene plays once, then a short line.
+    const gateTalk = executeCommands(game, ['talk to mira'])
+    expect(gateTalk).toContain('I am coming with you.')
+    expect(executeCommands(game, ['talk to mira'])).toContain(
+      'I am right behind you, Elior.',
+    )
+
     // --- Step 29: Entrance to Malakar's Fortress - Examine Gates ---
     examineResult = executeCommands(game, ['examine gates'])
     expect(examineResult.toLowerCase()).toContain('massive gates')

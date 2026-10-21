@@ -11,6 +11,7 @@ import {
   FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_MIRA_CONFESSED,
+  FLAG_ACT3_MIRA_GATE_TALKED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
@@ -192,20 +193,67 @@ describe('Mira', () => {
     expect(out).toContain('You arrive at')
   })
 
-  it('discusses fatigue at the Fortress Entrance', () => {
-    const game = new Game([new Act3()])
-    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
-    game.state.currentRoom = game.state.allRooms.FortressEntrance
-    const m = new Mira()
+  describe('at the Fortress Entrance', () => {
+    function atGate(): { game: Game; mira: Mira } {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+      game.state.currentRoom = game.state.allRooms.FortressEntrance
+      return { game, mira: new Mira() }
+    }
 
-    const out = m.talkTo(game.state)
+    it('plays the coming-along scene on the first talk', () => {
+      const { game, mira } = atGate()
 
-    expect(out).toContain('journey has taken its toll')
-    expect(out).toContain('drained much of my strength')
-    expect(out).toContain('must rest and recover')
-    expect(out).toContain('Sir Cedric press forward')
-    expect(out).toContain('three virtues you have proven')
-    expect(out).not.toContain('You arrive at')
+      const out = mira.talkTo(game.state)
+
+      expect(out).toContain('You speak with')
+      expect(out).toContain(
+        'Mira leans on the cold stone of the gate. Her hands are still ' +
+          'shaking from the last circle.',
+      )
+      expect(out).toContain('I know how I look, Elior.')
+      expect(out).toContain('I am coming with you.')
+      expect(out).not.toContain('I will await your return')
+      expect(out).not.toContain('must rest and recover')
+      expect(out).not.toContain('You arrive at')
+      expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_GATE_TALKED)).toBe(true)
+    })
+
+    it('gives only the short line on every later talk', () => {
+      const { game, mira } = atGate()
+      mira.talkTo(game.state)
+
+      const out = mira.talkTo(game.state)
+
+      expect(out).toContain('You speak with')
+      expect(out).toContain(
+        'I am right behind you, Elior. The gates will not open themselves.',
+      )
+      expect(out).not.toContain('I know how I look')
+      expect(out).not.toContain('Mira leans on the cold stone')
+    })
+
+    it('remembers the first talk across a save and load', () => {
+      const { game, mira } = atGate()
+      mira.talkTo(game.state)
+      const fresh = new Game([new Act3()])
+      fresh.loadSaveData(game.toSaveData())
+
+      const out = new Mira().talkTo(fresh.state)
+
+      expect(out).toContain('I am right behind you')
+      expect(out).not.toContain('I know how I look')
+    })
+
+    it('plays the full scene after loading a save made before the first talk', () => {
+      const { game } = atGate()
+      const fresh = new Game([new Act3()])
+      fresh.loadSaveData(game.toSaveData())
+
+      const out = new Mira().talkTo(fresh.state)
+
+      expect(out).toContain('I know how I look')
+    })
   })
 
   it('creates the elixir and removes the relics', () => {
