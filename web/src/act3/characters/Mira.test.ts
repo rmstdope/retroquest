@@ -446,6 +446,7 @@ describe('Mira confesses before the Warding Rite', () => {
       speech(
         "'Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon.'",
       ),
+      speech("'You noticed. I saw you notice.'"),
       speech(
         "'I knew your parents. Not as a healer knows a neighbour. I was their pupil — Aren's, Lysa's, and Malakar's. The three of them taught me everything I know of circles and wards.'",
       ),

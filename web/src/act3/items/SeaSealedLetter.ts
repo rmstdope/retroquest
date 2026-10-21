@@ -1,6 +1,10 @@
 import { Item, event, writing, type GameState } from '@/engine'
 import { AncientAmulet } from './AncientAmulet'
-import { FLAG_ACT3_SEA_SEALED_LETTER_READ } from '../Act3StoryFlags'
+import { Mira } from '../characters/Mira'
+import {
+  FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED,
+  FLAG_ACT3_SEA_SEALED_LETTER_READ,
+} from '../Act3StoryFlags'
 
 /** A scrap of vellum preserved by salt-crystal varnish. */
 export class SeaSealedLetter extends Item {
@@ -49,7 +53,8 @@ export class SeaSealedLetter extends Item {
 
   /**
    * Examine the letter and set the read flag. The first reading ends with the
-   * amulet's first glow.
+   * amulet's first glow. If Mira is in the room and has not yet let slip
+   * that she knew the Wardens, her slip follows the reading.
    */
   override examine(gameState: GameState): string {
     const first = !gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ)
@@ -58,7 +63,16 @@ export class SeaSealedLetter extends Item {
       event(`You examine the [item_name]${this.name}[/item_name].`) +
       '\n' +
       `${this.description}` +
-      (first ? AncientAmulet.glowInBag(gameState, 1) : '')
+      (first ? AncientAmulet.glowInBag(gameState, 1) : '') +
+      (this.miraSlipDue(gameState) ? '\n' + Mira.ruinsSlip(gameState) : '')
+    )
+  }
+
+  /** Whether Mira stands here and her Ruins slip has not played yet. */
+  private miraSlipDue(gameState: GameState): boolean {
+    return (
+      !gameState.getStoryFlag(FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED) &&
+      gameState.currentRoom.getCharacterByName('Mira') !== null
     )
   }
 

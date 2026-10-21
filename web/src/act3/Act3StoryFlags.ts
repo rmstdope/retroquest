@@ -101,3 +101,9 @@ export const FLAG_ACT3_SIGILS_MENDED = 'act3_sigils_mended'
 export const FLAG_ACT3_WARDEN_TRUTH_TOLD = 'act3_warden_truth_told'
 /** Set when the Phoenix has told who struck Malakar's name deeper (once). */
 export const FLAG_ACT3_PHOENIX_STORY_TOLD = 'act3_phoenix_story_told'
+
+// Mira's slips: she lets on, once per relic site, that she knew the Wardens
+export const FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED = 'act3_mira_ruins_slip_played'
+export const FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED = 'act3_mira_ember_slip_played'
+export const FLAG_ACT3_DRAGON_MESSAGE_GIVEN = 'act3_dragon_message_given'
+export const FLAG_ACT3_DRAGON_MESSAGE_RELAYED = 'act3_dragon_message_relayed'

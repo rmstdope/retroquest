@@ -212,7 +212,7 @@ describe('AncientDragon', () => {
     const blocks = parseTurn(dragon.talkTo(gameState))
 
     const speeches = blocks.filter((b) => b.kind === 'dialogue')
-    expect(speeches).toHaveLength(6)
+    expect(speeches).toHaveLength(7)
     expect(
       speeches.every(
         (b) => b.kind === 'dialogue' && b.speaker === 'ancient dragon',
@@ -341,5 +341,23 @@ describe('AncientDragon', () => {
     )
     expect(after).not.toContain('another voice')
     expectMarkupWellFormed(next)
+  })
+})
+
+describe('AncientDragon message for Mira', () => {
+  const MESSAGE =
+    'And the healer who waits at the cavern mouth. Little Mira. Tell her she has grown old.'
+
+  it('adds the message at the end of the first talk, before the rumble, once', () => {
+    const game = new Game([new Act3()])
+    const dragon = new AncientDragon()
+    const first = dragon.talkTo(game.state)
+    expect(first).toContain('As you turn to go, the great head lowers.')
+    expect(first).toContain(MESSAGE)
+    expect(first.indexOf('It says no more.')).toBeLessThan(
+      first.indexOf(MESSAGE),
+    )
+    expect(first.indexOf(MESSAGE)).toBeLessThan(first.indexOf('rumbles softly'))
+    expect(dragon.talkTo(game.state)).not.toContain(MESSAGE)
   })
 })

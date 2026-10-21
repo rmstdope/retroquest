@@ -20,6 +20,10 @@ import {
   FLAG_ACT3_MIRA_CONFESSED,
   FLAG_ACT3_MIRA_GATE_TALKED,
   FLAG_ACT3_RUINS_LEFT,
+  FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED,
+  FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED,
+  FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
+  FLAG_ACT3_DRAGON_MESSAGE_RELAYED,
 } from '../Act3StoryFlags'
 
 /**
@@ -40,7 +44,9 @@ export class Mira extends Character {
 
   /** Handle conversation with Mira, including quest start and teleportation. */
   override talkTo(gameState: GameState): string {
-    const eventMsg = event('You speak with ' + characterName(this.name) + '.')
+    const eventMsg =
+      event('You speak with ' + characterName(this.name) + '.') +
+      this.pendingSlips(gameState)
 
     // First conversation in Act III: start the main quest
     if (!gameState.getStoryFlag(FLAG_ACT3_MAIN_STARTED)) {
@@ -446,6 +452,70 @@ export class Mira extends Character {
   }
 
   /**
+   * The Sunken Ruins slip: Mira recognises Lysa's hand in the letter. Marks
+   * it played, so it is heard once, either as the letter is read with her
+   * in the room or, failing that, at her next talk.
+   */
+  static ruinsSlip(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED, true)
+    return (
+      speech("'Lysa's hand. She always crossed her sevens.'") +
+      '\n' +
+      event(
+        characterName('Mira') +
+          ' turns to the sea before you can ask what she means.',
+      )
+    )
+  }
+
+  /**
+   * The slips that open a talk with Mira, each marked played as it is told:
+   * the Ruins slip if the letter was read without her, the Ember slip on
+   * the first talk at the Switchbacks with the feather in hand, and the
+   * relay of the dragon's message at the Cavern Mouth. Returns the lines
+   * with a leading newline, or an empty string.
+   */
+  private pendingSlips(gameState: GameState): string {
+    const lines: string[] = []
+    const room = gameState.currentRoom.name
+    if (
+      gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ) &&
+      !gameState.getStoryFlag(FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED)
+    ) {
+      lines.push(Mira.ruinsSlip(gameState))
+    }
+    if (
+      room === 'Lower Switchbacks' &&
+      gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED) &&
+      !gameState.getStoryFlag(FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED)
+    ) {
+      gameState.setStoryFlag(FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED, true)
+      lines.push(
+        event('She looks at the feather a long time.'),
+        speech("'…even when the world burns.'"),
+        event(
+          'She says it softly, as if finishing a sentence someone else began.',
+        ),
+      )
+    }
+    if (
+      room === 'Cavern Mouth' &&
+      gameState.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN) &&
+      !gameState.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_RELAYED)
+    ) {
+      gameState.setStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_RELAYED, true)
+      lines.push(
+        event(
+          "You give her the dragon's words. " +
+            characterName('Mira') +
+            ' does not answer.',
+        ),
+      )
+    }
+    return lines.map((line) => '\n' + line).join('')
+  }
+
+  /**
    * Plays Mira's confession (a fixed conversation), records it and gives her
    * the description she has from now on.
    */
@@ -464,6 +534,7 @@ export class Mira extends Character {
         "'Before I join them, Elior, there is something you must hear from " +
           "me, and not from a stone or a dragon.'",
       ),
+      speech("'You noticed. I saw you notice.'"),
       speech(
         "'I knew your parents. Not as a healer knows a neighbour. I was " +
           "their pupil — Aren's, Lysa's, and Malakar's. The three of them " +
