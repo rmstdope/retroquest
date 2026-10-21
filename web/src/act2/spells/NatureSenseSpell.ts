@@ -1,5 +1,5 @@
 import { Spell, type GameState, event } from '@/engine'
-import { FLAG_FOUND_RAVINE } from '../Act2StoryFlags'
+import { FLAG_FOUND_RAVINE, FLAG_RAVINE_STORY_PENDING } from '../Act2StoryFlags'
 import { Ravine } from '../items/Ravine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
 import { WaterNymphs } from '../characters/WaterNymphs'
@@ -28,6 +28,10 @@ export class NatureSenseSpell extends Spell {
     })
   }
 
+  /**
+   * Cast in the current room: nymphs in the Whispering Glade, the ravine at the
+   * Forest Entrance (found once, then a dim recast line), flavour text elsewhere.
+   */
   override castSpell(gameState: GameState): string {
     // Special handling for Whispering Glade
     if (gameState.currentRoom instanceof WhisperingGlade) {
@@ -62,6 +66,7 @@ export class NatureSenseSpell extends Spell {
         )
       }
       gameState.setStoryFlag(FLAG_FOUND_RAVINE, true)
+      gameState.setStoryFlag(FLAG_RAVINE_STORY_PENDING, true)
       gameState.currentRoom.items.push(new Ravine())
       return (
         `[success]You cast [spell_name]${name}[/spell_name] and feel your ` +

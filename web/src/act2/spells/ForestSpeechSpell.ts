@@ -1,8 +1,5 @@
 import { Spell, type Character, type GameState, characterName } from '@/engine'
-import {
-  FLAG_FOUND_RAVINE,
-  FLAG_RAVINE_CREATURES_TOLD,
-} from '../Act2StoryFlags'
+import { FLAG_FOUND_RAVINE, FLAG_RAVINE_STORY_PENDING } from '../Act2StoryFlags'
 import { Ravine } from '../items/Ravine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
 import { AncientTreeSpirit } from '../characters/AncientTreeSpirit'
@@ -39,7 +36,6 @@ export class ForestSpeechSpell extends Spell {
       !gameState.getStoryFlag(FLAG_FOUND_RAVINE)
     ) {
       gameState.setStoryFlag(FLAG_FOUND_RAVINE, true)
-      gameState.setStoryFlag(FLAG_RAVINE_CREATURES_TOLD, true)
       // Add the Ravine item to the Forest Entrance room
       const ravine = new Ravine()
       currentRoom.items.push(ravine)
@@ -56,9 +52,9 @@ export class ForestSpeechSpell extends Spell {
     // Nature sense found the ravine first: the creatures tell their story once
     if (
       currentRoom instanceof ForestEntrance &&
-      !gameState.getStoryFlag(FLAG_RAVINE_CREATURES_TOLD)
+      gameState.getStoryFlag(FLAG_RAVINE_STORY_PENDING)
     ) {
-      gameState.setStoryFlag(FLAG_RAVINE_CREATURES_TOLD, true)
+      gameState.setStoryFlag(FLAG_RAVINE_STORY_PENDING, false)
       return (
         `[success]You cast [spell_name]${name}[/spell_name] and the woodland ` +
         'creatures gather around you excitedly. A family of squirrels chatters ' +
