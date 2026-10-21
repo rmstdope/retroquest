@@ -100,6 +100,12 @@ export class Shopkeeper extends Character {
         speech(
           'She was last seen near the old well. If you find her, ' +
             "there's a reward in it for you.",
+        ) +
+        '\n' +
+        speech(
+          'And the caravans have stopped coming, now the king is ill and the ' +
+            "roads are what they are. Malakar's luck, my father would have " +
+            'called it.',
         )
       )
     }

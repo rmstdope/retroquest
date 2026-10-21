@@ -293,6 +293,10 @@ const DIAGNOSIS_MIDDLE =
   'unbound. Not broken: unbound, with the old kind of unbinding,'
 const DIAGNOSIS_END =
   'the kind the scholars wrote down before any of us were born.'
+const DIAGNOSIS_LETTER =
+  'I wrote to the healer at Willowbrook about that mark, weeks ago. Mira. ' +
+  'The best hand with a curse this side of the hills, they say. She never ' +
+  'came, and she never answered.'
 const REMINDER =
   'Elena still? Strengthen her, wash her in untouched water, then unbind ' +
   'it. In that order, or not at all.'
@@ -320,8 +324,21 @@ describe("Lyria explains how Elena's curse is lifted (rq-nun)", () => {
     expect(answer).toContain(DIAGNOSIS_START)
     expect(answer).toContain(DIAGNOSIS_MIDDLE)
     expect(answer).toContain(DIAGNOSIS_END)
-    expect(answer.indexOf(DIAGNOSIS_END)).toBeLessThan(answer.indexOf(USUAL))
+    expect(answer).toContain(DIAGNOSIS_LETTER)
+    expect(answer.indexOf(DIAGNOSIS_END)).toBeLessThan(
+      answer.indexOf(DIAGNOSIS_LETTER),
+    )
+    expect(answer.indexOf(DIAGNOSIS_LETTER)).toBeLessThan(answer.indexOf(USUAL))
     expectLyriaSpeaks(answer)
+  })
+
+  it('names Mira and her unanswered letter only in the diagnosis, never in the reminder', () => {
+    const game = createGame()
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    new MasterHealerLyria().talkTo(game.state)
+    const answer = new MasterHealerLyria().talkTo(game.state)
+    expect(answer).toContain(REMINDER)
+    expect(answer).not.toContain('Mira')
   })
 
   it("gives the diagnosis after the first heal too, without Elena's first talk", () => {

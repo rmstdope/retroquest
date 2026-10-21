@@ -17,8 +17,9 @@ import { Well } from '../items/Well'
 
 /**
  * Tilda, the baker's wife: a friendly Willowbrook local who cycles through
- * village rumors, asks Elior about the well once it runs clean, and knows he
- * is leaving when she sees Mira's amulet. She also answers to `villager`,
+ * village rumors (one of them uses Malakar's name as the village does, a
+ * byword for bad luck), asks Elior about the well once it runs clean, and
+ * knows he is leaving when she sees Mira's amulet. She also answers to `villager`,
  * the name she went by before she had one.
  */
 export class Villager extends Character {
@@ -30,7 +31,8 @@ export class Villager extends Character {
       'an old amulet, from a family that left. Nobody would tell him a thing, ' +
       'and he took the road to the mill.',
     "The animals are restless. My neighbor's dog howled at nothing for hours, and the " +
-      'chickens refuse to leave their coop after dusk.',
+      'chickens refuse to leave their coop after dusk. ' +
+      "Malakar's weather, my mother would have called it, and knocked on wood.",
     'Strange footprints appeared by the riverbank this morning—too large for any ' +
       'villager, and they led straight into the woods.',
     `${characterName('Mira')} says the air feels heavy with magic, and the chapel bell rang by itself at ` +

@@ -108,6 +108,12 @@ export class PropheticVision extends Spell {
           'Then Malakar is no tale, and it is you he is hunting.',
         ) +
         '\n\n' +
+        'The missing page in the birth roll. The stranger asking after a ' +
+        'family that left. You hear yourself say it before you have ' +
+        'thought it: [italic]“He took them. That is why they vanished, and ' +
+        'that is why he wants me.”[/italic] ' +
+        `${characterName('Sir Cedric')} does not correct you. He does not ` +
+        'know either.\n\n' +
         `And yet the voice did not sound like a hunter's. ` +
         `${characterName('Sir Cedric')} waits, watching you, as if he can ` +
         'see you have something to say.'

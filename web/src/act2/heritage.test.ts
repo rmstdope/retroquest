@@ -26,6 +26,17 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
     expect(intro).not.toMatch(CHOSEN_TALK)
   })
 
+  it('tells on the opening page that Malakar is only a Willowbrook byword to Elior', () => {
+    const intro = new Act2().getActIntro()
+
+    expect(intro).toContain(
+      'Malakar, to you, is a word from Willowbrook: a name your neighbours ' +
+        'say over bad weather and bad luck, and knock on wood after. A tale ' +
+        'to frighten children, and nothing more.',
+    )
+    expect(intro).not.toContain('Cedric')
+  })
+
   it('ends the Hidden Library look on the mark Elior carries', () => {
     const description = new HiddenLibrary().description
 
