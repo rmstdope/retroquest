@@ -144,16 +144,24 @@ export class Wound extends Item {
     ].join('\n')
   }
 
-  /** Sacrifice: every spell Elior knows closes the wound; only grow remains. */
+  /** Sacrifice: Malakar tries once more to stop it, then every spell Elior
+   * knows closes the wound; only grow remains. */
   private sacrificeEnding(gameState: GameState): string {
     this.finish(gameState, 'sacrifice')
     gameState.knownSpells = [new Grow()]
     return [
+      event(
+        'Malakar half rises, reaching for the amulet, and stops his own hand.',
+      ),
+      dialogue(
+        'Malakar',
+        'Then keep something. One thing. Anything. Do not let me take it all.',
+      ),
       'You press the open amulet to the wound and let go. The light, the ' +
         'blessing, the truth sight, every spell you carried runs out of ' +
         'your hands into the tear, and the tear drinks it and closes. When ' +
-        'it is done, one small spell is still in you, the first and the ' +
-        'smallest: grow.',
+        'it is done, one small spell is still in you, the smallest of ' +
+        'them all: grow.',
       event('Your magic is gone. Only grow remains.'),
       dialogue(
         'King Alden',

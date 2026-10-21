@@ -16,7 +16,7 @@ const WALK_HOME =
 
 /** The kneel after Redemption or Justice, when grow comes back. */
 const KNEEL_REMEMBER =
-  'You kneel at the edge of the field. Your hands remember the first spell ' +
+  'You kneel at the edge of the field. Your hands remember the smallest spell ' +
   'you ever learned.'
 
 /** The kneel after Sacrifice, when grow was kept. */

@@ -259,9 +259,26 @@ describe('Sacrifice', () => {
     executeCommands(game, ['use lifelight elixir on prison'])
     const said = executeCommands(game, ['say sacrifice to malakar'])
     expect(said).toContain('“Take my magic,” you say.')
-    expect(said).toContain('Everything you have learned—')
+    expect(said).not.toContain('Everything you have learned')
+    expect(said).toContain(
+      'No. Your parents poured themselves into that wound once already. It does not get to have you too.',
+    )
+    expect(said).toContain('The open amulet grows heavy in your hand, ready.')
+    expect(executeCommands(game, ['say sacrifice to malakar'])).not.toContain(
+      'Your parents poured themselves',
+    )
     expect(spellNames(game)).toContain('bless')
     const text = executeCommands(game, ['use ancient amulet on wound'])
+    const rise =
+      'Malakar half rises, reaching for the amulet, and stops his own hand.'
+    const keep =
+      'Then keep something. One thing. Anything. Do not let me take it all.'
+    const press = 'You press the open amulet to the wound and let go.'
+    expect(text.indexOf(rise)).toBeGreaterThanOrEqual(0)
+    expect(text.indexOf(keep)).toBeGreaterThan(text.indexOf(rise))
+    expect(text.indexOf(press)).toBeGreaterThan(text.indexOf(keep))
+    expect(text).toContain('the smallest of them all: grow.')
+    expect(text).not.toContain('the first and the smallest')
     expect(text).toContain('Your magic is gone. Only grow remains.')
     expect(text).toContain('He will answer to me, and he will live to do it.')
     expect(text).toContain('You gave it all away, and kept the smallest thing.')
