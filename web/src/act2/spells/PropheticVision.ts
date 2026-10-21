@@ -1,11 +1,12 @@
-import { Spell, type GameState, event } from '@/engine'
+import { Spell, type GameState, characterName, event } from '@/engine'
 import { FLAG_GATHERING_STORM_COMPLETED } from '../Act2StoryFlags'
 import { SirCedric } from '../characters/SirCedric'
 
 /**
  * Ultimate divination spell concluding Act II foresight quest progression.
  * The first cast with Sir Cedric present completes the Gathering Storm quest
- * and delivers an extended prophecy; later casts return a shorter variant.
+ * and shows the vision of the village, the robed figure and the dream voice;
+ * later casts return a shorter variant.
  */
 export class PropheticVision extends Spell {
   constructor() {
@@ -52,22 +53,21 @@ export class PropheticVision extends Spell {
       gameState.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
       return event(
         'You close your eyes and reach out with your newly granted sight ' +
-          'beyond sight. With Sir Cedric standing beside you, you share the ' +
-          'visions as they flood your mind like fragments of a shattered ' +
-          'mirror, each reflecting a possible future:\n\nYou see shadows ' +
-          'gathering in the north, darker than any natural darkness. Ancient ' +
-          "evils stir in forgotten places, and you sense that Malakar's " +
-          'interest in Willowbrook was only the beginning of a much larger ' +
-          'design. The scattered threads of fate show you glimpses of trials ' +
-          'yet to come - allies who will stand with you, enemies who will ' +
-          'test your resolve, and choices that will shape the very fabric of ' +
-          'the world.\n\nThe vision fades, but the knowledge remains. Sir ' +
-          "Cedric's expression grows grave as he witnesses the prophetic " +
-          'revelations. You understand now that your journey has only just ' +
-          'begun, and the gathering storm spoken of by Sir Cedric is far ' +
-          'greater than anyone imagined. Together, armed with this ' +
-          'foresight, you are better prepared for whatever challenges lie ' +
-          'ahead.',
+          'beyond sight. With ' +
+          characterName('Sir Cedric') +
+          ' standing beside you, you share the vision as it rises before ' +
+          'you:\n\n' +
+          'A village at dusk, its roofs low and familiar. Beyond it, a field ' +
+          'withered to grey stalks, the way yours was the morning all this ' +
+          "began. And at the field's edge, a robed figure, its face lost in " +
+          'shadow, reaching one hand toward you as if across a great ' +
+          'distance.\n\n' +
+          'Then the voice from your dream, the one that called your name on ' +
+          'the night of the storm: [italic]“Elior… how you have grown. Do ' +
+          'not be afraid of me.”[/italic] It is closer than it was. You do ' +
+          'not know whose it is, only that you have heard it before, long ' +
+          'before the dream.\n\n' +
+          "The vision fades. Sir Cedric's expression has grown grave.",
       )
     }
 
