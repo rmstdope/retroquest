@@ -178,9 +178,20 @@ export class SirCedric extends Character {
   /**
    * Start the Knight's Test bout when Elior uses the training sword here: the
    * first time with the recognition of the blade, later (after leaving
-   * mid-bout) with a restart from the first attack.
+   * mid-bout) with a restart from the first attack. Using the sword again
+   * mid-bout only repeats the current attack.
    */
   beginBout(): string {
+    if (this.boutRunning()) {
+      const call = BOUT_CALLS[this.boutCall - 1]
+      return (
+        call.attackAction +
+        '\n' +
+        dialogue('Sir Cedric', call.cry) +
+        '\n' +
+        BOUT_REMINDER
+      )
+    }
     const first = !this.boutStarted
     this.boutStarted = true
     this.boutCall = 1

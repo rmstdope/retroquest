@@ -163,6 +163,7 @@ describe("The Knight's Test bout", () => {
     game.state.knownSpells.push(new MendSpell())
     const before = run(game, ['cast mend on sir cedric'])
     expect(before).not.toContain('A mage.')
+    expect(before).toContain('the spell fizzles')
     expect(game.state.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)).toBe(false)
 
     begin(game)
@@ -199,6 +200,18 @@ describe("The Knight's Test bout", () => {
     expect(out.trimEnd().endsWith(REMINDER)).toBe(true)
     expect(out).not.toContain('That notch by the guard')
     expect(cedric(game).boutCall).toBe(1)
+  })
+
+  it('repeats the current attack when the sword is used again mid-bout', () => {
+    const game = courtyardGame()
+    begin(game)
+    run(game, ['say guard to sir cedric'])
+    const out = run(game, ['use training sword'])
+    expect(out).toContain('He drives straight at your middle.')
+    expect(out).toContain("'Lunge!'")
+    expect(out).not.toContain('From the top')
+    expect(out.trimEnd().endsWith(REMINDER)).toBe(true)
+    expect(cedric(game).boutCall).toBe(2)
   })
 
   it('keeps the call across a save made mid-bout, and restarts after leaving', () => {
