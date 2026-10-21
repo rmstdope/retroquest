@@ -7,7 +7,6 @@ export const ACT2_GOLDEN_PATH: string[] = [
   'take pass',
   'n',
   'give pass to gate captain',
-  'talk to gate captain',
   'search',
   'take map',
   'n',

@@ -7,7 +7,7 @@ import {
 } from '@/engine'
 import { EntryPass } from '../items/EntryPass'
 
-/** Entry authority who validates `EntryPass` and may leave the gate area. */
+/** Entry authority who validates `EntryPass` and leaves the gate area once it is shown. */
 export class GateCaptain extends Character {
   entryPassGiven = false
 
@@ -21,7 +21,10 @@ export class GateCaptain extends Character {
     })
   }
 
-  /** Ask for entry papers, or bid farewell and leave once the pass was shown. */
+  /**
+   * Ask for entry papers. Once the pass was shown he has normally left; only
+   * an older save can still have him here, and then he bids farewell and goes.
+   */
   override talkTo(gameState: GameState): string {
     if (!this.entryPassGiven) {
       return (
@@ -34,11 +37,7 @@ export class GateCaptain extends Character {
         )
       )
     } else {
-      const characters = gameState.currentRoom.characters
-      const index = characters.indexOf(this)
-      if (index !== -1) {
-        // Remove self from the current room
-        characters.splice(index, 1)
+      if (this.leaveRoom(gameState)) {
         return (
           'The ' +
           characterName('Gate Captain') +
@@ -61,8 +60,22 @@ export class GateCaptain extends Character {
     }
   }
 
-  /** Accept the entry pass and politely decline any other item. */
-  override giveItem(_gameState: GameState, item: Item): string {
+  /** Walk out of the current room; false when he was not in it. */
+  private leaveRoom(gameState: GameState): boolean {
+    const characters = gameState.currentRoom.characters
+    const index = characters.indexOf(this)
+    if (index === -1) {
+      return false
+    }
+    characters.splice(index, 1)
+    return true
+  }
+
+  /**
+   * Accept the entry pass, point the player to the information post and walk
+   * away in the same turn; politely decline any other item.
+   */
+  override giveItem(gameState: GameState, item: Item): string {
     if (item instanceof EntryPass) {
       if (this.entryPassGiven) {
         const name = this.name
@@ -74,6 +87,7 @@ export class GateCaptain extends Character {
       }
 
       this.entryPassGiven = true
+      this.leaveRoom(gameState)
 
       return (
         'The ' +
@@ -85,7 +99,15 @@ export class GateCaptain extends Character {
           "'This is legitimate documentation indeed. You are welcome in " +
             "Greendale, honored visitor. Please, proceed with our blessing.'",
         ) +
-        ' He steps aside and gestures toward the city.'
+        ' ' +
+        speech(
+          "'You'll need a map to navigate the city - the streets can be " +
+            'quite maze-like for newcomers. Travelers leave things at the ' +
+            'information post there; look around and you may find what you ' +
+            "need.'",
+        ) +
+        ' With that, he salutes smartly and walks back to his patrol ' +
+        'duties, leaving you free to explore the gate area.'
       )
     }
 

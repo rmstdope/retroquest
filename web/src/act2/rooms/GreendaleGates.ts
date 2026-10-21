@@ -7,8 +7,9 @@ import { CityMap } from '../items/CityMap'
  * Greendale Gates room: formal entry gate with etiquette-based search unlock.
  *
  * `getExits()` withholds `north` until the gate captain grants entry; `search()`
- * is blocked while the captain remains and the first permissive search spawns a
- * CityMap (idempotent via `cityMapFound`).
+ * is blocked until the captain has accepted the entry pass (he leaves in that
+ * same turn; an older save may still have him present) and the first
+ * permissive search spawns a CityMap (idempotent via `cityMapFound`).
  */
 export class GreendaleGates extends Room {
   gateCaptain: GateCaptain
@@ -43,11 +44,11 @@ export class GreendaleGates extends Room {
 
   /** Search the area; the map appears only after protocol and the first search. */
   override search(_gameState: GameState): string {
-    if (this.characters.includes(this.gateCaptain)) {
+    if (!this.gateCaptain.entryPassGiven) {
       return (
         'The Gate Captain stands vigilant, watching all who approach. It would be ' +
-        'improper to search while he observes you so closely. Perhaps speak with him ' +
-        'first.'
+        'improper to search while he observes you so closely. Perhaps he would relax if you ' +
+        'showed him proper papers.'
       )
     }
     if (this.cityMapFound) {

@@ -91,20 +91,9 @@ describe('Act 2 golden path', () => {
     expect(exits.north, 'North exit should lead to Main Square').toBe(
       'MainSquare',
     )
-    // Verify that the room cannot be searched yet (captain still present)
-    expectCharacterInRoom(room(), 'Gate Captain')
-    let result = executeCommands(game, ['search'])
-    // The search should fail because captain is still watching
-    expect(
-      result.toLowerCase(),
-      'Search should be blocked while captain is present',
-    ).toContain('improper to search')
-    expectItemInRoom(room(), 'City Map', false)
-    // Talk to Gate Captain for city information - this causes him to walk away
-    executeCommands(game, ['talk to gate captain'])
-    // Verify that the Gate Captain has now walked away and is no longer in the room
+    // He leaves in the same turn, so the room can be searched at once
     expectCharacterInRoom(room(), 'Gate Captain', false)
-    // Search the room to find City Map (should now be possible after captain walked away)
+    // Search the room to find City Map (possible since the captain walked away)
     expectItemInRoom(room(), 'City Map', false)
     executeCommands(game, ['search'])
     expectItemInRoom(room(), 'City Map', true)
@@ -120,7 +109,7 @@ describe('Act 2 golden path', () => {
 
     // Test navigation restriction before using city map
     // Should not be able to go north or east without map
-    result = executeCommands(game, ['go north'])
+    let result = executeCommands(game, ['go north'])
     expectCurrentRoom(state, 'Main Square') // Should still be in Main Square
     expect(
       result.toLowerCase(),
