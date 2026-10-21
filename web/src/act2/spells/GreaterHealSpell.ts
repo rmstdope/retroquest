@@ -1,5 +1,12 @@
-import { Spell, type Character, type GameState, characterName } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  characterName,
+} from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
+import { Caravan } from '../items/Caravan'
 
 /**
  * Advanced restorative spell used in Elena's staged cure and high-impact
@@ -24,6 +31,14 @@ export class GreaterHealSpell extends Spell {
       'healing energy. The spell radiates outward, ready to cure serious ' +
       'ailments, but finds no one in immediate need of healing nearby.[/success]'
     )
+  }
+
+  /** The rescued merchants answer the spell; any other item fizzles as usual. */
+  override castOnItem(gameState: GameState, targetItem: Item): string {
+    if (targetItem instanceof Caravan) {
+      return targetItem.receiveGreaterHeal(gameState)
+    }
+    return super.castOnItem(gameState, targetItem)
   }
 
   override castOnCharacter(

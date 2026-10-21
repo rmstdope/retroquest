@@ -1,4 +1,5 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, dialogue } from '@/engine'
+import { FLAG_MERCHANTS_HEALED } from '../Act2StoryFlags'
 
 /** A large rescued merchant caravan object; non-carriable but interactive. */
 export class Caravan extends Item {
@@ -14,6 +15,39 @@ export class Caravan extends Item {
         'most salvageable.',
       canBeCarried: false, // A caravan is too large to carry
     })
+  }
+
+  /** Also answers to "merchants", the word the greater heal is cast on. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'merchants'
+  }
+
+  /**
+   * Greater heal on the rescued merchants: an optional moment. The first cast
+   * heals them and an unnamed spice trader speaks for the group; later casts
+   * get a short dim refusal. No virtue is recorded.
+   */
+  receiveGreaterHeal(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_MERCHANTS_HEALED)) {
+      return (
+        '[dim]The merchants are already on the mend. A spice trader waves ' +
+        'you off: "Save it for someone who needs it."[/dim]'
+      )
+    }
+    gameState.setStoryFlag(FLAG_MERCHANTS_HEALED, true)
+    return (
+      '[success]You cast [spell_name]greater heal[/spell_name] over the ' +
+      'merchants. Golden light settles on split lips and wrenched ankles, ' +
+      'and one by one they stop wincing.[/success]' +
+      '\n\n' +
+      'A spice trader flexes a hand she has been cradling since the ravine.' +
+      '\n\n' +
+      dialogue(
+        'Spice trader',
+        '"Three days down there and I\'d stopped feeling these fingers. ' +
+          'Tell Thorne he owes you twice now."',
+      )
+    )
   }
 
   /** Describe the state of the caravan and the grateful merchants. */

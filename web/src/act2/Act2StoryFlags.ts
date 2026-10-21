@@ -68,5 +68,9 @@ export const FLAG_MARCUS_TOLD_TRUTH = 'marcus_told_truth'
 export const FLAG_BRENN_FORGIVEN = 'brenn_forgiven'
 /** Set once greater heal has been cast on Elena (the first step of her cure). */
 export const FLAG_ELENA_HEALED = 'elena_healed'
+/** Set once greater heal has been cast on the rescued merchants. */
+export const FLAG_MERCHANTS_HEALED = 'merchants_healed'
+/** Set once Thorne has said his line about the healed merchants. */
+export const FLAG_THORNE_HEALING_TOLD = 'thorne_healing_told'
 /** Set once Lyria has given her three-step diagnosis of Elena's curse. */
 export const FLAG_LYRIA_DIAGNOSED = 'lyria_diagnosed'

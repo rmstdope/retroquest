@@ -236,11 +236,16 @@ export class BarmaidElena extends Character {
     }
 
     if (!this.elenaPurified) {
-      return (
-        'Elena needs to be purified with crystal-clear water before the ' +
-        'curse can be dispelled. The dark magic is still too strong to ' +
-        'break with dispelling alone.'
-      )
+      const dispelName = new DispelSpell().name
+      const cast = `You cast [spell_name]${dispelName}[/spell_name] on Elena. `
+      return this.elenaInitialHealing
+        ? `[failure]${cast}The counter-magic breaks against the silver mask ` +
+            'on her wrist like water on glass, and the mask smiles wider. ' +
+            'Whatever it wears over itself must be washed away before it can ' +
+            'be broken.[/failure]'
+        : `[failure]${cast}The counter-magic finds nothing to take hold of: ` +
+            'whatever holds her is buried too deep to show itself. ' +
+            'Something must draw it to the surface first.[/failure]'
     }
 
     this.markShown = false
