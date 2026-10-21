@@ -13,6 +13,11 @@ export class DarkPool extends Item {
     })
   }
 
+  /** The room text and the chant speak of "pools", so both spellings name this item. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'pools'
+  }
+
   /** Examine the pool: a faint tremor before it is stilled, perfect stillness after. */
   override examine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_POOLS_STILLED)) {

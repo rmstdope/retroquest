@@ -1,5 +1,7 @@
 import { Act, type GameState, type Room } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
+import { DarkPool } from './items/DarkPool'
+import { StillwaterPhial } from './items/StillwaterPhial'
 import { MirasHut } from './rooms/MirasHut'
 import { TidalCauseway } from './rooms/TidalCauseway'
 import { ShorelineMarkers } from './rooms/ShorelineMarkers'
@@ -38,6 +40,8 @@ import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import {
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
   FLAG_ACT3_MINERS_RESCUE_COMPLETED,
+  FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
+  FLAG_ACT3_POOLS_STILLED,
 } from './Act3StoryFlags'
 import { Tobin } from './characters/Tobin'
 import { CEDRIC_NAME } from './CedricLines'
@@ -167,6 +171,32 @@ export class Act3 extends Act {
     for (const room of Object.values(gameState.allRooms)) {
       const cedric = room.getCharacterByName(CEDRIC_NAME)
       if (cedric) cedric.name = CEDRIC_NAME
+    }
+    this.patchStillnessVestibule(gameState)
+  }
+
+  /**
+   * Saves from before the Stillwater Phial stilled the pools keep the old
+   * phial text and have no pool; a save past the oath counts as stilled.
+   */
+  private patchStillnessVestibule(gameState: GameState): void {
+    const phialText = new StillwaterPhial().description
+    const items = [
+      ...gameState.inventory,
+      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
+    ]
+    for (const item of items) {
+      if (item instanceof StillwaterPhial) item.description = phialText
+    }
+    const vestibule = gameState.allRooms.StillnessVestibule
+    if (
+      vestibule &&
+      !vestibule.items.some((item) => item instanceof DarkPool)
+    ) {
+      vestibule.addItem(new DarkPool())
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)) {
+      gameState.setStoryFlag(FLAG_ACT3_POOLS_STILLED, true)
     }
   }
 

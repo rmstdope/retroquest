@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from './Act3'
+import { DarkPool } from './items/DarkPool'
+import { StillwaterPhial } from './items/StillwaterPhial'
 import { Miners } from './characters/Miners'
 import { QuietCharm } from './items/QuietCharm'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
@@ -12,6 +14,7 @@ import {
   FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
   FLAG_ACT3_MINERS_RESCUE_COMPLETED,
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
+  FLAG_ACT3_POOLS_STILLED,
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_DRAGON_OATH_SPOKEN,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
@@ -955,6 +958,30 @@ describe('Giving the Quiet Charm to Tobin', () => {
     )
     expect(executeCommands(fresh, ['talk to miners'])).not.toContain(
       'Thank you, Elior.',
+    )
+  })
+})
+
+describe('Act 3 saves from before the Stillwater Phial stilled the pools', () => {
+  it('gives the old phial its reflection, adds the pool and counts a finished oath as stilled', () => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom = game.state.allRooms.StillnessVestibule
+    const vestibule = game.state.allRooms.StillnessVestibule
+    vestibule.items = vestibule.items.filter(
+      (item) => !(item instanceof DarkPool),
+    )
+    const phial = vestibule.items.find((i) => i instanceof StillwaterPhial)
+    if (!phial) throw new Error('no phial')
+    phial.description = 'An old phial text.'
+    game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
+
+    new Act3().afterLoad(game.state)
+
+    expect(phial.description).toContain('a young woman at a long table')
+    expect(vestibule.items.some((i) => i instanceof DarkPool)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_ACT3_POOLS_STILLED)).toBe(true)
+    expect(executeCommands(game, ['examine pool'])).toContain(
+      'Not a tremor crosses it.',
     )
   })
 })

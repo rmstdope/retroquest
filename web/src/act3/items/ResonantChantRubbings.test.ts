@@ -69,4 +69,30 @@ describe('ResonantChantRubbings', () => {
 
     expect(result).toContain('has no effect')
   })
+
+  it('breaks apart on ripples when blessed stones stand over unstilled pools', () => {
+    const rubbings = new ResonantChantRubbings()
+    const echoStones = new EchoStones()
+    const room = new StillnessVestibule()
+    const gs = createState(room)
+    gs.addItemToInventory(rubbings)
+    echoStones.receiveSpell(gs, 'bless')
+
+    const result = rubbings.useWith(gs, echoStones)
+
+    expect(result).toContain('You recite the resonant chant at each stone.')
+    expect(result).toContain(
+      'The words leave the stones and skim out across the pools. Water that ' +
+        'looked frozen shivers under them, and the chant breaks apart on a ' +
+        'thousand tiny ripples. It will not carry over water that is not ' +
+        'truly still.',
+    )
+    expect(result).toContain('[failure]')
+    expect(gs.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)).toBe(false)
+    expect(gs.inventory).toContain(rubbings)
+    expect(echoStones.areBlessed()).toBe(true)
+    expect(room.characters.some((c) => c instanceof WanderingPhantoms)).toBe(
+      true,
+    )
+  })
 })

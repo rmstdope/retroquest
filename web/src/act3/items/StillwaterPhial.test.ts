@@ -44,7 +44,13 @@ describe('StillwaterPhial', () => {
       const answer = executeCommands(game, [
         `use stillwater phial with ${target}`,
       ])
-      expect(answer).toContain('let a single drop fall into the nearest pool')
+      expect(answer).toContain(
+        'You unstopper the phial and let a single drop fall into the ' +
+          'nearest pool. The ripple does not spread; it sinks, and the ' +
+          'stillness goes down after it until the black water lies flat as ' +
+          'glass, holding the stones and the dark above in perfect ' +
+          'reflection.',
+      )
       expect(answer).toContain('The pools are mirror-still.')
       expect(game.state.getStoryFlag(FLAG_ACT3_POOLS_STILLED)).toBe(true)
       expectItemInInventory(game.state, 'stillwater phial', true)

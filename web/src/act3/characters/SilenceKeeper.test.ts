@@ -68,15 +68,15 @@ describe('Silence Keeper and the pools', () => {
   })
 
   it('says the water lies true once the pools are stilled, and after the oath', () => {
-    const true_ = 'The water lies true now; it will hold your words.'
+    const trueWater = 'The water lies true now; it will hold your words.'
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_POOLS_STILLED, true)
     const keeper = new SilenceKeeper()
     const first = keeper.talkTo(game.state)
-    expect(first).toContain(true_)
+    expect(first).toContain(trueWater)
     expect(first).not.toContain('troubled water')
-    expect(keeper.talkTo(game.state)).toContain(true_)
+    expect(keeper.talkTo(game.state)).toContain(trueWater)
     game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
-    expect(keeper.talkTo(game.state)).toContain(true_)
+    expect(keeper.talkTo(game.state)).toContain(trueWater)
   })
 })
