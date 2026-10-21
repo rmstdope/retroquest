@@ -78,3 +78,21 @@ export const FLAG_ACT3_MIRA_CONFESSED = 'act3_mira_confessed'
 
 // Dragon's dream voice (heard once, straight after the Dragon's memory)
 export const FLAG_ACT3_DRAGON_VOICE_HEARD = 'act3_dragon_voice_heard'
+
+// Optional virtue moments (recorded in the cross-act virtue record)
+/** Virtue keys Act III records; each is optional and recorded once. */
+export const VIRTUE_MERCY = 'mercy'
+export const VIRTUE_TRUTH = 'truth'
+export const VIRTUE_SELFLESS = 'selfless'
+/** Set when the Pier Warden has asked his question about the bad season. */
+export const FLAG_ACT3_WARDEN_ASKED = 'act3_warden_asked'
+/** Set when the Pier Warden has said his "bad season" line (once). */
+export const FLAG_ACT3_WARDEN_BAD_SEASON_SAID = 'act3_warden_bad_season_said'
+/** Set when Mira has moved the party on from the Sunken Ruins. */
+export const FLAG_ACT3_RUINS_LEFT = 'act3_ruins_left'
+/** Set when the wandering phantoms were freed with the word "rest". */
+export const FLAG_ACT3_PHANTOMS_FREED = 'act3_phantoms_freed'
+/** Set when the dragon's cracked sigils have been mended. */
+export const FLAG_ACT3_SIGILS_MENDED = 'act3_sigils_mended'
+/** Set when Elior has told the Pier Warden the truth (Act III's own moment). */
+export const FLAG_ACT3_WARDEN_TRUTH_TOLD = 'act3_warden_truth_told'

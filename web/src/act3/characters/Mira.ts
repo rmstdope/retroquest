@@ -18,6 +18,7 @@ import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_ECHOES_QUEST_STARTED,
   FLAG_ACT3_MIRA_CONFESSED,
+  FLAG_ACT3_RUINS_LEFT,
 } from '../Act3StoryFlags'
 
 /**
@@ -231,6 +232,8 @@ export class Mira extends Character {
       }
 
       destinationKey = 'LowerSwitchbacks'
+      // Moving the party on closes the Pier Warden's optional moment.
+      gameState.setStoryFlag(FLAG_ACT3_RUINS_LEFT, true)
       flavor =
         speech(
           "'Well done, Elior. The Crystal answers to courage; you " +

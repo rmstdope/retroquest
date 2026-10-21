@@ -1,6 +1,21 @@
-import { Character, type GameState } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  event,
+  remembered,
+} from '@/engine'
+import { FLAG_ACT3_PHANTOMS_FREED, VIRTUE_MERCY } from '../Act3StoryFlags'
 
-/** Restless spirits that whisper incomprehensibly in the Stillness Vestibule. */
+/** The one clear word under every whisper. */
+const REST_LINE =
+  '\nThrough the murmur, one word comes clear, over and over: ' +
+  '[italic]rest … rest …[/italic]'
+
+/**
+ * Restless spirits that whisper in the Stillness Vestibule. Every whisper
+ * ends on the clear word "rest"; saying it frees them, an optional mercy.
+ */
 export class WanderingPhantoms extends Character {
   constructor() {
     super({
@@ -13,7 +28,7 @@ export class WanderingPhantoms extends Character {
     })
   }
 
-  /** Phantoms only respond with undecipherable whispers. */
+  /** Phantoms whisper undecipherably, then the clear word "rest". */
   override talkTo(_gameState: GameState): string {
     const whispers = [
       'The phantoms turn toward you, their voices rising in a chorus of whispered ' +
@@ -33,6 +48,29 @@ export class WanderingPhantoms extends Character {
         'of desperation, yet none speak words you can fully grasp.',
     ]
 
-    return whispers[Math.floor(Math.random() * whispers.length)]
+    return whispers[Math.floor(Math.random() * whispers.length)] + REST_LINE
+  }
+
+  /**
+   * Saying "rest" frees them: the event, their fading and the remembered
+   * line, recorded once; they leave the room. Other words are not answered.
+   */
+  override sayTo(gameState: GameState, words: string): string {
+    if (words.trim().toLowerCase() !== 'rest') {
+      return "The phantoms' whispers rise and fall, and do not answer that."
+    }
+    gameState.setStoryFlag(FLAG_ACT3_PHANTOMS_FREED, true)
+    gameState.addVirtue(VIRTUE_MERCY)
+    const room = gameState.currentRoom
+    room.characters = room.characters.filter((c) => c !== this)
+    return (
+      event(`You say rest to the ${characterName(this.name)}.`) +
+      '\n' +
+      'The whispering falters. One by one the figures turn toward you, and ' +
+      'the urgency drains out of them. They thin like mist in morning sun, ' +
+      'and then they are gone. The chamber is quieter for it, but not yet ' +
+      'still.\n' +
+      remembered('Mercy')
+    )
   }
 }
