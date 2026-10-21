@@ -837,7 +837,7 @@ describe('Golden path step 15: Forest Transition', () => {
     // Step 15c: Learn nature_sense spell from the stones
     expectSpellKnown(state, 'nature_sense')
     expect(result.toLowerCase(), 'Should mention the spell name').toContain(
-      "nature's sense",
+      'nature sense',
     )
     expect(
       result.toLowerCase(),

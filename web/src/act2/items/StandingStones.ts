@@ -33,11 +33,10 @@ export class StandingStones extends Item {
           'ancient knowledge flows into your mind. The symbols begin to make ' +
           "sense—they're not just markers, but a teaching tool! You feel a " +
           'connection forming with the natural world around you, and ' +
-          "suddenly you understand how to cast the [spell_name]Nature's " +
-          'Sense[/spell_name] spell![/success]\n\n' +
+          'suddenly you understand how to cast the ' +
+          '[spell_name]nature sense[/spell_name] spell![/success]\n\n' +
           event(
-            "You have learned the spell: [spell_name]Nature's " +
-              'Sense[/spell_name]!',
+            'You have learned the spell: [spell_name]nature sense[/spell_name]!',
           )
       }
       return (
