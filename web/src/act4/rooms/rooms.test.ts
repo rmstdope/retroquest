@@ -7,6 +7,7 @@ import { HallOfEchoes } from './HallOfEchoes'
 import { TowerOfShadows } from './TowerOfShadows'
 import { ChamberOfWhispers } from './ChamberOfWhispers'
 import { MemoryVault } from './MemoryVault'
+import { ParentsVault } from './ParentsVault'
 import { ThroneChamer } from './ThroneChamer'
 
 /** Map of direction to its opposite. */
@@ -28,6 +29,7 @@ const ROOM_CLASSES: Record<string, new () => Room> = {
   TowerOfShadows,
   ChamberOfWhispers,
   MemoryVault,
+  ParentsVault,
   ThroneChamer,
 }
 
@@ -42,6 +44,8 @@ describe('Act 4 rooms', () => {
     // Check each room's exits
     for (const [roomName, room] of Object.entries(rooms)) {
       for (const [direction, destinationName] of Object.entries(room.exits)) {
+        // The Throne Chamber is rebuilt (with its way back) by rq-2bu.8
+        if (destinationName === 'ThroneChamer') continue
         // Check if destination room exists
         expect(
           destinationName in rooms,

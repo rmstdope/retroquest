@@ -164,7 +164,7 @@ describe('Act 4 integration', () => {
     it('blocks east in the Memory Vault', () => {
       game.state.currentRoom = act4.rooms.MemoryVault
       const result = executeCommands(game, ['go east'])
-      expect(result).toContain("You can't go that way.")
+      expect(result).toContain('The sealed door will not move.')
       expectCurrentRoom(game.state, 'Memory Vault')
     })
 
@@ -452,8 +452,10 @@ describe('Act 4 integration', () => {
       expectQuestCompleted(game.state, 'The Sorceress of Lies')
       expectItemInInventory(game.state, "Sorceress's Truth", true)
       expectSpellKnown(game.state, 'hearts_truth')
-      expectCurrentRoom(game.state, 'Chamber of Whispers')
-      expect(executeCommands(game, ['go north'])).toContain('Memory Vault')
+      expectQuestCompleted(game.state, 'The Shadow of the Past')
+      expectQuestCompleted(game.state, "The Parent's Legacy")
+      expectCurrentRoom(game.state, "Parents' Vault")
+      expect(executeCommands(game, ['go north'])).toContain('Throne Chamber')
     })
 
     it('is what cheat act 4 plays', () => {

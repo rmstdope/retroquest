@@ -1,4 +1,7 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type Character, type GameState, event } from '@/engine'
+import { ShadowOfThePast } from '../characters/ShadowOfThePast'
+import { MemoryVault } from '../rooms/MemoryVault'
+import { MemoryOrbs } from './MemoryOrbs'
 import { MirrorLabyrinth } from '../rooms/MirrorLabyrinth'
 import { ServantsPendant } from './ServantsPendant'
 
@@ -20,7 +23,8 @@ const ENHANCED_USE =
 
 /**
  * Carry the hall's echoes into the Mirror Labyrinth: used there together with
- * the Servant's Pendant (in any of the agreed forms) it solves the maze.
+ * the Servant's Pendant (in any of the agreed forms) it solves the maze. Once
+ * enhanced, it mends the orbs of the Memory Vault.
  */
 export class EchoStone extends Item {
   /** Set once the knight's voice has joined the stone. */
@@ -59,13 +63,24 @@ export class EchoStone extends Item {
 
   /** Use the stone alone: in the maze it solves it when the pendant is carried. */
   override use(gameState: GameState): string {
-    if (this.enhanced) return event(ENHANCED_USE)
+    if (this.enhanced) {
+      const room = gameState.currentRoom
+      if (room instanceof MemoryVault) return room.mendOrbs(gameState)
+      return event(ENHANCED_USE)
+    }
     return EchoStone.useInRoom(gameState)
+  }
+
+  /** The enhanced stone used on the Shadow does what it does in the vault. */
+  override useOnCharacter(gameState: GameState, target: Character): string {
+    if (target instanceof ShadowOfThePast) return this.use(gameState)
+    return super.useOnCharacter(gameState, target)
   }
 
   /** Use the stone with the pendant: the same as using it alone. */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof ServantsPendant) return this.use(gameState)
+    if (other instanceof MemoryOrbs && this.enhanced) return this.use(gameState)
     return super.useWith(gameState, other)
   }
 

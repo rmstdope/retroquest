@@ -17,6 +17,14 @@ import { SorceressOfLies } from './characters/SorceressOfLies'
 import { SorceressStaff } from './items/SorceressStaff'
 import { SorceressTruth } from './items/SorceressTruth'
 import { TheSorceressOfLies } from './quests/TheSorceressOfLies'
+import { ShadowOfThePast } from './characters/ShadowOfThePast'
+import { AncientAmulet } from './items/AncientAmulet'
+import { MemoryOrbs } from './items/MemoryOrbs'
+import { Memories } from './items/Memories'
+import { VaultDoor } from './items/VaultDoor'
+import { TheShadowOfThePast } from './quests/TheShadowOfThePast'
+import { TheParentsLegacy } from './quests/TheParentsLegacy'
+import { ParentsVault } from './rooms/ParentsVault'
 import { Barriers } from './items/Barriers'
 import { GuardiansChain } from './items/GuardiansChain'
 import { GuardiansEssence } from './items/GuardiansEssence'
@@ -55,7 +63,12 @@ export const ACT4_CLASSES = {
   WardStones,
   SorceressStaff,
   SorceressTruth,
+  AncientAmulet,
+  MemoryOrbs,
+  Memories,
+  VaultDoor,
   // Characters
+  ShadowOfThePast,
   SorceressOfLies,
   CaptainOfTheGuard,
   KnightOfDespair,
@@ -69,6 +82,8 @@ export const ACT4_CLASSES = {
   TheMazeOfMirrors,
   TheKnightOfDespair,
   TheSorceressOfLies,
+  TheShadowOfThePast,
+  TheParentsLegacy,
   // Rooms
   ChamberOfWhispers,
   FortressGates,
@@ -76,6 +91,7 @@ export const ACT4_CLASSES = {
   MemoryVault,
   MirrorLabyrinth,
   OuterCourtyard,
+  ParentsVault,
   ThroneChamer,
   TowerOfShadows,
   // Spells

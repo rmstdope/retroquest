@@ -60,6 +60,12 @@ export const FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED =
   'act4_shadow_of_the_past_started'
 export const FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED =
   'act4_shadow_of_the_past_completed'
+/** The Echo Stone has mended the Memory Vault's orbs; the Shadow has a face. */
+export const FLAG_ACT4_MEMORY_ORBS_MENDED = 'act4_memory_orbs_mended'
+/** The Sorceress's mask has been shown to the Shadow. */
+export const FLAG_ACT4_SHADOW_MASK_SHOWN = 'act4_shadow_mask_shown'
+/** The Ancient Amulet has opened the sealed door to the Parents' Vault. */
+export const FLAG_ACT4_VAULT_DOOR_OPENED = 'act4_vault_door_opened'
 export const FLAG_ACT4_COMBINED_MIRROR_MEMORY_SHARD_ACQUIRED =
   'act4_combined_mirror_memory_shard_acquired'
 

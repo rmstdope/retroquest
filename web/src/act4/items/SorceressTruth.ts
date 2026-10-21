@@ -1,8 +1,11 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type Character, type GameState, event } from '@/engine'
+import { ShadowOfThePast } from '../characters/ShadowOfThePast'
+import { MemoryVault } from '../rooms/MemoryVault'
 
 /**
  * The silver mask the Sorceress of Lies hands over: proof that even a liar can
- * choose the truth. Its real use comes in the Memory Vault.
+ * choose the truth. Shown to the Shadow in the Memory Vault, it is the proof
+ * the Shadow needs.
  */
 export class SorceressTruth extends Item {
   constructor() {
@@ -21,11 +24,19 @@ export class SorceressTruth extends Item {
     return event(this.description)
   }
 
-  /** For now it only waits; the same line everywhere. */
-  override use(_gameState: GameState): string {
+  /** In the Memory Vault the mask is shown to the Shadow; elsewhere it only waits. */
+  override use(gameState: GameState): string {
+    const room = gameState.currentRoom
+    if (room instanceof MemoryVault) return room.showMask(gameState)
     return event(
       'You turn the mask over in your hands. Somewhere ahead is someone who ' +
         'needs to see that a liar can choose the truth.',
     )
+  }
+
+  /** Shown to the Shadow, the mask does what it does in the vault. */
+  override useOnCharacter(gameState: GameState, target: Character): string {
+    if (target instanceof ShadowOfThePast) return this.use(gameState)
+    return super.useOnCharacter(gameState, target)
   }
 }
