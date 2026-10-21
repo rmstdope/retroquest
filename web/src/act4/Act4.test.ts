@@ -31,7 +31,7 @@ describe('Act4', () => {
       'ChamberOfWhispers',
       'MemoryVault',
       'ParentsVault',
-      'ThroneChamer',
+      'ThroneChamber',
     ]
     for (const roomName of expectedRooms) {
       expect(roomName in act4.rooms, `${roomName} in rooms`).toBe(true)

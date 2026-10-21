@@ -1,8 +1,6 @@
 import { Item, type GameState, event } from '@/engine'
-import {
-  FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED,
-  FLAG_ACT4_GUARDIANS_CHAIN_RAISED,
-} from '../Act4StoryFlags'
+import { FLAG_ACT4_GUARDIANS_CHAIN_RAISED } from '../Act4StoryFlags'
+import { HallOfEchoes } from '../rooms/HallOfEchoes'
 
 /** A mystical chain that provides protection against dark magic. */
 export class GuardiansChain extends Item {
@@ -18,9 +16,8 @@ export class GuardiansChain extends Item {
     })
   }
 
-  /** Set flag when the chain is picked up. */
-  override pickedUp(gameState: GameState): string {
-    gameState.setStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, true)
+  /** The chain's welcome when it is picked up. */
+  override pickedUp(_gameState: GameState): string {
     return event(
       "As you lift the Guardian's Chain, you feel a surge of protective " +
         "energy coursing through your body. The chain's light grows brighter, " +
@@ -30,7 +27,7 @@ export class GuardiansChain extends Item {
 
   /** Activate the chain's protective properties. */
   override use(gameState: GameState): string {
-    if (gameState.currentRoom.name === 'Hall of Echoes') {
+    if (gameState.currentRoom instanceof HallOfEchoes) {
       if (!gameState.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED)) {
         gameState.setStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED, true)
         return event(

@@ -18,7 +18,7 @@ export class ParentsVault extends Room {
       description: PARENTS_VAULT_BEFORE,
       items: [new Memories()],
       characters: [],
-      exits: { west: 'MemoryVault', north: 'ThroneChamer' },
+      exits: { west: 'MemoryVault', north: 'ThroneChamber' },
     })
   }
 

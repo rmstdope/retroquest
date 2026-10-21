@@ -15,6 +15,7 @@ import {
   HALL_AFTER_REDEMPTION,
   HALL_WARRIORS_SENTENCE,
 } from '../rooms/hallDescriptions'
+import { normaliseSpokenWord } from '../spokenWord'
 
 /** What the knight is called once he is redeemed. */
 const REDEEMED_NAME = 'Redeemed Knight'
@@ -124,10 +125,7 @@ export class KnightOfDespair extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)) {
       return '[dim]He has already found his way back. He bows his head to you.[/dim]'
     }
-    const word = words
-      .trim()
-      .replace(/^['"]|['"]$/g, '')
-      .toLowerCase()
+    const word = normaliseSpokenWord(words)
     if (word !== 'redemption') return '[dim]The knight does not answer.[/dim]'
     if (!gameState.getStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH)) {
       return (

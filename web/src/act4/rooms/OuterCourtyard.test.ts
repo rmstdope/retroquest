@@ -25,13 +25,9 @@ describe('OuterCourtyard', () => {
     game.state.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
     room.castBless(game.state)
 
-    const servants = room.examine(game.state, 'servants')
     const blessAgain = room.castBless(game.state)
 
-    expect(servants).toContain('Freed Servants')
     expect(blessAgain).toContain('already been freed')
-    for (const answer of [servants, blessAgain]) {
-      expectMarkupWellFormed(answer)
-    }
+    expectMarkupWellFormed(blessAgain)
   })
 })

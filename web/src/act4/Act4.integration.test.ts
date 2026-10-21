@@ -6,8 +6,6 @@ import { playDebugScript } from '@/utils/debugScript'
 import {
   FLAG_ACT4_FIELD_GREEN,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
-  FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED,
-  FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED,
   FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED,
   FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED,
   FLAG_ACT4_THRONE_AMULET_OPENED,
@@ -98,12 +96,10 @@ describe('Act 4 integration', () => {
     // Phase 1.5: Take Guardian's Chain for later protection
     executeCommands(game, ["take guardian's chain"])
     expectItemInInventory(game.state, "Guardian's Chain", true)
-    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, true)
 
     // Phase 1.6: Take Guardian's Essence (should be available after light spell)
     executeCommands(game, ["take guardian's essence"])
     expectItemInInventory(game.state, "Guardian's Essence", true)
-    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, true)
   })
 
   it('has the required items available in Fortress Gates', () => {
@@ -143,15 +139,11 @@ describe('Act 4 integration', () => {
       FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
       false,
     )
-    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, false)
-    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, false)
     expectStoryFlag(game.state, FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, false)
 
     // Simulate ward guardians quest completion
     // (Actual implementation would involve the quest system)
     game.state.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, true)
-    game.state.setStoryFlag(FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, true)
-    game.state.setStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, true)
 
     // Check flags are now set
     expectStoryFlag(
@@ -159,8 +151,6 @@ describe('Act 4 integration', () => {
       FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
       true,
     )
-    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, true)
-    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, true)
   })
 
   describe('after the stub rooms were cut', () => {

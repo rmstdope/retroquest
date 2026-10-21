@@ -3,6 +3,7 @@ import {
   FLAG_ACT4_BADGE_SHOWN,
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
 } from '../Act4StoryFlags'
+import { ChamberOfWhispers } from '../rooms/ChamberOfWhispers'
 import { HeartsTruth } from '../spells/HeartsTruth'
 
 /**
@@ -27,7 +28,7 @@ export class KnightsRedemption extends Item {
 
   /** In the Chamber of Whispers the badge is shown to the Sorceress (once). */
   override use(gameState: GameState): string {
-    if (gameState.currentRoom.name !== 'Chamber of Whispers') {
+    if (!(gameState.currentRoom instanceof ChamberOfWhispers)) {
       return super.use(gameState)
     }
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)

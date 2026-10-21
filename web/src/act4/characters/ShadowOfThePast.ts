@@ -5,6 +5,7 @@ import {
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
   FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED,
 } from '../Act4StoryFlags'
+import { normaliseSpokenWord } from '../spokenWord'
 
 /** What it is called once the orbs are mended and it has a face. */
 const FULL_NAME = 'Shadow of the Past'
@@ -91,10 +92,7 @@ export class ShadowOfThePast extends Character {
         'east.[/dim]'
       )
     }
-    const word = words
-      .trim()
-      .replace(/^['"]|['"]$/g, '')
-      .toLowerCase()
+    const word = normaliseSpokenWord(words)
     if (word !== ANSWER_WORD) {
       return '[dim]The Shadow waits, as it has waited for years.[/dim]'
     }

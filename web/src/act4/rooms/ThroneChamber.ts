@@ -15,7 +15,7 @@ import { THRONE_CHAMBER_FIRST } from './throneDescriptions'
  * open at all times; once the wound is closed an arch opens to the north,
  * the way home to Willowbrook Field.
  */
-export class ThroneChamer extends Room {
+export class ThroneChamber extends Room {
   constructor() {
     super({
       name: 'Throne Chamber',

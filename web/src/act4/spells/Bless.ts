@@ -5,6 +5,7 @@ import {
   characterName,
   event,
 } from '@/engine'
+import { TrappedServants } from '../characters/TrappedServants'
 
 /** A spell that channels divine energy to purify and free the corrupted. */
 export class Bless extends Spell {
@@ -37,7 +38,7 @@ export class Bless extends Spell {
     gameState: GameState,
     targetCharacter: Character,
   ): string {
-    if (targetCharacter.name.toLowerCase().includes('servant')) {
+    if (targetCharacter instanceof TrappedServants) {
       // Special handling for servants
       const room = gameState.currentRoom
       const hook = (room as { castBless?: (gs: GameState) => string }).castBless

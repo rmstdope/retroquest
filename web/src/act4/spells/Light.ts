@@ -1,4 +1,5 @@
 import { Spell, type GameState, type Item, event } from '@/engine'
+import { WardStones } from '../items/WardStones'
 
 /** A spell that creates brilliant light to dispel darkness and shadow magic. */
 export class Light extends Spell {
@@ -20,7 +21,7 @@ export class Light extends Spell {
 
   /** Cast light spell on a specific item. */
   override castOnItem(gameState: GameState, targetItem: Item): string {
-    if (['ward stones', 'ward stone'].includes(targetItem.name.toLowerCase())) {
+    if (targetItem instanceof WardStones) {
       // Special handling for ward stones in Fortress Gates
       return gameState.currentRoom.light(gameState)
     }

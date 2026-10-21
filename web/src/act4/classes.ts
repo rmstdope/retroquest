@@ -52,7 +52,7 @@ import { Nyx } from './characters/Nyx'
 import { CrystalPrison } from './items/CrystalPrison'
 import { Wound } from './items/Wound'
 import { LifelightElixir } from './items/LifelightElixir'
-import { ThroneChamer } from './rooms/ThroneChamer'
+import { ThroneChamber } from './rooms/ThroneChamber'
 import { WillowbrookField } from './rooms/WillowbrookField'
 import { TowerOfShadows } from './rooms/TowerOfShadows'
 import { Bless } from './spells/Bless'
@@ -113,7 +113,7 @@ export const ACT4_CLASSES = {
   MirrorLabyrinth,
   OuterCourtyard,
   ParentsVault,
-  ThroneChamer,
+  ThroneChamber,
   WillowbrookField,
   TowerOfShadows,
   // Spells

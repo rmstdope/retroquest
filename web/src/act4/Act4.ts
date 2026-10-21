@@ -9,7 +9,7 @@ import { TowerOfShadows } from './rooms/TowerOfShadows'
 import { ChamberOfWhispers } from './rooms/ChamberOfWhispers'
 import { MemoryVault } from './rooms/MemoryVault'
 import { ParentsVault } from './rooms/ParentsVault'
-import { ThroneChamer } from './rooms/ThroneChamer'
+import { ThroneChamber } from './rooms/ThroneChamber'
 import { WillowbrookField } from './rooms/WillowbrookField'
 import { Light } from './spells/Light'
 import { Bless } from './spells/Bless'
@@ -43,7 +43,7 @@ export class Act4 extends Act {
       ParentsVault: new ParentsVault(),
 
       // Final area (entered north from the Parents' Vault)
-      ThroneChamer: new ThroneChamer(),
+      ThroneChamber: new ThroneChamber(),
 
       // The end of the story, entered north from the Throne Chamber
       WillowbrookField: new WillowbrookField(),

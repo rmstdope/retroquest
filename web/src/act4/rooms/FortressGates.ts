@@ -90,47 +90,4 @@ export class FortressGates extends Room {
       'is clear.[/dim]'
     )
   }
-
-  /** Handle examining specific targets in the room. */
-  examine(gameState: GameState, target: string): string {
-    const targetLower = target.toLowerCase()
-    if (targetLower.includes('ward stone') || targetLower.includes('stones')) {
-      return event(
-        'You examine the ward stones closely. Each stone is carved with ' +
-          'ancient protective runes that pulse with dark energy. The stones appear ' +
-          'to be the anchor points for the shadow guardians and magical barriers. ' +
-          'A fragment has broken off from one stone, perhaps weakening the network.',
-      )
-    }
-    if (targetLower.includes('guardian')) {
-      if (!this.shadowGuardiansBanished) {
-        return event(
-          'The spectral guardians drift menacingly between the ward stones, ' +
-            'their forms shifting between solid and ethereal. Their hollow eyes burn ' +
-            "with malevolent purpose, and they seem bound to the stones' dark " +
-            'energy.',
-        )
-      }
-      return event(
-        'The shadow guardians have been banished by your light magic.',
-      )
-    }
-    if (targetLower.includes('barrier')) {
-      if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
-        return event(
-          'Shimmering barriers of dark energy block the entrances to the ' +
-            'fortress. The barriers pulse in rhythm with the ward stones, drawing ' +
-            'power from their dark magic.',
-        )
-      }
-      return event(
-        'The magical barriers have been disabled and no longer ' +
-          'block your way.',
-      )
-    }
-    return event(
-      `You examine the ${target} but find nothing particularly ` +
-        'noteworthy about it.',
-    )
-  }
 }

@@ -12,7 +12,7 @@ describe('ParentsVault', () => {
     game.state.setStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED, true)
     expect(room.getExits(game.state)).toEqual({
       west: 'MemoryVault',
-      north: 'ThroneChamer',
+      north: 'ThroneChamber',
     })
   })
 })
