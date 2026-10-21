@@ -8,6 +8,7 @@ import {
 import {
   FLAG_SHOWED_JOURNAL_TO_HISTORIANS,
   FLAG_READ_TRAVELERS_JOURNAL,
+  FLAG_RESEARCHED_FAMILY_HERITAGE,
 } from '../Act2StoryFlags'
 import { TravelersJournal } from '../items/TravelersJournal'
 
@@ -26,16 +27,26 @@ export class Historians extends Character {
   /** Return appropriate dialogue when the player talks to the Historians. */
   override talkTo(gameState: GameState): string {
     const name = this.name
-    if (gameState.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)) {
-      const prefix = 'The journal you showed us was most '
+    if (gameState.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE)) {
       return (
         characterName(name) +
         ': ' +
         speech(
-          prefix +
-            "illuminating! The references to Willowbrook's bloodlines confirm what " +
-            'we suspected from the ancient chronicles. Your heritage appears to be ' +
-            'quite significant indeed.',
+          'We checked the Willowbrook roll against his notes. One page is ' +
+            'gone from it, cut out at the binding, and long ago by the look ' +
+            'of it. The year you were born. His notes stop at the same ' +
+            'place. Whatever he came for, someone hid it from him before he ' +
+            'ever sat down.',
+        )
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)) {
+      return (
+        characterName(name) +
+        ': ' +
+        speech(
+          'Search the archive with us. If a thief has been at our shelves, ' +
+            'we want to know what else he read.',
         )
       )
     } else {
@@ -74,16 +85,25 @@ export class Historians extends Character {
       const successMsg =
         `[success]You show the [item_name]${itemName}[/item_name] to the ` +
         characterName(histName) +
-        '. They examine it with great interest, cross-referencing the ' +
-        'records. Their study of the genealogical information reveals ' +
-        'details that would take ordinary scholars years to compile. ' +
+        '. They turn the pages slowly at first, then faster. One of them ' +
+        'goes pale.[/success]'
+      const speaker = characterName(histName) + ': '
+      return (
+        successMsg +
+        '\n\n' +
+        speaker +
         speech(
-          "'This is fascinating! The journal confirms several theories about " +
-            "Willowbrook's significance and provides crucial context for the " +
-            "ancient chronicles.'",
+          'These are our birth rolls. Copied line for line, and that sketch ' +
+            'is drawn from one of our own pages. Nobody has leave to copy ' +
+            'the birth rolls. Nobody!',
         ) +
-        '[/success]'
-      return successMsg
+        '\n\n' +
+        speaker +
+        speech(
+          'Whoever wrote this sat at our shelves. Search the archive with ' +
+            'us; we will show you what he read.',
+        )
+      )
     } else {
       return super.giveItem(gameState, item)
     }

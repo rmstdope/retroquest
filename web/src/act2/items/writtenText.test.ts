@@ -33,13 +33,14 @@ describe("Traveler's journal", () => {
     expect(raw).not.toContain('*')
   })
 
-  it('shows event, story line, three unlabelled quotes, event', () => {
+  it('shows event, four unlabelled quotes, story line, event', () => {
     expect(shape(raw)).toEqual([
       'event',
+      'dialogue:null',
+      'dialogue:null',
+      'dialogue:null',
+      'dialogue:null',
       'text',
-      'dialogue:null',
-      'dialogue:null',
-      'dialogue:null',
       'event',
     ])
   })
@@ -48,11 +49,9 @@ describe("Traveler's journal", () => {
     const quotes = parseTurn(raw).flatMap((block) =>
       block.kind === 'dialogue' ? [block.markup] : [],
     )
-    expect(quotes[0]).toMatch(/^'The bloodline of Ravencrest .*magics\.'$/)
-    expect(quotes[1]).toMatch(/^'I have documented .*great libraries\.'$/)
-    expect(quotes[2]).toMatch(
-      /^'Should any of my descendants .*stirs again\.'$/,
-    )
+    expect(quotes).toHaveLength(4)
+    expect(quotes[0]).toMatch(/^'Third night in Greendale\..*reach\.'$/)
+    expect(quotes[3]).toBe("'The innkeeper grows curious. I leave tonight.'")
   })
 })
 

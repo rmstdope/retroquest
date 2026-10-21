@@ -74,12 +74,11 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
     expect(stage).not.toMatch(CHOSEN_TALK)
   })
 
-  it('cuts the prophecy clause from the traveler journal', () => {
+  it('keeps the traveler journal free of chosen-one talk', () => {
     const game = new Game([new Act2()])
 
     const text = new TravelersJournal().use(game.state)
 
-    expect(text).toContain('could prove vital when darkness stirs again.')
     expect(text).not.toMatch(CHOSEN_TALK)
   })
 })

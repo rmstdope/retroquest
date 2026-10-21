@@ -34,8 +34,8 @@ describe('Historians dialogue markup', () => {
 
     const followUp = historians.talkTo(game.state)
 
-    expect(shown).toContain('This is fascinating!')
-    expect(followUp).toContain('most illuminating')
+    expect(shown).toContain('These are our birth rolls.')
+    expect(followUp).toContain('Search the archive with us.')
     for (const answer of [shown, followUp]) {
       expectMarkupWellFormed(answer)
       expectDialogueSpeaker(answer, 'historians')

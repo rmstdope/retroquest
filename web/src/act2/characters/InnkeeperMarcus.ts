@@ -312,7 +312,16 @@ export class InnkeeperMarcus extends Character {
         'brass key and explains how to access the private rooms upstairs. ' +
         `You have ${remainingCoins} [item_name]coins[/item_name] ` +
         'remaining.[/success]'
-      return eventMsg + '\n' + purchaseMsg
+      const lodger =
+        characterName(seller) +
+        ': ' +
+        speech(
+          'That room upstairs? Its last lodger was a man in a grey cloak. ' +
+            'Never gave a name, wrote half the night by candle, and was ' +
+            'gone one morning without paying. It was the week the king ' +
+            "went. I've aired it since. You'll find it clean.",
+        )
+      return eventMsg + '\n' + purchaseMsg + '\n\n' + lodger
     } else {
       // Should not happen if item is in wares, but safety check
       return (
