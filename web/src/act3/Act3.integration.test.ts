@@ -952,7 +952,7 @@ describe('Giving the Quiet Charm to Tobin', () => {
   it('plays through the commands, records one selfless moment and cannot be repeated', () => {
     const game = rescued()
     const gift = executeCommands(game, ['give quiet charm to young miner'])
-    expect(gift).toContain("'It's quiet.'")
+    expect(gift).toContain("It's quiet.")
     expect(gift).toContain('✦ Selflessness — this will be remembered')
     expect(game.state.virtueCount('selfless')).toBe(1)
     expect(game.state.hasItem('quiet charm')).toBe(false)

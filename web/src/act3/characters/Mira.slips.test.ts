@@ -16,7 +16,7 @@ import {
 import { Mira } from './Mira'
 import { SeaSealedLetter } from '../items/SeaSealedLetter'
 
-const RUINS_SPEECH = speech("'Lysa's hand. She always crossed her sevens.'")
+const RUINS_SPEECH = speech("Lysa's hand. She always crossed her sevens.")
 const RUINS_NARRATION = event(
   `${characterName('Mira')} turns to the sea before you can ask what she means.`,
 )

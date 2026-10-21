@@ -8,7 +8,7 @@ const FALLBACK =
   event(`${characterName('Mira')} shakes her head.`) +
   '\n' +
   speech(
-    "'Ask me of your parents, Malakar, the amulet or your grandmother, Elior.'",
+    'Ask me of your parents, Malakar, the amulet or your grandmother, Elior.',
   )
 
 describe('miraTopicIn', () => {
@@ -46,21 +46,19 @@ describe('miraTopicIn', () => {
 describe('miraTopicReply', () => {
   it('dodges each topic before the confession', () => {
     expect(miraTopicReply('parents', false)).toBe(
-      miraSays("'Later, Elior. Not here.'"),
+      miraSays('Later, Elior. Not here.'),
     )
     expect(miraTopicReply('malakar', false)).toBe(
-      miraSays(
-        "'A name in the old books. Let us keep it there a while longer.'",
-      ),
+      miraSays('A name in the old books. Let us keep it there a while longer.'),
     )
     expect(miraTopicReply('amulet', false)).toBe(
       miraSays(
-        "'Keep it close and keep it hidden. That is all it asks of you, for now.'",
+        'Keep it close and keep it hidden. That is all it asks of you, for now.',
       ),
     )
     expect(miraTopicReply('grandmother', false)).toBe(
       miraSays(
-        "'She loves you more than you know. Ask her yourself, when we are home.'",
+        'She loves you more than you know. Ask her yourself, when we are home.',
       ),
     )
   })
@@ -68,30 +66,30 @@ describe('miraTopicReply', () => {
   it('answers each topic honestly after the confession', () => {
     expect(miraTopicReply('parents', true)).toBe(
       miraSays(
-        "'Aren laughed with his whole chest, and Lysa always crossed her " +
+        'Aren laughed with his whole chest, and Lysa always crossed her ' +
           'sevens. They did not die, Elior. They became the ward, and they ' +
-          "are in it still.'",
+          'are in it still.',
       ),
     )
     expect(miraTopicReply('malakar', true)).toBe(
       miraSays(
-        "'He was their closest friend, and my teacher too. Something broke " +
+        'He was their closest friend, and my teacher too. Something broke ' +
           'in him that none of us could mend, and he tore at time itself. ' +
           'Whatever he is now, I remember the man who taught me my first ' +
-          "circle.'",
+          'circle.',
       ),
     )
     expect(miraTopicReply('amulet', true)).toBe(
       miraSays(
-        "'It is the anchor of their ward. As long as you carry it, the ward " +
-          "holds. That is why his agent walked our lanes looking for it.'",
+        'It is the anchor of their ward. As long as you carry it, the ward ' +
+          'holds. That is why his agent walked our lanes looking for it.',
       ),
     )
     expect(miraTopicReply('grandmother', true)).toBe(
       miraSays(
-        "'She is Lysa's mother, and she kept the secret with me all these " +
+        "She is Lysa's mother, and she kept the secret with me all these " +
           'years. It cost her more than it cost me. Be gentle with her when ' +
-          "you are home.'",
+          'you are home.',
       ),
     )
   })

@@ -16,7 +16,7 @@ export const CEDRIC_NAME = 'Sir Cedric'
 
 /** One spoken line of Sir Cedric, as attributed speech. */
 export function cedricSays(words: string): string {
-  return dialogue(CEDRIC_NAME, `'${words}'`)
+  return dialogue(CEDRIC_NAME, words)
 }
 
 /** A narration line that starts with his name, e.g. "Sir Cedric looks away.". */
@@ -95,8 +95,8 @@ export const CEDRIC_STAY_BEHIND =
   event(`The ${characterName('oldest miner')} puts a grey hand on his arm.`) +
   ' ' +
   speech(
-    "'You have a king to fetch, ser. We have stood in worse holes than " +
-      "this one.'",
+    'You have a king to fetch, ser. We have stood in worse holes than ' +
+      'this one.',
   ) +
   '\n' +
   cedricDoes('looks at him for a long moment, then nods.')
@@ -121,4 +121,4 @@ export const CEDRIC_GATE_TALK =
 
 /** What he says to words that are not the refrain. */
 export const CEDRIC_NOT_NOW =
-  cedricDoes('shakes his head.') + ' ' + speech("'Not now. Not here.'")
+  cedricDoes('shakes his head.') + ' ' + speech('Not now. Not here.')

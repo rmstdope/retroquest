@@ -25,31 +25,31 @@ export const MIRA_TOPICS_REMINDER =
 
 /** Her evasions before the confession; each gives a little away. */
 const DODGES: Record<MiraTopic, string> = {
-  parents: "'Later, Elior. Not here.'",
-  malakar: "'A name in the old books. Let us keep it there a while longer.'",
+  parents: 'Later, Elior. Not here.',
+  malakar: 'A name in the old books. Let us keep it there a while longer.',
   amulet:
-    "'Keep it close and keep it hidden. That is all it asks of you, for now.'",
+    'Keep it close and keep it hidden. That is all it asks of you, for now.',
   grandmother:
-    "'She loves you more than you know. Ask her yourself, when we are home.'",
+    'She loves you more than you know. Ask her yourself, when we are home.',
 }
 
 /** Her honest answers after the confession. */
 const ANSWERS: Record<MiraTopic, string> = {
   parents:
-    "'Aren laughed with his whole chest, and Lysa always crossed her sevens. " +
+    'Aren laughed with his whole chest, and Lysa always crossed her sevens. ' +
     'They did not die, Elior. They became the ward, and they are in it ' +
-    "still.'",
+    'still.',
   malakar:
-    "'He was their closest friend, and my teacher too. Something broke in " +
+    'He was their closest friend, and my teacher too. Something broke in ' +
     'him that none of us could mend, and he tore at time itself. Whatever ' +
-    "he is now, I remember the man who taught me my first circle.'",
+    'he is now, I remember the man who taught me my first circle.',
   amulet:
-    "'It is the anchor of their ward. As long as you carry it, the ward " +
-    "holds. That is why his agent walked our lanes looking for it.'",
+    'It is the anchor of their ward. As long as you carry it, the ward ' +
+    'holds. That is why his agent walked our lanes looking for it.',
   grandmother:
-    "'She is Lysa's mother, and she kept the secret with me all these " +
+    "She is Lysa's mother, and she kept the secret with me all these " +
     'years. It cost her more than it cost me. Be gentle with her when you ' +
-    "are home.'",
+    'are home.',
 }
 
 /**
@@ -78,8 +78,8 @@ export function miraTopicReply(
       event(`${characterName('Mira')} shakes her head.`) +
       '\n' +
       speech(
-        "'Ask me of your parents, Malakar, the amulet or your " +
-          "grandmother, Elior.'",
+        'Ask me of your parents, Malakar, the amulet or your ' +
+          'grandmother, Elior.',
       )
     )
   }

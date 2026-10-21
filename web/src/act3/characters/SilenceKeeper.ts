@@ -42,9 +42,9 @@ export class SilenceKeeper extends Character {
       return (
         `The ${keeper} bows their hooded head: ` +
         speech(
-          "'The sleeper spoke with you, and the stone held. Forty years, " +
+          'The sleeper spoke with you, and the stone held. Forty years, ' +
             'and I have never been so glad to have kept a quiet. ' +
-            `${TRUE_WATER.trim()}'`,
+            `${TRUE_WATER.trim()}`,
         )
       )
     }
@@ -52,8 +52,8 @@ export class SilenceKeeper extends Character {
       return (
         `The ${keeper} does not turn: ` +
         speech(
-          "'Forty years I have listened to those stones. They are cold. " +
-            `${this.waterLine(gameState)}Bless them; give them the chant.'`,
+          'Forty years I have listened to those stones. They are cold. ' +
+            `${this.waterLine(gameState)}Bless them; give them the chant.`,
         )
       )
     }
@@ -61,18 +61,18 @@ export class SilenceKeeper extends Character {
     return (
       `The ${keeper} whispers, their voice barely disturbing the air: ` +
       speech(
-        "'I have kept this hush for forty years, so the sleeper below can " +
+        'I have kept this hush for forty years, so the sleeper below can ' +
           'rest. I was a singer once, in the villages above. I sang one ' +
           'night too loud, too near the deep, and something old turned over ' +
           'in its sleep. I put my voice down that night and never picked it ' +
-          "up.'",
+          'up.',
       ) +
       '\n\n' +
       speech(
-        "'The stones in this room were cut to carry a whisper to the " +
+        'The stones in this room were cut to carry a whisper to the ' +
           'sleeper without waking it. They have gone cold. ' +
           `${this.waterLine(gameState)}Bless them, and ` +
-          "give them the old chant, and the way will open.'",
+          'give them the old chant, and the way will open.',
       )
     )
   }

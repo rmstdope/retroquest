@@ -73,9 +73,9 @@ describe('AshScholar notebook', () => {
     const scholar = new AshScholar()
     const first = scholar.talkTo(g)
     for (const line of [
-      "'We are on an expedition: a small band of scholars and tinkerers, tracing the terraces and cataloguing anything that glints.'",
-      "'I found this brass mirror segment while prying at a collapsed ledge. It is small, but it will mend a mount. There will be more among the outcrops, if you search carefully.'",
-      "'This was in the same ledge. A notebook, burned nearly through. Whoever wrote in it knew these mirrors better than any of us, and I cannot make out who that was. Perhaps you can.'",
+      'We are on an expedition: a small band of scholars and tinkerers, tracing the terraces and cataloguing anything that glints.',
+      'I found this brass mirror segment while prying at a collapsed ledge. It is small, but it will mend a mount. There will be more among the outcrops, if you search carefully.',
+      'This was in the same ledge. A notebook, burned nearly through. Whoever wrote in it knew these mirrors better than any of us, and I cannot make out who that was. Perhaps you can.',
     ]) {
       expect(first).toContain(line)
     }

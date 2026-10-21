@@ -14,16 +14,16 @@ export const TRIAL_STEPS = 3
 
 /** The Guardian's refusals of the near-miss answers, by the word spoken. */
 const NEAR_MISSES: Record<string, string> = {
-  mira: "'Mira was not in the water with you. Her voice was. Who walked?'",
+  mira: 'Mira was not in the water with you. Her voice was. Who walked?',
   cedric:
-    "'The knight stayed at the door. You could not see him. " +
-    "Who did you still have?'",
+    'The knight stayed at the door. You could not see him. ' +
+    'Who did you still have?',
   'my friends':
-    "'Your friends were behind you, in the light. " +
-    "Who was with you in the dark?'",
-  'the king': "'The king is the reason you came. He is not who came through.'",
+    'Your friends were behind you, in the light. ' +
+    'Who was with you in the dark?',
+  'the king': 'The king is the reason you came. He is not who came through.',
   'my parents':
-    "'They are with you always, and still they did not walk. Who did?'",
+    'They are with you always, and still they did not walk. Who did?',
 }
 
 /**
@@ -69,7 +69,7 @@ export class TideBornGuardian extends Character {
       return (
         event('The lights go out again as you cross the threshold.') +
         '\n' +
-        dialogue(this.name, "'Walk.'")
+        dialogue(this.name, 'Walk.')
       )
     }
     this.trialBegun = true
@@ -81,8 +81,8 @@ export class TideBornGuardian extends Character {
       characterName(this.name) +
       event(' speaks from the black: ') +
       speech(
-        "'The lanterns brought you here. They will not take you further. " +
-          "Walk.'",
+        'The lanterns brought you here. They will not take you further. ' +
+          'Walk.',
       )
     )
   }
@@ -95,13 +95,13 @@ export class TideBornGuardian extends Character {
           `${CEDRIC_NAME}.`,
       ) +
       ' ' +
-      speech("'Name what you will not abandon.'") +
+      speech('Name what you will not abandon.') +
       '\n' +
       cedricSays('My king.') +
       ' ' +
       event('A breath.') +
       ' ' +
-      speech("'I did once.'") +
+      speech('I did once.') +
       '\n' +
       event('The water does not answer him.')
     )
@@ -151,7 +151,7 @@ export class TideBornGuardian extends Character {
           event('A voice like ') +
           characterName('Mira') +
           event(', close behind you: ') +
-          speech("'Turn back, Elior. There is nothing out there.'")
+          speech('Turn back, Elior. There is nothing out there.')
         )
       default:
         return (
@@ -167,14 +167,14 @@ export class TideBornGuardian extends Character {
               'world.',
           ) +
           '\n' +
-          dialogue(this.name, "'You came through. What did you not abandon?'")
+          dialogue(this.name, 'You came through. What did you not abandon?')
         )
     }
   }
 
   /** The Guardian's answer to a light spell cast in the dark. */
   refuseLight(): string {
-    return dialogue(this.name, "'Not here. Here you go without it.'")
+    return dialogue(this.name, 'Not here. Here you go without it.')
   }
 
   /** Wade back to the edge from wherever Elior stands. */
@@ -194,20 +194,17 @@ export class TideBornGuardian extends Character {
     if (gameState.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)) {
       return dialogue(
         this.name,
-        "'One came before you, long ago. Aren. He asked me to test whoever " +
-          "came after him the way he was tested.'",
+        'One came before you, long ago. Aren. He asked me to test whoever ' +
+          'came after him the way he was tested.',
       )
     }
     if (this.step() >= TRIAL_STEPS) {
-      return dialogue(
-        this.name,
-        "'You came through. What did you not abandon?'",
-      )
+      return dialogue(this.name, 'You came through. What did you not abandon?')
     }
     return dialogue(
       this.name,
-      "'Walk east into the water. When you come through, I will ask you one " +
-        "thing.'",
+      'Walk east into the water. When you come through, I will ask you one ' +
+        'thing.',
     )
   }
 
@@ -221,7 +218,7 @@ export class TideBornGuardian extends Character {
       return this.talkTo(gameState)
     }
     if (this.step() < TRIAL_STEPS) {
-      return dialogue(this.name, "'Words are easy on the shore. Walk first.'")
+      return dialogue(this.name, 'Words are easy on the shore. Walk first.')
     }
     const w = words.trim().toLowerCase()
     if (w === 'myself') {
@@ -232,9 +229,9 @@ export class TideBornGuardian extends Character {
         'take the [item_name]Crystal of Light[/item_name].[/success]\n' +
         dialogue(
           this.name,
-          "'Most name a person, and leave themselves behind in the dark. " +
+          'Most name a person, and leave themselves behind in the dark. ' +
             'You walked in whole, and you walked out whole. That is the ' +
-            "courage the crystal asks for.'",
+            'courage the crystal asks for.',
         ) +
         '\n' +
         event(
@@ -248,8 +245,8 @@ export class TideBornGuardian extends Character {
     return dialogue(
       this.name,
       nearMiss ??
-        "'The tide listens, then falls quiet. That is not what you carried " +
-          "through the water.'",
+        'The tide listens, then falls quiet. That is not what you carried ' +
+          'through the water.',
     )
   }
 }
