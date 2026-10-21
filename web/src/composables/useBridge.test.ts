@@ -57,7 +57,7 @@ describe('useBridge', () => {
       expect(bridge.isReady()).toBe(true)
     })
 
-    it('loads all four acts, so Act IV follows Act III', async () => {
+    it('loads all four acts', async () => {
       const bridge = useBridge()
       await bridge.init()
       for (const act of [1, 2, 3, 4]) {
