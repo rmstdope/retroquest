@@ -7,6 +7,8 @@ import {
   FLAG_ACT3_DRAGON_VOICE_HEARD,
   FLAG_ACT3_DRAGON_MESSAGE_GIVEN,
   FLAG_ACT3_DRAGON_OATH_SPOKEN,
+  FLAG_ACT3_PHANTOMS_HEARD,
+  FLAG_ACT3_SHELL_HEARD,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
 } from '../Act3StoryFlags'
 import { AncientDragon } from './AncientDragon'
@@ -435,5 +437,44 @@ describe('AncientDragon message for Mira', () => {
     )
     expect(first.indexOf(MESSAGE)).toBeLessThan(first.indexOf('rumbles softly'))
     expect(dragon.talkTo(game.state)).not.toContain(MESSAGE)
+  })
+})
+
+describe('AncientDragon recognises the tune', () => {
+  const SHELL_LINE =
+    'And under the words, faint as the sea in a shell, runs the tune the ' +
+    'woman hummed.'
+  const PHANTOM_LINE = 'And under the words runs the tune the phantoms hummed.'
+  const BEFORE = 'before you had words for it. '
+  const AFTER = ' Then it is gone.'
+
+  it('adds the shell sentence when the shell was heard', () => {
+    const state = makeGameState()
+    state.setStoryFlag(FLAG_ACT3_SHELL_HEARD, true)
+    const out = new AncientDragon().talkTo(state)
+    expect(out).toContain(BEFORE + SHELL_LINE + AFTER)
+    expectMarkupWellFormed(out)
+  })
+
+  it('prefers the shell sentence when both were heard', () => {
+    const state = makeGameState()
+    state.setStoryFlag(FLAG_ACT3_SHELL_HEARD, true)
+    state.setStoryFlag(FLAG_ACT3_PHANTOMS_HEARD, true)
+    const out = new AncientDragon().talkTo(state)
+    expect(out).toContain(SHELL_LINE)
+    expect(out).not.toContain(PHANTOM_LINE)
+  })
+
+  it('adds the phantoms sentence when only they were heard', () => {
+    const state = makeGameState()
+    state.setStoryFlag(FLAG_ACT3_PHANTOMS_HEARD, true)
+    const out = new AncientDragon().talkTo(state)
+    expect(out).toContain(BEFORE + PHANTOM_LINE + AFTER)
+  })
+
+  it('leaves the text unchanged when neither was heard', () => {
+    const out = new AncientDragon().talkTo(makeGameState())
+    expect(out).toContain(BEFORE + 'Then it is gone.')
+    expect(out).not.toContain('runs the tune')
   })
 })
