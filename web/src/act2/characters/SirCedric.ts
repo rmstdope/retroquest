@@ -247,9 +247,9 @@ export class SirCedric extends Character {
     ) {
       this.cedricTrustsElior = true
 
-      // Give Elior 100 individual coins using the new batching system
+      // Give Elior 150 individual coins using the new batching system
       const coin = new Coins(1) // Create a single coin worth 1 gold
-      gameState.addItemToInventory(coin, 100) // Add 100 of them
+      gameState.addItemToInventory(coin, 150) // Add 150 of them
 
       return (
         characterName('Sir Cedric') +
@@ -266,7 +266,7 @@ export class SirCedric extends Character {
         characterName('Sir Cedric') +
         ': ' +
         speech(
-          'Please accept these 100 gold coins. I should have provided them ' +
+          'Please accept these 150 gold coins. I should have provided them ' +
             "earlier for your supply purchasing. You'll need proper equipment " +
             'for the forest expedition: a survival kit, an enhanced lantern, ' +
             'and quality rope from the Market District. The realm faces a ' +
