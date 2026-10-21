@@ -85,6 +85,16 @@ export const FLAG_ACT4_PARENTS_LEGACY_COMPLETED =
 export const FLAG_ACT4_THRONE_KEY_ACQUIRED = 'act4_throne_key_acquired'
 
 // Final confrontation flags
+/** Malakar has made his offer in the Throne Chamber. */
+export const FLAG_ACT4_THRONE_OFFER_HEARD = 'act4_throne_offer_heard'
+/** Elior has answered Malakar with the refrain. */
+export const FLAG_ACT4_THRONE_REFRAIN_SAID = 'act4_throne_refrain_said'
+/** The Ancient Amulet has opened in the Throne Chamber. */
+export const FLAG_ACT4_THRONE_AMULET_OPENED = 'act4_throne_amulet_opened'
+/** The Lifelight Elixir was given to Malakar. */
+export const FLAG_ACT4_ELIXIR_ON_MALAKAR = 'act4_elixir_on_malakar'
+/** The Lifelight Elixir broke the crystal prison and freed King Alden. */
+export const FLAG_ACT4_ELIXIR_ON_KING = 'act4_elixir_on_king'
 export const FLAG_ACT4_FINAL_STAND_STARTED = 'act4_final_stand_started'
 export const FLAG_ACT4_FINAL_STAND_COMPLETED = 'act4_final_stand_completed'
 export const FLAG_ACT4_CROWN_OF_ELDORIA_ACQUIRED =

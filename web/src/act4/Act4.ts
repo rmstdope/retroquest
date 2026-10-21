@@ -1,5 +1,6 @@
 import { Act, type GameState } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
+import { LifelightElixir } from './items/LifelightElixir'
 import { FortressGates } from './rooms/FortressGates'
 import { OuterCourtyard } from './rooms/OuterCourtyard'
 import { MirrorLabyrinth } from './rooms/MirrorLabyrinth'
@@ -105,6 +106,8 @@ export class Act4 extends Act {
 
     // Mira gave Elior the amulet at the end of Act I; it opens the Memory Vault's door
     gameState.addItemToInventory(new AncientAmulet())
+    // The Lifelight Elixir from Act III: its one use is the choice in the throne room
+    gameState.addItemToInventory(new LifelightElixir())
 
     // The main quest starts when the act opens
     gameState.setStoryFlag(FLAG_ACT4_MAIN_STARTED, true)
