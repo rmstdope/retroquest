@@ -173,3 +173,29 @@ describe('Caravan Master Thorne and the week the king went', () => {
     ).not.toContain(ROAD_LINE)
   })
 })
+
+describe('Caravan Master Thorne points to Brenn in the warehouse', () => {
+  it('says Brenn is skulking in the warehouse in the first talk', () => {
+    const game = gameAtThorne()
+
+    const first = game.commandParser.parse('talk to caravan master thorne')
+
+    expect(first).toContain(
+      "Ran! He's skulking in the warehouse now. I'll deal with him once my people are home.",
+    )
+    expect(first.indexOf("He's skulking")).toBeLessThan(
+      first.indexOf("I'll deal with him"),
+    )
+  })
+
+  it('says Brenn sits in the warehouse, not outside it, after the rescue', () => {
+    const game = gameAfterRescue()
+
+    const answer = game.commandParser.parse('talk to caravan master thorne')
+
+    expect(answer).toContain(
+      "He's sitting in the warehouse waiting for his wages, and wages are all he'll get from me.",
+    )
+    expect(answer).not.toContain('outside the warehouse')
+  })
+})

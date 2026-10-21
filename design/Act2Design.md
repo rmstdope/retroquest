@@ -91,7 +91,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Prerequisites:** Access to Market District
   - **Dependencies:** Learn `forest_speech` from the Ancient Tree Spirit and have Quality Rope from the Market District
   - **Completion:** Cast Forest Speech to locate the caravan, then use Quality Rope with the Ravine to rescue the merchants; return to Thorne for the Secret Documents
-  - **Setup line:** Thorne mentions that his guard Brenn fled when the ravine path gave way; Brenn is told about in Thorne's dialogue only and never appears.
+  - **Setup line:** Thorne mentions that his guard Brenn fled when the ravine path gave way; Brenn is met in person in the Merchant's Warehouse (`talk to brenn`), with one conversation in three steps: his side of the story, thanks and a hint after the rescue, and a promise once Elior has spoken for him.
   - **Rewards:** Secret Documents from Thorne, which can help restore Cedric's honor
   - **Story Impact:** Establishes reputation as a reliable hero
 
@@ -243,7 +243,7 @@ City orientation is handled through the City Map and movement behavior, not sepa
 
 #### Master Merchant Aldric & Caravan Master Thorne
 
-- **Role:** Commerce, supply sources; Thorne speaks of Brenn, his guard who fled
+- **Role:** Commerce, supply sources; Thorne speaks of Brenn, his guard who fled and sits in the Merchant's Warehouse
 - **Personality Traits:** Business-focused, practical
 - **Dialogue Interactions:** Trading negotiations, caravan rescue quest
 
@@ -418,7 +418,7 @@ This is the implemented Act II room roster and topology. Items and characters ma
 | Market District | Aldric sells Forest Survival Kit, Enhanced Lantern, and Quality Rope. | Master Merchant Aldric, Caravan Master Thorne | West to Main Square, north to The Silver Stag Inn, south to Merchant's Warehouse. |
 | The Silver Stag Inn | Room Key and Door; the Room Key is purchased from Marcus. | Innkeeper Marcus, Barmaid Elena | South to Market District; east to Inn Rooms after using the key with the door. |
 | Inn Rooms | Twenty Coins; searching reveals the Traveler's Journal, the notebook of the grey-cloaked stranger who last lodged here (Marcus mentions him when Elior rents the room). | None | West to The Silver Stag Inn. |
-| Merchant's Warehouse | None | None | North to Market District. |
+| Merchant's Warehouse | None | Brenn | North to Market District. |
 | Castle Approach | None | Herald, Castle Guard Captain | South to Main Square; west to Castle Courtyard after showing the Entry Pass to the Herald (who does not notice the scraped name). |
 | Castle Courtyard | Squire's Diary appears after talking to the Training Master and Squires, then searching. | Sir Cedric, Training Master, Squires | East to Castle Approach, north to Residential Quarter, west to Great Hall. |
 | Great Hall | None; archive search is gated by formal presentation to the Court Herald and by showing the Historians the stranger's notebook. | Court Herald, Historians, Lord Commander | East to Castle Courtyard. |
