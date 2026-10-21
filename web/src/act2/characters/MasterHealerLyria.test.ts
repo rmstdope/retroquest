@@ -111,7 +111,7 @@ describe('Master Healer Lyria dialogue markup', () => {
     }
   })
 
-  it('keeps her line after the apprenticeship', () => {
+  it('gives the mentor line after the apprenticeship', () => {
     const game = createGame()
     game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true)
     game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
@@ -262,6 +262,21 @@ describe('Lyria with saves and the curse during the apprenticeship', () => {
 
     expect(answer.indexOf('Elena still?')).toBeLessThan(
       answer.indexOf(REMINDER_LINE),
+    )
+  })
+
+  it('gives the curse reminder before the mentor line once complete', () => {
+    const game = createGame()
+    game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true)
+    game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    const lyria = new MasterHealerLyria()
+    lyria.talkTo(game.state)
+
+    const answer = plain(lyria.talkTo(game.state))
+
+    expect(answer.indexOf('Elena still?')).toBeLessThan(
+      answer.indexOf(MENTOR_LINE),
     )
   })
 })
