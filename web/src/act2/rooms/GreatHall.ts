@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event, writing } from '@/engine'
 import type { GameState } from '@/engine'
 import { CourtHerald } from '../characters/CourtHerald'
 import { Historians } from '../characters/Historians'
@@ -8,6 +8,12 @@ import {
   FLAG_RESEARCHED_FAMILY_HERITAGE,
   FLAG_SHOWED_JOURNAL_TO_HISTORIANS,
 } from '../Act2StoryFlags'
+
+/** The visitors' register entry the archive search shows, and recalls on a repeat search. */
+const VISITOR_ENTRY =
+  "'A man in a grey cloak. Asked for the birth rolls of Willowbrook and the " +
+  'families who came there. Would not give his name. Said he came on the ' +
+  "business of Malakar.'"
 
 /**
  * Great Hall room: political nexus enabling a gated heritage research sequence.
@@ -46,17 +52,45 @@ export class GreatHall extends Room {
         'with these records.[/failure]'
       )
     }
+    if (gameState.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE)) {
+      return (
+        event(
+          'You have already been through the archive. One entry in the ' +
+            "visitors' register stays with you:",
+        ) +
+        '\n' +
+        writing(VISITOR_ENTRY)
+      )
+    }
     gameState.setStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE, true)
     return (
-      "[success]With the historians' expert guidance, you navigate through the vast " +
-      'archives to find records mentioning Willowbrook and your family lineage. The ' +
-      'ancient chronicles reveal that your ancestors, the Ravencrest family, were ' +
-      'among the first settlers of Willowbrook. For generations, they served as protectors ' +
-      'of the realm, wielding hereditary magical abilities passed down through bloodlines. ' +
-      'Your family has long been connected to the ancient tradition of safeguarding the ' +
-      'balance between the natural and mystical worlds, with each generation producing ' +
-      'individuals capable of channeling protective magic to defend their community.' +
-      '[/success]'
+      "[success]With the historians' guidance you work through the archive. " +
+      'Most of it is tax rolls and land grants, but near the oldest shelves ' +
+      'you find two things.[/success]\n' +
+      event(
+        'The first is a page from an old history, its sigil drawn in faded gold:',
+      ) +
+      '\n' +
+      writing(
+        "'Of the Wardens of the Dawn. Their mark is the sun rising over three " +
+          'linked rings. They kept watch over the kingdom when the old wars ' +
+          'ended and answered to no lord but the crown. None of them has been ' +
+          "seen in a generation, and few now remember their names.'",
+      ) +
+      '\n' +
+      event(
+        "The second is the archive's own register of visitors. The same entry " +
+          'appears again and again over the past year, in different hands:',
+      ) +
+      '\n' +
+      writing(VISITOR_ENTRY) +
+      '\n' +
+      event(
+        'Malakar. You had always thought him a name from old books, a tale to ' +
+          'frighten children. Yet someone walks into this archive in his name, ' +
+          'asking after the families of Willowbrook. The last entry is dated ' +
+          'the week King Alden vanished.',
+      )
     )
   }
 }

@@ -14,8 +14,8 @@ export class EchoesOfThePastQuest extends Quest {
         'researching historical records and genealogical information in the ' +
         'Great Hall.',
       completion:
-        'You have uncovered important information about your family heritage ' +
-        "and Willowbrook's significance in ancient history!",
+        'The archive names the Wardens of the Dawn, and a stranger asking ' +
+        "after the Willowbrook bloodline on Malakar's business.",
     })
   }
 

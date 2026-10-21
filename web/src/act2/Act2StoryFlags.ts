@@ -36,6 +36,7 @@ export const FLAG_EXAMINED_SECRET_DOCUMENTS = 'examined_secret_documents'
 export const FLAG_SPOKEN_TO_CARAVAN_MASTER = 'spoken_to_caravan_master'
 export const FLAG_COURT_HERALD_FORMAL_PRESENTATION =
   'court_herald_formal_presentation'
+export const FLAG_READ_ANCIENT_CHRONICLE = 'read_ancient_chronicle'
 export const FLAG_RESEARCHED_FAMILY_HERITAGE = 'researched_family_heritage'
 export const FLAG_HELPED_ELDERLY_RESIDENTS = 'helped_elderly_residents'
 export const FLAG_USED_CITY_MAP = 'used_city_map'
