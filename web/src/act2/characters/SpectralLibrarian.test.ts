@@ -133,7 +133,10 @@ const THANKS =
   "'You mended the wards with your [spell_name]mend[/spell_name] spell. They have been failing longer than I care to count; thank you. Now, what you came for.'"
 
 /** A game with the librarian, optionally with the wards mended and the amulet carried. */
-function setup(options: { amulet: boolean; mended?: boolean }) {
+function setup(options: { amulet: boolean; mended?: boolean }): {
+  game: Game
+  librarian: SpectralLibrarian
+} {
   const game = createGame()
   game.state.inventory = game.state.inventory.filter(
     (item) => !(item instanceof AncientAmulet),
@@ -212,6 +215,12 @@ describe('Spectral Librarian notices the amulet', () => {
       `'${GLANCE_LINE} ${CONFESSION}'`,
       " The spirit's eyes glow brighter as they speak: ",
     ])
+    expect(answer.startsWith('[success]')).toBe(true)
+    expect(game.state.currentRoom.items.map((i) => i.name)).toContain(
+      'Crystal Focus',
+    )
+    expect(game.state.getStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)).toBe(true)
   })
 
   it('mends without a confession when the amulet is not carried', () => {
@@ -290,5 +299,27 @@ describe('Spectral Librarian notices the amulet', () => {
     const answer = new SpectralLibrarian().talkTo(fresh.state)
 
     expect(answer).toContain(`'${GLANCE_LINE} ${CONFESSION}'`)
+  })
+
+  it('plays the glance for a save made before mending', () => {
+    const { game } = setup({ amulet: true })
+    const fresh = createGame()
+    fresh.loadSaveData(game.toSaveData())
+
+    const answer = new SpectralLibrarian().talkTo(fresh.state)
+
+    expectInOrder(answer, [GLANCE_NARRATION, GLANCE_LINE, GREETING_START])
+  })
+
+  it('remembers the confession across a save and a reload', () => {
+    const { game, librarian } = setup({ amulet: true, mended: true })
+    librarian.talkTo(game.state)
+    const fresh = createGame()
+    fresh.loadSaveData(game.toSaveData())
+
+    const answer = new SpectralLibrarian().talkTo(fresh.state)
+
+    expect(fresh.state.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)).toBe(true)
+    expect(answer).not.toContain('I wore that mark')
   })
 })
