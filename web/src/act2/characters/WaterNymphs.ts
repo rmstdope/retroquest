@@ -15,57 +15,70 @@ const RIDDLE_HELP =
   "it. Use the command 'say <your_answer> to water nymphs' to give your " +
   'solution.[/dim]'
 
-/** One of the nymphs' riddles: the question, accepted answers and the explanation. */
+/** One of the nymphs' riddles: the question, accepted answers, explanation and hint. */
 interface Riddle {
   question: string
   answers: string[]
   explanation: string
+  hint: string
 }
+
+/**
+ * The nymphs' three riddles in the order they are asked: water, mask, truth.
+ * The mask seeds the silver mark on Elena's wrist; the truth echoes the
+ * refrain on the moss-covered stone. Kept out of the save so that saves
+ * always meet the current riddles.
+ */
+export const RIDDLES: Riddle[] = [
+  {
+    question:
+      "I am the forest's blood that flows without wound, the sky's gift " +
+      'that falls without being thrown. I give life yet can take it, ' +
+      'am soft yet can carve stone. What am I?',
+    answers: ['water', 'the water', 'rain', 'stream', 'river'],
+    explanation:
+      'Water is the lifeblood of the forest, falls as rain, nurtures life ' +
+      'but can flood, and over time carves through stone.',
+    hint:
+      "What runs through us while we sit here? Haven't your boots been " +
+      'wet since you came in?',
+  },
+  {
+    question:
+      'I smile, yet I have no eyes. I have a face, yet it is not my own. ' +
+      'Put me on and I hide you; leave me behind and I tell whose work it ' +
+      'was. What am I?',
+    answers: ['mask', 'masks', 'a mask', 'the mask', 'false face', 'disguise'],
+    explanation:
+      'A mask smiles without eyes and wears a face that is not its own. ' +
+      'It hides whoever wears it, and whoever leaves one behind has signed ' +
+      'their work.',
+    hint:
+      'What do the players at a fair hold up to their faces? Who smiles on ' +
+      'the outside and weeps behind it?',
+  },
+  {
+    question:
+      'Purpose follows me, and power follows purpose. A lie may wear my ' +
+      'coat, but it cannot keep it on. I am hard to say and harder to ' +
+      'hear, and I grow no lighter for being hidden. What am I?',
+    answers: ['truth', 'the truth', 'a truth', 'honesty', 'true'],
+    explanation:
+      'Purpose follows truth, and power follows purpose. A lie can pass ' +
+      'for the truth only for a while, and a hidden truth only grows ' +
+      'heavier.',
+    hint:
+      'What did the old stone in your own woods say comes first, before ' +
+      'purpose and before power?',
+  },
+]
 
 /** Guardians of the Whispering Glade who test visitors with riddles, and who answer only with questions. */
 export class WaterNymphs extends Character {
   riddlesCompleted = false
   currentRiddle = 0
-  riddles: Riddle[] = [
-    {
-      question:
-        'I stand tall and proud, my arms reaching skyward, and sing without ' +
-        'voice. The older I become, the more rings I show. What am I?',
-      answers: ['tree', 'trees', 'forest'],
-      explanation:
-        'A tree grows from earth but reaches toward sky, sings in the wind, ' +
-        'and shows age through rings.',
-    },
-    {
-      question:
-        "I am the forest's blood that flows without wound, the sky's gift " +
-        'that falls without being thrown. I give life yet can take it, ' +
-        'am soft yet can carve stone. What am I?',
-      answers: ['water'],
-      explanation:
-        'Water is the lifeblood of the forest, falls as rain, nurtures life ' +
-        'but can flood, and over time carves through stone.',
-    },
-    {
-      question:
-        'We are many yet one, small yet mighty, busy yet patient. We ' +
-        'build without hands, work without rest, and turn death into life. ' +
-        'What are we?',
-      answers: [
-        'insect',
-        'insects',
-        'bug',
-        'bugs',
-        'ant',
-        'ants',
-        'beetle',
-        'beetles',
-      ],
-      explanation:
-        'Insects work as colonies, build complex structures, decompose ' +
-        'matter, and are essential to the forest ecosystem.',
-    },
-  ]
+  /** Wrong answers given to the current riddle; the hint shows from the second. */
+  missCount = 0
 
   constructor() {
     super({
@@ -110,9 +123,9 @@ export class WaterNymphs extends Character {
             'below the city taste it first.',
         )
       )
-    } else if (this.currentRiddle < this.riddles.length) {
+    } else if (this.currentRiddle < RIDDLES.length) {
       // Present the current riddle
-      const riddle = this.riddles[this.currentRiddle]
+      const riddle = RIDDLES[this.currentRiddle]
       const greeting =
         this.currentRiddle === 0
           ? 'The stream rises into shapes. ' +
@@ -153,22 +166,23 @@ export class WaterNymphs extends Character {
       )
     }
 
-    if (this.currentRiddle >= this.riddles.length) {
+    if (this.currentRiddle >= RIDDLES.length) {
       return '[failure]There are no more riddles to answer.[/failure]'
     }
 
-    const riddle = this.riddles[this.currentRiddle]
+    const riddle = RIDDLES[this.currentRiddle]
     const wordLower = words.toLowerCase().trim()
 
     if (riddle.answers.includes(wordLower)) {
       // Correct answer
+      this.missCount = 0
       this.currentRiddle += 1
       gameState.setStoryFlag(
         `water_nymph_riddle_${this.currentRiddle}_completed`,
         true,
       )
 
-      if (this.currentRiddle >= this.riddles.length) {
+      if (this.currentRiddle >= RIDDLES.length) {
         this.riddlesCompleted = true
         gameState.setStoryFlag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED, true)
 
@@ -191,7 +205,7 @@ export class WaterNymphs extends Character {
           )
         )
       }
-      const nextRiddle = this.riddles[this.currentRiddle]
+      const nextRiddle = RIDDLES[this.currentRiddle]
       return (
         `[success]Correct! '${words}' is the right answer. ${riddle.explanation}` +
         '[/success]\n\nThe ' +
@@ -205,6 +219,8 @@ export class WaterNymphs extends Character {
         speech(`'${nextRiddle.question}'`)
       )
     }
+    this.missCount = (this.missCount || 0) + 1
+    const hint = this.missCount >= 2 ? '\n\n' + speech(`'${riddle.hint}'`) : ''
     return (
       '[failure]The ' +
       characterName(this.name) +
@@ -212,8 +228,7 @@ export class WaterNymphs extends Character {
       speech("'Is that really what you think? Will you hear it again?'") +
       '\n\n' +
       speech(`'${riddle.question}'`) +
-      "\n\n[dim]Consider what you've learned about the forest during your " +
-      'journey.[/dim]'
+      hint
     )
   }
 
