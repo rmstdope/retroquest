@@ -17,7 +17,11 @@ export class Nyx extends Character {
     })
   }
 
-  /** Return dialogue for Nyx and grant rewards on first meeting. */
+  /**
+   * Return dialogue for Nyx and grant rewards on first meeting. The first
+   * talk ends with the refrain and Elior's recognition of the glade stone;
+   * a save that already met Nyx hears only the farewell.
+   */
   override talkTo(gameState: GameState): string {
     // Check if this is the first time talking to Nyx
     if (!gameState.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)) {
@@ -45,7 +49,12 @@ export class Nyx extends Character {
         'You have received: [item_name]Forest Heart Crystal[/item_name]\n\n' +
         '"Use these gifts wisely, young one. The prophetic vision will help you ' +
         "prepare for the gathering storm that approaches. May the forest's blessing " +
-        'guide you on your path."'
+        'guide you on your path."\n\n' +
+        'Then her voice softens, as if she is repeating something she was ' +
+        'told long ago. "Remember the old words, Elior: Power follows ' +
+        'purpose; purpose follows truth."\n\n' +
+        'The words from the stone in the glade. You read them aloud there ' +
+        'and did not know what they meant. You still do not, quite.'
       return msg + '[/success]'
     }
     // Subsequent meetings - just wish good luck

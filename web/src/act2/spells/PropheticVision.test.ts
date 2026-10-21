@@ -31,7 +31,7 @@ describe('Prophetic Vision markup', () => {
 
     const answer = new PropheticVision().castSpell(game.state)
 
-    expect(answer).toContain('shadows gathering in the north')
+    expect(answer).toContain('a robed figure')
     expectMarkupWellFormed(answer)
   })
 
@@ -45,6 +45,30 @@ describe('Prophetic Vision markup', () => {
 
     expect(answer).toContain('brief glimpses of possible futures')
     expectMarkupWellFormed(answer)
+  })
+})
+
+describe('Prophetic Vision first cast', () => {
+  it('shows the village, the figure and the dream voice once', () => {
+    const game = createGameWithCedric()
+    completeAllSideQuests(game.state)
+    const spell = new PropheticVision()
+
+    const first = spell.castSpell(game.state)
+
+    expect(first).toContain('[character_name]Sir Cedric[/character_name]')
+    expect(first).toContain('A village at dusk')
+    expect(first).toContain(
+      '[italic]“Elior… how you have grown. Do not be afraid of me.”[/italic]',
+    )
+    expect(first).toContain(
+      "The vision fades. [character_name]Sir Cedric[/character_name]'s expression has grown grave.",
+    )
+    expect(first).not.toContain('Willowbrook')
+    expect(first).not.toContain('shadows gathering')
+    const later = spell.castSpell(game.state)
+    expect(later).not.toContain('how you have grown')
+    expect(later).not.toContain('robed figure')
   })
 })
 
@@ -66,7 +90,7 @@ describe('Prophetic Vision casting', () => {
 
     const answer = game.cast('prophetic vision')
 
-    expect(answer).toContain('shadows gathering in the north')
+    expect(answer).toContain('a robed figure')
     expect(game.state.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)).toBe(true)
   })
 })
