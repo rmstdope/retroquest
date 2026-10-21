@@ -22,13 +22,13 @@ import { WeatheredCoin } from '../items/WeatheredCoin'
 
 /** His question, asked once the curse has shown at the ruins. */
 const QUESTION =
-  "'You'll have seen the causeway. Birds by the hundred, and the surf gone " +
+  "You'll have seen the causeway. Birds by the hundred, and the surf gone " +
   "grey. I've known bad seasons on this coast, forty years of them. It's " +
-  "only a bad season, isn't it? Tell me the sea will mend on its own.'"
+  "only a bad season, isn't it? Tell me the sea will mend on its own."
 
 /** What he says, once, when Elior talks to him again without the truth. */
 const BAD_SEASON =
-  "'Nothing to say? Then it's a bad season, and it'll pass. It always has.'"
+  "Nothing to say? Then it's a bad season, and it'll pass. It always has."
 
 /**
  * A watchful warden of the pier who comments on local happenings.
@@ -96,7 +96,7 @@ export class PierWarden extends Character {
       return (
         event(`You speak with the ${characterName(this.name)}.`) +
         '\n' +
-        speech("'The truth about what, lad? Speak plain.'")
+        speech('The truth about what, lad? Speak plain.')
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)) {
@@ -104,8 +104,8 @@ export class PierWarden extends Character {
         event(`You speak with the ${characterName(this.name)}.`) +
         '\n' +
         speech(
-          "'You've told me, lad, and I'll not forget it. The boats are " +
-            "staying in.'",
+          "You've told me, lad, and I'll not forget it. The boats are " +
+            'staying in.',
         )
       )
     }
@@ -119,9 +119,9 @@ export class PierWarden extends Character {
       ) +
       '\n' +
       speech(
-        "'… Aye. I think I knew it, and only wanted someone to say " +
+        '… Aye. I think I knew it, and only wanted someone to say ' +
           "otherwise. Better a hard truth than a soft lie. I'll send word up " +
-          "the coast to keep the boats in.'",
+          'the coast to keep the boats in.',
       ) +
       '\n' +
       remembered('Truth')
@@ -151,7 +151,7 @@ export class PierWarden extends Character {
         '\n' +
         event('He pushes your hand away.') +
         '\n' +
-        speech("'I said keep it, lad.'")
+        speech('I said keep it, lad.')
       )
     }
     gameState.setStoryFlag(FLAG_ACT3_WARDEN_COIN_PRESSED_BACK, true)
@@ -161,7 +161,7 @@ export class PierWarden extends Character {
       '\n' +
       event('He turns it over once, then folds your fingers back around it.') +
       '\n' +
-      speech("'Keep it. Toll for the crossing, my da said.'")
+      speech('Keep it. Toll for the crossing, my da said.')
     )
   }
 
@@ -177,9 +177,9 @@ export class PierWarden extends Character {
         characterName(name) +
         ' squints toward the shore. ' +
         speech(
-          "'I'd mind the high stones if I were you. The markers " +
+          "I'd mind the high stones if I were you. The markers " +
             'along the shore keep strange fragments—take heed and look for ' +
-            "moon-signs before the tide turns.'",
+            'moon-signs before the tide turns.',
         )
       )
     }
@@ -190,9 +190,9 @@ export class PierWarden extends Character {
         characterName(name) +
         ' nods slowly. ' +
         speech(
-          "'You've done right by the pillars. There's a fused locker " +
+          "You've done right by the pillars. There's a fused locker " +
             "down in the vaults; I tried a key once but it stuck. Key's no " +
-            "good alone, and magic's no good alone. It wants both.'",
+            "good alone, and magic's no good alone. It wants both.",
         )
       )
     }
@@ -202,9 +202,9 @@ export class PierWarden extends Character {
       characterName(name) +
       ' looks out over the calmer water. ' +
       speech(
-        "'With the sigils attuned and the lanterns lit, the way grows " +
+        'With the sigils attuned and the lanterns lit, the way grows ' +
           'steadier. Those who brave the sanctum find the tide less quick to ' +
-          "swallow their steps.'",
+          'swallow their steps.',
       )
     )
   }

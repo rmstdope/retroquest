@@ -24,17 +24,17 @@ export class KeepsakeNote extends Item {
     return (
       event("You unfold the note carefully, reading Mira's words:") +
       '\n\n' +
-      "[dim]'Elior, as you journey to the relic sites, keep your eyes " +
+      '[dim]Elior, as you journey to the relic sites, keep your eyes ' +
       'open for traces of the past. Your parents left marks upon this ' +
       'world—fragments of their story that Malakar could not erase. In ' +
       'the depths where courage is tested, on the heights where wisdom ' +
       'burns, and in the shadows where sacrifice echoes, you may find ' +
       'the truth of how they hid you from his sight. The three testimonies ' +
-      "will reveal what love can accomplish against the darkest power.'[/dim]\n\n" +
+      'will reveal what love can accomplish against the darkest power.[/dim]\n\n' +
       event(
-        'The note fills you with a sense of purpose beyond the ' +
-          'immediate quest. Somewhere in each relic site, pieces of your ' +
-          'heritage await discovery.',
+        'The note fills you with a sense of purpose beyond the road ' +
+          'ahead. Somewhere in each relic site, pieces of your heritage ' +
+          'await discovery.',
       )
     )
   }

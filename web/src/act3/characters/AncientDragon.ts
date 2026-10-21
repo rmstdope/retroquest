@@ -137,26 +137,24 @@ export class AncientDragon extends Character {
    */
   private closingLine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_SIGILS_MENDED)) {
-      return "'Go with my blessing, young one. The prison holds.'"
+      return 'Go with my blessing, young one. The prison holds.'
     }
     if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)) {
       return (
-        "'Go with my blessing. The prison I hold is weaker for the scale's " +
-        "going. That is the price, and it is mine to pay, not yours.'"
+        "Go with my blessing. The prison I hold is weaker for the scale's " +
+        'going. That is the price, and it is mine to pay, not yours.'
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)) {
       return OATH_ACCEPTED_LINE
     }
     if (gameState.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)) {
-      return (
-        "'You have read the old words. Then tell me: " + OATH_QUESTION + "'"
-      )
+      return 'You have read the old words. Then tell me: ' + OATH_QUESTION
     }
     return (
-      "'The memory has been shared. Your path leads forward now, not " +
+      'The memory has been shared. Your path leads forward now, not ' +
       'back. The scale awaits when you are ready to prove your ' +
-      "selflessness.'"
+      'selflessness.'
     )
   }
 
@@ -170,16 +168,15 @@ export class AncientDragon extends Character {
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {
       return (
         `The ${name} rumbles: ` +
-        speech("'Words come after memory, young one. Sit, and hear me first.'")
+        speech('Words come after memory, young one. Sit, and hear me first.')
       )
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)) {
       return (
         `The ${name}’s golden eyes narrow. ` +
         speech(
-          "'An oath is not something you make up, child. The old words " +
-            'are kept in the Echo Chambers. Read them, then come back.' +
-            "'",
+          'An oath is not something you make up, child. The old words ' +
+            'are kept in the Echo Chambers. Read them, then come back.',
         )
       )
     }
@@ -199,18 +196,18 @@ export class AncientDragon extends Character {
         '\n' +
         '[success]' +
         speech(
-          "'Your words ring true, young one. The scale is yours to bear. " +
-            "May you carry its burden with honor.'",
+          'Your words ring true, young one. The scale is yours to bear. ' +
+            'May you carry its burden with honor.',
         ) +
         '[/success]'
       )
     }
     if (TAKING_ANSWERS.includes(answer)) {
-      return `The ${name} rumbles: ` + speech("'Then you would be taking.'")
+      return `The ${name} rumbles: ` + speech('Then you would be taking.')
     }
     return (
       `The ${name} rumbles: ` +
-      speech("'That is no answer, young one. W" + OATH_QUESTION.slice(1) + "'")
+      speech('That is no answer, young one. W' + OATH_QUESTION.slice(1))
     )
   }
 }
@@ -220,7 +217,7 @@ const OATH_QUESTION = 'what will you give back, for what you take?'
 
 /** The line for the gap between the accepted oath and taking the scale. */
 const OATH_ACCEPTED_LINE =
-  "'The oath has been given and accepted. The scale is yours to claim.'"
+  'The oath has been given and accepted. The scale is yours to claim.'
 
 /** The words that fill the blank, normalised, with how the echo spells them. */
 const GIVING_WORDS: ReadonlyMap<string, string> = new Map([

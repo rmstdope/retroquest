@@ -117,7 +117,7 @@ describe('Miners and Tobin', () => {
       'You offer the [item_name]quiet charm[/item_name] to the [character_name]miners[/character_name].',
     )
     expect(a).toContain('Pretty thing. Not much use to an old man with a pick')
-    expect(a).toContain("I know who needs it.'")
+    expect(a).toContain('I know who needs it.')
     expect(miners.giveItem(game.state, charm)).toBe(a)
     expectMarkupWellFormed(a)
     expect(game.state.virtueCount('selfless')).toBe(0)

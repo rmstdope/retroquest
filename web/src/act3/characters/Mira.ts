@@ -74,25 +74,25 @@ export class Mira extends Character {
         eventMsg +
         '\n' +
         speech(
-          "'Elior. Malakar is draining King Alden's life to break " +
-            "Eldoria's wards, and the king grows weaker every day.'",
+          "Elior. Malakar is draining King Alden's life to break " +
+            "Eldoria's wards, and the king grows weaker every day.",
         ) +
         '\n' +
         speech(
-          "'Three relics can stand against him: the Crystal of Light, " +
+          'Three relics can stand against him: the Crystal of Light, ' +
             "the Phoenix Feather and the Dragon's Scale. We will fetch " +
-            "them one at a time.'",
+            'them one at a time.',
         ) +
         '\n' +
-        speech("'Before we go, take this, and read it. Then we can leave.'") +
+        speech('Before we go, take this, and read it. Then we can leave.') +
         '\n' +
         event('Mira hands you a small, worn piece of parchment.') +
         '\n' +
-        speech("'Say the word, and I will draw the first circle.'") +
+        speech('Say the word, and I will draw the first circle.') +
         '\n' +
         speech(
-          "'On the road, ask me what you need to. I may not be able to " +
-            "answer all of it yet.'",
+          'On the road, ask me what you need to. I may not be able to ' +
+            'answer all of it yet.',
         ) +
         '\n' +
         MIRA_TOPICS_REMINDER
@@ -117,23 +117,23 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            "'The shadows here run deep, Elior. The miners' plight is a " +
+            "The shadows here run deep, Elior. The miners' plight is a " +
               'test of selflessness—lend your strength, and the path to the dragon ' +
               'will open. ' +
-              "The caverns will not yield their heart until all are safe.'",
+              'The caverns will not yield their heart until all are safe.',
           )
         )
       }
       destinationKey = 'MirasHut'
       flavor =
         speech(
-          "'The three relics are yours, Elior. The dragon's " +
+          "The three relics are yours, Elior. The dragon's " +
             'wisdom runs deep—its scale will turn aside shadow and bind ' +
             'your oath. Let us return to my hut where we can combine their ' +
-            "power into something that can save the king.'",
+            'power into something that can save the king.',
         ) +
         '\n' +
-        speech("'The king is fading, Elior. We have less time than I hoped.'") +
+        speech('The king is fading, Elior. We have less time than I hoped.') +
         cedricAdds(gameState, CEDRIC_KING_WEAKER_3)
     } else if (gameState.currentRoom.name === 'Lower Switchbacks') {
       if (!gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
@@ -141,13 +141,13 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            "'Here, Wisdom is taught in " +
+            'Here, Wisdom is taught in ' +
               'embers. Old guides here tell of a phoenix that nested where ' +
               'the rock blooms with heat — a bird of returning flame. From ' +
               'its ash a single feather rises renewed, and such a feather ' +
               'is said to clear the eyes and steady a wavering hand. ' +
               'Listen for songs on the wind, and tend any sparks you find; ' +
-              "they may be more than mere kindle.'",
+              'they may be more than mere kindle.',
           )
         )
       }
@@ -158,10 +158,10 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            "'Before we descend into shadow, Elior, you must " +
+            'Before we descend into shadow, Elior, you must ' +
               'discover the words your parents left burned into stone upon ' +
               'these ember heights. Their message will guide you through ' +
-              "the darkness ahead.'",
+              'the darkness ahead.',
           )
         )
       }
@@ -169,15 +169,15 @@ export class Mira extends Character {
       destinationKey = 'CavernMouth'
       flavor =
         speech(
-          "'You have done well, Elior. The Phoenix Feather is a " +
+          'You have done well, Elior. The Phoenix Feather is a ' +
             'token of wisdom; it will guide you through darkness and flame. ' +
             'Ahead lies the Cavern Mouth—gaping stone jaws that breathe cold ' +
-            "and shadow. Steel your heart and hold your light high.'",
+            'and shadow. Steel your heart and hold your light high.',
         ) +
         '\n' +
         speech(
-          "'The king is weaker still. Whatever drains him draws harder with every " +
-            "site we reach.'",
+          'The king is weaker still. Whatever drains him draws harder with every ' +
+            'site we reach.',
         ) +
         cedricAdds(gameState, CEDRIC_KING_WEAKER_2)
     } else if (gameState.currentRoom.name === 'Tidal Causeway') {
@@ -186,11 +186,11 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            "'This place keeps its secrets in salt and song. " +
+            'This place keeps its secrets in salt and song. ' +
               'Within the Sunken Ruins lies the Crystal of Light—an old ' +
               'relic that answers to courage. It parts veils and steadies ' +
               'the spirit. When you stand before the ' +
-              "tide-born guardian, speak your vow and let it steady you.'",
+              'tide-born guardian, speak your vow and let it steady you.',
           )
         )
       }
@@ -201,10 +201,10 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            "'Before we venture into the shadowed depths, Elior, " +
+            'Before we venture into the shadowed depths, Elior, ' +
               'you should seek the traces your parents left behind in the ' +
               'sunken ruins. Their story will give you strength for what ' +
-              "lies ahead on the ember heights.'",
+              'lies ahead on the ember heights.',
           )
         )
       }
@@ -214,16 +214,16 @@ export class Mira extends Character {
       gameState.setStoryFlag(FLAG_ACT3_RUINS_LEFT, true)
       flavor =
         speech(
-          "'Well done, Elior. The Crystal answers to courage; you " +
+          'Well done, Elior. The Crystal answers to courage; you ' +
             'have steadied the tide. Ahead lies the Lower Switchbacks—ridges ' +
             'of ember and knife-rolled stone where ash chokes the air and the ' +
             'path winds like a fever dream. Keep your footing and watch the ' +
-            "skies for falling cinders.'",
+            'skies for falling cinders.',
         ) +
         '\n' +
         speech(
-          "'And Elior—I can feel the king through the focus. He is weaker than " +
-            "when we set out.'",
+          'And Elior—I can feel the king through the focus. He is weaker than ' +
+            'when we set out.',
         ) +
         cedricAdds(gameState, CEDRIC_KING_WEAKER_1)
     } else if (gameState.currentRoom.name === "Mira's Hut") {
@@ -233,9 +233,9 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            "'Before we proceed, Elior, you should read the note " +
+            'Before we proceed, Elior, you should read the note ' +
               'I gave you. It contains important guidance about your journey ' +
-              "that you may find... enlightening.'",
+              'that you may find... enlightening.',
           )
         )
       }
@@ -258,9 +258,9 @@ export class Mira extends Character {
             eventMsg +
             '\n' +
             speech(
-              "'Before the Warding Rite, every remaining quest in " +
-                'this act must be complete. Only then can the three relics ' +
-                "be joined safely.'",
+              'Not yet. Something is still left undone out there, Elior — ' +
+                'I can feel it in the weave. Until it is set right, the ' +
+                'three relics cannot be joined safely.',
             )
           )
         }
@@ -288,10 +288,10 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           (speech(
-            "'The three relics resonate with ancient power, " +
+            'The three relics resonate with ancient power, ' +
               'Elior. The Crystal of Light, the Phoenix Feather, and the ' +
               "Dragon's Scale—courage, wisdom, and selflessness made " +
-              "manifest.'",
+              'manifest.',
           ) +
             '\n' +
             event(
@@ -309,8 +309,8 @@ export class Mira extends Character {
             ) +
             '\n' +
             speech(
-              "'By light and flame and ancient oath, let these " +
-                "virtues merge into one vessel of protection!'",
+              'By light and flame and ancient oath, let these ' +
+                'virtues merge into one vessel of protection!',
             ) +
             '\n' +
             event(
@@ -321,9 +321,9 @@ export class Mira extends Character {
             ) +
             '\n' +
             speech(
-              "'It is done. This elixir can counter Malakar's " +
+              "It is done. This elixir can counter Malakar's " +
                 'life-draining ritual and save King Alden. Take it, and we ' +
-                "shall proceed to the fortress.'",
+                'shall proceed to the fortress.',
             ))
         )
       } else if (gameState.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)) {
@@ -333,10 +333,10 @@ export class Mira extends Character {
             eventMsg +
             '\n' +
             speech(
-              "'Elior, you must take the Lifelight Elixir before we " +
+              'Elior, you must take the Lifelight Elixir before we ' +
                 'depart for the fortress. We cannot face Malakar without it—the ' +
                 'elixir is our only hope of countering his life-draining ritual ' +
-                "and saving King Alden.'",
+                'and saving King Alden.',
             )
           )
         }
@@ -344,29 +344,29 @@ export class Mira extends Character {
         destinationKey = 'FortressEntrance'
         flavor =
           speech(
-            "'The Lifelight Elixir pulses with the power of three " +
+            'The Lifelight Elixir pulses with the power of three ' +
               "virtues. Now we make our final journey—to Malakar's fortress, " +
-              "where the kingdom's fate awaits.'",
+              "where the kingdom's fate awaits.",
           ) +
           '\n' +
           speech(
-            "'Steel yourself, Elior. Beyond this circle lies the " +
+            'Steel yourself, Elior. Beyond this circle lies the ' +
               'heart of shadow itself. But you carry the light that can pierce ' +
-              "even Malakar's darkness.'",
+              "even Malakar's darkness.",
           )
       } else {
         // Initial teleport to start the quest
         destinationKey = 'TidalCauseway'
         flavor =
           speech(
-            "'The hour is upon us, Elior. We will draw the first " +
+            'The hour is upon us, Elior. We will draw the first ' +
               'circle at the Tidal Causeway, where moonlight marries the ' +
-              "sea.'",
+              'sea.',
           ) +
           '\n' +
           speech(
-            "'When the air folds and the mist closes, breathe. It " +
-              "will pass in a heartbeat.'",
+            'When the air folds and the mist closes, breathe. It ' +
+              'will pass in a heartbeat.',
           )
       }
     }
@@ -449,8 +449,8 @@ export class Mira extends Character {
         eventMsg +
         '\n' +
         speech(
-          "'I am right behind you, Elior. The gates will not open " +
-            "themselves.'",
+          'I am right behind you, Elior. The gates will not open ' +
+            'themselves.',
         )
       )
     }
@@ -461,11 +461,11 @@ export class Mira extends Character {
         'Mira leans on the cold stone of the gate. Her hands are still ' +
           'shaking from the last circle.',
       ),
-      speech("'I know how I look, Elior. Do not ask me to stay behind.'"),
+      speech('I know how I look, Elior. Do not ask me to stay behind.'),
       speech(
-        "'Your parents walked into the dark without me once. I will not " +
+        'Your parents walked into the dark without me once. I will not ' +
           'let you do the same. Go with courage, wisdom, and ' +
-          "selflessness—I am coming with you.'",
+          'selflessness—I am coming with you.',
       ),
     ].join('\n')
   }
@@ -478,7 +478,7 @@ export class Mira extends Character {
   static ruinsSlip(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED, true)
     return (
-      speech("'Lysa's hand. She always crossed her sevens.'") +
+      speech("Lysa's hand. She always crossed her sevens.") +
       '\n' +
       event(
         characterName('Mira') +
@@ -513,7 +513,7 @@ export class Mira extends Character {
       gameState.setStoryFlag(FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED, true)
       lines.push(
         event('She looks at the feather a long time.'),
-        speech("'…even when the world burns.'"),
+        speech('…even when the world burns.'),
         event(
           'She says it softly, as if finishing a sentence someone else began.',
         ),
@@ -552,45 +552,42 @@ export class Mira extends Character {
         "Mira's hands stop above the three relics. She does not begin the rite.",
       ),
       speech(
-        "'Before I join them, Elior, there is something you must hear from " +
-          "me, and not from a stone or a dragon.'",
+        'Before I join them, Elior, there is something you must hear from ' +
+          'me, and not from a stone or a dragon.',
       ),
-      speech("'You noticed. I saw you notice.'"),
+      speech('You noticed. I saw you notice.'),
       speech(
-        "'I knew your parents. Not as a healer knows a neighbour. I was " +
+        'I knew your parents. Not as a healer knows a neighbour. I was ' +
           "their pupil — Aren's, Lysa's, and Malakar's. The three of them " +
-          "taught me everything I know of circles and wards.'",
+          'taught me everything I know of circles and wards.',
       ),
       speech(
-        "'When Aren and Lysa poured themselves into the ward, someone had " +
+        'When Aren and Lysa poured themselves into the ward, someone had ' +
           'to stay with the child it hid. I came to Willowbrook as its ' +
-          "healer, and I have watched over you every day since.'",
+          'healer, and I have watched over you every day since.',
       ),
       speech(
-        "'Your grandmother knew. She is Lysa's mother, and she kept the " +
-          "secret with me.'",
+        "Your grandmother knew. She is Lysa's mother, and she kept the " +
+          'secret with me.',
       ),
       event(
         'For a moment you cannot speak. Then the words come out harder than ' +
           "you meant them: 'Why didn't you tell me?'",
       ),
       speech(
-        "'Because the seal could not bear it. Malakar's cloaked agent " +
+        "Because the seal could not bear it. Malakar's cloaked agent " +
           "walked Willowbrook's lanes searching for the amulet, and any " +
-          "word of who you were could have reached him.'",
+          'word of who you were could have reached him.',
       ),
       speech(
-        "'I am telling you now because you have earned the truth. The " +
-          "amulet you carry is the anchor of the ward your parents became.'",
+        'I am telling you now because you have earned the truth. The ' +
+          'amulet you carry is the anchor of the ward your parents became.',
       ),
       event('She looks down at the relics, and then back at you.'),
+      speech('When you are ready, tell me, and I will begin the Warding Rite.'),
       speech(
-        "'When you are ready, speak to me again, and I will begin the " +
-          "Warding Rite.'",
-      ),
-      speech(
-        "'And ask me anything you like now — about your parents, Malakar, " +
-          "the amulet, your grandmother. I will not hide from you again.'",
+        'And ask me anything you like now — about your parents, Malakar, ' +
+          'the amulet, your grandmother. I will not hide from you again.',
       ),
       MIRA_TOPICS_REMINDER,
     ].join('\n')

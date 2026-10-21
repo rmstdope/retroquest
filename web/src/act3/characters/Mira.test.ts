@@ -85,16 +85,16 @@ describe('Mira', () => {
     const out = new Mira().talkTo(game.state)
     const speeches = out.match(/\[dialogue\].*?\[\/dialogue\]/g) ?? []
     expect(speeches).toEqual([
-      "[dialogue]'Elior. Malakar is draining King Alden's life to break " +
-        "Eldoria's wards, and the king grows weaker every day.'[/dialogue]",
-      "[dialogue]'Three relics can stand against him: the Crystal of Light, " +
+      "[dialogue]Elior. Malakar is draining King Alden's life to break " +
+        "Eldoria's wards, and the king grows weaker every day.[/dialogue]",
+      '[dialogue]Three relics can stand against him: the Crystal of Light, ' +
         "the Phoenix Feather and the Dragon's Scale. We will fetch them one " +
-        "at a time.'[/dialogue]",
-      "[dialogue]'Before we go, take this, and read it. Then we can leave.'" +
+        'at a time.[/dialogue]',
+      '[dialogue]Before we go, take this, and read it. Then we can leave.' +
         '[/dialogue]',
-      "[dialogue]'Say the word, and I will draw the first circle.'[/dialogue]",
-      "[dialogue]'On the road, ask me what you need to. I may not be able to " +
-        "answer all of it yet.'[/dialogue]",
+      '[dialogue]Say the word, and I will draw the first circle.[/dialogue]',
+      '[dialogue]On the road, ask me what you need to. I may not be able to ' +
+        'answer all of it yet.[/dialogue]',
     ])
     expect(out.endsWith(MIRA_TOPICS_REMINDER)).toBe(true)
     const handOver = out.indexOf('Mira hands you a small, worn piece')
@@ -354,7 +354,7 @@ describe('Mira', () => {
 
       const out = new Mira().talkTo(game.state)
 
-      expect(out).toContain('every remaining quest')
+      expect(out).toContain('Something is still left undone')
       expect(game.state.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)).toBe(
         false,
       )
@@ -521,33 +521,31 @@ describe('Mira confesses before the Warding Rite', () => {
         "Mira's hands stop above the three relics. She does not begin the rite.",
       ),
       speech(
-        "'Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon.'",
+        'Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon.',
       ),
-      speech("'You noticed. I saw you notice.'"),
+      speech('You noticed. I saw you notice.'),
       speech(
-        "'I knew your parents. Not as a healer knows a neighbour. I was their pupil — Aren's, Lysa's, and Malakar's. The three of them taught me everything I know of circles and wards.'",
-      ),
-      speech(
-        "'When Aren and Lysa poured themselves into the ward, someone had to stay with the child it hid. I came to Willowbrook as its healer, and I have watched over you every day since.'",
+        "I knew your parents. Not as a healer knows a neighbour. I was their pupil — Aren's, Lysa's, and Malakar's. The three of them taught me everything I know of circles and wards.",
       ),
       speech(
-        "'Your grandmother knew. She is Lysa's mother, and she kept the secret with me.'",
+        'When Aren and Lysa poured themselves into the ward, someone had to stay with the child it hid. I came to Willowbrook as its healer, and I have watched over you every day since.',
+      ),
+      speech(
+        "Your grandmother knew. She is Lysa's mother, and she kept the secret with me.",
       ),
       event(
         "For a moment you cannot speak. Then the words come out harder than you meant them: 'Why didn't you tell me?'",
       ),
       speech(
-        "'Because the seal could not bear it. Malakar's cloaked agent walked Willowbrook's lanes searching for the amulet, and any word of who you were could have reached him.'",
+        "Because the seal could not bear it. Malakar's cloaked agent walked Willowbrook's lanes searching for the amulet, and any word of who you were could have reached him.",
       ),
       speech(
-        "'I am telling you now because you have earned the truth. The amulet you carry is the anchor of the ward your parents became.'",
+        'I am telling you now because you have earned the truth. The amulet you carry is the anchor of the ward your parents became.',
       ),
       event('She looks down at the relics, and then back at you.'),
+      speech('When you are ready, tell me, and I will begin the Warding Rite.'),
       speech(
-        "'When you are ready, speak to me again, and I will begin the Warding Rite.'",
-      ),
-      speech(
-        "'And ask me anything you like now — about your parents, Malakar, the amulet, your grandmother. I will not hide from you again.'",
+        'And ask me anything you like now — about your parents, Malakar, the amulet, your grandmother. I will not hide from you again.',
       ),
       MIRA_TOPICS_REMINDER,
     ].join('\n')
@@ -579,7 +577,7 @@ describe('Mira confesses before the Warding Rite', () => {
 
     const out = executeCommands(game, ['talk to mira'])
 
-    expect(out).toContain('every remaining quest')
+    expect(out).toContain('Something is still left undone')
     expect(out).not.toContain('pupil')
     expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)).toBe(false)
   })
@@ -623,7 +621,7 @@ describe('Mira topics', () => {
   it('dodges a topic before the confession and repeats it word for word', () => {
     const game = new Game([new Act3()])
     const first = new Mira().sayTo(game.state, 'parents')
-    expect(first).toBe(dialogue('Mira', "'Later, Elior. Not here.'"))
+    expect(first).toBe(dialogue('Mira', 'Later, Elior. Not here.'))
     expect(new Mira().sayTo(game.state, 'parents')).toBe(first)
   })
 
@@ -666,8 +664,8 @@ describe('Mira topics', () => {
     expect(confession.endsWith(MIRA_TOPICS_REMINDER)).toBe(true)
     expect(confession).toContain(
       speech(
-        "'And ask me anything you like now — about your parents, Malakar, " +
-          "the amulet, your grandmother. I will not hide from you again.'",
+        'And ask me anything you like now — about your parents, Malakar, ' +
+          'the amulet, your grandmother. I will not hide from you again.',
       ),
     )
   })

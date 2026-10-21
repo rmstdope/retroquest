@@ -55,8 +55,8 @@ export class SubmergedAntechamber extends Room {
     }
     if (gameState.getStoryFlag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)) {
       return event(
-        'The niches glow with steady, pearlescent flame. The Lanterns of the ' +
-          'Deeps are already lit.',
+        'The niches glow with steady, pearlescent flame. The lanterns you ' +
+          'set here still burn.',
       )
     }
     const alreadyHere = this.items.some((i) => i instanceof LanternBracket)

@@ -58,18 +58,18 @@ export class Phoenix extends Character {
         ' inclines its head. ' +
         (story
           ? speech(
-              "'You saw his name on the terraces, burned deeper than the " +
+              'You saw his name on the terraces, burned deeper than the ' +
                 'others. No fire did that. He came back, years after, and ' +
                 'struck it again himself, to cut himself out of the promise. ' +
-                "The stone would not let him.'",
+                'The stone would not let him.',
             ) + ' '
           : '') +
         (gameState.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)
           ? speech(
-              "'You gave him back his place. He could not do that for himself.'",
+              'You gave him back his place. He could not do that for himself.',
             ) + ' '
           : '') +
-        speech("'Remember him when time is short for you.'")
+        speech('Remember him when time is short for you.')
       )
     }
     this.riddlePosed = true
@@ -78,13 +78,13 @@ export class Phoenix extends Character {
       characterName('phoenix') +
       "'s voice does not come from its " +
       'beak, but resounds within your mind: ' +
-      speech("'What is wisdom when time is short?'") +
+      speech('What is wisdom when time is short?') +
       ' The question lingers, ' +
       'bright and weightless, as if the answer might shape the very air around you.' +
       ' ' +
       speech(
-        "'I asked this once of the Warden of Wisdom, when he came to me with " +
-          "his two friends. He knew the answer, and did not keep it.'",
+        'I asked this once of the Warden of Wisdom, when he came to me with ' +
+          'his two friends. He knew the answer, and did not keep it.',
       )
     )
   }
@@ -104,7 +104,7 @@ export class Phoenix extends Character {
         characterName('phoenix') +
         ' inclines its head, a knowing ' +
         'warmth in its eyes. ' +
-        speech("'You already hold what you have earned.'")
+        speech('You already hold what you have earned.')
       )
     }
     const answerWords = words.toLowerCase().split(/[^a-z]+/)
@@ -114,9 +114,9 @@ export class Phoenix extends Character {
       const link =
         ' ' +
         speech(
-          "'He gave your answer too. Then time grew short for his friends, and " +
+          'He gave your answer too. Then time grew short for his friends, and ' +
             'patience was the one thing he had none of. Do not become what he ' +
-            "became.'",
+            'became.',
         )
       const terraces = gameState.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)
         ? ' You think of the third name on the terraces, level with the others again.'
@@ -129,8 +129,8 @@ export class Phoenix extends Character {
         "'s eyes flare with approval. It " +
         'plucks a single glowing feather and offers it to you. ' +
         speech(
-          "'Wisdom is " +
-            "patience, even when the world burns. Take this, and remember.'",
+          'Wisdom is ' +
+            'patience, even when the world burns. Take this, and remember.',
         ) +
         link +
         terraces +
@@ -141,7 +141,7 @@ export class Phoenix extends Character {
       'The ' +
       characterName('phoenix') +
       ' studies you in silence. ' +
-      speech("'Is that truly wisdom, when time is short?'")
+      speech('Is that truly wisdom, when time is short?')
     )
   }
 }

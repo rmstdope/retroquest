@@ -63,11 +63,11 @@ export class Tobin extends Character {
       'you met him.' +
       '\n' +
       `${characterName(this.name)}: ` +
-      speech("'It's quiet.'") +
+      speech("It's quiet.") +
       ' His voice is a cracked whisper. ' +
       speech(
-        "'I could still hear it. Me, shouting. All this time, I could still " +
-          "hear it.'",
+        'I could still hear it. Me, shouting. All this time, I could still ' +
+          'hear it.',
       ) +
       '\n' +
       'Across the gallery, the lead miner sets down his pick and does not ' +
@@ -84,8 +84,8 @@ export class Tobin extends Character {
       return (
         `${characterName(this.name)} touches the charm at his throat: ` +
         speech(
-          "'Still quiet. I'll keep it, if that's all right. Just till we're " +
-            "up top.'",
+          "Still quiet. I'll keep it, if that's all right. Just till we're " +
+            'up top.',
         )
       )
     }

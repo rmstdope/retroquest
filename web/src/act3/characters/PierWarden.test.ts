@@ -41,7 +41,7 @@ describe('PierWarden dialogue branches', () => {
 
     expect(out).toContain(
       "I tried a key once but it stuck. Key's no good alone, and magic's " +
-        "no good alone. It wants both.'",
+        'no good alone. It wants both.',
     )
     expect(out).not.toContain('old songs')
   })

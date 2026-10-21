@@ -83,9 +83,9 @@ describe('Sir Cedric reacts to the story', () => {
     expect(inOrder(first, 'You may now', 'turns its rippling face to')).toBe(
       true,
     )
-    expect(first).toContain("'Name what you will not abandon.'")
-    expect(first).toContain("'My king.'")
-    expect(first).toContain("'I did once.'")
+    expect(first).toContain('Name what you will not abandon.')
+    expect(first).toContain('My king.')
+    expect(first).toContain('I did once.')
     expect(first.endsWith('The water does not answer him.[/event]')).toBe(true)
     expect(second).not.toContain('Sir Cedric')
     expect(game.state.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(true)
@@ -174,7 +174,7 @@ describe('Sir Cedric reacts to the story', () => {
       expect(
         inOrder(out, 'not yet synchronized', 'steps toward the vents'),
       ).toBe(true)
-      expect(out).toContain("'Between breaths, then.")
+      expect(out).toContain('Between breaths, then.')
     }
   })
 
@@ -216,10 +216,10 @@ describe('Sir Cedric in the story view', () => {
     walkTrial(guardian, game)
     const quotes = speakers(guardian.sayTo(game.state, 'myself'))
     expect(quotes).toContain(
-      "Tide-Born Guardian: 'Name what you will not abandon.'",
+      'Tide-Born Guardian: Name what you will not abandon.',
     )
-    expect(quotes).toContain("Sir Cedric: 'My king.'")
-    expect(quotes).toContain("Sir Cedric: 'I did once.'")
+    expect(quotes).toContain('Sir Cedric: My king.')
+    expect(quotes).toContain('Sir Cedric: I did once.')
   })
 
   it('gives the oldest miner his own words', () => {
@@ -227,7 +227,7 @@ describe('Sir Cedric in the story view', () => {
     const quotes = speakers(new Miners().talkTo(game.state))
     expect(quotes.some((q) => q.startsWith('oldest miner: '))).toBe(true)
     expect(quotes).toContain(
-      "Sir Cedric: 'Someone should stay until the braces settle. I will.'",
+      'Sir Cedric: Someone should stay until the braces settle. I will.',
     )
   })
 
@@ -238,7 +238,7 @@ describe('Sir Cedric in the story view', () => {
       'You: \u201cPower follows purpose; purpose follows truth.\u201d',
     )
     expect(speakers(out)).toEqual([
-      "Sir Cedric: 'Truth, then. The truth is I was on the wall. The truth is he is still alive. Let us go and get him.'",
+      'Sir Cedric: Truth, then. The truth is I was on the wall. The truth is he is still alive. Let us go and get him.',
     ])
   })
 })

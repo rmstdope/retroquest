@@ -77,7 +77,7 @@ describe('Tobin', () => {
       expect(answer).toContain(
         'As his hand closes around it, the endless dripping of the gallery seems to step back a pace',
       )
-      expect(answer).toContain("'It's quiet.'")
+      expect(answer).toContain("It's quiet.")
       expect(answer).toContain(
         'Across the gallery, the lead miner sets down his pick and does not pick it up again.',
       )
@@ -103,7 +103,7 @@ describe('Tobin', () => {
         'The pale charm hangs at his throat on a bootlace',
       )
       const a = tobin.talkTo(game.state)
-      expect(a).toContain("'Still quiet. I'll keep it, if that's all right.")
+      expect(a).toContain("Still quiet. I'll keep it, if that's all right.")
       expect(tobin.talkTo(game.state)).toBe(a)
       expect(a).not.toContain('swallows')
       expectMarkupWellFormed(a)
@@ -113,7 +113,7 @@ describe('Tobin', () => {
       const { game, tobin } = setup()
       expect(tobin.talks).toBe(0)
       const answer = tobin.giveItem(game.state, new QuietCharm())
-      expect(answer).toContain("'It's quiet.'")
+      expect(answer).toContain("It's quiet.")
     })
 
     it('declines anything else as usual', () => {
