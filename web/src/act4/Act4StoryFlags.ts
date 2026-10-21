@@ -27,6 +27,9 @@ export const FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED =
   'act4_knight_of_despair_started'
 export const FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED =
   'act4_knight_of_despair_completed'
+/** The awake captain has told the player of the man in grey (once, after the knight's redemption). */
+export const FLAG_ACT4_CAPTAIN_MAN_IN_GREY_TOLD =
+  'act4_captain_man_in_grey_told'
 export const FLAG_ACT4_KNIGHTS_REDEMPTION_ACQUIRED =
   'act4_knights_redemption_acquired'
 export const FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED =

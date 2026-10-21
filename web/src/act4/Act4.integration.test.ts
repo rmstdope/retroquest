@@ -375,9 +375,7 @@ describe('Act 4 integration', () => {
       expect(servants).toContain('Thank you for our freedom!')
       expectDialogueSpeaker(servants, 'Freed Servants')
       const captain = executeCommands(game, ['talk to captain'])
-      expect(captain).toContain(
-        'The night the king was taken, Cedric stood his post',
-      )
+      expect(captain).toContain('Cedric stood his post')
       expectDialogueSpeaker(captain, 'Captain of the Guard')
       executeCommands(game, ['take loyalty token', "take servant's pendant"])
       expectItemInInventory(game.state, 'Loyalty Token', true)
