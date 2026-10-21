@@ -56,13 +56,24 @@ describe('Prophetic Vision first cast', () => {
 
     const first = spell.castSpell(game.state)
 
-    expect(first).toContain('[character_name]Sir Cedric[/character_name]')
-    expect(first).toContain('A village at dusk')
-    expect(first).toContain(
-      '[italic]“Elior… how you have grown. Do not be afraid of me.”[/italic]',
-    )
-    expect(first).toContain(
-      "The vision fades. [character_name]Sir Cedric[/character_name]'s expression has grown grave.",
+    expect(first).toBe(
+      '[event]' +
+        'You close your eyes and reach out with your newly granted sight ' +
+        'beyond sight. With [character_name]Sir Cedric[/character_name] ' +
+        'standing beside you, you share the vision as it rises before you:' +
+        '\n\n' +
+        'A village at dusk, its roofs low and familiar. Beyond it, a field ' +
+        'withered to grey stalks, the way yours was the morning all this ' +
+        "began. And at the field's edge, a robed figure, its face lost in " +
+        'shadow, reaching one hand toward you as if across a great ' +
+        'distance.\n\n' +
+        'Then the voice from your dream, the one that called your name on ' +
+        'the night of the storm: [italic]“Elior… how you have grown. Do ' +
+        'not be afraid of me.”[/italic] It is closer than it was. You do ' +
+        'not know whose it is, only that you have heard it before, long ' +
+        'before the dream.\n\n' +
+        "The vision fades. Sir Cedric's expression has grown grave." +
+        '[/event]',
     )
     expect(first).not.toContain('Willowbrook')
     expect(first).not.toContain('shadows gathering')

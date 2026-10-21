@@ -24,7 +24,15 @@ describe('Nyx', () => {
     expect(answer.indexOf(REFRAIN)).toBeGreaterThan(blessing)
     expect(answer.indexOf(RECOGNITION)).toBeGreaterThan(answer.indexOf(REFRAIN))
     expect(answer.startsWith('[success]')).toBe(true)
-    expect(answer.endsWith(RECOGNITION + '[/success]')).toBe(true)
+    expect(
+      answer.endsWith(
+        'guide you on your path."\n\n' +
+          REFRAIN +
+          '\n\n' +
+          RECOGNITION +
+          '[/success]',
+      ),
+    ).toBe(true)
     expectMarkupWellFormed(answer)
   })
 

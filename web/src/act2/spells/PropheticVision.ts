@@ -5,7 +5,8 @@ import { SirCedric } from '../characters/SirCedric'
 /**
  * Ultimate divination spell concluding Act II foresight quest progression.
  * The first cast with Sir Cedric present completes the Gathering Storm quest
- * and shows the vision of the village, the robed figure and the dream voice; later casts return a shorter variant.
+ * and shows the vision of the village, the robed figure and the dream voice;
+ * later casts return a shorter variant.
  */
 export class PropheticVision extends Spell {
   constructor() {
@@ -66,9 +67,7 @@ export class PropheticVision extends Spell {
           'not be afraid of me.”[/italic] It is closer than it was. You do ' +
           'not know whose it is, only that you have heard it before, long ' +
           'before the dream.\n\n' +
-          'The vision fades. ' +
-          characterName('Sir Cedric') +
-          "'s expression has grown grave.",
+          "The vision fades. Sir Cedric's expression has grown grave.",
       )
     }
 
