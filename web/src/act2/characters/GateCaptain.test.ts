@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { GateCaptain } from './GateCaptain'
+import type { GreendaleGates } from '../rooms/GreendaleGates'
 import { EntryPass } from '../items/EntryPass'
 import { WalkingStick } from '../items/WalkingStick'
 import {
@@ -57,15 +58,41 @@ describe('Gate Captain dialogue markup', () => {
     expectCaptainSpeaks(answer)
   })
 
-  it('attributes the talk after the entry pass to the captain', () => {
+  it('leaves the room in the same turn as he accepts the pass', () => {
+    const game = createGameAtGates()
+    game.state.addItemToInventory(new EntryPass())
+
+    const answer = game.commandParser.parse('give entry pass to gate captain')
+
+    expect(answer).toContain("You'll need a map to navigate the city")
+    expect(answer).toContain('information post')
+    expect(answer).toContain('salutes smartly')
+    expect(answer).not.toContain('He steps aside')
+    expect(game.state.currentRoom.characters).toHaveLength(0)
+    expectCaptainSpeaks(answer)
+  })
+
+  it('is not there to talk to after he accepted the pass', () => {
     const game = createGameAtGates()
     game.state.addItemToInventory(new EntryPass())
     game.commandParser.parse('give entry pass to gate captain')
 
     const answer = game.commandParser.parse('talk to gate captain')
 
+    expect(answer).not.toContain('Welcome to Greendale')
+    expect(game.state.currentRoom.characters).toHaveLength(0)
+  })
+
+  it('still sends off a captain left in the room by an older save', () => {
+    const game = createGameAtGates()
+    const gates = game.state.allRooms.GreendaleGates as GreendaleGates
+    gates.gateCaptain.entryPassGiven = true
+
+    const answer = game.commandParser.parse('talk to gate captain')
+
     expect(answer).toContain('Welcome to Greendale, honored visitor')
     expect(answer).toContain('salutes smartly')
+    expect(gates.characters).toHaveLength(0)
     expectCaptainSpeaks(answer)
   })
 
