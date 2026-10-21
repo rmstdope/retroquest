@@ -51,14 +51,14 @@ describe('Barmaid Elena stage directions', () => {
       (e) => {
         e.elenaInitialHealing = true
       },
-      'Elena looks much better, but still weak.',
+      'Elena turns her hand over and looks at it as if it belonged to someone else.',
     ],
     [
       'purified',
       (e) => {
         e.elenaPurified = true
       },
-      'Elena glows with pure energy.',
+      'Elena rubs at the inside of her wrist.',
     ],
     [
       'cured',
@@ -76,7 +76,8 @@ describe('Barmaid Elena stage directions', () => {
       expect(out).not.toContain('*')
       expect(narration(out)).toEqual([line])
       const spoken = quotes(out)
-      expect(spoken).toHaveLength(1)
+      // After the healing Elena speaks twice: it did not take, and Lyria.
+      expect(spoken).toHaveLength(line.includes('turns her hand') ? 2 : 1)
       expect(spoken[0].speaker).toBe('barmaid elena')
       expect(parseTurn(out)[0].kind).toBe('text')
     },

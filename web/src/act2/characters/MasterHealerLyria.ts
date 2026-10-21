@@ -10,6 +10,10 @@ import { GreaterHealSpell } from '../spells/GreaterHealSpell'
 import {
   FLAG_HEALERS_APPRENTICE_ACCEPTED,
   FLAG_HEALERS_APPRENTICE_COMPLETED,
+  FLAG_KNOWS_ELENA_CURSE,
+  FLAG_ELENA_HEALED,
+  FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
+  FLAG_LYRIA_DIAGNOSED,
 } from '../Act2StoryFlags'
 
 /** NPC mentor who teaches advanced healing and handles the apprenticeship quest. */
@@ -26,8 +30,62 @@ export class MasterHealerLyria extends Character {
     })
   }
 
-  /** Handle dialogue based on inventory and apprenticeship story flags. */
+  /**
+   * Lyria is the one who explains how Elena's curse is lifted: the first talk
+   * once the curse is known gives the full diagnosis, later talks until Elena
+   * is cured give a one-line reminder, each before her usual reply.
+   */
   override talkTo(gameState: GameState): string {
+    const usual = this.usualReply(gameState)
+    const curseKnown =
+      gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE) ||
+      gameState.getStoryFlag(FLAG_ELENA_HEALED)
+    if (
+      !curseKnown ||
+      gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)
+    ) {
+      return usual
+    }
+    const name = characterName(this.name)
+    if (!gameState.getStoryFlag(FLAG_LYRIA_DIAGNOSED)) {
+      gameState.setStoryFlag(FLAG_LYRIA_DIAGNOSED, true)
+      return (
+        characterName('Lyria') +
+        ' looks up from her mortar, and something in your face makes her ' +
+        'set the pestle down.' +
+        '\n\n' +
+        name +
+        ': ' +
+        speech(
+          "You've been to the Silver Stag. Marcus's girl, Elena. I have sat " +
+            'by her bed myself, and I could do nothing for her. Listen, then, ' +
+            'because this is how a curse like hers is lifted, if it can be ' +
+            'lifted at all. First she must be made strong, or what comes ' +
+            'after will kill her; that wants a deeper healing than I can ' +
+            'give alone. Then the mark must be washed in water no shadow has ' +
+            'ever touched. You will find none in this city; every well here ' +
+            'has seen the dark. And last, the thing must be unbound. Not ' +
+            'broken: unbound, with the old kind of unbinding, the kind the ' +
+            'scholars wrote down before any of us were born.',
+        ) +
+        '\n\n' +
+        usual
+      )
+    }
+    return (
+      name +
+      ': ' +
+      speech(
+        'Elena still? Strengthen her, wash her in untouched water, then ' +
+          'unbind it. In that order, or not at all.',
+      ) +
+      '\n\n' +
+      usual
+    )
+  }
+
+  /** Lyria's reply for the player's current point in the apprenticeship. */
+  private usualReply(gameState: GameState): string {
     // The crystal focus is required before Lyria can begin the apprenticeship.
     const hasCrystalFocus = gameState.hasItem('Crystal Focus')
     if (!gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)) {

@@ -27,13 +27,13 @@ export class GreaterHealSpell extends Spell {
   }
 
   override castOnCharacter(
-    _gameState: GameState,
+    gameState: GameState,
     targetCharacter: Character,
   ): string {
     // Special handling for Elena's curse
     if (targetCharacter instanceof BarmaidElena) {
-      // Invoke Elena's staged recovery handler (no game state argument needed)
-      return targetCharacter.receiveGreaterHeal()
+      // Invoke Elena's staged recovery handler
+      return targetCharacter.receiveGreaterHeal(gameState)
     }
     const name = this.name
     const tname = targetCharacter.name

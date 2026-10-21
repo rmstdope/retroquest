@@ -3,6 +3,7 @@ import { GreaterHealSpell } from '../spells/GreaterHealSpell'
 import { DispelSpell } from '../spells/DispelSpell'
 import {
   FLAG_KNOWS_ELENA_CURSE,
+  FLAG_ELENA_HEALED,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
 } from '../Act2StoryFlags'
 
@@ -80,35 +81,36 @@ export class BarmaidElena extends Character {
         )
       )
     } else if (this.elenaPurified) {
-      const name = this.name
       return (
         characterName('Elena') +
-        ' glows with pure energy.' +
+        ' rubs at the inside of her wrist.' +
         '\n\n' +
-        characterName(name) +
+        characterName(this.name) +
         ': ' +
         speech(
-          'I feel so much cleaner now! The ' +
-            'blessed water has washed away the dark corruption that was ' +
-            'clinging to my soul. The curse is almost gone - I can sense just ' +
-            'a few dark tendrils remaining. One powerful dispelling spell ' +
-            'should shatter the last of this evil enchantment!',
+          'The water stung, and then it was gone, and some of the cold went ' +
+            'with it. But it is still holding on. I can feel it, here.',
         )
       )
     } else if (this.elenaInitialHealing) {
-      const name = this.name
+      const name = characterName(this.name)
       return (
         characterName('Elena') +
-        ' looks much better, but still weak.' +
+        ' turns her hand over and looks at it as if it belonged to someone ' +
+        'else.' +
         '\n\n' +
-        characterName(name) +
+        name +
         ': ' +
         speech(
-          'The healing magic has given ' +
-            "me strength! I can feel the curse's grip weakening, but it's " +
-            "still there, clinging to me. I think you'll need to purify the " +
-            'dark magic with blessed water and then cast a powerful dispelling ' +
-            'spell to break it completely.',
+          "It didn't take. I felt it go in, warm as a hearth, and then the " +
+            'cold closed over it again.',
+        ) +
+        '\n\n' +
+        name +
+        ': ' +
+        speech(
+          'Master Lyria sat with me once, when it began. If anyone knows ' +
+            'what comes next, she does.',
         )
       )
     } else if (!gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)) {
@@ -145,13 +147,14 @@ export class BarmaidElena extends Character {
   }
 
   /** Handle receiving the greater heal spell as the first step of the cure. */
-  receiveGreaterHeal(): string {
+  receiveGreaterHeal(gameState: GameState): string {
     if (this.elenaInitialHealing) {
       return 'Elena is already strengthened by your healing magic.'
     }
 
     // Set the flag and update Elena's condition
     this.elenaInitialHealing = true
+    gameState.setStoryFlag(FLAG_ELENA_HEALED, true)
     this.markShown = true
 
     // Update Elena's description to show improvement
@@ -172,9 +175,8 @@ export class BarmaidElena extends Character {
       "break the enchantment completely, it significantly strengthens Elena's " +
       'life force. She gasps as color returns to her cheeks and she stands a ' +
       'little straighter.\n\n' +
-      'The healing has made her strong enough to endure the final steps of the ' +
-      "cure, but the curse still clings to her. Now you'll need to purify her " +
-      'and dispel the curse.[/success]' +
+      'The healing has made her stronger, but the curse still clings to ' +
+      'her.[/success]' +
       '\n\n' +
       'As the golden light fades, something surfaces on the inside of ' +
       "Elena's wrist: a small silver mark in the shape of a mask, smooth and " +
@@ -223,8 +225,7 @@ export class BarmaidElena extends Character {
       'touches.\n\n' +
       'As the last of the water drips away, Elena stands straighter, her skin ' +
       "glowing with a faint, pure radiance. The curse's hold on her has been " +
-      'greatly weakened by the purification. Now only a powerful dispelling ' +
-      'spell remains to shatter the last remnants of the dark enchantment.[/success]'
+      'greatly weakened by the purification.[/success]'
     )
   }
 

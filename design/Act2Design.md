@@ -258,8 +258,8 @@ City orientation is handled through the City Map and movement behavior, not sepa
 Act II dialogue is driven by story flags, quest progress, inventory, and character state rather than a separate relationship-level or dialogue-choice system.
 
 - **Sir Cedric:** His responses change after first contact, the combat test, his honor quest, and Nyx's gift.
-- **Lyria:** Her offer and follow-up dialogue change after receiving the Crystal Focus and completing the apprenticeship.
-- **Elena:** Her appearance and dialogue change during the healing, purification, and dispelling steps.
+- **Lyria:** Her offer and follow-up dialogue change after receiving the Crystal Focus and completing the apprenticeship. Once Elena's curse is known she gives the three-step diagnosis (heal, wash with untouched water, unbind) once, then a one-line reminder until Elena is cured.
+- **Elena:** Her appearance and dialogue change during the healing, purification, and dispelling steps. She never names the next step: after the heal she says it did not take and that Lyria might know what comes next.
 - **Forest Spirits:** The sprites offer the riddles quest; the Ancient Tree Spirit teaches Forest Speech for the Enchanted Acorn; Nature Sense reveals the Water Nymphs.
 - **Nyx:** Her first conversation grants her gifts; later conversations use a follow-up response.
 
