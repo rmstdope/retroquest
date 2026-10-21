@@ -4,7 +4,8 @@
  * trapped servants in the Outer Courtyard, then fetching the Echo Stone from
  * the Hall of Echoes, solving the Mirror Labyrinth, redeeming the Knight
  * of Despair and the Sorceress of Lies, then answering the Shadow of the Past
- * and seeing the parents' memories. Each later Act 4 piece appends its
+ * and seeing the parents' memories, then facing Malakar in the Throne Chamber as far
+ * as the open amulet (the elixir choice that follows is a branch). Each later Act 4 piece appends its
  * steps here as it lands.
  */
 export const ACT4_GOLDEN_PATH: string[] = [
@@ -49,4 +50,8 @@ export const ACT4_GOLDEN_PATH: string[] = [
   'use ancient amulet on door',
   'e',
   'examine memories',
+  'n',
+  'talk to malakar',
+  'say refrain to malakar',
+  'use ancient amulet',
 ]

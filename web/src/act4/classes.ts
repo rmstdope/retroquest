@@ -43,6 +43,11 @@ import { HallOfEchoes } from './rooms/HallOfEchoes'
 import { MemoryVault } from './rooms/MemoryVault'
 import { MirrorLabyrinth } from './rooms/MirrorLabyrinth'
 import { OuterCourtyard } from './rooms/OuterCourtyard'
+import { Malakar } from './characters/Malakar'
+import { KingAlden } from './characters/KingAlden'
+import { CrystalPrison } from './items/CrystalPrison'
+import { Wound } from './items/Wound'
+import { LifelightElixir } from './items/LifelightElixir'
 import { ThroneChamer } from './rooms/ThroneChamer'
 import { TowerOfShadows } from './rooms/TowerOfShadows'
 import { Bless } from './spells/Bless'
@@ -67,7 +72,12 @@ export const ACT4_CLASSES = {
   MemoryOrbs,
   Memories,
   VaultDoor,
+  CrystalPrison,
+  Wound,
+  LifelightElixir,
   // Characters
+  Malakar,
+  KingAlden,
   ShadowOfThePast,
   SorceressOfLies,
   CaptainOfTheGuard,

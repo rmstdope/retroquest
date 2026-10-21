@@ -1,25 +1,26 @@
 import { Room } from '@/engine'
+import { KingAlden } from '../characters/KingAlden'
+import { Malakar } from '../characters/Malakar'
+import { CrystalPrison } from '../items/CrystalPrison'
+import { Wound } from '../items/Wound'
+import { THRONE_CHAMBER_FIRST } from './throneDescriptions'
 
 /**
- * The seat of corrupted power where Malakar awaits final judgment.
- *
- * Ultimate confrontation where all previous choices determine the outcome.
+ * The seat of Malakar's power and the climax of Act IV: King Alden hangs in
+ * his crystal prison, the wound in time bleeds beside him, and Malakar waits
+ * for Elior's answer. The scene itself is played by Malakar, the Ancient
+ * Amulet, the Lifelight Elixir and the prison; the room holds them together
+ * and its description follows the scene. South to the Parents' Vault stays
+ * open at all times.
  */
 export class ThroneChamer extends Room {
   constructor() {
     super({
       name: 'Throne Chamber',
-      description:
-        'The corrupted heart of the kingdom spreads before you—a throne room ' +
-        'twisted by shadow magic into a monument of despair. The obsidian throne ' +
-        'pulses with malevolent energy, surrounded by floating crystals that hum ' +
-        'with captured screams. Dark tapestries depicting scenes of conquest and ' +
-        'suffering drape the walls, while the very air crackles with the weight ' +
-        'of accumulated power and pain. Here, where light once brought hope, only ' +
-        'darkness remains—waiting for someone brave enough to challenge its dominion.',
-      items: [],
-      characters: [],
-      exits: {},
+      description: THRONE_CHAMBER_FIRST,
+      items: [new CrystalPrison(), new Wound()],
+      characters: [new Malakar(), new KingAlden()],
+      exits: { south: 'ParentsVault' },
     })
   }
 }

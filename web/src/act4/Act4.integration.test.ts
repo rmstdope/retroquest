@@ -9,6 +9,7 @@ import {
   FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED,
   FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED,
   FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED,
+  FLAG_ACT4_THRONE_AMULET_OPENED,
 } from './Act4StoryFlags'
 import {
   executeCommands,
@@ -454,8 +455,8 @@ describe('Act 4 integration', () => {
       expectSpellKnown(game.state, 'hearts_truth')
       expectQuestCompleted(game.state, 'The Shadow of the Past')
       expectQuestCompleted(game.state, "The Parent's Legacy")
-      expectCurrentRoom(game.state, "Parents' Vault")
-      expect(executeCommands(game, ['go north'])).toContain('Throne Chamber')
+      expectCurrentRoom(game.state, 'Throne Chamber')
+      expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
     })
 
     it('is what cheat act 4 plays', () => {
@@ -892,5 +893,20 @@ describe('Act 4 integration', () => {
       )
       expect(executeCommands(game, ['go east'])).toContain('Tower of Shadows')
     })
+  })
+})
+
+describe('Act 4 throne room', () => {
+  it('plays the golden path to the open amulet and survives a save', () => {
+    const game = new Game([new Act4()])
+    executeCommands(game, ACT4_GOLDEN_PATH)
+    expectCurrentRoom(game.state, 'Throne Chamber')
+    expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
+    expect(game.loadSaveData(game.toSaveData())).toContain(
+      'Game loaded successfully.',
+    )
+    expectCurrentRoom(game.state, 'Throne Chamber')
+    expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
+    expectItemInInventory(game.state, 'Lifelight Elixir')
   })
 })
