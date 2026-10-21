@@ -110,7 +110,10 @@ export class MountainHermit extends Character {
     if (this.swordGiven) {
       return this.alreadyGaveSword()
     }
-    return this.handOverSword(gameState)
+    const handsOver = event(
+      'The ' + characterName(this.name) + ' hands you a battered sword.',
+    )
+    return handsOver + '\n' + this.handOverSword(gameState)
   }
 
   /** The line he says when the sword is already in the player's hands. */

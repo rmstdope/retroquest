@@ -63,4 +63,16 @@ describe("Training Sword as Cedric's old blade", () => {
       'You practice a few sword forms with the training sword.',
     )
   })
+
+  it('is unchanged in the courtyard without Sir Cedric', () => {
+    const game = new Game([new Act2()])
+    const courtyard = game.state.allRooms.CastleCourtyard
+    courtyard.characters = []
+    game.state.currentRoom = courtyard
+
+    const text = new TrainingSword().use(game.state)
+
+    expect(text).toContain('You practice a few sword forms')
+    expect(text).not.toContain('That notch by the guard.')
+  })
 })

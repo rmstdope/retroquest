@@ -75,6 +75,7 @@ describe('MountainHermit, the retired sergeant', () => {
     expect(given).toContain('the sergeant never believed a word of it')
     expect(given).toContain('You receive a [item_name]training sword')
     expect(given).not.toContain('would-be heroes')
+    expectMarkupWellFormed(given)
     expect(hermit.giveTrainingSword(game.state)).toContain(
       'I already gave you the sword, young one. Use it wisely.',
     )
