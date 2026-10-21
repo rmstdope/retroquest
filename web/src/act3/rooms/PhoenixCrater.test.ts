@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { GameState, Room } from '@/engine'
+import { Game, GameState, Room, event } from '@/engine'
+import { Act3 } from '../Act3'
 import { PhoenixCrater } from './PhoenixCrater'
 
 /** A bare game state (the Python DummyGameState). */
@@ -44,5 +45,46 @@ describe('Phoenix Crater', () => {
     const result2 = room.rest(gs)
     expect(phoenixCount(room)).toBe(prevCount)
     expect(result2).toContain('gathering your strength')
+  })
+
+  describe('before the Phoenix has appeared', () => {
+    const DROWSY =
+      'The warmth is drowsy here, as if the bowl would rather you sat and ' +
+      'rested a while.'
+
+    it('answers talk to anyone with a quiet narrated line', () => {
+      const game = new Game([new Act3()])
+      game.state.currentRoom = new PhoenixCrater()
+      const expected = event(
+        'The crater is silent. Nothing comes to those who call.',
+      )
+      expect(game.talk('phoenix')).toBe(expected)
+      expect(game.talk('bird')).toBe(expected)
+      expect(game.talk('')).toBe('[failure]Talk to whom?[/failure]')
+    })
+
+    it('ends the description with the drowsy sentence', () => {
+      const room = new PhoenixCrater()
+      expect(room.descriptionFor(dummyState())).toMatch(
+        new RegExp(`forge stars\\. ${DROWSY}$`),
+      )
+    })
+
+    it('drops the sentence and talks normally once the Phoenix is there, even after a save', () => {
+      const game = new Game([new Act3()])
+      game.state.currentRoom = new PhoenixCrater()
+      game.rest()
+      const text = game.state.currentRoom.descriptionFor(game.state)
+      expect(text).not.toContain(DROWSY)
+      expect(text).toContain('molten fan')
+      expect(game.talk('phoenix')).not.toContain('crater is silent')
+
+      const fresh = new Game([new Act3()])
+      fresh.loadSaveData(game.toSaveData())
+      const loaded = fresh.state.currentRoom.descriptionFor(fresh.state)
+      expect(loaded).not.toContain(DROWSY)
+      expect(loaded).toContain('molten fan')
+      expect(fresh.talk('phoenix')).not.toContain('crater is silent')
+    })
   })
 })

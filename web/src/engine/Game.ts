@@ -563,6 +563,8 @@ Welcome to
     if (!target) return '[failure]Talk to whom?[/failure]'
     const character = this.findCharacter(target)
     if (character) return character.talkTo(this.state)
+    const answer = this.state.currentRoom.talkToNobody(this.state, target)
+    if (answer !== null) return answer
     return (
       `[failure]There is no character named ` +
       `'[character_name]${target}[/character_name]' here to talk to.[/failure]`

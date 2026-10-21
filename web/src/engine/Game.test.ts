@@ -762,6 +762,11 @@ describe('Game', () => {
   })
 
   describe('talk and say', () => {
+    it('lets the room answer when nobody by that name is there', () => {
+      rooms.EliorsCottage.talkToNobody = () => 'quiet'
+      expect(game.talk('ghost')).toBe('quiet')
+    })
+
     it('talks to a character in the room', () => {
       rooms.EliorsCottage.addCharacter(character('Mira'))
       expect(game.talk('mira')).toContain('has nothing to say right now')

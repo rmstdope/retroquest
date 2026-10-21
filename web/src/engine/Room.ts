@@ -111,6 +111,15 @@ export class Room {
     return this.description
   }
 
+  /**
+   * What the room says when the player talks to a name nobody here answers
+   * to. Null (the default) leaves the engine's "no character" failure; rooms
+   * with an in-world answer override it.
+   */
+  talkToNobody(_gameState: GameState, _target: string): string | null {
+    return null
+  }
+
   /** The full description with items (counted), characters and exits. */
   describe(gameState: GameState): string {
     let desc = `[bold]${this.name}[/bold]\n${this.descriptionFor(gameState)}\n`
