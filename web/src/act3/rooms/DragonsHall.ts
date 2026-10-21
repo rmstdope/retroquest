@@ -26,11 +26,12 @@ export class DragonsHall extends Room {
     super({
       name: "Dragon's Hall",
       description:
-        'A vast chamber of black stone, lit by slow-breathing embers along ' +
-        'the floor. Sigils spiral across the obsidian tiles, and they seem to ' +
-        'shift when you look away. The air smells of ozone and old parchment. ' +
-        'At the heart of the hall the Ancient Dragon rests in massive coils, ' +
-        'its scales gleaming like polished obsidian.',
+        'A hall of living stone opens beyond sight, its ceiling lost in ' +
+        'shadow. Embers burn slowly along the floor, pulsing like a heartbeat, ' +
+        'and somewhere in the dark, water drips. Rings of old sigils spiral ' +
+        'across the black tiles around the Ancient Dragon. It lies coiled at ' +
+        'the centre, scales like polished obsidian, and each slow breath hums ' +
+        'in your bones.',
       items: [new Sigils()],
       characters: [new AncientDragon()],
       exits: { west: 'StillnessVestibule' },

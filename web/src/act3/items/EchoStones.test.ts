@@ -32,7 +32,7 @@ describe('EchoStones', () => {
     expect(gs.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED)).toBe(false)
 
     let result = stones.receiveSpell(gs, 'bless')
-    expect(result.toLowerCase()).toContain('sacred luminescence')
+    expect(result.toLowerCase()).toContain('steady glow')
     expect(result.toLowerCase()).toContain('ancient chant')
     expect(stones.areBlessed()).toBe(true)
     expect(gs.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED)).toBe(true)
@@ -41,13 +41,20 @@ describe('EchoStones', () => {
     expect(result.toLowerCase()).toContain('already blessed')
   })
 
-  it('describes the blessing in a few plain sentences', () => {
+  it('narrates the blessing in the agreed words, then the unchanged hint', () => {
     const result = new EchoStones().receiveSpell(createState(), 'bless')
-    const blessing = result.split('\n')[0].replace(/\[[^\]]*\]/g, '')
-    const sentences = blessing.trim().split(/(?<=[.!?])\s+/)
-    expect(sentences.length).toBeLessThanOrEqual(4)
-    expect(result).not.toContain('otherworldly')
-    expect(result).toContain('[success]')
+    const [narration, hint] = result.split('\n')
+    expect(narration.replace(/\[[^\]]*\]/g, '')).toBe(
+      'As the blessing leaves your lips, the echo stones hum, and you feel it ' +
+        'in your bones. Silver light runs along their carved channels like ' +
+        'water finding its course. Then the light settles into a slow, steady ' +
+        'glow.',
+    )
+    expect(hint).toBe(
+      '[success]You sense that these hallowed stones now await ' +
+        'the ancient chant that will complete the ritual and banish the ' +
+        'restless spirits from this sacred place.[/success]',
+    )
   })
 
   it('starts the quest when examined', () => {

@@ -535,7 +535,7 @@ describe('Act 3 golden path', () => {
 
     // Cast bless on echo stones (sanctifies them for the rite)
     const blessResult = executeCommands(game, ['cast bless on echo stones'])
-    expect(blessResult.toLowerCase()).toContain('sacred luminescence')
+    expect(blessResult.toLowerCase()).toContain('steady glow')
     expect(blessResult.toLowerCase()).toContain('ancient chant')
 
     // Still the pools with the Stillwater Phial (the chant only carries over still water)

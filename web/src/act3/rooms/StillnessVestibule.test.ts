@@ -12,13 +12,14 @@ function dummyState(): GameState {
 }
 
 describe('Stillness Vestibule', () => {
-  it('describes the room in a few plain sentences', () => {
-    const room = new StillnessVestibule()
-    const sentences = room.description.split(/(?<=[.!?])\s+/)
-    expect(sentences.length).toBeLessThanOrEqual(4)
-    expect(room.description).not.toContain('otherworldly')
-    expect(room.description).toContain('echo stones')
-    expect(room.description).toContain('pools')
+  it('has the agreed plain description', () => {
+    expect(new StillnessVestibule().description).toBe(
+      'A hush falls over this chamber like a shroud. Dark pools mirror the ' +
+        'ceiling, so still they look frozen in time, and the stone seems to ' +
+        'swallow every sound. At the centre, three weathered echo stones stand ' +
+        'in a triangle. Their carved channels look made to catch whispered ' +
+        'words and hold them.',
+    )
   })
 
   it('initializes with its items, the keeper and the phantoms', () => {

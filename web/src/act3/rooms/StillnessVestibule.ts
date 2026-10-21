@@ -14,10 +14,11 @@ export class StillnessVestibule extends Room {
     super({
       name: 'Stillness Vestibule',
       description:
-        'A deep hush lies over dark pools of water so still they look ' +
-        'frozen. The stone swallows every sound. Three echo stones stand in a ' +
-        'triangle at the centre, their surfaces carved with winding channels ' +
-        'meant to catch spoken words.',
+        'A hush falls over this chamber like a shroud. Dark pools mirror the ' +
+        'ceiling, so still they look frozen in time, and the stone seems to ' +
+        'swallow every sound. At the centre, three weathered echo stones stand ' +
+        'in a triangle. Their carved channels look made to catch whispered ' +
+        'words and hold them.',
       items: [
         new EchoStones(),
         new DarkPool(),

@@ -35,10 +35,10 @@ export class EchoStones extends Item {
       gameState.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED, true)
       return (
         event(
-          'As the blessing leaves your lips, the echo stones awaken with a ' +
-            'low hum. Silver light runs along their carved channels, and the ' +
-            'stones settle into a gentle, sacred luminescence that glints on ' +
-            'the dark pools.',
+          'As the blessing leaves your lips, the echo stones hum, and you ' +
+            'feel it in your bones. Silver light runs along their carved ' +
+            'channels like water finding its course. Then the light settles ' +
+            'into a slow, steady glow.',
         ) +
         '\n' +
         '[success]You sense that these hallowed stones now await ' +
