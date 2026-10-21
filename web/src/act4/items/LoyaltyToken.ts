@@ -1,10 +1,14 @@
 import { Item, type GameState, event } from '@/engine'
-import { FLAG_ACT4_LOYALTY_TOKEN_ACQUIRED } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_LOYALTY_TOKEN_ACQUIRED,
+  FLAG_ACT4_LOYALTY_TOKEN_RAISED,
+} from '../Act4StoryFlags'
 
-/** A token that proves the bonds of trust with freed allies. */
+/**
+ * A token that proves the bonds of trust with freed allies. Raised once in the
+ * Tower of Shadows, its protection carries up into the Chamber of Whispers.
+ */
 export class LoyaltyToken extends Item {
-  private protectionActive = false
-
   constructor() {
     super({
       name: 'Loyalty Token',
@@ -23,11 +27,11 @@ export class LoyaltyToken extends Item {
     return ''
   }
 
-  /** Use the loyalty token to resist deception. */
+  /** Use the loyalty token to resist deception (raised once, in the tower). */
   override use(gameState: GameState): string {
     if (gameState.currentRoom.name === 'Tower of Shadows') {
-      if (!this.protectionActive) {
-        this.protectionActive = true
+      if (!gameState.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED)) {
+        gameState.setStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED, true)
         return event(
           'You hold the Loyalty Token close to your heart, feeling the ' +
             "warmth of true friendship and trust. The token's power forms a " +
@@ -36,6 +40,12 @@ export class LoyaltyToken extends Item {
         )
       }
       return '[dim]The Loyalty Token is already protecting you from deception.[/dim]'
+    }
+    if (gameState.currentRoom.name === 'Chamber of Whispers') {
+      return (
+        '[dim]The token is still warm against your heart. Her whispers ' +
+        'cannot reach you.[/dim]'
+      )
     }
     return event(
       'The Loyalty Token glows softly, ready to prove the strength ' +

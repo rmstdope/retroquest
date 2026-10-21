@@ -14,6 +14,7 @@ import { ShatteredWardGuardians } from './quests/ShatteredWardGuardians'
 import { TheTrappedServants } from './quests/TheTrappedServants'
 import { TheMazeOfMirrors } from './quests/TheMazeOfMirrors'
 import { TheKnightOfDespair } from './quests/TheKnightOfDespair'
+import { TheSorceressOfLies } from './quests/TheSorceressOfLies'
 import { FLAG_ACT4_MAIN_STARTED } from './Act4StoryFlags'
 import { ACT4_CLASSES } from './classes'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
@@ -47,6 +48,7 @@ export class Act4 extends Act {
         new TheTrappedServants(),
         new TheMazeOfMirrors(),
         new TheKnightOfDespair(),
+        new TheSorceressOfLies(),
       ],
       musicFile: 'Conquest - The Silver Grail (freetouse.com).mp3',
       musicInfo:
