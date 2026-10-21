@@ -189,6 +189,10 @@ describe('Act 4 integration', () => {
       )
       expectItemInInventory(game.state, "Guardian's Chain", true)
       expectItemInInventory(game.state, "Guardian's Essence", true)
+      expectStoryFlag(game.state, FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, true)
+      expectItemInInventory(game.state, 'Loyalty Token', true)
+      expectItemInInventory(game.state, "Servant's Pendant", true)
+      expectCurrentRoom(game.state, 'Mirror Labyrinth')
     })
 
     it('is what cheat act 4 plays', () => {
@@ -216,6 +220,7 @@ describe('Act 4 integration', () => {
         FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
         true,
       )
+      expectStoryFlag(game.state, FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, true)
     })
 
     it('survives a save and load round-trip at the end', () => {
@@ -226,6 +231,8 @@ describe('Act 4 integration', () => {
       )
       expect(fresh.state.storyFlags).toEqual(game.state.storyFlags)
       expectCurrentRoom(fresh.state, game.state.currentRoom.name)
+      expectItemInInventory(fresh.state, "Guardian's Chain", true)
+      expectItemInInventory(fresh.state, 'Loyalty Token', true)
     })
   })
 })
