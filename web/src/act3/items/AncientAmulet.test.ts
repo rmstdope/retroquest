@@ -101,7 +101,7 @@ describe('AncientAmulet', () => {
     expect(bagAmulet(fresh).glow(2)).toBe('')
   })
 
-  it('can be taken by hand in no room: Mira no longer refuses', () => {
+  it('examines from the bag to the before line, with no refusal from Mira', () => {
     const game = new Game([new Act3()])
 
     const out = executeCommands(game, ['examine amulet'])

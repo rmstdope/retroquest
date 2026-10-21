@@ -215,7 +215,6 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Description: A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully among her concoctions, her eyes bright with knowledge and kindness.
 -   Items:
     -   Healing Herbs (basic curatives and components)
-    -   Ancient Amulet (Elior’s family heirloom; glows at each Echoes clue and shows a fragment of his parents’ faces)
     -   Teleportation Focus (crystal prism used by Mira to anchor travel between relic sites)
 -   Characters:
     -   Mira (mentor; explains the relics, initiates Act III and makes her confession before the Warding Rite)
