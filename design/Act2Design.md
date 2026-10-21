@@ -165,7 +165,7 @@ The five town-resolving quests below must be complete before the forest entrance
 - **Name:** The Forest Guardian's Riddles
 
   - **Type:** Side Quest (Required for Main Quest)
-  - **Trigger:** Speak to the Forest Sprites at Forest Entrance
+  - **Trigger:** Speak to the Forest Sprites at Forest Entrance; the journal sends the player east from the Forest Entrance to the Whispering Glade
   - **Prerequisites:** Forest access; this quest is not a prerequisite for entering
   - **Dependencies:** Cast `nature_sense` in the Whispering Glade to reveal the Water Nymphs, then answer all three riddles
   - **Completion:** Answer the Water Nymphs' three riddles
