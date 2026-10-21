@@ -7,6 +7,27 @@ import {
 } from '../Act1StoryFlags'
 
 /**
+ * The revelation in the farewell: grandmother names Elior's parents for the
+ * first time, says the amulet was theirs and warns that someone is looking for it.
+ */
+function revelation(): string {
+  return (
+    'Her hand finds the [item_name]amulet[/item_name] at your chest and ' +
+    'closes around it.\n' +
+    speech(
+      `This was theirs, you know. ${characterName('Aren')} and ` +
+        `${characterName('Lysa')}'s.`,
+    ) +
+    '\nIn all your years, you have never once heard her say their names.\n' +
+    speech(
+      `They gave it to ${characterName('Mira')} to keep for you, until you ` +
+        'were ready. And someone has come to Willowbrook looking for it. ' +
+        'Keep it hidden, child.',
+    )
+  )
+}
+
+/**
  * The farewell on the Road to Greendale that ends Act I: grandmother has
  * walked out to see Elior off, with a word on the ring and on Patches that
  * follows his choices; then the chapel bell rings once by itself.
@@ -41,6 +62,8 @@ function farewell(gameState: GameState): string {
     '\n' +
     ringLine +
     (patchesLine ? '\n' + patchesLine : '') +
+    '\n' +
+    revelation() +
     '\nShe kisses your brow, and turns for home before you can see her cry.\n' +
     event(
       'As you look back at Willowbrook, the chapel bell rings once, ' +
@@ -102,8 +125,8 @@ export class GameMap extends Item {
         '\n' +
         `The [item_name]${this.name}[/item_name] aligns with the landscape,` +
         ' revealing a ' +
-        'hidden path that shortens the journey to Greendale. You feel a sense of ' +
-        'accomplishment as you set forth.'
+        'hidden path that shortens the journey to Greendale. ' +
+        "You tuck your parents' amulet beneath your mother's cloak, and set forth."
       )
     }
     return event(

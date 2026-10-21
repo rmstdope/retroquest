@@ -22,8 +22,9 @@ export class Villager extends Character {
   dialogueOptions: string[] = [
     'Have you seen the fields lately? The crops are withering overnight, and no one ' +
       "knows why. It's like the land itself is sick...",
-    'Last night, someone spotted a cloaked stranger near the old well. Folks say he ' +
-      'vanished when the moon went behind the clouds.',
+    'Last night, someone spotted a cloaked stranger near the old well, asking after ' +
+      'an old amulet, from a family that left. Nobody would tell him a thing, ' +
+      'and he took the road to the mill.',
     "The animals are restless. My neighbor's dog howled at nothing for hours, and the " +
       'chickens refuse to leave their coop after dusk.',
     'Strange footprints appeared by the riverbank this morning—too large for any ' +

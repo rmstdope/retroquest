@@ -96,6 +96,14 @@ export class Act1 extends Act {
     )
   }
 
+  /** The hook that opens Act I's complete page: the amulet and the search for it. */
+  override getCompletionHook(): string {
+    return (
+      "The amulet was your parents'. " +
+      'And someone has come to Willowbrook looking for it.'
+    )
+  }
+
   /**
    * Bring older saves up to date: drop the matches the store's wares still
    * sell, and give the villager her name, Tilda.

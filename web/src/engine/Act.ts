@@ -58,6 +58,14 @@ export class Act {
     return ''
   }
 
+  /**
+   * A line that opens the act-complete page before the words every act
+   * shares, to leave the player on a hook. Empty for an act without one.
+   */
+  getCompletionHook(): string {
+    return ''
+  }
+
   /** Act-specific set-up of a fresh state (starting items, spells…). */
   setupGameState(_gameState: GameState): void {}
 
