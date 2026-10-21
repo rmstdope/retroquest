@@ -4,6 +4,8 @@ import { Act1 } from './Act1'
 import { playDebugScript } from '@/utils/debugScript'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { MysteriousBox } from './items/MysteriousBox'
+import { FreshBread } from './items/FreshBread'
+import { VIRTUE_MERCY, VIRTUE_SELFLESS, VIRTUE_TRUTH } from './Act1StoryFlags'
 import {
   executeCommands,
   expectMarkupWellFormed,
@@ -272,7 +274,7 @@ describe('Act 1 golden path', () => {
     expectItemInInventory(state, 'sharp knife')
     executeCommands(game, ['use sharp knife with vines'])
     expectItemInRoom(room(), 'vines', false)
-    expectItemInInventory(state, 'sharp knife', false)
+    expectItemInInventory(state, 'sharp knife')
     expectItemInRoom(room(), 'stick')
     executeCommands(game, ['take stick'])
     expectItemInInventory(state, 'stick')
@@ -688,6 +690,80 @@ describe('Act 1 with the alternative choices', () => {
     const farewell = executeCommands(fresh, ['use map'])
     expect(farewell).toContain('you kept her ring')
     expect(farewell).toContain('claimed your pillow')
+  })
+})
+
+describe('Act 1 with the optional virtue moments', () => {
+  /** The golden path with the fox kit freed right after the vines are cut. */
+  function pathWithKit(): string[] {
+    const path = [...ACT1_GOLDEN_PATH]
+    path.splice(
+      path.indexOf('use sharp knife with vines') + 1,
+      0,
+      'use sharp knife with snare',
+    )
+    return path
+  }
+
+  /** Play the path with all three moments, and return the game, on the Road. */
+  function gameWithAllThree(): Game {
+    const game = new Game([new Act1()])
+    const path = pathWithKit()
+    const purified = path.lastIndexOf('cast purify on well')
+    executeCommands(game, path.slice(0, purified + 1))
+    // Tilda asks about the clean well, then Elior tells her the truth.
+    const well = game.state.currentRoom
+    game.state.currentRoom = game.state.allRooms.VillageSquare
+    executeCommands(game, ['talk to tilda', 'say truth to tilda'])
+    game.state.currentRoom = well
+    executeCommands(game, path.slice(purified + 1))
+    // Grandmother's loaf is off the golden path; Elior carries it here.
+    game.state.addItemToInventory(new FreshBread())
+    executeCommands(game, ['give fresh bread to merchant'])
+    return game
+  }
+
+  it('records mercy, truth and selflessness without changing the golden path', () => {
+    const game = gameWithAllThree()
+
+    expect(game.state.virtues.sort()).toEqual(
+      [VIRTUE_MERCY, VIRTUE_SELFLESS, VIRTUE_TRUTH].sort(),
+    )
+    expectCurrentRoom(game.state, 'Road to Greendale')
+    executeCommands(game, ['use map'])
+    expect(
+      game.acts[game.currentAct].isCompleted(game.state),
+      'Act I completed',
+    ).toBe(true)
+  })
+
+  it('keeps the record through a save and load, and shows nothing again', () => {
+    const game = gameWithAllThree()
+    const fresh = new Game([new Act1()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(fresh.state.virtues.sort()).toEqual(game.state.virtues.sort())
+    expect(executeCommands(fresh, ['talk to merchant'])).not.toContain(
+      'remembered',
+    )
+    expect(executeCommands(fresh, ['talk to merchant'])).not.toContain(
+      'Forgive me',
+    )
+  })
+
+  it('records nothing when every moment is skipped, and the act still completes', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, ACT1_GOLDEN_PATH)
+
+    expect(game.state.virtues).toEqual([])
+    expect(executeCommands(game, ['talk to merchant'])).toContain(
+      "Forgive me if I'm short, friend.",
+    )
+    executeCommands(game, ['use map'])
+    expect(
+      game.acts[game.currentAct].isCompleted(game.state),
+      'Act I completed',
+    ).toBe(true)
   })
 })
 

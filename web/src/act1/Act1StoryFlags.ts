@@ -63,3 +63,17 @@ export const FLAG_PATCHES_STAYED_WITH_GRANDMOTHER =
   'patches_stayed_with_grandmother'
 /** Set when Hemlock, told that Patches stays with grandmother, gives Elior a rope. */
 export const FLAG_HEMLOCK_HEARD_PATCHES_STAYED = 'hemlock_heard_patches_stayed'
+/** Set when Tilda has said her "spring cleared itself" line (she says it once). */
+export const FLAG_TILDA_SPRING_LINE_SAID = 'tilda_spring_line_said'
+/** Set when the fox kit has been cut free of the poacher's snare. */
+export const FLAG_FOX_KIT_FREED = 'fox_kit_freed'
+/** Set when Mira has made her one-time remark about the freed fox kit. */
+export const FLAG_MIRA_FOREST_REMARK_SAID = 'mira_forest_remark_said'
+
+/**
+ * Virtue moments Act I records in the cross-act virtue record. Each is
+ * optional and is recorded once.
+ */
+export const VIRTUE_MERCY = 'mercy'
+export const VIRTUE_TRUTH = 'truth'
+export const VIRTUE_SELFLESS = 'selfless'

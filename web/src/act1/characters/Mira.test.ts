@@ -5,8 +5,10 @@ import { RareFlower } from '../items/RareFlower'
 import { RuneToken } from '../items/RuneToken'
 import { Mechanism } from '../items/Mechanism'
 import { Rope } from '../items/Rope'
+import { AncientAmulet } from '../items/AncientAmulet'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_FOX_KIT_FREED,
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_MIRA_NAMED_FOULING_SIGIL,
@@ -214,5 +216,47 @@ describe('Mira and the rune token from the well', () => {
     expect(response).not.toContain('on purpose')
     expectItemInInventory(game.state, 'rune token')
     expectDialogueSpeaker(response, 'Mira')
+  })
+})
+
+describe('Mira and the fox kit', () => {
+  const REMARK =
+    'The forest has been whispering about you. A small red thing, running ' +
+    'free that ought not to be. That was kindly done, ' +
+    '[character_name]Elior[/character_name].'
+
+  it('says nothing about the forest until the kit has been freed', () => {
+    const game = gameInMirasHut()
+
+    expect(executeCommands(game, ['talk to mira'])).not.toContain('whispering')
+  })
+
+  it('opens the next talk with her forest remark, then her usual line, once', () => {
+    const game = gameInMirasHut()
+    game.state.setStoryFlag(FLAG_FOX_KIT_FREED, true)
+
+    const first = executeCommands(game, ['talk to mira'])
+    const second = executeCommands(game, ['talk to mira'])
+
+    expect(first).toContain(REMARK)
+    expect(first.indexOf('You speak with')).toBeLessThan(first.indexOf(REMARK))
+    expect(first).not.toContain('tilts her head')
+    expect(first.indexOf(REMARK)).toBeLessThan(
+      first.indexOf('Welcome, [character_name]Elior'),
+    )
+    expectDialogueSpeaker(first, 'Mira')
+    expect(second).not.toContain('whispering')
+    expect(second).toContain('Welcome, [character_name]Elior')
+  })
+
+  it('also precedes the post-amulet line, whenever in the act the kit was freed', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new AncientAmulet())
+    game.state.setStoryFlag(FLAG_FOX_KIT_FREED, true)
+
+    const answer = executeCommands(game, ['talk to mira'])
+
+    expect(answer).toContain(REMARK)
+    expect(answer).toContain('The journey of a thousand miles')
   })
 })

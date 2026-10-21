@@ -5,6 +5,7 @@ import {
   dialogue,
   event,
   findMarkupProblems,
+  remembered,
   speech,
   writing,
 } from './markup'
@@ -100,5 +101,14 @@ describe('findMarkupProblems', () => {
       'You speak with [character_name]Mira[/character_name].\n' +
       '[dialogue]Hello, [character_name]Elior[/character_name].[/dialogue]'
     expect(findMarkupProblems(text)).toEqual([])
+  })
+})
+
+describe('remembered', () => {
+  it('writes the amber "remembered" event line for a virtue', () => {
+    expect(remembered('Mercy')).toBe(
+      '[event]✦ Mercy — this will be remembered[/event]',
+    )
+    expect(findMarkupProblems(remembered('Truth'))).toEqual([])
   })
 })
