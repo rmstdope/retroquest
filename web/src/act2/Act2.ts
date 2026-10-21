@@ -1,4 +1,5 @@
 import { Act, type GameState, speech } from '@/engine'
+import { AncientAmulet } from './items/AncientAmulet'
 import { MountainPath } from './rooms/MountainPath'
 import { GreendaleGates } from './rooms/GreendaleGates'
 import { MainSquare } from './rooms/MainSquare'
@@ -107,8 +108,8 @@ export class Act2 extends Act {
         "'Seek out Sir Cedric at the castle. He will help you understand " +
           "your heritage and the growing darkness that threatens our world.'",
       ) +
-      ' The ancient amulet she gave you feels warm against your chest, a ' +
-      'reminder of the mysteries you must uncover.\n\nBeyond Greendale, ' +
+      ' The [item_name]Ancient Amulet[/item_name] Mira gave you feels warm ' +
+      'against your chest, a reminder of the mysteries you must uncover.\n\nBeyond Greendale, ' +
       'you glimpse the edge of the Enchanted Forest—an ancient woodland ' +
       'where magic flows like water and spirits older than memory dwell ' +
       'among the trees. The very air seems to shimmer with possibility ' +
@@ -119,6 +120,11 @@ export class Act2 extends Act {
       'storm that threatens all you hold dear.\n\nTake a deep breath and ' +
       'step forward into your destiny.\n'
     )
+  }
+
+  /** Give Elior the amulet Mira gave him; runs only for a fresh Act II, never on load. */
+  override setupGameState(gameState: GameState): void {
+    gameState.addItemToInventory(new AncientAmulet())
   }
 
   override isCompleted(gameState: GameState): boolean {
