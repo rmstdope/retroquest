@@ -81,6 +81,11 @@ export class Mira extends Character {
           speech('May this guide and protect you.') +
           ' ' +
           event('([item_name]Ancient Amulet[/item_name] added to inventory!)') +
+          '\nThen, more quietly: ' +
+          speech(
+            'I knew your parents better than I have said. ' +
+              'Once you are truly ready, I will tell you.',
+          ) +
           '\nShe holds your hand a moment longer, her tone serious. ' +
           speech(
             `Your road leads to Greendale, ${characterName('Elior')}. ` +
