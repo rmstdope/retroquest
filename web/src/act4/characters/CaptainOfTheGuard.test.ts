@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
+import { GuardiansChain } from '../items/GuardiansChain'
+import { LoyaltyToken } from '../items/LoyaltyToken'
+import { FLAG_ACT4_CHAIN_GIVEN, VIRTUE_SELFLESS } from '../Act4StoryFlags'
 import { Act4 } from '../Act4'
 import {
   FLAG_ACT4_CAPTAIN_MAN_IN_GREY_TOLD,
@@ -8,6 +11,7 @@ import {
 } from '../Act4StoryFlags'
 import { CaptainOfTheGuard } from './CaptainOfTheGuard'
 import {
+  executeCommands,
   expectDialogueSpeaker,
   expectMarkupWellFormed,
 } from '@/testing/gameHelpers'
@@ -115,6 +119,127 @@ describe('CaptainOfTheGuard', () => {
       expect(answer).not.toContain('man in grey')
       expect(game.state.getStoryFlag(FLAG_ACT4_CAPTAIN_MAN_IN_GREY_TOLD)).toBe(
         false,
+      )
+    })
+  })
+
+  describe('the Guardian’s Chain as a gift', () => {
+    const HINT =
+      "'They tell me the gates are open. I would walk out of them tonight, if my hand remembered the sword. Every shadow between here and home knows my face.'"
+
+    /** A game in the courtyard with the servants freed and the chain carried. */
+    function createCourtyardGame(freed = true): Game {
+      const game = createGame()
+      game.state.currentRoom = game.state.allRooms.OuterCourtyard
+      game.state.setStoryFlag(FLAG_ACT4_SERVANTS_FREED, freed)
+      game.state.addItemToInventory(new GuardiansChain())
+      return game
+    }
+
+    it('adds the hint after the freed line, every time, chain or not', () => {
+      const game = createCourtyardGame()
+      const first = executeCommands(game, ['talk to captain'])
+      expect(first).toContain('tell him I am sorry I ever doubted him.')
+      expect(first).toContain(HINT)
+      expect(first.indexOf(HINT)).toBeGreaterThan(first.indexOf('Cedric stood'))
+      expectMarkupWellFormed(first)
+      game.state.removeItemFromInventory("Guardian's Chain")
+      expect(executeCommands(game, ['talk to captain'])).toContain(HINT)
+    })
+
+    it('has no hint while he is enthralled', () => {
+      const game = createCourtyardGame(false)
+      expect(executeCommands(game, ['talk to captain'])).not.toContain('gates')
+    })
+
+    it('takes the chain, records Selflessness once and sends him home', () => {
+      const game = createCourtyardGame()
+      const answer = executeCommands(game, ["give guardian's chain to captain"])
+      expect(answer).toContain(
+        "You lift the [item_name]Guardian's Chain[/item_name] over the captain's head. Its crystals flare once and settle against his soot-black tabard, and the warmth goes out of your hands.",
+      )
+      expect(answer).toContain("'You will need this more than I will.'")
+      expect(answer).toContain(
+        '[/dialogue] He tries to give it back, and when you will not take it, he grips your arm. [dialogue]',
+      )
+      expect(answer).toContain(
+        "'Then I will tell them at home what you did here.'",
+      )
+      expect(answer).toContain('✦ Selflessness — this will be remembered')
+      expect(answer).toContain(
+        'He turns toward the gates and walks out without looking back. The shadows draw away from the light at his throat.',
+      )
+      expect(answer.indexOf('✦')).toBeGreaterThan(answer.indexOf('Then I will'))
+      expect(answer.indexOf('He turns')).toBeGreaterThan(answer.indexOf('✦'))
+      expectMarkupWellFormed(answer)
+      expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(1)
+      expect(game.state.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)).toBe(true)
+      expect(
+        game.state.inventory.some((i) => i instanceof GuardiansChain),
+      ).toBe(false)
+      expect(executeCommands(game, ['talk to captain'])).toContain(
+        "There is no character named '[character_name]captain[/character_name]' here to talk to.",
+      )
+    })
+
+    it('works the same after the knight is redeemed', () => {
+      const game = createCourtyardGame()
+      game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
+      const answer = executeCommands(game, ["give guardian's chain to captain"])
+      expect(answer).toContain('✦ Selflessness')
+      expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(1)
+    })
+
+    it('refuses the chain before he is freed', () => {
+      const game = createCourtyardGame(false)
+      const answer = executeCommands(game, ["give guardian's chain to captain"])
+      expect(answer).toContain(
+        'The captain stares through you. His hands do not close on the chain, and you keep it.',
+      )
+      expectMarkupWellFormed(answer)
+      expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(0)
+      expect(
+        game.state.inventory.some((i) => i instanceof GuardiansChain),
+      ).toBe(true)
+    })
+
+    it('refuses any other item, before and after he is freed', () => {
+      const before = createCourtyardGame(false)
+      before.state.addItemToInventory(new LoyaltyToken())
+      expect(
+        executeCommands(before, ['give loyalty token to captain']),
+      ).toContain(
+        'His hands do not close on the Loyalty Token, and you keep it.',
+      )
+      const after = createCourtyardGame()
+      after.state.addItemToInventory(new LoyaltyToken())
+      const answer = executeCommands(after, ['give loyalty token to captain'])
+      expect(answer).toContain(
+        "[dim]The captain shakes his head. 'Keep it. You will need it more than I will.'[/dim]",
+      )
+      expect(after.state.virtueCount(VIRTUE_SELFLESS)).toBe(0)
+      expect(after.state.inventory.some((i) => i instanceof LoyaltyToken)).toBe(
+        true,
+      )
+    })
+
+    it('says the usual thing when the chain is no longer carried', () => {
+      const game = createCourtyardGame()
+      game.state.removeItemFromInventory("Guardian's Chain")
+      expect(
+        executeCommands(game, ["give guardian's chain to captain"]),
+      ).toContain("You don't have any")
+    })
+
+    it('keeps him gone, the chain given and the moment counted once on reload', () => {
+      const game = createCourtyardGame()
+      executeCommands(game, ["give guardian's chain to captain"])
+      game.loadSaveData(game.toSaveData())
+      expect(executeCommands(game, ['look'])).not.toContain('captain')
+      expect(game.state.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)).toBe(true)
+      expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(1)
+      expect(executeCommands(game, ['talk to captain'])).toContain(
+        "There is no character named '[character_name]captain[/character_name]' here to talk to.",
       )
     })
   })

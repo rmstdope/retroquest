@@ -1,4 +1,5 @@
 import { Room, type Exits, type GameState, event } from '@/engine'
+import { COURTYARD_AFTER_DESCRIPTION } from './courtyardDescriptions'
 import { CaptainOfTheGuard } from '../characters/CaptainOfTheGuard'
 import { TrappedServants } from '../characters/TrappedServants'
 import { ServantsPendant } from '../items/ServantsPendant'
@@ -8,12 +9,6 @@ import {
   FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED,
   FLAG_ACT4_TRAPPED_SERVANTS_STARTED,
 } from '../Act4StoryFlags'
-
-/** The courtyard once the servants are free and the captain has woken. */
-const COURTYARD_AFTER_DESCRIPTION =
-  'The fountains have stopped running black, and the sky has thinned to ' +
-  'grey. The Freed Servants rest by the fountains, their chains gone, and ' +
-  'the captain of the guard sits among them with his head in his hands.'
 
 /**
  * A once-beautiful courtyard now tainted by shadow magic and trapped souls.
