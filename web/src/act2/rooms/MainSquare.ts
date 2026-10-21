@@ -1,19 +1,13 @@
 import { Room } from '@/engine'
-import type { Exits, GameState } from '@/engine'
 import { CityNoticeBoard } from '../items/CityNoticeBoard'
 import { MerchantsFlyer } from '../items/MerchantsFlyer'
 import { TownCrier } from '../characters/TownCrier'
 
 /**
- * Main Square room: central urban hub in Greendale (Act II).
- *
- * Exits are gated until the player uses the city map; `enableCityNavigation()`
- * flips `cityMapUsed` allowing full movement. `Game.move()` reads the static
- * `exits` and the `used_city_map` flag for the "lost in the streets" message.
+ * Main Square room: central urban hub in Greendale (Act II). North, east and
+ * south are open from the moment the player arrives; the city map is optional.
  */
 export class MainSquare extends Room {
-  cityMapUsed = false
-
   constructor() {
     super({
       name: 'Main Square',
@@ -31,18 +25,5 @@ export class MainSquare extends Room {
         east: 'MarketDistrict',
       },
     })
-  }
-
-  /** Return exits, limiting movement to south until the city map has been used. */
-  override getExits(_gameState: GameState): Exits {
-    if (this.cityMapUsed) {
-      return this.exits
-    }
-    return { south: 'GreendaleGates' }
-  }
-
-  /** Enable the full exit set once the player has oriented using the city map. */
-  enableCityNavigation(): void {
-    this.cityMapUsed = true
   }
 }

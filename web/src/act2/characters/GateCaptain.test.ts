@@ -73,7 +73,8 @@ describe('Gate Captain dialogue markup', () => {
 
     const answer = game.commandParser.parse('give entry pass to gate captain')
 
-    expect(answer).toContain("You'll need a map to navigate the city")
+    expect(answer).toContain('A map would help you find your way')
+    expect(answer).not.toContain("You'll need a map")
     expect(answer).toContain('information post')
     expect(answer).toContain('salutes smartly')
     expect(answer).not.toContain('He steps aside')
@@ -105,6 +106,8 @@ describe('Gate Captain dialogue markup', () => {
     const answer = game.commandParser.parse('talk to gate captain')
 
     expect(answer).toContain('Welcome to Greendale, honored visitor')
+    expect(answer).toContain('A map would help you find your way')
+    expect(answer).not.toContain("You'll need a map")
     expect(answer).toContain('salutes smartly')
     expect(gates.characters).toHaveLength(0)
     expectCaptainSpeaks(answer)

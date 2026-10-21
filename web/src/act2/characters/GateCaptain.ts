@@ -43,8 +43,8 @@ export class GateCaptain extends Character {
           characterName('Gate Captain') +
           ' nods respectfully. ' +
           speech(
-            "'Welcome to Greendale, honored visitor. You'll need a map to " +
-              'navigate the city - the streets can be quite maze-like for ' +
+            "'Welcome to Greendale, honored visitor. A map would help you " +
+              'find your way - the streets can be quite maze-like for ' +
               'newcomers. Travelers leave all sorts at the information post by ' +
               "the arch; have a look there before you go in.'",
           ) +
@@ -102,7 +102,7 @@ export class GateCaptain extends Character {
         ) +
         ' ' +
         speech(
-          "'You'll need a map to navigate the city - the streets can be " +
+          "'A map would help you find your way - the streets can be " +
             'quite maze-like for newcomers. Travelers leave things at the ' +
             'information post there; look around and you may find what you ' +
             "need.'",

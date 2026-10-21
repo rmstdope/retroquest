@@ -109,42 +109,21 @@ describe('Act 2 golden path', () => {
     executeCommands(game, ['go north'])
     expectCurrentRoom(state, 'Main Square')
 
-    // Test navigation restriction before using city map
-    // Should not be able to go north or east without map
-    let result = executeCommands(game, ['go north'])
-    expectCurrentRoom(state, 'Main Square') // Should still be in Main Square
-    expect(
-      result.toLowerCase(),
-      'Should get lost message when trying to go north without map',
-    ).toContain('lost')
-
-    result = executeCommands(game, ['go east'])
-    expectCurrentRoom(state, 'Main Square') // Should still be in Main Square
-    expect(
-      result.toLowerCase(),
-      'Should get lost message when trying to go east without map',
-    ).toContain('lost')
-
-    // Should be able to go south (back to Greendale Gates)
-    executeCommands(game, ['go south'])
-    expectCurrentRoom(state, 'Greendale Gates')
-    executeCommands(game, ['go north']) // Return to Main Square
+    // Main Square is open from the start: north and east need no map
+    executeCommands(game, ['go east'])
+    expectCurrentRoom(state, 'Market District')
+    executeCommands(game, ['go west'])
     expectCurrentRoom(state, 'Main Square')
-
-    // Use City Map to orient yourself
-    // First verify the map is in inventory
-    expectItemInInventory(state, 'City Map')
-
-    executeCommands(game, ['use city map'])
-
-    // Verify the map has been removed from inventory after use
-    expectItemInInventory(state, 'City Map', false)
-
-    // After using map, should be able to move freely
     executeCommands(game, ['go north'])
     expectCurrentRoom(state, 'Castle Approach')
-    executeCommands(game, ['go south']) // Return to Main Square
+    executeCommands(game, ['go south'])
     expectCurrentRoom(state, 'Main Square')
+
+    // Reading the map is optional and does not use it up
+    expectItemInInventory(state, 'City Map')
+    const reading = executeCommands(game, ['use city map'])
+    expect(reading).toContain('cellar?')
+    expectItemInInventory(state, 'City Map')
 
     // Examine City Notice Board
     executeCommands(game, ['examine city notice board'])
@@ -697,97 +676,42 @@ describe('Act 2 golden path', () => {
   })
 })
 
-describe('Main Square navigation restriction', () => {
-  it('is restricted until the city map is used', () => {
+describe('Main Square navigation', () => {
+  it('is open from the start, with or without the city map', () => {
     const game = new Game([new Act2()])
     const state = game.state
-
-    // Add required items from Act 1
-    state.inventory.push(new CityMap())
-
-    // Navigate directly to Main Square for this focused test
     state.currentRoom = state.allRooms.MainSquare
 
-    // Verify that map hasn't been used yet
-    expect(
-      state.getStoryFlag('used_city_map'),
-      'City map should not be used initially',
-    ).toBe(false)
-
-    // Test restricted exits - should only be able to go south
-    let availableExits = state.currentRoom.getExits(state)
-    expect(availableExits, 'Expected only south exit').toEqual({
-      south: 'GreendaleGates',
-    })
-
-    // Test navigation restriction - should get lost message when trying invalid directions
-    let result = game.move('north')
-    expectMarkupWellFormed(result)
-    expect(
-      result.toLowerCase(),
-      'Should get lost message when trying to go north without map',
-    ).toContain('lost')
-    expect(state.currentRoom.name, 'Should still be in Main Square').toBe(
-      'Main Square',
-    )
-
-    result = game.move('east')
-    expectMarkupWellFormed(result)
-    expect(
-      result.toLowerCase(),
-      'Should get lost message when trying to go east without map',
-    ).toContain('lost')
-    expect(state.currentRoom.name, 'Should still be in Main Square').toBe(
-      'Main Square',
-    )
-
-    // Invalid direction should still give standard error message
-    result = game.move('west')
-    expectMarkupWellFormed(result)
-    expect(
-      result.toLowerCase(),
-      'Should get standard error for truly invalid direction',
-    ).toContain("can't go that way")
-    expect(state.currentRoom.name, 'Should still be in Main Square').toBe(
-      'Main Square',
-    )
-
-    // Use the city map to unlock navigation
-    // First verify the map is in inventory
-    expect(
-      state.hasItem('city map'),
-      'City map should be in inventory before use',
-    ).toBe(true)
-
-    executeCommands(game, ['use city map'])
-
-    // Verify the map has been removed from inventory after use
-    expect(
-      state.hasItem('city map'),
-      'City map should be removed from inventory after use',
-    ).toBe(false)
-
-    // After using map, should have full access to all exits
-    availableExits = state.currentRoom.getExits(state)
-    const expectedExits = {
+    expect(state.currentRoom.getExits(state)).toEqual({
       south: 'GreendaleGates',
       north: 'CastleApproach',
       east: 'MarketDistrict',
-    }
-    expect(availableExits, 'Expected all exits after using map').toEqual(
-      expectedExits,
-    )
+    })
 
-    // Mock the movement to test the exit availability without side effects
-    const exits = state.currentRoom.getExits(state)
-    expect(
-      exits,
-      'North exit should be available after using map',
-    ).toHaveProperty('north')
-    expect(
-      exits,
-      'East exit should be available after using map',
-    ).toHaveProperty('east')
+    const north = game.move('north')
+    expectMarkupWellFormed(north)
+    expect(north).not.toContain('lost')
+    expect(state.currentRoom.name).toBe('Castle Approach')
+
+    state.currentRoom = state.allRooms.MainSquare
+    game.move('east')
+    expect(state.currentRoom.name).toBe('Market District')
+
+    state.currentRoom = state.allRooms.MainSquare
+    const west = game.move('west')
+    expect(west).toContain("can't go that way")
+  })
+
+  it('keeps the city map in the bag when it is used', () => {
+    const game = new Game([new Act2()])
+    const state = game.state
+    state.inventory.push(new CityMap())
+    state.currentRoom = state.allRooms.MainSquare
+
+    executeCommands(game, ['use city map'])
+    executeCommands(game, ['use city map'])
+
+    expect(state.hasItem('city map')).toBe(true)
   })
 })
 

@@ -61,8 +61,8 @@ export class GreendaleGates extends Room {
     return (
       "With the Gate Captain gone, you're free to look around. A small information post " +
       'nearby holds items left by travelers. Among them you discover a detailed ' +
-      `[item_name]${name}[/item_name] of Greendale—exactly what you need to navigate the ` +
-      "city's winding streets!"
+      `[item_name]${name}[/item_name] of Greendale. ` +
+      'Someone has drawn on it in grey ink.'
     )
   }
 }

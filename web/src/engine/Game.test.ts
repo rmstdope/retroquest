@@ -451,7 +451,7 @@ describe('Game', () => {
       expect(game.state.currentRoom).toBe(sealed)
     })
 
-    it('keeps the player lost in the Main Square until the city map was used', () => {
+    it('lets the player leave a room named Main Square by any of its exits', () => {
       const square = new Room({
         name: 'Main Square',
         description: 'd',
@@ -460,15 +460,8 @@ describe('Game', () => {
       const castle = new Room({ name: 'Castle', description: 'd' })
       const gate = new Room({ name: 'Gate', description: 'd' })
       const game = makeGame({ MainSquare: square, Castle: castle, Gate: gate })
-      expect(game.move('north')).toContain('you quickly become lost')
-      expect(game.state.currentRoom).toBe(square)
-      expect(game.move('west')).toBe(
-        "[failure]You can't go that way.[/failure]",
-      )
-      expect(game.move('south')).toContain('You move south')
-      game.state.currentRoom = square
-      game.state.setStoryFlag('used_city_map', true)
       expect(game.move('north')).toContain('You move north')
+      expect(game.state.currentRoom).toBe(castle)
     })
   })
 
