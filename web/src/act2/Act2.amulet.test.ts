@@ -19,7 +19,7 @@ function carries(game: Game): boolean {
 }
 
 describe('Act II ancient amulet', () => {
-  it('is in the bag on the first turn, with no announcement', () => {
+  it('is in the bag on the first turn', () => {
     const game = newGame()
     expect(carries(game)).toBe(true)
     const amulet = game.state.inventory.find((i) => i instanceof AncientAmulet)
