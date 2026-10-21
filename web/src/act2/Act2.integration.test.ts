@@ -5,6 +5,7 @@ import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 import {
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_EXAMINED_SECRET_DOCUMENTS,
+  FLAG_FOUND_LOST_CARAVAN,
   FLAG_READ_SQUIRES_DIARY,
   FLAG_SQUIRES_TALKED_TO,
   FLAG_CEDRIC_RECOGNISED_SIGIL,
@@ -1255,6 +1256,34 @@ describe('Act 2 golden path as declared by the act', () => {
     expectItemInInventory(game.state, 'Enhanced Lantern')
     expectItemInInventory(game.state, 'Quality Rope')
     expectItemCountInInventory(game.state, 'coins', 30)
+  })
+
+  it('takes two forest journeys and rescues the caravan on the first', () => {
+    const game = new Game([new Act2()])
+    const forest = [
+      'Forest Transition',
+      'Forest Entrance',
+      'Ancient Grove',
+      'Whispering Glade',
+      'Heart of the Forest',
+    ]
+    let inForest = false
+    let rescuedOnJourney = 0
+    let journeys = 0
+    for (const command of ACT2_GOLDEN_PATH) {
+      executeCommands(game, [command])
+      const nowInForest = forest.includes(game.state.currentRoom.name)
+      if (nowInForest && !inForest) journeys++
+      inForest = nowInForest
+      if (
+        !rescuedOnJourney &&
+        game.state.getStoryFlag(FLAG_FOUND_LOST_CARAVAN)
+      ) {
+        rescuedOnJourney = journeys
+      }
+    }
+    expect(journeys).toBe(2)
+    expect(rescuedOnJourney).toBe(1)
   })
 
   it('is what cheat act 2 plays', () => {
