@@ -169,10 +169,11 @@ describe('Act 4 integration', () => {
         .toSaveData()
         .replace('"c":"Act4.OuterCourtyard"', '"c":"Act4.RoyalGardens"')
       expect(oldSave).toContain('RoyalGardens')
+      game.state.currentRoom = act4.rooms.MemoryVault
       const result = game.loadSaveData(oldSave)
       expect(result).toContain('Failed to load game: ')
       expect(result).toContain('unknown class: Act4.RoyalGardens')
-      expectCurrentRoom(game.state, 'Fortress Gates')
+      expectCurrentRoom(game.state, 'Memory Vault')
     })
   })
 })
