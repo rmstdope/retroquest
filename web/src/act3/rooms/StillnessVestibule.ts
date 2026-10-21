@@ -1,5 +1,6 @@
 import { Room } from '@/engine'
 import type { Exits, GameState } from '@/engine'
+import { DarkPool } from '../items/DarkPool'
 import { EchoStones } from '../items/EchoStones'
 import { StillwaterPhial } from '../items/StillwaterPhial'
 import { QuietCharm } from '../items/QuietCharm'
@@ -23,7 +24,12 @@ export class StillnessVestibule extends Room {
         'waiting to amplify sacred whispers and bind them to the fabric of ' +
         'reality itself. The air thrums with dormant power, heavy with the ' +
         'weight of forgotten rituals.',
-      items: [new EchoStones(), new StillwaterPhial(), new QuietCharm()],
+      items: [
+        new EchoStones(),
+        new DarkPool(),
+        new StillwaterPhial(),
+        new QuietCharm(),
+      ],
       characters: [new SilenceKeeper(), new WanderingPhantoms()],
       exits: { north: 'CollapsedGalleries', west: 'CavernMouth' },
     })

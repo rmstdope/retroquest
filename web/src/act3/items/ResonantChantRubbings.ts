@@ -2,6 +2,7 @@ import { Item, event, type GameState } from '@/engine'
 import {
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
   FLAG_ACT3_PHANTOMS_FREED,
+  FLAG_ACT3_POOLS_STILLED,
 } from '../Act3StoryFlags'
 import { WanderingPhantoms } from '../characters/WanderingPhantoms'
 import { StillnessVestibule } from '../rooms/StillnessVestibule'
@@ -20,11 +21,21 @@ export class ResonantChantRubbings extends Item {
     })
   }
 
-  /** Handle using resonant chant rubbings with blessed echo stones. */
+  /** Handle using the rubbings with the echo stones: blessed and over still pools, the chant completes the Oath. */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof EchoStones) {
       // Check if the echo stones are blessed
       if (other.areBlessed()) {
+        if (!gameState.getStoryFlag(FLAG_ACT3_POOLS_STILLED)) {
+          return (
+            event('You recite the resonant chant at each stone. ') +
+            '\n' +
+            '[failure]The words leave the stones and skim out across the ' +
+            'pools. Water that looked frozen shivers under them, and the ' +
+            'chant breaks apart on a thousand tiny ripples. It will not ' +
+            'carry over water that is not truly still.[/failure]'
+          )
+        }
         // Perform the Oath of Stillness
         gameState.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
         // Remove the rubbings from inventory (consumed in the ritual)

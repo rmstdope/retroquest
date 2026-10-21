@@ -4,6 +4,7 @@ import { Act3 } from '../Act3'
 import {
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
   FLAG_ACT3_OATH_OF_STILLNESS_STARTED,
+  FLAG_ACT3_POOLS_STILLED,
 } from '../Act3StoryFlags'
 import { EchoStones } from './EchoStones'
 import { ResonantChantRubbings } from './ResonantChantRubbings'
@@ -78,6 +79,7 @@ describe('EchoStones', () => {
     const rubbings = new ResonantChantRubbings()
     const gs = createState()
     stones.receiveSpell(gs, 'bless')
+    gs.setStoryFlag(FLAG_ACT3_POOLS_STILLED, true)
 
     const result = rubbings.useWith(gs, stones).toLowerCase()
 
@@ -102,6 +104,7 @@ describe('EchoStones', () => {
     const rubbings = new ResonantChantRubbings()
     const gs = createState()
     stones.receiveSpell(gs, 'bless')
+    gs.setStoryFlag(FLAG_ACT3_POOLS_STILLED, true)
     expect(stones.areBlessed()).toBe(true)
 
     const result = stones.useWith(gs, rubbings)
