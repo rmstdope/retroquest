@@ -109,6 +109,7 @@ export class Act2 extends Act {
     return 'Malakar is real. And the bloodline he seeks is yours.'
   }
 
+  /** The Act II opening page: arrival at Greendale, quoting only Mira's and Grandmother's Act I words. */
   override getActIntro(): string {
     return (
       '[bold]ACT 2: THE GATHERING STORM[/bold]\n\nAfter the mysterious ' +
