@@ -451,6 +451,26 @@ describe('Game', () => {
       expect(game.state.currentRoom).toBe(sealed)
     })
 
+    it('lets a room handle a direction itself without leaving', () => {
+      class WadeRoom extends Room {
+        /** Take over east: wade in place instead of leaving. */
+        override walk(_gameState: GameState, direction: string): string | null {
+          return direction === 'east' ? '[event]You wade.[/event]' : null
+        }
+      }
+      const wade = new WadeRoom({
+        name: 'Wade',
+        description: 'd',
+        exits: { east: 'Wade', north: 'Other' },
+      })
+      const other = new Room({ name: 'Other', description: 'd' })
+      const game = makeGame({ Wade: wade, Other: other })
+      expect(game.move('east')).toBe('[event]You wade.[/event]')
+      expect(game.state.currentRoom).toBe(wade)
+      expect(game.move('north')).toContain('You move north')
+      expect(game.state.currentRoom).toBe(other)
+    })
+
     it('lets the player leave a room named Main Square by any of its exits', () => {
       const square = new Room({
         name: 'Main Square',

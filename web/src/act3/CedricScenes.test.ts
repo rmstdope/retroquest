@@ -64,12 +64,18 @@ function inOrder(text: string, first: string, second: string): boolean {
   return text.indexOf(first) >= 0 && text.indexOf(first) < text.indexOf(second)
 }
 
+/** Walk the Guardian's trial to the third step, where the vow is asked. */
+function walkTrial(guardian: TideBornGuardian, game: Game): void {
+  for (let i = 0; i < 3; i++) guardian.walkEast(game.state)
+}
+
 describe('Sir Cedric reacts to the story', () => {
   it('turns the Guardian to him at the vow, once', () => {
     const game = partyAt('SanctumOfTheTide')
     const guardian = game.state.currentRoom.getCharacterByName(
       'tide-born guardian',
     ) as TideBornGuardian
+    walkTrial(guardian, game)
     const first = guardian.sayTo(game.state, 'myself')
     const second = guardian.sayTo(game.state, 'myself')
 
@@ -91,6 +97,7 @@ describe('Sir Cedric reacts to the story', () => {
     const guardian = game.state.currentRoom.getCharacterByName(
       'tide-born guardian',
     ) as TideBornGuardian
+    walkTrial(guardian, game)
     expect(guardian.sayTo(game.state, 'myself')).not.toContain('Sir Cedric')
   })
 
@@ -206,6 +213,7 @@ describe('Sir Cedric in the story view', () => {
     const guardian = game.state.currentRoom.getCharacterByName(
       'tide-born guardian',
     ) as TideBornGuardian
+    walkTrial(guardian, game)
     const quotes = speakers(guardian.sayTo(game.state, 'myself'))
     expect(quotes).toContain(
       "Tide-Born Guardian: 'Name what you will not abandon.'",

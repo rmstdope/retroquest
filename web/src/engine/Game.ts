@@ -384,6 +384,8 @@ Welcome to
 
   move(direction: string): string {
     const room = this.state.currentRoom
+    const walked = room.walk(this.state, direction)
+    if (walked !== null) return walked
     const exits = room.getExits(this.state)
     if (!(direction in exits))
       return (

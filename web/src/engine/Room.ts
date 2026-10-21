@@ -53,6 +53,15 @@ export class Room {
   }
 
   /**
+   * Lets the room take over a move in a direction: a non-null result is the
+   * story text of the move, and the player stays where they are. Called
+   * before the exits are looked at; null (the default) moves as usual.
+   */
+  walk(_gameState: GameState, _direction: string): string | null {
+    return null
+  }
+
+  /**
    * The label an exit shows in place of the destination room's name, or null
    * for the name. Override for a way whose end the player should not read yet.
    */

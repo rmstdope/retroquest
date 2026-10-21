@@ -52,6 +52,9 @@ describe('Act 3 rooms', () => {
       for (const [direction, targetKey] of Object.entries(exits)) {
         // Only enforce bi-directionality for standard cardinal directions
         if (!(direction in reverse)) continue
+        // An exit to the room itself is a move the room handles in place
+        // (the Sanctum's wade into the dark water), not a passage.
+        if (targetKey === roomKey) continue
         expect(
           targetKey in act3.rooms,
           `Exit from ${roomKey} via '${direction}' points to unknown room '${targetKey}'.`,
