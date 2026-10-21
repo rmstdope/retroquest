@@ -138,5 +138,7 @@ export const FLAG_ACT3_SHELL_HEARD = 'act3_shell_heard'
 export const FLAG_ACT3_PHANTOMS_HEARD = 'act3_phantoms_heard'
 
 // Elior's answer to Mira's confession (the first answer stands; at most one is set)
+/** Set when Elior forgives Mira after her confession (the first answer stands). */
 export const FLAG_ACT3_MIRA_FORGIVEN = 'act3_mira_forgiven'
+/** Set when Elior tells Mira she should have told him (the first answer stands). */
 export const FLAG_ACT3_MIRA_REPROACHED = 'act3_mira_reproached'

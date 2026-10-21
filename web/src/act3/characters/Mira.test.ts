@@ -720,6 +720,15 @@ describe('Elior answers the confession', () => {
     )
   })
 
+  it('lets a first reproach stand against a later forgiveness', () => {
+    const game = confessed()
+    executeCommands(game, ['say you should have told me to mira'])
+    expect(executeCommands(game, ['say i forgive you to mira'])).toBe(
+      dialogue('Mira', MIRA_ANSWER_REPEAT),
+    )
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN)).toBe(false)
+  })
+
   it('does not recognise the answers before the confession', () => {
     const game = confessed()
     game.state.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, false)

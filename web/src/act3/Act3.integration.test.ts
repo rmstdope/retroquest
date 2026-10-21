@@ -24,6 +24,7 @@ import {
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
   FLAG_ACT3_MIRA_FORGIVEN,
+  FLAG_ACT3_MIRA_REPROACHED,
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
   FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_PHOENIX_STORY_TOLD,
@@ -641,6 +642,12 @@ describe('Act 3 golden path', () => {
       'courage, wisdom, and selflessness',
     )
     expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
+
+    // After the rite the answer words are no longer recognised
+    expect(
+      executeCommands(game, ['say you should have told me to mira']),
+    ).toContain('shakes her head.')
+    expectStoryFlag(state, FLAG_ACT3_MIRA_REPROACHED, false)
 
     // The rite used the herbs: gone from the hut, never in the bag.
     expectItemInRoom(room(), 'healing herbs', false)
