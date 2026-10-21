@@ -23,6 +23,8 @@ import {
   FLAG_ACT3_DRAGON_OATH_SPOKEN,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
+  FLAG_ACT3_MIRA_FORGIVEN,
+  FLAG_ACT3_MIRA_REPROACHED,
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
   FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_PHOENIX_STORY_TOLD,
@@ -615,6 +617,12 @@ describe('Act 3 golden path', () => {
     )
     expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, false)
 
+    // Elior may answer the confession; the answer is remembered in the save
+    expect(executeCommands(game, ['say i forgive you to mira'])).toContain(
+      'Thank you. I did not dare ask for that.',
+    )
+    expectStoryFlag(state, FLAG_ACT3_MIRA_FORGIVEN, true)
+
     // A save made before the rite still has the herbs, and the rite takes them
     const beforeRite = new Game([new Act3()])
     expect(beforeRite.loadSaveData(game.toSaveData())).toContain('loaded')
@@ -622,6 +630,7 @@ describe('Act 3 golden path', () => {
     expect(executeCommands(beforeRite, ['say amulet to mira'])).toContain(
       'anchor of their ward',
     )
+    expectStoryFlag(beforeRite.state, FLAG_ACT3_MIRA_FORGIVEN, true)
     executeCommands(beforeRite, ['talk to mira'])
     expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', false)
 
@@ -633,6 +642,12 @@ describe('Act 3 golden path', () => {
       'courage, wisdom, and selflessness',
     )
     expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
+
+    // After the rite the answer words are no longer recognised
+    expect(
+      executeCommands(game, ['say you should have told me to mira']),
+    ).toContain('shakes her head.')
+    expectStoryFlag(state, FLAG_ACT3_MIRA_REPROACHED, false)
 
     // The rite used the herbs: gone from the hut, never in the bag.
     expectItemInRoom(room(), 'healing herbs', false)
@@ -658,6 +673,7 @@ describe('Act 3 golden path', () => {
     // Mira refuses to stay behind; the scene plays once, then a short line.
     const gateTalk = executeCommands(game, ['talk to mira'])
     expect(gateTalk).toContain('I am coming with you.')
+    expect(gateTalk).toContain('You forgave me in the hut')
     expect(executeCommands(game, ['talk to mira'])).toContain(
       'I am right behind you, Elior.',
     )

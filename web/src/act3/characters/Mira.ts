@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   characterName,
+  dialogue,
   event,
   speech,
 } from '@/engine'
@@ -25,7 +26,9 @@ import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_ECHOES_QUEST_STARTED,
   FLAG_ACT3_MIRA_CONFESSED,
+  FLAG_ACT3_MIRA_FORGIVEN,
   FLAG_ACT3_MIRA_GATE_TALKED,
+  FLAG_ACT3_MIRA_REPROACHED,
   FLAG_ACT3_RUINS_LEFT,
   FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED,
   FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED,
@@ -37,13 +40,22 @@ import {
   miraTopicIn,
   miraTopicReply,
 } from '../MiraTopics'
+import {
+  MIRA_ANSWER_INVITATION,
+  MIRA_ANSWER_REMINDER,
+  MIRA_ANSWER_REPEAT,
+  MIRA_GATE_LINES,
+  miraAnswerIn,
+  miraAnswerReply,
+} from '../MiraAnswers'
 
 /**
  * Act III version of Mira: starts the main quest, handles teleportation
  * between sites and, once everything is complete, confesses that she was the
  * Wardens' pupil before she performs the Warding Rite on the next talk. She
  * also answers `say <topic> to mira` about Elior's parents, Malakar, the
- * amulet and his grandmother (see `sayTo`).
+ * amulet and his grandmother, and, between the confession and the rite, lets
+ * him forgive her or reproach her (see `sayTo`).
  */
 export class Mira extends Character {
   constructor() {
@@ -430,9 +442,31 @@ export class Mira extends Character {
    * Elior asks Mira about his past: parents, Malakar, the amulet or his
    * grandmother. She dodges before her confession and answers honestly after
    * it; any other words get the same shake of the head. Works in every room
-   * she is in.
+   * she is in. Between the confession and the Warding Rite he may instead
+   * answer the confession (forgive her or reproach her): the first answer is
+   * remembered, a later one only gets her acknowledgement.
    */
   override sayTo(gameState: GameState, words: string): string {
+    const answer = miraAnswerIn(words)
+    if (
+      answer &&
+      gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED) &&
+      !gameState.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)
+    ) {
+      if (
+        gameState.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN) ||
+        gameState.getStoryFlag(FLAG_ACT3_MIRA_REPROACHED)
+      ) {
+        return dialogue('Mira', MIRA_ANSWER_REPEAT)
+      }
+      gameState.setStoryFlag(
+        answer === 'forgive'
+          ? FLAG_ACT3_MIRA_FORGIVEN
+          : FLAG_ACT3_MIRA_REPROACHED,
+        true,
+      )
+      return miraAnswerReply(answer)
+    }
     return miraTopicReply(
       miraTopicIn(words),
       gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED),
@@ -441,7 +475,9 @@ export class Mira extends Character {
 
   /**
    * Mira's talk at the fortress gate: the first time she refuses to stay
-   * behind and says she is coming along; every later time one short line.
+   * behind and says she is coming along (her second line follows Elior's
+   * answer to the confession, if he gave one); every later time one short
+   * line.
    */
   private talkAtGate(gameState: GameState, eventMsg: string): string {
     if (gameState.getStoryFlag(FLAG_ACT3_MIRA_GATE_TALKED)) {
@@ -455,6 +491,11 @@ export class Mira extends Character {
       )
     }
     gameState.setStoryFlag(FLAG_ACT3_MIRA_GATE_TALKED, true)
+    const answeredLine = gameState.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN)
+      ? MIRA_GATE_LINES.forgive
+      : gameState.getStoryFlag(FLAG_ACT3_MIRA_REPROACHED)
+        ? MIRA_GATE_LINES.reproach
+        : null
     return [
       eventMsg,
       event(
@@ -463,9 +504,10 @@ export class Mira extends Character {
       ),
       speech('I know how I look, Elior. Do not ask me to stay behind.'),
       speech(
-        'Your parents walked into the dark without me once. I will not ' +
-          'let you do the same. Go with courage, wisdom, and ' +
-          'selflessness—I am coming with you.',
+        answeredLine ??
+          'Your parents walked into the dark without me once. I will not ' +
+            'let you do the same. Go with courage, wisdom, and ' +
+            'selflessness—I am coming with you.',
       ),
     ].join('\n')
   }
@@ -583,6 +625,8 @@ export class Mira extends Character {
         'I am telling you now because you have earned the truth. The ' +
           'amulet you carry is the anchor of the ward your parents became.',
       ),
+      speech(MIRA_ANSWER_INVITATION),
+      MIRA_ANSWER_REMINDER,
       event('She looks down at the relics, and then back at you.'),
       speech('When you are ready, tell me, and I will begin the Warding Rite.'),
       speech(

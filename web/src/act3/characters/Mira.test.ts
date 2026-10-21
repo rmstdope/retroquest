@@ -18,12 +18,21 @@ import {
   FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_MIRA_CONFESSED,
+  FLAG_ACT3_MIRA_FORGIVEN,
   FLAG_ACT3_MIRA_GATE_TALKED,
+  FLAG_ACT3_MIRA_REPROACHED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
 import { Mira } from './Mira'
 import { MIRA_TOPICS_REMINDER } from '../MiraTopics'
+import {
+  MIRA_ANSWER_INVITATION,
+  MIRA_ANSWER_REMINDER,
+  MIRA_ANSWER_REPEAT,
+  MIRA_GATE_LINES,
+  miraAnswerReply,
+} from '../MiraAnswers'
 import { SirCedric } from './SirCedric'
 import { CrystalOfLight } from '../items/CrystalOfLight'
 import { DragonsScale } from '../items/DragonsScale'
@@ -542,6 +551,8 @@ describe('Mira confesses before the Warding Rite', () => {
       speech(
         'I am telling you now because you have earned the truth. The amulet you carry is the anchor of the ward your parents became.',
       ),
+      speech(MIRA_ANSWER_INVITATION),
+      MIRA_ANSWER_REMINDER,
       event('She looks down at the relics, and then back at you.'),
       speech('When you are ready, tell me, and I will begin the Warding Rite.'),
       speech(
@@ -668,5 +679,124 @@ describe('Mira topics', () => {
           'the amulet, your grandmother. I will not hide from you again.',
       ),
     )
+  })
+})
+
+describe('Elior answers the confession', () => {
+  /** A game just after the confession, in Mira's Hut with the rite pending. */
+  function confessed(): Game {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    game.state.currentRoom.characters.push(new Mira())
+    return game
+  }
+
+  it('plays the forgiveness reply and remembers it', () => {
+    const game = confessed()
+    const out = executeCommands(game, ['say i forgive you to mira'])
+    expect(out).toBe(miraAnswerReply('forgive'))
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_REPROACHED)).toBe(false)
+  })
+
+  it('plays the reproach reply and remembers it', () => {
+    const game = confessed()
+    const out = executeCommands(game, ['say You should have told me to mira'])
+    expect(out).toBe(miraAnswerReply('reproach'))
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_REPROACHED)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN)).toBe(false)
+  })
+
+  it('lets the first answer stand', () => {
+    const game = confessed()
+    executeCommands(game, ['say i forgive you to mira'])
+    const again = executeCommands(game, ['say you should have told me to mira'])
+    expect(again).toBe(dialogue('Mira', MIRA_ANSWER_REPEAT))
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_REPROACHED)).toBe(false)
+    expect(executeCommands(game, ['say i forgive you to mira'])).toBe(
+      dialogue('Mira', MIRA_ANSWER_REPEAT),
+    )
+  })
+
+  it('lets a first reproach stand against a later forgiveness', () => {
+    const game = confessed()
+    executeCommands(game, ['say you should have told me to mira'])
+    expect(executeCommands(game, ['say i forgive you to mira'])).toBe(
+      dialogue('Mira', MIRA_ANSWER_REPEAT),
+    )
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN)).toBe(false)
+  })
+
+  it('does not recognise the answers before the confession', () => {
+    const game = confessed()
+    game.state.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, false)
+    const out = executeCommands(game, ['say i forgive you to mira'])
+    expect(out).toContain('shakes her head.')
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN)).toBe(false)
+  })
+
+  it('does not recognise the answers once the rite is performed', () => {
+    const game = confessed()
+    game.state.setStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
+    const out = executeCommands(game, ['say i forgive you to mira'])
+    expect(out).toContain('shakes her head.')
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN)).toBe(false)
+  })
+
+  it('keeps the topic replies when no answer is given', () => {
+    const game = confessed()
+    expect(executeCommands(game, ['say amulet to mira'])).toContain(
+      'It is the anchor of their ward.',
+    )
+  })
+
+  it('remembers the answer through a save and load', () => {
+    const game = confessed()
+    executeCommands(game, ['say i forgive you to mira'])
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+    expect(fresh.state.getStoryFlag(FLAG_ACT3_MIRA_FORGIVEN)).toBe(true)
+  })
+
+  describe('at the fortress gate, first talk', () => {
+    function gateTalk(flag: string | null): string {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+      game.state.currentRoom = game.state.allRooms.FortressEntrance
+      if (flag) game.state.setStoryFlag(flag, true)
+      return new Mira().talkTo(game.state)
+    }
+    const ORIGINAL = speech(
+      'Your parents walked into the dark without me once. I will not let you do the same. Go with courage, wisdom, and selflessness—I am coming with you.',
+    )
+
+    it('keeps the original second line with no answer', () => {
+      expect(gateTalk(null)).toContain(ORIGINAL)
+    })
+
+    it('uses the forgiveness line', () => {
+      const out = gateTalk(FLAG_ACT3_MIRA_FORGIVEN)
+      expect(out).toContain(speech(MIRA_GATE_LINES.forgive))
+      expect(out).not.toContain(ORIGINAL)
+      expect(out).toContain('I know how I look, Elior.')
+    })
+
+    it('uses the reproach line', () => {
+      const out = gateTalk(FLAG_ACT3_MIRA_REPROACHED)
+      expect(out).toContain(speech(MIRA_GATE_LINES.reproach))
+      expect(out).not.toContain(ORIGINAL)
+    })
+
+    it('gives the short line on later talks whatever the answer', () => {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+      game.state.currentRoom = game.state.allRooms.FortressEntrance
+      game.state.setStoryFlag(FLAG_ACT3_MIRA_FORGIVEN, true)
+      const mira = new Mira()
+      mira.talkTo(game.state)
+      expect(mira.talkTo(game.state)).toContain('I am right behind you')
+    })
   })
 })
