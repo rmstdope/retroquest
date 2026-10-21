@@ -1,6 +1,9 @@
 import { Character, type GameState, characterName, speech } from '@/engine'
 import { PhoenixFeather } from '../items/PhoenixFeather'
-import { FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_CHARRED_INSCRIPTION_READ,
+  FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+} from '../Act3StoryFlags'
 
 /** A majestic, telepathic phoenix who poses a riddle to the worthy. */
 export class Phoenix extends Character {
@@ -17,8 +20,19 @@ export class Phoenix extends Character {
     })
   }
 
-  /** Telepathic riddle from the Phoenix. */
-  override talkTo(_gameState: GameState): string {
+  /**
+   * Poses the telepathic riddle with a hint at the Warden of Wisdom; once the
+   * feather is earned the riddle is no longer asked and the Phoenix bids farewell.
+   */
+  override talkTo(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
+      return (
+        'The ' +
+        characterName('phoenix') +
+        ' inclines its head. ' +
+        speech("'Remember him when time is short for you.'")
+      )
+    }
     this.riddlePosed = true
     return (
       'The ' +
@@ -27,7 +41,12 @@ export class Phoenix extends Character {
       'beak, but resounds within your mind: ' +
       speech("'What is wisdom when time is short?'") +
       ' The question lingers, ' +
-      'bright and weightless, as if the answer might shape the very air around you.'
+      'bright and weightless, as if the answer might shape the very air around you.' +
+      ' ' +
+      speech(
+        "'I asked this once of the Warden of Wisdom, when he came to me with " +
+          "his two friends. He knew the answer, and did not keep it.'",
+      )
     )
   }
 
@@ -50,6 +69,18 @@ export class Phoenix extends Character {
     if (['patience', 'calm', 'ease'].some((key) => answer.includes(key))) {
       gameState.addItemToInventory(new PhoenixFeather())
       gameState.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+      const link =
+        ' ' +
+        speech(
+          "'He gave your answer too. Then time grew short for his friends, and " +
+            'patience was the one thing he had none of. Do not become what he ' +
+            "became.'",
+        )
+      const terraces = gameState.getStoryFlag(
+        FLAG_ACT3_CHARRED_INSCRIPTION_READ,
+      )
+        ? ' You think of the third name burned deeper than the others on the terraces.'
+        : ''
       return (
         'The ' +
         characterName('phoenix') +
@@ -58,7 +89,9 @@ export class Phoenix extends Character {
         speech(
           "'Wisdom is " +
             "patience, even when the world burns. Take this, and remember.'",
-        )
+        ) +
+        link +
+        terraces
       )
     }
     return (
