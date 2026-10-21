@@ -1,5 +1,8 @@
 import { Item, event, type GameState } from '@/engine'
-import { FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
+  FLAG_ACT3_PHANTOMS_FREED,
+} from '../Act3StoryFlags'
 import { WanderingPhantoms } from '../characters/WanderingPhantoms'
 import { StillnessVestibule } from '../rooms/StillnessVestibule'
 import { EchoStones } from './EchoStones'
@@ -33,12 +36,16 @@ export class ResonantChantRubbings extends Item {
             (char) => !(char instanceof WanderingPhantoms),
           )
         }
+        // Freed first (the optional mercy): the silence settles on an empty room.
+        const silence = gameState.getStoryFlag(FLAG_ACT3_PHANTOMS_FREED)
+          ? 'settles over the empty chamber.'
+          : 'banishes the wandering phantoms.'
         return (
           event('You recite the resonant chant at each stone. ') +
           '\n' +
           '[success]The words ' +
           'echo and re-echo, building into a harmonious silence that ' +
-          "banishes the wandering phantoms. The path to the dragon's hall " +
+          `${silence} The path to the dragon's hall ` +
           'now lies open.[/success]'
         )
       }

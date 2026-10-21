@@ -11,7 +11,9 @@ import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_DRAGON_OATH_SPOKEN,
   FLAG_ACT3_DRAGON_VOICE_HEARD,
+  FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_OATH_SCROLLS_EXAMINED,
+  FLAG_ACT3_SIGILS_MENDED,
 } from '../Act3StoryFlags'
 
 /** The ancient dragon who guards the Dragon's Scale and holds memories. */
@@ -96,17 +98,35 @@ export class AncientDragon extends Character {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD, true)
       dialogue = dialogue + this.voiceMoment()
     }
-    dialogue =
+    return (
       dialogue +
-      ('The ' +
-        characterName(name) +
-        ' rumbles softly: ' +
-        speech(
-          "'The memory has been shared. Your path leads forward now, not " +
-            'back. The scale awaits when you are ready to prove your ' +
-            "selflessness.'",
-        ))
-    return dialogue
+      'The ' +
+      characterName(name) +
+      ' rumbles softly: ' +
+      speech(this.closingLine(gameState))
+    )
+  }
+
+  /**
+   * The line that ends every talk: the scale awaits, then (once it is
+   * taken) the price of its going, then (once the sigils are mended) that
+   * the prison holds.
+   */
+  private closingLine(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT3_SIGILS_MENDED)) {
+      return "'Go with my blessing, young one. The prison holds.'"
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)) {
+      return (
+        "'Go with my blessing. The prison I hold is weaker for the scale's " +
+        "going. That is the price, and it is mine to pay, not yours.'"
+      )
+    }
+    return (
+      "'The memory has been shared. Your path leads forward now, not " +
+      'back. The scale awaits when you are ready to prove your ' +
+      "selflessness.'"
+    )
   }
 
   /** Handle saying something to the dragon, particularly oaths. */

@@ -32,6 +32,7 @@ import { QuietCharm } from './items/QuietCharm'
 import { ReinforcedBraces } from './items/ReinforcedBraces'
 import { ResonantChantRubbings } from './items/ResonantChantRubbings'
 import { RunicWalls } from './items/RunicWalls'
+import { Sigils } from './items/Sigils'
 import { RustedLockerKey } from './items/RustedLockerKey'
 import { SeaSealedLetter } from './items/SeaSealedLetter'
 import { SeaweedTangle } from './items/SeaweedTangle'
@@ -123,6 +124,7 @@ export const ACT3_CLASSES = {
   ReinforcedBraces,
   ResonantChantRubbings,
   RunicWalls,
+  Sigils,
   RustedLockerKey,
   SeaSealedLetter,
   SeaweedTangle,
