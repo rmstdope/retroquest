@@ -144,8 +144,7 @@ export class Mira extends Character {
             "'The shadows here run deep, Elior. The miners' plight is a " +
               'test of selflessness—lend your strength, and the path to the dragon ' +
               'will open. ' +
-              'When you are ready, I can draw the next circle, but the caverns will ' +
-              "not yield their heart until all are safe.'",
+              "The caverns will not yield their heart until all are safe.'",
           )
         )
       }
@@ -226,7 +225,7 @@ export class Mira extends Character {
             "'Before we venture into the shadowed depths, Elior, " +
               'you should seek the traces your parents left behind in the ' +
               'sunken ruins. Their story will give you strength for what ' +
-              "lies ahead in the caverns.'",
+              "lies ahead on the ember heights.'",
           )
         )
       }
