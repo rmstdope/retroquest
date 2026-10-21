@@ -597,6 +597,31 @@ describe('Act 3 golden path', () => {
 })
 
 describe('Act 3 golden path as declared by the act', () => {
+  it('does not replay a glow after a save and load mid-act', () => {
+    const game = new Game([new Act3()])
+    executeCommands(game, ACT3_GOLDEN_PATH.slice(0, 8))
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+
+    const again = executeCommands(fresh, ['examine letter', 'examine amulet'])
+
+    expect(again).not.toContain('grows warm')
+    expect(again).toContain('two faces linger')
+  })
+
+  it('ends with the amulet showing both parents, after three glows', () => {
+    const game = new Game([new Act3()])
+    const out = executeCommands(game, ACT3_GOLDEN_PATH)
+    expect(
+      out.match(
+        /Ancient Amulet\[\/item_name\] (grows warm|glows again|blazes)/g,
+      ),
+    ).toHaveLength(3)
+    expect(executeCommands(game, ['examine amulet'])).toContain(
+      'Aren and Lysa stand hand in hand',
+    )
+  })
+
   it('completes every non-main quest before completing the main quest', () => {
     const game = new Game([new Act3()])
     executeCommands(game, ACT3_GOLDEN_PATH)

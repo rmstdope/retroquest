@@ -5,6 +5,7 @@ import {
   event,
   speech,
 } from '@/engine'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { DragonsScale } from '../items/DragonsScale'
 import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
@@ -25,7 +26,10 @@ export class AncientDragon extends Character {
     })
   }
 
-  /** Provide the Dragon's Memory for the storytelling quest. */
+  /**
+   * Provide the Dragon's Memory for the storytelling quest; the first talk
+   * ends the memory with the amulet's third glow.
+   */
   override talkTo(gameState: GameState): string {
     const name = this.name
     // Check if this is the first conversation
@@ -55,6 +59,7 @@ export class AncientDragon extends Character {
           'They are not gone as the dead are gone, child. They are ' +
             'warded away, not dead.',
         ) +
+        AncientAmulet.glowInBag(gameState, 3) +
         '\n\n'
     }
     dialogue =

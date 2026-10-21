@@ -4,6 +4,7 @@ import { Act3 } from '../Act3'
 import { SeaSealedLetter } from './SeaSealedLetter'
 import { parseTurn } from '@/lantern/parseTurn'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
+import { AncientAmulet } from './AncientAmulet'
 
 describe('SeaSealedLetter', () => {
   it('exposes an appropriate name', () => {
@@ -73,5 +74,24 @@ describe('SeaSealedLetter', () => {
     expect(lines.every((l) => !l.startsWith("'") && !l.endsWith("'"))).toBe(
       true,
     )
+  })
+
+  it('glows the amulet after the last line the first time only', () => {
+    const game = new Game([new Act3()])
+    const letter = new SeaSealedLetter()
+
+    const first = letter.examine(game.state)
+    const again = letter.examine(game.state)
+
+    expect(first).toContain('At your side, the [item_name]Ancient Amulet')
+    expect(first.indexOf('and answered')).toBeLessThan(
+      first.indexOf('grows warm'),
+    )
+    expect(first.trimEnd().endsWith('Then the light fades.[/event]')).toBe(true)
+    expect(again).not.toContain('grows warm')
+    expectMarkupWellFormed(first)
+    expect(
+      game.state.inventory.find((i) => i instanceof AncientAmulet)?.description,
+    ).toContain('two faces linger')
   })
 })

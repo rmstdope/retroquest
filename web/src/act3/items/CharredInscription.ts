@@ -1,4 +1,5 @@
 import { Item, event, writing, type GameState } from '@/engine'
+import { AncientAmulet } from './AncientAmulet'
 import { FLAG_ACT3_CHARRED_INSCRIPTION_READ } from '../Act3StoryFlags'
 
 /** A charred inscription etched into cooled lava, part of the Hidden Bond story. */
@@ -14,11 +15,13 @@ export class CharredInscription extends Item {
     })
   }
 
-  /** Examine the inscription to read its message. */
+  /**
+   * Examine the inscription to read its message. The first reading ends with
+   * the amulet's second glow.
+   */
   override examine(gameState: GameState): string {
-    if (!gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)) {
-      gameState.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
-    }
+    const first = !gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)
+    gameState.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
 
     return (
       event(
@@ -40,7 +43,8 @@ export class CharredInscription extends Item {
         'The last name is burned deeper than the others, as if the stone ' +
           'was struck again long after it cooled. Your parents and Malakar ' +
           'made this promise together, and the wisdom was his.',
-      )
+      ) +
+      (first ? AncientAmulet.glowInBag(gameState, 2) : '')
     )
   }
 }

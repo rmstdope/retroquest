@@ -58,7 +58,8 @@ describe('CharredInscription', () => {
     )
     const result2 = inscription.examine(game.state)
 
-    expect(result1).toBe(result2)
+    expect(result1.startsWith(result2)).toBe(true)
+    expect(result1).not.toBe(result2)
     expect(game.state.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)).toBe(
       true,
     )
@@ -87,5 +88,20 @@ describe('CharredInscription', () => {
       'I, Malakar, pour wisdom into the Phoenix Feather.',
       'What we pour into the ward, the ward will keep.',
     ])
+  })
+
+  it('glows the amulet after the last line the first time only', () => {
+    const game = new Game([new Act3()])
+    const inscription = new CharredInscription()
+
+    const first = inscription.examine(game.state)
+    const again = inscription.examine(game.state)
+
+    expect(first).toContain('glows again, brighter than before')
+    expect(first.trimEnd().endsWith('still has his back turned.[/event]')).toBe(
+      true,
+    )
+    expect(again).not.toContain('glows again')
+    expectMarkupWellFormed(first)
   })
 })
