@@ -2,7 +2,13 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { Nyx } from './Nyx'
-import { FLAG_NYX_TRIALS_COMPLETED } from '../Act2StoryFlags'
+import {
+  FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_WREN_FLOWER_GIVEN,
+  FLAG_MARCUS_TOLD_TRUTH,
+  FLAG_BRENN_FORGIVEN,
+} from '../Act2StoryFlags'
+import { characterName } from '@/engine'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 const REFRAIN =
@@ -32,7 +38,8 @@ describe('Nyx', () => {
     expect(answer).toContain(
       '"Elior. You gave the tree your acorn instead of keeping it. You ' +
         'answered the nymphs without bargaining. You brought me the three ' +
-        'charms. That is enough."',
+        'charms. The forest saw the road you took. It will keep watching. ' +
+        'That is enough."',
     )
     expect(answer).toContain(
       'She touches your forehead. Something settles behind your eyes, like ' +
@@ -89,5 +96,104 @@ describe('Nyx', () => {
 
     expect(answer).toContain(LATER)
     expect(answer).not.toContain('Power follows')
+  })
+
+  describe('names the optional kindnesses taken', () => {
+    const WREN = `You gave ${characterName('Wren')} your flower from the mountain, and she held it up to the window.`
+    const MARCUS = `You told ${characterName('Marcus')} the truth about his daughter when a kinder lie was easier.`
+    const BRENN = `You spoke for ${characterName('Brenn')} when ${characterName('Thorne')} would not.`
+    const NONE = 'The forest saw the road you took. It will keep watching.'
+    const CHARMS = 'You brought me the three charms. '
+
+    /** Talk to Nyx once with the given kindness flags set. */
+    function firstTalk(flags: string[]): string {
+      const game = new Game([new Act2()])
+      for (const flag of flags) game.state.setStoryFlag(flag, true)
+      return new Nyx().talkTo(game.state)
+    }
+
+    it('says one neutral sentence when none were taken', () => {
+      const answer = firstTalk([])
+      expect(answer).toContain(CHARMS + NONE + ' That is enough.')
+      expect(answer).not.toContain('No one asked')
+      expectMarkupWellFormed(answer)
+    })
+
+    it.each([
+      [FLAG_WREN_FLOWER_GIVEN, WREN],
+      [FLAG_MARCUS_TOLD_TRUTH, MARCUS],
+      [FLAG_BRENN_FORGIVEN, BRENN],
+    ])(
+      'names a single kindness (%s) with the singular lead-in',
+      (flag, line) => {
+        const answer = firstTalk([flag])
+        expect(answer).toContain(
+          CHARMS + 'No one asked this of you. ' + line + ' That is enough.',
+        )
+        expect(answer).not.toContain(NONE)
+        expectMarkupWellFormed(answer)
+      },
+    )
+
+    it.each([
+      [
+        [FLAG_BRENN_FORGIVEN, FLAG_WREN_FLOWER_GIVEN],
+        [WREN, BRENN],
+      ],
+      [
+        [FLAG_MARCUS_TOLD_TRUTH, FLAG_WREN_FLOWER_GIVEN],
+        [WREN, MARCUS],
+      ],
+      [
+        [FLAG_BRENN_FORGIVEN, FLAG_MARCUS_TOLD_TRUTH],
+        [MARCUS, BRENN],
+      ],
+    ])('names a pair in the fixed order', (flags, lines) => {
+      const answer = firstTalk(flags)
+      expect(answer).toContain(
+        CHARMS +
+          'No one asked these of you. ' +
+          lines.join(' ') +
+          ' That is enough.',
+      )
+      expectMarkupWellFormed(answer)
+    })
+
+    it('names all three, exactly as agreed', () => {
+      const answer = firstTalk([
+        FLAG_BRENN_FORGIVEN,
+        FLAG_WREN_FLOWER_GIVEN,
+        FLAG_MARCUS_TOLD_TRUTH,
+      ])
+      expect(answer).toContain(
+        CHARMS +
+          'No one asked these of you. ' +
+          [WREN, MARCUS, BRENN].join(' ') +
+          ' That is enough.',
+      )
+      expect(answer).toContain(`${characterName('Wren')} your flower`)
+      expectMarkupWellFormed(answer)
+    })
+
+    it('never names a kindness taken after the first meeting', () => {
+      const game = new Game([new Act2()])
+      const nyx = new Nyx()
+      nyx.talkTo(game.state)
+      game.state.setStoryFlag(FLAG_WREN_FLOWER_GIVEN, true)
+
+      const answer = nyx.talkTo(game.state)
+
+      expect(answer).toContain(LATER)
+      expect(answer).not.toContain('flower')
+    })
+
+    it('leaves rewards and flags as before', () => {
+      const game = new Game([new Act2()])
+      game.state.setStoryFlag(FLAG_WREN_FLOWER_GIVEN, true)
+      const before = game.state.inventory.length
+      new Nyx().talkTo(game.state)
+      expect(game.state.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)).toBe(true)
+      expect(game.state.inventory).toHaveLength(before + 2)
+    })
   })
 })

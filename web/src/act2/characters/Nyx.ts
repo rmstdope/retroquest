@@ -1,8 +1,13 @@
-import { Character, type GameState } from '@/engine'
+import { Character, characterName, type GameState } from '@/engine'
 import { NyxToken } from '../items/NyxToken'
 import { ForestHeartCrystal } from '../items/ForestHeartCrystal'
 import { PropheticVision } from '../spells/PropheticVision'
-import { FLAG_NYX_TRIALS_COMPLETED } from '../Act2StoryFlags'
+import {
+  FLAG_BRENN_FORGIVEN,
+  FLAG_MARCUS_TOLD_TRUTH,
+  FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_WREN_FLOWER_GIVEN,
+} from '../Act2StoryFlags'
 
 /** The forest sprite at the end of the south path, a plain witness to what Elior did. */
 export class Nyx extends Character {
@@ -16,13 +21,48 @@ export class Nyx extends Character {
   }
 
   /**
-   * Return dialogue for Nyx and grant rewards on first meeting. The first
+   * The words Nyx adds to her witness speech about the optional kindnesses
+   * Elior took, always in the order Wren, Marcus, Brenn, each in a sentence of
+   * its own. One kindness gets the singular lead-in, two or three the plural;
+   * none gets one neutral sentence. Includes the trailing space.
+   */
+  private kindnessesSpoken(gameState: GameState): string {
+    const sentences: string[] = []
+    if (gameState.getStoryFlag(FLAG_WREN_FLOWER_GIVEN))
+      sentences.push(
+        `You gave ${characterName('Wren')} your flower from the mountain, ` +
+          'and she held it up to the window.',
+      )
+    if (gameState.getStoryFlag(FLAG_MARCUS_TOLD_TRUTH))
+      sentences.push(
+        `You told ${characterName('Marcus')} the truth about his daughter ` +
+          'when a kinder lie was easier.',
+      )
+    if (gameState.getStoryFlag(FLAG_BRENN_FORGIVEN))
+      sentences.push(
+        `You spoke for ${characterName('Brenn')} when ` +
+          `${characterName('Thorne')} would not.`,
+      )
+    if (sentences.length === 0)
+      return 'The forest saw the road you took. It will keep watching. '
+    const leadIn =
+      sentences.length === 1
+        ? 'No one asked this of you. '
+        : 'No one asked these of you. '
+    return leadIn + sentences.join(' ') + ' '
+  }
+
+  /**
+   * Return dialogue for Nyx and grant rewards on first meeting. Her witness
+   * speech names the optional kindnesses taken so far. The first
    * talk ends with the refrain and Elior's recognition of the glade stone;
    * a save that already met Nyx hears only the farewell.
    */
   override talkTo(gameState: GameState): string {
     // Check if this is the first time talking to Nyx
     if (!gameState.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)) {
+      // The kindnesses are read now, before anything changes, and only once
+      const kindnesses = this.kindnessesSpoken(gameState)
       // First meeting - grant all rewards immediately
       gameState.setStoryFlag(FLAG_NYX_TRIALS_COMPLETED, true)
       // Add Prophetic Vision spell
@@ -38,7 +78,9 @@ export class Nyx extends Character {
         'you look at a road you have walked before.\n\n' +
         '"Elior. You gave the tree your acorn instead of keeping it. You ' +
         'answered the nymphs without bargaining. You brought me the three ' +
-        'charms. That is enough."\n\n' +
+        'charms. ' +
+        kindnesses +
+        'That is enough."\n\n' +
         'She touches your forehead. Something settles behind your eyes, like ' +
         'a word you had forgotten coming back. She puts two things in your ' +
         'hands.\n\n' +
