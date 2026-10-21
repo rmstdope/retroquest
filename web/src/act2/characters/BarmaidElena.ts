@@ -12,10 +12,17 @@ import {
  * Recovery sequence: `receiveGreaterHeal` (stabilization), then
  * `receiveCrystalWaterPurification` (cleansing), then `receiveDispelFinalCure`
  * (sets the quest completion flag). Each phase updates the description.
+ *
+ * From the greater heal until the dispel the Sorceress of Lies' silver mask
+ * shows on her wrist: it is in her description, and she remarks on it once.
  */
 export class BarmaidElena extends Character {
   elenaInitialHealing = false
   elenaPurified = false
+  /** True from the greater heal until the dispel: the silver mask shows on her wrist. */
+  markShown = false
+  /** True once Elena has spoken her lines about the mark. */
+  markSpoken = false
 
   constructor() {
     super({
@@ -29,6 +36,33 @@ export class BarmaidElena extends Character {
 
   /** Dialogue reflecting the current stage of Elena's recovery. */
   override talkTo(gameState: GameState): string {
+    const reply = this.stageReply(gameState)
+    if (
+      this.markShown &&
+      !this.markSpoken &&
+      !gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)
+    ) {
+      this.markSpoken = true
+      return (
+        characterName('Elena') +
+        ' sees you looking at her wrist and tugs her sleeve down over the ' +
+        'silver mark.' +
+        '\n\n' +
+        characterName(this.name) +
+        ': ' +
+        speech(
+          'It came the same night as the curse. Since then I dream of a ' +
+            'smiling face with no eyes, and it never says a true word.',
+        ) +
+        '\n\n' +
+        reply
+      )
+    }
+    return reply
+  }
+
+  /** Elena's reply for her current stage of recovery. */
+  private stageReply(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
       const name = this.name
       return (
@@ -118,13 +152,15 @@ export class BarmaidElena extends Character {
 
     // Set the flag and update Elena's condition
     this.elenaInitialHealing = true
+    this.markShown = true
 
     // Update Elena's description to show improvement
     this.description =
       'A young woman who appears to be recovering from a serious affliction. ' +
       'While still pale and bearing signs of magical corruption, the healing ' +
       'magic has restored some of her strength and vitality. Her eyes show ' +
-      'hope for the first time in weeks.'
+      'hope for the first time in weeks.' +
+      ' On the inside of her wrist, a small silver mask shows through her skin.'
 
     // Get spell name for display
     const spellName = new GreaterHealSpell().name
@@ -138,7 +174,12 @@ export class BarmaidElena extends Character {
       'little straighter.\n\n' +
       'The healing has made her strong enough to endure the final steps of the ' +
       "cure, but the curse still clings to her. Now you'll need to purify her " +
-      'and dispel the curse.[/success]'
+      'and dispel the curse.[/success]' +
+      '\n\n' +
+      'As the golden light fades, something surfaces on the inside of ' +
+      "Elena's wrist: a small silver mark in the shape of a mask, smooth and " +
+      'smiling, with no eyes behind it. The curse is wearing a face. You ' +
+      'have never seen its like, and you cannot say whose it is.'
     )
   }
 
@@ -168,7 +209,10 @@ export class BarmaidElena extends Character {
       'A young woman who radiates a faint, pure light. The blessed water has ' +
       'cleansed away much of the dark corruption, leaving her looking almost ' +
       'healthy. Her skin has a subtle luminous quality and her eyes are bright ' +
-      'with hope, though traces of the curse still linger.'
+      'with hope, though traces of the curse still linger.' +
+      (this.markShown
+        ? ' The silver mask on her wrist is untouched by the water.'
+        : '')
 
     return (
       '[success]You carefully pour the [item_name]crystal-clear water[/item_name] ' +
@@ -198,6 +242,8 @@ export class BarmaidElena extends Character {
       )
     }
 
+    this.markShown = false
+
     // Complete the cure and set the quest completion flag
     gameState.setStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED, true)
 
@@ -221,7 +267,10 @@ export class BarmaidElena extends Character {
       'The curse that has tormented her for weeks is finally broken! Elena ' +
       'looks at you with tears of joy, completely free at last. The three-step ' +
       'healing process - greater heal, purification, and dispelling - has ' +
-      'worked perfectly to save her life.[/success]'
+      'worked perfectly to save her life.[/success]' +
+      '\n\n' +
+      'On her wrist the silver mask goes on smiling a moment longer, then ' +
+      'fades like breath on a cold window, and is gone.'
     )
   }
 }
