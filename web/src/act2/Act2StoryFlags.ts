@@ -64,3 +64,7 @@ export const FLAG_WREN_FLOWER_GIVEN = 'wren_flower_given'
 export const FLAG_MARCUS_TOLD_TRUTH = 'marcus_told_truth'
 /** Set once Elior has spoken to Thorne for Brenn. */
 export const FLAG_BRENN_FORGIVEN = 'brenn_forgiven'
+/** Set once greater heal has been cast on Elena (the first step of her cure). */
+export const FLAG_ELENA_HEALED = 'elena_healed'
+/** Set once Lyria has given her three-step diagnosis of Elena's curse. */
+export const FLAG_LYRIA_DIAGNOSED = 'lyria_diagnosed'

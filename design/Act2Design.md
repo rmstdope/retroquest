@@ -131,7 +131,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Trigger:** A young girl in Greendale has been cursed by dark magic and needs help
   - **Prerequisites:** Access to The Silver Stag Inn
   - **Dependencies:** Learn `greater_heal` and `dispel`, and obtain Crystal-Clear Water from the Whispering Glade
-  - **Completion:** Break the curse using a combination of Elior's growing magical abilities and items found throughout Greendale. On the first `greater_heal` Elior sees the curse's silver, mask-shaped mark on Elena's wrist; it fades when `dispel` breaks the curse.
+  - **Completion:** Lyria, not Elena, explains the three steps. Break the curse using a combination of Elior's growing magical abilities and items found throughout Greendale. On the first `greater_heal` Elior sees the curse's silver, mask-shaped mark on Elena's wrist; it fades when `dispel` breaks the curse.
   - **Rewards:** Innkeeper's gratitude, curse-breaking experience, Druidic Charm
   - **Story Impact:** Demonstrates growing magical power, saves innocent life; the mark is the Sorceress of Lies' (recognised in Act IV)
 
@@ -203,7 +203,7 @@ City orientation is handled through the City Map and movement behavior, not sepa
 - **Motivations:** Heal the sick, pass on knowledge to worthy students, protect the innocent
 - **Character Arc:** Recognizes Elior's potential, becomes a mentor figure, grows to see Elior as an equal
 - **Dialogue Style:** Gentle but authoritative, uses medical metaphors, speaks with confidence about healing
-- **State-Dependent Dialogue:** Offers the apprenticeship when Elior brings the Crystal Focus, teaches Greater Heal when it is given, and later acknowledges Elior's progress.
+- **State-Dependent Dialogue:** Offers the apprenticeship when Elior brings the Crystal Focus, teaches Greater Heal when it is given, and later acknowledges Elior's progress. Once Elena's curse is known she explains the cure (strengthen, wash with untouched water, unbind) once, then reminds Elior until Elena is cured.
 - **Quest Involvement:** "The Healer's Apprentice", "The Innkeeper's Daughter"
 - **Teaching Role:** Advanced healing magic, compassion, medical knowledge
 
@@ -258,8 +258,8 @@ City orientation is handled through the City Map and movement behavior, not sepa
 Act II dialogue is driven by story flags, quest progress, inventory, and character state rather than a separate relationship-level or dialogue-choice system.
 
 - **Sir Cedric:** His responses change after first contact, the combat test, his honor quest, and Nyx's gift.
-- **Lyria:** Her offer and follow-up dialogue change after receiving the Crystal Focus and completing the apprenticeship.
-- **Elena:** Her appearance and dialogue change during the healing, purification, and dispelling steps.
+- **Lyria:** Her offer and follow-up dialogue change after receiving the Crystal Focus and completing the apprenticeship. Once Elena's curse is known she gives the three-step diagnosis (heal, wash with untouched water, unbind) once, then a one-line reminder until Elena is cured.
+- **Elena:** Her appearance and dialogue change during the healing, purification, and dispelling steps. She never names the next step: after the heal she says it did not take and that Lyria might know what comes next.
 - **Forest Spirits:** The sprites offer the riddles quest; the Ancient Tree Spirit teaches Forest Speech for the Enchanted Acorn; Nature Sense reveals the Water Nymphs.
 - **Nyx:** Her first conversation grants her gifts; later conversations use a follow-up response.
 
