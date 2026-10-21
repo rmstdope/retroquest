@@ -1,7 +1,6 @@
 import { Room, type Exits, type GameState, event } from '@/engine'
 import { CaptainOfTheGuard } from '../characters/CaptainOfTheGuard'
 import { TrappedServants } from '../characters/TrappedServants'
-import { LoyaltyToken } from '../items/LoyaltyToken'
 import { ServantsPendant } from '../items/ServantsPendant'
 import {
   FLAG_ACT4_SERVANTS_TRUST_EARNED,
@@ -76,8 +75,7 @@ export class OuterCourtyard extends Room {
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)) {
       gameState.setStoryFlag(FLAG_ACT4_SERVANTS_FREED, true)
       gameState.setStoryFlag(FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, true)
-      // Add the loyalty token and pendant to the room
-      this.addItem(new LoyaltyToken())
+      // The servants offer the pendant
       this.addItem(new ServantsPendant())
       // The servants stay, now called the Freed Servants
       const servants = this.getCharacterByName('servants')
@@ -88,9 +86,8 @@ export class OuterCourtyard extends Room {
           'window. The chains do not break so much as forget to hold, and fall ' +
           'away. One by one the servants stand still and look up. ' +
           'By the fountain, the captain blinks, as if waking from a long sleep. ' +
-          'One of the servants presses two things into your hands: a silver ' +
-          '[item_name]Loyalty Token[/item_name] and a small blue ' +
-          "[item_name]Servant's Pendant[/item_name].",
+          'One of the servants presses a small blue ' +
+          "[item_name]Servant's Pendant[/item_name] into your hands.",
       )
     }
     return '[dim]The chains are gone. There is nothing left to bless away.[/dim]'

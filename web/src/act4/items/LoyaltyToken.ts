@@ -1,38 +1,35 @@
 import { Item, type GameState, event } from '@/engine'
-import { FLAG_ACT4_LOYALTY_TOKEN_RAISED } from '../Act4StoryFlags'
+import { FLAG_ACT4_TOWER_STAIR_OPEN } from '../Act4StoryFlags'
 import { ChamberOfWhispers } from '../rooms/ChamberOfWhispers'
 import { TowerOfShadows } from '../rooms/TowerOfShadows'
 
 /**
- * A token that proves the bonds of trust with freed allies. Raised once in the
- * Tower of Shadows, its protection carries up into the Chamber of Whispers.
+ * The medallion Mira presses into Elior's hand at the gate. In the Tower of
+ * Shadows it lets the friends' names be heard; its warmth carries up into the
+ * Chamber of Whispers.
  */
 export class LoyaltyToken extends Item {
   constructor() {
     super({
       name: 'Loyalty Token',
       description:
-        'A small silver token stamped with two clasped hands, still warm from ' +
-        'the servant who gave it to you. Whoever carries it is not alone, and ' +
-        'knows it.',
+        'A small silver medallion stamped with two clasped hands, warm from ' +
+        'the friends who pressed it into your hand. Whoever carries it is ' +
+        'not alone, and knows it.',
       canBeCarried: true,
     })
   }
 
-  /** Use the loyalty token to resist deception (raised once, in the tower). */
+  /** In the tower it hints at the names (or is quiet once the stair is open); elsewhere it only warms. */
   override use(gameState: GameState): string {
     if (gameState.currentRoom instanceof TowerOfShadows) {
-      if (!gameState.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED)) {
-        gameState.setStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED, true)
-        return event(
-          'You hold the token against your chest. It is still warm. The ' +
-            'whispers say no one is coming; the token says someone already ' +
-            'did.',
-        )
+      if (gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)) {
+        return '[dim]The token is quiet and warm. The whispers are gone.[/dim]'
       }
-      return (
-        '[dim]The token is warm against your heart. The whispers cannot find ' +
-        'their way in.[/dim]'
+      return event(
+        'You hold the token up, and it grows warm. Under the whispers, very ' +
+          "faint, you think you hear your name, in Mira's voice. They are " +
+          'not gone. Say their names.',
       )
     }
     if (gameState.currentRoom instanceof ChamberOfWhispers) {

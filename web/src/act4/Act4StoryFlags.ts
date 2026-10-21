@@ -37,7 +37,16 @@ export const FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED =
 export const FLAG_ACT4_KNIGHT_SEEN_THROUGH = 'act4_knight_seen_through'
 export const FLAG_ACT4_GUARDIANS_CHAIN_RAISED = 'act4_guardians_chain_raised'
 export const FLAG_ACT4_WARRIORS_AT_PEACE = 'act4_warriors_at_peace'
-export const FLAG_ACT4_LOYALTY_TOKEN_RAISED = 'act4_loyalty_token_raised'
+/** Mira has been named to the whispers in the Tower of Shadows. */
+export const FLAG_ACT4_WHISPERS_MIRA_NAMED = 'act4_whispers_mira_named'
+/** Sir Cedric has been named to the whispers in the Tower of Shadows. */
+export const FLAG_ACT4_WHISPERS_CEDRIC_NAMED = 'act4_whispers_cedric_named'
+/** Nyx has been named to the whispers in the Tower of Shadows. */
+export const FLAG_ACT4_WHISPERS_NYX_NAMED = 'act4_whispers_nyx_named'
+/** All three friends are named; the whispers are gone and the tower stair is open. */
+export const FLAG_ACT4_TOWER_STAIR_OPEN = 'act4_tower_stair_open'
+/** The flag older saves used for the stair opening; `Act4.afterLoad` carries it over. */
+export const LEGACY_FLAG_ACT4_LOYALTY_TOKEN_RAISED = 'act4_loyalty_token_raised'
 export const FLAG_ACT4_BADGE_SHOWN = 'act4_badge_shown'
 export const FLAG_ACT4_HEARTS_TRUTH_CAST = 'act4_hearts_truth_cast'
 
