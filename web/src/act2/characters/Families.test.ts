@@ -53,6 +53,28 @@ describe('Families dialogue markup', () => {
   })
 })
 
+const POINTER_LINE =
+  "Master Lyria up the lane has been asking all week for herbs like these. If you've no use for them yourself, she would."
+
+describe('Families point to Lyria', () => {
+  it('says the pointer once with the gift, before the Wren line', () => {
+    const game = createGameAfterHelpingElders()
+
+    const first = game.commandParser.parse('talk to families')
+    const second = game.commandParser.parse('talk to families')
+
+    expect(first).toContain(POINTER_LINE)
+    expect(first.indexOf('You receive')).toBeLessThan(
+      first.indexOf(POINTER_LINE),
+    )
+    expect(first.indexOf(POINTER_LINE)).toBeLessThan(
+      first.indexOf('Little Wren'),
+    )
+    expect(second).not.toContain(POINTER_LINE)
+    expectFamiliesSpeak(first)
+  })
+})
+
 const WREN_LINE =
   'Little Wren at the end house has been abed with fever all week.'
 const REMEMBERED = '✦ Selflessness — this will be remembered'

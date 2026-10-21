@@ -79,6 +79,13 @@ export class Families extends Character {
                 "generations. Someone who helps others as you do should have them.'",
             ) +
             ` You receive [item_name]${herbs.name}[/item_name]!`,
+        ) +
+        '\n\n' +
+        characterName(this.name) +
+        ': ' +
+        speech(
+          'Master Lyria up the lane has been asking all week for herbs like ' +
+            "these. If you've no use for them yourself, she would.",
         )
     }
 

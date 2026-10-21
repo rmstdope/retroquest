@@ -314,7 +314,7 @@ describe('Act 2 golden path', () => {
     expectCurrentRoom(state, "Healer's House")
     // Check that Master Healer Lyria is present
     expectCharacterInRoom(room(), 'Master Healer Lyria')
-    // Lyria requires the Crystal Focus for her apprenticeship.
+    // Lyria asks for healing herbs for her apprenticeship.
     executeCommands(game, ['talk to master healer lyria'])
     expectQuests(state, [
       MAIN,
@@ -322,6 +322,16 @@ describe('Act 2 golden path', () => {
       "The Innkeeper's Daughter",
     ])
     expectSpellKnown(state, 'greater_heal', false)
+    // The healing herbs start the apprenticeship at the carter's bed.
+    executeCommands(game, ['give healing herbs to master healer lyria'])
+    expectItemInInventory(state, 'Healing Herbs', false)
+    expectSpellKnown(state, 'greater_heal', false)
+    expectQuests(state, [
+      MAIN,
+      "The Merchant's Lost Caravan",
+      "The Innkeeper's Daughter",
+      "The Healer's Apprentice",
+    ])
 
     // Step 12: Residential Quarter (Hidden Library Discovery)
     // Return to Residential Quarter
@@ -335,6 +345,7 @@ describe('Act 2 golden path', () => {
       MAIN,
       "The Merchant's Lost Caravan",
       "The Innkeeper's Daughter",
+      "The Healer's Apprentice",
       'The Ancient Library',
     ])
 
@@ -362,6 +373,7 @@ describe('Act 2 golden path', () => {
       MAIN,
       "The Merchant's Lost Caravan",
       "The Innkeeper's Daughter",
+      "The Healer's Apprentice",
     ])
 
     // Step 14: Healer's House - again

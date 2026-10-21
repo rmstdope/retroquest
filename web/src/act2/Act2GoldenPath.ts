@@ -55,6 +55,7 @@ export const ACT2_GOLDEN_PATH: string[] = [
   'talk to families',
   'n',
   'talk to master healer lyria',
+  'give healing herbs to master healer lyria',
   's',
   'search',
   'go secret_passage',
