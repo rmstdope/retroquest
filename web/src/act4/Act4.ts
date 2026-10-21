@@ -10,6 +10,7 @@ import { ThroneChamer } from './rooms/ThroneChamer'
 import { Light } from './spells/Light'
 import { Bless } from './spells/Bless'
 import { ACT4_CLASSES } from './classes'
+import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
 
 /** Act 4 of RetroQuest: The Awakening. */
 export class Act4 extends Act {
@@ -41,6 +42,7 @@ export class Act4 extends Act {
         'Source: https://freetouse.com/music\n' +
         'Music for Videos (Free Download)\n',
       classes: ACT4_CLASSES,
+      goldenPath: ACT4_GOLDEN_PATH,
     })
   }
 

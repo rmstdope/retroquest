@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from './Act4'
+import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
+import { playDebugScript } from '@/utils/debugScript'
 import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED,
@@ -174,6 +176,56 @@ describe('Act 4 integration', () => {
       expect(result).toContain('Failed to load game: ')
       expect(result).toContain('unknown class: Act4.RoyalGardens')
       expectCurrentRoom(game.state, 'Memory Vault')
+    })
+  })
+
+  describe('golden path', () => {
+    it('plays through the Fortress Gates ward fight', () => {
+      executeCommands(game, ACT4_GOLDEN_PATH)
+      expectStoryFlag(
+        game.state,
+        FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
+        true,
+      )
+      expectItemInInventory(game.state, "Guardian's Chain", true)
+      expectItemInInventory(game.state, "Guardian's Essence", true)
+    })
+
+    it('is what cheat act 4 plays', () => {
+      const viaPath = new Game([new Act4()])
+      executeCommands(viaPath, ACT4_GOLDEN_PATH)
+      const viaCheat = new Game([new Act4()])
+      executeCommands(viaCheat, ['cheat act 4'])
+      expect(viaCheat.state.storyFlags).toEqual(viaPath.state.storyFlags)
+      expect(viaCheat.state.currentRoom.name).toBe(
+        viaPath.state.currentRoom.name,
+      )
+    })
+
+    it('is played by debug act4 without a failure', async () => {
+      const shown: string[] = []
+      await playDebugScript('act4', {
+        play: (command) => executeCommands(game, [command]),
+        running: () => true,
+        show: (text) => shown.push(text),
+        goldenPath: (n) => game.goldenPath(n),
+      })
+      expect(shown.join('\n')).not.toContain('[failure]')
+      expectStoryFlag(
+        game.state,
+        FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
+        true,
+      )
+    })
+
+    it('survives a save and load round-trip at the end', () => {
+      executeCommands(game, ACT4_GOLDEN_PATH)
+      const fresh = new Game([new Act4()])
+      expect(fresh.loadSaveData(game.toSaveData())).toContain(
+        'Game loaded successfully.',
+      )
+      expect(fresh.state.storyFlags).toEqual(game.state.storyFlags)
+      expectCurrentRoom(fresh.state, game.state.currentRoom.name)
     })
   })
 })
