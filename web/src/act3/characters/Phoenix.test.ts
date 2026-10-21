@@ -141,16 +141,22 @@ describe('Phoenix accepts the riddle answer only as a whole word', () => {
     },
   )
 
-  it.each(['patience', 'be patient', 'calm', 'Patience.', 'ease'])(
-    'gives the feather for "%s"',
-    (words) => {
-      const game = new Game([new Act3()])
-      const phoenix = new Phoenix()
-      phoenix.talkTo(game.state)
-      expect(phoenix.sayTo(game.state, words)).toContain(
-        'Take this, and remember.',
-      )
-      expect(game.state.hasItem('Phoenix Feather')).toBe(true)
-    },
-  )
+  it.each([
+    'patience',
+    'be patient',
+    'calm',
+    'Patience.',
+    'ease',
+    'calmly',
+    'calmness',
+    'patiently',
+  ])('gives the feather for "%s"', (words) => {
+    const game = new Game([new Act3()])
+    const phoenix = new Phoenix()
+    phoenix.talkTo(game.state)
+    expect(phoenix.sayTo(game.state, words)).toContain(
+      'Take this, and remember.',
+    )
+    expect(game.state.hasItem('Phoenix Feather')).toBe(true)
+  })
 })

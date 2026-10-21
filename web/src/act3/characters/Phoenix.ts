@@ -9,7 +9,15 @@ import {
  * Words the Phoenix accepts as the answer to its riddle, matched only as whole
  * words so that "impatience" or "please" do not earn the feather.
  */
-const RIDDLE_ANSWERS = ['patience', 'patient', 'calm', 'ease']
+const RIDDLE_ANSWERS = [
+  'patience',
+  'patient',
+  'patiently',
+  'calm',
+  'calmly',
+  'calmness',
+  'ease',
+]
 
 /** A majestic, telepathic phoenix who poses a riddle to the worthy. */
 export class Phoenix extends Character {
