@@ -42,6 +42,8 @@ export const FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED =
 // Caverns of Shadow / Miners' Rescue
 export const FLAG_ACT3_MINERS_RESCUE_STARTED = 'act3_miners_rescue_started'
 export const FLAG_ACT3_MINERS_RESCUE_COMPLETED = 'act3_miners_rescue_completed'
+/** Set when the Quiet Charm has been given to Tobin and he has found his voice. */
+export const FLAG_ACT3_TOBIN_GIVEN_CHARM = 'act3_tobin_given_charm'
 // Oath of Stillness (Echo Chambers / Dragon's Hall)
 export const FLAG_ACT3_OATH_OF_STILLNESS_STARTED =
   'act3_oath_of_stillness_started'

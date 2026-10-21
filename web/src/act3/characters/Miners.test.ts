@@ -4,7 +4,12 @@ import { Act3 } from '../Act3'
 import { Miners } from './Miners'
 import { SirCedric } from './SirCedric'
 import { Tobin } from './Tobin'
-import { FLAG_ACT3_DRAGONS_MEMORY_RECEIVED } from '../Act3StoryFlags'
+import { AncientAmulet } from '../items/AncientAmulet'
+import {
+  FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+  FLAG_ACT3_TOBIN_GIVEN_CHARM,
+} from '../Act3StoryFlags'
+import { QuietCharm } from '../items/QuietCharm'
 import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
@@ -101,5 +106,48 @@ describe('Miners and Tobin', () => {
     const { game, miners } = setup()
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     expect(miners.talkTo(game.state)).toContain('Thank the gods you found us')
+  })
+
+  it('hands the charm back and nods toward the boy, every time', () => {
+    const { game, miners } = setup()
+    miners.talkTo(game.state)
+    const charm = new QuietCharm()
+    const a = miners.giveItem(game.state, charm)
+    expect(a).toContain(
+      'You offer the [item_name]quiet charm[/item_name] to the [character_name]miners[/character_name].',
+    )
+    expect(a).toContain('Pretty thing. Not much use to an old man with a pick')
+    expect(a).toContain("I know who needs it.'")
+    expect(miners.giveItem(game.state, charm)).toBe(a)
+    expectMarkupWellFormed(a)
+    expect(game.state.virtueCount('selfless')).toBe(0)
+  })
+
+  it('declines other items as usual', () => {
+    const { game, miners } = setup()
+    expect(miners.giveItem(game.state, new AncientAmulet())).toContain(
+      "doesn't seem interested",
+    )
+  })
+
+  it('thanks the player once after the gift, then goes back to the usual line', () => {
+    const { game, miners } = setup()
+    miners.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_TOBIN_GIVEN_CHARM, true)
+
+    const thanks = miners.talkTo(game.state)
+    expect(thanks).toContain('He talked to me. Asked me how long till we')
+    expect(thanks).toContain('Thank you, Elior.')
+    expectMarkupWellFormed(thanks)
+    expect(miners.talkTo(game.state)).toContain('Still here, Elior?')
+  })
+
+  it('shows the thanks before the silence speech when the memory came first', () => {
+    const { game, miners } = setup()
+    miners.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    game.state.setStoryFlag(FLAG_ACT3_TOBIN_GIVEN_CHARM, true)
+    expect(miners.talkTo(game.state)).toContain('Thank you, Elior.')
+    expect(miners.talkTo(game.state)).toContain('The picks stopped ringing.')
   })
 })
