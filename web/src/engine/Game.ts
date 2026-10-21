@@ -487,7 +487,10 @@ Welcome to
       const exits = Object.entries(room.getExits(this.state))
       if (exits.length === 0) output.push('    No exits')
       for (const [direction, key] of exits) {
-        const destination = this.state.allRooms[key]?.name ?? key
+        const destination =
+          room.exitLabel(this.state, direction) ??
+          this.state.allRooms[key]?.name ??
+          key
         output.push(`    ${direction} -> [room_name]${destination}[/room_name]`)
       }
     }

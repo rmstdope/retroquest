@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game, GameRunState } from '@/engine'
 import { Act4 } from '../Act4'
+import { Grow } from '../spells/Grow'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
   FLAG_ACT4_FIELD_GREEN,
@@ -248,5 +249,44 @@ describe('casting grow at home', () => {
     expect(executeCommands(game, ['cast grow'])).toContain(
       'nothing else happens',
     )
+  })
+})
+
+describe('more of the field', () => {
+  it('answers to Cedric and refuses grow for every companion', () => {
+    const game = home('justice')
+    expect(executeCommands(game, ['talk to cedric'])).toContain(
+      'good place to stop',
+    )
+    for (const name of ['Mira', 'Nyx', 'Cedric']) {
+      expect(executeCommands(game, [`cast grow on ${name}`])).toContain(
+        'Grow is for the field, not for',
+      )
+    }
+    expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, false)
+  })
+
+  it('finds no field to grow in the fortress', () => {
+    const { game } = ended('redemption')
+    game.state.learnSpell(new Grow())
+    expect(executeCommands(game, ['cast grow on field'])).toContain(
+      "You don't see a 'field'",
+    )
+  })
+
+  it('keeps the ending for Mira and the last page through a reload', () => {
+    for (const ending of ['redemption', 'sacrifice'] as const) {
+      const game = home(ending)
+      reload(game)
+      expectCurrentRoom(game.state, 'Willowbrook Field')
+      expect(game.state.knownSpells.map((s) => s.id)).toContain('grow')
+      expect(executeCommands(game, ['talk to mira'])).toContain(
+        ending === 'redemption' ? 'He remembers.' : 'teach you again',
+      )
+      executeCommands(game, ['cast grow'])
+      reload(game)
+      game.newTurn()
+      expect(game.getActCompleteText()).toContain('is home.')
+    }
   })
 })

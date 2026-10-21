@@ -4,7 +4,8 @@ import { endingPlayed, type Ending } from '../endings'
 /** What Elior tells Mira and what she answers, by ending. */
 const LINES: Record<Ending, [string, string]> = {
   redemption: [
-    'You tell her what Malakar said: that he is sorry, and that he remembers her.',
+    'You tell her what Malakar said: that he is sorry, and that he ' +
+      'remembers her.',
     'He remembers. Then I will go and see him, one day. Not yet.',
   ],
   justice: [
@@ -13,7 +14,8 @@ const LINES: Record<Ending, [string, string]> = {
   ],
   sacrifice: [
     'She takes your hands and feels how quiet they are.',
-    'All of it? Oh, Elior. Then I will teach you again, slowly, if you want to learn.',
+    'All of it? Oh, Elior. Then I will teach you again, slowly, if you ' +
+      'want to learn.',
   ],
 }
 
