@@ -3,6 +3,7 @@ import { AncientAmulet } from './AncientAmulet'
 import { Mira } from '../characters/Mira'
 import {
   FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED,
+  FLAG_ACT3_RUINS_LEFT,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
 
@@ -68,9 +69,10 @@ export class SeaSealedLetter extends Item {
     )
   }
 
-  /** Whether Mira stands here and her Ruins slip has not played yet. */
+  /** Whether Mira stands here, the ruins are not left and her slip is unplayed. */
   private miraSlipDue(gameState: GameState): boolean {
     return (
+      !gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT) &&
       !gameState.getStoryFlag(FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED) &&
       gameState.currentRoom.getCharacterByName('Mira') !== null
     )

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, characterName, event } from '@/engine'
+import { Game, characterName, event, speech } from '@/engine'
 import { Act3 } from '../Act3'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
@@ -10,11 +10,13 @@ import {
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+  FLAG_ACT3_RUINS_LEFT,
+  FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
 import { Mira } from './Mira'
 import { SeaSealedLetter } from '../items/SeaSealedLetter'
 
-const RUINS_SPEECH = 'Lysa'
+const RUINS_SPEECH = speech("'Lysa's hand. She always crossed her sevens.'")
 const RUINS_NARRATION = event(
   `${characterName('Mira')} turns to the sea before you can ask what she means.`,
 )
@@ -41,6 +43,9 @@ describe('Mira ruins slip', () => {
     const first = letter.examine(game.state)
     expect(first).toContain(RUINS_SPEECH)
     expect(first).toContain(RUINS_NARRATION)
+    expect(first.indexOf(RUINS_SPEECH)).toBeLessThan(
+      first.indexOf(RUINS_NARRATION),
+    )
     expect(first.indexOf('Your parents wrote to Malakar')).toBeLessThan(
       first.indexOf(RUINS_NARRATION),
     )
@@ -68,8 +73,10 @@ describe('Mira ruins slip', () => {
       talk.indexOf(RUINS_NARRATION),
     )
     expect(talk).toContain('You arrive at')
-    const again = gameWithMiraAt('TidalCauseway')
-    expect(again.mira.talkTo(again.game.state)).not.toContain(RUINS_NARRATION)
+    expect(talk).toContain(RUINS_SPEECH)
+    expect(talk.indexOf(RUINS_SPEECH)).toBeLessThan(
+      talk.indexOf(RUINS_NARRATION),
+    )
   })
 
   it('does not play a second time on a later talk', () => {
@@ -79,6 +86,17 @@ describe('Mira ruins slip', () => {
     game.state.currentRoom = game.state.allRooms.TidalCauseway
     expect(mira.talkTo(game.state)).toContain(RUINS_NARRATION)
     expect(mira.talkTo(game.state)).not.toContain(RUINS_NARRATION)
+  })
+})
+
+describe('Mira ruins slip in older saves', () => {
+  it('does not play at a later site once the ruins are left', () => {
+    const { game, mira } = gameWithMiraAt('LowerSwitchbacks')
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_RUINS_LEFT, true)
+    expect(mira.talkTo(game.state)).not.toContain(RUINS_NARRATION)
+    const reading = new SeaSealedLetter().examine(game.state)
+    expect(reading).not.toContain(RUINS_NARRATION)
   })
 })
 

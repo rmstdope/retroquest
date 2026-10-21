@@ -103,7 +103,11 @@ export const FLAG_ACT3_WARDEN_TRUTH_TOLD = 'act3_warden_truth_told'
 export const FLAG_ACT3_PHOENIX_STORY_TOLD = 'act3_phoenix_story_told'
 
 // Mira's slips: she lets on, once per relic site, that she knew the Wardens
+/** Set when Mira's Sunken Ruins slip about Lysa's hand has played. */
 export const FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED = 'act3_mira_ruins_slip_played'
+/** Set when Mira's Mount Ember slip over the Phoenix Feather has played. */
 export const FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED = 'act3_mira_ember_slip_played'
+/** Set when the Ancient Dragon has given its message for Mira. */
 export const FLAG_ACT3_DRAGON_MESSAGE_GIVEN = 'act3_dragon_message_given'
+/** Set when Mira has received the Ancient Dragon's message at the Cavern Mouth. */
 export const FLAG_ACT3_DRAGON_MESSAGE_RELAYED = 'act3_dragon_message_relayed'

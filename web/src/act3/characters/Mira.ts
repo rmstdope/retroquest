@@ -470,7 +470,8 @@ export class Mira extends Character {
 
   /**
    * The slips that open a talk with Mira, each marked played as it is told:
-   * the Ruins slip if the letter was read without her, the Ember slip on
+   * the Ruins slip if the letter was read without her (never once the party
+   * has left the ruins), the Ember slip on
    * the first talk at the Switchbacks with the feather in hand, and the
    * relay of the dragon's message at the Cavern Mouth. Returns the lines
    * with a leading newline, or an empty string.
@@ -480,6 +481,7 @@ export class Mira extends Character {
     const room = gameState.currentRoom.name
     if (
       gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ) &&
+      !gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT) &&
       !gameState.getStoryFlag(FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED)
     ) {
       lines.push(Mira.ruinsSlip(gameState))
