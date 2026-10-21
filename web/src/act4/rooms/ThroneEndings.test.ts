@@ -123,6 +123,7 @@ describe('Redemption', () => {
     )
     const text = executeCommands(game, ['cast forgiveness on wound'])
     expect(text).toContain('You lay forgiveness on the wound.')
+    expect(text).not.toContain('Then keep something.')
     expect(text).toContain('King Alden breathes again.')
     expect(text).toContain('Thank you, Elior. I will stay here')
     expect(text).toContain('Elior. Look at you. Taller than me, I think.')
@@ -228,6 +229,7 @@ describe('Justice', () => {
     )
     const text = executeCommands(game, ['use ancient amulet on wound'])
     expect(text).toContain('Threads of gold rise from King Alden')
+    expect(text).not.toContain('Then keep something.')
     expect(text).toContain('I am sorry. Tell them— no. They know.')
     expect(text).toContain('Then it falls to me to set right what he broke.')
     expect(text).toContain('You named what he did, and you did not hate him')
@@ -274,7 +276,7 @@ describe('Sacrifice', () => {
     const keep =
       'Then keep something. One thing. Anything. Do not let me take it all.'
     const press = 'You press the open amulet to the wound and let go.'
-    expect(text.indexOf(rise)).toBeGreaterThanOrEqual(0)
+    expect(text.startsWith(`[event]${rise}`)).toBe(true)
     expect(text.indexOf(keep)).toBeGreaterThan(text.indexOf(rise))
     expect(text.indexOf(press)).toBeGreaterThan(text.indexOf(keep))
     expect(text).toContain('the smallest of them all: grow.')

@@ -144,8 +144,10 @@ export class Wound extends Item {
     ].join('\n')
   }
 
-  /** Sacrifice: Malakar tries once more to stop it, then every spell Elior
-   * knows closes the wound; only grow remains. */
+  /**
+   * Sacrifice: Malakar tries once more to stop it, then every spell Elior
+   * knows closes the wound; only grow remains.
+   */
   private sacrificeEnding(gameState: GameState): string {
     this.finish(gameState, 'sacrifice')
     gameState.knownSpells = [new Grow()]
