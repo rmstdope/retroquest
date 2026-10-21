@@ -1,6 +1,8 @@
-import { Act, type GameState } from '@/engine'
+import { Act, type GameState, dialogue } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { LifelightElixir } from './items/LifelightElixir'
+import { LoyaltyToken } from './items/LoyaltyToken'
+import { Whispers } from './characters/Whispers'
 import { FortressGates } from './rooms/FortressGates'
 import { OuterCourtyard } from './rooms/OuterCourtyard'
 import { MirrorLabyrinth } from './rooms/MirrorLabyrinth'
@@ -21,7 +23,12 @@ import { TheKnightOfDespair } from './quests/TheKnightOfDespair'
 import { TheSorceressOfLies } from './quests/TheSorceressOfLies'
 import { TheShadowOfThePast } from './quests/TheShadowOfThePast'
 import { TheParentsLegacy } from './quests/TheParentsLegacy'
-import { FLAG_ACT4_FIELD_GREEN, FLAG_ACT4_MAIN_STARTED } from './Act4StoryFlags'
+import {
+  FLAG_ACT4_FIELD_GREEN,
+  FLAG_ACT4_MAIN_STARTED,
+  FLAG_ACT4_TOWER_STAIR_OPEN,
+  LEGACY_FLAG_ACT4_LOYALTY_TOKEN_RAISED,
+} from './Act4StoryFlags'
 import { ENDING_HOOKS, endingPlayed } from './endings'
 import { ACT4_CLASSES } from './classes'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
@@ -73,7 +80,7 @@ export class Act4 extends Act {
     })
   }
 
-  /** Return the introductory text for Act IV. */
+  /** Return the introductory text for Act IV: the companions' goodbye at the gate. */
   override getActIntro(): string {
     return (
       '[bold]ACT IV: THE FINAL CONFRONTATION[/bold]\n\n' +
@@ -81,11 +88,35 @@ export class Act4 extends Act {
       'The obsidian gates loom ahead, wreathed in shadow and ancient magic. ' +
       'Mira steps through the gates beside you, pale but unbending. She and ' +
       'Sir Cedric take up their places just inside the threshold — someone ' +
-      'must hold the way out. From here, you go on alone. ' +
-      'This is the culmination of your journey—a test of courage, wisdom, and ' +
-      'selflessness that will determine the fate of the kingdom.\n\n' +
-      'The final confrontation awaits. Every choice you make will echo through ' +
-      'eternity.\n\n' +
+      'must hold the way out. A small light settles on the gatepost: Nyx, ' +
+      'keeping close.\n\n' +
+      dialogue(
+        'Mira',
+        "Someone has to keep the way out open, and that's me. So come back " +
+          'through it.',
+      ) +
+      '\n' +
+      dialogue(
+        'Sir Cedric',
+        'I held a gate once and lost a king behind it. I will not lose this ' +
+          'one, or you.',
+      ) +
+      '\n' +
+      dialogue(
+        'Nyx',
+        "I'll be the light at the edge of your eye. Don't look for me. Just " +
+          'know.',
+      ) +
+      '\n\n' +
+      'Mira presses something into your hand: a small silver medallion, two ' +
+      'hands clasped on its face. Sir Cedric lays his hand over hers; the ' +
+      'light on the gatepost leans in.\n\n' +
+      dialogue(
+        'Mira',
+        "If it goes quiet in there, say our names. We'll hear.",
+      ) +
+      '\n\n' +
+      'From here, you go on alone — or nearly.\n\n' +
       "Let's begin. (Type 'help' for a list of commands.)\n"
     )
   }
@@ -111,6 +142,33 @@ export class Act4 extends Act {
       : null
   }
 
+  /**
+   * Saves from before the friends were named to the whispers: the old flag
+   * for the raised token now means the stair is open, a tower still barred
+   * gets its whispers, and the Loyalty Token (once found in the courtyard) is
+   * moved into the pack.
+   */
+  override afterLoad(gameState: GameState): void {
+    if (gameState.getStoryFlag(LEGACY_FLAG_ACT4_LOYALTY_TOKEN_RAISED)) {
+      gameState.setStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN, true)
+    }
+    const tower = gameState.allRooms.TowerOfShadows
+    if (
+      tower &&
+      !gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN) &&
+      !tower.getCharacterByName('whispers')
+    ) {
+      tower.addCharacter(new Whispers())
+    }
+    if (!gameState.hasItem('Loyalty Token')) {
+      const room = Object.values(gameState.allRooms).find((r) =>
+        r.getItemByName('Loyalty Token'),
+      )
+      const token = room?.removeItem('Loyalty Token')
+      gameState.addItemToInventory(token ?? new LoyaltyToken())
+    }
+  }
+
   /** Setup initial state for Act IV. */
   override setupGameState(gameState: GameState): void {
     // Add basic spells that player needs for phase 1
@@ -129,6 +187,8 @@ export class Act4 extends Act {
     gameState.addItemToInventory(new AncientAmulet())
     // The Lifelight Elixir from Act III: its one use is the choice in the throne room
     gameState.addItemToInventory(new LifelightElixir())
+    // The companions' Loyalty Token, handed over at the gate in the intro
+    gameState.addItemToInventory(new LoyaltyToken())
 
     // The main quest starts when the act opens
     gameState.setStoryFlag(FLAG_ACT4_MAIN_STARTED, true)

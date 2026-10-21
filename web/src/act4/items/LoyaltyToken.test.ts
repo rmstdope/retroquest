@@ -2,23 +2,50 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import { LoyaltyToken } from './LoyaltyToken'
+import { FLAG_ACT4_TOWER_STAIR_OPEN } from '../Act4StoryFlags'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('LoyaltyToken', () => {
-  it('uses known tags when used elsewhere and again in the tower', () => {
+  /** A game with the token in the pack and Elior in the tower. */
+  function inTower(): Game {
     const act = new Act4()
     act.musicFile = ''
     const game = new Game([act])
-    const item = new LoyaltyToken()
-    const elsewhere = item.use(game.state)
     game.state.currentRoom = game.state.allRooms.TowerOfShadows
-    item.use(game.state)
+    return game
+  }
 
-    const again = item.use(game.state)
+  it('is carried from the start of the act', () => {
+    const game = new Game([new Act4()])
+    expect(game.state.hasItem('Loyalty Token')).toBe(true)
+  })
 
+  it('gives the first hint in the tower and changes nothing', () => {
+    const game = inTower()
+    const hint = new LoyaltyToken().use(game.state)
+    expect(hint).toContain('Say their names.')
+    expect(hint).toContain('in Mira')
+    expectMarkupWellFormed(hint)
+    expect(Object.values(game.state.storyFlags).some(Boolean)).toBe(
+      Object.values(new Game([new Act4()]).state.storyFlags).some(Boolean),
+    )
+    expect(game.state.currentRoom.getExits(game.state)).not.toHaveProperty('up')
+  })
+
+  it('is quiet once the stair is open, warm in the chamber, glad elsewhere', () => {
+    const game = inTower()
+    game.state.setStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN, true)
+    const quiet = new LoyaltyToken().use(game.state)
+    expect(quiet).toContain(
+      'The token is quiet and warm. The whispers are gone.',
+    )
+    game.state.currentRoom = game.state.allRooms.ChamberOfWhispers
+    const chamber = new LoyaltyToken().use(game.state)
+    game.state.currentRoom = game.state.allRooms.FortressGates
+    const elsewhere = new LoyaltyToken().use(game.state)
+    expect(chamber).toContain('still warm against your heart')
     expect(elsewhere).toContain('Someone, somewhere, is glad you came')
-    expect(again).toContain('The whispers cannot find their way in')
-    for (const answer of [elsewhere, again]) {
+    for (const answer of [quiet, chamber, elsewhere]) {
       expectMarkupWellFormed(answer)
     }
   })

@@ -23,6 +23,12 @@ const TO_KNIGHT = ACT4_GOLDEN_PATH.slice(
   ACT4_GOLDEN_PATH.indexOf('say redemption to knight') + 1,
 )
 
+const NAME_FRIENDS = [
+  'say mira to whispers',
+  'say cedric to whispers',
+  'say nyx to whispers',
+]
+
 const STUMBLE =
   'You set your foot on the stair, and the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down.'
 const FIRST_LOOK =
@@ -45,7 +51,8 @@ function inTower(): Game {
 /** A game with Elior in the chamber. */
 function inChamber(): Game {
   const game = inTower()
-  executeCommands(game, ['use loyalty token', 'up'])
+  executeCommands(game, NAME_FRIENDS)
+  executeCommands(game, ['up'])
   return game
 }
 
@@ -61,8 +68,10 @@ describe('The Sorceress of Lies', () => {
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
     expect(game.state.currentRoom.name).toBe('Tower of Shadows')
     expect(executeCommands(game, ['use loyalty token'])).toContain(
-      'You hold the token against your chest',
+      'Say their names.',
     )
+    expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
+    executeCommands(game, NAME_FRIENDS)
     expect(executeCommands(game, ['go up'])).toContain('Chamber of Whispers')
   })
 
@@ -242,7 +251,7 @@ describe('The Sorceress of Lies', () => {
     const game = inTower()
     reload(game)
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
-    executeCommands(game, ['use loyalty token'])
+    executeCommands(game, NAME_FRIENDS)
     reload(game)
     expect(executeCommands(game, ['go up'])).toContain('Chamber of Whispers')
     reload(game)

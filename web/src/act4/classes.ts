@@ -49,6 +49,7 @@ import { Grandmother } from './characters/Grandmother'
 import { Mira } from './characters/Mira'
 import { SirCedric } from './characters/SirCedric'
 import { Nyx } from './characters/Nyx'
+import { Whispers } from './characters/Whispers'
 import { CrystalPrison } from './items/CrystalPrison'
 import { Wound } from './items/Wound'
 import { LifelightElixir } from './items/LifelightElixir'
@@ -89,6 +90,7 @@ export const ACT4_CLASSES = {
   Mira,
   SirCedric,
   Nyx,
+  Whispers,
   ShadowOfThePast,
   SorceressOfLies,
   CaptainOfTheGuard,

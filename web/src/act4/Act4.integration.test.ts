@@ -213,8 +213,7 @@ describe('Act 4 integration', () => {
         'The obsidian gates loom ahead, wreathed in shadow and ancient magic. ' +
           'Mira steps through the gates beside you, pale but unbending. She ' +
           'and Sir Cedric take up their places just inside the threshold — ' +
-          'someone must hold the way out. From here, you go on alone. ' +
-          'This is the culmination',
+          'someone must hold the way out. ',
       )
     })
 
@@ -350,7 +349,7 @@ describe('Act 4 integration', () => {
       const bless = executeCommands(game, ['cast bless on servants'])
       expect(bless).toContain(
         'By the fountain, the captain blinks, as if waking from a long ' +
-          'sleep. One of the servants presses two things into your hands',
+          "sleep. One of the servants presses a small blue [item_name]Servant's Pendant[/item_name] into your hands.",
       )
       expectQuestCompleted(game.state, 'The Trapped Servants')
       const done = game.state.completedQuests.find(
@@ -360,7 +359,7 @@ describe('Act 4 integration', () => {
         "Elior's courage earns the servants' trust, and a blessing breaks " +
           'their chains. Freed, they offer what help they can for the trials ahead.',
       )
-      expectItemInInventory(game.state, 'Loyalty Token', false)
+      expect(bless).not.toContain('Loyalty Token')
       expectItemInInventory(game.state, "Servant's Pendant", false)
       const room = game.state.currentRoom.describe(game.state)
       expect(room).toContain(
@@ -380,8 +379,7 @@ describe('Act 4 integration', () => {
       const captain = executeCommands(game, ['talk to captain'])
       expect(captain).toContain('Cedric stood his post')
       expectDialogueSpeaker(captain, 'Captain of the Guard')
-      executeCommands(game, ['take loyalty token', "take servant's pendant"])
-      expectItemInInventory(game.state, 'Loyalty Token', true)
+      executeCommands(game, ["take servant's pendant"])
       expectItemInInventory(game.state, "Servant's Pendant", true)
     })
 
@@ -456,9 +454,8 @@ describe('Act 4 integration', () => {
         'I remember now.',
       )
       expect(executeCommands(game, ['go north'])).toContain('You move north to')
-      executeCommands(game, ['go south', 'take loyalty token'])
+      executeCommands(game, ['go south'])
       reload()
-      expectItemInInventory(game.state, 'Loyalty Token', true)
       expectItemInInventory(game.state, "Servant's Pendant", false)
       expectItemInRoom(game.state.currentRoom, "Servant's Pendant")
     })
@@ -560,7 +557,7 @@ describe('Act 4 integration', () => {
 
     /** Play the golden path up to freeing the servants and taking the pendant. */
     function toFreedServants(): void {
-      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, 11))
+      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, 10))
     }
 
     /** Fetch the Echo Stone from the hall and walk to the maze door. */
