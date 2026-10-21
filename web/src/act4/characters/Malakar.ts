@@ -320,7 +320,10 @@ export class Malakar extends Character {
     )
   }
 
-  /** The Lifelight Elixir offered to him by hand: the same as using it on him. */
+  /**
+   * Items offered to him by hand: the Lifelight Elixir is the same as using it
+   * on him, and the Ancient Amulet may accept his bargain (see `amuletGiven`).
+   */
   override giveItem(
     gameState: GameState,
     item: Parameters<Character['giveItem']>[1],

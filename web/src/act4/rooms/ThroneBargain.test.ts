@@ -113,13 +113,14 @@ describe('the Bargain', () => {
   it('survives a save and load', () => {
     const game = offered()
     executeCommands(game, ['give amulet to malakar'])
-    expect(game.loadSaveData(game.toSaveData())).toContain(
+    const loaded = new Game([new Act4()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain(
       'Game loaded successfully.',
     )
-    expectStoryFlag(game.state, FLAG_ACT4_THRONE_BARGAIN_SEEN, true)
-    expectItemInInventory(game.state, 'ancient amulet')
-    expect(executeCommands(game, ['give amulet to malakar'])).toBe(AGAIN)
-    expect(executeCommands(game, ['talk to malakar'])).toBe(AFTER_TALK)
+    expectStoryFlag(loaded.state, FLAG_ACT4_THRONE_BARGAIN_SEEN, true)
+    expectItemInInventory(loaded.state, 'ancient amulet')
+    expect(executeCommands(loaded, ['give amulet to malakar'])).toBe(AGAIN)
+    expect(executeCommands(loaded, ['talk to malakar'])).toBe(AFTER_TALK)
   })
 })
 
