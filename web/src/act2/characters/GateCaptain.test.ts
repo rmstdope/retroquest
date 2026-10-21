@@ -81,3 +81,21 @@ describe('Gate Captain dialogue markup', () => {
     expectCaptainSpeaks(answer)
   })
 })
+
+describe('Gate Captain welcome', () => {
+  it('points the player to the information post before leaving', () => {
+    const game = createGameAtGates()
+    const captain = new GateCaptain()
+    game.state.currentRoom.characters.push(captain)
+    captain.giveItem(game.state, new EntryPass())
+
+    const answer = captain.talkTo(game.state)
+
+    expect(answer).toContain(
+      'Travelers leave all sorts at the information post by the arch; have a ' +
+        'look there before you go in.',
+    )
+    expect(answer).not.toContain('Feel free to look around')
+    expectCaptainSpeaks(answer)
+  })
+})
