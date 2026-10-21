@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, characterName, event, type GameState } from '@/engine'
 import { FLAG_ACT3_FORTRESS_GATES_EXAMINED } from '../Act3StoryFlags'
 
 /** The massive gates of Malakar's fortress, bound with eldritch wards. */
@@ -26,8 +26,15 @@ export class FortressGates extends Item {
         'the corner of your vision. Beyond the lattice, you glimpse corridors ' +
         "that pulse with malevolent energy. This is the threshold of Malakar's " +
         "domain—where King Alden is held captive and the kingdom's fate will " +
-        'be decided. The three relics in your possession pulse with protective ' +
-        "power, ready to shield you from the sorcerer's influence. " +
+        'be decided.\n\n' +
+        'The [item_name]Ancient Amulet[/item_name] is warm against your palm. ' +
+        'You came on this journey believing Malakar took your parents from ' +
+        'you. You know better now. ' +
+        `${characterName('Aren')} and ${characterName('Lysa')} were his ` +
+        'closest friends, and the ward they became is still holding.\n\n' +
+        'They are not dead. They are warded away.\n\n' +
+        'The Lifelight Elixir pulses with protective power, ready to shield ' +
+        "you from the sorcerer's influence. " +
         '[bold]Act III is complete.[/bold] The final confrontation awaits.'
       )
     } else {
