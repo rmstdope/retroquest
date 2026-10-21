@@ -98,8 +98,8 @@ describe('CharredInscription', () => {
     const again = inscription.examine(game.state)
 
     expect(first).toContain('glows again, brighter than before')
-    expect(first.trimEnd().endsWith('still has his back turned.[/event]')).toBe(
-      true,
+    expect(first.indexOf('still has his back turned.')).toBeLessThan(
+      first.indexOf('Ash begins to fall'),
     )
     expect(again).not.toContain('glows again')
     expectMarkupWellFormed(first)

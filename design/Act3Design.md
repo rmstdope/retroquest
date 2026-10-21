@@ -61,7 +61,7 @@ Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns b
 
 ## The Curse Worsens
 
-At each relic site the curse is visibly worse than the last, and the beat plays once, when Elior reads or hears that site’s Echoes clue (the letter, the inscription, the Dragon’s Memory).
+At each relic site the curse is visibly worse than the last, and the beat plays once, when Elior reads or hears that site’s Echoes clue (the letter, the inscription, the Dragon’s Memory). The beat is one paragraph straight after the amulet’s glow; afterwards the Tidal Causeway, Mirror Terraces and Dragon’s Hall each end their description with one closing line about it, and Mira’s parting speech at each of the three departures ends with one sentence that the king is weaker.
 
 -   Sunken Ruins: dead sea birds on the causeways, the surf running grey.
 -   Mount Ember: ash rain falling over the slopes and the braziers guttering.

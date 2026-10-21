@@ -18,6 +18,21 @@ function gameState(): GameState {
 }
 
 describe('Room', () => {
+  it('describes with the text its descriptionFor hook gives', () => {
+    class Changing extends Room {
+      /** Test override: a description that depends on the state. */
+      protected override descriptionFor(_gameState: GameState): string {
+        return `${this.description} Changed.`
+      }
+    }
+    const room = new Changing({ name: 'R', description: 'Plain.' })
+
+    expect(room.describe(gameState())).toContain('Plain. Changed.')
+    expect(
+      new Room({ name: 'R', description: 'Plain.' }).describe(gameState()),
+    ).toBe('[bold]R[/bold]\nPlain.\n')
+  })
+
   it('initializes with empty items, characters and exits', () => {
     const r = new Room({ name: 'TestRoom', description: 'A simple room.' })
     expect(r.name).toBe('TestRoom')

@@ -87,7 +87,9 @@ describe('SeaSealedLetter', () => {
     expect(first.indexOf('and answered')).toBeLessThan(
       first.indexOf('grows warm'),
     )
-    expect(first.trimEnd().endsWith('Then the light fades.[/event]')).toBe(true)
+    expect(first.indexOf('Then the light fades.')).toBeLessThan(
+      first.indexOf('Whatever is draining the king'),
+    )
     expect(again).not.toContain('grows warm')
     expectMarkupWellFormed(first)
     expect(
