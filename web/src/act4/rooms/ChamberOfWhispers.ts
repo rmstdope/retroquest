@@ -4,6 +4,7 @@ import {
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
 } from '../Act4StoryFlags'
 import { SorceressOfLies } from '../characters/SorceressOfLies'
+import { CrystalWhispers } from '../items/CrystalWhispers'
 import { SorceressStaff } from '../items/SorceressStaff'
 import { CHAMBER_FIRST_LOOK_SENTENCE } from './chamberDescriptions'
 
@@ -23,7 +24,7 @@ export class ChamberOfWhispers extends Room {
         'walls, each humming something kind and untrue, and the floor gives a ' +
         'little under your feet, like ice that might hold.' +
         CHAMBER_FIRST_LOOK_SENTENCE,
-      items: [new SorceressStaff()],
+      items: [new SorceressStaff(), new CrystalWhispers()],
       characters: [new SorceressOfLies()],
       exits: { down: 'TowerOfShadows', north: 'MemoryVault' },
     })

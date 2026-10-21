@@ -1,6 +1,8 @@
 /**
  * Every content class of Act 4 by name, so saves can refer to them.
  */
+import { Banners } from './items/Banners'
+import { CrystalWhispers } from './items/CrystalWhispers'
 import { Echoes } from './items/Echoes'
 import { EchoStone } from './items/EchoStone'
 import { Mirrors } from './items/Mirrors'
@@ -65,7 +67,9 @@ import { Light } from './spells/Light'
 
 export const ACT4_CLASSES = {
   // Items
+  Banners,
   Barriers,
+  CrystalWhispers,
   Echoes,
   EchoStone,
   Mirrors,

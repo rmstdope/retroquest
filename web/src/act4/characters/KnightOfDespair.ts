@@ -1,5 +1,7 @@
 import { Character, type GameState, dialogue, event } from '@/engine'
 import {
+  FLAG_ACT4_BANNERS_SEEN,
+  FLAG_ACT4_ECHO_STONE_HEARD,
   FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED,
   FLAG_ACT4_CHAIN_GIVEN,
   FLAG_ACT4_GUARDIANS_CHAIN_RAISED,
@@ -21,6 +23,9 @@ import { normaliseSpokenWord } from '../spokenWord'
 
 /** What the knight is called once he is redeemed. */
 const REDEEMED_NAME = 'Redeemed Knight'
+
+/** The sights (the knight, the banners, the Echo Stone) needed before the word works. */
+const SIGHTS_NEEDED = 3
 
 /** The four speeches of the confession, in order. */
 const CONFESSION = [
@@ -60,6 +65,15 @@ export class KnightOfDespair extends Character {
         name.toLowerCase(),
       )
     )
+  }
+
+  /** How many of the hall's three sights (the knight, the banners, the Echo Stone) Elior has seen through. */
+  sightsSeen(gameState: GameState): number {
+    return [
+      FLAG_ACT4_KNIGHT_SEEN_THROUGH,
+      FLAG_ACT4_BANNERS_SEEN,
+      FLAG_ACT4_ECHO_STONE_HEARD,
+    ].filter((flag) => gameState.getStoryFlag(flag)).length
   }
 
   /** Truth Sight: shows him as he is (once); starts the quest like any meeting. */
@@ -108,7 +122,15 @@ export class KnightOfDespair extends Character {
           'there is still hope.',
       )
     }
-    if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH)) {
+    const seen = this.sightsSeen(gameState)
+    if (seen > 0 && seen < SIGHTS_NEEDED) {
+      return dialogue(
+        this.name,
+        'So you see something of me. That is not the same as knowing me. ' +
+          'Look around you, if you must know.',
+      )
+    }
+    if (seen === SIGHTS_NEEDED) {
       return dialogue(
         this.name,
         'So you see me. Then you know what I am, and what I have done. There ' +
@@ -123,7 +145,7 @@ export class KnightOfDespair extends Character {
   }
 
   /**
-   * Only the word "redemption" works, and only once he is seen through and
+   * Only the word "redemption" works, and only once all three sights are seen and
    * Elior is shielded: the chain raised and not given away, or the Loyalty
    * Token raised in the hall.
    */
@@ -134,7 +156,15 @@ export class KnightOfDespair extends Character {
     }
     const word = normaliseSpokenWord(words)
     if (word !== 'redemption') return '[dim]The knight does not answer.[/dim]'
-    if (!gameState.getStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH)) {
+    const seen = this.sightsSeen(gameState)
+    if (seen > 0 && seen < SIGHTS_NEEDED) {
+      return (
+        '[failure]The word catches in your throat. You have seen something ' +
+        'of him, but you do not yet know what he has done. There is more in ' +
+        'this hall to see through.[/failure]'
+      )
+    }
+    if (seen === 0) {
       return (
         '[failure]The word means nothing to a man you cannot truly see. He ' +
         'does not even turn his head.[/failure]'

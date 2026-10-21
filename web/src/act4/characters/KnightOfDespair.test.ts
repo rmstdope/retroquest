@@ -8,6 +8,8 @@ import { LoyaltyToken } from '../items/LoyaltyToken'
 import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED,
+  FLAG_ACT4_BANNERS_SEEN,
+  FLAG_ACT4_ECHO_STONE_HEARD,
   FLAG_ACT4_KNIGHT_SEEN_THROUGH,
   FLAG_ACT4_CHAIN_GIVEN,
 } from '../Act4StoryFlags'
@@ -29,6 +31,19 @@ const NOT_SEEN =
 const NO_CHAIN =
   "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. You could not say it with nothing between you and his sorrow."
 const BLOCK = 'there is no way past him'
+
+/** The hall's three sights, in the order of the golden path. */
+const THREE_SIGHTS = [
+  'cast truth sight on knight of despair',
+  'cast truth sight on banners',
+  'cast truth sight on echo stone',
+]
+
+/** The failure for one or two sights, and the knight's line then. */
+const SOME_SEEN =
+  'The word catches in your throat. You have seen something of him, but you do not yet know what he has done. There is more in this hall to see through.'
+const SOMETHING_OF_ME =
+  'So you see something of me. That is not the same as knowing me. Look around you, if you must know.'
 
 /** A game in the Hall of Echoes with Truth Sight, the chain and the stone. */
 function createGameInHall(): Game {
@@ -82,11 +97,58 @@ describe('KnightOfDespair', () => {
       'The grey cloak, the twisted rune at its clasp, the tears behind the visor. The cloaked stranger from Willowbrook stands before you, and he knows you have seen him.',
     )
     const talk = executeCommands(game, ['talk to knight of despair'])
-    expect(talk).toContain(
+    expect(talk).toContain(SOMETHING_OF_ME)
+    expectDialogueSpeaker(talk, 'Knight of Despair')
+    executeCommands(game, THREE_SIGHTS.slice(1))
+    expect(executeCommands(game, ['talk to knight of despair'])).toContain(
       'So you see me. Then you know what I am, and what I have done. There is no redemption for a man like me. Do not waste the word.',
     )
-    expectDialogueSpeaker(talk, 'Knight of Despair')
     expect(executeCommands(game, ['go east'])).toContain(BLOCK)
+  })
+
+  it('shows the banners and the Echo Stone in any order, once each', () => {
+    const game = createGameInHall()
+    expect(executeCommands(game, ['examine banners'])).toContain(
+      'Something is stitched beneath the dirt.',
+    )
+    const stone = executeCommands(game, ['cast truth sight on echo stone'])
+    expect(stone).toContain("It is the knight's voice.")
+    expectMarkupWellFormed(stone)
+    expect(executeCommands(game, ['cast truth sight on echo stone'])).toBe(
+      "[dim]You have already heard the knight's voice in the stone.[/dim]",
+    )
+    const banners = executeCommands(game, ['cast truth sight on banner'])
+    expect(banners).toContain("the gate company of King Alden's guard")
+    expectMarkupWellFormed(banners)
+    expect(executeCommands(game, ['cast truth sight on banners'])).toBe(
+      '[dim]You have already seen the banners as they truly are.[/dim]',
+    )
+    expect(executeCommands(game, ['talk to knight'])).toContain(SOMETHING_OF_ME)
+  })
+
+  it('answers the Echo Stone in its niche as well as in the pack', () => {
+    const game = createGameInHall()
+    const stone = game.state.inventory.pop()
+    if (stone) game.state.currentRoom.addItem(stone)
+    expect(executeCommands(game, ['cast truth sight on echo stone'])).toContain(
+      'Under the hall',
+    )
+  })
+
+  it('catches the word in the throat with one or two sights, in any order', () => {
+    const game = createGameInHall()
+    executeCommands(game, [THREE_SIGHTS[1]])
+    expect(executeCommands(game, ['say redemption to knight'])).toContain(
+      SOME_SEEN,
+    )
+    executeCommands(game, [THREE_SIGHTS[2]])
+    expect(executeCommands(game, ['say redemption to knight'])).toContain(
+      SOME_SEEN,
+    )
+    executeCommands(game, [THREE_SIGHTS[0]])
+    expect(executeCommands(game, ['say redemption to knight'])).toContain(
+      NO_CHAIN,
+    )
   })
 
   it('refuses the word until he is seen through and the chain is raised', () => {
@@ -94,7 +156,7 @@ describe('KnightOfDespair', () => {
     expect(executeCommands(game, ['say redemption to knight'])).toContain(
       NOT_SEEN,
     )
-    executeCommands(game, ['cast truth sight on knight of despair'])
+    executeCommands(game, THREE_SIGHTS)
     expect(executeCommands(game, ['say redemption to knight'])).toContain(
       NO_CHAIN,
     )
@@ -114,8 +176,8 @@ describe('KnightOfDespair', () => {
   })
 
   for (const order of [
-    ["use guardian's chain", 'cast truth sight on knight of despair'],
-    ['cast truth sight on knight of despair', "use guardian's chain"],
+    ["use guardian's chain", ...THREE_SIGHTS],
+    [...THREE_SIGHTS, "use guardian's chain"],
   ]) {
     it(`redeems him after ${order.join(' then ')}`, () => {
       const game = createGameInHall()
@@ -156,7 +218,7 @@ describe('KnightOfDespair', () => {
     const game = createGameInHall()
     executeCommands(game, [
       "use guardian's chain",
-      'cast truth sight on knight of despair',
+      ...THREE_SIGHTS,
       'say redemption to knight',
     ])
     const hall = game.state.currentRoom.describe(game.state)
@@ -196,6 +258,8 @@ describe('KnightOfDespair', () => {
       game.state.removeItemFromInventory("Guardian's Chain")
       game.state.addItemToInventory(new LoyaltyToken())
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_BANNERS_SEEN, true)
+      game.state.setStoryFlag(FLAG_ACT4_ECHO_STONE_HEARD, true)
       game.state.setStoryFlag(FLAG_ACT4_CHAIN_GIVEN, true)
       return game
     }
@@ -224,6 +288,8 @@ describe('KnightOfDespair', () => {
     it('loses the chain’s protection if it is given away after raising', () => {
       const game = createGameInHall()
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_BANNERS_SEEN, true)
+      game.state.setStoryFlag(FLAG_ACT4_ECHO_STONE_HEARD, true)
       executeCommands(game, ["use guardian's chain"])
       game.state.removeItemFromInventory("Guardian's Chain")
       game.state.setStoryFlag(FLAG_ACT4_CHAIN_GIVEN, true)
@@ -235,6 +301,8 @@ describe('KnightOfDespair', () => {
     it('keeps the chain version when the chain is raised and kept', () => {
       const game = createGameInHall()
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_BANNERS_SEEN, true)
+      game.state.setStoryFlag(FLAG_ACT4_ECHO_STONE_HEARD, true)
       executeCommands(game, ["use guardian's chain"])
       const answer = executeCommands(game, ['say redemption to knight'])
       expect(answer).toContain("breaks against the chain's light")
@@ -243,6 +311,8 @@ describe('KnightOfDespair', () => {
     it('gives today’s refusal alone when the chain is kept but not raised', () => {
       const game = createGameInHall()
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_BANNERS_SEEN, true)
+      game.state.setStoryFlag(FLAG_ACT4_ECHO_STONE_HEARD, true)
       const answer = executeCommands(game, ['say redemption to knight'])
       expect(answer).toContain(NO_CHAIN)
       expect(answer).not.toContain('The chain is gone')

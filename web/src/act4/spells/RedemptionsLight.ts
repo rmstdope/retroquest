@@ -7,9 +7,12 @@ import {
 } from '@/engine'
 import { GhostlyWarriors } from '../characters/GhostlyWarriors'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
+import { ShadowOfThePast } from '../characters/ShadowOfThePast'
+import { SorceressOfLies } from '../characters/SorceressOfLies'
 import { HALL_AFTER_REDEMPTION } from '../rooms/hallDescriptions'
 import {
   FLAG_ACT4_CEDRIC_FORGAVE,
+  FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
   FLAG_ACT4_WARRIORS_AT_PEACE,
   VIRTUE_MERCY,
 } from '../Act4StoryFlags'
@@ -19,10 +22,22 @@ const NOTHING_TO_REDEEM =
   '[dim]Soft light gathers in your hand and fades. There is no fallen soul ' +
   'here to remember itself.[/dim]'
 
+/** What the light does to the Shadow of the Past: it needs none. */
+const SHADOW_LINE =
+  'Light gathers in your hand, and the Shadow turns from it, gently. ' +
+  '"It is already remembering. It needs no light."'
+
+/** What the light does to the redeemed Sorceress. */
+const SORCERESS_LINE =
+  'Soft light touches the Unmasked Sorceress. She does not flinch. "So this ' +
+  'is what it is," she says, "to be looked at without a lie."'
+
 /**
  * Learned from the Knight of Despair: reminds a fallen soul of who it was.
  * Cast on the Ghostly Warriors it puts them at peace (mercy), and Sir Cedric
  * forgives the knight.
+ * Cast on the Ghostly Warriors it puts them at peace (mercy); on the Shadow
+ * and the redeemed Sorceress it only shows a line.
  */
 export class RedemptionsLight extends Spell {
   constructor() {
@@ -40,6 +55,13 @@ export class RedemptionsLight extends Spell {
 
   /** The warriors are put at peace (mercy, once) and Sir Cedric forgives the knight; the knight needs no more. */
   override castOnCharacter(gameState: GameState, target: Character): string {
+    if (target instanceof ShadowOfThePast) return event(SHADOW_LINE)
+    if (
+      target instanceof SorceressOfLies &&
+      gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)
+    ) {
+      return event(SORCERESS_LINE)
+    }
     if (!(target instanceof GhostlyWarriors)) {
       return target instanceof KnightOfDespair
         ? NOTHING_TO_REDEEM

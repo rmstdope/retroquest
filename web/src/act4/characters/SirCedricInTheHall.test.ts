@@ -46,6 +46,8 @@ function redeemed(): Game {
   executeCommands(game, [
     "use guardian's chain",
     'cast truth sight on knight of despair',
+    'cast truth sight on banners',
+    'cast truth sight on echo stone',
     'say redemption to knight',
   ])
   return game
@@ -82,6 +84,8 @@ describe('Sir Cedric in the Hall of Echoes', () => {
     executeCommands(game, [
       "use guardian's chain",
       'cast truth sight on knight of despair',
+      'cast truth sight on banners',
+      'cast truth sight on echo stone',
     ])
     const out = executeCommands(game, ['say redemption to knight'])
     const order = [
@@ -138,7 +142,11 @@ describe('Sir Cedric in the Hall of Echoes', () => {
 
   it('remembers what he has seen and chosen across a save', () => {
     const game = hall()
-    executeCommands(game, ['cast truth sight on knight of despair'])
+    executeCommands(game, [
+      'cast truth sight on knight of despair',
+      'cast truth sight on banners',
+      'cast truth sight on echo stone',
+    ])
     reload(game)
     expect(executeCommands(game, ['talk to cedric'])).toContain(KNOWS)
     executeCommands(game, ["use guardian's chain", 'say redemption to knight'])
