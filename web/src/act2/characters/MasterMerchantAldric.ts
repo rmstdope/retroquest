@@ -38,6 +38,9 @@ export class MasterMerchantAldric extends Character {
     "Planning an expedition? You've come to the right place for quality supplies.",
     "I've heard tales of strange happenings in the forest. Good thing I stock the " +
       'best protective gear!',
+    'Bread costs near twice what it did in spring. The farms west of the city ' +
+      'send half the grain they used to, and what does come is grey at the ' +
+      'husk. Not my trade, mind, but my suppliers talk of little else.',
   ]
   dialogueIndex = 0
   closedDialogue =

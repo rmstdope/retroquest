@@ -148,3 +148,62 @@ describe('Families and the mountain flower (selfless moment)', () => {
     expect(answer).toContain(REMEMBERED)
   })
 })
+
+const BLIGHT_LINE =
+  'Our garden plots have gone grey this year. Beans, cabbages, the lot: they ' +
+  'come up green and then simply give up. Old Hettie says it is the soil, but ' +
+  'none of us has ever seen soil do that.'
+
+describe('Families and the blight', () => {
+  it('has no blight line before the elders were helped', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.ResidentialQuarter
+
+    expect(game.commandParser.parse('talk to families')).not.toContain(
+      'garden plots',
+    )
+  })
+
+  it('orders welcome, herbs, blight, Wren on the first friendly talk', () => {
+    const game = createGameAfterHelpingElders()
+
+    const answer = game.commandParser.parse('talk to families')
+
+    const order = [
+      'Welcome to our neighborhood!',
+      'rare healing herbs',
+      BLIGHT_LINE,
+      WREN_LINE,
+    ].map((part) => answer.indexOf(part))
+    expect(order.every((i) => i >= 0)).toBe(true)
+    expect(order).toEqual([...order].sort((a, b) => a - b))
+    expectFamiliesSpeak(answer)
+  })
+
+  it('orders welcome, blight, Wren on later talks', () => {
+    const game = createGameAfterHelpingElders()
+    game.commandParser.parse('talk to families')
+
+    const answer = game.commandParser.parse('talk to families')
+
+    const order = ['Welcome to our neighborhood!', BLIGHT_LINE, WREN_LINE].map(
+      (part) => answer.indexOf(part),
+    )
+    expect(order.every((i) => i >= 0)).toBe(true)
+    expect(order).toEqual([...order].sort((a, b) => a - b))
+    expectFamiliesSpeak(answer)
+  })
+
+  it('keeps the blight line after Wren has the flower, without her line', () => {
+    const game = createGameAfterHelpingElders()
+    game.commandParser.parse('talk to families')
+    game.state.addItemToInventory(new MountainFlower())
+    game.commandParser.parse('give mountain flower to families')
+
+    const answer = game.commandParser.parse('talk to families')
+
+    expect(answer).toContain(BLIGHT_LINE)
+    expect(answer).not.toContain('Wren')
+    expectFamiliesSpeak(answer)
+  })
+})

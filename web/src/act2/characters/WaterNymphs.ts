@@ -84,7 +84,10 @@ export class WaterNymphs extends Character {
     return String(number) // fallback for numbers beyond our list
   }
 
-  /** Present the current riddle, or praise the player once all are solved. */
+  /**
+   * Present the current riddle, or praise the player once all are solved and
+   * add the nymphs' remark about the thinning streams (the blight).
+   */
   override talkTo(_gameState: GameState): string {
     const eventMsg = event(
       'You approach the ' + characterName(this.name) + ' by the sacred stream.',
@@ -101,6 +104,14 @@ export class WaterNymphs extends Character {
             'ways, young seeker. The sacred gifts are yours to take - the ' +
             'crystal-clear water and moonflowers that grow here. Use them ' +
             "wisely in your quest to protect the natural world.'",
+        ) +
+        '\n\n' +
+        characterName(this.name) +
+        ': ' +
+        speech(
+          'Yet the streams come down thinner from the hills this season, ' +
+            'seeker. Something up there drinks before we do, and the fields ' +
+            'below the city taste it first.',
         )
       )
     } else if (this.currentRiddle < this.riddles.length) {
