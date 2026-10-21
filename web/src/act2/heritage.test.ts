@@ -70,7 +70,7 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
 
     const stage = quest.latestStage ?? ''
     expect(stage).toContain(
-      'learned the powerful dispel spell. The chronicle was written by the Wardens of the Dawn, and their magic was the unbinding kind; its last page warns that Malakar seeks the blood of Willowbrook. Armed with what you now know of the Wardens and of the magical arts, you now possess',
+      'taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook.',
     )
     expect(stage).not.toMatch(CHOSEN_TALK)
   })
