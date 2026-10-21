@@ -1,5 +1,8 @@
 import { Item, event, type GameState } from '@/engine'
-import { FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_MIRRORS_MENDED,
+  FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
+} from '../Act3StoryFlags'
 import { BindingResin } from './BindingResin'
 import { BrassMirrorSegment } from './BrassMirrorSegment'
 
@@ -81,8 +84,8 @@ export class MirrorMount extends Item {
   }
 
   /**
-   * Finalize mirror repairs across the terraces and set the Mirrors of
-   * Emberlight completion flag when the mount is installed and resin applied.
+   * Finalize mirror repairs when the mount is installed and resin applied. This
+   * only sets the mended flag; the beam fires on the next rest on the terraces.
    */
   mend(gameState: GameState): string {
     if (!this.installed) {
@@ -100,15 +103,24 @@ export class MirrorMount extends Item {
       )
     }
 
-    // Set the completion flag; idempotent
-    gameState.setStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, true)
+    // Already mended: remind the player where things stand instead of repeating
+    // (a save from before the mended flag existed only carries COMPLETED)
+    if (
+      gameState.getStoryFlag(FLAG_ACT3_MIRRORS_MENDED) ||
+      gameState.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED)
+    ) {
+      return gameState.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED)
+        ? '[dim]The mirrors are already whole, and the way east stands open.[/dim]'
+        : '[dim]The mirrors are already whole. The sun is not where it needs ' +
+            'to be. Perhaps rest a while, and let it climb.[/dim]'
+    }
+
+    gameState.setStoryFlag(FLAG_ACT3_MIRRORS_MENDED, true)
     return (
       '[success]A whispered mend gathers in your hands and the mirrors ' +
-      'answer — seams knit, polish brightens, and the whole face hums. ' +
-      "When the sun's beams strike the great mirror they are coaxed and " +
-      'folded together until they pour from the terraces as a single, ' +
-      'piercing ray. The light lances into the mountainside, strikes a ' +
-      'hidden trigger, and a narrow passage grinds open to the east.[/success]'
+      'answer — seams knit, polish brightens, and the whole face hums.[/success]\n' +
+      'The mirrors are whole. The sun is not where it needs to be. Perhaps ' +
+      'rest a while, and let it climb.'
     )
   }
 

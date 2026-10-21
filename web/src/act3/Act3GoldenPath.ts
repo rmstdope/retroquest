@@ -49,6 +49,7 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'use brass mirror segment with mirror mount',
   'use binding resin with mirror mount',
   'cast mend on mirror mount',
+  'rest',
   's',
   'search',
   'take ash-fern',
