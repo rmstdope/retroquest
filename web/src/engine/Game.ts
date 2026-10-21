@@ -681,7 +681,12 @@ Welcome to
     const item = this.findItem(targetName)
     if (item) return spell.castOnItem(this.state, item)
     const character = this.findCharacter(targetName)
-    if (character) return spell.castOnCharacter(this.state, character)
+    if (character) {
+      return (
+        character.receiveSpell(this.state, spell) ??
+        spell.castOnCharacter(this.state, character)
+      )
+    }
     const named = spell.castOnName(this.state, targetName)
     if (named !== null) return named
     return (

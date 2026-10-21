@@ -38,6 +38,12 @@ export class CastleCourtyard extends Room {
     })
   }
 
+  /** Leaving the courtyard mid-bout abandons it: Cedric starts the bout over next time. */
+  override onEnter(_gameState: GameState): void {
+    for (const character of this.characters)
+      if (character instanceof SirCedric) character.abandonBout()
+  }
+
   /** Search for the hidden diary after the prerequisite dialogue. */
   override search(gameState: GameState): string {
     if (!this.diaryFound) {

@@ -9,17 +9,21 @@ import {
 } from '@/testing/gameHelpers'
 
 describe('Training Sword markup', () => {
-  it('attributes both demonstrations to Sir Cedric', () => {
+  it('attributes the bout and the later practice to Sir Cedric', () => {
     const game = new Game([new Act2()])
     game.state.currentRoom = game.state.allRooms.CastleCourtyard
     const sword = new TrainingSword()
 
     const first = sword.use(game.state)
+    game.commandParser.parse('say guard to sir cedric')
+    game.commandParser.parse('say turn to sir cedric')
+    const pass = game.commandParser.parse('say strike to sir cedric')
     const second = sword.use(game.state)
 
-    expect(first).toContain('Excellent! Your martial training is evident')
+    expect(first).toContain('High cut!')
+    expect(pass).toContain('Excellent! Your martial training is evident')
     expect(second).toContain('Your skills remain sharp')
-    for (const answer of [first, second]) {
+    for (const answer of [first, pass, second]) {
       expectMarkupWellFormed(answer)
       expectDialogueSpeaker(answer, 'Sir Cedric')
       expectNoSpeechOutsideDialogue(answer)
@@ -41,16 +45,14 @@ describe("Training Sword as Cedric's old blade", () => {
     const sword = new TrainingSword()
 
     const first = sword.use(game.state)
-    const second = sword.use(game.state)
 
     const recognition = first.indexOf('That notch by the guard.')
-    const forms = first.indexOf('You draw the training sword and perform')
+    const bout = first.indexOf('He takes a practice blade')
     expect(first).toContain('catches your wrist and turns the blade')
     expect(first).toContain('Show me what he taught you, then.')
     expect(recognition).toBeGreaterThan(-1)
-    expect(forms).toBeGreaterThan(recognition)
-    expect(first).toContain('Excellent! Your martial training is evident')
-    expect(second).not.toContain('That notch by the guard.')
+    expect(bout).toBeGreaterThan(recognition)
+    expect(first).not.toContain('Excellent! Your martial training is evident')
     expectMarkupWellFormed(first)
     expectNoSpeechOutsideDialogue(first)
   })
