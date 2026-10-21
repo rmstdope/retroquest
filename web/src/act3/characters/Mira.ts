@@ -66,55 +66,22 @@ export class Mira extends Character {
       return (
         eventMsg +
         '\n' +
-        (speech(
-          "'Elior, the weave bends and the hourglass shivers. " +
-            "Threads of fate tighten about us.'",
+        speech(
+          "'Elior. Malakar is draining King Alden's life to break " +
+            "Eldoria's wards, and the king grows weaker every day.'",
         ) +
-          '\n' +
-          speech(
-            "'Malakar drains King Alden to unbind Eldoria's wards. " +
-              "We will not reach him unscathed without protection.'",
-          ) +
-          '\n' +
-          speech(
-            "'To walk the last road, you must embody three virtues—" +
-              'Courage, Wisdom, and Selflessness—and three relics must be won to ' +
-              'counter his working and shield you from his influence: the Crystal ' +
-              'of Light from the Sunken Ruins, the Phoenix Feather from Mount ' +
-              "Ember, and the Dragon's Scale from the Caverns of " +
-              "Shadow.'",
-          ) +
-          '\n' +
-          speech(
-            "'Listen to what the tide whispers, what embers teach, " +
-              "and what the deep stone remembers.'",
-          ) +
-          '\n' +
-          speech(
-            "'The Crystal will part veils and steady your spirit; " +
-              'the Feather will awaken guiding fire and clarity; the Scale will ' +
-              "turn aside shadow and bind your oath.'",
-          ) +
-          '\n' +
-          speech(
-            "'We will travel by my focus. I will anchor circles at " +
-              'the edges of each site: first the Tidal Causeway of the Sunken ' +
-              'Ruins, then the Lower Switchbacks on Mount Ember, and finally the ' +
-              "Cavern Mouth of the shadowed halls.'",
-          ) +
-          '\n' +
-          speech(
-            "'Before we depart, take this note. It contains guidance " +
-              "about traces of the past you may find on your journey.'",
-          ) +
-          '\n' +
-          event('Mira hands you a small, worn piece of parchment.') +
-          '\n' +
-          speech(
-            "'When all three are gathered, I will set our last " +
-              'circle at the fortress gate. Say the word, and I will draw the ' +
-              "first circle—where moonlight marries the sea.'",
-          ))
+        '\n' +
+        speech(
+          "'Three relics can stand against him: the Crystal of Light, " +
+            "the Phoenix Feather and the Dragon's Scale. We will fetch " +
+            "them one at a time.'",
+        ) +
+        '\n' +
+        speech("'Before we go, take this, and read it. Then we can leave.'") +
+        '\n' +
+        event('Mira hands you a small, worn piece of parchment.') +
+        '\n' +
+        speech("'Say the word, and I will draw the first circle.'")
       )
     }
 
@@ -125,7 +92,7 @@ export class Mira extends Character {
     // unless the Crystal of Light has been acquired. If acquired, Mira can
     // draw the circle onward to Mount Ember.
     // If we're already at Lower Switchbacks, do not teleport; instead
-    // provide lore about the second virtue and the phoenix legend.
+    // provide lore about Wisdom and the phoenix legend.
     // The fortress gate has its own talk (see talkAtGate).
     if (gameState.currentRoom.name === "Entrance to Malakar's Fortress") {
       return this.talkAtGate(gameState, eventMsg)
@@ -160,7 +127,7 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            "'There the second virtue, Wisdom, is taught in " +
+            "'Here, Wisdom is taught in " +
               'embers. Old guides here tell of a phoenix that nested where ' +
               'the rock blooms with heat — a bird of returning flame. From ' +
               'its ash a single feather rises renewed, and such a feather ' +
@@ -207,7 +174,8 @@ export class Mira extends Character {
           speech(
             "'This place keeps its secrets in salt and song. " +
               'Within the Sunken Ruins lies the Crystal of Light—an old ' +
-              'relic that answers to courage. When you stand before the ' +
+              'relic that answers to courage. It parts veils and steadies ' +
+              'the spirit. When you stand before the ' +
               "tide-born guardian, speak your vow and let it steady you.'",
           )
         )
