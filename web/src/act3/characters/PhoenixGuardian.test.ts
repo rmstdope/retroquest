@@ -3,6 +3,7 @@ import { Game, type GameState } from '@/engine'
 import { Act3 } from '../Act3'
 import { FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED } from '../Act3StoryFlags'
 import { PhoenixGuardian } from './PhoenixGuardian'
+import { SirCedric } from './SirCedric'
 import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
@@ -12,6 +13,7 @@ import {
 function makeGameState(flagValue: boolean): GameState {
   const state = new Game([new Act3()]).state
   state.setStoryFlag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, flagValue)
+  state.currentRoom = state.allRooms.FumarolePassages
   return state
 }
 
@@ -55,4 +57,20 @@ describe('PhoenixGuardian', () => {
       expectDialogueSpeaker(answer, pg.name)
     },
   )
+
+  it('is answered by Sir Cedric when he stands by, with the way open', () => {
+    const state = makeGameState(true)
+    state.currentRoom.addCharacter(new SirCedric())
+    const answer = new PhoenixGuardian().talkTo(state)
+    expect(answer).toContain(
+      "[dialogue]'Patience. The king has had nothing from us but patience.'",
+    )
+    expectMarkupWellFormed(answer)
+  })
+
+  it('is not answered by Sir Cedric before the way is open', () => {
+    const state = makeGameState(false)
+    state.currentRoom.addCharacter(new SirCedric())
+    expect(new PhoenixGuardian().talkTo(state)).not.toContain('Sir Cedric')
+  })
 })

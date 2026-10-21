@@ -394,6 +394,7 @@ Welcome to
     if (!next)
       return '[failure]That exit leads nowhere (room not found).[/failure]'
     this.state.currentRoom = next
+    this.acts[this.currentAct].onRoomChanged(this.state, room, next)
     next.onEnter(this.state)
     this.state.markVisited(next)
     this.hasChangedRoom = true

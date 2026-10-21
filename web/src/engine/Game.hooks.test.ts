@@ -37,6 +37,10 @@ class HookAct extends Act {
   override getCompletionHook(gameState: GameState): string {
     return `Hook in ${gameState.currentRoom.name}`
   }
+  moves: string[] = []
+  override onRoomChanged(_gameState: GameState, from: Room, to: Room): void {
+    this.moves.push(`${from.name}>${to.name}`)
+  }
 }
 
 function makeGame(): Game {
@@ -83,6 +87,12 @@ describe('engine hooks', () => {
     const game = makeGame()
     expect(game.cast('lost')).toBe('That magic is gone.')
     expect(game.cast('other')).toContain("You don't know any spell called")
+  })
+
+  it('tells the act which rooms the player moved between', () => {
+    const game = makeGame()
+    game.move('north')
+    expect((game.acts[0] as HookAct).moves).toEqual(['Hall>Yard'])
   })
 
   it('passes the finished act’s state to the completion hook', () => {

@@ -1,4 +1,4 @@
-import { Act, type GameState } from '@/engine'
+import { Act, type GameState, type Room } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { MirasHut } from './rooms/MirasHut'
 import { TidalCauseway } from './rooms/TidalCauseway'
@@ -36,6 +36,7 @@ import { BlessSpell } from './spells/BlessSpell'
 import { ACT3_CLASSES } from './classes'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import { FLAG_ACT3_FORTRESS_GATES_EXAMINED } from './Act3StoryFlags'
+import { CEDRIC_NAME } from './CedricLines'
 
 /** Act 3 of RetroQuest: The Awakening. */
 export class Act3 extends Act {
@@ -128,6 +129,30 @@ export class Act3 extends Act {
   /** Complete Act III once the fortress gates have been examined. */
   override isCompleted(_gameState: GameState): boolean {
     return _gameState.getStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)
+  }
+
+  /**
+   * Sir Cedric walks with Elior: when the party moves to another room he
+   * follows, from wherever he stands (a save made before he followed may
+   * have left him in Mira's Hut).
+   */
+  override onRoomChanged(gameState: GameState, _from: Room, to: Room): void {
+    for (const room of Object.values(gameState.allRooms)) {
+      if (room === to) continue
+      const cedric = room.getCharacterByName(CEDRIC_NAME)
+      if (!cedric) continue
+      cedric.name = CEDRIC_NAME
+      room.characters.splice(room.characters.indexOf(cedric), 1)
+      to.characters.push(cedric)
+    }
+  }
+
+  /** Saves from before Sir Cedric was shown in title case still name him in lower case. */
+  override afterLoad(gameState: GameState): void {
+    for (const room of Object.values(gameState.allRooms)) {
+      const cedric = room.getCharacterByName(CEDRIC_NAME)
+      if (cedric) cedric.name = CEDRIC_NAME
+    }
   }
 
   /** Give Elior his amulet and ensure essential Act III magic is available at start. */

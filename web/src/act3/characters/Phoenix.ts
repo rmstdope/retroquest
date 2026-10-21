@@ -1,4 +1,5 @@
 import { Character, type GameState, characterName, speech } from '@/engine'
+import { CEDRIC_FEATHER_GLANCE, cedricAdds } from '../CedricLines'
 import { PhoenixFeather } from '../items/PhoenixFeather'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
@@ -125,7 +126,8 @@ export class Phoenix extends Character {
             "patience, even when the world burns. Take this, and remember.'",
         ) +
         link +
-        terraces
+        terraces +
+        cedricAdds(gameState, CEDRIC_FEATHER_GLANCE)
       )
     }
     return (

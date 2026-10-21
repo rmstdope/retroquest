@@ -7,6 +7,7 @@ import {
 import { VentStone } from '../items/VentStone'
 import type { HeatWardMix } from '../items/HeatWardMix'
 import { PhoenixGuardian } from '../characters/PhoenixGuardian'
+import { CEDRIC_HEAT_WARD, cedricAdds } from '../CedricLines'
 
 /** Narrow tunnels exhaling rhythmic heat like a great sleeping bellows. */
 export class FumarolePassages extends Room {
@@ -72,7 +73,8 @@ export class FumarolePassages extends Room {
     if (this.ventCalibrations < 3) {
       return (
         '[failure]The vents are not yet synchronized; the ward would be ' +
-        'unstable. Calibrate more vent stones first.[/failure]'
+        'unstable. Calibrate more vent stones first.[/failure]' +
+        cedricAdds(gameState, CEDRIC_HEAT_WARD)
       )
     }
 

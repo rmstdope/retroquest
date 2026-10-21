@@ -10,6 +10,8 @@ Act III unfolds as a pilgrimage across Eldoria to recover three ancient relics�
 
 Mira, drawing on her mastery of arcane teleportation, whisks the party between the distant relic sites. Her spells bend space, allowing Elior, Cedric, and herself to traverse Eldoria’s vast reaches in moments—first to the storm-lashed coast, then to the volcanic slopes, and finally deep beneath the hills. Elior must read Mira’s Keepsake Note before the first departure. Before leaving the Sunken Ruins and Mount Ember, Elior must also uncover their parentage clues: the Sea-Sealed Letter and Charred Inscription. After securing all three relics and completing every non-main quest, Mira confesses who she is (see *Mira’s Confession*), and then performs the Warding Rite, creating the Lifelight Elixir and completing “The Three Virtues.” She can then teleport the party to the fortress threshold, where she refuses to rest behind and goes through the gates with Elior (she holds the way out just inside with Sir Cedric). Examining the fortress gates marks Act III complete and begins Act IV.
 
+**Sir Cedric's guilt.** Cedric walks with Elior from room to room and carries his guilt over the night King Alden was taken: one line per site and quest stage, a reaction after each of Mira's three "the king is weaker" beats, his answer when the Tide-Born Guardian asks what he will not abandon, his impatience on Mount Ember, the heavy lifting in the Caverns, and a gate line at the fortress that Elior may answer with the refrain. He speaks as a plain soldier; the full confession is left for the Knight of Despair in Act IV.
+
 ## The Stakes
 
 -   Malakar’s ritual drains King Alden’s essence. If the king falls, the binding magics protecting Eldoria unravel.

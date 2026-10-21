@@ -8,6 +8,13 @@ import {
 import { KeepsakeNote } from '../items/KeepsakeNote'
 import { LifelightElixir } from '../items/LifelightElixir'
 import {
+  CEDRIC_GATE_ARRIVAL,
+  CEDRIC_KING_WEAKER_1,
+  CEDRIC_KING_WEAKER_2,
+  CEDRIC_KING_WEAKER_3,
+  cedricAdds,
+} from '../CedricLines'
+import {
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
@@ -145,7 +152,8 @@ export class Mira extends Character {
             "power into something that can save the king.'",
         ) +
         '\n' +
-        speech("'The king is fading, Elior. We have less time than I hoped.'")
+        speech("'The king is fading, Elior. We have less time than I hoped.'") +
+        cedricAdds(gameState, CEDRIC_KING_WEAKER_3)
     } else if (gameState.currentRoom.name === 'Lower Switchbacks') {
       if (!gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
         return (
@@ -189,7 +197,8 @@ export class Mira extends Character {
         speech(
           "'The king is weaker still. Whatever drains him draws harder with every " +
             "site we reach.'",
-        )
+        ) +
+        cedricAdds(gameState, CEDRIC_KING_WEAKER_2)
     } else if (gameState.currentRoom.name === 'Tidal Causeway') {
       if (!gameState.getStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED)) {
         return (
@@ -233,7 +242,8 @@ export class Mira extends Character {
         speech(
           "'And Elior—I can feel the king through the focus. He is weaker than " +
             "when we set out.'",
-        )
+        ) +
+        cedricAdds(gameState, CEDRIC_KING_WEAKER_1)
     } else if (gameState.currentRoom.name === "Mira's Hut") {
       // Check if Elior has read the Keepsake Note first
       if (!gameState.getStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED)) {
@@ -374,6 +384,11 @@ export class Mira extends Character {
     if (destinationKey in gameState.allRooms) {
       // Capture origin and destination rooms
       const originRoom = gameState.currentRoom
+      // Sir Cedric's gate line plays as the circle sets them down at the fortress.
+      const atGate =
+        destinationKey === 'FortressEntrance'
+          ? cedricAdds(gameState, CEDRIC_GATE_ARRIVAL)
+          : ''
       const destinationRoom = gameState.allRooms[destinationKey]
 
       // Move Mira and Sir Cedric to the new room to accompany the player
@@ -409,7 +424,8 @@ export class Mira extends Character {
         event(
           'You arrive at ' +
             `[room_name]${gameState.currentRoom.name}[/room_name].`,
-        )
+        ) +
+        atGate
       )
     }
     return (
