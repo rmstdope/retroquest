@@ -7,6 +7,7 @@ import { BarnacledBeamFragment } from './items/BarnacledBeamFragment'
 import { BindingResin } from './items/BindingResin'
 import { BrassMirrorSegment } from './items/BrassMirrorSegment'
 import { CharredInscription } from './items/CharredInscription'
+import { CharredNotebook } from './items/CharredNotebook'
 import { CooledSlag } from './items/CooledSlag'
 import { CrystalOfLight } from './items/CrystalOfLight'
 import { DragonsScale } from './items/DragonsScale'
@@ -99,6 +100,7 @@ export const ACT3_CLASSES = {
   BindingResin,
   BrassMirrorSegment,
   CharredInscription,
+  CharredNotebook,
   CooledSlag,
   CrystalOfLight,
   DragonsScale,

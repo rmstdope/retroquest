@@ -16,6 +16,7 @@ import {
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
   FLAG_ACT3_MAIN_COMPLETED,
+  FLAG_ACT3_PHOENIX_STORY_TOLD,
 } from './Act3StoryFlags'
 import {
   executeCommands,
@@ -624,6 +625,25 @@ describe('Act 3 golden path', () => {
       game.state.inventory.map((i) => i.name),
     )
     expect(fresh.state.storyFlags).toEqual(game.state.storyFlags)
+  })
+})
+
+describe('Act 3 Mount Ember notebook save and load', () => {
+  it('keeps the scholar gift and the Phoenix told-once state across a save', () => {
+    const game = new Game([new Act3()])
+    const room = game.state.getRoom('Lower Switchbacks')
+    if (!room) throw new Error('Lower Switchbacks missing')
+    game.state.currentRoom = room
+    game.commandParser.parse('talk to ash scholar')
+    game.state.setStoryFlag(FLAG_ACT3_PHOENIX_STORY_TOLD, true)
+
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    expect(fresh.state.hasItem('Charred Notebook')).toBe(true)
+    expect(fresh.state.getStoryFlag(FLAG_ACT3_PHOENIX_STORY_TOLD)).toBe(true)
+    const again = fresh.commandParser.parse('talk to ash scholar')
+    expect(again).toContain('Seek the outcrops for what the mountain has shed.')
+    expect(fresh.state.getItemCount('Charred Notebook')).toBe(1)
   })
 })
 
