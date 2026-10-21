@@ -136,3 +136,7 @@ export const FLAG_ACT3_CEDRIC_GATE_ANSWERED = 'act3_cedric_gate_answered'
 export const FLAG_ACT3_SHELL_HEARD = 'act3_shell_heard'
 /** Set when Elior has heard the wandering phantoms hum the tune. */
 export const FLAG_ACT3_PHANTOMS_HEARD = 'act3_phantoms_heard'
+
+// Elior's answer to Mira's confession (the first answer stands; at most one is set)
+export const FLAG_ACT3_MIRA_FORGIVEN = 'act3_mira_forgiven'
+export const FLAG_ACT3_MIRA_REPROACHED = 'act3_mira_reproached'
