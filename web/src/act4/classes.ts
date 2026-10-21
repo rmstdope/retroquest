@@ -51,6 +51,8 @@ import { LifelightElixir } from './items/LifelightElixir'
 import { ThroneChamer } from './rooms/ThroneChamer'
 import { TowerOfShadows } from './rooms/TowerOfShadows'
 import { Bless } from './spells/Bless'
+import { Forgiveness } from './spells/Forgiveness'
+import { Grow } from './spells/Grow'
 import { Light } from './spells/Light'
 
 export const ACT4_CLASSES = {
@@ -109,5 +111,7 @@ export const ACT4_CLASSES = {
   Light,
   RedemptionsLight,
   HeartsTruth,
+  Forgiveness,
+  Grow,
   TruthSight,
 }

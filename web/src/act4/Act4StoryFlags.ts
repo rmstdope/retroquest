@@ -107,6 +107,13 @@ export const FLAG_ACT4_MAIN_COMPLETED = 'act4_main_completed'
 // Ending choice flags
 export const FLAG_ACT4_REDEMPTION_ENDING = 'act4_redemption_ending'
 export const FLAG_ACT4_JUSTICE_ENDING = 'act4_justice_ending'
+export const FLAG_ACT4_SACRIFICE_ENDING = 'act4_sacrifice_ending'
+/** Elior has said "forgiveness" to the healed Malakar and learned the spell. */
+export const FLAG_ACT4_FORGIVENESS_SAID = 'act4_forgiveness_said'
+/** Elior has said "justice" to Malakar; the amulet is waiting. */
+export const FLAG_ACT4_JUSTICE_SAID = 'act4_justice_said'
+/** Elior has said "sacrifice" to Malakar; the amulet is waiting. */
+export const FLAG_ACT4_SACRIFICE_SAID = 'act4_sacrifice_said'
 export const FLAG_ACT4_CROWN_ENDING = 'act4_crown_ending'
 export const FLAG_ACT4_HOME_ENDING = 'act4_home_ending'
 
@@ -118,3 +125,6 @@ export const VIRTUE_TRUTH = 'truth'
 
 /** The virtue moment recorded when Elior puts the Ghostly Warriors to rest. */
 export const VIRTUE_MERCY = 'mercy'
+
+/** The virtue moment recorded for help that gains nothing. */
+export const VIRTUE_SELFLESS = 'selfless'

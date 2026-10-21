@@ -10,6 +10,7 @@ import {
   FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED,
   FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED,
   FLAG_ACT4_THRONE_AMULET_OPENED,
+  FLAG_ACT4_REDEMPTION_ENDING,
 } from './Act4StoryFlags'
 import {
   executeCommands,
@@ -897,16 +898,21 @@ describe('Act 4 integration', () => {
 })
 
 describe('Act 4 throne room', () => {
-  it('plays the golden path to the open amulet and survives a save', () => {
+  it('plays the golden path to the Redemption ending and survives a save', () => {
     const game = new Game([new Act4()])
     executeCommands(game, ACT4_GOLDEN_PATH)
     expectCurrentRoom(game.state, 'Throne Chamber')
     expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
+    expectStoryFlag(game.state, FLAG_ACT4_REDEMPTION_ENDING, true)
+    expectQuestCompleted(game.state, 'The Final Stand')
+    expectSpellKnown(game.state, 'Forgiveness')
     expect(game.loadSaveData(game.toSaveData())).toContain(
       'Game loaded successfully.',
     )
     expectCurrentRoom(game.state, 'Throne Chamber')
-    expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
-    expectItemInInventory(game.state, 'Lifelight Elixir')
+    expectStoryFlag(game.state, FLAG_ACT4_REDEMPTION_ENDING, true)
+    expectQuestCompleted(game.state, 'The Final Stand')
+    expectSpellKnown(game.state, 'Forgiveness')
+    expectItemInInventory(game.state, 'Lifelight Elixir', false)
   })
 })

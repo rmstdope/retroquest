@@ -8,6 +8,7 @@ import {
   FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED,
   FLAG_ACT4_THRONE_AMULET_OPENED,
   FLAG_ACT4_THRONE_REFRAIN_SAID,
+  VIRTUE_TRUTH,
 } from '../Act4StoryFlags'
 import {
   executeCommands,
@@ -65,6 +66,8 @@ function healed(): Game {
 
 function shattered(): Game {
   const game = opened()
+  game.state.addVirtue(VIRTUE_TRUTH)
+  game.state.addVirtue(VIRTUE_TRUTH)
   executeCommands(game, ['use lifelight elixir on prison'])
   return game
 }
@@ -261,6 +264,8 @@ describe('ThroneChamer', () => {
 
   it('breaks the prison and frees the king', () => {
     const game = opened()
+    game.state.addVirtue(VIRTUE_TRUTH)
+    game.state.addVirtue(VIRTUE_TRUTH)
     const text = executeCommands(game, ['use lifelight elixir on prison'])
     expect(text).toContain(
       'You pour the elixir over the crystal. It cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it.',
