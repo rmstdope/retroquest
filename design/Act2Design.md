@@ -412,14 +412,14 @@ This is the implemented Act II room roster and topology. Items and characters ma
 
 | Room | Items and dynamic content | Characters | Exits and gates |
 |---|---|---|---|
-| Mountain Path | Mountain Flower, Walking Stick, Camp Site; examining the camp reveals the Entry Pass. The Mountain Hermit, a retired castle sergeant who drilled Sir Cedric, gives Elior Cedric's old Training Sword with a message for him. | Mountain Hermit | North to Greendale Gates; east to Forest Transition after Supplies for the Journey. |
-| Greendale Gates | City Map appears after the Gate Captain accepts the Entry Pass and leaves; searching then reveals it. | Gate Captain (leaves after accepting the pass) | South to Mountain Path; north to Main Square after the pass is accepted. |
+| Mountain Path | Mountain Flower, Walking Stick, Camp Site; examining the camp reveals the Entry Pass (two fire pits and doubled boot prints hint that it was the grey-cloaked stranger's; his name is scraped off the pass, the seal is whole). The Mountain Hermit, a retired castle sergeant who drilled Sir Cedric, gives Elior Cedric's old Training Sword with a message for him. | Mountain Hermit | North to Greendale Gates; east to Forest Transition after Supplies for the Journey. |
+| Greendale Gates | City Map appears after the Gate Captain accepts the Entry Pass and leaves; searching then reveals it. | Gate Captain (notes the scraped name, accepts the seal, then leaves) | South to Mountain Path; north to Main Square after the pass is accepted. |
 | Main Square | City Notice Board, Merchant's Flyer | Town Crier | South to Greendale Gates, north to Castle Approach, east to Market District; city navigation is enabled after using the City Map. |
 | Market District | Aldric sells Forest Survival Kit, Enhanced Lantern, and Quality Rope. | Master Merchant Aldric, Caravan Master Thorne | West to Main Square, north to The Silver Stag Inn, south to Merchant's Warehouse. |
 | The Silver Stag Inn | Room Key and Door; the Room Key is purchased from Marcus. | Innkeeper Marcus, Barmaid Elena | South to Market District; east to Inn Rooms after using the key with the door. |
 | Inn Rooms | Twenty Coins; searching reveals the Traveler's Journal, the notebook of the grey-cloaked stranger who last lodged here (Marcus mentions him when Elior rents the room). | None | West to The Silver Stag Inn. |
 | Merchant's Warehouse | None | None | North to Market District. |
-| Castle Approach | None | Herald, Castle Guard Captain | South to Main Square; west to Castle Courtyard after showing the Entry Pass to the Herald. |
+| Castle Approach | None | Herald, Castle Guard Captain | South to Main Square; west to Castle Courtyard after showing the Entry Pass to the Herald (who does not notice the scraped name). |
 | Castle Courtyard | Squire's Diary appears after talking to the Training Master and Squires, then searching. | Sir Cedric, Training Master, Squires | East to Castle Approach, north to Residential Quarter, west to Great Hall. |
 | Great Hall | None; archive search is gated by formal presentation to the Court Herald and by showing the Historians the stranger's notebook. | Court Herald, Historians, Lord Commander | East to Castle Courtyard. |
 | Residential Quarter | Searching reveals the secret passage after The Ancient Library is offered. | Local Craftsmen, Families | South to Castle Courtyard, north to Healer's House, secret passage to Hidden Library after discovery. |

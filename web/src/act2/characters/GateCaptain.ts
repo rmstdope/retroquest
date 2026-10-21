@@ -92,12 +92,13 @@ export class GateCaptain extends Character {
       return (
         'The ' +
         characterName('Gate Captain') +
-        ' examines the entry pass carefully when you show it to him, ' +
-        'noting the official seal. His expression changes to one of ' +
-        'respect as he recognizes the authority behind it. ' +
+        ' turns the pass over in his hands. He runs a thumb along the line ' +
+        'where a name should be; it has been scraped away with a blade. Then ' +
+        'he looks at the seal, and grunts. ' +
         speech(
-          "'This is legitimate documentation indeed. You are welcome in " +
-            "Greendale, honored visitor. Please, proceed with our blessing.'",
+          "'Somebody's scraped the name off this. The seal's good, though, " +
+            "and the seal's what I answer for. You are welcome in Greendale. " +
+            "Please, proceed.'",
         ) +
         ' ' +
         speech(
