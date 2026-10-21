@@ -875,6 +875,19 @@ describe('Game', () => {
       )
     })
 
+    it('lets the target item answer first through usedBy, else falls through', () => {
+      game.state.addItemToInventory(using('key'))
+      const door = using('sealed_door')
+      door.usedBy = (_state, other) =>
+        other.name === 'key' ? 'The door answers the key.' : null
+      rooms.EliorsCottage.addItem(door)
+      expect(game.use('key', 'sealed_door')).toBe('The door answers the key.')
+      game.state.addItemToInventory(using('coin'))
+      expect(game.use('coin', 'sealed_door')).toBe(
+        'You used the [item]coin[/item] with [item]sealed_door[/item].',
+      )
+    })
+
     it('uses an item on a character when no item matches the target', () => {
       game.state.addItemToInventory(using('Crystal Shard'))
       rooms.EliorsCottage.addCharacter(character('Wise Wizard'))

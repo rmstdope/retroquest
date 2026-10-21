@@ -7,7 +7,7 @@ describe('Act4', () => {
     // The TS act name is the short id used in saves (see the porting guide),
     // not the Python display title "Act IV".
     expect(act4.name).toBe('Act4')
-    expect(Object.keys(act4.rooms)).toHaveLength(8)
+    expect(Object.keys(act4.rooms)).toHaveLength(9)
     expect(act4.quests.map((quest) => quest.name)).toEqual([
       'The Final Stand',
       'Shattered Ward Guardians',
@@ -15,6 +15,8 @@ describe('Act4', () => {
       'The Maze of Mirrors',
       'The Knight of Despair',
       'The Sorceress of Lies',
+      'The Shadow of the Past',
+      "The Parent's Legacy",
     ])
   })
 
@@ -28,6 +30,7 @@ describe('Act4', () => {
       'TowerOfShadows',
       'ChamberOfWhispers',
       'MemoryVault',
+      'ParentsVault',
       'ThroneChamer',
     ]
     for (const roomName of expectedRooms) {

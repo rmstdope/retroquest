@@ -650,7 +650,7 @@ Welcome to
     if (item === other) {
       return `[failure]You can't use the [item_name]${item.name}[/item_name] with itself.[/failure]`
     }
-    return item.useWith(this.state, other)
+    return other.usedBy(this.state, item) ?? item.useWith(this.state, other)
   }
 
   /**

@@ -1,4 +1,5 @@
 import { Act, type GameState } from '@/engine'
+import { AncientAmulet } from './items/AncientAmulet'
 import { FortressGates } from './rooms/FortressGates'
 import { OuterCourtyard } from './rooms/OuterCourtyard'
 import { MirrorLabyrinth } from './rooms/MirrorLabyrinth'
@@ -6,6 +7,7 @@ import { HallOfEchoes } from './rooms/HallOfEchoes'
 import { TowerOfShadows } from './rooms/TowerOfShadows'
 import { ChamberOfWhispers } from './rooms/ChamberOfWhispers'
 import { MemoryVault } from './rooms/MemoryVault'
+import { ParentsVault } from './rooms/ParentsVault'
 import { ThroneChamer } from './rooms/ThroneChamer'
 import { Light } from './spells/Light'
 import { Bless } from './spells/Bless'
@@ -15,6 +17,8 @@ import { TheTrappedServants } from './quests/TheTrappedServants'
 import { TheMazeOfMirrors } from './quests/TheMazeOfMirrors'
 import { TheKnightOfDespair } from './quests/TheKnightOfDespair'
 import { TheSorceressOfLies } from './quests/TheSorceressOfLies'
+import { TheShadowOfThePast } from './quests/TheShadowOfThePast'
+import { TheParentsLegacy } from './quests/TheParentsLegacy'
 import { FLAG_ACT4_MAIN_STARTED } from './Act4StoryFlags'
 import { ACT4_CLASSES } from './classes'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
@@ -33,8 +37,9 @@ export class Act4 extends Act {
       TowerOfShadows: new TowerOfShadows(),
       ChamberOfWhispers: new ChamberOfWhispers(),
       MemoryVault: new MemoryVault(),
+      ParentsVault: new ParentsVault(),
 
-      // Final area (its way in comes with the Parents' Vault)
+      // Final area (entered north from the Parents' Vault)
       ThroneChamer: new ThroneChamer(),
     }
 
@@ -49,6 +54,8 @@ export class Act4 extends Act {
         new TheMazeOfMirrors(),
         new TheKnightOfDespair(),
         new TheSorceressOfLies(),
+        new TheShadowOfThePast(),
+        new TheParentsLegacy(),
       ],
       musicFile: 'Conquest - The Silver Grail (freetouse.com).mp3',
       musicInfo:
@@ -95,6 +102,9 @@ export class Act4 extends Act {
     if (!gameState.hasSpell(blessSpell.id)) {
       gameState.learnSpell(blessSpell)
     }
+
+    // Mira gave Elior the amulet at the end of Act I; it opens the Memory Vault's door
+    gameState.addItemToInventory(new AncientAmulet())
 
     // The main quest starts when the act opens
     gameState.setStoryFlag(FLAG_ACT4_MAIN_STARTED, true)
