@@ -26,29 +26,34 @@ describe('SirCedric', () => {
     expect(out).toContain('Mira')
   })
 
-  it('replies differently at the Tidal Causeway based on flags', () => {
+  it('replies differently at the Tidal Causeway in each reachable state', () => {
     const game = new Game([new Act3()])
     const s = new SirCedric()
     game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
     game.state.currentRoom = game.state.allRooms.TidalCauseway
 
-    // no crystal: tide advice
-    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, false)
+    // before the Crystal is won: tide advice
     let out = s.talkTo(game.state)
     expect(out.toLowerCase()).toContain('tide')
 
-    // crystal acquired but no vow: ask to make vow
+    // the Crystal can only be won after the vow: acknowledge and encourage
+    game.state.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    out = s.talkTo(game.state)
+    expect(out).toContain('Let us press onward')
+  })
+
+  it('never asks for the vow once the Crystal is won', () => {
+    const game = new Game([new Act3()])
+    const cedric = new SirCedric()
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.currentRoom = game.state.allRooms.TidalCauseway
     game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
     game.state.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, false)
-    out = s.talkTo(game.state)
-    expect(out.toLowerCase()).toContain('vow')
 
-    // vow made: acknowledge and encourage
-    game.state.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
-    out = s.talkTo(game.state).toLowerCase()
-    expect(out.includes('vow') || out.includes('let us press onward')).toBe(
-      true,
-    )
+    const out = cedric.talkTo(game.state)
+
+    expect(out).not.toContain('The Crystal is ours')
   })
 
   it('attributes every reply in each quest state to Sir Cedric', () => {
@@ -59,24 +64,16 @@ describe('SirCedric', () => {
     const defaultReply = cedric.talkTo(game.state)
     game.state.currentRoom = game.state.allRooms.TidalCauseway
     const noCrystal = cedric.talkTo(game.state)
-    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
-    const noVow = cedric.talkTo(game.state)
     game.state.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
 
     const vowSpoken = cedric.talkTo(game.state)
 
     expect(beforeQuest).toContain('speak with')
     expect(defaultReply).toContain('The path is set')
     expect(noCrystal).toContain('The tide tests the brave')
-    expect(noVow).toContain('The Crystal is ours')
     expect(vowSpoken).toContain('Your vow has been spoken')
-    for (const answer of [
-      beforeQuest,
-      defaultReply,
-      noCrystal,
-      noVow,
-      vowSpoken,
-    ]) {
+    for (const answer of [beforeQuest, defaultReply, noCrystal, vowSpoken]) {
       expectMarkupWellFormed(answer)
       expectDialogueSpeaker(answer, 'Sir Cedric')
     }
