@@ -217,9 +217,18 @@ describe('Act 3 golden path', () => {
     ])
     expectItemInInventory(state, 'Sea-Sealed Letter', true)
 
-    // Step 10: Sanctum — speak vow, then take crystal
+    // Step 10: Sanctum — walk three steps into the dark water, speak the
+    // vow, then take the crystal
     executeCommands(game, ['east', 'east'])
     expectCurrentRoom(state, 'Sanctum of the Tide')
+    executeCommands(game, ['east', 'east'])
+    const parted = executeCommands(game, ['east'])
+    expect(parted).toContain('What did you not abandon?')
+    const midWalk = new Game([new Act3()])
+    midWalk.loadSaveData(game.toSaveData())
+    expect(midWalk.state.currentRoom.descriptionFor(midWalk.state)).toContain(
+      'The water stands parted',
+    )
     const vow = executeCommands(game, ['say myself to tide-born guardian'])
     expect(
       vow.toLowerCase().includes('vow') ||

@@ -25,7 +25,7 @@ Mira, drawing on her mastery of arcane teleportation, whisks the party between t
 
 The journey leads to the coast where the sea swallows a shattered temple known as the Sunken Ruins. At dusk, stone causeways rise from the surf, slick with salt and seaweed. Spectral water-wardens—spirits bound to guard the ruins—test intruders with fear itself.
 
--   Trial: In the sanctum, a tide-born guardian tests Elior’s resolve. The accepted vow is “myself.” After both Sunken Ruins side quests are complete, the waters part and the Crystal of Light becomes available.
+-   Trial: In the sanctum the tide-born guardian puts out every light and asks Elior to walk. He wades three steps east into the black water (west turns back, no penalty), each step with a line of fear. On the third the water parts and the Crystal of Light is there; the guardian asks what he did not abandon. The accepted vow is “myself.” Near-miss answers (Mira, Cedric, friends, the king, parents) get gentle, specific refusals. After the vow the sigils kindle again and the sanctum is lit for good.
 -   Curse: dead sea birds line the causeways and the surf runs grey (see *The Curse Worsens*).
 -   Amulet: when Elior reads the Sea-Sealed Letter, the Ancient Amulet glows and shows a fragment of two faces, a man and a woman, laughing beside a third figure turned away.
 
@@ -289,11 +289,12 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 6. Sanctum of the Tide
 
 -   Description: A domed chamber where water stands glass‑still; sigils ripple across the surface like starlight.
--   Items: Crystal of Light (present in the room; the way into the sanctum is gated by both Sunken Ruins side quests).
+-   Items: Crystal of Light (appears only when the water parts on the third step of the trial; the way into the sanctum is gated by both Sunken Ruins side quests).
 -   Characters: Tide‑Born Guardian (final test of Courage)
 -   Quest Relevance: Main Quest phase completion for the Crystal of Light.
 -   Exits:
     -   West to Submerged Antechamber
+    -   East (before the vow only): a step into the black water, not another room
 
 ---
 
@@ -620,11 +621,12 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `east` → Enters the Sanctum after both Tideward Sigils and Lanterns of the Deeps are complete.
-    -   `search` → Shows a glass‑still basin and the tide‑born guardian’s presence.
-    -   `talk to tide-born guardian` → The guardian intones a riddle testing your resolve; it hints
-        that the true vow must name who you will not abandon.
-
-    -   `say myself to tide-born guardian` → Vow accepted; waters part; enables `take crystal of light` to claim the relic and complete the Sunken Ruins phase. The relic can be taken only after completing “Tideward Sigils” and “Lanterns of the Deeps”.
+    -   Arriving → the lights go out; the guardian says “Walk.” Casting light is refused (“Here you go without it.”).
+    -   `east` (three times) → Wades into the black water: cold to the knees; a voice like Mira’s telling Elior to turn back; water at the chest with Cedric out of sight. On the third step the water parts, the Crystal of Light appears and the guardian asks, “You came through. What did you not abandon?”
+    -   `west` from a step → Wades back to the edge, no penalty. `west` from the edge leaves the sanctum. Leaving and returning before the vow puts Elior at the edge again.
+    -   `talk to tide-born guardian` → Before the vow: walk east, and the guardian will ask one thing. After the vow: the guardian tells of Aren, who asked to have later visitors tested as he was.
+    -   `say myself to tide-born guardian` → Before the third step: “Walk first.” At the third step: vow accepted; the guardian explains what it meant, the sigils kindle again, the sanctum is lit for good, and `take crystal of light` works. Taking the crystal earlier is refused by the wards. The relic can be taken only after completing “Tideward Sigils” and “Lanterns of the Deeps”.
+    -   Progress through the walk is saved: a save made mid-walk loads on the same step.
 
 10. Room: Tidal Causeway
 

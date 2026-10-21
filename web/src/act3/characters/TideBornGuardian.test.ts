@@ -30,19 +30,27 @@ function makeGameState(): GameState {
   return new Game([new Act3()]).state
 }
 
+/** Walk the guardian's trial to the third step. */
+function walkThrough(guardian: TideBornGuardian, g: GameState): void {
+  guardian.walkEast(g)
+  guardian.walkEast(g)
+  guardian.walkEast(g)
+}
+
 describe('TideBornGuardian', () => {
-  it('returns the prompt for a vow when talked to', () => {
-    const g = makeGameState()
+  it('tells Elior to walk when talked to on the shore', () => {
     const guardian = new TideBornGuardian()
 
-    const res = guardian.talkTo(g)
+    const res = guardian.talkTo(makeGameState())
 
-    expect(res).toContain('will not abandon')
+    expect(res).toContain('Walk east into the water')
+    expect(res).toContain('I will ask you one thing')
   })
 
   it("sets the vow flag when told 'myself'", () => {
     const g = makeGameState()
     const guardian = new TideBornGuardian()
+    walkThrough(guardian, g)
     expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(false)
 
     const res = guardian.sayTo(g, 'myself')
@@ -54,27 +62,130 @@ describe('TideBornGuardian', () => {
   it('rejects other words without setting the flag', () => {
     const g = makeGameState()
     const guardian = new TideBornGuardian()
+    walkThrough(guardian, g)
 
     const res = guardian.sayTo(g, 'not the vow')
 
-    expect(res).toContain('not the vow')
+    expect(res).toContain('That is not what you carried through the water')
     expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(false)
   })
 
-  it('attributes the vow prompt to the guardian', () => {
+  it('attributes the question at the third step to the guardian', () => {
     const guardian = new TideBornGuardian()
-    const answer = guardian.talkTo(makeGameState())
+    const g = makeGameState()
+    walkThrough(guardian, g)
+    const answer = guardian.talkTo(g)
 
-    expect(answer).toContain('Name what you will not abandon')
+    expect(answer).toContain('What did you not abandon?')
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, guardian.name)
   })
 
   it('narrates a wrong vow without speakerless dialogue', () => {
-    const answer = new TideBornGuardian().sayTo(makeGameState(), 'gold')
+    const guardian = new TideBornGuardian()
+    const g = makeGameState()
+    walkThrough(guardian, g)
+    const answer = guardian.sayTo(g, 'gold')
 
-    expect(answer).toContain('not the vow')
+    expect(answer).toContain('The tide listens')
     expectMarkupWellFormed(answer)
     expectNoSpeakerlessDialogue(answer)
+  })
+
+  it('starts at the edge and counts three steps', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    expect(guardian.step()).toBe(0)
+    expect(guardian.walkEast(g)).toContain('cold to the knees')
+    expect(guardian.step()).toBe(1)
+    expect(guardian.walkEast(g)).toContain('Turn back, Elior')
+    expect(guardian.step()).toBe(2)
+    const third = guardian.walkEast(g)
+    expect(third).toContain('The water is at your chest')
+    expect(third).toContain('the only light in the world')
+    expect(third).toContain('You came through. What did you not abandon?')
+    expect(guardian.step()).toBe(3)
+    expect(guardian.walkEast(g)).toBe(guardian.lookLine(g))
+    expect(guardian.step()).toBe(3)
+  })
+
+  it('gives each position its look line', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    expect(guardian.lookLine(g)).toContain('You stand at the edge')
+    guardian.walkEast(g)
+    expect(guardian.lookLine(g)).toContain('Black water to your knees')
+    guardian.walkEast(g)
+    expect(guardian.lookLine(g)).toContain('Black water to your waist')
+    guardian.walkEast(g)
+    expect(guardian.lookLine(g)).toContain('The water stands parted')
+  })
+
+  it('wades back to the edge from any step', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    guardian.walkEast(g)
+    guardian.walkEast(g)
+    expect(guardian.turnBack()).toContain('You wade back to the edge')
+    expect(guardian.step()).toBe(0)
+  })
+
+  it('refuses words before the third step', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    guardian.walkEast(g)
+    const res = guardian.sayTo(g, 'myself')
+    expect(res).toContain('Words are easy on the shore. Walk first.')
+    expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(false)
+  })
+
+  it.each([
+    ['mira', 'Mira was not in the water with you'],
+    ['Cedric', 'The knight stayed at the door'],
+    ['my friends', 'Your friends were behind you'],
+    ['the king', 'The king is the reason you came'],
+    ['my parents', 'They are with you always'],
+  ])('answers the near miss %s specifically', (words, line) => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    walkThrough(guardian, g)
+    const res = guardian.sayTo(g, words)
+    expect(res).toContain(line)
+    expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(false)
+    expectMarkupWellFormed(res)
+  })
+
+  it('explains itself after the vow and then tells of Aren', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    walkThrough(guardian, g)
+    const res = guardian.sayTo(g, ' Myself ')
+    expect(res).toContain('Most name a person')
+    expect(res).toContain('the chamber is lit as you first saw it')
+    expectMarkupWellFormed(res)
+    const talk = guardian.talkTo(g)
+    expect(talk).toContain('He asked me to test whoever came after him')
+    expectMarkupWellFormed(talk)
+  })
+
+  it('plays the darkness once, then the short return line', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    expect(guardian.enterLine(g)).toContain('every light goes out at once')
+    guardian.walkEast(g)
+    expect(guardian.enterLine(g)).toContain('The lights go out again')
+    expect(guardian.step()).toBe(0)
+    g.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
+    expect(guardian.enterLine(g)).toBe('')
+  })
+
+  it('reads a save without trial fields as the edge of the dark', () => {
+    const guardian = new TideBornGuardian()
+    guardian.trialStep = undefined
+    guardian.trialBegun = undefined
+    expect(guardian.step()).toBe(0)
+    expect(guardian.enterLine(makeGameState())).toContain(
+      'every light goes out',
+    )
   })
 })
