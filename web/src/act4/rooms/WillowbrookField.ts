@@ -14,6 +14,11 @@ const WALK_HOME =
   'Willowbrook close around you, and then you are standing at the edge of ' +
   'your own field.'
 
+/** Grandmother's singing at the gate, shown in every ending. */
+const GATE_SONG =
+  'At the gate Grandmother is singing to herself: "Hush, little seed, the ' +
+  'frost is going—" She sees you, and stops.'
+
 /** The kneel after Redemption or Justice, when grow comes back. */
 const KNEEL_REMEMBER =
   'You kneel at the edge of the field. Your hands remember the smallest spell ' +
@@ -50,13 +55,13 @@ export class WillowbrookField extends Room {
     if (!gameState.hasSpell('grow')) gameState.learnSpell(new Grow())
   }
 
-  /** The walk home and the kneel; the remembering is an event, once. */
+  /** The walk home, Grandmother's singing and the kneel; the remembering is an event, once. */
   override enterText(gameState: GameState): string {
     if (endingPlayed(gameState) === 'sacrifice') {
-      return `${WALK_HOME}\n${KNEEL_KEPT}`
+      return `${WALK_HOME}\n${GATE_SONG}\n${KNEEL_KEPT}`
     }
     return (
-      `${WALK_HOME}\n${KNEEL_REMEMBER}\n` +
+      `${WALK_HOME}\n${GATE_SONG}\n${KNEEL_REMEMBER}\n` +
       event('You remember the grow spell!')
     )
   }

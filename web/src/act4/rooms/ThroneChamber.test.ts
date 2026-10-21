@@ -262,7 +262,7 @@ describe('ThroneChamber', () => {
       const game = opened()
       const text = executeCommands(game, [command])
       expect(text).toContain(
-        "You kneel and hold the elixir to Malakar's lips. He drinks. The grey goes out of his face, and for a moment he is the young man at the workbench again. The wound flickers, and waits.",
+        `You kneel and hold the elixir to Malakar's lips. He drinks. The grey goes out of his face, and for a moment he is the young man at the workbench again. "Hush, little seed," he sings under his breath, and does not seem to know he does. The wound flickers, and waits.`,
       )
       expect(text).toContain('The Lifelight Elixir is gone.')
       expectItemInInventory(game.state, 'Lifelight Elixir', false)

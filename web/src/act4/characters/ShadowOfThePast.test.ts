@@ -34,7 +34,7 @@ const SCENE = [
   'It is still pulling. Every hand in the room turns backwards, wanting more of the days back, and the wound would take all of them if nothing held it shut.',
   'Your parents before the wound, hands joined, pouring themselves into it until they are only light, bound to the amulet and to the crown of King Alden, so that you would be hidden and the wound held shut.',
   'Hold it shut, Aren. Hide him. That is enough.',
-  'Last, and smallest: Malakar by a cottage fire in Willowbrook, rocking a baby in his arms and humming. The baby is you.',
+  'Last, and smallest: Malakar by a cottage fire in Willowbrook, rocking a baby in his arms and singing, low: "Hush, little seed, the frost is going. Hush, the field will wake." The baby is you.',
   'The lanterns dim, one by one, until only the amulet glows in your hand.',
 ]
 

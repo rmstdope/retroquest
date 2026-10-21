@@ -134,6 +134,8 @@ export class Wound extends Item {
         'closes, and Malakar goes with it, drawn into the seal. He does not ' +
         'fight.',
       dialogue('Malakar', 'I am sorry. Tell them— no. They know.'),
+      'The last of him to go is his voice, low: "…the field will wake." ' +
+        'Then the seal is shut.',
       dialogue(
         'King Alden',
         'Then it falls to me to set right what he broke. Rest now. You ' +

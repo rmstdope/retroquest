@@ -374,7 +374,9 @@ export class Malakar extends Character {
       event(
         "You kneel and hold the elixir to Malakar's lips. He drinks. The " +
           'grey goes out of his face, and for a moment he is the young man ' +
-          'at the workbench again. The wound flickers, and waits.',
+          'at the workbench again. "Hush, little seed," he sings under his ' +
+          'breath, and does not seem to know he does. The wound flickers, ' +
+          'and waits.',
       ),
       event('The Lifelight Elixir is gone.'),
     ].join('\n')
