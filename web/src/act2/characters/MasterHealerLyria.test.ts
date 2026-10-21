@@ -396,6 +396,16 @@ describe('Master Healer Lyria and the silver leaves', () => {
     }
   })
 
+  it('keeps the leaves when they are given to anyone else', () => {
+    const game = gameWithLeaves()
+    game.state.currentRoom = game.state.allRooms.ResidentialQuarter
+
+    executeCommands(game, ['give silver leaves to families'])
+
+    expect(game.state.hasItem('silver leaves')).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_LYRIA_SILVER_LEAVES_GIVEN)).toBe(false)
+  })
+
   it('leaves her talk unchanged until the leaves are given', () => {
     const game = gameWithLeaves()
 

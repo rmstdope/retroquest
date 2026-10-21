@@ -162,9 +162,9 @@ export class MasterHealerLyria extends Character {
 
   /**
    * Handle giving items to Master Healer Lyria. The silver leaves go in a dish
-   * on her windowsill. The healing herbs start the
-   * apprenticeship at the carter's bed; the Crystal Focus is taught over that
-   * bed and is handed back when the herbs have not been given yet.
+   * on her windowsill. The healing herbs start the apprenticeship at the
+   * carter's bed; the Crystal Focus is taught over that bed and is handed back
+   * when the herbs have not been given yet.
    */
   override giveItem(gameState: GameState, item: Item): string {
     const name = characterName(this.name)
