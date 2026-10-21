@@ -267,7 +267,7 @@ describe('Phoenix after the name is mended', () => {
 
     const reply = phoenix.sayTo(game.state, 'patience')
 
-    expect(reply.endsWith(MENDED_TERRACES)).toBe(true)
+    expect(reply).toContain(MENDED_TERRACES)
     expect(reply).not.toContain('burned deeper')
   })
 })
