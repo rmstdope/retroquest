@@ -623,8 +623,9 @@ export class Mira extends Character {
       ),
       speech(
         'Lyria wrote to me from Greendale, about a girl with a mask on her ' +
-          'wrist. I burned the letter. If I had gone, I would have left you ' +
-          'alone in the one place he was looking, and I have never been so ' +
+          'wrist. I burned the letter. If I had gone, I would have shown ' +
+          'Greendale what the healer at Willowbrook can do, with his agent ' +
+          'in both towns and you in one of them. I have never been so ' +
           'ashamed of anything.',
       ),
       speech(

@@ -32,7 +32,8 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
     expect(intro).toContain(
       'Malakar, to you, is a word from Willowbrook: a name your neighbours ' +
         'say over bad weather and bad luck, and knock on wood after. A tale ' +
-        'to frighten children, and nothing more.',
+        "to frighten children, and one line in your mother's hand that called " +
+        'him a friend once.',
     )
     expect(intro).not.toContain('Cedric')
   })
