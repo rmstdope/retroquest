@@ -1,15 +1,41 @@
 import { Character, type GameState, characterName, speech } from '@/engine'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { CrystalFocus } from '../items/CrystalFocus'
 import { MendSpell } from '../spells/MendSpell'
 import { DispelSpell } from '../spells/DispelSpell'
 import {
+  FLAG_LIBRARIAN_CONFESSED,
+  FLAG_LIBRARIAN_NOTICED_AMULET,
   FLAG_MENDED_LIBRARY_ENCHANTMENTS,
   FLAG_READ_ANCIENT_CHRONICLE,
   FLAG_SPECTRAL_LIBRARIAN_FRIENDLY,
 } from '../Act2StoryFlags'
 
+/** The Ancient Amulet's name as the librarian's lines mark it. */
+const AMULET_NAME = 'Ancient Amulet'
+
+/** What the librarian says on first seeing the amulet. */
+const GLANCE_WORDS =
+  'I have not seen that worn since the last hand wrote in that chronicle.'
+
+/** What the librarian confesses once the wards are mended. */
+const CONFESSION_WORDS =
+  'I wore that mark once, when I had a body to wear it in. Whose yours ' +
+  'was, I cannot tell you; only that the Wardens did not give them away. ' +
+  'We taught the unbinding to those we trusted, and wrote it down for the rest.'
+
+/** Marks an item name in narration. */
+function itemName(name: string): string {
+  return `[item_name]${name}[/item_name]`
+}
+
 /**
  * Ghostly guardian NPC who controls access to the library's deeper lore.
+ *
+ * A Warden of the Dawn in life: glances at the Ancient Amulet on the first
+ * greeting while Elior carries it, and confesses after the wards are mended
+ * (once, the first time he carries the amulet), saying "we" about the Wardens
+ * from then on. Never names the Wardens of Act III.
  *
  * Becomes friendly once FLAG_MENDED_LIBRARY_ENCHANTMENTS is set: points the
  * player to the Wardens' chronicle, places the Crystal Focus in the room, and
@@ -27,77 +53,134 @@ export class SpectralLibrarian extends Character {
     })
   }
 
-  /** Speak with the librarian; points to the chronicle once the wards are mended. */
+  /**
+   * Speak with the librarian. Before the wards are mended they greet Elior (and
+   * glance once at the Ancient Amulet if he carries it); the talk that
+   * completes the mending adds the confession of having been a Warden; later
+   * talks nudge towards the chronicle and, if the confession was missed because
+   * the amulet was left behind, play it once when he carries it.
+   */
   override talkTo(gameState: GameState): string {
-    // Check if player has mended the protective enchantments first
-    const mendedEnchantments = gameState.getStoryFlag(
-      FLAG_MENDED_LIBRARY_ENCHANTMENTS,
+    const carrying = gameState.inventory.some(
+      (item) => item instanceof AncientAmulet,
     )
     if (!gameState.getStoryFlag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY)) {
-      if (mendedEnchantments) {
-        gameState.setStoryFlag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY, true)
-        // Add Crystal Focus to the room for player to take
-        const crystalFocus = new CrystalFocus()
-        gameState.currentRoom.addItem(crystalFocus)
-        // Get spell names
-        const mendSpell = new MendSpell()
-        const dispelSpell = new DispelSpell()
-        const mendName = mendSpell.name
-        const dispelName = dispelSpell.name
-        const crystalName = crystalFocus.name
-        return (
-          '[success]' +
-          characterName(this.name) +
-          ': ' +
-          speech(
-            `'You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
-              'spell. They have been failing longer than I care to count; ' +
-              "thank you. Now, what you came for.'",
-          ) +
-          " The spirit's eyes glow brighter as they speak: " +
-          speech(
-            "'I am a keeper, not a teller. The answer you came for is in that " +
-              'chronicle. The Wardens of the Dawn wrote it, and their mark is ' +
-              'on its cover, the same mark you wear at your throat. Read it, ' +
-              `and you will learn the [spell_name]${dispelName}[/spell_name] ` +
-              "spell.'",
-          ) +
-          ' They gesture to a crystal resting on the shelf: ' +
-          speech(
-            `'And take this [item_name]${crystalName}[/item_name]. What you ` +
-              "do with them is yours to choose.'",
-          ) +
-          '[/success]'
-        )
+      if (gameState.getStoryFlag(FLAG_MENDED_LIBRARY_ENCHANTMENTS)) {
+        return this.mendingTalk(gameState, carrying)
       }
-      return (
-        characterName(this.name) +
-        ': ' +
-        speech(
-          "'Mind the shelves. Everything here has been kept a long time, " +
-            'and the wards on the oldest texts are failing. I can keep a book; ' +
-            'I cannot mend one. Mend the wards, and I will show you where to ' +
-            "look for the mark you carry.'",
-        )
-      )
+      return this.greeting(gameState, carrying)
     }
-    if (!gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)) {
-      return (
-        characterName(this.name) +
-        ': ' +
-        speech(
-          "'The chronicle is waiting on its shelf. The Wardens wrote it for " +
-            "whoever would read it; I cannot read it for you.'",
-        )
-      )
-    }
-    return (
+    return this.laterTalk(gameState, carrying)
+  }
+
+  /** The greeting before mending; the first one with the amulet opens with the glance. */
+  private greeting(gameState: GameState, carrying: boolean): string {
+    const greeting =
       characterName(this.name) +
       ': ' +
       speech(
-        "'You have read what the Wardens left. The rest is not written on " +
-          "any shelf of mine. Use this knowledge wisely.'",
+        "'Mind the shelves. Everything here has been kept a long time, " +
+          'and the wards on the oldest texts are failing. I can keep a book; ' +
+          'I cannot mend one. Mend the wards, and I will show you where to ' +
+          "look for the mark you carry.'",
       )
+    if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET)) {
+      return greeting
+    }
+    gameState.setStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET, true)
+    return (
+      'The ' +
+      characterName(this.name) +
+      ' turns toward you, and stops. Their eyes have found the ' +
+      itemName(AMULET_NAME) +
+      ' at your throat.\n\n' +
+      characterName(this.name) +
+      ': ' +
+      speech(`'${GLANCE_WORDS}'`) +
+      '\n\n' +
+      greeting
+    )
+  }
+
+  /** The talk that completes the mending: thanks, the confession if the amulet is carried, the reveal. */
+  private mendingTalk(gameState: GameState, carrying: boolean): string {
+    gameState.setStoryFlag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY, true)
+    // Add Crystal Focus to the room for player to take
+    const crystalFocus = new CrystalFocus()
+    gameState.currentRoom.addItem(crystalFocus)
+    const mendName = new MendSpell().name
+    const dispelName = new DispelSpell().name
+    const heardGlance = gameState.getStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET)
+    let confession = ''
+    if (carrying) {
+      gameState.setStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET, true)
+      gameState.setStoryFlag(FLAG_LIBRARIAN_CONFESSED, true)
+      confession = heardGlance
+        ? ' Their eyes go back to the ' +
+          itemName(AMULET_NAME) +
+          '. ' +
+          speech(`'${CONFESSION_WORDS}'`)
+        : ' Their eyes find the ' +
+          itemName(AMULET_NAME) +
+          ' at your throat, and stay there. ' +
+          speech(`'${GLANCE_WORDS} ${CONFESSION_WORDS}'`)
+    }
+    return (
+      '[success]' +
+      characterName(this.name) +
+      ': ' +
+      speech(
+        `'You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
+          'spell. They have been failing longer than I care to count; ' +
+          "thank you. Now, what you came for.'",
+      ) +
+      confession +
+      " The spirit's eyes glow brighter as they speak: " +
+      speech(
+        "'I am a keeper, not a teller. The answer you came for is in that " +
+          'chronicle. We wrote it, and our mark is on its cover. Read it, ' +
+          `and you will learn the [spell_name]${dispelName}[/spell_name] ` +
+          "spell.'",
+      ) +
+      ' They gesture to a crystal resting on the shelf: ' +
+      speech(
+        `'And take this [item_name]${crystalFocus.name}[/item_name]. What you ` +
+          "do with them is yours to choose.'",
+      ) +
+      '[/success]'
+    )
+  }
+
+  /** Later talks: the confession once if missed and the amulet is carried, then the chronicle line. */
+  private laterTalk(gameState: GameState, carrying: boolean): string {
+    const line =
+      characterName(this.name) +
+      ': ' +
+      (gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)
+        ? speech(
+            "'You have read what we left. The rest is not written on " +
+              "any shelf of mine. Use this knowledge wisely.'",
+          )
+        : speech(
+            "'The chronicle is waiting on its shelf. We wrote it for " +
+              "whoever would read it; I cannot read it for you.'",
+          ))
+    if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)) {
+      return line
+    }
+    gameState.setStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET, true)
+    gameState.setStoryFlag(FLAG_LIBRARIAN_CONFESSED, true)
+    return (
+      'The ' +
+      characterName(this.name) +
+      "'s eyes go to the " +
+      itemName(AMULET_NAME) +
+      '.\n\n' +
+      characterName(this.name) +
+      ': ' +
+      speech(`'${GLANCE_WORDS} ${CONFESSION_WORDS}'`) +
+      '\n\n' +
+      line
     )
   }
 

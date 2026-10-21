@@ -249,9 +249,9 @@ City orientation is handled through the City Map and movement behavior, not sepa
 
 #### Spectral Librarian
 
-- **Role:** Guardian of ancient knowledge
-- **Personality Traits:** Ethereal, knowledge-focused, protective of texts
-- **Dialogue Interactions:** Tests Elior's worthiness for ancient knowledge
+- **Role:** Guardian of ancient knowledge; a Warden of the Dawn in life who wrote in the chronicle they now keep
+- **Personality Traits:** Ethereal, knowledge-focused, protective of texts, reserved about their past
+- **Dialogue Interactions:** Glances at the Ancient Amulet on the first greeting while Elior carries it ("I have not seen that worn since the last hand wrote in that chronicle."). Once the wards are mended they confess to having worn the mark, say they cannot tell whose Elior's amulet was (only that the Wardens did not give them away) and that they taught the unbinding to those they trusted, and from then on speak of the Wardens as "we". If Elior is not carrying the amulet at the mending talk, the confession comes on the next talk while he carries it. They never name Aren, Lysa or Malakar, never mention a friendship or that there were three, and never say who wrote the newer ink; that stays for Act III.
 
 ### State-Dependent Dialogue
 
@@ -336,7 +336,7 @@ Spell learning follows quest and item state rather than a separate relationship 
 
 - The craftsmen teach after Elior helps the Families.
 - Lyria teaches after receiving the Crystal Focus.
-- The librarian permits study after Elior repairs the wards.
+- The librarian permits study after Elior repairs the wards, and confesses at that point that they were a Warden of the Dawn.
 - The tree spirit teaches after receiving the Enchanted Acorn.
 - Nyx grants Prophetic Vision after being summoned with the three charms.
 
@@ -393,7 +393,7 @@ The forest represents increasingly mystical realms:
 #### Implemented Artifacts
 
 - **Ancient Amulet:** Placed in Elior's inventory by Act II's setup (Act I gave it to him). Its sigil is the Warden sigil Cedric recognises on the first talk.
-- **Ancient Chronicle:** Records regional history, the Wardens of the Dawn and their sigil, and Malakar's search for the Willowbrook bloodline; studying it after the librarian permits access teaches `dispel`.
+- **Ancient Chronicle:** Kept by the Spectral Librarian, who helped write it as a Warden of the Dawn. Records regional history, the Wardens of the Dawn and their sigil, and Malakar's search for the Willowbrook bloodline; studying it after the librarian permits access teaches `dispel`.
 - **Crystal Focus:** The Spectral Librarian leaves it in the Hidden Library after Elior repairs the wards; Lyria needs it to teach `greater_heal`.
 - **Forest Heart Crystal and Nyx's Token:** Gifts from Nyx when first spoken to after the altar ritual.
 - **Three Sacred Charms:** The Protective Charm, Druidic Charm, and Nature's Charm are consumed by the Offering Altar to summon Nyx.
