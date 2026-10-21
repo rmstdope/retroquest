@@ -6,6 +6,31 @@ import {
   FLAG_EXAMINED_SECRET_DOCUMENTS,
 } from '../Act2StoryFlags'
 
+/** The journal's opening entry. */
+const START_TEXT =
+  'Sir Cedric was stripped of his knighthood after the night King Alden ' +
+  'vanished: two men of the night watch swore he had left his post. ' +
+  'Investigate what happened that night and find evidence to clear his name.'
+
+/** The journal entry once the squires and their diary have been heard. */
+const DIARY_TEXT =
+  '\n\nAccording to the squires and their diary, one of the watchmen who ' +
+  'accused Cedric fled to Heavensforth and sent papers back with a merchant ' +
+  'caravan that never arrived. Find these papers to restore his honor.'
+
+/** The journal entry once the papers have been examined. */
+const EXAMINED_TEXT =
+  "\n\nYou have found the papers: a watchman's confession that he and " +
+  "another were paid to leave the king's postern unguarded and to blame Sir " +
+  'Cedric, with the letter that paid them, sealed with a twisted rune. Present ' +
+  'them to the Lord Commander in the Great Hall to restore his honor.'
+
+/** The text shown when the quest completes. */
+const COMPLETION_TEXT =
+  "You have cleared Sir Cedric's name. The night watch was paid to leave the " +
+  "king's postern open and to blame him, and the letter that paid them was " +
+  "written in Malakar's name."
+
 /** Quest to vindicate Sir Cedric by locating exonerating documents. */
 export class CedricksLostHonorQuest extends Quest {
   squiresInfoAdded = false
@@ -14,15 +39,18 @@ export class CedricksLostHonorQuest extends Quest {
   constructor() {
     super({
       name: "Cedric's Lost Honor",
-      description:
-        'Sir Cedric has been living under a cloud of disgrace due to false ' +
-        'accusations of cowardice. Investigate the rumors about his past and ' +
-        'find evidence to clear his name.',
-      completion:
-        "You have found the secret documents that prove Sir Cedric's innocence " +
-        "and restored his honor! The knight's reputation has been cleared, and " +
-        'he is grateful for your efforts to uncover the truth.',
+      description: START_TEXT,
+      completion: COMPLETION_TEXT,
     })
+  }
+
+  /** Bring the quest's stored texts up to date in a save made with older wording. */
+  refreshText(gameState: GameState): void {
+    this.completion = COMPLETION_TEXT
+    // Started quests are rebuilt on load; settle the rest without reporting news.
+    if (this.completed) this.checkUpdate(gameState)
+    else if (!gameState.activatedQuests.includes(this))
+      this.description = START_TEXT
   }
 
   /** Trigger after the Training Master is talked to and Echoes is complete. */
@@ -42,18 +70,12 @@ export class CedricksLostHonorQuest extends Quest {
   override checkUpdate(gameState: GameState): boolean {
     let updated = false
     const earlier: string[] = []
-    let newDesc =
-      'Sir Cedric has been living under a cloud of disgrace due to false ' +
-      'accusations of cowardice. Investigate the rumors about his past and ' +
-      'find evidence to clear his name.'
+    let newDesc = START_TEXT
     // First update: when diary is read
     if (gameState.getStoryFlag(FLAG_READ_SQUIRES_DIARY)) {
       // Update the description to include information from the squires
       earlier.push(newDesc)
-      newDesc =
-        '\n\nAccording to the squires and their diary, secret documents from ' +
-        'Heavensforth that would clear his name went missing when a merchant ' +
-        'caravan was lost. Find these documents to restore his honor.'
+      newDesc = DIARY_TEXT
       if (!this.squiresInfoAdded) {
         updated = true
       }
@@ -64,11 +86,7 @@ export class CedricksLostHonorQuest extends Quest {
     if (gameState.getStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS)) {
       // Update the description to include information about finding the evidence
       earlier.push(newDesc)
-      newDesc =
-        '\n\nYou have found the secret documents! The evidence clearly proves ' +
-        "Sir Cedric's innocence - he was protecting civilians and following " +
-        'direct orders during the Battle of Thornfield Pass. Now you need ' +
-        'to present this evidence to restore his honor.'
+      newDesc = EXAMINED_TEXT
       if (!this.documentsExamined) {
         updated = true
       }

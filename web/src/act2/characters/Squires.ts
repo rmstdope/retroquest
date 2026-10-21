@@ -47,22 +47,20 @@ export class Squires extends Character {
       characterName('Squires') +
       ': ' +
       speech(
-        "We're not supposed to talk about it, but we've heard " +
-          "the older knights whispering about Sir Cedric's disgrace. They " +
-          'say he abandoned his post during a crucial battle and that ' +
-          'soldiers died because of his cowardice.',
+        "We're not supposed to talk about it, but we've heard the older " +
+          "knights whispering about Sir Cedric's disgrace. They say he left the " +
+          "king's wall the night His Majesty vanished, and that whoever took the " +
+          'king walked in through the gap.',
       ) +
       '\n\nOne squire looks particularly troubled.\n\n' +
       speech(
-        "But it doesn't make sense - Sir Cedric " +
-          'has always taught us about honor and duty. He would never abandon ' +
-          'his men.',
+        "But it doesn't make sense — Sir Cedric has always taught us about " +
+          'honor and duty. He would never leave his post.',
       ) +
       '\n\nAnother squire nods.\n\n' +
       speech(
-        'We found an old diary under the ' +
-          'stone benches that tells a different story. Maybe you should take ' +
-          'a look at it.',
+        'We found a diary under the stone benches that tells a different ' +
+          'story. Maybe you should take a look at it.',
       )
     )
   }

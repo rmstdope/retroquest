@@ -45,7 +45,7 @@ describe('Lord Commander', () => {
 
     const answer = game.commandParser.parse('talk to lord commander')
 
-    expect(answer).toContain('please present them to me')
+    expect(answer).toContain('give them to me')
     expectAttributedDialogue(answer)
   })
 
@@ -56,7 +56,7 @@ describe('Lord Commander', () => {
 
     const answer = game.commandParser.parse('talk to lord commander')
 
-    expect(answer).toContain("Sir Cedric's honor has been fully restored")
+    expect(answer).toContain('I have sent riders to Heavensforth')
     expectAttributedDialogue(answer)
   })
 
@@ -69,7 +69,7 @@ describe('Lord Commander', () => {
       'give secret documents to lord commander',
     )
 
-    expect(answer).toContain('Please examine them thoroughly')
+    expect(answer).toContain('Read them and know what you bring me')
     expectAttributedDialogue(answer)
     expect(game.state.inventory).toContain(documents)
     expect(game.state.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)).toBe(false)
@@ -85,7 +85,7 @@ describe('Lord Commander', () => {
       'give secret documents to lord commander',
     )
 
-    expect(answer).toContain("I hereby officially restore Sir Cedric's honor")
+    expect(answer).toContain('I hereby restore his knighthood')
     expect(answer.startsWith('[success]')).toBe(true)
     expect(answer.endsWith('[/success]')).toBe(true)
     expectAttributedDialogue(answer)

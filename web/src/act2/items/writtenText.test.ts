@@ -79,9 +79,9 @@ describe("Squire's diary", () => {
 
   it('keeps the headings, colon included, in order', () => {
     expect(textLines(raw).slice(0, 3)).toEqual([
-      'Entry from three years ago:',
-      'Later entry:',
-      'Final entry:',
+      'The morning after the king vanished:',
+      'Some days later:',
+      'Last entry:',
     ])
   })
 
@@ -107,6 +107,6 @@ describe("Squire's diary", () => {
   })
 
   it('keeps the success line before the closing event', () => {
-    expect(raw).toContain('[success]The diary confirms')
+    expect(raw).toContain('[success]The diary points to papers')
   })
 })

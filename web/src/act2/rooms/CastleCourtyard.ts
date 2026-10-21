@@ -6,6 +6,15 @@ import { Squires } from '../characters/Squires'
 import { SquiresDiary } from '../items/SquiresDiary'
 import { FLAG_SQUIRES_TALKED_TO } from '../Act2StoryFlags'
 
+/** The Castle Courtyard description; `Act2.afterLoad` restores it in older saves. */
+export const CASTLE_COURTYARD_DESCRIPTION =
+  'An expansive courtyard within the castle walls, featuring training grounds ' +
+  'where knights practice their swordwork. Ancient oak trees provide shade for ' +
+  'stone benches, and a stable houses magnificent warhorses, though half its ' +
+  "stalls stand empty since the king's own guard rode out to search for him. " +
+  "The castle's main hall rises before you, its great doors carved with the " +
+  "symbols of Greendale's noble houses."
+
 /**
  * Castle Courtyard room: martial training hub with dialogue-gated hidden diary.
  *
@@ -18,12 +27,7 @@ export class CastleCourtyard extends Room {
   constructor() {
     super({
       name: 'Castle Courtyard',
-      description:
-        'An expansive courtyard within the castle walls, featuring training grounds ' +
-        'where knights practice their swordwork. Ancient oak trees provide shade for ' +
-        "stone benches, and a stable houses magnificent warhorses. The castle's main " +
-        "hall rises before you, its great doors carved with the symbols of Greendale's " +
-        'noble houses.',
+      description: CASTLE_COURTYARD_DESCRIPTION,
       items: [],
       characters: [new SirCedric(), new TrainingMaster(), new Squires()],
       exits: {

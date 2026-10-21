@@ -32,7 +32,9 @@ describe("Cedric's Lost Honor log", () => {
     expect(quest.checkUpdate(game.state)).toBe(false)
 
     expect(quest.details()).toMatchObject({ kind: 'journal', earlier: [] })
-    expect(quest.description).toMatch(/^Sir Cedric has been living/)
+    expect(quest.description).toMatch(
+      /^Sir Cedric was stripped of his knighthood/,
+    )
   })
 
   it('dims the accusation once the diary adds the squires information', () => {
@@ -45,11 +47,13 @@ describe("Cedric's Lost Honor log", () => {
     const details = quest.details()
     if (details.kind !== 'journal') throw new Error('expected a journal')
     expect(details.earlier).toHaveLength(1)
-    expect(details.latest).toContain('secret documents')
+    expect(details.latest).toContain('fled to Heavensforth')
     expect(quest.description).toBe(
       `[dim]${quest.earlierStages?.[0]}[/dim]${quest.latestStage}`,
     )
-    expect(quest.description.startsWith('[dim]Sir Cedric has been')).toBe(true)
+    expect(quest.description.startsWith('[dim]Sir Cedric was stripped')).toBe(
+      true,
+    )
   })
 
   it('has two earlier entries after the documents are examined', () => {
@@ -63,6 +67,6 @@ describe("Cedric's Lost Honor log", () => {
     const details = quest.details()
     if (details.kind !== 'journal') throw new Error('expected a journal')
     expect(details.earlier).toHaveLength(2)
-    expect(details.latest).toContain('You have found the secret documents')
+    expect(details.latest).toContain('You have found the papers')
   })
 })

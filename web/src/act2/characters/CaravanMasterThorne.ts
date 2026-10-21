@@ -32,10 +32,11 @@ export class CaravanMasterThorne extends Character {
         const prefix = "You've found them! "
         const middle =
           'I cannot express my gratitude enough for bringing my people back safely. ' +
-          'As promised, here is your reward - but this is more than just payment. ' +
-          'These documents came into my possession years ago, and I believe they ' +
-          "contain evidence that could clear a good man's name. Perhaps you'll " +
-          'know what to do with them.\n\n'
+          'As promised, here is your reward, but this is more than just payment. ' +
+          'My wagon-master says a frightened man in Heavensforth paid him to ' +
+          'carry these to Greendale, and begged him to put them in no hands but ' +
+          "a knight's. I believe they contain evidence that could clear a good " +
+          "man's name. Perhaps you'll know what to do with them.\n\n"
         return (
           characterName(this.name) +
           ': ' +

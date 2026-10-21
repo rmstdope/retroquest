@@ -943,7 +943,7 @@ describe("Squire's diary quest dependency", () => {
     // Now talk to squires - should provide information about diary
     result = executeCommands(game, ['talk to squires'])
     expect(result).toContain("Sir Cedric's disgrace")
-    expect(result).toContain('old diary under the stone benches')
+    expect(result).toContain('diary under the stone benches')
 
     // Now search should find the diary
     result = executeCommands(game, ['search'])
@@ -955,8 +955,8 @@ describe("Squire's diary quest dependency", () => {
 
     // Read diary - should provide detailed information (quest already accepted)
     result = executeCommands(game, ["use squire's diary"])
-    expect(result).toContain('Battle of Thornfield Pass')
-    expect(result).toContain('secret military documents')
+    expect(result).toContain('the king vanished')
+    expect(result).toContain('papers')
     expect(result).toContain('Heavensforth')
     expect(result).toContain('caravan')
   })
@@ -989,7 +989,7 @@ describe('Castle Courtyard search dependency', () => {
 
     // Now talk to squires - should work
     result = executeCommands(game, ['talk to squires'])
-    expect(result).toContain('old diary under the stone benches')
+    expect(result).toContain('diary under the stone benches')
 
     // Now search should succeed
     result = executeCommands(game, ['search'])
@@ -1029,7 +1029,7 @@ describe('Squires before quest acceptance', () => {
     // Now squires should be willing to talk
     result = executeCommands(game, ['talk to squires'])
     expect(result).toContain("Sir Cedric's disgrace")
-    expect(result).toContain('old diary under the stone benches')
+    expect(result).toContain('diary under the stone benches')
 
     // Verify squires talked flag IS now set
     expect(state.getStoryFlag(FLAG_SQUIRES_TALKED_TO)).toBe(true)
@@ -1074,9 +1074,9 @@ describe('Secret documents quest dependency', () => {
     // Examine documents before reading diary - should not understand significance
     let examineResult = secretDocs.examine(state)
     expectMarkupWellFormed(examineResult)
-    expect(examineResult).toContain('legal papers and testimonies')
-    expect(examineResult).toContain("can't make sense of their significance")
-    expect(examineResult).toContain("don't mean anything to you")
+    expect(examineResult).toContain('letter closed with black wax')
+    expect(examineResult).toContain('you cannot make sense of them')
+    expect(examineResult).toContain('without knowing whose night')
     expect(
       examineResult,
       'Should not mention Cedric before reading diary',
@@ -1091,13 +1091,13 @@ describe('Secret documents quest dependency', () => {
     // Now examine documents after reading diary - should understand their significance
     examineResult = secretDocs.examine(state)
     expectMarkupWellFormed(examineResult)
-    expect(examineResult).toContain('Sir Cedric was falsely accused')
-    expect(examineResult).toContain('protecting civilians')
-    expect(examineResult).toContain('clear his name and restore his honor')
+    expect(examineResult).toContain('Sir Cedric had left his post')
+    expect(examineResult).toContain('twisted rune')
+    expect(examineResult).toContain('a name in an old script')
     expect(
       examineResult,
       'Should not show confusion after reading diary',
-    ).not.toContain("can't make sense")
+    ).not.toContain('cannot make sense')
 
     // Flag should now be set since documents were examined after reading diary
     expect(state.getStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS)).toBe(true)
@@ -1130,8 +1130,8 @@ describe("Squire's diary flag", () => {
 
     // Verify the diary content is returned
     expect(result).toContain('troubling story')
-    expect(result).toContain('Battle of Thornfield Pass')
-    expect(result).toContain('secret documents from Heavensforth')
+    expect(result).toContain('the king vanished')
+    expect(result).toContain('papers sent from Heavensforth')
   })
 })
 
@@ -1167,36 +1167,25 @@ describe("Cedric's Lost Honor quest updates", () => {
 
     // Check initial quest description
     const initialDescription = cedricsQuest.description
-    expect(initialDescription).toContain('Investigate the rumors')
-    expect(initialDescription).not.toContain(
-      'secret documents from Heavensforth',
-    )
-    expect(initialDescription).not.toContain(
-      'You have found the secret documents',
-    )
+    expect(initialDescription).toContain('Investigate what happened that night')
+    expect(initialDescription).not.toContain('fled to Heavensforth')
+    expect(initialDescription).not.toContain('You have found the papers')
 
     // Read diary - should trigger first quest update
     executeCommands(game, ["use squire's diary"])
     const firstUpdateDescription = cedricsQuest.description
+    expect(firstUpdateDescription).toContain('fled to Heavensforth')
     expect(firstUpdateDescription).toContain(
-      'secret documents from Heavensforth',
+      'merchant caravan that never arrived',
     )
-    expect(firstUpdateDescription).toContain(
-      'went missing when a merchant caravan was lost',
-    )
-    expect(firstUpdateDescription).not.toContain(
-      'You have found the secret documents',
-    )
+    expect(firstUpdateDescription).not.toContain('You have found the papers')
 
     // Examine documents - should trigger second quest update
     executeCommands(game, ['examine secret documents'])
     const finalDescription = cedricsQuest.description
-    expect(finalDescription).toContain('You have found the secret documents')
-    expect(finalDescription).toContain("clearly proves Sir Cedric's innocence")
-    expect(finalDescription).toContain(
-      'protecting civilians and following direct orders',
-    )
-    expect(finalDescription).toContain('present this evidence')
+    expect(finalDescription).toContain('You have found the papers')
+    expect(finalDescription).toContain('sealed with a twisted rune')
+    expect(finalDescription).toContain('Present them to the Lord Commander')
   })
 })
 
@@ -1242,8 +1231,8 @@ describe('Step 24: Lord Commander interaction', () => {
     ).toBe(false)
 
     // Verify success message
-    expect(result).toContain('Justice has been served at last')
-    expect(result).toContain("officially restore Sir Cedric's honor")
+    expect(result).toContain('By the will of Malakar.')
+    expect(result).toContain('I hereby restore his knighthood')
 
     // Now test Sir Cedric's reaction
     state.currentRoom = state.allRooms.CastleCourtyard

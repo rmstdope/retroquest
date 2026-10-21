@@ -3,6 +3,14 @@ import type { Exits, GameState } from '@/engine'
 import { Herald } from '../characters/Herald'
 import { CastleGuardCaptain } from '../characters/CastleGuardCaptain'
 
+/** The Castle Approach description; `Act2.afterLoad` restores it in older saves. */
+export const CASTLE_APPROACH_DESCRIPTION =
+  "A wide avenue lined with statues of Greendale's heroes leads to an impressive " +
+  'castle of white stone. Tall spires reach toward the sky, and colorful banners ' +
+  'snap in the wind. ' +
+  'Fewer guards than the posts were built for patrol the approach, and those who ' +
+  'remain keep their voices low. The royal standard is gone from the highest spire.'
+
 /**
  * Castle Approach room: ceremonial avenue gating access to the castle courtyard.
  *
@@ -15,12 +23,7 @@ export class CastleApproach extends Room {
   constructor() {
     super({
       name: 'Castle Approach',
-      description:
-        "A wide avenue lined with statues of Greendale's heroes leads to an impressive " +
-        'castle of white stone. Tall spires reach toward the sky, and colorful banners ' +
-        'snap in the wind. ' +
-        'Guards in ceremonial armor patrol the approach, their presence both welcoming ' +
-        'and imposing. This is clearly where power resides in Greendale.',
+      description: CASTLE_APPROACH_DESCRIPTION,
       items: [],
       characters: [new Herald(), new CastleGuardCaptain()],
       exits: { south: 'MainSquare', west: 'CastleCourtyard' },

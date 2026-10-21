@@ -64,7 +64,9 @@ export class CourtHerald extends Character {
         speech(
           'You have been formally presented to the court and your ' +
             'credentials are on record. You may access the historical archives ' +
-            'and speak with court historians about your research.',
+            'and speak with court historians about your research. Petitions that ' +
+            "were the king's go to the Lord Commander now, by his order, until His " +
+            'Majesty is found.',
         )
       )
     } else {
@@ -75,7 +77,8 @@ export class CourtHerald extends Character {
           'I handle formal presentations and credentials for court access. ' +
             'If you wish to research in the historical archives or speak with ' +
             "court officials, you'll need proper documentation of your " +
-            'standing.',
+            "standing. Petitions that were the king's go to the Lord Commander " +
+            'now, by his order, until His Majesty is found.',
         )
       )
     }

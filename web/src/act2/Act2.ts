@@ -1,4 +1,4 @@
-import { Act, type GameState, speech } from '@/engine'
+import { Act, type GameState, type Item, speech } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { MountainPath } from './rooms/MountainPath'
 import { GreendaleGates } from './rooms/GreendaleGates'
@@ -29,7 +29,15 @@ import { TheAncientLibraryQuest } from './quests/TheAncientLibrary'
 import { TheForestGuardiansRiddles } from './quests/TheForestGuardiansRiddles'
 import { TheHermitsWarningQuest } from './quests/TheHermitsWarning'
 import { WhispersInTheWind } from './quests/WhispersInTheWind'
+import { CASTLE_APPROACH_DESCRIPTION } from './rooms/CastleApproach'
+import { CASTLE_COURTYARD_DESCRIPTION } from './rooms/CastleCourtyard'
+import { GREAT_HALL_DESCRIPTION } from './rooms/GreatHall'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
+import {
+  SECRET_DOCUMENTS_DESCRIPTION,
+  SecretDocuments,
+} from './items/SecretDocuments'
+import { SQUIRES_DIARY_DESCRIPTION, SquiresDiary } from './items/SquiresDiary'
 import { FLAG_GATHERING_STORM_COMPLETED } from './Act2StoryFlags'
 import { ACT2_CLASSES } from './classes'
 import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
@@ -125,6 +133,34 @@ export class Act2 extends Act {
   /** Give Elior the amulet Mira gave him; runs only for a fresh Act II, never on load. */
   override setupGameState(gameState: GameState): void {
     gameState.addItemToInventory(new AncientAmulet())
+  }
+
+  /**
+   * Bring older saves up to date: the secret documents, the squire's diary,
+   * the castle rooms and Cedric's quest log keep the text they were saved with, so give them the
+   * current wording. Safe to run on every load.
+   */
+  override afterLoad(gameState: GameState): void {
+    gameState.allRooms.CastleApproach.description = CASTLE_APPROACH_DESCRIPTION
+    gameState.allRooms.CastleCourtyard.description =
+      CASTLE_COURTYARD_DESCRIPTION
+    gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
+    const items: Item[] = [...gameState.inventory]
+    for (const room of Object.values(gameState.allRooms))
+      items.push(...room.items)
+    for (const item of items) {
+      if (item instanceof SecretDocuments)
+        item.description = SECRET_DOCUMENTS_DESCRIPTION
+      if (item instanceof SquiresDiary)
+        item.description = SQUIRES_DIARY_DESCRIPTION
+    }
+    for (const quest of [
+      ...gameState.nonActivatedQuests,
+      ...gameState.activatedQuests,
+      ...gameState.completedQuests,
+    ]) {
+      if (quest instanceof CedricksLostHonorQuest) quest.refreshText(gameState)
+    }
   }
 
   override isCompleted(gameState: GameState): boolean {

@@ -25,6 +25,13 @@ export class CastleGuardCaptain extends Character {
           "him as 'Sir' and show proper respect. He's been seeking capable " +
           "individuals for important work, so if you're here about that, be " +
           'prepared to demonstrate your abilities.',
+      ) +
+      '\n\nHe lowers his voice.\n\n' +
+      speech(
+        'And a word of advice: ask no questions about the king. His Majesty has not ' +
+          'been seen these three weeks, since the night he vanished from his own ' +
+          'chambers. The word sent out to the villages is that he is ill. The Lord ' +
+          'Commander rules in his name until he returns.',
       )
     )
   }

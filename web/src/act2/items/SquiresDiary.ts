@@ -1,17 +1,20 @@
 import { Item, type GameState, event, writing } from '@/engine'
 import { FLAG_READ_SQUIRES_DIARY } from '../Act2StoryFlags'
 
+/** The diary's description; `Act2.afterLoad` restores it in older saves. */
+export const SQUIRES_DIARY_DESCRIPTION =
+  'A worn leather-bound diary belonging to a former squire. The pages are ' +
+  'filled with observations about castle life and training exercises. There are ' +
+  "also notes about Sir Cedric's supposed disgrace and the night the king " +
+  'vanished.'
+
 /** A personal diary containing clues about Sir Cedric's past and missing documents. */
 export class SquiresDiary extends Item {
   constructor() {
     super({
       name: "squire's diary",
       shortName: 'diary',
-      description:
-        'A worn leather-bound diary belonging to a former squire. The pages are ' +
-        'filled with observations about castle life and training exercises. There are ' +
-        "also notes about Sir Cedric's supposed disgrace and details about events from " +
-        'years ago.',
+      description: SQUIRES_DIARY_DESCRIPTION,
       canBeCarried: true,
     })
   }
@@ -33,36 +36,34 @@ export class SquiresDiary extends Item {
         "You carefully read through the squire's diary. The entries reveal " +
           'a troubling story...',
       ) +
-      '\n\nEntry from three years ago:\n' +
+      '\n\n' +
+      '[italic]The morning after the king vanished:[/italic]' +
+      '\n' +
       writing(
-        "'Sir Cedric has been accused of " +
-          'abandoning his post during the Battle of Thornfield Pass. ' +
-          'Official reports claim he fled when the enemy charged, leaving ' +
-          'his men behind. But this makes no sense - Sir Cedric is the most ' +
-          "honorable knight I've ever known.'",
+        "'They have taken Sir Cedric's sword. Two men of the night watch swear " +
+          "he left the king's wall at the third bell. I was on the yard steps " +
+          "until midnight, and he never moved.'",
       ) +
-      '\n\nLater entry:\n' +
+      '\n\n' +
+      '[italic]Some days later:[/italic]' +
+      '\n' +
       writing(
-        "'I've been asking questions, and something doesn't add up. A merchant " +
-          'caravan was due from Heavensforth, carrying secret military ' +
-          "documents that could prove Sir Cedric's innocence. Those " +
-          'documents contained witness testimonies and reports that showed ' +
-          "the real truth about Thornfield Pass.'",
+        "'One of those two watchmen is gone. He packed in the night and took " +
+          'the road to Heavensforth, they say. A man with a clear conscience ' +
+          "does not run.'",
       ) +
-      '\n\nFinal entry:\n' +
+      '\n\n' +
+      '[italic]Last entry:[/italic]' +
+      '\n' +
       writing(
-        "'The caravan arrived, but the secret documents were nowhere to be " +
-          'found. The merchants claimed they never received such documents. ' +
-          'There were rumors of attacks and lost goods along the mountain ' +
-          "roads. Without those documents, Sir Cedric's name could not be " +
-          'cleared. I pray someone will find the truth and restore his ' +
-          "honor.'",
+        "'A carter swears the watchman sent something back from Heavensforth, " +
+          'papers, with a merchant caravan bound for Greendale. The caravan ' +
+          'never came; they say it was lost on the forest road. If those ' +
+          "papers are still out there, they could clear Sir Cedric's name.'",
       ) +
-      '\n\n[success]The diary confirms what the Training Master ' +
-      'suspected - secret documents from Heavensforth would clear Sir ' +
-      "Cedric's name. They mysteriously went missing when the caravan " +
-      "arrived. The lost caravan's documents might still be out " +
-      'there...[/success]\n\n' +
+      '\n\n[success]The diary points to papers sent from Heavensforth by a ' +
+      "watchman who fled, on a caravan that never arrived. The lost caravan's " +
+      'papers might still be out there…[/success]\n\n' +
       event(
         'After reading the diary, you place it back where you found it. ' +
           'This keeps the information safe while you no longer carry the ' +

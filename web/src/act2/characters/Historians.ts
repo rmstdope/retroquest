@@ -47,6 +47,11 @@ export class Historians extends Character {
             'regional history, family genealogies, and ancient chronicles. Do ' +
             "you have any historical documents or artifacts you'd like us to " +
             'examine?',
+        ) +
+        '\n\nOne of them adds, more quietly:\n\n' +
+        speech(
+          'We have searched every record for a king who simply vanished from his ' +
+            "own bed. There is none, not in all of Greendale's history.",
         )
       )
     }
