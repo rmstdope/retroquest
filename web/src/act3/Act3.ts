@@ -117,11 +117,11 @@ export class Act3 extends Act {
     )
   }
 
-  /** The hook that opens Act III's complete page: the parents are warded away, not dead. */
+  /** The hook that opens Act III's complete page: the Dragon says the parents are warded away, not dead. */
   override getCompletionHook(): string {
     return (
       "Your parents were Malakar's closest friends. " +
-      'They are warded away, not dead.'
+      'The Dragon says they are warded away, not dead.'
     )
   }
 

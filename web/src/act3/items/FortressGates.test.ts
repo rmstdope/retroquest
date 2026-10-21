@@ -9,7 +9,7 @@ const AMULET_MOMENT =
   'You know better now. [character_name]Aren[/character_name] and ' +
   '[character_name]Lysa[/character_name] were his closest friends, and the ' +
   'ward they became is still holding.\n\n' +
-  'They are not dead. They are warded away.'
+  'The Dragon said they were warded away, not dead. You do not yet know what that means.'
 
 describe('FortressGates', () => {
   it('names the amulet moment and the Elixir on the first examination', () => {
