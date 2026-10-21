@@ -79,115 +79,190 @@ describe('AncientDragon', () => {
     expect(result.toLowerCase()).toContain('scale awaits')
   })
 
-  it('adds the scale to the room when the oath is spoken', () => {
-    const dragon = new AncientDragon()
+  /** A Dragon's Hall game with the memory heard and the scrolls optionally read. */
+  function hallState(scrollsRead: boolean): {
+    gameState: GameState
+    room: DragonsHall
+  } {
     const gameState = makeGameState()
     const room = new DragonsHall()
     gameState.currentRoom = room
+    gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    gameState.setStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD, true)
+    gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, scrollsRead)
+    return { gameState, room }
+  }
 
-    // First need to talk to get memory
-    dragon.talkTo(gameState)
-    // Need to examine oath scrolls first
+  const BEFORE_MEMORY =
+    'Words come after memory, young one. Sit, and hear me first.'
+  const BEFORE_SCROLLS =
+    'An oath is not something you make up, child. The old words are kept ' +
+    'in the Echo Chambers. Read them, then come back.'
+  const QUESTION =
+    'You have read the old words. Then tell me: what will you give back, ' +
+    'for what you take?'
+
+  it('refuses any say before the memory, in the dragon voice', () => {
+    const dragon = new AncientDragon()
+    const gameState = makeGameState()
     gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
-    // Initially no dragon's scale in room
-    expect(hasScale(room)).toBe(false)
 
-    const result = dragon.sayTo(gameState, 'oath')
+    const result = dragon.sayTo(gameState, 'everything')
 
-    expect(result.toLowerCase()).toContain('oath')
-    expect(result.toLowerCase()).toContain('scale is yours to bear')
+    expect(result).toContain(BEFORE_MEMORY)
+    expect(result).toContain('The ')
+    expect(result).toContain('rumbles:')
+    expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(false)
+  })
+
+  it.each(['everything', 'hello', 'oath'])(
+    'refuses %s before the scrolls are read and names the Echo Chambers',
+    (words) => {
+      const { gameState, room } = hallState(false)
+
+      const result = new AncientDragon().sayTo(gameState, words)
+
+      expect(result).toContain('golden eyes narrow.')
+      expect(result).toContain(BEFORE_SCROLLS)
+      expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(false)
+      expect(hasScale(room)).toBe(false)
+    },
+  )
+
+  it.each([
+    ['everything', 'everything'],
+    ['it', 'it'],
+    ['myself', 'myself'],
+    ['what I take', 'what I take'],
+    ['  Everything!  ', 'everything'],
+    ['EVERYTHING.', 'everything'],
+    ['i return everything', 'everything'],
+    ['I return it.', 'it'],
+    ['I return what i take', 'what I take'],
+    ['i take what is given and i return myself', 'myself'],
+    ['I take what is given, and I return everything.', 'everything'],
+    ['i  take what is  given,  and i return it!', 'it'],
+  ])('accepts %j and echoes the oath with %s', (words, word) => {
+    const { gameState, room } = hallState(true)
+
+    const result = new AncientDragon().sayTo(gameState, words)
+
+    expect(result).toContain(
+      `You speak the old words to the [character_name]ancient dragon[/character_name]: ` +
+        `“I take what is given, and I return ${word}.”`,
+    )
+    expect(result).toContain('Your words ring true, young one.')
+    expect(result).toContain('[success]')
     expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(true)
     expect(hasScale(room)).toBe(true)
+    expectMarkupWellFormed(result)
   })
 
-  it('answers that the oath was already given when spoken twice', () => {
-    const dragon = new AncientDragon()
-    const gameState = makeGameState()
-    gameState.currentRoom = new DragonsHall()
-    gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
-    gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
-    gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
+  it.each([
+    'i will give it back',
+    'take it',
+    'i return nothing at all',
+    'everything and more',
+    'hello',
+    'oath',
+  ])('asks the question again for %j', (words) => {
+    const { gameState, room } = hallState(true)
 
-    const result = dragon.sayTo(gameState, 'oath')
+    const result = new AncientDragon().sayTo(gameState, words)
 
-    expect(result.toLowerCase()).toContain('oath has been given and accepted')
-    expect(result.toLowerCase()).toContain('scale is yours to claim')
-  })
-
-  it('ignores wrong words', () => {
-    const dragon = new AncientDragon()
-    const gameState = makeGameState()
-    gameState.currentRoom = new DragonsHall()
-    gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
-
-    const result = dragon.sayTo(gameState, 'hello')
-
-    expect(result.toLowerCase()).toContain('does not respond to those words')
-    expect(result.toLowerCase()).toContain('meaningful pledge')
-  })
-
-  it('refuses the oath before the scrolls are examined', () => {
-    const dragon = new AncientDragon()
-    const gameState = makeGameState()
-    const room = new DragonsHall()
-    gameState.currentRoom = room
-    gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
-    expect(gameState.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)).toBe(false)
-
-    const result = dragon.sayTo(gameState, 'oath')
-
-    expect(result.toLowerCase()).toContain(
-      'must first understand the weight of the oath',
-    )
-    expect(result.toLowerCase()).toContain('proves your selflessness')
+    expect(result).toContain('That is no answer, young one.')
+    expect(result).toContain('What will you give back, for what you take?')
     expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(false)
     expect(hasScale(room)).toBe(false)
   })
 
-  it('accepts the oath after the scrolls are examined', () => {
-    const dragon = new AncientDragon()
-    const gameState = makeGameState()
-    const room = new DragonsHall()
-    gameState.currentRoom = room
-    gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
-    gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
+  it.each([
+    'gold',
+    'silver',
+    'coin',
+    'coins',
+    'money',
+    'nothing',
+    'thanks',
+    'Thank you',
+    'thank you.',
+  ])('answers a taking answer %j with "Then you would be taking."', (words) => {
+    const { gameState, room } = hallState(true)
 
-    const result = dragon.sayTo(gameState, 'oath')
+    const result = new AncientDragon().sayTo(gameState, words)
 
-    expect(result.toLowerCase()).toContain('speak your oath')
-    expect(result.toLowerCase()).toContain('scale is yours to bear')
-    expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(true)
-    expect(hasScale(room)).toBe(true)
+    expect(result).toContain('Then you would be taking.')
+    expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(false)
+    expect(hasScale(room)).toBe(false)
   })
 
-  it.each(['oath', 'OATH', 'Oath', 'OaTh'])(
-    'accepts the oath word %s case-insensitively',
-    (oathWord) => {
-      const dragon = new AncientDragon()
-      const gameState = makeGameState()
-      const room = new DragonsHall()
-      gameState.currentRoom = room
-      gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
-      gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
-      gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, false)
-      room.items.length = 0
+  it('gives the same waiting line to any say once the oath is given', () => {
+    const { gameState } = hallState(true)
+    gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
 
-      const result = dragon.sayTo(gameState, oathWord)
+    for (const words of ['everything', 'hello']) {
+      const result = new AncientDragon().sayTo(gameState, words)
+      expect(result).toContain(
+        'The oath has been given and accepted. The scale is yours to claim.',
+      )
+    }
+  })
 
-      expect(result.toLowerCase()).toContain('speak your oath')
-      expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(true)
-    },
-  )
+  it('does not need the scrolls in hand, only the scrolls-read flag', () => {
+    const { gameState } = hallState(true)
+    expect(gameState.inventory.some((i) => i.name === 'Old Oath Scrolls')).toBe(
+      false,
+    )
+
+    const result = new AncientDragon().sayTo(gameState, 'everything')
+
+    expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(true)
+    expect(result).toContain('Your words ring true')
+  })
+
+  it('closes every talk with the question once the scrolls are read', () => {
+    const { gameState } = hallState(true)
+    const dragon = new AncientDragon()
+
+    for (let i = 0; i < 2; i++) {
+      const result = dragon.talkTo(gameState)
+      expect(result).toContain(QUESTION)
+      expect(result).not.toContain('scale awaits')
+    }
+  })
+
+  it('keeps the old closing line before the scrolls are read', () => {
+    const { gameState } = hallState(false)
+
+    const result = new AncientDragon().talkTo(gameState)
+
+    expect(result).toContain('The scale awaits when you are ready')
+    expect(result).not.toContain(QUESTION)
+  })
+
+  it('closes talk with the accepted line between oath and scale', () => {
+    const { gameState } = hallState(true)
+    gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
+
+    const result = new AncientDragon().talkTo(gameState)
+
+    expect(result).toContain(
+      'The oath has been given and accepted. The scale is yours to claim.',
+    )
+    expect(result).not.toContain(QUESTION)
+  })
 
   it('attributes the dialogue in every branch', () => {
     const dragon = new AncientDragon()
-    const gameState = makeGameState()
-    gameState.currentRoom = new DragonsHall()
-    const answers = [dragon.talkTo(gameState), dragon.talkTo(gameState)]
-    answers.push(dragon.sayTo(gameState, 'oath'))
+    const { gameState } = hallState(false)
+    const answers = [dragon.talkTo(gameState), dragon.sayTo(gameState, 'x')]
     gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
-    answers.push(dragon.sayTo(gameState, 'oath'))
-    answers.push(dragon.sayTo(gameState, 'oath'))
+    answers.push(dragon.talkTo(gameState))
+    answers.push(dragon.sayTo(gameState, 'hello'))
+    answers.push(dragon.sayTo(gameState, 'gold'))
+    answers.push(dragon.sayTo(gameState, 'everything'))
+    answers.push(dragon.sayTo(gameState, 'everything'))
+    answers.push(dragon.talkTo(gameState))
 
     for (const answer of answers) {
       expectMarkupWellFormed(answer)
@@ -196,8 +271,7 @@ describe('AncientDragon', () => {
   })
 
   it('narrates ignored words without speakerless dialogue', () => {
-    const gameState = makeGameState()
-    gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    const { gameState } = hallState(true)
 
     const answer = new AncientDragon().sayTo(gameState, 'hello')
 
