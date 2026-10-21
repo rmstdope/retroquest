@@ -87,13 +87,13 @@ describe('Silence Keeper and the pools', () => {
 
 describe('Silence Keeper on the phantoms', () => {
   const PRESENT =
-    "'The figures by the pools? They are not ghosts, not as the villages tell it. They are moments. " +
+    'The figures by the pools? They are not ghosts, not as the villages tell it. They are moments. ' +
     'Someone cut at time, years ago, and what came loose drifts down here, saying the same thing over. ' +
-    "Tell them to rest; most of them only want leave to stop.'"
+    'Tell them to rest; most of them only want leave to stop.'
   const PAST =
-    "'The figures by the pools are gone, then. They were not ghosts, not as the villages tell it. They were moments. " +
+    'The figures by the pools are gone, then. They were not ghosts, not as the villages tell it. They were moments. ' +
     'Someone cut at time, years ago, and what came loose drifted down here, saying the same thing over. ' +
-    "You gave them leave to stop.'"
+    'You gave them leave to stop.'
   const REMINDER = 'Forty years I have listened to those stones.'
 
   function setup(): { game: Game; keeper: SilenceKeeper } {

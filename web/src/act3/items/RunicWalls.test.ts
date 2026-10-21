@@ -20,7 +20,7 @@ describe('RunicWalls markup', () => {
 describe('RunicWalls echo', () => {
   const CHANT =
     "The runes describe a chant to quiet the phantoms: 'Let stillness echo, let silence bind.'"
-  const ECHO = "'It is a wound. You know it is. Stay. Wait with us.'"
+  const ECHO = 'It is a wound. You know it is. Stay. Wait with us.'
 
   it('reveals the chant first and plays the echo on the second examine only', () => {
     const game = new Game([new Act3()])

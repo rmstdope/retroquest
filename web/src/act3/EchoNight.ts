@@ -21,28 +21,28 @@ const ECHO_NIGHT =
   '\n\n' +
   dialogue(
     "A man's voice, steady",
-    "'Mal. Put the lamp down and listen to me.'",
+    'Mal. Put the lamp down and listen to me.',
   ) +
   '\n\n' +
   dialogue(
     'A second man, quick and low',
-    "'I have listened for a year, Aren. " +
-      "The Wasting is in Willowbrook. It is in her.'",
+    'I have listened for a year, Aren. ' +
+      'The Wasting is in Willowbrook. It is in her.',
   ) +
   '\n\n' +
   dialogue(
     "A woman's voice, hoarse",
-    "'Then let it stay in me. Not this. Time is not a door, Mal.'",
+    'Then let it stay in me. Not this. Time is not a door, Mal.',
   ) +
   '\n\n' +
-  dialogue('The second man', "'It is only a door if I close it again.'") +
+  dialogue('The second man', 'It is only a door if I close it again.') +
   '\n\n' +
   dialogue(
     'The steady voice',
-    "'It is a wound. You know it is. Stay. Wait with us.'",
+    'It is a wound. You know it is. Stay. Wait with us.',
   ) +
   '\n\n' +
-  dialogue('The second man', "'You would have me wait while you die.'") +
+  dialogue('The second man', 'You would have me wait while you die.') +
   '\n\n' +
   event(
     'Somewhere in the stone, a door closes. The whispers go back to ' +

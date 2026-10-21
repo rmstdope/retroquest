@@ -131,14 +131,14 @@ describe('Echo Chambers echo', () => {
     const first = game.listen()
     expect(first).toContain(OPENING)
     expect(first).toContain("A man's voice, steady")
-    expect(first).toContain("'Mal. Put the lamp down and listen to me.'")
-    expect(first).toContain("'You would have me wait while you die.'")
+    expect(first).toContain('Mal. Put the lamp down and listen to me.')
+    expect(first).toContain('You would have me wait while you die.')
     for (const line of [
       'A second man, quick and low',
-      "'I have listened for a year, Aren. The Wasting is in Willowbrook. It is in her.'",
+      'I have listened for a year, Aren. The Wasting is in Willowbrook. It is in her.',
       "A woman's voice, hoarse",
-      "'Then let it stay in me. Not this. Time is not a door, Mal.'",
-      "'It is only a door if I close it again.'",
+      'Then let it stay in me. Not this. Time is not a door, Mal.',
+      'It is only a door if I close it again.',
     ]) {
       expect(first).toContain(line)
     }

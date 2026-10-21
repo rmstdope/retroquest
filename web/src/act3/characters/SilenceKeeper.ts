@@ -19,15 +19,15 @@ const TROUBLED_WATER =
 const TRUE_WATER = 'The water lies true now; it will hold your words. '
 
 const PHANTOMS_PRESENT =
-  "'The figures by the pools? They are not ghosts, not as the villages " +
+  'The figures by the pools? They are not ghosts, not as the villages ' +
   'tell it. They are moments. Someone cut at time, years ago, and what ' +
   'came loose drifts down here, saying the same thing over. Tell them to ' +
-  "rest; most of them only want leave to stop.'"
+  'rest; most of them only want leave to stop.'
 const PHANTOMS_GONE =
-  "'The figures by the pools are gone, then. They were not ghosts, not as " +
+  'The figures by the pools are gone, then. They were not ghosts, not as ' +
   'the villages tell it. They were moments. Someone cut at time, years ' +
   'ago, and what came loose drifted down here, saying the same thing over. ' +
-  "You gave them leave to stop.'"
+  'You gave them leave to stop.'
 
 /** Keeper of the hush before the dragon's hall: a former singer who gave up their voice. */
 export class SilenceKeeper extends Character {
