@@ -63,7 +63,8 @@ export class Grow extends Spell {
     return super.castOnCharacter(gameState, target)
   }
 
-  /** The last cast of the game: the field turns green and the act ends. */
+  /** The last cast of the game: the field turns green, Nyx says the refrain
+   * once, and the act ends on Grandmother's welcome. */
   private greenTheField(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_FIELD_GREEN, true)
     return [
@@ -71,6 +72,9 @@ export class Grow extends Spell {
       'You press your hands into the dry earth and say the smallest spell ' +
         'you know. Green runs out from your fingers along the rows. Leaves ' +
         'unfurl, the earth darkens, and the whole field breathes out at once.',
+      'In the hedge the little light brightens. For the last time you hear ' +
+        'Nyx, very small:',
+      dialogue('Nyx', 'Power follows purpose; purpose follows truth.'),
       'Grandmother opens the gate.',
       dialogue('Grandmother', 'Welcome home, Elior.'),
     ].join('\n')

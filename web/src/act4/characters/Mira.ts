@@ -19,8 +19,21 @@ const LINES: Record<Ending, [string, string]> = {
   ],
 }
 
-/** Mira in Willowbrook Field: her one line follows the ending. */
+/** What Elior tells Mira about Elena, and her answer, the same in every ending. */
+const ELENA_TOLD =
+  'You tell her, too, what the Sorceress asked you to carry: that she is ' +
+  'sorry, and that Elena should hear it.'
+const ELENA_ANSWER =
+  'Elena. I am going back through Greendale. I will tell her.'
+
+/**
+ * Mira in Willowbrook Field: her line follows the ending, and the first talk
+ * adds Elena's message from the Sorceress.
+ */
 export class Mira extends Character {
+  /** Whether Elior has already passed on Elena's message. */
+  delivered = false
+
   constructor() {
     super({
       name: 'Mira',
@@ -28,9 +41,14 @@ export class Mira extends Character {
     })
   }
 
-  /** The same line every time, by ending. */
+  /** Her ending line; the first time, Elena's message follows it. */
   override talkTo(gameState: GameState): string {
     const [told, answer] = LINES[endingPlayed(gameState) ?? 'redemption']
-    return `${told}\n${dialogue('Mira', answer)}`
+    const lines = [told, dialogue('Mira', answer)]
+    if (!this.delivered) {
+      this.delivered = true
+      lines.push(ELENA_TOLD, dialogue('Mira', ELENA_ANSWER))
+    }
+    return lines.join('\n')
   }
 }
