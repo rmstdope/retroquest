@@ -564,6 +564,13 @@ describe('Act 3 golden path', () => {
     )
     expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
 
+    // The rite used the herbs: gone from the hut, never in the bag.
+    expectItemInRoom(room(), 'healing herbs', false)
+    expectItemInInventory(state, 'healing herbs', false)
+    expect(executeCommands(game, ['take herbs'])).toContain(
+      "There is no 'herbs' here to take.",
+    )
+
     // Lifelight Elixir should now be available in the room
     expectItemInRoom(room(), 'lifelight elixir', true)
 
@@ -606,6 +613,11 @@ describe('Act 3 golden path', () => {
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
     for (let turn = 0; turn < 3; turn++) fresh.newTurn()
     expect(fresh.getActCompleteText()).toBe(game.getActCompleteText())
+    expect(
+      fresh.state.allRooms.MirasHut.items.some(
+        (item) => item.name === 'healing herbs',
+      ),
+    ).toBe(false)
     expect(executeCommands(game, ['look at mira'])).toContain(
       "the Wardens' pupil",
     )
