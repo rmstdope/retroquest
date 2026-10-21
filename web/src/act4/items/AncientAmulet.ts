@@ -25,15 +25,13 @@ export class AncientAmulet extends Item {
     return event(this.description)
   }
 
-  /** Used with the Memory Vault's sealed door, it opens it (once the Shadow is answered). */
+  /**
+   * Used with the Memory Vault's sealed door, it opens it (once the Shadow
+   * is answered); used on the wound, it closes it in Justice or Sacrifice.
+   */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof VaultDoor) return other.openWith(gameState)
-    if (other instanceof Wound) {
-      return (
-        '[failure]Not yet. The wound is not yours to close while Malakar ' +
-        'still waits for you.[/failure]'
-      )
-    }
+    if (other instanceof Wound) return other.closeWithAmulet(gameState)
     return super.useWith(gameState, other)
   }
 

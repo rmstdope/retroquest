@@ -1,5 +1,13 @@
 import { Character, type GameState, dialogue, event } from '@/engine'
 import { FLAG_ACT4_ELIXIR_ON_KING } from '../Act4StoryFlags'
+import { endingPlayed, type Ending } from '../endings'
+
+/** What he says once the wound is closed, by ending. */
+const ENDING_LINES: Record<Ending, string> = {
+  redemption: 'You saved my kingdom, and somehow him as well. Go home.',
+  justice: 'Go home, Elior. The kingdom will remember what you did here.',
+  sacrifice: 'Go home, farmer. You have earned your field.',
+}
 
 /**
  * King Alden in the Throne Chamber: asleep in his crystal prison until the
@@ -33,8 +41,10 @@ export class KingAlden extends Character {
     return event(this.description)
   }
 
-  /** Asleep in the crystal until it is broken; then his one line. */
+  /** Asleep in the crystal until it is broken; then his line, by ending. */
   override talkTo(gameState: GameState): string {
+    const ending = endingPlayed(gameState)
+    if (ending) return dialogue('King Alden', ENDING_LINES[ending])
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
       return dialogue(
         'King Alden',

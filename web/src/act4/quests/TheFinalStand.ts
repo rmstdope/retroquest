@@ -1,10 +1,13 @@
 import { Quest, type GameState } from '@/engine'
-import { FLAG_ACT4_MAIN_STARTED } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_FINAL_STAND_COMPLETED,
+  FLAG_ACT4_MAIN_STARTED,
+} from '../Act4StoryFlags'
 
 /**
  * The main quest of Act IV: break into Malakar's fortress and face him. It
- * starts when the act opens; the pieces that complete it arrive with the later
- * parts of the act.
+ * starts when the act opens and completes when the Throne Chamber's wound is
+ * closed in Redemption, Justice or Sacrifice.
  */
 export class TheFinalStand extends Quest {
   constructor() {
@@ -19,6 +22,11 @@ export class TheFinalStand extends Quest {
   /** Start with the act. */
   override checkTrigger(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_ACT4_MAIN_STARTED)
+  }
+
+  /** Complete when the wound is closed in one of the three endings. */
+  override checkCompletion(gameState: GameState): boolean {
+    return gameState.getStoryFlag(FLAG_ACT4_FINAL_STAND_COMPLETED)
   }
 
   /** This is the main quest of Act IV. */

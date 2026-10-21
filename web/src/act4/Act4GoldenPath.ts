@@ -54,4 +54,7 @@ export const ACT4_GOLDEN_PATH: string[] = [
   'talk to malakar',
   'say refrain to malakar',
   'use ancient amulet',
+  'use lifelight elixir on malakar',
+  'say forgiveness to malakar',
+  'cast forgiveness on wound',
 ]

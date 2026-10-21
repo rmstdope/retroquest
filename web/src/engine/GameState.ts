@@ -57,9 +57,17 @@ export class GameState {
     this.storyFlags[flagName] = value
   }
 
-  /** Records a virtue moment; recording the same virtue twice changes nothing. */
+  /**
+   * Records one virtue moment. Every call counts, so each moment must be
+   * recorded once by its own guard (a flag or a state change).
+   */
   addVirtue(virtue: string): void {
-    if (!this.virtues.includes(virtue)) this.virtues.push(virtue)
+    this.virtues.push(virtue)
+  }
+
+  /** How many moments of the virtue have been recorded, in this or an earlier act. */
+  virtueCount(virtue: string): number {
+    return this.virtues.filter((v) => v === virtue).length
   }
 
   /** True when the virtue has been recorded in this or an earlier act. */

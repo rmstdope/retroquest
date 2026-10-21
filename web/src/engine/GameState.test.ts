@@ -333,17 +333,21 @@ describe('GameState', () => {
   })
 
   describe('virtues', () => {
-    it('remembers an added virtue once and reports unknown ones as absent', () => {
+    it('counts every recorded moment of a virtue and reports unknown ones as absent', () => {
       const state = new GameState(
         new Room({ name: 'A', description: '' }),
         {},
         [],
       )
       expect(state.hasVirtue('mercy')).toBe(false)
+      expect(state.virtueCount('mercy')).toBe(0)
       state.addVirtue('mercy')
       state.addVirtue('mercy')
+      state.addVirtue('truth')
       expect(state.hasVirtue('mercy')).toBe(true)
-      expect(state.virtues).toEqual(['mercy'])
+      expect(state.virtueCount('mercy')).toBe(2)
+      expect(state.virtueCount('truth')).toBe(1)
+      expect(state.virtues).toEqual(['mercy', 'mercy', 'truth'])
     })
   })
 })

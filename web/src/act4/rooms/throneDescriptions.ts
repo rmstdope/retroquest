@@ -30,3 +30,21 @@ export const THRONE_CHAMBER_SHATTERED =
   'The crystal lies in shards around the ritual circle. King Alden sits ' +
   'among them, weak but alive. The wound still stands open, and Malakar ' +
   'stands beside it, greyer than before.'
+
+/** The whole description after the Redemption ending. */
+export const THRONE_CHAMBER_REDEMPTION =
+  'The dome is quiet. Where the wound was there is only air. King Alden ' +
+  'sits among the shards of his prison, alive, and Malakar sits beside ' +
+  'him, himself again.'
+
+/** The whole description after the Justice ending. */
+export const THRONE_CHAMBER_JUSTICE =
+  'The dome is quiet. Where the wound was, a seal of gold and pale light ' +
+  'hangs in the air, and Malakar is somewhere inside it. King Alden stands ' +
+  'at the throne, alive, his crown bright again.'
+
+/** The whole description after the Sacrifice ending. */
+export const THRONE_CHAMBER_SACRIFICE =
+  'The dome is quiet. Where the wound was there is only air. King Alden ' +
+  'stands at the throne, alive, and Malakar kneels before him, grey and ' +
+  'powerless, waiting to be judged.'
