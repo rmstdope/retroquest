@@ -5,7 +5,7 @@ import { ServantsPendant } from './ServantsPendant'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('ServantsPendant', () => {
-  it('uses known tags when used elsewhere and again in the labyrinth', () => {
+  it('glows elsewhere and has nothing to choose before the fork', () => {
     const act = new Act4()
     act.musicFile = ''
     const game = new Game([act])
@@ -17,7 +17,7 @@ describe('ServantsPendant', () => {
     const again = item.use(game.state)
 
     expect(elsewhere).toContain('has nothing to say here')
-    expect(again).toContain('have said what they know')
+    expect(again).toContain('nothing yet to choose')
     for (const answer of [elsewhere, again]) {
       expectMarkupWellFormed(answer)
     }

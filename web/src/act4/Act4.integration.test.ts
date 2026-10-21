@@ -535,25 +535,26 @@ describe('Act 4 integration', () => {
   describe('the maze and the hall', () => {
     const GLASS =
       'You step toward a corridor of light and walk straight into cold glass. ' +
-      'Somewhere behind you, a reflection laughs.'
+      'Somewhere behind you, a reflection laughs. You are back at the entrance.'
     const KNIGHT_BLOCK =
       'The Knight of Despair stands before the stair to the tower. He does ' +
       'not lift his sword. He simply does not move, and there is no way past him.'
-    const NO_LIGHT =
-      'The echoes whisper the way, but every step they name opens onto three ' +
-      'more, all of them shining. You cannot tell which light is true. You ' +
-      'wish the servants were here; they would know.'
+    const NO_STONE =
+      "You try to recall the echoes' words, but in here the glass answers " +
+      'only with your own voice. You lose the way, and find yourself back at ' +
+      'the entrance.'
     const STONE_OUTSIDE =
       "You hold the Echo Stone to your ear. The hall's voices murmur inside " +
       'it, waiting for somewhere that needs them.'
     const SOLVED =
-      "You hold the Echo Stone and the Servant's Pendant together. The echoes " +
-      'whisper where to walk, and the pendant glows brighter at every true ' +
-      'step. You walk only where your reflection does not follow. One by one ' +
-      'the false mirrors darken, until a single corridor remains — and at its ' +
-      'end, a plain mirror that shows you exactly as you are.'
+      'You step into the empty corridor. Behind you the false mirrors go ' +
+      'dark, one by one, until a single corridor remains — and at its end, a ' +
+      'plain mirror that shows you exactly as you are.'
     const ALREADY_CLEAR =
       'The true path is already clear. The false mirrors stay dark.'
+    const NOTHING_YET =
+      "The pendant's light falls on the glass. Here every reflection walks " +
+      'with you; there is nothing yet to choose between.'
 
     /** Play the golden path up to freeing the servants and taking the pendant. */
     function toFreedServants(): void {
@@ -571,6 +572,12 @@ describe('Act 4 integration', () => {
         'east',
       ])
       executeCommands(game, ['north'])
+    }
+
+    /** Walk the route: left, left, the pendant at the fork, then east. */
+    function solveMaze(): string {
+      executeCommands(game, ['west', 'west', "use servant's pendant"])
+      return executeCommands(game, ['east'])
     }
 
     it('opens the hall north of the gates and the maze north of the courtyard', () => {
@@ -602,7 +609,7 @@ describe('Act 4 integration', () => {
       return game.state.activatedQuests.map((quest) => quest.name)
     }
 
-    it('examines the mirrors and keeps the pendant lines', () => {
+    it('examines the mirrors and says there is nothing to choose before the fork', () => {
       toFreedServants()
       executeCommands(game, ['north'])
       expect(executeCommands(game, ['examine mirrors'])).toContain(
@@ -611,23 +618,59 @@ describe('Act 4 integration', () => {
           'Every path looks real. Most of them are lies.',
       )
       expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        'Bring us their voices.',
-      )
-      expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        "The pendant's voices have said what they know.",
+        NOTHING_YET,
       )
     })
 
-    it('bumps into glass north, east and west before the maze is solved', () => {
-      toFreedServants()
+    it('walks the maze entrance, stretch and fork with their own looks and exits', () => {
+      toMazeWithStone()
+      const entrance = game.state.currentRoom.describe(game.state)
+      expect(entrance).toContain(
+        'You stand at the mouth of the maze, facing north.',
+      )
+      expect(entrance).toContain('[exits]west[/exits]')
+      const turn1 = executeCommands(game, ['west'])
+      expect(turn1).toContain('You turn left, and the glass lets you through.')
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'The corridor narrows and bends, and you face north again.',
+      )
+      const turn2 = executeCommands(game, ['west'])
+      expect(turn2).toContain(
+        'You turn left again, and the glass lets you through.',
+      )
+      const fork = game.state.currentRoom.describe(game.state)
+      expect(fork).toContain('The corridor ends in a last fork, facing north.')
+      expect(fork).toContain('[exits]east[/exits]')
+      expect(fork).not.toContain('[exits]west[/exits]')
+      expectCurrentRoom(game.state, 'Mirror Labyrinth')
+    })
+
+    it('sends a wrong turn back to the entrance, also at the fork before the pendant', () => {
+      toMazeWithStone()
+      expect(executeCommands(game, ['go north'])).toContain(GLASS)
+      executeCommands(game, ['west', 'west'])
+      expect(executeCommands(game, ['go east'])).toContain(GLASS)
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'You stand at the mouth of the maze',
+      )
+      executeCommands(game, ['west', 'west', "use servant's pendant"])
+      expect(executeCommands(game, ['go north'])).toContain(GLASS)
+      executeCommands(game, ['west', 'west'])
+      expect(executeCommands(game, ['go east'])).toContain(GLASS)
+      expectStoryFlag(game.state, FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED, false)
+    })
+
+    it('retraces south out of the maze and starts again at the entrance', () => {
+      toMazeWithStone()
+      executeCommands(game, ['west'])
+      expect(executeCommands(game, ['south'])).toContain(
+        'You retrace your steps out of the glass.',
+      )
+      expectCurrentRoom(game.state, 'Outer Courtyard')
       executeCommands(game, ['north'])
-      for (const way of ['north', 'east', 'west']) {
-        expect(executeCommands(game, [`go ${way}`])).toContain(GLASS)
-        expectCurrentRoom(game.state, 'Mirror Labyrinth')
-      }
-      const exits = game.state.currentRoom.describe(game.state)
-      expect(exits).toContain('[exits]south[/exits]')
-      expect(exits).not.toContain('[exits]north[/exits]')
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'You stand at the mouth of the maze',
+      )
     })
 
     it('has the echoes, the stone and the knight in the hall', () => {
@@ -640,9 +683,13 @@ describe('Act 4 integration', () => {
         'a knight in tarnished armour stands without moving',
       )
       const clue =
-        "You stand still and listen. Beneath the battle cries and laments, one voice repeats the same words over and over, patient as a heartbeat: 'Carry our voices into the glass. Where the servants' light and the echoes meet, the true path shows itself.'"
-      expect(executeCommands(game, ['examine echoes'])).toContain(clue)
-      expect(executeCommands(game, ['examine echoes'])).toContain(clue)
+        'You stand still and listen. Beneath the battle cries and laments, one voice repeats the same words over and over, patient as a heartbeat:'
+      const route = "'Left, then left, then the way your shadow does not go.'"
+      for (let i = 0; i < 2; i++) {
+        const heard = executeCommands(game, ['examine echoes'])
+        expect(heard).toContain(clue)
+        expect(heard).toContain(route)
+      }
       expect(executeCommands(game, ['take echo stone'])).toContain(
         'You lift a smooth grey stone from a niche beneath the banners. It is ' +
           "warm, and when you hold it to your ear you hear the hall's echoes " +
@@ -675,29 +722,50 @@ describe('Act 4 integration', () => {
       )
     })
 
-    it('fails without the pendant and is neutral outside the maze', () => {
+    it('is neutral outside the maze and repeats the route inside it', () => {
       toFreedServants()
       executeCommands(game, ['west', 'north', 'take echo stone'])
       expect(executeCommands(game, ['use echo stone'])).toContain(STONE_OUTSIDE)
-      executeCommands(game, [
-        'south',
-        'east',
-        "drop servant's pendant",
-        'north',
-      ])
-      expect(executeCommands(game, ['use echo stone'])).toContain(NO_LIGHT)
+      executeCommands(game, ['south', 'east', 'north'])
+      for (const command of [
+        'use echo stone',
+        "use echo stone with servant's pendant",
+        "use servant's pendant with echo stone",
+      ]) {
+        const heard = executeCommands(game, [command])
+        expect(heard).toContain(
+          'You hold the Echo Stone to your ear. One voice repeats, patient as a heartbeat:',
+        )
+        expect(heard).toContain(
+          "'Left, then left, then the way your shadow does not go.'",
+        )
+      }
       expectSpellKnown(game.state, 'truth_sight', false)
       expectStoryFlag(game.state, FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED, false)
     })
 
-    it.each([
-      "use echo stone with servant's pendant",
-      "use servant's pendant with echo stone",
-      'use echo stone',
-    ])('solves the maze with "%s"', (command) => {
+    it('fails every turn without the Echo Stone', () => {
+      toFreedServants()
+      executeCommands(game, ['north'])
+      expect(executeCommands(game, ['go west'])).toContain(NO_STONE)
+      expect(executeCommands(game, ['go north'])).toContain(NO_STONE)
+      expectStoryFlag(game.state, FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED, false)
+    })
+
+    it('solves the maze by walking the route with the pendant at the fork', () => {
       toMazeWithStone()
-      const result = executeCommands(game, [command])
+      executeCommands(game, ['west', 'west'])
+      expect(executeCommands(game, ["use servant's pendant"])).toContain(
+        "The pendant's blue light falls on the glass. In the north corridor " +
+          'your reflection turns and walks with you. In the east corridor the ' +
+          'glass stays empty.',
+      )
+      expect(executeCommands(game, ["use servant's pendant"])).toContain(
+        'Your reflection still walks the north corridor. The east corridor stays empty.',
+      )
+      const result = executeCommands(game, ['go east'])
       expect(result).toContain(SOLVED)
+      expect(result).toContain('Truth Sight')
       expectSpellKnown(game.state, 'truth_sight')
       expectQuestCompleted(game.state, 'The Maze of Mirrors')
       const done = game.state.completedQuests.find(
@@ -707,23 +775,22 @@ describe('Act 4 integration', () => {
         "Guided by the servants' pendant and the hall's echoes, Elior walks " +
           'the one true path through the mirrors, and learns to see through illusion.',
       )
-      expect(game.state.currentRoom.describe(game.state)).toContain(
+      const room = game.state.currentRoom.describe(game.state)
+      expect(room).toContain(
         'The false mirrors stand dark and silent now. A single clear corridor ' +
           'runs through the labyrinth to a plain mirror at its heart, where ' +
           'your own reflection waits, keeping still.',
       )
-      expect(executeCommands(game, [command])).toContain(ALREADY_CLEAR)
-    })
-
-    it('solves the maze after the pendant hint was heard', () => {
-      toMazeWithStone()
-      executeCommands(game, ["use servant's pendant"])
-      expect(executeCommands(game, ['use echo stone'])).toContain(SOLVED)
+      expect(room).toContain('[exits]south[/exits]')
+      expect(room).not.toContain('[exits]west[/exits]')
+      expect(executeCommands(game, ["use servant's pendant"])).toContain(
+        ALREADY_CLEAR,
+      )
     })
 
     it('describes Truth Sight and finds nothing hidden', () => {
       toMazeWithStone()
-      executeCommands(game, ['use echo stone'])
+      solveMaze()
       expect(executeCommands(game, ['spells'])).toContain(
         'See through illusion to what is really there.',
       )
@@ -735,7 +802,7 @@ describe('Act 4 integration', () => {
     it('lets the True Self hear the truth once and remember it', () => {
       toMazeWithStone()
       expectCharacterAbsent()
-      executeCommands(game, ['use echo stone'])
+      solveMaze()
       expect(executeCommands(game, ['examine true self'])).toContain(
         "Your own reflection, in the plain mirror at the labyrinth's heart. " +
           'It does not copy you. It waits, watching, as if it already knows ' +
@@ -780,22 +847,42 @@ describe('Act 4 integration', () => {
       )
     }
 
-    it('works with the stone on the maze floor, not with the pendant there', () => {
+    it('loses the way when the stone is left on the maze floor', () => {
       toMazeWithStone()
       executeCommands(game, ['drop echo stone'])
-      executeCommands(game, ["drop servant's pendant"])
-      expect(executeCommands(game, ['use echo stone'])).toContain(NO_LIGHT)
-      executeCommands(game, ["take servant's pendant"])
-      expect(executeCommands(game, ['use echo stone'])).toContain(SOLVED)
+      expect(executeCommands(game, ['go west'])).toContain(NO_STONE)
+      executeCommands(game, ['take echo stone'])
+      expect(executeCommands(game, ['go west'])).toContain('You turn left,')
     })
 
     it('keeps the after-description and the True Self through a reload', () => {
       toMazeWithStone()
-      executeCommands(game, ['use echo stone'])
+      solveMaze()
       game.loadSaveData(game.toSaveData())
       const room = game.state.currentRoom.describe(game.state)
       expect(room).toContain('The false mirrors stand dark and silent now.')
       expect(room).toContain('True Self')
+    })
+
+    it('keeps the place in the maze and the pendant answer through a reload', () => {
+      const reload = (): void => {
+        game.loadSaveData(game.toSaveData())
+      }
+      toMazeWithStone()
+      executeCommands(game, ['west'])
+      reload()
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'The corridor narrows and bends',
+      )
+      executeCommands(game, ['west', "use servant's pendant"])
+      reload()
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'The corridor ends in a last fork',
+      )
+      expect(executeCommands(game, ["use servant's pendant"])).toContain(
+        'Your reflection still walks the north corridor.',
+      )
+      expect(executeCommands(game, ['go east'])).toContain(SOLVED)
     })
 
     it('keeps every state through a save and load', () => {
@@ -807,10 +894,7 @@ describe('Act 4 integration', () => {
       reload()
       executeCommands(game, ['north', "use servant's pendant"])
       reload()
-      expect(executeCommands(game, ["use servant's pendant"])).toContain(
-        'have said what they know',
-      )
-      expect(executeCommands(game, ['go north'])).toContain(GLASS)
+      expect(executeCommands(game, ['go north'])).toContain(NO_STONE)
       executeCommands(game, ['south', 'west', 'north'])
       reload()
       expectItemInRoom(game.state.currentRoom, 'Echo Stone')
@@ -818,11 +902,13 @@ describe('Act 4 integration', () => {
       executeCommands(game, ['take echo stone', 'south', 'east', 'north'])
       reload()
       expect(active()).toContain('The Maze of Mirrors')
-      executeCommands(game, ['use echo stone'])
+      solveMaze()
       reload()
       expectQuestCompleted(game.state, 'The Maze of Mirrors')
       expectSpellKnown(game.state, 'truth_sight')
-      expect(executeCommands(game, ['use echo stone'])).toContain(ALREADY_CLEAR)
+      expect(executeCommands(game, ["use servant's pendant"])).toContain(
+        ALREADY_CLEAR,
+      )
       executeCommands(game, ['say truth to true self'])
       reload()
       expect(game.state.hasVirtue('truth')).toBe(true)
