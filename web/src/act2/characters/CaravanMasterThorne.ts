@@ -11,6 +11,8 @@ import {
   FLAG_FOUND_LOST_CARAVAN,
   FLAG_LOST_CARAVAN_COMPLETED,
   FLAG_BRENN_FORGIVEN,
+  FLAG_MERCHANTS_HEALED,
+  FLAG_THORNE_HEALING_TOLD,
   VIRTUE_MERCY,
 } from '../Act2StoryFlags'
 import { SecretDocuments } from '../items/SecretDocuments'
@@ -85,8 +87,35 @@ export class CaravanMasterThorne extends Character {
     )
   }
 
-  /** Offer the lost caravan quest, nag about it, or hand over the reward. */
+  /**
+   * Offer the lost caravan quest, nag about it, or hand over the reward. The
+   * first talk after the merchants were healed ends with one line about it.
+   */
   override talkTo(gameState: GameState): string {
+    const reply = this.usualReply(gameState)
+    if (
+      gameState.getStoryFlag(FLAG_MERCHANTS_HEALED) &&
+      !gameState.getStoryFlag(FLAG_THORNE_HEALING_TOLD)
+    ) {
+      gameState.setStoryFlag(FLAG_THORNE_HEALING_TOLD, true)
+      return (
+        reply +
+        '\n\n' +
+        characterName(this.name) +
+        ': ' +
+        speech(
+          "And my people tell me you didn't just haul them out of that hole " +
+            '— you mended them where they sat. One of the spice traders says ' +
+            "her hand's never been better. I don't know how a man repays a " +
+            'debt twice over.',
+        )
+      )
+    }
+    return reply
+  }
+
+  /** Thorne's reply for the current point of the lost caravan quest. */
+  private usualReply(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_FOUND_LOST_CARAVAN)) {
       if (!this.hasGivenDocuments) {
         // Give Secret Documents as reward

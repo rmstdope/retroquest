@@ -214,7 +214,7 @@ describe('Elena names no next step (rq-nun)', () => {
       'Elena is too weak from the curse. You need to heal her before attempting purification.',
     )
     expect(elena.receiveDispelFinalCure(game.state)).toContain(
-      'Elena needs to be purified with crystal-clear water before the ',
+      'The counter-magic finds nothing to take hold of',
     )
   })
 })
