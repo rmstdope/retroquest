@@ -4,8 +4,6 @@ import { MirrorLabyrinth } from '../rooms/MirrorLabyrinth'
 
 /** A pendant that allows communication with freed servants for guidance. */
 export class ServantsPendant extends Item {
-  private guidanceReceived = false
-
   constructor() {
     super({
       name: "Servant's Pendant",
@@ -23,23 +21,10 @@ export class ServantsPendant extends Item {
     return super.useWith(gameState, other)
   }
 
-  /** Use the pendant to receive guidance from freed servants. */
+  /** Use the pendant: in the maze it shows the way at the fork, elsewhere it glows. */
   override use(gameState: GameState): string {
-    if (gameState.currentRoom instanceof MirrorLabyrinth) {
-      if (!this.guidanceReceived) {
-        this.guidanceReceived = true
-        return event(
-          "You hold up the pendant, and the servants' voices come faint " +
-            "through the crystal: 'We polished these mirrors for years, and " +
-            'they lied to us every day. Only the dead in the old hall have ' +
-            "nothing left to lie about. Bring us their voices.'",
-        )
-      }
-      return (
-        "[dim]The pendant's voices have said what they know. They are " +
-        'waiting for the echoes.[/dim]'
-      )
-    }
+    const room = gameState.currentRoom
+    if (room instanceof MirrorLabyrinth) return room.usePendant(gameState)
     return event(
       'The pendant glows faintly. Whoever is behind you has nothing to ' +
         'say here.',

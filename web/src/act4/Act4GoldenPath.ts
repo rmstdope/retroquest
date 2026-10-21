@@ -2,7 +2,8 @@
  * The commands that play Act 4's golden path from the Fortress Gates to the
  * end of the story: breaking the ward guardians, freeing the trapped servants
  * in the Outer Courtyard, then fetching the Echo Stone from the Hall of
- * Echoes, solving the Mirror Labyrinth, redeeming the Knight of Despair and
+ * Echoes, walking the Mirror Labyrinth (west, west, then east once the
+ * pendant has shown the empty corridor), redeeming the Knight of Despair and
  * the Sorceress of Lies, answering the Shadow of the Past and seeing the
  * parents' memories, then facing Malakar in the Throne Chamber. The path takes
  * the forgiveness ending (the other endings are branches), heals the Wound in
@@ -29,7 +30,10 @@ export const ACT4_GOLDEN_PATH: string[] = [
   's',
   'e',
   'n',
-  "use echo stone with servant's pendant",
+  'w',
+  'w',
+  "use servant's pendant",
+  'e',
   's',
   'w',
   'n',

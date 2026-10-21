@@ -1,6 +1,7 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, dialogue, event } from '@/engine'
+import { MAZE_ROUTE } from '../rooms/MirrorLabyrinth'
 
-/** The voices of the Hall of Echoes: scenery that gives the plain clue. */
+/** The voices of the Hall of Echoes: scenery that gives the route through the maze. */
 export class Echoes extends Item {
   constructor() {
     super({
@@ -8,14 +9,15 @@ export class Echoes extends Item {
       description:
         'You stand still and listen. Beneath the battle cries and laments, ' +
         'one voice repeats the same words over and over, patient as a ' +
-        "heartbeat: 'Carry our voices into the glass. Where the servants' " +
-        "light and the echoes meet, the true path shows itself.'",
+        'heartbeat:',
       canBeCarried: false,
     })
   }
 
-  /** The echoes say the same thing every time. */
+  /** The echoes give the route through the maze, the same every time. */
   override examine(_gameState: GameState): string {
-    return event(this.description)
+    return (
+      event(this.description) + '\n' + dialogue('an echo', `'${MAZE_ROUTE}'`)
+    )
   }
 }

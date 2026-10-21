@@ -40,13 +40,26 @@ describe('EchoStone', () => {
     expectMarkupWellFormed(alone)
   })
 
-  it('needs the pendant in the pack to solve the maze', () => {
+  it('repeats the route in the maze, alone or with the pendant, and never solves', () => {
     const { game } = inMaze()
     const stone = new EchoStone()
-    expect(stone.use(game.state)).toContain('You wish the servants were here')
-    game.state.inventory.push(new ServantsPendant())
-    expect(stone.use(game.state)).toContain('a plain mirror')
-    expect(stone.use(game.state)).toContain('already clear')
+    const pendant = new ServantsPendant()
+    game.state.inventory.push(pendant)
+    const alone = stone.use(game.state)
+    expect(alone).toContain('Left, then left, then the way your shadow')
+    expect(stone.useWith(game.state, pendant)).toBe(alone)
+    expect(pendant.useWith(game.state, stone)).toBe(alone)
+    expect(game.state.getStoryFlag(FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED)).toBe(
+      false,
+    )
+    expectMarkupWellFormed(alone)
+  })
+
+  it('still repeats the route in the maze once enhanced', () => {
+    const { game } = inMaze()
+    const stone = new EchoStone()
+    stone.enhance()
+    expect(stone.use(game.state)).toContain('Left, then left, then the way')
   })
 
   it('refuses other items as the base class does', () => {

@@ -22,9 +22,10 @@ const ENHANCED_USE =
   'waiting for a place where memories sleep.'
 
 /**
- * Carry the hall's echoes into the Mirror Labyrinth: used there together with
- * the Servant's Pendant (in any of the agreed forms) it solves the maze. Once
- * enhanced, it mends the orbs of the Memory Vault.
+ * Carry the hall's echoes into the Mirror Labyrinth: the maze can only be
+ * walked with the stone in the pack, and used there (alone or with the
+ * pendant) it repeats the route. Once enhanced, it mends the orbs of the
+ * Memory Vault.
  */
 export class EchoStone extends Item {
   /** Set once the knight's voice has joined the stone. */
@@ -61,10 +62,11 @@ export class EchoStone extends Item {
     return event(this.description)
   }
 
-  /** Use the stone alone: in the maze it solves it when the pendant is carried. */
+  /** Use the stone alone: in the maze it repeats the route. */
   override use(gameState: GameState): string {
     if (this.enhanced) {
       const room = gameState.currentRoom
+      if (room instanceof MirrorLabyrinth) return room.useStone(gameState)
       if (room instanceof MemoryVault) return room.mendOrbs(gameState)
       return event(ENHANCED_USE)
     }
@@ -85,12 +87,12 @@ export class EchoStone extends Item {
   }
 
   /**
-   * The one place stone and pendant meet: solve the maze when in it, else
-   * the neutral line. Also used by the pendant.
+   * The one place stone and pendant meet: repeat the route when in the maze,
+   * else the neutral line. Also used by the pendant.
    */
   static useInRoom(gameState: GameState): string {
     const room = gameState.currentRoom
     if (!(room instanceof MirrorLabyrinth)) return event(STONE_OUTSIDE_MAZE)
-    return room.solve(gameState)
+    return room.useStone(gameState)
   }
 }
