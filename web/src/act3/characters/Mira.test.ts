@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { Game, type Room } from '@/engine'
+import { Game, type Room, characterName, event, speech } from '@/engine'
 import { Act3 } from '../Act3'
+import { executeCommands } from '@/testing/gameHelpers'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
@@ -9,6 +10,7 @@ import {
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
   FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_MAIN_STARTED,
+  FLAG_ACT3_MIRA_CONFESSED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
@@ -226,6 +228,7 @@ describe('Mira', () => {
     expect(hasItemNamed(game.state.currentRoom, "Dragon's Scale")).toBe(true)
 
     const m = new Mira()
+    m.talkTo(game.state) // the confession
     const out = m.talkTo(game.state)
 
     expect(out).toContain('three relics resonate')
@@ -282,7 +285,9 @@ describe('Mira', () => {
     game.state.currentRoom = game.state.allRooms.MirasHut
     completeNonMainQuests(game)
 
-    const out = new Mira().talkTo(game.state)
+    const m = new Mira()
+    m.talkTo(game.state) // the confession
+    const out = m.talkTo(game.state)
 
     expect(out).toContain('three relics resonate')
     expect(game.state.getStoryFlag(FLAG_ACT3_MAIN_COMPLETED)).toBe(true)
@@ -331,5 +336,129 @@ describe('Mira', () => {
     expect(out).toContain('seek the traces your parents left behind')
     expect(out).toContain('sunken ruins')
     expect(out).not.toContain('You arrive at')
+  })
+})
+
+describe('Mira confesses before the Warding Rite', () => {
+  /** A game in Mira's Hut with everything complete and the confession unheard. */
+  function readyForConfession(questsDone = true): Game {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    if (questsDone) completeNonMainQuests(game)
+    return game
+  }
+
+  const OLD_DESCRIPTION = 'The village healer returns with renewed purpose.'
+  const NEW_DESCRIPTION =
+    "The village healer — and, you know now, the Wardens' pupil, who " +
+    'stayed in Willowbrook for your sake. She meets your eyes more easily ' +
+    'than before.'
+
+  it('plays the whole confession on one talk without the rite', () => {
+    const game = readyForConfession()
+
+    const out = executeCommands(game, ['talk to mira'])
+
+    const expected = [
+      event('You speak with ' + characterName('Mira') + '.'),
+      event(
+        "Mira's hands stop above the three relics. She does not begin the rite.",
+      ),
+      speech(
+        "'Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon.'",
+      ),
+      speech(
+        "'I knew your parents. Not as a healer knows a neighbour. I was their pupil — Aren's, Lysa's, and Malakar's. The three of them taught me everything I know of circles and wards.'",
+      ),
+      speech(
+        "'When Aren and Lysa poured themselves into the ward, someone had to stay with the child it hid. I came to Willowbrook as its healer, and I have watched over you every day since.'",
+      ),
+      speech(
+        "'Your grandmother knew. She is Lysa's mother, and she kept the secret with me.'",
+      ),
+      event(
+        "For a moment you cannot speak. Then the words come out harder than you meant them: 'Why didn't you tell me?'",
+      ),
+      speech(
+        "'Because the seal could not bear it. Malakar's cloaked agent walked Willowbrook's lanes searching for the amulet, and any word of who you were could have reached him.'",
+      ),
+      speech(
+        "'I am telling you now because you have earned the truth. The amulet you carry is the anchor of the ward your parents became.'",
+      ),
+      event('She looks down at the relics, and then back at you.'),
+      speech(
+        "'When you are ready, speak to me again, and I will begin the Warding Rite.'",
+      ),
+    ].join('\n')
+    expect(out).toBe(expected)
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)).toBe(
+      false,
+    )
+  })
+
+  it('performs the rite on the next talk, even after leaving and returning', () => {
+    const game = readyForConfession()
+    executeCommands(game, ['talk to mira'])
+    const hut = game.state.currentRoom
+    game.state.currentRoom = game.state.allRooms.TidalCauseway
+    game.state.currentRoom = hut
+
+    const out = executeCommands(game, ['talk to mira'])
+
+    expect(out).toContain('three relics resonate')
+    expect(out).not.toContain('there is something you must hear')
+    expect(game.state.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)).toBe(
+      true,
+    )
+  })
+
+  it('shows nothing of the confession while quests remain', () => {
+    const game = readyForConfession(false)
+
+    const out = executeCommands(game, ['talk to mira'])
+
+    expect(out).toContain('every remaining quest')
+    expect(out).not.toContain('pupil')
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)).toBe(false)
+  })
+
+  it('skips the confession for a game whose rite was already performed', () => {
+    const game = readyForConfession()
+    game.state.setStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
+
+    const out = executeCommands(game, ['talk to mira'])
+
+    expect(out).not.toContain('pupil')
+    expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)).toBe(false)
+  })
+
+  it('changes her description from the confession on', () => {
+    const game = readyForConfession()
+    expect(executeCommands(game, ['look at mira'])).toContain(OLD_DESCRIPTION)
+
+    executeCommands(game, ['talk to mira'])
+
+    const out = executeCommands(game, ['look at mira'])
+    expect(out).toContain(NEW_DESCRIPTION)
+    expect(out).not.toContain(OLD_DESCRIPTION)
+  })
+
+  it('keeps the confession state through a save and load', () => {
+    const game = readyForConfession()
+    executeCommands(game, ['talk to mira'])
+
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+
+    expect(executeCommands(fresh, ['look at mira'])).toContain(NEW_DESCRIPTION)
+    expect(executeCommands(fresh, ['talk to mira'])).toContain(
+      'three relics resonate',
+    )
   })
 })

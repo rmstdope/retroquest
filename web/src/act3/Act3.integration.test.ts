@@ -549,7 +549,12 @@ describe('Act 3 golden path', () => {
     expectCurrentRoom(state, "Mira's Hut")
 
     // --- Step 28: Mira's Hut - Warding Rite and Lifelight Elixir ---
-    // Talk to Mira to perform the Warding Rite
+    // The first talk is Mira's confession; the rite is held back
+    const confession = executeCommands(game, ['talk to mira'])
+    expect(confession.toLowerCase()).toContain('i was their pupil')
+    expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, false)
+
+    // The next talk performs the Warding Rite
     const wardingResult = executeCommands(game, ['talk to mira'])
     expect(wardingResult.toLowerCase()).toContain('three relics resonate')
     expect(wardingResult.toLowerCase()).toContain('lifelight elixir')
@@ -577,6 +582,9 @@ describe('Act 3 golden path', () => {
     expect(examineResult.toLowerCase()).toContain('massive gates')
     expect(examineResult.toLowerCase()).toContain('act iii is complete')
     expectStoryFlag(state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
+    expect(executeCommands(game, ['look at mira'])).toContain(
+      "the Wardens' pupil",
+    )
     expectStoryFlag(state, FLAG_ACT3_MAIN_COMPLETED, true)
     expect(state.isQuestCompleted(MAIN)).toBe(true)
     expect(new Act3().isCompleted(state)).toBe(true)

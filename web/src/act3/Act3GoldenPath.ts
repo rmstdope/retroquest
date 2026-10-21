@@ -98,6 +98,7 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'w',
   'talk to mira',
   'talk to mira',
+  'talk to mira',
   'take lifelight elixir',
   'talk to mira',
 ]

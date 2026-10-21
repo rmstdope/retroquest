@@ -72,3 +72,6 @@ export const FLAG_ACT3_ECHOES_QUEST_STARTED = 'act3_echoes_quest_started'
 export const FLAG_ACT3_CHARRED_INSCRIPTION_READ =
   'act3_charred_inscription_read'
 export const FLAG_ACT3_ECHOES_QUEST_COMPLETED = 'act3_echoes_quest_completed'
+
+// Mira's confession before the Warding Rite
+export const FLAG_ACT3_MIRA_CONFESSED = 'act3_mira_confessed'
