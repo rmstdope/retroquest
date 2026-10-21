@@ -6,6 +6,8 @@ import { Act2 } from '@/act2/Act2'
 import { ACT2_GOLDEN_PATH } from '@/act2/Act2GoldenPath'
 import { Act3 } from '@/act3/Act3'
 import { ACT3_GOLDEN_PATH } from '@/act3/Act3GoldenPath'
+import { Act4 } from '@/act4/Act4'
+import { ACT4_GOLDEN_PATH } from '@/act4/Act4GoldenPath'
 import { parseTurn } from './parseTurn'
 
 /**
@@ -34,6 +36,7 @@ describe('speaker names in the story view', () => {
     ['Act 1', () => new Game([new Act1()]), ACT1_GOLDEN_PATH],
     ['Act 2', () => new Game([new Act2()]), ACT2_GOLDEN_PATH],
     ['Act 3', () => new Game([new Act3()]), ACT3_GOLDEN_PATH],
+    ['Act 4', () => new Game([new Act4()]), ACT4_GOLDEN_PATH],
   ])(
     '%s golden path (guard) shows no "Name:" line before a labelled quote',
     (_act, make, path) => {
