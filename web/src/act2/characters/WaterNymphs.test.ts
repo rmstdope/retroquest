@@ -159,6 +159,7 @@ describe('Water Nymphs voice', () => {
     nymphs.currentRiddle = 1
     replies.push(nymphs.talkTo(game.state))
     replies.push(nymphs.sayTo(game.state, 'wrong'))
+    replies.push(nymphs.sayTo(game.state, 'wrong'))
     replies.push(nymphs.sayTo(game.state, 'mask'))
     nymphs.currentRiddle = 2
     replies.push(nymphs.sayTo(game.state, 'truth'))
@@ -295,12 +296,39 @@ describe('Water Nymphs hints', () => {
     expect(miss(nymphs, game)).not.toContain(RIDDLES[1].hint)
   })
 
+  it('reads a save made before the count existed as zero misses', () => {
+    const { game } = createGameWithNymphs()
+    const old = JSON.parse(game.toSaveData()) as unknown
+    const strip = (value: unknown): void => {
+      if (Array.isArray(value)) value.forEach(strip)
+      else if (value && typeof value === 'object') {
+        const record = value as Record<string, unknown>
+        delete record.missCount
+        Object.values(record).forEach(strip)
+      }
+    }
+    strip(old)
+    const reloaded = new Game([new Act2()])
+    reloaded.loadSaveData(JSON.stringify(old))
+    const nymphs = reloaded.state.allRooms.WhisperingGlade.characters.find(
+      (c): c is WaterNymphs => c instanceof WaterNymphs,
+    ) as WaterNymphs
+
+    expect(miss(nymphs, reloaded)).not.toContain(RIDDLES[0].hint)
+    expect(miss(nymphs, reloaded)).toContain(RIDDLES[0].hint)
+  })
+
   it('keeps the count across leaving and a save reload, with no hint on return', () => {
     const { game, nymphs } = createGameWithNymphs()
     miss(nymphs, game)
     miss(nymphs, game)
 
-    expect(nymphs.talkTo(game.state)).not.toContain(RIDDLES[0].hint)
+    game.commandParser.parse('go west')
+    expect(game.state.currentRoom).not.toBe(game.state.allRooms.WhisperingGlade)
+    game.commandParser.parse('go east')
+    expect(game.commandParser.parse('talk to water nymphs')).not.toContain(
+      RIDDLES[0].hint,
+    )
     expect(nymphs.missCount).toBe(2)
 
     const reloaded = new Game([new Act2()])
