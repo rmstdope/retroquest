@@ -14,9 +14,10 @@ describe('OldOathScrolls', () => {
 
     expect(scrolls.name).toBe('Old Oath Scrolls')
     expect(scrolls.canBeCarried).toBe(true)
-    expect(scrolls.description).toContain('binding oaths')
-    expect(scrolls.description).toContain('selflessness')
-    expect(scrolls.description).toContain('Ancient Dragon')
+    expect(scrolls.description).toContain('Brittle parchment')
+    expect(scrolls.description).toContain(
+      'I take what is given, and I return ___.',
+    )
   })
 
   it('sets the flag when examined', () => {
@@ -27,8 +28,8 @@ describe('OldOathScrolls', () => {
     const result = scrolls.examine(gs)
 
     expect(gs.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)).toBe(true)
-    expect(result).toContain('binding oaths')
-    expect(result).toContain('selflessness')
+    expect(result).toContain('I take what is given, and I return ___.')
+    expect(result).not.toContain('disintegrate')
   })
 
   it('keeps the flag set when examined multiple times', () => {
@@ -42,15 +43,17 @@ describe('OldOathScrolls', () => {
     expect(gs.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)).toBe(true)
   })
 
-  it('is removed from the room when examined', () => {
+  it('stays in the room and the bag when examined, with the same text', () => {
     const scrolls = new OldOathScrolls()
     const gs = createState()
-    const room = gs.currentRoom
-    room.items.push(scrolls)
-    expect(room.items).toContain(scrolls)
+    gs.currentRoom.items.push(scrolls)
+    gs.inventory.push(scrolls)
 
-    scrolls.examine(gs)
+    const first = scrolls.examine(gs)
+    const second = scrolls.examine(gs)
 
-    expect(room.items).not.toContain(scrolls)
+    expect(gs.currentRoom.items).toContain(scrolls)
+    expect(gs.inventory).toContain(scrolls)
+    expect(second).toBe(first)
   })
 })

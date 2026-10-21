@@ -130,9 +130,10 @@ export class AncientDragon extends Character {
   }
 
   /**
-   * The line that ends every talk: the scale awaits, then (once it is
-   * taken) the price of its going, then (once the sigils are mended) that
-   * the prison holds.
+   * The line that ends every talk: the scale awaits (or, once the scrolls
+   * are read, the question), the accepted oath until the scale is taken, then
+   * the price of its going, then (once the sigils are mended) that the
+   * prison holds.
    */
   private closingLine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_SIGILS_MENDED)) {
@@ -144,6 +145,14 @@ export class AncientDragon extends Character {
         "going. That is the price, and it is mine to pay, not yours.'"
       )
     }
+    if (gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)) {
+      return OATH_ACCEPTED_LINE
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)) {
+      return (
+        "'You have read the old words. Then tell me: " + OATH_QUESTION + "'"
+      )
+    }
     return (
       "'The memory has been shared. Your path leads forward now, not " +
       'back. The scale awaits when you are ready to prove your ' +
@@ -151,55 +160,44 @@ export class AncientDragon extends Character {
     )
   }
 
-  /** Handle saying something to the dragon, particularly oaths. */
+  /**
+   * Handle saying something to the dragon. Only an answer that fills the
+   * blank of the old oath wins the scale, and only once the memory is heard
+   * and the scrolls are read.
+   */
   override sayTo(gameState: GameState, words: string): string {
+    const name = characterName(this.name)
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {
       return (
-        "The dragon's eyes glint with ancient wisdom. You should probably " +
-        'listen to what it has to say first.'
+        `The ${name} rumbles: ` +
+        speech("'Words come after memory, young one. Sit, and hear me first.'")
       )
     }
-    if (words.toLowerCase() === 'oath') {
-      if (!gameState.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)) {
-        return (
-          'The ' +
-          characterName(this.name) +
-          "'s golden eyes " +
-          'narrow slightly. ' +
-          speech(
-            "'You " +
-              'must first understand the weight of the oath you wish to ' +
-              'speak. You can not just speak any oath. You must speak one ' +
-              "that proves your selflessness.'",
-          )
+    if (!gameState.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED)) {
+      return (
+        `The ${name}’s golden eyes narrow. ` +
+        speech(
+          "'An oath is not something you make up, child. The old words " +
+            'are kept in the Echo Chambers. Read them, then come back.' +
+            "'",
         )
-      }
-      // Check if the oath has already been spoken
-      if (gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)) {
-        return (
-          'The ' +
-          characterName(this.name) +
-          ' rumbles: ' +
-          speech(
-            "'The oath has been given and accepted. The scale is yours " +
-              "to claim.'",
-          )
-        )
-      }
-      // Accept the oath and make the scale available
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)) {
+      return `The ${name} rumbles: ` + speech(OATH_ACCEPTED_LINE)
+    }
+    const answer = normaliseAnswer(words)
+    const word = GIVING_WORDS.get(oathBlank(answer))
+    if (word !== undefined) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
-      // Add the dragon's scale to the current room
-      const dragonsScale = new DragonsScale()
-      gameState.currentRoom.addItem(dragonsScale)
+      gameState.currentRoom.addItem(new DragonsScale())
       return (
         event(
-          'You speak your oath to the ' +
-            characterName(this.name) +
-            ', pledging ' +
-            'your commitment to selflessness and the protection of others.',
+          `You speak the old words to the ${name}: ` +
+            `“I take what is given, and I return ${word}.”`,
         ) +
         '\n' +
-        "[success]The dragon's golden eyes regard you with ancient wisdom. " +
+        '[success]' +
         speech(
           "'Your words ring true, young one. The scale is yours to bear. " +
             "May you carry its burden with honor.'",
@@ -207,12 +205,64 @@ export class AncientDragon extends Character {
         '[/success]'
       )
     }
+    if (TAKING_ANSWERS.includes(answer)) {
+      return `The ${name} rumbles: ` + speech("'Then you would be taking.'")
+    }
     return (
-      'The ' +
-      characterName(this.name) +
-      ' listens but does ' +
-      'not respond to those words. Perhaps you need to speak a more meaningful ' +
-      'pledge.'
+      `The ${name} rumbles: ` +
+      speech("'That is no answer, young one. W" + OATH_QUESTION.slice(1) + "'")
     )
   }
+}
+
+/** The question the dragon asks once the scrolls are read. */
+const OATH_QUESTION = 'what will you give back, for what you take?'
+
+/** The line for the gap between the accepted oath and taking the scale. */
+const OATH_ACCEPTED_LINE =
+  "'The oath has been given and accepted. The scale is yours to claim.'"
+
+/** The words that fill the blank, normalised, with how the echo spells them. */
+const GIVING_WORDS: ReadonlyMap<string, string> = new Map([
+  ['everything', 'everything'],
+  ['it', 'it'],
+  ['myself', 'myself'],
+  ['what i take', 'what I take'],
+])
+
+/** Answers that name a payment rather than a giving back. */
+const TAKING_ANSWERS: readonly string[] = [
+  'gold',
+  'silver',
+  'coin',
+  'coins',
+  'money',
+  'nothing',
+  'thanks',
+  'thank you',
+]
+
+/**
+ * Lower-case an answer, drop commas, collapse spaces and strip one final
+ * "." or "!".
+ */
+function normaliseAnswer(words: string): string {
+  return words
+    .toLowerCase()
+    .replace(/,/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/[.!]$/, '')
+    .trim()
+}
+
+/**
+ * The part of a normalised answer that fills the blank: the whole answer, or
+ * what follows "i return" or "i take what is given and i return".
+ */
+function oathBlank(answer: string): string {
+  for (const prefix of ['i take what is given and i return ', 'i return ']) {
+    if (answer.startsWith(prefix)) return answer.slice(prefix.length)
+  }
+  return answer
 }

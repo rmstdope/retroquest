@@ -50,7 +50,7 @@ Beneath Eldoria’s oldest hills, the Caverns of Shadow breathe a chill that dim
 -   The dream voice: after the Dragon’s Memory, the voice from the Prologue speaks once more in the hall, asking Elior for help in words he almost knows. The Dragon answers that it is “the friend who stayed behind,” and says no more.
 -   Curse: the mines fall silent and the cavern’s old dripping stops (see *The Curse Worsens*).
 -   Amulet: when Elior hears the Dragon’s Memory, the Ancient Amulet glows a third time, and Aren stands beside Lysa, hand in hand, while the third figure still has his back turned. The Dragon names the amulet as the anchor of the ward. The amulet shows the faces; it does not say whether the parents live.
--   Offering: After hearing the Dragon’s Memory and examining the Old Oath Scrolls found in Echo Chambers, Elior offers the binding oath. The dragon yields the Scale when it believes the promise.
+-   Offering: After hearing the Dragon’s Memory and examining the Old Oath Scrolls found in Echo Chambers, the scrolls hold an old oath with one blank (“I take what is given, and I return ___.”) and the Dragon asks what Elior will give back. He answers with `say everything to ancient dragon` (or it / myself / what I take); the dragon yields the Scale when the blank is filled with a giving word.
 
 Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns brighten, not with light, but with trust.
 
@@ -399,7 +399,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Description: Smooth caverns that amplify every footfall; faint whispers mimic speech.
 -   Items: Runic Walls; examining them reveals Resonant Chant Rubbings, and searching reveals the Old Oath Scrolls.
 -   Characters: None
--   Quest Relevance: Examine the Runic Walls to learn the chant, then examine the Old Oath Scrolls before pledging to the Dragon.
+-   Quest Relevance: Examine the Runic Walls to learn the chant, then read the Old Oath Scrolls (they stay re-readable) before answering the Dragon's question.
 -   Exits:
     -   West to Collapsed Galleries
 
@@ -729,7 +729,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `east` → Opens from Collapsed Galleries after “Miners’ Rescue” is complete; `search` reveals the Old Oath Scrolls.
-    -   `examine old oath scrolls` → Records that Elior has learned the oath; the scrolls disintegrate.
+    -   `examine old oath scrolls` → Records that Elior has read the old oath form; the scrolls stay and can be read again.
     -   `examine runic walls` → Reveals the Resonant Chant instructions.
     -   `take resonant chant rubbings` → Adds the rubbings to inventory.
 
@@ -749,7 +749,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 25. Room: Dragon’s Hall (Relic Trial)
 
 -   Commands and yields:
-    -   `say oath to dragon` → The pledge is accepted; adds the dragon's scale to the room's items.
+    -   `say everything to ancient dragon` → The blank is filled; Elior speaks the old line back, the dragon accepts and the scale is added to the room's items. Taking answers (gold, nothing, thanks…) get “Then you would be taking.”; other answers get the question again.
     -   `take dragon's scale` → Add the scale to the inventory; completes Caverns phase.
 
 ---

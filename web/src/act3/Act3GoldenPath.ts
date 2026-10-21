@@ -92,7 +92,7 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'use resonant chant rubbings with echo stones',
   'e',
   'talk to ancient dragon',
-  'say oath to ancient dragon',
+  'say everything to ancient dragon',
   "take dragon's scale",
   'w',
   'w',

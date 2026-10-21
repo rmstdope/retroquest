@@ -247,7 +247,11 @@ describe("Dragon's prison: selflessness", () => {
     const answer = run(game, 'cast bless on sigils')
     expect(answer).toContain('You cast')
     expect(answer).toContain('brighten, steady, and hold.')
-    expect(answer).toContain('Your parents would have done the same.')
+    expect(answer).toContain(
+      'You said you would return what you took. Most forget by the time ' +
+        'they reach the door. Your parents would have done the same.',
+    )
+    expect(answer).not.toContain('You owed me nothing')
     expect(answer).toContain(REMEMBERED_SELFLESS)
     expect(answer.indexOf('Your parents would')).toBeLessThan(
       answer.indexOf(REMEMBERED_SELFLESS),
