@@ -3,6 +3,7 @@ import { PhoenixFeather } from '../items/PhoenixFeather'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+  FLAG_ACT3_PHOENIX_STORY_TOLD,
 } from '../Act3StoryFlags'
 
 /**
@@ -36,14 +37,30 @@ export class Phoenix extends Character {
 
   /**
    * Poses the telepathic riddle with a hint at the Warden of Wisdom; once the
-   * feather is earned the riddle is no longer asked and the Phoenix bids farewell.
+   * feather is earned the riddle is no longer asked and the Phoenix bids farewell;
+   * on the first such talk after the Charred Inscription has been read, it first
+   * tells, once, who struck Malakar's name deeper.
    */
   override talkTo(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
+      const story =
+        gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ) &&
+        !gameState.getStoryFlag(FLAG_ACT3_PHOENIX_STORY_TOLD)
+      if (story) {
+        gameState.setStoryFlag(FLAG_ACT3_PHOENIX_STORY_TOLD, true)
+      }
       return (
         'The ' +
         characterName('phoenix') +
         ' inclines its head. ' +
+        (story
+          ? speech(
+              "'You saw his name on the terraces, burned deeper than the " +
+                'others. No fire did that. He came back, years after, and ' +
+                'struck it again himself, to cut himself out of the promise. ' +
+                "The stone would not let him.'",
+            ) + ' '
+          : '') +
         speech("'Remember him when time is short for you.'")
       )
     }

@@ -297,7 +297,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: Wind‑carved paths zig‑zag across black rock; canvas shelters flap and braziers glow low.
 -   Items: Emberwater Canteen
--   Characters: Ash Scholar (gives a Brass Mirror Segment when first spoken to)
+-   Characters: Ash Scholar (on the first talk gives a Brass Mirror Segment and a Charred Notebook, an optional read: two entries of Malakar's, one from the good years and one naming the Wasting that reached Willowbrook; the Phoenix, once the feather is earned and the Charred Inscription read, tells once that Malakar himself struck his name deeper)
 -   Quest Relevance: Staging area; points to mirror terraces (Mirrors of Emberlight).
 -   Exits:
     -   North to Obsidian Outcrops

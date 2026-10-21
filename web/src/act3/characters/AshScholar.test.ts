@@ -66,3 +66,22 @@ describe('AshScholar', () => {
     }
   })
 })
+
+describe('AshScholar notebook', () => {
+  it('hands out the notebook with the segment on the first talk, once', () => {
+    const g = makeGameState()
+    const scholar = new AshScholar()
+    const first = scholar.talkTo(g)
+    expect(first).toContain('A notebook, burned nearly through.')
+    expect(first).toContain('You receive the [item_name]Charred Notebook')
+    expect(g.getItemCount('Charred Notebook')).toBe(1)
+    expect(first.indexOf('Brass Mirror Segment')).toBeLessThan(
+      first.indexOf('Charred Notebook'),
+    )
+    const later = scholar.talkTo(g)
+    expect(later).toContain('Seek the outcrops for what the mountain has shed.')
+    expect(later).not.toContain('alignment')
+    expect(later).not.toContain('Notebook')
+    expect(g.getItemCount('Charred Notebook')).toBe(1)
+  })
+})

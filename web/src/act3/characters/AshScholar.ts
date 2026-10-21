@@ -6,8 +6,9 @@ import {
   speech,
 } from '@/engine'
 import { BrassMirrorSegment } from '../items/BrassMirrorSegment'
+import { CharredNotebook } from '../items/CharredNotebook'
 
-/** A scholar who studies mirrorcraft and offers a mirror segment. */
+/** A scholar who studies mirrorcraft and offers a mirror segment and a charred notebook. */
 export class AshScholar extends Character {
   /** Tracks whether this scholar has already given their mirror segment. */
   private gaveSegment = false
@@ -21,7 +22,7 @@ export class AshScholar extends Character {
     })
   }
 
-  /** Speak to the scholar to receive advice and possibly a mirror segment. */
+  /** Speak to the scholar; the first talk gives the segment and the notebook. */
   override talkTo(gameState: GameState): string {
     // If the scholar hasn't yet given their segment, give one now.
     // Do NOT check the player's inventory; the scholar's gift is tracked
@@ -30,25 +31,32 @@ export class AshScholar extends Character {
       const segment = new BrassMirrorSegment()
       gameState.addItemToInventory(segment)
       this.gaveSegment = true
+      const notebook = new CharredNotebook()
+      gameState.addItemToInventory(notebook)
       return (
         'The ' +
         characterName(this.name) +
-        ' straightens and ' +
-        'studies you for a long moment before ' +
-        'speaking. ' +
+        ' straightens and studies you for a long moment before speaking.\n' +
         speech(
-          "'We are on an expedition — a small band of scholars and " +
-            'tinkerers tracing the terraces and cataloguing anything that ' +
-            'glints. We comb the fissures for fragments, map the channels, ' +
-            'and bide our time until the sun lines up with the mounts. It was ' +
-            'while prying at a collapsed ledge that I found this brass mirror ' +
-            "segment tucked between cooled slag and soot. It's small, but it " +
-            'will mend a mount. There are likely more of this sort scattered ' +
-            'among the outcrops — search carefully and you will find them. ' +
-            "Take this; it should help.'",
+          "'We are on an expedition: a small band of scholars and tinkerers, " +
+            "tracing the terraces and cataloguing anything that glints.'",
         ) +
         '\n' +
-        event(`You receive the [item_name]${segment.name}[/item_name].`)
+        speech(
+          "'I found this brass mirror segment while prying at a collapsed " +
+            'ledge. It is small, but it will mend a mount. There will be more ' +
+            "among the outcrops, if you search carefully.'",
+        ) +
+        '\n' +
+        event(`You receive the [item_name]${segment.name}[/item_name].`) +
+        '\n' +
+        speech(
+          "'This was in the same ledge. A notebook, burned nearly through. " +
+            'Whoever wrote in it knew these mirrors better than any of us, ' +
+            "and I cannot make out who that was. Perhaps you can.'",
+        ) +
+        '\n' +
+        event(`You receive the [item_name]${notebook.name}[/item_name].`)
       )
     }
     return (
@@ -56,10 +64,8 @@ export class AshScholar extends Character {
       characterName(this.name) +
       ' offers a small nod. ' +
       speech(
-        "'The terraces favor steady hands. We're on an expedition " +
-          'cataloguing glass and shards; seek the outcrops for what the mountain ' +
-          'has shed. When you find fragments, set them carefully—alignment ' +
-          "matters.'",
+        "'The terraces favour steady hands. Seek the outcrops for what the " +
+          "mountain has shed.'",
       )
     )
   }

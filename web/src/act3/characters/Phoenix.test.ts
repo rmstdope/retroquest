@@ -5,6 +5,7 @@ import { Phoenix } from './Phoenix'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+  FLAG_ACT3_PHOENIX_STORY_TOLD,
 } from '../Act3StoryFlags'
 import {
   expectDialogueSpeaker,
@@ -158,5 +159,50 @@ describe('Phoenix accepts the riddle answer only as a whole word', () => {
       'Take this, and remember.',
     )
     expect(game.state.hasItem('Phoenix Feather')).toBe(true)
+  })
+})
+
+const STORY =
+  'You saw his name on the terraces, burned deeper than the others. No fire did that.'
+
+/** A game with the feather earned and the given inscription state. */
+function earned(inscriptionRead: boolean): {
+  game: Game
+  phoenix: Phoenix
+} {
+  const game = new Game([new Act3()])
+  const phoenix = new Phoenix()
+  phoenix.talkTo(game.state)
+  game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, inscriptionRead)
+  phoenix.sayTo(game.state, 'patience')
+  return { game, phoenix }
+}
+
+describe('Phoenix tells who struck the name deeper', () => {
+  it('tells the story once, then only the farewell', () => {
+    const { game, phoenix } = earned(true)
+    const first = phoenix.talkTo(game.state)
+    expectMarkupWellFormed(first)
+    expectDialogueSpeaker(first, phoenix.name)
+    expect(first).toContain(STORY)
+    expect(first).toContain('The stone would not let him.')
+    expect(first.endsWith(`[dialogue]'${FAREWELL}'[/dialogue]`)).toBe(true)
+    const second = phoenix.talkTo(game.state)
+    expect(second).not.toContain(STORY)
+    expect(second).toContain(FAREWELL)
+  })
+
+  it('keeps the story pending until the inscription is read', () => {
+    const { game, phoenix } = earned(false)
+    expect(phoenix.talkTo(game.state)).not.toContain(STORY)
+    expect(phoenix.talkTo(game.state)).not.toContain(STORY)
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    expect(phoenix.talkTo(game.state)).toContain(STORY)
+    expect(phoenix.talkTo(game.state)).not.toContain(STORY)
+  })
+
+  it('does not tell the story in the feather-giving reply', () => {
+    const { game } = earned(true)
+    expect(game.state.getStoryFlag(FLAG_ACT3_PHOENIX_STORY_TOLD)).toBe(false)
   })
 })
