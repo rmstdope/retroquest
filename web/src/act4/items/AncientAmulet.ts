@@ -25,7 +25,8 @@ const THIRD_FIGURE_STAGES = [
 
 /**
  * Elior's heirloom, carried from the first turn of Act IV. It is the key to
- * the sealed door in the Memory Vault (see VaultDoor); alone it only shows the picture Act III left in it.
+ * the sealed door in the Memory Vault (see VaultDoor); alone it only shows the picture Act III left in it,
+ * which changes as the story reaches new stages.
  */
 export class AncientAmulet extends Item {
   constructor() {

@@ -321,8 +321,8 @@ export class Malakar extends Character {
   }
 
   /**
-   * The Ancient Amulet used here: the third step of the scene. Fails before
-   * the refrain, and afterwards only a dim line.
+   * The Ancient Amulet used here: the third step of the scene. Before the
+   * refrain it burns Malakar (once, then a dim line).
    */
   openAmulet(gameState: GameState): string {
     if (endingPlayed(gameState)) {

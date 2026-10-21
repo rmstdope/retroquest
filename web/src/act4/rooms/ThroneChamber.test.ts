@@ -394,4 +394,24 @@ describe('Throne Chamber, commands out of order', () => {
       'twitches toward the glass',
     )
   })
+
+  it("starts the early refrain with today's refrain line and offers once", () => {
+    const game = inThrone()
+    const out = executeCommands(game, ['say refrain to malakar'])
+    expect(out.startsWith('[event]“Power follows purpose')).toBe(true)
+    expect(executeCommands(game, ['talk to malakar'])).toContain(PLEA)
+  })
+
+  it('burns Malakar after talk too, and keeps the picture stage on reload', () => {
+    const game = inThrone()
+    executeCommands(game, ['talk to malakar'])
+    expect(executeCommands(game, ['use amulet on malakar'])).toContain(
+      'it burns white',
+    )
+    executeCommands(game, ['say refrain to malakar'])
+    reload(game)
+    expect(executeCommands(game, ['examine amulet'])).toContain(
+      'Malakar as he is now',
+    )
+  })
 })
