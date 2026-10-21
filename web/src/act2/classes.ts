@@ -2,6 +2,7 @@
  * Every content class of Act 2 by name, so saves can refer to them.
  */
 import { AdvancedHealingPotion } from './items/AdvancedHealingPotion'
+import { AncientAmulet } from './items/AncientAmulet'
 import { AncientChronicle } from './items/AncientChronicle'
 import { BoundaryStoneFragment } from './items/BoundaryStoneFragment'
 import { CampSite } from './items/CampSite'
@@ -103,6 +104,7 @@ import { PropheticVision } from './spells/PropheticVision'
 export const ACT2_CLASSES = {
   // Items
   AdvancedHealingPotion,
+  AncientAmulet,
   AncientChronicle,
   BoundaryStoneFragment,
   CampSite,
