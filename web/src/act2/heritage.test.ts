@@ -93,6 +93,7 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
     expect(first).toContain(
       "'Take this. If you mean to help Greendale, you'll need to prove your skills to those who matter. This blade has served me well in teaching others.'",
     )
+    expect(first).toContain('You have the look of one who might rise')
     expect(first).not.toMatch(CHOSEN_TALK)
     expect(hermit.talkTo(game.state)).toContain('Show them your skill')
   })
