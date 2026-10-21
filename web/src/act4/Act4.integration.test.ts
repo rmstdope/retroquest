@@ -63,31 +63,13 @@ describe('Act 4 integration', () => {
     // Should start in Fortress Gates
     expectCurrentRoom(game.state, 'Fortress Gates')
 
-    // Phase 1.1: Examine ward stones to understand the mechanism
+    // Phase 1.1: Examining the ward stones names the stone out of time
     let result = executeCommands(game, ['examine ward stones'])
-    expect(
-      result.toLowerCase().includes('a corner has broken away') ||
-        result.toLowerCase().includes('the same hand on every one'),
-    ).toBe(true)
+    expect(result).toContain('the right stone brightens a breath after')
 
-    // Phase 1.2: Take ward stone fragment (should be available)
-    executeCommands(game, ['take ward stone fragment'])
-    expectItemInInventory(game.state, 'Ward Stone Fragment', true)
-
-    // Phase 1.3: Use ward stone fragment to disable barriers
-    result = executeCommands(game, ['use ward stone fragment with barriers'])
-    expect(
-      result.toLowerCase().includes('the wall shivers') ||
-        result.toLowerCase().includes('goes out'),
-    ).toBe(true)
-
-    // Phase 1.4: Cast light to dispel shadow guardians
-    result = executeCommands(game, ['cast light on ward stones'])
-    expect(
-      result.toLowerCase().includes('dispel') ||
-        result.toLowerCase().includes('banish') ||
-        result.toLowerCase().includes('guardians'),
-    ).toBe(true)
+    // Phase 1.2: One light on that stone breaks the rhythm and the guardians
+    result = executeCommands(game, ['cast light on right stone'])
+    expect(result).toContain('Your light finds the right stone')
 
     // Quest should be completed and Guardian's Essence obtained
     expectStoryFlag(
@@ -100,34 +82,31 @@ describe('Act 4 integration', () => {
     executeCommands(game, ["take guardian's chain"])
     expectItemInInventory(game.state, "Guardian's Chain", true)
 
-    // Phase 1.6: Take Guardian's Essence (should be available after light spell)
+    // Phase 1.6: Take Guardian's Essence (left on the ground by the solve)
     executeCommands(game, ["take guardian's essence"])
     expectItemInInventory(game.state, "Guardian's Essence", true)
   })
 
-  it('has the required items available in Fortress Gates', () => {
-    // Start at Fortress Gates
+  it('leaves the fragment, chain and essence only once the gates fall', () => {
     expectCurrentRoom(game.state, 'Fortress Gates')
+    executeCommands(game, ['take ward stone fragment', "take guardian's chain"])
+    expectItemInInventory(game.state, 'Ward Stone Fragment', false)
+    expectItemInInventory(game.state, "Guardian's Chain", false)
 
-    // Check that we can take ward stone fragment
-    executeCommands(game, ['take ward stone fragment'])
+    executeCommands(game, [
+      'cast light on right stone',
+      'take ward stone fragment',
+      "take guardian's chain",
+    ])
     expectItemInInventory(game.state, 'Ward Stone Fragment', true)
-
-    // Check that we can take guardian's chain
-    executeCommands(game, ["take guardian's chain"])
     expectItemInInventory(game.state, "Guardian's Chain", true)
   })
 
   it('has working room transitions in phase 1', () => {
-    // Start in Fortress Gates
     expectCurrentRoom(game.state, 'Fortress Gates')
 
     // Move to Outer Courtyard (the barrier must be down first)
-    executeCommands(game, [
-      'take ward stone fragment',
-      'use ward stone fragment with barriers',
-      'east',
-    ])
+    executeCommands(game, ['cast light on right stone', 'east'])
     expectCurrentRoom(game.state, 'Outer Courtyard')
 
     // Return to Fortress Gates
@@ -184,8 +163,8 @@ describe('Act 4 integration', () => {
 
   describe('the gates and the courtyard', () => {
     const BARRIER_THROWS_BACK =
-      'The violet wall gives under your hand, then pushes you back, ' +
-      'gently and firmly. It hums in time with the ward stones.'
+      'A shimmering barrier of dark energy throws you back. It pulses in ' +
+      'rhythm with the ward stones.'
     const SERVANTS_BLOCK =
       'The servants drift across the archway, their chains trailing. ' +
       'They do not stop for you, and you cannot get past them.'
@@ -197,11 +176,7 @@ describe('Act 4 integration', () => {
 
     /** Break the barrier and banish the guardians. */
     function breakThrough(): void {
-      executeCommands(game, [
-        'take ward stone fragment',
-        'use ward stone fragment with barriers',
-        'cast light on ward stones',
-      ])
+      executeCommands(game, ['cast light on right stone'])
     }
 
     /** Break through and walk into the courtyard. */
@@ -262,10 +237,7 @@ describe('Act 4 integration', () => {
     it('shows no exits at the gates until the barrier is broken', () => {
       const before = game.state.currentRoom.describe(game.state)
       expect(before).not.toContain('Exits:')
-      executeCommands(game, [
-        'take ward stone fragment',
-        'use ward stone fragment with barriers',
-      ])
+      executeCommands(game, ['cast light on right stone'])
       const broken = game.state.currentRoom.describe(game.state)
       expect(broken).toContain('[exits]east[/exits]')
       expect(broken).toContain('[exits]north[/exits]')
@@ -273,9 +245,7 @@ describe('Act 4 integration', () => {
 
     it('refuses light before the barrier is broken', () => {
       const answer = executeCommands(game, ['cast light on ward stones'])
-      expect(answer).toContain(
-        'Your light touches the nearest guardian and slides off it',
-      )
+      expect(answer).toContain('They drink it together and keep their count.')
       expect(answer).not.toContain('You must')
       expectStoryFlag(
         game.state,
@@ -296,10 +266,9 @@ describe('Act 4 integration', () => {
       )
       const room = game.state.currentRoom.describe(game.state)
       expect(room).toContain(
-        'The ward stones are dark now, and the paths between them are empty. ' +
-          'The gates stand open.',
+        'The ward stones stand dark and silent now, and the barrier is gone.',
       )
-      expect(room).not.toContain('still walk')
+      expect(room).not.toContain('guardians drift')
       expect(executeCommands(game, ['go north'])).toContain('You move north to')
       expectCurrentRoom(game.state, 'Hall of Echoes')
       executeCommands(game, ['go south'])
@@ -386,20 +355,16 @@ describe('Act 4 integration', () => {
       expectItemInInventory(game.state, "Servant's Pendant", true)
     })
 
-    it('shows the middle gates description once the wall is down, also after a reload', () => {
+    it('shows the gates description that matches, also after a reload', () => {
       const look = (): string => game.state.currentRoom.describe(game.state)
-      expect(look()).toContain('a thin wall of the same light')
-      executeCommands(game, [
-        'take ward stone fragment',
-        'use ward stone fragment with barriers',
-      ])
-      expect(look()).toContain('The violet wall is gone')
-      expect(look()).toContain('still walk their short lines')
+      expect(look()).toContain(
+        'Three ancient ward stones, left, middle and right',
+      )
+      executeCommands(game, ['cast light on right stone'])
+      expect(look()).toContain('the barrier is gone')
       const loaded = game.loadSaveData(game.toSaveData())
       expect(loaded).toContain('Game loaded successfully.')
-      expect(look()).toContain('The violet wall is gone')
-      executeCommands(game, ['cast light on ward stones'])
-      expect(look()).toContain('The gates stand open.')
+      expect(look()).toContain('the barrier is gone')
     })
 
     it('never tells the player what to type in the first half of the act', () => {
@@ -437,7 +402,7 @@ describe('Act 4 integration', () => {
       reload()
       expectQuestCompleted(game.state, 'Shattered Ward Guardians')
       expect(game.state.currentRoom.describe(game.state)).toContain(
-        'The ward stones are dark now',
+        'The ward stones stand dark and silent now',
       )
       expect(executeCommands(game, ['go north'])).toContain('You move north to')
       executeCommands(game, ['go south', "take guardian's essence", 'east'])
@@ -561,7 +526,7 @@ describe('Act 4 integration', () => {
 
     /** Play the golden path up to freeing the servants and taking the pendant. */
     function toFreedServants(): void {
-      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, 10))
+      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, 8))
     }
 
     /** Fetch the Echo Stone from the hall and walk to the maze door. */

@@ -1,27 +1,34 @@
 import { Item, type GameState, event } from '@/engine'
-import { FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
+  FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
+} from '../Act4StoryFlags'
 
-/** Ancient ward stones that anchor the fortress's magical defenses. */
+/** The three ward stones taken together: the look that names the odd one out. */
 export class WardStones extends Item {
   constructor() {
     super({
       name: 'Ward Stones',
       description:
-        'Four pillars of black stone, carved with runes and glowing a steady ' +
-        'violet. They stand exactly as far apart as each other, and the ' +
-        'guardians never stray from the lines between them.',
+        'Three ward stones stand before the gates, left, middle and right.',
       canBeCarried: false,
     })
   }
 
-  /** Examine the ward stones; the first look starts the guardians quest. */
+  /** Examine the ward stones; before the gates fall the first look starts the guardians quest. */
   override examine(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED)) {
+      return event(
+        'Three ward stones, dark and silent. The right one is missing a ' +
+          'piece of its face.',
+      )
+    }
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
     return event(
-      'You look at each stone in turn. The runes are cut deep and even, the ' +
-        'same hand on every one. Only one stone is not quite perfect: a corner ' +
-        'has broken away, and the piece lies at its foot. Its light stutters ' +
-        'where the others hold steady.',
+      'Three ward stones stand before the gates, evenly spaced, each carved ' +
+        'with the same runes. Their light swells and fades together, and the ' +
+        'barrier swells and fades with them. All but one: the right stone ' +
+        'brightens a breath after the others, like a man who has lost count.',
     )
   }
 }

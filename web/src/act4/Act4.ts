@@ -2,6 +2,7 @@ import { Act, type GameState, dialogue } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { LifelightElixir } from './items/LifelightElixir'
 import { LoyaltyToken } from './items/LoyaltyToken'
+import { WardStone } from './items/WardStone'
 import { Whispers } from './characters/Whispers'
 import { FortressGates } from './rooms/FortressGates'
 import { OuterCourtyard } from './rooms/OuterCourtyard'
@@ -146,9 +147,16 @@ export class Act4 extends Act {
    * Saves from before the friends were named to the whispers: the old flag
    * for the raised token now means the stair is open, a tower still barred
    * gets its whispers, and the Loyalty Token (once found in the courtyard) is
-   * moved into the pack.
+   * moved into the pack. Saves from before the three ward stones stood at the
+   * Fortress Gates get them back, so the gates can still be solved.
    */
   override afterLoad(gameState: GameState): void {
+    const gates = gameState.allRooms.FortressGates
+    if (gates && !gates.getItemByName('Right Stone')) {
+      for (const side of ['left', 'middle', 'right'] as const) {
+        gates.addItem(new WardStone(side))
+      }
+    }
     const legacyOpen = gameState.getStoryFlag(
       LEGACY_FLAG_ACT4_LOYALTY_TOKEN_RAISED,
     )
