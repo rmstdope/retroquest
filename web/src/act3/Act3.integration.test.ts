@@ -668,9 +668,18 @@ describe('Act 3 golden path as declared by the act', () => {
     )
     executeCommands(game, ACT3_GOLDEN_PATH.slice(0, toDragon))
     game.state.removeItemFromInventory('Old Oath Scrolls')
-    game.state.currentRoom.items.splice(0, game.state.currentRoom.items.length)
+    const chambers = game.state.getRoom('Echo Chambers')?.items ?? []
+    chambers.splice(
+      0,
+      chambers.length,
+      ...chambers.filter((i) => i.name !== 'Old Oath Scrolls'),
+    )
+    expect(chambers.some((i) => i.name === 'Old Oath Scrolls')).toBe(false)
     const fresh = new Game([new Act3()])
     fresh.loadSaveData(game.toSaveData())
+
+    const talk = executeCommands(fresh, ['talk to ancient dragon'])
+    expect(talk).toContain('what will you give back, for what you take?')
 
     const early = executeCommands(fresh, ['say it to ancient dragon'])
     expect(early).toContain('I take what is given, and I return it.')
