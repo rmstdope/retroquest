@@ -64,13 +64,37 @@ export class SanctumOfTheTide extends Room {
     if (!guardian || !this.isDark(gameState)) return null
     if (direction === 'east') {
       const text = guardian.walkEast(gameState)
-      if (guardian.step() >= TRIAL_STEPS && !this.getItemByName('Crystal')) {
-        this.addItem(new CrystalOfLight())
-      }
+      this.syncCrystal(gameState)
       return text
     }
-    if (direction === 'west' && guardian.step() > 0) return guardian.turnBack()
+    if (direction === 'west' && guardian.step() > 0) {
+      const text = guardian.turnBack()
+      this.syncCrystal(gameState)
+      return text
+    }
     return null
+  }
+
+  /**
+   * In the dark the Crystal of Light is in the room only while the water is
+   * parted (the third step); anywhere else before the vow it is taken out
+   * of the item list, which also tidies saves made before the trial existed.
+   */
+  private syncCrystal(gameState: GameState): void {
+    const guardian = this.guardian()
+    if (!guardian || !this.isDark(gameState)) return
+    const present = this.getItemByName('Crystal of Light') !== null
+    if (guardian.step() >= TRIAL_STEPS) {
+      if (!present) this.addItem(new CrystalOfLight())
+    } else if (present) {
+      this.removeItem('Crystal of Light')
+    }
+  }
+
+  /** Describe the room, with the crystal listed only when it is really there. */
+  override describe(gameState: GameState): string {
+    this.syncCrystal(gameState)
+    return super.describe(gameState)
   }
 
   /**
@@ -83,6 +107,7 @@ export class SanctumOfTheTide extends Room {
     if (!guardian) return ''
     const first = !(guardian.trialBegun ?? false)
     const darkness = guardian.enterLine(gameState)
+    this.syncCrystal(gameState)
     if (darkness === '' || !first) return darkness
     return event(this.description) + '\n' + darkness
   }

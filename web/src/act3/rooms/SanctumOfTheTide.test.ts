@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from '../Act3'
+import { CrystalOfLight } from '../items/CrystalOfLight'
 import {
   FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
   FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
@@ -147,5 +148,22 @@ describe('Sanctum of the Tide trial', () => {
     reloaded.loadSaveData(game.toSaveData())
     expect(reloaded.state.currentRoom.name).toBe('Sanctum of the Tide')
     expect(describeRoom(reloaded)).toContain('Black water to your waist')
+  })
+
+  it('takes the crystal away again when Elior turns back or leaves', () => {
+    enter()
+    executeCommands(game, ['east', 'east', 'east', 'say gold to guardian'])
+    executeCommands(game, ['west'])
+    expect(describeRoom(game)).not.toContain('Crystal of Light')
+    executeCommands(game, ['east', 'east', 'east', 'west', 'west', 'east'])
+    expect(describeRoom(game)).not.toContain('Crystal of Light')
+    executeCommands(game, ['east', 'east', 'east'])
+    expect(describeRoom(game)).toContain('Crystal of Light')
+  })
+
+  it('hides a crystal left in the room by an older save until step 3', () => {
+    enter()
+    game.state.currentRoom.addItem(new CrystalOfLight())
+    expect(describeRoom(game)).not.toContain('Crystal of Light')
   })
 })
