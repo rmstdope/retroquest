@@ -471,6 +471,26 @@ describe('Game', () => {
       expect(game.state.currentRoom).toBe(other)
     })
 
+    it('shows the text a room says on departure before the move line', () => {
+      class GateRoom extends Room {
+        /** Say something when leaving east. */
+        override departText(_gameState: GameState, direction: string): string {
+          return direction === 'east' ? '[event]You slip out.[/event]\n\n' : ''
+        }
+      }
+      const gate = new GateRoom({
+        name: 'Gate',
+        description: 'd',
+        exits: { east: 'Other' },
+      })
+      const other = new Room({ name: 'Other', description: 'd' })
+      const game = makeGame({ Gate: gate, Other: other })
+      expect(game.move('west')).not.toContain('You slip out.')
+      const moved = game.move('east')
+      expect(moved.startsWith('[event]You slip out.[/event]')).toBe(true)
+      expect(moved).toContain('You move east')
+    })
+
     it('lets the player leave a room named Main Square by any of its exits', () => {
       const square = new Room({
         name: 'Main Square',
@@ -981,6 +1001,7 @@ describe('Game', () => {
       const help = game.help()
       expect(help).toContain('[bold]Available Commands:[/bold]')
       expect(help).toContain('cast <spell> on <object/character>')
+      expect(help).toContain('sleep, rest, wait')
       expect(help.toLowerCase()).not.toContain('cheat')
       expect(game.getCommandCompletions()).not.toHaveProperty('cheat')
     })

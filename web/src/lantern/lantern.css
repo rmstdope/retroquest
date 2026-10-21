@@ -282,6 +282,13 @@ body {
 .theme-italic {
   font-style: italic;
 }
+.theme-breath {
+  display: block;
+  margin: 0.4em 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--lq-accent);
+  font-style: italic;
+}
 .theme-dim {
   color: var(--lq-muted);
   opacity: 1;

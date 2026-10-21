@@ -1,6 +1,9 @@
 import { Character, type GameState, characterName, speech } from '@/engine'
 import { CEDRIC_PATIENCE, cedricAdds } from '../CedricLines'
-import { FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
+  FLAG_ACT3_FUMAROLE_WARD_APPLIED,
+} from '../Act3StoryFlags'
 
 /** A silent, vigilant figure who tends the vents and watches the passage to the crater. */
 export class PhoenixGuardian extends Character {
@@ -13,9 +16,23 @@ export class PhoenixGuardian extends Character {
     })
   }
 
-  /** Give hints before and after the south exit is unlocked. */
+  /** Give hints before the ward, while the breath must be counted, and after the first crossing. */
   override talkTo(gameState: GameState): string {
-    if (!gameState.getStoryFlag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED)) {
+    const crossed = gameState.getStoryFlag(
+      FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
+    )
+    if (!crossed && gameState.getStoryFlag(FLAG_ACT3_FUMAROLE_WARD_APPLIED)) {
+      return (
+        'The ' +
+        characterName('Phoenix Guardian') +
+        ' watches the vents. ' +
+        speech(
+          'The ward holds, but the mountain still breathes. Count its breath. ' +
+            'Walk when it draws in.',
+        )
+      )
+    }
+    if (!crossed) {
       return (
         'The ' +
         characterName('Phoenix Guardian') +

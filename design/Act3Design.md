@@ -154,6 +154,7 @@ Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned f
     -   Objectives:
         -   Gather ash‑fern and cooled slag to craft a simple heat ward
         -   Calibrate vent stones to synchronize the safe crossing intervals
+        -   Once the ward is set the vents breathe out, pause, in; wait (`rest` or `wait`) and cross south only on the in-breath
     -   Outcome: Enables safe passage through heated vents; required to stand before the phoenix and receive the Feather
 
 #### Caverns of Shadow (Selflessness)
@@ -337,10 +338,10 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 -   Description: Narrow tunnels exhaling rhythmic heat; stone vents chuff like a great sleeping bellows.
 -   Items: Vent Stones.
 -   Characters: Phoenix Guardian, who explains the vent-and-ward trial and later advises patience before meeting the Phoenix.
--   Quest Relevance: Calibrate three vent stones and apply the heat ward to complete “Breath of the Mountain.”
+-   Quest Relevance: Calibrate three vent stones, apply the heat ward, then time the crossing to complete “Breath of the Mountain” (Wisdom: patience). After the ward the vents breathe out → pause → in; only `rest`/`wait` (or a failed try south) moves the breath on, it restarts on the out-breath at every entry, and south can only be crossed on the in-breath.
 -   Exits:
     -   West to Mirror Terraces
-    -   South to Phoenix Crater only after “Breath of the Mountain” is completed
+    -   South to Phoenix Crater: listed once the heat ward is applied, crossed only on the in-breath (the first crossing completes “Breath of the Mountain”)
 
 5. Ember Gallery
 
@@ -515,7 +516,7 @@ The connections reflect exits:
 -   Fumarole Passages: W→MT, S→PC
 -   Ember Gallery: N→MT, W→LS
 -   Phoenix Crater: N→FP
-    -   Mirror Terraces’ east exit opens after “Mirrors of Emberlight”; Fumarole Passages’ south exit opens after “Breath of the Mountain.”
+    -   Mirror Terraces’ east exit opens after “Mirrors of Emberlight”; Fumarole Passages’ south exit is listed after the heat ward and crossed on the vents’ in-breath, which completes “Breath of the Mountain.”
 
 ### Caverns of Shadow — Selflessness (Dragon’s Scale)
 
@@ -682,12 +683,13 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 -   Commands and yields:
     -   `north` → Returns to Mirror Terraces; `east` enters Fumarole Passages.
     -   `use vent stone` (three times) → Synchronizes the vents.
-    -   `use heat-ward mix` → Applies the heat ward, completes “Breath of the Mountain,” and opens the south exit to the crater.
+    -   `use heat-ward mix` → Applies the heat ward: the vents start a steady breath (out, pause, in) and the south exit is listed.
+    -   `rest` twice → The breath goes out → pause → in (it always starts on the out-breath on entry; `wait` does the same as `rest`).
 
 16. Room: Phoenix Crater (Reveal the Phoenix)
 
 -   Commands and yields:
-    -   `south` → Enters the crater after “Breath of the Mountain” is complete.
+    -   `south` → On the vents’ in-breath: crosses into the crater and completes “Breath of the Mountain.”
     -   `rest` → Reveals the Phoenix and changes the room description.
 
 17. Room: Phoenix Crater (Relic Trial)
