@@ -5,6 +5,16 @@ import { Families } from '../characters/Families'
 import { FLAG_ANCIENT_LIBRARY_ACCEPTED } from '../Act2StoryFlags'
 import { HiddenLibrary } from './HiddenLibrary'
 
+/** Hint appended to the description while the passage is still hidden. */
+const CELLAR_HINT =
+  'At the end of one lane an old cellar door has been bricked up, and a cold ' +
+  'draught breathes through the gaps.'
+
+/** Replaces the hint once the secret passage has been found. */
+const CELLAR_AFTER =
+  'At the end of one lane, behind the old storage crates, the way down to the ' +
+  'hidden library stands open.'
+
 /** Residential Quarter room for Act II; handles hidden library discovery. */
 export class ResidentialQuarter extends Room {
   constructor() {
@@ -20,6 +30,12 @@ export class ResidentialQuarter extends Room {
       characters: [new LocalCraftsmen(), new Families()],
       exits: { south: 'CastleCourtyard', north: 'HealersHouse' },
     })
+  }
+
+  /** The description, ending with the cellar hint or its "after" sentence. */
+  override descriptionFor(gameState: GameState): string {
+    const found = gameState.getStoryFlag(FLAG_ANCIENT_LIBRARY_ACCEPTED)
+    return `${this.description} ${found ? CELLAR_AFTER : CELLAR_HINT}`
   }
 
   /** Handle searching for the Hidden Library entrance. */

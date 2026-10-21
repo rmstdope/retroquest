@@ -3,6 +3,15 @@ import type { GameState } from '@/engine'
 import { TravelersJournal } from '../items/TravelersJournal'
 import { Coins } from '../items/Coins'
 
+/** Hint appended to the description while the journal is still hidden. */
+const FLOORBOARD_HINT =
+  'One floorboard beside the bed sits a little proud of the rest.'
+
+/** Replaces the hint once the journal has been found. */
+const FLOORBOARD_AFTER =
+  'The loose floorboard beside the bed sits back in its place, the hiding ' +
+  'place beneath it empty.'
+
 /**
  * Inn Rooms room: private upstairs chambers with hidden journal and coin stash.
  *
@@ -23,6 +32,11 @@ export class InnRooms extends Room {
       characters: [],
       exits: { west: 'SilverStagInn' },
     })
+  }
+
+  /** The description, ending with the floorboard hint or its "after" sentence. */
+  override descriptionFor(_gameState: GameState): string {
+    return `${this.description} ${this.journalFound ? FLOORBOARD_AFTER : FLOORBOARD_HINT}`
   }
 
   /** Search for the hidden traveler's journal (idempotent). */

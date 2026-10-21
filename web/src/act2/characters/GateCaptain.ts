@@ -46,8 +46,8 @@ export class GateCaptain extends Character {
           speech(
             "'Welcome to Greendale, honored visitor. You'll need a map to " +
               'navigate the city - the streets can be quite maze-like for ' +
-              'newcomers. Feel free to look around here for anything that might ' +
-              "help you find your way.'",
+              'newcomers. Travelers leave all sorts at the information post by ' +
+              "the arch; have a look there before you go in.'",
           ) +
           ' With that, he salutes smartly and walks back to his patrol ' +
           'duties, leaving you free to explore the gate area.'
