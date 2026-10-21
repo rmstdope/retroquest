@@ -3,6 +3,7 @@ import { CEDRIC_FEATHER_GLANCE, cedricAdds } from '../CedricLines'
 import { PhoenixFeather } from '../items/PhoenixFeather'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
+  FLAG_ACT3_INSCRIPTION_MENDED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_PHOENIX_STORY_TOLD,
 } from '../Act3StoryFlags'
@@ -40,7 +41,8 @@ export class Phoenix extends Character {
    * Poses the telepathic riddle with a hint at the Warden of Wisdom; once the
    * feather is earned the riddle is no longer asked and the Phoenix bids farewell;
    * on the first such talk after the Charred Inscription has been read, it first
-   * tells, once, who struck Malakar's name deeper.
+   * tells, once, who struck Malakar's name deeper; once the name is mended it
+   * adds that Elior gave him back his place.
    */
   override talkTo(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
@@ -60,6 +62,11 @@ export class Phoenix extends Character {
                 'others. No fire did that. He came back, years after, and ' +
                 'struck it again himself, to cut himself out of the promise. ' +
                 "The stone would not let him.'",
+            ) + ' '
+          : '') +
+        (gameState.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)
+          ? speech(
+              "'You gave him back his place. He could not do that for himself.'",
             ) + ' '
           : '') +
         speech("'Remember him when time is short for you.'")
@@ -111,11 +118,11 @@ export class Phoenix extends Character {
             'patience was the one thing he had none of. Do not become what he ' +
             "became.'",
         )
-      const terraces = gameState.getStoryFlag(
-        FLAG_ACT3_CHARRED_INSCRIPTION_READ,
-      )
-        ? ' You think of the third name burned deeper than the others on the terraces.'
-        : ''
+      const terraces = gameState.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)
+        ? ' You think of the third name on the terraces, level with the others again.'
+        : gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)
+          ? ' You think of the third name burned deeper than the others on the terraces.'
+          : ''
       return (
         'The ' +
         characterName('phoenix') +

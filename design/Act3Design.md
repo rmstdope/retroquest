@@ -351,7 +351,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
     -   North to Mirror Terraces
     -   West to Lower Switchbacks
 
-6. Phoenix Crater (once the feather is earned and the Charred Inscription read, the Phoenix tells once that Malakar himself struck his name deeper)
+6. Phoenix Crater (once the feather is earned and the Charred Inscription read, the Phoenix tells once that Malakar himself struck his name deeper; if the name has been mended, its farewell adds “You gave him back his place. He could not do that for himself.”)
 
 -   Description: A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals.
 -   Items: Starts empty.
@@ -446,6 +446,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle. Each r
 | Collapsed Pier, Pier Warden   | Tell the Pier Warden the true state of the ruins instead of the comforting lie       | **truth**    |
 | Stillness Vestibule, Phantoms | Free the wandering phantoms without banishing them (`say rest to wandering phantoms`) before the chant; the chant then still completes the quest | **mercy**    |
 | Dragon’s Hall, the Dragon     | After taking the scale, mend the prison it weakened (`cast bless on sigils`), gaining nothing | **selfless** |
+| Mirror Terraces, Charred Inscription | After reading it, restore Malakar’s deeper-struck name (`cast mend on inscription`). The inscription’s closing line, the Phoenix’s farewell and the feather reply change once it is done | **mercy**    |
 
 The endings read the counters across the whole game, as described in `Act4Design.md`.
 

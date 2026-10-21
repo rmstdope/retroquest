@@ -1,7 +1,11 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from '../Act3'
-import { FLAG_ACT3_CHARRED_INSCRIPTION_READ } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_CHARRED_INSCRIPTION_READ,
+  FLAG_ACT3_INSCRIPTION_MENDED,
+  VIRTUE_MERCY,
+} from '../Act3StoryFlags'
 import { CharredInscription } from './CharredInscription'
 import { parseTurn } from '@/lantern/parseTurn'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
@@ -103,5 +107,98 @@ describe('CharredInscription', () => {
     )
     expect(again).not.toContain('glows again')
     expectMarkupWellFormed(first)
+  })
+})
+
+const MENDED_CLOSING =
+  'The three names sit level in the stone, as they did the day the promise ' +
+  'was made. Your parents and Malakar made this promise together, and the ' +
+  'wisdom was his.'
+
+describe('CharredInscription mending', () => {
+  it('only nudges toward reading it before it has been read', () => {
+    const { game, inscription } = setup()
+
+    const answer = inscription.receiveSpell(game.state, 'mend', 'mend')
+
+    expect(answer).toBe(
+      '[event]You cast [spell_name]mend[/spell_name] on the ' +
+        '[item_name]Charred Inscription[/item_name].[/event]\n' +
+        'The magic settles over the blackened letters and waits. You have ' +
+        'not read them yet; you do not know what in them is broken.',
+    )
+    expect(game.state.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(false)
+    expect(game.state.virtueCount(VIRTUE_MERCY)).toBe(0)
+    expectMarkupWellFormed(answer)
+  })
+
+  it('restores the name, records one mercy and says it is remembered', () => {
+    const { game, inscription } = setup()
+    inscription.examine(game.state)
+
+    const answer = inscription.receiveSpell(game.state, 'mend', 'mend')
+
+    expect(answer).toContain(
+      "The deeper cut fills. Malakar's name sits level with your parents' " +
+        'again, as it was the day they wrote it.',
+    )
+    expect(answer).toBe(
+      '[event]You cast [spell_name]mend[/spell_name] on the ' +
+        '[item_name]Charred Inscription[/item_name].[/event]\n' +
+        "The deeper cut fills. Malakar's name sits level with your parents' " +
+        'again, as it was the day they wrote it.\n' +
+        '[event]✦ Mercy — this will be remembered[/event]',
+    )
+    expect(game.state.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(true)
+    expect(game.state.virtueCount(VIRTUE_MERCY)).toBe(1)
+    expectMarkupWellFormed(answer)
+  })
+
+  it('still allows the mercy after an early cast once it has been read', () => {
+    const { game, inscription } = setup()
+    inscription.receiveSpell(game.state, 'mend', 'mend')
+    inscription.examine(game.state)
+
+    inscription.receiveSpell(game.state, 'mend', 'mend')
+    inscription.receiveSpell(game.state, 'mend', 'mend')
+
+    expect(game.state.virtueCount(VIRTUE_MERCY)).toBe(1)
+  })
+
+  it('says nothing is left to mend the second time, recording nothing', () => {
+    const { game, inscription } = setup()
+    inscription.examine(game.state)
+    inscription.receiveSpell(game.state, 'mend', 'mend')
+
+    const answer = inscription.receiveSpell(game.state, 'mend', 'mend')
+
+    expect(answer).toContain(
+      'The three names sit level and whole. There is nothing left to mend.',
+    )
+    expect(answer).not.toContain('remembered')
+    expect(game.state.virtueCount(VIRTUE_MERCY)).toBe(1)
+  })
+
+  it('ignores spells other than mend', () => {
+    const { game, inscription } = setup()
+    inscription.examine(game.state)
+
+    const answer = inscription.receiveSpell(game.state, 'bless', 'bless')
+
+    expect(answer).toContain('no effect')
+    expect(game.state.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(false)
+  })
+
+  it('ends the reading on the level-names line once mended, without a new glow', () => {
+    const { game, inscription } = setup()
+    inscription.examine(game.state)
+    inscription.receiveSpell(game.state, 'mend', 'mend')
+
+    const answer = inscription.examine(game.state)
+
+    expect(answer).toContain(MENDED_CLOSING)
+    expect(answer).not.toContain('burned deeper')
+    expect(answer).not.toContain('glows again')
+    expectMarkupWellFormed(answer)
   })
 })
