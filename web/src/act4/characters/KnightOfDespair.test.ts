@@ -8,6 +8,8 @@ import { LoyaltyToken } from '../items/LoyaltyToken'
 import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED,
+  FLAG_ACT4_BANNERS_SEEN,
+  FLAG_ACT4_ECHO_STONE_HEARD,
   FLAG_ACT4_KNIGHT_SEEN_THROUGH,
   FLAG_ACT4_CHAIN_GIVEN,
 } from '../Act4StoryFlags'
@@ -256,6 +258,8 @@ describe('KnightOfDespair', () => {
       game.state.removeItemFromInventory("Guardian's Chain")
       game.state.addItemToInventory(new LoyaltyToken())
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_BANNERS_SEEN, true)
+      game.state.setStoryFlag(FLAG_ACT4_ECHO_STONE_HEARD, true)
       game.state.setStoryFlag(FLAG_ACT4_CHAIN_GIVEN, true)
       return game
     }
@@ -284,6 +288,8 @@ describe('KnightOfDespair', () => {
     it('loses the chain’s protection if it is given away after raising', () => {
       const game = createGameInHall()
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_BANNERS_SEEN, true)
+      game.state.setStoryFlag(FLAG_ACT4_ECHO_STONE_HEARD, true)
       executeCommands(game, ["use guardian's chain"])
       game.state.removeItemFromInventory("Guardian's Chain")
       game.state.setStoryFlag(FLAG_ACT4_CHAIN_GIVEN, true)
@@ -295,6 +301,8 @@ describe('KnightOfDespair', () => {
     it('keeps the chain version when the chain is raised and kept', () => {
       const game = createGameInHall()
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_BANNERS_SEEN, true)
+      game.state.setStoryFlag(FLAG_ACT4_ECHO_STONE_HEARD, true)
       executeCommands(game, ["use guardian's chain"])
       const answer = executeCommands(game, ['say redemption to knight'])
       expect(answer).toContain("breaks against the chain's light")
@@ -303,6 +311,8 @@ describe('KnightOfDespair', () => {
     it('gives today’s refusal alone when the chain is kept but not raised', () => {
       const game = createGameInHall()
       game.state.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
+      game.state.setStoryFlag(FLAG_ACT4_BANNERS_SEEN, true)
+      game.state.setStoryFlag(FLAG_ACT4_ECHO_STONE_HEARD, true)
       const answer = executeCommands(game, ['say redemption to knight'])
       expect(answer).toContain(NO_CHAIN)
       expect(answer).not.toContain('The chain is gone')

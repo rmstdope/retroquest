@@ -914,6 +914,8 @@ describe('Act 4 integration', () => {
       executeCommands(game, [
         "use guardian's chain",
         'cast truth sight on knight of despair',
+        'cast truth sight on banners',
+        'cast truth sight on echo stone',
       ])
       game.state.currentRoom = game.state.allRooms.OuterCourtyard
       executeCommands(game, ["give guardian's chain to captain"])
