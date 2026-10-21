@@ -3,6 +3,7 @@ import {
   type GameState,
   type Item,
   characterName,
+  dialogue,
   event,
   speech,
 } from '@/engine'
@@ -16,6 +17,17 @@ import {
   FLAG_WHISPERS_IN_WIND_OFFERED,
 } from '../Act2StoryFlags'
 
+/** Where the nymphs are, said after the acorn without naming what to bring. */
+const NYMPHS_POINTER_TEXT =
+  'The nymphs in the glade east of the entrance have something for these ' +
+  'roots. Answer them, and bring back what they give you.'
+/** The pointer as a quoted line, for a talk after the acorn. */
+const NYMPHS_POINTER = `'${NYMPHS_POINTER_TEXT}'`
+/** The pointer as spoken straight after the spell is learned. */
+const NYMPHS_POINTER_AFTER_SPELL =
+  "'Now you can hear them, you'll hear the grove is uneasy. " +
+  `${NYMPHS_POINTER_TEXT}'`
+
 /** Ancient Tree Spirit NPC for quest progression and spell teaching. */
 export class AncientTreeSpirit extends Character {
   acornReceived = false
@@ -25,39 +37,27 @@ export class AncientTreeSpirit extends Character {
     super({
       name: 'ancient tree spirit',
       description:
-        'A magnificent presence that dwells within the silver-barked tree, ' +
-        'ancient beyond measure and wise beyond mortal understanding. The ' +
-        'spirit manifests as a shifting form of bark, leaves, and silver ' +
-        'light, with eyes like deep forest pools that have witnessed the ' +
-        'passing of countless seasons. Its voice sounds like wind through ' +
-        'old growth forests, carrying the weight of millennia.',
+        'The spirit lives in the silver-barked tree. Its face is only there ' +
+        'when you stop looking for it: two knots for eyes, a split in the ' +
+        'bark for a mouth. Moss grows on it in rings, one for every winter.',
     })
   }
 
   /** Handle dialogue when talking to the Ancient Tree Spirit. */
   override talkTo(gameState: GameState): string {
-    const eventMsg = event(
-      'You approach the ' + characterName(this.name) + ' with reverence.',
-    )
+    const eventMsg = event('You approach the ' + characterName(this.name) + '.')
 
     if (!this.acornReceived) {
       // Player hasn't brought the acorn yet
       return (
         eventMsg +
-        '\nThe ' +
-        characterName(this.name) +
-        ' acknowledges your presence with a slow, measured gaze. ' +
-        speech(
-          "'Welcome, young seeker, to my ancient domain. You show proper " +
-            "reverence, which speaks well of your character.'",
-        ) +
+        '\nA face gathers in the knots of the silver bark and turns toward ' +
+        'you. ' +
+        speech("'You walk like spring. Everything new, nothing kept.'") +
         '\n\n' +
         speech(
-          "'However, respect alone does not earn the deepest wisdom of the " +
-            'forest. If you would learn the ancient ways, you must first ' +
-            'demonstrate your understanding of forest customs. Bring me a gift ' +
-            'that shows your connection to the natural world, and I will ' +
-            "consider sharing my knowledge with you.'",
+          "'I don't teach for nothing. Bring me something that hasn't " +
+            "grown yet.'",
         )
       )
     }
@@ -66,45 +66,20 @@ export class AncientTreeSpirit extends Character {
       // Player has given the acorn but hasn't completed the quest yet
       return (
         eventMsg +
-        '\nThe ' +
-        characterName(this.name) +
-        ' senses your presence and turns its ancient gaze upon you. ' +
-        speech(
-          "'Ah, young forest friend, you return to me. I sense you have been " +
-            'learning to use the gift of forest speech, but your task is not ' +
-            "yet complete.'",
-        ) +
+        '\n' +
+        speech("'Still summer for you, then — all errands.'") +
         '\n\n' +
-        speech(
-          "'Remember what I asked of you - to restore harmony to this sacred " +
-            'grove by helping the creatures in distress. The water nymphs of ' +
-            'the Whispering Glade to the north hold ancient wisdom and sacred ' +
-            'gifts, but they will only share them with those who prove their ' +
-            "understanding through their trials.'",
-        ) +
-        '\n\n' +
-        speech(
-          "'Seek them out, young one. Answer their challenges, earn their " +
-            'trust, and gather what they offer. Only when you have shown that ' +
-            'you truly comprehend the interconnected nature of all forest life ' +
-            'will your quest be complete. Return to me when you carry both ' +
-            'crystal-clear water and moonflowers - the symbols of their ' +
-            "acceptance.'",
-        )
+        speech(NYMPHS_POINTER)
       )
     }
 
-    // General conversation after all interactions
+    // General conversation after the quest is complete
     return (
       eventMsg +
-      '\nThe ' +
-      characterName(this.name) +
-      ' rustles gently in a breeze that touches only its silver ' +
-      'branches. ' +
+      '\n' +
       speech(
-        "'You have learned much, young forest friend. Use your knowledge " +
-          'wisely, and remember that the greatest magic comes from ' +
-          "understanding the connections between all living things.'",
+        "'Autumn, for you. You came with nothing and you leave carrying " +
+          "things. The way south is yours.'",
       )
     )
   }
@@ -120,15 +95,7 @@ export class AncientTreeSpirit extends Character {
     // Handle the enchanted acorn
     if (item instanceof EnchantedAcorn) {
       if (this.acornReceived) {
-        return (
-          'The ' +
-          characterName(this.name) +
-          ' gently refuses. ' +
-          speech(
-            "'You have already offered me the sacred acorn, young one. One " +
-              "gift of such significance is enough.'",
-          )
-        )
+        return this.refuseRepeatGift()
       }
 
       // Receive the acorn, teach the spell, and offer the quest
@@ -140,41 +107,16 @@ export class AncientTreeSpirit extends Character {
 
       return (
         eventMsg +
-        '\nThe ' +
-        characterName(this.name) +
-        ' stirs as you offer the [item_name]enchanted acorn[/item_name]. ' +
-        "The ancient being's form brightens with approval. " +
+        '\nThe bark around the knots softens. ' +
         speech(
-          "'Ah, young one, you bring me a gift of great significance. This " +
-            'acorn carries the essence of new growth, the promise of future ' +
-            "forests.'",
+          "'Next spring's tree, and you carried it here instead of planting " +
+            "it. Good. Listen, then.'",
         ) +
-        '\n\n' +
-        speech(
-          "'You have shown respect and understanding by bringing this " +
-            'offering. In return, I shall share with you the ancient knowledge ' +
-            'of forest speech - the ability to commune with all growing things ' +
-            "and understand the voices of tree and beast alike.'",
-        ) +
-        "\n\n[success]The tree spirit's wisdom flows into your mind, " +
-        'teaching you the secrets of communication with the natural ' +
-        'world.\n\nYou have learned the [spell_name]Forest ' +
-        'Speech[/spell_name] spell![/success]\n\nThe ' +
-        characterName(this.name) +
-        ' regards you with ancient, knowing eyes. ' +
-        speech(
-          "'Now that you can speak with the forest, there is another service " +
-            'you could provide. The balance of this grove has been disturbed ' +
-            "by creatures in distress.'",
-        ) +
-        '\n\n' +
-        speech(
-          "'Use your newfound abilities to help the forest creatures who " +
-            'dwell here. Listen to their troubles, ease their burdens, and ' +
-            'restore harmony to this sacred place. When you have shown that ' +
-            'you truly understand the ways of the forest, return to me with ' +
-            "two gifts the forest has bestowed upon you.'",
-        )
+        '\n\n[success]The voices of the grove settle into you: the creak of ' +
+        'branches, the talk of roots, the small sounds in the undergrowth. ' +
+        'You can understand them now.\n\nYou have learned the ' +
+        '[spell_name]Forest Speech[/spell_name] spell![/success]\n\n' +
+        dialogue(this.name, NYMPHS_POINTER_AFTER_SPELL)
       )
     }
 
@@ -186,15 +128,7 @@ export class AncientTreeSpirit extends Character {
       }
 
       if (gameState.getStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED)) {
-        return (
-          'The ' +
-          characterName(this.name) +
-          ' nods approvingly but gently refuses. ' +
-          speech(
-            "'You have already proven yourself, young one. Keep these sacred " +
-              "gifts as tokens of the forest's trust in you.'",
-          )
-        )
+        return this.refuseRepeatGift()
       }
 
       const hasWater = gameState.hasItem('crystal-clear water')
@@ -206,57 +140,28 @@ export class AncientTreeSpirit extends Character {
         gameState.removeItemFromInventory('moonflowers')
 
         return (
-          'You approach the ' +
-          characterName(this.name) +
-          ' with the sacred items from the Whispering Glade - the ' +
-          "Crystal-Clear Water and the Moonflowers. At the spirit's gentle " +
-          'guidance, you pour some of the crystal-clear water at the base of ' +
-          'the silver tree, where the moonflowers immediately take root in ' +
-          "the blessed soil. The Ancient Tree Spirit's voice fills the grove " +
-          'with warmth and approval as the flowers begin to glow with ' +
-          'ethereal light.\n\n' +
-          speech(
-            "'You have done well, forest wanderer. The water nymphs have " +
-              'tested your wisdom and found you worthy. These sacred items - ' +
-              'water blessed with purification magic and flowers touched by ' +
-              "moonlight - are treasures of the forest's heart. You have shown " +
-              'respect for the old ways and proven yourself a true friend to the ' +
-              "woodland spirits.'",
+          'You pour some of the crystal-clear water at the foot of the ' +
+          'silver tree and set the moonflowers in the wet soil. They take ' +
+          'root at once and begin to glow.\n\n' +
+          dialogue(
+            this.name,
+            "'Rain and a night's flowers. That will see the roots through " +
+              "winter.'",
           ) +
-          "\n\nThe great tree's bark glows more brightly, and you feel a deep " +
-          'sense of accomplishment. The forest itself seems to acknowledge ' +
-          'your achievement, and the whispers in the wind now carry words of ' +
-          'welcome and gratitude.\n\n' +
-          speech(
-            "'Your dedication has earned you a great privilege, young seeker. " +
-              "I now open the path to the Heart of the Forest - Nyx's sacred " +
-              "home. The way south from here shall be revealed to you.'",
-          ) +
-          "\n\nThe spirit's ancient voice takes on a more serious tone.\n\n" +
-          speech(
-            "'However, know this - Nyx dwells between the realms, and to " +
-              'summon the forest sprite to this plane of existence, you will ' +
-              'need three sacred charms. These powerful tokens must be gathered ' +
-              'from across the forest realm. Only when you possess all three ' +
-              'charms can you call upon Nyx and receive the ultimate wisdom you ' +
-              "seek.'",
+          '\n\nSouth of the grove, branches pull apart with a long creak.\n\n' +
+          dialogue(
+            this.name,
+            "'The way south is open. Nyx lives at the end of it. She doesn't " +
+              "come for asking — read her altar before you call her.'",
           )
         )
       }
 
-      // Player only has one of the required items
-      const missingItem = hasWater ? 'moonflowers' : 'crystal-clear water'
-      return (
-        'The ' +
-        characterName(this.name) +
-        ` examines the [item_name]${item.name}[/item_name] with approval. ` +
-        speech(
-          "'This is indeed a sacred gift from the water nymphs, young one. " +
-            'However, to complete your task and prove your full understanding ' +
-            "of the forest's ways, you must bring me both the crystal-clear " +
-            `water and the moonflowers. Return when you have the [item_name]${missingItem}` +
-            "[/item_name] as well.'",
-        )
+      // Player only has one of the two gifts
+      return dialogue(
+        this.name,
+        "'Half a harvest. The nymphs gave you two things — go back for the " +
+          "other.'",
       )
     }
 
@@ -264,12 +169,18 @@ export class AncientTreeSpirit extends Character {
     return (
       'The ' +
       characterName(this.name) +
-      ` regards the [item_name]${item.name}[/item_name] with ancient ` +
-      'wisdom. ' +
-      speech(
-        "'This is not what I seek, young one. The forest calls for a more " +
-          "sacred offering.'",
-      )
+      ' does not stir. ' +
+      speech("'Wrong season for that.'")
+    )
+  }
+
+  /** Turn down a gift the spirit has already received. */
+  private refuseRepeatGift(): string {
+    return (
+      'The ' +
+      characterName(this.name) +
+      ' does not take it. ' +
+      speech("'Keep it. The roots have what they need.'")
     )
   }
 
@@ -278,11 +189,9 @@ export class AncientTreeSpirit extends Character {
     return event(
       'You study the ' +
         characterName(this.name) +
-        ` in wonder. ${this.description} The silver bark seems to contain ` +
-        'swirling galaxies of light, and you can sense the vast network of ' +
-        'roots that connect this ancient being to every living thing in ' +
-        'the forest. This is truly one of the oldest and most powerful ' +
-        'guardians of the natural world.',
+        `. ${this.description} The bark is warm under your hand, and below ` +
+        'your feet the roots shift slowly, like someone turning over in ' +
+        'their sleep.',
     )
   }
 }
