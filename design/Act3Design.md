@@ -85,7 +85,7 @@ When Mira next teleports the party she says the king is weaker. Together with th
         -   Phase 2: Phoenix Feather (Wisdom) — Requires completion of both Mount Ember side quests
         -   Phase 3: Dragon’s Scale (Selflessness) — Requires completion of both Caverns of Shadow side quests
         -   Mira’s Confession — After every Act III non-main quest is complete and before the rite, Mira tells Elior the truth about herself (see *Mira’s Confession*)
-        -   Final: Warding Rite — After the confession, Mira combines and consumes the three relics to create the Lifelight Elixir. This completes “The Three Virtues” and prepares the party for the Act IV assault.
+        -   Final: Warding Rite — After the confession, Mira combines and consumes the three relics, and presses the Healing Herbs from her shelf into Elior’s hands (they leave the hut), to create the Lifelight Elixir. This completes “The Three Virtues” and prepares the party for the Act IV assault.
     -   Story Impact: Establishes the relics as the counter to Malakar’s ritual; examining the fortress gates completes Act III and begins Act IV.
 
 #### Mira’s Slips
@@ -220,7 +220,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully among her concoctions, her eyes bright with knowledge and kindness.
 -   Items:
-    -   Healing Herbs (basic curatives and components)
+    -   Healing Herbs (basic curatives and components; not carriable — Mira uses them in the Warding Rite and they leave the hut)
     -   Teleportation Focus (crystal prism used by Mira to anchor travel between relic sites)
 -   Characters:
     -   Mira (mentor; explains the relics, initiates Act III and makes her confession before the Warding Rite)
@@ -766,7 +766,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `talk to Mira` → After every Act III non-main quest is complete, Mira makes her confession: she was the Wardens’ pupil, stayed in Willowbrook to watch over Elior, and Grandmother knew. Elior asks, “Why didn’t you tell me?”
-    -   `talk to Mira` → Mira performs the Warding Rite, consumes the relics, creates the Lifelight Elixir, and completes “The Three Virtues.”
+    -   `talk to Mira` → Mira performs the Warding Rite, consumes the relics, presses the Healing Herbs into Elior’s hands (they leave the hut), creates the Lifelight Elixir, and completes “The Three Virtues.”
     -   `take Lifelight Elixir` → Adds the elixir to inventory.
     -   `talk to Mira` → Teleports the party to the Entrance to Malakar’s Fortress.
 

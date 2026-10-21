@@ -555,6 +555,13 @@ describe('Act 3 golden path', () => {
     expect(confession.toLowerCase()).toContain('i was their pupil')
     expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, false)
 
+    // A save made before the rite still has the herbs, and the rite takes them
+    const beforeRite = new Game([new Act3()])
+    expect(beforeRite.loadSaveData(game.toSaveData())).toContain('loaded')
+    expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', true)
+    executeCommands(beforeRite, ['talk to mira'])
+    expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', false)
+
     // The next talk performs the Warding Rite
     const wardingResult = executeCommands(game, ['talk to mira'])
     expect(wardingResult.toLowerCase()).toContain('three relics resonate')
@@ -613,11 +620,7 @@ describe('Act 3 golden path', () => {
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
     for (let turn = 0; turn < 3; turn++) fresh.newTurn()
     expect(fresh.getActCompleteText()).toBe(game.getActCompleteText())
-    expect(
-      fresh.state.allRooms.MirasHut.items.some(
-        (item) => item.name === 'healing herbs',
-      ),
-    ).toBe(false)
+    expectItemInRoom(fresh.state.allRooms.MirasHut, 'healing herbs', false)
     expect(executeCommands(game, ['look at mira'])).toContain(
       "the Wardens' pupil",
     )

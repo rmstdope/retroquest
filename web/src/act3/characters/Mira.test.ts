@@ -366,6 +366,12 @@ describe('Mira', () => {
     const incantation = out.indexOf('By light and flame')
     expect(herbs).toBeGreaterThan(arranging)
     expect(incantation).toBeGreaterThan(herbs)
+    expect(out.indexOf('The three relics dissolve')).toBeGreaterThan(
+      incantation,
+    )
+    expect(out.indexOf('It is done.')).toBeGreaterThan(
+      out.indexOf('The three relics dissolve'),
+    )
     expect(hasItemNamed(game.state.currentRoom, 'healing herbs')).toBe(false)
     expect(game.state.hasItem('healing herbs')).toBe(false)
   })
