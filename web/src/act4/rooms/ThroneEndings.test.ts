@@ -229,6 +229,10 @@ describe('Justice', () => {
     const text = executeCommands(game, ['use ancient amulet on wound'])
     expect(text).toContain('Threads of gold rise from King Alden')
     expect(text).toContain('I am sorry. Tell them— no. They know.')
+    const song =
+      'The last of him to go is his voice, low: "…the field will wake." Then the seal is shut.'
+    expect(text.indexOf(song)).toBeGreaterThan(text.indexOf('They know.'))
+    expect(text.indexOf(song)).toBeLessThan(text.indexOf('Then it falls to me'))
     expect(text).toContain('Then it falls to me to set right what he broke.')
     expect(text).toContain('You named what he did, and you did not hate him')
     expectStoryFlag(game.state, FLAG_ACT4_JUSTICE_ENDING, true)

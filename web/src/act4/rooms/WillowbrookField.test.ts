@@ -143,6 +143,40 @@ describe('Willowbrook Field', () => {
   })
 })
 
+describe('the cradle song at the gate', () => {
+  const GATE =
+    'At the gate Grandmother is singing to herself: "Hush, little seed, the frost is going—" She sees you, and stops.'
+
+  for (const ending of ['redemption', 'justice', 'sacrifice'] as const) {
+    it(`is sung on arrival after the ${ending} ending, between the walk and the kneel`, () => {
+      const { game } = ended(ending)
+      const text = executeCommands(game, ['north'])
+      const walk = text.indexOf('your own field.')
+      const gate = text.indexOf(GATE)
+      const kneel = text.indexOf('You kneel at the edge of the field.')
+      expect(gate).toBeGreaterThan(walk)
+      expect(kneel).toBeGreaterThan(gate)
+      expect(executeCommands(game, ['look'])).not.toContain('Hush')
+    })
+  }
+
+  it('has no song in the Sacrifice Throne Chamber', () => {
+    expect(ended('sacrifice').text).not.toContain('Hush')
+  })
+
+  it('has Grandmother name the song on the first talk only', () => {
+    const game = home('justice')
+    const first = executeCommands(game, ['talk to grandmother'])
+    expect(first).toContain("Your mother's. I didn't think you'd remember.")
+    expect(first.indexOf('Your mother')).toBeLessThan(
+      first.indexOf('You saw them'),
+    )
+    expect(executeCommands(game, ['talk to grandmother'])).not.toContain(
+      'Your mother',
+    )
+  })
+})
+
 describe('the companions', () => {
   it('Grandmother tells the message first, then her short line', () => {
     const game = home('redemption')

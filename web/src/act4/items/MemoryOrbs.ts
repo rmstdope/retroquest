@@ -8,7 +8,9 @@ import {
 const ORBS_BEFORE =
   'The orbs are cracked and clouded. In one you glimpse three young people ' +
   'laughing over a workbench; in another, a cradle by a fire. Each scene ' +
-  'breaks apart before you can hold it.'
+  'breaks apart before you can hold it. ' +
+  'From the cracked one by the cradle a voice sings, low, ' +
+  '"Hush, little seed—" and breaks off.'
 
 /** What the orbs show once they are whole. */
 const ORBS_AFTER =

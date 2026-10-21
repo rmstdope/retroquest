@@ -73,7 +73,8 @@ export class Memories extends Item {
       dialogue(LYSA, 'Hold it shut, Aren. Hide him. That is enough.'),
       event(
         'Last, and smallest: Malakar by a cottage fire in Willowbrook, ' +
-          'rocking a baby in his arms and humming. The baby is you.',
+          'rocking a baby in his arms and singing, low: "Hush, little seed, the ' +
+          'frost is going. Hush, the field will wake." The baby is you.',
       ),
       event(
         'The lanterns dim, one by one, until only the amulet glows in your ' +
