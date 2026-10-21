@@ -7,6 +7,7 @@ import {
   remembered,
   speech,
 } from '@/engine'
+import { COURTYARD_CAPTAIN_GONE_DESCRIPTION } from '../rooms/courtyardDescriptions'
 import { GuardiansChain } from '../items/GuardiansChain'
 import {
   FLAG_ACT4_CAPTAIN_MAN_IN_GREY_TOLD,
@@ -103,6 +104,7 @@ export class CaptainOfTheGuard extends Character {
     gameState.addVirtue(VIRTUE_SELFLESS)
     const room = gameState.currentRoom
     room.characters = room.characters.filter((c) => c !== this)
+    room.description = COURTYARD_CAPTAIN_GONE_DESCRIPTION
     return [
       event(
         "You lift the [item_name]Guardian's Chain[/item_name] over the " +

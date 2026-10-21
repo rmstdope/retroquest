@@ -944,6 +944,25 @@ describe('Act 4 integration', () => {
       expect(game.state.currentRoom.getCharacterByName('captain')).toBeNull()
     })
 
+    it('lets the real gift take the chain protection and the token stand in, across a reload', () => {
+      executeCommands(game, KNIGHT_PATH.slice(0, -3))
+      executeCommands(game, [
+        "use guardian's chain",
+        'cast truth sight on knight of despair',
+      ])
+      game.state.currentRoom = game.state.allRooms.OuterCourtyard
+      executeCommands(game, ["give guardian's chain to captain"])
+      game.state.currentRoom = game.state.allRooms.HallOfEchoes
+      expect(executeCommands(game, ['say redemption to knight'])).toContain(
+        'The chain is gone with the captain',
+      )
+      executeCommands(game, ['use loyalty token'])
+      reload()
+      expect(executeCommands(game, ['say redemption to knight'])).toContain(
+        'warmth at your heart',
+      )
+    })
+
     it('starts its quest on first entering the hall', () => {
       executeCommands(game, KNIGHT_PATH.slice(0, -6))
       expect(game.state.activatedQuests.map((q) => q.name)).toContain(

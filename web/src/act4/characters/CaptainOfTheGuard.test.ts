@@ -235,6 +235,7 @@ describe('CaptainOfTheGuard', () => {
       const game = createCourtyardGame()
       executeCommands(game, ["give guardian's chain to captain"])
       game.loadSaveData(game.toSaveData())
+      expect(executeCommands(game, ['look'])).not.toContain('captain')
       expect(game.state.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)).toBe(true)
       expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(1)
       expect(executeCommands(game, ['talk to captain'])).toContain(

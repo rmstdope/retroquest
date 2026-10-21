@@ -122,7 +122,11 @@ export class KnightOfDespair extends Character {
     )
   }
 
-  /** Only the word "redemption" works, and only once he is seen through and the chain raised. */
+  /**
+   * Only the word "redemption" works, and only once he is seen through and
+   * Elior is shielded: the chain raised and not given away, or the Loyalty
+   * Token raised in the hall.
+   */
   override sayTo(gameState: GameState, words: string): string {
     gameState.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)) {
