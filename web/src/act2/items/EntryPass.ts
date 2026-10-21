@@ -1,6 +1,10 @@
 import { Item, type GameState, event } from '@/engine'
 
-/** What the pass looks like; shown on every examine, so older saves read it too. */
+/**
+ * What the pass looks like; shown on every `examine`, so older saves read it
+ * too. Only `examine` applies it: the stored `description` field of an older
+ * save is not rewritten.
+ */
 const ENTRY_PASS_DESCRIPTION =
   'An official-looking document with the seal of Greendale. The line where ' +
   "the bearer's name should be has been scraped away with a blade, but the " +
