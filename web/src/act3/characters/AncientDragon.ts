@@ -36,17 +36,24 @@ export class AncientDragon extends Character {
         'The ' +
         characterName(name) +
         "'s voice resonates through " +
-        'your mind like distant thunder: ' +
+        'your mind like distant thunder:\n\n' +
         speech(
-          "'Young one, I remember your " +
-            'parents well. Lyra ' +
-            'and Theron came to me when shadows first stirred. They spoke of ' +
-            "a child who must be hidden from Malakar's sight, protected until " +
-            'the time of choosing arrived. They forged a ward—not of stone or ' +
-            'steel, but of love itself. This ward yet shields you, woven into ' +
-            'your very being. They did not perish, child. They walk paths ' +
-            'beyond sight, guardians still, waiting for the moment when all ' +
-            "debts are paid and all bonds may be renewed.'",
+          'Young one, I remember your parents well. Aren and Lysa, ' +
+            'Wardens of the Dawn. They came to me with their friend ' +
+            'Malakar, the three of them laughing, and made the relics as equals.',
+        ) +
+        '\n\n' +
+        speech(
+          'When Malakar tore a wound in time, it was they who stood ' +
+            'against him. They poured themselves into a ward. It hides you ' +
+            'from his sight, and it holds his wound shut. It is anchored in ' +
+            'the amulet you carry, and in the bindings of your king. That ' +
+            'is why Malakar drains him.',
+        ) +
+        '\n\n' +
+        speech(
+          'They are not gone as the dead are gone, child. They are ' +
+            'warded away, not dead.',
         ) +
         '\n\n'
     }

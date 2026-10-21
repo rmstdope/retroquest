@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Game, type GameState } from '@/engine'
+import { parseTurn } from '@/lantern/parseTurn'
 import { Act3 } from '../Act3'
 import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
@@ -55,8 +56,12 @@ describe('AncientDragon', () => {
 
     const result = dragon.talkTo(gameState)
 
-    expect(result).toContain('Lyra and Theron')
-    expect(result).toContain('ward—not of stone or steel, but of love')
+    expect(result).toContain('Aren and Lysa, Wardens of the Dawn')
+    expect(result).toContain('their friend Malakar')
+    expect(result).toContain('anchored in the amulet you carry')
+    expect(result).toContain('That is why Malakar drains him.')
+    expect(result).toContain('warded away, not dead')
+    expect(result).toContain('The memory has been shared')
     expect(gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)).toBe(true)
   })
 
@@ -67,6 +72,7 @@ describe('AncientDragon', () => {
 
     const result = dragon.talkTo(gameState)
 
+    expect(result).not.toContain('Wardens of the Dawn')
     expect(result.toLowerCase()).toContain('memory has been shared')
     expect(result.toLowerCase()).toContain('scale awaits')
   })
@@ -195,5 +201,29 @@ describe('AncientDragon', () => {
 
     expectMarkupWellFormed(answer)
     expectNoSpeakerlessDialogue(answer)
+  })
+
+  it('tells the memory as three speeches by the ancient dragon', () => {
+    const dragon = new AncientDragon()
+    const gameState = makeGameState()
+
+    const blocks = parseTurn(dragon.talkTo(gameState))
+
+    const speeches = blocks.filter((b) => b.kind === 'dialogue')
+    expect(speeches).toHaveLength(4)
+    expect(
+      speeches.every(
+        (b) => b.kind === 'dialogue' && b.speaker === 'ancient dragon',
+      ),
+    ).toBe(true)
+    expect(speeches[0].kind === 'dialogue' && speeches[0].markup).toBe(
+      'Young one, I remember your parents well. Aren and Lysa, Wardens of ' +
+        'the Dawn. They came to me with their friend Malakar, the three of ' +
+        'them laughing, and made the relics as equals.',
+    )
+    expect(speeches[2].kind === 'dialogue' && speeches[2].markup).toBe(
+      'They are not gone as the dead are gone, child. They are warded ' +
+        'away, not dead.',
+    )
   })
 })

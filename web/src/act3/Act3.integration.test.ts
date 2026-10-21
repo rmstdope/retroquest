@@ -521,13 +521,9 @@ describe('Act 3 golden path', () => {
 
     // Talk to dragon (grants the Dragon's Memory)
     const memoryResult = executeCommands(game, ['talk to ancient dragon'])
-    expect(memoryResult).toContain('Lyra and Theron')
-    expect(memoryResult.toLowerCase()).toContain(
-      'protected until the time of choosing',
-    )
-    expect(memoryResult.toLowerCase()).toContain(
-      'ward—not of stone or steel, but of love',
-    )
+    expect(memoryResult).toContain('Aren and Lysa')
+    expect(memoryResult.toLowerCase()).toContain('warded away, not dead')
+    expect(memoryResult.toLowerCase()).toContain('anchored in the amulet')
     expectStoryFlag(state, FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
 
     // --- Step 26: Dragon's Hall - Relic Trial (Oath and Scale) ---
