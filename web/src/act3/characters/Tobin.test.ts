@@ -1,7 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from '../Act3'
-import { FLAG_ACT3_DRAGONS_MEMORY_RECEIVED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+  VIRTUE_SELFLESS,
+} from '../Act3StoryFlags'
+import { QuietCharm } from '../items/QuietCharm'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { Tobin } from './Tobin'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
@@ -52,5 +57,70 @@ describe('Tobin', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     expect(new Tobin().talkTo(game.state)).toContain(FIRST)
+  })
+
+  describe('the Quiet Charm', () => {
+    const setup = (): { game: Game; tobin: Tobin } => {
+      const game = new Game([new Act3()])
+      game.state.addItemToInventory(new QuietCharm())
+      return { game, tobin: new Tobin() }
+    }
+
+    it('gives him his voice back, takes the charm and records one selfless moment', () => {
+      const { game, tobin } = setup()
+      const charm = game.state.inventory.find((i) => i.name === 'quiet charm')!
+      const answer = tobin.giveItem(game.state, charm)
+
+      expect(answer).toContain(
+        'You give the [item_name]quiet charm[/item_name] to [character_name]Tobin[/character_name].',
+      )
+      expect(answer).toContain(
+        'As his hand closes around it, the endless dripping of the gallery seems to step back a pace',
+      )
+      expect(answer).toContain("'It's quiet.'")
+      expect(answer).toContain(
+        'Across the gallery, the lead miner sets down his pick and does not pick it up again.',
+      )
+      expect(
+        answer
+          .trimEnd()
+          .endsWith('[event]✦ Selflessness — this will be remembered[/event]'),
+      ).toBe(true)
+      expectMarkupWellFormed(answer)
+      expect(game.state.inventory.some((i) => i.name === 'quiet charm')).toBe(
+        false,
+      )
+      expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(1)
+    })
+
+    it('shows the charm at his throat and speaks the same line every talk', () => {
+      const { game, tobin } = setup()
+      tobin.giveItem(
+        game.state,
+        game.state.inventory[game.state.inventory.length - 1],
+      )
+      expect(tobin.examine(game.state)).toContain(
+        'The pale charm hangs at his throat on a bootlace',
+      )
+      const a = tobin.talkTo(game.state)
+      expect(a).toContain("'Still quiet. I'll keep it, if that's all right.")
+      expect(tobin.talkTo(game.state)).toBe(a)
+      expect(a).not.toContain('swallows')
+      expectMarkupWellFormed(a)
+    })
+
+    it('works even before he has ever been talked to', () => {
+      const { game, tobin } = setup()
+      expect(tobin.talks).toBe(0)
+      const answer = tobin.giveItem(game.state, new QuietCharm())
+      expect(answer).toContain("'It's quiet.'")
+    })
+
+    it('declines anything else as usual', () => {
+      const { game, tobin } = setup()
+      const answer = tobin.giveItem(game.state, new AncientAmulet())
+      expect(answer).toContain("doesn't seem interested")
+      expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(0)
+    })
   })
 })

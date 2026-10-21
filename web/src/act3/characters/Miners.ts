@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  type Item,
   characterName,
   event,
   speech,
@@ -9,11 +10,16 @@ import { CEDRIC_STAY_BEHIND, cedricAdds } from '../CedricLines'
 import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_MINERS_RESCUE_COMPLETED,
+  FLAG_ACT3_TOBIN_GIVEN_CHARM,
 } from '../Act3StoryFlags'
+import { QuietCharm } from '../items/QuietCharm'
 import { Tobin } from './Tobin'
 
 /** Trapped miners awaiting rescue in the collapsed galleries. */
 export class Miners extends Character {
+  /** Whether the lead miner has thanked the player for Tobin's voice. */
+  thanked = false
+
   constructor() {
     super({
       name: 'miners',
@@ -21,6 +27,26 @@ export class Miners extends Character {
         'A group of miners trapped behind the fallen rock, their voices ' +
         'echoing faintly through the debris.',
     })
+  }
+
+  /**
+   * The lead miner hands the Quiet Charm back and nods toward the boy who
+   * needs it; anything else is declined as usual.
+   */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (!(item instanceof QuietCharm)) return super.giveItem(gameState, item)
+    return (
+      event(
+        `You offer the [item_name]${item.name}[/item_name] to the ${characterName(this.name)}.`,
+      ) +
+      '\n' +
+      `The ${characterName('lead miner')} turns it over and hands it back: ` +
+      speech(
+        "'Pretty thing. Not much use to an old man with a pick, though.'",
+      ) +
+      ' His eyes go to the boy on the bucket. ' +
+      speech("'If it's quiet you're handing out, I know who needs it.'")
+    )
   }
 
   /** Handle talking to the miners for rescue completion. */
@@ -70,6 +96,19 @@ export class Miners extends Character {
             'to continue your journey.',
         ) +
         cedricAdds(gameState, CEDRIC_STAY_BEHIND)
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_TOBIN_GIVEN_CHARM) && !this.thanked) {
+      this.thanked = true
+      return (
+        `The ${characterName('lead miner')} nods toward the bucket, where ` +
+        'Tobin sits with the charm in his fist: ' +
+        speech(
+          "'He talked to me. Asked me how long till we're up top. First thing " +
+            "he's said since the rock came down.'",
+        ) +
+        ' He clears his throat. ' +
+        speech("'Thank you, Elior.'")
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {

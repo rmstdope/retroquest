@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from './Act3'
 import { Miners } from './characters/Miners'
+import { QuietCharm } from './items/QuietCharm'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import { playDebugScript } from '@/utils/debugScript'
 import {
@@ -903,5 +904,49 @@ describe('Tobin and the saves', () => {
     const game = new Game([new Act3()])
     new Act3().afterLoad(game.state)
     expect(galleries(game)).not.toContain('Tobin')
+  })
+})
+
+describe('Giving the Quiet Charm to Tobin', () => {
+  const rescued = (): Game => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom = game.state.allRooms.CollapsedGalleries
+    game.state.currentRoom.addCharacter(new Miners())
+    executeCommands(game, ['talk to miners'])
+    game.state.addItemToInventory(new QuietCharm())
+    return game
+  }
+
+  it('plays through the commands, records one selfless moment and cannot be repeated', () => {
+    const game = rescued()
+    const gift = executeCommands(game, ['give quiet charm to young miner'])
+    expect(gift).toContain("'It's quiet.'")
+    expect(gift).toContain('✦ Selflessness — this will be remembered')
+    expect(game.state.virtueCount('selfless')).toBe(1)
+    expect(game.state.hasItem('quiet charm')).toBe(false)
+    expect(executeCommands(game, ['give charm to boy'])).toContain(
+      "You don't have any 'charm' to give.",
+    )
+    expect(game.state.virtueCount('selfless')).toBe(1)
+  })
+
+  it('keeps the gift, the selfless moment and the unseen thanks through a save', () => {
+    const game = rescued()
+    executeCommands(game, ['give charm to tobin'])
+
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(fresh.state.virtueCount('selfless')).toBe(1)
+    expect(executeCommands(fresh, ['examine boy'])).toContain(
+      'The pale charm hangs at his throat',
+    )
+    expect(executeCommands(fresh, ['talk to tobin'])).toContain('Still quiet.')
+    expect(executeCommands(fresh, ['talk to miners'])).toContain(
+      'Thank you, Elior.',
+    )
+    expect(executeCommands(fresh, ['talk to miners'])).not.toContain(
+      'Thank you, Elior.',
+    )
   })
 })
