@@ -1,6 +1,6 @@
 /** The entry pass carries a scraped-away name and a good seal (rq-bi7). */
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, findMarkupProblems } from '@/engine'
 import { Act2 } from '../Act2'
 import { EntryPass } from './EntryPass'
 
@@ -35,5 +35,24 @@ describe('Entry pass', () => {
         'into Greendale without question.',
     )
     expect(pass.use(game.state)).toBe(first)
+  })
+
+  it('has well-formed markup in every text', () => {
+    const game = new Game([new Act2()])
+    const pass = new EntryPass()
+
+    expect(findMarkupProblems(pass.examine(game.state))).toEqual([])
+    expect(findMarkupProblems(pass.use(game.state))).toEqual([])
+  })
+
+  it('survives a save round-trip with the new text', () => {
+    const game = new Game([new Act2()])
+    game.state.addItemToInventory(new EntryPass())
+
+    const fresh = new Game([new Act2()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    expect(fresh.commandParser.parse('examine entry pass')).toContain(
+      DESCRIPTION,
+    )
   })
 })
