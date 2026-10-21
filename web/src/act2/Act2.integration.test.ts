@@ -1264,6 +1264,21 @@ describe('Act 2 golden path as declared by the act', () => {
     expect(completed).toEqual(expect.arrayContaining(sideQuests))
   })
 
+  it('affords every required purchase without the inn-room coins', () => {
+    const game = new Game([new Act2()])
+    const ropeAt = ACT2_GOLDEN_PATH.indexOf(
+      'buy quality rope from master merchant aldric',
+    )
+    const withoutInnCoins = ACT2_GOLDEN_PATH.slice(0, ropeAt + 1).filter(
+      (command) => command !== 'take coins',
+    )
+    executeCommands(game, withoutInnCoins)
+    expectItemInInventory(game.state, 'Forest Survival Kit')
+    expectItemInInventory(game.state, 'Enhanced Lantern')
+    expectItemInInventory(game.state, 'Quality Rope')
+    expectItemCountInInventory(game.state, 'coins', 30)
+  })
+
   it('is what cheat act 2 plays', () => {
     const viaPath = new Game([new Act2()])
     executeCommands(viaPath, ACT2_GOLDEN_PATH)
