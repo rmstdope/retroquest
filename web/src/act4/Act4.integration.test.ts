@@ -150,4 +150,29 @@ describe('Act 4 integration', () => {
     expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_ESSENCE_ACQUIRED, true)
     expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED, true)
   })
+
+  describe('after the stub rooms were cut', () => {
+    it('blocks east in the Memory Vault', () => {
+      game.state.currentRoom = act4.rooms.MemoryVault
+      const result = executeCommands(game, ['go east'])
+      expect(result).toContain("You can't go that way.")
+      expectCurrentRoom(game.state, 'Memory Vault')
+    })
+
+    it('loads an Act 4 save made now', () => {
+      const result = game.loadSaveData(game.toSaveData())
+      expect(result).toContain('Game loaded successfully.')
+    })
+
+    it('refuses a save made while the cut rooms existed', () => {
+      const oldSave = game
+        .toSaveData()
+        .replace('"c":"Act4.OuterCourtyard"', '"c":"Act4.RoyalGardens"')
+      expect(oldSave).toContain('RoyalGardens')
+      const result = game.loadSaveData(oldSave)
+      expect(result).toContain('Failed to load game: ')
+      expect(result).toContain('unknown class: Act4.RoyalGardens')
+      expectCurrentRoom(game.state, 'Fortress Gates')
+    })
+  })
 })

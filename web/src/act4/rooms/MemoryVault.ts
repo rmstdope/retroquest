@@ -18,7 +18,7 @@ export class MemoryVault extends Room {
         'desperate longing toward memories that seem to slip away like morning mist.',
       items: [],
       characters: [],
-      exits: { south: 'ChamberOfWhispers', east: 'ThroneChamberApproach' },
+      exits: { south: 'ChamberOfWhispers' },
     })
   }
 }

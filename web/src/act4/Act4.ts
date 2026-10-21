@@ -6,9 +6,7 @@ import { HallOfEchoes } from './rooms/HallOfEchoes'
 import { TowerOfShadows } from './rooms/TowerOfShadows'
 import { ChamberOfWhispers } from './rooms/ChamberOfWhispers'
 import { MemoryVault } from './rooms/MemoryVault'
-import { ThroneChamberApproach } from './rooms/ThroneChamberApproach'
 import { ThroneChamer } from './rooms/ThroneChamer'
-import { RoyalGardens } from './rooms/RoyalGardens'
 import { Light } from './spells/Light'
 import { Bless } from './spells/Bless'
 import { ACT4_CLASSES } from './classes'
@@ -28,10 +26,8 @@ export class Act4 extends Act {
       ChamberOfWhispers: new ChamberOfWhispers(),
       MemoryVault: new MemoryVault(),
 
-      // Final areas
-      ThroneChamberApproach: new ThroneChamberApproach(),
+      // Final area (its way in comes with the Parents' Vault)
       ThroneChamer: new ThroneChamer(),
-      RoyalGardens: new RoyalGardens(),
     }
 
     super({
