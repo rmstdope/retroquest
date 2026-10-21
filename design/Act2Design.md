@@ -102,7 +102,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Prerequisites:** Access to Great Hall
   - **Dependencies:** None
   - **Completion:** Piece together historical clues about why Malakar was interested in Willowbrook: the archives name the Wardens of the Dawn and their sigil, and record that agents of Malakar have asked after the Willowbrook bloodline. The clues also tell of King Alden's disappearance and Cedric's disgrace.
-  - **Rewards:** Knowledge of the Wardens of the Dawn, of Elior's heritage and of the Chosen One prophecy
+  - **Rewards:** Knowledge of the Wardens of the Dawn, and of Elior's heritage
   - **Story Impact:** Reveals crucial background lore: Malakar is real, and he is looking for Elior's bloodline
 
 - **Name:** The Healer's Apprentice
@@ -144,7 +144,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Completion:** Repair the wards, earn the Spectral Librarian's trust, learn `dispel` by using the Ancient Chronicle (which names the Wardens of the Dawn and Malakar's search for the Willowbrook bloodline), and take the Crystal Focus
   - **Order Flexibility:** If the Crystal Focus is given to Lyria before learning `dispel`, acquiring it still counts; the quest completes once `dispel` is learned.
   - **Rewards:** `dispel`, Crystal Focus, and knowledge of Elior's heritage
-  - **Story Impact:** Reveals crucial information about Chosen One prophecy
+  - **Story Impact:** Reveals the Wardens of the Dawn and Malakar's search for the Willowbrook bloodline
 
 #### Forest and Cross-Phase Quests
 
@@ -384,7 +384,7 @@ The forest represents increasingly mystical realms:
 - Malakar is real, and his agents (the cloaked stranger seen in Willowbrook) are searching for the Willowbrook bloodline
 - King Alden has vanished; Malakar's agents framed Sir Cedric, who was on guard that night
 - The Wardens of the Dawn, whose sigil is on the Ancient Amulet, guarded the kingdom long ago
-- Prophecies in Hidden Library reference coming darkness
+- The Hidden Library's chronicle, written by the Wardens, warns of Malakar's search for the Willowbrook bloodline
 - Forest spirits sense disturbances in magical balance
 - Elior's heritage links to ancient magical traditions
 
@@ -525,7 +525,7 @@ These five completed quests, plus completion of The Hermit's Warning at Forest T
 - **The Sorceress of Lies' mark:** Seen on Elena's curse; Act IV recognises it.
 - **The Shadow of the Past:** The dream voice is heard once more in Nyx's vision.
 - **Family Heritage:** Understanding of why Malakar was interested in Willowbrook bloodlines
-- **Prophecy Knowledge:** Comprehension of Chosen One predictions and their meaning
+- **Warden Knowledge:** Comprehension of the Wardens of the Dawn and Malakar's search for the Willowbrook bloodline
 - **Magical Mastery:** Command of healing, environmental, and divination magic
 - **Political Connections:** Recognition within Greendale's power structure
 

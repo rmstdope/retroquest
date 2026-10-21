@@ -108,10 +108,10 @@ export class TheGatheringStormQuest extends Quest {
         '\n\nThe ancient hidden library has revealed its secrets! Through the ' +
         "Spectral Librarian's guidance, you have uncovered crucial knowledge " +
         'about your family heritage and learned the powerful dispel spell. ' +
-        'The ancient prophecies speak of a Chosen One destined to face the ' +
-        'returning darkness, and the revelation of your lineage suggests you ' +
-        'may be central to this cosmic struggle. Armed with this newfound ' +
-        'understanding of both your destiny and the magical arts, you now ' +
+        'The chronicle was written by the Wardens of the Dawn, and their ' +
+        'magic was the unbinding kind; its last page warns that Malakar ' +
+        'seeks the blood of Willowbrook. Armed with what you now know of ' +
+        'the Wardens and of the magical arts, you now ' +
         'possess the knowledge and power needed to confront the gathering ' +
         'storm. The pieces of the puzzle are falling into place, and with ' +
         'each revelation, the path to finding Nyx and ultimately defeating ' +
