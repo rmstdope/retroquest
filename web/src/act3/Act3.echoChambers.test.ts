@@ -15,6 +15,22 @@ function reload(game: Game): Game {
 }
 
 describe('The Echo Chambers echo and the Silence Keeper', () => {
+  it('remembers across a save that the Keeper was met before the echo', () => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom = game.state.allRooms.StillnessVestibule
+    game.state.currentRoom
+      .getCharacterByName('Silence Keeper')
+      ?.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_ECHO_HEARD, true)
+
+    const loaded = reload(game)
+    const keeper =
+      loaded.state.allRooms.StillnessVestibule.getCharacterByName(
+        'Silence Keeper',
+      )
+    expect(keeper?.talkTo(loaded.state)).toContain('They are moments')
+  })
+
   it('keeps the echo heard and the Keeper line told across a save and load', () => {
     const game = new Game([new Act3()])
     game.state.currentRoom = game.state.allRooms.EchoChambers

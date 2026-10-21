@@ -26,7 +26,8 @@ const ECHO_NIGHT =
   '\n\n' +
   dialogue(
     'A second man, quick and low',
-    "'I have listened for a year, Aren. The Wasting is in Willowbrook. It is in her.'",
+    "'I have listened for a year, Aren. " +
+      "The Wasting is in Willowbrook. It is in her.'",
   ) +
   '\n\n' +
   dialogue(

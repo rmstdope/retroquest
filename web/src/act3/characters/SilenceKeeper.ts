@@ -60,7 +60,7 @@ export class SilenceKeeper extends Character {
    * past tense if they were freed).
    */
   override talkTo(gameState: GameState): string {
-    const met = this.talkedBefore
+    const met = this.talkedBefore || this.introduced
     this.talkedBefore = true
     const reply = this.usualReply(gameState)
     if (
@@ -74,7 +74,7 @@ export class SilenceKeeper extends Character {
     const line = gameState.getStoryFlag(FLAG_ACT3_PHANTOMS_FREED)
       ? PHANTOMS_GONE
       : PHANTOMS_PRESENT
-    return `${reply}\n\n${dialogue('silence keeper', line)}`
+    return `${reply}\n\n${dialogue(this.name, line)}`
   }
 
   /**
