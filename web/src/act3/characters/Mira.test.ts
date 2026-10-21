@@ -631,8 +631,12 @@ describe('Mira topics', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, true)
     for (const key of ['MirasHut', 'FortressEntrance']) {
-      game.state.currentRoom = game.state.allRooms[key]
-      expect(new Mira().sayTo(game.state, 'say gran')).toContain(
+      const room = game.state.allRooms[key]
+      game.state.currentRoom = room
+      if (!room.characters.some((c) => c instanceof Mira)) {
+        room.characters.push(new Mira())
+      }
+      expect(executeCommands(game, ['say gran to mira'])).toContain(
         "She is Lysa's mother",
       )
     }

@@ -33,6 +33,7 @@ describe('miraTopicIn', () => {
   it('matches whole words only', () => {
     expect(miraTopicIn('the arena')).toBeNull()
     expect(miraTopicIn('the weather')).toBeNull()
+    expect(miraTopicIn("aren't you tired")).toBeNull()
   })
 
   it('picks the first topic in the fixed order when several are named', () => {

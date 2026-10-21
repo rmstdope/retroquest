@@ -589,6 +589,9 @@ describe('Act 3 golden path', () => {
 
     // --- Step 28: Mira's Hut - Warding Rite and Lifelight Elixir ---
     // The first talk is Mira's confession; the rite is held back
+    expect(executeCommands(game, ['say parents to mira'])).toContain(
+      'Later, Elior. Not here.',
+    )
     const confession = executeCommands(game, ['talk to mira'])
     expect(confession.toLowerCase()).toContain('i was their pupil')
     expect(confession).toContain('say parents, say malakar')

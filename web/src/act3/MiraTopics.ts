@@ -12,7 +12,7 @@ export type MiraTopic = 'parents' | 'malakar' | 'amulet' | 'grandmother'
 
 /** The topics in priority order, each with the words that name it. */
 const TOPIC_WORDS: ReadonlyArray<readonly [MiraTopic, RegExp]> = [
-  ['parents', /\b(parents|mother|father|mum|dad|aren|lysa)\b/i],
+  ['parents', /\b(parents|mother|father|mum|dad|aren(?!['’]t)|lysa)\b/i],
   ['malakar', /\bmalakar\b/i],
   ['amulet', /\bamulet\b/i],
   ['grandmother', /\b(grandmother|grandma|gran|granny)\b/i],

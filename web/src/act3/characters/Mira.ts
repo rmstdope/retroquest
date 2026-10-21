@@ -41,7 +41,9 @@ import {
 /**
  * Act III version of Mira: starts the main quest, handles teleportation
  * between sites and, once everything is complete, confesses that she was the
- * Wardens' pupil before she performs the Warding Rite on the next talk.
+ * Wardens' pupil before she performs the Warding Rite on the next talk. She
+ * also answers `say <topic> to mira` about Elior's parents, Malakar, the
+ * amulet and his grandmother (see `sayTo`).
  */
 export class Mira extends Character {
   constructor() {
