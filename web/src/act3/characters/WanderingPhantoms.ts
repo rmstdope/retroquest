@@ -57,10 +57,7 @@ export class WanderingPhantoms extends Character {
    */
   override sayTo(gameState: GameState, words: string): string {
     if (words.trim().toLowerCase() !== 'rest') {
-      return (
-        `The ${characterName(this.name)}' whispers rise and fall, and do not ` +
-        'answer that.'
-      )
+      return "The phantoms' whispers rise and fall, and do not answer that."
     }
     gameState.setStoryFlag(FLAG_ACT3_PHANTOMS_FREED, true)
     gameState.addVirtue(VIRTUE_MERCY)

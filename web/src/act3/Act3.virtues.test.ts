@@ -133,6 +133,16 @@ describe('Mira moving the party on from the ruins', () => {
   })
 })
 
+describe('Pier Warden: truth told in an earlier act', () => {
+  it('still asks his question and takes the truth', () => {
+    const game = gameIn('CollapsedPier')
+    game.state.addVirtue(VIRTUE_TRUTH)
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    expect(run(game, 'talk to pier warden')).toContain('Tell me the sea will')
+    expect(run(game, 'say truth to pier warden')).toContain(REMEMBERED_TRUTH)
+  })
+})
+
 describe('Wandering phantoms: mercy', () => {
   it('ends every whisper with the clear word rest', () => {
     const game = gameIn('StillnessVestibule')
@@ -164,7 +174,9 @@ describe('Wandering phantoms: mercy', () => {
   it('answers other words with the do-not-answer line', () => {
     const game = gameIn('StillnessVestibule')
     const answer = game.commandParser.parse('say hello to wandering phantoms')
-    expect(answer).toContain('do not answer that')
+    expect(answer).toContain(
+      "The phantoms' whispers rise and fall, and do not answer that.",
+    )
     expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(false)
   })
 
@@ -257,8 +269,14 @@ describe('virtues are remembered', () => {
   it('survive a save/load round-trip and the move into the next act', () => {
     const game = gameIn('StillnessVestibule')
     run(game, 'say rest to wandering phantoms')
+    game.state.addVirtue(VIRTUE_TRUTH)
+    game.state.addVirtue(VIRTUE_SELFLESS)
     const fresh = new Game([new Act3()])
     fresh.loadSaveData(game.toSaveData())
-    expect(fresh.state.hasVirtue(VIRTUE_MERCY)).toBe(true)
+    expect(fresh.state.virtues).toEqual([
+      VIRTUE_MERCY,
+      VIRTUE_TRUTH,
+      VIRTUE_SELFLESS,
+    ])
   })
 })

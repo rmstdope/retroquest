@@ -94,3 +94,5 @@ export const FLAG_ACT3_RUINS_LEFT = 'act3_ruins_left'
 export const FLAG_ACT3_PHANTOMS_FREED = 'act3_phantoms_freed'
 /** Set when the dragon's cracked sigils have been mended. */
 export const FLAG_ACT3_SIGILS_MENDED = 'act3_sigils_mended'
+/** Set when Elior has told the Pier Warden the truth (Act III's own moment). */
+export const FLAG_ACT3_WARDEN_TRUTH_TOLD = 'act3_warden_truth_told'

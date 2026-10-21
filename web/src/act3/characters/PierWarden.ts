@@ -13,6 +13,7 @@ import {
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
   FLAG_ACT3_WARDEN_ASKED,
   FLAG_ACT3_WARDEN_BAD_SEASON_SAID,
+  FLAG_ACT3_WARDEN_TRUTH_TOLD,
   VIRTUE_TRUTH,
 } from '../Act3StoryFlags'
 
@@ -60,7 +61,7 @@ export class PierWarden extends Character {
     if (
       !gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ) ||
       gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT) ||
-      gameState.hasVirtue(VIRTUE_TRUTH)
+      gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)
     ) {
       return ''
     }
@@ -95,7 +96,7 @@ export class PierWarden extends Character {
         speech("'The truth about what, lad? Speak plain.'")
       )
     }
-    if (gameState.hasVirtue(VIRTUE_TRUTH)) {
+    if (gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)) {
       return (
         event(`You speak with the ${characterName(this.name)}.`) +
         '\n' +
@@ -105,6 +106,7 @@ export class PierWarden extends Character {
         )
       )
     }
+    gameState.setStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD, true)
     gameState.addVirtue(VIRTUE_TRUTH)
     return (
       event(
