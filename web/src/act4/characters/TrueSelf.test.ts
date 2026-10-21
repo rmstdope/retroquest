@@ -31,6 +31,12 @@ describe('TrueSelf', () => {
     expect(game.state.virtues).toEqual(['truth'])
   })
 
+  it('accepts the truth with trailing punctuation', () => {
+    const game = new Game([new Act4()])
+    new TrueSelf().sayTo(game.state, '"truth."')
+    expect(game.state.getStoryFlag(FLAG_ACT4_TRUTH_TOLD)).toBe(true)
+  })
+
   it('shakes its head at other words', () => {
     const game = new Game([new Act4()])
     const answer = new TrueSelf().sayTo(game.state, 'hello')

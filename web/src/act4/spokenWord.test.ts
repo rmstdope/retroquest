@@ -16,4 +16,9 @@ describe('normaliseSpokenWord', () => {
     expect(normaliseSpokenWord('truth.')).toBe('truth')
     expect(normaliseSpokenWord('truth!')).toBe('truth')
   })
+
+  it('strips quotes and punctuation together', () => {
+    expect(normaliseSpokenWord('"truth."')).toBe('truth')
+    expect(normaliseSpokenWord('“truth!”')).toBe('truth')
+  })
 })
