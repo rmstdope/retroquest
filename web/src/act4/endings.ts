@@ -10,6 +10,7 @@ import {
   FLAG_ACT4_JUSTICE_ENDING,
   FLAG_ACT4_REDEMPTION_ENDING,
   FLAG_ACT4_SACRIFICE_ENDING,
+  FLAG_ACT4_THRONE_BARGAIN_SEEN,
   VIRTUE_SELFLESS,
   VIRTUE_TRUTH,
 } from './Act4StoryFlags'
@@ -74,7 +75,8 @@ const ENDING_LINES: Record<Ending, string> = {
 
 /**
  * The parents' farewell, the same in every ending but for one line (and,
- * in Sacrifice, Aren's extra line after two selfless moments).
+ * in Sacrifice, Aren's extra line after two selfless moments; Lysa adds one
+ * line when the Bargain was seen).
  */
 export function farewell(ending: Ending, gameState: GameState): string {
   return [
@@ -87,6 +89,13 @@ export function farewell(ending: Ending, gameState: GameState): string {
       'We watched over you all this time, from inside the light. We could ' +
         'not hold you, but we could hold the door shut.',
     ),
+    gameState.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)
+      ? dialogue(
+          'Lysa',
+          'We saw you at the workbench with us, for a moment. You let it ' +
+            'go. That was the bravest thing you did today.',
+        )
+      : null,
     ENDING_LINES[ending],
     ...(ending === 'sacrifice' ? [selflessLine(gameState)] : []),
     dialogue(

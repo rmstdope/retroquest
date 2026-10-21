@@ -94,6 +94,8 @@ export const FLAG_ACT4_THRONE_EARLY_ELIXIR_SEEN =
 /** The amulet was raised before the refrain and burned Malakar (plays once). */
 export const FLAG_ACT4_THRONE_EARLY_AMULET_SEEN =
   'act4_throne_early_amulet_seen'
+/** The amulet was given to Malakar after his offer: the Bargain was seen (plays once). */
+export const FLAG_ACT4_THRONE_BARGAIN_SEEN = 'act4_throne_bargain_seen'
 /** The Ancient Amulet has opened in the Throne Chamber. */
 export const FLAG_ACT4_THRONE_AMULET_OPENED = 'act4_throne_amulet_opened'
 /** The Lifelight Elixir was given to Malakar. */
