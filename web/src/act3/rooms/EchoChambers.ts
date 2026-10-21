@@ -2,6 +2,7 @@ import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { RunicWalls } from '../items/RunicWalls'
 import { OldOathScrolls } from '../items/OldOathScrolls'
+import { ECHO_AFTER, echoHeard, playEcho } from '../EchoNight'
 
 /** Echoing caverns with runic walls and chant rubbings. */
 export class EchoChambers extends Room {
@@ -22,6 +23,11 @@ export class EchoChambers extends Room {
       items: [new RunicWalls()],
       exits: { west: 'CollapsedGalleries' },
     })
+  }
+
+  /** Listening plays the echo of the Wardens parting once, then a short line. */
+  override getAmbientSound(gameState: GameState): string {
+    return echoHeard(gameState) ? ECHO_AFTER : playEcho(gameState)
   }
 
   /** Search the Echo Chambers to discover hidden Old Oath Scrolls. */

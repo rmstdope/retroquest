@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { GameState, Room } from '@/engine'
+import { Game, GameState, Room } from '@/engine'
+import { Act3 } from '../Act3'
+import { FLAG_ACT3_ECHO_HEARD } from '../Act3StoryFlags'
+import { expectMarkupWellFormed, expectStoryFlag } from '@/testing/gameHelpers'
 import { EchoChambers } from './EchoChambers'
 import { RunicWalls } from '../items/RunicWalls'
 import { ResonantChantRubbings } from '../items/ResonantChantRubbings'
@@ -108,5 +111,49 @@ describe('Echo Chambers', () => {
     // Should not add duplicate scrolls
     const scrollsCount = itemNames(room).filter((n) => n === SCROLLS).length
     expect(scrollsCount).toBe(1)
+  })
+})
+
+describe('Echo Chambers echo', () => {
+  const OPENING =
+    'You hold still. The whispers in the alcoves gather, and for a moment ' +
+    'they are not copying you at all.'
+  const CLOSING = 'Somewhere in the stone, a door closes.'
+  const AFTER =
+    'Only your own breath comes back from the stone, and under it, very ' +
+    'faintly, a door closing.'
+
+  it('plays the echo on the first listen, then the short line', () => {
+    const game = new Game([new Act3()])
+    const room = new EchoChambers()
+    game.state.currentRoom = room
+
+    const first = game.listen()
+    expect(first).toContain(OPENING)
+    expect(first).toContain("A man's voice, steady")
+    expect(first).toContain('Mal. Put the lamp down and listen to me.')
+    expect(first).toContain('You would have me wait while you die.')
+    for (const line of [
+      'A second man, quick and low',
+      'I have listened for a year, Aren. The Wasting is in Willowbrook. It is in her.',
+      "A woman's voice, hoarse",
+      'Then let it stay in me. Not this. Time is not a door, Mal.',
+      'It is only a door if I close it again.',
+    ]) {
+      expect(first).toContain(line)
+    }
+    expect(first).toContain(CLOSING)
+    expectMarkupWellFormed(first)
+    expectStoryFlag(game.state, FLAG_ACT3_ECHO_HEARD, true)
+
+    expect(game.listen()).toBe(`[dim]${AFTER}[/dim]`)
+    expect(game.listen()).toBe(`[dim]${AFTER}[/dim]`)
+  })
+
+  it('leaves listen alone in other rooms', () => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom = new Room({ name: 'Elsewhere', description: '' })
+    expect(game.listen()).toBe('It is quiet here.')
+    expectStoryFlag(game.state, FLAG_ACT3_ECHO_HEARD, false)
   })
 })

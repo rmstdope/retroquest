@@ -769,7 +769,8 @@ describe('Game', () => {
     })
 
     it('listens to the room or an item', () => {
-      rooms.EliorsCottage.getAmbientSound = () => 'Leaves rustle.'
+      rooms.EliorsCottage.getAmbientSound = (state) =>
+        state === game.state ? 'Leaves rustle.' : 'Silence.'
       expect(game.listen()).toBe('Leaves rustle.')
       const shell = item('Whispering Shell')
       shell.listen = () => 'You hear the sea.'

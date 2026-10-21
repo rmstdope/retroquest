@@ -3,12 +3,16 @@ import { Game } from '@/engine'
 import { Act3 } from '../Act3'
 import { SilenceKeeper } from './SilenceKeeper'
 import {
+  FLAG_ACT3_ECHO_HEARD,
+  FLAG_ACT3_KEEPER_PHANTOM_LINE_TOLD,
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
+  FLAG_ACT3_PHANTOMS_FREED,
   FLAG_ACT3_POOLS_STILLED,
 } from '../Act3StoryFlags'
 import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
+  expectStoryFlag,
 } from '@/testing/gameHelpers'
 
 describe('Silence Keeper dialogue markup', () => {
@@ -78,5 +82,88 @@ describe('Silence Keeper and the pools', () => {
     expect(keeper.talkTo(game.state)).toContain(trueWater)
     game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
     expect(keeper.talkTo(game.state)).toContain(trueWater)
+  })
+})
+
+describe('Silence Keeper on the phantoms', () => {
+  const PRESENT =
+    'The figures by the pools? They are not ghosts, not as the villages tell it. They are moments. ' +
+    'Someone cut at time, years ago, and what came loose drifts down here, saying the same thing over. ' +
+    'Tell them to rest; most of them only want leave to stop.'
+  const PAST =
+    'The figures by the pools are gone, then. They were not ghosts, not as the villages tell it. They were moments. ' +
+    'Someone cut at time, years ago, and what came loose drifted down here, saying the same thing over. ' +
+    'You gave them leave to stop.'
+  const REMINDER = 'Forty years I have listened to those stones.'
+
+  function setup(): { game: Game; keeper: SilenceKeeper } {
+    return { game: new Game([new Act3()]), keeper: new SilenceKeeper() }
+  }
+
+  it('says nothing of the phantoms when the echo is unheard', () => {
+    const { game, keeper } = setup()
+    keeper.talkTo(game.state)
+    const later = keeper.talkTo(game.state)
+    expect(later).toContain(REMINDER)
+    expect(later).not.toContain('moments')
+  })
+
+  it('keeps the first talk unchanged and adds the line on the second, once', () => {
+    const { game, keeper } = setup()
+    game.state.setStoryFlag(FLAG_ACT3_ECHO_HEARD, true)
+
+    const first = keeper.talkTo(game.state)
+    expect(first).toContain('singer once')
+    expect(first).not.toContain('moments')
+
+    const second = keeper.talkTo(game.state)
+    expect(second).toContain(REMINDER)
+    expect(second).toContain(PRESENT)
+    expectMarkupWellFormed(second)
+    expectStoryFlag(game.state, FLAG_ACT3_KEEPER_PHANTOM_LINE_TOLD, true)
+
+    const third = keeper.talkTo(game.state)
+    expect(third).toContain(REMINDER)
+    expect(third).not.toContain('moments')
+  })
+
+  it('appends the line to a met keeper after the echo is heard', () => {
+    const { game, keeper } = setup()
+    keeper.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_ECHO_HEARD, true)
+    expect(keeper.talkTo(game.state)).toContain(PRESENT)
+  })
+
+  it('tells the past-tense version when the phantoms were freed', () => {
+    const { game, keeper } = setup()
+    keeper.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_ECHO_HEARD, true)
+    game.state.setStoryFlag(FLAG_ACT3_PHANTOMS_FREED, true)
+    const answer = keeper.talkTo(game.state)
+    expect(answer).toContain(PAST)
+    expect(answer).not.toContain(PRESENT)
+  })
+
+  it('appends the line after the closing on the next talk once the Oath is complete', () => {
+    const { game, keeper } = setup()
+    game.state.setStoryFlag(FLAG_ACT3_ECHO_HEARD, true)
+    game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
+    const unchanged = keeper.talkTo(game.state)
+    expect(unchanged).not.toContain('moments')
+    const answer = keeper.talkTo(game.state)
+    expect(answer).toContain('The sleeper spoke with you')
+    expect(answer.indexOf(PRESENT)).toBeGreaterThan(
+      answer.indexOf('The sleeper spoke with you'),
+    )
+    expect(keeper.talkTo(game.state)).not.toContain('moments')
+  })
+
+  it('says nothing more when the phantoms are freed after the line was told', () => {
+    const { game, keeper } = setup()
+    keeper.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_ECHO_HEARD, true)
+    keeper.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_ACT3_PHANTOMS_FREED, true)
+    expect(keeper.talkTo(game.state)).not.toContain('moments')
   })
 })
