@@ -120,7 +120,7 @@ Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned f
     -   Location: Sunken Ruins causeways and outer wards
     -   Prerequisites: None
     -   Objectives:
-        -   Recover the Moon Rune shards by searching the Shoreline Markers (one search, one room)
+        -   Recover the Moon Rune shards: a single search at the Shoreline Markers reveals them all
         -   Place and engrave the Moon Runes on the three warding pillars to form a Moon Sigil
     -   Outcome: The engraved Moon Sigil draws the flood aside, pulling the tide back and opening a safe path to the sanctum; required to access the Crystal of Light
 

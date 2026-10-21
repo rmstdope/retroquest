@@ -84,6 +84,7 @@ describe('Phoenix Crater', () => {
       const loaded = fresh.state.currentRoom.descriptionFor(fresh.state)
       expect(loaded).not.toContain(DROWSY)
       expect(loaded).toContain('molten fan')
+      expect(fresh.talk('phoenix')).not.toContain('crater is silent')
     })
   })
 })
