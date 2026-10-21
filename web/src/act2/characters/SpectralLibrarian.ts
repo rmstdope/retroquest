@@ -79,10 +79,10 @@ export class SpectralLibrarian extends Character {
       characterName(this.name) +
       ': ' +
       speech(
-        "'Mind the shelves. Everything here has been kept a long time, " +
+        'Mind the shelves. Everything here has been kept a long time, ' +
           'and the wards on the oldest texts are failing. I can keep a book; ' +
           'I cannot mend one. Mend the wards, and I will show you where to ' +
-          "look for the mark you carry.'",
+          'look for the mark you carry.',
       )
     if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET)) {
       return greeting
@@ -96,7 +96,7 @@ export class SpectralLibrarian extends Character {
       ' at your throat.\n\n' +
       characterName(this.name) +
       ': ' +
-      speech(`'${GLANCE_WORDS}'`) +
+      speech(`${GLANCE_WORDS}`) +
       '\n\n' +
       greeting
     )
@@ -119,33 +119,33 @@ export class SpectralLibrarian extends Character {
         ? ' Their eyes go back to the ' +
           itemName(AMULET_NAME) +
           '. ' +
-          speech(`'${CONFESSION_WORDS}'`)
+          speech(`${CONFESSION_WORDS}`)
         : ' Their eyes find the ' +
           itemName(AMULET_NAME) +
           ' at your throat, and stay there. ' +
-          speech(`'${GLANCE_WORDS} ${CONFESSION_WORDS}'`)
+          speech(`${GLANCE_WORDS} ${CONFESSION_WORDS}`)
     }
     return (
       '[success]' +
       characterName(this.name) +
       ': ' +
       speech(
-        `'You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
+        `You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
           'spell. They have been failing longer than I care to count; ' +
-          "thank you. Now, what you came for.'",
+          'thank you. Now, what you came for.',
       ) +
       confession +
       " The spirit's eyes glow brighter as they speak: " +
       speech(
-        "'I am a keeper, not a teller. The answer you came for is in that " +
+        'I am a keeper, not a teller. The answer you came for is in that ' +
           'chronicle. We wrote it, and our mark is on its cover. Read it, ' +
           `and you will learn the [spell_name]${dispelName}[/spell_name] ` +
-          "spell.'",
+          'spell.',
       ) +
       ' They gesture to a crystal resting on the shelf: ' +
       speech(
-        `'And take this [item_name]${crystalFocus.name}[/item_name]. What you ` +
-          "do with them is yours to choose.'",
+        `And take this [item_name]${crystalFocus.name}[/item_name]. What you ` +
+          'do with them is yours to choose.',
       ) +
       '[/success]'
     )
@@ -158,12 +158,12 @@ export class SpectralLibrarian extends Character {
       ': ' +
       (gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)
         ? speech(
-            "'You have read what we left. The rest is not written on " +
-              "any shelf of mine. Use this knowledge wisely.'",
+            'You have read what we left. The rest is not written on ' +
+              'any shelf of mine. Use this knowledge wisely.',
           )
         : speech(
-            "'The chronicle is waiting on its shelf. We wrote it for " +
-              "whoever would read it; I cannot read it for you.'",
+            'The chronicle is waiting on its shelf. We wrote it for ' +
+              'whoever would read it; I cannot read it for you.',
           ))
     if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)) {
       return line
@@ -178,7 +178,7 @@ export class SpectralLibrarian extends Character {
       '.\n\n' +
       characterName(this.name) +
       ': ' +
-      speech(`'${GLANCE_WORDS} ${CONFESSION_WORDS}'`) +
+      speech(`${GLANCE_WORDS} ${CONFESSION_WORDS}`) +
       '\n\n' +
       line
     )

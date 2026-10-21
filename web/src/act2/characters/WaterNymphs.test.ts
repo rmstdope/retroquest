@@ -48,7 +48,7 @@ describe('Water Nymphs dialogue markup', () => {
 
     expect(answer).toContain("shake their heads gently as you say 'wrong'")
     expect(answer).toContain(
-      "'Is that really what you think? Will you hear it again?'",
+      'Is that really what you think? Will you hear it again?',
     )
     expect(answer).toContain(RIDDLES[0].question)
     expect(answer).not.toContain('Consider what')
@@ -71,8 +71,8 @@ describe('Water Nymphs voice', () => {
     expect(answer).not.toContain('sacred')
     expect(answer).toContain('The stream rises into shapes. ')
     expect(answer).toContain(
-      "'Came all this way to stand in our water? Will you answer three " +
-        "questions, then? Here is the first.'",
+      'Came all this way to stand in our water? Will you answer three ' +
+        'questions, then? Here is the first.',
     )
     expect(answer).toContain(RIDDLES[0].question)
     expect(answer).toContain(HELP)
@@ -88,7 +88,7 @@ describe('Water Nymphs voice', () => {
     const third = nymphs.talkTo(game.state)
 
     expect(second).toContain(
-      "'Back so soon? Do you remember where we were? The second one, wasn't it?'",
+      "Back so soon? Do you remember where we were? The second one, wasn't it?",
     )
     expect(second).toContain(RIDDLES[1].question)
     expect(second).toContain(HELP)
@@ -107,7 +107,7 @@ describe('Water Nymphs voice', () => {
     expect(answer).toContain(RIDDLES[0].explanation)
     expect(answer).toContain(' nod. ')
     expect(answer).toContain(
-      "'Did you know it, or guess it? Does it matter? What about this one?'",
+      'Did you know it, or guess it? Does it matter? What about this one?',
     )
     expect(answer).toContain(RIDDLES[1].question)
     expectMarkupWellFormed(answer)
@@ -121,8 +121,8 @@ describe('Water Nymphs voice', () => {
     const answer = nymphs.sayTo(game.state, 'truth')
 
     expect(answer).toContain(
-      "'Three for three — who taught you to listen like that? Will you take " +
-        "what grows here? Who else would we give it to?'",
+      'Three for three — who taught you to listen like that? Will you take ' +
+        'what grows here? Who else would we give it to?',
     )
     expect(answer).toContain(
       'The water nymphs draw back from the bank. The clear pool and the ' +
@@ -144,7 +144,7 @@ describe('Water Nymphs voice', () => {
     const said = nymphs.sayTo(game.state, 'hello')
 
     expect(talk).toContain(
-      "'Back again? Wasn't three enough? What more could we ask you?'",
+      "Back again? Wasn't three enough? What more could we ask you?",
     )
     expect(said).toBe(
       "[dim]The [character_name]water nymphs[/character_name] listen to 'hello' and only smile. They have no more riddles for you.[/dim]",
@@ -275,7 +275,7 @@ describe('Water Nymphs hints', () => {
     const third = miss(nymphs, game)
 
     expect(first).not.toContain(RIDDLES[1].hint)
-    expect(second).toContain(`'${RIDDLES[1].hint}'`)
+    expect(second).toContain(RIDDLES[1].hint)
     expect(second.indexOf(RIDDLES[1].question)).toBeLessThan(
       second.indexOf(RIDDLES[1].hint),
     )

@@ -17,9 +17,9 @@ describe('Forest hermit', () => {
     const lines = [
       'You approach the',
       'glances at the treeline before looking at you, as if checking who might be listening.',
-      "'You're going in. She's in a sour mood this season, so mind yourself.'",
-      "'She moves her paths when she's bored, and she keeps old things in her that don't care for strangers. Everything that lives in there is hers. Ask before you take, and never take more than you give.'",
-      "'But you... there is old magic on you, and not of your own making. She'll notice it. Take this charm—it tells her you're under my protection. And don't go to her unready; sort out your pack before you cross.'",
+      "You're going in. She's in a sour mood this season, so mind yourself.",
+      "She moves her paths when she's bored, and she keeps old things in her that don't care for strangers. Everything that lives in there is hers. Ask before you take, and never take more than you give.",
+      "But you... there is old magic on you, and not of your own making. She'll notice it. Take this charm—it tells her you're under my protection. And don't go to her unready; sort out your pack before you cross.",
       'You receive a [item_name]protective charm[/item_name]!',
     ]
     let from = 0
@@ -41,7 +41,7 @@ describe('Forest hermit', () => {
 
     expect(answer).toContain('tilts their head toward the trees.')
     expect(answer).toContain(
-      "'She knows you're coming now. Go on, before she changes her mind.'",
+      "She knows you're coming now. Go on, before she changes her mind.",
     )
     expectMarkupWellFormed(answer)
     expect(answer).not.toMatch(/knowingly|wisdom|spirits/i)

@@ -51,21 +51,21 @@ export class ForestHermit extends Character {
         ' glances at the treeline before looking at you, as if checking ' +
         'who might be listening. ' +
         speech(
-          "'You're going in. She's in a sour mood this season, so mind yourself.'",
+          "You're going in. She's in a sour mood this season, so mind yourself.",
         ) +
         '\n\n' +
         speech(
-          "'She moves her paths when she's bored, and she keeps old things " +
+          "She moves her paths when she's bored, and she keeps old things " +
             "in her that don't care for strangers. Everything that lives in " +
             'there is hers. Ask before you take, and never take more than you ' +
-            "give.'",
+            'give.',
         ) +
         '\n\n' +
         speech(
-          "'But you... there is old magic on you, and not of your own making. " +
+          'But you... there is old magic on you, and not of your own making. ' +
             "She'll notice it. Take this charm—it tells her you're under my " +
             "protection. And don't go to her unready; sort out your pack " +
-            "before you cross.'",
+            'before you cross.',
         ) +
         '\n\n' +
         event('You receive a [item_name]protective charm[/item_name]!')
@@ -77,7 +77,7 @@ export class ForestHermit extends Character {
         characterName(this.name) +
         ' tilts their head toward the trees. ' +
         speech(
-          "'She knows you're coming now. Go on, before she changes her mind.'",
+          "She knows you're coming now. Go on, before she changes her mind.",
         )
       )
     }

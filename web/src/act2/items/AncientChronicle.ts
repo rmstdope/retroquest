@@ -82,11 +82,11 @@ export class AncientChronicle extends Item {
           'texts.',
       ) +
       '\n' +
-      speech("'These sacred chronicles are not for the unworthy,'") +
+      speech('These sacred chronicles are not for the unworthy,') +
       ' the spirit intones. ' +
       speech(
-        "'Prove yourself first, then perhaps I will permit you to study " +
-          "these treasures.'",
+        'Prove yourself first, then perhaps I will permit you to study ' +
+          'these treasures.',
       )
     )
   }

@@ -43,9 +43,9 @@ export class MountainHermit extends Character {
         characterName(name) +
         ' looks you up and down, the way he might inspect a recruit.\n' +
         speech(
-          "'Greendale, is it? Thirty years I drilled squires in that " +
+          'Greendale, is it? Thirty years I drilled squires in that ' +
             "castle's yard, and I've never heard the city so uneasy. The " +
-            "king gone, the guard half-empty. Walk carefully.'",
+            'king gone, the guard half-empty. Walk carefully.',
         )
 
       if (!this.swordGiven) {
@@ -67,8 +67,8 @@ export class MountainHermit extends Character {
           ' hears you out and grunts, but there is something softer in his ' +
           'face.\n' +
           speech(
-            "'Knew the notch, did he? Good. Then he knows. Go on, now. " +
-              "Greendale needs him more than I do.'",
+            'Knew the notch, did he? Good. Then he knows. Go on, now. ' +
+              'Greendale needs him more than I do.',
           )
         )
       }
@@ -78,9 +78,9 @@ export class MountainHermit extends Character {
         characterName(name) +
         ' jerks his chin toward Greendale.\n' +
         speech(
-          "'You've still got that blade, I see. Get it to " +
+          "You've still got that blade, I see. Get it to " +
             characterName('Cedric') +
-            ", and mind you give him my words.'",
+            ', and mind you give him my words.',
         )
       )
     }
@@ -122,7 +122,7 @@ export class MountainHermit extends Character {
       'The ' +
       characterName(this.name) +
       ' smiles. ' +
-      speech("'I already gave you the sword, young one. Use it wisely.'")
+      speech('I already gave you the sword, young one. Use it wisely.')
     )
   }
 
@@ -140,12 +140,12 @@ export class MountainHermit extends Character {
       `He unwraps a battered [item_name]${swordName}[/item_name] from an ` +
       'old cloth.\n' +
       speech(
-        "'This was " +
+        'This was ' +
           characterName('Cedric') +
           "'s. I put it in his hands when he was a squire no taller than " +
           'you. They say he slept on watch the night the king went, and ' +
           'lost his spurs for it. Take it to him in the castle yard. Tell ' +
-          "him the sergeant never believed a word of it.'",
+          'him the sergeant never believed a word of it.',
       ) +
       '\n\n' +
       event(`You receive a [item_name]${swordName}[/item_name]!`)

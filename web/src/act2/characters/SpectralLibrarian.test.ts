@@ -28,7 +28,7 @@ describe('Spectral Librarian dialogue markup', () => {
     const answer = librarian.talkTo(game.state)
 
     expect(answer).toContain(
-      "'Mind the shelves. Everything here has been kept a long time, and the wards on the oldest texts are failing. I can keep a book; I cannot mend one. Mend the wards, and I will show you where to look for the mark you carry.'",
+      'Mind the shelves. Everything here has been kept a long time, and the wards on the oldest texts are failing. I can keep a book; I cannot mend one. Mend the wards, and I will show you where to look for the mark you carry.',
     )
     expect(answer).not.toMatch(/eternal|worthiness/i)
     expectMarkupWellFormed(answer)
@@ -95,11 +95,11 @@ describe('Spectral Librarian dialogue markup', () => {
     const answer = new SpectralLibrarian().talkTo(game.state)
 
     const lines = [
-      "'You mended the wards with your [spell_name]mend[/spell_name] spell. They have been failing longer than I care to count; thank you. Now, what you came for.'",
+      'You mended the wards with your [spell_name]mend[/spell_name] spell. They have been failing longer than I care to count; thank you. Now, what you came for.',
       " The spirit's eyes glow brighter as they speak: ",
-      "'I am a keeper, not a teller. The answer you came for is in that chronicle. We wrote it, and our mark is on its cover. Read it, and you will learn the [spell_name]dispel[/spell_name] spell.'",
+      'I am a keeper, not a teller. The answer you came for is in that chronicle. We wrote it, and our mark is on its cover. Read it, and you will learn the [spell_name]dispel[/spell_name] spell.',
       ' They gesture to a crystal resting on the shelf: ',
-      "'And take this [item_name]Crystal Focus[/item_name]. What you do with them is yours to choose.'",
+      'And take this [item_name]Crystal Focus[/item_name]. What you do with them is yours to choose.',
     ]
     let from = 0
     for (const line of lines) {
@@ -128,9 +128,9 @@ const GLANCE_LINE =
   'I have not seen that worn since the last hand wrote in that chronicle.'
 const CONFESSION =
   'I wore that mark once, when I had a body to wear it in. Whose yours was, I cannot tell you; only that the Wardens did not give them away. We taught the unbinding to those we trusted, and wrote it down for the rest.'
-const GREETING_START = "'Mind the shelves."
+const GREETING_START = 'Mind the shelves.'
 const THANKS =
-  "'You mended the wards with your [spell_name]mend[/spell_name] spell. They have been failing longer than I care to count; thank you. Now, what you came for.'"
+  'You mended the wards with your [spell_name]mend[/spell_name] spell. They have been failing longer than I care to count; thank you. Now, what you came for.'
 
 /** A game with the librarian, optionally with the wards mended and the amulet carried. */
 function setup(options: { amulet: boolean; mended?: boolean }): {
@@ -190,9 +190,9 @@ describe('Spectral Librarian notices the amulet', () => {
     expectInOrder(answer, [
       THANKS,
       ' Their eyes go back to the [item_name]Ancient Amulet[/item_name]. ',
-      `'${CONFESSION}'`,
+      `${CONFESSION}`,
       " The spirit's eyes glow brighter as they speak: ",
-      "'I am a keeper, not a teller.",
+      'I am a keeper, not a teller.',
       ' They gesture to a crystal resting on the shelf: ',
     ])
     expect(answer.startsWith('[success]')).toBe(true)
@@ -212,7 +212,7 @@ describe('Spectral Librarian notices the amulet', () => {
     expectInOrder(answer, [
       THANKS,
       ' Their eyes find the [item_name]Ancient Amulet[/item_name] at your throat, and stay there. ',
-      `'${GLANCE_LINE} ${CONFESSION}'`,
+      `${GLANCE_LINE} ${CONFESSION}`,
       " The spirit's eyes glow brighter as they speak: ",
     ])
     expect(answer.startsWith('[success]')).toBe(true)
@@ -245,8 +245,8 @@ describe('Spectral Librarian notices the amulet', () => {
 
     expectInOrder(delayed, [
       "The [character_name]Spectral Librarian[/character_name]'s eyes go to the [item_name]Ancient Amulet[/item_name].",
-      `'${GLANCE_LINE} ${CONFESSION}'`,
-      "'The chronicle is waiting on its shelf. We wrote it for whoever would read it; I cannot read it for you.'",
+      `${GLANCE_LINE} ${CONFESSION}`,
+      'The chronicle is waiting on its shelf. We wrote it for whoever would read it; I cannot read it for you.',
     ])
     expect(again).not.toContain('I wore that mark')
     expectMarkupWellFormed(delayed)
@@ -262,7 +262,7 @@ describe('Spectral Librarian notices the amulet', () => {
 
     expectInOrder(delayed, [
       CONFESSION,
-      "'You have read what we left. The rest is not written on any shelf of mine. Use this knowledge wisely.'",
+      'You have read what we left. The rest is not written on any shelf of mine. Use this knowledge wisely.',
     ])
   })
 
@@ -298,7 +298,7 @@ describe('Spectral Librarian notices the amulet', () => {
 
     const answer = new SpectralLibrarian().talkTo(fresh.state)
 
-    expect(answer).toContain(`'${GLANCE_LINE} ${CONFESSION}'`)
+    expect(answer).toContain(`${GLANCE_LINE} ${CONFESSION}`)
   })
 
   it('plays the glance for a save made before mending', () => {

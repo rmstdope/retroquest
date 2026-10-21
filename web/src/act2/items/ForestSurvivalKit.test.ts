@@ -55,7 +55,7 @@ describe('Forest survival kit', () => {
       'You wake to grey light and woodsmoke. The',
       'forest hermit',
       'is sitting by the embers, feeding them twigs.',
-      "'You slept on her doorstep and she let you. That's a start. Go on, then.'",
+      "You slept on her doorstep and she let you. That's a start. Go on, then.",
     ]
     let from = 0
     for (const line of lines) {

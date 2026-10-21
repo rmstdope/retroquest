@@ -44,8 +44,8 @@ export class Caravan extends Item {
       '\n\n' +
       dialogue(
         'Spice trader',
-        '"Three days down there and I\'d stopped feeling these fingers. ' +
-          'Tell Thorne he owes you twice now."',
+        "Three days down there and I'd stopped feeling these fingers. " +
+          'Tell Thorne he owes you twice now.',
       )
     )
   }

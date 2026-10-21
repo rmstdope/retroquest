@@ -48,9 +48,9 @@ export class MasterMerchantAldric extends Character {
     characterName('Master Merchant Aldric') +
     ' looks at you appraisingly. ' +
     speech(
-      "'I deal only with established customers and those with proper " +
+      'I deal only with established customers and those with proper ' +
         'credentials. Do you have any introduction or referral that would ' +
-        "qualify you for my premium services?'",
+        'qualify you for my premium services?',
     )
   gaveFlyer = false
 
@@ -91,7 +91,7 @@ export class MasterMerchantAldric extends Character {
       'The ' +
       characterName('Master Merchant Aldric') +
       ' says: ' +
-      speech(`"${dialogue} ${waresInfo.trim()}"`)
+      speech(`${dialogue} ${waresInfo.trim()}`)
     )
   }
 
@@ -109,9 +109,9 @@ export class MasterMerchantAldric extends Character {
         characterName('Master Merchant Aldric') +
         '. His eyes light up as he examines it. ' +
         speech(
-          "'Ah, excellent! This flyer grants you access to our premium " +
+          'Ah, excellent! This flyer grants you access to our premium ' +
             'selection and preferred customer pricing. What quality goods can ' +
-            "I help you acquire today?'",
+            'I help you acquire today?',
         ) +
         '[/success]'
       )
@@ -124,8 +124,8 @@ export class MasterMerchantAldric extends Character {
       characterName('Master Merchant Aldric') +
       ` examines the ${itemName}. ` +
       speech(
-        "'I appreciate the offer, but I deal in adventure gear, not " +
-          "donations. Perhaps you could purchase something instead?'",
+        'I appreciate the offer, but I deal in adventure gear, not ' +
+          'donations. Perhaps you could purchase something instead?',
       )
     )
   }
@@ -153,7 +153,7 @@ export class MasterMerchantAldric extends Character {
         eventMsg +
         '\n' +
         speech(
-          `"Sorry, I don't have any ' [item_name]${itemNameToBuy}` +
+          `Sorry, I don't have any ' [item_name]${itemNameToBuy}` +
             "[/item_name]' for sale. Check my current inventory for available " +
             'items.',
         )
@@ -189,7 +189,7 @@ export class MasterMerchantAldric extends Character {
         eventMsg +
         '\n' +
         speech(
-          `"You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
+          `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
             'should be sufficient for your needs.',
         )
       )
