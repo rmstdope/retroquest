@@ -1,4 +1,4 @@
-import { Act, type GameState, type Item, speech } from '@/engine'
+import { Act, characterName, type GameState, type Item, speech } from '@/engine'
 import { Brenn } from './characters/Brenn'
 import { AncientAmulet } from './items/AncientAmulet'
 import { MountainPath } from './rooms/MountainPath'
@@ -123,13 +123,17 @@ export class Act2 extends Act {
       'an impressive castle rising majestically above the city walls. ' +
       'Smoke rises from countless chimneys, and you can hear the distant ' +
       'sounds of commerce and conversation carried on the mountain ' +
-      "breeze.\n\nYour grandmother's words echo in your mind: " +
+      "breeze.\n\nMira's parting words go with you: " +
       speech(
-        "'Seek out Sir Cedric at the castle. He will help you understand " +
-          "your heritage and the growing darkness that threatens our world.'",
+        "'Your road leads to Greendale, " +
+          characterName('Elior') +
+          '. Once there, show the amulet to no one lightly. Those who know ' +
+          "what it is will find you.'",
       ) +
-      ' The [item_name]Ancient Amulet[/item_name] Mira gave you feels warm ' +
-      'against your chest, a reminder of the mysteries you must uncover.\n\nBeyond Greendale, ' +
+      ' The [item_name]Ancient Amulet[/item_name] your parents left you lies ' +
+      'hidden under your shirt, warm against your chest. Someone came to ' +
+      'Willowbrook looking for it, your grandmother said. Keep it hidden.' +
+      '\n\nBeyond Greendale, ' +
       'you glimpse the edge of the Enchanted Forest—an ancient woodland ' +
       'where magic flows like water and spirits older than memory dwell ' +
       'among the trees. The very air seems to shimmer with possibility ' +

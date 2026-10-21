@@ -75,12 +75,18 @@ describe('Act II ancient amulet', () => {
     expect(carries(loaded)).toBe(false)
   })
 
-  it('is named as an item, given by Mira, in the opening', () => {
+  it('quotes only what Act I said, and names the amulet as an item', () => {
     const intro = new Act2().getActIntro()
     expect(intro).toContain(
-      'The [item_name]Ancient Amulet[/item_name] Mira gave you feels warm ' +
-        'against your chest, a reminder of the mysteries you must uncover.',
+      "Mira's parting words go with you: " +
+        "[dialogue]'Your road leads to Greendale, [character_name]Elior[/character_name]. Once there, show the " +
+        "amulet to no one lightly. Those who know what it is will find you.'[/dialogue] " +
+        'The [item_name]Ancient Amulet[/item_name] your parents left you lies ' +
+        'hidden under your shirt, warm against your chest. Someone came to ' +
+        'Willowbrook looking for it, your grandmother said. Keep it hidden.',
     )
-    expect(intro).not.toContain('she gave you')
+    expect(intro).not.toContain('Seek out Sir Cedric')
+    expect(intro).not.toContain('Cedric')
+    expect(intro).not.toContain('feels warm')
   })
 })
