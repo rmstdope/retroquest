@@ -1,4 +1,5 @@
 import { Item, event, writing, type GameState } from '@/engine'
+import { AncientAmulet } from './AncientAmulet'
 import { FLAG_ACT3_SEA_SEALED_LETTER_READ } from '../Act3StoryFlags'
 
 /** A scrap of vellum preserved by salt-crystal varnish. */
@@ -46,13 +47,18 @@ export class SeaSealedLetter extends Item {
     })
   }
 
-  /** Examine the letter and set the read flag. */
+  /**
+   * Examine the letter and set the read flag. The first reading ends with the
+   * amulet's first glow.
+   */
   override examine(gameState: GameState): string {
+    const first = !gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ)
     gameState.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
     return (
       event(`You examine the [item_name]${this.name}[/item_name].`) +
       '\n' +
-      `${this.description}`
+      `${this.description}` +
+      (first ? AncientAmulet.glowInBag(gameState, 1) : '')
     )
   }
 

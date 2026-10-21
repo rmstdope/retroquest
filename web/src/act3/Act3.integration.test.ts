@@ -597,6 +597,19 @@ describe('Act 3 golden path', () => {
 })
 
 describe('Act 3 golden path as declared by the act', () => {
+  it('ends with the amulet showing both parents, after three glows', () => {
+    const game = new Game([new Act3()])
+    const out = executeCommands(game, ACT3_GOLDEN_PATH)
+    expect(
+      out.match(
+        /Ancient Amulet\[\/item_name\] (grows warm|glows again|blazes)/g,
+      ),
+    ).toHaveLength(3)
+    expect(executeCommands(game, ['examine amulet'])).toContain(
+      'Aren and Lysa stand hand in hand',
+    )
+  })
+
   it('completes every non-main quest before completing the main quest', () => {
     const game = new Game([new Act3()])
     executeCommands(game, ACT3_GOLDEN_PATH)

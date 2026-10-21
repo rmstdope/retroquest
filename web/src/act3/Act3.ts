@@ -1,4 +1,5 @@
 import { Act, type GameState } from '@/engine'
+import { AncientAmulet } from './items/AncientAmulet'
 import { MirasHut } from './rooms/MirasHut'
 import { TidalCauseway } from './rooms/TidalCauseway'
 import { ShorelineMarkers } from './rooms/ShorelineMarkers'
@@ -121,8 +122,10 @@ export class Act3 extends Act {
     return _gameState.getStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)
   }
 
-  /** Ensure essential Act III magic is available at start. */
+  /** Give Elior his amulet and ensure essential Act III magic is available at start. */
   override setupGameState(gameState: GameState): void {
+    // Mira gave Elior the amulet at the end of Act I
+    gameState.addItemToInventory(new AncientAmulet())
     // Learn core Act III spells so Sunken Ruins progression is possible
     if (!gameState.hasSpell(new PurifySpell().id)) {
       gameState.learnSpell(new PurifySpell())

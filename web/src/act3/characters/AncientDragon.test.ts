@@ -14,6 +14,7 @@ import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
 } from '@/testing/gameHelpers'
+import { AncientAmulet } from '../items/AncientAmulet'
 
 const DIALOGUE_PATTERN = /\[dialogue\].*?\[\/dialogue\]/gs
 const CHARACTER_NAME_PATTERN = /\[character_name\](.*?)\[\/character_name\]/s
@@ -225,5 +226,25 @@ describe('AncientDragon', () => {
       'They are not gone as the dead are gone, child. They are warded ' +
         'away, not dead.',
     )
+  })
+
+  it('glows the amulet after the memory and before the later-talk line, once', () => {
+    const dragon = new AncientDragon()
+    const gameState = makeGameState()
+
+    const first = dragon.talkTo(gameState)
+    const again = dragon.talkTo(gameState)
+
+    expect(first.indexOf('warded away, not dead')).toBeLessThan(
+      first.indexOf('blazes in your hand a third time'),
+    )
+    expect(first.indexOf('blazes in your hand a third time')).toBeLessThan(
+      first.indexOf('The memory has been shared'),
+    )
+    expect(again).not.toContain('blazes')
+    expectMarkupWellFormed(first)
+    expect(
+      gameState.inventory.find((i) => i instanceof AncientAmulet)?.description,
+    ).toContain('hand in hand')
   })
 })

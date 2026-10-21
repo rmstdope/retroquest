@@ -553,7 +553,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 1. Room: Mira’s Hut
 
 -   Commands and yields:
-    -   `take ancient amulet` → Elior takes his family heirloom and carries it from now on.
+    -   Elior already carries his family heirloom, the Ancient Amulet, from the first turn of Act III (no step needed).
     -   `talk to Mira` → Starts “The Three Virtues”; Mira explains the relics and gives Elior the Keepsake Note.
     -   `examine keepsake note` → Reads the note and starts “Echoes of the Hidden Bond.” The note is in Mira’s hand and says only that Elior must read what the relics’ makers left behind.
 
