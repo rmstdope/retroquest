@@ -72,11 +72,11 @@ export class Families extends Character {
           'An elderly woman from one of the ' +
             characterName(this.name) +
             ' approaches you with a warm smile. ' +
-            speech("'Here, dear,'") +
+            speech('Here, dear,') +
             ' she says, pressing a bundle into your hands. ' +
             speech(
-              "'These are rare healing herbs that have been in our family for " +
-                "generations. Someone who helps others as you do should have them.'",
+              'These are rare healing herbs that have been in our family for ' +
+                'generations. Someone who helps others as you do should have them.',
             ) +
             ` You receive [item_name]${herbs.name}[/item_name]!`,
         ) +

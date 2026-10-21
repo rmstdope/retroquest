@@ -191,7 +191,7 @@ export class InnkeeperMarcus extends Character {
         'The ' +
         characterName(name) +
         ' says: ' +
-        speech(`"${dialogue} ${waresInfo.trim()}"`) +
+        speech(`${dialogue} ${waresInfo.trim()}`) +
         '\n\n'
       const plea =
         "You've spoken with " +
@@ -214,7 +214,7 @@ export class InnkeeperMarcus extends Character {
         'The ' +
         characterName(name) +
         ' says: ' +
-        speech(`"${dialogue} ${waresInfo.trim()}"`) +
+        speech(`${dialogue} ${waresInfo.trim()}`) +
         '\n\n'
       const closing =
         'Though I must say, these have been dark times for my family. My daughter... ' +
@@ -242,8 +242,8 @@ export class InnkeeperMarcus extends Character {
         eventMsg +
         '\n' +
         speech(
-          `"Sorry, I don't have any '${itemDisp}' for sale. Check what I can ` +
-            'offer you."',
+          `Sorry, I don't have any '${itemDisp}' for sale. Check what I can ` +
+            'offer you.',
         )
       )
     }
@@ -277,8 +277,8 @@ export class InnkeeperMarcus extends Character {
         eventMsg +
         '\n' +
         speech(
-          `"You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
-            'room should be sufficient for your stay."',
+          `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
+            'room should be sufficient for your stay.',
         )
       )
     }

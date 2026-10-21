@@ -13,13 +13,13 @@ import {
 } from '@/testing/gameHelpers'
 
 const POINTER =
-  "'Now you can hear them, you'll hear the grove is uneasy. The nymphs in " +
+  "Now you can hear them, you'll hear the grove is uneasy. The nymphs in " +
   'the glade east of the entrance have something for these roots. Answer ' +
-  "them, and bring back what they give you.'"
+  'them, and bring back what they give you.'
 const HALF_HARVEST =
-  "'Half a harvest. The nymphs gave you two things — go back for the other.'"
+  'Half a harvest. The nymphs gave you two things — go back for the other.'
 const REPEAT_REFUSAL =
-  'does not take it. [dialogue]' + "'Keep it. The roots have what they need.'"
+  'does not take it. [dialogue]' + 'Keep it. The roots have what they need.'
 
 /** A game running Act II. */
 function createGame(): Game {
@@ -46,10 +46,10 @@ describe('Ancient Tree Spirit voice', () => {
       'A face gathers in the knots of the silver bark and turns toward you. ',
     )
     expect(answer).toContain(
-      "'You walk like spring. Everything new, nothing kept.'",
+      'You walk like spring. Everything new, nothing kept.',
     )
     expect(answer).toContain(
-      "'I don't teach for nothing. Bring me something that hasn't grown yet.'",
+      "I don't teach for nothing. Bring me something that hasn't grown yet.",
     )
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'ancient tree spirit')
@@ -65,8 +65,8 @@ describe('Ancient Tree Spirit voice', () => {
 
     expect(answer).toContain(
       'The bark around the knots softens. ' +
-        "[dialogue]'Next spring's tree, and you carried it here instead of " +
-        "planting it. Good. Listen, then.'",
+        "[dialogue]Next spring's tree, and you carried it here instead of " +
+        'planting it. Good. Listen, then.',
     )
     const flavour = answer.indexOf('The voices of the grove settle into you')
     const learned = answer.indexOf(
@@ -88,10 +88,10 @@ describe('Ancient Tree Spirit voice', () => {
 
     const answer = spirit.talkTo(game.state)
 
-    expect(answer).toContain("'Still summer for you, then — all errands.'")
+    expect(answer).toContain('Still summer for you, then — all errands.')
     expect(answer).toContain(
-      "'The nymphs in the glade east of the entrance have something for " +
-        "these roots. Answer them, and bring back what they give you.'",
+      'The nymphs in the glade east of the entrance have something for ' +
+        'these roots. Answer them, and bring back what they give you.',
     )
     expect(answer).not.toContain('north')
     expect(answer).not.toContain('crystal-clear')
@@ -129,14 +129,14 @@ describe('Ancient Tree Spirit voice', () => {
         'once and begin to glow.',
     )
     expect(answer).toContain(
-      "'Rain and a night's flowers. That will see the roots through winter.'",
+      "Rain and a night's flowers. That will see the roots through winter.",
     )
     expect(answer).toContain(
       'South of the grove, branches pull apart with a long creak.',
     )
     expect(answer).toContain(
-      "'The way south is open. Nyx lives at the end of it. She doesn't come " +
-        "for asking — read her altar before you call her.'",
+      "The way south is open. Nyx lives at the end of it. She doesn't come " +
+        'for asking — read her altar before you call her.',
     )
     expect(answer).not.toContain('Heart of the Forest')
     expect(game.state.getStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED)).toBe(true)
@@ -151,8 +151,8 @@ describe('Ancient Tree Spirit voice', () => {
     const answer = spirit.talkTo(game.state)
 
     expect(answer).toContain(
-      "'Autumn, for you. You came with nothing and you leave carrying " +
-        "things. The way south is yours.'",
+      'Autumn, for you. You came with nothing and you leave carrying ' +
+        'things. The way south is yours.',
     )
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'ancient tree spirit')
@@ -183,7 +183,7 @@ describe('Ancient Tree Spirit voice', () => {
     const answer = spirit.giveItem(game.state, leaves)
 
     expect(answer).toContain(
-      'does not stir. [dialogue]' + "'Wrong season for that.'",
+      'does not stir. [dialogue]' + 'Wrong season for that.',
     )
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'ancient tree spirit')

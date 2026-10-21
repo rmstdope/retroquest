@@ -21,12 +21,10 @@ import {
 const NYMPHS_POINTER_TEXT =
   'The nymphs in the glade east of the entrance have something for these ' +
   'roots. Answer them, and bring back what they give you.'
-/** The pointer as a quoted line, for a talk after the acorn. */
-const NYMPHS_POINTER = `'${NYMPHS_POINTER_TEXT}'`
 /** The pointer as spoken straight after the spell is learned. */
 const NYMPHS_POINTER_AFTER_SPELL =
-  "'Now you can hear them, you'll hear the grove is uneasy. " +
-  `${NYMPHS_POINTER_TEXT}'`
+  "Now you can hear them, you'll hear the grove is uneasy. " +
+  NYMPHS_POINTER_TEXT
 
 /** Ancient Tree Spirit NPC for quest progression and spell teaching. */
 export class AncientTreeSpirit extends Character {
@@ -53,11 +51,11 @@ export class AncientTreeSpirit extends Character {
         eventMsg +
         '\nA face gathers in the knots of the silver bark and turns toward ' +
         'you. ' +
-        speech("'You walk like spring. Everything new, nothing kept.'") +
+        speech('You walk like spring. Everything new, nothing kept.') +
         '\n\n' +
         speech(
-          "'I don't teach for nothing. Bring me something that hasn't " +
-            "grown yet.'",
+          "I don't teach for nothing. Bring me something that hasn't " +
+            'grown yet.',
         )
       )
     }
@@ -67,9 +65,9 @@ export class AncientTreeSpirit extends Character {
       return (
         eventMsg +
         '\n' +
-        speech("'Still summer for you, then — all errands.'") +
+        speech('Still summer for you, then — all errands.') +
         '\n\n' +
-        speech(NYMPHS_POINTER)
+        speech(NYMPHS_POINTER_TEXT)
       )
     }
 
@@ -78,8 +76,8 @@ export class AncientTreeSpirit extends Character {
       eventMsg +
       '\n' +
       speech(
-        "'Autumn, for you. You came with nothing and you leave carrying " +
-          "things. The way south is yours.'",
+        'Autumn, for you. You came with nothing and you leave carrying ' +
+          'things. The way south is yours.',
       )
     )
   }
@@ -109,8 +107,8 @@ export class AncientTreeSpirit extends Character {
         eventMsg +
         '\nThe bark around the knots softens. ' +
         speech(
-          "'Next spring's tree, and you carried it here instead of planting " +
-            "it. Good. Listen, then.'",
+          "Next spring's tree, and you carried it here instead of planting " +
+            'it. Good. Listen, then.',
         ) +
         '\n\n[success]The voices of the grove settle into you: the creak of ' +
         'branches, the talk of roots, the small sounds in the undergrowth. ' +
@@ -145,14 +143,14 @@ export class AncientTreeSpirit extends Character {
           'root at once and begin to glow.\n\n' +
           dialogue(
             this.name,
-            "'Rain and a night's flowers. That will see the roots through " +
-              "winter.'",
+            "Rain and a night's flowers. That will see the roots through " +
+              'winter.',
           ) +
           '\n\nSouth of the grove, branches pull apart with a long creak.\n\n' +
           dialogue(
             this.name,
-            "'The way south is open. Nyx lives at the end of it. She doesn't " +
-              "come for asking — read her altar before you call her.'",
+            "The way south is open. Nyx lives at the end of it. She doesn't " +
+              'come for asking — read her altar before you call her.',
           )
         )
       }
@@ -160,8 +158,8 @@ export class AncientTreeSpirit extends Character {
       // Player only has one of the two gifts
       return dialogue(
         this.name,
-        "'Half a harvest. The nymphs gave you two things — go back for the " +
-          "other.'",
+        'Half a harvest. The nymphs gave you two things — go back for the ' +
+          'other.',
       )
     }
 
@@ -170,7 +168,7 @@ export class AncientTreeSpirit extends Character {
       'The ' +
       characterName(this.name) +
       ' does not stir. ' +
-      speech("'Wrong season for that.'")
+      speech('Wrong season for that.')
     )
   }
 
@@ -180,7 +178,7 @@ export class AncientTreeSpirit extends Character {
       'The ' +
       characterName(this.name) +
       ' does not take it. ' +
-      speech("'Keep it. The roots have what they need.'")
+      speech('Keep it. The roots have what they need.')
     )
   }
 

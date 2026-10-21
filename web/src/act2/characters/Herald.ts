@@ -74,8 +74,8 @@ export class Herald extends Character {
         characterName(name) +
         '. He examines the seal carefully and nods with approval. ' +
         speech(
-          "'This is a formal recommendation of excellent standing. You are " +
-            "granted formal audience rights with the nobility.'",
+          'This is a formal recommendation of excellent standing. You are ' +
+            'granted formal audience rights with the nobility.',
         ) +
         ' He does not seem to notice that the name above the seal has been ' +
         'scraped away. The pass has been officially registered.[/success]'

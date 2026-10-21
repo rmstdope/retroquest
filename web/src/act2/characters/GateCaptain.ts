@@ -32,8 +32,8 @@ export class GateCaptain extends Character {
         characterName('Gate Captain') +
         ' looks at you with a professional but guarded expression. ' +
         speech(
-          "'State your business in Greendale, traveler. Do you have proper " +
-            "documentation for entry?'",
+          'State your business in Greendale, traveler. Do you have proper ' +
+            'documentation for entry?',
         )
       )
     } else {
@@ -43,10 +43,10 @@ export class GateCaptain extends Character {
           characterName('Gate Captain') +
           ' nods respectfully. ' +
           speech(
-            "'Welcome to Greendale, honored visitor. A map would help you " +
+            'Welcome to Greendale, honored visitor. A map would help you ' +
               'find your way - the streets can be quite maze-like for ' +
               'newcomers. Travelers leave all sorts at the information post by ' +
-              "the arch; have a look there before you go in.'",
+              'the arch; have a look there before you go in.',
           ) +
           ' With that, he salutes smartly and walks back to his patrol ' +
           'duties, leaving you free to explore the gate area.'
@@ -96,16 +96,16 @@ export class GateCaptain extends Character {
         'where a name should be; it has been scraped away with a blade. Then ' +
         'he looks at the seal, and grunts. ' +
         speech(
-          "'Somebody's scraped the name off this. The seal's good, though, " +
+          "Somebody's scraped the name off this. The seal's good, though, " +
             "and the seal's what I answer for. You are welcome in Greendale. " +
-            "Please, proceed.'",
+            'Please, proceed.',
         ) +
         ' ' +
         speech(
-          "'A map would help you find your way - the streets can be " +
+          'A map would help you find your way - the streets can be ' +
             'quite maze-like for newcomers. Travelers leave things at the ' +
             'information post there; look around and you may find what you ' +
-            "need.'",
+            'need.',
         ) +
         ' With that, he salutes smartly and walks back to his patrol ' +
         'duties, leaving you free to explore the gate area.'
@@ -116,7 +116,7 @@ export class GateCaptain extends Character {
       'The ' +
       characterName('Gate Captain') +
       ` politely declines the ${item.name}. ` +
-      speech("'I only need to see proper entry documentation.'")
+      speech('I only need to see proper entry documentation.')
     )
   }
 }

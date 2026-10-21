@@ -18,10 +18,10 @@ describe('Forest Sprites voice', () => {
       true,
     )
     expect(answer).toContain(
-      "'A traveller—' '—with muddy boots—' '—wanting the deep paths.'",
+      'A traveller— —with muddy boots— —wanting the deep paths.',
     )
     expect(answer).toContain(
-      "'And the nymphs have riddles—' '—east of here—' '—if you're clever.'",
+      "And the nymphs have riddles— —east of here— —if you're clever.",
     )
     expect(answer).not.toMatch(/ancient|sacred|wisdom/i)
     expect(answer).not.toMatch(/light and a ward|unwarded/i)
@@ -37,7 +37,7 @@ describe('Forest Sprites voice', () => {
     const answer = sprites.talkTo(game.state)
 
     expect(answer).toContain(
-      "'Back again—' '—did you forget?' 'Nymphs are east—' '—with their riddles.'",
+      'Back again— —did you forget? Nymphs are east— —with their riddles.',
     )
     expect(answer).not.toMatch(/light and a ward|unwarded/i)
     expectMarkupWellFormed(answer)

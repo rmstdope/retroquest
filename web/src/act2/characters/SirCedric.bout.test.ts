@@ -16,9 +16,9 @@ import {
 
 const REMINDER =
   '(Answer him with: say strike, say guard or say turn to Sir Cedric.)'
-const HIGH_CUT = "He raises his blade high over his left shoulder. 'High cut!'"
-const LUNGE = "He drives straight at your middle. 'Lunge!'"
-const WELL = "He swings wide and leaves his chest open. 'Well?'"
+const HIGH_CUT = 'He raises his blade high over his left shoulder. High cut!'
+const LUNGE = 'He drives straight at your middle. Lunge!'
+const WELL = 'He swings wide and leaves his chest open. Well?'
 
 /** A game with Elior in the courtyard carrying the sword; the bout not yet begun. */
 function courtyardGame(): Game {
@@ -60,7 +60,7 @@ describe("The Knight's Test bout", () => {
     expect(out).toContain('Three forms, the way he drilled them.')
     expect(out).toContain(REMINDER)
     expect(out).toContain('raises his blade high over his left shoulder.')
-    expect(out.trimEnd().endsWith("'High cut!'")).toBe(true)
+    expect(out.trimEnd().endsWith('High cut!')).toBe(true)
     expect(out).not.toContain('perform a series of combat forms')
     expectItemInInventory(game.state, 'training sword')
     expect(game.state.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)).toBe(false)
@@ -84,11 +84,11 @@ describe("The Knight's Test bout", () => {
     begin(game)
     const one = run(game, ['say guard to sir cedric'])
     expect(one).toContain('his blade rings off it.')
-    expect(one).toContain("'Lunge!'")
+    expect(one).toContain('Lunge!')
     expect(one).not.toContain(REMINDER)
     const two = run(game, ['say turn to sir cedric'])
     expect(two).toContain('his point slides past your ribs.')
-    expect(two).toContain("'Well?'")
+    expect(two).toContain('Well?')
     const three = run(game, ['say strike to sir cedric'])
     expect(three).toContain('You tap his chest with the flat of the blade.')
     expect(three).toContain('lowers his blade and nods approvingly.')
@@ -124,14 +124,14 @@ describe("The Knight's Test bout", () => {
   it('accepts the answer in any case with trailing punctuation', () => {
     const game = courtyardGame()
     begin(game)
-    expect(run(game, ['say GUARD! to sir cedric'])).toContain("'Lunge!'")
+    expect(run(game, ['say GUARD! to sir cedric'])).toContain('Lunge!')
   })
 
   it('repeats the attack, without the reminder, on any other word', () => {
     const game = courtyardGame()
     begin(game)
     const out = run(game, ['say hello to sir cedric'])
-    expect(out).toContain("'Strike, guard or turn, Elior.'")
+    expect(out).toContain('Strike, guard or turn, Elior.')
     expect(out).toContain(HIGH_CUT)
     expect(out).not.toContain(REMINDER)
   })
@@ -140,7 +140,7 @@ describe("The Knight's Test bout", () => {
     const game = courtyardGame()
     begin(game)
     const out = run(game, ['talk to sir cedric'])
-    expect(out).toContain("'Talk after.'")
+    expect(out).toContain('Talk after.')
     expect(out).toContain(HIGH_CUT)
     expect(out).not.toContain('Greetings, traveler')
   })
@@ -208,7 +208,7 @@ describe("The Knight's Test bout", () => {
     run(game, ['say guard to sir cedric'])
     const out = run(game, ['use training sword'])
     expect(out).toContain('He drives straight at your middle.')
-    expect(out).toContain("'Lunge!'")
+    expect(out).toContain('Lunge!')
     expect(out).not.toContain('From the top')
     expect(out.trimEnd().endsWith(REMINDER)).toBe(true)
     expect(cedric(game).boutCall).toBe(2)

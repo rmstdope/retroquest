@@ -64,7 +64,7 @@ describe('greater heal on the rescued merchants', () => {
     )
     expect(out).toContain(TRADER_GESTURE)
     expect(out).toContain(
-      `[character_name]Spice trader[/character_name]\n[dialogue]"${TRADER_LINE}"[/dialogue]`,
+      `[character_name]Spice trader[/character_name]\n[dialogue]${TRADER_LINE}[/dialogue]`,
     )
     expect(game.state.getStoryFlag(FLAG_MERCHANTS_HEALED)).toBe(true)
     expectMarkupWellFormed(out)

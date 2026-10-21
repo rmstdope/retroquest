@@ -188,6 +188,6 @@ export class PropheticVision extends Spell {
       )
       words = parts.join(' ')
     }
-    return `${stage}\n\n${dialogue('Sir Cedric', `"${words}"`)}`
+    return `${stage}\n\n${dialogue('Sir Cedric', words)}`
   }
 }

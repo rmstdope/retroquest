@@ -31,10 +31,10 @@ export class LordCommander extends Character {
       return (
         `The ${name} nods with satisfaction. ` +
         speech(
-          "'Sir Cedric's knighthood is restored and the charge struck from the " +
+          "Sir Cedric's knighthood is restored and the charge struck from the " +
             'record. As for the name in that letter, I have sent riders to ' +
             'Heavensforth for the watchman who wrote it. Whoever paid in that ' +
-            "name will be found.'",
+            'name will be found.',
         )
       )
     }
@@ -43,19 +43,19 @@ export class LordCommander extends Character {
       return (
         `The ${name} looks at you with interest. ` +
         speech(
-          "'I am told you carry papers touching on Sir Cedric's case, and on " +
+          "I am told you carry papers touching on Sir Cedric's case, and on " +
             'the night His Majesty vanished. If they bear on either, give them ' +
-            "to me.'",
+            'to me.',
         )
       )
     }
     return (
       `The ${name} greets you formally. ` +
       speech(
-        "'Welcome to Greendale's Great Hall. I oversee the military affairs of " +
+        "Welcome to Greendale's Great Hall. I oversee the military affairs of " +
           'our realm and, since King Alden vanished, I hold his court in his ' +
           'name. If you hear any word of His Majesty, you bring it to me ' +
-          "first.'",
+          'first.',
       )
     )
   }
@@ -69,8 +69,8 @@ export class LordCommander extends Character {
         return (
           `The ${name} glances at the papers and hands them back. ` +
           speech(
-            "'A confession and a letter, but about what? Read them and know " +
-              "what you bring me, then return.'",
+            'A confession and a letter, but about what? Read them and know ' +
+              'what you bring me, then return.',
           )
         )
       }
@@ -87,22 +87,22 @@ export class LordCommander extends Character {
         `[success]The ${name} reads the confession, then the letter. At its ` +
         'last line his face goes grey. ' +
         speech(
-          "'This is the old court script. It reads: [italic]By the will of " +
-            "Malakar.[/italic]'",
+          'This is the old court script. It reads: [italic]By the will of ' +
+            'Malakar.[/italic]',
         ) +
         ' He lowers the page. ' +
         speech(
-          "'Malakar is a name from children's tales. Yet someone paid gold in " +
+          "Malakar is a name from children's tales. Yet someone paid gold in " +
             'it, and on that night of all nights. Sir Cedric did not leave his ' +
             'post. He was chosen to carry the blame. I hereby restore his ' +
-            "knighthood and strike the charge from the record.'",
+            'knighthood and strike the charge from the record.',
         ) +
         ' He beckons a page and speaks a few quiet words. The boy runs off ' +
         'toward the armoury, and returns carrying a long bundle wrapped in ' +
         'oilcloth. ' +
         speech(
-          "'Take this to the training yard. A knight should not stand among " +
-            "his squires with an empty scabbard.'",
+          'Take this to the training yard. A knight should not stand among ' +
+            'his squires with an empty scabbard.',
         ) +
         '[/success]'
       )

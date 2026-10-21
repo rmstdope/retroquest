@@ -111,9 +111,7 @@ export class WaterNymphs extends Character {
       return (
         eventMsg +
         '\n' +
-        speech(
-          "'Back again? Wasn't three enough? What more could we ask you?'",
-        ) +
+        speech("Back again? Wasn't three enough? What more could we ask you?") +
         '\n\n' +
         characterName(this.name) +
         ': ' +
@@ -130,19 +128,19 @@ export class WaterNymphs extends Character {
         this.currentRiddle === 0
           ? 'The stream rises into shapes. ' +
             speech(
-              "'Came all this way to stand in our water? Will you answer " +
-                "three questions, then? Here is the first.'",
+              'Came all this way to stand in our water? Will you answer ' +
+                'three questions, then? Here is the first.',
             )
           : speech(
-              "'Back so soon? Do you remember where we were? The " +
-                `${this.getOrdinalWord(this.currentRiddle + 1)} one, wasn't it?'`,
+              'Back so soon? Do you remember where we were? The ' +
+                `${this.getOrdinalWord(this.currentRiddle + 1)} one, wasn't it?`,
             )
       return (
         eventMsg +
         '\n' +
         greeting +
         '\n\n' +
-        speech(`'${riddle.question}'`) +
+        speech(`${riddle.question}`) +
         '\n\n' +
         RIDDLE_HELP
       )
@@ -151,7 +149,7 @@ export class WaterNymphs extends Character {
     return (
       eventMsg +
       '\n' +
-      speech("'Back again? Wasn't three enough? What more could we ask you?'")
+      speech("Back again? Wasn't three enough? What more could we ask you?")
     )
   }
 
@@ -195,8 +193,8 @@ export class WaterNymphs extends Character {
           characterName(this.name) +
           ' laugh, a sound like water over a weir. ' +
           speech(
-            "'Three for three — who taught you to listen like that? Will you " +
-              "take what grows here? Who else would we give it to?'",
+            'Three for three — who taught you to listen like that? Will you ' +
+              'take what grows here? Who else would we give it to?',
           ) +
           '\n\n' +
           event(
@@ -212,22 +210,22 @@ export class WaterNymphs extends Character {
         characterName(this.name) +
         ' nod. ' +
         speech(
-          "'Did you know it, or guess it? Does it matter? What about this " +
-            "one?'",
+          'Did you know it, or guess it? Does it matter? What about this ' +
+            'one?',
         ) +
         '\n\n' +
-        speech(`'${nextRiddle.question}'`)
+        speech(`${nextRiddle.question}`)
       )
     }
     this.missCount = (this.missCount || 0) + 1
-    const hint = this.missCount >= 2 ? '\n\n' + speech(`'${riddle.hint}'`) : ''
+    const hint = this.missCount >= 2 ? '\n\n' + speech(`${riddle.hint}`) : ''
     return (
       '[failure]The ' +
       characterName(this.name) +
       ` shake their heads gently as you say '${words}'.[/failure] ` +
-      speech("'Is that really what you think? Will you hear it again?'") +
+      speech('Is that really what you think? Will you hear it again?') +
       '\n\n' +
-      speech(`'${riddle.question}'`) +
+      speech(`${riddle.question}`) +
       hint
     )
   }

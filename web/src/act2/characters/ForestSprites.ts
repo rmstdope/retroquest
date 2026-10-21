@@ -38,26 +38,26 @@ export class ForestSprites extends Character {
   private pathLine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)) {
       return (
-        speech("'The hermit's mark—'") +
+        speech("The hermit's mark—") +
         '\n\n' +
-        speech("'—we see it, we see it—'") +
+        speech('—we see it, we see it—') +
         '\n\n' +
-        speech("'—so the grove path is yours. No tricks.'")
+        speech('—so the grove path is yours. No tricks.')
       )
     }
     if (gameState.getStoryFlag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE)) {
       return (
-        speech("'Pretty light! Pretty light—'") +
+        speech('Pretty light! Pretty light—') +
         '\n\n' +
-        speech("'—but it won't walk you past us.'")
+        speech("—but it won't walk you past us.")
       )
     }
     return (
-      speech("'The grove path? Walk it, walk it—'") +
+      speech('The grove path? Walk it, walk it—') +
       '\n\n' +
-      speech("'—round and round—'") +
+      speech('—round and round—') +
       '\n\n' +
-      speech("'—and back you come! Unless you wear the hermit's mark.'")
+      speech("—and back you come! Unless you wear the hermit's mark.")
     )
   }
 
@@ -75,13 +75,10 @@ export class ForestSprites extends Character {
       return (
         eventMsg +
         '\n' +
-        speech(
-          "'A traveller—' '—with muddy boots—' '—wanting the deep paths.'",
-        ) +
+        speech('A traveller— —with muddy boots— —wanting the deep paths.') +
         '\n\n' +
         speech(
-          "'And the nymphs have riddles—' '—east of here—' '—if you're " +
-            "clever.'",
+          "And the nymphs have riddles— —east of here— —if you're " + 'clever.',
         ) +
         '\n\n' +
         this.pathLine(gameState)
@@ -92,8 +89,8 @@ export class ForestSprites extends Character {
         eventMsg +
         '\n' +
         speech(
-          "'Back again—' '—did you forget?' 'Nymphs are east—' '—with their " +
-            "riddles.'",
+          'Back again— —did you forget? Nymphs are east— —with their ' +
+            'riddles.',
         ) +
         '\n\n' +
         this.pathLine(gameState)

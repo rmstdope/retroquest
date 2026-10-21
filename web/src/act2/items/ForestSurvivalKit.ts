@@ -50,7 +50,7 @@ export class ForestSurvivalKit extends Item {
         'is sitting by the embers, feeding them twigs.' +
         '\n\n' +
         speech(
-          "'You slept on her doorstep and she let you. That's a start. Go on, then.'",
+          "You slept on her doorstep and she let you. That's a start. Go on, then.",
         )
       )
     }

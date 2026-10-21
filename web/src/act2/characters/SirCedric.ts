@@ -86,9 +86,9 @@ const BOUT_CALLS: BoutCall[] = [
     answer: 'guard',
     failure:
       'You step aside too late, and his blade stops a finger from your neck.',
-    correction: "'Dead, if this were steel. Again.'",
+    correction: 'Dead, if this were steel. Again.',
     attackAction: 'He raises his blade high over his left shoulder.',
-    cry: "'High cut!'",
+    cry: 'High cut!',
     success: 'You bring the training sword up and his blade rings off it.',
   },
   {
@@ -96,25 +96,25 @@ const BOUT_CALLS: BoutCall[] = [
     failure:
       'You bring the sword down to block, and his point slides under it ' +
       'and stops against your ribs.',
-    correction: "'You can't block a lunge with hope. Again.'",
+    correction: "You can't block a lunge with hope. Again.",
     attackAction: 'He drives straight at your middle.',
-    cry: "'Lunge!'",
+    cry: 'Lunge!',
     success: 'You step aside and his point slides past your ribs.',
   },
   {
     answer: 'strike',
     failure: 'You hold your ground, and the opening closes before you move.',
-    correction: "'I gave you a door and you stood in it. Again.'",
+    correction: 'I gave you a door and you stood in it. Again.',
     attackAction: 'He swings wide and leaves his chest open.',
-    cry: "'Well?'",
+    cry: 'Well?',
     success: 'You tap his chest with the flat of the blade.',
   },
 ]
 
 /** How Cedric goes on after a right answer: his acknowledgement and the next attack. */
 const BOUT_ACKNOWLEDGEMENTS: string[] = [
-  "'Guard. Good.'",
-  "'Turn. He taught you that much.'",
+  'Guard. Good.',
+  'Turn. He taught you that much.',
 ]
 
 /** The next attack as first made, after a right answer (calls 2 and 3). */
@@ -243,7 +243,7 @@ export class SirCedric extends Character {
       return (
         characterName('Sir Cedric') +
         ' takes up his practice blade again.\n' +
-        speech("'From the top, then. Strike, guard or turn.'") +
+        speech('From the top, then. Strike, guard or turn.') +
         ' ' +
         this.currentAttack() +
         '\n' +
@@ -256,30 +256,30 @@ export class SirCedric extends Character {
       characterName('Sir Cedric') +
       ' catches your wrist and turns the blade to the light.\n' +
       speech(
-        "'That notch by the guard. I put it there at fourteen, swinging " +
-          "at a post I'd been told to leave alone. Where did you get this?'",
+        'That notch by the guard. I put it there at fourteen, swinging ' +
+          "at a post I'd been told to leave alone. Where did you get this?",
       ) +
       '\nYou tell him about the old man by the fire on the mountain path, ' +
       'and what he asked you to say.\n' +
       characterName('Sir Cedric') +
       ' is silent for a long moment. When he speaks, his voice is low.\n' +
       speech(
-        "'The sergeant never believed in anything he couldn't hit. That " +
-          "he believes in me...'",
+        "The sergeant never believed in anything he couldn't hit. That " +
+          'he believes in me...',
       ) +
       ' He lets go of your wrist and steps back. ' +
-      speech("'Show me what he taught you, then.'") +
+      speech('Show me what he taught you, then.') +
       '\n\nHe takes a practice blade from the rack and squares off against you.\n' +
       speech(
-        "'Three forms, the way he drilled them. When I come at you, answer " +
-          "me: strike, guard or turn. Say it as you do it.'",
+        'Three forms, the way he drilled them. When I come at you, answer ' +
+          'me: strike, guard or turn. Say it as you do it.',
       ) +
       '\n' +
       BOUT_REMINDER +
       '\n' +
       characterName('Sir Cedric') +
       ' raises his blade high over his left shoulder.\n' +
-      speech("'High cut!'")
+      speech('High cut!')
     )
   }
 
@@ -316,7 +316,7 @@ export class SirCedric extends Character {
     const call = BOUT_CALLS[this.boutCall - 1]
     if (said !== 'strike' && said !== 'guard' && said !== 'turn') {
       return (
-        dialogue('Sir Cedric', "'Strike, guard or turn, Elior.'") +
+        dialogue('Sir Cedric', 'Strike, guard or turn, Elior.') +
         ' ' +
         this.currentAttack()
       )
@@ -351,15 +351,15 @@ export class SirCedric extends Character {
         characterName('Sir Cedric') +
         ' lowers his blade and nods approvingly.\n' +
         speech(
-          "'Excellent! Your martial training is evident. I can trust " +
-            "someone with such disciplined combat skills.'",
+          'Excellent! Your martial training is evident. I can trust ' +
+            'someone with such disciplined combat skills.',
         ),
     )
   }
 
   /** During the bout Cedric will not talk; he repeats the attack. */
   private talkDuringBout(): string {
-    return dialogue('Sir Cedric', "'Talk after.'") + ' ' + this.currentAttack()
+    return dialogue('Sir Cedric', 'Talk after.') + ' ' + this.currentAttack()
   }
 
   /** Any spell cast on Cedric during the bout ends it: he meets a mage with wary respect. */
@@ -375,10 +375,10 @@ export class SirCedric extends Character {
         characterName('Sir Cedric') +
         ' lowers the blade slowly. He is watching your hands now, not your face.\n' +
         speech(
-          "'A mage.' A long breath. 'The sergeant never trusted what he " +
+          "A mage.' A long breath. 'The sergeant never trusted what he " +
             "couldn't hit, and I couldn't hit that. Better it stands beside " +
             'me than against me. I can trust someone who knows when not to ' +
-            "fight fair.'",
+            'fight fair.',
         ),
     )
   }
@@ -398,38 +398,38 @@ export class SirCedric extends Character {
     return (
       'He pauses, his expression growing more serious. ' +
       speech(
-        "'Since you've proven your combat prowess, I can share more about " +
+        "Since you've proven your combat prowess, I can share more about " +
           "what lies ahead. The dark forces gathering aren't ordinary " +
           "threats - they're connected to ancient magical energies that have " +
-          "been dormant for centuries.'",
+          'been dormant for centuries.',
       ) +
       '\n\n' +
       characterName('Sir Cedric') +
       ' leans closer, lowering his voice. ' +
       speech(
-        "'There are legends of a being known as " +
+        'There are legends of a being known as ' +
           characterName('Nyx') +
           ' - a mystical entity who dwells deep within the enchanted forest ' +
           'beyond our borders. Nyx is said to possess knowledge of the ' +
           'oldest magics, including secrets that could help us understand ' +
-          "and combat these gathering shadows.'",
+          'and combat these gathering shadows.',
       ) +
       '\n\n' +
-      speech("'But the enchanted forest is treacherous,'") +
+      speech('But the enchanted forest is treacherous,') +
       ' he continues. ' +
       speech(
-        "'You'll need proper supplies before attempting such a journey. " +
+        "You'll need proper supplies before attempting such a journey. " +
           'Visit the Market District and gather essential equipment: a ' +
           'forest survival kit, an enhanced lantern for the dark woods, and ' +
           "quality rope for navigating difficult terrain. Only when you're " +
           'properly equipped should you venture into those mystical lands to ' +
-          "seek out Nyx.'",
+          'seek out Nyx.',
       ) +
       '\n\nHe straightens up, his voice returning to its commanding tone. ' +
       speech(
-        "'Time is of the essence, Elior. The darkness grows stronger each " +
+        'Time is of the essence, Elior. The darkness grows stronger each ' +
           "day, and we need Nyx's ancient wisdom to understand what we're " +
-          "truly facing.'",
+          'truly facing.',
       )
     )
   }

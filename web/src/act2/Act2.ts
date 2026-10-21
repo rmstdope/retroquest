@@ -126,10 +126,10 @@ export class Act2 extends Act {
       'sounds of commerce and conversation carried on the mountain ' +
       "breeze.\n\nMira's parting words go with you: " +
       speech(
-        "'Your road leads to Greendale, " +
+        'Your road leads to Greendale, ' +
           characterName('Elior') +
           '. Once there, show the amulet to no one lightly. Those who know ' +
-          "what it is will find you.'",
+          'what it is will find you.',
       ) +
       ' The [item_name]Ancient Amulet[/item_name] your parents left you lies ' +
       'hidden under your shirt, warm against your chest. Someone came to ' +

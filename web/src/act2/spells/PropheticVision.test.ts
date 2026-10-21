@@ -78,7 +78,7 @@ function refusal(gameState: GameState): string {
 
 /** Cedric's whole speech as the engine renders it. */
 function speech(words: string): string {
-  return STAGE + dialogue('Sir Cedric', `"${words}"`)
+  return STAGE + dialogue('Sir Cedric', words)
 }
 
 describe('Sir Cedric turns away an early vision', () => {
