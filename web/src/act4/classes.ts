@@ -4,6 +4,10 @@
 import { Echoes } from './items/Echoes'
 import { EchoStone } from './items/EchoStone'
 import { Mirrors } from './items/Mirrors'
+import { KnightsRedemption } from './items/KnightsRedemption'
+import { GhostlyWarriors } from './characters/GhostlyWarriors'
+import { RedemptionsLight } from './spells/RedemptionsLight'
+import { TheKnightOfDespair } from './quests/TheKnightOfDespair'
 import { KnightOfDespair } from './characters/KnightOfDespair'
 import { TrueSelf } from './characters/TrueSelf'
 import { TruthSight } from './spells/TruthSight'
@@ -37,6 +41,7 @@ export const ACT4_CLASSES = {
   Echoes,
   EchoStone,
   Mirrors,
+  KnightsRedemption,
   GuardiansChain,
   GuardiansEssence,
   LoyaltyToken,
@@ -46,6 +51,7 @@ export const ACT4_CLASSES = {
   // Characters
   CaptainOfTheGuard,
   KnightOfDespair,
+  GhostlyWarriors,
   TrueSelf,
   TrappedServants,
   // Quests
@@ -53,6 +59,7 @@ export const ACT4_CLASSES = {
   TheFinalStand,
   TheTrappedServants,
   TheMazeOfMirrors,
+  TheKnightOfDespair,
   // Rooms
   ChamberOfWhispers,
   FortressGates,
@@ -65,5 +72,6 @@ export const ACT4_CLASSES = {
   // Spells
   Bless,
   Light,
+  RedemptionsLight,
   TruthSight,
 }

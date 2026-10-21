@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
+import { FLAG_ACT4_GUARDIANS_CHAIN_RAISED } from '../Act4StoryFlags'
 import { GuardiansChain } from './GuardiansChain'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
@@ -17,6 +18,7 @@ describe('GuardiansChain', () => {
     const again = item.use(game.state)
 
     expect(elsewhere).toContain('glows softly')
+    expect(game.state.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED)).toBe(true)
     expect(again).toContain('already providing its protection')
     for (const answer of [elsewhere, again]) {
       expectMarkupWellFormed(answer)

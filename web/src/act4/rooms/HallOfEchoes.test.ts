@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
+import {
+  FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
+  FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED,
+} from '../Act4StoryFlags'
 import { HallOfEchoes } from './HallOfEchoes'
 
 describe('HallOfEchoes', () => {
@@ -23,5 +27,17 @@ describe('HallOfEchoes', () => {
       'there is no way past him',
     )
     expect(room.blockedExit(game.state, 'north')).toBeNull()
+  })
+
+  it('starts the knight quest on entering and opens the stair once he is redeemed', () => {
+    const game = new Game([new Act4()])
+    const room = new HallOfEchoes()
+    room.onEnter(game.state)
+    expect(game.state.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED)).toBe(
+      true,
+    )
+    game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
+    expect(Object.keys(room.getExits(game.state))).toContain('east')
+    expect(room.blockedExit(game.state, 'east')).toBeNull()
   })
 })
