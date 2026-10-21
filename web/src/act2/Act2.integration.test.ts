@@ -1257,6 +1257,36 @@ describe('Act 2 golden path as declared by the act', () => {
     expectItemCountInInventory(game.state, 'coins', 30)
   })
 
+  it('takes two forest journeys and rescues the caravan on the first', () => {
+    const game = new Game([new Act2()])
+    const forest = [
+      'Forest Transition',
+      'Forest Entrance',
+      'Ancient Grove',
+      'Whispering Glade',
+      'Heart of the Forest',
+    ]
+    let inForest = false
+    let rescuedOnJourney = 0
+    let journeys = 0
+    for (const command of ACT2_GOLDEN_PATH) {
+      executeCommands(game, [command])
+      const nowInForest = forest.includes(game.state.currentRoom.name)
+      if (nowInForest && !inForest) journeys++
+      inForest = nowInForest
+      if (
+        !rescuedOnJourney &&
+        game.state.completedQuests.some(
+          (q) => q.name === "The Merchant's Lost Caravan",
+        )
+      ) {
+        rescuedOnJourney = journeys
+      }
+    }
+    expect(journeys).toBe(2)
+    expect(rescuedOnJourney).toBe(1)
+  })
+
   it('is what cheat act 2 plays', () => {
     const viaPath = new Game([new Act2()])
     executeCommands(viaPath, ACT2_GOLDEN_PATH)
