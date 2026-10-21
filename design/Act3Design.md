@@ -738,7 +738,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `east` → Enters Dragon’s Hall after “Oath of Stillness” is complete.
-    -   `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues): Aren and Lysa, Wardens of the Dawn, became the ward and are warded away, not dead. The Dragon echoes “Power follows purpose; purpose follows truth.” The Ancient Amulet glows a third time and shows Aren and Lysa together, and the Dragon names it the anchor of the ward. The mines fall silent. The dream voice speaks once; the Dragon says it is “the friend who stayed behind.”
+    -   `talk to dragon` → Grants the Dragon’s Memory (Storytelling Quest 3/3; completes the Storytelling Quest when combined with earlier clues): Aren and Lysa, Wardens of the Dawn, became the ward and, the Dragon says, are warded away, not dead. The Dragon echoes “Power follows purpose; purpose follows truth.” The Ancient Amulet glows a third time and shows Aren and Lysa together, and the Dragon names it the anchor of the ward. The mines fall silent. The dream voice speaks once; the Dragon says it is “the friend who stayed behind.”
 
 25. Room: Dragon’s Hall (Relic Trial)
 
