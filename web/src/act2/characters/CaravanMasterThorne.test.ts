@@ -180,7 +180,9 @@ describe('Caravan Master Thorne points to Brenn in the warehouse', () => {
 
     const first = game.commandParser.parse('talk to caravan master thorne')
 
-    expect(first).toContain("He's skulking in the warehouse now.")
+    expect(first).toContain(
+      "Ran! He's skulking in the warehouse now. I'll deal with him once my people are home.",
+    )
     expect(first.indexOf("He's skulking")).toBeLessThan(
       first.indexOf("I'll deal with him"),
     )
@@ -191,7 +193,9 @@ describe('Caravan Master Thorne points to Brenn in the warehouse', () => {
 
     const answer = game.commandParser.parse('talk to caravan master thorne')
 
-    expect(answer).toContain("He's sitting in the warehouse waiting")
+    expect(answer).toContain(
+      "He's sitting in the warehouse waiting for his wages, and wages are all he'll get from me.",
+    )
     expect(answer).not.toContain('outside the warehouse')
   })
 })

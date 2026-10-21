@@ -1,7 +1,10 @@
 import { Room } from '@/engine'
 import { Brenn } from '../characters/Brenn'
 
-/** Merchant's Warehouse room: storage adjunct supporting market scale (Act II); Thorne's guard Brenn waits here. */
+/**
+ * Merchant's Warehouse room: storage adjunct supporting market scale (Act II).
+ * Thorne's guard Brenn waits here.
+ */
 export class MerchantsWarehouse extends Room {
   constructor() {
     super({

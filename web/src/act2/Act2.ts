@@ -1,4 +1,5 @@
 import { Act, type GameState, type Item, speech } from '@/engine'
+import { Brenn } from './characters/Brenn'
 import { AncientAmulet } from './items/AncientAmulet'
 import { MountainPath } from './rooms/MountainPath'
 import { GreendaleGates } from './rooms/GreendaleGates'
@@ -149,7 +150,8 @@ export class Act2 extends Act {
   /**
    * Bring older saves up to date: the secret documents, the squire's diary,
    * the castle rooms and Cedric's quest log keep the text they were saved with, so give them the
-   * current wording. Safe to run on every load.
+   * current wording, and put Brenn in the warehouse of saves made before he
+   * was met there. Safe to run on every load.
    */
   override afterLoad(gameState: GameState): void {
     gameState.allRooms.CastleApproach.description = CASTLE_APPROACH_DESCRIPTION
@@ -158,6 +160,9 @@ export class Act2 extends Act {
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
     gameState.allRooms.ForestEntrance.description = FOREST_ENTRANCE_DESCRIPTION
     SirCedric.refreshAll(gameState)
+    const warehouse = gameState.allRooms.MerchantsWarehouse
+    if (!warehouse.characters.some((c) => c instanceof Brenn))
+      warehouse.characters.push(new Brenn())
     const items: Item[] = [...gameState.inventory]
     for (const room of Object.values(gameState.allRooms))
       items.push(...room.items)

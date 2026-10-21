@@ -192,7 +192,8 @@ export class CaravanMasterThorne extends Character {
         speech(
           `${characterName('Brenn')}, my guard, came stumbling back alone ` +
             'two nights ago. Says the ravine path gave way and he ran. Ran! ' +
-            "He's skulking in the warehouse now. I'll deal with him once my people are home.",
+            "He's skulking in the warehouse now. " +
+            "I'll deal with him once my people are home.",
         )
       )
     } else {

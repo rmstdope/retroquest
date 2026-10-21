@@ -7,9 +7,20 @@ import {
   expectMarkupWellFormed,
 } from '@/testing/gameHelpers'
 
-const STEP_1 = 'The path just went, out from under the wagons.'
-const STEP_2 = "They're home? All of them?"
-const STEP_3 = "I won't run again. Not this time."
+const EXAMINE =
+  'A young caravan guard sits on a crate by the door, one hand wrapped in a dirty bandage. ' +
+  'He jumps whenever someone comes in, as if he expects to be thrown out.'
+const STEP_1 =
+  "You've seen Thorne, then. You'll have heard. The path just went, out from under the wagons. " +
+  'I was hanging over the ravine by one hand. When I got up I ran for help, I swear I did. ' +
+  "But the forest turned me round, and I couldn't find the road again for two days. " +
+  'So I came back. Somebody had to tell him.'
+const STEP_2 =
+  "They're home? All of them? … Thank you. Thorne says I'm to have my wages and not a copper more. " +
+  "I suppose that's fair. I ran. Unless somebody told him what it was like out there. " +
+  "He'd never hear it from me."
+const STEP_3 =
+  "Thorne says one more road. He says somebody spoke for me. … I won't run again. Not this time."
 
 /** An Act II game standing in the Merchant's Warehouse. */
 function gameAtBrenn(): Game {
@@ -33,9 +44,7 @@ describe('Brenn', () => {
     expect(
       game.state.allRooms.MerchantsWarehouse.characters.map((c) => c.name),
     ).toEqual(['brenn'])
-    expect(game.commandParser.parse('examine brenn')).toContain(
-      'A young caravan guard sits on a crate by the door, one hand wrapped in a dirty bandage.',
-    )
+    expect(game.commandParser.parse('examine brenn')).toContain(EXAMINE)
   })
 
   it('tells his side of the story before the rescue, every time', () => {
@@ -81,6 +90,27 @@ describe('Brenn', () => {
 
     expect(answer).toContain(STEP_3)
     expect(game.state.allRooms.MerchantsWarehouse.characters).toHaveLength(1)
+  })
+
+  it('stays on step 1 when Thorne is asked to forgive before the documents', () => {
+    const game = gameAtBrenn()
+    game.state.currentRoom = game.state.allRooms.MarketDistrict
+    game.commandParser.parse('say forgive to thorne')
+    game.state.currentRoom = game.state.allRooms.MerchantsWarehouse
+
+    expect(game.commandParser.parse('talk to brenn')).toContain(STEP_1)
+  })
+
+  it('appears in the warehouse of a save made before he was added', () => {
+    const game = gameAtBrenn()
+    game.state.allRooms.MerchantsWarehouse.characters = []
+    const fresh = new Game([new Act2()])
+
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(
+      fresh.state.allRooms.MerchantsWarehouse.characters.map((c) => c.name),
+    ).toEqual(['brenn'])
   })
 
   it('has nothing to say to other words', () => {
