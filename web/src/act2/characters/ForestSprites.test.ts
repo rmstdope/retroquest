@@ -24,6 +24,7 @@ describe('Forest Sprites voice', () => {
       "'And the nymphs have riddles—' '—east of here—' '—if you're clever.'",
     )
     expect(answer).not.toMatch(/ancient|sacred|wisdom/i)
+    expect(answer).not.toMatch(/light and a ward|unwarded/i)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'forest sprites')
   })
@@ -38,6 +39,7 @@ describe('Forest Sprites voice', () => {
     expect(answer).toContain(
       "'Back again—' '—did you forget?' 'Nymphs are east—' '—with their riddles.'",
     )
+    expect(answer).not.toMatch(/light and a ward|unwarded/i)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'forest sprites')
   })
