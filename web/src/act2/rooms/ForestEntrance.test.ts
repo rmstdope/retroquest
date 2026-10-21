@@ -132,6 +132,47 @@ describe('Forest Entrance paths', () => {
     expect(repeat).not.toContain('[success]')
   })
 
+  it('go south with nothing used leads astray, go east with only the charm is too dark', () => {
+    const game = atEntrance()
+    expect(executeCommands(game, ['go south'])).toContain(LED_ASTRAY)
+    executeCommands(game, ['use protective charm'])
+    expect(executeCommands(game, ['go east'])).toContain(TOO_DARK)
+    expect(game.state.currentRoom.name).toBe('Forest Entrance')
+  })
+
+  it('the south sentence names the sprites in character colour', () => {
+    expect(describeRoom(atEntrance())).toContain(
+      'A path leads south toward an ancient grove, but small motes of light ' +
+        'dance thick across it: [character_name]forest sprites[/character_name], ' +
+        'watching your every move.',
+    )
+  })
+
+  it('items used elsewhere do not open anything', () => {
+    const game = atEntrance()
+    game.state.currentRoom = game.state.allRooms.ForestTransition
+    executeCommands(game, ['use enhanced lantern', 'use protective charm'])
+    game.state.currentRoom = game.state.allRooms.ForestEntrance
+    expect(exitsOf(game)).toEqual(['west'])
+  })
+
+  it('replaces the old closing text of an older save', () => {
+    const game = atEntrance()
+    game.state.allRooms.ForestEntrance.description =
+      'Old text. Two paths diverge deeper: one toward an ancient grove.'
+    new Act2().afterLoad(game.state)
+    expect(describeRoom(game)).not.toContain('Two paths diverge')
+    expect(describeRoom(game)).toContain(EAST_DARK)
+  })
+
+  it('survives a save and load with only the charm used', () => {
+    const game = atEntrance()
+    executeCommands(game, ['use protective charm'])
+    const fresh = new Game([new Act2()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    expect(exitsOf(fresh)).toEqual(['west', 'south'])
+  })
+
   it('survives a save and load', () => {
     const game = atEntrance()
     executeCommands(game, ['use enhanced lantern'])

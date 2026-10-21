@@ -7,6 +7,13 @@ import {
 import { EnchantedAcorn } from '../items/EnchantedAcorn'
 import { ForestSprites } from '../characters/ForestSprites'
 
+/** The Forest Entrance base text; `Act2.afterLoad` restores it in older saves. */
+export const FOREST_ENTRANCE_DESCRIPTION =
+  'Massive trees create a natural cathedral as you enter the Enchanted Forest. ' +
+  'Dappled sunlight filters through the dense canopy, and the path ahead ' +
+  'disappears into green shadows. The air is alive with birds and rustling leaves, ' +
+  'but beneath it lies an expectant silence, as if the forest itself is watching.'
+
 /**
  * Forest Entrance room: two thresholds, each opened by its own item.
  *
@@ -19,11 +26,7 @@ export class ForestEntrance extends Room {
   constructor() {
     super({
       name: 'Forest Entrance',
-      description:
-        'Massive trees create a natural cathedral as you enter the Enchanted Forest. ' +
-        'Dappled sunlight filters through the dense canopy, and the path ahead ' +
-        'disappears into green shadows. The air is alive with birds and rustling leaves, ' +
-        'but beneath it lies an expectant silence, as if the forest itself is watching.',
+      description: FOREST_ENTRANCE_DESCRIPTION,
       items: [new EnchantedAcorn()],
       characters: [new ForestSprites()],
       exits: {
