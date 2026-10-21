@@ -74,3 +74,5 @@ export const FLAG_MERCHANTS_HEALED = 'merchants_healed'
 export const FLAG_THORNE_HEALING_TOLD = 'thorne_healing_told'
 /** Set once Lyria has given her three-step diagnosis of Elena's curse. */
 export const FLAG_LYRIA_DIAGNOSED = 'lyria_diagnosed'
+/** Set once Elior has given the silver leaves to Master Healer Lyria. */
+export const FLAG_LYRIA_SILVER_LEAVES_GIVEN = 'lyria_silver_leaves_given'

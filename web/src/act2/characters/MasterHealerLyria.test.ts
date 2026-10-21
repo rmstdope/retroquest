@@ -7,12 +7,14 @@ import {
   FLAG_KNOWS_ELENA_CURSE,
   FLAG_ELENA_HEALED,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
+  FLAG_LYRIA_SILVER_LEAVES_GIVEN,
 } from '../Act2StoryFlags'
 import { MasterHealerLyria } from './MasterHealerLyria'
 import { CrystalFocus } from '../items/CrystalFocus'
 import { GreaterHealSpell } from '../spells/GreaterHealSpell'
 import { HealingHerbs } from '../items/HealingHerbs'
 import { WalkingStick } from '../items/WalkingStick'
+import { SilverLeaves } from '../items/SilverLeaves'
 import {
   executeCommands,
   expectDialogueSpeaker,
@@ -345,5 +347,93 @@ describe("Lyria explains how Elena's curse is lifted (rq-nun)", () => {
     const answer = lyria.talkTo(after.state)
     expect(answer).not.toContain(DIAGNOSIS_START)
     expect(answer).toContain(REMINDER)
+  })
+})
+
+const LEAVES_GIVE =
+  'Lyria turns one leaf toward the window, and for a moment she forgets to ' +
+  'breathe. Silverbark. From the old tree itself, not a cutting. I have ' +
+  'only ever read of these. She lays them in a shallow dish as if they ' +
+  'might bruise. Steeped, a single leaf breaks a fever in a night. ' +
+  'Greendale will have a gentler winter because of you, Elior.'
+const WINDOWSILL =
+  'The dish of silver leaves sits on the windowsill where the light can reach it.'
+
+/** A game where the player carries the silver leaves. */
+function gameWithLeaves(): Game {
+  const game = createGame()
+  game.state.addItemToInventory(new SilverLeaves())
+  return game
+}
+
+describe('Master Healer Lyria and the silver leaves', () => {
+  it('takes the leaves, says what they are for and sets the flag', () => {
+    const game = gameWithLeaves()
+
+    const answer = new MasterHealerLyria().giveItem(
+      game.state,
+      new SilverLeaves(),
+    )
+
+    expect(plain(answer)).toBe(LEAVES_GIVE)
+    expectMarkupWellFormed(answer)
+    expect(game.state.hasItem('silver leaves')).toBe(false)
+    expect(game.state.getStoryFlag(FLAG_LYRIA_SILVER_LEAVES_GIVEN)).toBe(true)
+  })
+
+  it('takes them through the game command, before and after the herbs', () => {
+    for (const herbsFirst of [false, true]) {
+      const game = herbsFirst ? gameAfterHerbs() : createGame()
+      game.state.addItemToInventory(new SilverLeaves())
+      game.state.currentRoom.addCharacter(new MasterHealerLyria())
+
+      const out = executeCommands(game, [
+        'give silver leaves to master healer lyria',
+      ])
+
+      expect(plain(out)).toContain('Silverbark.')
+      expect(game.state.hasItem('silver leaves')).toBe(false)
+    }
+  })
+
+  it('keeps the leaves when they are given to anyone else', () => {
+    const game = gameWithLeaves()
+    game.state.currentRoom = game.state.allRooms.ResidentialQuarter
+
+    executeCommands(game, ['give silver leaves to families'])
+
+    expect(game.state.hasItem('silver leaves')).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_LYRIA_SILVER_LEAVES_GIVEN)).toBe(false)
+  })
+
+  it('leaves her talk unchanged until the leaves are given', () => {
+    const game = gameWithLeaves()
+
+    expect(plain(new MasterHealerLyria().talkTo(game.state))).not.toContain(
+      WINDOWSILL,
+    )
+  })
+
+  it('ends every later talk with the windowsill line, in every state', () => {
+    const setups: Array<(game: Game) => void> = [
+      () => {},
+      (game) => game.state.addItemToInventory(new HealingHerbs()),
+      (game) => game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true),
+      (game) =>
+        game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true),
+      (game) => game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true),
+    ]
+    for (const setup of setups) {
+      const game = gameWithLeaves()
+      new MasterHealerLyria().giveItem(game.state, new SilverLeaves())
+      setup(game)
+      const lyria = new MasterHealerLyria()
+
+      for (let i = 0; i < 2; i++) {
+        const answer = lyria.talkTo(game.state)
+        expect(plain(answer).endsWith('\n\n' + WINDOWSILL)).toBe(true)
+        expectMarkupWellFormed(answer)
+      }
+    }
   })
 })

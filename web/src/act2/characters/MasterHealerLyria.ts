@@ -7,6 +7,7 @@ import {
 } from '@/engine'
 import { CrystalFocus } from '../items/CrystalFocus'
 import { HealingHerbs } from '../items/HealingHerbs'
+import { SilverLeaves } from '../items/SilverLeaves'
 import { GreaterHealSpell } from '../spells/GreaterHealSpell'
 import {
   FLAG_HEALERS_APPRENTICE_ACCEPTED,
@@ -15,6 +16,7 @@ import {
   FLAG_ELENA_HEALED,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
   FLAG_LYRIA_DIAGNOSED,
+  FLAG_LYRIA_SILVER_LEAVES_GIVEN,
 } from '../Act2StoryFlags'
 
 /** NPC mentor who teaches advanced healing and handles the apprenticeship quest. */
@@ -32,11 +34,28 @@ export class MasterHealerLyria extends Character {
   }
 
   /**
+   * Her usual talk, and once the silver leaves have been given, a closing
+   * line about the dish of leaves on her windowsill.
+   */
+  override talkTo(gameState: GameState): string {
+    const talk = this.baseTalk(gameState)
+    if (!gameState.getStoryFlag(FLAG_LYRIA_SILVER_LEAVES_GIVEN)) {
+      return talk
+    }
+    return (
+      talk +
+      '\n\n' +
+      'The dish of [item_name]silver leaves[/item_name] sits on the ' +
+      'windowsill where the light can reach it.'
+    )
+  }
+
+  /**
    * Lyria is the one who explains how Elena's curse is lifted: the first talk
    * once the curse is known gives the full diagnosis, later talks until Elena
    * is cured give a one-line reminder, each before her usual reply.
    */
-  override talkTo(gameState: GameState): string {
+  private baseTalk(gameState: GameState): string {
     const usual = this.usualReply(gameState)
     const curseKnown =
       gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE) ||
@@ -142,9 +161,10 @@ export class MasterHealerLyria extends Character {
   }
 
   /**
-   * Handle giving items to Master Healer Lyria. The healing herbs start the
-   * apprenticeship at the carter's bed; the Crystal Focus is taught over that
-   * bed and is handed back when the herbs have not been given yet.
+   * Handle giving items to Master Healer Lyria. The silver leaves go in a dish
+   * on her windowsill. The healing herbs start the apprenticeship at the
+   * carter's bed; the Crystal Focus is taught over that bed and is handed back
+   * when the herbs have not been given yet.
    */
   override giveItem(gameState: GameState, item: Item): string {
     const name = characterName(this.name)
@@ -177,6 +197,24 @@ export class MasterHealerLyria extends Character {
             '[item_name]Crystal Focus[/item_name], and it came out the ' +
             'other side like sunlight through a glass. If one survives in ' +
             'Greendale, it is wherever the old scholars hid their books.',
+        )
+      )
+    }
+    if (item instanceof SilverLeaves) {
+      gameState.removeItemFromInventory(item.name)
+      gameState.setStoryFlag(FLAG_LYRIA_SILVER_LEAVES_GIVEN, true)
+      return (
+        characterName('Lyria') +
+        ' turns one leaf toward the window, and for a moment she forgets ' +
+        'to breathe. ' +
+        speech(
+          'Silverbark. From the old tree itself, not a cutting. I have ' +
+            'only ever read of these.',
+        ) +
+        ' She lays them in a shallow dish as if they might bruise. ' +
+        speech(
+          'Steeped, a single leaf breaks a fever in a night. Greendale ' +
+            `will have a gentler winter because of you, ${characterName('Elior')}.`,
         )
       )
     }
