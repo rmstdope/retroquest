@@ -22,7 +22,7 @@ export class PhoenixGuardian extends Character {
         'moment. ' +
         speech(
           'So, you seek the mighty one? To stand before the Phoenix, you must be ' +
-            'both brave and bold. The mountain tests those who would pass: its breath is ' +
+            'both patient and watchful. The mountain tests those who would pass: its breath is ' +
             'wild, its heat unforgiving. First, bring the vents into harmony—let them ' +
             'breathe as one. Only then can you bind the heat with a ward. When the rhythm ' +
             'is steady and the ward is set, the way to the crater will open.',

@@ -31,6 +31,13 @@ describe('PhoenixGuardian', () => {
     expect(response).toContain('Phoenix Guardian[/character_name] studies you')
   })
 
+  it('asks for the patience of the site of Wisdom, not bravery, before the quest', () => {
+    const pg = new PhoenixGuardian()
+    const response = pg.talkTo(makeGameState(false))
+    expect(response).toContain('both patient and watchful')
+    expect(response).not.toMatch(/brave|bold/i)
+  })
+
   it('gives post-completion advice after the quest is done', () => {
     const pg = new PhoenixGuardian()
     const response = pg.talkTo(makeGameState(true))
