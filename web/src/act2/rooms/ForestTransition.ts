@@ -4,6 +4,10 @@ import { FLAG_HERMITS_WARNING_COMPLETED } from '../Act2StoryFlags'
 import { ForestHermit } from '../characters/ForestHermit'
 import { StandingStones } from '../items/StandingStones'
 
+const HERMIT_BEFORE_CAMP = 'A robed figure sits peacefully among the stones.'
+const HERMIT_AFTER_CAMP =
+  'The forest hermit sits by the cold ashes of your camp in the lee of the oldest stone.'
+
 const PRE_FOREST_QUESTS = [
   "The Knight's Test",
   'Supplies for the Journey',
@@ -26,12 +30,19 @@ export class ForestTransition extends Room {
         'The boundary between the civilized mountain paths and the wild Enchanted Forest. ' +
         'Ancient standing stones mark the threshold, carved with protective runes that ' +
         'pulse with faint magic. The air grows thicker and you sense ancient power ' +
-        'awakening. Beyond lies a realm where normal rules may not apply. ' +
-        'A robed figure sits peacefully among the stones.',
+        'awakening. Beyond lies a realm where normal rules may not apply.',
       items: [new StandingStones()],
       characters: [new ForestHermit()],
       exits: { west: 'MountainPath', east: 'ForestEntrance' },
     })
+  }
+
+  /** The description, ending with the hermit among the stones or by the camp's ashes. */
+  override descriptionFor(gameState: GameState): string {
+    const hermit = gameState.getStoryFlag(FLAG_HERMITS_WARNING_COMPLETED)
+      ? HERMIT_AFTER_CAMP
+      : HERMIT_BEFORE_CAMP
+    return `${this.description} ${hermit}`
   }
 
   /** Return exits; hide east until Greendale preparation and the hermit's warning are complete. */

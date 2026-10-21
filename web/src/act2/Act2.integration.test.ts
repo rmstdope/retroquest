@@ -812,18 +812,12 @@ describe('Golden path step 15: Forest Transition', () => {
       'Nature sense should not be learned initially',
     ).toBe(false)
 
-    // Step 15a: Use Forest Survival Kit
+    // Step 15a: Talk to the hermit first, then camp with the kit
+    const firstHermit = state.currentRoom.characters[0]
+    expectMarkupWellFormed(firstHermit.talkTo(state))
     let result = executeCommands(game, ['use forest survival kit'])
-    expect(result.toLowerCase(), 'Should describe compass').toContain(
-      'compass points true north',
-    )
-    expect(result.toLowerCase(), 'Should mention studying the map').toContain(
-      'forest map',
-    )
-    expect(
-      result.toLowerCase(),
-      'Should mention survival preparation',
-    ).toContain('wilderness survival')
+    expect(result, 'Should play the camp scene').toContain('Nobody speaks.')
+    expectItemInInventory(state, 'forest survival kit', false)
 
     // Step 15b: Examine standing stones
     result = executeCommands(game, ['examine stones'])
@@ -844,31 +838,13 @@ describe('Golden path step 15: Forest Transition', () => {
       'Should describe magical connection',
     ).toContain('connection forming with the natural world')
 
-    // Step 15d: Talk to Forest Hermit to get protective charm and complete quest
-    const hermit = state.currentRoom.characters.find((character) =>
-      character.name.toLowerCase().includes('hermit'),
-    )
-    expect(hermit, 'Forest Hermit should be in the room').toBeDefined()
-    if (!hermit) return
-
+    // Step 15d: The first talk gave the charm; later talks send the player on
+    const hermit = state.currentRoom.characters[0]
     result = hermit.talkTo(state)
     expectMarkupWellFormed(result)
-
-    // Verify hermit interaction results
-    expect(
-      result.toLowerCase(),
-      'Should show the hermit warning about the forest',
-    ).toContain('sour mood this season')
-    expect(result.toLowerCase(), 'Should mention the charm').toContain(
-      'protective charm',
+    expect(result, 'Should send the player on').toContain(
+      "She knows you're coming now.",
     )
-    expect(result.toLowerCase(), 'Should warn about forest dangers').toContain(
-      'keeps old things',
-    )
-    expect(
-      result.toLowerCase(),
-      'Should tell the player to give back',
-    ).toContain('never take more than you give')
     expectItemInInventory(state, 'protective charm')
   })
 })

@@ -14,8 +14,8 @@ describe("The Hermit's Warning quest", () => {
         'Enchanted Forest.',
     )
     expect(quest.completion).toBe(
-      "You have heeded the hermit's warning and are now prepared to face " +
-        'the challenges of the Enchanted Forest.',
+      "You spent a night on the forest's doorstep, and she let you. " +
+        'The way east is open.',
     )
   })
 })
