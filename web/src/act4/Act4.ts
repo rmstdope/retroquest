@@ -26,7 +26,7 @@ import { ENDING_HOOKS, endingPlayed } from './endings'
 import { ACT4_CLASSES } from './classes'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
 
-/** Act 4 of RetroQuest: The Awakening. */
+/** Act 4 of RetroQuest: The Final Confrontation. */
 export class Act4 extends Act {
   constructor() {
     const rooms = {
