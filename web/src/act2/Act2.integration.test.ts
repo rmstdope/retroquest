@@ -5,6 +5,7 @@ import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 import {
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_EXAMINED_SECRET_DOCUMENTS,
+  FLAG_FOUND_LOST_CARAVAN,
   FLAG_READ_SQUIRES_DIARY,
   FLAG_SQUIRES_TALKED_TO,
   FLAG_CEDRIC_RECOGNISED_SIGIL,
@@ -1276,9 +1277,7 @@ describe('Act 2 golden path as declared by the act', () => {
       inForest = nowInForest
       if (
         !rescuedOnJourney &&
-        game.state.completedQuests.some(
-          (q) => q.name === "The Merchant's Lost Caravan",
-        )
+        game.state.getStoryFlag(FLAG_FOUND_LOST_CARAVAN)
       ) {
         rescuedOnJourney = journeys
       }
