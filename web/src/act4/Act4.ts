@@ -9,6 +9,10 @@ import { MemoryVault } from './rooms/MemoryVault'
 import { ThroneChamer } from './rooms/ThroneChamer'
 import { Light } from './spells/Light'
 import { Bless } from './spells/Bless'
+import { TheFinalStand } from './quests/TheFinalStand'
+import { ShatteredWardGuardians } from './quests/ShatteredWardGuardians'
+import { TheTrappedServants } from './quests/TheTrappedServants'
+import { FLAG_ACT4_MAIN_STARTED } from './Act4StoryFlags'
 import { ACT4_CLASSES } from './classes'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
 
@@ -34,8 +38,12 @@ export class Act4 extends Act {
     super({
       name: 'Act4',
       rooms,
-      // Quests will be added when implemented
-      quests: [],
+      // The main quest and the side quests of the stretch that is built so far
+      quests: [
+        new TheFinalStand(),
+        new ShatteredWardGuardians(),
+        new TheTrappedServants(),
+      ],
       musicFile: 'Conquest - The Silver Grail (freetouse.com).mp3',
       musicInfo:
         'Music track: The Silver Grail by Conquest\n' +
@@ -52,6 +60,8 @@ export class Act4 extends Act {
       '[bold]ACT IV: THE FINAL CONFRONTATION[/bold]\n\n' +
       "With the Lifelight Elixir in hand, you stand before Malakar's fortress. " +
       'The obsidian gates loom ahead, wreathed in shadow and ancient magic. ' +
+      'Mira and Sir Cedric take up their places at the threshold — someone ' +
+      'must hold the way out. From here, you go on alone. ' +
       'This is the culmination of your journey—a test of courage, wisdom, and ' +
       'selflessness that will determine the fate of the kingdom.\n\n' +
       'The final confrontation awaits. Every choice you make will echo through ' +
@@ -79,6 +89,9 @@ export class Act4 extends Act {
     if (!gameState.hasSpell(blessSpell.id)) {
       gameState.learnSpell(blessSpell)
     }
+
+    // The main quest starts when the act opens
+    gameState.setStoryFlag(FLAG_ACT4_MAIN_STARTED, true)
 
     // Set starting room to Fortress Gates
     if ('FortressGates' in this.rooms) {

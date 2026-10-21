@@ -28,7 +28,7 @@ describe('OuterCourtyard', () => {
     const servants = room.examine(game.state, 'servants')
     const blessAgain = room.castBless(game.state)
 
-    expect(servants).toContain('no longer trapped here')
+    expect(servants).toContain('Freed Servants')
     expect(blessAgain).toContain('already been freed')
     for (const answer of [servants, blessAgain]) {
       expectMarkupWellFormed(answer)

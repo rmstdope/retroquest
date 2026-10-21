@@ -23,6 +23,14 @@ function createGameInCourtyard(): Game {
 }
 
 describe('TrappedServants', () => {
+  it('answers to servants, trapped servants and freed servants', () => {
+    const servants = new TrappedServants()
+    expect(servants.answersTo('servants')).toBe(true)
+    expect(servants.answersTo('Trapped Servants')).toBe(true)
+    expect(servants.answersTo('freed servants')).toBe(true)
+    expect(servants.answersTo('captain')).toBe(false)
+  })
+
   it('asks for proof of courage before trust is earned', () => {
     const game = createGameInCourtyard()
 
@@ -48,11 +56,13 @@ describe('TrappedServants', () => {
     const game = createGameInCourtyard()
     game.state.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
     game.state.setStoryFlag(FLAG_ACT4_SERVANTS_FREED, true)
+    const servants = new TrappedServants()
+    servants.free()
 
-    const answer = new TrappedServants().talkTo(game.state)
+    const answer = servants.talkTo(game.state)
 
     expect(answer).toContain('Thank you for our freedom!')
-    expectDialogueSpeaker(answer, SPEAKER)
+    expectDialogueSpeaker(answer, 'Freed Servants')
     expectMarkupWellFormed(answer)
   })
 })

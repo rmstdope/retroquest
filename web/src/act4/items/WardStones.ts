@@ -1,4 +1,5 @@
 import { Item, type GameState, event } from '@/engine'
+import { FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED } from '../Act4StoryFlags'
 
 /** Ancient ward stones that anchor the fortress's magical defenses. */
 export class WardStones extends Item {
@@ -13,8 +14,9 @@ export class WardStones extends Item {
     })
   }
 
-  /** Examine the ward stones. */
-  override examine(_gameState: GameState): string {
+  /** Examine the ward stones; the first look starts the guardians quest. */
+  override examine(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
     return event(
       'You examine the ward stones closely. Each stone is carved with ' +
         'ancient protective runes that pulse with dark energy. The stones appear ' +

@@ -432,6 +432,25 @@ describe('Game', () => {
       )
     })
 
+    it("answers a blocked direction with the room's own line", () => {
+      class SealedRoom extends Room {
+        /** Seal the north exit with a story line. */
+        override blockedExit(
+          _gameState: GameState,
+          direction: string,
+        ): string | null {
+          return direction === 'north' ? '[event]Sealed shut.[/event]' : null
+        }
+      }
+      const sealed = new SealedRoom({ name: 'Sealed', description: 'd' })
+      const game = makeGame({ Sealed: sealed })
+      expect(game.move('north')).toBe('[event]Sealed shut.[/event]')
+      expect(game.move('west')).toBe(
+        "[failure]You can't go that way.[/failure]",
+      )
+      expect(game.state.currentRoom).toBe(sealed)
+    })
+
     it('keeps the player lost in the Main Square until the city map was used', () => {
       const square = new Room({
         name: 'Main Square',
