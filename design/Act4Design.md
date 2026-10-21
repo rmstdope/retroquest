@@ -263,8 +263,8 @@ pulses from ward stones in the gate frame, and spectral guardians materialise fr
 
 #### Exits
 
--   North: Hall of Echoes
--   East: Outer Courtyard (after "Shattered Ward Guardians")
+-   North: Hall of Echoes (once the barrier is down)
+-   East: Outer Courtyard (once the barrier is down)
 
 ### 2. Outer Courtyard
 
@@ -560,7 +560,7 @@ in Redemption. What the choice decides is Malakar's fate and the cost. If neithe
 Sacrifice is open, `use lifelight elixir on prison` is refused ("the crystal does not answer
 to one who has not yet spoken the truth, or given without asking") and Redemption is the one path
 left, so no player is stranded. If the prison is broken and only one of the two is open, the
-closed command (`name malakar's crimes` or `give up magic`) is refused with a line that says why.
+closed command (`say justice to malakar` or `say sacrifice to malakar`) is refused with a line that says why.
 
 In every ending the wound is closed, and the parents speak to Elior one last time, then rest in
 peace. They are not alive and nothing here hints that they are.
@@ -753,8 +753,8 @@ where they would occur.
     - `say refrain to malakar` → "Power follows purpose; purpose follows truth." (this is the refusal)
     - `use ancient amulet` → the amulet opens, the ward unseals, and the dream voice speaks
       through it and Malakar: "Finish what I could not."
-    - `say forgiveness to malakar` → Spell learned: `forgiveness`
-    - `use lifelight elixir on malakar` then `cast forgiveness on wound` → the elixir is consumed
+    - `use lifelight elixir on malakar`, then `say forgiveness to malakar` → Spell learned: `forgiveness`
+    - `cast forgiveness on wound` → the elixir is consumed
         - Quest completed: "The Final Stand"
         - Ending: Redemption
     - The wound closes; the parents speak to Elior one last time and rest.
@@ -766,9 +766,9 @@ where they would occur.
 ### Ending variants (not on the golden path)
 
 -   **Justice:** at step 11, instead of the elixir on Malakar: `use lifelight elixir on prison`
-    (Alden is freed), `name malakar's crimes` (needs 2 truth moments), `use ancient amulet on wound`.
+    (Alden is freed), `say justice to malakar` (needs 2 truth moments), `use ancient amulet on wound`.
     Malakar is sealed; the parents speak and rest. Epilogue as step 12.
--   **Sacrifice:** at step 11: `use lifelight elixir on prison`, `give up magic` (needs 2 selfless
+-   **Sacrifice:** at step 11: `use lifelight elixir on prison`, `say sacrifice to malakar` (needs 2 selfless
     moments), `use ancient amulet on wound`. Elior keeps only `grow`. Epilogue as step 12.
 
 ## Quest Completion Verification
