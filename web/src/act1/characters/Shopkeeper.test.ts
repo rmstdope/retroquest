@@ -189,6 +189,22 @@ describe('Hemlock and his missing cat', () => {
     expectDialogueSpeaker(again, 'shopkeeper')
   })
 
+  it('grumbles about the stopped caravans with Malakar as a byword on the first talk', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain(
+      'And the caravans have stopped coming, now the king is ill and the ' +
+        "roads are what they are. Malakar's luck, my father would have " +
+        'called it.',
+    )
+    expectQuotesInsideDialogue(answer)
+    expect(game.commandParser.parse('talk to shopkeeper')).not.toContain(
+      "Malakar's luck",
+    )
+  })
+
   it('stays shut after Mira asks Elior to connect with nature', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)

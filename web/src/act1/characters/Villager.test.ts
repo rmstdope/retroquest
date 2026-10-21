@@ -42,6 +42,18 @@ describe('Villager dialogue markup', () => {
     )
   })
 
+  it('uses Malakar as a village byword in her third rumour, the way a bogeyman is named', () => {
+    const villager = gameInSquare().state.currentRoom.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+
+    expect(villager.dialogueOptions[2]).toBe(
+      "The animals are restless. My neighbor's dog howled at nothing for hours, and the " +
+        'chickens refuse to leave their coop after dusk. ' +
+        "Malakar's weather, my mother would have called it, and knocked on wood.",
+    )
+  })
+
   it('tells the current second rumour after loading a save that holds the old one', () => {
     const game = gameInSquare()
     const villager = game.state.currentRoom.characters.find(

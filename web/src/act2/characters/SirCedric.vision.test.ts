@@ -12,6 +12,12 @@ import { PropheticVision } from '../spells/PropheticVision'
 import { SirCedric, VISION_CLOSING } from './SirCedric'
 
 const CEDRIC = characterName('Sir Cedric')
+const BELIEF =
+  'The missing page in the birth roll. The stranger asking after a family ' +
+  'that left. You hear yourself say it before you have thought it: ' +
+  '[italic]“He took them. That is why they vanished, and that is why he ' +
+  `wants me.”[/italic] ${CEDRIC} does not correct you. He does not know ` +
+  'either.'
 const HINT =
   "And yet the voice did not sound like a hunter's. " +
   `${CEDRIC} waits, watching you, as if he can see you have something to ` +
@@ -65,7 +71,9 @@ describe('the vision leaves Cedric waiting', () => {
     ].filter((quest) => !quest.isMain())
     again.state.completedQuests.push(...sideQuests)
     const cast = new PropheticVision().castSpell(again.state)
-    expect(cast.endsWith('hunting.' + '[/dialogue]\n\n' + HINT)).toBe(true)
+    expect(
+      cast.endsWith('hunting.' + '[/dialogue]\n\n' + BELIEF + '\n\n' + HINT),
+    ).toBe(true)
     expect(cast).not.toContain('Act II is complete')
     expect(cast).not.toContain('All your life')
     expectMarkupWellFormed(cast)

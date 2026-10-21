@@ -89,6 +89,16 @@ export class MasterHealerLyria extends Character {
             'scholars wrote down before any of us were born.',
         ) +
         '\n\n' +
+        'She picks the pestle up again and sets it down.' +
+        '\n\n' +
+        name +
+        ': ' +
+        speech(
+          'I wrote to the healer at Willowbrook about that mark, weeks ago. ' +
+            'Mira. The best hand with a curse this side of the hills, they ' +
+            'say. She never came, and she never answered.',
+        ) +
+        '\n\n' +
         usual
       )
     }

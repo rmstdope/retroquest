@@ -53,7 +53,7 @@
   - **Trigger:** Search Elior's Cottage and discover the photograph.
   - **Steps:** Examine the photograph to read its message (_Seek the truth where the river bends_), then show it to Grandmother. She reveals that Elior's family is connected to the darkness threatening Eldoria, and that his mother loved the river: the old fisherman at the Riverbank will remember her. The Riverbank is the bend. Show the photograph to the fisherman: he was the mother's friend, and tells of a tin she hid in the mud under the smooth stone the night before she went away. Search the Riverbank to find the tin and the mother's letter inside it.
   - **Completion:** Read the mother's letter.
-  - **Reward:** A fragment of a letter from Elior's mother. It does not name anyone ("If anyone comes asking about our line, do not answer them."), and says Mira keeps the amulet for him and that "when you are ready, it will know you". Carried into Mira's hut, it makes the amulet glow brighter (see _Story Beats_). Malakar is not named in Act I.
+  - **Reward:** A fragment of a letter from Elior's mother. It names Malakar once, as a friend gone wrong ("If Malakar comes asking about our line, do not answer him. He is not the friend we knew."), and says Mira keeps the amulet for him and that "when you are ready, it will know you". Carried into Mira's hut, it makes the amulet glow brighter (see _Story Beats_). It is the one voice in Act I that names Malakar as a man; the village knows him only as a byword (see _Story Beats_).
 
 - **Name:** Shadows Over Willowbrook (Main Quest)
   - **Trigger:** At the start of the act; Elior's dream introduces the mystery.
@@ -104,7 +104,7 @@
 - **Unusable:** old notice (start).
 - **Spells:** None.
 - **Usable Items:** (None based on Golden Path actions in this room).
-- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours, among them that King Alden is ill and the roads are no longer safe, and that a cloaked stranger was seen asking after "an old amulet, from a family that left" before he took the road to the mill; once the well is purified she asks, once, "The water's clean! Was that you?" (Elior may stay silent, and she decides the spring ran clear by itself; or answer `say truth to tilda`, accepted for as long as the well stays purified and she has asked, see _Optional choices_); once Elior carries Mira's amulet she knows he is leaving.
+- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours, among them that King Alden is ill and the roads are no longer safe, that a cloaked stranger was seen asking after "an old amulet, from a family that left" before he took the road to the mill, and that the animals are restless ("Malakar's weather, my mother would have called it, and knocked on wood"); once the well is purified she asks, once, "The water's clean! Was that you?" (Elior may stay silent, and she decides the spring ran clear by itself; or answer `say truth to tilda`, accepted for as long as the well stays purified and she has asked, see _Optional choices_); once Elior carries Mira's amulet she knows he is leaving.
 - **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east)
 
 ### 5. Mira’s Hut
@@ -133,7 +133,7 @@
 - **Items:** Rope (store stock), apple (bonus with each purchase), matches (kept for the Priest and not for sale — not among the wares, cannot be bought or taken; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act (the hoe's and Hemlock's reward).
 - **Spells:** None.
 - **Usable Items:** Coin (2nd, purchase rope and receive an apple bonus).
-- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). He introduces himself on the first talk, mentions that the caravans have stopped coming because the king is ill and the roads are unsafe, and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter. If Patches stays with Grandmother instead, Hemlock has heard the news, reopens the store and gives Elior a `rope` and an `apple` (no coin), so the act stays completable without the second coin.
+- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). He introduces himself on the first talk, mentions that the caravans have stopped coming because the king is ill and the roads are unsafe ("Malakar's luck, my father would have called it"), and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter. If Patches stays with Grandmother instead, Hemlock has heard the news, reopens the store and gives Elior a `rope` and an `apple` (no coin), so the act stays completable without the second coin.
 - **Save compatibility:** saves made when the hoe still gave a second coin keep the store open, and returning Patches in such a save earns no second coin.
 - **Exits:** Village Square (west), Blacksmith’s Forge (south)
 
@@ -266,7 +266,9 @@ Two light choices are recorded as Act I story flags, for a later virtue record. 
 
 ## Story Beats
 
-The red-line threads of Act I (see `GameStory.md`, Story Canon and Red Line). All ride on existing talks, examines and gives; none adds a puzzle or changes the golden path. Malakar, the Wardens, the ward and the parents' fate are not named in Act I.
+The red-line threads of Act I (see `GameStory.md`, Story Canon and Red Line). All ride on existing talks, examines and gives; none adds a puzzle or changes the golden path. The Wardens, the ward and the parents' fate are not named in Act I, and Malakar only as a byword, save for one line of the mother's letter.
+
+- **The byword.** Willowbrook says Malakar's name the way a village names a bogeyman: Tilda's "Malakar's weather" over the restless animals, Hemlock's "Malakar's luck" over the stopped caravans, both with a knock on wood. Nobody in the village treats him as a living man; only the mother's letter does, in one line. This is the source of the Act II row of the red line, where Elior arrives still half-believing Malakar is a tale from old books, and it is chilling in hindsight: the man the village swears by held Elior as a baby.
 
 - **The ill king.** Tilda says King Alden is ill and the roads are no longer safe; Hemlock adds that the caravans have stopped coming. Mira says the sickness in the land and the king's sickness feel like one wound (in the same talk as the rare flower, step 18): the blight is the first ripple of the same draining magic.
 - **The dream voice.** Elior's journal records a voice that called for help, achingly familiar but unplaced. When he repeats what it asked to Grandmother she goes quiet, turns to the bread and says "Some voices are older than memory." She is guarded and plainly knows more. The voice is never tied to a parent.

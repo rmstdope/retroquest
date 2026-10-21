@@ -622,6 +622,13 @@ export class Mira extends Character {
           'word of who you were could have reached him.',
       ),
       speech(
+        'Lyria wrote to me from Greendale, about a girl with a mask on her ' +
+          'wrist. I burned the letter. If I had gone, I would have shown ' +
+          'Greendale what the healer at Willowbrook can do, with his agent ' +
+          'in both towns and you in one of them. I have never been so ' +
+          'ashamed of anything.',
+      ),
+      speech(
         'I am telling you now because you have earned the truth. The ' +
           'amulet you carry is the anchor of the ward your parents became.',
       ),

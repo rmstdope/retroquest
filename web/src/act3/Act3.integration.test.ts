@@ -64,6 +64,24 @@ describe('Act 3 integration', () => {
     expect(act3.getActIntro()).not.toBeNull()
   })
 
+  it('opens on the belief Elior voiced in Greendale and on how Mira brought the party home', () => {
+    const intro = new Act3().getActIntro()
+
+    expect(intro).toContain('[bold]ACT III: TRIALS AND REVELATIONS[/bold]')
+    expect(intro).toContain(
+      'He took them. That is why they vanished, and that is why he wants me.',
+    )
+    expect(intro).toContain(
+      'Mira came to Greendale the night of the vision. She had felt the ' +
+        'amulet open to the forest, she said, and knew. In the castle ' +
+        'courtyard she drew a circle in chalk, and the three of you stepped ' +
+        'out of it into her hut in Willowbrook, the herbs still swinging ' +
+        'from the beam.',
+    )
+    expect(intro).not.toContain('THE AWAKENING')
+    expect(intro).not.toContain('Obsidian Fortress')
+  })
+
   it('can be loaded into a Game', () => {
     const act3 = new Act3()
     const game = new Game([act3])

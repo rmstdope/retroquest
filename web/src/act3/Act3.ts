@@ -114,14 +114,20 @@ export class Act3 extends Act {
   /** Return the introductory text for Act III. */
   override getActIntro(): string {
     return (
-      '[bold]ACT III: THE AWAKENING[/bold]\n\n' +
-      'You and Sir Cedric return to Willowbrook, the village where it all began. ' +
-      'Mira is waiting — the only one who can reveal how to confront Malakar ' +
-      'and what must be done next. ' +
-      'Her guidance will chart your path toward the Obsidian Fortress ' +
-      'and the trials ahead.\n\n' +
-      'Gather your resolve; the final hunt begins where the first questions ' +
-      'were asked.\n\n' +
+      '[bold]ACT III: TRIALS AND REVELATIONS[/bold]\n\n' +
+      'You said it aloud in the castle courtyard, with the vision still ' +
+      'fading: [italic]“He took them. That is why they vanished, and that ' +
+      'is why he wants me.”[/italic] Sir Cedric did not correct you. ' +
+      'Nobody has, and so it has become what you believe: Malakar took ' +
+      'your parents, and now he is coming for you.\n\n' +
+      'Mira came to Greendale the night of the vision. She had felt the ' +
+      'amulet open to the forest, she said, and knew. In the castle ' +
+      'courtyard she drew a circle in chalk, and the three of you stepped ' +
+      'out of it into her hut in Willowbrook, the herbs still swinging ' +
+      'from the beam. She has not yet said how a village healer learned ' +
+      'to do that.\n\n' +
+      'Now she is the only one who can say what must be done next, and ' +
+      'where the road to Malakar begins.\n\n' +
       "Let's begin. (Type 'help' for a list of commands.)\n"
     )
   }

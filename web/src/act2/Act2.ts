@@ -134,6 +134,10 @@ export class Act2 extends Act {
       ' The [item_name]Ancient Amulet[/item_name] your parents left you lies ' +
       'hidden under your shirt, warm against your chest. Someone came to ' +
       'Willowbrook looking for it, your grandmother said. Keep it hidden.' +
+      '\n\nMalakar, to you, is a word from Willowbrook: a name your neighbours ' +
+      'say over bad weather and bad luck, and knock on wood after. A tale ' +
+      "to frighten children, and one line in your mother's hand that called " +
+      'him a friend once.' +
       '\n\nBeyond Greendale, ' +
       'you glimpse the edge of the Enchanted Forest—an ancient woodland ' +
       'where magic flows like water and spirits older than memory dwell ' +
