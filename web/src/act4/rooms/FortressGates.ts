@@ -47,29 +47,20 @@ export class FortressGates extends Room {
     })
   }
 
-  /**
-   * The way east opens once the barrier is down; north waits for the Hall of
-   * Echoes. `exits` keeps the finished map, only the open part is offered.
-   */
+  /** The ways north and east open once the barrier is down. */
   override getExits(gameState: GameState): Exits {
     if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) return {}
-    return { east: this.exits.east }
+    return { north: this.exits.north, east: this.exits.east }
   }
 
-  /** The barrier throws Elior back (and starts the quest); the Hall is not built yet. */
+  /** The barrier throws Elior back (and starts the quest). */
   override blockedExit(gameState: GameState, direction: string): string | null {
     if (direction !== 'north' && direction !== 'east') return null
-    if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
-      gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
-      return (
-        '[failure]A shimmering barrier of dark energy throws you back. ' +
-        'It pulses in rhythm with the ward stones.[/failure]'
-      )
-    }
+    if (gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) return null
+    gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
     return (
-      '[failure]Beyond the gates to the north, a great hall lies in darkness, ' +
-      'its doorway heaped with fallen stone. There is no way through — ' +
-      'not yet.[/failure]'
+      '[failure]A shimmering barrier of dark energy throws you back. ' +
+      'It pulses in rhythm with the ward stones.[/failure]'
     )
   }
 

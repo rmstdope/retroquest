@@ -1,4 +1,5 @@
 import { Item, type GameState, event } from '@/engine'
+import { EchoStone } from './EchoStone'
 import { FLAG_ACT4_SERVANTS_PENDANT_ACQUIRED } from '../Act4StoryFlags'
 
 /** A pendant that allows communication with freed servants for guidance. */
@@ -21,6 +22,12 @@ export class ServantsPendant extends Item {
   override pickedUp(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SERVANTS_PENDANT_ACQUIRED, true)
     return ''
+  }
+
+  /** Use the pendant with the Echo Stone: the same as using the stone. */
+  override useWith(gameState: GameState, other: Item): string {
+    if (other instanceof EchoStone) return EchoStone.useInRoom(gameState)
+    return super.useWith(gameState, other)
   }
 
   /** Use the pendant to receive guidance from freed servants. */
