@@ -4,10 +4,16 @@ import {
   type Item,
   characterName,
   event,
+  remembered,
   speech,
 } from '@/engine'
-import { FLAG_HELPED_ELDERLY_RESIDENTS } from '../Act2StoryFlags'
+import {
+  FLAG_HELPED_ELDERLY_RESIDENTS,
+  FLAG_WREN_FLOWER_GIVEN,
+  VIRTUE_SELFLESS,
+} from '../Act2StoryFlags'
 import { WalkingStick } from '../items/WalkingStick'
+import { MountainFlower } from '../items/MountainFlower'
 import { HealingHerbs } from '../items/HealingHerbs'
 
 /**
@@ -15,6 +21,8 @@ import { HealingHerbs } from '../items/HealingHerbs'
  *
  * Friendly dialogue requires FLAG_HELPED_ELDERLY_RESIDENTS (earned by giving a
  * WalkingStick). The first friendly conversation grants HealingHerbs once.
+ * Every friendly talk ends with the line about little Wren until she has a
+ * MountainFlower: giving it is the optional selfless moment, recorded once.
  */
 export class Families extends Character {
   healingHerbsGiven = false
@@ -73,11 +81,30 @@ export class Families extends Character {
         )
     }
 
+    if (!gameState.getStoryFlag(FLAG_WREN_FLOWER_GIVEN)) {
+      response +=
+        '\n\n' +
+        characterName(this.name) +
+        ': ' +
+        speech(
+          'Little Wren at the end house has been abed with fever all week. ' +
+            'She keeps asking for the purple flowers that grow up on the ' +
+            'mountain path. None of us can manage that climb any more.',
+        )
+    }
+
     return response
   }
 
-  /** Handle giving items to the Families. */
+  /**
+   * Handle giving items to the Families: the walking stick helps the elders,
+   * the mountain flower goes to Wren (selfless, recorded once), anything else
+   * gets the default reply. Of the flower, strangers get only a polite nod.
+   */
   override giveItem(gameState: GameState, item: Item): string {
+    if (item instanceof MountainFlower) {
+      return this.giveFlower(gameState, item)
+    }
     if (item instanceof WalkingStick) {
       // Remove the walking stick from inventory and help elderly residents
       gameState.removeItemFromInventory(item.name)
@@ -93,5 +120,44 @@ export class Families extends Character {
       // For all other items, use the default behavior
       return super.giveItem(gameState, item)
     }
+  }
+
+  /** The flower for Wren: reaction, thanks and the remembered line. */
+  private giveFlower(gameState: GameState, flower: Item): string {
+    const gift = event(
+      `You give the [item_name]${flower.name}[/item_name] to the ` +
+        `${characterName(this.name)}.`,
+    )
+    if (!gameState.getStoryFlag(FLAG_HELPED_ELDERLY_RESIDENTS)) {
+      return (
+        gift +
+        '\n' +
+        `The ${characterName(this.name)} give you polite but distant nods. ` +
+        'Nobody seems to know what a stranger wants with them, or with a ' +
+        'flower.'
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_WREN_FLOWER_GIVEN)) {
+      return super.giveItem(gameState, flower)
+    }
+    gameState.removeItemFromInventory(flower.name)
+    gameState.setStoryFlag(FLAG_WREN_FLOWER_GIVEN, true)
+    gameState.addVirtue(VIRTUE_SELFLESS)
+    return (
+      gift +
+      '\n' +
+      'A mother carries the flower down the lane to the end house. A little ' +
+      'later a thin face appears at the window, holding it up to the light.' +
+      '\n' +
+      characterName(this.name) +
+      ': ' +
+      speech(
+        "She's smiling. First time in a week. It's only a flower, and she " +
+          'knows it, but it came from the mountain and someone thought of ' +
+          'her. Thank you, truly.',
+      ) +
+      '\n' +
+      remembered('Selflessness')
+    )
   }
 }

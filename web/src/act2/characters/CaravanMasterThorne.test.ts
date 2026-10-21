@@ -1,0 +1,131 @@
+import { describe, it, expect } from 'vitest'
+import { Game } from '@/engine'
+import { Act2 } from '../Act2'
+import {
+  FLAG_BRENN_FORGIVEN,
+  FLAG_FOUND_LOST_CARAVAN,
+  VIRTUE_MERCY,
+} from '../Act2StoryFlags'
+import {
+  expectDialogueSpeaker,
+  expectMarkupWellFormed,
+} from '@/testing/gameHelpers'
+
+const BRENN_FIRST = ', my guard, came stumbling back alone two nights ago.'
+const BRENN_AFTER = 'Which leaves [character_name]Brenn[/character_name].'
+const REMEMBERED = '✦ Mercy — this will be remembered'
+
+/** An Act II game in the Market District. */
+function gameAtThorne(): Game {
+  const game = new Game([new Act2()])
+  game.state.currentRoom = game.state.allRooms.MarketDistrict
+  return game
+}
+
+/** The caravan found; the documents talk already held. */
+function gameAfterRescue(): Game {
+  const game = gameAtThorne()
+  game.state.setStoryFlag(FLAG_FOUND_LOST_CARAVAN, true)
+  game.commandParser.parse('talk to caravan master thorne')
+  return game
+}
+
+describe('Caravan Master Thorne and Brenn (mercy moment)', () => {
+  it('names Brenn after his opening plea, in the first talk only', () => {
+    const game = gameAtThorne()
+
+    const first = game.commandParser.parse('talk to caravan master thorne')
+    const second = game.commandParser.parse('talk to caravan master thorne')
+
+    expect(first).toContain('Would you be willing to search for them?')
+    expect(first).toContain(BRENN_FIRST)
+    expect(first.indexOf(BRENN_FIRST)).toBeGreaterThan(
+      first.indexOf('forever in your debt'),
+    )
+    expect(second).not.toContain(BRENN_FIRST)
+    expectMarkupWellFormed(first)
+    expectDialogueSpeaker(first, 'caravan master thorne')
+  })
+
+  it('leaves the documents talk unchanged', () => {
+    const game = gameAtThorne()
+    game.state.setStoryFlag(FLAG_FOUND_LOST_CARAVAN, true)
+
+    const answer = game.commandParser.parse('talk to caravan master thorne')
+
+    expect(answer).toContain('Thorne hands you a stack of')
+    expect(answer).not.toContain(BRENN_AFTER)
+  })
+
+  it('ends every later talk with the Brenn line until Elior speaks', () => {
+    const game = gameAfterRescue()
+
+    for (let i = 0; i < 2; i++) {
+      const answer = game.commandParser.parse('talk to caravan master thorne')
+      expect(answer).toContain('still processing the relief')
+      expect(answer).toContain(BRENN_AFTER)
+      expect(answer.indexOf(BRENN_AFTER)).toBeGreaterThan(
+        answer.indexOf('still processing'),
+      )
+      expectMarkupWellFormed(answer)
+      expectDialogueSpeaker(answer, 'caravan master thorne')
+    }
+  })
+
+  it('records mercy with the speaking-for, his reply and the remembered line', () => {
+    const game = gameAfterRescue()
+
+    const answer = game.commandParser.parse('say forgive to thorne')
+
+    expect(answer).toContain('You speak for')
+    expect(answer).toContain('fear is not the same as cowardice')
+    expect(answer).toContain('One more road.')
+    expect(answer).toContain(REMEMBERED)
+    expectMarkupWellFormed(answer)
+    expectDialogueSpeaker(answer, 'caravan master thorne')
+    expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(true)
+    expect(game.state.getStoryFlag(FLAG_BRENN_FORGIVEN)).toBe(true)
+  })
+
+  it('records the moment although Act I already recorded mercy', () => {
+    const game = gameAfterRescue()
+    game.state.addVirtue(VIRTUE_MERCY)
+
+    expect(game.commandParser.parse('say forgive to thorne')).toContain(
+      REMEMBERED,
+    )
+  })
+
+  it('drops the Brenn line after forgiving and adds nothing', () => {
+    const game = gameAfterRescue()
+    game.commandParser.parse('say forgive to thorne')
+
+    const answer = game.commandParser.parse('talk to caravan master thorne')
+
+    expect(answer).toContain('still processing the relief')
+    expect(answer).not.toContain(BRENN_AFTER)
+    expect(answer).not.toContain('remembered')
+  })
+
+  it('answers a second plea without a second remembered line', () => {
+    const game = gameAfterRescue()
+    game.commandParser.parse('say forgive to thorne')
+
+    const answer = game.commandParser.parse('say forgive to thorne')
+
+    expect(answer).toContain('I said one more road, and I meant it.')
+    expect(answer).not.toContain('remembered')
+    expectDialogueSpeaker(answer, 'caravan master thorne')
+  })
+
+  it('asks Elior to come back before the rescue and records nothing', () => {
+    const game = gameAtThorne()
+
+    const answer = game.commandParser.parse('say forgive to thorne')
+
+    expect(answer).toContain('Ask me again when my people are home')
+    expect(answer).not.toContain('remembered')
+    expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(false)
+    expectDialogueSpeaker(answer, 'caravan master thorne')
+  })
+})

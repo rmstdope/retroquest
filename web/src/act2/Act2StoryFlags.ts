@@ -52,3 +52,15 @@ export const FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED =
   'forest_guardians_riddles_completed'
 export const FLAG_WHISPERS_IN_WIND_OFFERED = 'whispers_in_wind_offered'
 export const FLAG_MENDED_LIBRARY_ENCHANTMENTS = 'mended_library_enchantments'
+
+// Optional virtue moments (recorded in the cross-act virtue record)
+/** Virtue keys Act II records; each is optional and recorded once. */
+export const VIRTUE_MERCY = 'mercy'
+export const VIRTUE_TRUTH = 'truth'
+export const VIRTUE_SELFLESS = 'selfless'
+/** Set once the mountain flower has gone to the Families' sick child. */
+export const FLAG_WREN_FLOWER_GIVEN = 'wren_flower_given'
+/** Set once Elior has told Marcus the curse was set on Elena on purpose. */
+export const FLAG_MARCUS_TOLD_TRUTH = 'marcus_told_truth'
+/** Set once Elior has spoken to Thorne for Brenn. */
+export const FLAG_BRENN_FORGIVEN = 'brenn_forgiven'

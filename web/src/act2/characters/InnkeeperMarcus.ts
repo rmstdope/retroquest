@@ -4,6 +4,7 @@ import {
   type Item,
   characterName,
   event,
+  remembered,
   speech,
 } from '@/engine'
 import { RoomKey } from '../items/RoomKey'
@@ -11,6 +12,8 @@ import { DruidicCharm } from '../items/DruidicCharm'
 import {
   FLAG_KNOWS_ELENA_CURSE,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
+  FLAG_MARCUS_TOLD_TRUTH,
+  VIRTUE_TRUTH,
 } from '../Act2StoryFlags'
 
 /** Python's str.title(): every word starts upper-cased, the rest lower-cased. */
@@ -21,7 +24,11 @@ function title(text: string): string {
   )
 }
 
-/** Innkeeper NPC who sells wares and rewards the player after Elena's cure. */
+/**
+ * Innkeeper NPC who sells wares and rewards the player after Elena's cure.
+ * After the cure every talk ends with his "ill wind" line until Elior tells
+ * him the truth about the silver mask: the optional truth moment.
+ */
 export class InnkeeperMarcus extends Character {
   wares: Record<string, { item: Item; price: number }> = {
     'room key': { item: new RoomKey(), price: 10 },
@@ -44,6 +51,64 @@ export class InnkeeperMarcus extends Character {
         'his face and glances frequently toward his daughter with obvious ' +
         'concern.',
     })
+  }
+
+  /** Also answers to his first name, which the `say truth to marcus` command uses. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'marcus'
+  }
+
+  /**
+   * Take the truth about the curse. After the cure, saying "truth" tells him
+   * the silver mask was set on Elena on purpose: his reply and the remembered
+   * line, recorded once. Before the cure he points upstairs; afterwards he
+   * has heard it. Any other words get the usual reply.
+   */
+  override sayTo(gameState: GameState, words: string): string {
+    if (words.trim().toLowerCase() !== 'truth') {
+      return super.sayTo(gameState, words)
+    }
+    const speaker = characterName(this.name)
+    const greeting = event(`You speak with ${speaker}.`)
+    if (!gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
+      return (
+        greeting +
+        '\n' +
+        speech(
+          'The truth? The only truth I care about is upstairs, and ' +
+            "she's getting worse.",
+        )
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_MARCUS_TOLD_TRUTH)) {
+      return (
+        greeting +
+        '\n' +
+        speech(
+          'I heard you the first time, friend. ' +
+            "I've not slept right since, but I'd rather know.",
+        )
+      )
+    }
+    gameState.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
+    gameState.addVirtue(VIRTUE_TRUTH)
+    return (
+      event(
+        `You tell ${characterName('Marcus')} about the silver mask on ` +
+          `${characterName('Elena')}'s wrist: the curse was no ill wind. ` +
+          'Someone set it on her on purpose.',
+      ) +
+      '\n' +
+      speaker +
+      ': ' +
+      speech(
+        'On purpose. ... Someone chose my girl. ... Then this house sleeps ' +
+          'with one eye open from now on. Thank you for telling me. ' +
+          "I'd sooner know it than be comforted by a lie.",
+      ) +
+      '\n' +
+      remembered('Truth')
+    )
   }
 
   /** Reward the cure with the Druidic Charm, or list the wares and plead for help. */
@@ -80,13 +145,24 @@ export class InnkeeperMarcus extends Character {
           tail
         )
       } else {
-        return (
+        const usual =
           characterName(this.name) +
           ': ' +
           speech(
             'My daughter is healthy and happy again, all thanks to you! The ' +
               'Silver Stag Inn will always be your home. Whatever you need - ' +
               "rooms, meals, information - it's yours freely.",
+          )
+        if (gameState.getStoryFlag(FLAG_MARCUS_TOLD_TRUTH)) return usual
+        return (
+          usual +
+          '\n\n' +
+          characterName(this.name) +
+          ': ' +
+          speech(
+            'An ill wind, the healer called it. Bad luck, blown in off the ' +
+              'road, settling on the one soul in this house who never harmed ' +
+              'anyone.',
           )
         )
       }
