@@ -38,3 +38,14 @@ describe('TrueSelf', () => {
     expect(game.state.hasVirtue('truth')).toBe(false)
   })
 })
+
+describe('TrueSelf markup', () => {
+  it('writes well-formed answers before and after the truth', () => {
+    const game = new Game([new Act4()])
+    const self = new TrueSelf()
+    const answers = [self.examine(game.state), self.talkTo(game.state)]
+    self.sayTo(game.state, 'truth')
+    answers.push(self.talkTo(game.state), self.sayTo(game.state, 'truth'))
+    for (const answer of answers) expectMarkupWellFormed(answer)
+  })
+})

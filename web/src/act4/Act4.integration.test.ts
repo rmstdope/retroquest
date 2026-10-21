@@ -731,6 +731,24 @@ describe('Act 4 integration', () => {
       )
     }
 
+    it('works with the stone on the maze floor, not with the pendant there', () => {
+      toMazeWithStone()
+      executeCommands(game, ['drop echo stone'])
+      executeCommands(game, ["drop servant's pendant"])
+      expect(executeCommands(game, ['use echo stone'])).toContain(NO_LIGHT)
+      executeCommands(game, ["take servant's pendant"])
+      expect(executeCommands(game, ['use echo stone'])).toContain(SOLVED)
+    })
+
+    it('keeps the after-description and the True Self through a reload', () => {
+      toMazeWithStone()
+      executeCommands(game, ['use echo stone'])
+      game.loadSaveData(game.toSaveData())
+      const room = game.state.currentRoom.describe(game.state)
+      expect(room).toContain('The false mirrors stand dark and silent now.')
+      expect(room).toContain('True Self')
+    })
+
     it('keeps every state through a save and load', () => {
       const reload = (): void => {
         const loaded = game.loadSaveData(game.toSaveData())

@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import { MirrorLabyrinth } from './MirrorLabyrinth'
 import { ServantsPendant } from '../items/ServantsPendant'
+import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 import { FLAG_ACT4_MAZE_OF_MIRRORS_STARTED } from '../Act4StoryFlags'
 
 describe('MirrorLabyrinth', () => {
@@ -44,5 +45,19 @@ describe('MirrorLabyrinth', () => {
     room.solve(game.state)
     expect(room.characters.map((c) => c.name)).toEqual(['True Self'])
     expect(room.description).toContain('The false mirrors stand dark')
+  })
+})
+
+describe('MirrorLabyrinth markup', () => {
+  it('writes well-formed answers in every state', () => {
+    const game = new Game([new Act4()])
+    const room = new MirrorLabyrinth()
+    const answers = [
+      room.blockedExit(game.state, 'north') ?? '',
+      room.solve(game.state),
+    ]
+    game.state.inventory.push(new ServantsPendant())
+    answers.push(room.solve(game.state), room.solve(game.state))
+    for (const answer of answers) expectMarkupWellFormed(answer)
   })
 })
