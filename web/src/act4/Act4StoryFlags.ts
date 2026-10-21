@@ -41,6 +41,8 @@ export const FLAG_ACT4_CHAIN_GIVEN = 'act4_chain_given'
 /** The Loyalty Token has been raised in the Hall of Echoes against the knight's despair. */
 export const FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL =
   'act4_loyalty_token_raised_in_hall'
+/** Sir Cedric has forgiven the knight (after the warriors were put to rest). */
+export const FLAG_ACT4_CEDRIC_FORGAVE = 'act4_cedric_forgave'
 export const FLAG_ACT4_WARRIORS_AT_PEACE = 'act4_warriors_at_peace'
 /** Mira has been named to the whispers in the Tower of Shadows. */
 export const FLAG_ACT4_WHISPERS_MIRA_NAMED = 'act4_whispers_mira_named'

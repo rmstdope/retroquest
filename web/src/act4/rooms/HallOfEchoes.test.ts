@@ -16,7 +16,10 @@ describe('HallOfEchoes', () => {
   it('holds the echoes, the stone and the knight', () => {
     const room = new HallOfEchoes()
     expect(room.items.map((i) => i.name)).toEqual(['Echoes', 'Echo Stone'])
-    expect(room.characters.map((c) => c.name)).toEqual(['Knight of Despair'])
+    expect(room.characters.map((c) => c.name)).toEqual([
+      'Knight of Despair',
+      'Sir Cedric',
+    ])
   })
 
   it('offers only the way south and blocks the stair east', () => {

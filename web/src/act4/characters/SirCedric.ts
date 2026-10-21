@@ -1,15 +1,16 @@
 import { Character, type GameState, dialogue } from '@/engine'
+import { FLAG_ACT4_CEDRIC_FORGAVE } from '../Act4StoryFlags'
 
 const OLD_LINE =
   'I have walked a long way beside you. This is a good place to stop.'
 
 /**
  * Sir Cedric leaning on the fence of Willowbrook Field. The first talk
- * delivers the captain's and the knight's apologies; later talks are his one
+ * delivers the captain's apology and his word on the knight; later talks are his one
  * old line.
  */
 export class SirCedric extends Character {
-  /** Whether Elior has already passed on the two apologies. */
+  /** Whether Elior has already passed on the captain's apology. */
   delivered = false
 
   constructor() {
@@ -24,8 +25,8 @@ export class SirCedric extends Character {
     return super.answersTo(name) || name.toLowerCase() === 'cedric'
   }
 
-  /** Both apologies and his answers the first time, his old line after. */
-  override talkTo(_gameState: GameState): string {
+  /** The captain's apology and his choice about the knight the first time, his old line after. */
+  override talkTo(gameState: GameState): string {
     if (this.delivered) return dialogue('Sir Cedric', OLD_LINE)
     this.delivered = true
     return [
@@ -36,12 +37,13 @@ export class SirCedric extends Character {
         'He was the youngest on the walls that night. I never blamed him. I ' +
           'am glad he remembers.',
       ),
-      'Then what the knight in grey said: that he is sorry, and that he ' +
-        'would say it to your face.',
       dialogue(
         'Sir Cedric',
-        'The knight in grey. I thought I would want to hear that more than ' +
-          'I do. Tell me where he is.',
+        gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)
+          ? 'And the knight in grey said his piece to my face. I forgave ' +
+              'him. I find I meant it.'
+          : 'And the knight in grey said his piece to my face. I have not ' +
+              'forgiven him. Not yet.',
       ),
       'He looks out over the field for a while.',
       dialogue('Sir Cedric', `Later. ${OLD_LINE}`),

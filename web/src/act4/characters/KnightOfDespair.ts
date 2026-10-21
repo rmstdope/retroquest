@@ -32,8 +32,8 @@ const CONFESSION = [
   'And when I saw what my master was doing to the king, I stopped believing ' +
     'he could be saved. That is all despair is. You have given me something ' +
     'to believe in again.',
-  'When you see Sir Cedric again, tell him the knight in grey is sorry. Tell ' +
-    'him I will say it to his face, if he will let me.',
+  'Sir Cedric. I am sorry. I have no right to ask anything of you, so I ' +
+    'will not.',
 ]
 
 /**
@@ -176,6 +176,17 @@ export class KnightOfDespair extends Character {
     gameState.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
     gameState.setStoryFlag(FLAG_ACT4_KNIGHTS_REDEMPTION_ACQUIRED, true)
     const confession = CONFESSION.map((speech) => dialogue(this.name, speech))
+    confession.unshift(
+      dialogue('Sir Cedric', 'You.'),
+      dialogue(this.name, 'Me.'),
+    )
+    confession.push(
+      event('Sir Cedric does not move from the door.'),
+      dialogue(
+        'Sir Cedric',
+        'I heard you. That will have to be enough, for now.',
+      ),
+    )
     this.name = REDEEMED_NAME
 
     gameState.addItemToInventory(new KnightsRedemption())
