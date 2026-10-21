@@ -1,11 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
+import { LoyaltyToken } from '../items/LoyaltyToken'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
   executeCommands,
   expectCharacterInRoom,
   expectDialogueSpeaker,
+  expectMarkupWellFormed,
 } from '@/testing/gameHelpers'
 
 /** The golden path as far as the redeemed knight. */
@@ -92,7 +94,7 @@ describe('The whispers in the Tower of Shadows', () => {
       'say nyx to whispers',
     ])
     expect(game.state.currentRoom.describe(game.state)).toContain(AFTER)
-    expect(game.state.currentRoom.describe(game.state)).toContain('up')
+    expect(game.state.currentRoom.getExits(game.state)).toHaveProperty('up')
     expect(executeCommands(game, ['talk to whispers'])).toContain(
       'There is no character named',
     )
@@ -157,6 +159,36 @@ describe('The whispers in the Tower of Shadows', () => {
     expect(game.loadSaveData(game.toSaveData())).toContain('loaded')
     executeCommands(game, ['say nyx to whispers'])
     expect(game.loadSaveData(game.toSaveData())).toContain('loaded')
+    expect(
+      game.state.allRooms.TowerOfShadows.getCharacterByName('whispers'),
+    ).toBeNull()
     expect(executeCommands(game, ['go up'])).toContain('Chamber of Whispers')
+  })
+
+  it('does not take a dropped token back after a reload of a current save', () => {
+    const game = inTower()
+    executeCommands(game, ['say mira to whispers', 'drop loyalty token'])
+    expect(game.loadSaveData(game.toSaveData())).toContain('loaded')
+    expect(game.state.hasItem('Loyalty Token')).toBe(false)
+  })
+
+  it('writes well-formed markup in every state', () => {
+    const game = inTower()
+    game.state.removeItemFromInventory('Loyalty Token')
+    const answers = [
+      executeCommands(game, ['talk to whispers', 'say mira to whispers']),
+    ]
+    game.state.addItemToInventory(new LoyaltyToken())
+    answers.push(
+      executeCommands(game, [
+        'say grandmother to whispers',
+        'say hello to whispers',
+        'say mira to whispers',
+        'say mira to whispers',
+        'say cedric to whispers',
+        'say nyx to whispers',
+      ]),
+    )
+    for (const answer of answers) expectMarkupWellFormed(answer)
   })
 })

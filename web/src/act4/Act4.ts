@@ -149,18 +149,22 @@ export class Act4 extends Act {
    * moved into the pack.
    */
   override afterLoad(gameState: GameState): void {
-    if (gameState.getStoryFlag(LEGACY_FLAG_ACT4_LOYALTY_TOKEN_RAISED)) {
-      gameState.setStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN, true)
-    }
+    const legacyOpen = gameState.getStoryFlag(
+      LEGACY_FLAG_ACT4_LOYALTY_TOKEN_RAISED,
+    )
+    if (legacyOpen) gameState.setStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN, true)
     const tower = gameState.allRooms.TowerOfShadows
+    // An old save is one that has the legacy flag, or a barred tower with no whispers
+    let oldSave = legacyOpen
     if (
       tower &&
       !gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN) &&
       !tower.getCharacterByName('whispers')
     ) {
       tower.addCharacter(new Whispers())
+      oldSave = true
     }
-    if (!gameState.hasItem('Loyalty Token')) {
+    if (oldSave && !gameState.hasItem('Loyalty Token')) {
       const room = Object.values(gameState.allRooms).find((r) =>
         r.getItemByName('Loyalty Token'),
       )

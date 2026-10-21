@@ -22,13 +22,12 @@ describe('LoyaltyToken', () => {
 
   it('gives the first hint in the tower and changes nothing', () => {
     const game = inTower()
+    const before = { ...game.state.storyFlags }
     const hint = new LoyaltyToken().use(game.state)
     expect(hint).toContain('Say their names.')
     expect(hint).toContain('in Mira')
     expectMarkupWellFormed(hint)
-    expect(Object.values(game.state.storyFlags).some(Boolean)).toBe(
-      Object.values(new Game([new Act4()]).state.storyFlags).some(Boolean),
-    )
+    expect(game.state.storyFlags).toEqual(before)
     expect(game.state.currentRoom.getExits(game.state)).not.toHaveProperty('up')
   })
 
