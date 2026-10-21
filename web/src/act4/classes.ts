@@ -8,7 +8,11 @@ import { LoyaltyToken } from './items/LoyaltyToken'
 import { ServantsPendant } from './items/ServantsPendant'
 import { WardStoneFragment } from './items/WardStoneFragment'
 import { WardStones } from './items/WardStones'
+import { CaptainOfTheGuard } from './characters/CaptainOfTheGuard'
 import { TrappedServants } from './characters/TrappedServants'
+import { ShatteredWardGuardians } from './quests/ShatteredWardGuardians'
+import { TheFinalStand } from './quests/TheFinalStand'
+import { TheTrappedServants } from './quests/TheTrappedServants'
 import { ChamberOfWhispers } from './rooms/ChamberOfWhispers'
 import { FortressGates } from './rooms/FortressGates'
 import { HallOfEchoes } from './rooms/HallOfEchoes'
@@ -30,7 +34,12 @@ export const ACT4_CLASSES = {
   WardStoneFragment,
   WardStones,
   // Characters
+  CaptainOfTheGuard,
   TrappedServants,
+  // Quests
+  ShatteredWardGuardians,
+  TheFinalStand,
+  TheTrappedServants,
   // Rooms
   ChamberOfWhispers,
   FortressGates,

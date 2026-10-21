@@ -4,6 +4,9 @@ import {
   FLAG_ACT4_SERVANTS_FREED,
 } from '../Act4StoryFlags'
 
+/** What the servants are called once their chains are broken. */
+const FREED_SERVANTS_NAME = 'Freed Servants'
+
 /** Fortress servants enslaved by dark magic, seeking freedom. */
 export class TrappedServants extends Character {
   constructor() {
@@ -15,6 +18,21 @@ export class TrappedServants extends Character {
         'to this cursed ground, forcing them to serve Malakar against their will. ' +
         'Their eyes plead for release from their eternal suffering.',
     })
+  }
+
+  /** Also answers to "servants", whatever their name is now. */
+  override answersTo(name: string): boolean {
+    return (
+      super.answersTo(name) ||
+      ['servants', 'trapped servants', 'freed servants'].includes(
+        name.toLowerCase(),
+      )
+    )
+  }
+
+  /** The servants are freed: they stay in the courtyard under a new name. */
+  free(): void {
+    this.name = FREED_SERVANTS_NAME
   }
 
   /** Return the servants' plea, which changes as their trust and freedom are won. */
@@ -43,7 +61,7 @@ export class TrappedServants extends Character {
       )
     }
     return (
-      `The freed ${name} bow gratefully. ` +
+      `The ${name} bow gratefully. ` +
       speech(
         "'Thank you for our freedom! " +
           'The Mirror Labyrinth ahead is treacherous - our pendant will help guide ' +

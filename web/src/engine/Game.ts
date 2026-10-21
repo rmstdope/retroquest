@@ -398,7 +398,10 @@ Welcome to
       )
     }
     if (!(direction in exits))
-      return "[failure]You can't go that way.[/failure]"
+      return (
+        room.blockedExit(this.state, direction) ??
+        "[failure]You can't go that way.[/failure]"
+      )
     const next = this.state.allRooms[exits[direction]]
     if (!next)
       return '[failure]That exit leads nowhere (room not found).[/failure]'

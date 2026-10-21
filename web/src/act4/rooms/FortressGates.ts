@@ -1,4 +1,4 @@
-import { Room, type GameState, event } from '@/engine'
+import { Room, type Exits, type GameState, event } from '@/engine'
 import { WardStoneFragment } from '../items/WardStoneFragment'
 import { GuardiansChain } from '../items/GuardiansChain'
 import { GuardiansEssence } from '../items/GuardiansEssence'
@@ -7,7 +7,15 @@ import { Barriers } from '../items/Barriers'
 import {
   FLAG_ACT4_BARRIERS_DISABLED,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
+  FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
 } from '../Act4StoryFlags'
+
+/** The gates once the ward stones have fallen dark and the barrier is gone. */
+const GATES_AFTER_DESCRIPTION =
+  'Towering obsidian gates loom before you, carved with writhing shadows ' +
+  'that seem to move in the corners of your vision. The ward stones stand ' +
+  'dark and silent now, and the barrier is gone. Whispers of forgotten ' +
+  'souls still echo from deep within the fortress.'
 
 /**
  * The dark entrance to Malakar's fortress, protected by shadow guardians.
@@ -39,6 +47,32 @@ export class FortressGates extends Room {
     })
   }
 
+  /**
+   * The way east opens once the barrier is down; north waits for the Hall of
+   * Echoes. `exits` keeps the finished map, only the open part is offered.
+   */
+  override getExits(gameState: GameState): Exits {
+    if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) return {}
+    return { east: this.exits.east }
+  }
+
+  /** The barrier throws Elior back (and starts the quest); the Hall is not built yet. */
+  override blockedExit(gameState: GameState, direction: string): string | null {
+    if (direction !== 'north' && direction !== 'east') return null
+    if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
+      gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
+      return (
+        '[failure]A shimmering barrier of dark energy throws you back. ' +
+        'It pulses in rhythm with the ward stones.[/failure]'
+      )
+    }
+    return (
+      '[failure]Beyond the gates to the north, a great hall lies in darkness, ' +
+      'its doorway heaped with fallen stone. There is no way through — ' +
+      'not yet.[/failure]'
+    )
+  }
+
   /** Cast light spell to dispel shadow guardians. */
   override light(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) {
@@ -49,6 +83,7 @@ export class FortressGates extends Room {
     }
     if (!this.shadowGuardiansBanished) {
       this.shadowGuardiansBanished = true
+      this.description = GATES_AFTER_DESCRIPTION
       gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, true)
       // Add Guardian's Essence to the room
       this.addItem(new GuardiansEssence())

@@ -8,7 +8,11 @@ describe('Act4', () => {
     // not the Python display title "Act IV".
     expect(act4.name).toBe('Act4')
     expect(Object.keys(act4.rooms)).toHaveLength(8)
-    expect(act4.quests).toHaveLength(0) // No quests implemented yet
+    expect(act4.quests.map((quest) => quest.name)).toEqual([
+      'The Final Stand',
+      'Shattered Ward Guardians',
+      'The Trapped Servants',
+    ])
   })
 
   it('has all expected rooms', () => {

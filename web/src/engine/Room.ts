@@ -43,6 +43,15 @@ export class Room {
     return this.exits
   }
 
+  /**
+   * The story line shown when the player tries a direction that is not an
+   * open exit, or null for the plain "can't go that way". Override for
+   * barred ways that explain themselves; the hook may also set story flags.
+   */
+  blockedExit(_gameState: GameState, _direction: string): string | null {
+    return null
+  }
+
   getAmbientSound(): string {
     return 'It is quiet here.'
   }

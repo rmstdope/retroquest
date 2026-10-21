@@ -148,17 +148,19 @@ export class CommandParser {
     return this.game.say(words, character)
   }
 
-  /** `use <item>` or `use <item> with <other>`, from the command as typed. */
+  /** `use <item>`, `use <item> with <other>` or `use <item> on <other>`, from the command as typed. */
   private use(command: string): string {
     const tail = command.trim().slice('use '.length)
     const stripped = tail.trim()
     if (!stripped) return 'What do you want to use?'
     if (tail.toLowerCase().trimEnd().endsWith(' with')) return USE_WITH_USAGE
     const lower = stripped.toLowerCase()
-    const split = lower.indexOf(' with ')
+    // "on" reads the same as "with" when the command has no "with"
+    const joiner = lower.includes(' with ') ? ' with ' : ' on '
+    const split = lower.indexOf(joiner)
     if (split < 0) return this.game.use(lower)
     const item = lower.slice(0, split).trim()
-    const other = lower.slice(split + ' with '.length).trim()
+    const other = lower.slice(split + joiner.length).trim()
     if (!item || !other) return USE_WITH_USAGE
     return this.game.use(item, other)
   }

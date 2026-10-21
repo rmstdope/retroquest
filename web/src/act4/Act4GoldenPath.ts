@@ -1,8 +1,8 @@
 /**
  * The commands that play Act 4's golden path from the Fortress Gates as far as
  * the act is playable today: breaking the ward guardians, then freeing the
- * trapped servants in the Outer Courtyard and stepping into the Mirror Labyrinth. Each later Act 4
- * piece appends its steps here as it lands.
+ * trapped servants in the Outer Courtyard. Each later Act 4 piece appends its
+ * steps here as it lands.
  */
 export const ACT4_GOLDEN_PATH: string[] = [
   'examine ward stones',
@@ -16,5 +16,4 @@ export const ACT4_GOLDEN_PATH: string[] = [
   'cast bless on trapped servants',
   'take loyalty token',
   "take servant's pendant",
-  'n',
 ]

@@ -205,6 +205,7 @@ describe('CommandParser', () => {
       'discard rock': ['drop', 'rock'],
       'use lantern': ['use', 'lantern', null],
       'use key with chest': ['use', 'key', 'chest'],
+      'use key on chest': ['use', 'key', 'chest'],
       'use Bread With Chicken': ['use', 'bread', 'chicken'],
       inventory: ['inventory'],
       i: ['inventory'],

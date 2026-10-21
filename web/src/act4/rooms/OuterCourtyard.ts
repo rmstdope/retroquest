@@ -1,4 +1,5 @@
-import { Room, type GameState, event } from '@/engine'
+import { Room, type Exits, type GameState, event } from '@/engine'
+import { CaptainOfTheGuard } from '../characters/CaptainOfTheGuard'
 import { TrappedServants } from '../characters/TrappedServants'
 import { LoyaltyToken } from '../items/LoyaltyToken'
 import { ServantsPendant } from '../items/ServantsPendant'
@@ -6,7 +7,14 @@ import {
   FLAG_ACT4_SERVANTS_TRUST_EARNED,
   FLAG_ACT4_SERVANTS_FREED,
   FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED,
+  FLAG_ACT4_TRAPPED_SERVANTS_STARTED,
 } from '../Act4StoryFlags'
+
+/** The courtyard once the servants are free and the captain has woken. */
+const COURTYARD_AFTER_DESCRIPTION =
+  'The black tears in the fountains have dried, and the storm overhead has ' +
+  'thinned to grey. The Freed Servants rest by the fountains, their chains ' +
+  'gone, and the captain of the guard sits among them with his head in his hands.'
 
 /**
  * A once-beautiful courtyard now tainted by shadow magic and trapped souls.
@@ -23,25 +31,47 @@ export class OuterCourtyard extends Room {
         'Withered fountains weep black tears, and twisted statues reach toward a sky ' +
         'that seems perpetually stormy. Ethereal figures wander in endless circles, ' +
         'their faces etched with torment as dark chains bind their spirits to this ' +
-        'cursed ground. The very stones beneath your feet pulse with anguish, and ' +
+        'cursed ground. ' +
+        'By the dry fountain a soldier in a soot-black royal tabard stands ' +
+        'rigid, staring at nothing. ' +
+        'The very stones beneath your feet pulse with anguish, and ' +
         'the air tastes of lost hope and forgotten dreams.',
       items: [],
-      characters: [new TrappedServants()],
+      characters: [new TrappedServants(), new CaptainOfTheGuard()],
       exits: { west: 'FortressGates', north: 'MirrorLabyrinth' },
     })
+  }
+
+  /** Starting to explore the courtyard starts the servants quest. */
+  override onEnter(gameState: GameState): void {
+    gameState.setStoryFlag(FLAG_ACT4_TRAPPED_SERVANTS_STARTED, true)
+  }
+
+  /** Only the way west is open; `exits` keeps the finished map. */
+  override getExits(_gameState: GameState): Exits {
+    return { west: this.exits.west }
+  }
+
+  /** The archway north is choked with fallen stone until the maze is built. */
+  override blockedExit(
+    _gameState: GameState,
+    direction: string,
+  ): string | null {
+    if (direction !== 'north') return null
+    return (
+      '[failure]The archway to the north is choked with fallen stone. ' +
+      'There is no way through — not yet.[/failure]'
+    )
   }
 
   /** Handle examining specific targets in the room. */
   examine(gameState: GameState, target: string): string {
     const targetLower = target.toLowerCase()
     if (targetLower.includes('servant')) {
-      const servants = this.getCharacterByName('Trapped Servants')
+      const servants = this.getCharacterByName('servants')
       if (servants) {
         return servants.examine(gameState)
       }
-      return event(
-        'The servants have been freed and are no longer trapped here.',
-      )
     }
     return event(
       `You examine the ${target} but find nothing particularly ` +
@@ -63,12 +93,16 @@ export class OuterCourtyard extends Room {
       // Add the loyalty token and pendant to the room
       this.addItem(new LoyaltyToken())
       this.addItem(new ServantsPendant())
-      // Remove the trapped servants and replace with freed servants
-      this.characters.splice(0)
+      // The servants stay, now called the Freed Servants
+      const servants = this.getCharacterByName('servants')
+      if (servants instanceof TrappedServants) servants.free()
+      this.description = COURTYARD_AFTER_DESCRIPTION
       return event(
         'Your blessing magic flows out like golden light, shattering ' +
           'the dark chains that bind the servants. They cry out in joy as their ' +
-          "spirits are freed from Malakar's curse. In gratitude, they offer you " +
+          "spirits are freed from Malakar's curse. " +
+          'By the fountain, the captain blinks, as if waking from a long sleep. ' +
+          'In gratitude, they offer you ' +
           'a loyalty token and a pendant that will help guide you through the ' +
           'trials ahead.',
       )
