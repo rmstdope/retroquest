@@ -1,23 +1,40 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, event } from '@/engine'
 
-/** Credential document that grants passage through Greendale's gates. */
+/** What the pass looks like; shown on every examine, so older saves read it too. */
+const ENTRY_PASS_DESCRIPTION =
+  'An official-looking document with the seal of Greendale. The line where ' +
+  "the bearer's name should be has been scraped away with a blade, but the " +
+  'seal is whole. It appears to grant passage through the city gates to ' +
+  'those who present it to the guards.'
+
+/**
+ * Credential document that grants passage through Greendale's gates. It was
+ * the grey-cloaked stranger's: his name is scraped off, the seal is good.
+ */
 export class EntryPass extends Item {
   constructor() {
     super({
       name: 'entry pass',
       shortName: 'pass',
-      description:
-        'An official-looking document with the seal of Greendale. It appears to ' +
-        'grant passage through the city gates to those who present it to the guards.',
+      description: ENTRY_PASS_DESCRIPTION,
       canBeCarried: true,
     })
   }
 
-  /** Inspect the seal on the pass. */
+  /** Examine the pass with the current description, whatever an older save stored. */
+  override examine(_gameState: GameState): string {
+    return event(
+      `You examine the [item_name]${this.name}[/item_name]. ` +
+        ENTRY_PASS_DESCRIPTION,
+    )
+  }
+
+  /** Inspect the seal and the scraped line on the pass. */
   override use(_gameState: GameState): string {
     return (
-      'You examine the entry pass. The seal looks authentic, and it should allow ' +
-      'you passage into Greendale without question.'
+      'You examine the entry pass. Someone has scraped their name off it, ' +
+      'carefully. The seal looks authentic, and it should allow you passage ' +
+      'into Greendale without question.'
     )
   }
 }

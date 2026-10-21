@@ -43,7 +43,10 @@ describe('Herald dialogue markup', () => {
     expect(answer).toContain(
       'This is a formal recommendation of excellent standing',
     )
-    expect(answer).toContain('The pass has been officially registered')
+    expect(answer).toContain(
+      'He does not seem to notice that the name above the seal has been ' +
+        'scraped away. The pass has been officially registered',
+    )
     expectHeraldSpeaks(answer)
   })
 

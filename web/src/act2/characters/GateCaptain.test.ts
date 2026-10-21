@@ -54,7 +54,16 @@ describe('Gate Captain dialogue markup', () => {
 
     const answer = game.commandParser.parse('give entry pass to gate captain')
 
-    expect(answer).toContain('This is legitimate documentation indeed')
+    expect(answer).toContain(
+      'He runs a thumb along the line where a name should be; it has been ' +
+        'scraped away with a blade. Then he looks at the seal, and grunts.',
+    )
+    expect(answer).toContain(
+      "Somebody's scraped the name off this. The seal's good, though, and the " +
+        "seal's what I answer for. You are welcome in Greendale. Please, " +
+        'proceed.',
+    )
+    expect(answer).not.toContain('honored visitor')
     expectCaptainSpeaks(answer)
   })
 

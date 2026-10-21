@@ -29,10 +29,13 @@ export class CampSite extends Item {
     const entryPass = new EntryPass()
     gameState.currentRoom.addItem(entryPass)
     return (
-      'You carefully examine the abandoned camp site. Hidden under ' +
-      'leaves near the fire pit you discover an [item_name]entry ' +
-      'pass[/item_name] to Greendale — likely dropped by a prior ' +
-      'traveler in haste.\n\n' +
+      'You carefully examine the abandoned camp site. There are two fire ' +
+      'pits here, not one, and the ashes of one are much older than the ' +
+      'other. In the soft ground beside the trail, the same boot prints ' +
+      'show twice: one line coming up from Willowbrook, and a fresher line ' +
+      'going back down toward it. Hidden under leaves near the fire pit you ' +
+      'discover an [item_name]entry pass[/item_name] to Greendale, dropped, ' +
+      'it seems, by whoever left in such a hurry.\n\n' +
       event('You found an [item_name]entry pass[/item_name]!')
     )
   }

@@ -77,7 +77,8 @@ export class Herald extends Character {
           "'This is a formal recommendation of excellent standing. You are " +
             "granted formal audience rights with the nobility.'",
         ) +
-        ' The pass has been officially registered.[/success]'
+        ' He does not seem to notice that the name above the seal has been ' +
+        'scraped away. The pass has been officially registered.[/success]'
       )
     } else {
       return super.giveItem(gameState, item)
