@@ -15,6 +15,7 @@ import { Egg } from '../items/Egg'
 import { Fish } from '../items/Fish'
 import { WildBerries } from '../items/WildBerries'
 import { WitheredCarrot } from '../items/WitheredCarrot'
+import { Merchant } from './Merchant'
 import { Bread } from '../items/Bread'
 
 /** An Act I game on the Road to Greendale with the ring and the horseshoe. */
@@ -240,6 +241,30 @@ describe('Merchant and the fresh bread', () => {
     )
     expect(game.state.hasItem(name)).toBe(true)
     expect(game.state.hasVirtue(VIRTUE_SELFLESS)).toBe(false)
+    expect(executeCommands(game, ['talk to merchant'])).toContain(HUNGER)
+  })
+
+  it('shows the refusal as the event line and his speech, with no narration between', () => {
+    const game = gameAtMerchant()
+    game.state.addItemToInventory(new Apple())
+
+    const answer = executeCommands(game, ['give apple to merchant'])
+
+    expect(answer).toBe(
+      '[event]You offer the [item_name]apple[/item_name] to the ' +
+        '[character_name]merchant[/character_name].[/event]\n' +
+        "[dialogue]That's kind, friend, but you'll want every bite of that " +
+        "where you're going. Keep it.[/dialogue]",
+    )
+  })
+
+  it('counts a merchant from a save made before he could be fed as hungry', () => {
+    const game = gameAtMerchant()
+    const merchant = game.state.currentRoom.characters.find(
+      (c) => c instanceof Merchant,
+    ) as Merchant
+    Reflect.deleteProperty(merchant, 'fed')
+
     expect(executeCommands(game, ['talk to merchant'])).toContain(HUNGER)
   })
 })

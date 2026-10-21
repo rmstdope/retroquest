@@ -231,10 +231,14 @@ export class Mira extends Character {
    * remark about the forest, then goes on as it would have.
    */
   override talkTo(gameState: GameState): string {
-    return this.forestRemark(gameState) + this.talkByProgress(gameState)
+    const answer = this.talkByProgress(gameState)
+    const remark = this.forestRemark(gameState)
+    if (!remark) return answer
+    const opening = event(`You speak with ${characterName('Mira')}.`) + '\n'
+    return answer.replace(opening, opening + remark)
   }
 
-  /** Her one-time remark once the fox kit is freed, or nothing. */
+  /** Her one-time remark, placed after the event line, once the fox kit is freed; else ''. */
   private forestRemark(gameState: GameState): string {
     if (
       !gameState.getStoryFlag(FLAG_FOX_KIT_FREED) ||
@@ -244,13 +248,11 @@ export class Mira extends Character {
     }
     gameState.setStoryFlag(FLAG_MIRA_FOREST_REMARK_SAID, true)
     return (
-      `${characterName(this.name)} tilts her head as you come in. ` +
       speech(
         'The forest has been whispering about you. A small red thing, ' +
           'running free that ought not to be. ' +
           `That was kindly done, ${characterName('Elior')}.`,
-      ) +
-      '\n'
+      ) + '\n'
     )
   }
 

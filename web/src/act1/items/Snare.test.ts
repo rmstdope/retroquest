@@ -22,8 +22,10 @@ function gameWithVinesCut(): Game {
 }
 
 const KIT_CAUGHT =
-  "In the alcove a fox kit is caught in a poacher's snare, too tired now to struggle."
-const SNARE_CUT = "In the alcove lies a poacher's snare, cut and empty."
+  "In the alcove a fox kit is caught in a poacher's " +
+  '[item_name]snare[/item_name], too tired now to struggle.'
+const SNARE_CUT =
+  "In the alcove lies a poacher's [item_name]snare[/item_name], cut and empty."
 const KIT_LOOK =
   'A fox kit, no bigger than a cat, one hind leg caught fast in the wire. ' +
   'It watches you and does not struggle.'
@@ -155,5 +157,15 @@ describe('the snare', () => {
     expect(
       executeCommands(fresh, ['use sharp knife with snare']),
     ).not.toContain('remembered')
+  })
+
+  it('treats a snare from a save made before the field existed as still caught', () => {
+    const game = gameWithVinesCut()
+    const snare = game.state.currentRoom.items.find(
+      (item) => item instanceof Snare,
+    ) as Snare
+    Reflect.deleteProperty(snare, 'freed')
+
+    expect(executeCommands(game, ['look at snare'])).toContain(KIT_LOOK)
   })
 })

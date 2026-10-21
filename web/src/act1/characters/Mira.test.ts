@@ -239,6 +239,8 @@ describe('Mira and the fox kit', () => {
     const second = executeCommands(game, ['talk to mira'])
 
     expect(first).toContain(REMARK)
+    expect(first.indexOf('You speak with')).toBeLessThan(first.indexOf(REMARK))
+    expect(first).not.toContain('tilts her head')
     expect(first.indexOf(REMARK)).toBeLessThan(
       first.indexOf('Welcome, [character_name]Elior'),
     )

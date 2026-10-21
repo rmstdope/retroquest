@@ -21,10 +21,11 @@ const CLEARED_DESCRIPTION =
   'snap of a twig hints at unseen creatures nearby. The path feels ancient, ' +
   'as if it remembers every footstep that has ever passed this way.'
 const KIT_CAUGHT_SENTENCE =
-  " In the alcove a fox kit is caught in a poacher's snare, " +
+  " In the alcove a fox kit is caught in a poacher's " +
+  '[item_name]snare[/item_name], ' +
   'too tired now to struggle.'
 const SNARE_CUT_SENTENCE =
-  " In the alcove lies a poacher's snare, cut and empty."
+  " In the alcove lies a poacher's [item_name]snare[/item_name], cut and empty."
 
 /**
  * Forest Path room: dynamic description corridor with a removable vine

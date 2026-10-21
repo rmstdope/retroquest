@@ -220,7 +220,6 @@ export class Merchant extends Character {
           `${characterName(this.name)}.`,
       ) +
       '\n' +
-      `The ${characterName(this.name)} smiles and pushes it back. ` +
       speech(
         "That's kind, friend, but you'll want every bite of that where " +
           "you're going. Keep it.",

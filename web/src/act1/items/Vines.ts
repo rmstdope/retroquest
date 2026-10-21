@@ -32,9 +32,7 @@ export class Vines extends Item {
             'a sturdy [item_name]stick[/item_name] in the revealed alcove.',
         ) +
         '\n' +
-        event(
-          'You wipe the blade on the moss and keep it; it may yet be useful.',
-        )
+        'You wipe the blade on the moss and keep it; it may yet be useful.'
       )
     }
     return super.useWith(gameState, other)

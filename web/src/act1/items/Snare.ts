@@ -8,6 +8,10 @@ const KIT_DESCRIPTION =
   'A fox kit, no bigger than a cat, one hind leg caught fast in the wire. ' +
   'It watches you and does not struggle.'
 
+/** What the player sees of the freed snare. */
+const SNARE_CUT =
+  "In the alcove lies a poacher's [item_name]snare[/item_name], cut and empty."
+
 /** The line when the snare is tried without a blade. */
 const NEED_BLADE =
   "The wire is pulled tight around the kit's leg. You'll need a blade."
@@ -37,34 +41,22 @@ export class Snare extends Item {
 
   /** The kit while it is caught; the cut, empty snare afterwards. */
   override examine(_gameState: GameState): string {
-    if (this.freed) {
-      return event(
-        'You examine the [item_name]snare[/item_name]. ' +
-          'The wire is cut and the snare is empty.',
-      )
-    }
-    return event(KIT_DESCRIPTION)
+    return this.freed ? SNARE_CUT : KIT_DESCRIPTION
   }
 
   /** While the kit is caught, taking the snare needs a blade. */
   override preventPickup(): string {
-    return this.freed
-      ? super.preventPickup()
-      : `[failure]${NEED_BLADE}[/failure]`
+    return this.freed ? super.preventPickup() : NEED_BLADE
   }
 
   /** While the kit is caught, using the snare by hand needs a blade. */
   override use(gameState: GameState): string {
-    return this.freed
-      ? super.use(gameState)
-      : `[failure]${NEED_BLADE}[/failure]`
+    return this.freed ? super.use(gameState) : NEED_BLADE
   }
 
   /** While the kit is caught, opening the snare by hand needs a blade. */
   override open(gameState: GameState): string {
-    return this.freed
-      ? super.open(gameState)
-      : `[failure]${NEED_BLADE}[/failure]`
+    return this.freed ? super.open(gameState) : NEED_BLADE
   }
 
   /**
@@ -74,10 +66,7 @@ export class Snare extends Item {
   override useWith(gameState: GameState, other: Item): string {
     if (!(other instanceof SharpKnife)) return super.useWith(gameState, other)
     if (this.freed) {
-      return (
-        '[failure]The snare is already cut. ' +
-        'There is nothing left in it to free.[/failure]'
-      )
+      return 'The snare is already cut. There is nothing left in it to free.'
     }
     this.freed = true
     gameState.setStoryFlag(FLAG_FOX_KIT_FREED, true)
