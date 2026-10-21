@@ -13,8 +13,8 @@ import {
 import {
   endingPlayed,
   farewell,
-  justiceOpen,
-  sacrificeOpen,
+  justiceChoosable,
+  sacrificeChoosable,
   type Ending,
 } from '../endings'
 import {
@@ -67,7 +67,10 @@ export class Wound extends Item {
   }
 
   /** The wound's look. */
-  override examine(_gameState: GameState): string {
+  override examine(gameState: GameState): string {
+    if (endingPlayed(gameState)) {
+      return event('The air where the wound was is still and empty.')
+    }
     return event(this.description)
   }
 
@@ -87,8 +90,8 @@ export class Wound extends Item {
       return this.sacrificeEnding(gameState)
     }
     const choices = [
-      justiceOpen(gameState) ? HINT_JUSTICE : '',
-      sacrificeOpen(gameState) ? HINT_SACRIFICE : '',
+      justiceChoosable(gameState) ? HINT_JUSTICE : '',
+      sacrificeChoosable(gameState) ? HINT_SACRIFICE : '',
     ].filter(Boolean)
     const joined =
       choices.length === 2

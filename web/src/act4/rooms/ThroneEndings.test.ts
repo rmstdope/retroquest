@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
+import { Wound } from '../items/Wound'
+import { Grow } from '../spells/Grow'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
   FLAG_ACT4_FINAL_STAND_COMPLETED,
@@ -281,5 +283,70 @@ describe('Sacrifice', () => {
     reload(game)
     expect(spellNames(game)).toEqual(['grow'])
     expect(game.state.currentRoom.description).toContain('powerless')
+  })
+})
+
+describe('after the endings and around them', () => {
+  it('keeps both roads open for a save whose prison broke without a gate', () => {
+    const game = opened(TWO_TRUTHS)
+    executeCommands(game, ['use lifelight elixir on prison'])
+    game.state.virtues = []
+    const hint = executeCommands(game, ['use ancient amulet on wound'])
+    expect(hint).toContain('in justice. Or you could give up your magic')
+    executeCommands(game, ['say justice to malakar'])
+    executeCommands(game, ['use ancient amulet on wound'])
+    expectStoryFlag(game.state, FLAG_ACT4_JUSTICE_ENDING, true)
+  })
+
+  it('describes the closed scene when things are examined', () => {
+    const game = opened(TWO_TRUTHS)
+    executeCommands(game, ['use lifelight elixir on prison'])
+    executeCommands(game, ['say justice to malakar'])
+    executeCommands(game, ['use ancient amulet on wound'])
+    expect(executeCommands(game, ['examine wound'])).toContain(
+      'still and empty',
+    )
+    expect(executeCommands(game, ['examine prison'])).toContain('shards')
+    expect(executeCommands(game, ['examine king alden'])).toContain(
+      'crown bright again',
+    )
+    expect(executeCommands(game, ['examine malakar'])).toContain(
+      'gone into the seal',
+    )
+    expect(executeCommands(game, ['give ancient amulet to malakar'])).toContain(
+      'Malakar is gone into the seal.',
+    )
+  })
+
+  it('keeps a word, and the learned spell, through a reload with the wound open', () => {
+    const sacrifice = opened(TWO_SELFLESS)
+    executeCommands(sacrifice, [
+      'use lifelight elixir on prison',
+      'say sacrifice to malakar',
+    ])
+    reload(sacrifice)
+    expect(executeCommands(sacrifice, ['say sacrifice to malakar'])).toContain(
+      'You have said it. The amulet is waiting.',
+    )
+    expect(executeCommands(sacrifice, ['say justice to malakar'])).toContain(
+      'You have chosen.',
+    )
+    const redemption = opened()
+    executeCommands(redemption, [
+      'use lifelight elixir on malakar',
+      'say forgiveness to malakar',
+    ])
+    reload(redemption)
+    expect(spellNames(redemption)).toContain('Forgiveness')
+    expect(
+      executeCommands(redemption, ['say forgiveness to malakar']),
+    ).toContain('You have said it. The wound is waiting.')
+  })
+
+  it('casts grow alone and on an item', () => {
+    const game = opened()
+    const grow = new Grow()
+    expect(grow.castSpell(game.state)).toContain('nothing else happens')
+    expect(grow.castOnItem(game.state, new Wound())).toBeTypeOf('string')
   })
 })

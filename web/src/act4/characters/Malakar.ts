@@ -11,7 +11,7 @@ import {
   FLAG_ACT4_THRONE_REFRAIN_SAID,
   VIRTUE_MERCY,
 } from '../Act4StoryFlags'
-import { endingPlayed, justiceOpen, sacrificeOpen } from '../endings'
+import { endingPlayed, justiceChoosable, sacrificeChoosable } from '../endings'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { Forgiveness } from '../spells/Forgiveness'
@@ -69,7 +69,16 @@ export class Malakar extends Character {
   }
 
   /** His look. */
-  override examine(_gameState: GameState): string {
+  override examine(gameState: GameState): string {
+    const ending = endingPlayed(gameState)
+    if (ending === 'justice') return event('Malakar is gone into the seal.')
+    if (ending) {
+      return event(
+        ending === 'redemption'
+          ? 'Malakar sits by the shards, himself again.'
+          : 'Malakar kneels before the king, grey and powerless.',
+      )
+    }
     return event(this.description)
   }
 
@@ -208,7 +217,7 @@ export class Malakar extends Character {
   private chooseJustice(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_SACRIFICE_SAID)) return CHOSEN
     if (gameState.getStoryFlag(FLAG_ACT4_JUSTICE_SAID)) return SAID_AMULET
-    if (!justiceOpen(gameState)) {
+    if (!justiceChoosable(gameState)) {
       return (
         "[failure]The words will not come. Naming another's crimes asks " +
         'for someone who has told the truth when it cost them, and you ' +
@@ -229,7 +238,7 @@ export class Malakar extends Character {
   private chooseSacrifice(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_JUSTICE_SAID)) return CHOSEN
     if (gameState.getStoryFlag(FLAG_ACT4_SACRIFICE_SAID)) return SAID_AMULET
-    if (!sacrificeOpen(gameState)) {
+    if (!sacrificeChoosable(gameState)) {
       return (
         '[failure]You reach for your magic to let it go, and your hands ' +
         'close on it instead. You have not yet given often enough without ' +
@@ -271,6 +280,9 @@ export class Malakar extends Character {
     gameState: GameState,
     item: Parameters<Character['giveItem']>[1],
   ): string {
+    const ending = endingPlayed(gameState)
+    if (ending === 'justice') return GONE_INTO_SEAL
+    if (ending) return NOTHING_LEFT
     if (item instanceof LifelightElixir) return this.receiveElixir(gameState)
     if (item instanceof AncientAmulet) return this.otherWords(gameState)
     return super.giveItem(gameState, item)

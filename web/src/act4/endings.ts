@@ -34,6 +34,20 @@ export function sacrificeOpen(gameState: GameState): boolean {
   return gameState.virtueCount(VIRTUE_SELFLESS) >= MOMENTS_FOR_ENDING
 }
 
+/**
+ * Whether Justice can be chosen once the prison is broken. The elixir only
+ * breaks the prison when an ending is open; a save made before that gate
+ * existed may have none, and then both roads stay open so nobody is stranded.
+ */
+export function justiceChoosable(gameState: GameState): boolean {
+  return justiceOpen(gameState) || !sacrificeOpen(gameState)
+}
+
+/** Whether Sacrifice can be chosen once the prison is broken (see above). */
+export function sacrificeChoosable(gameState: GameState): boolean {
+  return sacrificeOpen(gameState) || !justiceOpen(gameState)
+}
+
 /** The ending that has been played, or null while the wound is open. */
 export function endingPlayed(gameState: GameState): Ending | null {
   if (gameState.getStoryFlag(FLAG_ACT4_REDEMPTION_ENDING)) return 'redemption'

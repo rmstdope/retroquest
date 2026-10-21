@@ -3,6 +3,7 @@ import {
   FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED,
 } from '../Act4StoryFlags'
+import { endingPlayed } from '../endings'
 import { THRONE_CHAMBER_SHATTERED } from '../rooms/throneDescriptions'
 
 /** The prison's look once it is broken. */
@@ -34,7 +35,10 @@ export class CrystalPrison extends Item {
 
   /** The prison's look, which changes once it is broken. */
   override examine(gameState: GameState): string {
-    if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
+    if (
+      endingPlayed(gameState) ||
+      gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)
+    ) {
       return event(PRISON_SHATTERED)
     }
     return event(this.description)

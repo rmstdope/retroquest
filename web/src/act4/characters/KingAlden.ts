@@ -32,6 +32,9 @@ export class KingAlden extends Character {
 
   /** His look, which changes once the prison is broken. */
   override examine(gameState: GameState): string {
+    if (endingPlayed(gameState)) {
+      return event('The king of Eldoria, alive, his crown bright again.')
+    }
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
       return event(
         'The king of Eldoria, weak and grey, but breathing. His crown is ' +
