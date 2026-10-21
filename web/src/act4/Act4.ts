@@ -10,6 +10,7 @@ import { ChamberOfWhispers } from './rooms/ChamberOfWhispers'
 import { MemoryVault } from './rooms/MemoryVault'
 import { ParentsVault } from './rooms/ParentsVault'
 import { ThroneChamer } from './rooms/ThroneChamer'
+import { WillowbrookField } from './rooms/WillowbrookField'
 import { Light } from './spells/Light'
 import { Bless } from './spells/Bless'
 import { TheFinalStand } from './quests/TheFinalStand'
@@ -20,7 +21,8 @@ import { TheKnightOfDespair } from './quests/TheKnightOfDespair'
 import { TheSorceressOfLies } from './quests/TheSorceressOfLies'
 import { TheShadowOfThePast } from './quests/TheShadowOfThePast'
 import { TheParentsLegacy } from './quests/TheParentsLegacy'
-import { FLAG_ACT4_MAIN_STARTED } from './Act4StoryFlags'
+import { FLAG_ACT4_FIELD_GREEN, FLAG_ACT4_MAIN_STARTED } from './Act4StoryFlags'
+import { ENDING_HOOKS, endingPlayed } from './endings'
 import { ACT4_CLASSES } from './classes'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
 
@@ -42,6 +44,9 @@ export class Act4 extends Act {
 
       // Final area (entered north from the Parents' Vault)
       ThroneChamer: new ThroneChamer(),
+
+      // The end of the story, entered north from the Throne Chamber
+      WillowbrookField: new WillowbrookField(),
     }
 
     super({
@@ -84,10 +89,25 @@ export class Act4 extends Act {
     )
   }
 
-  /** Check if Act IV is completed. */
-  override isCompleted(_gameState: GameState): boolean {
-    // Completion check will be implemented when quests are added
-    return false
+  /** The line that opens the complete page, naming the ending played. */
+  override getCompletionHook(gameState: GameState): string {
+    const ending = endingPlayed(gameState)
+    return ending ? ENDING_HOOKS[ending] : ''
+  }
+
+  /** Act IV, and the game, ends when grow has greened the field. */
+  override isCompleted(gameState: GameState): boolean {
+    return gameState.getStoryFlag(FLAG_ACT4_FIELD_GREEN)
+  }
+
+  /** After Sacrifice the lost spells are gone, not merely unknown. */
+  override unknownSpell(
+    gameState: GameState,
+    _spellName: string,
+  ): string | null {
+    return endingPlayed(gameState) === 'sacrifice'
+      ? '[failure]That magic is gone from you now.[/failure]'
+      : null
   }
 
   /** Setup initial state for Act IV. */

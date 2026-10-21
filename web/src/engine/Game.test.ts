@@ -258,9 +258,9 @@ describe('Game', () => {
       expect(game.getActCompleteText()).toMatch(
         /^A hook\.\n\nCongratulations — you have completed Act 1!/,
       )
-      expect(new Act({ ...options, name: 'Plain' }).getCompletionHook()).toBe(
-        '',
-      )
+      expect(
+        new Act({ ...options, name: 'Plain' }).getCompletionHook(game.state),
+      ).toBe('')
     })
 
     it('moves on to the next act when the act completes, then ends the game', () => {

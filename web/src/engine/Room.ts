@@ -52,6 +52,23 @@ export class Room {
     return null
   }
 
+  /**
+   * The label an exit shows in place of the destination room's name, or null
+   * for the name. Override for a way whose end the player should not read yet.
+   */
+  exitLabel(_gameState: GameState, _direction: string): string | null {
+    return null
+  }
+
+  /**
+   * Story text shown right after the "You move ... to <room>." line when the
+   * player walks into the room; empty for none. Only a move shows it, so it
+   * is never repeated by `look`, a load or a return.
+   */
+  enterText(_gameState: GameState): string {
+    return ''
+  }
+
   getAmbientSound(): string {
     return 'It is quiet here.'
   }
@@ -113,7 +130,7 @@ export class Room {
       const names = exits
         .map(
           ([direction, destination]) =>
-            `[exits]${direction}[/exits] (${destination})`,
+            `[exits]${direction}[/exits] (${this.exitLabel(gameState, direction) ?? destination})`,
         )
         .join(', ')
       desc += `\nExits: ${names}`

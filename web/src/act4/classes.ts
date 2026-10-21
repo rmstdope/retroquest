@@ -45,10 +45,15 @@ import { MirrorLabyrinth } from './rooms/MirrorLabyrinth'
 import { OuterCourtyard } from './rooms/OuterCourtyard'
 import { Malakar } from './characters/Malakar'
 import { KingAlden } from './characters/KingAlden'
+import { Grandmother } from './characters/Grandmother'
+import { Mira } from './characters/Mira'
+import { SirCedric } from './characters/SirCedric'
+import { Nyx } from './characters/Nyx'
 import { CrystalPrison } from './items/CrystalPrison'
 import { Wound } from './items/Wound'
 import { LifelightElixir } from './items/LifelightElixir'
 import { ThroneChamer } from './rooms/ThroneChamer'
+import { WillowbrookField } from './rooms/WillowbrookField'
 import { TowerOfShadows } from './rooms/TowerOfShadows'
 import { Bless } from './spells/Bless'
 import { Forgiveness } from './spells/Forgiveness'
@@ -80,6 +85,10 @@ export const ACT4_CLASSES = {
   // Characters
   Malakar,
   KingAlden,
+  Grandmother,
+  Mira,
+  SirCedric,
+  Nyx,
   ShadowOfThePast,
   SorceressOfLies,
   CaptainOfTheGuard,
@@ -105,6 +114,7 @@ export const ACT4_CLASSES = {
   OuterCourtyard,
   ParentsVault,
   ThroneChamer,
+  WillowbrookField,
   TowerOfShadows,
   // Spells
   Bless,

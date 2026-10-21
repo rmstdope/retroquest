@@ -193,7 +193,9 @@ export class Game implements CommandTarget {
    * finished act's hook, if it has one, then the words every act shares.
    */
   private actCompleteBody(): string {
-    const hook = this.acts[this.presentedActIndex()].getCompletionHook()
+    const hook = this.acts[this.presentedActIndex()].getCompletionHook(
+      this.presentedState(),
+    )
     return (hook ? `${hook}\n\n` : '') + this.sharedActCompleteWords()
   }
 
@@ -409,7 +411,10 @@ Welcome to
     next.onEnter(this.state)
     this.state.markVisited(next)
     this.hasChangedRoom = true
-    return `[event]You move ${direction} to [room_name]${next.name}[/room_name].[/event]\n\n`
+    return (
+      `[event]You move ${direction} to [room_name]${next.name}[/room_name].[/event]\n\n` +
+      next.enterText(this.state)
+    )
   }
 
   help(): string {
@@ -665,12 +670,17 @@ Welcome to
       split < 0 ? null : lower.slice(split + ' on '.length).trim()
     const spell = this.state.knownSpells.find((s) => s.answersTo(spellName))
     if (!spell)
-      return `[failure]You don't know any spell called '${spellName}'.[/failure]`
+      return (
+        this.acts[this.currentAct].unknownSpell(this.state, spellName) ??
+        `[failure]You don't know any spell called '${spellName}'.[/failure]`
+      )
     if (!targetName) return spell.castSpell(this.state)
     const item = this.findItem(targetName)
     if (item) return spell.castOnItem(this.state, item)
     const character = this.findCharacter(targetName)
     if (character) return spell.castOnCharacter(this.state, character)
+    const named = spell.castOnName(this.state, targetName)
+    if (named !== null) return named
     return (
       `[failure]You don't see a '${targetName}' to cast ` +
       `[spell_name]${spell.name}[/spell_name] on.[/failure]`

@@ -3,6 +3,7 @@
  * apart from the room, Malakar and the prison so none of them imports another
  * just for a line of text.
  */
+import { ARCH_SENTENCE } from '../endings'
 
 /** The chamber until the amulet opens. */
 export const THRONE_CHAMBER_FIRST =
@@ -35,16 +36,16 @@ export const THRONE_CHAMBER_SHATTERED =
 export const THRONE_CHAMBER_REDEMPTION =
   'The dome is quiet. Where the wound was there is only air. King Alden ' +
   'sits among the shards of his prison, alive, and Malakar sits beside ' +
-  'him, himself again.'
+  `him, himself again. ${ARCH_SENTENCE}`
 
 /** The whole description after the Justice ending. */
 export const THRONE_CHAMBER_JUSTICE =
   'The dome is quiet. Where the wound was, a seal of gold and pale light ' +
   'hangs in the air, and Malakar is somewhere inside it. King Alden stands ' +
-  'at the throne, alive, his crown bright again.'
+  `at the throne, alive, his crown bright again. ${ARCH_SENTENCE}`
 
 /** The whole description after the Sacrifice ending. */
 export const THRONE_CHAMBER_SACRIFICE =
   'The dome is quiet. Where the wound was there is only air. King Alden ' +
   'stands at the throne, alive, and Malakar kneels before him, grey and ' +
-  'powerless, waiting to be judged.'
+  `powerless, waiting to be judged. ${ARCH_SENTENCE}`

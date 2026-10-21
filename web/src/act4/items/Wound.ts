@@ -11,6 +11,7 @@ import {
   FLAG_ACT4_SACRIFICE_SAID,
 } from '../Act4StoryFlags'
 import {
+  ARCH_LINE,
   endingPlayed,
   farewell,
   justiceChoosable,
@@ -120,6 +121,7 @@ export class Wound extends Item {
           'remember them properly this time.',
       ),
       farewell('redemption'),
+      ARCH_LINE,
     ].join('\n')
   }
 
@@ -138,6 +140,7 @@ export class Wound extends Item {
           'have done enough.',
       ),
       farewell('justice'),
+      ARCH_LINE,
     ].join('\n')
   }
 
@@ -157,6 +160,7 @@ export class Wound extends Item {
         'He will answer to me, and he will live to do it. Thank you, farmer.',
       ),
       farewell('sacrifice'),
+      ARCH_LINE,
     ].join('\n')
   }
 
