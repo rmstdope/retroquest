@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act3 } from './Act3'
 import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import { AncientAmulet } from './items/AncientAmulet'
@@ -130,13 +130,29 @@ describe('Act III curse grows worse at each relic site', () => {
     expect(game.state.currentRoom.description).not.toContain(line)
   })
 
-  it('shows no moment but the closing line for a save already past a clue', () => {
+  it('shows the closing line on the room card, also after a save and load', () => {
+    const game = gameIn('MirrorTerraces')
+    const room = game.state.currentRoom
+    expect(new GameController(game).getRoomDescription()).toBe(room.description)
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+
+    const shown = new GameController(fresh).getRoomDescription()
+
+    expect(shown).toBe(`${room.description} ${LINE_2}`)
+  })
+
+  it('plays no moment for a save already past the clue, with the amulet still unglowed', () => {
     const game = gameIn('MirrorTerraces')
     game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
     const fresh = new Game([new Act3()])
     fresh.loadSaveData(game.toSaveData())
 
-    expect(fresh.state.currentRoom.describe(fresh.state)).toContain(LINE_2)
+    const out = executeCommands(fresh, ['examine inscription'])
+
+    expect(out).not.toContain(MOMENT_2)
+    expect(out).not.toContain('glows again')
   })
 
   it('ends Mira’s parting speech at each of the three departures with the king line', () => {
@@ -195,7 +211,13 @@ describe('Act III curse grows worse at each relic site', () => {
 
     const fresh = new Game([new Act3()])
     fresh.loadSaveData(game.toSaveData())
-    const again = executeCommands(fresh, ['examine amulet'])
-    expect(again).not.toContain(MOMENT_3)
+    const again =
+      new SeaSealedLetter().examine(fresh.state) +
+      new CharredInscription().examine(fresh.state) +
+      new AncientDragon().talkTo(fresh.state)
+    for (const moment of [MOMENT_1, MOMENT_2, MOMENT_3]) {
+      expect(again).not.toContain(moment)
+    }
+    expect(again).not.toContain('Ancient Amulet[/item_name] glows')
   })
 })

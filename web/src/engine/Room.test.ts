@@ -21,7 +21,7 @@ describe('Room', () => {
   it('describes with the text its descriptionFor hook gives', () => {
     class Changing extends Room {
       /** Test override: a description that depends on the state. */
-      protected override descriptionFor(_gameState: GameState): string {
+      override descriptionFor(_gameState: GameState): string {
         return `${this.description} Changed.`
       }
     }

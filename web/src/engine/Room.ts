@@ -77,10 +77,11 @@ export class Room {
   }
 
   /**
-   * The text `describe` shows for the room itself. Rooms whose text changes
-   * with the story override this; the default is the plain description.
+   * The text shown for the room itself, by `describe` and by the interface's
+   * room card. Rooms whose text changes with the story override this; the
+   * default is the plain description.
    */
-  protected descriptionFor(_gameState: GameState): string {
+  descriptionFor(_gameState: GameState): string {
     return this.description
   }
 

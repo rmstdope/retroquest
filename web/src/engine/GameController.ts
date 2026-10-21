@@ -332,7 +332,7 @@ export class GameController {
   }
 
   getRoomDescription(): string {
-    return this.game.state.currentRoom.description
+    return this.game.state.currentRoom.descriptionFor(this.game.state)
   }
 
   getRoomCharacters(): string[] {

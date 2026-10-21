@@ -34,7 +34,7 @@ export class DragonsHall extends Room {
   }
 
   /** The description, ending with the curse's mark once the clue is found. */
-  protected override descriptionFor(gameState: GameState): string {
+  override descriptionFor(gameState: GameState): string {
     return gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)
       ? `${this.description} ${CURSE_LINE}`
       : this.description

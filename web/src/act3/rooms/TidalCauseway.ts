@@ -49,7 +49,7 @@ export class TidalCauseway extends Room {
   }
 
   /** The description, ending with the curse's mark once the clue is found. */
-  protected override descriptionFor(gameState: GameState): string {
+  override descriptionFor(gameState: GameState): string {
     return gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ)
       ? `${this.description} ${CURSE_LINE}`
       : this.description

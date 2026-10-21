@@ -54,7 +54,7 @@ export class MirrorTerraces extends Room {
   }
 
   /** The description, ending with the curse's mark once the clue is found. */
-  protected override descriptionFor(gameState: GameState): string {
+  override descriptionFor(gameState: GameState): string {
     return gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)
       ? `${this.description} ${CURSE_LINE}`
       : this.description

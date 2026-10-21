@@ -83,8 +83,8 @@ export class AncientAmulet extends Item {
   }
 
   /**
-   * The glow paragraph (with its leading blank line) for the amulet in the
-   * bag, or '' when it has nothing new to show or is not carried.
+   * The glow and curse paragraphs (with their leading blank line) for the
+   * amulet in the bag, or '' when it has nothing new to show or is not carried.
    */
   static glowInBag(gameState: GameState, stage: AmuletStage): string {
     const amulet = gameState.inventory.find((i) => i instanceof AncientAmulet)
