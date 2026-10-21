@@ -13,19 +13,49 @@ import {
   FLAG_NYX_TRIALS_COMPLETED,
 } from '../Act2StoryFlags'
 
-/** Noble knight who recruits allies and awards honor-based quests. */
+/** Cedric's description while his name is not yet cleared: old mail, no device, an empty scabbard. */
+export const CEDRIC_DESCRIPTION_BEFORE =
+  'A tall knight in old, dented mail, bearing the scars of many battles. ' +
+  'A pale patch on his surcoat shows where his device has been unpicked, and ' +
+  'the scabbard at his hip hangs empty. His eyes hold wisdom and ' +
+  'determination all the same.'
+
+/** Cedric's description once the Lord Commander has cleared his name and returned his sword. */
+export const CEDRIC_DESCRIPTION_AFTER =
+  'A tall knight in old, dented mail, bearing the scars of many battles. His ' +
+  'sword hangs at his hip once more, and he carries himself like a man who ' +
+  'has been given back his name.'
+
+/** Disgraced knight who quietly recruits allies and awards honor-based quests. */
 export class SirCedric extends Character {
   receivedNaturesCharm = false
   cedricTrustsElior = false
+  /** Whether the hand on the sword hilt has been shown after the ruling. */
+  swordNoticed = false
 
   constructor() {
     super({
       name: 'sir cedric',
-      description:
-        'A noble knight in gleaming armor, bearing the scars of many battles. ' +
-        'His eyes hold wisdom and determination as he prepares for the ' +
-        'challenges ahead.',
+      description: CEDRIC_DESCRIPTION_BEFORE,
     })
+  }
+
+  /** Set the description that matches whether his name has been cleared; safe to repeat. */
+  refreshDescription(gameState: GameState): void {
+    this.description = gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)
+      ? CEDRIC_DESCRIPTION_AFTER
+      : CEDRIC_DESCRIPTION_BEFORE
+  }
+
+  /** The greeting in which Cedric introduces himself as plain Cedric, up to the first words of his errand. */
+  private greetingWords(): string {
+    return (
+      'Greetings, traveler. I am ' +
+      characterName('Cedric') +
+      ". Some here still call me Sir; you need not. The Lord Commander's " +
+      'notice asks for able hands; I ask for mine here in the yard, where I ' +
+      'can see what they can do. '
+    )
   }
 
   /**
@@ -34,6 +64,24 @@ export class SirCedric extends Character {
    * recognition of the Wardens' sigil, which changes the amulet's description.
    */
   override talkTo(gameState: GameState): string {
+    const reply = this.replyToTalk(gameState)
+    if (
+      gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED) &&
+      !this.swordNoticed
+    ) {
+      // The first talk after the ruling opens with the sword at his hip
+      this.swordNoticed = true
+      return (
+        "Sir Cedric's sword hangs at his hip again. He rests a hand on its " +
+        'hilt as you approach, as if to be sure it is real.\n\n' +
+        reply
+      )
+    }
+    return reply
+  }
+
+  /** The reply to a talk without the one-time hilt line. */
+  private replyToTalk(gameState: GameState): string {
     const amulet = gameState.inventory.find((i) => i instanceof AncientAmulet)
     if (amulet && !gameState.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)) {
       gameState.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
@@ -78,9 +126,8 @@ export class SirCedric extends Character {
       characterName('Sir Cedric') +
       ': ' +
       speech(
-        'Greetings, traveler. I am ' +
-          characterName('Sir Cedric') +
-          '. I have been seeking individuals of courage and skill for a ' +
+        this.greetingWords() +
+          'I have been seeking individuals of courage and skill for a ' +
           'matter of great—',
       ) +
       '\n\n' +
@@ -180,9 +227,8 @@ export class SirCedric extends Character {
         characterName('Sir Cedric') +
         ': ' +
         speech(
-          'Greetings, traveler. I am ' +
-            characterName('Sir Cedric') +
-            '. I have been seeking individuals of courage and skill for a ' +
+          this.greetingWords() +
+            'I have been seeking individuals of courage and skill for a ' +
             'matter of great importance. Dark forces are gathering; I call it ' +
             "the 'Gathering Storm', and I need allies with magical knowledge " +
             'and proven abilities. Before I can trust you with this ' +

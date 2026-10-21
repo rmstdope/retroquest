@@ -2,6 +2,7 @@ import { Character, type GameState, characterName, speech } from '@/engine'
 import {
   FLAG_SQUIRES_TALKED_TO,
   FLAG_CEDRIKS_HONOR_ACCEPTED,
+  FLAG_CEDRIKS_HONOR_COMPLETED,
 } from '../Act2StoryFlags'
 
 /**
@@ -22,7 +23,10 @@ export class Squires extends Character {
     })
   }
 
-  /** Brush the player off until Cedric's honor quest is accepted, then share rumors. */
+  /**
+   * Brush the player off until Cedric's honor quest is accepted, then share
+   * rumors; once his name is cleared they celebrate his sword instead.
+   */
   override talkTo(gameState: GameState): string {
     // Check if Cedric's Lost Honor quest has been accepted
     if (!gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED)) {
@@ -42,6 +46,22 @@ export class Squires extends Character {
     }
     // Set flag that squires have been talked to (only if quest is accepted)
     gameState.setStoryFlag(FLAG_SQUIRES_TALKED_TO, true)
+    if (gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)) {
+      return (
+        'The squires have abandoned their drill and crowd together, grinning.\n\n' +
+        characterName('Squires') +
+        ': ' +
+        speech(
+          'Did you see? They gave ' +
+            characterName('Sir Cedric') +
+            ' his sword back! He walked into the yard this morning with it ' +
+            'at his hip, and the Training Master saluted him in front of ' +
+            'everyone.',
+        ) +
+        '\n\nOne squire looks at you shyly.\n\n' +
+        speech('He said it was you who found the papers. Thank you.')
+      )
+    }
     return (
       'The young squires lower their voices and glance around nervously.\n\n' +
       characterName('Squires') +

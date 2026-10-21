@@ -1,4 +1,5 @@
 import { Character, type GameState, characterName, speech } from '@/engine'
+import { FLAG_CEDRIKS_HONOR_COMPLETED } from '../Act2StoryFlags'
 
 /** Orientation NPC who advises visitors on castle protocol and introductions. */
 export class CastleGuardCaptain extends Character {
@@ -12,19 +13,22 @@ export class CastleGuardCaptain extends Character {
     })
   }
 
-  /** Explain where Sir Cedric is and how to address him. */
-  override talkTo(_gameState: GameState): string {
+  /** Explain where Sir Cedric is and what he is owed; the answer follows his ruling. */
+  override talkTo(gameState: GameState): string {
     const name = this.name
+    const standing = gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)
+      ? "Sir by right again, and I'm glad to say it."
+      : 'He holds no rank now, but we still call him Sir, most of us, and ' +
+        "you'll do the same if you've any sense."
     return (
       characterName(name) +
       ': ' +
       speech(
         'Welcome to the castle grounds. ' +
           characterName('Sir Cedric') +
-          ' can be found in the courtyard. When speaking with him, address ' +
-          "him as 'Sir' and show proper respect. He's been seeking capable " +
-          "individuals for important work, so if you're here about that, be " +
-          'prepared to demonstrate your abilities.',
+          ` can be found in the courtyard. ${standing} He's been seeking ` +
+          "capable individuals for important work, so if you're here about " +
+          'that, be prepared to demonstrate your abilities.',
       ) +
       '\n\nHe lowers his voice.\n\n' +
       speech(

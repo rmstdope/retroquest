@@ -1,5 +1,8 @@
 import { Character, type GameState, characterName, speech } from '@/engine'
-import { FLAG_CEDRIKS_HONOR_ACCEPTED } from '../Act2StoryFlags'
+import {
+  FLAG_CEDRIKS_HONOR_ACCEPTED,
+  FLAG_CEDRIKS_HONOR_COMPLETED,
+} from '../Act2StoryFlags'
 
 /** Veteran instructor who seeds the Cedric honor investigation. */
 export class TrainingMaster extends Character {
@@ -14,7 +17,8 @@ export class TrainingMaster extends Character {
     })
   }
 
-  /** Start the honor investigation on first talk; later remind the player. */
+  /** Start the honor investigation on first talk; later remind the player,
+   * or acknowledge the sword once Cedric's name is cleared. */
   override talkTo(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED)) {
       // First time talking - trigger the quest
@@ -57,6 +61,22 @@ export class TrainingMaster extends Character {
       )
     }
     // Subsequent conversations
+    if (gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)) {
+      return (
+        'The ' +
+        characterName('Training Master') +
+        ' nods respectfully.' +
+        '\n\n' +
+        characterName('Training Master') +
+        ': ' +
+        speech(
+          "You've seen it, then? His sword at his hip again. I stood in " +
+            'this yard the morning they took it from him, and I held my ' +
+            "tongue. I'll not make that mistake twice. Greendale owes you, " +
+            'and so do I.',
+        )
+      )
+    }
     return (
       'The ' +
       characterName('Training Master') +

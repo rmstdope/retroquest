@@ -20,8 +20,10 @@ const NEW_EXAMINE =
   'the Wardens of the Dawn: the sun rising over three linked rings. It is ' +
   'faintly warm in your hand.'
 const OLD_GREETING =
-  'Greetings, traveler. I am [character_name]Sir Cedric[/character_name]. ' +
-  'I have been seeking individuals of courage and skill for a matter of ' +
+  'Greetings, traveler. I am [character_name]Cedric[/character_name]. Some ' +
+  "here still call me Sir; you need not. The Lord Commander's notice asks " +
+  'for able hands; I ask for mine here in the yard, where I can see what ' +
+  'they can do. I have been seeking individuals of courage and skill for a matter of ' +
   "great importance. Dark forces are gathering; I call it the 'Gathering " +
   "Storm', and I need allies with magical knowledge and proven abilities. " +
   'Before I can trust you with this responsibility, I need proof of your ' +
