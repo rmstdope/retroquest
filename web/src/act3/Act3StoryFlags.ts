@@ -98,11 +98,10 @@ export const FLAG_ACT3_PHANTOMS_FREED = 'act3_phantoms_freed'
 /** Set when the dragon's cracked sigils have been mended. */
 export const FLAG_ACT3_SIGILS_MENDED = 'act3_sigils_mended'
 /** Set when Elior has told the Pier Warden the truth (Act III's own moment). */
-// The Pier Warden has pressed the Weathered Coin back into Elior's hand
+export const FLAG_ACT3_WARDEN_TRUTH_TOLD = 'act3_warden_truth_told'
+/** Set when the Pier Warden has pressed the Weathered Coin back (once). */
 export const FLAG_ACT3_WARDEN_COIN_PRESSED_BACK =
   'act3_warden_coin_pressed_back'
-
-export const FLAG_ACT3_WARDEN_TRUTH_TOLD = 'act3_warden_truth_told'
 /** Set when the Phoenix has told who struck Malakar's name deeper (once). */
 export const FLAG_ACT3_PHOENIX_STORY_TOLD = 'act3_phoenix_story_told'
 /** Set when Malakar's struck name on the Charred Inscription has been mended. */

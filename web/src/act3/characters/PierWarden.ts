@@ -20,11 +20,6 @@ import {
 } from '../Act3StoryFlags'
 import { WeatheredCoin } from '../items/WeatheredCoin'
 
-/** The coin's description once the warden has pressed it back. */
-const COIN_PRESSED_BACK_DESCRIPTION =
-  'A small, greened coin whose face has long since been worn away. ' +
-  'The Pier Warden would not take it. Toll for the crossing, his da said.'
-
 /** His question, asked once the curse has shown at the ruins. */
 const QUESTION =
   "'You'll have seen the causeway. Birds by the hundred, and the surf gone " +
@@ -160,7 +155,7 @@ export class PierWarden extends Character {
       )
     }
     gameState.setStoryFlag(FLAG_ACT3_WARDEN_COIN_PRESSED_BACK, true)
-    item.description = COIN_PRESSED_BACK_DESCRIPTION
+    item.pressedBack()
     return (
       offer +
       '\n' +

@@ -71,10 +71,11 @@ describe('PierWarden and the Weathered Coin', () => {
     fresh.loadSaveData(game.toSaveData())
 
     const kept = fresh.state.inventory.find((i) => i.name === 'Weathered Coin')
+    expect(kept).toBeInstanceOf(WeatheredCoin)
     expect(kept?.description).toContain('would not take it')
-    expect(new PierWarden().giveItem(fresh.state, kept as Item)).toContain(
-      'I said keep it, lad.',
-    )
+    expect(
+      new PierWarden().giveItem(fresh.state, kept ?? new WeatheredCoin()),
+    ).toContain('I said keep it, lad.')
   })
 
   it('is not interested in the coin before the truth is told', () => {
