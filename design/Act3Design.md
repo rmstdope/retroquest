@@ -144,7 +144,7 @@ Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned f
     -   Prerequisites: None
     -   Objectives:
         -   Gather four brass mirror segments: one from the Ash Scholar, one from the Emberwater Canteen, one by searching the Obsidian Outcrops, and one by examining the Mirror Mount
-        -   Repair and set mirrors to form an unbroken light channel to the high altar
+        -   Repair and set mirrors to form an unbroken light channel to the high altar: cast mend on the prepared mount, then rest on the terraces until the sun reaches noon and the beam fires
     -   Outcome: Opens the upper terraces; required to access the phoenix’s crater
 
 -   Name: Breath of the Mountain
@@ -203,7 +203,7 @@ Act III requires the use of five spells. Act III setup grants any of these that 
 
     -   Learned In: Act II (via craftsmen study/mentorship)
     -   Used In: Mount Ember — Mirror Terraces
-    -   Purpose: Repair the prepared Mirror Mount after the segments are installed and bound with resin, opening the path to Fumarole Passages
+    -   Purpose: Repair the prepared Mirror Mount after the segments are installed and bound with resin; the beam then fires at the next rest on the terraces (noon), opening the path to Fumarole Passages
 
 -   Spell: `bless`
     -   Learned In: Act I (from the Priest)
@@ -663,7 +663,8 @@ This sequence completes all Act III requirements in a linear path. Each step lis
     -   `take brass mirror segment` → Takes the segment revealed by examining the mount.
     -   `use brass mirror segment with mirror mount` → Installs all segments in inventory; once all placed, the beam path forms.
     -   `use binding resin with mirror mount` → Secures the mirror segments.
-    -   `cast mend on mirror mount` → Repairs cracks and restores a continuous light channel; completes “Mirrors of Emberlight” and opens the east exit.
+    -   `cast mend on mirror mount` → Repairs cracks and mends the mirrors, but the sun is not yet in place
+    -   `rest` → Brings the sun to noon; the beam fires, completing “Mirrors of Emberlight” and opening the east exit.
 
 14. Room: Ember Gallery
 

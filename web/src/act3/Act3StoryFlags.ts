@@ -26,6 +26,8 @@ export const FLAG_ACT3_MAIN_COMPLETED = 'act3_main_completed'
 // Mount Ember / Mirrors of Emberlight progression
 export const FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_STARTED =
   'act3_mirrors_of_ember_light_started'
+/** The mirrors are mended; the beam waits for the next rest on the terraces. */
+export const FLAG_ACT3_MIRRORS_MENDED = 'act3_mirrors_mended'
 export const FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED =
   'act3_mirrors_of_ember_light_completed'
 

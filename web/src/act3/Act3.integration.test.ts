@@ -289,7 +289,20 @@ describe('Act 3 golden path', () => {
     expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, false)
     // After installing, cast the mend spell on a mount to finalize repairs
     executeCommands(game, ['cast mend on mirror mount'])
-    // After mending, the mirrors quest should be completed and the flag set
+    // The beam waits for the sun: the quest is still open and east is closed
+    expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, false)
+    expect(state.currentRoom.getExits(state).east).toBeUndefined()
+    // A save made while waiting loads back still waiting; resting fires the beam
+    const reloaded = new Game([new Act3()])
+    reloaded.loadSaveData(game.toSaveData())
+    executeCommands(reloaded, ['rest'])
+    expectStoryFlag(
+      reloaded.state,
+      FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
+      true,
+    )
+    // Resting brings noon; the beam fires and the flag is set
+    executeCommands(game, ['rest'])
     expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, true)
 
     // --- Step 15: Ember Gallery — find ash-fern and cooled slag, craft heat ward

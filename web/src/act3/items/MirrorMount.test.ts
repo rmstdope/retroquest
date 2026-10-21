@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from '../Act3'
-import { FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_MIRRORS_MENDED,
+  FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
+} from '../Act3StoryFlags'
 import { BindingResin } from './BindingResin'
 import { BrassMirrorSegment } from './BrassMirrorSegment'
 import { MirrorMount } from './MirrorMount'
@@ -48,9 +51,42 @@ describe('MirrorMount', () => {
     expect(out2.toLowerCase()).toContain('success')
 
     const out3 = mend.castOnItem(state, mount)
-    expect(out3.toLowerCase()).toContain('success')
+    expect(out3).toContain('the whole face hums.')
+    expect(out3).toContain(
+      'The mirrors are whole. The sun is not where it needs to be. ' +
+        'Perhaps rest a while, and let it climb.',
+    )
+    expect(out3).not.toContain('piercing ray')
+    expect(state.getStoryFlag(FLAG_ACT3_MIRRORS_MENDED)).toBe(true)
     expect(state.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED)).toBe(
-      true,
+      false,
+    )
+    expectMarkupWellFormed(out3)
+  })
+
+  it('gives a dim reminder when mended again, before and after the beam', () => {
+    const game = new Game([new Act3()])
+    const state = game.state
+    const mount = new MirrorMount()
+    for (let i = 0; i < 4; i++)
+      state.addItemToInventory(new BrassMirrorSegment())
+    state.addItemToInventory(new BindingResin())
+    mount.useWith(state, new BrassMirrorSegment())
+    mount.useWith(state, new BindingResin())
+    mount.mend(state)
+
+    const waiting = mount.mend(state)
+    expect(waiting).toBe(
+      '[dim]The mirrors are already whole. The sun is not where it needs ' +
+        'to be. Perhaps rest a while, and let it climb.[/dim]',
+    )
+    expect(state.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED)).toBe(
+      false,
+    )
+
+    state.setStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, true)
+    expect(mount.mend(state)).toBe(
+      '[dim]The mirrors are already whole, and the way east stands open.[/dim]',
     )
   })
 
