@@ -31,3 +31,36 @@ describe('Forest Transition access', () => {
     expect(transition.getExits(game.state).east).toBe('ForestEntrance')
   })
 })
+
+describe('Forest Transition description', () => {
+  it('seats the hermit among the stones before the camp and by the ashes after', () => {
+    const game = new Game([new Act2()])
+    const room = game.state.allRooms.ForestTransition
+
+    const before = room.descriptionFor(game.state)
+    expect(
+      before.endsWith('A robed figure sits peacefully among the stones.'),
+    ).toBe(true)
+
+    game.state.setStoryFlag(FLAG_HERMITS_WARNING_COMPLETED, true)
+    const after = room.descriptionFor(game.state)
+    expect(after).toBe(
+      before.replace(
+        'A robed figure sits peacefully among the stones.',
+        'The [character_name]forest hermit[/character_name] sits by the cold ashes of your camp in the lee of the oldest stone.',
+      ),
+    )
+  })
+
+  it('shows one hermit sentence when a save holds the older description', () => {
+    const game = new Game([new Act2()])
+    const room = game.state.allRooms.ForestTransition
+    room.description += ' A robed figure sits peacefully among the stones.'
+    game.state.setStoryFlag(FLAG_HERMITS_WARNING_COMPLETED, true)
+
+    const text = room.descriptionFor(game.state)
+
+    expect(text).not.toContain('robed figure')
+    expect(text).toContain('cold ashes of your camp')
+  })
+})
