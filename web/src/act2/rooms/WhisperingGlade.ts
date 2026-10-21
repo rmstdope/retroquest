@@ -14,6 +14,5 @@ export class WhisperingGlade extends Room {
       characters: [],
       exits: { west: 'ForestEntrance' },
     })
-    // Future expansion: riddle handling / water nymph interaction placeholder.
   }
 }
