@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game, characterName, dialogue } from '@/engine'
 import { Act2 } from '../Act2'
 import { SirCedric } from '../characters/SirCedric'
+import { ForestHeartCrystal } from '../items/ForestHeartCrystal'
 import type { GameState } from '@/engine'
 import { PropheticVision } from './PropheticVision'
 import { FLAG_GATHERING_STORM_COMPLETED } from '../Act2StoryFlags'
@@ -312,5 +313,60 @@ describe('Prophetic Vision ending', () => {
     expect(answer).not.toContain('The vision fades, but the knowledge remains')
     expect(answer).not.toContain('better prepared for whatever challenges')
     expectMarkupWellFormed(answer)
+  })
+})
+
+describe('Prophetic Vision and the Forest Heart Crystal', () => {
+  const CRYSTAL_OPENING =
+    'You take the [item_name]Forest Heart Crystal[/item_name] from your ' +
+    'pack and hold it out between you and ' +
+    `${characterName('Sir Cedric')}. The tiny lights inside it gather, ` +
+    'brighten, and spill outward, and the vision rises out of the crystal ' +
+    'for both of you to see:\n\nA village at dusk,'
+
+  it('opens the first shared vision with the crystal, keeping it in the pack', () => {
+    const game = createGameWithCedric()
+    game.state.addItemToInventory(new ForestHeartCrystal())
+    completeAllSideQuests(game.state)
+
+    const first = new PropheticVision().castSpell(game.state)
+
+    expect(first.startsWith('[event]' + CRYSTAL_OPENING)).toBe(true)
+    expect(first).not.toContain('newly granted sight')
+    expect(first).toContain('Act II is complete.')
+    expect(game.state.hasItem('forest heart crystal')).toBe(true)
+    expectMarkupWellFormed(first)
+  })
+
+  it('falls back to the old opening when the crystal is not carried', () => {
+    const game = createGameWithCedric()
+    completeAllSideQuests(game.state)
+
+    const first = new PropheticVision().castSpell(game.state)
+
+    expect(first).toContain('newly granted sight')
+    expect(first).not.toContain('Forest Heart Crystal')
+  })
+
+  it('never mentions the crystal without Cedric, before the quests or later', () => {
+    const crystal = new ForestHeartCrystal()
+    const alone = new Game([new Act2()])
+    alone.state.addItemToInventory(crystal)
+    expect(new PropheticVision().castSpell(alone.state)).not.toContain(
+      'Forest Heart Crystal',
+    )
+
+    const early = createGameWithCedric()
+    early.state.addItemToInventory(new ForestHeartCrystal())
+    expect(new PropheticVision().castSpell(early.state)).not.toContain(
+      'Forest Heart Crystal',
+    )
+
+    const later = createGameWithCedric()
+    later.state.addItemToInventory(new ForestHeartCrystal())
+    completeAllSideQuests(later.state)
+    const spell = new PropheticVision()
+    spell.castSpell(later.state)
+    expect(spell.castSpell(later.state)).not.toContain('Forest Heart Crystal')
   })
 })

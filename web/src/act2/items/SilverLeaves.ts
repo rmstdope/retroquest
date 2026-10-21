@@ -12,7 +12,7 @@ export class SilverLeaves extends Item {
         'Delicate leaves that shimmer with a soft argent sheen even in shadow. ' +
         'Their surfaces refract light into faint auroral threads, and a cool, ' +
         'clean scent clings to them. Holding them you sense tranquil, ancient ' +
-        'vitality.',
+        'vitality. A healer would know what to do with these.',
       canBeCarried: true,
     })
   }

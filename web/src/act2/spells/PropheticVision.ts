@@ -74,11 +74,8 @@ export class PropheticVision extends Spell {
       gameState.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
       return (
         event(
-          'You close your eyes and reach out with your newly granted sight ' +
-            'beyond sight. With ' +
-            characterName('Sir Cedric') +
-            ' standing beside you, you share the vision as it rises before ' +
-            'you:\n\n' +
+          this.visionOpening(gameState) +
+            '\n\n' +
             'A village at dusk, its roofs low and familiar. Beyond it, a field ' +
             'withered to grey stalks, the way yours was the morning all this ' +
             "began. And at the field's edge, a robed figure, its face lost in " +
@@ -114,6 +111,28 @@ export class PropheticVision extends Spell {
         'reminds you that every choice creates ripples through the ' +
         'tapestry of time, and wisdom lies in understanding the ' +
         'consequences of your actions.',
+    )
+  }
+
+  /**
+   * The opening of the first shared vision: Elior holds out the Forest Heart
+   * Crystal when he carries it, otherwise the plain casting.
+   */
+  private visionOpening(gameState: GameState): string {
+    if (gameState.hasItem('forest heart crystal')) {
+      return (
+        'You take the [item_name]Forest Heart Crystal[/item_name] from your ' +
+        'pack and hold it out between you and ' +
+        characterName('Sir Cedric') +
+        '. The tiny lights inside it gather, brighten, and spill outward, ' +
+        'and the vision rises out of the crystal for both of you to see:'
+      )
+    }
+    return (
+      'You close your eyes and reach out with your newly granted sight ' +
+      'beyond sight. With ' +
+      characterName('Sir Cedric') +
+      ' standing beside you, you share the vision as it rises before you:'
     )
   }
 

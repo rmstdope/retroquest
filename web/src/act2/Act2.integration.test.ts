@@ -1391,3 +1391,49 @@ describe("The sergeant's sword", () => {
     expect(hermit?.talkTo(afterSave.state)).toContain('Knew the notch, did he?')
   })
 })
+
+describe('Act 2 silver leaves and the Forest Heart Crystal', () => {
+  const GIVE = 'give silver leaves to master healer lyria'
+  const WINDOWSILL = 'The dish of silver leaves sits on the windowsill'
+
+  it('is optional: the act finishes with the leaves never given', () => {
+    const game = new Game([new Act2()])
+    executeCommands(
+      game,
+      ACT2_GOLDEN_PATH.filter((command) => command !== GIVE),
+    )
+    expectItemInInventory(game.state, 'silver leaves')
+
+    const vision = executeCommands(game, ['cast prophetic vision'])
+
+    expect(vision).toContain('Act II is complete.')
+  })
+
+  it('gives the leaves on the golden path and opens the vision with the crystal', () => {
+    const game = new Game([new Act2()])
+    executeCommands(game, ACT2_GOLDEN_PATH)
+
+    expect(game.state.hasItem('silver leaves')).toBe(false)
+    expectItemInInventory(game.state, 'forest heart crystal')
+    const vision = executeCommands(game, ['cast prophetic vision'])
+    expect(vision).toContain('Forest Heart Crystal')
+    expect(vision).toContain('Act II is complete.')
+  })
+
+  it('keeps the gift through a save and load', () => {
+    const game = new Game([new Act2()])
+    const givenAt = ACT2_GOLDEN_PATH.indexOf(GIVE)
+    executeCommands(game, ACT2_GOLDEN_PATH.slice(0, givenAt + 1))
+    const fresh = new Game([new Act2()])
+
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(fresh.state.hasItem('silver leaves')).toBe(false)
+    expect(executeCommands(fresh, ['talk to master healer lyria'])).toContain(
+      WINDOWSILL.replace(
+        'silver leaves',
+        '[item_name]silver leaves[/item_name]',
+      ),
+    )
+  })
+})
