@@ -1,4 +1,8 @@
 import { Room, type Exits, type GameState } from '@/engine'
+import {
+  FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
+  FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED,
+} from '../Act4StoryFlags'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { Echoes } from '../items/Echoes'
 import { EchoStone } from '../items/EchoStone'
@@ -26,17 +30,24 @@ export class HallOfEchoes extends Room {
     })
   }
 
-  /** Only the way back south is open; the stair east waits for the knight. */
-  override getExits(_gameState: GameState): Exits {
-    return { south: this.exits.south }
+  /** Entering the hall starts the knight's side quest. */
+  override onEnter(gameState: GameState): void {
+    gameState.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED, true)
+  }
+
+  /** The way back south is always open; the stair east once the knight is redeemed. */
+  override getExits(gameState: GameState): Exits {
+    if (!gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)) {
+      return { south: this.exits.south }
+    }
+    return { south: this.exits.south, east: this.exits.east }
   }
 
   /** The knight blocks the stair to the Tower of Shadows. */
-  override blockedExit(
-    _gameState: GameState,
-    direction: string,
-  ): string | null {
+  override blockedExit(gameState: GameState, direction: string): string | null {
     if (direction !== 'east') return null
+    if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED))
+      return null
     return (
       '[failure]The Knight of Despair stands before the stair to the tower. ' +
       'He does not lift his sword. He simply does not move, and there is no ' +

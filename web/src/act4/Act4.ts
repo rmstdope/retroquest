@@ -13,6 +13,7 @@ import { TheFinalStand } from './quests/TheFinalStand'
 import { ShatteredWardGuardians } from './quests/ShatteredWardGuardians'
 import { TheTrappedServants } from './quests/TheTrappedServants'
 import { TheMazeOfMirrors } from './quests/TheMazeOfMirrors'
+import { TheKnightOfDespair } from './quests/TheKnightOfDespair'
 import { FLAG_ACT4_MAIN_STARTED } from './Act4StoryFlags'
 import { ACT4_CLASSES } from './classes'
 import { ACT4_GOLDEN_PATH } from './Act4GoldenPath'
@@ -45,6 +46,7 @@ export class Act4 extends Act {
         new ShatteredWardGuardians(),
         new TheTrappedServants(),
         new TheMazeOfMirrors(),
+        new TheKnightOfDespair(),
       ],
       musicFile: 'Conquest - The Silver Grail (freetouse.com).mp3',
       musicInfo:

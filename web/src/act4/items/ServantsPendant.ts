@@ -26,7 +26,7 @@ export class ServantsPendant extends Item {
 
   /** Use the pendant with the Echo Stone: the same as using the stone. */
   override useWith(gameState: GameState, other: Item): string {
-    if (other instanceof EchoStone) return EchoStone.useInRoom(gameState)
+    if (other instanceof EchoStone) return other.use(gameState)
     return super.useWith(gameState, other)
   }
 

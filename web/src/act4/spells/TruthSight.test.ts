@@ -4,6 +4,7 @@ import { Act4 } from '../Act4'
 import { TruthSight } from './TruthSight'
 import { Mirrors } from '../items/Mirrors'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
+import { TrueSelf } from '../characters/TrueSelf'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('TruthSight', () => {
@@ -17,13 +18,13 @@ describe('TruthSight', () => {
     expect(spell.answersTo('truth_sight')).toBe(true)
   })
 
-  it('finds nothing hidden anywhere yet', () => {
+  it('finds nothing hidden in anything but the knight', () => {
     const game = new Game([new Act4()])
     const spell = new TruthSight()
     const answers = [
       spell.castSpell(game.state),
       spell.castOnItem(game.state, new Mirrors()),
-      spell.castOnCharacter(game.state, new KnightOfDespair()),
+      spell.castOnCharacter(game.state, new TrueSelf()),
     ]
     for (const answer of answers) {
       expect(answer).toBe(
@@ -31,5 +32,17 @@ describe('TruthSight', () => {
       )
       expectMarkupWellFormed(answer)
     }
+  })
+
+  it('shows the knight as he is, and says so once', () => {
+    const game = new Game([new Act4()])
+    const spell = new TruthSight()
+    const knight = new KnightOfDespair()
+    expect(spell.castOnCharacter(game.state, knight)).toContain(
+      'Behind the visor, the knight is weeping.',
+    )
+    expect(spell.castOnCharacter(game.state, knight)).toBe(
+      '[dim]You have already seen the knight as he truly is.[/dim]',
+    )
   })
 })

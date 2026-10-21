@@ -437,10 +437,13 @@ describe('Act 4 integration', () => {
       expectStoryFlag(game.state, FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, true)
       expectItemInInventory(game.state, 'Loyalty Token', true)
       expectItemInInventory(game.state, "Servant's Pendant", true)
-      expectItemInInventory(game.state, 'Echo Stone', true)
+      expectItemInInventory(game.state, 'Enhanced Echo Stone', true)
       expectQuestCompleted(game.state, 'The Maze of Mirrors')
       expectSpellKnown(game.state, 'truth_sight')
-      expectCurrentRoom(game.state, 'Mirror Labyrinth')
+      expectQuestCompleted(game.state, 'The Knight of Despair')
+      expectItemInInventory(game.state, "Knight's Redemption", true)
+      expectSpellKnown(game.state, 'redemptions_light')
+      expectCurrentRoom(game.state, 'Hall of Echoes')
     })
 
     it('is what cheat act 4 plays', () => {
@@ -780,6 +783,102 @@ describe('Act 4 integration', () => {
       expect(executeCommands(game, ['say truth to true self'])).toContain(
         'has heard your truth',
       )
+    })
+  })
+
+  describe('the Knight of Despair', () => {
+    const toRedeemed = (): void => {
+      executeCommands(game, ACT4_GOLDEN_PATH)
+    }
+    const reload = (): void => {
+      expect(game.loadSaveData(game.toSaveData())).toContain(
+        'Game loaded successfully.',
+      )
+    }
+
+    it('starts its quest on first entering the hall', () => {
+      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, -6))
+      expect(game.state.activatedQuests.map((q) => q.name)).toContain(
+        'The Knight of Despair',
+      )
+    })
+
+    it('enhances the stone even when it was dropped elsewhere', () => {
+      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, -4))
+      executeCommands(game, ['s', 'drop echo stone', 'n'])
+      executeCommands(game, [
+        "use guardian's chain",
+        'cast truth sight on knight of despair',
+        'say redemption to knight',
+        's',
+        'take enhanced echo stone',
+      ])
+      expectItemInInventory(game.state, 'Enhanced Echo Stone', true)
+      expect(executeCommands(game, ['use echo stone'])).toContain(
+        'waiting for a place where memories sleep.',
+      )
+      expect(
+        executeCommands(game, ["use servant's pendant with echo stone"]),
+      ).toContain('waiting for a place where memories sleep.')
+    })
+
+    it('gives the stone lines and the badge once redeemed', () => {
+      toRedeemed()
+      expect(executeCommands(game, ['examine enhanced echo stone'])).toContain(
+        'The Echo Stone hums more strongly now.',
+      )
+      expect(executeCommands(game, ["examine knight's redemption"])).toContain(
+        "A tarnished knight's badge, warm to the touch.",
+      )
+      expect(executeCommands(game, ['use enhanced echo stone'])).toContain(
+        'The voices inside it are clearer now',
+      )
+    })
+
+    it('records mercy from the optional warriors', () => {
+      toRedeemed()
+      expect(executeCommands(game, ['examine ghostly warriors'])).toContain(
+        'Their blades pass through one another without a sound.',
+      )
+      expect(executeCommands(game, ['talk to ghostly warriors'])).toContain(
+        'The warriors do not hear you.',
+      )
+      executeCommands(game, ["cast redemption's light on ghostly warriors"])
+      expect(game.state.hasVirtue('mercy')).toBe(true)
+    })
+
+    it('keeps every state through a save and load', () => {
+      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, -3))
+      reload()
+      expect(game.state.currentRoom.name).toBe('Hall of Echoes')
+      expect(executeCommands(game, ['say redemption to knight'])).toContain(
+        'cannot truly see',
+      )
+      executeCommands(game, ['cast truth sight on knight of despair'])
+      reload()
+      expect(executeCommands(game, ['say redemption to knight'])).toContain(
+        'You need something to shield you from it.',
+      )
+      executeCommands(game, ["use guardian's chain"])
+      reload()
+      expect(executeCommands(game, ["use guardian's chain"])).toContain(
+        'already providing',
+      )
+      executeCommands(game, ['say redemption to knight'])
+      reload()
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'Redeemed Knight',
+      )
+      expectItemInInventory(game.state, "Knight's Redemption", true)
+      expectItemInInventory(game.state, 'Enhanced Echo Stone', true)
+      expectQuestCompleted(game.state, 'The Knight of Despair')
+      executeCommands(game, ["cast redemption's light on ghostly warriors"])
+      reload()
+      expect(game.state.hasVirtue('mercy')).toBe(true)
+      expect(game.state.currentRoom.describe(game.state)).not.toContain(
+        'ghostly warriors',
+      )
+      expect(executeCommands(game, ['go east'])).toContain('Tower of Shadows')
     })
   })
 })

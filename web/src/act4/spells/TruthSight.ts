@@ -1,4 +1,5 @@
 import { Spell, type Character, type GameState, type Item } from '@/engine'
+import { KnightOfDespair } from '../characters/KnightOfDespair'
 
 /** What the spell shows where nothing is hidden. */
 const NOTHING_HIDDEN =
@@ -24,8 +25,9 @@ export class TruthSight extends Spell {
     return NOTHING_HIDDEN
   }
 
-  /** Nothing is hidden in a character yet (the knight comes with his own piece). */
-  override castOnCharacter(_gameState: GameState, _target: Character): string {
+  /** The Knight of Despair is shown as he is; nothing is hidden in anyone else. */
+  override castOnCharacter(gameState: GameState, target: Character): string {
+    if (target instanceof KnightOfDespair) return target.seeThrough(gameState)
     return NOTHING_HIDDEN
   }
 }

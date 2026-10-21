@@ -1,10 +1,11 @@
 import { Item, type GameState, event } from '@/engine'
-import { FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_GUARDIANS_CHAIN_ACQUIRED,
+  FLAG_ACT4_GUARDIANS_CHAIN_RAISED,
+} from '../Act4StoryFlags'
 
 /** A mystical chain that provides protection against dark magic. */
 export class GuardiansChain extends Item {
-  private protectionActive = false
-
   constructor() {
     super({
       name: "Guardian's Chain",
@@ -30,8 +31,8 @@ export class GuardiansChain extends Item {
   /** Activate the chain's protective properties. */
   override use(gameState: GameState): string {
     if (gameState.currentRoom.name === 'Hall of Echoes') {
-      if (!this.protectionActive) {
-        this.protectionActive = true
+      if (!gameState.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED)) {
+        gameState.setStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED, true)
         return event(
           "You hold the Guardian's Chain aloft, and its crystals blaze " +
             'with brilliant light. A protective barrier forms around you, ' +

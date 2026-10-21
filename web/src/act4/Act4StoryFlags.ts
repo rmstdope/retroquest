@@ -41,6 +41,9 @@ export const FLAG_ACT4_KNIGHTS_REDEMPTION_ACQUIRED =
   'act4_knights_redemption_acquired'
 export const FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED =
   'act4_enhanced_echo_stone_acquired'
+export const FLAG_ACT4_KNIGHT_SEEN_THROUGH = 'act4_knight_seen_through'
+export const FLAG_ACT4_GUARDIANS_CHAIN_RAISED = 'act4_guardians_chain_raised'
+export const FLAG_ACT4_WARRIORS_AT_PEACE = 'act4_warriors_at_peace'
 
 export const FLAG_ACT4_SORCERESS_OF_LIES_STARTED =
   'act4_sorceress_of_lies_started'
@@ -93,3 +96,6 @@ export const FLAG_ACT4_TRUTH_TOLD = 'act4_truth_told'
 
 /** The virtue moment recorded when Elior tells the True Self the truth. */
 export const VIRTUE_TRUTH = 'truth'
+
+/** The virtue moment recorded when Elior puts the Ghostly Warriors to rest. */
+export const VIRTUE_MERCY = 'mercy'

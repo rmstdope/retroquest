@@ -13,6 +13,7 @@ describe('Act4', () => {
       'Shattered Ward Guardians',
       'The Trapped Servants',
       'The Maze of Mirrors',
+      'The Knight of Despair',
     ])
   })
 
