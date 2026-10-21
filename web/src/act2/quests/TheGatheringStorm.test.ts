@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
+import { executeCommands } from '@/testing/gameHelpers'
 import { Act2 } from '../Act2'
 import {
   FLAG_ANCIENT_LIBRARY_COMPLETED,
@@ -47,9 +48,8 @@ describe('The Gathering Storm log', () => {
   const ENTRIES = [
     'Greendale is bigger than any place you have seen, but the talk in its ' +
       'streets is low and uneasy. People speak of a darkness gathering beyond ' +
-      'the walls. Your grandmother told you to find ' +
-      '[character_name]Sir Cedric[/character_name] at the castle; he can help ' +
-      'you understand it.',
+      'the walls, and say that if anyone at the castle understands it, it is ' +
+      '[character_name]Sir Cedric[/character_name].',
     '[character_name]Sir Cedric[/character_name] calls it the Gathering ' +
       'Storm. He needs allies who know magic, but he will not trust you on ' +
       'your word alone. He wants to see you fight first, with the training ' +
@@ -131,5 +131,32 @@ describe('The Gathering Storm log', () => {
       expect(entry.split(/(?<=[.!?])\s+/).length).toBeLessThanOrEqual(3)
       expect(entry).not.toMatch(/cosmic|otherworldly|encroaching|combat|Elior/i)
     }
+  })
+})
+
+describe('The Gathering Storm log in an older save', () => {
+  it('shows the current first entry, not the one the save was made with', () => {
+    const game = new Game([new Act2()])
+    executeCommands(game, ['look'])
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    game.state.refreshQuestLogs()
+    const old =
+      'Greendale is bigger than any place you have seen. Your grandmother ' +
+      'told you to find Sir Cedric at the castle; he can help you ' +
+      'understand it.'
+    const saved = game
+      .toSaveData()
+      .replace(/Greendale is bigger[^"]*?(?=\[\/dim\]|")/g, old)
+    expect(saved).toContain('Your grandmother told you')
+
+    const loaded = new Game([new Act2()])
+    loaded.loadSaveData(saved)
+    const quest = [
+      ...loaded.state.nonActivatedQuests,
+      ...loaded.state.activatedQuests,
+    ].find((q) => q instanceof TheGatheringStormQuest)
+    expect(quest?.description).not.toContain('grandmother')
+    expect(quest?.description).toContain('[dim]Greendale is bigger')
+    expect(quest?.description).toContain('it is [character_name]Sir Cedric')
   })
 })

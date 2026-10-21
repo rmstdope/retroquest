@@ -18,6 +18,10 @@ These beats ride on the existing conversations, items and quests below; none add
 - **The Wardens in the archive.** Echoes of the Past and the Ancient Chronicle name the Wardens of the Dawn and their sigil, and record that agents of Malakar have asked after the Willowbrook bloodline. The Secret Documents then name Malakar himself, and Nyx's vision shows he is hunting Elior.
 - **Nyx's vision.** Nyx speaks the refrain "Power follows purpose; purpose follows truth." in her first conversation. `prophetic_vision` then shows Elior a village, a withered field and a robed figure reaching toward him, and the dream voice from the Prologue is heard once more. It is the **Shadow of the Past**, not tied to either parent. Elior shares the vision with Cedric, who says: "Then Malakar is no tale, and it is you he is hunting."
 
+### Opening
+
+The opening page quotes only what Act I said: Mira's parting words as she hands over the Ancient Amulet ("Your road leads to Greendale, Elior. Once there, show the amulet to no one lightly. Those who know what it is will find you.") and, as narration, Grandmother's warning that someone came to Willowbrook looking for it. It does not name Sir Cedric. The first Gathering Storm journal entry says the talk in Greendale's streets names Sir Cedric as the one at the castle who might understand the darkness. Saves made earlier show the same words, because the page is composed on every view and the quest log is rebuilt on load.
+
 ## Quest Management Structure
 
 ### Main Quest Chain Architecture

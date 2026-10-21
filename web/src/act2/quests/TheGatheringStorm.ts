@@ -18,10 +18,9 @@ const PROPHETIC_VISION = '[spell_name]Prophetic Vision[/spell_name]'
 const OPENING_ENTRY =
   'Greendale is bigger than any place you have seen, but the talk in its ' +
   'streets is low and uneasy. People speak of a darkness gathering beyond ' +
-  'the walls. Your grandmother told you to find ' +
+  'the walls, and say that if anyone at the castle understands it, it is ' +
   SIR_CEDRIC +
-  ' at the castle; he can help ' +
-  'you understand it.'
+  '.'
 
 /**
  * Act II main quest tracking the narrative arc. `checkUpdate` composes layered
