@@ -5,13 +5,16 @@ import {
   event,
   speech,
 } from '@/engine'
+import { FLAG_DEMONSTRATED_COMBAT_SKILLS } from '../Act2StoryFlags'
 import { TrainingSword } from '../items/TrainingSword'
 
 /**
- * Hermit NPC who mentors the player and grants the Training Sword.
+ * The Mountain Hermit: a retired castle sergeant who drilled Sir Cedric as a
+ * squire.
  *
- * On the first talk the hermit delivers a prophetic warning and hands over the
- * Training Sword; later talks confirm the gift and offer encouragement.
+ * On the first talk he tells Elior about the uneasy city and hands over
+ * Cedric's old practice blade with a message for him. Later talks nudge the
+ * player to deliver it, then close his thread once Cedric has recognised it.
  */
 export class MountainHermit extends Character {
   swordGiven = false
@@ -21,28 +24,28 @@ export class MountainHermit extends Character {
     super({
       name: 'mountain hermit',
       description:
-        'An old man wrapped in weathered robes, with wise eyes that seem to have ' +
-        'seen many seasons pass. He sits by a small fire, watching the path ' +
-        'between Willowbrook and Greendale with keen interest.',
+        'A broad old man in a patched grey castle cloak, sitting ' +
+        'straight-backed by a small fire. His hands are scarred across the ' +
+        'knuckles, and he watches the path between Willowbrook and Greendale ' +
+        'the way a sentry watches a gate.',
     })
   }
 
-  /** Warn about the coming darkness and hand over the Training Sword. */
+  /** Greet the player, hand over Cedric's sword, or point them onward. */
   override talkTo(gameState: GameState): string {
     const name = this.name
     const eventMsg = event('You approach the ' + characterName(name) + '.')
 
     if (!this.warnedAboutTimes) {
       this.warnedAboutTimes = true
-      const warningMsg =
+      const greetingMsg =
         'The ' +
         characterName(name) +
-        ' looks up from his fire with ancient eyes. ' +
+        ' looks you up and down, the way he might inspect a recruit.\n' +
         speech(
-          "'Ah, a traveler heading to Greendale. I sense great changes " +
-            'coming to these lands. Dark forces stir, and heroes will be ' +
-            'needed in the days ahead. You have the look of one who might rise ' +
-            "to such challenges.'",
+          "'Greendale, is it? Thirty years I drilled squires in that " +
+            "castle's yard, and I've never heard the city so uneasy. The " +
+            "king gone, the guard half-empty. Walk carefully.'",
         )
 
       if (!this.swordGiven) {
@@ -50,23 +53,34 @@ export class MountainHermit extends Character {
         return this.giveTrainingSwordWithDialogue(
           gameState,
           eventMsg,
-          warningMsg,
+          greetingMsg,
         )
       }
-      return eventMsg + '\n' + warningMsg
+      return eventMsg + '\n' + greetingMsg
     }
     if (this.swordGiven) {
-      const trainingSword = new TrainingSword()
-      const swordName = trainingSword.name
+      if (gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)) {
+        return (
+          eventMsg +
+          '\nThe ' +
+          characterName(name) +
+          ' hears you out and grunts, but there is something softer in his ' +
+          'face.\n' +
+          speech(
+            "'Knew the notch, did he? Good. Then he knows. Go on, now. " +
+              "Greendale needs him more than I do.'",
+          )
+        )
+      }
       return (
         eventMsg +
         '\nThe ' +
         characterName(name) +
-        ' nods sagely. ' +
+        ' jerks his chin toward Greendale.\n' +
         speech(
-          `'The [item_name]${swordName}[/item_name] I gave you will serve ` +
-            'you well in Greendale. Show them your skill, and doors will open. ' +
-            "May your journey be blessed with wisdom and courage.'",
+          "'You've still got that blade, I see. Get it to " +
+            characterName('Cedric') +
+            ", and mind you give him my words.'",
         )
       )
     }
@@ -77,71 +91,61 @@ export class MountainHermit extends Character {
   giveTrainingSwordWithDialogue(
     gameState: GameState,
     eventMsg: string,
-    warningMsg: string,
+    greetingMsg: string,
   ): string {
     if (this.swordGiven) {
-      const name = this.name
-      return (
-        'The ' +
-        characterName(name) +
-        ' smiles. ' +
-        speech("'I already gave you the sword, young one. Use it wisely.'")
-      )
+      return this.alreadyGaveSword()
     }
 
-    this.swordGiven = true
-    const trainingSword = new TrainingSword()
-    gameState.addItemToInventory(trainingSword)
+    const handOver = this.handOverSword(gameState)
 
-    const swordName = trainingSword.name
-    const swordDialogue =
-      `He reaches into his pack and pulls out a [item_name]${swordName}` +
-      '[/item_name]. ' +
-      speech(
-        "'Take this. If you mean to help Greendale, you'll need to prove " +
-          'your skills to those who matter. This blade has served me well ' +
-          "in teaching others.'",
-      ) +
-      '\n\n' +
-      event(`You receive a [item_name]${swordName}[/item_name]!`)
-
-    if (warningMsg) {
-      return eventMsg + '\n' + warningMsg + '\n\n' + swordDialogue
+    if (greetingMsg) {
+      return eventMsg + '\n' + greetingMsg + '\n\n' + handOver
     }
-    return eventMsg + '\n' + swordDialogue
+    return eventMsg + '\n' + handOver
   }
 
   /** Gives the player a training sword if it has not already been given. */
   giveTrainingSword(gameState: GameState): string {
     if (this.swordGiven) {
-      const name = this.name
-      return (
-        'The ' +
-        characterName(name) +
-        ' smiles. ' +
-        speech("'I already gave you the sword, young one. Use it wisely.'")
-      )
+      return this.alreadyGaveSword()
     }
+    return this.handOverSword(gameState)
+  }
 
+  /** The line he says when the sword is already in the player's hands. */
+  private alreadyGaveSword(): string {
+    return (
+      'The ' +
+      characterName(this.name) +
+      ' smiles. ' +
+      speech("'I already gave you the sword, young one. Use it wisely.'")
+    )
+  }
+
+  /**
+   * Put Cedric's old training sword in the player's inventory and return the
+   * hand-over scene, ending with the "You receive" event.
+   */
+  private handOverSword(gameState: GameState): string {
     this.swordGiven = true
     const trainingSword = new TrainingSword()
     gameState.addItemToInventory(trainingSword)
 
-    const eventMsg = event(
-      'The ' +
-        characterName(this.name) +
-        ` hands you the [item_name]${trainingSword.name}[/item_name].`,
-    )
     const swordName = trainingSword.name
-    const dialogueBlock =
+    return (
+      `He unwraps a battered [item_name]${swordName}[/item_name] from an ` +
+      'old cloth.\n' +
       speech(
-        "'This blade has trained many would-be heroes. It may not be sharp " +
-          'enough for battle, but it will show your skill to those who need ' +
-          "convincing. Use it well in Greendale.'",
-      ) + '\n\n'
-    const receiveEvent = event(
-      `You receive a [item_name]${swordName}[/item_name]!`,
+        "'This was " +
+          characterName('Cedric') +
+          "'s. I put it in his hands when he was a squire no taller than " +
+          'you. They say he slept on watch the night the king went, and ' +
+          'lost his spurs for it. Take it to him in the castle yard. Tell ' +
+          "him the sergeant never believed a word of it.'",
+      ) +
+      '\n\n' +
+      event(`You receive a [item_name]${swordName}[/item_name]!`)
     )
-    return eventMsg + '\n' + dialogueBlock + receiveEvent
   }
 }

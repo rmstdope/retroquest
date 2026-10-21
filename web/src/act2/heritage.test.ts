@@ -83,17 +83,17 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
     expect(text).not.toMatch(CHOSEN_TALK)
   })
 
-  it('has the mountain hermit send Elior to Greendale, not call him destined', () => {
+  it('has the mountain hermit send Elior to Cedric, not call him destined', () => {
     const game = new Game([new Act2()])
     const hermit = new MountainHermit()
 
     const first = hermit.talkTo(game.state)
 
     expect(first).toContain(
-      "'Take this. If you mean to help Greendale, you'll need to prove your skills to those who matter. This blade has served me well in teaching others.'",
+      'Tell him the sergeant never believed a word of it.',
     )
-    expect(first).toContain('You have the look of one who might rise')
+    expect(first).not.toContain('You have the look of one who might rise')
     expect(first).not.toMatch(CHOSEN_TALK)
-    expect(hermit.talkTo(game.state)).toContain('Show them your skill')
+    expect(hermit.talkTo(game.state)).toContain('mind you give him my words')
   })
 })
