@@ -61,6 +61,8 @@ export const ACT3_GOLDEN_PATH: string[] = [
   'use vent stone',
   'use vent stone',
   'use heat-ward mix',
+  'rest',
+  'rest',
   's',
   'rest',
   'talk to phoenix',

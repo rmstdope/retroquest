@@ -360,12 +360,23 @@ describe('Act 3 golden path', () => {
       applyResult.toLowerCase().includes('ward') ||
         applyResult.toLowerCase().includes('seals'),
     ).toBe(true)
-    expectStoryFlag(state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, true)
+    // The ward does not finish the task: the vents must be crossed in time
+    expectStoryFlag(state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, false)
+    executeCommands(game, ['south'])
+    expectCurrentRoom(state, 'Fumarole Passages')
+    // The failed try moved the breath to the pause; one rest brings the in-breath
+    executeCommands(game, ['rest'])
+    // Save mid-breath: the in-breath comes back as it was
+    const midBreath = new Game([new Act3()])
+    midBreath.loadSaveData(game.toSaveData())
+    executeCommands(midBreath, ['south'])
+    expectCurrentRoom(midBreath.state, 'Phoenix Crater')
 
     // --- Step 18: Phoenix Crater (Relic Trial) ---
-    // Move south to Phoenix Crater
+    // Cross south to Phoenix Crater on the in-breath
     executeCommands(game, ['south'])
     expectCurrentRoom(state, 'Phoenix Crater')
+    expectStoryFlag(state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, true)
     // Reveal the phoenix
     executeCommands(game, ['rest'])
     expectCharacterInRoom(room(), 'phoenix', true)

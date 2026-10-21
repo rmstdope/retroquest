@@ -34,6 +34,8 @@ export const FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED =
 // Breath of the Mountain (vent calibration / heat ward)
 export const FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_STARTED =
   'act3_breath_of_the_mountain_started'
+export const FLAG_ACT3_FUMAROLE_WARD_APPLIED = 'act3_fumarole_ward_applied'
+/** Set the first time Elior crosses the vents on the in-breath. */
 export const FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED =
   'act3_breath_of_the_mountain_completed'
 

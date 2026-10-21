@@ -62,6 +62,16 @@ export class Room {
   }
 
   /**
+   * Story text shown before the "You move ... to <room>." line when the
+   * player leaves in a direction and the move goes ahead; empty for none.
+   * The hook may also set story flags. It is not called for a blocked way or
+   * a move the room took over with `walk`.
+   */
+  departText(_gameState: GameState, _direction: string): string {
+    return ''
+  }
+
+  /**
    * The label an exit shows in place of the destination room's name, or null
    * for the name. Override for a way whose end the player should not read yet.
    */

@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import { Game, type GameState } from '@/engine'
 import { Act3 } from '../Act3'
-import { FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED } from '../Act3StoryFlags'
+import {
+  FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
+  FLAG_ACT3_FUMAROLE_WARD_APPLIED,
+} from '../Act3StoryFlags'
 import { PhoenixGuardian } from './PhoenixGuardian'
 import { SirCedric } from './SirCedric'
 import {
@@ -38,6 +41,27 @@ describe('PhoenixGuardian', () => {
     const response = pg.talkTo(makeGameState(false))
     expect(response).toContain('both patient and watchful')
     expect(response).not.toMatch(/brave|bold/i)
+  })
+
+  it('tells the player to count the breath once the ward is set and until they have crossed', () => {
+    const state = makeGameState(false)
+    state.setStoryFlag(FLAG_ACT3_FUMAROLE_WARD_APPLIED, true)
+    const answer = new PhoenixGuardian().talkTo(state)
+    expect(answer).toContain('watches the vents')
+    expect(answer).toContain(
+      'The ward holds, but the mountain still breathes. Count its breath. ' +
+        'Walk when it draws in.',
+    )
+    expectMarkupWellFormed(answer)
+    expectDialogueSpeaker(answer, 'phoenix guardian')
+  })
+
+  it('goes back to the line about patience once the player has crossed', () => {
+    const state = makeGameState(true)
+    state.setStoryFlag(FLAG_ACT3_FUMAROLE_WARD_APPLIED, true)
+    expect(new PhoenixGuardian().talkTo(state)).toContain(
+      'patience is your ally',
+    )
   })
 
   it('gives post-completion advice after the quest is done', () => {

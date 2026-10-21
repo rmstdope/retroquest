@@ -111,7 +111,8 @@ export class CommandParser {
     if (cmd === 'help' || cmd === '?') return this.game.help()
     if (cmd === 'quit' || cmd === 'exit') return this.game.quit()
 
-    if (cmd === 'sleep' || cmd === 'rest') return this.game.rest()
+    if (cmd === 'sleep' || cmd === 'rest' || cmd === 'wait')
+      return this.game.rest()
     if (cmd === 'map') return this.game.map()
     if (cmd === 'stats') return this.game.stats()
     if (cmd.startsWith('cheat act ')) {

@@ -355,6 +355,7 @@ Welcome to
       exit: null,
       sleep: null,
       rest: null,
+      wait: null,
       map: null,
       stats: null,
     }
@@ -395,12 +396,14 @@ Welcome to
     const next = this.state.allRooms[exits[direction]]
     if (!next)
       return '[failure]That exit leads nowhere (room not found).[/failure]'
+    const departure = room.departText(this.state, direction)
     this.state.currentRoom = next
     this.acts[this.currentAct].onRoomChanged(this.state, room, next)
     next.onEnter(this.state)
     this.state.markVisited(next)
     this.hasChangedRoom = true
     return (
+      departure +
       `[event]You move ${direction} to [room_name]${next.name}[/room_name].[/event]\n\n` +
       next.enterText(this.state)
     )
@@ -444,7 +447,7 @@ Welcome to
       '  quit, exit\n' +
       '\n' +
       '[bold]Miscellaneous:[/bold]\n' +
-      '  sleep, rest\n' +
+      '  sleep, rest, wait\n' +
       '  map\n' +
       '  stats\n'
     )

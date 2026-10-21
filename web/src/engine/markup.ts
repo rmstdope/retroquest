@@ -23,6 +23,7 @@ export const MARKUP_TAGS: readonly string[] = [
   'bold',
   'dim',
   'italic',
+  'breath',
 ]
 
 /** Wrap `text` as an event line: `[event]text[/event]`. */

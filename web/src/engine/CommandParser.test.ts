@@ -249,6 +249,7 @@ describe('CommandParser', () => {
     expectCalls(game, parser, {
       sleep: ['rest'],
       rest: ['rest'],
+      wait: ['rest'],
       map: ['map'],
       stats: ['stats'],
       xyzzy: ['unknown', 'xyzzy'],
