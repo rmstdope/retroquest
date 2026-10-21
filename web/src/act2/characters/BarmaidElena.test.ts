@@ -50,9 +50,6 @@ describe('Elena and the silver mask', () => {
     const { elena } = setup()
     const out = elena.receiveGreaterHeal()
     expect(out.endsWith('[/success]\n\n' + HEAL_PARAGRAPH)).toBe(true)
-    expect(out.indexOf(HEAL_PARAGRAPH)).toBeGreaterThan(
-      out.indexOf('[/success]'),
-    )
     expect(elena.description.endsWith(HEAL_SENTENCE)).toBe(true)
   })
 
@@ -142,12 +139,22 @@ describe('Elena and the silver mask', () => {
     )
   })
 
-  it('an older mid-cure save shows no mark, yet the dispel sentence appears', () => {
+  it('an older mid-cure save, without the mark fields, shows no mark but the dispel sentence', () => {
     const { game, elena } = setup()
-    // As an older save would have it: healed and purified, no mark fields.
     elena.elenaInitialHealing = true
-    elena.elenaPurified = true
-    expect(elena.talkTo(game.state)).not.toContain(STAGE_LINE)
-    expect(elena.receiveDispelFinalCure(game.state)).toContain(DISPEL_SENTENCE)
+    const fresh = new Game([new Act2()])
+    fresh.loadSaveData(game.toSaveData())
+    const loaded = fresh.state.allRooms.SilverStagInn.characters.find(
+      (c): c is BarmaidElena => c instanceof BarmaidElena,
+    )!
+    // Older saves lack these fields entirely, so they read as undefined.
+    Reflect.deleteProperty(loaded, 'markShown')
+    Reflect.deleteProperty(loaded, 'markSpoken')
+    expect(loaded.talkTo(fresh.state)).not.toContain(STAGE_LINE)
+    purify(fresh, loaded)
+    expect(loaded.description).not.toContain('mask')
+    expect(loaded.receiveDispelFinalCure(fresh.state)).toContain(
+      DISPEL_SENTENCE,
+    )
   })
 })
