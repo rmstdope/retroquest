@@ -166,8 +166,8 @@ describe('Sir Cedric and the sigil', () => {
     executeCommands(game, ['take amulet'])
     const out = executeCommands(game, ['talk to sir cedric'])
     expect(out).toContain('goes very still')
-    expect(out).toContain('Please accept these 100 gold coins.')
-    expect(game.state.getItemCount('coins')).toBe(100)
+    expect(out).toContain('Please accept these 150 gold coins.')
+    expect(game.state.getItemCount('coins')).toBe(150)
   })
 
   it('keeps the Nature’s Charm handover after the recognition', () => {

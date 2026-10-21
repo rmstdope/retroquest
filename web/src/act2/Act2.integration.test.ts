@@ -194,6 +194,7 @@ describe('Act 2 golden path', () => {
     expectItemInInventory(state, 'Coins', false)
     executeCommands(game, ['talk to sir cedric'])
     expectItemInInventory(state, 'Coins')
+    expectItemCountInInventory(state, 'coins', 150)
 
     // Step 6: Market District
     // Go to Market District via Main Square
@@ -221,8 +222,7 @@ describe('Act 2 golden path', () => {
     expectItemInInventory(state, 'Forest Survival Kit')
     executeCommands(game, ['buy enhanced lantern from master merchant aldric'])
     expectItemInInventory(state, 'Enhanced Lantern')
-    executeCommands(game, ['buy quality rope from master merchant aldric'])
-    expectItemInInventory(state, 'Quality Rope', false)
+    expectItemCountInInventory(state, 'coins', 60)
 
     // Step 7: The Silver Stag Inn
     // Move to The Silver Stag Inn
@@ -244,6 +244,7 @@ describe('Act 2 golden path', () => {
     // Buy Room Key
     executeCommands(game, ['buy room key from innkeeper marcus'])
     expectItemInInventory(state, 'Room Key')
+    expectItemCountInInventory(state, 'coins', 50)
     // Use Room Key to access Inn Rooms
     executeCommands(game, ['go east'])
     expectCurrentRoom(state, 'The Silver Stag Inn')
@@ -254,10 +255,9 @@ describe('Act 2 golden path', () => {
     expectItemInRoom(room(), "Traveler's Journal", false)
     executeCommands(game, ['search'])
     expectItemInRoom(room(), "Traveler's Journal", true)
-    expectItemCountInInventory(state, 'coins', 0)
     executeCommands(game, ["take traveler's journal", 'take coins'])
     expectItemInInventory(state, "Traveler's Journal")
-    expectItemCountInInventory(state, 'coins', 20)
+    expectItemCountInInventory(state, 'coins', 70)
     executeCommands(game, ["use traveler's journal"])
     expectQuests(state, [
       MAIN,
@@ -271,9 +271,10 @@ describe('Act 2 golden path', () => {
     // Go back to Market District
     executeCommands(game, ['go west', 'go south'])
     expectCurrentRoom(state, 'Market District')
-    // Buy Enhanced Lantern and Quality Rope (not enough coins)
+    // Buy Quality Rope: 50 coins are left with the inn coins (30 without)
     executeCommands(game, ['buy quality rope from master merchant aldric'])
     expectItemInInventory(state, 'Quality Rope')
+    expectItemCountInInventory(state, 'coins', 50)
     expectQuests(state, [
       MAIN,
       "The Merchant's Lost Caravan",
