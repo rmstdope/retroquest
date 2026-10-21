@@ -42,10 +42,10 @@ export class Miners extends Character {
       '\n' +
       `The ${characterName('lead miner')} turns it over and hands it back: ` +
       speech(
-        "'Pretty thing. Not much use to an old man with a pick, though.' " +
-          "His eyes go to the boy on the bucket. 'If it's quiet you're " +
-          "handing out, I know who needs it.'",
-      )
+        "'Pretty thing. Not much use to an old man with a pick, though.'",
+      ) +
+      ' His eyes go to the boy on the bucket. ' +
+      speech("'If it's quiet you're handing out, I know who needs it.'")
     )
   }
 
@@ -102,12 +102,13 @@ export class Miners extends Character {
       this.thanked = true
       return (
         `The ${characterName('lead miner')} nods toward the bucket, where ` +
-        `${characterName('Tobin')} sits with the charm in his fist: ` +
+        'Tobin sits with the charm in his fist: ' +
         speech(
           "'He talked to me. Asked me how long till we're up top. First thing " +
-            "he's said since the rock came down.' He clears his throat. " +
-            "'Thank you, Elior.'",
-        )
+            "he's said since the rock came down.'",
+        ) +
+        ' He clears his throat. ' +
+        speech("'Thank you, Elior.'")
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {

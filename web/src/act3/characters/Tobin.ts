@@ -57,23 +57,21 @@ export class Tobin extends Character {
         `You give the [item_name]${item.name}[/item_name] to ${characterName(this.name)}.`,
       ) +
       '\n' +
-      event(
-        `${characterName(this.name)} turns the pale stone over in his fingers. As his hand ` +
-          'closes around it, the endless dripping of the gallery seems to step ' +
-          'back a pace, and his shoulders come down for the first time since ' +
-          'you met him.',
-      ) +
+      `Tobin turns the pale stone over in his fingers. As his hand ` +
+      'closes around it, the endless dripping of the gallery seems to step ' +
+      'back a pace, and his shoulders come down for the first time since ' +
+      'you met him.' +
       '\n' +
       `${characterName(this.name)}: ` +
+      speech("'It's quiet.'") +
+      ' His voice is a cracked whisper. ' +
       speech(
-        "'It's quiet.' His voice is a cracked whisper. 'I could still hear " +
-          "it. Me, shouting. All this time, I could still hear it.'",
+        "'I could still hear it. Me, shouting. All this time, I could still " +
+          "hear it.'",
       ) +
       '\n' +
-      event(
-        'Across the gallery, the lead miner sets down his pick and does not ' +
-          'pick it up again.',
-      ) +
+      'Across the gallery, the lead miner sets down his pick and does not ' +
+      'pick it up again.' +
       '\n' +
       remembered('Selflessness')
     )

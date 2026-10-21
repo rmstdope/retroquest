@@ -139,6 +139,7 @@ describe('Miners and Tobin', () => {
     expect(thanks).toContain('He talked to me. Asked me how long till we')
     expect(thanks).toContain('Thank you, Elior.')
     expectMarkupWellFormed(thanks)
+    expectDialogueSpeaker(thanks, 'lead miner')
     expect(miners.talkTo(game.state)).toContain('Still here, Elior?')
   })
 
