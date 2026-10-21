@@ -12,7 +12,7 @@ import { FLAG_HERMITS_WARNING_ACCEPTED } from '../Act2StoryFlags'
  * Wilderness mentor who grants a protective charm and warns of deeper trials.
  *
  * The first interaction grants a ProtectiveCharm and sets the acceptance flag;
- * later talks only reinforce the guidance.
+ * later talks only tell the player the forest is ready for them.
  */
 export class ForestHermit extends Character {
   hasWarned = false
@@ -29,7 +29,7 @@ export class ForestHermit extends Character {
     })
   }
 
-  /** Warn the player and give the charm once, then repeat the guidance. */
+  /** Warn the player and give the charm once, then send the player on. */
   override talkTo(gameState: GameState): string {
     const name = this.name
     const eventMsg = event('You approach the ' + characterName(name) + '.')
