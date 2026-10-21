@@ -1,4 +1,4 @@
-import { Quest, type GameState } from '@/engine'
+import { Quest, characterName, type GameState } from '@/engine'
 import {
   FLAG_GATHERING_STORM_COMPLETED,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
@@ -8,6 +8,20 @@ import {
   FLAG_HERMITS_WARNING_COMPLETED,
   FLAG_NYX_TRIALS_COMPLETED,
 } from '../Act2StoryFlags'
+
+const SIR_CEDRIC = characterName('Sir Cedric')
+const NYX = characterName('Nyx')
+const SPECTRAL_LIBRARIAN = characterName('Spectral Librarian')
+const PROPHETIC_VISION = '[spell_name]Prophetic Vision[/spell_name]'
+
+/** The opening journal entry, which is also the quest description. */
+const OPENING_ENTRY =
+  'Greendale is bigger than any place you have seen, but the talk in its ' +
+  'streets is low and uneasy. People speak of a darkness gathering beyond ' +
+  'the walls. Your grandmother told you to find ' +
+  SIR_CEDRIC +
+  ' at the castle; he can help ' +
+  'you understand it.'
 
 /**
  * Act II main quest tracking the narrative arc. `checkUpdate` composes layered
@@ -19,14 +33,7 @@ export class TheGatheringStormQuest extends Quest {
   constructor() {
     super({
       name: 'The Gathering Storm',
-      description:
-        'Having just arrived in the bustling city of Greendale, Elior senses an ' +
-        'ominous presence growing in the shadows. Strange whispers speak of dark ' +
-        'forces gathering strength, threatening the peace of both the city and ' +
-        'the surrounding lands. To understand the true nature of this emerging ' +
-        'threat and find a way to combat it, Elior must seek out Sir Cedric, the ' +
-        'respected knight commander, who may hold crucial knowledge about the ' +
-        'darkness that approaches.',
+      description: OPENING_ENTRY,
     })
   }
 
@@ -42,14 +49,7 @@ export class TheGatheringStormQuest extends Quest {
   override checkUpdate(gameState: GameState): boolean {
     let updated = false
     const earlier: string[] = []
-    let newDesc =
-      'Having just arrived in the bustling city of Greendale, Elior senses an ' +
-      'ominous presence growing in the shadows. Strange whispers speak of dark ' +
-      'forces gathering strength, threatening the peace of both the city and ' +
-      'the surrounding lands. To understand the true nature of this emerging ' +
-      'threat and find a way to combat it, Elior must seek out Sir Cedric, the ' +
-      'respected knight commander, who may hold crucial knowledge about the ' +
-      'darkness that approaches.'
+    let newDesc = OPENING_ENTRY
     if (gameState.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)) {
       if (!this.flagState[FLAG_SPOKEN_TO_SIR_CEDRIC]) {
         this.flagState[FLAG_SPOKEN_TO_SIR_CEDRIC] = true
@@ -57,8 +57,12 @@ export class TheGatheringStormQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nSir Cedric has explained that dark forces are gathering and he needs ' +
-        'allies with magical knowledge. '
+        '\n\n' +
+        SIR_CEDRIC +
+        ' calls it the Gathering ' +
+        'Storm. He needs allies who know magic, but he will not trust you on ' +
+        'your word alone. He wants to see you fight first, with the training ' +
+        'sword.'
     }
     if (gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)) {
       if (!this.flagState[FLAG_DEMONSTRATED_COMBAT_SKILLS]) {
@@ -67,19 +71,15 @@ export class TheGatheringStormQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nHaving proven your martial prowess with the training sword, you ' +
-        "have earned Sir Cedric's trust in your combat abilities. This " +
-        'demonstration of skill has strengthened your position as a valuable ' +
-        'ally in the fight against the growing darkness. Sir Cedric has ' +
-        'revealed the true scope of the mission: you must journey into the ' +
-        'enchanted forest to seek out the mystical being known as Nyx, who ' +
-        'possesses ancient knowledge that could help combat the gathering ' +
-        'shadows. Before attempting this dangerous quest, you need to gather ' +
-        'essential supplies from the Market District: a forest survival kit, ' +
-        'enhanced lantern, and quality rope. Time is of the essence, as the ' +
-        "darkness grows stronger each day, and only Nyx's ancient wisdom may " +
-        'hold the key to understanding and defeating these otherworldly ' +
-        'threats.'
+        '\n\n' +
+        SIR_CEDRIC +
+        ' watched you with the ' +
+        'training sword and now trusts you. He wants you to find ' +
+        NYX +
+        ', deep in the Enchanted Forest, ' +
+        'because her old wisdom may show what you are truly facing. He gave ' +
+        'you a hundred coins for a survival kit, an enhanced lantern and rope ' +
+        'from the Market District.'
     }
     if (gameState.getStoryFlag(FLAG_SUPPLIES_QUEST_COMPLETED)) {
       if (!this.flagState[FLAG_SUPPLIES_QUEST_COMPLETED]) {
@@ -88,15 +88,9 @@ export class TheGatheringStormQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nWith all the essential supplies now gathered - the forest survival ' +
-        'kit, enhanced lantern, and quality rope - you are properly equipped ' +
-        "for the dangerous journey into the enchanted forest. The merchant's " +
-        'guidance and the quality of the equipment give you confidence that ' +
-        'you can navigate the magical perils ahead. Now fully prepared, the ' +
-        'path to finding Nyx and unlocking the ancient wisdom needed to ' +
-        'combat the growing darkness lies before you. The forest awaits, and ' +
-        'with it, the answers that could save both Greendale and the surrounding ' +
-        'lands from the encroaching shadow.'
+        '\n\nThe survival kit, the lantern and the rope are packed. The ' +
+        'merchants of Greendale have done what they can for you. The rest of ' +
+        'the road leads to the edge of the Enchanted Forest.'
     }
     if (gameState.getStoryFlag(FLAG_ANCIENT_LIBRARY_COMPLETED)) {
       if (!this.flagState[FLAG_ANCIENT_LIBRARY_COMPLETED]) {
@@ -105,17 +99,12 @@ export class TheGatheringStormQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nThe ancient hidden library has revealed its secrets! Through the ' +
-        "Spectral Librarian's guidance, you have uncovered crucial knowledge " +
-        'about your family heritage and learned the powerful dispel spell. ' +
-        'The chronicle was written by the Wardens of the Dawn, and their ' +
-        'magic was the unbinding kind; its last page warns that Malakar ' +
-        'seeks the blood of Willowbrook. Armed with what you now know of ' +
-        'the Wardens and of the magical arts, you now ' +
-        'possess the knowledge and power needed to confront the gathering ' +
-        'storm. The pieces of the puzzle are falling into place, and with ' +
-        'each revelation, the path to finding Nyx and ultimately defeating ' +
-        'the encroaching shadow becomes clearer.'
+        '\n\nBeneath Greendale, the ' +
+        SPECTRAL_LIBRARIAN +
+        ' taught you the dispel spell. The chronicle ' +
+        'there was written by the Wardens of the Dawn, and their magic was ' +
+        'the unbinding kind. Its last page warns that Malakar seeks the blood ' +
+        'of Willowbrook.'
     }
 
     if (gameState.getStoryFlag(FLAG_HERMITS_WARNING_COMPLETED)) {
@@ -125,14 +114,11 @@ export class TheGatheringStormQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        "\n\nBy heeding the Hermit's warning and properly preparing with the " +
-        'survival kit, you have successfully navigated the threshold between ' +
-        'the civilized world and the wild Enchanted Forest. The ancient ' +
-        "protective runes have recognized your readiness, and the forest's " +
-        "guardians have granted you safe passage. With the hermit's blessing " +
-        'and proper preparation, you can now venture into the mystical realm ' +
-        'where Nyx awaits. The path forward is clear, and the final phase of ' +
-        'your quest to understand and combat the gathering darkness can begin.'
+        '\n\nAt the standing stones you opened the survival kit and studied ' +
+        'its map, as the hermit urged. You know now which paths to take and ' +
+        'which to avoid. Somewhere inside the forest, ' +
+        NYX +
+        ' is waiting.'
     }
 
     if (gameState.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)) {
@@ -142,19 +128,18 @@ export class TheGatheringStormQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nThe trials are complete! You have successfully met with Nyx, the ' +
-        'ancient forest sprite, and proven yourself worthy of her greatest ' +
-        'gifts. Through your demonstration of wisdom, compassion, and ' +
-        'courage throughout your journey, Nyx has blessed you with the ' +
-        'sacred prophetic vision spell - the power to see glimpses of ' +
-        'possible futures and understand the threads of fate. Along with ' +
-        "this ultimate magical ability, you have received Nyx's Token as a " +
-        'symbol of your alliance with the forest spirits, and the Forest ' +
-        "Heart Crystal containing the very essence of nature's power. With " +
-        'these powerful tools and newfound magical sight, you are now ready ' +
-        'to face the gathering storm and protect both Greendale and the ' +
-        'surrounding lands from the darkness that threatens to consume them ' +
-        'all.'
+        '\n\n' +
+        NYX +
+        ' judged you worthy and gave ' +
+        'you the ' +
+        PROPHETIC_VISION +
+        ' spell, her token ' +
+        'and the Forest Heart Crystal. She left you with the words from the ' +
+        'glade stone: power follows purpose; purpose follows truth. When ' +
+        'every other task in Greendale is done, cast the vision with ' +
+        SIR_CEDRIC +
+        ' beside you, so you can ' +
+        'both see what is coming.'
     }
 
     this.setJournal(earlier, newDesc)
