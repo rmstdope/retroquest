@@ -140,7 +140,7 @@ export class WaterNymphs extends Character {
         '\n' +
         greeting +
         '\n\n' +
-        speech(`${riddle.question}`) +
+        speech(riddle.question) +
         '\n\n' +
         RIDDLE_HELP
       )
@@ -225,7 +225,7 @@ export class WaterNymphs extends Character {
       ` shake their heads gently as you say '${words}'.[/failure] ` +
       speech('Is that really what you think? Will you hear it again?') +
       '\n\n' +
-      speech(`${riddle.question}`) +
+      speech(riddle.question) +
       hint
     )
   }

@@ -152,6 +152,7 @@ describe("The Knight's Test bout", () => {
     const out = run(game, ['cast mend on sir cedric'])
     expect(out).toContain('answer with mend instead.')
     expect(out).toContain('A mage.')
+    expect(out).not.toContain(".' ")
     expect(out).toContain('He pauses, his expression growing more serious.')
     expect(game.state.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)).toBe(true)
     expectItemInInventory(game.state, 'training sword', false)

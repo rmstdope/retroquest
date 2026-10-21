@@ -17,12 +17,16 @@ describe('Forest Sprites voice', () => {
     expect(game.state.getStoryFlag(FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED)).toBe(
       true,
     )
-    expect(answer).toContain(
-      'A traveller— —with muddy boots— —wanting the deep paths.',
-    )
-    expect(answer).toContain(
-      "And the nymphs have riddles— —east of here— —if you're clever.",
-    )
+    for (const fragment of [
+      'A traveller—',
+      '—with muddy boots—',
+      '—wanting the deep paths.',
+      'And the nymphs have riddles—',
+      '—east of here—',
+      "—if you're clever.",
+    ]) {
+      expect(answer).toContain(`[dialogue]${fragment}[/dialogue]`)
+    }
     expect(answer).not.toMatch(/ancient|sacred|wisdom/i)
     expect(answer).not.toMatch(/light and a ward|unwarded/i)
     expectMarkupWellFormed(answer)
@@ -36,9 +40,14 @@ describe('Forest Sprites voice', () => {
 
     const answer = sprites.talkTo(game.state)
 
-    expect(answer).toContain(
-      'Back again— —did you forget? Nymphs are east— —with their riddles.',
-    )
+    for (const fragment of [
+      'Back again—',
+      '—did you forget?',
+      'Nymphs are east—',
+      '—with their riddles.',
+    ]) {
+      expect(answer).toContain(`[dialogue]${fragment}[/dialogue]`)
+    }
     expect(answer).not.toMatch(/light and a ward|unwarded/i)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'forest sprites')

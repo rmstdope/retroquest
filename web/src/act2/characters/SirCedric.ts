@@ -374,11 +374,12 @@ export class SirCedric extends Character {
         "'s practice blade stops short, as if it had struck a wall.\n" +
         characterName('Sir Cedric') +
         ' lowers the blade slowly. He is watching your hands now, not your face.\n' +
+        speech('A mage.') +
+        ' A long breath. ' +
         speech(
-          "A mage.' A long breath. 'The sergeant never trusted what he " +
-            "couldn't hit, and I couldn't hit that. Better it stands beside " +
-            'me than against me. I can trust someone who knows when not to ' +
-            'fight fair.',
+          "The sergeant never trusted what he couldn't hit, and I couldn't " +
+            'hit that. Better it stands beside me than against me. I can ' +
+            'trust someone who knows when not to fight fair.',
         ),
     )
   }

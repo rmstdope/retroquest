@@ -18,6 +18,7 @@ function contentFiles(dir: string): string[] {
  * Written passages (journal pages, diaries, chronicles, the visitors' book)
  * are read out of a book, not spoken, so they keep their quote marks.
  */
+// A new written constant must be added here by hand.
 const WRITTEN_PASSAGES = ['MALAKAR_WARNING', 'VISITOR_ENTRY']
 const QUOTE = /^['"]|['"]$/
 

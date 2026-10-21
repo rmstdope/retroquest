@@ -75,11 +75,17 @@ export class ForestSprites extends Character {
       return (
         eventMsg +
         '\n' +
-        speech('A traveller— —with muddy boots— —wanting the deep paths.') +
+        speech('A traveller—') +
         '\n\n' +
-        speech(
-          "And the nymphs have riddles— —east of here— —if you're " + 'clever.',
-        ) +
+        speech('—with muddy boots—') +
+        '\n\n' +
+        speech('—wanting the deep paths.') +
+        '\n\n' +
+        speech('And the nymphs have riddles—') +
+        '\n\n' +
+        speech('—east of here—') +
+        '\n\n' +
+        speech("—if you're clever.") +
         '\n\n' +
         this.pathLine(gameState)
       )
@@ -88,10 +94,13 @@ export class ForestSprites extends Character {
       return (
         eventMsg +
         '\n' +
-        speech(
-          'Back again— —did you forget? Nymphs are east— —with their ' +
-            'riddles.',
-        ) +
+        speech('Back again—') +
+        '\n\n' +
+        speech('—did you forget?') +
+        '\n\n' +
+        speech('Nymphs are east—') +
+        '\n\n' +
+        speech('—with their riddles.') +
         '\n\n' +
         this.pathLine(gameState)
       )
