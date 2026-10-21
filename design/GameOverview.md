@@ -4,7 +4,7 @@
 
 ## High-Level Concept
 
-RetroQuest: The Awakening is a retro-style text adventure game set in a vibrant fantasy world. Players take on the role of a humble farmer boy who discovers latent magical powers and learns he is destined to save the kingdom from an evil sorcerer. The game blends classic interactive fiction mechanics with a rich narrative and memorable characters.
+RetroQuest: The Awakening is a retro-style text adventure game set in a vibrant fantasy world. Players take on the role of a humble farmer boy who discovers latent magical powers and learns that his vanished parents, a fallen sorcerer and the kingdom's fate are one story, and that he carries it. The game blends classic interactive fiction mechanics with a rich narrative and memorable characters.
 
 ## Setting
 
@@ -12,11 +12,11 @@ The story unfolds in the magical kingdom of Eldoria, a land of rolling farmlands
 
 ## Main Characters
 
-- **Elior:** The protagonist, a young farmer boy who discovers he is the chosen one with magical abilities.
+- **Elior:** The protagonist, a young farmer boy raised by his grandmother, who discovers his magic is his parents' inheritance and that the ward that protects the kingdom lives in him.
 - **Mira:** A wise village healer who mentors Elior and helps him unlock his powers.
 - **Sir Cedric:** A loyal knight who becomes Elior’s protector and guide.
 - **Nyx:** A mischievous forest sprite who aids Elior with riddles and secrets.
-- **Malakar:** The evil sorcerer seeking to conquer Eldoria with dark magic.
+- **Malakar:** A fallen Warden and his parents' closest friend, who tore a wound in time to save them and was corrupted by the power he found there; he drains the king to break the ward and bring his friends back.
 - **King Alden:** The benevolent ruler of Eldoria, whose fate rests in Elior’s hands.
 
 ## Gameplay Overview

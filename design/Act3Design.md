@@ -94,7 +94,7 @@ Mira lets slip, once per relic site, that she knew the Wardens; each is recognis
 
 #### Mira’s Confession
 
-Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned from Aren, Lysa and Malakar, and when Aren and Lysa became the ward she settled in Willowbrook as its healer to watch over Elior. Grandmother knew, and kept the secret with her. Elior confronts her: “Why didn’t you tell me?” Mira answers that she could not risk the seal, that Malakar’s cloaked agent was searching Willowbrook for the amulet and any word could have reached him, and that she is telling him now because Elior has earned the truth. The amulet, she adds, is the anchor of the ward his parents became. The confession is a fixed dialogue, not a branching choice; Mira performs the rite on her next conversation.
+Before the Warding Rite, Mira stops. She was the Wardens’ pupil: she learned from Aren, Lysa and Malakar, and when Aren and Lysa became the ward she settled in Willowbrook as its healer to watch over Elior. Grandmother knew, and kept the secret with her. Elior confronts her: “Why didn’t you tell me?” Mira answers that she could not risk the seal, that Malakar’s cloaked agent was searching Willowbrook for the amulet and any word could have reached him, and that she is telling him now because Elior has earned the truth. The amulet, she adds, is the anchor of the ward his parents became. The confession itself is fixed, but before the rite Elior may answer it once: `say i forgive you to mira` or `say you should have told me to mira` (forgiveness or reproach, recorded as a flag and remembered by Mira; neither is a virtue moment). Mira performs the rite on her next conversation either way.
 
 ### Storytelling Quest (Spans All Three Locations)
 
@@ -225,7 +225,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
     -   Healing Herbs (basic curatives and components; not carriable — Mira uses them in the Warding Rite and they leave the hut)
     -   Teleportation Focus (crystal prism used by Mira to anchor travel between relic sites)
 -   Characters:
-    -   Mira (mentor; explains the relics, initiates Act III and makes her confession before the Warding Rite)
+    -   Mira (mentor; explains the relics, initiates Act III and makes her confession before the Warding Rite; answers `say <topic> to mira` about his parents, Malakar, the amulet and Grandmother, evasively before the confession and honestly after it)
     -   Sir Cedric (companion; accompanies Elior)
 -   Quest Relevance: Entry point to the Main Quest “The Three Virtues”; Mira’s Teleportation Focus enables travel to each relic location and, later, to the fortress threshold.
 -   Exits:
@@ -249,7 +249,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 2. Shoreline Markers
 
 -   Description: Weathered stone steles stand at the surf’s edge, carved with faint moon sigils worn by salt.
--   Items: Steles and Polished Shell; searching reveals Moon Rune shards.
+-   Items: Steles and Polished Shell (held to the ear it hums a woman's slow tune, the lullaby the phantoms and the dream voice echo later); searching reveals Moon Rune shards.
 -   Characters: None
 -   Quest Relevance: Collect Moon Rune shards for “Tideward Sigils.”
 -   Exits:
@@ -400,7 +400,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 4. Echo Chambers
 
 -   Description: Smooth caverns that amplify every footfall; faint whispers mimic speech.
--   Items: Runic Walls; examining them reveals Resonant Chant Rubbings, and searching reveals the Old Oath Scrolls.
+-   Items: Runic Walls; examining them reveals Resonant Chant Rubbings, and searching reveals the Old Oath Scrolls. `listen` (or a second examine of the walls) plays the echo of the night Aren, Lysa and Malakar parted: three voices, never named by the game, ending with the letter's line and a door closing.
 -   Characters: None
 -   Quest Relevance: Examine the Runic Walls to learn the chant, then read the Old Oath Scrolls (they stay re-readable) before answering the Dragon's question.
 -   Exits:
@@ -410,7 +410,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: A hush falls over dark water pools; sound seems to fold into the stone.
 -   Items: Echo Stones, Dark Pool, Stillwater Phial, and Quiet Charm.
--   Characters: Silence Keeper and Wandering Phantoms.
+-   Characters: Silence Keeper and Wandering Phantoms (under their whispers some hum the shell's tune; one clear word under every whisper).
 -   Quest Relevance: Finalize the Oath of Stillness to silence illusions (completes “Oath of Stillness”).
 -   Exits:
     -   North to Collapsed Galleries
@@ -774,6 +774,7 @@ This sequence completes all Act III requirements in a linear path. Each step lis
 
 -   Commands and yields:
     -   `talk to Mira` → After every Act III non-main quest is complete, Mira makes her confession: she was the Wardens’ pupil, stayed in Willowbrook to watch over Elior, and Grandmother knew. Elior asks, “Why didn’t you tell me?”
+    -   _Optional:_ `say i forgive you to mira` or `say you should have told me to mira` → Elior answers the confession; Mira replies in kind and the rite follows either way.
     -   `talk to Mira` → Mira performs the Warding Rite, consumes the relics, presses the Healing Herbs into Elior’s hands (they leave the hut), creates the Lifelight Elixir, and completes “The Three Virtues.”
     -   `take Lifelight Elixir` → Adds the elixir to inventory.
     -   `talk to Mira` → Teleports the party to the Entrance to Malakar’s Fortress.

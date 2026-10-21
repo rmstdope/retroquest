@@ -118,7 +118,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Enter the mirror labyrinth
     -   **Prerequisites:** Servant's Pendant and the Echo Stone from the Hall of Echoes
-    -   **Completion:** Combine servant guidance and echo knowledge; solving it teaches `truth_sight`
+    -   **Completion:** Walk the maze inside the one room: the Echoes give the route ("Left, then left, then the way your shadow does not go"), which the Echo Stone repeats inside the maze; `west`, `west`, then at the last fork the Servant's Pendant shows which corridor the reflection does not follow (east). A wrong turn, or a turn without the stone, returns Elior to the entrance with the reflections' laugh. Reaching the heart teaches `truth_sight`
     -   **Rewards:** The spell `truth_sight`
     -   **Story Impact:** Wisdom combines several sources of knowledge. `truth_sight` lets Elior
         see the Knight of Despair as he really is.
@@ -129,8 +129,8 @@ rule that all side quests must be completed before the main quest can be finishe
 
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Encounter the first lieutenant in the Hall of Echoes
-    -   **Prerequisites:** Guardian's Chain and `truth_sight` (from the maze)
-    -   **Completion:** Wear the Guardian's Chain, then say redemption to the knight (nothing is consumed)
+    -   **Prerequisites:** `truth_sight` (from the maze) and a shield against his despair: the Guardian's Chain, still carried, or the Loyalty Token
+    -   **Completion:** Raise the Guardian's Chain (or, if it was given to the captain, the Loyalty Token), then say redemption to the knight (nothing is consumed)
     -   **Rewards:** Knight's Redemption, Enhanced Echo Stone, the spell `redemptions_light`,
         access to the Tower of Shadows
     -   **Who he is:** **Malakar's agent from Acts I and II.** With `truth_sight` Elior sees that
@@ -145,14 +145,16 @@ rule that all side quests must be completed before the main quest can be finishe
 
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Face the second lieutenant in the Chamber of Whispers
-    -   **Prerequisites:** "The Knight of Despair" completed; Knight's Redemption and Loyalty Token
-    -   **Completion:** Use the Knight's Redemption and the Loyalty Token, cast `hearts_truth`, say
-        understanding
+    -   **Prerequisites:** "The Knight of Despair" completed; Knight's Redemption
+    -   **Completion:** Use the Knight's Redemption, cast `hearts_truth`, say understanding
     -   **Rewards:** Sorceress's Truth, the spell `hearts_truth`, the secret passage to the Memory
         Vault
     -   **Who she is:** **The mark on Elena's curse in Greendale (Act II)** was the silver mask
         she set on Elena's wrist. The same smiling mask crowns the Sorceress's staff. She cursed
         Elena on Malakar's orders to draw healers away from the king, and she is lonely because
+        no one has ever spoken to her without a lie. Her own lie to Elior, that his parents sold
+        him to save themselves, is her story, not his: `hearts_truth` hears the girl sold for a
+        sack of grain in a hungry winter, and her confession says so once she is redeemed. Because
         no one has ever spoken to her without a lie.
     -   **Story Impact:** Understanding pain leads to true victory
 
@@ -205,7 +207,7 @@ Elior grows from a simple farmer to a hero who chooses mercy or justice knowing 
     She was the Wardens' pupil.
 -   **Sir Cedric:** Holds the way out with Mira and is not in the hall. The Knight of Despair
     confesses the framing and asks Elior to carry his apology to Cedric; his honour is restored.
--   **Nyx:** Her refrain is the one Elior says to Malakar.
+-   **Nyx:** Her refrain is the one Elior says to Malakar, and her light in the hedge says it once more, as the last spoken line before Grandmother's "Welcome home".
 
 ### Malakar's Complexity
 
@@ -339,11 +341,11 @@ A spiral tower where shadows move independently and whispered lies come from eve
 
 #### Usable Items
 
--   Loyalty Token (proves your allies' trust and silences the whispers)
+-   Loyalty Token (must be in the pack for a name to be heard; the whispers say Elior's friends left him, and the stair opens once he has named all three who stayed: `say mira to whispers`, `say cedric to whispers`, `say nyx to whispers`, each answered by that friend's voice through the token; "grandmother" gets a gentle line and is not wrong)
 
 #### Characters
 
--   Shadow Whispers
+-   Whispers (answer to `say <name> to whispers`)
 
 #### Exits
 
@@ -528,11 +530,15 @@ story. None of them are implemented yet.
 
 ## The Final Choice and the Three Endings
 
-Elior enters the Throne Chamber knowing the truth. Malakar tempts him: join me and I will tell
-you everything about your family. Elior speaks the refrain to him, which is his refusal:
+Elior enters the Throne Chamber knowing the truth. Malakar's offer is true and terrible: the wound
+is a wound in time, and if the ward breaks (the amulet pressed to Alden's crown, which holds the
+other half) it opens fully and pulls the days back to before the fever. Aren and Lysa wake at the
+workbench as they were. The price is the king, every year the kingdom has had since, and Elior
+himself, who was born after the tear. He is not lying; he has done the sums. Elior speaks the
+refrain to him, which is his refusal:
 **"Power follows purpose; purpose follows truth."** At this moment Elior uses the amulet: it opens, the ward unseals, and
-the dream voice speaks once more, through the amulet and the failing Malakar, asking his friend's son to finish
-what he could not.
+the dream voice speaks once more, through the amulet and the failing Malakar: "Be patient where I
+was not. Close what I opened, and let them rest."
 
 Then the one choice. The Lifelight Elixir can be used once:
 
@@ -546,22 +552,18 @@ Then the one choice. The Lifelight Elixir can be used once:
 Virtue moments (see Optional choices) are recorded as three counters shared across all four acts:
 **mercy**, **truth** and **selfless**. They never block the golden path.
 
-| Ending         | What it is                                                                           | What opens it                                                                                              |
+| Ending         | What it is                                                                           | What the virtue record adds                                                                                 |
 | -------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| **Redemption** | Elior offers the elixir and casts forgiveness; the wound is healed. Alden is freed as the drain stops, and Malakar lives, powerless and himself again. | Always open: this is the golden path. Each mercy moment in the game adds a line from Malakar and the knight (no threshold). |
-| **Justice**    | Alden is freed; Elior names Malakar's crimes and seals him with the amulet and royal bindings. | **2 truth moments** in the game. Act IV has one, so at least one from Acts I-III.                          |
-| **Sacrifice**  | Alden is freed; Elior gives his magic to close the wound; Malakar lives, powerless, to answer to the king.                            | **2 selfless moments** in the game. Act IV has none, so both come from Acts I-III.                       |
+| **Redemption** | Elior offers the elixir and casts forgiveness; the wound is healed. Alden is freed as the drain stops, and Malakar lives, powerless and himself again. | The golden path. Each mercy moment in the game adds a line from Malakar and the knight (no threshold). |
+| **Justice**    | Alden is freed; Elior names Malakar's crimes and seals him with the amulet and royal bindings. | Always open. With **2 truth moments** in the game King Alden adds a line ("You named every crime and did not add one"). |
+| **Sacrifice**  | Alden is freed; Elior gives his magic to close the wound; Malakar lives, powerless, to answer to the king.                            | Always open. With **2 selfless moments** in the game Aren adds a line to the farewell ("We watched you give, again and again"). |
 
-The Act III mercy at the Charred Inscription (mending Malakar's struck name) only adds to the
-mercy counter. Mercy has no threshold, and Justice and Sacrifice read only truth and selfless, so
-it changes no ending's availability.
-
-Alden is freed in every ending: by the elixir in Justice and Sacrifice, and by the wound closing
-in Redemption. What the choice decides is Malakar's fate and the cost. If neither Justice nor
-Sacrifice is open, `use lifelight elixir on prison` is refused ("the crystal does not answer
-to one who has not yet spoken the truth, or given without asking") and Redemption is the one path
-left, so no player is stranded. If the prison is broken and only one of the two is open, the
-closed command (`say justice to malakar` or `say sacrifice to malakar`) is refused with a line that says why.
+No ending is ever closed by the virtue record; it only colours the text. Alden is freed in every
+ending: by the elixir in Justice and Sacrifice, and by the wound closing in Redemption. What the
+choice decides is Malakar's fate and the cost. Once the prison is broken, `say justice to malakar`
+or `say sacrifice to malakar` chooses between the two. Commands given out of order are answered
+in-world (the refrain before Malakar has spoken makes him laugh, then stop; the elixir or the
+amulet before the refrain gets his "Not yet"), and nothing is lost by them.
 
 In every ending the wound is closed, and the parents speak to Elior one last time, then rest in
 peace. They are not alive and nothing here hints that they are.
@@ -574,8 +576,12 @@ peace. They are not alive and nothing here hints that they are.
 
 ### The Epilogue
 
-After any ending Elior walks home. In Willowbrook Field, the withered field from Act I, Elior
-casts `grow` and it turns green. Grandmother is at the gate. The game ends there.
+After any ending Elior walks home. In Willowbrook Field, the withered field from Act I,
+Grandmother is at the gate humming the cradle song ("Your mother's. I didn't think you'd
+remember") and carries the parents' message; Sir Cedric at the fence hears the captain's and the
+knight's apologies; Mira takes the Sorceress's to Elena; Nyx is a light in the hedge. Elior casts
+`grow` and the field turns green, Nyx says the refrain once more, and Grandmother says "Welcome
+home." The game ends there.
 
 ## Optional choices
 
@@ -584,6 +590,7 @@ and changes a few lines of dialogue.
 
 | Where                                   | The choice                                                              | Records     |
 | --------------------------------------- | ----------------------------------------------------------------------- | ----------- |
+| Outer Courtyard, Captain of the Guard   | Give the freed captain the Guardian's Chain so he can walk home through the fortress (`give guardian's chain to captain`); Elior then faces the knight with the Loyalty Token instead | **selfless** |
 | Mirror Labyrinth, The True Self         | Tell the reflection the truth about Elior's fear (`say truth to true self`) | **truth**   |
 | Hall of Echoes, Ghostly Warriors        | Cast `redemptions_light` on the ghostly warriors and let them rest      | **mercy**   |
 
@@ -679,11 +686,13 @@ where they would occur.
     - `cast bless on servants`
         - Quest completed: "The Trapped Servants"
         - Items obtained: `Loyalty Token`, `Servant's Pendant`
+    - Optional (**selfless**): `give guardian's chain to captain of the guard`
     - `talk to freed servants` → "The mirrors show truth, but only echoes from the halls can reveal
       the full path."
 
 3. **Mirror Labyrinth (first visit):** `examine mirrors`, `use servant's pendant` (partial
-   guidance only). Need the Hall of Echoes first.
+   guidance only). Any turn without the Echo Stone returns Elior to the entrance; the Hall of
+   Echoes comes first.
 
 4. **Hall of Echoes (first visit):**
 
@@ -693,7 +702,8 @@ where they would occur.
 
 5. **Mirror Labyrinth (second visit):**
 
-    - `use echo stone`, `solve maze puzzle`
+    - `west`, `west` (the Echo Stone repeats the route), `use servant's pendant` at the fork
+      (the reflection does not follow east), `east`
         - Spell learned: `truth_sight`
         - Quest completed: "The Maze of Mirrors"
     - Optional (**truth**): `say truth to true self`
@@ -704,19 +714,21 @@ where they would occur.
 
     - `cast truth sight on knight of despair` → the grey cloak and seal are the stranger's from
       Willowbrook and from the Secret Documents
-    - `use guardian's chain`, `talk to knight of despair`, `say redemption to knight`
+    - `use guardian's chain` (or `use loyalty token`, if the chain went to the captain),
+      `talk to knight of despair`, `say redemption to knight`
         - Quest completed: "The Knight of Despair"
         - Items obtained: `Knight's Redemption`, `Enhanced Echo Stone`
         - Spell learned: `redemptions_light`
         - The knight confesses: Willowbrook, the amulet, the framing of Cedric
     - Optional (**mercy**): `cast redemptions light on ghostly warriors`
 
-7. **Tower of Shadows:** `go up`, `use loyalty token` (silences the whispers).
+7. **Tower of Shadows:** `say mira to whispers`, `say cedric to whispers`, `say nyx to whispers`
+   (each friend answers through the Loyalty Token; the stair opens on the third name), `go up`.
 
 8. **Chamber of Whispers:**
 
     - `examine staff` → the silver mask, the mark on Elena's curse
-    - `talk to sorceress of lies`, `use knight's redemption`, `use loyalty token`
+    - `talk to sorceress of lies`, `use knight's redemption`
     - `cast hearts truth on sorceress`, `say understanding to sorceress`
         - Quest completed: "The Sorceress of Lies"
         - Item obtained: `Sorceress's Truth`
@@ -751,7 +763,7 @@ where they would occur.
     - `talk to malakar` → he offers the answers about Elior's family for loyalty
     - `say refrain to malakar` → "Power follows purpose; purpose follows truth." (this is the refusal)
     - `use ancient amulet` → the amulet opens, the ward unseals, and the dream voice speaks
-      through it and Malakar: "Finish what I could not."
+      through it and Malakar: "Close what I opened, and let them rest."
     - `use lifelight elixir on malakar`, then `say forgiveness to malakar` → Spell learned: `forgiveness`
     - `cast forgiveness on wound` → the elixir is consumed
         - Quest completed: "The Final Stand"
@@ -783,8 +795,9 @@ Spells: `truth_sight` (5), `redemptions_light` (6), `hearts_truth` (8), `forgive
 
 **Items strictly necessary to complete Act IV:**
 
--   `Ward Stone Fragment`, `Guardian's Chain`, `Guardian's Essence`, `Servant's Pendant`,
-    `Loyalty Token`, `Echo Stone` (Enhanced after the knight), `Knight's Redemption`,
+-   `Ward Stone Fragment`, `Guardian's Essence`, `Servant's Pendant`, `Loyalty Token`,
+    `Guardian's Chain` (or the Loyalty Token in its place, if the chain was given away),
+    `Echo Stone` (Enhanced after the knight), `Knight's Redemption`,
     `Sorceress's Truth`, `Ancient Amulet` (carried from Act I), `Lifelight Elixir` (consumed)
 
 ## Room Visitation Pattern
@@ -808,7 +821,10 @@ the Throne Chamber (Step 11) as the anchor of the ward.
 
 -   **Echo Stone:** basic navigation tool (Step 4) → enhanced memory tool (Step 6) → restores the
     vault orbs (Step 9)
--   **Guardian's Chain:** taken at the gates (Step 1), worn against the knight (Step 6)
+-   **Guardian's Chain:** taken at the gates (Step 1), raised against the knight (Step 6), or given
+    to the captain (Step 2) with the Loyalty Token taking its place in the hall
+-   **Loyalty Token:** names the friends in the Tower (Step 7); shields against the knight if the
+    chain was given away (Step 6)
 -   **Servant's Pendant:** servant guidance for the maze (Steps 3, 5)
 
 **Virtue demonstration items:**

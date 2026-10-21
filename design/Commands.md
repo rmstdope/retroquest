@@ -23,6 +23,7 @@ Below is a comprehensive list of all commands that should be possible to use in 
 -   look / observe / survey
 -   look at [object] / inspect [object] / examine [object] / check [object] / look [object]
 -   search / investigate
+-   listen / listen to [object]
 
 ## Inventory Management
 
@@ -48,7 +49,7 @@ Below is a comprehensive list of all commands that should be possible to use in 
 
 ## Miscellaneous
 
--   sleep / rest
+-   sleep / rest / wait
 -   map
 -   stats
 
