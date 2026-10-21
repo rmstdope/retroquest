@@ -11,7 +11,7 @@ import {
   FLAG_ACT4_THRONE_REFRAIN_SAID,
   VIRTUE_MERCY,
 } from '../Act4StoryFlags'
-import { endingPlayed, justiceChoosable, sacrificeChoosable } from '../endings'
+import { endingPlayed } from '../endings'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { Forgiveness } from '../spells/Forgiveness'
@@ -236,13 +236,6 @@ export class Malakar extends Character {
   private chooseJustice(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_SACRIFICE_SAID)) return CHOSEN
     if (gameState.getStoryFlag(FLAG_ACT4_JUSTICE_SAID)) return SAID_AMULET
-    if (!justiceChoosable(gameState)) {
-      return (
-        "[failure]The words will not come. Naming another's crimes asks " +
-        'for someone who has told the truth when it cost them, and you ' +
-        'have not been that often enough yet.[/failure]'
-      )
-    }
     gameState.setStoryFlag(FLAG_ACT4_JUSTICE_SAID, true)
     return [
       '“You tore the world, Malakar,” you say. “You drained the king. You ' +
@@ -257,13 +250,6 @@ export class Malakar extends Character {
   private chooseSacrifice(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_JUSTICE_SAID)) return CHOSEN
     if (gameState.getStoryFlag(FLAG_ACT4_SACRIFICE_SAID)) return SAID_AMULET
-    if (!sacrificeChoosable(gameState)) {
-      return (
-        '[failure]You reach for your magic to let it go, and your hands ' +
-        'close on it instead. You have not yet given often enough without ' +
-        'asking anything back.[/failure]'
-      )
-    }
     gameState.setStoryFlag(FLAG_ACT4_SACRIFICE_SAID, true)
     return [
       '“Take my magic,” you say. “All of it. Close the wound with that.”',

@@ -14,8 +14,7 @@ import {
   ARCH_LINE,
   endingPlayed,
   farewell,
-  justiceChoosable,
-  sacrificeChoosable,
+  truthLine,
   type Ending,
 } from '../endings'
 import {
@@ -35,15 +34,11 @@ const GENTLER =
   'The wound waits for something gentler than the amulet. Malakar looks up ' +
   'at you, as if he is waiting to hear something.'
 
-/** The start of the hint, before the endings that are open. */
-const HINT_START = 'The wound will not close for nothing.'
-
-/** The Justice sentence of the hint. */
-const HINT_JUSTICE =
-  "You could name Malakar's crimes and seal him away with it, in justice."
-
-/** The Sacrifice sentence of the hint. */
-const HINT_SACRIFICE = 'You could give up your magic to close it, in sacrifice.'
+/** The hint: both roads are always open. */
+const HINT =
+  "The wound will not close for nothing. You could name Malakar's crimes " +
+  'and seal him away with it, in justice. Or you could give up your magic ' +
+  'to close it, in sacrifice.'
 
 /**
  * The wound in time that Malakar tore, bleeding the king's light. The
@@ -90,15 +85,7 @@ export class Wound extends Item {
     if (gameState.getStoryFlag(FLAG_ACT4_SACRIFICE_SAID)) {
       return this.sacrificeEnding(gameState)
     }
-    const choices = [
-      justiceChoosable(gameState) ? HINT_JUSTICE : '',
-      sacrificeChoosable(gameState) ? HINT_SACRIFICE : '',
-    ].filter(Boolean)
-    const joined =
-      choices.length === 2
-        ? `${HINT_JUSTICE} Or ${HINT_SACRIFICE.replace('You', 'you')}`
-        : choices.join(' ')
-    return `${HINT_START} ${joined}`
+    return HINT
   }
 
   /** Forgiveness cast on the wound: the Redemption ending. */
@@ -120,12 +107,15 @@ export class Wound extends Item {
         'Thank you, Elior. I will stay here, by what I broke, and ' +
           'remember them properly this time.',
       ),
-      farewell('redemption'),
+      farewell('redemption', gameState),
       ARCH_LINE,
     ].join('\n')
   }
 
-  /** Justice: the king's bindings and the ward seal the wound, with Malakar. */
+  /**
+   * Justice: the king's bindings and the ward seal the wound, with Malakar.
+   * After two truth moments King Alden adds a line of his own.
+   */
   private justiceEnding(gameState: GameState): string {
     this.finish(gameState, 'justice')
     return [
@@ -141,9 +131,12 @@ export class Wound extends Item {
         'Then it falls to me to set right what he broke. Rest now. You ' +
           'have done enough.',
       ),
-      farewell('justice'),
+      truthLine(gameState),
+      farewell('justice', gameState),
       ARCH_LINE,
-    ].join('\n')
+    ]
+      .filter((line) => line !== null)
+      .join('\n')
   }
 
   /**
@@ -171,7 +164,7 @@ export class Wound extends Item {
         'King Alden',
         'He will answer to me, and he will live to do it. Thank you, farmer.',
       ),
-      farewell('sacrifice'),
+      farewell('sacrifice', gameState),
       ARCH_LINE,
     ].join('\n')
   }
