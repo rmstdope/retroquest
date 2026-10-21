@@ -60,6 +60,11 @@ export class Memories extends Item {
           'feed.',
       ),
       event(
+        'It is still pulling. Every hand in the room turns backwards, ' +
+          'wanting more of the days back, and the wound would take all of ' +
+          'them if nothing held it shut.',
+      ),
+      event(
         'Your parents before the wound, hands joined, pouring themselves ' +
           'into it until they are only light, bound to the amulet and to the ' +
           'crown of King Alden, so that you would be hidden and the wound ' +

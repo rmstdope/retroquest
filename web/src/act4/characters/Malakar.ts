@@ -117,18 +117,39 @@ export class Malakar extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)) {
       return dialogue(
         this.name,
-        'Please, Elior. The amulet, and they come home.',
+        'They would wake, Elior. Your mother would laugh at something your ' +
+          'father said. Is one boy and one tired king too much to pay for ' +
+          'that? Give me the amulet.',
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD, true)
-    return dialogue(
-      this.name,
-      "Aren's son. You have their eyes, both of them. You have seen the " +
-        'vault, so you know I loved them. Then help me, Elior. Give me the ' +
-        'amulet and I will bring them back, and I will tell you everything: ' +
-        'what they were like, what they sang over your cradle. Stand with ' +
-        'me. Please.',
-    )
+    return [
+      dialogue(
+        this.name,
+        "Aren's son. You have their eyes, both of them. You have seen the " +
+          'vault, so you know what I did, and you know it worked. They woke, ' +
+          'Elior. For a little while, they woke.',
+      ),
+      dialogue(
+        this.name,
+        'The wound runs backwards. Open it all the way and it pulls the ' +
+          'days back to before the fever, and they wake at the workbench as ' +
+          'they were. I am not lying to you. I have done the sums.',
+      ),
+      dialogue(
+        this.name,
+        'Only the ward holds it shut: half in your amulet, half in ' +
+          "Alden's crown. I have been bleeding the king for years to loosen " +
+          'his half. Give me yours and he can stop dying today.',
+      ),
+      dialogue(
+        this.name,
+        'And the price is the rest of it. The king. Every year the kingdom ' +
+          'has had since. And you. You were born after the tear, Elior. ' +
+          'When the days go back, you go with them. I am sorry. The sums ' +
+          'are still right.',
+      ),
+    ].join('\n')
   }
 
   /**
@@ -313,8 +334,9 @@ export class Malakar extends Character {
       ),
       dialogue(
         SHADOW_LABEL,
-        'Elior. I tore the world to keep them, and I lost them anyway. ' +
-          'Finish what I could not.',
+        'Elior. I tore the world to keep them, and I lost them anyway. I ' +
+          'could not wait; you can. Be patient where I was not. Close what ' +
+          'I opened, and let them rest.',
       ),
       event(
         'The Lifelight Elixir is warm in your hand. It can be used only ' +
