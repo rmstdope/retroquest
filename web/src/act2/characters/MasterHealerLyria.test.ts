@@ -10,6 +10,7 @@ import {
 } from '../Act2StoryFlags'
 import { MasterHealerLyria } from './MasterHealerLyria'
 import { CrystalFocus } from '../items/CrystalFocus'
+import { GreaterHealSpell } from '../spells/GreaterHealSpell'
 import { HealingHerbs } from '../items/HealingHerbs'
 import { WalkingStick } from '../items/WalkingStick'
 import {
@@ -227,6 +228,35 @@ describe('Lyria apprenticeship across a save', () => {
     expect(plain(talk)).not.toContain(BED_SCENE)
     expect(plain(teach)).toContain(TEACHING_STAGE)
     expect(reloaded.state.hasSpell('greater_heal')).toBe(true)
+  })
+})
+
+describe('Lyria with saves and the curse during the apprenticeship', () => {
+  it('keeps a finished apprenticeship from an old save', () => {
+    const game = createGame()
+    game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED, true)
+    game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
+    game.state.learnSpell(new GreaterHealSpell())
+    const reloaded = createGame()
+    expect(reloaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const answer = new MasterHealerLyria().talkTo(reloaded.state)
+
+    expect(plain(answer)).toContain('truly a master of the healing arts')
+    expect(reloaded.state.hasSpell('greater_heal')).toBe(true)
+  })
+
+  it('gives the curse reminder before the focus reminder', () => {
+    const game = gameAfterHerbs()
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    const lyria = new MasterHealerLyria()
+    lyria.talkTo(game.state)
+
+    const answer = plain(lyria.talkTo(game.state))
+
+    expect(answer.indexOf('Elena still?')).toBeLessThan(
+      answer.indexOf(REMINDER_LINE),
+    )
   })
 })
 

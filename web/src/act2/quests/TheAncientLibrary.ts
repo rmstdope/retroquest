@@ -31,6 +31,7 @@ export class TheAncientLibraryQuest extends Quest {
     return gameState.getStoryFlag(FLAG_ANCIENT_LIBRARY_ACCEPTED)
   }
 
+  /** Completes once dispel is known and the Crystal Focus is carried or given to Lyria. */
   override checkCompletion(gameState: GameState): boolean {
     // Quest completes when player has:
     // 1. Learned the dispel spell

@@ -19,11 +19,13 @@ export class TheHealersApprenticeQuest extends Quest {
     })
   }
 
+  /** Triggers when the player gives Lyria the healing herbs. */
   override checkTrigger(gameState: GameState): boolean {
     // Quest triggers when the player gives Lyria the healing herbs.
     return gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)
   }
 
+  /** Completes once Lyria has been given the Crystal Focus and taught greater heal. */
   override checkCompletion(gameState: GameState): boolean {
     // Quest completes when player has been taught greater heal over the carter's bed (focus given)
     return gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)

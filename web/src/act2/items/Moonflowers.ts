@@ -17,6 +17,7 @@ export class Moonflowers extends Item {
     })
   }
 
+  /** In the Healer's House Lyria waves the blooms away; elsewhere they glow or lie dormant. */
   override use(gameState: GameState): string {
     const currentRoom = gameState.currentRoom.name
     if (currentRoom.toLowerCase().includes('healer')) {
