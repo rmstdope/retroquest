@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
-import { WaterNymphs } from './WaterNymphs'
+import { RIDDLES, WaterNymphs } from './WaterNymphs'
 import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
@@ -32,7 +32,7 @@ describe('Water Nymphs dialogue markup', () => {
   it('uses known tags when answering after the last riddle', () => {
     const game = new Game([new Act2()])
     const nymphs = new WaterNymphs()
-    nymphs.currentRiddle = nymphs.riddles.length
+    nymphs.currentRiddle = RIDDLES.length
 
     const answer = nymphs.sayTo(game.state, 'water')
 
@@ -41,7 +41,7 @@ describe('Water Nymphs dialogue markup', () => {
   })
 
   it('attributes a wrong answer reply to the nymphs', () => {
-    const { game, nymphs } = createGameWithNymphs()
+    const { game } = createGameWithNymphs()
     game.commandParser.parse('talk to water nymphs')
 
     const answer = game.commandParser.parse('say wrong to water nymphs')
@@ -50,10 +50,9 @@ describe('Water Nymphs dialogue markup', () => {
     expect(answer).toContain(
       "'Is that really what you think? Will you hear it again?'",
     )
-    expect(answer).toContain(nymphs.riddles[0].question)
-    expect(answer).toContain(
-      "[dim]Consider what you've learned about the forest during your journey.[/dim]",
-    )
+    expect(answer).toContain(RIDDLES[0].question)
+    expect(answer).not.toContain('Consider what')
+    expect(answer).not.toContain(RIDDLES[0].hint)
     expect(answer).not.toContain('Not quite')
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, SPEAKER)
@@ -75,7 +74,7 @@ describe('Water Nymphs voice', () => {
       "'Came all this way to stand in our water? Will you answer three " +
         "questions, then? Here is the first.'",
     )
-    expect(answer).toContain(nymphs.riddles[0].question)
+    expect(answer).toContain(RIDDLES[0].question)
     expect(answer).toContain(HELP)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, SPEAKER)
@@ -91,10 +90,10 @@ describe('Water Nymphs voice', () => {
     expect(second).toContain(
       "'Back so soon? Do you remember where we were? The second one, wasn't it?'",
     )
-    expect(second).toContain(nymphs.riddles[1].question)
+    expect(second).toContain(RIDDLES[1].question)
     expect(second).toContain(HELP)
     expect(third).toContain('The third one, wasn')
-    expect(third).toContain(nymphs.riddles[2].question)
+    expect(third).toContain(RIDDLES[2].question)
     expectMarkupWellFormed(second)
     expectDialogueSpeaker(second, SPEAKER)
   })
@@ -102,15 +101,15 @@ describe('Water Nymphs voice', () => {
   it('nods with a question after a right answer and poses the next riddle', () => {
     const { game, nymphs } = createGameWithNymphs()
 
-    const answer = nymphs.sayTo(game.state, 'tree')
+    const answer = nymphs.sayTo(game.state, 'water')
 
     expect(answer).toContain('[success]Correct!')
-    expect(answer).toContain(nymphs.riddles[0].explanation)
+    expect(answer).toContain(RIDDLES[0].explanation)
     expect(answer).toContain(' nod. ')
     expect(answer).toContain(
       "'Did you know it, or guess it? Does it matter? What about this one?'",
     )
-    expect(answer).toContain(nymphs.riddles[1].question)
+    expect(answer).toContain(RIDDLES[1].question)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, SPEAKER)
   })
@@ -119,7 +118,7 @@ describe('Water Nymphs voice', () => {
     const { game, nymphs } = createGameWithNymphs()
     nymphs.currentRiddle = 2
 
-    const answer = nymphs.sayTo(game.state, 'ants')
+    const answer = nymphs.sayTo(game.state, 'truth')
 
     expect(answer).toContain(
       "'Three for three — who taught you to listen like that? Will you take " +
@@ -138,7 +137,7 @@ describe('Water Nymphs voice', () => {
 
   it('asks questions after all three riddles and answers speech with a smile', () => {
     const { game, nymphs } = createGameWithNymphs()
-    nymphs.currentRiddle = nymphs.riddles.length
+    nymphs.currentRiddle = RIDDLES.length
     nymphs.riddlesCompleted = true
 
     const talk = nymphs.talkTo(game.state)
@@ -160,9 +159,9 @@ describe('Water Nymphs voice', () => {
     nymphs.currentRiddle = 1
     replies.push(nymphs.talkTo(game.state))
     replies.push(nymphs.sayTo(game.state, 'wrong'))
-    replies.push(nymphs.sayTo(game.state, 'water'))
+    replies.push(nymphs.sayTo(game.state, 'mask'))
     nymphs.currentRiddle = 2
-    replies.push(nymphs.sayTo(game.state, 'ants'))
+    replies.push(nymphs.sayTo(game.state, 'truth'))
     replies.push(nymphs.talkTo(game.state))
 
     for (const reply of replies) {
@@ -202,9 +201,9 @@ describe('Water Nymphs and the blight', () => {
     expect(game.commandParser.parse('talk to water nymphs')).not.toContain(
       'thinner',
     )
-    game.commandParser.parse('say tree to water nymphs')
     game.commandParser.parse('say water to water nymphs')
-    const last = game.commandParser.parse('say ants to water nymphs')
+    game.commandParser.parse('say mask to water nymphs')
+    const last = game.commandParser.parse('say truth to water nymphs')
 
     expect(last).toContain('Three for three')
     expect(last).not.toContain('thinner')
@@ -212,7 +211,7 @@ describe('Water Nymphs and the blight', () => {
 
   it('adds the line after the praise on every later talk', () => {
     const { game } = createGameWithNymphs()
-    for (const word of ['tree', 'water', 'ants'])
+    for (const word of ['water', 'mask', 'truth'])
       game.commandParser.parse(`say ${word} to water nymphs`)
 
     for (let i = 0; i < 2; i++) {
@@ -226,5 +225,90 @@ describe('Water Nymphs and the blight', () => {
       expectDialogueSpeaker(answer, SPEAKER)
       expectNoSpeechOutsideDialogue(answer)
     }
+  })
+})
+
+describe('Water Nymphs riddles: mask and truth', () => {
+  it('asks water, mask, then truth', () => {
+    expect(RIDDLES.map((r) => r.answers[0])).toEqual(['water', 'mask', 'truth'])
+    expect(RIDDLES[1].question).toContain('I smile, yet I have no eyes.')
+    expect(RIDDLES[2].question).toContain('Purpose follows me')
+  })
+
+  it.each([
+    [1, ['mask', 'masks', 'a mask', 'the mask', 'false face', 'disguise']],
+    [2, ['truth', 'the truth', 'a truth', 'honesty', 'true']],
+    [0, ['water', 'the water', 'rain', 'stream', 'river']],
+  ])('accepts every synonym of riddle %i in any case', (index, words) => {
+    for (const word of words) {
+      const { game, nymphs } = createGameWithNymphs()
+      nymphs.currentRiddle = index
+      const answer = nymphs.sayTo(game.state, word.toUpperCase())
+      expect(answer).toContain('[success]Correct!')
+      expect(answer).toContain(`'${word.toUpperCase()}'`)
+    }
+  })
+
+  it('ignores surrounding spaces', () => {
+    const { game, nymphs } = createGameWithNymphs()
+    nymphs.currentRiddle = 1
+    expect(nymphs.sayTo(game.state, '  Mask ')).toContain('[success]Correct!')
+  })
+
+  it('treats a typo as a miss', () => {
+    const { game, nymphs } = createGameWithNymphs()
+    nymphs.currentRiddle = 1
+    expect(nymphs.sayTo(game.state, 'mak')).toContain('shake their heads')
+    expect(nymphs.currentRiddle).toBe(1)
+  })
+})
+
+describe('Water Nymphs hints', () => {
+  const miss = (n: WaterNymphs, g: Game): string => n.sayTo(g.state, 'wrong')
+
+  it('gives no hint on the first miss and a hint on every later miss', () => {
+    const { game, nymphs } = createGameWithNymphs()
+    nymphs.currentRiddle = 1
+    const first = miss(nymphs, game)
+    const second = miss(nymphs, game)
+    const third = miss(nymphs, game)
+
+    expect(first).not.toContain(RIDDLES[1].hint)
+    expect(second).toContain(`'${RIDDLES[1].hint}'`)
+    expect(second.indexOf(RIDDLES[1].question)).toBeLessThan(
+      second.indexOf(RIDDLES[1].hint),
+    )
+    expect(third).toContain(RIDDLES[1].hint)
+    for (const reply of [first, second, third]) {
+      expect(reply).not.toContain('Consider what')
+      expectMarkupWellFormed(reply)
+      expectNoSpeechOutsideDialogue(reply)
+    }
+  })
+
+  it('starts the count over when the riddle is answered', () => {
+    const { game, nymphs } = createGameWithNymphs()
+    miss(nymphs, game)
+    miss(nymphs, game)
+    nymphs.sayTo(game.state, 'water')
+
+    expect(miss(nymphs, game)).not.toContain(RIDDLES[1].hint)
+  })
+
+  it('keeps the count across leaving and a save reload, with no hint on return', () => {
+    const { game, nymphs } = createGameWithNymphs()
+    miss(nymphs, game)
+    miss(nymphs, game)
+
+    expect(nymphs.talkTo(game.state)).not.toContain(RIDDLES[0].hint)
+    expect(nymphs.missCount).toBe(2)
+
+    const reloaded = new Game([new Act2()])
+    reloaded.loadSaveData(game.toSaveData())
+    const again = reloaded.state.allRooms.WhisperingGlade.characters.find(
+      (c): c is WaterNymphs => c instanceof WaterNymphs,
+    )
+    expect(again?.missCount).toBe(2)
+    expect(miss(again as WaterNymphs, reloaded)).toContain(RIDDLES[0].hint)
   })
 })

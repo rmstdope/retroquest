@@ -485,9 +485,9 @@ describe('Act 2 golden path', () => {
     // Talk to water nymphs to start riddles
     executeCommands(game, ['talk to water nymphs'])
     // Answer the three riddles correctly using the 'say' command
-    executeCommands(game, ['say tree to water nymphs']) // First riddle answer
-    executeCommands(game, ['say water to water nymphs']) // Second riddle answer
-    executeCommands(game, ['say insects to water nymphs']) // Third riddle answer
+    executeCommands(game, ['say water to water nymphs']) // First riddle answer
+    executeCommands(game, ['say mask to water nymphs']) // Second riddle answer
+    executeCommands(game, ['say truth to water nymphs']) // Third riddle answer
 
     // Quest "The Forest Guardian's Riddles" should now be completed
     expectQuests(state, [
@@ -885,7 +885,7 @@ describe('Whispering Glade riddle system', () => {
     expect(state.getStoryFlag('water_nymph_riddle_1_completed')).toBe(false)
 
     // Test correct answers in sequence
-    const riddleAnswers = ['tree', 'water', 'insects']
+    const riddleAnswers = ['water', 'mask', 'truth']
 
     for (const answer of riddleAnswers) {
       result = executeCommands(game, [`say ${answer} to water nymphs`])
