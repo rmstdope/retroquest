@@ -12,6 +12,9 @@ import {
   FLAG_MERCHANTS_HEALED,
   FLAG_THORNE_HEALING_TOLD,
 } from './Act2StoryFlags'
+import { Ravine } from './items/Ravine'
+import { QualityRope } from './items/QualityRope'
+import { FLAG_INNKEEPERS_DAUGHTER_COMPLETED } from './Act2StoryFlags'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 const FIRST_HEAL =
@@ -80,6 +83,22 @@ describe('greater heal on the rescued merchants', () => {
     rescued(game)
     game.commandParser.parse('cast greater_heal on merchants')
     expect(game.state.virtues).toEqual([])
+  })
+})
+
+describe('merchants rescued with the real rope', () => {
+  it('can be healed in the forest, then Thorne tells of it in town', () => {
+    const game = new Game([new Act2()])
+    game.state.learnSpell(new GreaterHealSpell())
+    game.state.currentRoom = game.state.allRooms.ForestEntrance
+    game.state.currentRoom.items.push(new Ravine())
+    game.state.addItemToInventory(new QualityRope())
+    game.commandParser.parse('use rope with ravine')
+    const out = game.commandParser.parse('cast greater_heal on merchants')
+    expect(out).toContain('over the merchants')
+    game.state.currentRoom = game.state.allRooms.MarketDistrict
+    const talk = game.commandParser.parse('talk to caravan master thorne')
+    expect(talk).toContain('mended them where they sat')
   })
 })
 
@@ -175,7 +194,11 @@ describe('dispel on Elena too early', () => {
     game.commandParser.parse('cast greater_heal on barmaid elena')
     game.state.inventory.push(new CrystalClearWater())
     game.commandParser.parse('use crystal-clear water on barmaid elena')
-    game.commandParser.parse('cast dispel on barmaid elena')
+    const cure = game.commandParser.parse('cast dispel on barmaid elena')
+    expect(cure).toContain('shattering the evil enchantment completely')
+    expect(game.state.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)).toBe(
+      true,
+    )
     const out = game.commandParser.parse('cast dispel on barmaid elena')
     expect(out).toBe('Elena has already been completely cured of her curse.')
   })
