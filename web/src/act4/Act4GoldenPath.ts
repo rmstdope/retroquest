@@ -2,8 +2,8 @@
  * The commands that play Act 4's golden path from the Fortress Gates as far as
  * the act is playable today: breaking the ward guardians, freeing the
  * trapped servants in the Outer Courtyard, then fetching the Echo Stone from
- * the Hall of Echoes, solving the Mirror Labyrinth and redeeming the Knight
- * of Despair. Each later Act 4 piece appends its
+ * the Hall of Echoes, solving the Mirror Labyrinth, redeeming the Knight
+ * of Despair and the Sorceress of Lies. Each later Act 4 piece appends its
  * steps here as it lands.
  */
 export const ACT4_GOLDEN_PATH: string[] = [
@@ -35,4 +35,10 @@ export const ACT4_GOLDEN_PATH: string[] = [
   'cast truth sight on knight of despair',
   "use guardian's chain",
   'say redemption to knight',
+  'e',
+  'use loyalty token',
+  'up',
+  "use knight's redemption",
+  "cast heart's truth on sorceress",
+  'say understanding to sorceress',
 ]

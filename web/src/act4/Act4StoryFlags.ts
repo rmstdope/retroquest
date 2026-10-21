@@ -44,6 +44,9 @@ export const FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED =
 export const FLAG_ACT4_KNIGHT_SEEN_THROUGH = 'act4_knight_seen_through'
 export const FLAG_ACT4_GUARDIANS_CHAIN_RAISED = 'act4_guardians_chain_raised'
 export const FLAG_ACT4_WARRIORS_AT_PEACE = 'act4_warriors_at_peace'
+export const FLAG_ACT4_LOYALTY_TOKEN_RAISED = 'act4_loyalty_token_raised'
+export const FLAG_ACT4_BADGE_SHOWN = 'act4_badge_shown'
+export const FLAG_ACT4_HEARTS_TRUTH_CAST = 'act4_hearts_truth_cast'
 
 export const FLAG_ACT4_SORCERESS_OF_LIES_STARTED =
   'act4_sorceress_of_lies_started'

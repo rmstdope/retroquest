@@ -12,6 +12,11 @@ import { KnightOfDespair } from './characters/KnightOfDespair'
 import { TrueSelf } from './characters/TrueSelf'
 import { TruthSight } from './spells/TruthSight'
 import { TheMazeOfMirrors } from './quests/TheMazeOfMirrors'
+import { HeartsTruth } from './spells/HeartsTruth'
+import { SorceressOfLies } from './characters/SorceressOfLies'
+import { SorceressStaff } from './items/SorceressStaff'
+import { SorceressTruth } from './items/SorceressTruth'
+import { TheSorceressOfLies } from './quests/TheSorceressOfLies'
 import { Barriers } from './items/Barriers'
 import { GuardiansChain } from './items/GuardiansChain'
 import { GuardiansEssence } from './items/GuardiansEssence'
@@ -48,7 +53,10 @@ export const ACT4_CLASSES = {
   ServantsPendant,
   WardStoneFragment,
   WardStones,
+  SorceressStaff,
+  SorceressTruth,
   // Characters
+  SorceressOfLies,
   CaptainOfTheGuard,
   KnightOfDespair,
   GhostlyWarriors,
@@ -60,6 +68,7 @@ export const ACT4_CLASSES = {
   TheTrappedServants,
   TheMazeOfMirrors,
   TheKnightOfDespair,
+  TheSorceressOfLies,
   // Rooms
   ChamberOfWhispers,
   FortressGates,
@@ -73,5 +82,6 @@ export const ACT4_CLASSES = {
   Bless,
   Light,
   RedemptionsLight,
+  HeartsTruth,
   TruthSight,
 }

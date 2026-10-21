@@ -1,6 +1,14 @@
 import { Item, type GameState, event } from '@/engine'
+import {
+  FLAG_ACT4_BADGE_SHOWN,
+  FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
+} from '../Act4StoryFlags'
+import { HeartsTruth } from '../spells/HeartsTruth'
 
-/** The tarnished badge the redeemed knight presses into Elior's hand. */
+/**
+ * The tarnished badge the redeemed knight presses into Elior's hand. Shown to
+ * the Sorceress of Lies in the Chamber of Whispers, it teaches Heart's Truth.
+ */
 export class KnightsRedemption extends Item {
   constructor() {
     super({
@@ -15,5 +23,30 @@ export class KnightsRedemption extends Item {
   /** The badge's look. */
   override examine(_gameState: GameState): string {
     return event(this.description)
+  }
+
+  /** In the Chamber of Whispers the badge is shown to the Sorceress (once). */
+  override use(gameState: GameState): string {
+    if (gameState.currentRoom.name !== 'Chamber of Whispers') {
+      return super.use(gameState)
+    }
+    gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
+    if (gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
+      return '[dim]She has seen the badge. She cannot stop looking at it.[/dim]'
+    }
+    gameState.setStoryFlag(FLAG_ACT4_BADGE_SHOWN, true)
+    const spell = new HeartsTruth()
+    gameState.learnSpell(spell)
+    return [
+      event(
+        "You hold up the knight's badge. The Sorceress stares at it, and " +
+          'for the first time her smile slips. Beneath the whispers you ' +
+          'hear something else: a voice, very small, that is not lying.',
+      ),
+      event(
+        `You have learned the [spell_name]${spell.name}[/spell_name] spell! ` +
+          spell.description,
+      ),
+    ].join('\n')
   }
 }

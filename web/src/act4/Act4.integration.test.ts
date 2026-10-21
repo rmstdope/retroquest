@@ -21,6 +21,12 @@ import {
   expectSpellKnown,
 } from '@/testing/gameHelpers'
 
+/** The golden path as far as the redeemed knight (the Sorceress steps follow). */
+const KNIGHT_PATH = ACT4_GOLDEN_PATH.slice(
+  0,
+  ACT4_GOLDEN_PATH.indexOf('say redemption to knight') + 1,
+)
+
 describe('Act 4 integration', () => {
   let act4: Act4
   let game: Game
@@ -443,7 +449,11 @@ describe('Act 4 integration', () => {
       expectQuestCompleted(game.state, 'The Knight of Despair')
       expectItemInInventory(game.state, "Knight's Redemption", true)
       expectSpellKnown(game.state, 'redemptions_light')
-      expectCurrentRoom(game.state, 'Hall of Echoes')
+      expectQuestCompleted(game.state, 'The Sorceress of Lies')
+      expectItemInInventory(game.state, "Sorceress's Truth", true)
+      expectSpellKnown(game.state, 'hearts_truth')
+      expectCurrentRoom(game.state, 'Chamber of Whispers')
+      expect(executeCommands(game, ['go north'])).toContain('Memory Vault')
     })
 
     it('is what cheat act 4 plays', () => {
@@ -788,7 +798,7 @@ describe('Act 4 integration', () => {
 
   describe('the Knight of Despair', () => {
     const toRedeemed = (): void => {
-      executeCommands(game, ACT4_GOLDEN_PATH)
+      executeCommands(game, KNIGHT_PATH)
     }
     const reload = (): void => {
       expect(game.loadSaveData(game.toSaveData())).toContain(
@@ -797,14 +807,14 @@ describe('Act 4 integration', () => {
     }
 
     it('starts its quest on first entering the hall', () => {
-      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, -6))
+      executeCommands(game, KNIGHT_PATH.slice(0, -6))
       expect(game.state.activatedQuests.map((q) => q.name)).toContain(
         'The Knight of Despair',
       )
     })
 
     it('enhances the stone even when it was dropped elsewhere', () => {
-      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, -4))
+      executeCommands(game, KNIGHT_PATH.slice(0, -4))
       executeCommands(game, ['s', 'drop echo stone', 'n'])
       executeCommands(game, [
         "use guardian's chain",
@@ -848,7 +858,7 @@ describe('Act 4 integration', () => {
     })
 
     it('keeps every state through a save and load', () => {
-      executeCommands(game, ACT4_GOLDEN_PATH.slice(0, -3))
+      executeCommands(game, KNIGHT_PATH.slice(0, -3))
       reload()
       expect(game.state.currentRoom.name).toBe('Hall of Echoes')
       expect(executeCommands(game, ['say redemption to knight'])).toContain(
