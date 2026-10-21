@@ -117,6 +117,14 @@ export class Act3 extends Act {
     )
   }
 
+  /** The hook that opens Act III's complete page: the parents are warded away, not dead. */
+  override getCompletionHook(): string {
+    return (
+      "Your parents were Malakar's closest friends. " +
+      'They are warded away, not dead.'
+    )
+  }
+
   /** Complete Act III once the fortress gates have been examined. */
   override isCompleted(_gameState: GameState): boolean {
     return _gameState.getStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)
