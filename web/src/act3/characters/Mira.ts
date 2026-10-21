@@ -149,12 +149,15 @@ export class Mira extends Character {
         )
       }
       destinationKey = 'MirasHut'
-      flavor = speech(
-        "'The three relics are yours, Elior. The dragon's " +
-          'wisdom runs deep—its scale will turn aside shadow and bind ' +
-          'your oath. Let us return to my hut where we can combine their ' +
-          "power into something that can save the king.'",
-      )
+      flavor =
+        speech(
+          "'The three relics are yours, Elior. The dragon's " +
+            'wisdom runs deep—its scale will turn aside shadow and bind ' +
+            'your oath. Let us return to my hut where we can combine their ' +
+            "power into something that can save the king.'",
+        ) +
+        '\n' +
+        speech("'The king is fading, Elior. We have less time than I hoped.'")
     } else if (gameState.currentRoom.name === 'Lower Switchbacks') {
       if (!gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
         return (
@@ -187,12 +190,18 @@ export class Mira extends Character {
       }
 
       destinationKey = 'CavernMouth'
-      flavor = speech(
-        "'You have done well, Elior. The Phoenix Feather is a " +
-          'token of wisdom; it will guide you through darkness and flame. ' +
-          'Ahead lies the Cavern Mouth—gaping stone jaws that breathe cold ' +
-          "and shadow. Steel your heart and hold your light high.'",
-      )
+      flavor =
+        speech(
+          "'You have done well, Elior. The Phoenix Feather is a " +
+            'token of wisdom; it will guide you through darkness and flame. ' +
+            'Ahead lies the Cavern Mouth—gaping stone jaws that breathe cold ' +
+            "and shadow. Steel your heart and hold your light high.'",
+        ) +
+        '\n' +
+        speech(
+          "'The king is weaker still. Whatever drains him draws harder with every " +
+            "site we reach.'",
+        )
     } else if (gameState.currentRoom.name === 'Tidal Causeway') {
       if (!gameState.getStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED)) {
         return (
@@ -222,13 +231,19 @@ export class Mira extends Character {
       }
 
       destinationKey = 'LowerSwitchbacks'
-      flavor = speech(
-        "'Well done, Elior. The Crystal answers to courage; you " +
-          'have steadied the tide. Ahead lies the Lower Switchbacks—ridges ' +
-          'of ember and knife-rolled stone where ash chokes the air and the ' +
-          'path winds like a fever dream. Keep your footing and watch the ' +
-          "skies for falling cinders.'",
-      )
+      flavor =
+        speech(
+          "'Well done, Elior. The Crystal answers to courage; you " +
+            'have steadied the tide. Ahead lies the Lower Switchbacks—ridges ' +
+            'of ember and knife-rolled stone where ash chokes the air and the ' +
+            'path winds like a fever dream. Keep your footing and watch the ' +
+            "skies for falling cinders.'",
+        ) +
+        '\n' +
+        speech(
+          "'And Elior—I can feel the king through the focus. He is weaker than " +
+            "when we set out.'",
+        )
     } else if (gameState.currentRoom.name === "Mira's Hut") {
       // Check if Elior has read the Keepsake Note first
       if (!gameState.getStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED)) {

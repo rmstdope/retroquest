@@ -76,9 +76,18 @@ export class Room {
     return item
   }
 
+  /**
+   * The text shown for the room itself, by `describe` and by the interface's
+   * room card. Rooms whose text changes with the story override this; the
+   * default is the plain description.
+   */
+  descriptionFor(_gameState: GameState): string {
+    return this.description
+  }
+
   /** The full description with items (counted), characters and exits. */
   describe(gameState: GameState): string {
-    let desc = `[bold]${this.name}[/bold]\n${this.description}\n`
+    let desc = `[bold]${this.name}[/bold]\n${this.descriptionFor(gameState)}\n`
     if (this.items.length > 0) {
       const counts = new Map<string, number>()
       for (const item of this.items) {

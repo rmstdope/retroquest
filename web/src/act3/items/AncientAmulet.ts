@@ -32,6 +32,21 @@ const GLOWS: string[] = [
     'third figure still has his back turned.',
 ]
 
+/** The paragraph that follows each glow: the curse, worse at every site. */
+const CURSES: string[] = [
+  '',
+  'Out past the arches the tide turns, and the surf that breaks on the ' +
+    'causeway runs grey. Dead sea birds lie along the stones, more than you ' +
+    'can count, their feathers dull with salt. Whatever is draining the king ' +
+    'is draining the sea as well.',
+  'Ash begins to fall over the slopes, slow and grey as rain. Down the ' +
+    'mountain the braziers gutter one by one and sink to embers. The curse ' +
+    'lies heavier here than it did by the sea.',
+  'Far off in the mines the ring of picks stops, and does not start again. ' +
+    "Then the cavern's old dripping stops too, and the silence is complete. " +
+    'The curse has reached even here, beneath the oldest hills.',
+]
+
 /** The stage of the amulet's picture after each of the three clues. */
 export type AmuletStage = 1 | 2 | 3
 
@@ -55,20 +70,21 @@ export class AncientAmulet extends Item {
   }
 
   /**
-   * Glow for the clue of the given stage: the glow paragraph the first time
-   * the amulet reaches it, or '' when it has already shown that stage or a
-   * later one. The examine line moves on to the new picture.
+   * Glow for the clue of the given stage: the glow paragraph and, straight
+   * after it, the curse paragraph for that site, the first time the amulet
+   * reaches the stage; or '' when it has already shown that stage or a later
+   * one. The examine line moves on to the new picture.
    */
   glow(stage: AmuletStage): string {
     if (this.stage >= stage) return ''
     this.stage = stage
     this.description = PICTURES[stage]
-    return event(GLOWS[stage])
+    return event(GLOWS[stage]) + '\n\n' + event(CURSES[stage])
   }
 
   /**
-   * The glow paragraph (with its leading blank line) for the amulet in the
-   * bag, or '' when it has nothing new to show or is not carried.
+   * The glow and curse paragraphs (with their leading blank line) for the
+   * amulet in the bag, or '' when it has nothing new to show or is not carried.
    */
   static glowInBag(gameState: GameState, stage: AmuletStage): string {
     const amulet = gameState.inventory.find((i) => i instanceof AncientAmulet)

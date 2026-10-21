@@ -3,6 +3,10 @@ import type { GameState } from '@/engine'
 import { Mural } from '../items/Mural'
 import { RustedLockerKey } from '../items/RustedLockerKey'
 import { BarnacledBeamFragment } from '../items/BarnacledBeamFragment'
+import { FLAG_ACT3_SEA_SEALED_LETTER_READ } from '../Act3StoryFlags'
+
+/** The sentence the room gains once the curse has shown itself here. */
+const CURSE_LINE = 'Dead sea birds line the stones, and the surf runs grey.'
 
 /** Moon-washed causeways linking broken arches to half-drowned plazas. */
 export class TidalCauseway extends Room {
@@ -42,5 +46,12 @@ export class TidalCauseway extends Room {
         'shadowed cranny, something metallic flakes free — a corroded key rests ' +
         'in the rock.',
     )
+  }
+
+  /** The description, ending with the curse's mark once the clue is found. */
+  override descriptionFor(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ)
+      ? `${this.description} ${CURSE_LINE}`
+      : this.description
   }
 }

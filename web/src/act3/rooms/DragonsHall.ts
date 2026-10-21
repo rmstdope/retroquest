@@ -1,5 +1,11 @@
-import { Room } from '@/engine'
+import { Room, type GameState } from '@/engine'
 import { AncientDragon } from '../characters/AncientDragon'
+import { FLAG_ACT3_DRAGONS_MEMORY_RECEIVED } from '../Act3StoryFlags'
+
+/** The sentence the room gains once the curse has shown itself here. */
+const CURSE_LINE =
+  'The old dripping has stopped; from the mines beyond comes no sound of ' +
+  'picks at all.'
 
 /** A vast chamber lit by slow-breathing embers beneath scaled coils. */
 export class DragonsHall extends Room {
@@ -25,5 +31,12 @@ export class DragonsHall extends Room {
       characters: [new AncientDragon()],
       exits: { west: 'StillnessVestibule' },
     })
+  }
+
+  /** The description, ending with the curse's mark once the clue is found. */
+  override descriptionFor(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)
+      ? `${this.description} ${CURSE_LINE}`
+      : this.description
   }
 }

@@ -5,7 +5,13 @@ import { CharredInscription } from '../items/CharredInscription'
 import {
   FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_STARTED,
   FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
+  FLAG_ACT3_CHARRED_INSCRIPTION_READ,
 } from '../Act3StoryFlags'
+
+/** The sentence the room gains once the curse has shown itself here. */
+const CURSE_LINE =
+  'Ash falls over the terraces like slow grey rain, and down the slope the ' +
+  'braziers have guttered to embers.'
 
 /** The Mirror Terraces: stepped platforms with sockets for polished mirrors. */
 export class MirrorTerraces extends Room {
@@ -45,5 +51,12 @@ export class MirrorTerraces extends Room {
       delete exits.east
     }
     return exits
+  }
+
+  /** The description, ending with the curse's mark once the clue is found. */
+  override descriptionFor(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)
+      ? `${this.description} ${CURSE_LINE}`
+      : this.description
   }
 }
