@@ -97,12 +97,13 @@ export type ActClass = new () => Act
 
 /** The acts, loaded on demand so each is its own chunk of the build. */
 async function loadActs(): Promise<ActClass[]> {
-  const [{ Act1 }, { Act2 }, { Act3 }] = await Promise.all([
+  const [{ Act1 }, { Act2 }, { Act3 }, { Act4 }] = await Promise.all([
     import('@/act1/Act1'),
     import('@/act2/Act2'),
     import('@/act3/Act3'),
+    import('@/act4/Act4'),
   ])
-  return [Act1, Act2, Act3]
+  return [Act1, Act2, Act3, Act4]
 }
 
 /**

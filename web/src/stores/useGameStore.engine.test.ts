@@ -54,9 +54,11 @@ class CrownAct extends Act {
   }
 }
 
-/** The store over the real engine, playing only the crown act. */
-async function startedStore(): Promise<ReturnType<typeof useGameStore>> {
-  const bridge = useBridge(async (): Promise<ActClass[]> => [CrownAct])
+/** The store over the real engine, playing the crown act (or `acts`). */
+async function startedStore(
+  acts: ActClass[] = [CrownAct],
+): Promise<ReturnType<typeof useGameStore>> {
+  const bridge = useBridge(async (): Promise<ActClass[]> => acts)
   const store = useGameStore()
   store.setBridge(bridge)
   await store.initGame()
@@ -114,5 +116,15 @@ describe('useGameStore over the real engine: game over', () => {
     expect(store.modalChapter).toBe(null)
     store.dismissModal()
     expect(store.modalChapter).toMatchObject({ kind: 'complete', final: true })
+  })
+
+  it('leads on from a non-last act, never to the save dialog or the end', async () => {
+    const store = await startedStore([CrownAct, CrownAct])
+    store.submitCommand(`take ${CROWN}`)
+    store.dismissModal() // the quest pop-up
+    expect(store.modalChapter?.final).toBeFalsy()
+    store.continueChapter()
+    expect(store.finishAsked).toBe(false)
+    expect(store.ending).toBe(null)
   })
 })

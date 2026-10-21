@@ -57,6 +57,14 @@ describe('useBridge', () => {
       expect(bridge.isReady()).toBe(true)
     })
 
+    it('loads all four acts', async () => {
+      const bridge = useBridge()
+      await bridge.init()
+      for (const act of [1, 2, 3, 4]) {
+        expect(bridge.controller.goldenPath(act).length).toBeGreaterThan(0)
+      }
+    })
+
     it('throws when used before init', () => {
       expect(() => useBridge().controller.getRoomName()).toThrow(
         'Game not started',
