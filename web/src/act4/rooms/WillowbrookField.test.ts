@@ -168,9 +168,11 @@ describe('the cradle song at the gate', () => {
     const game = home('justice')
     const first = executeCommands(game, ['talk to grandmother'])
     expect(first).toContain("Your mother's. I didn't think you'd remember.")
-    expect(first.indexOf('Your mother')).toBeLessThan(
-      first.indexOf('You saw them'),
-    )
+    expect(
+      first.startsWith(
+        '[character_name]Grandmother[/character_name]\n[dialogue]Your mother',
+      ),
+    ).toBe(true)
     expect(executeCommands(game, ['talk to grandmother'])).not.toContain(
       'Your mother',
     )

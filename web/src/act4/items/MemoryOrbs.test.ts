@@ -14,7 +14,9 @@ describe('MemoryOrbs', () => {
     const before = orbs.examine(game.state)
     expect(before).toContain('before you can hold it. ' + VERSE)
     game.state.setStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED, true)
-    expect(orbs.examine(game.state)).not.toContain('Hush')
+    const after = orbs.examine(game.state)
+    expect(after).not.toContain('Hush')
+    expect(after).toContain('Whole now. In one, three young Wardens laugh')
   })
 
   it('answers to "orbs" and "memory orbs"', () => {
