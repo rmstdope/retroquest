@@ -4,6 +4,7 @@ import { Game, Quest } from '@/engine'
 import { parseTurn } from '@/lantern/parseTurn'
 import { Act2 } from './Act2'
 import {
+  FLAG_CEDRIC_RECOGNISED_SIGIL,
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
@@ -168,6 +169,7 @@ describe('Squires stage directions', () => {
 describe('Sir Cedric narration between quotes', () => {
   it('shows the charm line without asterisks and with a full stop', () => {
     const game = newGame()
+    game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
     const out = new SirCedric().talkTo(game.state)
     expect(out).not.toContain('*')
@@ -182,6 +184,7 @@ describe('Sir Cedric narration between quotes', () => {
 
   it('shows the coins line without asterisks and with a full stop', () => {
     const game = newGame()
+    game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
     game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
     game.state.completedQuests.push(
       new Quest({ name: "The Knight's Test", description: '', completion: '' }),
