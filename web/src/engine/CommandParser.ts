@@ -18,6 +18,7 @@ export interface CommandTarget {
   examine(target: string): string
   search(): string
   listen(target?: string): string
+  hint(): string
   take(item: string): string
   drop(item: string): string
   use(item: string, other?: string): string
@@ -115,6 +116,7 @@ export class CommandParser {
     if (cmd.startsWith('load '))
       return this.game.load(cmd.slice('load '.length).trim())
     if (cmd === 'help' || cmd === '?') return this.game.help()
+    if (cmd === 'hint') return this.game.hint()
     if (cmd === 'quit' || cmd === 'exit') return this.game.quit()
 
     if (cmd === 'sleep' || cmd === 'rest' || cmd === 'wait')

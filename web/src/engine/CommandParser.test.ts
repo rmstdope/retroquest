@@ -56,6 +56,9 @@ class RecordingGame implements CommandTarget {
       ? this.record('listen')
       : this.record('listen', target)
   }
+  hint() {
+    return this.record('hint')
+  }
   take(item: string) {
     return this.record('take', item)
   }
@@ -242,6 +245,7 @@ describe('CommandParser', () => {
 
   it('dispatches game management commands', () => {
     expectCalls(game, parser, {
+      hint: ['hint'],
       save: ['save', ''],
       'save myadventure': ['save', 'myadventure'],
       load: ['load', ''],
