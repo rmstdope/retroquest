@@ -8,14 +8,16 @@ import { AncientAmulet } from './AncientAmulet'
 /** The door's look until the Shadow is answered. */
 const DOOR_DARK =
   'A round door of pale stone, carved with the same runes as your amulet ' +
-  'around the sigil of the Wardens of the Dawn. It has no handle and no ' +
-  'keyhole.'
+  'around the sigil of the Wardens of the Dawn, and beneath it, worn almost ' +
+  "away, a tree under two moons: the crest on your mother's locket. It has " +
+  'no handle and no keyhole.'
 
 /** The door's look once the Shadow is answered. */
 const DOOR_GLOWING =
   'A round door of pale stone, carved with the same runes as your amulet ' +
-  'around the sigil of the Wardens of the Dawn. The runes glow faintly now, ' +
-  'as if they are waiting.'
+  'around the sigil of the Wardens of the Dawn, and beneath it, worn almost ' +
+  "away, a tree under two moons: the crest on your mother's locket. The " +
+  'runes glow faintly now, as if they are waiting.'
 
 /**
  * The sealed door on the Memory Vault's east wall. It answers to the Ancient

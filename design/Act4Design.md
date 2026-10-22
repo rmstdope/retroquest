@@ -412,7 +412,7 @@ his dreams.
 
 #### Description
 
-A quiet chamber behind a door carved with the same pattern as the amulet. Inside, the memories
+A quiet chamber behind a door carved with the same pattern as the amulet, and beneath the Warden sigil, worn almost away, a tree under two moons: the crest on Elior's mother's locket. Inside, the memories
 of Aren and Lysa hang like lanterns. Nothing in it is threatening; it is the saddest and warmest
 room in the fortress.
 

@@ -471,7 +471,10 @@ export class SirCedric extends Character {
       '\n\n' +
       'Whoever wore that amulet before you was a Warden, and your family is ' +
       'bound to them. I know no more than that. But I know enough to listen ' +
-      'to you.'
+      'to you.' +
+      '\n\n' +
+      'The oldest histories draw the mark another way: a tree under two ' +
+      'moons, from before there were three things to guard.'
     )
   }
 
