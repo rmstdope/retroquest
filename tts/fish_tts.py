@@ -40,6 +40,8 @@ ENV_FILE = HERE.parent / ".env"
 # "[shaky breath]", and paired tags such as <whisper>…</whisper>, <slow>, <emphasis>.
 MODELS = ["s2.1-pro-free", "s2.1-pro", "s2-pro", "drama-3"]
 PARAGRAPH_PAUSE_S = 0.8
+FORMATS = ["wav", "mp3", "opus"]
+WORD = r"[a-z0-9']+"
 
 
 def api_key() -> str:
@@ -58,9 +60,13 @@ def references(args: argparse.Namespace) -> tuple[list[ReferenceAudio], str]:
     """The cloning references for the request, and a label describing the voice."""
     if args.prompt:
         prompts = json.loads((HERE / "prompts" / "prompts.json").read_text())
+        if args.prompt not in prompts:
+            sys.exit(f"no prompt {args.prompt!r}; choose one of: {', '.join(prompts)}")
         wav, text = HERE / "prompts" / f"{args.prompt}.wav", prompts[args.prompt]["text"]
     elif args.prompt_wav:
-        wav, text = args.prompt_wav, args.prompt_text or ""
+        if not args.prompt_text:
+            sys.exit("--prompt-wav needs --prompt-text, the clip's exact transcript")
+        wav, text = args.prompt_wav, args.prompt_text
     elif args.reference_id:
         return [], f"saved voice {args.reference_id}"
     else:
@@ -71,6 +77,13 @@ def references(args: argparse.Namespace) -> tuple[list[ReferenceAudio], str]:
 def say(client: FishAudio, args: argparse.Namespace) -> None:
     """Speak args.text_file into args.out, after printing what will be sent."""
     text = args.text_file.read_text().strip()
+    if not text:
+        sys.exit(f"{args.text_file} is empty")
+    audio_format = args.out.suffix.lower().lstrip(".")
+    if audio_format not in FORMATS:
+        sys.exit(f"output must end in one of: {', '.join('.' + f for f in FORMATS)}")
+    if args.prompt_text and not args.prompt_wav:
+        sys.exit("--prompt-text only goes with --prompt-wav")
     refs, voice = references(args)
     print(f"model:  {args.model}")
     print(f"voice:  {voice}")
@@ -80,10 +93,10 @@ def say(client: FishAudio, args: argparse.Namespace) -> None:
         print("dry run: nothing sent")
         return
 
-    if args.per_paragraph and args.out.suffix != ".wav":
+    if args.per_paragraph and audio_format != "wav":
         sys.exit("--per-paragraph joins WAV files; give a .wav output")
     config = TTSConfig(
-        format=args.out.suffix.lstrip(".") or "wav",
+        format=audio_format,
         temperature=args.temperature,
         top_p=args.top_p,
         prosody=Prosody(speed=args.speed, volume=0),
@@ -110,17 +123,26 @@ def say(client: FishAudio, args: argparse.Namespace) -> None:
 
 
 def join_wavs(clips: list[bytes], pause_s: float) -> bytes:
-    """One WAV from several of the same format, with `pause_s` of silence between them."""
+    """One WAV from several 16-bit WAVs of the same format, with `pause_s` of silence between."""
     out = io.BytesIO()
     with wave.open(out, "wb") as joined:
         for index, clip in enumerate(clips):
             with wave.open(io.BytesIO(clip)) as part:
+                shape = (part.getnchannels(), part.getsampwidth(), part.getframerate())
                 if index == 0:
+                    if part.getsampwidth() != 2:
+                        sys.exit(f"expected 16-bit WAV from Fish, got {8 * part.getsampwidth()}-bit")
+                    first_shape = shape
                     joined.setparams(part.getparams())
                     silence = b"\0" * int(pause_s * part.getframerate()) * part.getsampwidth() * part.getnchannels()
                 else:
+                    if shape != first_shape:
+                        sys.exit(f"paragraph {index + 1} is {shape}, the first was {first_shape}")
                     joined.writeframes(silence)
-                joined.writeframes(part.readframes(part.getnframes()))
+                frames = part.readframes(part.getnframes())
+                if not frames:
+                    sys.exit(f"paragraph {index + 1} came back without audio frames")
+                joined.writeframes(frames)
     return out.getvalue()
 
 
@@ -131,14 +153,15 @@ def search_voices(client: FishAudio, args: argparse.Namespace) -> None:
     the voice that matches it. The phrase and each of its words are searched, a few pages
     each, and the pooled results are filtered here; --loose keeps them all.
     """
-    words = set(args.query.lower().split())
+    query_words = re.findall(WORD, args.query.lower())
+    words = set(query_words)
     found = {}
-    for term in dict.fromkeys([args.query, *args.query.lower().split()]):
+    for term in dict.fromkeys([args.query, *query_words]):
         for page in range(1, args.pages + 1):
             voices = client.voices.list(title=term, language=args.language, page_size=100, page_number=page)
             for voice in voices.items:
                 text = f"{voice.title} {voice.description or ''} {' '.join(voice.tags)}".lower()
-                if args.loose or words <= set(re.findall(r"[a-z0-9']+", text)):
+                if args.loose or words <= set(re.findall(WORD, text)):
                     found.setdefault(voice.id, voice)
             if len(voices.items) < 100:
                 break

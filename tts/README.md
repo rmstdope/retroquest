@@ -36,35 +36,40 @@ word, most used first. `--loose` keeps everything the API returned.
 - **`--per-paragraph`** sends one request per blank-line-separated paragraph and joins the WAVs
   with a 0.8 s pause. Long single requests (the whole Act I intro) dropped the connection.
 
-Voiced so far: the Act I intro (`out/act1-intro-cued.txt`, a cued copy of the text) with the
+Voiced so far: the Act I intro (`texts/act1-intro-cued.txt`, a cued copy of the text) with the
 "old man bible storytelling" library voice and with the Praetzellis clone, and the
-grandmother's first talk with two elderly female library voices. Names need help:
+grandmother's first talk (`texts/grandmother-first-talk.txt`) with two elderly female library
+voices. Names need help:
 "Elior" comes out as "Elia", "Elir" or "Hylia", so a phonetic spelling in the text sent to
 Fish is the likely fix.
 
 ## Getting the text
 
 `extract-intro.ts` prints the Act I intro as plain text (markup stripped, the title as a spoken
-sentence):
+sentence). `tsx` is not a dependency of `web/`; `npx` fetches the pinned version on demand.
 
 ```sh
-(cd web && npx tsx --tsconfig tsconfig.json ../tts/extract-intro.ts) > tts/out/act1-intro.txt
+(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-intro.ts) > tts/out/act1-intro.txt
 ```
 
 ## Checking a clip
 
 `check.py` transcribes a clip with Whisper (`uvx mlx-whisper`, Apple Silicon) and diffs it
-against its text, listing dropped, added and changed words. Whisper invents text over trailing
+against its text (bracketed cues are ignored), listing dropped, added and changed words. Whisper invents text over trailing
 silence; segments that are near-empty or reach past the end of the clip are ignored.
 
 ```sh
-python3 tts/check.py tts/out/act1-intro.txt tts/out/act1-intro-fish-oldman-cued.wav
+python3 tts/check.py tts/texts/act1-intro-cued.txt tts/out/act1-intro-fish-oldman-cued.wav
 ```
 
 ## Voice prompts
 
-`prompts/` holds 25-36 s clips of LibriVox narrators (public domain) with exact transcripts,
-sources and cut times in `prompts.json`, for cloning with `--prompt`.
+`prompts/` holds two 30-36 s clips of LibriVox narrators, for cloning with `--prompt`:
+`praetzellis` (*Treasure Island*) and `driver` (*The Princess and the Goblin*). LibriVox
+recordings are public domain, and both texts are public domain worldwide (Stevenson d. 1894,
+MacDonald d. 1905); `prompts.json` has the exact transcripts, sources and cut times. Clips of
+texts still in copyright outside the US were left out. Cloning a real narrator's voice for
+audio that ships in the game is a separate decision.
 
 ## Earlier: MisoTTS (removed)
 
