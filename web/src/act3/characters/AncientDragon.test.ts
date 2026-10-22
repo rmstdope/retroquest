@@ -64,6 +64,9 @@ describe('AncientDragon', () => {
     expect(result).toContain('Aren and Lysa, Wardens of the Dawn')
     expect(result).toContain('their friend Malakar')
     expect(result).toContain('anchored in the amulet you carry')
+    expect(result).toContain(
+      "in the bindings of your king, who was their friend and gave his crown's oath to hold it",
+    )
     expect(result).toContain('That is why Malakar drains him.')
     expect(result).toContain('warded away, not dead')
     expect(result).toContain('The memory has been shared')

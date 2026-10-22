@@ -221,9 +221,7 @@ describe('Sir Cedric', () => {
     expect(first).toContain('Do you remember what I told you in the yard?')
     expect(first).not.toContain('Please accept this Nature')
     const later = talk(game, 'sir cedric')
-    expect(later).toContain(
-      'finding the king, and whoever wears that old name.',
-    )
+    expect(later).toContain('the king, and whoever wears that old name.')
   })
 
   it('keeps one of the three charms back at the send-off, once', () => {

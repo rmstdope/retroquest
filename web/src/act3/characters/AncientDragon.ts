@@ -121,7 +121,8 @@ export class AncientDragon extends Character {
           'When Malakar tore a wound in time, it was they who stood ' +
             'against him. They poured themselves into a ward. It hides you ' +
             'from his sight, and it holds his wound shut. It is anchored in ' +
-            'the amulet you carry, and in the bindings of your king. That ' +
+            'the amulet you carry, and in the bindings of your king, who was ' +
+            "their friend and gave his crown's oath to hold it. That " +
             'is why Malakar drains him.',
         ) +
         '\n\n' +

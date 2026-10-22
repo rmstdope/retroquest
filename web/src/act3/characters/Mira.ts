@@ -368,6 +368,12 @@ export class Mira extends Character {
           ) +
           '\n' +
           speech(
+            'I know the road. I walked it as a girl, when it was the ' +
+              "Wardens' hall and not his fortress. Your parents made the " +
+              'relics there, at a workbench under the dome.',
+          ) +
+          '\n' +
+          speech(
             'Steel yourself, Elior. Beyond this circle lies the ' +
               'heart of shadow itself. But you carry the light that can pierce ' +
               "even Malakar's darkness.",

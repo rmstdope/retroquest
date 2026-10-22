@@ -9,7 +9,10 @@ export const SECRET_DOCUMENTS_DESCRIPTION =
   'A sealed packet of papers: a sworn confession and a letter closed with ' +
   'black wax.'
 
-/** A watchman's confession and the letter that paid him, which clear Sir Cedric's name. */
+/**
+ * A watchman's confession and the letter that paid him, which clear Sir
+ * Cedric's name and name where the king was carried.
+ */
 export class SecretDocuments extends Item {
   constructor() {
     super({
@@ -38,7 +41,9 @@ export class SecretDocuments extends Item {
       'say afterwards that Sir Cedric had left his post. Pinned to it is the ' +
       'letter that paid them, closed with black wax pressed with a twisted ' +
       "rune, the same kind of rune as the token you fished out of Willowbrook's " +
-      'well. It ends with a name in an old script you cannot read.'
+      'well. It names where the king was to be carried: the bastion on the ' +
+      'shattered ridge, north of the hills. It ends with a name in an old ' +
+      'script you cannot read.'
     )
   }
 }
