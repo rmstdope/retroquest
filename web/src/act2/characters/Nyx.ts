@@ -54,7 +54,8 @@ export class Nyx extends Character {
 
   /**
    * Return dialogue for Nyx and grant rewards on first meeting. Her witness
-   * speech names the optional kindnesses taken so far. The first
+   * speech opens with the deer that sat with Elior in the Act I glade (it was
+   * hers) and names the optional kindnesses taken so far. The first
    * talk ends with the refrain and Elior's recognition of the glade stone;
    * a save that already met Nyx hears only the farewell.
    */
@@ -76,7 +77,9 @@ export class Nyx extends Character {
         '[success]The light over the altar folds into a woman no taller than ' +
         'you, barefoot, leaves caught in her hair. She looks at you the way ' +
         'you look at a road you have walked before.\n\n' +
-        '"Elior. You gave the tree your acorn instead of keeping it. You ' +
+        '"Elior. My deer sat with you in the glade at Willowbrook, before ' +
+        'any of this. It said you were still. Few are. ' +
+        'You gave the tree your acorn instead of keeping it. You ' +
         'answered the nymphs without bargaining. You brought me the three ' +
         'charms. ' +
         kindnesses +
