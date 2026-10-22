@@ -53,7 +53,10 @@ export class AncientChronicle extends Item {
         event(
           'You open the chronicle. Pressed into the leather of its cover is ' +
             'the sun rising over three linked rings, the mark of the Wardens ' +
-            'of the Dawn.',
+            'of the Dawn. On the first page the same mark is drawn the old ' +
+            'way, a tree under two moons, and the first entry tells of ' +
+            'Wardens who settled a quiet valley to keep their relic safe, ' +
+            'and built their mill over a seat of power there.',
         ) +
         '\n' +
         writing(

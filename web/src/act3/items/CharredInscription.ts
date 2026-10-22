@@ -35,7 +35,9 @@ export class CharredInscription extends Item {
     return (
       event(
         'You trace the charred letters with your finger, feeling the ' +
-          'heat that once shaped them. The inscription reads:',
+          'heat that once shaped them. Above the words, cut shallow, is the ' +
+          'sun over three rings; beneath it, older and nearly gone, a tree ' +
+          'under two moons. The inscription reads:',
       ) +
       '\n\n' +
       writing('We are three, and we are one promise.') +

@@ -58,7 +58,7 @@ Result: The Scale is cold and heavy—a pledge as much as a relic. The caverns b
 
 -   Letters and sigils resurface. The Sea-Sealed Letter is written by **Aren and Lysa** to their friend Malakar, signed as fellow Wardens of the Dawn, and it begs him not to reach for time magic. They defied him as equals and as friends.
 -   In the Sunken Ruins, a mural shows two figures shielding a child from a storm of sigils while a third reaches toward them.
--   On Mount Ember’s Mirror Terraces, the Charred Inscription records the three Wardens’ shared promise, the three virtues they bound into the relics, and the words “what we pour into the ward, the ward will keep.”
+-   On Mount Ember’s Mirror Terraces, the Charred Inscription records the three Wardens’ shared promise, the three virtues they bound into the relics, and the words “what we pour into the ward, the ward will keep.” Above the words is the sun over three rings; beneath it, older and nearly gone, a tree under two moons.
 -   The Dragon names the ward: Aren and Lysa became it, and the Dragon says they are warded away, not dead.
 
 ## The Curse Worsens
