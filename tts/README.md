@@ -61,6 +61,25 @@ tts/vendor/MisoTTS/.venv/bin/python tts/generate_intro.py tts/out/act1-intro.txt
   --prompt-wav tts/prompts/fry.wav --prompt-text "$(jq -r .fry.text tts/prompts/prompts.json)"
 ```
 
+## Checking a clip
+
+`check.py` transcribes a clip with Whisper (`uvx mlx-whisper`) and diffs it against its text,
+listing dropped, added and changed words:
+
+```sh
+python3 tts/check.py tts/out/p2.txt tts/out/p2-praetzellis-paragraph.wav
+```
+
+## Findings so far (parked)
+
+- Praetzellis is the preferred voice prompt so far.
+- A ~20 s paragraph in one generation beats sentence-by-sentence (98% vs 88% of words heard);
+  longer chunks drift and hit the length cap.
+- The model often babbles a few words after the text ends; trimming after the last heard word
+  (from Whisper timestamps) is the planned fix.
+- Temperature 1.1 (one seed) stopped cleanly but slurred words and misplaced pauses; a fair
+  comparison needs several seeds per temperature.
+
 Every clip carries MisoTTS's inaudible SilentCipher watermark, as upstream applies it in
 `generate()`.
 
