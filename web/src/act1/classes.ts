@@ -58,6 +58,7 @@ import { WildBerries } from './items/WildBerries'
 import { WitheredCarrot } from './items/WitheredCarrot'
 import { Blacksmith } from './characters/Blacksmith'
 import { Deer } from './characters/Deer'
+import { DreamVoice } from './characters/DreamVoice'
 import { Fisherman } from './characters/Fisherman'
 import { Grandmother } from './characters/Grandmother'
 import { Merchant } from './characters/Merchant'
@@ -73,6 +74,7 @@ import { EliorsCottage } from './rooms/EliorsCottage'
 import { ForestPath } from './rooms/ForestPath'
 import { GeneralStore } from './rooms/GeneralStore'
 import { HiddenGlade } from './rooms/HiddenGlade'
+import { TheDream } from './rooms/TheDream'
 import { MirasHut } from './rooms/MirasHut'
 import { OldMill } from './rooms/OldMill'
 import { Riverbank } from './rooms/Riverbank'
@@ -160,6 +162,7 @@ export const ACT1_CLASSES = {
   // Characters
   Blacksmith,
   Deer,
+  DreamVoice,
   Fisherman,
   Grandmother,
   Merchant,
@@ -177,6 +180,7 @@ export const ACT1_CLASSES = {
   GeneralStore,
   HiddenGlade,
   MirasHut,
+  TheDream,
   OldMill,
   Riverbank,
   RoadToGreendale,

@@ -36,7 +36,7 @@ const DREAM_VOICE_ACT2 = 'Elior… how you have grown. Do not be afraid of me.'
 
 /**
  * The four acts of the red line, in order. The story keeps only its newest 200
- * turns (`MAX_TURNS` in the game store) and Act I's golden path is 180
+ * turns (`MAX_TURNS` in the game store) and Act I's golden path is 181
  * commands, so Act I has little room left before its early beats scroll away.
  */
 const ACTS: ActPlay[] = [
@@ -45,6 +45,10 @@ const ACTS: ActPlay[] = [
     played: /Debug script 'act1' played \d+ commands/,
     completing: ['use map'],
     beats: [
+      {
+        name: 'Act I dream voice: the three words in the opening dream',
+        text: '…and let them rest… Then your name, and the dark lets go of you.',
+      },
       {
         name: 'Act I amulet: Mira gives it to him',
         text: 'She presents you with the Ancient Amulet.',
@@ -174,11 +178,11 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
     if (index === 0) await expect(page.locator('.lq-chapter')).toBeVisible()
     const pages = await readPages(page, act.header)
     if (index === 0) {
-      // The dream voice's first appearance is in the opening chapter page.
+      // The opening chapter page ends where the dream begins.
       expect(
         pages.join('\n'),
-        'Act I dream voice: heard in the opening dream',
-      ).toContain('you dream of a shadowy figure calling your name')
+        'Act I opening page: the storm, and sleep that is not quiet',
+      ).toContain('Sleep, when it comes, is not quiet.')
       await page
         .getByRole('region', { name: 'Actions' })
         .getByRole('button', { name: 'Type', exact: true })

@@ -5,18 +5,25 @@ import { executeCommands } from '@/testing/gameHelpers'
 import { Key } from '../items/Key'
 import { FLAG_PATCHES_FOUND } from '../Act1StoryFlags'
 
+/** A new Act I game already woken out of the dream, standing in the cottage. */
+function cottageGame(): Game {
+  const game = new Game([new Act1()])
+  game.state.currentRoom = game.state.allRooms.EliorsCottage
+  return game
+}
+
 const QUEST = 'Curiosity killed the cat'
 
 describe('Curiosity killed the cat', () => {
   it('starts when Hemlock asks after Patches', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     game.state.currentRoom = game.state.allRooms.GeneralStore
     executeCommands(game, ['talk to shopkeeper'])
     expect(game.state.isQuestActivated(QUEST)).toBe(true)
   })
 
   it('stays open after the shed is unlocked, until Patches is home', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     game.state.currentRoom = game.state.allRooms.VillageWell
     game.state.addItemToInventory(new Key())
     executeCommands(game, ['go south', 'use key with door', 'talk to patches'])
@@ -32,7 +39,7 @@ describe('Curiosity killed the cat', () => {
   })
 
   it('also completes when Patches stays with grandmother', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
     executeCommands(game, ['say stay to grandmother'])
 

@@ -1,4 +1,5 @@
 import { Quest, type GameState } from '@/engine'
+import { TheDream } from '../rooms/TheDream'
 
 /** Side quest: visit every room of Willowbrook. */
 export class KnowYourVillageQuest extends Quest {
@@ -17,10 +18,13 @@ export class KnowYourVillageQuest extends Quest {
     return gameState.visitedRooms.length > 1
   }
 
-  /** Completed when all village rooms have been visited. */
+  /**
+   * Completed when every room of the village has been visited. The dream
+   * the act opens with is not a corner of Willowbrook and does not count.
+   */
   override checkCompletion(gameState: GameState): boolean {
-    return (
-      Object.keys(gameState.allRooms).length === gameState.visitedRooms.length
-    )
+    return Object.values(gameState.allRooms)
+      .filter((room) => !(room instanceof TheDream))
+      .every((room) => gameState.visitedRooms.includes(room.name))
   }
 }

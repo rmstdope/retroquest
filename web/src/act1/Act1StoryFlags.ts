@@ -3,6 +3,8 @@
  * interaction or milestone (discoveries, character talks, investigations,
  * magical progression and major story beats) that game logic tracks.
  */
+/** Elior answered the voice in the dream the game opens with, and woke in his cottage. */
+export const FLAG_WOKE_FROM_DREAM = 'woke_from_dream'
 export const FLAG_INVESTIGATED_WITHERED_CROPS = 'investigated_withered_crops'
 export const FLAG_WITNESSED_SHADOW_EVENT = 'witnessed_shadow_event'
 export const FLAG_ACCEPTED_MIRA_APPRENTICESHIP = 'accepted_mira_apprenticeship'

@@ -4,9 +4,16 @@ import { Act1 } from '../Act1'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Lantern } from './Lantern'
 
+/** A new Act I game already woken out of the dream, standing in the cottage. */
+function cottageGame(): Game {
+  const game = new Game([new Act1()])
+  game.state.currentRoom = game.state.allRooms.EliorsCottage
+  return game
+}
+
 describe('Lantern', () => {
   it('cannot be taken before it is lit', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     const answer = executeCommands(game, ['take lantern'])
     expect(answer).toContain('[failure]')
     expect(answer).toContain('light the')
@@ -14,7 +21,7 @@ describe('Lantern', () => {
   })
 
   it('can be carried once lit', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, ['use lantern', 'take lantern'])
     const lantern = game.state.inventory.find((i) => i instanceof Lantern)
     expect(lantern).toBeInstanceOf(Lantern)
@@ -22,14 +29,14 @@ describe('Lantern', () => {
   })
 
   it('can be carried in a save made when it stayed in the cottage', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, ['use lantern'])
     const lantern = game.state.currentRoom.items.find(
       (i) => i instanceof Lantern,
     )
     if (!lantern) throw new Error('no lantern in the cottage')
     lantern.canBeCarried = false
-    const loaded = new Game([new Act1()])
+    const loaded = cottageGame()
     expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
 
     executeCommands(loaded, ['take lantern'])

@@ -5,7 +5,12 @@ import { playDebugScript } from '@/utils/debugScript'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { MysteriousBox } from './items/MysteriousBox'
 import { FreshBread } from './items/FreshBread'
-import { VIRTUE_MERCY, VIRTUE_SELFLESS, VIRTUE_TRUTH } from './Act1StoryFlags'
+import {
+  FLAG_WOKE_FROM_DREAM,
+  VIRTUE_MERCY,
+  VIRTUE_SELFLESS,
+  VIRTUE_TRUTH,
+} from './Act1StoryFlags'
 import {
   executeCommands,
   expectMarkupWellFormed,
@@ -33,6 +38,16 @@ describe('Act 1 golden path', () => {
     const state = game.state
     const room = () => state.currentRoom
     executeCommands(game, ['look'])
+
+    // Step 0: The Dream
+    expectCurrentRoom(state, 'The Dream')
+    expectCharacterInRoom(room(), 'voice')
+    expect(state.inventory).toEqual([])
+    expectStoryFlag(state, FLAG_WOKE_FROM_DREAM, false)
+    const woke = executeCommands(game, ['talk to voice'])
+    expect(woke).toContain('\u2026and let them rest\u2026')
+    expectCurrentRoom(state, "Elior's Cottage")
+    expectStoryFlag(state, FLAG_WOKE_FROM_DREAM, true)
 
     // Step 1: Elior's Cottage
     expectQuests(state, [MAIN, 'Hint of Magic'])

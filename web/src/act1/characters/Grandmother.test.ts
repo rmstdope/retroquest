@@ -15,9 +15,16 @@ import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
 
+/** A new Act I game already woken out of the dream, standing in the cottage. */
+function cottageGame(): Game {
+  const game = new Game([new Act1()])
+  game.state.currentRoom = game.state.allRooms.EliorsCottage
+  return game
+}
+
 describe('Grandmother and the locket', () => {
   it('recognises the locket as her daughter’s founders’ heirloom', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     game.state.addItemToInventory(new Locket())
 
     const response = executeCommands(game, ['give locket to grandmother'])
@@ -30,7 +37,7 @@ describe('Grandmother and the locket', () => {
 
 describe('Grandmother and the faded photograph', () => {
   it('points Elior to the fisherman at the Riverbank once the message is read', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     game.state.addItemToInventory(new FadedPhotograph())
 
     executeCommands(game, ['examine faded photograph'])
@@ -47,7 +54,7 @@ describe('Grandmother and the faded photograph', () => {
 
 describe('Grandmother and the shed key', () => {
   it('hints that the shed was a workshop, and that it is dark', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     game.state.addItemToInventory(new Key())
 
     const response = executeCommands(game, ['talk to grandmother'])
@@ -58,7 +65,7 @@ describe('Grandmother and the shed key', () => {
   })
 
   it('says nothing of the shed without the key', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
 
     expect(executeCommands(game, ['talk to grandmother'])).not.toContain(
       'workshop',
@@ -68,7 +75,7 @@ describe('Grandmother and the shed key', () => {
 
 /** An Act I game where Mira has taught Elior and sent him to prepare. */
 function gameAfterMirasTeaching(): Game {
-  const game = new Game([new Act1()])
+  const game = cottageGame()
   executeCommands(game, ['talk to grandmother'])
   game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
   return game
@@ -76,7 +83,7 @@ function gameAfterMirasTeaching(): Game {
 
 describe('Grandmother and the journey', () => {
   it('says nothing of the gift before Mira has taught Elior', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
 
     const response = executeCommands(game, [
       'talk to grandmother',
@@ -130,7 +137,7 @@ describe('Grandmother and the journey', () => {
   })
 
   it('keeps the long journal tale for the first telling once she has more to say', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, [
       'use lantern',
       'take lantern',
@@ -151,7 +158,7 @@ describe('Grandmother and the dream', () => {
   const READ = ['use lantern', 'take lantern', 'use journal']
 
   it('reacts to the dream after the greeting and before the father’s tale', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, READ)
 
     const response = executeCommands(game, ['talk to grandmother'])
@@ -169,7 +176,7 @@ describe('Grandmother and the dream', () => {
   })
 
   it('is humming the cradle tune when Elior comes in with the dream, and stops', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, READ)
 
     const response = executeCommands(game, ['talk to grandmother'])
@@ -188,7 +195,7 @@ describe('Grandmother and the dream', () => {
   })
 
   it('goes quiet over the three words Elior caught from the voice', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, READ)
 
     const response = executeCommands(game, ['talk to grandmother'])
@@ -204,7 +211,7 @@ describe('Grandmother and the dream', () => {
   })
 
   it('reacts without the greeting when it was already heard', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, ['talk to grandmother', ...READ])
 
     const response = executeCommands(game, ['talk to grandmother'])
@@ -216,7 +223,7 @@ describe('Grandmother and the dream', () => {
   })
 
   it('does not react before the journal is read', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
 
     expect(executeCommands(game, ['talk to grandmother'])).not.toContain(
       REACTION,
@@ -224,7 +231,7 @@ describe('Grandmother and the dream', () => {
   })
 
   it('never mentions the dream again on later talks', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, [...READ, 'talk to grandmother'])
 
     const response = executeCommands(game, ['talk to grandmother'])
@@ -234,9 +241,9 @@ describe('Grandmother and the dream', () => {
   })
 
   it('does not react for a player who already learned revive', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, [...READ, 'talk to grandmother'])
-    const fresh = new Game([new Act1()])
+    const fresh = cottageGame()
     fresh.state.setStoryFlag('journal_read_prologue_entry', true)
     fresh.state.knownSpells.push(...game.state.knownSpells)
 
@@ -246,9 +253,9 @@ describe('Grandmother and the dream', () => {
   })
 
   it('still reacts after a save and reload between reading and talking', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
     executeCommands(game, READ)
-    const loaded = new Game([new Act1()])
+    const loaded = cottageGame()
     loaded.loadSaveData(game.toSaveData())
 
     expect(executeCommands(loaded, ['talk to grandmother'])).toContain(REACTION)
@@ -257,7 +264,7 @@ describe('Grandmother and the dream', () => {
 
 /** An Act I game in the cottage with Patches, coaxed out of the shed, in Elior's arms. */
 function gameCarryingPatches(): Game {
-  const game = new Game([new Act1()])
+  const game = cottageGame()
   game.state.currentRoom = game.state.allRooms.EliorsCottage
   game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
   return game
@@ -305,7 +312,7 @@ describe('Grandmother and Patches', () => {
   })
 
   it('does not take a cat Elior is not carrying', () => {
-    const game = new Game([new Act1()])
+    const game = cottageGame()
 
     executeCommands(game, ['say stay to grandmother'])
 
