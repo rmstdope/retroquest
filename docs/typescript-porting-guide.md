@@ -54,6 +54,37 @@ parameters is all a content class needs.
 | `get_items()` / `get_characters()` / `add_item` / `remove_item` / `get_item_by_name` | `items` / `characters` fields; `addItem`, `removeItem`, `getItemByName` |
 | `get_act_intro`, `setup_gamestate`, `is_completed` | `getActIntro`, `setupGameState`, `isCompleted` |
 
+### Hooks the engine added since the port
+
+These have no Python ancestor. Each is an optional override with a documented
+default in `web/src/engine/`; content classes override only what they need.
+
+| Class | Hook | What it is for |
+| --- | --- | --- |
+| `Room` | `blockedExit(gs, direction)` | the in-world line for a direction that is not an open exit (null keeps "You can't go that way") |
+| `Room` | `walk(gs, direction)` | take over a move entirely; a non-null result is the story text and the player stays |
+| `Room` | `departText(gs, direction)` / `enterText(gs)` | text before "You move …" when leaving, and right after it when arriving (never repeated by `look`) |
+| `Room` | `exitLabel(gs, direction)` | what an exit shows instead of its destination's name |
+| `Room` | `descriptionFor(gs)` | the description when it changes with the story (the room card reads this) |
+| `Room` | `talkToNobody(gs, target)` | the room's answer when the player talks to a name nobody here answers to |
+| `Room` | `getAmbientSound(gs)` / `rest(gs)` / `light(gs)` | `listen` with no target, `rest`/`sleep`/`wait`, and `cast light` in the room |
+| `Character`, `Item`, `Spell` | `answersTo(name)` | which words the player may use for it (a nickname, "the figure") |
+| `Character` | `receiveSpell(gs, spell)` | take over a spell cast on the character before the spell's own `castOnCharacter` |
+| `Item` | `listen(gs)` | `listen to <item>` |
+| `Spell` | `castOnName(gs, target)` | a cast on a name that is neither an item nor a character in reach |
+| `Quest` | `setJournal(earlier, latest)` / `setChecklist(checklist, description)` | the quest log as a journal of stages, or as a checklist; `details()` is what the UI reads |
+| `Quest` | `hint(gs)` | the line `hint` gives for this quest; the default is the newest journal entry or the next open checklist item |
+| `Act` | `getCompletionHook(gs)` | the line that opens the act-complete page |
+| `Act` | `unknownSpell(gs, name)` | the failure for a spell the player does not know, when the story has taken spells away |
+| `Act` | `carriedFlags()` | the story flags whose values travel into every later act (virtues always do) |
+| `Act` | `afterLoad(gs)` | bring a loaded save up to date; idempotent |
+| `Act` | `onRoomChanged(gs, from, to)` | after a walk, before the new room's `onEnter`; lets characters follow |
+
+The `Game` starts an act in the first room of its `rooms` map. A character may
+move the player itself (the dream's voice, Mira's teleport) by setting
+`currentRoom`, calling the new room's `onEnter` and `markVisited`; the UI shows
+the arrival from the room name changing.
+
 Mark overrides with `override`. Unused parameters keep a leading underscore
 (`_gameState`). Room/character/item helper methods that the Python code added
 (e.g. `unlock()`, `activate_dialogue()`) keep their purpose with camelCase names.

@@ -41,11 +41,14 @@ Every puzzle in every act follows these rules, so the game stays puzzling withou
 
 ## Example Commands
 
-- **Movement:** `go north`, `enter castle`, `climb tree`
-- **Interaction:** `talk to Mira`, `ask Nyx about riddle`, `give potion to Cedric`
-- **Examination:** `look`, `inspect altar`, `read scroll`
-- **Inventory:** `take sword`, `drop apple`, `use magic stone`
-- **Magic:** `cast fireball`, `heal self`, `reveal hidden door`
+The full list, with every synonym, is `design/Commands.md`. A few that the game answers:
+
+- **Movement:** `go north`, `north`, `n`
+- **Interaction:** `talk to Mira`, `say patience to shadow`, `give bread to grandmother`, `buy rope from shopkeeper`
+- **Examination:** `look`, `examine altar`, `search`, `listen`, `listen to shell`
+- **Inventory:** `take lantern`, `drop apple`, `use bucket with well`, `inventory`
+- **Magic:** `cast light`, `cast purify on well`, `spells`
+- **When stuck:** `hint`, `wait`, `map`
 - **Game Management:** `save`, `load`, `help`
 
 ## Target Audience

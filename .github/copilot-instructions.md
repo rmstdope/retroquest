@@ -116,6 +116,7 @@ Run each check as its own command and read its exit status; never chain them wit
 - All side quests need to be completed before the main quest can be finished, ensuring players fully engage with the story.
 - The design should describe a golden path through the story which contain all the steps needed to complete all quests, including the main quest and side quests.
 - The design should also contain additional optional content that can be explored for deeper lore and character development.
+- Every line the game says follows `design/Voice.md`, and every puzzle follows the Puzzle Rules in `design/GameOverview.md`. Both are binding for new content and for changes to old.
 
 ### Character Development
 
@@ -147,6 +148,7 @@ Run each check as its own command and read its exit status; never chain them wit
 - Quests should be structured in a way that allows for branching paths and dependencies.
 - Use a quest chain architecture where the main quest of an act is built up from all the side quests.
 - Each quest should have clear objectives, rewards, and consequences that affect the game world and player choices.
+- A quest's log is a journal of stages or a checklist (`setJournal`, `setChecklist`); the `hint` command reads it, and a quest may override `hint` to say something sharper, in-world and never naming a command.
 
 ### Spell System
 

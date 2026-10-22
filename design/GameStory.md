@@ -156,7 +156,7 @@ What Elior believes and what is revealed, act by act, with the recurring threads
 
 ## Story Path Summary
 
-- **Beginning:** Elior’s awakening, his bond with his grandmother, and the mystery of his parents.
+- **Beginning:** the dream the game opens in, Elior’s waking, his bond with his grandmother, and the mystery of his parents.
 - **Middle:** Gathering allies, learning magic, retrieving relics, and facing moral choices.
 - **End:** Confrontation with Malakar, saving the kingdom, and Elior’s return home to Willowbrook, where the withered field is green again as he casts `grow`.
 
