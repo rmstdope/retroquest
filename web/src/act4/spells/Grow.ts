@@ -12,8 +12,9 @@ import {
 } from '../Act4StoryFlags'
 
 /**
- * The first and smallest spell, the one Elior keeps after the Sacrifice
- * ending. Act IV carries its own copy so the acts stay self-contained. In
+ * The smallest spell, and the one Elior did not inherit: read from a stone
+ * in the glade, not carried in the ward, so it is the one he keeps after the
+ * Sacrifice ending. Act IV carries its own copy so the acts stay self-contained. In
  * Willowbrook Field, at the very end, it is the spell that greens the field
  * and closes the story; the companions there refuse it.
  */

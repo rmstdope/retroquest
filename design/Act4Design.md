@@ -190,7 +190,9 @@ rule that all side quests must be completed before the main quest can be finishe
         the wound held shut; baby Elior in Malakar's arms. The amulet opens the door because it is
         part of the ward.
     -   **Story Impact:** Elior learns that Malakar began out of love and was corrupted by the power, and that the
-        ward is the parents themselves and lives in Elior
+        ward is the parents themselves and lives in Elior. After Lysa's "Hold it shut, Aren" the
+        memories say it in so many words: the ward is Aren and Lysa, and their gift is the magic he
+        has, every spell but `grow`, which he read from a stone in a glade. The fever is named and dated: the Wasting, the year before Elior was born
 
 ## Character Development
 
@@ -576,8 +578,10 @@ peace. They are not alive and nothing here hints that they are.
 -   **Redemption:** Malakar, healed, is the uncorrupted friend again; he thanks Elior and
     lives on, powerless, beside the closed wound. Elior learns `Forgiveness` and casts it with the elixir.
 -   **Justice:** Malakar is sealed away, grieving. King Alden judges and restores order.
--   **Sacrifice:** Elior loses every spell but `grow`, a farmer's spell, which he keeps because it
-    is the smallest. The kingdom is healed at his cost.
+-   **Sacrifice:** Elior gives his parents' gift back to close the wound and loses every spell but
+    `grow`, the one he did not inherit (read from a stone in the glade, never carried in the ward).
+    The kingdom is healed at his cost. Lysa's farewell: "You gave our gift back to close what he
+    opened, and kept the one thing that was yours."
 
 ### The Epilogue
 

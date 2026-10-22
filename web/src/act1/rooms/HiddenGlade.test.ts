@@ -49,6 +49,19 @@ describe('Hidden Glade', () => {
       expect(closing).toBeGreaterThan(refrain)
     })
 
+    it('says grow is read off the stone and feels like his own, once, with the learn line', () => {
+      const game = gameInGlade()
+      const text = game.commandParser.parse('cast light')
+      const own =
+        'It does not wake in you the way the others did; this one you read, ' +
+        'word by word, off the stone, and it feels like your own.'
+      expect(text).toContain(own)
+      expect(text.indexOf(own)).toBeLessThan(
+        text.indexOf('You have learned the'),
+      )
+      expect(game.commandParser.parse('cast light')).not.toContain(own)
+    })
+
     it('shows again on a later cast, without the grow line', () => {
       const game = gameInGlade()
       game.commandParser.parse('cast light')

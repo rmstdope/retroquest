@@ -49,9 +49,10 @@ export class Memories extends Item {
           'Between them lie a crystal, a feather and a scale.',
       ),
       event(
-        'A dark year. A fever sweeps the land, and Aren and Lysa fall ill ' +
-          'with it. Nothing the Wardens know can heal them. Malakar sits by ' +
-          'their beds, reading, searching, unable to wait.',
+        'The year before you were born. The Wasting: a fever sweeps the ' +
+          'land, and Aren and Lysa fall ill with it. Nothing the Wardens know ' +
+          'can heal them. Malakar sits by their beds, reading, searching, ' +
+          'unable to wait.',
       ),
       event(
         'Malakar alone in a room full of clocks, tearing the air open to ' +
@@ -71,6 +72,11 @@ export class Memories extends Item {
           'held shut.',
       ),
       dialogue(LYSA, 'Hold it shut, Aren. Hide him. That is enough.'),
+      event(
+        'The ward is Aren and Lysa, and their gift is the magic you have: ' +
+          'every spell that ever answered your hands came through them, all ' +
+          'but one, which you read from a stone in a glade.',
+      ),
       event(
         'Last, and smallest: Malakar by a cottage fire in Willowbrook, ' +
           'rocking a baby in his arms and singing, low: "Hush, little seed, the ' +
