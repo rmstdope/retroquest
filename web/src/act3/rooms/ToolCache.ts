@@ -36,8 +36,8 @@ export class ToolCache extends Room {
       'You search deeper into the shadowed alcove and discover a heavy supply crate ' +
       'hidden behind stacked timbers, locked with a large iron padlock that glints ' +
       "with an almost malevolent gleam. The label reads: 'Rescue Supplies — For " +
-      "Emergency Use Only.' If you had the right key, you could unlock it and retrieve " +
-      'the tools needed to help the trapped miners.'
+      "Emergency Use Only.' The padlock is iron, rusted shut, and it has a " +
+      'keyhole.'
     )
   }
 }

@@ -25,6 +25,10 @@ describe('Act 3 Unlock spell', () => {
     const game = new Game([new Act3()])
     const crate = new SupplyCrate()
 
+    expect(crate.open(game.state)).toBe(
+      '[failure]The padlock holds. It is iron, rusted shut, and it has a ' +
+        'keyhole.[/failure]',
+    )
     const first = new UnlockSpell().castOnItem(game.state, crate)
     const again = new UnlockSpell().castOnItem(game.state, crate)
 

@@ -43,7 +43,10 @@ export class SupplyCrate extends Item {
   /** Open the unlocked crate, releasing its contents into the room. */
   override open(gameState: GameState): string {
     if (this.locked) {
-      return "[failure]The crate is locked. You'll need a key to open it.[/failure]"
+      return (
+        '[failure]The padlock holds. It is iron, rusted shut, and it has a ' +
+        'keyhole.[/failure]'
+      )
     }
     if (this.opened) {
       return event(
