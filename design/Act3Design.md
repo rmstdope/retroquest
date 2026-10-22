@@ -69,7 +69,7 @@ At each relic site the curse is visibly worse than the last, and the beat plays 
 -   Mount Ember: ash rain falling over the slopes and the braziers guttering.
 -   Caverns of Shadow: silent mines, the miners’ picks hanging unmoved.
 
-When Mira next teleports the party she says the king is weaker. Together with the clues, this builds to the Act III row of the red line: Elior’s parents were not Malakar’s victims; they were his closest friends.
+When Mira next teleports the party she says the king is weaker. At the Mount Ember departure, with the ash falling, she also draws the line between the two sicknesses, before the king line: "There is a word the old folk will reach for when this ash comes down on them: the Wasting. It is not that. The Wasting killed. This drinks." Together with the clues, this builds to the Act III row of the red line: Elior’s parents were not Malakar’s victims; they were his closest friends.
 
 ## Quests in Act III
 

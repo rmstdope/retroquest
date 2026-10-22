@@ -18,9 +18,9 @@ import {
 const ARCH_LINE =
   'Behind the throne an arch you had not noticed stands open. Beyond it, far off, the road runs home.'
 const KNEEL_REMEMBER =
-  'You kneel at the edge of the field. Your hands remember the smallest spell you ever learned.'
+  'You kneel at the edge of the field. Your hands remember the spell you read from a stone in the glade, the one that was always yours.'
 const KNEEL_KEPT =
-  'You kneel at the edge of the field. The one spell you kept stirs in your hands, small and certain.'
+  'You kneel at the edge of the field. The one spell you kept stirs in your hands, the one that was never theirs, small and certain.'
 const ARCH_SENTENCE = 'Behind the throne an arch stands open on the road home.'
 const AMULET_STEP = ACT4_GOLDEN_PATH.indexOf('use ancient amulet') + 1
 
@@ -354,7 +354,7 @@ describe('casting grow at home', () => {
       justice:
         'Malakar is sealed away, and the kingdom is set right. Elior is home.',
       sacrifice:
-        'Elior gave his magic away and kept the smallest spell. He is home.',
+        "Elior gave his parents' gift away and kept the one spell that was his. He is home.",
     }
     for (const ending of Object.keys(hooks) as Ending[]) {
       const game = home(ending)

@@ -285,11 +285,15 @@ describe('Sacrifice', () => {
     expect(text.startsWith(`[event]${rise}`)).toBe(true)
     expect(text.indexOf(keep)).toBeGreaterThan(text.indexOf(rise))
     expect(text.indexOf(press)).toBeGreaterThan(text.indexOf(keep))
-    expect(text).toContain('the smallest of them all: grow.')
-    expect(text).not.toContain('the first and the smallest')
+    expect(text).toContain(
+      'When it is done, one small spell is still in you: grow, the one you did not inherit. You read it from a stone in a glade, and their gift never touched it.',
+    )
+    expect(text).not.toContain('the smallest')
     expect(text).toContain('Your magic is gone. Only grow remains.')
     expect(text).toContain('He will answer to me, and he will live to do it.')
-    expect(text).toContain('You gave it all away, and kept the smallest thing.')
+    expect(text).toContain(
+      'You gave our gift back to close what he opened, and kept the one thing that was yours. That was always the best of you.',
+    )
     expectStoryFlag(game.state, FLAG_ACT4_SACRIFICE_ENDING, true)
     expectQuestCompleted(game.state, 'The Final Stand')
     expect(spellNames(game)).toEqual(['grow'])
@@ -314,7 +318,8 @@ describe('Sacrifice', () => {
 describe('Sacrifice colouring', () => {
   it('adds Aren’s line only after two selfless moments', () => {
     const line = 'We watched you give, again and again'
-    const lysa = 'You gave it all away, and kept the smallest thing.'
+    const lysa =
+      'You gave our gift back to close what he opened, and kept the one thing that was yours. That was always the best of you.'
     const play = (virtues: string[]): string => {
       const game = opened(virtues)
       executeCommands(game, ['use lifelight elixir on prison'])

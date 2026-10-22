@@ -68,8 +68,8 @@ const ENDING_LINES: Record<Ending, string> = {
   ),
   sacrifice: dialogue(
     'Lysa',
-    'You gave it all away, and kept the smallest thing. That was always ' +
-      'the best of you.',
+    'You gave our gift back to close what he opened, and kept the one ' +
+      'thing that was yours. That was always the best of you.',
   ),
 }
 
@@ -126,5 +126,6 @@ export const ENDING_HOOKS: Record<Ending, string> = {
   justice:
     'Malakar is sealed away, and the kingdom is set right. Elior is home.',
   sacrifice:
-    'Elior gave his magic away and kept the smallest spell. He is home.',
+    "Elior gave his parents' gift away and kept the one spell that was his. " +
+    'He is home.',
 }

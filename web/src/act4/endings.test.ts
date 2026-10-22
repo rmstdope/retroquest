@@ -46,7 +46,7 @@ describe('endings', () => {
     const lines = {
       redemption: 'You gave him back to us, our friend.',
       justice: 'You named what he did',
-      sacrifice: 'You gave it all away, and kept the smallest thing.',
+      sacrifice: 'You gave our gift back to close what he opened',
     } as const
     for (const [ending, line] of Object.entries(lines)) {
       const text = farewell(ending as keyof typeof lines, freshState())

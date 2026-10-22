@@ -188,6 +188,12 @@ export class Mira extends Character {
         ) +
         '\n' +
         speech(
+          'There is a word the old folk will reach for when this ash comes ' +
+            'down on them: the Wasting. It is not that. The Wasting killed. ' +
+            'This drinks.',
+        ) +
+        '\n' +
+        speech(
           'The king is weaker still. Whatever drains him draws harder with every ' +
             'site we reach.',
         ) +

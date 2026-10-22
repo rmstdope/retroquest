@@ -21,13 +21,13 @@ const GATE_SONG =
 
 /** The kneel after Redemption or Justice, when grow comes back. */
 const KNEEL_REMEMBER =
-  'You kneel at the edge of the field. Your hands remember the smallest spell ' +
-  'you ever learned.'
+  'You kneel at the edge of the field. Your hands remember the spell you ' +
+  'read from a stone in the glade, the one that was always yours.'
 
 /** The kneel after Sacrifice, when grow was kept. */
 const KNEEL_KEPT =
   'You kneel at the edge of the field. The one spell you kept stirs in ' +
-  'your hands, small and certain.'
+  'your hands, the one that was never theirs, small and certain.'
 
 /**
  * The end of the story: the withered field behind Elior's home, where the
