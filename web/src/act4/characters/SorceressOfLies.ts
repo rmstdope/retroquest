@@ -137,10 +137,37 @@ export class SorceressOfLies extends Character {
     }
     const word = normaliseSpokenWord(words)
     if (word !== 'understanding') return '[dim]The Sorceress only smiles.[/dim]'
+    return this.understandBy(
+      gameState,
+      '“I understand,” you say. “You have been alone in here a long ' +
+        'time.” The Sorceress goes very still.',
+    )
+  }
+
+  /**
+   * Listening in the chamber is understanding too: with the badge shown and
+   * all three hearts heard, standing still and listening to her redeems her
+   * as the word does. Before that, the same refusals as the word.
+   */
+  listenedTo(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
+    if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
+      return '[dim]She has already been heard. The chamber is quiet.[/dim]'
+    }
+    return this.understandBy(
+      gameState,
+      'You say nothing. You stand in the middle of her chamber and listen, ' +
+        'to all of it, for as long as it takes. The Sorceress goes very ' +
+        'still.',
+    )
+  }
+
+  /** The shared gates and the redemption, led in by what Elior did: the word, or the listening. */
+  private understandBy(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
       return (
-        '[failure]She laughs, and the chamber laughs with her. Your word is ' +
-        'lost among the whispers.[/failure]'
+        '[failure]She laughs, and the chamber laughs with her. Whatever you ' +
+        'came to give her is lost among the whispers.[/failure]'
       )
     }
     const heard = this.heartsHeard(gameState)
@@ -157,14 +184,14 @@ export class SorceressOfLies extends Character {
         'alone.[/failure]'
       )
     }
-    return this.redeem(gameState)
+    return this.redeem(gameState, lead)
   }
 
   /**
    * The redemption: the confession, then the mask, the completed quest, the
    * open arch and the changed chamber.
    */
-  private redeem(gameState: GameState): string {
+  private redeem(gameState: GameState, lead: string): string {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_TRUTH_ACQUIRED, true)
     const confession = CONFESSION.map((speech) => dialogue(this.name, speech))
@@ -175,10 +202,8 @@ export class SorceressOfLies extends Character {
 
     return [
       event(
-        '“I understand,” you say. “You have been alone in here a long ' +
-          'time.” The Sorceress goes very still. One by one the crystals ' +
-          'stop whispering, until the chamber is silent for the first time ' +
-          'in years.',
+        `${lead} One by one the crystals stop whispering, until the chamber ` +
+          'is silent for the first time in years.',
       ),
       ...confession,
       event(

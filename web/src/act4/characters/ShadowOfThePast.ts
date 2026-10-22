@@ -10,6 +10,11 @@ import { normaliseSpokenWord } from '../spokenWord'
 /** What it is called once the orbs are mended and it has a face. */
 const FULL_NAME = 'Shadow of the Past'
 
+/** The Shadow once it has its answer. */
+const ANSWERED =
+  '[dim]The Shadow has its answer. It nods towards the door to the ' +
+  'east.[/dim]'
+
 /** The word that answers the Shadow, after the Phoenix's riddle. */
 const ANSWER_WORD = 'patience'
 
@@ -96,15 +101,38 @@ export class ShadowOfThePast extends Character {
   override sayTo(gameState: GameState, words: string): string {
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
-      return (
-        '[dim]The Shadow has its answer. It nods towards the door to the ' +
-        'east.[/dim]'
-      )
+      return ANSWERED
     }
     const word = normaliseSpokenWord(words)
     if (word !== ANSWER_WORD) {
       return '[dim]The Shadow waits, as it has waited for years.[/dim]'
     }
+    return this.answerWithPatience(
+      gameState,
+      '“Patience,” you say. “You could not wait for them. You can wait a ' +
+        'little longer, for me.”',
+    )
+  }
+
+  /**
+   * Waiting in the vault is patience too: resting with the orbs mended and
+   * the mask shown answers the Shadow as the word does. Before that, the
+   * same refusals as the word; afterwards, the same nod.
+   */
+  waitWith(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
+    if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
+      return ANSWERED
+    }
+    return this.answerWithPatience(
+      gameState,
+      'You sit down among the orbs and wait, and say nothing at all. The ' +
+        'Shadow watches you do it for a long time.',
+    )
+  }
+
+  /** The shared gates and the answer, led in by what Elior did: the word, or the waiting. */
+  private answerWithPatience(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
       return (
         '[failure]The Shadow cannot hear you. The memories around it are ' +
@@ -119,10 +147,7 @@ export class ShadowOfThePast extends Character {
     }
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
     return [
-      event(
-        '“Patience,” you say. “You could not wait for them. You can wait a ' +
-          'little longer, for me.”',
-      ),
+      event(lead),
       dialogue(
         FULL_NAME,
         'Patience. The one thing I never had. Then I will wait, a little ' +

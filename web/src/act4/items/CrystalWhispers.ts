@@ -26,6 +26,17 @@ export class CrystalWhispers extends Item {
     )
   }
 
+  /** Listening with the ears alone hears the lies, not what is under them; silence once she is redeemed. */
+  override listen(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
+      return 'The crystals are silent now.'
+    }
+    return (
+      'Kind, untrue things, over and over, in a voice that is almost hers. ' +
+      'Whatever is under them is too quiet for ears alone.'
+    )
+  }
+
   /** The crystals fall silent once the Sorceress is redeemed. */
   override examine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {

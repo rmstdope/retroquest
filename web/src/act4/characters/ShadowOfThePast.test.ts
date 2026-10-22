@@ -216,6 +216,34 @@ describe('The Shadow of the Past', () => {
     expect(executeCommands(game, ['go west'])).toContain('Memory Vault')
   })
 
+  it('is answered by waiting too, with the same gates as the word', () => {
+    expect(executeCommands(inVault(), ['rest'])).toContain(
+      'The Shadow cannot hear you.',
+    )
+    const early = mended()
+    expect(executeCommands(early, ['rest'])).toContain(
+      'Patience is for those who still have hope. I have none left.',
+    )
+    expect(
+      early.state.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED),
+    ).toBe(false)
+
+    const game = masked()
+    const waited = executeCommands(game, ['rest'])
+    expect(waited).toContain(
+      'You sit down among the orbs and wait, and say nothing at all. The ' +
+        'Shadow watches you do it for a long time.',
+    )
+    expect(waited).toContain('Patience. The one thing I never had.')
+    expect(waited).not.toContain('“Patience,” you say')
+    expect(
+      game.state.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED),
+    ).toBe(true)
+    expect(executeCommands(game, ['rest'])).toContain(
+      'The Shadow has its answer.',
+    )
+  })
+
   it('accepts the stone on the shadow and a quoted, capitalised word', () => {
     const game = inVault()
     expect(

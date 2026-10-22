@@ -30,6 +30,17 @@ export class ChamberOfWhispers extends Room {
     })
   }
 
+  /** Listening here, once her hearts can be heard, is understanding; otherwise the crystals' hum. */
+  override getAmbientSound(gameState: GameState): string {
+    const sorceress = this.characters.find(
+      (character) => character instanceof SorceressOfLies,
+    )
+    if (sorceress instanceof SorceressOfLies) {
+      return sorceress.listenedTo(gameState)
+    }
+    return 'The crystals hum, each one something kind and untrue.'
+  }
+
   /** Entering the chamber starts the Sorceress's side quest. */
   override onEnter(gameState: GameState): void {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)

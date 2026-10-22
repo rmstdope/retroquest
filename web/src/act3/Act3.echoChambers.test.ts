@@ -5,7 +5,7 @@ import {
   FLAG_ACT3_ECHO_HEARD,
   FLAG_ACT3_KEEPER_PHANTOM_LINE_TOLD,
 } from './Act3StoryFlags'
-import { expectStoryFlag } from '@/testing/gameHelpers'
+import { expectStoryFlag, executeCommands } from '@/testing/gameHelpers'
 
 /** Reload a game through a save, as the browser does. */
 function reload(game: Game): Game {
@@ -29,6 +29,13 @@ describe('The Echo Chambers echo and the Silence Keeper', () => {
         'Silence Keeper',
       )
     expect(keeper?.talkTo(loaded.state)).toContain('They are moments')
+  })
+
+  it('is reached by the typed command, as the design names it', () => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom = game.state.allRooms.EchoChambers
+    expect(executeCommands(game, ['listen'])).toContain('Three voices')
+    expectStoryFlag(game.state, FLAG_ACT3_ECHO_HEARD, true)
   })
 
   it('keeps the echo heard and the Keeper line told across a save and load', () => {

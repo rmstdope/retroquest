@@ -51,6 +51,11 @@ class RecordingGame implements CommandTarget {
   search() {
     return this.record('search')
   }
+  listen(target?: string) {
+    return target === undefined
+      ? this.record('listen')
+      : this.record('listen', target)
+  }
   take(item: string) {
     return this.record('take', item)
   }
@@ -192,6 +197,9 @@ describe('CommandParser', () => {
       'check altar': ['examine', 'altar'],
       search: ['search'],
       investigate: ['search'],
+      listen: ['listen'],
+      'listen to shell': ['listen', 'shell'],
+      'listen shell': ['listen', 'shell'],
     })
   })
 
