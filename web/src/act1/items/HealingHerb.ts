@@ -1,4 +1,4 @@
-import { Item, characterName, speech } from '@/engine'
+import { Item, characterName, speech, event, type GameState } from '@/engine'
 
 /** Static, non-removable medicinal resource controlled by Mira (Act I healer). */
 export class HealingHerb extends Item {
@@ -10,6 +10,23 @@ export class HealingHerb extends Item {
         'Useful for healing wounds or brewing potions.',
       shortName: 'herb',
     })
+  }
+
+  /** Grow crowds the pot: a rewarded second use of the spell, in Mira's hut. */
+  override grow(_gameState: GameState): string {
+    return (
+      event(
+        'The herb crowds its pot and spills green over the rim, twice what ' +
+          'it was.',
+      ) +
+      '\n' +
+      characterName('Mira') +
+      ' raises an eyebrow. ' +
+      speech(
+        'That was dear, that herb. Now there is more of it. I will not ' +
+          'complain.',
+      )
+    )
   }
 
   /** Block pickup and deliver Mira's stewardship dialogue. */

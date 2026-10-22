@@ -4,8 +4,10 @@ import {
   type GameState,
   type Item,
   characterName,
+  event,
 } from '@/engine'
 import { MysteriousBox } from '../items/MysteriousBox'
+import { Mechanism } from '../items/Mechanism'
 
 /** Spell that attempts to open locks, magical or mundane, by focused intent. */
 export class UnlockSpell extends Spell {
@@ -26,10 +28,17 @@ export class UnlockSpell extends Spell {
     )
   }
 
-  /** Attempt to unlock an item; delegate to the item's unlock logic when present. */
+  /** Unlock the mysterious box; the mill's mechanism has no lock to find; other items refuse. */
   override castOnItem(gameState: GameState, item: Item): string {
     if (item instanceof MysteriousBox) {
       return item.unlock(gameState)
+    }
+    if (item instanceof Mechanism) {
+      return event(
+        'The spell finds nothing to turn. The black iron has no lock; it was ' +
+          'never meant to be opened, only to run' +
+          (item.repaired ? ', and now not even that.' : '.'),
+      )
     }
     const name = item.name
     return (
