@@ -138,6 +138,13 @@ export const FLAG_ACT4_TRUTH_TOLD = 'act4_truth_told'
 /** The virtue moment recorded when Elior tells the True Self the truth. */
 export const VIRTUE_TRUTH = 'truth'
 
+/**
+ * Act I's flag for the Vegetable Field watered with purified well water,
+ * carried into Act IV by `Act1.carriedFlags`; the epilogue field remembers it.
+ * The string is Act I's, since acts share no code.
+ */
+export const FLAG_FIELD_WATERED_IN_ACT1 = 'vegetable_field_watered'
+
 /** The virtue moment recorded when Elior puts the Ghostly Warriors to rest. */
 export const VIRTUE_MERCY = 'mercy'
 

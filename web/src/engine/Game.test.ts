@@ -316,6 +316,52 @@ describe('Game', () => {
       expect(game.acceptInput).toBe(false)
     })
 
+    it('carries declared flags and virtues into the next act, and drops the rest', () => {
+      const first = new Act({
+        name: 'First',
+        rooms: basicRooms(),
+        quests: [],
+        musicFile: 'a.mp3',
+        musicInfo: 'A',
+      })
+      first.carriedFlags = () => ['field_watered']
+      const second = new Act({
+        name: 'Second',
+        rooms: { Gate: new Room({ name: 'Gate', description: 'A gate.' }) },
+        quests: [],
+        musicFile: 'b.mp3',
+        musicInfo: 'B',
+      })
+      const third = new Act({
+        name: 'Third',
+        rooms: { Field: new Room({ name: 'Field', description: 'A field.' }) },
+        quests: [],
+        musicFile: 'c.mp3',
+        musicInfo: 'C',
+      })
+      let done = 0
+      first.isCompleted = () => done >= 1
+      second.isCompleted = () => done >= 2
+      const game = new Game([first, second, third])
+      game.newTurn()
+      game.newTurn()
+      game.state.setStoryFlag('field_watered', true)
+      game.state.setStoryFlag('private_to_first', true)
+      game.state.addVirtue('mercy')
+      done = 1
+      game.newTurn()
+      expect(game.currentAct).toBe(1)
+      expect(game.state.getStoryFlag('field_watered')).toBe(true)
+      expect(game.state.getStoryFlag('private_to_first')).toBe(false)
+      expect(game.state.hasVirtue('mercy')).toBe(true)
+      game.newTurn()
+      game.newTurn()
+      done = 2
+      game.newTurn()
+      expect(game.currentAct).toBe(2)
+      expect(game.state.getStoryFlag('field_watered')).toBe(true)
+    })
+
     it('presents the finished act during a transition and the current act otherwise', () => {
       const mk = (name: string, file: string): Act =>
         new Act({

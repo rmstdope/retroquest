@@ -99,14 +99,22 @@ export class Game implements CommandTarget {
   }
 
   /**
-   * A new state for the current act, starting in its first room, holding the
-   * given virtues carried over from the act before.
+   * A new state for the current act, starting in its first room. From the
+   * state of the act before it carries the virtues and every flag an earlier
+   * act declared in `carriedFlags`, and nothing else.
    */
-  private freshState(virtues: string[] = []): GameState {
+  private freshState(previous?: GameState): GameState {
     const act = this.acts[this.currentAct]
     const startingRoom = Object.values(act.rooms)[0]
     const state = new GameState(startingRoom, act.rooms, act.quests)
-    state.virtues = [...virtues]
+    if (previous) {
+      state.virtues = [...previous.virtues]
+      for (const earlier of this.acts.slice(0, this.currentAct)) {
+        for (const flag of earlier.carriedFlags()) {
+          if (previous.getStoryFlag(flag)) state.setStoryFlag(flag, true)
+        }
+      }
+    }
     act.setupGameState(state)
     return state
   }
@@ -130,7 +138,7 @@ export class Game implements CommandTarget {
             this.runState = GameRunState.ActTransition
             this.acceptInput = false
             this.finishedActState = this.state
-            this.state = this.freshState(this.state.virtues)
+            this.state = this.freshState(this.state)
             this.hasChangedRoom = true
           } else {
             this.runState = GameRunState.GameOver

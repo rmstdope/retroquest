@@ -25,7 +25,10 @@ import { OhDeerOhDeerQuest } from './quests/OhDeerOhDeer'
 import { PreparingForTheRoadQuest } from './quests/PreparingForTheRoad'
 import { FadedPhotographQuest } from './quests/FadedPhotograph'
 import { ShadowsOverWillowbrookQuest } from './quests/ShadowsOverWillowbrook'
-import { FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED } from './Act1StoryFlags'
+import {
+  FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED,
+  FLAG_VEGETABLE_FIELD_WATERED,
+} from './Act1StoryFlags'
 import { ACT1_CLASSES } from './classes'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { Shopkeeper } from './characters/Shopkeeper'
@@ -119,5 +122,10 @@ export class Act1 extends Act {
 
   override isCompleted(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED)
+  }
+
+  /** Whether the field was watered travels to the epilogue, which remembers it. */
+  override carriedFlags(): string[] {
+    return [FLAG_VEGETABLE_FIELD_WATERED]
   }
 }

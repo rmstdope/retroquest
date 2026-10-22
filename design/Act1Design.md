@@ -63,7 +63,7 @@
   - **Update:** Discuss the crops, villagers' fears and well with Mira; she urges Elior to connect with nature.
   - **Update:** Give the Rare Flower to Mira to unlock Elior's magic; she promises him the Ancient Amulet once he is ready for the road.
   - **Update:** Fish the ring out of the purified well; a black-iron rune token comes up with it. The well did not sour by itself.
-  - **Update (optional):** Water the Vegetable Field with purified well water; the whole field recovers.
+  - **Update (optional):** Water the Vegetable Field with purified well water; the whole field recovers. The flag travels to Act IV (`Act1.carriedFlags`), where the epilogue remembers whether the field was watered.
   - **Update:** Give the rune token to Mira. She names it a _fouling sigil_: someone poisoned the well on purpose. She says the cloaked stranger of the villagers' rumours came to her door asking for the amulet, and that whoever carried the token was searching Willowbrook for something, "or for someone". Malakar is not named.
   - **Update:** Mira adds that the sickness in the land and the sickness of King Alden feel like one wound (see _Story Beats_).
   - **Completion:** When act 1 is completed
