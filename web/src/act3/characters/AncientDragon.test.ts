@@ -310,7 +310,8 @@ describe('AncientDragon', () => {
     )
     expect(speeches[3].kind === 'dialogue' && speeches[3].markup).toBe(
       'They had a saying, the three of them, carved wherever they worked: ' +
-        'Power follows purpose; purpose follows truth.',
+        'Power follows purpose; purpose follows truth. When he offers you ' +
+        'what you want most, say it to him. It was his before it was yours.',
     )
     expect(speeches[4].kind === 'dialogue' && speeches[4].markup).toBe(
       'The friend who stayed behind.',

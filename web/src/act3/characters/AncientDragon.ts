@@ -133,7 +133,9 @@ export class AncientDragon extends Character {
         '\n\n' +
         speech(
           'They had a saying, the three of them, carved wherever they ' +
-            'worked: Power follows purpose; purpose follows truth.',
+            'worked: Power follows purpose; purpose follows truth. When he ' +
+            'offers you what you want most, say it to him. It was his ' +
+            'before it was yours.',
         ) +
         AncientAmulet.glowInBag(gameState, 3) +
         '\n\n'

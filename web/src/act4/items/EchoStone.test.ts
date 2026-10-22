@@ -32,6 +32,10 @@ describe('EchoStone', () => {
     game.state.inventory.push(pendant)
     const alone = stone.use(game.state)
     expect(alone).toContain('waiting for somewhere that needs them')
+    expect(alone).toContain(
+      'one voice says a single word over and over, the way a man says a ' +
+        'word he has stopped believing in: redemption.',
+    )
     expect(stone.useWith(game.state, pendant)).toBe(alone)
     expect(pendant.useWith(game.state, stone)).toBe(alone)
     expect(game.state.getStoryFlag(FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED)).toBe(
