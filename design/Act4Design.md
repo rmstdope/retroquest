@@ -169,7 +169,9 @@ rule that all side quests must be completed before the main quest can be finishe
         door opens to the amulet
     -   **Who it is:** **The dream voice from the Prologue.** Elior knows the voice at once. The
         Shadow is the uncorrupted remnant of Malakar, asking his friends' son for help. It feels
-        familiar because Malakar held baby Elior.
+        familiar because Malakar held baby Elior. Once the orbs are mended it says, whole, the
+        sentence Elior has caught in pieces since the first dream: "Be patient where I was not.
+        Close what I opened, and let them rest." The amulet repeats it at the climax.
     -   **Story Impact:** Reveals who has been calling Elior and prepares the vault
 
 #### The Parents' Vault
@@ -313,7 +315,8 @@ without the echo knowledge of the Hall of Echoes.
 #### Description
 
 A grand hall of tattered banners where footsteps echo as if accompanied by the ghosts of past
-battles. At its centre stands the Knight of Despair in a shredded grey cloak.
+battles. At its centre stands the Knight of Despair in a shredded grey cloak, his back to the
+door Elior came in by.
 
 #### Items
 
@@ -425,7 +428,9 @@ room in the fortress.
 
 A vast chamber with a twisted throne of black stone. King Alden hangs in a crystal prison above
 a ritual circle, his life draining into a bleeding rift in the air: Malakar's wound in time.
-Malakar stands beside it, grey and failing; the wound is killing him too.
+Malakar stands beside it, grey and failing; the wound is killing him too. He looks at the wound,
+not at Elior, until the refrain turns him ("For the first time since you came in, he is looking
+at you").
 
 #### Usable Items
 

@@ -148,6 +148,9 @@ describe('The Shadow of the Past', () => {
     expect(executeCommands(game, ['talk to shadow of the past'])).toContain(
       'I was Malakar, once. Not the one who waits in the throne room: the part of him that remembered why he began. When he tore the wound, he tore himself in two, and I am the half he left behind. I held you once, when you were small enough to fit in my two hands. I have called to you ever since.',
     )
+    expect(executeCommands(game, ['talk to shadow of the past'])).toContain(
+      'Every time, with the same words, and you caught only pieces of them. Hear them whole: be patient where I was not. Close what I opened, and let them rest.',
+    )
     expect(executeCommands(game, ['examine shadow'])).toContain(
       'His face is kind and very tired.',
     )

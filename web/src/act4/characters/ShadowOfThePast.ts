@@ -71,13 +71,22 @@ export class ShadowOfThePast extends Character {
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
-      return dialogue(
-        FULL_NAME,
-        'I was Malakar, once. Not the one who waits in the throne room: the ' +
-          'part of him that remembered why he began. When he tore the wound, ' +
-          'he tore himself in two, and I am the half he left behind. I held ' +
-          'you once, when you were small enough to fit in my two hands. I ' +
-          'have called to you ever since.',
+      return (
+        dialogue(
+          FULL_NAME,
+          'I was Malakar, once. Not the one who waits in the throne room: the ' +
+            'part of him that remembered why he began. When he tore the wound, ' +
+            'he tore himself in two, and I am the half he left behind. I held ' +
+            'you once, when you were small enough to fit in my two hands. I ' +
+            'have called to you ever since.',
+        ) +
+        '\n' +
+        dialogue(
+          FULL_NAME,
+          'Every time, with the same words, and you caught only pieces of ' +
+            'them. Hear them whole: be patient where I was not. Close what I ' +
+            'opened, and let them rest.',
+        )
       )
     }
     return "[dim]The shadow's lips move, but the vault swallows the sound.[/dim]"

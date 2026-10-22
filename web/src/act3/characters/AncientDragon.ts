@@ -44,7 +44,9 @@ export class AncientDragon extends Character {
       "Then, beneath the dragon's breathing, another voice: the whisper " +
       'from your dream, at the very edge of hearing. ' +
       '[italic]“Elior… little one. Help me. I cannot hold it shut ' +
-      'alone.”[/italic] You know it the way you know a song someone sang ' +
+      "alone.”[/italic] And after it, almost lost in the dragon's " +
+      'breathing: [italic]“…be patient where I was not…”[/italic] You ' +
+      'know it the way you know a song someone sang ' +
       'to you before you had words for it.' +
       this.tuneRecognition(gameState) +
       ' Then it is gone.\n\n' +

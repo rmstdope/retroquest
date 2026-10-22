@@ -164,8 +164,43 @@ describe('Grandmother and the dream', () => {
     expect(reaction).toBeGreaterThan(greeting)
     expect(tale).toBeGreaterThan(reaction)
     expect(lesson).toBeGreaterThan(tale)
-    expect(response).toContain('No. No, of course not.')
+    expect(response).toContain('Some voices are older than memory.')
     expect(findMarkupProblems(response)).toEqual([])
+  })
+
+  it('is humming the cradle tune when Elior comes in with the dream, and stops', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, READ)
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    const humming = response.indexOf(
+      'She is humming at the hearth when you come in: a slow tune that ' +
+        'climbs three notes and settles home again. You know it. You have ' +
+        'known it all your life, and you could not say from where. She ' +
+        'stops when she sees your face.',
+    )
+    expect(humming).toBeGreaterThan(-1)
+    expect(humming).toBeLessThan(response.indexOf(REACTION))
+    expect(humming).toBeLessThan(
+      response.indexOf('Willowbrook has always been'),
+    )
+  })
+
+  it('goes quiet over the three words Elior caught from the voice', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, READ)
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain(
+      'You tell her the three words you caught at the very end, the ones ' +
+        'you wrote down before they could go: let them rest. She goes ' +
+        'quiet. She turns to the bread on the board and does not turn back ' +
+        'for a while.',
+    )
+    expect(response).toContain('Some voices are older than memory.')
+    expect(response).not.toContain('No. No, of course not.')
   })
 
   it('reacts without the greeting when it was already heard', () => {
