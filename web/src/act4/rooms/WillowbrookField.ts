@@ -51,7 +51,7 @@ export class WillowbrookField extends Room {
     super({
       name: 'Willowbrook Field',
       description:
-        'The field behind your home, as you left it: rows of withered crops ' +
+        'The field behind your home: rows of withered crops ' +
         'under a pale sky, the earth cracked and grey. Grandmother waits at ' +
         'the gate. Mira stands beside her, and Sir Cedric leans on the ' +
         'fence. In the hedge a small light flickers: Nyx, keeping close. ' +

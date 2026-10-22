@@ -150,7 +150,7 @@ describe('Willowbrook Field', () => {
     const text = executeCommands(watered.game, ['north'])
     const walk = text.indexOf('your own field.')
     const since = text.indexOf(
-      'The field you watered once, the summer you left, went grey again by autumn. Grandmother tried.',
+      'The field you watered once went grey again after you left. Grandmother tried.',
     )
     const song = text.indexOf('At the gate Grandmother is singing')
     expect(since).toBeGreaterThan(walk)
