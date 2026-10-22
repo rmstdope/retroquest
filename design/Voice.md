@@ -23,22 +23,23 @@ after the elixir ("It does not hurt. For the first time in years, it does not hu
    because a person may instruct); the game's own voice never says "You need to" or "You should".
 5. **Refusals say something true in-world.** "The straps have nothing to hold." "The padlock
    holds. It is iron, rusted shut, and it has a keyhole." Never "nothing happens", never an
-   instruction in disguise. See the Puzzle Rules in `GameOverview.md`.
-6. **Each speaker has a habit.** Tilda gossips and knocks on wood; Cedric speaks like a soldier
+   instruction in disguise. See the Puzzle Rules in `design/GameOverview.md`.
+6. **Each speaker has a habit.** Tilda gossips and quotes her mother's knock on wood; Cedric speaks like a soldier
    and ends on a plain promise; the Librarian is a keeper, not a teller; the Shadow speaks in
    short, tired sentences; Grandmother deflects to the bread. Reuse the habit, not a catchphrase.
 7. **Let silence and gesture carry weight.** "You do." "She stops when she sees your face." A beat
    of narration beats a paragraph of explanation. Do not explain what a line means after
    saying it.
 8. **Reveal by implication, in order.** Each act's canon says what may be named (see
-   `GameStory.md`, Story Canon and the red line). A line that lands in Act I must not know what
+   `design/GameStory.md`, Story Canon and the red line). A line that lands in Act I must not know what
    Act III knows. Hint with a particular ("She always crossed her sevens"), not with a label.
 9. **Keep the motifs exact.** The refrain, the cradle song's three notes, the bell "with no hand
    on the rope", the turned back, the mark "a tree under two moons": repeat the same words
    every time, so the player recognises them.
 10. **Quotes and markup.** Character speech goes through `speech()` or `dialogue(name, …)`;
     narration goes bare or through `event()`; written text through `writing()`. Do not put
-    quotation marks inside the markup that already supplies them. Strings are split on
+    quotation marks inside the markup that already supplies them; a passage quoted inside a
+    book keeps its own. Strings are split on
     sentence or clause boundaries and joined with `+` (rule 8 of the formatting rules); never
     split inside a word, and never change existing wording unless the change is the point.
 
@@ -46,11 +47,14 @@ after the elixir ("It does not hurt. For the first time in years, it does not hu
 
 | Before | After |
 | --- | --- |
-| "The air tastes of lost hope and forgotten dreams." | "This was a garden once." |
-| "Whispered doubts slither into your mind like poison." | "The whispers say your friends have left you. They say it again, closer." |
-| "You cast unlock on the crate, but you need to find a key first." | "The padlock holds. It is iron, rusted shut, and it has a keyhole." |
-| "I am an ancient and wise spirit of the forest." | "My deer sat with you in the glade at Willowbrook. It said you were still. Few are." |
-| "Complete every side quest before sharing the vision." | "Not yet. You have left things undone in this city, and I will not read omens with a man who has debts." |
+| "the air tastes of lost hope and forgotten dreams." | "This was a garden once." |
+| "whispered doubts slither into your mind like poison." | "They do not answer you. They only say it again, closer: your friends have left you. No one is coming." |
+| "The crate is locked. You need to find a way to open it." | "The padlock holds. It is iron, rusted shut, and it has a keyhole." |
+| "I am an ancient and wise spirit of the forest." (the kind of line the game refuses) | "Elior. My deer sat with you in the glade at Willowbrook, before any of this. It said you were still. Few are." |
+| "Complete every side quest in Act II before sharing these visions." | "Not yet. Whatever you have seen, I would hear it with our promises kept, not with work still undone." |
+
+The left column is what the game once said, or the kind of line it refuses; the right column is
+quoted from the game as it stands.
 
 ## When writing a new line
 

@@ -471,10 +471,10 @@ path takes them:
 1. In the city: _The Knight's Test_, _Supplies for the Journey_, _Echoes of the Past_, _The
    Healer's Apprentice_, _The Ancient Library_; then _The Hermit's Warning_ at the stones, which
    together open the forest.
-2. In the forest and back: _The Forest Guardian's Riddles_, _Whispers in the Wind_, the caravan
-   found with `forest_speech`; then in town _The Innkeeper's Daughter_ (heal, water, dispel) and
-   _Cedric's Lost Honor_ (the Secret Documents to the Lord Commander); _The Merchant's Lost
-   Caravan_ closes with Thorne.
+2. In the forest and back: _The Forest Guardian's Riddles_, _Whispers in the Wind_, and the
+   caravan found at the ravine with `forest_speech` and the rope; then in town _The Merchant's
+   Lost Caravan_ closes with Thorne, _The Innkeeper's Daughter_ (heal, water, dispel) and
+   _Cedric's Lost Honor_ (the Secret Documents to the Lord Commander).
 3. At the altar: the three charms summon Nyx, who speaks the refrain and gives `prophetic_vision`,
    her token and the Forest Heart Crystal. Cast with Sir Cedric present, the vision shows the
    Shadow of the Past and the king in crystal; the act ends on Elior's next word to Cedric
@@ -482,8 +482,9 @@ path takes them:
 
 ### What Elior knows when he leaves
 
-- Malakar is no tale. His agents framed Cedric, cursed Elena and copied the Willowbrook birth
-  rolls, and the bloodline they are hunting is Elior's (row II of the red line). Elior believes,
+- Malakar is no tale. His agents framed Cedric and copied the Willowbrook birth rolls, someone set
+  a curse on Elena that was no ill wind (the Sorceress, which Act IV names), and the bloodline
+  they are hunting is Elior's (row II of the red line). Elior believes,
   wrongly, that Malakar took his parents; Act III will overturn it.
 - The amulet bears the Warden sigil; the Wardens were an order that guarded the kingdom, and the
   king of that day lent them the crown's binding. The Librarian wore the mark once.
