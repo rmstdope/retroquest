@@ -19,8 +19,8 @@ const WALK_HOME =
 
 /** What the field has been since Act I, if Elior watered it then. */
 const FIELD_WATERED_ONCE =
-  'The field you watered once, the summer you left, went grey again by ' +
-  'autumn. Grandmother tried.'
+  'The field you watered once went grey again after you left. ' +
+  'Grandmother tried.'
 
 /** What the field has been since Act I, if he never did. */
 const FIELD_UNTOUCHED = 'Nobody has touched it since you left.'
