@@ -29,7 +29,10 @@ from fishaudio.types import Prosody, ReferenceAudio, TTSConfig
 
 HERE = Path(__file__).parent
 ENV_FILE = HERE.parent / ".env"
-MODELS = ["s2.1-pro-free", "s2.1-pro", "s2-pro"]
+# USD per million UTF-8 bytes of text: s2.1-pro-free $0, s2.1-pro and s2-pro $15, drama-3 $50
+# ($10 until 2026-11-12). drama-3 is directed in plain language: "[barely holding it together]",
+# "[shaky breath]", and paired tags such as <whisper>…</whisper>, <slow>, <emphasis>.
+MODELS = ["s2.1-pro-free", "s2.1-pro", "s2-pro", "drama-3"]
 
 
 def api_key() -> str:
