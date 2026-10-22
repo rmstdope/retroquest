@@ -16,7 +16,13 @@ uv run tts/fish_tts.py credits                                   # balance (free
 uv run tts/fish_tts.py say text.txt out.wav --dry-run            # show the request only
 uv run tts/fish_tts.py say text.txt out.wav --reference-id 7d805071401d4b738334f332a8c320c2 --per-paragraph
 uv run tts/fish_tts.py say text.txt out.wav --prompt praetzellis --per-paragraph
+uv run tts/fish_tts.py voices search "elderly female"            # library voices (free)
+uv run tts/fish_tts.py voices show <id> --sample tts/out/sample.mp3   # details + demo clip
 ```
+
+`voices search` searches the phrase and each of its words (the API's own search ranks by
+popularity, not by match) and keeps voices whose title, description or tags contain every
+word, most used first. `--loose` keeps everything the API returned.
 
 - **Models.** `s2.1-pro-free` (default) costs nothing; `s2.1-pro`/`s2-pro` cost $15 and
   `drama-3` $50 per million bytes of text. Paid models need credit on the account.
