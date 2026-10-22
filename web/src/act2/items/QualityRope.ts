@@ -20,9 +20,8 @@ export class QualityRope extends Item {
   override use(_gameState: GameState): string {
     // Default behavior - rope needs to be used with something specific
     return (
-      "You examine the quality rope. It's well-made and versatile - useful for climbing, " +
-      'rappelling, securing equipment, or any situation where strong, reliable rope ' +
-      'is needed. You need to use it with something specific, like a ravine or cliff.'
+      'You coil the quality rope over your arm: fifty feet of it, tight-laid, ' +
+      'without a frayed strand. It wants an edge to be dropped over.'
     )
   }
 

@@ -186,20 +186,20 @@ Act III requires the use of five spells. Act III setup grants any of these that 
 -   Spell: `unlock`
 
     -   Learned In: Act I (from Mira)
-    -   Used In: Sunken Ruins — Collapsed Pier vault
-    -   Purpose: Open the corroded locker to retrieve the three Prism Lanterns after the physical key fails
+    -   Used In: Sunken Ruins — Collapsed Pier vault; Caverns of Shadow — Tool Cache (rewarded only)
+    -   Purpose: Open the corroded locker to retrieve the three Prism Lanterns after the physical key fails. Cast on the Supply Crate it opens the padlock without the miner's key, a second use that gains nothing the key would not
 
 -   Spell: `light`
 
     -   Learned In: Act I (from Mira)
-    -   Used In: Sunken Ruins — Tidal Causeway and Submerged Antechamber
-    -   Purpose: Reveal the Rusted Locker Key in the Causeway and ignite the mounted Prism Lanterns to reveal the path to the sanctum
+    -   Used In: Sunken Ruins — Tidal Causeway and Submerged Antechamber; Caverns of Shadow — Echo Chambers (rewarded only)
+    -   Purpose: Reveal the Rusted Locker Key in the Causeway and ignite the mounted Prism Lanterns to reveal the path to the sanctum. Cast in the Echo Chambers it finds the Wardens' writing above reach, three hands cutting the same words, and hushes the whispers while it burns
 
 -   Spell: `purify`
 
     -   Learned In: Act I (from Fisherman at the Riverbank)
-    -   Used In: Sunken Ruins — Outer Wards
-    -   Purpose: Cleanse the brine-crusted warding pillars so the Tideward Sigil will take and stabilize the flood wards
+    -   Used In: Sunken Ruins — Outer Wards; Shoreline Markers (rewarded only)
+    -   Purpose: Cleanse the brine-crusted warding pillars so the Tideward Sigil will take and stabilize the flood wards. Cast on the Steles it scours the salt from the moon-marks and the surf runs blue for a breath, gaining nothing
 
 -   Spell: `mend`
 

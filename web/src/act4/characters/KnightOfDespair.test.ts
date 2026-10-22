@@ -169,7 +169,8 @@ describe('KnightOfDespair', () => {
       NO_CHAIN,
     )
     expect(executeCommands(game, ['say hello to knight'])).toBe(
-      '[dim]The knight does not answer.[/dim]',
+      '[dim]The visor does not move. Whatever that word was, it is not the ' +
+        'one he is waiting for.[/dim]',
     )
     expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, false)
     expectItemInInventory(game.state, 'Echo Stone', true)

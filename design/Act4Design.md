@@ -130,7 +130,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Encounter the first lieutenant in the Hall of Echoes
     -   **Prerequisites:** `truth_sight` (from the maze) and a shield against his despair: the Guardian's Chain, still carried, or the Loyalty Token
-    -   **Completion:** Raise the Guardian's Chain (or, if it was given to the captain, the Loyalty Token), then say redemption to the knight (nothing is consumed)
+    -   **Completion:** Raise the Guardian's Chain (or, if it was given to the captain, the Loyalty Token), then say redemption to the knight (nothing is consumed). Any other word is refused in-world: "The visor does not move. Whatever that word was, it is not the one he is waiting for."
     -   **Rewards:** Knight's Redemption, Enhanced Echo Stone, the spell `redemptions_light`,
         access to the Tower of Shadows
     -   **Who he is:** **Malakar's agent from Acts I and II.** With `truth_sight` Elior sees that

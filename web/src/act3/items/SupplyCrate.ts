@@ -61,6 +61,22 @@ export class SupplyCrate extends Item {
     )
   }
 
+  /**
+   * Unlock the crate with the unlock sigil instead of the key: the second
+   * use of the spell in the act. The key, if carried, stays in the pack.
+   */
+  unlockWithSpell(_gameState: GameState): string {
+    if (!this.locked) {
+      return event('The padlock already hangs open.')
+    }
+    this.locked = false
+    return event(
+      "The sigil finds the padlock's rusted pins and lifts them one by one. " +
+        'The lock falls open. Whatever key was cut for it can stay where it ' +
+        'is.',
+    )
+  }
+
   /** Unlock the crate with the miner's key, consuming the key. */
   override useWith(gameState: GameState, other: Item): string {
     if (this.locked && other instanceof MinersKey) {

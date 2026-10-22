@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, event } from '@/engine'
 import type { GameState } from '@/engine'
 import { RunicWalls } from '../items/RunicWalls'
 import { OldOathScrolls } from '../items/OldOathScrolls'
@@ -23,6 +23,18 @@ export class EchoChambers extends Room {
       items: [new RunicWalls()],
       exits: { west: 'CollapsedGalleries' },
     })
+  }
+
+  /**
+   * Light cast here finds the writing above reach: a rewarded second use of
+   * the spell in the act, nothing gained but the sight.
+   */
+  castLightHere(_gameState: GameState): string {
+    return event(
+      'Your light runs up the runic walls and finds writing higher than any ' +
+        'hand could reach: three hands, the same words cut over and over. ' +
+        'The whispers hush for as long as it burns.',
+    )
   }
 
   /** Listening plays the echo of the Wardens parting once, then a short line. */

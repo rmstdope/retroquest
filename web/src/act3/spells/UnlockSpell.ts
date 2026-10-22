@@ -1,5 +1,6 @@
 import { Spell, type GameState, type Item } from '@/engine'
 import { Locker } from '../items/Locker'
+import { SupplyCrate } from '../items/SupplyCrate'
 
 /** A deft sigil that loosens fused pins and grudging clasps. */
 export class UnlockSpell extends Spell {
@@ -11,10 +12,13 @@ export class UnlockSpell extends Spell {
     })
   }
 
-  /** Cast unlock spell on target item, specifically handling lockers. */
+  /** Cast unlock on an item: the fused locker, or the miners' supply crate. */
   override castOnItem(gameState: GameState, targetItem: Item): string {
     if (targetItem instanceof Locker) {
       return targetItem.unlock(gameState)
+    }
+    if (targetItem instanceof SupplyCrate) {
+      return targetItem.unlockWithSpell(gameState)
     }
     return (
       `[failure]You cast [spell_name]${this.name}[/spell_name] on ` +
