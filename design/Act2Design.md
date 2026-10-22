@@ -22,24 +22,17 @@ These beats ride on the existing conversations, items and quests below; none add
 
 The opening page quotes only what Act I said: Mira's parting words as she hands over the Ancient Amulet ("Your road leads to Greendale, Elior. Once there, show the amulet to no one lightly. Those who know what it is will find you.") and, as narration, Grandmother's warning that someone came to Willowbrook looking for it. It adds one paragraph on what Malakar is to Elior: a word from Willowbrook, said over bad weather and bad luck with a knock on wood, a tale to frighten children, and one line in his mother's hand that called him a friend once (the sources are Act I's byword and the mother's letter, see `Act1Design.md`, _Story Beats_). It does not name Sir Cedric. The first Gathering Storm journal entry says the talk in Greendale's streets names Sir Cedric as the one at the castle who might understand the darkness. Saves made earlier show the same words, because the page is composed on every view and the quest log is rebuilt on load.
 
-## Quest Management Structure
+## How the act is gated
 
-### Main Quest Chain Architecture
+The main quest, _The Gathering Storm_, ends only when every Act II side quest is complete. Two
+doors stand between Elior and that end:
 
-The main quest "The Gathering Storm" can only be completed after every Act II side quest is complete. Greendale entry and forest access have separate progression gates:
-
-**Phase 1: Arrival and Recognition (Greendale)**
-
-- Complete the Greendale quests that resolve in town: "The Knight's Test", "Supplies for the Journey", "Echoes of the Past", "The Healer's Apprentice", and "The Ancient Library".
-- The forest route also requires the Hermit's Warning. The Innkeeper's Daughter, The Merchant's Lost Caravan, and Cedric's Lost Honor are cross-phase quests that resolve after forest entry.
-
-**Phase 2: Forest Preparation**
-
-- Knowledge and items from Greendale quests unlock forest access
-
-**Phase 3: Forest Mysteries**
-
-- Forest-based quests build toward the final confrontation with Nyx
+- **The city.** Five quests resolve in Greendale (_The Knight's Test_, _Supplies for the Journey_,
+  _Echoes of the Past_, _The Healer's Apprentice_, _The Ancient Library_) and, with _The Hermit's
+  Warning_ at the Forest Transition, open the way into the forest. Three more are started in town
+  and finished after the forest (_The Innkeeper's Daughter_, _The Merchant's Lost Caravan_,
+  _Cedric's Lost Honor_).
+- **The forest.** Its quests earn the three charms that summon Nyx, whose vision closes the act.
 
 ## Quests in Act II
 
@@ -269,13 +262,9 @@ Act II dialogue is driven by story flags, quest progress, inventory, and charact
 
 ## Spell System Design
 
-### Learning Prerequisites and Dependencies
+### How each spell is earned
 
-#### Spell Learning Architecture
-
-Spells in Act II follow a logical progression where each spell has specific conditions that must be met before it can be learned. This creates a natural character progression that feels earned rather than arbitrary.
-
-#### Learnable Spells with Prerequisites
+Each Act II spell is taught by someone, or by something, for a reason the player has just given them.
 
 - **`mend`**:
 
@@ -324,9 +313,7 @@ Spells in Act II follow a logical progression where each spell has specific cond
   - **Used For:** Share a vision of the coming threat with Sir Cedric
   - **Story Integration:** Completes the Act II main quest and prepares for Act III
 
-### Spell Learning Conditions and Natural Flow
-
-The spell system is designed so that players naturally encounter learning opportunities through story progression:
+### The order they come in
 
 1. **Practical Magic First:** `mend` is learned from craftsmen after helping the Families
 2. **Compassion-Based Magic:** `greater_heal` requires helping others, reinforcing heroic character development
@@ -334,9 +321,7 @@ The spell system is designed so that players naturally encounter learning opport
 4. **Nature Connection:** Examine the standing stones to learn `nature_sense`; offer the Enchanted Acorn to the Ancient Tree Spirit to learn `forest_speech`
 5. **Ultimate Vision:** Nyx teaches `prophetic_vision` when summoned with the three sacred charms; its first cast with Sir Cedric completes the main quest only after all side quests are complete
 
-### Integration with Character Interactions
-
-Spell learning follows quest and item state rather than a separate relationship system:
+### Who teaches, and after what
 
 - The craftsmen teach after Elior helps the Families.
 - Lyria teaches after receiving the Crystal Focus.
@@ -344,11 +329,9 @@ Spell learning follows quest and item state rather than a separate relationship 
 - The tree spirit teaches after receiving the Enchanted Acorn.
 - Nyx grants Prophetic Vision after being summoned with the three charms.
 
-## World-Building & Lore Integration
+## The world
 
-### Location Interconnectedness
-
-#### Greendale as a Crossroads
+### Greendale, a crossroads
 
 Greendale serves as the bridge between the civilized human world and the mystical forest realm. The city's layout reflects this role:
 
@@ -358,7 +341,7 @@ Greendale serves as the bridge between the civilized human world and the mystica
 - **Residential Quarter:** Demonstrates community life and hidden knowledge (Ancient Library)
 - **Forest Transition:** Gradual shift from human to natural magic
 
-#### The Enchanted Forest Structure
+### The forest, deeper as it goes
 
 The forest represents increasingly mystical realms:
 
@@ -368,22 +351,22 @@ The forest represents increasingly mystical realms:
 - **Whispering Glade:** Testing ground for wisdom and environmental harmony
 - **Heart of the Forest:** Nyx's domain, where deepest mysteries are revealed
 
-### Historical Context and Lore
+### What is known of the past
 
-#### Greendale's Foundation
+#### Greendale
 
 - Built as a trading post between mountain communities and forest dwellers
 - Ancient pacts with forest spirits allow coexistence
 - Castle established to protect trade routes and maintain peace
 - Hidden Library contains records of these ancient agreements
 
-#### The Forest's Ancient History
+#### The forest
 
 - Predates human settlements by millennia
 - Home to spirits and magical beings who remember the world's creation
 - Nyx serves as keeper of primordial knowledge and prophecies
 
-#### Connection to Wider World Events
+#### The kingdom
 
 - Malakar is real, and his agents (the cloaked stranger seen in Willowbrook) are searching for the Willowbrook bloodline
 - King Alden has vanished; Malakar's agents framed Sir Cedric, who was on guard that night
@@ -392,9 +375,7 @@ The forest represents increasingly mystical realms:
 - Forest spirits sense disturbances in magical balance
 - Elior's heritage links to ancient magical traditions
 
-### Items and Artifacts with Lore Significance
-
-#### Implemented Artifacts
+### Things that carry the story
 
 - **Ancient Amulet:** Placed in Elior's inventory by Act II's setup (Act I gave it to him). Its sigil is the Warden sigil Cedric recognises on the first talk.
 - **Ancient Chronicle:** Kept by the Spectral Librarian, who helped write it as a Warden of the Dawn. Records regional history, the Wardens of the Dawn and their sigil, and Malakar's search for the Willowbrook bloodline; studying it after the librarian permits access teaches `dispel`. Its first page draws the mark the old way, a tree under two moons, and tells of Wardens who settled a quiet valley to keep their relic safe and built their mill over a seat of power there (Willowbrook, unnamed).
@@ -403,9 +384,7 @@ The forest represents increasingly mystical realms:
 - **Three Sacred Charms:** The Protective Charm, Druidic Charm, and Nature's Charm are consumed by the Offering Altar to summon Nyx.
 - **Secret Documents:** Thorne gives them after the caravan rescue; they show that Malakar's agents (with the cloaked stranger's seal) framed Cedric, and so provide evidence to restore Cedric's honor.
 
-### Exploration Opportunities and Hidden Content
-
-#### Implemented Exploration
+### What is found by looking
 
 - **Hidden Library:** Discovered by searching the Residential Quarter after the quest is offered; its wards, Spectral Librarian, Ancient Chronicle, and Crystal Focus are part of the required path.
 - **Forest encounters:** The Standing Stones, Forest Sprites, Ancient Tree Spirit, and Water Nymphs are encountered through the required forest sequence.
@@ -484,87 +463,34 @@ Telling Cedric the voice did not sound like a hunter (`say truth to cedric`, aft
 
 The endings read the counters across the whole game, as described in `Act4Design.md`.
 
-## Act Completion Requirements
+## How the act ends
 
-### Main Quest Completion Architecture
+Every side quest must be complete before _The Gathering Storm_ can end. In the order the golden
+path takes them:
 
-Following the design rule that all side quests must be completed before the main quest can be finished, Act II completion requires:
+1. In the city: _The Knight's Test_, _Supplies for the Journey_, _Echoes of the Past_, _The
+   Healer's Apprentice_, _The Ancient Library_; then _The Hermit's Warning_ at the stones, which
+   together open the forest.
+2. In the forest and back: _The Forest Guardian's Riddles_, _Whispers in the Wind_, the caravan
+   found with `forest_speech`; then in town _The Innkeeper's Daughter_ (heal, water, dispel) and
+   _Cedric's Lost Honor_ (the Secret Documents to the Lord Commander); _The Merchant's Lost
+   Caravan_ closes with Thorne.
+3. At the altar: the three charms summon Nyx, who speaks the refrain and gives `prophetic_vision`,
+   her token and the Forest Heart Crystal. Cast with Sir Cedric present, the vision shows the
+   Shadow of the Past and the king in crystal; the act ends on Elior's next word to Cedric
+   (`say truth to cedric`, or any talk).
 
-#### Phase 1: Greendale Mastery (All Required)
+### What Elior knows when he leaves
 
-1. **The Knight's Test** - Establish trust with Sir Cedric
-2. **Supplies for the Journey** - Gather essential equipment
-3. **Echoes of the Past** - Uncover family heritage and historical context
-4. **The Healer's Apprentice** - Master advanced healing magic
-5. **The Ancient Library** - Gain access to ancient magical knowledge
-
-These five completed quests, plus completion of The Hermit's Warning at Forest Transition, are required to open the route into Forest Entrance. The remaining town-started quests are cross-phase and complete later.
-
-#### Phase 2: Forest Integration (All Required)
-
-1. **The Hermit's Warning** - Receive essential forest survival knowledge
-2. **The Forest Guardian's Riddles** - Prove wisdom to forest spirits
-3. **Whispers in the Wind** - Establish alliance with forest creatures
-4. **The Innkeeper's Daughter** - Break Elena's curse with healing, water, and Dispel
-5. **The Merchant's Lost Caravan** - Rescue Thorne's caravan and recover the Secret Documents
-6. **Cedric's Lost Honor** - Present the recovered evidence to the Lord Commander
-
-#### Phase 3: Spiritual Ascension (Final Test)
-
-1. **Summon Nyx** - Use the three charms at the Offering Altar in Heart of the Forest
-2. **Receive Nyx's gifts** - On the first conversation, Nyx grants Prophetic Vision, Nyx's Token, and the Forest Heart Crystal
-3. **Complete the main quest** - After all side quests are complete, cast Prophetic Vision while Sir Cedric is in the same room, then answer him (`say truth to cedric`) or talk to him
-
-### Key Story Revelations at Completion
-
-#### Character Development Achievements
-
-- **Elior:** Transformed from village hero to recognized magical practitioner with prophetic abilities
-- **Sir Cedric:** Honor restored, becomes trusted ally for future challenges
-- **Allies:** Earned support from Lyria, the forest spirits, and Sir Cedric through completed quests
-
-#### Lore and World Understanding
-
-- **Malakar is real:** The red-line row II. Elior no longer thinks of Malakar as a legend from old books; Malakar's agents are searching for the Willowbrook bloodline, which means Elior.
-- **The Wardens of the Dawn:** The Warden sigil on the Ancient Amulet ties Elior's family to the old order.
-- **King Alden's absence and Cedric's framing:** Alden has vanished, and Malakar's agents framed the knight who was on guard.
-- **The Sorceress of Lies' mark:** Seen on Elena's curse; Act IV recognises it.
-- **The Shadow of the Past:** The dream voice is heard once more in Nyx's vision.
-- **Family Heritage:** Understanding of why Malakar was interested in Willowbrook bloodlines
-- **Warden Knowledge:** Comprehension of the Wardens of the Dawn and Malakar's search for the Willowbrook bloodline
-- **Magical Mastery:** Command of healing, environmental, and divination magic
-- **Political Connections:** Recognition within Greendale's power structure
-
-#### Preparation for Future Challenges
-
-- **Magical Arsenal:** Complete spell collection for diverse challenges
-- **Alliance Network:** Supporters across multiple communities and realms
-- **Prophetic Insight:** Ability to anticipate and prepare for coming threats
-- **Leadership Recognition:** Established reputation as someone capable of great deeds
-
-### Optional Content for Extended Exploration
-
-The following are future-content ideas only; they are not implemented in Act II.
-
-#### Additional Character Interactions
-
-- **Deep Lore Conversations:** Extended dialogue trees with major characters after quest completion
-- **Historical Research:** Further investigation into ancient texts and artifacts
-- **Environmental Stewardship:** Additional forest spirit encounters and nature-based challenges
-
-#### Extended Spell Practice
-
-- **Spell Combination Techniques:** Learning to combine different magic types
-- **Advanced Healing Methods:** More complex medical applications of magical abilities
-- **Prophetic Vision Refinement:** Practice with divination magic to improve accuracy
-
-#### Cultural Integration
-
-- **Greendale Citizenship:** Deeper involvement in city life and politics
-- **Forest Spirit Ceremonies:** Participation in ancient rituals and seasonal celebrations
-- **Merchant Networks:** Expanded trading relationships and economic opportunities
-
-The completion of Act II marks Elior's transformation from a promising young hero to a true magical practitioner with the knowledge, abilities, and alliances needed to face the greater challenges that lie ahead. The act ensures that players have fully engaged with the world, its characters, and its magical systems before proceeding to more complex challenges.
+- Malakar is no tale. His agents framed Cedric, cursed Elena and copied the Willowbrook birth
+  rolls, and the bloodline they are hunting is Elior's (row II of the red line). Elior believes,
+  wrongly, that Malakar took his parents; Act III will overturn it.
+- The amulet bears the Warden sigil; the Wardens were an order that guarded the kingdom, and the
+  king of that day lent them the crown's binding. The Librarian wore the mark once.
+- King Alden has vanished and the Secret Documents name where he was carried.
+- Elena's curse bore a silver mask, and the healer at Willowbrook never answered Lyria's letter.
+- The dream voice was heard again, and it did not sound like a hunter's.
+- Nobody has named Aren, Lysa or any friendship with Malakar.
 
 ## Technical Implementation
 
