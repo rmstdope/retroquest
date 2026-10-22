@@ -516,6 +516,7 @@ Notes:
 
 ## Learnable Spells in Act IV
 
+-   **Bless:** carried from Act I; frees the servants, and cast on King Alden in his crystal slows the grey light for a moment ("It is not enough. He does not wake"), kindly taken once he is freed
 -   **Truth Sight:** Mirror Labyrinth; reveals illusions and who is hiding behind them
 -   **Redemption's Light:** Knight of Despair; purifies corrupted souls
 -   **Heart's Truth:** Sorceress of Lies; reveals true motivations

@@ -4,13 +4,17 @@ import {
   type GameState,
   type Item,
   characterName,
+  event,
+  speech,
 } from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
+import { SpectralLibrarian } from '../characters/SpectralLibrarian'
 
 /**
  * Counter-magic spell for breaking enchantments and Elena's final cure phase.
- * Casting on BarmaidElena defers to her final-cure logic; otherwise generic
- * dispel narration.
+ * Casting on BarmaidElena defers to her final-cure logic; on the Spectral
+ * Librarian it slides off, since the unbinding was theirs first; otherwise
+ * generic dispel narration.
  */
 export class DispelSpell extends Spell {
   constructor() {
@@ -42,6 +46,20 @@ export class DispelSpell extends Spell {
     // Special handling for Elena's curse - final step
     if (targetCharacter instanceof BarmaidElena) {
       return targetCharacter.receiveDispelFinalCure(gameState)
+    }
+    if (targetCharacter instanceof SpectralLibrarian) {
+      return (
+        event(
+          'The unbinding slides off the ' +
+            characterName(targetCharacter.name) +
+            ' like water off glass.',
+        ) +
+        '\n' +
+        speech(
+          'It was ours before it was yours. It does not work on the hand ' +
+            'that wrote it down.',
+        )
+      )
     }
     const name = this.name
     const tname = targetCharacter.name
