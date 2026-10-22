@@ -14,6 +14,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import wave
 from pathlib import Path
 
 WHISPER_MODEL = "mlx-community/whisper-large-v3-turbo"
@@ -35,8 +36,15 @@ def transcribe(wav: Path) -> str:
             check=True, capture_output=True,
         )
         segments = json.loads((Path(out_dir) / "t.json").read_text())["segments"]
-    # Whisper invents text for trailing silence as near-zero-length segments; drop them.
-    return " ".join(seg["text"].strip() for seg in segments if seg["end"] - seg["start"] >= MIN_SEGMENT_S)
+    with wave.open(str(wav)) as audio:
+        duration = audio.getnframes() / audio.getframerate()
+    # On trailing silence Whisper invents text: near-zero-length segments, or segments
+    # placed past the end of the file. Drop both.
+    return " ".join(
+        seg["text"].strip()
+        for seg in segments
+        if seg["end"] - seg["start"] >= MIN_SEGMENT_S and seg["start"] < duration - MIN_SEGMENT_S
+    )
 
 
 def main() -> None:
