@@ -350,7 +350,7 @@ A spiral tower where shadows move independently and whispered lies come from eve
 
 #### Usable Items
 
--   Loyalty Token (must be in the pack for a name to be heard; the whispers say Elior's friends left him, and the stair opens once he has named all three who stayed: `say mira to whispers`, `say cedric to whispers`, `say nyx to whispers`, each answered by that friend's voice through the token; "grandmother" gets a gentle line and is not wrong)
+-   Loyalty Token (must be in the pack for a name to be heard; the whispers say Elior's friends left him, and the stair opens once he has named all three who stayed: `say mira to whispers`, `say cedric to whispers`, `say nyx to whispers`, each answered by that friend's voice through the token; when Nyx is named, her own pendant in the pack is warm too; "grandmother" gets a gentle line and is not wrong)
 
 #### Characters
 
@@ -470,7 +470,7 @@ The air is quiet.
 
 #### Characters
 
--   Grandmother, Mira, Sir Cedric, Nyx's light in the hedge (companions who remain close)
+-   Grandmother, Mira, Sir Cedric, Nyx's light in the hedge (companions who remain close). Nyx cannot speak here, but she takes back her two gifts from Act II if Elior offers them (`give nyx's token to nyx`, `give forest heart crystal to nyx`): the pendant goes into the hedge with the light, the crystal is set among the roots and its lights pass into hers. Optional; nothing gates on it.
 
 #### Exits
 
@@ -817,6 +817,8 @@ Spells: `truth_sight` (5), `redemptions_light` (6), `hearts_truth` (8), `forgive
     `Guardian's Chain` (or the Loyalty Token in its place, if the chain was given away),
     `Echo Stone` (Enhanced after the knight), `Knight's Redemption`,
     `Sorceress's Truth`, `Ancient Amulet` (carried from Act I), `Lifelight Elixir` (consumed)
+-   Carried but not necessary: `Nyx's Token` and the `Forest Heart Crystal` from Act II. In the Tower the
+    pendant is warm when Nyx's name is said; both can be given back to her light in Willowbrook Field.
 
 ## Room Visitation Pattern
 

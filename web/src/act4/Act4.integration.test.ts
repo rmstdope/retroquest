@@ -441,6 +441,8 @@ describe('Act 4 integration', () => {
       expectItemInInventory(game.state, "Guardian's Essence", true)
       expectStoryFlag(game.state, FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED, true)
       expectItemInInventory(game.state, 'Loyalty Token', true)
+      expectItemInInventory(game.state, "Nyx's Token", true)
+      expectItemInInventory(game.state, 'Forest Heart Crystal', true)
       expectItemInInventory(game.state, "Servant's Pendant", true)
       expectItemInInventory(game.state, 'Enhanced Echo Stone', true)
       expectQuestCompleted(game.state, 'The Maze of Mirrors')

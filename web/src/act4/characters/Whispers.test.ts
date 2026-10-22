@@ -21,7 +21,9 @@ const HINT =
   'They do not answer you. They only say it again, closer: your friends have left you. No one is coming. Name one who stayed, if you can.'
 const FIRST = 'The token warms against your palm, and the whispers falter.'
 const SECOND = 'The token warms again. The whispers draw back from the stair.'
-const NYX_LEAD = 'A small light flickers at the edge of your eye.'
+const NYX_LEAD =
+  'A small light flickers at the edge of your eye, and in your pack the ' +
+  "crystalline pendant she gave you, Nyx's Token, is warm."
 const OPEN =
   'The whispers have nothing left to say. They thin like smoke, and the stair above lies open.'
 const MIRA_LINE =

@@ -57,6 +57,8 @@ import { Whispers } from './characters/Whispers'
 import { CrystalPrison } from './items/CrystalPrison'
 import { Wound } from './items/Wound'
 import { LifelightElixir } from './items/LifelightElixir'
+import { NyxToken } from './items/NyxToken'
+import { ForestHeartCrystal } from './items/ForestHeartCrystal'
 import { ThroneChamber } from './rooms/ThroneChamber'
 import { WillowbrookField } from './rooms/WillowbrookField'
 import { TowerOfShadows } from './rooms/TowerOfShadows'
@@ -90,6 +92,8 @@ export const ACT4_CLASSES = {
   CrystalPrison,
   Wound,
   LifelightElixir,
+  NyxToken,
+  ForestHeartCrystal,
   // Characters
   Malakar,
   KingAlden,
