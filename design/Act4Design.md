@@ -326,7 +326,7 @@ door Elior came in by.
 
 #### Items
 
--   Echo Stone (basic at first; enhanced after the knight's redemption)
+-   Echo Stone (basic at first; enhanced after the knight's redemption). Held to the ear outside the maze, one voice under the rest says a single word the way a man says a word he has stopped believing in: redemption, the knight's own word. Once the stone is enhanced the voice no longer repeats it; the knight speaks clearly instead.
 
 #### Spells
 

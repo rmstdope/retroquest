@@ -23,6 +23,17 @@ The story unfolds in the magical kingdom of Eldoria, a land of rolling farmlands
 
 Players interact with the world by typing text commands. The game responds with detailed descriptions, presenting challenges, puzzles, and narrative choices. Exploration, inventory management, and decision-making are key to progressing through the story.
 
+## Puzzle Rules
+
+Every puzzle in every act follows these rules, so the game stays puzzling without ever being hard.
+
+1. **The clue lives in a different room from the lock.** The blacksmith tells you to rest in the glade; the Phoenix Guardian says to count the breath; the Pier Warden's father knew what the sanctum water asks. A puzzle whose hint is in the same paragraph as its lock is a step, not a puzzle.
+2. **Wrong answers teach.** Every refusal says something true in-world ("Then you would be taking"). Nothing ever just fails to happen.
+3. **No fail state, ever.** A wrong turn returns you; a wrong word repeats the question.
+4. **One word-riddle per site.** The word must have meaning once answered (myself, patience, everything), and the near-misses get specific refusals.
+5. **Each learned spell is used twice** before its act ends: once where it is required, once where it is only rewarded.
+6. **Order gates are in-world.** "Not yet" comes from a character with a reason, never from the game.
+
 ## Example Commands
 
 - **Movement:** `go north`, `enter castle`, `climb tree`

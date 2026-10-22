@@ -56,6 +56,20 @@ describe('PierWarden dialogue branches', () => {
     expect(out.includes('steadier') || out.includes('lanterns')).toBe(true)
   })
 
+  it("passes on his father's word about the sanctum water once the way is lit", () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+    game.state.setStoryFlag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, true)
+    const hint =
+      'My da walked that water once, when the old wardens still asked it ' +
+      'of folk. Said the trick was not to leave yourself behind in the ' +
+      'dark. I never did understand him.'
+
+    expect(new PierWarden().talkTo(game.state)).toContain(hint)
+    const early = new Game([new Act3()])
+    expect(new PierWarden().talkTo(early.state)).not.toContain(hint)
+  })
+
   it('attributes the dialogue to the warden in every state', () => {
     const game = new Game([new Act3()])
     const warden = new PierWarden()

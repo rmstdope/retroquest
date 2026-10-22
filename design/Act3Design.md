@@ -46,7 +46,7 @@ Result: The Phoenix offers a single Feather, warm as a heartbeat.
 Beneath Eldoria’s oldest hills, the Caverns of Shadow breathe a chill that dims torches. There, a dragon sleeps—not a beast of greed, but a creature of burdens, keeping darkness pinned beneath its coils.
 
 -   The Dragon: Ancient, wise, and tired. It knows Elior’s parents’ names, Aren and Lysa, and calls them Wardens of the Dawn. It reveals that they made the relics together with their friend Malakar, and that they gave themselves to hide Elior and to hold shut the wound Malakar tore in time: they are warded away, not dead. The ward is anchored in the Ancient Amulet and in King Alden’s royal bindings; Alden was the Wardens’ friend and gave his crown’s oath to hold it, which is why Malakar drains the king. The dragon guards a scale that can ward a soul—but taking it without due cause weakens the prison it maintains.
--   The refrain: the Dragon echoes “Power follows purpose; purpose follows truth.”
+-   The refrain: the Dragon echoes “Power follows purpose; purpose follows truth.” and says when to use it: “When he offers you what you want most, say it to him. It was his before it was yours.”
 -   The dream voice: after the Dragon’s Memory, the voice from the Prologue speaks once more in the hall, asking Elior for help in words he almost knows (“Help me. I cannot hold it shut alone”), and almost lost in the dragon’s breathing, “…be patient where I was not…”, the third fragment of the sentence heard whole in Act IV. The Dragon answers that it is “the friend who stayed behind,” and says no more.
 -   Curse: the mines fall silent and the cavern’s old dripping stops (see *The Curse Worsens*).
 -   Amulet: when Elior hears the Dragon’s Memory, the Ancient Amulet glows a third time, and Aren stands beside Lysa, hand in hand, while the third figure still has his back turned. The Dragon names the amulet as the anchor of the ward. The amulet shows the faces; it does not say whether the parents live.
@@ -271,7 +271,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: A shattered jetty with sunken vaults beneath; barnacled beams jut like ribs.
 -   Items: Locker and Weathered Coin; after the Rusted Locker Key is jammed in the lock and `unlock` is cast, opening the locker reveals three Prism Lanterns.
--   Characters: Pier Warden.
+-   Characters: Pier Warden. Once both Sunken Ruins side quests are done he passes on his father's word about the sanctum water ("the trick was not to leave yourself behind in the dark"), the clue to the vow.
 -   Notes: The Rusted Locker Key is revealed by casting `light` at Tidal Causeway. Using it with the locker jams it in place; cast `unlock` on the locker, then open it to reveal the Prism Lanterns.
 -   Quest Relevance: Retrieve lanterns for “Lanterns of the Deeps.”
 -   Exits:

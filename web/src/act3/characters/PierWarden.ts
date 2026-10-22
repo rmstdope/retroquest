@@ -205,6 +205,12 @@ export class PierWarden extends Character {
         'With the sigils attuned and the lanterns lit, the way grows ' +
           'steadier. Those who brave the sanctum find the tide less quick to ' +
           'swallow their steps.',
+      ) +
+      '\n' +
+      speech(
+        'My da walked that water once, when the old wardens still asked it ' +
+          'of folk. Said the trick was not to leave yourself behind in the ' +
+          'dark. I never did understand him.',
       )
     )
   }
