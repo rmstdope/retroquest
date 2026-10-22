@@ -254,6 +254,17 @@ describe('The Sorceress of Lies', () => {
     expect(executeCommands(game, ['listen to staff'])).toContain(
       'Whatever it is hiding wants more than ears.',
     )
+    executeCommands(game, [
+      "use knight's redemption",
+      ...THREE_HEARTS,
+      'say understanding to sorceress',
+    ])
+    expect(executeCommands(game, ['listen to whispers'])).toContain(
+      'The crystals are silent now.',
+    )
+    expect(executeCommands(game, ['listen to staff'])).toContain(
+      'The bare staff makes no sound.',
+    )
   })
 
   it('is redeemed by understanding, with one scene of confession', () => {
