@@ -3,7 +3,10 @@ import { Grandmother } from '../characters/Grandmother'
 import { Mira } from '../characters/Mira'
 import { Nyx } from '../characters/Nyx'
 import { SirCedric } from '../characters/SirCedric'
-import { FLAG_ACT4_HOME_REACHED } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_HOME_REACHED,
+  FLAG_FIELD_WATERED_IN_ACT1,
+} from '../Act4StoryFlags'
 import { endingPlayed } from '../endings'
 import { Grow } from '../spells/Grow'
 
@@ -13,6 +16,14 @@ const WALK_HOME =
   'long, and somehow shorter than it was. Days later the hedges of ' +
   'Willowbrook close around you, and then you are standing at the edge of ' +
   'your own field.'
+
+/** What the field has been since Act I, if Elior watered it then. */
+const FIELD_WATERED_ONCE =
+  'The field you watered once went grey again after you left. ' +
+  'Grandmother tried.'
+
+/** What the field has been since Act I, if he never did. */
+const FIELD_UNTOUCHED = 'Nobody has touched it since you left.'
 
 /** Grandmother's singing at the gate, shown in every ending. */
 const GATE_SONG =
@@ -40,7 +51,7 @@ export class WillowbrookField extends Room {
     super({
       name: 'Willowbrook Field',
       description:
-        'The field behind your home, as you left it: rows of withered crops ' +
+        'The field behind your home: rows of withered crops ' +
         'under a pale sky, the earth cracked and grey. Grandmother waits at ' +
         'the gate. Mira stands beside her, and Sir Cedric leans on the ' +
         'fence. In the hedge a small light flickers: Nyx, keeping close. ' +
@@ -55,13 +66,19 @@ export class WillowbrookField extends Room {
     if (!gameState.hasSpell('grow')) gameState.learnSpell(new Grow())
   }
 
-  /** The walk home, Grandmother's singing and the kneel; the remembering is an event, once. */
+  /**
+   * The walk home, what the field has been since Act I, Grandmother's singing
+   * and the kneel; the remembering is an event, once.
+   */
   override enterText(gameState: GameState): string {
+    const since = gameState.getStoryFlag(FLAG_FIELD_WATERED_IN_ACT1)
+      ? FIELD_WATERED_ONCE
+      : FIELD_UNTOUCHED
     if (endingPlayed(gameState) === 'sacrifice') {
-      return `${WALK_HOME}\n${GATE_SONG}\n${KNEEL_KEPT}`
+      return `${WALK_HOME}\n${since}\n${GATE_SONG}\n${KNEEL_KEPT}`
     }
     return (
-      `${WALK_HOME}\n${GATE_SONG}\n${KNEEL_REMEMBER}\n` +
+      `${WALK_HOME}\n${since}\n${GATE_SONG}\n${KNEEL_REMEMBER}\n` +
       event('You remember the grow spell!')
     )
   }

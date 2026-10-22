@@ -80,6 +80,16 @@ export class Act {
   setupGameState(_gameState: GameState): void {}
 
   /**
+   * The names of this act's story flags whose values travel into every later
+   * act's fresh state (acts share no classes, so a later act reads the same
+   * string). Virtues always travel; everything else is dropped. Empty by
+   * default.
+   */
+  carriedFlags(): string[] {
+    return []
+  }
+
+  /**
    * Bring a state loaded from a save up to date, e.g. drop data that older
    * saves still hold. Runs on every load, so it must be idempotent.
    */

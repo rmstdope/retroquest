@@ -139,6 +139,25 @@ describe('Willowbrook Field', () => {
     }
   })
 
+  it('remembers whether the field was watered in Act I, between the walk and the song', () => {
+    const untouched = ended('redemption')
+    const dry = executeCommands(untouched.game, ['north'])
+    expect(dry).toContain('Nobody has touched it since you left.')
+    expect(dry).not.toContain('Grandmother tried.')
+
+    const watered = ended('sacrifice')
+    watered.game.state.setStoryFlag('vegetable_field_watered', true)
+    const text = executeCommands(watered.game, ['north'])
+    const walk = text.indexOf('your own field.')
+    const since = text.indexOf(
+      'The field you watered once went grey again after you left. Grandmother tried.',
+    )
+    const song = text.indexOf('At the gate Grandmother is singing')
+    expect(since).toBeGreaterThan(walk)
+    expect(song).toBeGreaterThan(since)
+    expect(text).not.toContain('Nobody has touched it')
+  })
+
   it('keeps the spell after Sacrifice, with a different line and no event', () => {
     const { game } = ended('sacrifice')
     const text = executeCommands(game, ['north'])

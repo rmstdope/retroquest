@@ -589,7 +589,9 @@ peace. They are not alive and nothing here hints that they are.
 
 ### The Epilogue
 
-After any ending Elior walks home. In Willowbrook Field, the withered field from Act I,
+After any ending Elior walks home. In Willowbrook Field, the withered field from Act I, one line
+remembers Act I: if Elior watered the field then, "The field you watered once went grey again after
+you left. Grandmother tried."; if not, "Nobody has touched it since you left."
 Grandmother is at the gate humming the cradle song ("Your mother's. I didn't think you'd
 remember"); told "You knew", she answers for it ("She made me promise, the night she went. I have
 not slept a whole night since") and carries the parents' message; Sir Cedric at the fence hears the captain's and the

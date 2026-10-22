@@ -24,6 +24,10 @@ const PHOTO = 'The Faded Photograph'
 const CAT = 'Curiosity killed the cat'
 
 describe('Act 1 golden path', () => {
+  it('carries only the watered field into later acts', () => {
+    expect(new Act1().carriedFlags()).toEqual(['vegetable_field_watered'])
+  })
+
   it('can be completed from start to finish', () => {
     const game = new Game([new Act1()])
     const state = game.state
