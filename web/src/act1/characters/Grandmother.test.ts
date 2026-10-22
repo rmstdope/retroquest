@@ -182,6 +182,9 @@ describe('Grandmother and the dream', () => {
     )
     expect(humming).toBeGreaterThan(-1)
     expect(humming).toBeLessThan(response.indexOf(REACTION))
+    expect(humming).toBeLessThan(
+      response.indexOf('Willowbrook has always been'),
+    )
   })
 
   it('goes quiet over the three words Elior caught from the voice', () => {

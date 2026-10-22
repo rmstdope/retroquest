@@ -53,8 +53,12 @@ export class Grandmother extends Character {
    */
   override talkTo(gameState: GameState): string {
     let dialogue = ''
+    const journalRead = gameState.getStoryFlag('journal_read_prologue_entry')
+    const dreamToTell = journalRead && !gameState.hasSpell('revive')
+    if (dreamToTell) dialogue = Grandmother.HUMMING_AT_THE_HEARTH
     if (this.dialogueState.initial_talk) {
-      dialogue = speech(
+      dialogue += dialogue ? '\n' : ''
+      dialogue += speech(
         `Oh, ${characterName('Elior')}, my dear. The village... ` +
           "it feels a bit on edge lately, doesn't it? \n" +
           'Willowbrook has always been a peaceful place. The [room_name]Village ' +
@@ -76,8 +80,7 @@ export class Grandmother extends Character {
       this.dialogueState.initial_talk = false // Change state after initial talk
     }
 
-    const journalRead = gameState.getStoryFlag('journal_read_prologue_entry')
-    if (journalRead && !gameState.hasSpell('revive')) {
+    if (dreamToTell) {
       dialogue +=
         (dialogue ? '\n' : '') +
         this.dreamReaction() +
@@ -121,17 +124,19 @@ export class Grandmother extends Character {
   }
 
   /**
-   * Her reaction when Elior tells her of the dream and the familiar voice:
-   * she is humming the cradle tune when he comes in, and goes quiet over the
-   * three words he caught. Part of the one talk that teaches revive, so it
-   * happens once only.
+   * What she is doing when Elior comes in with the dream to tell: humming
+   * the cradle tune, which she stops. Shown first in that one talk, before
+   * any greeting.
    */
+  private static readonly HUMMING_AT_THE_HEARTH =
+    'She is humming at the hearth when you come in: a slow tune that ' +
+    'climbs three notes and settles home again. You know it. You have ' +
+    'known it all your life, and you could not say from where. She ' +
+    'stops when she sees your face.'
+
+  /** Her reaction once Elior has told her of the dream (see `talkTo`). */
   private dreamReaction(): string {
     return (
-      'She is humming at the hearth when you come in: a slow tune that ' +
-      'climbs three notes and settles home again. You know it. You have ' +
-      'known it all your life, and you could not say from where. She ' +
-      'stops when she sees your face.\n' +
       'You tell her about the dream: the shadows, the figure, the voice ' +
       'calling your name, and how you were sure you had heard it before. ' +
       'She reaches for your hand and holds it tighter than she means to. ' +

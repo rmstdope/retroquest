@@ -27,10 +27,10 @@ export class EliorsJournal extends Item {
           'Not the usual ones of fields and harvests. This was dark, filled with swirling ' +
           'shadows. And a figure, tall and indistinct, its voice a whisper on the edge of ' +
           'hearing, yet it felt like it was calling my name. ' +
-          `${characterName('Elior')}... ` +
-          'And three words at the very end, which I wrote down the moment I ' +
-          'woke so I would not lose them: …and let them rest… I woke with a start, ' +
-          'my heart pounding. Even now, the memory sends a shiver down my spine. ' +
+          `${characterName('Elior')}... I woke with a start, ` +
+          'my heart pounding. And three words at the very end, which I wrote ' +
+          'down the moment I woke so I would not lose them: …and let them rest… ' +
+          'Even now, the memory sends a shiver down my spine. ' +
           'And the strangest thing — I knew that voice. Not the way you know a ' +
           "neighbour's, but the way you know a song someone sang to you before " +
           'you had words for it. It made my chest ache. ' +

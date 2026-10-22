@@ -95,7 +95,11 @@ export class Malakar extends Character {
           : 'Malakar kneels before the king, grey and powerless.',
       )
     }
-    return event(this.description)
+    return event(
+      gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
+        ? Malakar.DESCRIPTION_TURNED
+        : this.description,
+    )
   }
 
   /** What he says follows the ending, the refrain, the amulet and the elixir. */
@@ -222,7 +226,6 @@ export class Malakar extends Character {
       ].join('\n')
     }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID, true)
-    this.description = Malakar.DESCRIPTION_TURNED
     return [
       refrainLine,
       event(
