@@ -9,7 +9,10 @@ export const SECRET_DOCUMENTS_DESCRIPTION =
   'A sealed packet of papers: a sworn confession and a letter closed with ' +
   'black wax.'
 
-/** A watchman's confession and the letter that paid him, which clear Sir Cedric's name. */
+/**
+ * A watchman's confession and the letter that paid him, which clear Sir
+ * Cedric's name and name where the king was carried.
+ */
 export class SecretDocuments extends Item {
   constructor() {
     super({

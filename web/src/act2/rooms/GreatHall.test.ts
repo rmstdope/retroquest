@@ -40,7 +40,7 @@ describe('Great Hall archive search', () => {
     expect(text).toContain('the sun rising over three linked rings')
     expect(text).toContain('Of the Wardens of the Dawn.')
     expect(text).toContain(
-      "The king of that day stood with them, and lent the crown's own binding to their last great work.",
+      "The king stood with them, and lent the crown's own binding to their last great work.",
     )
     expect(text).toContain('Said he came on the business of Malakar.')
     expect(text).not.toContain('Elior')

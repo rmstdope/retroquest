@@ -588,7 +588,7 @@ export class SirCedric extends Character {
         ': ' +
         speech(
           'Thanks to you, my knighthood is restored and the charge struck from ' +
-            'my record. Now I can turn to what matters: finding the king, and ' +
+            'my record. Now I can turn to what matters: the king, and ' +
             'whoever wears that old name.',
         )
       )
