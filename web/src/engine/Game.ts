@@ -435,6 +435,7 @@ Welcome to
       '  look, observe, survey, l\n' +
       '  look at <object>, inspect <object>, examine <object>, check <object>\n' +
       '  search, investigate\n' +
+      '  listen, listen to <object>\n' +
       '\n' +
       '[bold]Inventory Management:[/bold]\n' +
       '  take <item>, pick up <item>, grab <item>, get <item>\n' +

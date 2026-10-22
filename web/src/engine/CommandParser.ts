@@ -17,6 +17,7 @@ export interface CommandTarget {
   look(): string
   examine(target: string): string
   search(): string
+  listen(target?: string): string
   take(item: string): string
   drop(item: string): string
   use(item: string, other?: string): string
@@ -85,6 +86,11 @@ export class CommandParser {
     const examineTarget = afterPrefix(cmd, EXAMINE_PREFIXES)
     if (examineTarget !== null) return this.game.examine(examineTarget)
     if (cmd === 'search' || cmd === 'investigate') return this.game.search()
+    if (cmd === 'listen') return this.game.listen()
+    if (cmd.startsWith('listen to '))
+      return this.game.listen(cmd.slice('listen to '.length).trim())
+    if (cmd.startsWith('listen '))
+      return this.game.listen(cmd.slice('listen '.length).trim())
 
     const takeTarget = afterPrefix(cmd, TAKE_PREFIXES)
     if (takeTarget !== null) return this.game.take(takeTarget)

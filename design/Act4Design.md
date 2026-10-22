@@ -146,7 +146,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Face the second lieutenant in the Chamber of Whispers
     -   **Prerequisites:** "The Knight of Despair" completed; Knight's Redemption
-    -   **Completion:** Use the Knight's Redemption, cast `hearts_truth`, say understanding
+    -   **Completion:** Use the Knight's Redemption, cast `hearts_truth` on her, her staff and the whispers, then say understanding, or simply `listen`: standing still and listening to all of it is understanding too, with the same gates
     -   **Rewards:** Sorceress's Truth, the spell `hearts_truth`, the secret passage to the Memory
         Vault
     -   **Who she is:** **The mark on Elena's curse in Greendale (Act II)** was the silver mask
@@ -166,7 +166,8 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Trigger:** Enter the Memory Vault
     -   **Prerequisites:** "The Sorceress of Lies" completed; Enhanced Echo Stone and Sorceress's Truth
     -   **Completion:** Restore the memory orbs with the Enhanced Echo Stone, show the Sorceress's
-        Truth to the Shadow, talk to it and say patience
+        Truth to the Shadow, talk to it and say patience, or simply `rest`: waiting in the vault is
+        patience too, with the same gates
     -   **Rewards:** The Shadow tells Elior the amulet will open the Parents' Vault, and the vault
         door opens to the amulet
     -   **Who it is:** **The dream voice from the Prologue.** Elior knows the voice at once. The
@@ -748,7 +749,7 @@ where they would occur.
 
     - `examine staff` → the silver mask, the mark on Elena's curse
     - `talk to sorceress of lies`, `use knight's redemption`
-    - `cast hearts truth on sorceress`, `say understanding to sorceress`
+    - `cast hearts truth on sorceress`, `say understanding to sorceress` (or `listen`)
         - Quest completed: "The Sorceress of Lies"
         - Item obtained: `Sorceress's Truth`
         - Spell learned: `hearts_truth`
@@ -759,7 +760,7 @@ where they would occur.
     - `use enhanced echo stone with memory orbs`
     - `use sorceress's truth`
     - `talk to shadow of the past` → the dream voice. "Elior. You came."
-    - `say patience to shadow`
+    - `say patience to shadow` (or `rest`)
         - Quest completed: "The Shadow of the Past"
     - The Shadow: "Take the amulet east. It will open for you."
 
