@@ -7,6 +7,7 @@ import {
   characterName,
 } from '@/engine'
 import { Well } from '../items/Well'
+import { River } from '../items/River'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
 
 /** Cleansing spell that removes impurities from items or environments. */
@@ -49,6 +50,19 @@ export class PurifySpell extends Spell {
     }
     if (item instanceof Well) {
       return item.purify(gameState)
+    }
+    if (item instanceof River) {
+      return (
+        event(
+          `You cast [spell_name]${this.name}[/spell_name] on the ` +
+            '[item_name]river[/item_name].',
+        ) +
+        '\n' +
+        'The light runs out over the water and finds nothing to do. The ' +
+        'river was never the trouble. Your mother stood at this bend and ' +
+        'taught this spell to a fisherman; the water remembers her better ' +
+        'than it needs you.'
+      )
     }
     const name = item.name
     return (

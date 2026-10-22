@@ -7,6 +7,7 @@ import {
   characterName,
 } from '@/engine'
 import { WitheredCarrot } from '../items/WitheredCarrot'
+import { Bush } from '../items/Bush'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
 
 /** Restore life to withered plants or recently deceased small creatures. */
@@ -37,7 +38,7 @@ export class ReviveSpell extends Spell {
     return '[failure]What do you want to cast [spell_name]revive[/spell_name] on?[/failure]'
   }
 
-  /** Attempt to revive an item; delegate to the item's revive logic when present. */
+  /** Revive the withered carrot, or green the Forest Path's bush; other items refuse. */
   override castOnItem(gameState: GameState, item: Item): string {
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
       return this.outOfReach()
@@ -54,6 +55,7 @@ export class ReviveSpell extends Spell {
         revivalMessage
       )
     }
+    if (item instanceof Bush) return item.revive(gameState)
     const name = item.name
     return `[failure]You can't revive [item_name]${name}[/item_name].[/failure]`
   }

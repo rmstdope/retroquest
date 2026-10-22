@@ -14,6 +14,17 @@ export class Bush extends Item {
     })
   }
 
+  /**
+   * Revive greens the bush and nothing more: a rewarded second use of the
+   * spell, and a nudge that fruit wants a different spell.
+   */
+  revive(_gameState: GameState): string {
+    return event(
+      'The bush greens under your hand, every leaf at once. Life it has. ' +
+        'It bears nothing; fruit wants something else of you.',
+    )
+  }
+
   /** Cast grow spell to generate wild berries if not present. */
   override grow(gameState: GameState): string {
     const currentRoom = gameState.currentRoom

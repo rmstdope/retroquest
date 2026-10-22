@@ -2,10 +2,12 @@ import {
   Spell,
   type Character,
   type GameState,
+  type Item,
   event,
   characterName,
 } from '@/engine'
 import { Fisherman } from '../characters/Fisherman'
+import { Snare } from '../items/Snare'
 
 /** Simple restorative spell for Act I; supports self-cast and targeted healing. */
 export class HealSpell extends Spell {
@@ -24,6 +26,22 @@ export class HealSpell extends Spell {
       event('You cast [spell_name]heal[/spell_name] on yourself.') +
       '\n' +
       'A warm light envelops you, and you feel your wounds mending.'
+    )
+  }
+
+  /** Heal cast on the snared kit: the wire comes first; an empty snare has nothing to mend. */
+  override castOnItem(gameState: GameState, item: Item): string {
+    if (!(item instanceof Snare)) return super.castOnItem(gameState, item)
+    if (item.freed) {
+      return event(
+        'There is nothing here to mend. The kit took its leg with it, and ' +
+          'it was whole enough to run.',
+      )
+    }
+    return event(
+      'The warmth reaches the kit and it flinches from it. The wire is ' +
+        'still in the leg; mending flesh around iron would be cruelty, and ' +
+        'the kit knows it before you do.',
     )
   }
 

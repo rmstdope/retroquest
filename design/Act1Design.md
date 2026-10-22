@@ -243,13 +243,13 @@
 
 ## Learnable Spells in Act I
 
-- **`revive`**: Learned from Grandmother in Elior’s Cottage (Step 1).
-- **`purify`**: Learned from the Fisherman at the Riverbank after giving him a fish (Step 12). Elior's mother once taught it to him by the bend.
+- **`revive`**: Learned from Grandmother in Elior’s Cottage (Step 1). Second, rewarded use: on the Forest Path bush, which greens but bears nothing ("fruit wants something else of you").
+- **`purify`**: Learned from the Fisherman at the Riverbank after giving him a fish (Step 12). Elior's mother once taught it to him by the bend. Second, rewarded use: on the river itself, which was never the trouble and "remembers her better than it needs you".
 - **`bless`**: Learned when picking up the Hidden Locket in the Village Chapel; the Priest recognizes the relic (Step 17).
-- **`heal`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18). Optionally cast on the Fisherman to mend his arm.
-- **`unlock`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
+- **`heal`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18). Optionally cast on the Fisherman to mend his arm; cast on the snared fox kit it says the wire comes first.
+- **`unlock`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18). Second, rewarded use: on the Old Mill's mechanism, which has no lock ("never meant to be opened, only to run").
 - **`light`**: Learned from Mira in Mira’s Hut after giving her the Rare Flower (Step 18).
-- **`grow`**: Learned from inscriptions on a moss-covered stone in the Hidden Glade after casting `light` on it (Step 22).
+- **`grow`**: Learned from inscriptions on a moss-covered stone in the Hidden Glade after casting `light` on it (Step 22). Second, rewarded use: on Mira's healing herb, which crowds its pot ("I will not complain").
 
 ## Action that completes the act:
 
