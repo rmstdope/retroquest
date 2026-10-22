@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rq-mh4 · Narrated story</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --bg: #10151a; --surface: #161d24; --raised: #1c242c; --line: #26313b;
+  --fg: #ece6d6; --prose: #d9d3c3; --muted: #a39d8e;
+  --accent: #ffa914; --on-accent: #1a1408; --accent-text: #ffb836; --accent-soft: #36270a; --accent-line: #a8740f;
+  --character: #7fb0e6; --character-soft: #172433; --character-line: #34506b;
+  --page: #0b0f13;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--page); color: var(--fg);
+  font: 15px/1.5 'DM Sans', system-ui, sans-serif;
+  display: flex; gap: 40px; justify-content: center; align-items: flex-start;
+  padding: 32px 16px; min-height: 100vh;
+}
+@media (max-width: 900px) { body { flex-direction: column; align-items: center; } }
+
+/* ---- explanation panel beside the phone ---- */
+.about { max-width: 380px; }
+.about .kicker { color: var(--accent-text); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.about h1 { font: 600 28px/1.15 Fraunces, serif; margin: 6px 0 12px; }
+.about p, .about li { color: var(--prose); }
+.about ul { padding-left: 18px; }
+.about .try { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin: 16px 0; }
+.about .try b { color: var(--accent-text); }
+.about .cost { color: var(--muted); font-size: 13px; border-left: 2px solid var(--accent-line); padding-left: 10px; }
+.about .rig { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.about button, .about label.switch {
+  font: 500 14px 'DM Sans', sans-serif; border-radius: 8px; padding: 8px 14px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--raised); color: var(--fg);
+}
+.about button.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.about label.switch { display: inline-flex; gap: 8px; align-items: center; }
+.about .voices { color: var(--muted); font-size: 12px; margin-top: 10px; }
+
+/* ---- phone ---- */
+.phone {
+  width: 390px; max-width: 100%; height: 780px; border-radius: 34px; border: 10px solid #000;
+  background: var(--bg); display: flex; flex-direction: column; overflow: hidden; position: relative;
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+}
+.hdr { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.hdr .room { font: 600 18px Fraunces, serif; }
+.hdr .sub { color: var(--muted); font-size: 12px; }
+.story {
+  flex: 1; overflow-y: auto; padding: 14px 16px 90px; position: relative;
+  font: 15px/1.5 'Source Serif 4', Georgia, serif; color: var(--prose);
+  -webkit-user-select: none; user-select: none;
+}
+.story .arrival { color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 14px; }
+.story .arrival .divider { font: 600 13px 'DM Sans', sans-serif; color: var(--accent-text); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+.story .echo { font: 500 13px 'DM Sans', sans-serif; color: var(--accent-text); margin: 6px 0 10px; }
+.story .block { margin: 0 0 12px; transition: opacity .35s ease, color .35s ease; }
+.story .speech {
+  background: var(--character-soft); border: 1px solid var(--character-line); border-radius: 10px;
+  padding: 8px 12px 10px; color: var(--fg); font-style: italic;
+}
+.story .speaker { font: 600 12px 'DM Sans', sans-serif; font-style: normal; color: var(--character); letter-spacing: .04em; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+.cname { color: var(--character); }
+.w { transition: opacity .18s ease; }
+
+/* speaking indicator (all variants) */
+.eq { display: inline-flex; gap: 2px; align-items: flex-end; height: 10px; opacity: 0; transition: opacity .2s; }
+.eq i { width: 2px; background: currentColor; border-radius: 1px; animation: eq 0.9s ease-in-out infinite; }
+.eq i:nth-child(2) { animation-delay: .15s; } .eq i:nth-child(3) { animation-delay: .3s; }
+.speaking .eq { opacity: 1; }
+@keyframes eq { 0%,100% { height: 3px; } 50% { height: 10px; } }
+
+/* ---- dock ---- */
+.dock { border-top: 1px solid var(--line); background: var(--surface); padding: 10px 12px 14px; display: flex; gap: 8px; align-items: center; position: relative; z-index: 3; }
+.dock .chip { border: 1px solid var(--line); background: var(--raised); color: var(--fg); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
+.dock .grow { flex: 1; }
+
+/* the "press to start" cover */
+.cover { position: absolute; inset: 0; background: rgba(8,11,14,.72); display: flex; align-items: center; justify-content: center; z-index: 10; }
+.cover button { font: 600 16px 'DM Sans', sans-serif; background: var(--accent); color: var(--on-accent); border: 0; border-radius: 999px; padding: 14px 24px; cursor: pointer; }
+.hidden { display: none !important; }
+
+/* hint pill */
+.hint { position: absolute; left: 50%; transform: translateX(-50%); bottom: 78px; z-index: 4;
+  background: var(--raised); border: 1px solid var(--line); color: var(--muted); font-size: 12px;
+  padding: 5px 12px; border-radius: 999px; white-space: nowrap; transition: opacity .3s; pointer-events: none; }
+
+/* read-along pacing */
+.story .block.upcoming { opacity: .4; }
+.story .block.current { opacity: 1; }
+.pacing-readalong .story .block.narration.current { box-shadow: inset 2px 0 0 var(--accent); padding-left: 10px; margin-left: -12px; }
+.w.now { background: var(--accent-soft); color: var(--accent-text); border-radius: 3px; box-shadow: 0 0 0 2px var(--accent-soft); }
+.pacing-block .story .block:not(.hidden) { animation: fadein .45s ease; }
+@keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* hold-to-fast-forward button */
+.ff { position: absolute; right: 16px; bottom: 82px; z-index: 5; width: 58px; height: 58px; border-radius: 50%;
+  border: 1px solid var(--accent-line); background: var(--raised); color: var(--accent-text); font-size: 22px; cursor: pointer;
+  touch-action: none; transition: transform .15s, background .15s, opacity .3s; }
+.fast .ff { background: var(--accent); color: var(--on-accent); transform: scale(1.08); }
+.phone:not(.playing) .ff { opacity: 0; pointer-events: none; }
+.fast .story { filter: saturate(.6); }
+.fast .hint { opacity: 1; }
+
+/* narration bar */
+.nbar { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: var(--raised); border-top: 1px solid var(--line); position: relative; z-index: 3; }
+.nbar .who { font: 600 13px 'DM Sans', sans-serif; color: var(--fg); flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.nbar .who::before { content: '🔊'; font-size: 13px; }
+.nbar .count { color: var(--muted); font-size: 12px; margin-right: 4px; }
+.nbar button { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 8px; height: 34px; min-width: 38px; padding: 0 9px; font: 500 13px 'DM Sans', sans-serif; cursor: pointer; }
+.nbar button.sk { color: var(--accent-text); border-color: var(--accent-line); }
+.nbar.idle .pp, .nbar.idle .nx, .nbar.idle .sk { opacity: .35; pointer-events: none; }
+.nbar.idle .who { color: var(--muted); }
+.nbar.idle .who::before { content: '✓'; }
+
+/* progressive read-along: blocks appear as their voice starts and are lit while spoken */
+.pacing-progressive .story .block:not(.hidden) { animation: fadein .45s ease; }
+.pacing-progressive .story .block.narration.current { box-shadow: inset 2px 0 0 var(--accent); padding-left: 10px; margin-left: -12px; }
+.pacing-progressive .story .block.speech.current { border-color: var(--character); box-shadow: 0 0 0 1px var(--character); }
+.pacing-progressive .story .w.read { }
+
+</style>
+<style>
+  .story .w.now { background: var(--accent-soft); color: var(--accent-text); border-radius: 3px; box-shadow: 0 0 0 2px var(--accent-soft); }
+  .block:not(.hidden) { animation: fadein .45s ease; }
+  .block.narration.current, .block.arrival-n.current, .block.title.current { box-shadow: inset 2px 0 0 var(--accent); padding-left: 10px; margin-left: -12px; }
+  .block.speech.current { border-color: var(--character); box-shadow: 0 0 0 1px var(--character); }
+  .block.event { font: 13px 'DM Sans', sans-serif; color: var(--muted); }
+  .block.event .diamond { color: var(--accent); }
+  .block.quest { border: 1px solid var(--accent-line); background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; color: var(--fg); }
+  .block.quest.current { box-shadow: 0 0 0 1px var(--accent); }
+  .block.quest .qk { font: 600 11px 'DM Sans', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-text); }
+  .block.quest .qn { font: 600 17px Fraunces, serif; margin: 2px 0 4px; }
+  .block.arrival-n .divider { font: 600 13px 'DM Sans', sans-serif; color: var(--accent-text); letter-spacing: .08em; text-transform: uppercase; margin: 14px 0 6px; border-top: 1px solid var(--line); padding-top: 12px; }
+  .dock button.chip { cursor: pointer; font: inherit; font-size: 13px; }
+  .states { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 8px; }
+  .states button { font: 500 13px 'DM Sans', sans-serif; border-radius: 999px; padding: 6px 12px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); cursor: pointer; }
+  .states button.on { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .state-text { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; color: var(--prose); min-height: 70px; }
+  .agreed li { font-size: 14px; }
+  /* overlays inside the phone */
+  .overlay { position: absolute; inset: 0; z-index: 8; display: flex; flex-direction: column; }
+  .settings { background: rgba(8,11,14,.6); justify-content: flex-end; }
+  .sheet { background: var(--surface); border-radius: 18px 18px 0 0; border-top: 1px solid var(--line); padding: 16px 18px 24px; }
+  .sheet h2 { font: 600 20px Fraunces, serif; margin: 0 0 12px; display: flex; justify-content: space-between; }
+  .sheet h3 { font: 600 12px 'DM Sans', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 14px 0 6px; }
+  .srow { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .srow .lab { font-weight: 500; } .srow .note { display: block; color: var(--muted); font-size: 12px; }
+  .srow input[type=range] { width: 150px; accent-color: var(--accent); }
+  .srow input[type=checkbox] { width: 38px; height: 22px; accent-color: var(--accent); }
+  .srow.new { background: linear-gradient(90deg, var(--accent-soft), transparent); margin: 0 -18px; padding: 8px 18px; }
+  .close { background: none; border: 0; color: var(--muted); font-size: 22px; cursor: pointer; }
+  .chapter { background: var(--bg); }
+  .chapter-body { flex: 1; overflow-y: auto; padding: 48px 26px 20px; font: 17px/1.6 'Source Serif 4', Georgia, serif; color: var(--prose); }
+  .chapter-body .ck { font: 600 12px 'DM Sans', sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); margin-bottom: 8px; }
+  .chapter-body .block.title { font: 600 28px/1.2 Fraunces, serif; color: var(--fg); margin-bottom: 20px; }
+  .chapter .foot { padding: 14px 20px 22px; border-top: 1px solid var(--line); }
+  .chapter .continue { width: 100%; font: 600 16px 'DM Sans', sans-serif; background: var(--accent); color: var(--on-accent); border: 0; border-radius: 12px; padding: 14px; cursor: pointer; }
+</style></head>
+<body>
+<section class="about" style="max-width:420px">
+  <div class="kicker">Agreed · narrated story</div>
+  <h1>Narrated story</h1>
+  <ul class="agreed">
+    <li>Each block appears when its voice starts; nothing unspoken is shown.</li>
+    <li>The spoken block is marked and a highlight follows the spoken word.</li>
+    <li>Tap the story (Space / Enter) hurries one block; double-tap (Esc) shows the rest silently.</li>
+    <li>Any action or typed command cuts in.</li>
+    <li>Narration, every character’s lines and quest cards are read; a room’s description only on the first visit; events stay silent with their sound effect; lines without a recording appear at once.</li>
+    <li>The chapter page and the quest-complete pop-up are narrated too.</li>
+    <li>Narration is on for a new player; Settings › Sound › “Narration” (“The story and every character read aloud”) with “Volume” turns it off.</li>
+    <li>The hint shows on the first 3 narrated turns of a game: “Tap to hurry · double-tap to skip” on phones and tablets, “Space to hurry · Esc to skip” on a laptop.</li>
+    <li>Help: “Narration: tap the story or press Space to hurry the current line; double-tap or press Esc to show the rest at once. Any action cuts in. Turn narration off in Settings.”</li>
+    <li>No replay of a narrated line (for now).</li>
+  </ul>
+  <p style="margin:14px 0 0;color:var(--muted);font-size:13px">Pick a state:</p>
+  <div class="states">
+    <button data-state="normal">A narrated turn</button>
+    <button data-state="cutin">Cutting in</button>
+    <button data-state="quest">Quest card</button>
+    <button data-state="noaudio">Line without audio</button>
+    <button data-state="off">Narration off</button>
+    <button data-state="settings">Settings</button>
+    <button data-state="chapter">Chapter page</button>
+  </div>
+  <div class="state-text">Pick a state to start. Sound plays through the browser’s own voices, standing in for the recorded ones.</div>
+  <p class="voices" style="color:var(--muted);font-size:12px"></p>
+  <p style="color:var(--muted);font-size:12px"><span class="hint-count"></span> <button class="reset-hint" style="font:inherit;font-size:12px;background:none;border:0;color:var(--accent-text);cursor:pointer;text-decoration:underline">Reset</button></p>
+  <p style="color:var(--muted);font-size:12px">Decided along the way: typed commands are not read aloud; turns that come back after loading a save are not narrated again; on a laptop Space/Enter hurry only when you are not typing in the command box; Esc closes an open menu before it skips.</p>
+</section>
+<div class="phone">
+  <div class="hdr"><div class="room">Elior's Cottage</div><div class="sub">Act I · Quests 1/5</div></div>
+  <div class="story"></div>
+  <div class="hint" style="opacity:0"></div>
+  <div class="dock"><button class="chip go-north">↑ Village Square</button><button class="chip do-look">Look</button><span class="grow"></span><span class="chip">Actions ▴</span><span class="chip">⌨</span></div>
+
+  <div class="overlay settings hidden">
+    <div class="sheet">
+      <h2>Settings <button class="close" aria-label="Close">×</button></h2>
+      <h3>Sound</h3>
+      <div class="srow"><span class="lab">Music</span><input type="checkbox" checked></div>
+      <div class="srow"><span class="lab">Sound effects</span><input type="checkbox" checked></div>
+      <div class="srow new"><span><span class="lab">Narration</span><span class="note">The story and every character read aloud</span></span><input id="narr-on" type="checkbox"></div>
+      <div class="srow new narr-vol-row"><span class="note">Volume</span><input id="narr-vol" type="range" min="0" max="100" aria-label="Narration volume"></div>
+    </div>
+  </div>
+
+  <div class="overlay chapter hidden">
+    <div class="chapter-body"></div>
+    <div class="foot"><button class="continue">Continue</button></div>
+  </div>
+</div>
+<script>
+// The agreed narration, as one drawing with its states.
+// Blocks appear only when their voice starts; the spoken block is marked and a highlight follows the
+// spoken word. Tap / Space / Enter hurries one block, double-tap / Esc shows the rest silently, any
+// action cuts in. Events are silent; lines without audio appear at once; quest cards are read.
+
+const NARRATOR = 'narrator', GRANDMOTHER = 'grandmother', HEMLOCK = 'hemlock'
+const GRANDMOTHER_TURN = [
+  { kind: 'narration', text: 'She is humming at the hearth when you come in: a slow tune that climbs three notes and settles home again. You know it. You have known it all your life, and you could not say from where. She stops when she sees your face.' },
+  { kind: 'narration', text: 'You tell her about the dream: the shadows, the figure, the voice calling your name, and how you were sure you had heard it before. She reaches for your hand and holds it tighter than she means to.' },
+  { kind: 'speech', speaker: 'Grandmother', voice: GRANDMOTHER, text: 'That voice... did it say anything more? Anything but your name?' },
+  { kind: 'narration', text: 'You tell her the three words you caught at the very end, the ones you wrote down before they could go: let them rest. She goes quiet. She turns to the bread on the board and does not turn back for a while.' },
+  { kind: 'speech', speaker: 'Grandmother', voice: GRANDMOTHER, text: 'Some voices are older than memory.' },
+]
+const SCENES = {
+  normal: { cmd: 'talk to grandmother', blocks: GRANDMOTHER_TURN },
+  cutin: { cmd: 'talk to grandmother', blocks: GRANDMOTHER_TURN, cue: 'While it plays, press “↑ Village Square” in the bar at the bottom.' },
+  quest: {
+    cmd: 'show photograph to grandmother',
+    blocks: [
+      { kind: 'narration', text: 'She turns the photograph over and reads the words on its back twice. Her hands are not quite steady.' },
+      { kind: 'speech', speaker: 'Grandmother', voice: GRANDMOTHER, text: 'Where the river bends... Your mother used to walk there.' },
+      { kind: 'quest', kicker: 'New main quest', name: 'The Faded Photograph', text: 'Somewhere in the cottage lies an old photograph of your parents, tucked away in a drawer. Read the cryptic message on its back and show it to your grandmother. Then seek the truth where the river bends.' },
+    ],
+  },
+  noaudio: {
+    cmd: 'buy bread from hemlock',
+    note: 'Illustrative lines: the middle one depends on the game state, so it has no recording.',
+    blocks: [
+      { kind: 'narration', text: 'Old Man Hemlock wraps a loaf in brown paper without being asked.' },
+      { kind: 'event', text: 'You hand over 2 coins. You have 3 coins left.', noAudio: true },
+      { kind: 'speech', speaker: 'Hemlock', voice: HEMLOCK, text: 'Still warm. Tell your grandmother I said so.' },
+    ],
+  },
+  off: { cmd: 'talk to grandmother', blocks: GRANDMOTHER_TURN, narrationOff: true },
+}
+const GO_NORTH = {
+  cmd: 'go north',
+  blocks: [
+    { kind: 'event', text: 'You move north to Village Square.' },
+    { kind: 'arrival', room: 'Village Square', text: 'The heart of Willowbrook bustles with life. Cobblestone paths radiate from an old stone fountain, and a weathered notice board stands nearby, covered in faded announcements. Children chase each other around market stalls, and the air is filled with laughter, gossip, and the scent of fresh bread.' },
+  ],
+}
+const CHAPTER = [
+  { kind: 'title', text: 'Act I. The Call to Adventure.' },
+  { kind: 'narration', text: 'You are Elior, a farmer boy in the village of Willowbrook, on the outskirts of Eldoria. Your grandmother raised you after your parents vanished, and your days are the crops, the hens and the weather.' },
+  { kind: 'narration', text: 'Tonight the weather is a storm, and a light that is not lightning has split the sky over the fields. Sleep, when it comes, is not quiet.' },
+]
+const WPS = 2.6, GAP_MS = 350, HINT_TURNS = 3
+
+const $ = (q) => document.querySelector(q)
+const story = $('.story'), phone = $('.phone')
+let voices = {}, sound = !!window.speechSynthesis
+let narrationOn = true, narrationVolume = 0.8
+let narratedTurns = 0, gen = 0, lastTap = 0
+let player = null // the narration in progress: { blocks, idx, host, done }
+
+function pickVoices() {
+  if (!window.speechSynthesis) return
+  const all = speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith('en'))
+  if (!all.length) { sound = false; return }
+  const find = (names) => all.find((v) => names.some((n) => v.name.includes(n)))
+  voices[NARRATOR] = find(['Daniel', 'Google UK English Male', 'Arthur', 'Fred', 'Aaron', 'Alex']) || all[0]
+  voices[GRANDMOTHER] = find(['Moira', 'Karen', 'Google UK English Female', 'Serena', 'Tessa', 'Samantha']) || all[1] || all[0]
+  voices[HEMLOCK] = find(['Fred', 'Ralph', 'Rishi', 'Oliver', 'Google US English']) || voices[NARRATOR]
+  $('.voices').textContent = `Stand-in voices: narrator “${voices[NARRATOR].name}”, Grandmother “${voices[GRANDMOTHER].name}”, Hemlock “${voices[HEMLOCK].name}”.`
+}
+if (window.speechSynthesis) { pickVoices(); speechSynthesis.onvoiceschanged = pickVoices }
+
+function wordsOf(el, text) {
+  const spans = []
+  for (const part of text.split(/(\s+)/)) {
+    if (!part.trim()) { el.append(part); continue }
+    const s = document.createElement('span'); s.className = 'w'; s.textContent = part; el.append(s); spans.push(s)
+  }
+  return spans
+}
+
+function renderBlock(data, host) {
+  const el = document.createElement('div')
+  let target = el
+  if (data.kind === 'speech') {
+    el.className = 'block speech'
+    el.innerHTML = `<div class="speaker">${data.speaker}<span class="eq"><i></i><i></i><i></i></span></div>`
+    target = document.createElement('div'); el.append(target)
+  } else if (data.kind === 'event') {
+    el.className = 'block event'
+    el.innerHTML = '<span class="diamond">◆</span> '
+  } else if (data.kind === 'quest') {
+    el.className = 'block quest'
+    el.innerHTML = `<div class="qk">${data.kicker}</div><div class="qn">${data.name}</div>`
+    target = document.createElement('div'); target.className = 'qd'; el.append(target)
+  } else if (data.kind === 'arrival') {
+    el.className = 'block arrival-n'
+    el.innerHTML = `<div class="divider">${data.room}</div>`
+    target = document.createElement('div'); el.append(target)
+  } else if (data.kind === 'title') {
+    el.className = 'block title'
+  } else {
+    el.className = 'block narration'
+  }
+  const words = wordsOf(target, data.text)
+  host.append(el)
+  return { data, el, words, progress: 0, voiceDone: true }
+}
+
+// ---- narration of one list of blocks into a host element ----
+function narrate(blockData, host, { onDone, silent } = {}) {
+  const blocks = blockData.map((d) => {
+    const b = renderBlock(d, host)
+    b.el.classList.add('hidden')
+    return b
+  })
+  player = { blocks, idx: -1, host, onDone, silent }
+  step(0)
+}
+
+function step(i) {
+  const myGen = ++gen
+  const p = player
+  p.idx = i
+  if (i >= p.blocks.length) return endNarration()
+  const b = p.blocks[i]
+  b.el.classList.remove('hidden')
+  const voiced = !p.silent && narrationOn && b.data.kind !== 'event' && !b.data.noAudio
+  if (!voiced) { // silent lines appear at once and narration carries straight on
+    keepInView(b.el)
+    return setTimeout(() => myGen === gen && step(i + 1), p.silent ? 0 : 120)
+  }
+  b.el.classList.add('current')
+  keepInView(b.el)
+  speak(b, myGen)
+  let last = performance.now()
+  const dur = b.words.length / WPS
+  const frame = (now) => {
+    if (myGen !== gen) return
+    b.progress += Math.max(0, (now - last) / 1000) / dur
+    last = now
+    const n = Math.max(1, Math.min(b.words.length, Math.ceil(b.progress * b.words.length)))
+    b.words.forEach((w, k) => w.classList.toggle('now', k === n - 1))
+    if (b.progress >= 1 && b.voiceDone) return finishBlock(b, true)
+    requestAnimationFrame(frame)
+  }
+  requestAnimationFrame(frame)
+}
+
+function speak(b, myGen) {
+  if (!sound || !window.speechSynthesis) return
+  b.voiceDone = false
+  const u = new SpeechSynthesisUtterance(b.data.text)
+  const who = b.data.voice || NARRATOR
+  if (voices[who]) u.voice = voices[who]
+  u.pitch = who === GRANDMOTHER ? 1.15 : who === HEMLOCK ? 0.7 : 0.8
+  u.rate = who === GRANDMOTHER ? 0.9 : 0.95
+  u.volume = narrationVolume
+  u.onend = u.onerror = () => { if (myGen === gen) { b.voiceDone = true; b.el.classList.remove('speaking') } }
+  b.el.classList.add('speaking')
+  speechSynthesis.speak(u)
+  setTimeout(() => { if (myGen === gen && !b.voiceDone) { b.voiceDone = true; b.el.classList.remove('speaking') } }, (b.words.length / WPS) * 2500 + 3000)
+}
+
+function settle(b) {
+  b.el.classList.remove('hidden', 'current', 'speaking')
+  b.words.forEach((w) => w.classList.remove('now'))
+}
+
+function finishBlock(b, withGap) {
+  const myGen = ++gen
+  settle(b)
+  const next = player.idx + 1
+  setTimeout(() => { if (myGen === gen) step(next) }, withGap ? GAP_MS : 80)
+}
+
+function keepInView(el) {
+  const scroller = el.closest('.story, .chapter-body')
+  const r = el.getBoundingClientRect(), s = scroller.getBoundingClientRect()
+  if (r.bottom > s.bottom - 90) scroller.scrollTop += r.bottom - (s.bottom - 90)
+}
+
+function hurry() {
+  if (!player || player.idx < 0 || player.idx >= player.blocks.length) return
+  if (window.speechSynthesis) speechSynthesis.cancel()
+  finishBlock(player.blocks[player.idx], false)
+}
+
+function skipAll() {
+  if (!player) return
+  gen++
+  if (window.speechSynthesis) speechSynthesis.cancel()
+  player.blocks.forEach(settle)
+  player.idx = player.blocks.length
+  const host = player.host.closest('.story, .chapter-body')
+  host.scrollTop = host.scrollHeight
+  endNarration()
+}
+
+function endNarration() {
+  const p = player
+  player = null
+  phone.classList.remove('playing')
+  setHint('')
+  p?.onDone?.()
+}
+
+function setHint(text) {
+  const h = $('.hint')
+  h.textContent = text
+  h.style.opacity = text ? 1 : 0
+}
+
+// ---- turns in the story ----
+function playTurn(turn) {
+  const host = document.createElement('div')
+  host.className = 'turn'
+  host.innerHTML = `<div class="echo">› ${turn.cmd}</div>`
+  story.append(host)
+  const silent = !!turn.narrationOff || !narrationOn
+  if (!silent) {
+    narratedTurns += 1
+    phone.classList.add('playing')
+    setHint(narratedTurns <= HINT_TURNS ? 'Tap to hurry · double-tap to skip' : '')
+  }
+  updateRig()
+  narrate(turn.blocks, host, { silent })
+}
+
+function resetStory() {
+  gen++
+  if (window.speechSynthesis) speechSynthesis.cancel()
+  player = null
+  phone.classList.remove('playing')
+  setHint('')
+  story.innerHTML = `<div class="arrival"><div class="divider">Elior's Cottage</div>
+    A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air.
+    A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth.
+    <span class="cname">Grandmother</span> hums softly in her rocking chair.</div>`
+  closeOverlays()
+}
+
+// Any action cuts in: the turn being narrated completes silently, the new one is narrated.
+function act(turn) {
+  if (player && player.host.closest('.story')) skipAll()
+  playTurn(turn)
+}
+
+story.addEventListener('click', () => {
+  if (!player) return
+  const now = Date.now()
+  if (now - lastTap < 400) skipAll(); else hurry()
+  lastTap = now
+})
+addEventListener('keydown', (e) => {
+  if (!player || e.target.closest('input, textarea, select')) return
+  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); hurry() }
+  if (e.code === 'Escape' && !$('.settings:not(.hidden)')) skipAll()
+})
+$('.go-north').addEventListener('click', () => act(GO_NORTH))
+$('.do-look').addEventListener('click', () => act({ cmd: 'look', blocks: [{ kind: 'event', text: 'You take a look at your surroundings.' }] }))
+
+// ---- chapter page ----
+function openChapter() {
+  resetStory()
+  const page = $('.chapter')
+  page.classList.remove('hidden')
+  const body = $('.chapter-body')
+  body.innerHTML = '<div class="ck">Chapter one</div>'
+  const host = document.createElement('div'); body.append(host)
+  phone.classList.add('playing')
+  narrate(CHAPTER, host, { silent: !narrationOn })
+}
+$('.chapter-body').addEventListener('click', () => {
+  if (!player) return
+  const now = Date.now()
+  if (now - lastTap < 400) skipAll(); else hurry()
+  lastTap = now
+})
+$('.chapter .continue').addEventListener('click', () => {
+  // Continue stops the voice and moves on, whatever is still unread.
+  gen++
+  if (window.speechSynthesis) speechSynthesis.cancel()
+  player = null
+  closeOverlays()
+})
+
+// ---- settings ----
+function openSettings() { $('.settings').classList.remove('hidden'); syncSettings() }
+function syncSettings() {
+  $('#narr-on').checked = narrationOn
+  $('#narr-vol').value = Math.round(narrationVolume * 100)
+  $('.narr-vol-row').classList.toggle('hidden', !narrationOn)
+}
+$('#narr-on').addEventListener('change', (e) => { narrationOn = e.target.checked; syncSettings(); updateRig() })
+$('#narr-vol').addEventListener('input', (e) => { narrationVolume = e.target.value / 100 })
+$('.settings .close').addEventListener('click', closeOverlays)
+function closeOverlays() { $('.settings').classList.add('hidden'); $('.chapter').classList.add('hidden') }
+
+// ---- the state switcher beside the phone ----
+const STATE_TEXT = {
+  normal: 'A turn with narration and the Grandmother’s lines. Blocks appear as they are spoken; tap to hurry, double-tap to skip.',
+  cutin: 'Start the turn, then pick an action in the bar while it plays: the turn completes silently and the new answer is narrated (Village Square’s description is read on this first visit).',
+  quest: 'The quest card is read aloud like the rest of the story.',
+  noaudio: 'The event line has no recording: it appears at once, silently (its sound effect plays), and narration carries on.',
+  off: 'Narration switched off in Settings: the answer appears at once, as today, and no hint is shown.',
+  settings: 'Settings › Sound gains a Narration row with a volume slider, beside Music and Sound effects.',
+  chapter: 'The chapter page at the start of an act is narrated the same way. Continue stops the voice and moves on.',
+}
+function runState(name) {
+  document.querySelectorAll('.states button').forEach((b) => b.classList.toggle('on', b.dataset.state === name))
+  $('.state-text').textContent = STATE_TEXT[name]
+  resetStory()
+  if (name === 'settings') return openSettings()
+  if (name === 'chapter') return openChapter()
+  const scene = SCENES[name]
+  if (scene.note) $('.state-text').textContent += ' ' + scene.note
+  playTurn(scene)
+}
+document.querySelectorAll('.states button').forEach((b) => b.addEventListener('click', () => runState(b.dataset.state)))
+$('.reset-hint').addEventListener('click', () => { narratedTurns = 0; updateRig() })
+function updateRig() {
+  $('.hint-count').textContent = narrationOn
+    ? `Narrated turns this game: ${narratedTurns} (the hint shows on the first ${HINT_TURNS}).`
+    : 'Narration is off in Settings.'
+}
+resetStory()
+updateRig()
+
+</script>
+</body></html>
