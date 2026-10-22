@@ -43,7 +43,10 @@ export class SupplyCrate extends Item {
   /** Open the unlocked crate, releasing its contents into the room. */
   override open(gameState: GameState): string {
     if (this.locked) {
-      return "[failure]The crate is locked. You'll need a key to open it.[/failure]"
+      return (
+        '[failure]The padlock holds. It is iron, rusted shut, and it has a ' +
+        'keyhole.[/failure]'
+      )
     }
     if (this.opened) {
       return event(
@@ -58,6 +61,22 @@ export class SupplyCrate extends Item {
     return event(
       'You open the crate. Inside are heavy iron braces, strong hemp straps, and ' +
         'tapered wooden wedge blocks—just what you need to rescue the trapped miners!',
+    )
+  }
+
+  /**
+   * Unlock the crate with the unlock sigil instead of the key: the second
+   * use of the spell in the act. The key, if carried, stays in the pack.
+   */
+  unlockWithSpell(_gameState: GameState): string {
+    if (!this.locked) {
+      return event('The padlock already hangs open.')
+    }
+    this.locked = false
+    return event(
+      "The sigil finds the padlock's rusted pins and lifts them one by one. " +
+        'The lock falls open. Whatever key was cut for it can stay where it ' +
+        'is.',
     )
   }
 

@@ -49,8 +49,9 @@ export class MysteriousBox extends Item {
     const nameHtml = `[item_name]${this.name}[/item_name]`
     if (this.locked) {
       return (
-        `[failure]The ${nameHtml} is locked. You need to find a way to open it.` +
-        '[/failure]'
+        `[failure]The ${nameHtml} is locked, and there is no keyhole. The ` +
+        'runes around the lid are the only way in, and they do not answer ' +
+        'to hands.[/failure]'
       )
     }
     if (this.containsMap) {

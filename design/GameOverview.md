@@ -30,7 +30,7 @@ Every puzzle in every act follows these rules, so the game stays puzzling withou
 1. **The clue lives in a different room from the lock.** The blacksmith tells you to rest in the glade; the Phoenix Guardian says to count the breath; the Pier Warden's father knew what the sanctum water asks. A puzzle whose hint is in the same paragraph as its lock is a step, not a puzzle.
 2. **Wrong answers teach.** Every refusal says something true in-world ("Then you would be taking"). Nothing ever just fails to happen.
 3. **No fail state, ever.** A wrong turn returns you; a wrong word repeats the question.
-4. **One word-riddle per site.** The word must have meaning once answered (myself, patience, everything), and the near-misses get specific refusals.
+4. **One word-riddle per site.** The word must have meaning once answered (myself, patience, everything), and the near-misses get specific refusals. The one exception is the Throne Chamber, the climax, which asks two: the refrain and then the ending word.
 5. **Each learned spell is used twice** before its act ends: once where it is required, once where it is only rewarded.
 6. **Order gates are in-world.** "Not yet" comes from a character with a reason, never from the game.
 

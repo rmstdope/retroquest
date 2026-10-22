@@ -15,6 +15,19 @@ function gameWithUnlockedBox(): { game: Game; box: MysteriousBox } {
 }
 
 describe('MysteriousBox', () => {
+  it('refuses to open while locked with its runes, not with an instruction', () => {
+    const game = new Game([new Act1()])
+    const box = new MysteriousBox()
+
+    const refusal = box.open(game.state)
+
+    expect(refusal).toContain(
+      'is locked, and there is no keyhole. The runes around the lid are the ' +
+        'only way in, and they do not answer to hands.',
+    )
+    expect(refusal).not.toContain('You need to')
+  })
+
   it("opens to the map and a note in Elior's father's hand", () => {
     const { game } = gameWithUnlockedBox()
 

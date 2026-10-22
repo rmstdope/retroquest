@@ -156,7 +156,12 @@ export class KnightOfDespair extends Character {
       return '[dim]He has already found his way back. He bows his head to you.[/dim]'
     }
     const word = normaliseSpokenWord(words)
-    if (word !== 'redemption') return '[dim]The knight does not answer.[/dim]'
+    if (word !== 'redemption') {
+      return (
+        '[dim]The visor does not move. Whatever that word was, it is not the ' +
+        'one he is waiting for.[/dim]'
+      )
+    }
     const seen = this.sightsSeen(gameState)
     if (seen > 0 && seen < SIGHTS_NEEDED) {
       return (

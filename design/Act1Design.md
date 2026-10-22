@@ -338,7 +338,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
     - Use key with shed door. _Key is removed from inventory, shed door is unlocked, revealing the interior. A frightened mew: a small cat bolts behind the crates._
       - Item used: `key` (on `shed door`)
-    - Find Mysterious Box. _The box is intricately locked, and the key doesn't fit this lock._
+    - Find Mysterious Box. _The box is intricately locked, and the key doesn't fit this lock: it has no keyhole, and its runes do not answer to hands._
     - Talk to Patches (call her by name). _She creeps out and lets Elior carry her; the quest log points him to Hemlock at the General Store._
     - Search shed. _The shed is dark; holding the lit lantern high, Elior finds a fishing rod and a small magnet amidst the clutter. Without a light, it is too dark to rummage._
     - Take fishing rod. _Fishing rod is added to inventory._

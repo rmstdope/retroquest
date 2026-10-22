@@ -16,6 +16,18 @@ describe('Act 3 Light spell', () => {
     expect(out.includes('[event]') || out.includes('[failure]')).toBe(true)
   })
 
+  it('finds the writing above reach in the Echo Chambers', () => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom = game.state.allRooms.EchoChambers
+
+    const out = new LightSpell().castSpell(game.state)
+
+    expect(out).toContain(
+      'three hands, the same words cut over and over. The whispers hush for ' +
+        'as long as it burns.',
+    )
+  })
+
   it('casting on a lantern follows the room path', () => {
     const game = new Game([new Act3()])
     const spell = new LightSpell()

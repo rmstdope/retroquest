@@ -7,6 +7,7 @@ import {
   type Item,
 } from '@/engine'
 import { WardingPillars } from '../items/WardingPillars'
+import { Steles } from '../items/Steles'
 
 /** Act III variant of Purify, customized for Sunken Ruins interactions. */
 export class PurifySpell extends Spell {
@@ -30,10 +31,12 @@ export class PurifySpell extends Spell {
     )
   }
 
-  /** Cast purify on target item, with special handling for warding pillars. */
+  /** Cast purify on an item: the warding pillars, or the salt-crusted steles. */
   override castOnItem(gameState: GameState, targetItem: Item): string {
-    // Special handling for the warding pillars in the Outer Wards
     if (targetItem instanceof WardingPillars) {
+      return targetItem.purify(gameState)
+    }
+    if (targetItem instanceof Steles) {
       return targetItem.purify(gameState)
     }
     return (

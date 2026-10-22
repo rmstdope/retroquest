@@ -21,6 +21,19 @@ export class Steles extends Item {
     )
   }
 
+  /**
+   * Purify scours the salt from the steles: a rewarded second use of the
+   * spell in the act, with nothing to gain but the sight of it.
+   */
+  purify(_gameState: GameState): string {
+    return event(
+      'Salt and grey scum run off the steles in the saltlight, and the ' +
+        'moon-marks stand clearer than they have in years. Beyond them the ' +
+        'surf runs blue for the space of a breath, and then the grey comes ' +
+        'back.',
+    )
+  }
+
   /** Override examine with detailed description of the steles and fragments. */
   override examine(_gameState: GameState): string {
     return event(
