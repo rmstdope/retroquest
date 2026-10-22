@@ -39,11 +39,11 @@ def transcribe(wav: Path) -> str:
     with wave.open(str(wav)) as audio:
         duration = audio.getnframes() / audio.getframerate()
     # On trailing silence Whisper invents text: near-zero-length segments, or segments
-    # placed past the end of the file. Drop both.
+    # reaching past the end of the file. Drop both.
     return " ".join(
         seg["text"].strip()
         for seg in segments
-        if seg["end"] - seg["start"] >= MIN_SEGMENT_S and seg["start"] < duration - MIN_SEGMENT_S
+        if seg["end"] - seg["start"] >= MIN_SEGMENT_S and seg["end"] <= duration + MIN_SEGMENT_S
     )
 
 
