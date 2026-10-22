@@ -24,8 +24,8 @@ export class EnchantedAcorn extends Item {
       // This should be handled by the room or character interaction
       return (
         `The [item_name]${this.name}[/item_name] pulses with magical energy in ` +
-        'response to the sacred grove. You should offer it to the ancient tree spirit ' +
-        'that dwells here.'
+        'response to the sacred grove, warm as a held hand, and turns in your ' +
+        'palm toward the silver-barked tree.'
       )
     } else if (currentRoom.toLowerCase().includes('forest')) {
       return (

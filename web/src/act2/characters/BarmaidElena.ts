@@ -220,8 +220,8 @@ export class BarmaidElena extends Character {
 
     if (!this.elenaInitialHealing) {
       return (
-        'Elena is too weak from the curse. You need to heal her ' +
-        'before attempting purification.'
+        'Elena is too weak from the curse; the water would run off her ' +
+        'like rain off stone. She wants mending first.'
       )
     }
 

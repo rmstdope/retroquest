@@ -43,9 +43,7 @@ describe('MirrorMount', () => {
 
     const mend = new MendSpell()
     const out = mend.castOnItem(state, mount).toLowerCase()
-    expect(
-      out.includes('apply binding resin') || out.includes('should apply'),
-    ).toBe(true)
+    expect(out.includes('they want binding first')).toBe(true)
 
     const out2 = mount.useWith(state, new BindingResin())
     expect(out2.toLowerCase()).toContain('success')

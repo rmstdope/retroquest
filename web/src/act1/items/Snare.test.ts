@@ -30,7 +30,7 @@ const KIT_LOOK =
   'A fox kit, no bigger than a cat, one hind leg caught fast in the wire. ' +
   'It watches you and does not struggle.'
 const NEED_BLADE =
-  "The wire is pulled tight around the kit's leg. You'll need a blade."
+  "The wire is pulled tight around the kit's leg, too tight for fingers."
 
 describe('cutting the vines', () => {
   it('keeps the sharp knife and says so', () => {

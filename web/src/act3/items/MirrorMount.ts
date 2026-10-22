@@ -98,8 +98,9 @@ export class MirrorMount extends Item {
     // Require binding resin to have been applied before final mending
     if (!this.resinApplied) {
       return (
-        '[failure]The mirror segments are seated but still loose. You should ' +
-        'apply Binding Resin to the mount before attempting the final mend.[/failure]'
+        '[failure]The mirror segments are seated but still loose. Mended now, ' +
+        'they would crack apart at the first tremor; they want binding ' +
+        'first.[/failure]'
       )
     }
 

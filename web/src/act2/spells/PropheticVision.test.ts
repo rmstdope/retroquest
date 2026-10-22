@@ -203,7 +203,7 @@ describe('Sir Cedric turns away an early vision', () => {
 
     const answer = new PropheticVision().castSpell(game.state)
 
-    expect(answer).toContain('most meaningful if shared')
+    expect(answer).toContain('it wants a second pair of eyes')
     expect(answer).not.toContain('Not yet.')
   })
 })

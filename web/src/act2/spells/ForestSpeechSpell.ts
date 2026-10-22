@@ -45,8 +45,8 @@ export class ForestSpeechSpell extends Spell {
         'strange noises from the deep ravine to the northeast. An old owl hoots solemnly ' +
         "about 'metal beasts trapped in the earth-scar where the stone walls weep.' " +
         'The animals describe a steep ravine hidden beyond the thickest part of the ' +
-        'forest, where something seems to be moving. You should try to get down there.' +
-        '[/success]'
+        'forest, where something seems to be moving. The owl looks at you, ' +
+        'and then at the ravine.[/success]'
       )
     }
     // Nature sense found the ravine first: the creatures tell their story once
@@ -60,8 +60,7 @@ export class ForestSpeechSpell extends Spell {
         'creatures gather around you excitedly. A family of squirrels chatters ' +
         'frantically about strange noises from the ravine you sensed. An old owl ' +
         "hoots solemnly about 'metal beasts trapped in the earth-scar where the " +
-        "stone walls weep.' Something down there is still moving. You should try " +
-        'to get down there.[/success]'
+        "stone walls weep.' Something down there is still moving.[/success]"
       )
     }
     // Check if caravan has already been found in Forest Entrance

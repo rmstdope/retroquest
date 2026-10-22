@@ -99,6 +99,6 @@ describe('Collapsed Galleries', () => {
     const straps = new SupportStraps()
     // Try straps before stabilization
     const result = straps.useWith(gs, fallenRock)
-    expect(result).toContain('stabilize the collapse with braces')
+    expect(result).toContain('The straps have nothing to hold')
   })
 })

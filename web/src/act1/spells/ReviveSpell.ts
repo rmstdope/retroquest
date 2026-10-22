@@ -24,7 +24,8 @@ export class ReviveSpell extends Spell {
   private outOfReach(): string {
     return event(
       'You focus your will, a faint warmth spreads from your fingertips, ' +
-        'but nothing happens. It feels like the magic is just out of reach.',
+        'and nothing answers it. The warmth is yours; the door it wants is ' +
+        'not open yet.',
     )
   }
 

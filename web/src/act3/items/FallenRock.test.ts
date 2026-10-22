@@ -26,9 +26,11 @@ describe('FallenRock markup', () => {
     const wedgesEarly = rock.useWith(game.state, new WedgeBlocks())
     const unhelpful = rock.useWith(game.state, new RustedLockerKey())
 
-    expect(bracesUnexamined).toContain('examine the fallen rock first')
-    expect(strapsEarly).toContain('stabilize the collapse with braces')
-    expect(wedgesEarly).toContain('secured with support straps')
+    expect(bracesUnexamined).toContain(
+      'You do not yet know where the ceiling sags',
+    )
+    expect(strapsEarly).toContain('The straps have nothing to hold')
+    expect(wedgesEarly).toContain('The braces stand loose under the ceiling')
     expect(unhelpful).toContain("won't help")
     for (const answer of [
       bracesUnexamined,

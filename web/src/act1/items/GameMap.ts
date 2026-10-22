@@ -102,18 +102,24 @@ export class GameMap extends Item {
       )
       const missingRequirements: string[] = []
       if (!gameState.hasItem('ancient amulet')) {
-        missingRequirements.push('receive the Ancient Amulet')
+        missingRequirements.push('the amulet Mira still keeps for you')
       }
       if (!gameState.isQuestCompleted(preparationQuestName)) {
-        missingRequirements.push('complete your journey preparations')
+        missingRequirements.push('your preparations for the road')
       }
       if (incompleteSideQuests.length > 0) {
-        missingRequirements.push('complete every other side quest')
+        missingRequirements.push('the tasks you began in the village')
       }
       if (missingRequirements.length > 0) {
+        const last = missingRequirements.pop()
+        const unfinished =
+          missingRequirements.length > 0
+            ? `${missingRequirements.join(', ')} and ${last}`
+            : `${last}`
         return (
-          '[failure]You are not ready to leave Willowbrook yet. You must ' +
-          `${missingRequirements.join(', ')} first.[/failure]`
+          '[failure]The map stays a plain map of Willowbrook. The hidden road ' +
+          'will not show itself while something here is unfinished: ' +
+          `${unfinished}.[/failure]`
         )
       }
 
