@@ -11,15 +11,14 @@ const FIRST =
   'frantically about strange noises from the deep ravine to the northeast. An ' +
   "old owl hoots solemnly about 'metal beasts trapped in the earth-scar where " +
   "the stone walls weep.' The animals describe a steep ravine hidden beyond " +
-  'the thickest part of the forest, where something seems to be moving. You ' +
-  'should try to get down there.[/success]'
+  'the thickest part of the forest, where something seems to be moving. The ' +
+  'owl looks at you, and then at the ravine.[/success]'
 const STORY =
   '[success]You cast [spell_name]forest speech[/spell_name] and the woodland ' +
   'creatures gather around you excitedly. A family of squirrels chatters ' +
   'frantically about strange noises from the ravine you sensed. An old owl ' +
   "hoots solemnly about 'metal beasts trapped in the earth-scar where the " +
-  "stone walls weep.' Something down there is still moving. You should try to " +
-  'get down there.[/success]'
+  "stone walls weep.' Something down there is still moving.[/success]"
 const NO_NEWS =
   '[dim]You cast [spell_name]forest speech[/spell_name], but the woodland ' +
   "creatures have no new information about the ravine - you've already " +

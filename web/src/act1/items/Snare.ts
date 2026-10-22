@@ -14,7 +14,7 @@ const SNARE_CUT =
 
 /** The line when the snare is tried without a blade. */
 const NEED_BLADE =
-  "The wire is pulled tight around the kit's leg. You'll need a blade."
+  "The wire is pulled tight around the kit's leg, too tight for fingers."
 
 /**
  * A poacher's snare in the Forest Path alcove, found once the vines are cut,

@@ -258,7 +258,7 @@ describe('KnightOfDespair', () => {
 
   describe('with the Loyalty Token instead of the chain', () => {
     const GONE =
-      "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. You need something to shield you from it. The chain is gone with the captain, but you are not as alone as the knight would have you believe."
+      "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. Nothing stands between you and his sorrow, and the chain is gone with the captain. But you are not as alone as the knight would have you believe."
     const TOKEN_OPENING =
       "You say the word, and the knight's despair breaks against the warmth at your heart like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human."
 

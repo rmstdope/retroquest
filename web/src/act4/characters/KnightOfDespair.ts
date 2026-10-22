@@ -184,10 +184,10 @@ export class KnightOfDespair extends Character {
       const chainGone = gameState.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)
       return chainGone
         ? "[failure]You open your mouth, and the knight's despair rolls over " +
-            'you like cold water. The word dies in your throat. You need ' +
-            'something to shield you from it. The chain is gone with the ' +
-            'captain, but you are not as alone as the knight would have you ' +
-            'believe.[/failure]'
+            'you like cold water. The word dies in your throat. Nothing ' +
+            'stands between you and his sorrow, and the chain is gone with ' +
+            'the captain. But you are not as alone as the knight would have ' +
+            'you believe.[/failure]'
         : "[failure]You open your mouth, and the knight's despair rolls over " +
             'you like cold water. The word dies in your throat. You could ' +
             'not say it with nothing between you and his sorrow.[/failure]'

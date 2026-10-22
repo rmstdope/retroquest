@@ -922,7 +922,7 @@ describe('Act 4 integration', () => {
       executeCommands(game, ["give guardian's chain to captain"])
       game.state.currentRoom = game.state.allRooms.HallOfEchoes
       expect(executeCommands(game, ['say redemption to knight'])).toContain(
-        'The chain is gone with the captain',
+        'the chain is gone with the captain',
       )
       executeCommands(game, ['use loyalty token'])
       reload()

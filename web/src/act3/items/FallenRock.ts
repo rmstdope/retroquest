@@ -46,8 +46,9 @@ export class FallenRock extends Item {
     if (other instanceof ReinforcedBraces) {
       if (!gameState.getStoryFlag(FLAG_ACT3_MINERS_RESCUE_STARTED)) {
         return (
-          '[failure]You should examine the fallen rock first to understand ' +
-          'the situation before attempting anything.[/failure]'
+          '[failure]You heft the braces toward the rock and stop. You do not ' +
+          'yet know where the ceiling sags, and one wrong push would bring ' +
+          'the whole gallery down.[/failure]'
         )
       }
       if (!this.collapseStabilized) {
@@ -71,8 +72,8 @@ export class FallenRock extends Item {
     if (other instanceof SupportStraps) {
       if (!this.collapseStabilized) {
         return (
-          '[failure]You need to stabilize the collapse with braces before ' +
-          'securing them with straps.[/failure]'
+          '[failure]The straps have nothing to hold. There is no brace under ' +
+          'the ceiling for them to bind.[/failure]'
         )
       }
       if (!this.strapsSecured) {
@@ -91,8 +92,8 @@ export class FallenRock extends Item {
     if (other instanceof WedgeBlocks) {
       if (!this.strapsSecured) {
         return (
-          '[failure]The braces need to be secured with support straps ' +
-          'before you can safely clear the passage.[/failure]'
+          '[failure]The braces stand loose under the ceiling. One blow of a ' +
+          'wedge and they would walk out from under it.[/failure]'
         )
       }
       if (!this.passageFreed) {

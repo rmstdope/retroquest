@@ -55,10 +55,9 @@ export class PropheticVision extends Spell {
     )
     if (!cedricPresent) {
       return (
-        '[dim]As you begin to cast the prophetic vision spell, you sense that the ' +
-        'visions would be most meaningful if shared with someone who can act upon the ' +
-        'knowledge. You should use this spell together with Sir Cedric, who has the ' +
-        'authority and wisdom to prepare for the threats that the visions reveal.[/dim]'
+        '[dim]You begin the casting and stop. Alone, the vision would be a ' +
+        'dream like any other; it wants a second pair of eyes, someone who ' +
+        'can act on what it shows. Sir Cedric is at the castle.[/dim]'
       )
     }
 
