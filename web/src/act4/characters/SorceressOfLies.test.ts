@@ -234,6 +234,12 @@ describe('The Sorceress of Lies', () => {
     const gift = said.indexOf('She lifts the silver mask from her staff')
     const received = said.indexOf('You received')
     expect(said).toContain(
+      'And I watched the inn door, to see who would come for a mark like that. The healer from Willowbrook never did. I should have known then what that meant.',
+    )
+    expect(said.indexOf('The healer from Willowbrook never did.')).toBeLessThan(
+      second,
+    )
+    expect(said).toContain(
       'I have told so many lies that I forgot what my own voice sounds like. And I told you your parents sold you. Mine did. I wanted it to be true of everyone, so that it would not only be true of me.',
     )
     expect(first).toBeGreaterThan(0)

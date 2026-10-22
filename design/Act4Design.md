@@ -151,7 +151,9 @@ rule that all side quests must be completed before the main quest can be finishe
         Vault
     -   **Who she is:** **The mark on Elena's curse in Greendale (Act II)** was the silver mask
         she set on Elena's wrist. The same smiling mask crowns the Sorceress's staff. She cursed
-        Elena on Malakar's orders to draw healers away from the king, and she is lonely because
+        Elena on Malakar's orders to draw healers away from the king, and as bait: she watched the
+        inn door to see which healer would come for a mark like that, and the healer from Willowbrook
+        never did ("I should have known then what that meant"). She is lonely because
         no one has ever spoken to her without a lie. Her own lie to Elior, that his parents sold
         him to save themselves, is her story, not his: `hearts_truth` hears the girl sold for a
         sack of grain in a hungry winter, and her confession says so once she is redeemed. Because
@@ -237,7 +239,9 @@ design are cut.
 ### Malakar's Fortress
 
 The fortress reflects Malakar's mind: orderly defences at the gates, then chaos and grief deeper
-in. The rooms follow his fall.
+in. The rooms follow his fall. It was the Wardens' hall before it was his fortress: the three made
+the relics at a workbench under the dome that is now the Throne Chamber, and the Warden sigil shows
+through the black stone at the gate arch.
 
 ### The Corruption's Source
 

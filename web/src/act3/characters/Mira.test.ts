@@ -241,6 +241,9 @@ describe('Mira', () => {
     out = m.talkTo(game.state)
 
     expect(out).toContain('final journey')
+    expect(out).toContain(
+      "I know the road. I walked it as a girl, when it was the Wardens' hall and not his fortress. Your parents made the relics there, at a workbench under the dome.",
+    )
     expect(out).toContain('You arrive at')
   })
 

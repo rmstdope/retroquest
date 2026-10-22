@@ -22,7 +22,10 @@ const HEARTS_NEEDED = 3
 const CONFESSION = [
   'Elena. The girl at the inn. Malakar wanted every healer in the kingdom ' +
     "at her bedside and none at the king's. So I cursed her, and set my " +
-    'mask on her wrist so they would know whose work it was, and fear it.',
+    'mask on her wrist so they would know whose work it was, and fear it. ' +
+    'And I watched the inn door, to see who would come for a mark like ' +
+    'that. The healer from Willowbrook never did. I should have known ' +
+    'then what that meant.',
   "I told the king's physicians he was only tired. I told the court he " +
     'had gone hunting. I have told so many lies that I forgot what my own ' +
     'voice sounds like. And I told you your parents sold you. Mine did. I ' +

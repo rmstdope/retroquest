@@ -252,7 +252,9 @@ describe('Prophetic Vision first cast', () => {
           'withered to grey stalks, the way yours was the morning all this ' +
           "began. And at the field's edge, a robed figure, its face lost in " +
           'shadow, reaching one hand toward you as if across a great ' +
-          'distance.\n\n' +
+          'distance. Above it all, small and far, a crowned man hangs in a ' +
+          'prison of crystal, and grey light runs out of him like water.' +
+          '\n\n' +
           'Then the voice from your dream, the one that called your name on ' +
           'the night of the storm: [italic]“Elior… how you have grown. Do ' +
           'not be afraid of me.”[/italic] And then, fainter, as if carried ' +
@@ -306,7 +308,8 @@ describe('Prophetic Vision ending', () => {
     expect(answer).toContain(
       'has grown grave.[/event]\n\n' +
         '[character_name]Sir Cedric[/character_name]\n[dialogue]' +
-        'Then Malakar is no tale, and it is you he is hunting.[/dialogue]\n\n',
+        'The man in the crystal. That was the king. That was Alden. Then ' +
+        'Malakar is no tale, and it is you he is hunting.[/dialogue]\n\n',
     )
     expect(answer).toContain(
       'The missing page in the birth roll. The stranger asking after a ' +

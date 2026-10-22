@@ -79,7 +79,9 @@ export class GreatHall extends Room {
       writing(
         "'Of the Wardens of the Dawn. Their mark is the sun rising over three " +
           'linked rings. They kept watch over the kingdom when the old wars ' +
-          'ended and answered to no lord but the crown. None of them has been ' +
+          'ended and answered to no lord but the crown. The king of that day ' +
+          "stood with them, and lent the crown's own binding to their last " +
+          'great work. None of them has been ' +
           "seen in a generation, and few now remember their names.'",
       ) +
       '\n' +

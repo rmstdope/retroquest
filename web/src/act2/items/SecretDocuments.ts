@@ -38,7 +38,9 @@ export class SecretDocuments extends Item {
       'say afterwards that Sir Cedric had left his post. Pinned to it is the ' +
       'letter that paid them, closed with black wax pressed with a twisted ' +
       "rune, the same kind of rune as the token you fished out of Willowbrook's " +
-      'well. It ends with a name in an old script you cannot read.'
+      'well. It names where the king was to be carried: the bastion on the ' +
+      'shattered ridge, north of the hills. It ends with a name in an old ' +
+      'script you cannot read.'
     )
   }
 }
