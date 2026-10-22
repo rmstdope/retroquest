@@ -463,9 +463,9 @@ This is the implemented Act II room roster and topology. Items and characters ma
 
 ## Learnable Spells in Act II
 
-- **`mend`**: Learned from local craftsmen in the Residential Quarter (used to repair Hidden Library enchantments)
+- **`mend`**: Learned from local craftsmen in the Residential Quarter (used to repair Hidden Library enchantments; cast on Cedric's training sword it starts to close the notch and Elior stops, since that notch is how Cedric will know the blade)
 - **`greater_heal`**: Learned from Master Healer Lyria in the Healer's House (used to cure Elena's curse)
-- **`dispel`**: Learned from ancient texts in the Hidden Library (used to break magical barriers and curses)
+- **`dispel`**: Learned from ancient texts in the Hidden Library (used to break magical barriers and curses; cast on the Spectral Librarian it slides off: "It was ours before it was yours")
 - **`nature_sense`**: Learned by examining the Standing Stones at Forest Transition (reveals Water Nymphs when cast in Whispering Glade)
 - **`forest_speech`**: Learned from the Ancient Tree Spirit in Ancient Grove (used to find lost caravan)
 - **`prophetic_vision`**: Learned by speaking to Nyx after summoning her (cast with Cedric present after all side quests, it shares the vision; The Gathering Storm completes when Elior then answers Cedric)

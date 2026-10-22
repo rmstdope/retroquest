@@ -1,6 +1,7 @@
-import { Spell, type GameState, type Item } from '@/engine'
+import { Spell, type GameState, type Item, event } from '@/engine'
 import { FLAG_MENDED_LIBRARY_ENCHANTMENTS } from '../Act2StoryFlags'
 import { ProtectiveEnchantments } from '../items/ProtectiveEnchantments'
+import { TrainingSword } from '../items/TrainingSword'
 
 /**
  * Utility repair spell with special handling for library protective wards.
@@ -29,7 +30,7 @@ export class MendSpell extends Spell {
     )
   }
 
-  /** Repair the target item, restoring library wards when they are the target. */
+  /** Repair the target item: the library wards when they are the target; Cedric's notched sword is left alone on purpose. */
   override castOnItem(gameState: GameState, targetItem: Item): string {
     // Special handling for protective enchantments in Hidden Library
     if (targetItem instanceof ProtectiveEnchantments) {
@@ -50,6 +51,13 @@ export class MendSpell extends Spell {
       return (
         `[dim]The [item_name]${iname}[/item_name] have already been repaired ` +
         'and are functioning properly.[/dim]'
+      )
+    }
+    if (targetItem instanceof TrainingSword) {
+      return event(
+        'The notch near the hilt starts to close under your hand, and you ' +
+          'stop. Somebody cut that notch as a boy, and it is how he will ' +
+          'know the blade. You leave it as it is.',
       )
     }
     // Check if the item can be repaired (this is the original implementation)

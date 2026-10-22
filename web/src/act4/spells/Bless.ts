@@ -6,6 +6,9 @@ import {
   event,
 } from '@/engine'
 import { TrappedServants } from '../characters/TrappedServants'
+import { KingAlden } from '../characters/KingAlden'
+import { FLAG_ACT4_ELIXIR_ON_KING } from '../Act4StoryFlags'
+import { endingPlayed } from '../endings'
 
 /** A spell that channels divine energy to purify and free the corrupted. */
 export class Bless extends Spell {
@@ -33,7 +36,7 @@ export class Bless extends Spell {
     )
   }
 
-  /** Cast bless spell on a specific character. */
+  /** Cast bless on a character: the servants through the courtyard, the king in or out of his crystal, anyone else a brief glow. */
   override castOnCharacter(
     gameState: GameState,
     targetCharacter: Character,
@@ -48,6 +51,22 @@ export class Bless extends Spell {
       return event(
         'You channel blessing energy toward the servants, but ' +
           'the magic seems unable to reach them fully here.',
+      )
+    }
+    if (targetCharacter instanceof KingAlden) {
+      if (
+        endingPlayed(gameState) ||
+        gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)
+      ) {
+        return event(
+          'The king bows his head to the blessing, and the gold in his ' +
+            'crown steadies a little. It is kindly meant, and kindly taken.',
+        )
+      }
+      return event(
+        'The blessing reaches him through the crystal, and for a moment the ' +
+          'grey light running out of him slows. It is not enough. He does ' +
+          'not wake.',
       )
     }
     return event(

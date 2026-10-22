@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { SirCedric } from '../characters/SirCedric'
 import { Caravan } from '../items/Caravan'
+import { TrainingSword } from '../items/TrainingSword'
 import { MendSpell } from './MendSpell'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
@@ -14,6 +15,19 @@ function createGameKnowingMend(): Game {
 }
 
 describe('Casting mend through the command parser', () => {
+  it("leaves the notch in Cedric's training sword on purpose", () => {
+    const game = createGameKnowingMend()
+    game.state.addItemToInventory(new TrainingSword())
+
+    const out = game.commandParser.parse('cast mend on training sword')
+
+    expect(out).toContain(
+      'Somebody cut that notch as a boy, and it is how he will know the ' +
+        'blade. You leave it as it is.',
+    )
+    expect(out).not.toContain('restoring it to working condition')
+  })
+
   it('has no effect on an undamaged item', () => {
     const game = createGameKnowingMend()
     game.commandParser.parse('take walking stick')
