@@ -17,6 +17,7 @@ import tempfile
 from pathlib import Path
 
 WHISPER_MODEL = "mlx-community/whisper-large-v3-turbo"
+MIN_SEGMENT_S = 0.3
 
 
 def words(text: str) -> list[str]:
@@ -33,7 +34,9 @@ def transcribe(wav: Path) -> str:
              "--verbose", "False", str(wav)],
             check=True, capture_output=True,
         )
-        return json.loads((Path(out_dir) / "t.json").read_text())["text"].strip()
+        segments = json.loads((Path(out_dir) / "t.json").read_text())["segments"]
+    # Whisper invents text for trailing silence as near-zero-length segments; drop them.
+    return " ".join(seg["text"].strip() for seg in segments if seg["end"] - seg["start"] >= MIN_SEGMENT_S)
 
 
 def main() -> None:
