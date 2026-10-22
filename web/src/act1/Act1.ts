@@ -1,4 +1,5 @@
-import { Act, characterName, type GameState, speech } from '@/engine'
+import { Act, characterName, type GameState } from '@/engine'
+import { TheDream } from './rooms/TheDream'
 import { EliorsCottage } from './rooms/EliorsCottage'
 import { VegetableField } from './rooms/VegetableField'
 import { ChickenCoop } from './rooms/ChickenCoop'
@@ -38,6 +39,7 @@ import { Villager } from './characters/Villager'
 export class Act1 extends Act {
   constructor() {
     const rooms = {
+      TheDream: new TheDream(),
       EliorsCottage: new EliorsCottage(),
       VegetableField: new VegetableField(),
       ChickenCoop: new ChickenCoop(),
@@ -82,19 +84,10 @@ export class Act1 extends Act {
   override getActIntro(): string {
     return (
       '[bold]ACT 1: THE CALL TO ADVENTURE[/bold]\n\n' +
-      `You are ${characterName('Elior')}, a humble farmer boy living in the quiet village of Willowbrook on the outskirts of Eldoria. ` +
-      `Raised by your ${characterName('grandmother')} after your parents vanished mysteriously, your life is simple—tending crops and caring for animals. ` +
-      'One stormy night, a strange light appears in the sky, and you dream of a shadowy figure calling your name.\n' +
-      "\nThe next morning, you awaken to find the village abuzz with rumors: livestock missing, strange footprints by the well, and the old mill's wheel turning on its own. " +
-      `Your ${characterName('grandmother')}, usually cheerful, seems worried and distracted, her gaze lingering on a faded photograph.\n` +
-      '\nAs you step outside, the air feels charged with something unfamiliar. The villagers gather in the square, debating what to do. ' +
-      `${characterName('Mira')}, the wise woman, catches your eye and beckons you over. ` +
-      speech('There are secrets in Willowbrook, child,') +
-      ' she says. ' +
-      speech('Secrets that have waited for you.') +
-      '\n' +
-      '\nA distant bell tolls from the chapel, and a cold wind rustles the fields. You sense that today, everything will change. ' +
-      'With questions swirling in your mind, you take your first step into the unknown.\n' +
+      `You are ${characterName('Elior')}, a farmer boy in the village of Willowbrook, on the outskirts of Eldoria. ` +
+      `Your ${characterName('grandmother')} raised you after your parents vanished, and your days are the crops, the hens and the weather.\n` +
+      '\nTonight the weather is a storm, and a light that is not lightning has split the sky over the fields. ' +
+      'Sleep, when it comes, is not quiet.\n' +
       "\nLet's get started! (Type 'help' for a list of commands.)\n"
     )
   }

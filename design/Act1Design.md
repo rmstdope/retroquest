@@ -69,6 +69,13 @@
   - **Completion:** When act 1 is completed
 
 ## Rooms
+### 0. The Dream
+
+- **Description:** Where the game opens. Dark, with a storm in it: rain against shutters Elior cannot see, thunder that shakes the dark, shadows moving like smoke. A man's hand lifts a child out of the dark and holds it against a shoulder. A slow tune climbs three notes and settles home again. A tall figure without a face whispers Elior's name.
+- **Items:** none. Elior carries nothing in the dream.
+- **Characters:** the voice (answers to voice, figure, shadow, stranger, man). Talking to it, or saying anything to it, ends the dream: the whisper says "…and let them rest…" and his name, and Elior wakes in Elior's Cottage with the tune still going out by the hearth, where Grandmother is humming it. The voice stays in the dream.
+- **Exits:** none. Going any way, resting, searching or calling any other name keeps him in the dream with a line of its own; `listen` hears the storm, the tune and the name. Once he wakes the dream is not on the map, and _Know your village_ does not count it.
+
 ### 1. Elior’s Cottage
 
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
@@ -271,8 +278,8 @@ The red-line threads of Act I (see `GameStory.md`, Story Canon and Red Line). Al
 - **The byword.** Willowbrook says Malakar's name the way a village names a bogeyman: Tilda's "Malakar's weather" over the restless animals, Hemlock's "Malakar's luck" over the stopped caravans, both with a knock on wood. Nobody in the village treats him as a living man; only the mother's letter does, in one line. This is the source of the Act II row of the red line, where Elior arrives still half-believing Malakar is a tale from old books, and it is chilling in hindsight: the man the village swears by held Elior as a baby.
 
 - **The ill king.** Tilda says King Alden is ill and the roads are no longer safe; Hemlock adds that the caravans have stopped coming. Mira says the sickness in the land and the king's sickness feel like one wound (in the same talk as the rare flower, step 18): the blight is the first ripple of the same draining magic.
-- **The dream voice.** Elior's journal records a voice that called his name, achingly familiar but unplaced, and three words he caught at its end: "…and let them rest…", the first fragment of the sentence the Shadow of the Past says whole in Act IV. When he tells Grandmother the three words she goes quiet, turns to the bread and says "Some voices are older than memory." She is guarded and plainly knows more. The voice is never tied to a parent.
-- **The cradle song.** Grandmother is humming it at the hearth when Elior comes to her with the dream, and stops when she sees his face; he knows the tune and cannot say from where. It is the tune of the shell and the phantoms in Act III and of the gate in Act IV.
+- **The dream voice.** The game opens inside the dream (room 0): the player stands in the storm with the figure whispering Elior's name, and hears the three words when Elior answers it. His journal then records a voice that called his name, achingly familiar but unplaced, and three words he caught at its end: "…and let them rest…", the first fragment of the sentence the Shadow of the Past says whole in Act IV. When he tells Grandmother the three words she goes quiet, turns to the bread and says "Some voices are older than memory." She is guarded and plainly knows more. The voice is never tied to a parent.
+- **The cradle song.** It is heard first in the dream, three notes climbing and settling home, and is still going when Elior wakes: Grandmother is humming it at the hearth, and stops when she sees his face when he comes to her with the dream; he knows the tune and cannot say from where. It is the tune of the shell and the phantoms in Act III and of the gate in Act IV.
 - **The turned back.** The stranger is seen once, at the Old Mill after the token, with his back to Elior, and leaves without turning: the first of the game's turned backs (the amulet's third figure in Act III, the Knight of Despair and Malakar in Act IV).
 - **The amulet reacts.** In Mira's hut it is faintly warm and glows brighter once Elior carries the founders' locket or his mother's letter into the room. In his hand it hums at the jammed Old Mill and glows beside the moss-covered stone in the Hidden Glade. It reacts to things tied to his parents and the founders' line, and at the mill to the old power beneath it being freed. The hum and the glow in his hand come only if he goes back to the mill and the glade after step 27; they are optional and off the golden path.
 - **The refrain.** "Power follows purpose; purpose follows truth." is carved beneath the `grow` inscription on the moss-covered stone.
@@ -291,6 +298,10 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 | Forest Path                 | Cut a fox kit free from a poacher's snare with the sharp knife instead of walking past (`use sharp knife with snare`)                     | **mercy**    |
 
 ## Golden Path (Optimal Solution to Complete Act I)
+
+0.  **The Dream:**
+
+    - Talk to the voice. _The whisper says the three words and Elior's name, and he wakes in Elior's Cottage with the tune still going out by the hearth. Three words are already slipping; he writes them down._
 
 1.  **Elior’s Cottage:**
 

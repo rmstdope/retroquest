@@ -32,11 +32,12 @@ function storageFull() {
   })
 }
 
-/** A bridge with the game running in Act I, ready for commands. */
+/** A bridge with the game running in Act I, woken out of the dream it opens with. */
 async function runningBridge() {
   const bridge = useBridge()
   await bridge.init()
   bridge.controller.advanceToRunning()
+  bridge.controller.takeTurn('talk to voice')
   return bridge
 }
 
@@ -94,6 +95,18 @@ describe('useBridge', () => {
       expect(bridge.controller.getActName()).toBe('Act 1')
       expect(bridge.controller.getActIntro()).toContain('ACT 1')
       expect(bridge.controller.getCurrentMusic().musicFile).toContain('.mp3')
+    })
+
+    it('opens in the dream and wakes into the cottage', async () => {
+      const bridge = useBridge()
+      await bridge.init()
+      bridge.controller.advanceToRunning()
+      expect(bridge.controller.getRoomName()).toBe('The Dream')
+      expect(bridge.controller.getRoomCharacters()).toEqual(['voice'])
+      expect(bridge.controller.takeTurn('talk to voice')).toContain(
+        'let them rest',
+      )
+      expect(bridge.controller.getRoomName()).toBe("Elior's Cottage")
     })
 
     it('runs commands and advances the turn', async () => {
