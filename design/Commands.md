@@ -50,7 +50,7 @@ Below is a comprehensive list of all commands that should be possible to use in 
 ## Miscellaneous
 
 -   sleep / rest / wait
--   hint (the active quests' newest journal line, the main quest first)
+-   hint (the active quests' newest journal line, or a checklist's next open item, the main quest first)
 -   map
 -   stats
 

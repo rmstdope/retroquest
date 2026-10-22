@@ -96,15 +96,16 @@ export class Quest {
 
   /**
    * The one line the `hint` command gives for this quest: by default the
-   * newest journal entry, or the first open item of a checklist. A quest may
+   * newest journal entry, or a checklist's lead-in with its first open item. A quest may
    * override it to say something sharper; null gives the player nothing.
    */
   hint(_gameState: GameState): string | null {
     const details = this.details()
     if (details.kind === 'checklist') {
-      return details.items.find((item) => !item.done)?.text ?? null
+      const open = details.items.find((item) => !item.done)
+      return open ? `${details.intro} ${open.text}`.trim() : null
     }
-    return details.latest || this.description || null
+    return details.latest || null
   }
 
   /**

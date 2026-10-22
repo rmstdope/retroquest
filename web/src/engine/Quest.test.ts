@@ -87,7 +87,7 @@ describe('Quest', () => {
       })
     })
 
-    it('hints with the newest journal entry, or the first open checklist item', () => {
+    it('hints with the newest journal entry, or the checklist lead-in and its first open item', () => {
       const plain = new Quest({ name: 'Plain', description: 'Find the well.' })
       expect(plain.hint(gameState())).toBe('Find the well.')
 
@@ -115,7 +115,7 @@ describe('Quest', () => {
           )
         }
       }
-      expect(new List().hint(gameState())).toBe('a map')
+      expect(new List().hint(gameState())).toBe('Gather: a map')
     })
 
     it('reports a checklist with its done flags', () => {
