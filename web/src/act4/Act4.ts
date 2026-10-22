@@ -3,6 +3,7 @@ import { AncientAmulet } from './items/AncientAmulet'
 import { LifelightElixir } from './items/LifelightElixir'
 import { LoyaltyToken } from './items/LoyaltyToken'
 import { NyxToken } from './items/NyxToken'
+import { Nyx } from './characters/Nyx'
 import { ForestHeartCrystal } from './items/ForestHeartCrystal'
 import { WardStone } from './items/WardStone'
 import { Whispers } from './characters/Whispers'
@@ -156,6 +157,8 @@ export class Act4 extends Act {
    * Fortress Gates get them back, so the gates can still be solved. The hall
    * gets its banners and the chamber its whispering crystals when an older
    * save lacks them.
+   * Saves from before Nyx's gifts were carried get the token and the
+   * crystal, unless the hedge already has them back.
    */
   override afterLoad(gameState: GameState): void {
     const gates = gameState.allRooms.FortressGates
@@ -192,6 +195,16 @@ export class Act4 extends Act {
       )
       const token = room?.removeItem('Loyalty Token')
       gameState.addItemToInventory(token ?? new LoyaltyToken())
+    }
+    // Saves made before Nyx's gifts were carried: hand them out, unless the
+    // hedge already has them back
+    const hedge = gameState.allRooms.WillowbrookField?.getCharacterByName('nyx')
+    const nyx = hedge instanceof Nyx ? hedge : undefined
+    if (!nyx?.tokenReturned && !gameState.hasItem("Nyx's Token")) {
+      gameState.addItemToInventory(new NyxToken())
+    }
+    if (!nyx?.crystalReturned && !gameState.hasItem('Forest Heart Crystal')) {
+      gameState.addItemToInventory(new ForestHeartCrystal())
     }
   }
 

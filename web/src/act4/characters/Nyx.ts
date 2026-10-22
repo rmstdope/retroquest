@@ -37,7 +37,7 @@ export class Nyx extends Character {
       return event(
         'You hold out the pendant. The light comes down to it and the two ' +
           'of them are gone into the hedge together; a moment later the ' +
-          'light is back, a little brighter, and your hand is empty.',
+          'light is back, a little steadier, and your hand is empty.',
       )
     }
     if (item instanceof ForestHeartCrystal) {

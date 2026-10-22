@@ -4,6 +4,7 @@ import { Act4 } from './Act4'
 import { Banners } from './items/Banners'
 import { CrystalWhispers } from './items/CrystalWhispers'
 import { LoyaltyToken } from './items/LoyaltyToken'
+import { Nyx } from './characters/Nyx'
 import {
   FLAG_ACT4_TOWER_STAIR_OPEN,
   LEGACY_FLAG_ACT4_LOYALTY_TOKEN_RAISED,
@@ -106,6 +107,24 @@ describe('Act4', () => {
       expect(
         loaded.state.allRooms.OuterCourtyard.getItemByName('Loyalty Token'),
       ).toBeNull()
+    })
+
+    it("hands out Nyx's gifts to a save made before they were carried, but not once returned", () => {
+      const game = oldSave()
+      game.state.removeItemFromInventory("Nyx's Token")
+      game.state.removeItemFromInventory('Forest Heart Crystal')
+      const loaded = reload(game)
+      expect(loaded.state.hasItem("Nyx's Token")).toBe(true)
+      expect(loaded.state.hasItem('Forest Heart Crystal')).toBe(true)
+
+      const nyx =
+        loaded.state.allRooms.WillowbrookField.getCharacterByName('nyx')
+      if (!(nyx instanceof Nyx)) throw new Error('no Nyx in the field')
+      nyx.tokenReturned = true
+      loaded.state.removeItemFromInventory("Nyx's Token")
+      const again = reload(loaded)
+      expect(again.state.hasItem("Nyx's Token")).toBe(false)
+      expect(again.state.hasItem('Forest Heart Crystal')).toBe(true)
     })
 
     it('hands out a token to a save that never had one anywhere', () => {
