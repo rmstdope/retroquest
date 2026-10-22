@@ -224,6 +224,9 @@ describe('the companions', () => {
       'I knew. She made me promise, the night she went. I have not slept a whole night since.',
     )
     expect(first.indexOf('You knew')).toBeLessThan(
+      first.indexOf('I knew. She made me promise'),
+    )
+    expect(first.indexOf('I knew. She made me promise')).toBeLessThan(
       first.indexOf('You tell her what they said'),
     )
     expect(first).toContain(

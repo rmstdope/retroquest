@@ -28,8 +28,8 @@ export class Grandmother extends Character {
       '“You knew,” you say. It is not a question.',
       dialogue(
         'Grandmother',
-        'I knew. She made me promise, the night she went. I have not slept ' +
-          'a whole night since.',
+        'I knew. She made me promise, the night she went. ' +
+          'I have not slept a whole night since.',
       ),
       'You tell her what they said: that they are proud of her, that they ' +
         'are resting.',

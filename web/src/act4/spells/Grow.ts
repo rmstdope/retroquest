@@ -76,8 +76,8 @@ export class Grow extends Spell {
       'You press your hands into the dry earth and say the smallest spell ' +
         'you know. Green runs out from your fingers along the rows. Leaves ' +
         'unfurl, the earth darkens, and the whole field breathes out at once.',
-      'Across the village, the chapel bell rings once, with no hand on the ' +
-        'rope.',
+      'Across the village, the chapel bell rings once, ' +
+        'with no hand on the rope.',
       dialogue(
         'Grandmother',
         'That is the third time. The first was for her, the night she went. ' +
