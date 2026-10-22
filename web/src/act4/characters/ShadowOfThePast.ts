@@ -10,12 +10,12 @@ import { normaliseSpokenWord } from '../spokenWord'
 /** What it is called once the orbs are mended and it has a face. */
 const FULL_NAME = 'Shadow of the Past'
 
-/** The word that answers the Shadow, after the Phoenix's riddle. */
 /** The Shadow once it has its answer. */
 const ANSWERED =
   '[dim]The Shadow has its answer. It nods towards the door to the ' +
   'east.[/dim]'
 
+/** The word that answers the Shadow, after the Phoenix's riddle. */
 const ANSWER_WORD = 'patience'
 
 /**

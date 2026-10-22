@@ -33,7 +33,6 @@ export class MemoryVault extends Room {
     })
   }
 
-  /** Entering the vault starts the Shadow's side quest. */
   /** Resting here, once the Shadow waits for its word, is the word; otherwise an ordinary rest. */
   override rest(gameState: GameState): string {
     const shadow = this.characters.find(
@@ -43,6 +42,7 @@ export class MemoryVault extends Room {
     return super.rest(gameState)
   }
 
+  /** Entering the vault starts the Shadow's side quest. */
   override onEnter(gameState: GameState): void {
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
   }

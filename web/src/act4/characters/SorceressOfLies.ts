@@ -166,8 +166,8 @@ export class SorceressOfLies extends Character {
   private understandBy(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
       return (
-        '[failure]She laughs, and the chamber laughs with her. Your word is ' +
-        'lost among the whispers.[/failure]'
+        '[failure]She laughs, and the chamber laughs with her. Whatever you ' +
+        'came to give her is lost among the whispers.[/failure]'
       )
     }
     const heard = this.heartsHeard(gameState)

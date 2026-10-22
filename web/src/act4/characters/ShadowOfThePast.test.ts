@@ -217,6 +217,9 @@ describe('The Shadow of the Past', () => {
   })
 
   it('is answered by waiting too, with the same gates as the word', () => {
+    expect(executeCommands(inVault(), ['rest'])).toContain(
+      'The Shadow cannot hear you.',
+    )
     const early = mended()
     expect(executeCommands(early, ['rest'])).toContain(
       'Patience is for those who still have hope. I have none left.',
