@@ -151,6 +151,8 @@ export class HiddenGlade extends Room {
       gameState.learnSpell(growSpell)
       message +=
         '\nAs you read the runes, you feel a connection to the ancient magic of nature. ' +
+        'It does not wake in you the way the others did; this one you read, ' +
+        'word by word, off the stone, and it feels like your own. ' +
         'You have learned the [spell_name]grow[/spell_name] spell!'
     }
     message +=

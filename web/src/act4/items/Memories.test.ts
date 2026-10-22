@@ -13,14 +13,14 @@ describe('Memories', () => {
       'The year before you were born. The Wasting: a fever sweeps the land, and Aren and Lysa fall ill with it.',
     )
     expect(seen).toContain(
-      'You understand it now, all of it. The ward is Aren and Lysa. It lives in their son and hides him, and their gift is the magic you have: every spell that ever answered your hands came through them, all but one, which you read from a stone in a glade. It is tied to the world at two points, the amulet in your hand and the crown on the king.',
+      'The ward is Aren and Lysa, and their gift is the magic you have: every spell that ever answered your hands came through them, all but one, which you read from a stone in a glade.',
     )
     expect(seen.indexOf('Hold it shut, Aren.')).toBeLessThan(
-      seen.indexOf('You understand it now'),
+      seen.indexOf('The ward is Aren and Lysa, and their gift'),
     )
-    expect(seen.indexOf('You understand it now')).toBeLessThan(
-      seen.indexOf('Last, and smallest'),
-    )
+    expect(
+      seen.indexOf('The ward is Aren and Lysa, and their gift'),
+    ).toBeLessThan(seen.indexOf('Last, and smallest'))
   })
 
   it('answers to "memory" and "lanterns"', () => {

@@ -47,7 +47,8 @@ const MIRA_2 =
 const MIRA_3 = 'The king is fading, Elior. We have less time than I hoped.'
 /** Mira's one line telling the Wasting from the blight, at the Mount Ember departure. */
 const MIRA_WASTING =
-  'There is a word the old folk will reach for when this ash comes down on them: the Wasting. It is not that. The Wasting killed. This drinks.'
+  'There is a word the old folk will reach for when this ash comes down on ' +
+  'them: the Wasting. It is not that. The Wasting killed. This drinks.'
 
 /** Number of times `needle` occurs in `text`. */
 function count(text: string, needle: string): number {

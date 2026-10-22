@@ -286,7 +286,7 @@ describe('Sacrifice', () => {
     expect(text.indexOf(keep)).toBeGreaterThan(text.indexOf(rise))
     expect(text.indexOf(press)).toBeGreaterThan(text.indexOf(keep))
     expect(text).toContain(
-      'When it is done, one small spell is still in you: grow, the one you did not inherit. You read it from a stone in a glade, and their gift never touched it.',
+      'When it is done, one small spell is still in you: grow, the one you did not inherit. You read it from a stone in a glade, and it was never theirs.',
     )
     expect(text).not.toContain('the smallest')
     expect(text).toContain('Your magic is gone. Only grow remains.')

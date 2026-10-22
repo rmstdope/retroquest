@@ -159,8 +159,8 @@ export class Wound extends Item {
         'blessing, the truth sight, every spell you carried runs out of ' +
         'your hands into the tear, and the tear drinks it and closes. When ' +
         'it is done, one small spell is still in you: grow, the one you did ' +
-        'not inherit. You read it from a stone in a glade, and their gift ' +
-        'never touched it.',
+        'not inherit. You read it from a stone in a glade, and it was never ' +
+        'theirs.',
       event('Your magic is gone. Only grow remains.'),
       dialogue(
         'King Alden',

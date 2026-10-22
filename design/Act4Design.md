@@ -190,10 +190,9 @@ rule that all side quests must be completed before the main quest can be finishe
         the wound held shut; baby Elior in Malakar's arms. The amulet opens the door because it is
         part of the ward.
     -   **Story Impact:** Elior learns that Malakar began out of love and was corrupted by the power, and that the
-        ward is the parents themselves and lives in Elior. The memories say it in so many words: the
-        ward is Aren and Lysa; it lives in their son and hides him, and their gift is the magic he has,
-        every spell but `grow`, which he read from a stone in a glade; it is tied to the world at the
-        amulet and the crown. The fever is named and dated: the Wasting, the year before Elior was born
+        ward is the parents themselves and lives in Elior. After Lysa's "Hold it shut, Aren" the
+        memories say it in so many words: the ward is Aren and Lysa, and their gift is the magic he
+        has, every spell but `grow`, which he read from a stone in a glade. The fever is named and dated: the Wasting, the year before Elior was born
 
 ## Character Development
 

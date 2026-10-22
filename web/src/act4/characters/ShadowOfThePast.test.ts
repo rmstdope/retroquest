@@ -34,7 +34,7 @@ const SCENE = [
   'It is still pulling. Every hand in the room turns backwards, wanting more of the days back, and the wound would take all of them if nothing held it shut.',
   'Your parents before the wound, hands joined, pouring themselves into it until they are only light, bound to the amulet and to the crown of King Alden, so that you would be hidden and the wound held shut.',
   'Hold it shut, Aren. Hide him. That is enough.',
-  'You understand it now, all of it. The ward is Aren and Lysa. It lives in their son and hides him, and their gift is the magic you have: every spell that ever answered your hands came through them, all but one, which you read from a stone in a glade. It is tied to the world at two points, the amulet in your hand and the crown on the king.',
+  'The ward is Aren and Lysa, and their gift is the magic you have: every spell that ever answered your hands came through them, all but one, which you read from a stone in a glade.',
   'Last, and smallest: Malakar by a cottage fire in Willowbrook, rocking a baby in his arms and singing, low: "Hush, little seed, the frost is going. Hush, the field will wake." The baby is you.',
   'The lanterns dim, one by one, until only the amulet glows in your hand.',
   'It was the opposite. They gave themselves away to save you. Of all the lies in the fortress, hers was the one that hurt most, because for a day you could not be sure. You are sure now.',
