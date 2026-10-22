@@ -35,7 +35,7 @@ export class UnlockSpell extends Spell {
     }
     if (item instanceof Mechanism) {
       return event(
-        'The sigil finds nothing to turn. The black iron has no lock; it was ' +
+        'The spell finds nothing to turn. The black iron has no lock; it was ' +
           'never meant to be opened, only to run' +
           (item.repaired ? ', and now not even that.' : '.'),
       )

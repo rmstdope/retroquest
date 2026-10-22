@@ -60,7 +60,7 @@ export class PurifySpell extends Spell {
         '\n' +
         'The light runs out over the water and finds nothing to do. The ' +
         'river was never the trouble. Your mother stood at this bend and ' +
-        'taught this spell to a fisherman; the water remembers her better ' +
+        'taught this spell to the fisherman; the water remembers her better ' +
         'than it needs you.'
       )
     }
