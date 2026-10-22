@@ -30,10 +30,36 @@ tts/vendor/MisoTTS/.venv/bin/python tts/generate_intro.py tts/out/act1-intro.txt
 ```
 
 The text is spoken one sentence at a time, with the last few generated sentences as context
-so the voice stays the same. Without a reference clip the voice is chosen by the random seed
+so the voice stays the same, and fixed pauses between sentences. `--chunk paragraph` speaks a
+whole paragraph per generation instead, keeping only the previous paragraph as context to stay
+inside the model's 2048-frame window. Tried and not recommended: chunks past ~20 s often run to
+the length cap, and the model then repeats its context, drops or repeats sentences and garbles
+words. Without a reference clip the voice is chosen by the random seed
 (`--seed`); `--prompt-wav clip.wav --prompt-text "transcript"` clones a voice from about ten
 seconds of audio instead. It runs on Apple Silicon through MPS (`--device mps`, the default
 on a Mac) or on the CPU.
+
+## Voice prompts
+
+MisoTTS, like Sesame's CSM model it is based on, takes its voice and its emotion mostly from
+the audio context, not from the text. The opening sentences set the tone for the rest, so a
+flat opening (or no prompt) gives flat narration.
+
+`prompts/` holds 25-36 s clips of expressive LibriVox narrators (public domain), with exact
+transcripts, sources and cut times in `prompts.json`. `audition.py` speaks the same three
+intro lines with each prompt, and once with none, into `out/audition/<name>.wav`:
+
+```sh
+tts/vendor/MisoTTS/.venv/bin/python tts/audition.py            # all prompts + baseline
+tts/vendor/MisoTTS/.venv/bin/python tts/audition.py --only fry  # one prompt
+```
+
+To voice the whole intro with a prompt:
+
+```sh
+tts/vendor/MisoTTS/.venv/bin/python tts/generate_intro.py tts/out/act1-intro.txt tts/out/act1-intro-fry.wav \
+  --prompt-wav tts/prompts/fry.wav --prompt-text "$(jq -r .fry.text tts/prompts/prompts.json)"
+```
 
 Every clip carries MisoTTS's inaudible SilentCipher watermark, as upstream applies it in
 `generate()`.
