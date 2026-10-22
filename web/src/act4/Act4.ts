@@ -2,6 +2,8 @@ import { Act, type GameState, dialogue } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { LifelightElixir } from './items/LifelightElixir'
 import { LoyaltyToken } from './items/LoyaltyToken'
+import { NyxToken } from './items/NyxToken'
+import { ForestHeartCrystal } from './items/ForestHeartCrystal'
 import { WardStone } from './items/WardStone'
 import { Whispers } from './characters/Whispers'
 import { Banners } from './items/Banners'
@@ -213,6 +215,9 @@ export class Act4 extends Act {
     gameState.addItemToInventory(new LifelightElixir())
     // The companions' Loyalty Token, handed over at the gate in the intro
     gameState.addItemToInventory(new LoyaltyToken())
+    // Nyx's two gifts from the Heart of the Forest, carried since Act II
+    gameState.addItemToInventory(new NyxToken())
+    gameState.addItemToInventory(new ForestHeartCrystal())
 
     // The main quest starts when the act opens
     gameState.setStoryFlag(FLAG_ACT4_MAIN_STARTED, true)

@@ -57,7 +57,9 @@ const FRIENDS: Friend[] = [
     object: 'her',
     doing: 'is keeping close',
     line: "Left? I'm right here. I never was anywhere else.",
-    ownLeadIn: 'A small light flickers at the edge of your eye.',
+    ownLeadIn:
+      'A small light flickers at the edge of your eye, and in your pack the ' +
+      "crystalline pendant she gave you, Nyx's Token, is warm.",
   },
 ]
 
