@@ -23,6 +23,10 @@ The story unfolds in the magical kingdom of Eldoria, a land of rolling farmlands
 
 Players interact with the world by typing text commands. The game responds with detailed descriptions, presenting challenges, puzzles, and narrative choices. Exploration, inventory management, and decision-making are key to progressing through the story.
 
+## Voice
+
+Every line of the game, in every act, follows `design/Voice.md`: plain and particular, one true thing per room, no character calling themself ancient or wise, no instruction in the game's own voice, the motifs repeated in the same words.
+
 ## Puzzle Rules
 
 Every puzzle in every act follows these rules, so the game stays puzzling without ever being hard.
