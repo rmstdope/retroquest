@@ -1,22 +1,28 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
-import { Act1 } from '../act1/Act1'
-import { Act2 } from './Act2'
-import { Act3 } from '../act3/Act3'
-import { Act4 } from '../act4/Act4'
-import { AncientAmulet } from './items/AncientAmulet'
-import { SirCedric } from './characters/SirCedric'
-import { FLAG_SPECTRAL_LIBRARIAN_FRIENDLY } from './Act2StoryFlags'
-import { FLAG_ACT3_MAIN_STARTED } from '../act3/Act3StoryFlags'
-import { executeCommands } from '@/testing/gameHelpers'
+import { Act1 } from '@/act1/Act1'
+import { Act2 } from '@/act2/Act2'
+import { Act3 } from '@/act3/Act3'
+import { Act4 } from '@/act4/Act4'
+import { AncientAmulet } from '@/act2/items/AncientAmulet'
+import { SirCedric } from '@/act2/characters/SirCedric'
+import { FLAG_SPECTRAL_LIBRARIAN_FRIENDLY } from '@/act2/Act2StoryFlags'
+import { FLAG_ACT3_MAIN_STARTED } from '@/act3/Act3StoryFlags'
+import { executeCommands } from './gameHelpers'
 
-/** The older form of the Warden sigil, as every act names it. */
+/**
+ * The older form of the Warden sigil, as every act names it. This thread test
+ * lives here because it crosses all four acts, which share no code.
+ */
 const OLD_MARK = 'a tree under two moons'
 
 describe('one mark runs through the four acts', () => {
   it("is cut over the chapel door in the Priest's tale", () => {
     const game = new Game([new Act1()])
     game.state.currentRoom = game.state.allRooms.VillageChapel
+    expect(game.state.currentRoom.description).toContain(
+      'Over the door a shape is cut into the stone, worn almost smooth.',
+    )
     const tale = executeCommands(game, ['talk to priest'])
     expect(tale).toContain(`Their mark was ${OLD_MARK}`)
     expect(tale).not.toContain('Warden')

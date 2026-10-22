@@ -397,7 +397,7 @@ The forest represents increasingly mystical realms:
 #### Implemented Artifacts
 
 - **Ancient Amulet:** Placed in Elior's inventory by Act II's setup (Act I gave it to him). Its sigil is the Warden sigil Cedric recognises on the first talk.
-- **Ancient Chronicle:** Kept by the Spectral Librarian, who helped write it as a Warden of the Dawn. Records regional history, the Wardens of the Dawn and their sigil, and Malakar's search for the Willowbrook bloodline; studying it after the librarian permits access teaches `dispel`. Its first page draws the mark the old way, a tree under two moons, and tells of Wardens who settled a quiet valley to keep what they had made and built their mill over a seat of power there (Willowbrook, unnamed).
+- **Ancient Chronicle:** Kept by the Spectral Librarian, who helped write it as a Warden of the Dawn. Records regional history, the Wardens of the Dawn and their sigil, and Malakar's search for the Willowbrook bloodline; studying it after the librarian permits access teaches `dispel`. Its first page draws the mark the old way, a tree under two moons, and tells of Wardens who settled a quiet valley to keep their relic safe and built their mill over a seat of power there (Willowbrook, unnamed).
 - **Crystal Focus:** The Spectral Librarian leaves it in the Hidden Library after Elior repairs the wards; Lyria needs it to teach `greater_heal`.
 - **Forest Heart Crystal and Nyx's Token:** Gifts from Nyx when first spoken to after the altar ritual.
 - **Three Sacred Charms:** The Protective Charm, Druidic Charm, and Nature's Charm are consumed by the Offering Altar to summon Nyx.

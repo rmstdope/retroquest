@@ -35,7 +35,8 @@ const SIGIL_WORDS =
   'That sigil. The sun rising over three linked rings. I have seen it only ' +
   'in the old histories in the castle archive: it is the mark of the ' +
   'Wardens of the Dawn. They guarded this kingdom long ago, and most have ' +
-  'forgotten them.'
+  'forgotten them. The oldest histories draw the mark another way: a tree ' +
+  'under two moons, from before there were three things to guard.'
 const BOUND_WORDS =
   'Whoever wore that amulet before you was a Warden, and your family is ' +
   'bound to them. I know no more than that. But I know enough to listen to ' +

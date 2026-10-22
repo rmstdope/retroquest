@@ -55,7 +55,7 @@ export class AncientChronicle extends Item {
             'the sun rising over three linked rings, the mark of the Wardens ' +
             'of the Dawn. On the first page the same mark is drawn the old ' +
             'way, a tree under two moons, and the first entry tells of ' +
-            'Wardens who settled a quiet valley to keep what they had made, ' +
+            'Wardens who settled a quiet valley to keep their relic safe, ' +
             'and built their mill over a seat of power there.',
         ) +
         '\n' +

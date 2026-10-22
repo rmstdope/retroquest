@@ -200,7 +200,7 @@
 
 ### 14. Village Chapel
 
-- **Description:** A small stone chapel with stained glass windows. A dark corner by the altar swallows the light (the locket is not mentioned until the candle reveals it).
+- **Description:** A small stone chapel with stained glass windows. Over the door a shape is cut into the stone, worn almost smooth (the founders' mark the Priest names). A dark corner by the altar swallows the light (the locket is not mentioned until the candle reveals it).
 - **Items:** Candle (start), hidden locket (later).
 - **Unusable:** prayer book (start).
 - **Spells:** `bless` (learned when picking up the hidden locket; the Priest recognizes it).
