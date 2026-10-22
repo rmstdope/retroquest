@@ -57,6 +57,19 @@ describe('GameMap act completion', () => {
     expect(act.isCompleted(game.state)).toBe(false)
   })
 
+  it('names what is unfinished as things, never as orders, with all three missing', () => {
+    const { game, map } = setupGameAtRoad()
+
+    const response = map.use(game.state)
+
+    expect(response).toContain(
+      'The hidden road will not show itself while something here is ' +
+        'unfinished: the amulet Mira still keeps for you, your preparations ' +
+        'for the road and the tasks you began in the village.',
+    )
+    expect(response).not.toMatch(/receive|You must|You need/)
+  })
+
   it('requires the Preparing for the road quest to be complete', () => {
     const { act, game, map } = setupGameAtRoad()
     completeSideQuestsExcept(game, 'Preparing for the road')

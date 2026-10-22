@@ -212,7 +212,7 @@ describe('Elena names no next step (rq-nun)', () => {
   it('out-of-order refusals stay word for word', () => {
     const { game, elena } = setup()
     expect(elena.receiveCrystalWaterPurification(game.state)).toBe(
-      'Elena is too weak from the curse; the water would run off her like rain off stone. She wants strength first.',
+      'Elena is too weak from the curse; the water would run off her like rain off stone. She wants mending first.',
     )
     expect(elena.receiveDispelFinalCure(game.state)).toContain(
       'The counter-magic finds nothing to take hold of',
