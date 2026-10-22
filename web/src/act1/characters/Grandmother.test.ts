@@ -265,7 +265,6 @@ describe('Grandmother and the dream', () => {
 /** An Act I game in the cottage with Patches, coaxed out of the shed, in Elior's arms. */
 function gameCarryingPatches(): Game {
   const game = cottageGame()
-  game.state.currentRoom = game.state.allRooms.EliorsCottage
   game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
   return game
 }

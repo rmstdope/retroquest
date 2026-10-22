@@ -57,7 +57,7 @@ describe('The Dream, where Act I opens', () => {
       const game = newGame()
       const answer = executeCommands(game, [command])
       expect(answer).toContain('…and let them rest…')
-      expect(answer).toContain('someone is humming it in the next room')
+      expect(answer).toContain('someone is humming it, out by the hearth')
       expect(answer).toContain("[room_name]Elior's Cottage[/room_name]")
       expectCurrentRoom(game.state, "Elior's Cottage")
       expectStoryFlag(game.state, FLAG_WOKE_FROM_DREAM, true)

@@ -6,7 +6,7 @@ import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
  * Elior's name. Answering it, by talking to it or saying anything to it,
  * makes it say the three words ("…and let them rest…") and his
  * name once more, and Elior wakes in his cottage with the tune still going
- * in the next room. It never speaks again; it stays in the dream.
+ * out by the hearth. It never speaks again; it stays in the dream.
  */
 export class DreamVoice extends Character {
   constructor() {
@@ -27,8 +27,8 @@ export class DreamVoice extends Character {
   /** Answering the voice ends the dream (see `wake`). */
   override talkTo(gameState: GameState): string {
     return (
-      'You answer it. You do not know with what: your name back, or the ' +
-      'question under it, who are you.\n\n' +
+      'You answer it. You do not know with what: your own name back, or ' +
+      'the question under it.\n\n' +
       this.wake(gameState)
     )
   }
@@ -59,8 +59,8 @@ export class DreamVoice extends Character {
       'and the dark lets go of you.\n\n' +
       'You wake in your own bed. The storm is gone and there is grey ' +
       'morning in the curtains. Your heart is going hard. The tune is ' +
-      'still going too, thin and near: someone is humming it in the next ' +
-      'room. Three words are already slipping, and you write them down ' +
+      'still going too, thin and near: someone is humming it, out by the ' +
+      'hearth. Three words are already slipping, and you write them down ' +
       'before they can go.\n\n' +
       event(`You are in [room_name]${cottage.name}[/room_name].`)
     )

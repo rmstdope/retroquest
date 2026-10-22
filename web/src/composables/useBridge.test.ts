@@ -32,8 +32,7 @@ function storageFull() {
   })
 }
 
-/** A bridge with the game running in Act I, ready for commands. */
-/** A running Act I game, woken out of the dream it opens with. */
+/** A bridge with the game running in Act I, woken out of the dream it opens with. */
 async function runningBridge() {
   const bridge = useBridge()
   await bridge.init()
