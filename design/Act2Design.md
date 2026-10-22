@@ -217,7 +217,7 @@ City orientation is handled through the City Map and movement behavior, not sepa
 - **Motivations:** Guard forest secrets, test worthy souls, maintain balance between human and natural worlds
 - **Character Arc:** Summoned at the offering altar after the three sacred charms are presented; on the first conversation, grants Prophetic Vision, Nyx's Token, and the Forest Heart Crystal.
 - **Dialogue Style:** Speaks in riddles and nature metaphors, voice carries weight of ages
-- **Story Role:** Speaks the refrain "Power follows purpose; purpose follows truth." in her first conversation; her vision shows the Shadow of the Past.
+- **Story Role:** Opens her first conversation by naming the deer of Act I's Hidden Glade as hers ("My deer sat with you in the glade at Willowbrook, before any of this. It said you were still. Few are."), so the forest was watching Elior before he knew it; speaks the refrain "Power follows purpose; purpose follows truth." in the same conversation; her vision shows the Shadow of the Past.
 - **State-Dependent Dialogue:** The first conversation speaks the refrain and grants Nyx's gifts; later conversations provide encouragement.
 - **Quest Involvement:** Final phase of main quest, ultimate teacher
 - **Teaching Role:** Prophetic magic, understanding of destiny, connection to natural world

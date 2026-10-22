@@ -195,7 +195,7 @@
 - **Unusable:** shiny pebble (start).
 - **Spells:** `grow` (learned from inscriptions on a stone; the learn text says it does not wake in Elior the way the others did, he reads it off the stone and it feels like his own, which Act IV's Parents' Vault and Sacrifice ending pay off: it is the one spell he did not inherit). Beneath the `grow` inscription the refrain is carved: "Power follows purpose; purpose follows truth." Elior reads it aloud and does not know what it means. If he carries the Ancient Amulet it glows beside the stone.
 - **Usable Items:** `light` spell (cast in the glade to illuminate the moss-covered stone).
-- **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer). It never speaks: `talk to deer` or `examine deer` gives a wordless moment, its gaze drifting to the mossy stone, then to Elior, nudging him to `light`; once the glade is lit it bows its head beside the glowing stone.
+- **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer; it is Nyx's, as she says in Act II, which Act I never reveals). It never speaks: `talk to deer` or `examine deer` gives a wordless moment, its gaze drifting to the mossy stone, then to Elior, nudging him to `light`; once the glade is lit it bows its head beside the glowing stone.
 - **Exits:** Forest Path (north), Village Chapel (south)
 
 ### 14. Village Chapel

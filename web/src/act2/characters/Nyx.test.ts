@@ -36,7 +36,9 @@ describe('Nyx', () => {
         'look at a road you have walked before.',
     )
     expect(answer).toContain(
-      '"Elior. You gave the tree your acorn instead of keeping it. You ' +
+      '"Elior. My deer sat with you in the glade at Willowbrook, before any ' +
+        'of this. It said you were still. Few are. ' +
+        'You gave the tree your acorn instead of keeping it. You ' +
         'answered the nymphs without bargaining. You brought me the three ' +
         'charms. The forest saw the road you took. It will keep watching. ' +
         'That is enough."',
