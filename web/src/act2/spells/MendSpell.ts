@@ -55,7 +55,7 @@ export class MendSpell extends Spell {
     }
     if (targetItem instanceof TrainingSword) {
       return event(
-        'The notch near the hilt starts to close under your hand, and you ' +
+        'The notch by the guard starts to close under your hand, and you ' +
           'stop. Somebody cut that notch as a boy, and it is how he will ' +
           'know the blade. You leave it as it is.',
       )

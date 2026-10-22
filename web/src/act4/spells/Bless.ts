@@ -59,8 +59,8 @@ export class Bless extends Spell {
         gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)
       ) {
         return event(
-          'The king bows his head to the blessing, and the gold in his ' +
-            'crown steadies a little. It is kindly meant, and kindly taken.',
+          'The king bows his head to the blessing, and something in his ' +
+            'crown stirs toward the light. It is kindly meant, and kindly taken.',
         )
       }
       return event(

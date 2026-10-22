@@ -25,7 +25,7 @@ describe('Casting mend through the command parser', () => {
       'Somebody cut that notch as a boy, and it is how he will know the ' +
         'blade. You leave it as it is.',
     )
-    expect(out).not.toContain('restoring it to working condition')
+    expect(out).not.toContain("doesn't appear to need any repairs")
   })
 
   it('has no effect on an undamaged item', () => {
