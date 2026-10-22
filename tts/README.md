@@ -1,86 +1,69 @@
-# TTS experiments (MisoTTS)
+# TTS experiments (Fish Audio)
 
-An experiment in voicing the game's text with [MisoTTS](https://github.com/MisoLabsAI/MisoTTS),
-an 8B open-weights English TTS model (Sesame CSM architecture, Mimi codec, 24 kHz output).
-Nothing here is part of the game build.
+An experiment in voicing the game's text with [Fish Audio](https://docs.fish.audio)'s hosted
+TTS. Nothing here is part of the game build.
 
-## Setup (once)
+## Setup
+
+- [uv](https://docs.astral.sh/uv/) (the tool installs the Fish Audio SDK by itself) and `npm ci`
+  in `web/`.
+- `FISH_AUDIO_API_KEY=…` in the worktree's `.env` (gitignored).
+
+## Voicing text
 
 ```sh
-git clone https://github.com/MisoLabsAI/MisoTTS.git tts/vendor/MisoTTS
-(cd tts/vendor/MisoTTS && uv sync --python 3.10)
-(cd web && npm ci)
+uv run tts/fish_tts.py credits                                   # balance (free call)
+uv run tts/fish_tts.py say text.txt out.wav --dry-run            # show the request only
+uv run tts/fish_tts.py say text.txt out.wav --reference-id 7d805071401d4b738334f332a8c320c2 --per-paragraph
+uv run tts/fish_tts.py say text.txt out.wav --prompt praetzellis --per-paragraph
 ```
 
-The first run downloads about 34 GB into the Hugging Face cache: the float32 model weights
-(32.8 GB), the Mimi codec, the SilentCipher watermarker and a Llama 3.2 tokenizer.
+- **Models.** `s2.1-pro-free` (default) costs nothing; `s2.1-pro`/`s2-pro` cost $15 and
+  `drama-3` $50 per million bytes of text. Paid models need credit on the account.
+- **Voice.** `--reference-id` takes a voice from Fish's library (the id is on its page at
+  fish.audio); `--prompt` clones one of the clips in `prompts/` per request; with neither, Fish's
+  default voice speaks. A library voice is only a clone of its uploader's clips: its title, tags
+  and description are free text and often wrong, so judge it by its sample.
+- **Cues.** S2 models take bracketed directions anywhere in the text, which they act rather
+  than read: `[hushed, uneasy]`, `[pause]`, `[whispering]`, `[as an old wise woman, low and
+  knowing]`. `drama-3` adds paired tags such as `<whisper>…</whisper>`.
+- **`--per-paragraph`** sends one request per blank-line-separated paragraph and joins the WAVs
+  with a 0.8 s pause. Long single requests (the whole Act I intro) dropped the connection.
 
-`generate_intro.py` replaces two upstream loaders:
+Voiced so far: the Act I intro (`out/act1-intro-cued.txt`, a cued copy of the text) with the
+"old man bible storytelling" library voice and with the Praetzellis clone, and the
+grandmother's first talk with two elderly female library voices. Names need help:
+"Elior" comes out as "Elia", "Elir" or "Hylia", so a phonetic spelling in the text sent to
+Fish is the likely fix.
 
-- the tokenizer comes from the ungated `unsloth/Llama-3.2-1B` mirror (same tokenizer) instead
-  of the gated `meta-llama/Llama-3.2-1B`;
-- the weights are cast to bfloat16 tensor by tensor while being read, so loading peaks near
-  16 GB instead of upstream's ~66 GB (a float32 model plus the full float32 state dict).
+## Getting the text
 
-## Generate the Act I intro
+`extract-intro.ts` prints the Act I intro as plain text (markup stripped, the title as a spoken
+sentence):
 
 ```sh
 (cd web && npx tsx --tsconfig tsconfig.json ../tts/extract-intro.ts) > tts/out/act1-intro.txt
-tts/vendor/MisoTTS/.venv/bin/python tts/generate_intro.py tts/out/act1-intro.txt tts/out/act1-intro.wav
-```
-
-The text is spoken one sentence at a time, with the last few generated sentences as context
-so the voice stays the same, and fixed pauses between sentences. `--chunk paragraph` speaks a
-whole paragraph per generation instead, keeping only the previous paragraph as context to stay
-inside the model's 2048-frame window. Tried and not recommended: chunks past ~20 s often run to
-the length cap, and the model then repeats its context, drops or repeats sentences and garbles
-words. Without a reference clip the voice is chosen by the random seed
-(`--seed`); `--prompt-wav clip.wav --prompt-text "transcript"` clones a voice from about ten
-seconds of audio instead. It runs on Apple Silicon through MPS (`--device mps`, the default
-on a Mac) or on the CPU.
-
-## Voice prompts
-
-MisoTTS, like Sesame's CSM model it is based on, takes its voice and its emotion mostly from
-the audio context, not from the text. The opening sentences set the tone for the rest, so a
-flat opening (or no prompt) gives flat narration.
-
-`prompts/` holds 25-36 s clips of expressive LibriVox narrators (public domain), with exact
-transcripts, sources and cut times in `prompts.json`. `audition.py` speaks the same three
-intro lines with each prompt, and once with none, into `out/audition/<name>.wav`:
-
-```sh
-tts/vendor/MisoTTS/.venv/bin/python tts/audition.py            # all prompts + baseline
-tts/vendor/MisoTTS/.venv/bin/python tts/audition.py --only fry  # one prompt
-```
-
-To voice the whole intro with a prompt:
-
-```sh
-tts/vendor/MisoTTS/.venv/bin/python tts/generate_intro.py tts/out/act1-intro.txt tts/out/act1-intro-fry.wav \
-  --prompt-wav tts/prompts/fry.wav --prompt-text "$(jq -r .fry.text tts/prompts/prompts.json)"
 ```
 
 ## Checking a clip
 
-`check.py` transcribes a clip with Whisper (`uvx mlx-whisper`) and diffs it against its text,
-listing dropped, added and changed words:
+`check.py` transcribes a clip with Whisper (`uvx mlx-whisper`, Apple Silicon) and diffs it
+against its text, listing dropped, added and changed words. Whisper invents text over trailing
+silence; segments that are near-empty or reach past the end of the clip are ignored.
 
 ```sh
-python3 tts/check.py tts/out/p2.txt tts/out/p2-praetzellis-paragraph.wav
+python3 tts/check.py tts/out/act1-intro.txt tts/out/act1-intro-fish-oldman-cued.wav
 ```
 
-## Findings so far (parked)
+## Voice prompts
 
-- Praetzellis is the preferred voice prompt so far.
-- A ~20 s paragraph in one generation beats sentence-by-sentence (98% vs 88% of words heard);
-  longer chunks drift and hit the length cap.
-- The model often babbles a few words after the text ends; trimming after the last heard word
-  (from Whisper timestamps) is the planned fix.
-- Temperature 1.1 (one seed) stopped cleanly but slurred words and misplaced pauses; a fair
-  comparison needs several seeds per temperature.
+`prompts/` holds 25-36 s clips of LibriVox narrators (public domain) with exact transcripts,
+sources and cut times in `prompts.json`, for cloning with `--prompt`.
 
-Every clip carries MisoTTS's inaudible SilentCipher watermark, as upstream applies it in
-`generate()`.
+## Earlier: MisoTTS (removed)
 
-`vendor/` and `out/` are not committed.
+The open-weights [MisoTTS](https://github.com/MisoLabsAI/MisoTTS) 8B model ran locally on an
+M5 Pro at about 7x slower than real time. It took voice and emotion from a reference clip, but
+drifted past ~20 s per generation (repeating, skipping and garbling words) and often babbled
+after the text ended. Fish's free model was faster, word-accurate and directable with cues, so
+the MisoTTS scripts were removed; they are in this branch's history.
