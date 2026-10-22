@@ -67,10 +67,8 @@ default in `web/src/engine/`; content classes override only what they need.
 | `Room` | `exitLabel(gs, direction)` | what an exit shows instead of its destination's name |
 | `Room` | `descriptionFor(gs)` | the description when it changes with the story (the room card reads this) |
 | `Room` | `talkToNobody(gs, target)` | the room's answer when the player talks to a name nobody here answers to |
-| `Room` | `getAmbientSound(gs)` / `rest(gs)` / `light(gs)` | `listen` with no target, `rest`/`sleep`/`wait`, and `cast light` in the room |
 | `Character`, `Item`, `Spell` | `answersTo(name)` | which words the player may use for it (a nickname, "the figure") |
 | `Character` | `receiveSpell(gs, spell)` | take over a spell cast on the character before the spell's own `castOnCharacter` |
-| `Item` | `listen(gs)` | `listen to <item>` |
 | `Spell` | `castOnName(gs, target)` | a cast on a name that is neither an item nor a character in reach |
 | `Quest` | `setJournal(earlier, latest)` / `setChecklist(checklist, description)` | the quest log as a journal of stages, or as a checklist; `details()` is what the UI reads |
 | `Quest` | `hint(gs)` | the line `hint` gives for this quest; the default is the newest journal entry or the next open checklist item |
