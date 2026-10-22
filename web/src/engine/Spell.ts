@@ -38,9 +38,9 @@ export class Spell {
 
   castOnItem(_gameState: GameState, target: Item): string {
     return (
-      `[failure]You attempt to cast [spell_name]${this.name}[/spell_name] on ` +
-      `[item_name]${target.name}[/item_name], but the spell fizzles and ` +
-      'does not seem to work on this item.[/failure]'
+      `[failure]You cast [spell_name]${this.name}[/spell_name] on the ` +
+      `[item_name]${target.name}[/item_name]. Nothing in it answers the ` +
+      'spell.[/failure]'
     )
   }
 
@@ -55,9 +55,9 @@ export class Spell {
 
   castOnCharacter(_gameState: GameState, target: Character): string {
     return (
-      `[failure]You attempt to cast [spell_name]${this.name}[/spell_name] on ` +
-      `[character_name]${target.name}[/character_name], but the spell ` +
-      'fizzles and does not seem to work on this character.[/failure]'
+      `[failure]You cast [spell_name]${this.name}[/spell_name] on ` +
+      `[character_name]${target.name}[/character_name]. Nothing in them ` +
+      'answers the spell.[/failure]'
     )
   }
 }

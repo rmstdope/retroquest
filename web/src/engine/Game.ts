@@ -457,6 +457,7 @@ Welcome to
       '\n' +
       '[bold]Miscellaneous:[/bold]\n' +
       '  sleep, rest, wait\n' +
+      '  hint\n' +
       '  map\n' +
       '  stats\n'
     )
@@ -717,6 +718,27 @@ Welcome to
 
   search(): string {
     return this.state.currentRoom.search(this.state)
+  }
+
+  /**
+   * What the player can think over: the active quests' hints, the main quest
+   * first, each under its name. In-world, never a command. Nothing pressing
+   * gets one quiet line.
+   */
+  hint(): string {
+    const quests = [...this.state.activatedQuests].sort(
+      (a, b) => Number(b.isMain()) - Number(a.isMain()),
+    )
+    const lines = quests
+      .map((quest) => {
+        const hint = quest.hint(this.state)
+        return hint ? `[bold]${quest.name}:[/bold] ${hint}` : null
+      })
+      .filter((line): line is string => line !== null)
+    if (lines.length === 0) {
+      return '[dim]You think it over. Nothing presses on you just now.[/dim]'
+    }
+    return ['You stop and think over what you know.', ...lines].join('\n')
   }
 
   listen(target?: string): string {

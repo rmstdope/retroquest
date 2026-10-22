@@ -164,7 +164,7 @@ describe("The Knight's Test bout", () => {
     game.state.knownSpells.push(new MendSpell())
     const before = run(game, ['cast mend on sir cedric'])
     expect(before).not.toContain('A mage.')
-    expect(before).toContain('the spell fizzles')
+    expect(before).toContain('Nothing in them answers the spell.')
     expect(game.state.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)).toBe(false)
 
     begin(game)

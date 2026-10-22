@@ -56,7 +56,7 @@ describe('RedemptionsLight', () => {
     const game = new Game([new Act4()])
     expect(
       new RedemptionsLight().castOnCharacter(game.state, new TrueSelf()),
-    ).toContain('fizzles')
+    ).toContain('Nothing in them answers the spell.')
   })
 
   it('puts the warriors at peace, records mercy once', () => {
@@ -101,7 +101,7 @@ describe('RedemptionsLight', () => {
     expectMarkupWellFormed(line)
     expect(spell.castOnCharacter(game.state, shadow)).toBe(line)
     expect(spell.castOnCharacter(game.state, sorceress)).toContain(
-      'fizzles and does not seem to work on this character',
+      'Nothing in them answers the spell.',
     )
     game.state.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
     const redeemed = spell.castOnCharacter(game.state, sorceress)

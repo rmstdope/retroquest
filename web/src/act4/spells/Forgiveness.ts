@@ -19,7 +19,7 @@ export class Forgiveness extends Spell {
     })
   }
 
-  /** On the wound it closes it (Redemption); elsewhere it fizzles as usual. */
+  /** On the wound it closes it (Redemption); elsewhere nothing answers it, as usual. */
   override castOnItem(gameState: GameState, target: Item): string {
     if (target instanceof Wound) return target.forgive(gameState)
     return super.castOnItem(gameState, target)

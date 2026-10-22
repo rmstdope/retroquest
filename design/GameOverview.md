@@ -37,6 +37,7 @@ Every puzzle in every act follows these rules, so the game stays puzzling withou
 4. **One word-riddle per site.** The word must have meaning once answered (myself, patience, everything), and the near-misses get specific refusals. The one exception is the Throne Chamber, the climax, which asks two: the refrain and then the ending word.
 5. **Each learned spell is used twice** before its act ends: once where it is required, once where it is only rewarded.
 6. **Order gates are in-world.** "Not yet" comes from a character with a reason, never from the game.
+7. **A stuck player can ask.** `hint` answers in-world with the active quests' newest journal line, or a checklist's lead-in and next open item, the main quest first; a quest may say something sharper. It never names a command.
 
 ## Example Commands
 

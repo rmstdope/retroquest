@@ -87,6 +87,37 @@ describe('Quest', () => {
       })
     })
 
+    it('hints with the newest journal entry, or the checklist lead-in and its first open item', () => {
+      const plain = new Quest({ name: 'Plain', description: 'Find the well.' })
+      expect(plain.hint(gameState())).toBe('Find the well.')
+
+      class Journal extends Quest {
+        constructor() {
+          super({ name: 'Journal', description: 'start' })
+          this.setJournal(['First you went north.'], 'Now the door is shut.')
+        }
+      }
+      expect(new Journal().hint(gameState())).toBe('Now the door is shut.')
+
+      class List extends Quest {
+        constructor() {
+          super({ name: 'List', description: 'start' })
+          this.setChecklist(
+            {
+              intro: 'Gather:',
+              items: [
+                { done: true, text: 'a cloak' },
+                { done: false, text: 'a map' },
+                { done: false, text: 'boots' },
+              ],
+            },
+            'Gather what the road wants.',
+          )
+        }
+      }
+      expect(new List().hint(gameState())).toBe('Gather: a map')
+    })
+
     it('reports a checklist with its done flags', () => {
       const q = new Logged({ name: 'Q', description: 'd' })
       q.list()

@@ -54,7 +54,7 @@ describe('Casting mend through the command parser', () => {
 
     const answer = game.commandParser.parse('cast mend on sir cedric')
 
-    expect(answer).toContain('fizzles')
+    expect(answer).toContain('Nothing in them answers the spell.')
     expectMarkupWellFormed(answer)
   })
 

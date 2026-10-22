@@ -24,11 +24,11 @@ describe('Spell', () => {
     )
     const rock = new Item({ name: 'rock', description: 'd' })
     expect(light.castOnItem(gs, rock)).toContain(
-      'on [item_name]rock[/item_name], but the spell fizzles',
+      'on the [item_name]rock[/item_name]. Nothing in it answers the spell.',
     )
     const mira = new Character({ name: 'Mira', description: 'd' })
     expect(light.castOnCharacter(gs, mira)).toContain(
-      'on [character_name]Mira[/character_name], but the spell fizzles',
+      'on [character_name]Mira[/character_name]. Nothing in them answers the spell.',
     )
   })
 

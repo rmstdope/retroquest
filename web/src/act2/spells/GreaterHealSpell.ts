@@ -33,7 +33,7 @@ export class GreaterHealSpell extends Spell {
     )
   }
 
-  /** The rescued merchants answer the spell; any other item fizzles as usual. */
+  /** The rescued merchants answer the spell; in any other item nothing answers it, as usual. */
   override castOnItem(gameState: GameState, targetItem: Item): string {
     if (targetItem instanceof Caravan) {
       return targetItem.receiveGreaterHeal(gameState)

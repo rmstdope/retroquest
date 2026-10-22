@@ -362,6 +362,33 @@ describe('Game', () => {
       expect(game.state.getStoryFlag('field_watered')).toBe(true)
     })
 
+    it('hints from the active quests, the main quest first, and is quiet with none', () => {
+      const side = new Quest({ name: 'Side', description: 'Fetch the rope.' })
+      class Main extends Quest {
+        override isMain(): boolean {
+          return true
+        }
+      }
+      const main = new Main({ name: 'Main', description: 'Find the glade.' })
+      const act = new Act({
+        name: 'Hints',
+        rooms: basicRooms(),
+        quests: [side, main],
+        musicFile: 'a.mp3',
+        musicInfo: 'A',
+      })
+      const game = new Game([act])
+      expect(game.hint()).toBe(
+        '[dim]You think it over. Nothing presses on you just now.[/dim]',
+      )
+      game.state.activatedQuests.push(side, main)
+      expect(game.hint()).toBe(
+        'You stop and think over what you know.\n' +
+          '[bold]Main:[/bold] Find the glade.\n' +
+          '[bold]Side:[/bold] Fetch the rope.',
+      )
+    })
+
     it('presents the finished act during a transition and the current act otherwise', () => {
       const mk = (name: string, file: string): Act =>
         new Act({
