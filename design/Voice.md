@@ -49,7 +49,7 @@ after the elixir ("It does not hurt. For the first time in years, it does not hu
 | --- | --- |
 | "the air tastes of lost hope and forgotten dreams." | "This was a garden once." |
 | "whispered doubts slither into your mind like poison." | "They do not answer you. They only say it again, closer: your friends have left you. No one is coming." |
-| "The crate is locked. You need to find a way to open it." | "The padlock holds. It is iron, rusted shut, and it has a keyhole." |
+| "The mysterious box is locked. You need to find a way to open it." | "The padlock holds. It is iron, rusted shut, and it has a keyhole." |
 | "I am an ancient and wise spirit of the forest." (the kind of line the game refuses) | "Elior. My deer sat with you in the glade at Willowbrook, before any of this. It said you were still. Few are." |
 | "Complete every side quest in Act II before sharing these visions." | "Not yet. Whatever you have seen, I would hear it with our promises kept, not with work still undone." |
 
