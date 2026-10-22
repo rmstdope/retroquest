@@ -591,10 +591,13 @@ peace. They are not alive and nothing here hints that they are.
 
 After any ending Elior walks home. In Willowbrook Field, the withered field from Act I,
 Grandmother is at the gate humming the cradle song ("Your mother's. I didn't think you'd
-remember") and carries the parents' message; Sir Cedric at the fence hears the captain's and the
+remember"); told "You knew", she answers for it ("She made me promise, the night she went. I have
+not slept a whole night since") and carries the parents' message; Sir Cedric at the fence hears the captain's and the
 knight's apologies; Mira takes the Sorceress's to Elena; Nyx is a light in the hedge. Elior casts
-`grow` and the field turns green, Nyx says the refrain once more, and Grandmother says "Welcome
-home." The game ends there.
+`grow` and the field turns green; across the village the chapel bell rings once with no hand on
+the rope, the third time (Grandmother: "The first was for her, the night she went. The second was
+for you, the morning you left. I do not know who this one is for." Elior does); Nyx says the
+refrain once more, and Grandmother says "Welcome home." The game ends there.
 
 ## Optional choices
 

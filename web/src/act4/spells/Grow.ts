@@ -65,8 +65,9 @@ export class Grow extends Spell {
   }
 
   /**
-   * The last cast of the game: the field turns green, Nyx says the refrain
-   * once, and the act ends on Grandmother's welcome.
+   * The last cast of the game: the field turns green, the chapel bell rings
+   * a third time, Nyx says the refrain once, and the act ends on
+   * Grandmother's welcome.
    */
   private greenTheField(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_FIELD_GREEN, true)
@@ -75,6 +76,15 @@ export class Grow extends Spell {
       'You press your hands into the dry earth and say the smallest spell ' +
         'you know. Green runs out from your fingers along the rows. Leaves ' +
         'unfurl, the earth darkens, and the whole field breathes out at once.',
+      'Across the village, the chapel bell rings once, ' +
+        'with no hand on the rope.',
+      dialogue(
+        'Grandmother',
+        'That is the third time. The first was for her, the night she went. ' +
+          'The second was for you, the morning you left. I do not know who ' +
+          'this one is for.',
+      ),
+      'You do.',
       'In the hedge the little light brightens. For the last time you hear ' +
         'Nyx, very small:',
       dialogue('Nyx', 'Power follows purpose; purpose follows truth.'),

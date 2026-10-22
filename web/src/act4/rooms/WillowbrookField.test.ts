@@ -219,6 +219,16 @@ describe('the companions', () => {
     const game = home('redemption')
     const first = executeCommands(game, ['talk to grandmother'])
     expect(first).toContain('You saw them. I can see it in your face.')
+    expect(first).toContain('“You knew,” you say. It is not a question.')
+    expect(first).toContain(
+      'I knew. She made me promise, the night she went. I have not slept a whole night since.',
+    )
+    expect(first.indexOf('You knew')).toBeLessThan(
+      first.indexOf('I knew. She made me promise'),
+    )
+    expect(first.indexOf('I knew. She made me promise')).toBeLessThan(
+      first.indexOf('You tell her what they said'),
+    )
     expect(first).toContain(
       'You tell her what they said: that they are proud of her, that they are resting.',
     )
@@ -334,6 +344,9 @@ describe('casting grow at home', () => {
       expect(text).toContain('Green runs out from your fingers along the rows.')
       const order = [
         'the whole field breathes out at once.',
+        'Across the village, the chapel bell rings once, with no hand on the rope.',
+        'That is the third time. The first was for her, the night she went. The second was for you, the morning you left. I do not know who this one is for.',
+        'You do.',
         'In the hedge the little light brightens. For the last time you hear Nyx, very small:',
         'Power follows purpose; purpose follows truth.',
         'Grandmother opens the gate.',
