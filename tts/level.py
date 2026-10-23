@@ -5,7 +5,8 @@
 
 Loudness is integrated loudness (EBU R128, LUFS). Each file is measured and re-encoded with
 the gain that brings it to the target, a limiter keeping peaks below -1.5 dBFS, then
-measured again and corrected; sample rate, channels, bit rate and timing are kept. narrate.py levels every narration clip it records.
+measured again and corrected; sample rate, channels, bit rate and timing are kept. Audio
+Studio levels every narration clip it records the same way (`output.lufs` in audio-studio.json).
 Needs ffmpeg.
 """
 
