@@ -63,6 +63,11 @@ function partsOf(
   }))
 }
 
+/** The unit of a turn's first quest card: after its answer's blocks and its arrival. */
+export function firstQuestUnit(turn: NarratedTurnInput): number {
+  return parseTurn(turn.text).length + (turn.arrival ? 1 : 0)
+}
+
 /**
  * The units of a turn. `firstVisit` says whether the room it arrives in is new
  * to the player (only then is the description read).

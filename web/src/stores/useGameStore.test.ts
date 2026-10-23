@@ -308,6 +308,8 @@ describe('useGameStore', () => {
       bridge.controller.completeQuest.mockReturnValue(null)
       await store.initGame()
       store.dismissModal()
+      expect(store.turns.at(-1)?.chime).toBe(true)
+      store.ringQuestChime(store.turns.at(-1)!.id)
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
     })
 
@@ -712,14 +714,21 @@ describe('useGameStore', () => {
       expect(store.questsHaveNew).toBe(false)
     })
 
-    it('calls playNewQuest when a quest is activated', () => {
+    it('owes the chime for an activated quest until its card shows, then rings it once', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.controller.activateQuest
         .mockReturnValueOnce(quest('Quest A'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
+      const turn = store.turns.at(-1)!
+      expect(turn.chime).toBe(true)
+      expect(audio.playNewQuest).not.toHaveBeenCalled()
+
+      store.ringQuestChime(turn.id)
+      store.ringQuestChime(turn.id)
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
+      expect(store.turns.at(-1)?.chime).toBeUndefined()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })
 
@@ -730,6 +739,7 @@ describe('useGameStore', () => {
         .mockReturnValueOnce(quest('Quest updated'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
+      store.ringQuestChime(store.turns.at(-1)!.id)
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })
@@ -742,6 +752,7 @@ describe('useGameStore', () => {
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+      expect(store.turns.at(-1)?.chime).toBeUndefined()
       expect(audio.playNewQuest).not.toHaveBeenCalled()
     })
 
@@ -1713,6 +1724,8 @@ describe('useGameStore', () => {
         .mockReturnValue(null)
 
       store.submitCommand('look')
+      store.ringQuestChime(store.turns.at(-1)!.id)
+      store.ringQuestChime(store.turns.at(-1)!.id)
 
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
     })

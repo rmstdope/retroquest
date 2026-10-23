@@ -1521,6 +1521,40 @@ describe('LanternLayout', () => {
       expect(texts(w)).toEqual([FIRST, SECOND])
     })
 
+    it('rings a quest chime when the quest card shows, not when the turn starts', async () => {
+      const w = await ready()
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      useGameStore().setAudioPlayer(audio)
+      await say(
+        narratedTurn(1, {
+          quests: [{ kind: 'updated', name: 'Q', main: false, text: 'Later.' }],
+          chime: true,
+        }),
+      )
+      expect(audio.playNewQuest).not.toHaveBeenCalled()
+      audios[0].onended?.()
+      await vi.advanceTimersByTimeAsync(350)
+      expect(audio.playNewQuest).not.toHaveBeenCalled()
+      audios[1].onended?.()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(w.find('[data-unit="2"]').exists()).toBe(true)
+      expect(audio.playNewQuest).toHaveBeenCalledOnce()
+    })
+
+    it('rings a quest chime at once when the turn shows at once', async () => {
+      await ready()
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      useGameStore().setAudioPlayer(audio)
+      await say(
+        narratedTurn(1, {
+          narrate: undefined,
+          quests: [{ kind: 'updated', name: 'Q', main: false, text: 'Later.' }],
+          chime: true,
+        }),
+      )
+      expect(audio.playNewQuest).toHaveBeenCalledOnce()
+    })
+
     it('shows a restored or opening turn, or one with narration off, at once', async () => {
       const w = await ready()
       await say(narratedTurn(1, { narrate: undefined }))

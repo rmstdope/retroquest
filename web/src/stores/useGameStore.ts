@@ -67,6 +67,8 @@ export interface Turn {
   quests?: QuestNews[]
   /** Set on a player's command and on the arrival that opens an act: its answer is narrated (never on a load). */
   narrate?: true
+  /** A new or updated quest's chime is owed: it rings when the turn's quest news shows (`ringQuestChime`). */
+  chime?: true
   /** Set when the turn arrived in a room the player had not been in before. */
   firstVisit?: true
 }
@@ -369,6 +371,14 @@ export const useGameStore = defineStore('game', () => {
     if (!showModal.value) {
       showNextModal()
     }
+  }
+
+  /** Ring turn `turnId`'s owed quest chime, once: when its quest news shows. */
+  function ringQuestChime(turnId: number): void {
+    const turn = turns.value.find((entry) => entry.id === turnId)
+    if (!turn?.chime) return
+    delete turn.chime
+    audioPlayer?.playNewQuest()
   }
 
   /** The UI asks before `quit` / `exit` (see QuitDialog). */
@@ -714,11 +724,12 @@ export const useGameStore = defineStore('game', () => {
     }
 
     // A completion's fanfare alone marks the turn; the chime would clash.
+    // The chime waits for the quest news to show (the story view rings it).
     const turn = turns.value.at(-1)
     if (news.length && turn) {
       turn.quests = [...(turn.quests ?? []), ...news]
       questsHaveNew.value = true
-      if (!completions.length) audioPlayer?.playNewQuest()
+      if (!completions.length) turn.chime = true
     }
 
     if (events.length > 0) {
@@ -908,6 +919,7 @@ export const useGameStore = defineStore('game', () => {
     dismissTitle,
     gameNumber,
     restartGame,
+    ringQuestChime,
     getQuickSave,
     notice,
     rawInventory,

@@ -4,6 +4,7 @@ import type { Turn } from '@/stores/useGameStore'
 import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn } from '@/lantern/parseTurn'
 import { newQuestKicker } from '@/lantern/questNews'
+import { firstQuestUnit as firstQuestOf } from '@/lantern/narrationUnits'
 import QuestNewsCard from './QuestNewsCard.vue'
 import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
@@ -35,9 +36,7 @@ const { shown, isSpeaking, html } = useReadAlong(() => props.turn.id, root)
 const arrivalUnit = computed(() =>
   props.turn.arrival ? blocks.value.length : -1,
 )
-const firstQuestUnit = computed(
-  () => blocks.value.length + (props.turn.arrival ? 1 : 0),
-)
+const firstQuestUnit = computed(() => firstQuestOf(props.turn))
 
 const blocks = computed(() => parseTurn(props.turn.text))
 

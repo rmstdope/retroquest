@@ -8,6 +8,7 @@ import {
   POPUP_NARRATION_ID,
   chapterUnits,
   questPopUpUnits,
+  firstQuestUnit,
   turnUnits,
 } from '@/lantern/narrationUnits'
 import { actFolder } from '@/lantern/narrationManifest'
@@ -240,6 +241,31 @@ watch(
       turn.id,
       turnUnits(turn, !!turn.firstVisit, manifest),
       folder,
+    )
+  },
+)
+
+// A turn's owed quest chime rings when its quest news shows: at once when the
+// turn is not narrated, or when the narration reaches the quest card. A new
+// turn shows the previous one whole, so a chime still owed rings then.
+let chimeTurn: number | null = null
+let stopChime: (() => void) | null = null
+watch(
+  () => game.turns.at(-1)?.id,
+  () => {
+    stopChime?.()
+    stopChime = null
+    if (chimeTurn !== null) game.ringQuestChime(chimeTurn)
+    const turn = game.turns.at(-1)
+    chimeTurn = turn?.chime ? turn.id : null
+    if (!turn?.chime) return
+    const unit = firstQuestUnit(turn)
+    stopChime = watch(
+      () => narration.revealed(turn.id, unit),
+      (shown) => {
+        if (shown) game.ringQuestChime(turn.id)
+      },
+      { immediate: true },
     )
   },
 )
