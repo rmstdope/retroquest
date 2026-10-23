@@ -60,3 +60,14 @@ def test_level_reaches_the_target_even_when_peaks_limit_a_plain_gain(quiet_with_
     out = tmp_path / "levelled.mp3"
     level(quiet_with_a_sharp_peak, out, target=-16.0)
     assert loudness(out) == pytest.approx(-16.0, abs=1.0)
+
+
+def test_level_refuses_a_clip_too_short_or_quiet_to_measure(tmp_path):
+    silent = tmp_path / "silent.mp3"
+    subprocess.run(
+        ["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono",
+         "-t", "0.2", "-b:a", "64k", str(silent)],
+        check=True,
+    )
+    with pytest.raises(ValueError, match="too short or silent"):
+        level(silent, tmp_path / "out.mp3", target=-16.0)

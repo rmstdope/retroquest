@@ -123,7 +123,6 @@ export const useGameStore = defineStore('game', () => {
   const turns = ref<Turn[]>([])
   let nextTurnId = 1
   let lastTurnRoom = ''
-  /** Rooms visited as of the previous turn, to tell a first visit from a return. */
   /** The rooms visited as of the last turn, to tell a first visit. */
   let lastVisited: string[] = []
   // Bag and spells as the bridge listed them after the previous turn

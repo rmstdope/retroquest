@@ -11,6 +11,7 @@ Needs ffmpeg.
 
 import argparse
 import json
+import math
 import re
 import subprocess
 import sys
@@ -58,11 +59,15 @@ def level(source: Path, target_path: Path, target: float, true_peak: float = TRU
 
     The gain is what the measurement asks for; a limiter catches the peaks that gain would
     push past `true_peak` (speech has short sharp peaks). The limiting takes a little
-    loudness off, so the result is measured again and the gain corrected, up to PASSES times.
+    loudness off, so the result is measured again and the gain corrected, up to PASSES times
+    (a file still off target then is reported). A clip too short or silent to measure is refused.
     """
     stream = _probe(source)
     bitrate = stream.get("bit_rate")
-    gain = target - loudness(source)
+    measured = loudness(source)
+    if not math.isfinite(measured):
+        raise ValueError(f"{source}: too short or silent to measure its loudness")
+    gain = target - measured
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / Path(target_path).name
         for _ in range(PASSES):
@@ -76,6 +81,8 @@ def level(source: Path, target_path: Path, target: float, true_peak: float = TRU
             if abs(miss) <= 0.5:
                 break
             gain += miss
+        else:
+            print(f"{source.name}: {target - miss:.1f} LUFS after {PASSES} passes", file=sys.stderr)
         out.replace(target_path)
 
 
