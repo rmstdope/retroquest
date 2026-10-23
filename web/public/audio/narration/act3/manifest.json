@@ -19750,172 +19750,172 @@
  "1234daeb5a18b5": {
   "file": "1234daeb5a18b5.mp3",
   "speaker": "malakar",
-  "duration": 11.842,
+  "duration": 12.26,
   "words": [
    {
     "word": "Lysa",
     "start": 0.0,
-    "end": 0.52
+    "end": 0.42
    },
    {
     "word": "says",
-    "start": 0.52,
-    "end": 0.74
+    "start": 0.42,
+    "end": 0.62
    },
    {
     "word": "I",
-    "start": 0.74,
-    "end": 0.92
+    "start": 0.62,
+    "end": 0.76
    },
    {
     "word": "measure",
-    "start": 0.92,
-    "end": 1.36
+    "start": 0.76,
+    "end": 1.1
    },
    {
     "word": "the",
-    "start": 1.36,
-    "end": 1.5
+    "start": 1.1,
+    "end": 1.24
    },
    {
     "word": "light",
-    "start": 1.5,
-    "end": 1.78
+    "start": 1.24,
+    "end": 1.5
    },
    {
     "word": "too",
-    "start": 1.78,
-    "end": 2.02
+    "start": 1.5,
+    "end": 1.72
    },
    {
     "word": "carefully.",
-    "start": 2.02,
-    "end": 2.58
+    "start": 1.72,
+    "end": 2.3
    },
    {
     "word": "Aren",
-    "start": 2.58,
-    "end": 3.82
+    "start": 2.3,
+    "end": 3.6
    },
    {
     "word": "says",
-    "start": 3.82,
-    "end": 4.08
+    "start": 3.6,
+    "end": 3.96
    },
    {
     "word": "that",
-    "start": 4.08,
-    "end": 4.34
+    "start": 3.96,
+    "end": 4.16
    },
    {
     "word": "is",
-    "start": 4.34,
-    "end": 4.46
+    "start": 4.16,
+    "end": 4.3
    },
    {
     "word": "why",
-    "start": 4.46,
-    "end": 4.66
+    "start": 4.3,
+    "end": 4.48
    },
    {
     "word": "it",
-    "start": 4.66,
-    "end": 4.84
+    "start": 4.48,
+    "end": 4.68
    },
    {
     "word": "never",
-    "start": 4.84,
-    "end": 5.12
+    "start": 4.68,
+    "end": 4.94
    },
    {
     "word": "misses.",
-    "start": 5.12,
-    "end": 5.48
+    "start": 4.94,
+    "end": 5.32
    },
    {
     "word": "We",
-    "start": 6.04,
-    "end": 6.4
+    "start": 6.14,
+    "end": 6.66
    },
    {
     "word": "set",
-    "start": 6.4,
-    "end": 6.62
+    "start": 6.66,
+    "end": 6.9
    },
    {
     "word": "the",
-    "start": 6.62,
-    "end": 6.8
+    "start": 6.9,
+    "end": 7.08
    },
    {
     "word": "third",
-    "start": 6.8,
-    "end": 7.06
+    "start": 7.08,
+    "end": 7.32
    },
    {
     "word": "mirror",
-    "start": 7.06,
-    "end": 7.38
+    "start": 7.32,
+    "end": 7.66
    },
    {
     "word": "today,",
-    "start": 7.38,
-    "end": 7.78
+    "start": 7.66,
+    "end": 8.04
    },
    {
     "word": "and",
-    "start": 8.04,
-    "end": 8.34
+    "start": 8.36,
+    "end": 8.62
    },
    {
     "word": "the",
-    "start": 8.34,
-    "end": 8.48
+    "start": 8.62,
+    "end": 8.78
    },
    {
     "word": "whole",
-    "start": 8.48,
-    "end": 8.76
+    "start": 8.78,
+    "end": 9.0
    },
    {
     "word": "terrace",
-    "start": 8.76,
-    "end": 9.18
+    "start": 9.0,
+    "end": 9.36
    },
    {
     "word": "caught",
-    "start": 9.18,
-    "end": 9.5
+    "start": 9.36,
+    "end": 9.66
    },
    {
     "word": "fire",
-    "start": 9.5,
-    "end": 9.88
+    "start": 9.66,
+    "end": 10.06
    },
    {
     "word": "with",
-    "start": 9.88,
-    "end": 10.14
+    "start": 10.06,
+    "end": 10.32
    },
    {
     "word": "it,",
-    "start": 10.14,
-    "end": 10.3
+    "start": 10.32,
+    "end": 10.5
    },
    {
     "word": "the",
-    "start": 10.46,
-    "end": 10.7
+    "start": 10.74,
+    "end": 11.12
    },
    {
     "word": "good",
-    "start": 10.7,
-    "end": 10.98
+    "start": 11.12,
+    "end": 11.34
    },
    {
     "word": "kind.",
-    "start": 10.98,
-    "end": 11.38
+    "start": 11.34,
+    "end": 11.78
    }
   ]
  },
@@ -21921,187 +21921,187 @@
  "13c126254d35ef": {
   "file": "13c126254d35ef.mp3",
   "speaker": "malakar",
-  "duration": 14.025,
+  "duration": 13.839,
   "words": [
    {
     "word": "The",
     "start": 0.0,
-    "end": 0.14
+    "end": 0.16
    },
    {
     "word": "Wasting",
-    "start": 0.14,
+    "start": 0.16,
     "end": 0.56
    },
    {
     "word": "has",
     "start": 0.56,
-    "end": 0.9
+    "end": 0.94
    },
    {
     "word": "reached",
-    "start": 0.9,
-    "end": 1.3
+    "start": 0.94,
+    "end": 1.34
    },
    {
     "word": "Willowbrook.",
-    "start": 1.3,
+    "start": 1.34,
     "end": 2.16
    },
    {
     "word": "Lysa",
-    "start": 2.88,
-    "end": 3.48
+    "start": 2.94,
+    "end": 3.54
    },
    {
     "word": "coughs",
-    "start": 3.48,
-    "end": 3.98
+    "start": 3.54,
+    "end": 4.0
    },
    {
     "word": "at",
-    "start": 3.98,
-    "end": 4.14
+    "start": 4.0,
+    "end": 4.16
    },
    {
     "word": "night",
-    "start": 4.14,
+    "start": 4.16,
     "end": 4.46
    },
    {
     "word": "and",
     "start": 4.46,
-    "end": 4.68
+    "end": 4.8
    },
    {
     "word": "pretends",
-    "start": 4.68,
-    "end": 5.14
+    "start": 4.8,
+    "end": 5.34
    },
    {
     "word": "she",
-    "start": 5.14,
-    "end": 5.32
+    "start": 5.34,
+    "end": 5.5
    },
    {
     "word": "does",
-    "start": 5.32,
-    "end": 5.52
+    "start": 5.5,
+    "end": 5.7
    },
    {
     "word": "not.",
-    "start": 5.52,
-    "end": 5.94
+    "start": 5.7,
+    "end": 6.1
    },
    {
     "word": "Aren",
-    "start": 5.94,
-    "end": 7.0
+    "start": 6.1,
+    "end": 6.92
    },
    {
     "word": "sits",
-    "start": 7.0,
-    "end": 7.28
+    "start": 6.92,
+    "end": 7.22
    },
    {
     "word": "up",
-    "start": 7.28,
-    "end": 7.52
+    "start": 7.22,
+    "end": 7.46
    },
    {
     "word": "with",
-    "start": 7.52,
-    "end": 7.7
+    "start": 7.46,
+    "end": 7.64
    },
    {
     "word": "her",
-    "start": 7.7,
+    "start": 7.64,
     "end": 7.9
    },
    {
     "word": "and",
     "start": 7.9,
-    "end": 8.28
+    "end": 8.26
    },
    {
     "word": "pretends",
-    "start": 8.28,
-    "end": 8.78
+    "start": 8.26,
+    "end": 8.8
    },
    {
     "word": "he",
-    "start": 8.78,
-    "end": 8.92
+    "start": 8.8,
+    "end": 8.96
    },
    {
     "word": "is",
-    "start": 8.92,
-    "end": 9.06
+    "start": 8.96,
+    "end": 9.12
    },
    {
     "word": "not",
-    "start": 9.06,
-    "end": 9.28
+    "start": 9.12,
+    "end": 9.32
    },
    {
     "word": "afraid.",
-    "start": 9.28,
-    "end": 9.72
+    "start": 9.32,
+    "end": 9.78
    },
    {
     "word": "They",
-    "start": 10.2,
-    "end": 10.66
+    "start": 10.4,
+    "end": 10.86
    },
    {
     "word": "tell",
-    "start": 10.66,
-    "end": 10.94
+    "start": 10.86,
+    "end": 11.14
    },
    {
     "word": "me",
-    "start": 10.94,
-    "end": 11.1
+    "start": 11.14,
+    "end": 11.3
    },
    {
     "word": "to",
-    "start": 11.1,
-    "end": 11.28
+    "start": 11.3,
+    "end": 11.46
    },
    {
     "word": "wait.",
-    "start": 11.28,
-    "end": 11.66
+    "start": 11.46,
+    "end": 11.8
    },
    {
     "word": "I",
-    "start": 11.9,
-    "end": 12.24
+    "start": 12.1,
+    "end": 12.16
    },
    {
     "word": "have",
-    "start": 12.24,
-    "end": 12.44
+    "start": 12.16,
+    "end": 12.34
    },
    {
     "word": "waited",
-    "start": 12.44,
-    "end": 12.74
+    "start": 12.34,
+    "end": 12.64
    },
    {
     "word": "all",
-    "start": 12.74,
-    "end": 13.02
+    "start": 12.64,
+    "end": 12.88
    },
    {
     "word": "my",
-    "start": 13.02,
-    "end": 13.24
+    "start": 12.88,
+    "end": 13.08
    },
    {
     "word": "life.",
-    "start": 13.24,
-    "end": 13.68
+    "start": 13.08,
+    "end": 13.52
    }
   ]
  },
@@ -26648,178 +26648,6 @@
     "word": "Virtues'.",
     "start": 2.42,
     "end": 3.39
-   }
-  ]
- },
- "18e825918693a7": {
-  "file": "18e825918693a7.mp3",
-  "speaker": "narrator",
-  "duration": 14.721,
-  "words": [
-   {
-    "word": "The",
-    "start": 0.0,
-    "end": 0.34
-   },
-   {
-    "word": "phantoms",
-    "start": 0.34,
-    "end": 0.96
-   },
-   {
-    "word": "drift",
-    "start": 0.96,
-    "end": 1.28
-   },
-   {
-    "word": "closer,",
-    "start": 1.28,
-    "end": 1.86
-   },
-   {
-    "word": "their",
-    "start": 2.14,
-    "end": 2.46
-   },
-   {
-    "word": "ethereal",
-    "start": 2.46,
-    "end": 3.06
-   },
-   {
-    "word": "forms",
-    "start": 3.06,
-    "end": 3.56
-   },
-   {
-    "word": "shimmering",
-    "start": 3.56,
-    "end": 4.16
-   },
-   {
-    "word": "as",
-    "start": 4.16,
-    "end": 4.34
-   },
-   {
-    "word": "they",
-    "start": 4.34,
-    "end": 4.48
-   },
-   {
-    "word": "attempt",
-    "start": 4.48,
-    "end": 4.88
-   },
-   {
-    "word": "to",
-    "start": 4.88,
-    "end": 5.06
-   },
-   {
-    "word": "communicate.",
-    "start": 5.06,
-    "end": 5.66
-   },
-   {
-    "word": "Their",
-    "start": 6.04,
-    "end": 6.64
-   },
-   {
-    "word": "voices",
-    "start": 6.64,
-    "end": 7.1
-   },
-   {
-    "word": "blend",
-    "start": 7.1,
-    "end": 7.62
-   },
-   {
-    "word": "into",
-    "start": 7.62,
-    "end": 7.88
-   },
-   {
-    "word": "a",
-    "start": 7.88,
-    "end": 8.08
-   },
-   {
-    "word": "haunting",
-    "start": 8.08,
-    "end": 8.48
-   },
-   {
-    "word": "melody",
-    "start": 8.48,
-    "end": 8.96
-   },
-   {
-    "word": "of",
-    "start": 8.96,
-    "end": 9.54
-   },
-   {
-    "word": "sibilant",
-    "start": 9.54,
-    "end": 10.14
-   },
-   {
-    "word": "sounds",
-    "start": 10.14,
-    "end": 10.58
-   },
-   {
-    "word": "and",
-    "start": 10.58,
-    "end": 11.06
-   },
-   {
-    "word": "half-formed",
-    "start": 11.06,
-    "end": 11.82
-   },
-   {
-    "word": "words",
-    "start": 11.82,
-    "end": 12.32
-   },
-   {
-    "word": "that",
-    "start": 12.32,
-    "end": 12.74
-   },
-   {
-    "word": "dance",
-    "start": 12.74,
-    "end": 13.16
-   },
-   {
-    "word": "at",
-    "start": 13.16,
-    "end": 13.28
-   },
-   {
-    "word": "the",
-    "start": 13.28,
-    "end": 13.4
-   },
-   {
-    "word": "edge",
-    "start": 13.4,
-    "end": 13.64
-   },
-   {
-    "word": "of",
-    "start": 13.64,
-    "end": 13.82
-   },
-   {
-    "word": "understanding.",
-    "start": 13.82,
-    "end": 14.26
    }
   ]
  },
@@ -34508,6 +34336,198 @@
     "word": "promise.",
     "start": 2.4,
     "end": 2.88
+   }
+  ]
+ },
+ "1fcdb0984e1e5b": {
+  "file": "1fcdb0984e1e5b.mp3",
+  "speaker": "narrator",
+  "duration": 15.093,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "phantoms",
+    "start": 0.24,
+    "end": 0.82
+   },
+   {
+    "word": "turn",
+    "start": 0.82,
+    "end": 1.16
+   },
+   {
+    "word": "toward",
+    "start": 1.16,
+    "end": 1.5
+   },
+   {
+    "word": "you,",
+    "start": 1.5,
+    "end": 1.76
+   },
+   {
+    "word": "their",
+    "start": 2.02,
+    "end": 2.52
+   },
+   {
+    "word": "voices",
+    "start": 2.52,
+    "end": 2.96
+   },
+   {
+    "word": "rising",
+    "start": 2.96,
+    "end": 3.54
+   },
+   {
+    "word": "in",
+    "start": 3.54,
+    "end": 3.82
+   },
+   {
+    "word": "a",
+    "start": 3.82,
+    "end": 3.94
+   },
+   {
+    "word": "chorus",
+    "start": 3.94,
+    "end": 4.36
+   },
+   {
+    "word": "of",
+    "start": 4.36,
+    "end": 4.6
+   },
+   {
+    "word": "whispered",
+    "start": 4.6,
+    "end": 5.26
+   },
+   {
+    "word": "syllables",
+    "start": 5.26,
+    "end": 5.66
+   },
+   {
+    "word": "that",
+    "start": 5.66,
+    "end": 6.36
+   },
+   {
+    "word": "seem",
+    "start": 6.36,
+    "end": 6.66
+   },
+   {
+    "word": "to",
+    "start": 6.66,
+    "end": 6.86
+   },
+   {
+    "word": "flow",
+    "start": 6.86,
+    "end": 7.2
+   },
+   {
+    "word": "like",
+    "start": 7.2,
+    "end": 7.48
+   },
+   {
+    "word": "water",
+    "start": 7.48,
+    "end": 7.82
+   },
+   {
+    "word": "over",
+    "start": 7.82,
+    "end": 8.1
+   },
+   {
+    "word": "stone.",
+    "start": 8.1,
+    "end": 8.54
+   },
+   {
+    "word": "The",
+    "start": 8.88,
+    "end": 9.52
+   },
+   {
+    "word": "words",
+    "start": 9.52,
+    "end": 9.86
+   },
+   {
+    "word": "are",
+    "start": 9.86,
+    "end": 10.04
+   },
+   {
+    "word": "just",
+    "start": 10.04,
+    "end": 10.32
+   },
+   {
+    "word": "beyond",
+    "start": 10.32,
+    "end": 10.7
+   },
+   {
+    "word": "comprehension,",
+    "start": 10.7,
+    "end": 11.48
+   },
+   {
+    "word": "as",
+    "start": 11.78,
+    "end": 12.22
+   },
+   {
+    "word": "if",
+    "start": 12.22,
+    "end": 12.4
+   },
+   {
+    "word": "spoken",
+    "start": 12.4,
+    "end": 12.86
+   },
+   {
+    "word": "in",
+    "start": 12.86,
+    "end": 13.06
+   },
+   {
+    "word": "a",
+    "start": 13.06,
+    "end": 13.16
+   },
+   {
+    "word": "language",
+    "start": 13.16,
+    "end": 13.58
+   },
+   {
+    "word": "forgotten",
+    "start": 13.58,
+    "end": 14.14
+   },
+   {
+    "word": "by",
+    "start": 14.14,
+    "end": 14.42
+   },
+   {
+    "word": "time.",
+    "start": 14.42,
+    "end": 14.72
    }
   ]
  },

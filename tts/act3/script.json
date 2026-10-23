@@ -910,9 +910,9 @@
     "text": "The stones in this room were cut to carry a whisper to the sleeper without waking it. They have gone cold. But a chant will not carry over troubled water, and these pools are not as still as they seem. Bless them, and give them the old chant, and the way will open."
   },
   {
-    "key": "080d6f6097d99d",
+    "key": "1fcdb0984e1e5b",
     "speaker": "narrator",
-    "text": "Spectral lips move in silent prayer, then burst into urgent whispers that cascade around you like falling leaves. Each voice carries a different tone of desperation, yet none speak words you can fully grasp."
+    "text": "The phantoms turn toward you, their voices rising in a chorus of whispered syllables that seem to flow like water over stone. The words are just beyond comprehension, as if spoken in a language forgotten by time."
   },
   {
     "key": "0808ef77c79013",
@@ -935,11 +935,6 @@
     "text": "The Echo Chambers whisper with restless phantoms that block the path to the dragon's hall. Ancient voices drift through the darkness, their words lost to time but their purpose clear—they seek the sacred ritual that will grant them peace. The runic walls hold secrets of old ceremonies, and somewhere within these carved passages lies the key to silencing their eternal unrest. The echo stones await a blessed chant, one that must be spoken with reverence and precision to quiet the wandering spirits."
   },
   {
-    "key": "04a0b967c995b7",
-    "speaker": "narrator",
-    "text": "A low murmur ripples through the ghostly figures as they notice your presence. Their whispers grow more urgent, overlapping in harmonies that speak of longing and unfinished purpose, but no clear meaning emerges."
-  },
-  {
     "key": "133bd8516a5de3",
     "speaker": "narrator",
     "text": "The pools are mirror-still. Now the chant will carry."
@@ -948,11 +943,6 @@
     "key": "0884d5edfb8061",
     "speaker": "silence keeper",
     "text": "The stones in this room were cut to carry a whisper to the sleeper without waking it. They have gone cold. The water lies true now; it will hold your words. Bless them, and give them the old chant, and the way will open."
-  },
-  {
-    "key": "18e825918693a7",
-    "speaker": "narrator",
-    "text": "The phantoms drift closer, their ethereal forms shimmering as they attempt to communicate. Their voices blend into a haunting melody of sibilant sounds and half-formed words that dance at the edge of understanding."
   },
   {
     "key": "0885314b052cf8",
@@ -1233,5 +1223,15 @@
     "key": "0d209a4ba101cd",
     "speaker": "mira",
     "text": "Your parents walked into the dark without me once. I will not let you do the same. Go with courage, wisdom, and selflessness—I am coming with you."
+  },
+  {
+    "key": "04a0b967c995b7",
+    "speaker": "narrator",
+    "text": "A low murmur ripples through the ghostly figures as they notice your presence. Their whispers grow more urgent, overlapping in harmonies that speak of longing and unfinished purpose, but no clear meaning emerges."
+  },
+  {
+    "key": "080d6f6097d99d",
+    "speaker": "narrator",
+    "text": "Spectral lips move in silent prayer, then burst into urgent whispers that cascade around you like falling leaves. Each voice carries a different tone of desperation, yet none speak words you can fully grasp."
   }
 ]

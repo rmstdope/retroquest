@@ -80,7 +80,7 @@ describe.each([2, 3, 4])('the recordings of Act %i', (act) => {
       expect(existsSync(new URL(`act${act}/${clip.file}`, AUDIO))).toBe(true)
   })
 
-  it('records every line in the voice cast for its speaker', () => {
+  it('records every line for its speaker', () => {
     const manifest = JSON.parse(
       readFileSync(new URL(`act${act}/manifest.json`, AUDIO), 'utf8'),
     ) as NarrationManifest
@@ -90,14 +90,47 @@ describe.each([2, 3, 4])('the recordings of Act %i', (act) => {
 })
 
 describe('the key-scene directions', () => {
-  it('number 25 across Acts II to IV', () => {
+  it('number 29 lines for the 25 scenes across Acts II to IV', () => {
     const total = [2, 3, 4].reduce(
       (sum, act) =>
         sum +
         Object.keys(read<Record<string, string>>(act, 'cues.json')).length,
       0,
     )
-    expect(total).toBe(25)
+    // 25 scenes; "You. / Me." is two lines, King Alden's "Go home" three, the
+    // Charred Notebook's softer reading two.
+    expect(total).toBe(29)
+  })
+})
+
+/** Speakers who are another speaker's voice in a scene: they must carry that voice's id. */
+const SAME_VOICE: Record<string, string> = {
+  'true self': 'elior',
+  'shadow of the past': 'malakar',
+  'an echo': 'malakar',
+  aren: 'father',
+  lysa: 'mother',
+  "a man's voice, steady": 'father',
+  'the steady voice': 'father',
+  'a second man, quick and low': 'malakar',
+  'the second man': 'malakar',
+  "a woman's voice, hoarse": 'mother',
+  'redeemed knight': 'knight of despair',
+  'unmasked sorceress': 'sorceress of lies',
+  'freed servants': 'trapped servants',
+  lyria: 'master healer lyria',
+  'oldest miner': 'miners',
+}
+
+describe('speakers who share a voice', () => {
+  it.each(Object.entries(SAME_VOICE))('%s is %s’s voice', (alias, base) => {
+    for (const act of [2, 3, 4]) {
+      const { speakers } = read<Cast>(act, 'cast.json')
+      if (speakers[alias])
+        expect(speakers[alias].voice).toBe(
+          speakers[base]?.voice ?? voicesOf(base)[0],
+        )
+    }
   })
 })
 

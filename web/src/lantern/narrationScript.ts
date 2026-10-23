@@ -137,11 +137,13 @@ export function linesOfTurn(
 /**
  * An optional scene the golden path does not take: once the command at index
  * `after` of the path has been played, `commands` are played on a copy of the
- * game and everything they say is read too.
+ * game and everything they say is read too. `virtues` are recorded on the copy
+ * first, for scenes that colour their lines by the virtues the player earned.
  */
 export interface ScriptBranch {
   after: number
   commands: string[]
+  virtues?: string[]
 }
 
 /** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look. */
@@ -210,6 +212,7 @@ export function actScript(
     settle(play)
     for (const branch of branches.filter((b) => b.after === index)) {
       probe.loadSaveData(game.toSaveData())
+      for (const virtue of branch.virtues ?? []) probe.state.addVirtue(virtue)
       for (const step of branch.commands) {
         add(turnBlocks(tryOut.takeTurn(step)))
         settle(tryOut)

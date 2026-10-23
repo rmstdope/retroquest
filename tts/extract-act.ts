@@ -23,6 +23,7 @@ import { ACT4_GOLDEN_PATH } from '../web/src/act4/Act4GoldenPath'
 import {
   actScript,
   type ScriptBranch,
+  type ScriptLine,
   type WriterRule,
 } from '../web/src/lantern/narrationScript'
 
@@ -57,13 +58,25 @@ const branchesFile = new URL('branches.json', here)
 const branches = existsSync(branchesFile)
   ? (JSON.parse(readFileSync(branchesFile, 'utf8')) as ScriptBranch[])
   : []
-const script = actScript(
-  () => new Game([source.make()]),
-  source.commands,
-  writers,
-  silent,
-  branches,
-)
+/**
+ * Lines the engine picks at random (the phantoms' whispers) must all be in the
+ * script, and the script must not depend on a roll: the act is played once for
+ * each of these fixed rolls and the lines are merged by key.
+ */
+const ROLLS = [0, 0.4, 0.8]
+const lines = new Map<string, ScriptLine>()
+for (const roll of ROLLS) {
+  Math.random = (): number => roll
+  for (const line of actScript(
+    () => new Game([source.make()]),
+    source.commands,
+    writers,
+    silent,
+    branches,
+  ))
+    if (!lines.has(line.key)) lines.set(line.key, line)
+}
+const script = [...lines.values()]
 writeFileSync(
   new URL('script.json', here),
   JSON.stringify(script, null, 2) + '\n',
