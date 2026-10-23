@@ -42,7 +42,7 @@ CHUNK_LIMIT = 400
 MIN_HEARD = 0.9
 TAKES = 3
 BITRATE = "64k"
-# Narration loudness: speech sits clearly above the music (-20 LUFS) and chimes (-18 LUFS).
+# Narration loudness: speech sits clearly above the music (-23 LUFS) and chimes (-26 LUFS).
 NARRATION_LUFS = -16.0
 PARALLEL = 4
 SYNTH_TRIES = 4

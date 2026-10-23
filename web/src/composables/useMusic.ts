@@ -5,8 +5,8 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 const MUSIC_BASE_PATH = '/audio/music/'
 const URL_PATTERN = /(https?:\/\/[^\s]+)/g
 
-/** Share of the music volume kept while a voice narrates (about -8 dB). */
-export const MUSIC_DUCK = 0.4
+/** Share of the music volume kept while a voice narrates (about -9 dB). */
+export const MUSIC_DUCK = 0.35
 /** How long the music takes to dip under a voice, or to come back up, in ms. */
 export const MUSIC_DUCK_FADE_MS = 400
 /** Steps per fade. */
