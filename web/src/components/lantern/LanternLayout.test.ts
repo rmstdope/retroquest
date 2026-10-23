@@ -1424,6 +1424,9 @@ describe('LanternLayout', () => {
   describe('narration', () => {
     const FIRST = 'Rain falls.'
     const SECOND = 'Then it stops.'
+    const HEADING = 'Act I: The Call'
+    const BODY = 'The wind rises.'
+    const DONE = 'You did it.'
     const audios: NarrationAudio[] = []
 
     /** A turn of two narration lines the manifest has recordings for. */
@@ -1445,7 +1448,7 @@ describe('LanternLayout', () => {
     async function ready(): Promise<VueWrapper> {
       vi.useFakeTimers()
       const manifest = Object.fromEntries(
-        [FIRST, SECOND].map((line) => [
+        [FIRST, SECOND, HEADING, BODY, DONE].map((line) => [
           narrationKey('narrator', line),
           {
             file: 'x.mp3',
@@ -1627,6 +1630,112 @@ describe('LanternLayout', () => {
         }),
       )
       expect(useNarrationStore().isNarrating).toBe(true)
+    })
+
+    describe('pop-ups', () => {
+      const CHAPTER = {
+        kind: 'intro' as const,
+        act: 'Act I',
+        title: 'The Call',
+        body: BODY,
+      }
+
+      async function openChapter(_w: VueWrapper): Promise<void> {
+        const game = useGameStore()
+        // Going on needs the engine; these tests are about the voice.
+        vi.spyOn(game, 'continueChapter').mockImplementation(() => {})
+        game.modalChapter = CHAPTER
+        game.showModal = true
+        await vi.advanceTimersByTimeAsync(0)
+      }
+
+      it('reads a chapter page: title first, then its paragraphs, until Continue', async () => {
+        const w = await ready()
+        await openChapter(w)
+        expect(w.get('.lq-chapter-title').classes()).toContain('lq-speaking')
+        expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
+
+        audios[0].onended?.()
+        await vi.advanceTimersByTimeAsync(350)
+        expect(w.get('.lq-chapter-block').text()).toBe(BODY)
+        expect(useNarrationStore().isNarrating).toBe(true)
+
+        const pause = vi.spyOn(audios[1], 'pause')
+        await w.get('.lq-chapter-button').trigger('click')
+        expect(useNarrationStore().isNarrating).toBe(false)
+        expect(pause).toHaveBeenCalled()
+      })
+
+      it('waits for the title page to go before reading the first chapter page', async () => {
+        const w = await ready()
+        const game = useGameStore()
+        game.showTitle = true
+        await openChapter(w)
+        expect(useNarrationStore().isNarrating).toBe(false)
+        game.showTitle = false
+        await vi.advanceTimersByTimeAsync(0)
+        expect(w.get('.lq-chapter-title').classes()).toContain('lq-speaking')
+      })
+
+      it('stops the voice when Escape goes on from a chapter page', async () => {
+        const w = await ready()
+        await openChapter(w)
+        await w.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
+        expect(useNarrationStore().isNarrating).toBe(false)
+      })
+
+      it('reads a quest-complete pop-up and stops at Continue', async () => {
+        const w = await ready()
+        const game = useGameStore()
+        vi.spyOn(game, 'dismissModal').mockImplementation(() => {})
+        game.modalQuest = {
+          kind: 'completed',
+          name: 'Q',
+          main: false,
+          text: DONE,
+        }
+        game.showModal = true
+        await vi.advanceTimersByTimeAsync(0)
+        expect(w.get('.lq-complete-text').classes()).toContain('lq-speaking')
+
+        await w.get('.lq-send').trigger('click')
+        expect(useNarrationStore().isNarrating).toBe(false)
+      })
+
+      it('cuts a chapter page in on the pop-up before it', async () => {
+        const w = await ready()
+        const game = useGameStore()
+        vi.spyOn(game, 'dismissModal').mockImplementation(() => {})
+        game.modalQuest = {
+          kind: 'completed',
+          name: 'Q',
+          main: false,
+          text: DONE,
+        }
+        game.showModal = true
+        await vi.advanceTimersByTimeAsync(0)
+        game.modalQuest = null
+        game.modalChapter = CHAPTER
+        await vi.advanceTimersByTimeAsync(0)
+        expect(w.get('.lq-chapter-title').classes()).toContain('lq-speaking')
+      })
+
+      it('shows a chapter page whole when narration is off', async () => {
+        const w = await ready()
+        useSettingsStore().narrationOn = false
+        await openChapter(w)
+        expect(useNarrationStore().isNarrating).toBe(false)
+        expect(w.findAll('.lq-chapter-block')).toHaveLength(1)
+      })
+
+      it('does not stall: a voice that never plays still lets the page move on', async () => {
+        const w = await ready()
+        await openChapter(w)
+        await vi.advanceTimersByTimeAsync(20000)
+        expect(w.findAll('.lq-chapter-block')).toHaveLength(1)
+        await w.get('.lq-chapter-button').trigger('click')
+        expect(useNarrationStore().isNarrating).toBe(false)
+      })
     })
 
     it('stops when a pop-up opens', async () => {

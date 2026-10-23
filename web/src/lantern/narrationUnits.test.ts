@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { narrationKey } from './narrationKey'
 import { narrationWords, type NarrationManifest } from './narrationManifest'
-import { turnUnits } from './narrationUnits'
+import {
+  chapterUnits,
+  POPUP_NARRATION_ID,
+  questPopUpUnits,
+  turnUnits,
+} from './narrationUnits'
 import { NARRATOR } from './narrationScript'
 
 /** A manifest with a clip for each (speaker, markup) pair. */
@@ -87,5 +92,63 @@ describe('turnUnits', () => {
     ])
     expect(units[0].parts.every((p) => p.clip)).toBe(true)
     expect(units[1].parts).toEqual([])
+  })
+})
+
+describe('chapterUnits', () => {
+  const body =
+    'The wind rises.\n[dialogue]Come.[/dialogue]\n[event]Help.[/event]'
+  const manifest = manifestOf(
+    [NARRATOR, 'Act I: The Call'],
+    [NARRATOR, 'The wind rises.'],
+    ['writing', 'Come.'],
+  )
+
+  it('reads an intro as its heading, then each paragraph, leaving events silent', () => {
+    const units = chapterUnits(
+      { kind: 'intro', act: 'Act I', title: 'The Call', body },
+      manifest,
+    )
+    expect(units.map((u) => u.parts.map((p) => !!p.clip))).toEqual([
+      [true],
+      [true],
+      [true],
+      [],
+    ])
+    expect(units[0].parts[0].markup).toBe('Act I: The Call')
+  })
+
+  it('shows a completion page title silently and reads its paragraphs', () => {
+    const units = chapterUnits(
+      { kind: 'complete', act: 'Act I', title: 'The Call', body },
+      manifest,
+    )
+    expect(units[0].parts).toEqual([])
+    expect(units.slice(1, 3).every((u) => u.parts[0].clip)).toBe(true)
+  })
+
+  it('gives a heading with no recording a part without a clip', () => {
+    const units = chapterUnits(
+      { kind: 'intro', act: 'Act I', title: 'The Call', body: '' },
+      {},
+    )
+    expect(units).toEqual([
+      { kind: 'block', parts: [{ markup: 'Act I: The Call', clip: null }] },
+    ])
+  })
+})
+
+describe('questPopUpUnits', () => {
+  it('is one unit made of the completion text as the quest card reads it', () => {
+    const text = 'You did it.\n[success]* Done[/success]'
+    const manifest = manifestOf([NARRATOR, 'You did it.'], [NARRATOR, 'Done'])
+    const units = questPopUpUnits(text, manifest)
+    expect(units).toHaveLength(1)
+    expect(units[0].kind).toBe('quest')
+    expect(units[0].parts.map((p) => !!p.clip)).toEqual([true, true])
+  })
+
+  it('uses an id no story turn has', () => {
+    expect(POPUP_NARRATION_ID).toBeLessThan(1)
   })
 })

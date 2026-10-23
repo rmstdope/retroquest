@@ -16,7 +16,12 @@ import {
   type NarrationClip,
   type NarrationManifest,
 } from './narrationManifest'
-import { blockVoice, questCardBlocks, turnBlocks } from './narrationScript'
+import {
+  NARRATOR,
+  blockVoice,
+  questCardBlocks,
+  turnBlocks,
+} from './narrationScript'
 import { parseTurn } from './parseTurn'
 
 /** One voiced line of a unit: its markup, and the recording if the manifest has one. */
@@ -82,4 +87,52 @@ export function turnUnits(
           : [],
     })
   return units
+}
+
+/** The `turnId` the store narrates the open pop-up (chapter page or quest-complete) under; story turns count from 1. */
+export const POPUP_NARRATION_ID = -1
+
+/** A chapter page as the narration reads it. */
+export interface NarratedChapter {
+  kind: 'intro' | 'complete'
+  /** "Act I". */
+  act: string
+  /** "The Call to Adventure". */
+  title: string
+  /** Engine markup: the intro text, or the act-complete text. */
+  body: string
+}
+
+/**
+ * The units of a chapter page: unit 0 is its title (an intro's heading,
+ * "Act I: The Call to Adventure", is recorded; a completion page's title has no
+ * recording and shows at once), then one unit per block of the body, index-aligned
+ * with `parseTurn` so the page finds unit `i + 1` for block `i`.
+ */
+export function chapterUnits(
+  chapter: NarratedChapter,
+  manifest: NarrationManifest,
+): NarrationUnit[] {
+  const heading =
+    chapter.kind === 'intro' && chapter.act && chapter.title
+      ? partsOf(
+          [{ speaker: NARRATOR, markup: `${chapter.act}: ${chapter.title}` }],
+          manifest,
+        )
+      : []
+  return [
+    { kind: 'block', parts: heading },
+    ...parseTurn(chapter.body).map((block): NarrationUnit => {
+      const voice = blockVoice(block)
+      return { kind: 'block', parts: voice ? partsOf([voice], manifest) : [] }
+    }),
+  ]
+}
+
+/** The unit of a quest-complete pop-up: its completion text read as a quest card is. */
+export function questPopUpUnits(
+  text: string,
+  manifest: NarrationManifest,
+): NarrationUnit[] {
+  return [{ kind: 'quest', parts: partsOf(questCardBlocks(text), manifest) }]
 }

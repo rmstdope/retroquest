@@ -93,3 +93,23 @@ test('hints at hurrying on the first narrated turn, and Settings can switch narr
   await narration.click()
   await expect(page.getByLabel('Narration volume')).toHaveCount(0)
 })
+
+test('reads the opening chapter page, and Continue mid-sentence moves on', async ({
+  page,
+}): Promise<void> => {
+  await slowNarrationClips(page)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+
+  // The title is read first; the paragraphs follow one by one.
+  await expect(page.locator('.lq-chapter-title.lq-speaking')).toHaveCount(1)
+  await expect(page.locator('.lq-chapter-block')).toHaveCount(0)
+  await expect(page.locator('.lq-chapter-block').first()).toBeVisible()
+
+  // A tap on the text hurries; Continue stops the voice and enters the game.
+  await page.locator('.lq-chapter-body').click()
+  await page.locator('.lq-chapter-button').click()
+  await expect(page.locator('.lq-chapter-button')).toHaveCount(0)
+  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
+})

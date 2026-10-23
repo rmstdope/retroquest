@@ -4,7 +4,13 @@ import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { turnUnits } from '@/lantern/narrationUnits'
+import {
+  POPUP_NARRATION_ID,
+  chapterUnits,
+  questPopUpUnits,
+  turnUnits,
+} from '@/lantern/narrationUnits'
+import { actFolder } from '@/lantern/narrationManifest'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
@@ -237,7 +243,7 @@ watch(
   },
 )
 
-// A pop-up, or a new game, stops the voice (the pop-up's own narration is its own).
+// A pop-up, or a new game, stops the voice (a pop-up's own narration follows).
 watch(
   () => [game.showModal, game.gameNumber] as const,
   ([open]) => {
@@ -255,6 +261,54 @@ watch(
     if (!on) narration.skipAll()
   },
 )
+
+// A chapter page or quest-complete pop-up is read aloud when its act has
+// recordings; one pop-up following another cuts in on it, and closing the last
+// one stops the voice; a page under the title page is read once that is
+// gone. Declared after the watch above so the old voice is cut
+// first, and before the render so nothing flashes unspoken.
+watch(
+  () =>
+    [
+      game.showModal,
+      game.modalChapter,
+      game.modalQuest,
+      game.showTitle,
+    ] as const,
+  async ([open, chapter, quest, title]) => {
+    narration.skipAll()
+    // The game's first chapter page waits under the title page.
+    if (!open || title) return
+    const folder = chapter ? actFolder(chapter.act) : game.narrationFolder
+    if (!folder || (!chapter && !quest)) return
+    await narration.preload(folder)
+    // Still the same pop-up once the recordings are in?
+    if (
+      !game.showModal ||
+      game.modalChapter !== chapter ||
+      game.modalQuest !== quest
+    )
+      return
+    const manifest = narration.manifestFor(folder)
+    if (!manifest) return
+    const units = chapter
+      ? chapterUnits(chapter, manifest)
+      : questPopUpUnits(quest?.text ?? '', manifest)
+    narration.begin(POPUP_NARRATION_ID, units, folder)
+  },
+)
+
+/** Leave a chapter page: its voice stops, then the game goes on (also for Escape). */
+function continueFromChapter(): void {
+  narration.skipAll()
+  game.continueChapter()
+}
+
+/** Leave the quest-complete (or text) pop-up: its voice stops, then the next pop-up or the story. */
+function dismissPopUp(): void {
+  narration.skipAll()
+  game.dismissModal()
+}
 
 // Show a new turn from its start (jsdom has no scrollIntoView). A command
 // run from another section (Use, Cast, Go) first brings the story back, and
@@ -437,7 +491,7 @@ const chapterTrap = useFocusTrap(chapterDialog)
 function onChapterKeydown(event: KeyboardEvent): void {
   if (event.key === 'Escape') {
     event.stopPropagation()
-    game.continueChapter()
+    continueFromChapter()
   } else chapterTrap.onKeydown(event)
 }
 
@@ -639,7 +693,7 @@ watch(
           ref="chapterPage"
           :chapter="game.modalChapter"
           title-id="lq-dialog-title"
-          @continue="game.continueChapter()"
+          @continue="continueFromChapter()"
         />
       </section>
       <!-- Other pop-ups: quest complete, or the engine's text. Keyed so each
@@ -663,7 +717,7 @@ watch(
             type="button"
             class="lq-send"
             data-autofocus
-            @click="game.dismissModal()"
+            @click="dismissPopUp()"
           >
             Continue
           </button>
