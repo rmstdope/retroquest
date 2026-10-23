@@ -13,7 +13,12 @@ import { renderMarkup } from '@/utils/theme'
  * Here chips of what is still around are buttons: the layout opens their
  * actions menu. The rest (an earlier room, or gone since) are plain text.
  */
-const props = defineProps<{ arrival: Arrival; command: string | null }>()
+const props = defineProps<{
+  arrival: Arrival
+  command: string | null
+  /** The description as HTML with its words marked, while it is read aloud. */
+  descriptionHtml?: string
+}>()
 const wide = useMediaQuery(WIDE_QUERY)
 const game = useGameStore()
 
@@ -68,7 +73,10 @@ const exits = computed(() => Object.entries(props.arrival.exits))
 
     <template v-if="!wide">
       <!-- eslint-disable vue/no-v-html -->
-      <p class="lq-arrival-text" v-html="renderMarkup(arrival.description)"></p>
+      <p
+        class="lq-arrival-text"
+        v-html="descriptionHtml ?? renderMarkup(arrival.description)"
+      ></p>
       <!-- eslint-enable vue/no-v-html -->
       <div v-if="here.length || exits.length" class="lq-here-box">
         <div v-if="here.length" class="lq-here" data-testid="here">

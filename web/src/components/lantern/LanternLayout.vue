@@ -3,6 +3,8 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { turnUnits } from '@/lantern/narrationUnits'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
@@ -48,9 +50,14 @@ import TitlePage from './TitlePage.vue'
  * goes on below the visible part.
  * After the last act, Finish the game asks to save (FinishDialog), then
  * only the end screen shows; the act's music keeps playing under it.
+ * A player's command is narrated when the act has recordings and narration is
+ * on (`useNarrationStore`): the layout starts it with the new turn, a click on
+ * the story hurries it (two skip), Space/Enter hurry and Escape skips while
+ * focus is not on a field or a control, and a pop-up stops it.
  */
 const game = useGameStore()
 const settings = useSettingsStore()
+const narration = useNarrationStore()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 const section = ref<Section>('story')
@@ -151,7 +158,33 @@ function answerTooLong(): boolean {
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
 
+/** Keys that steer the narration; see `onNarrationKey`. */
+function onNarrationKey(event: KeyboardEvent): void {
+  if (!narration.isNarrating || event.defaultPrevented) return
+  if (event.ctrlKey || event.metaKey || event.altKey) return
+  const hurries = event.key === ' ' || event.key === 'Enter'
+  if (!hurries && event.key !== 'Escape') return
+  // A menu or dialog has its own keys (Escape closes it first).
+  if (
+    game.showModal ||
+    game.showTitle ||
+    game.quitAsked ||
+    game.shownQuest ||
+    gameDialog.value ||
+    nameMenu.value
+  )
+    return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('input, textarea, select, [contenteditable]')) return
+  // Space and Enter keep their meaning on a button or a link.
+  if (hurries && target?.closest('button, a, [role="button"]')) return
+  event.preventDefault()
+  if (hurries) narration.hurry()
+  else narration.skipAll()
+}
+
 onMounted(() => {
+  document.addEventListener('keydown', onNarrationKey)
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
@@ -160,11 +193,49 @@ onMounted(() => {
   }
 })
 onUnmounted(() => {
+  document.removeEventListener('keydown', onNarrationKey)
+  narration.skipAll()
   storyResize?.disconnect()
 })
 
 // Larger or smaller text changes how much of the turn is still below.
 watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
+
+// The running act's recordings load in good time for its first answer.
+watch(
+  () => game.narrationFolder,
+  (folder) => {
+    if (folder) void narration.preload(folder)
+  },
+  { immediate: true },
+)
+
+// A new answer cuts in on the one being narrated, then is narrated itself
+// when it is a player's command in an act with recordings (never behind a
+// pop-up). Runs before the story renders, so nothing flashes unspoken.
+watch(
+  () => game.turns.at(-1)?.id,
+  () => {
+    narration.skipAll()
+    const turn = game.turns.at(-1)
+    const folder = game.narrationFolder
+    const manifest = folder ? narration.manifestFor(folder) : null
+    if (!turn?.narrate || !folder || !manifest || game.showModal) return
+    narration.begin(
+      turn.id,
+      turnUnits(turn, !!turn.firstVisit, manifest),
+      folder,
+    )
+  },
+)
+
+// A pop-up, or a new game, stops the voice (the pop-up's own narration is its own).
+watch(
+  () => [game.showModal, game.gameNumber] as const,
+  ([open]) => {
+    if (open || narration.isNarrating) narration.skipAll()
+  },
+)
 
 // Show a new turn from its start (jsdom has no scrollIntoView). A command
 // run from another section (Use, Cast, Go) first brings the story back, and
@@ -309,6 +380,18 @@ function runNameAction(command: string): void {
   void nextTick(focusActions)
 }
 
+/** A click on the story: a tap for the narration (names keep their menu), then the name menu. */
+function onStoryClick(event: MouseEvent): void {
+  const target = event.target instanceof Element ? event.target : null
+  if (
+    !target?.closest(
+      'button, a, [data-name-kind], .theme-item_name, .theme-character_name',
+    )
+  )
+    narration.tap()
+  onNameClick(event)
+}
+
 const chapterPage = ref<InstanceType<typeof ChapterPage> | null>(null)
 
 /** Leave the title page for the first act's chapter page. */
@@ -393,7 +476,7 @@ watch(
             ref="storyEl"
             class="lq-story"
             aria-label="Story"
-            @click="onNameClick"
+            @click="onStoryClick"
             @scroll.passive="updateMoreBelow"
           >
             <h2 class="lq-sr-only">Story</h2>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type {
   NamedItem,
   RoomExits,
@@ -15,6 +15,7 @@ import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
 import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
+import { actFolder } from '@/lantern/narrationManifest'
 import type { Chapter } from '@/lantern/chapter'
 
 /**
@@ -64,6 +65,10 @@ export interface Turn {
   arrival: Arrival | null
   /** Quests that started, moved on or were completed with this turn. */
   quests?: QuestNews[]
+  /** Set on a player's command: its answer is narrated (never on a load or the opening). */
+  narrate?: true
+  /** Set when the turn arrived in a room the player had not been in before. */
+  firstVisit?: true
 }
 
 /** What the player found on entering a room (engine markup / names). */
@@ -130,6 +135,8 @@ export const useGameStore = defineStore('game', () => {
   const turns = ref<Turn[]>([])
   let nextTurnId = 1
   let lastTurnRoom = ''
+  /** Rooms visited as of the previous turn, to tell a first visit from a return. */
+  let lastVisitedCount = 0
   // Bag and spells as the bridge listed them after the previous turn
   let lastBag: string[] = []
   let lastSpells: string[] = []
@@ -166,14 +173,21 @@ export const useGameStore = defineStore('game', () => {
   /** The end screen: the final answer and whether the game was saved. */
   const ending = ref<{ text: string; saved: boolean } | null>(null)
 
+  /** The running act's heading label ("Act I"), empty before an act has started. */
+  const actLabel = ref('')
+  /** The folder of the running act's recordings (`act1`...), or null before an act has started. */
+  const narrationFolder = computed(() => actFolder(actLabel.value))
+
   /** A loaded save may be in another act: keep its heading instead. */
   function rememberLoadedAct(b: GameBridge): void {
     currentAct = parseActIntro(b.controller.getActIntro())
+    actLabel.value = currentAct.act
   }
 
   /** Queue an act intro pop-up, with its chapter page. */
   function queueActIntro(raw: string): void {
     currentAct = parseActIntro(raw)
+    actLabel.value = currentAct.act
     modalQueue.value.push({
       title: '📖 Act Intro',
       body: renderMarkup(raw),
@@ -222,7 +236,8 @@ export const useGameStore = defineStore('game', () => {
     {
       chips = command !== null,
       arrive = false,
-    }: { chips?: boolean; arrive?: boolean } = {},
+      narrate = false,
+    }: { chips?: boolean; arrive?: boolean; narrate?: boolean } = {},
   ): void {
     const b = requireBridge()
     // The command that ends the game keeps its room and chips.
@@ -248,6 +263,9 @@ export const useGameStore = defineStore('game', () => {
 
     // A load shows the room even when it is the same one.
     const roomChanged = arrive || room !== lastTurnRoom
+    const visited = b.controller.getVisitedRoomCount()
+    const firstVisit = actRunning && visited > lastVisitedCount
+    lastVisitedCount = visited
     turns.value.push({
       id: nextTurnId++,
       command,
@@ -258,6 +276,8 @@ export const useGameStore = defineStore('game', () => {
       lost,
       // The engine only says "You move north to …"; keep what the room looked
       // like now so the story can show it later.
+      ...(narrate ? { narrate: true as const } : {}),
+      ...(narrate && firstVisit ? { firstVisit: true as const } : {}),
       arrival: roomChanged
         ? {
             room,
@@ -363,9 +383,11 @@ export const useGameStore = defineStore('game', () => {
     b.newGame()
     turns.value = []
     lastTurnRoom = ''
+    lastVisitedCount = 0
     lastBag = []
     lastSpells = []
     currentAct = null
+    actLabel.value = ''
     clearNewDots()
     questToOpen.value = null
     shownQuest.value = null
@@ -402,7 +424,7 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     const result = b.controller.takeTurn(command)
     lastAnswer = result
-    showOutput(command, result)
+    showOutput(command, result, { narrate: true })
     refreshPanels()
     pollQuestEvents()
     refreshPanels()
@@ -858,6 +880,8 @@ export const useGameStore = defineStore('game', () => {
 
   return {
     runDebugScript,
+    actLabel,
+    narrationFolder,
     // State
     loading,
     turns,

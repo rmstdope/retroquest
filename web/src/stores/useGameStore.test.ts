@@ -44,6 +44,7 @@ function createMockBridge() {
     advanceToRunning: vi.fn(() => screens(['Intro text'])),
     takeTurn: vi.fn(() => 'command result'),
     getRoomName: vi.fn(() => 'Village Square'),
+    getVisitedRoomCount: vi.fn(() => 1),
     getRoomDescription: vi.fn(() => 'A quiet village.'),
     getRoomCharacters: vi.fn(() => ['Mira']),
     getRoomItems: vi.fn(() => ['Map']),
@@ -1148,6 +1149,7 @@ describe('useGameStore', () => {
         gained: [],
         lost: [],
         arrival: null,
+        narrate: true,
       })
     })
 
@@ -1215,6 +1217,39 @@ describe('useGameStore', () => {
         room: 'Act 2 Start',
         roomChanged: true,
       })
+    })
+
+    it('marks a typed command for narration, never the opening or a load', async () => {
+      await startPlaying()
+      expect(store.turns[0].narrate).toBeUndefined()
+
+      store.submitCommand('look')
+      expect(store.turns.at(-1)?.narrate).toBe(true)
+
+      store.submitCommand('load')
+      expect(store.turns.at(-1)?.narrate).toBeUndefined()
+    })
+
+    it('flags a first visit once, and not a return', async () => {
+      await startPlaying()
+      bridge.controller.getRoomName.mockReturnValue('Forest')
+      bridge.controller.getVisitedRoomCount.mockReturnValue(2)
+      store.submitCommand('go north')
+      expect(store.turns.at(-1)?.firstVisit).toBe(true)
+
+      bridge.controller.getRoomName.mockReturnValue('Village Square')
+      store.submitCommand('go south')
+      expect(store.turns.at(-1)?.firstVisit).toBeUndefined()
+      expect(store.turns.at(-1)?.roomChanged).toBe(true)
+    })
+
+    it("names the folder of the running act's recordings", async () => {
+      expect(store.narrationFolder).toBeNull()
+      bridge.controller.advanceTurn
+        .mockReturnValueOnce('Logo')
+        .mockReturnValueOnce('[bold]ACT 1: THE CALL[/bold]\n\nHi.')
+      await startPlaying()
+      expect(store.narrationFolder).toBe('act1')
     })
 
     it(`keeps only the last ${MAX_TURNS} turns`, async () => {

@@ -23,6 +23,10 @@ export interface Settings {
   effectsOn: boolean
   /** 0–100 */
   effectsVolume: number
+  /** Whether the story and the characters are read aloud. */
+  narrationOn: boolean
+  /** 0–100 */
+  narrationVolume: number
   startMode: StartMode
   reduceMotion: ReduceMotionSetting
 }
@@ -44,6 +48,8 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = {
   musicVolume: 100,
   effectsOn: true,
   effectsVolume: 100,
+  narrationOn: true,
+  narrationVolume: 100,
   startMode: 'actions',
   reduceMotion: 'device',
 }
@@ -99,6 +105,8 @@ function loadSettings(): Settings {
     musicVolume: volume(stored.musicVolume, defaults.musicVolume),
     effectsOn: bool(stored.effectsOn, defaults.effectsOn),
     effectsVolume: volume(stored.effectsVolume, defaults.effectsVolume),
+    narrationOn: bool(stored.narrationOn, defaults.narrationOn),
+    narrationVolume: volume(stored.narrationVolume, defaults.narrationVolume),
     startMode: oneOf(stored.startMode, START_MODES, defaults.startMode),
     reduceMotion: oneOf(
       stored.reduceMotion,
@@ -116,6 +124,8 @@ export const useSettingsStore = defineStore('settings', () => {
   const musicVolume = ref(initial.musicVolume)
   const effectsOn = ref(initial.effectsOn)
   const effectsVolume = ref(initial.effectsVolume)
+  const narrationOn = ref(initial.narrationOn)
+  const narrationVolume = ref(initial.narrationVolume)
   const startMode = ref(initial.startMode)
   const reduceMotion = ref(initial.reduceMotion)
 
@@ -127,6 +137,8 @@ export const useSettingsStore = defineStore('settings', () => {
       musicVolume: musicVolume.value,
       effectsOn: effectsOn.value,
       effectsVolume: effectsVolume.value,
+      narrationOn: narrationOn.value,
+      narrationVolume: narrationVolume.value,
       startMode: startMode.value,
       reduceMotion: reduceMotion.value,
     }
@@ -147,6 +159,8 @@ export const useSettingsStore = defineStore('settings', () => {
     musicVolume.value = DEFAULT_SETTINGS.musicVolume
     effectsOn.value = DEFAULT_SETTINGS.effectsOn
     effectsVolume.value = DEFAULT_SETTINGS.effectsVolume
+    narrationOn.value = DEFAULT_SETTINGS.narrationOn
+    narrationVolume.value = DEFAULT_SETTINGS.narrationVolume
     startMode.value = DEFAULT_SETTINGS.startMode
     reduceMotion.value = DEFAULT_SETTINGS.reduceMotion
   }
@@ -158,6 +172,8 @@ export const useSettingsStore = defineStore('settings', () => {
     musicVolume,
     effectsOn,
     effectsVolume,
+    narrationOn,
+    narrationVolume,
     startMode,
     reduceMotion,
     resetToDefaults,

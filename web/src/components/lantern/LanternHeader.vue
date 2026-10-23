@@ -40,6 +40,8 @@ const textSizeAnchor = ref<HTMLElement | null>(null)
 const textSizeButton = ref<HTMLButtonElement | null>(null)
 function onDocumentKeydown(e: KeyboardEvent): void {
   if (e.key !== 'Escape' || !textSizeOpen.value) return
+  // Consumed here: the story's narration must not also take this Escape.
+  e.preventDefault()
   textSizeOpen.value = false
   textSizeButton.value?.focus()
 }
