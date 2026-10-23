@@ -21,3 +21,13 @@ export function toQuestNews(
 ): QuestNews {
   return { kind, name: event.name, main: event.main, text: event.text }
 }
+
+/** The heading of a new quest's card: "New main quest" or "New side quest". */
+export function newQuestKicker(main: boolean): string {
+  return `New ${main ? 'main' : 'side'} quest`
+}
+
+/** The heading of a completed quest: "Main quest complete" or "Side quest complete". */
+export function questCompleteKicker(main: boolean): string {
+  return `${main ? 'Main' : 'Side'} quest complete`
+}

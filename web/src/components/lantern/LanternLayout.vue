@@ -294,7 +294,14 @@ watch(
     if (!manifest) return
     const units = chapter
       ? chapterUnits(chapter, manifest)
-      : questPopUpUnits(quest?.text ?? '', manifest)
+      : questPopUpUnits(
+          {
+            main: quest?.main ?? false,
+            name: quest?.name ?? '',
+            text: quest?.text ?? '',
+          },
+          manifest,
+        )
     narration.begin(POPUP_NARRATION_ID, units, folder)
   },
 )

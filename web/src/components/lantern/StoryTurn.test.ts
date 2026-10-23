@@ -5,6 +5,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import StoryTurn from './StoryTurn.vue'
 import type { Turn } from '@/stores/useGameStore'
 import {
+  ARRIVAL_PAUSE_MS,
   useNarrationStore,
   type NarrationAudio,
 } from '@/stores/useNarrationStore'
@@ -256,6 +257,8 @@ describe('StoryTurn while it is narrated', () => {
     vi.useRealTimers()
   })
 
+  /** The pause after a spoken part (the store's GAP_MS). */
+  const GAP = 350
   const TEXT =
     'Rain falls on the roof.\n[event]A door creaks.[/event]\nAfter that, quiet.'
   const manifest = {
@@ -376,17 +379,31 @@ describe('StoryTurn while it is narrated', () => {
           exits: {},
         },
       },
-      { ...recorded('You go north.'), ...recorded(description) },
+      {
+        ...recorded('You go north.'),
+        ...recorded('Cellar'),
+        ...recorded(description),
+      },
     )
     expect(w.find('[data-testid="divider"]').exists()).toBe(false)
     audios[0].onended?.()
-    await vi.advanceTimersByTimeAsync(350)
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    expect(w.find('[data-testid="divider"]').exists()).toBe(false)
+    await vi.advanceTimersByTimeAsync(ARRIVAL_PAUSE_MS)
 
     expect(w.get('.lq-arrival').classes()).toContain('lq-speaking')
     expect(w.get('.lq-arrival-text').text()).toContain('A low room')
+    audios[1].currentTime = 0.5
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['Cellar'])
+    audios[1].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    audios[2].currentTime = 1
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['low'])
   })
 
-  it('marks a new quest card while its text is spoken', async () => {
+  it('reads a new quest card’s heading and name, then its text, lighting each', async () => {
     const w = narrated(
       {
         text: 'Done.',
@@ -396,15 +413,27 @@ describe('StoryTurn while it is narrated', () => {
       },
       {
         ...recorded('Done.'),
+        ...recorded('New side quest'),
+        ...recorded('Key'),
         ...recorded('Find the key.'),
       },
     )
     expect(w.find('.lq-quest-card').exists()).toBe(false)
     audios[0].onended?.()
-    await vi.advanceTimersByTimeAsync(350)
+    await vi.advanceTimersByTimeAsync(GAP + 10)
 
     expect(w.get('.lq-quest-card').classes()).toContain('lq-speaking')
-    audios[1].currentTime = 1
+    audios[1].currentTime = 2
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['quest'])
+    audios[1].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    audios[2].currentTime = 0.5
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['Key'])
+    audios[2].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    audios[3].currentTime = 1
     await vi.advanceTimersByTimeAsync(60)
     expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['the'])
   })

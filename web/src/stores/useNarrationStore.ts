@@ -29,6 +29,8 @@ import type { NarrationUnit } from '@/lantern/narrationUnits'
 
 /** Pause after a spoken part, in milliseconds. */
 const GAP_MS = 350
+/** The pause before a room is read, counted from the last voice (or from the turn's start). */
+export const ARRIVAL_PAUSE_MS = 1000
 /** The shorter pause after a hurried block. */
 const HURRIED_GAP_MS = 80
 /** Two taps this close are a double-tap. */
@@ -77,6 +79,10 @@ interface ActiveNarration {
   speaking: boolean
   /** The index of the spoken word, -1 before the first. */
   word: number
+  /** The pause just waited before the next part, in ms (0 at the turn's start). */
+  waited: number
+  /** The arrival unit whose pause has been waited, or -1. */
+  pausedFor: number
 }
 
 /** What is being spoken now in a turn. */
@@ -89,6 +95,8 @@ export interface Speaking {
   offset: number
   /** The number of words in the whole unit. */
   total: number
+  /** The number of words in each of the unit's parts. */
+  lengths: number[]
   /** Whether each recording's word timings match the words shown (otherwise no word can be lit). */
   aligned: boolean
 }
@@ -160,6 +168,7 @@ export const useNarrationStore = defineStore('narration', () => {
       word: now.word,
       offset: lengths.slice(0, now.part).reduce((sum, n) => sum + n, 0),
       total: lengths.reduce((sum, n) => sum + n, 0),
+      lengths,
       aligned: now.units[now.unit].parts.every(
         (part, i) => !part.clip || part.clip.words.length === lengths[i],
       ),
@@ -239,8 +248,24 @@ export const useNarrationStore = defineStore('narration', () => {
     for (;;) {
       if (now.unit >= now.units.length) return finish()
       const unit = now.units[now.unit]
-      if (now.part === 0) now.revealed = now.unit + 1
       const index = unit.parts.findIndex((p, i) => i >= now.part && !!p.clip)
+      // A room is shown and read after a longer breath: the scene changes.
+      if (
+        index >= 0 &&
+        unit.kind === 'arrival' &&
+        now.pausedFor !== now.unit &&
+        ARRIVAL_PAUSE_MS > now.waited
+      ) {
+        now.pausedFor = now.unit
+        const mine = generation
+        timers.push(
+          setTimeout(() => {
+            if (mine === generation) step()
+          }, ARRIVAL_PAUSE_MS - now.waited),
+        )
+        return
+      }
+      if (now.part === 0) now.revealed = now.unit + 1
       if (index < 0) {
         now.unit++
         now.part = 0
@@ -299,13 +324,12 @@ export const useNarrationStore = defineStore('narration', () => {
       : voicedAfter(now, unit, part)
     if (!more) return finish()
     const mine = generation
+    const gap = hurried ? HURRIED_GAP_MS : GAP_MS
+    now.waited = gap
     timers.push(
-      setTimeout(
-        () => {
-          if (mine === generation) step()
-        },
-        hurried ? HURRIED_GAP_MS : GAP_MS,
-      ),
+      setTimeout(() => {
+        if (mine === generation) step()
+      }, gap),
     )
   }
 
@@ -327,6 +351,8 @@ export const useNarrationStore = defineStore('narration', () => {
       part: 0,
       speaking: false,
       word: -1,
+      waited: 0,
+      pausedFor: -1,
     }
     narratedTurns.value++
     step()

@@ -3,8 +3,9 @@
  *
  * A turn is a list of units: one per block of the answer (index-aligned with
  * `parseTurn`, so the view finds unit `i` for block `i`), then the room
- * description of an arrival, then one unit per quest card. A unit is made of
- * parts, each a voiced line (`blockVoice`, `questCardBlocks`) with its
+ * name and description of an arrival, then one unit per quest card. A unit is
+ * made of parts, each a voiced line (`blockVoice`, `arrivalBlocks`,
+ * `newQuestBlocks`, `questCompleteBlocks`) with its
  * recording or none. A unit with no part is silent: events, failures,
  * checklists, a revisited room and quest records other than a new quest's
  * card appear at once.
@@ -18,9 +19,11 @@ import {
 } from './narrationManifest'
 import {
   NARRATOR,
+  arrivalBlocks,
   blockVoice,
-  questCardBlocks,
-  turnBlocks,
+  newQuestBlocks,
+  questCompleteBlocks,
+  type QuestShown,
 } from './narrationScript'
 import { parseTurn } from './parseTurn'
 
@@ -40,7 +43,7 @@ export interface NarrationUnit {
 /** The parts of a turn the narration reads: its answer, the arrival (if any) and quest news. */
 export interface NarratedTurnInput {
   text: string
-  arrival: { description: string } | null
+  arrival: { room: string; description: string } | null
   quests?: QuestNews[]
 }
 
@@ -75,16 +78,16 @@ export function turnUnits(
     units.push({
       kind: 'arrival',
       parts: firstVisit
-        ? partsOf(turnBlocks(turn.arrival.description), manifest)
+        ? partsOf(
+            arrivalBlocks(turn.arrival.room, turn.arrival.description),
+            manifest,
+          )
         : [],
     })
   for (const news of turn.quests ?? [])
     units.push({
       kind: 'quest',
-      parts:
-        news.kind === 'new'
-          ? partsOf(questCardBlocks(news.text), manifest)
-          : [],
+      parts: news.kind === 'new' ? partsOf(newQuestBlocks(news), manifest) : [],
     })
   return units
 }
@@ -129,10 +132,12 @@ export function chapterUnits(
   ]
 }
 
-/** The unit of a quest-complete pop-up: its completion text read as a quest card is. */
+/** The unit of a quest-complete pop-up: its heading, the quest's name, then the completion text. */
 export function questPopUpUnits(
-  text: string,
+  quest: QuestShown,
   manifest: NarrationManifest,
 ): NarrationUnit[] {
-  return [{ kind: 'quest', parts: partsOf(questCardBlocks(text), manifest) }]
+  return [
+    { kind: 'quest', parts: partsOf(questCompleteBlocks(quest), manifest) },
+  ]
 }

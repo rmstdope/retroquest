@@ -30,6 +30,13 @@ describe('wrapWords', () => {
     )
   })
 
+  it('numbers from a given start, for a unit whose text follows a heading', () => {
+    expect(wrapWords('a b', 3)).toEqual({
+      html: '<span class="lq-w" data-w="3">a</span> <span class="lq-w" data-w="4">b</span>',
+      count: 2,
+    })
+  })
+
   it('has nothing to wrap in empty html', () => {
     expect(wrapWords('')).toEqual({ html: '', count: 0 })
   })

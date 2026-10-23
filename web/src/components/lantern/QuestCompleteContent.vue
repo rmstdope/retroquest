@@ -51,7 +51,7 @@ const percent = computed(() => {
       :class="{ 'lq-speaking': isSpeaking(0) }"
       data-unit="0"
       @click="narration.tap()"
-      v-html="html(news.text, 0)"
+      v-html="html(news.text, 0, 2)"
     ></p>
     <!-- eslint-enable vue/no-v-html -->
     <div v-if="news.progress" class="lq-complete-progress">

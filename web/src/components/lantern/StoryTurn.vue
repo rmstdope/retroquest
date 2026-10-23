@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn } from '@/lantern/parseTurn'
+import { newQuestKicker } from '@/lantern/questNews'
 import QuestNewsCard from './QuestNewsCard.vue'
 import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
@@ -147,7 +148,8 @@ function chipLabel(chip: Chip): string {
       v-if="turn.arrival && shown(arrivalUnit)"
       :arrival="turn.arrival"
       :command="turn.command"
-      :description-html="html(turn.arrival.description, arrivalUnit)"
+      :name-html="html(turn.arrival.room, arrivalUnit, 0, 1)"
+      :description-html="html(turn.arrival.description, arrivalUnit, 1)"
       :class="{ 'lq-speaking': isSpeaking(arrivalUnit), 'lq-appear': fade }"
       :data-unit="arrivalUnit"
     />
@@ -181,7 +183,11 @@ function chipLabel(chip: Chip): string {
       <QuestNewsCard
         v-if="shown(firstQuestUnit + index)"
         :news="news"
-        :body-html="html(news.text, firstQuestUnit + index)"
+        :kicker-html="
+          html(newQuestKicker(news.main), firstQuestUnit + index, 0, 1)
+        "
+        :name-html="html(news.name, firstQuestUnit + index, 1, 2)"
+        :body-html="html(news.text, firstQuestUnit + index, 2)"
         :class="{
           'lq-speaking': isSpeaking(firstQuestUnit + index),
           'lq-appear': fade,

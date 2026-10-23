@@ -11,9 +11,16 @@
 /** Matches an HTML tag, whitespace, or a run of other characters. */
 const PIECES = /(<[^>]*>)|(\s+)|([^\s<]+)/g
 
-/** `html` (as `renderMarkup` makes it) with each word in a `lq-w` span, and the number of words. */
-export function wrapWords(html: string): { html: string; count: number } {
-  let index = -1
+/**
+ * `html` (as `renderMarkup` makes it) with each word in a `lq-w` span, and the
+ * number of words. Words are numbered from `start`, for text that follows
+ * other words of the same narrated unit (a room's name, a quest's heading).
+ */
+export function wrapWords(
+  html: string,
+  start = 0,
+): { html: string; count: number } {
+  let index = start - 1
   let inWord = false
   const wrapped = html.replace(
     PIECES,
@@ -34,5 +41,5 @@ export function wrapWords(html: string): { html: string; count: number } {
       return `<span class="lq-w" data-w="${index}">${word}</span>`
     },
   )
-  return { html: wrapped, count: index + 1 }
+  return { html: wrapped, count: index + 1 - start }
 }

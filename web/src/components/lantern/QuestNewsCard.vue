@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId } from 'vue'
-import type { QuestNews } from '@/lantern/questNews'
+import {
+  newQuestKicker,
+  questCompleteKicker,
+  type QuestNews,
+} from '@/lantern/questNews'
 import { useGameStore } from '@/stores/useGameStore'
-import { renderMarkup } from '@/utils/theme'
+import { escapeHtml, renderMarkup } from '@/utils/theme'
 
 /**
  * Quest news inside the story (non-blocking): a new quest is a card with its
@@ -15,6 +19,10 @@ import { renderMarkup } from '@/utils/theme'
  */
 const props = defineProps<{
   news: QuestNews
+  /** The card's heading as HTML with its words marked, while it is read aloud. */
+  kickerHtml?: string
+  /** The quest's name as HTML with its words marked, while it is read aloud. */
+  nameHtml?: string
   /** The card's text as HTML with its words marked, while it is read aloud. */
   bodyHtml?: string
 }>()
@@ -30,10 +38,9 @@ async function toggle(): Promise<void> {
   updateBody.value?.scrollIntoView?.({ block: 'nearest' })
 }
 
-const kind = computed(() => (props.news.main ? 'main' : 'side'))
-const kicker = computed(() => `New ${kind.value} quest`)
+const kicker = computed(() => newQuestKicker(props.news.main))
 const doneLabel = computed(() => {
-  const label = `${props.news.main ? 'Main' : 'Side'} quest complete`
+  const label = questCompleteKicker(props.news.main)
   const progress = props.news.progress
   return progress
     ? `${label} · ${progress.completed} of ${progress.total}`
@@ -47,8 +54,14 @@ const doneLabel = computed(() => {
     class="lq-quest-card"
     :aria-label="`${kicker}: ${news.name}`"
   >
-    <span class="lq-kicker">{{ kicker }}</span>
-    <span :id="titleId" class="lq-quest-title">{{ news.name }}</span>
+    <!-- eslint-disable vue/no-v-html -->
+    <span class="lq-kicker" v-html="kickerHtml ?? escapeHtml(kicker)"></span>
+    <span
+      :id="titleId"
+      class="lq-quest-title"
+      v-html="nameHtml ?? escapeHtml(news.name)"
+    ></span>
+    <!-- eslint-enable vue/no-v-html -->
     <!-- eslint-disable vue/no-v-html -->
     <p class="lq-quest-body" v-html="bodyHtml ?? renderMarkup(news.text)"></p>
     <!-- eslint-enable vue/no-v-html -->

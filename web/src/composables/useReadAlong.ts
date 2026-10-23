@@ -11,8 +11,11 @@ import { renderMarkup } from '@/utils/theme'
  *
  * - `shown(unit)`: whether the unit has been revealed yet.
  * - `isSpeaking(unit)`: whether its voice is playing now.
- * - `html(markup, unit)`: the unit's rendered markup; while it is spoken each
- *   word is wrapped (only when the words match the recording's timings).
+ * - `html(markup, unit, from, to)`: the rendered markup of the unit's parts
+ *   `from` up to `to` (all of them by default); while the unit is spoken each
+ *   word is wrapped and numbered from the start of part `from` (only when the
+ *   words match those parts' recordings). A unit shown in several places, such
+ *   as a room's name and its description, marks each place with its parts.
  *
  * The composable also lights the spoken word (`.lq-w-now`, found by
  * `[data-w]` inside `root`) and keeps the unit being spoken (`[data-unit]`)
@@ -24,7 +27,7 @@ export function useReadAlong(
 ): {
   shown: (unit: number) => boolean
   isSpeaking: (unit: number) => boolean
-  html: (markup: string, unit: number) => string
+  html: (markup: string, unit: number, from?: number, to?: number) => string
 } {
   const narration = useNarrationStore()
   const speaking = computed(() => narration.speaking(id()))
@@ -39,19 +42,26 @@ export function useReadAlong(
     return speaking.value?.unit === unit
   }
 
-  /** Which unit has its words marked, and how many it has: unchanged while the word moves, so nothing re-renders per word. */
+  /** Which unit has its words marked, and its parts' word counts: unchanged while the word moves, so nothing re-renders per word. */
   const wordMarking = computed((): string => {
     const now = speaking.value
-    return now?.aligned ? `${now.unit}:${now.total}` : ''
+    return now?.aligned ? `${now.unit}:${now.lengths.join(',')}` : ''
   })
 
-  /** The HTML of `markup`, with each word marked while unit `unit` is spoken. */
-  function html(markup: string, unit: number): string {
+  /** The HTML of `markup` (parts `from` to `to` of unit `unit`), with each word marked while the unit is spoken. */
+  function html(
+    markup: string,
+    unit: number,
+    from = 0,
+    to = Number.POSITIVE_INFINITY,
+  ): string {
     const plain = renderMarkup(markup)
-    const [markedUnit, total] = wordMarking.value.split(':').map(Number)
-    if (markedUnit !== unit) return plain
-    const wrapped = wrapWords(plain)
-    return wrapped.count === total ? wrapped.html : plain
+    const [markedUnit, counts] = wordMarking.value.split(':')
+    if (!counts || Number(markedUnit) !== unit) return plain
+    const lengths = counts.split(',').map(Number)
+    const sum = (list: number[]): number => list.reduce((a, n) => a + n, 0)
+    const wrapped = wrapWords(plain, sum(lengths.slice(0, from)))
+    return wrapped.count === sum(lengths.slice(from, to)) ? wrapped.html : plain
   }
 
   // Light the spoken word, and keep the unit being spoken in view.

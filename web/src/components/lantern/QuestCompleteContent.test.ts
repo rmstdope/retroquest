@@ -79,7 +79,7 @@ describe('QuestCompleteContent', () => {
       })
       useNarrationStore().begin(
         POPUP_NARRATION_ID,
-        questPopUpUnits(text, manifest),
+        questPopUpUnits({ ...news, text }, manifest),
         'act1',
       )
       return w

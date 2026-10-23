@@ -15,6 +15,11 @@
     "text": "Tonight the weather is a storm, and a light that is not lightning has split the sky over the fields. Sleep, when it comes, is not quiet."
   },
   {
+    "key": "0803c0318425e7",
+    "speaker": "narrator",
+    "text": "The Dream"
+  },
+  {
     "key": "04f582d34caddd",
     "speaker": "narrator",
     "text": "Dark, and a storm in it. Rain drives against shutters you cannot see, and the thunder comes so close that the dark itself shakes. Shadows move through it the way smoke moves. A hand, a man’s hand, lifts a child out of the dark and holds it against a shoulder, and then the dark has them both. Somewhere a slow tune climbs three notes and settles home again. Among the shadows a figure stands, tall and without a face, too far to reach and too near to be anything but real. Its whisper is at the edge of hearing, and it is your name."
@@ -35,14 +40,39 @@
     "text": "You wake in your own bed. The storm is gone and there is grey morning in the curtains. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
   },
   {
+    "key": "1f7d39c44976a9",
+    "speaker": "narrator",
+    "text": "New main quest"
+  },
+  {
+    "key": "081e5afed8e973",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook"
+  },
+  {
     "key": "0f3841f178f0b7",
     "speaker": "narrator",
     "text": "Elior dreams of a shadowy figure lurking in the fields, its presence felt even in the waking world. The dream is unsettling, leaving him with a sense of foreboding that something is wrong in Willowbrook."
   },
   {
+    "key": "0678b14852e2e7",
+    "speaker": "narrator",
+    "text": "New side quest"
+  },
+  {
+    "key": "0016e4860763bd",
+    "speaker": "narrator",
+    "text": "Hint of Magic"
+  },
+  {
     "key": "11fa3b345c71e0",
     "speaker": "narrator",
     "text": "After a strange, vivid dream, you awaken with the sense that something beyond the ordinary is calling to you. A mysterious force stirs within, urging you to pay attention to the signs around you and discover what this new feeling means."
+  },
+  {
+    "key": "1ce01e698ceb2f",
+    "speaker": "narrator",
+    "text": "Elior's Cottage"
   },
   {
     "key": "192d97e6e21a76",
@@ -100,9 +130,19 @@
     "text": "That journal of yours... your father was a great writer, you know. He wrote of many things, some of which I am only now beginning to understand. He sensed a darkness, a shadow stretching over Eldoria, long before others did. He believed it was tied to the old tales, to the whispers of forgotten magic. He even researched a peculiar enchantment, one that could supposedly breathe life back into things on the very brink... a 'revive' spell, he called it. He thought it might be a key, a way to mend what the encroaching darkness sought to break. Keep your eyes open, Elior. What you've read might be more than just stories."
   },
   {
+    "key": "09acfbb0c60912",
+    "speaker": "narrator",
+    "text": "Magic for real"
+  },
+  {
     "key": "0e5abdd235bf12",
     "speaker": "narrator",
     "text": "You discover that you possess mysterious magical abilities. Strange phenomena begin to occur around you, hinting at a power you never knew you had. You must seek guidance and understanding to unlock the secrets of your newfound magic and learn what it means for your destiny."
+  },
+  {
+    "key": "1f5c71c8ba496d",
+    "speaker": "narrator",
+    "text": "Side quest complete"
   },
   {
     "key": "1186cf88ef980d",
@@ -113,6 +153,11 @@
     "key": "1b614fc868a707",
     "speaker": "narrator",
     "text": "You search the cottage thoroughly and discover a faded photograph hidden in a drawer."
+  },
+  {
+    "key": "111769f2b08397",
+    "speaker": "narrator",
+    "text": "The Faded Photograph"
   },
   {
     "key": "1bfbf48a69cecc",
@@ -145,6 +190,11 @@
     "text": "Your mother loved the river. If anyone remembers what she did there, it's the old fisherman down at the Riverbank."
   },
   {
+    "key": "19ad071adb2439",
+    "speaker": "narrator",
+    "text": "Know your village"
+  },
+  {
     "key": "1c57d936b9039a",
     "speaker": "narrator",
     "text": "You are encouraged to explore and get to know every corner of Willowbrook. The village holds many secrets for you to discover."
@@ -155,6 +205,11 @@
     "text": "Elior has witnessed the devastation firsthand: once lush rows of crops now stand wilted and brown, their leaves curled and brittle. The earth beneath his feet is cracked and dry, and the air is thick with the scent of decay. Where there was once the promise of a bountiful harvest, there is now only ruin."
   },
   {
+    "key": "055c95cb57e560",
+    "speaker": "narrator",
+    "text": "Vegetable Field"
+  },
+  {
     "key": "1a6b7090032ec2",
     "speaker": "narrator",
     "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. The field feels quiet, as if holding its breath, waiting for a touch of magic to bring it back to life."
@@ -163,6 +218,11 @@
     "key": "1447a7b3404b33",
     "speaker": "narrator",
     "text": "It lands heads up. Seems like a regular coin, perhaps for trading."
+  },
+  {
+    "key": "05581437584906",
+    "speaker": "narrator",
+    "text": "Chicken Coop"
   },
   {
     "key": "072bb04e4e7edc",
@@ -178,6 +238,11 @@
     "key": "13d8c3545b7f3a",
     "speaker": "grandmother",
     "text": "So the chickens gave up my little secret. I tucked that key up in the coop rafters years ago. It opens the old shed by the mill. It was a workshop once... your father's. I never could bring myself to go in. It's dark as a cellar in there, dear; take the lantern with you."
+  },
+  {
+    "key": "0d49024e6a4c8b",
+    "speaker": "narrator",
+    "text": "Village Square"
   },
   {
     "key": "03ee6611d39356",
@@ -200,6 +265,11 @@
     "text": "Last night, someone spotted a cloaked stranger near the old well, asking after an old amulet, from a family that left. Nobody would tell him a thing, and he took the road to the mill."
   },
   {
+    "key": "00a3f28fcf7306",
+    "speaker": "narrator",
+    "text": "Village Well"
+  },
+  {
     "key": "0b460da0b2e890",
     "speaker": "narrator",
     "text": "An old stone well stands at the village's center, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides. The well seems to whisper secrets to those who listen closely."
@@ -208,6 +278,11 @@
     "key": "0022d0ca3a78d2",
     "speaker": "narrator",
     "text": "Rumors spread of the village well: a foul stench rising from its depths, and water that no one dares to drink. Elior wonders if the source of the corruption lies beneath the surface."
+  },
+  {
+    "key": "0c64c7e367b44a",
+    "speaker": "narrator",
+    "text": "Blacksmith's Forge"
   },
   {
     "key": "0ed78cb365d15e",
@@ -235,9 +310,19 @@
     "text": "How is that blade holding up? Keep that edge oiled, mind, or the damp will have it dull again before you know it."
   },
   {
+    "key": "09d7037c370abe",
+    "speaker": "narrator",
+    "text": "Curiosity killed the cat"
+  },
+  {
     "key": "0bb835c014e34d",
     "speaker": "narrator",
     "text": "Old Man Hemlock has shut the General Store until his cat, Patches, comes home. She was last seen near the old well, where a locked shed keeps its secrets. What will you discover if you find a way inside?"
+  },
+  {
+    "key": "0b7c094082210e",
+    "speaker": "narrator",
+    "text": "Abandoned Shed"
   },
   {
     "key": "157c9006e63850",
@@ -278,6 +363,11 @@
     "key": "1fa3f4e8f62e30",
     "speaker": "grandmother",
     "text": "Hemlock's Patches! The poor wee thing, she's all dust and bones. She's taken to you, hasn't she? With you off on the road soon, this cottage will be terribly quiet. If you'd have her stay with me, you need only say so, and I'll square it with Hemlock myself. Or carry her home to him; he'll be worried sick."
+  },
+  {
+    "key": "1d8e270a441a9c",
+    "speaker": "narrator",
+    "text": "Mira's Hut"
   },
   {
     "key": "1ad9768b1fa166",
@@ -323,6 +413,11 @@
     "key": "1b8d61ff81197f",
     "speaker": "narrator",
     "text": "Mira has urged Elior to connect with the living world and learn from its magic. The path forward is uncertain, but hope stirs in the heart of Willowbrook."
+  },
+  {
+    "key": "124d5c3ce7ffcb",
+    "speaker": "narrator",
+    "text": "General Store"
   },
   {
     "key": "109a0b716b36f4",
@@ -385,6 +480,11 @@
     "text": "Patches blinks at you slowly from the counter and begins to purr."
   },
   {
+    "key": "129314440d0b65",
+    "speaker": "narrator",
+    "text": "Old Mill"
+  },
+  {
     "key": "1a8eaaafa0c48b",
     "speaker": "narrator",
     "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
@@ -410,9 +510,19 @@
     "text": "Aye, this is from the old mill, alright. Sturdy stone. You know, old tales say the mill was built on a place of ancient power. Some say a magical deer sometimes appears in the Hidden Glade, but only when all is calm and restful—no voices, no footsteps, just the hush of the wind and the song of the stream. If you seek the deer, go there and sit quiet a while; have a rest, and let it come to you. It will not show itself to those who rush or bring trouble."
   },
   {
+    "key": "096a69c7bd0f90",
+    "speaker": "narrator",
+    "text": "Oh deer, oh deer"
+  },
+  {
     "key": "1988f1b3c68e4a",
     "speaker": "narrator",
     "text": "You have heard tales of a magical deer from the Blacksmith. Perhaps you will witness something extraordinary yourself!"
+  },
+  {
+    "key": "1c76c403ae9607",
+    "speaker": "narrator",
+    "text": "Riverbank"
   },
   {
     "key": "0950d6e42d4663",
@@ -433,6 +543,11 @@
     "key": "0d53995cd0ee6f",
     "speaker": "narrator",
     "text": "He teaches you the basics of fishing."
+  },
+  {
+    "key": "0dec4340207d8f",
+    "speaker": "narrator",
+    "text": "Fishing expedition"
   },
   {
     "key": "1757e754573121",
@@ -525,6 +640,11 @@
     "text": "At the river bend you found your mother's letter, hidden beneath the smooth stone. Its words raise more questions than they answer, but they are hers."
   },
   {
+    "key": "0d28fe08434f5e",
+    "speaker": "narrator",
+    "text": "Forest Path"
+  },
+  {
     "key": "1b1a839fb28b10",
     "speaker": "narrator",
     "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. A section of the path is blocked by thick, thorny vines. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby. The path feels ancient, as if it remembers every footstep that has ever passed this way."
@@ -538,6 +658,11 @@
     "key": "0c90bdfaa996bf",
     "speaker": "narrator",
     "text": "A fox kit, no bigger than a cat, one hind leg caught fast in the wire. It watches you and does not struggle."
+  },
+  {
+    "key": "150ecc75a68785",
+    "speaker": "narrator",
+    "text": "Hidden Glade"
   },
   {
     "key": "075f1ce44dc6ba",
@@ -563,6 +688,11 @@
     "key": "1caf3b96fb4df1",
     "speaker": "narrator",
     "text": "Its dark eyes hold yours for a long moment. Then its gaze drifts to the mossy stone and the shadowed runes upon it... then to you, patient, as if waiting for you to bring something to light."
+  },
+  {
+    "key": "1174c72ff016c4",
+    "speaker": "narrator",
+    "text": "Village Chapel"
   },
   {
     "key": "0cc25b5c5a869a",
@@ -598,6 +728,11 @@
     "key": "198b48cd69992c",
     "speaker": "priest",
     "text": "And now I cannot even light a candle against the dark. I am out of matches, and I usually get them for free from the General Store. Could you bring me some?"
+  },
+  {
+    "key": "1c6599d8336db4",
+    "speaker": "narrator",
+    "text": "Let there be light"
   },
   {
     "key": "131a4feac3cfc4",
@@ -755,6 +890,11 @@
     "text": "Now prepare for the road. You'll need warmth, protection, food, boots and a map. And learn all the basic magic the village elders can teach you. When you are truly ready, the Ancient Amulet will be yours."
   },
   {
+    "key": "193be0a872654f",
+    "speaker": "narrator",
+    "text": "Preparing for the road"
+  },
+  {
     "key": "05dd059914219b",
     "speaker": "narrator",
     "text": "Mira has tasked you with preparing for your journey. She says you will need:"
@@ -858,6 +998,11 @@
     "key": "15499782cd00fa",
     "speaker": "narrator",
     "text": "The fresh carrot looks vibrant and healthy!"
+  },
+  {
+    "key": "0a585f21456625",
+    "speaker": "narrator",
+    "text": "Magnet fishing expedition"
   },
   {
     "key": "0ee57df3f8d91c",
@@ -988,6 +1133,11 @@
     "key": "1e82bb9df4aa05",
     "speaker": "narrator",
     "text": "You have explored every corner of Willowbrook. The village feels more like home, and you are ready for what lies ahead."
+  },
+  {
+    "key": "182c839e0a2572",
+    "speaker": "narrator",
+    "text": "Road to Greendale"
   },
   {
     "key": "02d2b5030244c3",
@@ -1208,6 +1358,11 @@
     "key": "0fbd21e3b05726",
     "speaker": "narrator",
     "text": "The map aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. You tuck your parents' amulet beneath your mother's cloak, and set forth."
+  },
+  {
+    "key": "091ab964b0dd1c",
+    "speaker": "narrator",
+    "text": "Main quest complete"
   },
   {
     "key": "087193af0c970e",

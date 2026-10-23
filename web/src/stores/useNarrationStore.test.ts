@@ -1,7 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
-import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
+import {
+  ARRIVAL_PAUSE_MS,
+  useNarrationStore,
+  type NarrationAudio,
+} from './useNarrationStore'
 import { useSettingsStore } from './useSettingsStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import type { NarrationClip } from '@/lantern/narrationManifest'
@@ -330,6 +334,37 @@ describe('useNarrationStore', () => {
       await narration.preload('act3')
       expect(narration.manifestFor('act3')).toEqual({})
       vi.unstubAllGlobals()
+    })
+  })
+
+  describe('a room arrival', () => {
+    const arrival = (): NarrationUnit => ({
+      kind: 'arrival',
+      parts: [{ markup: 'a b', clip: clip(2) }],
+    })
+
+    it('waits a full second after the voice before it, then shows and reads the room', () => {
+      narration.begin(1, [voiced(), arrival()], 'act1')
+      last().onended?.()
+      vi.advanceTimersByTime(ARRIVAL_PAUSE_MS - 100)
+      expect(narration.revealed(1, 1)).toBe(false)
+      vi.advanceTimersByTime(200)
+      expect(narration.revealed(1, 1)).toBe(true)
+      expect(narration.speaking(1)?.unit).toBe(1)
+    })
+
+    it('waits a second before a room that opens the turn', () => {
+      narration.begin(1, [silent, arrival()], 'act1')
+      expect(narration.revealed(1, 0)).toBe(true)
+      expect(narration.revealed(1, 1)).toBe(false)
+      vi.advanceTimersByTime(ARRIVAL_PAUSE_MS + 10)
+      expect(narration.speaking(1)?.unit).toBe(1)
+    })
+
+    it('comes at once when the player hurries during the pause', () => {
+      narration.begin(1, [silent, arrival()], 'act1')
+      narration.hurry()
+      expect(narration.speaking(1)?.unit).toBe(1)
     })
   })
 })
