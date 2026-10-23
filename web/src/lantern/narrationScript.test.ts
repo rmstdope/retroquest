@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from '@/act1/Act1'
 import { Act2 } from '@/act2/Act2'
@@ -17,6 +17,7 @@ import {
   turnBlocks,
   UNSIGNED,
   type ScriptBranch,
+  type ScriptLine,
   type WriterRule,
 } from './narrationScript'
 
@@ -232,10 +233,16 @@ describe('actScript branches', () => {
     after: marcusIndex,
     commands: ['say truth to innkeeper marcus'],
   }
+  /** Act II is played twice; that is slow under a loaded machine. */
+  const SLOW = 60_000
+  let plain: ScriptLine[] = []
+  let branched: ScriptLine[] = []
+  beforeAll(() => {
+    plain = actScript(make, ACT2_GOLDEN_PATH, [])
+    branched = actScript(make, ACT2_GOLDEN_PATH, [], [], [truth])
+  }, SLOW)
 
   it('reads an optional scene the golden path does not take, played on a copy', () => {
-    const plain = actScript(make, ACT2_GOLDEN_PATH, [])
-    const branched = actScript(make, ACT2_GOLDEN_PATH, [], [], [truth])
     const onPurpose = (line: { text: string }): boolean =>
       line.text.startsWith('On purpose.')
     expect(plain.some(onPurpose)).toBe(false)
@@ -243,8 +250,6 @@ describe('actScript branches', () => {
   })
 
   it('leaves the lines of the golden path as they were', () => {
-    const plain = actScript(make, ACT2_GOLDEN_PATH, [])
-    const branched = actScript(make, ACT2_GOLDEN_PATH, [], [], [truth])
     const keys = new Set(branched.map((line) => line.key))
     expect(plain.every((line) => keys.has(line.key))).toBe(true)
   })
