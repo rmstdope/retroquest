@@ -1,4 +1,7 @@
-/** The commands that play Act 1's golden path from a new game to the Road to Greendale; `use map` there completes the act. */
+/** The command that completes Act 1 on the Road to Greendale, once the golden path has been played. */
+export const ACT1_COMPLETING_COMMAND = 'use map'
+
+/** The commands that play Act 1's golden path from a new game to the Road to Greendale; `ACT1_COMPLETING_COMMAND` there completes the act. */
 export const ACT1_GOLDEN_PATH: string[] = [
   'talk to voice',
   'use lantern',
