@@ -1752,8 +1752,30 @@ describe('useGameStore', () => {
       expect(audio.playNewQuest).not.toHaveBeenCalled()
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
       expect(store.turns.at(-1)!.quests!.map((q) => q.kind)).toEqual([
-        'new',
         'completed',
+        'new',
+      ])
+    })
+
+    it('tells a completion before the quests that start or move on with it', () => {
+      bridge.controller.activateQuest
+        .mockReturnValueOnce(quest(NEW))
+        .mockReturnValue(null)
+      bridge.controller.updateQuest
+        .mockReturnValueOnce(quest(NEW))
+        .mockReturnValue(null)
+      bridge.controller.completeQuest
+        .mockReturnValueOnce(
+          quest('[quest_name]Q (side quest)[/quest_name]\n\nDone.'),
+        )
+        .mockReturnValue(null)
+
+      store.submitCommand('talk to grandmother')
+
+      expect(store.turns.at(-1)!.quests!.map((q) => q.kind)).toEqual([
+        'completed',
+        'new',
+        'updated',
       ])
     })
 

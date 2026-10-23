@@ -709,24 +709,19 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
-   * Collect the engine's quest events: new and updated quests go in the story
-   * on the latest turn (with a chime); each completion is also a pop-up.
+   * Collect the engine's quest events into the story on the latest turn:
+   * completions first (what was done comes before what it starts), then new
+   * and updated quests.
    */
   function pollQuestEvents(): void {
     const b = requireBridge()
     const news: QuestNews[] = []
 
     const settled = b.controller.settleQuests()
-    for (const report of settled.activated) {
-      news.push(toQuestNews('new', report))
-    }
-    for (const report of settled.updated) {
-      news.push(toQuestNews('updated', report))
-    }
     const completions = settled.completed
 
-    // Completions go in the story as records (never a pop-up), each with the
-    // act's quest count as it stood once that quest was done.
+    // Each completion is a record with the act's quest count as it stood once
+    // that quest was done.
     if (completions.length) {
       const { completed: done, total } = b.controller.getQuestProgress()
       completions.forEach((completion, index) => {
@@ -738,6 +733,12 @@ export const useGameStore = defineStore('game', () => {
           },
         })
       })
+    }
+    for (const report of settled.activated) {
+      news.push(toQuestNews('new', report))
+    }
+    for (const report of settled.updated) {
+      news.push(toQuestNews('updated', report))
     }
 
     // Each card's sound waits for the card to show (the story view rings it):
