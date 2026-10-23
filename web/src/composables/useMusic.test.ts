@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { nextTick } from 'vue'
-import { useMusic } from './useMusic'
+import { nextTick, ref } from 'vue'
+import { MUSIC_DUCK, MUSIC_DUCK_FADE_MS, useMusic } from './useMusic'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
 /**
@@ -255,6 +255,53 @@ describe('useMusic', () => {
       const html = buildAttributionHtml()
       // Should not have consecutive <br>s for empty lines
       expect(html).not.toContain('<br><br>')
+    })
+  })
+
+  // --- Dipping under narration ---
+
+  describe('while a voice is narrating', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('fades down to the duck level, then back up when the voice ends', async () => {
+      useSettingsStore().musicVolume = 50
+      const narrating = ref(false)
+      useMusic(audio, narrating)
+      expect(audio.volume).toBe(0.5)
+
+      narrating.value = true
+      await nextTick()
+      vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS / 2)
+      expect(audio.volume).toBeLessThan(0.5)
+      expect(audio.volume).toBeGreaterThan(0.5 * MUSIC_DUCK)
+      vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS)
+      expect(audio.volume).toBeCloseTo(0.5 * MUSIC_DUCK)
+
+      narrating.value = false
+      await nextTick()
+      vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS * 2)
+      expect(audio.volume).toBeCloseTo(0.5)
+    })
+
+    it('keeps the dip when the volume setting changes during narration', async () => {
+      const narrating = ref(true)
+      useMusic(audio, narrating)
+      vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS * 2)
+      useSettingsStore().musicVolume = 80
+      await nextTick()
+      vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS * 2)
+      expect(audio.volume).toBeCloseTo(0.8 * MUSIC_DUCK)
+    })
+
+    it('plays at full volume when nothing narrates', () => {
+      useSettingsStore().musicVolume = 60
+      useMusic(audio)
+      expect(audio.volume).toBe(0.6)
     })
   })
 
