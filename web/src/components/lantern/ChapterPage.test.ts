@@ -103,6 +103,23 @@ describe('ChapterPage', () => {
     expect(focus).toHaveBeenCalledWith({ preventScroll: true })
   })
 
+  it('keeps speakers, quotes, events and checklists in the body', () => {
+    const body =
+      'Farewells.\n[character_name]Mira[/character_name]\n' +
+      '[dialogue]Go well.[/dialogue]\n[event]A bell.[/event]\n' +
+      '[failure]No.[/failure]\n* [success]Done[/success]\n* [pending]Not yet[/pending]'
+    const w = mount(ChapterPage, {
+      props: { chapter: { ...INTRO, body }, titleId: 't' },
+    })
+
+    expect(w.get('.lq-chapter-speaker').text()).toBe('Mira')
+    expect(w.get('.lq-chapter-body .theme-dialogue').text()).toBe('Go well.')
+    expect(w.find('.lq-chapter-body .theme-event').exists()).toBe(true)
+    expect(w.find('.lq-chapter-body .theme-failure').exists()).toBe(true)
+    expect(w.get('.lq-chapter-body').text()).toContain('Done')
+    expect(w.get('.lq-chapter-body').text()).toContain('Not yet')
+  })
+
   describe('narrated', () => {
     const chapter: Chapter = {
       kind: 'intro',
@@ -172,6 +189,14 @@ describe('ChapterPage', () => {
       useNarrationStore().skipAll()
       await nextTick()
       expect(w.findAll('.lq-chapter-block')).toHaveLength(3)
+    })
+
+    it('hurries on a tap of the title too', async () => {
+      const w = start()
+      await nextTick()
+      await w.get('h2').trigger('click')
+      await w.get('h2').trigger('click')
+      expect(useNarrationStore().isNarrating).toBe(false)
     })
 
     it('hurries on a tap of the text and skips on a second tap, not on the button', async () => {

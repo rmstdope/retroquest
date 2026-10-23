@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import type { Chapter } from '@/lantern/chapter'
-import { parseTurn } from '@/lantern/parseTurn'
+import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
+import { displayName } from '@/lantern/displayName'
 import { actFolder } from '@/lantern/narrationManifest'
 import { POPUP_NARRATION_ID } from '@/lantern/narrationUnits'
 import { useReadAlong } from '@/composables/useReadAlong'
@@ -31,7 +32,36 @@ const settings = useSettingsStore()
 const root = ref<HTMLElement | null>(null)
 const { shown, isSpeaking, html } = useReadAlong(() => POPUP_NARRATION_ID, root)
 const folder = computed(() => actFolder(props.chapter.act))
-const blocks = computed(() => parseTurn(props.chapter.body))
+/**
+ * The body's blocks as shown: the markup each is rendered from (a quote, an
+ * event or a failure keeps its tag so it looks as the engine marked it; a
+ * checklist is one line per item) and, for a quote whose speaker differs from
+ * the previous quote's, the name above it.
+ */
+const blocks = computed(() => {
+  let previous: string | null = null
+  return parseTurn(props.chapter.body).map((block: TurnBlock) => {
+    const speaker =
+      block.kind === 'dialogue' && block.speaker && block.speaker !== previous
+        ? displayName(block.speaker)
+        : null
+    if (block.kind === 'dialogue') previous = block.speaker
+    return { markup: shownMarkup(block), speaker }
+  })
+})
+
+/** The markup a block is rendered from. */
+function shownMarkup(block: TurnBlock): string {
+  if (block.kind === 'text') return block.markup
+  if (block.kind === 'checklist')
+    return block.items
+      .map((item) => {
+        const tag = item.done ? 'success' : 'pending'
+        return `[${tag}]${item.markup}[/${tag}]`
+      })
+      .join('\n')
+  return `[${block.kind}]${block.markup}[/${block.kind}]`
+}
 const held = computed(
   () =>
     settings.narrationOn &&
@@ -42,7 +72,7 @@ onMounted(() => {
   if (folder.value) void narration.preload(folder.value)
 })
 
-/** A tap on the page's text (names and links excepted) steers the voice. */
+/** A tap on the page's text or title (buttons and links excepted) steers the voice. */
 function onTextClick(event: MouseEvent): void {
   const target = event.target instanceof Element ? event.target : null
   if (!target?.closest('button, a')) narration.tap()
@@ -82,7 +112,11 @@ defineExpose({ focus })
 
 <template>
   <div ref="root" class="lq-chapter">
-    <div class="lq-chapter-inner" :class="{ 'lq-held': held }">
+    <div
+      class="lq-chapter-inner"
+      :class="{ 'lq-held': held }"
+      @click="onTextClick"
+    >
       <span class="lq-chapter-kicker">{{ kicker }}</span>
       <h2
         :id="titleId"
@@ -99,18 +133,17 @@ defineExpose({ focus })
         ><span class="lq-rule"></span>
       </div>
 
-      <div
-        class="lq-chapter-body"
-        :class="{ 'lq-chapter-closing': !intro }"
-        @click="onTextClick"
-      >
+      <div class="lq-chapter-body" :class="{ 'lq-chapter-closing': !intro }">
         <template v-for="(block, index) in blocks" :key="index">
           <p
-            v-if="shown(index + 1) && block.kind !== 'checklist'"
+            v-if="shown(index + 1)"
             class="lq-chapter-block"
             :class="{ 'lq-speaking': isSpeaking(index + 1) }"
             :data-unit="index + 1"
           >
+            <span v-if="block.speaker" class="lq-chapter-speaker">{{
+              block.speaker
+            }}</span>
             <!-- eslint-disable vue/no-v-html -->
             <span v-html="html(block.markup, index + 1)"></span>
             <!-- eslint-enable vue/no-v-html -->
@@ -197,6 +230,16 @@ defineExpose({ focus })
 }
 .lq-chapter-block {
   margin: 0 0 0.8em;
+}
+.lq-chapter-speaker {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--lq-font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lq-character);
 }
 .lq-chapter-block.lq-speaking {
   box-shadow: inset 2px 0 0 var(--lq-accent);
