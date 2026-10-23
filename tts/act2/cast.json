@@ -1,0 +1,124 @@
+{
+  "speakers": {
+    "ancient tree spirit": {
+      "voice": "1868865a066c4382963a712860d9ff3d",
+      "style": "[slow, deep, ancient]"
+    },
+    "barmaid elena": {
+      "voice": "9bbcd41170c34382970965458a16c021",
+      "style": "[young, frightened, quiet]"
+    },
+    "brenn": {
+      "voice": "b11f48d9c61345c48b5927b2e9163de2",
+      "style": "[young, ashamed, nervous]"
+    },
+    "caravan master thorne": {
+      "voice": "4d78f878f023424cb77975a6dea180a6",
+      "style": "[gruff, weathered, hard]"
+    },
+    "castle guard captain": {
+      "voice": "b051c22460b14070b3f0147586d94d33",
+      "style": "[stern, low, warning]"
+    },
+    "court herald": {
+      "voice": "752513077f7d448bb216b8976919f192",
+      "style": "[formal, dry, ceremonious]"
+    },
+    "families": {
+      "voice": "485e105c53b04e698cf0f733c32c930d",
+      "style": "[warm, neighbourly]"
+    },
+    "forest hermit": {
+      "voice": "80f1d9d25daf40c2ad149b9c1106b386",
+      "style": "[old, wry, knowing]"
+    },
+    "forest sprites": {
+      "voice": "2dad98ddb9cd4e8ebc61d04432b9610c",
+      "style": "[quick, playful, teasing]"
+    },
+    "gate captain": {
+      "voice": "5766f75966264fa2a5f3da4d4f649977",
+      "style": "[officious, then polite]"
+    },
+    "herald": {
+      "voice": "1d304964fcfe4c5998cfe7b7298aa727",
+      "style": "[formal, polite, precise]"
+    },
+    "historians": {
+      "voice": "0663f784128e42b2801c3fa5bc116cc8",
+      "style": "[scholarly, uneasy]"
+    },
+    "innkeeper marcus": {
+      "voice": "dcb3b4a683bf49a09d5896528beac8c4",
+      "style": "[warm, tired, plain-spoken]"
+    },
+    "knight of despair": {
+      "voice": "0adf497c253f403c99227d8197094644",
+      "style": "[hollow, heavy, worn out]"
+    },
+    "local craftsmen": {
+      "voice": "4c81725f7e4e4858bb7baf6014c1a490",
+      "style": "[cheerful, hearty]"
+    },
+    "lord commander": {
+      "voice": "3bab0b60a91e4eaaa5b7225f98b2b935",
+      "style": "[commanding, formal, grave]"
+    },
+    "lyria": {
+      "voice": "5dcd780da90948ddb54c5aefb322da1b",
+      "style": "[calm, brisk, kind]"
+    },
+    "master healer lyria": {
+      "voice": "5dcd780da90948ddb54c5aefb322da1b",
+      "style": "[calm, brisk, kind]"
+    },
+    "master merchant aldric": {
+      "voice": "c04478dc318f49f095652496bcdbafb7",
+      "style": "[smooth, haughty, salesman-like]"
+    },
+    "mira": {
+      "voice": "52b38f57477c4a3dbaf9136e739d9799",
+      "style": "[low, calm, knowing]"
+    },
+    "mountain hermit": {
+      "voice": "a688ac91e10c455caf586ff0d0cd3dab",
+      "style": "[old, gruff, fond]"
+    },
+    "narrator": {
+      "voice": "7d805071401d4b738334f332a8c320c2",
+      "style": "[warm, gentle storyteller]"
+    },
+    "nyx": {
+      "voice": "37ab9e84be5b42a18681adb35ab988d1",
+      "style": "[soft, otherworldly, unhurried]"
+    },
+    "sir cedric": {
+      "voice": "6e3869f7e5ce4589b9224181e7360bfc",
+      "style": "[warm, proud, a little worn]"
+    },
+    "spectral librarian": {
+      "voice": "8ec492b49f5c44a7ba00a742561f53d2",
+      "style": "[dry, hollow, ghostly]"
+    },
+    "squires": {
+      "voice": "fe2cbfe8efe0440cb80634b2f6c67ab5",
+      "style": "[young, eager, lowering his voice]"
+    },
+    "town crier": {
+      "voice": "4faf97dc50e0444c9b8007c06f5f1530",
+      "style": "[loud, ringing, sing-song]"
+    },
+    "training master": {
+      "voice": "aa830ada246d4233b9450e7d6c5252b3",
+      "style": "[firm, direct, decent]"
+    },
+    "water nymphs": {
+      "voice": "7dc0cbb9045243129fcfe20650744ead",
+      "style": "[liquid, light, curious]"
+    }
+  },
+  "pronounce": {
+    "Act II:": "Act Two:",
+    "Lyria": "LEER-ee-a"
+  }
+}

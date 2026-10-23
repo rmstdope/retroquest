@@ -1,0 +1,2102 @@
+[
+  {
+    "key": "03c445d262b0b0",
+    "speaker": "narrator",
+    "text": "Act II: The Gathering Storm"
+  },
+  {
+    "key": "18fb515d54c5bd",
+    "speaker": "narrator",
+    "text": "After the mysterious events in Willowbrook and the revelation of your growing magical abilities, you have left your quiet village behind. The mountain path stretches before you, winding through rocky terrain toward your destination: Greendale, a bustling city that serves as the gateway between civilization and the mystical Enchanted Forest."
+  },
+  {
+    "key": "004dd1039fbe71",
+    "speaker": "narrator",
+    "text": "As you crest the final ridge, the sight takes your breath away. Below lies Greendale—larger than any settlement you've ever seen, with stone buildings, busy market squares, and an impressive castle rising majestically above the city walls. Smoke rises from countless chimneys, and you can hear the distant sounds of commerce and conversation carried on the mountain breeze."
+  },
+  {
+    "key": "11e7538286f2d5",
+    "speaker": "narrator",
+    "text": "Mira's parting words go with you:"
+  },
+  {
+    "key": "1ec5339c1ad652",
+    "speaker": "mira",
+    "text": "Your road leads to Greendale, Elior. Once there, show the amulet to no one lightly. Those who know what it is will find you."
+  },
+  {
+    "key": "047416b6d84e7e",
+    "speaker": "narrator",
+    "text": "The Ancient Amulet your parents left you lies hidden under your shirt, warm against your chest. Someone came to Willowbrook looking for it, your grandmother said. Keep it hidden."
+  },
+  {
+    "key": "0318fc67052e16",
+    "speaker": "narrator",
+    "text": "Malakar, to you, is a word from Willowbrook: a name your neighbours say over bad weather and bad luck, and knock on wood after. A tale to frighten children, and one line in your mother's hand that called him a friend once."
+  },
+  {
+    "key": "1eb8a1263fb75e",
+    "speaker": "narrator",
+    "text": "Beyond Greendale, you glimpse the edge of the Enchanted Forest—an ancient woodland where magic flows like water and spirits older than memory dwell among the trees. The very air seems to shimmer with possibility and danger."
+  },
+  {
+    "key": "0ff50575625578",
+    "speaker": "narrator",
+    "text": "This is where your true journey begins. In Greendale, you must prove yourself worthy, forge alliances with powerful allies, and master the magical arts. Only then will you be ready to face the forest's deepest secrets and the growing storm that threatens all you hold dear."
+  },
+  {
+    "key": "0bc301d9db0039",
+    "speaker": "narrator",
+    "text": "Take a deep breath, and start down the road into Greendale."
+  },
+  {
+    "key": "1e92f307d3b358",
+    "speaker": "narrator",
+    "text": "A winding trail climbs through rocky terrain between Willowbrook and Greendale. Sturdy trees cast intermittent shade and the path remains well tended despite its remoteness. Glimpses of both settlements appear at overlooks, offering reflective pauses. A small camp site used by travelers rests just off the main trail."
+  },
+  {
+    "key": "08319cf1b2623a",
+    "speaker": "narrator",
+    "text": "Greendale is bigger than any place you have seen, but the talk in its streets is low and uneasy. People speak of a darkness gathering beyond the walls, and say that if anyone at the castle understands it, it is Sir Cedric."
+  },
+  {
+    "key": "0a732e5ad3b014",
+    "speaker": "narrator",
+    "text": "You carefully examine the abandoned camp site. There are two fire pits here, not one, and the ashes of one are much older than the other. In the soft ground beside the trail, the same boot prints show twice: one line coming up from Willowbrook, and a fresher line going back down toward it. Hidden under leaves near the fire pit you discover an entry pass to Greendale, dropped, it seems, by whoever left in such a hurry."
+  },
+  {
+    "key": "0f4d9bb15d3f37",
+    "speaker": "narrator",
+    "text": "You examine the mountain flower closely. It's quite pretty, but seems to be just an ordinary wildflower that's adapted to the harsh mountain climate."
+  },
+  {
+    "key": "07040f67547b10",
+    "speaker": "narrator",
+    "text": "The mountain hermit looks you up and down, the way he might inspect a recruit."
+  },
+  {
+    "key": "104c759751cd83",
+    "speaker": "mountain hermit",
+    "text": "Greendale, is it? Thirty years I drilled squires in that castle's yard, and I've never heard the city so uneasy. The king gone, the guard half-empty. Walk carefully."
+  },
+  {
+    "key": "0946e9715dbd4d",
+    "speaker": "narrator",
+    "text": "He unwraps a battered training sword from an old cloth."
+  },
+  {
+    "key": "0fb385b23e05cb",
+    "speaker": "mountain hermit",
+    "text": "This was Cedric's. I put it in his hands when he was a squire no taller than you. They say he slept on watch the night the king went, and lost his spurs for it. Take it to him in the castle yard. Tell him the sergeant never believed a word of it."
+  },
+  {
+    "key": "085a594c82fac7",
+    "speaker": "narrator",
+    "text": "You lean on the walking stick, feeling more steady on the rocky path. It's a small comfort and a reliable companion for any journey."
+  },
+  {
+    "key": "083338bae2861e",
+    "speaker": "narrator",
+    "text": "You practice a few sword forms with the training sword. The balance feels good in your hands, and it would be perfect for demonstrating combat skills to someone who needs proof of your abilities."
+  },
+  {
+    "key": "075915c3158718",
+    "speaker": "narrator",
+    "text": "The mountain hermit jerks his chin toward Greendale."
+  },
+  {
+    "key": "05a92239ed6bd6",
+    "speaker": "mountain hermit",
+    "text": "You've still got that blade, I see. Get it to Cedric, and mind you give him my words."
+  },
+  {
+    "key": "02a746d4cfcf30",
+    "speaker": "narrator",
+    "text": "You've already thoroughly examined the camp site. There's nothing more to find here."
+  },
+  {
+    "key": "0a8e1063a9e5d5",
+    "speaker": "narrator",
+    "text": "You examine the entry pass. Someone has scraped their name off it, carefully. The seal looks authentic, and it should allow you passage into Greendale without question."
+  },
+  {
+    "key": "0abd88502c4b9a",
+    "speaker": "narrator",
+    "text": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm."
+  },
+  {
+    "key": "1ab74b76482052",
+    "speaker": "narrator",
+    "text": "The Gate Captain looks at you with a professional but guarded expression."
+  },
+  {
+    "key": "07fc724ace1f34",
+    "speaker": "gate captain",
+    "text": "State your business in Greendale, traveler. Do you have proper documentation for entry?"
+  },
+  {
+    "key": "134f7951e7b0f1",
+    "speaker": "narrator",
+    "text": "The Gate Captain turns the pass over in his hands. He runs a thumb along the line where a name should be; it has been scraped away with a blade. Then he looks at the seal, and grunts."
+  },
+  {
+    "key": "16ec921cd76923",
+    "speaker": "gate captain",
+    "text": "Somebody's scraped the name off this. The seal's good, though, and the seal's what I answer for. You are welcome in Greendale. Please, proceed."
+  },
+  {
+    "key": "034298a91445e1",
+    "speaker": "gate captain",
+    "text": "A map would help you find your way - the streets can be quite maze-like for newcomers. Travelers leave things at the information post there; look around and you may find what you need."
+  },
+  {
+    "key": "189b70f7856683",
+    "speaker": "narrator",
+    "text": "With that, he salutes smartly and walks back to his patrol duties, leaving you free to explore the gate area."
+  },
+  {
+    "key": "1a7a4b5d09b1b2",
+    "speaker": "narrator",
+    "text": "With the Gate Captain gone, you're free to look around. A small information post nearby holds items left by travelers. Among them you discover a detailed city map of Greendale. Someone has drawn on it in grey ink."
+  },
+  {
+    "key": "007f77b5f9c893",
+    "speaker": "narrator",
+    "text": "You examine the city map closely. It's a professional cartographer's work, showing detailed street layouts, building locations, and district boundaries. Someone has been over it in grey ink, in a small, careful hand. The Silver Stag Inn is circled twice. In the Residential Quarter, at the end of one lane, a cross has been drawn, and beside it a single word: cellar?"
+  },
+  {
+    "key": "13033c7121598b",
+    "speaker": "narrator",
+    "text": "You study the city map carefully. The detailed layout shows the Main Square at the center, with the Market District to the east, Castle Approach to the north, and various other important locations clearly marked. Someone has been over it in grey ink, in a small, careful hand. The Silver Stag Inn is circled twice. In the Residential Quarter, at the end of one lane, a cross has been drawn, and beside it a single word: cellar?"
+  },
+  {
+    "key": "084f6122e0b420",
+    "speaker": "narrator",
+    "text": "The heart of Greendale pulses with activity. A grand fountain shows ancient heroes locked in battle with mythical beasts. Merchants hawk wares from bright stalls while townsfolk bustle about, exchanging news and gossip. Stone buildings with red roofs frame the space. Castle towers rise to the north, and the energetic flow of people makes it clear important things happen here."
+  },
+  {
+    "key": "04705fd9a62b01",
+    "speaker": "narrator",
+    "text": "You read through the various postings on the notice board. Most are mundane announcements about trade regulations and festival dates, but one catches your eye: a call under the Lord Commander's seal for able hands to serve the castle in these uncertain times. Beneath it, in a smaller hand, someone has written: Enquire in the training yard."
+  },
+  {
+    "key": "10586e52d56d97",
+    "speaker": "town crier",
+    "text": "Hear ye, hear ye! Welcome to Greendale, traveler! The Lord Commander calls for able hands to serve the realm. Read his notice on the board!"
+  },
+  {
+    "key": "1314f63d931250",
+    "speaker": "narrator",
+    "text": "He lowers his bell and his voice with it."
+  },
+  {
+    "key": "19feb8cc2694be",
+    "speaker": "town crier",
+    "text": "If it's a sword arm they want of you, they'll send you to the training yard, to Sir Cedric. Sir Cedric, as was. Mind your manners with him; whatever folk say, he's a fair man."
+  },
+  {
+    "key": "1872432986c69f",
+    "speaker": "narrator",
+    "text": "You examine the merchant's flyer. It advertises quality goods from Master Merchant Aldric and would serve as a good introduction when visiting the Market District."
+  },
+  {
+    "key": "1cebd24472fda8",
+    "speaker": "narrator",
+    "text": "A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind. Fewer guards than the posts were built for patrol the approach, and those who remain keep their voices low. The royal standard is gone from the highest spire."
+  },
+  {
+    "key": "19ba212624c25e",
+    "speaker": "herald",
+    "text": "Greetings, traveler. I must examine your credentials before you can be granted audience with the nobility. Do you have a formal pass or letter of recommendation? Forgive the quiet halls. Since King Alden vanished, half the court has gone home to wait for news."
+  },
+  {
+    "key": "0744bd5108466f",
+    "speaker": "castle guard captain",
+    "text": "Welcome to the castle grounds. Sir Cedric can be found in the courtyard. He holds no rank now, but we still call him Sir, most of us, and you'll do the same if you've any sense. He's been seeking capable individuals for important work, so if you're here about that, be prepared to demonstrate your abilities."
+  },
+  {
+    "key": "0d0b9f3dd7b4ba",
+    "speaker": "narrator",
+    "text": "He lowers his voice."
+  },
+  {
+    "key": "1eba3e7feb22d5",
+    "speaker": "castle guard captain",
+    "text": "And a word of advice: ask no questions about the king. His Majesty has not been seen these three weeks, since the night he vanished from his own chambers. The word sent out to the villages is that he is ill. The Lord Commander rules in his name until he returns."
+  },
+  {
+    "key": "0cf9e54619b7f8",
+    "speaker": "narrator",
+    "text": "You present the entry pass to the herald. He examines the seal carefully and nods with approval."
+  },
+  {
+    "key": "1fbca3222ae39d",
+    "speaker": "herald",
+    "text": "This is a formal recommendation of excellent standing. You are granted formal audience rights with the nobility."
+  },
+  {
+    "key": "1c1b554e050771",
+    "speaker": "narrator",
+    "text": "He does not seem to notice that the name above the seal has been scraped away. The pass has been officially registered."
+  },
+  {
+    "key": "0c1bbb44448ab7",
+    "speaker": "herald",
+    "text": "Your credentials have been verified and you have been granted formal audience rights. You may proceed to meet with Sir Cedric and other members of the court."
+  },
+  {
+    "key": "017ea0838c6df6",
+    "speaker": "narrator",
+    "text": "An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork. Ancient oak trees provide shade for stone benches, and a stable houses magnificent warhorses, though half its stalls stand empty since the king's own guard rode out to search for him. The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses."
+  },
+  {
+    "key": "050747ab7e1ba7",
+    "speaker": "narrator",
+    "text": "You draw the training sword. Before you can take your stance, Sir Cedric catches your wrist and turns the blade to the light."
+  },
+  {
+    "key": "05a618acf50f0a",
+    "speaker": "sir cedric",
+    "text": "That notch by the guard. I put it there at fourteen, swinging at a post I'd been told to leave alone. Where did you get this?"
+  },
+  {
+    "key": "1bfd8d632981bf",
+    "speaker": "narrator",
+    "text": "You tell him about the old man by the fire on the mountain path, and what he asked you to say."
+  },
+  {
+    "key": "12e80231c1bce8",
+    "speaker": "narrator",
+    "text": "Sir Cedric is silent for a long moment. When he speaks, his voice is low."
+  },
+  {
+    "key": "1e28c26fd81666",
+    "speaker": "sir cedric",
+    "text": "The sergeant never believed in anything he couldn't hit. That he believes in me..."
+  },
+  {
+    "key": "0d550b86ab4466",
+    "speaker": "narrator",
+    "text": "He lets go of your wrist and steps back."
+  },
+  {
+    "key": "1351582a027aeb",
+    "speaker": "sir cedric",
+    "text": "Show me what he taught you, then."
+  },
+  {
+    "key": "1fdb21dd205fa5",
+    "speaker": "narrator",
+    "text": "He takes a practice blade from the rack and squares off against you."
+  },
+  {
+    "key": "1aa9ba4c10c4ec",
+    "speaker": "sir cedric",
+    "text": "Three forms, the way he drilled them. When I come at you, answer me: strike, guard or turn. Say it as you do it."
+  },
+  {
+    "key": "00101c9785c368",
+    "speaker": "narrator",
+    "text": "(Answer him with: say strike, say guard or say turn to Sir Cedric.)"
+  },
+  {
+    "key": "0ab4f8a41e23cd",
+    "speaker": "narrator",
+    "text": "Sir Cedric raises his blade high over his left shoulder."
+  },
+  {
+    "key": "1e3e7a7b9bee86",
+    "speaker": "sir cedric",
+    "text": "High cut!"
+  },
+  {
+    "key": "0258e13e2d330a",
+    "speaker": "sir cedric",
+    "text": "Greetings, traveler. I am Cedric. Some here still call me Sir; you need not. The Lord Commander's notice asks for able hands; I ask for mine here in the yard, where I can see what they can do. I have been seeking individuals of courage and skill for a matter of great—"
+  },
+  {
+    "key": "02021b55a207a4",
+    "speaker": "narrator",
+    "text": "Sir Cedric stops mid-sentence. His eyes have fallen on the Ancient Amulet at your chest."
+  },
+  {
+    "key": "0d09d6449ae10f",
+    "speaker": "sir cedric",
+    "text": "That sigil. The sun rising over three linked rings. I have seen it only in the old histories in the castle archive: it is the mark of the Wardens of the Dawn. They guarded this kingdom long ago, and most have forgotten them. The oldest histories draw the mark another way: a tree under two moons, from before there were three things to guard. Whoever wore that amulet before you was a Warden, and your family is bound to them. I know no more than that. But I know enough to listen to you. Dark forces are gathering; I call it the 'Gathering Storm', and I need allies with magical knowledge and proven abilities. The sigil tells me where you come from; it does not tell me what you can do. Can you demonstrate your martial abilities?"
+  },
+  {
+    "key": "0682a09ea46fa8",
+    "speaker": "training master",
+    "text": "Ah, a visitor to our training grounds. I've been instructing knights and squires here for many years."
+  },
+  {
+    "key": "1299b38c4ccabf",
+    "speaker": "narrator",
+    "text": "He glances toward Sir Cedric with a troubled expression."
+  },
+  {
+    "key": "0b644d0b0a83f9",
+    "speaker": "training master",
+    "text": "It pains me to see a fine knight like Sir Cedric carrying such a heavy burden. He held the watch on the king's wall the night His Majesty vanished, and the next morning two men of the night watch swore he had left his post. They took his knighthood for it. But I've known Cedric for years, and he has never left a post in his life. Something about that whole affair never sat right with me. The watch's story was… too neat."
+  },
+  {
+    "key": "1bd470d9f1925b",
+    "speaker": "narrator",
+    "text": "He leans closer, lowering his voice."
+  },
+  {
+    "key": "17de376c137e21",
+    "speaker": "training master",
+    "text": "I've heard rumors that there are papers somewhere that tell a different story. Perhaps someone with your skills could help uncover the truth and restore honor to a good man who has suffered long enough."
+  },
+  {
+    "key": "098f63decd5b67",
+    "speaker": "narrator",
+    "text": "The squires are deeply focused on their training exercises, practicing sword forms and footwork with intense concentration. They seem too busy and focused to engage in conversation right now."
+  },
+  {
+    "key": "1e877186ead604",
+    "speaker": "squires",
+    "text": "Sorry, we can't talk - the Training Master expects us to perfect these techniques before the day is over."
+  },
+  {
+    "key": "01419347fea0db",
+    "speaker": "narrator",
+    "text": "Sir Cedric wants to see proof of your combat abilities before trusting you with important responsibilities. Demonstrate your martial skills with a training sword."
+  },
+  {
+    "key": "1a142f80d97d18",
+    "speaker": "narrator",
+    "text": "Sir Cedric calls it the Gathering Storm. He needs allies who know magic, but he will not trust you on your word alone. He wants to see you fight first, with the training sword."
+  },
+  {
+    "key": "12f7aec5f61931",
+    "speaker": "sir cedric",
+    "text": "I await your demonstration of combat skills before we can proceed with more serious matters."
+  },
+  {
+    "key": "065f627240f71f",
+    "speaker": "narrator",
+    "text": "He raises his blade high over his left shoulder."
+  },
+  {
+    "key": "1b27693862092d",
+    "speaker": "sir cedric",
+    "text": "Talk after."
+  },
+  {
+    "key": "19a796f9581e71",
+    "speaker": "narrator",
+    "text": "You bring the training sword up and his blade rings off it."
+  },
+  {
+    "key": "11ab7f54ea35d4",
+    "speaker": "sir cedric",
+    "text": "Guard. Good."
+  },
+  {
+    "key": "0d6e4f725ff964",
+    "speaker": "narrator",
+    "text": "He steps back, then drives straight at your middle."
+  },
+  {
+    "key": "1ed548d9ec0795",
+    "speaker": "sir cedric",
+    "text": "Lunge!"
+  },
+  {
+    "key": "16159eb0415e20",
+    "speaker": "narrator",
+    "text": "He drives straight at your middle."
+  },
+  {
+    "key": "0a938ff226a338",
+    "speaker": "narrator",
+    "text": "You step aside and his point slides past your ribs."
+  },
+  {
+    "key": "193858b17c196d",
+    "speaker": "sir cedric",
+    "text": "Turn. He taught you that much."
+  },
+  {
+    "key": "0cbc257f3180dd",
+    "speaker": "narrator",
+    "text": "He swings wide and, for a heartbeat, leaves his chest open."
+  },
+  {
+    "key": "1918c352b9bdee",
+    "speaker": "sir cedric",
+    "text": "Well?"
+  },
+  {
+    "key": "1cbf9f665d2bdf",
+    "speaker": "narrator",
+    "text": "He swings wide and leaves his chest open."
+  },
+  {
+    "key": "1c691731bed9d1",
+    "speaker": "narrator",
+    "text": "You tap his chest with the flat of the blade."
+  },
+  {
+    "key": "1e56cd4445cf26",
+    "speaker": "narrator",
+    "text": "Sir Cedric lowers his blade and nods approvingly."
+  },
+  {
+    "key": "17c16c04ae7cdd",
+    "speaker": "sir cedric",
+    "text": "Excellent! Your martial training is evident. I can trust someone with such disciplined combat skills."
+  },
+  {
+    "key": "0ae4ef0515a181",
+    "speaker": "narrator",
+    "text": "He pauses, his expression growing more serious."
+  },
+  {
+    "key": "07de139ff77ca8",
+    "speaker": "sir cedric",
+    "text": "Since you've proven your combat prowess, I can share more about what lies ahead. The dark forces gathering aren't ordinary threats - they're connected to ancient magical energies that have been dormant for centuries."
+  },
+  {
+    "key": "09181331540540",
+    "speaker": "narrator",
+    "text": "Sir Cedric leans closer, lowering his voice."
+  },
+  {
+    "key": "162647b6bed724",
+    "speaker": "sir cedric",
+    "text": "There are legends of a being known as Nyx - a mystical entity who dwells deep within the enchanted forest beyond our borders. Nyx is said to possess knowledge of the oldest magics, including secrets that could help us understand and combat these gathering shadows."
+  },
+  {
+    "key": "1dc954f55742f5",
+    "speaker": "sir cedric",
+    "text": "But the enchanted forest is treacherous,"
+  },
+  {
+    "key": "13dbf90aa3eb6a",
+    "speaker": "narrator",
+    "text": "he continues."
+  },
+  {
+    "key": "148264724bce0e",
+    "speaker": "sir cedric",
+    "text": "You'll need proper supplies before attempting such a journey. Visit the Market District and gather essential equipment: a forest survival kit, an enhanced lantern for the dark woods, and quality rope for navigating difficult terrain. Only when you're properly equipped should you venture into those mystical lands to seek out Nyx."
+  },
+  {
+    "key": "1df2c1029e815b",
+    "speaker": "narrator",
+    "text": "He straightens up, his voice returning to its commanding tone."
+  },
+  {
+    "key": "00460608531a93",
+    "speaker": "sir cedric",
+    "text": "Time is of the essence, Elior. The darkness grows stronger each day, and we need Nyx's ancient wisdom to understand what we're truly facing."
+  },
+  {
+    "key": "0cbada91f9d6bd",
+    "speaker": "narrator",
+    "text": "Sir Cedric mentioned the need for proper equipment for forest expeditions. Gather essential supplies from the Market District."
+  },
+  {
+    "key": "03811e523c94ca",
+    "speaker": "narrator",
+    "text": "Sir Cedric watched you with the training sword and now trusts you. He wants you to find Nyx, deep in the Enchanted Forest, because her old wisdom may show what you are truly facing. He gave you a hundred coins for a survival kit, an enhanced lantern and rope from the Market District."
+  },
+  {
+    "key": "166d0e5a67c879",
+    "speaker": "narrator",
+    "text": "You have successfully demonstrated your combat skills to Sir Cedric. He now trusts your abilities!"
+  },
+  {
+    "key": "12c5c4da77f2fb",
+    "speaker": "sir cedric",
+    "text": "Excellent demonstration! Your combat skills are impressive. I can see you have the training and discipline needed for the challenges ahead."
+  },
+  {
+    "key": "0240a1ca845add",
+    "speaker": "narrator",
+    "text": "Sir Cedric reaches into his pouch and hands you a bag of coins."
+  },
+  {
+    "key": "0c8b077791839a",
+    "speaker": "sir cedric",
+    "text": "Please accept these 150 gold coins. I should have provided them earlier for your supply purchasing. You'll need proper equipment for the forest expedition: a survival kit, an enhanced lantern, and quality rope from the Market District. The realm faces a great threat, and we must be prepared."
+  },
+  {
+    "key": "060eabdc165700",
+    "speaker": "narrator",
+    "text": "Sir Cedric hesitates, then rests a hand on a small pouch at his belt."
+  },
+  {
+    "key": "1f80578726e12a",
+    "speaker": "sir cedric",
+    "text": "One more thing, since the forest is where you are bound. My family has kept a charm for generations: Nature's Charm, carved for the knights who first made pacts with the forest spirits. The old texts say it is one of three that can call the sprite Nyx. I will not hand an heirloom of my house to someone I have known for a day. Prove yourself in more than a sparring yard, and we will speak of it again."
+  },
+  {
+    "key": "0200e854cd97d0",
+    "speaker": "narrator",
+    "text": "You count your coins. You have 1 gold pieces to spend on supplies and equipment."
+  },
+  {
+    "key": "093621b48d1f27",
+    "speaker": "sir cedric",
+    "text": "How goes your preparation? The gathering storm grows stronger each day. I trust you are making good progress in gathering allies and supplies."
+  },
+  {
+    "key": "0bc53ed2fb951e",
+    "speaker": "narrator",
+    "text": "Narrow streets crammed with shops and trading posts weave a maze of commerce. Spices, leather, and fresh bread scent the air. Merchant wagons clog passageways while deals are argued in several languages. Serious business gets done here."
+  },
+  {
+    "key": "119c93c270f33d",
+    "speaker": "narrator",
+    "text": "The Master Merchant Aldric looks at you appraisingly."
+  },
+  {
+    "key": "0cce80caa59327",
+    "speaker": "master merchant aldric",
+    "text": "I deal only with established customers and those with proper credentials. Do you have any introduction or referral that would qualify you for my premium services?"
+  },
+  {
+    "key": "065de058c31014",
+    "speaker": "caravan master thorne",
+    "text": "Thank the gods, someone who looks capable! I desperately need help - one of my most valuable caravans has gone missing in the Enchanted Forest. It was carrying rare goods and several merchants. I fear the worst, but I must know their fate. Would you be willing to search for them? I would be forever in your debt."
+  },
+  {
+    "key": "113879d738186c",
+    "speaker": "caravan master thorne",
+    "text": "Our road to Heavensforth runs along the forest's edge. It was safe enough a month ago, while the king's riders patrolled it. Nobody patrols it since the king went; every rider the castle has is out looking for him."
+  },
+  {
+    "key": "091cb3f9b79217",
+    "speaker": "caravan master thorne",
+    "text": "Brenn, my guard, came stumbling back alone two nights ago. Says the ravine path gave way and he ran. Ran! He's skulking in the warehouse now. I'll deal with him once my people are home."
+  },
+  {
+    "key": "075218d701c5e3",
+    "speaker": "narrator",
+    "text": "You present the merchant's flyer to Master Merchant Aldric. His eyes light up as he examines it."
+  },
+  {
+    "key": "1e3e51d6af3a16",
+    "speaker": "master merchant aldric",
+    "text": "Ah, excellent! This flyer grants you access to our premium selection and preferred customer pricing. What quality goods can I help you acquire today?"
+  },
+  {
+    "key": "1efd1503d0efbd",
+    "speaker": "narrator",
+    "text": "The Master Merchant Aldric says:"
+  },
+  {
+    "key": "125ea9f02e8264",
+    "speaker": "master merchant aldric",
+    "text": "Welcome to Aldric's Premium Adventure Gear! Only the finest equipment for discerning adventurers. My premium selection includes: - Forest Survival Kit: 50 gold coins - Enhanced Lantern: 40 gold coins - Quality Rope: 20 gold coins"
+  },
+  {
+    "key": "0888322b8fbf87",
+    "speaker": "narrator",
+    "text": "You purchase the forest survival kit from Master Merchant Aldric for 50 gold coins. You have 100 coins remaining."
+  },
+  {
+    "key": "1c89be8345ba22",
+    "speaker": "narrator",
+    "text": "You examine the forest survival kit. It contains high-quality gear that would provide essential protection and tools for navigating dangerous forest areas safely. Now is not the time to use it."
+  },
+  {
+    "key": "091716c1065555",
+    "speaker": "narrator",
+    "text": "You purchase the enhanced lantern from Master Merchant Aldric for 40 gold coins. You have 60 coins remaining."
+  },
+  {
+    "key": "18b115e5a3eaed",
+    "speaker": "narrator",
+    "text": "You activate the enhanced lantern. Its magical light pierces through darkness and can reveal hidden passages, magical traces, and secret paths that ordinary light cannot illuminate."
+  },
+  {
+    "key": "02385454ca018e",
+    "speaker": "narrator",
+    "text": "Caravan Master Thorne's valuable caravan has gone missing in the Enchanted Forest. Find out what happened to the merchants and their goods."
+  },
+  {
+    "key": "0c3bc9936b553e",
+    "speaker": "brenn",
+    "text": "You've seen Thorne, then. You'll have heard. The path just went, out from under the wagons. I was hanging over the ravine by one hand. When I got up I ran for help, I swear I did. But the forest turned me round, and I couldn't find the road again for two days. So I came back. Somebody had to tell him."
+  },
+  {
+    "key": "0fa8f34227e514",
+    "speaker": "caravan master thorne",
+    "text": "Any word on my missing caravan? Every day that passes makes me fear the worst for those poor souls."
+  },
+  {
+    "key": "06ec27d3855870",
+    "speaker": "narrator",
+    "text": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink."
+  },
+  {
+    "key": "15a26871b217e8",
+    "speaker": "narrator",
+    "text": "You examine the door closely. It's made of sturdy oak wood with decorative iron hinges and a simple latch. The door frame is carved with intricate patterns typical of the inn's welcoming atmosphere. This door provides access to the upper floor where guests can rent private rooms for rest and storage."
+  },
+  {
+    "key": "006e247f8d3f11",
+    "speaker": "narrator",
+    "text": "The innkeeper marcus says:"
+  },
+  {
+    "key": "1e3c765963319f",
+    "speaker": "innkeeper marcus",
+    "text": "Welcome to The Silver Stag Inn! We offer comfortable rooms and warm meals for weary travelers. I can offer you: - Room Key: 10 gold coins"
+  },
+  {
+    "key": "156c978b92483d",
+    "speaker": "narrator",
+    "text": "Though I must say, these have been dark times for my family. My daughter... well, perhaps you should speak with her yourself if you're looking to help those in need."
+  },
+  {
+    "key": "13b7a70cc09604",
+    "speaker": "narrator",
+    "text": "Elena coughs weakly."
+  },
+  {
+    "key": "1506e1a0152f7e",
+    "speaker": "barmaid elena",
+    "text": "Hello, traveler. I apologize for my appearance... I've been cursed by a dark wizard who passed through town weeks ago. The curse grows stronger each day, draining my life force. My father searches desperately for a cure, but I fear only someone with powerful magical abilities could break such dark magic."
+  },
+  {
+    "key": "034d4ab44856c6",
+    "speaker": "innkeeper marcus",
+    "text": "These have been difficult times, but we still maintain the finest accommodations in Greendale. I can offer you: - Room Key: 10 gold coins"
+  },
+  {
+    "key": "0b5b1bf27a6e0e",
+    "speaker": "narrator",
+    "text": "Elena, the barmaid at The Silver Stag Inn, has been cursed by a dark wizard. Use your magical abilities to break the curse and save her life."
+  },
+  {
+    "key": "1b428b8d478000",
+    "speaker": "narrator",
+    "text": "You've spoken with Elena? Then you understand my desperation. The curse grows stronger each day, and I fear we don't have much time left. If you truly can help her, I'll give you anything - rooms, information, whatever you need."
+  },
+  {
+    "key": "045e9d8eef4e41",
+    "speaker": "innkeeper marcus",
+    "text": "It came on her the week the king went. The whole town was out in the streets asking after him, and I was upstairs with a cold cloth."
+  },
+  {
+    "key": "08d8a0047c832f",
+    "speaker": "narrator",
+    "text": "Elena speaks weakly."
+  },
+  {
+    "key": "19352f00579042",
+    "speaker": "barmaid elena",
+    "text": "Have you found a way to break the curse? I can feel my strength fading more each day..."
+  },
+  {
+    "key": "02d6581e10873c",
+    "speaker": "narrator",
+    "text": "You purchase the room key from innkeeper marcus for 10 gold coins. He hands you a brass key and explains how to access the private rooms upstairs. You have 50 coins remaining."
+  },
+  {
+    "key": "151b462f84e348",
+    "speaker": "innkeeper marcus",
+    "text": "That room upstairs? Its last lodger was a man in a grey cloak. Never gave a name, wrote half the night by candle, and was gone one morning without paying. It was the week the king went. I've aired it since. You'll find it clean."
+  },
+  {
+    "key": "11bb96b103c681",
+    "speaker": "narrator",
+    "text": "The key turns with a soft click, unlocking access to the private inn rooms upstairs. You can now 'go east' to enter them."
+  },
+  {
+    "key": "0c6be73fe37335",
+    "speaker": "narrator",
+    "text": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below. One floorboard beside the bed sits a little proud of the rest."
+  },
+  {
+    "key": "02e47f6d2bff2a",
+    "speaker": "narrator",
+    "text": "As you examine the room carefully, you notice a wooden floorboard near the bed is slightly raised. Pressing it shifts the board with a soft creak. Lifting it reveals a hidden space containing a leather-bound journal deliberately concealed by a previous guest. The pages hold detailed notes and observations that may aid your journey."
+  },
+  {
+    "key": "169802a3095a5d",
+    "speaker": "knight of despair",
+    "text": "'Third night in Greendale. The archivists doze at their desks. The birth rolls of Willowbrook were easy enough to reach.'"
+  },
+  {
+    "key": "0a64cabae4dce2",
+    "speaker": "knight of despair",
+    "text": "'Copied: the families who came to Willowbrook from elsewhere. Ten I can trace. One I cannot follow past the village gate.'"
+  },
+  {
+    "key": "01063c55105911",
+    "speaker": "knight of despair",
+    "text": "'Called at the healer's hut. The amulet is not with her, she says. She lies well.'"
+  },
+  {
+    "key": "1f99ffefc66e65",
+    "speaker": "knight of despair",
+    "text": "'The innkeeper grows curious. I leave tonight.'"
+  },
+  {
+    "key": "0f5aeb6ebdf815",
+    "speaker": "narrator",
+    "text": "Below the notes, a sketch, drawn twice over: a sun rising over three linked rings. Beside it, a question mark, pressed so hard the nib has torn the page."
+  },
+  {
+    "key": "1b4d78679b77ab",
+    "speaker": "narrator",
+    "text": "Investigate your family heritage and Willowbrook's significance by researching historical records and genealogical information in the Great Hall."
+  },
+  {
+    "key": "00c75af9c12dfa",
+    "speaker": "narrator",
+    "text": "You purchase the quality rope from Master Merchant Aldric for 20 gold coins. You have 50 coins remaining."
+  },
+  {
+    "key": "12545708345f81",
+    "speaker": "narrator",
+    "text": "You have gathered all the essential supplies for forest exploration. The journey supplies quest is complete!"
+  },
+  {
+    "key": "01589e9ff408a6",
+    "speaker": "narrator",
+    "text": "You coil the quality rope over your arm: fifty feet of it, tight-laid, without a frayed strand. It wants an edge to be dropped over."
+  },
+  {
+    "key": "1ff363f3565b90",
+    "speaker": "narrator",
+    "text": "The survival kit, the lantern and the rope are packed. The merchants of Greendale have done what they can for you. The rest of the road leads to the edge of the Enchanted Forest."
+  },
+  {
+    "key": "02c9ff9589d2a7",
+    "speaker": "narrator",
+    "text": "A magnificent hall with soaring ceilings supported by massive stone columns. Tapestries depicting legendary battles cover the walls, and the king's throne stands empty on a raised dais at the far end, a dark cloth laid across its arms. Behind it, the doors to the throne room are barred. Sunlight streams through tall stained-glass windows, casting colorful patterns on the stone floor. This is where the lords of Greendale hold court; for now, the Lord Commander holds it alone."
+  },
+  {
+    "key": "14637fbe6ea441",
+    "speaker": "court herald",
+    "text": "I handle formal presentations and credentials for court access. If you wish to research in the historical archives or speak with court officials, you'll need proper documentation of your standing. Petitions that were the king's go to the Lord Commander now, by his order, until His Majesty is found."
+  },
+  {
+    "key": "1f4efa837bd323",
+    "speaker": "historians",
+    "text": "Welcome to the historical archives. We maintain records of regional history, family genealogies, and ancient chronicles. Do you have any historical documents or artifacts you'd like us to examine?"
+  },
+  {
+    "key": "060fc572a68d2e",
+    "speaker": "narrator",
+    "text": "One of them adds, more quietly:"
+  },
+  {
+    "key": "00dbdbed280dc5",
+    "speaker": "historians",
+    "text": "We have searched every record for a king who simply vanished from his own bed. There is none, not in all of Greendale's history."
+  },
+  {
+    "key": "083ce4fc64e752",
+    "speaker": "narrator",
+    "text": "The lord commander greets you formally."
+  },
+  {
+    "key": "022d23680430b8",
+    "speaker": "lord commander",
+    "text": "Welcome to Greendale's Great Hall. I oversee the military affairs of our realm and, since King Alden vanished, I hold his court in his name. If you hear any word of His Majesty, you bring it to me first."
+  },
+  {
+    "key": "1a75ac9ab95aa1",
+    "speaker": "court herald",
+    "text": "Excellent! This is a properly certified entry pass. I hereby formally present you to the court and grant you access to our historical archives. Your credentials are now on record, and you may research freely in our collections."
+  },
+  {
+    "key": "0fb82a4276ec64",
+    "speaker": "court herald",
+    "text": "You have been formally presented to the court and your credentials are on record. You may access the historical archives and speak with court historians about your research. Petitions that were the king's go to the Lord Commander now, by his order, until His Majesty is found."
+  },
+  {
+    "key": "03140301172299",
+    "speaker": "narrator",
+    "text": "You show the traveler's journal to the historians. They turn the pages slowly at first, then faster. One of them goes pale."
+  },
+  {
+    "key": "00c875c92c4b34",
+    "speaker": "historians",
+    "text": "These are our birth rolls. Copied line for line, and that sketch is drawn from one of our own pages. Nobody has leave to copy the birth rolls. Nobody!"
+  },
+  {
+    "key": "158d75ab3106d5",
+    "speaker": "historians",
+    "text": "Whoever wrote this sat at our shelves. Search the archive with us; we will show you what he read."
+  },
+  {
+    "key": "034ba6e0e0afce",
+    "speaker": "historians",
+    "text": "Search the archive with us. If a thief has been at our shelves, we want to know what else he read."
+  },
+  {
+    "key": "06455627b0e07f",
+    "speaker": "narrator",
+    "text": "With the historians' guidance you work through the archive. Most of it is tax rolls and land grants, but near the oldest shelves you find two things."
+  },
+  {
+    "key": "0451ecbf209cce",
+    "speaker": "narrator",
+    "text": "'Of the Wardens of the Dawn. Their mark is the sun rising over three linked rings. They kept watch over the kingdom when the old wars ended and answered to no lord but the crown. The king stood with them, and lent the crown's own binding to their last great work. None of them has been seen in a generation, and few now remember their names.'"
+  },
+  {
+    "key": "1d6e977c9830d6",
+    "speaker": "narrator",
+    "text": "'A man in a grey cloak. Asked for the birth rolls of Willowbrook and the families who came there. Would not give his name. Said he came on the business of Malakar.'"
+  },
+  {
+    "key": "0b1e0c219b018b",
+    "speaker": "narrator",
+    "text": "The archive names the Wardens of the Dawn, and a stranger asking after the Willowbrook bloodline on Malakar's business."
+  },
+  {
+    "key": "019ce99fd0d8d6",
+    "speaker": "historians",
+    "text": "We checked the Willowbrook roll against his notes. One page is gone from it, cut out at the binding, and long ago by the look of it. The year you were born. His notes stop at the same place. Whatever he came for, someone hid it from him before he ever sat down."
+  },
+  {
+    "key": "155566f8aa0b32",
+    "speaker": "historians",
+    "text": "You saw the last name in our register, then. The same week. We have told ourselves it means nothing, and none of us believes it."
+  },
+  {
+    "key": "1322f0aed9b36f",
+    "speaker": "narrator",
+    "text": "Quiet streets lined with comfortable two-story homes, each with small gardens and neat workshops. Smoke rises from chimneys, and the sound of craftsmen at work echoes from nearby buildings. This is where Greendale's skilled artisans and middle-class citizens live and work. The atmosphere is peaceful and industrious. At the end of one lane an old cellar door has been bricked up, and a cold draught breathes through the gaps."
+  },
+  {
+    "key": "1f2ffe60e908fe",
+    "speaker": "narrator",
+    "text": "You use your walking stick to help several elderly residents navigate the uneven cobblestones and carry their heavy loads. Your assistance is greatly appreciated, and the community takes note of your kind and helpful nature. Word spreads that you are someone who cares about others."
+  },
+  {
+    "key": "0416f24fc4280c",
+    "speaker": "narrator",
+    "text": "You speak with the local craftsmen and watch them work, observing their techniques for repairing items. As you study their methods, you begin to understand the magical principles behind restoration and repair. Through careful study, you learn the mend spell!"
+  },
+  {
+    "key": "11fc55184dc8f8",
+    "speaker": "families",
+    "text": "Welcome to our neighborhood! It's lovely to meet someone who takes time to help others. Greendale has a rich history - our families have been here for generations. The city has always been a place where those with good hearts and magical talents find a home. We're grateful for folks like you who lend a hand to those in need."
+  },
+  {
+    "key": "019864aee0f23d",
+    "speaker": "families",
+    "text": "Here, dear,"
+  },
+  {
+    "key": "1852fe412119aa",
+    "speaker": "families",
+    "text": "These are rare healing herbs that have been in our family for generations. Someone who helps others as you do should have them."
+  },
+  {
+    "key": "0be6a363ddf8b9",
+    "speaker": "families",
+    "text": "Master Lyria up the lane has been asking all week for herbs like these. If you've no use for them yourself, she would."
+  },
+  {
+    "key": "02c53c2bcc18bb",
+    "speaker": "families",
+    "text": "Our garden plots have gone grey this year. Beans, cabbages, the lot: they come up green and then simply give up. Old Hettie says it is the soil, but none of us has ever seen soil do that."
+  },
+  {
+    "key": "1a71dbbd24edfd",
+    "speaker": "families",
+    "text": "Little Wren at the end house has been abed with fever all week. She keeps asking for the purple flowers that grow up on the mountain path. None of us can manage that climb any more."
+  },
+  {
+    "key": "0044ac8dc6522d",
+    "speaker": "local craftsmen",
+    "text": "Good to see you again! How has your repair magic been working? The mend spell is one of the most useful pieces of magic a person can learn."
+  },
+  {
+    "key": "04b45c98d65e9d",
+    "speaker": "narrator",
+    "text": "You examine the healing herbs. They are fresh and potent - perfect for use in advanced healing magic, training with Master Healer Lyria, or crafting powerful remedies."
+  },
+  {
+    "key": "193fe31842f982",
+    "speaker": "narrator",
+    "text": "A cozy cottage filled with the scents of medicinal herbs and healing potions. Dried plants hang from the rafters and shelves are packed with bottles of many shapes and colors. A warm fire crackles in the hearth while comfortable chairs invite recovery. This is clearly a place of healing and learning."
+  },
+  {
+    "key": "1b94efc414d794",
+    "speaker": "narrator",
+    "text": "Lyria looks up from her mortar, and something in your face makes her set the pestle down."
+  },
+  {
+    "key": "0f3faa2f005ab0",
+    "speaker": "master healer lyria",
+    "text": "You've been to the Silver Stag. Marcus's girl, Elena. I have sat by her bed myself, and I could do nothing for her. Listen, then, because this is how a curse like hers is lifted, if it can be lifted at all. First she must be made strong, or what comes after will kill her; that wants a deeper healing than I can give alone. Then the mark must be washed in water no shadow has ever touched. You will find none in this city; every well here has seen the dark. And last, the thing must be unbound. Not broken: unbound, with the old kind of unbinding, the kind the scholars wrote down before any of us were born."
+  },
+  {
+    "key": "1eca6f4ba9ff79",
+    "speaker": "narrator",
+    "text": "She picks the pestle up again and sets it down."
+  },
+  {
+    "key": "12698c7dcfdc1f",
+    "speaker": "master healer lyria",
+    "text": "I wrote to the healer at Willowbrook about that mark, weeks ago. Mira. The best hand with a curse this side of the hills, they say. She never came, and she never answered."
+  },
+  {
+    "key": "12fe89b02fa334",
+    "speaker": "narrator",
+    "text": "Lyria's eyes go straight to the bundle in your hands."
+  },
+  {
+    "key": "19611cffac1574",
+    "speaker": "master healer lyria",
+    "text": "Are those from the old families? Give them here, if you are willing. I have a bed that cannot wait."
+  },
+  {
+    "key": "1aede3687817c4",
+    "speaker": "master healer lyria",
+    "text": "Elena still? Strengthen her, wash her in untouched water, then unbind it. In that order, or not at all."
+  },
+  {
+    "key": "0ec8caeb6b29ae",
+    "speaker": "narrator",
+    "text": "Lyria unties the bundle and breathes it in."
+  },
+  {
+    "key": "0dc54aa4b27eb0",
+    "speaker": "master healer lyria",
+    "text": "Greendale's old families grow these. They don't part with them lightly."
+  },
+  {
+    "key": "14d601853e3f01",
+    "speaker": "narrator",
+    "text": "She leads you through to the back room, where a carter lies grey under a blanket, his chest crushed under his own wagon. You watch her steep the herbs, lay her hands on him and pour her healing in. His breathing eases, but only a little."
+  },
+  {
+    "key": "04aa4e7c504bb6",
+    "speaker": "master healer lyria",
+    "text": "This is the work. You give what you have, and sometimes it is not enough. He needs more than these hands can give. The old healers gathered their healing into a crystal, a Crystal Focus, and it came out the other side like sunlight through a glass. If one survives in Greendale, it is wherever the old scholars hid their books."
+  },
+  {
+    "key": "0f82305b6675ab",
+    "speaker": "narrator",
+    "text": "Master Healer Lyria let you watch her at a dying carter's bed. Your herbs were not enough. She needs a Crystal Focus, and the old scholars of Greendale may have hidden one with their books."
+  },
+  {
+    "key": "0c1246e24bc0c6",
+    "speaker": "master healer lyria",
+    "text": "He's holding on. The herbs bought him days, not weeks. Find me that focus."
+  },
+  {
+    "key": "02ebedb805c0aa",
+    "speaker": "narrator",
+    "text": "You search through the basement areas of the residential buildings. Behind some old storage crates and forgotten furniture, you discover a concealed entrance in the stone wall. A narrow tunnel leads underground to what appears to be an ancient chamber. You've found a secret passage to a Hidden Library! Use 'go secret_passage' to enter this mysterious repository."
+  },
+  {
+    "key": "0bc87ff36ed028",
+    "speaker": "narrator",
+    "text": "You've discovered a hidden passage beneath Greendale containing an ancient library of magical texts and lore. You should explore its depths and uncover the secrets within."
+  },
+  {
+    "key": "1e430b9b117a58",
+    "speaker": "narrator",
+    "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry."
+  },
+  {
+    "key": "19fae8045779e4",
+    "speaker": "narrator",
+    "text": "The protective enchantments flicker weakly, showing clear signs of damage from the passage of time. These ancient magical barriers need to be repaired with restoration magic before they can properly protect the library's most precious texts."
+  },
+  {
+    "key": "031bef2db89d43",
+    "speaker": "narrator",
+    "text": "The Spectral Librarian turns toward you, and stops. Their eyes have found the Ancient Amulet at your throat."
+  },
+  {
+    "key": "0cf22e3e6e7f31",
+    "speaker": "spectral librarian",
+    "text": "I have not seen that worn since the last hand wrote in that chronicle."
+  },
+  {
+    "key": "0e5d3c4240d46d",
+    "speaker": "spectral librarian",
+    "text": "Mind the shelves. Everything here has been kept a long time, and the wards on the oldest texts are failing. I can keep a book; I cannot mend one. Mend the wards, and I will show you where to look for the mark you carry."
+  },
+  {
+    "key": "17df78b0cad06c",
+    "speaker": "narrator",
+    "text": "Up close, the Spectral Librarian's robes are worn thin at the cuffs, the way a working scholar's are. They watch your hands more than your face, the way a librarian watches anyone standing near the books."
+  },
+  {
+    "key": "190c116f09ec92",
+    "speaker": "narrator",
+    "text": "You cast mend on the damaged protective enchantments. The magical barriers flicker and stabilize as your repair magic restores their integrity. The shimmering barriers around the most valuable texts now glow steadily. You have proven your worthiness and respect for ancient knowledge."
+  },
+  {
+    "key": "1015ea2c8a6dbc",
+    "speaker": "narrator",
+    "text": "The protective enchantments now glow steadily with restored power. The magical barriers around the most valuable texts have been successfully repaired, allowing access to the ancient knowledge within."
+  },
+  {
+    "key": "0cbe8c515e253a",
+    "speaker": "narrator",
+    "text": "Spectral Librarian:"
+  },
+  {
+    "key": "17d0b2f807360a",
+    "speaker": "spectral librarian",
+    "text": "You mended the wards with your mend spell. They have been failing longer than I care to count; thank you. Now, what you came for."
+  },
+  {
+    "key": "1eaf719dda018e",
+    "speaker": "narrator",
+    "text": "Their eyes find the Ancient Amulet at your throat, and stay there."
+  },
+  {
+    "key": "0d04afc31718b4",
+    "speaker": "spectral librarian",
+    "text": "I have not seen that worn since the last hand wrote in that chronicle. I wore that mark once, when I had a body to wear it in. Whose yours was, I cannot tell you; only that the Wardens did not give them away. We taught the unbinding to those we trusted, and wrote it down for the rest."
+  },
+  {
+    "key": "04609cf1e0e234",
+    "speaker": "narrator",
+    "text": "The spirit's eyes glow brighter as they speak:"
+  },
+  {
+    "key": "12a93e218162a8",
+    "speaker": "spectral librarian",
+    "text": "I am a keeper, not a teller. The answer you came for is in that chronicle. We wrote it, and our mark is on its cover. Read it, and you will learn the dispel spell."
+  },
+  {
+    "key": "16c9ebcd490175",
+    "speaker": "narrator",
+    "text": "They gesture to a crystal resting on the shelf:"
+  },
+  {
+    "key": "1d49b08d8b207b",
+    "speaker": "spectral librarian",
+    "text": "And take this Crystal Focus. What you do with them is yours to choose."
+  },
+  {
+    "key": "07b25c7ef67a2b",
+    "speaker": "narrator",
+    "text": "The Crystal Focus is a masterwork of ancient magical craftsmanship. Its faceted surface catches and amplifies magical energy, and you can feel it resonating with your own magical abilities. This is clearly a tool created by master enchanters to enhance the magical arts."
+  },
+  {
+    "key": "047c1b1db1baf9",
+    "speaker": "spectral librarian",
+    "text": "The chronicle is waiting on its shelf. We wrote it for whoever would read it; I cannot read it for you."
+  },
+  {
+    "key": "040fb9757ab1f1",
+    "speaker": "narrator",
+    "text": "'The Wardens were few, and their magic was of the old kind: to loosen what another hand has bound, to lift a working laid in malice. This they taught to those they trusted, and it is written here.'"
+  },
+  {
+    "key": "1ecb59a0dc76d6",
+    "speaker": "narrator",
+    "text": "You study the pages until the words settle in your mind. You have learned dispel."
+  },
+  {
+    "key": "03c69174367748",
+    "speaker": "narrator",
+    "text": "'Let it be recorded: the one called Malakar seeks the blood of Willowbrook. If any Warden yet lives, let them guard it.'"
+  },
+  {
+    "key": "04266906888afc",
+    "speaker": "spectral librarian",
+    "text": "You have read what we left. The rest is not written on any shelf of mine. Use this knowledge wisely."
+  },
+  {
+    "key": "1bf42e29777bd1",
+    "speaker": "narrator",
+    "text": "You have successfully gained access to the ancient library's knowledge! You've learned the dispel spell, discovered important information about your family heritage, and received a Crystal Focus to enhance your magical abilities. The chronicle you read there was the Wardens' own book, and its last page warns that Malakar seeks the blood of Willowbrook."
+  },
+  {
+    "key": "1eb91cf6efd006",
+    "speaker": "narrator",
+    "text": "Lyria takes the Crystal Focus to the carter's bed and sets it on his chest."
+  },
+  {
+    "key": "16dbc33d48d0a6",
+    "speaker": "master healer lyria",
+    "text": "Watch my hands, not the light."
+  },
+  {
+    "key": "05a41ab2331b74",
+    "speaker": "narrator",
+    "text": "She gathers her healing into the crystal, and it comes out the other side bright and narrow, straight into him. The grey goes out of his face. Then she takes your hands, puts them where hers were, and has you do it again, slower, until you feel the shape of it."
+  },
+  {
+    "key": "1ae987ee950e50",
+    "speaker": "narrator",
+    "text": "You learn greater heal."
+  },
+  {
+    "key": "095935221aaf33",
+    "speaker": "master healer lyria",
+    "text": "He'll live. And you have the first of it now."
+  },
+  {
+    "key": "0ec2a4b26e7a0d",
+    "speaker": "narrator",
+    "text": "Quest Complete: The Healer's Apprentice"
+  },
+  {
+    "key": "1820e64c46030e",
+    "speaker": "narrator",
+    "text": "Over the carter's bed, with the Crystal Focus between her hands and then yours, Lyria taught you greater heal. He will live."
+  },
+  {
+    "key": "013ea4d553a98a",
+    "speaker": "master healer lyria",
+    "text": "You have the first of it. Mastery is the next twenty years."
+  },
+  {
+    "key": "112bc26c64c34d",
+    "speaker": "narrator",
+    "text": "The mountain hermit hears you out and grunts, but there is something softer in his face."
+  },
+  {
+    "key": "137d818a7781ff",
+    "speaker": "mountain hermit",
+    "text": "Knew the notch, did he? Good. Then he knows. Go on, now. Greendale needs him more than I do."
+  },
+  {
+    "key": "193f996d276ce3",
+    "speaker": "narrator",
+    "text": "The boundary between the civilized mountain paths and the wild Enchanted Forest. Ancient standing stones mark the threshold, carved with protective runes that pulse with faint magic. The air grows thicker and you sense ancient power awakening. Beyond lies a realm where normal rules may not apply. A robed figure sits peacefully among the stones."
+  },
+  {
+    "key": "187c4ced4e274f",
+    "speaker": "narrator",
+    "text": "As you trace the druidic runes with your finger, ancient knowledge flows into your mind. The symbols begin to make sense—they're not just markers, but a teaching tool! You feel a connection forming with the natural world around you, and suddenly you understand how to cast the nature sense spell!"
+  },
+  {
+    "key": "03c8b213d65e44",
+    "speaker": "narrator",
+    "text": "The forest hermit glances at the treeline before looking at you, as if checking who might be listening."
+  },
+  {
+    "key": "1e893ee25d8dc1",
+    "speaker": "forest hermit",
+    "text": "You're going in. She's in a sour mood this season, so mind yourself."
+  },
+  {
+    "key": "0e1c3575991e6a",
+    "speaker": "forest hermit",
+    "text": "She moves her paths when she's bored, and she keeps old things in her that don't care for strangers. Everything that lives in there is hers. Ask before you take, and never take more than you give."
+  },
+  {
+    "key": "1b038e1dc98bc4",
+    "speaker": "forest hermit",
+    "text": "But you... there is old magic on you, and not of your own making. She'll notice it. Take this charm—it tells her you're under my protection. And don't go to her unready; sort out your pack before you cross."
+  },
+  {
+    "key": "1fc8ace3b8036a",
+    "speaker": "narrator",
+    "text": "The standing stones continue to pulse with ancient magic, their druidic runes a testament to the old ways."
+  },
+  {
+    "key": "086a00b42a568d",
+    "speaker": "narrator",
+    "text": "A forest hermit at the edge of the Enchanted Forest has warned you that the forest moves its paths and keeps old things that don't care for strangers. The hermit has given you a protective charm to help safeguard your journey through the magical wilderness, but you need to prepare yourself before venturing further into the Enchanted Forest."
+  },
+  {
+    "key": "1351f3f158c695",
+    "speaker": "narrator",
+    "text": "Dusk comes early under the trees. You make a small fire in the lee of the stones, eat from the rations, set the kit's wards around your blanket and sleep with your back to the oldest stone."
+  },
+  {
+    "key": "0f5ba809a382a7",
+    "speaker": "narrator",
+    "text": "You dream of a field of grey stalks and of someone at its far edge, too far away to see. Nobody speaks."
+  },
+  {
+    "key": "01d1e5d5a09760",
+    "speaker": "narrator",
+    "text": "You wake to grey light and woodsmoke. The forest hermit is sitting by the embers, feeding them twigs."
+  },
+  {
+    "key": "1ca835b9b8769e",
+    "speaker": "forest hermit",
+    "text": "You slept on her doorstep and she let you. That's a start. Go on, then."
+  },
+  {
+    "key": "0bd63537a3bc35",
+    "speaker": "narrator",
+    "text": "The protective charm glows softly, providing a sense of comfort and protection. It seems most powerful near places of natural magic."
+  },
+  {
+    "key": "0859a6cb187b2a",
+    "speaker": "narrator",
+    "text": "The forest hermit tilts their head toward the trees."
+  },
+  {
+    "key": "076b5d077f6b8b",
+    "speaker": "forest hermit",
+    "text": "She knows you're coming now. Go on, before she changes her mind."
+  },
+  {
+    "key": "020a55ee49c366",
+    "speaker": "narrator",
+    "text": "At the standing stones you opened the survival kit and studied its map, as the hermit urged. You know now which paths to take and which to avoid. Somewhere inside the forest, Nyx is waiting."
+  },
+  {
+    "key": "0c1bfb7c630ecd",
+    "speaker": "narrator",
+    "text": "You spent a night on the forest's doorstep, and she let you. The way east is open."
+  },
+  {
+    "key": "05b9b92ad53907",
+    "speaker": "narrator",
+    "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. A path leads south toward an ancient grove, but small motes of light dance thick across it: forest sprites, watching your every move. To the east the undergrowth grows thick and dark."
+  },
+  {
+    "key": "1c1cf5f1098482",
+    "speaker": "narrator",
+    "text": "A narrow path east, toward a tranquil glade, is now open."
+  },
+  {
+    "key": "0e41e234eac7b9",
+    "speaker": "narrator",
+    "text": "The sprites draw aside. The path south, to the ancient grove, is now open."
+  },
+  {
+    "key": "0b1c62d5ebb214",
+    "speaker": "forest sprites",
+    "text": "A traveller—"
+  },
+  {
+    "key": "183ac215a47744",
+    "speaker": "forest sprites",
+    "text": "—with muddy boots—"
+  },
+  {
+    "key": "08b359213adf11",
+    "speaker": "forest sprites",
+    "text": "—wanting the deep paths."
+  },
+  {
+    "key": "0bc9338847c04d",
+    "speaker": "forest sprites",
+    "text": "And the nymphs have riddles—"
+  },
+  {
+    "key": "154052184cfe49",
+    "speaker": "forest sprites",
+    "text": "—east of here—"
+  },
+  {
+    "key": "0048a6d2a139bb",
+    "speaker": "forest sprites",
+    "text": "—if you're clever."
+  },
+  {
+    "key": "0c9106f3a475b3",
+    "speaker": "forest sprites",
+    "text": "The grove path? Walk it, walk it—"
+  },
+  {
+    "key": "1e30e3e38786c1",
+    "speaker": "forest sprites",
+    "text": "—round and round—"
+  },
+  {
+    "key": "02a130a1a2d2eb",
+    "speaker": "forest sprites",
+    "text": "—and back you come! Unless you wear the hermit's mark."
+  },
+  {
+    "key": "0899ddb860d8aa",
+    "speaker": "narrator",
+    "text": "You take the enchanted acorn. The moment you touch it, you feel a surge of natural magic - this is no ordinary acorn, but a sacred offering imbued with the forest's blessing. The forest sprites whisper approvingly as you claim this gift."
+  },
+  {
+    "key": "0c0e28f4bff5eb",
+    "speaker": "narrator",
+    "text": "The enchanted acorn glows softly in the forest, but it seems to be calling you toward something more ancient and sacred."
+  },
+  {
+    "key": "0f9d481c6e1648",
+    "speaker": "narrator",
+    "text": "The Protective Charm's energy still surrounds you, providing continued spiritual protection in this mystical place."
+  },
+  {
+    "key": "186d0e2f86830e",
+    "speaker": "forest sprites",
+    "text": "The hermit's mark—"
+  },
+  {
+    "key": "1b977001dca2a3",
+    "speaker": "forest sprites",
+    "text": "—we see it, we see it—"
+  },
+  {
+    "key": "1c1159c1cd7607",
+    "speaker": "forest sprites",
+    "text": "—so the grove path is yours. No tricks."
+  },
+  {
+    "key": "1f6165d08fcfc5",
+    "speaker": "narrator",
+    "text": "The Enhanced Lantern continues to provide magical illumination, keeping the forest paths clearly visible."
+  },
+  {
+    "key": "008bde1796d285",
+    "speaker": "narrator",
+    "text": "The forest sprites have challenged you to prove your wisdom by solving the riddles of the forest guardians. You must journey east from the Forest Entrance to the Whispering Glade, where ancient spirits will test your understanding of forest ways and natural wisdom."
+  },
+  {
+    "key": "0e52d6fd25ae05",
+    "speaker": "forest sprites",
+    "text": "Back again—"
+  },
+  {
+    "key": "1bd152aa311d58",
+    "speaker": "forest sprites",
+    "text": "—did you forget?"
+  },
+  {
+    "key": "12b3f099c692e9",
+    "speaker": "forest sprites",
+    "text": "Nymphs are east—"
+  },
+  {
+    "key": "1f438c6c51f9e4",
+    "speaker": "forest sprites",
+    "text": "—with their riddles."
+  },
+  {
+    "key": "1bef95ee5c6ac9",
+    "speaker": "narrator",
+    "text": "A circular clearing dominated by trees so old and massive they seem to touch the sky. Their bark bears carved symbols that predate human memory, and the air shimmers with concentrated magic. At the center grows a tree unlike any other - its silver bark gleams and its leaves whisper secrets in an ancient tongue. This is clearly a place of power and the sacred gateway to the forest's deepest mysteries."
+  },
+  {
+    "key": "1c8057336d5c62",
+    "speaker": "narrator",
+    "text": "The enchanted acorn pulses with magical energy in response to the sacred grove, warm as a held hand, and turns in your palm toward the silver-barked tree."
+  },
+  {
+    "key": "024452edd23b24",
+    "speaker": "narrator",
+    "text": "A face gathers in the knots of the silver bark and turns toward you."
+  },
+  {
+    "key": "0813f493ded756",
+    "speaker": "ancient tree spirit",
+    "text": "You walk like spring. Everything new, nothing kept."
+  },
+  {
+    "key": "0580882b498b8e",
+    "speaker": "ancient tree spirit",
+    "text": "I don't teach for nothing. Bring me something that hasn't grown yet."
+  },
+  {
+    "key": "1bebd83242cec0",
+    "speaker": "narrator",
+    "text": "The bark around the knots softens."
+  },
+  {
+    "key": "06d6bbf7341f2e",
+    "speaker": "ancient tree spirit",
+    "text": "Next spring's tree, and you carried it here instead of planting it. Good. Listen, then."
+  },
+  {
+    "key": "1f00afe42238c7",
+    "speaker": "narrator",
+    "text": "The voices of the grove settle into you: the creak of branches, the talk of roots, the small sounds in the undergrowth. You can understand them now."
+  },
+  {
+    "key": "1eb6c3d17ce2fd",
+    "speaker": "narrator",
+    "text": "You have learned the Forest Speech spell!"
+  },
+  {
+    "key": "05cb1640357763",
+    "speaker": "ancient tree spirit",
+    "text": "Now you can hear them, you'll hear the grove is uneasy. The nymphs in the glade east of the entrance have something for these roots. Answer them, and bring back what they give you."
+  },
+  {
+    "key": "043f120f335a0e",
+    "speaker": "narrator",
+    "text": "The Ancient Tree Spirit has sensed mystical beings hidden within the forest's depths. Gentle whispers carry on the wind, speaking of ancient wisdom and forgotten lore. To prove yourself worthy of the forest's trust, you must seek out these hidden spirits in the Whispering Glade and demonstrate your understanding of nature's mysteries."
+  },
+  {
+    "key": "153a5597d93914",
+    "speaker": "ancient tree spirit",
+    "text": "Still summer for you, then — all errands."
+  },
+  {
+    "key": "050b08d0d20290",
+    "speaker": "ancient tree spirit",
+    "text": "The nymphs in the glade east of the entrance have something for these roots. Answer them, and bring back what they give you."
+  },
+  {
+    "key": "0d40d575112956",
+    "speaker": "narrator",
+    "text": "A peaceful meadow opens around a small stream that babbles over smooth stones. Wildflowers blanket the ground and butterflies drift through warm sunlight. The water's murmur soothes, yet faint voices ride the breeze — whispers hinting at ancient secrets. Near the crystal stream you sense watchful, unseen guardians."
+  },
+  {
+    "key": "00b3e05d76f5dd",
+    "speaker": "narrator",
+    "text": "The stream rises into shapes."
+  },
+  {
+    "key": "05fc34333c0bc7",
+    "speaker": "water nymphs",
+    "text": "Came all this way to stand in our water? Will you answer three questions, then? Here is the first."
+  },
+  {
+    "key": "0b239128a9434c",
+    "speaker": "water nymphs",
+    "text": "I am the forest's blood that flows without wound, the sky's gift that falls without being thrown. I give life yet can take it, am soft yet can carve stone. What am I?"
+  },
+  {
+    "key": "15fad49ac11104",
+    "speaker": "narrator",
+    "text": "Think carefully and speak your answer when you believe you know it. Use the command 'say <your_answer> to water nymphs' to give your solution."
+  },
+  {
+    "key": "0596cb24de77d2",
+    "speaker": "narrator",
+    "text": "Correct! 'water' is the right answer. Water is the lifeblood of the forest, falls as rain, nurtures life but can flood, and over time carves through stone."
+  },
+  {
+    "key": "1863e6d5a77962",
+    "speaker": "narrator",
+    "text": "The water nymphs nod."
+  },
+  {
+    "key": "14d04f43e9dfbc",
+    "speaker": "water nymphs",
+    "text": "Did you know it, or guess it? Does it matter? What about this one?"
+  },
+  {
+    "key": "07def69ae856d9",
+    "speaker": "water nymphs",
+    "text": "I smile, yet I have no eyes. I have a face, yet it is not my own. Put me on and I hide you; leave me behind and I tell whose work it was. What am I?"
+  },
+  {
+    "key": "1e3959ace7140e",
+    "speaker": "water nymphs",
+    "text": "Back so soon? Do you remember where we were? The second one, wasn't it?"
+  },
+  {
+    "key": "0e276052189374",
+    "speaker": "narrator",
+    "text": "Correct! 'mask' is the right answer. A mask smiles without eyes and wears a face that is not its own. It hides whoever wears it, and whoever leaves one behind has signed their work."
+  },
+  {
+    "key": "1dd0587836cda0",
+    "speaker": "water nymphs",
+    "text": "Purpose follows me, and power follows purpose. A lie may wear my coat, but it cannot keep it on. I am hard to say and harder to hear, and I grow no lighter for being hidden. What am I?"
+  },
+  {
+    "key": "1bf24b863a5102",
+    "speaker": "water nymphs",
+    "text": "Back so soon? Do you remember where we were? The third one, wasn't it?"
+  },
+  {
+    "key": "0d058b9a6c2048",
+    "speaker": "narrator",
+    "text": "Correct! 'truth' is indeed the answer. Purpose follows truth, and power follows purpose. A lie can pass for the truth only for a while, and a hidden truth only grows heavier."
+  },
+  {
+    "key": "1f7e5bbd95dcca",
+    "speaker": "narrator",
+    "text": "The water nymphs laugh, a sound like water over a weir."
+  },
+  {
+    "key": "0fa44d8f3f3ba1",
+    "speaker": "water nymphs",
+    "text": "Three for three — who taught you to listen like that? Will you take what grows here? Who else would we give it to?"
+  },
+  {
+    "key": "1a023e0c2d25d1",
+    "speaker": "narrator",
+    "text": "You have successfully solved the riddles of the forest guardians, proving your wisdom and respect for the natural world. The forest spirits acknowledge your understanding."
+  },
+  {
+    "key": "027d2bd6cbb945",
+    "speaker": "water nymphs",
+    "text": "Back again? Wasn't three enough? What more could we ask you?"
+  },
+  {
+    "key": "18e211ef030d28",
+    "speaker": "water nymphs",
+    "text": "Yet the streams come down thinner from the hills this season, seeker. Something up there drinks before we do, and the fields below the city taste it first."
+  },
+  {
+    "key": "00be5c9cb9d330",
+    "speaker": "narrator",
+    "text": "You take the moonflowers. The moonflowers seem to approve of your gentle touch, their silvery glow pulsing warmly as you gather them. These blessed blooms will aid in healing and protection magic."
+  },
+  {
+    "key": "08f571f5fa7676",
+    "speaker": "narrator",
+    "text": "The moonflowers remain dormant here. They likely have special significance for healing or magical purposes."
+  },
+  {
+    "key": "14337215a6c4f2",
+    "speaker": "narrator",
+    "text": "The moonflowers glow more brightly in the magical atmosphere of the forest, their protective properties enhanced."
+  },
+  {
+    "key": "01aa7725cf9898",
+    "speaker": "narrator",
+    "text": "You pour some of the crystal-clear water at the foot of the silver tree and set the moonflowers in the wet soil. They take root at once and begin to glow."
+  },
+  {
+    "key": "038736748c4cfb",
+    "speaker": "ancient tree spirit",
+    "text": "Rain and a night's flowers. That will see the roots through winter."
+  },
+  {
+    "key": "1309948248d39a",
+    "speaker": "narrator",
+    "text": "South of the grove, branches pull apart with a long creak."
+  },
+  {
+    "key": "1d4affe4344c4a",
+    "speaker": "ancient tree spirit",
+    "text": "The way south is open. Nyx lives at the end of it. She doesn't come for asking — read her altar before you call her."
+  },
+  {
+    "key": "136993e2bbf768",
+    "speaker": "narrator",
+    "text": "You have communed with the Water Nymphs in the Whispering Glade, solved their ancient riddles, and earned their sacred gifts. By returning these blessed items to the Ancient Tree Spirit, you have proven yourself a true friend to the woodland spirits and earned the forest's trust."
+  },
+  {
+    "key": "0369cf7e1b0d2b",
+    "speaker": "ancient tree spirit",
+    "text": "Autumn, for you. You came with nothing and you leave carrying things. The way south is yours."
+  },
+  {
+    "key": "0b923d06ad4991",
+    "speaker": "narrator",
+    "text": "You cast forest speech and the woodland creatures gather around you excitedly. A family of squirrels chatters frantically about strange noises from the deep ravine to the northeast. An old owl hoots solemnly about 'metal beasts trapped in the earth-scar where the stone walls weep.' The animals describe a steep ravine hidden beyond the thickest part of the forest, where something seems to be moving. The owl looks at you, and then at the ravine."
+  },
+  {
+    "key": "103a48b8f0ff41",
+    "speaker": "narrator",
+    "text": "Looking down into the ravine, you can see the remnants of a merchant caravan trapped at the bottom. The wooden wagon wheels are visible among the rocks, and you can hear faint voices calling for help. The walls are steep and dangerous - you'll need rope or other climbing equipment to safely reach the bottom and see what is there."
+  },
+  {
+    "key": "15636edf478117",
+    "speaker": "narrator",
+    "text": "You secure one end of your Quality Rope to a sturdy tree and lower it into the ravine. Rappelling down carefully, you find the trapped merchant caravan at the bottom. The merchants are injured but alive, and their wagon is damaged but some goods are salvageable. Working together, you create a rope system that allows everyone to climb to safety. The grateful merchants gather their most valuable goods and follow you back to civilization. The caravan has been successfully rescued!"
+  },
+  {
+    "key": "08308c03d5c9ae",
+    "speaker": "narrator",
+    "text": "The merchant caravan is in rough shape but the people are safe. The wagon's wheels are cracked and the canvas cover is torn, but the structure is sound. Several merchants tend to minor injuries while sorting through their goods. You see spice containers, bolts of fine cloth, and various trade items. The merchants look at you with deep gratitude—you clearly saved their lives."
+  },
+  {
+    "key": "175a9193a344d4",
+    "speaker": "caravan master thorne",
+    "text": "You've found them! I cannot express my gratitude enough for bringing my people back safely. As promised, here is your reward, but this is more than just payment. My wagon-master says a frightened man in Heavensforth paid him to carry these to Greendale, and begged him to put them in no hands but a knight's. I believe they contain evidence that could clear a good man's name. Perhaps you'll know what to do with them. Thorne hands you a stack of secret documents."
+  },
+  {
+    "key": "02af69e62d34d5",
+    "speaker": "narrator",
+    "text": "You successfully located the missing caravan trapped in a deep ravine within the Enchanted Forest. Using your forest magic, you discovered their location, then employed quality rope to rappel down and rescue the trapped merchants. All merchants survived the ordeal, and Caravan Master Thorne rewarded you with secret documents containing evidence that can clear Sir Cedric's name of false accusations from a past court case."
+  },
+  {
+    "key": "03d006e80303c7",
+    "speaker": "brenn",
+    "text": "They're home? All of them? … Thank you. Thorne says I'm to have my wages and not a copper more. I suppose that's fair. I ran. Unless somebody told him what it was like out there. He'd never hear it from me."
+  },
+  {
+    "key": "1e8e8c1788e03a",
+    "speaker": "caravan master thorne",
+    "text": "… He did come back, didn't he. … All right. One more road. If he runs again, he walks home."
+  },
+  {
+    "key": "1512d4208bef03",
+    "speaker": "brenn",
+    "text": "Thorne says one more road. He says somebody spoke for me. … I won't run again. Not this time."
+  },
+  {
+    "key": "1aa01ee4fe46b2",
+    "speaker": "narrator",
+    "text": "A sworn confession and a letter closed with black wax. They speak of gold, a gate and a night, but without knowing whose night, you cannot make sense of them."
+  },
+  {
+    "key": "097b2fdb5d0a47",
+    "speaker": "caravan master thorne",
+    "text": "I'm still processing the relief of having my caravan safely returned. Those documents I gave you - I hope they prove useful. Sometimes the right evidence can restore honor where it was unjustly lost."
+  },
+  {
+    "key": "091d6ab55c3801",
+    "speaker": "caravan master thorne",
+    "text": "Which leaves Brenn. A guard who runs is no guard. He's sitting in the warehouse waiting for his wages, and wages are all he'll get from me."
+  },
+  {
+    "key": "04760047c48cb4",
+    "speaker": "narrator",
+    "text": "You cast greater heal on Elena, channeling powerful healing energy into her weakened form. The golden light battles against the dark tendrils of the curse, and while it cannot break the enchantment completely, it significantly strengthens Elena's life force. She gasps as color returns to her cheeks and she stands a little straighter."
+  },
+  {
+    "key": "043e36971ef78a",
+    "speaker": "narrator",
+    "text": "The healing has made her stronger, but the curse still clings to her."
+  },
+  {
+    "key": "0168bdd5af3037",
+    "speaker": "narrator",
+    "text": "As the golden light fades, something surfaces on the inside of Elena's wrist: a small silver mark in the shape of a mask, smooth and smiling, with no eyes behind it. The curse is wearing a face. You have never seen its like, and you cannot say whose it is."
+  },
+  {
+    "key": "005e2863176858",
+    "speaker": "narrator",
+    "text": "Elena sees you looking at her wrist and tugs her sleeve down over the silver mark."
+  },
+  {
+    "key": "06084cc20f14d1",
+    "speaker": "barmaid elena",
+    "text": "It came the same night as the curse. Since then I dream of a smiling face with no eyes, and it never says a true word."
+  },
+  {
+    "key": "1b642c0c3e476f",
+    "speaker": "narrator",
+    "text": "Elena turns her hand over and looks at it as if it belonged to someone else."
+  },
+  {
+    "key": "05930ce31c6281",
+    "speaker": "barmaid elena",
+    "text": "It didn't take. I felt it go in, warm as a hearth, and then the cold closed over it again."
+  },
+  {
+    "key": "146356cc208214",
+    "speaker": "barmaid elena",
+    "text": "Master Lyria sat with me once, when it began. If anyone knows what comes next, she does."
+  },
+  {
+    "key": "10086dfa7f74b1",
+    "speaker": "narrator",
+    "text": "You carefully pour the crystal-clear water over Elena. The blessed water sparkles with divine light as it touches her skin, and dark shadows begin to steam away like smoke. Elena gasps as the corrupting influence of the curse is washed from her body and soul. The water glows brighter, purifying every drop of dark magic it touches."
+  },
+  {
+    "key": "1927d851d2f34d",
+    "speaker": "narrator",
+    "text": "As the last of the water drips away, Elena stands straighter, her skin glowing with a faint, pure radiance. The curse's hold on her has been greatly weakened by the purification."
+  },
+  {
+    "key": "1bdbcc8edada89",
+    "speaker": "narrator",
+    "text": "Elena rubs at the inside of her wrist."
+  },
+  {
+    "key": "0fc6cb4c2de9f7",
+    "speaker": "barmaid elena",
+    "text": "The water stung, and then it was gone, and some of the cold went with it. But it is still holding on. I can feel it, here."
+  },
+  {
+    "key": "0327427fbebf98",
+    "speaker": "narrator",
+    "text": "You cast dispel on Elena, channeling powerful counter-magic into the remaining curse fragments. The spell tears through the last dark tendrils like lightning, shattering the evil enchantment completely. Elena cries out in relief as the final traces of the curse dissolve into nothingness."
+  },
+  {
+    "key": "1afad8e5a43521",
+    "speaker": "narrator",
+    "text": "She stands tall and straight, her skin glowing with perfect health. The curse that has tormented her for weeks is finally broken! Elena looks at you with tears of joy, completely free at last. The three-step healing process - greater heal, purification, and dispelling - has worked perfectly to save her life."
+  },
+  {
+    "key": "0737bfde02d47f",
+    "speaker": "narrator",
+    "text": "On her wrist the silver mask goes on smiling a moment longer, then fades like breath on a cold window, and is gone."
+  },
+  {
+    "key": "0c60098b0aecfe",
+    "speaker": "narrator",
+    "text": "Through careful magical healing, you successfully broke Elena's curse. You first strengthened her with a greater heal spell, then purified her spirit with crystal-clear water, and finally used a dispel spell to shatter the dark magic completely. Elena is now free from the wizard's curse!"
+  },
+  {
+    "key": "0ad64ab3dc9c3c",
+    "speaker": "narrator",
+    "text": "Marcus has tears of joy in his eyes."
+  },
+  {
+    "key": "02e894ab449b2a",
+    "speaker": "innkeeper marcus",
+    "text": "You have given me back my daughter! There are no words to express my gratitude. This druidic charm has been in my family for generations - it was blessed by the ancient druids who first settled in these lands. Please, take it as a token of our eternal gratitude. May it bring you protection and guidance on your heroic journey!"
+  },
+  {
+    "key": "17dbdf112ea629",
+    "speaker": "narrator",
+    "text": "Marcus places the sacred charm in your hands with reverence. You can feel the ancient magic thrumming within the carved wood."
+  },
+  {
+    "key": "11186ced7667b2",
+    "speaker": "narrator",
+    "text": "Elena beams with health and vitality."
+  },
+  {
+    "key": "19eedfa01f462a",
+    "speaker": "barmaid elena",
+    "text": "Oh, thank you so much! I feel like I'm alive again! The curse is completely gone, and I owe you my life. My father is so grateful - he insists you take our family's sacred charm as a token of our eternal gratitude. You are truly a hero!"
+  },
+  {
+    "key": "07231d224e62e0",
+    "speaker": "innkeeper marcus",
+    "text": "On purpose. … Someone chose my girl. … Then this house sleeps with one eye open from now on. Thank you for telling me. I'd sooner know it than be comforted by a lie."
+  },
+  {
+    "key": "0a7406cedd0e04",
+    "speaker": "narrator",
+    "text": "The druidic charm glows faintly with natural magic. It feels especially potent here, but you sense it has a greater purpose that requires the right location and companions."
+  },
+  {
+    "key": "0b473e3647b6ae",
+    "speaker": "innkeeper marcus",
+    "text": "My daughter is healthy and happy again, all thanks to you! The Silver Stag Inn will always be your home. Whatever you need - rooms, meals, information - it's yours freely."
+  },
+  {
+    "key": "1832b287ce11fa",
+    "speaker": "innkeeper marcus",
+    "text": "An ill wind, the healer called it. Bad luck, blown in off the road, settling on the one soul in this house who never harmed anyone."
+  },
+  {
+    "key": "027d96841fba04",
+    "speaker": "narrator",
+    "text": "Sir Cedric was stripped of his knighthood after the night King Alden vanished: two men of the night watch swore he had left his post. Investigate what happened that night and find evidence to clear his name."
+  },
+  {
+    "key": "038d0c91d431c3",
+    "speaker": "narrator",
+    "text": "Sir Cedric's jaw tightens."
+  },
+  {
+    "key": "1bc9cb52793662",
+    "speaker": "sir cedric",
+    "text": "You will have heard what they say of me. I held the king's wall the night he vanished, and he was taken on my watch. Whatever else is true, that is. I will not make excuses."
+  },
+  {
+    "key": "04bc86f86348a8",
+    "speaker": "narrator",
+    "text": "The Training Master nods respectfully."
+  },
+  {
+    "key": "17dc30eb194099",
+    "speaker": "training master",
+    "text": "You're looking into Sir Cedric's situation? Good. That man has suffered under false accusations for far too long. The truth needs to come to light. Perhaps the squires might know more about what happened - they sometimes hear things that we older knights miss."
+  },
+  {
+    "key": "1c3a892ce5260c",
+    "speaker": "narrator",
+    "text": "The young squires lower their voices and glance around nervously."
+  },
+  {
+    "key": "09982471c5bc2b",
+    "speaker": "squires",
+    "text": "We're not supposed to talk about it, but we've heard the older knights whispering about Sir Cedric's disgrace. They say he left the king's wall the night His Majesty vanished, and that whoever took the king walked in through the gap."
+  },
+  {
+    "key": "14083aaff31562",
+    "speaker": "narrator",
+    "text": "One squire looks particularly troubled."
+  },
+  {
+    "key": "0c44de5d8668f8",
+    "speaker": "squires",
+    "text": "But it doesn't make sense — Sir Cedric has always taught us about honor and duty. He would never leave his post."
+  },
+  {
+    "key": "14d81dba0e831d",
+    "speaker": "narrator",
+    "text": "Another squire nods."
+  },
+  {
+    "key": "1adb082867f7b1",
+    "speaker": "squires",
+    "text": "We found a diary under the stone benches that tells a different story. Maybe you should take a look at it."
+  },
+  {
+    "key": "1310b5d4d22fff",
+    "speaker": "narrator",
+    "text": "You found a squire's diary!"
+  },
+  {
+    "key": "02f9d78f9c3200",
+    "speaker": "narrator",
+    "text": "The morning after the king vanished:"
+  },
+  {
+    "key": "05260d72954612",
+    "speaker": "squires",
+    "text": "'They have taken Sir Cedric's sword. Two men of the night watch swear he left the king's wall at the third bell. I was on the yard steps until midnight, and he never moved.'"
+  },
+  {
+    "key": "0d21bc881d25cf",
+    "speaker": "narrator",
+    "text": "Some days later:"
+  },
+  {
+    "key": "004f45291f49d1",
+    "speaker": "squires",
+    "text": "'One of those two watchmen is gone. He packed in the night and took the road to Heavensforth, they say. A man with a clear conscience does not run.'"
+  },
+  {
+    "key": "0a4400367e965b",
+    "speaker": "narrator",
+    "text": "Last entry:"
+  },
+  {
+    "key": "1f4715065459ee",
+    "speaker": "squires",
+    "text": "'A carter swears the watchman sent something back from Heavensforth, papers, with a merchant caravan bound for Greendale. The caravan never came; they say it was lost on the forest road. If those papers are still out there, they could clear Sir Cedric's name.'"
+  },
+  {
+    "key": "06fb045e148347",
+    "speaker": "narrator",
+    "text": "The diary points to papers sent from Heavensforth by a watchman who fled, on a caravan that never arrived. The lost caravan's papers might still be out there…"
+  },
+  {
+    "key": "01d1c8f196a856",
+    "speaker": "narrator",
+    "text": "According to the squires and their diary, one of the watchmen who accused Cedric fled to Heavensforth and sent papers back with a merchant caravan that never arrived. Find these papers to restore his honor."
+  },
+  {
+    "key": "01afacf735a143",
+    "speaker": "narrator",
+    "text": "A confession from a man of the night watch, written in Heavensforth where he fled. He swears that he and another were paid to leave the king's postern gate unguarded on the night King Alden vanished, and to say afterwards that Sir Cedric had left his post. Pinned to it is the letter that paid them, closed with black wax pressed with a twisted rune, the same kind of rune as the token you fished out of Willowbrook's well. It names where the king was to be carried: the bastion on the shattered ridge, north of the hills. It ends with a name in an old script you cannot read."
+  },
+  {
+    "key": "09828de945c134",
+    "speaker": "narrator",
+    "text": "You have found the papers: a watchman's confession that he and another were paid to leave the king's postern unguarded and to blame Sir Cedric, with the letter that paid them, sealed with a twisted rune. Present them to the Lord Commander in the Great Hall to restore his honor."
+  },
+  {
+    "key": "01aa9f5ca3fa4c",
+    "speaker": "narrator",
+    "text": "The lord commander looks at you with interest."
+  },
+  {
+    "key": "01d30a7f02531f",
+    "speaker": "lord commander",
+    "text": "I am told you carry papers touching on Sir Cedric's case, and on the night His Majesty vanished. If they bear on either, give them to me."
+  },
+  {
+    "key": "061b1557e1f01d",
+    "speaker": "narrator",
+    "text": "The lord commander reads the confession, then the letter. At its last line his face goes grey."
+  },
+  {
+    "key": "01422c5bc9c506",
+    "speaker": "lord commander",
+    "text": "This is the old court script. It reads: By the will of Malakar."
+  },
+  {
+    "key": "0b1c2aaffc1aa8",
+    "speaker": "narrator",
+    "text": "He lowers the page."
+  },
+  {
+    "key": "1e904abe1dd484",
+    "speaker": "lord commander",
+    "text": "Malakar is a name from children's tales. Yet someone paid gold in it, and on that night of all nights. Sir Cedric did not leave his post. He was chosen to carry the blame. I hereby restore his knighthood and strike the charge from the record."
+  },
+  {
+    "key": "14b39989677fa3",
+    "speaker": "narrator",
+    "text": "He beckons a page and speaks a few quiet words. The boy runs off toward the armoury, and returns carrying a long bundle wrapped in oilcloth."
+  },
+  {
+    "key": "1965c3e7505f58",
+    "speaker": "lord commander",
+    "text": "Take this to the training yard. A knight should not stand among his squires with an empty scabbard."
+  },
+  {
+    "key": "1a5d3e721ebfec",
+    "speaker": "narrator",
+    "text": "You have cleared Sir Cedric's name. The night watch was paid to leave the king's postern open and to blame him, and the letter that paid them was written in Malakar's name."
+  },
+  {
+    "key": "0376e36e7e4bea",
+    "speaker": "narrator",
+    "text": "The lord commander nods with satisfaction."
+  },
+  {
+    "key": "1a1ed5ea7a0123",
+    "speaker": "lord commander",
+    "text": "Sir Cedric's knighthood is restored and the charge struck from the record. As for the name in that letter, I have sent riders to Heavensforth for the watchman who wrote it. Whoever paid in that name will be found."
+  },
+  {
+    "key": "02b3f6c320c800",
+    "speaker": "narrator",
+    "text": "Sir Cedric's sword hangs at his hip again. He rests a hand on its hilt as you approach, as if to be sure it is real."
+  },
+  {
+    "key": "09a6d503865107",
+    "speaker": "sir cedric",
+    "text": "My friend, I cannot express how grateful I am. You have restored my honor and cleared my name. And more: the king was not lost on my watch. He was taken, by men who were paid to let it happen."
+  },
+  {
+    "key": "1847b265e4f54f",
+    "speaker": "narrator",
+    "text": "He is quiet for a moment."
+  },
+  {
+    "key": "1707d96f249e32",
+    "speaker": "sir cedric",
+    "text": "Malakar. My grandmother frightened me with that name when I was small. Whoever hides behind it took my king, and I mean to find him."
+  },
+  {
+    "key": "052fa022556f20",
+    "speaker": "narrator",
+    "text": "Sir Cedric reaches into his pack and withdraws an ancient wooden charm."
+  },
+  {
+    "key": "174e773a74e4bd",
+    "speaker": "sir cedric",
+    "text": "Do you remember what I told you in the yard? That I would not give an heirloom of my house to someone I had known a day. I have known you long enough now. Take Nature's Charm. It was blessed by the ancient knights who first made pacts with the forest spirits, and it is one of the three that call Nyx. You will need it more than I will."
+  },
+  {
+    "key": "02034bbc8af511",
+    "speaker": "training master",
+    "text": "You've seen it, then? His sword at his hip again. I stood in this yard the morning they took it from him, and I held my tongue. I'll not make that mistake twice. Greendale owes you, and so do I."
+  },
+  {
+    "key": "188d6d30c00d0d",
+    "speaker": "narrator",
+    "text": "The squires have abandoned their drill and crowd together, grinning."
+  },
+  {
+    "key": "0b384122a93645",
+    "speaker": "squires",
+    "text": "Did you see? They gave Sir Cedric his sword back! He walked into the yard this morning with it at his hip, and the Training Master saluted him in front of everyone."
+  },
+  {
+    "key": "149948e1e840f7",
+    "speaker": "narrator",
+    "text": "One squire looks at you shyly."
+  },
+  {
+    "key": "16906b910b07cb",
+    "speaker": "squires",
+    "text": "He said it was you who found the papers. Thank you."
+  },
+  {
+    "key": "081c50e0919d17",
+    "speaker": "sir cedric",
+    "text": "Thanks to you, my knighthood is restored and the charge struck from my record. Now I can turn to what matters: the king, and whoever wears that old name."
+  },
+  {
+    "key": "151fa207436379",
+    "speaker": "narrator",
+    "text": "Lyria turns one leaf toward the window, and for a moment she forgets to breathe."
+  },
+  {
+    "key": "1ccca51d3f46d5",
+    "speaker": "lyria",
+    "text": "Silverbark. From the old tree itself, not a cutting. I have only ever read of these."
+  },
+  {
+    "key": "0945a11f2fc3df",
+    "speaker": "narrator",
+    "text": "She lays them in a shallow dish as if they might bruise."
+  },
+  {
+    "key": "00e6c0d80c3eae",
+    "speaker": "lyria",
+    "text": "Steeped, a single leaf breaks a fever in a night. Greendale will have a gentler winter because of you, Elior."
+  },
+  {
+    "key": "0328496b72bd4e",
+    "speaker": "narrator",
+    "text": "The dish of silver leaves sits on the windowsill where the light can reach it."
+  },
+  {
+    "key": "1eaf6ac99e471a",
+    "speaker": "castle guard captain",
+    "text": "Welcome to the castle grounds. Sir Cedric can be found in the courtyard. Sir by right again, and I'm glad to say it. He's been seeking capable individuals for important work, so if you're here about that, be prepared to demonstrate your abilities."
+  },
+  {
+    "key": "1e3c79f207b46d",
+    "speaker": "narrator",
+    "text": "He rings his bell twice, with relish."
+  },
+  {
+    "key": "116c48574161f0",
+    "speaker": "town crier",
+    "text": "And fresh news from the Great Hall! The Lord Commander has cleared Sir Cedric's name and given him back his sword. Sir Cedric, and no 'as was' about it!"
+  },
+  {
+    "key": "0c916f76329b7e",
+    "speaker": "narrator",
+    "text": "The deepest part of the Enchanted Forest, where reality feels fluid and magic flows like water. Impossible colors paint the landscape and the air sparkles with latent energy. A colossal tree dominates the center, its branches seeming to uphold the sky. Before it rests an ancient altar carved from starstone, runes pulsing with otherworldly light. This is Nyx's domain where profound secrets surface. The sacred grove path is the only passage into this mystical heart."
+  },
+  {
+    "key": "03da8a4c79eb03",
+    "speaker": "narrator",
+    "text": "The druidic charm resonates with the mystical energy of this sacred place. It should be placed on the offering altar along with other sacred items to perform powerful rituals."
+  },
+  {
+    "key": "1af9858b58bf89",
+    "speaker": "narrator",
+    "text": "As the three sacred charms are placed upon the altar, the starstone erupts in brilliant light! The mystical runes blaze with ancient power, and the very air shimmers with magic. From the swirling energies, a figure of ethereal beauty materializes - Nyx, the ancient forest sprite, has answered the ritual's call!"
+  },
+  {
+    "key": "0e854f3c302b44",
+    "speaker": "narrator",
+    "text": "The light over the altar folds into a woman no taller than you, barefoot, leaves caught in her hair. She looks at you the way you look at a road you have walked before."
+  },
+  {
+    "key": "0b8f8469551d32",
+    "speaker": "narrator",
+    "text": "\"Elior. My deer sat with you in the glade at Willowbrook, before any of this. It said you were still. Few are. You gave the tree your acorn instead of keeping it. You answered the nymphs without bargaining. You brought me the three charms. The forest saw the road you took. It will keep watching. That is enough.\""
+  },
+  {
+    "key": "012868eaea223d",
+    "speaker": "narrator",
+    "text": "She touches your forehead. Something settles behind your eyes, like a word you had forgotten coming back. She puts two things in your hands."
+  },
+  {
+    "key": "02510b6ed21436",
+    "speaker": "narrator",
+    "text": "You have learned the spell: Prophetic Vision"
+  },
+  {
+    "key": "043dd759ac7a8b",
+    "speaker": "narrator",
+    "text": "You have received: Nyx's Token"
+  },
+  {
+    "key": "04c64bdc84b706",
+    "speaker": "narrator",
+    "text": "You have received: Forest Heart Crystal"
+  },
+  {
+    "key": "130aeab0ad3abf",
+    "speaker": "narrator",
+    "text": "\"The storm is heading for your village. This lets you see it coming.\""
+  },
+  {
+    "key": "102abdfc4c7497",
+    "speaker": "narrator",
+    "text": "Then her voice softens, as if she is repeating something she was told long ago. \"Remember the old words, Elior: Power follows purpose; purpose follows truth.\""
+  },
+  {
+    "key": "185c71f4466343",
+    "speaker": "narrator",
+    "text": "The words from the stone in the glade. You read them aloud there and did not know what they meant. You still do not, quite."
+  },
+  {
+    "key": "1ac366af630fa4",
+    "speaker": "narrator",
+    "text": "Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the Forest Heart Crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
+  },
+  {
+    "key": "0298e64d51825f",
+    "speaker": "narrator",
+    "text": "Nyx is already half leaves again. \"Go home the long way, Elior. Look before you step.\""
+  },
+  {
+    "key": "0ab52ae3a9e273",
+    "speaker": "sir cedric",
+    "text": "My friend, I sense something extraordinary has happened. You carry an aura of ancient magic, and your eyes hold depths I had not seen before. Have you succeeded in your quest to find Nyx? The prophetic vision spell you learned is the sort of mystical knowledge we need. With your ability to glimpse possible futures, we can better anticipate threats and develop strategies to counter them. You have become a formidable ally in our fight against the darkness."
+  }
+]

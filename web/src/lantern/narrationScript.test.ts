@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from '@/act1/Act1'
+import { Act2 } from '@/act2/Act2'
+import { ACT2_GOLDEN_PATH } from '@/act2/Act2GoldenPath'
 import {
   ACT1_COMPLETING_COMMAND,
   ACT1_GOLDEN_PATH,
@@ -14,6 +16,7 @@ import {
   questCardBlocks,
   turnBlocks,
   UNSIGNED,
+  type ScriptBranch,
   type WriterRule,
 } from './narrationScript'
 
@@ -79,6 +82,15 @@ describe('linesOfTurn', () => {
       WRITERS,
     )
     expect(lines.map((l) => l.speaker)).toEqual(['mother', 'narrator'])
+  })
+
+  it('also gives narrated writing (a dim note on the page) to its writer, under the narrator’s key', () => {
+    const [line] = linesOfTurn(
+      'What a night, it was. A note in dim ink.',
+      WRITERS,
+    )
+    expect(line.speaker).toBe('elior')
+    expect(line.key).toBe(narrationKey('narrator', line.text))
   })
 })
 
@@ -210,5 +222,30 @@ describe('actScript for Act I', () => {
     const keys = script.map((line) => line.key)
     expect(new Set(keys).size).toBe(keys.length)
     expect(script.every((line) => line.text.length > 0)).toBe(true)
+  })
+})
+
+describe('actScript branches', () => {
+  const make = (): Game => new Game([new Act2()])
+  const marcusIndex = ACT2_GOLDEN_PATH.lastIndexOf('talk to innkeeper marcus')
+  const truth: ScriptBranch = {
+    after: marcusIndex,
+    commands: ['say truth to innkeeper marcus'],
+  }
+
+  it('reads an optional scene the golden path does not take, played on a copy', () => {
+    const plain = actScript(make, ACT2_GOLDEN_PATH, [])
+    const branched = actScript(make, ACT2_GOLDEN_PATH, [], [], [truth])
+    const onPurpose = (line: { text: string }): boolean =>
+      line.text.startsWith('On purpose.')
+    expect(plain.some(onPurpose)).toBe(false)
+    expect(branched.find(onPurpose)?.speaker).toBe('innkeeper marcus')
+  })
+
+  it('leaves the lines of the golden path as they were', () => {
+    const plain = actScript(make, ACT2_GOLDEN_PATH, [])
+    const branched = actScript(make, ACT2_GOLDEN_PATH, [], [], [truth])
+    const keys = new Set(branched.map((line) => line.key))
+    expect(plain.every((line) => keys.has(line.key))).toBe(true)
   })
 })
