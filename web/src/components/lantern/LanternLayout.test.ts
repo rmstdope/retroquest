@@ -1493,6 +1493,14 @@ describe('LanternLayout', () => {
 
     beforeEach(() => {
       audios.length = 0
+      // Settings are saved in localStorage where there is one: start each test with narration on.
+      try {
+        localStorage.clear()
+      } catch {
+        // No storage in this environment.
+      }
+      setActivePinia(createPinia())
+      useSettingsStore().narrationOn = true
     })
     afterEach(() => {
       vi.useRealTimers()
