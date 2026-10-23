@@ -67,8 +67,6 @@ export interface Turn {
   quests?: QuestNews[]
   /** Set on a player's command and on the arrival that opens an act: its answer is narrated (never on a load). */
   narrate?: true
-  /** A new or updated quest's chime is owed: it rings when the turn's quest news shows (`ringQuestChime`). */
-  chime?: true
   /** Set when the turn arrived in a room the player had not been in before. */
   firstVisit?: true
 }
@@ -373,11 +371,18 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
-  /** Ring turn `turnId`'s owed quest chime, once: when its quest news shows. */
-  function ringQuestChime(turnId: number): void {
-    const turn = turns.value.find((entry) => entry.id === turnId)
-    if (!turn?.chime) return
-    delete turn.chime
+  /**
+   * Ring the chime owed by quest cards `cards` (indices into turn `turnId`'s
+   * quests) as they show: once for all of them, so cards shown together do
+   * not stack their chimes; cards with nothing owed ring nothing.
+   */
+  function ringQuestChime(turnId: number, cards: number[]): void {
+    const quests = turns.value.find((entry) => entry.id === turnId)?.quests
+    const owed = cards
+      .map((index) => quests?.[index])
+      .filter((news): news is QuestNews => !!news?.chime)
+    if (!owed.length) return
+    for (const news of owed) delete news.chime
     audioPlayer?.playNewQuest()
   }
 
@@ -724,12 +729,14 @@ export const useGameStore = defineStore('game', () => {
     }
 
     // A completion's fanfare alone marks the turn; the chime would clash.
-    // The chime waits for the quest news to show (the story view rings it).
+    // Each card's chime waits for the card to show (the story view rings it).
     const turn = turns.value.at(-1)
     if (news.length && turn) {
       turn.quests = [...(turn.quests ?? []), ...news]
       questsHaveNew.value = true
-      if (!completions.length) turn.chime = true
+      if (!completions.length)
+        for (const item of news)
+          if (item.kind !== 'completed') item.chime = true
     }
 
     if (events.length > 0) {

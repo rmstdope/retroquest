@@ -12,6 +12,8 @@ export interface QuestNews {
   text: string
   /** Quests done in the act once this one completed (completions only). */
   progress?: { completed: number; total: number }
+  /** The new-quest chime is owed: it rings when the card shows (`ringQuestChime`). */
+  chime?: true
 }
 
 /** The story record of a quest event from the engine. */

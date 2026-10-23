@@ -1449,7 +1449,18 @@ describe('LanternLayout', () => {
     async function ready(): Promise<VueWrapper> {
       vi.useFakeTimers()
       const manifest = Object.fromEntries(
-        [FIRST, SECOND, HEADING, BODY, DONE].map((line) => [
+        [
+          FIRST,
+          SECOND,
+          HEADING,
+          BODY,
+          DONE,
+          'New side quest',
+          'Q1',
+          'A.',
+          'Q2',
+          'B.',
+        ].map((line) => [
           narrationKey('narrator', line),
           {
             file: 'x.mp3',
@@ -1521,35 +1532,54 @@ describe('LanternLayout', () => {
       expect(texts(w)).toEqual([FIRST, SECOND])
     })
 
-    it('rings a quest chime when the quest card shows, not when the turn starts', async () => {
+    it('rings a chime for each quest card as its reading starts, not when the turn starts', async () => {
       const w = await ready()
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       useGameStore().setAudioPlayer(audio)
+      const card = (name: string, text: string) => ({
+        kind: 'new' as const,
+        name,
+        main: false,
+        text,
+        chime: true as const,
+      })
       await say(
-        narratedTurn(1, {
-          quests: [{ kind: 'updated', name: 'Q', main: false, text: 'Later.' }],
-          chime: true,
-        }),
+        narratedTurn(1, { quests: [card('Q1', 'A.'), card('Q2', 'B.')] }),
       )
       expect(audio.playNewQuest).not.toHaveBeenCalled()
       audios[0].onended?.()
       await vi.advanceTimersByTimeAsync(350)
       expect(audio.playNewQuest).not.toHaveBeenCalled()
       audios[1].onended?.()
-      await vi.advanceTimersByTimeAsync(0)
+      await vi.advanceTimersByTimeAsync(350)
       expect(w.find('[data-unit="2"]').exists()).toBe(true)
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
+      // The first card's heading, name and text, one after another.
+      for (const index of [2, 3, 4]) {
+        audios[index].onended?.()
+        await vi.advanceTimersByTimeAsync(350)
+      }
+      expect(w.find('[data-unit="3"]').exists()).toBe(true)
+      expect(audio.playNewQuest).toHaveBeenCalledTimes(2)
     })
 
-    it('rings a quest chime at once when the turn shows at once', async () => {
+    it('rings one chime at once for quest cards shown together', async () => {
       await ready()
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       useGameStore().setAudioPlayer(audio)
       await say(
         narratedTurn(1, {
           narrate: undefined,
-          quests: [{ kind: 'updated', name: 'Q', main: false, text: 'Later.' }],
-          chime: true,
+          quests: [
+            {
+              kind: 'updated',
+              name: 'Q',
+              main: false,
+              text: 'Later.',
+              chime: true,
+            },
+            { kind: 'new', name: 'R', main: true, text: 'Go.', chime: true },
+          ],
         }),
       )
       expect(audio.playNewQuest).toHaveBeenCalledOnce()

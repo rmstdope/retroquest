@@ -245,25 +245,34 @@ watch(
   },
 )
 
-// A turn's owed quest chime rings when its quest news shows: at once when the
-// turn is not narrated, or when the narration reaches the quest card. A new
-// turn shows the previous one whole, so a chime still owed rings then.
-let chimeTurn: number | null = null
+// Each quest card's chime rings when the card shows: as the narration reaches
+// it, or at once with its turn (cards shown together ring once). A new turn
+// shows the previous one whole, so chimes still owed ring then.
+let chimeTurn: { id: number; cards: number } | null = null
 let stopChime: (() => void) | null = null
 watch(
   () => game.turns.at(-1)?.id,
   () => {
     stopChime?.()
     stopChime = null
-    if (chimeTurn !== null) game.ringQuestChime(chimeTurn)
+    if (chimeTurn)
+      game.ringQuestChime(
+        chimeTurn.id,
+        Array.from({ length: chimeTurn.cards }, (_, index) => index),
+      )
     const turn = game.turns.at(-1)
-    chimeTurn = turn?.chime ? turn.id : null
-    if (!turn?.chime) return
-    const unit = firstQuestUnit(turn)
+    const cards = turn?.quests?.length ?? 0
+    chimeTurn = turn && cards ? { id: turn.id, cards } : null
+    if (!turn || !cards) return
+    const first = firstQuestUnit(turn)
     stopChime = watch(
-      () => narration.revealed(turn.id, unit),
+      () =>
+        Array.from({ length: cards }, (_, index) =>
+          narration.revealed(turn.id, first + index),
+        ),
       (shown) => {
-        if (shown) game.ringQuestChime(turn.id)
+        const now = shown.flatMap((on, index) => (on ? [index] : []))
+        game.ringQuestChime(turn.id, now)
       },
       { immediate: true },
     )

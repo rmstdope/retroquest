@@ -258,7 +258,7 @@ describe('useGameStore', () => {
       store.dismissModal() // dismiss intro → triggers look + pollQuestEvents
       expect(store.showModal).toBe(false)
       expect(store.turns.at(-1)!.quests).toEqual([
-        { kind: 'new', name: 'Q', main: true, text: 'Go.' },
+        { kind: 'new', name: 'Q', main: true, text: 'Go.', chime: true },
       ])
     })
 
@@ -308,8 +308,8 @@ describe('useGameStore', () => {
       bridge.controller.completeQuest.mockReturnValue(null)
       await store.initGame()
       store.dismissModal()
-      expect(store.turns.at(-1)?.chime).toBe(true)
-      store.ringQuestChime(store.turns.at(-1)!.id)
+      expect(store.turns.at(-1)?.quests?.[0].chime).toBe(true)
+      store.ringQuestChime(store.turns.at(-1)!.id, [0])
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
     })
 
@@ -641,7 +641,13 @@ describe('useGameStore', () => {
       store.pollQuestEvents()
       expect(store.showModal).toBe(false)
       expect(store.turns.at(-1)!.quests).toEqual([
-        { kind: 'new', name: 'Q', main: false, text: 'Quest: Find the gem' },
+        {
+          kind: 'new',
+          name: 'Q',
+          main: false,
+          text: 'Quest: Find the gem',
+          chime: true,
+        },
       ])
     })
 
@@ -722,13 +728,13 @@ describe('useGameStore', () => {
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       const turn = store.turns.at(-1)!
-      expect(turn.chime).toBe(true)
+      expect(turn.quests?.[0].chime).toBe(true)
       expect(audio.playNewQuest).not.toHaveBeenCalled()
 
-      store.ringQuestChime(turn.id)
-      store.ringQuestChime(turn.id)
+      store.ringQuestChime(turn.id, [0])
+      store.ringQuestChime(turn.id, [0])
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
-      expect(store.turns.at(-1)?.chime).toBeUndefined()
+      expect(store.turns.at(-1)?.quests?.[0].chime).toBeUndefined()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })
 
@@ -739,7 +745,7 @@ describe('useGameStore', () => {
         .mockReturnValueOnce(quest('Quest updated'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
-      store.ringQuestChime(store.turns.at(-1)!.id)
+      store.ringQuestChime(store.turns.at(-1)!.id, [0])
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })
@@ -752,7 +758,7 @@ describe('useGameStore', () => {
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
-      expect(store.turns.at(-1)?.chime).toBeUndefined()
+      expect(store.turns.at(-1)?.quests?.some((q) => q.chime)).toBe(false)
       expect(audio.playNewQuest).not.toHaveBeenCalled()
     })
 
@@ -1708,12 +1714,19 @@ describe('useGameStore', () => {
           name: 'Hint of Magic',
           main: false,
           text: 'A force stirs.',
+          chime: true,
         },
-        { kind: 'updated', name: 'Shadows', main: true, text: 'New.' },
+        {
+          kind: 'updated',
+          name: 'Shadows',
+          main: true,
+          text: 'New.',
+          chime: true,
+        },
       ])
     })
 
-    it('plays the chime once for the news of a turn', () => {
+    it('owes a chime per quest card: one for cards shown together, one each when read in turn', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
       bridge.controller.activateQuest
@@ -1724,10 +1737,24 @@ describe('useGameStore', () => {
         .mockReturnValue(null)
 
       store.submitCommand('look')
-      store.ringQuestChime(store.turns.at(-1)!.id)
-      store.ringQuestChime(store.turns.at(-1)!.id)
-
+      const id = store.turns.at(-1)!.id
+      expect(store.turns.at(-1)?.quests?.map((q) => q.chime)).toEqual([
+        true,
+        true,
+      ])
+      store.ringQuestChime(id, [0, 1])
+      store.ringQuestChime(id, [0, 1])
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
+
+      store.submitCommand('look')
+      bridge.controller.activateQuest.mockReset()
+      store.turns.at(-1)!.quests = [
+        { kind: 'new', name: 'A', main: false, text: 'a', chime: true },
+        { kind: 'new', name: 'B', main: false, text: 'b', chime: true },
+      ]
+      store.ringQuestChime(store.turns.at(-1)!.id, [0])
+      store.ringQuestChime(store.turns.at(-1)!.id, [1])
+      expect(audio.playNewQuest).toHaveBeenCalledTimes(3)
     })
 
     it('gives the completion pop-up the quest it is about', () => {
