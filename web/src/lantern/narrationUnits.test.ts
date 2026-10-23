@@ -4,6 +4,7 @@ import { narrationWords, type NarrationManifest } from './narrationManifest'
 import {
   chapterUnits,
   POPUP_NARRATION_ID,
+  SCENE_PAUSE_MS,
   questPopUpUnits,
   turnUnits,
 } from './narrationUnits'
@@ -67,6 +68,8 @@ describe('turnUnits', () => {
       'A low room.',
     ])
     expect(first.at(-1)?.parts.every((p) => p.clip)).toBe(true)
+    expect(first.at(-1)?.pauseBefore).toBe(SCENE_PAUSE_MS)
+    expect(first.slice(0, -1).every((u) => !u.pauseBefore)).toBe(true)
     const again = turnUnits(turn, false, withClip)
     expect(again.at(-1)?.kind).toBe('arrival')
     expect(again.at(-1)?.parts).toEqual([])
@@ -111,6 +114,27 @@ describe('chapterUnits', () => {
     [NARRATOR, 'The wind rises.'],
     ['writing', 'Come.'],
   )
+
+  it('gives an intro’s first paragraph a breath after the heading, and no other unit', () => {
+    const units = chapterUnits(
+      { kind: 'intro', act: 'Act I', title: 'The Call', body },
+      manifest,
+    )
+    expect(units.map((u) => u.pauseBefore ?? 0)).toEqual([
+      0,
+      SCENE_PAUSE_MS,
+      0,
+      0,
+    ])
+  })
+
+  it('gives a closing page, whose title is not read, no breath', () => {
+    const units = chapterUnits(
+      { kind: 'complete', act: 'Act I', title: 'The Call', body },
+      manifest,
+    )
+    expect(units.every((u) => !u.pauseBefore)).toBe(true)
+  })
 
   it('reads an intro as its heading, then each paragraph, leaving events silent', () => {
     const units = chapterUnits(

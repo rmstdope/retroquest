@@ -5,10 +5,10 @@ import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import RoomCard from './RoomCard.vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { ARRIVAL_PAUSE_MS, useNarrationStore } from '@/stores/useNarrationStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
 import { narrationKey } from '@/lantern/narrationKey'
 import { narrationWords } from '@/lantern/narrationManifest'
-import { turnUnits } from '@/lantern/narrationUnits'
+import { SCENE_PAUSE_MS, turnUnits } from '@/lantern/narrationUnits'
 
 describe('RoomCard', () => {
   beforeEach(() => {
@@ -103,7 +103,7 @@ describe('RoomCard', () => {
       turnUnits({ text: 'You go north.', arrival }, true, manifest),
       'act1',
     )
-    await new Promise((r) => setTimeout(r, ARRIVAL_PAUSE_MS + 50))
+    await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 50))
     await nextTick()
     expect(w.get('.lq-room-card').classes()).toContain('lq-speaking')
     expect(w.get('.lq-room-text').classes()).not.toContain('lq-clamp')

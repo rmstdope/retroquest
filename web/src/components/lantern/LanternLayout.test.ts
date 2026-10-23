@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
@@ -1657,6 +1658,8 @@ describe('LanternLayout', () => {
 
         audios[0].onended?.()
         await vi.advanceTimersByTimeAsync(350)
+        expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
+        await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
         expect(w.get('.lq-chapter-block').text()).toBe(BODY)
         expect(useNarrationStore().isNarrating).toBe(true)
 

@@ -1,11 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
-import {
-  ARRIVAL_PAUSE_MS,
-  useNarrationStore,
-  type NarrationAudio,
-} from './useNarrationStore'
+import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
 import { useSettingsStore } from './useSettingsStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import type { NarrationClip } from '@/lantern/narrationManifest'
@@ -340,13 +337,14 @@ describe('useNarrationStore', () => {
   describe('a room arrival', () => {
     const arrival = (): NarrationUnit => ({
       kind: 'arrival',
+      pauseBefore: SCENE_PAUSE_MS,
       parts: [{ markup: 'a b', clip: clip(2) }],
     })
 
     it('waits a full second after the voice before it, then shows and reads the room', () => {
       narration.begin(1, [voiced(), arrival()], 'act1')
       last().onended?.()
-      vi.advanceTimersByTime(ARRIVAL_PAUSE_MS - 100)
+      vi.advanceTimersByTime(SCENE_PAUSE_MS - 100)
       expect(narration.revealed(1, 1)).toBe(false)
       vi.advanceTimersByTime(200)
       expect(narration.revealed(1, 1)).toBe(true)
@@ -357,7 +355,7 @@ describe('useNarrationStore', () => {
       narration.begin(1, [silent, arrival()], 'act1')
       expect(narration.revealed(1, 0)).toBe(true)
       expect(narration.revealed(1, 1)).toBe(false)
-      vi.advanceTimersByTime(ARRIVAL_PAUSE_MS + 10)
+      vi.advanceTimersByTime(SCENE_PAUSE_MS + 10)
       expect(narration.speaking(1)?.unit).toBe(1)
     })
 

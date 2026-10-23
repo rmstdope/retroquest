@@ -29,8 +29,6 @@ import type { NarrationUnit } from '@/lantern/narrationUnits'
 
 /** Pause after a spoken part, in milliseconds. */
 const GAP_MS = 350
-/** The pause before a room is read, counted from the last voice (or from the turn's start). */
-export const ARRIVAL_PAUSE_MS = 1000
 /** The shorter pause after a hurried block. */
 const HURRIED_GAP_MS = 80
 /** Two taps this close are a double-tap. */
@@ -81,7 +79,7 @@ interface ActiveNarration {
   word: number
   /** The pause just waited before the next part, in ms (0 at the turn's start). */
   waited: number
-  /** The arrival unit whose pause has been waited, or -1. */
+  /** The unit whose own pause (`pauseBefore`) has been waited, or -1. */
   pausedFor: number
 }
 
@@ -249,19 +247,16 @@ export const useNarrationStore = defineStore('narration', () => {
       if (now.unit >= now.units.length) return finish()
       const unit = now.units[now.unit]
       const index = unit.parts.findIndex((p, i) => i >= now.part && !!p.clip)
-      // A room is shown and read after a longer breath: the scene changes.
-      if (
-        index >= 0 &&
-        unit.kind === 'arrival' &&
-        now.pausedFor !== now.unit &&
-        ARRIVAL_PAUSE_MS > now.waited
-      ) {
+      // A unit that asks for a longer breath (a room, a chapter's text after
+      // its heading) is shown and read once it has passed.
+      const pause = unit.pauseBefore ?? 0
+      if (index >= 0 && now.pausedFor !== now.unit && pause > now.waited) {
         now.pausedFor = now.unit
         const mine = generation
         timers.push(
           setTimeout(() => {
             if (mine === generation) step()
-          }, ARRIVAL_PAUSE_MS - now.waited),
+          }, pause - now.waited),
         )
         return
       }

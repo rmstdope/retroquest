@@ -33,11 +33,16 @@ export interface NarrationPart {
   clip: NarrationClip | null
 }
 
+/** The breath before a new scene: a room arrival, or a chapter page's text after its heading (ms). */
+export const SCENE_PAUSE_MS = 1000
+
 /** One thing the view reveals at a time: an answer's block, an arrival's description or a quest card. */
 export interface NarrationUnit {
   kind: 'block' | 'arrival' | 'quest'
   /** The lines spoken in turn; empty when the unit is silent. */
   parts: NarrationPart[]
+  /** A longer pause before the unit is shown and read (ms), counted from the last voice. */
+  pauseBefore?: number
 }
 
 /** The parts of a turn the narration reads: its answer, the arrival (if any) and quest news. */
@@ -77,6 +82,7 @@ export function turnUnits(
   if (turn.arrival)
     units.push({
       kind: 'arrival',
+      pauseBefore: SCENE_PAUSE_MS,
       parts: firstVisit
         ? partsOf(
             arrivalBlocks(turn.arrival.room, turn.arrival.description),
@@ -125,9 +131,15 @@ export function chapterUnits(
       : []
   return [
     { kind: 'block', parts: heading },
-    ...parseTurn(chapter.body).map((block): NarrationUnit => {
+    ...parseTurn(chapter.body).map((block, index): NarrationUnit => {
       const voice = blockVoice(block)
-      return { kind: 'block', parts: voice ? partsOf([voice], manifest) : [] }
+      const unit: NarrationUnit = {
+        kind: 'block',
+        parts: voice ? partsOf([voice], manifest) : [],
+      }
+      // The text starts after a breath once the heading has been read.
+      if (index === 0 && heading.length) unit.pauseBefore = SCENE_PAUSE_MS
+      return unit
     }),
   ]
 }

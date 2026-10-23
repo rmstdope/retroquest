@@ -1,11 +1,11 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
+import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import StoryTurn from './StoryTurn.vue'
 import type { Turn } from '@/stores/useGameStore'
 import {
-  ARRIVAL_PAUSE_MS,
   useNarrationStore,
   type NarrationAudio,
 } from '@/stores/useNarrationStore'
@@ -389,7 +389,7 @@ describe('StoryTurn while it is narrated', () => {
     audios[0].onended?.()
     await vi.advanceTimersByTimeAsync(GAP + 10)
     expect(w.find('[data-testid="divider"]').exists()).toBe(false)
-    await vi.advanceTimersByTimeAsync(ARRIVAL_PAUSE_MS)
+    await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
 
     expect(w.get('.lq-arrival').classes()).toContain('lq-speaking')
     expect(w.get('.lq-arrival-text').text()).toContain('A low room')

@@ -1,11 +1,11 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest'
+import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { defineComponent, h, nextTick, ref, type VNode } from 'vue'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { useReadAlong } from './useReadAlong'
 import {
-  ARRIVAL_PAUSE_MS,
   useNarrationStore,
   type NarrationAudio,
 } from '@/stores/useNarrationStore'
@@ -120,7 +120,7 @@ describe('useReadAlong', () => {
       'act1',
     )
     // A room is read after a pause.
-    await new Promise((r) => setTimeout(r, ARRIVAL_PAUSE_MS + 50))
+    await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 50))
     await nextTick()
     expect(w.find('h3 .lq-w').attributes('data-w')).toBe('0')
     expect(w.findAll('p .lq-w').map((s) => s.attributes('data-w'))).toEqual([

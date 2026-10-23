@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, it, expect, vi } from 'vitest'
+import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { flushPromises, mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
@@ -167,13 +168,16 @@ describe('ChapterPage', () => {
       return w
     }
 
-    it('reads the title first, then shows each paragraph as it is spoken', async () => {
+    it('reads the title first, then after a breath shows each paragraph as it is spoken', async () => {
       const w = start()
       await nextTick()
       expect(w.get('h2').classes()).toContain('lq-speaking')
       expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
       audios[0].onended?.()
       await new Promise((r) => setTimeout(r, 400))
+      await nextTick()
+      expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
+      await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS))
       await nextTick()
       expect(w.findAll('.lq-chapter-block').map((b) => b.text())).toEqual([
         'The wind rises.',
