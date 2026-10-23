@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { QuestNews } from '@/lantern/questNews'
-import { renderMarkup } from '@/utils/theme'
+import { useReadAlong } from '@/composables/useReadAlong'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { POPUP_NARRATION_ID } from '@/lantern/narrationUnits'
 
 /**
  * The quest-complete pop-up's body (the one quest moment that blocks): a
  * check seal, the completion text and how many of the act's quests are
  * done. Which quest it is ("Side quest complete", its name) is in the
  * dialog's fixed header, so it stays in view while a long text scrolls.
+ *
+ * The completion text is read aloud like a quest card (`useNarrationStore`,
+ * narrated by the layout): marked while spoken, the spoken word lit. A tap on
+ * the text hurries the voice, a second one skips it.
  */
 const props = defineProps<{ news: QuestNews }>()
+
+const root = ref<HTMLElement | null>(null)
+const narration = useNarrationStore()
+const { isSpeaking, html } = useReadAlong(() => POPUP_NARRATION_ID, root)
 
 const percent = computed(() => {
   const progress = props.news.progress
@@ -20,7 +30,7 @@ const percent = computed(() => {
 </script>
 
 <template>
-  <div class="lq-complete">
+  <div ref="root" class="lq-complete">
     <span class="lq-seal" aria-hidden="true">
       <svg
         width="30"
@@ -36,7 +46,13 @@ const percent = computed(() => {
       </svg>
     </span>
     <!-- eslint-disable vue/no-v-html -->
-    <p class="lq-complete-text" v-html="renderMarkup(news.text)"></p>
+    <p
+      class="lq-complete-text"
+      :class="{ 'lq-speaking': isSpeaking(0) }"
+      data-unit="0"
+      @click="narration.tap()"
+      v-html="html(news.text, 0)"
+    ></p>
     <!-- eslint-enable vue/no-v-html -->
     <div v-if="news.progress" class="lq-complete-progress">
       <span
@@ -86,6 +102,17 @@ const percent = computed(() => {
   font-size: var(--lq-story-size);
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
+}
+/* The text being read: an amber rule at its left edge, as in the story. */
+.lq-complete-text.lq-speaking {
+  box-shadow: inset 2px 0 0 var(--lq-accent);
+}
+/* The spoken word. */
+.lq-complete :deep(.lq-w-now) {
+  background: var(--lq-accent-soft);
+  color: var(--lq-accent-text);
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px var(--lq-accent-soft);
 }
 /* Short screens (phone landscape): no room for the seal. */
 @media (max-height: 519px) {

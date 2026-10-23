@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn } from '@/lantern/parseTurn'
@@ -8,7 +8,7 @@ import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
 import StoryArrival from './StoryArrival.vue'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { wrapWords } from '@/lantern/wrapWords'
+import { useReadAlong } from '@/composables/useReadAlong'
 
 /**
  * One turn in the Lantern story: the command echo, the answer's blocks and
@@ -29,63 +29,13 @@ watch(
   },
 )
 
-/** Whether unit `unit` is shown yet. */
-function shown(unit: number): boolean {
-  return narration.revealed(props.turn.id, unit)
-}
-const speaking = computed(() => narration.speaking(props.turn.id))
-/** Whether unit `unit` is being spoken now. */
-function isSpeaking(unit: number): boolean {
-  return speaking.value?.unit === unit
-}
-/** Which unit has its words marked, and how many it has: unchanged while the word moves, so nothing re-renders per word. */
-const wordMarking = computed((): string => {
-  const now = speaking.value
-  return now?.aligned ? `${now.unit}:${now.total}` : ''
-})
+const { shown, isSpeaking, html } = useReadAlong(() => props.turn.id, root)
 /** The unit of the room arrival, and of the first quest card. */
 const arrivalUnit = computed(() =>
   props.turn.arrival ? blocks.value.length : -1,
 )
 const firstQuestUnit = computed(
   () => blocks.value.length + (props.turn.arrival ? 1 : 0),
-)
-
-/**
- * The HTML of `markup`; while unit `unit` is spoken, with each word marked
- * (only when the words match the recording's timings, else it stays plain).
- */
-function html(markup: string, unit: number): string {
-  const plain = renderMarkup(markup)
-  const [markedUnit, total] = wordMarking.value.split(':').map(Number)
-  if (markedUnit !== unit) return plain
-  const wrapped = wrapWords(plain)
-  return wrapped.count === total ? wrapped.html : plain
-}
-
-// Light the spoken word, and keep the block being spoken in view.
-watch(
-  () => {
-    const now = speaking.value
-    return now ? `${now.unit}:${now.word < 0 ? -1 : now.offset + now.word}` : ''
-  },
-  async (key) => {
-    await nextTick()
-    root.value?.querySelectorAll('.lq-w-now').forEach((el) => {
-      el.classList.remove('lq-w-now')
-    })
-    const now = speaking.value
-    if (!now) return
-    if (now.word >= 0)
-      root.value
-        ?.querySelectorAll(`[data-w="${now.offset + now.word}"]`)
-        .forEach((el) => el.classList.add('lq-w-now'))
-    if (key.endsWith(':-1'))
-      root.value
-        ?.querySelector(`[data-unit="${now.unit}"]`)
-        ?.scrollIntoView?.({ block: 'nearest' })
-  },
-  { flush: 'post' },
 )
 
 const blocks = computed(() => parseTurn(props.turn.text))
