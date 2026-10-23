@@ -57,8 +57,9 @@ import TitlePage from './TitlePage.vue'
  * goes on below the visible part.
  * After the last act, Finish the game asks to save (FinishDialog), then
  * only the end screen shows; the act's music keeps playing under it.
- * A player's command is narrated when the act has recordings and narration is
- * on (`useNarrationStore`): the layout starts it with the new turn, a click on
+ * A player's command, and the arrival that opens an act, is narrated when the
+ * act has recordings and narration is on (`useNarrationStore`): the layout
+ * starts it with the new turn, a click on
  * the story hurries it (two skip), Space/Enter hurry and Escape skips while
  * focus is not on a field or a control, and a pop-up stops it.
  */
@@ -225,8 +226,8 @@ watch(
 )
 
 // A new answer cuts in on the one being narrated, then is narrated itself
-// when it is a player's command in an act with recordings (never behind a
-// pop-up). Runs before the story renders, so nothing flashes unspoken.
+// when it is a player's command or an act's opening arrival in an act with
+// recordings (never behind a pop-up). Runs before the story renders, so nothing flashes unspoken.
 watch(
   () => game.turns.at(-1)?.id,
   () => {

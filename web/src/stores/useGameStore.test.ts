@@ -1121,6 +1121,8 @@ describe('useGameStore', () => {
           roomChanged: true,
           gained: [],
           lost: [],
+          narrate: true,
+          firstVisit: true,
           arrival: {
             room: 'Village Square',
             description: 'A quiet village.',
@@ -1208,6 +1210,7 @@ describe('useGameStore', () => {
 
       bridge.controller.isActRunning.mockReturnValue(true)
       bridge.controller.look.mockReturnValue('You are in Act 2.')
+      bridge.controller.getVisitedRoomCount.mockReturnValue(1)
       store.dismissModal() // act complete
       store.dismissModal() // act intro -> arrival look
 
@@ -1216,12 +1219,13 @@ describe('useGameStore', () => {
         text: 'You are in Act 2.',
         room: 'Act 2 Start',
         roomChanged: true,
+        narrate: true,
       })
     })
 
-    it('marks a typed command for narration, never the opening or a load', async () => {
+    it('marks the opening arrival and a typed command for narration, never a load', async () => {
       await startPlaying()
-      expect(store.turns[0].narrate).toBeUndefined()
+      expect(store.turns[0]).toMatchObject({ narrate: true, firstVisit: true })
 
       store.submitCommand('look')
       expect(store.turns.at(-1)?.narrate).toBe(true)

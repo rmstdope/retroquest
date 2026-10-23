@@ -65,7 +65,7 @@ export interface Turn {
   arrival: Arrival | null
   /** Quests that started, moved on or were completed with this turn. */
   quests?: QuestNews[]
-  /** Set on a player's command: its answer is narrated (never on a load or the opening). */
+  /** Set on a player's command and on the arrival that opens an act: its answer is narrated (never on a load). */
   narrate?: true
   /** Set when the turn arrived in a room the player had not been in before. */
   firstVisit?: true
@@ -750,7 +750,8 @@ export const useGameStore = defineStore('game', () => {
       // If this was the act intro modal, fire a look to trigger quest start
       if (pendingLookOnDismiss) {
         pendingLookOnDismiss = false
-        showOutput(null, b.controller.look())
+        // The act's first room is read aloud like any first visit.
+        showOutput(null, b.controller.look(), { narrate: true })
         refreshPanels()
         pollQuestEvents()
         // The look may start quests: list them (as submitCommand does).
