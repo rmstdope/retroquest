@@ -1638,5 +1638,108 @@ describe('LanternLayout', () => {
       expect(useNarrationStore().isNarrating).toBe(false)
       expect(texts(w)).toEqual([FIRST, SECOND])
     })
+
+    describe('the hint', () => {
+      const TOUCH = 'Tap to hurry · double-tap to skip'
+      const KEYS = 'Space to hurry · Esc to skip'
+      const hint = (w: VueWrapper): string =>
+        w.find('.lq-narration-hint').exists()
+          ? w.get('.lq-narration-hint').text()
+          : ''
+
+      it('shows the touch wording on a phone or tablet, during a narrated turn', async () => {
+        const w = await ready()
+        expect(hint(w)).toBe('')
+        await say(narratedTurn(1))
+        expect(hint(w)).toBe(TOUCH)
+      })
+
+      it('shows the keyboard wording with a mouse and keyboard', async () => {
+        vi.stubGlobal(
+          'matchMedia',
+          vi.fn((query: string) => ({
+            matches: query.includes('pointer: fine'),
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn(),
+          })),
+        )
+        const w = await ready()
+        await say(narratedTurn(1))
+        expect(hint(w)).toBe(KEYS)
+      })
+
+      it('goes when the turn is skipped, and ends after three narrated turns', async () => {
+        const w = await ready()
+        for (const id of [1, 2, 3]) {
+          await say(narratedTurn(id))
+          expect(hint(w)).toBe(TOUCH)
+          useNarrationStore().skipAll()
+          await vi.advanceTimersByTimeAsync(0)
+          expect(hint(w)).toBe('')
+        }
+        await say(narratedTurn(4))
+        expect(useNarrationStore().isNarrating).toBe(true)
+        expect(hint(w)).toBe('')
+      })
+
+      it('is not shown with narration off, and switching it off ends the turn', async () => {
+        const w = await ready()
+        await say(narratedTurn(1))
+        useSettingsStore().narrationOn = false
+        await vi.advanceTimersByTimeAsync(0)
+        expect(hint(w)).toBe('')
+        expect(useNarrationStore().isNarrating).toBe(false)
+        expect(texts(w)).toEqual([FIRST, SECOND])
+      })
+
+      it('counts again in a new game', async () => {
+        const w = await ready()
+        for (const id of [1, 2, 3, 4]) await say(narratedTurn(id))
+        expect(hint(w)).toBe('')
+        useGameStore().gameNumber++
+        await vi.advanceTimersByTimeAsync(0)
+        await say(narratedTurn(5))
+        expect(hint(w)).toBe(TOUCH)
+      })
+    })
+
+    it('adds the narration entry to Help, before the music credits', async () => {
+      const game = useGameStore()
+      vi.spyOn(game, 'readInfo').mockReturnValue(
+        '[bold]Available Commands:[/bold]',
+      )
+      // The credits show for a loaded track (jsdom's Audio has no playback).
+      vi.stubGlobal(
+        'Audio',
+        class {
+          paused = true
+          play = (): Promise<void> => Promise.resolve()
+          pause = (): void => undefined
+          load = (): void => undefined
+          removeAttribute = (): void => undefined
+        },
+      )
+      const w = await ready()
+      game.musicFile = 'market.mp3'
+      game.musicInfo = 'Market by Conquest\nSource: https://freetouse.com/music'
+      await w.get('button[aria-label="Game menu"]').trigger('click')
+      const help = w
+        .findAll('[role="dialog"] button')
+        .find((b) => b.text().startsWith('Help'))!
+      await help.trigger('click')
+
+      const text = w.get('[role="dialog"]').text()
+      expect(text).toContain(
+        'Narration: tap the story or press Space to hurry the current line; ' +
+          'double-tap or press Esc to show the rest at once. Any action cuts in. ' +
+          'Turn narration off in Settings.',
+      )
+      expect(text.indexOf('Available Commands:')).toBeLessThan(
+        text.indexOf('Narration:'),
+      )
+      expect(text.indexOf('Narration:')).toBeLessThan(
+        text.indexOf('Market by Conquest'),
+      )
+    })
   })
 })

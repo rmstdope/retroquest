@@ -69,3 +69,27 @@ test('shows an answer at once with narration off', async ({
   expect(await lastTurnBlocks(page).count()).toBeGreaterThan(1)
   await expect(page.locator('.lq-speaking')).toHaveCount(0)
 })
+
+test('hints at hurrying on the first narrated turn, and Settings can switch narration off', async ({
+  page,
+}): Promise<void> => {
+  await slowNarrationClips(page)
+  await startAct1(page)
+
+  const input = page.getByLabel('Command')
+  await input.fill('talk to voice')
+  await input.press('Enter')
+  await expect(page.locator('.lq-narration-hint')).toBeVisible()
+
+  await page.getByRole('region', { name: 'Story' }).dblclick({
+    position: { x: 5, y: 5 },
+  })
+  await expect(page.locator('.lq-narration-hint')).toHaveCount(0)
+
+  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  const narration = page.getByRole('switch', { name: 'Narration' })
+  await expect(narration).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByLabel('Narration volume')).toBeVisible()
+  await narration.click()
+  await expect(page.getByLabel('Narration volume')).toHaveCount(0)
+})

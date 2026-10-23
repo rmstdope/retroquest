@@ -12,8 +12,8 @@ import type { LanternTextSize } from '@/lantern/tokens'
 import LanternDialog from './LanternDialog.vue'
 
 /**
- * The player's settings, saved in this browser: theme and text size, music
- * and sound effects (on/off and volume), how the actions start, and reduce
+ * The player's settings, saved in this browser: theme and text size, music,
+ * sound effects and narration (on/off and volume), how the actions start, and reduce
  * motion (which follows the device until it is changed here).
  */
 const emit = defineEmits<{ close: [] }>()
@@ -157,6 +157,36 @@ function volume(event: Event): number {
           @input="settings.effectsVolume = volume($event)"
         />
         <span class="lq-volume-num">{{ settings.effectsVolume }}</span>
+      </label>
+      <div class="lq-row">
+        <span class="lq-row-text"
+          ><span class="lq-row-label">Narration</span
+          ><span class="lq-note"
+            >The story and every character read aloud</span
+          ></span
+        >
+        <button
+          type="button"
+          role="switch"
+          class="lq-switch"
+          aria-label="Narration"
+          :aria-checked="settings.narrationOn ? 'true' : 'false'"
+          @click="settings.narrationOn = !settings.narrationOn"
+        >
+          <span class="lq-knob"></span>
+        </button>
+      </div>
+      <label v-if="settings.narrationOn" class="lq-volume">
+        <span class="lq-note">Volume</span>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          aria-label="Narration volume"
+          :value="settings.narrationVolume"
+          @input="settings.narrationVolume = volume($event)"
+        />
+        <span class="lq-volume-num">{{ settings.narrationVolume }}</span>
       </label>
       <p v-if="nowPlaying" class="lq-now-playing">
         <span class="lq-note">Now playing</span>

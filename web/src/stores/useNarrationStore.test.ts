@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
 import { useSettingsStore } from './useSettingsStore'
@@ -114,6 +115,61 @@ describe('useNarrationStore', () => {
     useSettingsStore().narrationVolume = 40
     narration.begin(1, [voiced()], 'act1')
     expect(last().volume).toBeCloseTo(0.4)
+  })
+
+  describe('the hint', () => {
+    /** Begin narrating a one-block turn (its voice is left playing). */
+    function narrateTurn(id: number): void {
+      narration.begin(id, [voiced()], 'act1')
+    }
+
+    it('shows during the first three narrated turns, while they are narrated', () => {
+      for (const id of [1, 2, 3]) {
+        narrateTurn(id)
+        expect(narration.hintVisible).toBe(true)
+        last().onended?.()
+        expect(narration.hintVisible).toBe(false)
+      }
+      narrateTurn(4)
+      expect(narration.isNarrating).toBe(true)
+      expect(narration.hintVisible).toBe(false)
+    })
+
+    it('goes when the turn is skipped', async () => {
+      narrateTurn(1)
+      narration.skipAll()
+      expect(narration.hintVisible).toBe(false)
+    })
+
+    it('does not count a turn that is not narrated', () => {
+      narration.begin(1, [silent], 'act1')
+      useSettingsStore().narrationOn = false
+      narration.begin(2, [voiced()], 'act1')
+      useSettingsStore().narrationOn = true
+      narration.begin(3, [voiced()], 'act1')
+      expect(narration.hintVisible).toBe(true)
+      expect(narration.narratedTurns).toBe(1)
+    })
+
+    it('starts counting again for a new game', async () => {
+      for (const id of [1, 2, 3, 4]) narrateTurn(id)
+      narration.skipAll()
+      narration.resetGame()
+      narrateTurn(5)
+      expect(narration.hintVisible).toBe(true)
+    })
+
+    it('is hidden when narration is switched off mid-turn', async () => {
+      narrateTurn(1)
+      useSettingsStore().narrationOn = false
+      expect(narration.hintVisible).toBe(false)
+    })
+  })
+
+  it('applies a volume change to the voice that is playing', () => {
+    narration.begin(1, [voiced()], 'act1')
+    useSettingsStore().narrationVolume = 30
+    return nextTick().then(() => expect(last().volume).toBeCloseTo(0.3))
   })
 
   it('follows the spoken word', async () => {
