@@ -60,6 +60,13 @@ const settings = useSettingsStore()
 const narration = useNarrationStore()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
+/** A mouse and keyboard: the narration hint names keys instead of taps. */
+const keyboardPlayer = useMediaQuery('(hover: hover) and (pointer: fine)')
+const hintText = computed(() =>
+  keyboardPlayer.value
+    ? 'Space to hurry · Esc to skip'
+    : 'Tap to hurry · double-tap to skip',
+)
 const section = ref<Section>('story')
 const dockOpen = ref(!short.value)
 watch(short, (isShort) => {
@@ -237,6 +244,17 @@ watch(
   },
 )
 
+// A new game counts its narrated turns (for the hint) from the start.
+watch(() => game.gameNumber, narration.resetGame)
+
+// Switching narration off in Settings ends the turn being spoken.
+watch(
+  () => settings.narrationOn,
+  (on) => {
+    if (!on) narration.skipAll()
+  },
+)
+
 // Show a new turn from its start (jsdom has no scrollIntoView). A command
 // run from another section (Use, Cast, Go) first brings the story back, and
 // focus moves to the actions as the pressed button has gone (likewise for
@@ -307,12 +325,20 @@ const shownQuestView = computed<QuestView | null>(() => {
   )
 })
 
+/** Help's entry for narration (the engine's help lists commands only). */
+const NARRATION_HELP =
+  '\n[bold]Narration:[/bold] tap the story or press Space to hurry the current line; ' +
+  'double-tap or press Esc to show the rest at once. Any action cuts in. ' +
+  'Turn narration off in Settings.\n'
+
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
   const kind = gameDialog.value
   if (kind !== 'stats' && kind !== 'help') return ''
   const html = renderMarkup(game.readInfo(kind))
-  return kind === 'help' ? html + music.buildAttributionHtml() : html
+  return kind === 'help'
+    ? html + renderMarkup(NARRATION_HELP) + music.buildAttributionHtml()
+    : html
 })
 
 // --- Names in the story: click one for a small menu of what fits ---
@@ -482,6 +508,13 @@ watch(
             <h2 class="lq-sr-only">Story</h2>
             <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
           </section>
+          <p
+            v-if="narration.hintVisible"
+            class="lq-narration-hint"
+            :class="{ 'lq-hint-raised': moreBelow }"
+          >
+            {{ hintText }}
+          </p>
           <button
             v-if="moreBelow"
             ref="moreBelowButton"
@@ -716,6 +749,30 @@ watch(
   position: relative;
   display: flex;
   flex-direction: column;
+}
+.lq-narration-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--lq-line);
+  background: var(--lq-raised);
+  color: var(--lq-muted);
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: lq-hint-in calc(0.3s * var(--lq-motion)) ease;
+}
+.lq-narration-hint.lq-hint-raised {
+  bottom: 56px;
+}
+@keyframes lq-hint-in {
+  from {
+    opacity: 0;
+  }
 }
 .lq-more-below {
   position: absolute;

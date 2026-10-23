@@ -103,6 +103,27 @@ describe('SettingsDialog', () => {
     expect(settings.effectsOn).toBe(false)
   })
 
+  it('has a Narration row, on by default, with its note', () => {
+    const w = mountSettings()
+    const row = w.get('[role="switch"][aria-label="Narration"]')
+
+    expect(row.attributes('aria-checked')).toBe('true')
+    expect(w.text()).toContain('The story and every character read aloud')
+  })
+
+  it('shows the narration Volume only while narration is on', async () => {
+    const w = mountSettings()
+    const settings = useSettingsStore()
+
+    await w.get('input[aria-label="Narration volume"]').setValue('55')
+    expect(settings.narrationVolume).toBe(55)
+    expect(w.find('input[aria-label="Narration volume"]').exists()).toBe(true)
+
+    await w.get('[role="switch"][aria-label="Narration"]').trigger('click')
+    expect(settings.narrationOn).toBe(false)
+    expect(w.find('input[aria-label="Narration volume"]').exists()).toBe(false)
+  })
+
   it('names the music that is playing', () => {
     useGameStore().musicInfo =
       'Market by Conquest\nSource: https://freetouse.com/music'

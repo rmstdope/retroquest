@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useSettingsStore } from './useSettingsStore'
 import {
   narrationWords,
@@ -23,6 +23,7 @@ import type { NarrationUnit } from '@/lantern/narrationUnits'
  *   the one being narrated.
  * - A voice that fails, is blocked, or has not ended `duration + 3 s` after it
  *   started completes its block, so a turn never stalls.
+ * - `hintVisible` is true during a game's first three narrated turns.
  * - Nothing here is saved; a turn that is not the active one shows whole.
  */
 
@@ -38,6 +39,8 @@ const STALL_MARGIN_MS = 3000
 const LOAD_MARGIN_MS = 10000
 /** How often the spoken word is looked up. */
 const WORD_POLL_MS = 50
+/** The hint about hurrying and skipping shows during this many narrated turns of a game. */
+const HINT_TURNS = 3
 /** Where the recordings are served from. */
 const NARRATION_PATH = '/audio/narration/'
 
@@ -103,8 +106,35 @@ export const useNarrationStore = defineStore('narration', () => {
   let poll: ReturnType<typeof setInterval> | undefined
   let lastTap = Number.NEGATIVE_INFINITY
 
+  /** How many turns have begun narrating in this game. */
+  const narratedTurns = ref(0)
+
+  // A volume change reaches the voice that is playing.
+  watch(
+    () => settings.narrationVolume,
+    (volume) => {
+      if (audio) audio.volume = volume / 100
+    },
+  )
+
   /** True while a turn is being narrated. */
   const isNarrating = computed(() => active.value !== null)
+
+  /**
+   * Whether the hurry/skip hint shows: while one of a game's first three
+   * narrated turns is being narrated and narration is on.
+   */
+  const hintVisible = computed(
+    () =>
+      active.value !== null &&
+      settings.narrationOn &&
+      narratedTurns.value <= HINT_TURNS,
+  )
+
+  /** A new game starts counting narrated turns again. */
+  function resetGame(): void {
+    narratedTurns.value = 0
+  }
 
   /** Replace the audio element maker (tests). */
   function setAudioFactory(factory: NarrationAudioFactory): void {
@@ -298,6 +328,7 @@ export const useNarrationStore = defineStore('narration', () => {
       speaking: false,
       word: -1,
     }
+    narratedTurns.value++
     step()
   }
 
@@ -329,6 +360,9 @@ export const useNarrationStore = defineStore('narration', () => {
 
   return {
     isNarrating,
+    narratedTurns,
+    hintVisible,
+    resetGame,
     setAudioFactory,
     revealed,
     narrates,
