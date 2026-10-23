@@ -364,5 +364,14 @@ describe('useNarrationStore', () => {
       narration.hurry()
       expect(narration.speaking(1)?.unit).toBe(1)
     })
+
+    it('comes at once when the player hurries in the gap before it', () => {
+      narration.begin(1, [voiced(), arrival()], 'act1')
+      last().onended?.()
+      vi.advanceTimersByTime(100)
+      narration.hurry()
+      expect(narration.revealed(1, 1)).toBe(true)
+      expect(narration.speaking(1)?.unit).toBe(1)
+    })
   })
 })

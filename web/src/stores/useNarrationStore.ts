@@ -359,6 +359,8 @@ export const useNarrationStore = defineStore('narration', () => {
     if (!now) return
     if (now.speaking) completePart(true)
     else {
+      // The player has waited enough: no unit's own pause holds it back now.
+      now.waited = Infinity
       stopVoice()
       step()
     }

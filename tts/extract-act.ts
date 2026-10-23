@@ -38,7 +38,16 @@ const ACTS: Record<string, ActSource> = {
     make: () => new Act1(),
     commands: [...ACT1_GOLDEN_PATH, ACT1_COMPLETING_COMMAND],
   },
-  '2': { make: () => new Act2(), commands: ACT2_GOLDEN_PATH },
+  '2': {
+    make: () => new Act2(),
+    // The golden path stops with Cedric waiting; the vision and his answer
+    // end the act (branches.json plays the other answer, "say truth").
+    commands: [
+      ...ACT2_GOLDEN_PATH,
+      'cast prophetic vision',
+      'talk to sir cedric',
+    ],
+  },
   '3': { make: () => new Act3(), commands: ACT3_GOLDEN_PATH },
   '4': { make: () => new Act4(), commands: ACT4_GOLDEN_PATH },
 }
