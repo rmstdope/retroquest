@@ -1,0 +1,84 @@
+{
+  "speakers": {
+    "an echo": {
+      "voice": "85ff97bc3f424b789d09dc6e2b57252a",
+      "style": "[gentle, hollow, very tired]"
+    },
+    "aren": {
+      "voice": "12a41b18606d4aff82e253bc293ea5e9",
+      "style": "[warm, quiet, proud]"
+    },
+    "captain of the guard": {
+      "voice": "eee39fb8f50b4813acf61ee51f8db321",
+      "style": "[muddled, then clear and loyal]"
+    },
+    "freed servants": {
+      "voice": "1f168740f0034cf0a94590e22282ddf2",
+      "style": "[tired, gentle, far away]"
+    },
+    "grandmother": {
+      "voice": "e48a228e21a443d6a4302dc6238c8128",
+      "style": "[warm, gentle, a little worried]"
+    },
+    "king alden": {
+      "voice": "3f48a68f684f485580e77f6f55b7d47f",
+      "style": "[weak, kind, regal]"
+    },
+    "knight of despair": {
+      "voice": "0adf497c253f403c99227d8197094644",
+      "style": "[hollow, heavy, worn out]"
+    },
+    "lysa": {
+      "voice": "f7fe817b4b634c2cb763d240d95b1c2c",
+      "style": "[tender, firm, a mother's voice]"
+    },
+    "malakar": {
+      "voice": "85ff97bc3f424b789d09dc6e2b57252a",
+      "style": "[tired, low, still persuasive]"
+    },
+    "mira": {
+      "voice": "52b38f57477c4a3dbaf9136e739d9799",
+      "style": "[low, calm, knowing]"
+    },
+    "narrator": {
+      "voice": "7d805071401d4b738334f332a8c320c2",
+      "style": "[warm, gentle storyteller]"
+    },
+    "nyx": {
+      "voice": "37ab9e84be5b42a18681adb35ab988d1",
+      "style": "[soft, otherworldly, unhurried]"
+    },
+    "redeemed knight": {
+      "voice": "0adf497c253f403c99227d8197094644",
+      "style": "[hollow, heavy, worn out]"
+    },
+    "shadow of the past": {
+      "voice": "85ff97bc3f424b789d09dc6e2b57252a",
+      "style": "[gentle, hollow, very tired]"
+    },
+    "sir cedric": {
+      "voice": "6e3869f7e5ce4589b9224181e7360bfc",
+      "style": "[warm, proud, a little worn]"
+    },
+    "sorceress of lies": {
+      "voice": "7b305f7f7d584a18b76649ddb8535ba6",
+      "style": "[cool, silken, cracking at the end]"
+    },
+    "trapped servants": {
+      "voice": "1f168740f0034cf0a94590e22282ddf2",
+      "style": "[tired, gentle, far away]"
+    },
+    "true self": {
+      "voice": "ad1e8d0c166e464789c6c9d1c003bedd",
+      "style": "[quiet, unblinking]"
+    },
+    "unmasked sorceress": {
+      "voice": "7b305f7f7d584a18b76649ddb8535ba6",
+      "style": "[cool, silken, cracking at the end]"
+    }
+  },
+  "pronounce": {
+    "Act IV:": "Act Four:",
+    "Lyria": "LEER-ee-a"
+  }
+}

@@ -18,7 +18,8 @@
  * every voiced line: the chapter pages, every answer, each room's description
  * on its first visit and every quest card. At each step it also tries
  * examining, using and talking to whatever is at hand, on a copy of the game,
- * so optional lines are recorded too. Who voices a line is its block's speaker,
+ * so optional lines are recorded too, and plays each `ScriptBranch` (an
+ * optional scene the golden path does not take) on a copy. Who voices a line is its block's speaker,
  * except unsigned writing, which goes to its writer (`WriterRule`).
  */
 
@@ -39,7 +40,7 @@ export interface VoicedBlock {
   markup: string
 }
 
-/** Unsigned writing that opens with `opening` is voiced by `speaker`. */
+/** Unsigned writing or narration that opens with `opening` is voiced by `speaker`. */
 export interface WriterRule {
   opening: string
   speaker: string
@@ -96,9 +97,15 @@ export function questCardBlocks(text: string): VoicedBlock[] {
   return blocks
 }
 
-/** The voice of a block: its speaker, or for unsigned writing the first writer rule its opening matches, else the narrator. */
+/**
+ * The voice of a block: its speaker, or, for unsigned writing and for narration,
+ * the first writer rule its opening matches (a dim note on the page is
+ * narration but has a writer); unsigned writing that matches none is the
+ * narrator's. The voice is a casting choice only: the key stays the block's.
+ */
 function voiceOf(block: VoicedBlock, writers: WriterRule[]): string {
-  if (block.speaker !== UNSIGNED) return block.speaker
+  if (block.speaker !== UNSIGNED && block.speaker !== NARRATOR)
+    return block.speaker
   const text = narrationText(block.markup)
   return (
     writers.find((rule) => text.startsWith(rule.opening))?.speaker ?? NARRATOR
@@ -127,6 +134,18 @@ export function linesOfTurn(
   return scriptLines(turnBlocks(markup), writers)
 }
 
+/**
+ * An optional scene the golden path does not take: once the command at index
+ * `after` of the path has been played, `commands` are played on a copy of the
+ * game and everything they say is read too. `virtues` are recorded on the copy
+ * first, for scenes that colour their lines by the virtues the player earned.
+ */
+export interface ScriptBranch {
+  after: number
+  commands: string[]
+  virtues?: string[]
+}
+
 /** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look. */
 function probes(game: Game): string[] {
   const state = game.state
@@ -147,13 +166,15 @@ function probes(game: Game): string[] {
  * the act, so its answer and the closing chapter page are read too. Lines
  * that open with one of `silent` are left out (instructions, not story).
  * `newGame` makes a fresh game of the act; one plays the path and another,
- * reloaded from it at each step, tries the probes.
+ * reloaded from it at each step, tries the probes. `branches` are played the
+ * same way, on a copy reloaded when the path reaches their step.
  */
 export function actScript(
   newGame: () => Game,
   commands: string[],
   writers: WriterRule[],
   silent: string[] = [],
+  branches: ScriptBranch[] = [],
 ): ScriptLine[] {
   const script = new Map<string, ScriptLine>()
   const add = (blocks: VoicedBlock[]): void => {
@@ -177,15 +198,26 @@ export function actScript(
     add(turnBlocks(play.getRoomDescription()))
   }
   arrive()
-  for (const command of commands) {
-    add(turnBlocks(play.takeTurn(command)))
-    const quests = play.settleQuests()
+  const settle = (controller: GameController): void => {
+    const quests = controller.settleQuests()
     for (const report of [
       ...quests.activated,
       ...quests.updated,
       ...quests.completed,
     ])
       add(questCardBlocks(report.text))
+  }
+  for (const [index, command] of commands.entries()) {
+    add(turnBlocks(play.takeTurn(command)))
+    settle(play)
+    for (const branch of branches.filter((b) => b.after === index)) {
+      probe.loadSaveData(game.toSaveData())
+      for (const virtue of branch.virtues ?? []) probe.state.addVirtue(virtue)
+      for (const step of branch.commands) {
+        add(turnBlocks(tryOut.takeTurn(step)))
+        settle(tryOut)
+      }
+    }
     if (!game.isActRunning()) {
       add(turnBlocks(play.getActCompleteText() ?? ''))
       break

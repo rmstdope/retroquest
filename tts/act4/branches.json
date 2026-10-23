@@ -1,0 +1,54 @@
+[
+  {
+    "after": 50,
+    "commands": [
+      "use lifelight elixir on prison",
+      "say justice to malakar",
+      "use ancient amulet on wound",
+      "talk to king alden",
+      "n",
+      "cast grow"
+    ]
+  },
+  {
+    "after": 50,
+    "commands": [
+      "use lifelight elixir on prison",
+      "say justice to malakar",
+      "use ancient amulet on wound",
+      "talk to king alden",
+      "n",
+      "cast grow"
+    ],
+    "virtues": [
+      "truth",
+      "truth"
+    ]
+  },
+  {
+    "after": 50,
+    "commands": [
+      "use lifelight elixir on prison",
+      "say sacrifice to malakar",
+      "use ancient amulet on wound",
+      "talk to king alden",
+      "n",
+      "cast grow"
+    ]
+  },
+  {
+    "after": 50,
+    "commands": [
+      "use lifelight elixir on prison",
+      "say sacrifice to malakar",
+      "use ancient amulet on wound",
+      "talk to king alden",
+      "n",
+      "cast grow"
+    ],
+    "virtues": [
+      "selfless",
+      "selfless"
+    ]
+  }
+]

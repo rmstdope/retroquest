@@ -1,6 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from '@/act1/Act1'
+import { Act2 } from '@/act2/Act2'
+import { ACT2_GOLDEN_PATH } from '@/act2/Act2GoldenPath'
+import { Act4 } from '@/act4/Act4'
+import { ACT4_GOLDEN_PATH } from '@/act4/Act4GoldenPath'
 import {
   ACT1_COMPLETING_COMMAND,
   ACT1_GOLDEN_PATH,
@@ -14,6 +18,8 @@ import {
   questCardBlocks,
   turnBlocks,
   UNSIGNED,
+  type ScriptBranch,
+  type ScriptLine,
   type WriterRule,
 } from './narrationScript'
 
@@ -79,6 +85,15 @@ describe('linesOfTurn', () => {
       WRITERS,
     )
     expect(lines.map((l) => l.speaker)).toEqual(['mother', 'narrator'])
+  })
+
+  it('also gives narrated writing (a dim note on the page) to its writer, under the narrator’s key', () => {
+    const [line] = linesOfTurn(
+      'What a night, it was. A note in dim ink.',
+      WRITERS,
+    )
+    expect(line.speaker).toBe('elior')
+    expect(line.key).toBe(narrationKey('narrator', line.text))
   })
 })
 
@@ -210,5 +225,75 @@ describe('actScript for Act I', () => {
     const keys = script.map((line) => line.key)
     expect(new Set(keys).size).toBe(keys.length)
     expect(script.every((line) => line.text.length > 0)).toBe(true)
+  })
+})
+
+describe('actScript branches', () => {
+  const make = (): Game => new Game([new Act2()])
+  const marcusIndex = ACT2_GOLDEN_PATH.lastIndexOf('talk to innkeeper marcus')
+  const truth: ScriptBranch = {
+    after: marcusIndex,
+    commands: ['say truth to innkeeper marcus'],
+  }
+  /** Act II is played twice; that is slow under a loaded machine. */
+  const SLOW = 60_000
+  let plain: ScriptLine[] = []
+  let branched: ScriptLine[] = []
+  beforeAll(() => {
+    plain = actScript(make, ACT2_GOLDEN_PATH, [])
+    branched = actScript(make, ACT2_GOLDEN_PATH, [], [], [truth])
+  }, SLOW)
+
+  it('reads an optional scene the golden path does not take, played on a copy', () => {
+    const onPurpose = (line: { text: string }): boolean =>
+      line.text.startsWith('On purpose.')
+    expect(plain.some(onPurpose)).toBe(false)
+    expect(branched.find(onPurpose)?.speaker).toBe('innkeeper marcus')
+  })
+
+  it('leaves the lines of the golden path as they were', () => {
+    const keys = new Set(branched.map((line) => line.key))
+    expect(plain.every((line) => keys.has(line.key))).toBe(true)
+  })
+})
+
+describe('actScript branches with virtues', () => {
+  const make = (): Game => new Game([new Act4()])
+  const amulet = ACT4_GOLDEN_PATH.indexOf('use ancient amulet')
+  const sacrifice = [
+    'use lifelight elixir on prison',
+    'say sacrifice to malakar',
+    'use ancient amulet on wound',
+  ]
+  const ARENS_LINE = 'We watched you give, again and again'
+  let without: ScriptLine[] = []
+  let withVirtues: ScriptLine[] = []
+  beforeAll(() => {
+    without = actScript(
+      make,
+      ACT4_GOLDEN_PATH,
+      [],
+      [],
+      [{ after: amulet, commands: sacrifice }],
+    )
+    withVirtues = actScript(
+      make,
+      ACT4_GOLDEN_PATH,
+      [],
+      [],
+      [
+        {
+          after: amulet,
+          commands: sacrifice,
+          virtues: ['selfless', 'selfless'],
+        },
+      ],
+    )
+  }, 120_000)
+
+  it('plays the colour lines only for the virtues the branch earned', () => {
+    const arens = (line: ScriptLine): boolean => line.text.includes(ARENS_LINE)
+    expect(without.some(arens)).toBe(false)
+    expect(withVirtues.some(arens)).toBe(true)
   })
 })

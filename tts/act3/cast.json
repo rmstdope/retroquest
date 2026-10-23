@@ -1,0 +1,96 @@
+{
+  "speakers": {
+    "a man's voice, steady": {
+      "voice": "12a41b18606d4aff82e253bc293ea5e9",
+      "style": "[steady, calm, grave]"
+    },
+    "a second man, quick and low": {
+      "voice": "85ff97bc3f424b789d09dc6e2b57252a",
+      "style": "[quick, low, desperate]"
+    },
+    "a woman's voice, hoarse": {
+      "voice": "f7fe817b4b634c2cb763d240d95b1c2c",
+      "style": "[hoarse, weak, resolute]"
+    },
+    "ancient dragon": {
+      "voice": "91b05f7c05544317b7f3e4c330712337",
+      "style": "[vast, slow, kind]"
+    },
+    "ash scholar": {
+      "voice": "16626843ccc143eab3446a1a9c7f8165",
+      "style": "[curious, brisk, friendly]"
+    },
+    "father": {
+      "voice": "12a41b18606d4aff82e253bc293ea5e9",
+      "style": "[warm, quiet, hopeful]"
+    },
+    "malakar": {
+      "voice": "85ff97bc3f424b789d09dc6e2b57252a",
+      "style": "[tired, low, still persuasive]"
+    },
+    "mine overseer": {
+      "voice": "4917908fe8284e85b9ea57f3a6edf318",
+      "style": "[urgent, strained]"
+    },
+    "miners": {
+      "voice": "880fb671ebcb446dbc0d5fc99baf909e",
+      "style": "[old, rough, grateful]"
+    },
+    "mira": {
+      "voice": "52b38f57477c4a3dbaf9136e739d9799",
+      "style": "[low, calm, knowing]"
+    },
+    "mother": {
+      "voice": "f7fe817b4b634c2cb763d240d95b1c2c",
+      "style": "[tender, steady, afraid for a friend]"
+    },
+    "narrator": {
+      "voice": "7d805071401d4b738334f332a8c320c2",
+      "style": "[warm, gentle storyteller]"
+    },
+    "oldest miner": {
+      "voice": "880fb671ebcb446dbc0d5fc99baf909e",
+      "style": "[old, rough, grateful]"
+    },
+    "phoenix": {
+      "voice": "cd8a220cd2304648afc8b603c49f6cec",
+      "style": "[bright, ancient, grave]"
+    },
+    "phoenix guardian": {
+      "voice": "3799a1bfed8d43b48827bbd131ff9bd3",
+      "style": "[patient, calm, watchful]"
+    },
+    "pier warden": {
+      "voice": "c1961af6d14f44f585a53efd72fcfbf8",
+      "style": "[weathered, coastal, stubborn]"
+    },
+    "silence keeper": {
+      "voice": "c4761e156e0945238cd84f258d2b91ba",
+      "style": "[barely above a whisper]"
+    },
+    "sir cedric": {
+      "voice": "6e3869f7e5ce4589b9224181e7360bfc",
+      "style": "[warm, proud, a little worn]"
+    },
+    "the second man": {
+      "voice": "85ff97bc3f424b789d09dc6e2b57252a",
+      "style": "[quick, low, desperate]"
+    },
+    "the steady voice": {
+      "voice": "12a41b18606d4aff82e253bc293ea5e9",
+      "style": "[steady, calm, grave]"
+    },
+    "tide-born guardian": {
+      "voice": "51e2bc4dcdd047368c9f783fe27b1b02",
+      "style": "[still, deep, few words]"
+    },
+    "tobin": {
+      "voice": "b24024afe64444dda6bc35b086ddd7ca",
+      "style": "[hoarse, small, shaken]"
+    }
+  },
+  "pronounce": {
+    "Act III:": "Act Three:",
+    "Lyria": "LEER-ee-a"
+  }
+}

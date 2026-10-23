@@ -141,3 +141,33 @@ def test_cues_whose_line_left_the_script_are_reported():
 def test_spoken_text_reads_checklist_bullets_as_a_list_not_as_asterisks():
     text = "You will need: * Warm clothing * A map"
     assert spoken_text(text, "", {}) == "You will need: Warm clothing, A map"
+
+
+def test_a_dropped_connection_is_retried_before_giving_up(monkeypatch):
+    import types
+
+    import narrate
+
+    monkeypatch.setattr(narrate.time, "sleep", lambda _s: None)
+    monkeypatch.setitem(__import__("sys").modules, "fishaudio", types.ModuleType("fishaudio"))
+    types_mod = types.ModuleType("fishaudio.types")
+    types_mod.TTSConfig = lambda **kw: kw
+    monkeypatch.setitem(__import__("sys").modules, "fishaudio.types", types_mod)
+
+    class Flaky:
+        def __init__(self, failures):
+            self.calls = 0
+            self.failures = failures
+            self.tts = self
+
+        def convert(self, **_kw):
+            self.calls += 1
+            if self.calls <= self.failures:
+                raise ConnectionError("Server disconnected")
+            return b"wav"
+
+    client = Flaky(2)
+    assert narrate._synthesise(client, "Hello.", "voice") == b"wav"
+    assert client.calls == 3
+    with pytest.raises(ConnectionError):
+        narrate._synthesise(Flaky(99), "Hello.", "voice")

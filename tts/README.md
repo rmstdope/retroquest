@@ -50,7 +50,7 @@ Fish is the likely fix.
 An act's narration is recorded from a script of every line the story reads aloud:
 
 ```sh
-(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act1.ts)  # writes tts/act1/script.json
+(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act.ts 1)  # writes tts/act1/script.json (2, 3, 4 likewise)
 uv run tts/narrate.py act1 --check     # what is missing or stale
 uv run tts/narrate.py act1             # record what is missing, remove what is stale
 uv run tts/narrate.py act1 --only KEY  # re-record chosen lines
@@ -62,7 +62,10 @@ uv run tts/narrate.py act1 --retime    # re-measure word timings, no new audio
   line has its speaker and a key made from the speaker and the words (`narrationKey` in
   `web/src/lantern/`), so changed wording means a new key and the old clip goes stale. Lines the
   game builds from its state are not in it and play silently.
-- **`act1/writers.json`** gives unsigned writing to its writer by its opening words (the mother's
+- **`act<N>/branches.json`** (Acts II to IV) lists optional scenes the golden path skips, each
+  `{ after: <index of a path command>, commands: [...] }`, played on a copy so their lines are
+  recorded too (Marcus told the truth, Brenn forgiven, Tobin and the Quiet Charm).
+- **`act1/writers.json`** gives unsigned writing, and narrated notes, to the writer by their opening words (the mother's
   letter, the father's note, Elior's journal); other writing is the narrator's.
   **`act1/silent.json`** lists openings that stay silent (the chapter page's help line).
 - **`act1/cast.json`** holds each speaker's library voice and fixed style cue (approved by the
