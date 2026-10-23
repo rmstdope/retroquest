@@ -89,6 +89,20 @@ describe.each([2, 3, 4])('the recordings of Act %i', (act) => {
   })
 })
 
+describe('lines the engine picks at random', () => {
+  it('has every one of the four phantom whispers in the Act III script', () => {
+    const openings = [
+      'The phantoms turn toward you',
+      'A low murmur ripples through the ghostly figures',
+      'The phantoms drift closer',
+      'Spectral lips move in silent prayer',
+    ]
+    const script = read<Line[]>(3, 'script.json')
+    for (const opening of openings)
+      expect(script.some((line) => line.text.startsWith(opening))).toBe(true)
+  })
+})
+
 describe('the key-scene directions', () => {
   it('number 29 lines for the 25 scenes across Acts II to IV', () => {
     const total = [2, 3, 4].reduce(

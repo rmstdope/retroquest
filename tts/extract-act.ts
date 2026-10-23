@@ -63,7 +63,7 @@ const branches = existsSync(branchesFile)
  * script, and the script must not depend on a roll: the act is played once for
  * each of these fixed rolls and the lines are merged by key.
  */
-const ROLLS = [0, 0.4, 0.8]
+const ROLLS = [0, 0.25, 0.5, 0.75]
 const lines = new Map<string, ScriptLine>()
 for (const roll of ROLLS) {
   Math.random = (): number => roll
