@@ -40,7 +40,11 @@ with Whisper. **Refresh dialog** runs the extractor for an act:
 - **`cast.json`** is one cast for the whole game: each speaker's library voice and fixed style cue
   (a speaker sounds the same in every act), and `pronounce` for words said differently from how
   they are written ("Act I" is said "Act One"). **`act<N>/cues.json`** replaces the style on
-  key-scene lines (and keeps the mother's Act III manner on her lines there).
+  key-scene lines (and keeps the mother's Act III manner on her lines there). S2 models act
+  bracketed directions rather than read them: `[hushed, uneasy]`, `[pause]`, `[whispering]`. A
+  library voice is only a clone of its uploader's clips, and its title and tags are often wrong,
+  so it is judged by its takes in the audition. Names need help: "Elior" came out as "Elia" or
+  "Hylia" until `pronounce` spelled it out.
 - **`act<N>/narration.lock.json`** is Audio Studio's record of what each clip was made from, so it
   knows which lines are up to date. Its own state (auditions, cached takes) is in `.audio-studio/`,
   which is not committed.
@@ -55,7 +59,9 @@ with Whisper. **Refresh dialog** runs the extractor for an act:
 ## Getting the text
 
 `extract-intro.ts` prints the Act I intro as plain text (markup stripped, the title as a spoken
-sentence). `tsx` is not a dependency of `web/`; `npx` fetches the pinned version on demand.
+sentence), and `texts/` holds the texts voiced in the first experiments with Fish; both are kept
+from those experiments. `tsx` is not a dependency of `web/`; `npx` fetches the pinned version on
+demand.
 
 ```sh
 (cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-intro.ts) > tts/out/act1-intro.txt
@@ -64,11 +70,13 @@ sentence). `tsx` is not a dependency of `web/`; `npx` fetches the pinned version
 ## Checking a clip
 
 `check.py` transcribes a clip with Whisper (`uvx mlx-whisper`, Apple Silicon) and diffs it
-against its text (bracketed cues are ignored), listing dropped, added and changed words. Whisper invents text over trailing
-silence; segments that are near-empty or reach past the end of the clip are ignored.
+against its text (bracketed cues are ignored), listing dropped, added and changed words. Whisper
+invents text over trailing silence; segments that are near-empty or reach past the end of the
+clip are ignored. Audio Studio checks every take this way as it records; `check.py` is for a
+closer look at one clip, with its line's words in a text file:
 
 ```sh
-python3 tts/check.py tts/texts/act1-intro-cued.txt tts/out/act1-intro-fish-oldman-cued.wav
+python3 tts/check.py line.txt web/public/audio/narration/act1/0016e4860763bd.mp3
 ```
 
 ## Voice prompts

@@ -33,7 +33,7 @@ const CAST = JSON.parse(readFileSync(new URL('cast.json', TTS), 'utf8')) as Cast
 /** The mother's manner in Act III, kept as a direction on each of her lines there. */
 const MOTHER_IN_ACT_III = '[tender, steady, afraid for a friend]'
 
-describe.each([2, 3, 4])('the recordings of Act %i', (act) => {
+describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
   const script = read<Line[]>(act, 'script.json')
   const cues = read<Record<string, string>>(act, 'cues.json')
 
@@ -50,7 +50,7 @@ describe.each([2, 3, 4])('the recordings of Act %i', (act) => {
   })
 
   it('says the act’s title in words', () => {
-    const numeral = ['', '', 'II', 'III', 'IV'][act]
+    const numeral = ['', 'I', 'II', 'III', 'IV'][act]
     expect(CAST.pronounce[`Act ${numeral}:`]).toMatch(/^Act \w+:$/)
   })
 
@@ -126,19 +126,12 @@ const SAME_VOICE: Record<string, string> = {
 
 describe('speakers who share a voice', () => {
   it.each(Object.entries(SAME_VOICE))('%s is %s’s voice', (alias, base) => {
+    expect(CAST.speakers[base]?.voice).toMatch(/^[0-9a-f]{32}$/)
     expect(CAST.speakers[alias]?.voice).toBe(CAST.speakers[base]?.voice)
   })
 })
 
 describe('the one cast', () => {
-  it('casts every speaker of Act I too', () => {
-    const script = read<Line[]>(1, 'script.json')
-    const uncast = [...new Set(script.map((line) => line.speaker))].filter(
-      (speaker) => !CAST.speakers[speaker],
-    )
-    expect(uncast).toEqual([])
-  })
-
   it('keeps the mother’s Act III manner on each of her lines there', () => {
     const cues = read<Record<string, string>>(3, 'cues.json')
     const hers = read<Line[]>(3, 'script.json').filter(
