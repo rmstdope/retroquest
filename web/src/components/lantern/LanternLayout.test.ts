@@ -171,14 +171,15 @@ describe('LanternLayout', () => {
       expect(game.showModal).toBe(true)
     })
 
-    it('moves focus to the chapter when it follows another pop-up', async () => {
+    it('moves focus to the chapter when it follows another chapter', async () => {
       wrapper = mount(LanternLayout, { attachTo: document.body })
       const game = useGameStore()
-      game.modalTitle = '🏆 Quest Complete!'
+      game.modalChapter = { ...INTRO, kind: 'complete' }
       game.showModal = true
       await flushPromises()
+      ;(document.activeElement as HTMLElement | null)?.blur()
 
-      game.modalChapter = { ...INTRO, kind: 'complete' }
+      game.modalChapter = INTRO
       await flushPromises()
 
       expect(document.activeElement?.className).toContain('lq-chapter-button')
@@ -360,7 +361,7 @@ describe('LanternLayout', () => {
     game.shownQuest = 'Hint of Magic'
     await w.vm.$nextTick()
 
-    game.modalTitle = 'News'
+    game.modalChapter = { kind: 'intro', act: 'Act II', title: 'T', body: 'B' }
     game.showModal = true
     await w.vm.$nextTick()
     game.showModal = false
@@ -644,33 +645,6 @@ describe('LanternLayout', () => {
     expect(look!.attributes()).toHaveProperty('disabled')
   })
 
-  it('shows pending pop-ups (act intro, quests) and continues on request', async () => {
-    const w = mountLayout()
-    const game = useGameStore()
-    const dismiss = vi.spyOn(game, 'dismissModal').mockImplementation(() => {})
-    game.modalTitle = 'Act Intro'
-    game.modalBody = '<span class="theme-bold">ACT 1</span>'
-    game.showModal = true
-    await w.vm.$nextTick()
-
-    const dialog = w.get('[role="dialog"]')
-    expect(dialog.text()).toContain('Act Intro')
-    expect(dialog.find('.theme-bold').text()).toBe('ACT 1')
-
-    await dialog.get('button').trigger('click')
-    expect(dismiss).toHaveBeenCalledTimes(1)
-  })
-
-  it('moves focus to Continue when a pop-up opens', async () => {
-    wrapper = mount(LanternLayout, { attachTo: document.body })
-    const game = useGameStore()
-    game.modalTitle = 'Act Intro'
-    game.showModal = true
-    await wrapper.vm.$nextTick()
-
-    expect(document.activeElement?.textContent?.trim()).toBe('Continue')
-  })
-
   it('returns focus to the actions when the last pop-up closes', async () => {
     wrapper = mount(LanternLayout, { attachTo: document.body })
     const game = useGameStore()
@@ -682,17 +656,6 @@ describe('LanternLayout', () => {
     await wrapper.vm.$nextTick()
 
     expect(document.activeElement?.textContent?.trim()).toBe('Look')
-  })
-
-  it('continues the pop-up with Escape', async () => {
-    const w = mountLayout()
-    const game = useGameStore()
-    const dismiss = vi.spyOn(game, 'dismissModal').mockImplementation(() => {})
-    game.showModal = true
-    await w.vm.$nextTick()
-
-    await w.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
-    expect(dismiss).toHaveBeenCalledTimes(1)
   })
 
   it('brings the start of the newest turn into view', async () => {
@@ -1343,7 +1306,12 @@ describe('LanternLayout', () => {
       await w.get('button[aria-label="Game menu"]').trigger('click')
       const game = useGameStore()
 
-      game.modalTitle = 'News'
+      game.modalChapter = {
+        kind: 'intro',
+        act: 'Act II',
+        title: 'T',
+        body: 'B',
+      }
       game.showModal = true
       await w.vm.$nextTick()
       game.showModal = false

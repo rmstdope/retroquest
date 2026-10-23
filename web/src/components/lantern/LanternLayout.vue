@@ -138,7 +138,6 @@ function readOn(): void {
     behavior: still ? 'auto' : 'smooth',
   })
 }
-const continueButton = ref<HTMLButtonElement | null>(null)
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
 const dock = ref<InstanceType<typeof DockBar> | null>(null)
 
@@ -341,12 +340,6 @@ function continueFromChapter(): void {
   game.continueChapter()
 }
 
-/** Leave the quest-complete (or text) pop-up: its voice stops, then the next pop-up or the story. */
-function dismissPopUp(): void {
-  narration.skipAll()
-  game.dismissModal()
-}
-
 // Show a new turn from its start (jsdom has no scrollIntoView). A command
 // run from another section (Use, Cast, Go) first brings the story back, and
 // focus moves to the actions as the pressed button has gone (likewise for
@@ -541,12 +534,11 @@ watch(
   { flush: 'post' },
 )
 
-/** Focus the open pop-up's button (a chapter page's, or Continue). */
+/** Focus the open chapter page's button. */
 function focusPopUp(): void {
-  // The title page comes first; the pop-up under it gets focus after Start.
+  // The title page comes first; the page under it gets focus after Start.
   if (game.showTitle) return
-  if (chapterPage.value) chapterPage.value.focus()
-  else continueButton.value?.focus()
+  chapterPage.value?.focus()
 }
 
 // Move keyboard focus into each pop-up as it opens or one follows another
@@ -727,32 +719,6 @@ watch(
           @continue="continueFromChapter()"
         />
       </section>
-      <!-- Other pop-ups: the engine's text. Keyed so each one opens from its
-         top. Focus goes to the actions afterwards. (Quest news is never a
-         pop-up: it is read in the story.) -->
-      <LanternDialog
-        v-else-if="game.showModal"
-        :key="game.modalTitle"
-        :title="game.modalTitle"
-        :closable="false"
-        :restore-focus="false"
-        @close="game.dismissModal()"
-      >
-        <!-- eslint-disable vue/no-v-html -->
-        <div class="lq-dialog-body" v-html="game.modalBody"></div>
-        <!-- eslint-enable vue/no-v-html -->
-        <template #footer>
-          <button
-            ref="continueButton"
-            type="button"
-            class="lq-send"
-            data-autofocus
-            @click="dismissPopUp()"
-          >
-            Continue
-          </button>
-        </template>
-      </LanternDialog>
 
       <!-- Save before finishing, over the last act's chapter page. -->
       <FinishDialog v-if="game.showModal && game.finishAsked" />
@@ -927,12 +893,6 @@ watch(
 .lq-info :deep(a) {
   color: var(--lq-accent-text);
   text-decoration: underline;
-}
-.lq-dialog-body {
-  font-family: var(--lq-font-prose);
-  font-size: var(--lq-story-size);
-  line-height: var(--lq-story-line-height);
-  color: var(--lq-prose);
 }
 .lq-sr-only {
   position: absolute;

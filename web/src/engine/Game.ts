@@ -832,7 +832,7 @@ Welcome to
     return JSON.stringify(payload)
   }
 
-  /** Restore the state and act from save data made by `toSaveData`. */
+  /** Restore the state and act from save data made by `toSaveData`, and play on in that act. */
   loadSaveData(data: string): string {
     try {
       const payload = JSON.parse(data) as Partial<SavePayload>
@@ -852,6 +852,12 @@ Welcome to
       state.refreshQuestLogs()
       this.state = state
       this.currentAct = payload.actIndex
+      // Play on in the loaded act, even when the load comes between acts or
+      // after the last one.
+      this.runState = GameRunState.ActRunning
+      this.finishedActState = null
+      this.isRunning = true
+      this.acceptInput = true
     } catch (error) {
       return `[failure]Failed to load game: ${message(error)}[/failure]`
     }

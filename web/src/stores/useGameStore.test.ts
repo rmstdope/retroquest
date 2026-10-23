@@ -9,22 +9,18 @@ import type {
   SaveSlot,
 } from '@/types/bridge'
 
-vi.mock('@/utils/theme', () => ({
-  renderMarkup: vi.fn((s: string) => `<rendered>${s}</rendered>`),
-}))
-
 /**
  * A quest report as the engine would hand it: a pop-up text of the form
  * `[quest_name]Name (main quest)[/quest_name]\n\nText` gives its name, type
  * and text; any other string is a plain report named Q with that text.
  */
-function quest(popup: string): QuestReport {
+function quest(report: string): QuestReport {
   const match =
     /^\[quest_name\](.+) \((main|side) quest\)\[\/quest_name\]\n\n([\s\S]*)$/.exec(
-      popup,
+      report,
     )
-  if (!match) return { name: 'Q', main: false, text: popup, popup }
-  return { name: match[1], main: match[2] === 'main', text: match[3], popup }
+  if (!match) return { name: 'Q', main: false, text: report }
+  return { name: match[1], main: match[2] === 'main', text: match[3] }
 }
 
 /** Result screens whose act-complete text starts at "Congratulations", if any. */
@@ -168,8 +164,7 @@ describe('useGameStore', () => {
 
     it('has modal hidden', () => {
       expect(store.showModal).toBe(false)
-      expect(store.modalTitle).toBe('')
-      expect(store.modalBody).toBe('')
+      expect(store.modalChapter).toBe(null)
     })
   })
 
@@ -221,8 +216,7 @@ describe('useGameStore', () => {
         .mockReturnValueOnce('Act intro!')
       await store.initGame()
       expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('📖 Act Intro')
-      expect(store.modalBody).toBe('<rendered>Act intro!</rendered>')
+      expect(store.modalChapter).toMatchObject({ kind: 'intro' })
     })
 
     it('blocks acceptInput until intro modal is dismissed', async () => {
@@ -973,10 +967,7 @@ describe('useGameStore', () => {
       setupTransitionMocks()
       store.submitCommand('use map')
       expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('🏆 Act Complete!')
-      expect(store.modalBody).toBe(
-        '<rendered>Congratulations Act 1!</rendered>',
-      )
+      expect(store.modalChapter).toMatchObject({ kind: 'complete' })
     })
 
     it('shows act intro modal after dismissing transition modal', () => {
@@ -984,8 +975,7 @@ describe('useGameStore', () => {
       store.submitCommand('use map')
       store.dismissModal()
       expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('📖 Act Intro')
-      expect(store.modalBody).toBe('<rendered>Act 2 begins.</rendered>')
+      expect(store.modalChapter).toMatchObject({ kind: 'intro' })
     })
 
     it('takes the chapter body from the bridge, not from the text', () => {
@@ -1022,7 +1012,7 @@ describe('useGameStore', () => {
       store.resumeActEnd()
       expect(store.actEndPending).toBe(false)
       expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('🏆 Act Complete!')
+      expect(store.modalChapter).toMatchObject({ kind: 'complete' })
     })
 
     it('shows the act-complete page at once when no turn is being read', () => {

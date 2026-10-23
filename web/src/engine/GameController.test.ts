@@ -302,7 +302,6 @@ describe('GameController', () => {
         name: 'Main Arc',
         main: true,
         text: 'Do Main Arc.',
-        popup: '[quest_name]Main Arc (main quest)[/quest_name]\n\nDo Main Arc.',
       }
       expect(ctrl.settleQuests()).toEqual({ ...none, activated: [started] })
       expect(ctrl.settleQuests()).toEqual(none)
@@ -316,8 +315,6 @@ describe('GameController', () => {
             name: 'Main Arc',
             main: true,
             text: "You have completed the quest 'Main Arc'.",
-            popup:
-              "[quest_name]Main Arc (main quest)[/quest_name]\n\nYou have completed the quest 'Main Arc'.",
           },
         ],
       })

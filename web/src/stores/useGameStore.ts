@@ -11,7 +11,6 @@ import type {
 } from '@/types/bridge'
 import type { useBridge } from '@/composables/useBridge'
 import { normalizeSaveName } from '@/engine'
-import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
 import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
@@ -84,14 +83,6 @@ export interface Arrival {
 /** Journal tabs that show a dot when something new arrived. */
 export type JournalTab = 'bag' | 'spells' | 'quests'
 
-/** A pop-up waiting its turn: a chapter page (or a message). Quest news is never a pop-up. */
-interface QuestEvent {
-  title: string
-  body: string
-  /** An act intro or act completion, for a chapter page. */
-  chapter?: Chapter
-}
-
 export const useGameStore = defineStore('game', () => {
   // --- Bridge reference ---
   let bridge: GameBridge | null = null
@@ -154,9 +145,7 @@ export const useGameStore = defineStore('game', () => {
 
   // --- Modal ---
   const showModal = ref(false)
-  const modalTitle = ref('')
-  const modalBody = ref('')
-  /** The chapter page the open pop-up is (act intro / complete), else null. */
+  /** The chapter page that is open (act intro / complete), else null. */
   const modalChapter = ref<Chapter | null>(null)
   /** The running act's heading, kept for its act-complete page. */
   let currentAct: ActIntro | null = null
@@ -184,17 +173,13 @@ export const useGameStore = defineStore('game', () => {
   function queueActIntro(raw: string): void {
     currentAct = parseActIntro(raw)
     actLabel.value = currentAct.act
-    modalQueue.value.push({
-      title: '📖 Act Intro',
-      body: renderMarkup(raw),
-      chapter: { kind: 'intro', ...currentAct },
-    })
+    modalQueue.value.push({ kind: 'intro', ...currentAct })
   }
   /**
-   * Pop-ups wait here. New and updated quests are not pop-ups: they go in the
-   * story, on the turn that caused them.
+   * Chapter pages (act intros and completions) wait here. Quest news is never
+   * a page: it goes in the story, on the turn that caused it.
    */
-  const modalQueue = ref<QuestEvent[]>([])
+  const modalQueue = ref<Chapter[]>([])
   /** The latest save/load notice (a toast); a new id shows it again. */
   const notice = ref<{ id: number; text: string } | null>(null)
   let nextNoticeId = 1
@@ -407,6 +392,17 @@ export const useGameStore = defineStore('game', () => {
     afterActEnds()
   }
 
+  /**
+   * A save asked for while the act-complete page is held opens the page and
+   * saves nothing (true then): the act is over, so there is nothing to save
+   * until the next act begins.
+   */
+  function openHeldActEnd(): boolean {
+    if (!actEndPending.value) return false
+    resumeActEnd()
+    return true
+  }
+
   /** The UI asks before `quit` / `exit` (see QuitDialog). */
   const quitAsked = ref(false)
   /** Counts restarts, so views can start afresh with a new game. */
@@ -505,18 +501,13 @@ export const useGameStore = defineStore('game', () => {
   /** The last act's chapter page, whose button finishes the game. */
   function queueGameOver(): void {
     const b = requireBridge()
-    const text = b.controller.getResultText()
     modalQueue.value.push({
-      title: '🏆 Act Complete!',
-      body: renderMarkup(text),
-      chapter: {
-        kind: 'complete',
-        act: currentAct?.act ?? '',
-        title: currentAct?.title ?? '',
-        body: b.controller.getActCompleteText() ?? '',
-        stats: b.controller.getActStats(),
-        final: true,
-      },
+      kind: 'complete',
+      act: currentAct?.act ?? '',
+      title: currentAct?.title ?? '',
+      body: b.controller.getActCompleteText() ?? '',
+      stats: b.controller.getActStats(),
+      final: true,
     })
     if (!showModal.value) showNextModal()
   }
@@ -558,18 +549,14 @@ export const useGameStore = defineStore('game', () => {
     const transitionScreens = screens.slice(0, -1)
     const actIntroText = screens[screens.length - 1].text
     const nextAct = parseActIntro(actIntroText).act || undefined
-    for (const { text, actComplete } of transitionScreens) {
+    for (const { actComplete } of transitionScreens) {
       modalQueue.value.push({
-        title: '🏆 Act Complete!',
-        body: renderMarkup(text),
-        chapter: {
-          kind: 'complete',
-          act: finished?.act ?? '',
-          title: finished?.title ?? '',
-          body: actComplete ?? '',
-          stats,
-          nextAct,
-        },
+        kind: 'complete',
+        act: finished?.act ?? '',
+        title: finished?.title ?? '',
+        body: actComplete ?? '',
+        stats,
+        nextAct,
       })
     }
     queueActIntro(actIntroText)
@@ -628,6 +615,7 @@ export const useGameStore = defineStore('game', () => {
 
   /** Quick save; true when the game was saved (a failure goes in the story). */
   function saveGame(command: string | null = null): boolean {
+    if (openHeldActEnd()) return false
     const b = requireBridge()
     const result = b.quickSaveGame()
     if (!showNotice(result, 'Game saved'))
@@ -650,6 +638,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function saveNamedGame(name: string, command: string | null = null): boolean {
+    if (openHeldActEnd()) return false
     const b = requireBridge()
     const result = b.saveNamedGame(name)
     if (!showNotice(result, `Game saved · ${name}`))
@@ -666,15 +655,20 @@ export const useGameStore = defineStore('game', () => {
     refreshPanels()
   }
 
-  /** A load: a notice and the room in the story, or the engine's failure. */
+  /**
+   * A load: a notice and the room in the story, or the engine's failure. A
+   * load plays on in the loaded act, so an act-complete page still held for
+   * narration is dropped.
+   */
   function showLoaded(
     command: string | null,
     result: string,
     text: string,
   ): void {
-    if (showNotice(result, text))
+    if (showNotice(result, text)) {
+      actEndPending.value = false
       showOutput(null, '', { chips: false, arrive: true })
-    else showOutput(command, result, { chips: false })
+    } else showOutput(command, result, { chips: false })
   }
 
   /** The engine's stats or help text, for a dialog (adds nothing to the story). */
@@ -692,6 +686,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function saveToSlot(slot: number): boolean {
+    if (openHeldActEnd()) return false
     const b = requireBridge()
     const result = b.saveToSlot(slot)
     if (!showNotice(result, `Game saved · Slot ${slot}`))
@@ -759,10 +754,7 @@ export const useGameStore = defineStore('game', () => {
       modalChapter.value = null
       return
     }
-    const event = modalQueue.value.shift()!
-    modalTitle.value = event.title
-    modalBody.value = event.body
-    modalChapter.value = event.chapter ?? null
+    modalChapter.value = modalQueue.value.shift()!
     showModal.value = true
   }
 
@@ -781,10 +773,6 @@ export const useGameStore = defineStore('game', () => {
         pollQuestEvents()
         // The look may start quests: list them (as submitCommand does).
         refreshPanels()
-      } else if (!acceptInput.value && !b.controller.isActRunning()) {
-        // Quest completion modals were dismissed but the act has ended:
-        // show the next act's pages, or the last act's final page.
-        afterActEnds()
       }
     }
   }
@@ -955,8 +943,6 @@ export const useGameStore = defineStore('game', () => {
     exits,
     acceptInput,
     showModal,
-    modalTitle,
-    modalBody,
     modalChapter,
     musicFile,
     musicInfo,

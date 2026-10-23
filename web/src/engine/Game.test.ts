@@ -1294,6 +1294,36 @@ describe('Game', () => {
       expect(fresh.isGameOver()).toBe(true)
     })
 
+    it('plays on from a load made between acts or after the last one', () => {
+      const game = twoActGame()
+      game.newTurn()
+      game.newTurn()
+      const data = game.toSaveData()
+      ;(game.acts[0] as StateAct).done = true
+      game.newTurn()
+      expect(game.isActTransitioning()).toBe(true)
+
+      expect(game.loadSaveData(data)).toContain('loaded')
+
+      expect(game.isActRunning()).toBe(true)
+      expect(game.acceptInput).toBe(true)
+      expect(game.finishedActState).toBeNull()
+      expect(game.currentAct).toBe(0)
+
+      const last = twoActGame()
+      advanceToSecondAct(last)
+      const secondData = last.toSaveData()
+      ;(last.acts[1] as StateAct).done = true
+      last.newTurn()
+      expect(last.isGameOver()).toBe(true)
+
+      last.loadSaveData(secondData)
+
+      expect(last.isActRunning()).toBe(true)
+      expect(last.isRunning).toBe(true)
+      expect(last.acceptInput).toBe(true)
+    })
+
     it('carries a virtue into the next act and through a save round-trip', () => {
       const game = twoActGame()
       game.newTurn()
