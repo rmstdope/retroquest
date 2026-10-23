@@ -20,6 +20,11 @@
     "text": "Now she is the only one who can say what must be done next, and where the road to Malakar begins."
   },
   {
+    "key": "1d8e270a441a9c",
+    "speaker": "narrator",
+    "text": "Mira's Hut"
+  },
+  {
     "key": "1ad9768b1fa166",
     "speaker": "narrator",
     "text": "A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully among her concoctions, her eyes bright with knowledge and kindness."
@@ -55,6 +60,16 @@
     "text": "(Ask her with: say parents, say malakar, say amulet or say grandmother to Mira.)"
   },
   {
+    "key": "1f7d39c44976a9",
+    "speaker": "narrator",
+    "text": "New main quest"
+  },
+  {
+    "key": "0e5132ad65fabd",
+    "speaker": "narrator",
+    "text": "The Three Virtues"
+  },
+  {
     "key": "117fa7e9e14d81",
     "speaker": "narrator",
     "text": "Prove Courage, Wisdom, and Selflessness by recovering the three relics: the Crystal of Light, the Phoenix Feather, and the Dragon's Scale."
@@ -73,6 +88,16 @@
     "key": "09940a4ad697b2",
     "speaker": "sir cedric",
     "text": "Mira knows the way. I know how to stand in front of you. Between us, that will have to do."
+  },
+  {
+    "key": "0678b14852e2e7",
+    "speaker": "narrator",
+    "text": "New side quest"
+  },
+  {
+    "key": "096e3c6e21891b",
+    "speaker": "narrator",
+    "text": "Echoes of the Hidden Bond"
   },
   {
     "key": "01f58c59d96269",
@@ -103,6 +128,11 @@
     "key": "085a78c44c95ae",
     "speaker": "mira",
     "text": "When the air folds and the mist closes, breathe. It will pass in a heartbeat."
+  },
+  {
+    "key": "1766a66115e457",
+    "speaker": "narrator",
+    "text": "Tidal Causeway"
   },
   {
     "key": "0d69980546868c",
@@ -165,9 +195,19 @@
     "text": "You take the Rusted Locker Key. Its teeth are ragged with corrosion; it might fit, but the lock has long since fused."
   },
   {
+    "key": "1398b1cfcbca26",
+    "speaker": "narrator",
+    "text": "Shoreline Markers"
+  },
+  {
     "key": "0b1ec4833275d4",
     "speaker": "narrator",
     "text": "The shore here is quiet and cold. Weathered steles rise from the sand, their worn faces full of shallow marks. Salt and time have smudged many lines, but faint moon sigils still show when the tide drops. Loose pale flakes sit in the grooves; they shimmer like old stars. When the moon is high, the stones seem to hum with a slow, patient voice—an old magic tied to the sea."
+  },
+  {
+    "key": "003c7755180e7a",
+    "speaker": "narrator",
+    "text": "Tideward Sigils"
   },
   {
     "key": "1f11bdb349f56d",
@@ -180,14 +220,29 @@
     "text": "You take the Moon Rune Shards. The shards whisper with tide-salt; they leave a faint dust on your fingers."
   },
   {
+    "key": "0a14e4083902eb",
+    "speaker": "narrator",
+    "text": "Outer Wards"
+  },
+  {
     "key": "105e3267cd706a",
     "speaker": "narrator",
     "text": "The courtyard lies half-swallowed by the sea. Three ancient pillars rise from the black water, their faces scored with shallow marks. Brine beads along the carved lines and they catch the moon in small rings of light. The air here tastes of old promises and slow tides."
   },
   {
+    "key": "1f5c71c8ba496d",
+    "speaker": "narrator",
+    "text": "Side quest complete"
+  },
+  {
     "key": "14f4ed6ca12624",
     "speaker": "narrator",
     "text": "You cleansed the pillars and set the Moon Rune shards—the Moon Sigil resonates and the flood wards steady, granting safe passage toward the sanctum."
+  },
+  {
+    "key": "033cc29645073c",
+    "speaker": "narrator",
+    "text": "Collapsed Pier"
   },
   {
     "key": "06cd9c1529a07c",
@@ -230,9 +285,19 @@
     "text": "The door hangs open and the interior is still and cold, silt motes drifting inside."
   },
   {
+    "key": "1775296787cbf7",
+    "speaker": "narrator",
+    "text": "Submerged Antechamber"
+  },
+  {
     "key": "056b1005e8b07e",
     "speaker": "narrator",
     "text": "The hall lies half-swallowed by tide and time. Salt-smoothed stone arches bear weathered carvings that pulse with a cold, inner glow. A hush hangs in the air as if the sea itself listens; faint, distant echoes suggest something patient and watchful beyond the veil of gloom. The place tastes of old prayers and the memory of rituals long since folded into the stones."
+  },
+  {
+    "key": "082e1673731629",
+    "speaker": "narrator",
+    "text": "Lanterns of the Deeps"
   },
   {
     "key": "0f459a32497ac2",
@@ -268,6 +333,11 @@
     "key": "195a1640713d1d",
     "speaker": "tide-born guardian",
     "text": "The lanterns brought you here. They will not take you further. Walk."
+  },
+  {
+    "key": "1508aaf3535654",
+    "speaker": "narrator",
+    "text": "Sanctum of the Tide"
   },
   {
     "key": "0b5fbe9e3eb379",
@@ -355,6 +425,11 @@
     "text": "I had the wall that night. I heard nothing. Every day he is weaker, I hear it."
   },
   {
+    "key": "04801b4e567481",
+    "speaker": "narrator",
+    "text": "Lower Switchbacks"
+  },
+  {
     "key": "1a9fffd31ecfb9",
     "speaker": "narrator",
     "text": "Wind‑carved paths snake across black, glassy rock; ash skims the air and the scent of iron hangs on the wind. A small scholars' camp clings to a lee: canvas shelters patched with soot, low braziers for warmth, and drying racks where scorched notes and map fragments flutter. Workbenches hold polishing stones and brass fittings—evidence of a diligent, makeshift atelier repairing mirror segments found among the outcrops. Beyond the camp, the slope falls into jagged obsidian ribs and steaming vents where fumaroles hiss; sparks drift like trapped fireflies when the wind turns."
@@ -410,14 +485,29 @@
     "text": "The terraces favour steady hands. Seek the outcrops for what the mountain has shed."
   },
   {
+    "key": "00d0fd7f3e73e3",
+    "speaker": "narrator",
+    "text": "Obsidian Outcrops"
+  },
+  {
     "key": "14191d1acd3716",
     "speaker": "narrator",
     "text": "Needle-sharp obsidian towers rise like black teeth from the ash, their surfaces catching and fracturing the light into jagged, glassy facets. Between the towers, thin seams and crevices hide weathered mirror fragments and the faint scars of old mounts—brass filings, dull polish, and tiny holes that speak of a long-vanished craft. A dry, metallic tang rides the hot wind, and every step sets off a tiny cascade of glass flakes into echoing gullies below."
   },
   {
+    "key": "13003f52165b0a",
+    "speaker": "narrator",
+    "text": "Mirrors of Emberlight"
+  },
+  {
     "key": "1af2101ff0c4ff",
     "speaker": "narrator",
     "text": "The terraces are lined with ancient, cracked mirrors. Find a way to repair the mirrors and restore the channel of light to the high altar."
+  },
+  {
+    "key": "1047524c338beb",
+    "speaker": "narrator",
+    "text": "Mirror Terraces"
   },
   {
     "key": "171f394342b58b",
@@ -485,14 +575,29 @@
     "text": "Elior gathers the scattered brass mirror segments and, with care and skill, restores the ancient light channel atop Mount Ember. The mirrors blaze with reflected sunlight, opening the way to the volcano's heart and the Phoenix's trial of wisdom."
   },
   {
+    "key": "0cc90a1a463a37",
+    "speaker": "narrator",
+    "text": "Ember Gallery"
+  },
+  {
     "key": "1f32809c0e955f",
     "speaker": "narrator",
     "text": "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom. Steam sighs from fissures and pools of blackened water mirror faint, dancing light. Worktables gather scattered fragments of fireglass and ash‑tumbled tools where attendants hammer and sort cooled slag for wards. The heat here is a steady, low thrum — a reminder that the mountain breathes beneath your feet."
   },
   {
+    "key": "126de942b54836",
+    "speaker": "narrator",
+    "text": "Breath of the Mountain"
+  },
+  {
     "key": "01fdd518c2ab4a",
     "speaker": "narrator",
     "text": "The Fumarole Passages exhale waves of heat and steam, blocking the way forward. Find a way to cross the shifting vents and reach the heights to the south."
+  },
+  {
+    "key": "063646d201b312",
+    "speaker": "narrator",
+    "text": "Fumarole Passages"
   },
   {
     "key": "0de2e0f0f3e197",
@@ -548,6 +653,11 @@
     "key": "1c1364e6ee9b56",
     "speaker": "narrator",
     "text": "With patience and ingenuity, Elior crafts a heat ward from ash-fern and cooled slag, then calibrates the mountain's ancient vents to breathe in a steady, safe rhythm. The searing passages yield, opening the way to the Phoenix's crater and the next trial of wisdom."
+  },
+  {
+    "key": "14accdcd7e3aa0",
+    "speaker": "narrator",
+    "text": "Phoenix Crater"
   },
   {
     "key": "070602dd01b54d",
@@ -665,6 +775,11 @@
     "text": "Weaker still. And I stood on a mountain, waiting on a bird."
   },
   {
+    "key": "02d6c0ed0ee59f",
+    "speaker": "narrator",
+    "text": "Cavern Mouth"
+  },
+  {
     "key": "049d2cd103c5f1",
     "speaker": "narrator",
     "text": "A broad entry arch yawns before you, curtained by tendrils of cold mist that coil and writhe like spectral fingers. Lantern light wavers and dims at the threshold, as if the darkness within hungers to devour illumination. Ancient symbols are carved into the weathered stone archway, their meanings lost to time but somehow still resonating with a faint, otherworldly power. The air carries whispers of forgotten secrets and the weight of ages past."
@@ -710,6 +825,11 @@
     "text": "People under the rock. That I understand. Point me at the heavy end."
   },
   {
+    "key": "01fef373a5e7f4",
+    "speaker": "narrator",
+    "text": "Miners' Rescue"
+  },
+  {
     "key": "03bb03d3f3c391",
     "speaker": "narrator",
     "text": "Collapsed Galleries have trapped people behind tons of stone. You must find a way to free them."
@@ -725,6 +845,11 @@
     "text": "The miners are still waiting. The Tool Cache is north."
   },
   {
+    "key": "00f0ddcb46a680",
+    "speaker": "narrator",
+    "text": "Tool Cache"
+  },
+  {
     "key": "1f02630b41c2f6",
     "speaker": "narrator",
     "text": "A reinforced alcove carved from living stone, where shadows pool between weathered crates of timbers, iron braces, and coils of hemp rope. The air tastes of old metal and earth, heavy with the weight of countless mining expeditions. Ancient tool marks score the walls, and you sense the presence of those who labored here in ages past. The flickering torchlight reveals corners shrouded in darkness."
@@ -733,6 +858,11 @@
     "key": "15e5a822273993",
     "speaker": "narrator",
     "text": "You search deeper into the shadowed alcove and discover a heavy supply crate hidden behind stacked timbers, locked with a large iron padlock that glints with an almost malevolent gleam. The label reads: 'Rescue Supplies — For Emergency Use Only.' The padlock is iron, rusted shut, and it has a keyhole."
+  },
+  {
+    "key": "169a032fe2ad40",
+    "speaker": "narrator",
+    "text": "Collapsed Galleries"
   },
   {
     "key": "1ba108ec106b57",
@@ -815,6 +945,11 @@
     "text": "Still here, Elior? We're making good progress on these support beams. The passage to the Echo Chambers is secure now—you can head east whenever you're ready. We'll keep working to make sure these old caverns are safe for future travelers."
   },
   {
+    "key": "143283441007a0",
+    "speaker": "narrator",
+    "text": "Echo Chambers"
+  },
+  {
     "key": "099d4cb86949f2",
     "speaker": "narrator",
     "text": "Smooth caverns carved from living stone stretch into shadow, where every footfall reverberates through the darkness like whispered incantations. Faint, otherworldly voices seem to mimic your speech, echoing from unseen alcoves as if ancient spirits dwell within the walls themselves. Mysterious runic walls line the chamber, their symbols glowing with a dim, ethereal light that pulses in rhythm with your heartbeat. The air thrums with an almost palpable energy, and you sense that this place has witnessed rituals of great power."
@@ -890,6 +1025,11 @@
     "text": "Still quiet. I'll keep it, if that's all right. Just till we're up top."
   },
   {
+    "key": "0e8d73eea987bd",
+    "speaker": "narrator",
+    "text": "Stillness Vestibule"
+  },
+  {
     "key": "1362c286d221ea",
     "speaker": "narrator",
     "text": "A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound. At the centre, three weathered echo stones stand in a triangle. Their carved channels look made to catch whispered words and hold them."
@@ -930,6 +1070,11 @@
     "text": "You sense that these hallowed stones now await the ancient chant that will complete the ritual and banish the restless spirits from this sacred place."
   },
   {
+    "key": "0f09ca0f3dc93a",
+    "speaker": "narrator",
+    "text": "Oath of Stillness"
+  },
+  {
     "key": "12d42d2a85fd6c",
     "speaker": "narrator",
     "text": "The Echo Chambers whisper with restless phantoms that block the path to the dragon's hall. Ancient voices drift through the darkness, their words lost to time but their purpose clear—they seek the sacred ritual that will grant them peace. The runic walls hold secrets of old ceremonies, and somewhere within these carved passages lies the key to silencing their eternal unrest. The echo stones await a blessed chant, one that must be spoken with reverence and precision to quiet the wandering spirits."
@@ -963,6 +1108,11 @@
     "key": "010c0d9c3c1b8d",
     "speaker": "silence keeper",
     "text": "The sleeper spoke with you, and the stone held. Forty years, and I have never been so glad to have kept a quiet. The water lies true now; it will hold your words."
+  },
+  {
+    "key": "0239b7119a174b",
+    "speaker": "narrator",
+    "text": "Dragon's Hall"
   },
   {
     "key": "05385df00c3ecd",
@@ -1155,6 +1305,11 @@
     "text": "It is done. This elixir can counter Malakar's life-draining ritual and save King Alden. Take it, and we shall proceed to the fortress."
   },
   {
+    "key": "091ab964b0dd1c",
+    "speaker": "narrator",
+    "text": "Main quest complete"
+  },
+  {
     "key": "18a03648997440",
     "speaker": "narrator",
     "text": "You have completed the quest 'The Three Virtues'."
@@ -1188,6 +1343,11 @@
     "key": "12c451da7008bb",
     "speaker": "sir cedric",
     "text": "If I had held the door that night, we would not be standing at this one."
+  },
+  {
+    "key": "00b25ccba3dd2c",
+    "speaker": "narrator",
+    "text": "Entrance to Malakar's Fortress"
   },
   {
     "key": "03e279bed7d92b",

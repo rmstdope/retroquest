@@ -9922,6 +9922,28 @@
    }
   ]
  },
+ "0353a5bd1db1d3": {
+  "file": "0353a5bd1db1d3.mp3",
+  "speaker": "narrator",
+  "duration": 1.533,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "Ancient",
+    "start": 0.14,
+    "end": 0.54
+   },
+   {
+    "word": "Library",
+    "start": 0.54,
+    "end": 1.1
+   }
+  ]
+ },
  "0369cf7e1b0d2b": {
   "file": "0369cf7e1b0d2b.mp3",
   "speaker": "ancient tree spirit",
@@ -10011,6 +10033,28 @@
     "word": "yours.",
     "start": 7.46,
     "end": 7.74
+   }
+  ]
+ },
+ "036c998cb1c6e5": {
+  "file": "036c998cb1c6e5.mp3",
+  "speaker": "narrator",
+  "duration": 1.533,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "Gathering",
+    "start": 0.18,
+    "end": 0.66
+   },
+   {
+    "word": "Storm",
+    "start": 0.66,
+    "end": 1.2
    }
   ]
  },
@@ -11433,6 +11477,33 @@
     "word": "spell!",
     "start": 16.98,
     "end": 17.44
+   }
+  ]
+ },
+ "0424cccc5622d7": {
+  "file": "0424cccc5622d7.mp3",
+  "speaker": "narrator",
+  "duration": 1.95,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "Silver",
+    "start": 0.2,
+    "end": 0.62
+   },
+   {
+    "word": "Stag",
+    "start": 0.62,
+    "end": 1.26
+   },
+   {
+    "word": "Inn",
+    "start": 1.26,
+    "end": 1.68
    }
   ]
  },
@@ -14284,6 +14355,23 @@
    }
   ]
  },
+ "0536a89fc3609b": {
+  "file": "0536a89fc3609b.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Residential",
+    "start": 0.0,
+    "end": 0.76
+   },
+   {
+    "word": "Quarter",
+    "start": 0.76,
+    "end": 1.14
+   }
+  ]
+ },
  "0580882b498b8e": {
   "file": "0580882b498b8e.mp3",
   "speaker": "ancient tree spirit",
@@ -16626,6 +16714,28 @@
    }
   ]
  },
+ "0678b14852e2e7": {
+  "file": "0678b14852e2e7.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "New",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "side",
+    "start": 0.3,
+    "end": 0.78
+   },
+   {
+    "word": "quest",
+    "start": 0.78,
+    "end": 1.22
+   }
+  ]
+ },
  "0682a09ea46fa8": {
   "file": "0682a09ea46fa8.mp3",
   "speaker": "training master",
@@ -16715,6 +16825,23 @@
     "word": "years.",
     "start": 5.08,
     "end": 5.48
+   }
+  ]
+ },
+ "06d030b44aeaaa": {
+  "file": "06d030b44aeaaa.mp3",
+  "speaker": "narrator",
+  "duration": 1.068,
+  "words": [
+   {
+    "word": "Healer's",
+    "start": 0.0,
+    "end": 0.48
+   },
+   {
+    "word": "House",
+    "start": 0.48,
+    "end": 0.78
    }
   ]
  },
@@ -17988,6 +18115,23 @@
     "word": "Greendale.",
     "start": 2.3,
     "end": 3.0
+   }
+  ]
+ },
+ "07665b9f3abb03": {
+  "file": "07665b9f3abb03.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Whispering",
+    "start": 0.0,
+    "end": 0.7
+   },
+   {
+    "word": "Glade",
+    "start": 0.7,
+    "end": 1.24
    }
   ]
  },
@@ -20802,6 +20946,23 @@
    }
   ]
  },
+ "08ce2c9f0c5eb1": {
+  "file": "08ce2c9f0c5eb1.mp3",
+  "speaker": "narrator",
+  "duration": 1.068,
+  "words": [
+   {
+    "word": "Inn",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "Rooms",
+    "start": 0.3,
+    "end": 0.7
+   }
+  ]
+ },
  "08d8a0047c832f": {
   "file": "08d8a0047c832f.mp3",
   "speaker": "narrator",
@@ -23549,6 +23710,28 @@
    }
   ]
  },
+ "0ab360c1a12c5a": {
+  "file": "0ab360c1a12c5a.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "Innkeeper's",
+    "start": 0.16,
+    "end": 1.04
+   },
+   {
+    "word": "Daughter",
+    "start": 1.04,
+    "end": 1.28
+   }
+  ]
+ },
  "0ab4f8a41e23cd": {
   "file": "0ab4f8a41e23cd.mp3",
   "speaker": "narrator",
@@ -24667,6 +24850,23 @@
    }
   ]
  },
+ "0b2fbba095ac22": {
+  "file": "0b2fbba095ac22.mp3",
+  "speaker": "narrator",
+  "duration": 1.347,
+  "words": [
+   {
+    "word": "Forest",
+    "start": 0.0,
+    "end": 0.56
+   },
+   {
+    "word": "Entrance",
+    "start": 0.56,
+    "end": 1.12
+   }
+  ]
+ },
  "0b384122a93645": {
   "file": "0b384122a93645.mp3",
   "speaker": "squires",
@@ -25557,6 +25757,23 @@
     "word": "neat.",
     "start": 23.3,
     "end": 23.74
+   }
+  ]
+ },
+ "0b89a6aa3646e7": {
+  "file": "0b89a6aa3646e7.mp3",
+  "speaker": "narrator",
+  "duration": 1.672,
+  "words": [
+   {
+    "word": "Forest",
+    "start": 0.0,
+    "end": 0.66
+   },
+   {
+    "word": "Transition",
+    "start": 0.66,
+    "end": 1.32
    }
   ]
  },
@@ -27753,6 +27970,23 @@
    }
   ]
  },
+ "0c52ab49255664": {
+  "file": "0c52ab49255664.mp3",
+  "speaker": "narrator",
+  "duration": 1.068,
+  "words": [
+   {
+    "word": "Great",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "Hall",
+    "start": 0.38,
+    "end": 0.78
+   }
+  ]
+ },
  "0c60098b0aecfe": {
   "file": "0c60098b0aecfe.mp3",
   "speaker": "narrator",
@@ -28965,6 +29199,23 @@
     "word": "heart.",
     "start": 35.48,
     "end": 35.84
+   }
+  ]
+ },
+ "0ca1dbdd059ea9": {
+  "file": "0ca1dbdd059ea9.mp3",
+  "speaker": "narrator",
+  "duration": 1.161,
+  "words": [
+   {
+    "word": "Mountain",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "Path",
+    "start": 0.4,
+    "end": 0.84
    }
   ]
  },
@@ -31003,6 +31254,23 @@
     "word": "middle.",
     "start": 2.96,
     "end": 3.2
+   }
+  ]
+ },
+ "0dbe2e10b1f620": {
+  "file": "0dbe2e10b1f620.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Greendale",
+    "start": 0.0,
+    "end": 0.7
+   },
+   {
+    "word": "Gates",
+    "start": 0.7,
+    "end": 1.16
    }
   ]
  },
@@ -34700,6 +34968,28 @@
    }
   ]
  },
+ "100e3238910f54": {
+  "file": "100e3238910f54.mp3",
+  "speaker": "narrator",
+  "duration": 1.347,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "Knight's",
+    "start": 0.2,
+    "end": 0.72
+   },
+   {
+    "word": "Test",
+    "start": 0.72,
+    "end": 1.06
+   }
+  ]
+ },
  "1015ea2c8a6dbc": {
   "file": "1015ea2c8a6dbc.mp3",
   "speaker": "narrator",
@@ -35291,6 +35581,23 @@
    }
   ]
  },
+ "10426e85bca129": {
+  "file": "10426e85bca129.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Castle",
+    "start": 0.0,
+    "end": 0.48
+   },
+   {
+    "word": "Approach",
+    "start": 0.48,
+    "end": 1.04
+   }
+  ]
+ },
  "104c759751cd83": {
   "file": "104c759751cd83.mp3",
   "speaker": "mountain hermit",
@@ -35567,6 +35874,23 @@
     "word": "board!",
     "start": 9.46,
     "end": 9.92
+   }
+  ]
+ },
+ "109aab252df35a": {
+  "file": "109aab252df35a.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Castle",
+    "start": 0.0,
+    "end": 0.44
+   },
+   {
+    "word": "Courtyard",
+    "start": 0.44,
+    "end": 0.9
    }
   ]
  },
@@ -38220,6 +38544,33 @@
     "word": "it.",
     "start": 2.34,
     "end": 2.48
+   }
+  ]
+ },
+ "1322cdd207d46f": {
+  "file": "1322cdd207d46f.mp3",
+  "speaker": "narrator",
+  "duration": 1.347,
+  "words": [
+   {
+    "word": "Heart",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "of",
+    "start": 0.38,
+    "end": 0.52
+   },
+   {
+    "word": "the",
+    "start": 0.52,
+    "end": 0.64
+   },
+   {
+    "word": "Forest",
+    "start": 0.64,
+    "end": 1.0
    }
   ]
  },
@@ -41297,6 +41648,28 @@
    }
   ]
  },
+ "1532da0c1bc12d": {
+  "file": "1532da0c1bc12d.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "Healer's",
+    "start": 0.16,
+    "end": 0.66
+   },
+   {
+    "word": "Apprentice",
+    "start": 0.66,
+    "end": 1.28
+   }
+  ]
+ },
  "153a5597d93914": {
   "file": "153a5597d93914.mp3",
   "speaker": "ancient tree spirit",
@@ -42423,6 +42796,33 @@
     "word": "storage.",
     "start": 19.98,
     "end": 20.36
+   }
+  ]
+ },
+ "15b314c42e98da": {
+  "file": "15b314c42e98da.mp3",
+  "speaker": "narrator",
+  "duration": 1.95,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "Forest",
+    "start": 0.16,
+    "end": 0.5
+   },
+   {
+    "word": "Guardian's",
+    "start": 0.5,
+    "end": 1.36
+   },
+   {
+    "word": "Riddles",
+    "start": 1.36,
+    "end": 1.72
    }
   ]
  },
@@ -49015,6 +49415,23 @@
    }
   ]
  },
+ "19ffd86fd72bde": {
+  "file": "19ffd86fd72bde.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Market",
+    "start": 0.0,
+    "end": 0.5
+   },
+   {
+    "word": "District",
+    "start": 0.5,
+    "end": 0.94
+   }
+  ]
+ },
  "1a023e0c2d25d1": {
   "file": "1a023e0c2d25d1.mp3",
   "speaker": "narrator",
@@ -51911,6 +52328,23 @@
    }
   ]
  },
+ "1b370ac31db011": {
+  "file": "1b370ac31db011.mp3",
+  "speaker": "narrator",
+  "duration": 1.254,
+  "words": [
+   {
+    "word": "Hidden",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "Library",
+    "start": 0.36,
+    "end": 0.8
+   }
+  ]
+ },
  "1b428b8d478000": {
   "file": "1b428b8d478000.mp3",
   "speaker": "narrator",
@@ -52212,6 +52646,33 @@
     "word": "Hall.",
     "start": 9.06,
     "end": 9.44
+   }
+  ]
+ },
+ "1b5312c90d69ef": {
+  "file": "1b5312c90d69ef.mp3",
+  "speaker": "narrator",
+  "duration": 2.508,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.22
+   },
+   {
+    "word": "Merchant's",
+    "start": 0.22,
+    "end": 0.88
+   },
+   {
+    "word": "Lost",
+    "start": 0.88,
+    "end": 1.48
+   },
+   {
+    "word": "Caravan",
+    "start": 1.48,
+    "end": 2.06
    }
   ]
  },
@@ -54071,6 +54532,33 @@
    }
   ]
  },
+ "1c80dbd52f8968": {
+  "file": "1c80dbd52f8968.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Echoes",
+    "start": 0.0,
+    "end": 0.32
+   },
+   {
+    "word": "of",
+    "start": 0.32,
+    "end": 0.62
+   },
+   {
+    "word": "the",
+    "start": 0.62,
+    "end": 0.72
+   },
+   {
+    "word": "Past",
+    "start": 0.72,
+    "end": 0.98
+   }
+  ]
+ },
  "1c89be8345ba22": {
   "file": "1c89be8345ba22.mp3",
   "speaker": "narrator",
@@ -55415,6 +55903,50 @@
     "word": "tone.",
     "start": 3.54,
     "end": 3.78
+   }
+  ]
+ },
+ "1e0b2ad88242d9": {
+  "file": "1e0b2ad88242d9.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "Supplies",
+    "start": 0.0,
+    "end": 0.72
+   },
+   {
+    "word": "for",
+    "start": 0.72,
+    "end": 0.92
+   },
+   {
+    "word": "the",
+    "start": 0.92,
+    "end": 1.04
+   },
+   {
+    "word": "Journey",
+    "start": 1.04,
+    "end": 1.3
+   }
+  ]
+ },
+ "1e1822cb358981": {
+  "file": "1e1822cb358981.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Ancient",
+    "start": 0.0,
+    "end": 0.52
+   },
+   {
+    "word": "Grove",
+    "start": 0.52,
+    "end": 0.84
    }
   ]
  },
@@ -58121,6 +58653,23 @@
    }
   ]
  },
+ "1edf2c7f9bd3f7": {
+  "file": "1edf2c7f9bd3f7.mp3",
+  "speaker": "narrator",
+  "duration": 1.161,
+  "words": [
+   {
+    "word": "Main",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "Square",
+    "start": 0.4,
+    "end": 0.72
+   }
+  ]
+ },
  "1efd1503d0efbd": {
   "file": "1efd1503d0efbd.mp3",
   "speaker": "narrator",
@@ -58776,6 +59325,28 @@
    }
   ]
  },
+ "1f4b5d005bd240": {
+  "file": "1f4b5d005bd240.mp3",
+  "speaker": "narrator",
+  "duration": 1.95,
+  "words": [
+   {
+    "word": "Cedric's",
+    "start": 0.0,
+    "end": 0.76
+   },
+   {
+    "word": "Lost",
+    "start": 0.76,
+    "end": 1.26
+   },
+   {
+    "word": "Honor",
+    "start": 1.26,
+    "end": 1.64
+   }
+  ]
+ },
  "1f4efa837bd323": {
   "file": "1f4efa837bd323.mp3",
   "speaker": "historians",
@@ -58928,6 +59499,28 @@
    }
   ]
  },
+ "1f5c71c8ba496d": {
+  "file": "1f5c71c8ba496d.mp3",
+  "speaker": "narrator",
+  "duration": 1.718,
+  "words": [
+   {
+    "word": "Side",
+    "start": 0.0,
+    "end": 0.44
+   },
+   {
+    "word": "quest",
+    "start": 0.44,
+    "end": 0.84
+   },
+   {
+    "word": "complete",
+    "start": 0.84,
+    "end": 1.36
+   }
+  ]
+ },
  "1f6165d08fcfc5": {
   "file": "1f6165d08fcfc5.mp3",
   "speaker": "narrator",
@@ -59002,6 +59595,28 @@
     "word": "visible.",
     "start": 6.68,
     "end": 7.18
+   }
+  ]
+ },
+ "1f7d39c44976a9": {
+  "file": "1f7d39c44976a9.mp3",
+  "speaker": "narrator",
+  "duration": 1.44,
+  "words": [
+   {
+    "word": "New",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "main",
+    "start": 0.3,
+    "end": 0.7
+   },
+   {
+    "word": "quest",
+    "start": 0.7,
+    "end": 1.06
    }
   ]
  },
@@ -59474,6 +60089,33 @@
    }
   ]
  },
+ "1f98b5456a65d4": {
+  "file": "1f98b5456a65d4.mp3",
+  "speaker": "narrator",
+  "duration": 1.44,
+  "words": [
+   {
+    "word": "Whispers",
+    "start": 0.0,
+    "end": 0.56
+   },
+   {
+    "word": "in",
+    "start": 0.56,
+    "end": 0.74
+   },
+   {
+    "word": "the",
+    "start": 0.74,
+    "end": 0.82
+   },
+   {
+    "word": "Wind",
+    "start": 0.82,
+    "end": 1.1
+   }
+  ]
+ },
  "1f99ffefc66e65": {
   "file": "1f99ffefc66e65.mp3",
   "speaker": "knight of despair",
@@ -59774,6 +60416,28 @@
     "word": "you.",
     "start": 3.6,
     "end": 3.94
+   }
+  ]
+ },
+ "1fe084f76b5a38": {
+  "file": "1fe084f76b5a38.mp3",
+  "speaker": "narrator",
+  "duration": 1.393,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "Hermit's",
+    "start": 0.18,
+    "end": 0.8
+   },
+   {
+    "word": "Warning",
+    "start": 0.8,
+    "end": 1.02
    }
   ]
  },

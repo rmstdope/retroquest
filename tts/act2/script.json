@@ -50,9 +50,24 @@
     "text": "Take a deep breath, and start down the road into Greendale."
   },
   {
+    "key": "0ca1dbdd059ea9",
+    "speaker": "narrator",
+    "text": "Mountain Path"
+  },
+  {
     "key": "1e92f307d3b358",
     "speaker": "narrator",
     "text": "A winding trail climbs through rocky terrain between Willowbrook and Greendale. Sturdy trees cast intermittent shade and the path remains well tended despite its remoteness. Glimpses of both settlements appear at overlooks, offering reflective pauses. A small camp site used by travelers rests just off the main trail."
+  },
+  {
+    "key": "1f7d39c44976a9",
+    "speaker": "narrator",
+    "text": "New main quest"
+  },
+  {
+    "key": "036c998cb1c6e5",
+    "speaker": "narrator",
+    "text": "The Gathering Storm"
   },
   {
     "key": "08319cf1b2623a",
@@ -120,6 +135,11 @@
     "text": "You examine the entry pass. Someone has scraped their name off it, carefully. The seal looks authentic, and it should allow you passage into Greendale without question."
   },
   {
+    "key": "0dbe2e10b1f620",
+    "speaker": "narrator",
+    "text": "Greendale Gates"
+  },
+  {
     "key": "0abd88502c4b9a",
     "speaker": "narrator",
     "text": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm."
@@ -170,6 +190,11 @@
     "text": "You study the city map carefully. The detailed layout shows the Main Square at the center, with the Market District to the east, Castle Approach to the north, and various other important locations clearly marked. Someone has been over it in grey ink, in a small, careful hand. The Silver Stag Inn is circled twice. In the Residential Quarter, at the end of one lane, a cross has been drawn, and beside it a single word: cellar?"
   },
   {
+    "key": "1edf2c7f9bd3f7",
+    "speaker": "narrator",
+    "text": "Main Square"
+  },
+  {
     "key": "084f6122e0b420",
     "speaker": "narrator",
     "text": "The heart of Greendale pulses with activity. A grand fountain shows ancient heroes locked in battle with mythical beasts. Merchants hawk wares from bright stalls while townsfolk bustle about, exchanging news and gossip. Stone buildings with red roofs frame the space. Castle towers rise to the north, and the energetic flow of people makes it clear important things happen here."
@@ -198,6 +223,11 @@
     "key": "1872432986c69f",
     "speaker": "narrator",
     "text": "You examine the merchant's flyer. It advertises quality goods from Master Merchant Aldric and would serve as a good introduction when visiting the Market District."
+  },
+  {
+    "key": "10426e85bca129",
+    "speaker": "narrator",
+    "text": "Castle Approach"
   },
   {
     "key": "1cebd24472fda8",
@@ -243,6 +273,11 @@
     "key": "0c1bbb44448ab7",
     "speaker": "herald",
     "text": "Your credentials have been verified and you have been granted formal audience rights. You may proceed to meet with Sir Cedric and other members of the court."
+  },
+  {
+    "key": "109aab252df35a",
+    "speaker": "narrator",
+    "text": "Castle Courtyard"
   },
   {
     "key": "017ea0838c6df6",
@@ -358,6 +393,16 @@
     "key": "1e877186ead604",
     "speaker": "squires",
     "text": "Sorry, we can't talk - the Training Master expects us to perfect these techniques before the day is over."
+  },
+  {
+    "key": "0678b14852e2e7",
+    "speaker": "narrator",
+    "text": "New side quest"
+  },
+  {
+    "key": "100e3238910f54",
+    "speaker": "narrator",
+    "text": "The Knight's Test"
   },
   {
     "key": "01419347fea0db",
@@ -495,6 +540,11 @@
     "text": "Time is of the essence, Elior. The darkness grows stronger each day, and we need Nyx's ancient wisdom to understand what we're truly facing."
   },
   {
+    "key": "1e0b2ad88242d9",
+    "speaker": "narrator",
+    "text": "Supplies for the Journey"
+  },
+  {
     "key": "0cbada91f9d6bd",
     "speaker": "narrator",
     "text": "Sir Cedric mentioned the need for proper equipment for forest expeditions. Gather essential supplies from the Market District."
@@ -503,6 +553,11 @@
     "key": "03811e523c94ca",
     "speaker": "narrator",
     "text": "Sir Cedric watched you with the training sword and now trusts you. He wants you to find Nyx, deep in the Enchanted Forest, because her old wisdom may show what you are truly facing. He gave you a hundred coins for a survival kit, an enhanced lantern and rope from the Market District."
+  },
+  {
+    "key": "1f5c71c8ba496d",
+    "speaker": "narrator",
+    "text": "Side quest complete"
   },
   {
     "key": "166d0e5a67c879",
@@ -543,6 +598,11 @@
     "key": "093621b48d1f27",
     "speaker": "sir cedric",
     "text": "How goes your preparation? The gathering storm grows stronger each day. I trust you are making good progress in gathering allies and supplies."
+  },
+  {
+    "key": "19ffd86fd72bde",
+    "speaker": "narrator",
+    "text": "Market District"
   },
   {
     "key": "0bc53ed2fb951e",
@@ -615,6 +675,11 @@
     "text": "You activate the enhanced lantern. Its magical light pierces through darkness and can reveal hidden passages, magical traces, and secret paths that ordinary light cannot illuminate."
   },
   {
+    "key": "1b5312c90d69ef",
+    "speaker": "narrator",
+    "text": "The Merchant's Lost Caravan"
+  },
+  {
     "key": "02385454ca018e",
     "speaker": "narrator",
     "text": "Caravan Master Thorne's valuable caravan has gone missing in the Enchanted Forest. Find out what happened to the merchants and their goods."
@@ -628,6 +693,11 @@
     "key": "0fa8f34227e514",
     "speaker": "caravan master thorne",
     "text": "Any word on my missing caravan? Every day that passes makes me fear the worst for those poor souls."
+  },
+  {
+    "key": "0424cccc5622d7",
+    "speaker": "narrator",
+    "text": "The Silver Stag Inn"
   },
   {
     "key": "06ec27d3855870",
@@ -670,6 +740,11 @@
     "text": "These have been difficult times, but we still maintain the finest accommodations in Greendale. I can offer you: - Room Key: 10 gold coins"
   },
   {
+    "key": "0ab360c1a12c5a",
+    "speaker": "narrator",
+    "text": "The Innkeeper's Daughter"
+  },
+  {
     "key": "0b5b1bf27a6e0e",
     "speaker": "narrator",
     "text": "Elena, the barmaid at The Silver Stag Inn, has been cursed by a dark wizard. Use your magical abilities to break the curse and save her life."
@@ -710,6 +785,11 @@
     "text": "The key turns with a soft click, unlocking access to the private inn rooms upstairs. You can now 'go east' to enter them."
   },
   {
+    "key": "08ce2c9f0c5eb1",
+    "speaker": "narrator",
+    "text": "Inn Rooms"
+  },
+  {
     "key": "0c6be73fe37335",
     "speaker": "narrator",
     "text": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below. One floorboard beside the bed sits a little proud of the rest."
@@ -745,6 +825,11 @@
     "text": "Below the notes, a sketch, drawn twice over: a sun rising over three linked rings. Beside it, a question mark, pressed so hard the nib has torn the page."
   },
   {
+    "key": "1c80dbd52f8968",
+    "speaker": "narrator",
+    "text": "Echoes of the Past"
+  },
+  {
     "key": "1b4d78679b77ab",
     "speaker": "narrator",
     "text": "Investigate your family heritage and Willowbrook's significance by researching historical records and genealogical information in the Great Hall."
@@ -768,6 +853,11 @@
     "key": "1ff363f3565b90",
     "speaker": "narrator",
     "text": "The survival kit, the lantern and the rope are packed. The merchants of Greendale have done what they can for you. The rest of the road leads to the edge of the Enchanted Forest."
+  },
+  {
+    "key": "0c52ab49255664",
+    "speaker": "narrator",
+    "text": "Great Hall"
   },
   {
     "key": "02c9ff9589d2a7",
@@ -865,6 +955,11 @@
     "text": "You saw the last name in our register, then. The same week. We have told ourselves it means nothing, and none of us believes it."
   },
   {
+    "key": "0536a89fc3609b",
+    "speaker": "narrator",
+    "text": "Residential Quarter"
+  },
+  {
     "key": "1322f0aed9b36f",
     "speaker": "narrator",
     "text": "Quiet streets lined with comfortable two-story homes, each with small gardens and neat workshops. Smoke rises from chimneys, and the sound of craftsmen at work echoes from nearby buildings. This is where Greendale's skilled artisans and middle-class citizens live and work. The atmosphere is peaceful and industrious. At the end of one lane an old cellar door has been bricked up, and a cold draught breathes through the gaps."
@@ -918,6 +1013,11 @@
     "key": "04b45c98d65e9d",
     "speaker": "narrator",
     "text": "You examine the healing herbs. They are fresh and potent - perfect for use in advanced healing magic, training with Master Healer Lyria, or crafting powerful remedies."
+  },
+  {
+    "key": "06d030b44aeaaa",
+    "speaker": "narrator",
+    "text": "Healer's House"
   },
   {
     "key": "193fe31842f982",
@@ -980,6 +1080,11 @@
     "text": "This is the work. You give what you have, and sometimes it is not enough. He needs more than these hands can give. The old healers gathered their healing into a crystal, a Crystal Focus, and it came out the other side like sunlight through a glass. If one survives in Greendale, it is wherever the old scholars hid their books."
   },
   {
+    "key": "1532da0c1bc12d",
+    "speaker": "narrator",
+    "text": "The Healer's Apprentice"
+  },
+  {
     "key": "0f82305b6675ab",
     "speaker": "narrator",
     "text": "Master Healer Lyria let you watch her at a dying carter's bed. Your herbs were not enough. She needs a Crystal Focus, and the old scholars of Greendale may have hidden one with their books."
@@ -995,9 +1100,19 @@
     "text": "You search through the basement areas of the residential buildings. Behind some old storage crates and forgotten furniture, you discover a concealed entrance in the stone wall. A narrow tunnel leads underground to what appears to be an ancient chamber. You've found a secret passage to a Hidden Library! Use 'go secret_passage' to enter this mysterious repository."
   },
   {
+    "key": "0353a5bd1db1d3",
+    "speaker": "narrator",
+    "text": "The Ancient Library"
+  },
+  {
     "key": "0bc87ff36ed028",
     "speaker": "narrator",
     "text": "You've discovered a hidden passage beneath Greendale containing an ancient library of magical texts and lore. You should explore its depths and uncover the secrets within."
+  },
+  {
+    "key": "1b370ac31db011",
+    "speaker": "narrator",
+    "text": "Hidden Library"
   },
   {
     "key": "1e430b9b117a58",
@@ -1165,6 +1280,11 @@
     "text": "Knew the notch, did he? Good. Then he knows. Go on, now. Greendale needs him more than I do."
   },
   {
+    "key": "0b89a6aa3646e7",
+    "speaker": "narrator",
+    "text": "Forest Transition"
+  },
+  {
     "key": "193f996d276ce3",
     "speaker": "narrator",
     "text": "The boundary between the civilized mountain paths and the wild Enchanted Forest. Ancient standing stones mark the threshold, carved with protective runes that pulse with faint magic. The air grows thicker and you sense ancient power awakening. Beyond lies a realm where normal rules may not apply. A robed figure sits peacefully among the stones."
@@ -1198,6 +1318,11 @@
     "key": "1fc8ace3b8036a",
     "speaker": "narrator",
     "text": "The standing stones continue to pulse with ancient magic, their druidic runes a testament to the old ways."
+  },
+  {
+    "key": "1fe084f76b5a38",
+    "speaker": "narrator",
+    "text": "The Hermit's Warning"
   },
   {
     "key": "086a00b42a568d",
@@ -1248,6 +1373,11 @@
     "key": "0c1bfb7c630ecd",
     "speaker": "narrator",
     "text": "You spent a night on the forest's doorstep, and she let you. The way east is open."
+  },
+  {
+    "key": "0b2fbba095ac22",
+    "speaker": "narrator",
+    "text": "Forest Entrance"
   },
   {
     "key": "05b9b92ad53907",
@@ -1345,6 +1475,11 @@
     "text": "The Enhanced Lantern continues to provide magical illumination, keeping the forest paths clearly visible."
   },
   {
+    "key": "15b314c42e98da",
+    "speaker": "narrator",
+    "text": "The Forest Guardian's Riddles"
+  },
+  {
     "key": "008bde1796d285",
     "speaker": "narrator",
     "text": "The forest sprites have challenged you to prove your wisdom by solving the riddles of the forest guardians. You must journey east from the Forest Entrance to the Whispering Glade, where ancient spirits will test your understanding of forest ways and natural wisdom."
@@ -1368,6 +1503,11 @@
     "key": "1f438c6c51f9e4",
     "speaker": "forest sprites",
     "text": "—with their riddles."
+  },
+  {
+    "key": "1e1822cb358981",
+    "speaker": "narrator",
+    "text": "Ancient Grove"
   },
   {
     "key": "1bef95ee5c6ac9",
@@ -1420,6 +1560,11 @@
     "text": "Now you can hear them, you'll hear the grove is uneasy. The nymphs in the glade east of the entrance have something for these roots. Answer them, and bring back what they give you."
   },
   {
+    "key": "1f98b5456a65d4",
+    "speaker": "narrator",
+    "text": "Whispers in the Wind"
+  },
+  {
     "key": "043f120f335a0e",
     "speaker": "narrator",
     "text": "The Ancient Tree Spirit has sensed mystical beings hidden within the forest's depths. Gentle whispers carry on the wind, speaking of ancient wisdom and forgotten lore. To prove yourself worthy of the forest's trust, you must seek out these hidden spirits in the Whispering Glade and demonstrate your understanding of nature's mysteries."
@@ -1433,6 +1578,11 @@
     "key": "050b08d0d20290",
     "speaker": "ancient tree spirit",
     "text": "The nymphs in the glade east of the entrance have something for these roots. Answer them, and bring back what they give you."
+  },
+  {
+    "key": "07665b9f3abb03",
+    "speaker": "narrator",
+    "text": "Whispering Glade"
   },
   {
     "key": "0d40d575112956",
@@ -1760,6 +1910,11 @@
     "text": "An ill wind, the healer called it. Bad luck, blown in off the road, settling on the one soul in this house who never harmed anyone."
   },
   {
+    "key": "1f4b5d005bd240",
+    "speaker": "narrator",
+    "text": "Cedric's Lost Honor"
+  },
+  {
     "key": "027d96841fba04",
     "speaker": "narrator",
     "text": "Sir Cedric was stripped of his knighthood after the night King Alden vanished: two men of the night watch swore he had left his post. Investigate what happened that night and find evidence to clear his name."
@@ -2023,6 +2178,11 @@
     "key": "116c48574161f0",
     "speaker": "town crier",
     "text": "And fresh news from the Great Hall! The Lord Commander has cleared Sir Cedric's name and given him back his sword. Sir Cedric, and no 'as was' about it!"
+  },
+  {
+    "key": "1322cdd207d46f",
+    "speaker": "narrator",
+    "text": "Heart of the Forest"
   },
   {
     "key": "0c916f76329b7e",
