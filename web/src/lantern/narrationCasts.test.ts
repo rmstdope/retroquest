@@ -2,7 +2,11 @@ import { existsSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import type { NarrationManifest } from './narrationManifest'
 
-/** The recording tools' files for an act (`tts/act<N>/`), read from the repository. */
+/**
+ * The recording tools' files, read from the repository: one cast for the whole game
+ * (`tts/cast.json`, Audio Studio's), and each act's script and key-scene directions
+ * (`tts/act<N>/`).
+ */
 const TTS = new URL('../../../tts/', import.meta.url)
 const AUDIO = new URL('../../public/audio/narration/', import.meta.url)
 
@@ -23,36 +27,19 @@ function read<T>(act: number, file: string): T {
   ) as T
 }
 
-/** Speakers who return across acts and must keep their voice. */
-const RETURNING = [
-  'narrator',
-  'mira',
-  'elior',
-  'mother',
-  'father',
-  'grandmother',
-  'sir cedric',
-  'nyx',
-  'malakar',
-  'knight of despair',
-]
+/** The one cast: a speaker has one voice and manner in every act. */
+const CAST = JSON.parse(readFileSync(new URL('cast.json', TTS), 'utf8')) as Cast
 
-/** The voice a speaker has in each act that casts them. */
-function voicesOf(speaker: string): string[] {
-  return [1, 2, 3, 4].flatMap((act) => {
-    const voice = read<Cast>(act, 'cast.json').speakers[speaker]?.voice
-    return voice ? [voice] : []
-  })
-}
+/** The mother's manner in Act III, kept as a direction on each of her lines there. */
+const MOTHER_IN_ACT_III = '[tender, steady, afraid for a friend]'
 
 describe.each([2, 3, 4])('the recordings of Act %i', (act) => {
   const script = read<Line[]>(act, 'script.json')
-  const cast = read<Cast>(act, 'cast.json')
   const cues = read<Record<string, string>>(act, 'cues.json')
 
   it('casts every speaker of its script', () => {
     const uncast = [...new Set(script.map((line) => line.speaker))].filter(
-      (speaker) => !cast.speakers[speaker],
+      (speaker) => !CAST.speakers[speaker],
     )
     expect(uncast).toEqual([])
   })
@@ -64,7 +51,7 @@ describe.each([2, 3, 4])('the recordings of Act %i', (act) => {
 
   it('says the act’s title in words', () => {
     const numeral = ['', '', 'II', 'III', 'IV'][act]
-    expect(cast.pronounce[`Act ${numeral}:`]).toMatch(/^Act \w+:$/)
+    expect(CAST.pronounce[`Act ${numeral}:`]).toMatch(/^Act \w+:$/)
   })
 
   it('has a clip on disk for every line and none for a line that left the script', () => {
@@ -103,14 +90,15 @@ describe('lines the engine picks at random', () => {
   })
 })
 
+/** The key-scene directions of an act: its cues, without the mother's Act III manner. */
+function keyScenes(act: number): string[] {
+  const cues = read<Record<string, string>>(act, 'cues.json')
+  return Object.keys(cues).filter((key) => cues[key] !== MOTHER_IN_ACT_III)
+}
+
 describe('the key-scene directions', () => {
   it('number 29 lines for the 25 scenes across Acts II to IV', () => {
-    const total = [2, 3, 4].reduce(
-      (sum, act) =>
-        sum +
-        Object.keys(read<Record<string, string>>(act, 'cues.json')).length,
-      0,
-    )
+    const total = [2, 3, 4].reduce((sum, act) => sum + keyScenes(act).length, 0)
     // 25 scenes; "You. / Me." is two lines, King Alden's "Go home" three, the
     // Charred Notebook's softer reading two.
     expect(total).toBe(29)
@@ -138,18 +126,26 @@ const SAME_VOICE: Record<string, string> = {
 
 describe('speakers who share a voice', () => {
   it.each(Object.entries(SAME_VOICE))('%s is %s’s voice', (alias, base) => {
-    for (const act of [2, 3, 4]) {
-      const { speakers } = read<Cast>(act, 'cast.json')
-      if (speakers[alias])
-        expect(speakers[alias].voice).toBe(
-          speakers[base]?.voice ?? voicesOf(base)[0],
-        )
-    }
+    expect(CAST.speakers[alias]?.voice).toBe(CAST.speakers[base]?.voice)
   })
 })
 
-describe('returning speakers', () => {
-  it.each(RETURNING)('%s has the same voice in every act', (speaker) => {
-    expect(new Set(voicesOf(speaker)).size).toBeLessThanOrEqual(1)
+describe('the one cast', () => {
+  it('casts every speaker of Act I too', () => {
+    const script = read<Line[]>(1, 'script.json')
+    const uncast = [...new Set(script.map((line) => line.speaker))].filter(
+      (speaker) => !CAST.speakers[speaker],
+    )
+    expect(uncast).toEqual([])
+  })
+
+  it('keeps the mother’s Act III manner on each of her lines there', () => {
+    const cues = read<Record<string, string>>(3, 'cues.json')
+    const hers = read<Line[]>(3, 'script.json').filter(
+      (line) => line.speaker === 'mother',
+    )
+    // A key-scene direction of her own replaces the manner; every other line carries it.
+    expect(hers.filter((line) => !cues[line.key])).toEqual([])
+    expect(hers.some((line) => cues[line.key] === MOTHER_IN_ACT_III)).toBe(true)
   })
 })
