@@ -38,7 +38,11 @@ export function narrationWords(markup: string): string[] {
   return text ? text.split(' ') : []
 }
 
-/** The recording of `speaker` saying the block `markup`, or null when there is none. */
+/**
+ * The recording of one voiced block, or null when there is none. `speaker` and
+ * `markup` are one block as `turnBlocks`, `introBlocks` or `questCardBlocks`
+ * give it (`UNSIGNED` for unsigned writing), not a whole answer.
+ */
 export function findClip(
   manifest: NarrationManifest,
   speaker: string,

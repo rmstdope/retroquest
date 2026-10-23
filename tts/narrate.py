@@ -120,7 +120,12 @@ def chunk_text(text: str, limit: int = CHUNK_LIMIT) -> list[str]:
 
 
 def spoken_text(text: str, cue: str, cast: dict) -> str:
-    """The text sent to Fish: the cue, then the line with names said as the cast asks."""
+    """The text sent to Fish: the cue, then the line with names said as the cast asks.
+
+    A quest card's checklist bullets are read as a list, not as "asterisk".
+    """
+    text = re.sub(r":\s*\*\s+", ": ", text)
+    text = re.sub(r"\s+\*\s+", ", ", text)
     for written, said in cast.get("pronounce", {}).items():
         text = text.replace(written, said)
     return f"{cue} {text}".strip()
@@ -149,6 +154,12 @@ def heard_words(segments: list[dict], duration: float) -> list[dict]:
             continue
         words.extend(segment.get("words", []))
     return words
+
+
+def orphan_cues(cues: dict, script: list[dict]) -> list[str]:
+    """Cue keys whose line is no longer in the script (its wording changed), so the cue no longer applies."""
+    keys = {line["key"] for line in script}
+    return sorted(key for key in cues if key not in keys)
 
 
 # ---- recording ----
@@ -301,13 +312,16 @@ def main() -> None:
     if unknown:
         sys.exit(f"no voice cast for: {', '.join(unknown)}")
 
+    orphans = orphan_cues(cues, script)
     if args.check:
-        print(f"{len(script)} lines, {len(missing)} missing, {len(stale)} stale")
+        print(f"{len(script)} lines, {len(missing)} missing, {len(stale)} stale, {len(orphans)} orphaned cues")
         for line in missing:
             print(f"  missing {line['key']} {line['speaker']}: {line['text'][:60]}")
         for key in stale:
             print(f"  stale   {key}")
-        sys.exit(1 if missing or stale else 0)
+        for key in orphans:
+            print(f"  orphaned cue {key}: its line's wording changed; re-key it in cues.json")
+        sys.exit(1 if missing or stale or orphans else 0)
 
     if args.retime:
         retime(script, cast, out_dir, manifest)

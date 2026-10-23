@@ -3,7 +3,18 @@ import { Game } from '@/engine'
 import { Act1 } from '@/act1/Act1'
 import { ACT1_GOLDEN_PATH } from '@/act1/Act1GoldenPath'
 import { narrationKey } from './narrationKey'
-import { actScript, linesOfTurn, type WriterRule } from './narrationScript'
+import {
+  actScript,
+  introBlocks,
+  linesOfTurn,
+  questCardBlocks,
+  turnBlocks,
+  UNSIGNED,
+  type WriterRule,
+} from './narrationScript'
+
+/** The golden path stops short of the command that completes Act I (see `Act1GoldenPath`). */
+const ACT1_COMPLETES = 'use map'
 
 const WRITERS: WriterRule[] = [
   { opening: 'My dearest', speaker: 'mother' },
@@ -42,10 +53,44 @@ describe('linesOfTurn', () => {
   })
 })
 
+describe('the voiced blocks a surface shows', () => {
+  it('splits an answer into narration and speech, unsigned writing under its own name', () => {
+    expect(
+      turnBlocks(
+        'She looks up.\n[character_name]Mira[/character_name]\n[dialogue]Come in.[/dialogue]\n' +
+          '[character_name][/character_name]\n[dialogue]My dearest Elior.[/dialogue]\n[event]A chime.[/event]',
+      ),
+    ).toEqual([
+      { speaker: 'narrator', markup: 'She looks up.' },
+      { speaker: 'mira', markup: 'Come in.' },
+      { speaker: UNSIGNED, markup: 'My dearest Elior.' },
+    ])
+  })
+
+  it('gives a chapter page its heading, then its paragraphs', () => {
+    expect(
+      introBlocks(
+        '[bold]ACT 1: THE CALL TO ADVENTURE[/bold]\n\nYou are Elior.\n\nA storm comes.',
+      ),
+    ).toEqual([
+      { speaker: 'narrator', markup: 'Act I: The Call to Adventure' },
+      { speaker: 'narrator', markup: 'You are Elior.' },
+      { speaker: 'narrator', markup: 'A storm comes.' },
+    ])
+  })
+
+  it('reads a quest card as one block, as the card shows it', () => {
+    const card = 'You will need:\n[pending]* Warm clothing[/pending]'
+    expect(questCardBlocks(card)).toEqual([
+      { speaker: 'narrator', markup: card },
+    ])
+  })
+})
+
 describe('actScript for Act I', () => {
   const script = actScript(
     () => new Game([new Act1()]),
-    ACT1_GOLDEN_PATH,
+    [...ACT1_GOLDEN_PATH, ACT1_COMPLETES],
     WRITERS,
   )
   const find = (text: string): { speaker: string } | undefined =>
@@ -84,10 +129,30 @@ describe('actScript for Act I', () => {
     ).toBe(true)
   })
 
-  it('gives the mother’s letter to the mother', () => {
+  it('voices the mother’s letter as the mother, keyed as writing the page can find', () => {
+    const letter = script.find((line) =>
+      line.text.startsWith('My dearest Elior'),
+    )
+    expect(letter?.speaker).toBe('mother')
+    expect(letter?.key).toBe(narrationKey(UNSIGNED, letter?.text ?? ''))
+  })
+
+  it('reads the act-complete chapter page', () => {
     expect(
-      script.find((line) => line.text.startsWith('My dearest Elior'))?.speaker,
-    ).toBe('mother')
+      script.some((line) =>
+        line.text.startsWith("The amulet was your parents'."),
+      ),
+    ).toBe(true)
+  })
+
+  it('reads each quest card whole, checklist and all', () => {
+    expect(
+      script.some(
+        (line) =>
+          line.text.startsWith('Mira has tasked you with preparing') &&
+          line.text.includes('Warm clothing'),
+      ),
+    ).toBe(true)
   })
 
   it('takes optional lines from examining what is at hand along the way', () => {

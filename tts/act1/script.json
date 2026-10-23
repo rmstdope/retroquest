@@ -65,7 +65,7 @@
     "text": "The ink is slightly smudged on this page, as if written in haste or with a trembling hand..."
   },
   {
-    "key": "0da18df63125fe",
+    "key": "13acf44bebe1af",
     "speaker": "elior",
     "text": "What a night. The wind howled like a hungry wolf, and rain lashed against the shutters. I swear the whole cottage shook with each thunderclap. Sleep was impossible for hours. Then, through a gap in the curtains, I saw it – a searing, unnatural light that split the sky. It wasn't lightning; it was... different. Pulsating, almost. When I finally drifted off, the dreams came. Not the usual ones of fields and harvests. This was dark, filled with swirling shadows. And a figure, tall and indistinct, its voice a whisper on the edge of hearing, yet it felt like it was calling my name. Elior... I woke with a start, my heart pounding. And three words at the very end, which I wrote down the moment I woke so I would not lose them: …and let them rest… Even now, the memory sends a shiver down my spine. And the strangest thing — I knew that voice. Not the way you know a neighbour's, but the way you know a song someone sang to you before you had words for it. It made my chest ache. I just can't remember from where. What did it mean?"
   },
@@ -120,7 +120,7 @@
     "text": "Somewhere in the cottage lies an old photograph of your parents, tucked away in a drawer. Read the cryptic message on its back and show it to your grandmother. Then seek the truth where the river bends."
   },
   {
-    "key": "11538288040f0f",
+    "key": "04a40f5938d387",
     "speaker": "narrator",
     "text": "Seek the truth where the river bends."
   },
@@ -515,7 +515,7 @@
     "text": "You tip the smooth stone aside and dig into the cold mud beneath it. Your fingers close on a small tin, sealed with wax. Inside, wrapped in oilcloth, lies a mother's letter."
   },
   {
-    "key": "073b648803fc37",
+    "key": "026d47b0d5035d",
     "speaker": "mother",
     "text": "My dearest Elior, if you are reading this, you found the bend, as I knew you would. The river remembers what the village forgets. If Malakar comes asking about our line, do not answer him. He is not the friend we knew. Mira keeps the amulet for you. When you are ready, it will know you. Your father and I"
   },
@@ -685,7 +685,7 @@
     "text": "Around the inside of the lid, tiny letters are engraved:"
   },
   {
-    "key": "0453b94bffa6b5",
+    "key": "02400849f1f285",
     "speaker": "narrator",
     "text": "From the founders' line, to the next."
   },
@@ -755,9 +755,9 @@
     "text": "Now prepare for the road. You'll need warmth, protection, food, boots and a map. And learn all the basic magic the village elders can teach you. When you are truly ready, the Ancient Amulet will be yours."
   },
   {
-    "key": "05dd059914219b",
+    "key": "112546e7277cdc",
     "speaker": "narrator",
-    "text": "Mira has tasked you with preparing for your journey. She says you will need:"
+    "text": "Mira has tasked you with preparing for your journey. She says you will need: * Warm clothing * Magical protection * Food for the road (2 of 6 kinds gathered, any 4 will do) * Sturdy footwear * A map to find your way * All basic magic learned"
   },
   {
     "key": "1304127ca64208",
@@ -815,7 +815,7 @@
     "text": "Beneath it lies a folded note. Something in you knows the careful, slanting hand before you have read a word: it is your father's."
   },
   {
-    "key": "0f57989648de35",
+    "key": "1662d8ff3653ff",
     "speaker": "father",
     "text": "For when the light comes back to you."
   },
@@ -860,7 +860,7 @@
     "text": "You have retrieved the shiny ring from the well, proving your ingenuity and determination."
   },
   {
-    "key": "14faf202ea2f7d",
+    "key": "1627ae49c1165e",
     "speaker": "narrator",
     "text": "A & L"
   },
@@ -880,7 +880,7 @@
     "text": "Carved beneath the runes, in a plainer hand, are words you can read:"
   },
   {
-    "key": "07eed6487df799",
+    "key": "16da72a522b461",
     "speaker": "narrator",
     "text": "Power follows purpose; purpose follows truth."
   },
@@ -1178,5 +1178,15 @@
     "key": "0fbd21e3b05726",
     "speaker": "narrator",
     "text": "The map aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. You tuck your parents' amulet beneath your mother's cloak, and set forth."
+  },
+  {
+    "key": "087193af0c970e",
+    "speaker": "narrator",
+    "text": "You have confirmed that a dark force is at work in Willowbrook. Mira warns you that your magical abilities may be the key to protecting the village."
+  },
+  {
+    "key": "0cddcf1a7b356e",
+    "speaker": "narrator",
+    "text": "The amulet was your parents'. And someone has come to Willowbrook looking for it."
   }
 ]

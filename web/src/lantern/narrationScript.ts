@@ -1,15 +1,24 @@
 /**
- * The script of an act's narration: every block the story will read aloud,
- * with its speaker and recording key, gathered by playing the act.
+ * Which blocks the story reads aloud, and the script of an act's narration.
  *
- * `linesOfTurn` turns one answer into voiced lines, the way the story view
- * splits it (`parseTurn`): narration and speech are voiced, events, failures
- * and checklists are not, and unsigned writing is read by its writer.
+ * The voiced blocks of each surface are defined once here, for both sides: the
+ * recording tools key each recording by a block's speaker and words, and the
+ * story view finds a recording by the same block (`findClip`).
+ *
+ * - `turnBlocks`: an answer, split as the story view splits it (`parseTurn`):
+ *   narration and speech are voiced, events, failures and checklists are not.
+ *   Unsigned writing has no speaker on the page, so it is keyed as `UNSIGNED`.
+ * - `introBlocks`: a chapter page that opens an act: its heading
+ *   ("Act I: The Call to Adventure"), then its paragraphs. A closing chapter
+ *   page's body is an answer (`turnBlocks`).
+ * - `questCardBlocks`: a quest card in the story, read whole as it is shown.
+ *
  * `actScript` plays an act's golden path through the real engine and collects
- * the chapter page, every answer, each room's description on its first visit
- * and every quest card. At each step it also tries examining, using and
- * talking to whatever is at hand, on a copy of the game, so optional lines are recorded
- * too. The recording tools in `tts/` write the result to an act's script file.
+ * every voiced line: the chapter pages, every answer, each room's description
+ * on its first visit and every quest card. At each step it also tries
+ * examining, using and talking to whatever is at hand, on a copy of the game,
+ * so optional lines are recorded too. Who voices a line is its block's speaker,
+ * except unsigned writing, which goes to its writer (`WriterRule`).
  */
 
 import { GameController, type Game } from '@/engine'
@@ -20,55 +29,85 @@ import { parseTurn } from './parseTurn'
 /** The speaker of everything that is not a character's speech. */
 export const NARRATOR = 'narrator'
 
-/** Unsigned writing that opens with `opening` is read by `speaker`. */
+/** The key speaker of unsigned writing (a letter, a journal page), which names no speaker. */
+export const UNSIGNED = 'writing'
+
+/** One block the story reads aloud: who says it (as the page knows it) and its markup. */
+export interface VoicedBlock {
+  speaker: string
+  markup: string
+}
+
+/** Unsigned writing that opens with `opening` is voiced by `speaker`. */
 export interface WriterRule {
   opening: string
   speaker: string
 }
 
-/** One voiced block: its recording key, its speaker and its plain words. */
+/** One voiced line of the script: its recording key, the voice that reads it and its words. */
 export interface ScriptLine {
   key: string
   speaker: string
   text: string
 }
 
-function line(speaker: string, markup: string): ScriptLine | null {
-  const text = narrationText(markup)
-  if (!text) return null
-  return { key: narrationKey(speaker, text), speaker, text }
+/** The voiced blocks of an answer, in the order they are shown. */
+export function turnBlocks(markup: string): VoicedBlock[] {
+  const blocks: VoicedBlock[] = []
+  for (const block of parseTurn(markup)) {
+    if (block.kind === 'text')
+      blocks.push({ speaker: NARRATOR, markup: block.markup })
+    if (block.kind === 'dialogue')
+      blocks.push({
+        speaker: block.speaker?.toLowerCase() ?? UNSIGNED,
+        markup: block.markup,
+      })
+  }
+  return blocks
 }
 
-/** The writer of an unsigned text: the first rule its opening matches, else the narrator. */
-function writerOf(text: string, writers: WriterRule[]): string {
+/** The voiced blocks of the chapter page that opens an act: heading, then paragraphs. */
+export function introBlocks(intro: string): VoicedBlock[] {
+  const { act, title, body } = parseActIntro(intro)
+  const heading =
+    act && title ? [{ speaker: NARRATOR, markup: `${act}: ${title}` }] : []
+  return [...heading, ...turnBlocks(body)]
+}
+
+/** A quest card is read whole, as it is shown. */
+export function questCardBlocks(text: string): VoicedBlock[] {
+  return [{ speaker: NARRATOR, markup: text }]
+}
+
+/** The voice of a block: its speaker, or for unsigned writing the first writer rule its opening matches, else the narrator. */
+function voiceOf(block: VoicedBlock, writers: WriterRule[]): string {
+  if (block.speaker !== UNSIGNED) return block.speaker
+  const text = narrationText(block.markup)
   return (
     writers.find((rule) => text.startsWith(rule.opening))?.speaker ?? NARRATOR
   )
 }
 
-/** The voiced lines of one answer, in the order they are shown. */
+/** Script lines for voiced blocks: keyed by the block as shown, voiced by `voiceOf`; blocks without words are dropped. */
+function scriptLines(
+  blocks: VoicedBlock[],
+  writers: WriterRule[],
+): ScriptLine[] {
+  return blocks
+    .map((block) => ({
+      key: narrationKey(block.speaker, block.markup),
+      speaker: voiceOf(block, writers),
+      text: narrationText(block.markup),
+    }))
+    .filter((entry) => entry.text.length > 0)
+}
+
+/** The script lines of one answer, in the order they are shown. */
 export function linesOfTurn(
   markup: string,
   writers: WriterRule[],
 ): ScriptLine[] {
-  const lines: Array<ScriptLine | null> = []
-  for (const block of parseTurn(markup)) {
-    if (block.kind === 'text') lines.push(line(NARRATOR, block.markup))
-    if (block.kind === 'dialogue') {
-      const speaker =
-        block.speaker?.toLowerCase() ??
-        writerOf(narrationText(block.markup), writers)
-      lines.push(line(speaker, block.markup))
-    }
-  }
-  return lines.filter((entry): entry is ScriptLine => entry !== null)
-}
-
-/** The chapter page: its heading ("Act I: The Call to Adventure"), then its paragraphs. */
-function chapterLines(intro: string, writers: WriterRule[]): ScriptLine[] {
-  const { act, title, body } = parseActIntro(intro)
-  const heading = act && title ? line(NARRATOR, `${act}: ${title}`) : null
-  return [...(heading ? [heading] : []), ...linesOfTurn(body, writers)]
+  return scriptLines(turnBlocks(markup), writers)
 }
 
 /** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look. */
@@ -87,7 +126,8 @@ function probes(game: Game): string[] {
 
 /**
  * Every voiced line of an act, in the order a player along `commands` first
- * meets it, each once. `newGame` makes a fresh game of the act; one plays the
+ * meets it, each once. `commands` should end with the command that completes
+ * the act, so its answer and the closing chapter page are read too. `newGame` makes a fresh game of the act; one plays the
  * path and another, reloaded from it at each step, tries the probes.
  */
 export function actScript(
@@ -96,8 +136,8 @@ export function actScript(
   writers: WriterRule[],
 ): ScriptLine[] {
   const script = new Map<string, ScriptLine>()
-  const add = (lines: ScriptLine[]): void => {
-    for (const entry of lines)
+  const add = (blocks: VoicedBlock[]): void => {
+    for (const entry of scriptLines(blocks, writers))
       if (!script.has(entry.key)) script.set(entry.key, entry)
   }
   const game = newGame()
@@ -105,31 +145,34 @@ export function actScript(
   const probe = newGame()
   const tryOut = new GameController(probe)
 
-  add(chapterLines(game.getActIntro(), writers))
+  add(introBlocks(game.getActIntro()))
   play.advanceToRunning()
   const visited = new Set<string>()
   const arrive = (): void => {
     const room = play.getRoomName()
     if (visited.has(room)) return
     visited.add(room)
-    add(linesOfTurn(play.getRoomDescription(), writers))
+    add(turnBlocks(play.getRoomDescription()))
   }
   arrive()
   for (const command of commands) {
-    add(linesOfTurn(play.takeTurn(command), writers))
+    add(turnBlocks(play.takeTurn(command)))
     const quests = play.settleQuests()
     for (const report of [
       ...quests.activated,
       ...quests.updated,
       ...quests.completed,
     ])
-      add(linesOfTurn(report.text, writers))
-    if (!game.isActRunning()) break
+      add(questCardBlocks(report.text))
+    if (!game.isActRunning()) {
+      add(turnBlocks(play.getActCompleteText() ?? ''))
+      break
+    }
     arrive()
     const save = game.toSaveData()
     for (const command of probes(game)) {
       probe.loadSaveData(save)
-      add(linesOfTurn(tryOut.handleCommand(command), writers))
+      add(turnBlocks(tryOut.handleCommand(command)))
     }
   }
   return [...script.values()]

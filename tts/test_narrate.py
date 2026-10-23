@@ -6,7 +6,7 @@ splitting long lines, and building the text sent to Fish.
 
 import pytest
 
-from narrate import GAP_S, _join, align, chunk_text, heard_words, said_words, spoken_text
+from narrate import GAP_S, _join, align, chunk_text, heard_words, orphan_cues, said_words, spoken_text
 
 
 def words(*triples):
@@ -131,3 +131,13 @@ def test_heard_words_keep_a_real_last_segment_that_overshoots_the_clip():
         {"start": 3.45, "end": 4.5, "words": words(("for", 3.45, 4.0), ("watching", 4.0, 4.5))},
     ]
     assert [w["word"] for w in heard_words(segments, duration=3.5)] == ["I", "knew", "tell", "you."]
+
+
+def test_cues_whose_line_left_the_script_are_reported():
+    script = [{"key": "a1", "speaker": "narrator", "text": "x"}]
+    assert orphan_cues({"a1": "[soft]", "b2": "[loud]"}, script) == ["b2"]
+
+
+def test_spoken_text_reads_checklist_bullets_as_a_list_not_as_asterisks():
+    text = "You will need: * Warm clothing * A map"
+    assert spoken_text(text, "", {}) == "You will need: Warm clothing, A map"
