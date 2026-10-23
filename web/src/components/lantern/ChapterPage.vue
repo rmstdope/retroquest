@@ -111,12 +111,8 @@ defineExpose({ focus })
 </script>
 
 <template>
-  <div ref="root" class="lq-chapter">
-    <div
-      class="lq-chapter-inner"
-      :class="{ 'lq-held': held }"
-      @click="onTextClick"
-    >
+  <div ref="root" class="lq-chapter" @click="onTextClick">
+    <div class="lq-chapter-inner" :class="{ 'lq-held': held }">
       <span class="lq-chapter-kicker">{{ kicker }}</span>
       <h2
         :id="titleId"
