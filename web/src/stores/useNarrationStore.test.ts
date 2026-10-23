@@ -118,25 +118,25 @@ describe('useNarrationStore', () => {
   })
 
   describe('the hint', () => {
-    /** Narrate a one-block turn and let it finish. */
-    async function narrateTurn(id: number): Promise<void> {
+    /** Begin narrating a one-block turn (its voice is left playing). */
+    function narrateTurn(id: number): void {
       narration.begin(id, [voiced()], 'act1')
     }
 
-    it('shows during the first three narrated turns, while they are narrated', async () => {
+    it('shows during the first three narrated turns, while they are narrated', () => {
       for (const id of [1, 2, 3]) {
-        await narrateTurn(id)
+        narrateTurn(id)
         expect(narration.hintVisible).toBe(true)
         last().onended?.()
         expect(narration.hintVisible).toBe(false)
       }
-      await narrateTurn(4)
+      narrateTurn(4)
       expect(narration.isNarrating).toBe(true)
       expect(narration.hintVisible).toBe(false)
     })
 
     it('goes when the turn is skipped', async () => {
-      await narrateTurn(1)
+      narrateTurn(1)
       narration.skipAll()
       expect(narration.hintVisible).toBe(false)
     })
@@ -152,15 +152,15 @@ describe('useNarrationStore', () => {
     })
 
     it('starts counting again for a new game', async () => {
-      for (const id of [1, 2, 3, 4]) await narrateTurn(id)
+      for (const id of [1, 2, 3, 4]) narrateTurn(id)
       narration.skipAll()
       narration.resetGame()
-      await narrateTurn(5)
+      narrateTurn(5)
       expect(narration.hintVisible).toBe(true)
     })
 
     it('is hidden when narration is switched off mid-turn', async () => {
-      await narrateTurn(1)
+      narrateTurn(1)
       useSettingsStore().narrationOn = false
       expect(narration.hintVisible).toBe(false)
     })

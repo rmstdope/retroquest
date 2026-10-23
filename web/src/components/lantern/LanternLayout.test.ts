@@ -1708,7 +1708,20 @@ describe('LanternLayout', () => {
       vi.spyOn(game, 'readInfo').mockReturnValue(
         '[bold]Available Commands:[/bold]',
       )
+      // The credits show for a loaded track (jsdom's Audio has no playback).
+      vi.stubGlobal(
+        'Audio',
+        class {
+          paused = true
+          play = (): Promise<void> => Promise.resolve()
+          pause = (): void => undefined
+          load = (): void => undefined
+          removeAttribute = (): void => undefined
+        },
+      )
       const w = await ready()
+      game.musicFile = 'market.mp3'
+      game.musicInfo = 'Market by Conquest\nSource: https://freetouse.com/music'
       await w.get('button[aria-label="Game menu"]').trigger('click')
       const help = w
         .findAll('[role="dialog"] button')
@@ -1723,6 +1736,9 @@ describe('LanternLayout', () => {
       )
       expect(text.indexOf('Available Commands:')).toBeLessThan(
         text.indexOf('Narration:'),
+      )
+      expect(text.indexOf('Narration:')).toBeLessThan(
+        text.indexOf('Market by Conquest'),
       )
     })
   })

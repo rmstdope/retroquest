@@ -13,6 +13,7 @@ import { parseCountedName } from '@/lantern/inventoryChanges'
 import {
   SHORT_QUERY,
   useMediaQuery,
+  KEYBOARD_QUERY,
   WIDE_QUERY,
 } from '@/composables/useMediaQuery'
 import ActionComposer from './ActionComposer.vue'
@@ -61,7 +62,7 @@ const narration = useNarrationStore()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 /** A mouse and keyboard: the narration hint names keys instead of taps. */
-const keyboardPlayer = useMediaQuery('(hover: hover) and (pointer: fine)')
+const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
 const hintText = computed(() =>
   keyboardPlayer.value
     ? 'Space to hurry · Esc to skip'

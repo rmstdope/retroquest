@@ -2,6 +2,8 @@ import { onScopeDispose, ref, type Ref } from 'vue'
 
 /** Screens that get the laptop layout (side column, room card). */
 export const WIDE_QUERY = '(min-width: 1024px) and (min-height: 560px)'
+/** A mouse or trackpad and a keyboard: the player has keys to press, not taps. */
+export const KEYBOARD_QUERY = '(hover: hover) and (pointer: fine)'
 /** Short screens (phone landscape): the section tabs move into the header. */
 export const SHORT_QUERY = '(max-height: 519px)'
 
