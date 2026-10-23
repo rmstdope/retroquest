@@ -128,6 +128,11 @@ describe('GameController', () => {
       )
     })
 
+    it('counts the rooms visited so far', () => {
+      const ctrl = makeController()
+      expect(ctrl.getVisitedRoomCount()).toBe(1)
+    })
+
     it('lists characters and items by name', () => {
       expect(makeController().getRoomCharacters()).toEqual([])
       expect(makeController().getRoomItems()).toEqual([])

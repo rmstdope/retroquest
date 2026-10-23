@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { narrationKey } from './narrationKey'
 import {
+  actFolder,
   findClip,
   narrationWords,
+  wordAt,
   type NarrationManifest,
 } from './narrationManifest'
 
@@ -60,5 +62,38 @@ describe('narrationWords', () => {
 
   it('is empty for a block with no words', () => {
     expect(narrationWords('  [bold][/bold] ')).toEqual([])
+  })
+})
+
+describe('actFolder', () => {
+  it('names the recordings folder from an act heading', () => {
+    expect(actFolder('Act I')).toBe('act1')
+    expect(actFolder('Act IV')).toBe('act4')
+    expect(actFolder('Act 2')).toBe('act2')
+  })
+
+  it('names none for text that is not an act heading', () => {
+    expect(actFolder('')).toBeNull()
+    expect(actFolder('Chapter I')).toBeNull()
+  })
+})
+
+describe('wordAt', () => {
+  const clip = {
+    file: 'a.mp3',
+    speaker: 'mira',
+    duration: 3,
+    words: [
+      { word: 'a', start: 0.2, end: 0.6 },
+      { word: 'b', start: 0.6, end: 1 },
+      { word: 'c', start: 1.5, end: 2 },
+    ],
+  }
+
+  it('finds the word being spoken at a time', () => {
+    expect(wordAt(clip, 0)).toBe(-1)
+    expect(wordAt(clip, 0.2)).toBe(0)
+    expect(wordAt(clip, 1.2)).toBe(1)
+    expect(wordAt(clip, 9)).toBe(2)
   })
 })

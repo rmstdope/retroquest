@@ -8,6 +8,7 @@ import {
 import { narrationKey } from './narrationKey'
 import {
   actScript,
+  blockVoice,
   introBlocks,
   linesOfTurn,
   questCardBlocks,
@@ -27,6 +28,27 @@ const WRITERS: WriterRule[] = [
   { opening: 'My dearest', speaker: 'mother' },
   { opening: 'What a night', speaker: 'elior' },
 ]
+
+describe('blockVoice', () => {
+  it('voices text as the narrator and speech as its speaker, unsigned writing as UNSIGNED', () => {
+    expect(blockVoice({ kind: 'text', markup: 'Rain.' })).toEqual({
+      speaker: 'narrator',
+      markup: 'Rain.',
+    })
+    expect(
+      blockVoice({ kind: 'dialogue', speaker: 'Mira', markup: 'Hello.' }),
+    ).toEqual({ speaker: 'mira', markup: 'Hello.' })
+    expect(
+      blockVoice({ kind: 'dialogue', speaker: null, markup: 'Dear Elior' }),
+    ).toEqual({ speaker: UNSIGNED, markup: 'Dear Elior' })
+  })
+
+  it('leaves events, failures and checklists silent', () => {
+    expect(blockVoice({ kind: 'event', markup: 'x' })).toBeNull()
+    expect(blockVoice({ kind: 'failure', markup: 'x' })).toBeNull()
+    expect(blockVoice({ kind: 'checklist', items: [] })).toBeNull()
+  })
+})
 
 describe('linesOfTurn', () => {
   it('voices narration and speech, each by its speaker', () => {

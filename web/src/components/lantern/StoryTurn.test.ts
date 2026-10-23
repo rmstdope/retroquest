@@ -1,9 +1,19 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from 'vitest'
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import StoryTurn from './StoryTurn.vue'
 import type { Turn } from '@/stores/useGameStore'
+import {
+  useNarrationStore,
+  type NarrationAudio,
+} from '@/stores/useNarrationStore'
+import { narrationKey } from '@/lantern/narrationKey'
+import {
+  narrationWords,
+  type NarrationManifest,
+} from '@/lantern/narrationManifest'
+import { turnUnits } from '@/lantern/narrationUnits'
 
 function turn(partial: Partial<Turn>): Turn {
   return {
@@ -38,6 +48,10 @@ function mountTurn(partial: Partial<Turn>) {
 }
 
 describe('StoryTurn', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
   it('echoes the command the player gave', () => {
     const w = mountTurn({ command: 'take bucket', text: 'Taken.' })
 
@@ -199,5 +213,199 @@ describe('StoryTurn', () => {
     })
 
     expect(w.get('.lq-quest-card .lq-quest-title').text()).toBe('Hint of Magic')
+  })
+})
+
+/** A recording for `markup` as the narrator, one second a word. */
+function recorded(markup: string, speaker = 'narrator'): NarrationManifest {
+  return {
+    [narrationKey(speaker, markup)]: {
+      file: 'x.mp3',
+      speaker,
+      duration: 9,
+      words: narrationWords(markup).map((word, i) => ({
+        word,
+        start: i,
+        end: i + 1,
+      })),
+    },
+  }
+}
+
+describe('StoryTurn while it is narrated', () => {
+  const audios: { currentTime: number; onended: (() => void) | null }[] = []
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    setActivePinia(createPinia())
+    audios.length = 0
+    useNarrationStore().setAudioFactory(() => {
+      const audio: NarrationAudio = {
+        volume: 1,
+        currentTime: 0,
+        onended: null,
+        onerror: null,
+        play: () => Promise.resolve(),
+        pause: () => undefined,
+      }
+      audios.push(audio)
+      return audio
+    })
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  const TEXT =
+    'Rain falls on the roof.\n[event]A door creaks.[/event]\nAfter that, quiet.'
+  const manifest = {
+    ...recorded('Rain falls on the roof.'),
+    ...recorded('After that, quiet.'),
+  }
+
+  function narrated(
+    partial: Partial<Turn> = {},
+    clips: NarrationManifest = manifest,
+  ) {
+    const t = turn({ id: 5, text: TEXT, ...partial })
+    useNarrationStore().begin(5, turnUnits(t, true, clips), 'act1')
+    return mount(StoryTurn, { props: { turn: t } })
+  }
+
+  it('shows only what has been spoken, marking the block being spoken', () => {
+    const w = narrated()
+
+    expect(w.findAll('.lq-block-text')).toHaveLength(1)
+    expect(w.get('.lq-block-text').classes()).toContain('lq-speaking')
+    expect(w.find('.lq-block-event').exists()).toBe(false)
+  })
+
+  it('lights the word being spoken', async () => {
+    const w = narrated()
+    audios[0].currentTime = 2.3
+    await vi.advanceTimersByTimeAsync(60)
+
+    const lit = w.findAll('.lq-w-now')
+    expect(lit.map((word) => word.text())).toEqual(['on'])
+  })
+
+  it('shows the event at once when the block before it is done, and goes on', async () => {
+    const w = narrated()
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(350)
+
+    expect(w.get('.lq-block-event').text()).toContain('A door creaks.')
+    expect(w.findAll('.lq-block-text')).toHaveLength(2)
+    expect(w.findAll('.lq-speaking')).toHaveLength(1)
+  })
+
+  it('marks a speech block, not just narration', async () => {
+    const w = narrated(
+      {
+        text:
+          'You speak with [character_name]Mira[/character_name].\n' +
+          "[dialogue]'Come in.'[/dialogue]",
+      },
+      {
+        ...recorded('You speak with [character_name]Mira[/character_name].'),
+        ...recorded("'Come in.'", 'mira'),
+      },
+    )
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(350)
+
+    expect(w.get('.lq-block-dialogue').classes()).toContain('lq-speaking')
+  })
+
+  it('shows the whole turn without marks once it is skipped', async () => {
+    const w = narrated()
+    useNarrationStore().skipAll()
+    await w.vm.$nextTick()
+
+    expect(w.findAll('.lq-block-text')).toHaveLength(2)
+    expect(w.find('.lq-speaking').exists()).toBe(false)
+    expect(w.find('.lq-w').exists()).toBe(false)
+  })
+
+  it('holds the chips back until the turn is told', async () => {
+    const w = narrated({ gained: [{ kind: 'item', name: 'Key', count: 1 }] })
+    expect(w.get('.lq-chips').classes()).toContain('lq-pending')
+
+    useNarrationStore().skipAll()
+    await w.vm.$nextTick()
+    expect(w.get('.lq-chips').classes()).not.toContain('lq-pending')
+  })
+
+  it('marks the block but lights no word when the words do not match the recording', () => {
+    const w = narrated(
+      { text: 'Rain falls on the roof.' },
+      {
+        [narrationKey('narrator', 'Rain falls on the roof.')]: {
+          file: 'x.mp3',
+          speaker: 'narrator',
+          duration: 3,
+          words: [{ word: 'Rain', start: 0, end: 1 }],
+        },
+      },
+    )
+
+    expect(w.get('.lq-block-text').classes()).toContain('lq-speaking')
+    expect(w.findAll('.lq-w-now')).toHaveLength(0)
+  })
+
+  it('shows another turn whole', () => {
+    narrated()
+    const other = mount(StoryTurn, {
+      props: { turn: turn({ id: 2, text: TEXT }) },
+    })
+
+    expect(other.findAll('.lq-block-text')).toHaveLength(2)
+    expect(other.find('.lq-speaking').exists()).toBe(false)
+  })
+
+  it('reads a room description on a first visit and marks its arrival', async () => {
+    const description = 'A low room with one window.'
+    const w = narrated(
+      {
+        text: 'You go north.',
+        arrival: {
+          room: 'Cellar',
+          description,
+          characters: [],
+          items: [],
+          exits: {},
+        },
+      },
+      { ...recorded('You go north.'), ...recorded(description) },
+    )
+    expect(w.find('[data-testid="divider"]').exists()).toBe(false)
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(350)
+
+    expect(w.get('.lq-arrival').classes()).toContain('lq-speaking')
+    expect(w.get('.lq-arrival-text').text()).toContain('A low room')
+  })
+
+  it('marks a new quest card while its text is spoken', async () => {
+    const w = narrated(
+      {
+        text: 'Done.',
+        quests: [
+          { kind: 'new', name: 'Key', main: false, text: 'Find the key.' },
+        ],
+      },
+      {
+        ...recorded('Done.'),
+        ...recorded('Find the key.'),
+      },
+    )
+    expect(w.find('.lq-quest-card').exists()).toBe(false)
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(350)
+
+    expect(w.get('.lq-quest-card').classes()).toContain('lq-speaking')
+    audios[1].currentTime = 1
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['the'])
   })
 })

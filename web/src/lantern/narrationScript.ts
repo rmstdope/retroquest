@@ -25,7 +25,7 @@
 import { GameController, type Game } from '@/engine'
 import { narrationKey, narrationText } from './narrationKey'
 import { parseActIntro } from './parseActIntro'
-import { parseTurn } from './parseTurn'
+import { parseTurn, type TurnBlock } from './parseTurn'
 
 /** The speaker of everything that is not a character's speech. */
 export const NARRATOR = 'narrator'
@@ -52,19 +52,24 @@ export interface ScriptLine {
   text: string
 }
 
+/**
+ * The voice of one block of an answer: the narrator for text, the speaker for
+ * speech (`UNSIGNED` for unsigned writing); null for events, failures and
+ * checklists, which are not read aloud.
+ */
+export function blockVoice(block: TurnBlock): VoicedBlock | null {
+  if (block.kind === 'text') return { speaker: NARRATOR, markup: block.markup }
+  if (block.kind === 'dialogue')
+    return {
+      speaker: block.speaker?.toLowerCase() ?? UNSIGNED,
+      markup: block.markup,
+    }
+  return null
+}
+
 /** The voiced blocks of an answer, in the order they are shown. */
 export function turnBlocks(markup: string): VoicedBlock[] {
-  const blocks: VoicedBlock[] = []
-  for (const block of parseTurn(markup)) {
-    if (block.kind === 'text')
-      blocks.push({ speaker: NARRATOR, markup: block.markup })
-    if (block.kind === 'dialogue')
-      blocks.push({
-        speaker: block.speaker?.toLowerCase() ?? UNSIGNED,
-        markup: block.markup,
-      })
-  }
-  return blocks
+  return parseTurn(markup).flatMap((block) => blockVoice(block) ?? [])
 }
 
 /** The voiced blocks of the chapter page that opens an act: heading, then paragraphs. */

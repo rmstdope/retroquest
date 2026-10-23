@@ -53,6 +53,8 @@ describe('useSettingsStore', () => {
       musicVolume: 100,
       effectsOn: true,
       effectsVolume: 100,
+      narrationOn: true,
+      narrationVolume: 100,
       startMode: 'actions',
       reduceMotion: 'device',
     })
@@ -163,5 +165,25 @@ describe('useSettingsStore', () => {
 
     expect(settings.$state).toEqual(DEFAULT_SETTINGS)
     expect(saved(store)).toEqual(DEFAULT_SETTINGS)
+  })
+
+  it('stores the narration switch and volume, and falls back on bad values', () => {
+    const { store } = installLocalStorage({
+      [SETTINGS_STORAGE_KEY]: JSON.stringify({
+        narrationOn: false,
+        narrationVolume: 140,
+      }),
+    })
+    const settings = useSettingsStore()
+    expect(settings.narrationOn).toBe(false)
+    expect(settings.narrationVolume).toBe(100)
+
+    settings.narrationVolume = 35
+    return nextTick().then(() => {
+      expect(saved(store).narrationVolume).toBe(35)
+      settings.resetToDefaults()
+      expect(settings.narrationOn).toBe(true)
+      expect(settings.narrationVolume).toBe(100)
+    })
   })
 })

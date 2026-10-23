@@ -32,6 +32,22 @@ export interface NarrationClip {
 /** Every recorded block of an act, by `narrationKey`. */
 export type NarrationManifest = Record<string, NarrationClip>
 
+/**
+ * The folder of an act's recordings (`act1`...) from its heading label
+ * ("Act I", "Act IV"), or null when the label names no act.
+ */
+export function actFolder(label: string): string | null {
+  const match = /^Act\s+(\d+|[IVX]+)\b/i.exec(label.trim())
+  if (!match) return null
+  const numeral = match[1].toUpperCase()
+  const number = /^\d+$/.test(numeral)
+    ? Number(numeral)
+    : ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'].indexOf(
+        numeral,
+      ) + 1
+  return number > 0 ? `act${number}` : null
+}
+
 /** The words of a block as the story view shows them: whitespace-separated, punctuation attached. */
 export function narrationWords(markup: string): string[] {
   const text = narrationText(markup)
@@ -50,4 +66,14 @@ export function findClip(
 ): NarrationClip | null {
   if (!narrationText(markup)) return null
   return manifest[narrationKey(speaker, markup)] ?? null
+}
+
+/** The index of the word being spoken `seconds` into the clip (-1 before the first word starts). */
+export function wordAt(clip: NarrationClip, seconds: number): number {
+  let index = -1
+  for (let i = 0; i < clip.words.length; i++) {
+    if (clip.words[i].start <= seconds) index = i
+    else break
+  }
+  return index
 }

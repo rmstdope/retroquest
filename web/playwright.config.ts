@@ -39,6 +39,21 @@ export default defineConfig({
   use: {
     baseURL: BASE_URL,
     trace: 'on-first-retry',
+    // Narration is off unless a spec turns it on: answers then appear at once.
+    storageState: {
+      cookies: [],
+      origins: [
+        {
+          origin: BASE_URL,
+          localStorage: [
+            {
+              name: 'retroquest_settings',
+              value: JSON.stringify({ narrationOn: false }),
+            },
+          ],
+        },
+      ],
+    },
   },
   projects: [
     {

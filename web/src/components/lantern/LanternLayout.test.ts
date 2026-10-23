@@ -5,6 +5,13 @@ import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import {
+  useNarrationStore,
+  type NarrationAudio,
+} from '@/stores/useNarrationStore'
+import { narrationKey } from '@/lantern/narrationKey'
+import { narrationWords } from '@/lantern/narrationManifest'
+import type { Turn } from '@/stores/useGameStore'
 
 const TURN = {
   command: 'look',
@@ -1411,6 +1418,191 @@ describe('LanternLayout', () => {
 
       expect(w.get('[role="dialog"] h2').text()).toBe('Help')
       expect(w.get('[role="dialog"]').text()).toContain('Available Commands:')
+    })
+  })
+
+  describe('narration', () => {
+    const FIRST = 'Rain falls.'
+    const SECOND = 'Then it stops.'
+    const audios: NarrationAudio[] = []
+
+    /** A turn of two narration lines the manifest has recordings for. */
+    function narratedTurn(id: number, extra: Partial<Turn> = {}): Turn {
+      return {
+        id,
+        command: 'look',
+        text: `${FIRST}\n${SECOND}`,
+        room: 'Square',
+        roomChanged: false,
+        gained: [],
+        lost: [],
+        arrival: null,
+        narrate: true,
+        ...extra,
+      }
+    }
+
+    async function ready(): Promise<VueWrapper> {
+      vi.useFakeTimers()
+      const manifest = Object.fromEntries(
+        [FIRST, SECOND].map((line) => [
+          narrationKey('narrator', line),
+          {
+            file: 'x.mp3',
+            speaker: 'narrator',
+            duration: 5,
+            words: narrationWords(line).map((word, i) => ({
+              word,
+              start: i,
+              end: i + 1,
+            })),
+          },
+        ]),
+      )
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => ({ ok: true, json: async () => manifest })),
+      )
+      const narration = useNarrationStore()
+      narration.setAudioFactory(() => {
+        const audio: NarrationAudio = {
+          volume: 1,
+          currentTime: 0,
+          onended: null,
+          onerror: null,
+          play: () => Promise.resolve(),
+          pause: () => undefined,
+        }
+        audios.push(audio)
+        return audio
+      })
+      const w = mount(LanternLayout, { attachTo: document.body })
+      wrapper = w
+      useGameStore().actLabel = 'Act I'
+      await vi.advanceTimersByTimeAsync(0)
+      return w
+    }
+
+    async function say(turn: Turn): Promise<void> {
+      useGameStore().turns.push(turn)
+      await vi.advanceTimersByTimeAsync(0)
+    }
+
+    const texts = (w: VueWrapper): string[] =>
+      w.findAll('.lq-block-text').map((p) => p.text())
+
+    beforeEach(() => {
+      audios.length = 0
+    })
+    afterEach(() => {
+      vi.useRealTimers()
+      vi.unstubAllGlobals()
+    })
+
+    it("tells a typed command's answer block by block", async () => {
+      const w = await ready()
+      await say(narratedTurn(1))
+      expect(texts(w)).toEqual([FIRST])
+
+      audios[0].onended?.()
+      await vi.advanceTimersByTimeAsync(350)
+      expect(texts(w)).toEqual([FIRST, SECOND])
+    })
+
+    it('shows a restored or opening turn, or one with narration off, at once', async () => {
+      const w = await ready()
+      await say(narratedTurn(1, { narrate: undefined }))
+      expect(texts(w)).toEqual([FIRST, SECOND])
+
+      useSettingsStore().narrationOn = false
+      await say(narratedTurn(2))
+      expect(w.findAll('.lq-block-text')).toHaveLength(4)
+    })
+
+    it('leaves a turn without recordings, or a turn behind a pop-up, silent', async () => {
+      const w = await ready()
+      await say(narratedTurn(1, { text: 'Not recorded.' }))
+      expect(texts(w)).toEqual(['Not recorded.'])
+
+      useGameStore().showModal = true
+      await say(narratedTurn(2))
+      expect(texts(w)).toHaveLength(3)
+    })
+
+    it('cuts in: a new answer completes the old one at once and is narrated', async () => {
+      const w = await ready()
+      await say(narratedTurn(1))
+      await say(narratedTurn(2))
+
+      expect(texts(w)).toEqual([FIRST, SECOND, FIRST])
+    })
+
+    it('hurries on a tap and skips on a second tap', async () => {
+      const w = await ready()
+      await say(narratedTurn(1))
+      await w.get('.lq-story').trigger('click')
+      await vi.advanceTimersByTimeAsync(80)
+      expect(texts(w)).toEqual([FIRST, SECOND])
+      await say(narratedTurn(2, { text: `${FIRST}\n${SECOND}\n${FIRST}` }))
+      await w.get('.lq-story').trigger('click')
+      await w.get('.lq-story').trigger('click')
+      expect(texts(w)).toHaveLength(5)
+      expect(useNarrationStore().isNarrating).toBe(false)
+    })
+
+    it('does not take a click on a name for a tap', async () => {
+      const w = await ready()
+      await say(narratedTurn(1, { text: `[item_name]${FIRST}[/item_name]` }))
+      await w.get('.theme-item_name').trigger('click')
+      expect(useNarrationStore().speaking(1)).not.toBeNull()
+    })
+
+    it('hurries with Space or Enter and skips with Escape, outside fields and menus', async () => {
+      const w = await ready()
+      await say(narratedTurn(1))
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', { key: ' ', bubbles: true }),
+      )
+      await vi.advanceTimersByTimeAsync(80)
+      expect(texts(w)).toEqual([FIRST, SECOND])
+
+      await say(narratedTurn(2))
+      const field = document.createElement('input')
+      document.body.appendChild(field)
+      field.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      )
+      expect(useNarrationStore().isNarrating).toBe(true)
+      field.remove()
+
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      )
+      expect(useNarrationStore().isNarrating).toBe(false)
+      await vi.advanceTimersByTimeAsync(0)
+      expect(texts(w)).toHaveLength(4)
+    })
+
+    it('leaves Enter to a focused button', async () => {
+      const w = await ready()
+      await say(narratedTurn(1))
+      const button = document.createElement('button')
+      document.body.appendChild(button)
+      button.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+      )
+      expect(texts(w)).toEqual([FIRST])
+      button.remove()
+    })
+
+    it('stops when a pop-up opens', async () => {
+      const w = await ready()
+      await say(narratedTurn(1))
+      useGameStore().showModal = true
+      await vi.advanceTimersByTimeAsync(0)
+
+      expect(useNarrationStore().isNarrating).toBe(false)
+      expect(texts(w)).toEqual([FIRST, SECOND])
     })
   })
 })

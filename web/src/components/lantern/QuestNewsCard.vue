@@ -13,7 +13,11 @@ import { renderMarkup } from '@/utils/theme'
  * cards in view are told apart. A completed quest stays as a record (its
  * pop-up comes first), with the act's quest count.
  */
-const props = defineProps<{ news: QuestNews }>()
+const props = defineProps<{
+  news: QuestNews
+  /** The card's text as HTML with its words marked, while it is read aloud. */
+  bodyHtml?: string
+}>()
 const open = ref(false)
 const game = useGameStore()
 const updateBody = ref<HTMLElement | null>(null)
@@ -46,7 +50,7 @@ const doneLabel = computed(() => {
     <span class="lq-kicker">{{ kicker }}</span>
     <span :id="titleId" class="lq-quest-title">{{ news.name }}</span>
     <!-- eslint-disable vue/no-v-html -->
-    <p class="lq-quest-body" v-html="renderMarkup(news.text)"></p>
+    <p class="lq-quest-body" v-html="bodyHtml ?? renderMarkup(news.text)"></p>
     <!-- eslint-enable vue/no-v-html -->
     <button
       type="button"
