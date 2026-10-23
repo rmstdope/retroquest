@@ -1,4 +1,5 @@
 import { Quest, type GameState } from '@/engine'
+import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
 
 /** Quest that unlocks the cottage exits after the player learns the revive spell. */
 export class HintOfMagicQuest extends Quest {
@@ -15,9 +16,9 @@ export class HintOfMagicQuest extends Quest {
     })
   }
 
-  /** Triggered from the start of the act. */
-  override checkTrigger(_gameState: GameState): boolean {
-    return true
+  /** Given when Elior wakes from the dream in his cottage. */
+  override checkTrigger(gameState: GameState): boolean {
+    return gameState.getStoryFlag(FLAG_WOKE_FROM_DREAM)
   }
 
   /**

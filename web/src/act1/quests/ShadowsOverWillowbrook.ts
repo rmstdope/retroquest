@@ -10,6 +10,7 @@ import {
   FLAG_VEGETABLE_FIELD_WATERED,
   FLAG_VILLAGER_TALKED_TO,
   FLAG_WELL_EXAMINED,
+  FLAG_WOKE_FROM_DREAM,
 } from '../Act1StoryFlags'
 
 /**
@@ -36,8 +37,9 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     })
   }
 
-  override checkTrigger(_gameState: GameState): boolean {
-    return true
+  /** Given when Elior wakes from the dream in his cottage. */
+  override checkTrigger(gameState: GameState): boolean {
+    return gameState.getStoryFlag(FLAG_WOKE_FROM_DREAM)
   }
 
   /** Record a flag the first time it is seen; true when it was new. */
