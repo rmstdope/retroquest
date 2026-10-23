@@ -755,9 +755,39 @@
     "text": "Now prepare for the road. You'll need warmth, protection, food, boots and a map. And learn all the basic magic the village elders can teach you. When you are truly ready, the Ancient Amulet will be yours."
   },
   {
-    "key": "112546e7277cdc",
+    "key": "05dd059914219b",
     "speaker": "narrator",
-    "text": "Mira has tasked you with preparing for your journey. She says you will need: * Warm clothing * Magical protection * Food for the road (2 of 6 kinds gathered, any 4 will do) * Sturdy footwear * A map to find your way * All basic magic learned"
+    "text": "Mira has tasked you with preparing for your journey. She says you will need:"
+  },
+  {
+    "key": "09268f595ef823",
+    "speaker": "narrator",
+    "text": "Warm clothing"
+  },
+  {
+    "key": "1f85214b270c2c",
+    "speaker": "narrator",
+    "text": "Magical protection"
+  },
+  {
+    "key": "0d1c2b24f91a9e",
+    "speaker": "narrator",
+    "text": "Food for the road (2 of 6 kinds gathered, any 4 will do)"
+  },
+  {
+    "key": "06a35532638971",
+    "speaker": "narrator",
+    "text": "Sturdy footwear"
+  },
+  {
+    "key": "1290ee8a3446dd",
+    "speaker": "narrator",
+    "text": "A map to find your way"
+  },
+  {
+    "key": "0b5b0ecddac4cf",
+    "speaker": "narrator",
+    "text": "All basic magic learned"
   },
   {
     "key": "1304127ca64208",

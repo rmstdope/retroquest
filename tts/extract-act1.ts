@@ -8,11 +8,11 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { Game } from '../web/src/engine'
 import { Act1 } from '../web/src/act1/Act1'
-import { ACT1_GOLDEN_PATH } from '../web/src/act1/Act1GoldenPath'
+import {
+  ACT1_COMPLETING_COMMAND,
+  ACT1_GOLDEN_PATH,
+} from '../web/src/act1/Act1GoldenPath'
 import { actScript, type WriterRule } from '../web/src/lantern/narrationScript'
-
-/** The golden path stops short of the command that completes the act (see `Act1GoldenPath`). */
-const ACT1_COMPLETES = 'use map'
 
 const here = new URL('./act1/', import.meta.url)
 const writers = JSON.parse(
@@ -23,9 +23,10 @@ const silent = JSON.parse(
 ) as string[]
 const script = actScript(
   () => new Game([new Act1()]),
-  [...ACT1_GOLDEN_PATH, ACT1_COMPLETES],
+  [...ACT1_GOLDEN_PATH, ACT1_COMPLETING_COMMAND],
   writers,
-).filter((line) => !silent.some((opening) => line.text.startsWith(opening)))
+  silent,
+)
 writeFileSync(
   new URL('script.json', here),
   JSON.stringify(script, null, 2) + '\n',

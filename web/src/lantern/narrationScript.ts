@@ -11,7 +11,8 @@
  * - `introBlocks`: a chapter page that opens an act: its heading
  *   ("Act I: The Call to Adventure"), then its paragraphs. A closing chapter
  *   page's body is an answer (`turnBlocks`).
- * - `questCardBlocks`: a quest card in the story, read whole as it is shown.
+ * - `questCardBlocks`: a quest card in the story: its text, then each
+ *   checklist item as its own line.
  *
  * `actScript` plays an act's golden path through the real engine and collects
  * every voiced line: the chapter pages, every answer, each room's description
@@ -74,9 +75,20 @@ export function introBlocks(intro: string): VoicedBlock[] {
   return [...heading, ...turnBlocks(body)]
 }
 
-/** A quest card is read whole, as it is shown. */
+/**
+ * A quest card: its text, then each checklist item as its own line, so an item
+ * that carries a count (game state) does not take the rest of the card with it.
+ */
 export function questCardBlocks(text: string): VoicedBlock[] {
-  return [{ speaker: NARRATOR, markup: text }]
+  const blocks: VoicedBlock[] = []
+  for (const block of parseTurn(text)) {
+    if (block.kind === 'text')
+      blocks.push({ speaker: NARRATOR, markup: block.markup })
+    if (block.kind === 'checklist')
+      for (const item of block.items)
+        blocks.push({ speaker: NARRATOR, markup: item.markup })
+  }
+  return blocks
 }
 
 /** The voice of a block: its speaker, or for unsigned writing the first writer rule its opening matches, else the narrator. */
@@ -127,18 +139,23 @@ function probes(game: Game): string[] {
 /**
  * Every voiced line of an act, in the order a player along `commands` first
  * meets it, each once. `commands` should end with the command that completes
- * the act, so its answer and the closing chapter page are read too. `newGame` makes a fresh game of the act; one plays the
- * path and another, reloaded from it at each step, tries the probes.
+ * the act, so its answer and the closing chapter page are read too. Lines
+ * that open with one of `silent` are left out (instructions, not story).
+ * `newGame` makes a fresh game of the act; one plays the path and another,
+ * reloaded from it at each step, tries the probes.
  */
 export function actScript(
   newGame: () => Game,
   commands: string[],
   writers: WriterRule[],
+  silent: string[] = [],
 ): ScriptLine[] {
   const script = new Map<string, ScriptLine>()
   const add = (blocks: VoicedBlock[]): void => {
-    for (const entry of scriptLines(blocks, writers))
-      if (!script.has(entry.key)) script.set(entry.key, entry)
+    for (const entry of scriptLines(blocks, writers)) {
+      const quiet = silent.some((opening) => entry.text.startsWith(opening))
+      if (!quiet && !script.has(entry.key)) script.set(entry.key, entry)
+    }
   }
   const game = newGame()
   const play = new GameController(game)

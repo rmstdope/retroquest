@@ -6532,6 +6532,83 @@
    }
   ]
  },
+ "05dd059914219b": {
+  "file": "05dd059914219b.mp3",
+  "speaker": "narrator",
+  "duration": 5.155,
+  "words": [
+   {
+    "word": "Mira",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "has",
+    "start": 0.34,
+    "end": 0.66
+   },
+   {
+    "word": "tasked",
+    "start": 0.66,
+    "end": 1.1
+   },
+   {
+    "word": "you",
+    "start": 1.1,
+    "end": 1.36
+   },
+   {
+    "word": "with",
+    "start": 1.36,
+    "end": 1.56
+   },
+   {
+    "word": "preparing",
+    "start": 1.56,
+    "end": 2.06
+   },
+   {
+    "word": "for",
+    "start": 2.06,
+    "end": 2.32
+   },
+   {
+    "word": "your",
+    "start": 2.32,
+    "end": 2.5
+   },
+   {
+    "word": "journey.",
+    "start": 2.5,
+    "end": 2.84
+   },
+   {
+    "word": "She",
+    "start": 3.2,
+    "end": 3.84
+   },
+   {
+    "word": "says",
+    "start": 3.84,
+    "end": 4.16
+   },
+   {
+    "word": "you",
+    "start": 4.16,
+    "end": 4.34
+   },
+   {
+    "word": "will",
+    "start": 4.34,
+    "end": 4.52
+   },
+   {
+    "word": "need:",
+    "start": 4.52,
+    "end": 4.88
+   }
+  ]
+ },
  "0638932533305a": {
   "file": "0638932533305a.mp3",
   "speaker": "narrator",
@@ -7462,6 +7539,23 @@
     "word": "clear.",
     "start": 9.34,
     "end": 9.6
+   }
+  ]
+ },
+ "06a35532638971": {
+  "file": "06a35532638971.mp3",
+  "speaker": "narrator",
+  "duration": 1.393,
+  "words": [
+   {
+    "word": "Sturdy",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "footwear",
+    "start": 0.54,
+    "end": 1.1
    }
   ]
  },
@@ -9474,6 +9568,23 @@
     "word": "cloak.",
     "start": 2.8,
     "end": 3.16
+   }
+  ]
+ },
+ "09268f595ef823": {
+  "file": "09268f595ef823.mp3",
+  "speaker": "narrator",
+  "duration": 1.207,
+  "words": [
+   {
+    "word": "Warm",
+    "start": 0.0,
+    "end": 0.46
+   },
+   {
+    "word": "clothing",
+    "start": 0.46,
+    "end": 0.92
    }
   ]
  },
@@ -11576,6 +11687,33 @@
    }
   ]
  },
+ "0b5b0ecddac4cf": {
+  "file": "0b5b0ecddac4cf.mp3",
+  "speaker": "narrator",
+  "duration": 2.136,
+  "words": [
+   {
+    "word": "All",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "basic",
+    "start": 0.38,
+    "end": 0.96
+   },
+   {
+    "word": "magic",
+    "start": 0.96,
+    "end": 1.34
+   },
+   {
+    "word": "learned",
+    "start": 1.34,
+    "end": 1.78
+   }
+  ]
+ },
  "0b6a4bedb49148": {
   "file": "0b6a4bedb49148.mp3",
   "speaker": "narrator",
@@ -12822,6 +12960,78 @@
     "word": "it.",
     "start": 4.48,
     "end": 4.66
+   }
+  ]
+ },
+ "0d1c2b24f91a9e": {
+  "file": "0d1c2b24f91a9e.mp3",
+  "speaker": "narrator",
+  "duration": 5.433,
+  "words": [
+   {
+    "word": "Food",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "for",
+    "start": 0.38,
+    "end": 0.58
+   },
+   {
+    "word": "the",
+    "start": 0.58,
+    "end": 0.7
+   },
+   {
+    "word": "road",
+    "start": 0.7,
+    "end": 1.06
+   },
+   {
+    "word": "(2",
+    "start": 1.3,
+    "end": 1.92
+   },
+   {
+    "word": "of",
+    "start": 1.92,
+    "end": 2.1
+   },
+   {
+    "word": "6",
+    "start": 2.1,
+    "end": 2.44
+   },
+   {
+    "word": "kinds",
+    "start": 2.44,
+    "end": 2.9
+   },
+   {
+    "word": "gathered,",
+    "start": 2.9,
+    "end": 3.44
+   },
+   {
+    "word": "any",
+    "start": 3.72,
+    "end": 4.24
+   },
+   {
+    "word": "4",
+    "start": 4.24,
+    "end": 4.6
+   },
+   {
+    "word": "will",
+    "start": 4.6,
+    "end": 4.9
+   },
+   {
+    "word": "do)",
+    "start": 4.9,
+    "end": 5.12
    }
   ]
  },
@@ -16052,258 +16262,6 @@
    }
   ]
  },
- "112546e7277cdc": {
-  "file": "112546e7277cdc.mp3",
-  "speaker": "narrator",
-  "duration": 18.808,
-  "words": [
-   {
-    "word": "Mira",
-    "start": 0.0,
-    "end": 0.6
-   },
-   {
-    "word": "has",
-    "start": 0.6,
-    "end": 0.94
-   },
-   {
-    "word": "tasked",
-    "start": 0.94,
-    "end": 1.38
-   },
-   {
-    "word": "you",
-    "start": 1.38,
-    "end": 1.6
-   },
-   {
-    "word": "with",
-    "start": 1.6,
-    "end": 1.82
-   },
-   {
-    "word": "preparing",
-    "start": 1.82,
-    "end": 2.34
-   },
-   {
-    "word": "for",
-    "start": 2.34,
-    "end": 2.64
-   },
-   {
-    "word": "your",
-    "start": 2.64,
-    "end": 2.82
-   },
-   {
-    "word": "journey.",
-    "start": 2.82,
-    "end": 3.18
-   },
-   {
-    "word": "She",
-    "start": 3.58,
-    "end": 4.16
-   },
-   {
-    "word": "says",
-    "start": 4.16,
-    "end": 4.46
-   },
-   {
-    "word": "you",
-    "start": 4.46,
-    "end": 4.64
-   },
-   {
-    "word": "will",
-    "start": 4.64,
-    "end": 4.8
-   },
-   {
-    "word": "need:",
-    "start": 4.8,
-    "end": 5.14
-   },
-   {
-    "word": "*",
-    "start": 5.14,
-    "end": 5.14
-   },
-   {
-    "word": "Warm",
-    "start": 5.14,
-    "end": 5.92
-   },
-   {
-    "word": "clothing",
-    "start": 5.92,
-    "end": 6.46
-   },
-   {
-    "word": "*",
-    "start": 6.46,
-    "end": 6.8
-   },
-   {
-    "word": "Magical",
-    "start": 6.8,
-    "end": 7.36
-   },
-   {
-    "word": "protection",
-    "start": 7.36,
-    "end": 7.94
-   },
-   {
-    "word": "*",
-    "start": 7.94,
-    "end": 8.42
-   },
-   {
-    "word": "Food",
-    "start": 8.42,
-    "end": 8.78
-   },
-   {
-    "word": "for",
-    "start": 8.78,
-    "end": 9.0
-   },
-   {
-    "word": "the",
-    "start": 9.0,
-    "end": 9.12
-   },
-   {
-    "word": "road",
-    "start": 9.12,
-    "end": 9.48
-   },
-   {
-    "word": "(2",
-    "start": 9.86,
-    "end": 9.98
-   },
-   {
-    "word": "of",
-    "start": 9.98,
-    "end": 10.18
-   },
-   {
-    "word": "6",
-    "start": 10.18,
-    "end": 10.48
-   },
-   {
-    "word": "kinds",
-    "start": 10.48,
-    "end": 10.88
-   },
-   {
-    "word": "gathered,",
-    "start": 10.88,
-    "end": 11.38
-   },
-   {
-    "word": "any",
-    "start": 11.74,
-    "end": 12.0
-   },
-   {
-    "word": "4",
-    "start": 12.0,
-    "end": 12.32
-   },
-   {
-    "word": "will",
-    "start": 12.32,
-    "end": 12.56
-   },
-   {
-    "word": "do)",
-    "start": 12.56,
-    "end": 12.84
-   },
-   {
-    "word": "*",
-    "start": 12.84,
-    "end": 13.48
-   },
-   {
-    "word": "Sturdy",
-    "start": 13.48,
-    "end": 13.92
-   },
-   {
-    "word": "footwear",
-    "start": 13.92,
-    "end": 14.56
-   },
-   {
-    "word": "*",
-    "start": 14.56,
-    "end": 14.96
-   },
-   {
-    "word": "A",
-    "start": 14.96,
-    "end": 15.02
-   },
-   {
-    "word": "map",
-    "start": 15.02,
-    "end": 15.4
-   },
-   {
-    "word": "to",
-    "start": 15.4,
-    "end": 15.62
-   },
-   {
-    "word": "find",
-    "start": 15.62,
-    "end": 15.9
-   },
-   {
-    "word": "your",
-    "start": 15.9,
-    "end": 16.08
-   },
-   {
-    "word": "way",
-    "start": 16.08,
-    "end": 16.36
-   },
-   {
-    "word": "*",
-    "start": 16.36,
-    "end": 16.8
-   },
-   {
-    "word": "All",
-    "start": 16.8,
-    "end": 17.26
-   },
-   {
-    "word": "basic",
-    "start": 17.26,
-    "end": 17.78
-   },
-   {
-    "word": "magic",
-    "start": 17.78,
-    "end": 18.18
-   },
-   {
-    "word": "learned",
-    "start": 18.18,
-    "end": 18.6
-   }
-  ]
- },
  "112de193c5fa4e": {
   "file": "112de193c5fa4e.mp3",
   "speaker": "narrator",
@@ -17699,6 +17657,43 @@
     "word": "left.",
     "start": 11.12,
     "end": 11.46
+   }
+  ]
+ },
+ "1290ee8a3446dd": {
+  "file": "1290ee8a3446dd.mp3",
+  "speaker": "narrator",
+  "duration": 1.95,
+  "words": [
+   {
+    "word": "A",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "map",
+    "start": 0.14,
+    "end": 0.52
+   },
+   {
+    "word": "to",
+    "start": 0.52,
+    "end": 0.82
+   },
+   {
+    "word": "find",
+    "start": 0.82,
+    "end": 1.2
+   },
+   {
+    "word": "your",
+    "start": 1.2,
+    "end": 1.38
+   },
+   {
+    "word": "way",
+    "start": 1.38,
+    "end": 1.64
    }
   ]
  },
@@ -32456,6 +32451,23 @@
     "word": "in.",
     "start": 1.34,
     "end": 1.56
+   }
+  ]
+ },
+ "1f85214b270c2c": {
+  "file": "1f85214b270c2c.mp3",
+  "speaker": "narrator",
+  "duration": 1.533,
+  "words": [
+   {
+    "word": "Magical",
+    "start": 0.0,
+    "end": 0.62
+   },
+   {
+    "word": "protection",
+    "start": 0.62,
+    "end": 1.02
    }
   ]
  },

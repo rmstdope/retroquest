@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from '@/act1/Act1'
-import { ACT1_GOLDEN_PATH } from '@/act1/Act1GoldenPath'
+import {
+  ACT1_COMPLETING_COMMAND,
+  ACT1_GOLDEN_PATH,
+} from '@/act1/Act1GoldenPath'
 import { narrationKey } from './narrationKey'
 import {
   actScript,
@@ -13,8 +16,12 @@ import {
   type WriterRule,
 } from './narrationScript'
 
-/** The golden path stops short of the command that completes Act I (see `Act1GoldenPath`). */
-const ACT1_COMPLETES = 'use map'
+/** Lines that stay silent: the chapter page's help line and the closing page's shared words. */
+const SILENT = [
+  "Let's get started!",
+  'Congratulations — you have completed Act',
+  'Take a moment to catch your breath',
+]
 
 const WRITERS: WriterRule[] = [
   { opening: 'My dearest', speaker: 'mother' },
@@ -79,10 +86,15 @@ describe('the voiced blocks a surface shows', () => {
     ])
   })
 
-  it('reads a quest card as one block, as the card shows it', () => {
-    const card = 'You will need:\n[pending]* Warm clothing[/pending]'
-    expect(questCardBlocks(card)).toEqual([
-      { speaker: 'narrator', markup: card },
+  it('reads a quest card’s opening, then each checklist item as its own line', () => {
+    expect(
+      questCardBlocks(
+        'You will need:\n[success]* Warm clothing[/success]\n[pending]* A map[/pending]',
+      ),
+    ).toEqual([
+      { speaker: 'narrator', markup: 'You will need:' },
+      { speaker: 'narrator', markup: 'Warm clothing' },
+      { speaker: 'narrator', markup: 'A map' },
     ])
   })
 })
@@ -90,8 +102,9 @@ describe('the voiced blocks a surface shows', () => {
 describe('actScript for Act I', () => {
   const script = actScript(
     () => new Game([new Act1()]),
-    [...ACT1_GOLDEN_PATH, ACT1_COMPLETES],
+    [...ACT1_GOLDEN_PATH, ACT1_COMPLETING_COMMAND],
     WRITERS,
+    SILENT,
   )
   const find = (text: string): { speaker: string } | undefined =>
     script.find((line) => line.text === text)
@@ -145,14 +158,19 @@ describe('actScript for Act I', () => {
     ).toBe(true)
   })
 
-  it('reads each quest card whole, checklist and all', () => {
+  it('reads a quest card’s opening apart from its list, so a count in an item does not silence it', () => {
     expect(
-      script.some(
-        (line) =>
-          line.text.startsWith('Mira has tasked you with preparing') &&
-          line.text.includes('Warm clothing'),
-      ),
-    ).toBe(true)
+      find(
+        'Mira has tasked you with preparing for your journey. She says you will need:',
+      )?.speaker,
+    ).toBe('narrator')
+    expect(find('Warm clothing')?.speaker).toBe('narrator')
+  })
+
+  it('leaves the closing page’s shared congratulations silent', () => {
+    expect(script.some((line) => line.text.startsWith('Congratulations'))).toBe(
+      false,
+    )
   })
 
   it('takes optional lines from examining what is at hand along the way', () => {
