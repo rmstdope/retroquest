@@ -294,9 +294,9 @@ export class GameController {
     return payloads
   }
 
-  /** How many different rooms the player has been in so far (the story reads a room's description on its first visit). */
-  getVisitedRoomCount(): number {
-    return this.game.state.visitedRooms.length
+  /** The rooms the player has been in so far, by name (the story reads a room on its first visit). */
+  getVisitedRooms(): string[] {
+    return [...this.game.state.visitedRooms]
   }
 
   getRoomName(): string {

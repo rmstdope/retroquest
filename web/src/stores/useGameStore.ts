@@ -136,7 +136,8 @@ export const useGameStore = defineStore('game', () => {
   let nextTurnId = 1
   let lastTurnRoom = ''
   /** Rooms visited as of the previous turn, to tell a first visit from a return. */
-  let lastVisitedCount = 0
+  /** The rooms visited as of the last turn, to tell a first visit. */
+  let lastVisited: string[] = []
   // Bag and spells as the bridge listed them after the previous turn
   let lastBag: string[] = []
   let lastSpells: string[] = []
@@ -263,9 +264,12 @@ export const useGameStore = defineStore('game', () => {
 
     // A load shows the room even when it is the same one.
     const roomChanged = arrive || room !== lastTurnRoom
-    const visited = b.controller.getVisitedRoomCount()
-    const firstVisit = actRunning && visited > lastVisitedCount
-    lastVisitedCount = visited
+    // A room is new when it joins the visited rooms. Compared by name, as a
+    // room can also leave the list (the dream, once Elior wakes).
+    const visited = b.controller.getVisitedRooms()
+    const firstVisit =
+      actRunning && visited.includes(room) && !lastVisited.includes(room)
+    lastVisited = visited
     turns.value.push({
       id: nextTurnId++,
       command,
@@ -383,7 +387,7 @@ export const useGameStore = defineStore('game', () => {
     b.newGame()
     turns.value = []
     lastTurnRoom = ''
-    lastVisitedCount = 0
+    lastVisited = []
     lastBag = []
     lastSpells = []
     currentAct = null

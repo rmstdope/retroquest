@@ -44,7 +44,7 @@ function createMockBridge() {
     advanceToRunning: vi.fn(() => screens(['Intro text'])),
     takeTurn: vi.fn(() => 'command result'),
     getRoomName: vi.fn(() => 'Village Square'),
-    getVisitedRoomCount: vi.fn(() => 1),
+    getVisitedRooms: vi.fn(() => ['Village Square']),
     getRoomDescription: vi.fn(() => 'A quiet village.'),
     getRoomCharacters: vi.fn(() => ['Mira']),
     getRoomItems: vi.fn(() => ['Map']),
@@ -1210,7 +1210,7 @@ describe('useGameStore', () => {
 
       bridge.controller.isActRunning.mockReturnValue(true)
       bridge.controller.look.mockReturnValue('You are in Act 2.')
-      bridge.controller.getVisitedRoomCount.mockReturnValue(1)
+      bridge.controller.getVisitedRooms.mockReturnValue(['Act 2 Start'])
       store.dismissModal() // act complete
       store.dismissModal() // act intro -> arrival look
 
@@ -1234,10 +1234,21 @@ describe('useGameStore', () => {
       expect(store.turns.at(-1)?.narrate).toBeUndefined()
     })
 
+    it('flags a first visit when the room is new, even as another leaves the visited list (waking from the dream)', async () => {
+      await startPlaying()
+      bridge.controller.getRoomName.mockReturnValue("Elior's Cottage")
+      bridge.controller.getVisitedRooms.mockReturnValue(["Elior's Cottage"])
+      store.submitCommand('talk to voice')
+      expect(store.turns.at(-1)?.firstVisit).toBe(true)
+    })
+
     it('flags a first visit once, and not a return', async () => {
       await startPlaying()
       bridge.controller.getRoomName.mockReturnValue('Forest')
-      bridge.controller.getVisitedRoomCount.mockReturnValue(2)
+      bridge.controller.getVisitedRooms.mockReturnValue([
+        'Village Square',
+        'Forest',
+      ])
       store.submitCommand('go north')
       expect(store.turns.at(-1)?.firstVisit).toBe(true)
 
