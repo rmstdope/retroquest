@@ -34,6 +34,8 @@ const HURRIED_GAP_MS = 80
 const DOUBLE_TAP_MS = 300
 /** How long past a clip's length a voice may take before it counts as stuck. */
 const STALL_MARGIN_MS = 3000
+/** Extra time allowed for a clip to start (it is fetched when played) before the guard counts its length. */
+const LOAD_MARGIN_MS = 10000
 /** How often the spoken word is looked up. */
 const WORD_POLL_MS = 50
 /** Where the recordings are served from. */
@@ -234,11 +236,19 @@ export const useNarrationStore = defineStore('narration', () => {
     }
     element.onended = end
     element.onerror = end
-    timers.push(setTimeout(end, clip.duration * 1000 + STALL_MARGIN_MS))
+    const guard = (extra: number): void => {
+      timers.forEach(clearTimeout)
+      timers = [setTimeout(end, clip.duration * 1000 + STALL_MARGIN_MS + extra)]
+    }
+    // The clip is fetched when played: count its length from when sound can
+    // start, with a longer allowance for a play that never settles.
+    guard(LOAD_MARGIN_MS)
     poll = setInterval(() => {
       if (mine === generation) now.word = wordAt(clip, element.currentTime)
     }, WORD_POLL_MS)
-    element.play().catch(end)
+    element.play().then(() => {
+      if (mine === generation) guard(0)
+    }, end)
   }
 
   /**

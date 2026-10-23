@@ -38,6 +38,11 @@ const speaking = computed(() => narration.speaking(props.turn.id))
 function isSpeaking(unit: number): boolean {
   return speaking.value?.unit === unit
 }
+/** Which unit has its words marked, and how many it has: unchanged while the word moves, so nothing re-renders per word. */
+const wordMarking = computed((): string => {
+  const now = speaking.value
+  return now?.aligned ? `${now.unit}:${now.total}` : ''
+})
 /** The unit of the room arrival, and of the first quest card. */
 const arrivalUnit = computed(() =>
   props.turn.arrival ? blocks.value.length : -1,
@@ -52,10 +57,10 @@ const firstQuestUnit = computed(
  */
 function html(markup: string, unit: number): string {
   const plain = renderMarkup(markup)
-  const now = speaking.value
-  if (!now || now.unit !== unit || !now.aligned) return plain
+  const [markedUnit, total] = wordMarking.value.split(':').map(Number)
+  if (markedUnit !== unit) return plain
   const wrapped = wrapWords(plain)
-  return wrapped.count === now.total ? wrapped.html : plain
+  return wrapped.count === total ? wrapped.html : plain
 }
 
 // Light the spoken word, and keep the block being spoken in view.

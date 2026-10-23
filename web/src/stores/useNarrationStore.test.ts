@@ -209,6 +209,24 @@ describe('useNarrationStore', () => {
     expect(narration.isNarrating).toBe(false)
   })
 
+  it('counts the length of a clip from when it can play, not from when it was asked for', async () => {
+    let start: () => void = () => undefined
+    narration.setAudioFactory((src) => {
+      const audio = new FakeAudio(src)
+      audio.play = () => new Promise<void>((resolve) => (start = resolve))
+      return audio
+    })
+    narration.begin(1, [voiced(2)], 'act1')
+    // A slow fetch: more than the usual allowance passes before sound starts.
+    await vi.advanceTimersByTimeAsync(8000)
+    expect(narration.isNarrating).toBe(true)
+    start()
+    await vi.advanceTimersByTimeAsync(4000)
+    expect(narration.isNarrating).toBe(true)
+    await vi.advanceTimersByTimeAsync(1100)
+    expect(narration.isNarrating).toBe(false)
+  })
+
   it('treats a rejected play() as an ended block', async () => {
     narration.setAudioFactory((src) => {
       const audio = new FakeAudio(src)

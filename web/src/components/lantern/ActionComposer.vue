@@ -259,8 +259,11 @@ function clear(): void {
 }
 
 /** Escape puts a half-built command away — unless it is continuing a pop-up. */
-function putAway(): void {
-  if (verb.value && !game.showModal) reset()
+function putAway(event: KeyboardEvent): void {
+  if (!verb.value || game.showModal) return
+  // Consumed here: the story's narration must not also take this Escape.
+  event.preventDefault()
+  reset()
 }
 
 /** Enter in a text slot: run the command if complete, else go on to the choices. */

@@ -1595,6 +1595,32 @@ describe('LanternLayout', () => {
       button.remove()
     })
 
+    it('does not narrate a turn that was already there when the story opened', async () => {
+      vi.useFakeTimers()
+      useGameStore().turns.push(narratedTurn(1))
+      const w = mount(LanternLayout, { attachTo: document.body })
+      wrapper = w
+      useGameStore().actLabel = 'Act I'
+      await vi.advanceTimersByTimeAsync(0)
+
+      expect(texts(w)).toEqual([FIRST, SECOND])
+      expect(useNarrationStore().isNarrating).toBe(false)
+    })
+
+    it('leaves Escape to the text-size popover and to a half-built command', async () => {
+      const w = await ready()
+      await say(narratedTurn(1))
+      await w.get('button[aria-label="Text size"]').trigger('click')
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Escape',
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
+      expect(useNarrationStore().isNarrating).toBe(true)
+    })
+
     it('stops when a pop-up opens', async () => {
       const w = await ready()
       await say(narratedTurn(1))
