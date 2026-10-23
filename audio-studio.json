@@ -1,0 +1,41 @@
+{
+  "name": "RetroQuest",
+  "description": "A retro-style text adventure played in the browser. A warm storyteller narrates; the characters are the people Elior meets on his journey.",
+  "env": ".env",
+  "narration": {
+    "partLabel": "Act",
+    "parts": [
+      {
+        "id": "act1",
+        "title": "Act I: The Call to Adventure"
+      },
+      {
+        "id": "act2",
+        "title": "Act II: The Gathering Storm"
+      },
+      {
+        "id": "act3",
+        "title": "Act III: Trials and Revelations"
+      },
+      {
+        "id": "act4",
+        "title": "Act IV: The Final Confrontation"
+      }
+    ],
+    "characters": "tts/cast.json",
+    "paths": {
+      "dialog": "tts/{part}/script.json",
+      "cues": "tts/{part}/cues.json",
+      "lock": "tts/{part}/narration.lock.json",
+      "clips": "web/public/audio/narration/{part}",
+      "manifest": "web/public/audio/narration/{part}/manifest.json"
+    },
+    "refreshDialog": "p={part}; cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act.ts ${p#act}",
+    "output": {
+      "codec": "mp3",
+      "bitrate": "64k",
+      "channels": 1,
+      "lufs": -16
+    }
+  }
+}
