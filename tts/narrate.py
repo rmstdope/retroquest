@@ -29,6 +29,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 import wave
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -42,6 +43,7 @@ MIN_HEARD = 0.9
 TAKES = 3
 BITRATE = "64k"
 PARALLEL = 4
+SYNTH_TRIES = 4
 GAP_S = 0.25
 
 
@@ -176,7 +178,13 @@ def _synthesise(client, text: str, voice: str) -> bytes:
     from fishaudio.types import TTSConfig
 
     config = TTSConfig(format="wav", latency="normal")
-    return client.tts.convert(text=text, reference_id=voice, config=config, model=MODEL)
+    for attempt in range(SYNTH_TRIES):
+        try:
+            return client.tts.convert(text=text, reference_id=voice, config=config, model=MODEL)
+        except Exception:  # Fish drops connections now and then; the last try raises
+            if attempt == SYNTH_TRIES - 1:
+                raise
+            time.sleep(2 * (attempt + 1))
 
 
 def _join(clips: list[bytes]) -> tuple[bytes, float]:
