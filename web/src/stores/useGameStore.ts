@@ -84,13 +84,10 @@ export interface Arrival {
 /** Journal tabs that show a dot when something new arrived. */
 export type JournalTab = 'bag' | 'spells' | 'quests'
 
-/** A pop-up waiting its turn: a quest completion or a chapter page. */
+/** A pop-up waiting its turn: a chapter page (or a message). Quest news is never a pop-up. */
 interface QuestEvent {
   title: string
   body: string
-  sound: 'questComplete' | null
-  /** The completed quest, for a pop-up made for it. */
-  quest?: QuestNews
   /** An act intro or act completion, for a chapter page. */
   chapter?: Chapter
 }
@@ -159,8 +156,6 @@ export const useGameStore = defineStore('game', () => {
   const showModal = ref(false)
   const modalTitle = ref('')
   const modalBody = ref('')
-  /** The completed quest the open pop-up is about, else null. */
-  const modalQuest = ref<QuestNews | null>(null)
   /** The chapter page the open pop-up is (act intro / complete), else null. */
   const modalChapter = ref<Chapter | null>(null)
   /** The running act's heading, kept for its act-complete page. */
@@ -192,7 +187,6 @@ export const useGameStore = defineStore('game', () => {
     modalQueue.value.push({
       title: '📖 Act Intro',
       body: renderMarkup(raw),
-      sound: null,
       chapter: { kind: 'intro', ...currentAct },
     })
   }
@@ -372,18 +366,45 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
-   * Ring the chime owed by quest cards `cards` (indices into turn `turnId`'s
-   * quests) as they show: once for all of them, so cards shown together do
-   * not stack their chimes; cards with nothing owed ring nothing.
+   * Play the sound owed by quest cards `cards` (indices into turn `turnId`'s
+   * quests) as they show, once for all of them so cards shown together do not
+   * stack: the fanfare when one of them completes a quest, else the chime.
+   * Cards with nothing owed play nothing.
    */
-  function ringQuestChime(turnId: number, cards: number[]): void {
+  function ringQuestSounds(turnId: number, cards: number[]): void {
     const quests = turns.value.find((entry) => entry.id === turnId)?.quests
     const owed = cards
       .map((index) => quests?.[index])
-      .filter((news): news is QuestNews => !!news?.chime)
+      .filter((news): news is QuestNews => !!news?.chime || !!news?.fanfare)
     if (!owed.length) return
-    for (const news of owed) delete news.chime
-    audioPlayer?.playNewQuest()
+    const fanfare = owed.some((news) => news.fanfare)
+    for (const news of owed) {
+      delete news.chime
+      delete news.fanfare
+    }
+    if (fanfare) audioPlayer?.playQuestComplete()
+    else audioPlayer?.playNewQuest()
+  }
+
+  /**
+   * Whether the act-complete page must wait for turn `turn` (the act's last)
+   * to be read aloud; set by the story view (`setActEndGate`). With no gate,
+   * the page opens at once.
+   */
+  let actEndGate: ((turn: Turn) => boolean) | null = null
+  /** The act has ended and its page waits for the last turn's narration. */
+  const actEndPending = ref(false)
+
+  /** Let the story view hold the act-complete page while the act's last turn is read. */
+  function setActEndGate(gate: ((turn: Turn) => boolean) | null): void {
+    actEndGate = gate
+  }
+
+  /** The last turn has been read: open the act-complete page that was held. */
+  function resumeActEnd(): void {
+    if (!actEndPending.value) return
+    actEndPending.value = false
+    afterActEnds()
   }
 
   /** The UI asks before `quit` / `exit` (see QuitDialog). */
@@ -396,6 +417,7 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     quitAsked.value = false
     finishAsked.value = false
+    actEndPending.value = false
     ending.value = null
     lastAnswer = ''
     gameNumber.value++
@@ -412,7 +434,6 @@ export const useGameStore = defineStore('game', () => {
     shownQuest.value = null
     modalQueue.value = []
     showModal.value = false
-    modalQuest.value = null
     modalChapter.value = null
     openFirstAct(b)
   }
@@ -452,7 +473,9 @@ export const useGameStore = defineStore('game', () => {
       !showModal.value &&
       !b.controller.isActRunning()
     ) {
-      afterActEnds()
+      const last = turns.value.at(-1)
+      if (last && actEndGate?.(last)) actEndPending.value = true
+      else afterActEnds()
     }
     return result
   }
@@ -486,7 +509,6 @@ export const useGameStore = defineStore('game', () => {
     modalQueue.value.push({
       title: '🏆 Act Complete!',
       body: renderMarkup(text),
-      sound: null,
       chapter: {
         kind: 'complete',
         act: currentAct?.act ?? '',
@@ -519,7 +541,6 @@ export const useGameStore = defineStore('game', () => {
     finishAsked.value = false
     modalQueue.value = []
     showModal.value = false
-    modalQuest.value = null
     modalChapter.value = null
     ending.value = { text: lastAnswer, saved: save }
     return true
@@ -541,7 +562,6 @@ export const useGameStore = defineStore('game', () => {
       modalQueue.value.push({
         title: '🏆 Act Complete!',
         body: renderMarkup(text),
-        sound: null,
         chapter: {
           kind: 'complete',
           act: finished?.act ?? '',
@@ -705,62 +725,44 @@ export const useGameStore = defineStore('game', () => {
     }
     const completions = settled.completed
 
-    // Completions also stay in the story as records, each with the act's
-    // quest count as it stood once that quest was done.
-    const events: QuestEvent[] = []
+    // Completions go in the story as records (never a pop-up), each with the
+    // act's quest count as it stood once that quest was done.
     if (completions.length) {
       const { completed: done, total } = b.controller.getQuestProgress()
       completions.forEach((completion, index) => {
-        const record: QuestNews = {
+        news.push({
           ...toQuestNews('completed', completion),
           progress: {
             completed: done - (completions.length - 1 - index),
             total,
           },
-        }
-        news.push(record)
-        events.push({
-          title: '🏆 Quest Complete!',
-          body: renderMarkup(completion.popup),
-          sound: 'questComplete',
-          quest: record,
         })
       })
     }
 
-    // A completion's fanfare alone marks the turn; the chime would clash.
-    // Each card's chime waits for the card to show (the story view rings it).
+    // Each card's sound waits for the card to show (the story view rings it):
+    // the fanfare for a completion, the chime for a new or updated quest.
     const turn = turns.value.at(-1)
     if (news.length && turn) {
       turn.quests = [...(turn.quests ?? []), ...news]
       questsHaveNew.value = true
-      if (!completions.length)
-        for (const item of news)
-          if (item.kind !== 'completed') item.chime = true
-    }
-
-    if (events.length > 0) {
-      modalQueue.value.push(...events)
-      if (!showModal.value) {
-        showNextModal()
-      }
+      for (const item of news)
+        if (item.kind === 'completed') item.fanfare = true
+        else item.chime = true
     }
   }
 
   function showNextModal(): void {
     if (modalQueue.value.length === 0) {
       showModal.value = false
-      modalQuest.value = null
       modalChapter.value = null
       return
     }
     const event = modalQueue.value.shift()!
     modalTitle.value = event.title
     modalBody.value = event.body
-    modalQuest.value = event.quest ?? null
     modalChapter.value = event.chapter ?? null
     showModal.value = true
-    if (event.sound === 'questComplete') audioPlayer?.playQuestComplete()
   }
 
   function dismissModal(): void {
@@ -926,7 +928,10 @@ export const useGameStore = defineStore('game', () => {
     dismissTitle,
     gameNumber,
     restartGame,
-    ringQuestChime,
+    ringQuestSounds,
+    setActEndGate,
+    resumeActEnd,
+    actEndPending,
     getQuickSave,
     notice,
     rawInventory,
@@ -951,7 +956,6 @@ export const useGameStore = defineStore('game', () => {
     showModal,
     modalTitle,
     modalBody,
-    modalQuest,
     modalChapter,
     musicFile,
     musicInfo,

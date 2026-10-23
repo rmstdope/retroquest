@@ -309,7 +309,7 @@ describe('useGameStore', () => {
       await store.initGame()
       store.dismissModal()
       expect(store.turns.at(-1)?.quests?.[0].chime).toBe(true)
-      store.ringQuestChime(store.turns.at(-1)!.id, [0])
+      store.ringQuestSounds(store.turns.at(-1)!.id, [0])
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
     })
 
@@ -651,42 +651,37 @@ describe('useGameStore', () => {
       ])
     })
 
-    it('shows modal for completed quest', () => {
+    it('puts a completed quest in the story with its fanfare owed, never in a pop-up', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      store.submitCommand('look')
       bridge.controller.completeQuest
         .mockReturnValueOnce(quest('Quest complete!'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
-      expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('🏆 Quest Complete!')
-      expect(store.modalBody).toBe('<rendered>Quest complete!</rendered>')
-    })
-
-    it('queues multiple completions and shows the first', () => {
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(quest(done('A')))
-        .mockReturnValueOnce(quest(done('B')))
-        .mockReturnValueOnce(null)
-      store.pollQuestEvents()
-      expect(store.modalQuest?.name).toBe('A')
-    })
-
-    it('dismissModal advances to next queued event', () => {
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(quest(done('A')))
-        .mockReturnValueOnce(quest(done('B')))
-        .mockReturnValueOnce(null)
-      store.pollQuestEvents()
-      store.dismissModal()
-      expect(store.modalQuest?.name).toBe('B')
-    })
-
-    it('dismissModal hides modal when queue empty', () => {
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(quest(done('A')))
-        .mockReturnValueOnce(null)
-      store.pollQuestEvents()
-      store.dismissModal()
       expect(store.showModal).toBe(false)
+      const news = store.turns.at(-1)!.quests!.at(-1)!
+      expect(news).toMatchObject({ kind: 'completed', fanfare: true })
+      expect(audio.playQuestComplete).not.toHaveBeenCalled()
+
+      store.ringQuestSounds(store.turns.at(-1)!.id, [
+        store.turns.at(-1)!.quests!.length - 1,
+      ])
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+    })
+
+    it('plays the fanfare alone when a completion shows together with a new quest', () => {
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      store.setAudioPlayer(audio)
+      store.submitCommand('look')
+      const turn = store.turns.at(-1)!
+      turn.quests = [
+        { kind: 'new', name: 'A', main: false, text: 'a', chime: true },
+        { kind: 'completed', name: 'B', main: true, text: 'b', fanfare: true },
+      ]
+      store.ringQuestSounds(turn.id, [0, 1])
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+      expect(audio.playNewQuest).not.toHaveBeenCalled()
     })
 
     it('dismissModal restores acceptInput from bridge when last modal dismissed', () => {
@@ -697,20 +692,6 @@ describe('useGameStore', () => {
       store.pollQuestEvents()
       store.dismissModal()
       expect(store.acceptInput).toBe(true)
-    })
-
-    it('dismissModal does not restore acceptInput while more modals remain', () => {
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(quest(done('A')))
-        .mockReturnValueOnce(quest(done('B')))
-        .mockReturnValueOnce(null)
-      bridge.controller.isAcceptingInput.mockReturnValue(true)
-      // Start with acceptInput false to detect an incorrect restore
-      store.acceptInput = false
-      store.pollQuestEvents()
-      store.dismissModal() // B still in queue
-      expect(store.showModal).toBe(true)
-      expect(store.acceptInput).toBe(false)
     })
 
     it('does nothing when no events', () => {
@@ -731,8 +712,8 @@ describe('useGameStore', () => {
       expect(turn.quests?.[0].chime).toBe(true)
       expect(audio.playNewQuest).not.toHaveBeenCalled()
 
-      store.ringQuestChime(turn.id, [0])
-      store.ringQuestChime(turn.id, [0])
+      store.ringQuestSounds(turn.id, [0])
+      store.ringQuestSounds(turn.id, [0])
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
       expect(store.turns.at(-1)?.quests?.[0].chime).toBeUndefined()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
@@ -745,34 +726,24 @@ describe('useGameStore', () => {
         .mockReturnValueOnce(quest('Quest updated'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
-      store.ringQuestChime(store.turns.at(-1)!.id, [0])
+      store.ringQuestSounds(store.turns.at(-1)!.id, [0])
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
       expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })
 
-    it('calls playQuestComplete when a quest is completed', () => {
+    it('plays the fanfare for a completed quest when its record shows', () => {
       const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
       store.setAudioPlayer(audio)
+      store.submitCommand('look')
       bridge.controller.completeQuest
         .mockReturnValueOnce(quest('Quest done!'))
         .mockReturnValueOnce(null)
       store.pollQuestEvents()
+      expect(audio.playQuestComplete).not.toHaveBeenCalled()
+      store.ringQuestSounds(store.turns.at(-1)!.id, [0])
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
       expect(store.turns.at(-1)?.quests?.some((q) => q.chime)).toBe(false)
       expect(audio.playNewQuest).not.toHaveBeenCalled()
-    })
-
-    it('plays the fanfare per pop-up shown, not all at once', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
-      store.setAudioPlayer(audio)
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(quest(done('A')))
-        .mockReturnValueOnce(quest(done('B')))
-        .mockReturnValueOnce(null)
-      store.pollQuestEvents()
-      expect(audio.playQuestComplete).toHaveBeenCalledTimes(1)
-      store.dismissModal()
-      expect(audio.playQuestComplete).toHaveBeenCalledTimes(2)
     })
 
     it('does not call audio when no audio player is set', () => {
@@ -1039,22 +1010,27 @@ describe('useGameStore', () => {
       expect(bridge.controller.look).toHaveBeenCalled()
     })
 
-    it('shows transition modal after quest completion modals when act transitions', () => {
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(quest('Main quest complete!'))
-        .mockReturnValueOnce(null)
-      bridge.controller.activateQuest.mockReturnValue(null)
-      bridge.controller.updateQuest.mockReturnValue(null)
-      bridge.controller.isAcceptingInput.mockReturnValue(false)
-      bridge.controller.isActRunning.mockReturnValue(false)
-      bridge.controller.advanceToRunning.mockReturnValue(
-        screens(['Congratulations Act 1!', 'Act 2 begins.', '']),
-      )
+    it('holds the act-complete page while the last turn is being read, then shows it', () => {
+      setupTransitionMocks()
+      const gate = vi.fn(() => true)
+      store.setActEndGate(gate)
       store.submitCommand('use map')
-      expect(store.modalTitle).toBe('🏆 Quest Complete!')
-      store.dismissModal()
+      expect(gate).toHaveBeenCalledWith(store.turns.at(-1))
+      expect(store.showModal).toBe(false)
+      expect(store.actEndPending).toBe(true)
+
+      store.resumeActEnd()
+      expect(store.actEndPending).toBe(false)
       expect(store.showModal).toBe(true)
       expect(store.modalTitle).toBe('🏆 Act Complete!')
+    })
+
+    it('shows the act-complete page at once when no turn is being read', () => {
+      setupTransitionMocks()
+      store.setActEndGate(() => false)
+      store.submitCommand('use map')
+      expect(store.showModal).toBe(true)
+      expect(store.actEndPending).toBe(false)
     })
 
     it('does not trigger transition modals when act is running normally', () => {
@@ -1742,8 +1718,8 @@ describe('useGameStore', () => {
         true,
         true,
       ])
-      store.ringQuestChime(id, [0, 1])
-      store.ringQuestChime(id, [0, 1])
+      store.ringQuestSounds(id, [0, 1])
+      store.ringQuestSounds(id, [0, 1])
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
 
       store.submitCommand('look')
@@ -1752,37 +1728,9 @@ describe('useGameStore', () => {
         { kind: 'new', name: 'A', main: false, text: 'a', chime: true },
         { kind: 'new', name: 'B', main: false, text: 'b', chime: true },
       ]
-      store.ringQuestChime(store.turns.at(-1)!.id, [0])
-      store.ringQuestChime(store.turns.at(-1)!.id, [1])
+      store.ringQuestSounds(store.turns.at(-1)!.id, [0])
+      store.ringQuestSounds(store.turns.at(-1)!.id, [1])
       expect(audio.playNewQuest).toHaveBeenCalledTimes(3)
-    })
-
-    it('gives the completion pop-up the quest it is about', () => {
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(
-          quest(
-            '[quest_name]Hint of Magic (side quest)[/quest_name]\n\nIt begins.',
-          ),
-        )
-        .mockReturnValue(null)
-      bridge.controller.getQuestProgress.mockReturnValue({
-        completed: 5,
-        total: 11,
-        actNumber: 1,
-        mainQuest: 'Shadows',
-      })
-
-      store.submitCommand('talk to grandmother')
-
-      expect(store.modalQuest).toEqual({
-        kind: 'completed',
-        name: 'Hint of Magic',
-        main: false,
-        text: 'It begins.',
-        progress: { completed: 5, total: 11 },
-      })
-      store.dismissModal()
-      expect(store.modalQuest).toBe(null)
     })
 
     it('lets the fanfare alone mark a turn that also completes a quest', () => {
@@ -1798,6 +1746,8 @@ describe('useGameStore', () => {
         .mockReturnValue(null)
 
       store.submitCommand('talk to grandmother')
+      // Shown together (narration off): one sound, the fanfare.
+      store.ringQuestSounds(store.turns.at(-1)!.id, [0, 1])
 
       expect(audio.playNewQuest).not.toHaveBeenCalled()
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
@@ -1830,6 +1780,7 @@ describe('useGameStore', () => {
           main: false,
           text: 'Well done.',
           progress: { completed: 4, total: 11 },
+          fanfare: true,
         },
         {
           kind: 'completed',
@@ -1837,21 +1788,9 @@ describe('useGameStore', () => {
           main: false,
           text: 'Well done.',
           progress: { completed: 5, total: 11 },
+          fanfare: true,
         },
       ])
-    })
-
-    it('still shows a pop-up when a quest completes', () => {
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(
-          quest('[quest_name]Q (side quest)[/quest_name]\n\nDone.'),
-        )
-        .mockReturnValue(null)
-
-      store.submitCommand('look')
-
-      expect(store.showModal).toBe(true)
-      expect(store.modalTitle).toBe('🏆 Quest Complete!')
     })
 
     it('puts a dot on the Quests tab until it is seen', () => {
@@ -1983,21 +1922,6 @@ describe('useGameStore', () => {
       expect(store.finishAsked).toBe(false)
       expect(store.modalChapter).toBe(null)
       expect(bridge.controller.look).toHaveBeenCalled()
-    })
-
-    it('has no chapter for a quest pop-up', async () => {
-      await store.initGame()
-      store.dismissModal()
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(
-          quest('[quest_name]Q (side quest)[/quest_name]\n\nDone.'),
-        )
-        .mockReturnValue(null)
-
-      store.submitCommand('look')
-
-      expect(store.showModal).toBe(true)
-      expect(store.modalChapter).toBe(null)
     })
   })
 
@@ -2181,15 +2105,14 @@ describe('useGameStore', () => {
       final: true,
     }
 
-    it('shows the final chapter after the last quest pop-up', () => {
+    it('shows the final chapter right after the last quest completes, the completion in the story', () => {
       bridge.controller.completeQuest
         .mockReturnValueOnce(
           quest('[quest_name]Q (main quest)[/quest_name]\n\nDone.'),
         )
         .mockReturnValue(null)
       finishLastAct()
-      expect(store.modalQuest).not.toBe(null)
-      store.dismissModal()
+      expect(store.turns.at(-1)?.quests?.at(-1)?.kind).toBe('completed')
       expect(store.modalChapter).toEqual(FINAL_CHAPTER)
       expect(bridge.controller.advanceToRunning).not.toHaveBeenCalled()
     })

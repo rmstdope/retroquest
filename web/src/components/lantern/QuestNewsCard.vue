@@ -14,8 +14,9 @@ import { escapeHtml, renderMarkup } from '@/utils/theme'
  * newest part, since updates come often. Opening it scrolls the revealed
  * part into view, as the banner often sits at the bottom of the story.
  * A card's "Open in journal" button is described by its quest name, so two
- * cards in view are told apart. A completed quest stays as a record (its
- * pop-up comes first), with the act's quest count.
+ * cards in view are told apart. A completed quest is a record in the story,
+ * read aloud like a new quest's card, with the act's quest count (shown, not
+ * read).
  */
 const props = defineProps<{
   news: QuestNews
@@ -39,12 +40,11 @@ async function toggle(): Promise<void> {
 }
 
 const kicker = computed(() => newQuestKicker(props.news.main))
-const doneLabel = computed(() => {
-  const label = questCompleteKicker(props.news.main)
+const doneKicker = computed(() => questCompleteKicker(props.news.main))
+/** " · 3 of 11" after a completion's heading: shown, not read aloud. */
+const doneCount = computed(() => {
   const progress = props.news.progress
-  return progress
-    ? `${label} · ${progress.completed} of ${progress.total}`
-    : label
+  return progress ? ` · ${progress.completed} of ${progress.total}` : ''
 })
 </script>
 
@@ -95,10 +95,19 @@ const doneLabel = computed(() => {
       </svg>
     </span>
     <span class="lq-record-main">
-      <span class="lq-kicker">{{ doneLabel }}</span>
-      <span class="lq-quest-title">{{ news.name }}</span>
       <!-- eslint-disable vue/no-v-html -->
-      <span class="lq-record-text" v-html="renderMarkup(news.text)"></span>
+      <span class="lq-kicker"
+        ><span v-html="kickerHtml ?? escapeHtml(doneKicker)"></span
+        >{{ doneCount }}</span
+      >
+      <span
+        class="lq-quest-title"
+        v-html="nameHtml ?? escapeHtml(news.name)"
+      ></span>
+      <span
+        class="lq-record-text"
+        v-html="bodyHtml ?? renderMarkup(news.text)"
+      ></span>
       <!-- eslint-enable vue/no-v-html -->
     </span>
   </section>

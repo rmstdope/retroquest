@@ -7,8 +7,8 @@
  * made of parts, each a voiced line (`blockVoice`, `arrivalBlocks`,
  * `newQuestBlocks`, `questCompleteBlocks`) with its
  * recording or none. A unit with no part is silent: events, failures,
- * checklists, a revisited room and quest records other than a new quest's
- * card appear at once.
+ * checklists, a revisited room and a quest update appear at once; a new
+ * quest's card and a completed quest's record are read.
  */
 
 import type { QuestNews } from './questNews'
@@ -23,7 +23,6 @@ import {
   blockVoice,
   newQuestBlocks,
   questCompleteBlocks,
-  type QuestShown,
 } from './narrationScript'
 import { parseTurn } from './parseTurn'
 
@@ -98,7 +97,12 @@ export function turnUnits(
   for (const news of turn.quests ?? [])
     units.push({
       kind: 'quest',
-      parts: news.kind === 'new' ? partsOf(newQuestBlocks(news), manifest) : [],
+      parts:
+        news.kind === 'new'
+          ? partsOf(newQuestBlocks(news), manifest)
+          : news.kind === 'completed'
+            ? partsOf(questCompleteBlocks(news), manifest)
+            : [],
     })
   return units
 }
@@ -146,15 +150,5 @@ export function chapterUnits(
       if (index === 0 && heading.length) unit.pauseBefore = SCENE_PAUSE_MS
       return unit
     }),
-  ]
-}
-
-/** The unit of a quest-complete pop-up: its heading, the quest's name, then the completion text. */
-export function questPopUpUnits(
-  quest: QuestShown,
-  manifest: NarrationManifest,
-): NarrationUnit[] {
-  return [
-    { kind: 'quest', parts: partsOf(questCompleteBlocks(quest), manifest) },
   ]
 }

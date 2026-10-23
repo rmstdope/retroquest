@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn } from '@/lantern/parseTurn'
-import { newQuestKicker } from '@/lantern/questNews'
+import { newQuestKicker, questCompleteKicker } from '@/lantern/questNews'
 import { firstQuestUnit as firstQuestOf } from '@/lantern/narrationUnits'
 import QuestNewsCard from './QuestNewsCard.vue'
 import { displayName } from '@/lantern/displayName'
@@ -183,7 +183,14 @@ function chipLabel(chip: Chip): string {
         v-if="shown(firstQuestUnit + index)"
         :news="news"
         :kicker-html="
-          html(newQuestKicker(news.main), firstQuestUnit + index, 0, 1)
+          html(
+            news.kind === 'completed'
+              ? questCompleteKicker(news.main)
+              : newQuestKicker(news.main),
+            firstQuestUnit + index,
+            0,
+            1,
+          )
         "
         :name-html="html(news.name, firstQuestUnit + index, 1, 2)"
         :body-html="html(news.text, firstQuestUnit + index, 2)"

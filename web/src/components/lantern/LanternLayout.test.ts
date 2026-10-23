@@ -210,53 +210,6 @@ describe('LanternLayout', () => {
     })
   })
 
-  it('shows a completed quest in the pop-up', async () => {
-    const w = mountLayout()
-    const game = useGameStore()
-    game.modalTitle = '🏆 Quest Complete!'
-    game.modalQuest = {
-      kind: 'completed',
-      name: 'Hint of Magic',
-      main: false,
-      text: 'It begins.',
-      progress: { completed: 5, total: 11 },
-    }
-    game.showModal = true
-    await w.vm.$nextTick()
-
-    const dialog = w.get('[role="dialog"]')
-    const title = dialog.get('h2')
-    expect(title.text()).toBe('Hint of Magic')
-    expect(dialog.attributes('aria-labelledby')).toBe(title.attributes('id'))
-    expect(dialog.get('.lq-dialog-eyebrow').text()).toBe('Side quest complete')
-    expect(dialog.find('.lq-complete-count').exists()).toBe(true)
-    expect(dialog.text()).not.toContain('🏆')
-    expect(dialog.get('footer button').text()).toBe('Continue')
-  })
-
-  it('opens the next completion pop-up from its top', async () => {
-    const w = mountLayout()
-    const game = useGameStore()
-    const quest = (name: string) => ({
-      kind: 'completed' as const,
-      name,
-      main: false,
-      text: 'Done.',
-      progress: { completed: 1, total: 11 },
-    })
-    game.modalQuest = quest('First')
-    game.showModal = true
-    await w.vm.$nextTick()
-    const first = w.get('.lq-complete').element
-
-    game.modalQuest = quest('Second')
-    await w.vm.$nextTick()
-
-    // A fresh scroll box, so the text does not open where the last one was
-    // scrolled to.
-    expect(w.get('.lq-complete').element).not.toBe(first)
-  })
-
   it('plays the quest sounds (chime and fanfare)', () => {
     const game = useGameStore()
     const setPlayer = vi.spyOn(game, 'setAudioPlayer')
@@ -1585,6 +1538,32 @@ describe('LanternLayout', () => {
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
     })
 
+    it('holds the act-complete page until the act’s last turn has been read', async () => {
+      await ready()
+      const game = useGameStore()
+      const resume = vi.spyOn(game, 'resumeActEnd').mockImplementation(() => {})
+      const turn = narratedTurn(1)
+      await say(turn)
+      game.actEndPending = true
+      await vi.advanceTimersByTimeAsync(0)
+      expect(resume).not.toHaveBeenCalled()
+      audios[0].onended?.()
+      await vi.advanceTimersByTimeAsync(350)
+      audios[1].onended?.()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(resume).toHaveBeenCalled()
+    })
+
+    it('asks to hold the act-complete page only for a turn that will be read', async () => {
+      const gate = vi.spyOn(useGameStore(), 'setActEndGate')
+      await ready()
+      const held = gate.mock.calls.at(-1)?.[0]
+      expect(held?.(narratedTurn(1))).toBe(true)
+      expect(held?.(narratedTurn(2, { narrate: undefined }))).toBe(false)
+      useSettingsStore().narrationOn = false
+      expect(held?.(narratedTurn(3))).toBe(false)
+    })
+
     it('shows a restored or opening turn, or one with narration off, at once', async () => {
       const w = await ready()
       await say(narratedTurn(1, { narrate: undefined }))
@@ -1749,42 +1728,6 @@ describe('LanternLayout', () => {
         await openChapter(w)
         await w.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
         expect(useNarrationStore().isNarrating).toBe(false)
-      })
-
-      it('reads a quest-complete pop-up and stops at Continue', async () => {
-        const w = await ready()
-        const game = useGameStore()
-        vi.spyOn(game, 'dismissModal').mockImplementation(() => {})
-        game.modalQuest = {
-          kind: 'completed',
-          name: 'Q',
-          main: false,
-          text: DONE,
-        }
-        game.showModal = true
-        await vi.advanceTimersByTimeAsync(0)
-        expect(w.get('.lq-complete-text').classes()).toContain('lq-speaking')
-
-        await w.get('.lq-send').trigger('click')
-        expect(useNarrationStore().isNarrating).toBe(false)
-      })
-
-      it('cuts a chapter page in on the pop-up before it', async () => {
-        const w = await ready()
-        const game = useGameStore()
-        vi.spyOn(game, 'dismissModal').mockImplementation(() => {})
-        game.modalQuest = {
-          kind: 'completed',
-          name: 'Q',
-          main: false,
-          text: DONE,
-        }
-        game.showModal = true
-        await vi.advanceTimersByTimeAsync(0)
-        game.modalQuest = null
-        game.modalChapter = CHAPTER
-        await vi.advanceTimersByTimeAsync(0)
-        expect(w.get('.lq-chapter-title').classes()).toContain('lq-speaking')
       })
 
       it('shows a chapter page whole when narration is off', async () => {

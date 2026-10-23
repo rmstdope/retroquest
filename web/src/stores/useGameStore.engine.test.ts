@@ -109,19 +109,16 @@ describe('useGameStore over the real engine: game over', () => {
     })
   })
 
-  it('shows the quest pop-up first, then the final page', async () => {
+  it('records the last quest in the story and shows the final page', async () => {
     const store = await startedStore()
     store.submitCommand(`take ${CROWN}`)
-    expect(store.modalQuest).not.toBe(null)
-    expect(store.modalChapter).toBe(null)
-    store.dismissModal()
+    expect(store.turns.at(-1)?.quests?.at(-1)?.kind).toBe('completed')
     expect(store.modalChapter).toMatchObject({ kind: 'complete', final: true })
   })
 
   it('leads on from a non-last act, never to the save dialog or the end', async () => {
     const store = await startedStore([CrownAct, CrownAct])
     store.submitCommand(`take ${CROWN}`)
-    store.dismissModal() // the quest pop-up
     expect(store.modalChapter?.final).toBeFalsy()
     store.continueChapter()
     expect(store.finishAsked).toBe(false)

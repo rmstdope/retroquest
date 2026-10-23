@@ -5,7 +5,6 @@ import {
   chapterUnits,
   POPUP_NARRATION_ID,
   SCENE_PAUSE_MS,
-  questPopUpUnits,
   turnUnits,
 } from './narrationUnits'
 import { NARRATOR } from './narrationScript'
@@ -170,8 +169,8 @@ describe('chapterUnits', () => {
   })
 })
 
-describe('questPopUpUnits', () => {
-  it('is one unit: the heading, the quest’s name, then the completion text', () => {
+describe('a completed quest in the story', () => {
+  it('is read as its heading, the quest’s name, then the completion text', () => {
     const text = 'You did it.\n[success]* Done[/success]'
     const manifest = manifestOf(
       [NARRATOR, 'Side quest complete'],
@@ -179,7 +178,15 @@ describe('questPopUpUnits', () => {
       [NARRATOR, 'You did it.'],
       [NARRATOR, 'Done'],
     )
-    const units = questPopUpUnits({ main: false, name: 'Key', text }, manifest)
+    const units = turnUnits(
+      {
+        text: '',
+        arrival: null,
+        quests: [{ kind: 'completed', name: 'Key', main: false, text }],
+      },
+      false,
+      manifest,
+    )
     expect(units).toHaveLength(1)
     expect(units[0].kind).toBe('quest')
     expect(units[0].parts.map((p) => p.markup)).toEqual([
@@ -190,7 +197,9 @@ describe('questPopUpUnits', () => {
     ])
     expect(units[0].parts.every((p) => p.clip)).toBe(true)
   })
+})
 
+describe('POPUP_NARRATION_ID', () => {
   it('uses an id no story turn has', () => {
     expect(POPUP_NARRATION_ID).toBeLessThan(1)
   })
