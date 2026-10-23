@@ -1,13 +1,15 @@
-# TTS experiments (Fish Audio)
+# TTS (Fish Audio)
 
-An experiment in voicing the game's text with [Fish Audio](https://docs.fish.audio)'s hosted
-TTS. Nothing here is part of the game build.
+Tools for voicing the game's text with [Fish Audio](https://docs.fish.audio)'s hosted TTS. The
+recorded narration (see *Recording an act*) ships with the game from `web/public/audio/narration/`;
+everything else here is tooling and stays outside the build.
 
 ## Setup
 
 - [uv](https://docs.astral.sh/uv/) (the tool installs the Fish Audio SDK by itself) and `npm ci`
   in `web/`.
-- `FISH_AUDIO_API_KEY=…` in the worktree's `.env` (gitignored).
+- `FISH_AUDIO_API_KEY=…` in the repository's `.env` (gitignored), or in the environment.
+- `ffmpeg` (for `narrate.py` and `check.py`).
 
 ## Voicing text
 
@@ -42,6 +44,36 @@ grandmother's first talk (`texts/grandmother-first-talk.txt`) with two elderly f
 voices. Names need help:
 "Elior" comes out as "Elia", "Elir" or "Hylia", so a phonetic spelling in the text sent to
 Fish is the likely fix.
+
+## Recording an act
+
+An act's narration is recorded from a script of every line the story reads aloud:
+
+```sh
+(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act1.ts)  # writes tts/act1/script.json
+uv run tts/narrate.py act1 --check     # what is missing or stale
+uv run tts/narrate.py act1             # record what is missing, remove what is stale
+uv run tts/narrate.py act1 --only KEY  # re-record chosen lines
+uv run tts/narrate.py act1 --retime    # re-measure word timings, no new audio
+```
+
+- **The script** (`act1/script.json`, committed) is gathered by playing the act's golden path
+  through the real engine, trying examine/use/talk/look at every step on a copy of the game. Each
+  line has its speaker and a key made from the speaker and the words (`narrationKey` in
+  `web/src/lantern/`), so changed wording means a new key and the old clip goes stale. Lines the
+  game builds from its state are not in it and play silently.
+- **`act1/writers.json`** gives unsigned writing to its writer by its opening words (the mother's
+  letter, the father's note, Elior's journal); other writing is the narrator's.
+  **`act1/silent.json`** lists openings that stay silent (the chapter page's help line).
+- **`act1/cast.json`** holds each speaker's library voice and fixed style cue (approved by the
+  navigator one by one), and `pronounce` for words said differently from how they are written
+  ("Act I" is said "Act One"). **`act1/cues.json`** replaces the style on key-scene lines.
+- **`narrate.py`** sends each line (long ones in sentence-sized pieces) to Fish's free model,
+  transcribes the take with Whisper, aligns Whisper's word times onto the shown words, and keeps
+  the best of up to three takes, aiming for 90% of the words heard; names (Elior, Aren, Lysa) and
+  written prices are the usual misses. Clips are 64 kbps mono MP3 in
+  `web/public/audio/narration/act1/` with `manifest.json` (key -> file, speaker, duration, word
+  timings), which the story view reads.
 
 ## Getting the text
 

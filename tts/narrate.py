@@ -7,6 +7,7 @@
     uv run tts/narrate.py act1            # record every line that has no clip yet
     uv run tts/narrate.py act1 --check    # report missing and stale clips, record nothing
     uv run tts/narrate.py act1 --only KEY # (re)record chosen lines
+    uv run tts/narrate.py act1 --retime   # re-measure word timings of existing clips
 
 Reads tts/<act>/script.json (written by extract-<act>.ts), cast.json (speaker -> voice and
 style cue, plus how names are said) and cues.json (key -> a hand cue replacing the style).
@@ -61,16 +62,15 @@ def _norm(word: str) -> str:
     return _NUMBERS.get(plain, plain)
 
 
-def align(tokens: list[str], heard: list[dict], duration: float, aliases: dict | None = None) -> tuple[list[dict], float]:
+def align(tokens: list[str], heard: list[dict], duration: float, said: list[str] | None = None) -> tuple[list[dict], float]:
     """Give every shown token a start and end from Whisper's words.
 
     Tokens matched to a heard word take its times; unmatched tokens share the gap
-    between their matched neighbours evenly. `aliases` maps a shown word to the word
-    actually said (see `spoken_aliases`). Returns the timed tokens and the share of
-    tokens that were heard.
+    between their matched neighbours evenly. `said` is the same words as actually said
+    (see `said_words`), compared in place of the shown ones. Returns the timed tokens
+    and the share of tokens that were heard.
     """
-    aliases = aliases or {}
-    want = [_norm(aliases.get(_plain(t), t)) for t in tokens]
+    want = [_norm(t) for t in (said if said and len(said) == len(tokens) else tokens)]
     got = [_norm(w["word"]) for w in heard]
     times: list[tuple[float, float] | None] = [None] * len(tokens)
     for block in difflib.SequenceMatcher(a=want, b=got, autojunk=False).get_matching_blocks():
@@ -126,17 +126,29 @@ def spoken_text(text: str, cue: str, cast: dict) -> str:
     return f"{cue} {text}".strip()
 
 
-def spoken_aliases(cast: dict) -> dict:
-    """Shown word -> said word, for the cast's pronunciations that keep the word count."""
-    aliases = {}
-    for written, said in cast.get("pronounce", {}).items():
-        shown, spoken = written.split(), said.split()
-        if len(shown) != len(spoken):
+def said_words(text: str, cast: dict) -> list[str]:
+    """The shown words as they are said: the cast's pronunciations applied to the whole line.
+
+    Falls back to the shown words when a pronunciation changes the word count, since the
+    timings must line up one to one with the shown words.
+    """
+    shown = text.split(" ")
+    said = spoken_text(text, "", cast).split(" ")
+    return said if len(said) == len(shown) else shown
+
+
+def heard_words(segments: list[dict], duration: float) -> list[dict]:
+    """Whisper's words, without what it invents over trailing silence.
+
+    Invented text comes as near-empty segments or segments that start once the speech is
+    over; a real last segment may still end a little past the clip, and is kept.
+    """
+    words = []
+    for segment in segments:
+        if segment["end"] - segment["start"] < 0.3 or segment["start"] >= duration - 0.1:
             continue
-        for a, b in zip(shown, spoken):
-            if _plain(a) != _plain(b):
-                aliases[_plain(a)] = _plain(b)
-    return aliases
+        words.extend(segment.get("words", []))
+    return words
 
 
 # ---- recording ----
@@ -190,12 +202,7 @@ def _transcribe(wav_path: Path, duration: float) -> list[dict]:
 
     with _WHISPER_LOCK:
         result = mlx_whisper.transcribe(str(wav_path), path_or_hf_repo=WHISPER_MODEL, word_timestamps=True)
-    heard = []
-    for segment in result["segments"]:
-        if segment["end"] - segment["start"] < 0.3 or segment["end"] > duration + 0.3:
-            continue
-        heard.extend(segment.get("words", []))
-    return heard
+    return heard_words(result["segments"], duration)
 
 
 def _encode(wav: bytes, mp3_path: Path) -> None:
@@ -223,7 +230,7 @@ def _best_take(client, line: dict, cast: dict, cues: dict) -> tuple[bytes, float
             tmp.write(wav)
             tmp.flush()
             heard = _transcribe(Path(tmp.name), duration)
-        timed, ratio = align(tokens, heard, duration, spoken_aliases(cast))
+        timed, ratio = align(tokens, heard, duration, said_words(line["text"], cast))
         if best is None or ratio > best[3]:
             best = (wav, duration, timed, ratio)
         if ratio >= MIN_HEARD:
@@ -249,6 +256,22 @@ def record(lines: list[dict], cast: dict, cues: dict, out_dir: Path, manifest: d
     return below
 
 
+def retime(script: list[dict], cast: dict, out_dir: Path, manifest: dict) -> None:
+    """Re-measure the word timings of every recorded line from its clip, without new audio."""
+    for number, line in enumerate(script, 1):
+        clip = manifest.get(line["key"])
+        if not clip:
+            continue
+        with tempfile.NamedTemporaryFile(suffix=".wav") as tmp:
+            subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(out_dir / clip["file"]), tmp.name], check=True)
+            with wave.open(tmp.name) as audio:
+                duration = audio.getnframes() / audio.getframerate()
+            heard = _transcribe(Path(tmp.name), duration)
+        clip["words"], ratio = align(line["text"].split(" "), heard, duration, said_words(line["text"], cast))
+        clip["duration"] = round(duration, 3)
+        print(f"[{number}/{len(script)}] {ratio:4.0%} {line['speaker']:<11} {line['text'][:60]}", flush=True)
+
+
 def _write_manifest(out_dir: Path, manifest: dict) -> None:
     (out_dir / "manifest.json").write_text(json.dumps(dict(sorted(manifest.items())), indent=1) + "\n")
 
@@ -258,6 +281,7 @@ def main() -> None:
     parser.add_argument("act", help="act folder in tts/, e.g. act1")
     parser.add_argument("--check", action="store_true", help="report missing and stale clips; record nothing")
     parser.add_argument("--only", nargs="+", metavar="KEY", help="(re)record only these lines")
+    parser.add_argument("--retime", action="store_true", help="re-measure the word timings of existing clips; no new audio")
     args = parser.parse_args()
 
     act_dir = HERE / args.act
@@ -284,6 +308,11 @@ def main() -> None:
         for key in stale:
             print(f"  stale   {key}")
         sys.exit(1 if missing or stale else 0)
+
+    if args.retime:
+        retime(script, cast, out_dir, manifest)
+        _write_manifest(out_dir, manifest)
+        return
 
     for key in stale:
         (out_dir / manifest.pop(key)["file"]).unlink(missing_ok=True)

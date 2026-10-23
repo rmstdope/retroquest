@@ -6,7 +6,7 @@ splitting long lines, and building the text sent to Fish.
 
 import pytest
 
-from narrate import GAP_S, _join, align, chunk_text, spoken_aliases, spoken_text
+from narrate import GAP_S, _join, align, chunk_text, heard_words, said_words, spoken_text
 
 
 def words(*triples):
@@ -77,14 +77,24 @@ def test_spoken_text_adds_the_cue_and_says_names_as_cast():
     assert spoken_text("Act I: The Call to Adventure", "[grand]", cast) == "[grand] Act One: The Call to Adventure"
 
 
-def test_align_counts_a_word_said_as_the_cast_asks_as_heard():
-    timed, ratio = align(["Act", "I:", "The", "Call"], words(("Act", 0.0, 0.3), ("one", 0.3, 0.9), ("The", 1.0, 1.2), ("Call", 1.2, 1.6)), 2.0, {"i": "one"})
+def test_align_compares_against_the_words_as_said():
+    shown = ["Act", "I:", "The", "Call"]
+    said = said_words("Act I: The Call", {"pronounce": {"Act I:": "Act One:"}})
+    timed, ratio = align(shown, words(("Act", 0.0, 0.3), ("1", 0.3, 0.9), ("The", 1.0, 1.2), ("Call", 1.2, 1.6)), 2.0, said)
     assert ratio == 1.0
     assert timed[1] == {"word": "I:", "start": 0.3, "end": 0.9}
 
 
-def test_spoken_aliases_pair_words_said_differently():
-    assert spoken_aliases({"pronounce": {"Act I:": "Act One:", "Malakar": "Mala-kar the Grey"}}) == {"i": "one"}
+def test_a_pronunciation_changes_only_its_own_phrase():
+    cast = {"pronounce": {"Act I:": "Act One:"}}
+    text = "I knew your parents. Once you are ready, I will tell you."
+    assert said_words(text, cast) == text.split(" ")
+    _, ratio = align(text.split(" "), words(*[(w, i, i + 0.5) for i, w in enumerate(text.split(" "))]), 30.0, said_words(text, cast))
+    assert ratio == 1.0
+
+
+def test_said_words_fall_back_to_the_shown_words_when_the_count_changes():
+    assert said_words("Malakar waits", {"pronounce": {"Malakar": "Mala kar"}}) == ["Malakar", "waits"]
 
 
 def test_join_measures_the_audio_read_not_the_header():
@@ -107,7 +117,17 @@ def test_join_measures_the_audio_read_not_the_header():
 
 
 def test_align_treats_a_number_word_and_its_digits_alike():
-    timed, ratio = align(["Act", "I:"], words(("Act", 0.0, 0.3), ("1", 0.3, 0.9)), 1.0, {"i": "one"})
+    timed, ratio = align(["Act", "I:"], words(("Act", 0.0, 0.3), ("1", 0.3, 0.9)), 1.0, ["Act", "One:"])
     assert ratio == 1.0
     _, ratio = align(["three", "words"], words(("3", 0.0, 0.3), ("words", 0.3, 0.9)), 1.0)
     assert ratio == 1.0
+
+
+def test_heard_words_keep_a_real_last_segment_that_overshoots_the_clip():
+    segments = [
+        {"start": 0.0, "end": 2.0, "words": words(("I", 0.0, 0.5), ("knew", 0.5, 1.0))},
+        {"start": 2.0, "end": 3.6, "words": words(("tell", 2.1, 2.8), ("you.", 2.8, 3.5))},
+        {"start": 3.4, "end": 3.4, "words": words(("Thanks", 3.4, 3.4))},
+        {"start": 3.45, "end": 4.5, "words": words(("for", 3.45, 4.0), ("watching", 4.0, 4.5))},
+    ]
+    assert [w["word"] for w in heard_words(segments, duration=3.5)] == ["I", "knew", "tell", "you."]
