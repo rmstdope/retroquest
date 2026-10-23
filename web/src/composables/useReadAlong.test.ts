@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
+import { defineComponent, h, nextTick, ref, type VNode } from 'vue'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { useReadAlong } from './useReadAlong'
@@ -32,21 +33,24 @@ describe('useReadAlong', () => {
     })
   })
 
-  function mountReader() {
+  /** A surface narrated under `id`, drawing `content` with the read-along. */
+  function mountReader(
+    id = 7,
+    content: (along: ReturnType<typeof useReadAlong>) => VNode[] = (along) => [
+      along.shown(0)
+        ? h('p', {
+            class: along.isSpeaking(0) ? 'lq-speaking' : '',
+            'data-unit': 0,
+            innerHTML: along.html(TEXT, 0),
+          })
+        : h('i'),
+    ],
+  ) {
     const reader = defineComponent({
       setup() {
         const root = ref<HTMLElement | null>(null)
-        const along = useReadAlong(() => 7, root)
-        return () =>
-          h('div', { ref: root }, [
-            along.shown(0)
-              ? h('p', {
-                  class: along.isSpeaking(0) ? 'lq-speaking' : '',
-                  'data-unit': 0,
-                  innerHTML: along.html(TEXT, 0),
-                })
-              : null,
-          ])
+        const along = useReadAlong(() => id, root)
+        return () => h('div', { ref: root }, content(along))
       },
     })
     return mount(reader)
@@ -84,5 +88,51 @@ describe('useReadAlong', () => {
     await nextTick()
     expect(w.find('.lq-speaking').exists()).toBe(false)
     expect(w.findAll('.lq-w')).toHaveLength(0)
+  })
+
+  it('numbers a unit’s words across its parts, so a heading and its text light in turn', async () => {
+    const narration = useNarrationStore()
+    const clipOf = (markup: string) => ({
+      file: 'a.mp3',
+      speaker: 'narrator',
+      duration: 3,
+      words: narrationWords(markup).map((word, i) => ({
+        word,
+        start: i,
+        end: i + 1,
+      })),
+    })
+    const manifest = {
+      [narrationKey('narrator', 'Cellar')]: clipOf('Cellar'),
+      [narrationKey('narrator', TEXT)]: clipOf(TEXT),
+    }
+    const w = mountReader(8, (along) => [
+      h('h3', { innerHTML: along.html('Cellar', 0, 0, 1) }),
+      h('p', { innerHTML: along.html(TEXT, 0, 1) }),
+    ])
+    narration.begin(
+      8,
+      turnUnits(
+        { text: '', arrival: { room: 'Cellar', description: TEXT } },
+        true,
+        manifest,
+      ),
+      'act1',
+    )
+    // A room is read after a pause.
+    await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 50))
+    await nextTick()
+    expect(w.find('h3 .lq-w').attributes('data-w')).toBe('0')
+    expect(w.findAll('p .lq-w').map((s) => s.attributes('data-w'))).toEqual([
+      '1',
+      '2',
+      '3',
+    ])
+    audio.onended?.()
+    await new Promise((r) => setTimeout(r, 1200))
+    audio.currentTime = 1.2
+    await new Promise((r) => setTimeout(r, 120))
+    await nextTick()
+    expect(w.find('.lq-w-now').text()).toBe('two')
   })
 })

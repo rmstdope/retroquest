@@ -11,7 +11,6 @@ import type {
 } from '@/types/bridge'
 import type { useBridge } from '@/composables/useBridge'
 import { normalizeSaveName } from '@/engine'
-import { renderMarkup } from '@/utils/theme'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
 import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
@@ -65,7 +64,7 @@ export interface Turn {
   arrival: Arrival | null
   /** Quests that started, moved on or were completed with this turn. */
   quests?: QuestNews[]
-  /** Set on a player's command: its answer is narrated (never on a load or the opening). */
+  /** Set on a player's command and on the arrival that opens an act: its answer is narrated (never on a load). */
   narrate?: true
   /** Set when the turn arrived in a room the player had not been in before. */
   firstVisit?: true
@@ -83,17 +82,6 @@ export interface Arrival {
 
 /** Journal tabs that show a dot when something new arrived. */
 export type JournalTab = 'bag' | 'spells' | 'quests'
-
-/** A pop-up waiting its turn: a quest completion or a chapter page. */
-interface QuestEvent {
-  title: string
-  body: string
-  sound: 'questComplete' | null
-  /** The completed quest, for a pop-up made for it. */
-  quest?: QuestNews
-  /** An act intro or act completion, for a chapter page. */
-  chapter?: Chapter
-}
 
 export const useGameStore = defineStore('game', () => {
   // --- Bridge reference ---
@@ -135,8 +123,8 @@ export const useGameStore = defineStore('game', () => {
   const turns = ref<Turn[]>([])
   let nextTurnId = 1
   let lastTurnRoom = ''
-  /** Rooms visited as of the previous turn, to tell a first visit from a return. */
-  let lastVisitedCount = 0
+  /** The rooms visited as of the last turn, to tell a first visit. */
+  let lastVisited: string[] = []
   // Bag and spells as the bridge listed them after the previous turn
   let lastBag: string[] = []
   let lastSpells: string[] = []
@@ -156,11 +144,7 @@ export const useGameStore = defineStore('game', () => {
 
   // --- Modal ---
   const showModal = ref(false)
-  const modalTitle = ref('')
-  const modalBody = ref('')
-  /** The completed quest the open pop-up is about, else null. */
-  const modalQuest = ref<QuestNews | null>(null)
-  /** The chapter page the open pop-up is (act intro / complete), else null. */
+  /** The chapter page that is open (act intro / complete), else null. */
   const modalChapter = ref<Chapter | null>(null)
   /** The running act's heading, kept for its act-complete page. */
   let currentAct: ActIntro | null = null
@@ -188,18 +172,13 @@ export const useGameStore = defineStore('game', () => {
   function queueActIntro(raw: string): void {
     currentAct = parseActIntro(raw)
     actLabel.value = currentAct.act
-    modalQueue.value.push({
-      title: '📖 Act Intro',
-      body: renderMarkup(raw),
-      sound: null,
-      chapter: { kind: 'intro', ...currentAct },
-    })
+    modalQueue.value.push({ kind: 'intro', ...currentAct })
   }
   /**
-   * Pop-ups wait here. New and updated quests are not pop-ups: they go in the
-   * story, on the turn that caused them.
+   * Chapter pages (act intros and completions) wait here. Quest news is never
+   * a page: it goes in the story, on the turn that caused it.
    */
-  const modalQueue = ref<QuestEvent[]>([])
+  const modalQueue = ref<Chapter[]>([])
   /** The latest save/load notice (a toast); a new id shows it again. */
   const notice = ref<{ id: number; text: string } | null>(null)
   let nextNoticeId = 1
@@ -263,9 +242,12 @@ export const useGameStore = defineStore('game', () => {
 
     // A load shows the room even when it is the same one.
     const roomChanged = arrive || room !== lastTurnRoom
-    const visited = b.controller.getVisitedRoomCount()
-    const firstVisit = actRunning && visited > lastVisitedCount
-    lastVisitedCount = visited
+    // A room is new when it joins the visited rooms. Compared by name, as a
+    // room can also leave the list (the dream, once Elior wakes).
+    const visited = b.controller.getVisitedRooms()
+    const firstVisit =
+      actRunning && visited.includes(room) && !lastVisited.includes(room)
+    lastVisited = visited
     turns.value.push({
       id: nextTurnId++,
       command,
@@ -367,6 +349,59 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
+  /**
+   * Play the sound owed by quest cards `cards` (indices into turn `turnId`'s
+   * quests) as they show, once for all of them so cards shown together do not
+   * stack: the fanfare when one of them completes a quest, else the chime.
+   * Cards with nothing owed play nothing.
+   */
+  function ringQuestSounds(turnId: number, cards: number[]): void {
+    const quests = turns.value.find((entry) => entry.id === turnId)?.quests
+    const owed = cards
+      .map((index) => quests?.[index])
+      .filter((news): news is QuestNews => !!news?.chime || !!news?.fanfare)
+    if (!owed.length) return
+    const fanfare = owed.some((news) => news.fanfare)
+    for (const news of owed) {
+      delete news.chime
+      delete news.fanfare
+    }
+    if (fanfare) audioPlayer?.playQuestComplete()
+    else audioPlayer?.playNewQuest()
+  }
+
+  /**
+   * Whether the act-complete page must wait for turn `turn` (the act's last)
+   * to be read aloud; set by the story view (`setActEndGate`). With no gate,
+   * the page opens at once.
+   */
+  let actEndGate: ((turn: Turn) => boolean) | null = null
+  /** The act has ended and its page waits for the last turn's narration. */
+  const actEndPending = ref(false)
+
+  /** Let the story view hold the act-complete page while the act's last turn is read. */
+  function setActEndGate(gate: ((turn: Turn) => boolean) | null): void {
+    actEndGate = gate
+  }
+
+  /** The last turn has been read: open the act-complete page that was held. */
+  function resumeActEnd(): void {
+    if (!actEndPending.value) return
+    actEndPending.value = false
+    afterActEnds()
+  }
+
+  /**
+   * A save asked for while the act-complete page is held opens the page and
+   * saves nothing (true then): the act is over, so there is nothing to save
+   * until the next act begins.
+   */
+  function openHeldActEnd(): boolean {
+    if (!actEndPending.value) return false
+    resumeActEnd()
+    return true
+  }
+
   /** The UI asks before `quit` / `exit` (see QuitDialog). */
   const quitAsked = ref(false)
   /** Counts restarts, so views can start afresh with a new game. */
@@ -377,13 +412,14 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     quitAsked.value = false
     finishAsked.value = false
+    actEndPending.value = false
     ending.value = null
     lastAnswer = ''
     gameNumber.value++
     b.newGame()
     turns.value = []
     lastTurnRoom = ''
-    lastVisitedCount = 0
+    lastVisited = []
     lastBag = []
     lastSpells = []
     currentAct = null
@@ -393,7 +429,6 @@ export const useGameStore = defineStore('game', () => {
     shownQuest.value = null
     modalQueue.value = []
     showModal.value = false
-    modalQuest.value = null
     modalChapter.value = null
     openFirstAct(b)
   }
@@ -433,7 +468,9 @@ export const useGameStore = defineStore('game', () => {
       !showModal.value &&
       !b.controller.isActRunning()
     ) {
-      afterActEnds()
+      const last = turns.value.at(-1)
+      if (last && actEndGate?.(last)) actEndPending.value = true
+      else afterActEnds()
     }
     return result
   }
@@ -463,19 +500,13 @@ export const useGameStore = defineStore('game', () => {
   /** The last act's chapter page, whose button finishes the game. */
   function queueGameOver(): void {
     const b = requireBridge()
-    const text = b.controller.getResultText()
     modalQueue.value.push({
-      title: '🏆 Act Complete!',
-      body: renderMarkup(text),
-      sound: null,
-      chapter: {
-        kind: 'complete',
-        act: currentAct?.act ?? '',
-        title: currentAct?.title ?? '',
-        body: b.controller.getActCompleteText() ?? '',
-        stats: b.controller.getActStats(),
-        final: true,
-      },
+      kind: 'complete',
+      act: currentAct?.act ?? '',
+      title: currentAct?.title ?? '',
+      body: b.controller.getActCompleteText() ?? '',
+      stats: b.controller.getActStats(),
+      final: true,
     })
     if (!showModal.value) showNextModal()
   }
@@ -500,7 +531,6 @@ export const useGameStore = defineStore('game', () => {
     finishAsked.value = false
     modalQueue.value = []
     showModal.value = false
-    modalQuest.value = null
     modalChapter.value = null
     ending.value = { text: lastAnswer, saved: save }
     return true
@@ -518,19 +548,14 @@ export const useGameStore = defineStore('game', () => {
     const transitionScreens = screens.slice(0, -1)
     const actIntroText = screens[screens.length - 1].text
     const nextAct = parseActIntro(actIntroText).act || undefined
-    for (const { text, actComplete } of transitionScreens) {
+    for (const { actComplete } of transitionScreens) {
       modalQueue.value.push({
-        title: '🏆 Act Complete!',
-        body: renderMarkup(text),
-        sound: null,
-        chapter: {
-          kind: 'complete',
-          act: finished?.act ?? '',
-          title: finished?.title ?? '',
-          body: actComplete ?? '',
-          stats,
-          nextAct,
-        },
+        kind: 'complete',
+        act: finished?.act ?? '',
+        title: finished?.title ?? '',
+        body: actComplete ?? '',
+        stats,
+        nextAct,
       })
     }
     queueActIntro(actIntroText)
@@ -589,6 +614,7 @@ export const useGameStore = defineStore('game', () => {
 
   /** Quick save; true when the game was saved (a failure goes in the story). */
   function saveGame(command: string | null = null): boolean {
+    if (openHeldActEnd()) return false
     const b = requireBridge()
     const result = b.quickSaveGame()
     if (!showNotice(result, 'Game saved'))
@@ -611,6 +637,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function saveNamedGame(name: string, command: string | null = null): boolean {
+    if (openHeldActEnd()) return false
     const b = requireBridge()
     const result = b.saveNamedGame(name)
     if (!showNotice(result, `Game saved · ${name}`))
@@ -627,15 +654,20 @@ export const useGameStore = defineStore('game', () => {
     refreshPanels()
   }
 
-  /** A load: a notice and the room in the story, or the engine's failure. */
+  /**
+   * A load: a notice and the room in the story, or the engine's failure. A
+   * load plays on in the loaded act, so an act-complete page still held for
+   * narration is dropped.
+   */
   function showLoaded(
     command: string | null,
     result: string,
     text: string,
   ): void {
-    if (showNotice(result, text))
+    if (showNotice(result, text)) {
+      actEndPending.value = false
       showOutput(null, '', { chips: false, arrive: true })
-    else showOutput(command, result, { chips: false })
+    } else showOutput(command, result, { chips: false })
   }
 
   /** The engine's stats or help text, for a dialog (adds nothing to the story). */
@@ -653,6 +685,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function saveToSlot(slot: number): boolean {
+    if (openHeldActEnd()) return false
     const b = requireBridge()
     const result = b.saveToSlot(slot)
     if (!showNotice(result, `Game saved · Slot ${slot}`))
@@ -670,75 +703,58 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
-   * Collect the engine's quest events: new and updated quests go in the story
-   * on the latest turn (with a chime); each completion is also a pop-up.
+   * Collect the engine's quest events into the story on the latest turn:
+   * completions first (what was done comes before what it starts), then new
+   * and updated quests.
    */
   function pollQuestEvents(): void {
     const b = requireBridge()
     const news: QuestNews[] = []
 
     const settled = b.controller.settleQuests()
+    const completions = settled.completed
+
+    // Each completion is a record with the act's quest count as it stood once
+    // that quest was done.
+    if (completions.length) {
+      const { completed: done, total } = b.controller.getQuestProgress()
+      completions.forEach((completion, index) => {
+        news.push({
+          ...toQuestNews('completed', completion),
+          progress: {
+            completed: done - (completions.length - 1 - index),
+            total,
+          },
+        })
+      })
+    }
     for (const report of settled.activated) {
       news.push(toQuestNews('new', report))
     }
     for (const report of settled.updated) {
       news.push(toQuestNews('updated', report))
     }
-    const completions = settled.completed
 
-    // Completions also stay in the story as records, each with the act's
-    // quest count as it stood once that quest was done.
-    const events: QuestEvent[] = []
-    if (completions.length) {
-      const { completed: done, total } = b.controller.getQuestProgress()
-      completions.forEach((completion, index) => {
-        const record: QuestNews = {
-          ...toQuestNews('completed', completion),
-          progress: {
-            completed: done - (completions.length - 1 - index),
-            total,
-          },
-        }
-        news.push(record)
-        events.push({
-          title: '🏆 Quest Complete!',
-          body: renderMarkup(completion.popup),
-          sound: 'questComplete',
-          quest: record,
-        })
-      })
-    }
-
-    // A completion's fanfare alone marks the turn; the chime would clash.
+    // Each card's sound waits for the card to show (the story view rings it):
+    // the fanfare for a completion, the chime for a new or updated quest.
     const turn = turns.value.at(-1)
     if (news.length && turn) {
       turn.quests = [...(turn.quests ?? []), ...news]
       questsHaveNew.value = true
-      if (!completions.length) audioPlayer?.playNewQuest()
-    }
-
-    if (events.length > 0) {
-      modalQueue.value.push(...events)
-      if (!showModal.value) {
-        showNextModal()
-      }
+      for (const item of news)
+        if (item.kind === 'completed') item.fanfare = true
+        else item.chime = true
     }
   }
 
   function showNextModal(): void {
     if (modalQueue.value.length === 0) {
       showModal.value = false
-      modalQuest.value = null
       modalChapter.value = null
       return
     }
-    const event = modalQueue.value.shift()!
-    modalTitle.value = event.title
-    modalBody.value = event.body
-    modalQuest.value = event.quest ?? null
-    modalChapter.value = event.chapter ?? null
+    modalChapter.value = modalQueue.value.shift()!
     showModal.value = true
-    if (event.sound === 'questComplete') audioPlayer?.playQuestComplete()
   }
 
   function dismissModal(): void {
@@ -750,15 +766,12 @@ export const useGameStore = defineStore('game', () => {
       // If this was the act intro modal, fire a look to trigger quest start
       if (pendingLookOnDismiss) {
         pendingLookOnDismiss = false
-        showOutput(null, b.controller.look())
+        // The act's first room is read aloud like any first visit.
+        showOutput(null, b.controller.look(), { narrate: true })
         refreshPanels()
         pollQuestEvents()
         // The look may start quests: list them (as submitCommand does).
         refreshPanels()
-      } else if (!acceptInput.value && !b.controller.isActRunning()) {
-        // Quest completion modals were dismissed but the act has ended:
-        // show the next act's pages, or the last act's final page.
-        afterActEnds()
       }
     }
   }
@@ -903,6 +916,10 @@ export const useGameStore = defineStore('game', () => {
     dismissTitle,
     gameNumber,
     restartGame,
+    ringQuestSounds,
+    setActEndGate,
+    resumeActEnd,
+    actEndPending,
     getQuickSave,
     notice,
     rawInventory,
@@ -925,9 +942,6 @@ export const useGameStore = defineStore('game', () => {
     exits,
     acceptInput,
     showModal,
-    modalTitle,
-    modalBody,
-    modalQuest,
     modalChapter,
     musicFile,
     musicInfo,

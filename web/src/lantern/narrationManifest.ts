@@ -56,7 +56,8 @@ export function narrationWords(markup: string): string[] {
 
 /**
  * The recording of one voiced block, or null when there is none. `speaker` and
- * `markup` are one block as `turnBlocks`, `introBlocks` or `questCardBlocks`
+ * `markup` are one block as `turnBlocks`, `introBlocks`, `arrivalBlocks`,
+ * `newQuestBlocks` or `questCompleteBlocks`
  * give it (`UNSIGNED` for unsigned writing), not a whole answer.
  */
 export function findClip(

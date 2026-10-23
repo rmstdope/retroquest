@@ -688,7 +688,7 @@ test.describe('Lantern UI (the default)', () => {
     expect(height).toBeLessThan(72)
   })
 
-  test('shows quest complete as a bottom sheet on a small phone', async ({
+  test('shows a completed quest in the story, not as a pop-up, on a small phone', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 320, height: 568 })
@@ -698,27 +698,32 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const app = (document.querySelector('#app') as any).__vue_app__
       const store = app.config.globalProperties.$pinia.state.value.game
-      store.modalTitle = '🏆 Quest Complete!'
-      store.modalQuest = {
-        kind: 'completed',
-        name: 'Oath of Stillness',
-        main: false,
-        text: 'You kept your vow through the long night. '.repeat(30),
-        progress: { completed: 5, total: 8 },
-      }
-      store.showModal = true
+      store.turns.push({
+        id: 999,
+        command: 'kneel',
+        text: 'You kneel until dawn.',
+        room: store.roomName,
+        roomChanged: false,
+        gained: [],
+        lost: [],
+        arrival: null,
+        quests: [
+          {
+            kind: 'completed',
+            name: 'Oath of Stillness',
+            main: false,
+            text: 'You kept your vow through the long night.',
+            progress: { completed: 5, total: 8 },
+          },
+        ],
+      })
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
-    const dialog = page.getByRole('dialog', { name: 'Oath of Stillness' })
-    await expect(dialog).toBeVisible()
-    const box = await dialog.boundingBox()
-    expect(Math.round(box!.y + box!.height)).toBe(568)
-    expect(box!.width).toBe(320)
-    await expect(
-      dialog.getByRole('button', { name: 'Continue' }),
-    ).toBeInViewport()
-    await expect(dialog.getByText('5 of 8 quests')).toBeAttached()
+    const story = page.getByRole('region', { name: 'Story' })
+    await expect(story.getByText('Oath of Stillness')).toBeVisible()
+    await expect(story.getByText('Side quest complete · 5 of 8')).toBeAttached()
+    await expect(page.getByRole('dialog')).toHaveCount(0)
   })
 
   test('keeps the failed-load screen reachable with a long error on a short screen', async ({

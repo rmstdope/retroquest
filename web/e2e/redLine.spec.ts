@@ -133,28 +133,22 @@ async function startGame(page: Page): Promise<void> {
 }
 
 /**
- * Close every chapter page and pop-up until the act `header` is on screen,
+ * Close every chapter page until the act `header` is on screen,
  * collecting the text of the chapter pages on the way. Waits for the next page
  * to show instead of sleeping, so a slow machine only makes it wait longer.
  */
 async function readPages(page: Page, header: string): Promise<string[]> {
   const pages: string[] = []
   const chapterButton = page.locator('.lq-chapter-button')
-  const popUpButton = page.getByRole('button', {
-    name: 'Continue',
-    exact: true,
-  })
   const actHeader = page.getByTestId('act')
   for (;;) {
     if (await chapterButton.isVisible()) {
       pages.push(await page.locator('.lq-chapter').innerText())
       await chapterButton.click()
-    } else if (await popUpButton.isVisible()) {
-      await popUpButton.click()
     } else if ((await actHeader.textContent()) === header) {
       return pages
     } else {
-      await expect(chapterButton.or(popUpButton)).toBeVisible()
+      await expect(chapterButton).toBeVisible()
     }
   }
 }
@@ -199,13 +193,7 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
     }
   }
 
-  // The last act ends on its closing chapter page, after the quest pop-ups.
-  const popUp = page.getByRole('button', { name: 'Continue', exact: true })
-  const closing = page.locator('.lq-chapter')
-  while (!(await closing.isVisible())) {
-    await expect(popUp.or(closing)).toBeVisible()
-    if (await popUp.isVisible()) await popUp.click()
-  }
+  // The last act ends on its closing chapter page.
   await expect(page.locator('.lq-chapter')).toContainText(
     'Malakar is himself again. And Elior is home.',
   )

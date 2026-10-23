@@ -4,7 +4,7 @@ import { useGameStore, type Arrival } from '@/stores/useGameStore'
 import { useMediaQuery, WIDE_QUERY } from '@/composables/useMediaQuery'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
-import { renderMarkup } from '@/utils/theme'
+import { escapeHtml, renderMarkup } from '@/utils/theme'
 
 /**
  * Arrival in a room inside the story: a chapter-style divider, the room
@@ -16,6 +16,8 @@ import { renderMarkup } from '@/utils/theme'
 const props = defineProps<{
   arrival: Arrival
   command: string | null
+  /** The room's name as HTML with its words marked, while it is read aloud. */
+  nameHtml?: string
   /** The description as HTML with its words marked, while it is read aloud. */
   descriptionHtml?: string
 }>()
@@ -67,7 +69,9 @@ const exits = computed(() => Object.entries(props.arrival.exits))
         }}</span>
         {{ displayName(direction) }}</span
       >{{ direction ? ' ' : '' }}
-      <h3 class="lq-room">{{ arrival.room }}</h3>
+      <!-- eslint-disable vue/no-v-html -->
+      <h3 class="lq-room" v-html="nameHtml ?? escapeHtml(arrival.room)"></h3>
+      <!-- eslint-enable vue/no-v-html -->
       <span class="lq-rule" aria-hidden="true"></span>
     </div>
 

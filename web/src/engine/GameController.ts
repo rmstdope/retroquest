@@ -38,8 +38,6 @@ export interface QuestReport {
    * journal entry or the whole checklist (an update), the completion text.
    */
   text: string
-  /** The pop-up markup: the quest's name and type, then `text` or the log. */
-  popup: string
 }
 
 /** The quest events one settling produced. */
@@ -97,21 +95,12 @@ function isMerchant(character: Character): character is Merchant {
   )
 }
 
-function questType(quest: Quest): 'main' | 'side' {
-  return quest.isMain() ? 'main' : 'side'
-}
-
-/** A quest event: the story text plus the pop-up form of the same text. */
-function questReport(
-  quest: Quest,
-  text: string,
-  popupText = text,
-): QuestReport {
+/** A quest event: the quest and the text the story shows for it. */
+function questReport(quest: Quest, text: string): QuestReport {
   return {
     name: quest.name,
     main: quest.isMain(),
     text,
-    popup: `[quest_name]${quest.name} (${questType(quest)} quest)[/quest_name]\n\n${popupText}`,
   }
 }
 
@@ -261,7 +250,7 @@ export class GameController {
   }
 
   /**
-   * Settle the quest events of the turn and return their pop-up texts: quests
+   * Settle the quest events of the turn and return them for the story: quests
    * that started (only while an act runs), quests whose log changed, and
    * quests that completed. Between acts and after the last one the
    * completions are those of the presented state, so the completion that
@@ -284,9 +273,7 @@ export class GameController {
       payloads.activated = changes.activated.map((q) =>
         questReport(q, q.description),
       )
-      payloads.updated = changes.updated.map((q) =>
-        questReport(q, newsText(q), q.description),
-      )
+      payloads.updated = changes.updated.map((q) => questReport(q, newsText(q)))
       payloads.completed = changes.completed.map((q) =>
         questReport(q, q.completion),
       )
@@ -294,9 +281,9 @@ export class GameController {
     return payloads
   }
 
-  /** How many different rooms the player has been in so far (the story reads a room's description on its first visit). */
-  getVisitedRoomCount(): number {
-    return this.game.state.visitedRooms.length
+  /** The rooms the player has been in so far, by name (the story reads a room on its first visit). */
+  getVisitedRooms(): string[] {
+    return [...this.game.state.visitedRooms]
   }
 
   getRoomName(): string {

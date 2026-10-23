@@ -7,7 +7,7 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
 import {
   POPUP_NARRATION_ID,
   chapterUnits,
-  questPopUpUnits,
+  firstQuestUnit,
   turnUnits,
 } from '@/lantern/narrationUnits'
 import { actFolder } from '@/lantern/narrationManifest'
@@ -36,7 +36,6 @@ import QuitDialog from './QuitDialog.vue'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import SettingsDialog from './SettingsDialog.vue'
 import LanternHeader from './LanternHeader.vue'
-import QuestCompleteContent from './QuestCompleteContent.vue'
 import RoomCard from './RoomCard.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
@@ -57,8 +56,9 @@ import TitlePage from './TitlePage.vue'
  * goes on below the visible part.
  * After the last act, Finish the game asks to save (FinishDialog), then
  * only the end screen shows; the act's music keeps playing under it.
- * A player's command is narrated when the act has recordings and narration is
- * on (`useNarrationStore`): the layout starts it with the new turn, a click on
+ * A player's command, and the arrival that opens an act, is narrated when the
+ * act has recordings and narration is on (`useNarrationStore`): the layout
+ * starts it with the new turn, a click on
  * the story hurries it (two skip), Space/Enter hurry and Escape skips while
  * focus is not on a field or a control, and a pop-up stops it.
  */
@@ -138,7 +138,6 @@ function readOn(): void {
     behavior: still ? 'auto' : 'smooth',
   })
 }
-const continueButton = ref<HTMLButtonElement | null>(null)
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
 const dock = ref<InstanceType<typeof DockBar> | null>(null)
 
@@ -225,8 +224,8 @@ watch(
 )
 
 // A new answer cuts in on the one being narrated, then is narrated itself
-// when it is a player's command in an act with recordings (never behind a
-// pop-up). Runs before the story renders, so nothing flashes unspoken.
+// when it is a player's command or an act's opening arrival in an act with
+// recordings (never behind a pop-up). Runs before the story renders, so nothing flashes unspoken.
 watch(
   () => game.turns.at(-1)?.id,
   () => {
@@ -239,6 +238,58 @@ watch(
       turn.id,
       turnUnits(turn, !!turn.firstVisit, manifest),
       folder,
+    )
+  },
+)
+
+// The act-complete page waits while the act's last turn is read aloud (a
+// pop-up would cut the voice off), then opens; with nothing to read, at once.
+game.setActEndGate(
+  (turn) =>
+    !!turn.narrate &&
+    settings.narrationOn &&
+    !!game.narrationFolder &&
+    !!narration.manifestFor(game.narrationFolder),
+)
+watch(
+  () => [game.actEndPending, narration.isNarrating] as const,
+  ([pending, narrating]) => {
+    if (pending && !narrating) game.resumeActEnd()
+  },
+  { flush: 'post' },
+)
+onUnmounted(() => game.setActEndGate(null))
+
+// Each quest card's chime rings when the card shows: as the narration reaches
+// it, or at once with its turn (cards shown together ring once). A new turn
+// shows the previous one whole, so chimes still owed ring then.
+let chimeTurn: { id: number; cards: number } | null = null
+let stopChime: (() => void) | null = null
+watch(
+  () => game.turns.at(-1)?.id,
+  () => {
+    stopChime?.()
+    stopChime = null
+    if (chimeTurn)
+      game.ringQuestSounds(
+        chimeTurn.id,
+        Array.from({ length: chimeTurn.cards }, (_, index) => index),
+      )
+    const turn = game.turns.at(-1)
+    const cards = turn?.quests?.length ?? 0
+    chimeTurn = turn && cards ? { id: turn.id, cards } : null
+    if (!turn || !cards) return
+    const first = firstQuestUnit(turn)
+    stopChime = watch(
+      () =>
+        Array.from({ length: cards }, (_, index) =>
+          narration.revealed(turn.id, first + index),
+        ),
+      (shown) => {
+        const now = shown.flatMap((on, index) => (on ? [index] : []))
+        game.ringQuestSounds(turn.id, now)
+      },
+      { immediate: true },
     )
   },
 )
@@ -262,39 +313,24 @@ watch(
   },
 )
 
-// A chapter page or quest-complete pop-up is read aloud when its act has
-// recordings; one pop-up following another cuts in on it, and closing the last
-// one stops the voice; a page under the title page is read once that is
-// gone. Declared after the watch above so the old voice is cut
+// A chapter page is read aloud when its act has recordings; one page
+// following another cuts in on it, and closing the last one stops the voice;
+// a page under the title page is read once that is gone. Declared after the watch above so the old voice is cut
 // first, and before the render so nothing flashes unspoken.
 watch(
-  () =>
-    [
-      game.showModal,
-      game.modalChapter,
-      game.modalQuest,
-      game.showTitle,
-    ] as const,
-  async ([open, chapter, quest, title]) => {
+  () => [game.showModal, game.modalChapter, game.showTitle] as const,
+  async ([open, chapter, title]) => {
     narration.skipAll()
     // The game's first chapter page waits under the title page.
-    if (!open || title) return
-    const folder = chapter ? actFolder(chapter.act) : game.narrationFolder
-    if (!folder || (!chapter && !quest)) return
+    if (!open || title || !chapter) return
+    const folder = actFolder(chapter.act)
+    if (!folder) return
     await narration.preload(folder)
-    // Still the same pop-up once the recordings are in?
-    if (
-      !game.showModal ||
-      game.modalChapter !== chapter ||
-      game.modalQuest !== quest
-    )
-      return
+    // Still the same page once the recordings are in?
+    if (!game.showModal || game.modalChapter !== chapter) return
     const manifest = narration.manifestFor(folder)
     if (!manifest) return
-    const units = chapter
-      ? chapterUnits(chapter, manifest)
-      : questPopUpUnits(quest?.text ?? '', manifest)
-    narration.begin(POPUP_NARRATION_ID, units, folder)
+    narration.begin(POPUP_NARRATION_ID, chapterUnits(chapter, manifest), folder)
   },
 )
 
@@ -302,12 +338,6 @@ watch(
 function continueFromChapter(): void {
   narration.skipAll()
   game.continueChapter()
-}
-
-/** Leave the quest-complete (or text) pop-up: its voice stops, then the next pop-up or the story. */
-function dismissPopUp(): void {
-  narration.skipAll()
-  game.dismissModal()
 }
 
 // Show a new turn from its start (jsdom has no scrollIntoView). A command
@@ -504,25 +534,18 @@ watch(
   { flush: 'post' },
 )
 
-/** The quest-complete pop-up's eyebrow (none for the engine's text pop-ups). */
-const questEyebrow = computed(() => {
-  const quest = game.modalQuest
-  return quest ? `${quest.main ? 'Main' : 'Side'} quest complete` : ''
-})
-
-/** Focus the open pop-up's button (a chapter page's, or Continue). */
+/** Focus the open chapter page's button. */
 function focusPopUp(): void {
-  // The title page comes first; the pop-up under it gets focus after Start.
+  // The title page comes first; the page under it gets focus after Start.
   if (game.showTitle) return
-  if (chapterPage.value) chapterPage.value.focus()
-  else continueButton.value?.focus()
+  chapterPage.value?.focus()
 }
 
 // Move keyboard focus into each pop-up as it opens or one follows another
-// (a quest pop-up, then a chapter page), and back to the actions when the
-// last one closes.
+// (one chapter page, then the next), and back to the actions when the last
+// one closes.
 watch(
-  () => [game.showModal, game.modalChapter, game.modalQuest] as const,
+  () => [game.showModal, game.modalChapter] as const,
   ([open], [wasOpen]) => {
     if (open) focusPopUp()
     else if (wasOpen) focusActions()
@@ -696,33 +719,6 @@ watch(
           @continue="continueFromChapter()"
         />
       </section>
-      <!-- Other pop-ups: quest complete, or the engine's text. Keyed so each
-         one opens from its top. Focus goes to the actions afterwards. -->
-      <LanternDialog
-        v-else-if="game.showModal"
-        :key="game.modalQuest?.name ?? game.modalTitle"
-        :title="game.modalQuest?.name ?? game.modalTitle"
-        :eyebrow="questEyebrow"
-        :closable="false"
-        :restore-focus="false"
-        @close="game.dismissModal()"
-      >
-        <QuestCompleteContent v-if="game.modalQuest" :news="game.modalQuest" />
-        <!-- eslint-disable vue/no-v-html -->
-        <div v-else class="lq-dialog-body" v-html="game.modalBody"></div>
-        <!-- eslint-enable vue/no-v-html -->
-        <template #footer>
-          <button
-            ref="continueButton"
-            type="button"
-            class="lq-send"
-            data-autofocus
-            @click="dismissPopUp()"
-          >
-            Continue
-          </button>
-        </template>
-      </LanternDialog>
 
       <!-- Save before finishing, over the last act's chapter page. -->
       <FinishDialog v-if="game.showModal && game.finishAsked" />
@@ -897,12 +893,6 @@ watch(
 .lq-info :deep(a) {
   color: var(--lq-accent-text);
   text-decoration: underline;
-}
-.lq-dialog-body {
-  font-family: var(--lq-font-prose);
-  font-size: var(--lq-story-size);
-  line-height: var(--lq-story-line-height);
-  color: var(--lq-prose);
 }
 .lq-sr-only {
   position: absolute;

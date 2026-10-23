@@ -55,7 +55,14 @@ async function focusSlot(slot: number): Promise<void> {
 }
 
 async function save(slot: number): Promise<void> {
+  // While the act's last turn is read, a save opens the act page instead
+  // (nothing to save until the next act begins): leave the way clear.
+  const held = game.actEndPending
   const ok = game.saveToSlot(slot)
+  if (held) {
+    emit('close')
+    return
+  }
   asking.value = null
   justSaved.value = ok ? slot : null
   saveFailed.value = !ok

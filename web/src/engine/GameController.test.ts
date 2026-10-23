@@ -128,9 +128,9 @@ describe('GameController', () => {
       )
     })
 
-    it('counts the rooms visited so far', () => {
+    it('lists the rooms visited so far by name', () => {
       const ctrl = makeController()
-      expect(ctrl.getVisitedRoomCount()).toBe(1)
+      expect(ctrl.getVisitedRooms()).toEqual([ctrl.getRoomName()])
     })
 
     it('lists characters and items by name', () => {
@@ -302,7 +302,6 @@ describe('GameController', () => {
         name: 'Main Arc',
         main: true,
         text: 'Do Main Arc.',
-        popup: '[quest_name]Main Arc (main quest)[/quest_name]\n\nDo Main Arc.',
       }
       expect(ctrl.settleQuests()).toEqual({ ...none, activated: [started] })
       expect(ctrl.settleQuests()).toEqual(none)
@@ -316,8 +315,6 @@ describe('GameController', () => {
             name: 'Main Arc',
             main: true,
             text: "You have completed the quest 'Main Arc'.",
-            popup:
-              "[quest_name]Main Arc (main quest)[/quest_name]\n\nYou have completed the quest 'Main Arc'.",
           },
         ],
       })

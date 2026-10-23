@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { Act, Item, Quest, Room, type GameState } from '@/engine'
 import { useBridge, type ActClass } from '@/composables/useBridge'
@@ -26,9 +26,13 @@ class CrownQuest extends Quest {
 
 /** A one-act game that ends the moment the player holds the crown. */
 class CrownAct extends Act {
-  constructor() {
+  constructor(
+    name = 'Crown Act',
+    quest: Quest = new CrownQuest(),
+    classes: Record<string, typeof CrownQuest> = { CrownQuest },
+  ) {
     super({
-      name: 'Crown Act',
+      name,
       rooms: {
         Hall: new Room({
           name: 'Hall',
@@ -42,7 +46,8 @@ class CrownAct extends Act {
           ],
         }),
       },
-      quests: [new CrownQuest()],
+      quests: [quest],
+      classes,
       musicFile: 'finale.mp3',
       musicInfo: 'Finale',
     })
@@ -53,6 +58,19 @@ class CrownAct extends Act {
     return gameState.inventory.some((item) => item.name === CROWN)
   }
 }
+
+/** The quest of the second crown act (each act registers its own classes). */
+class SecondCrownQuest extends CrownQuest {}
+
+/** A second crown act, so a game can lead on from the first. */
+class SecondCrownAct extends CrownAct {
+  constructor() {
+    super('Second Crown Act', new SecondCrownQuest(), { SecondCrownQuest })
+  }
+}
+
+/** The game store under test. */
+type Store = ReturnType<typeof useGameStore>
 
 /** The store over the real engine, playing the crown act (or `acts`). */
 async function startedStore(
@@ -69,6 +87,21 @@ async function startedStore(
 describe('useGameStore over the real engine: game over', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
+    // Saves need the browser's storage: an empty one in memory.
+    const stored: Record<string, string> = {}
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string): string | null => stored[key] ?? null,
+      setItem: (key: string, value: string): void => {
+        stored[key] = value
+      },
+      removeItem: (key: string): void => {
+        delete stored[key]
+      },
+    })
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
   })
 
   it('does not end the game before the last act is complete', async () => {
@@ -81,7 +114,6 @@ describe('useGameStore over the real engine: game over', () => {
   it('closes the final act with the engine’s own closing text and stats', async () => {
     const store = await startedStore()
     store.submitCommand(`take ${CROWN}`)
-    store.dismissModal() // the quest pop-up
     expect(store.showModal).toBe(true)
     expect(store.modalChapter).toMatchObject({
       kind: 'complete',
@@ -96,7 +128,6 @@ describe('useGameStore over the real engine: game over', () => {
   it('asks to save on the final page, then ends with the engine’s last answer', async () => {
     const store = await startedStore()
     store.submitCommand(`take ${CROWN}`)
-    store.dismissModal() // the quest pop-up
     store.continueChapter()
     expect(store.finishAsked).toBe(true)
     store.cancelFinish()
@@ -109,22 +140,55 @@ describe('useGameStore over the real engine: game over', () => {
     })
   })
 
-  it('shows the quest pop-up first, then the final page', async () => {
+  it('records the last quest in the story and shows the final page', async () => {
     const store = await startedStore()
     store.submitCommand(`take ${CROWN}`)
-    expect(store.modalQuest).not.toBe(null)
-    expect(store.modalChapter).toBe(null)
-    store.dismissModal()
+    expect(store.turns.at(-1)?.quests?.at(-1)?.kind).toBe('completed')
     expect(store.modalChapter).toMatchObject({ kind: 'complete', final: true })
   })
 
   it('leads on from a non-last act, never to the save dialog or the end', async () => {
-    const store = await startedStore([CrownAct, CrownAct])
+    const store = await startedStore([CrownAct, SecondCrownAct])
     store.submitCommand(`take ${CROWN}`)
-    store.dismissModal() // the quest pop-up
     expect(store.modalChapter?.final).toBeFalsy()
     store.continueChapter()
     expect(store.finishAsked).toBe(false)
     expect(store.ending).toBe(null)
+  })
+
+  it('plays on from a load made while the act-complete page waits for narration', async () => {
+    const store = await startedStore([CrownAct, SecondCrownAct])
+    store.setActEndGate(() => true)
+    expect(store.saveGame()).toBe(true)
+    store.submitCommand(`take ${CROWN}`)
+    expect(store.actEndPending).toBe(true)
+    expect(store.showModal).toBe(false)
+
+    store.loadGame()
+
+    expect(store.actEndPending).toBe(false)
+    expect(store.acceptInput).toBe(true)
+    store.resumeActEnd()
+    expect(store.showModal).toBe(false)
+    store.submitCommand('look')
+    expect(store.turns.at(-1)?.command).toBe('look')
+  })
+
+  it.each([
+    ['a quick save', (store: Store): boolean => store.saveGame()],
+    ['a slot save', (store: Store): boolean => store.saveToSlot(1)],
+    ['a named save', (store: Store): boolean => store.saveNamedGame('late')],
+  ])('opens the waiting act pages instead of %s', async (_kind, save) => {
+    const store = await startedStore([CrownAct, SecondCrownAct])
+    store.setActEndGate(() => true)
+    store.submitCommand(`take ${CROWN}`)
+
+    expect(save(store)).toBe(false)
+
+    expect(store.actEndPending).toBe(false)
+    // The act's pages (here only the next act's intro) are open.
+    expect(store.showModal).toBe(true)
+    expect(store.getQuickSave()).toBe(null)
+    expect(store.getSaveSlots()[0].act).toBe(null)
   })
 })

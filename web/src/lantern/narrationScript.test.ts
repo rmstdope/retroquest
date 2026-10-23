@@ -15,7 +15,10 @@ import {
   blockVoice,
   introBlocks,
   linesOfTurn,
-  questCardBlocks,
+  arrivalBlocks,
+  newQuestBlocks,
+  questCompleteBlocks,
+  questTextBlocks,
   turnBlocks,
   UNSIGNED,
   type ScriptBranch,
@@ -123,9 +126,45 @@ describe('the voiced blocks a surface shows', () => {
     ])
   })
 
-  it('reads a quest card’s opening, then each checklist item as its own line', () => {
+  it('reads a room arrival’s name, then its description', () => {
+    expect(arrivalBlocks('The Dream', 'Dark.\n\nA storm.')).toEqual([
+      { speaker: 'narrator', markup: 'The Dream' },
+      { speaker: 'narrator', markup: 'Dark.' },
+      { speaker: 'narrator', markup: 'A storm.' },
+    ])
+  })
+
+  it('reads a new quest’s heading and name before its text', () => {
     expect(
-      questCardBlocks(
+      newQuestBlocks({
+        main: false,
+        name: 'Fishing expedition',
+        text: 'Help him.',
+      }),
+    ).toEqual([
+      { speaker: 'narrator', markup: 'New side quest' },
+      { speaker: 'narrator', markup: 'Fishing expedition' },
+      { speaker: 'narrator', markup: 'Help him.' },
+    ])
+  })
+
+  it('reads a completed quest’s heading and name before its completion text', () => {
+    expect(
+      questCompleteBlocks({
+        main: true,
+        name: 'The Faded Photograph',
+        text: 'You found it.',
+      }),
+    ).toEqual([
+      { speaker: 'narrator', markup: 'Main quest complete' },
+      { speaker: 'narrator', markup: 'The Faded Photograph' },
+      { speaker: 'narrator', markup: 'You found it.' },
+    ])
+  })
+
+  it('reads a quest text’s opening, then each checklist item as its own line', () => {
+    expect(
+      questTextBlocks(
         'You will need:\n[success]* Warm clothing[/success]\n[pending]* A map[/pending]',
       ),
     ).toEqual([
@@ -208,6 +247,22 @@ describe('actScript for Act I', () => {
     expect(script.some((line) => line.text.startsWith('Congratulations'))).toBe(
       false,
     )
+  })
+
+  it('reads each room’s name on arrival, the opening room too', () => {
+    expect(find('The Dream')?.speaker).toBe('narrator')
+    expect(find('Village Square')?.speaker).toBe('narrator')
+  })
+
+  it('reads quest headings and quest names', () => {
+    for (const words of [
+      'New main quest',
+      'New side quest',
+      'Side quest complete',
+      'Main quest complete',
+      'The Faded Photograph',
+    ])
+      expect(find(words)?.speaker, words).toBe('narrator')
   })
 
   it('takes optional lines from examining what is at hand along the way', () => {

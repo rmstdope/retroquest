@@ -1,4 +1,26 @@
 {
+ "0016e4860763bd": {
+  "file": "0016e4860763bd.mp3",
+  "speaker": "narrator",
+  "duration": 1.207,
+  "words": [
+   {
+    "word": "Hint",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "of",
+    "start": 0.34,
+    "end": 0.54
+   },
+   {
+    "word": "Magic",
+    "start": 0.54,
+    "end": 0.9
+   }
+  ]
+ },
  "0022d0ca3a78d2": {
   "file": "0022d0ca3a78d2.mp3",
   "speaker": "narrator",
@@ -367,6 +389,23 @@
     "word": "I.",
     "start": 7.26,
     "end": 7.66
+   }
+  ]
+ },
+ "00a3f28fcf7306": {
+  "file": "00a3f28fcf7306.mp3",
+  "speaker": "narrator",
+  "duration": 1.161,
+  "words": [
+   {
+    "word": "Village",
+    "start": 0.0,
+    "end": 0.5
+   },
+   {
+    "word": "Well",
+    "start": 0.5,
+    "end": 0.9
    }
   ]
  },
@@ -6226,6 +6265,40 @@
    }
   ]
  },
+ "05581437584906": {
+  "file": "05581437584906.mp3",
+  "speaker": "narrator",
+  "duration": 1.022,
+  "words": [
+   {
+    "word": "Chicken",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "Coop",
+    "start": 0.4,
+    "end": 0.74
+   }
+  ]
+ },
+ "055c95cb57e560": {
+  "file": "055c95cb57e560.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Vegetable",
+    "start": 0.0,
+    "end": 0.64
+   },
+   {
+    "word": "Field",
+    "start": 0.64,
+    "end": 1.2
+   }
+  ]
+ },
  "05633832d62aae": {
   "file": "05633832d62aae.mp3",
   "speaker": "tilda",
@@ -7330,6 +7403,28 @@
     "word": "that.",
     "start": 49.34,
     "end": 49.78
+   }
+  ]
+ },
+ "0678b14852e2e7": {
+  "file": "0678b14852e2e7.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "New",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "side",
+    "start": 0.36,
+    "end": 0.84
+   },
+   {
+    "word": "quest",
+    "start": 0.84,
+    "end": 1.12
    }
   ]
  },
@@ -8781,6 +8876,45 @@
    }
   ]
  },
+ "0803c0318425e7": {
+  "file": "0803c0318425e7.mp3",
+  "speaker": "narrator",
+  "duration": 0.882,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "Dream",
+    "start": 0.14,
+    "end": 0.46
+   }
+  ]
+ },
+ "081e5afed8e973": {
+  "file": "081e5afed8e973.mp3",
+  "speaker": "narrator",
+  "duration": 1.95,
+  "words": [
+   {
+    "word": "Shadows",
+    "start": 0.0,
+    "end": 0.66
+   },
+   {
+    "word": "Over",
+    "start": 0.66,
+    "end": 1.1
+   },
+   {
+    "word": "Willowbrook",
+    "start": 1.1,
+    "end": 1.82
+   }
+  ]
+ },
  "081f99ee117abb": {
   "file": "081f99ee117abb.mp3",
   "speaker": "narrator",
@@ -9492,6 +9626,28 @@
    }
   ]
  },
+ "091ab964b0dd1c": {
+  "file": "091ab964b0dd1c.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "Main",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "quest",
+    "start": 0.36,
+    "end": 0.74
+   },
+   {
+    "word": "complete",
+    "start": 0.74,
+    "end": 1.28
+   }
+  ]
+ },
  "09245420c652a2": {
   "file": "09245420c652a2.mp3",
   "speaker": "narrator",
@@ -9825,6 +9981,33 @@
    }
   ]
  },
+ "096a69c7bd0f90": {
+  "file": "096a69c7bd0f90.mp3",
+  "speaker": "narrator",
+  "duration": 1.95,
+  "words": [
+   {
+    "word": "Oh",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "deer,",
+    "start": 0.34,
+    "end": 1.2
+   },
+   {
+    "word": "oh",
+    "start": 1.2,
+    "end": 1.4
+   },
+   {
+    "word": "deer",
+    "start": 1.4,
+    "end": 1.95
+   }
+  ]
+ },
  "098d337e8c685a": {
   "file": "098d337e8c685a.mp3",
   "speaker": "blacksmith",
@@ -10091,6 +10274,28 @@
    }
   ]
  },
+ "09acfbb0c60912": {
+  "file": "09acfbb0c60912.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Magic",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "for",
+    "start": 0.54,
+    "end": 0.78
+   },
+   {
+    "word": "real",
+    "start": 0.78,
+    "end": 1.22
+   }
+  ]
+ },
  "09ae2f5c6f96f4": {
   "file": "09ae2f5c6f96f4.mp3",
   "speaker": "narrator",
@@ -10180,6 +10385,33 @@
     "word": "Eldoria.",
     "start": 6.14,
     "end": 6.68
+   }
+  ]
+ },
+ "09d7037c370abe": {
+  "file": "09d7037c370abe.mp3",
+  "speaker": "narrator",
+  "duration": 2.322,
+  "words": [
+   {
+    "word": "Curiosity",
+    "start": 0.0,
+    "end": 0.64
+   },
+   {
+    "word": "killed",
+    "start": 0.64,
+    "end": 1.54
+   },
+   {
+    "word": "the",
+    "start": 1.54,
+    "end": 1.78
+   },
+   {
+    "word": "cat",
+    "start": 1.78,
+    "end": 2.12
    }
   ]
  },
@@ -10668,6 +10900,28 @@
     "word": "smiles.",
     "start": 0.52,
     "end": 1.12
+   }
+  ]
+ },
+ "0a585f21456625": {
+  "file": "0a585f21456625.mp3",
+  "speaker": "narrator",
+  "duration": 2.229,
+  "words": [
+   {
+    "word": "Magnet",
+    "start": 0.0,
+    "end": 0.72
+   },
+   {
+    "word": "fishing",
+    "start": 0.72,
+    "end": 1.14
+   },
+   {
+    "word": "expedition",
+    "start": 1.14,
+    "end": 1.98
    }
   ]
  },
@@ -11731,6 +11985,23 @@
    }
   ]
  },
+ "0b7c094082210e": {
+  "file": "0b7c094082210e.mp3",
+  "speaker": "narrator",
+  "duration": 1.44,
+  "words": [
+   {
+    "word": "Abandoned",
+    "start": 0.0,
+    "end": 0.74
+   },
+   {
+    "word": "Shed",
+    "start": 0.74,
+    "end": 1.14
+   }
+  ]
+ },
  "0b8a43fec851bd": {
   "file": "0b8a43fec851bd.mp3",
   "speaker": "narrator",
@@ -12407,6 +12678,23 @@
    }
   ]
  },
+ "0c64c7e367b44a": {
+  "file": "0c64c7e367b44a.mp3",
+  "speaker": "narrator",
+  "duration": 1.718,
+  "words": [
+   {
+    "word": "Blacksmith's",
+    "start": 0.0,
+    "end": 1.0
+   },
+   {
+    "word": "Forge",
+    "start": 1.0,
+    "end": 1.48
+   }
+  ]
+ },
  "0c90bdfaa996bf": {
   "file": "0c90bdfaa996bf.mp3",
   "speaker": "narrator",
@@ -13035,6 +13323,23 @@
    }
   ]
  },
+ "0d28fe08434f5e": {
+  "file": "0d28fe08434f5e.mp3",
+  "speaker": "narrator",
+  "duration": 1.254,
+  "words": [
+   {
+    "word": "Forest",
+    "start": 0.0,
+    "end": 0.6
+   },
+   {
+    "word": "Path",
+    "start": 0.6,
+    "end": 0.94
+   }
+  ]
+ },
  "0d2c5de2512e86": {
   "file": "0d2c5de2512e86.mp3",
   "speaker": "narrator",
@@ -13219,6 +13524,23 @@
     "word": "life.",
     "start": 15.5,
     "end": 15.8
+   }
+  ]
+ },
+ "0d49024e6a4c8b": {
+  "file": "0d49024e6a4c8b.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Village",
+    "start": 0.0,
+    "end": 0.52
+   },
+   {
+    "word": "Square",
+    "start": 0.52,
+    "end": 0.86
    }
   ]
  },
@@ -13878,6 +14200,23 @@
     "word": "letter.",
     "start": 13.34,
     "end": 13.62
+   }
+  ]
+ },
+ "0dec4340207d8f": {
+  "file": "0dec4340207d8f.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Fishing",
+    "start": 0.0,
+    "end": 0.46
+   },
+   {
+    "word": "expedition",
+    "start": 0.46,
+    "end": 1.06
    }
   ]
  },
@@ -16262,6 +16601,28 @@
    }
   ]
  },
+ "111769f2b08397": {
+  "file": "111769f2b08397.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "Faded",
+    "start": 0.2,
+    "end": 0.66
+   },
+   {
+    "word": "Photograph",
+    "start": 0.66,
+    "end": 1.36
+   }
+  ]
+ },
  "112de193c5fa4e": {
   "file": "112de193c5fa4e.mp3",
   "speaker": "narrator",
@@ -16563,6 +16924,23 @@
     "word": "anywhere.",
     "start": 7.88,
     "end": 8.24
+   }
+  ]
+ },
+ "1174c72ff016c4": {
+  "file": "1174c72ff016c4.mp3",
+  "speaker": "narrator",
+  "duration": 1.254,
+  "words": [
+   {
+    "word": "Village",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "Chapel",
+    "start": 0.54,
+    "end": 0.96
    }
   ]
  },
@@ -17164,6 +17542,23 @@
    }
   ]
  },
+ "124d5c3ce7ffcb": {
+  "file": "124d5c3ce7ffcb.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "General",
+    "start": 0.0,
+    "end": 0.44
+   },
+   {
+    "word": "Store",
+    "start": 0.44,
+    "end": 0.9
+   }
+  ]
+ },
  "125609050865dc": {
   "file": "125609050865dc.mp3",
   "speaker": "blacksmith",
@@ -17694,6 +18089,23 @@
     "word": "way",
     "start": 1.38,
     "end": 1.64
+   }
+  ]
+ },
+ "129314440d0b65": {
+  "file": "129314440d0b65.mp3",
+  "speaker": "narrator",
+  "duration": 1.115,
+  "words": [
+   {
+    "word": "Old",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "Mill",
+    "start": 0.4,
+    "end": 0.78
    }
   ]
  },
@@ -20467,6 +20879,23 @@
     "word": "warm.",
     "start": 2.64,
     "end": 3.0
+   }
+  ]
+ },
+ "150ecc75a68785": {
+  "file": "150ecc75a68785.mp3",
+  "speaker": "narrator",
+  "duration": 1.161,
+  "words": [
+   {
+    "word": "Hidden",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "Glade",
+    "start": 0.36,
+    "end": 0.94
    }
   ]
  },
@@ -23548,6 +23977,28 @@
    }
   ]
  },
+ "182c839e0a2572": {
+  "file": "182c839e0a2572.mp3",
+  "speaker": "narrator",
+  "duration": 1.533,
+  "words": [
+   {
+    "word": "Road",
+    "start": 0.0,
+    "end": 0.44
+   },
+   {
+    "word": "to",
+    "start": 0.44,
+    "end": 0.6
+   },
+   {
+    "word": "Greendale",
+    "start": 0.6,
+    "end": 1.26
+   }
+  ]
+ },
  "188fe68f93c37e": {
   "file": "188fe68f93c37e.mp3",
   "speaker": "narrator",
@@ -24387,6 +24838,33 @@
    }
   ]
  },
+ "193be0a872654f": {
+  "file": "193be0a872654f.mp3",
+  "speaker": "narrator",
+  "duration": 1.533,
+  "words": [
+   {
+    "word": "Preparing",
+    "start": 0.0,
+    "end": 0.56
+   },
+   {
+    "word": "for",
+    "start": 0.56,
+    "end": 0.8
+   },
+   {
+    "word": "the",
+    "start": 0.8,
+    "end": 0.92
+   },
+   {
+    "word": "road",
+    "start": 0.92,
+    "end": 1.2
+   }
+  ]
+ },
  "193d40acf110ef": {
   "file": "193d40acf110ef.mp3",
   "speaker": "narrator",
@@ -25008,6 +25486,28 @@
     "word": "some?",
     "start": 9.56,
     "end": 9.86
+   }
+  ]
+ },
+ "19ad071adb2439": {
+  "file": "19ad071adb2439.mp3",
+  "speaker": "narrator",
+  "duration": 1.393,
+  "words": [
+   {
+    "word": "Know",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "your",
+    "start": 0.36,
+    "end": 0.64
+   },
+   {
+    "word": "village",
+    "start": 0.64,
+    "end": 0.98
    }
   ]
  },
@@ -30013,6 +30513,33 @@
    }
   ]
  },
+ "1c6599d8336db4": {
+  "file": "1c6599d8336db4.mp3",
+  "speaker": "narrator",
+  "duration": 1.347,
+  "words": [
+   {
+    "word": "Let",
+    "start": 0.0,
+    "end": 0.28
+   },
+   {
+    "word": "there",
+    "start": 0.28,
+    "end": 0.5
+   },
+   {
+    "word": "be",
+    "start": 0.5,
+    "end": 0.74
+   },
+   {
+    "word": "light",
+    "start": 0.74,
+    "end": 1.04
+   }
+  ]
+ },
  "1c76b767ac8cbe": {
   "file": "1c76b767ac8cbe.mp3",
   "speaker": "narrator",
@@ -30107,6 +30634,18 @@
     "word": "rewarded.",
     "start": 6.38,
     "end": 6.86
+   }
+  ]
+ },
+ "1c76c403ae9607": {
+  "file": "1c76c403ae9607.mp3",
+  "speaker": "narrator",
+  "duration": 0.789,
+  "words": [
+   {
+    "word": "Riverbank",
+    "start": 0.0,
+    "end": 0.6
    }
   ]
  },
@@ -30331,6 +30870,23 @@
     "word": "light.",
     "start": 12.44,
     "end": 12.74
+   }
+  ]
+ },
+ "1ce01e698ceb2f": {
+  "file": "1ce01e698ceb2f.mp3",
+  "speaker": "narrator",
+  "duration": 1.207,
+  "words": [
+   {
+    "word": "Elior's",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "Cottage",
+    "start": 0.4,
+    "end": 1.0
    }
   ]
  },
@@ -31014,6 +31570,23 @@
     "word": "found!",
     "start": 11.72,
     "end": 12.16
+   }
+  ]
+ },
+ "1d8e270a441a9c": {
+  "file": "1d8e270a441a9c.mp3",
+  "speaker": "narrator",
+  "duration": 0.975,
+  "words": [
+   {
+    "word": "Mira's",
+    "start": 0.0,
+    "end": 0.48
+   },
+   {
+    "word": "Hut",
+    "start": 0.48,
+    "end": 0.76
    }
   ]
  },
@@ -32427,6 +33000,28 @@
    }
   ]
  },
+ "1f5c71c8ba496d": {
+  "file": "1f5c71c8ba496d.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "Side",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "quest",
+    "start": 0.42,
+    "end": 0.78
+   },
+   {
+    "word": "complete",
+    "start": 0.78,
+    "end": 1.28
+   }
+  ]
+ },
  "1f7745b8397160": {
   "file": "1f7745b8397160.mp3",
   "speaker": "narrator",
@@ -32451,6 +33046,28 @@
     "word": "in.",
     "start": 1.34,
     "end": 1.56
+   }
+  ]
+ },
+ "1f7d39c44976a9": {
+  "file": "1f7d39c44976a9.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "New",
+    "start": 0.0,
+    "end": 0.32
+   },
+   {
+    "word": "main",
+    "start": 0.32,
+    "end": 0.74
+   },
+   {
+    "word": "quest",
+    "start": 0.74,
+    "end": 1.26
    }
   ]
  },

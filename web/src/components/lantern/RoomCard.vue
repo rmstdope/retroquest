@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, useId, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useReadAlong } from '@/composables/useReadAlong'
 import { displayName } from '@/lantern/displayName'
-import { renderMarkup } from '@/utils/theme'
+import { parseTurn } from '@/lantern/parseTurn'
 
 /**
  * The room card above the story on laptops: where the player is, the room
  * description (long ones clamped to three lines with Read more) and who and
  * what is here (the Here chips are buttons: the layout opens their
- * actions menu).
+ * actions menu). While the room is read aloud on arrival (the newest turn's
+ * arrival unit, `useReadAlong`) the card is marked, opened if it was clamped,
+ * and lights the spoken word of the description (the room's name is read
+ * first, in the story's divider).
  */
 const game = useGameStore()
 
@@ -18,6 +22,18 @@ const CLAMP_CHARS = 280
 const expanded = ref(false)
 const descriptionId = useId()
 const clampable = computed(() => game.roomDescription.length > CLAMP_CHARS)
+
+const root = ref<HTMLElement | null>(null)
+const newest = computed(() => game.turns.at(-1))
+/** The newest turn's arrival unit (after its answer's blocks), or -1. */
+const arrivalUnit = computed(() =>
+  newest.value?.arrival ? parseTurn(newest.value.text).length : -1,
+)
+const { isSpeaking, html } = useReadAlong(() => newest.value?.id ?? 0, root)
+/** Whether the room is being read aloud now. */
+const reading = computed(
+  () => arrivalUnit.value >= 0 && isSpeaking(arrivalUnit.value),
+)
 const here = computed(() => [
   ...game.characters.map((name) => ({ name, kind: 'character' })),
   ...game.items.map((name) => ({ name, kind: 'item' })),
@@ -33,15 +49,20 @@ watch(
 </script>
 
 <template>
-  <section class="lq-room-card" aria-label="Current location">
+  <section
+    ref="root"
+    class="lq-room-card"
+    :class="{ 'lq-speaking': reading }"
+    aria-label="Current location"
+  >
     <span class="lq-label">You are in</span>
     <h2 class="lq-room-name">{{ game.roomName }}</h2>
     <!-- eslint-disable vue/no-v-html -->
     <p
       :id="descriptionId"
       class="lq-room-text"
-      :class="{ 'lq-clamp': clampable && !expanded }"
-      v-html="renderMarkup(game.roomDescription)"
+      :class="{ 'lq-clamp': clampable && !expanded && !reading }"
+      v-html="html(game.roomDescription, arrivalUnit, 1)"
     ></p>
     <!-- eslint-enable vue/no-v-html -->
     <button
@@ -73,6 +94,17 @@ watch(
 </template>
 
 <style scoped>
+/* The room being read aloud: its card lit, the spoken word marked. */
+.lq-room-card.lq-speaking {
+  border-color: var(--lq-accent);
+  box-shadow: 0 0 0 1px var(--lq-accent);
+}
+.lq-room-card :deep(.lq-w-now) {
+  background: var(--lq-accent-soft);
+  color: var(--lq-accent-text);
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px var(--lq-accent-soft);
+}
 .lq-room-card {
   display: flex;
   flex-direction: column;

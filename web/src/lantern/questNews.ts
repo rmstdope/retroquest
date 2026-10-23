@@ -12,6 +12,10 @@ export interface QuestNews {
   text: string
   /** Quests done in the act once this one completed (completions only). */
   progress?: { completed: number; total: number }
+  /** The new-quest chime is owed: it rings when the card shows (`ringQuestSounds`). */
+  chime?: true
+  /** The quest-complete fanfare is owed (completions): it plays when the record shows. */
+  fanfare?: true
 }
 
 /** The story record of a quest event from the engine. */
@@ -20,4 +24,14 @@ export function toQuestNews(
   event: QuestReport,
 ): QuestNews {
   return { kind, name: event.name, main: event.main, text: event.text }
+}
+
+/** The heading of a new quest's card: "New main quest" or "New side quest". */
+export function newQuestKicker(main: boolean): string {
+  return `New ${main ? 'main' : 'side'} quest`
+}
+
+/** The heading of a completed quest: "Main quest complete" or "Side quest complete". */
+export function questCompleteKicker(main: boolean): string {
+  return `${main ? 'Main' : 'Side'} quest complete`
 }

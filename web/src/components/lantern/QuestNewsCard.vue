@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId } from 'vue'
-import type { QuestNews } from '@/lantern/questNews'
+import {
+  newQuestKicker,
+  questCompleteKicker,
+  type QuestNews,
+} from '@/lantern/questNews'
 import { useGameStore } from '@/stores/useGameStore'
-import { renderMarkup } from '@/utils/theme'
+import { escapeHtml, renderMarkup } from '@/utils/theme'
 
 /**
  * Quest news inside the story (non-blocking): a new quest is a card with its
@@ -10,11 +14,16 @@ import { renderMarkup } from '@/utils/theme'
  * newest part, since updates come often. Opening it scrolls the revealed
  * part into view, as the banner often sits at the bottom of the story.
  * A card's "Open in journal" button is described by its quest name, so two
- * cards in view are told apart. A completed quest stays as a record (its
- * pop-up comes first), with the act's quest count.
+ * cards in view are told apart. A completed quest is a record in the story,
+ * read aloud like a new quest's card, with the act's quest count (shown, not
+ * read).
  */
 const props = defineProps<{
   news: QuestNews
+  /** The card's heading as HTML with its words marked, while it is read aloud. */
+  kickerHtml?: string
+  /** The quest's name as HTML with its words marked, while it is read aloud. */
+  nameHtml?: string
   /** The card's text as HTML with its words marked, while it is read aloud. */
   bodyHtml?: string
 }>()
@@ -30,14 +39,12 @@ async function toggle(): Promise<void> {
   updateBody.value?.scrollIntoView?.({ block: 'nearest' })
 }
 
-const kind = computed(() => (props.news.main ? 'main' : 'side'))
-const kicker = computed(() => `New ${kind.value} quest`)
-const doneLabel = computed(() => {
-  const label = `${props.news.main ? 'Main' : 'Side'} quest complete`
+const kicker = computed(() => newQuestKicker(props.news.main))
+const doneKicker = computed(() => questCompleteKicker(props.news.main))
+/** " · 3 of 11" after a completion's heading: shown, not read aloud. */
+const doneCount = computed(() => {
   const progress = props.news.progress
-  return progress
-    ? `${label} · ${progress.completed} of ${progress.total}`
-    : label
+  return progress ? ` · ${progress.completed} of ${progress.total}` : ''
 })
 </script>
 
@@ -47,8 +54,14 @@ const doneLabel = computed(() => {
     class="lq-quest-card"
     :aria-label="`${kicker}: ${news.name}`"
   >
-    <span class="lq-kicker">{{ kicker }}</span>
-    <span :id="titleId" class="lq-quest-title">{{ news.name }}</span>
+    <!-- eslint-disable vue/no-v-html -->
+    <span class="lq-kicker" v-html="kickerHtml ?? escapeHtml(kicker)"></span>
+    <span
+      :id="titleId"
+      class="lq-quest-title"
+      v-html="nameHtml ?? escapeHtml(news.name)"
+    ></span>
+    <!-- eslint-enable vue/no-v-html -->
     <!-- eslint-disable vue/no-v-html -->
     <p class="lq-quest-body" v-html="bodyHtml ?? renderMarkup(news.text)"></p>
     <!-- eslint-enable vue/no-v-html -->
@@ -82,10 +95,19 @@ const doneLabel = computed(() => {
       </svg>
     </span>
     <span class="lq-record-main">
-      <span class="lq-kicker">{{ doneLabel }}</span>
-      <span class="lq-quest-title">{{ news.name }}</span>
       <!-- eslint-disable vue/no-v-html -->
-      <span class="lq-record-text" v-html="renderMarkup(news.text)"></span>
+      <span class="lq-kicker"
+        ><span v-html="kickerHtml ?? escapeHtml(doneKicker)"></span
+        >{{ doneCount }}</span
+      >
+      <span
+        class="lq-quest-title"
+        v-html="nameHtml ?? escapeHtml(news.name)"
+      ></span>
+      <span
+        class="lq-record-text"
+        v-html="bodyHtml ?? renderMarkup(news.text)"
+      ></span>
       <!-- eslint-enable vue/no-v-html -->
     </span>
   </section>

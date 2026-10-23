@@ -15,7 +15,7 @@ Each line is spoken by Fish Audio (free s2.1-pro-free model) in its speaker's vo
 lines go as sentence-sized pieces joined into one clip. The clip is transcribed with
 Whisper, whose word times are aligned onto the line's shown words; a take where fewer than
 90% of the words are heard is retried, up to three takes, keeping the best. Clips are
-encoded as 64 kbps mono MP3 into web/public/audio/narration/<act>/, with manifest.json
+levelled to -16 LUFS (level.py) and encoded as 64 kbps mono MP3 into web/public/audio/narration/<act>/, with manifest.json
 keyed by the line's narration key. Clips whose line left the script are removed.
 Needs uv, ffmpeg, and FISH_AUDIO_API_KEY (environment or the repository's .env).
 """
@@ -42,6 +42,8 @@ CHUNK_LIMIT = 400
 MIN_HEARD = 0.9
 TAKES = 3
 BITRATE = "64k"
+# Narration loudness: speech sits clearly above the music (-23 LUFS) and chimes (-26 LUFS).
+NARRATION_LUFS = -16.0
 PARALLEL = 4
 SYNTH_TRIES = 4
 GAP_S = 0.25
@@ -225,10 +227,15 @@ def _transcribe(wav_path: Path, duration: float) -> list[dict]:
 
 
 def _encode(wav: bytes, mp3_path: Path) -> None:
+    """Encode a take as mono MP3, then bring it to the narration loudness (see level.py)."""
     subprocess.run(
         ["ffmpeg", "-loglevel", "error", "-y", "-f", "wav", "-i", "-", "-ac", "1", "-b:a", BITRATE, str(mp3_path)],
         input=wav, check=True,
     )
+    sys.path.insert(0, str(HERE))
+    from level import level
+
+    level(mp3_path, mp3_path, NARRATION_LUFS)
 
 
 def _take(client, line: dict, cast: dict, cues: dict) -> tuple[bytes, float]:

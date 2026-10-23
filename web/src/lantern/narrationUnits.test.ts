@@ -4,7 +4,7 @@ import { narrationWords, type NarrationManifest } from './narrationManifest'
 import {
   chapterUnits,
   POPUP_NARRATION_ID,
-  questPopUpUnits,
+  SCENE_PAUSE_MS,
   turnUnits,
 } from './narrationUnits'
 import { NARRATOR } from './narrationScript'
@@ -56,21 +56,29 @@ describe('turnUnits', () => {
     ])
   })
 
-  it('reads the room description only on a first visit', () => {
-    const arrival = { description: 'A low room.' }
-    const withClip = manifestOf([NARRATOR, 'A low room.'])
+  it('reads the room’s name, then its description, only on a first visit', () => {
+    const arrival = { room: 'Cellar', description: 'A low room.' }
+    const withClip = manifestOf([NARRATOR, 'Cellar'], [NARRATOR, 'A low room.'])
     const turn = { text: 'You go north.', arrival }
     const first = turnUnits(turn, true, withClip)
     expect(first.at(-1)?.kind).toBe('arrival')
-    expect(first.at(-1)?.parts[0].clip).not.toBeNull()
+    expect(first.at(-1)?.parts.map((p) => p.markup)).toEqual([
+      'Cellar',
+      'A low room.',
+    ])
+    expect(first.at(-1)?.parts.every((p) => p.clip)).toBe(true)
+    expect(first.at(-1)?.pauseBefore).toBe(SCENE_PAUSE_MS)
+    expect(first.slice(0, -1).every((u) => !u.pauseBefore)).toBe(true)
     const again = turnUnits(turn, false, withClip)
     expect(again.at(-1)?.kind).toBe('arrival')
     expect(again.at(-1)?.parts).toEqual([])
   })
 
-  it('reads a new quest card as its text then each checklist item, and no other quest record', () => {
+  it('reads a new quest card as its heading, name, text and each checklist item, and no other quest record', () => {
     const card = 'Find the key.\n[pending]* Look in the barn[/pending]'
     const clips = manifestOf(
+      [NARRATOR, 'New main quest'],
+      [NARRATOR, 'Key'],
       [NARRATOR, 'Find the key.'],
       [NARRATOR, 'Look in the barn'],
     )
@@ -87,6 +95,8 @@ describe('turnUnits', () => {
     )
     expect(units.map((u) => u.kind)).toEqual(['quest', 'quest'])
     expect(units[0].parts.map((p) => p.markup)).toEqual([
+      'New main quest',
+      'Key',
       'Find the key.',
       'Look in the barn',
     ])
@@ -103,6 +113,27 @@ describe('chapterUnits', () => {
     [NARRATOR, 'The wind rises.'],
     ['writing', 'Come.'],
   )
+
+  it('gives an intro’s first paragraph a breath after the heading, and no other unit', () => {
+    const units = chapterUnits(
+      { kind: 'intro', act: 'Act I', title: 'The Call', body },
+      manifest,
+    )
+    expect(units.map((u) => u.pauseBefore ?? 0)).toEqual([
+      0,
+      SCENE_PAUSE_MS,
+      0,
+      0,
+    ])
+  })
+
+  it('gives a closing page, whose title is not read, no breath', () => {
+    const units = chapterUnits(
+      { kind: 'complete', act: 'Act I', title: 'The Call', body },
+      manifest,
+    )
+    expect(units.every((u) => !u.pauseBefore)).toBe(true)
+  })
 
   it('reads an intro as its heading, then each paragraph, leaving events silent', () => {
     const units = chapterUnits(
@@ -138,16 +169,37 @@ describe('chapterUnits', () => {
   })
 })
 
-describe('questPopUpUnits', () => {
-  it('is one unit made of the completion text as the quest card reads it', () => {
+describe('a completed quest in the story', () => {
+  it('is read as its heading, the quest’s name, then the completion text', () => {
     const text = 'You did it.\n[success]* Done[/success]'
-    const manifest = manifestOf([NARRATOR, 'You did it.'], [NARRATOR, 'Done'])
-    const units = questPopUpUnits(text, manifest)
+    const manifest = manifestOf(
+      [NARRATOR, 'Side quest complete'],
+      [NARRATOR, 'Key'],
+      [NARRATOR, 'You did it.'],
+      [NARRATOR, 'Done'],
+    )
+    const units = turnUnits(
+      {
+        text: '',
+        arrival: null,
+        quests: [{ kind: 'completed', name: 'Key', main: false, text }],
+      },
+      false,
+      manifest,
+    )
     expect(units).toHaveLength(1)
     expect(units[0].kind).toBe('quest')
-    expect(units[0].parts.map((p) => !!p.clip)).toEqual([true, true])
+    expect(units[0].parts.map((p) => p.markup)).toEqual([
+      'Side quest complete',
+      'Key',
+      'You did it.',
+      'Done',
+    ])
+    expect(units[0].parts.every((p) => p.clip)).toBe(true)
   })
+})
 
+describe('POPUP_NARRATION_ID', () => {
   it('uses an id no story turn has', () => {
     expect(POPUP_NARRATION_ID).toBeLessThan(1)
   })

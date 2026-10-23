@@ -3,6 +3,8 @@ import { computed, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn } from '@/lantern/parseTurn'
+import { newQuestKicker, questCompleteKicker } from '@/lantern/questNews'
+import { firstQuestUnit as firstQuestOf } from '@/lantern/narrationUnits'
 import QuestNewsCard from './QuestNewsCard.vue'
 import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
@@ -34,9 +36,7 @@ const { shown, isSpeaking, html } = useReadAlong(() => props.turn.id, root)
 const arrivalUnit = computed(() =>
   props.turn.arrival ? blocks.value.length : -1,
 )
-const firstQuestUnit = computed(
-  () => blocks.value.length + (props.turn.arrival ? 1 : 0),
-)
+const firstQuestUnit = computed(() => firstQuestOf(props.turn))
 
 const blocks = computed(() => parseTurn(props.turn.text))
 
@@ -147,7 +147,8 @@ function chipLabel(chip: Chip): string {
       v-if="turn.arrival && shown(arrivalUnit)"
       :arrival="turn.arrival"
       :command="turn.command"
-      :description-html="html(turn.arrival.description, arrivalUnit)"
+      :name-html="html(turn.arrival.room, arrivalUnit, 0, 1)"
+      :description-html="html(turn.arrival.description, arrivalUnit, 1)"
       :class="{ 'lq-speaking': isSpeaking(arrivalUnit), 'lq-appear': fade }"
       :data-unit="arrivalUnit"
     />
@@ -181,7 +182,18 @@ function chipLabel(chip: Chip): string {
       <QuestNewsCard
         v-if="shown(firstQuestUnit + index)"
         :news="news"
-        :body-html="html(news.text, firstQuestUnit + index)"
+        :kicker-html="
+          html(
+            news.kind === 'completed'
+              ? questCompleteKicker(news.main)
+              : newQuestKicker(news.main),
+            firstQuestUnit + index,
+            0,
+            1,
+          )
+        "
+        :name-html="html(news.name, firstQuestUnit + index, 1, 2)"
+        :body-html="html(news.text, firstQuestUnit + index, 2)"
         :class="{
           'lq-speaking': isSpeaking(firstQuestUnit + index),
           'lq-appear': fade,

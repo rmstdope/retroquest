@@ -4,6 +4,8 @@ import { effectScope, nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { useActMusic } from './useActMusic'
 import { useGameStore } from '@/stores/useGameStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { MUSIC_DUCK, MUSIC_DUCK_FADE_MS } from './useMusic'
 
 class FakeAudio {
   static last: FakeAudio
@@ -31,6 +33,47 @@ describe('useActMusic', () => {
     vi.stubGlobal('Audio', FakeAudio)
   })
   afterEach(() => vi.unstubAllGlobals())
+
+  it('dips under a narrated turn and comes back up after it', async () => {
+    vi.useFakeTimers()
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    const music = FakeAudio.last
+    const narration = useNarrationStore()
+    narration.begin(
+      1,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: 'a b',
+              clip: {
+                file: 'a.mp3',
+                speaker: 'narrator',
+                duration: 2,
+                words: [
+                  { word: 'a', start: 0, end: 1 },
+                  { word: 'b', start: 1, end: 2 },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+      'act1',
+    )
+    await nextTick()
+    vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS * 2)
+    expect(music.volume).toBeCloseTo(MUSIC_DUCK)
+
+    narration.skipAll()
+    await nextTick()
+    vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS * 2)
+    expect(music.volume).toBeCloseTo(1)
+    scope.stop()
+    vi.useRealTimers()
+  })
 
   it("loops the current act's track", async () => {
     const scope = effectScope()

@@ -16,11 +16,13 @@ import { Fish } from '../items/Fish'
 import { WildBerries } from '../items/WildBerries'
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import { Merchant } from './Merchant'
+import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
 import { Bread } from '../items/Bread'
 
-/** An Act I game on the Road to Greendale with the ring and the horseshoe. */
+/** An Act I game on the Road to Greendale with the ring and the horseshoe, woken from the dream as every player is by then. */
 function gameAtMerchant(): Game {
   const game = new Game([new Act1()])
+  game.state.setStoryFlag(FLAG_WOKE_FROM_DREAM, true)
   game.state.currentRoom = game.state.allRooms.RoadToGreendale
   game.state.addItemToInventory(new ShinyRing())
   game.state.addItemToInventory(new Horseshoe())

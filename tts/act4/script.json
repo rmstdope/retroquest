@@ -40,9 +40,24 @@
     "text": "The halls beyond are yours to walk, but you will not be far from them."
   },
   {
+    "key": "135164e660d757",
+    "speaker": "narrator",
+    "text": "Fortress Gates"
+  },
+  {
     "key": "0e8521120703b7",
     "speaker": "narrator",
     "text": "Towering obsidian gates loom before you, carved with writhing shadows that seem to move in the corners of your vision. Three ancient ward stones, left, middle and right, pulse with malevolent energy, casting eerie purple light across the threshold. The air crackles with dark magic, and whispers of forgotten souls echo from beyond the barrier. Spectral guardians drift between the stones, their hollow eyes fixed upon any who dare approach this cursed entrance."
+  },
+  {
+    "key": "1f7d39c44976a9",
+    "speaker": "narrator",
+    "text": "New main quest"
+  },
+  {
+    "key": "0ca1cf7c5e480b",
+    "speaker": "narrator",
+    "text": "The Final Stand"
   },
   {
     "key": "019f9bf4961047",
@@ -50,9 +65,24 @@
     "text": "Malakar's fortress stands before you, and somewhere inside King Alden is held captive. Break through its defences and face the sorcerer."
   },
   {
+    "key": "0678b14852e2e7",
+    "speaker": "narrator",
+    "text": "New side quest"
+  },
+  {
+    "key": "066d71f5a8634e",
+    "speaker": "narrator",
+    "text": "Shattered Ward Guardians"
+  },
+  {
     "key": "0ff9a923f23ca2",
     "speaker": "narrator",
     "text": "Shadow guardians and a barrier of dark energy bar the way into the fortress. Find what feeds them, and break their hold on the gates."
+  },
+  {
+    "key": "1f5c71c8ba496d",
+    "speaker": "narrator",
+    "text": "Side quest complete"
   },
   {
     "key": "0108f2ff93146f",
@@ -65,9 +95,19 @@
     "text": "You take the Guardian's Chain. As you lift the Guardian's Chain, you feel a surge of protective energy coursing through your body. The chain's light grows brighter, recognizing you as its new bearer."
   },
   {
+    "key": "1b4f8361eb6968",
+    "speaker": "narrator",
+    "text": "The Trapped Servants"
+  },
+  {
     "key": "0566b8d6a2c9fb",
     "speaker": "narrator",
     "text": "Malakar's servants wander the courtyard in chains of shadow, bound to serve him against their will. Win their trust, and break the chains."
+  },
+  {
+    "key": "043a6a9f6e0001",
+    "speaker": "narrator",
+    "text": "Outer Courtyard"
   },
   {
     "key": "0c87a947e5f2d2",
@@ -135,9 +175,19 @@
     "text": "'They tell me the gates are open. I would walk out of them tonight, if my hand remembered the sword. Every shadow between here and home knows my face.'"
   },
   {
+    "key": "1681cbe8503c34",
+    "speaker": "narrator",
+    "text": "The Maze of Mirrors"
+  },
+  {
     "key": "1f6288fd341524",
     "speaker": "narrator",
     "text": "Countless mirrors show false paths and twisted reflections. Find the one true way through the labyrinth."
+  },
+  {
+    "key": "08a00495e868bc",
+    "speaker": "narrator",
+    "text": "Mirror Labyrinth"
   },
   {
     "key": "0867d0484fa8b2",
@@ -145,9 +195,19 @@
     "text": "Corridors of mirror run away from you in impossible directions, and in every one of them a different Elior looks back. You stand at the mouth of the maze, facing north."
   },
   {
+    "key": "13618e56c6aa8a",
+    "speaker": "narrator",
+    "text": "The Knight of Despair"
+  },
+  {
     "key": "162f2163415017",
     "speaker": "narrator",
     "text": "A knight in a grey cloak bars the stair to the Tower of Shadows, lost in a despair no blade can reach. Learn the truth of him, and find a way past."
+  },
+  {
+    "key": "07429567d9aa12",
+    "speaker": "narrator",
+    "text": "Hall of Echoes"
   },
   {
     "key": "07ecce0d3e3e85",
@@ -270,6 +330,11 @@
     "text": "The warriors do not hear you. They are still fighting."
   },
   {
+    "key": "0ff5e5d429c5f6",
+    "speaker": "narrator",
+    "text": "Tower of Shadows"
+  },
+  {
     "key": "1f1b0530bc96c2",
     "speaker": "narrator",
     "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come."
@@ -300,9 +365,19 @@
     "text": "The token is quiet and warm. The whispers are gone."
   },
   {
+    "key": "1e113540f7ca91",
+    "speaker": "narrator",
+    "text": "The Sorceress of Lies"
+  },
+  {
     "key": "12c5cc6dd6d75a",
     "speaker": "narrator",
     "text": "At the top of the tower the Sorceress of Lies holds court, and the mask on her staff is the mark that lay beneath Elena's curse. See through her lies, and find what lies beneath them."
+  },
+  {
+    "key": "162c69256764e6",
+    "speaker": "narrator",
+    "text": "Chamber of Whispers"
   },
   {
     "key": "00981e1ed2bec9",
@@ -355,9 +430,19 @@
     "text": "Go on, through the arch. What waits there has been waiting for you longer than I have. And Elior — tell Elena I am sorry. It is the first true thing I have asked anyone to carry."
   },
   {
+    "key": "1c3b42c14173f4",
+    "speaker": "narrator",
+    "text": "The Shadow of the Past"
+  },
+  {
     "key": "178cd0c3334b9b",
     "speaker": "narrator",
     "text": "Among the broken memories a shadow reaches for scenes it cannot hold. Mend what it has lost, and learn whose voice it is."
+  },
+  {
+    "key": "0c793f67112a24",
+    "speaker": "narrator",
+    "text": "Memory Vault"
   },
   {
     "key": "19c313b991e372",
@@ -420,9 +505,19 @@
     "text": "Go east, Elior. I have seen those memories every day for years. You never have."
   },
   {
+    "key": "16cb7e1f883291",
+    "speaker": "narrator",
+    "text": "The Parent's Legacy"
+  },
+  {
     "key": "1df19729085ae4",
     "speaker": "narrator",
     "text": "Behind the sealed door, Aren and Lysa's last memories wait. Look into them, and learn the whole truth before the throne room."
+  },
+  {
+    "key": "0c910de0c35b8b",
+    "speaker": "narrator",
+    "text": "Parents' Vault"
   },
   {
     "key": "04ba84cb874e1b",
@@ -443,6 +538,11 @@
     "key": "091491218bb345",
     "speaker": "narrator",
     "text": "The lanterns are dim now. You do not need to look again; you will not forget."
+  },
+  {
+    "key": "16aed33be01696",
+    "speaker": "narrator",
+    "text": "Throne Chamber"
   },
   {
     "key": "068215b2c648d4",
@@ -583,6 +683,11 @@
     "key": "0d7bfd7eadcf96",
     "speaker": "narrator",
     "text": "Behind the throne an arch you had not noticed stands open. Beyond it, far off, the road runs home."
+  },
+  {
+    "key": "091ab964b0dd1c",
+    "speaker": "narrator",
+    "text": "Main quest complete"
   },
   {
     "key": "0905f831b145e3",
@@ -758,6 +863,11 @@
     "key": "153f272fec84df",
     "speaker": "king alden",
     "text": "You saved my kingdom, and somehow him as well. Go home."
+  },
+  {
+    "key": "175471f86e37b6",
+    "speaker": "narrator",
+    "text": "Willowbrook Field"
   },
   {
     "key": "0491fbc4b379cc",

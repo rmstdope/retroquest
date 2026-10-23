@@ -98,6 +98,23 @@
    }
   ]
  },
+ "003c7755180e7a": {
+  "file": "003c7755180e7a.mp3",
+  "speaker": "narrator",
+  "duration": 1.207,
+  "words": [
+   {
+    "word": "Tideward",
+    "start": 0.0,
+    "end": 0.44
+   },
+   {
+    "word": "Sigils",
+    "start": 0.44,
+    "end": 1.0
+   }
+  ]
+ },
  "006b60c52386a5": {
   "file": "006b60c52386a5.mp3",
   "speaker": "mira",
@@ -347,6 +364,33 @@
    }
   ]
  },
+ "00b25ccba3dd2c": {
+  "file": "00b25ccba3dd2c.mp3",
+  "speaker": "narrator",
+  "duration": 2.276,
+  "words": [
+   {
+    "word": "Entrance",
+    "start": 0.0,
+    "end": 0.52
+   },
+   {
+    "word": "to",
+    "start": 0.52,
+    "end": 0.76
+   },
+   {
+    "word": "Malakar's",
+    "start": 0.76,
+    "end": 1.58
+   },
+   {
+    "word": "Fortress",
+    "start": 1.58,
+    "end": 2.02
+   }
+  ]
+ },
  "00b33411e6baf4": {
   "file": "00b33411e6baf4.mp3",
   "speaker": "mira",
@@ -511,6 +555,23 @@
     "word": "dome.",
     "start": 10.9,
     "end": 11.22
+   }
+  ]
+ },
+ "00d0fd7f3e73e3": {
+  "file": "00d0fd7f3e73e3.mp3",
+  "speaker": "narrator",
+  "duration": 1.811,
+  "words": [
+   {
+    "word": "Obsidian",
+    "start": 0.0,
+    "end": 0.82
+   },
+   {
+    "word": "Outcrops",
+    "start": 0.82,
+    "end": 1.6
    }
   ]
  },
@@ -777,6 +838,23 @@
     "word": "behind.",
     "start": 1.46,
     "end": 1.92
+   }
+  ]
+ },
+ "00f0ddcb46a680": {
+  "file": "00f0ddcb46a680.mp3",
+  "speaker": "narrator",
+  "duration": 1.254,
+  "words": [
+   {
+    "word": "Tool",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "Cache",
+    "start": 0.42,
+    "end": 0.82
    }
   ]
  },
@@ -2104,6 +2182,40 @@
    }
   ]
  },
+ "01fef373a5e7f4": {
+  "file": "01fef373a5e7f4.mp3",
+  "speaker": "narrator",
+  "duration": 1.347,
+  "words": [
+   {
+    "word": "Miners'",
+    "start": 0.0,
+    "end": 0.58
+   },
+   {
+    "word": "Rescue",
+    "start": 0.58,
+    "end": 0.96
+   }
+  ]
+ },
+ "0239b7119a174b": {
+  "file": "0239b7119a174b.mp3",
+  "speaker": "narrator",
+  "duration": 1.022,
+  "words": [
+   {
+    "word": "Dragon's",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "Hall",
+    "start": 0.54,
+    "end": 0.8
+   }
+  ]
+ },
  "026183953bd636": {
   "file": "026183953bd636.mp3",
   "speaker": "mira",
@@ -2409,6 +2521,23 @@
    }
   ]
  },
+ "02d6c0ed0ee59f": {
+  "file": "02d6c0ed0ee59f.mp3",
+  "speaker": "narrator",
+  "duration": 1.068,
+  "words": [
+   {
+    "word": "Cavern",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "Mouth",
+    "start": 0.42,
+    "end": 0.82
+   }
+  ]
+ },
  "02dbf3d00f9ce4": {
   "file": "02dbf3d00f9ce4.mp3",
   "speaker": "mother",
@@ -2644,6 +2773,23 @@
     "word": "key.",
     "start": 4.96,
     "end": 5.36
+   }
+  ]
+ },
+ "033cc29645073c": {
+  "file": "033cc29645073c.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Collapsed",
+    "start": 0.0,
+    "end": 0.62
+   },
+   {
+    "word": "Pier",
+    "start": 0.62,
+    "end": 1.06
    }
   ]
  },
@@ -4249,6 +4395,23 @@
     "word": "end.",
     "start": 4.86,
     "end": 5.28
+   }
+  ]
+ },
+ "04801b4e567481": {
+  "file": "04801b4e567481.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Lower",
+    "start": 0.0,
+    "end": 0.46
+   },
+   {
+    "word": "Switchbacks",
+    "start": 0.46,
+    "end": 1.24
    }
   ]
  },
@@ -7138,6 +7301,45 @@
    }
   ]
  },
+ "063646d201b312": {
+  "file": "063646d201b312.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "Fumarole",
+    "start": 0.0,
+    "end": 0.68
+   },
+   {
+    "word": "Passages",
+    "start": 0.68,
+    "end": 1.32
+   }
+  ]
+ },
+ "0678b14852e2e7": {
+  "file": "0678b14852e2e7.mp3",
+  "speaker": "narrator",
+  "duration": 1.533,
+  "words": [
+   {
+    "word": "New",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "side",
+    "start": 0.36,
+    "end": 0.86
+   },
+   {
+    "word": "quest",
+    "start": 0.86,
+    "end": 1.34
+   }
+  ]
+ },
  "06941e109476ee": {
   "file": "06941e109476ee.mp3",
   "speaker": "narrator",
@@ -8936,6 +9138,33 @@
    }
   ]
  },
+ "082e1673731629": {
+  "file": "082e1673731629.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Lanterns",
+    "start": 0.0,
+    "end": 0.64
+   },
+   {
+    "word": "of",
+    "start": 0.64,
+    "end": 0.76
+   },
+   {
+    "word": "the",
+    "start": 0.76,
+    "end": 0.86
+   },
+   {
+    "word": "Deeps",
+    "start": 0.86,
+    "end": 1.32
+   }
+  ]
+ },
  "0834e0a1c8dd4f": {
   "file": "0834e0a1c8dd4f.mp3",
   "speaker": "narrator",
@@ -10700,6 +10929,28 @@
    }
   ]
  },
+ "091ab964b0dd1c": {
+  "file": "091ab964b0dd1c.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "Main",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "quest",
+    "start": 0.42,
+    "end": 0.8
+   },
+   {
+    "word": "complete",
+    "start": 0.8,
+    "end": 1.28
+   }
+  ]
+ },
  "091f1b893a7c2d": {
   "file": "091f1b893a7c2d.mp3",
   "speaker": "narrator",
@@ -11338,6 +11589,38 @@
    }
   ]
  },
+ "096e3c6e21891b": {
+  "file": "096e3c6e21891b.mp3",
+  "speaker": "narrator",
+  "duration": 1.811,
+  "words": [
+   {
+    "word": "Echoes",
+    "start": 0.0,
+    "end": 0.58
+   },
+   {
+    "word": "of",
+    "start": 0.58,
+    "end": 0.72
+   },
+   {
+    "word": "the",
+    "start": 0.72,
+    "end": 0.8
+   },
+   {
+    "word": "Hidden",
+    "start": 0.8,
+    "end": 1.06
+   },
+   {
+    "word": "Bond",
+    "start": 1.06,
+    "end": 1.54
+   }
+  ]
+ },
  "09940a4ad697b2": {
   "file": "09940a4ad697b2.mp3",
   "speaker": "sir cedric",
@@ -11946,6 +12229,23 @@
     "word": "you.",
     "start": 5.92,
     "end": 6.18
+   }
+  ]
+ },
+ "0a14e4083902eb": {
+  "file": "0a14e4083902eb.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Outer",
+    "start": 0.0,
+    "end": 0.58
+   },
+   {
+    "word": "Wards",
+    "start": 0.58,
+    "end": 1.04
    }
   ]
  },
@@ -14516,6 +14816,23 @@
    }
   ]
  },
+ "0cc90a1a463a37": {
+  "file": "0cc90a1a463a37.mp3",
+  "speaker": "narrator",
+  "duration": 1.254,
+  "words": [
+   {
+    "word": "Ember",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "Gallery",
+    "start": 0.54,
+    "end": 0.84
+   }
+  ]
+ },
  "0d05aeb47bf59b": {
   "file": "0d05aeb47bf59b.mp3",
   "speaker": "narrator",
@@ -16561,6 +16878,28 @@
    }
   ]
  },
+ "0e5132ad65fabd": {
+  "file": "0e5132ad65fabd.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "Three",
+    "start": 0.18,
+    "end": 0.52
+   },
+   {
+    "word": "Virtues",
+    "start": 0.52,
+    "end": 1.34
+   }
+  ]
+ },
  "0e7eb95a5f801d": {
   "file": "0e7eb95a5f801d.mp3",
   "speaker": "the second man",
@@ -16615,6 +16954,23 @@
     "word": "again.",
     "start": 2.26,
     "end": 2.56
+   }
+  ]
+ },
+ "0e8d73eea987bd": {
+  "file": "0e8d73eea987bd.mp3",
+  "speaker": "narrator",
+  "duration": 1.95,
+  "words": [
+   {
+    "word": "Stillness",
+    "start": 0.0,
+    "end": 0.72
+   },
+   {
+    "word": "Vestibule",
+    "start": 0.72,
+    "end": 1.72
    }
   ]
  },
@@ -17000,6 +17356,28 @@
     "word": "mind:",
     "start": 5.0,
     "end": 5.36
+   }
+  ]
+ },
+ "0f09ca0f3dc93a": {
+  "file": "0f09ca0f3dc93a.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "Oath",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "of",
+    "start": 0.36,
+    "end": 0.7
+   },
+   {
+    "word": "Stillness",
+    "start": 0.7,
+    "end": 1.32
    }
   ]
  },
@@ -17797,6 +18175,23 @@
     "word": "carefully.",
     "start": 10.86,
     "end": 11.36
+   }
+  ]
+ },
+ "1047524c338beb": {
+  "file": "1047524c338beb.mp3",
+  "speaker": "narrator",
+  "duration": 1.393,
+  "words": [
+   {
+    "word": "Mirror",
+    "start": 0.0,
+    "end": 0.48
+   },
+   {
+    "word": "Terraces",
+    "start": 0.48,
+    "end": 1.1
    }
   ]
  },
@@ -19956,6 +20351,33 @@
    }
   ]
  },
+ "126de942b54836": {
+  "file": "126de942b54836.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Breath",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "of",
+    "start": 0.4,
+    "end": 0.54
+   },
+   {
+    "word": "the",
+    "start": 0.54,
+    "end": 0.66
+   },
+   {
+    "word": "Mountain",
+    "start": 0.66,
+    "end": 1.0
+   }
+  ]
+ },
  "12923ed6b7af2a": {
   "file": "12923ed6b7af2a.mp3",
   "speaker": "narrator",
@@ -21024,6 +21446,28 @@
    }
   ]
  },
+ "13003f52165b0a": {
+  "file": "13003f52165b0a.mp3",
+  "speaker": "narrator",
+  "duration": 1.533,
+  "words": [
+   {
+    "word": "Mirrors",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "of",
+    "start": 0.54,
+    "end": 0.72
+   },
+   {
+    "word": "Emberlight",
+    "start": 0.72,
+    "end": 1.533
+   }
+  ]
+ },
  "13108550a68262": {
   "file": "13108550a68262.mp3",
   "speaker": "ash scholar",
@@ -21915,6 +22359,23 @@
     "word": "head:",
     "start": 2.14,
     "end": 2.42
+   }
+  ]
+ },
+ "1398b1cfcbca26": {
+  "file": "1398b1cfcbca26.mp3",
+  "speaker": "narrator",
+  "duration": 1.44,
+  "words": [
+   {
+    "word": "Shoreline",
+    "start": 0.0,
+    "end": 0.64
+   },
+   {
+    "word": "Markers",
+    "start": 0.64,
+    "end": 1.18
    }
   ]
  },
@@ -22838,6 +23299,23 @@
    }
   ]
  },
+ "143283441007a0": {
+  "file": "143283441007a0.mp3",
+  "speaker": "narrator",
+  "duration": 1.254,
+  "words": [
+   {
+    "word": "Echo",
+    "start": 0.0,
+    "end": 0.46
+   },
+   {
+    "word": "Chambers",
+    "start": 0.46,
+    "end": 0.9
+   }
+  ]
+ },
  "14842a2bc7e59e": {
   "file": "14842a2bc7e59e.mp3",
   "speaker": "narrator",
@@ -23047,6 +23525,23 @@
    }
   ]
  },
+ "14accdcd7e3aa0": {
+  "file": "14accdcd7e3aa0.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Phoenix",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "Crater",
+    "start": 0.42,
+    "end": 1.0
+   }
+  ]
+ },
  "14f4ed6ca12624": {
   "file": "14f4ed6ca12624.mp3",
   "speaker": "narrator",
@@ -23171,6 +23666,33 @@
     "word": "sanctum.",
     "start": 9.9,
     "end": 10.38
+   }
+  ]
+ },
+ "1508aaf3535654": {
+  "file": "1508aaf3535654.mp3",
+  "speaker": "narrator",
+  "duration": 1.486,
+  "words": [
+   {
+    "word": "Sanctum",
+    "start": 0.0,
+    "end": 0.6
+   },
+   {
+    "word": "of",
+    "start": 0.6,
+    "end": 0.76
+   },
+   {
+    "word": "the",
+    "start": 0.76,
+    "end": 0.86
+   },
+   {
+    "word": "Tide",
+    "start": 0.86,
+    "end": 1.26
    }
   ]
  },
@@ -24394,6 +24916,23 @@
    }
   ]
  },
+ "169a032fe2ad40": {
+  "file": "169a032fe2ad40.mp3",
+  "speaker": "narrator",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "Collapsed",
+    "start": 0.0,
+    "end": 0.68
+   },
+   {
+    "word": "Galleries",
+    "start": 0.68,
+    "end": 1.14
+   }
+  ]
+ },
  "16c2cb9ebbc6f7": {
   "file": "16c2cb9ebbc6f7.mp3",
   "speaker": "narrator",
@@ -25523,6 +26062,40 @@
     "word": "sevens.",
     "start": 2.98,
     "end": 3.64
+   }
+  ]
+ },
+ "1766a66115e457": {
+  "file": "1766a66115e457.mp3",
+  "speaker": "narrator",
+  "duration": 1.347,
+  "words": [
+   {
+    "word": "Tidal",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "Causeway",
+    "start": 0.42,
+    "end": 1.1
+   }
+  ]
+ },
+ "1775296787cbf7": {
+  "file": "1775296787cbf7.mp3",
+  "speaker": "narrator",
+  "duration": 1.95,
+  "words": [
+   {
+    "word": "Submerged",
+    "start": 0.0,
+    "end": 0.78
+   },
+   {
+    "word": "Antechamber",
+    "start": 0.78,
+    "end": 1.76
    }
   ]
  },
@@ -31282,6 +31855,23 @@
    }
   ]
  },
+ "1d8e270a441a9c": {
+  "file": "1d8e270a441a9c.mp3",
+  "speaker": "narrator",
+  "duration": 1.161,
+  "words": [
+   {
+    "word": "Mira's",
+    "start": 0.0,
+    "end": 0.64
+   },
+   {
+    "word": "Hut",
+    "start": 0.64,
+    "end": 0.96
+   }
+  ]
+ },
  "1dadd89a01f3f8": {
   "file": "1dadd89a01f3f8.mp3",
   "speaker": "narrator",
@@ -34464,6 +35054,28 @@
    }
   ]
  },
+ "1f5c71c8ba496d": {
+  "file": "1f5c71c8ba496d.mp3",
+  "speaker": "narrator",
+  "duration": 1.579,
+  "words": [
+   {
+    "word": "Side",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "quest",
+    "start": 0.42,
+    "end": 0.76
+   },
+   {
+    "word": "complete",
+    "start": 0.76,
+    "end": 1.26
+   }
+  ]
+ },
  "1f776e92dc6c9d": {
   "file": "1f776e92dc6c9d.mp3",
   "speaker": "narrator",
@@ -34508,6 +35120,28 @@
     "word": "promise.",
     "start": 2.4,
     "end": 2.88
+   }
+  ]
+ },
+ "1f7d39c44976a9": {
+  "file": "1f7d39c44976a9.mp3",
+  "speaker": "narrator",
+  "duration": 1.44,
+  "words": [
+   {
+    "word": "New",
+    "start": 0.0,
+    "end": 0.32
+   },
+   {
+    "word": "main",
+    "start": 0.32,
+    "end": 0.72
+   },
+   {
+    "word": "quest",
+    "start": 0.72,
+    "end": 1.2
    }
   ]
  },

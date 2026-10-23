@@ -94,6 +94,19 @@ describe('SaveLoadDialog', () => {
     expect(w.emitted('close')).toBeUndefined()
   })
 
+  it('closes, with no failure, when the save opens the act page waiting for narration', async () => {
+    const game = useGameStore()
+    game.actEndPending = true
+    vi.mocked(game.saveToSlot).mockReturnValue(false)
+    const w = mountDialog('save')
+
+    await card(w, '1').get('button').trigger('click')
+
+    expect(game.saveToSlot).toHaveBeenCalledWith(1)
+    expect(w.find('[role="alert"]').exists()).toBe(false)
+    expect(w.emitted('close')).toHaveLength(1)
+  })
+
   it('asks in the card before replacing a save', async () => {
     const w = mountDialog('save')
     const filled = card(w, '2')

@@ -11,8 +11,10 @@
  * - `introBlocks`: a chapter page that opens an act: its heading
  *   ("Act I: The Call to Adventure"), then its paragraphs. A closing chapter
  *   page's body is an answer (`turnBlocks`).
- * - `questCardBlocks`: a quest card in the story: its text, then each
- *   checklist item as its own line.
+ * - `arrivalBlocks`: a room arrival: the room's name, then its description.
+ * - `newQuestBlocks` / `questCompleteBlocks`: a new quest's card and a
+ *   completed quest's pop-up: heading, quest name, then the quest's text
+ *   (`questTextBlocks`: its paragraphs, then each checklist item).
  *
  * `actScript` plays an act's golden path through the real engine and collects
  * every voiced line: the chapter pages, every answer, each room's description
@@ -27,6 +29,7 @@ import { GameController, type Game } from '@/engine'
 import { narrationKey, narrationText } from './narrationKey'
 import { parseActIntro } from './parseActIntro'
 import { parseTurn, type TurnBlock } from './parseTurn'
+import { newQuestKicker, questCompleteKicker } from './questNews'
 
 /** The speaker of everything that is not a character's speech. */
 export const NARRATOR = 'narrator'
@@ -82,10 +85,10 @@ export function introBlocks(intro: string): VoicedBlock[] {
 }
 
 /**
- * A quest card: its text, then each checklist item as its own line, so an item
- * that carries a count (game state) does not take the rest of the card with it.
+ * A quest's text: its paragraphs, then each checklist item as its own line, so
+ * an item that carries a count (game state) does not take the rest with it.
  */
-export function questCardBlocks(text: string): VoicedBlock[] {
+export function questTextBlocks(text: string): VoicedBlock[] {
   const blocks: VoicedBlock[] = []
   for (const block of parseTurn(text)) {
     if (block.kind === 'text')
@@ -95,6 +98,39 @@ export function questCardBlocks(text: string): VoicedBlock[] {
         blocks.push({ speaker: NARRATOR, markup: item.markup })
   }
   return blocks
+}
+
+/** A quest as a card or pop-up shows it: its name, whether it is the main quest, and its text. */
+export interface QuestShown {
+  main: boolean
+  name: string
+  text: string
+}
+
+/** A new quest's card: its heading ("New side quest"), its name, then its text. */
+export function newQuestBlocks(quest: QuestShown): VoicedBlock[] {
+  return [
+    { speaker: NARRATOR, markup: newQuestKicker(quest.main) },
+    { speaker: NARRATOR, markup: quest.name },
+    ...questTextBlocks(quest.text),
+  ]
+}
+
+/** A completed quest: its heading ("Main quest complete"), its name, then the completion text. */
+export function questCompleteBlocks(quest: QuestShown): VoicedBlock[] {
+  return [
+    { speaker: NARRATOR, markup: questCompleteKicker(quest.main) },
+    { speaker: NARRATOR, markup: quest.name },
+    ...questTextBlocks(quest.text),
+  ]
+}
+
+/** A room arrival: the room's name, then its description. */
+export function arrivalBlocks(
+  room: string,
+  description: string,
+): VoicedBlock[] {
+  return [{ speaker: NARRATOR, markup: room }, ...turnBlocks(description)]
 }
 
 /**
@@ -195,17 +231,14 @@ export function actScript(
     const room = play.getRoomName()
     if (visited.has(room)) return
     visited.add(room)
-    add(turnBlocks(play.getRoomDescription()))
+    add(arrivalBlocks(room, play.getRoomDescription()))
   }
   arrive()
   const settle = (controller: GameController): void => {
     const quests = controller.settleQuests()
-    for (const report of [
-      ...quests.activated,
-      ...quests.updated,
-      ...quests.completed,
-    ])
-      add(questCardBlocks(report.text))
+    for (const report of quests.activated) add(newQuestBlocks(report))
+    for (const report of quests.updated) add(questTextBlocks(report.text))
+    for (const report of quests.completed) add(questCompleteBlocks(report))
   }
   for (const [index, command] of commands.entries()) {
     add(turnBlocks(play.takeTurn(command)))

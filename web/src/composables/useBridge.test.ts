@@ -183,7 +183,7 @@ describe('useBridge', () => {
       ])
       expect(bridge.controller.getCompletedQuests()).toEqual([])
       const settled = bridge.controller.settleQuests()
-      expect(settled.activated[0].popup).toContain('[quest_name]')
+      expect(settled.activated[0].name).toBeTruthy()
       expect(settled.updated).toEqual([])
       expect(settled.completed).toEqual([])
       expect(bridge.controller.getActiveQuests().length).toBeGreaterThan(0)
