@@ -320,7 +320,7 @@ export class Grandmother extends Character {
       const travelCloak = new TravelCloak()
       gameState.addItemToInventory(travelCloak)
       return (
-        `${characterName(this.name)}'s eyes widen as ` +
+        `${characterName('Grandmother')}'s eyes widen as ` +
         'she sees the [item_name]' +
         item.name +
         '[/item_name]. ' +
@@ -335,7 +335,7 @@ export class Grandmother extends Character {
             'have this when you were old enough to understand its importance.',
         ) +
         '\n' +
-        (`${characterName(this.name)} hands you a finely made [item_name]` +
+        (`${characterName('Grandmother')} hands you a finely made [item_name]` +
           travelCloak.name +
           '[/item_name].\n' +
           speech(
@@ -356,7 +356,7 @@ export class Grandmother extends Character {
           `Oh, [item_name]${item.name}[/item_name]! ` +
             "Thank you, dear. These look lovely. I'll make a pie later.",
         ) +
-        ` ${characterName(this.name)} smiles warmly. ` +
+        ` ${characterName('Grandmother')} smiles warmly. ` +
         speech("It's the little things that brighten the day, isn't it?")
       )
     } else if (
@@ -403,7 +403,7 @@ export class Grandmother extends Character {
     }
 
     return (
-      `${characterName(this.name)} looks at the [item_name]` +
+      `${characterName('Grandmother')} looks at the [item_name]` +
       item.name +
       '[/item_name]. ' +
       speech("I'm not sure what to do with this, dear.")

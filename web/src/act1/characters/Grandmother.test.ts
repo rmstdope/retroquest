@@ -14,6 +14,7 @@ import { Act1 } from '../Act1'
 import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
+import { WildBerries } from '../items/WildBerries'
 
 /** A new Act I game already woken out of the dream, standing in the cottage. */
 function cottageGame(): Game {
@@ -32,6 +33,44 @@ describe('Grandmother and the locket', () => {
     expect(response).toContain("this was your mother's")
     expect(response).toContain('all the way back to the founders')
     expect(game.state.hasItem('travel cloak')).toBe(true)
+  })
+
+  it('starts the sentences of her reaction with a capitalised name', () => {
+    const game = cottageGame()
+    game.state.addItemToInventory(new Locket())
+
+    const response = executeCommands(game, ['give locket to grandmother'])
+
+    expect(response).toContain(
+      "[character_name]Grandmother[/character_name]'s eyes widen",
+    )
+    expect(response).toContain(
+      '[character_name]Grandmother[/character_name] hands you',
+    )
+  })
+})
+
+describe('Grandmother and other gifts', () => {
+  it('smiles warmly over the berries, her name capitalised', () => {
+    const game = cottageGame()
+    game.state.addItemToInventory(new WildBerries())
+
+    const response = executeCommands(game, ['give berries to grandmother'])
+
+    expect(response).toContain(
+      '[character_name]Grandmother[/character_name] smiles warmly',
+    )
+  })
+
+  it('looks at a gift she has no use for, her name capitalised', () => {
+    const game = cottageGame()
+    game.state.addItemToInventory(new Key())
+
+    const response = executeCommands(game, ['give key to grandmother'])
+
+    expect(response).toContain(
+      '[character_name]Grandmother[/character_name] looks at',
+    )
   })
 })
 
