@@ -240,21 +240,6 @@
     "text": "You cleansed the pillars and set the Moon Rune shards—the Moon Sigil resonates and the flood wards steady, granting safe passage toward the sanctum."
   },
   {
-    "key": "033cc29645073c",
-    "speaker": "narrator",
-    "text": "Collapsed Pier"
-  },
-  {
-    "key": "06cd9c1529a07c",
-    "speaker": "narrator",
-    "text": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
-  },
-  {
-    "key": "0335233ece7341",
-    "speaker": "narrator",
-    "text": "Barnacles crust the seam; the fused lock will not yield to a mundane key."
-  },
-  {
     "key": "1ea2e4c09febb6",
     "speaker": "narrator",
     "text": "The Pier Warden nods slowly."
@@ -268,6 +253,36 @@
     "key": "1111e4b770f030",
     "speaker": "pier warden",
     "text": "You'll have seen the causeway. Birds by the hundred, and the surf gone grey. I've known bad seasons on this coast, forty years of them. It's only a bad season, isn't it? Tell me the sea will mend on its own."
+  },
+  {
+    "key": "13cb2515f1f7c2",
+    "speaker": "pier warden",
+    "text": "… Aye. I think I knew it, and only wanted someone to say otherwise. Better a hard truth than a soft lie. I'll send word up the coast to keep the boats in."
+  },
+  {
+    "key": "1313b22225f261",
+    "speaker": "pier warden",
+    "text": "Keep it. Toll for the crossing, my da said."
+  },
+  {
+    "key": "0018d31862a669",
+    "speaker": "pier warden",
+    "text": "I said keep it, lad."
+  },
+  {
+    "key": "033cc29645073c",
+    "speaker": "narrator",
+    "text": "Collapsed Pier"
+  },
+  {
+    "key": "06cd9c1529a07c",
+    "speaker": "narrator",
+    "text": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
+  },
+  {
+    "key": "0335233ece7341",
+    "speaker": "narrator",
+    "text": "Barnacles crust the seam; the fused lock will not yield to a mundane key."
   },
   {
     "key": "17d430e5173bf0",
@@ -565,6 +580,16 @@
     "text": "The mirrors are whole. The sun is not where it needs to be. Perhaps rest a while, and let it climb."
   },
   {
+    "key": "0cf7b3dfb6fccb",
+    "speaker": "narrator",
+    "text": "The deeper cut fills. Malakar's name sits level with your parents' again, as it was the day they wrote it."
+  },
+  {
+    "key": "1d382b3fb34138",
+    "speaker": "narrator",
+    "text": "The three names sit level and whole. There is nothing left to mend."
+  },
+  {
     "key": "12923ed6b7af2a",
     "speaker": "narrator",
     "text": "You settle on the warm stone and let the hours pass. The sun climbs until it stands squarely over the terraces. When the sun's beams strike the great mirror they are coaxed and folded together until they pour from the terraces as a single, piercing ray. The light lances into the mountainside, strikes a hidden trigger, and a narrow passage grinds open to the east."
@@ -575,16 +600,6 @@
     "text": "Elior gathers the scattered brass mirror segments and, with care and skill, restores the ancient light channel atop Mount Ember. The mirrors blaze with reflected sunlight, opening the way to the volcano's heart and the Phoenix's trial of wisdom."
   },
   {
-    "key": "0cc90a1a463a37",
-    "speaker": "narrator",
-    "text": "Ember Gallery"
-  },
-  {
-    "key": "1f32809c0e955f",
-    "speaker": "narrator",
-    "text": "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom. Steam sighs from fissures and pools of blackened water mirror faint, dancing light. Worktables gather scattered fragments of fireglass and ash‑tumbled tools where attendants hammer and sort cooled slag for wards. The heat here is a steady, low thrum — a reminder that the mountain breathes beneath your feet."
-  },
-  {
     "key": "126de942b54836",
     "speaker": "narrator",
     "text": "Breath of the Mountain"
@@ -593,46 +608,6 @@
     "key": "01fdd518c2ab4a",
     "speaker": "narrator",
     "text": "The Fumarole Passages exhale waves of heat and steam, blocking the way forward. Find a way to cross the shifting vents and reach the heights to the south."
-  },
-  {
-    "key": "063646d201b312",
-    "speaker": "narrator",
-    "text": "Fumarole Passages"
-  },
-  {
-    "key": "0de2e0f0f3e197",
-    "speaker": "narrator",
-    "text": "Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams. Curtains of steam veil the low passages, and the air tastes faintly of sulfur and warm metal. Here and there a vent hisses sparks that glass the rock into smoky, translucent streaks, while the floor bears the pale scars of old fittings—tiny holes and rubbed brass where mounts were once bolted. Each step sends a warm gust that carries a distant clink of metal and the steady, low sigh of fumaroles farther below."
-  },
-  {
-    "key": "1dd03a06df2eb7",
-    "speaker": "narrator",
-    "text": "The vents gust and sputter without rhythm; there is no telling when they will breathe next."
-  },
-  {
-    "key": "1980609d2bb4f1",
-    "speaker": "sir cedric",
-    "text": "Between breaths, then. I have run through worse than this."
-  },
-  {
-    "key": "0007a6dbf03521",
-    "speaker": "narrator",
-    "text": "The Phoenix Guardian studies you for a moment."
-  },
-  {
-    "key": "0800d21c2cc2c1",
-    "speaker": "phoenix guardian",
-    "text": "So, you seek the mighty one? To stand before the Phoenix, you must be both patient and watchful. The mountain tests those who would pass: its breath is wild, its heat unforgiving. First, bring the vents into harmony—let them breathe as one. Only then can you bind the heat with a ward. When the rhythm is steady and the ward is set, the way to the crater will open."
-  },
-  {
-    "key": "05c2021fb1b284",
-    "speaker": "narrator",
-    "text": "The Phoenix Guardian watches the vents."
-  },
-  {
-    "key": "1068fac62c0d5e",
-    "speaker": "phoenix guardian",
-    "text": "The ward holds, but the mountain still breathes. Count its breath. Walk when it draws in."
   },
   {
     "key": "18856bbe16809f",
@@ -653,16 +628,6 @@
     "key": "1c1364e6ee9b56",
     "speaker": "narrator",
     "text": "With patience and ingenuity, Elior crafts a heat ward from ash-fern and cooled slag, then calibrates the mountain's ancient vents to breathe in a steady, safe rhythm. The searing passages yield, opening the way to the Phoenix's crater and the next trial of wisdom."
-  },
-  {
-    "key": "14accdcd7e3aa0",
-    "speaker": "narrator",
-    "text": "Phoenix Crater"
-  },
-  {
-    "key": "070602dd01b54d",
-    "speaker": "narrator",
-    "text": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars. The warmth is drowsy here, as if the bowl would rather you sat and rested a while."
   },
   {
     "key": "1cc681e48ae873",
@@ -705,19 +670,14 @@
     "text": "He gave your answer too. Then time grew short for his friends, and patience was the one thing he had none of. Do not become what he became."
   },
   {
-    "key": "0df082a08a37e9",
+    "key": "1a9d57e98b4812",
     "speaker": "narrator",
-    "text": "You think of the third name burned deeper than the others on the terraces."
+    "text": "You think of the third name on the terraces, level with the others again."
   },
   {
     "key": "01f091482af7f7",
     "speaker": "narrator",
     "text": "You have obtained the Phoenix Feather. Its warmth pulses in your grasp, a living ember that refuses to die. The memory of fire and flight lingers, reminding you that hope can rise from ashes. The path ahead is clearer, but the final virtue remains."
-  },
-  {
-    "key": "1556a622af4d06",
-    "speaker": "sir cedric",
-    "text": "A bird told us to wait, and we waited. I hope it was worth what it cost him."
   },
   {
     "key": "0e5106b2540dbd",
@@ -730,9 +690,84 @@
     "text": "You saw his name on the terraces, burned deeper than the others. No fire did that. He came back, years after, and struck it again himself, to cut himself out of the promise. The stone would not let him."
   },
   {
+    "key": "15f71fd823b6ba",
+    "speaker": "phoenix",
+    "text": "You gave him back his place. He could not do that for himself."
+  },
+  {
     "key": "09277e9755dca7",
     "speaker": "phoenix",
     "text": "Remember him when time is short for you."
+  },
+  {
+    "key": "0cc90a1a463a37",
+    "speaker": "narrator",
+    "text": "Ember Gallery"
+  },
+  {
+    "key": "1f32809c0e955f",
+    "speaker": "narrator",
+    "text": "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom. Steam sighs from fissures and pools of blackened water mirror faint, dancing light. Worktables gather scattered fragments of fireglass and ash‑tumbled tools where attendants hammer and sort cooled slag for wards. The heat here is a steady, low thrum — a reminder that the mountain breathes beneath your feet."
+  },
+  {
+    "key": "063646d201b312",
+    "speaker": "narrator",
+    "text": "Fumarole Passages"
+  },
+  {
+    "key": "0de2e0f0f3e197",
+    "speaker": "narrator",
+    "text": "Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams. Curtains of steam veil the low passages, and the air tastes faintly of sulfur and warm metal. Here and there a vent hisses sparks that glass the rock into smoky, translucent streaks, while the floor bears the pale scars of old fittings—tiny holes and rubbed brass where mounts were once bolted. Each step sends a warm gust that carries a distant clink of metal and the steady, low sigh of fumaroles farther below."
+  },
+  {
+    "key": "1dd03a06df2eb7",
+    "speaker": "narrator",
+    "text": "The vents gust and sputter without rhythm; there is no telling when they will breathe next."
+  },
+  {
+    "key": "1980609d2bb4f1",
+    "speaker": "sir cedric",
+    "text": "Between breaths, then. I have run through worse than this."
+  },
+  {
+    "key": "0007a6dbf03521",
+    "speaker": "narrator",
+    "text": "The Phoenix Guardian studies you for a moment."
+  },
+  {
+    "key": "0800d21c2cc2c1",
+    "speaker": "phoenix guardian",
+    "text": "So, you seek the mighty one? To stand before the Phoenix, you must be both patient and watchful. The mountain tests those who would pass: its breath is wild, its heat unforgiving. First, bring the vents into harmony—let them breathe as one. Only then can you bind the heat with a ward. When the rhythm is steady and the ward is set, the way to the crater will open."
+  },
+  {
+    "key": "05c2021fb1b284",
+    "speaker": "narrator",
+    "text": "The Phoenix Guardian watches the vents."
+  },
+  {
+    "key": "1068fac62c0d5e",
+    "speaker": "phoenix guardian",
+    "text": "The ward holds, but the mountain still breathes. Count its breath. Walk when it draws in."
+  },
+  {
+    "key": "14accdcd7e3aa0",
+    "speaker": "narrator",
+    "text": "Phoenix Crater"
+  },
+  {
+    "key": "070602dd01b54d",
+    "speaker": "narrator",
+    "text": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars. The warmth is drowsy here, as if the bowl would rather you sat and rested a while."
+  },
+  {
+    "key": "0df082a08a37e9",
+    "speaker": "narrator",
+    "text": "You think of the third name burned deeper than the others on the terraces."
+  },
+  {
+    "key": "1556a622af4d06",
+    "speaker": "sir cedric",
+    "text": "A bird told us to wait, and we waited. I hope it was worth what it cost him."
   },
   {
     "key": "0eacd243ef2027",
@@ -1025,6 +1060,46 @@
     "text": "Still quiet. I'll keep it, if that's all right. Just till we're up top."
   },
   {
+    "key": "115dda251a2a36",
+    "speaker": "narrator",
+    "text": "The lead miner nods toward the bucket, where Tobin sits with the charm in his fist:"
+  },
+  {
+    "key": "00ff0d24fee731",
+    "speaker": "lead miner",
+    "text": "He talked to me. Asked me how long till we're up top. First thing he's said since the rock came down."
+  },
+  {
+    "key": "0cd697ec6f4779",
+    "speaker": "narrator",
+    "text": "He clears his throat."
+  },
+  {
+    "key": "0742829c09187d",
+    "speaker": "lead miner",
+    "text": "Thank you, Elior."
+  },
+  {
+    "key": "1fcdb0984e1e5b",
+    "speaker": "narrator",
+    "text": "The phantoms turn toward you, their voices rising in a chorus of whispered syllables that seem to flow like water over stone. The words are just beyond comprehension, as if spoken in a language forgotten by time."
+  },
+  {
+    "key": "0808ef77c79013",
+    "speaker": "narrator",
+    "text": "Beneath the whispers, a few of them are humming: a slow tune that climbs three notes and settles home again."
+  },
+  {
+    "key": "09024faf364039",
+    "speaker": "narrator",
+    "text": "Through the murmur, one word comes clear, over and over: rest … rest …"
+  },
+  {
+    "key": "01ae36be3b8b54",
+    "speaker": "narrator",
+    "text": "The whispering falters. One by one the figures turn toward you, and the urgency drains out of them. They thin like mist in morning sun, and then they are gone. The chamber is quieter for it, but not yet still."
+  },
+  {
     "key": "0e8d73eea987bd",
     "speaker": "narrator",
     "text": "Stillness Vestibule"
@@ -1048,21 +1123,6 @@
     "key": "08b78bf78ab69e",
     "speaker": "silence keeper",
     "text": "The stones in this room were cut to carry a whisper to the sleeper without waking it. They have gone cold. But a chant will not carry over troubled water, and these pools are not as still as they seem. Bless them, and give them the old chant, and the way will open."
-  },
-  {
-    "key": "1fcdb0984e1e5b",
-    "speaker": "narrator",
-    "text": "The phantoms turn toward you, their voices rising in a chorus of whispered syllables that seem to flow like water over stone. The words are just beyond comprehension, as if spoken in a language forgotten by time."
-  },
-  {
-    "key": "0808ef77c79013",
-    "speaker": "narrator",
-    "text": "Beneath the whispers, a few of them are humming: a slow tune that climbs three notes and settles home again."
-  },
-  {
-    "key": "09024faf364039",
-    "speaker": "narrator",
-    "text": "Through the murmur, one word comes clear, over and over: rest … rest …"
   },
   {
     "key": "0bfd191577b57a",
@@ -1205,6 +1265,26 @@
     "text": "You have claimed the Dragon's Scale, its obsidian surface gleaming with ancient power. The dragon's wisdom echoes in your mind, a testament to the selflessness you have proven. With all three relics in hand, the final trial awaits—the Warding Rite that will determine the fate of all."
   },
   {
+    "key": "08f93e4b81770a",
+    "speaker": "narrator",
+    "text": "Light runs along the cracked ring like water finding its course. The sigils brighten, steady, and hold."
+  },
+  {
+    "key": "043464b8e63815",
+    "speaker": "narrator",
+    "text": "The ancient dragon lowers its head."
+  },
+  {
+    "key": "16ef2605a79977",
+    "speaker": "ancient dragon",
+    "text": "You said you would return what you took. Most forget by the time they reach the door. Your parents would have done the same."
+  },
+  {
+    "key": "1f875adda26fc7",
+    "speaker": "ancient dragon",
+    "text": "Go with my blessing, young one. The prison holds."
+  },
+  {
     "key": "0ea6d71e45791d",
     "speaker": "ancient dragon",
     "text": "Go with my blessing. The prison I hold is weaker for the scale's going. That is the price, and it is mine to pay, not yours."
@@ -1283,6 +1363,16 @@
     "key": "182875ddfe0b04",
     "speaker": "mira",
     "text": "And ask me anything you like now — about your parents, Malakar, the amulet, your grandmother. I will not hide from you again."
+  },
+  {
+    "key": "19c7aebac93628",
+    "speaker": "mira",
+    "text": "Thank you. I did not dare ask for that. I will try to deserve it."
+  },
+  {
+    "key": "1e35c127b2486e",
+    "speaker": "mira",
+    "text": "I should have. I chose the seal over you every day, and I would choose it again. But I am sorry for every one of those days."
   },
   {
     "key": "00d7ab3713233a",

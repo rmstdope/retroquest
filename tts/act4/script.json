@@ -150,6 +150,26 @@
     "text": "Elior's courage earns the servants' trust, and a blessing breaks their chains. Freed, they offer what help they can for the trials ahead."
   },
   {
+    "key": "1d40989c7bb633",
+    "speaker": "narrator",
+    "text": "The Captain of the Guard answers."
+  },
+  {
+    "key": "09247e18648b67",
+    "speaker": "captain of the guard",
+    "text": "'You will need this more than I will.'"
+  },
+  {
+    "key": "06d38056cf8fe2",
+    "speaker": "narrator",
+    "text": "He tries to give it back, and when you will not take it, he grips your arm."
+  },
+  {
+    "key": "049eb4119cedfe",
+    "speaker": "captain of the guard",
+    "text": "'Then I will tell them at home what you did here.'"
+  },
+  {
     "key": "060072baa59d6e",
     "speaker": "narrator",
     "text": "The Freed Servants bow. One of them, an old woman with flour still in the creases of her hands, looks up."
@@ -245,14 +265,24 @@
     "text": "Guided by the servants' pendant and the hall's echoes, Elior walks the one true path through the mirrors, and learns to see through illusion."
   },
   {
-    "key": "03bc080972c9d9",
-    "speaker": "narrator",
-    "text": "The true path is already clear. The false mirrors stay dark."
-  },
-  {
     "key": "1531fa3cae6868",
     "speaker": "true self",
     "text": "You told Mira you came for the king. Tell me why you really came."
+  },
+  {
+    "key": "13ae5e7d537583",
+    "speaker": "narrator",
+    "text": "Elior will remember this."
+  },
+  {
+    "key": "0b6f9b6ce770f7",
+    "speaker": "true self",
+    "text": "Remember what you told me, when you stand before him."
+  },
+  {
+    "key": "03bc080972c9d9",
+    "speaker": "narrator",
+    "text": "The true path is already clear. The false mirrors stay dark."
   },
   {
     "key": "17c73ec19febeb",
@@ -313,6 +343,16 @@
     "key": "18af870c7d2dc1",
     "speaker": "narrator",
     "text": "Elior sees the knight as he truly is and offers him redemption instead of a blade. The man who framed Sir Cedric confesses, and the stair to the Tower of Shadows lies open."
+  },
+  {
+    "key": "1a9ed44266839d",
+    "speaker": "sir cedric",
+    "text": "If they can be let go, so can this. I forgive you. Get up."
+  },
+  {
+    "key": "0b239fe49bb1a4",
+    "speaker": "sir cedric",
+    "text": "Go on up. I will wait here with him. Someone should."
   },
   {
     "key": "06b7c345cf653e",
@@ -585,14 +625,19 @@
     "text": "King Alden sleeps in the crystal and does not hear you."
   },
   {
-    "key": "1892d189aeb0af",
-    "speaker": "malakar",
-    "text": "You would waste it on me? Keep it for them, then. Give me the amulet, Elior, and your mother wakes before that glass is empty."
+    "key": "0be974268175fe",
+    "speaker": "narrator",
+    "text": "A workshop in the late sun. Aren bends over the workbench; Lysa laughs at something he has said. They are young. They do not look up."
   },
   {
-    "key": "00917c43819a98",
+    "key": "0a60816ebc7001",
+    "speaker": "shadow of the past",
+    "text": "Not like this. Not by force."
+  },
+  {
+    "key": "1b80a20d45dd14",
     "speaker": "malakar",
-    "text": "They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet."
+    "text": "You saw. Then you know I was not lying."
   },
   {
     "key": "122df91c3cebfb",
@@ -605,44 +650,24 @@
     "text": "Elior. I tore the world to keep them, and I lost them anyway. I could not wait; you can. Be patient where I was not. Close what I opened, and let them rest."
   },
   {
-    "key": "07d2a69806730b",
+    "key": "1334dc34e4fd0e",
+    "speaker": "narrator",
+    "text": "“I forgive you,” you say. The words are harder than any spell, and then they are easy. Something warm settles in your chest, like a lesson you always knew."
+  },
+  {
+    "key": "189e3b2f3fa06e",
     "speaker": "malakar",
-    "text": "Then show me what they left you."
+    "text": "You would forgive me. They would have too."
   },
   {
-    "key": "05511dd0bbf86d",
+    "key": "00c7db73066110",
     "speaker": "narrator",
-    "text": "“You tore the world, Malakar,” you say. “You drained the king. You sent a man to hunt a child in Willowbrook, and you let Sir Cedric take the blame. I will not pretend you didn't.”"
+    "text": "You lay forgiveness on the wound. Its edges stop flickering. The days that never happened fall quiet one by one, and the tear draws closed like a healed cut. Above the circle the crystal clouds, cracks and falls away, and King Alden breathes again."
   },
   {
-    "key": "0cc8fde0d59fa4",
+    "key": "014b21be116e32",
     "speaker": "malakar",
-    "text": "No. You won't. Your mother never could either."
-  },
-  {
-    "key": "1f3bc7fdefa3bd",
-    "speaker": "narrator",
-    "text": "The open amulet grows heavy in your hand, ready."
-  },
-  {
-    "key": "14faea1d05fa85",
-    "speaker": "narrator",
-    "text": "You press the open amulet to the wound. Threads of gold rise from King Alden's crown and weave into the ward's light. The tear closes, and Malakar goes with it, drawn into the seal. He does not fight."
-  },
-  {
-    "key": "02c271aebde2b3",
-    "speaker": "malakar",
-    "text": "I am sorry. Tell them— no. They know."
-  },
-  {
-    "key": "040571ad69c291",
-    "speaker": "narrator",
-    "text": "The last of him to go is his voice, low: \"…the field will wake.\" Then the seal is shut."
-  },
-  {
-    "key": "01b23ae64b344d",
-    "speaker": "king alden",
-    "text": "Then it falls to me to set right what he broke. Rest now. You have done enough."
+    "text": "Thank you, Elior. I will stay here, by what I broke, and remember them properly this time."
   },
   {
     "key": "0428c1e8ac1354",
@@ -660,9 +685,14 @@
     "text": "We watched over you all this time, from inside the light. We could not hold you, but we could hold the door shut."
   },
   {
-    "key": "1ad56cf2f51b90",
-    "speaker": "aren",
-    "text": "You named what he did, and you did not hate him for it. That is the hardest kind of fair."
+    "key": "09ea0612918131",
+    "speaker": "lysa",
+    "text": "We saw you at the workbench with us, for a moment. You let it go. That was the bravest thing you did today."
+  },
+  {
+    "key": "0bc43d8a5b39c2",
+    "speaker": "lysa",
+    "text": "You gave him back to us, our friend. We never dared hope for that."
   },
   {
     "key": "130bcb783977e9",
@@ -693,11 +723,6 @@
     "key": "0905f831b145e3",
     "speaker": "narrator",
     "text": "You have completed the quest 'The Final Stand'."
-  },
-  {
-    "key": "0b5cb42912e4ba",
-    "speaker": "king alden",
-    "text": "Go home, Elior. The kingdom will remember what you did here."
   },
   {
     "key": "065ebf6dd8a2e0",
@@ -760,9 +785,49 @@
     "text": "Welcome home, Elior."
   },
   {
-    "key": "190c1e6e5b1413",
+    "key": "05511dd0bbf86d",
+    "speaker": "narrator",
+    "text": "“You tore the world, Malakar,” you say. “You drained the king. You sent a man to hunt a child in Willowbrook, and you let Sir Cedric take the blame. I will not pretend you didn't.”"
+  },
+  {
+    "key": "0cc8fde0d59fa4",
+    "speaker": "malakar",
+    "text": "No. You won't. Your mother never could either."
+  },
+  {
+    "key": "1f3bc7fdefa3bd",
+    "speaker": "narrator",
+    "text": "The open amulet grows heavy in your hand, ready."
+  },
+  {
+    "key": "14faea1d05fa85",
+    "speaker": "narrator",
+    "text": "You press the open amulet to the wound. Threads of gold rise from King Alden's crown and weave into the ward's light. The tear closes, and Malakar goes with it, drawn into the seal. He does not fight."
+  },
+  {
+    "key": "02c271aebde2b3",
+    "speaker": "malakar",
+    "text": "I am sorry. Tell them— no. They know."
+  },
+  {
+    "key": "040571ad69c291",
+    "speaker": "narrator",
+    "text": "The last of him to go is his voice, low: \"…the field will wake.\" Then the seal is shut."
+  },
+  {
+    "key": "01b23ae64b344d",
     "speaker": "king alden",
-    "text": "You named every crime and did not add one. Only someone who has paid for the truth before speaks it like that. I will remember it."
+    "text": "Then it falls to me to set right what he broke. Rest now. You have done enough."
+  },
+  {
+    "key": "1ad56cf2f51b90",
+    "speaker": "aren",
+    "text": "You named what he did, and you did not hate him for it. That is the hardest kind of fair."
+  },
+  {
+    "key": "0b5cb42912e4ba",
+    "speaker": "king alden",
+    "text": "Go home, Elior. The kingdom will remember what you did here."
   },
   {
     "key": "0112e4034ae0c9",
@@ -805,6 +870,31 @@
     "text": "You kneel at the edge of the field. The one spell you kept stirs in your hands, the one that was never theirs, small and certain."
   },
   {
+    "key": "1892d189aeb0af",
+    "speaker": "malakar",
+    "text": "You would waste it on me? Keep it for them, then. Give me the amulet, Elior, and your mother wakes before that glass is empty."
+  },
+  {
+    "key": "00917c43819a98",
+    "speaker": "malakar",
+    "text": "They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet."
+  },
+  {
+    "key": "07d2a69806730b",
+    "speaker": "malakar",
+    "text": "Then show me what they left you."
+  },
+  {
+    "key": "13686727aaffc1",
+    "speaker": "king alden",
+    "text": "You came for me. Whoever you are, you came."
+  },
+  {
+    "key": "190c1e6e5b1413",
+    "speaker": "king alden",
+    "text": "You named every crime and did not add one. Only someone who has paid for the truth before speaks it like that. I will remember it."
+  },
+  {
     "key": "17683f724d6484",
     "speaker": "aren",
     "text": "We watched you give, again and again, and never ask for anything back. Today was only the last time."
@@ -820,34 +910,14 @@
     "text": "Malakar does not answer. He is staring at the open amulet."
   },
   {
+    "key": "0039063aba0672",
+    "speaker": "malakar",
+    "text": "And not for the first time, I think. You have shown mercy before, where none was owed. I can see it on you."
+  },
+  {
     "key": "1931fac992f597",
     "speaker": "malakar",
     "text": "It does not hurt. For the first time in years, it does not hurt."
-  },
-  {
-    "key": "1334dc34e4fd0e",
-    "speaker": "narrator",
-    "text": "“I forgive you,” you say. The words are harder than any spell, and then they are easy. Something warm settles in your chest, like a lesson you always knew."
-  },
-  {
-    "key": "189e3b2f3fa06e",
-    "speaker": "malakar",
-    "text": "You would forgive me. They would have too."
-  },
-  {
-    "key": "00c7db73066110",
-    "speaker": "narrator",
-    "text": "You lay forgiveness on the wound. Its edges stop flickering. The days that never happened fall quiet one by one, and the tear draws closed like a healed cut. Above the circle the crystal clouds, cracks and falls away, and King Alden breathes again."
-  },
-  {
-    "key": "014b21be116e32",
-    "speaker": "malakar",
-    "text": "Thank you, Elior. I will stay here, by what I broke, and remember them properly this time."
-  },
-  {
-    "key": "0bc43d8a5b39c2",
-    "speaker": "lysa",
-    "text": "You gave him back to us, our friend. We never dared hope for that."
   },
   {
     "key": "19f4117a852463",

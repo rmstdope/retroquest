@@ -1,7 +1,54 @@
 [
-  { "after": 30, "commands": ["s", "talk to brenn"] },
-  { "after": 108, "commands": ["s", "talk to brenn"] },
-  { "after": 108, "commands": ["say forgive to caravan master thorne", "s", "talk to brenn"] },
-  { "after": 113, "commands": ["say truth to innkeeper marcus"] },
-  { "after": 151, "commands": ["say truth to sir cedric"] }
+  {
+    "after": 30,
+    "commands": [
+      "s",
+      "talk to brenn"
+    ]
+  },
+  {
+    "after": 108,
+    "commands": [
+      "s",
+      "talk to brenn"
+    ]
+  },
+  {
+    "after": 108,
+    "commands": [
+      "say forgive to caravan master thorne",
+      "s",
+      "talk to brenn"
+    ]
+  },
+  {
+    "after": 113,
+    "commands": [
+      "say truth to innkeeper marcus"
+    ]
+  },
+  {
+    "after": 151,
+    "commands": [
+      "say truth to sir cedric"
+    ]
+  },
+  {
+    "after": 55,
+    "commands": [
+      "give mountain flower to families"
+    ]
+  },
+  {
+    "after": 102,
+    "commands": [
+      "cast greater heal on caravan",
+      "w",
+      "w",
+      "n",
+      "n",
+      "e",
+      "talk to caravan master thorne"
+    ]
+  }
 ]

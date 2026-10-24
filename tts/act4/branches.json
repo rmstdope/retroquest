@@ -3,6 +3,7 @@
     "after": 50,
     "commands": [
       "use lifelight elixir on prison",
+      "talk to king alden",
       "say justice to malakar",
       "use ancient amulet on wound",
       "talk to king alden",
@@ -49,6 +50,81 @@
     "virtues": [
       "selfless",
       "selfless"
+    ]
+  },
+  {
+    "after": 51,
+    "commands": [
+      "say forgiveness to malakar",
+      "cast forgiveness on wound",
+      "n",
+      "cast grow"
+    ],
+    "virtues": [
+      "mercy"
+    ]
+  },
+  {
+    "after": 48,
+    "commands": [
+      "give ancient amulet to malakar",
+      "say refrain to malakar",
+      "use ancient amulet",
+      "use lifelight elixir on malakar",
+      "say forgiveness to malakar",
+      "cast forgiveness on wound",
+      "n",
+      "cast grow"
+    ]
+  },
+  {
+    "after": 48,
+    "commands": [
+      "give ancient amulet to malakar",
+      "say refrain to malakar",
+      "use ancient amulet",
+      "use lifelight elixir on prison",
+      "say justice to malakar",
+      "use ancient amulet on wound",
+      "talk to king alden",
+      "n",
+      "cast grow"
+    ]
+  },
+  {
+    "after": 48,
+    "commands": [
+      "give ancient amulet to malakar",
+      "say refrain to malakar",
+      "use ancient amulet",
+      "use lifelight elixir on prison",
+      "say sacrifice to malakar",
+      "use ancient amulet on wound",
+      "talk to king alden",
+      "n",
+      "cast grow"
+    ]
+  },
+  {
+    "after": 21,
+    "commands": [
+      "talk to true self",
+      "say truth to true self",
+      "talk to true self"
+    ]
+  },
+  {
+    "after": 6,
+    "commands": [
+      "give guardian's chain to captain of the guard",
+      "talk to captain of the guard"
+    ]
+  },
+  {
+    "after": 29,
+    "commands": [
+      "cast redemption's light on ghostly warriors",
+      "talk to sir cedric"
     ]
   }
 ]
