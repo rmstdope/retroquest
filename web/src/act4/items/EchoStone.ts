@@ -12,6 +12,10 @@ const STONE_OUTSIDE_MAZE =
   'single word over and over, the way a man says a word he has stopped ' +
   'believing in: redemption.'
 
+/** What the stone says when taken again, wherever it was dropped. */
+const PICKED_UP_AGAIN =
+  "It is warm, and the hall's echoes still speak inside it."
+
 /** What the stone is called, and how it looks, after the knight is redeemed. */
 const ENHANCED_NAME = 'Enhanced Echo Stone'
 const ENHANCED_DESCRIPTION =
@@ -33,6 +37,9 @@ export class EchoStone extends Item {
   /** Set once the knight's voice has joined the stone. */
   private enhanced = false
 
+  /** Set once the stone has been taken from its niche in the hall. */
+  private liftedFromNiche = false
+
   constructor() {
     super({
       name: 'Echo Stone',
@@ -43,8 +50,13 @@ export class EchoStone extends Item {
     })
   }
 
-  /** The line shown after the stone is taken. */
+  /**
+   * The line shown after the stone is taken: the niche beneath the hall's
+   * banners only the first time, a plain line wherever it lies after that.
+   */
   override pickedUp(_gameState: GameState): string {
+    if (this.liftedFromNiche) return PICKED_UP_AGAIN
+    this.liftedFromNiche = true
     return (
       'You lift a smooth grey stone from a niche beneath the banners. It is ' +
       "warm, and when you hold it to your ear you hear the hall's echoes still " +
