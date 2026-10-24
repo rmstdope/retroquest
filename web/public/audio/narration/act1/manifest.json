@@ -2233,42 +2233,42 @@
  "02400849f1f285": {
   "file": "02400849f1f285.mp3",
   "speaker": "narrator",
-  "duration": 2.694,
+  "duration": 2.601,
   "words": [
    {
     "word": "From",
     "start": 0.0,
-    "end": 0.2
+    "end": 0.22
    },
    {
     "word": "the",
-    "start": 0.2,
+    "start": 0.22,
     "end": 0.36
    },
    {
     "word": "founders'",
     "start": 0.36,
-    "end": 0.96
+    "end": 0.94
    },
    {
     "word": "line,",
-    "start": 0.96,
-    "end": 1.4
+    "start": 0.94,
+    "end": 1.36
    },
    {
     "word": "to",
-    "start": 1.4,
-    "end": 1.82
+    "start": 1.36,
+    "end": 1.84
    },
    {
     "word": "the",
-    "start": 1.82,
-    "end": 2.0
+    "start": 1.84,
+    "end": 1.98
    },
    {
     "word": "next.",
-    "start": 2.0,
-    "end": 2.38
+    "start": 1.98,
+    "end": 2.34
    }
   ]
  },
@@ -30961,22 +30961,22 @@
  "1627ae49c1165e": {
   "file": "1627ae49c1165e.mp3",
   "speaker": "narrator",
-  "duration": 0.975,
+  "duration": 1.022,
   "words": [
    {
     "word": "A",
     "start": 0.0,
-    "end": 0.24
+    "end": 0.22
    },
    {
     "word": "&",
-    "start": 0.24,
-    "end": 0.44
+    "start": 0.22,
+    "end": 0.51
    },
    {
     "word": "L",
-    "start": 0.44,
-    "end": 0.72
+    "start": 0.51,
+    "end": 0.8
    }
   ]
  },
@@ -39164,7 +39164,7 @@
  "1b1b078b4d2f85": {
   "file": "1b1b078b4d2f85.mp3",
   "speaker": "blacksmith",
-  "duration": 3.019,
+  "duration": 3.065,
   "words": [
    {
     "word": "Welcome",
@@ -39179,26 +39179,26 @@
    {
     "word": "young",
     "start": 0.78,
-    "end": 1.06
+    "end": 1.08
    },
    {
     "word": "Elior.",
-    "start": 1.06,
-    "end": 1.88
+    "start": 1.08,
+    "end": 1.56
    },
    {
     "word": "Need",
-    "start": 1.88,
+    "start": 1.9,
     "end": 2.1
    },
    {
     "word": "something",
     "start": 2.1,
-    "end": 2.44
+    "end": 2.42
    },
    {
     "word": "else?",
-    "start": 2.44,
+    "start": 2.42,
     "end": 2.8
    }
   ]
