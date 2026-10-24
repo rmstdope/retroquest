@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, dialogue } from '@/engine'
 import {
   FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
@@ -27,12 +27,12 @@ export class SirCedricInTheHall extends Character {
   /** By the south door, or sitting on the stair once he has forgiven. */
   override examine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)) {
-      return event(
+      return (
         'Sir Cedric sits on the stair beside the knight. Neither of them is ' +
-          'saying much.',
+        'saying much.'
       )
     }
-    return event(this.description)
+    return this.description
   }
 
   /** What he says follows what he knows of the knight and what he chose. */

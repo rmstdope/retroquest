@@ -1,10 +1,4 @@
-import {
-  Spell,
-  event,
-  type Character,
-  type GameState,
-  type Item,
-} from '@/engine'
+import { Spell, type Character, type GameState, type Item } from '@/engine'
 import {
   FLAG_ACT4_BANNERS_SEEN,
   FLAG_ACT4_ECHO_STONE_HEARD,
@@ -87,7 +81,7 @@ export class TruthSight extends Spell {
       target instanceof MemoryOrbs &&
       !gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)
     ) {
-      return event(ORBS_SEEN)
+      return ORBS_SEEN
     }
     return NOTHING_HIDDEN
   }
@@ -96,7 +90,7 @@ export class TruthSight extends Spell {
   override castOnCharacter(gameState: GameState, target: Character): string {
     if (target instanceof KnightOfDespair) return target.seeThrough(gameState)
     if (target instanceof Malakar && !endingPlayed(gameState)) {
-      return event(MALAKAR_SEEN)
+      return MALAKAR_SEEN
     }
     return NOTHING_HIDDEN
   }
@@ -110,6 +104,6 @@ export class TruthSight extends Spell {
   ): string {
     if (gameState.getStoryFlag(flag)) return `[dim]${already}[/dim]`
     gameState.setStoryFlag(flag, true)
-    return event(line)
+    return line
   }
 }

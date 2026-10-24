@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
@@ -47,10 +47,10 @@ export class WardStone extends Item {
   /** The stone's look: on the beat or a breath behind, then dark. The first look starts the quest. */
   override examine(gameState: GameState): string {
     if (this.isDark(gameState)) {
-      return event(`The ${this.side} stone is dark.`)
+      return `The ${this.side} stone is dark.`
     }
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
-    if (this.side === 'right') return event(OUT_OF_TIME)
-    return event(`The ${this.side} stone${ON_THE_BEAT}`)
+    if (this.side === 'right') return OUT_OF_TIME
+    return `The ${this.side} stone${ON_THE_BEAT}`
   }
 }

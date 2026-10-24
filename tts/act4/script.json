@@ -50,6 +50,11 @@
     "text": "Towering obsidian gates loom before you, carved with writhing shadows that seem to move in the corners of your vision. Three ancient ward stones, left, middle and right, pulse with malevolent energy, casting eerie purple light across the threshold. The air crackles with dark magic, and whispers of forgotten souls echo from beyond the barrier. Spectral guardians drift between the stones, their hollow eyes fixed upon any who dare approach this cursed entrance."
   },
   {
+    "key": "1c5df38619a981",
+    "speaker": "narrator",
+    "text": "Three ward stones stand before the gates, evenly spaced, each carved with the same runes. Their light swells and fades together, and the barrier swells and fades with them. All but one: the right stone brightens a breath after the others, like a man who has lost count."
+  },
+  {
     "key": "1f7d39c44976a9",
     "speaker": "narrator",
     "text": "New main quest"
@@ -80,6 +85,91 @@
     "text": "Shadow guardians and a barrier of dark energy bar the way into the fortress. Find what feeds them, and break their hold on the gates."
   },
   {
+    "key": "0c01393618b1f0",
+    "speaker": "narrator",
+    "text": "A shimmering barrier of dark energy throws you back. It pulses in rhythm with the ward stones."
+  },
+  {
+    "key": "04826019615d3b",
+    "speaker": "narrator",
+    "text": "Your light falls on the guardians and slides off them. They stand on the barrier, and the barrier stands on the stones."
+  },
+  {
+    "key": "002a5b94e9d2c0",
+    "speaker": "narrator",
+    "text": "The stone drinks your light and pulses brighter, and the guardians lean closer for a moment. The barrier keeps its rhythm."
+  },
+  {
+    "key": "1c16ca7774c98a",
+    "speaker": "narrator",
+    "text": "Your light washes over all three stones at once. They drink it together and keep their count."
+  },
+  {
+    "key": "0025452b436e19",
+    "speaker": "narrator",
+    "text": "Warm, golden light fills the area, but there is nothing here that responds to the blessing."
+  },
+  {
+    "key": "07981171c1c2df",
+    "speaker": "narrator",
+    "text": "A thin wall of violet light hangs across the gateway, humming in time with the ward stones. It is the only thing between you and the gates."
+  },
+  {
+    "key": "1e8eb0bec69c4a",
+    "speaker": "narrator",
+    "text": "The left stone swells and fades with the barrier, exactly on the beat."
+  },
+  {
+    "key": "19d8c7cb3d5428",
+    "speaker": "narrator",
+    "text": "The middle stone swells and fades with the barrier, exactly on the beat."
+  },
+  {
+    "key": "1ce4957a84538d",
+    "speaker": "narrator",
+    "text": "The right stone brightens a breath after the barrier does, every time, like a man who has lost count."
+  },
+  {
+    "key": "19a152339c309e",
+    "speaker": "narrator",
+    "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
+  },
+  {
+    "key": "071954bb4d75c0",
+    "speaker": "narrator",
+    "text": "A shimmering elixir that seems to contain liquid starlight. Threads of crystal clarity, phoenix flame, and draconic essence swirl within the glass vial."
+  },
+  {
+    "key": "1fcf25e17acb8a",
+    "speaker": "narrator",
+    "text": "A small silver medallion stamped with two clasped hands, warm from the friends who pressed it into your hand. Whoever carries it is not alone, and knows it."
+  },
+  {
+    "key": "1511ac64886212",
+    "speaker": "narrator",
+    "text": "A small crystalline pendant that shifts through the colours of the forest as you turn it: leaf green, acorn brown, snow, blossom. It is warm, the way a held hand is warm."
+  },
+  {
+    "key": "159fda9106a0c4",
+    "speaker": "narrator",
+    "text": "A crystal with a whole small forest in it. Tiny lights move inside like fireflies, and held close it sounds faintly of wind in leaves."
+  },
+  {
+    "key": "1668105665b087",
+    "speaker": "narrator",
+    "text": "The token is warm in your hand. Someone, somewhere, is glad you came."
+  },
+  {
+    "key": "1fc9d5de8cb36a",
+    "speaker": "narrator",
+    "text": "Your light finds the right stone between its beats. It flares, stutters, and goes dark. A fragment cracks from its face and drops to the flagstones. The other two stones falter, lose the count, and go dark with it; the barrier flickers out of time and is gone."
+  },
+  {
+    "key": "1875f810afe01b",
+    "speaker": "narrator",
+    "text": "Without the barrier the guardians have nothing to stand on. They thin to smoke and are gone, and where they drifted lies the chain that bound them, and a small orb of golden light: the Guardian's Essence."
+  },
+  {
     "key": "1f5c71c8ba496d",
     "speaker": "narrator",
     "text": "Side quest complete"
@@ -90,9 +180,79 @@
     "text": "Elior's light breaks the guardians' hold on the gates. The ward stones fall dark, and the way into Malakar's fortress lies open."
   },
   {
-    "key": "101acdefcf3507",
+    "key": "12a811ff41f79c",
     "speaker": "narrator",
-    "text": "You take the Guardian's Chain. As you lift the Guardian's Chain, you feel a surge of protective energy coursing through your body. The chain's light grows brighter, recognizing you as its new bearer."
+    "text": "The stone is dark. Your light shows only its runes."
+  },
+  {
+    "key": "1c87c3e79d433c",
+    "speaker": "narrator",
+    "text": "The ward stones are dark. Your light shows only their runes."
+  },
+  {
+    "key": "00f4221eeaddb3",
+    "speaker": "narrator",
+    "text": "You take the Ward Stone Fragment. The fragment is cold, and it no longer keeps any time at all."
+  },
+  {
+    "key": "165439bb214d32",
+    "speaker": "narrator",
+    "text": "The left stone is dark."
+  },
+  {
+    "key": "1d598735366439",
+    "speaker": "narrator",
+    "text": "The middle stone is dark."
+  },
+  {
+    "key": "08dba2208ee565",
+    "speaker": "narrator",
+    "text": "The right stone is dark."
+  },
+  {
+    "key": "0fac5b0869403e",
+    "speaker": "narrator",
+    "text": "Three ward stones, dark and silent. The right one is missing a piece of its face."
+  },
+  {
+    "key": "1f1923faedfd28",
+    "speaker": "narrator",
+    "text": "The violet wall is gone. The gateway is only a gateway now."
+  },
+  {
+    "key": "175219ea14d8a0",
+    "speaker": "narrator",
+    "text": "A jagged piece of the right ward stone, carved with half a rune. It is cold, and keeps no time at all."
+  },
+  {
+    "key": "06b237b56417e6",
+    "speaker": "narrator",
+    "text": "A silver chain, each link inscribed with runes. It bound the guardians to the stones; now it binds nothing."
+  },
+  {
+    "key": "08993777469ac1",
+    "speaker": "narrator",
+    "text": "A small, steady light the colour of a candle flame, left where the last guardian stood. Whoever the guardians were made from was brave once. The light remembers it."
+  },
+  {
+    "key": "12b90cfd8fef1a",
+    "speaker": "narrator",
+    "text": "You take the Guardian's Chain. A surge of protective energy courses through your body. The chain's light grows brighter, recognizing you as its new bearer."
+  },
+  {
+    "key": "1f6e9bea76e8b5",
+    "speaker": "narrator",
+    "text": "The light shows it clearly, but has no special effect."
+  },
+  {
+    "key": "096fd59cf2a0e3",
+    "speaker": "narrator",
+    "text": "The crystals stay quiet. Whatever the chain was made to stand against, it is not here."
+  },
+  {
+    "key": "1a5590b6b094a7",
+    "speaker": "narrator",
+    "text": "The light sits warm in your hand, waiting for someone to show it to."
   },
   {
     "key": "1b4f8361eb6968",
@@ -105,6 +265,31 @@
     "text": "Malakar's servants wander the courtyard in chains of shadow, bound to serve him against their will. Win their trust, and break the chains."
   },
   {
+    "key": "11c1bdef704d1a",
+    "speaker": "narrator",
+    "text": "The servants flinch from the light and keep walking. They do not know you, and they have learned what strangers bring."
+  },
+  {
+    "key": "05ec706f6c0dc0",
+    "speaker": "narrator",
+    "text": "The room is already well lit."
+  },
+  {
+    "key": "1ff139c3055558",
+    "speaker": "narrator",
+    "text": "The servants drift across the archway, their chains trailing. They do not stop for you, and you cannot get past them."
+  },
+  {
+    "key": "107cde50cbb63c",
+    "speaker": "narrator",
+    "text": "Captain of the Guard glows briefly with golden light."
+  },
+  {
+    "key": "16f646a4026c28",
+    "speaker": "narrator",
+    "text": "The captain stares through you. His hands do not close on it, and you keep it."
+  },
+  {
     "key": "043a6a9f6e0001",
     "speaker": "narrator",
     "text": "Outer Courtyard"
@@ -113,6 +298,11 @@
     "key": "0c87a947e5f2d2",
     "speaker": "narrator",
     "text": "This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away. Grey figures walk the paths in circles, chains of shadow at their ankles, never looking up. By the dry fountain a soldier in a soot-black royal tabard stands rigid, staring at nothing."
+  },
+  {
+    "key": "0554374320630e",
+    "speaker": "narrator",
+    "text": "The light warms your hands. Across the courtyard, one of the servants stops walking and turns towards it."
   },
   {
     "key": "13105e814facd1",
@@ -135,6 +325,21 @@
     "text": "'I held the gate for King Alden once. Now I hold it for... I cannot remember.'"
   },
   {
+    "key": "1953a5d597a222",
+    "speaker": "narrator",
+    "text": "Grey figures walk the courtyard paths in circles, chains of shadow at their ankles. They wear what is left of kitchen aprons and stable coats. None of them looks up."
+  },
+  {
+    "key": "10da90eb3cd1f4",
+    "speaker": "narrator",
+    "text": "A captain of the royal guard, his tabard black with soot. His eyes are open but see nothing, and his hand rests on a sword he has forgotten how to draw."
+  },
+  {
+    "key": "0f4e62a865c9d3",
+    "speaker": "narrator",
+    "text": "The servants stop their circling and gather to look at the Guardian's Essence. One reaches out, but does not touch. They know what it is, and what it cost. For the first time, they look at you instead of through you."
+  },
+  {
     "key": "19ae551fa5f73e",
     "speaker": "narrator",
     "text": "The Trapped Servants have stopped walking. They stand close together, watching you."
@@ -145,9 +350,19 @@
     "text": "'We are so tired. Whatever you can do for us, do it gently.'"
   },
   {
+    "key": "1085e4beac4e29",
+    "speaker": "narrator",
+    "text": "Your blessing settles over the courtyard like warm light through a window. The chains do not break so much as forget to hold, and fall away. One by one the servants stand still and look up. By the fountain, the captain blinks, as if waking from a long sleep. One of the servants presses a small blue Servant's Pendant into your hands."
+  },
+  {
     "key": "039bd6428cd939",
     "speaker": "narrator",
     "text": "Elior's courage earns the servants' trust, and a blessing breaks their chains. Freed, they offer what help they can for the trials ahead."
+  },
+  {
+    "key": "0fcb43eec7e51f",
+    "speaker": "narrator",
+    "text": "You lift the Guardian's Chain over the captain's head. Its crystals flare once and settle against his soot-black tabard, and the warmth goes out of your hands."
   },
   {
     "key": "1d40989c7bb633",
@@ -168,6 +383,106 @@
     "key": "049eb4119cedfe",
     "speaker": "captain of the guard",
     "text": "'Then I will tell them at home what you did here.'"
+  },
+  {
+    "key": "0979bbc0fe8d7b",
+    "speaker": "narrator",
+    "text": "He turns toward the gates and walks out without looking back. The shadows draw away from the light at his throat."
+  },
+  {
+    "key": "1681cbe8503c34",
+    "speaker": "narrator",
+    "text": "The Maze of Mirrors"
+  },
+  {
+    "key": "1f6288fd341524",
+    "speaker": "narrator",
+    "text": "Countless mirrors show false paths and twisted reflections. Find the one true way through the labyrinth."
+  },
+  {
+    "key": "19e8c8bd37959f",
+    "speaker": "narrator",
+    "text": "The pendant's light falls on the glass. Here every reflection walks with you; there is nothing yet to choose between."
+  },
+  {
+    "key": "13618e56c6aa8a",
+    "speaker": "narrator",
+    "text": "The Knight of Despair"
+  },
+  {
+    "key": "162f2163415017",
+    "speaker": "narrator",
+    "text": "A knight in a grey cloak bars the stair to the Tower of Shadows, lost in a despair no blade can reach. Learn the truth of him, and find a way past."
+  },
+  {
+    "key": "17c43d0dcec9ed",
+    "speaker": "narrator",
+    "text": "You stand still and listen. Beneath the battle cries and laments, one voice repeats the same words over and over, patient as a heartbeat:"
+  },
+  {
+    "key": "129d5dfe60517d",
+    "speaker": "an echo",
+    "text": "'Left, then left, then the way your shadow does not go.'"
+  },
+  {
+    "key": "09e211ea14f5ce",
+    "speaker": "narrator",
+    "text": "You take the Echo Stone. You lift a smooth grey stone from a niche beneath the banners. It is warm, and when you hold it to your ear you hear the hall's echoes still speaking inside it."
+  },
+  {
+    "key": "0a4b929132a33a",
+    "speaker": "narrator",
+    "text": "The glass lets you through."
+  },
+  {
+    "key": "11cce26fc48254",
+    "speaker": "narrator",
+    "text": "The glass lets you through again."
+  },
+  {
+    "key": "1ec2d7bfc68c71",
+    "speaker": "narrator",
+    "text": "The pendant's blue light falls on the glass. In the north corridor your reflection turns and walks with you. In the east corridor the glass stays empty."
+  },
+  {
+    "key": "10add521fc2902",
+    "speaker": "narrator",
+    "text": "Behind you the false mirrors go dark, one by one, until a single corridor remains — and at its end, a plain mirror that shows you exactly as you are."
+  },
+  {
+    "key": "162b81ffe289d3",
+    "speaker": "narrator",
+    "text": "You learn Truth Sight."
+  },
+  {
+    "key": "1ab30b347af233",
+    "speaker": "narrator",
+    "text": "Guided by the servants' pendant and the hall's echoes, Elior walks the one true path through the mirrors, and learns to see through illusion."
+  },
+  {
+    "key": "16c99fefc6896f",
+    "speaker": "narrator",
+    "text": "Your sight sharpens, and the gloom peels away from the knight. His grey cloak is a traveller's, hooded and road-worn, and its clasp bears a twisted rune you know: the rune on the token that fouled Willowbrook's well, and the seal on the Secret Documents that cleared Sir Cedric's name. This is the cloaked stranger the villagers whispered about. Behind the visor, the knight is weeping."
+  },
+  {
+    "key": "12d02bc16a3da3",
+    "speaker": "narrator",
+    "text": "Your sight sharpens, and the grime slides from the banners. Beneath it is a sigil you have seen on the captain's tabard: the gate company of King Alden's guard. The knight served the king before he ever served Malakar."
+  },
+  {
+    "key": "0a93978b64c1ec",
+    "speaker": "narrator",
+    "text": "Your sight sharpens, and the stone's murmur parts. Under the hall's voices one is already there, very quiet: a man weeping, saying one word over and over as if he knows no other. \"Sorry.\" It is the knight's voice."
+  },
+  {
+    "key": "01c195fbdec713",
+    "speaker": "narrator",
+    "text": "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. Nothing stands between you and his sorrow, and the chain is gone with the captain. But you are not as alone as the knight would have you believe."
+  },
+  {
+    "key": "0fceec43484c31",
+    "speaker": "narrator",
+    "text": "A small blue crystal on a fine chain, from the freed servants. When you hold it, it feels as if someone is standing just behind you, ready to point the way."
   },
   {
     "key": "060072baa59d6e",
@@ -195,14 +510,9 @@
     "text": "'They tell me the gates are open. I would walk out of them tonight, if my hand remembered the sword. Every shadow between here and home knows my face.'"
   },
   {
-    "key": "1681cbe8503c34",
+    "key": "1bde72fcb6c832",
     "speaker": "narrator",
-    "text": "The Maze of Mirrors"
-  },
-  {
-    "key": "1f6288fd341524",
-    "speaker": "narrator",
-    "text": "Countless mirrors show false paths and twisted reflections. Find the one true way through the labyrinth."
+    "text": "The pendant glows faintly. Whoever is behind you has nothing to say here."
   },
   {
     "key": "08a00495e868bc",
@@ -215,14 +525,9 @@
     "text": "Corridors of mirror run away from you in impossible directions, and in every one of them a different Elior looks back. You stand at the mouth of the maze, facing north."
   },
   {
-    "key": "13618e56c6aa8a",
+    "key": "0da99ce8d79169",
     "speaker": "narrator",
-    "text": "The Knight of Despair"
-  },
-  {
-    "key": "162f2163415017",
-    "speaker": "narrator",
-    "text": "A knight in a grey cloak bars the stair to the Tower of Shadows, lost in a despair no blade can reach. Learn the truth of him, and find a way past."
+    "text": "Each mirror shows a different Elior — older, younger, crowned, broken — with a different corridor stretching away behind him. Every path looks real. Most of them are lies."
   },
   {
     "key": "07429567d9aa12",
@@ -235,9 +540,29 @@
     "text": "A long hall of old banners, so high the ceiling is lost. Everything that was ever said here is still being said, very quietly: orders, jokes, names, someone counting. Tattered banners hang high along the walls, grimed past reading. At the far end, before the stair, a knight in tarnished armour stands without moving, the way a man stands at a grave. Sir Cedric has followed you in; he stands by the south door, his eyes on the knight."
   },
   {
-    "key": "129d5dfe60517d",
-    "speaker": "an echo",
-    "text": "'Left, then left, then the way your shadow does not go.'"
+    "key": "18837c729fab57",
+    "speaker": "narrator",
+    "text": "A smooth grey stone that hums with the voices of the Hall of Echoes. Held close, it repeats what the echoes know."
+  },
+  {
+    "key": "0edf6cf31b9d4a",
+    "speaker": "narrator",
+    "text": "Tattered banners hang high along the walls, too grimed with age to read. Something is stitched beneath the dirt."
+  },
+  {
+    "key": "17b5e2b11eea7e",
+    "speaker": "narrator",
+    "text": "You hold the Loyalty Token close to your heart. For a moment you are not alone in the hall: the servants you freed, the friends who brought you to the threshold, everyone who trusted you on the way here. The knight's despair breaks around you and does not reach you."
+  },
+  {
+    "key": "1229e2dd0190c9",
+    "speaker": "narrator",
+    "text": "The chain's crystals catch what little light there is and keep it. His sorrow is still there, but it no longer reaches you."
+  },
+  {
+    "key": "0e916720945f7a",
+    "speaker": "narrator",
+    "text": "The light steadies in the old hall, as if it has been here before."
   },
   {
     "key": "03c9095f900d6b",
@@ -250,9 +575,34 @@
     "text": "That voice. I have heard it before, Elior, I would swear to it. I cannot see the face that goes with it."
   },
   {
-    "key": "09e211ea14f5ce",
+    "key": "189a11ba0900de",
     "speaker": "narrator",
-    "text": "You take the Echo Stone. You lift a smooth grey stone from a niche beneath the banners. It is warm, and when you hold it to your ear you hear the hall's echoes still speaking inside it."
+    "text": "A knight in tarnished armour, a shredded grey cloak hanging from his shoulders. He stands with his back to the door you came in by. His visor is down, and he does not move. When he speaks, his voice is hollow: 'Return when you have the truth.'"
+  },
+  {
+    "key": "0880679bc553f1",
+    "speaker": "narrator",
+    "text": "Sir Cedric, by the south door, his eyes on the knight."
+  },
+  {
+    "key": "0d3d71a722a8be",
+    "speaker": "narrator",
+    "text": "The hall's voices murmur inside the Echo Stone, waiting for somewhere that needs them. Under the rest, one voice says a single word over and over, the way a man says a word he has stopped believing in: redemption."
+  },
+  {
+    "key": "094c0ed72c7cb3",
+    "speaker": "narrator",
+    "text": "You step toward a corridor of light and walk straight into cold glass. Somewhere behind you, a reflection laughs. You are back at the entrance."
+  },
+  {
+    "key": "1abf46b91ee87c",
+    "speaker": "narrator",
+    "text": "You try to recall the echoes' words, but in here the glass answers only with your own voice. You lose the way, and find yourself back at the entrance."
+  },
+  {
+    "key": "1f549424530549",
+    "speaker": "narrator",
+    "text": "In the Echo Stone one voice repeats, patient as a heartbeat:"
   },
   {
     "key": "16770703ee51e4",
@@ -260,14 +610,14 @@
     "text": "Your reflection still walks the north corridor. The east corridor stays empty."
   },
   {
-    "key": "1ab30b347af233",
-    "speaker": "narrator",
-    "text": "Guided by the servants' pendant and the hall's echoes, Elior walks the one true path through the mirrors, and learns to see through illusion."
-  },
-  {
     "key": "1531fa3cae6868",
     "speaker": "true self",
     "text": "You told Mira you came for the king. Tell me why you really came."
+  },
+  {
+    "key": "08067b1c8f836a",
+    "speaker": "narrator",
+    "text": "You tell it the truth: that you did not come only for the king. You came because you want Malakar to pay for what he took from you, and you are afraid of what that wanting makes you. The reflection nods, slowly. For a moment it wears your father's face. Then it is only you again, standing a little straighter."
   },
   {
     "key": "13ae5e7d537583",
@@ -285,6 +635,26 @@
     "text": "The true path is already clear. The false mirrors stay dark."
   },
   {
+    "key": "0c17abe789e161",
+    "speaker": "narrator",
+    "text": "Your own reflection, in the plain mirror at the labyrinth's heart. It does not copy you. It waits, watching, as if it already knows what you will say."
+  },
+  {
+    "key": "1aafbd08d7741f",
+    "speaker": "narrator",
+    "text": "The word means nothing to a man you cannot truly see. He does not even turn his head."
+  },
+  {
+    "key": "014bad9129332c",
+    "speaker": "narrator",
+    "text": "The Knight of Despair stands before the stair to the tower. He does not lift his sword. He simply does not move, and there is no way past him."
+  },
+  {
+    "key": "1fd36cc91ad1c1",
+    "speaker": "narrator",
+    "text": "The word catches in your throat. You have seen something of him, but you do not yet know what he has done. There is more in this hall to see through."
+  },
+  {
     "key": "17c73ec19febeb",
     "speaker": "knight of despair",
     "text": "So you see something of me. That is not the same as knowing me. Look around you, if you must know."
@@ -295,6 +665,16 @@
     "text": "Grey cloak, twisted rune. I know him now. Do what you came to do. I will hear what he has to say."
   },
   {
+    "key": "0dce0dbd2225fe",
+    "speaker": "narrator",
+    "text": "The grey cloak, the twisted rune at its clasp, the tears behind the visor. The cloaked stranger from Willowbrook stands before you, and he knows you have seen him."
+  },
+  {
+    "key": "0fa78831a2c19d",
+    "speaker": "narrator",
+    "text": "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. You could not say it with nothing between you and his sorrow."
+  },
+  {
     "key": "055b451ea779b0",
     "speaker": "knight of despair",
     "text": "So you see me. Then you know what I am, and what I have done. There is no redemption for a man like me. Do not waste the word."
@@ -303,6 +683,11 @@
     "key": "08ca98bf759edb",
     "speaker": "narrator",
     "text": "The chain is already lit. His sorrow does not reach you."
+  },
+  {
+    "key": "0b5c4157b5e58d",
+    "speaker": "narrator",
+    "text": "The knight's despair breaks against the chain's light like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human."
   },
   {
     "key": "1921d19c28761e",
@@ -335,14 +720,44 @@
     "text": "Sir Cedric. I am sorry. I have no right to ask anything of you, so I will not."
   },
   {
+    "key": "0b40fb990b8ba0",
+    "speaker": "narrator",
+    "text": "Sir Cedric does not move from the door."
+  },
+  {
     "key": "15a0eef7f35c1f",
     "speaker": "sir cedric",
     "text": "I heard you. That will have to be enough, for now."
   },
   {
+    "key": "1473724e6f39f8",
+    "speaker": "narrator",
+    "text": "You received Knight's Redemption!"
+  },
+  {
+    "key": "1a46ecdf4b5bd1",
+    "speaker": "narrator",
+    "text": "The Echo Stone grows warm in your pack. A new voice has joined the echoes inside it: the knight's own, speaking the truth at last."
+  },
+  {
+    "key": "17c0a3746b5a91",
+    "speaker": "narrator",
+    "text": "You have learned the Redemption's Light spell! Light that reminds a fallen soul of who it was."
+  },
+  {
     "key": "18af870c7d2dc1",
     "speaker": "narrator",
     "text": "Elior sees the knight as he truly is and offers him redemption instead of a blade. The man who framed Sir Cedric confesses, and the stair to the Tower of Shadows lies open."
+  },
+  {
+    "key": "1dfa40572f1df2",
+    "speaker": "narrator",
+    "text": "Soft light spills from your hands across the hall. One by one the ghostly warriors lower their blades and look at one another as if for the first time. Then they fade, at peace."
+  },
+  {
+    "key": "04ec498377dc1d",
+    "speaker": "narrator",
+    "text": "Sir Cedric watches the last of them go. Then he crosses the hall and offers the knight his hand."
   },
   {
     "key": "1a9ed44266839d",
@@ -353,6 +768,21 @@
     "key": "0b239fe49bb1a4",
     "speaker": "sir cedric",
     "text": "Go on up. I will wait here with him. Someone should."
+  },
+  {
+    "key": "0cee4a886017d0",
+    "speaker": "narrator",
+    "text": "The Echo Stone hums more strongly now. Among the hall's voices one speaks clearly and without fear: the knight's, telling the truth."
+  },
+  {
+    "key": "1f69dcc5223d25",
+    "speaker": "narrator",
+    "text": "A tarnished knight's badge, warm to the touch. He pressed it into your hand: proof that even one of Malakar's own can turn back."
+  },
+  {
+    "key": "077745bdd114fc",
+    "speaker": "narrator",
+    "text": "The voices inside the stone are clearer now, waiting for a place where memories sleep."
   },
   {
     "key": "06b7c345cf653e",
@@ -370,6 +800,21 @@
     "text": "The warriors do not hear you. They are still fighting."
   },
   {
+    "key": "035a131e2bde0e",
+    "speaker": "narrator",
+    "text": "He kneels by the stair, his helm beside him. Without the visor he looks like any tired soldier far from home."
+  },
+  {
+    "key": "1f499148b7ff88",
+    "speaker": "narrator",
+    "text": "Pale shapes of soldiers drift among the banners, fighting a battle that ended long ago. Their blades pass through one another without a sound."
+  },
+  {
+    "key": "0c0627ff50734f",
+    "speaker": "narrator",
+    "text": "On the stair the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down."
+  },
+  {
     "key": "0ff5e5d429c5f6",
     "speaker": "narrator",
     "text": "Tower of Shadows"
@@ -380,14 +825,44 @@
     "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come."
   },
   {
+    "key": "096e2a15d96fae",
+    "speaker": "narrator",
+    "text": "The token grows warm in your hand. Under the whispers, very faint, you think you hear your name, in Mira's voice. They are not gone. Say their names."
+  },
+  {
+    "key": "171f9e62e3af4f",
+    "speaker": "narrator",
+    "text": "They do not answer you. They only say it again, closer: your friends have left you. No one is coming. Name one who stayed, if you can."
+  },
+  {
+    "key": "0b102233ad7fc6",
+    "speaker": "narrator",
+    "text": "Voices without mouths, thick on the stair, saying the same thing again and again."
+  },
+  {
+    "key": "05bdc4c871c3c1",
+    "speaker": "narrator",
+    "text": "The token warms against your palm, and the whispers falter."
+  },
+  {
     "key": "06815a213b6118",
     "speaker": "mira",
     "text": "I'm at the gate, Elior. I said I'd hold it, and I'm holding it."
   },
   {
+    "key": "17dd60785dbceb",
+    "speaker": "narrator",
+    "text": "The token warms again. The whispers draw back from the stair."
+  },
+  {
     "key": "14ba3ae61f4470",
     "speaker": "sir cedric",
     "text": "A knight does not leave his post. Mine is the threshold. Go on, lad."
+  },
+  {
+    "key": "104bbce132243f",
+    "speaker": "narrator",
+    "text": "A small light flickers at the edge of your eye, and in your pack the crystalline pendant she gave you, Nyx's Token, is warm."
   },
   {
     "key": "128c691bac6979",
@@ -415,6 +890,16 @@
     "text": "At the top of the tower the Sorceress of Lies holds court, and the mask on her staff is the mark that lay beneath Elena's curse. See through her lies, and find what lies beneath them."
   },
   {
+    "key": "03703bbf9d50b7",
+    "speaker": "narrator",
+    "text": "She laughs, and the chamber laughs with her. Whatever you came to give her is lost among the whispers."
+  },
+  {
+    "key": "1de7bf2acfbcf7",
+    "speaker": "narrator",
+    "text": "The north arch is a wall of whispering crystal. It will not open while the Sorceress holds the chamber."
+  },
+  {
     "key": "162c69256764e6",
     "speaker": "narrator",
     "text": "Chamber of Whispers"
@@ -425,14 +910,44 @@
     "text": "A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it. Crystals grow from the walls, each humming something kind and untrue, and the floor gives a little under your feet, like ice that might hold. At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist."
   },
   {
+    "key": "14b9fc1a54d5a2",
+    "speaker": "narrator",
+    "text": "The mask is smooth and smiling, with no eyes behind it. It is the very mark that sat beneath Elena's curse in Greendale. This is the hand that cursed her."
+  },
+  {
+    "key": "1922d02f0cc0d6",
+    "speaker": "narrator",
+    "text": "You lean close to a crystal. The whispers speak of what you want most and fear most, and the longer you listen the more they sound alike."
+  },
+  {
     "key": "034e14f63c0f17",
     "speaker": "narrator",
     "text": "The token is still warm against your heart. Her whispers cannot reach you."
   },
   {
+    "key": "0bd0fc33c192b0",
+    "speaker": "narrator",
+    "text": "The Sorceress stares at the knight's badge, and for the first time her smile slips. Beneath the whispers you hear something else: a voice, very small, that is not lying."
+  },
+  {
+    "key": "077f6c3d7995f7",
+    "speaker": "narrator",
+    "text": "You have learned the Heart's Truth spell! Hear the true heart beneath a lie."
+  },
+  {
     "key": "16d94aab1ad5a6",
     "speaker": "sorceress of lies",
     "text": "Little Elior. Your parents sold you to save themselves, did you know? Malakar told me so himself. Turn back."
+  },
+  {
+    "key": "1342b0fbef8c74",
+    "speaker": "narrator",
+    "text": "She is beautiful in the way the chamber is beautiful: a little too perfect, a little wrong. Her smile never reaches her eyes."
+  },
+  {
+    "key": "10c09aa84a67a4",
+    "speaker": "narrator",
+    "text": "You cannot answer a pain you cannot hear. Beneath the whispers her heart is saying something, too quietly for ears alone."
   },
   {
     "key": "164dced95e940a",
@@ -445,9 +960,39 @@
     "text": "He turned? Then he is a fool. Everyone lies, little Elior. No one has ever understood a word I said. Why would you be the first?"
   },
   {
+    "key": "10ef4a1741c54a",
+    "speaker": "narrator",
+    "text": "The whispers fall away. Beneath them the Sorceress is alone, as she has always been: no one has ever spoken to her without a lie, and she has never answered with anything else."
+  },
+  {
+    "key": "0d699aaccc379c",
+    "speaker": "narrator",
+    "text": "And under the loneliness, older and smaller: a girl in a hungry winter, and the parents who sold her for a sack of grain. She tells you the lie because she believes it. It is the only story about parents she has ever known."
+  },
+  {
+    "key": "0fc1977fed475c",
+    "speaker": "narrator",
+    "text": "You have heard some of her, but not all. There is more in this chamber that is hers to listen to."
+  },
+  {
+    "key": "03ebc17328596d",
+    "speaker": "narrator",
+    "text": "Beneath the mask's smile there is something small and lonely. It was made to be looked at, and no one ever looked at it. Only away."
+  },
+  {
+    "key": "0e472c2176a5ae",
+    "speaker": "narrator",
+    "text": "The whispers are not many voices. They are one: hers, repeating every lie she has ever told so that she never has to hear the silence."
+  },
+  {
     "key": "05fbde77bcb93f",
     "speaker": "elior",
     "text": "I understand. You have been alone in here a long time."
+  },
+  {
+    "key": "06367f33743e66",
+    "speaker": "narrator",
+    "text": "The Sorceress goes very still. One by one the crystals stop whispering, until the chamber is silent for the first time in years."
   },
   {
     "key": "04f851f00b3e98",
@@ -465,14 +1010,49 @@
     "text": "No one has ever spoken to me without a lie. Not Malakar, not his servants, not the ones I cursed. You are the first. I did not know it would hurt."
   },
   {
+    "key": "130635cde8bb52",
+    "speaker": "narrator",
+    "text": "She lifts the silver mask from her staff and puts it in your hands."
+  },
+  {
+    "key": "036e9c80151c0c",
+    "speaker": "narrator",
+    "text": "You received Sorceress's Truth!"
+  },
+  {
     "key": "10bcea96cc7400",
     "speaker": "narrator",
     "text": "Elior sees through the Sorceress's lies and answers the loneliness beneath them. She confesses the curse on Elena, and the arch to the north opens."
   },
   {
+    "key": "07e887d6b9f789",
+    "speaker": "narrator",
+    "text": "Somewhere ahead is someone who needs to see that a liar can choose the truth."
+  },
+  {
+    "key": "0ab8df02b81236",
+    "speaker": "narrator",
+    "text": "Her staff lies across her knees, bare where the mask once sat."
+  },
+  {
+    "key": "0f250f9e01fa96",
+    "speaker": "narrator",
+    "text": "The crystals are silent now."
+  },
+  {
+    "key": "1016b023a5fb85",
+    "speaker": "narrator",
+    "text": "The silver mask from her staff, smooth and smiling, with no eyes behind it. In your hands it is only metal: a lie she no longer needs, given as proof that even a liar can choose the truth."
+  },
+  {
     "key": "1bb106c44d2290",
     "speaker": "unmasked sorceress",
     "text": "Go on, through the arch. What waits there has been waiting for you longer than I have. And Elior — tell Elena I am sorry. It is the first true thing I have asked anyone to carry."
+  },
+  {
+    "key": "01eb0e45438b56",
+    "speaker": "narrator",
+    "text": "Without the chamber's glamour she looks tired and ordinary, a woman who has not slept in years. She keeps her eyes on the arch."
   },
   {
     "key": "1c3b42c14173f4",
@@ -485,6 +1065,31 @@
     "text": "Among the broken memories a shadow reaches for scenes it cannot hold. Mend what it has lost, and learn whose voice it is."
   },
   {
+    "key": "05ac4661f79e9d",
+    "speaker": "narrator",
+    "text": "The Shadow cannot hear you. The memories around it are too broken."
+  },
+  {
+    "key": "02b420b5a7defe",
+    "speaker": "narrator",
+    "text": "The Shadow cannot see the mask through the broken memories."
+  },
+  {
+    "key": "04e15a53544051",
+    "speaker": "narrator",
+    "text": "A round door of pale stone, carved with the same runes as your amulet around the sigil of the Wardens of the Dawn, and beneath it, worn almost away, a tree under two moons: the crest on your mother's locket. It has no handle and no keyhole."
+  },
+  {
+    "key": "126806c1465d47",
+    "speaker": "narrator",
+    "text": "The door's runes stay dark under the amulet. Something in this vault is not ready to let you in."
+  },
+  {
+    "key": "03f32585124dc5",
+    "speaker": "narrator",
+    "text": "The sealed door will not move. Its runes are dark."
+  },
+  {
     "key": "0c793f67112a24",
     "speaker": "narrator",
     "text": "Memory Vault"
@@ -495,9 +1100,24 @@
     "text": "This mystical chamber exists partially outside of time itself, its walls covered in floating orbs of crystallized memory that flicker with scenes from long ago. The air ripples with temporal distortions, and fragments of the past drift like spectral snow through the space. At the room's center, a shadowy figure wavers between existence and void, reaching out with desperate longing toward memories that seem to slip away like morning mist."
   },
   {
+    "key": "0b30a9c227d01d",
+    "speaker": "narrator",
+    "text": "The orbs are cracked and clouded. In one you glimpse three young people laughing over a workbench; in another, a cradle by a fire. Each scene breaks apart before you can hold it. From the cracked one by the cradle a voice sings, low, \"Hush, little seed—\" and breaks off."
+  },
+  {
+    "key": "0951dc73d733c7",
+    "speaker": "narrator",
+    "text": "The voices inside the Echo Stone pour out into the vault, and the orbs drink them in. One by one the cracks close and the scenes grow still and clear. The shadow turns towards you, and for the first time it has a face."
+  },
+  {
     "key": "1a1a9b996a73e1",
     "speaker": "shadow of the past",
     "text": "Elior. You came."
+  },
+  {
+    "key": "0b0f499343e942",
+    "speaker": "narrator",
+    "text": "You know the voice before you know the face. It is the voice from your dream, the one that called your name on the stormy night in Willowbrook, and in Nyx's vision, and in the Dragon's hall."
   },
   {
     "key": "0cd2cb74efeaa1",
@@ -505,9 +1125,34 @@
     "text": "The shadow's lips move, but the vault swallows the sound."
   },
   {
+    "key": "02df47d98b48be",
+    "speaker": "narrator",
+    "text": "It is the shape of a man, thin as smoke. It reaches for the orbs, and they slip through its fingers."
+  },
+  {
+    "key": "13c6516fd74782",
+    "speaker": "narrator",
+    "text": "The Shadow shakes its head. “Patience is for those who still have hope. I have none left.”"
+  },
+  {
+    "key": "0cfbfce54fe08a",
+    "speaker": "narrator",
+    "text": "Whole now. In one, three young Wardens laugh over a workbench; in another, a cradle sits by a fire. The clearest scenes all lie beyond the door to the east."
+  },
+  {
+    "key": "17ab195cacf277",
+    "speaker": "narrator",
+    "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The third figure has turned around. He is young, and he is smiling at them."
+  },
+  {
     "key": "105323d44dd94b",
     "speaker": "narrator",
     "text": "The orbs are whole. The stone lies quiet in your hand."
+  },
+  {
+    "key": "1729a66d7a6306",
+    "speaker": "narrator",
+    "text": "The Shadow turns the silver mask over in hands that are almost solid now, and gives it back."
   },
   {
     "key": "1df420bb7e6d41",
@@ -523,6 +1168,11 @@
     "key": "0df90115dcf200",
     "speaker": "shadow of the past",
     "text": "Every time, with the same words, and you caught only pieces of them. Hear them whole: be patient where I was not. Close what I opened, and let them rest."
+  },
+  {
+    "key": "1d9245aa1d7acc",
+    "speaker": "narrator",
+    "text": "A man made of shadow, almost solid now. His face is kind and very tired. You have never seen it before, and you know it all the same."
   },
   {
     "key": "0fdb269ac2ad82",
@@ -550,6 +1200,21 @@
     "text": "Elior learns that the voice from his dreams is what remains of Malakar's better self. The sealed door to the east now answers to the amulet."
   },
   {
+    "key": "18cc49f290a103",
+    "speaker": "narrator",
+    "text": "The door is sealed. Its runes glow faintly, waiting for the amulet."
+  },
+  {
+    "key": "141390a82b3131",
+    "speaker": "narrator",
+    "text": "A round door of pale stone, carved with the same runes as your amulet around the sigil of the Wardens of the Dawn, and beneath it, worn almost away, a tree under two moons: the crest on your mother's locket. The runes glow faintly now, as if they are waiting."
+  },
+  {
+    "key": "06b98405773d42",
+    "speaker": "narrator",
+    "text": "The runes on the door wake to the runes on the amulet, and the stone rolls aside without a sound."
+  },
+  {
     "key": "191b0cb0759820",
     "speaker": "shadow of the past",
     "text": "Go east, Elior. I have seen those memories every day for years. You never have."
@@ -565,6 +1230,11 @@
     "text": "Behind the sealed door, Aren and Lysa's last memories wait. Look into them, and learn the whole truth before the throne room."
   },
   {
+    "key": "00270aabebbb2e",
+    "speaker": "narrator",
+    "text": "The door to the north is shut. The lanterns are still waiting for you."
+  },
+  {
     "key": "0c910de0c35b8b",
     "speaker": "narrator",
     "text": "Parents' Vault"
@@ -575,9 +1245,54 @@
     "text": "A small, quiet room. Nothing here is threatening. Memories hang in the air like lanterns, warm and still, and every one of them has your parents in it. It is the saddest and warmest room in the fortress."
   },
   {
+    "key": "0d939a042453f2",
+    "speaker": "narrator",
+    "text": "Three young Wardens bent over one workbench: your father, your mother, and a dark-haired man laughing at something Lysa said. Between them lie a crystal, a feather and a scale."
+  },
+  {
+    "key": "1e69b934a6c27e",
+    "speaker": "narrator",
+    "text": "The year before you were born. The Wasting: a fever sweeps the land, and Aren and Lysa fall ill with it. Nothing the Wardens know can heal them. Malakar sits by their beds, reading, searching, unable to wait."
+  },
+  {
+    "key": "0399332f994121",
+    "speaker": "narrator",
+    "text": "Malakar alone in a room full of clocks, tearing the air open to pull back the days before the fever. Aren and Lysa wake, well again. But the wound he opened does not close, and it begins to feed."
+  },
+  {
+    "key": "0240c6d1963758",
+    "speaker": "narrator",
+    "text": "It is still pulling. Every hand in the room turns backwards, wanting more of the days back, and the wound would take all of them if nothing held it shut."
+  },
+  {
+    "key": "0ebfc0e623f3b7",
+    "speaker": "narrator",
+    "text": "Your parents before the wound, hands joined, pouring themselves into it until they are only light, bound to the amulet and to the crown of King Alden, so that you would be hidden and the wound held shut."
+  },
+  {
     "key": "11907cb28a3e52",
     "speaker": "lysa",
     "text": "Hold it shut, Aren. Hide him. That is enough."
+  },
+  {
+    "key": "1e88aea3d3d549",
+    "speaker": "narrator",
+    "text": "The ward is Aren and Lysa, and their gift is the magic you have: every spell that ever answered your hands came through them, all but one, which you read from a stone in a glade."
+  },
+  {
+    "key": "000ce230d94b9d",
+    "speaker": "narrator",
+    "text": "Last, and smallest: Malakar by a cottage fire in Willowbrook, rocking a baby in his arms and singing, low: \"Hush, little seed, the frost is going. Hush, the field will wake.\" The baby is you."
+  },
+  {
+    "key": "16ad3b3c9d10af",
+    "speaker": "narrator",
+    "text": "The lanterns dim, one by one, until only the amulet glows in your hand."
+  },
+  {
+    "key": "0a3d238f6d5328",
+    "speaker": "narrator",
+    "text": "Your parents sold you to save themselves. It was the opposite. They gave themselves away to save you. Of all the lies in the fortress, hers was the one that hurt most, because for a day you could not be sure. You are sure now."
   },
   {
     "key": "0ee22d340e3f95",
@@ -600,9 +1315,34 @@
     "text": "A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from his crown a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too."
   },
   {
+    "key": "0a0eadb15c1806",
+    "speaker": "narrator",
+    "text": "The crystal is clouded and cold. Inside it King Alden sleeps without breathing, his crown dark. A thread of light runs from his crown into the wound."
+  },
+  {
+    "key": "1f143e2fbb8e07",
+    "speaker": "narrator",
+    "text": "A tear in the air, no wider than a door, its edges flickering with days that never happened. It drinks the light from the king, and from Malakar too."
+  },
+  {
+    "key": "1bd20c99311439",
+    "speaker": "narrator",
+    "text": "Malakar lunges for the amulet. The moment his fingers close on it, it burns white, and he snatches his hand back."
+  },
+  {
     "key": "07c38f831ebb50",
     "speaker": "shadow of the past",
     "text": "Not like this."
+  },
+  {
+    "key": "1f1d074fca7569",
+    "speaker": "narrator",
+    "text": "The voice is gone as soon as it came. Malakar holds his hand against his chest and will not look at you."
+  },
+  {
+    "key": "1e8f9cb312b89d",
+    "speaker": "narrator",
+    "text": "Malakar's hand comes up for the elixir, and stops a finger's width from the glass."
   },
   {
     "key": "0106774aa37221",
@@ -635,6 +1375,26 @@
     "text": "King Alden sleeps in the crystal and does not hear you."
   },
   {
+    "key": "1c8609d2a075fc",
+    "speaker": "narrator",
+    "text": "A tall man in a grey robe that was once a Warden's blue. His hair is white, though he cannot be much older than your father would have been. He leans on the throne as if it is the only thing holding him up. He is looking at the wound, not at you."
+  },
+  {
+    "key": "1b3600e7e10598",
+    "speaker": "narrator",
+    "text": "The king of Eldoria, grey with the long years of the wound. His crown is dark."
+  },
+  {
+    "key": "096334c2f1e66f",
+    "speaker": "narrator",
+    "text": "Malakar's hand closes on the amulet, and for a moment neither of you lets go. Then you do."
+  },
+  {
+    "key": "040e86db2b35dc",
+    "speaker": "narrator",
+    "text": "He lifts it toward the thread of light that bleeds from the king's crown. The wound in the air yawns wide, and the chamber goes grey, and then gold."
+  },
+  {
     "key": "0be974268175fe",
     "speaker": "narrator",
     "text": "A workshop in the late sun. Aren bends over the workbench; Lysa laughs at something he has said. They are young. They do not look up."
@@ -643,6 +1403,11 @@
     "key": "0a60816ebc7001",
     "speaker": "shadow of the past",
     "text": "Not like this. Not by force."
+  },
+  {
+    "key": "1ace27a8dd86d6",
+    "speaker": "narrator",
+    "text": "The amulet will not break. The light runs backwards through the chamber and Malakar is thrown against the throne. You are standing where you stood, and the amulet is warm in your hand."
   },
   {
     "key": "1b80a20d45dd14",
@@ -655,14 +1420,44 @@
     "text": "Power follows purpose; purpose follows truth."
   },
   {
+    "key": "05cdd6b4fe4187",
+    "speaker": "narrator",
+    "text": "The words from the stone in Willowbrook, from Nyx, from the Dragon's hall. They are yours now."
+  },
+  {
+    "key": "028f50657a8754",
+    "speaker": "narrator",
+    "text": "Malakar turns from the wound. For the first time since you came in, he is looking at you."
+  },
+  {
     "key": "122df91c3cebfb",
     "speaker": "malakar",
     "text": "We carved those words together, your father and I. I had forgotten them."
   },
   {
+    "key": "1e0d9cfe1d619c",
+    "speaker": "narrator",
+    "text": "The amulet opens in your hand like a flower, and the light of the ward pours out over the chamber. Malakar staggers. When he speaks again, it is not his voice."
+  },
+  {
     "key": "188421ce1dba8b",
     "speaker": "shadow of the past",
     "text": "Elior. I tore the world to keep them, and I lost them anyway. I could not wait; you can. Be patient where I was not. Close what I opened, and let them rest."
+  },
+  {
+    "key": "00a49c3941387a",
+    "speaker": "narrator",
+    "text": "The Lifelight Elixir is warm in your hand. It can be used only once. It could break the crystal and free the king, or it could be offered to Malakar, to heal the wound that is killing him."
+  },
+  {
+    "key": "136cc3e04f251c",
+    "speaker": "narrator",
+    "text": "You kneel and hold the elixir to Malakar's lips. He drinks. The grey goes out of his face, and for a moment he is the young man at the workbench again. \"Hush, little seed,\" he sings under his breath, and does not seem to know he does. The wound flickers, and waits."
+  },
+  {
+    "key": "088b09303fb45a",
+    "speaker": "narrator",
+    "text": "The Lifelight Elixir is gone."
   },
   {
     "key": "070cd86f1b8171",
@@ -675,14 +1470,19 @@
     "text": "The words are harder than any spell, and then they are easy. Something warm settles in your chest, like a lesson you always knew."
   },
   {
+    "key": "0a9497002d3262",
+    "speaker": "narrator",
+    "text": "You have learned the Forgiveness spell!"
+  },
+  {
     "key": "189e3b2f3fa06e",
     "speaker": "malakar",
     "text": "You would forgive me. They would have too."
   },
   {
-    "key": "00c7db73066110",
+    "key": "18a88ab1fcb78a",
     "speaker": "narrator",
-    "text": "You lay forgiveness on the wound. Its edges stop flickering. The days that never happened fall quiet one by one, and the tear draws closed like a healed cut. Above the circle the crystal clouds, cracks and falls away, and King Alden breathes again."
+    "text": "Forgiveness settles on the wound, and its edges stop flickering. The days that never happened fall quiet one by one, and the tear draws closed like a healed cut. Above the circle the crystal clouds, cracks and falls away, and King Alden breathes again."
   },
   {
     "key": "014b21be116e32",
@@ -765,6 +1565,11 @@
     "text": "You kneel at the edge of the field. Your hands remember the spell you read from a stone in the glade, the one that was always yours."
   },
   {
+    "key": "151c08ef15b935",
+    "speaker": "narrator",
+    "text": "You remember the grow spell!"
+  },
+  {
     "key": "1f454af63ceb22",
     "speaker": "narrator",
     "text": "You press your hands into the dry earth and say the smallest spell you know. Green runs out from your fingers along the rows. Leaves unfurl, the earth darkens, and the whole field breathes out at once."
@@ -803,6 +1608,11 @@
     "key": "121828fd3fdc5e",
     "speaker": "grandmother",
     "text": "Welcome home, Elior."
+  },
+  {
+    "key": "1f3bd834633e39",
+    "speaker": "narrator",
+    "text": "Under the elixir the crystal cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it."
   },
   {
     "key": "007c845b68189d",
@@ -860,6 +1670,11 @@
     "text": "No. Your parents poured themselves into that wound once already. It does not get to have you too."
   },
   {
+    "key": "01594f68da988e",
+    "speaker": "narrator",
+    "text": "Malakar half rises, reaching for the amulet, and stops his own hand."
+  },
+  {
     "key": "1e97a804fe1d63",
     "speaker": "malakar",
     "text": "Then keep something. One thing. Anything. Do not let me take it all."
@@ -868,6 +1683,11 @@
     "key": "180b8d1195fdde",
     "speaker": "narrator",
     "text": "You press the open amulet to the wound and let go. The light, the blessing, the truth sight, every spell you carried runs out of your hands into the tear, and the tear drinks it and closes. When it is done, one small spell is still in you: grow, the one you did not inherit. You read it from a stone in a glade, and it was never theirs."
+  },
+  {
+    "key": "0033e5fd69041a",
+    "speaker": "narrator",
+    "text": "Your magic is gone. Only grow remains."
   },
   {
     "key": "0edc6a2fb02365",
@@ -900,9 +1720,24 @@
     "text": "They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet."
   },
   {
+    "key": "095a0043e0cf84",
+    "speaker": "narrator",
+    "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The third figure is Malakar as he is now: white-haired, grey-robed, a step behind them."
+  },
+  {
+    "key": "1f2468fb7b7892",
+    "speaker": "narrator",
+    "text": "Not yet. The amulet at your chest is stirring."
+  },
+  {
     "key": "07d2a69806730b",
     "speaker": "malakar",
     "text": "Then show me what they left you."
+  },
+  {
+    "key": "073ed1643bc618",
+    "speaker": "narrator",
+    "text": "A tall man in a grey robe that was once a Warden's blue. His hair is white, though he cannot be much older than your father would have been. He leans on the throne as if it is the only thing holding him up, and he does not look away from you."
   },
   {
     "key": "13686727aaffc1",
@@ -920,9 +1755,24 @@
     "text": "We watched you give, again and again, and never ask for anything back. Today was only the last time."
   },
   {
+    "key": "007b25ae8b954b",
+    "speaker": "narrator",
+    "text": "Not yet. The elixir is still in your hand."
+  },
+  {
+    "key": "1980987673e785",
+    "speaker": "narrator",
+    "text": "Not yet. The wound is not yours to close while Malakar still waits for you."
+  },
+  {
     "key": "1b2d7d45383642",
     "speaker": "narrator",
     "text": "The amulet is already open, its light filling the chamber."
+  },
+  {
+    "key": "014cf57d2a6aa8",
+    "speaker": "narrator",
+    "text": "The elixir is for the king's prison, or for Malakar's wound."
   },
   {
     "key": "0619d8bc140009",
@@ -935,9 +1785,34 @@
     "text": "And not for the first time, I think. You have shown mercy before, where none was owed. I can see it on you."
   },
   {
+    "key": "18cdd14818d4b4",
+    "speaker": "narrator",
+    "text": "Malakar has drunk the elixir. That road is closed now."
+  },
+  {
     "key": "1931fac992f597",
     "speaker": "malakar",
     "text": "It does not hurt. For the first time in years, it does not hurt."
+  },
+  {
+    "key": "0cedbc37093123",
+    "speaker": "narrator",
+    "text": "Malakar is already forgiven. It is the wound that needs it."
+  },
+  {
+    "key": "144b56bd00c67b",
+    "speaker": "narrator",
+    "text": "The crystal lies in shards around the ritual circle."
+  },
+  {
+    "key": "0a6b087cf2cdf9",
+    "speaker": "narrator",
+    "text": "The air where the wound was is still and empty."
+  },
+  {
+    "key": "1fdd4097cd9814",
+    "speaker": "narrator",
+    "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The three of them stand together at a workbench, heads bent over something you cannot quite see."
   },
   {
     "key": "19f4117a852463",
@@ -953,6 +1828,16 @@
     "key": "153f272fec84df",
     "speaker": "king alden",
     "text": "You saved my kingdom, and somehow him as well. Go home."
+  },
+  {
+    "key": "00812b18a047f5",
+    "speaker": "narrator",
+    "text": "Malakar sits by the shards, himself again."
+  },
+  {
+    "key": "0a8e1f8fdbdc52",
+    "speaker": "narrator",
+    "text": "The king of Eldoria, alive, his crown bright again."
   },
   {
     "key": "175471f86e37b6",
@@ -1048,6 +1933,51 @@
     "key": "1be326544250f4",
     "speaker": "narrator",
     "text": "The little light brushes your cheek, warm, and settles back into the hedge."
+  },
+  {
+    "key": "178da06277ebce",
+    "speaker": "narrator",
+    "text": "Your grandmother, waiting at the gate with her hands folded."
+  },
+  {
+    "key": "1039fd553f2bf1",
+    "speaker": "narrator",
+    "text": "Mira, standing beside Grandmother at the gate."
+  },
+  {
+    "key": "015f72acf1bfc1",
+    "speaker": "narrator",
+    "text": "Sir Cedric, leaning on the fence as if it were a wall."
+  },
+  {
+    "key": "049c15648f21a3",
+    "speaker": "narrator",
+    "text": "A small light that flickers in the hedge, keeping close."
+  },
+  {
+    "key": "0d82522fa81715",
+    "speaker": "narrator",
+    "text": "The light comes down to the pendant, and the two of them are gone into the hedge together; a moment later the light is back, a little steadier, and your hand is empty."
+  },
+  {
+    "key": "0dc66157f304af",
+    "speaker": "narrator",
+    "text": "The light brushes the Servant's Pendant once and leaves it in your hand. It is yours."
+  },
+  {
+    "key": "1e1905bdea0a39",
+    "speaker": "narrator",
+    "text": "The light brushes the ancient amulet once and leaves it in your hand. It is yours."
+  },
+  {
+    "key": "0f2617ba19ed86",
+    "speaker": "narrator",
+    "text": "Nyx glows briefly with golden light."
+  },
+  {
+    "key": "1a22a1f571c929",
+    "speaker": "narrator",
+    "text": "Grow is for the field, not for people."
   },
   {
     "key": "02bfcd930c2cbe",

@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** The piece that cracks from the right ward stone when the gates fall. Nothing needs it. */
 export class WardStoneFragment extends Item {
@@ -14,9 +14,6 @@ export class WardStoneFragment extends Item {
 
   /** The fragment's welcome when it is picked up. */
   override pickedUp(_gameState: GameState): string {
-    return event(
-      'You pick up the fragment. It is cold, and it no longer keeps any ' +
-        'time at all.',
-    )
+    return 'The fragment is cold, and it no longer keeps any time at all.'
   }
 }

@@ -1,10 +1,4 @@
-import {
-  Spell,
-  event,
-  type Character,
-  type GameState,
-  type Item,
-} from '@/engine'
+import { Spell, type Character, type GameState, type Item } from '@/engine'
 import {
   FLAG_ACT4_SERVANTS_FREED,
   FLAG_ACT4_STAFF_HEARD,
@@ -24,13 +18,13 @@ const NOTHING_TO_HEAR =
 
 /** What the staff's mask hides, once. */
 const STAFF_HEARD =
-  "You listen, and beneath the mask's smile there is something small and " +
+  "Beneath the mask's smile there is something small and " +
   'lonely. It was made to be looked at, and no one ever looked at it. Only ' +
   'away.'
 
 /** Whose voice the whispers are, once. */
 const WHISPERS_HEARD =
-  'You listen to the crystals, and the whispers are not many voices. They ' +
+  'The whispers are not many voices. They ' +
   'are one: hers, repeating every lie she has ever told so that she never ' +
   'has to hear the silence.'
 
@@ -93,13 +87,13 @@ export class HeartsTruth extends Spell {
       target instanceof Malakar &&
       !gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
     ) {
-      return event(MALAKAR_HEARD)
+      return MALAKAR_HEARD
     }
     if (
       target instanceof TrappedServants &&
       gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)
     ) {
-      return event(SERVANTS_HEARD)
+      return SERVANTS_HEARD
     }
     return NOTHING_TO_HEAR
   }
@@ -113,6 +107,6 @@ export class HeartsTruth extends Spell {
   ): string {
     if (gameState.getStoryFlag(flag)) return `[dim]${already}[/dim]`
     gameState.setStoryFlag(flag, true)
-    return event(line)
+    return line
   }
 }

@@ -1,4 +1,4 @@
-import { Room, type Exits, type GameState, event } from '@/engine'
+import { Room, type Exits, type GameState, clue } from '@/engine'
 import { COURTYARD_AFTER_DESCRIPTION } from './courtyardDescriptions'
 import { CaptainOfTheGuard } from '../characters/CaptainOfTheGuard'
 import { TrappedServants } from '../characters/TrappedServants'
@@ -52,19 +52,19 @@ export class OuterCourtyard extends Room {
     direction: string,
   ): string | null {
     if (direction !== 'north') return null
-    return (
-      '[failure]The servants drift across the archway, their chains ' +
-      'trailing. They do not stop for you, and you cannot get past ' +
-      'them.[/failure]'
+    return clue(
+      'The servants drift across the archway, their chains ' +
+        'trailing. They do not stop for you, and you cannot get past ' +
+        'them.',
     )
   }
 
   /** Handle casting bless spell on servants. */
   castBless(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
-      return (
-        '[failure]The servants flinch from the light and keep walking. They ' +
-        'do not know you, and they have learned what strangers bring.[/failure]'
+      return clue(
+        'The servants flinch from the light and keep walking. They ' +
+          'do not know you, and they have learned what strangers bring.',
       )
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)) {
@@ -76,13 +76,13 @@ export class OuterCourtyard extends Room {
       const servants = this.getCharacterByName('servants')
       if (servants instanceof TrappedServants) servants.free()
       this.description = COURTYARD_AFTER_DESCRIPTION
-      return event(
+      return (
         'Your blessing settles over the courtyard like warm light through a ' +
-          'window. The chains do not break so much as forget to hold, and fall ' +
-          'away. One by one the servants stand still and look up. ' +
-          'By the fountain, the captain blinks, as if waking from a long sleep. ' +
-          'One of the servants presses a small blue ' +
-          "[item_name]Servant's Pendant[/item_name] into your hands.",
+        'window. The chains do not break so much as forget to hold, and fall ' +
+        'away. One by one the servants stand still and look up. ' +
+        'By the fountain, the captain blinks, as if waking from a long sleep. ' +
+        'One of the servants presses a small blue ' +
+        "[item_name]Servant's Pendant[/item_name] into your hands."
       )
     }
     return '[dim]The chains are gone. There is nothing left to bless away.[/dim]'

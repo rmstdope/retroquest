@@ -88,12 +88,12 @@ describe('FortressGates', () => {
       const game = createGame()
       for (let i = 0; i < 2; i++) {
         expect(executeCommands(game, ['cast light on left stone'])).toContain(
-          'The left stone drinks your light and pulses brighter, and the ' +
+          'The stone drinks your light and pulses brighter, and the ' +
             'guardians lean closer for a moment. The barrier keeps its rhythm.',
         )
       }
       expect(executeCommands(game, ['cast light on middle stone'])).toContain(
-        'The middle stone drinks your light',
+        'The stone drinks your light',
       )
       expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(false)
       expect(
@@ -151,7 +151,7 @@ describe('FortressGates', () => {
       expectItemInInventory(game.state, "Guardian's Essence", true)
       expectItemInInventory(game.state, 'Ward Stone Fragment', false)
       expect(executeCommands(game, ['take ward stone fragment'])).toContain(
-        'You pick up the fragment.',
+        'The fragment is cold',
       )
     })
 
@@ -226,10 +226,10 @@ describe('FortressGates', () => {
         'The left stone is dark.',
       )
       expect(executeCommands(game, ['cast light on middle stone'])).toContain(
-        'The middle stone is dark. Your light shows only its runes.',
+        'The stone is dark. Your light shows only its runes.',
       )
       expect(executeCommands(game, ['cast light on right stone'])).toContain(
-        'The right stone is dark.',
+        'The stone is dark.',
       )
       expect(executeCommands(game, ['cast light on ward stones'])).toContain(
         'The ward stones are dark.',

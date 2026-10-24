@@ -215,7 +215,7 @@ describe('ThroneChamber', () => {
     const text = executeCommands(game, ['say refrain to malakar'])
     expect(text).toContain(
       dialogue('Elior', 'Power follows purpose; purpose follows truth.') +
-        "\n[event]The words from the stone in Willowbrook, from Nyx, from the Dragon's hall. They are yours now.[/event]",
+        "\nThe words from the stone in Willowbrook, from Nyx, from the Dragon's hall. They are yours now.",
     )
     expect(text).not.toContain('you say')
     expectDialogueSpeaker(text, 'Malakar')
@@ -242,7 +242,7 @@ describe('ThroneChamber', () => {
       const game = refrained()
       const text = executeCommands(game, [command])
       expect(text).toContain(
-        'You raise the amulet. It opens in your hand like a flower, and the light of the ward pours out over the chamber. Malakar staggers. When he speaks again, it is not his voice.',
+        'The amulet opens in your hand like a flower, and the light of the ward pours out over the chamber. Malakar staggers. When he speaks again, it is not his voice.',
       )
       expectDialogueSpeaker(text, 'Shadow of the Past')
       expect(text).toContain(
@@ -314,7 +314,7 @@ describe('ThroneChamber', () => {
     game.state.addVirtue(VIRTUE_TRUTH)
     const text = executeCommands(game, ['use lifelight elixir on prison'])
     expect(text).toContain(
-      'You pour the elixir over the crystal. It cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it.',
+      'Under the elixir the crystal cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it.',
     )
     expect(text).toContain('The Lifelight Elixir is gone.')
     expectItemInInventory(game.state, 'Lifelight Elixir', false)

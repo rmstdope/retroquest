@@ -1,4 +1,4 @@
-import { Room, type Exits, type GameState } from '@/engine'
+import { Room, type Exits, type GameState, clue } from '@/engine'
 import {
   FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
@@ -60,10 +60,10 @@ export class HallOfEchoes extends Room {
     if (direction !== 'east') return null
     if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED))
       return null
-    return (
-      '[failure]The Knight of Despair stands before the stair to the tower. ' +
-      'He does not lift his sword. He simply does not move, and there is no ' +
-      'way past him.[/failure]'
+    return clue(
+      'The Knight of Despair stands before the stair to the tower. ' +
+        'He does not lift his sword. He simply does not move, and there is no ' +
+        'way past him.',
     )
   }
 }

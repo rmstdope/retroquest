@@ -46,13 +46,12 @@ const NOT_MENDED_PATIENCE =
   'The Shadow cannot hear you. The memories around it are too broken.'
 const NO_HOPE =
   'The Shadow shakes its head. “Patience is for those who still have hope. I have none left.”'
-const NO_SEE =
-  'You hold out the mask, but the Shadow cannot see it through the broken memories.'
+const NO_SEE = 'The Shadow cannot see the mask through the broken memories.'
 const DARK_DOOR = 'The sealed door will not move. Its runes are dark.'
 const WAITING_DOOR =
   'The door is sealed. Its runes glow faintly, waiting for the amulet.'
 const DARK_AMULET =
-  'You hold the amulet to the door, but its runes stay dark. Something in this vault is not ready to let you in.'
+  "The door's runes stay dark under the amulet. Something in this vault is not ready to let you in."
 const NORTH_SHUT =
   'The door to the north is shut. The lanterns are still waiting for you.'
 
@@ -128,7 +127,7 @@ describe('The Shadow of the Past', () => {
     expect(text).toContain('for the first time it has a face.')
     expectDialogueSpeaker(text, 'Shadow of the Past')
     expect(text).toContain(
-      'You raise the Echo Stone. The voices inside it pour out into the vault, and the orbs drink them in. One by one the cracks close and the scenes grow still and clear. The shadow turns towards you, and for the first time it has a face.',
+      'The voices inside the Echo Stone pour out into the vault, and the orbs drink them in. One by one the cracks close and the scenes grow still and clear. The shadow turns towards you, and for the first time it has a face.',
     )
     expect(text).toContain('Elior. You came.')
     expect(text).toContain(
@@ -167,7 +166,7 @@ describe('The Shadow of the Past', () => {
     expect(text).toContain('gives it back.')
     expectDialogueSpeaker(text, 'Shadow of the Past')
     expect(text).toContain(
-      'You hold out the silver mask. The Shadow turns it over in hands that are almost solid now, and gives it back.',
+      'The Shadow turns the silver mask over in hands that are almost solid now, and gives it back.',
     )
     expect(text).toContain(
       'She lied for him for years, and still she chose the truth. Then perhaps he can too. But not by force, Elior. Never by force.',

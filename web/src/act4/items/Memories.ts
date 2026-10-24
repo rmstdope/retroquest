@@ -1,4 +1,4 @@
-import { Item, type GameState, dialogue, event } from '@/engine'
+import { Item, type GameState, dialogue } from '@/engine'
 import {
   FLAG_ACT4_PARENTS_LEGACY_COMPLETED,
   FLAG_ACT4_PARENTS_LEGACY_STARTED,
@@ -43,55 +43,37 @@ export class Memories extends Item {
     gameState.setStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED, true)
     gameState.currentRoom.description = PARENTS_VAULT_AFTER
     return [
-      event(
-        'Three young Wardens bent over one workbench: your father, your ' +
-          'mother, and a dark-haired man laughing at something Lysa said. ' +
-          'Between them lie a crystal, a feather and a scale.',
-      ),
-      event(
-        'The year before you were born. The Wasting: a fever sweeps the ' +
-          'land, and Aren and Lysa fall ill with it. Nothing the Wardens know ' +
-          'can heal them. Malakar sits by their beds, reading, searching, ' +
-          'unable to wait.',
-      ),
-      event(
-        'Malakar alone in a room full of clocks, tearing the air open to ' +
-          'pull back the days before the fever. Aren and Lysa wake, well ' +
-          'again. But the wound he opened does not close, and it begins to ' +
-          'feed.',
-      ),
-      event(
-        'It is still pulling. Every hand in the room turns backwards, ' +
-          'wanting more of the days back, and the wound would take all of ' +
-          'them if nothing held it shut.',
-      ),
-      event(
-        'Your parents before the wound, hands joined, pouring themselves ' +
-          'into it until they are only light, bound to the amulet and to the ' +
-          'crown of King Alden, so that you would be hidden and the wound ' +
-          'held shut.',
-      ),
+      'Three young Wardens bent over one workbench: your father, your ' +
+        'mother, and a dark-haired man laughing at something Lysa said. ' +
+        'Between them lie a crystal, a feather and a scale.',
+      'The year before you were born. The Wasting: a fever sweeps the ' +
+        'land, and Aren and Lysa fall ill with it. Nothing the Wardens know ' +
+        'can heal them. Malakar sits by their beds, reading, searching, ' +
+        'unable to wait.',
+      'Malakar alone in a room full of clocks, tearing the air open to ' +
+        'pull back the days before the fever. Aren and Lysa wake, well ' +
+        'again. But the wound he opened does not close, and it begins to ' +
+        'feed.',
+      'It is still pulling. Every hand in the room turns backwards, ' +
+        'wanting more of the days back, and the wound would take all of ' +
+        'them if nothing held it shut.',
+      'Your parents before the wound, hands joined, pouring themselves ' +
+        'into it until they are only light, bound to the amulet and to the ' +
+        'crown of King Alden, so that you would be hidden and the wound ' +
+        'held shut.',
       dialogue(LYSA, 'Hold it shut, Aren. Hide him. That is enough.'),
-      event(
-        'The ward is Aren and Lysa, and their gift is the magic you have: ' +
-          'every spell that ever answered your hands came through them, all ' +
-          'but one, which you read from a stone in a glade.',
-      ),
-      event(
-        'Last, and smallest: Malakar by a cottage fire in Willowbrook, ' +
-          'rocking a baby in his arms and singing, low: "Hush, little seed, the ' +
-          'frost is going. Hush, the field will wake." The baby is you.',
-      ),
-      event(
-        'The lanterns dim, one by one, until only the amulet glows in your ' +
-          'hand.',
-      ),
-      event(
-        '[italic]Your parents sold you to save themselves.[/italic] It was ' +
-          'the opposite. They gave themselves away to save you. Of all the ' +
-          'lies in the fortress, hers was the one that hurt most, because ' +
-          'for a day you could not be sure. You are sure now.',
-      ),
+      'The ward is Aren and Lysa, and their gift is the magic you have: ' +
+        'every spell that ever answered your hands came through them, all ' +
+        'but one, which you read from a stone in a glade.',
+      'Last, and smallest: Malakar by a cottage fire in Willowbrook, ' +
+        'rocking a baby in his arms and singing, low: "Hush, little seed, the ' +
+        'frost is going. Hush, the field will wake." The baby is you.',
+      'The lanterns dim, one by one, until only the amulet glows in your ' +
+        'hand.',
+      '[italic]Your parents sold you to save themselves.[/italic] It was ' +
+        'the opposite. They gave themselves away to save you. Of all the ' +
+        'lies in the fortress, hers was the one that hurt most, because ' +
+        'for a day you could not be sure. You are sure now.',
     ].join('\n')
   }
 }

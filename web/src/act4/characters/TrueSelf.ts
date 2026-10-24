@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, dialogue } from '@/engine'
 import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
 import { normaliseSpokenWord } from '../spokenWord'
 
@@ -24,7 +24,7 @@ export class TrueSelf extends Character {
 
   /** The reflection's look. */
   override examine(_gameState: GameState): string {
-    return event(this.description)
+    return this.description
   }
 
   /** It asks why Elior came, and afterwards reminds him of the answer. */
@@ -52,13 +52,12 @@ export class TrueSelf extends Character {
     gameState.setStoryFlag(FLAG_ACT4_TRUTH_TOLD, true)
     gameState.addVirtue(VIRTUE_TRUTH)
     return (
-      event(
-        'You tell it the truth: that you did not come only for the king. You ' +
-          'came because you want Malakar to pay for what he took from you, and ' +
-          'you are afraid of what that wanting makes you. The reflection nods, ' +
-          "slowly. For a moment it wears your father's face. Then it is only " +
-          'you again, standing a little straighter.',
-      ) + '\n[dim]Elior will remember this.[/dim]'
+      'You tell it the truth: that you did not come only for the king. You ' +
+      'came because you want Malakar to pay for what he took from you, and ' +
+      'you are afraid of what that wanting makes you. The reflection nods, ' +
+      "slowly. For a moment it wears your father's face. Then it is only " +
+      'you again, standing a little straighter.' +
+      '\n[dim]Elior will remember this.[/dim]'
     )
   }
 }

@@ -133,7 +133,8 @@ describe('Willowbrook Field', () => {
         'You walk out of the fortress and do not look back.',
       )
       expect(text).toContain(KNEEL_REMEMBER)
-      expect(text).toContain('[event]You remember the grow spell![/event]')
+      expect(text).toContain('You remember the grow spell!')
+      expect(text).not.toContain('[event]You remember')
       expectCurrentRoom(game.state, 'Willowbrook Field')
       expect(game.state.knownSpells.map((s) => s.id)).toContain('grow')
     }
@@ -193,7 +194,9 @@ describe('Willowbrook Field', () => {
     expect(game.state.knownSpells.map((s) => s.id)).toContain('grow')
     expect(executeCommands(game, ['look'])).not.toContain('You remember')
     expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, false)
-    expect(executeCommands(game, ['cast grow'])).toContain('You cast')
+    expect(executeCommands(game, ['cast grow'])).toContain(
+      'You press your hands into the dry earth',
+    )
   })
 })
 
@@ -343,10 +346,10 @@ describe('casting grow at home', () => {
   it('refuses the companions by name', () => {
     const game = home('redemption')
     expect(executeCommands(game, ['cast grow on grandmother'])).toContain(
-      'Grow is for the field, not for Grandmother.',
+      'Grow is for the field, not for people.',
     )
     expect(executeCommands(game, ['cast grow on sir cedric'])).toContain(
-      'Grow is for the field, not for Sir Cedric.',
+      'Grow is for the field, not for people.',
     )
     expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, false)
   })
@@ -359,9 +362,7 @@ describe('casting grow at home', () => {
     it(`"${cast}" greens the field and ends the act`, () => {
       const game = home('sacrifice')
       const text = executeCommands(game, [cast])
-      expect(text).toContain(
-        '[event]You cast [spell_name]grow[/spell_name].[/event]',
-      )
+      expect(text).not.toContain('You cast')
       expect(text).toContain('Green runs out from your fingers along the rows.')
       const order = [
         'the whole field breathes out at once.',

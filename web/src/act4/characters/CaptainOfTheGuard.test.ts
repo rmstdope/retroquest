@@ -194,7 +194,7 @@ describe('CaptainOfTheGuard', () => {
       const game = createCourtyardGame(false)
       const answer = executeCommands(game, ["give guardian's chain to captain"])
       expect(answer).toContain(
-        'The captain stares through you. His hands do not close on the chain, and you keep it.',
+        'The captain stares through you. His hands do not close on it, and you keep it.',
       )
       expectMarkupWellFormed(answer)
       expect(game.state.virtueCount(VIRTUE_SELFLESS)).toBe(0)
@@ -208,9 +208,7 @@ describe('CaptainOfTheGuard', () => {
       before.state.addItemToInventory(new LoyaltyToken())
       expect(
         executeCommands(before, ['give loyalty token to captain']),
-      ).toContain(
-        'His hands do not close on the Loyalty Token, and you keep it.',
-      )
+      ).toContain('His hands do not close on it, and you keep it.')
       const after = createCourtyardGame()
       after.state.addItemToInventory(new LoyaltyToken())
       const answer = executeCommands(after, ['give loyalty token to captain'])

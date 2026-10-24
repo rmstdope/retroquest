@@ -3,7 +3,7 @@ import {
   type Character,
   type GameState,
   characterName,
-  event,
+  clue,
 } from '@/engine'
 import { TrappedServants } from '../characters/TrappedServants'
 import { KingAlden } from '../characters/KingAlden'
@@ -30,9 +30,9 @@ export class Bless extends Spell {
     if (typeof hook === 'function') {
       return hook.call(room, gameState)
     }
-    return event(
-      'You channel divine energy, filling the area with warm, golden ' +
-        'light, but there is nothing here that responds to the blessing.',
+    return (
+      'Warm, golden light fills the area, but there is nothing here that ' +
+      'responds to the blessing.'
     )
   }
 
@@ -48,30 +48,24 @@ export class Bless extends Spell {
       if (typeof hook === 'function') {
         return hook.call(room, gameState)
       }
-      return event(
-        'You channel blessing energy toward the servants, but ' +
-          'the magic seems unable to reach them fully here.',
-      )
+      return clue('The magic seems unable to reach the servants fully here.')
     }
     if (targetCharacter instanceof KingAlden) {
       if (
         endingPlayed(gameState) ||
         gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)
       ) {
-        return event(
+        return (
           'The king bows his head to the blessing, and something in his ' +
-            'crown stirs toward the light. It is kindly meant, and kindly taken.',
+          'crown stirs toward the light. It is kindly meant, and kindly taken.'
         )
       }
-      return event(
+      return (
         'The blessing reaches him through the crystal, and for a moment the ' +
-          'grey light running out of him slows. It is not enough. He does ' +
-          'not wake.',
+        'grey light running out of him slows. It is not enough. He does ' +
+        'not wake.'
       )
     }
-    return event(
-      `You bless ${characterName(targetCharacter.name)} ` +
-        'with divine energy, causing them to glow briefly with golden light.',
-    )
+    return `${characterName(targetCharacter.name)} glows briefly with golden light.`
   }
 }

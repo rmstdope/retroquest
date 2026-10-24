@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import {
   FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED,
@@ -39,9 +39,9 @@ export class CrystalPrison extends Item {
       endingPlayed(gameState) ||
       gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)
     ) {
-      return event(PRISON_SHATTERED)
+      return PRISON_SHATTERED
     }
-    return event(this.description)
+    return this.description
   }
 
   /** The elixir breaks the crystal: the king falls free and the elixir is gone. */
@@ -51,12 +51,10 @@ export class CrystalPrison extends Item {
     gameState.removeItemFromInventoryOrRoom('Lifelight Elixir', 1)
     gameState.currentRoom.description = THRONE_CHAMBER_SHATTERED
     return [
-      event(
-        'You pour the elixir over the crystal. It cracks like ice in ' +
-          'spring, and King Alden falls free, gasping, alive. But the wound ' +
-          'still stands open, and Malakar still stands beside it.',
-      ),
-      event('The Lifelight Elixir is gone.'),
+      'Under the elixir the crystal cracks like ice in ' +
+        'spring, and King Alden falls free, gasping, alive. But the wound ' +
+        'still stands open, and Malakar still stands beside it.',
+      'The Lifelight Elixir is gone.',
     ].join('\n')
   }
 }

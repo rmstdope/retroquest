@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import {
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
@@ -36,10 +36,8 @@ export class SorceressStaff extends Item {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
-      return event(
-        'Her staff lies across her knees, bare where the mask once sat.',
-      )
+      return 'Her staff lies across her knees, bare where the mask once sat.'
     }
-    return event(this.description)
+    return this.description
   }
 }

@@ -1,4 +1,4 @@
-import { Item, type Character, type GameState, event } from '@/engine'
+import { Item, type Character, type GameState } from '@/engine'
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
 import { MemoryVault } from '../rooms/MemoryVault'
 
@@ -21,16 +21,16 @@ export class SorceressTruth extends Item {
 
   /** The mask's look. */
   override examine(_gameState: GameState): string {
-    return event(this.description)
+    return this.description
   }
 
   /** In the Memory Vault the mask is shown to the Shadow; elsewhere it only waits. */
   override use(gameState: GameState): string {
     const room = gameState.currentRoom
     if (room instanceof MemoryVault) return room.showMask(gameState)
-    return event(
-      'You turn the mask over in your hands. Somewhere ahead is someone who ' +
-        'needs to see that a liar can choose the truth.',
+    return (
+      'Somewhere ahead is someone who ' +
+      'needs to see that a liar can choose the truth.'
     )
   }
 

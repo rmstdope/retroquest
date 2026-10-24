@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { FLAG_ACT4_GUARDIANS_CHAIN_RAISED } from '../Act4StoryFlags'
 import { HallOfEchoes } from '../rooms/HallOfEchoes'
 
@@ -16,10 +16,9 @@ export class GuardiansChain extends Item {
 
   /** The chain's welcome when it is picked up. */
   override pickedUp(_gameState: GameState): string {
-    return event(
-      "As you lift the [item_name]Guardian's Chain[/item_name], you feel a " +
-        'surge of protective energy coursing through your body. ' +
-        "The chain's light grows brighter, recognizing you as its new bearer.",
+    return (
+      'A surge of protective energy courses through your body. ' +
+      "The chain's light grows brighter, recognizing you as its new bearer."
     )
   }
 
@@ -28,17 +27,16 @@ export class GuardiansChain extends Item {
     if (gameState.currentRoom instanceof HallOfEchoes) {
       if (!gameState.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED)) {
         gameState.setStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED, true)
-        return event(
-          'You hold the chain up between you and the knight. The crystals ' +
-            'catch what little light there is and keep it. His sorrow is still ' +
-            'there, but it no longer reaches you.',
+        return (
+          "The chain's crystals catch what little light there is and keep it. " +
+          'His sorrow is still there, but it no longer reaches you.'
         )
       }
       return '[dim]The chain is already lit. His sorrow does not reach you.[/dim]'
     }
-    return event(
+    return (
       'The crystals stay quiet. Whatever the chain was made to stand ' +
-        'against, it is not here.',
+      'against, it is not here.'
     )
   }
 }
