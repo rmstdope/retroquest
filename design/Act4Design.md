@@ -110,7 +110,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Trigger:** Discover fortress servants enslaved by dark magic
     -   **Prerequisites:** Guardian's Essence (completion of "Shattered Ward Guardians")
     -   **Completion:** Use Guardian's Essence and selfless magic (`bless`) to break the enchantment
-    -   **Rewards:** Loyalty Token, Servant's Pendant, knowledge of the fortress layout
+    -   **Rewards:** Servant's Pendant, knowledge of the fortress layout
     -   **Story Impact:** Courage enables selflessness
 
 -   **Name:** The Maze of Mirrors
@@ -147,7 +147,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Trigger:** Face the second lieutenant in the Chamber of Whispers
     -   **Prerequisites:** "The Knight of Despair" completed; Knight's Redemption
     -   **Completion:** Use the Knight's Redemption, then hear all three of the chamber's hearts with `hearts_truth`: the Sorceress herself (the girl sold for grain), her staff (the lonely silver mask) and the whispers (her own voice, repeating every lie so that she never has to hear the silence). Then say understanding, or simply `listen`: standing still and listening to all of it is understanding too, with the same gates
-    -   **Rewards:** Sorceress's Truth, the spell `hearts_truth`, the secret passage to the Memory
+    -   **Rewards:** Sorceress's Truth, the secret passage to the Memory
         Vault
     -   **Who she is:** **The mark on Elena's curse in Greendale (Act II)** was the silver mask
         she set on Elena's wrist. The same smiling mask crowns the Sorceress's staff. She cursed
@@ -616,7 +616,7 @@ and changes a few lines of dialogue.
 | Mirror Labyrinth, The True Self         | Tell the reflection the truth about Elior's fear (`say truth to true self`) | **truth**   |
 | Hall of Echoes, Ghostly Warriors        | Cast `redemptions_light` on the ghostly warriors and let them rest      | **mercy**   |
 
-Other optional moments record nothing and gate nothing; each plays once, then a dim line:
+Other optional moments gate nothing. The sights and hearts repeat their line each time; the early amulet, the early elixir and the Bargain play once, then a dim line. The Bargain is the only one that changes anything later (Lysa's farewell line):
 
 -   **Truth Sight** on the unmended memory orbs (the cradle by the fire, a Willowbrook cottage and
     its well) and on Malakar (for a breath, a young man mending a toy at a workbench).
@@ -624,12 +624,12 @@ Other optional moments record nothing and gate nothing; each plays once, then a 
     and on Malakar before the refrain (the Shadow's voice speaks through his).
 -   **In the Throne Chamber, before the refrain:** raising the Ancient Amulet burns Malakar's hand
     ("Not like this.") and holding out the Lifelight Elixir makes him reach for it and stop.
-    Neither costs anything. The refrain said before he has spoken makes him laugh, then repeat
-    his offer.
+    Neither costs anything. The refrain said before he has spoken makes him laugh and say "Not yet", and he
+    makes his offer then.
 -   **The Bargain:** after his offer and before the refrain, `give ancient amulet to malakar`
     accepts it. The wound yawns, a vision of Aren and Lysa young at the workbench shows, the
-    Shadow says "Not like this. Not by force.", the amulet will not break and Elior is thrown
-    back where he stood. Malakar: "You saw. Then you know I was not lying." Lysa then adds a
+    Shadow says "Not like this. Not by force.", the amulet will not break and Malakar is thrown
+    against the throne. Malakar: "You saw. Then you know I was not lying." Lysa then adds a
     line to the farewell in every ending: "We saw you at the workbench with us, for a moment.
     You let it go. That was the bravest thing you did today."
 
@@ -706,7 +706,7 @@ Elior chooses an ending.
 ## Golden Path (Optimal Solution to Complete Act IV)
 
 The golden path is the Redemption ending and needs no virtue moment. Optional moments are listed
-where they would occur.
+where they would occur. Examining and talking steps (`examine`, `talk to`) are reading aloud for the player and are not in `ACT4_GOLDEN_PATH`; every command that changes the game is.
 
 ### Phase 1: Fortress Breach
 
@@ -724,7 +724,6 @@ where they would occur.
     - `use guardian's essence on servants`
     - `cast bless on servants`
         - Quest completed: "The Trapped Servants"
-        - Item obtained: `Loyalty Token`
     - `take servant's pendant` (the freed servants leave it behind)
     - Optional (**selfless**): `give guardian's chain to captain of the guard`
     - `talk to freed servants` → "The mirrors show truth, but only echoes from the halls can reveal
@@ -764,7 +763,7 @@ where they would occur.
         - Items obtained: `Knight's Redemption`, `Enhanced Echo Stone`
         - Spell learned: `redemptions_light`
         - The knight confesses: Willowbrook, the amulet, the framing of Cedric
-    - Optional (**mercy**): `cast redemptions light on ghostly warriors`
+    - Optional (**mercy**): `cast redemption's light on ghostly warriors`
 
 7. **Tower of Shadows:** `say mira to whispers`, `say cedric to whispers`, `say nyx to whispers`
    (each friend answers through the Loyalty Token; the stair opens on the third name), `go up`.
@@ -772,15 +771,14 @@ where they would occur.
 8. **Chamber of Whispers:**
 
     - `examine staff` → the silver mask, the mark on Elena's curse
-    - `talk to sorceress of lies`, `use knight's redemption`
-    - `cast hearts truth on sorceress` → the lonely woman and the girl sold in a hungry winter
-    - `cast hearts truth on staff` → the silver mask, made to be looked at and never looked at
-    - `cast hearts truth on whispers` → the whispers are one voice, hers
+    - `talk to sorceress of lies`, `use knight's redemption` (this teaches `hearts_truth`)
+    - `cast heart's truth on sorceress` → the lonely woman and the girl sold in a hungry winter
+    - `cast heart's truth on staff` → the silver mask, made to be looked at and never looked at
+    - `cast heart's truth on whispers` → the whispers are one voice, hers
     - (all three hearts are needed before understanding works; each shows once, then a dim line)
     - `say understanding to sorceress` (or `listen`)
         - Quest completed: "The Sorceress of Lies"
         - Item obtained: `Sorceress's Truth`
-        - Spell learned: `hearts_truth`
 
 9. **Memory Vault:**
 
@@ -791,13 +789,13 @@ where they would occur.
     - `say patience to shadow` (or `rest`)
         - Quest completed: "The Shadow of the Past"
     - The Shadow: "Take the amulet east. It will open for you."
+    - `examine door`, `use ancient amulet on door` → the door opens east
 
 ### Phase 3: The Parents' Vault
 
 10. **The Parents' Vault:**
 
-    - `examine door`
-    - `use ancient amulet on door` → the door opens
+    - (arrive from the Memory Vault, `east`)
     - `examine memories` → Aren, Lysa and Malakar making the relics; the catastrophe; the wound; the
       parents pouring themselves into the ward; baby Elior in Malakar's arms
         - Quest completed: "The Parent's Legacy"
