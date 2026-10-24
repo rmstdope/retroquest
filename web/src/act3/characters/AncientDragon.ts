@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  characterName,
-  event,
-  speech,
-} from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { DragonsScale } from '../items/DragonsScale'
 import {
@@ -55,7 +49,7 @@ export class AncientDragon extends Character {
       '. Its golden eyes are half closed.\n\n' +
       speech('The friend who stayed behind.') +
       '\n\n' +
-      event('It says no more.') +
+      'It says no more.' +
       '\n\n'
     )
   }
@@ -84,7 +78,7 @@ export class AncientDragon extends Character {
    */
   private messageForMira(): string {
     return (
-      event('As you turn to go, the great head lowers.') +
+      'As you turn to go, the great head lowers.' +
       '\n\n' +
       speech(
         'And the healer who waits at the cavern mouth. Little Mira. Tell ' +
@@ -217,12 +211,8 @@ export class AncientDragon extends Character {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
       gameState.currentRoom.addItem(new DragonsScale())
       return (
-        event(
-          `You speak the old words to the ${name}: ` +
-            `“I take what is given, and I return ${word}.”`,
-        ) +
-        '\n' +
-        '[success]' +
+        characterName(this.name) +
+        '\n[success]' +
         speech(
           'Your words ring true, young one. The scale is yours to bear. ' +
             'May you carry its burden with honor.',

@@ -99,7 +99,7 @@ describe('EchoStones', () => {
 
     const result = rubbings.useWith(gs, stones).toLowerCase()
 
-    expect(result).toContain('recite the resonant chant')
+    expect(result).not.toContain('recite the resonant chant')
     expect(result).toContain('harmonious silence')
     expect(result).toContain("dragon's hall now lies open")
     expect(gs.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)).toBe(true)

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, characterName, event, speech } from '@/engine'
+import { Game, characterName, speech } from '@/engine'
 import { Act3 } from '../Act3'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
@@ -17,13 +17,9 @@ import { Mira } from './Mira'
 import { SeaSealedLetter } from '../items/SeaSealedLetter'
 
 const RUINS_SPEECH = speech("Lysa's hand. She always crossed her sevens.")
-const RUINS_NARRATION = event(
-  `${characterName('Mira')} turns to the sea before you can ask what she means.`,
-)
-const EMBER_NARRATION = event('She looks at the feather a long time.')
-const RELAY_NARRATION = event(
-  `You give her the dragon's words. ${characterName('Mira')} does not answer.`,
-)
+const RUINS_NARRATION = `${characterName('Mira')} turns to the sea before you can ask what she means.`
+const EMBER_NARRATION = 'looks at the feather a long time.'
+const RELAY_NARRATION = `${characterName('Mira')} does not answer.`
 
 /** A started Act III game with Mira standing in the given room. */
 function gameWithMiraAt(roomKey: string): { game: Game; mira: Mira } {
@@ -72,7 +68,7 @@ describe('Mira ruins slip', () => {
     expect(talk.indexOf('You speak with')).toBeLessThan(
       talk.indexOf(RUINS_NARRATION),
     )
-    expect(talk).toContain('You arrive at')
+    expect(talk).toContain('you arrive at your next destination')
     expect(talk).toContain(RUINS_SPEECH)
     expect(talk.indexOf(RUINS_SPEECH)).toBeLessThan(
       talk.indexOf(RUINS_NARRATION),
@@ -121,7 +117,7 @@ describe('Mira Ember slip', () => {
     game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
     const out = mira.talkTo(game.state)
     expect(out).toContain(EMBER_NARRATION)
-    expect(out).toContain('You arrive at')
+    expect(out).toContain('you arrive at your next destination')
   })
 
   it('does not play before the feather', () => {
@@ -156,6 +152,6 @@ describe('Mira relay of the dragon message', () => {
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
     const out = mira.talkTo(game.state)
     expect(out).toContain(RELAY_NARRATION)
-    expect(out).toContain('You arrive at')
+    expect(out).toContain('you arrive at your next destination')
   })
 })

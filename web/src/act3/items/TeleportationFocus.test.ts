@@ -37,12 +37,9 @@ describe('TeleportationFocus', () => {
 
     const result = focus.examine(gs)
 
-    expect(
-      result.includes('study the prism') ||
-        result.includes('doorway') ||
-        !result.toLowerCase().includes('mira'),
-    ).toBe(true)
-    expect(result.startsWith('[event]')).toBe(true)
+    expect(result).toContain('doorway')
+    expect(result).not.toContain('[event]')
+    expect(result).not.toContain('You study')
   })
 
   it('prevents pickup with dialogue', () => {
@@ -70,11 +67,11 @@ describe('TeleportationFocus', () => {
 
     for (let i = 0; i < 2; i++) {
       const result = focus.examine(gs)
-      expect(result).toContain('You study the prism.')
+      expect(result).toContain('Reflections in the prism hover')
       expect(result).toContain(
-        '\n[event]Low on one facet, almost lost in the light, someone has ' +
+        '\nLow on one facet, almost lost in the light, someone has ' +
           "scratched a seven with a bar through it. Lysa's hand. Your " +
-          'mother cut this prism.[/event]',
+          'mother cut this prism.',
       )
     }
   })

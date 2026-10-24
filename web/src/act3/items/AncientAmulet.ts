@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 const HEIRLOOM = 'A family heirloom whose runes glint like dew at dawn. '
 
@@ -79,7 +79,7 @@ export class AncientAmulet extends Item {
     if (this.stage >= stage) return ''
     this.stage = stage
     this.description = PICTURES[stage]
-    return event(GLOWS[stage]) + '\n\n' + event(CURSES[stage])
+    return GLOWS[stage] + '\n\n' + CURSES[stage]
   }
 
   /**

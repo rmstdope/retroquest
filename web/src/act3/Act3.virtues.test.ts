@@ -157,7 +157,7 @@ describe('Wandering phantoms: mercy', () => {
   it('frees them with rest: fading, remembered line, they leave', () => {
     const game = gameIn('StillnessVestibule')
     const answer = run(game, 'say rest to wandering phantoms')
-    expect(answer).toContain('You say rest to the')
+    expect(answer).not.toContain('You say rest')
     expect(answer).toContain('then they are gone')
     expect(answer).toContain(REMEMBERED_MERCY)
     expect(answer.indexOf('then they are gone')).toBeLessThan(
@@ -247,7 +247,7 @@ describe("Dragon's prison: selflessness", () => {
     const game = hall()
     takeScale(game)
     const answer = run(game, 'cast bless on sigils')
-    expect(answer).toContain('You cast')
+    expect(answer).not.toContain('You cast')
     expect(answer).toContain('brighten, steady, and hold.')
     expect(answer).toContain(
       'You said you would return what you took. Most forget by the time ' +

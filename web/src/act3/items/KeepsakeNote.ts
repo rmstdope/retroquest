@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { FLAG_ACT3_ECHOES_QUEST_STARTED } from '../Act3StoryFlags'
 
 /** A note from Mira referencing Elior's parents and hinting at hidden truths. */
@@ -22,8 +22,6 @@ export class KeepsakeNote extends Item {
     }
 
     return (
-      event("You unfold the note carefully, reading Mira's words:") +
-      '\n\n' +
       '[dim]Elior, as you journey to the relic sites, keep your eyes ' +
       'open for traces of the past. Your parents left marks upon this ' +
       'world—fragments of their story that Malakar could not erase. In ' +
@@ -31,11 +29,9 @@ export class KeepsakeNote extends Item {
       'burns, and in the shadows where sacrifice echoes, you may find ' +
       'the truth of how they hid you from his sight. The three testimonies ' +
       'will reveal what love can accomplish against the darkest power.[/dim]\n\n' +
-      event(
-        'The note fills you with a sense of purpose beyond the road ' +
-          'ahead. Somewhere in each relic site, pieces of your heritage ' +
-          'await discovery.',
-      )
+      'The note fills you with a sense of purpose beyond the road ' +
+      'ahead. Somewhere in each relic site, pieces of your heritage ' +
+      'await discovery.'
     )
   }
 }

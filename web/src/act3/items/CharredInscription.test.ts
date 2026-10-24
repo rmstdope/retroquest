@@ -122,9 +122,7 @@ describe('CharredInscription mending', () => {
     const answer = inscription.receiveSpell(game.state, 'mend', 'mend')
 
     expect(answer).toBe(
-      '[event]You cast [spell_name]mend[/spell_name] on the ' +
-        '[item_name]Charred Inscription[/item_name].[/event]\n' +
-        'The magic settles over the blackened letters and waits. You have ' +
+      'The magic settles over the blackened letters and waits. You have ' +
         'not read them yet; you do not know what in them is broken.',
     )
     expect(game.state.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(false)
@@ -143,9 +141,7 @@ describe('CharredInscription mending', () => {
         'again, as it was the day they wrote it.',
     )
     expect(answer).toBe(
-      '[event]You cast [spell_name]mend[/spell_name] on the ' +
-        '[item_name]Charred Inscription[/item_name].[/event]\n' +
-        "The deeper cut fills. Malakar's name sits level with your parents' " +
+      "The deeper cut fills. Malakar's name sits level with your parents' " +
         'again, as it was the day they wrote it.\n' +
         '[event]✦ Mercy — this will be remembered[/event]',
     )

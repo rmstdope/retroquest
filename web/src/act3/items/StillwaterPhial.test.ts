@@ -96,7 +96,7 @@ describe('StillwaterPhial', () => {
     const failed = executeCommands(game, [
       'use resonant chant rubbings with echo stones',
     ])
-    expect(failed).toContain('You recite the resonant chant at each stone.')
+    expect(failed).not.toContain('You recite')
     expect(failed).toContain('breaks apart on a thousand tiny ripples')
     expectItemInInventory(game.state, 'Resonant Chant Rubbings', true)
     expect(game.state.getStoryFlag('act3_oath_of_stillness_completed')).toBe(

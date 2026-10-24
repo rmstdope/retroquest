@@ -1,4 +1,4 @@
-import { Room, event } from '@/engine'
+import { Room, clue } from '@/engine'
 import type { Exits, GameState } from '@/engine'
 import {
   FLAG_ACT3_FUMAROLE_WARD_APPLIED,
@@ -99,17 +99,17 @@ export class FumarolePassages extends Room {
 
     this.ventCalibrations += 1
     if (this.ventCalibrations < 3) {
-      return event(
-        'You press the vent stone into the channel. The vents click and ' +
-          'a rhythmic hiss grows steadier—the timing seems closer to being ' +
-          'synchronized.',
+      return (
+        'The vents click and ' +
+        'a rhythmic hiss grows steadier—the timing seems closer to being ' +
+        'synchronized.'
       )
     }
 
-    return event(
+    return (
       "With a final fit, the vents' rhythms align into a deep, slow " +
-        'breath. You sense the passages will now accept a heat ward to steady ' +
-        'the crossing intervals.',
+      'breath. You sense the passages will now accept a heat ward to steady ' +
+      'the crossing intervals.'
     )
   }
 
@@ -117,9 +117,10 @@ export class FumarolePassages extends Room {
   applyHeatWard(gameState: GameState, mix: HeatWardMix): string {
     if (this.ventCalibrations < 3) {
       return (
-        '[failure]The vents are not yet synchronized; the ward would be ' +
-        'unstable. Calibrate more vent stones first.[/failure]' +
-        cedricAdds(gameState, CEDRIC_HEAT_WARD)
+        clue(
+          'The vents are not yet synchronized; the ward would be unstable. ' +
+            'Calibrate more vent stones first.',
+        ) + cedricAdds(gameState, CEDRIC_HEAT_WARD)
       )
     }
 
@@ -130,12 +131,12 @@ export class FumarolePassages extends Room {
     // The ward lists the way south and starts the breath; crossing completes the quest
     gameState.setStoryFlag(FLAG_ACT3_FUMAROLE_WARD_APPLIED, true)
 
-    return event(
-      'You daub the heat-ward mix into the vents and seams. The rock ' +
-        'grows a touch cooler around your hands as the ward seals into place. ' +
-        'Down the tunnel you notice the gusting heat flatten into a steady ' +
-        'breath—passage through the fumaroles is now safe for a short interval. ' +
-        WARD_BREATH_TEXT,
+    return (
+      'The rock ' +
+      'grows a touch cooler around your hands as the ward seals into place. ' +
+      'Down the tunnel you notice the gusting heat flatten into a steady ' +
+      'breath—passage through the fumaroles is now safe for a short interval. ' +
+      WARD_BREATH_TEXT
     )
   }
 
@@ -186,7 +187,7 @@ export class FumarolePassages extends Room {
   override rest(gameState: GameState): string {
     if (!this.isWarded(gameState)) return super.rest(gameState)
     this.advanceBreath()
-    return `You stand still and count.\n${this.breathLine(gameState)}`
+    return this.breathLine(gameState)
   }
 
   /**
@@ -199,14 +200,14 @@ export class FumarolePassages extends Room {
     const text =
       this.currentBreath() === 'out' ? DRIVEN_BACK_ON_OUT : DRIVEN_BACK_ON_PAUSE
     this.advanceBreath()
-    return event(text)
+    return text
   }
 
   /** Crossing south on the in-breath says so and completes Breath of the Mountain. */
   override departText(gameState: GameState, direction: string): string {
     if (direction !== 'south') return ''
     gameState.setStoryFlag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, true)
-    return `${event(CROSSING_TEXT)}\n\n`
+    return `${CROSSING_TEXT}\n\n`
   }
 
   /** Start the quest and the breath on the out-breath on every entry. */

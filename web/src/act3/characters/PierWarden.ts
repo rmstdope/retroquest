@@ -1,9 +1,9 @@
 import {
+  dialogue,
   Character,
   type GameState,
   type Item,
   characterName,
-  event,
   remembered,
   speech,
 } from '@/engine'
@@ -93,30 +93,21 @@ export class PierWarden extends Character {
       return super.sayTo(gameState, words)
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_WARDEN_ASKED)) {
-      return (
-        event(`You speak with the ${characterName(this.name)}.`) +
-        '\n' +
-        speech('The truth about what, lad? Speak plain.')
-      )
+      return dialogue(this.name, 'The truth about what, lad? Speak plain.')
     }
     if (gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)) {
-      return (
-        event(`You speak with the ${characterName(this.name)}.`) +
-        '\n' +
-        speech(
-          "You've told me, lad, and I'll not forget it. The boats are " +
-            'staying in.',
-        )
+      return dialogue(
+        this.name,
+        "You've told me, lad, and I'll not forget it. The boats are " +
+          'staying in.',
       )
     }
     gameState.setStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD, true)
     gameState.addVirtue(VIRTUE_TRUTH)
     return (
-      event(
-        `You tell the ${characterName(this.name)} what you know: this is ` +
-          'no season. Something is draining the king, and the sea with him, ' +
-          'and it is getting worse.',
-      ) +
+      `You tell the ${characterName(this.name)} what you know: this is ` +
+      'no season. Something is draining the king, and the sea with him, ' +
+      'and it is getting worse.' +
       '\n' +
       speech(
         '… Aye. I think I knew it, and only wanted someone to say ' +
@@ -141,15 +132,9 @@ export class PierWarden extends Character {
     ) {
       return super.giveItem(gameState, item)
     }
-    const offer = event(
-      `You offer the [item_name]${item.name}[/item_name] to the ` +
-        `${characterName(this.name)}.`,
-    )
     if (gameState.getStoryFlag(FLAG_ACT3_WARDEN_COIN_PRESSED_BACK)) {
       return (
-        offer +
-        '\n' +
-        event('He pushes your hand away.') +
+        `The ${characterName(this.name)} pushes your hand away.` +
         '\n' +
         speech('I said keep it, lad.')
       )
@@ -157,9 +142,8 @@ export class PierWarden extends Character {
     gameState.setStoryFlag(FLAG_ACT3_WARDEN_COIN_PRESSED_BACK, true)
     item.pressedBack()
     return (
-      offer +
-      '\n' +
-      event('He turns it over once, then folds your fingers back around it.') +
+      `The ${characterName(this.name)} turns the coin over once, then ` +
+      'folds your fingers back around it.' +
       '\n' +
       speech('Keep it. Toll for the crossing, my da said.')
     )

@@ -1,4 +1,4 @@
-import { Item, event, remembered, writing, type GameState } from '@/engine'
+import { Item, remembered, writing, type GameState } from '@/engine'
 import { AncientAmulet } from './AncientAmulet'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
@@ -33,12 +33,10 @@ export class CharredInscription extends Item {
     gameState.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
 
     return (
-      event(
-        'You trace the charred letters with your finger, feeling the ' +
-          'heat that once shaped them. Above the words, cut shallow, is the ' +
-          'sun over three rings; beneath it, older and nearly gone, a tree ' +
-          'under two moons. The inscription reads:',
-      ) +
+      'You trace the charred letters with your finger, feeling the ' +
+      'heat that once shaped them. Above the words, cut shallow, is the ' +
+      'sun over three rings; beneath it, older and nearly gone, a tree ' +
+      'under two moons. The inscription reads:' +
       '\n\n' +
       writing('We are three, and we are one promise.') +
       '\n\n' +
@@ -50,16 +48,14 @@ export class CharredInscription extends Item {
       '\n\n' +
       writing('What we pour into the ward, the ward will keep.') +
       '\n\n' +
-      event(
-        gameState.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)
-          ? 'The three names sit level in the stone, as they did the day ' +
-              'the promise was made. Your parents and Malakar made this ' +
-              'promise together, and the wisdom was his.'
-          : 'The last name is burned deeper than the others, as if the ' +
-              'stone was struck again long after it cooled. Your parents ' +
-              'and Malakar made this promise together, and the wisdom was ' +
-              'his.',
-      ) +
+      (gameState.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)
+        ? 'The three names sit level in the stone, as they did the day ' +
+          'the promise was made. Your parents and Malakar made this ' +
+          'promise together, and the wisdom was his.'
+        : 'The last name is burned deeper than the others, as if the ' +
+          'stone was struck again long after it cooled. Your parents ' +
+          'and Malakar made this promise together, and the wisdom was ' +
+          'his.') +
       (first ? AncientAmulet.glowInBag(gameState, 2) : '')
     )
   }
@@ -77,30 +73,18 @@ export class CharredInscription extends Item {
     if (spellId !== 'mend') {
       return `[failure]The ${spellName} spell has no effect on the inscription.[/failure]`
     }
-    const cast = event(
-      'You cast [spell_name]mend[/spell_name] on the ' +
-        '[item_name]Charred Inscription[/item_name].',
-    )
     if (!gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)) {
       return (
-        cast +
-        '\n' +
         'The magic settles over the blackened letters and waits. You have ' +
         'not read them yet; you do not know what in them is broken.'
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)) {
-      return (
-        cast +
-        '\n' +
-        'The three names sit level and whole. There is nothing left to mend.'
-      )
+      return 'The three names sit level and whole. There is nothing left to mend.'
     }
     gameState.setStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED, true)
     gameState.addVirtue(VIRTUE_MERCY)
     return (
-      cast +
-      '\n' +
       "The deeper cut fills. Malakar's name sits level with your parents' " +
       'again, as it was the day they wrote it.\n' +
       remembered('Mercy')

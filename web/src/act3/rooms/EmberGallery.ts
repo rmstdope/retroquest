@@ -1,4 +1,4 @@
-import { Room, event } from '@/engine'
+import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { AshFern } from '../items/AshFern'
 import { CooledSlag } from '../items/CooledSlag'
@@ -33,11 +33,11 @@ export class EmberGallery extends Room {
       this.depositsRevealed = true
       this.items.push(new AshFern())
       this.items.push(new CooledSlag())
-      return event(
+      return (
         'You sift through the sorted fragments on the worktable and ' +
-          'find a brittle frond of ash-fern tucked in a tool roll, and a pile ' +
-          'of cooled slag fragments sifted into a shallow basin. They look ' +
-          'suitable for warding mixtures.',
+        'find a brittle frond of ash-fern tucked in a tool roll, and a pile ' +
+        'of cooled slag fragments sifted into a shallow basin. They look ' +
+        'suitable for warding mixtures.'
       )
     }
     return (

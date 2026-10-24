@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { FLAG_ACT3_POOLS_STILLED } from '../Act3StoryFlags'
 import { StillwaterPhial } from './StillwaterPhial'
 
@@ -21,15 +21,15 @@ export class DarkPool extends Item {
   /** Examine the pool: a faint tremor before it is stilled, perfect stillness after. */
   override examine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_POOLS_STILLED)) {
-      return event(
+      return (
         'The water lies flat as glass, holding the stones and the dark ' +
-          'above in perfect reflection. Not a tremor crosses it.',
+        'above in perfect reflection. Not a tremor crosses it.'
       )
     }
-    return event(
+    return (
       'Obsidian water, so still it seems frozen. Yet when you lean close, ' +
-        'the faintest tremor runs across it, too fine to see unless you ' +
-        'are looking for it.',
+      'the faintest tremor runs across it, too fine to see unless you ' +
+      'are looking for it.'
     )
   }
 

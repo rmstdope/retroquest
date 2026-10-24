@@ -1,4 +1,4 @@
-import { Room, event } from '@/engine'
+import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { Phoenix } from '../characters/Phoenix'
 
@@ -48,7 +48,7 @@ export class PhoenixCrater extends Room {
 
   /** Until the Phoenix appears, calling out gets a quiet in-world answer. */
   override talkToNobody(_gameState: GameState, _target: string): string | null {
-    return this.phoenixPresent() ? null : event(SILENT_CRATER)
+    return this.phoenixPresent() ? null : SILENT_CRATER
   }
 
   /** Reveal the Phoenix when the player rests. */
@@ -57,11 +57,11 @@ export class PhoenixCrater extends Room {
       this.addCharacter(new Phoenix())
       this.description = BASE_DESCRIPTION + PHOENIX_DESCRIPTION
       return (
-        'You rest for a moment, and as your eyes close, the air grows warmer. When you ' +
+        'As your eyes close, the air grows warmer. When you ' +
         'open them, a vast phoenix of living ember stands before you, its gaze meeting ' +
         'yours with ancient, knowing patience.'
       )
     }
-    return 'You rest for a moment, gathering your strength.'
+    return 'The heat of the crater soaks into you, and the ache goes out of your legs.'
   }
 }

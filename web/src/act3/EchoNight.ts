@@ -1,4 +1,4 @@
-import { dialogue, event, type GameState } from '@/engine'
+import { dialogue, type GameState } from '@/engine'
 import { FLAG_ACT3_ECHO_HEARD } from './Act3StoryFlags'
 
 /**
@@ -13,11 +13,9 @@ export const ECHO_AFTER =
   'very faintly, a door closing.[/dim]'
 
 const ECHO_NIGHT =
-  event(
-    'You hold still. The whispers in the alcoves gather, and for a moment ' +
-      'they are not copying you at all. Three voices, close and tired, as ' +
-      'if the night they belong to never ended.',
-  ) +
+  'You hold still. The whispers in the alcoves gather, and for a moment ' +
+  'they are not copying you at all. Three voices, close and tired, as ' +
+  'if the night they belong to never ended.' +
   '\n\n' +
   dialogue(
     "A man's voice, steady",
@@ -44,10 +42,8 @@ const ECHO_NIGHT =
   '\n\n' +
   dialogue('The second man', 'You would have me wait while you die.') +
   '\n\n' +
-  event(
-    'Somewhere in the stone, a door closes. The whispers go back to ' +
-      'copying your breath.',
-  )
+  ('Somewhere in the stone, a door closes. The whispers go back to ' +
+    'copying your breath.')
 
 /** Whether the echo has been heard. */
 export function echoHeard(gameState: GameState): boolean {

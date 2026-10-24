@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, clue, type GameState } from '@/engine'
 
 /** Ancient stone pillars at the shore's edge with ward sigils; source of Moon Rune shards. */
 export class Steles extends Item {
@@ -15,9 +15,9 @@ export class Steles extends Item {
 
   /** Override pickup prevention with context-specific message. */
   override preventPickup(): string {
-    return (
-      "[failure]You can't take the [item_name]Steles[/item_name]. They are part " +
-      'of the shore itself—heavy and set.[/failure]'
+    return clue(
+      "You can't take the [item_name]Steles[/item_name]. They are part " +
+        'of the shore itself—heavy and set.',
     )
   }
 
@@ -26,19 +26,19 @@ export class Steles extends Item {
    * spell in the act, with nothing to gain but the sight of it.
    */
   purify(_gameState: GameState): string {
-    return event(
+    return (
       'Salt and grey scum run off the steles in the saltlight, and the ' +
-        'moon-marks stand clearer than they have in years. Beyond them the ' +
-        'surf runs blue for the space of a breath, and then the grey comes ' +
-        'back.',
+      'moon-marks stand clearer than they have in years. Beyond them the ' +
+      'surf runs blue for the space of a breath, and then the grey comes ' +
+      'back.'
     )
   }
 
   /** Override examine with detailed description of the steles and fragments. */
   override examine(_gameState: GameState): string {
-    return event(
+    return (
       'The steles bear shallow moon-marks, pores packed with salt. ' +
-        'Loose pale fragments glint in crevices—likely usable in sigil work.',
+      'Loose pale fragments glint in crevices—likely usable in sigil work.'
     )
   }
 }

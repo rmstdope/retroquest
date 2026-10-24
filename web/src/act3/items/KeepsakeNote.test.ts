@@ -23,7 +23,7 @@ describe('KeepsakeNote', () => {
     const result = note.examine(game.state)
 
     expect(game.state.getStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED)).toBe(true)
-    expect(result).toContain("Mira's words")
+    expect(result).not.toContain('You unfold')
     expect(result).toContain('fragments of their story')
     expect(result).toContain('three testimonies will reveal')
     expect(result).toContain('depths where courage is tested')

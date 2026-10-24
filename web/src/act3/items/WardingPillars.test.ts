@@ -74,7 +74,8 @@ describe('WardingPillars', () => {
     pillars.purify(game.state)
 
     const successOut = shards.useWith(game.state, pillars)
-    expect(successOut).toContain('[event]')
+    expect(successOut).not.toContain('[event]')
+    expect(successOut).toContain('You press the pale shards')
     expect(game.state.getItemCount('Moon Rune Shards')).toBe(0)
     expectStoryFlag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
   })

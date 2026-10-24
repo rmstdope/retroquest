@@ -30,7 +30,7 @@ describe('FortressGates', () => {
     const gates = new FortressGates()
     gates.examine(game.state)
     const again = gates.examine(game.state)
-    expect(again).toContain('You examine the fortress gates.')
+    expect(again).not.toContain('You examine')
     expect(again).toContain('The gates stand ready to be breached.')
     expect(again).not.toContain('Amulet')
   })

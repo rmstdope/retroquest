@@ -26,8 +26,8 @@ describe('Act 3 Unlock spell', () => {
     const crate = new SupplyCrate()
 
     expect(crate.open(game.state)).toBe(
-      '[failure]The padlock holds. It is iron, rusted shut, and it has a ' +
-        'keyhole.[/failure]',
+      '[failure][clue]The padlock holds. It is iron, rusted shut, and it has ' +
+        'a keyhole.[/clue][/failure]',
     )
     const first = new UnlockSpell().castOnItem(game.state, crate)
     const again = new UnlockSpell().castOnItem(game.state, crate)
@@ -35,7 +35,7 @@ describe('Act 3 Unlock spell', () => {
     expect(first).toContain('The lock falls open.')
     expect(crate.locked).toBe(false)
     expect(again).toContain('The padlock already hangs open.')
-    expect(crate.open(game.state)).toContain('You open the crate.')
+    expect(crate.open(game.state)).toContain('Inside the crate are')
   })
 
   it('returns a failure on a non-locker item', () => {
@@ -45,6 +45,8 @@ describe('Act 3 Unlock spell', () => {
 
     const out = spell.castOnItem(game.state, lantern)
 
-    expect(out).toContain('[failure]')
+    expect(out).toBe(
+      '[failure][clue]That has no lock or magical seal to open.[/clue][/failure]',
+    )
   })
 })

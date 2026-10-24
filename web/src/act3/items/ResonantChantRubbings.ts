@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, clue, type GameState } from '@/engine'
 import {
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
   FLAG_ACT3_PHANTOMS_FREED,
@@ -27,13 +27,11 @@ export class ResonantChantRubbings extends Item {
       // Check if the echo stones are blessed
       if (other.areBlessed()) {
         if (!gameState.getStoryFlag(FLAG_ACT3_POOLS_STILLED)) {
-          return (
-            event('You recite the resonant chant at each stone. ') +
-            '\n' +
-            '[failure]The words leave the stones and skim out across the ' +
-            'pools. Water that looked frozen shivers under them, and the ' +
-            'chant breaks apart on a thousand tiny ripples. It will not ' +
-            'carry over water that is not truly still.[/failure]'
+          return clue(
+            'The words leave the stones and skim out across the ' +
+              'pools. Water that looked frozen shivers under them, and the ' +
+              'chant breaks apart on a thousand tiny ripples. It will not ' +
+              'carry over water that is not truly still.',
           )
         }
         // Perform the Oath of Stillness
@@ -52,17 +50,15 @@ export class ResonantChantRubbings extends Item {
           ? 'settles over the empty chamber.'
           : 'banishes the wandering phantoms.'
         return (
-          event('You recite the resonant chant at each stone. ') +
-          '\n' +
           '[success]The words ' +
           'echo and re-echo, building into a harmonious silence that ' +
           `${silence} The path to the dragon's hall ` +
           'now lies open.[/success]'
         )
       }
-      return (
-        '[failure]The stones remain cold and unresponsive. They must be ' +
-        'sanctified before the chant can take hold.[/failure]'
+      return clue(
+        'The stones remain cold and unresponsive. They must be ' +
+          'sanctified before the chant can take hold.',
       )
     }
     return `[failure]The ${other.name} has no effect on the rubbings.[/failure]`

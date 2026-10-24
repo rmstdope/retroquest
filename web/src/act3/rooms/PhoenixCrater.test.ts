@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, GameState, Room, event } from '@/engine'
+import { Game, GameState, Room } from '@/engine'
 import { Act3 } from '../Act3'
 import { PhoenixCrater } from './PhoenixCrater'
 
@@ -44,7 +44,7 @@ describe('Phoenix Crater', () => {
     const prevCount = phoenixCount(room)
     const result2 = room.rest(gs)
     expect(phoenixCount(room)).toBe(prevCount)
-    expect(result2).toContain('gathering your strength')
+    expect(result2).toContain('The heat of the crater soaks into you')
   })
 
   describe('before the Phoenix has appeared', () => {
@@ -55,9 +55,7 @@ describe('Phoenix Crater', () => {
     it('answers talk to anyone with a quiet narrated line', () => {
       const game = new Game([new Act3()])
       game.state.currentRoom = new PhoenixCrater()
-      const expected = event(
-        'The crater is silent. Nothing comes to those who call.',
-      )
+      const expected = 'The crater is silent. Nothing comes to those who call.'
       expect(game.talk('phoenix')).toBe(expected)
       expect(game.talk('bird')).toBe(expected)
       expect(game.talk('')).toBe('[failure]Talk to whom?[/failure]')

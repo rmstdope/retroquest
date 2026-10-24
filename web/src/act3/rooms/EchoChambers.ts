@@ -1,4 +1,4 @@
-import { Room, event } from '@/engine'
+import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { RunicWalls } from '../items/RunicWalls'
 import { OldOathScrolls } from '../items/OldOathScrolls'
@@ -30,10 +30,10 @@ export class EchoChambers extends Room {
    * the spell in the act, nothing gained but the sight.
    */
   castLightHere(_gameState: GameState): string {
-    return event(
+    return (
       'Your light runs up the runic walls and finds writing higher than any ' +
-        'hand could reach: three hands, the same words cut over and over. ' +
-        'The whispers hush for as long as it burns.',
+      'hand could reach: three hands, the same words cut over and over. ' +
+      'The whispers hush for as long as it burns.'
     )
   }
 

@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, clue, type GameState } from '@/engine'
 import { FLAG_ACT3_MINERS_RESCUE_STARTED } from '../Act3StoryFlags'
 import { CEDRIC_BRACES, CEDRIC_WEDGE, cedricAdds } from '../CedricLines'
 import { Miners } from '../characters/Miners'
@@ -31,8 +31,7 @@ export class FallenRock extends Item {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_STARTED, true)
     return (
-      event('You examine the massive pile of fallen rock.') +
-      ' The collapse ' +
+      'The collapse ' +
       'appears unstable, with loose stones precariously balanced above. You can ' +
       'hear desperate voices calling from beyond the barrier—miners are definitely ' +
       'trapped on the other side. The ceiling sags dangerously, but with the right ' +
@@ -45,22 +44,21 @@ export class FallenRock extends Item {
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof ReinforcedBraces) {
       if (!gameState.getStoryFlag(FLAG_ACT3_MINERS_RESCUE_STARTED)) {
-        return (
-          '[failure]You heft the braces toward the rock and stop. You do not ' +
-          'yet know where the ceiling sags, and one wrong push would bring ' +
-          'the whole gallery down.[/failure]'
+        return clue(
+          'You heft the braces toward the rock and stop. You do not ' +
+            'yet know where the ceiling sags, and one wrong push would bring ' +
+            'the whole gallery down.',
         )
       }
       if (!this.collapseStabilized) {
         this.collapseStabilized = true
         gameState.removeItemFromInventory(other.name)
         return (
-          event(
-            'You wedge the reinforced braces under the sagging ' +
-              'ceiling, stabilizing the collapse. The immediate danger of ' +
-              'further cave-in is reduced, but the braces need to be secured ' +
-              'before you can safely clear the passage.',
-          ) + cedricAdds(gameState, CEDRIC_BRACES)
+          'The reinforced braces wedge under the sagging ceiling and steady ' +
+          'the collapse. The immediate danger of ' +
+          'further cave-in is reduced, but the braces need to be secured ' +
+          'before you can safely clear the passage.' +
+          cedricAdds(gameState, CEDRIC_BRACES)
         )
       }
       return (
@@ -71,19 +69,18 @@ export class FallenRock extends Item {
 
     if (other instanceof SupportStraps) {
       if (!this.collapseStabilized) {
-        return (
-          '[failure]The straps have nothing to hold. There is no brace under ' +
-          'the ceiling for them to bind.[/failure]'
+        return clue(
+          'The straps have nothing to hold. There is no brace under ' +
+            'the ceiling for them to bind.',
         )
       }
       if (!this.strapsSecured) {
         this.strapsSecured = true
         gameState.removeItemFromInventory(other.name)
-        return event(
-          'You bind the reinforced braces securely with the ' +
-            'support straps, ensuring they can withstand the pressure ' +
-            'when the debris is cleared. The structure is now stable ' +
-            'enough for the final excavation.',
+        return (
+          'The support straps bind the reinforced braces securely, so they ' +
+          'can withstand the pressure when the debris is cleared. The structure is now stable ' +
+          'enough for the final excavation.'
         )
       }
       return '[dim]The straps are already securing the braces.[/dim]'
@@ -91,9 +88,9 @@ export class FallenRock extends Item {
 
     if (other instanceof WedgeBlocks) {
       if (!this.strapsSecured) {
-        return (
-          '[failure]The braces stand loose under the ceiling. One blow of a ' +
-          'wedge and they would walk out from under it.[/failure]'
+        return clue(
+          'The braces stand loose under the ceiling. One blow of a ' +
+            'wedge and they would walk out from under it.',
         )
       }
       if (!this.passageFreed) {
@@ -105,12 +102,11 @@ export class FallenRock extends Item {
         const miners = new Miners()
         gameState.currentRoom.addCharacter(miners)
         return (
-          event(
-            'You hammer the wedge blocks into the cracks, freeing ' +
-              'the blocked passage. The fallen rock crumbles away, clearing ' +
-              'the path forward. Through the newly opened gap, you see the ' +
-              'trapped miners emerging from the depths!',
-          ) + cedricAdds(gameState, CEDRIC_WEDGE)
+          'The wedge blocks bite into the cracks and free the blocked ' +
+          'passage. The fallen rock crumbles away, clearing ' +
+          'the path forward. Through the newly opened gap, you see the ' +
+          'trapped miners emerging from the depths!' +
+          cedricAdds(gameState, CEDRIC_WEDGE)
         )
       }
       return '[dim]The wedge blocks are already securing the passage.[/dim]'
