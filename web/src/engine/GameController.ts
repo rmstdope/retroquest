@@ -129,6 +129,9 @@ function questSummary(quest: Quest, done: boolean): QuestSummary {
 }
 
 export class GameController {
+  /** Whether the last `takeTurn` asked for the room to be described again. */
+  private redescribesRoom = false
+
   constructor(readonly game: Game) {}
 
   /** The first text to show (the logo). */
@@ -141,11 +144,22 @@ export class GameController {
     return this.game.commandParser.parse(command)
   }
 
-  /** Play a command: parse it, then start the next turn. */
+  /**
+   * Play a command: parse it, then start the next turn. Whether the command
+   * asked for the room to be described again (a `look`) is kept for
+   * `lastTurnRedescribesRoom`, read before the next turn can change rooms.
+   */
   takeTurn(command: string): string {
+    this.game.hasChangedRoom = false
     const result = this.handleCommand(command)
+    this.redescribesRoom = this.game.hasChangedRoom
     this.game.newTurn()
     return result
+  }
+
+  /** True when the last `takeTurn` asked for the room to be shown again (a `look`, or a move). */
+  lastTurnRedescribesRoom(): boolean {
+    return this.redescribesRoom
   }
 
   /** The current result text, then a new turn (the logo and intro screens). */
