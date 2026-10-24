@@ -3152,6 +3152,43 @@
    }
   ]
  },
+ "0169889a2a7fe6": {
+  "file": "0169889a2a7fe6.mp3",
+  "speaker": "narrator",
+  "duration": 3.762,
+  "words": [
+   {
+    "word": "Act",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "II",
+    "start": 0.4,
+    "end": 0.78
+   },
+   {
+    "word": "complete.",
+    "start": 0.78,
+    "end": 1.32
+   },
+   {
+    "word": "The",
+    "start": 1.32,
+    "end": 2.36
+   },
+   {
+    "word": "Gathering",
+    "start": 2.36,
+    "end": 3.04
+   },
+   {
+    "word": "Storm.",
+    "start": 3.04,
+    "end": 3.46
+   }
+  ]
+ },
  "017ea0838c6df6": {
   "file": "017ea0838c6df6.mp3",
   "speaker": "narrator",

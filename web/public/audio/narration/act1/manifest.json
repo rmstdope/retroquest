@@ -12524,47 +12524,47 @@
  "0c3173172cc3d4": {
   "file": "0c3173172cc3d4.mp3",
   "speaker": "grandmother",
-  "duration": 4.319,
+  "duration": 4.04,
   "words": [
    {
     "word": "This",
     "start": 0.0,
-    "end": 0.36
+    "end": 0.28
    },
    {
     "word": "was",
-    "start": 0.36,
-    "end": 0.68
+    "start": 0.28,
+    "end": 0.56
    },
    {
     "word": "theirs,",
-    "start": 0.68,
-    "end": 1.14
+    "start": 0.56,
+    "end": 0.98
    },
    {
     "word": "you",
-    "start": 1.72,
-    "end": 1.78
+    "start": 1.24,
+    "end": 1.32
    },
    {
     "word": "know.",
-    "start": 1.78,
-    "end": 2.0
+    "start": 1.32,
+    "end": 1.54
    },
    {
     "word": "Aren",
-    "start": 2.0,
-    "end": 3.04
+    "start": 2.44,
+    "end": 2.82
    },
    {
     "word": "and",
-    "start": 3.04,
-    "end": 3.46
+    "start": 2.82,
+    "end": 3.14
    },
    {
     "word": "Lysa's.",
-    "start": 3.46,
-    "end": 4.08
+    "start": 3.14,
+    "end": 3.78
    }
   ]
  },
