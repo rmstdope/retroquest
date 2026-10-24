@@ -584,6 +584,5 @@
  "1fc8ace3b8036a": {"fp":"8dc682292c8c56c2","voice":"7d805071401d4b738334f332a8c320c2","model":"s2.1-pro-free","parts":{"cue":"30e4588b","text":"4b615ce3","said":"4b615ce3","settings":"4666d299"},"adopted":true,"at":"2026-10-23T22:38:29.850Z"},
  "1fdb21dd205fa5": {"fp":"b79ce423d8d1bd8e","voice":"7d805071401d4b738334f332a8c320c2","model":"s2.1-pro-free","parts":{"cue":"30e4588b","text":"c6f17ebc","said":"c6f17ebc","settings":"4666d299"},"adopted":true,"at":"2026-10-23T22:38:29.850Z"},
  "1fe084f76b5a38": {"fp":"607ce5988be90dd0","voice":"7d805071401d4b738334f332a8c320c2","model":"s2.1-pro-free","parts":{"cue":"30e4588b","text":"069cb829","said":"069cb829","settings":"4666d299"},"adopted":true,"at":"2026-10-23T22:38:29.850Z"},
- "1feabede3cc688": {"fp":"ccbde7bf26da8b94","voice":"7d805071401d4b738334f332a8c320c2","model":"s2.1-pro-free","parts":{"cue":"30e4588b","text":"ecaebb1a","said":"ecaebb1a","settings":"4666d299"},"heard":1,"takes":1,"at":"2026-10-24T20:08:30.653Z"},
  "1ff363f3565b90": {"fp":"86e84b03a32e8dc6","voice":"7d805071401d4b738334f332a8c320c2","model":"s2.1-pro-free","parts":{"cue":"30e4588b","text":"e5ce3fab","said":"e5ce3fab","settings":"4666d299"},"adopted":true,"at":"2026-10-23T22:38:29.850Z"}
 }

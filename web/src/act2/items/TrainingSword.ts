@@ -69,9 +69,10 @@ export class TrainingSword extends Item {
       )
     }
     return (
-      "The training sword's balance feels " +
-      'good in your hands, and it would be perfect for demonstrating combat skills ' +
-      'to someone who needs proof of your abilities.'
+      'You practice a few sword forms with the training sword. ' +
+      'The balance feels good in your hands, and it would be perfect for ' +
+      'demonstrating combat skills to someone who needs proof of your ' +
+      'abilities.'
     )
   }
 }
