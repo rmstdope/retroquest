@@ -10,7 +10,7 @@ import { parseTurn } from '@/lantern/parseTurn'
  * The game store holds the panels of a narrated command at their old state
  * (`useGameStore.releasePanels`); this decides when each group is released as
  * the narration reaches it: the place (room card, Here, map, header room and
- * act) when the turn's arrival is revealed, the quest count when its last
+ * act, and what the command box and target chips offer) when the turn's arrival is revealed, the quest count when its last
  * quest card is, and Bag and Spells when the turn is over. A turn that ends
  * by a skip or a cut-in releases whatever is left without lighting it up.
  */

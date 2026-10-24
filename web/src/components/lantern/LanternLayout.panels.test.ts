@@ -129,25 +129,47 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(w.get('.lq-room-card').classes()).not.toContain('lq-flash')
   })
 
-  it('catches up when a verb is pressed, and the verb opens for the new place', async () => {
+  it('keeps the voice reading while a verb is pressed, and offers the old place', async () => {
     const w = await ready()
     await goNorth()
-    await w.get('[data-verb]').trigger('click')
-    expect(useNarrationStore().isNarrating).toBe(false)
+    await w.get('[data-verb="take"]').trigger('click')
+    expect(useNarrationStore().isNarrating).toBe(true)
+    expect(cardName(w)).toBe('Hall')
+  })
+
+  it('cuts in when a verb that needs nothing more is pressed', async () => {
+    const w = await ready()
+    await goNorth()
+    await w.get('[data-verb="look"]').trigger('click')
+    expect(w.findAll('[data-testid="turn"]').length).toBeGreaterThan(1)
     expect(cardName(w)).toBe('Garden')
   })
 
-  it('catches up when typing starts in the command box', async () => {
+  it('keeps the voice reading while typing, and the word list follows the place', async () => {
     useSettingsStore().startMode = 'type'
     const w = await ready()
+    const game = useGameStore()
     await goNorth()
     expect(cardName(w)).toBe('Hall')
     await w.get('.lq-type-input').trigger('keydown', { key: 'x' })
-    expect(useNarrationStore().isNarrating).toBe(false)
+    expect(useNarrationStore().isNarrating).toBe(true)
+    expect(cardName(w)).toBe('Hall')
+    const before = JSON.stringify(game.completionTree)
+    await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
     expect(cardName(w)).toBe('Garden')
+    expect(JSON.stringify(game.completionTree)).not.toBe(before)
   })
 
-  it('catches up when another section is opened on a phone', async () => {
+  it('holds the word list at the old place until the arrival is read', async () => {
+    const w = await ready()
+    const game = useGameStore()
+    const before = JSON.stringify(game.completionTree)
+    await goNorth()
+    expect(cardName(w)).toBe('Hall')
+    expect(JSON.stringify(game.completionTree)).toBe(before)
+  })
+
+  it('keeps the voice reading when another section is opened on a phone', async () => {
     const w = await ready(false)
     await goNorth()
     expect(useNarrationStore().isNarrating).toBe(true)
@@ -155,7 +177,9 @@ describe('LanternLayout: panels wait for the narration', () => {
       .findAll('[role="tab"], button')
       .find((b) => b.text() === 'Map')
     await map!.trigger('click')
-    expect(useNarrationStore().isNarrating).toBe(false)
+    expect(useNarrationStore().isNarrating).toBe(true)
+    expect(w.get('.lq-here-room').text()).toBe('Hall')
+    await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
     expect(w.get('.lq-here-room').text()).toBe('Garden')
   })
 
