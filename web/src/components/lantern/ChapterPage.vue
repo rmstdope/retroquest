@@ -20,9 +20,9 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * A block appears when its voice starts and is marked while spoken, with the
  * spoken word lit; a tap on the text hurries the voice, a second one skips.
  * The kicker, numbers and button are always there (the button in a footer
- * pinned to the page's bottom edge, so it never scrolls out of view). While the act's recordings
- * are still loading the title and text are held back (their room kept) so
- * unspoken text never flashes.
+ * pinned to the page's bottom edge, so it never scrolls out of view). While
+ * the act's recordings are still loading the title and text are held back
+ * (their room kept) so unspoken text never flashes.
  */
 const props = defineProps<{ chapter: Chapter; titleId: string }>()
 const emit = defineEmits<{ continue: [] }>()
@@ -297,12 +297,14 @@ defineExpose({ focus })
   color: var(--lq-muted);
 }
 .lq-chapter-footer {
-  /* Pinned to the page's bottom edge: Continue stays in view while a long page grows as it is read. */
+  /* Pinned to the page's bottom edge: Continue stays in view while a long
+     page grows as it is read. The negative margin cancels the padding, so a
+     short page lays out as before. */
   position: sticky;
   bottom: 0;
   width: 100%;
-  margin-top: 24px;
-  padding: 12px 0 0;
+  margin: 12px 0 -12px;
+  padding: 12px 0;
   display: flex;
   justify-content: center;
   background: linear-gradient(to bottom, transparent, var(--lq-bg) 12px);
