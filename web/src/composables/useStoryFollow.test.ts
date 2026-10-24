@@ -341,6 +341,20 @@ describe('useStoryFollow', () => {
     })
   })
 
+  describe('zoom gestures', () => {
+    it('are not held: a ctrl-wheel is left to the browser', async () => {
+      fake = await mountStory()
+      read()
+      const zoom = new WheelEvent('wheel', {
+        cancelable: true,
+        deltaY: 5,
+        ctrlKey: true,
+      })
+      fake.story.dispatchEvent(zoom)
+      expect(zoom.defaultPrevented).toBe(false)
+    })
+  })
+
   describe('lq-follow events', () => {
     it('are handled by following the word while held, and left alone otherwise', async () => {
       fake = await mountStory()

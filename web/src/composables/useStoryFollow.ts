@@ -107,6 +107,7 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     pane.scrollTop = top
   }
 
+  /** Scroll the pane to `top`; see `StoryFollow.moveTo`. */
   function moveTo(top: number, animate = true): void {
     const pane = story.value
     if (!pane) return
@@ -136,6 +137,7 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     frame = requestAnimationFrame(step)
   }
 
+  /** Keep `el` in view as the rule says; see `StoryFollow.follow`. */
   function follow(el: Element, unit = false): void {
     const pane = story.value
     if (!pane) return
@@ -153,6 +155,7 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     else if (top < from) moveTo(top)
   }
 
+  /** Bring the lit word back into view at once; see `StoryFollow.refollow`. */
   function refollow(): void {
     const pane = story.value
     if (!pane || !held.value) return
@@ -176,12 +179,16 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     narration.nudgeHint()
   }
 
+  /** The mouse wheel or trackpad over the held pane (a zoom gesture is left alone). */
   function onWheel(event: Event): void {
+    if (event instanceof WheelEvent && event.ctrlKey) return
     if (held.value) attempt(event)
   }
+  /** A touch drag on the held pane. */
   function onTouchMove(event: Event): void {
     if (held.value) attempt(event)
   }
+  /** A scrolling key pressed on the page or in the held pane (not in a field). */
   function onKey(event: KeyboardEvent): void {
     const pane = story.value
     if (!held.value || !pane || !SCROLL_KEYS.has(event.key) || event.altKey)
@@ -193,6 +200,7 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     if (target?.closest(EDITABLE)) return
     attempt(event)
   }
+  /** The pane scrolled: put it back if the player moved it while held. */
   function onScroll(): void {
     const pane = story.value
     if (!pane) return
@@ -205,6 +213,7 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     pane.scrollTop = expected
     narration.nudgeHint()
   }
+  /** The read-along announced a word or unit to follow. */
   function onFollow(event: Event): void {
     if (!held.value || !(event.target instanceof Element)) return
     event.preventDefault()

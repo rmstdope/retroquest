@@ -18,6 +18,7 @@ import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
+import { useStoryFollow } from '@/composables/useStoryFollow'
 import {
   SHORT_QUERY,
   useMediaQuery,
@@ -43,7 +44,6 @@ import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
 import StoryTurn from './StoryTurn.vue'
-import { useStoryFollow } from '@/composables/useStoryFollow'
 import TitlePage from './TitlePage.vue'
 
 /**

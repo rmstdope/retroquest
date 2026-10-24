@@ -1727,6 +1727,15 @@ describe('LanternLayout', () => {
         await vi.advanceTimersByTimeAsync(0)
       }
 
+      it('does not hold the story under a chapter page', async () => {
+        const w = await ready()
+        await openChapter(w)
+        const event = new WheelEvent('wheel', { cancelable: true, deltaY: 50 })
+        w.get('section[aria-label="Story"]').element.dispatchEvent(event)
+        expect(useNarrationStore().isNarrating).toBe(true)
+        expect(event.defaultPrevented).toBe(false)
+      })
+
       it('reads a chapter page: title first, then its paragraphs, until Continue', async () => {
         const w = await ready()
         await openChapter(w)
@@ -1793,6 +1802,10 @@ describe('LanternLayout', () => {
     })
 
     describe('following the reading', () => {
+      afterEach(() => {
+        vi.restoreAllMocks()
+      })
+
       const story = (w: VueWrapper): HTMLElement =>
         w.get('section[aria-label="Story"]').element as HTMLElement
 
@@ -1836,6 +1849,34 @@ describe('LanternLayout', () => {
         await vi.advanceTimersByTimeAsync(400)
         // jsdom has no line height: 16px text counts as 24px lines.
         expect(story(w).scrollTop).toBe(600 - 300 + 2 * 24)
+      })
+
+      it('brings the lit word back into view at once when the story changes size', async () => {
+        const observed: Array<() => void> = []
+        vi.stubGlobal(
+          'ResizeObserver',
+          class {
+            constructor(cb: () => void) {
+              observed.push(cb)
+            }
+            observe() {}
+            disconnect() {}
+          },
+        )
+        const w = await ready()
+        stubGeometry(w, 200)
+        await say(narratedTurn(1))
+        audios[0].currentTime = 0.5
+        await vi.advanceTimersByTimeAsync(200)
+        expect(story(w).scrollTop).toBe(0)
+
+        Object.defineProperty(story(w), 'clientHeight', {
+          configurable: true,
+          value: 150,
+        })
+        observed.forEach((cb) => cb())
+        // At once: no glide to wait for (jsdom lines are 24px).
+        expect(story(w).scrollTop).toBe(200 - 150 + 2 * 24)
       })
 
       it('holds the story still while it is read, and frees it when the reading ends', async () => {
