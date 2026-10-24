@@ -8,8 +8,9 @@ import { escapeHtml, renderMarkup } from '@/utils/theme'
 
 /**
  * Arrival in a room inside the story: a chapter-style divider, the room
- * description and a "Here + exits" box. On laptops the room card and the
- * map already show the room, so the story keeps only the divider. The
+ * description and a "Here + exits" box. On laptops the room card shows Here
+ * and the map the exits, so the story keeps only the divider and the
+ * description (which is read aloud here, never in the card). The
  * Here chips of what is still around are buttons: the layout opens their
  * actions menu. The rest (an earlier room, or gone since) are plain text.
  */
@@ -80,13 +81,13 @@ const exits = computed(() => Object.entries(props.arrival.exits))
       <span class="lq-rule" aria-hidden="true"></span>
     </div>
 
+    <!-- eslint-disable vue/no-v-html -->
+    <p
+      class="lq-arrival-text"
+      v-html="descriptionHtml ?? renderMarkup(arrival.description)"
+    ></p>
+    <!-- eslint-enable vue/no-v-html -->
     <template v-if="!wide">
-      <!-- eslint-disable vue/no-v-html -->
-      <p
-        class="lq-arrival-text"
-        v-html="descriptionHtml ?? renderMarkup(arrival.description)"
-      ></p>
-      <!-- eslint-enable vue/no-v-html -->
       <div v-if="here.length || exits.length" class="lq-here-box">
         <div v-if="here.length" class="lq-here" data-testid="here">
           <span class="lq-here-label">Here</span>

@@ -158,7 +158,7 @@ describe('StoryArrival', () => {
     expect(divider.element.textContent).toMatch(/South\s+Vegetable Field/)
   })
 
-  describe('on a laptop (the room card shows the room)', () => {
+  describe('on a laptop (the room card shows Here, the map the exits)', () => {
     beforeEach(() => {
       vi.stubGlobal(
         'matchMedia',
@@ -172,11 +172,11 @@ describe('StoryArrival', () => {
 
     afterEach(() => vi.unstubAllGlobals())
 
-    it('shows only the divider', () => {
+    it('shows the divider and the description, without the here-box', () => {
       const w = mountArrival('go south')
 
       expect(w.get('h3').text()).toBe('Vegetable Field')
-      expect(w.find('.lq-arrival-text').exists()).toBe(false)
+      expect(w.get('.lq-arrival-text').text()).toContain('Rows of withered')
       expect(w.find('[data-testid="here"]').exists()).toBe(false)
       expect(w.find('[data-testid="exits"]').exists()).toBe(false)
     })

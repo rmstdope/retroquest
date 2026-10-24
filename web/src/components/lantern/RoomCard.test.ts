@@ -51,7 +51,7 @@ describe('RoomCard', () => {
     expect(toggle.attributes('aria-expanded')).toBe('true')
   })
 
-  it('is lit, opened and follows the spoken word while the room is read on arrival', async () => {
+  it('stays silent and cut while the room is read in the story', async () => {
     const game = useGameStore()
     const description = 'A long room. '.repeat(40).trim()
     game.roomDescription = description
@@ -105,10 +105,9 @@ describe('RoomCard', () => {
     )
     await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 50))
     await nextTick()
-    expect(w.get('.lq-room-card').classes()).toContain('lq-speaking')
-    expect(w.get('.lq-room-text').classes()).not.toContain('lq-clamp')
-    const words = w.findAll('.lq-room-text .lq-w')
-    expect(words).toHaveLength(narrationWords(description).length)
-    expect(words[0].attributes('data-w')).toBe('2')
+    expect(narration.speaking(4)?.unit).toBe(1)
+    expect(w.get('.lq-room-card').classes()).not.toContain('lq-speaking')
+    expect(w.get('.lq-room-text').classes()).toContain('lq-clamp')
+    expect(w.findAll('.lq-room-text .lq-w')).toHaveLength(0)
   })
 })
