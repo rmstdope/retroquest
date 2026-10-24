@@ -83,6 +83,11 @@ describe('ChapterPage', () => {
     expect(w.emitted('continue')).toHaveLength(1)
   })
 
+  it('keeps its button in a footer pinned to the page bottom', () => {
+    const w = mount(ChapterPage, { props: { chapter: INTRO, titleId: 't' } })
+    expect(w.get('.lq-chapter-footer button').text()).toBe('Begin')
+  })
+
   it('can put focus on its button', () => {
     const w = mount(ChapterPage, {
       props: { chapter: INTRO, titleId: 't' },

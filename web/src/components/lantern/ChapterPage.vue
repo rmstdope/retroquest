@@ -19,7 +19,8 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * started by the layout): unit 0 is the title, unit `i + 1` is body block `i`.
  * A block appears when its voice starts and is marked while spoken, with the
  * spoken word lit; a tap on the text hurries the voice, a second one skips.
- * The kicker, numbers and button are always there. While the act's recordings
+ * The kicker, numbers and button are always there (the button in a footer
+ * pinned to the page's bottom edge, so it never scrolls out of view). While the act's recordings
  * are still loading the title and text are held back (their room kept) so
  * unspoken text never flashes.
  */
@@ -154,14 +155,16 @@ defineExpose({ focus })
         </div>
       </div>
 
-      <button
-        ref="button"
-        type="button"
-        class="lq-chapter-button"
-        @click="emit('continue')"
-      >
-        {{ action }}
-      </button>
+      <div class="lq-chapter-footer">
+        <button
+          ref="button"
+          type="button"
+          class="lq-chapter-button"
+          @click="emit('continue')"
+        >
+          {{ action }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -293,8 +296,18 @@ defineExpose({ focus })
   font-size: 12px;
   color: var(--lq-muted);
 }
-.lq-chapter-button {
+.lq-chapter-footer {
+  /* Pinned to the page's bottom edge: Continue stays in view while a long page grows as it is read. */
+  position: sticky;
+  bottom: 0;
+  width: 100%;
   margin-top: 24px;
+  padding: 12px 0 0;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(to bottom, transparent, var(--lq-bg) 12px);
+}
+.lq-chapter-button {
   min-width: 200px;
   height: 52px;
   padding: 0 28px;
