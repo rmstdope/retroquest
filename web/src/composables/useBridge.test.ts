@@ -166,7 +166,7 @@ describe('useBridge', () => {
       expect(bridge.controller.getRoomItems()).toEqual(['lantern'])
       expect(bridge.controller.getRoomExits()).toEqual({})
       expect(bridge.controller.getRoomWares()).toEqual([])
-      expect(bridge.controller.look()).toContain('surroundings')
+      expect(bridge.controller.look()).toBe('')
     })
 
     it('lists the inventory, spells and quests as named items', async () => {

@@ -62,7 +62,7 @@ export class Room {
   }
 
   /**
-   * Story text shown before the "You move ... to <room>." line when the
+   * Story text shown before the room's own text when the
    * player leaves in a direction and the move goes ahead; empty for none.
    * The hook may also set story flags. It is not called for a blocked way or
    * a move the room took over with `walk`.
@@ -80,7 +80,7 @@ export class Room {
   }
 
   /**
-   * Story text shown right after the "You move ... to <room>." line when the
+   * Story text shown on arrival when the
    * player walks into the room; empty for none. Only a move shows it, so it
    * is never repeated by `look`, a load or a return.
    */

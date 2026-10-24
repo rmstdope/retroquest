@@ -70,11 +70,9 @@ describe('engine hooks', () => {
     )
   })
 
-  it('appends the entered room’s text after the move line', () => {
+  it('answers a move with the entered room’s text and no echo of the move', () => {
     const game = makeGame()
-    expect(game.move('north')).toBe(
-      '[event]You move north to [room_name]Yard[/room_name].[/event]\n\nThe yard is wide.',
-    )
+    expect(game.move('north')).toBe('The yard is wide.')
   })
 
   it('lets a spell answer a target that is not an item or character', () => {

@@ -479,9 +479,7 @@ describe('Game', () => {
       const entered = vi.spyOn(rooms.VegetableField, 'onEnter')
       const result = game.move('south')
       expect(game.state.currentRoom).toBe(rooms.VegetableField)
-      expect(result).toBe(
-        '[event]You move south to [room_name]VegetableField[/room_name].[/event]\n\n',
-      )
+      expect(result).toBe('')
       expect(entered).toHaveBeenCalledWith(game.state)
       expect(game.hasChangedRoom).toBe(true)
       expect(game.state.visitedRooms).toEqual([
@@ -540,11 +538,11 @@ describe('Game', () => {
       const game = makeGame({ Wade: wade, Other: other })
       expect(game.move('east')).toBe('[event]You wade.[/event]')
       expect(game.state.currentRoom).toBe(wade)
-      expect(game.move('north')).toContain('You move north')
+      expect(game.move('north')).not.toContain('You move')
       expect(game.state.currentRoom).toBe(other)
     })
 
-    it('shows the text a room says on departure before the move line', () => {
+    it('shows the text a room says on departure, with no echo of the move', () => {
       class GateRoom extends Room {
         /** Say something when leaving east. */
         override departText(_gameState: GameState, direction: string): string {
@@ -561,7 +559,7 @@ describe('Game', () => {
       expect(game.move('west')).not.toContain('You slip out.')
       const moved = game.move('east')
       expect(moved.startsWith('[event]You slip out.[/event]')).toBe(true)
-      expect(moved).toContain('You move east')
+      expect(moved).not.toContain('You move')
     })
 
     it('lets the player leave a room named Main Square by any of its exits', () => {
@@ -573,7 +571,7 @@ describe('Game', () => {
       const castle = new Room({ name: 'Castle', description: 'd' })
       const gate = new Room({ name: 'Gate', description: 'd' })
       const game = makeGame({ MainSquare: square, Castle: castle, Gate: gate })
-      expect(game.move('north')).toContain('You move north')
+      expect(game.move('north')).not.toContain('You move')
       expect(game.state.currentRoom).toBe(castle)
     })
   })
@@ -695,7 +693,7 @@ describe('Game', () => {
     it('learns a spell once', () => {
       const light = new EchoSpell('light')
       expect(game.learn(light)).toBe(
-        '[event]You have learned the [spell_name]light[/spell_name] spell![/event]',
+        'You have learned the [spell_name]light[/spell_name] spell!',
       )
       expect(game.learn(light)).toBe('')
       expect(game.state.knownSpells).toEqual([light])
@@ -803,20 +801,16 @@ describe('Game', () => {
       const apple = item('Golden Apple')
       apple.description = 'A golden delicious apple.'
       game.state.inventory.push(apple)
-      expect(game.examine('golden apple')).toBe(
-        '[event]You examine the [item_name]Golden Apple[/item_name]. A golden delicious apple.[/event]',
-      )
+      expect(game.examine('golden apple')).toBe('A golden delicious apple.')
       const rock = item('rock')
       rooms.EliorsCottage.addItem(rock)
-      expect(game.examine('rock')).toContain('[item_name]rock[/item_name]')
+      expect(game.examine('rock')).toBe('A rock.')
       const john = new Character({
         name: 'Blacksmith John',
         description: 'Strong and sturdy.',
       })
       rooms.EliorsCottage.addCharacter(john)
-      expect(game.examine('blacksmith JOHN')).toBe(
-        '[event]You examine [character_name]Blacksmith John[/character_name]. Strong and sturdy.[/event]',
-      )
+      expect(game.examine('blacksmith JOHN')).toBe('Strong and sturdy.')
     })
 
     it('asks what to examine and reports unknown targets', () => {
@@ -828,9 +822,7 @@ describe('Game', () => {
   describe('look, search, rest, listen', () => {
     it('looks around and flags the room for re-description', () => {
       game.hasChangedRoom = false
-      expect(game.look()).toBe(
-        '[event]You take a look at your surroundings.[/event]\n\n',
-      )
+      expect(game.look()).toBe('')
       expect(game.hasChangedRoom).toBe(true)
     })
 

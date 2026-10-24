@@ -67,10 +67,7 @@ export class Item {
   }
 
   examine(_gameState: GameState): string {
-    return (
-      `[event]You examine the [item_name]${this.name}[/item_name]. ` +
-      `${this.description}[/event]`
-    )
+    return this.description
   }
 
   listen(_gameState: GameState): string {
