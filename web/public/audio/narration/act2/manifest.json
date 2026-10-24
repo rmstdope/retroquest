@@ -25186,6 +25186,53 @@
    }
   ]
  },
+ "09097b529ab3e9": {
+  "file": "09097b529ab3e9.mp3",
+  "speaker": "narrator",
+  "duration": 3.111,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.28
+   },
+   {
+    "word": "rest",
+    "start": 0.28,
+    "end": 0.72
+   },
+   {
+    "word": "for",
+    "start": 0.72,
+    "end": 0.94
+   },
+   {
+    "word": "a",
+    "start": 0.94,
+    "end": 1.1
+   },
+   {
+    "word": "moment,",
+    "start": 1.1,
+    "end": 1.42
+   },
+   {
+    "word": "gathering",
+    "start": 1.74,
+    "end": 2.24
+   },
+   {
+    "word": "your",
+    "start": 2.24,
+    "end": 2.5
+   },
+   {
+    "word": "strength.",
+    "start": 2.5,
+    "end": 2.8
+   }
+  ]
+ },
  "09181331540540": {
   "file": "09181331540540.mp3",
   "speaker": "narrator",

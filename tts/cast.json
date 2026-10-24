@@ -35,7 +35,7 @@
     "master merchant aldric": { "voice": "c04478dc318f49f095652496bcdbafb7", "style": "[smooth, haughty, salesman-like]" },
     "mountain hermit": { "voice": "a688ac91e10c455caf586ff0d0cd3dab", "style": "[old, gruff, fond]" },
     "nyx": { "voice": "37ab9e84be5b42a18681adb35ab988d1", "style": "[soft, otherworldly, unhurried]" },
-    "sir cedric": { "voice": "6e3869f7e5ce4589b9224181e7360bfc", "style": "[warm, proud, a little worn]" },
+    "sir cedric": { "voice": "6e3869f7e5ce4589b9224181e7360bfc", "style": "[warm, proud, a little worn]", "audition": { "phrase": "Come in out of the rain, child. [laughs] Sit by the fire, and I will tell you how it all began." } },
     "spectral librarian": { "voice": "8ec492b49f5c44a7ba00a742561f53d2", "style": "[dry, hollow, ghostly]" },
     "squires": { "voice": "fe2cbfe8efe0440cb80634b2f6c67ab5", "style": "[young, eager, lowering his voice]" },
     "town crier": { "voice": "4faf97dc50e0444c9b8007c06f5f1530", "style": "[loud, ringing, sing-song]" },
@@ -80,6 +80,8 @@
     "Act I complete.": "Act One complete.",
     "Act II complete.": "Act Two complete.",
     "Act III complete.": "Act Three complete.",
-    "Act IV complete.": "Act Four complete."
+    "Act IV complete.": "Act Four complete.",
+    "Oh deer": "Oh dear",
+    "oh deer": "oh dear"
   }
 }
