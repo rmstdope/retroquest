@@ -79,7 +79,8 @@ describe('The Sorceress of Lies', () => {
     )
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
     executeCommands(game, NAME_FRIENDS)
-    expect(executeCommands(game, ['go up'])).toContain('Chamber of Whispers')
+    executeCommands(game, ['go up'])
+    expect(game.state.currentRoom.name).toBe('Chamber of Whispers')
   })
 
   it('shows her and the mask on the first look, and starts the quest on entering', () => {
@@ -304,7 +305,8 @@ describe('The Sorceress of Lies', () => {
     expectQuestCompleted(game.state, 'The Sorceress of Lies')
     expectStoryFlag(game.state, FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
     expectStoryFlag(game.state, FLAG_ACT4_SORCERESS_TRUTH_ACQUIRED, true)
-    expect(executeCommands(game, ['go north'])).toContain('Memory Vault')
+    executeCommands(game, ['go north'])
+    expect(game.state.currentRoom.name).toBe('Memory Vault')
   })
 
   it('stays as the Unmasked Sorceress by the open arch', () => {
@@ -357,7 +359,8 @@ describe('The Sorceress of Lies', () => {
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
     executeCommands(game, NAME_FRIENDS)
     reload(game)
-    expect(executeCommands(game, ['go up'])).toContain('Chamber of Whispers')
+    executeCommands(game, ['go up'])
+    expect(game.state.currentRoom.name).toBe('Chamber of Whispers')
     reload(game)
     expect(executeCommands(game, ['go north'])).toContain(NORTH_WALL)
     executeCommands(game, ["use knight's redemption"])
@@ -386,6 +389,7 @@ describe('The Sorceress of Lies', () => {
     expect(game.state.currentRoom.describe(game.state)).toContain(
       'The chamber is still now.',
     )
-    expect(executeCommands(game, ['go north'])).toContain('Memory Vault')
+    executeCommands(game, ['go north'])
+    expect(game.state.currentRoom.name).toBe('Memory Vault')
   })
 })

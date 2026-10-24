@@ -245,9 +245,7 @@ describe('Fumarole Passages — the breath of the mountain', () => {
       'You walk with the draught at your back, down through the cooling ' +
         'tunnel, and out beneath the open sky of the crater.',
     )
-    expect(answer.indexOf('You walk with the draught')).toBeLessThan(
-      answer.indexOf('You move south'),
-    )
+    expect(answer).not.toContain('You move south')
     expect(game.state.currentRoom.name).toBe('Phoenix Crater')
     expect(
       game.state.getStoryFlag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED),

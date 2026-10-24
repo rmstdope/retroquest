@@ -1,4 +1,4 @@
-import { Room, event, type GameState } from '@/engine'
+import { Room, type GameState } from '@/engine'
 import { SackOfFlour } from '../items/SackOfFlour'
 import { Mechanism } from '../items/Mechanism'
 import {
@@ -82,6 +82,6 @@ export class OldMill extends Room {
       return ''
     }
     gameState.setStoryFlag(FLAG_STRANGER_SEEN_AT_MILL, true)
-    return event(STRANGER_SIGHTING)
+    return STRANGER_SIGHTING
   }
 }

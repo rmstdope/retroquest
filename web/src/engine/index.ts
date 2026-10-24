@@ -38,6 +38,7 @@ export {
 } from './GameController'
 export {
   MARKUP_TAGS,
+  attributeSpeech,
   characterName,
   clue,
   dialogue,

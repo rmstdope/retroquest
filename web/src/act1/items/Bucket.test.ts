@@ -13,9 +13,11 @@ describe('Bucket', () => {
 
     const answer = bucket.useWith(game.state, new Well())
 
-    expect(answer).toContain('murky')
-    expect(answer).toContain('sour smell')
-    expect(answer).not.toContain('clear water')
+    expect(answer).toBe(
+      'The [item_name]bucket[/item_name] comes up from the ' +
+        '[item_name]well[/item_name] full of murky water.',
+    )
+    expect(bucket.description).toContain('sour smell')
     expect(bucket.description).toContain('murky')
   })
 

@@ -1,4 +1,4 @@
-import { Item, type GameState, event, characterName, speech } from '@/engine'
+import { Item, type GameState, characterName, speech } from '@/engine'
 
 /** Early defensive gear establishing the concept of protective equipment. */
 export class Armor extends Item {
@@ -30,24 +30,11 @@ export class Armor extends Item {
 
   /** Examine the armor for its protective qualities. */
   override use(_gameState: GameState): string {
-    return event(
-      'You examine the [item_name]armor[/item_name]. ' +
-        'It looks like it would provide good protection if worn.',
-    )
+    return 'It looks like it would provide good protection if worn.'
   }
 
   /** Equip the armor to feel more protected. */
   override equip(_gameState: GameState): string {
-    return event(
-      'You put on the [item_name]armor[/item_name]. ' +
-        'You feel more protected and ready for danger.',
-    )
-  }
-
-  /** Examine the armor and read its description. */
-  override examine(_gameState: GameState): string {
-    return event(
-      `You examine the [item_name]armor[/item_name]. ${this.description}`,
-    )
+    return 'You feel more protected and ready for danger.'
   }
 }

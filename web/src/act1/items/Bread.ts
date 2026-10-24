@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { Chicken } from './Chicken'
 import { Key } from './Key'
 
@@ -20,12 +20,9 @@ export class Bread extends Item {
       gameState.removeItemFromInventory(this.name)
       gameState.currentRoom.addItem(new Key())
       return (
-        event(
-          'You offer the [item_name]bread[/item_name] to the ' +
-            '[item_name]chickens[/item_name].',
-        ) +
-        '\n' +
-        'They peck at it excitedly, and in the flapping commotion something shiny ' +
+        'The [item_name]chickens[/item_name] peck at the ' +
+        '[item_name]bread[/item_name] excitedly, and in the flapping ' +
+        'commotion something shiny ' +
         "is knocked from a high rafter. It's a [item_name]small key[/item_name], " +
         'hidden up there long ago by someone who did not want it found!'
       )

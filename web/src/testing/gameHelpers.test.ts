@@ -67,8 +67,7 @@ describe('executeCommands', () => {
   it('runs the commands, settles quests and joins the answers', () => {
     const g = game()
     const text = executeCommands(g, ['look', 'n'])
-    expect(text).toContain('You take a look')
-    expect(text).toContain('You move north')
+    expect(text).not.toContain('You move')
     expectCurrentRoom(g.state, 'Yard')
     expectQuests(g.state, ['Starts'])
     executeCommands(g, ['s', 'take coin'])

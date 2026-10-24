@@ -46,7 +46,7 @@ describe('Fisherman', () => {
         'give faded photograph to fisherman',
       ])
 
-      expect(response).toContain('You show the [item_name]faded photograph')
+      expect(response).not.toContain('You show the')
       expect(response).toContain('tin')
       expect(response).toContain('[item_name]smooth stone[/item_name]')
       expectDialogueSpeaker(response, 'fisherman')

@@ -189,10 +189,7 @@ describe('Merchant and the fresh bread', () => {
     const answer = executeCommands(game, ['give fresh bread to merchant'])
 
     expect(game.state.hasItem('fresh bread')).toBe(false)
-    expect(answer).toContain(
-      'You give the [item_name]fresh bread[/item_name] to the ' +
-        '[character_name]merchant[/character_name].',
-    )
+    expect(answer).not.toContain('You give the')
     expect(answer).toContain(
       'The [character_name]merchant[/character_name] unwraps the cloth and ' +
         'simply holds the loaf for a moment.',
@@ -233,10 +230,7 @@ describe('Merchant and the fresh bread', () => {
 
     const answer = executeCommands(game, [`give ${name} to merchant`])
 
-    expect(answer).toContain(
-      `You offer the [item_name]${name}[/item_name] to the ` +
-        '[character_name]merchant[/character_name].',
-    )
+    expect(answer).not.toContain('You offer the')
     expect(answer).toContain(
       "That's kind, friend, but you'll want every bite of that where " +
         "you're going. Keep it.",
@@ -246,15 +240,14 @@ describe('Merchant and the fresh bread', () => {
     expect(executeCommands(game, ['talk to merchant'])).toContain(HUNGER)
   })
 
-  it('shows the refusal as the event line and his speech, with no narration between', () => {
+  it('shows the refusal as his speech alone, with no echo of the offer', () => {
     const game = gameAtMerchant()
     game.state.addItemToInventory(new Apple())
 
     const answer = executeCommands(game, ['give apple to merchant'])
 
     expect(answer).toBe(
-      '[event]You offer the [item_name]apple[/item_name] to the ' +
-        '[character_name]merchant[/character_name].[/event]\n' +
+      '[character_name]merchant[/character_name]\n' +
         "[dialogue]That's kind, friend, but you'll want every bite of that " +
         "where you're going. Keep it.[/dialogue]",
     )

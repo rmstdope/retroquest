@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, clue } from '@/engine'
 
 /**
  * The broad stone bedded at the water's edge of the river bend. It stays where
@@ -17,9 +17,9 @@ export class SmoothStone extends Item {
 
   /** The stone belongs to the bend; it refuses to be carried off, even in older saves. */
   override preventPickup(): string {
-    return (
-      '[failure]You lift the [item_name]smooth stone[/item_name] a little, ' +
-      'then set it back. It belongs here, at the bend of the river.[/failure]'
+    return clue(
+      'You lift the [item_name]smooth stone[/item_name] a little, ' +
+        'then set it back. It belongs here, at the bend of the river.',
     )
   }
 }

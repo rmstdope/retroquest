@@ -2,9 +2,9 @@ import {
   Character,
   type GameState,
   type Item,
-  event,
   characterName,
   speech,
+  attributeSpeech,
 } from '@/engine'
 import { ReviveSpell } from '../spells/ReviveSpell'
 import { TravelCloak } from '../items/TravelCloak'
@@ -52,6 +52,11 @@ export class Grandmother extends Character {
    * when she has nothing newer to say.
    */
   override talkTo(gameState: GameState): string {
+    return attributeSpeech(this.name, this.talkAnswer(gameState))
+  }
+
+  /** What Grandmother answers when spoken to, before the speaker is labelled. */
+  private talkAnswer(gameState: GameState): string {
     let dialogue = ''
     const journalRead = gameState.getStoryFlag('journal_read_prologue_entry')
     const dreamToTell = journalRead && !gameState.hasSpell('revive')
@@ -105,10 +110,8 @@ export class Grandmother extends Character {
       dialogue =
         this.journalTale() +
         '\n\n' +
-        event(
-          "You recall your father's writings on the " +
-            '[spell_name]Revive[/spell_name] spell. The knowledge feels familiar.',
-        )
+        ("You recall your father's writings on the " +
+          '[spell_name]Revive[/spell_name] spell. The knowledge feels familiar.')
     }
 
     if (!dialogue) {
@@ -119,8 +122,7 @@ export class Grandmother extends Character {
       )
     }
 
-    const eventMsg = event(`You speak with ${characterName(this.name)}.`)
-    return eventMsg + '\n' + dialogue
+    return dialogue
   }
 
   /**
@@ -174,10 +176,10 @@ export class Grandmother extends Character {
   /** Teach Elior the revive spell his father wrote of. */
   private teachRevive(gameState: GameState): string {
     gameState.knownSpells.push(new ReviveSpell())
-    return event(
+    return (
       'As she speaks of it, the words your father wrote seem to ' +
-        'settle in your mind. \nYou feel a new understanding... You have ' +
-        'learned the [spell_name]Revive[/spell_name] spell!',
+      'settle in your mind. \nYou feel a new understanding... You have ' +
+      'learned the [spell_name]Revive[/spell_name] spell!'
     )
   }
 
@@ -223,7 +225,7 @@ export class Grandmother extends Character {
           'I baked this morning; take this for the way.',
       ) +
       '\n' +
-      event(`You received a [item_name]${bread.name}[/item_name]!`)
+      `You received a [item_name]${bread.name}[/item_name]!`
     )
   }
 
@@ -277,8 +279,6 @@ export class Grandmother extends Character {
       gameState.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
       gameState.currentRoom.addCharacter(new Patches())
       return (
-        event(`You set ${characterName('Patches')} down by the hearth.`) +
-        '\n' +
         `${characterName('Patches')} sniffs the rug, circles twice and curls ` +
         `up at your ${characterName('grandmother')}'s feet. She laughs softly. ` +
         speech(
@@ -310,32 +310,31 @@ export class Grandmother extends Character {
 
   /** Handle items given to the grandmother and produce appropriate events. */
   override giveItem(gameState: GameState, item: Item): string {
+    return attributeSpeech(this.name, this.giveAnswer(gameState, item))
+  }
+
+  /** What Grandmother answers to a gift, before the speaker is labelled. */
+  private giveAnswer(gameState: GameState, item: Item): string {
     if (item instanceof Locket) {
       gameState.removeItemFromInventory(item.name)
       const travelCloak = new TravelCloak()
       gameState.addItemToInventory(travelCloak)
-      const eventMsg = event(
-        `You give the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName(this.name)}.`,
-      )
       return (
-        eventMsg +
+        `${characterName(this.name)}'s eyes widen as ` +
+        'she sees the [item_name]' +
+        item.name +
+        '[/item_name]. ' +
+        speech(
+          "This... this was your mother's. It came to her from me, and to " +
+            'me from my mother, all the way back to the founders, so the old ' +
+            'ones said. I thought she took it with her when she left.',
+        ) +
+        '\nShe closes her hand around it for a moment. ' +
+        speech(
+          'She said it would keep you safe. And this... she wanted you to ' +
+            'have this when you were old enough to understand its importance.',
+        ) +
         '\n' +
-        (`${characterName(this.name)}'s eyes widen as ` +
-          'she sees the [item_name]' +
-          item.name +
-          '[/item_name]. ' +
-          speech(
-            "This... this was your mother's. It came to her from me, and to " +
-              'me from my mother, all the way back to the founders, so the old ' +
-              'ones said. I thought she took it with her when she left.',
-          ) +
-          '\nShe closes her hand around it for a moment. ' +
-          speech(
-            'She said it would keep you safe. And this... she wanted you to ' +
-              'have this when you were old enough to understand its importance.',
-          ) +
-          '\n') +
         (`${characterName(this.name)} hands you a finely made [item_name]` +
           travelCloak.name +
           '[/item_name].\n' +
@@ -343,7 +342,7 @@ export class Grandmother extends Character {
             `May it protect you on your journeys, ${characterName('Elior')}.`,
           )) +
         '\n' +
-        event(`You received a [item_name]${travelCloak.name}[/item_name]!`)
+        `You received a [item_name]${travelCloak.name}[/item_name]!`
       )
     } else if (
       item instanceof WildBerries &&
@@ -352,13 +351,7 @@ export class Grandmother extends Character {
       this.dialogueState.given_berries = true
       // Remove WildBerries from inventory
       gameState.removeItemFromInventory(item.name)
-      const eventMsg = event(
-        `You give the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName(this.name)}.`,
-      )
       return (
-        eventMsg +
-        '\n' +
         speech(
           `Oh, [item_name]${item.name}[/item_name]! ` +
             "Thank you, dear. These look lovely. I'll make a pie later.",
@@ -372,29 +365,15 @@ export class Grandmother extends Character {
     ) {
       // Remove WildBerries from inventory
       gameState.removeItemFromInventory(item.name)
-      const eventMsg = event(
-        `You give the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName(this.name)}.`,
-      )
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `More [item_name]${item.name}[/item_name]? ` +
-            'You are too ' +
-            `kind, ${characterName('Elior')}. Thank you.`,
-        )
+      return speech(
+        `More [item_name]${item.name}[/item_name]? ` +
+          'You are too ' +
+          `kind, ${characterName('Elior')}. Thank you.`,
       )
     } else if (item instanceof FadedPhotograph) {
-      const eventMsg = event(
-        `You show the [item_name]${item.name}[/item_name] to ` +
-          `the ${characterName(this.name)}.`,
-      )
       if (!gameState.getStoryFlag(FLAG_READ_PHOTO_MESSAGE)) {
         return (
-          eventMsg +
-          '\n' +
-          'She takes the photograph, her eyes misty with memory. ' +
+          `Your ${characterName('grandmother')} takes the photograph, her eyes misty with memory. ` +
           speech(
             'This was taken long ago, before the troubles began. Your parents were so ' +
               `full of hope... They loved you dearly, ${characterName('Elior')}. ` +
@@ -405,9 +384,7 @@ export class Grandmother extends Character {
       }
       gameState.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
       return (
-        eventMsg +
-        '\n' +
-        'She studies the back of the photograph, her expression growing ' +
+        `Your ${characterName('grandmother')} studies the back of the photograph, her expression growing ` +
         'serious. ' +
         speech(
           'You found the message, then? Your parents... ' +
@@ -425,13 +402,7 @@ export class Grandmother extends Character {
       )
     }
 
-    const eventMsg = event(
-      `You offer the [item_name]${item.name}[/item_name] to the ` +
-        `${characterName(this.name)}.`,
-    )
     return (
-      eventMsg +
-      '\n' +
       `${characterName(this.name)} looks at the [item_name]` +
       item.name +
       '[/item_name]. ' +
