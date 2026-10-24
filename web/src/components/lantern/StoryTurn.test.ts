@@ -426,6 +426,50 @@ describe('StoryTurn while it is narrated', () => {
     expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['low'])
   })
 
+  it('reads a room description in the story on a laptop too', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn(() => ({
+        matches: true,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    try {
+      const description = 'A low room with one window.'
+      const w = narrated(
+        {
+          text: 'You go north.',
+          arrival: {
+            room: 'Cellar',
+            description,
+            characters: ['mouse'],
+            items: [],
+            exits: { south: 'Hall' },
+          },
+        },
+        {
+          ...recorded('You go north.'),
+          ...recorded('Cellar'),
+          ...recorded(description),
+        },
+      )
+      audios[0].onended?.()
+      await vi.advanceTimersByTimeAsync(GAP + 10 + SCENE_PAUSE_MS)
+
+      expect(w.get('.lq-arrival').classes()).toContain('lq-speaking')
+      expect(w.get('.lq-arrival-text').text()).toContain('A low room')
+      expect(w.find('[data-testid="here"]').exists()).toBe(false)
+      audios[1].onended?.()
+      await vi.advanceTimersByTimeAsync(GAP + 10)
+      audios[2].currentTime = 1
+      await vi.advanceTimersByTimeAsync(60)
+      expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['low'])
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
   it('reads a new quest card’s heading and name, then its text, lighting each', async () => {
     const w = narrated(
       {
