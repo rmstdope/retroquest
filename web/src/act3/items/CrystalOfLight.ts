@@ -39,9 +39,7 @@ export class CrystalOfLight extends Item {
     if (!vow) {
       gameState.removeItemFromInventory(this.name, 1)
       gameState.currentRoom.addItem(this)
-      return clue(
-        'Wards flare as you touch the crystal, locking it in place. ' + '',
-      )
+      return clue('Wards flare as you touch the crystal, locking it in place.')
     }
     gameState.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
     return (

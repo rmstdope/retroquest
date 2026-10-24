@@ -853,7 +853,7 @@ describe('Act 3 golden path as declared by the act', () => {
     const out = executeCommands(game, ACT3_GOLDEN_PATH)
     const count = (needle: string): number => out.split(needle).length - 1
     expect(count('She always crossed her sevens.')).toBe(1)
-    expect(count('She looks at the feather a long time.')).toBe(1)
+    expect(count('looks at the feather a long time.')).toBe(1)
     expect(count('Tell her she has grown old.')).toBe(1)
     expect(count('does not answer.')).toBe(1)
     expect(count('You noticed. I saw you notice.')).toBe(1)

@@ -564,7 +564,7 @@ export class Mira extends Character {
     ) {
       gameState.setStoryFlag(FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED, true)
       lines.push(
-        'She looks at the feather a long time.',
+        `${characterName(this.name)} looks at the feather a long time.`,
         speech('…even when the world burns.'),
         'She says it softly, as if finishing a sentence someone else began.',
       )

@@ -1,6 +1,14 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
+import { Game } from '@/engine'
+import { parseTurn } from '@/lantern/parseTurn'
+import { Act3 } from './Act3'
+import {
+  FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+  FLAG_ACT3_OATH_SCROLLS_EXAMINED,
+} from './Act3StoryFlags'
+import { AncientDragon } from './characters/AncientDragon'
 
 /** Every non-test TypeScript file under `dir`, recursively. */
 function contentFiles(dir: string): string[] {
@@ -27,5 +35,14 @@ describe('Act III effects', () => {
       echo.test(readFileSync(file, 'utf8')),
     )
     expect(offenders).toEqual([])
+  })
+
+  it('labels the dragon’s oath answer with its name above the quote, not on a line of its own', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    game.state.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
+    const blocks = parseTurn(new AncientDragon().sayTo(game.state, 'it'))
+    expect(blocks.map((block) => block.kind)).not.toContain('text')
+    expect(blocks.some((block) => block.kind === 'dialogue')).toBe(true)
   })
 })

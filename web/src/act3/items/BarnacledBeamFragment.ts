@@ -16,8 +16,7 @@ export class BarnacledBeamFragment extends Item {
   /** Explain why the fragment cannot be taken. */
   override preventPickup(): string {
     return clue(
-      "The beam is fused into the pier's wreckage; you cannot pry it free." +
-        '',
+      "The beam is fused into the pier's wreckage; you cannot pry it free.",
     )
   }
 }

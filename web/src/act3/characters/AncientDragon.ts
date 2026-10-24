@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  characterName,
-  dialogue,
-  speech,
-} from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { DragonsScale } from '../items/DragonsScale'
 import {
@@ -217,9 +211,9 @@ export class AncientDragon extends Character {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
       gameState.currentRoom.addItem(new DragonsScale())
       return (
-        '[success]' +
-        dialogue(
-          this.name,
+        characterName(this.name) +
+        '\n[success]' +
+        speech(
           'Your words ring true, young one. The scale is yours to bear. ' +
             'May you carry its burden with honor.',
         ) +

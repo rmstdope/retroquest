@@ -18,7 +18,7 @@ import { SeaSealedLetter } from '../items/SeaSealedLetter'
 
 const RUINS_SPEECH = speech("Lysa's hand. She always crossed her sevens.")
 const RUINS_NARRATION = `${characterName('Mira')} turns to the sea before you can ask what she means.`
-const EMBER_NARRATION = 'She looks at the feather a long time.'
+const EMBER_NARRATION = 'looks at the feather a long time.'
 const RELAY_NARRATION = `${characterName('Mira')} does not answer.`
 
 /** A started Act III game with Mira standing in the given room. */
