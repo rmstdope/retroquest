@@ -3,8 +3,8 @@ import {
   type Character,
   type GameState,
   type Item,
+  clue,
   dialogue,
-  event,
 } from '@/engine'
 import {
   FLAG_ACT4_FIELD_GREEN,
@@ -33,8 +33,6 @@ export class Grow extends Spell {
       return this.greenTheField(gameState)
     }
     return (
-      event('You cast [spell_name]grow[/spell_name].') +
-      '\n' +
       'The nearby plants seem to respond with vibrant energy, ' +
       'but nothing else happens.'
     )
@@ -59,7 +57,7 @@ export class Grow extends Spell {
   /** At home the companions refuse it; elsewhere the plain refusal. */
   override castOnCharacter(gameState: GameState, target: Character): string {
     if (gameState.getStoryFlag(FLAG_ACT4_HOME_REACHED)) {
-      return `[failure]Grow is for the field, not for ${target.name}.[/failure]`
+      return clue('Grow is for the field, not for people.')
     }
     return super.castOnCharacter(gameState, target)
   }
@@ -72,7 +70,6 @@ export class Grow extends Spell {
   private greenTheField(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_FIELD_GREEN, true)
     return [
-      event('You cast [spell_name]grow[/spell_name].'),
       'You press your hands into the dry earth and say the smallest spell ' +
         'you know. Green runs out from your fingers along the rows. Leaves ' +
         'unfurl, the earth darkens, and the whole field breathes out at once.',

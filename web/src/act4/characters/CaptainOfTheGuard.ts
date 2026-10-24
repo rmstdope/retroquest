@@ -3,7 +3,6 @@ import {
   type GameState,
   type Item,
   characterName,
-  event,
   remembered,
   speech,
 } from '@/engine'
@@ -87,10 +86,9 @@ export class CaptainOfTheGuard extends Character {
     const freed = gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)
     const isChain = item instanceof GuardiansChain
     if (!freed) {
-      const what = isChain ? 'the chain' : `the ${item.name}`
-      return event(
-        `The captain stares through you. His hands do not close on ${what}, ` +
-          'and you keep it.',
+      return (
+        'The captain stares through you. His hands do not close on it, and ' +
+        'you keep it.'
       )
     }
     if (!isChain) {
@@ -106,21 +104,17 @@ export class CaptainOfTheGuard extends Character {
     room.characters = room.characters.filter((c) => c !== this)
     room.description = COURTYARD_CAPTAIN_GONE_DESCRIPTION
     return [
-      event(
-        "You lift the [item_name]Guardian's Chain[/item_name] over the " +
-          "captain's head. Its crystals flare once and settle against his " +
-          'soot-black tabard, and the warmth goes out of your hands.',
-      ),
+      "You lift the [item_name]Guardian's Chain[/item_name] over the " +
+        "captain's head. Its crystals flare once and settle against his " +
+        'soot-black tabard, and the warmth goes out of your hands.',
       `The ${characterName(this.name)} answers. ` +
         speech("'You will need this more than I will.'") +
         ' He tries to give it back, and when you will not take it, he grips ' +
         'your arm. ' +
         speech("'Then I will tell them at home what you did here.'"),
       remembered('Selflessness'),
-      event(
-        'He turns toward the gates and walks out without looking back. The ' +
-          'shadows draw away from the light at his throat.',
-      ),
+      'He turns toward the gates and walks out without looking back. The ' +
+        'shadows draw away from the light at his throat.',
     ].join('\n')
   }
 }

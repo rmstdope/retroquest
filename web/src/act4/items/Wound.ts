@@ -1,4 +1,4 @@
-import { Item, type GameState, dialogue, event } from '@/engine'
+import { Item, type GameState, clue, dialogue } from '@/engine'
 import {
   FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_ELIXIR_ON_MALAKAR,
@@ -25,9 +25,10 @@ import {
 import { Grow } from '../spells/Grow'
 
 /** What the amulet says before the elixir has been used. */
-const NOT_YET =
-  '[failure]Not yet. The wound is not yours to close while Malakar still ' +
-  'waits for you.[/failure]'
+const NOT_YET = clue(
+  'Not yet. The wound is not yours to close while Malakar still ' +
+    'waits for you.',
+)
 
 /** What the amulet says once the elixir has healed Malakar. */
 const GENTLER =
@@ -65,9 +66,9 @@ export class Wound extends Item {
   /** The wound's look. */
   override examine(gameState: GameState): string {
     if (endingPlayed(gameState)) {
-      return event('The air where the wound was is still and empty.')
+      return 'The air where the wound was is still and empty.'
     }
-    return event(this.description)
+    return this.description
   }
 
   /**
@@ -94,11 +95,11 @@ export class Wound extends Item {
       return '[dim]There is no wound left to forgive.[/dim]'
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_FORGIVENESS_SAID)) {
-      return '[failure]Forgiveness has not been spoken yet.[/failure]'
+      return clue('Forgiveness has not been spoken yet.')
     }
     this.finish(gameState, 'redemption')
     return [
-      'You lay forgiveness on the wound. Its edges stop flickering. The ' +
+      'Forgiveness settles on the wound, and its edges stop flickering. The ' +
         'days that never happened fall quiet one by one, and the tear draws ' +
         'closed like a healed cut. Above the circle the crystal clouds, ' +
         'cracks and falls away, and King Alden breathes again.',
@@ -148,9 +149,7 @@ export class Wound extends Item {
     this.finish(gameState, 'sacrifice')
     gameState.knownSpells = [new Grow()]
     return [
-      event(
-        'Malakar half rises, reaching for the amulet, and stops his own hand.',
-      ),
+      'Malakar half rises, reaching for the amulet, and stops his own hand.',
       dialogue(
         'Malakar',
         'Then keep something. One thing. Anything. Do not let me take it all.',
@@ -161,7 +160,7 @@ export class Wound extends Item {
         'it is done, one small spell is still in you: grow, the one you did ' +
         'not inherit. You read it from a stone in a glade, and it was never ' +
         'theirs.',
-      event('Your magic is gone. Only grow remains.'),
+      'Your magic is gone. Only grow remains.',
       dialogue(
         'King Alden',
         'He will answer to me, and he will live to do it. Thank you, farmer.',

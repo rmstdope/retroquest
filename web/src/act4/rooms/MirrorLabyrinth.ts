@@ -1,4 +1,4 @@
-import { Room, dialogue, event, type Exits, type GameState } from '@/engine'
+import { Room, clue, dialogue, type Exits, type GameState } from '@/engine'
 import { TrueSelf } from '../characters/TrueSelf'
 import { EchoStone } from '../items/EchoStone'
 import { Mirrors } from '../items/Mirrors'
@@ -36,16 +36,18 @@ const MAZE_AFTER_DESCRIPTION =
   'reflection waits, keeping still.'
 
 /** A turn the maze does not allow: back to the entrance. */
-const WRONG_TURN =
-  '[failure]You step toward a corridor of light and walk straight into ' +
-  'cold glass. Somewhere behind you, a reflection laughs. You are back at ' +
-  'the entrance.[/failure]'
+const WRONG_TURN = clue(
+  'You step toward a corridor of light and walk straight into ' +
+    'cold glass. Somewhere behind you, a reflection laughs. You are back at ' +
+    'the entrance.',
+)
 
 /** A turn taken without the Echo Stone: back to the entrance. */
-const NO_STONE_TURN =
-  "[failure]You try to recall the echoes' words, but in here the glass " +
-  'answers only with your own voice. You lose the way, and find yourself ' +
-  'back at the entrance.[/failure]'
+const NO_STONE_TURN = clue(
+  "You try to recall the echoes' words, but in here the glass " +
+    'answers only with your own voice. You lose the way, and find yourself ' +
+    'back at the entrance.',
+)
 
 /**
  * An enchanted maze where reality bends and truth becomes elusive.
@@ -137,16 +139,10 @@ export class MirrorLabyrinth extends Room {
     if (direction !== 'west') return this.failTurn(WRONG_TURN)
     if (this.stretch === 'entrance') {
       this.stretch = 'stretch'
-      return event('You turn left, and the glass lets you through.')
+      return 'The glass lets you through.'
     }
     this.stretch = 'fork'
-    return event('You turn left again, and the glass lets you through.')
-  }
-
-  /** Leaving south is a retracing of steps, from any stretch. */
-  override departText(_gameState: GameState, direction: string): string {
-    if (direction !== 'south') return ''
-    return `${event('You retrace your steps out of the glass.')}\n\n`
+    return 'The glass lets you through again.'
   }
 
   /** Send Elior back to the entrance with the given failure line. */
@@ -165,24 +161,17 @@ export class MirrorLabyrinth extends Room {
     this.description = MAZE_AFTER_DESCRIPTION
     this.addCharacter(new TrueSelf())
     return (
-      event(
-        'You step into the empty corridor. Behind you the false mirrors go ' +
-          'dark, one by one, until a single corridor remains — and at its ' +
-          'end, a plain mirror that shows you exactly as you are.',
-      ) +
-      '\n' +
-      event('You learn [spell_name]Truth Sight[/spell_name].')
+      'Behind you the false mirrors go ' +
+      'dark, one by one, until a single corridor remains — and at its ' +
+      'end, a plain mirror that shows you exactly as you are.\n' +
+      'You learn [spell_name]Truth Sight[/spell_name].'
     )
   }
 
   /** The Echo Stone used in the maze repeats the route, never solves it. */
   useStone(_gameState: GameState): string {
     return (
-      event(
-        'You hold the Echo Stone to your ear. One voice repeats, patient as a ' +
-          'heartbeat:',
-      ) +
-      '\n' +
+      'In the Echo Stone one voice repeats, patient as a heartbeat:\n' +
       dialogue('an echo', `'${MAZE_ROUTE}'`)
     )
   }
@@ -200,9 +189,9 @@ export class MirrorLabyrinth extends Room {
       )
     }
     if (this.stretch !== 'fork') {
-      return event(
+      return (
         "The pendant's light falls on the glass. Here every reflection walks " +
-          'with you; there is nothing yet to choose between.',
+        'with you; there is nothing yet to choose between.'
       )
     }
     if (this.forkShown) {
@@ -212,10 +201,10 @@ export class MirrorLabyrinth extends Room {
       )
     }
     this.forkShown = true
-    return event(
+    return (
       "The pendant's blue light falls on the glass. In the north corridor " +
-        'your reflection turns and walks with you. In the east corridor the ' +
-        'glass stays empty.',
+      'your reflection turns and walks with you. In the east corridor the ' +
+      'glass stays empty.'
     )
   }
 }

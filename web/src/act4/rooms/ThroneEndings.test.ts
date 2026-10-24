@@ -54,7 +54,7 @@ describe('the endings are always open', () => {
     for (const virtues of [[], [VIRTUE_TRUTH, VIRTUE_SELFLESS]]) {
       const game = opened(virtues)
       const text = executeCommands(game, ['use lifelight elixir on prison'])
-      expect(text).toContain('You pour the elixir over the crystal.')
+      expect(text).toContain('Under the elixir the crystal cracks')
       expect(text).not.toContain('does not answer to one who has not yet')
     }
   })
@@ -128,7 +128,7 @@ describe('Redemption', () => {
       'Malakar is already forgiven. It is the wound that needs it.',
     )
     const text = executeCommands(game, ['cast forgiveness on wound'])
-    expect(text).toContain('You lay forgiveness on the wound.')
+    expect(text).toContain('Forgiveness settles on the wound')
     expect(text).not.toContain('Then keep something.')
     expect(text).toContain('King Alden breathes again.')
     expect(text).toContain('Thank you, Elior. I will stay here')
@@ -301,7 +301,7 @@ describe('Sacrifice', () => {
     const keep =
       'Then keep something. One thing. Anything. Do not let me take it all.'
     const press = 'You press the open amulet to the wound and let go.'
-    expect(text.startsWith(`[event]${rise}`)).toBe(true)
+    expect(text.startsWith(rise)).toBe(true)
     expect(text.indexOf(keep)).toBeGreaterThan(text.indexOf(rise))
     expect(text.indexOf(press)).toBeGreaterThan(text.indexOf(keep))
     expect(text).toContain(

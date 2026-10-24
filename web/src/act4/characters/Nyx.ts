@@ -1,4 +1,4 @@
-import { Character, type GameState, type Item, event } from '@/engine'
+import { Character, type GameState, type Item } from '@/engine'
 import { NyxToken } from '../items/NyxToken'
 import { ForestHeartCrystal } from '../items/ForestHeartCrystal'
 
@@ -34,25 +34,25 @@ export class Nyx extends Character {
     if (item instanceof NyxToken) {
       this.tokenReturned = true
       gameState.removeItemFromInventory(item.name, 1)
-      return event(
-        'You hold out the pendant. The light comes down to it and the two ' +
-          'of them are gone into the hedge together; a moment later the ' +
-          'light is back, a little steadier, and your hand is empty.',
+      return (
+        'The light comes down to the pendant, and the two ' +
+        'of them are gone into the hedge together; a moment later the ' +
+        'light is back, a little steadier, and your hand is empty.'
       )
     }
     if (item instanceof ForestHeartCrystal) {
       this.crystalReturned = true
       gameState.removeItemFromInventory(item.name, 1)
-      return event(
+      return (
         'You set the crystal in the hedge, down among the roots. The tiny ' +
-          'lights inside it go out one by one, and the small light above ' +
-          'them grows by exactly that much. The hedge sounds, very faintly, ' +
-          'of wind in leaves.',
+        'lights inside it go out one by one, and the small light above ' +
+        'them grows by exactly that much. The hedge sounds, very faintly, ' +
+        'of wind in leaves.'
       )
     }
-    return event(
-      `You hold out the [item_name]${item.name}[/item_name]. The light ` +
-        'brushes it once and leaves it in your hand. It is yours.',
+    return (
+      `The light brushes the [item_name]${item.name}[/item_name] once and ` +
+      'leaves it in your hand. It is yours.'
     )
   }
 

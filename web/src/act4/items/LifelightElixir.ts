@@ -1,11 +1,12 @@
-import { Item, type Character, type GameState, event } from '@/engine'
+import { Item, type Character, type GameState, clue } from '@/engine'
 import { Malakar } from '../characters/Malakar'
 import { CrystalPrison } from './CrystalPrison'
 import { Wound } from './Wound'
 
 /** What the elixir says when it is aimed at anything but the two targets. */
-const WRONG_TARGET =
-  "[failure]The elixir is for the king's prison, or for Malakar's wound.[/failure]"
+const WRONG_TARGET = clue(
+  "The elixir is for the king's prison, or for Malakar's wound.",
+)
 
 /**
  * The Lifelight Elixir Elior carries through Act IV (Act III's elixir, made
@@ -27,7 +28,7 @@ export class LifelightElixir extends Item {
 
   /** The elixir's look. */
   override examine(_gameState: GameState): string {
-    return event(this.description)
+    return this.description
   }
 
   /** The Malakar of the current room, if the player stands in his chamber. */

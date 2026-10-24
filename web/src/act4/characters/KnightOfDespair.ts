@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, clue, dialogue } from '@/engine'
 import {
   FLAG_ACT4_BANNERS_SEEN,
   FLAG_ACT4_ECHO_STONE_HEARD,
@@ -84,13 +84,13 @@ export class KnightOfDespair extends Character {
       return '[dim]You have already seen the knight as he truly is.[/dim]'
     }
     gameState.setStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH, true)
-    return event(
+    return (
       'Your sight sharpens, and the gloom peels away from the knight. His ' +
-        "grey cloak is a traveller's, hooded and road-worn, and its clasp " +
-        'bears a twisted rune you know: the rune on the token that fouled ' +
-        "Willowbrook's well, and the seal on the Secret Documents that " +
-        "cleared Sir Cedric's name. This is the cloaked stranger the " +
-        'villagers whispered about. Behind the visor, the knight is weeping.',
+      "grey cloak is a traveller's, hooded and road-worn, and its clasp " +
+      'bears a twisted rune you know: the rune on the token that fouled ' +
+      "Willowbrook's well, and the seal on the Secret Documents that " +
+      "cleared Sir Cedric's name. This is the cloaked stranger the " +
+      'villagers whispered about. Behind the visor, the knight is weeping.'
     )
   }
 
@@ -98,19 +98,19 @@ export class KnightOfDespair extends Character {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)) {
-      return event(
+      return (
         'He kneels by the stair, his helm beside him. Without the visor he ' +
-          'looks like any tired soldier far from home.',
+        'looks like any tired soldier far from home.'
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_SEEN_THROUGH)) {
-      return event(
+      return (
         'The grey cloak, the twisted rune at its clasp, the tears behind the ' +
-          'visor. The cloaked stranger from Willowbrook stands before you, ' +
-          'and he knows you have seen him.',
+        'visor. The cloaked stranger from Willowbrook stands before you, ' +
+        'and he knows you have seen him.'
       )
     }
-    return event(this.description)
+    return this.description
   }
 
   /** What he says changes as he is seen through and redeemed. */
@@ -164,16 +164,16 @@ export class KnightOfDespair extends Character {
     }
     const seen = this.sightsSeen(gameState)
     if (seen > 0 && seen < SIGHTS_NEEDED) {
-      return (
-        '[failure]The word catches in your throat. You have seen something ' +
-        'of him, but you do not yet know what he has done. There is more in ' +
-        'this hall to see through.[/failure]'
+      return clue(
+        'The word catches in your throat. You have seen something ' +
+          'of him, but you do not yet know what he has done. There is more in ' +
+          'this hall to see through.',
       )
     }
     if (seen === 0) {
-      return (
-        '[failure]The word means nothing to a man you cannot truly see. He ' +
-        'does not even turn his head.[/failure]'
+      return clue(
+        'The word means nothing to a man you cannot truly see. He ' +
+          'does not even turn his head.',
       )
     }
     const chainHolds = this.chainHolds(gameState)
@@ -183,14 +183,18 @@ export class KnightOfDespair extends Character {
     if (!chainHolds && !tokenHolds) {
       const chainGone = gameState.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)
       return chainGone
-        ? "[failure]You open your mouth, and the knight's despair rolls over " +
-            'you like cold water. The word dies in your throat. Nothing ' +
-            'stands between you and his sorrow, and the chain is gone with ' +
-            'the captain. But you are not as alone as the knight would have ' +
-            'you believe.[/failure]'
-        : "[failure]You open your mouth, and the knight's despair rolls over " +
-            'you like cold water. The word dies in your throat. You could ' +
-            'not say it with nothing between you and his sorrow.[/failure]'
+        ? clue(
+            "You open your mouth, and the knight's despair rolls over " +
+              'you like cold water. The word dies in your throat. Nothing ' +
+              'stands between you and his sorrow, and the chain is gone with ' +
+              'the captain. But you are not as alone as the knight would have ' +
+              'you believe.',
+          )
+        : clue(
+            "You open your mouth, and the knight's despair rolls over " +
+              'you like cold water. The word dies in your throat. You could ' +
+              'not say it with nothing between you and his sorrow.',
+          )
     }
     return this.redeem(gameState, chainHolds)
   }
@@ -217,7 +221,7 @@ export class KnightOfDespair extends Character {
       dialogue(this.name, 'Me.'),
     )
     confession.push(
-      event('Sir Cedric does not move from the door.'),
+      'Sir Cedric does not move from the door.',
       dialogue(
         'Sir Cedric',
         'I heard you. That will have to be enough, for now.',
@@ -234,33 +238,27 @@ export class KnightOfDespair extends Character {
     room.addCharacter(new GhostlyWarriors())
 
     const lines = [
-      event(
-        "You say the word, and the knight's despair breaks against the " +
-          (byChain
-            ? "chain's light like a wave on stone. "
-            : 'warmth at your heart like a wave on stone. ') +
-          'Slowly, he lifts his visor. ' +
-          'The face beneath is grey and tired, and very human.',
-      ),
+      "The knight's despair breaks against the " +
+        (byChain
+          ? "chain's light like a wave on stone. "
+          : 'warmth at your heart like a wave on stone. ') +
+        'Slowly, he lifts his visor. ' +
+        'The face beneath is grey and tired, and very human.',
       ...confession,
-      event("You received [item_name]Knight's Redemption[/item_name]!"),
+      "You received [item_name]Knight's Redemption[/item_name]!",
     ]
     const stone = this.findEchoStone(gameState)
     if (stone) {
       stone.enhance()
       gameState.setStoryFlag(FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED, true)
       lines.push(
-        event(
-          'The Echo Stone grows warm in your pack. A new voice has joined ' +
-            "the echoes inside it: the knight's own, speaking the truth at last.",
-        ),
+        'The Echo Stone grows warm in your pack. A new voice has joined ' +
+          "the echoes inside it: the knight's own, speaking the truth at last.",
       )
     }
     lines.push(
-      event(
-        `You have learned the [spell_name]${spell.name}[/spell_name] spell! ` +
-          spell.description,
-      ),
+      `You have learned the [spell_name]${spell.name}[/spell_name] spell! ` +
+        spell.description,
     )
     return lines.join('\n')
   }

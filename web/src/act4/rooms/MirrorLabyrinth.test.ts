@@ -62,15 +62,11 @@ describe('MirrorLabyrinth', () => {
 
   it('walks left twice to the fork, each stretch with its own look', () => {
     const { game, room } = inMaze()
-    expect(game.move('west')).toContain(
-      'You turn left, and the glass lets you through.',
-    )
+    expect(game.move('west')).toBe('The glass lets you through.')
     expect(game.state.currentRoom).toBe(room)
     expect(seen(game, room)).toContain(STRETCH)
     expect(exitsOf(game, room)).toEqual(['north', 'east', 'west', 'south'])
-    expect(game.move('west')).toContain(
-      'You turn left again, and the glass lets you through.',
-    )
+    expect(game.move('west')).toBe('The glass lets you through again.')
     expect(seen(game, room)).toContain(FORK)
     expect(exitsOf(game, room)).toEqual(['north', 'east', 'south'])
   })
@@ -91,7 +87,7 @@ describe('MirrorLabyrinth', () => {
       game.move('west')
       expect(game.move(way)).toContain(WRONG)
       expect(seen(game, room)).toContain(ENTRANCE)
-      expect(game.move('west')).toContain('You turn left,')
+      expect(game.move('west')).toContain('The glass lets you through')
       expect(seen(game, room)).toContain(STRETCH)
     },
   )
@@ -170,7 +166,7 @@ describe('MirrorLabyrinth', () => {
     game.move('west')
     room.usePendant(game.state)
     const result = game.move('east')
-    expect(result).toContain('You step into the empty corridor.')
+    expect(result).toContain('Behind you the false mirrors go dark')
     expect(result).toContain('Truth Sight')
     expect(game.state.hasSpell('truth_sight')).toBe(true)
     expect(game.state.getStoryFlag(FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED)).toBe(
@@ -184,7 +180,7 @@ describe('MirrorLabyrinth', () => {
   it('repeats the route for the stone and never solves with it', () => {
     const { game, room } = inMaze()
     const heard = room.useStone(game.state)
-    expect(heard).toContain('You hold the Echo Stone to your ear.')
+    expect(heard).toContain('In the Echo Stone one voice repeats')
     expect(heard).toContain('Left, then left, then the way your shadow')
     game.move('west')
     game.move('west')
@@ -199,7 +195,7 @@ describe('MirrorLabyrinth', () => {
     const { game, room } = inMaze()
     game.move('west')
     const out = game.move('south')
-    expect(out).toContain('You retrace your steps out of the glass.')
+    expect(out).not.toContain('retrace')
     expect(game.state.currentRoom.name).toBe('Outer Courtyard')
     game.move('north')
     expect(game.state.currentRoom).toBe(room)
@@ -246,6 +242,6 @@ describe('MirrorLabyrinth', () => {
     game.loadSaveData(game.toSaveData())
     const loaded = game.state.currentRoom as MirrorLabyrinth
     expect(seen(game, loaded)).toContain(FORK)
-    expect(game.move('east')).toContain('You step into the empty corridor.')
+    expect(game.move('east')).toContain('Behind you the false mirrors go dark')
   })
 })

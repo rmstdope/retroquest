@@ -30,7 +30,7 @@ const NAME_FRIENDS = [
 ]
 
 const STUMBLE =
-  'You set your foot on the stair, and the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down.'
+  'On the stair the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down.'
 const FIRST_LOOK =
   "At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist."
 const LAUGHS =
@@ -140,7 +140,7 @@ describe('The Sorceress of Lies', () => {
     const game = inChamber()
     const shown = executeCommands(game, ["use knight's redemption"])
     expect(shown).toContain(
-      "You hold up the knight's badge. The Sorceress stares at it, and for the first time her smile slips. Beneath the whispers you hear something else: a voice, very small, that is not lying.",
+      "The Sorceress stares at the knight's badge, and for the first time her smile slips. Beneath the whispers you hear something else: a voice, very small, that is not lying.",
     )
     expect(shown).toContain("Heart's Truth")
     expect(shown).toContain('Hear the true heart beneath a lie.')
@@ -276,7 +276,7 @@ describe('The Sorceress of Lies', () => {
         'Elior',
         'I understand. You have been alone in here a long time.',
       ) +
-        '\n[event]The Sorceress goes very still. One by one the crystals stop whispering, until the chamber is silent for the first time in years.[/event]',
+        '\nThe Sorceress goes very still. One by one the crystals stop whispering, until the chamber is silent for the first time in years.',
     )
     expectDialogueSpeaker(said, 'Sorceress of Lies')
     const first = said.indexOf('Elena. The girl at the inn.')
@@ -338,7 +338,7 @@ describe('The Sorceress of Lies', () => {
       'Her staff lies across her knees, bare where the mask once sat.',
     )
     expect(executeCommands(game, ['examine whispers'])).toBe(
-      '[event]The crystals are silent now.[/event]',
+      'The crystals are silent now.',
     )
     expect(executeCommands(game, ["cast heart's truth on whispers"])).toContain(
       'You have already heard whose voice',

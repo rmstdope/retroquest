@@ -1,4 +1,4 @@
-import { Room, type Exits, type GameState, event } from '@/engine'
+import { Room, type Exits, type GameState, clue } from '@/engine'
 import { WardStoneFragment } from '../items/WardStoneFragment'
 import { GuardiansChain } from '../items/GuardiansChain'
 import { GuardiansEssence } from '../items/GuardiansEssence'
@@ -78,9 +78,9 @@ export class FortressGates extends Room {
     if (direction !== 'north' && direction !== 'east') return null
     if (gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) return null
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
-    return (
-      '[failure]A shimmering barrier of dark energy throws you back. It ' +
-      'pulses in rhythm with the ward stones.[/failure]'
+    return clue(
+      'A shimmering barrier of dark energy throws you back. It ' +
+        'pulses in rhythm with the ward stones.',
     )
   }
 
@@ -92,22 +92,20 @@ export class FortressGates extends Room {
         'forward is clear.[/dim]'
       )
     }
-    return (
-      '[failure]Your light falls on the guardians and slides off them. They ' +
-      'stand on the barrier, and the barrier stands on the stones.[/failure]'
+    return clue(
+      'Your light falls on the guardians and slides off them. They ' +
+        'stand on the barrier, and the barrier stands on the stones.',
     )
   }
 
   /** Light on all three stones at once: they keep their count. */
   lightAllStones(gameState: GameState): string {
     if (this.isSolved(gameState)) {
-      return event(
-        'The ward stones are dark. Your light shows only their runes.',
-      )
+      return 'The ward stones are dark. Your light shows only their runes.'
     }
-    return (
-      '[failure]Your light washes over all three stones at once. They drink ' +
-      'it together and keep their count.[/failure]'
+    return clue(
+      'Your light washes over all three stones at once. They drink ' +
+        'it together and keep their count.',
     )
   }
 
@@ -116,17 +114,14 @@ export class FortressGates extends Room {
    * single cast. The others only draw the guardians closer.
    */
   lightStone(gameState: GameState, stone: WardStone): string {
-    const name = stone.side
     if (this.isSolved(gameState)) {
-      return event(
-        `The ${name} stone is dark. Your light shows only its runes.`,
-      )
+      return 'The stone is dark. Your light shows only its runes.'
     }
     if (stone.side !== 'right') {
-      return (
-        `[failure]The ${name} stone drinks your light and pulses brighter, ` +
-        'and the guardians lean closer for a moment. The barrier keeps its ' +
-        'rhythm.[/failure]'
+      return clue(
+        'The stone drinks your light and pulses brighter, ' +
+          'and the guardians lean closer for a moment. The barrier keeps its ' +
+          'rhythm.',
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
@@ -136,19 +131,14 @@ export class FortressGates extends Room {
     this.addItem(new GuardiansChain())
     this.addItem(new GuardiansEssence())
     return (
-      event(
-        'Your light finds the right stone between its beats. It flares, ' +
-          'stutters, and goes dark. A fragment cracks from its face and drops ' +
-          'to the flagstones. The other two stones falter, lose the count, ' +
-          'and go dark with it; the barrier flickers out of time and is gone.',
-      ) +
-      '\n\n' +
-      event(
-        'Without the barrier the guardians have nothing to stand on. They ' +
-          'thin to smoke and are gone, and where they drifted lies the chain ' +
-          'that bound them, and a small orb of golden light: the ' +
-          "[item_name]Guardian's Essence[/item_name].",
-      )
+      'Your light finds the right stone between its beats. It flares, ' +
+      'stutters, and goes dark. A fragment cracks from its face and drops ' +
+      'to the flagstones. The other two stones falter, lose the count, ' +
+      'and go dark with it; the barrier flickers out of time and is gone.\n\n' +
+      'Without the barrier the guardians have nothing to stand on. They ' +
+      'thin to smoke and are gone, and where they drifted lies the chain ' +
+      'that bound them, and a small orb of golden light: the ' +
+      "[item_name]Guardian's Essence[/item_name]."
     )
   }
 }

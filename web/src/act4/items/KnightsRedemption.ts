@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import {
   FLAG_ACT4_BADGE_SHOWN,
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
@@ -23,7 +23,7 @@ export class KnightsRedemption extends Item {
 
   /** The badge's look. */
   override examine(_gameState: GameState): string {
-    return event(this.description)
+    return this.description
   }
 
   /** In the Chamber of Whispers the badge is shown to the Sorceress (once). */
@@ -39,15 +39,11 @@ export class KnightsRedemption extends Item {
     const spell = new HeartsTruth()
     gameState.learnSpell(spell)
     return [
-      event(
-        "You hold up the knight's badge. The Sorceress stares at it, and " +
-          'for the first time her smile slips. Beneath the whispers you ' +
-          'hear something else: a voice, very small, that is not lying.',
-      ),
-      event(
-        `You have learned the [spell_name]${spell.name}[/spell_name] spell! ` +
-          spell.description,
-      ),
+      "The Sorceress stares at the knight's badge, and " +
+        'for the first time her smile slips. Beneath the whispers you ' +
+        'hear something else: a voice, very small, that is not lying.',
+      `You have learned the [spell_name]${spell.name}[/spell_name] spell! ` +
+        spell.description,
     ].join('\n')
   }
 }

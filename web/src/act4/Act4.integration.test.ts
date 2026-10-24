@@ -514,10 +514,10 @@ describe('Act 4 integration', () => {
       'only with your own voice. You lose the way, and find yourself back at ' +
       'the entrance.'
     const STONE_OUTSIDE =
-      "You hold the Echo Stone to your ear. The hall's voices murmur inside " +
-      'it, waiting for somewhere that needs them.'
+      "The hall's voices murmur inside the Echo Stone, waiting for somewhere " +
+      'that needs them.'
     const SOLVED =
-      'You step into the empty corridor. Behind you the false mirrors go ' +
+      'Behind you the false mirrors go ' +
       'dark, one by one, until a single corridor remains — and at its end, a ' +
       'plain mirror that shows you exactly as you are.'
     const ALREADY_CLEAR =
@@ -600,14 +600,12 @@ describe('Act 4 integration', () => {
       )
       expect(entrance).toContain('[exits]west[/exits]')
       const turn1 = executeCommands(game, ['west'])
-      expect(turn1).toContain('You turn left, and the glass lets you through.')
+      expect(turn1).toContain('The glass lets you through.')
       expect(game.state.currentRoom.describe(game.state)).toContain(
         'The corridor narrows and bends, and you face north again.',
       )
       const turn2 = executeCommands(game, ['west'])
-      expect(turn2).toContain(
-        'You turn left again, and the glass lets you through.',
-      )
+      expect(turn2).toContain('The glass lets you through again.')
       const fork = game.state.currentRoom.describe(game.state)
       expect(fork).toContain('The corridor ends in a last fork, facing north.')
       expect(fork).toContain('[exits]east[/exits]')
@@ -633,9 +631,7 @@ describe('Act 4 integration', () => {
     it('retraces south out of the maze and starts again at the entrance', () => {
       toMazeWithStone()
       executeCommands(game, ['west'])
-      expect(executeCommands(game, ['south'])).toContain(
-        'You retrace your steps out of the glass.',
-      )
+      expect(executeCommands(game, ['south'])).toContain('You move south to')
       expectCurrentRoom(game.state, 'Outer Courtyard')
       executeCommands(game, ['north'])
       expect(game.state.currentRoom.describe(game.state)).toContain(
@@ -705,7 +701,7 @@ describe('Act 4 integration', () => {
       ]) {
         const heard = executeCommands(game, [command])
         expect(heard).toContain(
-          'You hold the Echo Stone to your ear. One voice repeats, patient as a heartbeat:',
+          'In the Echo Stone one voice repeats, patient as a heartbeat:',
         )
         expect(heard).toContain(
           "'Left, then left, then the way your shadow does not go.'",
@@ -823,7 +819,9 @@ describe('Act 4 integration', () => {
       executeCommands(game, ['drop echo stone'])
       expect(executeCommands(game, ['go west'])).toContain(NO_STONE)
       executeCommands(game, ['take echo stone'])
-      expect(executeCommands(game, ['go west'])).toContain('You turn left,')
+      expect(executeCommands(game, ['go west'])).toContain(
+        'The glass lets you through',
+      )
     })
 
     it('keeps the after-description and the True Self through a reload', () => {
@@ -970,7 +968,7 @@ describe('Act 4 integration', () => {
         "A tarnished knight's badge, warm to the touch.",
       )
       expect(executeCommands(game, ['use enhanced echo stone'])).toContain(
-        'The voices inside it are clearer now',
+        'The voices inside the stone are clearer now',
       )
     })
 

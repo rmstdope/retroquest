@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED } from '../Act4StoryFlags'
 
 /**
@@ -40,8 +40,8 @@ export class CrystalWhispers extends Item {
   /** The crystals fall silent once the Sorceress is redeemed. */
   override examine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
-      return event('The crystals are silent now.')
+      return 'The crystals are silent now.'
     }
-    return event(this.description)
+    return this.description
   }
 }

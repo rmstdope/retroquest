@@ -16,7 +16,7 @@ describe('Banners', () => {
   it('reads as agreed', () => {
     const game = new Game([new Act4()])
     expect(new Banners().examine(game.state)).toBe(
-      '[event]Tattered banners hang high along the walls, too grimed with age to read. Something is stitched beneath the dirt.[/event]',
+      'Tattered banners hang high along the walls, too grimed with age to read. Something is stitched beneath the dirt.',
     )
   })
 })
@@ -34,8 +34,6 @@ describe('CrystalWhispers', () => {
     const whispers = new CrystalWhispers()
     expect(whispers.examine(game.state)).toContain('You lean close')
     game.state.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
-    expect(whispers.examine(game.state)).toBe(
-      '[event]The crystals are silent now.[/event]',
-    )
+    expect(whispers.examine(game.state)).toBe('The crystals are silent now.')
   })
 })

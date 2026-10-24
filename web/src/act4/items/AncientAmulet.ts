@@ -1,4 +1,4 @@
-import { Item, type Character, type GameState, event } from '@/engine'
+import { Item, type Character, type GameState } from '@/engine'
 import { Malakar } from '../characters/Malakar'
 import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
@@ -48,7 +48,7 @@ export class AncientAmulet extends Item {
     if (endingPlayed(gameState) === 'redemption') stage = 3
     else if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) stage = 2
     else if (gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) stage = 1
-    return event(PICTURE_HEAD + THIRD_FIGURE_STAGES[stage])
+    return PICTURE_HEAD + THIRD_FIGURE_STAGES[stage]
   }
 
   /**

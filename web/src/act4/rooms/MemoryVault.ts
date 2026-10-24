@@ -1,4 +1,4 @@
-import { Room, type Exits, type GameState, dialogue, event } from '@/engine'
+import { Room, type Exits, type GameState, clue, dialogue } from '@/engine'
 import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
   FLAG_ACT4_SHADOW_MASK_SHOWN,
@@ -59,12 +59,12 @@ export class MemoryVault extends Room {
   override blockedExit(gameState: GameState, direction: string): string | null {
     if (direction !== 'east') return null
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
-      return (
-        '[failure]The door is sealed. Its runes glow faintly, waiting for ' +
-        'the amulet.[/failure]'
+      return clue(
+        'The door is sealed. Its runes glow faintly, waiting for ' +
+          'the amulet.',
       )
     }
-    return '[failure]The sealed door will not move. Its runes are dark.[/failure]'
+    return clue('The sealed door will not move. Its runes are dark.')
   }
 
   /** The enhanced Echo Stone mends the orbs (once): the recognition of the dream voice. */
@@ -79,27 +79,22 @@ export class MemoryVault extends Room {
       if (character instanceof ShadowOfThePast) character.gainFace()
     }
     return [
-      event(
-        'You raise the Echo Stone. The voices inside it pour out into the ' +
-          'vault, and the orbs drink them in. One by one the cracks close ' +
-          'and the scenes grow still and clear. The shadow turns towards ' +
-          'you, and for the first time it has a face.',
-      ),
+      'The voices inside the Echo Stone pour out into the ' +
+        'vault, and the orbs drink them in. One by one the cracks close ' +
+        'and the scenes grow still and clear. The shadow turns towards ' +
+        'you, and for the first time it has a face.',
       dialogue(SHADOW_LABEL, 'Elior. You came.'),
-      event(
-        'You know the voice before you know the face. It is the voice from ' +
-          'your dream, the one that called your name on the stormy night in ' +
-          "Willowbrook, and in Nyx's vision, and in the Dragon's hall.",
-      ),
+      'You know the voice before you know the face. It is the voice from ' +
+        'your dream, the one that called your name on the stormy night in ' +
+        "Willowbrook, and in Nyx's vision, and in the Dragon's hall.",
     ].join('\n')
   }
 
   /** Sorceress's Truth is shown to the Shadow: needs the orbs mended; once. */
   showMask(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
-      return (
-        '[failure]You hold out the mask, but the Shadow cannot see it ' +
-        'through the broken memories.[/failure]'
+      return clue(
+        'The Shadow cannot see the mask ' + 'through the broken memories.',
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN)) {
@@ -107,10 +102,8 @@ export class MemoryVault extends Room {
     }
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN, true)
     return [
-      event(
-        'You hold out the silver mask. The Shadow turns it over in hands ' +
-          'that are almost solid now, and gives it back.',
-      ),
+      'The Shadow turns the silver mask over in hands ' +
+        'that are almost solid now, and gives it back.',
       dialogue(
         SHADOW_LABEL,
         'She lied for him for years, and still she chose the truth. Then ' +

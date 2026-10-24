@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, dialogue } from '@/engine'
 import {
   FLAG_ACT4_TOWER_STAIR_OPEN,
   FLAG_ACT4_WHISPERS_CEDRIC_NAMED,
@@ -88,10 +88,10 @@ export class Whispers extends Character {
 
   /** They point at the way out: name one who stayed. */
   override talkTo(_gameState: GameState): string {
-    return event(
+    return (
       'They do not answer you. They only say it again, closer: your ' +
-        'friends have left you. No one is coming. Name one who stayed, if ' +
-        'you can.',
+      'friends have left you. No one is coming. Name one who stayed, if ' +
+      'you can.'
     )
   }
 
@@ -101,35 +101,33 @@ export class Whispers extends Character {
     const friend = FRIENDS.find((f) => f.words.includes(word))
     if (!friend) {
       if (word === 'grandmother') {
-        return event(
+        return (
           'You say it into the dark, and something in you steadies — but ' +
-            'she is far from here, and the whispers know it. Name one who ' +
-            'came with you to the gate.',
+          'she is far from here, and the whispers know it. Name one who ' +
+          'came with you to the gate.'
         )
       }
-      return event(
-        'The whispers swallow the word. Name one who stayed, if you can.',
-      )
+      return 'The whispers swallow the word. Name one who stayed, if you can.'
     }
     if (!gameState.hasItem(TOKEN_NAME)) {
-      return event(
+      return (
         `You say ${friend.pronoun} name into the dark. Nothing answers but ` +
-          'the whispers. Your hand closes on nothing, where the token used ' +
-          'to be.',
+        'the whispers. Your hand closes on nothing, where the token used ' +
+        'to be.'
       )
     }
     if (gameState.getStoryFlag(friend.flag)) {
-      return event(
+      return (
         `The token is still warm from ${friend.object}. ${friend.name} ` +
-          `${friend.doing}; you know that now. The whispers want someone ` +
-          'else.',
+        `${friend.doing}; you know that now. The whispers want someone ` +
+        'else.'
       )
     }
     const named = FRIENDS.filter((f) => gameState.getStoryFlag(f.flag)).length
     gameState.setStoryFlag(friend.flag, true)
     const leadIn = friend.ownLeadIn ?? LEAD_INS[named]
     const parts = [
-      ...(leadIn ? [event(leadIn)] : []),
+      ...(leadIn ? [leadIn] : []),
       dialogue(friend.name, friend.line),
     ]
     if (named === FRIENDS.length - 1) {

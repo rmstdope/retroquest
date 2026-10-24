@@ -1,10 +1,4 @@
-import {
-  Spell,
-  dialogue,
-  event,
-  type Character,
-  type GameState,
-} from '@/engine'
+import { Spell, dialogue, type Character, type GameState } from '@/engine'
 import { GhostlyWarriors } from '../characters/GhostlyWarriors'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
@@ -55,12 +49,12 @@ export class RedemptionsLight extends Spell {
 
   /** The warriors are put at peace (mercy, once) and Sir Cedric forgives the knight; the knight needs no more. */
   override castOnCharacter(gameState: GameState, target: Character): string {
-    if (target instanceof ShadowOfThePast) return event(SHADOW_LINE)
+    if (target instanceof ShadowOfThePast) return SHADOW_LINE
     if (
       target instanceof SorceressOfLies &&
       gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)
     ) {
-      return event(SORCERESS_LINE)
+      return SORCERESS_LINE
     }
     if (!(target instanceof GhostlyWarriors)) {
       return target instanceof KnightOfDespair
@@ -74,16 +68,11 @@ export class RedemptionsLight extends Spell {
     gameState.setStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE, true)
     gameState.addVirtue(VIRTUE_MERCY)
     return (
-      event(
-        'Soft light spills from your hands across the hall. One by one the ' +
-          'ghostly warriors lower their blades and look at one another as if ' +
-          'for the first time. Then they fade, at peace.',
-      ) +
-      '\n' +
-      event(
-        'Sir Cedric watches the last of them go. Then he crosses the hall ' +
-          'and offers the knight his hand.',
-      ) +
+      'Soft light spills from your hands across the hall. One by one the ' +
+      'ghostly warriors lower their blades and look at one another as if ' +
+      'for the first time. Then they fade, at peace.\n' +
+      'Sir Cedric watches the last of them go. Then he crosses the hall ' +
+      'and offers the knight his hand.\n' +
       '\n' +
       dialogue(
         'Sir Cedric',

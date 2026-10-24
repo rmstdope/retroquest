@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, dialogue, event } from '@/engine'
+import { Game, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import { farewell } from '../endings'
@@ -26,17 +26,11 @@ function offered(): Game {
 }
 
 const BARGAIN = [
-  event(
-    "You hold out the amulet. Malakar's hand closes on it, and for a moment neither of you lets go. Then you do.",
-  ),
-  event(
-    "He lifts it toward the thread of light that bleeds from the king's crown. The wound in the air yawns wide, and the chamber goes grey, and then gold.",
-  ),
+  "Malakar's hand closes on the amulet, and for a moment neither of you lets go. Then you do.",
+  "He lifts it toward the thread of light that bleeds from the king's crown. The wound in the air yawns wide, and the chamber goes grey, and then gold.",
   '[breath]A workshop in the late sun. Aren bends over the workbench; Lysa laughs at something he has said. They are young. They do not look up.[/breath]',
   dialogue('Shadow of the Past', 'Not like this. Not by force.'),
-  event(
-    'The amulet will not break. The light runs backwards through the chamber and Malakar is thrown against the throne. You are standing where you stood, and the amulet is warm in your hand.',
-  ),
+  'The amulet will not break. The light runs backwards through the chamber and Malakar is thrown against the throne. You are standing where you stood, and the amulet is warm in your hand.',
   dialogue('Malakar', 'You saw. Then you know I was not lying.'),
 ].join('\n')
 

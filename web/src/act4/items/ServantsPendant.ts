@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { EchoStone } from './EchoStone'
 import { MirrorLabyrinth } from '../rooms/MirrorLabyrinth'
 
@@ -25,9 +25,9 @@ export class ServantsPendant extends Item {
   override use(gameState: GameState): string {
     const room = gameState.currentRoom
     if (room instanceof MirrorLabyrinth) return room.usePendant(gameState)
-    return event(
+    return (
       'The pendant glows faintly. Whoever is behind you has nothing to ' +
-        'say here.',
+      'say here.'
     )
   }
 }

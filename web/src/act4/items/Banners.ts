@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** The Hall of Echoes' banners: scenery that Truth Sight sees through. */
 export class Banners extends Item {
@@ -19,6 +19,6 @@ export class Banners extends Item {
 
   /** Examine the banners. */
   override examine(_gameState: GameState): string {
-    return event(this.description)
+    return this.description
   }
 }

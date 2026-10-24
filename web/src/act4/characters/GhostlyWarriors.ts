@@ -1,4 +1,4 @@
-import { Character, type GameState, event } from '@/engine'
+import { Character, type GameState } from '@/engine'
 
 /**
  * Ghostly warriors fighting an old battle among the banners of the Hall of
@@ -22,7 +22,7 @@ export class GhostlyWarriors extends Character {
 
   /** The warriors' look. */
   override examine(_gameState: GameState): string {
-    return event(this.description)
+    return this.description
   }
 
   /** They cannot hear Elior. */

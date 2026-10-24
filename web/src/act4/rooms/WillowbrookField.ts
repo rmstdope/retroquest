@@ -1,4 +1,4 @@
-import { Room, event, type GameState } from '@/engine'
+import { Room, type GameState } from '@/engine'
 import { Grandmother } from '../characters/Grandmother'
 import { Mira } from '../characters/Mira'
 import { Nyx } from '../characters/Nyx'
@@ -79,7 +79,7 @@ export class WillowbrookField extends Room {
     }
     return (
       `${WALK_HOME}\n${since}\n${GATE_SONG}\n${KNEEL_REMEMBER}\n` +
-      event('You remember the grow spell!')
+      'You remember the grow spell!'
     )
   }
 

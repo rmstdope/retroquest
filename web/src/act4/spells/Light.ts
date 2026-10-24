@@ -1,4 +1,4 @@
-import { Spell, type GameState, type Item, event } from '@/engine'
+import { Spell, type GameState, type Item } from '@/engine'
 import { WardStone } from '../items/WardStone'
 import { WardStones } from '../items/WardStones'
 import { FortressGates } from '../rooms/FortressGates'
@@ -32,9 +32,6 @@ export class Light extends Spell {
         return room.lightAllStones(gameState)
       }
     }
-    return event(
-      `You shine light on the [item_name]${targetItem.name}[/item_name], ` +
-        'illuminating it clearly, but the light has no special effect.',
-    )
+    return 'The light shows it clearly, but has no special effect.'
   }
 }
