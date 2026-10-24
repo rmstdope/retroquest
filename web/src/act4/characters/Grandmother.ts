@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, dialogue } from '@/engine'
 
 /**
  * Grandmother at the gate of Willowbrook Field. The first talk names the
@@ -26,7 +26,7 @@ export class Grandmother extends Character {
       dialogue('Grandmother', "Your mother's. I didn't think you'd remember."),
       dialogue('Grandmother', 'You saw them. I can see it in your face.'),
       dialogue('Elior', 'You knew.'),
-      event('It is not a question.'),
+      'It is not a question.',
       dialogue(
         'Grandmother',
         'I knew. She made me promise, the night she went. ' +

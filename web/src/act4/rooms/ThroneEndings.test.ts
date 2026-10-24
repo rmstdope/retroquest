@@ -16,6 +16,7 @@ import {
 import {
   executeCommands,
   expectDialogueSpeaker,
+  expectMarkupWellFormed,
   expectQuestCompleted,
   expectStoryFlag,
 } from '@/testing/gameHelpers'
@@ -96,6 +97,14 @@ describe('Redemption', () => {
     const text = executeCommands(plain, ['say forgiveness to malakar'])
     expect(text).toContain(dialogue('Elior', 'I forgive you.'))
     expect(text).toContain('You have learned the Forgiveness spell!')
+    expect(text.startsWith(dialogue('Elior', 'I forgive you.'))).toBe(true)
+    expect(text.indexOf('The words are harder')).toBeLessThan(
+      text.indexOf('You have learned the Forgiveness spell!'),
+    )
+    expect(
+      text.indexOf('You have learned the Forgiveness spell!'),
+    ).toBeLessThan(text.indexOf('You would forgive me.'))
+    expectMarkupWellFormed(text)
     expectDialogueSpeaker(text, 'Malakar')
     expect(text).toContain('You would forgive me. They would have too.')
     expect(text).not.toContain('You have shown mercy before')
@@ -103,6 +112,9 @@ describe('Redemption', () => {
     expect(executeCommands(plain, ['say forgiveness to malakar'])).toContain(
       'You have said it. The wound is waiting.',
     )
+    expect(
+      executeCommands(plain, ['say forgiveness to malakar']),
+    ).not.toContain('Elior')
     const merciful = healed([VIRTUE_MERCY])
     expect(executeCommands(merciful, ['say forgiveness to malakar'])).toContain(
       'You have shown mercy before, where none was owed.',

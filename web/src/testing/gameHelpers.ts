@@ -135,14 +135,21 @@ export function expectMarkupWellFormed(text: string): void {
   expect(findMarkupProblems(text), `markup problems in: ${text}`).toEqual([])
 }
 
-/** Every dialogue block is attributed (by the last character name before it) to speaker. */
+/**
+ * Every dialogue block is attributed (by the last character name before it)
+ * to speaker, and at least one is. Blocks introduced by Elior's own name line
+ * are skipped, so his lines may be interleaved; a bare block after one still
+ * counts as his and fails.
+ */
 export function expectDialogueSpeaker(text: string, speaker: string): void {
   const blocks = [...text.matchAll(DIALOGUE_PATTERN)]
   expect(blocks.length, `no dialogue in: ${text}`).toBeGreaterThan(0)
   let narration = ''
   let position = 0
+  let spoken = 0
   for (const block of blocks) {
-    narration += text.slice(position, block.index)
+    const before = text.slice(position, block.index)
+    narration += before
     position = block.index + block[0].length
     const names = [...narration.matchAll(CHARACTER_NAME_PATTERN)].map(
       (m) => m[1],
@@ -151,12 +158,18 @@ export function expectDialogueSpeaker(text: string, speaker: string): void {
       names.length,
       `no speaker before dialogue in: ${text}`,
     ).toBeGreaterThan(0)
-    // Elior's own lines are interleaved with the other speaker's; skip them.
-    if (names.at(-1) === 'Elior' && speaker !== 'Elior') continue
+    // Elior's own lines are interleaved with the other speaker's; skip a
+    // block only when his name line comes directly before it.
+    const own = new RegExp(
+      `\\[character_name\\]Elior\\[/character_name\\]\\s*$`,
+    ).test(before)
+    if (own && speaker.toLowerCase() !== 'elior') continue
+    spoken += 1
     expect(names.at(-1)?.toLowerCase(), `dialogue speaker in: ${text}`).toBe(
       speaker.toLowerCase(),
     )
   }
+  expect(spoken, `${speaker} never speaks in: ${text}`).toBeGreaterThan(0)
 }
 
 /** No dialogue block contains a 'Name:' speaker label. */

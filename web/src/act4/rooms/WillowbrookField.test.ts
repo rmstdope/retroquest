@@ -239,7 +239,7 @@ describe('the companions', () => {
     const first = executeCommands(game, ['talk to grandmother'])
     expect(first).toContain('You saw them. I can see it in your face.')
     expect(first).toContain(
-      dialogue('Elior', 'You knew.') + '\n[event]It is not a question.[/event]',
+      dialogue('Elior', 'You knew.') + '\nIt is not a question.',
     )
     expect(first).toContain(
       'I knew. She made me promise, the night she went. I have not slept a whole night since.',

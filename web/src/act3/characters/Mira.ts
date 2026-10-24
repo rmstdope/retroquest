@@ -629,7 +629,8 @@ export class Mira extends Character {
           'you meant them.',
       ),
       dialogue('Elior', "Why didn't you tell me?"),
-      speech(
+      dialogue(
+        'Mira',
         "Because the seal could not bear it. Malakar's cloaked agent " +
           "walked Willowbrook's lanes searching for the amulet, and any " +
           'word of who you were could have reached him.',

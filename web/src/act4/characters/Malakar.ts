@@ -268,11 +268,9 @@ export class Malakar extends Character {
     gameState.learnSpell(new Forgiveness())
     const lines = [
       dialogue('Elior', 'I forgive you.'),
-      event(
-        'The words are harder than any spell, and then they are easy. ' +
-          'Something warm settles in your chest, like a lesson you always ' +
-          'knew.',
-      ),
+      'The words are harder than any spell, and then they are easy. ' +
+        'Something warm settles in your chest, like a lesson you always ' +
+        'knew.',
       event('You have learned the Forgiveness spell!'),
       dialogue(this.name, 'You would forgive me. They would have too.'),
     ]
