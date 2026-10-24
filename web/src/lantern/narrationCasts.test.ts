@@ -44,6 +44,20 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
     expect(uncast).toEqual([])
   })
 
+  it('carries the act-complete heading in its script', () => {
+    const title = [
+      '',
+      'The Call to Adventure',
+      'The Gathering Storm',
+      'Trials and Revelations',
+      'The Final Confrontation',
+    ][act]
+    const numeral = ['', 'I', 'II', 'III', 'IV'][act]
+    expect(script.map((line) => line.text)).toContain(
+      `Act ${numeral} complete. ${title}.`,
+    )
+  })
+
   it('gives every key-scene direction to a line of the script', () => {
     const keys = new Set(script.map((line) => line.key))
     expect(Object.keys(cues).filter((key) => !keys.has(key))).toEqual([])
@@ -70,12 +84,22 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
       expect(existsSync(new URL(`act${act}/${clip.file}`, AUDIO))).toBe(true)
   })
 
-  it('records every line for its speaker', () => {
+  it('records each recorded line in its speaker’s voice', () => {
     const manifest = JSON.parse(
       readFileSync(new URL(`act${act}/manifest.json`, AUDIO), 'utf8'),
     ) as NarrationManifest
     for (const line of script.filter((entry) => manifest[entry.key]))
       expect(manifest[line.key]?.speaker).toBe(line.speaker)
+  })
+})
+
+describe('the closing line of Act III', () => {
+  it('is in the script', () => {
+    const script = read<Line[]>(3, 'script.json')
+    expect(script.map((line) => line.text)).toContain(
+      "Your parents were Malakar's closest friends. " +
+        'The Dragon says they are warded away, not dead.',
+    )
   })
 })
 
