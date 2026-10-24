@@ -240,21 +240,6 @@
     "text": "You cleansed the pillars and set the Moon Rune shards—the Moon Sigil resonates and the flood wards steady, granting safe passage toward the sanctum."
   },
   {
-    "key": "033cc29645073c",
-    "speaker": "narrator",
-    "text": "Collapsed Pier"
-  },
-  {
-    "key": "06cd9c1529a07c",
-    "speaker": "narrator",
-    "text": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
-  },
-  {
-    "key": "0335233ece7341",
-    "speaker": "narrator",
-    "text": "Barnacles crust the seam; the fused lock will not yield to a mundane key."
-  },
-  {
     "key": "1ea2e4c09febb6",
     "speaker": "narrator",
     "text": "The Pier Warden nods slowly."
@@ -268,6 +253,26 @@
     "key": "1111e4b770f030",
     "speaker": "pier warden",
     "text": "You'll have seen the causeway. Birds by the hundred, and the surf gone grey. I've known bad seasons on this coast, forty years of them. It's only a bad season, isn't it? Tell me the sea will mend on its own."
+  },
+  {
+    "key": "13cb2515f1f7c2",
+    "speaker": "pier warden",
+    "text": "… Aye. I think I knew it, and only wanted someone to say otherwise. Better a hard truth than a soft lie. I'll send word up the coast to keep the boats in."
+  },
+  {
+    "key": "033cc29645073c",
+    "speaker": "narrator",
+    "text": "Collapsed Pier"
+  },
+  {
+    "key": "06cd9c1529a07c",
+    "speaker": "narrator",
+    "text": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
+  },
+  {
+    "key": "0335233ece7341",
+    "speaker": "narrator",
+    "text": "Barnacles crust the seam; the fused lock will not yield to a mundane key."
   },
   {
     "key": "17d430e5173bf0",
@@ -563,6 +568,16 @@
     "key": "06b4c703750138",
     "speaker": "narrator",
     "text": "The mirrors are whole. The sun is not where it needs to be. Perhaps rest a while, and let it climb."
+  },
+  {
+    "key": "0cf7b3dfb6fccb",
+    "speaker": "narrator",
+    "text": "The deeper cut fills. Malakar's name sits level with your parents' again, as it was the day they wrote it."
+  },
+  {
+    "key": "1d382b3fb34138",
+    "speaker": "narrator",
+    "text": "The three names sit level and whole. There is nothing left to mend."
   },
   {
     "key": "12923ed6b7af2a",
@@ -1025,6 +1040,26 @@
     "text": "Still quiet. I'll keep it, if that's all right. Just till we're up top."
   },
   {
+    "key": "1fcdb0984e1e5b",
+    "speaker": "narrator",
+    "text": "The phantoms turn toward you, their voices rising in a chorus of whispered syllables that seem to flow like water over stone. The words are just beyond comprehension, as if spoken in a language forgotten by time."
+  },
+  {
+    "key": "0808ef77c79013",
+    "speaker": "narrator",
+    "text": "Beneath the whispers, a few of them are humming: a slow tune that climbs three notes and settles home again."
+  },
+  {
+    "key": "09024faf364039",
+    "speaker": "narrator",
+    "text": "Through the murmur, one word comes clear, over and over: rest … rest …"
+  },
+  {
+    "key": "01ae36be3b8b54",
+    "speaker": "narrator",
+    "text": "The whispering falters. One by one the figures turn toward you, and the urgency drains out of them. They thin like mist in morning sun, and then they are gone. The chamber is quieter for it, but not yet still."
+  },
+  {
     "key": "0e8d73eea987bd",
     "speaker": "narrator",
     "text": "Stillness Vestibule"
@@ -1048,21 +1083,6 @@
     "key": "08b78bf78ab69e",
     "speaker": "silence keeper",
     "text": "The stones in this room were cut to carry a whisper to the sleeper without waking it. They have gone cold. But a chant will not carry over troubled water, and these pools are not as still as they seem. Bless them, and give them the old chant, and the way will open."
-  },
-  {
-    "key": "1fcdb0984e1e5b",
-    "speaker": "narrator",
-    "text": "The phantoms turn toward you, their voices rising in a chorus of whispered syllables that seem to flow like water over stone. The words are just beyond comprehension, as if spoken in a language forgotten by time."
-  },
-  {
-    "key": "0808ef77c79013",
-    "speaker": "narrator",
-    "text": "Beneath the whispers, a few of them are humming: a slow tune that climbs three notes and settles home again."
-  },
-  {
-    "key": "09024faf364039",
-    "speaker": "narrator",
-    "text": "Through the murmur, one word comes clear, over and over: rest … rest …"
   },
   {
     "key": "0bfd191577b57a",
@@ -1203,6 +1223,26 @@
     "key": "0bd2bba9a2b5e0",
     "speaker": "narrator",
     "text": "You have claimed the Dragon's Scale, its obsidian surface gleaming with ancient power. The dragon's wisdom echoes in your mind, a testament to the selflessness you have proven. With all three relics in hand, the final trial awaits—the Warding Rite that will determine the fate of all."
+  },
+  {
+    "key": "08f93e4b81770a",
+    "speaker": "narrator",
+    "text": "Light runs along the cracked ring like water finding its course. The sigils brighten, steady, and hold."
+  },
+  {
+    "key": "043464b8e63815",
+    "speaker": "narrator",
+    "text": "The ancient dragon lowers its head."
+  },
+  {
+    "key": "16ef2605a79977",
+    "speaker": "ancient dragon",
+    "text": "You said you would return what you took. Most forget by the time they reach the door. Your parents would have done the same."
+  },
+  {
+    "key": "1f875adda26fc7",
+    "speaker": "ancient dragon",
+    "text": "Go with my blessing, young one. The prison holds."
   },
   {
     "key": "0ea6d71e45791d",

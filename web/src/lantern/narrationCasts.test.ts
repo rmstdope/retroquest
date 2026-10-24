@@ -97,11 +97,12 @@ function keyScenes(act: number): string[] {
 }
 
 describe('the key-scene directions', () => {
-  it('number 29 lines for the 25 scenes across Acts II to IV', () => {
+  it('number 32 lines for the 25 scenes across Acts II to IV', () => {
     const total = [2, 3, 4].reduce((sum, act) => sum + keyScenes(act).length, 0)
     // 25 scenes; "You. / Me." is two lines, King Alden's "Go home" three, the
-    // Charred Notebook's softer reading two.
-    expect(total).toBe(29)
+    // Charred Notebook's softer reading two. Three optional lines take their
+    // scene's manner: the dragon's two after the sigils, Malakar's after the Bargain.
+    expect(total).toBe(32)
   })
 })
 

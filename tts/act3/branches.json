@@ -1,3 +1,40 @@
 [
-  { "after": 92, "commands": ["take quiet charm", "n", "give quiet charm to tobin", "talk to tobin"] }
+  {
+    "after": 92,
+    "commands": [
+      "take quiet charm",
+      "n",
+      "give quiet charm to tobin",
+      "talk to tobin"
+    ]
+  },
+  {
+    "after": 14,
+    "commands": [
+      "talk to pier warden",
+      "say truth to pier warden",
+      "talk to pier warden"
+    ]
+  },
+  {
+    "after": 48,
+    "commands": [
+      "cast mend on charred inscription",
+      "cast mend on charred inscription"
+    ]
+  },
+  {
+    "after": 92,
+    "commands": [
+      "talk to wandering phantoms",
+      "say rest to wandering phantoms"
+    ]
+  },
+  {
+    "after": 100,
+    "commands": [
+      "cast bless on sigils",
+      "talk to ancient dragon"
+    ]
+  }
 ]

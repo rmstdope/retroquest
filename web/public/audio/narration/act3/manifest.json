@@ -1407,6 +1407,213 @@
    }
   ]
  },
+ "01ae36be3b8b54": {
+  "file": "01ae36be3b8b54.mp3",
+  "speaker": "narrator",
+  "duration": 15.464,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "whispering",
+    "start": 0.18,
+    "end": 0.66
+   },
+   {
+    "word": "falters.",
+    "start": 0.66,
+    "end": 1.32
+   },
+   {
+    "word": "One",
+    "start": 1.54,
+    "end": 2.12
+   },
+   {
+    "word": "by",
+    "start": 2.12,
+    "end": 2.32
+   },
+   {
+    "word": "one",
+    "start": 2.32,
+    "end": 2.64
+   },
+   {
+    "word": "the",
+    "start": 2.64,
+    "end": 2.82
+   },
+   {
+    "word": "figures",
+    "start": 2.82,
+    "end": 3.26
+   },
+   {
+    "word": "turn",
+    "start": 3.26,
+    "end": 3.64
+   },
+   {
+    "word": "toward",
+    "start": 3.64,
+    "end": 3.92
+   },
+   {
+    "word": "you,",
+    "start": 3.92,
+    "end": 4.14
+   },
+   {
+    "word": "and",
+    "start": 4.14,
+    "end": 4.68
+   },
+   {
+    "word": "the",
+    "start": 4.68,
+    "end": 4.8
+   },
+   {
+    "word": "urgency",
+    "start": 4.8,
+    "end": 5.34
+   },
+   {
+    "word": "drains",
+    "start": 5.34,
+    "end": 5.88
+   },
+   {
+    "word": "out",
+    "start": 5.88,
+    "end": 6.14
+   },
+   {
+    "word": "of",
+    "start": 6.14,
+    "end": 6.28
+   },
+   {
+    "word": "them.",
+    "start": 6.28,
+    "end": 6.46
+   },
+   {
+    "word": "They",
+    "start": 6.8,
+    "end": 7.4
+   },
+   {
+    "word": "thin",
+    "start": 7.4,
+    "end": 7.76
+   },
+   {
+    "word": "like",
+    "start": 7.76,
+    "end": 8.08
+   },
+   {
+    "word": "mist",
+    "start": 8.08,
+    "end": 8.52
+   },
+   {
+    "word": "in",
+    "start": 8.52,
+    "end": 8.72
+   },
+   {
+    "word": "morning",
+    "start": 8.72,
+    "end": 9.02
+   },
+   {
+    "word": "sun,",
+    "start": 9.02,
+    "end": 9.46
+   },
+   {
+    "word": "and",
+    "start": 9.46,
+    "end": 10.08
+   },
+   {
+    "word": "then",
+    "start": 10.08,
+    "end": 10.28
+   },
+   {
+    "word": "they",
+    "start": 10.28,
+    "end": 10.48
+   },
+   {
+    "word": "are",
+    "start": 10.48,
+    "end": 10.66
+   },
+   {
+    "word": "gone.",
+    "start": 10.66,
+    "end": 11.0
+   },
+   {
+    "word": "The",
+    "start": 11.48,
+    "end": 12.02
+   },
+   {
+    "word": "chamber",
+    "start": 12.02,
+    "end": 12.36
+   },
+   {
+    "word": "is",
+    "start": 12.36,
+    "end": 12.6
+   },
+   {
+    "word": "quieter",
+    "start": 12.6,
+    "end": 13.1
+   },
+   {
+    "word": "for",
+    "start": 13.1,
+    "end": 13.4
+   },
+   {
+    "word": "it,",
+    "start": 13.4,
+    "end": 13.66
+   },
+   {
+    "word": "but",
+    "start": 13.84,
+    "end": 14.24
+   },
+   {
+    "word": "not",
+    "start": 14.24,
+    "end": 14.52
+   },
+   {
+    "word": "yet",
+    "start": 14.52,
+    "end": 14.76
+   },
+   {
+    "word": "still.",
+    "start": 14.76,
+    "end": 15.1
+   }
+  ]
+ },
  "01b164bb55cfa5": {
   "file": "01b164bb55cfa5.mp3",
   "speaker": "mira",
@@ -4323,6 +4530,43 @@
     "word": "comes.",
     "start": 18.08,
     "end": 18.54
+   }
+  ]
+ },
+ "043464b8e63815": {
+  "file": "043464b8e63815.mp3",
+  "speaker": "narrator",
+  "duration": 2.461,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "ancient",
+    "start": 0.16,
+    "end": 0.6
+   },
+   {
+    "word": "dragon",
+    "start": 0.6,
+    "end": 1.06
+   },
+   {
+    "word": "lowers",
+    "start": 1.06,
+    "end": 1.6
+   },
+   {
+    "word": "its",
+    "start": 1.6,
+    "end": 1.9
+   },
+   {
+    "word": "head.",
+    "start": 1.9,
+    "end": 2.16
    }
   ]
  },
@@ -10852,6 +11096,98 @@
    }
   ]
  },
+ "08f93e4b81770a": {
+  "file": "08f93e4b81770a.mp3",
+  "speaker": "narrator",
+  "duration": 7.477,
+  "words": [
+   {
+    "word": "Light",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "runs",
+    "start": 0.36,
+    "end": 0.76
+   },
+   {
+    "word": "along",
+    "start": 0.76,
+    "end": 1.06
+   },
+   {
+    "word": "the",
+    "start": 1.06,
+    "end": 1.26
+   },
+   {
+    "word": "cracked",
+    "start": 1.26,
+    "end": 1.62
+   },
+   {
+    "word": "ring",
+    "start": 1.62,
+    "end": 1.96
+   },
+   {
+    "word": "like",
+    "start": 1.96,
+    "end": 2.22
+   },
+   {
+    "word": "water",
+    "start": 2.22,
+    "end": 2.66
+   },
+   {
+    "word": "finding",
+    "start": 2.66,
+    "end": 3.3
+   },
+   {
+    "word": "its",
+    "start": 3.3,
+    "end": 3.56
+   },
+   {
+    "word": "course.",
+    "start": 3.56,
+    "end": 3.94
+   },
+   {
+    "word": "The",
+    "start": 4.22,
+    "end": 4.88
+   },
+   {
+    "word": "sigils",
+    "start": 4.88,
+    "end": 5.34
+   },
+   {
+    "word": "brighten,",
+    "start": 5.34,
+    "end": 5.78
+   },
+   {
+    "word": "steady,",
+    "start": 6.06,
+    "end": 6.58
+   },
+   {
+    "word": "and",
+    "start": 6.58,
+    "end": 6.84
+   },
+   {
+    "word": "hold.",
+    "start": 6.84,
+    "end": 7.18
+   }
+  ]
+ },
  "09024faf364039": {
   "file": "09024faf364039.mp3",
   "speaker": "narrator",
@@ -14830,6 +15166,113 @@
     "word": "Gallery",
     "start": 0.54,
     "end": 0.84
+   }
+  ]
+ },
+ "0cf7b3dfb6fccb": {
+  "file": "0cf7b3dfb6fccb.mp3",
+  "speaker": "narrator",
+  "duration": 7.477,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "deeper",
+    "start": 0.18,
+    "end": 0.56
+   },
+   {
+    "word": "cut",
+    "start": 0.56,
+    "end": 0.94
+   },
+   {
+    "word": "fills.",
+    "start": 0.94,
+    "end": 1.36
+   },
+   {
+    "word": "Malakar's",
+    "start": 1.36,
+    "end": 2.86
+   },
+   {
+    "word": "name",
+    "start": 2.86,
+    "end": 3.14
+   },
+   {
+    "word": "sits",
+    "start": 3.14,
+    "end": 3.44
+   },
+   {
+    "word": "level",
+    "start": 3.44,
+    "end": 3.84
+   },
+   {
+    "word": "with",
+    "start": 3.84,
+    "end": 4.08
+   },
+   {
+    "word": "your",
+    "start": 4.08,
+    "end": 4.26
+   },
+   {
+    "word": "parents'",
+    "start": 4.26,
+    "end": 4.66
+   },
+   {
+    "word": "again,",
+    "start": 4.66,
+    "end": 5.02
+   },
+   {
+    "word": "as",
+    "start": 5.36,
+    "end": 5.86
+   },
+   {
+    "word": "it",
+    "start": 5.86,
+    "end": 5.98
+   },
+   {
+    "word": "was",
+    "start": 5.98,
+    "end": 6.26
+   },
+   {
+    "word": "the",
+    "start": 6.26,
+    "end": 6.42
+   },
+   {
+    "word": "day",
+    "start": 6.42,
+    "end": 6.62
+   },
+   {
+    "word": "they",
+    "start": 6.62,
+    "end": 6.88
+   },
+   {
+    "word": "wrote",
+    "start": 6.88,
+    "end": 7.16
+   },
+   {
+    "word": "it.",
+    "start": 7.16,
+    "end": 7.32
    }
   ]
  },
@@ -22566,6 +23009,178 @@
    }
   ]
  },
+ "13cb2515f1f7c2": {
+  "file": "13cb2515f1f7c2.mp3",
+  "speaker": "pier warden",
+  "duration": 10.82,
+  "words": [
+   {
+    "word": "\u2026",
+    "start": 0.0,
+    "end": 0.56
+   },
+   {
+    "word": "Aye.",
+    "start": 0.56,
+    "end": 1.12
+   },
+   {
+    "word": "I",
+    "start": 1.12,
+    "end": 1.68
+   },
+   {
+    "word": "think",
+    "start": 1.68,
+    "end": 2.24
+   },
+   {
+    "word": "I",
+    "start": 2.24,
+    "end": 2.52
+   },
+   {
+    "word": "knew",
+    "start": 2.52,
+    "end": 2.8
+   },
+   {
+    "word": "it,",
+    "start": 2.8,
+    "end": 3.0
+   },
+   {
+    "word": "and",
+    "start": 3.0,
+    "end": 3.4
+   },
+   {
+    "word": "only",
+    "start": 3.4,
+    "end": 3.66
+   },
+   {
+    "word": "wanted",
+    "start": 3.66,
+    "end": 3.98
+   },
+   {
+    "word": "someone",
+    "start": 3.98,
+    "end": 4.3
+   },
+   {
+    "word": "to",
+    "start": 4.3,
+    "end": 4.48
+   },
+   {
+    "word": "say",
+    "start": 4.48,
+    "end": 4.68
+   },
+   {
+    "word": "otherwise.",
+    "start": 4.68,
+    "end": 5.1
+   },
+   {
+    "word": "Better",
+    "start": 5.58,
+    "end": 6.08
+   },
+   {
+    "word": "a",
+    "start": 6.08,
+    "end": 6.3
+   },
+   {
+    "word": "hard",
+    "start": 6.3,
+    "end": 6.62
+   },
+   {
+    "word": "truth",
+    "start": 6.62,
+    "end": 6.94
+   },
+   {
+    "word": "than",
+    "start": 6.94,
+    "end": 7.12
+   },
+   {
+    "word": "a",
+    "start": 7.12,
+    "end": 7.26
+   },
+   {
+    "word": "soft",
+    "start": 7.26,
+    "end": 7.54
+   },
+   {
+    "word": "lie.",
+    "start": 7.54,
+    "end": 7.86
+   },
+   {
+    "word": "I'll",
+    "start": 8.16,
+    "end": 8.62
+   },
+   {
+    "word": "send",
+    "start": 8.62,
+    "end": 8.88
+   },
+   {
+    "word": "word",
+    "start": 8.88,
+    "end": 9.14
+   },
+   {
+    "word": "up",
+    "start": 9.14,
+    "end": 9.32
+   },
+   {
+    "word": "the",
+    "start": 9.32,
+    "end": 9.46
+   },
+   {
+    "word": "coast",
+    "start": 9.46,
+    "end": 9.76
+   },
+   {
+    "word": "to",
+    "start": 9.76,
+    "end": 9.94
+   },
+   {
+    "word": "keep",
+    "start": 9.94,
+    "end": 10.12
+   },
+   {
+    "word": "the",
+    "start": 10.12,
+    "end": 10.26
+   },
+   {
+    "word": "boats",
+    "start": 10.26,
+    "end": 10.56
+   },
+   {
+    "word": "in.",
+    "start": 10.56,
+    "end": 10.74
+   }
+  ]
+ },
  "13d176b3ac9774": {
   "file": "13d176b3ac9774.mp3",
   "speaker": "mira",
@@ -25074,6 +25689,133 @@
     "word": "will.",
     "start": 3.58,
     "end": 3.94
+   }
+  ]
+ },
+ "16ef2605a79977": {
+  "file": "16ef2605a79977.mp3",
+  "speaker": "ancient dragon",
+  "duration": 9.288,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "said",
+    "start": 0.2,
+    "end": 0.58
+   },
+   {
+    "word": "you",
+    "start": 0.58,
+    "end": 1.08
+   },
+   {
+    "word": "would",
+    "start": 1.08,
+    "end": 1.3
+   },
+   {
+    "word": "return",
+    "start": 1.3,
+    "end": 1.72
+   },
+   {
+    "word": "what",
+    "start": 1.72,
+    "end": 2.1
+   },
+   {
+    "word": "you",
+    "start": 2.1,
+    "end": 2.28
+   },
+   {
+    "word": "took.",
+    "start": 2.28,
+    "end": 2.7
+   },
+   {
+    "word": "Most",
+    "start": 3.22,
+    "end": 3.9
+   },
+   {
+    "word": "forget",
+    "start": 3.9,
+    "end": 4.44
+   },
+   {
+    "word": "by",
+    "start": 4.44,
+    "end": 4.8
+   },
+   {
+    "word": "the",
+    "start": 4.8,
+    "end": 4.98
+   },
+   {
+    "word": "time",
+    "start": 4.98,
+    "end": 5.24
+   },
+   {
+    "word": "they",
+    "start": 5.24,
+    "end": 5.52
+   },
+   {
+    "word": "reach",
+    "start": 5.52,
+    "end": 5.86
+   },
+   {
+    "word": "the",
+    "start": 5.86,
+    "end": 6.04
+   },
+   {
+    "word": "door.",
+    "start": 6.04,
+    "end": 6.4
+   },
+   {
+    "word": "Your",
+    "start": 6.8,
+    "end": 7.28
+   },
+   {
+    "word": "parents",
+    "start": 7.28,
+    "end": 7.74
+   },
+   {
+    "word": "would",
+    "start": 7.74,
+    "end": 8.02
+   },
+   {
+    "word": "have",
+    "start": 8.02,
+    "end": 8.16
+   },
+   {
+    "word": "done",
+    "start": 8.16,
+    "end": 8.38
+   },
+   {
+    "word": "the",
+    "start": 8.38,
+    "end": 8.6
+   },
+   {
+    "word": "same.",
+    "start": 8.6,
+    "end": 8.88
    }
   ]
  },
@@ -31586,6 +32328,78 @@
    }
   ]
  },
+ "1d382b3fb34138": {
+  "file": "1d382b3fb34138.mp3",
+  "speaker": "narrator",
+  "duration": 5.155,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "three",
+    "start": 0.36,
+    "end": 0.62
+   },
+   {
+    "word": "names",
+    "start": 0.62,
+    "end": 1.02
+   },
+   {
+    "word": "sit",
+    "start": 1.02,
+    "end": 1.4
+   },
+   {
+    "word": "level",
+    "start": 1.4,
+    "end": 1.84
+   },
+   {
+    "word": "and",
+    "start": 1.84,
+    "end": 2.3
+   },
+   {
+    "word": "whole.",
+    "start": 2.3,
+    "end": 2.7
+   },
+   {
+    "word": "There",
+    "start": 2.98,
+    "end": 3.46
+   },
+   {
+    "word": "is",
+    "start": 3.46,
+    "end": 3.64
+   },
+   {
+    "word": "nothing",
+    "start": 3.64,
+    "end": 3.98
+   },
+   {
+    "word": "left",
+    "start": 3.98,
+    "end": 4.36
+   },
+   {
+    "word": "to",
+    "start": 4.36,
+    "end": 4.62
+   },
+   {
+    "word": "mend.",
+    "start": 4.62,
+    "end": 4.92
+   }
+  ]
+ },
  "1d3bd3d9b68746": {
   "file": "1d3bd3d9b68746.mp3",
   "speaker": "mira",
@@ -35142,6 +35956,58 @@
     "word": "quest",
     "start": 0.72,
     "end": 1.2
+   }
+  ]
+ },
+ "1f875adda26fc7": {
+  "file": "1f875adda26fc7.mp3",
+  "speaker": "ancient dragon",
+  "duration": 4.598,
+  "words": [
+   {
+    "word": "Go",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "with",
+    "start": 0.38,
+    "end": 0.66
+   },
+   {
+    "word": "my",
+    "start": 0.66,
+    "end": 0.88
+   },
+   {
+    "word": "blessing,",
+    "start": 0.88,
+    "end": 1.5
+   },
+   {
+    "word": "young",
+    "start": 1.68,
+    "end": 1.84
+   },
+   {
+    "word": "one.",
+    "start": 1.84,
+    "end": 2.2
+   },
+   {
+    "word": "The",
+    "start": 2.42,
+    "end": 2.92
+   },
+   {
+    "word": "prison",
+    "start": 2.92,
+    "end": 3.52
+   },
+   {
+    "word": "holds.",
+    "start": 3.52,
+    "end": 4.1
    }
   ]
  },
