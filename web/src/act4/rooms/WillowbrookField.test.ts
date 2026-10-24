@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, GameRunState } from '@/engine'
+import { Game, GameRunState, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { Grow } from '../spells/Grow'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
@@ -238,7 +238,9 @@ describe('the companions', () => {
     const game = home('redemption')
     const first = executeCommands(game, ['talk to grandmother'])
     expect(first).toContain('You saw them. I can see it in your face.')
-    expect(first).toContain('“You knew,” you say. It is not a question.')
+    expect(first).toContain(
+      dialogue('Elior', 'You knew.') + '\nIt is not a question.',
+    )
     expect(first).toContain(
       'I knew. She made me promise, the night she went. I have not slept a whole night since.',
     )

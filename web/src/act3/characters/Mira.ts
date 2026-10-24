@@ -626,9 +626,11 @@ export class Mira extends Character {
       ),
       event(
         'For a moment you cannot speak. Then the words come out harder than ' +
-          "you meant them: 'Why didn't you tell me?'",
+          'you meant them.',
       ),
-      speech(
+      dialogue('Elior', "Why didn't you tell me?"),
+      dialogue(
+        'Mira',
         "Because the seal could not bear it. Malakar's cloaked agent " +
           "walked Willowbrook's lanes searching for the amulet, and any " +
           'word of who you were could have reached him.',

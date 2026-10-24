@@ -8,7 +8,11 @@ import {
   speech,
 } from '@/engine'
 import { Act3 } from '../Act3'
-import { executeCommands } from '@/testing/gameHelpers'
+import {
+  executeCommands,
+  expectDialogueSpeaker,
+  expectMarkupWellFormed,
+} from '@/testing/gameHelpers'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
@@ -546,9 +550,11 @@ describe('Mira confesses before the Warding Rite', () => {
         "Your grandmother knew. She is Lysa's mother, and she kept the secret with me.",
       ),
       event(
-        "For a moment you cannot speak. Then the words come out harder than you meant them: 'Why didn't you tell me?'",
+        'For a moment you cannot speak. Then the words come out harder than you meant them.',
       ),
-      speech(
+      dialogue('Elior', "Why didn't you tell me?"),
+      dialogue(
+        'Mira',
         "Because the seal could not bear it. Malakar's cloaked agent walked Willowbrook's lanes searching for the amulet, and any word of who you were could have reached him.",
       ),
       speech(
@@ -567,6 +573,8 @@ describe('Mira confesses before the Warding Rite', () => {
       MIRA_TOPICS_REMINDER,
     ].join('\n')
     expect(out).toBe(expected)
+    expectDialogueSpeaker(out, 'Mira')
+    expectMarkupWellFormed(out)
     expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED)).toBe(
       false,

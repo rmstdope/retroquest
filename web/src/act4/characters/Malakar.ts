@@ -204,11 +204,13 @@ export class Malakar extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
       return '[dim]You have said it. Malakar heard.[/dim]'
     }
-    const refrainLine = event(
-      '“Power follows purpose; purpose follows truth,” you say. The ' +
-        "words from the stone in Willowbrook, from Nyx, from the Dragon's " +
-        'hall. They are yours now.',
-    )
+    const refrainLine = [
+      dialogue('Elior', 'Power follows purpose; purpose follows truth.'),
+      event(
+        "The words from the stone in Willowbrook, from Nyx, from the Dragon's " +
+          'hall. They are yours now.',
+      ),
+    ].join('\n')
     if (!gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)) {
       // Said before he has spoken: the refrain does not count yet.
       return [
@@ -265,9 +267,10 @@ export class Malakar extends Character {
     gameState.setStoryFlag(FLAG_ACT4_FORGIVENESS_SAID, true)
     gameState.learnSpell(new Forgiveness())
     const lines = [
-      '“I forgive you,” you say. The words are harder than any spell, and ' +
-        'then they are easy. Something warm settles in your chest, like a ' +
-        'lesson you always knew.',
+      dialogue('Elior', 'I forgive you.'),
+      'The words are harder than any spell, and then they are easy. ' +
+        'Something warm settles in your chest, like a lesson you always ' +
+        'knew.',
       event('You have learned the Forgiveness spell!'),
       dialogue(this.name, 'You would forgive me. They would have too.'),
     ]
@@ -289,9 +292,12 @@ export class Malakar extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_JUSTICE_SAID)) return SAID_AMULET
     gameState.setStoryFlag(FLAG_ACT4_JUSTICE_SAID, true)
     return [
-      '“You tore the world, Malakar,” you say. “You drained the king. You ' +
-        'sent a man to hunt a child in Willowbrook, and you let Sir Cedric ' +
-        "take the blame. I will not pretend you didn't.”",
+      dialogue(
+        'Elior',
+        'You tore the world, Malakar. You drained the king. You sent a man ' +
+          'to hunt a child in Willowbrook, and you let Sir Cedric take the ' +
+          "blame. I will not pretend you didn't.",
+      ),
       dialogue(this.name, "No. You won't. Your mother never could either."),
       AMULET_READY,
     ].join('\n')
@@ -303,7 +309,7 @@ export class Malakar extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_SACRIFICE_SAID)) return SAID_AMULET
     gameState.setStoryFlag(FLAG_ACT4_SACRIFICE_SAID, true)
     return [
-      '“Take my magic,” you say. “All of it. Close the wound with that.”',
+      dialogue('Elior', 'Take my magic. All of it. Close the wound with that.'),
       dialogue(
         this.name,
         'No. Your parents poured themselves into that wound once already. ' +

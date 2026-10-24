@@ -12,6 +12,11 @@ import { SorceressTruth } from '../items/SorceressTruth'
 import { CHAMBER_AFTER_REDEMPTION } from '../rooms/chamberDescriptions'
 import { normaliseSpokenWord } from '../spokenWord'
 
+/** What the chamber does the moment she is heard. */
+const CRYSTALS_QUIET =
+  'One by one the crystals stop whispering, until the chamber is silent for ' +
+  'the first time in years.'
+
 /** What she is called once she is redeemed. */
 const UNMASKED_NAME = 'Unmasked Sorceress'
 
@@ -139,8 +144,13 @@ export class SorceressOfLies extends Character {
     if (word !== 'understanding') return '[dim]The Sorceress only smiles.[/dim]'
     return this.understandBy(
       gameState,
-      '“I understand,” you say. “You have been alone in here a long ' +
-        'time.” The Sorceress goes very still.',
+      [
+        dialogue(
+          'Elior',
+          'I understand. You have been alone in here a long time.',
+        ),
+        event(`The Sorceress goes very still. ${CRYSTALS_QUIET}`),
+      ].join('\n'),
     )
   }
 
@@ -156,13 +166,15 @@ export class SorceressOfLies extends Character {
     }
     return this.understandBy(
       gameState,
-      'You say nothing. You stand in the middle of her chamber and listen, ' +
-        'to all of it, for as long as it takes. The Sorceress goes very ' +
-        'still.',
+      event(
+        'You say nothing. You stand in the middle of her chamber and ' +
+          'listen, to all of it, for as long as it takes. The Sorceress ' +
+          `goes very still. ${CRYSTALS_QUIET}`,
+      ),
     )
   }
 
-  /** The shared gates and the redemption, led in by what Elior did: the word, or the listening. */
+  /** The shared gates and the redemption, led in by what Elior did (ready-made lines): the word, or the listening. */
   private understandBy(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
       return (
@@ -201,10 +213,7 @@ export class SorceressOfLies extends Character {
     gameState.currentRoom.description = CHAMBER_AFTER_REDEMPTION
 
     return [
-      event(
-        `${lead} One by one the crystals stop whispering, until the chamber ` +
-          'is silent for the first time in years.',
-      ),
+      lead,
       ...confession,
       event(
         'She lifts the silver mask from her staff and puts it in your hands.',

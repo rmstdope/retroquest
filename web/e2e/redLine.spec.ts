@@ -112,7 +112,7 @@ const ACTS: ActPlay[] = [
       },
       {
         name: 'Act IV refrain: said by Elior to Malakar',
-        text: `“${REFRAIN.slice(0, -1)},” you say.`,
+        text: "The words from the stone in Willowbrook, from Nyx, from the Dragon's hall. They are yours now.",
       },
       {
         name: 'Act IV amulet: used in the final choice',

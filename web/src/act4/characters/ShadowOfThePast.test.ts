@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
@@ -187,7 +187,10 @@ describe('The Shadow of the Past', () => {
     expect(executeCommands(game, ['say hello to shadow'])).toContain(WAITS)
     const text = executeCommands(game, ['say patience to shadow'])
     expect(text).toContain(
-      '“Patience,” you say. “You could not wait for them. You can wait a little longer, for me.”',
+      dialogue(
+        'Elior',
+        'Patience. You could not wait for them. You can wait a little longer, for me.',
+      ),
     )
     expectDialogueSpeaker(text, 'Shadow of the Past')
     expectQuestCompleted(game.state, 'The Shadow of the Past')
@@ -235,7 +238,7 @@ describe('The Shadow of the Past', () => {
         'Shadow watches you do it for a long time.',
     )
     expect(waited).toContain('Patience. The one thing I never had.')
-    expect(waited).not.toContain('“Patience,” you say')
+    expect(waited).not.toContain('[character_name]Elior')
     expect(
       game.state.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED),
     ).toBe(true)
