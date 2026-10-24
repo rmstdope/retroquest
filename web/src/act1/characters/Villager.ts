@@ -1,10 +1,10 @@
 import {
   Character,
   type GameState,
-  event,
   characterName,
   remembered,
   speech,
+  attributeSpeech,
 } from '@/engine'
 import {
   FLAG_TILDA_ASKED_ABOUT_WELL,
@@ -75,21 +75,20 @@ export class Villager extends Character {
    * runs clean; otherwise share the next rumor. Records that a villager has
    * been talked to.
    */
+  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
+    return attributeSpeech(this.name, this.talkAnswer(gameState))
+  }
+
+  /** What Tilda answers when spoken to, before the speaker is labelled. */
+  private talkAnswer(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
-    const eventMsg = event(
-      `You speak with ${characterName(this.name)}, the baker's wife.`,
-    )
     if (gameState.inventory.some((item) => item instanceof AncientAmulet)) {
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `${characterName('Mira')}'s amulet... ` +
-            "you're leaving, aren't you? " +
-            "Well. Don't you dare go without a proper send-off from the bakery. " +
-            'And mind you come home, love.',
-        )
+      return speech(
+        `${characterName('Mira')}'s amulet... ` +
+          "you're leaving, aren't you? " +
+          "Well. Don't you dare go without a proper send-off from the bakery. " +
+          'And mind you come home, love.',
       )
     }
     if (
@@ -97,14 +96,10 @@ export class Villager extends Character {
       !gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)
     ) {
       gameState.setStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL, true)
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `The water's clean! Was that you, ${characterName('Elior')}? ` +
-            "No — don't tell me, you've that look about you. " +
-            "I've not had dough rise so light in a year.",
-        )
+      return speech(
+        `The water's clean! Was that you, ${characterName('Elior')}? ` +
+          "No — don't tell me, you've that look about you. " +
+          "I've not had dough rise so light in a year.",
       )
     }
     if (
@@ -113,19 +108,15 @@ export class Villager extends Character {
       !gameState.hasVirtue(VIRTUE_TRUTH)
     ) {
       gameState.setStoryFlag(FLAG_TILDA_SPRING_LINE_SAID, true)
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          "Not a word, eh? Then it'll be the old spring clearing itself, " +
-            'like my gran always said it would. Funny old world.',
-        )
+      return speech(
+        "Not a word, eh? Then it'll be the old spring clearing itself, " +
+          'like my gran always said it would. Funny old world.',
       )
     }
     const rumor = this.dialogueOptions[this.dialogueIndex]
     // Cycle through dialogue
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
-    return eventMsg + '\n' + speech(rumor)
+    return speech(rumor)
   }
 
   /**
@@ -139,25 +130,17 @@ export class Villager extends Character {
       return super.sayTo(gameState, words)
     }
     if (!gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)) {
-      return (
-        event(`You speak with ${characterName(this.name)}.`) +
-        '\n' +
-        speech("The truth about what, love? You've lost me.")
-      )
+      return speech("The truth about what, love? You've lost me.")
     }
     if (gameState.hasVirtue(VIRTUE_TRUTH)) {
-      return (
-        event(`You speak with ${characterName(this.name)}.`) +
-        '\n' +
-        speech("I know, love. Your secret's safe with me, and so's your loaf.")
+      return speech(
+        "I know, love. Your secret's safe with me, and so's your loaf.",
       )
     }
     gameState.addVirtue(VIRTUE_TRUTH)
     return (
-      event(
-        `You tell ${characterName(this.name)} it was you: ` +
-          'a spell, and a little help from the healer.',
-      ) +
+      `You tell ${characterName(this.name)} it was you: ` +
+      'a spell, and a little help from the healer.' +
       '\n' +
       speech(
         'Magic? In Willowbrook? ... Well. ' +

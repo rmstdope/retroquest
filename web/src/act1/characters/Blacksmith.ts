@@ -2,9 +2,9 @@ import {
   Character,
   type GameState,
   type Item,
-  event,
   characterName,
   speech,
+  attributeSpeech,
 } from '@/engine'
 import {
   FLAG_BLACKSMITH_MET,
@@ -42,19 +42,19 @@ export class Blacksmith extends Character {
   }
 
   /** Dialogue when the player talks to the blacksmith; varies by story flags. */
+  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
-    const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
+    return attributeSpeech(this.name, this.talkAnswer(gameState))
+  }
 
+  /** What the blacksmith answers when spoken to, before the speaker is labelled. */
+  private talkAnswer(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_BLACKSMITH_MET)) {
       const lines = this.contextLines(gameState)
       if (lines.length === 0) {
-        return (
-          eventMsg +
-          '\n' +
-          speech(
-            `Welcome back, young ${characterName('Elior')}. ` +
-              'Need something else?',
-          )
+        return speech(
+          `Welcome back, young ${characterName('Elior')}. ` +
+            'Need something else?',
         )
       }
       const spoken =
@@ -63,18 +63,14 @@ export class Blacksmith extends Character {
           : (this.contextLinesSpoken ?? 0)
       this.contextLinesKnown = lines.length
       this.contextLinesSpoken = spoken + 1
-      return eventMsg + '\n' + speech(lines[spoken % lines.length])
+      return speech(lines[spoken % lines.length])
     }
 
     gameState.setStoryFlag(FLAG_BLACKSMITH_MET, true)
-    return (
-      eventMsg +
-      '\n' +
-      speech(
-        `Well met, young one. I am ${characterName('Borin')}, the village ` +
-          `${characterName(this.name)}. If you need tools ` +
-          "made or mended, I'm your man. A sharp blade can be a good friend.",
-      )
+    return speech(
+      `Well met, young one. I am ${characterName('Borin')}, the village ` +
+        `${characterName(this.name)}. If you need tools ` +
+        "made or mended, I'm your man. A sharp blade can be a good friend.",
     )
   }
 
@@ -114,13 +110,8 @@ export class Blacksmith extends Character {
   }
 
   /** What Borin makes of the black-iron rune token; he hands it back. */
-  private readRuneToken(item: Item): string {
+  private readRuneToken(): string {
     return (
-      event(
-        `You show the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName(this.name)}.`,
-      ) +
-      '\n' +
       `The ${characterName(this.name)} weighs the token in his palm, then ` +
       'frowns and rubs his thumb over the rune. ' +
       speech(
@@ -147,15 +138,7 @@ export class Blacksmith extends Character {
         gameState.addItemToInventory(new SharpKnife())
         gameState.setStoryFlag(FLAG_BLACKSMITH_SHARPENED_KNIFE, true)
 
-        const givenMsg = event(
-          `You give the [item_name]${item.name}[/item_name] ` +
-            `and [item_name]${dullKnifeInstance.name}[/item_name] to the ` +
-            `${characterName(this.name)}.`,
-        )
-
         return (
-          givenMsg +
-          '\n' +
           `The ${characterName(this.name)} takes your ` +
           `[item_name]${item.name}[/item_name] and your ` +
           `[item_name]${dullKnifeInstance.name}[/item_name]. He ` +
@@ -163,13 +146,7 @@ export class Blacksmith extends Character {
           'gleaming [item_name]sharp knife[/item_name]!'
         )
       }
-      const offerMsg = event(
-        `You offer the [item_name]${item.name}[/item_name] to ` +
-          `the ${characterName(this.name)}.`,
-      )
       return (
-        offerMsg +
-        '\n' +
         `The ${characterName(this.name)} eyes the ` +
         `[item_name]${item.name}[/item_name]. ` +
         speech(
@@ -179,20 +156,13 @@ export class Blacksmith extends Character {
         )
       )
     } else if (item instanceof RuneToken) {
-      return this.readRuneToken(item)
+      return this.readRuneToken()
     } else if (item instanceof MillstoneFragment) {
       gameState.removeItemFromInventory(item.name)
       // Optionally, set a story flag if needed
       gameState.setStoryFlag(FLAG_DEER_CAN_BE_OBSERVED, true)
 
-      const eventMsg = event(
-        `You give the [item_name]${item.name}[/item_name] to ` +
-          `the ${characterName(this.name)}.`,
-      )
-
       return (
-        eventMsg +
-        '\n' +
         `The ${characterName(this.name)} takes the ` +
         `[item_name]${item.name}[/item_name], turning it over in ` +
         'his calloused hands. ' +
@@ -209,14 +179,8 @@ export class Blacksmith extends Character {
         )
       )
     }
-    const eventMsg = event(
-      `You offer the [item_name]${item.name}[/item_name] to ` +
-        `the ${characterName(this.name)}.`,
-    )
 
     return (
-      eventMsg +
-      '\n' +
       `The ${characterName(this.name)} looks at the ` +
       `[item_name]${item.name}[/item_name]. ` +
       speech("I don't have a use for this, lad.")

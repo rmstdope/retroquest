@@ -3,8 +3,7 @@ import {
   type Character,
   type GameState,
   type Item,
-  characterName,
-  event,
+  clue,
 } from '@/engine'
 import { MysteriousBox } from '../items/MysteriousBox'
 import { Mechanism } from '../items/Mechanism'
@@ -34,28 +33,20 @@ export class UnlockSpell extends Spell {
       return item.unlock(gameState)
     }
     if (item instanceof Mechanism) {
-      return event(
+      return (
         'The spell finds nothing to turn. The black iron has no lock; it was ' +
-          'never meant to be opened, only to run' +
-          (item.repaired ? ', and now not even that.' : '.'),
+        'never meant to be opened, only to run' +
+        (item.repaired ? ', and now not even that.' : '.')
       )
     }
-    const name = item.name
-    return (
-      `[failure]You cast [spell_name]unlock[/spell_name] on [item_name]${name}[/item_name], ` +
-      'but it seems to lack any locks or magical seals to open.[/failure]'
-    )
+    return clue('That has no lock or magical seal to open.')
   }
 
   /** Casting on characters always fails; characters are not unlockable objects. */
   override castOnCharacter(
     _gameState: GameState,
-    character: Character,
+    _character: Character,
   ): string {
-    const name = character.name
-    return (
-      `[failure]You can't unlock ${characterName(name)}. They are not a ` +
-      'locked object![/failure]'
-    )
+    return clue("You can't unlock a person!")
   }
 }

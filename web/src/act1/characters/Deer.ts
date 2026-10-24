@@ -1,4 +1,4 @@
-import { Character, type GameState, characterName, event } from '@/engine'
+import { Character, type GameState, characterName } from '@/engine'
 import { HiddenGlade } from '../rooms/HiddenGlade'
 
 /**
@@ -20,9 +20,7 @@ export class Deer extends Character {
   /** The deer does not answer in words; it shares a wordless moment. */
   override talkTo(gameState: GameState): string {
     return (
-      event(`You speak softly to the ${characterName(this.name)}.`) +
-      '\n' +
-      'It does not answer, not in words. ' +
+      `The ${characterName(this.name)} does not answer, not in words. ` +
       this.wordlessMoment(gameState)
     )
   }

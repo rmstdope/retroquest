@@ -3,8 +3,7 @@ import {
   type Character,
   type GameState,
   type Item,
-  event,
-  characterName,
+  clue,
 } from '@/engine'
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import { Bush } from '../items/Bush'
@@ -23,10 +22,10 @@ export class ReviveSpell extends Spell {
   }
 
   private outOfReach(): string {
-    return event(
+    return (
       'You focus your will, a faint warmth spreads from your fingertips, ' +
-        'and nothing answers it. The warmth is yours; the door it wants is ' +
-        'not open yet.',
+      'and nothing answers it. The warmth is yours; the door it wants is ' +
+      'not open yet.'
     )
   }
 
@@ -46,14 +45,7 @@ export class ReviveSpell extends Spell {
     if (item instanceof WitheredCarrot) {
       // The WitheredCarrot is revived in place (inventory or room).
       const revivalMessage = item.revive()
-      return (
-        event(
-          'You channel the life-giving energy into the ' +
-            '[item_name]Withered Carrot[/item_name].',
-        ) +
-        '\n' +
-        revivalMessage
-      )
+      return revivalMessage
     }
     if (item instanceof Bush) return item.revive(gameState)
     const name = item.name
@@ -61,14 +53,13 @@ export class ReviveSpell extends Spell {
   }
 
   /** Casting on characters is not supported in Act I; always fails for living targets. */
-  override castOnCharacter(gameState: GameState, character: Character): string {
+  override castOnCharacter(
+    gameState: GameState,
+    _character: Character,
+  ): string {
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
       return this.outOfReach()
     }
-    const name = character.name
-    return (
-      `[failure]You can't revive ${characterName(name)}. ` +
-      'They are very much alive![/failure]'
-    )
+    return clue("You can't revive someone who is very much alive!")
   }
 }

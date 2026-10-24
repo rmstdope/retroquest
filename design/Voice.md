@@ -42,17 +42,21 @@ after the elixir ("It does not hurt. For the first time in years, it does not hu
     book keeps its own. Strings are split on
     sentence or clause boundaries and joined with `+` (rule 8 of the formatting rules); never
     split inside a word, and never change existing wording unless the change is the point.
-11. **The echo is silent; the effect is narrated.** When the player acts, the answer has two
-    kinds of line. The echo repeats what the player just did ("You till the soil with the rusty
-    hoe.") and goes through `event()`: a small grey line the voice never reads. The effect says
-    what happened ("The ground is tough, and you unearth a small, tarnished coin! You quickly
-    pocket it.") and goes bare, as story text the voice reads. Short results ("You quickly
-    pocket it.") are effects. An answer is an echo followed by its effect, or the effect alone;
-    a bare echo is never the whole answer. A plain refusal ("…it doesn't seem to have much
-    effect here.") is a `[failure]` and stays silent. A failure that tells the player something
-    about the world or carries a clue goes through `clue()`: it keeps the red box and is read
-    aloud, and any echo before it goes on its own `event()` line above, never inside the clue.
-    The `remembered()` line is a marker, not an echo or an effect, and stays a silent `event()`.
+11. **An answer never repeats the command; the effect is narrated.** The "› use hoe" line at the
+    top of a turn is the only echo. An answer says what happened ("The ground is tough, and you
+    unearth a small, tarnished coin! You quickly pocket it.") and goes bare, as story text the
+    voice reads. Short results ("You quickly pocket it.") and gifts ("You receive a coin.", "You
+    have learned bless.") are effects too. Never write the repeat ("You till the soil with the
+    rusty hoe."): drop it when the rest stands on its own, and fold the thing into the read
+    sentence when it does not ("The coin lands heads up."). A command and its result that share a
+    sentence are one read sentence ("The magnet clamps onto the end of the fishing rod: it is a
+    magnetic fishing rod now."). A plain refusal ("…it doesn't seem to have much effect here.")
+    is a `[failure]` and stays silent only when it is a bare no (already lit, already full).
+    A failure that tells the player something about the world or carries a clue goes through
+    `clue()`: it keeps the red box and is read aloud, in one fixed sentence that names no changing
+    target, price or item. The only grey `event()` lines left are markers, not repeats: a plain
+    pick-up ("You take the coin."), waking in the cottage, saving and loading, and the
+    `remembered()` line. Dialogue that opens an answer is labelled with `attributeSpeech()`.
 
 ## Before and after
 

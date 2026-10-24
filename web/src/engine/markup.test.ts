@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   MARKUP_TAGS,
+  attributeSpeech,
   characterName,
   clue,
   dialogue,
@@ -121,5 +122,29 @@ describe('clue', () => {
     )
     expect(findMarkupProblems(clue('A glimmer.'))).toEqual([])
     expect(MARKUP_TAGS).toContain('clue')
+  })
+})
+
+describe('attributeSpeech', () => {
+  it('puts the speaker on a line before dialogue that has none', () => {
+    expect(attributeSpeech('Mira', speech('Hello.'))).toBe(
+      '[character_name]Mira[/character_name]\n[dialogue]Hello.[/dialogue]',
+    )
+  })
+
+  it('splits narration from the label when the quote follows on the same line', () => {
+    expect(attributeSpeech('Mira', `She nods. ${speech('Hello.')}`)).toBe(
+      'She nods. \n[character_name]Mira[/character_name]\n' +
+        '[dialogue]Hello.[/dialogue]',
+    )
+  })
+
+  it('leaves attributed dialogue and plain narration alone', () => {
+    const named = `${characterName('Mira')} nods. ${speech('Hello.')}`
+    expect(attributeSpeech('Mira', named)).toBe(named)
+    expect(attributeSpeech('Mira', 'Nothing is said.')).toBe('Nothing is said.')
+    expect(findMarkupProblems(attributeSpeech('Mira', speech('Hi.')))).toEqual(
+      [],
+    )
   })
 })

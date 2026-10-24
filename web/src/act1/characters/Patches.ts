@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  type Item,
-  characterName,
-  event,
-} from '@/engine'
+import { Character, type GameState, type Item, characterName } from '@/engine'
 import { Egg } from '../items/Egg'
 import { Fish } from '../items/Fish'
 import {
@@ -32,13 +26,7 @@ export class Patches extends Character {
   /** Call her by name: coax her out of hiding, or hear her purr once home. */
   override talkTo(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_PATCHES_FOUND)) return this.purr(gameState)
-    return (
-      event(
-        `You crouch by the crates and call softly for ${characterName(this.name)}.`,
-      ) +
-      '\n' +
-      this.comeOut(gameState)
-    )
+    return this.comeOut(gameState)
   }
 
   /** Saying her name coaxes her out like calling her; other words spook her. */
@@ -47,13 +35,7 @@ export class Patches extends Character {
       !gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
       words.toLowerCase().includes('patches')
     ) {
-      return (
-        event(
-          `You say ${characterName(this.name)}'s name gently into the shadows.`,
-        ) +
-        '\n' +
-        this.comeOut(gameState)
-      )
+      return this.comeOut(gameState)
     }
     return (
       `${characterName(this.name)} flicks an ear at you, ` +
@@ -66,22 +48,17 @@ export class Patches extends Character {
    * Anything else only gets a sniff.
    */
   override giveItem(gameState: GameState, item: Item): string {
-    const offer = event(
-      `You hold out the [item_name]${item.name}[/item_name] to ${characterName(this.name)}.`,
-    )
     if (gameState.getStoryFlag(FLAG_PATCHES_FOUND)) {
-      return offer + '\n' + this.purr(gameState)
+      return this.purr(gameState)
     }
     if (item instanceof Egg || item instanceof Fish) {
       return (
-        offer +
         '\nA small nose twitches behind the crates. ' +
         'Curiosity gets the better of her.\n' +
         this.comeOut(gameState)
       )
     }
     return (
-      offer +
       '\nShe sniffs at it from the shadows and stays put. ' +
       'Perhaps she would rather hear her name.'
     )
@@ -96,11 +73,9 @@ export class Patches extends Character {
       'A pair of green eyes blinks in the dark. With a small, uncertain mew, ' +
       `${characterName(this.name)} creeps out, sniffs your fingers and lets ` +
       'you scoop her up. She is thin and dusty, but unhurt.\n' +
-      event(
-        `You carry ${characterName(this.name)} in your arms. ` +
-          `Old Man ${characterName('Hemlock')} at the ` +
-          '[room_name]General Store[/room_name] will be glad to see her.',
-      )
+      (`You carry ${characterName(this.name)} in your arms. ` +
+        `Old Man ${characterName('Hemlock')} at the ` +
+        '[room_name]General Store[/room_name] will be glad to see her.')
     )
   }
 
