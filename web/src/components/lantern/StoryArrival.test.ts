@@ -22,6 +22,18 @@ function mountArrival(command: string | null, arrival: Partial<Arrival> = {}) {
 describe('StoryArrival', () => {
   beforeEach(() => setActivePinia(createPinia()))
 
+  it('names the region by arrival, or by the room alone when the player stayed', () => {
+    expect(
+      mountArrival('go south').get('section').attributes('aria-label'),
+    ).toBe('Arrived at Vegetable Field')
+    const looked = mount(StoryArrival, {
+      props: { command: 'look', arrival: FIELD, stayed: true },
+    })
+    expect(looked.get('section').attributes('aria-label')).toBe(
+      'Vegetable Field',
+    )
+  })
+
   it('makes buttons only of the chips for what is still here', () => {
     const game = useGameStore()
     game.roomName = 'Vegetable Field'

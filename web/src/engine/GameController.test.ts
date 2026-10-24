@@ -597,6 +597,15 @@ describe('GameController', () => {
       )
     })
 
+    it('says whether the last turn asked to describe the room again', () => {
+      const ctrl = makeController()
+      ctrl.advanceToRunning()
+      ctrl.takeTurn('look')
+      expect(ctrl.lastTurnRedescribesRoom()).toBe(true)
+      ctrl.takeTurn('xyzzy')
+      expect(ctrl.lastTurnRedescribesRoom()).toBe(false)
+    })
+
     it('advances one screen and returns its text', () => {
       const ctrl = makeController()
       const logo = ctrl.getResultText()

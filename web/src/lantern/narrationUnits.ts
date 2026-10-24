@@ -8,7 +8,8 @@
  * `newQuestBlocks`, `questCompleteBlocks`) with its
  * recording or none. A unit with no part is silent: events, plain failures,
  * checklists, a revisited room and a quest update appear at once; a new
- * quest's card and a completed quest's record are read.
+ * room, a room looked at again, a new quest's card and a completed quest's
+ * record are read.
  */
 
 import type { QuestNews } from './questNews'
@@ -68,8 +69,19 @@ export function firstQuestUnit(turn: NarratedTurnInput): number {
 }
 
 /**
- * The units of a turn. `firstVisit` says whether the room it arrives in is new
- * to the player (only then is the description read).
+ * Whether a turn's arrival is read: on a first visit, or when the player
+ * looked around; a revisited room appears at once.
+ */
+export function readsArrival(turn: {
+  firstVisit?: true
+  lookedAround?: true
+}): boolean {
+  return Boolean(turn.firstVisit || turn.lookedAround)
+}
+
+/**
+ * The units of a turn. `firstVisit` says whether its arrival is read (see
+ * `readsArrival`; only then are the room's name and description voiced).
  */
 export function turnUnits(
   turn: NarratedTurnInput,

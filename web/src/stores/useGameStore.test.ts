@@ -39,6 +39,7 @@ function createMockBridge() {
   const controller = {
     advanceToRunning: vi.fn(() => screens(['Intro text'])),
     takeTurn: vi.fn(() => 'command result'),
+    lastTurnRedescribesRoom: vi.fn(() => false),
     getRoomName: vi.fn(() => 'Village Square'),
     getVisitedRooms: vi.fn(() => ['Village Square']),
     getRoomDescription: vi.fn(() => 'A quiet village.'),

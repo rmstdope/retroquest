@@ -20,6 +20,8 @@ const props = defineProps<{
   nameHtml?: string
   /** The description as HTML with its words marked, while it is read aloud. */
   descriptionHtml?: string
+  /** True when the player stayed and looked around: the region is not an arrival. */
+  stayed?: boolean
 }>()
 const wide = useMediaQuery(WIDE_QUERY)
 const game = useGameStore()
@@ -60,7 +62,10 @@ const exits = computed(() => Object.entries(props.arrival.exits))
 </script>
 
 <template>
-  <section class="lq-arrival" :aria-label="`Arrived at ${arrival.room}`">
+  <section
+    class="lq-arrival"
+    :aria-label="stayed ? arrival.room : `Arrived at ${arrival.room}`"
+  >
     <div class="lq-divider" data-testid="divider">
       <span class="lq-rule" aria-hidden="true"></span>
       <span v-if="direction" class="lq-direction"

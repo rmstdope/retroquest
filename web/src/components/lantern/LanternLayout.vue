@@ -8,6 +8,7 @@ import {
   POPUP_NARRATION_ID,
   chapterUnits,
   firstQuestUnit,
+  readsArrival,
   turnUnits,
 } from '@/lantern/narrationUnits'
 import { actFolder } from '@/lantern/narrationManifest'
@@ -267,7 +268,7 @@ watch(
     if (turn?.narrate && folder && manifest && !game.showModal)
       narration.begin(
         turn.id,
-        turnUnits(turn, !!turn.firstVisit, manifest),
+        turnUnits(turn, readsArrival(turn), manifest),
         folder,
       )
     // Its panels wait for the voice, or, with none to wait for, change now.

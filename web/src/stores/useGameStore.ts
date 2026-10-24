@@ -60,7 +60,7 @@ export interface Turn {
   gained: Chip[]
   /** Items and spells this command removed (none for system output). */
   lost: Chip[]
-  /** The room as found on arrival, kept for the story (null if no room change). */
+  /** The room as found on arrival or on a look, kept for the story (null otherwise). */
   arrival: Arrival | null
   /** Quests that started, moved on or were completed with this turn. */
   quests?: QuestNews[]
@@ -68,6 +68,8 @@ export interface Turn {
   narrate?: true
   /** Set when the turn arrived in a room the player had not been in before. */
   firstVisit?: true
+  /** Set on a narrated look: the room is shown and read again without a move. */
+  lookedAround?: true
 }
 
 /** What the player found on entering a room (engine markup / names). */
@@ -269,6 +271,7 @@ export const useGameStore = defineStore('game', () => {
    *
    * A command that completes an act already swaps in the next act's state, so
    * while the act is not running the answer stays in the previous turn's room.
+   * `redescribe` (a look) shows the room again although the player stayed.
    */
   function showOutput(
     command: string | null,
@@ -276,11 +279,13 @@ export const useGameStore = defineStore('game', () => {
     {
       chips = command !== null,
       arrive = false,
+      redescribe = false,
       narrate = false,
       hold = false,
     }: {
       chips?: boolean
       arrive?: boolean
+      redescribe?: boolean
       narrate?: boolean
       hold?: boolean
     } = {},
@@ -316,6 +321,7 @@ export const useGameStore = defineStore('game', () => {
     // A room is new when it joins the visited rooms. Compared by name, as a
     // room can also leave the list (the dream, once Elior wakes).
     const visited = b.controller.getVisitedRooms()
+    const lookedAround = redescribe && actRunning && !roomChanged
     const firstVisit =
       actRunning && visited.includes(room) && !lastVisited.includes(room)
     lastVisited = visited
@@ -331,15 +337,18 @@ export const useGameStore = defineStore('game', () => {
       // like now so the story can show it later.
       ...(narrate ? { narrate: true as const } : {}),
       ...(narrate && firstVisit ? { firstVisit: true as const } : {}),
-      arrival: roomChanged
-        ? {
-            room,
-            description: b.controller.getRoomDescription(),
-            characters: b.controller.getRoomCharacters(),
-            items: b.controller.getRoomItems(),
-            exits: b.controller.getRoomExits(),
-          }
-        : null,
+      ...(narrate && lookedAround ? { lookedAround: true as const } : {}),
+      // A look shows the room again without having moved.
+      arrival:
+        roomChanged || lookedAround
+          ? {
+              room,
+              description: b.controller.getRoomDescription(),
+              characters: b.controller.getRoomCharacters(),
+              items: b.controller.getRoomItems(),
+              exits: b.controller.getRoomExits(),
+            }
+          : null,
     })
     lastTurnRoom = room
     if (turns.value.length > MAX_TURNS) {
@@ -661,7 +670,11 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     const result = b.controller.takeTurn(command)
     lastAnswer = result
-    showOutput(command, result, { narrate: true, hold: true })
+    showOutput(command, result, {
+      redescribe: b.controller.lastTurnRedescribesRoom(),
+      narrate: true,
+      hold: true,
+    })
     refreshPanels()
     pollQuestEvents()
     refreshPanels()

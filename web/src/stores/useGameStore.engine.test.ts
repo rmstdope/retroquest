@@ -192,3 +192,36 @@ describe('useGameStore over the real engine: game over', () => {
     expect(store.getSaveSlots()[0].act).toBe(null)
   })
 })
+
+describe('useGameStore over the real engine: look', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  it('shows the room again in the story when the player looks around', async () => {
+    const store = await startedStore()
+    store.submitCommand('look')
+
+    const turn = store.turns.at(-1)
+    expect(turn?.command).toBe('look')
+    expect(turn?.roomChanged).toBe(false)
+    // Marked so the narration reads the room again.
+    expect(turn?.narrate).toBe(true)
+    expect(turn?.lookedAround).toBe(true)
+    expect(turn?.arrival).toEqual({
+      room: 'Hall',
+      description: 'A quiet hall.',
+      characters: [],
+      items: [CROWN],
+      exits: {},
+    })
+  })
+
+  it('shows no room for a command that does not look around', async () => {
+    const store = await startedStore()
+    store.submitCommand('inventory')
+
+    expect(store.turns.at(-1)?.arrival).toBeNull()
+    expect(store.turns.at(-1)?.lookedAround).toBeUndefined()
+  })
+})
