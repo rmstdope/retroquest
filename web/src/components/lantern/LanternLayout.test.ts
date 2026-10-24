@@ -1610,8 +1610,6 @@ describe('LanternLayout', () => {
       const w = await ready()
       await say(narratedTurn(1))
       const button = document.createElement('button')
-      const pressed = vi.fn()
-      button.addEventListener('click', pressed)
       document.body.appendChild(button)
       const down = new KeyboardEvent('keydown', {
         key: 'Enter',
@@ -1639,6 +1637,24 @@ describe('LanternLayout', () => {
       button.dispatchEvent(up)
       expect(up.defaultPrevented).toBe(true)
       button.remove()
+    })
+
+    it('leaves Space and Enter to the command box', async () => {
+      await ready()
+      await say(narratedTurn(1))
+      const field = document.createElement('input')
+      document.body.appendChild(field)
+      for (const key of [' ', 'Enter']) {
+        const down = new KeyboardEvent('keydown', {
+          key,
+          bubbles: true,
+          cancelable: true,
+        })
+        field.dispatchEvent(down)
+        expect(down.defaultPrevented).toBe(false)
+      }
+      expect(useNarrationStore().isNarrating).toBe(true)
+      field.remove()
     })
 
     it('leaves Space and Enter to a button once nothing is being narrated', async () => {

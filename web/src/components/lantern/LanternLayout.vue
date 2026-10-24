@@ -183,6 +183,8 @@ function onNarrationKeyUp(event: KeyboardEvent): void {
 
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
+  // A fresh key press forgets a key-up that never came (window lost focus).
+  swallowKeyUp = null
   if (!narration.isNarrating || event.defaultPrevented) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   const hurries = event.key === ' ' || event.key === 'Enter'
