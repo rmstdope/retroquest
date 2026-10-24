@@ -136,6 +136,18 @@ describe('useNarrationStore', () => {
       expect(narration.hintVisible).toBe(false)
     })
 
+    it('does not count the chapter page or a pop-up as a turn', () => {
+      narration.begin(-1, [voiced()], 'act1')
+      expect(narration.narratedTurns).toBe(0)
+      narration.skipAll()
+      for (const id of [1, 2, 3]) {
+        narrateTurn(id)
+        expect(narration.hintVisible).toBe(true)
+        last().onended?.()
+      }
+      expect(narration.narratedTurns).toBe(3)
+    })
+
     it('goes when the turn is skipped', async () => {
       narrateTurn(1)
       narration.skipAll()

@@ -136,6 +136,11 @@ test('reads the opening chapter page, and Continue mid-sentence moves on', async
   await expect(page.locator('.lq-chapter-block')).toHaveCount(0)
   await expect(page.locator('.lq-chapter-block').first()).toBeVisible()
 
+  // Begin stays inside a short window while the page is read.
+  await page.setViewportSize({ width: 1512, height: 300 })
+  await expect(page.locator('.lq-chapter-button')).toBeInViewport()
+  await page.setViewportSize({ width: 1280, height: 720 })
+
   // A tap on the text hurries; Continue stops the voice and enters the game.
   await page.locator('.lq-chapter-body').click()
   await page.locator('.lq-chapter-button').click()

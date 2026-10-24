@@ -349,7 +349,8 @@ export const useNarrationStore = defineStore('narration', () => {
       waited: 0,
       pausedFor: -1,
     }
-    narratedTurns.value++
+    // The chapter page and pop-ups (negative ids) are not story turns.
+    if (turnId >= 1) narratedTurns.value++
     step()
   }
 
