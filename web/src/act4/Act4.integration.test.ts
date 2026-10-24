@@ -792,7 +792,8 @@ describe('Act 4 integration', () => {
           "slowly. For a moment it wears your father's face. Then it is only " +
           'you again, standing a little straighter.',
       )
-      expect(told).toContain('[dim]Elior will remember this.[/dim]')
+      expect(told).toContain('[event]✦ Truth — this will be remembered[/event]')
+      expect(told).not.toContain('Elior will remember this.')
       expect(game.state.hasVirtue('truth')).toBe(true)
       const after = executeCommands(game, ['talk to true self'])
       expect(after).toContain(
@@ -980,7 +981,11 @@ describe('Act 4 integration', () => {
       expect(executeCommands(game, ['talk to ghostly warriors'])).toContain(
         'The warriors do not hear you.',
       )
-      executeCommands(game, ["cast redemption's light on ghostly warriors"])
+      const cast = executeCommands(game, [
+        "cast redemption's light on ghostly warriors",
+      ])
+      expect(cast).toContain('[event]✦ Mercy — this will be remembered[/event]')
+      expect(cast).not.toContain('Elior will remember this.')
       expect(game.state.hasVirtue('mercy')).toBe(true)
     })
 

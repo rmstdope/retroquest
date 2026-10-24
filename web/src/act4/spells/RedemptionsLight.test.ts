@@ -69,7 +69,8 @@ describe('RedemptionsLight', () => {
     expect(cast).toContain(
       'Soft light spills from your hands across the hall. One by one the ghostly warriors lower their blades and look at one another as if for the first time. Then they fade, at peace.',
     )
-    expect(cast).toContain('[dim]Elior will remember this.[/dim]')
+    expect(cast).toContain('[event]✦ Mercy — this will be remembered[/event]')
+    expect(cast).not.toContain('Elior will remember this.')
     expect(game.state.hasVirtue('mercy')).toBe(true)
     expect(game.state.virtues.filter((v) => v === 'mercy')).toHaveLength(1)
     expect(game.state.getStoryFlag(FLAG_ACT4_WARRIORS_AT_PEACE)).toBe(true)

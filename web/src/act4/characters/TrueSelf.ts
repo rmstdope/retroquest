@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue } from '@/engine'
+import { Character, type GameState, dialogue, remembered } from '@/engine'
 import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
 import { normaliseSpokenWord } from '../spokenWord'
 
@@ -57,7 +57,8 @@ export class TrueSelf extends Character {
       'you are afraid of what that wanting makes you. The reflection nods, ' +
       "slowly. For a moment it wears your father's face. Then it is only " +
       'you again, standing a little straighter.' +
-      '\n[dim]Elior will remember this.[/dim]'
+      '\n' +
+      remembered('Truth')
     )
   }
 }
