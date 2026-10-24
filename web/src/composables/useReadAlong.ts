@@ -2,6 +2,7 @@ import { computed, nextTick, watch, type Ref } from 'vue'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { wrapWords } from '@/lantern/wrapWords'
 import { renderMarkup } from '@/utils/theme'
+import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 
 /**
  * The read-along of one narrated surface (a story turn, a chapter page or a
@@ -19,7 +20,11 @@ import { renderMarkup } from '@/utils/theme'
  *
  * The composable also lights the spoken word (`.lq-w-now`, found by
  * `[data-w]` inside `root`) and keeps the unit being spoken (`[data-unit]`)
- * in view.
+ * in view. Both are announced with a bubbling, cancelable `lq-follow` event
+ * (`detail.unit` is true for a unit) so the story pane, which is held still
+ * and follows the word (`useStoryFollow`), can scroll itself; a surface where
+ * nobody handles it (the chapter page, a pop-up) has the unit scrolled into
+ * view as before, and the word is not followed.
  */
 export function useReadAlong(
   id: () => number,
@@ -79,14 +84,26 @@ export function useReadAlong(
       })
       const now = speaking.value
       if (!now) return
-      if (now.word >= 0)
-        root.value
-          ?.querySelectorAll(`[data-w="${now.offset + now.word}"]`)
-          .forEach((el) => el.classList.add('lq-w-now'))
-      if (key.endsWith(':-1'))
-        root.value
-          ?.querySelector(`[data-unit="${now.unit}"]`)
-          ?.scrollIntoView?.({ block: 'nearest' })
+      if (now.word >= 0) {
+        const lit = root.value?.querySelectorAll(
+          `[data-w="${now.offset + now.word}"]`,
+        )
+        lit?.forEach((el) => el.classList.add('lq-w-now'))
+        lit?.[0]?.dispatchEvent(
+          new CustomEvent(FOLLOW_EVENT, { bubbles: true, cancelable: true }),
+        )
+      }
+      if (key.endsWith(':-1')) {
+        const unit = root.value?.querySelector(`[data-unit="${now.unit}"]`)
+        const unhandled = unit?.dispatchEvent(
+          new CustomEvent(FOLLOW_EVENT, {
+            bubbles: true,
+            cancelable: true,
+            detail: { unit: true },
+          }),
+        )
+        if (unhandled) unit?.scrollIntoView?.({ block: 'nearest' })
+      }
     },
     { flush: 'post' },
   )

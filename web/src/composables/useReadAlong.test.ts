@@ -135,4 +135,72 @@ describe('useReadAlong', () => {
     await nextTick()
     expect(w.find('.lq-w-now').text()).toBe('two')
   })
+
+  describe('telling the story pane what to follow', () => {
+    const manifest = {
+      [narrationKey('narrator', TEXT)]: {
+        file: 'a.mp3',
+        speaker: 'narrator',
+        duration: 3,
+        words: narrationWords(TEXT).map((word, i) => ({
+          word,
+          start: i,
+          end: i + 1,
+        })),
+      },
+    }
+    const start = (): void =>
+      useNarrationStore().begin(
+        7,
+        turnUnits({ text: TEXT, arrival: null }, false, manifest),
+        'act1',
+      )
+
+    it('fires lq-follow on the lit word, with no scrolling of its own', async () => {
+      const scrolled: Element[] = []
+      Element.prototype.scrollIntoView = function (this: Element) {
+        scrolled.push(this)
+      }
+      const w = mountReader()
+      const followed: string[] = []
+      w.element.addEventListener('lq-follow', (e: Event) => {
+        const el = e.target as HTMLElement
+        followed.push(
+          el.className.includes('lq-w-now') ? el.textContent! : 'unit',
+        )
+      })
+      start()
+      await nextTick()
+      await nextTick()
+      audio.currentTime = 1.2
+      await new Promise((r) => setTimeout(r, 120))
+      await nextTick()
+      expect(followed).toContain('two')
+      expect(scrolled.every((el) => el.tagName === 'P')).toBe(true)
+    })
+
+    it('announces the unit that starts speaking, and scrolls it into view itself only when nobody follows', async () => {
+      const scrolled: Element[] = []
+      Element.prototype.scrollIntoView = function (this: Element) {
+        scrolled.push(this)
+      }
+      const w = mountReader()
+      start()
+      await nextTick()
+      await nextTick()
+      expect(scrolled).toHaveLength(1)
+      useNarrationStore().skipAll()
+      w.unmount()
+
+      const handled = mountReader()
+      handled.element.addEventListener('lq-follow', (e: Event) =>
+        e.preventDefault(),
+      )
+      scrolled.length = 0
+      start()
+      await nextTick()
+      await nextTick()
+      expect(scrolled).toHaveLength(0)
+    })
+  })
 })

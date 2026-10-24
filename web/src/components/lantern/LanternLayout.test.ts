@@ -1792,6 +1792,101 @@ describe('LanternLayout', () => {
       expect(texts(w)).toEqual([FIRST, SECOND])
     })
 
+    describe('following the reading', () => {
+      const story = (w: VueWrapper): HTMLElement =>
+        w.get('section[aria-label="Story"]').element as HTMLElement
+
+      /** Give the story a 300px view of 2000px, and the lit word a place at `wordBottom`. */
+      function stubGeometry(w: VueWrapper, wordBottom: number): void {
+        const el = story(w)
+        Object.defineProperty(el, 'clientHeight', {
+          configurable: true,
+          value: 300,
+        })
+        Object.defineProperty(el, 'scrollHeight', {
+          configurable: true,
+          value: 2000,
+        })
+        vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
+          function (this: Element) {
+            if (this === el) return { top: 0, bottom: 300 } as DOMRect
+            if (this.classList.contains('lq-w-now'))
+              return {
+                top: wordBottom - 20 - el.scrollTop,
+                bottom: wordBottom - el.scrollTop,
+              } as DOMRect
+            return { top: 0, bottom: 0 } as DOMRect
+          },
+        )
+      }
+
+      const wheel = (w: VueWrapper): WheelEvent => {
+        const event = new WheelEvent('wheel', { cancelable: true, deltaY: 50 })
+        story(w).dispatchEvent(event)
+        return event
+      }
+
+      it('scrolls the story to keep the lit word two lines above the bottom', async () => {
+        const w = await ready()
+        stubGeometry(w, 600)
+        await say(narratedTurn(1))
+        audios[0].currentTime = 0.5
+        await vi.advanceTimersByTimeAsync(200)
+        // The story glides there.
+        await vi.advanceTimersByTimeAsync(400)
+        // jsdom has no line height: 16px text counts as 24px lines.
+        expect(story(w).scrollTop).toBe(600 - 300 + 2 * 24)
+      })
+
+      it('holds the story still while it is read, and frees it when the reading ends', async () => {
+        const w = await ready()
+        await say(narratedTurn(1))
+        expect(wheel(w).defaultPrevented).toBe(true)
+        useNarrationStore().skipAll()
+        await vi.advanceTimersByTimeAsync(0)
+        expect(wheel(w).defaultPrevented).toBe(false)
+      })
+
+      it('shows the hint for a scroll attempt in any turn', async () => {
+        const w = await ready()
+        for (const id of [1, 2, 3, 4]) await say(narratedTurn(id))
+        expect(w.find('.lq-narration-hint').exists()).toBe(false)
+        wheel(w)
+        await vi.advanceTimersByTimeAsync(0)
+        expect(w.find('.lq-narration-hint').exists()).toBe(true)
+        await vi.advanceTimersByTimeAsync(2100)
+        expect(w.find('.lq-narration-hint').exists()).toBe(false)
+      })
+
+      it('hides "More below" while it reads and brings it back after', async () => {
+        const w = await ready()
+        const el = story(w)
+        Object.defineProperty(el, 'clientHeight', {
+          configurable: true,
+          value: 300,
+        })
+        Object.defineProperty(el, 'scrollHeight', {
+          configurable: true,
+          value: 2000,
+        })
+        await say(narratedTurn(1))
+        await el.dispatchEvent(new Event('scroll'))
+        await vi.advanceTimersByTimeAsync(0)
+        expect(w.find('button.lq-more-below').exists()).toBe(false)
+        useNarrationStore().skipAll()
+        await vi.advanceTimersByTimeAsync(0)
+        expect(w.find('button.lq-more-below').exists()).toBe(true)
+      })
+
+      it('does not hold the story when nothing is narrated', async () => {
+        const w = await ready()
+        useSettingsStore().narrationOn = false
+        await say(narratedTurn(1))
+        expect(wheel(w).defaultPrevented).toBe(false)
+        expect(w.find('.lq-narration-hint').exists()).toBe(false)
+      })
+    })
+
     describe('the hint', () => {
       const TOUCH = 'Tap to hurry · double-tap to skip'
       const KEYS = 'Space to hurry · Esc to skip'

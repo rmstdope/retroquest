@@ -142,6 +142,40 @@ test('typing keeps the voice reading, and Esc in the command box skips it', asyn
   await expect(input).toBeFocused()
 })
 
+test('holds the story still and keeps the lit word in view while it reads', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 520 })
+  await slowNarrationClips(page)
+  await startAct1(page)
+  const input = page.getByLabel('Command')
+  await input.fill('talk to voice')
+  await input.press('Enter')
+  await expect(page.locator('.lq-speaking')).toHaveCount(1)
+
+  const story = page.getByRole('region', { name: 'Story' })
+  /** Whether a wheel turn over the story is stopped. */
+  const wheelStopped = (): Promise<boolean> =>
+    story.evaluate((el) => {
+      const event = new WheelEvent('wheel', { cancelable: true, deltaY: 80 })
+      el.dispatchEvent(event)
+      return event.defaultPrevented
+    })
+  expect(await wheelStopped()).toBe(true)
+  await expect(page.locator('.lq-narration-hint')).toBeVisible()
+
+  // The lit word is never outside the story.
+  await expect(page.locator('.lq-w-now')).toHaveCount(1, { timeout: 6000 })
+  const box = await story.boundingBox()
+  const word = await page.locator('.lq-w-now').first().boundingBox()
+  expect(word && box && word.y + word.height <= box.y + box.height).toBe(true)
+
+  // Skipped, the story is free.
+  await story.dblclick({ position: { x: 5, y: 5 } })
+  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  expect(await wheelStopped()).toBe(false)
+})
+
 test('shows an answer at once with narration off', async ({
   page,
 }): Promise<void> => {

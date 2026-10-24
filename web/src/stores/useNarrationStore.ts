@@ -23,7 +23,10 @@ import type { NarrationUnit } from '@/lantern/narrationUnits'
  *   the one being narrated.
  * - A voice that fails, is blocked, or has not ended `duration + 3 s` after it
  *   started completes its block, so a turn never stalls.
- * - `hintVisible` is true during a game's first three narrated turns.
+ * - `hintVisible` is true during a game's first three narrated turns, and for
+ *   two seconds after each `nudgeHint` (a scroll attempt on the held story).
+ * - `storyReading` is true while a story turn (not the chapter page or a
+ *   pop-up) is narrated: the story is then held still and follows the word.
  * - Nothing here is saved; a turn that is not the active one shows whole.
  */
 
@@ -41,6 +44,8 @@ const LOAD_MARGIN_MS = 10000
 const WORD_POLL_MS = 50
 /** The hint about hurrying and skipping shows during this many narrated turns of a game. */
 const HINT_TURNS = 3
+/** How long a scroll attempt keeps the hint up. */
+const NUDGE_MS = 2000
 /** Where the recordings are served from. */
 const NARRATION_PATH = '/audio/narration/'
 
@@ -111,6 +116,7 @@ export const useNarrationStore = defineStore('narration', () => {
   let timers: ReturnType<typeof setTimeout>[] = []
   let poll: ReturnType<typeof setInterval> | undefined
   let lastTap = Number.NEGATIVE_INFINITY
+  let nudgeTimer: ReturnType<typeof setTimeout> | undefined
 
   /** How the latest narrated turn ended. */
   const lastEnd = ref<{ turnId: number; skipped: boolean } | null>(null)
@@ -129,16 +135,35 @@ export const useNarrationStore = defineStore('narration', () => {
   /** True while a turn is being narrated. */
   const isNarrating = computed(() => active.value !== null)
 
+  /** True while a story turn is narrated (the chapter page and pop-ups have negative ids). */
+  const storyReading = computed(
+    () => active.value !== null && active.value.turnId >= 1,
+  )
+
+  /** Whether a recent scroll attempt keeps the hint up. */
+  const hintNudged = ref(false)
+
   /**
    * Whether the hurry/skip hint shows: while one of a game's first three
-   * narrated turns is being narrated and narration is on.
+   * narrated turns is being narrated and narration is on, or while a scroll
+   * attempt on a narrated turn (any turn) keeps it up.
    */
   const hintVisible = computed(
     () =>
       active.value !== null &&
       settings.narrationOn &&
-      narratedTurns.value <= HINT_TURNS,
+      (narratedTurns.value <= HINT_TURNS || hintNudged.value),
   )
+
+  /** Put the hint up for two seconds; each call restarts them. Does nothing when no turn is narrated. */
+  function nudgeHint(): void {
+    if (!active.value) return
+    hintNudged.value = true
+    clearTimeout(nudgeTimer)
+    nudgeTimer = setTimeout(() => {
+      hintNudged.value = false
+    }, NUDGE_MS)
+  }
 
   /** A new game starts counting narrated turns again. */
   function resetGame(): void {
@@ -230,6 +255,8 @@ export const useNarrationStore = defineStore('narration', () => {
     stopVoice()
     if (active.value) lastEnd.value = { turnId: active.value.turnId, skipped }
     active.value = null
+    clearTimeout(nudgeTimer)
+    hintNudged.value = false
   }
 
   /** Whether a voiced part is left after the one at (unit, part), counting that part as done. */
@@ -395,6 +422,8 @@ export const useNarrationStore = defineStore('narration', () => {
     isNarrating,
     narratedTurns,
     hintVisible,
+    storyReading,
+    nudgeHint,
     resetGame,
     setAudioFactory,
     revealed,

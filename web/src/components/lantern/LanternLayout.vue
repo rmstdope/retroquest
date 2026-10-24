@@ -43,6 +43,7 @@ import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
 import StoryTurn from './StoryTurn.vue'
+import { useStoryFollow } from '@/composables/useStoryFollow'
 import TitlePage from './TitlePage.vue'
 
 /**
@@ -124,6 +125,8 @@ watch(wide, (isWide) => {
   if (isWide) section.value = 'story'
 })
 const storyEl = ref<HTMLElement | null>(null)
+/** The story is held still and follows the word while an answer is read. */
+const { held: storyHeld, moveTo: moveStory, refollow } = useStoryFollow(storyEl)
 /** Unread story below the visible part (a long turn opens at its start). */
 const moreBelow = ref(false)
 const moreBelowButton = ref<HTMLButtonElement | null>(null)
@@ -231,7 +234,10 @@ onMounted(() => {
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
-    storyResize = new ResizeObserver(updateMoreBelow)
+    storyResize = new ResizeObserver(() => {
+      updateMoreBelow()
+      refollow()
+    })
     storyResize.observe(storyEl.value)
   }
 })
@@ -403,7 +409,16 @@ watch(
     const away = !wide.value && section.value !== 'story'
     section.value = 'story'
     await nextTick()
-    storyEl.value?.lastElementChild?.scrollIntoView?.({ block: 'start' })
+    const latest = storyEl.value?.lastElementChild
+    // A held story is moved only through `moveStory`, which knows where it belongs.
+    if (storyHeld.value && latest && storyEl.value)
+      moveStory(
+        latest.getBoundingClientRect().top -
+          storyEl.value.getBoundingClientRect().top +
+          storyEl.value.scrollTop,
+        false,
+      )
+    else latest?.scrollIntoView?.({ block: 'start' })
     const folds =
       !wide.value && dockOpen.value && (short.value || answerTooLong())
     if (folds) {
@@ -645,12 +660,12 @@ watch(
           <p
             v-if="narration.hintVisible"
             class="lq-narration-hint"
-            :class="{ 'lq-hint-raised': moreBelow }"
+            :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
           >
             {{ hintText }}
           </p>
           <button
-            v-if="moreBelow"
+            v-if="moreBelow && !storyHeld"
             ref="moreBelowButton"
             type="button"
             class="lq-more-below"
