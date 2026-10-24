@@ -1606,15 +1606,52 @@ describe('LanternLayout', () => {
       expect(texts(w)).toHaveLength(4)
     })
 
-    it('leaves Enter to a focused button', async () => {
+    it('hurries on Space or Enter even when a verb button has focus, without pressing it', async () => {
       const w = await ready()
       await say(narratedTurn(1))
       const button = document.createElement('button')
+      const pressed = vi.fn()
+      button.addEventListener('click', pressed)
       document.body.appendChild(button)
+      const down = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true,
+      })
+      button.dispatchEvent(down)
+      expect(down.defaultPrevented).toBe(true)
+      await vi.advanceTimersByTimeAsync(80)
+      expect(texts(w)).toEqual([FIRST, SECOND])
+      // Space presses a button on key-up; that press is swallowed too.
+      await say(narratedTurn(2))
       button.dispatchEvent(
-        new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+        new KeyboardEvent('keydown', {
+          key: ' ',
+          bubbles: true,
+          cancelable: true,
+        }),
       )
-      expect(texts(w)).toEqual([FIRST])
+      const up = new KeyboardEvent('keyup', {
+        key: ' ',
+        bubbles: true,
+        cancelable: true,
+      })
+      button.dispatchEvent(up)
+      expect(up.defaultPrevented).toBe(true)
+      button.remove()
+    })
+
+    it('leaves Space and Enter to a button once nothing is being narrated', async () => {
+      await ready()
+      const button = document.createElement('button')
+      document.body.appendChild(button)
+      const down = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true,
+      })
+      button.dispatchEvent(down)
+      expect(down.defaultPrevented).toBe(false)
       button.remove()
     })
 
