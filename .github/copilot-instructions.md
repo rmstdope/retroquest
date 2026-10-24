@@ -161,6 +161,12 @@ Run each check as its own command and read its exit status; never chain them wit
 - Characters should have rich dialogues.
 - Character states should change based on quest progress, affecting future interactions and story outcomes.
 
+### Narration Recordings
+
+- The narration audio (`web/public/audio/narration/`, the `narration.lock.json` files) is recorded by the navigator, by hand, with Audio Studio (`tts/README.md`). No agent records narration, and no bead is filed to record it.
+- A change that adds or changes a spoken line puts the line in its act's script (`tts/act<N>/script.json`, written by `tts/extract-act.ts`) and ships without a recording. The navigator records new lines after the merge.
+- A line with no recording yet is not a defect. A test may require that every recording belongs to a line of the script, never that every line of the script has a recording.
+
 ### Save/Load Compatibility
 
 Saves are JSON produced by the engine's generic serializer and kept in the browser's storage. Every content class must stay serializable:
