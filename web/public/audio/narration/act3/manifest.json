@@ -412,17 +412,17 @@
  "003c7755180e7a": {
   "file": "003c7755180e7a.mp3",
   "speaker": "narrator",
-  "duration": 1.3,
+  "duration": 1.207,
   "words": [
    {
     "word": "Tideward",
     "start": 0.0,
-    "end": 0.44
+    "end": 0.36
    },
    {
     "word": "Sigils",
-    "start": 0.44,
-    "end": 1.04
+    "start": 0.36,
+    "end": 0.92
    }
   ]
  },
@@ -3982,6 +3982,128 @@
    }
   ]
  },
+ "0220f4895b8ac0": {
+  "file": "0220f4895b8ac0.mp3",
+  "speaker": "sir cedric",
+  "duration": 7.941,
+  "words": [
+   {
+    "word": "Truth,",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "then.",
+    "start": 0.3,
+    "end": 0.56
+   },
+   {
+    "word": "The",
+    "start": 0.82,
+    "end": 1.28
+   },
+   {
+    "word": "truth",
+    "start": 1.28,
+    "end": 1.56
+   },
+   {
+    "word": "is",
+    "start": 1.56,
+    "end": 1.96
+   },
+   {
+    "word": "I",
+    "start": 2.18,
+    "end": 2.48
+   },
+   {
+    "word": "was",
+    "start": 2.48,
+    "end": 2.66
+   },
+   {
+    "word": "on",
+    "start": 2.66,
+    "end": 2.82
+   },
+   {
+    "word": "the",
+    "start": 2.82,
+    "end": 2.92
+   },
+   {
+    "word": "wall.",
+    "start": 2.92,
+    "end": 3.26
+   },
+   {
+    "word": "The",
+    "start": 3.56,
+    "end": 3.94
+   },
+   {
+    "word": "truth",
+    "start": 3.94,
+    "end": 4.2
+   },
+   {
+    "word": "is",
+    "start": 4.2,
+    "end": 4.58
+   },
+   {
+    "word": "he",
+    "start": 4.92,
+    "end": 5.02
+   },
+   {
+    "word": "is",
+    "start": 5.02,
+    "end": 5.2
+   },
+   {
+    "word": "still",
+    "start": 5.2,
+    "end": 5.46
+   },
+   {
+    "word": "alive.",
+    "start": 5.46,
+    "end": 6.08
+   },
+   {
+    "word": "Let",
+    "start": 6.36,
+    "end": 6.82
+   },
+   {
+    "word": "us",
+    "start": 6.82,
+    "end": 6.96
+   },
+   {
+    "word": "go",
+    "start": 6.96,
+    "end": 7.16
+   },
+   {
+    "word": "and",
+    "start": 7.16,
+    "end": 7.3
+   },
+   {
+    "word": "get",
+    "start": 7.3,
+    "end": 7.5
+   },
+   {
+    "word": "him.",
+    "start": 7.5,
+    "end": 7.74
+   }
+  ]
+ },
  "0239b7119a174b": {
   "file": "0239b7119a174b.mp3",
   "speaker": "narrator",
@@ -5097,27 +5219,27 @@
  "02dbf3d00f9ce4": {
   "file": "02dbf3d00f9ce4.mp3",
   "speaker": "mother",
-  "duration": 2.461,
+  "duration": 3.855,
   "words": [
    {
     "word": "Malakar,",
     "start": 0.0,
-    "end": 1.02
+    "end": 1.12
    },
    {
     "word": "our",
-    "start": 1.46,
-    "end": 1.72
+    "start": 1.74,
+    "end": 1.98
    },
    {
     "word": "friend",
-    "start": 1.72,
-    "end": 2.04
+    "start": 1.98,
+    "end": 2.38
    },
    {
     "word": "\u2014",
-    "start": 2.04,
-    "end": 2.461
+    "start": 2.38,
+    "end": 3.855
    }
   ]
  },
@@ -12313,26 +12435,26 @@
  "06f3fc595099be": {
   "file": "06f3fc595099be.mp3",
   "speaker": "tobin",
-  "duration": 3.576,
+  "duration": 3.669,
   "words": [
    {
     "word": "Still",
     "start": 0.0,
-    "end": 0.28
+    "end": 0.3
    },
    {
     "word": "quiet.",
-    "start": 0.28,
-    "end": 0.62
+    "start": 0.3,
+    "end": 0.66
    },
    {
     "word": "I'll",
     "start": 0.86,
-    "end": 1.08
+    "end": 1.1
    },
    {
     "word": "keep",
-    "start": 1.08,
+    "start": 1.1,
     "end": 1.28
    },
    {
@@ -12342,48 +12464,48 @@
    },
    {
     "word": "if",
-    "start": 1.46,
+    "start": 1.48,
     "end": 1.66
    },
    {
     "word": "that's",
     "start": 1.66,
-    "end": 1.9
+    "end": 1.88
    },
    {
     "word": "all",
-    "start": 1.9,
-    "end": 2.15
+    "start": 1.88,
+    "end": 2.16
    },
    {
     "word": "right.",
-    "start": 2.15,
-    "end": 2.4
+    "start": 2.16,
+    "end": 2.44
    },
    {
     "word": "Just",
-    "start": 2.4,
-    "end": 2.68
+    "start": 2.44,
+    "end": 2.7
    },
    {
     "word": "till",
-    "start": 2.68,
-    "end": 2.82
+    "start": 2.7,
+    "end": 2.86
    },
    {
     "word": "we're",
-    "start": 2.82,
-    "end": 3.0
+    "start": 2.86,
+    "end": 3.04
    },
    {
     "word": "up",
-    "start": 3.0,
-    "end": 3.12
+    "start": 3.04,
+    "end": 3.18
    },
    {
     "word": "top.",
-    "start": 3.12,
-    "end": 3.36
+    "start": 3.18,
+    "end": 3.42
    }
   ]
  },
@@ -15709,77 +15831,77 @@
  "09024faf364039": {
   "file": "09024faf364039.mp3",
   "speaker": "narrator",
-  "duration": 6.641,
+  "duration": 6.316,
   "words": [
    {
     "word": "Through",
     "start": 0.0,
-    "end": 0.26
+    "end": 0.24
    },
    {
     "word": "the",
-    "start": 0.26,
-    "end": 0.48
+    "start": 0.24,
+    "end": 0.44
    },
    {
     "word": "murmur,",
-    "start": 0.48,
-    "end": 0.94
+    "start": 0.44,
+    "end": 0.96
    },
    {
     "word": "one",
-    "start": 1.1,
-    "end": 1.46
+    "start": 1.16,
+    "end": 1.54
    },
    {
     "word": "word",
-    "start": 1.46,
-    "end": 1.78
+    "start": 1.54,
+    "end": 1.88
    },
    {
     "word": "comes",
-    "start": 1.78,
-    "end": 2.12
+    "start": 1.88,
+    "end": 2.22
    },
    {
     "word": "clear,",
-    "start": 2.12,
-    "end": 2.62
+    "start": 2.22,
+    "end": 2.66
    },
    {
     "word": "over",
-    "start": 2.86,
-    "end": 3.66
+    "start": 2.66,
+    "end": 3.38
    },
    {
     "word": "and",
-    "start": 3.66,
-    "end": 4.02
+    "start": 3.38,
+    "end": 3.74
    },
    {
     "word": "over:",
-    "start": 4.02,
-    "end": 4.46
+    "start": 3.74,
+    "end": 4.14
    },
    {
     "word": "rest",
-    "start": 5.08,
-    "end": 5.62
+    "start": 4.56,
+    "end": 5.26
    },
    {
     "word": "\u2026",
-    "start": 5.62,
-    "end": 5.9
+    "start": 5.26,
+    "end": 5.58
    },
    {
     "word": "rest",
-    "start": 5.9,
-    "end": 6.38
+    "start": 5.58,
+    "end": 6.06
    },
    {
     "word": "\u2026",
-    "start": 6.38,
-    "end": 6.641
+    "start": 6.06,
+    "end": 6.316
    }
   ]
  },
@@ -22014,6 +22136,113 @@
    }
   ]
  },
+ "0ce1e2418d8f7d": {
+  "file": "0ce1e2418d8f7d.mp3",
+  "speaker": "narrator",
+  "duration": 7.384,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.44
+   },
+   {
+    "word": "speak",
+    "start": 0.44,
+    "end": 0.88
+   },
+   {
+    "word": "the",
+    "start": 0.88,
+    "end": 1.08
+   },
+   {
+    "word": "old",
+    "start": 1.08,
+    "end": 1.4
+   },
+   {
+    "word": "words",
+    "start": 1.4,
+    "end": 1.9
+   },
+   {
+    "word": "to",
+    "start": 1.9,
+    "end": 2.22
+   },
+   {
+    "word": "the",
+    "start": 2.22,
+    "end": 2.36
+   },
+   {
+    "word": "ancient",
+    "start": 2.36,
+    "end": 2.78
+   },
+   {
+    "word": "dragon:",
+    "start": 2.78,
+    "end": 3.22
+   },
+   {
+    "word": "\u201cI",
+    "start": 3.54,
+    "end": 4.16
+   },
+   {
+    "word": "take",
+    "start": 4.16,
+    "end": 4.52
+   },
+   {
+    "word": "what",
+    "start": 4.52,
+    "end": 4.72
+   },
+   {
+    "word": "is",
+    "start": 4.72,
+    "end": 4.9
+   },
+   {
+    "word": "given,",
+    "start": 4.9,
+    "end": 5.26
+   },
+   {
+    "word": "and",
+    "start": 5.26,
+    "end": 5.76
+   },
+   {
+    "word": "I",
+    "start": 5.76,
+    "end": 5.94
+   },
+   {
+    "word": "return",
+    "start": 5.94,
+    "end": 6.34
+   },
+   {
+    "word": "what",
+    "start": 6.34,
+    "end": 6.68
+   },
+   {
+    "word": "I",
+    "start": 6.68,
+    "end": 6.84
+   },
+   {
+    "word": "take.\u201d",
+    "start": 6.84,
+    "end": 7.12
+   }
+  ]
+ },
  "0cf7b3dfb6fccb": {
   "file": "0cf7b3dfb6fccb.mp3",
   "speaker": "narrator",
@@ -24571,6 +24800,103 @@
     "word": "Virtues",
     "start": 0.52,
     "end": 1.32
+   }
+  ]
+ },
+ "0e67928a38102d": {
+  "file": "0e67928a38102d.mp3",
+  "speaker": "narrator",
+  "duration": 6.455,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.22
+   },
+   {
+    "word": "speak",
+    "start": 0.22,
+    "end": 0.62
+   },
+   {
+    "word": "the",
+    "start": 0.62,
+    "end": 0.82
+   },
+   {
+    "word": "old",
+    "start": 0.82,
+    "end": 1.12
+   },
+   {
+    "word": "words",
+    "start": 1.12,
+    "end": 1.54
+   },
+   {
+    "word": "to",
+    "start": 1.54,
+    "end": 1.72
+   },
+   {
+    "word": "the",
+    "start": 1.72,
+    "end": 1.84
+   },
+   {
+    "word": "ancient",
+    "start": 1.84,
+    "end": 2.24
+   },
+   {
+    "word": "dragon:",
+    "start": 2.24,
+    "end": 2.68
+   },
+   {
+    "word": "\u201cI",
+    "start": 2.98,
+    "end": 3.5
+   },
+   {
+    "word": "take",
+    "start": 3.5,
+    "end": 3.82
+   },
+   {
+    "word": "what",
+    "start": 3.82,
+    "end": 4.0
+   },
+   {
+    "word": "is",
+    "start": 4.0,
+    "end": 4.18
+   },
+   {
+    "word": "given,",
+    "start": 4.18,
+    "end": 4.52
+   },
+   {
+    "word": "and",
+    "start": 4.52,
+    "end": 5.06
+   },
+   {
+    "word": "I",
+    "start": 5.06,
+    "end": 5.22
+   },
+   {
+    "word": "return",
+    "start": 5.22,
+    "end": 5.6
+   },
+   {
+    "word": "everything.\u201d",
+    "start": 5.6,
+    "end": 6.1
    }
   ]
  },
@@ -35921,6 +36247,48 @@
    }
   ]
  },
+ "155ece7fd5499a": {
+  "file": "155ece7fd5499a.mp3",
+  "speaker": "narrator",
+  "duration": 5.062,
+  "words": [
+   {
+    "word": "You:",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "\u201cPower",
+    "start": 0.82,
+    "end": 1.68
+   },
+   {
+    "word": "follows",
+    "start": 1.68,
+    "end": 2.2
+   },
+   {
+    "word": "purpose;",
+    "start": 2.2,
+    "end": 2.72
+   },
+   {
+    "word": "purpose",
+    "start": 2.96,
+    "end": 3.8
+   },
+   {
+    "word": "follows",
+    "start": 3.8,
+    "end": 4.4
+   },
+   {
+    "word": "truth.\u201d",
+    "start": 4.4,
+    "end": 4.72
+   }
+  ]
+ },
  "1565d6e155d51d": {
   "file": "1565d6e155d51d.mp3",
   "speaker": "narrator",
@@ -36066,7 +36434,7 @@
  "1568e7892d1ad5": {
   "file": "1568e7892d1ad5.mp3",
   "speaker": "mother",
-  "duration": 3.111,
+  "duration": 1.997,
   "words": [
    {
     "word": "\u2014",
@@ -36076,17 +36444,17 @@
    {
     "word": "Aren",
     "start": 0.0,
-    "end": 0.0
+    "end": 1.06
    },
    {
     "word": "and",
-    "start": 0.0,
-    "end": 2.06
+    "start": 1.06,
+    "end": 1.28
    },
    {
     "word": "Lysa",
-    "start": 2.06,
-    "end": 2.68
+    "start": 1.28,
+    "end": 1.64
    }
   ]
  },
@@ -41951,6 +42319,38 @@
    }
   ]
  },
+ "18856bbe16809f": {
+  "file": "18856bbe16809f.mp3",
+  "speaker": "narrator",
+  "duration": 2.183,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "stand",
+    "start": 0.18,
+    "end": 0.6
+   },
+   {
+    "word": "still",
+    "start": 0.6,
+    "end": 1.04
+   },
+   {
+    "word": "and",
+    "start": 1.04,
+    "end": 1.5
+   },
+   {
+    "word": "count.",
+    "start": 1.5,
+    "end": 1.86
+   }
+  ]
+ },
  "1885cd462d8e8f": {
   "file": "1885cd462d8e8f.mp3",
   "speaker": "mine overseer",
@@ -42688,6 +43088,103 @@
     "word": "understanding.",
     "start": 14.44,
     "end": 14.62
+   }
+  ]
+ },
+ "18f988ff49aced": {
+  "file": "18f988ff49aced.mp3",
+  "speaker": "narrator",
+  "duration": 6.641,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "speak",
+    "start": 0.36,
+    "end": 0.76
+   },
+   {
+    "word": "the",
+    "start": 0.76,
+    "end": 0.94
+   },
+   {
+    "word": "old",
+    "start": 0.94,
+    "end": 1.28
+   },
+   {
+    "word": "words",
+    "start": 1.28,
+    "end": 1.72
+   },
+   {
+    "word": "to",
+    "start": 1.72,
+    "end": 1.92
+   },
+   {
+    "word": "the",
+    "start": 1.92,
+    "end": 2.04
+   },
+   {
+    "word": "ancient",
+    "start": 2.04,
+    "end": 2.48
+   },
+   {
+    "word": "dragon:",
+    "start": 2.48,
+    "end": 2.96
+   },
+   {
+    "word": "\u201cI",
+    "start": 3.36,
+    "end": 4.04
+   },
+   {
+    "word": "take",
+    "start": 4.04,
+    "end": 4.42
+   },
+   {
+    "word": "what",
+    "start": 4.42,
+    "end": 4.64
+   },
+   {
+    "word": "is",
+    "start": 4.64,
+    "end": 4.82
+   },
+   {
+    "word": "given,",
+    "start": 4.82,
+    "end": 5.2
+   },
+   {
+    "word": "and",
+    "start": 5.2,
+    "end": 5.62
+   },
+   {
+    "word": "I",
+    "start": 5.62,
+    "end": 5.8
+   },
+   {
+    "word": "return",
+    "start": 5.8,
+    "end": 6.22
+   },
+   {
+    "word": "it.\u201d",
+    "start": 6.22,
+    "end": 6.48
    }
   ]
  },
@@ -44315,6 +44812,53 @@
     "word": "it.",
     "start": 5.06,
     "end": 5.4
+   }
+  ]
+ },
+ "19df34d39fbdb7": {
+  "file": "19df34d39fbdb7.mp3",
+  "speaker": "narrator",
+  "duration": 3.39,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "recite",
+    "start": 0.42,
+    "end": 0.9
+   },
+   {
+    "word": "the",
+    "start": 0.9,
+    "end": 1.14
+   },
+   {
+    "word": "resonant",
+    "start": 1.14,
+    "end": 1.72
+   },
+   {
+    "word": "chant",
+    "start": 1.72,
+    "end": 2.08
+   },
+   {
+    "word": "at",
+    "start": 2.08,
+    "end": 2.3
+   },
+   {
+    "word": "each",
+    "start": 2.3,
+    "end": 2.58
+   },
+   {
+    "word": "stone.",
+    "start": 2.58,
+    "end": 2.92
    }
   ]
  },
@@ -46741,6 +47285,103 @@
     "word": "sea.",
     "start": 7.98,
     "end": 8.36
+   }
+  ]
+ },
+ "1b93a62f18d056": {
+  "file": "1b93a62f18d056.mp3",
+  "speaker": "narrator",
+  "duration": 7.291,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "speak",
+    "start": 0.42,
+    "end": 0.86
+   },
+   {
+    "word": "the",
+    "start": 0.86,
+    "end": 1.04
+   },
+   {
+    "word": "old",
+    "start": 1.04,
+    "end": 1.44
+   },
+   {
+    "word": "words",
+    "start": 1.44,
+    "end": 1.98
+   },
+   {
+    "word": "to",
+    "start": 1.98,
+    "end": 2.36
+   },
+   {
+    "word": "the",
+    "start": 2.36,
+    "end": 2.48
+   },
+   {
+    "word": "ancient",
+    "start": 2.48,
+    "end": 2.86
+   },
+   {
+    "word": "dragon:",
+    "start": 2.86,
+    "end": 3.28
+   },
+   {
+    "word": "\u201cI",
+    "start": 3.62,
+    "end": 4.2
+   },
+   {
+    "word": "take",
+    "start": 4.2,
+    "end": 4.54
+   },
+   {
+    "word": "what",
+    "start": 4.54,
+    "end": 4.74
+   },
+   {
+    "word": "is",
+    "start": 4.74,
+    "end": 4.9
+   },
+   {
+    "word": "given,",
+    "start": 4.9,
+    "end": 5.26
+   },
+   {
+    "word": "and",
+    "start": 5.26,
+    "end": 5.84
+   },
+   {
+    "word": "I",
+    "start": 5.84,
+    "end": 6.0
+   },
+   {
+    "word": "return",
+    "start": 6.0,
+    "end": 6.44
+   },
+   {
+    "word": "myself.\u201d",
+    "start": 6.44,
+    "end": 6.68
    }
   ]
  },
@@ -52733,6 +53374,103 @@
     "word": "vows.",
     "start": 20.18,
     "end": 20.68
+   }
+  ]
+ },
+ "1f0049dba95e3c": {
+  "file": "1f0049dba95e3c.mp3",
+  "speaker": "narrator",
+  "duration": 6.966,
+  "words": [
+   {
+    "word": "Sir",
+    "start": 0.0,
+    "end": 0.22
+   },
+   {
+    "word": "Cedric",
+    "start": 0.22,
+    "end": 0.64
+   },
+   {
+    "word": "is",
+    "start": 0.64,
+    "end": 0.86
+   },
+   {
+    "word": "quiet",
+    "start": 0.86,
+    "end": 1.36
+   },
+   {
+    "word": "a",
+    "start": 1.36,
+    "end": 1.7
+   },
+   {
+    "word": "long",
+    "start": 1.7,
+    "end": 1.92
+   },
+   {
+    "word": "moment.",
+    "start": 1.92,
+    "end": 2.34
+   },
+   {
+    "word": "Then",
+    "start": 2.58,
+    "end": 3.02
+   },
+   {
+    "word": "he",
+    "start": 3.02,
+    "end": 3.18
+   },
+   {
+    "word": "nods,",
+    "start": 3.18,
+    "end": 3.72
+   },
+   {
+    "word": "once,",
+    "start": 3.8,
+    "end": 4.28
+   },
+   {
+    "word": "and",
+    "start": 4.6,
+    "end": 4.96
+   },
+   {
+    "word": "loosens",
+    "start": 4.96,
+    "end": 5.46
+   },
+   {
+    "word": "his",
+    "start": 5.46,
+    "end": 5.66
+   },
+   {
+    "word": "sword",
+    "start": 5.66,
+    "end": 6.08
+   },
+   {
+    "word": "in",
+    "start": 6.08,
+    "end": 6.28
+   },
+   {
+    "word": "its",
+    "start": 6.28,
+    "end": 6.46
+   },
+   {
+    "word": "sheath.",
+    "start": 6.46,
+    "end": 6.84
    }
   ]
  },
