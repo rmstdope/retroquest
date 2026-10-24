@@ -62,7 +62,6 @@ export class Fisherman extends Character {
   }
 
   /** Handle talking to the fisherman and teach fishing basics if eligible. */
-  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
   }
@@ -167,7 +166,7 @@ export class Fisherman extends Character {
     }
 
     if (item instanceof FadedPhotograph) {
-      return this.showPhotograph(gameState, item)
+      return this.showPhotograph(gameState)
     }
 
     return (
@@ -183,7 +182,7 @@ export class Fisherman extends Character {
    * message has been read he tells of the tin she hid under the smooth stone.
    * The photograph stays with Elior.
    */
-  private showPhotograph(gameState: GameState, _item: Item): string {
+  private showPhotograph(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_READ_PHOTO_MESSAGE)) {
       return (
         `The ${characterName('fisherman')} squints at the photograph, ` +

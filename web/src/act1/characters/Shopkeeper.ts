@@ -213,7 +213,6 @@ export class Shopkeeper extends Character {
    * Greet Elior: while the store is shut, welcome Patches home or ask after
    * her; once open, hand over the priest's matches or list the wares.
    */
-  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
   }
@@ -302,7 +301,6 @@ export class Shopkeeper extends Character {
    * instead), and the matches are kept for the priest
    * and never sold.
    */
-  /** Sells as before, with the speaker labelled now that no command line names them. */
   override buyItem(gameState: GameState, itemName: string): string {
     return attributeSpeech(this.name, this.buyAnswer(gameState, itemName))
   }

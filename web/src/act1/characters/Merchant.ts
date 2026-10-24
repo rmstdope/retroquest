@@ -141,7 +141,6 @@ export class Merchant extends Character {
    * Trade the boots for the ring or the horseshoe, once; taking the
    * horseshoe sets FLAG_KEPT_MOTHERS_RING. Anything else is declined.
    */
-  /** Receives a gift as before, with the speaker labelled now that no command line names them. */
   override giveItem(gameState: GameState, item: Item): string {
     return attributeSpeech(this.name, this.giveAnswer(gameState, item))
   }
@@ -161,7 +160,7 @@ export class Merchant extends Character {
     if (item instanceof FreshBread && !this.fed) {
       return this.takeFreshBread(gameState, item)
     }
-    if (isRoadFood(item)) return this.refuseFood(item)
+    if (isRoadFood(item)) return this.refuseFood()
     if (item instanceof Horseshoe) return this.tradeHorseshoe(gameState, item)
     if (item instanceof ShinyRing) {
       gameState.removeItemFromInventory(item.name)
@@ -190,7 +189,7 @@ export class Merchant extends Character {
   }
 
   /** Kindly refuse food Elior needs for the road; it stays in his pack. */
-  private refuseFood(_item: Item): string {
+  private refuseFood(): string {
     return speech(
       "That's kind, friend, but you'll want every bite of that where " +
         "you're going. Keep it.",

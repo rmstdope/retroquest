@@ -669,7 +669,7 @@ describe('Game', () => {
       const lantern = item('lantern')
       game.state.inventory.push(lantern)
       expect(game.drop('lantern')).toBe(
-        'You drop the [item_name]lantern[/item_name].',
+        '[event]You drop the [item_name]lantern[/item_name].[/event]',
       )
       expect(game.state.inventory).toEqual([])
       expect(rooms.EliorsCottage.items).toEqual([lantern])

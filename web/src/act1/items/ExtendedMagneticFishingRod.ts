@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { Well } from './Well'
 import { ShinyRing } from './ShinyRing'
 import { RuneToken } from './RuneToken'
@@ -51,10 +51,9 @@ export class ExtendedMagneticFishingRod extends Item {
           `[item_name]${this.name}[/item_name].`
         )
       }
-      return (
-        `You try to use the [item_name]${this.name}[/item_name] ` +
-        `with the [item_name]${other.name}[/item_name], but ` +
-        "it doesn't seem to work right now."
+      return clue(
+        `The [item_name]${this.name}[/item_name] does not seem to work ` +
+          'right now.',
       )
     }
     return super.useWith(gameState, other)

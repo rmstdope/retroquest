@@ -31,7 +31,6 @@ export class Priest extends Character {
   }
 
   /** Tell the founders' story the first time, then answer to Elior's progress. */
-  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
   }

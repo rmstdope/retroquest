@@ -42,7 +42,6 @@ export class Blacksmith extends Character {
   }
 
   /** Dialogue when the player talks to the blacksmith; varies by story flags. */
-  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
   }

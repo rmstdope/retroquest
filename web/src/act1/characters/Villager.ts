@@ -75,7 +75,6 @@ export class Villager extends Character {
    * runs clean; otherwise share the next rumor. Records that a villager has
    * been talked to.
    */
-  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
   }
@@ -130,11 +129,15 @@ export class Villager extends Character {
       return super.sayTo(gameState, words)
     }
     if (!gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)) {
-      return speech("The truth about what, love? You've lost me.")
+      return attributeSpeech(
+        this.name,
+        speech("The truth about what, love? You've lost me."),
+      )
     }
     if (gameState.hasVirtue(VIRTUE_TRUTH)) {
-      return speech(
-        "I know, love. Your secret's safe with me, and so's your loaf.",
+      return attributeSpeech(
+        this.name,
+        speech("I know, love. Your secret's safe with me, and so's your loaf."),
       )
     }
     gameState.addVirtue(VIRTUE_TRUTH)

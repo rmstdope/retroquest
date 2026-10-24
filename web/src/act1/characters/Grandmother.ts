@@ -51,7 +51,6 @@ export class Grandmother extends Character {
    * Patches and the shed hint while he carries its key. The journal tale is told again only
    * when she has nothing newer to say.
    */
-  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
   }
@@ -310,7 +309,6 @@ export class Grandmother extends Character {
   }
 
   /** Handle items given to the grandmother and produce appropriate events. */
-  /** Receives a gift as before, with the speaker labelled now that no command line names them. */
   override giveItem(gameState: GameState, item: Item): string {
     return attributeSpeech(this.name, this.giveAnswer(gameState, item))
   }
@@ -375,7 +373,7 @@ export class Grandmother extends Character {
     } else if (item instanceof FadedPhotograph) {
       if (!gameState.getStoryFlag(FLAG_READ_PHOTO_MESSAGE)) {
         return (
-          'She takes the photograph, her eyes misty with memory. ' +
+          `Your ${characterName('grandmother')} takes the photograph, her eyes misty with memory. ` +
           speech(
             'This was taken long ago, before the troubles began. Your parents were so ' +
               `full of hope... They loved you dearly, ${characterName('Elior')}. ` +
@@ -386,7 +384,7 @@ export class Grandmother extends Character {
       }
       gameState.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
       return (
-        'She studies the back of the photograph, her expression growing ' +
+        `Your ${characterName('grandmother')} studies the back of the photograph, her expression growing ` +
         'serious. ' +
         speech(
           'You found the message, then? Your parents... ' +

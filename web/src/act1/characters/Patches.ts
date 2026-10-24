@@ -53,13 +53,14 @@ export class Patches extends Character {
     }
     if (item instanceof Egg || item instanceof Fish) {
       return (
-        '\nA small nose twitches behind the crates. ' +
+        'A small nose twitches behind the crates. ' +
         'Curiosity gets the better of her.\n' +
         this.comeOut(gameState)
       )
     }
     return (
-      '\nShe sniffs at it from the shadows and stays put. ' +
+      `${characterName(this.name)} sniffs at the [item_name]${item.name}[/item_name] ` +
+      'from the shadows and stays put. ' +
       'Perhaps she would rather hear her name.'
     )
   }

@@ -37,6 +37,4 @@ export class Sword extends Item {
   override equip(_gameState: GameState): string {
     return 'You feel more confident and prepared for any threats.'
   }
-
-  /** Examine the sword and read its description. */
 }

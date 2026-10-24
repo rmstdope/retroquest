@@ -522,7 +522,7 @@ Welcome to
       return `[failure]You don't have a '${itemName}' to drop.[/failure]`
     this.state.inventory.splice(this.state.inventory.indexOf(item), 1)
     this.state.currentRoom.items.push(item)
-    return `You drop the [item_name]${item.name}[/item_name].`
+    return `[event]You drop the [item_name]${item.name}[/item_name].[/event]`
   }
 
   /** Take every item with the name from the room; some may refuse. */

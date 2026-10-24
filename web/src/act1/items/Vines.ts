@@ -25,7 +25,7 @@ export class Vines extends Item {
       refreshRoomDescription(gameState)
       return (
         `The thick [item_name]${this.name}[/item_name] fall away under the ` +
-        `sharp [item_name]${other.name}[/item_name], clearing the way ` +
+        `[item_name]${other.name}[/item_name], clearing the way ` +
         'to a small alcove. You can see ' +
         'a sturdy [item_name]stick[/item_name] in the revealed alcove.\n' +
         'You wipe the blade on the moss and keep it; it may yet be useful.'

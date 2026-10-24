@@ -227,7 +227,6 @@ export class Mira extends Character {
    * The first talk after the fox kit was freed opens with her one-time
    * remark about the forest, then goes on as it would have.
    */
-  /** Talks as before, with the speaker labelled now that no command line names them. */
   override talkTo(gameState: GameState): string {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
   }

@@ -37,6 +37,4 @@ export class Armor extends Item {
   override equip(_gameState: GameState): string {
     return 'You feel more protected and ready for danger.'
   }
-
-  /** Examine the armor and read its description. */
 }
