@@ -187,7 +187,7 @@ export class FumarolePassages extends Room {
   override rest(gameState: GameState): string {
     if (!this.isWarded(gameState)) return super.rest(gameState)
     this.advanceBreath()
-    return this.breathLine(gameState)
+    return `You stand still and count.\n${this.breathLine(gameState)}`
   }
 
   /**

@@ -985,6 +985,11 @@
     "text": "The rock grows a touch cooler around your hands as the ward seals into place. Down the tunnel you notice the gusting heat flatten into a steady breath—passage through the fumaroles is now safe for a short interval. The wild gusting settles into a slow, even breath: out, a held pause, and in. Each time it draws in, a cool draught runs south."
   },
   {
+    "key": "18856bbe16809f",
+    "speaker": "narrator",
+    "text": "You stand still and count."
+  },
+  {
     "key": "02d3fa43f564e3",
     "speaker": "narrator",
     "text": "The vents fall still, holding their breath. The heat hangs heavy and unmoving."
@@ -1785,6 +1790,11 @@
     "text": "The stones in this room were cut to carry a whisper to the sleeper without waking it. They have gone cold. The water lies true now; it will hold your words. Bless them, and give them the old chant, and the way will open."
   },
   {
+    "key": "19df34d39fbdb7",
+    "speaker": "narrator",
+    "text": "You recite the resonant chant at each stone."
+  },
+  {
     "key": "0885314b052cf8",
     "speaker": "narrator",
     "text": "The words echo and re-echo, building into a harmonious silence that banishes the wandering phantoms. The path to the dragon's hall now lies open."
@@ -1913,6 +1923,11 @@
     "key": "19a152339c309e",
     "speaker": "narrator",
     "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
+  },
+  {
+    "key": "0e67928a38102d",
+    "speaker": "narrator",
+    "text": "You speak the old words to the ancient dragon: “I take what is given, and I return everything.”"
   },
   {
     "key": "19054fab381fc3",

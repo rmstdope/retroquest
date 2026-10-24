@@ -80,7 +80,9 @@ describe('ResonantChantRubbings', () => {
 
     const result = rubbings.useWith(gs, echoStones)
 
-    expect(result).not.toContain('You recite')
+    expect(
+      result.startsWith('You recite the resonant chant at each stone.\n'),
+    ).toBe(true)
     expect(result).toContain(
       'The words leave the stones and skim out across the pools. Water that ' +
         'looked frozen shivers under them, and the chant breaks apart on a ' +
