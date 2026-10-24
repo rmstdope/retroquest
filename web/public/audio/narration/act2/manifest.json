@@ -3578,6 +3578,198 @@
    }
   ]
  },
+ "01991ff198ef2e": {
+  "file": "01991ff198ef2e.mp3",
+  "speaker": "narrator",
+  "duration": 16.115,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "moment",
+    "start": 0.2,
+    "end": 0.58
+   },
+   {
+    "word": "you",
+    "start": 0.58,
+    "end": 0.82
+   },
+   {
+    "word": "touch",
+    "start": 0.82,
+    "end": 1.18
+   },
+   {
+    "word": "it,",
+    "start": 1.18,
+    "end": 1.36
+   },
+   {
+    "word": "you",
+    "start": 1.6,
+    "end": 1.88
+   },
+   {
+    "word": "feel",
+    "start": 1.88,
+    "end": 2.2
+   },
+   {
+    "word": "a",
+    "start": 2.2,
+    "end": 2.4
+   },
+   {
+    "word": "surge",
+    "start": 2.4,
+    "end": 2.8
+   },
+   {
+    "word": "of",
+    "start": 2.8,
+    "end": 3.02
+   },
+   {
+    "word": "natural",
+    "start": 3.02,
+    "end": 3.5
+   },
+   {
+    "word": "magic",
+    "start": 3.5,
+    "end": 3.98
+   },
+   {
+    "word": "-",
+    "start": 3.98,
+    "end": 4.38
+   },
+   {
+    "word": "this",
+    "start": 4.38,
+    "end": 5.1
+   },
+   {
+    "word": "is",
+    "start": 5.1,
+    "end": 5.32
+   },
+   {
+    "word": "no",
+    "start": 5.32,
+    "end": 5.6
+   },
+   {
+    "word": "ordinary",
+    "start": 5.6,
+    "end": 6.2
+   },
+   {
+    "word": "acorn,",
+    "start": 6.2,
+    "end": 6.86
+   },
+   {
+    "word": "but",
+    "start": 6.92,
+    "end": 7.42
+   },
+   {
+    "word": "a",
+    "start": 7.42,
+    "end": 7.58
+   },
+   {
+    "word": "sacred",
+    "start": 7.58,
+    "end": 8.02
+   },
+   {
+    "word": "offering",
+    "start": 8.02,
+    "end": 8.58
+   },
+   {
+    "word": "imbued",
+    "start": 8.58,
+    "end": 9.54
+   },
+   {
+    "word": "with",
+    "start": 9.54,
+    "end": 9.7
+   },
+   {
+    "word": "the",
+    "start": 9.7,
+    "end": 9.86
+   },
+   {
+    "word": "forest's",
+    "start": 9.86,
+    "end": 10.56
+   },
+   {
+    "word": "blessing.",
+    "start": 10.56,
+    "end": 11.0
+   },
+   {
+    "word": "The",
+    "start": 11.36,
+    "end": 12.0
+   },
+   {
+    "word": "forest",
+    "start": 12.0,
+    "end": 12.42
+   },
+   {
+    "word": "sprites",
+    "start": 12.42,
+    "end": 12.94
+   },
+   {
+    "word": "whisper",
+    "start": 12.94,
+    "end": 13.48
+   },
+   {
+    "word": "approvingly",
+    "start": 13.48,
+    "end": 14.34
+   },
+   {
+    "word": "as",
+    "start": 14.34,
+    "end": 14.74
+   },
+   {
+    "word": "you",
+    "start": 14.74,
+    "end": 14.88
+   },
+   {
+    "word": "claim",
+    "start": 14.88,
+    "end": 15.24
+   },
+   {
+    "word": "this",
+    "start": 15.24,
+    "end": 15.54
+   },
+   {
+    "word": "gift.",
+    "start": 15.54,
+    "end": 15.82
+   }
+  ]
+ },
  "019ce99fd0d8d6": {
   "file": "019ce99fd0d8d6.mp3",
   "speaker": "historians",
@@ -56262,6 +56454,153 @@
     "word": "generations.",
     "start": 11.48,
     "end": 11.86
+   }
+  ]
+ },
+ "17a2d38bf48bf5": {
+  "file": "17a2d38bf48bf5.mp3",
+  "speaker": "narrator",
+  "duration": 12.307,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "moonflowers",
+    "start": 0.34,
+    "end": 1.16
+   },
+   {
+    "word": "seem",
+    "start": 1.16,
+    "end": 1.42
+   },
+   {
+    "word": "to",
+    "start": 1.42,
+    "end": 1.62
+   },
+   {
+    "word": "approve",
+    "start": 1.62,
+    "end": 2.06
+   },
+   {
+    "word": "of",
+    "start": 2.06,
+    "end": 2.36
+   },
+   {
+    "word": "your",
+    "start": 2.36,
+    "end": 2.52
+   },
+   {
+    "word": "gentle",
+    "start": 2.52,
+    "end": 2.86
+   },
+   {
+    "word": "touch,",
+    "start": 2.86,
+    "end": 3.3
+   },
+   {
+    "word": "their",
+    "start": 3.58,
+    "end": 4.14
+   },
+   {
+    "word": "silvery",
+    "start": 4.14,
+    "end": 4.66
+   },
+   {
+    "word": "glow",
+    "start": 4.66,
+    "end": 5.04
+   },
+   {
+    "word": "pulsing",
+    "start": 5.04,
+    "end": 5.84
+   },
+   {
+    "word": "warmly",
+    "start": 5.84,
+    "end": 6.4
+   },
+   {
+    "word": "as",
+    "start": 6.4,
+    "end": 6.6
+   },
+   {
+    "word": "you",
+    "start": 6.6,
+    "end": 6.7
+   },
+   {
+    "word": "gather",
+    "start": 6.7,
+    "end": 7.04
+   },
+   {
+    "word": "them.",
+    "start": 7.04,
+    "end": 7.28
+   },
+   {
+    "word": "These",
+    "start": 7.72,
+    "end": 8.42
+   },
+   {
+    "word": "blessed",
+    "start": 8.42,
+    "end": 8.96
+   },
+   {
+    "word": "blooms",
+    "start": 8.96,
+    "end": 9.4
+   },
+   {
+    "word": "will",
+    "start": 9.4,
+    "end": 9.66
+   },
+   {
+    "word": "aid",
+    "start": 9.66,
+    "end": 9.96
+   },
+   {
+    "word": "in",
+    "start": 9.96,
+    "end": 10.18
+   },
+   {
+    "word": "healing",
+    "start": 10.18,
+    "end": 10.54
+   },
+   {
+    "word": "and",
+    "start": 10.54,
+    "end": 11.02
+   },
+   {
+    "word": "protection",
+    "start": 11.02,
+    "end": 11.54
+   },
+   {
+    "word": "magic.",
+    "start": 11.54,
+    "end": 11.96
    }
   ]
  },
