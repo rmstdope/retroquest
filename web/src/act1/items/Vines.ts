@@ -1,7 +1,6 @@
 import { Item, type GameState } from '@/engine'
 import { SharpKnife } from './SharpKnife'
 import { Snare } from './Snare'
-import { refreshRoomDescription } from '../refreshRoomDescription'
 import { Stick } from './Stick'
 
 /** Destructible environmental obstacle that converts into a resource (Stick) when overcome. */
@@ -22,7 +21,6 @@ export class Vines extends Item {
       gameState.currentRoom.removeItem(this.name)
       gameState.currentRoom.addItem(new Stick())
       gameState.currentRoom.addItem(new Snare())
-      refreshRoomDescription(gameState)
       return (
         `The thick [item_name]${this.name}[/item_name] fall away under the ` +
         `[item_name]${other.name}[/item_name], clearing the way ` +

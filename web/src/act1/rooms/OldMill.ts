@@ -35,8 +35,8 @@ const AMULET_HUM =
  * stranger's mechanism whirs until Elior jams it, and where the stranger
  * himself is seen once, with his back turned, after the rune token is found.
  *
- * The description follows the Mechanism item. `Mechanism.useWith` calls
- * `refreshDescription()` so the room text changes the moment it is jammed.
+ * The description follows the Mechanism item: `descriptionFor` computes it
+ * from the mechanism and the amulet each time the room is shown.
  */
 export class OldMill extends Room {
   constructor() {
@@ -50,23 +50,18 @@ export class OldMill extends Room {
   }
 
   /**
-   * Describe the mechanism as whirring or jammed; once it is jammed and
+   * The mill with its mechanism whirring or jammed; once it is jammed and
    * Elior carries the amulet, the amulet hums.
    */
-  refreshDescription(gameState: GameState): void {
+  override descriptionFor(gameState: GameState): string {
     const jammed = this.items.some(
       (item) => item instanceof Mechanism && item.repaired,
     )
-    this.description =
+    return (
       DESCRIPTION_START +
       (jammed ? MECHANISM_JAMMED : MECHANISM_WORKING) +
       (jammed && gameState.hasItem('Ancient Amulet') ? AMULET_HUM : '')
-  }
-
-  /** Refresh the mechanism in the description before describing the room. */
-  override describe(gameState: GameState): string {
-    this.refreshDescription(gameState)
-    return super.describe(gameState)
+    )
   }
 
   /**

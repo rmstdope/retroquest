@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import { LightSpell } from '../spells/LightSpell'
 import { AncientAmulet } from '../items/AncientAmulet'
@@ -99,5 +99,15 @@ describe('Hidden Glade', () => {
         SENTENCE,
       )
     })
+  })
+})
+
+describe('the Hidden Glade room card', () => {
+  it('shows the sunlit glade once light is cast', () => {
+    const game = gameInGlade()
+    const card = new GameController(game)
+    game.commandParser.parse('cast light')
+    expect(card.getRoomDescription()).toContain('golden sunlight')
+    expect(card.getRoomDescription()).not.toContain('too deep in shadow')
   })
 })

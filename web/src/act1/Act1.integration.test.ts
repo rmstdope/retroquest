@@ -657,7 +657,9 @@ describe('Act 1 optional watering of the Vegetable Field', () => {
     executeCommands(game, ['use bucket with well', 'go west', 'use bucket'])
 
     expectStoryFlag(game.state, 'vegetable_field_watered', true)
-    expect(game.state.currentRoom.description).toContain('green crops')
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'green crops',
+    )
     expect(game.state.getQuest(MAIN)?.description).toContain(
       '[room_name]Vegetable Field[/room_name] back to life',
     )

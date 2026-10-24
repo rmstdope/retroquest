@@ -31,17 +31,18 @@ export class SubmergedAntechamber extends Room {
   }
 
   /**
-   * Describe the room; once the Tideward sigils are completed the tide has
-   * withdrawn and the stored description changes to the unmasked hall.
+   * The flooded hall; once the Tideward sigils are completed the tide has
+   * withdrawn and the room reads as the unmasked hall.
    */
-  override describe(gameState: GameState): string {
+  override descriptionFor(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)) {
-      this.description =
+      return (
         'The hall, recently unmasked by a withdrawing tide, shows the bare ' +
         'lines of its carved work. Salt crystals glitter on exposed stone; ' +
         "the air feels colder and the rooms' echoes are clearer than before."
+      )
     }
-    return super.describe(gameState)
+    return this.description
   }
 
   /** Search the antechamber for subtle traces and hidden marks. */

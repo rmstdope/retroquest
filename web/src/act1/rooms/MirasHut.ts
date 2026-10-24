@@ -29,13 +29,16 @@ export class MirasHut extends Room {
     })
   }
 
-  /** Add the amulet's glow or the empty stand to the description, then describe. */
-  override describe(gameState: GameState): string {
+  /**
+   * The hut's text with the amulet's glow or the empty stand added. Saves
+   * made before this was computed may carry either sentence in the stored
+   * description, so both are stripped first.
+   */
+  override descriptionFor(gameState: GameState): string {
     const base = this.description.replace(GLOW, '').replace(EMPTY_STAND, '')
     const onStand = this.items.some((item) => item instanceof AncientAmulet)
     const keepsake =
       gameState.hasItem('locket') || gameState.hasItem("mother's letter")
-    this.description = base + (onStand ? (keepsake ? GLOW : '') : EMPTY_STAND)
-    return super.describe(gameState)
+    return base + (onStand ? (keepsake ? GLOW : '') : EMPTY_STAND)
   }
 }

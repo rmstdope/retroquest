@@ -1,7 +1,6 @@
 import { Item, type GameState, remembered } from '@/engine'
 import { FLAG_FOX_KIT_FREED, VIRTUE_MERCY } from '../Act1StoryFlags'
 import { SharpKnife } from './SharpKnife'
-import { refreshRoomDescription } from '../refreshRoomDescription'
 
 /** What the player sees while the kit is caught. */
 const KIT_DESCRIPTION =
@@ -71,7 +70,6 @@ export class Snare extends Item {
     this.freed = true
     gameState.setStoryFlag(FLAG_FOX_KIT_FREED, true)
     gameState.addVirtue(VIRTUE_MERCY)
-    refreshRoomDescription(gameState)
     return (
       'You kneel and saw through the wire, slow and careful. The moment it ' +
       'gives, the fox kit twists free, stares at you for one heartbeat, and ' +

@@ -30,8 +30,8 @@ const SNARE_CUT_SENTENCE =
 /**
  * Forest Path room: dynamic description corridor with a removable vine
  * obstacle. Once the vines are cut the alcove shows the fox kit caught in a
- * snare and, after it is freed, the cut, empty snare. `refreshDescription()`
- * rebuilds the text from the items in the room.
+ * snare and, after it is freed, the cut, empty snare. `descriptionFor`
+ * builds the text from the items in the room each time it is shown.
  */
 export class ForestPath extends Room {
   constructor() {
@@ -49,22 +49,15 @@ export class ForestPath extends Room {
    * with the opened alcove and what lies in it (the caught kit, or the cut
    * snare after it is freed).
    */
-  refreshDescription(_gameState: GameState): void {
+  override descriptionFor(_gameState: GameState): string {
     if (this.items.some((item) => item instanceof Vines)) {
-      this.description = BLOCKED_DESCRIPTION
-      return
+      return BLOCKED_DESCRIPTION
     }
     const snare = this.items.find((item) => item instanceof Snare)
     let alcove = ''
     if (snare instanceof Snare) {
       alcove = snare.freed ? SNARE_CUT_SENTENCE : KIT_CAUGHT_SENTENCE
     }
-    this.description = CLEARED_DESCRIPTION + alcove
-  }
-
-  /** Refresh the description before describing the room. */
-  override describe(gameState: GameState): string {
-    this.refreshDescription(gameState)
-    return super.describe(gameState)
+    return CLEARED_DESCRIPTION + alcove
   }
 }

@@ -1,7 +1,6 @@
 import { Item, type GameState, clue } from '@/engine'
 import { MillstoneFragment } from './MillstoneFragment'
 import { Rope } from './Rope'
-import { refreshRoomDescription } from '../refreshRoomDescription'
 
 const WORKING_DESCRIPTION =
   'A strange mechanism of black iron, all levers and gears, ' +
@@ -67,7 +66,6 @@ export class Mechanism extends Item {
       const millstoneFragment = new MillstoneFragment()
       gameState.currentRoom.addItem(millstoneFragment)
       this.description = JAMMED_DESCRIPTION
-      refreshRoomDescription(gameState)
       const nameHtml = `[item_name]${this.name}[/item_name]`
       return (
         'You thread the [item_name]rope[/item_name] through the gears of the ' +

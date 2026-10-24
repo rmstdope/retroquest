@@ -1,7 +1,6 @@
 import { Item, type GameState, clue } from '@/engine'
 import { FLAG_VEGETABLE_FIELD_WATERED } from '../Act1StoryFlags'
 import { VegetableField } from '../rooms/VegetableField'
-import { refreshRoomDescription } from '../refreshRoomDescription'
 import { Well } from './Well'
 import { WitheredCarrot } from './WitheredCarrot'
 
@@ -112,7 +111,6 @@ export class Bucket extends Item {
       return 'The field drinks the clear water gladly, already green and thriving.'
     }
     gameState.setStoryFlag(FLAG_VEGETABLE_FIELD_WATERED, true)
-    refreshRoomDescription(gameState)
     return (
       'You walk the rows, pouring the clear well water along the cracked earth.\n' +
       'The soil darkens and drinks it in. ' +

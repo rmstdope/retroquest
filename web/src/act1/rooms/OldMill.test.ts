@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
+import { Mechanism } from '../items/Mechanism'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { Act1 } from '../Act1'
 import {
   FLAG_FOUND_RUNE_TOKEN,
@@ -55,5 +57,20 @@ describe('the cloaked stranger at the Old Mill', () => {
 
     expect(loaded.state.currentRoom).toBeInstanceOf(OldMill)
     expect(loaded.commandParser.parse('look')).not.toContain(SIGHTING)
+  })
+})
+
+describe('the Old Mill room card', () => {
+  it('shows the jammed mechanism and the humming amulet', () => {
+    const game = new Game([new Act1()])
+    const mill = game.state.allRooms.OldMill
+    game.state.currentRoom = mill
+    const mechanism = mill.items.find((item) => item instanceof Mechanism)
+    if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
+    mechanism.repaired = true
+    game.state.inventory.push(new AncientAmulet())
+    const text = new GameController(game).getRoomDescription()
+    expect(text).toContain('jammed with a rope')
+    expect(text).toContain('hums softly')
   })
 })
