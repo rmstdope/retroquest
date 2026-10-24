@@ -56,7 +56,9 @@ after the elixir ("It does not hurt. For the first time in years, it does not hu
     `clue()`: it keeps the red box and is read aloud, in one fixed sentence that names no changing
     target, price or item. The only grey `event()` lines left are markers, not repeats: a plain
     pick-up ("You take the coin.") and its twin "You drop the coin.", waking in the cottage, saving and loading, and the
-    `remembered()` line. Dialogue that opens an answer is labelled with `attributeSpeech()`.
+    `remembered()` line. A pick-up with its own line has no marker: that line, read, is the whole
+    answer ("take echo stone" answers "You lift a smooth grey stone…" alone). Dialogue that opens
+    an answer is labelled with `attributeSpeech()`.
 
 ## Before and after
 

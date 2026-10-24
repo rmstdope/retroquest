@@ -525,7 +525,11 @@ Welcome to
     return `[event]You drop the [item_name]${item.name}[/item_name].[/event]`
   }
 
-  /** Take every item with the name from the room; some may refuse. */
+  /**
+   * Take every item with the name from the room; some may refuse. A single
+   * item with its own pickup line is taken in that line alone, which already
+   * says what happens; the plain "You take the X." is for items without one.
+   */
   take(itemName: string): string {
     const candidates = this.findAllItems(itemName, { inventory: false })
     if (candidates.length === 0) {
@@ -547,8 +551,10 @@ Welcome to
     const responses: string[] = []
     if (taken.length === 1) {
       const [item, message] = taken[0]
-      const event = `[event]You take the [item_name]${item.name}[/item_name].[/event]`
-      responses.push(message ? `${event} ${message}` : event)
+      responses.push(
+        message ||
+          `[event]You take the [item_name]${item.name}[/item_name].[/event]`,
+      )
     } else if (taken.length > 1) {
       const name = taken[0][0].name
       responses.push(

@@ -17,8 +17,8 @@ export class RustedLockerKey extends Item {
   /** Override pickup to emphasize the key's compromised condition. */
   override pickedUp(_gameState: GameState): string {
     return (
-      'Its teeth are ragged with corrosion; it might fit, but the lock ' +
-      'has long since fused.'
+      "The key's teeth are ragged with corrosion; it might fit, but the " +
+      'lock has long since fused.'
     )
   }
 
