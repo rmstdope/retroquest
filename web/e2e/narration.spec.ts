@@ -110,6 +110,12 @@ test('Space and Enter press a focused verb and the voice keeps reading', async (
   ).toBeVisible()
   expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+
+  // Enter on the focused Cancel presses it too, and the voice still reads.
+  await page.locator('.lq-cancel').focus()
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.lq-cancel')).toHaveCount(0)
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
 })
 
 test('typing keeps the voice reading, and Esc in the command box skips it', async ({

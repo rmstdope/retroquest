@@ -266,6 +266,15 @@ function putAway(event: KeyboardEvent): void {
   reset()
 }
 
+/**
+ * Escape in the command box: with the word list open it only closes the list
+ * (consumed, so the layout's narration skip does not also take it).
+ */
+function onTypedEscape(event: KeyboardEvent): void {
+  if (completion.open.value) event.preventDefault()
+  completion.close()
+}
+
 /** Enter in a text slot: run the command if complete, else go on to the choices. */
 function textEntered(): void {
   if (command.value) doIt()
@@ -515,7 +524,7 @@ function onTypedEnter(): void {
           @keydown.tab="completion.onTab"
           @keydown.down.prevent="completion.onArrowDown"
           @keydown.up.prevent="completion.onArrowUp"
-          @keydown.escape="completion.close"
+          @keydown.escape="onTypedEscape"
           @keydown.enter.prevent="onTypedEnter"
           @blur="completion.close"
         />

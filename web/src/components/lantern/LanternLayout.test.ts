@@ -1834,6 +1834,7 @@ describe('LanternLayout', () => {
         await say(narratedTurn(1))
         const field = document.createElement('input')
         document.body.appendChild(field)
+        field.className = 'lq-type-input'
         field.focus()
         await vi.advanceTimersByTimeAsync(0)
         expect(hint(w)).toBe('Esc to skip')

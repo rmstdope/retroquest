@@ -85,6 +85,9 @@ const hintText = computed(() => {
   return fieldFocused.value ? 'Esc to skip' : 'Space to hurry · Esc to skip'
 })
 
+/** The Type-mode command box: the one field where Esc skips the voice. */
+const COMMAND_BOX = '.lq-type-input'
+
 /** Follows where the cursor is, for the hint. */
 function onFocusChange(event: FocusEvent): void {
   // Focus is going to `relatedTarget` when it leaves, and to the target when it enters.
@@ -220,6 +223,7 @@ function onNarrationKey(event: KeyboardEvent): void {
 }
 
 onMounted(() => {
+  fieldFocused.value = !!document.activeElement?.matches(COMMAND_BOX)
   document.addEventListener('keydown', onNarrationKey)
   document.addEventListener('focusin', onFocusChange)
   document.addEventListener('focusout', onFocusChange)
