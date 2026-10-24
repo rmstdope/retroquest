@@ -26513,6 +26513,78 @@
    }
   ]
  },
+ "13404625e6187f": {
+  "file": "13404625e6187f.mp3",
+  "speaker": "narrator",
+  "duration": 4.876,
+  "words": [
+   {
+    "word": "As",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "you",
+    "start": 0.2,
+    "end": 0.32
+   },
+   {
+    "word": "do",
+    "start": 0.32,
+    "end": 0.56
+   },
+   {
+    "word": "this,",
+    "start": 0.56,
+    "end": 0.9
+   },
+   {
+    "word": "the",
+    "start": 1.26,
+    "end": 1.48
+   },
+   {
+    "word": "priest",
+    "start": 1.48,
+    "end": 1.86
+   },
+   {
+    "word": "gasps",
+    "start": 1.86,
+    "end": 2.44
+   },
+   {
+    "word": "and",
+    "start": 2.44,
+    "end": 2.94
+   },
+   {
+    "word": "looks",
+    "start": 2.94,
+    "end": 3.28
+   },
+   {
+    "word": "closely",
+    "start": 3.28,
+    "end": 3.84
+   },
+   {
+    "word": "at",
+    "start": 3.84,
+    "end": 4.08
+   },
+   {
+    "word": "its",
+    "start": 4.08,
+    "end": 4.26
+   },
+   {
+    "word": "crest.",
+    "start": 4.26,
+    "end": 4.52
+   }
+  ]
+ },
  "136e4c997d932c": {
   "file": "136e4c997d932c.mp3",
   "speaker": "narrator",
