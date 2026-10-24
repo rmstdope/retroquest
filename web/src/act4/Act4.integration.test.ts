@@ -517,7 +517,7 @@ describe('Act 4 integration', () => {
       "You hold the Echo Stone to your ear. The hall's voices murmur inside " +
       'it, waiting for somewhere that needs them.'
     const SOLVED =
-      'Behind you the false mirrors go ' +
+      'You step into the empty corridor. Behind you the false mirrors go ' +
       'dark, one by one, until a single corridor remains — and at its end, a ' +
       'plain mirror that shows you exactly as you are.'
     const ALREADY_CLEAR =
