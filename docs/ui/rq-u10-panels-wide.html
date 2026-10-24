@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panels wait (laptop)</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+:root{--bg:#10151a;--surface:#161d24;--raised:#1c242c;--line:#26313b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;
+--accent:#ffa914;--on-accent:#1a1408;--accent-text:#ffb836;--accent-soft:#36270a;--accent-line:#a8740f;
+--character:#7fb0e6;--character-soft:#172433;--character-line:#34506b;--page:#0b0f13;--quest:#9fd38a;--quest-soft:#17261a;--quest-line:#3c6236}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--fg);font:15px/1.5 'DM Sans',system-ui,sans-serif;padding:24px 16px}
+.wrap{max-width:1200px;margin:0 auto}
+.kicker{color:var(--accent-text);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{font:600 26px/1.15 Fraunces,serif;margin:4px 0 8px}
+.intro{color:var(--prose);max-width:820px}
+.cost{color:var(--muted);font-size:13px;border-left:2px solid var(--accent-line);padding-left:10px;max-width:820px}
+.rig{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.rig button{font:500 14px 'DM Sans',sans-serif;border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--line);background:var(--raised);color:var(--fg)}
+.rig button.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.rig .step{color:var(--muted);font-size:13px}
+.caption{min-height:44px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--prose);margin-bottom:14px}
+.caption b{color:var(--accent-text)}
+/* the game */
+.game{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg)}
+.hdr{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;border-bottom:1px solid var(--line);background:var(--surface)}
+.hdr .title{font:600 17px Fraunces,serif}
+.hdr .prog{color:var(--muted);font-size:13px}
+.hdr .prog b{color:var(--fg)}
+.cols{display:grid;grid-template-columns:1fr 340px;min-height:520px}
+.story{padding:16px 22px 20px;font:15px/1.55 'Source Serif 4',Georgia,serif;color:var(--prose);border-right:1px solid var(--line);cursor:pointer}
+.echo{font:500 13px 'DM Sans',sans-serif;color:var(--accent-text);margin:4px 0 10px}
+.blk{margin:0 0 12px;animation:fade .35s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.blk.narr.speaking{box-shadow:inset 3px 0 0 var(--accent);padding-left:10px}
+.divider{font:600 13px 'DM Sans',sans-serif;color:var(--accent-text);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:6px}
+.divider.speaking{box-shadow:inset 3px 0 0 var(--accent);padding-left:10px}
+.speech{background:var(--character-soft);border:1px solid var(--character-line);border-radius:10px;padding:8px 12px;color:var(--fg);font-style:italic}
+.speech .who{font:600 12px 'DM Sans',sans-serif;color:var(--character);font-style:normal;display:block}
+.speech.speaking{border-color:var(--character)}
+.quest{background:var(--quest-soft);border:1px solid var(--quest-line);border-radius:10px;padding:8px 12px;font-family:'DM Sans',sans-serif}
+.quest .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--quest)}
+.quest.speaking{border-color:var(--quest)}
+.event{font:500 13px 'DM Sans',sans-serif;color:var(--muted)}
+.hint{font:12px 'DM Sans',sans-serif;color:var(--muted);margin-top:6px}
+.side{display:flex;flex-direction:column;gap:12px;padding:14px;background:var(--bg)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;transition:opacity .35s ease}
+.panel.changed{animation:flash 1.2s ease}
+@keyframes flash{0%{border-color:var(--accent)}100%{border-color:var(--line)}}
+.label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.rname{font:600 19px Fraunces,serif;margin:2px 0 4px}
+.rtext{font:14px/1.5 'Source Serif 4',serif;color:var(--prose);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.rtext.reading{box-shadow:inset 3px 0 0 var(--accent);padding-left:8px;-webkit-line-clamp:unset}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font:500 12px 'DM Sans',sans-serif;border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--raised);color:var(--fg);cursor:pointer}
+.chip.ch{color:var(--character);border-color:var(--character-line)}
+.compass{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.compass div{min-height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center}
+.compass .exit{background:var(--raised);border:1px solid var(--line);cursor:pointer}
+.compass .here{background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent-text);font-weight:600}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:-4px 0 8px}
+.tabs span{font-size:13px;padding:4px 8px;color:var(--muted)}
+.tabs span.on{color:var(--fg);border-bottom:2px solid var(--accent)}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:4px;vertical-align:middle}
+.list{font-size:13px;color:var(--prose);margin:0;padding-left:18px}
+/* variants */
+.placeholder .rname{color:var(--muted);font-style:italic;font-family:'Source Serif 4',serif;font-weight:400}
+.placeholder{opacity:.55}
+.locked{opacity:.45}
+.locked .exit,.locked .chip{cursor:not-allowed}
+.composer{border-top:1px solid var(--line);padding:10px 18px;display:flex;gap:6px;background:var(--surface)}
+.composer span{font:500 13px 'DM Sans',sans-serif;border:1px solid var(--line);border-radius:8px;padding:5px 12px;background:var(--raised)}
+</style></head><body><div class="wrap">
+<div class="kicker">rq-u10 · Agreed · laptop</div>
+<h1>The panels beside the story wait for the voice</h1>
+<p class="intro">Press <b>Next moment</b> (or click the story) to walk through one narrated turn: “go north” from Village Square to Mira's Hut, where Mira gives a herb and a new quest. Watch the right-hand side.</p>
+<p class="cost">Agreed: the room card, Here, map and header hold the old place until the arrival is read; the quest count changes when the quest card is read; Bag and Spells (and their dots) when the turn is read to the end. Pressing an old exit or name at moment 1 only catches up. Skipping, cutting in or narration off: everything at once.</p>
+<div class="rig">
+  <button class="primary" id="next">Next moment of the turn ▸</button>
+  <button id="restart">Start the turn again</button>
+  <span class="step" id="stepinfo"></span>
+</div>
+<div class="caption" id="caption"></div>
+<div class="game">
+  <div class="hdr"><span class="title">RetroQuest</span><span class="prog">Act I · Quests <b id="qdone">1</b>/11</span></div>
+  <div class="cols">
+    <div class="story" id="story" title="Click the story to hurry, as in the game"></div>
+    <div class="side">
+      <section class="panel" id="room">
+        <div class="label">You are in</div>
+        <div class="rname" id="rname"></div>
+        <div class="rtext" id="rtext"></div>
+        <div class="label" style="margin-top:8px">Here</div>
+        <div class="chips" id="here"></div>
+      </section>
+      <section class="panel" id="map">
+        <div class="label">Map</div>
+        <div class="compass" id="compass"></div>
+      </section>
+      <section class="panel" id="journal">
+        <div class="tabs"><span id="tbag">Bag</span><span>Spells</span><span class="on" id="tq">Quests · 1 active</span></div>
+        <ul class="list" id="qlist"></ul>
+      </section>
+    </div>
+  </div>
+  <div class="composer"><span>Look</span><span>Go</span><span>Take</span><span>Talk</span><span>Use</span><span>Type ⌨</span></div>
+</div>
+</div>
+<script>
+const V = {"placeholder": false, "locked": false, "bagWaits": true};
+const OLD = {name:'Village Square',text:'The heart of Willowbrook bustles with life. Cobblestone paths radiate from an old stone fountain, and a weathered notice board stands nearby, covered in faded announcements.',here:[['Villager','ch'],['bucket',''],['old notice','']],exits:{1:'North<br>Mira\'s Hut',3:'West<br>Elior\'s Cottage',5:'East<br>General Store'}};
+const NEW = {name:"Mira's Hut",text:'A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage.',here:[['Mira','ch'],['healing herb',''],['ancient amulet','']],exits:{7:'South<br>Village Square'}};
+// the turn: 0 lane (narration), 1 arrival, 2 Mira speaks, 3 herb given (event), 4 quest card, 5 done
+const BLOCKS = [
+ {k:'narr',h:'You leave the fountain behind and climb the narrow lane north, the noise of the market fading at your back.'},
+ {k:'arr',h:'Mira\'s Hut'},
+ {k:'speech',h:'<span class="who">Mira</span>“Ah, Elior. I wondered when the herbs would bring you to me. Take this — you will need it before the week is out.”'},
+ {k:'event',h:'The healing herb is now in your bag.'},
+ {k:'quest',h:'<div class="k">New quest</div><b>The Healer\'s Apprentice</b><br>Help Mira gather what the village needs.'},
+];
+const CAP = {"0": "<b>Moment 1.</b> The voice reads the walk up the lane. You are not in Mira's Hut yet \u2014 so the panels on the right still show <b>Village Square</b>, its exits and the old quest count.", "1": "<b>Moment 2.</b> The voice reads the arrival. Now the room card, the people and things <b>Here</b> and the map switch to <b>Mira's Hut</b> (the description in the room card is what is being read).", "2": "<b>Moment 3.</b> Mira speaks. Nothing beside the story changes.", "3": "<b>Moment 4.</b> A silent line: the herb is given.", "4": "<b>Moment 5.</b> The voice reads the new quest card \u2014 only now does the Quests tab say <b>2 active</b>.", "5": "<b>Turn finished.</b> Everything beside the story is up to date.", "caught": "You pressed something in a panel that still showed the old place. <b>That press only caught up</b>: the rest of the turn is shown at once, the voice stops, and every panel now shows Mira's Hut. Nothing else happened \u2014 press again to act.", "locked": "That panel is dimmed and <b>cannot be pressed</b> until the voice has read the arrival. Keep listening, or click the story / press Esc to skip.", "acts": "(In the game this press would now act \u2014 e.g. go south, or open the name's menu.)"};
+let step = 0, caught = false;
+const $ = id => document.getElementById(id);
+function render(flashIds=[]){
+  const full = caught || step >= 5;
+  const shown = full ? 5 : step + 1;
+  const speaking = full ? -1 : step;
+  $('story').innerHTML = '<div class="echo">&gt; go north</div>' + BLOCKS.slice(0,shown).map((b,i)=>{
+    const sp = i===speaking ? ' speaking':'';
+    if(b.k==='narr') return `<p class="blk narr${sp}">${b.h}</p>`;
+    if(b.k==='arr') return `<div class="blk divider${sp}">${b.h}</div>`;
+    if(b.k==='speech') return `<div class="blk speech${sp}">${b.h}</div>`;
+    if(b.k==='event') return `<p class="blk event">${b.h}</p>`;
+    return `<div class="blk quest${sp}">${b.h}</div>`;
+  }).join('') + (full ? '' : '<div class="hint">Space to hurry · Esc to skip</div>');
+  const arrived = full || step >= 1;
+  const questIn = full || step >= 4;
+  const turnDone = full;
+  const placeholder = V.placeholder && !arrived;
+  const r = arrived ? NEW : OLD;
+  $('room').className = 'panel' + (placeholder ? ' placeholder' : '') + (V.locked && !arrived ? ' locked':'');
+  $('map').className = 'panel' + (placeholder ? ' placeholder' : '') + (V.locked && !arrived ? ' locked':'');
+  if (placeholder){
+    $('rname').textContent = 'On the way…';
+    $('rtext').textContent = '';
+    $('here').innerHTML = '<span class="label" style="text-transform:none;letter-spacing:0">—</span>';
+    $('compass').innerHTML = Array.from({length:9},(_,i)=> i===4?'<div class="here">…</div>':'<div></div>').join('');
+  } else {
+    $('rname').textContent = r.name;
+    $('rtext').textContent = r.text;
+    $('rtext').className = 'rtext' + (step===1 && !full ? ' reading':'');
+    $('here').innerHTML = r.here.map(([n,c])=>`<span class="chip ${c}" data-act="${n}">${n}</span>`).join('');
+    $('compass').innerHTML = Array.from({length:9},(_,i)=> i===4?`<div class="here">${r.name}</div>`: r.exits[i]?`<div class="exit" data-act="go">${r.exits[i]}</div>`:'<div></div>').join('');
+  }
+  $('qdone').textContent = '1';
+  $('tq').textContent = 'Quests · ' + (questIn ? 2 : 1) + ' active';
+  $('qlist').innerHTML = '<li>Find the lost locket</li>' + (questIn ? '<li><b>The Healer\'s Apprentice</b></li>' : '');
+  const bagShows = V.bagWaits ? turnDone : (step>=0);
+  $('tbag').innerHTML = 'Bag · ' + (bagShows ? 4 : 3) + (bagShows ? '<span class="dot"></span>' : '');
+  flashIds.forEach(id=>{ const e=$(id); e.classList.remove('changed'); void e.offsetWidth; e.classList.add('changed'); });
+  $('stepinfo').textContent = full ? 'Turn finished' : `Moment ${step+1} of 5`;
+  $('caption').innerHTML = caught ? CAP.caught : CAP[Math.min(step,5)];
+  $('next').disabled = full;
+}
+let prev = {arrived:false,quest:false,done:false};
+function advance(){
+  step++;
+  const flash=[];
+  if(step===1) flash.push('room','map');
+  if(step===4) flash.push('journal');
+  if(step===5 && V.bagWaits) flash.push('journal');
+  render(flash);
+}
+$('next').onclick = advance;
+$('story').onclick = advance;
+$('restart').onclick = ()=>{ step=0; caught=false; render(); };
+document.querySelector('.side').addEventListener('click', e=>{
+  const t = e.target.closest('[data-act]'); if(!t) return;
+  const arrived = caught || step>=1;
+  if(arrived){ $('caption').innerHTML = CAP.acts; return; }
+  if(V.locked){ $('caption').innerHTML = CAP.locked; return; }
+  caught = true; render(['room','map','journal']);
+});
+render();
+</script></body></html>
