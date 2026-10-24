@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
@@ -214,8 +214,10 @@ describe('ThroneChamber', () => {
     executeCommands(game, ['talk to malakar'])
     const text = executeCommands(game, ['say refrain to malakar'])
     expect(text).toContain(
-      "“Power follows purpose; purpose follows truth,” you say. The words from the stone in Willowbrook, from Nyx, from the Dragon's hall. They are yours now.",
+      dialogue('Elior', 'Power follows purpose; purpose follows truth.') +
+        "\n[event]The words from the stone in Willowbrook, from Nyx, from the Dragon's hall. They are yours now.[/event]",
     )
+    expect(text).not.toContain('you say')
     expectDialogueSpeaker(text, 'Malakar')
     expect(text).toContain(
       'We carved those words together, your father and I. I had forgotten them.',
@@ -418,7 +420,11 @@ describe('Throne Chamber, commands out of order', () => {
   it("starts the early refrain with today's refrain line and offers once", () => {
     const game = inThrone()
     const out = executeCommands(game, ['say refrain to malakar'])
-    expect(out.startsWith('[event]“Power follows purpose')).toBe(true)
+    expect(
+      out.startsWith(
+        '[character_name]Elior[/character_name]\n[dialogue]Power follows purpose',
+      ),
+    ).toBe(true)
     expect(executeCommands(game, ['talk to malakar'])).toContain(PLEA)
   })
 

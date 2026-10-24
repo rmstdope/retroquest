@@ -546,8 +546,9 @@ describe('Mira confesses before the Warding Rite', () => {
         "Your grandmother knew. She is Lysa's mother, and she kept the secret with me.",
       ),
       event(
-        "For a moment you cannot speak. Then the words come out harder than you meant them: 'Why didn't you tell me?'",
+        'For a moment you cannot speak. Then the words come out harder than you meant them.',
       ),
+      dialogue('Elior', "Why didn't you tell me?"),
       speech(
         "Because the seal could not bear it. Malakar's cloaked agent walked Willowbrook's lanes searching for the amulet, and any word of who you were could have reached him.",
       ),

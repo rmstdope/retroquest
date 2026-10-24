@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
@@ -238,7 +238,7 @@ describe('The Sorceress of Lies', () => {
         'to all of it, for as long as it takes. The Sorceress goes very ' +
         'still. One by one the crystals stop whispering',
     )
-    expect(heard).not.toContain('“I understand,” you say')
+    expect(heard).not.toContain('[character_name]Elior')
     expect(heard).toContain('Elena. The girl at the inn.')
     expectItemInInventory(game.state, "Sorceress's Truth", true)
     expect(executeCommands(game, ['listen'])).toContain(
@@ -272,7 +272,11 @@ describe('The Sorceress of Lies', () => {
     executeCommands(game, ["use knight's redemption", ...THREE_HEARTS])
     const said = executeCommands(game, ['say understanding to sorceress'])
     expect(said).toContain(
-      '“I understand,” you say. “You have been alone in here a long time.” The Sorceress goes very still. One by one the crystals stop whispering, until the chamber is silent for the first time in years.',
+      dialogue(
+        'Elior',
+        'I understand. You have been alone in here a long time.',
+      ) +
+        '\n[event]The Sorceress goes very still. One by one the crystals stop whispering, until the chamber is silent for the first time in years.[/event]',
     )
     expectDialogueSpeaker(said, 'Sorceress of Lies')
     const first = said.indexOf('Elena. The girl at the inn.')

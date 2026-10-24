@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { Wound } from '../items/Wound'
 import { Grow } from '../spells/Grow'
@@ -42,6 +42,11 @@ const TWO_SELFLESS = [VIRTUE_SELFLESS, VIRTUE_SELFLESS]
 function spellNames(game: Game): string[] {
   return game.state.knownSpells.map((s) => s.name)
 }
+
+const JUSTICE_LINE = dialogue(
+  'Elior',
+  "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you let Sir Cedric take the blame. I will not pretend you didn't.",
+)
 
 describe('the endings are always open', () => {
   it('breaks the prison whatever the virtue record', () => {
@@ -89,7 +94,7 @@ describe('Redemption', () => {
   it('teaches forgiveness, once, with the mercy line only after mercy', () => {
     const plain = healed()
     const text = executeCommands(plain, ['say forgiveness to malakar'])
-    expect(text).toContain('“I forgive you,” you say.')
+    expect(text).toContain(dialogue('Elior', 'I forgive you.'))
     expect(text).toContain('You have learned the Forgiveness spell!')
     expectDialogueSpeaker(text, 'Malakar')
     expect(text).toContain('You would forgive me. They would have too.')
@@ -185,10 +190,10 @@ describe('Justice', () => {
       'Forgiveness alone will not close it now.',
     )
     expect(executeCommands(game, ['say sacrifice to malakar'])).toContain(
-      '“Take my magic,” you say.',
+      dialogue('Elior', 'Take my magic. All of it. Close the wound with that.'),
     )
     expect(executeCommands(broken([]), ['say justice to malakar'])).toContain(
-      '“You tore the world, Malakar,” you say.',
+      JUSTICE_LINE,
     )
   })
 
@@ -220,7 +225,7 @@ describe('Justice', () => {
   it('plays Justice in two steps and seals Malakar away', () => {
     const game = broken(TWO_TRUTHS)
     const said = executeCommands(game, ['say justice to malakar'])
-    expect(said).toContain('“You tore the world, Malakar,” you say.')
+    expect(said).toContain(JUSTICE_LINE)
     expect(said).toContain("No. You won't. Your mother never could either.")
     expect(said).toContain('The open amulet grows heavy in your hand, ready.')
     expect(executeCommands(game, ['say justice to malakar'])).toContain(
@@ -266,7 +271,9 @@ describe('Sacrifice', () => {
     const game = opened(TWO_SELFLESS)
     executeCommands(game, ['use lifelight elixir on prison'])
     const said = executeCommands(game, ['say sacrifice to malakar'])
-    expect(said).toContain('“Take my magic,” you say.')
+    expect(said).toContain(
+      dialogue('Elior', 'Take my magic. All of it. Close the wound with that.'),
+    )
     expect(said).not.toContain('Everything you have learned')
     expect(said).toContain(
       'No. Your parents poured themselves into that wound once already. It does not get to have you too.',

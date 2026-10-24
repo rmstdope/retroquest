@@ -151,6 +151,8 @@ export function expectDialogueSpeaker(text: string, speaker: string): void {
       names.length,
       `no speaker before dialogue in: ${text}`,
     ).toBeGreaterThan(0)
+    // Elior's own lines are interleaved with the other speaker's; skip them.
+    if (names.at(-1) === 'Elior' && speaker !== 'Elior') continue
     expect(names.at(-1)?.toLowerCase(), `dialogue speaker in: ${text}`).toBe(
       speaker.toLowerCase(),
     )

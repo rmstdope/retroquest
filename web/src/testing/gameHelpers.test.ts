@@ -109,13 +109,21 @@ describe('markup assertions', () => {
     ).toThrow()
   })
 
+  it("skips Elior's own lines between another speaker's", () => {
+    expectDialogueSpeaker(
+      '[character_name]Elior[/character_name]\n[dialogue]Hi[/dialogue]\n' +
+        '[character_name]Mira[/character_name]\n[dialogue]Hello[/dialogue]',
+      'mira',
+    )
+  })
+
   it('rejects dialogue without or with the wrong speaker, labels and stray speech', () => {
     expect(() =>
       expectDialogueSpeaker("[dialogue]'Hi'[/dialogue]", 'mira'),
     ).toThrow()
     expect(() =>
       expectDialogueSpeaker(
-        "[character_name]Elior[/character_name] [dialogue]'Hi'[/dialogue]",
+        "[character_name]Tilda[/character_name] [dialogue]'Hi'[/dialogue]",
         'mira',
       ),
     ).toThrow()

@@ -109,8 +109,11 @@ export class ShadowOfThePast extends Character {
     }
     return this.answerWithPatience(
       gameState,
-      '“Patience,” you say. “You could not wait for them. You can wait a ' +
-        'little longer, for me.”',
+      dialogue(
+        'Elior',
+        'Patience. You could not wait for them. You can wait a little ' +
+          'longer, for me.',
+      ),
     )
   }
 
@@ -126,12 +129,14 @@ export class ShadowOfThePast extends Character {
     }
     return this.answerWithPatience(
       gameState,
-      'You sit down among the orbs and wait, and say nothing at all. The ' +
-        'Shadow watches you do it for a long time.',
+      event(
+        'You sit down among the orbs and wait, and say nothing at all. The ' +
+          'Shadow watches you do it for a long time.',
+      ),
     )
   }
 
-  /** The shared gates and the answer, led in by what Elior did: the word, or the waiting. */
+  /** The shared gates and the answer, led in by what Elior did (ready-made lines): the word, or the waiting. */
   private answerWithPatience(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
       return (
@@ -147,7 +152,7 @@ export class ShadowOfThePast extends Character {
     }
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
     return [
-      event(lead),
+      lead,
       dialogue(
         FULL_NAME,
         'Patience. The one thing I never had. Then I will wait, a little ' +
