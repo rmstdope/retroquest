@@ -211,7 +211,8 @@ export class AncientDragon extends Character {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
       gameState.currentRoom.addItem(new DragonsScale())
       return (
-        characterName(this.name) +
+        `You speak the old words to the ${name}: ` +
+        `“I take what is given, and I return ${word}.”` +
         '\n[success]' +
         speech(
           'Your words ring true, young one. The scale is yours to bear. ' +

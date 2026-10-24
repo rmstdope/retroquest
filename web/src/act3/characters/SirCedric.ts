@@ -17,8 +17,11 @@ import {
   FLAG_ACT3_VOW_OF_COURAGE_MADE,
 } from '../Act3StoryFlags'
 
+/** The refrain as Elior speaks it at the gate. */
+const REFRAIN = 'Power follows purpose; purpose follows truth.'
+
 /** The words of the carved refrain, lower-cased, as Elior may answer him. */
-const REFRAIN_LINE = 'power follows purpose; purpose follows truth'
+const REFRAIN_LINE = REFRAIN.slice(0, -1).toLowerCase()
 
 /** Rooms of the Sunken Ruins other than the Sanctum, by room key. */
 const RUINS_ROOMS = [
@@ -197,6 +200,8 @@ export class SirCedric extends Character {
     if (!isRefrain || !atGate) return CEDRIC_NOT_NOW
     gameState.setStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED, true)
     return (
+      `You: “${REFRAIN}”` +
+      '\n' +
       cedricDoes(
         'is quiet a long moment. Then he nods, once, and loosens his sword ' +
           'in its sheath.',

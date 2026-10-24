@@ -231,10 +231,12 @@ describe('Sir Cedric in the story view', () => {
     )
   })
 
-  it("leaves Elior's own words out of the answer", () => {
+  it('narrates the refrain Elior speaks before Sir Cedric answers', () => {
     const game = partyAt('FortressEntrance')
     const out = new SirCedric().sayTo(game.state, 'refrain')
-    expect(out).not.toContain('You: ')
+    expect(out).toContain(
+      'You: “Power follows purpose; purpose follows truth.”\n',
+    )
     expect(speakers(out)).toEqual([
       'Sir Cedric: Truth, then. The truth is I was on the wall. The truth is he is still alive. Let us go and get him.',
     ])

@@ -189,7 +189,7 @@ describe('Act III items narrate effects and keep no echo of the command', () => 
     expect(isClue(crystal.pickedUp(game.state))).toBe(true)
   })
 
-  it('the rubbings read both chant refusals and drop the recite echo', () => {
+  it('the rubbings read both chant refusals, the chant recited over the water', () => {
     const game = newGame()
     const rubbings = new ResonantChantRubbings()
     const stones = new EchoStones()
@@ -200,7 +200,9 @@ describe('Act III items narrate effects and keep no echo of the command', () => 
 
     expect(isClue(cold)).toBe(true)
     expect(isClue(overWater)).toBe(true)
-    expect(overWater).not.toContain('You recite')
+    expect(
+      overWater.startsWith('You recite the resonant chant at each stone.\n'),
+    ).toBe(true)
   })
 
   it('reading and examining the story items drops the echo', () => {

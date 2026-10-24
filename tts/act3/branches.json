@@ -86,5 +86,29 @@
       "talk to mira",
       "say you should have told me to mira"
     ]
+  },
+  {
+    "after": 98,
+    "commands": [
+      "say it to ancient dragon"
+    ]
+  },
+  {
+    "after": 98,
+    "commands": [
+      "say myself to ancient dragon"
+    ]
+  },
+  {
+    "after": 98,
+    "commands": [
+      "say what I take to ancient dragon"
+    ]
+  },
+  {
+    "after": 107,
+    "commands": [
+      "say refrain to cedric"
+    ]
   }
 ]
