@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { Well } from './Well'
 import { ShinyRing } from './ShinyRing'
 import { RuneToken } from './RuneToken'
@@ -22,11 +22,6 @@ export class ExtendedMagneticFishingRod extends Item {
   /** Use the rod with the purified well to retrieve the ring and the rune token, otherwise fail. */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Well) {
-      const eventMsg =
-        event(
-          `You try to use the [item_name]${this.name}[/item_name] ` +
-            `with the [item_name]${other.name}[/item_name].`,
-        ) + '\n'
       if (other.isPurified && other.containsRing) {
         const index = gameState.inventory.indexOf(this)
         if (index >= 0) gameState.inventory.splice(index, 1)
@@ -36,7 +31,6 @@ export class ExtendedMagneticFishingRod extends Item {
         other.containsRing = false
         gameState.setStoryFlag(FLAG_FOUND_RUNE_TOKEN, true)
         return (
-          eventMsg +
           'After some careful maneuvering, you manage to retrieve a ' +
           `[item_name]${ring.name}[/item_name]!\n` +
           'Something else clings to the magnet beside it: a ' +
@@ -47,20 +41,17 @@ export class ExtendedMagneticFishingRod extends Item {
         )
       } else if (!other.isPurified) {
         return (
-          eventMsg +
           `The water in the [item_name]${other.name}[/item_name] ` +
           "is too murky. You can't see anything to retrieve."
         )
       } else if (!other.containsRing) {
         return (
-          eventMsg +
           `You can see the bottom of the [item_name]${other.name}[/item_name] ` +
           "clearly, but there's nothing metallic to retrieve with the " +
           `[item_name]${this.name}[/item_name].`
         )
       }
       return (
-        eventMsg +
         `You try to use the [item_name]${this.name}[/item_name] ` +
         `with the [item_name]${other.name}[/item_name], but ` +
         "it doesn't seem to work right now."

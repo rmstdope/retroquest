@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { Magnet } from './Magnet'
 import { MagneticFishingRod } from './MagneticFishingRod'
 import { River } from './River'
@@ -26,16 +26,16 @@ export class FishingRod extends Item {
 
         const magneticRod = new MagneticFishingRod()
         gameState.inventory.push(magneticRod)
-        return event(
-          `You attach the [item_name]${other.name}[/item_name] to ` +
-            `the [item_name]${this.name}[/item_name], creating a ` +
-            `[item_name]${magneticRod.name}[/item_name].`,
+        return (
+          `The [item_name]${other.name}[/item_name] clamps onto the end of ` +
+          `the [item_name]${this.name}[/item_name]: it is a ` +
+          `[item_name]${magneticRod.name}[/item_name] now.`
         )
       }
-      return (
-        '[failure]You could force the magnet onto the rod, but it would likely ' +
-        'prevent you from fishing — and you are really keen on doing some ' +
-        'fishing![/failure]'
+      return clue(
+        'You could force the magnet onto the rod, but it would likely ' +
+          'prevent you from fishing — and you are really keen on doing some ' +
+          'fishing!',
       )
     }
 
@@ -44,9 +44,8 @@ export class FishingRod extends Item {
     }
 
     if (other instanceof Well) {
-      return (
-        '[failure]You try fishing in the [item_name]well[/item_name], but the ' +
-        '[item_name]rod[/item_name] is too short to reach the water.[/failure]'
+      return clue(
+        'The [item_name]rod[/item_name] is too short to reach the water.',
       )
     }
     return super.useWith(gameState, other)

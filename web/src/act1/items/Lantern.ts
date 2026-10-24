@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { Bread } from './Bread'
 import { EliorsJournal } from './EliorsJournal'
 
@@ -30,9 +30,9 @@ export class Lantern extends Item {
    */
   override preventPickup(): string {
     if (this.isLit()) return ''
-    return (
-      `[failure]You'd rather light the [item_name]${this.name}[/item_name] ` +
-      'before you carry it anywhere; it is no use to you dark.[/failure]'
+    return clue(
+      `You'd rather light the [item_name]${this.name}[/item_name] ` +
+        'before you carry it anywhere; it is no use to you dark.',
     )
   }
 
@@ -43,10 +43,10 @@ export class Lantern extends Item {
       this.shortName = 'lantern'
       gameState.currentRoom.addItem(new Bread())
       gameState.currentRoom.addItem(new EliorsJournal())
-      return event(
-        `You light the [item_name]${this.name}[/item_name]. The flickering ` +
-          'light reveals more of the room. A small loaf of [item_name]bread[/item_name] ' +
-          'and a [item_name]journal[/item_name] appear in the light.',
+      return (
+        'The flickering light reveals more of the room. A small loaf of ' +
+        '[item_name]bread[/item_name] and a [item_name]journal[/item_name] ' +
+        'appear in the light.'
       )
     }
     return `[failure]The [item_name]${this.name}[/item_name] is already lit.[/failure]`

@@ -1,11 +1,4 @@
-import {
-  Item,
-  type GameState,
-  event,
-  characterName,
-  speech,
-  writing,
-} from '@/engine'
+import { Item, type GameState, characterName, speech, writing } from '@/engine'
 import { BlessSpell } from '../spells/BlessSpell'
 
 /**
@@ -32,8 +25,7 @@ export class Locket extends Item {
       const blessSpell = new BlessSpell()
       gameState.learnSpell(blessSpell)
       return (
-        event('You pick up the locket.') +
-        '\nAs you do this, the ' +
+        'As you do this, the ' +
         characterName('priest') +
         ' gasps and looks closely at its crest. ' +
         speech(
@@ -45,7 +37,7 @@ export class Locket extends Item {
         '\nHe nods gravely. ' +
         speech('May this blessing protect you on your path.') +
         '\nHe teaches you the [spell_name]bless[/spell_name] spell!\n' +
-        event('You have learned [spell_name]bless[/spell_name].')
+        'You have learned [spell_name]bless[/spell_name].'
       )
     }
     return ''
@@ -54,8 +46,7 @@ export class Locket extends Item {
   /** Open the locket to read the engraving inside its lid. */
   override use(_gameState: GameState): string {
     return (
-      event('You press the tiny clasp, and the locket springs open.') +
-      '\nAround the inside of the lid, tiny letters are engraved:' +
+      'The locket springs open.\nAround the inside of the lid, tiny letters are engraved:' +
       writing("From the founders' line, to the next.") +
       '\nThe silver warms in your palm for a moment, then cools again.'
     )
