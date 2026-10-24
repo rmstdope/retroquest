@@ -4,6 +4,7 @@ import { narrationWords, type NarrationManifest } from './narrationManifest'
 import {
   chapterUnits,
   POPUP_NARRATION_ID,
+  readsArrival,
   SCENE_PAUSE_MS,
   turnUnits,
 } from './narrationUnits'
@@ -114,6 +115,14 @@ describe('turnUnits', () => {
     ])
     expect(units[0].parts.every((p) => p.clip)).toBe(true)
     expect(units[1].parts).toEqual([])
+  })
+})
+
+describe('readsArrival', () => {
+  it('reads the room on a first visit and on a look, never on a revisit', () => {
+    expect(readsArrival({ firstVisit: true })).toBe(true)
+    expect(readsArrival({ lookedAround: true })).toBe(true)
+    expect(readsArrival({})).toBe(false)
   })
 })
 

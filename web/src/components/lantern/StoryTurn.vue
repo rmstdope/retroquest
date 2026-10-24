@@ -147,6 +147,7 @@ function chipLabel(chip: Chip): string {
       v-if="turn.arrival && shown(arrivalUnit)"
       :arrival="turn.arrival"
       :command="turn.command"
+      :stayed="!turn.roomChanged"
       :name-html="html(turn.arrival.room, arrivalUnit, 0, 1)"
       :description-html="html(turn.arrival.description, arrivalUnit, 1)"
       :class="{ 'lq-speaking': isSpeaking(arrivalUnit), 'lq-appear': fade }"

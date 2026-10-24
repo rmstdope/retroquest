@@ -68,6 +68,8 @@ export interface Turn {
   narrate?: true
   /** Set when the turn arrived in a room the player had not been in before. */
   firstVisit?: true
+  /** Set on a narrated look: the room is shown and read again without a move. */
+  lookedAround?: true
 }
 
 /** What the player found on entering a room (engine markup / names). */
@@ -319,6 +321,7 @@ export const useGameStore = defineStore('game', () => {
     // A room is new when it joins the visited rooms. Compared by name, as a
     // room can also leave the list (the dream, once Elior wakes).
     const visited = b.controller.getVisitedRooms()
+    const lookedAround = redescribe && actRunning && !roomChanged
     const firstVisit =
       actRunning && visited.includes(room) && !lastVisited.includes(room)
     lastVisited = visited
@@ -334,9 +337,10 @@ export const useGameStore = defineStore('game', () => {
       // like now so the story can show it later.
       ...(narrate ? { narrate: true as const } : {}),
       ...(narrate && firstVisit ? { firstVisit: true as const } : {}),
+      ...(narrate && lookedAround ? { lookedAround: true as const } : {}),
       // A look shows the room again without having moved.
       arrival:
-        roomChanged || (redescribe && actRunning)
+        roomChanged || lookedAround
           ? {
               room,
               description: b.controller.getRoomDescription(),

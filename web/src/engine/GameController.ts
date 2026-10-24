@@ -157,7 +157,10 @@ export class GameController {
     return result
   }
 
-  /** True when the last `takeTurn` asked for the room to be shown again (a `look`, or a move). */
+  /**
+   * True when the last `takeTurn` asked for the room to be shown again: a
+   * `look`. A move sets it too; tell a move by the room's name instead.
+   */
   lastTurnRedescribesRoom(): boolean {
     return this.redescribesRoom
   }
