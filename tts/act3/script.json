@@ -1920,6 +1920,26 @@
     "text": "The three testimonies have revealed the truth: Elior's parents, once apprentices to Malakar, defied their master to protect their son. Through sacrifice and ancient wards, they hid Elior from Malakar's sight, ensuring he would grow strong enough to face the darkness when the time came."
   },
   {
+    "key": "18f988ff49aced",
+    "speaker": "narrator",
+    "text": "You speak the old words to the ancient dragon: “I take what is given, and I return it.”"
+  },
+  {
+    "key": "19054fab381fc3",
+    "speaker": "ancient dragon",
+    "text": "Your words ring true, young one. The scale is yours to bear. May you carry its burden with honor."
+  },
+  {
+    "key": "1b93a62f18d056",
+    "speaker": "narrator",
+    "text": "You speak the old words to the ancient dragon: “I take what is given, and I return myself.”"
+  },
+  {
+    "key": "0ce1e2418d8f7d",
+    "speaker": "narrator",
+    "text": "You speak the old words to the ancient dragon: “I take what is given, and I return what I take.”"
+  },
+  {
     "key": "19a152339c309e",
     "speaker": "narrator",
     "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
@@ -1928,11 +1948,6 @@
     "key": "0e67928a38102d",
     "speaker": "narrator",
     "text": "You speak the old words to the ancient dragon: “I take what is given, and I return everything.”"
-  },
-  {
-    "key": "19054fab381fc3",
-    "speaker": "ancient dragon",
-    "text": "Your words ring true, young one. The scale is yours to bear. May you carry its burden with honor."
   },
   {
     "key": "00943bd2854040",
@@ -2203,6 +2218,21 @@
     "key": "19c1738da846ec",
     "speaker": "narrator",
     "text": "Words carved beneath the runes of a sunlit glade come back to you."
+  },
+  {
+    "key": "155ece7fd5499a",
+    "speaker": "narrator",
+    "text": "You: “Power follows purpose; purpose follows truth.”"
+  },
+  {
+    "key": "1f0049dba95e3c",
+    "speaker": "narrator",
+    "text": "Sir Cedric is quiet a long moment. Then he nods, once, and loosens his sword in its sheath."
+  },
+  {
+    "key": "0220f4895b8ac0",
+    "speaker": "sir cedric",
+    "text": "Truth, then. The truth is I was on the wall. The truth is he is still alive. Let us go and get him."
   },
   {
     "key": "00b25ccba3dd2c",
