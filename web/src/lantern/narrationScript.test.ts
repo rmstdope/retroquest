@@ -294,6 +294,16 @@ describe('actScript for Act I', () => {
     expect(script.length).toBeGreaterThan(150)
   })
 
+  it('reads the reply to resting, which the golden path never asks for', () => {
+    expect(
+      find('You rest for a moment, gathering your strength.')?.speaker,
+    ).toBe('narrator')
+    expect(
+      find('You are asleep already. The voice says your name again, nearer.')
+        ?.speaker,
+    ).toBe('narrator')
+  })
+
   it('takes lines from using what is carried, such as the locket inscription', () => {
     expect(
       script.find((line) => line.text.startsWith("From the founders' line"))
@@ -334,6 +344,33 @@ describe('actScript branches', () => {
   it('leaves the lines of the golden path as they were', () => {
     const keys = new Set(branched.map((line) => line.key))
     expect(plain.every((line) => keys.has(line.key))).toBe(true)
+  })
+})
+
+describe('actScript branches with story flags cleared', () => {
+  const QUIET =
+    'You rest for a while, but the glade remains quiet. Perhaps something more needs to happen for its magic to awaken.'
+  const glade = ACT1_GOLDEN_PATH.indexOf('rest')
+  const branch: ScriptBranch = {
+    after: glade,
+    commands: ['rest'],
+    unset: ['deer_can_be_observed'],
+  }
+  /** Act I is played twice; that is slow under a loaded machine. */
+  const SLOW = 60_000
+  let script: ScriptLine[] = []
+  beforeAll(() => {
+    script = actScript(
+      () => new Game([new Act1()]),
+      ACT1_GOLDEN_PATH,
+      WRITERS,
+      SILENT,
+      [branch],
+    )
+  }, SLOW)
+
+  it('reads a scene as it plays before a story flag is set', () => {
+    expect(script.find((line) => line.text === QUIET)?.speaker).toBe('narrator')
   })
 })
 

@@ -50,9 +50,64 @@
     "text": "Towering obsidian gates loom before you, carved with writhing shadows that seem to move in the corners of your vision. Three ancient ward stones, left, middle and right, pulse with malevolent energy, casting eerie purple light across the threshold. The air crackles with dark magic, and whispers of forgotten souls echo from beyond the barrier. Spectral guardians drift between the stones, their hollow eyes fixed upon any who dare approach this cursed entrance."
   },
   {
+    "key": "1e8eb0bec69c4a",
+    "speaker": "narrator",
+    "text": "The left stone swells and fades with the barrier, exactly on the beat."
+  },
+  {
+    "key": "19d8c7cb3d5428",
+    "speaker": "narrator",
+    "text": "The middle stone swells and fades with the barrier, exactly on the beat."
+  },
+  {
+    "key": "1ce4957a84538d",
+    "speaker": "narrator",
+    "text": "The right stone brightens a breath after the barrier does, every time, like a man who has lost count."
+  },
+  {
     "key": "1c5df38619a981",
     "speaker": "narrator",
     "text": "Three ward stones stand before the gates, evenly spaced, each carved with the same runes. Their light swells and fades together, and the barrier swells and fades with them. All but one: the right stone brightens a breath after the others, like a man who has lost count."
+  },
+  {
+    "key": "07981171c1c2df",
+    "speaker": "narrator",
+    "text": "A thin wall of violet light hangs across the gateway, humming in time with the ward stones. It is the only thing between you and the gates."
+  },
+  {
+    "key": "19a152339c309e",
+    "speaker": "narrator",
+    "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
+  },
+  {
+    "key": "071954bb4d75c0",
+    "speaker": "narrator",
+    "text": "A shimmering elixir that seems to contain liquid starlight. Threads of crystal clarity, phoenix flame, and draconic essence swirl within the glass vial."
+  },
+  {
+    "key": "1fcf25e17acb8a",
+    "speaker": "narrator",
+    "text": "A small silver medallion stamped with two clasped hands, warm from the friends who pressed it into your hand. Whoever carries it is not alone, and knows it."
+  },
+  {
+    "key": "1511ac64886212",
+    "speaker": "narrator",
+    "text": "A small crystalline pendant that shifts through the colours of the forest as you turn it: leaf green, acorn brown, snow, blossom. It is warm, the way a held hand is warm."
+  },
+  {
+    "key": "159fda9106a0c4",
+    "speaker": "narrator",
+    "text": "A crystal with a whole small forest in it. Tiny lights move inside like fireflies, and held close it sounds faintly of wind in leaves."
+  },
+  {
+    "key": "1668105665b087",
+    "speaker": "narrator",
+    "text": "The token is warm in your hand. Someone, somewhere, is glad you came."
+  },
+  {
+    "key": "09097b529ab3e9",
+    "speaker": "narrator",
+    "text": "You rest for a moment, gathering your strength."
   },
   {
     "key": "1f7d39c44976a9",
@@ -108,56 +163,6 @@
     "key": "0025452b436e19",
     "speaker": "narrator",
     "text": "Warm, golden light fills the area, but there is nothing here that responds to the blessing."
-  },
-  {
-    "key": "07981171c1c2df",
-    "speaker": "narrator",
-    "text": "A thin wall of violet light hangs across the gateway, humming in time with the ward stones. It is the only thing between you and the gates."
-  },
-  {
-    "key": "1e8eb0bec69c4a",
-    "speaker": "narrator",
-    "text": "The left stone swells and fades with the barrier, exactly on the beat."
-  },
-  {
-    "key": "19d8c7cb3d5428",
-    "speaker": "narrator",
-    "text": "The middle stone swells and fades with the barrier, exactly on the beat."
-  },
-  {
-    "key": "1ce4957a84538d",
-    "speaker": "narrator",
-    "text": "The right stone brightens a breath after the barrier does, every time, like a man who has lost count."
-  },
-  {
-    "key": "19a152339c309e",
-    "speaker": "narrator",
-    "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
-  },
-  {
-    "key": "071954bb4d75c0",
-    "speaker": "narrator",
-    "text": "A shimmering elixir that seems to contain liquid starlight. Threads of crystal clarity, phoenix flame, and draconic essence swirl within the glass vial."
-  },
-  {
-    "key": "1fcf25e17acb8a",
-    "speaker": "narrator",
-    "text": "A small silver medallion stamped with two clasped hands, warm from the friends who pressed it into your hand. Whoever carries it is not alone, and knows it."
-  },
-  {
-    "key": "1511ac64886212",
-    "speaker": "narrator",
-    "text": "A small crystalline pendant that shifts through the colours of the forest as you turn it: leaf green, acorn brown, snow, blossom. It is warm, the way a held hand is warm."
-  },
-  {
-    "key": "159fda9106a0c4",
-    "speaker": "narrator",
-    "text": "A crystal with a whole small forest in it. Tiny lights move inside like fireflies, and held close it sounds faintly of wind in leaves."
-  },
-  {
-    "key": "1668105665b087",
-    "speaker": "narrator",
-    "text": "The token is warm in your hand. Someone, somewhere, is glad you came."
   },
   {
     "key": "1fc9d5de8cb36a",
@@ -1185,14 +1190,19 @@
     "text": "The Phoenix asked us once what wisdom is when time is short. Aren and Lysa knew. I did not."
   },
   {
-    "key": "0325174da55eb2",
-    "speaker": "elior",
-    "text": "Patience. You could not wait for them. You can wait a little longer, for me."
+    "key": "0831696dffba1a",
+    "speaker": "narrator",
+    "text": "You sit down among the orbs and wait, and say nothing at all. The Shadow watches you do it for a long time."
   },
   {
     "key": "138b4f1c6117b3",
     "speaker": "shadow of the past",
     "text": "Patience. The one thing I never had. Then I will wait, a little longer. Take the amulet east, Elior. It will open for you."
+  },
+  {
+    "key": "0325174da55eb2",
+    "speaker": "elior",
+    "text": "Patience. You could not wait for them. You can wait a little longer, for me."
   },
   {
     "key": "052d070f56e7f4",
@@ -1218,6 +1228,11 @@
     "key": "191b0cb0759820",
     "speaker": "shadow of the past",
     "text": "Go east, Elior. I have seen those memories every day for years. You never have."
+  },
+  {
+    "key": "14bc73b445f17d",
+    "speaker": "narrator",
+    "text": "The Shadow has its answer. It nods towards the door to the east."
   },
   {
     "key": "16cb7e1f883291",

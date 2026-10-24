@@ -69,3 +69,35 @@ describe.each([2, 3, 4])('narration coverage of Act %i', (act) => {
     },
   )
 })
+
+/** The replies to resting that are read aloud: the everyday one in every act, and the special ones where a room gives them. */
+const REST_LINES: Record<number, string[]> = {
+  1: [
+    'You rest for a moment, gathering your strength.',
+    'You are asleep already. The voice says your name again, nearer.',
+    'You rest for a while, but the glade remains quiet. Perhaps something more needs to happen for its magic to awaken.',
+    'You take a moment to rest in the tranquil glade. The Deer continues to graze peacefully.',
+  ],
+  2: ['You rest for a moment, gathering your strength.'],
+  3: [
+    'You rest for a moment, gathering your strength.',
+    'The heat of the crater soaks into you, and the ache goes out of your legs.',
+    'The vents exhale. A scalding gust roars up out of the southern tunnel.',
+    'The vents fall still, holding their breath. The heat hangs heavy and unmoving.',
+    'The vents draw in. A cool draught tugs past you toward the south.',
+  ],
+  4: [
+    'You rest for a moment, gathering your strength.',
+    'You sit down among the orbs and wait, and say nothing at all. The Shadow watches you do it for a long time.',
+  ],
+}
+
+describe.each([1, 2, 3, 4])('narration of resting in Act %i', (act) => {
+  const script = readJson<ScriptLine[]>(`tts/act${act}/script.json`)
+
+  it.each(REST_LINES[act])('has the narrator read "%s"', (words) => {
+    expect(script.find((entry) => entry.text === words)?.speaker).toBe(
+      'narrator',
+    )
+  })
+})

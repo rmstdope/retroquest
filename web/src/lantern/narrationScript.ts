@@ -20,7 +20,7 @@
  * `actScript` plays an act's golden path through the real engine and collects
  * every voiced line: the chapter pages, every answer, each room's description
  * on its first visit and every quest card. At each step it also tries
- * examining, using and talking to whatever is at hand, on a copy of the game,
+ * examining, using and talking to whatever is at hand, looking and resting, on a copy of the game,
  * so optional lines are recorded too, and plays each `ScriptBranch` (an
  * optional scene the golden path does not take) on a copy. Who voices a line is its block's speaker,
  * except unsigned writing, which goes to its writer (`WriterRule`).
@@ -196,15 +196,18 @@ export function linesOfTurn(
  * An optional scene the golden path does not take: once the command at index
  * `after` of the path has been played, `commands` are played on a copy of the
  * game and everything they say is read too. `virtues` are recorded on the copy
- * first, for scenes that colour their lines by the virtues the player earned.
+ * first, for scenes that colour their lines by the virtues the player earned;
+ * `unset` story flags are cleared on the copy, for a scene the path only
+ * reaches after its flag is set (a room's reply before it has woken).
  */
 export interface ScriptBranch {
   after: number
   commands: string[]
   virtues?: string[]
+  unset?: string[]
 }
 
-/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look. */
+/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, rest. */
 function probes(game: Game): string[] {
   const state = game.state
   const room = state.currentRoom
@@ -215,6 +218,7 @@ function probes(game: Game): string[] {
     ...room.characters.map((character) => `talk to ${character.name}`),
     ...room.characters.map((character) => `examine ${character.name}`),
     'look',
+    'rest',
   ]
 }
 
@@ -256,18 +260,28 @@ export function actScript(
     add(arrivalBlocks(room, play.getRoomDescription()))
   }
   arrive()
+  const tryProbes = (): void => {
+    const save = game.toSaveData()
+    for (const command of probes(game)) {
+      probe.loadSaveData(save)
+      add(turnBlocks(tryOut.handleCommand(command)))
+    }
+  }
   const settle = (controller: GameController): void => {
     const quests = controller.settleQuests()
     for (const report of quests.activated) add(newQuestBlocks(report))
     for (const report of quests.updated) add(questTextBlocks(report.text))
     for (const report of quests.completed) add(questCompleteBlocks(report))
   }
+  tryProbes()
   for (const [index, command] of commands.entries()) {
     add(turnBlocks(play.takeTurn(command)))
     settle(play)
     for (const branch of branches.filter((b) => b.after === index)) {
       probe.loadSaveData(game.toSaveData())
       for (const virtue of branch.virtues ?? []) probe.state.addVirtue(virtue)
+      for (const flag of branch.unset ?? [])
+        probe.state.setStoryFlag(flag, false)
       for (const step of branch.commands) {
         add(turnBlocks(tryOut.takeTurn(step)))
         settle(tryOut)
@@ -281,11 +295,7 @@ export function actScript(
       break
     }
     arrive()
-    const save = game.toSaveData()
-    for (const command of probes(game)) {
-      probe.loadSaveData(save)
-      add(turnBlocks(tryOut.handleCommand(command)))
-    }
+    tryProbes()
   }
   return [...script.values()]
 }

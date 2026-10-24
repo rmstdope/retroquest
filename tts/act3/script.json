@@ -30,6 +30,21 @@
     "text": "A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully among her concoctions, her eyes bright with knowledge and kindness."
   },
   {
+    "key": "01217de9719a95",
+    "speaker": "narrator",
+    "text": "Bundles of resin-sweet stems and silverleaf—Mira's blends for steadying wounds and sharpening ritual focus during complex workings."
+  },
+  {
+    "key": "0bd937e3ff7eb6",
+    "speaker": "narrator",
+    "text": "Reflections in the prism hover a breath out of sync—each a doorway waiting for Mira's word."
+  },
+  {
+    "key": "11cd35b0d31514",
+    "speaker": "narrator",
+    "text": "A family heirloom whose runes glint like dew at dawn. It is faintly warm in your hand."
+  },
+  {
     "key": "1e014c32a5a593",
     "speaker": "mira",
     "text": "Elior. Malakar is draining King Alden's life to break Eldoria's wards, and the king grows weaker every day."
@@ -65,6 +80,26 @@
     "text": "(Ask her with: say parents, say malakar, say amulet or say grandmother to Mira.)"
   },
   {
+    "key": "1580729c3e3b06",
+    "speaker": "sir cedric",
+    "text": "If we're to take the fight to Malakar, speak with Mira. She understands the rites and the way to begin."
+  },
+  {
+    "key": "17af8199da3765",
+    "speaker": "narrator",
+    "text": "The village healer returns with renewed purpose. Her eyes shine with resolve as she speaks of the three relics needed to confront Malakar."
+  },
+  {
+    "key": "0e253d2ea8f460",
+    "speaker": "narrator",
+    "text": "Armor tempered, eyes steady—Cedric stands ready for the trials. His presence is a quiet promise."
+  },
+  {
+    "key": "09097b529ab3e9",
+    "speaker": "narrator",
+    "text": "You rest for a moment, gathering your strength."
+  },
+  {
     "key": "1f7d39c44976a9",
     "speaker": "narrator",
     "text": "New main quest"
@@ -78,21 +113,6 @@
     "key": "117fa7e9e14d81",
     "speaker": "narrator",
     "text": "Prove Courage, Wisdom, and Selflessness by recovering the three relics: the Crystal of Light, the Phoenix Feather, and the Dragon's Scale."
-  },
-  {
-    "key": "01217de9719a95",
-    "speaker": "narrator",
-    "text": "Bundles of resin-sweet stems and silverleaf—Mira's blends for steadying wounds and sharpening ritual focus during complex workings."
-  },
-  {
-    "key": "0bd937e3ff7eb6",
-    "speaker": "narrator",
-    "text": "Reflections in the prism hover a breath out of sync—each a doorway waiting for Mira's word."
-  },
-  {
-    "key": "11cd35b0d31514",
-    "speaker": "narrator",
-    "text": "A family heirloom whose runes glint like dew at dawn. It is faintly warm in your hand."
   },
   {
     "key": "09407b5fdfa2da",
@@ -113,16 +133,6 @@
     "key": "09940a4ad697b2",
     "speaker": "sir cedric",
     "text": "Mira knows the way. I know how to stand in front of you. Between us, that will have to do."
-  },
-  {
-    "key": "17af8199da3765",
-    "speaker": "narrator",
-    "text": "The village healer returns with renewed purpose. Her eyes shine with resolve as she speaks of the three relics needed to confront Malakar."
-  },
-  {
-    "key": "0e253d2ea8f460",
-    "speaker": "narrator",
-    "text": "Armor tempered, eyes steady—Cedric stands ready for the trials. His presence is a quiet promise."
   },
   {
     "key": "0678b14852e2e7",
@@ -1155,6 +1165,11 @@
     "text": "The ward holds, but the mountain still breathes. Count its breath. Walk when it draws in."
   },
   {
+    "key": "0ae49756583bd8",
+    "speaker": "narrator",
+    "text": "The vents exhale. A scalding gust roars up out of the southern tunnel."
+  },
+  {
     "key": "14accdcd7e3aa0",
     "speaker": "narrator",
     "text": "Phoenix Crater"
@@ -1168,6 +1183,11 @@
     "key": "1dbf54ee04c21c",
     "speaker": "narrator",
     "text": "A vast, ember-wrought phoenix reclines amid the crater's molten glass. Its feathers glow with shifting gold and crimson, and its eyes burn with patient, ancient wisdom. It radiates a presence that is both fierce and serene, as if it has seen the rise and fall of ages."
+  },
+  {
+    "key": "09151a312ed310",
+    "speaker": "narrator",
+    "text": "The heat of the crater soaks into you, and the ache goes out of your legs."
   },
   {
     "key": "0df082a08a37e9",
