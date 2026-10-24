@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, onUpdated, ref } from 'vue'
 import type { Chapter } from '@/lantern/chapter'
 import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { displayName } from '@/lantern/displayName'
@@ -69,8 +69,55 @@ const held = computed(
     !!folder.value &&
     narration.manifestFor(folder.value) === null,
 )
+/**
+ * Shrink each centred closing block to its widest line of text, so the
+ * speaking rule (drawn at the block's left edge) sits beside the words even
+ * when the line wraps. CSS alone can only shrink a block to the column, not to
+ * the widest wrapped line. Does nothing on intro pages.
+ */
+function hugText(): void {
+  if (intro.value || !root.value) return
+  const blocksEls = root.value.querySelectorAll<HTMLElement>(
+    '.lq-chapter-closing .lq-chapter-block',
+  )
+  for (const el of blocksEls) {
+    el.style.width = ''
+    const style = getComputedStyle(el)
+    const padding =
+      parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
+    let left = Infinity
+    let right = -Infinity
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      const range = document.createRange()
+      range.selectNodeContents(n)
+      for (const rect of Array.from(range.getClientRects())) {
+        if (rect.width === 0) continue
+        left = Math.min(left, rect.left)
+        right = Math.max(right, rect.right)
+      }
+    }
+    if (right > left) {
+      el.style.width = `${Math.ceil(right - left + padding) + 1}px`
+    }
+  }
+}
+let resizeObserver: ResizeObserver | null = null
 onMounted(() => {
   if (folder.value) void narration.preload(folder.value)
+  hugText()
+  // Web fonts change line widths when they arrive.
+  void document.fonts?.ready.then(hugText)
+  document.fonts?.addEventListener?.('loadingdone', hugText)
+  if (typeof ResizeObserver !== 'undefined' && root.value) {
+    resizeObserver = new ResizeObserver(hugText)
+    resizeObserver.observe(root.value)
+  }
+})
+onUpdated(hugText)
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  document.fonts?.removeEventListener?.('loadingdone', hugText)
 })
 
 /** A tap on the page's text or title (buttons and links excepted) steers the voice. */
@@ -272,7 +319,8 @@ defineExpose({ focus })
   font-style: italic;
 }
 /* A centred line hugs its text, so the speaking rule sits beside the words;
-   the side padding is always there, so nothing shifts when the rule shows. */
+   the side padding is always there, so nothing shifts when the rule shows.
+   `hugText` narrows the block further to its widest wrapped line. */
 .lq-chapter-closing .lq-chapter-block {
   width: fit-content;
   max-width: 100%;
