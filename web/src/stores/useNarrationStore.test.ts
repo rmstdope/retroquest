@@ -118,6 +118,26 @@ describe('useNarrationStore', () => {
     expect(last().volume).toBeCloseTo(0.4)
   })
 
+  describe('storyReading', () => {
+    it('is true while a story turn is narrated, not for the chapter page or a pop-up', () => {
+      expect(narration.storyReading).toBe(false)
+      narration.begin(-1, [voiced()], 'act1')
+      expect(narration.storyReading).toBe(false)
+      narration.begin(3, [voiced()], 'act1')
+      expect(narration.storyReading).toBe(true)
+      narration.skipAll()
+      expect(narration.storyReading).toBe(false)
+    })
+
+    it('stays true through hurrying and ends with the turn', () => {
+      narration.begin(3, [voiced(), voiced()], 'act1')
+      narration.hurry()
+      expect(narration.storyReading).toBe(true)
+      narration.skipAll()
+      expect(narration.storyReading).toBe(false)
+    })
+  })
+
   describe('the hint', () => {
     /** Begin narrating a one-block turn (its voice is left playing). */
     function narrateTurn(id: number): void {
@@ -170,6 +190,30 @@ describe('useNarrationStore', () => {
       narration.resetGame()
       narrateTurn(5)
       expect(narration.hintVisible).toBe(true)
+    })
+
+    it('shows for two seconds after a scroll attempt, in any turn, and each attempt restarts the two seconds', async () => {
+      for (const id of [1, 2, 3, 4]) narrateTurn(id)
+      expect(narration.hintVisible).toBe(false)
+      narration.nudgeHint()
+      expect(narration.hintVisible).toBe(true)
+      await vi.advanceTimersByTimeAsync(1500)
+      narration.nudgeHint()
+      await vi.advanceTimersByTimeAsync(1500)
+      expect(narration.hintVisible).toBe(true)
+      await vi.advanceTimersByTimeAsync(600)
+      expect(narration.hintVisible).toBe(false)
+    })
+
+    it('does not show a nudge when nothing is narrated, nor linger into the next turn', async () => {
+      narration.nudgeHint()
+      expect(narration.hintVisible).toBe(false)
+      for (const id of [1, 2, 3, 4]) narrateTurn(id)
+      narration.nudgeHint()
+      narration.skipAll()
+      expect(narration.hintVisible).toBe(false)
+      narrateTurn(5)
+      expect(narration.hintVisible).toBe(false)
     })
 
     it('is hidden when narration is switched off mid-turn', async () => {

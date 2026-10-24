@@ -142,6 +142,39 @@ test('typing keeps the voice reading, and Esc in the command box skips it', asyn
   await expect(input).toBeFocused()
 })
 
+test('holds the story still while it reads, and frees it when the reading ends', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 520 })
+  await slowNarrationClips(page)
+  await startAct1(page)
+  const input = page.getByLabel('Command')
+  const story = page.getByRole('region', { name: 'Story' })
+  const top = (): Promise<number> => story.evaluate((el) => el.scrollTop)
+
+  // Past the first three narrated turns the hint is gone until a scroll attempt.
+  for (let i = 0; i < 4; i++) {
+    await input.fill(i === 0 ? 'talk to voice' : 'look')
+    await input.press('Enter')
+    await expect(page.locator('.lq-speaking')).toHaveCount(1)
+    if (i < 3) await story.dblclick({ position: { x: 5, y: 5 } })
+  }
+  await expect(page.locator('.lq-narration-hint')).toHaveCount(0)
+
+  // Reading: a wheel turn moves nothing and brings the hint up.
+  const held = await top()
+  await story.hover()
+  await page.mouse.wheel(0, -300)
+  await expect(page.locator('.lq-narration-hint')).toBeVisible()
+  expect(await top()).toBe(held)
+
+  // Skipped: the story scrolls freely.
+  await story.dblclick({ position: { x: 5, y: 5 } })
+  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  await page.mouse.wheel(0, -300)
+  await expect.poll(top).toBeLessThan(held)
+})
+
 test('shows an answer at once with narration off', async ({
   page,
 }): Promise<void> => {
