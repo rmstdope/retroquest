@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act3 } from '../Act3'
 import { PrismLantern } from '../items/PrismLantern'
 import { LanternBracket } from '../items/LanternBracket'
@@ -141,5 +141,16 @@ describe('Submerged Antechamber markup', () => {
     ]) {
       expectMarkupWellFormed(answer)
     }
+  })
+})
+
+describe('the Submerged Antechamber room card', () => {
+  it('shows the unmasked hall once the Tideward sigils are completed', () => {
+    const game = new Game([new Act3()])
+    game.state.currentRoom = game.state.allRooms.SubmergedAntechamber
+    game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+    expect(new GameController(game).getRoomDescription()).toContain(
+      'recently unmasked by a withdrawing tide',
+    )
   })
 })

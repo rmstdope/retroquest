@@ -26,8 +26,8 @@ const WATERED_DESCRIPTION =
  *
  * Entering the field sets FLAG_INVESTIGATED_WITHERED_CROPS unprompted. Once
  * it is watered with purified well water (FLAG_VEGETABLE_FIELD_WATERED) the
- * description shows the field recovered; `Bucket.use` calls
- * `refreshDescription()` so the room text changes at once.
+ * description shows the field recovered; `descriptionFor` reads the flag
+ * each time the room is shown.
  */
 export class VegetableField extends Room {
   constructor() {
@@ -44,9 +44,9 @@ export class VegetableField extends Room {
     })
   }
 
-  /** Describe the field as withered or, once watered, recovered. */
-  refreshDescription(gameState: GameState): void {
-    this.description = gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
+  /** The field withered or, once watered, recovered. */
+  override descriptionFor(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
       ? WATERED_DESCRIPTION
       : WITHERED_DESCRIPTION
   }
@@ -55,11 +55,5 @@ export class VegetableField extends Room {
   override onEnter(gameState: GameState): void {
     gameState.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
     super.onEnter(gameState)
-  }
-
-  /** Refresh the field in the description before describing the room. */
-  override describe(gameState: GameState): string {
-    this.refreshDescription(gameState)
-    return super.describe(gameState)
   }
 }

@@ -49,8 +49,11 @@ export class HiddenGlade extends Room {
     ' Beneath it, in a plainer hand, is carved: ' +
     `\u201c${HiddenGlade.REFRAIN}\u201d`
 
-  /** Build and return the dynamic base description for the glade. */
-  getRoomTextDescription(gameState: GameState): string {
+  /**
+   * The glade's text, built from its dynamic segments: dim or sunlit, the
+   * glowing amulet, and the Deer and Rare Flower once they have appeared.
+   */
+  override descriptionFor(gameState: GameState): string {
     let baseDescription = this.lightSpellCast
       ? HiddenGlade.SUNLIT_DESCRIPTION + HiddenGlade.CARVING_SENTENCE
       : HiddenGlade.DIM_DESCRIPTION
@@ -125,12 +128,6 @@ export class HiddenGlade extends Room {
       'You rest for a while, but the glade remains quiet. Perhaps something more needs ' +
       'to happen for its magic to awaken.'
     )
-  }
-
-  /** Rebuild the description from its dynamic segments before describing. */
-  override describe(gameState: GameState): string {
-    this.description = this.getRoomTextDescription(gameState)
-    return super.describe(gameState)
   }
 
   /** Called when a light source is used or a light spell is cast in the room. */

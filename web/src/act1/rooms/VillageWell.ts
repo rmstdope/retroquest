@@ -18,8 +18,8 @@ const CLEAR_WATER =
  * Village Well room: mystical utility hub foreshadowing purification systems.
  *
  * The description follows the Well item: dark and foul until it is purified,
- * crystal clear afterwards. `Well.purify` calls `refreshDescription()` so the
- * room text changes the moment the well is purified.
+ * crystal clear afterwards. `descriptionFor` computes it from the Well each
+ * time the room is shown.
  */
 export class VillageWell extends Room {
   constructor() {
@@ -36,20 +36,15 @@ export class VillageWell extends Room {
     })
   }
 
-  /** Describe the water as murky or clear depending on whether the well is purified. */
-  refreshDescription(): void {
+  /** The well with its water murky or clear, as the Well item is purified. */
+  override descriptionFor(_gameState: GameState): string {
     const purified = this.items.some(
       (item) => item instanceof Well && item.isPurified,
     )
-    this.description =
+    return (
       DESCRIPTION_START +
       (purified ? CLEAR_WATER : MURKY_WATER) +
       DESCRIPTION_END
-  }
-
-  /** Refresh the water in the description before describing the room. */
-  override describe(gameState: GameState): string {
-    this.refreshDescription()
-    return super.describe(gameState)
+    )
   }
 }

@@ -61,7 +61,9 @@ describe('cutting the vines', () => {
   it('adds the trapped kit to the room description once the vines are cut', () => {
     const game = gameWithVinesCut()
 
-    expect(game.state.currentRoom.description).toContain(KIT_CAUGHT)
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      KIT_CAUGHT,
+    )
     expect(game.state.currentRoom.describe(game.state)).toContain(KIT_CAUGHT)
   })
 })
@@ -112,7 +114,9 @@ describe('the snare', () => {
 
     const room = game.state.currentRoom.describe(game.state)
 
-    expect(game.state.currentRoom.description).toContain(SNARE_CUT)
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      SNARE_CUT,
+    )
     expect(room).toContain(SNARE_CUT)
     expect(room).not.toContain(KIT_CAUGHT)
     expect(game.state.currentRoom.items.some((i) => i instanceof Snare)).toBe(
