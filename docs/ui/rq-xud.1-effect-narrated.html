@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Effects read aloud</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+:root{--bg:#10151a;--surface:#161d24;--raised:#1c242c;--line:#26313b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--on-accent:#1a1408;--accent-text:#ffb836;--accent-soft:#36270a;--accent-line:#a8740f;--item:#e8c46a;--fail:#f08a7a;--fail-soft:#2e1a19;--page:#0b0f13}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--fg);font:15px/1.5 'DM Sans',system-ui,sans-serif;padding:24px 16px}
+.wrap{max-width:1100px;margin:0 auto}
+.kicker{color:var(--accent-text);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{font:600 26px/1.15 Fraunces,serif;margin:4px 0 8px}
+.intro{color:var(--prose);max-width:820px}
+.cost{color:var(--muted);font-size:13px;border-left:2px solid var(--accent-line);padding-left:10px;max-width:820px}
+.rig{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.rig button{font:500 14px 'DM Sans',sans-serif;border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:var(--on-accent)}
+.rig .step{color:var(--muted);font-size:13px}
+.frames{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:start}
+@media(max-width:860px){.frames{grid-template-columns:1fr}}
+.flabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.story{border:1px solid var(--line);border-radius:14px;background:var(--bg);padding:16px 20px;font:15px/1.6 'Source Serif 4',Georgia,serif;color:var(--prose)}
+.turn{margin-bottom:22px}
+.turn h3{font:500 11px 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;border-bottom:1px dashed var(--line);padding-bottom:4px}
+.echo{font:500 13px 'DM Sans',sans-serif;color:var(--accent-text);margin:0 0 8px}
+.blk{margin:0 0 10px}
+.event{font:500 14px/1.5 'DM Sans',sans-serif;color:var(--muted);display:flex;gap:8px}
+.event .d{color:var(--accent);font-size:9px;margin-top:5px}
+.failure{font:500 14px/1.5 'DM Sans',sans-serif;color:var(--fail);background:var(--fail-soft);border-radius:8px;padding:8px 12px;display:flex;gap:8px}
+.item{color:var(--item)}
+.voiced.speaking{box-shadow:inset 3px 0 0 var(--accent);padding-left:10px}
+.failure.voiced.speaking{box-shadow:inset 3px 0 0 var(--fail)}
+.w.now{background:var(--accent-soft);color:var(--accent-text);border-radius:3px}
+.failure .w.now{background:#4a2420;color:#ffb3a7}
+.tag{display:inline-block;font:600 10px 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:middle}
+.tag.on{background:var(--accent-soft);color:var(--accent-text);border:1px solid var(--accent-line)}
+.tag.off{background:var(--raised);color:var(--muted);border:1px solid var(--line)}
+.notes{display:none}
+body.annot .notes{display:inline}
+</style></head><body class="annot"><div class="wrap">
+<div class="kicker">rq-xud.1 · Agreed</div><h1>The repeated command is a silent grey line; what happens is read aloud</h1><p class="intro">Press <b>▶ Hear it</b> to hear which words the voice reads. The tags say which lines are read aloud; untick the box to see the screen exactly as a player sees it. The wording here is today’s, split to show the rule. The final lines for each act are written separately.</p><p class="cost">Agreed: the repeated command is a grey ◆ line and is never read. The result is story text and is read aloud. A failure with a clue keeps its red box, with the repeated command split onto a grey line above it, and the box is read aloud. A plain refusal is a red box and stays silent.</p>
+<div class="rig"><button id="play">▶ Hear it</button><label class="step"><input type="checkbox" id="ann" checked> show which lines are read aloud</label><span class="step" id="info"></span></div>
+<div class="frames"><div><div class="flabel">Laptop</div><div class="story" id="wide"><div class="turn"><h3>An effect — in the vegetable field</h3><p class="echo">› use hoe</p><p class="blk event"><span class="d">◆</span><span>You till the soil with the <span class="item">rusty hoe</span>.<span class="tag off notes">silent</span></span></p><p class="blk voiced"><span class="txt">The ground is tough, and you unearth a small, tarnished <span class="item">coin</span>! You quickly pocket it.</span><span class="tag on notes">read aloud</span></p></div><div class="turn"><h3>A failure with a clue — at the murky well</h3><p class="echo">› look in well</p><p class="blk event"><span class="d">◆</span><span>You peer into the murky depths.<span class="tag off notes">silent</span></span></p><p class="blk failure voiced"><span>⊖</span><span><span class="txt">It's hard to see clearly, but you think you catch a glimpse of something shiny. It's far too deep to reach.</span><span class="tag on notes">read aloud</span></span></p></div><div class="turn"><h3>An effect — at the well, once it is clear</h3><p class="echo">› look in well</p><p class="blk event"><span class="d">◆</span><span>You peer into the crystal clear water.<span class="tag off notes">silent</span></span></p><p class="blk voiced"><span class="txt">The bottom is visible and empty.</span><span class="tag on notes">read aloud</span></p></div><div class="turn"><h3>A plain refusal — tilling the field again</h3><p class="echo">› use hoe</p><p class="blk failure"><span>⊖</span><span>You till the soil again with the <span class="item">rusty hoe</span>, but it seems you've already found what was hidden here.<span class="tag off notes">silent</span></span></p></div><div class="turn"><h3>A plain refusal — at the well</h3><p class="echo">› use hoe</p><p class="blk failure"><span>⊖</span><span>You swing the <span class="item">rusty hoe</span>, but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though.<span class="tag off notes">silent</span></span></p></div></div></div>
+<div><div class="flabel">Phone</div><div class="story" style="font-size:14px;padding:12px 14px"><div class="turn"><h3>An effect — in the vegetable field</h3><p class="echo">› use hoe</p><p class="blk event"><span class="d">◆</span><span>You till the soil with the <span class="item">rusty hoe</span>.<span class="tag off notes">silent</span></span></p><p class="blk voiced"><span class="txt">The ground is tough, and you unearth a small, tarnished <span class="item">coin</span>! You quickly pocket it.</span><span class="tag on notes">read aloud</span></p></div><div class="turn"><h3>A failure with a clue — at the murky well</h3><p class="echo">› look in well</p><p class="blk event"><span class="d">◆</span><span>You peer into the murky depths.<span class="tag off notes">silent</span></span></p><p class="blk failure voiced"><span>⊖</span><span><span class="txt">It's hard to see clearly, but you think you catch a glimpse of something shiny. It's far too deep to reach.</span><span class="tag on notes">read aloud</span></span></p></div><div class="turn"><h3>An effect — at the well, once it is clear</h3><p class="echo">› look in well</p><p class="blk event"><span class="d">◆</span><span>You peer into the crystal clear water.<span class="tag off notes">silent</span></span></p><p class="blk voiced"><span class="txt">The bottom is visible and empty.</span><span class="tag on notes">read aloud</span></p></div><div class="turn"><h3>A plain refusal — tilling the field again</h3><p class="echo">› use hoe</p><p class="blk failure"><span>⊖</span><span>You till the soil again with the <span class="item">rusty hoe</span>, but it seems you've already found what was hidden here.<span class="tag off notes">silent</span></span></p></div><div class="turn"><h3>A plain refusal — at the well</h3><p class="echo">› use hoe</p><p class="blk failure"><span>⊖</span><span>You swing the <span class="item">rusty hoe</span>, but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though.<span class="tag off notes">silent</span></span></p></div></div></div></div>
+</div><script>
+document.getElementById('ann').onchange=e=>document.body.classList.toggle('annot',e.target.checked);
+document.querySelectorAll('.voiced').forEach(b=>{const walk=n=>{[...n.childNodes].forEach(c=>{if(c.nodeType===3){const f=document.createDocumentFragment();c.textContent.split(/(\s+)/).forEach(t=>{if(/^\s+$/.test(t)||!t)f.append(t);else{const s=document.createElement('span');s.className='w';s.textContent=t;f.append(s)}});c.replaceWith(f)}else if(!c.classList||!c.classList.contains('tag'))walk(c)})};walk(b.querySelector('.txt')||b)});
+let timer=null;
+document.getElementById('play').onclick=()=>{clearTimeout(timer);document.querySelectorAll('.speaking,.now').forEach(x=>x.classList.remove('speaking','now'));
+ const blocks=[...document.querySelectorAll('#wide .voiced')];const twins=[...document.querySelectorAll('.story:not(#wide) .voiced')];let bi=0,wi=0;
+ const info=document.getElementById('info');
+ const step=()=>{document.querySelectorAll('.now').forEach(x=>x.classList.remove('now'));if(bi>=blocks.length){document.querySelectorAll('.speaking').forEach(x=>x.classList.remove('speaking'));info.textContent='The voice has finished. The grey lines were never read.';return}
+  const b=blocks[bi],t=twins[bi];const ws=b.querySelectorAll('.w'),wt=t.querySelectorAll('.w');b.classList.add('speaking');t.classList.add('speaking');info.textContent='Reading…';
+  if(wi<ws.length){ws[wi].classList.add('now');wt[wi]&&wt[wi].classList.add('now');wi++;timer=setTimeout(step,230)}else{b.classList.remove('speaking');t.classList.remove('speaking');bi++;wi=0;timer=setTimeout(step,450)}};step()};
+</script></body></html>
