@@ -124,8 +124,9 @@ export interface NarratedChapter {
 /**
  * The units of a chapter page: unit 0 is its title (read as the page's
  * heading: an intro's "Act I: The Call to Adventure", a completion's "Act I
- * complete. The Call to Adventure."; with no recording it shows at once), then one unit per block of the body, index-aligned
- * with `parseTurn` so the page finds unit `i + 1` for block `i`.
+ * complete. The Call to Adventure."; with no recording it shows at once),
+ * then one unit per block of the body, index-aligned with `parseTurn` so the
+ * page finds unit `i + 1` for block `i`.
  */
 export function chapterUnits(
   chapter: NarratedChapter,

@@ -128,6 +128,14 @@ describe('chapterUnits', () => {
     ])
   })
 
+  it('gives no breath after a heading that has no recording', () => {
+    const units = chapterUnits(
+      { kind: 'intro', act: 'Act I', title: 'The Call', body },
+      manifestOf([NARRATOR, 'The wind rises.']),
+    )
+    expect(units.map((u) => u.pauseBefore ?? 0)).toEqual([0, 0, 0, 0])
+  })
+
   it('gives a closing page’s first paragraph a breath after its heading, like an intro', () => {
     const units = chapterUnits(
       { kind: 'complete', act: 'Act I', title: 'The Call', body },
