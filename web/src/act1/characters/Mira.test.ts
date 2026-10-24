@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { Game, type GameState } from '@/engine'
+import { Game, GameController, type GameState } from '@/engine'
 import { Act1 } from '../Act1'
 import { RareFlower } from '../items/RareFlower'
 import { RuneToken } from '../items/RuneToken'
@@ -112,7 +112,7 @@ describe('Mira handing over the Ancient Amulet', () => {
     expect(
       game.state.inventory.filter((item) => item.name === 'ancient amulet'),
     ).toHaveLength(1)
-    expect(game.state.currentRoom.describe(game.state)).toContain(
+    expect(new GameController(game).getRoomDescription()).toContain(
       'The stand where the amulet rested stands empty.',
     )
   })
