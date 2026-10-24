@@ -1591,10 +1591,12 @@ describe('LanternLayout', () => {
 
       await say(narratedTurn(2))
       const field = document.createElement('input')
+      field.setAttribute('aria-expanded', 'true')
       document.body.appendChild(field)
       field.dispatchEvent(
         new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
       )
+      // An open word list takes the Escape to close itself.
       expect(useNarrationStore().isNarrating).toBe(true)
       field.remove()
 
@@ -1606,36 +1608,47 @@ describe('LanternLayout', () => {
       expect(texts(w)).toHaveLength(4)
     })
 
-    it('hurries on Space or Enter even when a verb button has focus, without pressing it', async () => {
+    it('skips with Escape in the command box when no word list is open, keeping the text', async () => {
       const w = await ready()
+      await say(narratedTurn(1))
+      const field = document.createElement('input')
+      field.setAttribute('aria-expanded', 'false')
+      field.value = 'talk to'
+      document.body.appendChild(field)
+      field.focus()
+      field.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      )
+      expect(useNarrationStore().isNarrating).toBe(false)
+      await vi.advanceTimersByTimeAsync(0)
+      expect(texts(w)).toHaveLength(2)
+      expect(field.value).toBe('talk to')
+      expect(document.activeElement).toBe(field)
+      field.remove()
+    })
+
+    it('leaves Space and Enter to a focused button: it is pressed and the voice goes on', async () => {
+      await ready()
       await say(narratedTurn(1))
       const button = document.createElement('button')
       document.body.appendChild(button)
-      const down = new KeyboardEvent('keydown', {
-        key: 'Enter',
-        bubbles: true,
-        cancelable: true,
-      })
-      button.dispatchEvent(down)
-      expect(down.defaultPrevented).toBe(true)
-      await vi.advanceTimersByTimeAsync(80)
-      expect(texts(w)).toEqual([FIRST, SECOND])
-      // Space presses a button on key-up; that press is swallowed too.
-      await say(narratedTurn(2))
-      button.dispatchEvent(
-        new KeyboardEvent('keydown', {
-          key: ' ',
+      for (const key of [' ', 'Enter']) {
+        const down = new KeyboardEvent('keydown', {
+          key,
           bubbles: true,
           cancelable: true,
-        }),
-      )
-      const up = new KeyboardEvent('keyup', {
-        key: ' ',
-        bubbles: true,
-        cancelable: true,
-      })
-      button.dispatchEvent(up)
-      expect(up.defaultPrevented).toBe(true)
+        })
+        button.dispatchEvent(down)
+        expect(down.defaultPrevented).toBe(false)
+        const up = new KeyboardEvent('keyup', {
+          key,
+          bubbles: true,
+          cancelable: true,
+        })
+        button.dispatchEvent(up)
+        expect(up.defaultPrevented).toBe(false)
+      }
+      expect(useNarrationStore().isNarrating).toBe(true)
       button.remove()
     })
 
@@ -1806,6 +1819,28 @@ describe('LanternLayout', () => {
         const w = await ready()
         await say(narratedTurn(1))
         expect(hint(w)).toBe(KEYS)
+      })
+
+      it('says only Esc to skip while the cursor is in the command box', async () => {
+        vi.stubGlobal(
+          'matchMedia',
+          vi.fn((query: string) => ({
+            matches: query.includes('pointer: fine'),
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn(),
+          })),
+        )
+        const w = await ready()
+        await say(narratedTurn(1))
+        const field = document.createElement('input')
+        document.body.appendChild(field)
+        field.focus()
+        await vi.advanceTimersByTimeAsync(0)
+        expect(hint(w)).toBe('Esc to skip')
+        field.blur()
+        await vi.advanceTimersByTimeAsync(0)
+        expect(hint(w)).toBe(KEYS)
+        field.remove()
       })
 
       it('goes when the turn is skipped, and ends after three narrated turns', async () => {

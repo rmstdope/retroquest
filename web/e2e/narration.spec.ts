@@ -82,7 +82,7 @@ test('keeps the room card until the voice reaches them, and a press in the journ
   await expect(page.getByTestId('turn')).toHaveCount(turns)
 })
 
-test('Space and Enter hurry with a verb focused, and do not press it', async ({
+test('Space and Enter press a focused verb and the voice keeps reading', async ({
   page,
 }): Promise<void> => {
   await slowNarrationClips(page)
@@ -99,17 +99,41 @@ test('Space and Enter hurry with a verb focused, and do not press it', async ({
     .click()
   const verb = page
     .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Look', exact: true })
+    .getByRole('button', { name: 'Talk', exact: true })
   await verb.focus()
-  const turns = await page.getByTestId('turn').count()
   const shown = await lastTurnBlocks(page).count()
 
   await page.keyboard.press(' ')
-  await expect(lastTurnBlocks(page)).toHaveCount(shown + 1)
-  await page.keyboard.press('Enter')
-  await expect(lastTurnBlocks(page)).toHaveCount(shown + 2)
-  // Neither key ran the verb: no new turn.
-  expect(await page.getByTestId('turn').count()).toBe(turns)
+  // The press opened the builder (its Cancel shows); nothing was hurried.
+  await expect(
+    page.getByRole('region', { name: 'Actions' }).getByText('Cancel'),
+  ).toBeVisible()
+  expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+})
+
+test('typing keeps the voice reading, and Esc in the command box skips it', async ({
+  page,
+}): Promise<void> => {
+  await slowNarrationClips(page)
+  await startAct1(page)
+  const input = page.getByLabel('Command')
+  await input.fill('talk to voice')
+  await input.press('Enter')
+  await expect(lastTurnBlocks(page).first()).toBeVisible()
+  const shown = await lastTurnBlocks(page).count()
+
+  await input.pressSequentially('look')
+  expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+  await expect(page.locator('.lq-narration-hint')).toHaveText('Esc to skip')
+
+  // The word list is open for "look"; the first Esc closes it, the next skips.
+  await input.press('Escape')
+  await input.press('Escape')
+  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  await expect(input).toHaveValue('look')
+  await expect(input).toBeFocused()
 })
 
 test('shows an answer at once with narration off', async ({

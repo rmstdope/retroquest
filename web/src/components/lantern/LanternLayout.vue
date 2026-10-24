@@ -60,13 +60,15 @@ import TitlePage from './TitlePage.vue'
  * A player's command, and the arrival that opens an act, is narrated when the
  * act has recordings and narration is on (`useNarrationStore`): the layout
  * starts it with the new turn, a click on
- * the story hurries it (two skip), Space/Enter hurry and Escape skips while
- * focus is not on a field or a control, and a pop-up stops it.
+ * the story hurries it (two skip), Space/Enter hurry while focus is not on a
+ * field or a control, Escape skips (also in the command box, unless its word
+ * list is open), and a pop-up stops it. Building a command (typing, verbs,
+ * targets) never stops it: only the complete command cuts in.
  * While a command is narrated the side panels (room card, map, journal, the
  * header's room and counts) keep the state from before it and switch as the
- * voice reaches them (`usePanelHold`); pressing in one of them, opening
- * another section, pressing a verb, typing, or opening a name's menu first
- * shows the rest of the turn at once.
+ * voice reaches them (`usePanelHold`), and so do the command box's word list
+ * and the target chips; only pressing in one of those panels first shows the
+ * rest of the turn at once. Opening another section or a name's menu does not.
  */
 const game = useGameStore()
 const settings = useSettingsStore()
@@ -76,11 +78,20 @@ const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 /** A mouse and keyboard: the narration hint names keys instead of taps. */
 const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
-const hintText = computed(() =>
-  keyboardPlayer.value
-    ? 'Space to hurry · Esc to skip'
-    : 'Tap to hurry · double-tap to skip',
-)
+/** The cursor is in a text field (the command box): only Esc steers the voice there. */
+const fieldFocused = ref(false)
+const hintText = computed(() => {
+  if (!keyboardPlayer.value) return 'Tap to hurry · double-tap to skip'
+  return fieldFocused.value ? 'Esc to skip' : 'Space to hurry · Esc to skip'
+})
+
+/** Follows where the cursor is, for the hint. */
+function onFocusChange(event: FocusEvent): void {
+  // Focus is going to `relatedTarget` when it leaves, and to the target when it enters.
+  const next = event.type === 'focusout' ? event.relatedTarget : event.target
+  fieldFocused.value =
+    next instanceof Element && next.matches('input, textarea')
+}
 const section = ref<Section>('story')
 const dockOpen = ref(!short.value)
 watch(short, (isShort) => {
@@ -178,20 +189,8 @@ function answerTooLong(): boolean {
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
 
-/** The hurry key whose key-up must not press the focused button. */
-let swallowKeyUp: string | null = null
-
-/** Swallows the key-up of a key that `onNarrationKey` consumed. */
-function onNarrationKeyUp(event: KeyboardEvent): void {
-  if (swallowKeyUp === null || event.key !== swallowKeyUp) return
-  swallowKeyUp = null
-  event.preventDefault()
-}
-
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
-  // A fresh key press forgets a key-up that never came (window lost focus).
-  swallowKeyUp = null
   if (!narration.isNarrating || event.defaultPrevented) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   const hurries = event.key === ' ' || event.key === 'Enter'
@@ -207,18 +206,23 @@ function onNarrationKey(event: KeyboardEvent): void {
   )
     return
   const target = event.target instanceof Element ? event.target : null
-  if (target?.closest('input, textarea, select, [contenteditable]')) return
-  // Space and Enter hurry even with a verb button focused; only fields keep
-  // them. A button presses on Space's key-up, so that is swallowed too.
+  // A field keeps Space and Enter (a space, the command), and an open word
+  // list takes Escape to close itself; any other Escape skips, text kept.
+  if (target?.closest('input, textarea, select, [contenteditable]')) {
+    if (hurries || target.closest('[aria-expanded="true"]')) return
+  }
+  // A button, link or summary presses on Space or Enter: building a command
+  // goes on while the voice reads (the press that completes it cuts in).
+  if (hurries && target?.closest('button, a, [role="button"], summary')) return
   event.preventDefault()
-  if (hurries) swallowKeyUp = event.key
   if (hurries) narration.hurry()
   else narration.skipAll()
 }
 
 onMounted(() => {
   document.addEventListener('keydown', onNarrationKey)
-  document.addEventListener('keyup', onNarrationKeyUp)
+  document.addEventListener('focusin', onFocusChange)
+  document.addEventListener('focusout', onFocusChange)
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
@@ -228,7 +232,8 @@ onMounted(() => {
 })
 onUnmounted(() => {
   document.removeEventListener('keydown', onNarrationKey)
-  document.removeEventListener('keyup', onNarrationKeyUp)
+  document.removeEventListener('focusin', onFocusChange)
+  document.removeEventListener('focusout', onFocusChange)
   narration.skipAll()
   storyResize?.disconnect()
 })
@@ -272,12 +277,6 @@ watch(
 game.setPanelHold(true)
 onUnmounted(() => game.setPanelHold(false))
 
-// Opening another section on a phone shows the panels as they are: bring them up to date.
-watch(section, (now) => {
-  // Coming back to the story is the layout's own (after a command from another section).
-  if (now !== 'story') panelHold.catchUp()
-})
-
 /**
  * A press on something in a held panel (room card, map, journal, the exits
  * bar) only brings the panels up to date; the player presses again to act.
@@ -288,23 +287,6 @@ function onPanelPress(event: MouseEvent): void {
   if (!panelHold.catchUp()) return
   event.stopPropagation()
   event.preventDefault()
-}
-
-/** Pressing a verb in the action bar, or typing in its command box, brings the panels up to date first, then goes on. */
-function onComposerPress(event: Event): void {
-  if (event instanceof KeyboardEvent) {
-    const typing =
-      event.target instanceof HTMLInputElement &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      !event.altKey &&
-      (event.key.length === 1 || event.key === 'Backspace')
-    if (typing) panelHold.catchUp()
-  } else if (
-    event.target instanceof Element &&
-    event.target.closest('.lq-verb')
-  )
-    panelHold.catchUp()
 }
 
 // The act-complete page waits while the act's last turn is read aloud (a
@@ -510,8 +492,6 @@ function onNameClick(event: MouseEvent): void {
     '.theme-item_name, .theme-character_name, [data-name-kind]',
   )
   if (!name || !game.acceptInput) return
-  // Its actions name people and things of the place the player is in.
-  panelHold.catchUp()
   const kind =
     name.dataset.nameKind === 'character' ||
     name.classList.contains('theme-character_name')
@@ -683,8 +663,6 @@ watch(
           :class="{ 'lq-sheet': !wide }"
           :foldable="!wide"
           @fold="fold"
-          @click.capture="onComposerPress"
-          @keydown.capture="onComposerPress"
         />
         <DockBar
           v-if="!wide && section === 'story' && !dockOpen"
