@@ -224,7 +224,8 @@ export class InnkeeperMarcus extends Character {
     // Check if item is available
     if (!(itemNameToBuy in this.wares)) {
       const itemDisp = `[item_name]${itemNameToBuy}[/item_name]`
-      return speech(
+      return dialogue(
+        this.name,
         `Sorry, I don't have any '${itemDisp}' for sale. Check what I can ` +
           'offer you.',
       )
@@ -249,7 +250,8 @@ export class InnkeeperMarcus extends Character {
           item.name.toLowerCase() === itemNameToBuy && item.canBeCarried,
       )
     ) {
-      return speech(
+      return dialogue(
+        this.name,
         `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
           'room should be sufficient for your stay.',
       )
@@ -282,7 +284,7 @@ export class InnkeeperMarcus extends Character {
       const purchaseMsg =
         `[success]The [item_name]${itemNameToBuy}[/item_name] is yours for ` +
         `${price} [item_name]gold coins[/item_name]. ` +
-        characterName(seller) +
+        characterName('Marcus') +
         ' hands you a brass key and explains how to access the private ' +
         'rooms upstairs.[/success]'
       const lodger =

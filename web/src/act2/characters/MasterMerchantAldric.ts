@@ -4,6 +4,7 @@ import {
   type Item,
   type Room,
   characterName,
+  dialogue,
   clue,
   speech,
 } from '@/engine'
@@ -140,7 +141,8 @@ export class MasterMerchantAldric extends Character {
 
     // Check if item is available
     if (!(itemNameToBuy in this.wares)) {
-      return speech(
+      return dialogue(
+        this.name,
         `Sorry, I don't have any ' [item_name]${itemNameToBuy}` +
           "[/item_name]' for sale. Check my current inventory for available " +
           'items.',
@@ -165,7 +167,8 @@ export class MasterMerchantAldric extends Character {
           item.name.toLowerCase() === itemNameToBuy && item.canBeCarried,
       )
     ) {
-      return speech(
+      return dialogue(
+        this.name,
         `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
           'should be sufficient for your needs.',
       )

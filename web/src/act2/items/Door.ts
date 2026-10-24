@@ -25,7 +25,7 @@ export class Door extends Item {
         'to enter the room area.[/dim]'
       )
     }
-    return '[dim]This door is not accessible from your current location.[/dim]'
+    return '[failure]This door is not accessible from your current location.[/failure]'
   }
 
   /** Describe the sturdy oak door. */

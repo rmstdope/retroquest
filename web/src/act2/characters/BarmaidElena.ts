@@ -180,7 +180,7 @@ export class BarmaidElena extends Character {
   /** Handle receiving the greater heal spell as the first step of the cure. */
   receiveGreaterHeal(gameState: GameState): string {
     if (this.elenaInitialHealing) {
-      return 'Elena is already strengthened by your healing magic.'
+      return '[failure]Elena is already strengthened by your healing magic.[/failure]'
     }
 
     // Set the flag and update Elena's condition

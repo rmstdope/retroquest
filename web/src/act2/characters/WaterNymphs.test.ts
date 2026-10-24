@@ -147,7 +147,7 @@ describe('Water Nymphs voice', () => {
       "Back again? Wasn't three enough? What more could we ask you?",
     )
     expect(said).toBe(
-      "[dim]The [character_name]water nymphs[/character_name] listen to 'hello' and only smile. They have no more riddles for you.[/dim]",
+      '[dim]The [character_name]water nymphs[/character_name] listen and only smile. They have no more riddles for you.[/dim]',
     )
     expectMarkupWellFormed(talk)
     expectDialogueSpeaker(talk, SPEAKER)
@@ -246,7 +246,6 @@ describe('Water Nymphs riddles: mask and truth', () => {
       nymphs.currentRiddle = index
       const answer = nymphs.sayTo(game.state, word.toUpperCase())
       expect(answer).toContain('[success]Correct!')
-      expect(answer).toContain(`'${word.toUpperCase()}'`)
     }
   })
 

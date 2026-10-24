@@ -151,7 +151,7 @@ export class WaterNymphs extends Character {
       return (
         '[dim]The ' +
         characterName(this.name) +
-        ` listen to '${words}' and only smile. They have no more riddles ` +
+        ' listen and only smile. They have no more riddles ' +
         'for you.[/dim]'
       )
     }
@@ -180,7 +180,7 @@ export class WaterNymphs extends Character {
         gameState.currentRoom.items.push(new Moonflowers())
 
         return (
-          `[success]Correct! '${words}' is indeed the answer. ${riddle.explanation}` +
+          `[success]Correct! That is indeed the answer. ${riddle.explanation}` +
           '[/success]\n\nThe ' +
           characterName(this.name) +
           ' laugh, a sound like water over a weir. ' +
@@ -195,7 +195,7 @@ export class WaterNymphs extends Character {
       }
       const nextRiddle = RIDDLES[this.currentRiddle]
       return (
-        `[success]Correct! '${words}' is the right answer. ${riddle.explanation}` +
+        `[success]Correct! That is the right answer. ${riddle.explanation}` +
         '[/success]\n\nThe ' +
         characterName(this.name) +
         ' nod. ' +

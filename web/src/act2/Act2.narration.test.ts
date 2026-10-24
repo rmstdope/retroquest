@@ -6,6 +6,9 @@ import { parseTurn } from '@/lantern/parseTurn'
 import { Act2 } from './Act2'
 import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 import { MendSpell } from './spells/MendSpell'
+import { DispelSpell } from './spells/DispelSpell'
+import { Coins } from './items/Coins'
+import { GreendaleGates } from './rooms/GreendaleGates'
 
 /** Grey event lines that may stay: markers, never the echo of a command. */
 const MARKER = /^(✦ |You take |You move |.*this will be remembered)/
@@ -77,5 +80,67 @@ describe('Act II keeps grey lines for markers only', () => {
     const answer = game.commandParser.parse('cast mend')
     expect(answer).not.toContain('You cast')
     expect(answer).toContain('finds nothing that needs mending nearby')
+  })
+})
+
+describe('Act II shops, spells and repeats', () => {
+  /** A game in `room` with `coins` coins and the shop open. */
+  function shopGame(room: string): Game {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms[room]
+    return game
+  }
+
+  it('sells the room key in one read sentence and names Marcus', () => {
+    const game = shopGame('SilverStagInn')
+    for (let i = 0; i < 10; i++) game.state.addItemToInventory(new Coins())
+    const answer = game.commandParser.parse(
+      'buy room key from innkeeper marcus',
+    )
+    expect(answer).toContain('is yours for 10')
+    expect(answer).toContain(
+      '[character_name]Marcus[/character_name] hands you',
+    )
+    expect(answer).not.toContain('remaining')
+    expect(answer).not.toContain('You purchase')
+  })
+
+  it('refuses a buyer without coins in one read red box', () => {
+    const game = shopGame('SilverStagInn')
+    const answer = game.commandParser.parse(
+      'buy room key from innkeeper marcus',
+    )
+    expect(kinds(game, 'buy room key from innkeeper marcus')).toEqual(['clue'])
+    expect(answer).toContain("You don't have enough coins for that.")
+  })
+
+  it('attributes a shopkeeper refusal to the shopkeeper', () => {
+    const game = shopGame('SilverStagInn')
+    const turn = parseTurn(
+      game.commandParser.parse('buy sword from innkeeper marcus'),
+    )
+    const speech = turn.find((block) => block.kind === 'dialogue')
+    expect(speech?.kind === 'dialogue' && speech.speaker).toBe(
+      'innkeeper marcus',
+    )
+  })
+
+  it('casts every spell on anyone with one fixed sentence and no cast echo', () => {
+    const game = shopGame('MarketDistrict')
+    game.state.learnSpell(new DispelSpell())
+    const answer = game.commandParser.parse(
+      'cast dispel on master merchant aldric',
+    )
+    expect(answer).not.toContain('You cast')
+    expect(answer).toContain('Counter-magic flows outward')
+  })
+
+  it('answers a second search at the gates with a silent red box', () => {
+    const game = shopGame('GreendaleGates')
+    const gates = game.state.currentRoom
+    if (!(gates instanceof GreendaleGates)) throw new Error('not the gates')
+    gates.gateCaptain.entryPassGiven = true
+    expect(kinds(game, 'search')).not.toContain('failure')
+    expect(kinds(game, 'search')).toEqual(['failure'])
   })
 })
