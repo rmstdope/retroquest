@@ -1,7 +1,7 @@
 {
   "speakers": {
     "narrator": { "voice": "7d805071401d4b738334f332a8c320c2", "style": "[warm, gentle storyteller]" },
-    "grandmother": { "voice": "0b6770770baf4db5b13c78c3091584a0", "voiceName": "Old grandma", "style": "[warm, gentle, a little worried]", "audition": { "keywords": ["grandmother", "old", "mother"] } },
+    "grandmother": { "voice": "47e0fe010fc1468fa2b389a3dc1db037", "voiceName": "Warm Grandmother", "style": "[warm, gentle, a little worried]", "audition": { "keywords": ["grandmother", "old", "mother", "warm"], "phrase": "Oh, Elior, my dear. The village... it feels a bit on edge lately, doesn't it?\nWillowbrook has always been a peaceful place. The Village Square is usually bustling, though folks seem more hushed these days." } },
     "mira": { "voice": "52b38f57477c4a3dbaf9136e739d9799", "style": "[low, calm, knowing]" },
     "priest": { "voice": "d5b3a0954fba413b924daa64cf19fcf4", "style": "[kind, hushed, reverent]" },
     "fisherman": { "voice": "66fd169d1eca43298b3e977878f14e20", "style": "[weathered, friendly, unhurried]" },
