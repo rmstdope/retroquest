@@ -50,9 +50,7 @@ describe('Item', () => {
     expect(rock.useOnCharacter(gs, mira)).toContain(
       'on [character_name]Mira[/character_name]',
     )
-    expect(rock.examine(gs)).toBe(
-      '[event]You examine the [item_name]rock[/item_name]. A grey rock.[/event]',
-    )
+    expect(rock.examine(gs)).toBe('A grey rock.')
     expect(rock.listen(gs)).toContain('is silent')
     expect(rock.pickedUp(gs)).toBe('')
     expect(rock.open(gs)).toContain("can't open")

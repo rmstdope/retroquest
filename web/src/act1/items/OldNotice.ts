@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, event, writing } from '@/engine'
+import { Item, type GameState, characterName, writing } from '@/engine'
 
 /** Faded piece of parchment pinned to the notice board, may contain a clue or warning. */
 export class OldNotice extends Item {
@@ -14,10 +14,7 @@ export class OldNotice extends Item {
 
   /** Read the notice and return its message. */
   read(_gameState: GameState): string {
-    const eventMsg =
-      event(`You read the [item_name]${this.name}[/item_name].`) + '\n'
     return (
-      eventMsg +
       'The notice is weathered and old, but you can make out some of the words:\n\n' +
       writing(
         `[bold]MISSING[/bold] - Our dear cat, ${characterName('Patches')}, has vanished. ` +

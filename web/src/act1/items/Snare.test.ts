@@ -92,10 +92,7 @@ describe('the snare', () => {
 
     const answer = executeCommands(game, ['use sharp knife with snare'])
 
-    expect(answer).toContain(
-      'You use the [item_name]sharp knife[/item_name] on the ' +
-        '[item_name]snare[/item_name].',
-    )
+    expect(answer).not.toContain('You use the')
     expect(answer).toContain(
       'You kneel and saw through the wire, slow and careful. The moment it ' +
         'gives, the fox kit twists free, stares at you for one heartbeat, and ' +

@@ -5347,6 +5347,43 @@
    }
   ]
  },
+ "04b146cfb79545": {
+  "file": "04b146cfb79545.mp3",
+  "speaker": "narrator",
+  "duration": 4.226,
+  "words": [
+   {
+    "word": "Act",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "III",
+    "start": 0.38,
+    "end": 0.68
+   },
+   {
+    "word": "complete.",
+    "start": 0.68,
+    "end": 1.18
+   },
+   {
+    "word": "Trials",
+    "start": 1.18,
+    "end": 2.76
+   },
+   {
+    "word": "and",
+    "start": 2.76,
+    "end": 3.18
+   },
+   {
+    "word": "Revelations.",
+    "start": 3.18,
+    "end": 3.94
+   }
+  ]
+ },
  "04ee129b765c20": {
   "file": "04ee129b765c20.mp3",
   "speaker": "sir cedric",
@@ -8659,22 +8696,22 @@
  "0742829c09187d": {
   "file": "0742829c09187d.mp3",
   "speaker": "lead miner",
-  "duration": 1.254,
+  "duration": 1.207,
   "words": [
    {
     "word": "Thank",
     "start": 0.0,
-    "end": 0.3
+    "end": 0.28
    },
    {
     "word": "you,",
-    "start": 0.3,
-    "end": 0.48
+    "start": 0.28,
+    "end": 0.46
    },
    {
     "word": "Elior.",
-    "start": 0.48,
-    "end": 1.254
+    "start": 0.46,
+    "end": 1.207
    }
   ]
  },
@@ -15315,6 +15352,88 @@
     "word": "that.",
     "start": 22.34,
     "end": 22.56
+   }
+  ]
+ },
+ "0cb56b89137d59": {
+  "file": "0cb56b89137d59.mp3",
+  "speaker": "narrator",
+  "duration": 6.734,
+  "words": [
+   {
+    "word": "Your",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "parents",
+    "start": 0.4,
+    "end": 0.82
+   },
+   {
+    "word": "were",
+    "start": 0.82,
+    "end": 1.06
+   },
+   {
+    "word": "Malakar's",
+    "start": 1.06,
+    "end": 1.76
+   },
+   {
+    "word": "closest",
+    "start": 1.76,
+    "end": 2.12
+   },
+   {
+    "word": "friends.",
+    "start": 2.12,
+    "end": 2.6
+   },
+   {
+    "word": "The",
+    "start": 2.9,
+    "end": 3.36
+   },
+   {
+    "word": "Dragon",
+    "start": 3.36,
+    "end": 3.72
+   },
+   {
+    "word": "says",
+    "start": 3.72,
+    "end": 4.1
+   },
+   {
+    "word": "they",
+    "start": 4.1,
+    "end": 4.34
+   },
+   {
+    "word": "are",
+    "start": 4.34,
+    "end": 4.52
+   },
+   {
+    "word": "warded",
+    "start": 4.52,
+    "end": 4.96
+   },
+   {
+    "word": "away,",
+    "start": 4.96,
+    "end": 5.3
+   },
+   {
+    "word": "not",
+    "start": 5.56,
+    "end": 6.1
+   },
+   {
+    "word": "dead.",
+    "start": 6.1,
+    "end": 6.44
    }
   ]
  },
@@ -22371,52 +22490,52 @@
  "1313b22225f261": {
   "file": "1313b22225f261.mp3",
   "speaker": "pier warden",
-  "duration": 3.251,
+  "duration": 3.437,
   "words": [
    {
     "word": "Keep",
     "start": 0.0,
-    "end": 0.3
+    "end": 0.42
    },
    {
     "word": "it.",
-    "start": 0.3,
-    "end": 0.5
+    "start": 0.42,
+    "end": 0.68
    },
    {
     "word": "Toll",
-    "start": 0.5,
-    "end": 1.54
+    "start": 1.2,
+    "end": 1.68
    },
    {
     "word": "for",
-    "start": 1.54,
-    "end": 1.74
+    "start": 1.68,
+    "end": 1.86
    },
    {
     "word": "the",
-    "start": 1.74,
-    "end": 1.88
+    "start": 1.86,
+    "end": 2.0
    },
    {
     "word": "crossing,",
-    "start": 1.88,
-    "end": 2.32
+    "start": 2.0,
+    "end": 2.46
    },
    {
     "word": "my",
-    "start": 2.46,
-    "end": 2.58
+    "start": 2.6,
+    "end": 2.7
    },
    {
     "word": "da",
-    "start": 2.58,
-    "end": 2.74
+    "start": 2.7,
+    "end": 2.92
    },
    {
     "word": "said.",
-    "start": 2.74,
-    "end": 3.1
+    "start": 2.92,
+    "end": 3.28
    }
   ]
  },
@@ -28869,6 +28988,38 @@
     "word": "Walk.",
     "start": 3.54,
     "end": 4.04
+   }
+  ]
+ },
+ "195c78cf7313ac": {
+  "file": "195c78cf7313ac.mp3",
+  "speaker": "elior",
+  "duration": 1.161,
+  "words": [
+   {
+    "word": "Why",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "didn't",
+    "start": 0.18,
+    "end": 0.42
+   },
+   {
+    "word": "you",
+    "start": 0.42,
+    "end": 0.52
+   },
+   {
+    "word": "tell",
+    "start": 0.52,
+    "end": 0.76
+   },
+   {
+    "word": "me?",
+    "start": 0.76,
+    "end": 0.96
    }
   ]
  },

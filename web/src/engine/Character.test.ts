@@ -15,9 +15,7 @@ describe('Character', () => {
   const mira = new Character({ name: 'Mira', description: 'The wise woman.' })
 
   it('describes itself when examined', () => {
-    expect(mira.examine(gs)).toBe(
-      '[event]You examine [character_name]Mira[/character_name]. The wise woman.[/event]',
-    )
+    expect(mira.examine(gs)).toBe('The wise woman.')
   })
 
   it('has no special answer to a spell by default', () => {
@@ -27,8 +25,7 @@ describe('Character', () => {
 
   it('has nothing to say by default', () => {
     expect(mira.talkTo(gs)).toBe(
-      '[event]You speak with the [character_name]Mira[/character_name].[/event]\n' +
-        '[character_name]Mira[/character_name] has nothing to say right now.',
+      '[character_name]Mira[/character_name] has nothing to say right now.',
     )
     expect(mira.sayTo(gs, 'hello')).toContain(
       "You say 'hello' to [character_name]Mira",

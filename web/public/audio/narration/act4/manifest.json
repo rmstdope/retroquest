@@ -323,6 +323,178 @@
    }
   ]
  },
+ "007c845b68189d": {
+  "file": "007c845b68189d.mp3",
+  "speaker": "elior",
+  "duration": 11.238,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "tore",
+    "start": 0.14,
+    "end": 0.38
+   },
+   {
+    "word": "the",
+    "start": 0.38,
+    "end": 0.54
+   },
+   {
+    "word": "world,",
+    "start": 0.54,
+    "end": 0.9
+   },
+   {
+    "word": "Malakar.",
+    "start": 0.9,
+    "end": 1.98
+   },
+   {
+    "word": "You",
+    "start": 1.98,
+    "end": 2.46
+   },
+   {
+    "word": "drained",
+    "start": 2.46,
+    "end": 2.76
+   },
+   {
+    "word": "the",
+    "start": 2.76,
+    "end": 2.96
+   },
+   {
+    "word": "king.",
+    "start": 2.96,
+    "end": 3.3
+   },
+   {
+    "word": "You",
+    "start": 3.66,
+    "end": 4.14
+   },
+   {
+    "word": "sent",
+    "start": 4.14,
+    "end": 4.36
+   },
+   {
+    "word": "a",
+    "start": 4.36,
+    "end": 4.48
+   },
+   {
+    "word": "man",
+    "start": 4.48,
+    "end": 4.76
+   },
+   {
+    "word": "to",
+    "start": 4.76,
+    "end": 4.92
+   },
+   {
+    "word": "hunt",
+    "start": 4.92,
+    "end": 5.12
+   },
+   {
+    "word": "a",
+    "start": 5.12,
+    "end": 5.24
+   },
+   {
+    "word": "child",
+    "start": 5.24,
+    "end": 5.56
+   },
+   {
+    "word": "in",
+    "start": 5.56,
+    "end": 5.76
+   },
+   {
+    "word": "Willowbrook,",
+    "start": 5.76,
+    "end": 6.34
+   },
+   {
+    "word": "and",
+    "start": 6.52,
+    "end": 6.94
+   },
+   {
+    "word": "you",
+    "start": 6.94,
+    "end": 7.06
+   },
+   {
+    "word": "let",
+    "start": 7.06,
+    "end": 7.24
+   },
+   {
+    "word": "Sir",
+    "start": 7.24,
+    "end": 7.44
+   },
+   {
+    "word": "Cedric",
+    "start": 7.44,
+    "end": 7.86
+   },
+   {
+    "word": "take",
+    "start": 7.86,
+    "end": 8.1
+   },
+   {
+    "word": "the",
+    "start": 8.1,
+    "end": 8.24
+   },
+   {
+    "word": "blame.",
+    "start": 8.24,
+    "end": 8.6
+   },
+   {
+    "word": "I",
+    "start": 9.2,
+    "end": 9.68
+   },
+   {
+    "word": "will",
+    "start": 9.68,
+    "end": 9.84
+   },
+   {
+    "word": "not",
+    "start": 9.84,
+    "end": 10.06
+   },
+   {
+    "word": "pretend",
+    "start": 10.06,
+    "end": 10.42
+   },
+   {
+    "word": "you",
+    "start": 10.42,
+    "end": 10.64
+   },
+   {
+    "word": "didn't.",
+    "start": 10.64,
+    "end": 11.08
+   }
+  ]
+ },
  "00917c43819a98": {
   "file": "00917c43819a98.mp3",
   "speaker": "malakar",
@@ -1775,6 +1947,43 @@
    }
   ]
  },
+ "02bfcd930c2cbe": {
+  "file": "02bfcd930c2cbe.mp3",
+  "speaker": "narrator",
+  "duration": 3.762,
+  "words": [
+   {
+    "word": "Act",
+    "start": 0.0,
+    "end": 0.32
+   },
+   {
+    "word": "IV",
+    "start": 0.32,
+    "end": 0.74
+   },
+   {
+    "word": "complete.",
+    "start": 0.74,
+    "end": 1.24
+   },
+   {
+    "word": "The",
+    "start": 2.06,
+    "end": 2.16
+   },
+   {
+    "word": "Final",
+    "start": 2.16,
+    "end": 2.54
+   },
+   {
+    "word": "Confrontation.",
+    "start": 2.54,
+    "end": 3.54
+   }
+  ]
+ },
  "02c0e8227a0da6": {
   "file": "02c0e8227a0da6.mp3",
   "speaker": "knight of despair",
@@ -1991,6 +2200,88 @@
     "word": "know.",
     "start": 4.48,
     "end": 4.92
+   }
+  ]
+ },
+ "0325174da55eb2": {
+  "file": "0325174da55eb2.mp3",
+  "speaker": "elior",
+  "duration": 5.759,
+  "words": [
+   {
+    "word": "Patience.",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "You",
+    "start": 1.3,
+    "end": 1.74
+   },
+   {
+    "word": "could",
+    "start": 1.74,
+    "end": 1.9
+   },
+   {
+    "word": "not",
+    "start": 1.9,
+    "end": 2.08
+   },
+   {
+    "word": "wait",
+    "start": 2.08,
+    "end": 2.34
+   },
+   {
+    "word": "for",
+    "start": 2.34,
+    "end": 2.52
+   },
+   {
+    "word": "them.",
+    "start": 2.52,
+    "end": 2.74
+   },
+   {
+    "word": "You",
+    "start": 3.2,
+    "end": 3.64
+   },
+   {
+    "word": "can",
+    "start": 3.64,
+    "end": 3.78
+   },
+   {
+    "word": "wait",
+    "start": 3.78,
+    "end": 3.96
+   },
+   {
+    "word": "a",
+    "start": 3.96,
+    "end": 4.1
+   },
+   {
+    "word": "little",
+    "start": 4.1,
+    "end": 4.22
+   },
+   {
+    "word": "longer,",
+    "start": 4.22,
+    "end": 4.66
+   },
+   {
+    "word": "for",
+    "start": 4.66,
+    "end": 5.24
+   },
+   {
+    "word": "me.",
+    "start": 5.24,
+    "end": 5.44
    }
   ]
  },
@@ -4682,6 +4973,195 @@
    }
   ]
  },
+ "058e1d765b996c": {
+  "file": "058e1d765b996c.mp3",
+  "speaker": "narrator",
+  "duration": 9.52,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.26
+   },
+   {
+    "word": "words",
+    "start": 0.26,
+    "end": 0.66
+   },
+   {
+    "word": "are",
+    "start": 0.66,
+    "end": 0.88
+   },
+   {
+    "word": "harder",
+    "start": 0.88,
+    "end": 1.26
+   },
+   {
+    "word": "than",
+    "start": 1.26,
+    "end": 1.5
+   },
+   {
+    "word": "any",
+    "start": 1.5,
+    "end": 1.86
+   },
+   {
+    "word": "spell,",
+    "start": 1.86,
+    "end": 2.34
+   },
+   {
+    "word": "and",
+    "start": 2.56,
+    "end": 3.14
+   },
+   {
+    "word": "then",
+    "start": 3.14,
+    "end": 3.4
+   },
+   {
+    "word": "they",
+    "start": 3.4,
+    "end": 3.66
+   },
+   {
+    "word": "are",
+    "start": 3.66,
+    "end": 3.86
+   },
+   {
+    "word": "easy.",
+    "start": 3.86,
+    "end": 4.28
+   },
+   {
+    "word": "Something",
+    "start": 4.8,
+    "end": 5.52
+   },
+   {
+    "word": "warm",
+    "start": 5.52,
+    "end": 5.96
+   },
+   {
+    "word": "settles",
+    "start": 5.96,
+    "end": 6.5
+   },
+   {
+    "word": "in",
+    "start": 6.5,
+    "end": 6.64
+   },
+   {
+    "word": "your",
+    "start": 6.64,
+    "end": 6.78
+   },
+   {
+    "word": "chest,",
+    "start": 6.78,
+    "end": 7.22
+   },
+   {
+    "word": "like",
+    "start": 7.22,
+    "end": 7.72
+   },
+   {
+    "word": "a",
+    "start": 7.72,
+    "end": 7.86
+   },
+   {
+    "word": "lesson",
+    "start": 7.86,
+    "end": 8.22
+   },
+   {
+    "word": "you",
+    "start": 8.22,
+    "end": 8.4
+   },
+   {
+    "word": "always",
+    "start": 8.4,
+    "end": 8.9
+   },
+   {
+    "word": "knew.",
+    "start": 8.9,
+    "end": 9.22
+   }
+  ]
+ },
+ "05fbde77bcb93f": {
+  "file": "05fbde77bcb93f.mp3",
+  "speaker": "elior",
+  "duration": 3.762,
+  "words": [
+   {
+    "word": "I",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "understand.",
+    "start": 0.16,
+    "end": 0.68
+   },
+   {
+    "word": "You",
+    "start": 1.32,
+    "end": 1.76
+   },
+   {
+    "word": "have",
+    "start": 1.76,
+    "end": 1.9
+   },
+   {
+    "word": "been",
+    "start": 1.9,
+    "end": 2.04
+   },
+   {
+    "word": "alone",
+    "start": 2.04,
+    "end": 2.36
+   },
+   {
+    "word": "in",
+    "start": 2.36,
+    "end": 2.54
+   },
+   {
+    "word": "here",
+    "start": 2.54,
+    "end": 2.74
+   },
+   {
+    "word": "a",
+    "start": 2.74,
+    "end": 2.9
+   },
+   {
+    "word": "long",
+    "start": 2.9,
+    "end": 3.14
+   },
+   {
+    "word": "time.",
+    "start": 3.14,
+    "end": 3.4
+   }
+  ]
+ },
  "05ffec6d16880f": {
   "file": "05ffec6d16880f.mp3",
   "speaker": "nyx",
@@ -5988,6 +6468,28 @@
    }
   ]
  },
+ "070cd86f1b8171": {
+  "file": "070cd86f1b8171.mp3",
+  "speaker": "elior",
+  "duration": 0.882,
+  "words": [
+   {
+    "word": "I",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "forgive",
+    "start": 0.14,
+    "end": 0.42
+   },
+   {
+    "word": "you.",
+    "start": 0.42,
+    "end": 0.7
+   }
+  ]
+ },
  "07229790af96c5": {
   "file": "07229790af96c5.mp3",
   "speaker": "narrator",
@@ -6985,6 +7487,38 @@
     "word": "it.",
     "start": 7.48,
     "end": 7.68
+   }
+  ]
+ },
+ "08d7820159e29b": {
+  "file": "08d7820159e29b.mp3",
+  "speaker": "narrator",
+  "duration": 1.533,
+  "words": [
+   {
+    "word": "It",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "is",
+    "start": 0.24,
+    "end": 0.4
+   },
+   {
+    "word": "not",
+    "start": 0.4,
+    "end": 0.66
+   },
+   {
+    "word": "a",
+    "start": 0.66,
+    "end": 0.8
+   },
+   {
+    "word": "question.",
+    "start": 0.8,
+    "end": 1.24
    }
   ]
  },
@@ -9757,6 +10291,68 @@
     "word": "rest.",
     "start": 11.3,
     "end": 11.74
+   }
+  ]
+ },
+ "0e28c3062eb242": {
+  "file": "0e28c3062eb242.mp3",
+  "speaker": "elior",
+  "duration": 3.669,
+  "words": [
+   {
+    "word": "Take",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "my",
+    "start": 0.2,
+    "end": 0.4
+   },
+   {
+    "word": "magic.",
+    "start": 0.4,
+    "end": 0.8
+   },
+   {
+    "word": "All",
+    "start": 1.18,
+    "end": 1.5
+   },
+   {
+    "word": "of",
+    "start": 1.5,
+    "end": 1.62
+   },
+   {
+    "word": "it.",
+    "start": 1.62,
+    "end": 1.86
+   },
+   {
+    "word": "Close",
+    "start": 2.22,
+    "end": 2.52
+   },
+   {
+    "word": "the",
+    "start": 2.52,
+    "end": 2.66
+   },
+   {
+    "word": "wound",
+    "start": 2.66,
+    "end": 2.92
+   },
+   {
+    "word": "with",
+    "start": 2.92,
+    "end": 3.14
+   },
+   {
+    "word": "that.",
+    "start": 3.14,
+    "end": 3.42
    }
   ]
  },
@@ -17254,6 +17850,60 @@
     "word": "hurt.",
     "start": 4.98,
     "end": 5.3
+   }
+  ]
+ },
+ "193eec83ac0f7f": {
+  "file": "193eec83ac0f7f.mp3",
+  "speaker": "elior",
+  "duration": 3.344,
+  "words": [
+   {
+    "word": "Power",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "follows",
+    "start": 0.38,
+    "end": 0.82
+   },
+   {
+    "word": "purpose;",
+    "start": 0.82,
+    "end": 1.32
+   },
+   {
+    "word": "purpose",
+    "start": 1.8,
+    "end": 2.3
+   },
+   {
+    "word": "follows",
+    "start": 2.3,
+    "end": 2.74
+   },
+   {
+    "word": "truth.",
+    "start": 2.74,
+    "end": 3.0
+   }
+  ]
+ },
+ "19486a52e8da24": {
+  "file": "19486a52e8da24.mp3",
+  "speaker": "elior",
+  "duration": 0.65,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "knew.",
+    "start": 0.24,
+    "end": 0.4
    }
   ]
  },

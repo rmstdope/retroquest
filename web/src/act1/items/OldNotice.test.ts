@@ -8,7 +8,7 @@ describe('OldNotice', () => {
     const game = new Game([new Act1()])
     const text = new OldNotice().read(game.state)
     expect(findMarkupProblems(text)).toEqual([])
-    expect(text).toContain('[event]You read the [item_name]')
+    expect(text).not.toContain('You read the')
   })
 
   it('shows the notice as unquoted writing naming Hemlock', () => {

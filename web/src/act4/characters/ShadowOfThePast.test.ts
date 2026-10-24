@@ -214,8 +214,10 @@ describe('The Shadow of the Past', () => {
     expect(executeCommands(game, ['use ancient amulet on door'])).toContain(
       'The door already stands open.',
     )
-    expect(executeCommands(game, ['go east'])).toContain("Parents' Vault")
-    expect(executeCommands(game, ['go west'])).toContain('Memory Vault')
+    executeCommands(game, ['go east'])
+    expect(game.state.currentRoom.name).toBe("Parents' Vault")
+    executeCommands(game, ['go west'])
+    expect(game.state.currentRoom.name).toBe('Memory Vault')
   })
 
   it('is answered by waiting too, with the same gates as the word', () => {
@@ -275,7 +277,8 @@ describe('The Shadow of the Past', () => {
       'rolls aside',
     )
     reload(game)
-    expect(executeCommands(game, ['go east'])).toContain("Parents' Vault")
+    executeCommands(game, ['go east'])
+    expect(game.state.currentRoom.name).toBe("Parents' Vault")
     reload(game)
     expectStoryFlag(game.state, FLAG_ACT4_PARENTS_LEGACY_STARTED, true)
     expect(game.state.activatedQuests.map((q) => q.name)).toContain(
@@ -330,6 +333,7 @@ describe("The Parent's Legacy", () => {
     expect(again).not.toContain('It was the opposite.')
     reload(game)
     expect(game.state.currentRoom.description).toContain('hang dim and still')
-    expect(executeCommands(game, ['go north'])).toContain('Throne Chamber')
+    executeCommands(game, ['go north'])
+    expect(game.state.currentRoom.name).toBe('Throne Chamber')
   })
 })

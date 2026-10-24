@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { MillstoneFragment } from './MillstoneFragment'
 import { Rope } from './Rope'
 import { refreshRoomDescription } from '../refreshRoomDescription'
@@ -47,10 +47,8 @@ export class Mechanism extends Item {
     if (this.repaired) {
       return '[failure]The ' + nameHtml + ' is jammed fast.[/failure]'
     }
-    return (
-      '[failure]It looks like you need to use something with the ' +
-      nameHtml +
-      '.[/failure]'
+    return clue(
+      'It looks like you need to use something with the ' + nameHtml + '.',
     )
   }
 
@@ -71,12 +69,7 @@ export class Mechanism extends Item {
       this.description = JAMMED_DESCRIPTION
       refreshRoomDescription(gameState)
       const nameHtml = `[item_name]${this.name}[/item_name]`
-      const eventMsg =
-        event(
-          'You try to use the [item_name]rope[/item_name] with the ' + nameHtml,
-        ) + '\n'
       return (
-        eventMsg +
         'You thread the [item_name]rope[/item_name] through the gears of the ' +
         `${nameHtml} and pull it tight. ` +
         'The gears grind, catch, and jam. ' +
@@ -92,19 +85,14 @@ export class Mechanism extends Item {
   /** A draining whir while it works; silence once it is jammed. */
   override listen(_gameState: GameState): string {
     const nameHtml = `[item_name]${this.name}[/item_name]`
-    const eventMsg = event('You listen to the ' + nameHtml) + '\n'
     if (this.repaired) {
-      return (
-        eventMsg +
-        ('The ' + nameHtml + ' is silent now, its gears jammed fast.')
-      )
+      return 'The ' + nameHtml + ' is silent now, its gears jammed fast.'
     }
     return (
-      eventMsg +
-      ('You hear a faint whirring and clicking from within the ' +
-        nameHtml +
-        ', and beneath it a low hum, as if something were being drawn ' +
-        'up from far below.')
+      'You hear a faint whirring and clicking from within the ' +
+      nameHtml +
+      ', and beneath it a low hum, as if something were being drawn ' +
+      'up from far below.'
     )
   }
 }

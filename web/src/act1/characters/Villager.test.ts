@@ -84,7 +84,6 @@ describe('Tilda, the baker’s wife', () => {
 
     const answer = game.commandParser.parse('talk to tilda')
 
-    expect(answer).toContain("the baker's wife")
     expectDialogueSpeaker(answer, 'Tilda')
     expect(game.state.getStoryFlag(FLAG_VILLAGER_TALKED_TO)).toBe(true)
   })
@@ -102,9 +101,7 @@ describe('Tilda, the baker’s wife', () => {
     expect(loaded.state.currentRoom.characters.map((c) => c.name)).toContain(
       'Tilda',
     )
-    expect(loaded.commandParser.parse('talk to tilda')).toContain(
-      "the baker's wife",
-    )
+    expectDialogueSpeaker(loaded.commandParser.parse('talk to tilda'), 'Tilda')
   })
 
   it('asks whether Elior cleaned the well, once, then goes back to her rumours', () => {

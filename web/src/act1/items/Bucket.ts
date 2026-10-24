@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { FLAG_VEGETABLE_FIELD_WATERED } from '../Act1StoryFlags'
 import { VegetableField } from '../rooms/VegetableField'
 import { refreshRoomDescription } from '../refreshRoomDescription'
@@ -64,27 +64,26 @@ export class Bucket extends Item {
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Well) {
       if (this.name === 'bucket') {
-        const water = this.fill(other)
-        return event(
-          'You lower the [item_name]bucket[/item_name] into the ' +
-            `[item_name]well[/item_name] and draw it up, full of ${water}.`,
+        const kind = other.isPurified ? 'clear' : 'murky'
+        this.fill(other)
+        return (
+          'The [item_name]bucket[/item_name] comes up from the ' +
+          `[item_name]well[/item_name] full of ${kind} water.`
         )
       }
       if (other.isPurified && !this.hasPurifiedWater(gameState)) {
-        const water = this.fill(other)
-        return event(
-          'You tip the old water out onto the stones, lower the ' +
-            '[item_name]bucket[/item_name] into the [item_name]well[/item_name] ' +
-            `again and draw it up, full of ${water}.`,
+        this.fill(other)
+        return (
+          'The old water splashes out onto the stones, and the ' +
+          '[item_name]bucket[/item_name] comes up again full of clear water.'
         )
       }
       return '[failure]The [item_name]bucket[/item_name] is already full.[/failure]'
     }
     if (other instanceof WitheredCarrot) return this.use(gameState)
-    return (
-      "[failure]You can't seem to use the [item_name]bucket[/item_name] together " +
-      `with [item_name]${other.name}[/item_name]. Perhaps near something ` +
-      'with water?[/failure]'
+    return clue(
+      'The [item_name]bucket[/item_name] is no use with that. Perhaps near ' +
+        'something with water?',
     )
   }
 
@@ -94,34 +93,29 @@ export class Bucket extends Item {
       return super.use(gameState)
     }
     if (this.name === 'bucket') {
-      return (
-        '[failure]The [item_name]bucket[/item_name] is empty. ' +
-        'The parched rows will need water from somewhere.[/failure]'
+      return clue(
+        'The [item_name]bucket[/item_name] is empty. ' +
+          'The parched rows will need water from somewhere.',
       )
     }
     if (!this.hasPurifiedWater(gameState)) {
-      return (
-        '[failure]You lift the [item_name]bucket[/item_name], then think ' +
-        'better of it. The sour water from the well would only sicken the ' +
-        'soil further.[/failure]'
+      return clue(
+        'You lift the [item_name]bucket[/item_name], then think ' +
+          'better of it. The sour water from the well would only sicken the ' +
+          'soil further.',
       )
     }
     this.name = 'bucket'
     this.holdsPurifiedWater = false
     this.description = EMPTY_DESCRIPTION
     if (gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)) {
-      return event(
-        'You pour the clear water along the rows. ' +
-          'The field drinks it gladly, already green and thriving.',
-      )
+      return 'The field drinks the clear water gladly, already green and thriving.'
     }
     gameState.setStoryFlag(FLAG_VEGETABLE_FIELD_WATERED, true)
     refreshRoomDescription(gameState)
     return (
-      event(
-        'You walk the rows, pouring the clear well water along the cracked earth.',
-      ) +
-      '\nThe soil darkens and drinks it in. ' +
+      'You walk the rows, pouring the clear well water along the cracked earth.\n' +
+      'The soil darkens and drinks it in. ' +
       'Before your eyes, the brittle leaves uncurl and green shoots push up ' +
       'between the rows. By the time the [item_name]bucket[/item_name] is ' +
       'empty, the whole [room_name]Vegetable Field[/room_name] is breathing again.'

@@ -94,7 +94,8 @@ describe('Patches in the Abandoned Shed', () => {
 
     expect(loaded.state.currentRoom).toBeInstanceOf(AbandonedShed)
     expect(patchesIn(loaded, 'AbandonedShed')).toBe(true)
-    expect(loaded.commandParser.parse('go north')).toContain('Village Well')
+    loaded.commandParser.parse('go north')
+    expect(loaded.state.currentRoom.name).toBe('Village Well')
     loaded.commandParser.parse('go south')
     expect(
       loaded.state.allRooms.AbandonedShed.characters.filter(

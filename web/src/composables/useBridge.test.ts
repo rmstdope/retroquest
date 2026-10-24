@@ -113,7 +113,7 @@ describe('useBridge', () => {
       const bridge = await runningBridge()
       expect(bridge.controller.getRoomItems()).not.toContain('bread')
       const result = bridge.controller.takeTurn('use lantern')
-      expect(result).toContain('[event]')
+      expect(result).toContain('The flickering light')
       expect(bridge.controller.getRoomItems()).toContain('bread')
       expect(bridge.controller.takeTurn('xyzzy')).toContain(
         "I don't understand",
@@ -166,7 +166,7 @@ describe('useBridge', () => {
       expect(bridge.controller.getRoomItems()).toEqual(['lantern'])
       expect(bridge.controller.getRoomExits()).toEqual({})
       expect(bridge.controller.getRoomWares()).toEqual([])
-      expect(bridge.controller.look()).toContain('surroundings')
+      expect(bridge.controller.look()).toBe('')
     })
 
     it('lists the inventory, spells and quests as named items', async () => {

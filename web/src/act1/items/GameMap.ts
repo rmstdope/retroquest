@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, event, speech } from '@/engine'
+import { Item, type GameState, characterName, speech, clue } from '@/engine'
 import {
   FLAG_KEPT_MOTHERS_RING,
   FLAG_PATCHES_RETURNED,
@@ -53,8 +53,7 @@ function farewell(gameState: GameState): string {
     )
   }
   return (
-    event('Footsteps hurry along the road behind you.') +
-    '\n' +
+    'Footsteps hurry along the road behind you.\n' +
     `Your ${characterName('grandmother')} has walked all the way out from ` +
     'the village. She tugs the [item_name]travel cloak[/item_name] straight ' +
     'on your shoulders. ' +
@@ -65,10 +64,8 @@ function farewell(gameState: GameState): string {
     '\n' +
     revelation() +
     '\nShe kisses your brow, and turns for home before you can see her cry.\n' +
-    event(
-      'As you look back at Willowbrook, the chapel bell rings once, ' +
-        'though no hand is on the rope.',
-    )
+    'As you look back at Willowbrook, the chapel bell rings once, ' +
+    'though no hand is on the rope.'
   )
 }
 
@@ -116,10 +113,10 @@ export class GameMap extends Item {
           missingRequirements.length > 0
             ? `${missingRequirements.join(', ')} and ${last}`
             : `${last}`
-        return (
-          '[failure]The map stays a plain map of Willowbrook. The hidden road ' +
-          'will not show itself while something here is unfinished: ' +
-          `${unfinished}.[/failure]`
+        return clue(
+          'The map stays a plain map of Willowbrook. The hidden road ' +
+            'will not show itself while something here is unfinished: ' +
+            `${unfinished}.`,
         )
       }
 
@@ -127,17 +124,15 @@ export class GameMap extends Item {
       return (
         farewell(gameState) +
         '\n' +
-        event(`You use the [item_name]${this.name}[/item_name].`) +
-        '\n' +
         `The [item_name]${this.name}[/item_name] aligns with the landscape,` +
         ' revealing a ' +
         'hidden path that shortens the journey to Greendale. ' +
         "You tuck your parents' amulet beneath your mother's cloak, and set forth."
       )
     }
-    return event(
-      `You study the [item_name]${this.name}[/item_name]. It depicts the ` +
-        'local area with surprising detail.',
+    return (
+      `The [item_name]${this.name}[/item_name] depicts the local area with ` +
+      'surprising detail.'
     )
   }
 }

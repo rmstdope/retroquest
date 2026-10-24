@@ -1,9 +1,9 @@
 import {
   Character,
   type GameState,
-  event,
   characterName,
   speech,
+  attributeSpeech,
 } from '@/engine'
 import { Candle } from '../items/Candle'
 import { Locket } from '../items/Locket'
@@ -32,12 +32,16 @@ export class Priest extends Character {
 
   /** Tell the founders' story the first time, then answer to Elior's progress. */
   override talkTo(gameState: GameState): string {
-    const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
+    return attributeSpeech(this.name, this.talkAnswer(gameState))
+  }
+
+  /** What the priest answers when spoken to, before the speaker is labelled. */
+  private talkAnswer(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_PRIEST_TALKED_TO)) {
       gameState.setStoryFlag(FLAG_PRIEST_TALKED_TO, true)
-      return eventMsg + '\n' + this.firstTalk()
+      return this.firstTalk()
     }
-    return eventMsg + '\n' + this.progressTalk(gameState)
+    return this.progressTalk(gameState)
   }
 
   /** The greeting, the story of the founders, the relic and the bell, and the matches. */

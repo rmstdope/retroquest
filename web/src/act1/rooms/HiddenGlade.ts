@@ -1,4 +1,4 @@
-import { Room, event, characterName, writing } from '@/engine'
+import { Room, characterName, writing } from '@/engine'
 import type { GameState } from '@/engine'
 import { RareFlower } from '../items/RareFlower'
 import { ShinyPebble } from '../items/ShinyPebble'
@@ -137,11 +137,7 @@ export class HiddenGlade extends Room {
   override light(gameState: GameState): string {
     this.lightSpellCast = true
     let message =
-      event(
-        'You cast a [spell_name]light[/spell_name] spell that illuminates the ' +
-          'glade.',
-      ) +
-      '\n' +
+      'Light fills the glade.\n' +
       'The unnatural darkness lifts, and golden sunlight spills through the ' +
       'branches. The inscription on the mossy stone glows faintly, revealing ' +
       'ancient runes. ' +

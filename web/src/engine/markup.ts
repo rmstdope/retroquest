@@ -91,6 +91,26 @@ export function writing(words: string): string {
   return `[character_name][/character_name]\n[dialogue]${words}[/dialogue]`
 }
 
+/**
+ * Make sure the first `[dialogue]` of `text` has a speaker: when no
+ * `[character_name]` comes before it, the speaker's name goes on a line of
+ * its own right before the quote, which the story view shows as the label.
+ * Text with no dialogue, or whose dialogue is already attributed, comes back
+ * unchanged. Use it where an answer opens with narration or speech that no
+ * longer has a command line naming who is speaking.
+ */
+export function attributeSpeech(speaker: string, text: string): string {
+  const quote = text.indexOf('[dialogue]')
+  if (quote < 0 || text.slice(0, quote).includes('[character_name]'))
+    return text
+  const lead = quote === 0 || text[quote - 1] === '\n' ? '' : '\n'
+  return (
+    text.slice(0, quote) +
+    `${lead}[character_name]${speaker}[/character_name]\n` +
+    text.slice(quote)
+  )
+}
+
 const TAG_PATTERN = /\[(\/?)([a-z_]+)\]/g
 
 /**
