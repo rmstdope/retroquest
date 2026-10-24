@@ -91,7 +91,7 @@ function chipLabel(chip: Chip): string {
         <p
           v-else-if="block.kind === 'failure'"
           class="lq-block-failure"
-          :class="{ 'lq-appear': fade }"
+          :class="{ 'lq-speaking': isSpeaking(index), 'lq-appear': fade }"
           :data-unit="index"
         >
           <svg
@@ -108,7 +108,7 @@ function chipLabel(chip: Chip): string {
             <circle cx="12" cy="12" r="9" />
             <path d="M8 12h8" />
           </svg>
-          <span v-html="renderMarkup(block.markup)"></span>
+          <span v-html="html(block.markup, index)"></span>
         </p>
         <blockquote
           v-else-if="block.kind === 'dialogue'"
@@ -357,10 +357,19 @@ function chipLabel(chip: Chip): string {
 .lq-arrival.lq-speaking {
   box-shadow: inset 2px 0 0 var(--lq-accent);
 }
+/* A clue failure being read: a red rule at the box's left edge. */
+.lq-block-failure.lq-speaking {
+  box-shadow: inset 3px 0 0 var(--lq-failure);
+}
 /* The rule sits left of the words, which stay where they were. */
 .lq-block-text.lq-speaking {
   padding-left: 10px;
   margin-left: -12px;
+}
+.lq-turn :deep(.lq-block-failure .lq-w-now) {
+  background: color-mix(in srgb, var(--lq-failure) 28%, transparent);
+  color: var(--lq-failure);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--lq-failure) 28%, transparent);
 }
 .lq-quest-card.lq-speaking {
   border-color: var(--lq-accent);

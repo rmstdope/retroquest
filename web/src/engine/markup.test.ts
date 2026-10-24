@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   MARKUP_TAGS,
   characterName,
+  clue,
   dialogue,
   event,
   findMarkupProblems,
@@ -110,5 +111,15 @@ describe('remembered', () => {
       '[event]✦ Mercy — this will be remembered[/event]',
     )
     expect(findMarkupProblems(remembered('Truth'))).toEqual([])
+  })
+})
+
+describe('clue', () => {
+  it('writes a failure that carries a clue, still a [failure] for the game', () => {
+    expect(clue('A glimmer.')).toBe(
+      '[failure][clue]A glimmer.[/clue][/failure]',
+    )
+    expect(findMarkupProblems(clue('A glimmer.'))).toEqual([])
+    expect(MARKUP_TAGS).toContain('clue')
   })
 })

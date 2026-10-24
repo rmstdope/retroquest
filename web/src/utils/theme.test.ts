@@ -13,6 +13,7 @@ describe('theme', () => {
         'quest_name',
         'event',
         'failure',
+        'clue',
         'pending',
         'success',
         'exits',

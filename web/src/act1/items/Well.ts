@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, clue, event } from '@/engine'
 import { FLAG_WELL_EXAMINED } from '../Act1StoryFlags'
 import { refreshRoomDescription } from '../refreshRoomDescription'
 import { Bucket } from './Bucket'
@@ -87,9 +87,12 @@ export class Well extends Item {
     }
     if (this.containsRing) {
       return (
-        "[failure]You peer into the murky depths. It's hard to see clearly, " +
-        "but you think you catch a glimpse of something shiny. It's far too " +
-        'deep to reach.[/failure]'
+        event('You peer into the murky depths.') +
+        '\n' +
+        clue(
+          "It's hard to see clearly, but you think you catch a glimpse of " +
+            "something shiny. It's far too deep to reach.",
+        )
       )
     }
     return (
