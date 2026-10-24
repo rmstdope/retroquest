@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { Game } from '@/engine'
+import { parseTurn } from '@/lantern/parseTurn'
 import { Act1 } from '../Act1'
 import { Well } from './Well'
 
@@ -27,7 +28,9 @@ describe('Well', () => {
     const game = new Game([new Act1()])
     const well = new Well()
     well.containsRing = false
-    expect(well.search(game.state)).not.toContain('[clue]')
-    expect(well.search(game.state)).toContain('[failure]')
+    const blocks = parseTurn(well.search(game.state))
+    expect(blocks).toHaveLength(1)
+    expect(blocks[0].kind).toBe('failure')
+    expect(blocks[0]).not.toHaveProperty('narrated')
   })
 })
