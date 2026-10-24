@@ -73,4 +73,16 @@ describe('the Old Mill room card', () => {
     expect(text).toContain('jammed with a rope')
     expect(text).toContain('hums softly')
   })
+
+  it('shows the jammed mechanism without the hum when the amulet is not carried', () => {
+    const game = new Game([new Act1()])
+    const mill = game.state.allRooms.OldMill
+    game.state.currentRoom = mill
+    const mechanism = mill.items.find((item) => item instanceof Mechanism)
+    if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
+    mechanism.repaired = true
+    const text = new GameController(game).getRoomDescription()
+    expect(text).toContain('jammed with a rope')
+    expect(text).not.toContain('hums softly')
+  })
 })

@@ -11,6 +11,12 @@ function gameInHut(): Game {
 }
 
 describe("Mira's Hut room card", () => {
+  it('shows the amulet on its stand without a glow and no empty stand at first', () => {
+    const text = new GameController(gameInHut()).getRoomDescription()
+    expect(text).not.toContain('glows brighter')
+    expect(text).not.toContain('stands empty')
+  })
+
   it('shows the amulet glowing while Elior carries the locket', () => {
     const game = gameInHut()
     game.state.inventory.push(new Locket())
