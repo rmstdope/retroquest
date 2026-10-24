@@ -40,6 +40,16 @@
     "text": "You wake in your own bed. The storm is gone and there is grey morning in the curtains. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
   },
   {
+    "key": "0c2b48f3e89ded",
+    "speaker": "narrator",
+    "text": "It has no face you can find, only a height and a nearness. When it speaks, it speaks your name."
+  },
+  {
+    "key": "1b9f4255b10ad6",
+    "speaker": "narrator",
+    "text": "You are asleep already. The voice says your name again, nearer."
+  },
+  {
     "key": "1f7d39c44976a9",
     "speaker": "narrator",
     "text": "New main quest"
@@ -93,6 +103,11 @@
     "key": "06a824d7accd07",
     "speaker": "narrator",
     "text": "Elior's wise and loving grandmother, always ready with advice and a gentle smile. She has raised Elior since his parents vanished."
+  },
+  {
+    "key": "09097b529ab3e9",
+    "speaker": "narrator",
+    "text": "You rest for a moment, gathering your strength."
   },
   {
     "key": "0967c6683e4888",
@@ -1020,6 +1035,11 @@
     "text": "You have observed the magical deer, gaining a deeper understanding of the wonders and mysteries of Eldoria."
   },
   {
+    "key": "13b9b8255c378a",
+    "speaker": "narrator",
+    "text": "You rest for a while, but the glade remains quiet. Perhaps something more needs to happen for its magic to awaken."
+  },
+  {
     "key": "173eaeef97cb8d",
     "speaker": "narrator",
     "text": "A delicate, radiant flower found only in this hidden glade. Its petals shimmer with a faint magical glow."
@@ -1038,6 +1058,11 @@
     "key": "1caf3b96fb4df1",
     "speaker": "narrator",
     "text": "Its dark eyes hold yours for a long moment. Then its gaze drifts to the mossy stone and the shadowed runes upon it... then to you, patient, as if waiting for you to bring something to light."
+  },
+  {
+    "key": "067a11c05b8321",
+    "speaker": "narrator",
+    "text": "You take a moment to rest in the tranquil glade. The Deer continues to graze peacefully."
   },
   {
     "key": "1174c72ff016c4",

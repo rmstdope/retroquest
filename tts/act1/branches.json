@@ -1,0 +1,7 @@
+[
+  {
+    "after": 79,
+    "commands": ["rest"],
+    "unset": ["deer_can_be_observed"]
+  }
+]
