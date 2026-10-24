@@ -80,6 +80,21 @@
     "text": "Shadow guardians and a barrier of dark energy bar the way into the fortress. Find what feeds them, and break their hold on the gates."
   },
   {
+    "key": "1fcf25e17acb8a",
+    "speaker": "narrator",
+    "text": "A small silver medallion stamped with two clasped hands, warm from the friends who pressed it into your hand. Whoever carries it is not alone, and knows it."
+  },
+  {
+    "key": "1511ac64886212",
+    "speaker": "narrator",
+    "text": "A small crystalline pendant that shifts through the colours of the forest as you turn it: leaf green, acorn brown, snow, blossom. It is warm, the way a held hand is warm."
+  },
+  {
+    "key": "159fda9106a0c4",
+    "speaker": "narrator",
+    "text": "A crystal with a whole small forest in it. Tiny lights move inside like fireflies, and held close it sounds faintly of wind in leaves."
+  },
+  {
     "key": "1f5c71c8ba496d",
     "speaker": "narrator",
     "text": "Side quest complete"
@@ -88,6 +103,21 @@
     "key": "0108f2ff93146f",
     "speaker": "narrator",
     "text": "Elior's light breaks the guardians' hold on the gates. The ward stones fall dark, and the way into Malakar's fortress lies open."
+  },
+  {
+    "key": "175219ea14d8a0",
+    "speaker": "narrator",
+    "text": "A jagged piece of the right ward stone, carved with half a rune. It is cold, and keeps no time at all."
+  },
+  {
+    "key": "06b237b56417e6",
+    "speaker": "narrator",
+    "text": "A silver chain, each link inscribed with runes. It bound the guardians to the stones; now it binds nothing."
+  },
+  {
+    "key": "08993777469ac1",
+    "speaker": "narrator",
+    "text": "A small, steady light the colour of a candle flame, left where the last guardian stood. Whoever the guardians were made from was brave once. The light remembers it."
   },
   {
     "key": "101acdefcf3507",
@@ -135,6 +165,16 @@
     "text": "'I held the gate for King Alden once. Now I hold it for... I cannot remember.'"
   },
   {
+    "key": "1953a5d597a222",
+    "speaker": "narrator",
+    "text": "Grey figures walk the courtyard paths in circles, chains of shadow at their ankles. They wear what is left of kitchen aprons and stable coats. None of them looks up."
+  },
+  {
+    "key": "10da90eb3cd1f4",
+    "speaker": "narrator",
+    "text": "A captain of the royal guard, his tabard black with soot. His eyes are open but see nothing, and his hand rests on a sword he has forgotten how to draw."
+  },
+  {
     "key": "19ae551fa5f73e",
     "speaker": "narrator",
     "text": "The Trapped Servants have stopped walking. They stand close together, watching you."
@@ -168,6 +208,11 @@
     "key": "049eb4119cedfe",
     "speaker": "captain of the guard",
     "text": "'Then I will tell them at home what you did here.'"
+  },
+  {
+    "key": "0fceec43484c31",
+    "speaker": "narrator",
+    "text": "A small blue crystal on a fine chain, from the freed servants. When you hold it, it feels as if someone is standing just behind you, ready to point the way."
   },
   {
     "key": "060072baa59d6e",
@@ -378,6 +423,11 @@
     "key": "1f1b0530bc96c2",
     "speaker": "narrator",
     "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come."
+  },
+  {
+    "key": "0b102233ad7fc6",
+    "speaker": "narrator",
+    "text": "Voices without mouths, thick on the stair, saying the same thing again and again."
   },
   {
     "key": "06815a213b6118",
@@ -1048,6 +1098,26 @@
     "key": "1be326544250f4",
     "speaker": "narrator",
     "text": "The little light brushes your cheek, warm, and settles back into the hedge."
+  },
+  {
+    "key": "178da06277ebce",
+    "speaker": "narrator",
+    "text": "Your grandmother, waiting at the gate with her hands folded."
+  },
+  {
+    "key": "1039fd553f2bf1",
+    "speaker": "narrator",
+    "text": "Mira, standing beside Grandmother at the gate."
+  },
+  {
+    "key": "015f72acf1bfc1",
+    "speaker": "narrator",
+    "text": "Sir Cedric, leaning on the fence as if it were a wall."
+  },
+  {
+    "key": "049c15648f21a3",
+    "speaker": "narrator",
+    "text": "A small light that flickers in the hedge, keeping close."
   },
   {
     "key": "02bfcd930c2cbe",

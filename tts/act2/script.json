@@ -75,9 +75,24 @@
     "text": "Greendale is bigger than any place you have seen, but the talk in its streets is low and uneasy. People speak of a darkness gathering beyond the walls, and say that if anyone at the castle understands it, it is Sir Cedric."
   },
   {
+    "key": "1e150034b7a21a",
+    "speaker": "narrator",
+    "text": "A sturdy wooden walking stick worn smooth by many travelers. It provides reliable support on mountain paths and could serve as a makeshift weapon if needed."
+  },
+  {
     "key": "0a732e5ad3b014",
     "speaker": "narrator",
     "text": "You carefully examine the abandoned camp site. There are two fire pits here, not one, and the ashes of one are much older than the other. In the soft ground beside the trail, the same boot prints show twice: one line coming up from Willowbrook, and a fresher line going back down toward it. Hidden under leaves near the fire pit you discover an entry pass to Greendale, dropped, it seems, by whoever left in such a hurry."
+  },
+  {
+    "key": "116b0920d7c26a",
+    "speaker": "narrator",
+    "text": "A mysterious amulet inscribed with runes. At its centre is a worn sigil you cannot place. It is faintly warm in your hand."
+  },
+  {
+    "key": "06c894f080ba49",
+    "speaker": "narrator",
+    "text": "A small but hardy wildflower that grows along the mountain paths. Its purple petals seem to shimmer slightly in the sunlight, though it appears to have no special properties."
   },
   {
     "key": "0f4d9bb15d3f37",
@@ -105,9 +120,19 @@
     "text": "This was Cedric's. I put it in his hands when he was a squire no taller than you. They say he slept on watch the night the king went, and lost his spurs for it. Take it to him in the castle yard. Tell him the sergeant never believed a word of it."
   },
   {
+    "key": "0aaaf02226f11a",
+    "speaker": "narrator",
+    "text": "A broad old man in a patched grey castle cloak, sitting straight-backed by a small fire. His hands are scarred across the knuckles, and he watches the path between Willowbrook and Greendale the way a sentry watches a gate."
+  },
+  {
     "key": "085a594c82fac7",
     "speaker": "narrator",
     "text": "You lean on the walking stick, feeling more steady on the rocky path. It's a small comfort and a reliable companion for any journey."
+  },
+  {
+    "key": "1da29c7cbb0678",
+    "speaker": "narrator",
+    "text": "A well-balanced practice sword with a dulled blade. The grip is worn smooth by years of a young hand, and there is a small notch near the guard. Though not sharp enough for real combat, it's perfect for demonstrating martial skills and training exercises."
   },
   {
     "key": "083338bae2861e",
@@ -153,6 +178,11 @@
     "key": "07fc724ace1f34",
     "speaker": "gate captain",
     "text": "State your business in Greendale, traveler. Do you have proper documentation for entry?"
+  },
+  {
+    "key": "17ab3cdf3ffa26",
+    "speaker": "narrator",
+    "text": "A seasoned officer of Greendale's guard, wearing polished mail and bearing the insignia of the city watch. His weathered face shows years of experience maintaining order at the gates."
   },
   {
     "key": "134f7951e7b0f1",
@@ -205,6 +235,11 @@
     "text": "You read through the various postings on the notice board. Most are mundane announcements about trade regulations and festival dates, but one catches your eye: a call under the Lord Commander's seal for able hands to serve the castle in these uncertain times. Beneath it, in a smaller hand, someone has written: Enquire in the training yard."
   },
   {
+    "key": "058021086b5af4",
+    "speaker": "narrator",
+    "text": "A colorful handbill advertising the Market District's finest merchants and their premium goods. It features a special introduction coupon for new customers seeking quality adventure gear."
+  },
+  {
     "key": "10586e52d56d97",
     "speaker": "town crier",
     "text": "Hear ye, hear ye! Welcome to Greendale, traveler! The Lord Commander calls for able hands to serve the realm. Read his notice on the board!"
@@ -218,6 +253,11 @@
     "key": "19feb8cc2694be",
     "speaker": "town crier",
     "text": "If it's a sword arm they want of you, they'll send you to the training yard, to Sir Cedric. Sir Cedric, as was. Mind your manners with him; whatever folk say, he's a fair man."
+  },
+  {
+    "key": "1688a3d432ebd1",
+    "speaker": "narrator",
+    "text": "A loud, enthusiastic man dressed in official Greendale colors who announces news and events throughout the city. He carries a brass bell and scroll with current announcements."
   },
   {
     "key": "1872432986c69f",
@@ -253,6 +293,16 @@
     "key": "1eba3e7feb22d5",
     "speaker": "castle guard captain",
     "text": "And a word of advice: ask no questions about the king. His Majesty has not been seen these three weeks, since the night he vanished from his own chambers. The word sent out to the villages is that he is ill. The Lord Commander rules in his name until he returns."
+  },
+  {
+    "key": "164c9c2dee8d42",
+    "speaker": "narrator",
+    "text": "An official court herald wearing ornate robes bearing the royal arms. He examines documents and credentials for those seeking audience with nobility."
+  },
+  {
+    "key": "0708434f648e37",
+    "speaker": "narrator",
+    "text": "A stern-looking officer in polished armor who oversees security for the castle grounds. He provides guidance on proper protocol for meeting with nobility."
   },
   {
     "key": "0cf9e54619b7f8",
@@ -395,6 +445,21 @@
     "text": "Sorry, we can't talk - the Training Master expects us to perfect these techniques before the day is over."
   },
   {
+    "key": "03dcb4fbe886e5",
+    "speaker": "narrator",
+    "text": "A tall knight in old, dented mail, bearing the scars of many battles. A pale patch on his surcoat shows where his device has been unpicked, and the scabbard at his hip hangs empty. His eyes hold wisdom and determination all the same."
+  },
+  {
+    "key": "165872a4c09fd9",
+    "speaker": "narrator",
+    "text": "A grizzled veteran knight responsible for training the castle's squires and maintaining combat readiness. His weathered face and battle-scarred armor speak of many years of military service. He observes the training grounds with a critical eye, ensuring every move is precise and disciplined."
+  },
+  {
+    "key": "14931572cb494a",
+    "speaker": "narrator",
+    "text": "Young men and women training to become knights under the guidance of the Training Master and Sir Cedric. They practice sword work and horsemanship with determination, though they occasionally pause to whisper among themselves about castle affairs and their mentors' reputations."
+  },
+  {
     "key": "0678b14852e2e7",
     "speaker": "narrator",
     "text": "New side quest"
@@ -413,6 +478,11 @@
     "key": "1a142f80d97d18",
     "speaker": "narrator",
     "text": "Sir Cedric calls it the Gathering Storm. He needs allies who know magic, but he will not trust you on your word alone. He wants to see you fight first, with the training sword."
+  },
+  {
+    "key": "14ef884f0c5716",
+    "speaker": "narrator",
+    "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. It is faintly warm in your hand."
   },
   {
     "key": "12f7aec5f61931",
@@ -590,6 +660,11 @@
     "text": "One more thing, since the forest is where you are bound. My family has kept a charm for generations: Nature's Charm, carved for the knights who first made pacts with the forest spirits. The old texts say it is one of three that can call the sprite Nyx. I will not hand an heirloom of my house to someone I have known for a day. Prove yourself in more than a sparring yard, and we will speak of it again."
   },
   {
+    "key": "0419603d64a048",
+    "speaker": "narrator",
+    "text": "A pouch containing 1 gold coins. These will be useful for purchasing supplies and equipment in Greendale."
+  },
+  {
     "key": "0200e854cd97d0",
     "speaker": "narrator",
     "text": "You count your coins. You have 1 gold pieces to spend on supplies and equipment."
@@ -635,6 +710,16 @@
     "text": "Brenn, my guard, came stumbling back alone two nights ago. Says the ravine path gave way and he ran. Ran! He's skulking in the warehouse now. I'll deal with him once my people are home."
   },
   {
+    "key": "0d6808021123f7",
+    "speaker": "narrator",
+    "text": "A prosperous merchant with keen eyes for quality goods. He specializes in premium adventure gear and has connections throughout the trading networks."
+  },
+  {
+    "key": "19802f68a1c60a",
+    "speaker": "narrator",
+    "text": "A weather-beaten man with worried eyes who oversees merchant caravans. He paces anxiously, clearly distressed about some urgent matter."
+  },
+  {
     "key": "075218d701c5e3",
     "speaker": "narrator",
     "text": "You present the merchant's flyer to Master Merchant Aldric. His eyes light up as he examines it."
@@ -643,6 +728,21 @@
     "key": "1e3e51d6af3a16",
     "speaker": "master merchant aldric",
     "text": "Ah, excellent! This flyer grants you access to our premium selection and preferred customer pricing. What quality goods can I help you acquire today?"
+  },
+  {
+    "key": "050eb759fdf2a4",
+    "speaker": "narrator",
+    "text": "A comprehensive kit containing everything needed for safe forest exploration: dried food, water purification tablets, protective gear, a compass, and magical wards against forest spirits."
+  },
+  {
+    "key": "104c2e459ac6bc",
+    "speaker": "narrator",
+    "text": "A magically enhanced lantern that burns with bright, steady light. The enchantment allows it to illuminate hidden paths and reveal magical auras that would otherwise remain invisible."
+  },
+  {
+    "key": "1944c872ba99ab",
+    "speaker": "narrator",
+    "text": "Fifty feet of strong, reliable rope suitable for climbing, securing loads, and emergency situations. The rope is treated to resist weather and magical corrosion."
   },
   {
     "key": "1efd1503d0efbd",
@@ -705,6 +805,11 @@
     "text": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink."
   },
   {
+    "key": "1cdd6ce303a61b",
+    "speaker": "narrator",
+    "text": "A brass key to a private room at The Silver Stag Inn. The room provides a quiet space for studying and safe storage of important items."
+  },
+  {
     "key": "15a26871b217e8",
     "speaker": "narrator",
     "text": "You examine the door closely. It's made of sturdy oak wood with decorative iron hinges and a simple latch. The door frame is carved with intricate patterns typical of the inn's welcoming atmosphere. This door provides access to the upper floor where guests can rent private rooms for rest and storage."
@@ -733,6 +838,16 @@
     "key": "1506e1a0152f7e",
     "speaker": "barmaid elena",
     "text": "Hello, traveler. I apologize for my appearance... I've been cursed by a dark wizard who passed through town weeks ago. The curse grows stronger each day, draining my life force. My father searches desperately for a cure, but I fear only someone with powerful magical abilities could break such dark magic."
+  },
+  {
+    "key": "0a4875d513f73d",
+    "speaker": "narrator",
+    "text": "A kind-hearted man who runs The Silver Stag Inn. He has worry lines on his face and glances frequently toward his daughter with obvious concern."
+  },
+  {
+    "key": "0f47842ed7faa3",
+    "speaker": "narrator",
+    "text": "A young woman who moves slowly and appears weakened by some affliction. Dark circles under her eyes and a pale complexion suggest she is suffering from a magical curse."
   },
   {
     "key": "034d4ab44856c6",
@@ -798,6 +913,11 @@
     "key": "02e47f6d2bff2a",
     "speaker": "narrator",
     "text": "As you examine the room carefully, you notice a wooden floorboard near the bed is slightly raised. Pressing it shifts the board with a soft creak. Lifting it reveals a hidden space containing a leather-bound journal deliberately concealed by a previous guest. The pages hold detailed notes and observations that may aid your journey."
+  },
+  {
+    "key": "1dc50b0f1e5394",
+    "speaker": "narrator",
+    "text": "A plain leather journal, its cover rubbed grey at the corners. There is no name inside. The pages are crowded with notes in a small, careful hand, and many of them look copied from somewhere else."
   },
   {
     "key": "169802a3095a5d",
@@ -895,6 +1015,21 @@
     "text": "Welcome to Greendale's Great Hall. I oversee the military affairs of our realm and, since King Alden vanished, I hold his court in his name. If you hear any word of His Majesty, you bring it to me first."
   },
   {
+    "key": "1680038f079794",
+    "speaker": "narrator",
+    "text": "An elaborately dressed official who manages formal presentations and ceremonies at court. He scrutinizes documents and credentials with practiced expertise."
+  },
+  {
+    "key": "03f46df98425b8",
+    "speaker": "narrator",
+    "text": "A group of learned scholars who maintain the court's historical records and genealogical archives. They are eager to examine any historical documents or artifacts."
+  },
+  {
+    "key": "059903a43e203b",
+    "speaker": "narrator",
+    "text": "A distinguished military officer wearing elaborate ceremonial armor adorned with Greendale's coat of arms. His bearing speaks of years of command and the authority to make important decisions affecting the realm's knights."
+  },
+  {
     "key": "1a75ac9ab95aa1",
     "speaker": "court herald",
     "text": "Excellent! This is a properly certified entry pass. I hereby formally present you to the court and grant you access to our historical archives. Your credentials are now on record, and you may research freely in our collections."
@@ -965,6 +1100,16 @@
     "text": "Quiet streets lined with comfortable two-story homes, each with small gardens and neat workshops. Smoke rises from chimneys, and the sound of craftsmen at work echoes from nearby buildings. This is where Greendale's skilled artisans and middle-class citizens live and work. The atmosphere is peaceful and industrious. At the end of one lane an old cellar door has been bricked up, and a cold draught breathes through the gaps."
   },
   {
+    "key": "1766edc44e066c",
+    "speaker": "narrator",
+    "text": "Skilled artisans working at various crafts - blacksmithing, carpentry, tailoring, and magical repair work. They demonstrate traditional techniques passed down through generations."
+  },
+  {
+    "key": "026b1841990df8",
+    "speaker": "narrator",
+    "text": "Friendly local families who have lived in Greendale for generations. They know the city's history and are happy to share stories with helpful visitors."
+  },
+  {
     "key": "1f2ffe60e908fe",
     "speaker": "narrator",
     "text": "You use your walking stick to help several elderly residents navigate the uneven cobblestones and carry their heavy loads. Your assistance is greatly appreciated, and the community takes note of your kind and helpful nature. Word spreads that you are someone who cares about others."
@@ -1020,6 +1165,11 @@
     "text": "She's smiling. First time in a week. It's only a flower, and she knows it, but it came from the mountain and someone thought of her. Thank you, truly."
   },
   {
+    "key": "1d167ec2d018fd",
+    "speaker": "narrator",
+    "text": "A bundle of carefully selected medicinal herbs known for their healing properties. These herbs are essential for advanced healing magic and potion-making."
+  },
+  {
     "key": "04b45c98d65e9d",
     "speaker": "narrator",
     "text": "You examine the healing herbs. They are fresh and potent - perfect for use in advanced healing magic, training with Master Healer Lyria, or crafting powerful remedies."
@@ -1063,6 +1213,11 @@
     "key": "19611cffac1574",
     "speaker": "master healer lyria",
     "text": "Are those from the old families? Give them here, if you are willing. I have a bed that cannot wait."
+  },
+  {
+    "key": "06f96602263743",
+    "speaker": "narrator",
+    "text": "A wise and nurturing healer with graying hair and gentle eyes that seem to see right through to your magical potential. She wears simple robes adorned with healing herbs, and her hands are steady from years of tending to the sick and wounded. There's an aura of calm competence about her that inspires confidence in her abilities."
   },
   {
     "key": "1aede3687817c4",
@@ -1128,6 +1283,11 @@
     "key": "1e430b9b117a58",
     "speaker": "narrator",
     "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry."
+  },
+  {
+    "key": "1c9b8fbc67698f",
+    "speaker": "narrator",
+    "text": "A massive tome containing historical records of the region. On its cover, worn almost smooth, is the sun rising over three linked rings."
   },
   {
     "key": "19fae8045779e4",
@@ -1325,6 +1485,11 @@
     "text": "But you... there is old magic on you, and not of your own making. She'll notice it. Take this charm—it tells her you're under my protection. And don't go to her unready; sort out your pack before you cross."
   },
   {
+    "key": "06729dd02cbe9f",
+    "speaker": "narrator",
+    "text": "A thin figure in moss-green robes, weathered by years outdoors. Charms of bark, bone and braided grass hang from their belt. Every so often they glance at the treeline, the way you would at someone who might be listening."
+  },
+  {
     "key": "1fc8ace3b8036a",
     "speaker": "narrator",
     "text": "The standing stones continue to pulse with ancient magic, their druidic runes a testament to the old ways."
@@ -1338,6 +1503,11 @@
     "key": "086a00b42a568d",
     "speaker": "narrator",
     "text": "A forest hermit at the edge of the Enchanted Forest has warned you that the forest moves its paths and keeps old things that don't care for strangers. The hermit has given you a protective charm to help safeguard your journey through the magical wilderness, but you need to prepare yourself before venturing further into the Enchanted Forest."
+  },
+  {
+    "key": "1e2bbe4d2450e2",
+    "speaker": "narrator",
+    "text": "A small talisman woven from forest vines and blessed by ancient magic. It pulses with a gentle green light and carries the protective power of the deep woods. This charm will ward off hostile forest spirits and mark the bearer as one under the hermit's protection."
   },
   {
     "key": "1351f3f158c695",
@@ -1578,6 +1748,11 @@
     "key": "043f120f335a0e",
     "speaker": "narrator",
     "text": "The Ancient Tree Spirit has sensed mystical beings hidden within the forest's depths. Gentle whispers carry on the wind, speaking of ancient wisdom and forgotten lore. To prove yourself worthy of the forest's trust, you must seek out these hidden spirits in the Whispering Glade and demonstrate your understanding of nature's mysteries."
+  },
+  {
+    "key": "0c2bc4a73d3ba8",
+    "speaker": "narrator",
+    "text": "Delicate leaves that shimmer with a soft argent sheen even in shadow. Their surfaces refract light into faint auroral threads, and a cool, clean scent clings to them. Holding them you sense tranquil, ancient vitality. A healer would know what to do with these."
   },
   {
     "key": "153a5597d93914",
@@ -1855,6 +2030,11 @@
     "text": "Master Lyria sat with me once, when it began. If anyone knows what comes next, she does."
   },
   {
+    "key": "01ccd2044a8150",
+    "speaker": "narrator",
+    "text": "A young woman who appears to be recovering from a serious affliction. While still pale and bearing signs of magical corruption, the healing magic has restored some of her strength and vitality. Her eyes show hope for the first time in weeks. On the inside of her wrist, a small silver mask shows through her skin."
+  },
+  {
     "key": "10086dfa7f74b1",
     "speaker": "narrator",
     "text": "You carefully pour the crystal-clear water over Elena. The blessed water sparkles with divine light as it touches her skin, and dark shadows begin to steam away like smoke. Elena gasps as the corrupting influence of the curse is washed from her body and soul. The water glows brighter, purifying every drop of dark magic it touches."
@@ -1873,6 +2053,11 @@
     "key": "0fc6cb4c2de9f7",
     "speaker": "barmaid elena",
     "text": "The water stung, and then it was gone, and some of the cold went with it. But it is still holding on. I can feel it, here."
+  },
+  {
+    "key": "03062276283120",
+    "speaker": "narrator",
+    "text": "A young woman who radiates a faint, pure light. The blessed water has cleansed away much of the dark corruption, leaving her looking almost healthy. Her skin has a subtle luminous quality and her eyes are bright with hope, though traces of the curse still linger. The silver mask on her wrist is untouched by the water."
   },
   {
     "key": "0327427fbebf98",
@@ -1918,6 +2103,11 @@
     "key": "19eedfa01f462a",
     "speaker": "barmaid elena",
     "text": "Oh, thank you so much! I feel like I'm alive again! The curse is completely gone, and I owe you my life. My father is so grateful - he insists you take our family's sacred charm as a token of our eternal gratitude. You are truly a hero!"
+  },
+  {
+    "key": "1a417427b07a9b",
+    "speaker": "narrator",
+    "text": "A vibrant young woman who radiates health and vitality. Her eyes sparkle with life, and her complexion glows with natural beauty. She moves with grace and energy, completely free from the dark curse that once plagued her. She looks at you with deep gratitude and joy."
   },
   {
     "key": "07231d224e62e0",
@@ -2165,6 +2355,16 @@
     "text": "He said it was you who found the papers. Thank you."
   },
   {
+    "key": "08d8667d878da7",
+    "speaker": "narrator",
+    "text": "A tall knight in old, dented mail, bearing the scars of many battles. His sword hangs at his hip once more, and he carries himself like a man who has been given back his name."
+  },
+  {
+    "key": "02eaca6b4dd2e2",
+    "speaker": "narrator",
+    "text": "An ancient charm blessed by the knights of old, carved from living wood and inlaid with silver runes. It pulses with a gentle green light and seems to resonate with the natural world. This is clearly one of the sacred charms mentioned in the old texts - those needed to summon the forest sprite Nyx."
+  },
+  {
     "key": "081c50e0919d17",
     "speaker": "sir cedric",
     "text": "Thanks to you, my knighthood is restored and the charge struck from my record. Now I can turn to what matters: the king, and whoever wears that old name."
@@ -2218,6 +2418,11 @@
     "key": "0c916f76329b7e",
     "speaker": "narrator",
     "text": "The deepest part of the Enchanted Forest, where reality feels fluid and magic flows like water. Impossible colors paint the landscape and the air sparkles with latent energy. A colossal tree dominates the center, its branches seeming to uphold the sky. Before it rests an ancient altar carved from starstone, runes pulsing with otherworldly light. This is Nyx's domain where profound secrets surface. The sacred grove path is the only passage into this mystical heart."
+  },
+  {
+    "key": "0413ccf77df0b5",
+    "speaker": "narrator",
+    "text": "An ancient altar carved from a single piece of starstone, its surface adorned with mystical runes that pulse with otherworldly light. Three circular indentations suggest that specific items are meant to be placed here in a sacred ritual. The altar radiates powerful magic and seems to be waiting for the proper offerings to activate its full potential."
   },
   {
     "key": "03da8a4c79eb03",
@@ -2275,9 +2480,24 @@
     "text": "The words from the stone in the glade. You read them aloud there and did not know what they meant. You still do not, quite."
   },
   {
+    "key": "0456b160c9fe9a",
+    "speaker": "narrator",
+    "text": "A woman no taller than you, barefoot, with leaves caught in her hair. The moss is greener where she has stood."
+  },
+  {
     "key": "1ac366af630fa4",
     "speaker": "narrator",
     "text": "Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the Forest Heart Crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
+  },
+  {
+    "key": "13f6b96c8e2ea1",
+    "speaker": "narrator",
+    "text": "A small, crystalline pendant that shifts through all the colors of nature — from the deep green of summer leaves to the golden brown of autumn, the pure white of winter snow, and the vibrant colors of spring flowers. It pulses with gentle magic and seems to contain a fragment of the forest's eternal essence."
+  },
+  {
+    "key": "0ba9adb82f02b5",
+    "speaker": "narrator",
+    "text": "A magnificent crystal that seems to contain an entire living forest within its translucent depths. Tiny lights dance inside like fireflies, and you can almost hear the whisper of wind through leaves when you hold it close. This crystal radiates immense magical power and represents the concentrated essence of all natural magic."
   },
   {
     "key": "0298e64d51825f",
