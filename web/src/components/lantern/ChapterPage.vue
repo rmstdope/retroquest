@@ -69,9 +69,6 @@ const held = computed(
     !!folder.value &&
     narration.manifestFor(folder.value) === null,
 )
-/** The side padding of a centred closing block, always there so nothing shifts. */
-const HUG_PADDING = 10
-
 /**
  * Shrink each centred closing block to its widest line of text, so the
  * speaking rule (drawn at the block's left edge) sits beside the words even
@@ -85,6 +82,9 @@ function hugText(): void {
   )
   for (const el of blocksEls) {
     el.style.width = ''
+    const style = getComputedStyle(el)
+    const padding =
+      parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
     let left = Infinity
     let right = -Infinity
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
@@ -98,7 +98,7 @@ function hugText(): void {
       }
     }
     if (right > left) {
-      el.style.width = `${Math.ceil(right - left) + 2 * HUG_PADDING + 1}px`
+      el.style.width = `${Math.ceil(right - left + padding) + 1}px`
     }
   }
 }
@@ -108,13 +108,17 @@ onMounted(() => {
   hugText()
   // Web fonts change line widths when they arrive.
   void document.fonts?.ready.then(hugText)
+  document.fonts?.addEventListener?.('loadingdone', hugText)
   if (typeof ResizeObserver !== 'undefined' && root.value) {
     resizeObserver = new ResizeObserver(hugText)
     resizeObserver.observe(root.value)
   }
 })
 onUpdated(hugText)
-onBeforeUnmount(() => resizeObserver?.disconnect())
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  document.fonts?.removeEventListener?.('loadingdone', hugText)
+})
 
 /** A tap on the page's text or title (buttons and links excepted) steers the voice. */
 function onTextClick(event: MouseEvent): void {

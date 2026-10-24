@@ -1024,13 +1024,23 @@ test.describe('Lantern UI (the default)', () => {
         kind: 'complete',
         act: 'Act III',
         title: 'Act III complete',
-        body:
-          'Your parents were Malakar’s closest friends. ' +
-          'The Dragon says they are warded away, not dead.',
+        body: 'Short.',
         stats: { questsCompleted: 6, questsTotal: 6, spells: 9, places: 12 },
         nextAct: 'Act IV',
       }
       store.showModal = true
+    })
+    await expect(page.locator('.lq-chapter-block').first()).toBeVisible()
+    // The text arrives after the page is up, as it does when a voice starts.
+    await page.evaluate(() => {
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.modalChapter = {
+        ...store.modalChapter,
+        body:
+          'Your parents were Malakar’s closest friends. ' +
+          'The Dragon says they are warded away, not dead.',
+      }
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
