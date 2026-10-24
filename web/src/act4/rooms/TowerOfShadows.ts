@@ -50,7 +50,7 @@ export class TowerOfShadows extends Room {
     if (direction !== 'up') return null
     if (gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)) return null
     return clue(
-      'On the stair the whispers close in: ' +
+      'You set your foot on the stair, and the whispers close in: ' +
         'your friends have left you, no one is coming, you were always alone. ' +
         'You stumble back down.',
     )

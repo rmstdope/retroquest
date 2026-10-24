@@ -156,10 +156,14 @@ describe('Act IV rooms narrate their effect', () => {
       return { game, room }
     }
 
-    it('the right turns say only what the glass does', () => {
+    it('the right turns say how Elior turns and what the glass does', () => {
       const { game } = inMaze()
-      expect(only(game.move('west'))).toBe('The glass lets you through.')
-      expect(only(game.move('west'))).toBe('The glass lets you through again.')
+      expect(only(game.move('west'))).toBe(
+        'You turn left, and the glass lets you through.',
+      )
+      expect(only(game.move('west'))).toBe(
+        'You turn left again, and the glass lets you through.',
+      )
     })
 
     it('a wrong turn is a read red box', () => {
@@ -167,15 +171,17 @@ describe('Act IV rooms narrate their effect', () => {
       expect(shape(game.move('north'))).toEqual(['failure*'])
     })
 
-    it('leaving south repeats nothing', () => {
+    it('leaving south is a read retracing of steps', () => {
       const { game } = inMaze()
-      expect(game.move('south')).not.toContain('retrace')
+      const out = game.move('south')
+      expect(out).toMatch(/^You retrace your steps out of the glass\.\n\n/)
+      expect(shape(out)[0]).toBe('text')
     })
 
     it('the stone and the pendant are read', () => {
       const { game, room } = inMaze()
       expect(room.useStone(game.state)).toContain(
-        'In the Echo Stone one voice repeats, patient as a heartbeat:',
+        'You hold the Echo Stone to your ear. One voice repeats, patient as a heartbeat:',
       )
       expect(shape(room.useStone(game.state))).not.toContain('event')
       expect(shape(room.usePendant(game.state))).toEqual(['text'])
@@ -190,19 +196,20 @@ describe('Act IV rooms narrate their effect', () => {
       game.move('west')
       room.usePendant(game.state)
       const out = game.move('east')
-      expect(out).not.toContain('You step into the empty corridor')
+      expect(out).toMatch(/^You step into the empty corridor\. Behind you/)
       expect(shape(out)).toEqual(['text', 'text'])
       expect(out).toContain('Behind you the false mirrors go dark')
     })
   })
 
   describe('Memory Vault', () => {
-    it('mending the orbs folds the raising into the voices', () => {
+    it('mending the orbs reads the raising and the voices', () => {
       const { game, act } = newGame()
       const vault = act.rooms.MemoryVault as MemoryVault
       const out = vault.mendOrbs(game.state)
-      expect(out).toContain('The voices inside the Echo Stone pour out')
-      expect(out).not.toContain('You raise the Echo Stone')
+      expect(out).toMatch(
+        /^You raise the Echo Stone\. The voices inside it pour out/,
+      )
       expect(shape(out)).not.toContain('event')
     })
 

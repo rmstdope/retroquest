@@ -314,7 +314,7 @@ describe('ThroneChamber', () => {
     game.state.addVirtue(VIRTUE_TRUTH)
     const text = executeCommands(game, ['use lifelight elixir on prison'])
     expect(text).toContain(
-      'Under the elixir the crystal cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it.',
+      'You pour the elixir over the crystal. It cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it.',
     )
     expect(text).toContain('The Lifelight Elixir is gone.')
     expectItemInInventory(game.state, 'Lifelight Elixir', false)

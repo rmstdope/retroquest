@@ -30,7 +30,7 @@ const NAME_FRIENDS = [
 ]
 
 const STUMBLE =
-  'On the stair the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down.'
+  'You set your foot on the stair, and the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down.'
 const FIRST_LOOK =
   "At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist."
 const LAUGHS =

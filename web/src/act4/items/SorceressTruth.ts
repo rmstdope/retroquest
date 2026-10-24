@@ -29,7 +29,7 @@ export class SorceressTruth extends Item {
     const room = gameState.currentRoom
     if (room instanceof MemoryVault) return room.showMask(gameState)
     return (
-      'Somewhere ahead is someone who ' +
+      'You turn the mask over in your hands. Somewhere ahead is someone who ' +
       'needs to see that a liar can choose the truth.'
     )
   }

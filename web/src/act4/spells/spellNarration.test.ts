@@ -80,8 +80,8 @@ describe('Act IV spells narrate their effect', () => {
   it('bless where nothing answers is one read sentence', () => {
     const game = newGame()
     expect(new Bless().castSpell(game.state)).toBe(
-      'Warm, golden light fills the area, but there is nothing here that ' +
-        'responds to the blessing.',
+      'You channel divine energy, filling the area with warm, golden ' +
+        'light, but there is nothing here that responds to the blessing.',
     )
   })
 

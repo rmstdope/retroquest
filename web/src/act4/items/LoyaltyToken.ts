@@ -52,7 +52,7 @@ export class LoyaltyToken extends Item {
         return '[dim]The token is quiet and warm. The whispers are gone.[/dim]'
       }
       return (
-        'The token grows warm in your hand. Under the whispers, very ' +
+        'You hold the token up, and it grows warm. Under the whispers, very ' +
         "faint, you think you hear your name, in Mira's voice. They are " +
         'not gone. Say their names.'
       )
