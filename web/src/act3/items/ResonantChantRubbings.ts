@@ -8,6 +8,12 @@ import { WanderingPhantoms } from '../characters/WanderingPhantoms'
 import { StillnessVestibule } from '../rooms/StillnessVestibule'
 import { EchoStones } from './EchoStones'
 
+/**
+ * What Elior does when the rubbings are used with the blessed stones: the
+ * effect of the use, not an echo of it, and the antecedent of "The words".
+ */
+const RECITED = 'You recite the resonant chant at each stone.'
+
 /** Rubbings of the Resonant Chant from the Echo Chambers. */
 export class ResonantChantRubbings extends Item {
   constructor() {
@@ -27,11 +33,14 @@ export class ResonantChantRubbings extends Item {
       // Check if the echo stones are blessed
       if (other.areBlessed()) {
         if (!gameState.getStoryFlag(FLAG_ACT3_POOLS_STILLED)) {
-          return clue(
-            'The words leave the stones and skim out across the ' +
-              'pools. Water that looked frozen shivers under them, and the ' +
-              'chant breaks apart on a thousand tiny ripples. It will not ' +
-              'carry over water that is not truly still.',
+          return (
+            `${RECITED}\n` +
+            clue(
+              'The words leave the stones and skim out across the ' +
+                'pools. Water that looked frozen shivers under them, and the ' +
+                'chant breaks apart on a thousand tiny ripples. It will not ' +
+                'carry over water that is not truly still.',
+            )
           )
         }
         // Perform the Oath of Stillness
@@ -50,6 +59,7 @@ export class ResonantChantRubbings extends Item {
           ? 'settles over the empty chamber.'
           : 'banishes the wandering phantoms.'
         return (
+          `${RECITED}\n` +
           '[success]The words ' +
           'echo and re-echo, building into a harmonious silence that ' +
           `${silence} The path to the dragon's hall ` +

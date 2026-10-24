@@ -573,7 +573,7 @@ describe('Act 3 golden path', () => {
     let oathResult = executeCommands(game, [
       'use resonant chant rubbings with echo stones',
     ])
-    expect(oathResult.toLowerCase()).not.toContain('recite the resonant chant')
+    expect(oathResult.toLowerCase()).toContain('you recite the resonant chant')
     expect(oathResult.toLowerCase()).toContain('harmonious silence')
     expect(oathResult.toLowerCase()).toContain("dragon's hall now lies open")
     expectStoryFlag(state, FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)

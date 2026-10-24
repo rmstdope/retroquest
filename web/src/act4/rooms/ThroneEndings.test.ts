@@ -54,7 +54,7 @@ describe('the endings are always open', () => {
     for (const virtues of [[], [VIRTUE_TRUTH, VIRTUE_SELFLESS]]) {
       const game = opened(virtues)
       const text = executeCommands(game, ['use lifelight elixir on prison'])
-      expect(text).toContain('Under the elixir the crystal cracks')
+      expect(text).toContain('You pour the elixir over the crystal. It cracks')
       expect(text).not.toContain('does not answer to one who has not yet')
     }
   })

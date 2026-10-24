@@ -149,12 +149,16 @@ describe('AncientDragon', () => {
     ['i take what is given and i return myself', 'myself'],
     ['I take what is given, and I return everything.', 'everything'],
     ['i  take what is  given,  and i return it!', 'it'],
-  ])('accepts %j and accepts it as the oath', (words, _word) => {
+  ])('accepts %j and accepts it as the oath', (words, word) => {
     const { gameState, room } = hallState(true)
 
     const result = new AncientDragon().sayTo(gameState, words)
 
-    expect(result).not.toContain('You speak the old words')
+    expect(result).toContain(
+      'You speak the old words to the ' +
+        '[character_name]ancient dragon[/character_name]: ' +
+        `“I take what is given, and I return ${word}.”`,
+    )
     expect(result).not.toContain('[event]')
     expect(result).toContain('Your words ring true, young one.')
     expect(result).toContain('[success]')

@@ -51,7 +51,7 @@ export class CrystalPrison extends Item {
     gameState.removeItemFromInventoryOrRoom('Lifelight Elixir', 1)
     gameState.currentRoom.description = THRONE_CHAMBER_SHATTERED
     return [
-      'Under the elixir the crystal cracks like ice in ' +
+      'You pour the elixir over the crystal. It cracks like ice in ' +
         'spring, and King Alden falls free, gasping, alive. But the wound ' +
         'still stands open, and Malakar still stands beside it.',
       'The Lifelight Elixir is gone.',

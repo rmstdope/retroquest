@@ -57,12 +57,14 @@ describe("Training Sword as Cedric's old blade", () => {
     expectNoSpeechOutsideDialogue(first)
   })
 
-  it('is unchanged away from Sir Cedric', () => {
+  it('narrates the practice away from Sir Cedric', () => {
     const game = new Game([new Act2()])
-    const sword = new TrainingSword()
+    game.state.addItemToInventory(new TrainingSword())
 
-    expect(sword.use(game.state)).toContain(
-      "The training sword's balance feels good in your hands",
+    expect(game.commandParser.parse('use training sword')).toContain(
+      'You practice a few sword forms with the training sword. The balance ' +
+        'feels good in your hands, and it would be perfect for demonstrating ' +
+        'combat skills to someone who needs proof of your abilities.',
     )
   })
 
@@ -74,7 +76,7 @@ describe("Training Sword as Cedric's old blade", () => {
 
     const text = new TrainingSword().use(game.state)
 
-    expect(text).toContain('The training sword')
+    expect(text).toContain('You practice a few sword forms')
     expect(text).not.toContain('That notch by the guard.')
   })
 })
