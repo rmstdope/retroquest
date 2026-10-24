@@ -6,6 +6,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       environment: 'node',
+      setupFiles: ['src/testing/domSetup.ts'],
       include: ['src/**/*.test.ts', '*.config.test.ts'],
     },
   }),

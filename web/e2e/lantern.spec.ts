@@ -1010,4 +1010,55 @@ test.describe('Lantern UI (the default)', () => {
       ),
     ).toBe(true)
   })
+  test('puts the speaking rule at the widest line of a wrapped closing line', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.modalChapter = {
+        kind: 'complete',
+        act: 'Act III',
+        title: 'Act III complete',
+        body:
+          'Your parents were Malakar’s closest friends. ' +
+          'The Dragon says they are warded away, not dead.',
+        stats: { questsCompleted: 6, questsTotal: 6, spells: 9, places: 12 },
+        nextAct: 'Act IV',
+      }
+      store.showModal = true
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const block = page.locator('.lq-chapter-block').first()
+    await expect(block).toBeVisible()
+    await page.evaluate(() => document.fonts.ready)
+    const box = (await block.boundingBox())!
+    // The left edge and width of the text itself, line by line.
+    const text = await block.evaluate((el) => {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
+      let left = Infinity
+      let right = -Infinity
+      const lines = new Set<number>()
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+        const range = document.createRange()
+        range.selectNodeContents(n)
+        for (const r of Array.from(range.getClientRects())) {
+          if (r.width === 0) continue
+          left = Math.min(left, r.left)
+          right = Math.max(right, r.right)
+          lines.add(Math.round(r.top))
+        }
+      }
+      return { left, right, lines: lines.size }
+    })
+    expect(text.lines).toBeGreaterThan(1)
+    // The box starts 10px before the widest line and ends 10px after it.
+    expect(Math.abs(text.left - box.x - 10)).toBeLessThan(2)
+    expect(Math.abs(box.x + box.width - text.right - 10)).toBeLessThan(2)
+  })
 })
