@@ -110,4 +110,12 @@ describe('the Hidden Glade room card', () => {
     expect(card.getRoomDescription()).toContain('golden sunlight')
     expect(card.getRoomDescription()).not.toContain('too deep in shadow')
   })
+
+  it('shows the amulet glowing in the glade while Elior carries it', () => {
+    const game = gameInGlade()
+    game.state.inventory.push(new AncientAmulet())
+    expect(new GameController(game).getRoomDescription()).toContain(
+      'in your hand begins to glow.',
+    )
+  })
 })
