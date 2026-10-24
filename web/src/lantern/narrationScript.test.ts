@@ -219,7 +219,7 @@ describe('actScript for Act I', () => {
     expect(
       script.some((line) =>
         line.text.startsWith(
-          'Somewhere in the cottage lies an old photograph of your parents',
+          'An old photograph of your parents, hidden away in a drawer.',
         ),
       ),
     ).toBe(true)

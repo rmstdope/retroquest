@@ -7242,7 +7242,7 @@
     "end": 14.22
    },
    {
-    "word": "man\u2019s",
+    "word": "man’s",
     "start": 14.22,
     "end": 14.64
    },
@@ -9399,7 +9399,7 @@
     "end": 13.44
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 13.44,
     "end": 13.82
    },
@@ -25397,7 +25397,7 @@
     "end": 5.88
    },
    {
-    "word": "\u2026and",
+    "word": "…and",
     "start": 5.88,
     "end": 6.7
    },
@@ -25412,7 +25412,7 @@
     "end": 7.2
    },
    {
-    "word": "rest\u2026",
+    "word": "rest…",
     "start": 7.2,
     "end": 7.66
    },
@@ -26910,7 +26910,7 @@
     "end": 3.94
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 3.94,
     "end": 4.4
    },
@@ -27212,7 +27212,7 @@
     "end": 14.56
    },
    {
-    "word": "\u2013",
+    "word": "–",
     "start": 14.56,
     "end": 14.78
    },
@@ -27682,7 +27682,7 @@
     "end": 48.68
    },
    {
-    "word": "\u2026and",
+    "word": "…and",
     "start": 48.9,
     "end": 49.4
    },
@@ -27697,7 +27697,7 @@
     "end": 49.8
    },
    {
-    "word": "rest\u2026",
+    "word": "rest…",
     "start": 49.8,
     "end": 50.26
    },
@@ -27772,7 +27772,7 @@
     "end": 55.38
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 55.38,
     "end": 55.58
    },
@@ -31767,7 +31767,7 @@
     "end": 13.66
    },
    {
-    "word": "restful\u2014no",
+    "word": "restful—no",
     "start": 13.66,
     "end": 14.64
    },
@@ -32208,7 +32208,7 @@
     "end": 1.9
    },
    {
-    "word": "fisherman\u2014he",
+    "word": "fisherman—he",
     "start": 1.9,
     "end": 3.02
    },
@@ -35265,7 +35265,7 @@
     "end": 7.42
    },
    {
-    "word": "world\u2014listen",
+    "word": "world—listen",
     "start": 7.42,
     "end": 8.72
    },
@@ -40440,198 +40440,6 @@
     "word": "Willowbrook,",
     "start": 3.8,
     "end": 4.58
-   }
-  ]
- },
- "1bfbf48a69cecc": {
-  "file": "1bfbf48a69cecc.mp3",
-  "speaker": "narrator",
-  "duration": 13.235,
-  "words": [
-   {
-    "word": "Somewhere",
-    "start": 0.0,
-    "end": 0.68
-   },
-   {
-    "word": "in",
-    "start": 0.68,
-    "end": 0.9
-   },
-   {
-    "word": "the",
-    "start": 0.9,
-    "end": 1.02
-   },
-   {
-    "word": "cottage",
-    "start": 1.02,
-    "end": 1.44
-   },
-   {
-    "word": "lies",
-    "start": 1.44,
-    "end": 2.02
-   },
-   {
-    "word": "an",
-    "start": 2.02,
-    "end": 2.18
-   },
-   {
-    "word": "old",
-    "start": 2.18,
-    "end": 2.48
-   },
-   {
-    "word": "photograph",
-    "start": 2.48,
-    "end": 2.98
-   },
-   {
-    "word": "of",
-    "start": 2.98,
-    "end": 3.26
-   },
-   {
-    "word": "your",
-    "start": 3.26,
-    "end": 3.4
-   },
-   {
-    "word": "parents,",
-    "start": 3.4,
-    "end": 3.84
-   },
-   {
-    "word": "tucked",
-    "start": 3.84,
-    "end": 4.42
-   },
-   {
-    "word": "away",
-    "start": 4.42,
-    "end": 4.72
-   },
-   {
-    "word": "in",
-    "start": 4.72,
-    "end": 4.96
-   },
-   {
-    "word": "a",
-    "start": 4.96,
-    "end": 5.04
-   },
-   {
-    "word": "drawer.",
-    "start": 5.04,
-    "end": 5.36
-   },
-   {
-    "word": "Read",
-    "start": 5.36,
-    "end": 6.44
-   },
-   {
-    "word": "the",
-    "start": 6.44,
-    "end": 6.58
-   },
-   {
-    "word": "cryptic",
-    "start": 6.58,
-    "end": 7.1
-   },
-   {
-    "word": "message",
-    "start": 7.1,
-    "end": 7.44
-   },
-   {
-    "word": "on",
-    "start": 7.44,
-    "end": 7.7
-   },
-   {
-    "word": "its",
-    "start": 7.7,
-    "end": 7.86
-   },
-   {
-    "word": "back",
-    "start": 7.86,
-    "end": 8.24
-   },
-   {
-    "word": "and",
-    "start": 8.24,
-    "end": 8.68
-   },
-   {
-    "word": "show",
-    "start": 8.68,
-    "end": 8.96
-   },
-   {
-    "word": "it",
-    "start": 8.96,
-    "end": 9.12
-   },
-   {
-    "word": "to",
-    "start": 9.12,
-    "end": 9.26
-   },
-   {
-    "word": "your",
-    "start": 9.26,
-    "end": 9.42
-   },
-   {
-    "word": "grandmother.",
-    "start": 9.42,
-    "end": 9.92
-   },
-   {
-    "word": "Then",
-    "start": 9.92,
-    "end": 10.92
-   },
-   {
-    "word": "seek",
-    "start": 10.92,
-    "end": 11.3
-   },
-   {
-    "word": "the",
-    "start": 11.3,
-    "end": 11.5
-   },
-   {
-    "word": "truth",
-    "start": 11.5,
-    "end": 11.82
-   },
-   {
-    "word": "where",
-    "start": 11.82,
-    "end": 12.06
-   },
-   {
-    "word": "the",
-    "start": 12.06,
-    "end": 12.2
-   },
-   {
-    "word": "river",
-    "start": 12.2,
-    "end": 12.46
-   },
-   {
-    "word": "bends.",
-    "start": 12.46,
-    "end": 12.92
    }
   ]
  },

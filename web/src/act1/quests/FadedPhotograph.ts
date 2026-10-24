@@ -1,4 +1,4 @@
-import { characterName, Quest, type GameState } from '@/engine'
+import { Quest, type GameState } from '@/engine'
 import { FLAG_FOUND_PHOTO, FLAG_READ_MOTHERS_LETTER } from '../Act1StoryFlags'
 
 /**
@@ -12,9 +12,8 @@ export class FadedPhotographQuest extends Quest {
     super({
       name: 'The Faded Photograph',
       description:
-        'Somewhere in the cottage lies an old photograph of your parents, tucked away in a drawer. ' +
-        `Read the cryptic message on its back and show it to your ${characterName('grandmother')}. ` +
-        'Then seek the truth where the river bends.',
+        'An old photograph of your parents, hidden away in a drawer. ' +
+        "On the back is a line in your mother's hand.",
       completion:
         "At the river bend you found your mother's letter, hidden beneath the smooth stone. " +
         'Its words raise more questions than they answer, but they are hers.',
