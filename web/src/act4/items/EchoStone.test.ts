@@ -38,6 +38,17 @@ describe('EchoStone', () => {
     expectMarkupWellFormed(again)
   })
 
+  it('remembers across a save and load that it left the niche', () => {
+    const { game, act } = inMaze()
+    game.state.currentRoom = act.rooms.HallOfEchoes
+    executeCommands(game, ['take echo stone'])
+    expect(game.loadSaveData(game.toSaveData())).toContain(
+      'Game loaded successfully.',
+    )
+    executeCommands(game, ['drop echo stone'])
+    expect(executeCommands(game, ['take echo stone'])).not.toContain('banners')
+  })
+
   it('murmurs neutrally outside the maze, also with the pendant', () => {
     const { game, act } = inMaze()
     game.state.currentRoom = act.rooms.HallOfEchoes

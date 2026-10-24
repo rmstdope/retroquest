@@ -175,6 +175,10 @@
         "commands": ["n", "drop echo stone", "west"]
     },
     {
+        "after": 17,
+        "commands": ["n", "drop echo stone", "take echo stone"]
+    },
+    {
         "after": 24,
         "commands": ["say redemption to knight", "e"]
     },
