@@ -148,13 +148,13 @@ describe('Act IV spells narrate their effect', () => {
     expect(shape(out)).toEqual(['text'])
   })
 
-  it("redemption's light on the warriors is read, with no grey line", () => {
+  it("redemption's light on the warriors is read, and the silent marker closes it", () => {
     const game = newGame()
     game.state.currentRoom = game.state.allRooms.HallOfEchoes
     const warriors = new GhostlyWarriors()
     game.state.currentRoom.addCharacter(warriors)
     const out = new RedemptionsLight().castOnCharacter(game.state, warriors)
-    expect(shape(out)).not.toContain('event')
+    expect(shape(out)).toEqual(['text', 'text', 'dialogue', 'event'])
     expect(out).toContain('Soft light spills from your hands')
   })
 })

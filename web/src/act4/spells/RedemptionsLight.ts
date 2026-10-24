@@ -1,4 +1,10 @@
-import { Spell, dialogue, type Character, type GameState } from '@/engine'
+import {
+  Spell,
+  dialogue,
+  remembered,
+  type Character,
+  type GameState,
+} from '@/engine'
 import { GhostlyWarriors } from '../characters/GhostlyWarriors'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
@@ -77,7 +83,8 @@ export class RedemptionsLight extends Spell {
         'Sir Cedric',
         'If they can be let go, so can this. I forgive you. Get up.',
       ) +
-      '\n[dim]Elior will remember this.[/dim]'
+      '\n' +
+      remembered('Mercy')
     )
   }
 }

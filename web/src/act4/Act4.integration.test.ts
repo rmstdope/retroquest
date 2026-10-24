@@ -792,7 +792,8 @@ describe('Act 4 integration', () => {
           "slowly. For a moment it wears your father's face. Then it is only " +
           'you again, standing a little straighter.',
       )
-      expect(told).toContain('[dim]Elior will remember this.[/dim]')
+      expect(told).toContain('[event]✦ Truth — this will be remembered[/event]')
+      expect(told).not.toContain('Elior will remember this.')
       expect(game.state.hasVirtue('truth')).toBe(true)
       const after = executeCommands(game, ['talk to true self'])
       expect(after).toContain(
