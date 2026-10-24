@@ -18,9 +18,9 @@ import {
   type NarrationManifest,
 } from './narrationManifest'
 import {
-  NARRATOR,
   arrivalBlocks,
   blockVoice,
+  chapterHeading,
   newQuestBlocks,
   questCompleteBlocks,
 } from './narrationScript'
@@ -122,22 +122,18 @@ export interface NarratedChapter {
 }
 
 /**
- * The units of a chapter page: unit 0 is its title (an intro's heading,
- * "Act I: The Call to Adventure", is recorded; a completion page's title has no
- * recording and shows at once), then one unit per block of the body, index-aligned
- * with `parseTurn` so the page finds unit `i + 1` for block `i`.
+ * The units of a chapter page: unit 0 is its title (read as the page's
+ * heading: an intro's "Act I: The Call to Adventure", a completion's "Act I
+ * complete. The Call to Adventure."; with no recording it shows at once),
+ * then one unit per block of the body, index-aligned with `parseTurn` so the
+ * page finds unit `i + 1` for block `i`.
  */
 export function chapterUnits(
   chapter: NarratedChapter,
   manifest: NarrationManifest,
 ): NarrationUnit[] {
-  const heading =
-    chapter.kind === 'intro' && chapter.act && chapter.title
-      ? partsOf(
-          [{ speaker: NARRATOR, markup: `${chapter.act}: ${chapter.title}` }],
-          manifest,
-        )
-      : []
+  const voice = chapterHeading(chapter.kind, chapter.act, chapter.title)
+  const heading = voice ? partsOf([voice], manifest) : []
   return [
     { kind: 'block', parts: heading },
     ...parseTurn(chapter.body).map((block, index): NarrationUnit => {
@@ -146,8 +142,9 @@ export function chapterUnits(
         kind: 'block',
         parts: voice ? partsOf([voice], manifest) : [],
       }
-      // The text starts after a breath once the heading has been read.
-      if (index === 0 && heading.length) unit.pauseBefore = SCENE_PAUSE_MS
+      // The text starts after a breath once the heading has been read (a
+      // heading with no recording shows at once and nothing waits for it).
+      if (index === 0 && heading[0]?.clip) unit.pauseBefore = SCENE_PAUSE_MS
       return unit
     }),
   ]

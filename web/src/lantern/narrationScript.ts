@@ -80,12 +80,30 @@ export function turnBlocks(markup: string): VoicedBlock[] {
   return parseTurn(markup).flatMap((block) => blockVoice(block) ?? [])
 }
 
+/**
+ * The heading a chapter page has read before its text, or null without an act
+ * and title: "Act I: The Call to Adventure" opens an act, "Act I complete. The
+ * Call to Adventure." closes it. The recording tools and the page key their
+ * clips by it, so it is defined once.
+ */
+export function chapterHeading(
+  kind: 'intro' | 'complete',
+  act: string,
+  title: string,
+): VoicedBlock | null {
+  if (!act || !title) return null
+  return {
+    speaker: NARRATOR,
+    markup:
+      kind === 'intro' ? `${act}: ${title}` : `${act} complete. ${title}.`,
+  }
+}
+
 /** The voiced blocks of the chapter page that opens an act: heading, then paragraphs. */
 export function introBlocks(intro: string): VoicedBlock[] {
   const { act, title, body } = parseActIntro(intro)
-  const heading =
-    act && title ? [{ speaker: NARRATOR, markup: `${act}: ${title}` }] : []
-  return [...heading, ...turnBlocks(body)]
+  const heading = chapterHeading('intro', act, title)
+  return [...(heading ? [heading] : []), ...turnBlocks(body)]
 }
 
 /**
@@ -256,6 +274,9 @@ export function actScript(
       }
     }
     if (!game.isActRunning()) {
+      const { act, title } = parseActIntro(game.getActIntro())
+      const heading = chapterHeading('complete', act, title)
+      if (heading) add([heading])
       add(turnBlocks(play.getActCompleteText() ?? ''))
       break
     }

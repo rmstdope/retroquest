@@ -48,7 +48,11 @@ const ACTS: Record<string, ActSource> = {
       'talk to sir cedric',
     ],
   },
-  '3': { make: () => new Act3(), commands: ACT3_GOLDEN_PATH },
+  '3': {
+    make: () => new Act3(),
+    // 'examine gates' plays the closing page into the script.
+    commands: [...ACT3_GOLDEN_PATH, 'examine gates'],
+  },
   '4': { make: () => new Act4(), commands: ACT4_GOLDEN_PATH },
 }
 

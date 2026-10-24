@@ -52,6 +52,9 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
   it('says the act’s title in words', () => {
     const numeral = ['', 'I', 'II', 'III', 'IV'][act]
     expect(CAST.pronounce[`Act ${numeral}:`]).toMatch(/^Act \w+:$/)
+    expect(CAST.pronounce[`Act ${numeral} complete.`]).toMatch(
+      /^Act \w+ complete\.$/,
+    )
   })
 
   it('has a clip on disk for every line and none for a line that left the script', () => {

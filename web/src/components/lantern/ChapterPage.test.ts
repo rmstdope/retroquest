@@ -134,7 +134,12 @@ describe('ChapterPage', () => {
       body: 'The wind rises.\n[event]Help.[/event]\nA door opens.',
     }
     const manifest: Record<string, unknown> = {}
-    for (const text of ['Act I: The Call', 'The wind rises.', 'A door opens.'])
+    for (const text of [
+      'Act I: The Call',
+      'Act I complete. The Call.',
+      'The wind rises.',
+      'A door opens.',
+    ])
       manifest[narrationKey('narrator', text)] = {
         file: `${text.length}.mp3`,
         speaker: 'narrator',
@@ -189,6 +194,28 @@ describe('ChapterPage', () => {
       ])
       expect(w.get('.lq-chapter-block').classes()).toContain('lq-speaking')
       expect(w.find('.lq-w').exists()).toBe(true)
+    })
+
+    it('reads a completion page’s heading first, lighting only the title', async () => {
+      const closing: Chapter = { ...chapter, kind: 'complete' }
+      const w = mount(ChapterPage, {
+        props: { chapter: closing, titleId: 't' },
+      })
+      useNarrationStore().begin(
+        POPUP_NARRATION_ID,
+        chapterUnits(closing, manifest as never),
+        'act1',
+      )
+      await nextTick()
+      expect(w.get('h2').classes()).toContain('lq-speaking')
+      expect(w.get('.lq-chapter-kicker').classes()).not.toContain('lq-speaking')
+      expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
+      audios[0].onended?.()
+      await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 400))
+      await nextTick()
+      expect(w.findAll('.lq-chapter-block').map((b) => b.text())).toEqual([
+        'The wind rises.',
+      ])
     })
 
     it('shows a line with no recording at once and keeps the button visible throughout', async () => {

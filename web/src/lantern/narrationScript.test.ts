@@ -13,6 +13,7 @@ import { narrationKey } from './narrationKey'
 import {
   actScript,
   blockVoice,
+  chapterHeading,
   introBlocks,
   linesOfTurn,
   arrivalBlocks,
@@ -230,6 +231,24 @@ describe('actScript for Act I', () => {
     )
     expect(letter?.speaker).toBe('mother')
     expect(letter?.key).toBe(narrationKey(UNSIGNED, letter?.text ?? ''))
+  })
+
+  it('reads the act-complete heading before the closing page', () => {
+    expect(
+      chapterHeading('complete', 'Act I', 'The Call to Adventure'),
+    ).toEqual({
+      speaker: 'narrator',
+      markup: 'Act I complete. The Call to Adventure.',
+    })
+    expect(chapterHeading('intro', 'Act I', 'The Call to Adventure')).toEqual({
+      speaker: 'narrator',
+      markup: 'Act I: The Call to Adventure',
+    })
+    expect(chapterHeading('complete', '', 'x')).toBeNull()
+    const lines = script.map((line) => line.text)
+    const heading = lines.indexOf('Act I complete. The Call to Adventure.')
+    expect(heading).toBeGreaterThan(-1)
+    expect(lines[heading + 1]).toMatch(/^The amulet was your parents'\./)
   })
 
   it('reads the act-complete chapter page', () => {

@@ -122,6 +122,7 @@ describe('chapterUnits', () => {
     'The wind rises.\n[dialogue]Come.[/dialogue]\n[event]Help.[/event]'
   const manifest = manifestOf(
     [NARRATOR, 'Act I: The Call'],
+    [NARRATOR, 'Act I complete. The Call.'],
     [NARRATOR, 'The wind rises.'],
     ['writing', 'Come.'],
   )
@@ -139,12 +140,25 @@ describe('chapterUnits', () => {
     ])
   })
 
-  it('gives a closing page, whose title is not read, no breath', () => {
+  it('gives no breath after a heading that has no recording', () => {
+    const units = chapterUnits(
+      { kind: 'intro', act: 'Act I', title: 'The Call', body },
+      manifestOf([NARRATOR, 'The wind rises.']),
+    )
+    expect(units.map((u) => u.pauseBefore ?? 0)).toEqual([0, 0, 0, 0])
+  })
+
+  it('gives a closing page’s first paragraph a breath after its heading, like an intro', () => {
     const units = chapterUnits(
       { kind: 'complete', act: 'Act I', title: 'The Call', body },
       manifest,
     )
-    expect(units.every((u) => !u.pauseBefore)).toBe(true)
+    expect(units.map((u) => u.pauseBefore ?? 0)).toEqual([
+      0,
+      SCENE_PAUSE_MS,
+      0,
+      0,
+    ])
   })
 
   it('reads an intro as its heading, then each paragraph, leaving events silent', () => {
@@ -161,13 +175,23 @@ describe('chapterUnits', () => {
     expect(units[0].parts[0].markup).toBe('Act I: The Call')
   })
 
-  it('shows a completion page title silently and reads its paragraphs', () => {
+  it('reads a completion page as its heading, then its paragraphs', () => {
     const units = chapterUnits(
       { kind: 'complete', act: 'Act I', title: 'The Call', body },
       manifest,
     )
-    expect(units[0].parts).toEqual([])
+    expect(units[0].parts[0].markup).toBe('Act I complete. The Call.')
+    expect(units[0].parts[0].clip).not.toBeNull()
     expect(units.slice(1, 3).every((u) => u.parts[0].clip)).toBe(true)
+  })
+
+  it('shows a completion title at once, and starts the text without a breath, when its heading has no recording', () => {
+    const units = chapterUnits(
+      { kind: 'complete', act: 'Act I', title: 'The Call', body },
+      manifestOf([NARRATOR, 'The wind rises.']),
+    )
+    expect(units[0].parts[0].clip).toBeNull()
+    expect(units[1].pauseBefore).toBeUndefined()
   })
 
   it('gives a heading with no recording a part without a clip', () => {
