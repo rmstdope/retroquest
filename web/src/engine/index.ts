@@ -39,6 +39,7 @@ export {
 export {
   MARKUP_TAGS,
   characterName,
+  clue,
   dialogue,
   event,
   findMarkupProblems,

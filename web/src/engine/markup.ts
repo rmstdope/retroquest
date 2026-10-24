@@ -17,6 +17,7 @@ export const MARKUP_TAGS: readonly string[] = [
   'quest_name',
   'event',
   'failure',
+  'clue',
   'pending',
   'success',
   'exits',
@@ -29,6 +30,17 @@ export const MARKUP_TAGS: readonly string[] = [
 /** Wrap `text` as an event line: `[event]text[/event]`. */
 export function event(text: string): string {
   return `[event]${text}[/event]`
+}
+
+/**
+ * Wrap `text` as a failure that tells the player something about the world or
+ * gives a clue: `[failure][clue]text[/clue][/failure]`. The story view shows
+ * it in the red failure box and reads it aloud, while a plain `[failure]`
+ * refusal stays silent. It is still a `[failure]` to the game. Keep any echo
+ * of the command out of it, on its own `event()` line before it.
+ */
+export function clue(text: string): string {
+  return `[failure][clue]${text}[/clue][/failure]`
 }
 
 /**

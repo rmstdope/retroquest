@@ -284,6 +284,9 @@ body {
   color: var(--lq-failure);
   font-weight: 500;
 }
+.theme-clue {
+  color: inherit;
+}
 .theme-success {
   color: var(--lq-success);
   font-weight: 500;

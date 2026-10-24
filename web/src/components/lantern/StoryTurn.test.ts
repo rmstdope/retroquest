@@ -320,6 +320,29 @@ describe('StoryTurn while it is narrated', () => {
     expect(w.get('.lq-block-dialogue').classes()).toContain('lq-speaking')
   })
 
+  it('marks and lights a clue failure, while a plain refusal stays unmarked', async () => {
+    const clueText = 'Something shiny.'
+    const w = narrated(
+      {
+        text:
+          '[event]You peer in.[/event]\n' +
+          `[failure][clue]${clueText}[/clue][/failure]\n` +
+          '[failure]Nothing here.[/failure]',
+      },
+      recorded(clueText),
+    )
+    await vi.advanceTimersByTimeAsync(0)
+    const failures = w.findAll('.lq-block-failure')
+    expect(failures).toHaveLength(1)
+    expect(failures[0].classes()).toContain('lq-speaking')
+    audios[0].currentTime = 0.3
+    await vi.advanceTimersByTimeAsync(60)
+    expect(failures[0].findAll('.lq-w-now').map((x) => x.text())).toEqual([
+      'Something',
+    ])
+    expect(w.find('.lq-block-event').classes()).not.toContain('lq-speaking')
+  })
+
   it('shows the whole turn without marks once it is skipped', async () => {
     const w = narrated()
     useNarrationStore().skipAll()

@@ -37,11 +37,22 @@ after the elixir ("It does not hurt. For the first time in years, it does not hu
    on the rope", the turned back, the mark "a tree under two moons": repeat the same words
    every time, so the player recognises them.
 10. **Quotes and markup.** Character speech goes through `speech()` or `dialogue(name, …)`;
-    narration goes bare or through `event()`; written text through `writing()`. Do not put
+    narration goes bare; written text through `writing()`. Do not put
     quotation marks inside the markup that already supplies them; a passage quoted inside a
     book keeps its own. Strings are split on
     sentence or clause boundaries and joined with `+` (rule 8 of the formatting rules); never
     split inside a word, and never change existing wording unless the change is the point.
+11. **The echo is silent; the effect is narrated.** When the player acts, the answer has two
+    kinds of line. The echo repeats what the player just did ("You till the soil with the rusty
+    hoe.") and goes through `event()`: a small grey line the voice never reads. The effect says
+    what happened ("The ground is tough, and you unearth a small, tarnished coin! You quickly
+    pocket it.") and goes bare, as story text the voice reads. Short results ("You quickly
+    pocket it.") are effects. An answer is an echo followed by its effect, or the effect alone;
+    a bare echo is never the whole answer. A plain refusal ("…it doesn't seem to have much
+    effect here.") is a `[failure]` and stays silent. A failure that tells the player something
+    about the world or carries a clue goes through `clue()`: it keeps the red box and is read
+    aloud, and any echo before it goes on its own `event()` line above, never inside the clue.
+    The `remembered()` line is a marker, not an echo or an effect, and stays a silent `event()`.
 
 ## Before and after
 

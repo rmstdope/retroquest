@@ -26,6 +26,18 @@ function manifestOf(...lines: [string, string][]): NarrationManifest {
   return manifest
 }
 
+describe('turnUnits clue failures', () => {
+  it('voices a clue failure, and leaves the echo and a plain refusal silent', () => {
+    const text =
+      '[event]You peer in.[/event]\n' +
+      '[failure][clue]Something shiny.[/clue][/failure]\n' +
+      '[failure]Nothing here.[/failure]'
+    const units = turnUnits({ text, arrival: null }, false, {})
+    expect(units.map((unit) => unit.parts.length)).toEqual([0, 1, 0])
+    expect(units[1].parts[0].markup).toBe('Something shiny.')
+  })
+})
+
 describe('turnUnits', () => {
   const text =
     'You speak with [character_name]Mira[/character_name].\n' +

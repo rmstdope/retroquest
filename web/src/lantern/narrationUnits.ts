@@ -6,7 +6,7 @@
  * name and description of an arrival, then one unit per quest card. A unit is
  * made of parts, each a voiced line (`blockVoice`, `arrivalBlocks`,
  * `newQuestBlocks`, `questCompleteBlocks`) with its
- * recording or none. A unit with no part is silent: events, failures,
+ * recording or none. A unit with no part is silent: events, plain failures,
  * checklists, a revisited room and a quest update appear at once; a new
  * quest's card and a completed quest's record are read.
  */

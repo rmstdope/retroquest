@@ -57,6 +57,12 @@ describe('blockVoice', () => {
     expect(blockVoice({ kind: 'failure', markup: 'x' })).toBeNull()
     expect(blockVoice({ kind: 'checklist', items: [] })).toBeNull()
   })
+
+  it('reads a clue failure in the narrator’s voice', () => {
+    expect(
+      blockVoice({ kind: 'failure', markup: 'Shiny.', narrated: true }),
+    ).toEqual({ speaker: 'narrator', markup: 'Shiny.' })
+  })
 })
 
 describe('linesOfTurn', () => {
