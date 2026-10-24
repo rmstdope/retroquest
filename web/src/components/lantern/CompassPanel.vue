@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
+import { usePanelFlash } from '@/composables/usePanelFlash'
 
 /**
  * The map compass beside the story on laptops: the exits laid out around the
@@ -12,6 +13,7 @@ import { exitArrow } from '@/lantern/exitArrow'
  */
 defineProps<{ heading?: boolean }>()
 const game = useGameStore()
+const { flashing, endFlash } = usePanelFlash(['place'])
 
 /** Grid cell (row-major, 0–8) for each compass direction; 4 is the room. */
 const CELLS: Record<string, number> = {
@@ -44,7 +46,12 @@ function go(direction: string): void {
 </script>
 
 <template>
-  <section class="lq-compass" aria-label="Map">
+  <section
+    class="lq-compass"
+    :class="{ 'lq-flash': flashing }"
+    aria-label="Map"
+    @animationend.self="endFlash"
+  >
     <h2 v-if="heading" class="lq-compass-title">Map</h2>
     <div class="lq-grid">
       <template v-for="(exit, cell) in grid" :key="cell">

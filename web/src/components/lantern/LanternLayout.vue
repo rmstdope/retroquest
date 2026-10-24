@@ -11,6 +11,7 @@ import {
   turnUnits,
 } from '@/lantern/narrationUnits'
 import { actFolder } from '@/lantern/narrationManifest'
+import { usePanelHold } from '@/composables/usePanelHold'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
@@ -61,10 +62,16 @@ import TitlePage from './TitlePage.vue'
  * starts it with the new turn, a click on
  * the story hurries it (two skip), Space/Enter hurry and Escape skips while
  * focus is not on a field or a control, and a pop-up stops it.
+ * While a command is narrated the side panels (room card, map, journal, the
+ * header's room and counts) keep the state from before it and switch as the
+ * voice reaches them (`usePanelHold`); pressing in one of them, opening
+ * another section, pressing a verb, typing, or opening a name's menu first
+ * shows the rest of the turn at once.
  */
 const game = useGameStore()
 const settings = useSettingsStore()
 const narration = useNarrationStore()
+const panelHold = usePanelHold()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 /** A mouse and keyboard: the narration hint names keys instead of taps. */
@@ -248,14 +255,57 @@ watch(
     const turn = game.turns.at(-1)
     const folder = game.narrationFolder
     const manifest = folder ? narration.manifestFor(folder) : null
-    if (!turn?.narrate || !folder || !manifest || game.showModal) return
-    narration.begin(
-      turn.id,
-      turnUnits(turn, !!turn.firstVisit, manifest),
-      folder,
-    )
+    if (turn?.narrate && folder && manifest && !game.showModal)
+      narration.begin(
+        turn.id,
+        turnUnits(turn, !!turn.firstVisit, manifest),
+        folder,
+      )
+    // Its panels wait for the voice, or, with none to wait for, change now.
+    if (!turn) return
+    if (narration.narrates(turn.id)) panelHold.track(turn)
+    else panelHold.settle(turn)
   },
 )
+
+// The panels of a narrated command are held for this layout; leaving lets go.
+game.setPanelHold(true)
+onUnmounted(() => game.setPanelHold(false))
+
+// Opening another section on a phone shows the panels as they are: bring them up to date.
+watch(section, (now) => {
+  // Coming back to the story is the layout's own (after a command from another section).
+  if (now !== 'story') panelHold.catchUp()
+})
+
+/**
+ * A press on something in a held panel (room card, map, journal, the exits
+ * bar) only brings the panels up to date; the player presses again to act.
+ */
+function onPanelPress(event: MouseEvent): void {
+  const target = event.target instanceof Element ? event.target : null
+  if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
+  if (!panelHold.catchUp()) return
+  event.stopPropagation()
+  event.preventDefault()
+}
+
+/** Pressing a verb in the action bar, or typing in its command box, brings the panels up to date first, then goes on. */
+function onComposerPress(event: Event): void {
+  if (event instanceof KeyboardEvent) {
+    const typing =
+      event.target instanceof HTMLInputElement &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey &&
+      (event.key.length === 1 || event.key === 'Backspace')
+    if (typing) panelHold.catchUp()
+  } else if (
+    event.target instanceof Element &&
+    event.target.closest('.lq-verb')
+  )
+    panelHold.catchUp()
+}
 
 // The act-complete page waits while the act's last turn is read aloud (a
 // pop-up would cut the voice off), then opens; with nothing to read, at once.
@@ -460,6 +510,8 @@ function onNameClick(event: MouseEvent): void {
     '.theme-item_name, .theme-character_name, [data-name-kind]',
   )
   if (!name || !game.acceptInput) return
+  // Its actions name people and things of the place the player is in.
+  panelHold.catchUp()
   const kind =
     name.dataset.nameKind === 'character' ||
     name.classList.contains('theme-character_name')
@@ -588,8 +640,12 @@ watch(
         </template>
       </LanternHeader>
 
-      <main class="lq-main" :class="{ 'lq-wide': wide }">
-        <RoomCard v-if="wide" class="lq-card" @click="onNameClick" />
+      <main
+        class="lq-main"
+        :class="{ 'lq-wide': wide }"
+        @click.capture="onPanelPress"
+      >
+        <RoomCard v-if="wide" class="lq-card" data-panel @click="onNameClick" />
         <div v-show="wide || section === 'story'" class="lq-story-wrap">
           <section
             ref="storyEl"
@@ -627,28 +683,33 @@ watch(
           :class="{ 'lq-sheet': !wide }"
           :foldable="!wide"
           @fold="fold"
+          @click.capture="onComposerPress"
+          @keydown.capture="onComposerPress"
         />
         <DockBar
           v-if="!wide && section === 'story' && !dockOpen"
           ref="dock"
+          data-panel
           @open="openDock"
         />
 
         <template v-if="!wide">
-          <CompassPanel v-if="section === 'map'" heading />
+          <CompassPanel v-if="section === 'map'" heading data-panel />
           <JournalPanel
             v-else-if="section !== 'story'"
             :key="`journal-${game.gameNumber}`"
             :tab="section"
             class="lq-section-view"
+            data-panel
           />
         </template>
 
         <aside v-if="wide" class="lq-aside" aria-label="Map and journal">
-          <CompassPanel />
+          <CompassPanel data-panel />
           <JournalPanel
             :key="`journal-${game.gameNumber}`"
             class="lq-journal-panel"
+            data-panel
           />
         </aside>
       </main>

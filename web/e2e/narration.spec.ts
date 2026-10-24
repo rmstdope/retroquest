@@ -54,6 +54,34 @@ test('tells an answer block by block, and a double tap shows the rest', async ({
   expect(await lastTurnBlocks(page).count()).toBeGreaterThan(early)
 })
 
+test('keeps the room card until the voice reaches them, and a press in the journal catches up', async ({
+  page,
+}): Promise<void> => {
+  await slowNarrationClips(page)
+  await startAct1(page)
+  const roomName = page.locator('.lq-room-name')
+  const before = await roomName.textContent()
+
+  const input = page.getByLabel('Command')
+  await input.fill('talk to voice')
+  await input.press('Enter')
+  await expect(lastTurnBlocks(page).first()).toBeVisible()
+  await expect(page.locator('.lq-speaking')).toHaveCount(1)
+  // Block 1 is being read: the panels are still the ones from before the turn.
+  await expect(roomName).toHaveText(before ?? '')
+
+  // A press in a held panel only brings everything up to date.
+  const turns = await page.getByTestId('turn').count()
+  await page.getByRole('tab', { name: /^Quests/ }).click()
+  // That press did nothing but catch up: the tab did not open.
+  await expect(page.getByRole('tab', { name: /^Quests/ })).toHaveAttribute(
+    'aria-selected',
+    'false',
+  )
+  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  await expect(page.getByTestId('turn')).toHaveCount(turns)
+})
+
 test('Space and Enter hurry with a verb focused, and do not press it', async ({
   page,
 }): Promise<void> => {
