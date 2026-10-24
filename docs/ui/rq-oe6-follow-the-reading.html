@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rq-oe6 · The story follows the reading</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+:root {
+  --bg:#10151a; --surface:#161d24; --raised:#1c242c; --line:#26313b;
+  --fg:#ece6d6; --prose:#d9d3c3; --muted:#a39d8e;
+  --accent:#ffa914; --on-accent:#1a1408; --accent-text:#ffb836; --accent-soft:#36270a; --accent-line:#a8740f;
+  --character:#7fb0e6; --character-soft:#172433; --character-line:#34506b; --page:#0b0f13;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--fg);font:15px/1.5 'DM Sans',system-ui,sans-serif;display:flex;gap:40px;justify-content:center;align-items:flex-start;padding:32px 16px;min-height:100vh}
+@media (max-width:900px){body{flex-direction:column;align-items:center}}
+.about{max-width:400px}
+.about .kicker{color:var(--accent-text);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.about h1{font:600 28px/1.15 Fraunces,serif;margin:6px 0 12px}
+.about p,.about li{color:var(--prose)}
+.about ul{padding-left:18px}
+.about .try{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:16px 0}
+.about .try b{color:var(--accent-text)}
+.about .cost{color:var(--muted);font-size:13px;border-left:2px solid var(--accent-line);padding-left:10px}
+.rig{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.rig button{font:500 14px 'DM Sans',sans-serif;border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--line);background:var(--raised);color:var(--fg)}
+.rig button.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.status{margin-top:14px;font-size:13px;color:var(--muted);min-height:40px}
+.status b{color:var(--accent-text);font-weight:500}
+.phone{width:390px;max-width:100%;height:640px;border-radius:34px;border:10px solid #000;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.hdr{padding:14px 16px 10px;border-bottom:1px solid var(--line);background:var(--surface)}
+.hdr .room{font:600 18px Fraunces,serif}
+.hdr .sub{color:var(--muted);font-size:12px}
+.wrap{flex:1;position:relative;min-height:0}
+.story{position:absolute;inset:0;overflow-y:auto;padding:14px 16px 60px;font:15px/1.6 'Source Serif 4',Georgia,serif;color:var(--prose)}
+.story .old{color:var(--muted)}
+.story .echo{font:500 13px 'DM Sans',sans-serif;color:var(--accent-text);margin:6px 0 10px}
+.story p{margin:0 0 12px}
+.w.now{background:var(--accent-soft);color:var(--accent-text);border-radius:3px;box-shadow:0 0 0 2px var(--accent-soft)}
+.w.ahead{opacity:.45}
+.pill{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font:500 13px 'DM Sans',sans-serif;background:var(--raised);color:var(--fg);border:1px solid var(--accent-line);border-radius:999px;padding:7px 14px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5);display:none;white-space:nowrap}
+.pill.show{display:block}
+.pill.back{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font:500 12px 'DM Sans',sans-serif;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 12px;white-space:nowrap;opacity:0;transition:opacity .25s;pointer-events:none}.hint.show{opacity:1}
+.guide{position:absolute;left:0;right:0;border-top:1px dashed rgba(255,169,20,.35);pointer-events:none;display:none}
+.showguides .hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font:500 12px 'DM Sans',sans-serif;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 12px;white-space:nowrap;opacity:0;transition:opacity .25s;pointer-events:none}.hint.show{opacity:1}
+.guide{display:block}
+.dock{border-top:1px solid var(--line);background:var(--surface);padding:10px 12px 14px;display:flex;gap:8px;align-items:center}
+.dock .chip{border:1px solid var(--line);background:var(--raised);color:var(--fg);border-radius:999px;padding:6px 12px;font-size:13px}
+</style></head><body>
+<div class="about">
+  <div class="kicker">The story follows the reading · Agreed</div>
+  <h1>Glide with the word, hold the story still</h1>
+  <p>While the narrator reads an answer, the story keeps the word being read on screen. Once the word gets within two lines of the bottom edge, the story glides up a line at a time to keep it there.</p><p>Until the reading ends, is skipped, or an action cuts in, the story cannot be scrolled. Any attempt (finger, wheel, keys) brings up the hint: <b>Tap to hurry · double-tap to skip</b>, or on a keyboard <b>Space to hurry · Esc to skip</b>. <b>More below</b> is hidden while it reads and comes back when the reading ends.</p><p>Only the story does this. The room card and the chapter page stay as they are.</p>
+  <div class="try"><b>Try it:</b> press <b>Play</b> and watch the highlighted word. Then scroll the story up with your mouse or finger (or press <b>Scroll away</b>) while it reads, and see what happens.</div>
+  <p class="cost">Rejected: turning the page, keeping it centred, coming back after a pause, a button to go back, and scrolling stopping the reading.</p>
+  <div class="rig">
+    <button class="primary" id="play">Play</button>
+    <button id="away">Scroll away</button>
+    <button id="guides">Show the edges it uses</button>
+  </div>
+  <div class="status" id="status">Press Play.</div>
+</div>
+<div class="phone">
+  <div class="hdr"><div class="room">The Village Square</div><div class="sub">Willowbrook</div></div>
+  <div class="wrap">
+    <div class="story" id="story">
+      <p class="old">The square is quiet. A well stands at its centre, its stones worn smooth by many hands.</p>
+      <div class="echo">› talk to elder</div>
+      <p id="speak"></p>
+      <div style="height:0"></div>
+    </div>
+    <div class="guide" id="g1"></div><div class="guide" id="g2"></div>
+    <button class="pill" id="pill"></button><div class="hint" id="hint">Tap to hurry · double-tap to skip</div>
+  </div>
+  <div class="dock"><span class="chip">Look</span><span class="chip">Talk</span><span class="chip">Use</span><span class="grow"></span><span class="chip">Actions</span></div>
+</div>
+<script>
+const FOLLOW='glide', RETURN='lock';
+const text="Elder Thorne leans on his staff and looks at you for a long while before he speaks. "+
+"“You have your father’s eyes,” he says at last. “He stood where you stand, the summer the river rose, and he asked me the same question you are about to ask. "+
+"I told him then what I will tell you now: the Crystal Amulet was never lost. It was hidden, and those who hid it meant for it to stay hidden until the village had need of it again. "+
+"That time has come. The wells run low, the crops fail in fields that have never failed, and at night the old forest whispers in a voice I have not heard since I was a boy. "+
+"Go to the Ancient Library beyond the Hidden Path. Find the Librarian, if she still keeps the shelves, and tell her Thorne has sent you. "+
+"She will ask you for a token. Give her nothing until she names it, for a wrong gift is worse than none. "+
+"And when you have the amulet, child, do not wear it in the open. There are eyes in the forest that have waited a long time for it to wake.” "+
+"He turns back to the well, and the conversation is over.";
+const words=text.split(' ');
+const speak=document.getElementById('speak'), story=document.getElementById('story'), pill=document.getElementById('pill'), status=document.getElementById('status');
+speak.innerHTML=words.map((w,i)=>`<span class="w ahead" data-w="${i}">${w}</span>`).join(' ');
+const spans=[...speak.querySelectorAll('.w')];
+const LINE=24, CTX=2*LINE, PAUSE=3000;
+let i=-1, timer=null, away=false, lastUser=0, auto=false, autoUntil=0;
+function setStatus(s){status.innerHTML=s}
+function wordBox(){const s=spans[i];if(!s)return null;const r=s.getBoundingClientRect(),p=story.getBoundingClientRect();return{top:r.top-p.top,bottom:r.bottom-p.top}}
+function scrollToY(y){auto=true;autoUntil=Date.now()+700;const still=matchMedia('(prefers-reduced-motion: reduce)').matches;story.scrollTo({top:Math.max(0,y),behavior:still?'auto':'smooth'})}
+function inView(b){return b && b.top>=0 && b.bottom<=story.clientHeight-8}
+function follow(){
+  const b=wordBox(); if(!b)return; const H=story.clientHeight;
+  if(FOLLOW==='page'){ if(b.bottom>H-8||b.top<0){scrollToY(story.scrollTop+b.top-CTX);setStatus('<b>Page turned:</b> the line being read moved up, keeping two lines above it.')} }
+  else if(FOLLOW==='glide'){ const limit=H-8-CTX; if(b.bottom>limit){scrollToY(story.scrollTop+b.bottom-limit);setStatus('<b>Gliding:</b> the story moves up a line at a time, two lines above the bottom edge.')} else if(b.top<0){scrollToY(story.scrollTop+b.top-CTX)} }
+  else { const target=story.scrollTop+b.top-(H/2-LINE/2); if(Math.abs(target-story.scrollTop)>4){scrollToY(target);setStatus('<b>Centred:</b> the line being read stays in the middle of the story.')} }
+}
+function direction(){const b=wordBox();return b&&b.top<0?'↑':'↓'}
+function updatePill(){
+  const b=wordBox();
+  if(RETURN==='pill' && away){pill.className='pill show back';pill.textContent='Back to the reading '+direction();return}
+  const more=story.scrollTop+story.clientHeight<story.scrollHeight-8;
+  pill.className='pill'+(more&&!timer?' show':''); pill.textContent='More below ↓';
+}
+function userScrolled(){
+  if(!timer)return;
+  if(RETURN==='cut'){skipRest('You scrolled, so <b>the narrator stopped</b> for this answer, as any action does. The rest is shown and the story is yours.');return}
+  if(RETURN==='lock')return; lastUser=Date.now();
+  if(!away){away=true;
+    if(RETURN==='instant')setStatus('You scrolled away. <b>It will pull you back with the next word.</b>');
+    else if(RETURN==='pause')setStatus('You scrolled away. <b>Following paused</b> — it comes back once you have left the story alone for 3 seconds.');
+    else setStatus('You scrolled away. <b>Following stopped.</b> Press “Back to the reading”, or scroll the word back into view yourself.');
+  }
+  updatePill();
+}
+story.addEventListener('scroll',()=>{ if(Date.now()<autoUntil)return; auto=false; userScrolled(); });
+['wheel','touchmove','keydown'].forEach(e=>story.addEventListener(e,()=>{autoUntil=0},{passive:true}));
+
+const hint=document.getElementById('hint'); let hintT=null;
+function flashHint(){hint.classList.add('show');clearTimeout(hintT);hintT=setTimeout(()=>hint.classList.remove('show'),2200)}
+function skipRest(msg){ if(!timer)return; clearInterval(timer);timer=null;away=false;spans.forEach(s=>{s.classList.remove('ahead','now')});setStatus(msg);updatePill()}
+story.addEventListener('dblclick',()=>skipRest('Skipped: the rest of the answer is shown silently, and the story scrolls freely.'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')skipRest('Skipped with Esc: the rest is shown silently, and the story scrolls freely.')});
+if(RETURN==='lock'){
+  const block=e=>{ if(!timer)return; e.preventDefault(); flashHint(); setStatus('<b>Scrolling is held</b> while the narrator reads. The hint shows how to hurry or skip; double-click the story to skip.'); };
+  story.addEventListener('wheel',block,{passive:false}); story.addEventListener('touchmove',block,{passive:false});
+  story.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(e.key))block(e)});
+}
+function tick(){
+  if(i>=0)spans[i].classList.remove('now'); i++;
+  if(i>=spans.length){clearInterval(timer);timer=null;away=false;setStatus('Finished reading.');updatePill();return}
+  spans[i].classList.add('now');spans[i].classList.remove('ahead');
+  if(away){
+    if(RETURN==='instant'){away=false;follow();setStatus('<b>Pulled back</b> to the word being read.')}
+    else if(RETURN==='pause'){ if(Date.now()-lastUser>=PAUSE){away=false;follow();if(!inView(wordBox()))scrollToY(story.scrollTop+wordBox().top-CTX);setStatus('<b>Back:</b> 3 seconds without scrolling, so the story glided back to the reading.')} }
+    else { if(inView(wordBox())){away=false;setStatus('The word is in view again, so <b>following resumed</b>.')} }
+  } else follow();
+  updatePill();
+}
+document.getElementById('play').onclick=()=>{clearInterval(timer);spans.forEach(s=>{s.classList.remove('now');s.classList.add('ahead')});i=-1;away=false;story.scrollTop=0;timer=setInterval(tick,260);setStatus('Reading…');updatePill()};
+document.getElementById('away').onclick=()=>{if(RETURN==='lock'&&timer){flashHint();setStatus('<b>Scrolling is held</b> while the narrator reads. The hint shows how to hurry or skip; double-click the story to skip.');return}autoUntil=0;story.scrollBy({top:-200,behavior:'smooth'})};
+pill.onclick=()=>{ if(pill.classList.contains('back')){away=false;const b=wordBox();scrollToY(story.scrollTop+b.top-CTX);setStatus('<b>Back to the reading:</b> following resumed.');updatePill()} else {story.scrollBy({top:story.clientHeight-48,behavior:'smooth'})} };
+document.getElementById('guides').onclick=()=>{document.querySelector('.phone').classList.toggle('showguides');const H=story.clientHeight;const g1=document.getElementById('g1'),g2=document.getElementById('g2');
+  if(FOLLOW==='centre'){g1.style.top=(H/2)+'px';g2.style.display='none'} else if(FOLLOW==='glide'){g1.style.top=(H-8-CTX)+'px';g2.style.display='none'} else {g1.style.top=(H-8)+'px';g2.style.top=CTX+'px'}};
+updatePill();
+</script></body></html>
