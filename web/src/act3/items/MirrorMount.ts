@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, clue, type GameState } from '@/engine'
 import {
   FLAG_ACT3_MIRRORS_MENDED,
   FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
@@ -37,13 +37,13 @@ export class MirrorMount extends Item {
     // If the player uses binding resin on the mount, handle it here
     if (other instanceof BindingResin) {
       if (!this.installed) {
-        return (
-          '[failure]There is nothing to bind yet — prepare the mount with ' +
-          'the mirror segments first.[/failure]'
+        return clue(
+          'There is nothing to bind yet — prepare the mount with ' +
+            'the mirror segments first.',
         )
       }
       if (this.resinApplied) {
-        return '[dim]Binding resin has already been applied to this mount.[/dim]'
+        return '[failure]Binding resin has already been applied to this mount.[/failure]'
       }
       // Remove one resin from inventory
       const resinName = new BindingResin().name
@@ -65,9 +65,9 @@ export class MirrorMount extends Item {
     // Requirement: player must have at least 4 brass mirror segments total
     const segName = new BrassMirrorSegment().name
     if (gameState.getItemCount(segName) < 4) {
-      return (
-        '[failure]You need more brass mirror segments in your pack before ' +
-        'you can install them into the terrace mounts.[/failure]'
+      return clue(
+        'You need more brass mirror segments in your pack before ' +
+          'you can install them into the terrace mounts.',
       )
     }
 
@@ -89,18 +89,18 @@ export class MirrorMount extends Item {
    */
   mend(gameState: GameState): string {
     if (!this.installed) {
-      return (
-        '[failure]This mount has not yet been prepared with the brass segments; ' +
-        'there is nothing to mend.[/failure]'
+      return clue(
+        'This mount has not yet been prepared with the brass segments; ' +
+          'there is nothing to mend.',
       )
     }
 
     // Require binding resin to have been applied before final mending
     if (!this.resinApplied) {
-      return (
-        '[failure]The mirror segments are seated but still loose. Mended now, ' +
-        'they would crack apart at the first tremor; they want binding ' +
-        'first.[/failure]'
+      return clue(
+        'The mirror segments are seated but still loose. Mended now, ' +
+          'they would crack apart at the first tremor; they want binding ' +
+          'first.',
       )
     }
 
@@ -133,10 +133,10 @@ export class MirrorMount extends Item {
     const segment = new BrassMirrorSegment()
     gameState.currentRoom.addItem(segment)
     this.segmentRevealed = true
-    return event(
+    return (
       'You sift the ash and grit beneath the mount and find a ' +
-        `[item_name]${segment.name}[/item_name]. It lies half-buried ` +
-        'in the sand and has been added to the terrace.',
+      `[item_name]${segment.name}[/item_name]. It lies half-buried ` +
+      'in the sand and has been added to the terrace.'
     )
   }
 }

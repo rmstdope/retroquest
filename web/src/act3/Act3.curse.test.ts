@@ -73,7 +73,8 @@ describe('Act III curse grows worse at each relic site', () => {
       expect(out.indexOf(glows[stage - 1])).toBeLessThan(
         out.indexOf(moments[stage - 1]),
       )
-      expect(out).toContain(`[event]${moments[stage - 1]}[/event]`)
+      expect(out).toContain(moments[stage - 1])
+      expect(out).not.toContain('[event]')
       expectMarkupWellFormed(out)
       expect(amulet.glow(stage)).toBe('')
     }
@@ -186,7 +187,8 @@ describe('Act III curse grows worse at each relic site', () => {
       const out = mira.talkTo(game.state)
 
       expect(out).toContain(`[dialogue]${sentence}[/dialogue]`)
-      expect(out.indexOf(sentence)).toBeLessThan(out.indexOf('You arrive at'))
+      expect(out).not.toContain('You arrive at')
+      expect(out).toContain('you arrive at your next destination')
       if (key === 'LowerSwitchbacks') {
         expect(out).toContain(`[dialogue]${MIRA_WASTING}[/dialogue]`)
         expect(out.indexOf(MIRA_WASTING)).toBeLessThan(out.indexOf(sentence))

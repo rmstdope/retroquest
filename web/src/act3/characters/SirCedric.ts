@@ -1,4 +1,4 @@
-import { Character, type GameState, characterName, event } from '@/engine'
+import { Character, type GameState, characterName } from '@/engine'
 import {
   CEDRIC_GATE_TALK,
   CEDRIC_NAME,
@@ -197,8 +197,6 @@ export class SirCedric extends Character {
     if (!isRefrain || !atGate) return CEDRIC_NOT_NOW
     gameState.setStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED, true)
     return (
-      event('You: “Power follows purpose; purpose follows truth.”') +
-      '\n' +
       cedricDoes(
         'is quiet a long moment. Then he nods, once, and loosens his sword ' +
           'in its sheath.',

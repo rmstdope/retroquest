@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, clue, type GameState } from '@/engine'
 import {
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
   FLAG_ACT3_VOW_OF_COURAGE_MADE,
@@ -22,9 +22,9 @@ export class CrystalOfLight extends Item {
 
   /** Return descriptive examination text referencing ambient progress cues. */
   override examine(_gameState: GameState): string {
-    return event(
+    return (
       "The crystal's facets amplify the faintest glow, casting sigil-like " +
-        'refractions. It seems to breathe with the tide.',
+      'refractions. It seems to breathe with the tide.'
     )
   }
 
@@ -39,15 +39,14 @@ export class CrystalOfLight extends Item {
     if (!vow) {
       gameState.removeItemFromInventory(this.name, 1)
       gameState.currentRoom.addItem(this)
-      return (
-        '[failure]Wards flare as you touch the crystal, locking it in place. ' +
-        '[/failure]'
+      return clue(
+        'Wards flare as you touch the crystal, locking it in place. ' + '',
       )
     }
     gameState.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
-    return event(
+    return (
       'The crystal steadies in your grasp, radiance aligning with your ' +
-        'resolve.',
+      'resolve.'
     )
   }
 }

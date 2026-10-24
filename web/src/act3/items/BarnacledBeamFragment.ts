@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, clue } from '@/engine'
 
 /** A splintered beam piece encrusted with barnacles; not carriable. */
 export class BarnacledBeamFragment extends Item {
@@ -15,9 +15,9 @@ export class BarnacledBeamFragment extends Item {
 
   /** Explain why the fragment cannot be taken. */
   override preventPickup(): string {
-    return (
-      "[failure]The beam is fused into the pier's wreckage; you cannot pry it free." +
-      '[/failure]'
+    return clue(
+      "The beam is fused into the pier's wreckage; you cannot pry it free." +
+        '',
     )
   }
 }

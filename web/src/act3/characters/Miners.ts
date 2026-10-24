@@ -3,7 +3,6 @@ import {
   type GameState,
   type Item,
   characterName,
-  event,
   speech,
 } from '@/engine'
 import { CEDRIC_STAY_BEHIND, cedricAdds } from '../CedricLines'
@@ -36,11 +35,7 @@ export class Miners extends Character {
   override giveItem(gameState: GameState, item: Item): string {
     if (!(item instanceof QuietCharm)) return super.giveItem(gameState, item)
     return (
-      event(
-        `You offer the [item_name]${item.name}[/item_name] to the ${characterName(this.name)}.`,
-      ) +
-      '\n' +
-      `The ${characterName('lead miner')} turns it over and hands it back: ` +
+      `The ${characterName('lead miner')} turns the [item_name]${item.name}[/item_name] over and hands it back: ` +
       speech('Pretty thing. Not much use to an old man with a pick, though.') +
       ' His eyes go to the boy on the bucket. ' +
       speech("If it's quiet you're handing out, I know who needs it.")
@@ -89,10 +84,8 @@ export class Miners extends Character {
             "Chambers is open, but we'll make sure it stays that way.",
         ) +
         '\n\n' +
-        event(
-          'The miners begin setting up additional supports as you prepare ' +
-            'to continue your journey.',
-        ) +
+        'The miners begin setting up additional supports as you prepare ' +
+        'to continue your journey.' +
         cedricAdds(gameState, CEDRIC_STAY_BEHIND)
       )
     }

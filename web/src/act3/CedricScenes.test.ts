@@ -86,7 +86,7 @@ describe('Sir Cedric reacts to the story', () => {
     expect(first).toContain('Name what you will not abandon.')
     expect(first).toContain('My king.')
     expect(first).toContain('I did once.')
-    expect(first.endsWith('The water does not answer him.[/event]')).toBe(true)
+    expect(first.endsWith('The water does not answer him.')).toBe(true)
     expect(second).not.toContain('Sir Cedric')
     expect(game.state.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(true)
   })
@@ -147,8 +147,8 @@ describe('Sir Cedric reacts to the story', () => {
 
     expectMarkupWellFormed(out)
     expect(game.state.currentRoom.name).toBe("Entrance to Malakar's Fortress")
-    expect(inOrder(out, 'Steel yourself', 'You arrive at')).toBe(true)
-    expect(inOrder(out, 'You arrive at', 'looking up at the gates')).toBe(true)
+    expect(out).not.toContain('You arrive at')
+    expect(inOrder(out, 'Steel yourself', 'looking up at the gates')).toBe(true)
     expect(inOrder(out, 'looking up at the gates', 'sunlit glade')).toBe(true)
     expectCharacterInRoom(game.state.currentRoom, 'Sir Cedric')
   })
@@ -160,7 +160,7 @@ describe('Sir Cedric reacts to the story', () => {
     const first = phoenix.sayTo(game.state, 'patience')
     const again = phoenix.sayTo(game.state, 'patience')
     expectMarkupWellFormed(first)
-    expect(first.endsWith('looks at the ground.[/event]')).toBe(true)
+    expect(first.endsWith('looks at the ground.')).toBe(true)
     expect(again).not.toContain('looks at the ground')
   })
 
@@ -231,12 +231,10 @@ describe('Sir Cedric in the story view', () => {
     )
   })
 
-  it('shows what Elior says as a plain "You:" line', () => {
+  it("leaves Elior's own words out of the answer", () => {
     const game = partyAt('FortressEntrance')
     const out = new SirCedric().sayTo(game.state, 'refrain')
-    expect(out).toContain(
-      'You: \u201cPower follows purpose; purpose follows truth.\u201d',
-    )
+    expect(out).not.toContain('You: ')
     expect(speakers(out)).toEqual([
       'Sir Cedric: Truth, then. The truth is I was on the wall. The truth is he is still alive. Let us go and get him.',
     ])

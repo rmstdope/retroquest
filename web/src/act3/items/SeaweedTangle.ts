@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, clue } from '@/engine'
 
 /** A mat of salt-wet seaweed that clings to the shoreline; not carriable. */
 export class SeaweedTangle extends Item {
@@ -15,9 +15,9 @@ export class SeaweedTangle extends Item {
 
   /** Explain why this cannot be picked up. */
   override preventPickup(): string {
-    return (
-      '[failure]The seaweed is wedged into crevices and heavy with salt; you ' +
-      "can't pull it free.[/failure]"
+    return clue(
+      'The seaweed is wedged into crevices and heavy with salt; you ' +
+        "can't pull it free.",
     )
   }
 }

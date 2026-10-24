@@ -1,4 +1,4 @@
-import { Spell, type GameState, type Item } from '@/engine'
+import { Spell, clue, type GameState, type Item } from '@/engine'
 import { Locker } from '../items/Locker'
 import { SupplyCrate } from '../items/SupplyCrate'
 
@@ -20,10 +20,6 @@ export class UnlockSpell extends Spell {
     if (targetItem instanceof SupplyCrate) {
       return targetItem.unlockWithSpell(gameState)
     }
-    return (
-      `[failure]You cast [spell_name]${this.name}[/spell_name] on ` +
-      `[item_name]${targetItem.name}[/item_name], but no lock ` +
-      'yields.[/failure]'
-    )
+    return clue('That has no lock or magical seal to open.')
   }
 }

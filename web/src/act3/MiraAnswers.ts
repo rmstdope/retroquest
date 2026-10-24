@@ -3,7 +3,7 @@
  * the two answers, her replies, and the gate line each answer leaves behind.
  * The answer itself is remembered in two story flags, so nothing here is saved.
  */
-import { characterName, event, speech } from '@/engine'
+import { characterName, speech } from '@/engine'
 
 /** How Elior answers the confession. */
 export type MiraAnswer = 'forgive' | 'reproach'
@@ -46,19 +46,15 @@ export function miraAnswerIn(words: string): MiraAnswer | null {
 export function miraAnswerReply(answer: MiraAnswer): string {
   if (answer === 'forgive') {
     return [
-      event(`You say 'I forgive you' to ${characterName('Mira')}.`),
-      event(
-        'Mira closes her eyes. For a moment she looks younger, and very ' +
-          'tired.',
-      ),
+      `${characterName('Mira')} closes her eyes. For a moment she looks ` +
+        'younger, and very tired.',
       speech(
         'Thank you. I did not dare ask for that. I will try to deserve it.',
       ),
     ].join('\n')
   }
   return [
-    event(`You say 'You should have told me' to ${characterName('Mira')}.`),
-    event('Mira does not look away.'),
+    `${characterName('Mira')} does not look away.`,
     speech(
       'I should have. I chose the seal over you every day, and I would ' +
         'choose it again. But I am sorry for every one of those days.',

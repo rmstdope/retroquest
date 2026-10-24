@@ -1,11 +1,4 @@
-import {
-  Spell,
-  characterName,
-  event,
-  type Character,
-  type GameState,
-  type Item,
-} from '@/engine'
+import { Spell, type Character, type GameState, type Item } from '@/engine'
 import { WardingPillars } from '../items/WardingPillars'
 import { Steles } from '../items/Steles'
 
@@ -24,11 +17,7 @@ export class PurifySpell extends Spell {
   /** Cast purify spell providing cleansing aura. */
   override castSpell(_gameState: GameState): string {
     // Act III version has no global gating; it always responds with a cleansing aura
-    return (
-      event(`You cast [spell_name]${this.name}[/spell_name].`) +
-      '\n' +
-      'A brine-bright clarity flows from your hands, cutting through the mire.'
-    )
+    return 'A brine-bright clarity flows from your hands, cutting through the mire.'
   }
 
   /** Cast purify on an item: the warding pillars, or the salt-crusted steles. */
@@ -39,28 +28,14 @@ export class PurifySpell extends Spell {
     if (targetItem instanceof Steles) {
       return targetItem.purify(gameState)
     }
-    return (
-      event(
-        `You cast [spell_name]${this.name}[/spell_name] on ` +
-          `[item_name]${targetItem.name}[/item_name].`,
-      ) +
-      '\n' +
-      'Saltlight skims its surface, though nothing more changes.'
-    )
+    return 'Saltlight skims the surface, though nothing more changes.'
   }
 
   /** Cast purify on target character to provide cleansing calm. */
   override castOnCharacter(
     _gameState: GameState,
-    targetCharacter: Character,
+    _targetCharacter: Character,
   ): string {
-    return (
-      event(
-        `You cast [spell_name]${this.name}[/spell_name] on ` +
-          `${characterName(targetCharacter.name)}.`,
-      ) +
-      '\n' +
-      'A cleansing calm settles, washing away lingering dread.'
-    )
+    return 'A cleansing calm settles, washing away lingering dread.'
   }
 }

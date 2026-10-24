@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { FLAG_ACT3_OATH_OF_STILLNESS_STARTED } from '../Act3StoryFlags'
 import { ResonantChantRubbings } from './ResonantChantRubbings'
 import { StillwaterPhial } from './StillwaterPhial'
@@ -34,12 +34,10 @@ export class EchoStones extends Item {
       this.blessed = true
       gameState.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED, true)
       return (
-        event(
-          'As the blessing leaves your lips, the echo stones hum, and you ' +
-            'feel it in your bones. Silver light runs along their carved ' +
-            'channels like water finding its course. Then the light settles ' +
-            'into a slow, steady glow.',
-        ) +
+        'As the blessing leaves your lips, the echo stones hum, and you ' +
+        'feel it in your bones. Silver light runs along their carved ' +
+        'channels like water finding its course. Then the light settles ' +
+        'into a slow, steady glow.' +
         '\n' +
         '[success]You sense that these hallowed stones now await ' +
         'the ancient chant that will complete the ritual and banish the ' +

@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { Locker } from './Locker'
 
 /** A salt-corroded key that cannot open its intended lock through normal means. */
@@ -16,9 +16,9 @@ export class RustedLockerKey extends Item {
 
   /** Override pickup to emphasize the key's compromised condition. */
   override pickedUp(_gameState: GameState): string {
-    return event(
+    return (
       'Its teeth are ragged with corrosion; it might fit, but the lock ' +
-        'has long since fused.',
+      'has long since fused.'
     )
   }
 

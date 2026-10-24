@@ -1,4 +1,4 @@
-import { Spell, event, type GameState, type Item } from '@/engine'
+import { Spell, type GameState, type Item } from '@/engine'
 import { LanternBracket } from '../items/LanternBracket'
 
 /** A steady kindling that coaxes prisms to life. */
@@ -19,9 +19,9 @@ export class LightSpell extends Spell {
     if (typeof hook === 'function') {
       return hook.call(room, gameState)
     }
-    return event(
+    return (
       'A warm spark flares in your palm and fades—nothing here seems to ' +
-        'catch.',
+      'catch.'
     )
   }
 

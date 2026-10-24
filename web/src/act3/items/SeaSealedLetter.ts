@@ -1,4 +1,4 @@
-import { Item, event, writing, type GameState } from '@/engine'
+import { Item, writing, type GameState } from '@/engine'
 import { AncientAmulet } from './AncientAmulet'
 import { Mira } from '../characters/Mira'
 import {
@@ -14,10 +14,7 @@ export class SeaSealedLetter extends Item {
       name: 'Sea-Sealed Letter',
       shortName: 'letter',
       description:
-        event(
-          'You unfold the salt-preserved vellum carefully. The ink, ' +
-            'protected by crystalline varnish, is still clear:',
-        ) +
+        "The letter's ink, protected by crystalline varnish, is still clear:" +
         '\n\n' +
         writing('Malakar, our friend —') +
         '\n\n' +
@@ -38,16 +35,12 @@ export class SeaSealedLetter extends Item {
         '\n\n' +
         writing('— Aren and Lysa') +
         '\n\n' +
-        event(
-          'Beneath their names, in a sharper hand and darker ink, someone ' +
-            'has written a reply:',
-        ) +
+        'Beneath their names, in a sharper hand and darker ink, someone ' +
+        'has written a reply:' +
         '\n\n' +
         writing('You would have me wait while you die. — M.') +
         '\n\n' +
-        event(
-          'Your parents wrote to Malakar as a friend. He read it, and answered.',
-        ),
+        'Your parents wrote to Malakar as a friend. He read it, and answered.',
       canBeCarried: true,
     })
   }
@@ -61,8 +54,6 @@ export class SeaSealedLetter extends Item {
     const first = !gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ)
     gameState.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
     return (
-      event(`You examine the [item_name]${this.name}[/item_name].`) +
-      '\n' +
       `${this.description}` +
       (first ? AncientAmulet.glowInBag(gameState, 1) : '') +
       (this.miraSlipDue(gameState) ? '\n' + Mira.ruinsSlip(gameState) : '')
@@ -80,8 +71,6 @@ export class SeaSealedLetter extends Item {
 
   /** Handle letter pickup flavor text. */
   override pickedUp(_gameState: GameState): string {
-    return event(
-      'You carefully fold the letter — a plea to a friend, kept by the sea.',
-    )
+    return 'You carefully fold the letter — a plea to a friend, kept by the sea.'
   }
 }

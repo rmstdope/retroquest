@@ -127,9 +127,10 @@ describe('PierWarden and the Weathered Coin', () => {
 
     const out = new PierWarden().giveItem(game.state, coin)
 
-    expect(out).toContain('You offer the')
+    expect(out).not.toContain('You offer the')
+    expect(out).not.toContain('[event]')
     expect(out).toContain(
-      'He turns it over once, then folds your fingers back around it.',
+      'turns the coin over once, then folds your fingers back around it.',
     )
     expect(out).toContain('Keep it. Toll for the crossing, my da said.')
     expect(coin.description).toBe(
@@ -149,7 +150,8 @@ describe('PierWarden and the Weathered Coin', () => {
 
     for (let i = 0; i < 2; i++) {
       const out = warden.giveItem(game.state, coin)
-      expect(out).toContain('He pushes your hand away.')
+      expect(out).toContain('pushes your hand away.')
+      expect(out).not.toContain('[event]')
       expect(out).toContain('I said keep it, lad.')
       expect(out).not.toContain('Toll for the crossing, my da said.')
     }

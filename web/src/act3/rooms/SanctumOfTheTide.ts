@@ -1,4 +1,4 @@
-import { Room, event } from '@/engine'
+import { Room } from '@/engine'
 import type { Exits, GameState } from '@/engine'
 import { FLAG_ACT3_VOW_OF_COURAGE_MADE } from '../Act3StoryFlags'
 import { CrystalOfLight } from '../items/CrystalOfLight'
@@ -109,7 +109,7 @@ export class SanctumOfTheTide extends Room {
     const darkness = guardian.enterLine(gameState)
     this.syncCrystal(gameState)
     if (darkness === '' || !first) return darkness
-    return event(this.description) + '\n' + darkness
+    return this.description + '\n' + darkness
   }
 
   /** In the dark the room is only the line for where Elior stands. */

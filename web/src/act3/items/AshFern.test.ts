@@ -44,6 +44,8 @@ describe('AshFern', () => {
     expect(
       result.includes('heat-ward mix') || result.includes('heat-ward'),
     ).toBe(true)
-    expect(result).toContain('combine the ash-fern with cooled slag')
+    expect(result).toBe(
+      'The ash-fern and cooled slag grind down into a coarse paste: a heat-ward mix.',
+    )
   })
 })
