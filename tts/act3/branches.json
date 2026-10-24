@@ -5,7 +5,8 @@
       "take quiet charm",
       "n",
       "give quiet charm to tobin",
-      "talk to tobin"
+      "talk to tobin",
+      "talk to miners"
     ]
   },
   {
@@ -35,6 +36,55 @@
     "commands": [
       "cast bless on sigils",
       "talk to ancient dragon"
+    ]
+  },
+  {
+    "after": 48,
+    "commands": [
+      "cast mend on charred inscription",
+      "rest",
+      "s",
+      "search",
+      "take ash-fern",
+      "take cooled slag",
+      "use cooled slag with ash-fern",
+      "n",
+      "e",
+      "use vent stone",
+      "use vent stone",
+      "use vent stone",
+      "use heat-ward mix",
+      "rest",
+      "rest",
+      "s",
+      "rest",
+      "talk to phoenix",
+      "say patience to phoenix",
+      "talk to phoenix"
+    ]
+  },
+  {
+    "after": 14,
+    "commands": [
+      "talk to pier warden",
+      "say truth to pier warden",
+      "take weathered coin",
+      "give weathered coin to pier warden",
+      "give weathered coin to pier warden"
+    ]
+  },
+  {
+    "after": 103,
+    "commands": [
+      "talk to mira",
+      "say forgive to mira"
+    ]
+  },
+  {
+    "after": 103,
+    "commands": [
+      "talk to mira",
+      "say you should have told me to mira"
     ]
   }
 ]

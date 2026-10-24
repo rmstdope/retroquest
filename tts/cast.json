@@ -9,6 +9,8 @@
     "blacksmith": { "voice": "d3b518ad71b64fa2a3197779f217a5f1", "style": "[gruff, hearty]" },
     "tilda": { "voice": "1c93f26e9a6e411ba05c263432e5d3ce", "style": "[chatty, lowering her voice]" },
     "merchant": { "voice": "c16c2964a0324371b06f9c5bbe5e8f0f", "style": "[warm, salesman-like]" },
+    "spice trader": { "voice": "c16c2964a0324371b06f9c5bbe5e8f0f", "style": "[warm, relieved, grateful]" },
+    "lead miner": { "voice": "880fb671ebcb446dbc0d5fc99baf909e", "style": "[old, rough, grateful]" },
     "mother": { "voice": "f7fe817b4b634c2cb763d240d95b1c2c", "style": "[tender, a little urgent, writing to her son]" },
     "father": { "voice": "12a41b18606d4aff82e253bc293ea5e9", "style": "[warm, quiet, hopeful]" },
     "elior": { "voice": "ad1e8d0c166e464789c6c9d1c003bedd", "style": "[young, breathless, remembering the night]" },

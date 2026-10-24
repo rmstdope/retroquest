@@ -46,6 +46,38 @@
    }
   ]
  },
+ "0018d31862a669": {
+  "file": "0018d31862a669.mp3",
+  "speaker": "pier warden",
+  "duration": 1.625,
+  "words": [
+   {
+    "word": "I",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "said",
+    "start": 0.24,
+    "end": 0.62
+   },
+   {
+    "word": "keep",
+    "start": 0.62,
+    "end": 0.94
+   },
+   {
+    "word": "it,",
+    "start": 0.94,
+    "end": 1.16
+   },
+   {
+    "word": "lad.",
+    "start": 1.26,
+    "end": 1.42
+   }
+  ]
+ },
  "00219f08434557": {
   "file": "00219f08434557.mp3",
   "speaker": "father",
@@ -912,6 +944,118 @@
     "word": "patience.",
     "start": 3.52,
     "end": 4.02
+   }
+  ]
+ },
+ "00ff0d24fee731": {
+  "file": "00ff0d24fee731.mp3",
+  "speaker": "lead miner",
+  "duration": 5.526,
+  "words": [
+   {
+    "word": "He",
+    "start": 0.0,
+    "end": 0.12
+   },
+   {
+    "word": "talked",
+    "start": 0.12,
+    "end": 0.4
+   },
+   {
+    "word": "to",
+    "start": 0.4,
+    "end": 0.56
+   },
+   {
+    "word": "me.",
+    "start": 0.56,
+    "end": 0.7
+   },
+   {
+    "word": "Asked",
+    "start": 1.14,
+    "end": 1.42
+   },
+   {
+    "word": "me",
+    "start": 1.42,
+    "end": 1.54
+   },
+   {
+    "word": "how",
+    "start": 1.54,
+    "end": 1.7
+   },
+   {
+    "word": "long",
+    "start": 1.7,
+    "end": 1.92
+   },
+   {
+    "word": "till",
+    "start": 1.92,
+    "end": 2.06
+   },
+   {
+    "word": "we're",
+    "start": 2.06,
+    "end": 2.24
+   },
+   {
+    "word": "up",
+    "start": 2.24,
+    "end": 2.34
+   },
+   {
+    "word": "top.",
+    "start": 2.34,
+    "end": 2.64
+   },
+   {
+    "word": "First",
+    "start": 3.08,
+    "end": 3.42
+   },
+   {
+    "word": "thing",
+    "start": 3.42,
+    "end": 3.58
+   },
+   {
+    "word": "he's",
+    "start": 3.58,
+    "end": 3.7
+   },
+   {
+    "word": "said",
+    "start": 3.7,
+    "end": 3.96
+   },
+   {
+    "word": "since",
+    "start": 3.96,
+    "end": 4.22
+   },
+   {
+    "word": "the",
+    "start": 4.22,
+    "end": 4.36
+   },
+   {
+    "word": "rock",
+    "start": 4.36,
+    "end": 4.58
+   },
+   {
+    "word": "came",
+    "start": 4.58,
+    "end": 4.78
+   },
+   {
+    "word": "down.",
+    "start": 4.78,
+    "end": 5.04
    }
   ]
  },
@@ -8512,6 +8656,28 @@
    }
   ]
  },
+ "0742829c09187d": {
+  "file": "0742829c09187d.mp3",
+  "speaker": "lead miner",
+  "duration": 1.254,
+  "words": [
+   {
+    "word": "Thank",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "you,",
+    "start": 0.3,
+    "end": 0.48
+   },
+   {
+    "word": "Elior.",
+    "start": 0.48,
+    "end": 1.254
+   }
+  ]
+ },
  "07c44b1b5e2d18": {
   "file": "07c44b1b5e2d18.mp3",
   "speaker": "narrator",
@@ -15169,6 +15335,33 @@
    }
   ]
  },
+ "0cd697ec6f4779": {
+  "file": "0cd697ec6f4779.mp3",
+  "speaker": "narrator",
+  "duration": 1.393,
+  "words": [
+   {
+    "word": "He",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "clears",
+    "start": 0.14,
+    "end": 0.54
+   },
+   {
+    "word": "his",
+    "start": 0.54,
+    "end": 0.84
+   },
+   {
+    "word": "throat.",
+    "start": 0.84,
+    "end": 1.1
+   }
+  ]
+ },
  "0cf7b3dfb6fccb": {
   "file": "0cf7b3dfb6fccb.mp3",
   "speaker": "narrator",
@@ -19993,6 +20186,93 @@
    }
   ]
  },
+ "115dda251a2a36": {
+  "file": "115dda251a2a36.mp3",
+  "speaker": "narrator",
+  "duration": 5.341,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "lead",
+    "start": 0.16,
+    "end": 0.42
+   },
+   {
+    "word": "miner",
+    "start": 0.42,
+    "end": 0.78
+   },
+   {
+    "word": "nods",
+    "start": 0.78,
+    "end": 1.38
+   },
+   {
+    "word": "toward",
+    "start": 1.38,
+    "end": 1.56
+   },
+   {
+    "word": "the",
+    "start": 1.56,
+    "end": 1.76
+   },
+   {
+    "word": "bucket,",
+    "start": 1.76,
+    "end": 2.08
+   },
+   {
+    "word": "where",
+    "start": 2.38,
+    "end": 2.8
+   },
+   {
+    "word": "Tobin",
+    "start": 2.8,
+    "end": 3.28
+   },
+   {
+    "word": "sits",
+    "start": 3.28,
+    "end": 3.64
+   },
+   {
+    "word": "with",
+    "start": 3.64,
+    "end": 3.84
+   },
+   {
+    "word": "the",
+    "start": 3.84,
+    "end": 4.0
+   },
+   {
+    "word": "charm",
+    "start": 4.0,
+    "end": 4.36
+   },
+   {
+    "word": "in",
+    "start": 4.36,
+    "end": 4.56
+   },
+   {
+    "word": "his",
+    "start": 4.56,
+    "end": 4.72
+   },
+   {
+    "word": "fist:",
+    "start": 4.72,
+    "end": 5.1
+   }
+  ]
+ },
  "115ff10da618b9": {
   "file": "115ff10da618b9.mp3",
   "speaker": "narrator",
@@ -22085,6 +22365,58 @@
     "word": "can.",
     "start": 9.78,
     "end": 10.06
+   }
+  ]
+ },
+ "1313b22225f261": {
+  "file": "1313b22225f261.mp3",
+  "speaker": "pier warden",
+  "duration": 3.251,
+  "words": [
+   {
+    "word": "Keep",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "it.",
+    "start": 0.3,
+    "end": 0.5
+   },
+   {
+    "word": "Toll",
+    "start": 0.5,
+    "end": 1.54
+   },
+   {
+    "word": "for",
+    "start": 1.54,
+    "end": 1.74
+   },
+   {
+    "word": "the",
+    "start": 1.74,
+    "end": 1.88
+   },
+   {
+    "word": "crossing,",
+    "start": 1.88,
+    "end": 2.32
+   },
+   {
+    "word": "my",
+    "start": 2.46,
+    "end": 2.58
+   },
+   {
+    "word": "da",
+    "start": 2.58,
+    "end": 2.74
+   },
+   {
+    "word": "said.",
+    "start": 2.74,
+    "end": 3.1
    }
   ]
  },
@@ -25384,6 +25716,78 @@
    }
   ]
  },
+ "15f71fd823b6ba": {
+  "file": "15f71fd823b6ba.mp3",
+  "speaker": "phoenix",
+  "duration": 4.04,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "gave",
+    "start": 0.16,
+    "end": 0.34
+   },
+   {
+    "word": "him",
+    "start": 0.34,
+    "end": 0.5
+   },
+   {
+    "word": "back",
+    "start": 0.5,
+    "end": 0.76
+   },
+   {
+    "word": "his",
+    "start": 0.76,
+    "end": 0.94
+   },
+   {
+    "word": "place.",
+    "start": 0.94,
+    "end": 1.34
+   },
+   {
+    "word": "He",
+    "start": 1.8,
+    "end": 2.2
+   },
+   {
+    "word": "could",
+    "start": 2.2,
+    "end": 2.36
+   },
+   {
+    "word": "not",
+    "start": 2.36,
+    "end": 2.56
+   },
+   {
+    "word": "do",
+    "start": 2.56,
+    "end": 2.78
+   },
+   {
+    "word": "that",
+    "start": 2.78,
+    "end": 2.98
+   },
+   {
+    "word": "for",
+    "start": 2.98,
+    "end": 3.12
+   },
+   {
+    "word": "himself.",
+    "start": 3.12,
+    "end": 3.44
+   }
+  ]
+ },
  "168df8909e1d64": {
   "file": "168df8909e1d64.mp3",
   "speaker": "tide-born guardian",
@@ -28622,6 +29026,88 @@
    }
   ]
  },
+ "19c7aebac93628": {
+  "file": "19c7aebac93628.mp3",
+  "speaker": "mira",
+  "duration": 5.666,
+  "words": [
+   {
+    "word": "Thank",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "you.",
+    "start": 0.34,
+    "end": 0.66
+   },
+   {
+    "word": "I",
+    "start": 0.92,
+    "end": 1.38
+   },
+   {
+    "word": "did",
+    "start": 1.38,
+    "end": 1.56
+   },
+   {
+    "word": "not",
+    "start": 1.56,
+    "end": 1.82
+   },
+   {
+    "word": "dare",
+    "start": 1.82,
+    "end": 2.18
+   },
+   {
+    "word": "ask",
+    "start": 2.18,
+    "end": 2.74
+   },
+   {
+    "word": "for",
+    "start": 2.74,
+    "end": 2.96
+   },
+   {
+    "word": "that.",
+    "start": 2.96,
+    "end": 3.32
+   },
+   {
+    "word": "I",
+    "start": 3.5,
+    "end": 3.98
+   },
+   {
+    "word": "will",
+    "start": 3.98,
+    "end": 4.16
+   },
+   {
+    "word": "try",
+    "start": 4.16,
+    "end": 4.46
+   },
+   {
+    "word": "to",
+    "start": 4.46,
+    "end": 4.68
+   },
+   {
+    "word": "deserve",
+    "start": 4.68,
+    "end": 5.06
+   },
+   {
+    "word": "it.",
+    "start": 5.06,
+    "end": 5.4
+   }
+  ]
+ },
  "19f8242d9872b6": {
   "file": "19f8242d9872b6.mp3",
   "speaker": "narrator",
@@ -29015,6 +29501,83 @@
     "word": "became.",
     "start": 8.94,
     "end": 9.32
+   }
+  ]
+ },
+ "1a9d57e98b4812": {
+  "file": "1a9d57e98b4812.mp3",
+  "speaker": "narrator",
+  "duration": 4.783,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "think",
+    "start": 0.34,
+    "end": 0.6
+   },
+   {
+    "word": "of",
+    "start": 0.6,
+    "end": 0.74
+   },
+   {
+    "word": "the",
+    "start": 0.74,
+    "end": 0.88
+   },
+   {
+    "word": "third",
+    "start": 0.88,
+    "end": 1.18
+   },
+   {
+    "word": "name",
+    "start": 1.18,
+    "end": 1.5
+   },
+   {
+    "word": "on",
+    "start": 1.5,
+    "end": 1.74
+   },
+   {
+    "word": "the",
+    "start": 1.74,
+    "end": 1.86
+   },
+   {
+    "word": "terraces,",
+    "start": 1.86,
+    "end": 2.48
+   },
+   {
+    "word": "level",
+    "start": 2.72,
+    "end": 3.26
+   },
+   {
+    "word": "with",
+    "start": 3.26,
+    "end": 3.54
+   },
+   {
+    "word": "the",
+    "start": 3.54,
+    "end": 3.7
+   },
+   {
+    "word": "others",
+    "start": 3.7,
+    "end": 4.04
+   },
+   {
+    "word": "again.",
+    "start": 4.04,
+    "end": 4.38
    }
   ]
  },
@@ -33584,6 +34147,148 @@
     "word": "taken.",
     "start": 5.34,
     "end": 5.68
+   }
+  ]
+ },
+ "1e35c127b2486e": {
+  "file": "1e35c127b2486e.mp3",
+  "speaker": "mira",
+  "duration": 9.381,
+  "words": [
+   {
+    "word": "I",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "should",
+    "start": 0.18,
+    "end": 0.5
+   },
+   {
+    "word": "have.",
+    "start": 0.5,
+    "end": 0.88
+   },
+   {
+    "word": "I",
+    "start": 1.14,
+    "end": 1.58
+   },
+   {
+    "word": "chose",
+    "start": 1.58,
+    "end": 2.0
+   },
+   {
+    "word": "the",
+    "start": 2.0,
+    "end": 2.26
+   },
+   {
+    "word": "seal",
+    "start": 2.26,
+    "end": 2.68
+   },
+   {
+    "word": "over",
+    "start": 2.68,
+    "end": 3.04
+   },
+   {
+    "word": "you",
+    "start": 3.04,
+    "end": 3.32
+   },
+   {
+    "word": "every",
+    "start": 3.32,
+    "end": 3.72
+   },
+   {
+    "word": "day,",
+    "start": 3.72,
+    "end": 4.08
+   },
+   {
+    "word": "and",
+    "start": 4.32,
+    "end": 4.64
+   },
+   {
+    "word": "I",
+    "start": 4.64,
+    "end": 4.78
+   },
+   {
+    "word": "would",
+    "start": 4.78,
+    "end": 4.96
+   },
+   {
+    "word": "choose",
+    "start": 4.96,
+    "end": 5.28
+   },
+   {
+    "word": "it",
+    "start": 5.28,
+    "end": 5.46
+   },
+   {
+    "word": "again.",
+    "start": 5.46,
+    "end": 5.86
+   },
+   {
+    "word": "But",
+    "start": 6.12,
+    "end": 6.56
+   },
+   {
+    "word": "I",
+    "start": 6.56,
+    "end": 6.7
+   },
+   {
+    "word": "am",
+    "start": 6.7,
+    "end": 6.86
+   },
+   {
+    "word": "sorry",
+    "start": 6.86,
+    "end": 7.32
+   },
+   {
+    "word": "for",
+    "start": 7.32,
+    "end": 7.58
+   },
+   {
+    "word": "every",
+    "start": 7.58,
+    "end": 7.9
+   },
+   {
+    "word": "one",
+    "start": 7.9,
+    "end": 8.12
+   },
+   {
+    "word": "of",
+    "start": 8.12,
+    "end": 8.3
+   },
+   {
+    "word": "those",
+    "start": 8.3,
+    "end": 8.58
+   },
+   {
+    "word": "days.",
+    "start": 8.58,
+    "end": 8.88
    }
   ]
  },

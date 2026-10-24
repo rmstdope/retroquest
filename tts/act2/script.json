@@ -1750,9 +1750,19 @@
     "text": "You secure one end of your Quality Rope to a sturdy tree and lower it into the ravine. Rappelling down carefully, you find the trapped merchant caravan at the bottom. The merchants are injured but alive, and their wagon is damaged but some goods are salvageable. Working together, you create a rope system that allows everyone to climb to safety. The grateful merchants gather their most valuable goods and follow you back to civilization. The caravan has been successfully rescued!"
   },
   {
-    "key": "08308c03d5c9ae",
+    "key": "1314343be14544",
     "speaker": "narrator",
-    "text": "The merchant caravan is in rough shape but the people are safe. The wagon's wheels are cracked and the canvas cover is torn, but the structure is sound. Several merchants tend to minor injuries while sorting through their goods. You see spice containers, bolts of fine cloth, and various trade items. The merchants look at you with deep gratitude—you clearly saved their lives."
+    "text": "You cast greater heal over the merchants. Golden light settles on split lips and wrenched ankles, and one by one they stop wincing."
+  },
+  {
+    "key": "1bcfacd8218213",
+    "speaker": "narrator",
+    "text": "A spice trader flexes a hand she has been cradling since the ravine."
+  },
+  {
+    "key": "0bf8caaa8940b6",
+    "speaker": "spice trader",
+    "text": "Three days down there and I'd stopped feeling these fingers. Tell Thorne he owes you twice now."
   },
   {
     "key": "175a9193a344d4",
@@ -1760,9 +1770,19 @@
     "text": "You've found them! I cannot express my gratitude enough for bringing my people back safely. As promised, here is your reward, but this is more than just payment. My wagon-master says a frightened man in Heavensforth paid him to carry these to Greendale, and begged him to put them in no hands but a knight's. I believe they contain evidence that could clear a good man's name. Perhaps you'll know what to do with them. Thorne hands you a stack of secret documents."
   },
   {
+    "key": "1e185af16e60d0",
+    "speaker": "caravan master thorne",
+    "text": "And my people tell me you didn't just haul them out of that hole — you mended them where they sat. One of the spice traders says her hand's never been better. I don't know how a man repays a debt twice over."
+  },
+  {
     "key": "02af69e62d34d5",
     "speaker": "narrator",
     "text": "You successfully located the missing caravan trapped in a deep ravine within the Enchanted Forest. Using your forest magic, you discovered their location, then employed quality rope to rappel down and rescue the trapped merchants. All merchants survived the ordeal, and Caravan Master Thorne rewarded you with secret documents containing evidence that can clear Sir Cedric's name of false accusations from a past court case."
+  },
+  {
+    "key": "08308c03d5c9ae",
+    "speaker": "narrator",
+    "text": "The merchant caravan is in rough shape but the people are safe. The wagon's wheels are cracked and the canvas cover is torn, but the structure is sound. Several merchants tend to minor injuries while sorting through their goods. You see spice containers, bolts of fine cloth, and various trade items. The merchants look at you with deep gratitude—you clearly saved their lives."
   },
   {
     "key": "03d006e80303c7",

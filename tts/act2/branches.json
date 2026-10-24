@@ -38,5 +38,17 @@
     "commands": [
       "give mountain flower to families"
     ]
+  },
+  {
+    "after": 102,
+    "commands": [
+      "cast greater heal on caravan",
+      "w",
+      "w",
+      "n",
+      "n",
+      "e",
+      "talk to caravan master thorne"
+    ]
   }
 ]

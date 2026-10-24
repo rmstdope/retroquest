@@ -20,6 +20,12 @@ function readJson<T>(path: string): T {
 const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
   2: [{ speaker: 'families', opening: "She's smiling. First time in a week." }],
   3: [
+    { speaker: 'phoenix', opening: 'You gave him back his place' },
+    { speaker: 'lead miner', opening: 'Thank you, Elior.' },
+    { speaker: 'mira', opening: 'Thank you. I did not dare ask for that' },
+    { speaker: 'mira', opening: 'I should have. I chose the seal' },
+    { speaker: 'pier warden', opening: 'Keep it. Toll for the crossing' },
+    { speaker: 'pier warden', opening: 'I said keep it, lad.' },
     { speaker: 'pier warden', opening: '… Aye. I think I knew it' },
     {
       speaker: 'ancient dragon',
@@ -28,6 +34,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'ancient dragon', opening: 'Go with my blessing, young one' },
   ],
   4: [
+    { speaker: 'king alden', opening: 'You came for me. Whoever you are' },
     { speaker: 'lysa', opening: 'We saw you at the workbench with us' },
     { speaker: 'malakar', opening: 'You saw. Then you know I was not lying' },
     { speaker: 'sir cedric', opening: 'If they can be let go, so can this' },

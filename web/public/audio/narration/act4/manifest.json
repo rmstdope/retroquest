@@ -13708,6 +13708,58 @@
    }
   ]
  },
+ "13686727aaffc1": {
+  "file": "13686727aaffc1.mp3",
+  "speaker": "king alden",
+  "duration": 4.087,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "came",
+    "start": 0.16,
+    "end": 0.44
+   },
+   {
+    "word": "for",
+    "start": 0.44,
+    "end": 0.68
+   },
+   {
+    "word": "me.",
+    "start": 0.68,
+    "end": 0.94
+   },
+   {
+    "word": "Whoever",
+    "start": 1.66,
+    "end": 2.18
+   },
+   {
+    "word": "you",
+    "start": 2.18,
+    "end": 2.4
+   },
+   {
+    "word": "are,",
+    "start": 2.4,
+    "end": 2.78
+   },
+   {
+    "word": "you",
+    "start": 3.2,
+    "end": 3.42
+   },
+   {
+    "word": "came.",
+    "start": 3.42,
+    "end": 3.68
+   }
+  ]
+ },
  "137b33754f775c": {
   "file": "137b33754f775c.mp3",
   "speaker": "malakar",
