@@ -73,7 +73,6 @@ export class RedemptionsLight extends Spell {
       'for the first time. Then they fade, at peace.\n' +
       'Sir Cedric watches the last of them go. Then he crosses the hall ' +
       'and offers the knight his hand.\n' +
-      '\n' +
       dialogue(
         'Sir Cedric',
         'If they can be let go, so can this. I forgive you. Get up.',

@@ -93,9 +93,7 @@ export class MemoryVault extends Room {
   /** Sorceress's Truth is shown to the Shadow: needs the orbs mended; once. */
   showMask(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
-      return clue(
-        'The Shadow cannot see the mask ' + 'through the broken memories.',
-      )
+      return clue('The Shadow cannot see the mask through the broken memories.')
     }
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN)) {
       return '[dim]The Shadow has seen the mask. It is enough.[/dim]'
