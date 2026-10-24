@@ -1,4 +1,4 @@
-import { Item, type GameState, event, remembered } from '@/engine'
+import { Item, type GameState, remembered } from '@/engine'
 import { FLAG_FOX_KIT_FREED, VIRTUE_MERCY } from '../Act1StoryFlags'
 import { SharpKnife } from './SharpKnife'
 import { refreshRoomDescription } from '../refreshRoomDescription'
@@ -73,11 +73,6 @@ export class Snare extends Item {
     gameState.addVirtue(VIRTUE_MERCY)
     refreshRoomDescription(gameState)
     return (
-      event(
-        `You use the [item_name]${other.name}[/item_name] on the ` +
-          `[item_name]${this.name}[/item_name].`,
-      ) +
-      '\n' +
       'You kneel and saw through the wire, slow and careful. The moment it ' +
       'gives, the fox kit twists free, stares at you for one heartbeat, and ' +
       'bolts into the undergrowth.\n' +

@@ -3,7 +3,6 @@ import {
   type Character,
   type GameState,
   type Item,
-  event,
   characterName,
 } from '@/engine'
 import { Fisherman } from '../characters/Fisherman'
@@ -22,41 +21,33 @@ export class HealSpell extends Spell {
 
   /** Cast the spell without a target (self-cast behavior). */
   override castSpell(_gameState: GameState): string {
-    return (
-      event('You cast [spell_name]heal[/spell_name] on yourself.') +
-      '\n' +
-      'A warm light envelops you, and you feel your wounds mending.'
-    )
+    return 'A warm light envelops you, and you feel your wounds mending.'
   }
 
   /** Heal cast on the snared kit: the wire comes first; an empty snare has nothing to mend. */
   override castOnItem(gameState: GameState, item: Item): string {
     if (!(item instanceof Snare)) return super.castOnItem(gameState, item)
     if (item.freed) {
-      return event(
+      return (
         'There is nothing here to mend. The kit took its leg with it, and ' +
-          'it was whole enough to run.',
+        'it was whole enough to run.'
       )
     }
-    return event(
+    return (
       'The warmth reaches the kit and it flinches from it. The wire is ' +
-        'still in the leg; mending flesh around iron would be cruelty, and ' +
-        'the kit knows it before you do.',
+      'still in the leg; mending flesh around iron would be cruelty, and ' +
+      'the kit knows it before you do.'
     )
   }
 
   /** Heal a target character; the fisherman's busted arm mends for real. */
   override castOnCharacter(gameState: GameState, character: Character): string {
     const name = character.name
-    const castMsg = event(
-      `You cast [spell_name]heal[/spell_name] on ${characterName(name)}.`,
-    )
     if (character instanceof Fisherman) {
-      return castMsg + '\n' + character.healArm(gameState)
+      return character.healArm(gameState)
     }
     return (
-      castMsg +
-      '\nA warm light envelops ' +
+      'A warm light envelops ' +
       `${characterName(name)} and the character seems a bit healthier.`
     )
   }

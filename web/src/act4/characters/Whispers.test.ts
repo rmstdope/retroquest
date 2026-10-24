@@ -100,7 +100,8 @@ describe('The whispers in the Tower of Shadows', () => {
     expect(executeCommands(game, ['talk to whispers'])).toContain(
       'There is no character named',
     )
-    expect(executeCommands(game, ['go up'])).toContain('Chamber of Whispers')
+    executeCommands(game, ['go up'])
+    expect(game.state.currentRoom.name).toBe('Chamber of Whispers')
   })
 
   it('know a name already said, and count nothing for it', () => {
@@ -164,7 +165,8 @@ describe('The whispers in the Tower of Shadows', () => {
     expect(
       game.state.allRooms.TowerOfShadows.getCharacterByName('whispers'),
     ).toBeNull()
-    expect(executeCommands(game, ['go up'])).toContain('Chamber of Whispers')
+    executeCommands(game, ['go up'])
+    expect(game.state.currentRoom.name).toBe('Chamber of Whispers')
   })
 
   it('does not take a dropped token back after a reload of a current save', () => {

@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, event, writing } from '@/engine'
+import { Item, type GameState, characterName, writing } from '@/engine'
 
 /** Elior's personal journal containing lore and story hints. */
 export class EliorsJournal extends Item {
@@ -37,11 +37,7 @@ export class EliorsJournal extends Item {
           "I just can't remember from where. What did it mean?",
       ) +
       '\n'
-    const eventMsg =
-      event(
-        'You open your [item_name]journal[/item_name] and begin to read the latest entry.',
-      ) + '\n'
     gameState.setStoryFlag('journal_read_prologue_entry', true)
-    return eventMsg + entry
+    return entry
   }
 }

@@ -101,7 +101,7 @@ describe('Shopkeeper dialogue markup', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new Coin())
     const answer = game.commandParser.parse('buy rope from shopkeeper')
-    expect(answer).toContain('You bought a')
+    expect(answer).toContain('is yours for')
     expectQuotesInsideDialogue(answer)
   })
 
@@ -166,7 +166,7 @@ describe('Shopkeeper and the priest matches', () => {
     const answer = game.commandParser.parse('buy matches from shopkeeper')
 
     expect(answer).toContain('priest')
-    expect(answer).not.toContain('You bought')
+    expect(answer).not.toContain('is yours for')
     expectDialogueSpeaker(answer, 'shopkeeper')
   })
 })
@@ -210,7 +210,7 @@ describe('Hemlock and his missing cat', () => {
     game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
     game.state.addItemToInventory(new Coin())
     expect(game.commandParser.parse('buy rope from shopkeeper')).not.toContain(
-      'You bought',
+      'is yours for',
     )
     expect(coins(game)).toBe(1)
   })
@@ -235,7 +235,7 @@ describe('Hemlock and his missing cat', () => {
     )
     expect(coins(game)).toBe(1)
     expect(game.commandParser.parse('buy rope from shopkeeper')).toContain(
-      'You bought',
+      'is yours for',
     )
   })
 
@@ -304,7 +304,7 @@ describe('Shopkeeper restored from a save made before Patches', () => {
       'You found her',
     )
     expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
-      'You bought',
+      'is yours for',
     )
   })
 })

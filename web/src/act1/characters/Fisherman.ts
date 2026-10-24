@@ -2,9 +2,9 @@ import {
   Character,
   type GameState,
   type Item,
-  event,
   characterName,
   speech,
+  attributeSpeech,
 } from '@/engine'
 import { Fish } from '../items/Fish'
 import { FadedPhotograph } from '../items/FadedPhotograph'
@@ -63,6 +63,11 @@ export class Fisherman extends Character {
 
   /** Handle talking to the fisherman and teach fishing basics if eligible. */
   override talkTo(gameState: GameState): string {
+    return attributeSpeech(this.name, this.talkAnswer(gameState))
+  }
+
+  /** What the fisherman answers when spoken to, before the speaker is labelled. */
+  private talkAnswer(gameState: GameState): string {
     // Set the story flag that the player has talked to the fisherman
     gameState.setStoryFlag('talked_to_fisherman', true)
     // Check if player has a fishing rod in the inventory
@@ -91,8 +96,7 @@ export class Fisherman extends Character {
       }
     }
 
-    const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
-    return eventMsg + '\n' + this.dialogueStates[this.currentDialogueKey]
+    return this.dialogueStates[this.currentDialogueKey]
   }
 
   /**
@@ -141,13 +145,7 @@ export class Fisherman extends Character {
       // Teach spell
       gameState.learnSpell(new PurifySpell())
       this.currentDialogueKey = 'taught_spells'
-      const eventMsg = event(
-        `You give the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName('Fisherman')}.`,
-      )
       return (
-        eventMsg +
-        '\n' +
         this.dialogueStates.received_fish_thanks +
         ' ' +
         speech(
@@ -161,29 +159,17 @@ export class Fisherman extends Character {
         'You have learned [spell_name]purify[/spell_name]!'
       )
     } else if (item instanceof Fish && this.receivedFish) {
-      const eventMsg = event(
-        `You offer the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName('Fisherman')}.`,
-      )
       return (
-        eventMsg +
-        '\n' +
         `The ${characterName('fisherman')} smiles. ` +
         speech("Thank you, but I've already eaten. Save it for yourself!")
       )
     }
 
     if (item instanceof FadedPhotograph) {
-      return this.showPhotograph(gameState, item)
+      return this.showPhotograph(gameState)
     }
 
-    const eventMsg = event(
-      `You offer the [item_name]${item.name}[/item_name] to the ` +
-        `${characterName('Fisherman')}.`,
-    )
     return (
-      eventMsg +
-      '\n' +
       `The ${characterName('fisherman')} looks at the ` +
       '[item_name]' +
       item.name +
@@ -196,15 +182,9 @@ export class Fisherman extends Character {
    * message has been read he tells of the tin she hid under the smooth stone.
    * The photograph stays with Elior.
    */
-  private showPhotograph(gameState: GameState, item: Item): string {
-    const eventMsg = event(
-      `You show the [item_name]${item.name}[/item_name] to the ` +
-        `${characterName(this.name)}.`,
-    )
+  private showPhotograph(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_READ_PHOTO_MESSAGE)) {
       return (
-        eventMsg +
-        '\n' +
         `The ${characterName('fisherman')} squints at the photograph, ` +
         'and his face softens. ' +
         speech(
@@ -217,16 +197,12 @@ export class Fisherman extends Character {
     }
     if (gameState.getStoryFlag(FLAG_FOUND_MOTHERS_LETTER)) {
       return (
-        eventMsg +
-        '\n' +
         `The ${characterName('fisherman')} nods slowly. ` +
         speech("She'd be proud of you, lad. Keep her words close.")
       )
     }
     if (gameState.getStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN)) {
       return (
-        eventMsg +
-        '\n' +
         `The ${characterName('fisherman')} points to the water's edge. ` +
         speech(
           'Under the [item_name]smooth stone[/item_name], lad, ' +
@@ -236,8 +212,6 @@ export class Fisherman extends Character {
     }
     gameState.setStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN, true)
     return (
-      eventMsg +
-      '\n' +
       `The ${characterName('fisherman')} turns the photograph over and reads ` +
       'the back. For a long while he says nothing. ' +
       speech(

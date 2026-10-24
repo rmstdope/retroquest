@@ -8,7 +8,7 @@ describe('PrayerBook', () => {
     const game = new Game([new Act1()])
     const text = new PrayerBook().read(game.state)
     expect(findMarkupProblems(text)).toEqual([])
-    expect(text).toContain('[event]You read the [item_name]')
+    expect(text).not.toContain('[event]You read the [item_name]')
   })
 
   it('shows the passage as unquoted writing', () => {

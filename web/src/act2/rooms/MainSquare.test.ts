@@ -31,8 +31,10 @@ describe('MainSquare', () => {
     const game = new Game([new Act2()])
     expect(game.loadSaveData(data)).toContain('loaded successfully')
     game.state.currentRoom = game.state.allRooms.MainSquare
-    expect(game.move('north')).toContain('You move north')
+    game.move('north')
+    expect(game.state.currentRoom).not.toBe(game.state.allRooms.MainSquare)
     game.state.currentRoom = game.state.allRooms.MainSquare
-    expect(game.move('east')).toContain('You move east')
+    game.move('east')
+    expect(game.state.currentRoom).not.toBe(game.state.allRooms.MainSquare)
   })
 })

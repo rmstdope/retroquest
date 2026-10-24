@@ -1,4 +1,4 @@
-import { Room, event } from '@/engine'
+import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { BrokenShovel } from '../items/BrokenShovel'
 import { MysteriousBox } from '../items/MysteriousBox'
@@ -151,19 +151,13 @@ export class AbandonedShed extends Room {
   override light(_gameState: GameState): string {
     if (this.locked) {
       return (
-        event('You cast a [spell_name]light[/spell_name] spell.') +
-        '\n' +
         'The glow plays over the weathered boards and the locked ' +
         '[item_name]Shed Door[/item_name]. Whatever lies inside stays dark.'
       )
     }
     this.lit = true
     return (
-      event(
-        'You cast a [spell_name]light[/spell_name] spell, and a soft glow ' +
-          'fills the shed.',
-      ) +
-      '\n' +
+      'A soft glow fills the shed.\n' +
       'Warm light spills over the old workbench and the dusty shelves above ' +
       'it. Whoever worked here kept their tools in careful rows.'
     )

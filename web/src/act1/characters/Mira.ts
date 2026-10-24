@@ -2,9 +2,9 @@ import {
   Character,
   type GameState,
   type Item,
-  event,
   characterName,
   speech,
+  attributeSpeech,
 } from '@/engine'
 import { RareFlower } from '../items/RareFlower'
 import { AncientAmulet } from '../items/AncientAmulet'
@@ -81,8 +81,7 @@ export class Mira extends Character {
           ) +
           '\nShe presents you with the [item_name]Ancient Amulet[/item_name]. ' +
           speech('May this guide and protect you.') +
-          ' ' +
-          event('([item_name]Ancient Amulet[/item_name] added to inventory!)') +
+          '\nYou now carry the [item_name]Ancient Amulet[/item_name].' +
           '\nThen, more quietly: ' +
           speech(
             'I knew your parents better than I have said. ' +
@@ -197,12 +196,10 @@ export class Mira extends Character {
         ) +
         '\nShe then guides you through ancient words and gestures, ' +
         'awakening your innate abilities. ' +
-        event(
-          'You feel a new understanding ' +
-            'dawn as she imparts the knowledge of [spell_name]heal[/spell_name] to mend, ' +
-            '[spell_name]unlock[/spell_name] to reveal, and [spell_name]light[/spell_name] to ' +
-            'illuminate the path.',
-        ) +
+        'You feel a new understanding ' +
+        'dawn as she imparts the knowledge of [spell_name]heal[/spell_name] to mend, ' +
+        '[spell_name]unlock[/spell_name] to reveal, and [spell_name]light[/spell_name] to ' +
+        'illuminate the path.' +
         '\n' +
         speech('The spark was always within you,') +
         ` ${characterName('Mira')} explains, ` +
@@ -231,14 +228,18 @@ export class Mira extends Character {
    * remark about the forest, then goes on as it would have.
    */
   override talkTo(gameState: GameState): string {
+    return attributeSpeech(this.name, this.talkAnswer(gameState))
+  }
+
+  /** What Mira answers when spoken to, before the speaker is labelled. */
+  private talkAnswer(gameState: GameState): string {
     const answer = this.talkByProgress(gameState)
     const remark = this.forestRemark(gameState)
     if (!remark) return answer
-    const opening = event(`You speak with ${characterName('Mira')}.`) + '\n'
-    return answer.replace(opening, opening + remark)
+    return remark + answer
   }
 
-  /** Her one-time remark, placed after the event line, once the fox kit is freed; else ''. */
+  /** Her one-time remark, placed before her answer, once the fox kit is freed; else ''. */
   private forestRemark(gameState: GameState): string {
     if (
       !gameState.getStoryFlag(FLAG_FOX_KIT_FREED) ||
@@ -258,10 +259,9 @@ export class Mira extends Character {
 
   /** Her dialogue for the stage Elior has reached in the act. */
   private talkByProgress(gameState: GameState): string {
-    const eventMsg = event(`You speak with ${characterName('Mira')}.`)
     // 1. Give the post_amulet message if amulet is in inventory
     if (gameState.hasItem('Ancient Amulet')) {
-      return eventMsg + '\n' + this.dialogue('post_amulet')
+      return this.dialogue('post_amulet')
     }
 
     // 2. Give the initial message if the story flag 'magic_fully_unlocked' is not set
@@ -299,9 +299,9 @@ export class Mira extends Character {
               'attention to the well and the glade; they may hold secrets vital to ' +
               'your quest.',
           )
-        return eventMsg + '\n' + this.dialogue('initial') + extra
+        return this.dialogue('initial') + extra
       }
-      return eventMsg + '\n' + this.dialogue('initial')
+      return this.dialogue('initial')
     }
 
     // 3. If 'magic_fully_unlocked' is set (flower given) and player doesn't have amulet:
@@ -314,9 +314,9 @@ export class Mira extends Character {
       const standAmulet = gameState.currentRoom.removeItem('ancient amulet')
       gameState.addItemToInventory(standAmulet ?? new AncientAmulet())
       this.amuletGiven = true
-      return eventMsg + '\n' + this.dialogue('quest_complete_amulet_given')
+      return this.dialogue('quest_complete_amulet_given')
     }
     // Conditions not fulfilled: give quest_conditions_not_met message
-    return eventMsg + '\n' + this.dialogue('quest_conditions_not_met')
+    return this.dialogue('quest_conditions_not_met')
   }
 }

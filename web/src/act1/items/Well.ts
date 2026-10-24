@@ -1,4 +1,4 @@
-import { Item, type GameState, clue, event } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { FLAG_WELL_EXAMINED } from '../Act1StoryFlags'
 import { refreshRoomDescription } from '../refreshRoomDescription'
 import { Bucket } from './Bucket'
@@ -74,41 +74,28 @@ export class Well extends Item {
   search(_gameState: GameState): string {
     if (this.isPurified) {
       if (this.containsRing) {
-        return event(
-          'You peer into the crystal clear water. A [item_name]shiny ' +
-            'ring[/item_name] glints at the bottom, tantalizingly out of ' +
-            'reach by hand.',
+        return (
+          'A [item_name]shiny ring[/item_name] glints at the bottom, ' +
+          'tantalizingly out of reach by hand.'
         )
       }
-      return event(
-        'You peer into the crystal clear water. The bottom is visible and ' +
-          'empty.',
-      )
+      return 'The bottom is visible and empty.'
     }
     if (this.containsRing) {
-      return (
-        event('You peer into the murky depths.') +
-        '\n' +
-        clue(
-          "It's hard to see clearly, but you think you catch a glimpse of " +
-            "something shiny. It's far too deep to reach.",
-        )
+      return clue(
+        "It's hard to see clearly, but you think you catch a glimpse of " +
+          "something shiny. It's far too deep to reach.",
       )
     }
-    return (
-      "[failure]You peer into the murky depths. It's too dark and unclear to see " +
-      'anything of interest.[/failure]'
-    )
+    return clue("It's too dark and unclear to see anything of interest.")
   }
 
   /** Purify the well if examined, update state, and reveal ring if present. */
   purify(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_WELL_EXAMINED)) {
-      const name = this.name
-      return (
-        '[failure]You hesitate. Why would you cast [spell_name]purify[/spell_name] on the [item_name]' +
-        name +
-        '[/item_name]? Perhaps you should examine it first.[/failure]'
+      return clue(
+        'You hesitate. Why cast that on the [item_name]well[/item_name] ' +
+          'before you have even looked at it?',
       )
     }
     if (this.isPurified) {
@@ -123,23 +110,17 @@ export class Well extends Item {
     this.isPurified = true
     refreshRoomDescription(gameState)
     if (this.containsRing) {
-      const name = this.name
-      return event(
-        'You cast [spell_name]purify[/spell_name] on the [item_name]' +
-          name +
-          '[/item_name]. The murky water shimmers and clears! You can now ' +
-          "see a [item_name]shiny ring[/item_name] at the bottom, but it's " +
-          'still too deep to reach by hand.' +
-          FIELD_HINT,
+      return (
+        'The murky water shimmers and clears! You can now ' +
+        "see a [item_name]shiny ring[/item_name] at the bottom, but it's " +
+        'still too deep to reach by hand.' +
+        FIELD_HINT
       )
     }
-    const name = this.name
-    return event(
-      'You cast [spell_name]purify[/spell_name] on the [item_name]' +
-        name +
-        '[/item_name]. The murky water shimmers and clears! The bottom is ' +
-        "visible, but there's nothing of interest." +
-        FIELD_HINT,
+    return (
+      'The murky water shimmers and clears! The bottom is ' +
+      "visible, but there's nothing of interest." +
+      FIELD_HINT
     )
   }
 }

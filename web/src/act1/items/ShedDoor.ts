@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { AbandonedShed } from '../rooms/AbandonedShed'
 import { Key } from './Key'
 
@@ -35,14 +35,11 @@ export class ShedDoor extends Item {
         const room = gameState.currentRoom
         if (room instanceof AbandonedShed) room.unlock()
         return (
-          event(
-            'The [item_name]' +
-              keyName +
-              '[/item_name] turns in the lock! The [item_name]' +
-              doorName +
-              '[/item_name] creaks open.',
-          ) +
-          '\n' +
+          'The [item_name]' +
+          keyName +
+          '[/item_name] turns in the lock! The [item_name]' +
+          doorName +
+          '[/item_name] creaks open.\n' +
           'In the gloom you make out an old workbench and a few interesting ' +
           'things. ' +
           'From the shadows comes a frightened mew, and a small patchwork ' +

@@ -1,4 +1,4 @@
-import { Item, type GameState, event, writing } from '@/engine'
+import { Item, type GameState, writing, clue } from '@/engine'
 import { GameMap } from './GameMap'
 
 /** The words Elior's father left in the box for him. */
@@ -32,11 +32,7 @@ export class MysteriousBox extends Item {
       this.description =
         `A small, ornate wooden ${nameHtml} covered in ` +
         'strange runes. The lock has clicked open.'
-      const eventMsg = event(`You try to unlock the ${nameHtml}.`) + '\n'
-      return (
-        eventMsg +
-        `A soft click is heard from the ${nameHtml} as the lock springs open!`
-      )
+      return `A soft click is heard from the ${nameHtml} as the lock springs open!`
     }
     return `[failure]The ${nameHtml} is already unlocked.[/failure]`
   }
@@ -48,10 +44,10 @@ export class MysteriousBox extends Item {
   override open(gameState: GameState): string {
     const nameHtml = `[item_name]${this.name}[/item_name]`
     if (this.locked) {
-      return (
-        `[failure]The ${nameHtml} is locked, and there is no keyhole. The ` +
-        'runes around the lid are the only way in, and they do not answer ' +
-        'to hands.[/failure]'
+      return clue(
+        `The ${nameHtml} is locked, and there is no keyhole. The ` +
+          'runes around the lid are the only way in, and they do not answer ' +
+          'to hands.',
       )
     }
     if (this.containsMap) {
@@ -62,8 +58,6 @@ export class MysteriousBox extends Item {
         'An open, ornate wooden box. Only a folded note remains inside, in ' +
         `your father's careful, slanting hand:\n${note}`
       return (
-        event(`You open the ${nameHtml}.`) +
-        '\n' +
         'Inside, you find a [item_name]map[/item_name]! You take the ' +
         '[item_name]map[/item_name] and place it in your inventory.\n' +
         'Beneath it lies a folded note. Something in you knows the careful, ' +
@@ -73,6 +67,6 @@ export class MysteriousBox extends Item {
         'sealed so that only your magic could ever open it.'
       )
     }
-    return event(`The ${nameHtml} is now empty.`)
+    return `The ${nameHtml} is now empty.`
   }
 }

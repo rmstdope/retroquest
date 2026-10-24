@@ -2,10 +2,10 @@ import {
   Character,
   type GameState,
   type Item,
-  event,
   characterName,
   remembered,
   speech,
+  attributeSpeech,
 } from '@/engine'
 import { ShinyRing } from '../items/ShinyRing'
 import { WanderingBoots } from '../items/WanderingBoots'
@@ -84,11 +84,8 @@ export class Merchant extends Character {
       gameState.setStoryFlag(FLAG_MERCHANT_NEWS_HEARD, true)
     }
     // Use bootsGiven flag instead of checking inventory
-    const eventMsg = event(`You speak with the ${characterName(this.name)}.`)
     if (!this.bootsGiven) {
       return (
-        eventMsg +
-        '\n' +
         `The ${characterName(this.name)} offers a friendly nod. ` +
         speech(
           news +
@@ -103,8 +100,6 @@ export class Merchant extends Character {
       )
     }
     return (
-      eventMsg +
-      '\n' +
       `The ${characterName(this.name)} grins. ` +
       speech(
         news +
@@ -130,11 +125,6 @@ export class Merchant extends Character {
     this.fed = true
     gameState.addVirtue(VIRTUE_SELFLESS)
     return (
-      event(
-        `You give the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName(this.name)}.`,
-      ) +
-      '\n' +
       `The ${characterName(this.name)} unwraps the cloth and simply holds the ` +
       'loaf for a moment. ' +
       speech(
@@ -152,14 +142,14 @@ export class Merchant extends Character {
    * horseshoe sets FLAG_KEPT_MOTHERS_RING. Anything else is declined.
    */
   override giveItem(gameState: GameState, item: Item): string {
+    return attributeSpeech(this.name, this.giveAnswer(gameState, item))
+  }
+
+  /** What the merchant answers to a gift, before the speaker is labelled. */
+  private giveAnswer(gameState: GameState, item: Item): string {
     const tradeGoods = item instanceof ShinyRing || item instanceof Horseshoe
     if (tradeGoods && this.bootsGiven) {
       return (
-        event(
-          `You offer the [item_name]${item.name}[/item_name] to the ` +
-            `${characterName(this.name)}.`,
-        ) +
-        '\n' +
         `The ${characterName(this.name)} waves it away. ` +
         speech(
           "You've had your boots, friend. Keep that; " +
@@ -170,21 +160,14 @@ export class Merchant extends Character {
     if (item instanceof FreshBread && !this.fed) {
       return this.takeFreshBread(gameState, item)
     }
-    if (isRoadFood(item)) return this.refuseFood(item)
+    if (isRoadFood(item)) return this.refuseFood()
     if (item instanceof Horseshoe) return this.tradeHorseshoe(gameState, item)
     if (item instanceof ShinyRing) {
       gameState.removeItemFromInventory(item.name)
       const boots = new WanderingBoots()
       gameState.addItemToInventory(boots)
       this.bootsGiven = true // Set flag when boots are given
-      const eventMsg = event(
-        'You give the [item_name]' +
-          item.name +
-          `[/item_name] to the ${characterName(this.name)}.`,
-      )
       return (
-        eventMsg +
-        '\n' +
         `The ${characterName(this.name)}'s eyes widen as you hand over the [item_name]` +
         item.name +
         '[/item_name]. ' +
@@ -194,17 +177,10 @@ export class Merchant extends Character {
             "[/item_name]. They'll serve you well on the road to Greendale.",
         ) +
         '\n\n' +
-        event(`You receive a pair of [item_name]${boots.name}[/item_name]!`)
+        `You receive a pair of [item_name]${boots.name}[/item_name]!`
       )
     }
-    const eventMsg = event(
-      'You offer the [item_name]' +
-        item.name +
-        `[/item_name] to the ${characterName(this.name)}.`,
-    )
     return (
-      eventMsg +
-      '\n' +
       `The ${characterName(this.name)} examines the [item_name]` +
       item.name +
       '[/item_name] but shakes his head. ' +
@@ -213,17 +189,10 @@ export class Merchant extends Character {
   }
 
   /** Kindly refuse food Elior needs for the road; it stays in his pack. */
-  private refuseFood(item: Item): string {
-    return (
-      event(
-        `You offer the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName(this.name)}.`,
-      ) +
-      '\n' +
-      speech(
-        "That's kind, friend, but you'll want every bite of that where " +
-          "you're going. Keep it.",
-      )
+  private refuseFood(): string {
+    return speech(
+      "That's kind, friend, but you'll want every bite of that where " +
+        "you're going. Keep it.",
     )
   }
 
@@ -235,11 +204,6 @@ export class Merchant extends Character {
     this.bootsGiven = true
     gameState.setStoryFlag(FLAG_KEPT_MOTHERS_RING, true)
     return (
-      event(
-        `You give the [item_name]${item.name}[/item_name] to the ` +
-          `${characterName(this.name)}.`,
-      ) +
-      '\n' +
       `The ${characterName(this.name)} raps the [item_name]${item.name}[/item_name] ` +
       'with a knuckle and grins. ' +
       speech(
@@ -248,7 +212,7 @@ export class Merchant extends Character {
           `Here, the [item_name]${boots.name}[/item_name] are yours.`,
       ) +
       '\n\n' +
-      event(`You receive a pair of [item_name]${boots.name}[/item_name]!`)
+      `You receive a pair of [item_name]${boots.name}[/item_name]!`
     )
   }
 }

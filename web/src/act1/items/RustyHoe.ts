@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { Coin } from './Coin'
 import { FLAG_RUSTY_HOE_FIRST_COIN_FOUND } from '../Act1StoryFlags'
 
@@ -21,11 +21,10 @@ export class RustyHoe extends Item {
       if (!gameState.getStoryFlag(FLAG_RUSTY_HOE_FIRST_COIN_FOUND)) {
         gameState.setStoryFlag(FLAG_RUSTY_HOE_FIRST_COIN_FOUND, true)
         gameState.addItemToInventory(new Coin())
-        return event(
-          'You till the soil with the [item_name]rusty hoe[/item_name]. ' +
-            'The ground is tough, and you unearth a small, tarnished ' +
-            '[item_name]coin[/item_name]! ' +
-            'You quickly pocket it.',
+        return (
+          'The ground is tough, and you unearth a small, tarnished ' +
+          '[item_name]coin[/item_name]! ' +
+          'You quickly pocket it.'
         )
       }
       return (
@@ -33,9 +32,9 @@ export class RustyHoe extends Item {
         "seems you've already found what was hidden here.[/failure]"
       )
     }
-    return (
-      "[failure]You swing the [item_name]rusty hoe[/item_name], but it doesn't seem to " +
-      "have much effect here. It's a sturdy (but rusty) tool, though.[/failure]"
+    return clue(
+      "You swing the [item_name]rusty hoe[/item_name], but it doesn't seem to " +
+        "have much effect here. It's a sturdy (but rusty) tool, though.",
     )
   }
 }

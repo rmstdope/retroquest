@@ -2,9 +2,10 @@ import {
   Character,
   type GameState,
   type Item,
-  event,
   characterName,
   speech,
+  clue,
+  attributeSpeech,
 } from '@/engine'
 import { Rope } from '../items/Rope'
 import { Apple } from '../items/Apple'
@@ -134,8 +135,6 @@ export class Shopkeeper extends Character {
       ? "Here, the reward I promised. It isn't much, but it's honestly given."
       : "You'll always be welcome in this store, lad."
     return (
-      event(`You set ${characterName('Patches')} down on the counter.`) +
-      '\n' +
       `${characterName('Patches')} butts her head against the ` +
       `${characterName('Shopkeeper')}'s hand, and his face lights up. ` +
       speech(
@@ -143,7 +142,7 @@ export class Shopkeeper extends Character {
           `Old ${characterName('Hemlock')} won't forget this. ` +
           `${reward} And the store's open again, so have a look around.`,
       ) +
-      (paid ? '\n' + event('You receive a [item_name]coin[/item_name].') : '') +
+      (paid ? '\n' + 'You receive a [item_name]coin[/item_name].' : '') +
       '\n' +
       `${characterName('Patches')} curls up beside the till and begins to purr.`
     )
@@ -183,10 +182,8 @@ export class Shopkeeper extends Character {
       ) +
       (gift
         ? '\n' +
-          event(
-            'You receive a [item_name]rope[/item_name] and an ' +
-              '[item_name]apple[/item_name].',
-          )
+          ('You receive a [item_name]rope[/item_name] and an ' +
+            '[item_name]apple[/item_name].')
         : '')
     )
   }
@@ -217,6 +214,11 @@ export class Shopkeeper extends Character {
    * her; once open, hand over the priest's matches or list the wares.
    */
   override talkTo(gameState: GameState): string {
+    return attributeSpeech(this.name, this.talkAnswer(gameState))
+  }
+
+  /** What the shopkeeper answers when spoken to, before the speaker is labelled. */
+  private talkAnswer(gameState: GameState): string {
     const shut = this.whileShut(gameState)
     if (shut) return shut
 
@@ -242,7 +244,7 @@ export class Shopkeeper extends Character {
             'Here, take these for him, on the house. Tell him I said hello!',
         ) +
         '\n\n' +
-        event('You receive a box of [item_name]matches[/item_name].')
+        'You receive a box of [item_name]matches[/item_name].'
       )
     }
 
@@ -300,31 +302,24 @@ export class Shopkeeper extends Character {
    * and never sold.
    */
   override buyItem(gameState: GameState, itemName: string): string {
+    return attributeSpeech(this.name, this.buyAnswer(gameState, itemName))
+  }
+
+  /** What the shopkeeper answers to a purchase, before the speaker is labelled. */
+  private buyAnswer(gameState: GameState, itemName: string): string {
     const shut = this.whileShut(gameState)
     if (shut) return shut
     const itemNameToBuy = itemName.toLowerCase()
-    const eventMsg = event(
-      `You try to buy the [item_name]${itemNameToBuy}[/item_name] from the ` +
-        `${characterName(this.name)}.`,
-    )
     if (gameState.currentRoom.getItemByName(itemNameToBuy) instanceof Matches) {
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `Those [item_name]matches[/item_name] are the ${characterName('priest')}'s. ` +
-            "He gets them on the house whenever he asks, so they're not for sale.",
-        )
+      return speech(
+        `Those [item_name]matches[/item_name] are the ${characterName('priest')}'s. ` +
+          "He gets them on the house whenever he asks, so they're not for sale.",
       )
     }
     if (!(itemNameToBuy in this.wares)) {
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          "Sorry, I don't have any '[item_name]" +
-            `${itemNameToBuy}[/item_name]' for sale.`,
-        )
+      return speech(
+        "Sorry, I don't have any '[item_name]" +
+          `${itemNameToBuy}[/item_name]' for sale.`,
       )
     }
 
@@ -340,13 +335,7 @@ export class Shopkeeper extends Character {
     }
 
     if (coinCount < price) {
-      return (
-        eventMsg +
-        '\n' +
-        "[failure]You don't have enough [item_name]coins[/item_name] for " +
-        `the [item_name]${itemNameToBuy}[/item_name]. It costs ${price} ` +
-        '[item_name]coin(s)[/item_name].[/failure]'
-      )
+      return clue("You don't have enough coins for that.")
     }
 
     // Remove coins from inventory
@@ -381,12 +370,9 @@ export class Shopkeeper extends Character {
     // The store has infinite stock; the player buys one instance.
 
     return (
-      '\n' +
-      event(
-        `You bought a [item_name]${newItem.name}[/item_name] for ${price} ` +
-          '[item_name]coin(s)[/item_name] and got an extra ' +
-          '[item_name]apple[/item_name] as a bonus!',
-      )
+      `The [item_name]${newItem.name}[/item_name] is yours for ${price} ` +
+      '[item_name]coin(s)[/item_name], with an extra ' +
+      '[item_name]apple[/item_name] as a bonus!'
     )
   }
 }

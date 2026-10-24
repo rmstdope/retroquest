@@ -410,11 +410,7 @@ Welcome to
     next.onEnter(this.state)
     this.state.markVisited(next)
     this.hasChangedRoom = true
-    return (
-      departure +
-      `[event]You move ${direction} to [room_name]${next.name}[/room_name].[/event]\n\n` +
-      next.enterText(this.state)
-    )
+    return departure + next.enterText(this.state)
   }
 
   help(): string {
@@ -465,7 +461,7 @@ Welcome to
 
   look(): string {
     this.hasChangedRoom = true
-    return '[event]You take a look at your surroundings.[/event]\n\n'
+    return ''
   }
 
   examine(target: string): string {
@@ -526,7 +522,7 @@ Welcome to
       return `[failure]You don't have a '${itemName}' to drop.[/failure]`
     this.state.inventory.splice(this.state.inventory.indexOf(item), 1)
     this.state.currentRoom.items.push(item)
-    return `You drop the [item_name]${item.name}[/item_name].`
+    return `[event]You drop the [item_name]${item.name}[/item_name].[/event]`
   }
 
   /** Take every item with the name from the room; some may refuse. */
@@ -703,7 +699,7 @@ Welcome to
   learn(spell: Spell): string {
     if (this.state.knownSpells.includes(spell)) return ''
     this.state.knownSpells.push(spell)
-    return `[event]You have learned the [spell_name]${spell.name}[/spell_name] spell![/event]`
+    return `You have learned the [spell_name]${spell.name}[/spell_name] spell!`
   }
 
   spells(): string {

@@ -130,7 +130,7 @@ describe('Mira handing over the Ancient Amulet', () => {
 
     expect(response).toContain('Then, more quietly:')
     expect(response).toContain(hint)
-    const gift = response.indexOf('added to inventory!')
+    const gift = response.indexOf('You now carry the')
     expect(gift).toBeGreaterThan(-1)
     expect(response.indexOf('Then, more quietly:')).toBeLessThan(
       response.indexOf(hint),

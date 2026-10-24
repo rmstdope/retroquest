@@ -1,4 +1,4 @@
-import { Item, type GameState, event, characterName, speech } from '@/engine'
+import { Item, type GameState, characterName, speech } from '@/engine'
 
 /** Sword item representing a combat/heroism symbol with equip and examine actions. */
 export class Sword extends Item {
@@ -30,24 +30,11 @@ export class Sword extends Item {
 
   /** Examine the sword for its combat readiness. */
   override use(_gameState: GameState): string {
-    return event(
-      'You examine the [item_name]sword[/item_name]. ' +
-        'It feels perfectly balanced and ready for combat.',
-    )
+    return 'It feels perfectly balanced and ready for combat.'
   }
 
   /** Equip the sword to feel more confident and prepared. */
   override equip(_gameState: GameState): string {
-    return event(
-      'You grip the [item_name]sword[/item_name] firmly. ' +
-        'You feel more confident and prepared for any threats.',
-    )
-  }
-
-  /** Examine the sword and read its description. */
-  override examine(_gameState: GameState): string {
-    return event(
-      `You examine the [item_name]sword[/item_name]. ${this.description}`,
-    )
+    return 'You feel more confident and prepared for any threats.'
   }
 }

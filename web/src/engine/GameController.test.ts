@@ -94,7 +94,7 @@ describe('GameController', () => {
   it('runs commands through the parser', () => {
     const ctrl = makeController()
     expect(ctrl.handleCommand('xyzzy')).toContain("I don't understand")
-    expect(ctrl.look()).toContain('You take a look at your surroundings')
+    expect(ctrl.look()).toBe('')
     expect(ctrl.getActIntro()).toBe('')
   })
 
