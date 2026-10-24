@@ -268,6 +268,14 @@ defineExpose({ focus })
   text-align: center;
   font-style: italic;
 }
+/* A centred line hugs its text, so the speaking rule sits beside the words;
+   the side padding is always there, so nothing shifts when the rule shows. */
+.lq-chapter-closing .lq-chapter-block {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-inline: 10px;
+}
 .lq-stats {
   margin: 20px 0 8px;
   display: flex;

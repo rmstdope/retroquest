@@ -924,4 +924,50 @@ test.describe('Lantern UI (the default)', () => {
       page.getByRole('heading', { name: 'Thank you for playing RetroQuest' }),
     ).toHaveCount(0)
   })
+
+  for (const width of [1280, 360]) {
+    test(`hugs a centred closing line with the speaking rule at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 800 })
+      await page.goto('/')
+      await injectMockState(page)
+      await page.evaluate(() => {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const app = (document.querySelector('#app') as any).__vue_app__
+        const store = app.config.globalProperties.$pinia.state.value.game
+        store.modalChapter = {
+          kind: 'complete',
+          act: 'Act II',
+          title: 'Act II complete',
+          body: 'Malakar is real.',
+          stats: { questsCompleted: 6, questsTotal: 6, spells: 9, places: 12 },
+          nextAct: 'Act III',
+        }
+        store.showModal = true
+        /* eslint-enable @typescript-eslint/no-explicit-any */
+      })
+
+      const block = page.locator('.lq-chapter-block').first()
+      const body = page.locator('.lq-chapter-body')
+      await expect(block).toBeVisible()
+      const before = (await block.boundingBox())!
+      const column = (await body.boundingBox())!
+      // The block wraps its short line instead of spanning the column, centred in it.
+      expect(before.width).toBeLessThan(column.width / 2)
+      const centre = before.x + before.width / 2
+      expect(Math.abs(centre - (column.x + column.width / 2))).toBeLessThan(2)
+
+      // The rule appearing moves nothing.
+      await block.evaluate((el) => el.classList.add('lq-speaking'))
+      expect(await block.boundingBox()).toEqual(before)
+      expect(
+        await page.evaluate(
+          () =>
+            document.documentElement.scrollWidth <=
+            document.documentElement.clientWidth,
+        ),
+      ).toBe(true)
+    })
+  }
 })
