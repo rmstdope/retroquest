@@ -879,7 +879,9 @@ describe('Act 3 golden path as declared by the act', () => {
 
     const relay = executeCommands(fresh, ['w', 'w', 'talk to mira'])
 
-    expect(relay).toContain('Mira[/character_name] does not answer.')
+    expect(relay).toContain(
+      "You give her the dragon's words. [character_name]Mira[/character_name] does not answer.",
+    )
   })
 
   it('ends with the amulet showing both parents, after three glows', () => {

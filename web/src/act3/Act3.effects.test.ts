@@ -29,8 +29,10 @@ describe('Act III effects', () => {
   })
 
   it('never opens an answer by repeating the typed command', () => {
+    // "You give her the dragon's words." is exempt: Mira's relay answers
+    // `talk to mira`, so the giving is the talk's effect, not its echo.
     const echo =
-      /['"`](You (speak with|say|cast|examine|give|recite|daub|stand still|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b)/
+      /['"`](You (speak with|say|cast|examine|give(?! her the dragon's words)|recite|daub|stand still|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b)/
     const offenders = contentFiles(__dirname).filter((file) =>
       echo.test(readFileSync(file, 'utf8')),
     )

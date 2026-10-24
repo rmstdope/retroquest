@@ -14772,33 +14772,6 @@
    }
   ]
  },
- "0886ca00b6fb3d": {
-  "file": "0886ca00b6fb3d.mp3",
-  "speaker": "narrator",
-  "duration": 1.625,
-  "words": [
-   {
-    "word": "Mira",
-    "start": 0.0,
-    "end": 0.34
-   },
-   {
-    "word": "does",
-    "start": 0.34,
-    "end": 0.66
-   },
-   {
-    "word": "not",
-    "start": 0.66,
-    "end": 0.94
-   },
-   {
-    "word": "answer.",
-    "start": 0.94,
-    "end": 1.32
-   }
-  ]
- },
  "089b185d637fa6": {
   "file": "089b185d637fa6.mp3",
   "speaker": "narrator",
