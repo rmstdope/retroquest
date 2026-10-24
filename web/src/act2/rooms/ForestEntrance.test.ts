@@ -128,7 +128,7 @@ describe('Forest Entrance paths', () => {
     expect(second).not.toContain(OLD_COMBINED)
     expect(second).not.toContain(LANTERN_GREEN)
     const repeat = executeCommands(game, ['use protective charm'])
-    expect(repeat).toContain('[dim]')
+    expect(repeat).toContain('[failure]')
     expect(repeat).not.toContain('[success]')
   })
 

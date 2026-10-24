@@ -33,15 +33,15 @@ describe("Traveler's journal", () => {
     expect(raw).not.toContain('*')
   })
 
-  it('shows event, four unlabelled quotes, story line, event', () => {
+  it('shows story text, four unlabelled quotes, two story lines', () => {
     expect(shape(raw)).toEqual([
-      'event',
+      'text',
       'dialogue:null',
       'dialogue:null',
       'dialogue:null',
       'dialogue:null',
       'text',
-      'event',
+      'text',
     ])
   })
 
@@ -64,7 +64,7 @@ describe("Squire's diary", () => {
 
   it('shows a heading line then an unlabelled quote, three times', () => {
     expect(shape(raw)).toEqual([
-      'event',
+      'text',
       'text',
       'dialogue:null',
       'text',
@@ -72,12 +72,12 @@ describe("Squire's diary", () => {
       'text',
       'dialogue:null',
       'text',
-      'event',
+      'text',
     ])
   })
 
   it('keeps the headings, colon included, in order', () => {
-    expect(textLines(raw).slice(0, 3)).toEqual([
+    expect(textLines(raw).slice(1, 4)).toEqual([
       'The morning after the king vanished:',
       'Some days later:',
       'Last entry:',

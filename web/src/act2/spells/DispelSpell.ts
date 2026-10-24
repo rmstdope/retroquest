@@ -4,7 +4,6 @@ import {
   type GameState,
   type Item,
   characterName,
-  event,
   speech,
 } from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
@@ -29,16 +28,16 @@ export class DispelSpell extends Spell {
     })
   }
 
+  /** Cast dispel without a target: no active magic nearby. */
   override castSpell(_gameState: GameState): string {
-    const name = this.name
     return (
-      `[success]You cast [spell_name]${name}[/spell_name], sending out waves of ` +
-      'counter-magic that neutralize hostile enchantments. The spell ripples ' +
-      'through the air, ready to break magical barriers and curses, but finds ' +
-      'no active magic to dispel nearby.[/success]'
+      '[success]Waves of counter-magic ripple through the air, ready to ' +
+      'break magical barriers and curses, but find no active magic to ' +
+      'dispel nearby.[/success]'
     )
   }
 
+  /** Dispel on a character: one fixed sentence for anyone but Elena and the Librarian. */
   override castOnCharacter(
     gameState: GameState,
     targetCharacter: Character,
@@ -49,38 +48,27 @@ export class DispelSpell extends Spell {
     }
     if (targetCharacter instanceof SpectralLibrarian) {
       return (
-        event(
-          'The unbinding slides off the ' +
-            characterName(targetCharacter.name) +
-            ' like water off glass.',
-        ) +
-        '\n' +
+        'The unbinding slides off the ' +
+        characterName(targetCharacter.name) +
+        ' like water off glass.\n' +
         speech(
           'It was ours before it was yours. It does not work on the hand ' +
             'that wrote it down.',
         )
       )
     }
-    const name = this.name
-    const tname = targetCharacter.name
     return (
-      `[success]You cast [spell_name]${name}[/spell_name] on ` +
-      characterName(tname) +
-      '. Counter-magic flows around them, dispelling any minor ' +
-      'enchantments and magical effects they may have been affected ' +
-      'by.[/success]'
+      '[success]Counter-magic flows outward, dispelling any minor ' +
+      'enchantments and magical effects it finds.[/success]'
     )
   }
 
-  override castOnItem(_gameState: GameState, targetItem: Item): string {
-    // This could be used for breaking magical barriers or dispelling cursed items
-    const name = this.name
-    const iname = targetItem.name
+  /** Dispel on an item: one fixed sentence whatever the item is. */
+  override castOnItem(_gameState: GameState, _targetItem: Item): string {
     return (
-      `[success]You cast [spell_name]${name}[/spell_name] on ` +
-      `[item_name]${iname}[/item_name]. Counter-magic flows through the ` +
-      'item, neutralizing any magical enchantments or curses that may ' +
-      'have been affecting it.[/success]'
+      '[success]Counter-magic flows through the item, neutralizing any ' +
+      'magical enchantments or curses that may have been affecting ' +
+      'it.[/success]'
     )
   }
 }

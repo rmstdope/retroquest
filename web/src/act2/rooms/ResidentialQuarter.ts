@@ -47,8 +47,8 @@ export class ResidentialQuarter extends Room {
       // Add the secret passage exit when the library is discovered
       this.exits.secret_passage = 'HiddenLibrary'
       return (
-        '[success]You search through the basement areas of the residential buildings. ' +
-        'Behind some old storage crates and forgotten furniture, you discover a ' +
+        '[success]Behind some old storage crates and forgotten furniture in the ' +
+        'basements, you discover a ' +
         'concealed entrance in the stone wall. A narrow tunnel leads underground to ' +
         'what appears to ' +
         "be an ancient chamber. You've found a secret passage to a " +
@@ -57,8 +57,8 @@ export class ResidentialQuarter extends Room {
       )
     }
     return (
-      "[dim]You've already discovered the secret passage to the " +
-      `${hiddenLibrary.name}.[/dim]`
+      "[failure]You've already discovered the secret passage to the " +
+      `${hiddenLibrary.name}.[/failure]`
     )
   }
 }

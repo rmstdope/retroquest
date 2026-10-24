@@ -30,7 +30,7 @@ describe('Entry pass', () => {
     const first = pass.use(game.state)
 
     expect(first).toBe(
-      'You examine the entry pass. Someone has scraped their name off it, ' +
+      'Someone has scraped their name off the entry pass, ' +
         'carefully. The seal looks authentic, and it should allow you passage ' +
         'into Greendale without question.',
     )

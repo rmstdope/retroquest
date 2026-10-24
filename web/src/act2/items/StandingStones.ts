@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { NatureSenseSpell } from '../spells/NatureSenseSpell'
 
 /** Ancient druidic monoliths that convey nature magic and may teach a spell. */
@@ -35,20 +35,17 @@ export class StandingStones extends Item {
           'connection forming with the natural world around you, and ' +
           'suddenly you understand how to cast the ' +
           '[spell_name]nature sense[/spell_name] spell![/success]\n\n' +
-          event(
-            'You have learned the spell: [spell_name]nature sense[/spell_name]!',
-          )
+          'You have learned the spell: [spell_name]nature sense[/spell_name]!'
       }
       return (
-        event(
-          'You approach the ancient standing stones and run your hands over ' +
-            'their weathered surfaces. The runes carved into the stone are ' +
-            'clearly druidic—symbols representing protection, passage, and the ' +
-            'balance between civilization and wilderness. These stones have ' +
-            'stood here for centuries, marking the boundary between worlds. ' +
-            'You can feel the old magic thrumming within them, a gentle but ' +
-            'powerful force that has protected travelers for generations.',
-        ) + spellMsg
+        'You approach the ancient standing stones and run your hands over ' +
+        'their weathered surfaces. The runes carved into the stone are ' +
+        'clearly druidic—symbols representing protection, passage, and the ' +
+        'balance between civilization and wilderness. These stones have ' +
+        'stood here for centuries, marking the boundary between worlds. ' +
+        'You can feel the old magic thrumming within them, a gentle but ' +
+        'powerful force that has protected travelers for generations.' +
+        spellMsg
       )
     }
     return (

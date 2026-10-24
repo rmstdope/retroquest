@@ -3,7 +3,7 @@ import {
   type GameState,
   type Item,
   characterName,
-  event,
+  clue,
   remembered,
   speech,
 } from '@/engine'
@@ -40,12 +40,12 @@ export class Families extends Character {
   /** Ignore strangers; welcome helpers and hand over herbs on the first visit. */
   override talkTo(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_HELPED_ELDERLY_RESIDENTS)) {
-      return (
-        '[failure]The ' +
-        characterName(this.name) +
-        ' seem busy with their own affairs and no one seems to want to ' +
-        'talk to you. They give you polite but distant nods, clearly not ' +
-        'interested in conversation with a stranger.[/failure]'
+      return clue(
+        'The ' +
+          characterName(this.name) +
+          ' seem busy with their own affairs and no one seems to want to ' +
+          'talk to you. They give you polite but distant nods, clearly not ' +
+          'interested in conversation with a stranger.',
       )
     }
 
@@ -68,18 +68,16 @@ export class Families extends Character {
       gameState.addItemToInventory(herbs)
       response +=
         '\n\n' +
-        event(
-          'An elderly woman from one of the ' +
-            characterName(this.name) +
-            ' approaches you with a warm smile. ' +
-            speech('Here, dear,') +
-            ' she says, pressing a bundle into your hands. ' +
-            speech(
-              'These are rare healing herbs that have been in our family for ' +
-                'generations. Someone who helps others as you do should have them.',
-            ) +
-            ` You receive [item_name]${herbs.name}[/item_name]!`,
+        'An elderly woman from one of the ' +
+        characterName(this.name) +
+        ' approaches you with a warm smile. ' +
+        speech('Here, dear,') +
+        ' she says, pressing a bundle into your hands. ' +
+        speech(
+          'These are rare healing herbs that have been in our family for ' +
+            'generations. Someone who helps others as you do should have them.',
         ) +
+        ` You receive [item_name]${herbs.name}[/item_name]!` +
         '\n\n' +
         characterName(this.name) +
         ': ' +
@@ -142,14 +140,8 @@ export class Families extends Character {
 
   /** The flower for Wren: reaction, thanks and the remembered line. */
   private giveFlower(gameState: GameState, flower: Item): string {
-    const gift = event(
-      `You give the [item_name]${flower.name}[/item_name] to the ` +
-        `${characterName(this.name)}.`,
-    )
     if (!gameState.getStoryFlag(FLAG_HELPED_ELDERLY_RESIDENTS)) {
       return (
-        gift +
-        '\n' +
         `The ${characterName(this.name)} give you polite but distant nods. ` +
         'Nobody seems to know what a stranger wants with them, or with a ' +
         'flower.'
@@ -162,8 +154,6 @@ export class Families extends Character {
     gameState.setStoryFlag(FLAG_WREN_FLOWER_GIVEN, true)
     gameState.addVirtue(VIRTUE_SELFLESS)
     return (
-      gift +
-      '\n' +
       'A mother carries the flower down the lane to the end house. A little ' +
       'later a thin face appears at the window, holding it up to the light.' +
       '\n' +

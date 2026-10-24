@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { OfferingAltar } from './OfferingAltar'
 
 /** Sacred charm used in rituals and offerings at the forest altar. */
@@ -45,12 +45,12 @@ export class DruidicCharm extends Item {
   /** Examine the charm and recall Marcus's gratitude. */
   override examine(_gameState: GameState): string {
     const desc = this.description
-    return event(
-      `You examine the [item_name]druidic charm[/item_name]. ${desc} The ` +
-        'intricate carvings depict intertwined branches and leaves, ' +
-        'symbols of the eternal cycle of growth and renewal. You can feel ' +
-        'the gratitude and love that Marcus poured into this gift when he ' +
-        'gave it to you for saving his daughter Elena from the dark curse.',
+    return (
+      `${desc} The ` +
+      'intricate carvings depict intertwined branches and leaves, ' +
+      'symbols of the eternal cycle of growth and renewal. You can feel ' +
+      'the gratitude and love that Marcus poured into this gift when he ' +
+      'gave it to you for saving his daughter Elena from the dark curse.'
     )
   }
 }

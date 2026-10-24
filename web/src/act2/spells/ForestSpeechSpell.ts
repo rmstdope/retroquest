@@ -1,4 +1,4 @@
-import { Spell, type Character, type GameState, characterName } from '@/engine'
+import { Spell, type Character, type GameState, clue } from '@/engine'
 import { FLAG_FOUND_RAVINE, FLAG_RAVINE_STORY_PENDING } from '../Act2StoryFlags'
 import { Ravine } from '../items/Ravine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
@@ -40,7 +40,7 @@ export class ForestSpeechSpell extends Spell {
       const ravine = new Ravine()
       currentRoom.items.push(ravine)
       return (
-        `[success]You cast [spell_name]${name}[/spell_name] and the woodland creatures ` +
+        '[success]The woodland creatures ' +
         'gather around you excitedly. A family of squirrels chatters frantically about ' +
         'strange noises from the deep ravine to the northeast. An old owl hoots solemnly ' +
         "about 'metal beasts trapped in the earth-scar where the stone walls weep.' " +
@@ -56,7 +56,7 @@ export class ForestSpeechSpell extends Spell {
     ) {
       gameState.setStoryFlag(FLAG_RAVINE_STORY_PENDING, false)
       return (
-        `[success]You cast [spell_name]${name}[/spell_name] and the woodland ` +
+        '[success]The woodland ' +
         'creatures gather around you excitedly. A family of squirrels chatters ' +
         'frantically about strange noises from the ravine you sensed. An old owl ' +
         "hoots solemnly about 'metal beasts trapped in the earth-scar where the " +
@@ -69,17 +69,16 @@ export class ForestSpeechSpell extends Spell {
       gameState.getStoryFlag(FLAG_FOUND_RAVINE)
     ) {
       return (
-        `[dim]You cast [spell_name]${name}[/spell_name], but the woodland creatures ` +
+        `[failure]You cast [spell_name]${name}[/spell_name], but the woodland creatures ` +
         "have no new information about the ravine - you've already located it." +
-        '[/dim]'
+        '[/failure]'
       )
     }
     // Normal forest speech behavior for other locations
     const roomName = currentRoom.name.toLowerCase()
     if (roomName.includes('forest') || roomName.includes('grove')) {
       return (
-        `[success]You cast [spell_name]${name}[/spell_name] and suddenly ` +
-        'the forest comes alive with conversation. The trees whisper their ancient ' +
+        '[success]The forest comes alive with conversation. The trees whisper their ancient ' +
         'wisdom, sharing memories of seasons past and warnings of dangers ahead. ' +
         'Small woodland creatures emerge to share news of hidden paths and secret ' +
         'places. You feel deeply connected to the living tapestry of the forest.' +
@@ -87,20 +86,18 @@ export class ForestSpeechSpell extends Spell {
       )
     } else if (roomName.includes('enchanted')) {
       return (
-        `[success]You cast [spell_name]${name}[/spell_name] in this magical ` +
-        'realm and the response is overwhelming. Every plant, from the mightiest ' +
+        '[success]In this magical ' +
+        'realm the response is overwhelming. Every plant, from the mightiest ' +
         'tree to the smallest moss, has something to say. The magical nature of ' +
         'this place amplifies your connection, allowing you to understand even ' +
         'the most subtle communications from the natural world.' +
         '[/success]'
       )
     }
-    return (
-      `[dim]You cast [spell_name]${name}[/spell_name], but there are ` +
-      'few natural beings here to communicate with. You sense the faint whispers ' +
-      'of any plants nearby, but the spell would be much more powerful in a ' +
-      'forest or natural environment.' +
-      '[/dim]'
+    return clue(
+      'There are few natural beings here to communicate with. You sense the ' +
+        'faint whispers of any plants nearby, but the spell would be much ' +
+        'more powerful in a forest or natural environment.',
     )
   }
 
@@ -109,25 +106,20 @@ export class ForestSpeechSpell extends Spell {
     _gameState: GameState,
     targetCharacter: Character,
   ): string {
-    const tname = targetCharacter.name
     if (
       targetCharacter instanceof AncientTreeSpirit ||
       targetCharacter instanceof ForestSprites ||
       targetCharacter instanceof WaterNymphs
     ) {
       return (
-        `[success]You cast [spell_name]${this.name}[/spell_name] on ` +
-        characterName(tname) +
-        ', opening a channel of deep, mystical communication. Through the ' +
-        "spell's magic, you can understand their ancient wisdom and forest " +
-        'secrets.[/success]'
+        '[success]A channel of deep, mystical communication opens between ' +
+        "you. Through the spell's magic, you can understand their ancient " +
+        'wisdom and forest secrets.[/success]'
       )
     }
-    return (
-      `[dim]You cast [spell_name]${this.name}[/spell_name] on ` +
-      characterName(tname) +
-      ', but this spell is designed for communication with forest beings ' +
-      'and natural spirits. It has no effect on this character.[/dim]'
+    return clue(
+      'This spell is for forest beings and natural spirits. It has no ' +
+        'effect here.',
     )
   }
 }

@@ -4,15 +4,13 @@ import { FLAG_SPOKEN_TO_CARAVAN_MASTER } from '../Act2StoryFlags'
 import { ravineHere, reload, setupForestEntrance } from '../ravineTestSupport'
 
 const DISCOVERY =
-  '[success]You cast [spell_name]nature sense[/spell_name] and feel your ' +
-  'awareness spread out through the roots and undergrowth. To the north-east ' +
+  '[success]Your awareness spreads out through the roots and undergrowth. To the north-east ' +
   'the web of living things simply stops: the ground falls away there into a ' +
   'steep, rocky ravine hidden beyond the thickest trees. Down at the bottom, ' +
   'something heavy and still lies where nothing of the forest belongs.[/success]'
 const NOTHING_CHANGED =
-  '[dim]You cast [spell_name]nature sense[/spell_name] and feel again the ' +
-  'ravine to the north-east, the ground falling sharply away. Nothing has ' +
-  'changed.[/dim]'
+  '[failure][clue]Again you feel the ravine to the north-east, the ground ' +
+  'falling sharply away. Nothing has changed.[/clue][/failure]'
 
 describe('NatureSenseSpell at the Forest Entrance', () => {
   it('finds the ravine with the agreed line and does not name the caravan', () => {

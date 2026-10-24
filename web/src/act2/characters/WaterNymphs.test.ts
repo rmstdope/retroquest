@@ -46,7 +46,8 @@ describe('Water Nymphs dialogue markup', () => {
 
     const answer = game.commandParser.parse('say wrong to water nymphs')
 
-    expect(answer).toContain("shake their heads gently as you say 'wrong'")
+    expect(answer).toContain(' shake their heads gently.')
+    expect(answer).not.toContain('wrong')
     expect(answer).toContain(
       'Is that really what you think? Will you hear it again?',
     )
@@ -66,10 +67,9 @@ describe('Water Nymphs voice', () => {
 
     const answer = nymphs.talkTo(game.state)
 
-    expect(answer).toContain('You approach the')
-    expect(answer).toContain('by the stream.')
+    expect(answer).not.toContain('You approach the')
     expect(answer).not.toContain('sacred')
-    expect(answer).toContain('The stream rises into shapes. ')
+    expect(answer).toContain('The stream rises into shapes.')
     expect(answer).toContain(
       'Came all this way to stand in our water? Will you answer three ' +
         'questions, then? Here is the first.',

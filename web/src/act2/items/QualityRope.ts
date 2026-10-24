@@ -31,8 +31,8 @@ export class QualityRope extends Item {
       // Check if caravan has already been secured
       if (gameState.getStoryFlag(FLAG_FOUND_LOST_CARAVAN)) {
         return (
-          "[dim]You've already used your rope to secure the caravan and help the " +
-          'merchants escape from the ravine.[/dim]'
+          "[failure]You've already used your rope to secure the caravan and help the " +
+          'merchants escape from the ravine.[/failure]'
         )
       }
 

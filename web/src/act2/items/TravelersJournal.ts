@@ -1,4 +1,4 @@
-import { Item, type GameState, event, writing } from '@/engine'
+import { Item, type GameState, writing } from '@/engine'
 import { FLAG_READ_TRAVELERS_JOURNAL } from '../Act2StoryFlags'
 
 /**
@@ -23,10 +23,8 @@ export class TravelersJournal extends Item {
   override use(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_READ_TRAVELERS_JOURNAL, true)
     return (
-      event(
-        "You open the weathered traveler's journal. There is no name " +
-          'inside the cover, only page after page in a small, careful hand.',
-      ) +
+      "There is no name inside the cover of the weathered traveler's " +
+      'journal, only page after page in a small, careful hand.' +
       '\n\n' +
       writing(
         "'Third night in Greendale. The archivists doze at their desks. " +
@@ -49,11 +47,9 @@ export class TravelersJournal extends Item {
       'linked rings. Beside it, a question mark, pressed so hard the nib ' +
       'has torn the page.' +
       '\n\n' +
-      event(
-        "Whoever wrote this had sat with the castle's own records, and read " +
-          'them closely. The historians in the Great Hall would know where ' +
-          'these notes were copied from.',
-      )
+      "Whoever wrote this had sat with the castle's own records, and read " +
+      'them closely. The historians in the Great Hall would know where ' +
+      'these notes were copied from.'
     )
   }
 }

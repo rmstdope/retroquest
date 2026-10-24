@@ -3,8 +3,9 @@ import {
   type GameState,
   type Item,
   characterName,
-  event,
+  clue,
   remembered,
+  dialogue,
   speech,
 } from '@/engine'
 import { RoomKey } from '../items/RoomKey'
@@ -69,35 +70,26 @@ export class InnkeeperMarcus extends Character {
       return super.sayTo(gameState, words)
     }
     const speaker = characterName(this.name)
-    const greeting = event(`You speak with ${speaker}.`)
     if (!gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
-      return (
-        greeting +
-        '\n' +
-        speech(
-          'The truth? The only truth I care about is upstairs, and ' +
-            "she's getting worse.",
-        )
+      return dialogue(
+        this.name,
+        'The truth? The only truth I care about is upstairs, and ' +
+          "she's getting worse.",
       )
     }
     if (gameState.getStoryFlag(FLAG_MARCUS_TOLD_TRUTH)) {
-      return (
-        greeting +
-        '\n' +
-        speech(
-          'I heard you the first time, friend. ' +
-            "I've not slept right since, but I'd rather know.",
-        )
+      return dialogue(
+        this.name,
+        'I heard you the first time, friend. ' +
+          "I've not slept right since, but I'd rather know.",
       )
     }
     gameState.setStoryFlag(FLAG_MARCUS_TOLD_TRUTH, true)
     gameState.addVirtue(VIRTUE_TRUTH)
     return (
-      event(
-        `You tell ${characterName('Marcus')} about the silver mask on ` +
-          `${characterName('Elena')}'s wrist: the curse was no ill wind. ` +
-          'Someone set it on her on purpose.',
-      ) +
+      `You tell ${characterName('Marcus')} about the silver mask on ` +
+      `${characterName('Elena')}'s wrist: the curse was no ill wind. ` +
+      'Someone set it on her on purpose.' +
       '\n' +
       speaker +
       ': ' +
@@ -228,23 +220,13 @@ export class InnkeeperMarcus extends Character {
   override buyItem(gameState: GameState, itemName: string): string {
     const itemNameToBuy = itemName.toLowerCase()
     const seller = this.name
-    const eventMsg = event(
-      `You try to buy the [item_name]${itemNameToBuy}[/item_name] from ` +
-        'the ' +
-        characterName(seller) +
-        '.',
-    )
 
     // Check if item is available
     if (!(itemNameToBuy in this.wares)) {
       const itemDisp = `[item_name]${itemNameToBuy}[/item_name]`
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `Sorry, I don't have any '${itemDisp}' for sale. Check what I can ` +
-            'offer you.',
-        )
+      return speech(
+        `Sorry, I don't have any '${itemDisp}' for sale. Check what I can ` +
+          'offer you.',
       )
     }
 
@@ -256,13 +238,7 @@ export class InnkeeperMarcus extends Character {
 
     // Check if player has enough coins
     if (totalCoins < price) {
-      return (
-        eventMsg +
-        '\n' +
-        ("[failure]You don't have enough [item_name]coins[/item_name] for the " +
-          `[item_name]${itemNameToBuy}[/item_name]. It costs ${price} ` +
-          `[item_name]gold coins[/item_name] but you only have ${totalCoins}.[/failure]`)
-      )
+      return clue("You don't have enough coins for that.")
     }
 
     // Check if already have the item in inventory (not counting display items in room)
@@ -273,24 +249,16 @@ export class InnkeeperMarcus extends Character {
           item.name.toLowerCase() === itemNameToBuy && item.canBeCarried,
       )
     ) {
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
-            'room should be sufficient for your stay.',
-        )
+      return speech(
+        `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
+          'room should be sufficient for your stay.',
       )
     }
 
     // Purchase the item - spend coins using the batching system
     const coinsRemoved = gameState.removeItemFromInventory('coins', price)
     if (coinsRemoved !== price) {
-      return (
-        eventMsg +
-        '\n' +
-        '[failure]Transaction failed. Unable to process payment.[/failure]'
-      )
+      return '[failure]Transaction failed. Unable to process payment.[/failure]'
     }
 
     // Remove the display item from the room (if present)
@@ -311,15 +279,12 @@ export class InnkeeperMarcus extends Character {
     if (newItem) {
       newItem.canBeCarried = true // Ensure the purchased item is carriable
       gameState.addItemToInventory(newItem)
-      const remainingCoins = gameState.getItemCount('coins')
       const purchaseMsg =
-        `[success]You purchase the [item_name]${itemNameToBuy}[/item_name] ` +
-        'from ' +
+        `[success]The [item_name]${itemNameToBuy}[/item_name] is yours for ` +
+        `${price} [item_name]gold coins[/item_name]. ` +
         characterName(seller) +
-        ` for ${price} [item_name]gold coins[/item_name]. He hands you a ` +
-        'brass key and explains how to access the private rooms upstairs. ' +
-        `You have ${remainingCoins} [item_name]coins[/item_name] ` +
-        'remaining.[/success]'
+        ' hands you a brass key and explains how to access the private ' +
+        'rooms upstairs.[/success]'
       const lodger =
         characterName(seller) +
         ': ' +
@@ -329,14 +294,10 @@ export class InnkeeperMarcus extends Character {
             'gone one morning without paying. It was the week the king ' +
             "went. I've aired it since. You'll find it clean.",
         )
-      return eventMsg + '\n' + purchaseMsg + '\n\n' + lodger
+      return purchaseMsg + '\n\n' + lodger
     } else {
       // Should not happen if item is in wares, but safety check
-      return (
-        eventMsg +
-        '\n' +
-        '[failure]An unexpected error occurred trying to rent the room.[/failure]'
-      )
+      return '[failure]An unexpected error occurred trying to rent the room.[/failure]'
     }
   }
 }

@@ -40,10 +40,10 @@ describe('Ancient Tree Spirit voice', () => {
   it('speaks of spring before the acorn', () => {
     const answer = new AncientTreeSpirit().talkTo(createGame().state)
 
-    expect(answer).toContain('You approach the')
+    expect(answer).not.toContain('You approach the')
     expect(answer).not.toContain('reverence')
     expect(answer).toContain(
-      'A face gathers in the knots of the silver bark and turns toward you. ',
+      'A face gathers in the knots of the silver bark and turns toward you.',
     )
     expect(answer).toContain(
       'You walk like spring. Everything new, nothing kept.',
@@ -64,7 +64,8 @@ describe('Ancient Tree Spirit voice', () => {
     const answer = spirit.giveItem(game.state, acorn)
 
     expect(answer).toContain(
-      'The bark around the knots softens. ' +
+      'The bark around the knots softens.\n' +
+        '[character_name]ancient tree spirit[/character_name]\n' +
         "[dialogue]Next spring's tree, and you carried it here instead of " +
         'planting it. Good. Listen, then.',
     )

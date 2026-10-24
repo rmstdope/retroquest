@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  characterName,
-  event,
-  speech,
-} from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { ProtectiveCharm } from '../items/ProtectiveCharm'
 import { FLAG_HERMITS_WARNING_ACCEPTED } from '../Act2StoryFlags'
 
@@ -31,9 +25,6 @@ export class ForestHermit extends Character {
 
   /** Warn the player and give the charm once, then send the player on. */
   override talkTo(gameState: GameState): string {
-    const name = this.name
-    const eventMsg = event('You approach the ' + characterName(name) + '.')
-
     if (!this.hasWarned) {
       this.hasWarned = true
       this.charmGiven = true
@@ -45,8 +36,7 @@ export class ForestHermit extends Character {
       // Set quest completion flag
       gameState.setStoryFlag(FLAG_HERMITS_WARNING_ACCEPTED, true)
       return (
-        eventMsg +
-        '\nThe ' +
+        'The ' +
         characterName(this.name) +
         ' glances at the treeline before looking at you, as if checking ' +
         'who might be listening. ' +
@@ -68,12 +58,11 @@ export class ForestHermit extends Character {
             'before you cross.',
         ) +
         '\n\n' +
-        event('You receive a [item_name]protective charm[/item_name]!')
+        'You receive a [item_name]protective charm[/item_name]!'
       )
     } else {
       return (
-        eventMsg +
-        '\nThe ' +
+        'The ' +
         characterName(this.name) +
         ' tilts their head toward the trees. ' +
         speech(

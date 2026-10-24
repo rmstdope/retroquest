@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, event, speech } from '@/engine'
+import { Item, type GameState, characterName, clue, speech } from '@/engine'
 import {
   FLAG_HERMITS_WARNING_ACCEPTED,
   FLAG_HERMITS_WARNING_COMPLETED,
@@ -25,20 +25,15 @@ export class ForestSurvivalKit extends Item {
     const currentRoom = gameState.currentRoom
     if (currentRoom instanceof ForestTransition) {
       if (!gameState.getStoryFlag(FLAG_HERMITS_WARNING_ACCEPTED)) {
-        return (
-          '[failure]A robed figure is sitting among the stones, watching you. ' +
-          "Making camp on someone's doorstep without a word seems rude.[/failure]"
+        return clue(
+          'A robed figure is sitting among the stones, watching you. ' +
+            "Making camp on someone's doorstep without a word seems rude.",
         )
       }
       gameState.setStoryFlag(FLAG_HERMITS_WARNING_COMPLETED, true)
       gameState.removeItemFromInventory('forest survival kit')
 
       return (
-        event(
-          `You open the [item_name]${this.name}[/item_name] at the foot of the ` +
-            'standing stones.',
-        ) +
-        '\n\n' +
         'Dusk comes early under the trees. You make a small fire in the lee of ' +
         "the stones, eat from the rations, set the kit's wards around your " +
         'blanket and sleep with your back to the oldest stone.' +
@@ -56,7 +51,7 @@ export class ForestSurvivalKit extends Item {
     }
     // Default behavior for other rooms
     return (
-      'You examine the forest survival kit. It contains high-quality gear that would ' +
+      'The forest survival kit contains high-quality gear that would ' +
       'provide essential protection and tools for navigating dangerous forest areas ' +
       'safely. Now is not the time to use it.'
     )

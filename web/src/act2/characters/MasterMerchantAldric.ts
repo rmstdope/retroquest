@@ -4,7 +4,7 @@ import {
   type Item,
   type Room,
   characterName,
-  event,
+  clue,
   speech,
 } from '@/engine'
 import { ForestSurvivalKit } from '../items/ForestSurvivalKit'
@@ -103,11 +103,10 @@ export class MasterMerchantAldric extends Character {
       if (index >= 0) gameState.inventory.splice(index, 1)
       this.gaveFlyer = true
       if (hasAddWares(gameState.currentRoom)) gameState.currentRoom.addWares()
-      const itemName = item.name
       return (
-        `[success]You present the [item_name]${itemName}[/item_name] to ` +
+        '[success]' +
         characterName('Master Merchant Aldric') +
-        '. His eyes light up as he examines it. ' +
+        "'s eyes light up as he examines the flyer. " +
         speech(
           'Ah, excellent! This flyer grants you access to our premium ' +
             'selection and preferred customer pricing. What quality goods can ' +
@@ -138,25 +137,13 @@ export class MasterMerchantAldric extends Character {
     }
 
     const itemNameToBuy = itemName.toLowerCase()
-    const name = this.name
-    const eventMsg = event(
-      'You try to buy the [item_name]' +
-        itemNameToBuy +
-        '[/item_name] from the ' +
-        characterName(name) +
-        '.',
-    )
 
     // Check if item is available
     if (!(itemNameToBuy in this.wares)) {
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `Sorry, I don't have any ' [item_name]${itemNameToBuy}` +
-            "[/item_name]' for sale. Check my current inventory for available " +
-            'items.',
-        )
+      return speech(
+        `Sorry, I don't have any ' [item_name]${itemNameToBuy}` +
+          "[/item_name]' for sale. Check my current inventory for available " +
+          'items.',
       )
     }
 
@@ -168,14 +155,7 @@ export class MasterMerchantAldric extends Character {
 
     // Check if player has enough coins
     if (totalCoins < price) {
-      return (
-        eventMsg +
-        '\n' +
-        ("[failure]You don't have enough [item_name]coins[/item_name] " +
-          `for the [item_name]${itemNameToBuy}[/item_name]. It costs ${price} ` +
-          `[item_name]gold coins[/item_name] but you only have ${totalCoins}.` +
-          '[/failure]')
-      )
+      return clue("You don't have enough coins for that.")
     }
 
     // Check if already have the item in inventory (not counting display items in room)
@@ -185,24 +165,16 @@ export class MasterMerchantAldric extends Character {
           item.name.toLowerCase() === itemNameToBuy && item.canBeCarried,
       )
     ) {
-      return (
-        eventMsg +
-        '\n' +
-        speech(
-          `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
-            'should be sufficient for your needs.',
-        )
+      return speech(
+        `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
+          'should be sufficient for your needs.',
       )
     }
 
     // Purchase the item - spend coins using the batching system
     const coinsRemoved = gameState.removeItemFromInventory('coins', price)
     if (coinsRemoved !== price) {
-      return (
-        eventMsg +
-        '\n' +
-        '[failure]Transaction failed. Unable to process payment.[/failure]'
-      )
+      return '[failure]Transaction failed. Unable to process payment.[/failure]'
     }
 
     // Remove the display item from the room (if present)
@@ -231,20 +203,13 @@ export class MasterMerchantAldric extends Character {
     if (newItem) {
       newItem.canBeCarried = true // Ensure the purchased item is carriable
       gameState.addItemToInventory(newItem)
-      const remainingCoins = gameState.getItemCount('coins')
       return (
-        eventMsg +
-        `\n[success]You purchase the [item_name]${itemNameToBuy}` +
-        '[/item_name] from ' +
-        characterName('Master Merchant Aldric') +
-        ` for ${price} [item_name]gold coins[/item_name]. You have ${remainingCoins}` +
-        ' [item_name]coins[/item_name] remaining.[/success]'
+        `[success]The [item_name]${itemNameToBuy}[/item_name] is yours for ` +
+        `${price} [item_name]gold coins[/item_name].[/success]`
       )
     }
     // Should not happen if item is in wares, but safety check
     return (
-      eventMsg +
-      '\n' +
       '[failure]An unexpected error occurred trying to sell the ' +
       `[item_name]${itemNameToBuy}[/item_name].[/failure]`
     )

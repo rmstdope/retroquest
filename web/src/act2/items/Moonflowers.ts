@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, event, speech } from '@/engine'
+import { Item, type GameState, characterName, speech } from '@/engine'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
 
 /** Rare bioluminescent blossoms used in healing and divinatory practices. */
@@ -58,11 +58,11 @@ export class Moonflowers extends Item {
 
   override examine(_gameState: GameState): string {
     const desc = this.description
-    return event(
-      `You examine the [item_name]moonflowers[/item_name]. ${desc} As ` +
-        "you watch, the petals seem to move gently even though there's no " +
-        'breeze, and you notice tiny motes of silvery light drifting from ' +
-        'the blooms like magical pollen.',
+    return (
+      `${desc} As ` +
+      "you watch, the petals seem to move gently even though there's no " +
+      'breeze, and you notice tiny motes of silvery light drifting from ' +
+      'the blooms like magical pollen.'
     )
   }
 }

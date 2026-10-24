@@ -38,8 +38,7 @@ export class TrainingSword extends Item {
         // Subsequent uses after mission explanation
         const prefix = characterName('Sir Cedric')
         return (
-          '[success]You practice a few more combat forms with the training ' +
-          `sword, and ${prefix} watches with approval.\n\n` +
+          `[success]${prefix} watches your combat forms with approval.\n\n` +
           speech('Your skills remain sharp,') +
           ' he observes. ' +
           speech(
@@ -63,13 +62,14 @@ export class TrainingSword extends Item {
       }
       // Fallback if flags are inconsistent
       return (
-        '[success]You practice combat forms with the training sword. ' +
+        '[success]' +
         characterName('Sir Cedric') +
-        ' nods approvingly at your continued martial discipline.[/success]'
+        ' watches you run through the combat forms and nods approvingly at ' +
+        'your continued martial discipline.[/success]'
       )
     }
     return (
-      'You practice a few sword forms with the training sword. The balance feels ' +
+      "The training sword's balance feels " +
       'good in your hands, and it would be perfect for demonstrating combat skills ' +
       'to someone who needs proof of your abilities.'
     )
