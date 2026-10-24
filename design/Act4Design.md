@@ -706,7 +706,7 @@ Elior chooses an ending.
 ## Golden Path (Optimal Solution to Complete Act IV)
 
 The golden path is the Redemption ending and needs no virtue moment. Optional moments are listed
-where they would occur. Examining and talking steps (`examine`, `talk to`) are reading aloud for the player and are not in `ACT4_GOLDEN_PATH`; every command that changes the game is.
+where they would occur. The `examine` and `talk to` steps below that `ACT4_GOLDEN_PATH` leaves out change nothing; every other step is in it.
 
 ### Phase 1: Fortress Breach
 
