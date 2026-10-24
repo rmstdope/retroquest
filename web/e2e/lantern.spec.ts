@@ -970,4 +970,44 @@ test.describe('Lantern UI (the default)', () => {
       ).toBe(true)
     })
   }
+
+  test('keeps a wrapped closing line inside the column on a phone', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.modalChapter = {
+        kind: 'complete',
+        act: 'Act III',
+        title: 'Act III complete',
+        body:
+          'Your parents were Malakar’s closest friends. ' +
+          'The Dragon says they are warded away, not dead.',
+        stats: { questsCompleted: 6, questsTotal: 6, spells: 9, places: 12 },
+        nextAct: 'Act IV',
+      }
+      store.showModal = true
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+
+    const block = page.locator('.lq-chapter-block').first()
+    await expect(block).toBeVisible()
+    const box = (await block.boundingBox())!
+    const column = (await page.locator('.lq-chapter-body').boundingBox())!
+    expect(box.width).toBeGreaterThan(column.width * 0.85)
+    expect(box.x).toBeGreaterThanOrEqual(column.x - 1)
+    expect(box.x + box.width).toBeLessThanOrEqual(column.x + column.width + 1)
+    expect(
+      await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth <=
+          document.documentElement.clientWidth,
+      ),
+    ).toBe(true)
+  })
 })
