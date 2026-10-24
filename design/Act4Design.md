@@ -130,7 +130,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Encounter the first lieutenant in the Hall of Echoes
     -   **Prerequisites:** `truth_sight` (from the maze) and a shield against his despair: the Guardian's Chain, still carried, or the Loyalty Token
-    -   **Completion:** Raise the Guardian's Chain (or, if it was given to the captain, the Loyalty Token), then say redemption to the knight (nothing is consumed). Any other word is refused in-world: "The visor does not move. Whatever that word was, it is not the one he is waiting for."
+    -   **Completion:** See through all three of the hall's sights with `truth_sight`: the knight, the banners (the sigil of the king's own gate company, under the grime) and the Echo Stone (the knight weeping "Sorry" under the hall's voices). Then raise the Guardian's Chain (or, if it was given to the captain, the Loyalty Token) and say redemption to the knight (nothing is consumed). With none of the sights seen the word means nothing to him; with only some, "there is more in this hall to see through". Any other word is refused in-world: "The visor does not move. Whatever that word was, it is not the one he is waiting for."
     -   **Rewards:** Knight's Redemption, Enhanced Echo Stone, the spell `redemptions_light`,
         access to the Tower of Shadows
     -   **Who he is:** **Malakar's agent from Acts I and II.** With `truth_sight` Elior sees that
@@ -146,7 +146,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Face the second lieutenant in the Chamber of Whispers
     -   **Prerequisites:** "The Knight of Despair" completed; Knight's Redemption
-    -   **Completion:** Use the Knight's Redemption, cast `hearts_truth` on her, her staff and the whispers, then say understanding, or simply `listen`: standing still and listening to all of it is understanding too, with the same gates
+    -   **Completion:** Use the Knight's Redemption, then hear all three of the chamber's hearts with `hearts_truth`: the Sorceress herself (the girl sold for grain), her staff (the lonely silver mask) and the whispers (her own voice, repeating every lie so that she never has to hear the silence). Then say understanding, or simply `listen`: standing still and listening to all of it is understanding too, with the same gates
     -   **Rewards:** Sorceress's Truth, the spell `hearts_truth`, the secret passage to the Memory
         Vault
     -   **Who she is:** **The mark on Elena's curse in Greendale (Act II)** was the silver mask
@@ -327,6 +327,7 @@ door Elior came in by.
 
 #### Items
 
+-   Banners (`truth_sight` shows the king's gate sigil under the grime)
 -   Echo Stone (basic at first; enhanced after the knight's redemption). Held to the ear outside the maze, one voice under the rest says a single word the way a man says a word he has stopped believing in: redemption, the knight's own word. Once the stone is enhanced the voice no longer repeats it; the knight speaks clearly instead.
 
 #### Spells
@@ -371,6 +372,7 @@ silver mask on her staff is the mark that was on Elena's curse.
 
 #### Items
 
+-   Her staff and the crystal whispers (`hearts_truth` hears the mask and the single voice)
 -   Sorceress's Truth (given when she is understood)
 
 #### Spells
@@ -614,6 +616,23 @@ and changes a few lines of dialogue.
 | Mirror Labyrinth, The True Self         | Tell the reflection the truth about Elior's fear (`say truth to true self`) | **truth**   |
 | Hall of Echoes, Ghostly Warriors        | Cast `redemptions_light` on the ghostly warriors and let them rest      | **mercy**   |
 
+Other optional moments record nothing and gate nothing; each plays once, then a dim line:
+
+-   **Truth Sight** on the unmended memory orbs (the cradle by the fire, a Willowbrook cottage and
+    its well) and on Malakar (for a breath, a young man mending a toy at a workbench).
+-   **Heart's Truth** on the freed servants (they are afraid to go home and find no one waiting)
+    and on Malakar before the refrain (the Shadow's voice speaks through his).
+-   **In the Throne Chamber, before the refrain:** raising the Ancient Amulet burns Malakar's hand
+    ("Not like this.") and holding out the Lifelight Elixir makes him reach for it and stop.
+    Neither costs anything. The refrain said before he has spoken makes him laugh, then repeat
+    his offer.
+-   **The Bargain:** after his offer and before the refrain, `give ancient amulet to malakar`
+    accepts it. The wound yawns, a vision of Aren and Lysa young at the workbench shows, the
+    Shadow says "Not like this. Not by force.", the amulet will not break and Elior is thrown
+    back where he stood. Malakar: "You saw. Then you know I was not lying." Lysa then adds a
+    line to the farewell in every ending: "We saw you at the workbench with us, for a moment.
+    You let it go. That was the bravest thing you did today."
+
 Acts I-III each add their own two or three moments of the same three kinds (defined in their
 designs). The endings read the counters across the whole game, as described above.
 
@@ -705,7 +724,8 @@ where they would occur.
     - `use guardian's essence on servants`
     - `cast bless on servants`
         - Quest completed: "The Trapped Servants"
-        - Items obtained: `Loyalty Token`, `Servant's Pendant`
+        - Item obtained: `Loyalty Token`
+    - `take servant's pendant` (the freed servants leave it behind)
     - Optional (**selfless**): `give guardian's chain to captain of the guard`
     - `talk to freed servants` → "The mirrors show truth, but only echoes from the halls can reveal
       the full path."
@@ -734,6 +754,10 @@ where they would occur.
 
     - `cast truth sight on knight of despair` → the grey cloak and seal are the stranger's from
       Willowbrook and from the Secret Documents
+    - `cast truth sight on banners` → the sigil of the king's gate company: the knight served
+      Alden before he served Malakar
+    - `cast truth sight on echo stone` → under the hall's voices, the knight weeping "Sorry"
+    - (all three sights are needed before the word works; each shows once, then a dim line)
     - `use guardian's chain` (or `use loyalty token`, if the chain went to the captain),
       `talk to knight of despair`, `say redemption to knight`
         - Quest completed: "The Knight of Despair"
@@ -749,7 +773,11 @@ where they would occur.
 
     - `examine staff` → the silver mask, the mark on Elena's curse
     - `talk to sorceress of lies`, `use knight's redemption`
-    - `cast hearts truth on sorceress`, `say understanding to sorceress` (or `listen`)
+    - `cast hearts truth on sorceress` → the lonely woman and the girl sold in a hungry winter
+    - `cast hearts truth on staff` → the silver mask, made to be looked at and never looked at
+    - `cast hearts truth on whispers` → the whispers are one voice, hers
+    - (all three hearts are needed before understanding works; each shows once, then a dim line)
+    - `say understanding to sorceress` (or `listen`)
         - Quest completed: "The Sorceress of Lies"
         - Item obtained: `Sorceress's Truth`
         - Spell learned: `hearts_truth`
@@ -784,6 +812,7 @@ where they would occur.
     - `say refrain to malakar` → "Power follows purpose; purpose follows truth." (this is the refusal)
     - `use ancient amulet` → the amulet opens, the ward unseals, and the dream voice speaks
       through it and Malakar: "Close what I opened, and let them rest."
+    - (optional: the Bargain, see Optional choices)
     - `use lifelight elixir on malakar`, then `say forgiveness to malakar` → Spell learned: `forgiveness`
     - `cast forgiveness on wound` → the elixir is consumed
         - Quest completed: "The Final Stand"
@@ -815,7 +844,7 @@ Spells: `truth_sight` (5), `redemptions_light` (6), `hearts_truth` (8), `forgive
 
 **Items strictly necessary to complete Act IV:**
 
--   `Ward Stone Fragment`, `Guardian's Essence`, `Servant's Pendant`, `Loyalty Token`,
+-   `Guardian's Essence`, `Servant's Pendant`, `Loyalty Token`,
     `Guardian's Chain` (or the Loyalty Token in its place, if the chain was given away),
     `Echo Stone` (Enhanced after the knight), `Knight's Redemption`,
     `Sorceress's Truth`, `Ancient Amulet` (carried from Act I), `Lifelight Elixir` (consumed)
