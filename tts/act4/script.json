@@ -140,6 +140,21 @@
     "text": "A shimmering elixir that seems to contain liquid starlight. Threads of crystal clarity, phoenix flame, and draconic essence swirl within the glass vial."
   },
   {
+    "key": "1fcf25e17acb8a",
+    "speaker": "narrator",
+    "text": "A small silver medallion stamped with two clasped hands, warm from the friends who pressed it into your hand. Whoever carries it is not alone, and knows it."
+  },
+  {
+    "key": "1511ac64886212",
+    "speaker": "narrator",
+    "text": "A small crystalline pendant that shifts through the colours of the forest as you turn it: leaf green, acorn brown, snow, blossom. It is warm, the way a held hand is warm."
+  },
+  {
+    "key": "159fda9106a0c4",
+    "speaker": "narrator",
+    "text": "A crystal with a whole small forest in it. Tiny lights move inside like fireflies, and held close it sounds faintly of wind in leaves."
+  },
+  {
     "key": "1668105665b087",
     "speaker": "narrator",
     "text": "The token is warm in your hand. Someone, somewhere, is glad you came."
@@ -203,6 +218,21 @@
     "key": "1f1923faedfd28",
     "speaker": "narrator",
     "text": "The violet wall is gone. The gateway is only a gateway now."
+  },
+  {
+    "key": "175219ea14d8a0",
+    "speaker": "narrator",
+    "text": "A jagged piece of the right ward stone, carved with half a rune. It is cold, and keeps no time at all."
+  },
+  {
+    "key": "06b237b56417e6",
+    "speaker": "narrator",
+    "text": "A silver chain, each link inscribed with runes. It bound the guardians to the stones; now it binds nothing."
+  },
+  {
+    "key": "08993777469ac1",
+    "speaker": "narrator",
+    "text": "A small, steady light the colour of a candle flame, left where the last guardian stood. Whoever the guardians were made from was brave once. The light remembers it."
   },
   {
     "key": "12b90cfd8fef1a",
@@ -293,6 +323,16 @@
     "key": "06cecab6981f44",
     "speaker": "captain of the guard",
     "text": "'I held the gate for King Alden once. Now I hold it for... I cannot remember.'"
+  },
+  {
+    "key": "1953a5d597a222",
+    "speaker": "narrator",
+    "text": "Grey figures walk the courtyard paths in circles, chains of shadow at their ankles. They wear what is left of kitchen aprons and stable coats. None of them looks up."
+  },
+  {
+    "key": "10da90eb3cd1f4",
+    "speaker": "narrator",
+    "text": "A captain of the royal guard, his tabard black with soot. His eyes are open but see nothing, and his hand rests on a sword he has forgotten how to draw."
   },
   {
     "key": "0f4e62a865c9d3",
@@ -440,6 +480,11 @@
     "text": "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. Nothing stands between you and his sorrow, and the chain is gone with the captain. But you are not as alone as the knight would have you believe."
   },
   {
+    "key": "0fceec43484c31",
+    "speaker": "narrator",
+    "text": "A small blue crystal on a fine chain, from the freed servants. When you hold it, it feels as if someone is standing just behind you, ready to point the way."
+  },
+  {
     "key": "060072baa59d6e",
     "speaker": "narrator",
     "text": "The Freed Servants bow. One of them, an old woman with flour still in the creases of her hands, looks up."
@@ -548,11 +593,6 @@
     "key": "094c0ed72c7cb3",
     "speaker": "narrator",
     "text": "You step toward a corridor of light and walk straight into cold glass. Somewhere behind you, a reflection laughs. You are back at the entrance."
-  },
-  {
-    "key": "05ab6d16a74314",
-    "speaker": "narrator",
-    "text": "You drop the Echo Stone."
   },
   {
     "key": "1abf46b91ee87c",
@@ -793,6 +833,11 @@
     "key": "171f9e62e3af4f",
     "speaker": "narrator",
     "text": "They do not answer you. They only say it again, closer: your friends have left you. No one is coming. Name one who stayed, if you can."
+  },
+  {
+    "key": "0b102233ad7fc6",
+    "speaker": "narrator",
+    "text": "Voices without mouths, thick on the stair, saying the same thing again and again."
   },
   {
     "key": "05bdc4c871c3c1",
@@ -1888,6 +1933,26 @@
     "key": "1be326544250f4",
     "speaker": "narrator",
     "text": "The little light brushes your cheek, warm, and settles back into the hedge."
+  },
+  {
+    "key": "178da06277ebce",
+    "speaker": "narrator",
+    "text": "Your grandmother, waiting at the gate with her hands folded."
+  },
+  {
+    "key": "1039fd553f2bf1",
+    "speaker": "narrator",
+    "text": "Mira, standing beside Grandmother at the gate."
+  },
+  {
+    "key": "015f72acf1bfc1",
+    "speaker": "narrator",
+    "text": "Sir Cedric, leaning on the fence as if it were a wall."
+  },
+  {
+    "key": "049c15648f21a3",
+    "speaker": "narrator",
+    "text": "A small light that flickers in the hedge, keeping close."
   },
   {
     "key": "0d82522fa81715",

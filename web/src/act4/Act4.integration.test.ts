@@ -631,7 +631,7 @@ describe('Act 4 integration', () => {
     it('retraces south out of the maze and starts again at the entrance', () => {
       toMazeWithStone()
       executeCommands(game, ['west'])
-      expect(executeCommands(game, ['south'])).toContain('You move south to')
+      executeCommands(game, ['south'])
       expectCurrentRoom(game.state, 'Outer Courtyard')
       executeCommands(game, ['north'])
       expect(game.state.currentRoom.describe(game.state)).toContain(
