@@ -14,7 +14,7 @@ const STONE_OUTSIDE_MAZE =
 
 /** What the stone says when taken again, wherever it was dropped. */
 const PICKED_UP_AGAIN =
-  "It is warm, and the hall's echoes still speak inside it."
+  "The stone is warm, and the hall's echoes still speak inside it."
 
 /** What the stone is called, and how it looks, after the knight is redeemed. */
 const ENHANCED_NAME = 'Enhanced Echo Stone'
