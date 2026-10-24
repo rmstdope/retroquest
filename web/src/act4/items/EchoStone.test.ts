@@ -5,7 +5,7 @@ import { EchoStone } from './EchoStone'
 import { ServantsPendant } from './ServantsPendant'
 import { Mirrors } from './Mirrors'
 import { FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED } from '../Act4StoryFlags'
-import { expectMarkupWellFormed } from '@/testing/gameHelpers'
+import { executeCommands, expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 /** An Act IV game with the player standing in the maze. */
 function inMaze(): { game: Game; act: Act4 } {
@@ -22,6 +22,31 @@ describe('EchoStone', () => {
     const { game } = inMaze()
     expect(stone.canBeCarried).toBe(true)
     expect(stone.pickedUp(game.state)).toContain('You lift a smooth grey stone')
+  })
+
+  it('only mentions the niche beneath the banners on the first pickup', () => {
+    const { game, act } = inMaze()
+    game.state.currentRoom = act.rooms.HallOfEchoes
+    const first = executeCommands(game, ['take echo stone'])
+    expect(first).toContain('from a niche beneath the banners')
+    game.state.currentRoom = act.rooms.MirrorLabyrinth
+    executeCommands(game, ['drop echo stone'])
+    const again = executeCommands(game, ['take echo stone'])
+    expect(again).toContain('You take the [item_name]Echo Stone')
+    expect(again).not.toContain('banners')
+    expect(again).not.toContain('niche')
+    expectMarkupWellFormed(again)
+  })
+
+  it('remembers across a save and load that it left the niche', () => {
+    const { game, act } = inMaze()
+    game.state.currentRoom = act.rooms.HallOfEchoes
+    executeCommands(game, ['take echo stone'])
+    expect(game.loadSaveData(game.toSaveData())).toContain(
+      'Game loaded successfully.',
+    )
+    executeCommands(game, ['drop echo stone'])
+    expect(executeCommands(game, ['take echo stone'])).not.toContain('banners')
   })
 
   it('murmurs neutrally outside the maze, also with the pendant', () => {
