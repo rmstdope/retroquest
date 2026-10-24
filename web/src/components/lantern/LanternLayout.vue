@@ -171,8 +171,20 @@ function answerTooLong(): boolean {
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
 
+/** The hurry key whose key-up must not press the focused button. */
+let swallowKeyUp: string | null = null
+
+/** Swallows the key-up of a key that `onNarrationKey` consumed. */
+function onNarrationKeyUp(event: KeyboardEvent): void {
+  if (swallowKeyUp === null || event.key !== swallowKeyUp) return
+  swallowKeyUp = null
+  event.preventDefault()
+}
+
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
+  // A fresh key press forgets a key-up that never came (window lost focus).
+  swallowKeyUp = null
   if (!narration.isNarrating || event.defaultPrevented) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   const hurries = event.key === ' ' || event.key === 'Enter'
@@ -189,15 +201,17 @@ function onNarrationKey(event: KeyboardEvent): void {
     return
   const target = event.target instanceof Element ? event.target : null
   if (target?.closest('input, textarea, select, [contenteditable]')) return
-  // Space and Enter keep their meaning on a button or a link.
-  if (hurries && target?.closest('button, a, [role="button"]')) return
+  // Space and Enter hurry even with a verb button focused; only fields keep
+  // them. A button presses on Space's key-up, so that is swallowed too.
   event.preventDefault()
+  if (hurries) swallowKeyUp = event.key
   if (hurries) narration.hurry()
   else narration.skipAll()
 }
 
 onMounted(() => {
   document.addEventListener('keydown', onNarrationKey)
+  document.addEventListener('keyup', onNarrationKeyUp)
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
@@ -207,6 +221,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
   document.removeEventListener('keydown', onNarrationKey)
+  document.removeEventListener('keyup', onNarrationKeyUp)
   narration.skipAll()
   storyResize?.disconnect()
 })

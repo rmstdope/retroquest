@@ -54,6 +54,36 @@ test('tells an answer block by block, and a double tap shows the rest', async ({
   expect(await lastTurnBlocks(page).count()).toBeGreaterThan(early)
 })
 
+test('Space and Enter hurry with a verb focused, and do not press it', async ({
+  page,
+}): Promise<void> => {
+  await slowNarrationClips(page)
+  await startAct1(page)
+  const input = page.getByLabel('Command')
+  await input.fill('talk to voice')
+  await input.press('Enter')
+  await expect(lastTurnBlocks(page).first()).toBeVisible()
+
+  // Back to the verbs, as the default mode has it, with one of them focused.
+  await page
+    .getByRole('region', { name: 'Actions' })
+    .getByRole('button', { name: 'Actions', exact: true })
+    .click()
+  const verb = page
+    .getByRole('region', { name: 'Actions' })
+    .getByRole('button', { name: 'Look', exact: true })
+  await verb.focus()
+  const turns = await page.getByTestId('turn').count()
+  const shown = await lastTurnBlocks(page).count()
+
+  await page.keyboard.press(' ')
+  await expect(lastTurnBlocks(page)).toHaveCount(shown + 1)
+  await page.keyboard.press('Enter')
+  await expect(lastTurnBlocks(page)).toHaveCount(shown + 2)
+  // Neither key ran the verb: no new turn.
+  expect(await page.getByTestId('turn').count()).toBe(turns)
+})
+
 test('shows an answer at once with narration off', async ({
   page,
 }): Promise<void> => {
