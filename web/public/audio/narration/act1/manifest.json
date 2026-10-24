@@ -4166,7 +4166,7 @@
     "end": 14.22
    },
    {
-    "word": "man\u2019s",
+    "word": "man’s",
     "start": 14.22,
     "end": 14.64
    },
@@ -6251,7 +6251,7 @@
     "end": 13.44
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 13.44,
     "end": 13.82
    },
@@ -11492,58 +11492,6 @@
    }
   ]
  },
- "0b1af4bfc39501": {
-  "file": "0b1af4bfc39501.mp3",
-  "speaker": "narrator",
-  "duration": 3.529,
-  "words": [
-   {
-    "word": "You",
-    "start": 0.0,
-    "end": 0.28
-   },
-   {
-    "word": "take",
-    "start": 0.28,
-    "end": 0.62
-   },
-   {
-    "word": "the",
-    "start": 0.62,
-    "end": 0.86
-   },
-   {
-    "word": "locket.",
-    "start": 0.86,
-    "end": 1.32
-   },
-   {
-    "word": "You",
-    "start": 1.85,
-    "end": 2.16
-   },
-   {
-    "word": "pick",
-    "start": 2.16,
-    "end": 2.54
-   },
-   {
-    "word": "up",
-    "start": 2.54,
-    "end": 2.74
-   },
-   {
-    "word": "the",
-    "start": 2.74,
-    "end": 2.92
-   },
-   {
-    "word": "locket.",
-    "start": 2.92,
-    "end": 3.34
-   }
-  ]
- },
  "0b241988fa6096": {
   "file": "0b241988fa6096.mp3",
   "speaker": "tilda",
@@ -15916,203 +15864,6 @@
    }
   ]
  },
- "10366103cfb7b1": {
-  "file": "10366103cfb7b1.mp3",
-  "speaker": "narrator",
-  "duration": 13.421,
-  "words": [
-   {
-    "word": "It",
-    "start": 0.0,
-    "end": 0.18
-   },
-   {
-    "word": "does",
-    "start": 0.18,
-    "end": 0.36
-   },
-   {
-    "word": "not",
-    "start": 0.36,
-    "end": 0.6
-   },
-   {
-    "word": "answer,",
-    "start": 0.6,
-    "end": 1.04
-   },
-   {
-    "word": "not",
-    "start": 1.04,
-    "end": 1.62
-   },
-   {
-    "word": "in",
-    "start": 1.62,
-    "end": 1.78
-   },
-   {
-    "word": "words.",
-    "start": 1.78,
-    "end": 2.22
-   },
-   {
-    "word": "It",
-    "start": 2.22,
-    "end": 2.96
-   },
-   {
-    "word": "lifts",
-    "start": 2.96,
-    "end": 3.28
-   },
-   {
-    "word": "its",
-    "start": 3.28,
-    "end": 3.5
-   },
-   {
-    "word": "head",
-    "start": 3.5,
-    "end": 3.76
-   },
-   {
-    "word": "toward",
-    "start": 3.76,
-    "end": 4.02
-   },
-   {
-    "word": "the",
-    "start": 4.02,
-    "end": 4.2
-   },
-   {
-    "word": "glowing",
-    "start": 4.2,
-    "end": 4.48
-   },
-   {
-    "word": "stone,",
-    "start": 4.48,
-    "end": 5.0
-   },
-   {
-    "word": "then",
-    "start": 5.0,
-    "end": 5.6
-   },
-   {
-    "word": "dips",
-    "start": 5.6,
-    "end": 5.98
-   },
-   {
-    "word": "it",
-    "start": 5.98,
-    "end": 6.14
-   },
-   {
-    "word": "to",
-    "start": 6.14,
-    "end": 6.34
-   },
-   {
-    "word": "you,",
-    "start": 6.34,
-    "end": 6.62
-   },
-   {
-    "word": "slow",
-    "start": 6.62,
-    "end": 7.46
-   },
-   {
-    "word": "and",
-    "start": 7.46,
-    "end": 7.72
-   },
-   {
-    "word": "deliberate,",
-    "start": 7.72,
-    "end": 8.18
-   },
-   {
-    "word": "as",
-    "start": 8.18,
-    "end": 8.82
-   },
-   {
-    "word": "if",
-    "start": 8.82,
-    "end": 9.0
-   },
-   {
-    "word": "in",
-    "start": 9.0,
-    "end": 9.14
-   },
-   {
-    "word": "thanks.",
-    "start": 9.14,
-    "end": 9.58
-   },
-   {
-    "word": "For",
-    "start": 9.58,
-    "end": 10.36
-   },
-   {
-    "word": "a",
-    "start": 10.36,
-    "end": 10.5
-   },
-   {
-    "word": "heartbeat",
-    "start": 10.5,
-    "end": 11.02
-   },
-   {
-    "word": "the",
-    "start": 11.02,
-    "end": 11.26
-   },
-   {
-    "word": "whole",
-    "start": 11.26,
-    "end": 11.58
-   },
-   {
-    "word": "glade",
-    "start": 11.58,
-    "end": 12.02
-   },
-   {
-    "word": "seems",
-    "start": 12.02,
-    "end": 12.34
-   },
-   {
-    "word": "to",
-    "start": 12.34,
-    "end": 12.54
-   },
-   {
-    "word": "breathe",
-    "start": 12.54,
-    "end": 12.88
-   },
-   {
-    "word": "with",
-    "start": 12.88,
-    "end": 13.14
-   },
-   {
-    "word": "it.",
-    "start": 13.14,
-    "end": 13.3
-   }
-  ]
- },
  "10576a5bc16a8b": {
   "file": "10576a5bc16a8b.mp3",
   "speaker": "grandmother",
@@ -17824,7 +17575,7 @@
     "end": 5.88
    },
    {
-    "word": "\u2026and",
+    "word": "…and",
     "start": 5.88,
     "end": 6.7
    },
@@ -17839,7 +17590,7 @@
     "end": 7.2
    },
    {
-    "word": "rest\u2026",
+    "word": "rest…",
     "start": 7.2,
     "end": 7.66
    },
@@ -18868,78 +18619,6 @@
    }
   ]
  },
- "13404625e6187f": {
-  "file": "13404625e6187f.mp3",
-  "speaker": "narrator",
-  "duration": 4.783,
-  "words": [
-   {
-    "word": "As",
-    "start": 0.0,
-    "end": 0.24
-   },
-   {
-    "word": "you",
-    "start": 0.24,
-    "end": 0.38
-   },
-   {
-    "word": "do",
-    "start": 0.38,
-    "end": 0.58
-   },
-   {
-    "word": "this,",
-    "start": 0.58,
-    "end": 0.88
-   },
-   {
-    "word": "the",
-    "start": 1.08,
-    "end": 1.34
-   },
-   {
-    "word": "priest",
-    "start": 1.34,
-    "end": 1.72
-   },
-   {
-    "word": "gasps",
-    "start": 1.72,
-    "end": 2.34
-   },
-   {
-    "word": "and",
-    "start": 2.34,
-    "end": 2.9
-   },
-   {
-    "word": "looks",
-    "start": 2.9,
-    "end": 3.18
-   },
-   {
-    "word": "closely",
-    "start": 3.18,
-    "end": 3.74
-   },
-   {
-    "word": "at",
-    "start": 3.74,
-    "end": 3.98
-   },
-   {
-    "word": "its",
-    "start": 3.98,
-    "end": 4.16
-   },
-   {
-    "word": "crest.",
-    "start": 4.16,
-    "end": 4.46
-   }
-  ]
- },
  "136e4c997d932c": {
   "file": "136e4c997d932c.mp3",
   "speaker": "narrator",
@@ -19265,7 +18944,7 @@
     "end": 3.94
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 3.94,
     "end": 4.4
    },
@@ -19567,7 +19246,7 @@
     "end": 14.56
    },
    {
-    "word": "\u2013",
+    "word": "–",
     "start": 14.56,
     "end": 14.78
    },
@@ -20037,7 +19716,7 @@
     "end": 48.68
    },
    {
-    "word": "\u2026and",
+    "word": "…and",
     "start": 48.9,
     "end": 49.4
    },
@@ -20052,7 +19731,7 @@
     "end": 49.8
    },
    {
-    "word": "rest\u2026",
+    "word": "rest…",
     "start": 49.8,
     "end": 50.26
    },
@@ -20127,7 +19806,7 @@
     "end": 55.38
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 55.38,
     "end": 55.58
    },
@@ -20664,73 +20343,6 @@
     "word": "you.",
     "start": 18.44,
     "end": 18.68
-   }
-  ]
- },
- "1447a7b3404b33": {
-  "file": "1447a7b3404b33.mp3",
-  "speaker": "narrator",
-  "duration": 4.876,
-  "words": [
-   {
-    "word": "It",
-    "start": 0.0,
-    "end": 0.14
-   },
-   {
-    "word": "lands",
-    "start": 0.14,
-    "end": 0.54
-   },
-   {
-    "word": "heads",
-    "start": 0.54,
-    "end": 0.82
-   },
-   {
-    "word": "up.",
-    "start": 0.82,
-    "end": 1.18
-   },
-   {
-    "word": "Seems",
-    "start": 1.38,
-    "end": 1.94
-   },
-   {
-    "word": "like",
-    "start": 1.94,
-    "end": 2.2
-   },
-   {
-    "word": "a",
-    "start": 2.2,
-    "end": 2.32
-   },
-   {
-    "word": "regular",
-    "start": 2.32,
-    "end": 2.68
-   },
-   {
-    "word": "coin,",
-    "start": 2.68,
-    "end": 3.18
-   },
-   {
-    "word": "perhaps",
-    "start": 3.38,
-    "end": 3.98
-   },
-   {
-    "word": "for",
-    "start": 3.98,
-    "end": 4.28
-   },
-   {
-    "word": "trading.",
-    "start": 4.28,
-    "end": 4.6
    }
   ]
  },
@@ -23076,7 +22688,7 @@
     "end": 13.66
    },
    {
-    "word": "restful\u2014no",
+    "word": "restful—no",
     "start": 13.66,
     "end": 14.64
    },
@@ -23420,7 +23032,7 @@
     "end": 1.9
    },
    {
-    "word": "fisherman\u2014he",
+    "word": "fisherman—he",
     "start": 1.9,
     "end": 3.02
    },
@@ -25016,93 +24628,6 @@
    }
   ]
  },
- "195d44826e58a2": {
-  "file": "195d44826e58a2.mp3",
-  "speaker": "narrator",
-  "duration": 7.848,
-  "words": [
-   {
-    "word": "It",
-    "start": 0.0,
-    "end": 0.18
-   },
-   {
-    "word": "now",
-    "start": 0.18,
-    "end": 0.42
-   },
-   {
-    "word": "casts",
-    "start": 0.42,
-    "end": 0.98
-   },
-   {
-    "word": "a",
-    "start": 0.98,
-    "end": 1.22
-   },
-   {
-    "word": "warm",
-    "start": 1.22,
-    "end": 1.54
-   },
-   {
-    "word": "glow.",
-    "start": 1.54,
-    "end": 1.9
-   },
-   {
-    "word": "The",
-    "start": 1.9,
-    "end": 2.74
-   },
-   {
-    "word": "flickering",
-    "start": 2.74,
-    "end": 3.32
-   },
-   {
-    "word": "candlelight",
-    "start": 3.32,
-    "end": 4.12
-   },
-   {
-    "word": "reveals",
-    "start": 4.12,
-    "end": 4.84
-   },
-   {
-    "word": "a",
-    "start": 4.84,
-    "end": 5.04
-   },
-   {
-    "word": "locket",
-    "start": 5.04,
-    "end": 5.54
-   },
-   {
-    "word": "that",
-    "start": 5.54,
-    "end": 5.98
-   },
-   {
-    "word": "was",
-    "start": 5.98,
-    "end": 6.18
-   },
-   {
-    "word": "previously",
-    "start": 6.18,
-    "end": 6.82
-   },
-   {
-    "word": "unseen!",
-    "start": 6.82,
-    "end": 7.32
-   }
-  ]
- },
  "196c52ea87c658": {
   "file": "196c52ea87c658.mp3",
   "speaker": "narrator",
@@ -25873,7 +25398,7 @@
     "end": 7.42
    },
    {
-    "word": "world\u2014listen",
+    "word": "world—listen",
     "start": 7.42,
     "end": 8.72
    },
@@ -31433,188 +30958,6 @@
    }
   ]
  },
- "1d60e758a5113c": {
-  "file": "1d60e758a5113c.mp3",
-  "speaker": "narrator",
-  "duration": 12.446,
-  "words": [
-   {
-    "word": "They",
-    "start": 0.0,
-    "end": 0.28
-   },
-   {
-    "word": "peck",
-    "start": 0.28,
-    "end": 0.68
-   },
-   {
-    "word": "at",
-    "start": 0.68,
-    "end": 0.88
-   },
-   {
-    "word": "it",
-    "start": 0.88,
-    "end": 1.0
-   },
-   {
-    "word": "excitedly,",
-    "start": 1.0,
-    "end": 1.76
-   },
-   {
-    "word": "and",
-    "start": 1.76,
-    "end": 2.42
-   },
-   {
-    "word": "in",
-    "start": 2.42,
-    "end": 2.58
-   },
-   {
-    "word": "the",
-    "start": 2.58,
-    "end": 2.7
-   },
-   {
-    "word": "flapping",
-    "start": 2.7,
-    "end": 3.2
-   },
-   {
-    "word": "commotion",
-    "start": 3.2,
-    "end": 3.78
-   },
-   {
-    "word": "something",
-    "start": 3.78,
-    "end": 4.18
-   },
-   {
-    "word": "shiny",
-    "start": 4.18,
-    "end": 4.64
-   },
-   {
-    "word": "is",
-    "start": 4.64,
-    "end": 4.92
-   },
-   {
-    "word": "knocked",
-    "start": 4.92,
-    "end": 5.24
-   },
-   {
-    "word": "from",
-    "start": 5.24,
-    "end": 5.46
-   },
-   {
-    "word": "a",
-    "start": 5.46,
-    "end": 5.6
-   },
-   {
-    "word": "high",
-    "start": 5.6,
-    "end": 5.82
-   },
-   {
-    "word": "rafter.",
-    "start": 5.82,
-    "end": 6.28
-   },
-   {
-    "word": "It's",
-    "start": 6.28,
-    "end": 7.34
-   },
-   {
-    "word": "a",
-    "start": 7.34,
-    "end": 7.46
-   },
-   {
-    "word": "small",
-    "start": 7.46,
-    "end": 7.82
-   },
-   {
-    "word": "key,",
-    "start": 7.82,
-    "end": 8.18
-   },
-   {
-    "word": "hidden",
-    "start": 8.18,
-    "end": 9.0
-   },
-   {
-    "word": "up",
-    "start": 9.0,
-    "end": 9.16
-   },
-   {
-    "word": "there",
-    "start": 9.16,
-    "end": 9.34
-   },
-   {
-    "word": "long",
-    "start": 9.34,
-    "end": 9.64
-   },
-   {
-    "word": "ago",
-    "start": 9.64,
-    "end": 9.92
-   },
-   {
-    "word": "by",
-    "start": 9.92,
-    "end": 10.2
-   },
-   {
-    "word": "someone",
-    "start": 10.2,
-    "end": 10.58
-   },
-   {
-    "word": "who",
-    "start": 10.58,
-    "end": 10.84
-   },
-   {
-    "word": "did",
-    "start": 10.84,
-    "end": 11.1
-   },
-   {
-    "word": "not",
-    "start": 11.1,
-    "end": 11.34
-   },
-   {
-    "word": "want",
-    "start": 11.34,
-    "end": 11.58
-   },
-   {
-    "word": "it",
-    "start": 11.58,
-    "end": 11.72
-   },
-   {
-    "word": "found!",
-    "start": 11.72,
-    "end": 12.16
-   }
-  ]
- },
  "1d8e270a441a9c": {
   "file": "1d8e270a441a9c.mp3",
   "speaker": "narrator",
@@ -32132,233 +31475,6 @@
     "word": "up.",
     "start": 1.6,
     "end": 1.82
-   }
-  ]
- },
- "1e2d572aba6739": {
-  "file": "1e2d572aba6739.mp3",
-  "speaker": "narrator",
-  "duration": 16.068,
-  "words": [
-   {
-    "word": "It",
-    "start": 0.0,
-    "end": 0.16
-   },
-   {
-    "word": "does",
-    "start": 0.16,
-    "end": 0.38
-   },
-   {
-    "word": "not",
-    "start": 0.38,
-    "end": 0.68
-   },
-   {
-    "word": "answer,",
-    "start": 0.68,
-    "end": 1.2
-   },
-   {
-    "word": "not",
-    "start": 1.2,
-    "end": 1.88
-   },
-   {
-    "word": "in",
-    "start": 1.88,
-    "end": 2.06
-   },
-   {
-    "word": "words.",
-    "start": 2.06,
-    "end": 2.52
-   },
-   {
-    "word": "Its",
-    "start": 2.52,
-    "end": 3.3
-   },
-   {
-    "word": "dark",
-    "start": 3.3,
-    "end": 3.64
-   },
-   {
-    "word": "eyes",
-    "start": 3.64,
-    "end": 4.08
-   },
-   {
-    "word": "hold",
-    "start": 4.08,
-    "end": 4.44
-   },
-   {
-    "word": "yours",
-    "start": 4.44,
-    "end": 4.74
-   },
-   {
-    "word": "for",
-    "start": 4.74,
-    "end": 4.98
-   },
-   {
-    "word": "a",
-    "start": 4.98,
-    "end": 5.14
-   },
-   {
-    "word": "long",
-    "start": 5.14,
-    "end": 5.44
-   },
-   {
-    "word": "moment.",
-    "start": 5.44,
-    "end": 5.86
-   },
-   {
-    "word": "Then",
-    "start": 5.86,
-    "end": 6.76
-   },
-   {
-    "word": "its",
-    "start": 6.76,
-    "end": 6.98
-   },
-   {
-    "word": "gaze",
-    "start": 6.98,
-    "end": 7.38
-   },
-   {
-    "word": "drifts",
-    "start": 7.38,
-    "end": 7.84
-   },
-   {
-    "word": "to",
-    "start": 7.84,
-    "end": 8.06
-   },
-   {
-    "word": "the",
-    "start": 8.06,
-    "end": 8.2
-   },
-   {
-    "word": "mossy",
-    "start": 8.2,
-    "end": 8.72
-   },
-   {
-    "word": "stone",
-    "start": 8.72,
-    "end": 9.0
-   },
-   {
-    "word": "and",
-    "start": 9.0,
-    "end": 9.66
-   },
-   {
-    "word": "the",
-    "start": 9.66,
-    "end": 9.82
-   },
-   {
-    "word": "shadowed",
-    "start": 9.82,
-    "end": 10.36
-   },
-   {
-    "word": "runes",
-    "start": 10.36,
-    "end": 10.8
-   },
-   {
-    "word": "upon",
-    "start": 10.8,
-    "end": 11.1
-   },
-   {
-    "word": "it...",
-    "start": 11.1,
-    "end": 11.32
-   },
-   {
-    "word": "then",
-    "start": 11.32,
-    "end": 11.7
-   },
-   {
-    "word": "to",
-    "start": 11.7,
-    "end": 11.9
-   },
-   {
-    "word": "you,",
-    "start": 11.9,
-    "end": 12.24
-   },
-   {
-    "word": "patient,",
-    "start": 12.24,
-    "end": 12.86
-   },
-   {
-    "word": "as",
-    "start": 12.86,
-    "end": 13.68
-   },
-   {
-    "word": "if",
-    "start": 13.68,
-    "end": 13.84
-   },
-   {
-    "word": "waiting",
-    "start": 13.84,
-    "end": 14.16
-   },
-   {
-    "word": "for",
-    "start": 14.16,
-    "end": 14.38
-   },
-   {
-    "word": "you",
-    "start": 14.38,
-    "end": 14.52
-   },
-   {
-    "word": "to",
-    "start": 14.52,
-    "end": 14.68
-   },
-   {
-    "word": "bring",
-    "start": 14.68,
-    "end": 14.96
-   },
-   {
-    "word": "something",
-    "start": 14.96,
-    "end": 15.4
-   },
-   {
-    "word": "to",
-    "start": 15.4,
-    "end": 15.6
-   },
-   {
-    "word": "light.",
-    "start": 15.6,
-    "end": 15.86
    }
   ]
  },
