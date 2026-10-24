@@ -1,6 +1,5 @@
 import { Item, type GameState, clue } from '@/engine'
 import { FLAG_WELL_EXAMINED } from '../Act1StoryFlags'
-import { refreshRoomDescription } from '../refreshRoomDescription'
 import { Bucket } from './Bucket'
 import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
@@ -108,7 +107,6 @@ export class Well extends Item {
       )
     }
     this.isPurified = true
-    refreshRoomDescription(gameState)
     if (this.containsRing) {
       return (
         'The murky water shimmers and clears! You can now ' +
