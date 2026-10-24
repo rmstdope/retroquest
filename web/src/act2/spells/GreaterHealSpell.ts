@@ -1,10 +1,4 @@
-import {
-  Spell,
-  type Character,
-  type GameState,
-  type Item,
-  characterName,
-} from '@/engine'
+import { Spell, type Character, type GameState, type Item } from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
 import { Caravan } from '../items/Caravan'
 
@@ -25,11 +19,10 @@ export class GreaterHealSpell extends Spell {
   }
 
   override castSpell(_gameState: GameState): string {
-    const name = this.name
     return (
-      `[success]You cast [spell_name]${name}[/spell_name], channeling powerful ` +
-      'healing energy. The spell radiates outward, ready to cure serious ' +
-      'ailments, but finds no one in immediate need of healing nearby.[/success]'
+      '[success]Powerful healing energy radiates outward, ready to cure ' +
+      'serious ailments, but finds no one in immediate need of healing ' +
+      'nearby.[/success]'
     )
   }
 
@@ -50,13 +43,9 @@ export class GreaterHealSpell extends Spell {
       // Invoke Elena's staged recovery handler
       return targetCharacter.receiveGreaterHeal(gameState)
     }
-    const name = this.name
-    const tname = targetCharacter.name
     return (
-      `[success]You cast [spell_name]${name}[/spell_name] on ` +
-      characterName(tname) +
-      '. Healing energy flows through them, restoring their vitality and ' +
-      'curing any minor ailments they may have had.[/success]'
+      '[success]Golden healing energy flows from your hands, restoring ' +
+      'vitality and curing any minor ailments.[/success]'
     )
   }
 }

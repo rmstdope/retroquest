@@ -1,10 +1,17 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  clue,
+  type Character,
+  type GameState,
+  type Item,
+} from '@/engine'
 import { Malakar } from '../characters/Malakar'
 import { Wound } from '../items/Wound'
 
 /** What the spell says when it is aimed at Malakar. */
-const ALREADY_FORGIVEN =
-  '[failure]Malakar is already forgiven. It is the wound that needs it.[/failure]'
+const ALREADY_FORGIVEN = clue(
+  'Malakar is already forgiven. It is the wound that needs it.',
+)
 
 /**
  * Learned from saying "forgiveness" to the healed Malakar. Cast on the wound

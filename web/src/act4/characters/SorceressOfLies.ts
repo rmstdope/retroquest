@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, clue, dialogue } from '@/engine'
 import {
   FLAG_ACT4_BADGE_SHOWN,
   FLAG_ACT4_HEARTS_TRUTH_CAST,
@@ -83,17 +83,13 @@ export class SorceressOfLies extends Character {
     }
     gameState.setStoryFlag(FLAG_ACT4_HEARTS_TRUTH_CAST, true)
     return [
-      event(
-        'The whispers fall away. Beneath them the Sorceress is alone, as she ' +
-          'has always been: no one has ever spoken to her without a lie, and ' +
-          'she has never answered with anything else.',
-      ),
-      event(
-        'And under the loneliness, older and smaller: a girl in a hungry ' +
-          'winter, and the parents who sold her for a sack of grain. She ' +
-          'tells you the lie because she believes it. It is the only story ' +
-          'about parents she has ever known.',
-      ),
+      'The whispers fall away. Beneath them the Sorceress is alone, as she ' +
+        'has always been: no one has ever spoken to her without a lie, and ' +
+        'she has never answered with anything else.',
+      'And under the loneliness, older and smaller: a girl in a hungry ' +
+        'winter, and the parents who sold her for a sack of grain. She ' +
+        'tells you the lie because she believes it. It is the only story ' +
+        'about parents she has ever known.',
     ].join('\n')
   }
 
@@ -101,12 +97,12 @@ export class SorceressOfLies extends Character {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
-      return event(
+      return (
         "Without the chamber's glamour she looks tired and ordinary, a woman " +
-          'who has not slept in years. She keeps her eyes on the arch.',
+        'who has not slept in years. She keeps her eyes on the arch.'
       )
     }
-    return event(this.description)
+    return this.description
   }
 
   /** What she says changes as the badge is shown and she is redeemed. */
@@ -149,7 +145,7 @@ export class SorceressOfLies extends Character {
           'Elior',
           'I understand. You have been alone in here a long time.',
         ),
-        event(`The Sorceress goes very still. ${CRYSTALS_QUIET}`),
+        `The Sorceress goes very still. ${CRYSTALS_QUIET}`,
       ].join('\n'),
     )
   }
@@ -166,34 +162,32 @@ export class SorceressOfLies extends Character {
     }
     return this.understandBy(
       gameState,
-      event(
-        'You say nothing. You stand in the middle of her chamber and ' +
-          'listen, to all of it, for as long as it takes. The Sorceress ' +
-          `goes very still. ${CRYSTALS_QUIET}`,
-      ),
+      'You say nothing. You stand in the middle of her chamber and ' +
+        'listen, to all of it, for as long as it takes. The Sorceress ' +
+        `goes very still. ${CRYSTALS_QUIET}`,
     )
   }
 
   /** The shared gates and the redemption, led in by what Elior did (ready-made lines): the word, or the listening. */
   private understandBy(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
-      return (
-        '[failure]She laughs, and the chamber laughs with her. Whatever you ' +
-        'came to give her is lost among the whispers.[/failure]'
+      return clue(
+        'She laughs, and the chamber laughs with her. Whatever you ' +
+          'came to give her is lost among the whispers.',
       )
     }
     const heard = this.heartsHeard(gameState)
     if (heard > 0 && heard < HEARTS_NEEDED) {
-      return (
-        '[failure]You have heard some of her, but not all. There is more in ' +
-        'this chamber that is hers to listen to.[/failure]'
+      return clue(
+        'You have heard some of her, but not all. There is more in ' +
+          'this chamber that is hers to listen to.',
       )
     }
     if (heard === 0) {
-      return (
-        '[failure]You cannot answer a pain you cannot hear. Beneath the ' +
-        'whispers her heart is saying something, too quietly for ears ' +
-        'alone.[/failure]'
+      return clue(
+        'You cannot answer a pain you cannot hear. Beneath the ' +
+          'whispers her heart is saying something, too quietly for ears ' +
+          'alone.',
       )
     }
     return this.redeem(gameState, lead)
@@ -215,10 +209,8 @@ export class SorceressOfLies extends Character {
     return [
       lead,
       ...confession,
-      event(
-        'She lifts the silver mask from her staff and puts it in your hands.',
-      ),
-      event("You received [item_name]Sorceress's Truth[/item_name]!"),
+      'She lifts the silver mask from her staff and puts it in your hands.',
+      "You received [item_name]Sorceress's Truth[/item_name]!",
     ].join('\n')
   }
 }

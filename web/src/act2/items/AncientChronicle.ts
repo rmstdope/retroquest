@@ -1,11 +1,4 @@
-import {
-  Item,
-  type GameState,
-  characterName,
-  event,
-  speech,
-  writing,
-} from '@/engine'
+import { Item, type GameState, characterName, speech, writing } from '@/engine'
 import {
   FLAG_READ_ANCIENT_CHRONICLE,
   FLAG_SPECTRAL_LIBRARIAN_FRIENDLY,
@@ -39,9 +32,7 @@ export class AncientChronicle extends Item {
     if (gameState.getStoryFlag(FLAG_SPECTRAL_LIBRARIAN_FRIENDLY)) {
       if (gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)) {
         return (
-          event(
-            "You turn again to the newer ink on the chronicle's last page:",
-          ) +
+          "You turn again to the newer ink on the chronicle's last page:" +
           '\n' +
           writing(MALAKAR_WARNING)
         )
@@ -50,14 +41,12 @@ export class AncientChronicle extends Item {
       gameState.learnSpell(new DispelSpell())
 
       return (
-        event(
-          'You open the chronicle. Pressed into the leather of its cover is ' +
-            'the sun rising over three linked rings, the mark of the Wardens ' +
-            'of the Dawn. On the first page the same mark is drawn the old ' +
-            'way, a tree under two moons, and the first entry tells of ' +
-            'Wardens who settled a quiet valley to keep their relic safe, ' +
-            'and built their mill over a seat of power there.',
-        ) +
+        "Pressed into the leather of the chronicle's cover is " +
+        'the sun rising over three linked rings, the mark of the Wardens ' +
+        'of the Dawn. On the first page the same mark is drawn the old ' +
+        'way, a tree under two moons, and the first entry tells of ' +
+        'Wardens who settled a quiet valley to keep their relic safe, ' +
+        'and built their mill over a seat of power there.' +
         '\n' +
         writing(
           "'The Wardens were few, and their magic was of the old kind: to " +
@@ -69,21 +58,17 @@ export class AncientChronicle extends Item {
         '[success]You study the pages until the words settle in your mind. ' +
         'You have learned [spell_name]dispel[/spell_name].[/success]' +
         '\n' +
-        event(
-          'On the last page the ink is newer than the rest, as if someone ' +
-            'added it within living memory:',
-        ) +
+        'On the last page the ink is newer than the rest, as if someone ' +
+        'added it within living memory:' +
         '\n' +
         writing(MALAKAR_WARNING)
       )
     }
     return (
-      event(
-        'The ' +
-          characterName('Spectral Librarian') +
-          ' materializes before you, blocking your access to the ancient ' +
-          'texts.',
-      ) +
+      'The ' +
+      characterName('Spectral Librarian') +
+      ' materializes before you, blocking your access to the ancient ' +
+      'texts.' +
       '\n' +
       speech('These sacred chronicles are not for the unworthy,') +
       ' the spirit intones. ' +

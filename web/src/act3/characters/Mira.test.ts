@@ -1,12 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-  Game,
-  type Room,
-  characterName,
-  dialogue,
-  event,
-  speech,
-} from '@/engine'
+import { Game, type Room, dialogue, speech } from '@/engine'
 import { Act3 } from '../Act3'
 import {
   executeCommands,
@@ -140,7 +133,7 @@ describe('Mira', () => {
     game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, false)
     const out = m.talkTo(game.state)
     expect(out).toContain('seek the traces your parents left behind')
-    expect(out).not.toContain('You arrive at')
+    expect(out).not.toContain('you arrive at your next destination')
 
     // letter read -> should teleport to Lower Switchbacks
     game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
@@ -151,7 +144,7 @@ describe('Mira', () => {
 
     const res = m.talkTo(game.state)
 
-    expect(res).toContain('You arrive at')
+    expect(res).toContain('you arrive at your next destination')
     expect(game.state.currentRoom.characters).toContain(m)
     expect(hasCharacterNamed(game.state.currentRoom, 'sir cedric')).toBe(true)
   })
@@ -186,7 +179,7 @@ describe('Mira', () => {
     expect(out).not.toContain('second virtue')
     expect(out.toLowerCase()).toContain('wisdom')
     expect(out.toLowerCase()).toContain('phoenix')
-    expect(out).not.toContain('You arrive at')
+    expect(out).not.toContain('you arrive at your next destination')
     expect(game.state.currentRoom.characters).toContain(m)
   })
 
@@ -203,7 +196,7 @@ describe('Mira', () => {
     expect(out).toContain(
       'discover the words your parents left burned into stone',
     )
-    expect(out).not.toContain('You arrive at')
+    expect(out).not.toContain('you arrive at your next destination')
 
     // inscription read - should allow teleport
     game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
@@ -213,7 +206,7 @@ describe('Mira', () => {
 
     out = m.talkTo(game.state)
 
-    expect(out).toContain('You arrive at')
+    expect(out).toContain('you arrive at your next destination')
     expect(
       out.includes('Cavern Mouth') ||
         game.state.currentRoom.name.includes('CavernMouth'),
@@ -234,7 +227,7 @@ describe('Mira', () => {
     let out = m.talkTo(game.state)
     expect(out).toContain('take the Lifelight Elixir')
     expect(out).toContain('before we depart')
-    expect(out).not.toContain('You arrive at')
+    expect(out).not.toContain('you arrive at your next destination')
 
     // with elixir in inventory - should allow teleport
     game.state.inventory.push(new LifelightElixir())
@@ -248,7 +241,7 @@ describe('Mira', () => {
     expect(out).toContain(
       "I know the road. I walked it as a girl, when it was the Wardens' hall and not his fortress. Your parents made the relics there, at a workbench under the dome.",
     )
-    expect(out).toContain('You arrive at')
+    expect(out).toContain('you arrive at your next destination')
   })
 
   describe('at the Fortress Entrance', () => {
@@ -264,7 +257,7 @@ describe('Mira', () => {
 
       const out = mira.talkTo(game.state)
 
-      expect(out).toContain('You speak with')
+      expect(out).not.toContain('[event]')
       expect(out).toContain(
         'Mira leans on the cold stone of the gate. Her hands are still ' +
           'shaking from the last circle.',
@@ -273,7 +266,7 @@ describe('Mira', () => {
       expect(out).toContain('I am coming with you.')
       expect(out).not.toContain('I will await your return')
       expect(out).not.toContain('must rest and recover')
-      expect(out).not.toContain('You arrive at')
+      expect(out).not.toContain('you arrive at your next destination')
       expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_GATE_TALKED)).toBe(true)
     })
 
@@ -283,7 +276,7 @@ describe('Mira', () => {
 
       const out = mira.talkTo(game.state)
 
-      expect(out).toContain('You speak with')
+      expect(out).not.toContain('[event]')
       expect(out).toContain(
         'I am right behind you, Elior. The gates will not open themselves.',
       )
@@ -414,11 +407,10 @@ describe('Mira', () => {
 
     const out = m.talkTo(game.state)
 
-    const herbsLine = event(
+    const herbsLine =
       'Mira takes the healing herbs from the shelf and presses the sachets ' +
-        'into your hands. Their resin-sweet scent steadies your breath as ' +
-        'the starlight tightens around the relics.',
-    )
+      'into your hands. Their resin-sweet scent steadies your breath as ' +
+      'the starlight tightens around the relics.'
     const arranging = out.indexOf('Mira carefully arranges')
     const herbs = out.indexOf(herbsLine)
     const incantation = out.indexOf('By light and flame')
@@ -444,9 +436,10 @@ describe('Mira', () => {
     expect(out).toContain('read the note')
     expect(out).toContain('important guidance')
     expect(out).not.toContain('three relics')
-    expect(!out.includes('teleport') || !out.includes('You arrive at')).toBe(
-      true,
-    )
+    expect(
+      !out.includes('teleport') ||
+        !out.includes('you arrive at your next destination'),
+    ).toBe(true)
   })
 
   it('requires the charred inscription read at the Lower Switchbacks', () => {
@@ -462,7 +455,7 @@ describe('Mira', () => {
       'discover the words your parents left burned into stone',
     )
     expect(out).toContain('ember heights')
-    expect(out).not.toContain('You arrive at')
+    expect(out).not.toContain('you arrive at your next destination')
   })
 
   it('requires the sea-sealed letter read at the Tidal Causeway', () => {
@@ -476,7 +469,7 @@ describe('Mira', () => {
 
     expect(out).toContain('seek the traces your parents left behind')
     expect(out).toContain('sunken ruins')
-    expect(out).not.toContain('You arrive at')
+    expect(out).not.toContain('you arrive at your next destination')
   })
 
   it('points to the ember heights, not the caverns, before the sea-sealed letter is read', () => {
@@ -502,7 +495,7 @@ describe('Mira', () => {
 
     expect(out).toContain("The miners' plight is a test of selflessness")
     expect(out).not.toContain('circle')
-    expect(out).not.toContain('You arrive at')
+    expect(out).not.toContain('you arrive at your next destination')
   })
 })
 
@@ -532,10 +525,8 @@ describe('Mira confesses before the Warding Rite', () => {
     const out = executeCommands(game, ['talk to mira'])
 
     const expected = [
-      event('You speak with ' + characterName('Mira') + '.'),
-      event(
-        "Mira's hands stop above the three relics. She does not begin the rite.",
-      ),
+      "Mira's hands stop above the three relics. She does not begin the rite.",
+      '[character_name]Mira[/character_name]',
       speech(
         'Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon.',
       ),
@@ -549,9 +540,7 @@ describe('Mira confesses before the Warding Rite', () => {
       speech(
         "Your grandmother knew. She is Lysa's mother, and she kept the secret with me.",
       ),
-      event(
-        'For a moment you cannot speak. Then the words come out harder than you meant them.',
-      ),
+      'For a moment you cannot speak. Then the words come out harder than you meant them.',
       dialogue('Elior', "Why didn't you tell me?"),
       dialogue(
         'Mira',
@@ -565,7 +554,7 @@ describe('Mira confesses before the Warding Rite', () => {
       ),
       speech(MIRA_ANSWER_INVITATION),
       MIRA_ANSWER_REMINDER,
-      event('She looks down at the relics, and then back at you.'),
+      'She looks down at the relics, and then back at you.',
       speech('When you are ready, tell me, and I will begin the Warding Rite.'),
       speech(
         'And ask me anything you like now — about your parents, Malakar, the amulet, your grandmother. I will not hide from you again.',

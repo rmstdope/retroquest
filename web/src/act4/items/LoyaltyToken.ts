@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
@@ -34,12 +34,12 @@ export class LoyaltyToken extends Item {
     ) {
       if (!gameState.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL)) {
         gameState.setStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL, true)
-        return event(
+        return (
           'You hold the Loyalty Token close to your heart. For a moment you ' +
-            'are not alone in the hall: the servants you freed, the friends ' +
-            'who brought you to the threshold, everyone who trusted you on ' +
-            "the way here. The knight's despair breaks around you and does " +
-            'not reach you.',
+          'are not alone in the hall: the servants you freed, the friends ' +
+          'who brought you to the threshold, everyone who trusted you on ' +
+          "the way here. The knight's despair breaks around you and does " +
+          'not reach you.'
         )
       }
       return (
@@ -51,10 +51,10 @@ export class LoyaltyToken extends Item {
       if (gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)) {
         return '[dim]The token is quiet and warm. The whispers are gone.[/dim]'
       }
-      return event(
-        'You hold the token up, and it grows warm. Under the whispers, very ' +
-          "faint, you think you hear your name, in Mira's voice. They are " +
-          'not gone. Say their names.',
+      return (
+        'The token grows warm in your hand. Under the whispers, very ' +
+        "faint, you think you hear your name, in Mira's voice. They are " +
+        'not gone. Say their names.'
       )
     }
     if (gameState.currentRoom instanceof ChamberOfWhispers) {
@@ -63,9 +63,9 @@ export class LoyaltyToken extends Item {
         'cannot reach you.[/dim]'
       )
     }
-    return event(
+    return (
       'The token is warm in your hand. Someone, somewhere, is glad you ' +
-        'came.',
+      'came.'
     )
   }
 }

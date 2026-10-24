@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  clue,
+  speech,
+} from '@/engine'
 import { MendSpell } from '../spells/MendSpell'
 import { FLAG_HELPED_ELDERLY_RESIDENTS } from '../Act2StoryFlags'
 
@@ -23,21 +29,21 @@ export class LocalCraftsmen extends Character {
   override talkTo(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_HELPED_ELDERLY_RESIDENTS)) {
       const name = this.name
-      return (
-        '[failure]The ' +
-        characterName(name) +
-        " eye you with suspicion and refuse to talk to you. They don't " +
-        'seem to trust you yet. Perhaps you need to prove yourself to the ' +
-        'community first.[/failure]'
+      return clue(
+        'The ' +
+          characterName(name) +
+          " eye you with suspicion and refuse to talk to you. They don't " +
+          'seem to trust you yet. Perhaps you need to prove yourself to the ' +
+          'community first.',
       )
     }
     if (!gameState.hasSpell(new MendSpell().id)) {
       gameState.learnSpell(new MendSpell())
       const name = this.name
       return (
-        '[success]You speak with the ' +
+        '[success]You watch the ' +
         characterName(name) +
-        ' and watch them work, observing their techniques for repairing ' +
+        ' work, observing their techniques for repairing ' +
         'items. As you study their methods, you begin to understand the ' +
         'magical principles behind restoration and repair. Through careful ' +
         'study, you learn the [spell_name]mend[/spell_name] ' +

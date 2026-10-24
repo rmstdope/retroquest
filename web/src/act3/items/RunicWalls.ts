@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { ResonantChantRubbings } from './ResonantChantRubbings'
 import { echoHeard, playEcho } from '../EchoNight'
 
@@ -30,10 +30,10 @@ export class RunicWalls extends Item {
       gameState.currentRoom.addItem(new ResonantChantRubbings())
       this.rubbingsDiscovered = true
     }
-    return event(
+    return (
       'The runes describe a chant to quiet the phantoms: ' +
-        "'Let stillness echo, let silence bind.' You notice you could make " +
-        'rubbings of these ancient symbols.',
+      "'Let stillness echo, let silence bind.' You notice you could make " +
+      'rubbings of these ancient symbols.'
     )
   }
 }

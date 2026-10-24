@@ -1,4 +1,4 @@
-import { Item, type GameState, dialogue, event } from '@/engine'
+import { Item, type GameState, dialogue } from '@/engine'
 import { MAZE_ROUTE } from '../rooms/MirrorLabyrinth'
 
 /** The voices of the Hall of Echoes: scenery that gives the route through the maze. */
@@ -16,8 +16,6 @@ export class Echoes extends Item {
 
   /** The echoes give the route through the maze, the same every time. */
   override examine(_gameState: GameState): string {
-    return (
-      event(this.description) + '\n' + dialogue('an echo', `'${MAZE_ROUTE}'`)
-    )
+    return this.description + '\n' + dialogue('an echo', `'${MAZE_ROUTE}'`)
   }
 }

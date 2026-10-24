@@ -1,7 +1,6 @@
 import {
   Spell,
   characterName,
-  event,
   type Character,
   type GameState,
   type Item,
@@ -23,8 +22,6 @@ export class BlessSpell extends Spell {
   override castSpell(gameState: GameState): string {
     gameState.setStoryFlag('journey_bless_completed', true)
     return (
-      event('You cast [spell_name]bless[/spell_name] on yourself.') +
-      '\n' +
       'Your resolve is strengthened, and you feel more prepared for the ' +
       'challenges that lie ahead on your journey.'
     )
@@ -37,10 +34,6 @@ export class BlessSpell extends Spell {
   ): string {
     const name = targetCharacter.name
     return (
-      event(
-        `You cast [spell_name]bless[/spell_name] on ${characterName(name)}.`,
-      ) +
-      '\n' +
       'A divine light surrounds ' +
       `${characterName(name)}, and they seem ` +
       'strengthened and more resolute.'

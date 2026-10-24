@@ -31,7 +31,7 @@ export class CityMap extends Item {
   /** Study the map: the layout and the stranger's marks; the map stays in the bag. */
   override use(_gameState: GameState): string {
     return (
-      'You study the city map carefully. The detailed layout shows the Main Square at the ' +
+      "The city map's detailed layout shows the Main Square at the " +
       'center, with the Market District to the east, Castle Approach to the north, ' +
       `and various other important locations clearly marked. ${STRANGERS_MARKS}`
     )
@@ -40,7 +40,7 @@ export class CityMap extends Item {
   /** Describe the cartographer's work and the stranger's marks. */
   override examine(_gameState: GameState): string {
     return (
-      "You examine the city map closely. It's a professional cartographer's work, " +
+      "The city map is a professional cartographer's work, " +
       'showing detailed street layouts, building locations, and district boundaries. ' +
       STRANGERS_MARKS
     )

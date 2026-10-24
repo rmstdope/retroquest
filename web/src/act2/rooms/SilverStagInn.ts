@@ -33,6 +33,6 @@ export class SilverStagInn extends Room {
         "inn rooms upstairs. You can now 'go east' to enter them.[/success]"
       )
     }
-    return '[dim]The inn rooms are already unlocked.[/dim]'
+    return '[failure]The inn rooms are already unlocked.[/failure]'
   }
 }

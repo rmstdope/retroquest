@@ -3,6 +3,7 @@ import {
   type GameState,
   type Item,
   characterName,
+  clue,
   speech,
 } from '@/engine'
 import {
@@ -77,20 +78,19 @@ export class Historians extends Character {
   override giveItem(gameState: GameState, item: Item): string {
     if (item instanceof TravelersJournal) {
       if (!gameState.getStoryFlag(FLAG_READ_TRAVELERS_JOURNAL)) {
-        return (
-          '[failure]You should not give things away that you know nothing about. ' +
-          'Perhaps you should ensure that you understand its contents before ' +
-          'sharing it with others.[/failure]'
+        return clue(
+          'You should not give things away that you know nothing about. ' +
+            'Perhaps you should ensure that you understand its contents before ' +
+            'sharing it with others.',
         )
       }
 
       gameState.setStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS, true)
       const histName = this.name
-      const itemName = item.name
       const successMsg =
-        `[success]You show the [item_name]${itemName}[/item_name] to the ` +
+        '[success]The ' +
         characterName(histName) +
-        '. They turn the pages slowly at first, then faster. One of them ' +
+        ' turn the pages slowly at first, then faster. One of them ' +
         'goes pale.[/success]'
       const speaker = characterName(histName) + ': '
       return (

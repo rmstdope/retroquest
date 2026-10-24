@@ -36,8 +36,8 @@ export class ProtectiveEnchantments extends Item {
   /** Use the protective enchantments (not directly usable). */
   useItem(_gameState: GameState): string {
     return (
-      '[dim]The protective enchantments are magical barriers, not something you ' +
-      'can use directly.[/dim]'
+      '[failure]The protective enchantments are magical barriers, not something you ' +
+      'can use directly.[/failure]'
     )
   }
 }

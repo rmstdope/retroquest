@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { EntryPass } from './EntryPass'
 
 /** Abandoned rest node offering single hidden item discovery (entry pass). */
@@ -21,22 +21,22 @@ export class CampSite extends Item {
   override examine(gameState: GameState): string {
     if (this.examined) {
       return (
-        "You've already thoroughly examined the camp site. There's nothing " +
-        'more to find here.'
+        "[failure]You've already thoroughly examined the camp site. There's " +
+        'nothing more to find here.[/failure]'
       )
     }
     this.examined = true
     const entryPass = new EntryPass()
     gameState.currentRoom.addItem(entryPass)
     return (
-      'You carefully examine the abandoned camp site. There are two fire ' +
+      'There are two fire ' +
       'pits here, not one, and the ashes of one are much older than the ' +
       'other. In the soft ground beside the trail, the same boot prints ' +
       'show twice: one line coming up from Willowbrook, and a fresher line ' +
       'going back down toward it. Hidden under leaves near the fire pit you ' +
       'discover an [item_name]entry pass[/item_name] to Greendale, dropped, ' +
       'it seems, by whoever left in such a hurry.\n\n' +
-      event('You found an [item_name]entry pass[/item_name]!')
+      'You found an [item_name]entry pass[/item_name]!'
     )
   }
 
@@ -46,8 +46,8 @@ export class CampSite extends Item {
       return this.examine(gameState)
     }
     return (
-      'The camp site has been thoroughly examined. You could rest here if needed, ' +
-      "but there's nothing more to discover."
+      '[failure]The camp site has been thoroughly examined. You could rest here if needed, ' +
+      "but there's nothing more to discover.[/failure]"
     )
   }
 }

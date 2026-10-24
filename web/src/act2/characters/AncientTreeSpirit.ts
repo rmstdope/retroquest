@@ -4,7 +4,6 @@ import {
   type Item,
   characterName,
   dialogue,
-  event,
   speech,
 } from '@/engine'
 import { EnchantedAcorn } from '../items/EnchantedAcorn'
@@ -43,15 +42,15 @@ export class AncientTreeSpirit extends Character {
 
   /** Handle dialogue when talking to the Ancient Tree Spirit. */
   override talkTo(gameState: GameState): string {
-    const eventMsg = event('You approach the ' + characterName(this.name) + '.')
-
     if (!this.acornReceived) {
       // Player hasn't brought the acorn yet
       return (
-        eventMsg +
-        '\nA face gathers in the knots of the silver bark and turns toward ' +
-        'you. ' +
-        speech('You walk like spring. Everything new, nothing kept.') +
+        'A face gathers in the knots of the silver bark and turns toward ' +
+        'you.\n' +
+        dialogue(
+          this.name,
+          'You walk like spring. Everything new, nothing kept.',
+        ) +
         '\n\n' +
         speech(
           "I don't teach for nothing. Bring me something that hasn't " +
@@ -63,33 +62,22 @@ export class AncientTreeSpirit extends Character {
     if (!gameState.getStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED)) {
       // Player has given the acorn but hasn't completed the quest yet
       return (
-        eventMsg +
-        '\n' +
-        speech('Still summer for you, then — all errands.') +
+        dialogue(this.name, 'Still summer for you, then — all errands.') +
         '\n\n' +
         speech(NYMPHS_POINTER_TEXT)
       )
     }
 
     // General conversation after the quest is complete
-    return (
-      eventMsg +
-      '\n' +
-      speech(
-        'Autumn, for you. You came with nothing and you leave carrying ' +
-          'things. The way south is yours.',
-      )
+    return dialogue(
+      this.name,
+      'Autumn, for you. You came with nothing and you leave carrying ' +
+        'things. The way south is yours.',
     )
   }
 
   /** Handle giving items to the Ancient Tree Spirit. */
   override giveItem(gameState: GameState, item: Item): string {
-    const eventMsg = event(
-      `You offer the [item_name]${item.name}[/item_name] to the ` +
-        characterName(this.name) +
-        '.',
-    )
-
     // Handle the enchanted acorn
     if (item instanceof EnchantedAcorn) {
       if (this.acornReceived) {
@@ -104,9 +92,9 @@ export class AncientTreeSpirit extends Character {
       gameState.currentRoom.items.push(new SilverLeaves())
 
       return (
-        eventMsg +
-        '\nThe bark around the knots softens. ' +
-        speech(
+        'The bark around the knots softens.\n' +
+        dialogue(
+          this.name,
           "Next spring's tree, and you carried it here instead of planting " +
             'it. Good. Listen, then.',
         ) +
@@ -184,12 +172,10 @@ export class AncientTreeSpirit extends Character {
 
   /** Examine the Ancient Tree Spirit and read its description. */
   override examine(_gameState: GameState): string {
-    return event(
-      'You study the ' +
-        characterName(this.name) +
-        `. ${this.description} The bark is warm under your hand, and below ` +
-        'your feet the roots shift slowly, like someone turning over in ' +
-        'their sleep.',
+    return (
+      `${this.description} The bark is warm under your hand, and below ` +
+      'your feet the roots shift slowly, like someone turning over in ' +
+      'their sleep.'
     )
   }
 }

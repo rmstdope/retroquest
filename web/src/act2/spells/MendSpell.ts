@@ -1,4 +1,4 @@
-import { Spell, type GameState, type Item, event } from '@/engine'
+import { Spell, type GameState, type Item } from '@/engine'
 import { FLAG_MENDED_LIBRARY_ENCHANTMENTS } from '../Act2StoryFlags'
 import { ProtectiveEnchantments } from '../items/ProtectiveEnchantments'
 import { TrainingSword } from '../items/TrainingSword'
@@ -22,11 +22,9 @@ export class MendSpell extends Spell {
 
   /** Cast mend without a target; nothing nearby needs repair. */
   override castSpell(_gameState: GameState): string {
-    const name = this.name
     return (
-      `[success]You cast [spell_name]${name}[/spell_name] into the air. The spell ` +
-      'shimmers briefly, looking for something to repair, but finds nothing ' +
-      'that needs mending nearby.[/success]'
+      '[success]The spell shimmers in the air, looking for something to ' +
+      'repair, but finds nothing that needs mending nearby.[/success]'
     )
   }
 
@@ -36,11 +34,8 @@ export class MendSpell extends Spell {
     if (targetItem instanceof ProtectiveEnchantments) {
       if (!gameState.getStoryFlag(FLAG_MENDED_LIBRARY_ENCHANTMENTS)) {
         gameState.setStoryFlag(FLAG_MENDED_LIBRARY_ENCHANTMENTS, true)
-        const name = this.name
-        const iname = targetItem.name
         return (
-          `[success]You cast [spell_name]${name}[/spell_name] on the damaged ` +
-          `[item_name]${iname}[/item_name]. The magical barriers flicker and ` +
+          '[success]The magical barriers flicker and ' +
           'stabilize as your repair magic restores their integrity. The ' +
           'shimmering barriers around the most valuable texts now glow ' +
           'steadily. You have proven your worthiness and respect for ' +
@@ -49,34 +44,31 @@ export class MendSpell extends Spell {
       }
       const iname = targetItem.name
       return (
-        `[dim]The [item_name]${iname}[/item_name] have already been repaired ` +
-        'and are functioning properly.[/dim]'
+        `[failure]The [item_name]${iname}[/item_name] have already been repaired ` +
+        'and are functioning properly.[/failure]'
       )
     }
     if (targetItem instanceof TrainingSword) {
-      return event(
+      return (
         'The notch by the guard starts to close under your hand, and you ' +
-          'stop. Somebody cut that notch as a boy, and it is how he will ' +
-          'know the blade. You leave it as it is.',
+        'stop. Somebody cut that notch as a boy, and it is how he will ' +
+        'know the blade. You leave it as it is.'
       )
     }
     // Check if the item can be repaired (this is the original implementation)
     const lowered = targetItem.description.toLowerCase()
     if (lowered.includes('broken') || lowered.includes('damaged')) {
-      const name = this.name
-      const iname = targetItem.name
       return (
-        `[success]You cast [spell_name]${name}[/spell_name] on ` +
-        `[item_name]${iname}[/item_name]. The magical energy flows through the ` +
-        'item, repairing damage and restoring it to working condition![/success]'
+        '[success]Magical energy flows through the damaged item, repairing ' +
+        'damage and restoring it to working condition![/success]'
       )
     }
     const name = this.name
     const iname = targetItem.name
     return (
-      `[dim]You cast [spell_name]${name}[/spell_name] on ` +
+      `[failure]You cast [spell_name]${name}[/spell_name] on ` +
       `[item_name]${iname}[/item_name], but it doesn't appear to need any ` +
-      'repairs. The spell has no effect.[/dim]'
+      'repairs. The spell has no effect.[/failure]'
     )
   }
 }

@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { FLAG_ACT3_POOLS_STILLED } from '../Act3StoryFlags'
 import { DarkPool } from './DarkPool'
 import { EchoStones } from './EchoStones'
@@ -28,13 +28,11 @@ export class StillwaterPhial extends Item {
       }
       gameState.setStoryFlag(FLAG_ACT3_POOLS_STILLED, true)
       return (
-        event(
-          'You unstopper the phial and let a single drop fall into the ' +
-            'nearest pool. The ripple does not spread; it sinks, and the ' +
-            'stillness goes down after it until the black water lies flat ' +
-            'as glass, holding the stones and the dark above in perfect ' +
-            'reflection. ',
-        ) +
+        'You unstopper the phial and let a single drop fall into the ' +
+        'nearest pool. The ripple does not spread; it sinks, and the ' +
+        'stillness goes down after it until the black water lies flat ' +
+        'as glass, holding the stones and the dark above in perfect ' +
+        'reflection. ' +
         '\n' +
         '[success]The pools are mirror-still. Now the chant will carry.[/success]'
       )

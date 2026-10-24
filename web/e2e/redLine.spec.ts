@@ -116,7 +116,7 @@ const ACTS: ActPlay[] = [
       },
       {
         name: 'Act IV amulet: used in the final choice',
-        text: 'You raise the amulet. It opens in your hand like a flower',
+        text: 'The amulet opens in your hand like a flower',
       },
       {
         name: 'Epilogue: the withered field is green again',

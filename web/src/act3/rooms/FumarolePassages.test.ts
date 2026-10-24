@@ -190,11 +190,9 @@ describe('Fumarole Passages — the breath of the mountain', () => {
   it('moves the breath on only with rest and wait: out, pause, in, out', () => {
     const game = wardedGame()
     const rest = (command: string): string => executeCommands(game, [command])
-    expect(rest('rest')).toBe(
-      `You stand still and count.\n${breathLine(PAUSE)}`,
-    )
-    expect(rest('wait')).toBe(`You stand still and count.\n${breathLine(IN)}`)
-    expect(rest('rest')).toBe(`You stand still and count.\n${breathLine(OUT)}`)
+    expect(rest('rest')).toBe(breathLine(PAUSE))
+    expect(rest('wait')).toBe(breathLine(IN))
+    expect(rest('rest')).toBe(breathLine(OUT))
   })
 
   it('leaves the breath alone for look, talk, examine and search', () => {

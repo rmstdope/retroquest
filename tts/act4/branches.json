@@ -1,130 +1,269 @@
 [
-  {
-    "after": 50,
-    "commands": [
-      "use lifelight elixir on prison",
-      "talk to king alden",
-      "say justice to malakar",
-      "use ancient amulet on wound",
-      "talk to king alden",
-      "n",
-      "cast grow"
-    ]
-  },
-  {
-    "after": 50,
-    "commands": [
-      "use lifelight elixir on prison",
-      "say justice to malakar",
-      "use ancient amulet on wound",
-      "talk to king alden",
-      "n",
-      "cast grow"
-    ],
-    "virtues": [
-      "truth",
-      "truth"
-    ]
-  },
-  {
-    "after": 50,
-    "commands": [
-      "use lifelight elixir on prison",
-      "say sacrifice to malakar",
-      "use ancient amulet on wound",
-      "talk to king alden",
-      "n",
-      "cast grow"
-    ]
-  },
-  {
-    "after": 50,
-    "commands": [
-      "use lifelight elixir on prison",
-      "say sacrifice to malakar",
-      "use ancient amulet on wound",
-      "talk to king alden",
-      "n",
-      "cast grow"
-    ],
-    "virtues": [
-      "selfless",
-      "selfless"
-    ]
-  },
-  {
-    "after": 51,
-    "commands": [
-      "say forgiveness to malakar",
-      "cast forgiveness on wound",
-      "n",
-      "cast grow"
-    ],
-    "virtues": [
-      "mercy"
-    ]
-  },
-  {
-    "after": 48,
-    "commands": [
-      "give ancient amulet to malakar",
-      "say refrain to malakar",
-      "use ancient amulet",
-      "use lifelight elixir on malakar",
-      "say forgiveness to malakar",
-      "cast forgiveness on wound",
-      "n",
-      "cast grow"
-    ]
-  },
-  {
-    "after": 48,
-    "commands": [
-      "give ancient amulet to malakar",
-      "say refrain to malakar",
-      "use ancient amulet",
-      "use lifelight elixir on prison",
-      "say justice to malakar",
-      "use ancient amulet on wound",
-      "talk to king alden",
-      "n",
-      "cast grow"
-    ]
-  },
-  {
-    "after": 48,
-    "commands": [
-      "give ancient amulet to malakar",
-      "say refrain to malakar",
-      "use ancient amulet",
-      "use lifelight elixir on prison",
-      "say sacrifice to malakar",
-      "use ancient amulet on wound",
-      "talk to king alden",
-      "n",
-      "cast grow"
-    ]
-  },
-  {
-    "after": 21,
-    "commands": [
-      "talk to true self",
-      "say truth to true self",
-      "talk to true self"
-    ]
-  },
-  {
-    "after": 6,
-    "commands": [
-      "give guardian's chain to captain of the guard",
-      "talk to captain of the guard"
-    ]
-  },
-  {
-    "after": 29,
-    "commands": [
-      "cast redemption's light on ghostly warriors",
-      "talk to sir cedric"
-    ]
-  }
+    {
+        "after": 50,
+        "commands": [
+            "use lifelight elixir on prison",
+            "talk to king alden",
+            "say justice to malakar",
+            "use ancient amulet on wound",
+            "talk to king alden",
+            "n",
+            "cast grow"
+        ]
+    },
+    {
+        "after": 50,
+        "commands": [
+            "use lifelight elixir on prison",
+            "say justice to malakar",
+            "use ancient amulet on wound",
+            "talk to king alden",
+            "n",
+            "cast grow"
+        ],
+        "virtues": ["truth", "truth"]
+    },
+    {
+        "after": 50,
+        "commands": [
+            "use lifelight elixir on prison",
+            "say sacrifice to malakar",
+            "use ancient amulet on wound",
+            "talk to king alden",
+            "n",
+            "cast grow"
+        ]
+    },
+    {
+        "after": 50,
+        "commands": [
+            "use lifelight elixir on prison",
+            "say sacrifice to malakar",
+            "use ancient amulet on wound",
+            "talk to king alden",
+            "n",
+            "cast grow"
+        ],
+        "virtues": ["selfless", "selfless"]
+    },
+    {
+        "after": 51,
+        "commands": ["say forgiveness to malakar", "cast forgiveness on wound", "n", "cast grow"],
+        "virtues": ["mercy"]
+    },
+    {
+        "after": 48,
+        "commands": [
+            "give ancient amulet to malakar",
+            "say refrain to malakar",
+            "use ancient amulet",
+            "use lifelight elixir on malakar",
+            "say forgiveness to malakar",
+            "cast forgiveness on wound",
+            "n",
+            "cast grow"
+        ]
+    },
+    {
+        "after": 48,
+        "commands": [
+            "give ancient amulet to malakar",
+            "say refrain to malakar",
+            "use ancient amulet",
+            "use lifelight elixir on prison",
+            "say justice to malakar",
+            "use ancient amulet on wound",
+            "talk to king alden",
+            "n",
+            "cast grow"
+        ]
+    },
+    {
+        "after": 48,
+        "commands": [
+            "give ancient amulet to malakar",
+            "say refrain to malakar",
+            "use ancient amulet",
+            "use lifelight elixir on prison",
+            "say sacrifice to malakar",
+            "use ancient amulet on wound",
+            "talk to king alden",
+            "n",
+            "cast grow"
+        ]
+    },
+    {
+        "after": 21,
+        "commands": ["talk to true self", "say truth to true self", "talk to true self"]
+    },
+    {
+        "after": 6,
+        "commands": [
+            "give guardian's chain to captain of the guard",
+            "talk to captain of the guard"
+        ]
+    },
+    {
+        "after": 29,
+        "commands": ["cast redemption's light on ghostly warriors", "talk to sir cedric"]
+    },
+    {
+        "after": 0,
+        "commands": [
+            "n",
+            "cast light",
+            "cast light on left stone",
+            "cast light on ward stones",
+            "cast bless",
+            "cast grow",
+            "examine barriers"
+        ]
+    },
+    {
+        "after": 1,
+        "commands": [
+            "cast light on left stone",
+            "cast light on ward stones",
+            "take ward stone fragment"
+        ]
+    },
+    {
+        "after": 2,
+        "commands": ["cast light on guardian's chain"]
+    },
+    {
+        "after": 4,
+        "commands": [
+            "cast bless",
+            "cast light",
+            "n",
+            "cast bless on captain",
+            "cast grow on trapped servants",
+            "give guardian's chain to captain"
+        ]
+    },
+    {
+        "after": 6,
+        "commands": [
+            "give guardian's chain to captain of the guard",
+            "take servant's pendant",
+            "n",
+            "use servant's pendant",
+            "s",
+            "w",
+            "n",
+            "examine echoes",
+            "take echo stone",
+            "s",
+            "e",
+            "n",
+            "w",
+            "w",
+            "use servant's pendant",
+            "e",
+            "s",
+            "w",
+            "n",
+            "cast truth sight on knight of despair",
+            "cast truth sight on banners",
+            "cast truth sight on echo stone",
+            "say redemption to knight"
+        ]
+    },
+    {
+        "after": 17,
+        "commands": ["n", "drop echo stone", "west"]
+    },
+    {
+        "after": 24,
+        "commands": ["say redemption to knight", "e"]
+    },
+    {
+        "after": 25,
+        "commands": ["say redemption to knight"]
+    },
+    {
+        "after": 27,
+        "commands": ["say redemption to knight"]
+    },
+    {
+        "after": 30,
+        "commands": ["up"]
+    },
+    {
+        "after": 34,
+        "commands": ["say understanding to sorceress", "n"]
+    },
+    {
+        "after": 35,
+        "commands": ["say understanding to sorceress"]
+    },
+    {
+        "after": 36,
+        "commands": ["say understanding to sorceress"]
+    },
+    {
+        "after": 39,
+        "commands": ["use sorceress's truth"]
+    },
+    {
+        "after": 40,
+        "commands": [
+            "say patience to shadow",
+            "use sorceress's truth",
+            "examine door",
+            "use ancient amulet on door",
+            "e"
+        ]
+    },
+    {
+        "after": 41,
+        "commands": ["say patience to shadow", "examine door"]
+    },
+    {
+        "after": 42,
+        "commands": ["e", "examine door", "use ancient amulet on door"]
+    },
+    {
+        "after": 43,
+        "commands": ["e", "examine door", "use ancient amulet on door"]
+    },
+    {
+        "after": 45,
+        "commands": ["n"]
+    },
+    {
+        "after": 48,
+        "commands": ["use lifelight elixir on wound"]
+    },
+    {
+        "after": 50,
+        "commands": [
+            "say justice to malakar",
+            "use ancient amulet on wound",
+            "use lifelight elixir on wound"
+        ]
+    },
+    {
+        "after": 51,
+        "commands": [
+            "use lifelight elixir on prison",
+            "say justice to malakar",
+            "cast forgiveness on wound"
+        ]
+    },
+    {
+        "after": 53,
+        "commands": ["cast forgiveness on malakar"]
+    },
+    {
+        "after": 55,
+        "commands": [
+            "give nyx's token to nyx",
+            "give servant's pendant to nyx",
+            "give ancient amulet to nyx",
+            "cast bless on nyx",
+            "cast grow on nyx"
+        ]
+    }
 ]

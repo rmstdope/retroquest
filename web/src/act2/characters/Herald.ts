@@ -3,7 +3,6 @@ import {
   type GameState,
   type Item,
   characterName,
-  event,
   speech,
 } from '@/engine'
 import { EntryPass } from '../items/EntryPass'
@@ -62,17 +61,10 @@ export class Herald extends Character {
       }
       this.receivedPass = true
       const name = this.name
-      const itemName = item.name
       return (
-        event(
-          `You offer the [item_name]${itemName}[/item_name] to the ` +
-            characterName(name) +
-            '.',
-        ) +
-        `\n[success]You present the [item_name]${itemName}[/item_name] to ` +
-        'the ' +
+        '[success]The ' +
         characterName(name) +
-        '. He examines the seal carefully and nods with approval. ' +
+        ' examines the seal carefully and nods with approval. ' +
         speech(
           'This is a formal recommendation of excellent standing. You are ' +
             'granted formal audience rights with the nobility.',

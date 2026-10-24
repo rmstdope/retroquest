@@ -193,7 +193,7 @@ describe('KnightOfDespair', () => {
       executeCommands(game, order)
       const out = executeCommands(game, ['say redemption to knight'])
       const parts = [
-        "You say the word, and the knight's despair breaks against the chain's light like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human.",
+        "The knight's despair breaks against the chain's light like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human.",
         'You.',
         'Me.',
         'I was the stranger in Willowbrook. Malakar sent me for an amulet, and for the child it hid. It was my token that fouled your well.',
@@ -260,7 +260,7 @@ describe('KnightOfDespair', () => {
     const GONE =
       "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. Nothing stands between you and his sorrow, and the chain is gone with the captain. But you are not as alone as the knight would have you believe."
     const TOKEN_OPENING =
-      "You say the word, and the knight's despair breaks against the warmth at your heart like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human."
+      "The knight's despair breaks against the warmth at your heart like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human."
 
     function gameWithoutChain(): Game {
       const game = createGameInHall()

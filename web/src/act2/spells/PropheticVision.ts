@@ -1,4 +1,4 @@
-import { Spell, type GameState, characterName, dialogue, event } from '@/engine'
+import { Spell, type GameState, characterName, dialogue, clue } from '@/engine'
 import {
   FLAG_GATHERING_STORM_COMPLETED,
   FLAG_VISION_SHARED,
@@ -54,10 +54,10 @@ export class PropheticVision extends Spell {
       (char) => char instanceof SirCedric,
     )
     if (!cedricPresent) {
-      return (
-        '[dim]You begin the casting and stop. Alone, the vision would be a ' +
-        'dream like any other; it wants a second pair of eyes, someone who ' +
-        'can act on what it shows. Sir Cedric is at the castle.[/dim]'
+      return clue(
+        'You begin the casting and stop. Alone, the vision would be a ' +
+          'dream like any other; it wants a second pair of eyes, someone who ' +
+          'can act on what it shows. Sir Cedric is at the castle.',
       )
     }
 
@@ -65,7 +65,7 @@ export class PropheticVision extends Spell {
       gameState.getStoryFlag(FLAG_VISION_SHARED) &&
       !gameState.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)
     ) {
-      return event(
+      return clue(
         'You have already shared the vision. ' +
           `${characterName('Sir Cedric')} is waiting for you to speak.`,
       )
@@ -86,25 +86,23 @@ export class PropheticVision extends Spell {
       // First casting - share the vision; the quest completes when Elior answers Cedric
       gameState.setStoryFlag(FLAG_VISION_SHARED, true)
       return (
-        event(
-          this.visionOpening(gameState) +
-            '\n\n' +
-            'A village at dusk, its roofs low and familiar. Beyond it, a field ' +
-            'withered to grey stalks, the way yours was the morning all this ' +
-            "began. And at the field's edge, a robed figure, its face lost in " +
-            'shadow, reaching one hand toward you as if across a great ' +
-            'distance. Above it all, small and far, a crowned man hangs in a ' +
-            'prison of crystal, and grey light runs out of him like water.' +
-            '\n\n' +
-            'Then the voice from your dream, the one that called your name on ' +
-            'the night of the storm: [italic]“Elior… how you have grown. Do ' +
-            'not be afraid of me.”[/italic] And then, fainter, as if carried ' +
-            'off by the wind: [italic]“…close what I opened…”[/italic] It is ' +
-            'closer than it was. You do ' +
-            'not know whose it is, only that you have heard it before, long ' +
-            'before the dream.\n\n' +
-            "The vision fades. Sir Cedric's expression has grown grave.",
-        ) +
+        this.visionOpening(gameState) +
+        '\n\n' +
+        'A village at dusk, its roofs low and familiar. Beyond it, a field ' +
+        'withered to grey stalks, the way yours was the morning all this ' +
+        "began. And at the field's edge, a robed figure, its face lost in " +
+        'shadow, reaching one hand toward you as if across a great ' +
+        'distance. Above it all, small and far, a crowned man hangs in a ' +
+        'prison of crystal, and grey light runs out of him like water.' +
+        '\n\n' +
+        'Then the voice from your dream, the one that called your name on ' +
+        'the night of the storm: [italic]“Elior… how you have grown. Do ' +
+        'not be afraid of me.”[/italic] And then, fainter, as if carried ' +
+        'off by the wind: [italic]“…close what I opened…”[/italic] It is ' +
+        'closer than it was. You do ' +
+        'not know whose it is, only that you have heard it before, long ' +
+        'before the dream.\n\n' +
+        "The vision fades. Sir Cedric's expression has grown grave." +
         '\n\n' +
         dialogue(
           'Sir Cedric',
@@ -124,12 +122,11 @@ export class PropheticVision extends Spell {
       )
     }
 
-    return event(
-      'You cast the prophetic vision spell, and brief glimpses of ' +
-        'possible futures dance before your eyes. The gift of foresight ' +
-        'reminds you that every choice creates ripples through the ' +
-        'tapestry of time, and wisdom lies in understanding the ' +
-        'consequences of your actions.',
+    return (
+      'Brief glimpses of possible futures dance before your eyes. The gift ' +
+      'of foresight reminds you that every choice creates ripples through ' +
+      'the tapestry of time, and wisdom lies in understanding the ' +
+      'consequences of your actions.'
     )
   }
 

@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE } from '../Act2StoryFlags'
 import { ForestEntrance } from '../rooms/ForestEntrance'
 import { OfferingAltar } from './OfferingAltar'
@@ -22,21 +22,20 @@ export class ProtectiveCharm extends Item {
     if (gameState.currentRoom instanceof ForestEntrance) {
       if (!gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)) {
         gameState.setStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, true)
-        const result = event(
+        const result =
           'The Protective Charm radiates a warm, golden light as you invoke ' +
-            'its power. A shimmering barrier of spiritual energy surrounds ' +
-            'you, and you feel the watchful gaze of the forest spirits become ' +
-            'less threatening. The ancient magic recognizes your respect and ' +
-            'preparation, granting you safe passage through these sacred woods.',
-        )
+          'its power. A shimmering barrier of spiritual energy surrounds ' +
+          'you, and you feel the watchful gaze of the forest spirits become ' +
+          'less threatening. The ancient magic recognizes your respect and ' +
+          'preparation, granting you safe passage through these sacred woods.'
         return (
           result +
           '\n\n[success]The sprites draw aside. The path south, to the ancient grove, is now open.[/success]'
         )
       }
       return (
-        "[dim]The Protective Charm's energy still surrounds you, providing continued " +
-        'spiritual protection in this mystical place.[/dim]'
+        "[failure]The Protective Charm's energy still surrounds you, providing continued " +
+        'spiritual protection in this mystical place.[/failure]'
       )
     }
     return (

@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, clue, dialogue } from '@/engine'
 import {
   FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_ELIXIR_ON_MALAKAR,
@@ -42,9 +42,10 @@ const NOTHING_LEFT = '[dim]There is nothing left to say. It is over.[/dim]'
 const GONE_INTO_SEAL = '[dim]Malakar is gone into the seal.[/dim]'
 
 /** What he says when forgiveness is said but the king is already free. */
-const FORGIVENESS_TOO_LATE =
-  '[failure]Malakar shakes his head. The king is free and the wound is ' +
-  'still open. Forgiveness alone will not close it now.[/failure]'
+const FORGIVENESS_TOO_LATE = clue(
+  'Malakar shakes his head. The king is free and the wound is ' +
+    'still open. Forgiveness alone will not close it now.',
+)
 
 /** What follows the word of Justice or Sacrifice. */
 const AMULET_READY = 'The open amulet grows heavy in your hand, ready.'
@@ -87,19 +88,15 @@ export class Malakar extends Character {
   /** His look. */
   override examine(gameState: GameState): string {
     const ending = endingPlayed(gameState)
-    if (ending === 'justice') return event('Malakar is gone into the seal.')
+    if (ending === 'justice') return 'Malakar is gone into the seal.'
     if (ending) {
-      return event(
-        ending === 'redemption'
-          ? 'Malakar sits by the shards, himself again.'
-          : 'Malakar kneels before the king, grey and powerless.',
-      )
+      return ending === 'redemption'
+        ? 'Malakar sits by the shards, himself again.'
+        : 'Malakar kneels before the king, grey and powerless.'
     }
-    return event(
-      gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
-        ? Malakar.DESCRIPTION_TURNED
-        : this.description,
-    )
+    return gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
+      ? Malakar.DESCRIPTION_TURNED
+      : this.description
   }
 
   /** What he says follows the ending, the refrain, the amulet and the elixir. */
@@ -206,19 +203,15 @@ export class Malakar extends Character {
     }
     const refrainLine = [
       dialogue('Elior', 'Power follows purpose; purpose follows truth.'),
-      event(
-        "The words from the stone in Willowbrook, from Nyx, from the Dragon's " +
-          'hall. They are yours now.',
-      ),
+      "The words from the stone in Willowbrook, from Nyx, from the Dragon's " +
+        'hall. They are yours now.',
     ].join('\n')
     if (!gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)) {
       // Said before he has spoken: the refrain does not count yet.
       return [
         refrainLine,
-        event(
-          'Malakar laughs, a dry sound that goes on too long. Then it ' +
-            'stops, all at once.',
-        ),
+        'Malakar laughs, a dry sound that goes on too long. Then it ' +
+          'stops, all at once.',
         dialogue(
           this.name,
           'Not yet. You have not heard me. Hear me, and then say it to my ' +
@@ -230,10 +223,8 @@ export class Malakar extends Character {
     gameState.setStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID, true)
     return [
       refrainLine,
-      event(
-        'Malakar turns from the wound. For the first time since you came ' +
-          'in, he is looking at you.',
-      ),
+      'Malakar turns from the wound. For the first time since you came ' +
+        'in, he is looking at you.',
       dialogue(
         this.name,
         'We carved those words together, your father and I. I had ' +
@@ -246,13 +237,13 @@ export class Malakar extends Character {
   private endingWord(gameState: GameState, word: string): string {
     const onMalakar = gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)
     if (!onMalakar && !gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
-      return '[failure]Not yet. The elixir is still in your hand.[/failure]'
+      return clue('Not yet. The elixir is still in your hand.')
     }
     if (word === 'forgiveness') {
       return onMalakar ? this.forgive(gameState) : FORGIVENESS_TOO_LATE
     }
     if (onMalakar) {
-      return '[failure]Malakar has drunk the elixir. That road is closed now.[/failure]'
+      return clue('Malakar has drunk the elixir. That road is closed now.')
     }
     return word === 'justice'
       ? this.chooseJustice(gameState)
@@ -271,7 +262,7 @@ export class Malakar extends Character {
       'The words are harder than any spell, and then they are easy. ' +
         'Something warm settles in your chest, like a lesson you always ' +
         'knew.',
-      event('You have learned the Forgiveness spell!'),
+      'You have learned the Forgiveness spell!',
       dialogue(this.name, 'You would forgive me. They would have too.'),
     ]
     if (gameState.hasVirtue(VIRTUE_MERCY)) {
@@ -372,26 +363,20 @@ export class Malakar extends Character {
     }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN, true)
     return [
-      event(
-        "You hold out the amulet. Malakar's hand closes on it, and for a " +
-          'moment neither of you lets go. Then you do.',
-      ),
-      event(
-        'He lifts it toward the thread of light that bleeds from the ' +
-          "king's crown. The wound in the air yawns wide, and the chamber " +
-          'goes grey, and then gold.',
-      ),
+      "Malakar's hand closes on the amulet, and for a moment neither of " +
+        'you lets go. Then you do.',
+      'He lifts it toward the thread of light that bleeds from the ' +
+        "king's crown. The wound in the air yawns wide, and the chamber " +
+        'goes grey, and then gold.',
       wrapBreath(
         'A workshop in the late sun. Aren bends over the workbench; Lysa ' +
           'laughs at something he has said. They are young. They do not ' +
           'look up.',
       ),
       dialogue(SHADOW_LABEL, 'Not like this. Not by force.'),
-      event(
-        'The amulet will not break. The light runs backwards through the ' +
-          'chamber and Malakar is thrown against the throne. You are ' +
-          'standing where you stood, and the amulet is warm in your hand.',
-      ),
+      'The amulet will not break. The light runs backwards through the ' +
+        'chamber and Malakar is thrown against the throne. You are ' +
+        'standing where you stood, and the amulet is warm in your hand.',
       dialogue(this.name, 'You saw. Then you know I was not lying.'),
     ].join('\n')
   }
@@ -413,22 +398,18 @@ export class Malakar extends Character {
     gameState.setStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED, true)
     gameState.currentRoom.description = THRONE_CHAMBER_AMULET
     return [
-      event(
-        'You raise the amulet. It opens in your hand like a flower, and ' +
-          'the light of the ward pours out over the chamber. Malakar ' +
-          'staggers. When he speaks again, it is not his voice.',
-      ),
+      'The amulet opens in your hand like a flower, and ' +
+        'the light of the ward pours out over the chamber. Malakar ' +
+        'staggers. When he speaks again, it is not his voice.',
       dialogue(
         SHADOW_LABEL,
         'Elior. I tore the world to keep them, and I lost them anyway. I ' +
           'could not wait; you can. Be patient where I was not. Close what ' +
           'I opened, and let them rest.',
       ),
-      event(
-        'The Lifelight Elixir is warm in your hand. It can be used only ' +
-          'once. It could break the crystal and free the king, or it could ' +
-          'be offered to Malakar, to heal the wound that is killing him.',
-      ),
+      'The Lifelight Elixir is warm in your hand. It can be used only ' +
+        'once. It could break the crystal and free the king, or it could ' +
+        'be offered to Malakar, to heal the wound that is killing him.',
     ].join('\n')
   }
 
@@ -439,15 +420,11 @@ export class Malakar extends Character {
     }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_EARLY_AMULET_SEEN, true)
     return [
-      event(
-        'Malakar lunges for the amulet. The moment his fingers close on ' +
-          'it, it burns white, and he snatches his hand back.',
-      ),
+      'Malakar lunges for the amulet. The moment his fingers close on ' +
+        'it, it burns white, and he snatches his hand back.',
       dialogue(SHADOW_LABEL, 'Not like this.'),
-      event(
-        'The voice is gone as soon as it came. Malakar holds his hand ' +
-          'against his chest and will not look at you.',
-      ),
+      'The voice is gone as soon as it came. Malakar holds his hand ' +
+        'against his chest and will not look at you.',
     ].join('\n')
   }
 
@@ -463,10 +440,8 @@ export class Malakar extends Character {
       : 'You would waste it on me? You have not even heard what I am ' +
         'offering.'
     return [
-      event(
-        "You hold out the elixir. Malakar's hand comes up for it, and " +
-          "stops a finger's width from the glass.",
-      ),
+      "Malakar's hand comes up for the elixir, and stops a finger's " +
+        'width from the glass.',
       dialogue(this.name, reply),
     ].join('\n')
   }
@@ -478,7 +453,7 @@ export class Malakar extends Character {
   elixirRefusal(gameState: GameState): string | null {
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)) return null
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
-      return '[failure]Not yet. The amulet at your chest is stirring.[/failure]'
+      return clue('Not yet. The amulet at your chest is stirring.')
     }
     return this.reachedForElixir(gameState)
   }
@@ -492,14 +467,12 @@ export class Malakar extends Character {
     gameState.removeItemFromInventoryOrRoom('Lifelight Elixir', 1)
     gameState.currentRoom.description = THRONE_CHAMBER_HEALED
     return [
-      event(
-        "You kneel and hold the elixir to Malakar's lips. He drinks. The " +
-          'grey goes out of his face, and for a moment he is the young man ' +
-          'at the workbench again. "Hush, little seed," he sings under his ' +
-          'breath, and does not seem to know he does. The wound flickers, ' +
-          'and waits.',
-      ),
-      event('The Lifelight Elixir is gone.'),
+      "You kneel and hold the elixir to Malakar's lips. He drinks. The " +
+        'grey goes out of his face, and for a moment he is the young man ' +
+        'at the workbench again. "Hush, little seed," he sings under his ' +
+        'breath, and does not seem to know he does. The wound flickers, ' +
+        'and waits.',
+      'The Lifelight Elixir is gone.',
     ].join('\n')
   }
 }

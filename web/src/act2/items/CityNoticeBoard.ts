@@ -20,7 +20,7 @@ export class CityNoticeBoard extends Item {
   /** Read the postings on the board. */
   override examine(_gameState: GameState): string {
     return (
-      'You read through the various postings on the notice board. Most are mundane ' +
+      'Most of the postings on the notice board are mundane ' +
       'announcements about trade regulations and festival dates, but one catches ' +
       "your eye: a call under the Lord Commander's seal for able hands to serve " +
       'the castle in these uncertain times. Beneath it, in a smaller hand, ' +

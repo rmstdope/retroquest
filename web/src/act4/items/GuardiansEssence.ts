@@ -1,4 +1,4 @@
-import { Item, type Character, type GameState, event } from '@/engine'
+import { Item, type Character, type GameState } from '@/engine'
 import { FLAG_ACT4_SERVANTS_TRUST_EARNED } from '../Act4StoryFlags'
 import { TrappedServants } from '../characters/TrappedServants'
 import { HallOfEchoes } from '../rooms/HallOfEchoes'
@@ -28,11 +28,11 @@ export class GuardiansEssence extends Item {
     ) {
       if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
         gameState.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
-        return event(
-          "You hold out the [item_name]Guardian's Essence[/item_name]. The " +
-            'servants stop their circling and gather to look at it. One reaches ' +
-            'out, but does not touch. They know what it is, and what it cost. ' +
-            'For the first time, they look at you instead of through you.',
+        return (
+          'The servants stop their circling and gather to look at the ' +
+          "[item_name]Guardian's Essence[/item_name]. One reaches " +
+          'out, but does not touch. They know what it is, and what it cost. ' +
+          'For the first time, they look at you instead of through you.'
         )
       }
       return '[dim]The servants already know you. They watch you, and wait.[/dim]'
@@ -43,18 +43,14 @@ export class GuardiansEssence extends Item {
   /** Use Guardian's Essence to prove worthiness. */
   override use(gameState: GameState): string {
     if (gameState.currentRoom instanceof OuterCourtyard) {
-      return event(
+      return (
         'The light warms your hands. Across the courtyard, one of the ' +
-          'servants stops walking and turns towards it.',
+        'servants stops walking and turns towards it.'
       )
     }
     if (gameState.currentRoom instanceof HallOfEchoes) {
-      return event(
-        'The light steadies in the old hall, as if it has been here before.',
-      )
+      return 'The light steadies in the old hall, as if it has been here before.'
     }
-    return event(
-      'The light sits warm in your hand, waiting for someone to show it to.',
-    )
+    return 'The light sits warm in your hand, waiting for someone to show it to.'
   }
 }

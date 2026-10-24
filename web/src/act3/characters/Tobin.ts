@@ -3,7 +3,6 @@ import {
   type GameState,
   type Item,
   characterName,
-  event,
   remembered,
   speech,
 } from '@/engine'
@@ -53,10 +52,6 @@ export class Tobin extends Character {
       'his lap. The pale charm hangs at his throat on a bootlace, over the ' +
       'strip of torn shirt. He watches you now, not the ceiling.'
     return (
-      event(
-        `You give the [item_name]${item.name}[/item_name] to ${characterName(this.name)}.`,
-      ) +
-      '\n' +
       `Tobin turns the pale stone over in his fingers. As his hand ` +
       'closes around it, the endless dripping of the gallery seems to step ' +
       'back a pace, and his shoulders come down for the first time since ' +
@@ -90,21 +85,21 @@ export class Tobin extends Character {
       )
     }
     if (this.talks === 1) {
-      return event(
+      return (
         `${characterName(this.name)} looks at you for a long moment. His lips part, then close ` +
-          'again. He turns the cracked lamp over in his hands and goes back ' +
-          'to watching the ceiling.',
+        'again. He turns the cracked lamp over in his hands and goes back ' +
+        'to watching the ceiling.'
       )
     }
     if (this.talks === 2) {
-      return event(
+      return (
         `${characterName(this.name)} swallows, and you see what it costs him. No sound comes. ` +
-          'He shakes his head, once.',
+        'He shakes his head, once.'
       )
     }
-    return event(
+    return (
       `${characterName(this.name)} does not look up. His thumb traces the crack in the lamp's ` +
-        'glass, back and forth.',
+      'glass, back and forth.'
     )
   }
 }

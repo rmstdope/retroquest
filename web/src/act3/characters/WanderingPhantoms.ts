@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  characterName,
-  event,
-  remembered,
-} from '@/engine'
+import { Character, type GameState, remembered } from '@/engine'
 import {
   FLAG_ACT3_PHANTOMS_FREED,
   FLAG_ACT3_PHANTOMS_HEARD,
@@ -88,8 +82,6 @@ export class WanderingPhantoms extends Character {
     const room = gameState.currentRoom
     room.characters = room.characters.filter((c) => c !== this)
     return (
-      event(`You say rest to the ${characterName(this.name)}.`) +
-      '\n' +
       'The whispering falters. One by one the figures turn toward you, and ' +
       'the urgency drains out of them. They thin like mist in morning sun, ' +
       'and then they are gone. The chamber is quieter for it, but not yet ' +

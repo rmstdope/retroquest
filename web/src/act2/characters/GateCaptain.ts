@@ -53,8 +53,8 @@ export class GateCaptain extends Character {
         )
       } else {
         return (
-          'The Gate Captain has already returned to his duties and is ' +
-          'no longer present.'
+          '[failure]The Gate Captain has already returned to his duties and is ' +
+          'no longer present.[/failure]'
         )
       }
     }

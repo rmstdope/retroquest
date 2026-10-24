@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
   FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED,
@@ -37,8 +37,8 @@ export class MemoryOrbs extends Item {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
-      return event(ORBS_AFTER)
+      return ORBS_AFTER
     }
-    return event(ORBS_BEFORE)
+    return ORBS_BEFORE
   }
 }

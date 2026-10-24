@@ -103,6 +103,8 @@ interface PanelSnapshot {
     exits: RoomExits
     roomWares: RoomWare[]
     actNumber: number | null
+    /** What the command box offers: words of the place the panels show. */
+    completions: CompletionTree
   }
   quests: {
     activeQuests: QuestSummary[]
@@ -410,6 +412,7 @@ export const useGameStore = defineStore('game', () => {
       items.value = place.items
       exits.value = place.exits
       roomWares.value = place.roomWares
+      completionTree.value = place.completions
       if (questProgress.value && place.actNumber !== null)
         questProgress.value = {
           ...questProgress.value,
@@ -779,6 +782,7 @@ export const useGameStore = defineStore('game', () => {
         exits: b.controller.getRoomExits(),
         roomWares: b.controller.getRoomWares(),
         actNumber: progress ? progress.actNumber : null,
+        completions: b.controller.getCommandCompletions(),
       },
       quests: {
         activeQuests: b.controller.getActiveQuests(),
@@ -792,7 +796,6 @@ export const useGameStore = defineStore('game', () => {
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
     acceptInput.value = b.controller.isAcceptingInput()
-    completionTree.value = b.controller.getCommandCompletions()
     shortNames.value = b.controller.getShortNames()
   }
 

@@ -1,4 +1,4 @@
-import { Item, event, writing, type GameState } from '@/engine'
+import { Item, writing, type GameState } from '@/engine'
 
 /**
  * A burned notebook of Malakar's, handed over by the Ash Scholar. Optional
@@ -18,10 +18,8 @@ export class CharredNotebook extends Item {
   /** Read the two surviving entries; the text never changes and no state is set. */
   override examine(_gameState: GameState): string {
     return (
-      event(
-        'You open the [item_name]Charred Notebook[/item_name]. Most pages ' +
-          'have crumbled to flakes; two survive, in a neat and patient hand.',
-      ) +
+      "Most of the notebook's pages have crumbled to flakes; two survive, " +
+      'in a neat and patient hand.' +
       '\n\n' +
       writing(
         'Lysa says I measure the light too carefully. Aren says that is why ' +
@@ -35,10 +33,8 @@ export class CharredNotebook extends Item {
           'not afraid. They tell me to wait. I have waited all my life.',
       ) +
       '\n\n' +
-      event(
-        'The second entry is pressed so hard into the page that the pen has ' +
-          "torn it. The names in it are your parents'.",
-      )
+      'The second entry is pressed so hard into the page that the pen has ' +
+      "torn it. The names in it are your parents'."
     )
   }
 }

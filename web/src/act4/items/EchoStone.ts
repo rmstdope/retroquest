@@ -1,4 +1,4 @@
-import { Item, type Character, type GameState, event } from '@/engine'
+import { Item, type Character, type GameState } from '@/engine'
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
 import { MemoryVault } from '../rooms/MemoryVault'
 import { MemoryOrbs } from './MemoryOrbs'
@@ -7,7 +7,7 @@ import { ServantsPendant } from './ServantsPendant'
 
 /** What the stone says anywhere but in the maze. */
 const STONE_OUTSIDE_MAZE =
-  "You hold the Echo Stone to your ear. The hall's voices murmur inside it, " +
+  "The hall's voices murmur inside the Echo Stone, " +
   'waiting for somewhere that needs them. Under the rest, one voice says a ' +
   'single word over and over, the way a man says a word he has stopped ' +
   'believing in: redemption.'
@@ -20,7 +20,7 @@ const ENHANCED_DESCRIPTION =
 
 /** What the enhanced stone does for now, anywhere. */
 const ENHANCED_USE =
-  'You hold the stone to your ear. The voices inside it are clearer now, ' +
+  'The voices inside the stone are clearer now, ' +
   'waiting for a place where memories sleep.'
 
 /**
@@ -61,7 +61,7 @@ export class EchoStone extends Item {
 
   /** The enhanced stone's look. */
   override examine(_gameState: GameState): string {
-    return event(this.description)
+    return this.description
   }
 
   /** Use the stone alone: in the maze it repeats the route. */
@@ -70,7 +70,7 @@ export class EchoStone extends Item {
       const room = gameState.currentRoom
       if (room instanceof MirrorLabyrinth) return room.useStone(gameState)
       if (room instanceof MemoryVault) return room.mendOrbs(gameState)
-      return event(ENHANCED_USE)
+      return ENHANCED_USE
     }
     return EchoStone.useInRoom(gameState)
   }
@@ -94,7 +94,7 @@ export class EchoStone extends Item {
    */
   static useInRoom(gameState: GameState): string {
     const room = gameState.currentRoom
-    if (!(room instanceof MirrorLabyrinth)) return event(STONE_OUTSIDE_MAZE)
+    if (!(room instanceof MirrorLabyrinth)) return STONE_OUTSIDE_MAZE
     return room.useStone(gameState)
   }
 }

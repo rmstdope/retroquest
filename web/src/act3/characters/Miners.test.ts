@@ -42,7 +42,7 @@ describe('Miners dialogue markup', () => {
     expect(first).toContain(
       'oldest miner[/character_name] puts a grey hand on his arm',
     )
-    expect(first.endsWith('then nods.[/event]')).toBe(true)
+    expect(first).toMatch(/then nods\.(\[\/event\])?$/)
     expectMarkupWellFormed(first)
     expect(second).not.toContain('Sir Cedric')
   })
@@ -113,8 +113,9 @@ describe('Miners and Tobin', () => {
     miners.talkTo(game.state)
     const charm = new QuietCharm()
     const a = miners.giveItem(game.state, charm)
+    expect(a).not.toContain('You offer the')
     expect(a).toContain(
-      'You offer the [item_name]quiet charm[/item_name] to the [character_name]miners[/character_name].',
+      'The [character_name]lead miner[/character_name] turns the [item_name]quiet charm[/item_name] over and hands it back:',
     )
     expect(a).toContain('Pretty thing. Not much use to an old man with a pick')
     expect(a).toContain('I know who needs it.')

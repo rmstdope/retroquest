@@ -3,7 +3,6 @@ import {
   type GameState,
   characterName,
   dialogue,
-  event,
   speech,
 } from '@/engine'
 import { CEDRIC_NAME, cedricAdds, cedricSays } from '../CedricLines'
@@ -67,19 +66,17 @@ export class TideBornGuardian extends Character {
     if (gameState.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)) return ''
     if (this.trialBegun ?? false) {
       return (
-        event('The lights go out again as you cross the threshold.') +
+        'The lights go out again as you cross the threshold.' +
         '\n' +
         dialogue(this.name, 'Walk.')
       )
     }
     this.trialBegun = true
     return (
-      event(
-        'Then every light goes out at once — the sigils, the motes, the ' +
-          'glow at your back. The ',
-      ) +
+      'Then every light goes out at once — the sigils, the motes, the ' +
+      'glow at your back. The ' +
       characterName(this.name) +
-      event(' speaks from the black: ') +
+      ' speaks from the black: ' +
       speech(
         'The lanterns brought you here. They will not take you further. ' +
           'Walk.',
@@ -90,20 +87,18 @@ export class TideBornGuardian extends Character {
   /** The Guardian turns to Sir Cedric, who answers; the water does not. */
   private turnsToCedric(): string {
     return (
-      event(
-        `The ${characterName(this.name)} turns its rippling face to ` +
-          `${CEDRIC_NAME}.`,
-      ) +
+      `The ${characterName(this.name)} turns its rippling face to ` +
+      `${CEDRIC_NAME}.` +
       ' ' +
       speech('Name what you will not abandon.') +
       '\n' +
       cedricSays('My king.') +
       ' ' +
-      event('A breath.') +
+      'A breath.' +
       ' ' +
       speech('I did once.') +
       '\n' +
-      event('The water does not answer him.')
+      'The water does not answer him.'
     )
   }
 
@@ -111,22 +106,18 @@ export class TideBornGuardian extends Character {
   lookLine(_gameState: GameState): string {
     switch (this.step()) {
       case 0:
-        return event(
+        return (
           'You stand at the edge of the black water. Somewhere ahead, the ' +
-            'Guardian waits.',
+          'Guardian waits.'
         )
       case 1:
-        return event(
-          'Black water to your knees. You cannot see your own hands.',
-        )
+        return 'Black water to your knees. You cannot see your own hands.'
       case 2:
-        return event(
-          'Black water to your waist. You cannot see your own hands.',
-        )
+        return 'Black water to your waist. You cannot see your own hands.'
       default:
-        return event(
+        return (
           'The water stands parted around you. The Crystal of Light burns ' +
-            'in its basin, the only light in the world.',
+          'in its basin, the only light in the world.'
         )
     }
   }
@@ -142,30 +133,26 @@ export class TideBornGuardian extends Character {
     this.trialStep = step + 1
     switch (step + 1) {
       case 1:
-        return event(
+        return (
           'You step down into the black water. It is cold to the knees, ' +
-            'and you cannot see your own hands.',
+          'and you cannot see your own hands.'
         )
       case 2:
         return (
-          event('A voice like ') +
+          'A voice like ' +
           characterName('Mira') +
-          event(', close behind you: ') +
+          ', close behind you: ' +
           speech('Turn back, Elior. There is nothing out there.')
         )
       default:
         return (
-          event(
-            'The water is at your chest. You call for ' +
-              'Sir Cedric and hear nothing — the door is too far behind. ' +
-              'You take the step anyway.',
-          ) +
+          'The water is at your chest. You call for ' +
+          'Sir Cedric and hear nothing — the door is too far behind. ' +
+          'You take the step anyway.' +
           '\n' +
-          event(
-            'The water parts around you. In the hollow it leaves, the ' +
-              'Crystal of Light burns in its basin, the only light in the ' +
-              'world.',
-          ) +
+          ('The water parts around you. In the hollow it leaves, the ' +
+            'Crystal of Light burns in its basin, the only light in the ' +
+            'world.') +
           '\n' +
           dialogue(this.name, 'You came through. What did you not abandon?')
         )
@@ -180,9 +167,9 @@ export class TideBornGuardian extends Character {
   /** Wade back to the edge from wherever Elior stands. */
   turnBack(): string {
     this.trialStep = 0
-    return event(
+    return (
       'You wade back to the edge of the basin. The water closes behind you ' +
-        'without a sound.',
+      'without a sound.'
     )
   }
 
@@ -234,10 +221,8 @@ export class TideBornGuardian extends Character {
             'courage the crystal asks for.',
         ) +
         '\n' +
-        event(
-          'One by one the sigils kindle again across the water, and the ' +
-            'chamber is lit as you first saw it.',
-        ) +
+        ('One by one the sigils kindle again across the water, and the ' +
+          'chamber is lit as you first saw it.') +
         cedricAdds(gameState, this.turnsToCedric())
       )
     }

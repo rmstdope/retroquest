@@ -1,4 +1,4 @@
-import { Item, event, type GameState } from '@/engine'
+import { Item, clue, type GameState } from '@/engine'
 import { PrismLantern } from './PrismLantern'
 import { RustedLockerKey } from './RustedLockerKey'
 
@@ -46,9 +46,9 @@ export class Locker extends Item {
       return '[dim]The locker is already open.[/dim]'
     }
     if (this.locked) {
-      return (
-        '[failure]You pull at the handle, but the fused lock holds tight. ' +
-        'It cannot open while it remains locked.[/failure]'
+      return clue(
+        'You pull at the handle, but the fused lock holds tight. ' +
+          'It cannot open while it remains locked.',
       )
     }
     this.opened = true
@@ -72,17 +72,17 @@ export class Locker extends Item {
     // pins). If the rusted key is not stuck, the mechanism cannot be freed
     // by ordinary means.
     if (!this.rustedKeyStuck) {
-      return (
-        '[failure]The lock is fused tight; without something lodged in the ' +
-        'mechanism you cannot free the pins.[/failure]'
+      return clue(
+        'The lock is fused tight; without something lodged in the ' +
+          'mechanism you cannot free the pins.',
       )
     }
 
     // Proceed to free the mechanism when the rusted key is present.
     this.locked = false
-    return event(
+    return (
       'A subtle click echoes under the pier as fused pins release. ' +
-        'The locker can now be opened.',
+      'The locker can now be opened.'
     )
   }
 
@@ -95,9 +95,9 @@ export class Locker extends Item {
       // The rusted key gets stuck and does not unlock the mechanism.
       this.rustedKeyStuck = true
       gameState.removeItemFromInventory(other.name)
-      return event(
+      return (
         'The lock is too corroded for the key to turn. As you tug, ' +
-          'the corroded key jams in the mechanism and will not come free.',
+        'the corroded key jams in the mechanism and will not come free.'
       )
     }
     return super.useWith(gameState, other)

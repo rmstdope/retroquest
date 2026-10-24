@@ -2,7 +2,8 @@ import {
   Character,
   type GameState,
   characterName,
-  event,
+  dialogue,
+  clue,
   speech,
 } from '@/engine'
 import { CrystalClearWater } from '../items/CrystalClearWater'
@@ -103,15 +104,13 @@ export class WaterNymphs extends Character {
    * solved and add the nymphs' remark about the thinning streams (the blight).
    */
   override talkTo(_gameState: GameState): string {
-    const eventMsg = event(
-      'You approach the ' + characterName(this.name) + ' by the stream.',
-    )
     if (this.riddlesCompleted) {
       // After completing all riddles
       return (
-        eventMsg +
-        '\n' +
-        speech("Back again? Wasn't three enough? What more could we ask you?") +
+        dialogue(
+          this.name,
+          "Back again? Wasn't three enough? What more could we ask you?",
+        ) +
         '\n\n' +
         characterName(this.name) +
         ': ' +
@@ -126,30 +125,23 @@ export class WaterNymphs extends Character {
       const riddle = RIDDLES[this.currentRiddle]
       const greeting =
         this.currentRiddle === 0
-          ? 'The stream rises into shapes. ' +
-            speech(
+          ? 'The stream rises into shapes.\n' +
+            dialogue(
+              this.name,
               'Came all this way to stand in our water? Will you answer ' +
                 'three questions, then? Here is the first.',
             )
-          : speech(
+          : dialogue(
+              this.name,
               'Back so soon? Do you remember where we were? The ' +
                 `${this.getOrdinalWord(this.currentRiddle + 1)} one, wasn't it?`,
             )
-      return (
-        eventMsg +
-        '\n' +
-        greeting +
-        '\n\n' +
-        speech(riddle.question) +
-        '\n\n' +
-        RIDDLE_HELP
-      )
+      return greeting + '\n\n' + speech(riddle.question) + '\n\n' + RIDDLE_HELP
     }
     // This shouldn't happen, but just in case
-    return (
-      eventMsg +
-      '\n' +
-      speech("Back again? Wasn't three enough? What more could we ask you?")
+    return dialogue(
+      this.name,
+      "Back again? Wasn't three enough? What more could we ask you?",
     )
   }
 
@@ -159,7 +151,7 @@ export class WaterNymphs extends Character {
       return (
         '[dim]The ' +
         characterName(this.name) +
-        ` listen to '${words}' and only smile. They have no more riddles ` +
+        ' listen and only smile. They have no more riddles ' +
         'for you.[/dim]'
       )
     }
@@ -188,7 +180,7 @@ export class WaterNymphs extends Character {
         gameState.currentRoom.items.push(new Moonflowers())
 
         return (
-          `[success]Correct! '${words}' is indeed the answer. ${riddle.explanation}` +
+          `[success]Correct! That is indeed the answer. ${riddle.explanation}` +
           '[/success]\n\nThe ' +
           characterName(this.name) +
           ' laugh, a sound like water over a weir. ' +
@@ -197,15 +189,13 @@ export class WaterNymphs extends Character {
               'take what grows here? Who else would we give it to?',
           ) +
           '\n\n' +
-          event(
-            'The water nymphs draw back from the bank. The clear pool and ' +
-              'the pale flowers at its edge are there for the taking.',
-          )
+          'The water nymphs draw back from the bank. The clear pool and ' +
+          'the pale flowers at its edge are there for the taking.'
         )
       }
       const nextRiddle = RIDDLES[this.currentRiddle]
       return (
-        `[success]Correct! '${words}' is the right answer. ${riddle.explanation}` +
+        `[success]Correct! That is the right answer. ${riddle.explanation}` +
         '[/success]\n\nThe ' +
         characterName(this.name) +
         ' nod. ' +
@@ -220,9 +210,8 @@ export class WaterNymphs extends Character {
     this.missCount = (this.missCount || 0) + 1
     const hint = this.missCount >= 2 ? '\n\n' + speech(`${riddle.hint}`) : ''
     return (
-      '[failure]The ' +
-      characterName(this.name) +
-      ` shake their heads gently as you say '${words}'.[/failure] ` +
+      clue('The ' + characterName(this.name) + ' shake their heads gently.') +
+      ' ' +
       speech('Is that really what you think? Will you hear it again?') +
       '\n\n' +
       speech(riddle.question) +
@@ -232,11 +221,9 @@ export class WaterNymphs extends Character {
 
   /** Describe the nymphs and what they do when you lean closer. */
   override examine(_gameState: GameState): string {
-    return event(
-      'You study the ' +
-        characterName(this.name) +
-        `. ${this.description} When you lean closer, every one of them ` +
-        'leans closer too.',
+    return (
+      `${this.description} When you lean closer, every one of them ` +
+      'leans closer too.'
     )
   }
 }

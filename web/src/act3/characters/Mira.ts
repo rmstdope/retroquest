@@ -3,7 +3,7 @@ import {
   type GameState,
   characterName,
   dialogue,
-  event,
+  clue,
   speech,
 } from '@/engine'
 import { KeepsakeNote } from '../items/KeepsakeNote'
@@ -68,11 +68,29 @@ export class Mira extends Character {
     })
   }
 
-  /** Handle conversation with Mira, including quest start and teleportation. */
+  /**
+   * Handle conversation with Mira, including quest start and teleportation.
+   * No line repeats the typed command, so when her answer opens with a quote
+   * her name goes on a line of its own first, as the quote's label.
+   */
   override talkTo(gameState: GameState): string {
-    const eventMsg =
-      event('You speak with ' + characterName(this.name) + '.') +
-      this.pendingSlips(gameState)
+    const answer = this.converse(gameState).replace(/^\n+/, '')
+    const quote = answer.search(/\[dialogue\]/)
+    if (
+      quote < 0 ||
+      answer.slice(0, quote).includes(characterName(this.name))
+    ) {
+      return answer
+    }
+    const label = characterName(this.name) + '\n'
+    return quote === 0 || answer[quote - 1] === '\n'
+      ? answer.slice(0, quote) + label + answer.slice(quote)
+      : label + answer
+  }
+
+  /** What Mira says and does when talked to, before the speaker is labelled. */
+  private converse(gameState: GameState): string {
+    const eventMsg = this.pendingSlips(gameState).trimStart()
 
     // First conversation in Act III: start the main quest
     if (!gameState.getStoryFlag(FLAG_ACT3_MAIN_STARTED)) {
@@ -98,7 +116,7 @@ export class Mira extends Character {
         '\n' +
         speech('Before we go, take this, and read it. Then we can leave.') +
         '\n' +
-        event('Mira hands you a small, worn piece of parchment.') +
+        'Mira hands you a small, worn piece of parchment.' +
         '\n' +
         speech('Say the word, and I will draw the first circle.') +
         '\n' +
@@ -312,31 +330,25 @@ export class Mira extends Character {
               'manifest.',
           ) +
             '\n' +
-            event(
-              'Mira carefully arranges the three relics in a precise ' +
-                'triangle. She begins an intricate ritual, weaving threads of ' +
-                'starlight around each relic. The Crystal flares with brilliant ' +
-                'light, the Feather ignites with phoenix fire, and the Scale ' +
-                'hums with draconic power.',
-            ) +
+            ('Mira carefully arranges the three relics in a precise ' +
+              'triangle. She begins an intricate ritual, weaving threads of ' +
+              'starlight around each relic. The Crystal flares with brilliant ' +
+              'light, the Feather ignites with phoenix fire, and the Scale ' +
+              'hums with draconic power.') +
             '\n' +
-            event(
-              'Mira takes the healing herbs from the shelf and presses the ' +
-                'sachets into your hands. Their resin-sweet scent steadies ' +
-                'your breath as the starlight tightens around the relics.',
-            ) +
+            ('Mira takes the healing herbs from the shelf and presses the ' +
+              'sachets into your hands. Their resin-sweet scent steadies ' +
+              'your breath as the starlight tightens around the relics.') +
             '\n' +
             speech(
               'By light and flame and ancient oath, let these ' +
                 'virtues merge into one vessel of protection!',
             ) +
             '\n' +
-            event(
-              'The three relics dissolve into streams of pure essence ' +
-                'that spiral together into a crystalline vial. The resulting ' +
-                'elixir shimmers with liquid starlight—the Lifelight Elixir, ' +
-                'born from the union of three virtues.',
-            ) +
+            ('The three relics dissolve into streams of pure essence ' +
+              'that spiral together into a crystalline vial. The resulting ' +
+              'elixir shimmers with liquid starlight—the Lifelight Elixir, ' +
+              'born from the union of three virtues.') +
             '\n' +
             speech(
               "It is done. This elixir can counter Malakar's " +
@@ -424,29 +436,19 @@ export class Mira extends Character {
       gameState.currentRoom.onEnter(gameState)
       gameState.markVisited(gameState.currentRoom)
       const arrivalFx =
-        event(
-          'Mira traces a prism with her finger; the air folds and the ' +
-            'world blurs. When it clears, you arrive at your next ' +
-            'destination.',
-        ) + '\n'
-      return (
-        eventMsg +
-        '\n' +
-        flavor +
-        '\n' +
-        arrivalFx +
-        event(
-          'You arrive at ' +
-            `[room_name]${gameState.currentRoom.name}[/room_name].`,
-        ) +
-        atGate
-      )
+        'Mira traces a prism with her finger; the air folds and the ' +
+        'world blurs. When it clears, you arrive at your next ' +
+        'destination.' +
+        '\n'
+      return eventMsg + '\n' + flavor + '\n' + arrivalFx + atGate
     }
     return (
       eventMsg +
       '\n' +
-      '[failure]Mira hesitates—she cannot find the proper anchor to send ' +
-      'you there yet.[/failure]'
+      clue(
+        'Mira hesitates—she cannot find the proper anchor to send ' +
+          'you there yet.',
+      )
     )
   }
 
@@ -510,10 +512,8 @@ export class Mira extends Character {
         : null
     return [
       eventMsg,
-      event(
-        'Mira leans on the cold stone of the gate. Her hands are still ' +
-          'shaking from the last circle.',
-      ),
+      'Mira leans on the cold stone of the gate. Her hands are still ' +
+        'shaking from the last circle.',
       speech('I know how I look, Elior. Do not ask me to stay behind.'),
       speech(
         answeredLine ??
@@ -534,10 +534,8 @@ export class Mira extends Character {
     return (
       speech("Lysa's hand. She always crossed her sevens.") +
       '\n' +
-      event(
-        characterName('Mira') +
-          ' turns to the sea before you can ask what she means.',
-      )
+      (characterName('Mira') +
+        ' turns to the sea before you can ask what she means.')
     )
   }
 
@@ -566,11 +564,9 @@ export class Mira extends Character {
     ) {
       gameState.setStoryFlag(FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED, true)
       lines.push(
-        event('She looks at the feather a long time.'),
+        `${characterName(this.name)} looks at the feather a long time.`,
         speech('…even when the world burns.'),
-        event(
-          'She says it softly, as if finishing a sentence someone else began.',
-        ),
+        'She says it softly, as if finishing a sentence someone else began.',
       )
     }
     if (
@@ -579,13 +575,7 @@ export class Mira extends Character {
       !gameState.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_RELAYED)
     ) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_RELAYED, true)
-      lines.push(
-        event(
-          "You give her the dragon's words. " +
-            characterName('Mira') +
-            ' does not answer.',
-        ),
-      )
+      lines.push(characterName('Mira') + ' does not answer.')
     }
     return lines.map((line) => '\n' + line).join('')
   }
@@ -602,9 +592,7 @@ export class Mira extends Character {
       'than before.'
     return [
       eventMsg,
-      event(
-        "Mira's hands stop above the three relics. She does not begin the rite.",
-      ),
+      "Mira's hands stop above the three relics. She does not begin the rite.",
       speech(
         'Before I join them, Elior, there is something you must hear from ' +
           'me, and not from a stone or a dragon.',
@@ -624,10 +612,8 @@ export class Mira extends Character {
         "Your grandmother knew. She is Lysa's mother, and she kept the " +
           'secret with me.',
       ),
-      event(
-        'For a moment you cannot speak. Then the words come out harder than ' +
-          'you meant them.',
-      ),
+      'For a moment you cannot speak. Then the words come out harder than ' +
+        'you meant them.',
       dialogue('Elior', "Why didn't you tell me?"),
       dialogue(
         'Mira',
@@ -648,7 +634,7 @@ export class Mira extends Character {
       ),
       speech(MIRA_ANSWER_INVITATION),
       MIRA_ANSWER_REMINDER,
-      event('She looks down at the relics, and then back at you.'),
+      'She looks down at the relics, and then back at you.',
       speech('When you are ready, tell me, and I will begin the Warding Rite.'),
       speech(
         'And ask me anything you like now — about your parents, Malakar, ' +

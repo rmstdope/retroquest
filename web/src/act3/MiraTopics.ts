@@ -5,7 +5,7 @@
  * tells the player the command. Which set she uses depends only on whether
  * she has confessed, so nothing here is saved.
  */
-import { characterName, dialogue, event, speech } from '@/engine'
+import { characterName, dialogue, speech } from '@/engine'
 
 /** A subject Elior can ask Mira about. */
 export type MiraTopic = 'parents' | 'malakar' | 'amulet' | 'grandmother'
@@ -75,7 +75,7 @@ export function miraTopicReply(
 ): string {
   if (topic === null) {
     return (
-      event(`${characterName('Mira')} shakes her head.`) +
+      `${characterName('Mira')} shakes her head.` +
       '\n' +
       speech(
         'Ask me of your parents, Malakar, the amulet or your ' +

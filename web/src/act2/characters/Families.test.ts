@@ -115,9 +115,7 @@ describe('Families and the mountain flower (selfless moment)', () => {
 
     const answer = game.commandParser.parse('give mountain flower to families')
 
-    expect(answer).toContain(
-      'You give the [item_name]mountain flower[/item_name]',
-    )
+    expect(answer).not.toContain('You give the')
     expect(answer).toContain('A little later a thin face appears at the window')
     expect(answer).toContain(
       "She's smiling. First time in a week. It's only a flower, and she knows " +
@@ -148,9 +146,7 @@ describe('Families and the mountain flower (selfless moment)', () => {
 
     const answer = game.commandParser.parse('give mountain flower to families')
 
-    expect(answer).toContain(
-      'You give the [item_name]mountain flower[/item_name]',
-    )
+    expect(answer).not.toContain('You give the')
     expect(answer).toContain(
       'give you polite but distant nods. Nobody seems to know what a ' +
         'stranger wants with them, or with a flower.',

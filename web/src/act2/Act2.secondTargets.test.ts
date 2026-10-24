@@ -18,13 +18,13 @@ import { FLAG_INNKEEPERS_DAUGHTER_COMPLETED } from './Act2StoryFlags'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 const FIRST_HEAL =
-  'Golden light settles on split lips and wrenched ankles, and one by one they stop wincing.'
+  'Golden light settles on split lips and wrenched ankles, and one by one the merchants stop wincing.'
 const TRADER_GESTURE =
   'A spice trader flexes a hand she has been cradling since the ravine.'
 const TRADER_LINE =
   "Three days down there and I'd stopped feeling these fingers. Tell Thorne he owes you twice now."
 const REPEAT =
-  '[dim]The merchants are already on the mend. A spice trader waves you off: "Save it for someone who needs it."[/dim]'
+  '[failure][clue]The merchants are already on the mend. A spice trader waves you off: "Save it for someone who needs it."[/clue][/failure]'
 const THORNE_LINE =
   "And my people tell me you didn't just haul them out of that hole — you mended them where they sat. One of the spice traders says her hand's never been better. I don't know how a man repays a debt twice over."
 const MASK_FAILURE =
@@ -58,10 +58,7 @@ describe('greater heal on the rescued merchants', () => {
     const game = newGame()
     rescued(game)
     const out = game.commandParser.parse(`cast greater_heal on ${target}`)
-    expect(out).toContain(
-      'You cast [spell_name]greater heal[/spell_name] over the merchants. ' +
-        FIRST_HEAL,
-    )
+    expect(out).toContain(FIRST_HEAL)
     expect(out).toContain(TRADER_GESTURE)
     expect(out).toContain(
       `[character_name]Spice trader[/character_name]\n[dialogue]${TRADER_LINE}[/dialogue]`,
@@ -95,7 +92,7 @@ describe('merchants rescued with the real rope', () => {
     game.state.addItemToInventory(new QualityRope())
     game.commandParser.parse('use rope with ravine')
     const out = game.commandParser.parse('cast greater_heal on merchants')
-    expect(out).toContain('over the merchants')
+    expect(out).toContain(FIRST_HEAL)
     game.state.currentRoom = game.state.allRooms.MarketDistrict
     const talk = game.commandParser.parse('talk to caravan master thorne')
     expect(talk).toContain('mended them where they sat')
@@ -172,9 +169,7 @@ describe('dispel on Elena too early', () => {
   it('finds nothing to grip before the greater heal', () => {
     const game = withElena()
     const out = game.commandParser.parse('cast dispel on barmaid elena')
-    expect(out).toBe(
-      `[failure]You cast [spell_name]dispel[/spell_name] on Elena. ${NOTHING_FAILURE}[/failure]`,
-    )
+    expect(out).toBe(`[failure][clue]${NOTHING_FAILURE}[/clue][/failure]`)
     expectMarkupWellFormed(out)
   })
 
@@ -182,9 +177,7 @@ describe('dispel on Elena too early', () => {
     const game = withElena()
     game.commandParser.parse('cast greater_heal on barmaid elena')
     const out = game.commandParser.parse('cast dispel on barmaid elena')
-    expect(out).toBe(
-      `[failure]You cast [spell_name]dispel[/spell_name] on Elena. ${MASK_FAILURE}[/failure]`,
-    )
+    expect(out).toBe(`[failure][clue]${MASK_FAILURE}[/clue][/failure]`)
     expect(out).not.toContain('[character_name]')
     expectMarkupWellFormed(out)
   })
@@ -200,6 +193,8 @@ describe('dispel on Elena too early', () => {
       true,
     )
     const out = game.commandParser.parse('cast dispel on barmaid elena')
-    expect(out).toBe('Elena has already been completely cured of her curse.')
+    expect(out).toBe(
+      '[failure]Elena has already been completely cured of her curse.[/failure]',
+    )
   })
 })

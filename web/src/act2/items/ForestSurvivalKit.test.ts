@@ -47,9 +47,6 @@ describe('Forest survival kit', () => {
     const answer = executeCommands(game, ['use forest survival kit'])
 
     const lines = [
-      'You open the',
-      'forest survival kit',
-      'at the foot of the standing stones.',
       "Dusk comes early under the trees. You make a small fire in the lee of the stones, eat from the rations, set the kit's wards around your blanket and sleep with your back to the oldest stone.",
       'You dream of a field of grey stalks and of someone at its far edge, too far away to see. Nobody speaks.',
       'You wake to grey light and woodsmoke. The',

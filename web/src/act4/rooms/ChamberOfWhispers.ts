@@ -1,4 +1,4 @@
-import { Room, type Exits, type GameState } from '@/engine'
+import { Room, type Exits, type GameState, clue } from '@/engine'
 import {
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
@@ -59,9 +59,9 @@ export class ChamberOfWhispers extends Room {
     if (direction !== 'north') return null
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED))
       return null
-    return (
-      '[failure]The north arch is a wall of whispering crystal. It will not ' +
-      'open while the Sorceress holds the chamber.[/failure]'
+    return clue(
+      'The north arch is a wall of whispering crystal. It will not ' +
+        'open while the Sorceress holds the chamber.',
     )
   }
 }

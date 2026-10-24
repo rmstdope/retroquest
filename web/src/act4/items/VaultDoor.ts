@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import {
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
   FLAG_ACT4_VAULT_DOOR_OPENED,
@@ -40,9 +40,9 @@ export class VaultDoor extends Item {
   /** The door's look, which changes once the Shadow is answered. */
   override examine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
-      return event(DOOR_GLOWING)
+      return DOOR_GLOWING
     }
-    return event(DOOR_DARK)
+    return DOOR_DARK
   }
 
   /** The Ancient Amulet used on the door: see `openWith`. */
@@ -60,15 +60,15 @@ export class VaultDoor extends Item {
       return '[dim]The door already stands open.[/dim]'
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
-      return (
-        '[failure]You hold the amulet to the door, but its runes stay dark. ' +
-        'Something in this vault is not ready to let you in.[/failure]'
+      return clue(
+        "The door's runes stay dark under the amulet. " +
+          'Something in this vault is not ready to let you in.',
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_VAULT_DOOR_OPENED, true)
-    return event(
+    return (
       'The runes on the door wake to the runes on the amulet, and the stone ' +
-        'rolls aside without a sound.',
+      'rolls aside without a sound.'
     )
   }
 }

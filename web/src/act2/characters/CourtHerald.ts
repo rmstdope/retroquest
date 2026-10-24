@@ -3,7 +3,6 @@ import {
   type GameState,
   type Item,
   characterName,
-  event,
   speech,
 } from '@/engine'
 import { FLAG_COURT_HERALD_FORMAL_PRESENTATION } from '../Act2StoryFlags'
@@ -27,13 +26,7 @@ export class CourtHerald extends Character {
       // Set the formal presentation flag
       gameState.setStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION, true)
 
-      const itemName = item.name
       const heraldName = this.name
-      const eventMsg = event(
-        `You present the [item_name]${itemName}[/item_name] to the ` +
-          characterName(heraldName) +
-          '.',
-      )
       const announcement =
         'Excellent! This is a ' +
         'properly certified entry pass. I hereby formally present you to the ' +
@@ -42,8 +35,6 @@ export class CourtHerald extends Character {
         'Your credentials are now on record, and you may research freely in ' +
         'our collections.'
       return (
-        eventMsg +
-        '\n' +
         characterName(heraldName) +
         ': ' +
         speech(announcement + ' ' + announcementTail)

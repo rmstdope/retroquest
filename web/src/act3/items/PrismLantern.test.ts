@@ -36,9 +36,10 @@ describe('PrismLantern', () => {
     expect(bracket).toBeDefined()
 
     const result = lantern.useWith(game.state, bracket as LanternBracket)
-    expect(
-      result.includes('[event]') || result.toLowerCase().includes('seat'),
-    ).toBe(true)
+    expect(result).toContain(
+      'The prism lantern settles into the bracket; water hums softly as it ' +
+        'takes the weight.',
+    )
 
     expect(game.state.hasItem('Prism Lantern')).toBe(false)
     expect((bracket as LanternBracket).hasLantern).toBe(true)

@@ -16,7 +16,7 @@ export class MerchantsFlyer extends Item {
 
   override use(_gameState: GameState): string {
     return (
-      "You examine the merchant's flyer. It advertises quality goods from Master " +
+      "The merchant's flyer advertises quality goods from Master " +
       'Merchant Aldric and would serve as a good introduction when visiting ' +
       'the Market District.'
     )

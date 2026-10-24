@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  characterName,
-  event,
-  speech,
-} from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { MinersKey } from '../items/MinersKey'
 import { FLAG_ACT3_MINERS_RESCUE_STARTED } from '../Act3StoryFlags'
 
@@ -52,7 +46,7 @@ export class MineOverseer extends Character {
             'It opens the supply crate. Get those miners out.',
         ) +
         '\n' +
-        event("You receive the [item_name]Miner's Key[/item_name].")
+        "You receive the [item_name]Miner's Key[/item_name]."
       )
     }
     return (

@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, dialogue } from '@/engine'
 import { FLAG_ACT4_ELIXIR_ON_KING } from '../Act4StoryFlags'
 import { endingPlayed, type Ending } from '../endings'
 
@@ -33,15 +33,15 @@ export class KingAlden extends Character {
   /** His look, which changes once the prison is broken. */
   override examine(gameState: GameState): string {
     if (endingPlayed(gameState)) {
-      return event('The king of Eldoria, alive, his crown bright again.')
+      return 'The king of Eldoria, alive, his crown bright again.'
     }
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
-      return event(
+      return (
         'The king of Eldoria, weak and grey, but breathing. His crown is ' +
-          'dark still.',
+        'dark still.'
       )
     }
-    return event(this.description)
+    return this.description
   }
 
   /** Asleep in the crystal until it is broken; then his line, by ending. */

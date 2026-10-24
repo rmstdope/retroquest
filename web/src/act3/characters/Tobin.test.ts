@@ -47,7 +47,7 @@ describe('Tobin', () => {
     expect(answers[3]).toBe(answers[2])
     expect(answers[4]).toBe(answers[2])
     for (const answer of answers) {
-      expect(answer.startsWith('[event]')).toBe(true)
+      expect(answer).not.toContain('[event]')
       expect(answer).not.toContain('[dialogue]')
       expectMarkupWellFormed(answer)
     }
@@ -71,9 +71,7 @@ describe('Tobin', () => {
       const charm = game.state.inventory.find((i) => i.name === 'quiet charm')!
       const answer = tobin.giveItem(game.state, charm)
 
-      expect(answer).toContain(
-        'You give the [item_name]quiet charm[/item_name] to [character_name]Tobin[/character_name].',
-      )
+      expect(answer).not.toContain('You give the')
       expect(answer).toContain(
         'As his hand closes around it, the endless dripping of the gallery seems to step back a pace',
       )

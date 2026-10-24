@@ -15,7 +15,6 @@ describe('Forest hermit', () => {
     const answer = new ForestHermit().talkTo(game.state)
 
     const lines = [
-      'You approach the',
       'glances at the treeline before looking at you, as if checking who might be listening.',
       "You're going in. She's in a sour mood this season, so mind yourself.",
       "She moves her paths when she's bored, and she keeps old things in her that don't care for strangers. Everything that lives in there is hers. Ask before you take, and never take more than you give.",

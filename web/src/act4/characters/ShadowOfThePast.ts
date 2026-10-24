@@ -1,4 +1,4 @@
-import { Character, type GameState, dialogue, event } from '@/engine'
+import { Character, type GameState, clue, dialogue } from '@/engine'
 import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
   FLAG_ACT4_SHADOW_MASK_SHOWN,
@@ -50,12 +50,12 @@ export class ShadowOfThePast extends Character {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
-      return event(
+      return (
         'A man made of shadow, almost solid now. His face is kind and very ' +
-          'tired. You have never seen it before, and you know it all the same.',
+        'tired. You have never seen it before, and you know it all the same.'
       )
     }
-    return event(this.description)
+    return this.description
   }
 
   /** What it says follows the orbs, the mask and the answer. */
@@ -129,25 +129,23 @@ export class ShadowOfThePast extends Character {
     }
     return this.answerWithPatience(
       gameState,
-      event(
-        'You sit down among the orbs and wait, and say nothing at all. The ' +
-          'Shadow watches you do it for a long time.',
-      ),
+      'You sit down among the orbs and wait, and say nothing at all. The ' +
+        'Shadow watches you do it for a long time.',
     )
   }
 
   /** The shared gates and the answer, led in by what Elior did (ready-made lines): the word, or the waiting. */
   private answerWithPatience(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
-      return (
-        '[failure]The Shadow cannot hear you. The memories around it are ' +
-        'too broken.[/failure]'
+      return clue(
+        'The Shadow cannot hear you. The memories around it are ' +
+          'too broken.',
       )
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN)) {
-      return (
-        '[failure]The Shadow shakes its head. “Patience is for those who ' +
-        'still have hope. I have none left.”[/failure]'
+      return clue(
+        'The Shadow shakes its head. “Patience is for those who ' +
+          'still have hope. I have none left.”',
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)

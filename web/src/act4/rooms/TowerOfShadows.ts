@@ -1,4 +1,4 @@
-import { Room, type Exits, type GameState } from '@/engine'
+import { Room, type Exits, type GameState, clue } from '@/engine'
 import { Whispers } from '../characters/Whispers'
 import { FLAG_ACT4_TOWER_STAIR_OPEN } from '../Act4StoryFlags'
 
@@ -49,10 +49,10 @@ export class TowerOfShadows extends Room {
   override blockedExit(gameState: GameState, direction: string): string | null {
     if (direction !== 'up') return null
     if (gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)) return null
-    return (
-      '[failure]You set your foot on the stair, and the whispers close in: ' +
-      'your friends have left you, no one is coming, you were always alone. ' +
-      'You stumble back down.[/failure]'
+    return clue(
+      'On the stair the whispers close in: ' +
+        'your friends have left you, no one is coming, you were always alone. ' +
+        'You stumble back down.',
     )
   }
 }

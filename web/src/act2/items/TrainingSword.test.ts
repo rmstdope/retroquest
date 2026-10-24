@@ -62,7 +62,7 @@ describe("Training Sword as Cedric's old blade", () => {
     const sword = new TrainingSword()
 
     expect(sword.use(game.state)).toContain(
-      'You practice a few sword forms with the training sword.',
+      "The training sword's balance feels good in your hands",
     )
   })
 
@@ -74,7 +74,7 @@ describe("Training Sword as Cedric's old blade", () => {
 
     const text = new TrainingSword().use(game.state)
 
-    expect(text).toContain('You practice a few sword forms')
+    expect(text).toContain('The training sword')
     expect(text).not.toContain('That notch by the guard.')
   })
 })

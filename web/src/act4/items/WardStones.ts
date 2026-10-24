@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
@@ -18,17 +18,17 @@ export class WardStones extends Item {
   /** Examine the ward stones; before the gates fall the first look starts the guardians quest. */
   override examine(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED)) {
-      return event(
+      return (
         'Three ward stones, dark and silent. The right one is missing a ' +
-          'piece of its face.',
+        'piece of its face.'
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
-    return event(
+    return (
       'Three ward stones stand before the gates, evenly spaced, each carved ' +
-        'with the same runes. Their light swells and fades together, and the ' +
-        'barrier swells and fades with them. All but one: the right stone ' +
-        'brightens a breath after the others, like a man who has lost count.',
+      'with the same runes. Their light swells and fades together, and the ' +
+      'barrier swells and fades with them. All but one: the right stone ' +
+      'brightens a breath after the others, like a man who has lost count.'
     )
   }
 }

@@ -1,4 +1,4 @@
-import { Room, type Exits, type GameState } from '@/engine'
+import { Room, type Exits, type GameState, clue } from '@/engine'
 import {
   FLAG_ACT4_PARENTS_LEGACY_COMPLETED,
   FLAG_ACT4_PARENTS_LEGACY_STARTED,
@@ -39,9 +39,9 @@ export class ParentsVault extends Room {
   override blockedExit(gameState: GameState, direction: string): string | null {
     if (direction !== 'north') return null
     if (gameState.getStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED)) return null
-    return (
-      '[failure]The door to the north is shut. The lanterns are still ' +
-      'waiting for you.[/failure]'
+    return clue(
+      'The door to the north is shut. The lanterns are still ' +
+        'waiting for you.',
     )
   }
 }

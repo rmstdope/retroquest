@@ -41,8 +41,8 @@ export class RoomKey extends Item {
         return result
       }
       return (
-        '[dim]The key is cut for a door at the Silver Stag. There is no such ' +
-        'door here.[/dim]'
+        '[failure]The key is cut for a door at the Silver Stag. There is no such ' +
+        'door here.[/failure]'
       )
     }
     const otherName = other.name

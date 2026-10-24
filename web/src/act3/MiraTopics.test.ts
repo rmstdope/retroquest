@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { characterName, dialogue, event, speech } from '@/engine'
+import { characterName, dialogue, speech } from '@/engine'
 import { MIRA_TOPICS_REMINDER, miraTopicIn, miraTopicReply } from './MiraTopics'
 
 const miraSays = (words: string): string => dialogue('Mira', words)
 
 const FALLBACK =
-  event(`${characterName('Mira')} shakes her head.`) +
+  `${characterName('Mira')} shakes her head.` +
   '\n' +
   speech(
     'Ask me of your parents, Malakar, the amulet or your grandmother, Elior.',

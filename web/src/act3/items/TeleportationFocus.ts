@@ -1,4 +1,4 @@
-import { Item, characterName, event, speech, type GameState } from '@/engine'
+import { Item, characterName, speech, type GameState } from '@/engine'
 import { FLAG_ACT3_MIRA_CONFESSED } from '../Act3StoryFlags'
 
 /** Anchor focus for long-range circle magic; non-carriable ritual prism. */
@@ -20,19 +20,16 @@ export class TeleportationFocus extends Item {
    * a second line follows: the crossed seven Lysa scratched into the prism.
    */
   override examine(gameState: GameState): string {
-    const study = event(
-      'You study the prism. Reflections hover a breath out of sync—each ' +
-        "a doorway waiting for Mira's word.",
-    )
+    const study =
+      'Reflections in the prism hover a breath out of sync—each ' +
+      "a doorway waiting for Mira's word."
     if (!gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)) return study
     return (
       study +
       '\n' +
-      event(
-        'Low on one facet, almost lost in the light, someone has scratched ' +
-          "a seven with a bar through it. Lysa's hand. Your mother cut " +
-          'this prism.',
-      )
+      'Low on one facet, almost lost in the light, someone has scratched ' +
+      "a seven with a bar through it. Lysa's hand. Your mother cut " +
+      'this prism.'
     )
   }
 

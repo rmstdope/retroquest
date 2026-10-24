@@ -1,4 +1,4 @@
-import { Room, event } from '@/engine'
+import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { WardingPillars } from '../items/WardingPillars'
 import { SeaweedTangle } from '../items/SeaweedTangle'
@@ -30,10 +30,10 @@ export class OuterWards extends Room {
 
   /** Describe the courtyard and warding pillars without performing attunement. */
   override search(_gameState: GameState): string {
-    return event(
-      'You search the drowned courtyard thoroughly. Apart from the ' +
-        'three ancient warding pillars rising from the black water, there is ' +
-        'little of interest; the pillars alone seem keyed to the moon and tide.',
+    return (
+      'Apart from the three ancient warding pillars rising from the black ' +
+      'water, the drowned courtyard holds little of interest; the pillars ' +
+      'alone seem keyed to the moon and tide.'
     )
   }
 }

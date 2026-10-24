@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  characterName,
-  event,
-  speech,
-} from '@/engine'
+import { Character, type GameState, characterName, speech } from '@/engine'
 import { BrassMirrorSegment } from '../items/BrassMirrorSegment'
 import { CharredNotebook } from '../items/CharredNotebook'
 
@@ -48,7 +42,7 @@ export class AshScholar extends Character {
             'among the outcrops, if you search carefully.',
         ) +
         '\n' +
-        event(`You receive the [item_name]${segment.name}[/item_name].`) +
+        `You receive the [item_name]${segment.name}[/item_name].` +
         '\n' +
         speech(
           'This was in the same ledge. A notebook, burned nearly through. ' +
@@ -56,7 +50,7 @@ export class AshScholar extends Character {
             'and I cannot make out who that was. Perhaps you can.',
         ) +
         '\n' +
-        event(`You receive the [item_name]${notebook.name}[/item_name].`)
+        `You receive the [item_name]${notebook.name}[/item_name].`
       )
     }
     return (

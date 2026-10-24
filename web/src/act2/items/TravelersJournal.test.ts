@@ -41,13 +41,13 @@ describe("The stranger's notebook", () => {
         b.kind === 'dialogue' ? `dialogue:${b.speaker}` : b.kind,
       ),
     ).toEqual([
-      'event',
+      'text',
       'dialogue:null',
       'dialogue:null',
       'dialogue:null',
       'dialogue:null',
       'text',
-      'event',
+      'text',
     ])
     expect(text).toContain('There is no name inside the cover')
     expect(text).toContain("'Third night in Greendale.")

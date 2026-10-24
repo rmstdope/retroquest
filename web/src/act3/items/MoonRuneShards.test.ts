@@ -36,7 +36,8 @@ describe('MoonRuneShards', () => {
     expect(game.state.hasItem('Moon Rune Shards')).toBe(true)
 
     const resultOk = shards.useWith(game.state, pillars)
-    expect(resultOk).toContain('[event]')
+    expect(resultOk).not.toContain('[event]')
+    expect(resultOk).toContain('You press the pale shards')
     expect(game.state.hasItem('Moon Rune Shards')).toBe(false)
     expect(game.state.getStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)).toBe(
       true,
