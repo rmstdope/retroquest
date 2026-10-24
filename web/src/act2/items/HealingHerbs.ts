@@ -17,7 +17,7 @@ export class HealingHerbs extends Item {
   /** Inspect the fresh herbs. */
   override use(_gameState: GameState): string {
     return (
-      'You examine the healing herbs. They are fresh and potent - perfect for use ' +
+      'The healing herbs are fresh and potent - perfect for use ' +
       'in advanced healing magic, training with Master Healer Lyria, or crafting ' +
       'powerful remedies.'
     )

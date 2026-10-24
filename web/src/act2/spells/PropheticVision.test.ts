@@ -228,7 +228,7 @@ describe('Prophetic Vision markup', () => {
 
     const answer = spell.castSpell(game.state)
 
-    expect(answer).toContain('brief glimpses of possible futures')
+    expect(answer).toContain('Brief glimpses of possible futures')
     expectMarkupWellFormed(answer)
   })
 })
@@ -243,8 +243,7 @@ describe('Prophetic Vision first cast', () => {
 
     expect(
       first.startsWith(
-        '[event]' +
-          'You close your eyes and reach out with your newly granted sight ' +
+        'You close your eyes and reach out with your newly granted sight ' +
           'beyond sight. With [character_name]Sir Cedric[/character_name] ' +
           'standing beside you, you share the vision as it rises before you:' +
           '\n\n' +
@@ -263,7 +262,7 @@ describe('Prophetic Vision first cast', () => {
           'not know whose it is, only that you have heard it before, long ' +
           'before the dream.\n\n' +
           "The vision fades. Sir Cedric's expression has grown grave." +
-          '[/event]\n\n',
+          '\n\n',
       ),
     ).toBe(true)
     expect(first).not.toContain('shadows gathering')
@@ -306,7 +305,7 @@ describe('Prophetic Vision ending', () => {
     const answer = new PropheticVision().castSpell(game.state)
 
     expect(answer).toContain(
-      'has grown grave.[/event]\n\n' +
+      'has grown grave.\n\n' +
         '[character_name]Sir Cedric[/character_name]\n[dialogue]' +
         'The man in the crystal. That was the king. That was Alden. Then ' +
         'Malakar is no tale, and it is you he is hunting.[/dialogue]\n\n',
@@ -341,7 +340,7 @@ describe('Prophetic Vision and the Forest Heart Crystal', () => {
 
     const first = new PropheticVision().castSpell(game.state)
 
-    expect(first.startsWith('[event]' + CRYSTAL_OPENING)).toBe(true)
+    expect(first.startsWith(CRYSTAL_OPENING)).toBe(true)
     expect(first).not.toContain('newly granted sight')
     expect(first).toContain('something to say.')
     expect(game.state.hasItem('forest heart crystal')).toBe(true)

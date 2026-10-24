@@ -1,4 +1,4 @@
-import { Item, type GameState, event } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /**
  * What the pass looks like; shown on every `examine`, so older saves read it
@@ -27,16 +27,13 @@ export class EntryPass extends Item {
 
   /** Examine the pass with the current description, whatever an older save stored. */
   override examine(_gameState: GameState): string {
-    return event(
-      `You examine the [item_name]${this.name}[/item_name]. ` +
-        ENTRY_PASS_DESCRIPTION,
-    )
+    return ENTRY_PASS_DESCRIPTION
   }
 
   /** Inspect the seal and the scraped line on the pass. */
   override use(_gameState: GameState): string {
     return (
-      'You examine the entry pass. Someone has scraped their name off it, ' +
+      'Someone has scraped their name off the entry pass, ' +
       'carefully. The seal looks authentic, and it should allow you passage ' +
       'into Greendale without question.'
     )

@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  characterName,
-  event,
-  speech,
-} from '@/engine'
+import { Character, type GameState, dialogue, speech } from '@/engine'
 import {
   FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE,
   FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
@@ -66,16 +60,12 @@ export class ForestSprites extends Character {
    * line. The sprites finish each other's sentences.
    */
   override talkTo(gameState: GameState): string {
-    const name = this.name
-    const eventMsg = event('You approach the ' + characterName(name) + '.')
     if (!this.riddlesQuestGiven) {
       // Give the Forest Guardian's Riddles quest
       this.riddlesQuestGiven = true
       gameState.setStoryFlag(FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED, true)
       return (
-        eventMsg +
-        '\n' +
-        speech('A traveller—') +
+        dialogue(this.name, 'A traveller—') +
         '\n\n' +
         speech('—with muddy boots—') +
         '\n\n' +
@@ -92,9 +82,7 @@ export class ForestSprites extends Character {
     } else {
       // Subsequent conversations repeat the way on
       return (
-        eventMsg +
-        '\n' +
-        speech('Back again—') +
+        dialogue(this.name, 'Back again—') +
         '\n\n' +
         speech('—did you forget?') +
         '\n\n' +
@@ -109,11 +97,9 @@ export class ForestSprites extends Character {
 
   /** Study the sprites more closely. */
   override examine(_gameState: GameState): string {
-    return event(
-      'You study the ' +
-        characterName(this.name) +
-        ` more closely. ${this.description} The longer you watch, the more ` +
-        'it seems they are watching you back.',
+    return (
+      `${this.description} The longer you watch, the more ` +
+      'it seems they are watching you back.'
     )
   }
 }

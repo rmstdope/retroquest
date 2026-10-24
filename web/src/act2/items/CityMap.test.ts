@@ -11,12 +11,12 @@ const MARKS =
   'drawn, and beside it a single word: [italic]cellar?[/italic]'
 
 const EXAMINE =
-  "You examine the city map closely. It's a professional cartographer's work, " +
+  "The city map is a professional cartographer's work, " +
   'showing detailed street layouts, building locations, and district ' +
   `boundaries. ${MARKS}`
 
 const USE =
-  'You study the city map carefully. The detailed layout shows the Main ' +
+  "The city map's detailed layout shows the Main " +
   'Square at the center, with the Market District to the east, Castle ' +
   'Approach to the north, and various other important locations clearly ' +
   `marked. ${MARKS}`

@@ -19,9 +19,7 @@ export class CrystalFocus extends Item {
   /** This item enhances magical understanding and comprehension of ancient texts. */
   useItem(_gameState: GameState): string {
     return (
-      '[success]You focus your magical energy through the ' +
-      '[item_name]Crystal Focus[/item_name]. ' +
-      'The crystal amplifies your magical awareness, allowing you to better ' +
+      '[success]The crystal amplifies your magical awareness, allowing you to better ' +
       'understand arcane principles and enhancing your ability to comprehend ' +
       'ancient magical texts. Your connection to magical forces feels stronger ' +
       'and more refined.[/success]'

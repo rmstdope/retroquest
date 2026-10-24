@@ -2,8 +2,8 @@ import {
   Character,
   type GameState,
   characterName,
-  event,
   remembered,
+  dialogue,
   speech,
 } from '@/engine'
 import {
@@ -50,31 +50,24 @@ export class CaravanMasterThorne extends Character {
       return super.sayTo(gameState, words)
     }
     const speaker = characterName(this.name)
-    const greeting = event(`You speak with ${speaker}.`)
     if (!this.hasGivenDocuments) {
-      return (
-        greeting +
-        '\n' +
-        speech(
-          `Forgive ${characterName('Brenn')}? Ask me again when my people are home and breathing.`,
-        )
+      return dialogue(
+        this.name,
+        `Forgive ${characterName('Brenn')}? Ask me again when my people are home and breathing.`,
       )
     }
     if (gameState.getStoryFlag(FLAG_BRENN_FORGIVEN)) {
-      return (
-        greeting +
-        '\n' +
-        speech("I said one more road, and I meant it. Don't make me regret it.")
+      return dialogue(
+        this.name,
+        "I said one more road, and I meant it. Don't make me regret it.",
       )
     }
     gameState.setStoryFlag(FLAG_BRENN_FORGIVEN, true)
     gameState.addVirtue(VIRTUE_MERCY)
     return (
-      event(
-        `You speak for ${characterName('Brenn')}: the path gave way under him too, and fear is ` +
-          'not the same as cowardice. He came back to tell you, when he ' +
-          'could have kept running.',
-      ) +
+      `You speak for ${characterName('Brenn')}: the path gave way under him too, and fear is ` +
+      'not the same as cowardice. He came back to tell you, when he ' +
+      'could have kept running.' +
       '\n' +
       speaker +
       ': ' +

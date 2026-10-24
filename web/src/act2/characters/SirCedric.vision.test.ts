@@ -1,6 +1,6 @@
 /** After the vision Elior can answer Sir Cedric before the act ends (rq-cum). */
 import { describe, it, expect } from 'vitest'
-import { Game, characterName, dialogue, event } from '@/engine'
+import { Game, characterName, clue, dialogue } from '@/engine'
 import type { GameState } from '@/engine'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 import { Act2 } from '../Act2'
@@ -30,7 +30,7 @@ const REPLY = dialogue(
   'Then it is worse, not better. A thing that wants you to come to it.',
 )
 const WAITING_LINE = `${CEDRIC} is still waiting for you, his hand on his sword.`
-const REMINDER = event(
+const REMINDER = clue(
   `You have already shared the vision. ${CEDRIC} is waiting for you to speak.`,
 )
 

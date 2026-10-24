@@ -71,7 +71,7 @@ describe('Elena and the silver mask', () => {
     const { game, elena } = setup()
     elena.receiveGreaterHeal(game.state)
     expect(elena.receiveGreaterHeal(game.state)).toBe(
-      'Elena is already strengthened by your healing magic.',
+      '[failure]Elena is already strengthened by your healing magic.[/failure]',
     )
   })
 

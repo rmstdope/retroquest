@@ -74,7 +74,7 @@ describe('The Historians recognise their own shelves', () => {
 
     expect(findMarkupProblems(text)).toEqual([])
     expect(text).toContain(
-      'They turn the pages slowly at first, then faster. One of them goes pale.',
+      ' turn the pages slowly at first, then faster. One of them goes pale.',
     )
     expect(text).toContain('These are our birth rolls.')
     expect(text).toContain('Nobody has leave to copy the birth rolls. Nobody!')

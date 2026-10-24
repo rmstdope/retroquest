@@ -16,7 +16,7 @@ export class MountainFlower extends Item {
 
   override use(_gameState: GameState): string {
     return (
-      "You examine the mountain flower closely. It's quite pretty, but seems " +
+      'The mountain flower is quite pretty, but seems ' +
       "to be just an ordinary wildflower that's adapted to the harsh mountain " +
       'climate.'
     )

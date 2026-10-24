@@ -1,4 +1,4 @@
-import { Room, event, writing } from '@/engine'
+import { Room, clue, writing } from '@/engine'
 import type { GameState } from '@/engine'
 import { CourtHerald } from '../characters/CourtHerald'
 import { Historians } from '../characters/Historians'
@@ -45,24 +45,22 @@ export class GreatHall extends Room {
   /** Conduct lineage research through progressive flag checks. */
   override search(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION)) {
-      return (
-        '[failure]The Court Herald stops you from accessing the archives. You need formal ' +
-        'approval from him first.[/failure]'
+      return clue(
+        'The Court Herald stops you from accessing the archives. You need formal ' +
+          'approval from him first.',
       )
     }
     if (!gameState.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)) {
-      return (
-        '[failure]The archives are vast, filled with countless books and scrolls. ' +
-        "You don't know where to start. You need guidance from someone familiar " +
-        'with these records.[/failure]'
+      return clue(
+        'The archives are vast, filled with countless books and scrolls. ' +
+          "You don't know where to start. You need guidance from someone familiar " +
+          'with these records.',
       )
     }
     if (gameState.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE)) {
       return (
-        event(
-          'You have already been through the archive. One entry in the ' +
-            "visitors' register stays with you:",
-        ) +
+        'You have already been through the archive. One entry in the ' +
+        "visitors' register stays with you:" +
         '\n' +
         writing(VISITOR_ENTRY)
       )
@@ -72,9 +70,7 @@ export class GreatHall extends Room {
       "[success]With the historians' guidance you work through the archive. " +
       'Most of it is tax rolls and land grants, but near the oldest shelves ' +
       'you find two things.[/success]\n' +
-      event(
-        'The first is a page from an old history, its sigil drawn in faded gold:',
-      ) +
+      'The first is a page from an old history, its sigil drawn in faded gold:' +
       '\n' +
       writing(
         "'Of the Wardens of the Dawn. Their mark is the sun rising over three " +
@@ -85,19 +81,15 @@ export class GreatHall extends Room {
           "seen in a generation, and few now remember their names.'",
       ) +
       '\n' +
-      event(
-        "The second is the archive's own register of visitors. The same entry " +
-          'appears again and again over the past year, in different hands:',
-      ) +
+      "The second is the archive's own register of visitors. The same entry " +
+      'appears again and again over the past year, in different hands:' +
       '\n' +
       writing(VISITOR_ENTRY) +
       '\n' +
-      event(
-        'Malakar. You had always thought him a name from old books, a tale to ' +
-          'frighten children. Yet someone walks into this archive in his name, ' +
-          'asking after the families of Willowbrook. The last entry is dated ' +
-          'the week King Alden vanished.',
-      )
+      'Malakar. You had always thought him a name from old books, a tale to ' +
+      'frighten children. Yet someone walks into this archive in his name, ' +
+      'asking after the families of Willowbrook. The last entry is dated ' +
+      'the week King Alden vanished.'
     )
   }
 }

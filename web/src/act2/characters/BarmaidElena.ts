@@ -1,6 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
-import { GreaterHealSpell } from '../spells/GreaterHealSpell'
-import { DispelSpell } from '../spells/DispelSpell'
+import {
+  Character,
+  type GameState,
+  characterName,
+  clue,
+  speech,
+} from '@/engine'
 import {
   FLAG_KNOWS_ELENA_CURSE,
   FLAG_ELENA_HEALED,
@@ -176,7 +180,7 @@ export class BarmaidElena extends Character {
   /** Handle receiving the greater heal spell as the first step of the cure. */
   receiveGreaterHeal(gameState: GameState): string {
     if (this.elenaInitialHealing) {
-      return 'Elena is already strengthened by your healing magic.'
+      return '[failure]Elena is already strengthened by your healing magic.[/failure]'
     }
 
     // Set the flag and update Elena's condition
@@ -192,12 +196,8 @@ export class BarmaidElena extends Character {
       'hope for the first time in weeks.' +
       ' On the inside of her wrist, a small silver mask shows through her skin.'
 
-    // Get spell name for display
-    const spellName = new GreaterHealSpell().name
-
     return (
-      `[success]You cast [spell_name]${spellName}[/spell_name] on Elena, ` +
-      'channeling powerful healing energy into her weakened form. The golden ' +
+      "[success]Powerful healing energy flows into Elena's weakened form. The golden " +
       'light battles against the dark tendrils of the curse, and while it cannot ' +
       "break the enchantment completely, it significantly strengthens Elena's " +
       'life force. She gasps as color returns to her cheeks and she stands a ' +
@@ -215,7 +215,7 @@ export class BarmaidElena extends Character {
   /** Handle using crystal-clear water on Elena as the second step of the cure. */
   receiveCrystalWaterPurification(gameState: GameState): string {
     if (this.elenaPurified) {
-      return 'Elena has already been purified with the crystal-clear water.'
+      return '[failure]Elena has already been purified with the crystal-clear water.[/failure]'
     }
 
     if (!this.elenaInitialHealing) {
@@ -244,9 +244,8 @@ export class BarmaidElena extends Character {
         : '')
 
     return (
-      '[success]You carefully pour the [item_name]crystal-clear water[/item_name] ' +
-      'over Elena. The blessed water sparkles with divine light as it touches ' +
-      'her skin, and dark shadows begin to steam away like smoke. Elena gasps ' +
+      "[success]The blessed water sparkles with divine light as it touches Elena's " +
+      'skin, and dark shadows begin to steam away like smoke. Elena gasps ' +
       'as the corrupting influence of the curse is washed from her body and ' +
       'soul. The water glows brighter, purifying every drop of dark magic it ' +
       'touches.\n\n' +
@@ -259,20 +258,22 @@ export class BarmaidElena extends Character {
   /** Handle casting dispel spell on Elena as the final step to complete the cure. */
   receiveDispelFinalCure(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
-      return 'Elena has already been completely cured of her curse.'
+      return '[failure]Elena has already been completely cured of her curse.[/failure]'
     }
 
     if (!this.elenaPurified) {
-      const dispelName = new DispelSpell().name
-      const cast = `You cast [spell_name]${dispelName}[/spell_name] on Elena. `
       return this.elenaInitialHealing
-        ? `[failure]${cast}The counter-magic breaks against the silver mask ` +
-            'on her wrist like water on glass, and the mask smiles wider. ' +
-            'Whatever it wears over itself must be washed away before it can ' +
-            'be broken.[/failure]'
-        : `[failure]${cast}The counter-magic finds nothing to take hold of: ` +
-            'whatever holds her is buried too deep to show itself. ' +
-            'Something must draw it to the surface first.[/failure]'
+        ? clue(
+            'The counter-magic breaks against the silver mask ' +
+              'on her wrist like water on glass, and the mask smiles wider. ' +
+              'Whatever it wears over itself must be washed away before it can ' +
+              'be broken.',
+          )
+        : clue(
+            'The counter-magic finds nothing to take hold of: ' +
+              'whatever holds her is buried too deep to show itself. ' +
+              'Something must draw it to the surface first.',
+          )
     }
 
     this.markShown = false
@@ -287,12 +288,8 @@ export class BarmaidElena extends Character {
       'She moves with grace and energy, completely free from the dark curse ' +
       'that once plagued her. She looks at you with deep gratitude and joy.'
 
-    // Get spell name for display
-    const dispelName = new DispelSpell().name
-
     return (
-      `[success]You cast [spell_name]${dispelName}[/spell_name] on Elena, ` +
-      'channeling powerful counter-magic into the remaining curse fragments. ' +
+      '[success]Counter-magic floods the remaining curse fragments. ' +
       'The spell tears through the last dark tendrils like lightning, ' +
       'shattering the evil enchantment completely. Elena cries out in relief ' +
       'as the final traces of the curse dissolve into nothingness.\n\n' +

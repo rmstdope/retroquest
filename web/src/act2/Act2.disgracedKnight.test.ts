@@ -20,7 +20,7 @@ import { TrainingMaster } from './characters/TrainingMaster'
 import { LordCommander } from './characters/LordCommander'
 
 const BOARD_EXAMINE =
-  "You read through the various postings on the notice board. Most are mundane announcements about trade regulations and festival dates, but one catches your eye: a call under the Lord Commander's seal for able hands to serve the castle in these uncertain times. Beneath it, in a smaller hand, someone has written: [italic]Enquire in the training yard.[/italic]"
+  "Most of the postings on the notice board are mundane announcements about trade regulations and festival dates, but one catches your eye: a call under the Lord Commander's seal for able hands to serve the castle in these uncertain times. Beneath it, in a smaller hand, someone has written: [italic]Enquire in the training yard.[/italic]"
 const BOARD_DESCRIPTION =
   "A large wooden board posted with official notices, job postings, and announcements. The most prominent posting, under the Lord Commander's seal, calls for able hands to serve the castle."
 const CEDRIC_BEFORE =

@@ -1,4 +1,4 @@
-import { Item, type GameState, event, writing } from '@/engine'
+import { Item, type GameState, writing } from '@/engine'
 import { FLAG_READ_SQUIRES_DIARY } from '../Act2StoryFlags'
 
 /** The diary's description; `Act2.afterLoad` restores it in older saves. */
@@ -32,10 +32,7 @@ export class SquiresDiary extends Item {
 
     // The quest should already be accepted by talking to Training Master
     return (
-      event(
-        "You carefully read through the squire's diary. The entries reveal " +
-          'a troubling story...',
-      ) +
+      "The entries in the squire's diary reveal a troubling story..." +
       '\n\n' +
       '[italic]The morning after the king vanished:[/italic]' +
       '\n' +
@@ -64,21 +61,19 @@ export class SquiresDiary extends Item {
       '\n\n[success]The diary points to papers sent from Heavensforth by a ' +
       "watchman who fled, on a caravan that never arrived. The lost caravan's " +
       'papers might still be out there…[/success]\n\n' +
-      event(
-        'After reading the diary, you place it back where you found it. ' +
-          'This keeps the information safe while you no longer carry the ' +
-          'diary.',
-      )
+      'After reading the diary, you place it back where you found it. ' +
+      'This keeps the information safe while you no longer carry the ' +
+      'diary.'
     )
   }
 
   /** Return a short examination string describing the diary and its entries. */
   override examine(_gameState: GameState): string {
-    return event(
-      `You examine the [item_name]squire's diary[/item_name]. ${this.description}` +
-        ' The handwriting is careful and deliberate. Several entries focus ' +
-        "on Sir Cedric's disgrace and the missing evidence that could " +
-        'clear his name.',
+    return (
+      `${this.description}` +
+      ' The handwriting is careful and deliberate. Several entries focus ' +
+      "on Sir Cedric's disgrace and the missing evidence that could " +
+      'clear his name.'
     )
   }
 }

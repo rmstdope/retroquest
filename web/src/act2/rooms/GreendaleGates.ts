@@ -52,7 +52,7 @@ export class GreendaleGates extends Room {
       )
     }
     if (this.cityMapFound) {
-      return "You've already searched thoroughly. Nothing more of value stands out here."
+      return "[failure]You've already searched thoroughly. Nothing more of value stands out here.[/failure]"
     }
     this.cityMapFound = true
     const cityMap = new CityMap()
