@@ -158,4 +158,15 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(useNarrationStore().isNarrating).toBe(false)
     expect(w.get('.lq-here-room').text()).toBe('Garden')
   })
+
+  it('still narrates a command run from the phone Map section', async () => {
+    const w = await ready(false)
+    const map = w
+      .findAll('[role="tab"], button')
+      .find((b) => b.text() === 'Map')
+    await map!.trigger('click')
+    await w.get('.lq-compass .lq-exit').trigger('click')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(useNarrationStore().isNarrating).toBe(true)
+  })
 })

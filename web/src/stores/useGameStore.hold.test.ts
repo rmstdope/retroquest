@@ -66,6 +66,24 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.panelFlash.place).toBe(0)
   })
 
+  it('flashes only the groups whose values changed (the gem leaves the room, so Here changes)', async () => {
+    const store = await startedStore()
+    store.submitCommand('look')
+    store.releasePanels(
+      store.turns.at(-1)!.id,
+      ['place', 'quests', 'stock'],
+      true,
+    )
+    expect(store.panelFlash).toEqual({ place: 0, quests: 0, stock: 0 })
+    store.submitCommand(`take ${GEM}`)
+    store.releasePanels(
+      store.turns.at(-1)!.id,
+      ['place', 'quests', 'stock'],
+      true,
+    )
+    expect(store.panelFlash).toEqual({ place: 1, quests: 1, stock: 1 })
+  })
+
   it('shows a command at once when holding is off', async () => {
     const store = await startedStore()
     store.setPanelHold(false)

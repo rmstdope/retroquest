@@ -272,8 +272,11 @@ watch(
 game.setPanelHold(true)
 onUnmounted(() => game.setPanelHold(false))
 
-// Another section on a phone shows the panels as they are: bring them up to date.
-watch(section, () => panelHold.catchUp())
+// Opening another section on a phone shows the panels as they are: bring them up to date.
+watch(section, (now) => {
+  // Coming back to the story is the layout's own (after a command from another section).
+  if (now !== 'story') panelHold.catchUp()
+})
 
 /**
  * A press on something in a held panel (room card, map, journal, the exits

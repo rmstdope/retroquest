@@ -372,6 +372,33 @@ export const useGameStore = defineStore('game', () => {
     else questsHaveNew.value = on
   }
 
+  /** What the panels of `group` show now, to tell whether a release changed them. */
+  function shownState(group: PanelGroup): string {
+    if (group === 'place')
+      return JSON.stringify([
+        roomName.value,
+        roomDescription.value,
+        characters.value,
+        items.value,
+        exits.value,
+        questProgress.value?.actNumber,
+      ])
+    if (group === 'quests')
+      return JSON.stringify([
+        activeQuests.value,
+        completedQuests.value,
+        questProgress.value?.completed,
+        questProgress.value?.total,
+        questsHaveNew.value,
+      ])
+    return JSON.stringify([
+      rawInventory.value,
+      rawSpells.value,
+      bagHasNew.value,
+      spellsHaveNew.value,
+    ])
+  }
+
   /** Put a group's latest values on the panels. */
   function applyGroup(group: PanelGroup): void {
     if (!latest) return
@@ -419,13 +446,15 @@ export const useGameStore = defineStore('game', () => {
     for (const group of groups) {
       if (!held.value[group]) continue
       held.value[group] = false
+      const before = shownState(group)
       applyGroup(group)
       for (const tab of ['bag', 'spells', 'quests'] as const)
         if (groupOf(tab) === group && pendingDots[tab]) {
           pendingDots[tab] = false
           setDot(tab, true)
         }
-      if (flash) panelFlash.value[group]++
+      // Only a panel that changed lights up.
+      if (flash && shownState(group) !== before) panelFlash.value[group]++
     }
     if (!panelsHeld.value) heldTurn.value = null
   }

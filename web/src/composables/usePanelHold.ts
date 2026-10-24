@@ -37,7 +37,8 @@ export function usePanelHold(): {
     const quests = turn.quests?.length
       ? firstQuestUnit(turn) + turn.quests.length - 1
       : -1
-    // Synchronous, so a press that skips the turn sees the new place at once.
+    // The watch ends with its turn: every end of narration (a skip, a cut-in, the
+    // layout unmounting) stops the turn, which stops this. Synchronous, so a press that skips the turn sees the new place at once.
     stop = watch(
       () => ({
         live: narration.narrates(turn.id),

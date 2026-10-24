@@ -54,7 +54,7 @@ test('tells an answer block by block, and a double tap shows the rest', async ({
   expect(await lastTurnBlocks(page).count()).toBeGreaterThan(early)
 })
 
-test('keeps the room card and quest count until the voice reaches them, and a press in the journal catches up', async ({
+test('keeps the room card until the voice reaches them, and a press in the journal catches up', async ({
   page,
 }): Promise<void> => {
   await slowNarrationClips(page)
@@ -73,6 +73,11 @@ test('keeps the room card and quest count until the voice reaches them, and a pr
   // A press in a held panel only brings everything up to date.
   const turns = await page.getByTestId('turn').count()
   await page.getByRole('tab', { name: /^Quests/ }).click()
+  // That press did nothing but catch up: the tab did not open.
+  await expect(page.getByRole('tab', { name: /^Quests/ })).toHaveAttribute(
+    'aria-selected',
+    'false',
+  )
   await expect(page.locator('.lq-speaking')).toHaveCount(0)
   await expect(page.getByTestId('turn')).toHaveCount(turns)
 })
