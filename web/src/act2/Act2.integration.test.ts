@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from './Act2'
@@ -1454,5 +1456,32 @@ describe('Act 2 silver leaves and the Forest Heart Crystal', () => {
         '[item_name]silver leaves[/item_name]',
       ),
     )
+  })
+})
+
+describe('Act 2 design document', () => {
+  /** The backticked commands of the design's final steps after the declared route. */
+  function designFinalSteps(): string[] {
+    const design = readFileSync(
+      resolve(__dirname, '../../../design/Act2Design.md'),
+      'utf8',
+    )
+    const sentence =
+      /The final steps after the declared route are ([^\n]*)/.exec(design)
+    expect(sentence).not.toBeNull()
+    return [...(sentence?.[1] ?? '').matchAll(/`([^`]+)`/g)].map(
+      (match) => match[1],
+    )
+  }
+
+  it('names final steps that complete Act II when typed verbatim', () => {
+    const steps = designFinalSteps()
+    expect(steps).toHaveLength(3)
+    const [cast, ...answers] = steps
+    for (const answer of answers) {
+      const game = new Game([new Act2()])
+      executeCommands(game, [...ACT2_GOLDEN_PATH, cast, answer])
+      expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
+    }
   })
 })
