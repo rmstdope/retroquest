@@ -392,6 +392,48 @@
    }
   ]
  },
+ "008b6b53a7eaca": {
+  "file": "008b6b53a7eaca.mp3",
+  "speaker": "narrator",
+  "duration": 3.576,
+  "words": [
+   {
+    "word": "Act",
+    "start": 0.0,
+    "end": 0.32
+   },
+   {
+    "word": "I",
+    "start": 0.32,
+    "end": 0.7
+   },
+   {
+    "word": "complete.",
+    "start": 0.7,
+    "end": 1.2
+   },
+   {
+    "word": "The",
+    "start": 1.78,
+    "end": 2.14
+   },
+   {
+    "word": "Call",
+    "start": 2.14,
+    "end": 2.52
+   },
+   {
+    "word": "to",
+    "start": 2.52,
+    "end": 2.78
+   },
+   {
+    "word": "Adventure.",
+    "start": 2.78,
+    "end": 3.22
+   }
+  ]
+ },
  "00a3f28fcf7306": {
   "file": "00a3f28fcf7306.mp3",
   "speaker": "narrator",
