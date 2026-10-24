@@ -31,8 +31,8 @@ export class Bless extends Spell {
       return hook.call(room, gameState)
     }
     return (
-      'Warm, golden light fills the area, but there is nothing here that ' +
-      'responds to the blessing.'
+      'You channel divine energy, filling the area with warm, golden ' +
+      'light, but there is nothing here that responds to the blessing.'
     )
   }
 

@@ -108,8 +108,9 @@ describe('Act IV items narrate their effect', () => {
       {
         kind: 'text',
         markup:
-          "The chain's crystals catch what little light there is and keep " +
-          'it. His sorrow is still there, but it no longer reaches you.',
+          'You hold the chain up between you and the knight. The crystals ' +
+          'catch what little light there is and keep it. His sorrow is still ' +
+          'there, but it no longer reaches you.',
       },
     ])
     expect(nonText(new GuardiansChain().use(inRoom('FortressGates')))).toEqual(
@@ -131,14 +132,14 @@ describe('Act IV items narrate their effect', () => {
     const tower = inRoom('TowerOfShadows')
     const token = new LoyaltyToken().use(tower)
     expect(token).toMatch(
-      /^The token grows warm in your hand\. Under the whispers/,
+      /^You hold the token up, and it grows warm\. Under the whispers/,
     )
     expect(nonText(token)).toEqual([])
     tower.setStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN, true)
 
     const outside = EchoStone.useInRoom(inRoom('FortressGates'))
     expect(outside).toMatch(
-      /^The hall's voices murmur inside the Echo Stone, waiting for somewhere that needs them\./,
+      /^You hold the Echo Stone to your ear\. The hall's voices murmur inside it, waiting for somewhere that needs them\./,
     )
     expect(nonText(outside)).toEqual([])
     const enhanced = new EchoStone()
@@ -147,8 +148,8 @@ describe('Act IV items narrate their effect', () => {
       {
         kind: 'text',
         markup:
-          'The voices inside the stone are clearer now, waiting for a place ' +
-          'where memories sleep.',
+          'You hold the stone to your ear. The voices inside it are clearer ' +
+          'now, waiting for a place where memories sleep.',
       },
     ])
 
@@ -164,7 +165,7 @@ describe('Act IV items narrate their effect', () => {
     expect(nonText(new GuardiansEssence().use(courtyard))).toEqual([])
     expect(nonText(new SorceressTruth().use(courtyard))).toEqual([])
     expect(new SorceressTruth().use(courtyard)).toMatch(
-      /^Somewhere ahead is someone who needs to see/,
+      /^You turn the mask over in your hands\. Somewhere ahead is someone who needs to see/,
     )
   })
 
@@ -172,7 +173,7 @@ describe('Act IV items narrate their effect', () => {
     const throne = inRoom('ThroneChamber')
     const freed = new CrystalPrison().breakWith(throne)
     expect(freed).toMatch(
-      /^Under the elixir the crystal cracks like ice in spring/,
+      /^You pour the elixir over the crystal\. It cracks like ice in spring/,
     )
     expect(nonText(freed)).toEqual([])
     expect(freed).toContain('The Lifelight Elixir is gone.')

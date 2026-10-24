@@ -18,13 +18,13 @@ const NOTHING_TO_HEAR =
 
 /** What the staff's mask hides, once. */
 const STAFF_HEARD =
-  "Beneath the mask's smile there is something small and " +
+  "You listen, and beneath the mask's smile there is something small and " +
   'lonely. It was made to be looked at, and no one ever looked at it. Only ' +
   'away.'
 
 /** Whose voice the whispers are, once. */
 const WHISPERS_HEARD =
-  'The whispers are not many voices. They ' +
+  'You listen to the crystals, and the whispers are not many voices. They ' +
   'are one: hers, repeating every lie she has ever told so that she never ' +
   'has to hear the silence.'
 

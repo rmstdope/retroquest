@@ -79,7 +79,7 @@ export class MemoryVault extends Room {
       if (character instanceof ShadowOfThePast) character.gainFace()
     }
     return [
-      'The voices inside the Echo Stone pour out into the ' +
+      'You raise the Echo Stone. The voices inside it pour out into the ' +
         'vault, and the orbs drink them in. One by one the cracks close ' +
         'and the scenes grow still and clear. The shadow turns towards ' +
         'you, and for the first time it has a face.',

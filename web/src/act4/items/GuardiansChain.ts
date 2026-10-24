@@ -28,7 +28,8 @@ export class GuardiansChain extends Item {
       if (!gameState.getStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED)) {
         gameState.setStoryFlag(FLAG_ACT4_GUARDIANS_CHAIN_RAISED, true)
         return (
-          "The chain's crystals catch what little light there is and keep it. " +
+          'You hold the chain up between you and the knight. The crystals ' +
+          'catch what little light there is and keep it. ' +
           'His sorrow is still there, but it no longer reaches you.'
         )
       }

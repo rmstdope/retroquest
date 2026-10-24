@@ -62,11 +62,15 @@ describe('MirrorLabyrinth', () => {
 
   it('walks left twice to the fork, each stretch with its own look', () => {
     const { game, room } = inMaze()
-    expect(game.move('west')).toBe('The glass lets you through.')
+    expect(game.move('west')).toBe(
+      'You turn left, and the glass lets you through.',
+    )
     expect(game.state.currentRoom).toBe(room)
     expect(seen(game, room)).toContain(STRETCH)
     expect(exitsOf(game, room)).toEqual(['north', 'east', 'west', 'south'])
-    expect(game.move('west')).toBe('The glass lets you through again.')
+    expect(game.move('west')).toBe(
+      'You turn left again, and the glass lets you through.',
+    )
     expect(seen(game, room)).toContain(FORK)
     expect(exitsOf(game, room)).toEqual(['north', 'east', 'south'])
   })
@@ -87,7 +91,7 @@ describe('MirrorLabyrinth', () => {
       game.move('west')
       expect(game.move(way)).toContain(WRONG)
       expect(seen(game, room)).toContain(ENTRANCE)
-      expect(game.move('west')).toContain('The glass lets you through')
+      expect(game.move('west')).toContain('the glass lets you through')
       expect(seen(game, room)).toContain(STRETCH)
     },
   )
@@ -180,7 +184,9 @@ describe('MirrorLabyrinth', () => {
   it('repeats the route for the stone and never solves with it', () => {
     const { game, room } = inMaze()
     const heard = room.useStone(game.state)
-    expect(heard).toContain('In the Echo Stone one voice repeats')
+    expect(heard).toContain(
+      'You hold the Echo Stone to your ear. One voice repeats',
+    )
     expect(heard).toContain('Left, then left, then the way your shadow')
     game.move('west')
     game.move('west')
@@ -195,7 +201,7 @@ describe('MirrorLabyrinth', () => {
     const { game, room } = inMaze()
     game.move('west')
     const out = game.move('south')
-    expect(out).not.toContain('retrace')
+    expect(out).toContain('You retrace your steps out of the glass.')
     expect(game.state.currentRoom.name).toBe('Outer Courtyard')
     game.move('north')
     expect(game.state.currentRoom).toBe(room)

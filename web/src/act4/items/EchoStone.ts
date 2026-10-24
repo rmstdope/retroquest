@@ -7,7 +7,7 @@ import { ServantsPendant } from './ServantsPendant'
 
 /** What the stone says anywhere but in the maze. */
 const STONE_OUTSIDE_MAZE =
-  "The hall's voices murmur inside the Echo Stone, " +
+  "You hold the Echo Stone to your ear. The hall's voices murmur inside it, " +
   'waiting for somewhere that needs them. Under the rest, one voice says a ' +
   'single word over and over, the way a man says a word he has stopped ' +
   'believing in: redemption.'
@@ -24,7 +24,7 @@ const ENHANCED_DESCRIPTION =
 
 /** What the enhanced stone does for now, anywhere. */
 const ENHANCED_USE =
-  'The voices inside the stone are clearer now, ' +
+  'You hold the stone to your ear. The voices inside it are clearer now, ' +
   'waiting for a place where memories sleep.'
 
 /**

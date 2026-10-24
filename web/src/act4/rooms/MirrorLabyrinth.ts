@@ -139,10 +139,16 @@ export class MirrorLabyrinth extends Room {
     if (direction !== 'west') return this.failTurn(WRONG_TURN)
     if (this.stretch === 'entrance') {
       this.stretch = 'stretch'
-      return 'The glass lets you through.'
+      return 'You turn left, and the glass lets you through.'
     }
     this.stretch = 'fork'
-    return 'The glass lets you through again.'
+    return 'You turn left again, and the glass lets you through.'
+  }
+
+  /** Leaving south is a retracing of steps, from any stretch. */
+  override departText(_gameState: GameState, direction: string): string {
+    if (direction !== 'south') return ''
+    return 'You retrace your steps out of the glass.\n\n'
   }
 
   /** Send Elior back to the entrance with the given failure line. */
@@ -161,7 +167,7 @@ export class MirrorLabyrinth extends Room {
     this.description = MAZE_AFTER_DESCRIPTION
     this.addCharacter(new TrueSelf())
     return (
-      'Behind you the false mirrors go ' +
+      'You step into the empty corridor. Behind you the false mirrors go ' +
       'dark, one by one, until a single corridor remains — and at its ' +
       'end, a plain mirror that shows you exactly as you are.\n' +
       'You learn [spell_name]Truth Sight[/spell_name].'
@@ -171,7 +177,8 @@ export class MirrorLabyrinth extends Room {
   /** The Echo Stone used in the maze repeats the route, never solves it. */
   useStone(_gameState: GameState): string {
     return (
-      'In the Echo Stone one voice repeats, patient as a heartbeat:\n' +
+      'You hold the Echo Stone to your ear. One voice repeats, patient as a ' +
+      'heartbeat:\n' +
       dialogue('an echo', `'${MAZE_ROUTE}'`)
     )
   }

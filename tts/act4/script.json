@@ -160,9 +160,9 @@
     "text": "Your light washes over all three stones at once. They drink it together and keep their count."
   },
   {
-    "key": "0025452b436e19",
+    "key": "1dece0402c3030",
     "speaker": "narrator",
-    "text": "Warm, golden light fills the area, but there is nothing here that responds to the blessing."
+    "text": "You channel divine energy, filling the area with warm, golden light, but there is nothing here that responds to the blessing."
   },
   {
     "key": "1fc9d5de8cb36a",
@@ -410,6 +410,11 @@
     "text": "The pendant's light falls on the glass. Here every reflection walks with you; there is nothing yet to choose between."
   },
   {
+    "key": "0b0335882efa5a",
+    "speaker": "narrator",
+    "text": "You retrace your steps out of the glass."
+  },
+  {
     "key": "13618e56c6aa8a",
     "speaker": "narrator",
     "text": "The Knight of Despair"
@@ -435,14 +440,14 @@
     "text": "You lift a smooth grey stone from a niche beneath the banners. It is warm, and when you hold it to your ear you hear the hall's echoes still speaking inside it."
   },
   {
-    "key": "0a4b929132a33a",
+    "key": "128db6ea6629f7",
     "speaker": "narrator",
-    "text": "The glass lets you through."
+    "text": "You turn left, and the glass lets you through."
   },
   {
-    "key": "11cce26fc48254",
+    "key": "171824ccbe69f6",
     "speaker": "narrator",
-    "text": "The glass lets you through again."
+    "text": "You turn left again, and the glass lets you through."
   },
   {
     "key": "1ec2d7bfc68c71",
@@ -450,9 +455,9 @@
     "text": "The pendant's blue light falls on the glass. In the north corridor your reflection turns and walks with you. In the east corridor the glass stays empty."
   },
   {
-    "key": "10add521fc2902",
+    "key": "1a2881d7a152d3",
     "speaker": "narrator",
-    "text": "Behind you the false mirrors go dark, one by one, until a single corridor remains — and at its end, a plain mirror that shows you exactly as you are."
+    "text": "You step into the empty corridor. Behind you the false mirrors go dark, one by one, until a single corridor remains — and at its end, a plain mirror that shows you exactly as you are."
   },
   {
     "key": "162b81ffe289d3",
@@ -560,9 +565,9 @@
     "text": "You hold the Loyalty Token close to your heart. For a moment you are not alone in the hall: the servants you freed, the friends who brought you to the threshold, everyone who trusted you on the way here. The knight's despair breaks around you and does not reach you."
   },
   {
-    "key": "1229e2dd0190c9",
+    "key": "1f12fe426cc674",
     "speaker": "narrator",
-    "text": "The chain's crystals catch what little light there is and keep it. His sorrow is still there, but it no longer reaches you."
+    "text": "You hold the chain up between you and the knight. The crystals catch what little light there is and keep it. His sorrow is still there, but it no longer reaches you."
   },
   {
     "key": "0e916720945f7a",
@@ -590,9 +595,9 @@
     "text": "Sir Cedric, by the south door, his eyes on the knight."
   },
   {
-    "key": "0d3d71a722a8be",
+    "key": "0348b7226196e6",
     "speaker": "narrator",
-    "text": "The hall's voices murmur inside the Echo Stone, waiting for somewhere that needs them. Under the rest, one voice says a single word over and over, the way a man says a word he has stopped believing in: redemption."
+    "text": "You hold the Echo Stone to your ear. The hall's voices murmur inside it, waiting for somewhere that needs them. Under the rest, one voice says a single word over and over, the way a man says a word he has stopped believing in: redemption."
   },
   {
     "key": "094c0ed72c7cb3",
@@ -610,9 +615,9 @@
     "text": "The stone is warm, and the hall's echoes still speak inside it."
   },
   {
-    "key": "1f549424530549",
+    "key": "1c3b7fca7fe6fd",
     "speaker": "narrator",
-    "text": "In the Echo Stone one voice repeats, patient as a heartbeat:"
+    "text": "You hold the Echo Stone to your ear. One voice repeats, patient as a heartbeat:"
   },
   {
     "key": "16770703ee51e4",
@@ -785,9 +790,9 @@
     "text": "A tarnished knight's badge, warm to the touch. He pressed it into your hand: proof that even one of Malakar's own can turn back."
   },
   {
-    "key": "077745bdd114fc",
+    "key": "016a02b343f5e1",
     "speaker": "narrator",
-    "text": "The voices inside the stone are clearer now, waiting for a place where memories sleep."
+    "text": "You hold the stone to your ear. The voices inside it are clearer now, waiting for a place where memories sleep."
   },
   {
     "key": "06b7c345cf653e",
@@ -815,9 +820,9 @@
     "text": "Pale shapes of soldiers drift among the banners, fighting a battle that ended long ago. Their blades pass through one another without a sound."
   },
   {
-    "key": "0c0627ff50734f",
+    "key": "1fede627b89ee9",
     "speaker": "narrator",
-    "text": "On the stair the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down."
+    "text": "You set your foot on the stair, and the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down."
   },
   {
     "key": "0ff5e5d429c5f6",
@@ -830,9 +835,9 @@
     "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come."
   },
   {
-    "key": "096e2a15d96fae",
+    "key": "002cc961d62d5d",
     "speaker": "narrator",
-    "text": "The token grows warm in your hand. Under the whispers, very faint, you think you hear your name, in Mira's voice. They are not gone. Say their names."
+    "text": "You hold the token up, and it grows warm. Under the whispers, very faint, you think you hear your name, in Mira's voice. They are not gone. Say their names."
   },
   {
     "key": "171f9e62e3af4f",
@@ -980,14 +985,14 @@
     "text": "You have heard some of her, but not all. There is more in this chamber that is hers to listen to."
   },
   {
-    "key": "03ebc17328596d",
+    "key": "15eecc55d73dff",
     "speaker": "narrator",
-    "text": "Beneath the mask's smile there is something small and lonely. It was made to be looked at, and no one ever looked at it. Only away."
+    "text": "You listen, and beneath the mask's smile there is something small and lonely. It was made to be looked at, and no one ever looked at it. Only away."
   },
   {
-    "key": "0e472c2176a5ae",
+    "key": "04ac5d16815912",
     "speaker": "narrator",
-    "text": "The whispers are not many voices. They are one: hers, repeating every lie she has ever told so that she never has to hear the silence."
+    "text": "You listen to the crystals, and the whispers are not many voices. They are one: hers, repeating every lie she has ever told so that she never has to hear the silence."
   },
   {
     "key": "05fbde77bcb93f",
@@ -1030,9 +1035,9 @@
     "text": "Elior sees through the Sorceress's lies and answers the loneliness beneath them. She confesses the curse on Elena, and the arch to the north opens."
   },
   {
-    "key": "07e887d6b9f789",
+    "key": "1cae202ad6eb76",
     "speaker": "narrator",
-    "text": "Somewhere ahead is someone who needs to see that a liar can choose the truth."
+    "text": "You turn the mask over in your hands. Somewhere ahead is someone who needs to see that a liar can choose the truth."
   },
   {
     "key": "0ab8df02b81236",
@@ -1110,9 +1115,9 @@
     "text": "The orbs are cracked and clouded. In one you glimpse three young people laughing over a workbench; in another, a cradle by a fire. Each scene breaks apart before you can hold it. From the cracked one by the cradle a voice sings, low, \"Hush, little seed—\" and breaks off."
   },
   {
-    "key": "0951dc73d733c7",
+    "key": "13f4535e835dd3",
     "speaker": "narrator",
-    "text": "The voices inside the Echo Stone pour out into the vault, and the orbs drink them in. One by one the cracks close and the scenes grow still and clear. The shadow turns towards you, and for the first time it has a face."
+    "text": "You raise the Echo Stone. The voices inside it pour out into the vault, and the orbs drink them in. One by one the cracks close and the scenes grow still and clear. The shadow turns towards you, and for the first time it has a face."
   },
   {
     "key": "1a1a9b996a73e1",
@@ -1625,9 +1630,9 @@
     "text": "Welcome home, Elior."
   },
   {
-    "key": "1f3bd834633e39",
+    "key": "17f698be9bfdcb",
     "speaker": "narrator",
-    "text": "Under the elixir the crystal cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it."
+    "text": "You pour the elixir over the crystal. It cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it."
   },
   {
     "key": "007c845b68189d",
