@@ -405,11 +405,6 @@
     "text": "He turned? Then he is a fool. Everyone lies, little Elior. No one has ever understood a word I said. Why would you be the first?"
   },
   {
-    "key": "05fbde77bcb93f",
-    "speaker": "elior",
-    "text": "I understand. You have been alone in here a long time."
-  },
-  {
     "key": "04f851f00b3e98",
     "speaker": "sorceress of lies",
     "text": "Elena. The girl at the inn. Malakar wanted every healer in the kingdom at her bedside and none at the king's. So I cursed her, and set my mask on her wrist so they would know whose work it was, and fear it. And I watched the inn door, to see who would come for a mark like that. The healer from Willowbrook never did. I should have known then what that meant."
@@ -493,11 +488,6 @@
     "key": "12086e984f6900",
     "speaker": "shadow of the past",
     "text": "The Phoenix asked us once what wisdom is when time is short. Aren and Lysa knew. I did not."
-  },
-  {
-    "key": "0325174da55eb2",
-    "speaker": "elior",
-    "text": "Patience. You could not wait for them. You can wait a little longer, for me."
   },
   {
     "key": "138b4f1c6117b3",
@@ -605,11 +595,6 @@
     "text": "They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet."
   },
   {
-    "key": "193eec83ac0f7f",
-    "speaker": "elior",
-    "text": "Power follows purpose; purpose follows truth."
-  },
-  {
     "key": "122df91c3cebfb",
     "speaker": "malakar",
     "text": "We carved those words together, your father and I. I had forgotten them."
@@ -625,9 +610,9 @@
     "text": "Then show me what they left you."
   },
   {
-    "key": "007c845b68189d",
-    "speaker": "elior",
-    "text": "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you let Sir Cedric take the blame. I will not pretend you didn't."
+    "key": "05511dd0bbf86d",
+    "speaker": "narrator",
+    "text": "“You tore the world, Malakar,” you say. “You drained the king. You sent a man to hunt a child in Willowbrook, and you let Sir Cedric take the blame. I will not pretend you didn't.”"
   },
   {
     "key": "0cc8fde0d59fa4",
@@ -780,9 +765,9 @@
     "text": "You named every crime and did not add one. Only someone who has paid for the truth before speaks it like that. I will remember it."
   },
   {
-    "key": "0e28c3062eb242",
-    "speaker": "elior",
-    "text": "Take my magic. All of it. Close the wound with that."
+    "key": "0112e4034ae0c9",
+    "speaker": "narrator",
+    "text": "“Take my magic,” you say. “All of it. Close the wound with that.”"
   },
   {
     "key": "0a2355042ad557",
@@ -840,14 +825,9 @@
     "text": "It does not hurt. For the first time in years, it does not hurt."
   },
   {
-    "key": "070cd86f1b8171",
-    "speaker": "elior",
-    "text": "I forgive you."
-  },
-  {
-    "key": "058e1d765b996c",
+    "key": "1334dc34e4fd0e",
     "speaker": "narrator",
-    "text": "The words are harder than any spell, and then they are easy. Something warm settles in your chest, like a lesson you always knew."
+    "text": "“I forgive you,” you say. The words are harder than any spell, and then they are easy. Something warm settles in your chest, like a lesson you always knew."
   },
   {
     "key": "189e3b2f3fa06e",
@@ -905,14 +885,9 @@
     "text": "You saw them. I can see it in your face."
   },
   {
-    "key": "19486a52e8da24",
-    "speaker": "elior",
-    "text": "You knew."
-  },
-  {
-    "key": "08d7820159e29b",
+    "key": "0ccf146d28eca6",
     "speaker": "narrator",
-    "text": "It is not a question."
+    "text": "“You knew,” you say. It is not a question."
   },
   {
     "key": "01c7d5f6c55fff",
