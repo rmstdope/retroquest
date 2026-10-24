@@ -2,6 +2,7 @@
 import { computed, ref, useId, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useReadAlong } from '@/composables/useReadAlong'
+import { usePanelFlash } from '@/composables/usePanelFlash'
 import { displayName } from '@/lantern/displayName'
 import { parseTurn } from '@/lantern/parseTurn'
 
@@ -15,6 +16,7 @@ import { parseTurn } from '@/lantern/parseTurn'
  * first, in the story's divider).
  */
 const game = useGameStore()
+const { flashing, endFlash } = usePanelFlash(['place'])
 
 /** Descriptions longer than this get the clamp and a Read more toggle. */
 const CLAMP_CHARS = 280
@@ -52,8 +54,9 @@ watch(
   <section
     ref="root"
     class="lq-room-card"
-    :class="{ 'lq-speaking': reading }"
+    :class="{ 'lq-speaking': reading, 'lq-flash': flashing }"
     aria-label="Current location"
+    @animationend.self="endFlash"
   >
     <span class="lq-label">You are in</span>
     <h2 class="lq-room-name">{{ game.roomName }}</h2>

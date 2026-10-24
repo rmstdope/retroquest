@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { usePanelFlash } from '@/composables/usePanelFlash'
 import { displayName } from '@/lantern/displayName'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { renderMarkup } from '@/utils/theme'
@@ -25,6 +26,7 @@ const TITLES: Record<Tab, string> = {
   quests: 'Quests',
 }
 const game = useGameStore()
+const { flashing, endFlash } = usePanelFlash(['quests', 'stock'])
 const active = ref<Tab>(props.tab ?? 'bag')
 const expanded = ref<Set<string>>(new Set())
 const tabButtons = ref<HTMLButtonElement[]>([])
@@ -136,7 +138,13 @@ function toggle(name: string): void {
 </script>
 
 <template>
-  <section ref="root" class="lq-journal" aria-label="Journal">
+  <section
+    ref="root"
+    class="lq-journal"
+    :class="{ 'lq-flash': flashing }"
+    aria-label="Journal"
+    @animationend.self="endFlash"
+  >
     <h2 v-if="tab" class="lq-journal-title">
       {{ TITLES[tab] }}
     </h2>

@@ -83,6 +83,38 @@ export interface Arrival {
 /** Journal tabs that show a dot when something new arrived. */
 export type JournalTab = 'bag' | 'spells' | 'quests'
 
+/**
+ * The side panels that wait for a narrated turn, in groups that switch
+ * together: `place` (room card, Here, map, header room and act), `quests`
+ * (the quest count, progress and dot) and `stock` (Bag and Spells with their dots).
+ */
+export type PanelGroup = 'place' | 'quests' | 'stock'
+
+/** Every panel group. */
+export const PANEL_GROUPS: readonly PanelGroup[] = ['place', 'quests', 'stock']
+
+/** What the engine says the panels of each group show right now. */
+interface PanelSnapshot {
+  place: {
+    roomName: string
+    roomDescription: string
+    characters: string[]
+    items: string[]
+    exits: RoomExits
+    roomWares: RoomWare[]
+    actNumber: number | null
+  }
+  quests: {
+    activeQuests: QuestSummary[]
+    completedQuests: QuestSummary[]
+    progress: QuestProgress
+  }
+  stock: {
+    bag: NamedItem[]
+    spells: NamedItem[]
+  }
+}
+
 export const useGameStore = defineStore('game', () => {
   // --- Bridge reference ---
   let bridge: GameBridge | null = null
@@ -131,6 +163,33 @@ export const useGameStore = defineStore('game', () => {
   const bagHasNew = ref(false)
   const spellsHaveNew = ref(false)
   const questsHaveNew = ref(false)
+
+  // --- Panels held while a turn is narrated ---
+  /** Whether a narrated command holds the panels (the layout turns it on). */
+  let panelHoldEnabled = false
+  /** The turn whose panels are held, or null. */
+  const heldTurn = ref<number | null>(null)
+  const held = ref<Record<PanelGroup, boolean>>({
+    place: false,
+    quests: false,
+    stock: false,
+  })
+  /** Counts each group's switches that should light up (a new value lights again). */
+  const panelFlash = ref<Record<PanelGroup, number>>({
+    place: 0,
+    quests: 0,
+    stock: 0,
+  })
+  /** What the engine showed at the last refresh; held groups apply it on release. */
+  let latest: PanelSnapshot | null = null
+  /** Dots earned while their group is held. */
+  let pendingDots: Record<JournalTab, boolean> = {
+    bag: false,
+    spells: false,
+    quests: false,
+  }
+  /** True while a narrated turn holds some panel. */
+  const panelsHeld = computed(() => PANEL_GROUPS.some((g) => held.value[g]))
   /** A quest the story asked the journal to open ("Open in journal"). */
   const questToOpen = ref<string | null>(null)
   /** The quest whose details dialog is open, by name. */
@@ -216,9 +275,19 @@ export const useGameStore = defineStore('game', () => {
       chips = command !== null,
       arrive = false,
       narrate = false,
-    }: { chips?: boolean; arrive?: boolean; narrate?: boolean } = {},
+      hold = false,
+    }: {
+      chips?: boolean
+      arrive?: boolean
+      narrate?: boolean
+      hold?: boolean
+    } = {},
   ): void {
     const b = requireBridge()
+    const turnId = nextTurnId++
+    // A player's command in a narrated game keeps the panels as they were
+    // until the narration reaches them (see `releasePanels`).
+    if (hold) startHold(turnId)
     // The command that ends the game keeps its room and chips.
     const actRunning = b.controller.isActRunning() || b.controller.isGameOver()
     const room = actRunning ? b.controller.getRoomName() : lastTurnRoom
@@ -235,8 +304,8 @@ export const useGameStore = defineStore('game', () => {
     const lost = showChips ? [...itemChanges.lost, ...spellChanges.lost] : []
     // A new act starts a new bag: nothing in it is "new" yet.
     if (!actRunning) clearNewDots()
-    if (showChips && itemChanges.gained.length) bagHasNew.value = true
-    if (showChips && spellChanges.gained.length) spellsHaveNew.value = true
+    if (showChips && itemChanges.gained.length) markNew('bag')
+    if (showChips && spellChanges.gained.length) markNew('spells')
     lastBag = bag
     lastSpells = spellList
 
@@ -249,7 +318,7 @@ export const useGameStore = defineStore('game', () => {
       actRunning && visited.includes(room) && !lastVisited.includes(room)
     lastVisited = visited
     turns.value.push({
-      id: nextTurnId++,
+      id: turnId,
       command,
       text: raw,
       room,
@@ -276,8 +345,108 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
+  /** Let a command's panels wait (applying an older turn's first). */
+  function startHold(turnId: number): void {
+    if (!panelHoldEnabled) return
+    if (heldTurn.value !== null)
+      releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
+    heldTurn.value = turnId
+    held.value = { place: true, quests: true, stock: true }
+  }
+
+  /** Whether the panels of `group` are in the hold. */
+  function groupOf(tab: JournalTab): PanelGroup {
+    return tab === 'quests' ? 'quests' : 'stock'
+  }
+
+  /** Something new for a journal tab: its dot shows now, or when its group is released. */
+  function markNew(tab: JournalTab): void {
+    if (held.value[groupOf(tab)]) pendingDots[tab] = true
+    else setDot(tab, true)
+  }
+
+  /** Set a journal tab's dot. */
+  function setDot(tab: JournalTab, on: boolean): void {
+    if (tab === 'bag') bagHasNew.value = on
+    else if (tab === 'spells') spellsHaveNew.value = on
+    else questsHaveNew.value = on
+  }
+
+  /** Put a group's latest values on the panels. */
+  function applyGroup(group: PanelGroup): void {
+    if (!latest) return
+    if (group === 'place') {
+      const place = latest.place
+      roomName.value = place.roomName
+      roomDescription.value = place.roomDescription
+      characters.value = place.characters
+      items.value = place.items
+      exits.value = place.exits
+      roomWares.value = place.roomWares
+      if (questProgress.value && place.actNumber !== null)
+        questProgress.value = {
+          ...questProgress.value,
+          actNumber: place.actNumber,
+        }
+    } else if (group === 'quests') {
+      const quests = latest.quests
+      activeQuests.value = quests.activeQuests
+      completedQuests.value = quests.completedQuests
+      questProgress.value = {
+        ...quests.progress,
+        actNumber: questProgress.value?.actNumber ?? quests.progress.actNumber,
+      }
+    } else {
+      const stock = latest.stock
+      rawInventory.value = stock.bag
+      rawSpells.value = stock.spells
+      bagEntries.value = stock.bag.map((entry) => entry.name)
+      spellEntries.value = stock.spells.map((entry) => entry.name)
+    }
+  }
+
+  /**
+   * The narration of turn `turnId` has reached `groups`: they show the
+   * engine's state now (and their dots), lighting up when `flash` is set. Does
+   * nothing for another turn than the one held, or for a group already released.
+   */
+  function releasePanels(
+    turnId: number,
+    groups: PanelGroup[],
+    flash: boolean,
+  ): void {
+    if (turnId !== heldTurn.value) return
+    for (const group of groups) {
+      if (!held.value[group]) continue
+      held.value[group] = false
+      applyGroup(group)
+      for (const tab of ['bag', 'spells', 'quests'] as const)
+        if (groupOf(tab) === group && pendingDots[tab]) {
+          pendingDots[tab] = false
+          setDot(tab, true)
+        }
+      if (flash) panelFlash.value[group]++
+    }
+    if (!panelsHeld.value) heldTurn.value = null
+  }
+
+  /** Forget a hold without applying it (a load or a new game refreshes the panels itself). */
+  function dropHold(): void {
+    heldTurn.value = null
+    held.value = { place: false, quests: false, stock: false }
+    pendingDots = { bag: false, spells: false, quests: false }
+  }
+
+  /** Let the layout hold the panels of narrated commands (off: they change at once). */
+  function setPanelHold(enabled: boolean): void {
+    panelHoldEnabled = enabled
+    if (!enabled && heldTurn.value !== null)
+      releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
+  }
+
   /** A loaded save or a new act: no item or spell is "new" any more. */
   function clearNewDots(): void {
+    pendingDots = { bag: false, spells: false, quests: false }
     bagHasNew.value = false
     spellsHaveNew.value = false
     questsHaveNew.value = false
@@ -417,6 +586,7 @@ export const useGameStore = defineStore('game', () => {
     lastAnswer = ''
     gameNumber.value++
     b.newGame()
+    dropHold()
     turns.value = []
     lastTurnRoom = ''
     lastVisited = []
@@ -459,7 +629,7 @@ export const useGameStore = defineStore('game', () => {
     const b = requireBridge()
     const result = b.controller.takeTurn(command)
     lastAnswer = result
-    showOutput(command, result, { narrate: true })
+    showOutput(command, result, { narrate: true, hold: true })
     refreshPanels()
     pollQuestEvents()
     refreshPanels()
@@ -568,21 +738,27 @@ export const useGameStore = defineStore('game', () => {
   /** Read the room, journal, music, input state and completions from the bridge. */
   function refreshPanels(): void {
     const b = requireBridge()
-    roomName.value = b.controller.getRoomName()
-    roomDescription.value = b.controller.getRoomDescription()
-    characters.value = b.controller.getRoomCharacters()
-    items.value = b.controller.getRoomItems()
-    exits.value = b.controller.getRoomExits()
-    roomWares.value = b.controller.getRoomWares()
     const bag = b.controller.getInventory()
     const spellList = b.controller.getSpells()
-    bagEntries.value = bag.map((entry) => entry.name)
-    spellEntries.value = spellList.map((entry) => entry.name)
-    rawInventory.value = bag
-    rawSpells.value = spellList
-    activeQuests.value = b.controller.getActiveQuests()
-    completedQuests.value = b.controller.getCompletedQuests()
-    questProgress.value = b.controller.getQuestProgress()
+    const progress = b.controller.getQuestProgress()
+    latest = {
+      place: {
+        roomName: b.controller.getRoomName(),
+        roomDescription: b.controller.getRoomDescription(),
+        characters: b.controller.getRoomCharacters(),
+        items: b.controller.getRoomItems(),
+        exits: b.controller.getRoomExits(),
+        roomWares: b.controller.getRoomWares(),
+        actNumber: progress ? progress.actNumber : null,
+      },
+      quests: {
+        activeQuests: b.controller.getActiveQuests(),
+        completedQuests: b.controller.getCompletedQuests(),
+        progress,
+      },
+      stock: { bag, spells: spellList },
+    }
+    for (const group of PANEL_GROUPS) if (!held.value[group]) applyGroup(group)
     const m = b.controller.getCurrentMusic()
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
@@ -630,6 +806,7 @@ export const useGameStore = defineStore('game', () => {
   function loadGame(command: string | null = null): void {
     const b = requireBridge()
     const result = b.quickLoadGame()
+    dropHold()
     rememberLoadedAct(b)
     clearNewDots()
     showLoaded(command, result, 'Game loaded')
@@ -648,6 +825,7 @@ export const useGameStore = defineStore('game', () => {
   function loadNamedGame(name: string, command: string | null = null): void {
     const b = requireBridge()
     const result = b.loadNamedGame(name)
+    dropHold()
     rememberLoadedAct(b)
     clearNewDots()
     showLoaded(command, result, `Game loaded · ${name}`)
@@ -696,6 +874,7 @@ export const useGameStore = defineStore('game', () => {
   function loadFromSlot(slot: number): void {
     const b = requireBridge()
     const result = b.loadFromSlot(slot)
+    dropHold()
     rememberLoadedAct(b)
     clearNewDots()
     showLoaded(null, result, `Game loaded · Slot ${slot}`)
@@ -740,7 +919,7 @@ export const useGameStore = defineStore('game', () => {
     const turn = turns.value.at(-1)
     if (news.length && turn) {
       turn.quests = [...(turn.quests ?? []), ...news]
-      questsHaveNew.value = true
+      markNew('quests')
       for (const item of news)
         if (item.kind === 'completed') item.fanfare = true
         else item.chime = true
@@ -945,7 +1124,12 @@ export const useGameStore = defineStore('game', () => {
     modalChapter,
     musicFile,
     musicInfo,
+    heldTurn,
+    panelsHeld,
+    panelFlash,
     // Actions
+    setPanelHold,
+    releasePanels,
     setBridge,
     setAudioPlayer,
     initGame,

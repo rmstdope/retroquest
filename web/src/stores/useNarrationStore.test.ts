@@ -226,6 +226,19 @@ describe('useNarrationStore', () => {
     expect(narration.speaking(1)).toMatchObject({ unit: 1 })
   })
 
+  it('says whether a turn ended by a skip, a cut-in or by being read', async () => {
+    narration.begin(1, [voiced()], 'act1')
+    narration.skipAll()
+    expect(narration.endedBySkip(1)).toBe(true)
+    narration.begin(2, [voiced()], 'act1')
+    narration.begin(3, [voiced()], 'act1')
+    expect(narration.endedBySkip(2)).toBe(true)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(narration.isNarrating).toBe(false)
+    expect(narration.endedBySkip(3)).toBe(false)
+  })
+
   it('skipAll shows the rest of the turn at once, silently', async () => {
     narration.begin(1, [voiced(), voiced(), silent, voiced()], 'act1')
     const first = last()

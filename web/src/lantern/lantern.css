@@ -217,6 +217,22 @@
   --lq-motion: 0;
 }
 
+/*
+ * A side panel that has just switched because the narration reached it: its
+ * border lights amber and fades (about a second; none with reduced motion).
+ */
+.lq-flash {
+  animation: lq-flash calc(1s * var(--lq-motion)) ease-out;
+}
+@keyframes lq-flash {
+  from {
+    border-color: var(--lq-accent);
+  }
+  to {
+    border-color: var(--lq-line);
+  }
+}
+
 /* The page behind the shell uses the Lantern ground. */
 :root,
 body {

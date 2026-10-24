@@ -112,6 +112,9 @@ export const useNarrationStore = defineStore('narration', () => {
   let poll: ReturnType<typeof setInterval> | undefined
   let lastTap = Number.NEGATIVE_INFINITY
 
+  /** How the latest narrated turn ended. */
+  const lastEnd = ref<{ turnId: number; skipped: boolean } | null>(null)
+
   /** How many turns have begun narrating in this game. */
   const narratedTurns = ref(0)
 
@@ -173,6 +176,11 @@ export const useNarrationStore = defineStore('narration', () => {
     }
   }
 
+  /** Whether turn `turnId` was the latest to end, and was cut short (skipped, cut in on) rather than read. */
+  function endedBySkip(turnId: number): boolean {
+    return lastEnd.value?.turnId === turnId && lastEnd.value.skipped
+  }
+
   /** Whether turn `turnId` is the one being narrated (its units appear as they are spoken). */
   function narrates(turnId: number): boolean {
     return active.value?.turnId === turnId
@@ -217,9 +225,10 @@ export const useNarrationStore = defineStore('narration', () => {
     }
   }
 
-  /** The turn is over: everything shows. */
-  function finish(): void {
+  /** The turn is over: everything shows. `skipped` says it was cut short, not read. */
+  function finish(skipped = false): void {
     stopVoice()
+    if (active.value) lastEnd.value = { turnId: active.value.turnId, skipped }
     active.value = null
   }
 
@@ -334,7 +343,7 @@ export const useNarrationStore = defineStore('narration', () => {
    * stays as it is.
    */
   function begin(turnId: number, units: NarrationUnit[], folder: string): void {
-    if (active.value) finish()
+    if (active.value) finish(true)
     const voiced = units.some((unit) => unit.parts.some((part) => part.clip))
     if (!settings.narrationOn || !voiced) return
     active.value = {
@@ -369,7 +378,7 @@ export const useNarrationStore = defineStore('narration', () => {
 
   /** Show the rest of the turn at once, silently. */
   function skipAll(): void {
-    finish()
+    finish(true)
   }
 
   /** A tap on the story: hurry, or skip on a second tap within 300 ms. */
@@ -390,6 +399,7 @@ export const useNarrationStore = defineStore('narration', () => {
     setAudioFactory,
     revealed,
     narrates,
+    endedBySkip,
     speaking,
     manifestFor,
     preload,
