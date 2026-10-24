@@ -92,7 +92,7 @@
     "end": 3.0
    },
    {
-    "word": "steadier\u2014the",
+    "word": "steadier—the",
     "start": 3.0,
     "end": 4.28
    },
@@ -1156,7 +1156,7 @@
   "duration": 11.285,
   "words": [
    {
-    "word": "\u2713",
+    "word": "✓",
     "start": 0.0,
     "end": 0.0
    },
@@ -1800,7 +1800,7 @@
     "end": 2.3
    },
    {
-    "word": "silverleaf\u2014Mira's",
+    "word": "silverleaf—Mira's",
     "start": 2.3,
     "end": 3.9
    },
@@ -2128,7 +2128,7 @@
     "end": 6.28
    },
    {
-    "word": "blocks\u2014just",
+    "word": "blocks—just",
     "start": 6.28,
     "end": 7.46
    },
@@ -3044,7 +3044,7 @@
     "end": 7.26
    },
    {
-    "word": "thunder\u2014trapped",
+    "word": "thunder—trapped",
     "start": 7.26,
     "end": 8.22
    },
@@ -3841,7 +3841,7 @@
     "end": 10.42
    },
    {
-    "word": "\u201cI",
+    "word": "“I",
     "start": 10.72,
     "end": 11.12
    },
@@ -3881,7 +3881,7 @@
     "end": 13.5
    },
    {
-    "word": "___.\u201d",
+    "word": "___.”",
     "start": 13.5,
     "end": 16.76
    },
@@ -4309,7 +4309,7 @@
     "end": 16.56
    },
    {
-    "word": "selflessness\u2014the",
+    "word": "selflessness—the",
     "start": 16.56,
     "end": 18.22
    },
@@ -4418,7 +4418,7 @@
   "duration": 4.226,
   "words": [
    {
-    "word": "\u25cb",
+    "word": "○",
     "start": 0.0,
     "end": 0.0
    },
@@ -5115,7 +5115,7 @@
     "end": 2.18
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 2.18,
     "end": 3.437
    }
@@ -5637,7 +5637,7 @@
     "end": 5.72
    },
    {
-    "word": "lives\u2014without",
+    "word": "lives—without",
     "start": 5.72,
     "end": 6.8
    },
@@ -5690,193 +5690,6 @@
     "word": "heads.",
     "start": 9.02,
     "end": 9.34
-   }
-  ]
- },
- "035605f5d74525": {
-  "file": "035605f5d74525.mp3",
-  "speaker": "narrator",
-  "duration": 15.65,
-  "words": [
-   {
-    "word": "You",
-    "start": 0.0,
-    "end": 0.14
-   },
-   {
-    "word": "take",
-    "start": 0.14,
-    "end": 0.4
-   },
-   {
-    "word": "the",
-    "start": 0.4,
-    "end": 0.58
-   },
-   {
-    "word": "Dragon's",
-    "start": 0.58,
-    "end": 0.96
-   },
-   {
-    "word": "Scale.",
-    "start": 0.96,
-    "end": 1.42
-   },
-   {
-    "word": "The",
-    "start": 2.12,
-    "end": 2.5
-   },
-   {
-    "word": "dragon's",
-    "start": 2.5,
-    "end": 2.88
-   },
-   {
-    "word": "scale",
-    "start": 2.88,
-    "end": 3.34
-   },
-   {
-    "word": "settles",
-    "start": 3.34,
-    "end": 3.9
-   },
-   {
-    "word": "into",
-    "start": 3.9,
-    "end": 4.1
-   },
-   {
-    "word": "your",
-    "start": 4.1,
-    "end": 4.28
-   },
-   {
-    "word": "hands",
-    "start": 4.28,
-    "end": 4.6
-   },
-   {
-    "word": "with",
-    "start": 4.6,
-    "end": 4.8
-   },
-   {
-    "word": "surprising",
-    "start": 4.8,
-    "end": 5.44
-   },
-   {
-    "word": "weight.",
-    "start": 5.44,
-    "end": 5.84
-   },
-   {
-    "word": "You",
-    "start": 6.14,
-    "end": 6.72
-   },
-   {
-    "word": "feel",
-    "start": 6.72,
-    "end": 7.08
-   },
-   {
-    "word": "the",
-    "start": 7.08,
-    "end": 7.28
-   },
-   {
-    "word": "burden",
-    "start": 7.28,
-    "end": 7.64
-   },
-   {
-    "word": "of",
-    "start": 7.64,
-    "end": 7.82
-   },
-   {
-    "word": "responsibility",
-    "start": 7.82,
-    "end": 8.6
-   },
-   {
-    "word": "and",
-    "start": 8.94,
-    "end": 9.32
-   },
-   {
-    "word": "the",
-    "start": 9.32,
-    "end": 9.46
-   },
-   {
-    "word": "strength",
-    "start": 9.46,
-    "end": 9.88
-   },
-   {
-    "word": "that",
-    "start": 9.88,
-    "end": 10.16
-   },
-   {
-    "word": "comes",
-    "start": 10.16,
-    "end": 10.54
-   },
-   {
-    "word": "from",
-    "start": 10.54,
-    "end": 10.78
-   },
-   {
-    "word": "selfless",
-    "start": 10.78,
-    "end": 11.44
-   },
-   {
-    "word": "action.",
-    "start": 11.44,
-    "end": 11.9
-   },
-   {
-    "word": "The",
-    "start": 12.3,
-    "end": 12.84
-   },
-   {
-    "word": "relic",
-    "start": 12.84,
-    "end": 13.26
-   },
-   {
-    "word": "pulses",
-    "start": 13.26,
-    "end": 13.76
-   },
-   {
-    "word": "warmly",
-    "start": 13.76,
-    "end": 14.36
-   },
-   {
-    "word": "against",
-    "start": 14.36,
-    "end": 14.68
-   },
-   {
-    "word": "your",
-    "start": 14.68,
-    "end": 14.98
-   },
-   {
-    "word": "palm.",
-    "start": 14.98,
-    "end": 15.38
    }
   ]
  },
@@ -7573,7 +7386,7 @@
     "end": 11.1
    },
    {
-    "word": "on\u2014dark",
+    "word": "on—dark",
     "start": 11.1,
     "end": 12.34
    },
@@ -8673,7 +8486,7 @@
     "end": 5.12
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 5.12,
     "end": 5.7
    },
@@ -10500,7 +10313,7 @@
     "end": 21.68
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 21.68,
     "end": 21.86
    },
@@ -10657,7 +10470,7 @@
     "end": 10.38
    },
    {
-    "word": "starlight\u2014the",
+    "word": "starlight—the",
     "start": 10.38,
     "end": 11.78
    },
@@ -11422,7 +11235,7 @@
     "end": 5.46
    },
    {
-    "word": "journey\u2014to",
+    "word": "journey—to",
     "start": 5.46,
     "end": 6.28
    },
@@ -11469,7 +11282,7 @@
   "duration": 5.016,
   "words": [
    {
-    "word": "Here\u2014take",
+    "word": "Here—take",
     "start": 0.0,
     "end": 0.92
    },
@@ -11631,7 +11444,7 @@
     "end": 7.9
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 7.9,
     "end": 8.2
    },
@@ -12862,7 +12675,7 @@
   "duration": 1.95,
   "words": [
    {
-    "word": "\u2026even",
+    "word": "…even",
     "start": 0.0,
     "end": 0.28
    },
@@ -13417,7 +13230,7 @@
     "end": 13.44
    },
    {
-    "word": "harmony\u2014let",
+    "word": "harmony—let",
     "start": 13.44,
     "end": 14.42
    },
@@ -14350,7 +14163,7 @@
     "end": 4.1
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 4.1,
     "end": 4.44
    },
@@ -15924,7 +15737,7 @@
     "end": 5.76
    },
    {
-    "word": "\u2026",
+    "word": "…",
     "start": 5.76,
     "end": 6.08
    },
@@ -15934,7 +15747,7 @@
     "end": 6.54
    },
    {
-    "word": "\u2026",
+    "word": "…",
     "start": 6.54,
     "end": 6.827
    }
@@ -16324,7 +16137,7 @@
     "end": 8.12
    },
    {
-    "word": "world\u2014fragments",
+    "word": "world—fragments",
     "start": 8.12,
     "end": 9.3
    },
@@ -16945,7 +16758,7 @@
     "end": 16.56
    },
    {
-    "word": "domain\u2014where",
+    "word": "domain—where",
     "start": 16.56,
     "end": 17.74
    },
@@ -17658,7 +17471,7 @@
     "end": 1.04
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 1.04,
     "end": 1.14
    },
@@ -17969,7 +17782,7 @@
     "end": 8.04
    },
    {
-    "word": "Scale\u2014courage,",
+    "word": "Scale—courage,",
     "start": 8.04,
     "end": 9.54
    },
@@ -18489,7 +18302,7 @@
     "end": 7.14
    },
    {
-    "word": "heat\u2011ward",
+    "word": "heat‑ward",
     "start": 7.14,
     "end": 7.68
    },
@@ -18893,7 +18706,7 @@
     "end": 25.94
    },
    {
-    "word": "voice\u2014an",
+    "word": "voice—an",
     "start": 25.94,
     "end": 27.08
    },
@@ -19287,7 +19100,7 @@
     "end": 5.84
    },
    {
-    "word": "free\u2014etched",
+    "word": "free—etched",
     "start": 5.84,
     "end": 7.18
    },
@@ -19435,98 +19248,6 @@
     "word": "marks.",
     "start": 16.82,
     "end": 17.18
-   }
-  ]
- },
- "0b4aade77a1836": {
-  "file": "0b4aade77a1836.mp3",
-  "speaker": "narrator",
-  "duration": 7.291,
-  "words": [
-   {
-    "word": "You",
-    "start": 0.0,
-    "end": 0.18
-   },
-   {
-    "word": "take",
-    "start": 0.18,
-    "end": 0.52
-   },
-   {
-    "word": "the",
-    "start": 0.52,
-    "end": 0.72
-   },
-   {
-    "word": "Crystal",
-    "start": 0.72,
-    "end": 1.16
-   },
-   {
-    "word": "of",
-    "start": 1.16,
-    "end": 1.38
-   },
-   {
-    "word": "Light.",
-    "start": 1.38,
-    "end": 1.68
-   },
-   {
-    "word": "The",
-    "start": 2.06,
-    "end": 2.64
-   },
-   {
-    "word": "crystal",
-    "start": 2.64,
-    "end": 3.08
-   },
-   {
-    "word": "steadies",
-    "start": 3.08,
-    "end": 3.66
-   },
-   {
-    "word": "in",
-    "start": 3.66,
-    "end": 3.82
-   },
-   {
-    "word": "your",
-    "start": 3.82,
-    "end": 3.96
-   },
-   {
-    "word": "grasp,",
-    "start": 3.96,
-    "end": 4.5
-   },
-   {
-    "word": "radiance",
-    "start": 5.08,
-    "end": 5.52
-   },
-   {
-    "word": "aligning",
-    "start": 5.52,
-    "end": 6.04
-   },
-   {
-    "word": "with",
-    "start": 6.04,
-    "end": 6.3
-   },
-   {
-    "word": "your",
-    "start": 6.3,
-    "end": 6.48
-   },
-   {
-    "word": "resolve.",
-    "start": 6.48,
-    "end": 6.84
    }
   ]
  },
@@ -19957,7 +19678,7 @@
     "end": 6.5
    },
    {
-    "word": "Light\u2014an",
+    "word": "Light—an",
     "start": 6.5,
     "end": 7.42
    },
@@ -20431,7 +20152,7 @@
     "end": 15.74
    },
    {
-    "word": "awaits\u2014the",
+    "word": "awaits—the",
     "start": 15.74,
     "end": 16.96
    },
@@ -20533,7 +20254,7 @@
     "end": 3.16
    },
    {
-    "word": "sync\u2014each",
+    "word": "sync—each",
     "start": 3.16,
     "end": 4.44
    },
@@ -20933,7 +20654,7 @@
   "duration": 9.427,
   "words": [
    {
-    "word": "\u2713",
+    "word": "✓",
     "start": 0.0,
     "end": 0.0
    },
@@ -22312,7 +22033,7 @@
     "end": 7.82
    },
    {
-    "word": "selflessness\u2014I",
+    "word": "selflessness—I",
     "start": 7.82,
     "end": 9.1
    },
@@ -22840,7 +22561,7 @@
     "end": 8.62
    },
    {
-    "word": "half\u2011heard",
+    "word": "half‑heard",
     "start": 8.62,
     "end": 9.28
    },
@@ -23049,7 +22770,7 @@
     "end": 7.0
    },
    {
-    "word": "it\u2014the",
+    "word": "it—the",
     "start": 7.0,
     "end": 7.78
    },
@@ -24099,7 +23820,7 @@
     "end": 26.66
    },
    {
-    "word": "fittings\u2014tiny",
+    "word": "fittings—tiny",
     "start": 26.66,
     "end": 28.02
    },
@@ -24425,7 +24146,7 @@
     "end": 1.8
    },
    {
-    "word": "steady\u2014Cedric",
+    "word": "steady—Cedric",
     "start": 1.8,
     "end": 3.54
    },
@@ -25021,7 +24742,7 @@
     "end": 11.02
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 11.02,
     "end": 11.22
    },
@@ -25325,7 +25046,7 @@
     "end": 2.14
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 2.14,
     "end": 2.8
    },
@@ -25755,7 +25476,7 @@
     "end": 10.08
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 10.08,
     "end": 10.34
    },
@@ -26474,7 +26195,7 @@
     "end": 7.94
    },
    {
-    "word": "heat\u2011ward",
+    "word": "heat‑ward",
     "start": 7.94,
     "end": 8.52
    },
@@ -26907,7 +26628,7 @@
   "duration": 4.551,
   "words": [
    {
-    "word": "\u25cb",
+    "word": "○",
     "start": 0.0,
     "end": 0.0
    },
@@ -27943,7 +27664,7 @@
     "end": 7.6
    },
    {
-    "word": "Switchbacks\u2014ridges",
+    "word": "Switchbacks—ridges",
     "start": 7.6,
     "end": 9.22
    },
@@ -31055,7 +30776,7 @@
     "end": 12.42
    },
    {
-    "word": "clear\u2014they",
+    "word": "clear—they",
     "start": 12.42,
     "end": 13.68
    },
@@ -32285,7 +32006,7 @@
     "end": 4.16
    },
    {
-    "word": "deep\u2014its",
+    "word": "deep—its",
     "start": 4.16,
     "end": 5.12
    },
@@ -32882,7 +32603,7 @@
   "duration": 10.82,
   "words": [
    {
-    "word": "\u2026",
+    "word": "…",
     "start": 0.0,
     "end": 0.56
    },
@@ -33318,7 +33039,7 @@
     "end": 6.48
    },
    {
-    "word": "resin\u2014useful",
+    "word": "resin—useful",
     "start": 6.48,
     "end": 7.98
    },
@@ -33674,7 +33395,7 @@
     "end": 17.32
    },
    {
-    "word": "mounts\u2014brass",
+    "word": "mounts—brass",
     "start": 17.32,
     "end": 18.78
    },
@@ -34513,7 +34234,7 @@
     "end": 2.56
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 2.56,
     "end": 2.78
    },
@@ -34811,7 +34532,7 @@
     "end": 3.0
    },
    {
-    "word": "shards\u2014the",
+    "word": "shards—the",
     "start": 3.0,
     "end": 4.14
    },
@@ -35948,7 +35669,7 @@
   "duration": 2.461,
   "words": [
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 0.0,
     "end": 0.72
    },
@@ -36435,7 +36156,7 @@
     "end": 15.8
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 15.8,
     "end": 15.8
    },
@@ -37312,7 +37033,7 @@
     "end": 11.02
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 11.02,
     "end": 11.1
    },
@@ -37793,7 +37514,7 @@
     "end": 7.1
    },
    {
-    "word": "crevices\u2014likely",
+    "word": "crevices—likely",
     "start": 7.1,
     "end": 8.62
    },
@@ -38758,7 +38479,7 @@
     "end": 7.98
    },
    {
-    "word": "\u201cElior\u2026",
+    "word": "“Elior…",
     "start": 8.72,
     "end": 9.34
    },
@@ -38808,7 +38529,7 @@
     "end": 12.96
    },
    {
-    "word": "alone.\u201d",
+    "word": "alone.”",
     "start": 12.96,
     "end": 13.42
    },
@@ -38858,7 +38579,7 @@
     "end": 17.28
    },
    {
-    "word": "\u201c\u2026be",
+    "word": "“…be",
     "start": 17.82,
     "end": 18.02
    },
@@ -38883,7 +38604,7 @@
     "end": 19.1
    },
    {
-    "word": "not\u2026\u201d",
+    "word": "not…”",
     "start": 19.1,
     "end": 19.42
    },
@@ -39921,7 +39642,7 @@
     "end": 36.32
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 36.32,
     "end": 36.68
    },
@@ -41110,7 +40831,7 @@
     "end": 2.2
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 2.2,
     "end": 2.2
    },
@@ -41622,7 +41343,7 @@
     "end": 3.06
    },
    {
-    "word": "need\u2014braces,",
+    "word": "need—braces,",
     "start": 3.06,
     "end": 4.56
    },
@@ -41829,7 +41550,7 @@
     "end": 5.5
    },
    {
-    "word": "stone\u2014no",
+    "word": "stone—no",
     "start": 5.5,
     "end": 6.58
    },
@@ -43755,7 +43476,7 @@
     "end": 9.58
    },
    {
-    "word": "breath\u2014passage",
+    "word": "breath—passage",
     "start": 9.58,
     "end": 11.16
    },
@@ -44087,123 +43808,6 @@
     "word": "it.",
     "start": 5.06,
     "end": 5.4
-   }
-  ]
- },
- "19f8242d9872b6": {
-  "file": "19f8242d9872b6.mp3",
-  "speaker": "narrator",
-  "duration": 9.195,
-  "words": [
-   {
-    "word": "You",
-    "start": 0.0,
-    "end": 0.18
-   },
-   {
-    "word": "take",
-    "start": 0.18,
-    "end": 0.54
-   },
-   {
-    "word": "the",
-    "start": 0.54,
-    "end": 0.74
-   },
-   {
-    "word": "Rusted",
-    "start": 0.74,
-    "end": 1.2
-   },
-   {
-    "word": "Locker",
-    "start": 1.2,
-    "end": 1.56
-   },
-   {
-    "word": "Key.",
-    "start": 1.56,
-    "end": 1.98
-   },
-   {
-    "word": "Its",
-    "start": 2.28,
-    "end": 2.92
-   },
-   {
-    "word": "teeth",
-    "start": 2.92,
-    "end": 3.2
-   },
-   {
-    "word": "are",
-    "start": 3.2,
-    "end": 3.46
-   },
-   {
-    "word": "ragged",
-    "start": 3.46,
-    "end": 3.94
-   },
-   {
-    "word": "with",
-    "start": 3.94,
-    "end": 4.12
-   },
-   {
-    "word": "corrosion;",
-    "start": 4.12,
-    "end": 4.62
-   },
-   {
-    "word": "it",
-    "start": 5.08,
-    "end": 5.62
-   },
-   {
-    "word": "might",
-    "start": 5.62,
-    "end": 5.86
-   },
-   {
-    "word": "fit,",
-    "start": 5.86,
-    "end": 6.3
-   },
-   {
-    "word": "but",
-    "start": 6.48,
-    "end": 6.88
-   },
-   {
-    "word": "the",
-    "start": 6.88,
-    "end": 7.04
-   },
-   {
-    "word": "lock",
-    "start": 7.04,
-    "end": 7.32
-   },
-   {
-    "word": "has",
-    "start": 7.32,
-    "end": 7.56
-   },
-   {
-    "word": "long",
-    "start": 7.56,
-    "end": 7.9
-   },
-   {
-    "word": "since",
-    "start": 7.9,
-    "end": 8.32
-   },
-   {
-    "word": "fused.",
-    "start": 8.32,
-    "end": 8.96
    }
   ]
  },
@@ -44644,7 +44248,7 @@
     "end": 5.02
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 5.02,
     "end": 5.26
    },
@@ -44962,7 +44566,7 @@
   "duration": 43.739,
   "words": [
    {
-    "word": "Wind\u2011carved",
+    "word": "Wind‑carved",
     "start": 0.0,
     "end": 0.9
    },
@@ -45227,7 +44831,7 @@
     "end": 24.32
    },
    {
-    "word": "fittings\u2014evidence",
+    "word": "fittings—evidence",
     "start": 24.32,
     "end": 25.92
    },
@@ -45897,7 +45501,7 @@
     "end": 7.72
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 7.72,
     "end": 7.9
    },
@@ -47373,7 +46977,7 @@
     "end": 9.0
    },
    {
-    "word": "barrier\u2014miners",
+    "word": "barrier—miners",
     "start": 9.0,
     "end": 10.52
    },
@@ -47857,108 +47461,6 @@
     "word": "away.",
     "start": 1.96,
     "end": 2.24
-   }
-  ]
- },
- "1bfcf1c57fd659": {
-  "file": "1bfcf1c57fd659.mp3",
-  "speaker": "narrator",
-  "duration": 7.802,
-  "words": [
-   {
-    "word": "You",
-    "start": 0.0,
-    "end": 0.14
-   },
-   {
-    "word": "take",
-    "start": 0.14,
-    "end": 0.46
-   },
-   {
-    "word": "the",
-    "start": 0.46,
-    "end": 0.66
-   },
-   {
-    "word": "Moon",
-    "start": 0.66,
-    "end": 1.0
-   },
-   {
-    "word": "Rune",
-    "start": 1.0,
-    "end": 1.56
-   },
-   {
-    "word": "Shards.",
-    "start": 1.56,
-    "end": 2.06
-   },
-   {
-    "word": "The",
-    "start": 2.32,
-    "end": 2.88
-   },
-   {
-    "word": "shards",
-    "start": 2.88,
-    "end": 3.36
-   },
-   {
-    "word": "whisper",
-    "start": 3.36,
-    "end": 3.84
-   },
-   {
-    "word": "with",
-    "start": 3.84,
-    "end": 4.12
-   },
-   {
-    "word": "tide-salt;",
-    "start": 4.12,
-    "end": 5.06
-   },
-   {
-    "word": "they",
-    "start": 5.06,
-    "end": 5.6
-   },
-   {
-    "word": "leave",
-    "start": 5.6,
-    "end": 5.88
-   },
-   {
-    "word": "a",
-    "start": 5.88,
-    "end": 6.0
-   },
-   {
-    "word": "faint",
-    "start": 6.0,
-    "end": 6.34
-   },
-   {
-    "word": "dust",
-    "start": 6.34,
-    "end": 6.72
-   },
-   {
-    "word": "on",
-    "start": 6.72,
-    "end": 6.96
-   },
-   {
-    "word": "your",
-    "start": 6.96,
-    "end": 7.12
-   },
-   {
-    "word": "fingers.",
-    "start": 7.12,
-    "end": 7.52
    }
   ]
  },
@@ -48576,7 +48078,7 @@
   "duration": 10.124,
   "words": [
    {
-    "word": "\u2713",
+    "word": "✓",
     "start": 0.0,
     "end": 0.0
    },
@@ -48689,113 +48191,6 @@
     "word": "sacrifice.",
     "start": 9.18,
     "end": 9.66
-   }
-  ]
- },
- "1cccf39100f174": {
-  "file": "1cccf39100f174.mp3",
-  "speaker": "narrator",
-  "duration": 7.616,
-  "words": [
-   {
-    "word": "You",
-    "start": 0.0,
-    "end": 0.18
-   },
-   {
-    "word": "take",
-    "start": 0.18,
-    "end": 0.54
-   },
-   {
-    "word": "the",
-    "start": 0.54,
-    "end": 0.8
-   },
-   {
-    "word": "Sea-Sealed",
-    "start": 0.8,
-    "end": 1.6
-   },
-   {
-    "word": "Letter.",
-    "start": 1.6,
-    "end": 1.92
-   },
-   {
-    "word": "You",
-    "start": 2.26,
-    "end": 2.74
-   },
-   {
-    "word": "carefully",
-    "start": 2.74,
-    "end": 3.3
-   },
-   {
-    "word": "fold",
-    "start": 3.3,
-    "end": 3.88
-   },
-   {
-    "word": "the",
-    "start": 3.88,
-    "end": 4.04
-   },
-   {
-    "word": "letter",
-    "start": 4.04,
-    "end": 4.34
-   },
-   {
-    "word": "\u2014",
-    "start": 4.34,
-    "end": 4.56
-   },
-   {
-    "word": "a",
-    "start": 4.56,
-    "end": 4.94
-   },
-   {
-    "word": "plea",
-    "start": 4.94,
-    "end": 5.22
-   },
-   {
-    "word": "to",
-    "start": 5.22,
-    "end": 5.44
-   },
-   {
-    "word": "a",
-    "start": 5.44,
-    "end": 5.64
-   },
-   {
-    "word": "friend,",
-    "start": 5.64,
-    "end": 5.96
-   },
-   {
-    "word": "kept",
-    "start": 5.96,
-    "end": 6.58
-   },
-   {
-    "word": "by",
-    "start": 6.58,
-    "end": 6.9
-   },
-   {
-    "word": "the",
-    "start": 6.9,
-    "end": 7.1
-   },
-   {
-    "word": "sea.",
-    "start": 7.1,
-    "end": 7.34
    }
   ]
  },
@@ -49405,7 +48800,7 @@
     "end": 9.38
    },
    {
-    "word": "Mouth\u2014gaping",
+    "word": "Mouth—gaping",
     "start": 9.38,
     "end": 10.66
    },
@@ -49599,7 +48994,7 @@
   "duration": 4.737,
   "words": [
    {
-    "word": "\u25cb",
+    "word": "○",
     "start": 0.0,
     "end": 0.0
    },
@@ -51100,7 +50495,7 @@
     "end": 4.5
    },
    {
-    "word": "selflessness\u2014lend",
+    "word": "selflessness—lend",
     "start": 4.5,
     "end": 6.24
    },
@@ -51879,7 +51274,7 @@
     "end": 5.84
    },
    {
-    "word": "now\u2014you",
+    "word": "now—you",
     "start": 5.84,
     "end": 6.48
    },
@@ -52135,7 +51530,7 @@
     "end": 0.16
    },
    {
-    "word": "Elior\u2014I",
+    "word": "Elior—I",
     "start": 0.16,
     "end": 1.36
    },
@@ -52988,7 +52383,7 @@
     "end": 3.48
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 3.48,
     "end": 3.76
    },
@@ -54048,7 +53443,7 @@
     "end": 24.42
    },
    {
-    "word": "ash\u2011tumbled",
+    "word": "ash‑tumbled",
     "start": 24.42,
     "end": 25.22
    },
@@ -54143,7 +53538,7 @@
     "end": 32.9
    },
    {
-    "word": "\u2014",
+    "word": "—",
     "start": 32.9,
     "end": 33.12
    },
@@ -54744,7 +54139,7 @@
     "end": 4.36
    },
    {
-    "word": "\u201cHe",
+    "word": "“He",
     "start": 4.7,
     "end": 5.14
    },
@@ -54814,7 +54209,7 @@
     "end": 9.2
    },
    {
-    "word": "me.\u201d",
+    "word": "me.”",
     "start": 9.2,
     "end": 9.46
    },

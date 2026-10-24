@@ -646,13 +646,12 @@ describe('Game', () => {
       expect(game.state.getItemCount('book')).toBe(2)
     })
 
-    it('appends the pickup message of a single item', () => {
+    it('says only the pickup line of a single item that has one', () => {
       rooms.EliorsCottage.items.push(
         new TakeItem('gem', true, 'The gem glows!'),
       )
-      expect(game.take('gem')).toBe(
-        '[event]You take the [item_name]gem[/item_name].[/event] The gem glows!',
-      )
+      expect(game.take('gem')).toBe('The gem glows!')
+      expect(game.state.getItemCount('gem')).toBe(1)
     })
 
     it('only reports the prevention when nothing could be taken', () => {

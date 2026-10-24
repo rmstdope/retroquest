@@ -32,7 +32,9 @@ describe('EchoStone', () => {
     game.state.currentRoom = act.rooms.MirrorLabyrinth
     executeCommands(game, ['drop echo stone'])
     const again = executeCommands(game, ['take echo stone'])
-    expect(again).toContain('You take the [item_name]Echo Stone')
+    expect(again).toBe(
+      "The stone is warm, and the hall's echoes still speak inside it.",
+    )
     expect(again).not.toContain('banners')
     expect(again).not.toContain('niche')
     expectMarkupWellFormed(again)
@@ -47,6 +49,15 @@ describe('EchoStone', () => {
     )
     executeCommands(game, ['drop echo stone'])
     expect(executeCommands(game, ['take echo stone'])).not.toContain('banners')
+  })
+
+  it('is taken in its own words, without the plain pick-up before them', () => {
+    const { game, act } = inMaze()
+    game.state.currentRoom = act.rooms.HallOfEchoes
+    const answer = game.commandParser.parse('take echo stone')
+    expect(answer).toMatch(/^You lift a smooth grey stone/)
+    expect(answer).not.toContain('You take')
+    expect(game.state.getItemCount('Echo Stone')).toBe(1)
   })
 
   it('murmurs neutrally outside the maze, also with the pendant', () => {

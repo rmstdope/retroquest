@@ -127,7 +127,7 @@ describe('Sir Cedric in the Hall of Echoes', () => {
       'Then they fade, at peace.',
       FORGIVE_EVENT,
       FORGIVE_LINE,
-      'Elior will remember this.',
+      '✦ Mercy — this will be remembered',
     ].map((part) => out.indexOf(part))
     expect(order.every((i) => i >= 0)).toBe(true)
     expect([...order].sort((a, b) => a - b)).toEqual(order)
