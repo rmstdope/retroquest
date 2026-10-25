@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hint read aloud A</title><style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:wght@400;600&display=swap');
+:root{--bg:#10151a;--surface:#161d24;--raised:#1c242c;--line:#26313b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--on-accent:#1a1408;--accent-text:#ffb836;--page:#0b0f13}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--fg);font:15px/1.5 'DM Sans',system-ui,sans-serif;padding:24px 16px}
+.wrap{max-width:860px;margin:0 auto}.kicker{color:var(--accent-text);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{font:600 26px/1.15 Fraunces,serif;margin:4px 0 8px}.intro{color:var(--prose)}.cost{color:var(--muted);font-size:13px;border-left:2px solid #a8740f;padding-left:10px}
+.rig{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.rig button{font:500 14px 'DM Sans',sans-serif;border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--line);background:var(--raised);color:var(--fg)}
+.rig button.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.caption{min-height:44px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--prose);margin-bottom:14px}.caption b{color:var(--accent-text)}
+.game{border:1px solid var(--line);border-radius:14px;background:var(--bg);padding:16px 22px;font:15px/1.55 'Source Serif 4',Georgia,serif;color:var(--prose)}
+.echo{font:500 13px 'DM Sans',sans-serif;color:var(--accent-text);margin:4px 0 10px}
+.line{margin:0 0 10px;padding-left:10px;border-left:3px solid transparent}
+.seg{border-radius:3px;transition:background .2s}
+.seg.speaking{background:#36270a;box-shadow:0 0 0 2px #36270a}
+.line.dim{color:var(--muted)}
+b.q{color:var(--fg)}
+h2{font:600 18px Fraunces,serif;margin:28px 0 6px}
+.clips{font:13px 'DM Sans',sans-serif;color:var(--muted);margin:10px 0 0;padding-left:18px}
+.clips li.new{color:var(--accent-text)}
+</style></head><body><div class="wrap">
+<div class="kicker">Option A</div><h1>Each line read whole, quest name and all</h1><p class="intro">Every line of the answer is one recording, read exactly as it is printed: “Shadows Over Willowbrook: Villagers speak in hushed tones…”. The name flows straight into the sentence.</p><p class="cost">Cost: one new recording for every hint line a player can get (about 23 in Act I), and a line that changes in the quest log needs recording again here too.</p>
+<h2>A hint with two quests open</h2>
+<div class="rig"><button class="primary" onclick="step('main')">Play next piece ▸</button><button onclick="reset('main')">Start over</button></div>
+<div class="caption" id="cap-main">Press <b>Play next piece</b> to hear the answer one recording at a time.</div>
+<div class="game" id="g-main"></div>
+<ol class="clips" id="l-main"></ol>
+<h2>A hint with nothing open</h2>
+<div class="rig"><button class="primary" onclick="step('none')">Play next piece ▸</button><button onclick="reset('none')">Start over</button></div>
+<div class="caption" id="cap-none">Press <b>Play next piece</b>.</div>
+<div class="game" id="g-none"></div>
+<ol class="clips" id="l-none"></ol>
+<script>
+const D={"main": [[0, "You stop and think over what you know.", true, "\u201cYou stop and think over what you know.\u201d"], [1, "<b class=\"q\">Shadows Over Willowbrook:</b> Villagers speak in hushed tones of strange happenings: animals refusing to leave their shelters, and shadows moving where none should be. Elior senses the fear growing among his neighbors, and the mystery deepens.", true, "\u201cShadows Over Willowbrook: Villagers speak\u2026\u201d (one piece)"], [2, "<b class=\"q\">Know your village:</b> You are encouraged to explore and get to know every corner of Willowbrook. The village holds many secrets for you to discover.", true, "\u201cKnow your village: You are encouraged\u2026\u201d (one piece)"]], "none": [[0, "You think it over. Nothing presses on you just now.", true, "\u201cYou think it over. Nothing presses on you just now.\u201d", "dim"]]};
+const LINES={main:[
+ [['o','You stop and think over what you know.']],
+ null,null],none:null};
+const S={main:-1,none:-1};
+function render(k){
+ const g=document.getElementById('g-'+k);const c=D[k];
+ const byLine={};c.forEach((cl,i)=>{(byLine[cl[0]]=byLine[cl[0]]||[]).push([i,cl[1],cl[4]||'']);});
+ let h='<div class="echo">&gt; hint</div>';
+ Object.keys(byLine).forEach(li=>{const segs=byLine[li];h+='<p class="line '+segs[0][2]+'">'+segs.map(s=>'<span class="seg'+(s[0]===S[k]?' speaking':'')+'">'+s[1]+'</span>').join(' ')+'</p>';});
+ g.innerHTML=h;
+ document.getElementById('l-'+k).innerHTML='<b style="color:var(--fg)">Recordings this answer plays:</b>'+c.map((cl,i)=>'<li class="'+(cl[2]?'new':'')+'">'+cl[3]+(cl[2]?' — new recording':' — already recorded')+'</li>').join('');
+ document.getElementById('cap-'+k).innerHTML=S[k]<0?'Press <b>Play next piece</b>.':(S[k]>=c.length?'Done. The narration stops; the page stays as it is.':'Now playing piece <b>'+(S[k]+1)+' of '+c.length+'</b>: '+c[S[k]][3]);
+}
+function step(k){S[k]=Math.min(S[k]+1,D[k].length);render(k)}
+function reset(k){S[k]=-1;render(k)}
+render('main');render('none');
+</script></div></body></html>
