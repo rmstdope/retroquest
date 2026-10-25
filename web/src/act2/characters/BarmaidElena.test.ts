@@ -1,9 +1,11 @@
 /** The Sorceress of Lies' mark on Elena's curse (rq-roe.4). */
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
+import { expectDialogueSpeaker } from '@/testing/gameHelpers'
 import { Act2 } from '../Act2'
 import { BarmaidElena } from './BarmaidElena'
 import { CrystalClearWater } from '../items/CrystalClearWater'
+import { Coins } from '../items/Coins'
 import {
   FLAG_ELENA_HEALED,
   FLAG_MARCUS_TOLD_TRUTH,
@@ -314,5 +316,43 @@ describe('Elena remarks on her father after the truth (rq-coj)', () => {
     elena.talkTo(game.state)
     const { fresh, loaded } = reload(game)
     expect(loaded.talkTo(fresh.state)).not.toContain(TRUTH_STAGE)
+  })
+})
+
+describe('Elena answers to her own name (rq-aum)', () => {
+  /** An Act II game standing in the Silver Stag Inn. */
+  function atInn(): Game {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    return game
+  }
+
+  it('is examined as elena', () => {
+    const game = atInn()
+    const answer = game.commandParser.parse('examine elena')
+    expect(answer).not.toContain("You don't see")
+    expect(answer).toContain('A young woman who moves slowly')
+  })
+
+  it('is talked to as elena', () => {
+    const game = atInn()
+    const answer = game.commandParser.parse('talk to elena')
+    expect(answer).not.toContain('There is no character named')
+    expectDialogueSpeaker(answer, 'barmaid elena')
+  })
+
+  it('is given things as elena', () => {
+    const game = atInn()
+    game.state.inventory.push(new Coins())
+    const answer = game.commandParser.parse('give coins to elena')
+    expect(answer).not.toContain('There is no character named')
+    expect(answer).toContain('[character_name]barmaid elena[/character_name]')
+  })
+
+  it('still answers to barmaid elena', () => {
+    const game = atInn()
+    expect(game.commandParser.parse('examine barmaid elena')).toContain(
+      'A young woman who moves slowly',
+    )
   })
 })

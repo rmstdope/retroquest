@@ -45,6 +45,11 @@ export class BarmaidElena extends Character {
     })
   }
 
+  /** She answers to her name, Elena, as well as to barmaid elena. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'elena'
+  }
+
   /** Dialogue for the current stage of her recovery, with one-off remarks first. */
   override talkTo(gameState: GameState): string {
     const reply = this.stageReply(gameState)
