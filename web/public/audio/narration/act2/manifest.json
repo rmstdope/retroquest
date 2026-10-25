@@ -44211,6 +44211,43 @@
    }
   ]
  },
+ "108ba6312dc6df": {
+  "file": "108ba6312dc6df.mp3",
+  "speaker": "narrator",
+  "duration": 2.786,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "Lord",
+    "start": 0.14,
+    "end": 0.38
+   },
+   {
+    "word": "Commander",
+    "start": 0.38,
+    "end": 0.86
+   },
+   {
+    "word": "nods",
+    "start": 0.86,
+    "end": 1.46
+   },
+   {
+    "word": "with",
+    "start": 1.46,
+    "end": 1.66
+   },
+   {
+    "word": "satisfaction.",
+    "start": 1.66,
+    "end": 2.0
+   }
+  ]
+ },
  "109aab252df35a": {
   "file": "109aab252df35a.mp3",
   "speaker": "narrator",
@@ -60707,6 +60744,98 @@
    }
   ]
  },
+ "193a25dc1a98a7": {
+  "file": "193a25dc1a98a7.mp3",
+  "speaker": "narrator",
+  "duration": 7.012,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "Lord",
+    "start": 0.38,
+    "end": 0.68
+   },
+   {
+    "word": "Commander",
+    "start": 0.68,
+    "end": 1.18
+   },
+   {
+    "word": "reads",
+    "start": 1.18,
+    "end": 1.68
+   },
+   {
+    "word": "the",
+    "start": 1.68,
+    "end": 1.86
+   },
+   {
+    "word": "confession,",
+    "start": 1.86,
+    "end": 2.36
+   },
+   {
+    "word": "then",
+    "start": 2.6,
+    "end": 3.02
+   },
+   {
+    "word": "the",
+    "start": 3.02,
+    "end": 3.22
+   },
+   {
+    "word": "letter.",
+    "start": 3.22,
+    "end": 3.52
+   },
+   {
+    "word": "At",
+    "start": 3.88,
+    "end": 4.5
+   },
+   {
+    "word": "its",
+    "start": 4.5,
+    "end": 4.66
+   },
+   {
+    "word": "last",
+    "start": 4.66,
+    "end": 5.0
+   },
+   {
+    "word": "line",
+    "start": 5.0,
+    "end": 5.38
+   },
+   {
+    "word": "his",
+    "start": 5.52,
+    "end": 5.66
+   },
+   {
+    "word": "face",
+    "start": 5.66,
+    "end": 6.0
+   },
+   {
+    "word": "goes",
+    "start": 6.0,
+    "end": 6.34
+   },
+   {
+    "word": "grey.",
+    "start": 6.34,
+    "end": 6.7
+   }
+  ]
+ },
  "193f996d276ce3": {
   "file": "193f996d276ce3.mp3",
   "speaker": "narrator",
@@ -69062,6 +69191,53 @@
    }
   ]
  },
+ "1c6e49f9f9af2a": {
+  "file": "1c6e49f9f9af2a.mp3",
+  "speaker": "narrator",
+  "duration": 2.74,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "Lord",
+    "start": 0.18,
+    "end": 0.5
+   },
+   {
+    "word": "Commander",
+    "start": 0.5,
+    "end": 0.82
+   },
+   {
+    "word": "looks",
+    "start": 0.82,
+    "end": 1.46
+   },
+   {
+    "word": "at",
+    "start": 1.46,
+    "end": 1.62
+   },
+   {
+    "word": "you",
+    "start": 1.62,
+    "end": 1.78
+   },
+   {
+    "word": "with",
+    "start": 1.78,
+    "end": 2.04
+   },
+   {
+    "word": "interest.",
+    "start": 2.04,
+    "end": 2.36
+   }
+  ]
+ },
  "1c8057336d5c62": {
   "file": "1c8057336d5c62.mp3",
   "speaker": "narrator",
@@ -72359,6 +72535,43 @@
     "word": "I?",
     "start": 14.06,
     "end": 14.42
+   }
+  ]
+ },
+ "1ddc27b93c04e0": {
+  "file": "1ddc27b93c04e0.mp3",
+  "speaker": "narrator",
+  "duration": 2.554,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "Lord",
+    "start": 0.16,
+    "end": 0.44
+   },
+   {
+    "word": "Commander",
+    "start": 0.44,
+    "end": 1.02
+   },
+   {
+    "word": "greets",
+    "start": 1.02,
+    "end": 1.6
+   },
+   {
+    "word": "you",
+    "start": 1.6,
+    "end": 1.76
+   },
+   {
+    "word": "formally.",
+    "start": 1.76,
+    "end": 2.24
    }
   ]
  },
