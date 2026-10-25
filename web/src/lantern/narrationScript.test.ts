@@ -390,6 +390,42 @@ describe('actScript branches with story flags cleared', () => {
   })
 })
 
+describe('actScript hints', () => {
+  /** Act I is played with its probes; that is slow under a loaded machine. */
+  const SLOW = 60_000
+  let script: ScriptLine[] = []
+  beforeAll(() => {
+    script = actScript(
+      () => new Game([new Act1()]),
+      [...ACT1_GOLDEN_PATH, ACT1_COMPLETING_COMMAND],
+      WRITERS,
+      SILENT,
+    )
+  }, SLOW)
+
+  it('reads the opening line of a hint', () => {
+    const line = script.find(
+      (l) => l.text === 'You stop and think over what you know.',
+    )
+    expect(line?.speaker).toBe('narrator')
+  })
+
+  it('reads a quest line whole, with the quest name in front', () => {
+    const line = script.find((l) =>
+      l.text.startsWith('Shadows Over Willowbrook: Villagers speak'),
+    )
+    expect(line?.speaker).toBe('narrator')
+  })
+
+  it('reads the line for nothing open', () => {
+    expect(
+      script.some(
+        (l) => l.text === 'You think it over. Nothing presses on you just now.',
+      ),
+    ).toBe(true)
+  })
+})
+
 describe('actScript branches with virtues', () => {
   const make = (): Game => new Game([new Act4()])
   const amulet = ACT4_GOLDEN_PATH.indexOf('use ancient amulet')

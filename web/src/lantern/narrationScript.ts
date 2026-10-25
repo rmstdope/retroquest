@@ -20,7 +20,7 @@
  * `actScript` plays an act's golden path through the real engine and collects
  * every voiced line: the chapter pages, every answer, each room's description
  * on its first visit and every quest card. At each step it also tries
- * examining, using and talking to whatever is at hand, looking and resting, on a copy of the game,
+ * examining, using and talking to whatever is at hand, looking, asking for a hint and resting, on a copy of the game,
  * so optional lines are recorded too, and plays each `ScriptBranch` (an
  * optional scene the golden path does not take) on a copy. Who voices a line is its block's speaker,
  * except unsigned writing, which goes to its writer (`WriterRule`).
@@ -207,7 +207,7 @@ export interface ScriptBranch {
   unset?: string[]
 }
 
-/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, search, rest. */
+/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, search, ask for a hint, rest. */
 function probes(game: Game): string[] {
   const state = game.state
   const room = state.currentRoom
@@ -219,6 +219,7 @@ function probes(game: Game): string[] {
     ...room.characters.map((character) => `examine ${character.name}`),
     'look',
     'search',
+    'hint',
     'rest',
   ]
 }

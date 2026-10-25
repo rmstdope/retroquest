@@ -50,6 +50,11 @@
     "text": "Your hands find nothing. The dark has no floor and the dream no edges. The whisper comes again, nearer, and it is your name."
   },
   {
+    "key": "12ca45e13de2eb",
+    "speaker": "narrator",
+    "text": "You think it over. Nothing presses on you just now."
+  },
+  {
     "key": "1b9f4255b10ad6",
     "speaker": "narrator",
     "text": "You are asleep already. The voice says your name again, nearer."
@@ -118,6 +123,21 @@
     "key": "1b614fc868a707",
     "speaker": "narrator",
     "text": "You search the cottage thoroughly and discover a faded photograph hidden in a drawer."
+  },
+  {
+    "key": "014e3249e88e12",
+    "speaker": "narrator",
+    "text": "You stop and think over what you know."
+  },
+  {
+    "key": "11e09cf1567314",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Elior dreams of a shadowy figure lurking in the fields, its presence felt even in the waking world. The dream is unsettling, leaving him with a sense of foreboding that something is wrong in Willowbrook."
+  },
+  {
+    "key": "0234c639fe73b8",
+    "speaker": "narrator",
+    "text": "Hint of Magic: After a strange, vivid dream, you awaken with the sense that something beyond the ordinary is calling to you. A mysterious force stirs within, urging you to pay attention to the signs around you and discover what this new feeling means."
   },
   {
     "key": "09097b529ab3e9",
@@ -230,6 +250,11 @@
     "text": "You recall your father's writings on the Revive spell. The knowledge feels familiar."
   },
   {
+    "key": "194f1d8f95c7fd",
+    "speaker": "narrator",
+    "text": "Magic for real: You discover that you possess mysterious magical abilities. Strange phenomena begin to occur around you, hinting at a power you never knew you had. You must seek guidance and understanding to unlock the secrets of your newfound magic and learn what it means for your destiny."
+  },
+  {
     "key": "111769f2b08397",
     "speaker": "narrator",
     "text": "The Faded Photograph"
@@ -253,6 +278,11 @@
     "key": "14e3f26422cc34",
     "speaker": "narrator",
     "text": "You search the cottage but find nothing new."
+  },
+  {
+    "key": "1638cc5cd74fa2",
+    "speaker": "narrator",
+    "text": "The Faded Photograph: An old photograph of your parents, hidden away in a drawer. On the back is a line in your mother's hand."
   },
   {
     "key": "0ffd22ca95680e",
@@ -333,6 +363,16 @@
     "key": "0098d73fd3fadf",
     "speaker": "narrator",
     "text": "You search around the Vegetable Field, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "key": "017ef1b66ccd05",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Elior has witnessed the devastation firsthand: once lush rows of crops now stand wilted and brown, their leaves curled and brittle. The earth beneath his feet is cracked and dry, and the air is thick with the scent of decay. Where there was once the promise of a bountiful harvest, there is now only ruin."
+  },
+  {
+    "key": "00a280cdc5666c",
+    "speaker": "narrator",
+    "text": "Know your village: You are encouraged to explore and get to know every corner of Willowbrook. The village holds many secrets for you to discover."
   },
   {
     "key": "0d9183b0f6f76b",
@@ -455,6 +495,11 @@
     "text": "Last night, someone spotted a cloaked stranger near the old well, asking after an old amulet, from a family that left. Nobody would tell him a thing, and he took the road to the mill."
   },
   {
+    "key": "0cc978f9af1024",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Villagers speak in hushed tones of strange happenings: animals refusing to leave their shelters, and shadows moving where none should be. Elior senses the fear growing among his neighbors, and the mystery deepens."
+  },
+  {
     "key": "097a4dd86d48ab",
     "speaker": "narrator",
     "text": "The bucket is empty. The parched rows will need water from somewhere."
@@ -483,6 +528,11 @@
     "key": "0022d0ca3a78d2",
     "speaker": "narrator",
     "text": "Rumors spread of the village well: a foul stench rising from its depths, and water that no one dares to drink. Elior wonders if the source of the corruption lies beneath the surface."
+  },
+  {
+    "key": "07225e7736e08a",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Rumors spread of the village well: a foul stench rising from its depths, and water that no one dares to drink. Elior wonders if the source of the corruption lies beneath the surface."
   },
   {
     "key": "0fc739302b683a",
@@ -585,6 +635,11 @@
     "text": "You take a look around the shed. Nothing! The Shed Door is locked so you can't search inside."
   },
   {
+    "key": "17236651ac23a8",
+    "speaker": "narrator",
+    "text": "Curiosity killed the cat: Old Man Hemlock has shut the General Store until his cat, Patches, comes home. She was last seen near the old well, where a locked shed keeps its secrets. What will you discover if you find a way inside?"
+  },
+  {
     "key": "1903ec3e502025",
     "speaker": "narrator",
     "text": "The key turns in the lock! The shed door creaks open."
@@ -648,6 +703,11 @@
     "key": "0443cad94a38f2",
     "speaker": "narrator",
     "text": "A pair of frightened green eyes watches you from behind the crates."
+  },
+  {
+    "key": "1bcc09b892cdeb",
+    "speaker": "narrator",
+    "text": "Curiosity killed the cat: Patches was hiding in the Abandoned Shed. Carry her home to Old Man Hemlock at the General Store."
   },
   {
     "key": "02f2a5ac7a8165",
@@ -788,6 +848,11 @@
     "key": "1b8d61ff81197f",
     "speaker": "narrator",
     "text": "Mira has urged Elior to connect with the living world and learn from its magic. The path forward is uncertain, but hope stirs in the heart of Willowbrook."
+  },
+  {
+    "key": "14626304971cb1",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Mira has urged Elior to connect with the living world and learn from its magic. The path forward is uncertain, but hope stirs in the heart of Willowbrook."
   },
   {
     "key": "0c2daf86c44092",
@@ -985,6 +1050,11 @@
     "text": "You have heard tales of a magical deer from the Blacksmith. Perhaps you will witness something extraordinary yourself!"
   },
   {
+    "key": "17f1a2977c7123",
+    "speaker": "narrator",
+    "text": "Oh deer, oh deer: You have heard tales of a magical deer from the Blacksmith. Perhaps you will witness something extraordinary yourself!"
+  },
+  {
     "key": "181e2d1f42f778",
     "speaker": "narrator",
     "text": "You lift the smooth stone a little, then set it back. It belongs here, at the bend of the river."
@@ -1058,6 +1128,11 @@
     "key": "017a30e8992a54",
     "speaker": "fisherman",
     "text": "Good to see you trying your luck with the rod. Any luck yet?"
+  },
+  {
+    "key": "152c191d292b34",
+    "speaker": "narrator",
+    "text": "Fishing expedition: You can't help but feel sorry for the fisherman—he seems troubled and in need of help. Perhaps if you assist him, you'll uncover something important."
   },
   {
     "key": "158507fd16553c",
@@ -1365,6 +1440,11 @@
     "text": "Any luck with those matches, child? The General Store has always been kind to this chapel."
   },
   {
+    "key": "1e6192055c18d8",
+    "speaker": "narrator",
+    "text": "Let there be light: The priest has asked you to help bring light to the chapel. Perhaps this small act will illuminate more than just the room for you."
+  },
+  {
     "key": "125609050865dc",
     "speaker": "blacksmith",
     "text": "Saw it, did you? The deer? My grandfather swore by that deer. Said it only shows itself to them as the land has need of."
@@ -1590,6 +1670,16 @@
     "text": "You have made progress, Elior, but you are not yet fully prepared for what lies ahead. Ensure you have all necessary items, learned the essential spells, and received a blessing for your journey."
   },
   {
+    "key": "00c468db709d2a",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Elior has proven his magical abilities are real. The villagers will look to him with new hope, and Mira believes he may be the key to dispelling the darkness. Mira has promised Elior the Ancient Amulet once he is truly ready for the road ahead."
+  },
+  {
+    "key": "094309f8faa785",
+    "speaker": "narrator",
+    "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Warm clothing"
+  },
+  {
     "key": "090a625c3831c4",
     "speaker": "narrator",
     "text": "She looks at you for a long moment, as if seeing someone else standing in your place."
@@ -1705,6 +1795,11 @@
     "text": "A fishing rod with a magnet attached to the end. Good for attracting metallic objects."
   },
   {
+    "key": "1f70ae81895ba9",
+    "speaker": "narrator",
+    "text": "Magnet fishing expedition: You have assembled a strange fishing rod with a magnet. Time to go on another fishing expedition!"
+  },
+  {
     "key": "04e363bbc0b9ca",
     "speaker": "narrator",
     "text": "The stick lashes onto the magnetic fishing rod: it is an extended magnetic fishing rod now."
@@ -1778,6 +1873,11 @@
     "key": "0d65ded805e265",
     "speaker": "narrator",
     "text": "A small disc of black iron, cold to the touch however long you hold it. A twisted rune, like a root strangling itself, is scored deep into its face. Nothing about it was lost by accident; someone made it, and made it to last."
+  },
+  {
+    "key": "054a2f940dd0c4",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Fishing the ring from the purified well, Elior drew up something else: a rune token of black iron, scored with a twisted rune and colder than the water. The well did not sour by itself."
   },
   {
     "key": "1bc47d048327f6",
@@ -1925,6 +2025,11 @@
     "text": "A heavy, hooded cloak made for travel. It offers warmth and protection from the elements."
   },
   {
+    "key": "0d54ceac9b5613",
+    "speaker": "narrator",
+    "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Magical protection"
+  },
+  {
     "key": "14c6d7ba6b1f0a",
     "speaker": "narrator",
     "text": "The priest smiles."
@@ -1948,6 +2053,11 @@
     "key": "0393c5c706eea6",
     "speaker": "priest",
     "text": "The blessing sits well on you. The founders' light has not gone out of their line after all. Go gently on the road."
+  },
+  {
+    "key": "07040f5fea63ad",
+    "speaker": "narrator",
+    "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Sturdy footwear"
   },
   {
     "key": "1e82bb9df4aa05",
@@ -2183,6 +2293,11 @@
     "key": "017e832c934bd2",
     "speaker": "mira",
     "text": "I have told you what I know of it. Keep it hidden, and keep your eyes open."
+  },
+  {
+    "key": "186637c16597f1",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Mira named the token a fouling sigil: someone poisoned the well on purpose. Whoever carried it, perhaps the cloaked stranger the villagers whisper about, was searching Willowbrook for something, or for someone."
   },
   {
     "key": "102c991f73cdd6",
