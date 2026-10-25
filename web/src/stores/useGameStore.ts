@@ -693,17 +693,26 @@ export const useGameStore = defineStore('game', () => {
   /**
    * Dev only (`debug <name>`): play the dev server's script `<name>` as
    * typed commands (see `@/utils/debugScript`). The module is imported under
-   * the DEV flag only, so a production build carries none of it.
+   * the DEV flag only, so a production build carries none of it. When the
+   * script ends the panels show the engine's state at once, not after the
+   * last command's narration.
    */
   async function runDebugScript(name: string): Promise<void> {
     if (!import.meta.env.DEV) return
     const { playDebugScript } = await import('@/utils/debugScript')
-    await playDebugScript(name, {
-      play: playCommand,
-      running: () => requireBridge().controller.isActRunning(),
-      goldenPath: (n) => requireBridge().controller.goldenPath(n),
-      show: (text) => showOutput(`debug ${name}`, text, { chips: false }),
-    })
+    try {
+      await playDebugScript(name, {
+        play: playCommand,
+        running: () => requireBridge().controller.isActRunning(),
+        goldenPath: (n) => requireBridge().controller.goldenPath(n),
+        show: (text) => showOutput(`debug ${name}`, text, { chips: false }),
+      })
+    } finally {
+      // The last command's narration would hold the panels on the room the
+      // script started in; show where it ended.
+      if (heldTurn.value !== null)
+        releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
+    }
   }
 
   /** An act has ended: the last one closes the game, any other leads on. */
