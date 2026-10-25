@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
@@ -109,5 +109,28 @@ describe('RoomCard', () => {
     expect(w.get('.lq-room-card').classes()).not.toContain('lq-speaking')
     expect(w.get('.lq-room-text').classes()).toContain('lq-clamp')
     expect(w.findAll('.lq-room-text .lq-w')).toHaveLength(0)
+  })
+
+  it('lists identical items without a duplicate-key warning', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const game = useGameStore()
+    game.characters = []
+    game.items = ['Mounted Lantern', 'Mounted Lantern', 'Mounted Lantern']
+    const w = mount(RoomCard)
+
+    game.items = ['Rope', 'Mounted Lantern', 'Mounted Lantern', 'Key']
+    await nextTick()
+    game.items = ['Key', 'Mounted Lantern', 'Mounted Lantern', 'Rope']
+    await nextTick()
+
+    const warnings = warn.mock.calls.map((args) => String(args[0]))
+    warn.mockRestore()
+    expect(warnings.filter((m) => m.includes('Duplicate keys'))).toEqual([])
+    expect(w.findAll('.lq-here-chip').map((c) => c.text())).toEqual([
+      'Key',
+      'Mounted Lantern',
+      'Mounted Lantern',
+      'Rope',
+    ])
   })
 })

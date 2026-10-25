@@ -22,10 +22,23 @@ const expanded = ref(false)
 const descriptionId = useId()
 const clampable = computed(() => game.roomDescription.length > CLAMP_CHARS)
 
-const here = computed(() => [
-  ...game.characters.map((name) => ({ name, kind: 'character' })),
-  ...game.items.map((name) => ({ name, kind: 'item' })),
-])
+/**
+ * Who and what is here, each with a key unique within the list: a room can
+ * hold several things of one name (three Mounted Lanterns), so the key adds
+ * how many of that name came before.
+ */
+const here = computed(() => {
+  const seen: Record<string, number> = {}
+  return [
+    ...game.characters.map((name) => ({ name, kind: 'character' })),
+    ...game.items.map((name) => ({ name, kind: 'item' })),
+  ].map((entry) => {
+    const base = `${entry.kind}:${entry.name}`
+    const count = seen[base] ?? 0
+    seen[base] = count + 1
+    return { ...entry, key: `${base}:${count}` }
+  })
+})
 
 // A new room starts collapsed again.
 watch(
@@ -67,7 +80,7 @@ watch(
       <span class="lq-label">Here</span>
       <button
         v-for="entry in here"
-        :key="`${entry.kind}:${entry.name}`"
+        :key="entry.key"
         type="button"
         class="lq-here-chip"
         :class="`lq-here-${entry.kind}`"
