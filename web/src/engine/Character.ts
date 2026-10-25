@@ -29,8 +29,12 @@ export class Character {
     return this.description
   }
 
+  /**
+   * The player talks to the character. By default it has nothing to say, the
+   * sentence opening with the name in title case (see `titleCase`).
+   */
   talkTo(_gameState: GameState): string {
-    return `[character_name]${this.name}[/character_name] has nothing to say right now.`
+    return `[character_name]${titleCase(this.name)}[/character_name] has nothing to say right now.`
   }
 
   /** The player says specific words to the character. */
@@ -62,9 +66,13 @@ export class Character {
     )
   }
 
+  /**
+   * The player asks to buy an item. By default the character sells nothing,
+   * the sentence opening with the name in title case (see `titleCase`).
+   */
   buyItem(_gameState: GameState, itemName: string): string {
     return (
-      `[character_name]${this.name}[/character_name] does not have any ` +
+      `[character_name]${titleCase(this.name)}[/character_name] does not have any ` +
       `[item_name]${itemName}[/item_name] to sell right now.`
     )
   }
