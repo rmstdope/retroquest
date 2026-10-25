@@ -70,6 +70,55 @@ describe.each([2, 3, 4])('narration coverage of Act %i', (act) => {
   )
 })
 
+/** Act I's off-path written replies: each is spoken by `speaker` and begins with `opening`. */
+const ACT1_OFF_PATH_LINES: { speaker: string; opening: string }[] = [
+  { speaker: 'narrator', opening: "You'd rather light the lantern" },
+  { speaker: 'narrator', opening: 'The bucket is no use with that.' },
+  { speaker: 'narrator', opening: 'You could force the magnet onto the rod' },
+  { speaker: 'narrator', opening: 'The rod is too short to reach the water.' },
+  { speaker: 'narrator', opening: 'Mira gently but firmly stops you.' },
+  { speaker: 'mira', opening: 'Those herbs are part of my stores' },
+  {
+    speaker: 'narrator',
+    opening: 'Mira places a protective hand over the amulet',
+  },
+  { speaker: 'mira', opening: 'This is not yet yours to claim' },
+  {
+    speaker: 'shopkeeper',
+    opening: 'Hold on there, friend! That sword is merchandise',
+  },
+  { speaker: 'narrator', opening: 'You lift the smooth stone a little' },
+  { speaker: 'narrator', opening: 'The wire is pulled tight around the kit' },
+  { speaker: 'narrator', opening: 'A soft glow fills the shed.' },
+  { speaker: 'narrator', opening: 'The mysterious box is now empty.' },
+  { speaker: 'narrator', opening: 'The spell finds nothing to turn.' },
+  {
+    speaker: 'fisherman',
+    opening: 'Well, would you look at that! Not a twinge.',
+  },
+  { speaker: 'narrator', opening: 'The light runs out over the water' },
+  { speaker: 'narrator', opening: 'The warmth reaches the kit' },
+  { speaker: 'narrator', opening: 'The bush greens under your hand' },
+  { speaker: 'narrator', opening: 'The herb crowds its pot' },
+  { speaker: 'mira', opening: 'That was dear, that herb.' },
+  { speaker: 'grandmother', opening: 'Oh, wild berries! Thank you, dear.' },
+  { speaker: 'fisherman', opening: 'Under the smooth stone, lad' },
+]
+
+describe('narration coverage of Act I off-path replies', () => {
+  const script = readJson<ScriptLine[]>('tts/act1/script.json')
+
+  it.each(ACT1_OFF_PATH_LINES.map((line) => [line.opening, line] as const))(
+    'has the reply "%s" in the script, in its speaker\'s voice',
+    (_opening, expected) => {
+      const line = script.find((entry) =>
+        entry.text.startsWith(expected.opening),
+      )
+      expect(line?.speaker).toBe(expected.speaker)
+    },
+  )
+})
+
 /** The replies to resting that are read aloud: the everyday one in every act, and the special ones where a room gives them. */
 const REST_LINES: Record<number, string[]> = {
   1: [
