@@ -12,6 +12,12 @@ function gameInGlade(): Game {
   return game
 }
 
+/** The carved refrain, word for word. */
+const REFRAIN = 'Power follows purpose; purpose follows truth.'
+
+/** The lit-glade sentence that quotes the refrain. */
+const SENTENCE = `Beneath it, in a plainer hand, is carved: \u201c${REFRAIN}\u201d`
+
 describe('Hidden Glade', () => {
   it('is dim and overgrown until light is cast', () => {
     const game = gameInGlade()
@@ -27,14 +33,12 @@ describe('Hidden Glade', () => {
   })
 
   describe('the carved refrain', () => {
-    const REFRAIN = 'Power follows purpose; purpose follows truth.'
     const LEAD_IN =
       'Carved beneath the runes, in a plainer hand, are words you can read:'
     const CLOSING =
       'You read them aloud. They mean nothing to you, and yet they stay with you.'
     const STONE =
       'In the center, a mossy stone bears a faint, magical inscription.'
-    const SENTENCE = `Beneath it, in a plainer hand, is carved: \u201c${REFRAIN}\u201d`
 
     it('follows the grow line on the first cast', () => {
       const game = gameInGlade()
@@ -117,5 +121,17 @@ describe('the Hidden Glade room card', () => {
     expect(new GameController(game).getRoomDescription()).toContain(
       'in your hand begins to glow.',
     )
+  })
+
+  it('shows the carved refrain on the room card, also after look and after leaving and returning, once light is cast', () => {
+    const game = gameInGlade()
+    const card = new GameController(game)
+    game.commandParser.parse('cast light')
+    expect(card.getRoomDescription()).toContain(SENTENCE)
+    game.commandParser.parse('look')
+    expect(card.getRoomDescription()).toContain(SENTENCE)
+    game.commandParser.parse('go north')
+    game.commandParser.parse('go south')
+    expect(card.getRoomDescription()).toContain(SENTENCE)
   })
 })
