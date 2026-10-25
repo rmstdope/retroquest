@@ -77,8 +77,8 @@ export class TheGatheringStormQuest extends Quest {
         NYX +
         ', deep in the Enchanted Forest, ' +
         'because her old wisdom may show what you are truly facing. He gave ' +
-        'you a hundred coins for a survival kit, an enhanced lantern and rope ' +
-        'from the Market District.'
+        'you a hundred and fifty coins for a survival kit, an enhanced ' +
+        'lantern and rope from the Market District.'
     }
     if (gameState.getStoryFlag(FLAG_SUPPLIES_QUEST_COMPLETED)) {
       if (!this.flagState[FLAG_SUPPLIES_QUEST_COMPLETED]) {

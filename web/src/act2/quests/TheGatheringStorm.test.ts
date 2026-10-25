@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act2 } from '../Act2'
+import { TrainingSword } from '../items/TrainingSword'
 import {
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
@@ -58,8 +59,8 @@ describe('The Gathering Storm log', () => {
       'training sword and now trusts you. He wants you to find ' +
       '[character_name]Nyx[/character_name], deep in the Enchanted Forest, ' +
       'because her old wisdom may show what you are truly facing. He gave you ' +
-      'a hundred coins for a survival kit, an enhanced lantern and rope from ' +
-      'the Market District.',
+      'a hundred and fifty coins for a survival kit, an enhanced lantern and ' +
+      'rope from the Market District.',
     'The survival kit, the lantern and the rope are packed. The merchants of ' +
       'Greendale have done what they can for you. The rest of the road leads ' +
       'to the edge of the Enchanted Forest.',
@@ -131,6 +132,31 @@ describe('The Gathering Storm log', () => {
       expect(entry.split(/(?<=[.!?])\s+/).length).toBeLessThanOrEqual(3)
       expect(entry).not.toMatch(/cosmic|otherworldly|encroaching|combat|Elior/i)
     }
+  })
+})
+
+describe('The Gathering Storm log after Sir Cedric pays', () => {
+  it('names the amount of coins he put in the bag', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.CastleCourtyard
+    game.state.addItemToInventory(new TrainingSword())
+    executeCommands(game, [
+      'talk to sir cedric',
+      'use training sword',
+      'say guard to sir cedric',
+      'say turn to sir cedric',
+      'say strike to sir cedric',
+      'talk to sir cedric',
+    ])
+    expect(game.state.getItemCount('coins')).toBe(150)
+
+    const quest = [
+      ...game.state.nonActivatedQuests,
+      ...game.state.activatedQuests,
+    ].find((q) => q instanceof TheGatheringStormQuest)
+    const details = quest?.details()
+    if (details?.kind !== 'journal') throw new Error('expected a journal')
+    expect(details.latest).toContain('He gave you a hundred and fifty coins')
   })
 })
 
