@@ -65,6 +65,15 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'A small nose twitches' },
     { speaker: 'narrator', opening: "You have a rod, but you're not quite" },
     { speaker: 'narrator', opening: 'The nearby plants seem to respond' },
+    /** The `hint` answer: its opening line, the quiet line and each quest's line under its name. */
+    { speaker: 'narrator', opening: 'You stop and think over what you know.' },
+    { speaker: 'narrator', opening: 'You think it over. Nothing presses' },
+    {
+      speaker: 'narrator',
+      opening: 'Shadows Over Willowbrook: Villagers speak',
+    },
+    { speaker: 'narrator', opening: 'Curiosity killed the cat: Patches was' },
+    { speaker: 'narrator', opening: 'Preparing for the road: Mira has tasked' },
   ],
   2: [{ speaker: 'families', opening: "She's smiling. First time in a week." }],
   3: [
