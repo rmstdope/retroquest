@@ -132,15 +132,16 @@ describe('Ancient Amulet in his hand', () => {
     handOver(game)
     const dim = game.state.currentRoom.describe(game.state)
     expect(dim).toContain(GLADE_GLOW)
-    expect(dim.indexOf(GLADE_GLOW)).toBeLessThan(
-      dim.indexOf('The glade feels enchanted'),
-    )
     expect(dim.indexOf(GLADE_GLOW)).toBeGreaterThan(
       dim.indexOf('too deep in shadow to read.'),
     )
     const glade = game.state.currentRoom
     if (glade instanceof HiddenGlade) glade.lightSpellCast = true
-    expect(game.state.currentRoom.describe(game.state)).toContain(GLADE_GLOW)
+    const sunlit = game.state.currentRoom.describe(game.state)
+    expect(sunlit).toContain(GLADE_GLOW)
+    expect(sunlit.indexOf(GLADE_GLOW)).toBeLessThan(
+      sunlit.indexOf('The glade feels enchanted'),
+    )
     expect(executeCommands(game, ['examine amulet'])).toContain(
       `${RUNES} It glows in your hand, brightest when you hold it near the mossy stone.`,
     )

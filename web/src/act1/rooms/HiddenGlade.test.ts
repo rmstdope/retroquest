@@ -32,6 +32,26 @@ describe('Hidden Glade', () => {
     expect(after).not.toContain('darkness')
   })
 
+  it('reads only as dark and waiting before light is cast', () => {
+    const game = gameInGlade()
+    const before = game.state.currentRoom.describe(game.state)
+    expect(before).toContain(
+      'as if the glade itself is waiting to be enlightened.',
+    )
+    expect(before).not.toContain('The glade feels enchanted')
+    expect(before).not.toMatch(/The glade feels[^.]*\. The glade feels/)
+  })
+
+  it('still ends enchanted once light is cast', () => {
+    const game = gameInGlade()
+    game.commandParser.parse('cast light')
+    const after = game.state.currentRoom.describe(game.state)
+    expect(after).toContain(
+      ' The glade feels quiet and expectant, as if waiting for something.' +
+        ' The glade feels enchanted, a place where the world holds its breath.',
+    )
+  })
+
   describe('the carved refrain', () => {
     const LEAD_IN =
       'Carved beneath the runes, in a plainer hand, are words you can read:'
