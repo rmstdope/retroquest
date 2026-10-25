@@ -6,6 +6,7 @@ import { Act2 } from '../Act2'
 import { BarmaidElena } from './BarmaidElena'
 import { CrystalClearWater } from '../items/CrystalClearWater'
 import { Coins } from '../items/Coins'
+import { MountainFlower } from '../items/MountainFlower'
 import {
   FLAG_ELENA_HEALED,
   FLAG_MARCUS_TOLD_TRUTH,
@@ -346,13 +347,21 @@ describe('Elena answers to her own name (rq-aum)', () => {
     game.state.inventory.push(new Coins())
     const answer = game.commandParser.parse('give coins to elena')
     expect(answer).not.toContain('There is no character named')
-    expect(answer).toContain('[character_name]barmaid elena[/character_name]')
+    expect(answer).toContain('[character_name]Barmaid Elena[/character_name]')
   })
 
   it('still answers to barmaid elena', () => {
     const game = atInn()
     expect(game.commandParser.parse('examine barmaid elena')).toContain(
       'A young woman who moves slowly',
+    )
+  })
+
+  it('opens a refused gift with her capitalised name (rq-4if)', () => {
+    const { game, elena } = setup()
+    expect(elena.giveItem(game.state, new MountainFlower())).toBe(
+      "[character_name]Barmaid Elena[/character_name] doesn't seem " +
+        'interested in the [item_name]mountain flower[/item_name].',
     )
   })
 })
