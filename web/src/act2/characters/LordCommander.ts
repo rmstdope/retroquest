@@ -26,7 +26,7 @@ export class LordCommander extends Character {
 
   /** Return the Lord Commander's words, which follow Sir Cedric's case. */
   override talkTo(gameState: GameState): string {
-    const name = characterName(this.name)
+    const name = characterName('Lord Commander')
     if (gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)) {
       return (
         `The ${name} nods with satisfaction. ` +
@@ -63,7 +63,7 @@ export class LordCommander extends Character {
   /** Handle giving items to the Lord Commander, who accepts only the secret documents;
    * clearing Cedric's name also returns his sword, which changes his description. */
   override giveItem(gameState: GameState, item: Item): string {
-    const name = characterName(this.name)
+    const name = characterName('Lord Commander')
     if (item instanceof SecretDocuments) {
       if (!gameState.getStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS)) {
         return (

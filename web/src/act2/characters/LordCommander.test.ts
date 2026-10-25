@@ -14,6 +14,7 @@ import {
 } from '@/testing/gameHelpers'
 
 const SPEAKER = 'lord commander'
+const TITLE = '[character_name]Lord Commander[/character_name]'
 
 /** An Act II game with the player in the Great Hall. */
 function createGameInGreatHall(): Game {
@@ -36,6 +37,7 @@ describe('Lord Commander', () => {
     const answer = game.commandParser.parse('talk to lord commander')
 
     expect(answer).toContain("Welcome to Greendale's Great Hall")
+    expect(answer).toContain(`The ${TITLE} greets you formally.`)
     expectAttributedDialogue(answer)
   })
 
@@ -46,6 +48,7 @@ describe('Lord Commander', () => {
     const answer = game.commandParser.parse('talk to lord commander')
 
     expect(answer).toContain('give them to me')
+    expect(answer).toContain(`The ${TITLE} looks at you with interest.`)
     expectAttributedDialogue(answer)
   })
 
@@ -57,6 +60,7 @@ describe('Lord Commander', () => {
     const answer = game.commandParser.parse('talk to lord commander')
 
     expect(answer).toContain('I have sent riders to Heavensforth')
+    expect(answer).toContain(`The ${TITLE} nods with satisfaction.`)
     expectAttributedDialogue(answer)
   })
 
@@ -70,6 +74,7 @@ describe('Lord Commander', () => {
     )
 
     expect(answer).toContain('Read them and know what you bring me')
+    expect(answer).toContain(`The ${TITLE} glances at the papers`)
     expectAttributedDialogue(answer)
     expect(game.state.inventory).toContain(documents)
     expect(game.state.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)).toBe(false)
@@ -86,7 +91,9 @@ describe('Lord Commander', () => {
     )
 
     expect(answer).toContain('I hereby restore his knighthood')
-    expect(answer.startsWith('[success]')).toBe(true)
+    expect(
+      answer.startsWith(`[success]The ${TITLE} reads the confession`),
+    ).toBe(true)
     expect(answer.endsWith('[/success]')).toBe(true)
     expectAttributedDialogue(answer)
     expect(game.state.inventory).not.toContain(documents)
@@ -106,7 +113,7 @@ describe('Lord Commander', () => {
       `has no need for your [item_name]${stick.name}[/item_name]`,
     )
     expectMarkupWellFormed(answer)
-    expect(answer).toContain(`[character_name]${SPEAKER}[/character_name]`)
+    expect(answer).toContain(`The ${TITLE} has no need for your`)
     expectNoSpeechOutsideDialogue(answer)
     expect(game.state.inventory).toContain(stick)
     expect(game.state.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)).toBe(false)
