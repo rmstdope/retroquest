@@ -55,5 +55,19 @@
         "commands": ["give rusty hoe to merchant", "give egg to merchant"]
     },
     { "after": 167, "commands": ["cast grow on healing herb"] },
-    { "after": 168, "commands": ["give rune token to mira"] }
+    { "after": 168, "commands": ["give rune token to mira"] },
+    {"after": 0, "commands": ["examine dragon"]},
+    {"after": 4, "commands": ["give lantern to grandmother", "buy rope from grandmother"]},
+    {"after": 22, "commands": ["give lantern to tilda", "buy rope from tilda"]},
+    {"after": 36, "commands": ["give lantern to patches"]},
+    {"after": 108, "commands": ["give lantern to blacksmith", "buy rope from blacksmith"]},
+    {"after": 109, "commands": ["buy rope from patches", "buy dragon from shopkeeper"]},
+    {"after": 111, "commands": ["buy rope from mira", "give lantern to mira"]},
+    {"after": 112, "commands": ["cast bless on mira", "cast heal on mira", "cast purify on mira"]},
+    {"after": 113, "commands": ["cast bless on tilda", "cast heal on tilda", "cast purify on tilda", "go east", "cast bless on patches", "cast heal on patches", "cast purify on patches", "cast bless on shopkeeper", "cast heal on shopkeeper", "cast purify on shopkeeper", "go south", "cast bless on blacksmith", "cast heal on blacksmith", "cast purify on blacksmith"]},
+    {"after": 114, "commands": ["cast bless on grandmother", "cast heal on grandmother", "cast purify on grandmother"]},
+    {"after": 132, "commands": ["give lantern to fisherman", "buy rope from fisherman", "cast bless on fisherman", "cast heal on fisherman", "cast purify on fisherman"]},
+    {"after": 134, "commands": ["give lantern to deer", "buy rope from deer", "cast bless on deer", "cast heal on deer", "cast purify on deer"]},
+    {"after": 153, "commands": ["give lantern to priest", "buy rope from priest", "cast bless on priest", "cast heal on priest", "cast purify on priest"]},
+    {"after": 155, "commands": ["give lantern to merchant", "buy rope from merchant", "cast bless on merchant", "cast heal on merchant", "cast purify on merchant"]}
 ]

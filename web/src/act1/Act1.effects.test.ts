@@ -65,7 +65,7 @@ describe('Act 1 narrates effects and never echoes the command', () => {
       expect(text.startsWith('\n')).toBe(false)
     }
     expect(new Patches().giveItem(game.state, new Coin())).toContain(
-      '[item_name]coin[/item_name]',
+      'sniffs at your offering',
     )
   })
 })

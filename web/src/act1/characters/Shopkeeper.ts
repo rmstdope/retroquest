@@ -317,10 +317,7 @@ export class Shopkeeper extends Character {
       )
     }
     if (!(itemNameToBuy in this.wares)) {
-      return speech(
-        "Sorry, I don't have any '[item_name]" +
-          `${itemNameToBuy}[/item_name]' for sale.`,
-      )
+      return speech("Sorry, friend, that's not something I carry.")
     }
 
     const wareDetails = this.wares[itemNameToBuy]

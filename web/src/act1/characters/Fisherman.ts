@@ -170,10 +170,8 @@ export class Fisherman extends Character {
     }
 
     return (
-      `The ${characterName('fisherman')} looks at the ` +
-      '[item_name]' +
-      item.name +
-      "[/item_name] curiously but doesn't seem to need it."
+      `The ${characterName('fisherman')} eyes it with mild curiosity, ` +
+      'then shrugs.'
     )
   }
 

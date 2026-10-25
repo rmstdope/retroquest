@@ -814,7 +814,7 @@ describe('Game', () => {
 
     it('asks what to examine and reports unknown targets', () => {
       expect(game.examine('')).toBe('Examine what?')
-      expect(game.examine('dragon')).toBe("You don't see any 'dragon' here.")
+      expect(game.examine('dragon')).toBe("You don't see that here.")
     })
   })
 
@@ -931,7 +931,7 @@ describe('Game', () => {
       expect(game.buy('magic beans from shopkeeper')).toBe('Sold: magic beans')
       rooms.EliorsCottage.addCharacter(character('villager'))
       expect(game.buy('rope from villager')).toContain(
-        '[character_name]Villager[/character_name] does not have any [item_name]rope[/item_name] to sell right now.',
+        '[character_name]Villager[/character_name] has nothing to sell you.',
       )
     })
 

@@ -180,8 +180,7 @@ export class Blacksmith extends Character {
     }
 
     return (
-      `The ${characterName(this.name)} looks at the ` +
-      `[item_name]${item.name}[/item_name]. ` +
+      `The ${characterName(this.name)} gives it a glance and hands it back. ` +
       speech("I don't have a use for this, lad.")
     )
   }

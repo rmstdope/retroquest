@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  type Item,
   characterName,
   remembered,
   speech,
@@ -63,6 +64,14 @@ export class Villager extends Character {
     this.name = Villager.NAME
     this.description = Villager.DESCRIPTION
     this.dialogueOptions = [...Villager.RUMOURS]
+  }
+
+  /** She politely declines any gift; the reply never names the item. */
+  override giveItem(_gameState: GameState, _item: Item): string {
+    return (
+      `${characterName(this.name)} shakes her head politely. ` +
+      "It isn't something she needs."
+    )
   }
 
   /** She answers to her name, Tilda, and still to villager. */

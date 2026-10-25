@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  type Item,
   characterName,
   speech,
   attributeSpeech,
@@ -28,6 +29,14 @@ export class Priest extends Character {
         'offering blessings ' +
         'and sharing the lore of Eldoria.',
     })
+  }
+
+  /** He politely declines any gift; the reply never names the item. */
+  override giveItem(_gameState: GameState, _item: Item): string {
+    return (
+      `The ${characterName(this.name)} shakes his head politely. ` +
+      "It isn't something he needs."
+    )
   }
 
   /** Tell the founders' story the first time, then answer to Elior's progress. */
