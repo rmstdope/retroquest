@@ -103,7 +103,11 @@ export class InnkeeperMarcus extends Character {
     )
   }
 
-  /** Reward the cure with the Druidic Charm, or list the wares and plead for help. */
+  /**
+   * Reward the cure with the Druidic Charm, or list the wares and plead for
+   * help. Every quote opens with his name and a colon, which the story view
+   * shows as the speaker's label.
+   */
   override talkTo(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
       if (!this.hasGivenCharm) {
@@ -180,9 +184,8 @@ export class InnkeeperMarcus extends Character {
 
     if (gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)) {
       const dialogueBlock =
-        'The ' +
         characterName(name) +
-        ' says: ' +
+        ': ' +
         speech(`${dialogue} ${waresInfo.trim()}`) +
         '\n\n'
       const plea =
@@ -203,9 +206,8 @@ export class InnkeeperMarcus extends Character {
       return dialogueBlock + plea + weekTheKingWent
     } else {
       const dialogueBlock =
-        'The ' +
         characterName(name) +
-        ' says: ' +
+        ': ' +
         speech(`${dialogue} ${waresInfo.trim()}`) +
         '\n\n'
       const closing =
