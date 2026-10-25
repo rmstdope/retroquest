@@ -167,9 +167,20 @@ export class Room {
     return desc
   }
 
+  /**
+   * The room's name as it reads inside a sentence, article included: "the"
+   * and the marked-up name, with a leading "The" of the name itself dropped so
+   * it is not said twice. Override for a name that takes no article, such as
+   * a person's possessive ("Mira's Hut").
+   */
+  protected nameInSentence(): string {
+    const name = this.name.replace(/^The /, '')
+    return `the [room_name]${name}[/room_name]`
+  }
+
   search(_gameState: GameState): string {
     return (
-      `You search around the [room_name]${this.name}[/room_name], but find nothing ` +
+      `You search around ${this.nameInSentence()}, but find nothing ` +
       'of interest beyond what you can already see.'
     )
   }

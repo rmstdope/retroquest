@@ -41,4 +41,9 @@ export class MirasHut extends Room {
       gameState.hasItem('locket') || gameState.hasItem("mother's letter")
     return base + (onStand ? (keepsake ? GLOW : '') : EMPTY_STAND)
   }
+
+  /** Mira's Hut is named after her, so it takes no "the". */
+  protected override nameInSentence(): string {
+    return `[room_name]${this.name}[/room_name]`
+  }
 }
