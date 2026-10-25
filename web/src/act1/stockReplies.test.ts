@@ -1,7 +1,8 @@
 /**
  * Act I's stock replies (rq-bio): what a person answers to a gift they do not
- * want, to a purchase they cannot fill, to a blessing, a healing or a
- * purification, and what the game says of something that is not there. Each
+ * want, to a purchase they cannot fill, and what the game says of something
+ * that is not there (the cast-on-person lines are unchanged and pinned by
+ * `narrationCoverage.test.ts`). Each
  * names who answered, never the thing the player named, so one fixed sentence
  * serves every item and can be recorded once.
  */
