@@ -105,8 +105,8 @@ export class InnkeeperMarcus extends Character {
 
   /**
    * Reward the cure with the Druidic Charm, or list the wares and plead for
-   * help. Every quote opens with his name and a colon, which the story view
-   * shows as the speaker's label.
+   * help. Every line he speaks is a quote opening with his name and a colon,
+   * which the story view shows as the speaker's label.
    */
   override talkTo(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
@@ -189,12 +189,16 @@ export class InnkeeperMarcus extends Character {
         speech(`${dialogue} ${waresInfo.trim()}`) +
         '\n\n'
       const plea =
-        "You've spoken with " +
-        characterName('Elena') +
-        '? Then you understand my desperation. The curse grows stronger ' +
-        "each day, and I fear we don't have much time left. If you truly " +
-        "can help her, I'll give you anything - rooms, information, " +
-        'whatever you need.'
+        characterName(name) +
+        ': ' +
+        speech(
+          "You've spoken with " +
+            characterName('Elena') +
+            '? Then you understand my desperation. The curse grows stronger ' +
+            "each day, and I fear we don't have much time left. If you truly " +
+            "can help her, I'll give you anything - rooms, information, " +
+            'whatever you need.',
+        )
       const weekTheKingWent =
         '\n\n' +
         characterName(name) +
@@ -211,9 +215,13 @@ export class InnkeeperMarcus extends Character {
         speech(`${dialogue} ${waresInfo.trim()}`) +
         '\n\n'
       const closing =
-        'Though I must say, these have been dark times for my family. My daughter... ' +
-        "well, perhaps you should speak with her yourself if you're looking to help " +
-        'those in need.'
+        characterName(name) +
+        ': ' +
+        speech(
+          'Though I must say, these have been dark times for my family. My daughter... ' +
+            "well, perhaps you should speak with her yourself if you're looking to help " +
+            'those in need.',
+        )
       return dialogueBlock + closing
     }
   }
