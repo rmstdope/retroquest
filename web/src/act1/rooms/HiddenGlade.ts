@@ -52,6 +52,8 @@ export class HiddenGlade extends Room {
   /**
    * The glade's text, built from its dynamic segments: dim or sunlit, the
    * glowing amulet, and the Deer and Rare Flower once they have appeared.
+   * The dim glade ends on its darkness; only the sunlit glade goes on to
+   * feel expectant and enchanted.
    */
   override descriptionFor(gameState: GameState): string {
     let baseDescription = this.lightSpellCast
@@ -62,6 +64,7 @@ export class HiddenGlade extends Room {
         ' Beside the mossy stone, the [item_name]Ancient Amulet[/item_name] in ' +
         'your hand begins to glow.'
     }
+    if (!this.lightSpellCast) return baseDescription
     const dynamicParts: string[] = []
     if (this.getCharacterByName('Deer')) {
       dynamicParts.push(
