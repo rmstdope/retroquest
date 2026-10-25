@@ -68,7 +68,7 @@ The five town-resolving quests below must be complete before the forest entrance
   - **Prerequisites:** Access to Castle Courtyard
   - **Dependencies:** None
   - **Completion:** Pass a short sparring bout with Cedric in the courtyard. It is not combat and nothing can be lost. After the sergeant's recognition scene Cedric names three forms (strike, guard, turn) and attacks three times: "High cut!" is met by guard, "Lunge!" by turn, the open chest ("Well?") by strike. The player answers each with `say <form> to sir cedric`; a wrong answer repeats the attack and costs nothing. Alternatively any spell Elior knows, cast on Cedric during the bout, ends it at once and Cedric meets a mage with wary respect. Leaving the courtyard mid-bout abandons it, and Cedric starts over from the first attack.
-  - **Rewards:** Cedric's respect and 100 gold coins; the Mountain Hermit, Cedric's old drill sergeant, provides Cedric's own Training Sword before the test
+  - **Rewards:** Cedric's respect and 150 gold coins; the Mountain Hermit, Cedric's old drill sergeant, provides Cedric's own Training Sword before the test
   - **Story Impact:** Establishes trust with a key ally; follows the Warden sigil scene, which is why Cedric will guide Elior
 
 - **Name:** Supplies for the Journey
