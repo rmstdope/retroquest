@@ -221,3 +221,44 @@ describe('Innkeeper Marcus and the week the king went', () => {
     }
   })
 })
+
+describe('Innkeeper Marcus introduced by name (rq-pcn)', () => {
+  /**
+   * What the story view shows as text around his quotes: the answer without
+   * its `[dialogue]` blocks and without the `Name:` label lines, which the
+   * view drops and shows, title-cased, as the label above the quote.
+   */
+  function narration(text: string): string {
+    return text
+      .replace(/\[dialogue\][\s\S]*?\[\/dialogue\]/g, '')
+      .replace(/^\[character_name\][^[]+\[\/character_name\]:?\s*$/gm, '')
+  }
+
+  function expectIntroducedByName(text: string): void {
+    expect(text).not.toContain('The [character_name]')
+    expect(narration(text)).not.toContain('innkeeper marcus')
+    expectDialogueSpeaker(text, 'innkeeper marcus')
+  }
+
+  it('before Elena is met', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+
+    expectIntroducedByName(game.commandParser.parse('talk to innkeeper marcus'))
+  })
+
+  it('after Elena is met', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+
+    expectIntroducedByName(game.commandParser.parse('talk to innkeeper marcus'))
+  })
+
+  it('after the cure, with and after the charm', () => {
+    const game = gameAfterCure()
+
+    expectIntroducedByName(game.commandParser.parse('talk to innkeeper marcus'))
+    expectIntroducedByName(game.commandParser.parse('talk to innkeeper marcus'))
+  })
+})

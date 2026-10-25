@@ -995,33 +995,6 @@
    }
   ]
  },
- "006e247f8d3f11": {
-  "file": "006e247f8d3f11.mp3",
-  "speaker": "narrator",
-  "duration": 2.136,
-  "words": [
-   {
-    "word": "The",
-    "start": 0.0,
-    "end": 0.38
-   },
-   {
-    "word": "innkeeper",
-    "start": 0.38,
-    "end": 0.98
-   },
-   {
-    "word": "marcus",
-    "start": 0.98,
-    "end": 1.42
-   },
-   {
-    "word": "says:",
-    "start": 1.42,
-    "end": 1.86
-   }
-  ]
- },
  "008bde1796d285": {
   "file": "008bde1796d285.mp3",
   "speaker": "narrator",
