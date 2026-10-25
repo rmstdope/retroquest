@@ -215,9 +215,7 @@ export class Mira extends Character {
       )
     }
     return (
-      `${characterName('Mira')} looks at the [item_name]` +
-      item.name +
-      '[/item_name] but shakes her head gently. ' +
+      `${characterName('Mira')} regards it, then shakes her head gently. ` +
       speech('I have no need for this, child.')
     )
   }

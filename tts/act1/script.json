@@ -95,6 +95,11 @@
     "text": "You'd rather light the lantern before you carry it anywhere; it is no use to you dark."
   },
   {
+    "key": "151113c15ddf05",
+    "speaker": "narrator",
+    "text": "You don't see that here."
+  },
+  {
     "key": "1ce01e698ceb2f",
     "speaker": "narrator",
     "text": "Elior's Cottage"
@@ -160,14 +165,19 @@
     "text": "A leather-bound journal filled with Elior's careful handwriting. The pages are full of notes, sketches, and secrets."
   },
   {
-    "key": "05eaebaa0f5966",
+    "key": "0f903b003c9861",
     "speaker": "narrator",
-    "text": "Grandmother looks at the bread."
+    "text": "Grandmother turns it over in her hands."
   },
   {
     "key": "1921d4472cd88d",
     "speaker": "grandmother",
     "text": "I'm not sure what to do with this, dear."
+  },
+  {
+    "key": "1198ba6187843e",
+    "speaker": "narrator",
+    "text": "Grandmother has nothing to sell you."
   },
   {
     "key": "0b928263f68e32",
@@ -445,6 +455,16 @@
     "text": "So the chickens gave up my little secret. I tucked that key up in the coop rafters years ago. It opens the old shed by the mill. It was a workshop once... your father's. I never could bring myself to go in. It's dark as a cellar in there, dear; take the lantern with you."
   },
   {
+    "key": "1b926a29754ffb",
+    "speaker": "narrator",
+    "text": "Tilda shakes her head politely. It isn't something she needs."
+  },
+  {
+    "key": "06c9636081f1d2",
+    "speaker": "narrator",
+    "text": "Tilda has nothing to sell you."
+  },
+  {
     "key": "0d49024e6a4c8b",
     "speaker": "narrator",
     "text": "Village Square"
@@ -545,9 +565,9 @@
     "text": "A sturdy wooden bucket with a rope handle. It is full of murky water, with a sour smell drawn from the well."
   },
   {
-    "key": "1d5221026341c8",
+    "key": "16d8fd12d20d7d",
     "speaker": "narrator",
-    "text": "The blacksmith looks at the faded photograph."
+    "text": "The blacksmith gives it a glance and hands it back."
   },
   {
     "key": "1d8fbebac5aa39",
@@ -675,6 +695,11 @@
     "text": "Patches was hiding in the Abandoned Shed. Carry her home to Old Man Hemlock at the General Store."
   },
   {
+    "key": "088baadadf2ee4",
+    "speaker": "narrator",
+    "text": "Patches sniffs at your offering from the shadows and stays put. Perhaps she would rather hear her name."
+  },
+  {
     "key": "1d1933af2244eb",
     "speaker": "narrator",
     "text": "The shed door is unlocked and slightly ajar."
@@ -770,9 +795,9 @@
     "text": "This is not yet yours to claim, Elior. The Ancient Amulet is a powerful artifact that must be earned through preparation and wisdom. Complete your journey preparations first, and it shall be yours."
   },
   {
-    "key": "12fdbfabfdae4c",
+    "key": "117cc66e56de2a",
     "speaker": "narrator",
-    "text": "Mira looks at the rusty hoe but shakes her head gently."
+    "text": "Mira regards it, then shakes her head gently."
   },
   {
     "key": "1578d421fda558",
@@ -1555,6 +1580,26 @@
     "text": "Thank you for the light, child. Keep that locket close, and show it to your grandmother. She will know it better than I."
   },
   {
+    "key": "1ddbc587965d97",
+    "speaker": "narrator",
+    "text": "Blacksmith has nothing to sell you."
+  },
+  {
+    "key": "02e5f249f72efe",
+    "speaker": "narrator",
+    "text": "Patches has nothing to sell you."
+  },
+  {
+    "key": "16195c2ec1a1a6",
+    "speaker": "shopkeeper",
+    "text": "Sorry, friend, that's not something I carry."
+  },
+  {
+    "key": "06e59d8bf016e5",
+    "speaker": "narrator",
+    "text": "Mira has nothing to sell you."
+  },
+  {
     "key": "0eb3653554f52f",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. Its glow quickens as you lean closer, steady as a heartbeat."
@@ -1660,6 +1705,21 @@
     "text": "You have embraced your magical abilities and taken your first steps on a path filled with wonder and danger. The world will never be the same for you."
   },
   {
+    "key": "05a944cbb8b790",
+    "speaker": "narrator",
+    "text": "A divine light surrounds Mira, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "0aaf52d262e81e",
+    "speaker": "narrator",
+    "text": "A warm light envelops Mira and the character seems a bit healthier."
+  },
+  {
+    "key": "1fb5426e0eadff",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around Mira, purifying their spirit and lifting any negative influences."
+  },
+  {
     "key": "1cacf7b290b7d8",
     "speaker": "narrator",
     "text": "Mira looks at you thoughtfully."
@@ -1678,6 +1738,81 @@
     "key": "094309f8faa785",
     "speaker": "narrator",
     "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Warm clothing"
+  },
+  {
+    "key": "0af3cb7aab67d4",
+    "speaker": "narrator",
+    "text": "A divine light surrounds Tilda, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "017c5eea879784",
+    "speaker": "narrator",
+    "text": "A warm light envelops Tilda and the character seems a bit healthier."
+  },
+  {
+    "key": "09757b03265f73",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around Tilda, purifying their spirit and lifting any negative influences."
+  },
+  {
+    "key": "1dbab16f93c30a",
+    "speaker": "narrator",
+    "text": "A divine light surrounds Patches, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "0b08ad8ad76541",
+    "speaker": "narrator",
+    "text": "A warm light envelops Patches and the character seems a bit healthier."
+  },
+  {
+    "key": "127241fc39bac9",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around Patches, purifying their spirit and lifting any negative influences."
+  },
+  {
+    "key": "030394996b1f92",
+    "speaker": "narrator",
+    "text": "A divine light surrounds shopkeeper, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "0f6ee6a4569214",
+    "speaker": "narrator",
+    "text": "A warm light envelops shopkeeper and the character seems a bit healthier."
+  },
+  {
+    "key": "07e0eb7d932241",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around shopkeeper, purifying their spirit and lifting any negative influences."
+  },
+  {
+    "key": "126d76c822145c",
+    "speaker": "narrator",
+    "text": "A divine light surrounds blacksmith, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "1e324618018873",
+    "speaker": "narrator",
+    "text": "A warm light envelops blacksmith and the character seems a bit healthier."
+  },
+  {
+    "key": "053120ac1cfca6",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around blacksmith, purifying their spirit and lifting any negative influences."
+  },
+  {
+    "key": "0f6caabec47913",
+    "speaker": "narrator",
+    "text": "A divine light surrounds grandmother, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "19e85a4c9a1601",
+    "speaker": "narrator",
+    "text": "A warm light envelops grandmother and the character seems a bit healthier."
+  },
+  {
+    "key": "19d929d75e113f",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around grandmother, purifying their spirit and lifting any negative influences."
   },
   {
     "key": "090a625c3831c4",
@@ -1905,6 +2040,26 @@
     "text": "The light runs out over the water and finds nothing to do. The river was never the trouble. Your mother stood at this bend and taught this spell to the fisherman; the water remembers her better than it needs you."
   },
   {
+    "key": "1715821c603f25",
+    "speaker": "narrator",
+    "text": "The fisherman eyes it with mild curiosity, then shrugs."
+  },
+  {
+    "key": "13c2202788220e",
+    "speaker": "narrator",
+    "text": "Fisherman has nothing to sell you."
+  },
+  {
+    "key": "0235b7f8c2c5a5",
+    "speaker": "narrator",
+    "text": "A divine light surrounds fisherman, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "129ec3ac520ccf",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around fisherman, purifying their spirit and lifting any negative influences."
+  },
+  {
     "key": "1a196bac64f81f",
     "speaker": "narrator",
     "text": "The warmth reaches the kit and it flinches from it. The wire is still in the leg; mending flesh around iron would be cruelty, and the kit knows it before you do."
@@ -1913,6 +2068,31 @@
     "key": "0a07e078ad1161",
     "speaker": "narrator",
     "text": "The bush greens under your hand, every leaf at once. Life it has. It bears nothing; fruit wants something else of you."
+  },
+  {
+    "key": "140d83e4d9c824",
+    "speaker": "narrator",
+    "text": "The deer sniffs at it and turns its head away."
+  },
+  {
+    "key": "006733f09712cb",
+    "speaker": "narrator",
+    "text": "Deer has nothing to sell you."
+  },
+  {
+    "key": "108da87eb617ef",
+    "speaker": "narrator",
+    "text": "A divine light surrounds deer, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "04ec5e5feb8e93",
+    "speaker": "narrator",
+    "text": "A warm light envelops deer and the character seems a bit healthier."
+  },
+  {
+    "key": "0b7b06ca5b3323",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around deer, purifying their spirit and lifting any negative influences."
   },
   {
     "key": "084e21f9af40ec",
@@ -2030,6 +2210,31 @@
     "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Magical protection"
   },
   {
+    "key": "04184304f9b693",
+    "speaker": "narrator",
+    "text": "The priest shakes his head politely. It isn't something he needs."
+  },
+  {
+    "key": "00b8a584d17172",
+    "speaker": "narrator",
+    "text": "Priest has nothing to sell you."
+  },
+  {
+    "key": "0a2ac420179890",
+    "speaker": "narrator",
+    "text": "A divine light surrounds priest, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "04340a330bbfa8",
+    "speaker": "narrator",
+    "text": "A warm light envelops priest and the character seems a bit healthier."
+  },
+  {
+    "key": "1b5bd6d81cdf8f",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around priest, purifying their spirit and lifting any negative influences."
+  },
+  {
     "key": "14c6d7ba6b1f0a",
     "speaker": "narrator",
     "text": "The priest smiles."
@@ -2065,9 +2270,9 @@
     "text": "You have explored every corner of Willowbrook. The village feels more like home, and you are ready for what lies ahead."
   },
   {
-    "key": "01077f8566a488",
+    "key": "04b08f693320b1",
     "speaker": "narrator",
-    "text": "The merchant examines the rusty hoe but shakes his head."
+    "text": "The merchant weighs it in his palm and hands it back."
   },
   {
     "key": "17d317ea4fc5f2",
@@ -2078,6 +2283,26 @@
     "key": "06c49bbc27a458",
     "speaker": "merchant",
     "text": "That's kind, friend, but you'll want every bite of that where you're going. Keep it."
+  },
+  {
+    "key": "194bb4c5ea311f",
+    "speaker": "narrator",
+    "text": "Merchant has nothing to sell you."
+  },
+  {
+    "key": "109b877bc08c22",
+    "speaker": "narrator",
+    "text": "A divine light surrounds merchant, and they seem strengthened and more resolute."
+  },
+  {
+    "key": "0a45fc7717c514",
+    "speaker": "narrator",
+    "text": "A warm light envelops merchant and the character seems a bit healthier."
+  },
+  {
+    "key": "0c396668982f77",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows around merchant, purifying their spirit and lifting any negative influences."
   },
   {
     "key": "182c839e0a2572",

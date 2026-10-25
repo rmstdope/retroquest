@@ -65,6 +65,44 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'A small nose twitches' },
     { speaker: 'narrator', opening: "You have a rod, but you're not quite" },
     { speaker: 'narrator', opening: 'The nearby plants seem to respond' },
+    /** Act I's stock replies (rq-bio): one fixed line per person, never naming the item. */
+    { speaker: 'narrator', opening: 'Tilda shakes her head politely.' },
+    { speaker: 'narrator', opening: 'The priest shakes his head politely.' },
+    {
+      speaker: 'narrator',
+      opening: 'The deer sniffs at it and turns its head away.',
+    },
+    { speaker: 'narrator', opening: 'Grandmother turns it over in her hands.' },
+    {
+      speaker: 'narrator',
+      opening: 'Mira regards it, then shakes her head gently.',
+    },
+    {
+      speaker: 'narrator',
+      opening: 'The blacksmith gives it a glance and hands it back.',
+    },
+    {
+      speaker: 'narrator',
+      opening: 'The fisherman eyes it with mild curiosity, then shrugs.',
+    },
+    {
+      speaker: 'narrator',
+      opening: 'The merchant weighs it in his palm and hands it back.',
+    },
+    {
+      speaker: 'narrator',
+      opening: 'Patches sniffs at your offering from the shadows',
+    },
+    { speaker: 'narrator', opening: 'Tilda has nothing to sell you.' },
+    { speaker: 'narrator', opening: 'Patches has nothing to sell you.' },
+    {
+      speaker: 'shopkeeper',
+      opening: "Sorry, friend, that's not something I carry.",
+    },
+    { speaker: 'narrator', opening: "You don't see that here." },
+    { speaker: 'narrator', opening: 'A divine light surrounds Tilda' },
+    { speaker: 'narrator', opening: 'A warm light envelops Tilda' },
+    { speaker: 'narrator', opening: 'A cleansing energy flows around Tilda' },
     /** The `hint` answer: its opening line, the quiet line and each quest's line under its name. */
     { speaker: 'narrator', opening: 'You stop and think over what you know.' },
     { speaker: 'narrator', opening: 'You think it over. Nothing presses' },
@@ -125,6 +163,38 @@ describe.each([1, 2, 3, 4])('narration coverage of Act %i', (act) => {
       if (clip) expect(clip.speaker).toBe(expected.speaker)
     },
   )
+})
+
+describe('Act I stock replies in the script (rq-bio)', () => {
+  const script = readJson<ScriptLine[]>('tts/act1/script.json')
+
+  it('holds each give refusal once, whatever item was offered', () => {
+    for (const opening of [
+      'Tilda shakes her head politely.',
+      'The priest shakes his head politely.',
+      'The deer sniffs at it',
+      'Grandmother turns it over',
+      'Mira regards it',
+      'The blacksmith gives it a glance',
+      'The fisherman eyes it',
+      'The merchant weighs it',
+      'Patches sniffs at your offering',
+    ]) {
+      expect(
+        script.filter((line) => line.text.startsWith(opening)),
+        opening,
+      ).toHaveLength(1)
+    }
+  })
+
+  it('no longer holds a stock reply that names the item or the typed word', () => {
+    const echoes = script.filter((line) =>
+      /doesn't seem interested in the|to sell right now|You don't see any|looks at the (bread|faded|rusty)|examines the|curiously but/.test(
+        line.text,
+      ),
+    )
+    expect(echoes).toEqual([])
+  })
 })
 
 /** The replies to resting that are read aloud: the everyday one in every act, and the special ones where a room gives them. */

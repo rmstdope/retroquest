@@ -470,7 +470,7 @@ Welcome to
     if (item) return item.examine(this.state)
     const character = this.findCharacter(target)
     if (character) return character.examine(this.state)
-    return `You don't see any '${target}' here.`
+    return "You don't see that here."
   }
 
   /** The visited rooms and their exits. */

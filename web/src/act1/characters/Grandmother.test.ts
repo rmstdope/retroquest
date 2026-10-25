@@ -62,14 +62,14 @@ describe('Grandmother and other gifts', () => {
     )
   })
 
-  it('looks at a gift she has no use for, her name capitalised', () => {
+  it('turns over a gift she has no use for, her name capitalised', () => {
     const game = cottageGame()
     game.state.addItemToInventory(new Key())
 
     const response = executeCommands(game, ['give key to grandmother'])
 
     expect(response).toContain(
-      '[character_name]Grandmother[/character_name] looks at',
+      '[character_name]Grandmother[/character_name] turns it over in her hands.',
     )
   })
 })

@@ -92,7 +92,7 @@ describe('Shopkeeper dialogue markup', () => {
     const answer = gameInStore().commandParser.parse(
       'buy lantern from shopkeeper',
     )
-    expect(answer).toContain('for sale')
+    expect(answer).toContain("that's not something I carry")
     expectQuotesInsideDialogue(answer)
     expectDialogueSpeaker(answer, 'shopkeeper')
   })

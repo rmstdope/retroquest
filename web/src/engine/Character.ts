@@ -67,14 +67,12 @@ export class Character {
   }
 
   /**
-   * The player asks to buy an item. By default the character sells nothing,
-   * the sentence opening with the name in title case (see `titleCase`).
+   * The player asks to buy an item. By default the character sells nothing;
+   * the reply names who answered, never the item, so one line serves every
+   * item, and opens with the name in title case (see `titleCase`).
    */
-  buyItem(_gameState: GameState, itemName: string): string {
-    return (
-      `[character_name]${titleCase(this.name)}[/character_name] does not have any ` +
-      `[item_name]${itemName}[/item_name] to sell right now.`
-    )
+  buyItem(_gameState: GameState, _itemName: string): string {
+    return `[character_name]${titleCase(this.name)}[/character_name] has nothing to sell you.`
   }
 }
 

@@ -368,8 +368,7 @@ describe('Elena answers to her own name (rq-aum)', () => {
   it('opens a refused sale with her capitalised name (rq-05l)', () => {
     const game = atInn()
     expect(game.commandParser.parse('buy ale from barmaid elena')).toBe(
-      '[character_name]Barmaid Elena[/character_name] does not have any ' +
-        '[item_name]ale[/item_name] to sell right now.',
+      '[character_name]Barmaid Elena[/character_name] has nothing to sell you.',
     )
   })
 })

@@ -1,4 +1,4 @@
-import { Character, type GameState, characterName } from '@/engine'
+import { Character, type GameState, type Item, characterName } from '@/engine'
 import { HiddenGlade } from '../rooms/HiddenGlade'
 
 /**
@@ -23,6 +23,11 @@ export class Deer extends Character {
       `The ${characterName(this.name)} does not answer, not in words. ` +
       this.wordlessMoment(gameState)
     )
+  }
+
+  /** The deer turns away from any gift; the reply never names the item. */
+  override giveItem(_gameState: GameState, _item: Item): string {
+    return `The ${characterName(this.name)} sniffs at it and turns its head away.`
   }
 
   /** Looking at the deer also catches its gaze and the moment it shares. */

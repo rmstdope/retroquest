@@ -181,9 +181,7 @@ export class Merchant extends Character {
       )
     }
     return (
-      `The ${characterName(this.name)} examines the [item_name]` +
-      item.name +
-      '[/item_name] but shakes his head. ' +
+      `The ${characterName(this.name)} weighs it in his palm and hands it back. ` +
       speech('Not interested in that, friend.')
     )
   }

@@ -59,7 +59,7 @@ export class Patches extends Character {
       )
     }
     return (
-      `${characterName(this.name)} sniffs at the [item_name]${item.name}[/item_name] ` +
+      `${characterName(this.name)} sniffs at your offering ` +
       'from the shadows and stays put. ' +
       'Perhaps she would rather hear her name.'
     )

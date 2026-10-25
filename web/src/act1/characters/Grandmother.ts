@@ -403,9 +403,7 @@ export class Grandmother extends Character {
     }
 
     return (
-      `${characterName('Grandmother')} looks at the [item_name]` +
-      item.name +
-      '[/item_name]. ' +
+      `${characterName('Grandmother')} turns it over in her hands. ` +
       speech("I'm not sure what to do with this, dear.")
     )
   }

@@ -37,9 +37,10 @@ describe('Character', () => {
     expect(mira.giveItem(gs, bread)).toContain(
       "doesn't seem interested in the [item_name]bread[/item_name]",
     )
-    expect(mira.buyItem(gs, 'rope')).toContain(
-      'does not have any [item_name]rope[/item_name] to sell',
+    expect(mira.buyItem(gs, 'rope')).toBe(
+      '[character_name]Mira[/character_name] has nothing to sell you.',
     )
+    expect(mira.buyItem(gs, 'sword')).toBe(mira.buyItem(gs, 'rope'))
   })
 
   it('opens a refused gift with the name capitalised word by word', () => {
@@ -63,8 +64,7 @@ describe('Character', () => {
   it('opens a refused sale and the default talk with the name capitalised (rq-05l)', () => {
     const elena = new Character({ name: 'barmaid elena', description: 'd' })
     expect(elena.buyItem(gs, 'ale')).toBe(
-      '[character_name]Barmaid Elena[/character_name] does not have any ' +
-        '[item_name]ale[/item_name] to sell right now.',
+      '[character_name]Barmaid Elena[/character_name] has nothing to sell you.',
     )
     expect(elena.talkTo(gs)).toBe(
       '[character_name]Barmaid Elena[/character_name] has nothing to say right now.',
@@ -74,7 +74,7 @@ describe('Character', () => {
       description: 'd',
     })
     expect(captain.buyItem(gs, 'rope')).toMatch(
-      /^\[character_name\]Captain of the Guard\[\/character_name\] does not/,
+      /^\[character_name\]Captain of the Guard\[\/character_name\] has nothing to sell/,
     )
     expect(captain.talkTo(gs)).toMatch(
       /^\[character_name\]Captain of the Guard\[\/character_name\] has nothing/,
