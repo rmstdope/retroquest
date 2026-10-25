@@ -29784,12 +29784,12 @@
    {
     "word": "A",
     "start": 0.0,
-    "end": 0.36
+    "end": 0.64
    },
    {
     "word": "traveller\u2014",
-    "start": 0.36,
-    "end": 1.3
+    "start": 0.64,
+    "end": 0.74
    }
   ]
  },
@@ -45415,17 +45415,17 @@
  "11ab7f54ea35d4": {
   "file": "11ab7f54ea35d4.mp3",
   "speaker": "sir cedric",
-  "duration": 1.718,
+  "duration": 1.625,
   "words": [
    {
     "word": "Guard.",
     "start": 0.0,
-    "end": 0.72
+    "end": 0.66
    },
    {
     "word": "Good.",
-    "start": 0.72,
-    "end": 1.34
+    "start": 0.84,
+    "end": 1.3
    }
   ]
  },

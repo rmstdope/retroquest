@@ -36,6 +36,13 @@
       "bitrate": "64k",
       "channels": 1,
       "lufs": -16
+    },
+    "quality": {
+      "soundAlike": [
+        ["all right", "alright"],
+        ["deer", "dear"],
+        ["guard", "god"]
+      ]
     }
   }
 }
