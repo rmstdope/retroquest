@@ -43,6 +43,17 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.roomName).toBe('Garden')
   })
 
+  it('shows the room a debug script reached when a later line fails', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response('go north\ntake nothing\n')),
+    )
+    const store = await startedStore()
+    await store.runDebugScript('walk')
+    expect(store.panelsHeld).toBe(false)
+    expect(store.roomName).toBe('Garden')
+  })
+
   it('keeps the bag, its dot, the quest count and its dot until each is released', async () => {
     const store = await startedStore()
     expect(store.activeQuests).toHaveLength(1)
