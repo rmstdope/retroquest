@@ -59,4 +59,25 @@ describe('Character', () => {
       /^\[character_name\]Captain of the Guard\[\/character_name\] doesn't/,
     )
   })
+
+  it('opens a refused sale and the default talk with the name capitalised (rq-05l)', () => {
+    const elena = new Character({ name: 'barmaid elena', description: 'd' })
+    expect(elena.buyItem(gs, 'ale')).toBe(
+      '[character_name]Barmaid Elena[/character_name] does not have any ' +
+        '[item_name]ale[/item_name] to sell right now.',
+    )
+    expect(elena.talkTo(gs)).toBe(
+      '[character_name]Barmaid Elena[/character_name] has nothing to say right now.',
+    )
+    const captain = new Character({
+      name: 'Captain of the Guard',
+      description: 'd',
+    })
+    expect(captain.buyItem(gs, 'rope')).toMatch(
+      /^\[character_name\]Captain of the Guard\[\/character_name\] does not/,
+    )
+    expect(captain.talkTo(gs)).toMatch(
+      /^\[character_name\]Captain of the Guard\[\/character_name\] has nothing/,
+    )
+  })
 })
