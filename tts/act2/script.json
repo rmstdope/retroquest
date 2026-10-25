@@ -115,6 +115,11 @@
     "text": "A broad old man in a patched grey castle cloak, sitting straight-backed by a small fire. His hands are scarred across the knuckles, and he watches the path between Willowbrook and Greendale the way a sentry watches a gate."
   },
   {
+    "key": "002a9415ed66ac",
+    "speaker": "narrator",
+    "text": "You search around the Mountain Path, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "09097b529ab3e9",
     "speaker": "narrator",
     "text": "You rest for a moment, gathering your strength."
@@ -200,6 +205,11 @@
     "text": "A seasoned officer of Greendale's guard, wearing polished mail and bearing the insignia of the city watch. His weathered face shows years of experience maintaining order at the gates."
   },
   {
+    "key": "18d527016477d6",
+    "speaker": "narrator",
+    "text": "The Gate Captain stands vigilant, watching all who approach. It would be improper to search while he observes you so closely. Perhaps he would relax if you showed him proper papers."
+  },
+  {
     "key": "134f7951e7b0f1",
     "speaker": "narrator",
     "text": "The Gate Captain turns the pass over in his hands. He runs a thumb along the line where a name should be; it has been scraped away with a blade. Then he looks at the seal, and grunts."
@@ -275,6 +285,11 @@
     "text": "A loud, enthusiastic man dressed in official Greendale colors who announces news and events throughout the city. He carries a brass bell and scroll with current announcements."
   },
   {
+    "key": "028dcfdf4dc0f0",
+    "speaker": "narrator",
+    "text": "You search around the Main Square, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "1b94d171d51948",
     "speaker": "narrator",
     "text": "The merchant's flyer advertises quality goods from Master Merchant Aldric and would serve as a good introduction when visiting the Market District."
@@ -318,6 +333,11 @@
     "key": "0708434f648e37",
     "speaker": "narrator",
     "text": "A stern-looking officer in polished armor who oversees security for the castle grounds. He provides guidance on proper protocol for meeting with nobility."
+  },
+  {
+    "key": "1a6f2c07910499",
+    "speaker": "narrator",
+    "text": "You search around the Castle Approach, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "16fd72a1f82f3b",
@@ -473,6 +493,11 @@
     "key": "14931572cb494a",
     "speaker": "narrator",
     "text": "Young men and women training to become knights under the guidance of the Training Master and Sir Cedric. They practice sword work and horsemanship with determination, though they occasionally pause to whisper among themselves about castle affairs and their mentors' reputations."
+  },
+  {
+    "key": "1a7e45491cfe0d",
+    "speaker": "narrator",
+    "text": "You don't find anything of particular interest around the benches. The squires are watching you curiously — perhaps you should talk to them first to learn more about this place."
   },
   {
     "key": "0678b14852e2e7",
@@ -735,6 +760,11 @@
     "text": "A weather-beaten man with worried eyes who oversees merchant caravans. He paces anxiously, clearly distressed about some urgent matter."
   },
   {
+    "key": "00b441d8db7145",
+    "speaker": "narrator",
+    "text": "You search around the Market District, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "167d64e0c9be43",
     "speaker": "narrator",
     "text": "Master Merchant Aldric's eyes light up as he examines the flyer."
@@ -858,6 +888,11 @@
     "key": "0f47842ed7faa3",
     "speaker": "narrator",
     "text": "A young woman who moves slowly and appears weakened by some affliction. Dark circles under her eyes and a pale complexion suggest she is suffering from a magical curse."
+  },
+  {
+    "key": "052a440b1f96a3",
+    "speaker": "narrator",
+    "text": "You search around the The Silver Stag Inn, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "034d4ab44856c6",
@@ -1050,6 +1085,11 @@
     "text": "A distinguished military officer wearing elaborate ceremonial armor adorned with Greendale's coat of arms. His bearing speaks of years of command and the authority to make important decisions affecting the realm's knights."
   },
   {
+    "key": "150edf8e443a7d",
+    "speaker": "narrator",
+    "text": "The Court Herald stops you from accessing the archives. You need formal approval from him first."
+  },
+  {
     "key": "1a75ac9ab95aa1",
     "speaker": "court herald",
     "text": "Excellent! This is a properly certified entry pass. I hereby formally present you to the court and grant you access to our historical archives. Your credentials are now on record, and you may research freely in our collections."
@@ -1058,6 +1098,11 @@
     "key": "0fb82a4276ec64",
     "speaker": "court herald",
     "text": "You have been formally presented to the court and your credentials are on record. You may access the historical archives and speak with court historians about your research. Petitions that were the king's go to the Lord Commander now, by his order, until His Majesty is found."
+  },
+  {
+    "key": "123d77411ba690",
+    "speaker": "narrator",
+    "text": "The archives are vast, filled with countless books and scrolls. You don't know where to start. You need guidance from someone familiar with these records."
   },
   {
     "key": "1835225011c0c1",
@@ -1125,6 +1170,11 @@
     "text": "You saw the last name in our register, then. The same week. We have told ourselves it means nothing, and none of us believes it."
   },
   {
+    "key": "1d13a90e3bff8d",
+    "speaker": "narrator",
+    "text": "You have already been through the archive. One entry in the visitors' register stays with you:"
+  },
+  {
     "key": "0536a89fc3609b",
     "speaker": "narrator",
     "text": "Residential Quarter"
@@ -1153,6 +1203,11 @@
     "key": "026b1841990df8",
     "speaker": "narrator",
     "text": "Friendly local families who have lived in Greendale for generations. They know the city's history and are happy to share stories with helpful visitors."
+  },
+  {
+    "key": "0e7f5d33d1d195",
+    "speaker": "narrator",
+    "text": "Behind some old storage crates and forgotten furniture in the basements, you discover a concealed entrance in the stone wall. A narrow tunnel leads underground to what appears to be an ancient chamber. You've found a secret passage to a Hidden Library! Use 'go secret_passage' to enter this mysterious repository."
   },
   {
     "key": "1f2ffe60e908fe",
@@ -1280,6 +1335,11 @@
     "text": "A wise and nurturing healer with graying hair and gentle eyes that seem to see right through to your magical potential. She wears simple robes adorned with healing herbs, and her hands are steady from years of tending to the sick and wounded. There's an aura of calm competence about her that inspires confidence in her abilities."
   },
   {
+    "key": "0a8b1419d88a06",
+    "speaker": "narrator",
+    "text": "You search around the Healer's House, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "1aede3687817c4",
     "speaker": "master healer lyria",
     "text": "Elena still? Strengthen her, wash her in untouched water, then unbind it. In that order, or not at all."
@@ -1318,11 +1378,6 @@
     "key": "0c1246e24bc0c6",
     "speaker": "master healer lyria",
     "text": "He's holding on. The herbs bought him days, not weeks. Find me that focus."
-  },
-  {
-    "key": "0e7f5d33d1d195",
-    "speaker": "narrator",
-    "text": "Behind some old storage crates and forgotten furniture in the basements, you discover a concealed entrance in the stone wall. A narrow tunnel leads underground to what appears to be an ancient chamber. You've found a secret passage to a Hidden Library! Use 'go secret_passage' to enter this mysterious repository."
   },
   {
     "key": "0353a5bd1db1d3",
@@ -1373,6 +1428,11 @@
     "key": "17df78b0cad06c",
     "speaker": "narrator",
     "text": "Up close, the Spectral Librarian's robes are worn thin at the cuffs, the way a working scholar's are. They watch your hands more than your face, the way a librarian watches anyone standing near the books."
+  },
+  {
+    "key": "1d8e65e82ac2e4",
+    "speaker": "narrator",
+    "text": "You search around the Hidden Library, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "04eb476d577a65",
@@ -1585,6 +1645,11 @@
     "text": "A thin figure in moss-green robes, weathered by years outdoors. Charms of bark, bone and braided grass hang from their belt. Every so often they glance at the treeline, the way you would at someone who might be listening."
   },
   {
+    "key": "1fd70c621784c3",
+    "speaker": "narrator",
+    "text": "You search around the Forest Transition, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "1fc8ace3b8036a",
     "speaker": "narrator",
     "text": "The standing stones continue to pulse with ancient magic, their druidic runes a testament to the old ways."
@@ -1735,6 +1800,11 @@
     "text": "Motes of light no bigger than a thumbnail, each with wings like a split beech-nut husk. They never all hold still at once. The longer you watch, the more it seems they are watching you back."
   },
   {
+    "key": "003a859de2bf0c",
+    "speaker": "narrator",
+    "text": "You search around the Forest Entrance, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "01991ff198ef2e",
     "speaker": "narrator",
     "text": "The moment you touch it, you feel a surge of natural magic - this is no ordinary acorn, but a sacred offering imbued with the forest's blessing. The forest sprites whisper approvingly as you claim this gift."
@@ -1808,6 +1878,11 @@
     "key": "1c8057336d5c62",
     "speaker": "narrator",
     "text": "The enchanted acorn pulses with magical energy in response to the sacred grove, warm as a held hand, and turns in your palm toward the silver-barked tree."
+  },
+  {
+    "key": "00bda3fbdb5cee",
+    "speaker": "narrator",
+    "text": "You search around the Ancient Grove, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "0d3c3806603aed",
@@ -1893,6 +1968,11 @@
     "key": "0d40d575112956",
     "speaker": "narrator",
     "text": "A peaceful meadow opens around a small stream that babbles over smooth stones. Wildflowers blanket the ground and butterflies drift through warm sunlight. The water's murmur soothes, yet faint voices ride the breeze — whispers hinting at ancient secrets. Near the crystal stream you sense watchful, unseen guardians."
+  },
+  {
+    "key": "02c1300b04283d",
+    "speaker": "narrator",
+    "text": "You search around the Whispering Glade, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "18b4eebd0b9a97",
@@ -2608,6 +2688,11 @@
     "key": "03da8a4c79eb03",
     "speaker": "narrator",
     "text": "The druidic charm resonates with the mystical energy of this sacred place. It should be placed on the offering altar along with other sacred items to perform powerful rituals."
+  },
+  {
+    "key": "0c49d7e58ae9bf",
+    "speaker": "narrator",
+    "text": "You search around the Heart of the Forest, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "1af9858b58bf89",

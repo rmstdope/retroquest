@@ -207,7 +207,7 @@ export interface ScriptBranch {
   unset?: string[]
 }
 
-/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, rest. */
+/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, search, rest. */
 function probes(game: Game): string[] {
   const state = game.state
   const room = state.currentRoom
@@ -218,6 +218,7 @@ function probes(game: Game): string[] {
     ...room.characters.map((character) => `talk to ${character.name}`),
     ...room.characters.map((character) => `examine ${character.name}`),
     'look',
+    'search',
     'rest',
   ]
 }

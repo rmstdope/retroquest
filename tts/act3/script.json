@@ -95,6 +95,11 @@
     "text": "Armor tempered, eyes steady—Cedric stands ready for the trials. His presence is a quiet promise."
   },
   {
+    "key": "1c79593ba11c97",
+    "speaker": "narrator",
+    "text": "You search around the Mira's Hut, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "09097b529ab3e9",
     "speaker": "narrator",
     "text": "You rest for a moment, gathering your strength."
@@ -208,6 +213,11 @@
     "key": "114e88bbe80e92",
     "speaker": "sir cedric",
     "text": "Salt and old stone. Give me a wall to hold and I would know what to do. Here I just follow you."
+  },
+  {
+    "key": "0094360eac2d56",
+    "speaker": "narrator",
+    "text": "You search around the Tidal Causeway, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "052b930dc508a4",
@@ -370,6 +380,11 @@
     "text": "A dense mat of seaweed clings to the stones, slick and knotted. It seems rooted to the surf."
   },
   {
+    "key": "06ebbc3e9a2422",
+    "speaker": "narrator",
+    "text": "Apart from the three ancient warding pillars rising from the black water, the drowned courtyard holds little of interest; the pillars alone seem keyed to the moon and tide."
+  },
+  {
     "key": "18898c6897c0a2",
     "speaker": "narrator",
     "text": "You rinse salt and scrape coral from the carved channels. Glyph-lines breathe again, ready to take the Tideward Sigil."
@@ -465,6 +480,11 @@
     "text": "A salt-crusted figure who tends the ruined jetty and watches for those who come and go."
   },
   {
+    "key": "06a1e37c2e4c5f",
+    "speaker": "narrator",
+    "text": "You search around the Collapsed Pier, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "16030f93810545",
     "speaker": "narrator",
     "text": "The lock is too corroded for the key to turn. As you tug, the corroded key jams in the mechanism and will not come free."
@@ -525,6 +545,11 @@
     "text": "An empty bracket waits for a lantern."
   },
   {
+    "key": "0847beb458dafc",
+    "speaker": "narrator",
+    "text": "You wade through chilled water. Three empty brackets line the approach; their carved grooves catch the faint tide-light."
+  },
+  {
     "key": "10004d2376cf45",
     "speaker": "narrator",
     "text": "The prism lantern settles into the bracket; water hums softly as it takes the weight."
@@ -543,6 +568,11 @@
     "key": "055a8740ae171d",
     "speaker": "narrator",
     "text": "Light fills the mounts and the chamber sighs. Threads of pearly flame trace the carvings and the stone seems to part its lips. A pale corridor unfurls where shadow once lay; it feels older than living memory and leads toward what might be the sanctum, veiled in salt and promise. The room has answered — more of its secrets lie open now."
+  },
+  {
+    "key": "0a6eeae6ee8a0e",
+    "speaker": "narrator",
+    "text": "The niches glow with steady, pearlescent flame. The lanterns you set here still burn."
   },
   {
     "key": "03944bc5471056",
@@ -583,6 +613,11 @@
     "key": "1d16ff2194f7c5",
     "speaker": "narrator",
     "text": "A figure of gathered waters and ward-sigils, its form rippling with the tide's breath."
+  },
+  {
+    "key": "1843bb95137561",
+    "speaker": "narrator",
+    "text": "You search around the Sanctum of the Tide, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "0fdf42af5b3ad5",
@@ -765,6 +800,11 @@
     "text": "A thoughtful figure with soot-streaked robes, carrying notes on reflective geometry and the craft of mirrors."
   },
   {
+    "key": "09ec25e07db3f0",
+    "speaker": "narrator",
+    "text": "You search around the Lower Switchbacks, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "035a7e5f53d3f2",
     "speaker": "narrator",
     "text": "A battered brass segment whose face still catches light. It looks fragile but usable when bound into the mirror mounts."
@@ -893,6 +933,11 @@
     "key": "02b5fc311b9480",
     "speaker": "narrator",
     "text": "Ash begins to fall over the slopes, slow and grey as rain. Down the mountain the braziers gutter one by one and sink to embers. The curse lies heavier here than it did by the sea."
+  },
+  {
+    "key": "0f51807a801d39",
+    "speaker": "narrator",
+    "text": "You search around the Mirror Terraces, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "1c8dd246483304",
@@ -1105,6 +1150,11 @@
     "text": "Rough, glassy fragments of slag cooled against the tunnel walls. When ground with ash-fern it forms a basic heat‑ward paste."
   },
   {
+    "key": "11b2a24ff90bb6",
+    "speaker": "narrator",
+    "text": "You search the Ember Gallery again but find nothing new beyond the worktables and sorted fragments."
+  },
+  {
     "key": "194f4f9e73fe62",
     "speaker": "narrator",
     "text": "A coarse paste of ash-fern and cooled slag prepared to seal and stabilize vent stones against the mountain's heat. Use it at the fumaroles after calibration."
@@ -1160,6 +1210,11 @@
     "text": "A tall, masked figure in fire-etched robes stands by the vents, staff in hand. His eyes glint with emberlight, and he seems to listen to the mountain's breath."
   },
   {
+    "key": "0f93f721562bb9",
+    "speaker": "narrator",
+    "text": "You search around the Fumarole Passages, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "05c2021fb1b284",
     "speaker": "narrator",
     "text": "The Phoenix Guardian watches the vents."
@@ -1183,6 +1238,11 @@
     "key": "070602dd01b54d",
     "speaker": "narrator",
     "text": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars. The warmth is drowsy here, as if the bowl would rather you sat and rested a while."
+  },
+  {
+    "key": "037c838a76b61d",
+    "speaker": "narrator",
+    "text": "You search around the Phoenix Crater, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "1dbf54ee04c21c",
@@ -1325,6 +1385,11 @@
     "text": "A grizzled foreman with a ring of keys and a worried look."
   },
   {
+    "key": "1c966f69ae9bec",
+    "speaker": "narrator",
+    "text": "You search around the Cavern Mouth, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "01fef373a5e7f4",
     "speaker": "narrator",
     "text": "Miners' Rescue"
@@ -1368,6 +1433,11 @@
     "key": "137c4c6c9004e4",
     "speaker": "narrator",
     "text": "The padlock is sturdy and rusted, but the keyhole looks intact. The crate is labeled for rescue supplies."
+  },
+  {
+    "key": "0775e8f47eb657",
+    "speaker": "narrator",
+    "text": "You've already found the heavy supply crate, locked with its large iron padlock. The label still reads: 'Rescue Supplies — For Emergency Use Only.'"
   },
   {
     "key": "099a19b5cd2b39",
@@ -1418,6 +1488,11 @@
     "key": "1ba33a8471eeb2",
     "speaker": "narrator",
     "text": "The collapse appears unstable, with loose stones precariously balanced above. You can hear desperate voices calling from beyond the barrier—miners are definitely trapped on the other side. The ceiling sags dangerously, but with the right reinforcement, you might be able to stabilize the collapse and then clear a safe passage through."
+  },
+  {
+    "key": "1064ba5d748b37",
+    "speaker": "narrator",
+    "text": "You search around the Collapsed Galleries, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "0a9f3e8ef0d9bf",
@@ -1573,6 +1648,11 @@
     "key": "021295fcab54d8",
     "speaker": "narrator",
     "text": "Brittle parchment bound with faded golden thread. Most of the script has flaked away. One line survives, written in many hands, one beneath another: “I take what is given, and I return ___.” Each hand finished it with a word of its own, and every one of those words has worn away."
+  },
+  {
+    "key": "11de446e632a0b",
+    "speaker": "narrator",
+    "text": "You have already discovered the old oath scrolls hidden in this chamber. The alcoves hold no further secrets."
   },
   {
     "key": "151f461163ab31",
@@ -1750,6 +1830,11 @@
     "text": "Translucent figures drift through the chamber like wisps of mist, their forms barely visible in the dim light. They move with purpose yet seem trapped in an endless cycle, their ethereal voices creating a constant murmur of unintelligible whispers that echo off the ancient stones."
   },
   {
+    "key": "12bfe9d46fcdda",
+    "speaker": "narrator",
+    "text": "You search around the Stillness Vestibule, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "1dce594469d8e4",
     "speaker": "narrator",
     "text": "As the blessing leaves your lips, the echo stones hum, and you feel it in your bones. Silver light runs along their carved channels like water finding its course. Then the light settles into a slow, steady glow."
@@ -1908,6 +1993,11 @@
     "key": "0dd0556bdd9afb",
     "speaker": "narrator",
     "text": "A magnificent dragon of immense age, scales gleaming like polished obsidian in the ember-light. Ancient wisdom burns in golden eyes that have witnessed countless ages. Slow breaths stir the air like distant thunder."
+  },
+  {
+    "key": "0f13d21bb3d9fe",
+    "speaker": "narrator",
+    "text": "You search around the Dragon's Hall, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "0c1b860093a52d",
@@ -2278,6 +2368,11 @@
     "key": "0d209a4ba101cd",
     "speaker": "mira",
     "text": "Your parents walked into the dark without me once. I will not let you do the same. Go with courage, wisdom, and selflessness—I am coming with you."
+  },
+  {
+    "key": "1d78843bd3416f",
+    "speaker": "narrator",
+    "text": "You search around the Entrance to Malakar's Fortress, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "04b146cfb79545",

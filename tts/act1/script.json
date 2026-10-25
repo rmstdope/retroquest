@@ -45,6 +45,11 @@
     "text": "It has no face you can find, only a height and a nearness. When it speaks, it speaks your name."
   },
   {
+    "key": "1eedd50668e9ec",
+    "speaker": "narrator",
+    "text": "Your hands find nothing. The dark has no floor and the dream no edges. The whisper comes again, nearer, and it is your name."
+  },
+  {
     "key": "1b9f4255b10ad6",
     "speaker": "narrator",
     "text": "You are asleep already. The voice says your name again, nearer."
@@ -103,6 +108,11 @@
     "key": "06a824d7accd07",
     "speaker": "narrator",
     "text": "Elior's wise and loving grandmother, always ready with advice and a gentle smile. She has raised Elior since his parents vanished."
+  },
+  {
+    "key": "1b614fc868a707",
+    "speaker": "narrator",
+    "text": "You search the cottage thoroughly and discover a faded photograph hidden in a drawer."
   },
   {
     "key": "09097b529ab3e9",
@@ -205,11 +215,6 @@
     "text": "You recall your father's writings on the Revive spell. The knowledge feels familiar."
   },
   {
-    "key": "1b614fc868a707",
-    "speaker": "narrator",
-    "text": "You search the cottage thoroughly and discover a faded photograph hidden in a drawer."
-  },
-  {
     "key": "111769f2b08397",
     "speaker": "narrator",
     "text": "The Faded Photograph"
@@ -228,6 +233,11 @@
     "key": "04a40f5938d387",
     "speaker": "narrator",
     "text": "Seek the truth where the river bends."
+  },
+  {
+    "key": "14e3f26422cc34",
+    "speaker": "narrator",
+    "text": "You search the cottage but find nothing new."
   },
   {
     "key": "1ba5f1fad1d316",
@@ -290,6 +300,11 @@
     "text": "A small kitchen knife with a dull blade. It won't cut much, but could be sharpened."
   },
   {
+    "key": "0098d73fd3fadf",
+    "speaker": "narrator",
+    "text": "You search around the Vegetable Field, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "0d9183b0f6f76b",
     "speaker": "narrator",
     "text": "The ground is tough, and you unearth a small, tarnished coin! You quickly pocket it."
@@ -340,6 +355,11 @@
     "text": "You swing the rusty hoe, but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though."
   },
   {
+    "key": "1eedfba9ff0936",
+    "speaker": "narrator",
+    "text": "You search around the Chicken Coop, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "0bc4e614e40208",
     "speaker": "narrator",
     "text": "The chickens peck at the bread excitedly, and in the flapping commotion something shiny is knocked from a high rafter. It's a small key, hidden up there long ago by someone who did not want it found!"
@@ -385,6 +405,11 @@
     "text": "Tilda, the baker's wife: a friendly Willowbrook local, always eager to share the latest gossip or rumors about the village."
   },
   {
+    "key": "145b9dc5201213",
+    "speaker": "narrator",
+    "text": "You search around the Village Square, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "112de193c5fa4e",
     "speaker": "narrator",
     "text": "Villagers speak in hushed tones of strange happenings: animals refusing to leave their shelters, and shadows moving where none should be. Elior senses the fear growing among his neighbors, and the mystery deepens."
@@ -413,6 +438,11 @@
     "key": "0cfbaf6919199b",
     "speaker": "narrator",
     "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water below is dark and still. A foul stench rises from the depths, making your stomach churn. Something is very wrong here. You think you see something shiny deep within the murky water, but it's impossible to tell for sure or reach."
+  },
+  {
+    "key": "056fa02e7b1c06",
+    "speaker": "narrator",
+    "text": "You search around the Village Well, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "0022d0ca3a78d2",
@@ -453,6 +483,11 @@
     "key": "11549ac18aaa32",
     "speaker": "narrator",
     "text": "A burly, skilled craftsman who forges tools and weapons for the village. He is always ready to offer advice or sharpen a blade."
+  },
+  {
+    "key": "14b2c088262b5a",
+    "speaker": "narrator",
+    "text": "You search around the Blacksmith's Forge, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "1b1b078b4d2f85",
@@ -545,14 +580,19 @@
     "text": "A small cat with a patchwork coat of ginger, black and white, and wide green eyes."
   },
   {
-    "key": "168b41ddc89ae9",
-    "speaker": "narrator",
-    "text": "Patches was hiding in the Abandoned Shed. Carry her home to Old Man Hemlock at the General Store."
-  },
-  {
     "key": "19e3ded9968738",
     "speaker": "narrator",
     "text": "Holding the lantern high, you rummage through the clutter of rusty tools and broken crates. Tucked away in dusty corners, you find a discarded Fishing Rod, and a small Magnet!"
+  },
+  {
+    "key": "0443cad94a38f2",
+    "speaker": "narrator",
+    "text": "A pair of frightened green eyes watches you from behind the crates."
+  },
+  {
+    "key": "168b41ddc89ae9",
+    "speaker": "narrator",
+    "text": "Patches was hiding in the Abandoned Shed. Carry her home to Old Man Hemlock at the General Store."
   },
   {
     "key": "02f2a5ac7a8165",
@@ -563,6 +603,11 @@
     "key": "0f68534e9ba49a",
     "speaker": "narrator",
     "text": "A small, surprisingly strong magnet. It might be useful for retrieving metallic objects from hard-to-reach places."
+  },
+  {
+    "key": "0ba54359667b64",
+    "speaker": "narrator",
+    "text": "You search around the shed again, but find nothing else of interest among the clutter."
   },
   {
     "key": "182833db6adeb7",
@@ -640,6 +685,11 @@
     "text": "The village healer and wise woman, Mira is known for her knowledge of herbs and magic. She guides Elior on his journey."
   },
   {
+    "key": "1c79593ba11c97",
+    "speaker": "narrator",
+    "text": "You search around the Mira's Hut, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "1b8d61ff81197f",
     "speaker": "narrator",
     "text": "Mira has urged Elior to connect with the living world and learn from its magic. The path forward is uncertain, but hope stirs in the heart of Willowbrook."
@@ -705,6 +755,11 @@
     "text": "Old Man Hemlock, the owner of the General Store, always bustling about and eager to strike a bargain or share a rumor."
   },
   {
+    "key": "083f9e2e23d369",
+    "speaker": "narrator",
+    "text": "You search around the General Store, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "0c2daf86c44092",
     "speaker": "narrator",
     "text": "Shopkeeper quickly steps over."
@@ -768,6 +823,11 @@
     "key": "1ac71bc4b41ee6",
     "speaker": "narrator",
     "text": "A strange mechanism of black iron, all levers and gears, that doesn't belong to the old mill's design. It whirs on its own, and a faint pull tugs at the floorboards around it, as if it were drawing something up from deep beneath the mill. A twisted rune is scored into its housing. Its gears turn freely; something threaded through them might stop them."
+  },
+  {
+    "key": "1766f6a0d7e9fe",
+    "speaker": "narrator",
+    "text": "You search around the Old Mill, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "0de2d1d946915e",
@@ -848,6 +908,11 @@
     "key": "0ed6cc055fb83e",
     "speaker": "narrator",
     "text": "A weathered old man who spends his days by the riverbank, fishing and humming quiet tunes. He knows much about the river and its secrets."
+  },
+  {
+    "key": "165757030a4e44",
+    "speaker": "narrator",
+    "text": "You search along the bank, among the reeds and the mud, but find nothing of interest."
   },
   {
     "key": "0dec4340207d8f",
@@ -990,6 +1055,11 @@
     "text": "A dense, leafy bush. It looks like it might be hiding something, or just be a bush."
   },
   {
+    "key": "18864a414506da",
+    "speaker": "narrator",
+    "text": "You search around the Forest Path, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "043c8fc81c2f05",
     "speaker": "narrator",
     "text": "The thick vines fall away under the sharp knife, clearing the way to a small alcove. You can see a sturdy stick in the revealed alcove."
@@ -1023,6 +1093,11 @@
     "key": "1a40afb1558cf8",
     "speaker": "narrator",
     "text": "A small, smooth pebble that glints in the sunlight. It feels oddly warm to the touch."
+  },
+  {
+    "key": "1a098a4b51b42b",
+    "speaker": "narrator",
+    "text": "You search around the Hidden Glade, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "1ae1c85579a1ef",
@@ -1118,6 +1193,11 @@
     "key": "1b280033ab58da",
     "speaker": "narrator",
     "text": "A kindly priest who tends the chapel, offering blessings and sharing the lore of Eldoria."
+  },
+  {
+    "key": "0f87d1fedfdc4a",
+    "speaker": "narrator",
+    "text": "You search around the Village Chapel, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "1c6599d8336db4",
@@ -1693,6 +1773,11 @@
     "key": "02ecbdc146e5fc",
     "speaker": "narrator",
     "text": "A traveling merchant with a cart full of wares and stories from distant lands. Always ready to trade or offer travel advice."
+  },
+  {
+    "key": "17ca10006970d9",
+    "speaker": "narrator",
+    "text": "You search around the Road to Greendale, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "02169305687430",
