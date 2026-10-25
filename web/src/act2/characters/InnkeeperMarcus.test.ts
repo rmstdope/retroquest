@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
+import { parseTurn } from '@/lantern/parseTurn'
 import { Act2 } from '../Act2'
 import { Coins } from '../items/Coins'
 import { InnkeeperMarcus } from './InnkeeperMarcus'
@@ -260,5 +261,61 @@ describe('Innkeeper Marcus introduced by name (rq-pcn)', () => {
 
     expectIntroducedByName(game.commandParser.parse('talk to innkeeper marcus'))
     expectIntroducedByName(game.commandParser.parse('talk to innkeeper marcus'))
+  })
+})
+
+describe('Innkeeper Marcus speaks every line in his quote (rq-31u)', () => {
+  /**
+   * Each of `lines` is shown inside a quote labelled with his name, and none
+   * in a narration paragraph of the story view.
+   */
+  function expectQuoted(text: string, lines: string[]): void {
+    const blocks = parseTurn(text)
+    for (const line of lines) {
+      const quote = blocks.find(
+        (block) => block.kind === 'dialogue' && block.markup.includes(line),
+      )
+      expect(quote, `"${line}" not quoted in: ${text}`).toMatchObject({
+        speaker: 'innkeeper marcus',
+      })
+      const narrated = blocks.filter(
+        (block) => block.kind === 'text' && block.markup.includes(line),
+      )
+      expect(narrated, `"${line}" narrated in: ${text}`).toEqual([])
+    }
+  }
+
+  it('before Elena is met', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+
+    expectQuoted(game.commandParser.parse('talk to innkeeper marcus'), [
+      'Welcome to The Silver Stag Inn!',
+      'Though I must say, these have been dark times for my family.',
+    ])
+  })
+
+  it('after Elena is met', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+
+    expectQuoted(game.commandParser.parse('talk to innkeeper marcus'), [
+      'Welcome to The Silver Stag Inn!',
+      'Then you understand my desperation.',
+      'It came on her the week the king went.',
+    ])
+  })
+
+  it('after the cure, with the charm and after it', () => {
+    const game = gameAfterCure()
+
+    expectQuoted(game.commandParser.parse('talk to innkeeper marcus'), [
+      'You have given me back my daughter!',
+    ])
+    expectQuoted(game.commandParser.parse('talk to innkeeper marcus'), [
+      'My daughter is healthy and happy again',
+      ILL_WIND,
+    ])
   })
 })

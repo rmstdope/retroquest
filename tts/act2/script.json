@@ -835,8 +835,8 @@
     "text": "Welcome to The Silver Stag Inn! We offer comfortable rooms and warm meals for weary travelers. I can offer you: - Room Key: 10 gold coins"
   },
   {
-    "key": "156c978b92483d",
-    "speaker": "narrator",
+    "key": "168e4494acba47",
+    "speaker": "innkeeper marcus",
     "text": "Though I must say, these have been dark times for my family. My daughter... well, perhaps you should speak with her yourself if you're looking to help those in need."
   },
   {
@@ -875,8 +875,8 @@
     "text": "Elena, the barmaid at The Silver Stag Inn, has been cursed by a dark wizard. Use your magical abilities to break the curse and save her life."
   },
   {
-    "key": "1b428b8d478000",
-    "speaker": "narrator",
+    "key": "0ad972df3bf310",
+    "speaker": "innkeeper marcus",
     "text": "You've spoken with Elena? Then you understand my desperation. The curse grows stronger each day, and I fear we don't have much time left. If you truly can help her, I'll give you anything - rooms, information, whatever you need."
   },
   {
