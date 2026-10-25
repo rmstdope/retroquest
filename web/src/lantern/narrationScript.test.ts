@@ -304,6 +304,14 @@ describe('actScript for Act I', () => {
     ).toBe('narrator')
   })
 
+  it('reads the reply to searching, which the golden path never asks for', () => {
+    expect(
+      find(
+        'You search around the Vegetable Field, but find nothing of interest beyond what you can already see.',
+      )?.speaker,
+    ).toBe('narrator')
+  })
+
   it('takes lines from using what is carried, such as the locket inscription', () => {
     expect(
       script.find((line) => line.text.startsWith("From the founders' line"))

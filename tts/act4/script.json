@@ -105,6 +105,11 @@
     "text": "The token is warm in your hand. Someone, somewhere, is glad you came."
   },
   {
+    "key": "1ecd1a8a61edf8",
+    "speaker": "narrator",
+    "text": "You search around the Fortress Gates, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "09097b529ab3e9",
     "speaker": "narrator",
     "text": "You rest for a moment, gathering your strength."
@@ -340,6 +345,11 @@
     "text": "A captain of the royal guard, his tabard black with soot. His eyes are open but see nothing, and his hand rests on a sword he has forgotten how to draw."
   },
   {
+    "key": "17fb8edd4f94f2",
+    "speaker": "narrator",
+    "text": "You search around the Outer Courtyard, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "0f4e62a865c9d3",
     "speaker": "narrator",
     "text": "The servants stop their circling and gather to look at the Guardian's Essence. One reaches out, but does not touch. They know what it is, and what it cost. For the first time, they look at you instead of through you."
@@ -540,6 +550,11 @@
     "text": "Each mirror shows a different Elior — older, younger, crowned, broken — with a different corridor stretching away behind him. Every path looks real. Most of them are lies."
   },
   {
+    "key": "116ad8a51cadc3",
+    "speaker": "narrator",
+    "text": "You search around the Mirror Labyrinth, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "07429567d9aa12",
     "speaker": "narrator",
     "text": "Hall of Echoes"
@@ -593,6 +608,11 @@
     "key": "0880679bc553f1",
     "speaker": "narrator",
     "text": "Sir Cedric, by the south door, his eyes on the knight."
+  },
+  {
+    "key": "182260c50b5057",
+    "speaker": "narrator",
+    "text": "You search around the Hall of Echoes, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "0348b7226196e6",
@@ -850,6 +870,11 @@
     "text": "Voices without mouths, thick on the stair, saying the same thing again and again."
   },
   {
+    "key": "0a5db2df6fbc96",
+    "speaker": "narrator",
+    "text": "You search around the Tower of Shadows, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "05bdc4c871c3c1",
     "speaker": "narrator",
     "text": "The token warms against your palm, and the whispers falter."
@@ -953,6 +978,11 @@
     "key": "1342b0fbef8c74",
     "speaker": "narrator",
     "text": "She is beautiful in the way the chamber is beautiful: a little too perfect, a little wrong. Her smile never reaches her eyes."
+  },
+  {
+    "key": "103af5e6aa1f09",
+    "speaker": "narrator",
+    "text": "You search around the Chamber of Whispers, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "10c09aa84a67a4",
@@ -1140,6 +1170,11 @@
     "text": "It is the shape of a man, thin as smoke. It reaches for the orbs, and they slip through its fingers."
   },
   {
+    "key": "1eee10cb1b0cc0",
+    "speaker": "narrator",
+    "text": "You search around the Memory Vault, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "13c6516fd74782",
     "speaker": "narrator",
     "text": "The Shadow shakes its head. “Patience is for those who still have hope. I have none left.”"
@@ -1315,6 +1350,11 @@
     "text": "Your parents sold you to save themselves. It was the opposite. They gave themselves away to save you. Of all the lies in the fortress, hers was the one that hurt most, because for a day you could not be sure. You are sure now."
   },
   {
+    "key": "14243d0dad2726",
+    "speaker": "narrator",
+    "text": "You search around the Parents' Vault, but find nothing of interest beyond what you can already see."
+  },
+  {
     "key": "0ee22d340e3f95",
     "speaker": "narrator",
     "text": "Elior sees the whole truth: his parents' friendship with Malakar, the wound, and the ward they became. The way north to the Throne Chamber opens."
@@ -1403,6 +1443,11 @@
     "key": "1b3600e7e10598",
     "speaker": "narrator",
     "text": "The king of Eldoria, grey with the long years of the wound. His crown is dark."
+  },
+  {
+    "key": "086dba44bf6ff0",
+    "speaker": "narrator",
+    "text": "You search around the Throne Chamber, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "096334c2f1e66f",
@@ -1973,6 +2018,11 @@
     "key": "049c15648f21a3",
     "speaker": "narrator",
     "text": "A small light that flickers in the hedge, keeping close."
+  },
+  {
+    "key": "126162c0ed6194",
+    "speaker": "narrator",
+    "text": "You search around the Willowbrook Field, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "0d82522fa81715",
