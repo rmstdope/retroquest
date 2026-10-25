@@ -363,6 +363,11 @@ describe('Act 2 golden path', () => {
       "The Healer's Apprentice",
     ])
 
+    // Finishing the Ancient Library adds its stage to The Gathering Storm journal
+    executeCommands(game, ['look'])
+    const storm = state.getQuest(MAIN)
+    expect(storm?.latestStage).toContain('taught you the dispel spell')
+
     // Step 14: Healer's House - again
     // Return to Healer's House (navigate from Hidden Library back through the secret passage)
     executeCommands(game, ['go secret_passage', 'go north']) // To Healer's House
