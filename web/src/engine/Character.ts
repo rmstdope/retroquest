@@ -51,9 +51,13 @@ export class Character {
     return null
   }
 
+  /**
+   * The player offers an item. By default the character refuses it, the
+   * sentence opening with the name in title case (see `titleCase`).
+   */
   giveItem(_gameState: GameState, item: Item): string {
     return (
-      `[character_name]${this.name}[/character_name] doesn't seem interested in the ` +
+      `[character_name]${titleCase(this.name)}[/character_name] doesn't seem interested in the ` +
       `[item_name]${item.name}[/item_name].`
     )
   }
@@ -64,4 +68,22 @@ export class Character {
       `[item_name]${itemName}[/item_name] to sell right now.`
     )
   }
+}
+
+/** Words a title keeps lowercase ("Captain of the Guard"). */
+const MINOR_WORDS = ['of', 'the']
+
+/**
+ * A character's parser name as it reads at the start of a sentence: every
+ * word capitalised except the minor ones ("barmaid elena" -> "Barmaid Elena").
+ */
+function titleCase(name: string): string {
+  return name
+    .split(' ')
+    .map((word, i) =>
+      i > 0 && MINOR_WORDS.includes(word)
+        ? word
+        : word.charAt(0).toUpperCase() + word.slice(1),
+    )
+    .join(' ')
 }

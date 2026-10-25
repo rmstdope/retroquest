@@ -41,4 +41,22 @@ describe('Character', () => {
       'does not have any [item_name]rope[/item_name] to sell',
     )
   })
+
+  it('opens a refused gift with the name capitalised word by word', () => {
+    const bread = new Item({ name: 'bread', description: 'd' })
+    const thorne = new Character({
+      name: 'caravan master thorne',
+      description: 'd',
+    })
+    expect(thorne.giveItem(gs, bread)).toMatch(
+      /^\[character_name\]Caravan Master Thorne\[\/character_name\] doesn't/,
+    )
+    const captain = new Character({
+      name: 'Captain of the Guard',
+      description: 'd',
+    })
+    expect(captain.giveItem(gs, bread)).toMatch(
+      /^\[character_name\]Captain of the Guard\[\/character_name\] doesn't/,
+    )
+  })
 })
