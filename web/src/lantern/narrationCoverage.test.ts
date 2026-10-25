@@ -18,6 +18,54 @@ function readJson<T>(path: string): T {
 
 /** Optional lines per act: each is spoken by `speaker` and begins with `opening`. */
 const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
+  /** Act I: the authored replies to what the golden path does not try (take, use, cast, give). */
+  1: [
+    { speaker: 'narrator', opening: "You'd rather light the lantern" },
+    { speaker: 'narrator', opening: 'The bucket is no use with that.' },
+    { speaker: 'narrator', opening: 'You could force the magnet onto the rod' },
+    {
+      speaker: 'narrator',
+      opening: 'The rod is too short to reach the water.',
+    },
+    { speaker: 'narrator', opening: 'Mira gently but firmly stops you.' },
+    { speaker: 'mira', opening: 'Those herbs are part of my stores' },
+    {
+      speaker: 'narrator',
+      opening: 'Mira places a protective hand over the amulet',
+    },
+    { speaker: 'mira', opening: 'This is not yet yours to claim' },
+    {
+      speaker: 'shopkeeper',
+      opening: 'Hold on there, friend! That sword is merchandise',
+    },
+    { speaker: 'narrator', opening: 'You lift the smooth stone a little' },
+    { speaker: 'narrator', opening: 'The wire is pulled tight around the kit' },
+    { speaker: 'narrator', opening: 'A soft glow fills the shed.' },
+    { speaker: 'narrator', opening: 'The mysterious box is now empty.' },
+    { speaker: 'narrator', opening: 'The spell finds nothing to turn.' },
+    {
+      speaker: 'fisherman',
+      opening: 'Well, would you look at that! Not a twinge.',
+    },
+    { speaker: 'narrator', opening: 'The light runs out over the water' },
+    { speaker: 'narrator', opening: 'The warmth reaches the kit' },
+    { speaker: 'narrator', opening: 'The bush greens under your hand' },
+    { speaker: 'narrator', opening: 'The herb crowds its pot' },
+    { speaker: 'mira', opening: 'That was dear, that herb.' },
+    { speaker: 'grandmother', opening: 'Oh, wild berries! Thank you, dear.' },
+    { speaker: 'fisherman', opening: 'Under the smooth stone, lad' },
+    { speaker: 'grandmother', opening: 'This was taken long ago' },
+    { speaker: 'grandmother', opening: "It's the little things" },
+    { speaker: 'shopkeeper', opening: 'Hold on there, friend! That armor' },
+    { speaker: 'shopkeeper', opening: 'Not looking for donations' },
+    { speaker: 'merchant', opening: "That's kind, friend" },
+    { speaker: 'mira', opening: 'I have told you what I know of it' },
+    { speaker: 'narrator', opening: 'The old water splashes out' },
+    { speaker: 'narrator', opening: 'The mysterious box is locked' },
+    { speaker: 'narrator', opening: 'A small nose twitches' },
+    { speaker: 'narrator', opening: "You have a rod, but you're not quite" },
+    { speaker: 'narrator', opening: 'The nearby plants seem to respond' },
+  ],
   2: [{ speaker: 'families', opening: "She's smiling. First time in a week." }],
   3: [
     { speaker: 'phoenix', opening: 'You gave him back his place' },
@@ -50,7 +98,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
   ],
 }
 
-describe.each([2, 3, 4])('narration coverage of Act %i', (act) => {
+describe.each([1, 2, 3, 4])('narration coverage of Act %i', (act) => {
   const script = readJson<ScriptLine[]>(`tts/act${act}/script.json`)
   const manifest = readJson<NarrationManifest>(
     `web/public/audio/narration/act${act}/manifest.json`,

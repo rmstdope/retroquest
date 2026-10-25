@@ -85,6 +85,11 @@
     "text": "After a strange, vivid dream, you awaken with the sense that something beyond the ordinary is calling to you. A mysterious force stirs within, urging you to pay attention to the signs around you and discover what this new feeling means."
   },
   {
+    "key": "1aaa7b34be5670",
+    "speaker": "narrator",
+    "text": "You'd rather light the lantern before you carry it anywhere; it is no use to you dark."
+  },
+  {
     "key": "1ce01e698ceb2f",
     "speaker": "narrator",
     "text": "Elior's Cottage"
@@ -133,6 +138,16 @@
     "key": "0343646184b98f",
     "speaker": "narrator",
     "text": "A leather-bound journal filled with Elior's careful handwriting. The pages are full of notes, sketches, and secrets."
+  },
+  {
+    "key": "05eaebaa0f5966",
+    "speaker": "narrator",
+    "text": "Grandmother looks at the bread."
+  },
+  {
+    "key": "1921d4472cd88d",
+    "speaker": "grandmother",
+    "text": "I'm not sure what to do with this, dear."
   },
   {
     "key": "0b928263f68e32",
@@ -238,6 +253,21 @@
     "key": "14e3f26422cc34",
     "speaker": "narrator",
     "text": "You search the cottage but find nothing new."
+  },
+  {
+    "key": "0ffd22ca95680e",
+    "speaker": "narrator",
+    "text": "Your grandmother takes the photograph, her eyes misty with memory."
+  },
+  {
+    "key": "1a98b71a7e3a4c",
+    "speaker": "grandmother",
+    "text": "This was taken long ago, before the troubles began. Your parents were so full of hope... They loved you dearly, Elior. I miss them every day."
+  },
+  {
+    "key": "0f510099463830",
+    "speaker": "narrator",
+    "text": "She gently returns the photo to you, lost in thought."
   },
   {
     "key": "1ba5f1fad1d316",
@@ -410,6 +440,11 @@
     "text": "You search around the Village Square, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "195e7d2fc2417f",
+    "speaker": "narrator",
+    "text": "The bucket is no use with that. Perhaps near something with water?"
+  },
+  {
     "key": "112de193c5fa4e",
     "speaker": "narrator",
     "text": "Villagers speak in hushed tones of strange happenings: animals refusing to leave their shelters, and shadows moving where none should be. Elior senses the fear growing among his neighbors, and the mystery deepens."
@@ -458,6 +493,16 @@
     "key": "05a9dfdc3c4721",
     "speaker": "narrator",
     "text": "A sturdy wooden bucket with a rope handle. It is full of murky water, with a sour smell drawn from the well."
+  },
+  {
+    "key": "1d5221026341c8",
+    "speaker": "narrator",
+    "text": "The blacksmith looks at the faded photograph."
+  },
+  {
+    "key": "1d8fbebac5aa39",
+    "speaker": "blacksmith",
+    "text": "I don't have a use for this, lad."
   },
   {
     "key": "0c64c7e367b44a",
@@ -550,6 +595,31 @@
     "text": "In the gloom you make out an old workbench and a few interesting things. From the shadows comes a frightened mew, and a small patchwork shape bolts behind the broken crates."
   },
   {
+    "key": "1e331fe69bedcf",
+    "speaker": "narrator",
+    "text": "The mysterious box is locked, and there is no keyhole. The runes around the lid are the only way in, and they do not answer to hands."
+  },
+  {
+    "key": "1e3e27116da665",
+    "speaker": "narrator",
+    "text": "A small nose twitches behind the crates. Curiosity gets the better of her."
+  },
+  {
+    "key": "1ba9e262e4d2a4",
+    "speaker": "narrator",
+    "text": "A pair of green eyes blinks in the dark. With a small, uncertain mew, Patches creeps out, sniffs your fingers and lets you scoop her up. She is thin and dusty, but unhurt."
+  },
+  {
+    "key": "1eba8b3e062fdf",
+    "speaker": "narrator",
+    "text": "You carry Patches in your arms. Old Man Hemlock at the General Store will be glad to see her."
+  },
+  {
+    "key": "168b41ddc89ae9",
+    "speaker": "narrator",
+    "text": "Patches was hiding in the Abandoned Shed. Carry her home to Old Man Hemlock at the General Store."
+  },
+  {
     "key": "1d1933af2244eb",
     "speaker": "narrator",
     "text": "The shed door is unlocked and slightly ajar."
@@ -563,16 +633,6 @@
     "key": "16e35ada801376",
     "speaker": "narrator",
     "text": "A rusty, splintered shovel with a cracked wooden handle. It looks like it hasn't been used in years, but might still be useful for digging in soft earth."
-  },
-  {
-    "key": "1ba9e262e4d2a4",
-    "speaker": "narrator",
-    "text": "A pair of green eyes blinks in the dark. With a small, uncertain mew, Patches creeps out, sniffs your fingers and lets you scoop her up. She is thin and dusty, but unhurt."
-  },
-  {
-    "key": "1eba8b3e062fdf",
-    "speaker": "narrator",
-    "text": "You carry Patches in your arms. Old Man Hemlock at the General Store will be glad to see her."
   },
   {
     "key": "09190627801c4b",
@@ -590,11 +650,6 @@
     "text": "A pair of frightened green eyes watches you from behind the crates."
   },
   {
-    "key": "168b41ddc89ae9",
-    "speaker": "narrator",
-    "text": "Patches was hiding in the Abandoned Shed. Carry her home to Old Man Hemlock at the General Store."
-  },
-  {
     "key": "02f2a5ac7a8165",
     "speaker": "narrator",
     "text": "A simple fishing rod. It looks a bit flimsy."
@@ -610,6 +665,16 @@
     "text": "You search around the shed again, but find nothing else of interest among the clutter."
   },
   {
+    "key": "13c26768bcc0c8",
+    "speaker": "narrator",
+    "text": "You could force the magnet onto the rod, but it would likely prevent you from fishing — and you are really keen on doing some fishing!"
+  },
+  {
+    "key": "1e0db63760df0d",
+    "speaker": "narrator",
+    "text": "The rod is too short to reach the water."
+  },
+  {
     "key": "182833db6adeb7",
     "speaker": "narrator",
     "text": "You lift the bucket, then think better of it. The sour water from the well would only sicken the soil further."
@@ -623,6 +688,36 @@
     "key": "1fa3f4e8f62e30",
     "speaker": "grandmother",
     "text": "Hemlock's Patches! The poor wee thing, she's all dust and bones. She's taken to you, hasn't she? With you off on the road soon, this cottage will be terribly quiet. If you'd have her stay with me, you need only say so, and I'll square it with Hemlock myself. Or carry her home to him; he'll be worried sick."
+  },
+  {
+    "key": "11a62c8885cd34",
+    "speaker": "narrator",
+    "text": "Mira gently but firmly stops you."
+  },
+  {
+    "key": "1dea0929da2b19",
+    "speaker": "mira",
+    "text": "Those herbs are part of my stores, Elior. They are not for taking, but for healing those who truly need them."
+  },
+  {
+    "key": "03ba7c4764d78e",
+    "speaker": "narrator",
+    "text": "Mira places a protective hand over the amulet."
+  },
+  {
+    "key": "03dfbfb333a136",
+    "speaker": "mira",
+    "text": "This is not yet yours to claim, Elior. The Ancient Amulet is a powerful artifact that must be earned through preparation and wisdom. Complete your journey preparations first, and it shall be yours."
+  },
+  {
+    "key": "12fdbfabfdae4c",
+    "speaker": "narrator",
+    "text": "Mira looks at the rusty hoe but shakes her head gently."
+  },
+  {
+    "key": "1578d421fda558",
+    "speaker": "mira",
+    "text": "I have no need for this, child."
   },
   {
     "key": "1d8e270a441a9c",
@@ -695,6 +790,31 @@
     "text": "Mira has urged Elior to connect with the living world and learn from its magic. The path forward is uncertain, but hope stirs in the heart of Willowbrook."
   },
   {
+    "key": "0c2daf86c44092",
+    "speaker": "narrator",
+    "text": "Shopkeeper quickly steps over."
+  },
+  {
+    "key": "1875997df3a14d",
+    "speaker": "shopkeeper",
+    "text": "Hold on there, friend! That sword is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
+  },
+  {
+    "key": "01e33e35988200",
+    "speaker": "shopkeeper",
+    "text": "Hold on there, friend! That armor is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
+  },
+  {
+    "key": "0d53763970cec9",
+    "speaker": "narrator",
+    "text": "The Shopkeeper chuckles."
+  },
+  {
+    "key": "03f08d0124cf70",
+    "speaker": "shopkeeper",
+    "text": "Not looking for donations, friend, but I appreciate the thought!"
+  },
+  {
     "key": "124d5c3ce7ffcb",
     "speaker": "narrator",
     "text": "General Store"
@@ -758,11 +878,6 @@
     "key": "083f9e2e23d369",
     "speaker": "narrator",
     "text": "You search around the General Store, but find nothing of interest beyond what you can already see."
-  },
-  {
-    "key": "0c2daf86c44092",
-    "speaker": "narrator",
-    "text": "Shopkeeper quickly steps over."
   },
   {
     "key": "024e14903a4d2a",
@@ -868,6 +983,16 @@
     "key": "1988f1b3c68e4a",
     "speaker": "narrator",
     "text": "You have heard tales of a magical deer from the Blacksmith. Perhaps you will witness something extraordinary yourself!"
+  },
+  {
+    "key": "181e2d1f42f778",
+    "speaker": "narrator",
+    "text": "You lift the smooth stone a little, then set it back. It belongs here, at the bend of the river."
+  },
+  {
+    "key": "08d85789dda6e1",
+    "speaker": "narrator",
+    "text": "You have a rod, but you're not quite sure how to fish effectively yet. Perhaps someone could teach you."
   },
   {
     "key": "1c76c403ae9607",
@@ -1010,6 +1135,16 @@
     "text": "The night before she went away, she pressed a little tin into the mud under that smooth stone yonder, and made me promise to watch over it. Said if her boy ever came asking, he'd know where to look. I reckon you've come asking."
   },
   {
+    "key": "08b1a588888393",
+    "speaker": "narrator",
+    "text": "The fisherman points to the water's edge."
+  },
+  {
+    "key": "0cd39a3304f65a",
+    "speaker": "fisherman",
+    "text": "Under the smooth stone, lad, where the water turns. Go on, search there."
+  },
+  {
     "key": "0de6915aebf8ee",
     "speaker": "narrator",
     "text": "You tip the smooth stone aside and dig into the cold mud beneath it. Your fingers close on a small tin, sealed with wax. Inside, wrapped in oilcloth, lies a mother's letter."
@@ -1068,6 +1203,16 @@
     "key": "08027e402ac178",
     "speaker": "narrator",
     "text": "You wipe the blade on the moss and keep it; it may yet be useful."
+  },
+  {
+    "key": "046068d6450dab",
+    "speaker": "narrator",
+    "text": "The wire is pulled tight around the kit's leg, too tight for fingers."
+  },
+  {
+    "key": "0335c4695a33b6",
+    "speaker": "narrator",
+    "text": "You kneel and saw through the wire, slow and careful. The moment it gives, the fox kit twists free, stares at you for one heartbeat, and bolts into the undergrowth."
   },
   {
     "key": "01863f61be3887",
@@ -1470,6 +1615,16 @@
     "text": "You received a fresh bread!"
   },
   {
+    "key": "0d1d08d0535a2c",
+    "speaker": "narrator",
+    "text": "A soft glow fills the shed."
+  },
+  {
+    "key": "1273c888d8cc9d",
+    "speaker": "narrator",
+    "text": "Warm light spills over the old workbench and the dusty shelves above it. Whoever worked here kept their tools in careful rows."
+  },
+  {
     "key": "0028ec78cb405e",
     "speaker": "narrator",
     "text": "A soft click is heard from the mysterious box as the lock springs open!"
@@ -1498,6 +1653,11 @@
     "key": "1a0584f15d4544",
     "speaker": "narrator",
     "text": "The runes on the lid fade as you read, their work done. The box was sealed so that only your magic could ever open it."
+  },
+  {
+    "key": "17f052feb8fc87",
+    "speaker": "narrator",
+    "text": "The mysterious box is now empty."
   },
   {
     "key": "03f858ec732f26",
@@ -1565,6 +1725,11 @@
     "text": "The murky water shimmers and clears! You can now see a shiny ring at the bottom, but it's still too deep to reach by hand. Clean water at last; the parched Vegetable Field next door could surely use some."
   },
   {
+    "key": "0c59aed631a6a2",
+    "speaker": "narrator",
+    "text": "The old water splashes out onto the stones, and the bucket comes up again full of clear water."
+  },
+  {
     "key": "140315ff327bcd",
     "speaker": "narrator",
     "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water within is crystal clear. You can see something shiny at the bottom, but it's still too deep to reach by hand."
@@ -1620,6 +1785,36 @@
     "text": "A man in a grey cloak stands at the far door with his back to you, quite still, his head bent as if he were listening to the floor. You have made no sound, and yet he knows you are there. He does not turn. He steps out into the light toward the river, and when you reach the door the path is empty."
   },
   {
+    "key": "1ea4811e078146",
+    "speaker": "narrator",
+    "text": "The spell finds nothing to turn. The black iron has no lock; it was never meant to be opened, only to run, and now not even that."
+  },
+  {
+    "key": "04d65f3ff1cd0b",
+    "speaker": "narrator",
+    "text": "A warm light gathers around the fisherman's arm. He flexes his fingers, then lifts the arm above his head and laughs."
+  },
+  {
+    "key": "019c14b217e7b0",
+    "speaker": "fisherman",
+    "text": "Well, would you look at that! Not a twinge. Your mother mended my scrapes the same way, down by the bend. Thank you, lad. Tomorrow I'll cast my own line again."
+  },
+  {
+    "key": "09687532d9b027",
+    "speaker": "narrator",
+    "text": "The light runs out over the water and finds nothing to do. The river was never the trouble. Your mother stood at this bend and taught this spell to the fisherman; the water remembers her better than it needs you."
+  },
+  {
+    "key": "1a196bac64f81f",
+    "speaker": "narrator",
+    "text": "The warmth reaches the kit and it flinches from it. The wire is still in the leg; mending flesh around iron would be cruelty, and the kit knows it before you do."
+  },
+  {
+    "key": "0a07e078ad1161",
+    "speaker": "narrator",
+    "text": "The bush greens under your hand, every leaf at once. Life it has. It bears nothing; fruit wants something else of you."
+  },
+  {
     "key": "084e21f9af40ec",
     "speaker": "narrator",
     "text": "Light fills the glade."
@@ -1650,6 +1845,11 @@
     "text": "You read them aloud. They mean nothing to you, and yet they stay with you."
   },
   {
+    "key": "10a5df366ed3c9",
+    "speaker": "narrator",
+    "text": "The nearby plants seem to respond with vibrant energy, but nothing else happens."
+  },
+  {
     "key": "0d22a28439914e",
     "speaker": "narrator",
     "text": "The deer does not answer, not in words. It lifts its head toward the glowing stone, then dips it to you, slow and deliberate, as if in thanks. For a heartbeat the whole glade seems to breathe with it."
@@ -1668,6 +1868,21 @@
     "key": "02625eaf626e1f",
     "speaker": "narrator",
     "text": "A handful of small, juicy berries. They look edible, but you can't be sure they're safe."
+  },
+  {
+    "key": "06d4f72606d312",
+    "speaker": "grandmother",
+    "text": "Oh, wild berries! Thank you, dear. These look lovely. I'll make a pie later."
+  },
+  {
+    "key": "1a0fc3df24fb74",
+    "speaker": "narrator",
+    "text": "Grandmother smiles warmly."
+  },
+  {
+    "key": "106baca24308cd",
+    "speaker": "grandmother",
+    "text": "It's the little things that brighten the day, isn't it?"
   },
   {
     "key": "06da398409b0c9",
@@ -1738,6 +1953,21 @@
     "key": "1e82bb9df4aa05",
     "speaker": "narrator",
     "text": "You have explored every corner of Willowbrook. The village feels more like home, and you are ready for what lies ahead."
+  },
+  {
+    "key": "01077f8566a488",
+    "speaker": "narrator",
+    "text": "The merchant examines the rusty hoe but shakes his head."
+  },
+  {
+    "key": "17d317ea4fc5f2",
+    "speaker": "merchant",
+    "text": "Not interested in that, friend."
+  },
+  {
+    "key": "06c49bbc27a458",
+    "speaker": "merchant",
+    "text": "That's kind, friend, but you'll want every bite of that where you're going. Keep it."
   },
   {
     "key": "182c839e0a2572",
@@ -1823,6 +2053,21 @@
     "key": "13aa84f923d1fd",
     "speaker": "tilda",
     "text": "The water's clean! Was that you, Elior? No — don't tell me, you've that look about you. I've not had dough rise so light in a year."
+  },
+  {
+    "key": "1f9e60b785fb3f",
+    "speaker": "narrator",
+    "text": "The herb crowds its pot and spills green over the rim, twice what it was."
+  },
+  {
+    "key": "1f707282aeec86",
+    "speaker": "narrator",
+    "text": "Mira raises an eyebrow."
+  },
+  {
+    "key": "0f18f3e913cf82",
+    "speaker": "mira",
+    "text": "That was dear, that herb. Now there is more of it. I will not complain."
   },
   {
     "key": "081f99ee117abb",
@@ -1928,6 +2173,16 @@
     "key": "1dc99a7ae52b9f",
     "speaker": "narrator",
     "text": "Mira named the token a fouling sigil: someone poisoned the well on purpose. Whoever carried it, perhaps the cloaked stranger the villagers whisper about, was searching Willowbrook for something, or for someone."
+  },
+  {
+    "key": "0c3545ca3180ad",
+    "speaker": "narrator",
+    "text": "Mira closes your fingers over the rune token without taking it."
+  },
+  {
+    "key": "017e832c934bd2",
+    "speaker": "mira",
+    "text": "I have told you what I know of it. Keep it hidden, and keep your eyes open."
   },
   {
     "key": "102c991f73cdd6",

@@ -1,7 +1,59 @@
 [
-  {
-    "after": 79,
-    "commands": ["rest"],
-    "unset": ["deer_can_be_observed"]
-  }
+    {
+        "after": 79,
+        "commands": ["rest"],
+        "unset": ["deer_can_be_observed"]
+    },
+    { "after": 0, "commands": ["take lantern"] },
+    { "after": 2, "commands": ["give bread to grandmother"] },
+    { "after": 8, "commands": ["give faded photograph to grandmother"] },
+    { "after": 23, "commands": ["use bucket on old notice"] },
+    {
+        "after": 30,
+        "commands": ["give faded photograph to blacksmith"]
+    },
+    { "after": 36, "commands": ["open mysterious box", "give egg to patches"] },
+    { "after": 39, "commands": ["use fishing rod on magnet"] },
+    { "after": 41, "commands": ["use fishing rod on well"] },
+    {
+        "after": 45,
+        "commands": ["take healing herb", "take ancient amulet", "give rusty hoe to mira"]
+    },
+    {
+        "after": 48,
+        "commands": ["take sword", "take armor", "give rusty hoe to shopkeeper"]
+    },
+    {
+        "after": 67,
+        "commands": ["take smooth stone", "use fishing rod on river"]
+    },
+    { "after": 71, "commands": ["give faded photograph to fisherman"] },
+    {
+        "after": 76,
+        "commands": ["take snare", "use sharp knife on snare"]
+    },
+    {
+        "after": 111,
+        "commands": ["take healing herb", "take ancient amulet"]
+    },
+    { "after": 117, "commands": ["cast light"] },
+    { "after": 119, "commands": ["open mysterious box"] },
+    { "after": 128, "commands": ["use bucket on well"] },
+    { "after": 131, "commands": ["cast unlock on strange mechanism"] },
+    {
+        "after": 132,
+        "commands": ["cast heal on fisherman", "cast purify on river"]
+    },
+    {
+        "after": 133,
+        "commands": ["cast heal on snare", "cast revive on bush"]
+    },
+    { "after": 135, "commands": ["cast grow"] },
+    { "after": 144, "commands": ["give wild berries to grandmother"] },
+    {
+        "after": 155,
+        "commands": ["give rusty hoe to merchant", "give egg to merchant"]
+    },
+    { "after": 167, "commands": ["cast grow on healing herb"] },
+    { "after": 168, "commands": ["give rune token to mira"] }
 ]
