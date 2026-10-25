@@ -32,4 +32,12 @@ describe("Mira's Hut room card", () => {
       'The stand where the amulet rested stands empty.',
     )
   })
+
+  it('is searched without "the" before her name', () => {
+    const game = gameInHut()
+    expect(game.state.currentRoom.search(game.state)).toBe(
+      "You search around [room_name]Mira's Hut[/room_name], but find nothing " +
+        'of interest beyond what you can already see.',
+    )
+  })
 })

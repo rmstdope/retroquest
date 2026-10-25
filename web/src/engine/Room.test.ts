@@ -179,5 +179,21 @@ describe('Room', () => {
       expect(r.light(gs)).toBe('The room is already well lit.')
       expect(r.onEnter(gs)).toBeUndefined()
     })
+
+    it('searches around the room by name, with "the" before it', () => {
+      const r = new Room({ name: 'Old Mill', description: 'Desc' })
+      expect(r.search(gameState())).toBe(
+        'You search around the [room_name]Old Mill[/room_name], but find nothing ' +
+          'of interest beyond what you can already see.',
+      )
+    })
+
+    it('does not put a second "the" before a name that starts with "The"', () => {
+      const r = new Room({ name: 'The Silver Stag Inn', description: 'Desc' })
+      expect(r.search(gameState())).toBe(
+        'You search around the [room_name]Silver Stag Inn[/room_name], but find ' +
+          'nothing of interest beyond what you can already see.',
+      )
+    })
   })
 })
