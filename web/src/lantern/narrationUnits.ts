@@ -71,7 +71,8 @@ export function firstQuestUnit(turn: NarratedTurnInput): number {
 
 /**
  * Whether a turn's arrival is read: on a first visit, or when the player
- * looked around (stayed); a revisited room appears at once.
+ * looked around (stayed); a revisited room appears at once. Callers ask only
+ * for a narrated turn (`turn.narrate`).
  */
 export function readsArrival(turn: {
   description: RoomDescription | null

@@ -1024,7 +1024,7 @@ describe('useGameStore', () => {
       bridge.controller.openRoom.mockReturnValue('You are in Act 2.')
       bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
         moved: true,
-        firstVisit: false,
+        firstVisit: true,
       })
       store.dismissModal() // dismiss intro modal
       expect(bridge.controller.openRoom).toHaveBeenCalled()
@@ -1228,7 +1228,7 @@ describe('useGameStore', () => {
       bridge.controller.openRoom.mockReturnValue('You are in Act 2.')
       bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
         moved: true,
-        firstVisit: false,
+        firstVisit: true,
       })
       bridge.controller.getVisitedRooms.mockReturnValue(['Act 2 Start'])
       store.dismissModal() // act complete
@@ -1238,7 +1238,7 @@ describe('useGameStore', () => {
         command: null,
         text: 'You are in Act 2.',
         room: 'Act 2 Start',
-        description: { moved: true, firstVisit: false },
+        description: { moved: true, firstVisit: true },
         narrate: true,
       })
     })

@@ -660,6 +660,15 @@ describe('GameController', () => {
         })
       })
 
+      it('says a direct look stayed in the room', () => {
+        const ctrl = twoRooms()
+        ctrl.look()
+        expect(ctrl.lastTurnRoomDescription()).toEqual({
+          moved: false,
+          firstVisit: false,
+        })
+      })
+
       it('describes the first room of an act as an arrival at a first visit', () => {
         const ctrl = twoRooms()
         ctrl.openRoom()
