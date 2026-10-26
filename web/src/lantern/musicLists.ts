@@ -18,7 +18,7 @@ const SOUND_EFFECTS_DIR = 'web/public/audio/soundeffects/'
 export interface MusicTrack {
   /** Slug naming the track's file in the studio's clips folder; unique across the game. */
   id: string
-  /** Shown in the studio: the track's name in the file name. */
+  /** Shown in the studio: "Act 1 Opening" for an act's loop, the room's name for a room's, the sound file's name for a stinger. */
   title: string
   /** Where the game plays it. */
   plays: string
@@ -86,18 +86,30 @@ function slug(title: string): string {
 }
 
 /**
- * The loop an act plays today, named after its file: none for an act without
- * music (`''`), and an error for a music file that has no title or brief here,
- * so a refresh never says "no loops" about an act that has music.
+ * The loop an act plays today, titled "Act <N> Opening" after its act while
+ * its id stays the slug of the file's title, which a chosen take is keyed by:
+ * none for an act without music (`''`), and an error for a music file that has
+ * no title or brief here, so a refresh never says "no loops" about an act that
+ * has music.
  */
-export function actLoops(act: { musicFile: string }): MusicTrack[] {
+export function actLoops(act: {
+  name: string
+  musicFile: string
+}): MusicTrack[] {
   if (act.musicFile === '') return []
-  const title = FILE_TITLE.exec(act.musicFile)?.[1]
+  const fileTitle = FILE_TITLE.exec(act.musicFile)?.[1]
   const brief = LOOP_BRIEFS[act.musicFile]
-  if (!title || !brief)
+  if (!fileTitle || !brief)
     throw new Error(`No loop brief for music file "${act.musicFile}"`)
+  const number = /\d+$/.exec(act.name)?.[0]
+  const title = number ? `Act ${number} Opening` : act.name
   return [
-    { id: slug(title), title, file: `${MUSIC_DIR}${act.musicFile}`, ...brief },
+    {
+      id: slug(fileTitle),
+      title,
+      file: `${MUSIC_DIR}${act.musicFile}`,
+      ...brief,
+    },
   ]
 }
 
