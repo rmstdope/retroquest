@@ -1,42 +1,29 @@
 import { Item, type GameState } from '@/engine'
 
-/** Pouch-like currency item that tracks an integer coin balance. */
-export class Coins extends Item {
-  amount: number
+/** The coins' description; `Act2.afterLoad` restores it in older saves. */
+export const COINS_DESCRIPTION =
+  'Gold coins, kept in a pouch at your belt. These will be useful for ' +
+  'purchasing supplies and equipment in Greendale.'
 
-  constructor(amount = 100) {
+/**
+ * One gold coin. The bag holds as many of them as the player has (Sir Cedric
+ * pays 150, the merchants take them back one by one), so the description
+ * names no count of its own and `use` counts the coins actually carried.
+ */
+export class Coins extends Item {
+  constructor() {
     super({
       name: 'coins',
-      description:
-        `A pouch containing ${amount} gold coins. These will be useful for purchasing ` +
-        'supplies and equipment in Greendale.',
+      description: COINS_DESCRIPTION,
       canBeCarried: true,
     })
-    this.amount = amount
   }
 
-  /** Count the coins in the pouch. */
-  override use(_gameState: GameState): string {
+  /** Count every coin carried, not just this one. */
+  override use(gameState: GameState): string {
     return (
-      `You count your coins. You have ${this.amount} gold pieces to spend on ` +
-      'supplies and equipment.'
+      `You count your coins. You have ${gameState.getItemCount('coins')} ` +
+      'gold pieces to spend on supplies and equipment.'
     )
-  }
-
-  /** Spend coins if enough are available. */
-  spend(amount: number): boolean {
-    if (this.amount >= amount) {
-      this.amount -= amount
-      this.description =
-        `A pouch containing ${this.amount} gold coins. These will be useful for ` +
-        'purchasing supplies and equipment in Greendale.'
-      return true
-    }
-    return false
-  }
-
-  /** Return the current coin balance. */
-  getAmount(): number {
-    return this.amount
   }
 }

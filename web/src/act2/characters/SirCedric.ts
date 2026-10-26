@@ -603,8 +603,8 @@ export class SirCedric extends Character {
     ) {
       this.cedricTrustsElior = true
 
-      // Give Elior 150 individual coins using the new batching system
-      const coin = new Coins(1) // Create a single coin worth 1 gold
+      // Give Elior 150 coins, one item each
+      const coin = new Coins()
       gameState.addItemToInventory(coin, 150) // Add 150 of them
 
       return (
