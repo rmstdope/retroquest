@@ -327,6 +327,7 @@ describe('useMusic', () => {
       currentTime = 0
       volume = 1
       paused = true
+      srcSets: string[] = []
       play = vi.fn(() => {
         this.paused = false
         return Promise.resolve()
@@ -350,15 +351,23 @@ describe('useMusic', () => {
       vi.unstubAllGlobals()
     })
 
-    /** A playing element, as after the first track has started. */
+    /** A playing element that records every src it is given. */
     function playing(): FadeAudio {
       const el = new FadeAudio()
       el.paused = false
+      let src = ''
+      Object.defineProperty(el, 'src', {
+        get: () => src,
+        set: (value: string) => {
+          src = value
+          el.srcSets.push(value)
+        },
+      })
       FadeAudio.made = []
       return el
     }
 
-    it('fades the old loop out while the new one fades in', () => {
+    it('fades the playing element out untouched and the new loop in on another', () => {
       const el = playing()
       const { loadTrack } = useMusic(el as unknown as HTMLAudioElement)
       loadTrack('a.mp3', '')
@@ -366,22 +375,40 @@ describe('useMusic', () => {
       el.volume = 0.5
       loadTrack('b.mp3', '')
 
-      const old = FadeAudio.made[0]
-      expect(old.src).toContain('a.mp3')
-      expect(old.loop).toBe(true)
-      expect(old.paused).toBe(false)
-      expect(el.src).toContain('b.mp3')
-      expect(el.volume).toBe(0)
+      const next = FadeAudio.made[0]
+      expect(el.srcSets).toEqual([expect.stringContaining('a.mp3')])
+      expect(el.paused).toBe(false)
+      expect(next.src).toContain('b.mp3')
+      expect(next.loop).toBe(true)
+      expect(next.paused).toBe(false)
+      expect(next.volume).toBe(0)
 
       vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 2)
-      expect(old.volume).toBeGreaterThan(0)
-      expect(old.volume).toBeLessThan(0.5)
       expect(el.volume).toBeGreaterThan(0)
       expect(el.volume).toBeLessThan(0.5)
+      expect(next.volume).toBeGreaterThan(0)
+      expect(next.volume).toBeLessThan(0.5)
 
       vi.advanceTimersByTime(MUSIC_CROSSFADE_MS)
-      expect(old.volume).toBe(0)
-      expect(old.paused).toBe(true)
+      expect(el.volume).toBe(0)
+      expect(el.paused).toBe(true)
+      expect(next.volume).toBeCloseTo(0.5)
+    })
+
+    it('swaps the two elements on every later change', () => {
+      const el = playing()
+      const { loadTrack } = useMusic(el as unknown as HTMLAudioElement)
+      loadTrack('a.mp3', '')
+      el.paused = false
+      loadTrack('b.mp3', '')
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS * 2)
+      loadTrack('c.mp3', '')
+      expect(FadeAudio.made).toHaveLength(1)
+      expect(el.src).toContain('c.mp3')
+      expect(el.paused).toBe(false)
+      expect(FadeAudio.made[0].paused).toBe(false)
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS * 2)
+      expect(FadeAudio.made[0].paused).toBe(true)
       expect(el.volume).toBeCloseTo(0.5)
     })
 
@@ -395,7 +422,7 @@ describe('useMusic', () => {
       expect(el.volume).toBe(0.5)
     })
 
-    it('silences the old loop at once when the music is muted mid-fade', async () => {
+    it('silences both loops at once when the music is muted mid-fade', () => {
       const el = playing()
       const { loadTrack } = useMusic(el as unknown as HTMLAudioElement)
       loadTrack('a.mp3', '')
@@ -403,20 +430,21 @@ describe('useMusic', () => {
       loadTrack('b.mp3', '')
       vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 3)
       useSettingsStore().musicOn = false
+      expect(el.paused).toBe(true)
       expect(FadeAudio.made[0].paused).toBe(true)
     })
 
-    it('silences the old loop when stopped', () => {
+    it('silences the fading loop when stopped', () => {
       const el = playing()
       const music = useMusic(el as unknown as HTMLAudioElement)
       music.loadTrack('a.mp3', '')
       el.paused = false
       music.loadTrack('b.mp3', '')
       music.stopCrossfade()
-      expect(FadeAudio.made[0].paused).toBe(true)
+      expect(el.paused).toBe(true)
     })
 
-    it('ducks the old loop under a voice that starts mid-fade', async () => {
+    it('ducks the fading loop under a voice that starts mid-fade', async () => {
       const el = playing()
       const narrating = ref(false)
       const { loadTrack } = useMusic(
@@ -430,12 +458,52 @@ describe('useMusic', () => {
       narrating.value = true
       await nextTick()
       vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 10)
-      expect(FadeAudio.made[0].volume).toBeLessThanOrEqual(
-        0.5 * 0.8 * MUSIC_DUCK + 1e-9,
-      )
+      expect(el.volume).toBeLessThanOrEqual(0.5 * 0.8 * MUSIC_DUCK + 1e-9)
     })
 
-    it('fades each old loop out when the room changes twice quickly', () => {
+    it('fades the loop back up, without reloading it, when the player walks back', () => {
+      const el = playing()
+      const { loadTrack } = useMusic(el as unknown as HTMLAudioElement)
+      loadTrack('a.mp3', '')
+      el.paused = false
+      el.volume = 0.5
+      loadTrack('b.mp3', '')
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 2)
+      const heard = el.volume
+      loadTrack('a.mp3', '')
+      expect(el.srcSets).toHaveLength(1)
+      expect(el.paused).toBe(false)
+      expect(el.volume).toBe(heard)
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS * 2)
+      expect(el.volume).toBeCloseTo(0.5)
+      expect(FadeAudio.made[0].paused).toBe(true)
+    })
+
+    it('keeps the volume, duck and mute controls on the new element after a crossfade', async () => {
+      const el = playing()
+      const narrating = ref(false)
+      const music = useMusic(el as unknown as HTMLAudioElement, narrating)
+      music.loadTrack('a.mp3', '')
+      el.paused = false
+      music.loadTrack('b.mp3', '')
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS * 2)
+      const next = FadeAudio.made[0]
+
+      useSettingsStore().musicVolume = 40
+      await nextTick()
+      expect(next.volume).toBeCloseTo(0.4)
+      narrating.value = true
+      await nextTick()
+      vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS * 2)
+      expect(next.volume).toBeCloseTo(0.4 * MUSIC_DUCK)
+
+      useSettingsStore().musicOn = false
+      expect(next.paused).toBe(true)
+      useSettingsStore().musicOn = true
+      expect(next.paused).toBe(false)
+    })
+
+    it('ends with the newest loop alone when the room changes twice quickly', () => {
       const el = playing()
       const { loadTrack } = useMusic(el as unknown as HTMLAudioElement)
       loadTrack('a.mp3', '')
@@ -444,9 +512,11 @@ describe('useMusic', () => {
       vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 3)
       loadTrack('c.mp3', '')
       vi.advanceTimersByTime(MUSIC_CROSSFADE_MS * 2)
-      expect(FadeAudio.made.every((o) => o.paused)).toBe(true)
-      expect(el.src).toContain('c.mp3')
-      expect(el.volume).toBeCloseTo(0.5)
+      const all = [el, ...FadeAudio.made]
+      expect(all.filter((a) => !a.paused)).toHaveLength(1)
+      const alive = all.find((a) => !a.paused)
+      expect(alive?.src).toContain('c.mp3')
+      expect(alive?.volume).toBeCloseTo(0.5)
     })
 
     it('cuts straight over when the music is not playing yet', () => {
