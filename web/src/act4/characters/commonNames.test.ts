@@ -79,6 +79,18 @@ describe('a group character in a default reply', () => {
     )
   })
 
+  it('reads "the ghostly warriors" when spoken to once they fill the hall', () => {
+    const act = new Act4()
+    act.musicFile = ''
+    const game = new Game([act])
+    game.state.currentRoom = game.state.allRooms.HallOfEchoes
+    game.state.currentRoom.addCharacter(new GhostlyWarriors())
+
+    expect(game.commandParser.parse('say hello to warriors')).toContain(
+      'to the [character_name]ghostly warriors[/character_name]',
+    )
+  })
+
   it('reads "the freed servants" once they are freed', () => {
     const servants = new TrappedServants()
     servants.free()
