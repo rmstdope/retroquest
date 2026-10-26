@@ -1,10 +1,8 @@
 import { computed } from 'vue'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { NEW_QUEST_FILE, QUEST_COMPLETE_FILE } from './questSounds'
 
 const SFX_BASE_PATH = '/audio/soundeffects/'
-
-const NEW_QUEST_FILE = 'Voicy_New Quest.mp3'
-const QUEST_COMPLETE_FILE = 'Voicy_Quest Completed.mp3'
 
 /** Minimal interface for an audio element that can play a sound. */
 export interface AudioElement {

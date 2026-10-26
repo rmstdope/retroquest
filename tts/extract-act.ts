@@ -4,6 +4,7 @@
  * `actScript`). Unsigned writing is given to its writer by `act<N>/writers.json`;
  * lines opening as in `act<N>/silent.json` stay silent (instructions, not story).
  * `act<N>/branches.json` lists optional scenes to play on a copy (`ScriptBranch`).
+ * It also writes `tts/act<N>/music.json`, the act's loop (see `actLoops`).
  * Run from `web/`: `npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act.ts 2`.
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
@@ -26,6 +27,7 @@ import {
   type ScriptLine,
   type WriterRule,
 } from '../web/src/lantern/narrationScript'
+import { actLoops } from '../web/src/lantern/musicLists'
 
 /** What the extractor needs of an act: a fresh act and the commands that play it to its end. */
 interface ActSource {
@@ -95,3 +97,9 @@ writeFileSync(
   JSON.stringify(script, null, 2) + '\n',
 )
 console.log(`${script.length} lines written to tts/act${number}/script.json`)
+const loops = actLoops(source.make())
+writeFileSync(
+  new URL('music.json', here),
+  JSON.stringify(loops, null, 2) + '\n',
+)
+console.log(`${loops.length} loops written to tts/act${number}/music.json`)

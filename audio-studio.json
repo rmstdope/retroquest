@@ -49,5 +49,16 @@
       "draft": "s2.1-pro-free",
       "final": "drama-3"
     }
+  },
+  "music": {
+    "refreshShared": "cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-shared.ts",
+    "paths": {
+      "loops": "tts/{part}/music.json",
+      "stingers": "tts/stingers.json",
+      "briefs": "music/briefs.json",
+      "lock": "music/music.lock.json",
+      "clips": "web/public/audio/music/generated",
+      "manifest": "web/public/audio/music/generated/manifest.json"
+    }
   }
 }
