@@ -73,6 +73,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   }
   onScopeDispose(() => {
     removeListeners()
+    music.stopCrossfade()
     if (!audio.paused) audio.pause()
   })
 

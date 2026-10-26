@@ -34,6 +34,7 @@ export function useMusic(
 
   function loadTrack(file: string, info: string): void {
     if (!file) {
+      stopCrossfade()
       currentMusicFile.value = ''
       musicInfo.value = ''
       audio.pause()
@@ -65,7 +66,25 @@ export function useMusic(
     }
   }
 
-  /** Plays what `audio` plays on a second element and fades that out. */
+  /** The loops still fading out, each with the timer that fades it. */
+  const outgoing: {
+    old: HTMLAudioElement
+    timer: ReturnType<typeof setInterval>
+  }[] = []
+
+  /** Silences every loop still fading out. */
+  function stopCrossfade(): void {
+    for (const { old, timer } of outgoing.splice(0)) {
+      clearInterval(timer)
+      old.pause()
+    }
+  }
+
+  /**
+   * Plays what `audio` plays on a second element and fades that out. It
+   * follows a voice's dip like the main element does, so it never sounds
+   * louder than the ducked level.
+   */
   function fadeOutCopy(): void {
     const old = new Audio()
     old.loop = true
@@ -73,16 +92,23 @@ export function useMusic(
     old.currentTime = audio.currentTime
     old.volume = audio.volume
     old.play().catch(() => {})
-    const start = old.volume
+    const duckAtStart = narrating.value ? MUSIC_DUCK : 1
+    const base = audio.volume / duckAtStart
     let step = 0
-    const timer = setInterval(() => {
-      step++
-      old.volume = Math.max(0, start * (1 - step / FADE_STEPS))
-      if (step >= FADE_STEPS) {
-        clearInterval(timer)
-        old.pause()
-      }
-    }, MUSIC_CROSSFADE_MS / FADE_STEPS)
+    const entry = {
+      old,
+      timer: setInterval(() => {
+        step++
+        const duck = narrating.value ? MUSIC_DUCK : 1
+        old.volume = Math.max(0, base * duck * (1 - step / FADE_STEPS))
+        if (step >= FADE_STEPS) {
+          clearInterval(entry.timer)
+          old.pause()
+          outgoing.splice(outgoing.indexOf(entry), 1)
+        }
+      }, MUSIC_CROSSFADE_MS / FADE_STEPS),
+    }
+    outgoing.push(entry)
   }
 
   // Sync flush so muting takes effect immediately, wherever it was changed.
@@ -90,6 +116,7 @@ export function useMusic(
     () => settings.musicOn,
     (on) => {
       if (!on) {
+        stopCrossfade()
         audio.pause()
       } else if (currentMusicFile.value) {
         audio.play().catch(() => {})
@@ -104,6 +131,7 @@ export function useMusic(
   )
   let fade: ReturnType<typeof setInterval> | null = null
 
+  /** Moves the volume to `volume` over `ms`, replacing any fade under way. */
   function fadeTo(volume: number, ms: number = MUSIC_DUCK_FADE_MS): void {
     if (fade) clearInterval(fade)
     const start = audio.volume
@@ -180,6 +208,7 @@ export function useMusic(
     currentMusicFile,
     musicInfo,
     loadTrack,
+    stopCrossfade,
     toggleMute,
     ensureMusicStarted,
     buildAttributionHtml,
