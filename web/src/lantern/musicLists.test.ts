@@ -34,13 +34,23 @@ function readJson<T>(path: string): T {
 }
 
 describe('actLoops', () => {
-  it('lists one loop per act, named after the track it plays today', () => {
+  it('lists one loop per act, named by its act', () => {
     const titles = ACTS.map((act) => actLoops(act).map((t) => t.title))
     expect(titles).toEqual([
-      ['Market'],
-      ['Medieval Village'],
-      ['Feel The Storm'],
-      ['The Silver Grail'],
+      ['Act 1 Opening'],
+      ['Act 2 Opening'],
+      ['Act 3 Opening'],
+      ['Act 4 Opening'],
+    ])
+  })
+
+  it('keeps the ids a chosen take is keyed by', () => {
+    const ids = ACTS.map((act) => actLoops(act).map((t) => t.id))
+    expect(ids).toEqual([
+      ['market'],
+      ['medieval-village'],
+      ['feel-the-storm'],
+      ['the-silver-grail'],
     ])
   })
 
@@ -64,15 +74,15 @@ describe('actLoops', () => {
   })
 
   it('lists nothing for an act without music', () => {
-    expect(actLoops({ musicFile: '' })).toEqual([])
+    expect(actLoops({ name: 'Act5', musicFile: '' })).toEqual([])
   })
 })
 
 describe('actLoops without a brief', () => {
   it('refuses a music file it has no brief for', () => {
-    expect(() => actLoops({ musicFile: 'Someone - New Song.mp3' })).toThrow(
-      'No loop brief',
-    )
+    expect(() =>
+      actLoops({ name: 'Act5', musicFile: 'Someone - New Song.mp3' }),
+    ).toThrow('No loop brief')
   })
 })
 
