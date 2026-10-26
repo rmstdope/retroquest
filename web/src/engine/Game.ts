@@ -82,6 +82,12 @@ export class Game implements CommandTarget {
   /** Every class a save may contain: the engine's and each act's (`Act1.Bread`). */
   readonly registry: ClassRegistry
   private readonly saveStorage: SaveStorage
+  /**
+   * Each later act's rooms and quests as they were before its first start,
+   * by act index, so every start of it begins from them however far an
+   * earlier start was played (a save of an earlier act loaded in this game).
+   */
+  private readonly untouchedActs: Partial<Record<number, SerializedGraph>> = {}
 
   constructor(acts: Act[], { saveStorage }: GameOptions = {}) {
     this.acts = acts
@@ -99,10 +105,13 @@ export class Game implements CommandTarget {
   /**
    * A new state for act `actIndex`, starting in its first room. From the
    * state of the act before it carries the virtues and every flag an earlier
-   * act declared in `carriedFlags`, and nothing else.
+   * act declared in `carriedFlags`, and nothing else. An act started from the
+   * one before it gets its own copy of its untouched rooms and quests, so it
+   * begins as it did the first time even when it was played before.
    */
   private freshState(actIndex: number, previous?: GameState): GameState {
     const act = this.acts[actIndex]
+    if (previous) this.restoreUntouched(act, actIndex)
     const startingRoom = Object.values(act.rooms)[0]
     const state = new GameState(startingRoom, act.rooms, act.quests)
     if (previous) {
@@ -115,6 +124,23 @@ export class Game implements CommandTarget {
     }
     act.setupGameState(state)
     return state
+  }
+
+  /**
+   * Give `act` a copy of its rooms and quests as they were before its first
+   * start, keeping that untouched form the first time it is asked for.
+   */
+  private restoreUntouched(act: Act, actIndex: number): void {
+    const untouched = (this.untouchedActs[actIndex] ??= serialize(
+      { rooms: act.rooms, quests: act.quests },
+      this.registry,
+    ))
+    const copy = deserialize(untouched, this.registry) as Pick<
+      Act,
+      'rooms' | 'quests'
+    >
+    act.rooms = copy.rooms
+    act.quests = copy.quests
   }
 
   /** Advance the run state by one turn. */

@@ -307,7 +307,7 @@ describe('Game', () => {
       expect(game.getActCompleteText()).toBeNull()
       expect(game.isActIntroShowing()).toBe(true)
       expect(game.currentAct).toBe(1)
-      expect(game.state.currentRoom).toBe(secondRooms.Gate)
+      expect(game.state.currentRoom).toBe(second.rooms.Gate)
       expect(game.getActName()).toBe('Act 2')
       game.newTurn()
       secondDone = true
@@ -1393,6 +1393,34 @@ describe('Game', () => {
       expect(spell).toMatchObject({ id: 'two_words', name: 'Two Words' })
       expect(reloaded.state.hasSpell('two_words')).toBe(true)
       expect(reloaded.cast('two words')).toContain('Two Words')
+    })
+
+    it('starts a later act fresh after a save of an earlier act is loaded', () => {
+      const game = twoActGame()
+      const second = game.acts[1]
+      second.rooms.SecondRoom.items.push(item('pebble'))
+      const firstActSave = game.toSaveData()
+      const first = game.acts[0]
+      if (!(first instanceof StateAct)) throw new Error('no first act')
+      first.done = true
+      /** Turn until the second act runs. */
+      const enterSecondAct = (): void => {
+        for (let turn = 0; turn < 10; turn++) {
+          if (game.currentAct === 1 && game.isActRunning()) return
+          game.newTurn()
+        }
+        throw new Error('the second act never started')
+      }
+
+      enterSecondAct()
+      expect(game.take('pebble')).not.toContain('failure')
+      expect(game.loadSaveData(firstActSave)).toContain('loaded')
+      enterSecondAct()
+
+      expect(game.state.currentRoom.items.map((i) => i.name)).toEqual([
+        'pebble',
+      ])
+      expect(game.state.inventory).toEqual([])
     })
 
     it('names act classes after their act so acts may share class names', () => {
