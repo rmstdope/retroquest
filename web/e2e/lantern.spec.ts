@@ -1113,20 +1113,22 @@ test.describe('Lantern UI (the default)', () => {
         'The villagers whisper of shadows beyond the mill.',
       )
       await expect(body).toBeVisible()
-      // The frame is the nearest bordered box around the banner's button.
+      // The frame is the bordered box of the notice itself: the button or
+      // the notice that holds it, never a box further out.
       const frame = await banner.evaluate((button) => {
-        let el: Element | null = button
-        while (el && parseFloat(getComputedStyle(el).borderTopWidth) === 0) {
-          el = el.parentElement
-        }
-        const r = el!.getBoundingClientRect()
+        const framed = [button, button.parentElement].find(
+          (el) => el && parseFloat(getComputedStyle(el).borderTopWidth) > 0,
+        )
+        if (!framed) return null
+        const r = framed.getBoundingClientRect()
         return { top: r.top, bottom: r.bottom, left: r.left, right: r.right }
       })
+      expect(frame).not.toBeNull()
       const text = (await body.boundingBox())!
-      expect(text.y).toBeGreaterThanOrEqual(frame.top)
-      expect(text.y + text.height).toBeLessThanOrEqual(frame.bottom)
-      expect(text.x).toBeGreaterThanOrEqual(frame.left)
-      expect(text.x + text.width).toBeLessThanOrEqual(frame.right)
+      expect(text.y).toBeGreaterThanOrEqual(frame!.top)
+      expect(text.y + text.height).toBeLessThanOrEqual(frame!.bottom)
+      expect(text.x).toBeGreaterThanOrEqual(frame!.left)
+      expect(text.x + text.width).toBeLessThanOrEqual(frame!.right)
     })
   }
 })
