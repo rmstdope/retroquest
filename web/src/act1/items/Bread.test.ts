@@ -42,3 +42,14 @@ describe("Bread and grandmother's fresh loaf", () => {
     expect(game.state.hasItem('fresh bread')).toBe(true)
   })
 })
+
+describe('Using the bread on its own', () => {
+  it('says you are not hungry', () => {
+    const game = cottageGame()
+    game.state.addItemToInventory(new Bread())
+
+    expect(game.commandParser.parse('use bread')).toBe(
+      'You are not particularly hungry.',
+    )
+  })
+})

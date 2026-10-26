@@ -14,6 +14,11 @@ export class Bread extends Item {
     })
   }
 
+  /** Using the bread on its own is a remark: the player is not hungry. */
+  override use(_gameState: GameState): string {
+    return 'You are not particularly hungry.'
+  }
+
   /** Use bread with chickens to reveal a key, otherwise fail. */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Chicken) {
