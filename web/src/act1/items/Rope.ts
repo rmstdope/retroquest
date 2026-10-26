@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, speech } from '@/engine'
+import { Item, type GameState, nameInSentence, speech } from '@/engine'
 import { Mechanism } from './Mechanism'
 
 /** Early shop item used for mechanical or traversal interactions. */
@@ -17,7 +17,10 @@ export class Rope extends Item {
     if (!this.canBeCarried) {
       const nameHtml = `[item_name]${this.name}[/item_name]`
       return (
-        characterName('Shopkeeper') +
+        nameInSentence('character', 'shopkeeper', {
+          common: true,
+          atStart: true,
+        }) +
         ' quickly steps over. ' +
         speech(
           'Hold on there, friend! That ' +

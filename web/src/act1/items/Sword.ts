@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, speech } from '@/engine'
+import { Item, type GameState, nameInSentence, speech } from '@/engine'
 
 /** Sword item representing a combat/heroism symbol with equip and examine actions. */
 export class Sword extends Item {
@@ -16,7 +16,10 @@ export class Sword extends Item {
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
-        characterName('Shopkeeper') +
+        nameInSentence('character', 'shopkeeper', {
+          common: true,
+          atStart: true,
+        }) +
         ' quickly steps over. ' +
         speech(
           `Hold on there, friend! That [item_name]${this.name}[/item_name] ` +

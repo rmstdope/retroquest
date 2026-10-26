@@ -1,4 +1,4 @@
-import { Item, characterName, speech } from '@/engine'
+import { Item, nameInSentence, speech } from '@/engine'
 
 /** Basic food item; the shopkeeper blocks pickup until it has been bought. */
 export class Apple extends Item {
@@ -14,7 +14,10 @@ export class Apple extends Item {
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
-        characterName('Shopkeeper') +
+        nameInSentence('character', 'shopkeeper', {
+          common: true,
+          atStart: true,
+        }) +
         ' quickly steps over. ' +
         speech(
           `Hold on there, friend! That [item_name]${this.name}[/item_name] ` +

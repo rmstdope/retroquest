@@ -8389,78 +8389,6 @@
    }
   ]
  },
- "0438e23a08183a": {
-  "file": "0438e23a08183a.mp3",
-  "speaker": "narrator",
-  "duration": 4.923,
-  "words": [
-   {
-    "word": "Patches",
-    "start": 0.0,
-    "end": 0.46
-   },
-   {
-    "word": "butts",
-    "start": 0.46,
-    "end": 0.8
-   },
-   {
-    "word": "her",
-    "start": 0.8,
-    "end": 1.04
-   },
-   {
-    "word": "head",
-    "start": 1.04,
-    "end": 1.32
-   },
-   {
-    "word": "against",
-    "start": 1.32,
-    "end": 1.66
-   },
-   {
-    "word": "the",
-    "start": 1.66,
-    "end": 1.86
-   },
-   {
-    "word": "Shopkeeper's",
-    "start": 1.86,
-    "end": 2.58
-   },
-   {
-    "word": "hand,",
-    "start": 2.58,
-    "end": 2.88
-   },
-   {
-    "word": "and",
-    "start": 2.98,
-    "end": 3.46
-   },
-   {
-    "word": "his",
-    "start": 3.46,
-    "end": 3.66
-   },
-   {
-    "word": "face",
-    "start": 3.66,
-    "end": 4.04
-   },
-   {
-    "word": "lights",
-    "start": 4.04,
-    "end": 4.4
-   },
-   {
-    "word": "up.",
-    "start": 4.4,
-    "end": 4.72
-   }
-  ]
- },
  "043c8fc81c2f05": {
   "file": "043c8fc81c2f05.mp3",
   "speaker": "narrator",
@@ -23591,33 +23519,6 @@
    }
   ]
  },
- "0c2daf86c44092": {
-  "file": "0c2daf86c44092.mp3",
-  "speaker": "narrator",
-  "duration": 2.136,
-  "words": [
-   {
-    "word": "Shopkeeper",
-    "start": 0.0,
-    "end": 0.7
-   },
-   {
-    "word": "quickly",
-    "start": 0.7,
-    "end": 1.16
-   },
-   {
-    "word": "steps",
-    "start": 1.16,
-    "end": 1.58
-   },
-   {
-    "word": "over.",
-    "start": 1.58,
-    "end": 1.9
-   }
-  ]
- },
  "0c2f77642b7cb8": {
   "file": "0c2f77642b7cb8.mp3",
   "speaker": "narrator",
@@ -25957,28 +25858,6 @@
     "word": "Square",
     "start": 0.52,
     "end": 0.86
-   }
-  ]
- },
- "0d53763970cec9": {
-  "file": "0d53763970cec9.mp3",
-  "speaker": "narrator",
-  "duration": 1.625,
-  "words": [
-   {
-    "word": "The",
-    "start": 0.0,
-    "end": 0.14
-   },
-   {
-    "word": "Shopkeeper",
-    "start": 0.14,
-    "end": 0.8
-   },
-   {
-    "word": "chuckles.",
-    "start": 0.8,
-    "end": 1.18
    }
   ]
  },
@@ -30798,28 +30677,6 @@
     "word": "happens.",
     "start": 5.1,
     "end": 5.5
-   }
-  ]
- },
- "10bd44d6b64d6d": {
-  "file": "10bd44d6b64d6d.mp3",
-  "speaker": "narrator",
-  "duration": 1.533,
-  "words": [
-   {
-    "word": "The",
-    "start": 0.0,
-    "end": 0.14
-   },
-   {
-    "word": "Shopkeeper",
-    "start": 0.14,
-    "end": 0.84
-   },
-   {
-    "word": "says:",
-    "start": 0.84,
-    "end": 1.32
    }
   ]
  },
@@ -56442,33 +56299,6 @@
     "word": "light.",
     "start": 3.28,
     "end": 3.64
-   }
-  ]
- },
- "1f7745b8397160": {
-  "file": "1f7745b8397160.mp3",
-  "speaker": "narrator",
-  "duration": 1.811,
-  "words": [
-   {
-    "word": "The",
-    "start": 0.0,
-    "end": 0.14
-   },
-   {
-    "word": "Shopkeeper",
-    "start": 0.14,
-    "end": 0.84
-   },
-   {
-    "word": "leans",
-    "start": 0.84,
-    "end": 1.34
-   },
-   {
-    "word": "in.",
-    "start": 1.34,
-    "end": 1.58
    }
   ]
  },
