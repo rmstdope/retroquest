@@ -1,4 +1,11 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  attributeSpeech,
+  dialogue,
+} from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { CrystalFocus } from '../items/CrystalFocus'
 import { MendSpell } from '../spells/MendSpell'
@@ -75,15 +82,13 @@ export class SpectralLibrarian extends Character {
 
   /** The greeting before mending; the first one with the amulet opens with the glance. */
   private greeting(gameState: GameState, carrying: boolean): string {
-    const greeting =
-      characterName(this.name) +
-      ': ' +
-      speech(
-        'Mind the shelves. Everything here has been kept a long time, ' +
-          'and the wards on the oldest texts are failing. I can keep a book; ' +
-          'I cannot mend one. Mend the wards, and I will show you where to ' +
-          'look for the mark you carry.',
-      )
+    const greeting = dialogue(
+      this.name,
+      'Mind the shelves. Everything here has been kept a long time, ' +
+        'and the wards on the oldest texts are failing. I can keep a book; ' +
+        'I cannot mend one. Mend the wards, and I will show you where to ' +
+        'look for the mark you carry.',
+    )
     if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET)) {
       return greeting
     }
@@ -94,9 +99,7 @@ export class SpectralLibrarian extends Character {
       ' turns toward you, and stops. Their eyes have found the ' +
       itemName(AMULET_NAME) +
       ' at your throat.\n\n' +
-      characterName(this.name) +
-      ': ' +
-      speech(`${GLANCE_WORDS}`) +
+      dialogue(this.name, `${GLANCE_WORDS}`) +
       '\n\n' +
       greeting
     )
@@ -126,13 +129,14 @@ export class SpectralLibrarian extends Character {
           speech(`${GLANCE_WORDS} ${CONFESSION_WORDS}`)
     }
     return (
-      '[success]' +
-      characterName(this.name) +
-      ': ' +
-      speech(
-        `You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
-          'spell. They have been failing longer than I care to count; ' +
-          'thank you. Now, what you came for.',
+      attributeSpeech(
+        this.name,
+        '[success]' +
+          speech(
+            `You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
+              'spell. They have been failing longer than I care to count; ' +
+              'thank you. Now, what you came for.',
+          ),
       ) +
       confession +
       " The spirit's eyes glow brighter as they speak: " +
@@ -153,18 +157,14 @@ export class SpectralLibrarian extends Character {
 
   /** Later talks: the confession once if missed and the amulet is carried, then the chronicle line. */
   private laterTalk(gameState: GameState, carrying: boolean): string {
-    const line =
-      characterName(this.name) +
-      ': ' +
-      (gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)
-        ? speech(
-            'You have read what we left. The rest is not written on ' +
-              'any shelf of mine. Use this knowledge wisely.',
-          )
-        : speech(
-            'The chronicle is waiting on its shelf. We wrote it for ' +
-              'whoever would read it; I cannot read it for you.',
-          ))
+    const line = dialogue(
+      this.name,
+      gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)
+        ? 'You have read what we left. The rest is not written on ' +
+            'any shelf of mine. Use this knowledge wisely.'
+        : 'The chronicle is waiting on its shelf. We wrote it for ' +
+            'whoever would read it; I cannot read it for you.',
+    )
     if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)) {
       return line
     }
@@ -176,9 +176,7 @@ export class SpectralLibrarian extends Character {
       "'s eyes go to the " +
       itemName(AMULET_NAME) +
       '.\n\n' +
-      characterName(this.name) +
-      ': ' +
-      speech(`${GLANCE_WORDS} ${CONFESSION_WORDS}`) +
+      dialogue(this.name, `${GLANCE_WORDS} ${CONFESSION_WORDS}`) +
       '\n\n' +
       line
     )

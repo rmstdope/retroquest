@@ -3,7 +3,7 @@ import {
   type GameState,
   characterName,
   clue,
-  speech,
+  dialogue,
 } from '@/engine'
 import {
   FLAG_KNOWS_ELENA_CURSE,
@@ -65,9 +65,8 @@ export class BarmaidElena extends Character {
         ' sees you looking at her wrist and tugs her sleeve down over the ' +
         'silver mark.' +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'It came the same night as the curse. Since then I dream of a ' +
             'smiling face with no eyes, and it never says a true word.',
         ) +
@@ -85,9 +84,8 @@ export class BarmaidElena extends Character {
         characterName('Elena') +
         ' glances toward the taproom.' +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Father has bolted every shutter in the house, and he sleeps down ' +
             'in the taproom now with the poker across his knees. ' +
             "I'm glad you told him. He'd have gone on blaming the wind.",
@@ -107,9 +105,8 @@ export class BarmaidElena extends Character {
         characterName('Elena') +
         ' beams with health and vitality.' +
         '\n\n' +
-        characterName(name) +
-        ': ' +
-        speech(
+        dialogue(
+          name,
           'Oh, thank you so much! I feel ' +
             "like I'm alive again! The curse is completely gone, and I owe you " +
             'my life. My father is so grateful - he insists you take our ' +
@@ -122,30 +119,26 @@ export class BarmaidElena extends Character {
         characterName('Elena') +
         ' rubs at the inside of her wrist.' +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'The water stung, and then it was gone, and some of the cold went ' +
             'with it. But it is still holding on. I can feel it, here.',
         )
       )
     } else if (this.elenaInitialHealing) {
-      const name = characterName(this.name)
       return (
         characterName('Elena') +
         ' turns her hand over and looks at it as if it belonged to someone ' +
         'else.' +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           "It didn't take. I felt it go in, warm as a hearth, and then the " +
             'cold closed over it again.',
         ) +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Master Lyria sat with me once, when it began. If anyone knows ' +
             'what comes next, she does.',
         )
@@ -157,9 +150,8 @@ export class BarmaidElena extends Character {
         characterName('Elena') +
         ' coughs weakly.' +
         '\n\n' +
-        characterName(name) +
-        ': ' +
-        speech(
+        dialogue(
+          name,
           'Hello, traveler. I apologize for my appearance... ' +
             "I've been cursed by a dark wizard who passed through town weeks " +
             'ago. The curse grows stronger each day, draining my life force. ' +
@@ -173,9 +165,8 @@ export class BarmaidElena extends Character {
         characterName('Elena') +
         ' speaks weakly.' +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Have you found a way to break the curse? I can feel my ' +
             'strength fading more each day...',
         )

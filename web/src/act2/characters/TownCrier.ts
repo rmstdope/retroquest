@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  dialogue,
+} from '@/engine'
 import { FLAG_CEDRIKS_HONOR_COMPLETED } from '../Act2StoryFlags'
 
 /** Ambient NPC who broadcasts civic news and points players to key hubs. */
@@ -19,14 +25,12 @@ export class TownCrier extends Character {
    */
   override talkTo(gameState: GameState): string {
     const name = this.name
-    const greeting =
-      characterName(name) +
-      ': ' +
-      speech(
-        'Hear ye, hear ye! Welcome to Greendale, traveler! The Lord ' +
-          'Commander calls for able hands to serve the realm. Read his ' +
-          'notice on the board!',
-      )
+    const greeting = dialogue(
+      name,
+      'Hear ye, hear ye! Welcome to Greendale, traveler! The Lord ' +
+        'Commander calls for able hands to serve the realm. Read his ' +
+        'notice on the board!',
+    )
     const cedric = characterName('Sir Cedric')
     if (gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)) {
       return (

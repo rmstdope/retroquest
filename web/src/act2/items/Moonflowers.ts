@@ -1,4 +1,4 @@
-import { Item, type GameState, characterName, speech } from '@/engine'
+import { Item, type GameState, characterName, dialogue } from '@/engine'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
 
 /** Rare bioluminescent blossoms used in healing and divinatory practices. */
@@ -25,9 +25,8 @@ export class Moonflowers extends Item {
         characterName('Lyria') +
         ' glances at the silver blooms and shakes her head.' +
         '\n\n' +
-        characterName('Master Healer Lyria') +
-        ': ' +
-        speech(
+        dialogue(
+          'Master Healer Lyria',
           'Not for my shelves. Those belong to things older than me. Take ' +
             'them back to the forest.',
         )

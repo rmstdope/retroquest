@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  dialogue,
+} from '@/engine'
 import { FLAG_CEDRIKS_HONOR_COMPLETED } from '../Act2StoryFlags'
 
 /** Orientation NPC who advises visitors on castle protocol and introductions. */
@@ -21,9 +27,8 @@ export class CastleGuardCaptain extends Character {
       : 'He holds no rank now, but we still call him Sir, most of us, and ' +
         "you'll do the same if you've any sense."
     return (
-      characterName(name) +
-      ': ' +
-      speech(
+      dialogue(
+        name,
         'Welcome to the castle grounds. ' +
           characterName('Sir Cedric') +
           ` can be found in the courtyard. ${standing} He's been seeking ` +

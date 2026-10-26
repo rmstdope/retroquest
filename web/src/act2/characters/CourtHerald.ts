@@ -1,10 +1,4 @@
-import {
-  Character,
-  type GameState,
-  type Item,
-  characterName,
-  speech,
-} from '@/engine'
+import { Character, type GameState, type Item, dialogue } from '@/engine'
 import { FLAG_COURT_HERALD_FORMAL_PRESENTATION } from '../Act2StoryFlags'
 import { EntryPass } from '../items/EntryPass'
 
@@ -34,11 +28,7 @@ export class CourtHerald extends Character {
       const announcementTail =
         'Your credentials are now on record, and you may research freely in ' +
         'our collections.'
-      return (
-        characterName(heraldName) +
-        ': ' +
-        speech(announcement + ' ' + announcementTail)
-      )
+      return dialogue(heraldName, announcement + ' ' + announcementTail)
     } else {
       // Default behavior for other items
       return super.giveItem(gameState, item)
@@ -49,28 +39,22 @@ export class CourtHerald extends Character {
   override talkTo(gameState: GameState): string {
     const name = this.name
     if (gameState.getStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION)) {
-      return (
-        characterName(name) +
-        ': ' +
-        speech(
-          'You have been formally presented to the court and your ' +
-            'credentials are on record. You may access the historical archives ' +
-            'and speak with court historians about your research. Petitions that ' +
-            "were the king's go to the Lord Commander now, by his order, until His " +
-            'Majesty is found.',
-        )
+      return dialogue(
+        name,
+        'You have been formally presented to the court and your ' +
+          'credentials are on record. You may access the historical archives ' +
+          'and speak with court historians about your research. Petitions that ' +
+          "were the king's go to the Lord Commander now, by his order, until His " +
+          'Majesty is found.',
       )
     } else {
-      return (
-        characterName(name) +
-        ': ' +
-        speech(
-          'I handle formal presentations and credentials for court access. ' +
-            'If you wish to research in the historical archives or speak with ' +
-            "court officials, you'll need proper documentation of your " +
-            "standing. Petitions that were the king's go to the Lord Commander " +
-            'now, by his order, until His Majesty is found.',
-        )
+      return dialogue(
+        name,
+        'I handle formal presentations and credentials for court access. ' +
+          'If you wish to research in the historical archives or speak with ' +
+          "court officials, you'll need proper documentation of your " +
+          "standing. Petitions that were the king's go to the Lord Commander " +
+          'now, by his order, until His Majesty is found.',
       )
     }
   }

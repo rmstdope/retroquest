@@ -3,7 +3,7 @@ import {
   type GameState,
   characterName,
   clue,
-  speech,
+  dialogue,
 } from '@/engine'
 import { MendSpell } from '../spells/MendSpell'
 import { FLAG_HELPED_ELDERLY_RESIDENTS } from '../Act2StoryFlags'
@@ -51,14 +51,11 @@ export class LocalCraftsmen extends Character {
       )
     }
     const name = this.name
-    return (
-      characterName(name) +
-      ': ' +
-      speech(
-        'Good to see you again! How has your repair magic been working? ' +
-          'The mend spell is one of the most useful pieces of magic a person ' +
-          'can learn.',
-      )
+    return dialogue(
+      name,
+      'Good to see you again! How has your repair magic been working? ' +
+        'The mend spell is one of the most useful pieces of magic a person ' +
+        'can learn.',
     )
   }
 }

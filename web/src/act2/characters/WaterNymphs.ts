@@ -112,9 +112,8 @@ export class WaterNymphs extends Character {
           "Back again? Wasn't three enough? What more could we ask you?",
         ) +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Yet the streams come down thinner from the hills this season, ' +
             'seeker. Something up there drinks before we do, and the fields ' +
             'below the city taste it first.',

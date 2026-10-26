@@ -256,7 +256,7 @@ describe('Elena remarks on her father after the truth (rq-coj)', () => {
     expect(
       first.startsWith(
         TRUTH_STAGE +
-          '\n\n[character_name]barmaid elena[/character_name]: ' +
+          '\n\n[character_name]barmaid elena[/character_name]\n' +
           '[dialogue]' +
           TRUTH_SPEECH +
           '[/dialogue]\n\n',

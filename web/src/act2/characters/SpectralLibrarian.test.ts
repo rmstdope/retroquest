@@ -88,6 +88,18 @@ describe('Spectral Librarian dialogue markup', () => {
     }
   })
 
+  it('puts the speaker name on its own line before the mending thanks, never after [success]', () => {
+    const game = createGame()
+    game.state.setStoryFlag(FLAG_MENDED_LIBRARY_ENCHANTMENTS, true)
+    const librarian = new SpectralLibrarian()
+
+    const answer = librarian.talkTo(game.state)
+
+    expect(answer).toMatch(
+      /^\[success\]\n\[character_name\]Spectral Librarian\[\/character_name\]\n\[dialogue\]You mended/,
+    )
+  })
+
   it('tells the reveal in the agreed order', () => {
     const game = createGame()
     game.state.setStoryFlag(FLAG_MENDED_LIBRARY_ENCHANTMENTS, true)

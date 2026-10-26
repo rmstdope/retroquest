@@ -6,6 +6,7 @@ import {
   clue,
   remembered,
   speech,
+  dialogue,
 } from '@/engine'
 import {
   FLAG_HELPED_ELDERLY_RESIDENTS,
@@ -49,17 +50,15 @@ export class Families extends Character {
       )
     }
 
-    let response =
-      characterName(this.name) +
-      ': ' +
-      speech(
-        "Welcome to our neighborhood! It's lovely to meet someone who " +
-          'takes time to help others. Greendale has a rich history - our ' +
-          'families have been here for generations. The city has always been ' +
-          'a place where those with good hearts and magical talents find a ' +
-          "home. We're grateful for folks like you who lend a hand to those " +
-          'in need.',
-      )
+    let response = dialogue(
+      this.name,
+      "Welcome to our neighborhood! It's lovely to meet someone who " +
+        'takes time to help others. Greendale has a rich history - our ' +
+        'families have been here for generations. The city has always been ' +
+        'a place where those with good hearts and magical talents find a ' +
+        "home. We're grateful for folks like you who lend a hand to those " +
+        'in need.',
+    )
 
     // Give healing herbs on first conversation after helping elderly residents
     if (!this.healingHerbsGiven) {
@@ -79,9 +78,8 @@ export class Families extends Character {
         ) +
         ` You receive [item_name]${herbs.name}[/item_name]!` +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Master Lyria up the lane has been asking all week for herbs like ' +
             "these. If you've no use for them yourself, she would.",
         )
@@ -89,9 +87,8 @@ export class Families extends Character {
 
     response +=
       '\n\n' +
-      characterName(this.name) +
-      ': ' +
-      speech(
+      dialogue(
+        this.name,
         'Our garden plots have gone grey this year. Beans, cabbages, the lot: ' +
           'they come up green and then simply give up. Old Hettie says it is ' +
           'the soil, but none of us has ever seen soil do that.',
@@ -100,9 +97,8 @@ export class Families extends Character {
     if (!gameState.getStoryFlag(FLAG_WREN_FLOWER_GIVEN)) {
       response +=
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Little Wren at the end house has been abed with fever all week. ' +
             'She keeps asking for the purple flowers that grow up on the ' +
             'mountain path. None of us can manage that climb any more.',
@@ -157,9 +153,8 @@ export class Families extends Character {
       'A mother carries the flower down the lane to the end house. A little ' +
       'later a thin face appears at the window, holding it up to the light.' +
       '\n' +
-      characterName(this.name) +
-      ': ' +
-      speech(
+      dialogue(
+        this.name,
         "She's smiling. First time in a week. It's only a flower, and she " +
           'knows it, but it came from the mountain and someone thought of ' +
           'her. Thank you, truly.',

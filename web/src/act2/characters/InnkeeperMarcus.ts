@@ -6,7 +6,6 @@ import {
   clue,
   remembered,
   dialogue,
-  speech,
 } from '@/engine'
 import { RoomKey } from '../items/RoomKey'
 import { DruidicCharm } from '../items/DruidicCharm'
@@ -69,7 +68,6 @@ export class InnkeeperMarcus extends Character {
     if (words.trim().toLowerCase() !== 'truth') {
       return super.sayTo(gameState, words)
     }
-    const speaker = characterName(this.name)
     if (!gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
       return dialogue(
         this.name,
@@ -91,9 +89,8 @@ export class InnkeeperMarcus extends Character {
       `${characterName('Elena')}'s wrist: the curse was no ill wind. ` +
       'Someone set it on her on purpose.' +
       '\n' +
-      speaker +
-      ': ' +
-      speech(
+      dialogue(
+        this.name,
         'On purpose. … Someone chose my girl. … Then this house sleeps ' +
           'with one eye open from now on. Thank you for telling me. ' +
           "I'd sooner know it than be comforted by a lie.",
@@ -131,31 +128,20 @@ export class InnkeeperMarcus extends Character {
         const tail =
           '[success]Marcus places the sacred charm in your hands with reverence. ' +
           'You can feel the ancient magic thrumming within the carved wood.[/success]'
-        return (
-          direction +
-          '\n\n' +
-          characterName(name) +
-          ': ' +
-          speech(head + body) +
-          '\n\n' +
-          tail
-        )
+        return direction + '\n\n' + dialogue(name, head + body) + '\n\n' + tail
       } else {
-        const usual =
-          characterName(this.name) +
-          ': ' +
-          speech(
-            'My daughter is healthy and happy again, all thanks to you! The ' +
-              'Silver Stag Inn will always be your home. Whatever you need - ' +
-              "rooms, meals, information - it's yours freely.",
-          )
+        const usual = dialogue(
+          this.name,
+          'My daughter is healthy and happy again, all thanks to you! The ' +
+            'Silver Stag Inn will always be your home. Whatever you need - ' +
+            "rooms, meals, information - it's yours freely.",
+        )
         if (gameState.getStoryFlag(FLAG_MARCUS_TOLD_TRUTH)) return usual
         return (
           usual +
           '\n\n' +
-          characterName(this.name) +
-          ': ' +
-          speech(
+          dialogue(
+            this.name,
             'An ill wind, the healer called it. Bad luck, blown in off the ' +
               'road, settling on the one soul in this house who never harmed ' +
               'anyone.',
@@ -178,50 +164,39 @@ export class InnkeeperMarcus extends Character {
     }
 
     // Cycle through dialogue options
-    const dialogue = this.dialogueOptions[this.dialogueIndex]
+    const option = this.dialogueOptions[this.dialogueIndex]
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
     const name = this.name
 
     if (gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)) {
       const dialogueBlock =
-        characterName(name) +
-        ': ' +
-        speech(`${dialogue} ${waresInfo.trim()}`) +
-        '\n\n'
-      const plea =
-        characterName(name) +
-        ': ' +
-        speech(
-          "You've spoken with " +
-            characterName('Elena') +
-            '? Then you understand my desperation. The curse grows stronger ' +
-            "each day, and I fear we don't have much time left. If you truly " +
-            "can help her, I'll give you anything - rooms, information, " +
-            'whatever you need.',
-        )
+        dialogue(name, `${option} ${waresInfo.trim()}`) + '\n\n'
+      const plea = dialogue(
+        name,
+        "You've spoken with " +
+          characterName('Elena') +
+          '? Then you understand my desperation. The curse grows stronger ' +
+          "each day, and I fear we don't have much time left. If you truly " +
+          "can help her, I'll give you anything - rooms, information, " +
+          'whatever you need.',
+      )
       const weekTheKingWent =
         '\n\n' +
-        characterName(name) +
-        ': ' +
-        speech(
+        dialogue(
+          name,
           'It came on her the week the king went. The whole town was out in ' +
             'the streets asking after him, and I was upstairs with a cold cloth.',
         )
       return dialogueBlock + plea + weekTheKingWent
     } else {
       const dialogueBlock =
-        characterName(name) +
-        ': ' +
-        speech(`${dialogue} ${waresInfo.trim()}`) +
-        '\n\n'
-      const closing =
-        characterName(name) +
-        ': ' +
-        speech(
-          'Though I must say, these have been dark times for my family. My daughter... ' +
-            "well, perhaps you should speak with her yourself if you're looking to help " +
-            'those in need.',
-        )
+        dialogue(name, `${option} ${waresInfo.trim()}`) + '\n\n'
+      const closing = dialogue(
+        name,
+        'Though I must say, these have been dark times for my family. My daughter... ' +
+          "well, perhaps you should speak with her yourself if you're looking to help " +
+          'those in need.',
+      )
       return dialogueBlock + closing
     }
   }
@@ -297,15 +272,13 @@ export class InnkeeperMarcus extends Character {
         characterName('Marcus') +
         ' hands you a brass key and explains how to access the private ' +
         'rooms upstairs.[/success]'
-      const lodger =
-        characterName(seller) +
-        ': ' +
-        speech(
-          'That room upstairs? Its last lodger was a man in a grey cloak. ' +
-            'Never gave a name, wrote half the night by candle, and was ' +
-            'gone one morning without paying. It was the week the king ' +
-            "went. I've aired it since. You'll find it clean.",
-        )
+      const lodger = dialogue(
+        seller,
+        'That room upstairs? Its last lodger was a man in a grey cloak. ' +
+          'Never gave a name, wrote half the night by candle, and was ' +
+          'gone one morning without paying. It was the week the king ' +
+          "went. I've aired it since. You'll find it clean.",
+      )
       return purchaseMsg + '\n\n' + lodger
     } else {
       // Should not happen if item is in wares, but safety check

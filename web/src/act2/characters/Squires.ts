@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  dialogue,
+} from '@/engine'
 import {
   FLAG_SQUIRES_TALKED_TO,
   FLAG_CEDRIKS_HONOR_ACCEPTED,
@@ -36,9 +42,8 @@ export class Squires extends Character {
         'practicing sword forms and footwork with intense concentration. ' +
         'They seem too busy and focused to engage in conversation right ' +
         'now.\n\n' +
-        characterName('Squires') +
-        ': ' +
-        speech(
+        dialogue(
+          'Squires',
           "Sorry, we can't talk - the Training Master expects us to " +
             'perfect these techniques before the day is over.',
         )
@@ -49,9 +54,8 @@ export class Squires extends Character {
     if (gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)) {
       return (
         'The squires have abandoned their drill and crowd together, grinning.\n\n' +
-        characterName('Squires') +
-        ': ' +
-        speech(
+        dialogue(
+          'Squires',
           'Did you see? They gave ' +
             characterName('Sir Cedric') +
             ' his sword back! He walked into the yard this morning with it ' +
@@ -64,9 +68,8 @@ export class Squires extends Character {
     }
     return (
       'The young squires lower their voices and glance around nervously.\n\n' +
-      characterName('Squires') +
-      ': ' +
-      speech(
+      dialogue(
+        'Squires',
         "We're not supposed to talk about it, but we've heard the older " +
           "knights whispering about Sir Cedric's disgrace. They say he left the " +
           "king's wall the night His Majesty vanished, and that whoever took the " +

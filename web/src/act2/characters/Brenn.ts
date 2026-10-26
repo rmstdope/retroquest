@@ -1,4 +1,4 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import { Character, type GameState, dialogue } from '@/engine'
 import {
   FLAG_BRENN_FORGIVEN,
   FLAG_LOST_CARAVAN_COMPLETED,
@@ -23,39 +23,29 @@ export class Brenn extends Character {
 
   /** His line for the current step of the caravan story; the same every time. */
   override talkTo(gameState: GameState): string {
-    const speaker = characterName(this.name)
     if (gameState.getStoryFlag(FLAG_BRENN_FORGIVEN)) {
-      return (
-        speaker +
-        ': ' +
-        speech(
-          'Thorne says one more road. He says somebody spoke for me. ' +
-            "… I won't run again. Not this time.",
-        )
+      return dialogue(
+        this.name,
+        'Thorne says one more road. He says somebody spoke for me. ' +
+          "… I won't run again. Not this time.",
       )
     }
     if (gameState.getStoryFlag(FLAG_LOST_CARAVAN_COMPLETED)) {
-      return (
-        speaker +
-        ': ' +
-        speech(
-          "They're home? All of them? … Thank you. Thorne says I'm to have " +
-            "my wages and not a copper more. I suppose that's fair. I ran. " +
-            'Unless somebody told him what it was like out there. ' +
-            "He'd never hear it from me.",
-        )
+      return dialogue(
+        this.name,
+        "They're home? All of them? … Thank you. Thorne says I'm to have " +
+          "my wages and not a copper more. I suppose that's fair. I ran. " +
+          'Unless somebody told him what it was like out there. ' +
+          "He'd never hear it from me.",
       )
     }
-    return (
-      speaker +
-      ': ' +
-      speech(
-        "You've seen Thorne, then. You'll have heard. The path just went, " +
-          'out from under the wagons. I was hanging over the ravine by one ' +
-          'hand. When I got up I ran for help, I swear I did. But the forest ' +
-          "turned me round, and I couldn't find the road again for two days. " +
-          'So I came back. Somebody had to tell him.',
-      )
+    return dialogue(
+      this.name,
+      "You've seen Thorne, then. You'll have heard. The path just went, " +
+        'out from under the wagons. I was hanging over the ravine by one ' +
+        'hand. When I got up I ran for help, I swear I did. But the forest ' +
+        "turned me round, and I couldn't find the road again for two days. " +
+        'So I came back. Somebody had to tell him.',
     )
   }
 }
