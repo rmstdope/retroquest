@@ -1922,13 +1922,11 @@ describe('LanternLayout', () => {
       it('shows the end of the story when a reading ending on a quest update has been read', async () => {
         const w = await ready()
         const el = story(w)
-        Object.defineProperty(el, 'clientHeight', {
-          configurable: true,
-          value: 300,
-        })
+        // The lit word is near the end; the quest card, once drawn, adds 100px below it.
+        stubGeometry(w, 1880)
         Object.defineProperty(el, 'scrollHeight', {
           configurable: true,
-          value: 2000,
+          get: () => (el.querySelector('[data-unit="2"]') ? 2000 : 1900),
         })
         useGameStore().setAudioPlayer({
           playNewQuest: vi.fn(),
@@ -1949,6 +1947,9 @@ describe('LanternLayout', () => {
         )
         audios[0].onended?.()
         await vi.advanceTimersByTimeAsync(350)
+        // A word of the last line is lit, then its voice ends.
+        audios[1].currentTime = 0.5
+        await vi.advanceTimersByTimeAsync(200)
         audios[1].onended?.()
         await vi.advanceTimersByTimeAsync(350)
         expect(useNarrationStore().storyReading).toBe(false)

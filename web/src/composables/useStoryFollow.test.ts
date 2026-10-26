@@ -328,6 +328,27 @@ describe('useStoryFollow', () => {
       expect(fake.story.scrollTop).toBe(CONTENT - VIEW)
     })
 
+    it('keeps the last word read in view when unvoiced text below it is taller than the pane', async () => {
+      fake = await mountStory()
+      read()
+      fake.api.follow(fake.word(600))
+      audio.onended?.()
+      await nextTick()
+      expect(narration.storyReading).toBe(false)
+      // The word's line is at the top; the unvoiced text runs on below.
+      expect(fake.story.scrollTop).toBe(600 - LINE)
+    })
+
+    it('stays where it is when a reading is cut in on and then skipped', async () => {
+      fake = await mountStory()
+      read(1)
+      fake.api.moveTo(100, false)
+      read(2)
+      narration.skipAll()
+      await nextTick()
+      expect(fake.story.scrollTop).toBe(100)
+    })
+
     it('does not hold the pane for the chapter page or a pop-up', async () => {
       fake = await mountStory()
       read(-1)
