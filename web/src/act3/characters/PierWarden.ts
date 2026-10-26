@@ -7,6 +7,7 @@ import {
   remembered,
   speech,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
@@ -41,6 +42,11 @@ const BAD_SEASON =
  * an optional virtue moment.
  */
 export class PierWarden extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'Pier Warden',

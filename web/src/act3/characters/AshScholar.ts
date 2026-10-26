@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  type NameOptions,
+} from '@/engine'
 import { BrassMirrorSegment } from '../items/BrassMirrorSegment'
 import { CharredNotebook } from '../items/CharredNotebook'
 
@@ -6,6 +12,11 @@ import { CharredNotebook } from '../items/CharredNotebook'
 export class AshScholar extends Character {
   /** Tracks whether this scholar has already given their mirror segment and notebook. */
   private gaveSegment = false
+
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
 
   constructor() {
     super({

@@ -5,6 +5,7 @@ import {
   dialogue,
   clue,
   speech,
+  type NameOptions,
 } from '@/engine'
 import { CrystalClearWater } from '../items/CrystalClearWater'
 import { Moonflowers } from '../items/Moonflowers'
@@ -80,6 +81,16 @@ export class WaterNymphs extends Character {
   currentRiddle = 0
   /** Wrong answers given to the current riddle; the hint shows from the second. */
   missCount = 0
+
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
 
   constructor() {
     super({

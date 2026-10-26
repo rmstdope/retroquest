@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  type NameOptions,
+} from '@/engine'
 import { FLAG_DEMONSTRATED_COMBAT_SKILLS } from '../Act2StoryFlags'
 import { TrainingSword } from '../items/TrainingSword'
 
@@ -13,6 +19,11 @@ import { TrainingSword } from '../items/TrainingSword'
 export class MountainHermit extends Character {
   swordGiven = false
   warnedAboutTimes = false
+
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
 
   constructor() {
     super({

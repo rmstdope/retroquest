@@ -5,6 +5,7 @@ import {
   dialogue,
   effect,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_ACT4_BADGE_SHOWN,
@@ -53,6 +54,11 @@ const CONFESSION = [
  * redeems her, and she stays by the open arch as the Unmasked Sorceress.
  */
 export class SorceressOfLies extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'Sorceress of Lies',

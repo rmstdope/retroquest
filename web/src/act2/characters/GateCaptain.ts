@@ -4,12 +4,18 @@ import {
   type Item,
   characterName,
   speech,
+  type NameOptions,
 } from '@/engine'
 import { EntryPass } from '../items/EntryPass'
 
 /** Entry authority who validates `EntryPass` and leaves the gate area once it is shown. */
 export class GateCaptain extends Character {
   entryPassGiven = false
+
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
 
   constructor() {
     super({

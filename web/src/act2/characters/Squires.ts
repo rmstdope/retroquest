@@ -4,6 +4,7 @@ import {
   characterName,
   speech,
   dialogue,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_SQUIRES_TALKED_TO,
@@ -18,6 +19,16 @@ import {
  * talk sets FLAG_SQUIRES_TALKED_TO.
  */
 export class Squires extends Character {
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
+
   constructor() {
     super({
       name: 'squires',

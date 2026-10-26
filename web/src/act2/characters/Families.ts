@@ -7,6 +7,7 @@ import {
   remembered,
   speech,
   dialogue,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_HELPED_ELDERLY_RESIDENTS,
@@ -28,6 +29,16 @@ import { HealingHerbs } from '../items/HealingHerbs'
  */
 export class Families extends Character {
   healingHerbsGiven = false
+
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
 
   constructor() {
     super({

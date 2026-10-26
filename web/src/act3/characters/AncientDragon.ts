@@ -4,6 +4,7 @@ import {
   characterName,
   speech,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { DragonsScale } from '../items/DragonsScale'
@@ -21,6 +22,11 @@ import {
 
 /** The ancient dragon who guards the Dragon's Scale and holds memories. */
 export class AncientDragon extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'ancient dragon',

@@ -5,6 +5,7 @@ import {
   characterName,
   dialogue,
   speech,
+  type NameOptions,
 } from '@/engine'
 import { EnchantedAcorn } from '../items/EnchantedAcorn'
 import { CrystalClearWater } from '../items/CrystalClearWater'
@@ -30,6 +31,11 @@ const NYMPHS_POINTER_AFTER_SPELL =
 export class AncientTreeSpirit extends Character {
   acornReceived = false
   whispersQuestCompleted = false
+
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
 
   constructor() {
     super({

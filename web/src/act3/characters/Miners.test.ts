@@ -127,7 +127,7 @@ describe('Miners and Tobin', () => {
   it('declines other items as usual', () => {
     const { game, miners } = setup()
     expect(miners.giveItem(game.state, new AncientAmulet())).toContain(
-      "doesn't seem interested",
+      "The [character_name]miners[/character_name] don't seem interested",
     )
   })
 

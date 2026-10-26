@@ -4,11 +4,17 @@ import {
   characterName,
   speech,
   dialogue,
+  type NameOptions,
 } from '@/engine'
 import { FLAG_CEDRIKS_HONOR_COMPLETED } from '../Act2StoryFlags'
 
 /** Ambient NPC who broadcasts civic news and points players to key hubs. */
 export class TownCrier extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'town crier',

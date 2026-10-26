@@ -4,6 +4,7 @@ import {
   characterName,
   speech,
   saysAnyOf,
+  type NameOptions,
 } from '@/engine'
 import { CEDRIC_FEATHER_GLANCE, cedricAdds } from '../CedricLines'
 import { PhoenixFeather } from '../items/PhoenixFeather'
@@ -31,6 +32,11 @@ const RIDDLE_ANSWERS = [
 /** A majestic, telepathic phoenix who poses a riddle to the worthy. */
 export class Phoenix extends Character {
   private riddlePosed = false
+
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
 
   constructor() {
     super({

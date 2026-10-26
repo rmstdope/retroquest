@@ -5,6 +5,7 @@ import {
   speech,
   attributeSpeech,
   dialogue,
+  type NameOptions,
 } from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { CrystalFocus } from '../items/CrystalFocus'
@@ -50,6 +51,11 @@ function itemName(name: string): string {
  * is set, then closes the matter.
  */
 export class SpectralLibrarian extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'Spectral Librarian',
