@@ -15,15 +15,20 @@ describe('EliorsJournal', () => {
     )
   })
 
-  it('shows the journal entry as one unlabelled quote', () => {
+  it('shows the journal entry as two unlabelled paragraphs, so each can be skipped', () => {
     const game = new Game([new Act1()])
     const text = new EliorsJournal().use(game.state)
 
     expect(findMarkupProblems(text)).toEqual([])
     const quotes = parseTurn(text).filter((b) => b.kind === 'dialogue')
-    expect(quotes).toHaveLength(1)
+    expect(quotes).toHaveLength(2)
     expect(quotes[0]).toMatchObject({ speaker: null })
+    expect(quotes[1]).toMatchObject({ speaker: null })
     expect(text).toContain('[dialogue]What a night.')
+    expect(text).toContain('Pulsating, almost.[/dialogue]')
+    expect(text).toContain(
+      '[dialogue]When I finally drifted off, the dreams came.',
+    )
     expect(text).toContain('What did it mean?[/dialogue]')
   })
 
