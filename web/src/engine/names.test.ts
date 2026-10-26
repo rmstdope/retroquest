@@ -35,6 +35,15 @@ describe('nameInSentence', () => {
     )
   })
 
+  it('writes an item cased like a title in lower case after its article', () => {
+    expect(nameInSentence('item', 'Enhanced Echo Stone')).toBe(
+      'the [item_name]enhanced echo stone[/item_name]',
+    )
+    expect(
+      nameInSentence('item', 'Enhanced Echo Stone', { atStart: true }),
+    ).toBe('The [item_name]enhanced echo stone[/item_name]')
+  })
+
   it('gives a bare item name no article and its capitals', () => {
     expect(nameInSentence('item', "nyx's token", { bare: true })).toBe(
       "[item_name]Nyx's Token[/item_name]",

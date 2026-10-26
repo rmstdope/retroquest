@@ -1,8 +1,9 @@
 /**
  * How a character's, item's or room's name reads inside a sentence.
  *
- * Content objects have one `name`, the lowercase key the parser matches
- * ("barmaid elena", "elior's journal"). Whatever the engine prints about an
+ * Content objects have one `name`, the key the parser matches ("barmaid
+ * elena", "elior's journal"). Content may case it as it likes ("Echo Stone");
+ * this module decides the case it reads in. Whatever the engine prints about an
  * object goes through `nameInSentence`, the single place that knows the rules:
  * the markup tag of the kind, capitals, and the article a name does or does
  * not take.
@@ -51,9 +52,10 @@ function titleCase(name: string): string {
  *   unless `common` says it is named by what it is, when it reads like an
  *   item ("the merchant", "The merchant" with `atStart`).
  * - An item or room takes "the" ("The" with `atStart`), unless `bare` says its
- *   name is a person's own. A bare item is title-cased ("Elior's Journal"); a
- *   room's name is already cased, and a leading "The " of it is dropped so the
- *   article is not said twice.
+ *   name is a person's own. A bare item is title-cased ("Elior's Journal");
+ *   any other item reads in lower case, however content cased its name ("the
+ *   enhanced echo stone"); a room's name is already cased, and a leading
+ *   "The " of it is dropped so the article is not said twice.
  */
 export function nameInSentence(
   kind: NameKind,
@@ -75,7 +77,9 @@ export function nameInSentence(
       ? titleCase(name)
       : kind === 'room'
         ? name.replace(/^The /, '')
-        : name
+        : kind === 'item'
+          ? name.toLowerCase()
+          : name
   const marked = `[${tag}]${shown}[/${tag}]`
   if (bare) return marked
   return `${options.atStart ? 'The' : 'the'} ${marked}`

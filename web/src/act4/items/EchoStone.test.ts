@@ -123,4 +123,23 @@ describe('EchoStone enhanced', () => {
       'waiting for a place where memories sleep.',
     )
   })
+
+  it('reads in lower case mid-sentence when refused as a gift or a use', () => {
+    const { game, act } = inMaze()
+    game.state.currentRoom = act.rooms.HallOfEchoes
+    const stone = new EchoStone()
+    stone.enhance()
+    game.state.inventory.push(stone)
+    expect(executeCommands(game, ['give enhanced echo stone to knight'])).toBe(
+      'The [character_name]Knight of Despair[/character_name] ' +
+        "doesn't seem interested in the " +
+        '[item_name]enhanced echo stone[/item_name].',
+    )
+    expect(
+      executeCommands(game, ['use enhanced echo stone with banners']),
+    ).toBe(
+      "[failure]You can't use the [item_name]enhanced echo stone[/item_name] " +
+        'with the [item_name]banners[/item_name].[/failure]',
+    )
+  })
 })
