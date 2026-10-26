@@ -24,7 +24,10 @@ export function trackIdsAt(
   musicFile: string,
 ): string[] {
   if (place.actName === '' || musicFile === '') return []
-  return [roomTrackId(place.actName, place.roomKey), actLoopId(musicFile)]
+  const loop = actLoopId(musicFile)
+  return place.roomKey === ''
+    ? [loop]
+    : [roomTrackId(place.actName, place.roomKey), loop]
 }
 
 /** The take of the first of `ids` that has one, or null when none has. */
@@ -39,13 +42,21 @@ export function chooseTrack(
   return null
 }
 
-/** Fetches the manifest of chosen takes; a missing or unreadable one means none were made. */
+/** How long the game waits for the manifest before playing its own files, in ms. */
+const MANIFEST_TIMEOUT_MS = 3000
+
+/** Fetches the manifest of chosen takes; a missing, unreadable, malformed or slow one means none were made. */
 export async function loadChosenManifest(): Promise<ChosenManifest> {
   try {
     const response = await fetch(
       `/audio/music/${GENERATED_MUSIC_DIR}manifest.json`,
+      { signal: AbortSignal.timeout(MANIFEST_TIMEOUT_MS) },
     )
-    if (response.ok) return (await response.json()) as ChosenManifest
+    if (response.ok) {
+      const manifest: unknown = await response.json()
+      if (typeof manifest === 'object' && manifest !== null)
+        return manifest as ChosenManifest
+    }
   } catch {
     // No takes chosen: the game plays its own files.
   }

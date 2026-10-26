@@ -175,6 +175,34 @@ describe('useActMusic', () => {
       scope.stop()
     })
 
+    it('credits a chosen take to Audio Studio', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(() =>
+          Promise.resolve({ ok: true, json: () => Promise.resolve(manifest) }),
+        ),
+      )
+      const scope = effectScope()
+      const music = scope.run(() => useActMusic())
+      const game = useGameStore()
+      game.musicFile = MARKET
+      game.musicInfo = 'Market by Conquest'
+      game.musicActName = 'Act1'
+      game.musicRoomKey = 'VillageSquare'
+      await settle()
+      expect(music?.musicInfo.value).toContain('Audio Studio')
+      scope.stop()
+    })
+
+    it('does not restart the music between two rooms without takes', async () => {
+      const scope = await start({})
+      FakeAudio.last.play.mockClear()
+      useGameStore().musicRoomKey = 'ForestPath'
+      await settle()
+      expect(FakeAudio.last.play).not.toHaveBeenCalled()
+      scope.stop()
+    })
+
     it("plays the act's chosen take in a room with none", async () => {
       const scope = await start(manifest)
       useGameStore().musicRoomKey = 'ForestPath'
