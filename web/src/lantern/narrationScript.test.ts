@@ -5,10 +5,8 @@ import { Act2 } from '@/act2/Act2'
 import { ACT2_GOLDEN_PATH } from '@/act2/Act2GoldenPath'
 import { Act4 } from '@/act4/Act4'
 import { ACT4_GOLDEN_PATH } from '@/act4/Act4GoldenPath'
-import {
-  ACT1_COMPLETING_COMMAND,
-  ACT1_GOLDEN_PATH,
-} from '@/act1/Act1GoldenPath'
+import { ACT1_GOLDEN_PATH } from '@/act1/Act1GoldenPath'
+import { ACT_SOURCES } from '../../../tts/actScripts'
 import { narrationKey } from './narrationKey'
 import {
   actScript,
@@ -185,7 +183,7 @@ describe('the voiced blocks a surface shows', () => {
 describe('actScript for Act I', () => {
   const script = actScript(
     () => new Game([new Act1()]),
-    [...ACT1_GOLDEN_PATH, ACT1_COMPLETING_COMMAND],
+    ACT_SOURCES['1'].commands,
     WRITERS,
     SILENT,
   )
@@ -397,7 +395,7 @@ describe('actScript hints', () => {
   beforeAll(() => {
     script = actScript(
       () => new Game([new Act1()]),
-      [...ACT1_GOLDEN_PATH, ACT1_COMPLETING_COMMAND],
+      ACT_SOURCES['1'].commands,
       WRITERS,
       SILENT,
     )
