@@ -128,9 +128,23 @@ function questSummary(quest: Quest, done: boolean): QuestSummary {
   }
 }
 
+/**
+ * How a turn describes the room, the one fact the story, the narration and the
+ * arrival block read: `moved` when the player is in a different room than
+ * before (a move, or the engine placing them), `firstVisit` when that room is
+ * new to them. A look describes the room with `moved` false.
+ */
+export interface RoomDescription {
+  moved: boolean
+  firstVisit: boolean
+}
+
+/** The description of a room shown again after a load: an arrival, not a first visit. */
+export const LOADED_ROOM: RoomDescription = { moved: true, firstVisit: false }
+
 export class GameController {
-  /** Whether the last `takeTurn` asked for the room to be described again. */
-  private redescribesRoom = false
+  /** How the last turn described the room, or null when it did not. */
+  private roomDescription: RoomDescription | null = null
 
   constructor(readonly game: Game) {}
 
@@ -145,24 +159,33 @@ export class GameController {
   }
 
   /**
-   * Play a command: parse it, then start the next turn. Whether the command
-   * asked for the room to be described again (a `look`) is kept for
-   * `lastTurnRedescribesRoom`, read before the next turn can change rooms.
+   * Play a command: parse it, then start the next turn. How the command
+   * described the room (a move, a look, or the engine placing the player in a
+   * new room) is kept for `lastTurnRoomDescription`, worked out before the
+   * next turn can change rooms.
    */
   takeTurn(command: string): string {
+    const roomBefore = this.game.state.currentRoom.name
+    const visitedBefore = this.getVisitedRooms()
     this.game.hasChangedRoom = false
     const result = this.handleCommand(command)
-    this.redescribesRoom = this.game.hasChangedRoom
+    const roomAfter = this.game.state.currentRoom.name
+    const moved = roomAfter !== roomBefore
+    this.roomDescription =
+      moved || this.game.hasChangedRoom
+        ? { moved, firstVisit: moved && !visitedBefore.includes(roomAfter) }
+        : null
     this.game.newTurn()
     return result
   }
 
   /**
-   * True when the last `takeTurn` asked for the room to be shown again: a
-   * `look`. A move sets it too; tell a move by the room's name instead.
+   * How the last `takeTurn` (or `look` / `openRoom`) described the room: null
+   * when the room is not shown this turn, otherwise whether the player moved
+   * and whether the room is new to them.
    */
-  lastTurnRedescribesRoom(): boolean {
-    return this.redescribesRoom
+  lastTurnRoomDescription(): RoomDescription | null {
+    return this.roomDescription
   }
 
   /** The current result text, then a new turn (the logo and intro screens). */
@@ -262,8 +285,17 @@ export class GameController {
     return this.game.getActIntro()
   }
 
+  /** Look around: the room is described again without a move. */
   look(): string {
+    this.roomDescription = { moved: false, firstVisit: false }
     return this.game.look()
+  }
+
+  /** The look that opens an act: its first room is described as a first arrival. */
+  openRoom(): string {
+    const text = this.game.look()
+    this.roomDescription = { moved: true, firstVisit: true }
+    return text
   }
 
   /**

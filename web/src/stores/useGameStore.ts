@@ -10,7 +10,7 @@ import type {
   RoomWare,
 } from '@/types/bridge'
 import type { useBridge } from '@/composables/useBridge'
-import { normalizeSaveName } from '@/engine'
+import { LOADED_ROOM, normalizeSaveName, type RoomDescription } from '@/engine'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
 import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
@@ -54,8 +54,12 @@ export interface Turn {
   text: string
   /** Room the player is in after this turn. */
   room: string
-  /** True when this turn brought the player to a different room. */
-  roomChanged: boolean
+  /**
+   * How the engine described the room this turn: null when the room block is
+   * not shown, otherwise whether the player moved and whether it is a first
+   * visit. The story, the narration and the arrival block all read this.
+   */
+  description: RoomDescription | null
   /** Items and spells this command added (none for system output). */
   gained: Chip[]
   /** Items and spells this command removed (none for system output). */
@@ -66,10 +70,6 @@ export interface Turn {
   quests?: QuestNews[]
   /** Set on a player's command and on the arrival that opens an act: its answer is narrated (never on a load). */
   narrate?: true
-  /** Set when the turn arrived in a room the player had not been in before. */
-  firstVisit?: true
-  /** Set on a narrated look: the room is shown and read again without a move. */
-  lookedAround?: true
 }
 
 /** What the player found on entering a room (engine markup / names). */
@@ -159,8 +159,6 @@ export const useGameStore = defineStore('game', () => {
   const turns = ref<Turn[]>([])
   let nextTurnId = 1
   let lastTurnRoom = ''
-  /** The rooms visited as of the last turn, to tell a first visit. */
-  let lastVisited: string[] = []
   // Bag and spells as the bridge listed them after the previous turn
   let lastBag: string[] = []
   let lastSpells: string[] = []
@@ -271,21 +269,20 @@ export const useGameStore = defineStore('game', () => {
    *
    * A command that completes an act already swaps in the next act's state, so
    * while the act is not running the answer stays in the previous turn's room.
-   * `redescribe` (a look) shows the room again although the player stayed.
+   * `description` is the engine's word on whether the room is shown (see
+   * `RoomDescription`); it is ignored while no act runs.
    */
   function showOutput(
     command: string | null,
     raw: string,
     {
       chips = command !== null,
-      arrive = false,
-      redescribe = false,
+      description = null,
       narrate = false,
       hold = false,
     }: {
       chips?: boolean
-      arrive?: boolean
-      redescribe?: boolean
+      description?: RoomDescription | null
       narrate?: boolean
       hold?: boolean
     } = {},
@@ -316,39 +313,28 @@ export const useGameStore = defineStore('game', () => {
     lastBag = bag
     lastSpells = spellList
 
-    // A load shows the room even when it is the same one.
-    const roomChanged = arrive || room !== lastTurnRoom
-    // A room is new when it joins the visited rooms. Compared by name, as a
-    // room can also leave the list (the dream, once Elior wakes).
-    const visited = b.controller.getVisitedRooms()
-    const lookedAround = redescribe && actRunning && !roomChanged
-    const firstVisit =
-      actRunning && visited.includes(room) && !lastVisited.includes(room)
-    lastVisited = visited
+    const shown = actRunning ? description : null
     turns.value.push({
       id: turnId,
       command,
       text: raw,
       room,
-      roomChanged,
+      description: shown,
       gained,
       lost,
       // The engine only says "You move north to …"; keep what the room looked
       // like now so the story can show it later.
       ...(narrate ? { narrate: true as const } : {}),
-      ...(narrate && firstVisit ? { firstVisit: true as const } : {}),
-      ...(narrate && lookedAround ? { lookedAround: true as const } : {}),
       // A look shows the room again without having moved.
-      arrival:
-        roomChanged || lookedAround
-          ? {
-              room,
-              description: b.controller.getRoomDescription(),
-              characters: b.controller.getRoomCharacters(),
-              items: b.controller.getRoomItems(),
-              exits: b.controller.getRoomExits(),
-            }
-          : null,
+      arrival: shown
+        ? {
+            room,
+            description: b.controller.getRoomDescription(),
+            characters: b.controller.getRoomCharacters(),
+            items: b.controller.getRoomItems(),
+            exits: b.controller.getRoomExits(),
+          }
+        : null,
     })
     lastTurnRoom = room
     if (turns.value.length > MAX_TURNS) {
@@ -630,7 +616,6 @@ export const useGameStore = defineStore('game', () => {
     dropHold()
     turns.value = []
     lastTurnRoom = ''
-    lastVisited = []
     lastBag = []
     lastSpells = []
     currentAct = null
@@ -671,7 +656,7 @@ export const useGameStore = defineStore('game', () => {
     const result = b.controller.takeTurn(command)
     lastAnswer = result
     showOutput(command, result, {
-      redescribe: b.controller.lastTurnRedescribesRoom(),
+      description: b.controller.lastTurnRoomDescription(),
       narrate: true,
       hold: true,
     })
@@ -909,7 +894,7 @@ export const useGameStore = defineStore('game', () => {
   ): void {
     if (showNotice(result, text)) {
       actEndPending.value = false
-      showOutput(null, '', { chips: false, arrive: true })
+      showOutput(null, '', { chips: false, description: LOADED_ROOM })
     } else showOutput(command, result, { chips: false })
   }
 
@@ -1013,7 +998,10 @@ export const useGameStore = defineStore('game', () => {
       if (pendingLookOnDismiss) {
         pendingLookOnDismiss = false
         // The act's first room is read aloud like any first visit.
-        showOutput(null, b.controller.look(), { narrate: true })
+        showOutput(null, b.controller.openRoom(), {
+          narrate: true,
+          description: b.controller.lastTurnRoomDescription(),
+        })
         refreshPanels()
         pollQuestEvents()
         // The look may start quests: list them (as submitCommand does).

@@ -770,7 +770,7 @@ describe('ActionComposer', () => {
           command,
           text,
           room: 'Hall',
-          roomChanged: false,
+          description: null,
           gained: [],
           lost: [],
           arrival: null,

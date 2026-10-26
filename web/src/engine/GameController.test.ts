@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { Act } from './Act'
 import { Character } from './Character'
 import { Game } from './Game'
@@ -597,13 +597,77 @@ describe('GameController', () => {
       )
     })
 
-    it('says whether the last turn asked to describe the room again', () => {
-      const ctrl = makeController()
-      ctrl.advanceToRunning()
-      ctrl.takeTurn('look')
-      expect(ctrl.lastTurnRedescribesRoom()).toBe(true)
-      ctrl.takeTurn('xyzzy')
-      expect(ctrl.lastTurnRedescribesRoom()).toBe(false)
+    describe('lastTurnRoomDescription', () => {
+      function twoRooms(): GameController {
+        const field = new Room({
+          name: 'Field',
+          description: 'A field.',
+          exits: { south: 'Hall' },
+        })
+        const hall = new Room({
+          name: 'Hall',
+          description: 'A hall.',
+          exits: { north: 'Field' },
+        })
+        const ctrl = new GameController(
+          new Game([simpleAct({ Hall: hall, Field: field })]),
+        )
+        startAct(ctrl)
+        return ctrl
+      }
+
+      it('is null for a command that does not describe the room', () => {
+        const ctrl = twoRooms()
+        ctrl.takeTurn('inventory')
+        expect(ctrl.lastTurnRoomDescription()).toBeNull()
+      })
+
+      it('says a first move arrived at a first visit, and a return did not', () => {
+        const ctrl = twoRooms()
+        ctrl.takeTurn('go north')
+        expect(ctrl.lastTurnRoomDescription()).toEqual({
+          moved: true,
+          firstVisit: true,
+        })
+        ctrl.takeTurn('go south')
+        expect(ctrl.lastTurnRoomDescription()).toEqual({
+          moved: true,
+          firstVisit: false,
+        })
+      })
+
+      it('says a look stayed in the room', () => {
+        const ctrl = twoRooms()
+        ctrl.takeTurn('look')
+        expect(ctrl.lastTurnRoomDescription()).toEqual({
+          moved: false,
+          firstVisit: false,
+        })
+        ctrl.takeTurn('xyzzy')
+        expect(ctrl.lastTurnRoomDescription()).toBeNull()
+      })
+
+      it('counts a room the engine put the player in without a move', () => {
+        const ctrl = twoRooms()
+        vi.spyOn(ctrl, 'handleCommand').mockImplementation(() => {
+          ctrl.game.state.currentRoom = ctrl.game.state.allRooms.Field
+          return ''
+        })
+        ctrl.takeTurn('inventory')
+        expect(ctrl.lastTurnRoomDescription()).toEqual({
+          moved: true,
+          firstVisit: true,
+        })
+      })
+
+      it('describes the first room of an act as an arrival at a first visit', () => {
+        const ctrl = twoRooms()
+        ctrl.openRoom()
+        expect(ctrl.lastTurnRoomDescription()).toEqual({
+          moved: true,
+          firstVisit: true,
+        })
+      })
     })
 
     it('advances one screen and returns its text', () => {

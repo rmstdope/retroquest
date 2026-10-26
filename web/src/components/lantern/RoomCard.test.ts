@@ -68,7 +68,7 @@ describe('RoomCard', () => {
         command: 'go north',
         text: 'You go north.',
         room: 'Village Square',
-        roomChanged: true,
+        description: { moved: true, firstVisit: false },
         gained: [],
         lost: [],
         arrival,

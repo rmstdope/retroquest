@@ -120,9 +120,16 @@ describe('turnUnits', () => {
 
 describe('readsArrival', () => {
   it('reads the room on a first visit and on a look, never on a revisit', () => {
-    expect(readsArrival({ firstVisit: true })).toBe(true)
-    expect(readsArrival({ lookedAround: true })).toBe(true)
-    expect(readsArrival({})).toBe(false)
+    expect(
+      readsArrival({ description: { moved: true, firstVisit: true } }),
+    ).toBe(true)
+    expect(
+      readsArrival({ description: { moved: false, firstVisit: false } }),
+    ).toBe(true)
+    expect(
+      readsArrival({ description: { moved: true, firstVisit: false } }),
+    ).toBe(false)
+    expect(readsArrival({ description: null })).toBe(false)
   })
 })
 
