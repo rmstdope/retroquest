@@ -108,6 +108,21 @@ describe('parseTurn', () => {
     ).toEqual([{ kind: 'dialogue', speaker: 'Mira', markup: "'Hello.'" }])
   })
 
+  it('drops a speaker-name line inside a [success] span before its quote', () => {
+    expect(
+      parseTurn(
+        '[success]\n[character_name]Spectral Librarian[/character_name]\n' +
+          "[dialogue]'You mended the wards.'[/dialogue][/success]",
+      ),
+    ).toEqual([
+      {
+        kind: 'dialogue',
+        speaker: 'Spectral Librarian',
+        markup: "'You mended the wards.'",
+      },
+    ])
+  })
+
   it('drops a "Name:" line before that speaker\'s quote', () => {
     expect(
       parseTurn(

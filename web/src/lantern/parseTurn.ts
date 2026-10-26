@@ -89,15 +89,24 @@ function wholeLine(line: string, tag: string): string | null {
   return inner.includes(open) || inner.includes(close) ? null : inner.trim()
 }
 
+/** Span tags around a whole line (e.g. `[success]…[/success]`), not the name's own. */
+const LEADING_SPANS = /^(\[(?!character_name\])[a-z_]+\])+/
+const TRAILING_SPANS = /(\[\/(?!character_name\])[a-z_]+\])+$/
+
 /**
  * Drop each line that holds only a speaker's name when the quote right after
- * it is that speaker's: the quote's label already shows the name.
+ * it is that speaker's: the quote's label already shows the name. A name line
+ * inside a span (`[success]` around the answer) is still name-only once the
+ * span tags around it are set aside.
  */
 function dropNameBeforeQuote(blocks: TurnBlock[]): TurnBlock[] {
   return blocks.filter((block, index) => {
     const next = blocks[index + 1]
     if (block.kind !== 'text' || next?.kind !== 'dialogue') return true
-    const name = block.markup.match(NAME_ONLY)?.[1]
+    const name = block.markup
+      .replace(LEADING_SPANS, '')
+      .replace(TRAILING_SPANS, '')
+      .match(NAME_ONLY)?.[1]
     return name === undefined || name !== next.speaker
   })
 }
