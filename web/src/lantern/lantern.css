@@ -322,3 +322,15 @@ body {
 .theme-effect {
   font: inherit;
 }
+
+/* The speaking rule, shared by chapter pages and story turns: a rule at the
+   left edge of the block being spoken (a quest card has its border lit
+   instead). A block may set --lq-rule-width and --lq-rule-colour. */
+.lq-chapter-block.lq-speaking,
+.lq-block-text.lq-speaking,
+.lq-block-dialogue.lq-speaking,
+.lq-block-failure.lq-speaking,
+.lq-arrival.lq-speaking {
+  box-shadow: inset var(--lq-rule-width, 2px) 0 0
+    var(--lq-rule-colour, var(--lq-accent));
+}

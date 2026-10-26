@@ -287,9 +287,6 @@ defineExpose({ focus })
   text-transform: uppercase;
   color: var(--lq-character);
 }
-.lq-chapter-block.lq-speaking {
-  box-shadow: inset 2px 0 0 var(--lq-accent);
-}
 .lq-chapter-title.lq-speaking {
   text-shadow: 0 0 18px var(--lq-accent-soft);
 }
