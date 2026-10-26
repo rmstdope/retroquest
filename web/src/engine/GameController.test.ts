@@ -482,10 +482,15 @@ describe('GameController', () => {
         musicFile: '',
         musicInfo: '',
       })
-      const second = simpleAct(
-        { Gate: new Room({ name: 'Gate', description: 'A gate.' }) },
-        [new SimpleQuest('Next Arc', true)],
-      )
+      // A later act starts from a copy of itself, so its classes are registered.
+      const second = new Act({
+        name: 'Second',
+        rooms: { Gate: new Room({ name: 'Gate', description: 'A gate.' }) },
+        quests: [new SimpleQuest('Next Arc', true)],
+        musicFile: '',
+        musicInfo: '',
+        classes: { SimpleQuest },
+      })
       const ctrl = new GameController(new Game([first, second]))
       startAct(ctrl)
       ctrl.settleQuests()
