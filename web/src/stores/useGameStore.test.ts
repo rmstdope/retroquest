@@ -776,6 +776,8 @@ describe('useGameStore', () => {
     })
 
     it('follows the room the music plays in', () => {
+      // Past the act's intro pop-up, under which the act's loop plays.
+      store.dismissModal()
       bridge.controller.getMusicPlace.mockReturnValue({
         actName: 'Act1',
         roomKey: 'VillageSquare',

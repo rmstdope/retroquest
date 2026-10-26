@@ -805,7 +805,9 @@ export const useGameStore = defineStore('game', () => {
   /**
    * Play what the engine says is playing now: under a finished act's closing
    * page that is still the finished act's track, and the next act's starts
-   * once its intro pop-up has moved the engine on (`showNextModal`).
+   * once its intro pop-up has moved the engine on (`showNextModal`). Under an
+   * act's intro pop-up the player is not in a room yet, so the act's own loop
+   * plays there; the first room's track starts when the pop-up is dismissed.
    */
   function syncMusic(b: GameBridge): void {
     const m = b.controller.getCurrentMusic()
@@ -813,7 +815,12 @@ export const useGameStore = defineStore('game', () => {
     musicInfo.value = m.musicInfo
     const place = b.controller.getMusicPlace()
     musicActName.value = place.actName
-    musicRoomKey.value = place.roomKey
+    musicRoomKey.value = isIntroShowing() ? '' : place.roomKey
+  }
+
+  /** Whether an act's intro pop-up is on screen. */
+  function isIntroShowing(): boolean {
+    return showModal.value && modalChapter.value?.kind === 'intro'
   }
 
   /**

@@ -253,3 +253,38 @@ describe('useGameStore over the real engine: look', () => {
     expect(store.turns.at(-1)?.description).toBeNull()
   })
 })
+
+describe('useGameStore over the real engine: the room the music plays in', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  it('plays the act loop, not the first room’s track, under a new game’s intro pop-up', async () => {
+    const bridge = useBridge(async (): Promise<ActClass[]> => [CrownAct])
+    const store = useGameStore()
+    store.setBridge(bridge)
+    await store.initGame()
+
+    expect(store.modalChapter).toMatchObject({ kind: 'intro' })
+    expect(store.musicActName).toBe('Crown Act')
+    expect(store.musicRoomKey).toBe('')
+
+    store.dismissModal()
+
+    expect(store.musicRoomKey).toBe('Hall')
+  })
+
+  it('plays the act loop under the next act’s intro pop-up, then the room’s', async () => {
+    const store = await startedStore([CrownAct, SecondMusicCrownAct])
+    store.submitCommand(`take ${CROWN}`)
+    store.continueChapter()
+
+    expect(store.modalChapter).toMatchObject({ kind: 'intro' })
+    expect(store.musicActName).toBe('Second Crown Act')
+    expect(store.musicRoomKey).toBe('')
+
+    store.dismissModal()
+
+    expect(store.musicRoomKey).toBe('Hall')
+  })
+})
