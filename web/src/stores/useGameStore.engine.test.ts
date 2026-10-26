@@ -69,6 +69,23 @@ class SecondCrownAct extends CrownAct {
   }
 }
 
+/**
+ * A second crown act with its own music, so a change of track shows, and an
+ * intro, so its intro page follows the first act's closing page.
+ */
+class SecondMusicCrownAct extends SecondCrownAct {
+  constructor() {
+    super()
+    this.musicFile = 'second.mp3'
+    this.musicInfo = 'Second'
+  }
+
+  /** A one-line intro page. */
+  override getActIntro(): string {
+    return 'Act 2: The Second Crown'
+  }
+}
+
 /** The game store under test. */
 type Store = ReturnType<typeof useGameStore>
 
@@ -154,6 +171,17 @@ describe('useGameStore over the real engine: game over', () => {
     store.continueChapter()
     expect(store.finishAsked).toBe(false)
     expect(store.ending).toBe(null)
+  })
+
+  it('keeps the act’s music through its closing page until the player continues', async () => {
+    const store = await startedStore([CrownAct, SecondMusicCrownAct])
+    expect(store.musicFile).toBe('finale.mp3')
+    store.submitCommand(`take ${CROWN}`)
+    expect(store.modalChapter).toMatchObject({ kind: 'complete' })
+    expect(store.musicFile).toBe('finale.mp3')
+    store.continueChapter()
+    expect(store.modalChapter).toMatchObject({ kind: 'intro' })
+    expect(store.musicFile).toBe('second.mp3')
   })
 
   it('plays on from a load made while the act-complete page waits for narration', async () => {

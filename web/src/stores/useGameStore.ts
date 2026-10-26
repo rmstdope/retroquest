@@ -819,7 +819,13 @@ export const useGameStore = defineStore('game', () => {
     shortNames.value = b.controller.getShortNames()
   }
 
-  /** Play what the engine says is playing now. */
+  /**
+   * Play what the engine says is playing now. The engine is already in the
+   * next act while a finished act's closing page shows
+   * (`triggerActTransitionModals` advances it), so nothing may sync the music
+   * then: the finished act's track plays on under the page, and the next
+   * act's starts with its intro pop-up (`showNextModal`).
+   */
   function syncMusic(b: GameBridge): void {
     const m = b.controller.getCurrentMusic()
     musicFile.value = m.musicFile

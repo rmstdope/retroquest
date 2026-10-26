@@ -415,8 +415,8 @@ export class GameController {
   }
 
   /**
-   * The act's music once it runs, and still after the game is over; empty
-   * before that so nothing plays early.
+   * The act's music once it runs, still under its closing pages and after
+   * the game is over; empty before that so nothing plays early.
    */
   getCurrentMusic(): MusicInfo {
     return this.game.presentedMusic()
