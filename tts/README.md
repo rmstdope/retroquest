@@ -68,8 +68,9 @@ from the game** on the Stingers page runs `extract-shared.ts`, which writes `sti
 ```
 
 The lists come from `web/src/lantern/musicLists.ts`: a loop is named after the act's music file and
-briefed in that file's table. The game keeps playing its freetouse.com and Voicy files; the studio
-shows its tracks as "not chosen" until a take is chosen.
+briefed in that file's table. The game keeps playing its freetouse.com and Voicy files; each track
+carries a `file`, the path of the file the game plays for it, which the studio plays as "The game's
+file" until a take is chosen.
 
 ## Getting the text
 

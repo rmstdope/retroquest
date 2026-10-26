@@ -48,14 +48,6 @@ describe('actLoops', () => {
     }
   })
 
-  it('points at a music file the game really has', () => {
-    for (const act of ACTS) {
-      expect(
-        existsSync(repoUrl(`web/public/audio/music/${act.musicFile}`)),
-      ).toBe(true)
-    }
-  })
-
   it("names the game's file, as a path inside the project root", () => {
     for (const act of ACTS) {
       const [track] = actLoops(act)
