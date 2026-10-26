@@ -13,7 +13,10 @@ export class EliorsJournal extends Item {
     })
   }
 
-  /** Read the latest journal entry and set a story flag. */
+  /**
+   * Read the latest journal entry, in two paragraphs so the player can skip
+   * the first and hear the second, and set a story flag.
+   */
   override use(gameState: GameState): string {
     const entry =
       'The ink is slightly smudged on this page, as if written in haste or with a ' +
@@ -23,7 +26,11 @@ export class EliorsJournal extends Item {
           'against the shutters. I swear the whole cottage shook with each thunderclap. ' +
           'Sleep was impossible for hours. Then, through a gap in the curtains, I saw it ' +
           "– a searing, unnatural light that split the sky. It wasn't lightning; it was... " +
-          'different. Pulsating, almost.\n\nWhen I finally drifted off, the dreams came. ' +
+          'different. Pulsating, almost.',
+      ) +
+      '\n\n' +
+      writing(
+        'When I finally drifted off, the dreams came. ' +
           'Not the usual ones of fields and harvests. This was dark, filled with swirling ' +
           'shadows. And a figure, tall and indistinct, its voice a whisper on the edge of ' +
           'hearing, yet it felt like it was calling my name. ' +
