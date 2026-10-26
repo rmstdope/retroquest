@@ -12,6 +12,7 @@ import {
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
 } from '../Act1StoryFlags'
 import { Coin } from '../items/Coin'
+import { Bread } from '../items/Bread'
 import { Matches } from '../items/Matches'
 import { Patches } from './Patches'
 import { Shopkeeper } from './Shopkeeper'
@@ -416,5 +417,21 @@ describe('Shopkeeper named as a common noun', () => {
       answer.startsWith(`The ${SHOPKEEPER} shakes his head.`),
       answer,
     ).toBe(true)
+  })
+})
+
+describe('the shopkeeper answers to his name', () => {
+  it('reaches Hemlock by name once he has introduced himself', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.commandParser.parse('talk to shopkeeper')
+    game.state.addItemToInventory(new Bread())
+
+    const talk = game.commandParser.parse('talk to hemlock')
+    const give = game.commandParser.parse('give bread to hemlock')
+
+    expect(talk).not.toContain('There is no character')
+    expectDialogueSpeaker(talk, 'shopkeeper')
+    expect(give).not.toContain('There is no character')
+    expect(give).toContain('Not looking for donations')
   })
 })

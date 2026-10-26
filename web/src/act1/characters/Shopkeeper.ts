@@ -68,6 +68,14 @@ export class Shopkeeper extends Character {
     })
   }
 
+  /**
+   * Also answers to his name, Hemlock, which his description, the notice and
+   * his own introduction all give.
+   */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'hemlock'
+  }
+
   /** Named by what it is, so it reads "the shopkeeper" (see `nameInSentence`). */
   override nameInSentence(options?: NameOptions): string {
     return super.nameInSentence({ ...options, common: true })
