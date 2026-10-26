@@ -651,7 +651,7 @@ describe('Act 4 integration', () => {
         'a knight in tarnished armour stands without moving',
       )
       const clue =
-        'You stand still and listen. Beneath the battle cries and laments, one voice repeats the same words over and over, patient as a heartbeat:'
+        '[effect]You stand still and listen.[/effect] Beneath the battle cries and laments, one voice repeats the same words over and over, patient as a heartbeat:'
       const route = "'Left, then left, then the way your shadow does not go.'"
       for (let i = 0; i < 2; i++) {
         const heard = executeCommands(game, ['examine echoes'])

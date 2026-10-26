@@ -21,6 +21,8 @@ describe('theme', () => {
         'dim',
         'italic',
         'breath',
+        'gesture',
+        'effect',
       ]
       expect(THEME_TAGS).toEqual(expected)
     })

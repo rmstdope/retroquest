@@ -35,6 +35,22 @@ const ECHO_STONES =
   "banishes the wandering phantoms. The path to the dragon's hall now lies open.[/success]"
 
 describe('parseTurn', () => {
+  it('drops a gesture, so it is neither shown nor voiced', () => {
+    expect(
+      parseTurn('[gesture]You give her the scroll.[/gesture] She nods.'),
+    ).toEqual([{ kind: 'text', markup: 'She nods.' }])
+    expect(parseTurn('[gesture]You wave.[/gesture]\nThe gate opens.')).toEqual([
+      { kind: 'text', markup: 'The gate opens.' },
+    ])
+    expect(parseTurn('[gesture]You wave.[/gesture]')).toEqual([])
+  })
+
+  it('reads an effect as plain narration with its text unchanged', () => {
+    expect(
+      parseTurn('[effect]You give her the words.[/effect] Silence.'),
+    ).toEqual([{ kind: 'text', markup: 'You give her the words. Silence.' }])
+  })
+
   it('returns no blocks for empty or whitespace-only text', () => {
     expect(parseTurn('')).toEqual([])
     expect(parseTurn('  \n\n ')).toEqual([])

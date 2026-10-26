@@ -29,12 +29,10 @@ describe('Act III effects', () => {
   })
 
   it('never opens an answer by repeating the typed command', () => {
-    // Exempt, as effects rather than echoes: "You give her the dragon's
-    // words." (Mira's relay answers `talk to mira`), "You recite the resonant
-    // chant at each stone." (`use rubbings with echo stones`) and "You stand
-    // still and count." (`rest` or `wait` in the warded passages).
+    // A sentence that opens like the player's gesture but is an effect says so
+    // with `effect(...)`; the mark, not a list of exempt sentences, clears it.
     const echo =
-      /['"`](You (speak with|say|cast|examine|give(?! her the dragon's words)|recite(?! the resonant chant at each stone)|daub|stand still(?! and count)|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b)/
+      /(?<!effect\(\s*)['"`]You (speak with|say|cast|examine|give|recite|daub|stand still|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b/
     const offenders = contentFiles(__dirname).filter((file) =>
       echo.test(readFileSync(file, 'utf8')),
     )

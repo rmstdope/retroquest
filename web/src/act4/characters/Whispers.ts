@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   dialogue,
+  effect,
   normaliseSpokenWord,
 } from '@/engine'
 import {
@@ -106,16 +107,18 @@ export class Whispers extends Character {
     if (!friend) {
       if (word === 'grandmother') {
         return (
-          'You say it into the dark, and something in you steadies — but ' +
-          'she is far from here, and the whispers know it. Name one who ' +
-          'came with you to the gate.'
+          effect(
+            'You say it into the dark, and something in you steadies — but ' +
+              'she is far from here, and the whispers know it.',
+          ) + ' Name one who came with you to the gate.'
         )
       }
       return 'The whispers swallow the word. Name one who stayed, if you can.'
     }
     if (!gameState.hasItem(TOKEN_NAME)) {
       return (
-        `You say ${friend.pronoun} name into the dark. Nothing answers but ` +
+        effect(`You say ${friend.pronoun} name into the dark.`) +
+        ' Nothing answers but ' +
         'the whispers. Your hand closes on nothing, where the token used ' +
         'to be.'
       )

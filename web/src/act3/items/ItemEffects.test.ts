@@ -201,7 +201,9 @@ describe('Act III items narrate effects and keep no echo of the command', () => 
     expect(isClue(cold)).toBe(true)
     expect(isClue(overWater)).toBe(true)
     expect(
-      overWater.startsWith('You recite the resonant chant at each stone.\n'),
+      overWater.startsWith(
+        '[effect]You recite the resonant chant at each stone.[/effect]\n',
+      ),
     ).toBe(true)
   })
 

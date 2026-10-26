@@ -25,11 +25,33 @@ export const MARKUP_TAGS: readonly string[] = [
   'dim',
   'italic',
   'breath',
+  'gesture',
+  'effect',
 ]
 
 /** Wrap `text` as an event line: `[event]text[/event]`. */
 export function event(text: string): string {
   return `[event]${text}[/event]`
+}
+
+/**
+ * Mark `text` as the player's gesture: the sentence that only repeats what
+ * the typed command already says ("You give her the scroll."). The story view
+ * shows no gesture and narration voices none, so content may keep it beside
+ * the effect without the player hearing the command twice.
+ */
+export function gesture(text: string): string {
+  return `[gesture]${text}[/gesture]`
+}
+
+/**
+ * Mark `text` as an effect: what happens, even when it opens in the player's
+ * voice ("You recite the chant at each stone."). It reads as plain narration
+ * and is the one way a sentence that looks like an echo of the command is
+ * known not to be one.
+ */
+export function effect(text: string): string {
+  return `[effect]${text}[/effect]`
 }
 
 /**

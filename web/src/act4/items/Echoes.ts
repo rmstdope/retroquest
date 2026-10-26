@@ -1,4 +1,4 @@
-import { Item, type GameState, dialogue } from '@/engine'
+import { Item, type GameState, dialogue, effect } from '@/engine'
 import { MAZE_ROUTE } from '../rooms/MirrorLabyrinth'
 
 /** The voices of the Hall of Echoes: scenery that gives the route through the maze. */
@@ -7,7 +7,8 @@ export class Echoes extends Item {
     super({
       name: 'Echoes',
       description:
-        'You stand still and listen. Beneath the battle cries and laments, ' +
+        effect('You stand still and listen.') +
+        ' Beneath the battle cries and laments, ' +
         'one voice repeats the same words over and over, patient as a ' +
         'heartbeat:',
       canBeCarried: false,

@@ -4,6 +4,7 @@ import {
   characterName,
   dialogue,
   clue,
+  effect,
   speech,
 } from '@/engine'
 import { KeepsakeNote } from '../items/KeepsakeNote'
@@ -576,7 +577,7 @@ export class Mira extends Character {
     ) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_RELAYED, true)
       lines.push(
-        `You give her the dragon's words. ${characterName('Mira')} does not answer.`,
+        `${effect("You give her the dragon's words.")} ${characterName('Mira')} does not answer.`,
       )
     }
     return lines.map((line) => '\n' + line).join('')

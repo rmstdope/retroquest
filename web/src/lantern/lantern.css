@@ -312,3 +312,13 @@ body {
   color: var(--lq-muted);
   opacity: 1;
 }
+
+/* A gesture only repeats the typed command; the story view drops it first. */
+.theme-gesture {
+  display: none;
+}
+
+/* An effect is plain narration; the tag only marks it for the content guards. */
+.theme-effect {
+  font: inherit;
+}

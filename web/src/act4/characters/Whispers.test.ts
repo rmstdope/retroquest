@@ -32,7 +32,7 @@ const CEDRIC_LINE =
   'A knight does not leave his post. Mine is the threshold. Go on, lad.'
 const NYX_LINE = "Left? I'm right here. I never was anywhere else."
 const GRANDMOTHER =
-  'You say it into the dark, and something in you steadies — but she is far from here, and the whispers know it. Name one who came with you to the gate.'
+  '[effect]You say it into the dark, and something in you steadies — but she is far from here, and the whispers know it.[/effect] Name one who came with you to the gate.'
 const SWALLOWED =
   'The whispers swallow the word. Name one who stayed, if you can.'
 const AFTER =
@@ -142,7 +142,7 @@ describe('The whispers in the Tower of Shadows', () => {
     game.state.removeItemFromInventory('Loyalty Token')
     const none = executeCommands(game, ['say mira to whispers'])
     expect(none).toContain(
-      'You say her name into the dark. Nothing answers but the whispers. Your hand closes on nothing, where the token used to be.',
+      '[effect]You say her name into the dark.[/effect] Nothing answers but the whispers. Your hand closes on nothing, where the token used to be.',
     )
     expect(executeCommands(game, ['say cedric to whispers'])).toContain(
       'You say his name into the dark.',
