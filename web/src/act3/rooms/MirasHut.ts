@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { type NameOptions, Room } from '@/engine'
 import { Mira } from '../characters/Mira'
 import { SirCedric } from '../characters/SirCedric'
 import { HealingHerbs } from '../items/HealingHerbs'
@@ -19,5 +19,10 @@ export class MirasHut extends Room {
       characters: [new Mira(), new SirCedric()],
       exits: {},
     })
+  }
+
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  protected override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }

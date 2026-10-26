@@ -1,4 +1,4 @@
-import { characterName, Room, type GameState } from '@/engine'
+import { type NameOptions, characterName, Room, type GameState } from '@/engine'
 import { HealingHerb } from '../items/HealingHerb'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { Mira } from '../characters/Mira'
@@ -40,5 +40,10 @@ export class MirasHut extends Room {
     const keepsake =
       gameState.hasItem('locket') || gameState.hasItem("mother's letter")
     return base + (onStand ? (keepsake ? GLOW : '') : EMPTY_STAND)
+  }
+
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  protected override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }

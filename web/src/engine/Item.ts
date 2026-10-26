@@ -41,8 +41,8 @@ export class Item {
 
   /**
    * The item's name as it reads inside a sentence, article included (see
-   * `nameInSentence` in `names.ts`): "the [item]", or a possessive name
-   * without an article. Override only for a name that needs something else.
+   * `nameInSentence` in `names.ts`): "the [item]". Override and pass
+   * `bare: true` for an item named after a person ("Elior's Journal").
    */
   nameInSentence(options?: NameOptions): string {
     return nameInSentence('item', this.name, options)

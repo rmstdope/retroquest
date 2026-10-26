@@ -61,10 +61,10 @@ describe('Spell targets in a sentence', () => {
   it('names an item and a character through their own sentence names', () => {
     const gs = gameState()
     const spell = new Spell({ id: 'x', name: 'x', description: 'd' })
-    const token = new Item({ name: "nyx's token", description: 'd' })
+    const token = new Item({ name: "dragon's scale", description: 'd' })
     const elena = new Character({ name: 'barmaid elena', description: 'd' })
     expect(spell.castOnItem(gs, token)).toContain(
-      "on [item_name]Nyx's Token[/item_name]. Nothing in it",
+      "on the [item_name]dragon's scale[/item_name]. Nothing in it",
     )
     expect(spell.castOnCharacter(gs, elena)).toContain(
       'on [character_name]Barmaid Elena[/character_name]. Nothing in them',

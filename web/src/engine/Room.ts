@@ -171,7 +171,8 @@ export class Room {
   /**
    * The room's name as it reads inside a sentence, article included (see
    * `nameInSentence` in `names.ts`): "the [room]" with a leading "The" of the
-   * name dropped, or a possessive name ("Mira's Hut") without an article.
+   * name dropped. Override and pass `bare: true` for a room named after a
+   * person ("Mira's Hut").
    */
   protected nameInSentence(options?: NameOptions): string {
     return nameInSentence('room', this.name, options)

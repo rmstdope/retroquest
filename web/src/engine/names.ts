@@ -15,15 +15,16 @@ export type NameKind = 'character' | 'item' | 'room'
 export interface NameOptions {
   /** The name opens the sentence, so an article before it is capitalised. */
   atStart?: boolean
+  /**
+   * The name is a person's own ("Elior's Journal", "Mira's Hut"), so it takes
+   * no article. Content says so explicitly: a possessive in the name alone
+   * does not ("the Blacksmith's Forge" still takes "the").
+   */
+  bare?: boolean
 }
 
 /** Words a title keeps lower case ("Captain of the Guard"). */
 const MINOR_WORDS = ['of', 'the']
-
-/** Whether a name is a possessive ("elior's journal"), which takes no article. */
-function isPossessive(name: string): boolean {
-  return name.includes("'s ")
-}
 
 /** Capitalise every word but the minor ones after the first. */
 function titleCase(name: string): string {
@@ -41,10 +42,10 @@ function titleCase(name: string): string {
  * The marked-up name as it reads in a sentence.
  *
  * - A character is a proper name: title-cased, no article, wherever it stands.
- * - An item or room takes "the" ("The" with `atStart`), unless its name is a
- *   possessive, which takes no article. A possessive item is title-cased
- *   ("Elior's Journal"); a room's name is already cased, and a leading "The "
- *   of it is dropped so the article is not said twice.
+ * - An item or room takes "the" ("The" with `atStart`), unless `bare` says its
+ *   name is a person's own. A bare item is title-cased ("Elior's Journal"); a
+ *   room's name is already cased, and a leading "The " of it is dropped so the
+ *   article is not said twice.
  */
 export function nameInSentence(
   kind: NameKind,
@@ -55,14 +56,14 @@ export function nameInSentence(
     return `[character_name]${titleCase(name)}[/character_name]`
   }
   const tag = kind === 'item' ? 'item_name' : 'room_name'
-  const possessive = isPossessive(name)
+  const bare = options.bare === true
   const shown =
-    kind === 'item' && possessive
+    kind === 'item' && bare
       ? titleCase(name)
       : kind === 'room'
         ? name.replace(/^The /, '')
         : name
   const marked = `[${tag}]${shown}[/${tag}]`
-  if (possessive) return marked
+  if (bare) return marked
   return `${options.atStart ? 'The' : 'the'} ${marked}`
 }

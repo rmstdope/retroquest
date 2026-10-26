@@ -95,11 +95,11 @@ describe('Character names in a sentence', () => {
     )
   })
 
-  it('names a possessive item without an article when refusing a gift', () => {
-    const token = new Item({ name: "nyx's token", description: 'd' })
+  it('names the item with its article when refusing a gift', () => {
+    const token = new Item({ name: "dragon's scale", description: 'd' })
     expect(elena.giveItem(gs, token)).toBe(
       "[character_name]Barmaid Elena[/character_name] doesn't seem interested in " +
-        "[item_name]Nyx's Token[/item_name].",
+        "the [item_name]dragon's scale[/item_name].",
     )
   })
 })

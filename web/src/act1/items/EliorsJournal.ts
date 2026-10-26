@@ -1,4 +1,10 @@
-import { Item, type GameState, characterName, writing } from '@/engine'
+import {
+  type NameOptions,
+  Item,
+  type GameState,
+  characterName,
+  writing,
+} from '@/engine'
 
 /** Elior's personal journal containing lore and story hints. */
 export class EliorsJournal extends Item {
@@ -46,5 +52,10 @@ export class EliorsJournal extends Item {
       '\n'
     gameState.setStoryFlag('journal_read_prologue_entry', true)
     return entry
+  }
+
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }

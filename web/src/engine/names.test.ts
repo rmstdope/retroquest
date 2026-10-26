@@ -26,12 +26,24 @@ describe('nameInSentence', () => {
     )
   })
 
-  it('gives a possessive item name no article and its capitals', () => {
-    expect(nameInSentence('item', "nyx's token")).toBe(
+  it('gives a bare item name no article and its capitals', () => {
+    expect(nameInSentence('item', "nyx's token", { bare: true })).toBe(
       "[item_name]Nyx's Token[/item_name]",
     )
-    expect(nameInSentence('item', "nyx's token", { atStart: true })).toBe(
-      "[item_name]Nyx's Token[/item_name]",
+    expect(
+      nameInSentence('item', "nyx's token", { bare: true, atStart: true }),
+    ).toBe("[item_name]Nyx's Token[/item_name]")
+  })
+
+  it('keeps "the" before a possessive that is not a person\'s own name', () => {
+    expect(nameInSentence('item', "dragon's scale")).toBe(
+      "the [item_name]dragon's scale[/item_name]",
+    )
+    expect(nameInSentence('room', "Blacksmith's Forge")).toBe(
+      "the [room_name]Blacksmith's Forge[/room_name]",
+    )
+    expect(nameInSentence('room', "Entrance to Malakar's Fortress")).toBe(
+      "the [room_name]Entrance to Malakar's Fortress[/room_name]",
     )
   })
 
@@ -44,8 +56,8 @@ describe('nameInSentence', () => {
     )
   })
 
-  it('gives a possessive room name no article', () => {
-    expect(nameInSentence('room', "Mira's Hut")).toBe(
+  it('gives a bare room name no article', () => {
+    expect(nameInSentence('room', "Mira's Hut", { bare: true })).toBe(
       "[room_name]Mira's Hut[/room_name]",
     )
   })
