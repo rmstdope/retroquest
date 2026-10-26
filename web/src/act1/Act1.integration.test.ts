@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from './Act1'
 import { playDebugScript } from '@/utils/debugScript'
-import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
+import { ACT1_COMPLETING_COMMANDS, ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { MysteriousBox } from './items/MysteriousBox'
 import { FreshBread } from './items/FreshBread'
 import {
@@ -598,7 +598,7 @@ describe('Act 1 golden path', () => {
     expectCurrentRoom(state, 'Road to Greendale')
     expectItemInInventory(state, 'map')
     expectItemInInventory(state, 'ancient amulet')
-    executeCommands(game, ['use map'])
+    executeCommands(game, ACT1_COMPLETING_COMMANDS)
     expect(
       game.acts[game.currentAct].isCompleted(state),
       'Act I completed',
@@ -613,7 +613,7 @@ describe('Act 1 golden path', () => {
     game.newTurn()
     game.handleInput('cheat act 1')
     game.newTurn()
-    game.handleInput('use map')
+    for (const command of ACT1_COMPLETING_COMMANDS) game.handleInput(command)
     const answer = game.getResultText()
     expect(answer).toContain('Aren')
     expect(answer).toContain(
@@ -696,7 +696,7 @@ describe('Act 1 with the alternative choices', () => {
     expectItemInInventory(state, 'wandering boots')
     expectCurrentRoom(state, 'Road to Greendale')
 
-    const farewell = executeCommands(game, ['use map'])
+    const farewell = executeCommands(game, ACT1_COMPLETING_COMMANDS)
     expect(farewell).toContain('you kept her ring')
     expect(farewell).toContain('claimed your pillow')
     expect(
@@ -710,7 +710,7 @@ describe('Act 1 with the alternative choices', () => {
     executeCommands(game, alternativePath())
     const fresh = new Game([new Act1()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
-    const farewell = executeCommands(fresh, ['use map'])
+    const farewell = executeCommands(fresh, ACT1_COMPLETING_COMMANDS)
     expect(farewell).toContain('you kept her ring')
     expect(farewell).toContain('claimed your pillow')
   })
@@ -753,7 +753,7 @@ describe('Act 1 with the optional virtue moments', () => {
       [VIRTUE_MERCY, VIRTUE_SELFLESS, VIRTUE_TRUTH].sort(),
     )
     expectCurrentRoom(game.state, 'Road to Greendale')
-    executeCommands(game, ['use map'])
+    executeCommands(game, ACT1_COMPLETING_COMMANDS)
     expect(
       game.acts[game.currentAct].isCompleted(game.state),
       'Act I completed',
@@ -782,7 +782,7 @@ describe('Act 1 with the optional virtue moments', () => {
     expect(executeCommands(game, ['talk to merchant'])).toContain(
       "Forgive me if I'm short, friend.",
     )
-    executeCommands(game, ['use map'])
+    executeCommands(game, ACT1_COMPLETING_COMMANDS)
     expect(
       game.acts[game.currentAct].isCompleted(game.state),
       'Act I completed',
@@ -844,7 +844,7 @@ describe('debug act1', () => {
     const act = game.acts[game.currentAct]
     expect(act.isCompleted(game.state)).toBe(false)
 
-    executeCommands(game, ['use map'])
+    executeCommands(game, ACT1_COMPLETING_COMMANDS)
     expect(act.isCompleted(game.state)).toBe(true)
   })
 })

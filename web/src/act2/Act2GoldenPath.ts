@@ -1,4 +1,10 @@
-/** The commands that play Act 2's golden path from a new game to its end. */
+/** The commands that complete Act 2 once the golden path has been played: the vision, and Sir Cedric's answer (the other answer is a branch, not the path). */
+export const ACT2_COMPLETING_COMMANDS: string[] = [
+  'cast prophetic vision',
+  'talk to sir cedric',
+]
+
+/** The commands that play Act 2's golden path from a new game to Sir Cedric waiting; `ACT2_COMPLETING_COMMANDS` there complete the act. */
 export const ACT2_GOLDEN_PATH: string[] = [
   'take flower',
   'take stick',

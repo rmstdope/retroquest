@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from './Act2'
-import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
+import { ACT2_COMPLETING_COMMANDS, ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 import {
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_EXAMINED_SECRET_DOCUMENTS,
@@ -1249,7 +1249,7 @@ describe('Act 2 complete page', () => {
   it('opens on the hook, also on a game loaded from a save', () => {
     const game = new Game([new Act2()])
     executeCommands(game, ACT2_GOLDEN_PATH)
-    executeCommands(game, ['cast prophetic vision', 'talk to sir cedric'])
+    executeCommands(game, ACT2_COMPLETING_COMMANDS)
     for (let turn = 0; turn < 3; turn++) game.newTurn()
     const hook = 'Malakar is real. And the bloodline he seeks is yours.'
     expect(
@@ -1309,11 +1309,7 @@ describe('Act 2 optional virtue moments', () => {
   /** The golden path played to the end, then the three moments one by one. */
   function gameWithAllThree(): Game {
     const game = new Game([new Act2()])
-    executeCommands(game, [
-      ...ACT2_GOLDEN_PATH,
-      'cast prophetic vision',
-      'talk to sir cedric',
-    ])
+    executeCommands(game, [...ACT2_GOLDEN_PATH, ...ACT2_COMPLETING_COMMANDS])
     game.state.addItemToInventory(new MountainFlower())
     game.state.currentRoom = game.state.allRooms.ResidentialQuarter
     executeCommands(game, ['give mountain flower to families'])
@@ -1326,11 +1322,7 @@ describe('Act 2 optional virtue moments', () => {
 
   it('records nothing when every moment is skipped, and the act still completes', () => {
     const game = new Game([new Act2()])
-    executeCommands(game, [
-      ...ACT2_GOLDEN_PATH,
-      'cast prophetic vision',
-      'talk to sir cedric',
-    ])
+    executeCommands(game, [...ACT2_GOLDEN_PATH, ...ACT2_COMPLETING_COMMANDS])
 
     expect(game.state.virtues).toEqual([])
     expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
