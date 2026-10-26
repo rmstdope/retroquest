@@ -41,7 +41,8 @@ export function useMusic(
 
     currentMusicFile.value = file
     musicInfo.value = info
-    audio.src = MUSIC_BASE_PATH + encodeURIComponent(file)
+    audio.src =
+      MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
 
     if (!musicMuted.value) {
       audio.play().catch(() => {})

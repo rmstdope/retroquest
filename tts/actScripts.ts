@@ -34,7 +34,7 @@ import {
   type ScriptLine,
   type WriterRule,
 } from '../web/src/lantern/narrationScript'
-import { actLoops, type MusicTrack } from '../web/src/lantern/musicLists'
+import { actLoops, roomLoops, type MusicTrack } from '../web/src/lantern/musicLists'
 
 /** What the extractor needs of an act: a fresh act and the commands that play it to its end. */
 export interface ActSource {
@@ -112,7 +112,8 @@ export function extractActScript(number: string): ScriptLine[] {
   return [...lines.values()]
 }
 
-/** Returns the music loop of act `number`, as `music.json` holds it. */
+/** Returns the act's loop and a loop for each of its rooms, as `music.json` holds them. */
 export function extractActMusic(number: string): MusicTrack[] {
-  return actLoops(sourceOf(number).make())
+  const act = sourceOf(number).make()
+  return [...actLoops(act), ...roomLoops(act)]
 }

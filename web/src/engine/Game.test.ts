@@ -446,6 +446,44 @@ describe('Game', () => {
       })
     })
 
+    it('names the act and the room the music plays in, once the act runs', () => {
+      const act = new Act({
+        name: 'Only',
+        rooms: basicRooms(),
+        quests: [],
+        musicFile: 'a.mp3',
+        musicInfo: 'A',
+      })
+      const game = new Game([act])
+      expect(game.currentMusicPlace()).toEqual({ actName: '', roomKey: '' })
+      game.newTurn()
+      game.newTurn()
+      expect(game.currentMusicPlace()).toEqual({
+        actName: 'Only',
+        roomKey: 'EliorsCottage',
+      })
+      game.handleInput('go south')
+      expect(game.currentMusicPlace().roomKey).toBe('VegetableField')
+    })
+
+    it('names the room after a save and load too', () => {
+      const act = new Act({
+        name: 'Only',
+        rooms: basicRooms(),
+        quests: [],
+        musicFile: 'a.mp3',
+        musicInfo: 'A',
+      })
+      const game = new Game([act])
+      game.newTurn()
+      game.newTurn()
+      game.handleInput('go south')
+      const data = game.toSaveData()
+      game.handleInput('go north')
+      game.loadSaveData(data)
+      expect(game.currentMusicPlace().roomKey).toBe('VegetableField')
+    })
+
     it('enters game over when the last act completes, staying in that act', () => {
       const only = new Act({
         name: 'Only',

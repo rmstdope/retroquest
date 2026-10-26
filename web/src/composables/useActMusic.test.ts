@@ -7,6 +7,12 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { MUSIC_DUCK, MUSIC_DUCK_FADE_MS } from './useMusic'
 
+/** Lets the manifest fetch settle and the watchers run. */
+async function settle(): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, 0))
+  await nextTick()
+}
+
 class FakeAudio {
   static last: FakeAudio
   src = ''
@@ -31,6 +37,10 @@ describe('useActMusic', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     vi.stubGlobal('Audio', FakeAudio)
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve({ ok: false })),
+    )
   })
   afterEach(() => vi.unstubAllGlobals())
 
@@ -79,7 +89,7 @@ describe('useActMusic', () => {
     const scope = effectScope()
     scope.run(() => useActMusic())
     useGameStore().musicFile = 'willowbrook.mp3'
-    await nextTick()
+    await settle()
 
     expect(FakeAudio.last.loop).toBe(true)
     expect(FakeAudio.last.src).toContain('willowbrook.mp3')
@@ -90,7 +100,7 @@ describe('useActMusic', () => {
     const scope = effectScope()
     scope.run(() => useActMusic())
     useGameStore().musicFile = 'willowbrook.mp3'
-    await nextTick()
+    await settle()
     FakeAudio.last.pause()
     FakeAudio.last.play.mockClear()
 
@@ -105,7 +115,7 @@ describe('useActMusic', () => {
     const scope = effectScope()
     scope.run(() => useActMusic())
     useGameStore().musicFile = 'willowbrook.mp3'
-    await nextTick()
+    await settle()
     scope.stop()
     FakeAudio.last.pause()
     FakeAudio.last.play.mockClear()
@@ -119,11 +129,102 @@ describe('useActMusic', () => {
     const scope = effectScope()
     scope.run(() => useActMusic())
     useGameStore().musicFile = 'willowbrook.mp3'
-    await nextTick()
+    await settle()
     expect(FakeAudio.last.paused).toBe(false)
 
     scope.stop()
 
     expect(FakeAudio.last.paused).toBe(true)
+  })
+
+  describe('chosen takes', () => {
+    const MARKET = 'Conquest - Market (freetouse.com).mp3'
+    const manifest = {
+      market: { file: 'market.mp3', duration: 90 },
+      'act1-village-square': { file: 'square.mp3', duration: 60 },
+    }
+
+    /** Starts the music with `manifest` served (or the fetch failing) and returns the scope. */
+    async function start(
+      served: unknown,
+    ): Promise<ReturnType<typeof effectScope>> {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(() =>
+          served === null
+            ? Promise.reject(new Error('offline'))
+            : Promise.resolve({
+                ok: true,
+                json: () => Promise.resolve(served),
+              }),
+        ),
+      )
+      const scope = effectScope()
+      scope.run(() => useActMusic())
+      const game = useGameStore()
+      game.musicFile = MARKET
+      game.musicActName = 'Act1'
+      game.musicRoomKey = 'VillageSquare'
+      await settle()
+      return scope
+    }
+
+    it("plays the room's chosen take in that room", async () => {
+      const scope = await start(manifest)
+      expect(FakeAudio.last.src).toBe('/audio/music/generated/square.mp3')
+      scope.stop()
+    })
+
+    it('credits a chosen take to Audio Studio', async () => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(() =>
+          Promise.resolve({ ok: true, json: () => Promise.resolve(manifest) }),
+        ),
+      )
+      const scope = effectScope()
+      const music = scope.run(() => useActMusic())
+      const game = useGameStore()
+      game.musicFile = MARKET
+      game.musicInfo = 'Market by Conquest'
+      game.musicActName = 'Act1'
+      game.musicRoomKey = 'VillageSquare'
+      await settle()
+      expect(music?.musicInfo.value).toContain('Audio Studio')
+      scope.stop()
+    })
+
+    it('does not restart the music between two rooms without takes', async () => {
+      const scope = await start({})
+      FakeAudio.last.play.mockClear()
+      useGameStore().musicRoomKey = 'ForestPath'
+      await settle()
+      expect(FakeAudio.last.play).not.toHaveBeenCalled()
+      scope.stop()
+    })
+
+    it("plays the act's chosen take in a room with none", async () => {
+      const scope = await start(manifest)
+      useGameStore().musicRoomKey = 'ForestPath'
+      await settle()
+      expect(FakeAudio.last.src).toBe('/audio/music/generated/market.mp3')
+      scope.stop()
+    })
+
+    it("plays the game's own file where no take was chosen", async () => {
+      const scope = await start({})
+      expect(FakeAudio.last.src).toBe(
+        `/audio/music/${encodeURIComponent(MARKET)}`,
+      )
+      scope.stop()
+    })
+
+    it("plays the game's own file when the manifest cannot be read", async () => {
+      const scope = await start(null)
+      expect(FakeAudio.last.src).toBe(
+        `/audio/music/${encodeURIComponent(MARKET)}`,
+      )
+      scope.stop()
+    })
   })
 })

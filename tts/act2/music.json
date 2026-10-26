@@ -6,5 +6,131 @@
     "plays": "Act II, throughout",
     "brief": "gentle medieval village, lute and recorder, warm and unhurried, instrumental, no vocals",
     "seconds": 132
+  },
+  {
+    "id": "act2-mountain-path",
+    "title": "Mountain Path",
+    "plays": "Act II, Mountain Path",
+    "brief": "instrumental background loop for Mountain Path: A winding trail climbs through rocky terrain between Willowbrook and Greendale. Sturdy trees cast intermittent shade and the path remains well tended despite its remoteness, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-greendale-gates",
+    "title": "Greendale Gates",
+    "plays": "Act II, Greendale Gates",
+    "brief": "instrumental background loop for Greendale Gates: A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-main-square",
+    "title": "Main Square",
+    "plays": "Act II, Main Square",
+    "brief": "instrumental background loop for Main Square: The heart of Greendale pulses with activity. A grand fountain shows ancient heroes locked in battle with mythical beasts, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-market-district",
+    "title": "Market District",
+    "plays": "Act II, Market District",
+    "brief": "instrumental background loop for Market District: Narrow streets crammed with shops and trading posts weave a maze of commerce. Spices, leather, and fresh bread scent the air, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-silver-stag-inn",
+    "title": "The Silver Stag Inn",
+    "plays": "Act II, The Silver Stag Inn",
+    "brief": "instrumental background loop for The Silver Stag Inn: A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-inn-rooms",
+    "title": "Inn Rooms",
+    "plays": "Act II, Inn Rooms",
+    "brief": "instrumental background loop for Inn Rooms: Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-merchants-warehouse",
+    "title": "Merchant's Warehouse",
+    "plays": "Act II, Merchant's Warehouse",
+    "brief": "instrumental background loop for Merchant's Warehouse: A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-castle-approach",
+    "title": "Castle Approach",
+    "plays": "Act II, Castle Approach",
+    "brief": "instrumental background loop for Castle Approach: A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-castle-courtyard",
+    "title": "Castle Courtyard",
+    "plays": "Act II, Castle Courtyard",
+    "brief": "instrumental background loop for Castle Courtyard: An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-great-hall",
+    "title": "Great Hall",
+    "plays": "Act II, Great Hall",
+    "brief": "instrumental background loop for Great Hall: A magnificent hall with soaring ceilings supported by massive stone columns, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-residential-quarter",
+    "title": "Residential Quarter",
+    "plays": "Act II, Residential Quarter",
+    "brief": "instrumental background loop for Residential Quarter: Quiet streets lined with comfortable two-story homes, each with small gardens and neat workshops. Smoke rises from chimneys, and the sound of craftsmen at work echoes from nearby buildings, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-healers-house",
+    "title": "Healer's House",
+    "plays": "Act II, Healer's House",
+    "brief": "instrumental background loop for Healer's House: A cozy cottage filled with the scents of medicinal herbs and healing potions. Dried plants hang from the rafters and shelves are packed with bottles of many shapes and colors, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-hidden-library",
+    "title": "Hidden Library",
+    "plays": "Act II, Hidden Library",
+    "brief": "instrumental background loop for Hidden Library: Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-forest-transition",
+    "title": "Forest Transition",
+    "plays": "Act II, Forest Transition",
+    "brief": "instrumental background loop for Forest Transition: The boundary between the civilized mountain paths and the wild Enchanted Forest. Ancient standing stones mark the threshold, carved with protective runes that pulse with faint magic, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-forest-entrance",
+    "title": "Forest Entrance",
+    "plays": "Act II, Forest Entrance",
+    "brief": "instrumental background loop for Forest Entrance: Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-ancient-grove",
+    "title": "Ancient Grove",
+    "plays": "Act II, Ancient Grove",
+    "brief": "instrumental background loop for Ancient Grove: A circular clearing dominated by trees so old and massive they seem to touch the sky. Their bark bears carved symbols that predate human memory, and the air shimmers with concentrated magic, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-whispering-glade",
+    "title": "Whispering Glade",
+    "plays": "Act II, Whispering Glade",
+    "brief": "instrumental background loop for Whispering Glade: A peaceful meadow opens around a small stream that babbles over smooth stones. Wildflowers blanket the ground and butterflies drift through warm sunlight, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act2-heart-of-the-forest",
+    "title": "Heart of the Forest",
+    "plays": "Act II, Heart of the Forest",
+    "brief": "instrumental background loop for Heart of the Forest: The deepest part of the Enchanted Forest, where reality feels fluid and magic flows like water. Impossible colors paint the landscape and the air sparkles with latent energy, no vocals",
+    "seconds": 60
   }
 ]

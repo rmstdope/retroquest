@@ -100,6 +100,7 @@ function createMockBridge() {
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
     })),
+    getMusicPlace: vi.fn(() => ({ actName: '', roomKey: '' })),
     getCommandCompletions: vi.fn((): CompletionTree => ({})),
   }
   // The tests script each kind of quest event with the three mocks above, one
@@ -772,6 +773,16 @@ describe('useGameStore', () => {
     it('exposes musicFile and musicInfo', () => {
       expect(store.musicFile).toBe('track.mp3')
       expect(store.musicInfo).toBe('Track info')
+    })
+
+    it('follows the room the music plays in', () => {
+      bridge.controller.getMusicPlace.mockReturnValue({
+        actName: 'Act1',
+        roomKey: 'VillageSquare',
+      })
+      store.refreshPanels()
+      expect(store.musicActName).toBe('Act1')
+      expect(store.musicRoomKey).toBe('VillageSquare')
     })
 
     it('updates on refresh', () => {
