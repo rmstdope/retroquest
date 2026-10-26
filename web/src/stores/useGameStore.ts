@@ -258,6 +258,13 @@ export const useGameStore = defineStore('game', () => {
   /** The act and room the music plays in (see `getMusicPlace`), '' while nothing plays. */
   const musicActName = ref('')
   const musicRoomKey = ref('')
+  /**
+   * Whether a narrated command keeps the room's music at the room it started
+   * in, until the narration reaches the new scene (`releaseMusic`).
+   */
+  let musicHeld = false
+  /** The room key the engine plays in now, which `musicRoomKey` takes on release. */
+  let latestRoomKey = ''
 
   function setBridge(b: GameBridge) {
     bridge = b
@@ -352,6 +359,7 @@ export const useGameStore = defineStore('game', () => {
       releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
     heldTurn.value = turnId
     held.value = { place: true, quests: true, stock: true }
+    musicHeld = true
   }
 
   /** Whether the panels of `group` are in the hold. */
@@ -444,6 +452,8 @@ export const useGameStore = defineStore('game', () => {
     flash: boolean,
   ): void {
     if (turnId !== heldTurn.value) return
+    // The room's music is never later than the room card.
+    if (groups.includes('place')) releaseMusic(turnId)
     for (const group of groups) {
       if (!held.value[group]) continue
       held.value[group] = false
@@ -465,6 +475,19 @@ export const useGameStore = defineStore('game', () => {
     heldTurn.value = null
     held.value = { place: false, quests: false, stock: false }
     pendingDots = { bag: false, spells: false, quests: false }
+    musicHeld = false
+    musicRoomKey.value = latestRoomKey
+  }
+
+  /**
+   * The narration of turn `turnId` has reached the new scene: the music moves
+   * to the room the player is in now. Does nothing for another turn than the
+   * one held, or once the music has moved.
+   */
+  function releaseMusic(turnId: number): void {
+    if (turnId !== heldTurn.value || !musicHeld) return
+    musicHeld = false
+    musicRoomKey.value = latestRoomKey
   }
 
   /** Let the layout hold the panels of narrated commands (off: they change at once). */
@@ -808,6 +831,8 @@ export const useGameStore = defineStore('game', () => {
    * once its intro pop-up has moved the engine on (`showNextModal`). Under an
    * act's intro pop-up the player is not in a room yet, so the act's own loop
    * plays there; the first room's track starts when the pop-up is dismissed.
+   * A narrated command keeps the room it started in until the narration
+   * reaches the new scene (`releaseMusic`).
    */
   function syncMusic(b: GameBridge): void {
     const m = b.controller.getCurrentMusic()
@@ -815,7 +840,8 @@ export const useGameStore = defineStore('game', () => {
     musicInfo.value = m.musicInfo
     const place = b.controller.getMusicPlace()
     musicActName.value = place.actName
-    musicRoomKey.value = isIntroShowing() ? '' : place.roomKey
+    latestRoomKey = isIntroShowing() ? '' : place.roomKey
+    if (!musicHeld) musicRoomKey.value = latestRoomKey
   }
 
   /** Whether an act's intro pop-up is on screen. */
@@ -1204,6 +1230,7 @@ export const useGameStore = defineStore('game', () => {
     // Actions
     setPanelHold,
     releasePanels,
+    releaseMusic,
     setBridge,
     setAudioPlayer,
     initGame,
