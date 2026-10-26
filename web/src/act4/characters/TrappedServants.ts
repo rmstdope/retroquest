@@ -4,6 +4,7 @@ import {
   characterName,
   speech,
   type NameOptions,
+  nameInSentence as nameReading,
 } from '@/engine'
 import {
   FLAG_ACT4_SERVANTS_TRUST_EARNED,
@@ -15,9 +16,15 @@ const FREED_SERVANTS_NAME = 'Freed Servants'
 
 /** Fortress servants enslaved by dark magic, seeking freedom. */
 export class TrappedServants extends Character {
-  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  /**
+   * Named by what they are, so it reads "the …" and, a group and not a title,
+   * stays lower case mid-sentence (see `nameInSentence`).
+   */
   override nameInSentence(options?: NameOptions): string {
-    return super.nameInSentence({ ...options, common: true })
+    return nameReading('character', this.name.toLowerCase(), {
+      ...options,
+      common: true,
+    })
   }
 
   /** Several of them, so the default replies take plural verbs. */
