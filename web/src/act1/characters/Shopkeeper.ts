@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  type NameOptions,
   characterName,
   speech,
   clue,
@@ -65,6 +66,11 @@ export class Shopkeeper extends Character {
         `Old Man ${characterName('Hemlock')}, the owner of the General Store, ` +
         'always bustling about and eager to strike a bargain or share a rumor.',
     })
+  }
+
+  /** Named by what it is, so it reads "the shopkeeper" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
   }
 
   /**

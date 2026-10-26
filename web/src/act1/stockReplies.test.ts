@@ -116,7 +116,7 @@ describe('Act I stock replies', () => {
       `${characterName('Tilda')} has nothing to sell you.`,
     )
     expect(new Priest().buyItem(game.state, 'rope')).toBe(
-      `${characterName('Priest')} has nothing to sell you.`,
+      `The ${characterName('priest')} has nothing to sell you.`,
     )
   })
 

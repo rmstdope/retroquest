@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  type NameOptions,
   characterName,
   speech,
   attributeSpeech,
@@ -29,6 +30,11 @@ export class Priest extends Character {
         'offering blessings ' +
         'and sharing the lore of Eldoria.',
     })
+  }
+
+  /** Named by what it is, so it reads "the priest" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
   }
 
   /** He politely declines any gift; the reply never names the item. */

@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { Game, type Character } from '@/engine'
 import { Act1 } from '../Act1'
+import { Blacksmith } from './Blacksmith'
 import { Deer } from './Deer'
 import { Fisherman } from './Fisherman'
 import { Merchant } from './Merchant'
+import { Priest } from './Priest'
+import { Shopkeeper } from './Shopkeeper'
 
 /** An Act I game in the Village Square with `character` standing there. */
 function gameWith(character: Character): Game {
@@ -22,6 +25,8 @@ describe.each([
   ['merchant', (): Character => new Merchant()],
   ['deer', (): Character => new Deer()],
   ['fisherman', (): Character => new Fisherman()],
+  ['blacksmith', (): Character => new Blacksmith()],
+  ['priest', (): Character => new Priest()],
 ])('the %s, a common-noun character', (name, make) => {
   const marked = `[character_name]${name}[/character_name]`
 
@@ -38,6 +43,16 @@ describe.each([
 
     expect(game.commandParser.parse(`buy rope from ${name}`)).toBe(
       `The ${marked} has nothing to sell you.`,
+    )
+  })
+})
+
+describe('the shopkeeper, a common-noun character who sells', () => {
+  it('is "the" one mid-sentence when it does not understand', () => {
+    const game = gameWith(new Shopkeeper())
+
+    expect(game.commandParser.parse('say hello to shopkeeper')).toContain(
+      "You say 'hello' to the [character_name]shopkeeper[/character_name], but",
     )
   })
 })
