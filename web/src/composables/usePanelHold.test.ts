@@ -206,4 +206,17 @@ describe('usePanelHold: the music of a narrated move', () => {
     // "You wake in your own bed…"
     expect(game.musicRoomKey).toBe('EliorsCottage')
   })
+
+  it('moves the music to the cottage at once when the answer is skipped', async () => {
+    game.submitCommand('talk to voice')
+    const turn = game.turns.at(-1)!
+    narration.begin(turn.id, voicedUnitsOf(turn), 'act1')
+    hold.track(turn)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(game.musicRoomKey).toBe('TheDream')
+
+    narration.skipAll()
+
+    expect(game.musicRoomKey).toBe('EliorsCottage')
+  })
 })
