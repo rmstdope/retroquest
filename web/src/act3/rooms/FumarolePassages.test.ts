@@ -191,7 +191,7 @@ describe('Fumarole Passages — the breath of the mountain', () => {
     const game = wardedGame()
     const rest = (command: string): string => executeCommands(game, [command])
     const counted = (line: string): string =>
-      `You stand still and count.\n${line}`
+      `[effect]You stand still and count.[/effect]\n${line}`
     expect(rest('rest')).toBe(counted(breathLine(PAUSE)))
     expect(rest('wait')).toBe(counted(breathLine(IN)))
     expect(rest('rest')).toBe(counted(breathLine(OUT)))

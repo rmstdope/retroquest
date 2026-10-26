@@ -1,4 +1,4 @@
-import { Item, clue, type GameState } from '@/engine'
+import { Item, clue, effect, type GameState } from '@/engine'
 import {
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
   FLAG_ACT3_PHANTOMS_FREED,
@@ -12,7 +12,7 @@ import { EchoStones } from './EchoStones'
  * What Elior does when the rubbings are used with the blessed stones: the
  * effect of the use, not an echo of it, and the antecedent of "The words".
  */
-const RECITED = 'You recite the resonant chant at each stone.'
+const RECITED = effect('You recite the resonant chant at each stone.')
 
 /** Rubbings of the Resonant Chant from the Echo Chambers. */
 export class ResonantChantRubbings extends Item {

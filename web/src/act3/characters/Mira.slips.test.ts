@@ -20,7 +20,7 @@ const RUINS_SPEECH = speech("Lysa's hand. She always crossed her sevens.")
 const RUINS_NARRATION = `${characterName('Mira')} turns to the sea before you can ask what she means.`
 const EMBER_NARRATION = 'looks at the feather a long time.'
 const RELAY_NARRATION =
-  "You give her the dragon's words. " +
+  "[effect]You give her the dragon's words.[/effect] " +
   `${characterName('Mira')} does not answer.`
 
 /** A started Act III game with Mira standing in the given room. */

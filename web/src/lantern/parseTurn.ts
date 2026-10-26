@@ -14,6 +14,10 @@
  *   closed at the end of each line and reopened on the next, so every block's
  *   markup is balanced on its own; stray closing tags are dropped.
  *
+ * - `[gesture]…[/gesture]` is the player's gesture, which the command line
+ *   already shows: it is removed (a line left empty is skipped), so it is
+ *   neither shown nor voiced. `[effect]` is plain narration: its tags are
+ *   removed and its text is kept as written.
  * - A line holding only a speaker's name (optionally followed by a colon, as
  *   in `Name: quote`) right before that speaker's quote is
  *   dropped (the quote's label shows the name); `[character_name][/character_name]`
@@ -42,6 +46,8 @@ const DIALOGUE_CLOSE = '[/dialogue]'
 const CHARACTER_NAME = /\[character_name\]([\s\S]*?)\[\/character_name\]/g
 const NAME_ONLY = /^\[character_name\]([^[]+)\[\/character_name\]:?$/
 const CHECKLIST_BULLET = /^\*\s*/
+const GESTURE_SPAN = /\[gesture\][\s\S]*?\[\/gesture\] ?/g
+const EFFECT_TAG = /\[\/?effect\]/g
 const SPAN_TAG = new RegExp(
   `\\[(/?)(${MARKUP_TAGS.filter((tag) => tag !== 'dialogue').join('|')})\\]`,
   'g',
@@ -99,6 +105,7 @@ function dropNameBeforeQuote(blocks: TurnBlock[]): TurnBlock[] {
 /** Split one turn's raw markup into story-view blocks (see the file comment). */
 export function parseTurn(raw: string): TurnBlock[] {
   const blocks: TurnBlock[] = []
+  const turn = raw.replace(GESTURE_SPAN, '').replace(EFFECT_TAG, '')
   let speaker: string | null = null
   const openTags: string[] = []
 
@@ -141,7 +148,7 @@ export function parseTurn(raw: string): TurnBlock[] {
     chunk.split('\n').forEach(addLine)
   }
 
-  let rest = raw
+  let rest = turn
   for (;;) {
     const open = rest.indexOf(DIALOGUE_OPEN)
     if (open < 0) {

@@ -3,6 +3,7 @@ import {
   type GameState,
   clue,
   dialogue,
+  effect,
   normaliseSpokenWord,
 } from '@/engine'
 import {
@@ -167,7 +168,8 @@ export class SorceressOfLies extends Character {
     }
     return this.understandBy(
       gameState,
-      'You say nothing. You stand in the middle of her chamber and ' +
+      effect('You say nothing.') +
+        ' You stand in the middle of her chamber and ' +
         'listen, to all of it, for as long as it takes. The Sorceress ' +
         `goes very still. ${CRYSTALS_QUIET}`,
     )

@@ -1,4 +1,4 @@
-import { Room, clue } from '@/engine'
+import { Room, clue, effect } from '@/engine'
 import type { Exits, GameState } from '@/engine'
 import {
   FLAG_ACT3_FUMAROLE_WARD_APPLIED,
@@ -187,7 +187,7 @@ export class FumarolePassages extends Room {
   override rest(gameState: GameState): string {
     if (!this.isWarded(gameState)) return super.rest(gameState)
     this.advanceBreath()
-    return `You stand still and count.\n${this.breathLine(gameState)}`
+    return `${effect('You stand still and count.')}\n${this.breathLine(gameState)}`
   }
 
   /**

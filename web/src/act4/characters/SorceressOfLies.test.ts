@@ -235,7 +235,7 @@ describe('The Sorceress of Lies', () => {
     executeCommands(game, ["use knight's redemption", ...THREE_HEARTS])
     const heard = executeCommands(game, ['listen'])
     expect(heard).toContain(
-      'You say nothing. You stand in the middle of her chamber and listen, ' +
+      '[effect]You say nothing.[/effect] You stand in the middle of her chamber and listen, ' +
         'to all of it, for as long as it takes. The Sorceress goes very ' +
         'still. One by one the crystals stop whispering',
     )

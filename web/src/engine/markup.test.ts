@@ -5,8 +5,10 @@ import {
   characterName,
   clue,
   dialogue,
+  effect,
   event,
   findMarkupProblems,
+  gesture,
   remembered,
   speech,
   writing,
@@ -40,6 +42,17 @@ describe('markup helpers', () => {
   it('knows the full tag vocabulary', () => {
     expect(MARKUP_TAGS).toContain('dialogue')
     expect(MARKUP_TAGS).toContain('event')
+  })
+})
+
+describe('gesture and effect', () => {
+  it('wrap their text in the gesture and effect tags', () => {
+    expect(gesture('You wave.')).toBe('[gesture]You wave.[/gesture]')
+    expect(effect('The gate opens.')).toBe('[effect]The gate opens.[/effect]')
+  })
+
+  it('are known tags, so well-formed uses raise no markup problem', () => {
+    expect(findMarkupProblems(`${gesture('a')} ${effect('b')}`)).toEqual([])
   })
 })
 

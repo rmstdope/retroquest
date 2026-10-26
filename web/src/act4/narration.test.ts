@@ -25,6 +25,15 @@ describe('Act IV narration', () => {
     expect(offenders).toEqual([])
   })
 
+  it('never opens a string by repeating the typed command unless marked as an effect', () => {
+    const echo =
+      /(?<!(?:effect|gesture)\(\s*)['"`]You (speak with|say|cast|examine|give|recite|daub|stand still|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b/
+    const offenders = contentFiles(__dirname).filter((file) =>
+      echo.test(readFileSync(file, 'utf8')),
+    )
+    expect(offenders).toEqual([])
+  })
+
   it('keeps only the two bare refusals as plain, silent failure boxes', () => {
     const plain = contentFiles(__dirname).flatMap((file) =>
       [
