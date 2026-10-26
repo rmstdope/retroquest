@@ -51,9 +51,10 @@ function titleCase(name: string): string {
  *   unless `common` says it is named by what it is, when it reads like an
  *   item ("the merchant", "The merchant" with `atStart`).
  * - An item or room takes "the" ("The" with `atStart`), unless `bare` says its
- *   name is a person's own. A bare item is title-cased ("Elior's Journal"); a
- *   room's name is already cased, and a leading "The " of it is dropped so the
- *   article is not said twice.
+ *   name is a person's own. A bare item is title-cased ("Elior's Journal");
+ *   any other item reads in lower case, however content cased its name ("the
+ *   enhanced echo stone"); a room's name is already cased, and a leading
+ *   "The " of it is dropped so the article is not said twice.
  */
 export function nameInSentence(
   kind: NameKind,
@@ -75,7 +76,9 @@ export function nameInSentence(
       ? titleCase(name)
       : kind === 'room'
         ? name.replace(/^The /, '')
-        : name
+        : kind === 'item'
+          ? name.toLowerCase()
+          : name
   const marked = `[${tag}]${shown}[/${tag}]`
   if (bare) return marked
   return `${options.atStart ? 'The' : 'the'} ${marked}`
