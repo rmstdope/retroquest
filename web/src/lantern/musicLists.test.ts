@@ -56,6 +56,14 @@ describe('actLoops', () => {
     }
   })
 
+  it("names the game's file, as a path inside the project root", () => {
+    for (const act of ACTS) {
+      const [track] = actLoops(act)
+      expect(track?.file).toBe(`web/public/audio/music/${act.musicFile}`)
+      expect(existsSync(repoUrl(track?.file ?? ''))).toBe(true)
+    }
+  })
+
   it('lists nothing for an act without music', () => {
     expect(actLoops({ musicFile: '' })).toEqual([])
   })
@@ -89,6 +97,15 @@ describe('questStingers', () => {
       expect.stringContaining('new quest'),
       expect.stringContaining('quest is completed'),
     ])
+  })
+
+  it('names the files the game plays, as paths inside the project root', () => {
+    const files = questStingers().map((s) => s.file)
+    expect(files).toEqual([
+      `web/public/audio/soundeffects/${NEW_QUEST_FILE}`,
+      `web/public/audio/soundeffects/${QUEST_COMPLETE_FILE}`,
+    ])
+    for (const file of files) expect(existsSync(repoUrl(file ?? ''))).toBe(true)
   })
 
   it('has ids unique across the whole game', () => {

@@ -7,6 +7,11 @@
  */
 import { NEW_QUEST_FILE, QUEST_COMPLETE_FILE } from '@/composables/questSounds'
 
+/** Where the game's music files live, as paths inside the project root. */
+const MUSIC_DIR = 'web/public/audio/music/'
+/** Where the game's sound effects live, as paths inside the project root. */
+const SOUND_EFFECTS_DIR = 'web/public/audio/soundeffects/'
+
 /** One track in Audio Studio's format: a loop of an act, or a stinger. */
 export interface MusicTrack {
   /** Slug naming the track's file in the studio's clips folder; unique across the game. */
@@ -19,6 +24,8 @@ export interface MusicTrack {
   brief: string
   /** Length in seconds (a stinger is at most 10). */
   seconds: number
+  /** The music file the game plays for it now: a path inside the project root, which the studio only plays. */
+  file?: string
   /** Tempo, where known; omitted when not measured. */
   bpm?: number
   /** Musical key such as "D major", where known; omitted when not measured. */
@@ -82,7 +89,7 @@ export function actLoops(act: { musicFile: string }): MusicTrack[] {
   const brief = LOOP_BRIEFS[act.musicFile]
   if (!title || !brief)
     throw new Error(`No loop brief for music file "${act.musicFile}"`)
-  return [{ id: slug(title), title, ...brief }]
+  return [{ id: slug(title), title, file: MUSIC_DIR + act.musicFile, ...brief }]
 }
 
 /** The stingers: the sounds for a new quest and a completed quest, by the files the game plays. */
@@ -92,6 +99,7 @@ export function questStingers(): MusicTrack[] {
     {
       id: 'new-quest',
       title: NEW_QUEST_FILE.replace(/^Voicy_|\.mp3$/g, ''),
+      file: SOUND_EFFECTS_DIR + NEW_QUEST_FILE,
       plays: 'When a new quest begins',
       brief:
         'short bright fanfare announcing a new quest, instrumental, no vocals',
@@ -100,6 +108,7 @@ export function questStingers(): MusicTrack[] {
     {
       id: 'quest-complete',
       title: QUEST_COMPLETE_FILE.replace(/^Voicy_|\.mp3$/g, ''),
+      file: SOUND_EFFECTS_DIR + QUEST_COMPLETE_FILE,
       plays: 'When a quest is completed',
       brief:
         'short triumphant fanfare for a quest completed, instrumental, no vocals',
