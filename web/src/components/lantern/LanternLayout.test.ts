@@ -1919,6 +1919,46 @@ describe('LanternLayout', () => {
         expect(w.find('button.lq-more-below').exists()).toBe(true)
       })
 
+      it('shows the end of the story when a reading ending on a quest update has been read', async () => {
+        const w = await ready()
+        const el = story(w)
+        Object.defineProperty(el, 'clientHeight', {
+          configurable: true,
+          value: 300,
+        })
+        Object.defineProperty(el, 'scrollHeight', {
+          configurable: true,
+          value: 2000,
+        })
+        useGameStore().setAudioPlayer({
+          playNewQuest: vi.fn(),
+          playQuestComplete: vi.fn(),
+        })
+        await say(
+          narratedTurn(1, {
+            quests: [
+              {
+                kind: 'updated',
+                name: 'Q',
+                main: false,
+                text: 'Later.',
+                chime: true,
+              },
+            ],
+          }),
+        )
+        audios[0].onended?.()
+        await vi.advanceTimersByTimeAsync(350)
+        audios[1].onended?.()
+        await vi.advanceTimersByTimeAsync(350)
+        expect(useNarrationStore().storyReading).toBe(false)
+        // jsdom fires no scroll event for a scroll made in code; a browser does.
+        el.dispatchEvent(new Event('scroll'))
+        await vi.advanceTimersByTimeAsync(0)
+        expect(el.scrollTop).toBe(2000 - 300)
+        expect(w.find('button.lq-more-below').exists()).toBe(false)
+      })
+
       it('does not hold the story when nothing is narrated', async () => {
         const w = await ready()
         useSettingsStore().narrationOn = false

@@ -318,6 +318,16 @@ describe('useStoryFollow', () => {
       expect(fake.story.scrollTop).toBe(700)
     })
 
+    it('shows the end of the story when the reading was read to its end', async () => {
+      fake = await mountStory()
+      read()
+      fake.api.moveTo(100, false)
+      audio.onended?.()
+      await nextTick()
+      expect(narration.storyReading).toBe(false)
+      expect(fake.story.scrollTop).toBe(CONTENT - VIEW)
+    })
+
     it('does not hold the pane for the chapter page or a pop-up', async () => {
       fake = await mountStory()
       read(-1)

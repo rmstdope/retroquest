@@ -274,13 +274,16 @@ describe('useNarrationStore', () => {
     narration.begin(1, [voiced()], 'act1')
     narration.skipAll()
     expect(narration.endedBySkip(1)).toBe(true)
+    expect(narration.readToEnd).toBe(false)
     narration.begin(2, [voiced()], 'act1')
     narration.begin(3, [voiced()], 'act1')
     expect(narration.endedBySkip(2)).toBe(true)
+    expect(narration.readToEnd).toBe(false)
     last().onended?.()
     await vi.advanceTimersByTimeAsync(0)
     expect(narration.isNarrating).toBe(false)
     expect(narration.endedBySkip(3)).toBe(false)
+    expect(narration.readToEnd).toBe(true)
   })
 
   it('skipAll shows the rest of the turn at once, silently', async () => {
