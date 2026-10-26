@@ -56,6 +56,21 @@ with Whisper. **Refresh dialog** runs the extractor for an act:
   clip for clip on Act I), and `fish_tts.py`'s voice search is its audition. Both scripts are in
   this repository's history.
 
+## Music
+
+Audio Studio's Music workspace lists the tracks the game plays today, so new music can be made for
+them. **Refresh dialog** on an act also writes `act<N>/music.json`, the act's loop, and **Refresh
+from the game** on the Stingers page runs `extract-shared.ts`, which writes `stingers.json`
+(the new-quest and quest-complete sounds):
+
+```sh
+(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-shared.ts)  # writes tts/stingers.json
+```
+
+The lists come from `web/src/lantern/musicLists.ts`: a loop is named after the act's music file and
+briefed in that file's table. The game keeps playing its freetouse.com and Voicy files; the studio
+shows its tracks as "not chosen" until a take is chosen.
+
 ## Getting the text
 
 `extract-intro.ts` prints the Act I intro as plain text (markup stripped, the title as a spoken
